@@ -45,7 +45,7 @@ setSpacing(10);
 // Options Box
 optionsBox=new QHBox(this);
 
-	daysSliderBox=new QVGroupBox(i18n("Number of days"),optionsBox);
+	daysSliderBox=new QVGroupBox(i18n("Number of Days"),optionsBox);
 	dayNumberLabel=new QLabel(daysSliderBox);
 	dayNumberLabel->setText("- 1 -");
 	dayNumberLabel->setAlignment(Qt::AlignHCenter);
@@ -57,7 +57,7 @@ optionsBox=new QHBox(this);
 	dayNumberSelector->setTickmarks(QSlider::Below);
 	dayNumberSelector->setFixedWidth(100);
 
-	mealsSliderBox=new QVGroupBox(i18n("Meals per day"),optionsBox);
+	mealsSliderBox=new QVGroupBox(i18n("Meals per Day"),optionsBox);
 	mealNumberLabel=new QLabel(mealsSliderBox);
 	mealNumberLabel->setText("- 1 -");
 	mealNumberLabel->setAlignment(Qt::AlignHCenter);

@@ -443,10 +443,10 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		}
 
 		if ( properties & BackgroundColor )
-			popup->insertItem( i18n("Background color..."), this, SLOT(setBackgroundColor()) );
+			popup->insertItem( i18n("Background Color..."), this, SLOT(setBackgroundColor()) );
 
 		if ( properties & TextColor )
-			popup->insertItem( i18n("Text color..."), this, SLOT(setTextColor()) );
+			popup->insertItem( i18n("Text Color..."), this, SLOT(setTextColor()) );
 
 		if ( properties & Font )
 			popup->insertItem( i18n("Font..."), this, SLOT(setFont()) );
