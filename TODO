@@ -1,7 +1,9 @@
 
 jkivlighn:
 Just some ideas that popped into my mind...
-
+	*Handle plurals in units
+	*Calendar for meal planning
+	*Add auto-complete feature to the instructions text edit based on ingredients in the recipe
 	*Allow putting ingredients into groups with headers - i.e. Pie Crust and Filling
 	*Give option to import recipe formats by pasting the recipe text into a widget
 	*Allow saving and loading diet info from a file (or just store it in the database?)

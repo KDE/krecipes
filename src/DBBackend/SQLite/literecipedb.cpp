@@ -2431,7 +2431,7 @@ return(QString::null);
 
 int LiteRecipeDB::lastInsertID()
 {
-	int lastID; QSQLiteResult lastInsertID=database->executeQuery("SELECT name FROM recipes;",&lastID); // Execute whatever query that doesn't insert rows
+	int lastID; QSQLiteResult lastInsertID=database->executeQuery("SELECT ver from db_info;",&lastID); // Execute whatever query that doesn't insert rows, although let's make it a query that doesn't give an error (so we don't generate a false error in the console output)
 
 	return lastID;
 }
