@@ -58,13 +58,17 @@ private:
 	//Private variables
 	RecipeDB *database;
 	int mealNumber;
+	int dayNumber;
 	ElementList categoriesList;
 	IngredientPropertyList propertyList;
 	//Widgets
 	QHBox *optionsBox;
-	QVGroupBox *sliderBox;
+	QVGroupBox *mealsSliderBox;
 	QLabel *mealNumberLabel;
 	QSlider *mealNumberSelector;
+	QVGroupBox *daysSliderBox;
+	QLabel *dayNumberLabel;
+	QSlider *dayNumberSelector;
 	QTabWidget *mealTabs;
 	MealInput *mealTab; // points to the current tab
 	QHBox *buttonBox;
@@ -82,6 +86,7 @@ public:
 	//Methods
 	void reload(void);
 private slots:
+	void changeDayNumber(int dn);
 	void changeMealNumber(int mn);
 	void createDiet(void);
 };

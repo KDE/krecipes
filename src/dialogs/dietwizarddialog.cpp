@@ -34,17 +34,30 @@ DietWizardDialog::DietWizardDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 // Initialize internal variables
 database=db;
 mealNumber=1;
+dayNumber=1;
 
 //Design the dialog
 setSpacing(10);
 // Options Box
 optionsBox=new QHBox(this);
 
-	sliderBox=new QVGroupBox(i18n("Meals per day"),optionsBox);
-	mealNumberLabel=new QLabel(sliderBox);
+	daysSliderBox=new QVGroupBox(i18n("Number of days"),optionsBox);
+	dayNumberLabel=new QLabel(daysSliderBox);
+	dayNumberLabel->setText("- 1 -");
+	dayNumberLabel->setAlignment(Qt::AlignHCenter);
+	dayNumberSelector=new QSlider(daysSliderBox);
+
+	dayNumberSelector->setOrientation(Qt::Horizontal);
+	dayNumberSelector->setRange(1,10);
+	dayNumberSelector->setSteps(1,1);
+	dayNumberSelector->setTickmarks(QSlider::Below);
+	dayNumberSelector->setFixedWidth(100);
+
+	mealsSliderBox=new QVGroupBox(i18n("Meals per day"),optionsBox);
+	mealNumberLabel=new QLabel(mealsSliderBox);
 	mealNumberLabel->setText("- 1 -");
 	mealNumberLabel->setAlignment(Qt::AlignHCenter);
-	mealNumberSelector=new QSlider(sliderBox);
+	mealNumberSelector=new QSlider(mealsSliderBox);
 
 	mealNumberSelector->setOrientation(Qt::Horizontal);
 	mealNumberSelector->setRange(1,10);
@@ -73,6 +86,7 @@ reload();
 
 // Signals & Slots
 connect(mealNumberSelector,SIGNAL(valueChanged(int)),this,SLOT(changeMealNumber(int)));
+connect(dayNumberSelector,SIGNAL(valueChanged(int)),this,SLOT(changeDayNumber(int)));
 connect(okButton,SIGNAL(clicked()),this,SLOT(createDiet()));
 }
 
@@ -104,8 +118,32 @@ if (mn>mealNumber)
 	{
 	 newTab(i18n("Meal %1").arg(mn));
 	 mealNumber++;
-	 mealNumberLabel->setText(QString("- %1 -").arg(mn));
+	 mealNumberLabel->setText(QString(i18n("- %1 -")).arg(mn));
 	 }
+}
+
+void DietWizardDialog::changeDayNumber(int dn)
+{
+
+if (dn<7)
+	{
+	 dayNumber=dn;
+	 dayNumberLabel->setText(QString(i18n("- %1 -")).arg(dn));
+	}
+else if (dn==7)
+	{
+	dayNumber=7;
+	dayNumberLabel->setText(QString(i18n("- 1 week -")));
+	}
+else if (dn<10)
+	{
+	dayNumber=(dn-6)*7;
+	dayNumberLabel->setText(QString(i18n("- %1 weeks -")).arg(dn-6));
+	}
+else
+	{
+	dayNumberLabel->setText(QString(i18n("- 1 month -")));
+	}
 }
 
 void DietWizardDialog::createDiet(void)
@@ -118,33 +156,39 @@ database->loadRecipeDetails(&rlist,true,true);
 int recipes_left=rlist.count();
 
 RecipeList tempRList; // FIXME: it helps removing elements without loosing them, but may take too long copying. Better avoid this if possible. Also, we may not want to repeat recipes. Then better use the same array always.
-for (int meal=0;meal<mealNumber;meal++)
+
+bool alert=false;
+
+for (int day=0;day<dayNumber;day++) // Create the diet for the number of days defined by the user
 {
-int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
-
-	for (int dish=0;dish<dishNo;dish++)
+	for (int meal=0;meal<mealNumber;meal++)
 	{
-	tempRList=rlist; // temporal RecipeList so elements can be removed without reloading them again from the DB
-		bool found=false;
-		while ((!found) && recipes_left)
-		{
-			int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
-			RecipeList::Iterator rit=tempRList.at(random_index);
-			if (found=(checkCategories(*rit,meal,dish) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
-			{
-			dietRList.append(*rit);// Add recipe to the diet list
-			}
+	int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
 
-			// Remove this analized recipe from teh list
-			tempRList.remove(rit);
-			recipes_left--;
+		for (int dish=0;dish<dishNo;dish++)
+		{
+		tempRList=rlist; // temporal RecipeList so elements can be removed without reloading them again from the DB
+			bool found=false;
+			while ((!found) && recipes_left)
+			{
+				int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
+				RecipeList::Iterator rit=tempRList.at(random_index);
+				if (found=(checkCategories(*rit,meal,dish) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
+				{
+				dietRList.append(*rit);// Add recipe to the diet list
+				}
+
+				// Remove this analized recipe from teh list
+				tempRList.remove(rit);
+				recipes_left--;
+			}
+			if (!found) alert=true;
+			recipes_left=rlist.count();
 		}
-		if (!found) KMessageBox::information(this,i18n("I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. "));
-		recipes_left=rlist.count();
 	}
 }
 
-
+if (alert) KMessageBox::information(this,i18n("I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. "));
 
 }
 
