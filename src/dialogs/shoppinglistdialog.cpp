@@ -85,8 +85,18 @@ reloadRecipeList (); // Missing: check if there's non-existing recipes in the li
 
 void ShoppingListDialog::addRecipe(void)
 {
+QListViewItem *it;
+it=recipeListView->selectedItem();
+if (it) {
+	int recipeID=it->text(0).toInt();
+	QString recipeTitle=it->text(1);
+	QListViewItem *newIt=new QListViewItem (shopRecipeListView,QString::number(recipeID),recipeTitle);
+	}
 }
 
 void ShoppingListDialog::removeRecipe(void)
 {
+QListViewItem *it;
+it=shopRecipeListView->selectedItem();
+if (it) shopRecipeListView->removeItem(it);
 }
