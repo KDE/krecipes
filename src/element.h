@@ -25,6 +25,7 @@ public:
     ~Element();
     QString name;
     int id;
-};
+    Element& operator=(const Element &el);
+    };
 
 #endif

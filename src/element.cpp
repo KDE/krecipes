@@ -33,4 +33,9 @@ Element::~Element()
 {
 }
 
-
+Element& Element::operator=(const Element &el)
+{
+id=el.id;
+name=el.name;
+return *this;
+}
