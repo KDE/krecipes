@@ -41,6 +41,7 @@ public:
     void add(IngredientProperty &element);
     void append(IngredientProperty *property);
     int find(IngredientProperty* it);
+    int find(int id);
     IngredientProperty* at(int pos);
     private:
     PropertyPtrList list;

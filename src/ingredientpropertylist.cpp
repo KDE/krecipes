@@ -50,6 +50,12 @@ int IngredientPropertyList::find(IngredientProperty* it)
 return(list.find(it));
 }
 
+int IngredientPropertyList::find(int id)
+{
+IngredientProperty ip; ip.id=id;
+return(list.find(&ip));
+}
+
 IngredientProperty* IngredientPropertyList::at(int pos)
 {
 return(list.at(pos));
