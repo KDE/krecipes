@@ -9,7 +9,7 @@ INCLUDES         = $(all_includes)
 #building the library
 
 lib_LTLIBRARIES=libkrecqsqlite.la
-libkrecqsqlite_la_SOURCES=krecqsqlitedb.cpp  krecqsqlitedb.h  krecqsqliteresult.cpp  krecqsqliteresult.h
+libkrecqsqlite_la_SOURCES=krecqsqlitedb.cpp krecqsqliteresult.cpp
 libkrecqsqlite_la_METASOURCES=AUTO
 
 #the library search path.
