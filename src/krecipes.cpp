@@ -79,7 +79,7 @@ void Krecipes::setupActions()
     saveAction=KStdAction::save(this, SLOT(fileSave()), actionCollection());
     KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(this, SLOT(qApp->quit()), actionCollection());
+    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 
     m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
     m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
