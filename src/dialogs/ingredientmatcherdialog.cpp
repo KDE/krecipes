@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+#include <iostream>
 IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
 	// Initialize internal variables
@@ -119,8 +120,11 @@ void IngredientMatcherDialog::findRecipes(void)
 			{
 			new RecipeListItem(recipeListView->listView(),*it);
 			}
-		else incompleteRecipes.append(*it);
-		missingNumbers.append(missing.count());
+		else 
+			{
+			incompleteRecipes.append(*it);
+			missingNumbers.append(missing.count());
+			}
 		}
 
 	//Check if the user wants to show missing ingredients
@@ -128,7 +132,7 @@ void IngredientMatcherDialog::findRecipes(void)
 	if (this->missingNumberCombo->currentItem()==0) return; //"None"
 	
 	
-	new SectionItem(recipeListView->listView(),i18n("You are missing some ingredients for:"));
+	
 	
 	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
@@ -137,13 +141,28 @@ void IngredientMatcherDialog::findRecipes(void)
 	if (missingNumberCombo->currentItem()!=4) missingNoAllowed=missingNumberCombo->currentText().toInt(); //"1..3"
 	else missingNoAllowed=-1; // "Any"
 	
-	nit=missingNumbers.begin();	
+	std::cerr<<"missingNoAllowed: "<<missingNoAllowed<<"\n";
 	
+	for (int missingNo=1; missingNo<=missingNoAllowed; missingNo++)
+	{
+		std::cerr<<"missingNo: "<<missingNo<<"\n";
+		nit=missingNumbers.begin();
+		bool titleShownYet=false;
+		
 		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit)
 		{
-			if (missingNoAllowed<0||(*nit)<=missingNoAllowed)
+		std::cerr<<"*nit: "<<*nit<<"missingNo:"<<missingNo<<"\n";
+			if ((*nit)==missingNo) 
+				{	
+					if (!titleShownYet)
+					{
+						new SectionItem(recipeListView->listView(),i18n("You are missing %1 ingredients for:").arg(missingNo));
+						titleShownYet=true;
+					}
 				new RecipeListItem(recipeListView->listView(),*it);
+				}
 		}
+	}
 	
 }
 
