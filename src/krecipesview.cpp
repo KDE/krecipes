@@ -64,12 +64,13 @@
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
 {
-    // Initialize Database
+    
 
     // Init the setup wizard if necessary
     kdDebug()<<"Beginning wizard"<<endl;
     wizard();
     kdDebug()<<"Wizard finished correctly"<<endl;
+    
     // Show Splash Screen
 
     KStartupLogo* start_logo = 0L;
@@ -78,7 +79,8 @@ KrecipesView::KrecipesView(QWidget *parent)
     start_logo->show();
     start_logo->raise();
 
-
+    // Initialize Database
+    
     // Read the database setup
 
     KConfig *config; config=kapp->config(); config->sync(); 
@@ -108,7 +110,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     else if (dbtype=="SQLite")// SQLite case
     	{
 	kdDebug()<<i18n("Configured type... SQLite\n").latin1();
-    	database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+    	initSQLiteDatabase(config);
 	}
 
     #endif //HAVE_SQLITE
@@ -124,10 +126,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Design the GUI
     splitter=new QHBox(this);
 
-
-
-
-// Create Left and Right Panels (splitter)
+   // Create Left and Right Panels (splitter)
 
 
     KIconLoader il;
@@ -868,18 +867,18 @@ rightPanel->resize(rpsize);
 
 QString KrecipesView::checkCorrectDBType(KConfig *config)
 {
-QString dbType=config->readEntry("Type","SQLite");
-
- while ((dbType!="SQLite") && (dbType!="MySQL"))
-	{
-	questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
-		
-	// Read the database setup again
+	QString dbType=config->readEntry("Type","SQLite");
 	
-	config=kapp->config(); config->sync(); config->setGroup("DBType");
-	dbType=config->readEntry("Type","SQLite");
+	while ((dbType!="SQLite") && (dbType!="MySQL"))
+		{
+		questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
+			
+		// Read the database setup again
+		
+		config=kapp->config(); config->sync(); config->setGroup("DBType");
+		dbType=config->readEntry("Type","SQLite");
+		}
 	return (dbType);
-	}
 }
 
 #if HAVE_MYSQL
@@ -906,15 +905,17 @@ void KrecipesView::initMySQLDatabase(KConfig *config)
 		
 		config->setGroup("DBType");
    		dbtype=checkCorrectDBType(config);
-		config->setGroup("Server");
-		QString host=config->readEntry( "Host","localhost");
-    		QString user=config->readEntry( "Username",QString::null);
-    		QString pass=config->readEntry("Password",QString::null);
-    		QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+		
 		
 		
 		if(dbtype=="MySQL")  // First case, MySQL
 			{
+			config->setGroup("Server");
+			QString host=config->readEntry( "Host","localhost");
+    			QString user=config->readEntry( "Username",QString::null);
+    			QString pass=config->readEntry("Password",QString::null);
+    			QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+		
 			kdDebug()<<i18n("Configured type... MySQL\n").latin1();
 			
 			// Try opening the database again with the new details
@@ -943,7 +944,64 @@ void KrecipesView::initMySQLDatabase(KConfig *config)
 	}
 	kdDebug()<<i18n("DB started correctly\n").latin1();
 }
+
 #endif //HAVE_MYSQL
+
+#if HAVE_SQLITE
+void KrecipesView::initSQLiteDatabase(KConfig *config)
+{
+database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+
+while (!database->ok()) 
+	{
+		// Ask the user if he wants to rerun the wizard
+		questionRerunWizard(database->err(), i18n("Unable to open database"));
+		
+		// Reread the configuration file.
+		// The user may have changed the data and/or DB type
+		
+		config->setGroup("DBType");
+   		dbtype=checkCorrectDBType(config);
+		
+		
+		
+		if (dbtype=="SQLite")// The user chose SQLite (again)
+			{
+			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
+			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+			}
+		
+		#if HAVE_MYSQL
+		else if(dbtype=="MySQL")  // The user chose MySQL this time
+			{
+			config->setGroup("Server");
+			QString host=config->readEntry( "Host","localhost");
+    			QString user=config->readEntry( "Username",QString::null);
+    			QString pass=config->readEntry("Password",QString::null);
+    			QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+		
+			kdDebug()<<i18n("Configured type... MySQL\n").latin1();
+			
+			// Try opening the database again with the new details
+			delete (MySQLRecipeDB *)database;
+			database=new MySQLRecipeDB(host,user,pass,dbname);
+			}
+		
+		
+		#endif //HAVE_MYSQL
+		else{
+		
+		// No DB type has been enabled (should not happen at all, but just in case)
+		
+		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
+		exit(1);
+		}
+		
+		
+	}
+}
+
+#endif //HAVE_SQLITE
 
 
 

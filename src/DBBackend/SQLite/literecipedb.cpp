@@ -39,7 +39,8 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	     if (!database->open(dbFile))
 		{
 		kdError()<<QString(i18n("Could not open DB. You may not have permissions. Exiting.\n")).latin1();
-		exit(1);
+		dbErr=i18n("Krecipes could not open the SQLite database. You may not have the necessary permissions.\n");
+		return;
 		}
 
 	     // Initialize database if requested
@@ -51,8 +52,9 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	 	if (!checkIntegrity())
 			{
 			kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
-			 exit(1);
-			 }
+			dbErr=i18n("Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the database structure may be too corrupted.\n");
+			return;
+			}
 	 }
 	 dbOK=true;
 }

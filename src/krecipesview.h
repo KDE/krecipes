@@ -142,8 +142,9 @@ private:
 	#if HAVE_MYSQL 
 		void initMySQLDatabase(KConfig *config);
 	#endif //HAVE_MYSQL
-	
-	
+	#if HAVE_SQLITE
+		void initSQLiteDatabase(KConfig *config);
+	#endif //HAVE_SQLITE
 	// Widgets
 	QHBox *splitter;
 	KreMenu *leftPanel;
