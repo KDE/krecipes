@@ -2,8 +2,6 @@ AM_INIT_AUTOMAKE(krecipes, 0.7)
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
-UIC_NOT_NEEDED=true
-
 AC_ARG_ENABLE(sqlite,    [  --disable-sqlite]     [Don't compile SQLite backend support],disable_sqlite=yes)
 AC_ARG_ENABLE(mysql,     [  --disable-mysql]      [Don't compile MySQL backend support],disable_mysql=yes)
 AC_ARG_ENABLE(postgresql,[  --disable-postgresql] [Don't compile PostgreSQL backend support],disable_postgresql=yes)
