@@ -33,12 +33,10 @@ public:
 	PSqlRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
 	~PSqlRecipeDB(void);
 
-	void initializeDB(void);
-	void initializeData(void);
-
 	int lastInsertID();
 
 	void createTable(QString tableName);
+	void givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost);
 
 protected:
 	virtual QString qsqlDriver() const { return PSQL_DRIVER; }

@@ -163,20 +163,27 @@ void BaseImporter::parseFiles( const QStringList &filenames )
 	}
 }
 
-void BaseImporter::import( RecipeDB *db )
+void BaseImporter::import( RecipeDB *db, bool automatic )
 {
 	if ( m_recipe_list->count() == 0 )
 		return;
 
-	RecipeImportDialog import_dialog(*m_recipe_list);
+	RecipeList selected_recipes;
+	if ( !automatic ) {
+		RecipeImportDialog import_dialog(*m_recipe_list);
+	
+		if ( import_dialog.exec() != QDialog::Accepted )
+		{
+			//clear errors and messages so they won't be displayed
+			m_error_msgs.clear();
+			m_warning_msgs.clear();
+			return;
+		}
 
-	if ( import_dialog.exec() != QDialog::Accepted )
-	{
-		//clear errors and messages so they won't be displayed
-		m_error_msgs.clear();
-		m_warning_msgs.clear();
-		return;
+		selected_recipes = import_dialog.getSelectedRecipes();
 	}
+	else
+		selected_recipes = *m_recipe_list;
 
 	//cache some data we'll need
 	int max_author_length = db->maxAuthorNameLength();
@@ -184,8 +191,6 @@ void BaseImporter::import( RecipeDB *db )
 	int max_ing_length = db->maxIngredientNameLength();
 	int max_prepmethod_length = db->maxPrepMethodNameLength();
 	int max_units_length = db->maxUnitNameLength();
-
-	RecipeList selected_recipes = import_dialog.getSelectedRecipes();
 
 	// Load Current Settings
 	KConfig *config=kapp->config();

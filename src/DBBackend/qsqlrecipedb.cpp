@@ -27,12 +27,25 @@ QSqlRecipeDB::QSqlRecipeDB(QString host, QString user, QString pass, QString nam
 	dbOK = false; //it isn't ok until we've connect()'ed
 }
 
-void QSqlRecipeDB::connect(bool init)
+QSqlRecipeDB::~QSqlRecipeDB()
+{
+if (dbOK) database->close();
+}
+
+void QSqlRecipeDB::connect()
 {
 	kdDebug()<<i18n("QSqlRecipeDB: Opening Database...")<<endl;
 
-	if ( !QSqlDatabase::isDriverAvailable( qsqlDriver() ) )
-	{
+	QStringList drivers = QSqlDatabase::drivers();
+	bool driver_found = false;
+	for ( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+		if ( (*it) == qsqlDriver() ) {
+			driver_found = true;
+			break;
+		}
+	}
+
+	if ( !driver_found ) {
 		dbErr=QString(i18n("The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend.")).arg(qsqlDriver());
 		return;
 	}
@@ -59,9 +72,6 @@ void QSqlRecipeDB::connect(bool init)
 			dbErr=QString(i18n("Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(DBuser).arg(qsqlDriver());
 			return;
 		}
-	
-		// Initialize database if requested
-		if (init) initializeDB();
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
@@ -74,9 +84,29 @@ void QSqlRecipeDB::connect(bool init)
 	dbOK=true;
 }
 
-QSqlRecipeDB::~QSqlRecipeDB()
+void QSqlRecipeDB::initializeData(void)
 {
-if (dbOK) database->close();
+	// Populate with data
+
+	QString commands;
+	// Read the commands form the data file
+	QFile datafile(KGlobal::dirs()->findResource("appdata","data/data.sql"));
+	if ( datafile.open( IO_ReadOnly ) ) {
+		QTextStream stream( &datafile );
+		commands=stream.read();
+		datafile.close();
+	}
+
+	// Split commands
+	QStringList commandList;
+	splitCommands(commands,commandList);
+
+	// Execute commands
+	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it ) {
+		database->exec((*it)+QString(";")); //Split removes the semicolons
+	}
+
+	importSamples();
 }
 
 void QSqlRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list, bool withNames)
@@ -1891,18 +1921,6 @@ void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 	command=QString("DELETE FROM units WHERE id=%1").arg(id2);
 	update.exec(command);
 	emit unitRemoved(id2);
-}
-
-void QSqlRecipeDB::givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost)
-{
-QString command;
-
-if ( !password.isEmpty() ) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
-else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
-
-kdDebug()<<"I'm doing the query to setup permissions\n";
-
-QSqlQuery permissionsToSet( command,database);
 }
 
 QString QSqlRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )

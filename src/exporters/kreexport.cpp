@@ -84,17 +84,17 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<author>"+QStyleSheet::escape((*author_it).name.utf8())+"</author>\n";
 
     xml += "<pictures>\n";
-    xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
     if ( !(*recipe_it).photo.isNull() ) {
+    xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
 	QByteArray data;
 	QBuffer buffer( data );
 	buffer.open( IO_WriteOnly );
 	(*recipe_it).photo.save( &buffer, "JPEG" );
 	
 	xml += KCodecs::base64Encode(data, true);
-    }
 
     xml += "]]></pic>\n";
+    }
     xml += "</pictures>\n";
     xml += "<category>\n";
 

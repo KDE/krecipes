@@ -30,8 +30,14 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     // a TreeList dialog.. but there are a number of other
     // possibilities (including Tab, Swallow, and just Plain)
     QFrame *frame;
+    
+    KConfig *config = KGlobal::config();
+    config->setGroup("DBType");
+    
     KIconLoader il;
-    frame = addPage(i18n("Server Settings"), i18n("Database Server Options"),il.loadIcon("network_local",KIcon::NoGroup,32));
+    frame = addPage(i18n("Server Settings"),
+      QString(i18n("Database Server Options (%1)")).arg(config->readEntry("Type")),
+      il.loadIcon("network_local",KIcon::NoGroup,32));
     QHBoxLayout* layout = new QHBoxLayout( frame );
     m_pageServer = new ServerPrefs(frame);
     layout->addWidget(m_pageServer);
@@ -315,7 +321,7 @@ config->setGroup("DBType");
 QString DBtype = config->readEntry("Type");
 if ( DBtype == "MySQL" )
    ((MySQLServerPrefs*)serverWidget)->saveOptions();
-else if ( DBtype == "MySQL" )
+else if ( DBtype == "PostgreSQL" )
    ((PostgreSQLServerPrefs*)serverWidget)->saveOptions();
 else
    ((SQLiteServerPrefs*)serverWidget)->saveOptions();

@@ -47,69 +47,6 @@ else
 database->setDatabaseName(real_db_name);
 }
 
-void MySQLRecipeDB::initializeDB(void)
-{
-// Select the database
-QString command=QString("USE %1;").arg(database->databaseName());
-QSqlQuery initializeQuery(command,database);
-
-// Create the table structure
-
-	// Read the commands form the structure file
-	QString commands;
-	QFile file (KGlobal::dirs()->findResource("appdata", "data/mysqlstructure.sql"));
-	if ( file.open( IO_ReadOnly ) ) {
-	QTextStream stream( &file );
-     	commands=stream.read();
-     	file.close();
- 	}
-
-
-	// Split commands
-	QStringList commandList;
-	splitCommands(commands,commandList);
-	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
-	 {
-	 initializeQuery.exec((*it)+QString(";")); //Split removes the semicolons
-	 }
-
-
-
-}
-
-void MySQLRecipeDB::initializeData(void)
-{
-
-// Select the database
-QString command=QString("USE %1;").arg(database->databaseName());
-QSqlQuery initializeQuery(command,database);
-
-//
-
-// Populate with data
-
-	QString commands;
-	// Read the commands form the data file
-	QFile datafile(KGlobal::dirs()->findResource("appdata", "data/mysqldata.sql"));
-	if ( datafile.open( IO_ReadOnly ) ) {
-	QTextStream stream( &datafile );
-     	commands=stream.read();
-     	datafile.close();
- 	}
-
-
-	// Split commands
-	QStringList commandList;
-	splitCommands(commands,commandList);
-
-	// Execute commands
-	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
-	 {
-	 initializeQuery.exec((*it)+QString(";")); //Split removes the semicolons
-	 }
-
-}
-
 void MySQLRecipeDB::createTable(QString tableName)
 {
 
@@ -141,7 +78,10 @@ else if (tableName=="authors") commands<<QString("CREATE TABLE authors (id int(1
 
 else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
 
-else if (tableName=="db_info") commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+else if (tableName=="db_info") {
+commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
+}
 
 else return;
 
@@ -271,6 +211,18 @@ int MySQLRecipeDB::lastInsertID()
 		id = lastInsertID.value(0).toInt();
 
 	return id;
+}
+
+void MySQLRecipeDB::givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost)
+{
+QString command;
+
+if ( !password.isEmpty() ) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
+else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
+
+kdDebug()<<"I'm doing the query to setup permissions\n";
+
+QSqlQuery permissionsToSet( command,database);
 }
 
 #include "mysqlrecipedb.moc"

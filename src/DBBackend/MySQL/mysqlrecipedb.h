@@ -33,12 +33,10 @@ public:
 	MySQLRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
 	~MySQLRecipeDB(void);
 
-	void initializeDB(void);
-	void initializeData(void);
-
 	int lastInsertID();
 
 	void createTable(QString tableName);
+	void givePermissions(const QString &dbName,const QString &username, const QString &password=QString::null, const QString &clientHost="localhost");
 
 protected:
 	QString qsqlDriver() const { return MYSQL_DRIVER; }

@@ -46,7 +46,7 @@ public:
 	/** Import all the recipes into the given database.  These recipes are the
 	  * recipes added to this class by a subclass using the @ref add() method.
 	  */
-	void import( RecipeDB *db );
+	void import( RecipeDB *db, bool automatic=false );
 
 protected:
 	virtual void parseFile( const QString &filename ) = 0;

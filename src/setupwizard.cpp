@@ -45,6 +45,9 @@ addPage(sqliteSetupPage,i18n("Server Settings"));
 permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
 
+pSqlPermissionsSetupPage=new PSqlPermissionsSetupPage(this);
+addPage(pSqlPermissionsSetupPage,i18n("Database Permissions"));
+
 serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,i18n("Server Settings"));
 
@@ -59,6 +62,7 @@ setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
 #if (HAVE_SQLITE || HAVE_SQLITE3)
 setAppropriate(permissionsSetupPage,false);// Disable By Default
+setAppropriate(pSqlPermissionsSetupPage,false);// Disable By Default
 setAppropriate(serverSetupPage,false); // if we have SQLite (since it's default, and doesn't require these settings)
 setAppropriate(sqliteSetupPage,true);
 #else
@@ -68,7 +72,7 @@ setAppropriate(sqliteSetupPage,false);
 
 
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
-connect(dbTypeSetupPage,SIGNAL(showPages(bool)),this,SLOT(showPages(bool)));
+connect(dbTypeSetupPage,SIGNAL(showPages(DBType)),this,SLOT(showPages(DBType)));
 
 }
 
@@ -79,14 +83,28 @@ SetupWizard::~SetupWizard()
 }
 
 
-void SetupWizard::showPages(bool show)
+void SetupWizard::showPages(DBType type)
 {
-//MySQL pages
-setAppropriate(serverSetupPage,show);
-setAppropriate(permissionsSetupPage,show);
-
-//SQLite pages
-setAppropriate(sqliteSetupPage,!show);
+switch (type) {
+case MySQL: 
+	setAppropriate(serverSetupPage,true);
+	setAppropriate(permissionsSetupPage,true);
+	setAppropriate(pSqlPermissionsSetupPage,false);
+	setAppropriate(sqliteSetupPage,false);
+	break;
+case PostgreSQL:
+	setAppropriate(serverSetupPage,true);
+	setAppropriate(pSqlPermissionsSetupPage,true);
+	setAppropriate(permissionsSetupPage,false);
+	setAppropriate(sqliteSetupPage,false);
+	break;
+case SQLite: 
+	setAppropriate(serverSetupPage,false);
+	setAppropriate(permissionsSetupPage,false);
+	setAppropriate(pSqlPermissionsSetupPage,false);
+	setAppropriate(sqliteSetupPage,true);
+	break;
+}
 }
 
 
@@ -216,6 +234,108 @@ void PermissionsSetupPage::noSetupCheckBoxChanged(bool on)
 if (on) rootCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
 }
 
+
+PSqlPermissionsSetupPage::PSqlPermissionsSetupPage(QWidget *parent):QWidget(parent)
+{
+QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
+
+
+// Logo
+QPixmap permissionsSetupPixmap (locate("data", "krecipes/pics/dbpermissions.png"));
+logo=new QLabel(this);
+logo->setPixmap(permissionsSetupPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
+
+// Spacer to separate the logo
+QSpacerItem *logoSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(logoSpacer,1,2);
+
+
+// Explanation Text
+permissionsText=new QLabel(this);
+permissionsText->setText(i18n("This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases<b>.<br><br>If no superuser or priviledged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must<b> select the appropriate option below to enter the information of a priviledged PostgreSQL account."));
+
+permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
+layout->addWidget(permissionsText,1,3);
+
+// Text spacer
+QSpacerItem *textSpacer=new QSpacerItem(10,30,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(textSpacer,2,3);
+
+
+// "The user already has permissions" checkbox
+noSetupCheckBox=new QCheckBox(i18n("I have already set the necessary permissions"),this,"noSetupCheckBox");
+layout->addWidget(noSetupCheckBox,3,3);
+
+QSpacerItem *checkBoxSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(checkBoxSpacer,4,3);
+
+// root checkbox
+rootCheckBox=new QCheckBox(i18n("I have already set a superuser or priviledged account"),this,"rootCheckBox");
+layout->addWidget(rootCheckBox,5,3);
+
+QSpacerItem *rootInfoSpacer=new QSpacerItem(10,20,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(rootInfoSpacer,6,3);
+
+// MySQL root/admin info
+QGroupBox *rootInfoGBox=new QGroupBox(this,"rootInfoGBox"); rootInfoGBox->setTitle(i18n("PostgreSQL Superuser or Priviledged Account"));
+rootInfoGBox->setEnabled(false); // Disable by default
+rootInfoGBox->setColumns(2);
+rootInfoGBox->setInsideSpacing(10);
+layout->addWidget(rootInfoGBox,7,3);
+
+// User Entry
+QLabel *userLabel=new QLabel(rootInfoGBox); userLabel->setText(i18n("Username:"));
+userEdit=new KLineEdit(rootInfoGBox); userEdit->setText("postgres");
+
+// Password Entry
+QLabel *passLabel=new QLabel(rootInfoGBox); passLabel->setText(i18n("Password:"));
+passEdit=new KLineEdit(rootInfoGBox); passEdit->setEchoMode(QLineEdit::Password);
+
+// Bottom spacer
+QSpacerItem *bottomSpacer=new QSpacerItem(10,20,QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
+layout->addItem(bottomSpacer,8,1);
+
+// Connect Signals & slots
+
+connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoGBox,SLOT(setEnabled(bool)));
+connect(rootCheckBox,SIGNAL(toggled(bool)),this,SLOT(rootCheckBoxChanged(bool)));
+connect(noSetupCheckBox,SIGNAL(toggled(bool)),this,SLOT(noSetupCheckBoxChanged(bool)));
+}
+
+void PSqlPermissionsSetupPage::rootCheckBoxChanged(bool on)
+{
+if (on) noSetupCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
+}
+
+bool PSqlPermissionsSetupPage::doUserSetup()
+{
+return (!noSetupCheckBox->isChecked());
+}
+
+bool PSqlPermissionsSetupPage::useAdmin()
+{
+return (rootCheckBox->isChecked());
+}
+
+void PSqlPermissionsSetupPage::getAdmin(QString &adminName,QString &adminPass)
+{
+adminName=userEdit->text();
+adminPass=passEdit->text();
+}
+
+void PSqlPermissionsSetupPage::noSetupCheckBoxChanged(bool on)
+{
+if (on) rootCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
+}
+
+
 ServerSetupPage::ServerSetupPage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
@@ -239,7 +359,7 @@ layout->addItem(spacer_from_image,1,2);
 
 // Explanation text
 serverSetupText=new QLabel(this);
-serverSetupText->setText(i18n("In this dialog you can adjust the MySQL server settings."));
+serverSetupText->setText(i18n("In this dialog you can adjust the database server settings."));
 serverSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 serverSetupText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
 layout->addWidget(serverSetupText,1,3);
@@ -478,23 +598,24 @@ KConfig *config=kapp->config();
 // Save the database type
 QString sDBType;
 
-if (dbTypeSetupPage->dbType()==DBTypeSetupPage::MySQL)
-	sDBType="MySQL";
-else
-	sDBType="SQLite";
+switch (dbTypeSetupPage->dbType()) {
+case MySQL: sDBType="MySQL"; break;
+case PostgreSQL: sDBType="PostgreSQL"; break;
+default: sDBType="SQLite"; break;
+}
 
 config->setGroup("DBType");
 config->writeEntry("Type",sDBType);
 kdDebug()<<"DB type set in kconfig was... "<<sDBType<<endl;
 // Save the server data if needed
-if (!(dbTypeSetupPage->dbType()==DBTypeSetupPage::SQLite))
+if (!(dbTypeSetupPage->dbType()==SQLite))
 {
 config->setGroup("Server");
 config->writeEntry("Host",serverSetupPage->server());
 config->writeEntry("Username",serverSetupPage->user());
 config->writeEntry("Password",serverSetupPage->password());
 config->writeEntry("DBName",serverSetupPage->dbName());
-kdDebug()<<"Finished setting the database parameters for MySQL (non SQLite)..."<<endl;
+kdDebug()<<"Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..."<<endl;
 }
 else {
 config->setGroup("Server");
@@ -511,16 +632,18 @@ kdDebug()<<"Setting in kconfig the lines to disable wizard startup..."<<sDBType<
 
 void SetupWizard::getOptions(bool &setupUser, bool &initializeData, bool &doUSDAImport)
 {
-setupUser=permissionsSetupPage->doUserSetup();
+setupUser=permissionsSetupPage->doUserSetup()&&pSqlPermissionsSetupPage->doUserSetup();
 initializeData=dataInitializePage->doInitialization();
 doUSDAImport=dataInitializePage->doUSDAImport();
 }
 
-void SetupWizard::getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass)
+void SetupWizard::getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass, const QString &dbType)
 {
-enabled=permissionsSetupPage->useAdmin();
-permissionsSetupPage->getAdmin(adminUser,adminPass);
-
+enabled=permissionsSetupPage->useAdmin()||pSqlPermissionsSetupPage->useAdmin();
+if ( dbType=="MySQL" )
+	permissionsSetupPage->getAdmin(adminUser,adminPass);
+else
+	pSqlPermissionsSetupPage->getAdmin(adminUser,adminPass);
 }
 
 void SetupWizard::getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName,QString &user, QString &pass)
@@ -611,7 +734,7 @@ layout->addItem(spacer_from_image,1,2);
 
 // Explanation text
 dbTypeSetupText=new QLabel(this);
-dbTypeSetupText->setText(i18n("Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL database."));
+dbTypeSetupText->setText(i18n("Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL or PostgreSQL database."));
 dbTypeSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 dbTypeSetupText->setAlignment( int( QLabel::AlignTop |QLabel::WordBreak ) );
 layout->addWidget(dbTypeSetupText,1,3);
@@ -629,6 +752,7 @@ layout->addWidget(bg,3,3);
 
 liteCheckBox=new QRadioButton(i18n("Simple Local File (SQLite)"),bg,"liteCheckBox");
 mysqlCheckBox=new QRadioButton(i18n("Local or Remote MySQL Database"),bg,"liteCheckBox");
+psqlCheckBox=new QRadioButton(i18n("Local or Remote PostgreSQL Database"),bg,"psqlCheckBox");
 bg->setButton(0); // By default, SQLite 
 
 #if (!HAVE_MYSQL)
@@ -655,12 +779,11 @@ int DBTypeSetupPage::dbType(void)
 //int id=bg->selectedId(); //QT 3.2
 int id=bg->id(bg->selected()); //QT 3.1
 
-if (id==1) // MySQL (note index=0,1....)
-	 return (MySQL);
-else
-	 return(SQLite);
-
-
+switch (id) {
+case 1: return (MySQL); // MySQL (note index=0,1....)
+case 2: return (PostgreSQL);
+default: return (SQLite);
+}
 }
 
 /*
@@ -669,10 +792,11 @@ else
 
 void DBTypeSetupPage::setPages(int rb)
 {
-if (rb==0) // Hide pages
-	emit showPages(false);
-else // Show pages
-	emit showPages(true);
+switch (rb) {
+case 1: emit showPages(MySQL); break;
+case 2: emit showPages(PostgreSQL); break;
+default: emit showPages(SQLite); break;
+}
 }
 
 #include "setupwizard.moc"

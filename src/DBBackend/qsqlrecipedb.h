@@ -64,7 +64,7 @@ public:
 	QSqlRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
 	~QSqlRecipeDB(void);
 
-	void connect(bool init=true);
+	void connect();
 
 	void addAuthorToRecipe(int recipeID, int categoryID);
 	void addCategoryToRecipe(int recipeID, int categoryID);
@@ -102,11 +102,11 @@ public:
 	void findUseOf_Unit_InProperties(ElementList *results, int unitID);
 
 	QString getUniqueRecipeTitle( const QString &recipe_title );
-	void givePermissions(const QString &dbName,const QString &username, const QString &password=QString::null, const QString &clientHost="localhost");
-
 
 	bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID);
 	bool ingredientContainsUnit(int ingredientID, int unitID);
+
+	void initializeData(void);
 
 	//void initializeDB(void);
 	//void initializeData(void);

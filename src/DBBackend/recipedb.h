@@ -45,11 +45,16 @@ Q_OBJECT
 
 protected:
 	RecipeDB(QString host, QString user, QString pass, QString DBname):QObject(){dbOK=false; dbErr="";}
+	
+	double latestDBVersion() const{ return 0.61; }
+	QString krecipes_version() const;
 
 public:
 	virtual ~RecipeDB(){};
 	
-	virtual void connect(bool init=true) = 0;
+	virtual void connect() = 0;
+	
+	void importSamples();
 	
 	// Error handling (passive)
 	bool dbOK;
@@ -128,7 +133,6 @@ public:
 	virtual bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID)=0;
 	virtual bool ingredientContainsUnit(int ingredientID, int unitID)=0;
 
-	virtual void initializeDB(void)=0;
 	virtual void initializeData(void)=0;
 
 	virtual int lastInsertID()=0;

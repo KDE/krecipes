@@ -26,11 +26,13 @@
 class WelcomePage;
 class DBTypeSetupPage;
 class PermissionsSetupPage;
+class PSqlPermissionsSetupPage;
 class ServerSetupPage;
 class DataInitializePage;
 class SavePage;
 class SQLiteSetupPage;
 
+enum DBType {SQLite,MySQL,PostgreSQL};
 
 class SetupWizard:public KWizard{
 Q_OBJECT
@@ -39,13 +41,14 @@ public:
      SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
     ~SetupWizard();
     void getOptions(bool &setupUser, bool &initializeData, bool &doUSDAImport);
-    void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass);
+    void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass, const QString &dbType);
     void getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName,QString &user, QString &pass);
 private:
 	// Widgets
 	WelcomePage *welcomePage;
 	DBTypeSetupPage *dbTypeSetupPage;
 	PermissionsSetupPage *permissionsSetupPage;
+	PSqlPermissionsSetupPage *pSqlPermissionsSetupPage;
 	ServerSetupPage *serverSetupPage;
 	DataInitializePage *dataInitializePage;
 	SQLiteSetupPage *sqliteSetupPage;
@@ -53,7 +56,7 @@ private:
 
 private slots:
 	void save(void);
-	void showPages(bool show);
+	void showPages(DBType);
 
 };
 
@@ -75,6 +78,29 @@ Q_OBJECT
 public:
 	// Methods
 	PermissionsSetupPage(QWidget *parent);
+	bool doUserSetup(void);
+	bool useAdmin(void);
+	void getAdmin(QString &adminName,QString &adminPass);
+private:
+	// Widgets
+	QLabel *logo;
+	QLabel *permissionsText;
+	QCheckBox *noSetupCheckBox;
+	QCheckBox *rootCheckBox;
+	QLineEdit *userEdit;
+	QLineEdit *passEdit;
+
+private slots:
+	void rootCheckBoxChanged(bool on);
+	void noSetupCheckBoxChanged(bool on);
+
+};
+
+class PSqlPermissionsSetupPage:public QWidget{
+Q_OBJECT
+public:
+	// Methods
+	PSqlPermissionsSetupPage(QWidget *parent);
 	bool doUserSetup(void);
 	bool useAdmin(void);
 	void getAdmin(QString &adminName,QString &adminPass);
@@ -168,8 +194,6 @@ class DBTypeSetupPage:public QWidget{
 Q_OBJECT
 
 public:
-
-enum DBType {SQLite,MySQL};
 	// Methods
 	DBTypeSetupPage(QWidget *parent);
 	int dbType(void);
@@ -180,10 +204,11 @@ private:
 	QVButtonGroup *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
+	QRadioButton *psqlCheckBox;
 private slots:
 	void setPages(int rb); // hides/shows pages given the radio button state
 signals:
-	void showPages(bool show);
+	void showPages(DBType);
 };
 
 #endif

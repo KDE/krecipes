@@ -47,40 +47,6 @@ else
 database->setDatabaseName(real_db_name);
 }
 
-void PSqlRecipeDB::initializeDB(void)
-{
-}
-
-void PSqlRecipeDB::initializeData(void)
-{
-QSqlQuery initializeQuery(QString::null,database);
-
-//
-
-// Populate with data
-
-	QString commands;
-	// Read the commands form the data file
-	QFile datafile(KGlobal::dirs()->findResource("appdata", "data/mysqldata.sql"));
-	if ( datafile.open( IO_ReadOnly ) ) {
-	QTextStream stream( &datafile );
-     	commands=stream.read();
-     	datafile.close();
- 	}
-
-
-	// Split commands
-	QStringList commandList;
-	splitCommands(commands,commandList);
-
-	// Execute commands
-	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
-	 {
-	 initializeQuery.exec((*it)+QString(";")); //Split removes the semicolons
-	 }
-
-}
-
 void PSqlRecipeDB::createTable(QString tableName)
 {
 
@@ -122,7 +88,7 @@ else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_i
 
 else if (tableName=="db_info") {
 commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by CHARACTER VARYING default NULL);";
-commands<<"INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
+commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
 }
 
 else return;
@@ -189,6 +155,27 @@ void PSqlRecipeDB::loadPhoto(int recipeID, QPixmap &photo)
 		bool ok = pix.loadFromData(picData, "JPEG");
 		if (ok) photo = pix;
 	}
+}
+
+void PSqlRecipeDB::givePermissions(const QString &/*dbName*/,const QString &username, const QString &password, const QString &/*clientHost*/)
+{
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods"<<"db_info";
+
+//we also have to grant permissions on the sequences created
+tables<<"authors_id_seq"<<"categories_id_seq"<<"ingredient_properties_id_seq"<<"ingredients_id_seq"<<"prep_methods_id_seq"<<"recipes_id_seq"<<"units_id_seq";
+
+QString command;
+
+kdDebug()<<"I'm doing the query to create the new user"<<endl;
+command="CREATE USER "+username;
+if ( !password.isEmpty() )
+	command.append("WITH PASSWORD '"+password+"'");
+command.append(";");
+QSqlQuery permissionsToSet(command,database);
+
+kdDebug()<<"I'm doing the query to setup permissions\n";
+command=QString("GRANT ALL ON %1 TO %2;").arg(tables.join(",")).arg(username);
+permissionsToSet.exec(command);
 }
 
 #include "psqlrecipedb.moc"

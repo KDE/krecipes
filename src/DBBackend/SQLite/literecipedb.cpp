@@ -37,7 +37,7 @@ database->close();
 delete database;
 }
 
-void LiteRecipeDB::connect(bool init)
+void LiteRecipeDB::connect()
 {
 KConfig *config = KGlobal::config();
 config->setGroup("Server");
@@ -60,9 +60,6 @@ kdDebug()<<"Connecting to the SQLite database\n";
 		dbErr=i18n("Krecipes could not open the SQLite database. You may not have the necessary permissions.\n");
 		return;
 		}
-
-	     // Initialize database if requested
-	      if (init) initializeDB();
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
@@ -829,32 +826,6 @@ database->executeQuery(command);
 emit ingredientRemoved(ingredientID);
 }
 
-void LiteRecipeDB::initializeDB(void)
-{
-// Create the table structure
-
-	// Read the commands form the structure file
-	QString commands;
-	QFile file (KGlobal::dirs()->findResource("appdata", "data/litestructure.sql"));
-	if ( file.open( IO_ReadOnly ) ) {
-	QTextStream stream( &file );
-     	commands=stream.read();
-     	file.close();
- 	}
-
-
-	// Split commands
-	QStringList commandList;
-	splitCommands(commands,commandList);
-	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
-	 {
-	 database->executeQuery((*it)+QString(";")); //Split removes the semicolons
-	 }
-
-
-
-}
-
 void LiteRecipeDB::initializeData(void)
 {
 
@@ -862,7 +833,7 @@ void LiteRecipeDB::initializeData(void)
 
 	QString commands;
 	// Read the commands form the data file
-	QFile datafile(KGlobal::dirs()->findResource("appdata", "data/litedata.sql"));
+	QFile datafile(locate("appdata", "data/data.sql"));
 	if ( datafile.open( IO_ReadOnly ) ) {
 	QTextStream stream( &datafile );
      	commands=stream.read();
@@ -880,6 +851,8 @@ void LiteRecipeDB::initializeData(void)
 	 database->executeQuery((*it)+QString(";")); //Split removes the semicolons
 	 }
 
+	//now import samples
+	importSamples();
 }
 
 void LiteRecipeDB::addProperty(const QString &name, const QString &units)
@@ -1513,7 +1486,10 @@ else if (tableName=="authors") commands<<QString("CREATE TABLE authors (id INTEG
 
 else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_id INTEGER NOT NULL,author_id INTEGER NOT NULL);";
 
-else if (tableName=="db_info") commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+else if (tableName=="db_info") {
+commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
+}
 
 else return;
 

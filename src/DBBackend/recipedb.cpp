@@ -14,11 +14,16 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kprogress.h> 
+#include <kglobal.h>
+#include <klocale.h>
+#include <kaboutdata.h>
 
 #include <qfile.h>
 #include <qstringlist.h>
 
 #include <map>
+
+#include "importers/kreimporter.h"
 
 #include "ingredientpropertylist.h"
 #include "usda_property_data.h"
@@ -29,6 +34,15 @@ struct ingredient_nutrient_data
 	QString name;
 	QValueList<double> data;
 };
+
+QString RecipeDB::krecipes_version() const
+{
+	KInstance *this_instance = KGlobal::instance();
+	if ( this_instance && this_instance->aboutData() )
+		return this_instance->aboutData()->version();
+
+	return QString::null; //Oh, well.  We couldn't get the version.
+}
 
 void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KProgressDialog *progress_dlg )
 {
@@ -53,6 +67,26 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 	}
 }
 
+void RecipeDB::importSamples()
+{
+	QString sample_recipes = locate("appdata", "data/samples-"+KGlobal::locale()->language()+".kreml");
+	if ( sample_recipes.isEmpty() ) {
+		//TODO: Make this a KMessageBox??
+		kdDebug()<<"NOTICE: Samples recipes for the language \""<<KGlobal::locale()->language()<<"\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release."<<endl;
+
+		sample_recipes = locate("appdata", "data/samples-en_US.kreml"); //default to English
+	}
+	if ( !sample_recipes.isEmpty() ) {
+		KreImporter importer;
+		
+		QStringList file; file << sample_recipes;
+		importer.parseFiles(file);
+
+		importer.import(this,true);
+	}
+	else
+		kdDebug()<<"Unable to find samples recipe file (samples-en_US.kreml)"<<endl;
+}
 
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int,QString> * );

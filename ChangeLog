@@ -1,5 +1,7 @@
 Changes from 0.6 to CVS:
-  -Border option added recipe display
+  -Load sample recipes based on locale.  If we don't currently have your locale, please submit some recipes to us!
+  -Support for PostgreSQL database backend
+  -Border options added to recipe display
   -Support for drag and drop in the shopping list dialog
 
 Changes from 0.5 to 0.6:
