@@ -37,7 +37,7 @@ bool Unit::operator==( const Unit &u ) const
 	if ( plural_test1.isNull() )
 		plural_test1 = "";
 
-	QString plural_test2 = name.lower();
+	QString plural_test2 = plural.lower();
 	if ( plural_test2.isNull() )
 		plural_test2 = "";
 
@@ -49,5 +49,12 @@ bool Unit::operator==( const Unit &u ) const
 	if ( single_test2.isNull() )
 		single_test2 = "";
 
-	return plural_test1 == plural_test2 || single_test1 == single_test2;
+	if ( plural_test1.isEmpty() && plural_test2.isEmpty() && single_test1.isEmpty() && single_test2.isEmpty() )
+		return true;
+	else if ( plural_test1.isEmpty() && plural_test2.isEmpty() )
+		return single_test1 == single_test2;
+	else if ( single_test1.isEmpty() && single_test2.isEmpty() )
+		return plural_test1 == plural_test2;
+	else
+		return (plural_test1 == plural_test2 || single_test1 == single_test2);
 }
