@@ -81,6 +81,7 @@ private slots:
 private:
     void setupAccel();
     void setupActions();
+    void wizard(void);
 
 private:
     KrecipesView *m_view;

@@ -22,10 +22,11 @@
 #include <kconfig.h>
 
 #include <kedittoolbar.h>
-
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
+
+#include "setupwizard.h"
 
 Krecipes::Krecipes()
     : KMainWindow( 0, "Krecipes" ),
@@ -60,7 +61,8 @@ Krecipes::Krecipes()
     connect(this->m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)));
     enableSaveOption(false); // Disables saving initially
 
-
+    // Init the setup wizard if necessary
+    wizard();
 }
 
 Krecipes::~Krecipes()
@@ -266,4 +268,20 @@ void Krecipes::enableSaveOption(bool en)
 {
 saveAction->setEnabled(en);
 }
+
+void Krecipes::wizard(void)
+{
+KConfig *config=kapp->config();
+config->setGroup("Wizard");
+
+
+bool setupDone=config->readBoolEntry( "SystemSetup",false);
+if (!setupDone)
+{
+SetupWizard* setupWizard=new SetupWizard();
+setupWizard->exec();
+}
+
+}
+
 #include "krecipes.moc"

@@ -21,7 +21,7 @@ serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,"Server Settings");
 savePage = new SavePage(this);
 addPage(savePage,"Finish and Save Settings");
-
+setFinishEnabled(savePage,true); // Enable finish button
 }
 
 
@@ -123,4 +123,6 @@ saveText=new KTextEdit(this);
 saveText->setText("Congratulations! The necessary configuration was already setup. Press 'Finish' to continue, and enjoy cooking!");
 layout->addWidget(saveText,1,2);
 
+
 }
+
