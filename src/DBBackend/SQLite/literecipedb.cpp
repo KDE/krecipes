@@ -713,10 +713,10 @@ QSQLiteResult recipeFound=database->executeQuery( command ); // Find the entries
 // Populate data in the ElementList*
             if ( recipeFound.getStatus()!=QSQLiteResult::Failure ) {
 	    QSQLiteResultRow row=recipeFound.first();
-                while ( recipeFound.next() ) {
+                while ( !recipeFound.atEnd() ) {
 		    Element recipe;
-		    recipe.id=recipeFound.value(0).toInt();
-		    recipe.name=unescapeAndDecode(recipeFound.value(1).toString());
+		    recipe.id=row.data(0).toInt();
+		    recipe.name=unescapeAndDecode(row.data(1));
 		    results->add(recipe);
 		    row=recipeFound.next();
                 }
@@ -729,12 +729,12 @@ void LiteRecipeDB::findUseOf_Unit_InProperties(ElementList *results, int unitID)
 QSQLiteResult recipeFound= database->executeQuery(command); // Find the entries
 
 // Populate data in the ElementList*
-            if ( recipeFound.getStatus!=QSQLiteResult::Failure ) {
+            if ( recipeFound.getStatus()!=QSQLiteResult::Failure ) {
 	    QSQLiteResultRow row=recipeFound.first();
                 while (!recipeFound.atEnd()) {
 		    Element recipe;
-		    recipe.id=recipeFound.data(0).toInt();
-		    recipe.name=recipeFound.data(1);
+		    recipe.id=row.data(0).toInt();
+		    recipe.name=row.data(1);
 		    results->add(recipe);
 		    row=recipeFound.next();
                 }
@@ -755,31 +755,31 @@ QSQLiteResult ratiosToLoad=database->executeQuery(command);
 	    QSQLiteResultRow row=ratiosToLoad.first();
                 while ( !ratiosToLoad.atEnd() ) {
 		    UnitRatio ratio;
-		    ratio.ingID1=ratiosToLoad.value(0).toInt();
-		    ratio.ingID2=ratiosToLoad.value(1).toInt();
-		    ratio.ratio=ratiosToLoad.value(2).toDouble();
+		    ratio.ingID1=row.data(0).toInt();
+		    ratio.ingID2=row.data(1).toInt();
+		    ratio.ratio=row.data(2).toDouble();
 		    ratioList->add(ratio);
 		    row=ratiosToLoad.next();
                 }
 	}
 }
 
-/*void LiteRecipeDB::saveUnitRatio(const UnitRatio *ratio)
+void LiteRecipeDB::saveUnitRatio(const UnitRatio *ratio)
 {
 QString command;
 
 // Check if it's a new ratio or it exists already.
 command=QString("SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;").arg(ratio->ingID1).arg(ratio->ingID2); // Find ratio between units
 
-QSqlQuery ratioFound(command,database); // Find the entries
-bool newRatio=(ratioFound.size()==0);
+QSQLiteResult ratioFound=database->executeQuery(command); // Find the entries
+bool newRatio/*=(ratioFound.size()==0)*/; // FIXME: I need size() in the API
 
 if (newRatio)
 	command=QString("INSERT INTO units_conversion VALUES(%1,%2,%3);").arg(ratio->ingID1).arg(ratio->ingID2).arg(ratio->ratio);
 else
 	command=QString("UPDATE units_conversion SET ratio=%3 WHERE unit1_id=%1 AND unit2_id=%2").arg(ratio->ingID1).arg(ratio->ingID2).arg(ratio->ratio);
 
-ratioFound.exec(command); // Enter the new ratio
+database->executeQuery(command); // Enter the new ratio
 }
 
 double LiteRecipeDB::unitRatio(int unitID1, int unitID2)
@@ -789,20 +789,21 @@ if (unitID1==unitID2) return(1.0);
 QString command;
 
 command=QString("SELECT ratio FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;").arg(unitID1).arg(unitID2);
-QSqlQuery ratioToLoad( command,database);
+QSQLiteResult ratioToLoad=database->executeQuery(command);
 
-            if ( ratioToLoad.isActive() )
+
+	    if (ratioToLoad.getStatus()!=QSQLiteResult::Failure)
 	    {
-            if (ratioToLoad.next())
-	    	return(ratioToLoad.value(0).toDouble());
-	    else return(-1);// There is no ratio defined between the units
+	    if ( !ratioToLoad.atEnd() ) //FIXME: Check this. This should check if there's no data found
+	    	{
+	    	QSQLiteResultRow row=ratioToLoad.first();
+	    	return(row.data(0).toDouble());
+	    	}
+		else return(-1);
             }
-
-	    else
-	    {
-	    return(-1);
-	    }
+	    else return(-1);// There is no ratio defined between the units
 }
+
 
 //Finds data dependant on this Ingredient/Unit combination
 void LiteRecipeDB::findIngredientUnitDependancies(int ingredientID,int unitID,ElementList *recipes,ElementList *ingredientInfo)
@@ -811,12 +812,12 @@ void LiteRecipeDB::findIngredientUnitDependancies(int ingredientID,int unitID,El
 // Recipes using that combination
 
 QString command=QString("SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
-QSqlQuery unitToRemove( command,database);
+QSQLiteResult unitToRemove=database->executeQuery(command);
 loadElementList(recipes,&unitToRemove);
 // Ingredient info using that combination
 command=QString("SELECT i.name,ip.name,ip.units,u.name FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.ingredient_id=%1 AND ii.per_units=%2 AND ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID).arg(unitID);
 
-unitToRemove.exec(command);
+unitToRemove=database->executeQuery(command);
 loadPropertyElementList(ingredientInfo,&unitToRemove);
 }
 
@@ -824,7 +825,7 @@ void LiteRecipeDB::findIngredientDependancies(int ingredientID,ElementList *reci
 {
 QString command=QString("SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1").arg(ingredientID);
 
-QSqlQuery ingredientToRemove( command,database);
+QSQLiteResult ingredientToRemove=database->executeQuery(command);
 loadElementList(recipes,&ingredientToRemove);
 }
 
@@ -837,44 +838,52 @@ void LiteRecipeDB::findUnitDependancies(int unitID,ElementList *properties,Eleme
 // Ingredient-Info (ingredient->property) using this Unit
 
 QString command=QString("SELECT i.name,ip.name,ip.units,u.name  FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.per_units=%1 AND ii.property_id=ip.id  AND ii.per_units=u.id;").arg(unitID);
-QSqlQuery unitToRemove( command,database);
+QSQLiteResult unitToRemove=database->executeQuery(command);
 loadPropertyElementList(properties,&unitToRemove);
 
 // Recipes using this Unit
 command=QString("SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID); // Without "DISTINCT" we get duplicates since ingredient_list has no unique recipe_id's
-unitToRemove.exec(command);
+unitToRemove=database->executeQuery(command);
 loadElementList(recipes,&unitToRemove);
 
 }
 
-void LiteRecipeDB::loadElementList(ElementList *elList, QSqlQuery *query)
+void LiteRecipeDB::loadElementList(ElementList *elList, QSQLiteResult *query)
 {
-if ( query->isActive() ) {
-                while ( query->next() ) {
+if ( query->getStatus()!=QSQLiteResult::Failure )
+	{
+	QSQLiteResultRow row =query->first();
+	while ( !query->atEnd() )
+		{
 		    Element el;
-		    el.id=query->value(0).toInt();
-		    el.name=unescapeAndDecode(query->value(1).toString());
+		    el.id=row.data(0).toInt();
+		    el.name=unescapeAndDecode(row.data(1));
 		    elList->add(el); // Note that ElementList _copies_, does not take the pointer while adding.
-                }
-            }
+		    row=query->next();
+
+		}
+	}
 }
+
 // See function "findUnitDependancies" for use
-void LiteRecipeDB::loadPropertyElementList(ElementList *elList, QSqlQuery *query)
+void LiteRecipeDB::loadPropertyElementList(ElementList *elList, QSQLiteResult *query)
 {
-if ( query->isActive() ) {
-                while ( query->next() ) {
+if ( query->getStatus()!=QSQLiteResult::Failure ) {
+	QSQLiteResultRow row=query->first();
+                while ( !query->atEnd() ) {
 		    Element el;
 		    el.id=-1; // There's no ID for the ingredient-property combination
-		    QString ingName=query->value(0).toString();
-		    QString propName=unescapeAndDecode(query->value(1).toString());
-		    QString propUnits=unescapeAndDecode(query->value(2).toString());
-		    QString propPerUnits=unescapeAndDecode(query->value(3).toString());
+		    QString ingName=row.data(0);
+		    QString propName=unescapeAndDecode(row.data(1));
+		    QString propUnits=unescapeAndDecode(row.data(2));
+		    QString propPerUnits=unescapeAndDecode(row.data(3));
 
 		    el.name=QString("In ingredient %1: property \"%2\" [%3/%4]").arg(ingName).arg(propName).arg(propUnits).arg(propPerUnits);
 		    elList->add(el); // Note that ElementList _copies_, does not take the pointer while adding.
                 }
             }
 }
+
 
 QCString LiteRecipeDB::escapeAndEncode(const QString &s)
 {
@@ -896,21 +905,23 @@ return (s_escaped); // Use unicode encoding
 bool LiteRecipeDB::ingredientContainsUnit(int ingredientID, int unitID)
 {
 QString command=QString("SELECT *  FROM unit_list WHERE ingredient_id= %1 AND unit_id=%2;").arg(ingredientID).arg(unitID);
-QSqlQuery recipeToLoad( command,database);
-if (recipeToLoad.isActive())
-{
-	return(recipeToLoad.size()>0);
-}
+QSQLiteResult recipeToLoad=database->executeQuery( command);
+if (!recipeToLoad.getStatus()!=QSQLiteResult::Failure)
+	{
+	QSQLiteResultRow row=recipeToLoad.first();
+	/*return(recipeToLoad.size()>0);*/ //FIXME: I need size() in the API of QSQLiteResult
+	}
 return false;
 }
 
 bool LiteRecipeDB::ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID)
 {
 QString command=QString("SELECT *  FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 AND per_units=%3;").arg(ingredientID).arg(propertyID).arg(perUnitsID);
-QSqlQuery recipeToLoad( command,database);
-if (recipeToLoad.isActive())
+QSQLiteResult recipeToLoad=database->executeQuery(command);
+
+if (recipeToLoad.getStatus()!=QSQLiteResult::Failure)
 {
-	return(recipeToLoad.size()>0);
+	/*return(recipeToLoad.size()>0);*/ //FIXME: I need size() implemented in the API
 }
 return false;
 }
@@ -918,17 +929,17 @@ return false;
 QString LiteRecipeDB::unitName(int unitID)
 {
 QString command=QString("SELECT * FROM units WHERE id=%1;").arg(unitID);
-QSqlQuery unitToLoad( command,database);
-if (unitToLoad.isActive())
+QSQLiteResult unitToLoad=database->executeQuery(command);
+if (unitToLoad.getResults()!=QSQLiteResult::Failure)
 {
-if(unitToLoad.next()) // Go to the first record (there should be only one anyway.
- return(unitToLoad.value(1).toString());
+if (unitToLoad.next()) // Go to the first record (there should be only one anyway.
+ return(unitToLoad.data(0));
 }
 
 return(QString::null);
 }
 
-bool LiteRecipeDB::checkIntegrity(void)
+/*bool LiteRecipeDB::checkIntegrity(void)
 {
 
 
