@@ -22,8 +22,8 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-CookMLExporter::CookMLExporter( RecipeDB *db, const QString& filename, const QString format ) :
-  BaseExporter( db, filename, format )
+CookMLExporter::CookMLExporter( const QString& filename, const QString &format ) :
+  BaseExporter( filename, format )
 {
 }
 

@@ -15,8 +15,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-RecipeMLExporter::RecipeMLExporter( RecipeDB *db, const QString& filename, const QString format ) :
-  BaseExporter( db, filename, format )
+RecipeMLExporter::RecipeMLExporter( const QString& filename, const QString& format ) :
+  BaseExporter( filename, format )
 {
 }
 

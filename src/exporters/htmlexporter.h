@@ -50,12 +50,13 @@ private:
 class HTMLExporter : public BaseExporter
 {
 public:
-	HTMLExporter( RecipeDB *, const QString&, const QString, int width );
+	HTMLExporter( RecipeDB *, const QString&, const QString&, int width );
 	virtual ~HTMLExporter();
 
 	virtual QString createContent( const RecipeList & );
 
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
+	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 
 protected:
 	virtual QString extensions() const{ return ".html"; }

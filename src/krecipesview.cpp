@@ -239,6 +239,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
     connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
+    connect (selectPanel, SIGNAL(recipesSelected(const QValueList<int>&,int)),this, SLOT(actionRecipes(const QValueList<int>&,int)));
 
     // Close a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));
@@ -407,6 +408,14 @@ else if (action==2) //Remove
 		case KMessageBox::No: break;
 	}
 }
+}
+
+void KrecipesView::actionRecipes( const QValueList<int> &ids, int action )
+{
+	if ( action == 0 ) //show
+	{
+		showRecipes(ids);
+	}
 }
 
 
@@ -624,6 +633,13 @@ void KrecipesView::show (void)
 void KrecipesView::showRecipe(int recipeID)
 {
 viewPanel->loadRecipe(recipeID);
+rightPanel->setHeader(i18n("View Recipe"),"filefind");
+rightPanel->raise(viewPanel);
+}
+
+void KrecipesView::showRecipes( const QValueList<int> &recipeIDs)
+{
+viewPanel->loadRecipes(recipeIDs);
 rightPanel->setHeader(i18n("View Recipe"),"filefind");
 rightPanel->raise(viewPanel);
 }

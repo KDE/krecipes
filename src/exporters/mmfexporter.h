@@ -31,7 +31,7 @@
 class MMFExporter : public BaseExporter
 {
 public:
-	MMFExporter( RecipeDB *, const QString&, const QString );
+	MMFExporter( const QString&, const QString& );
 	virtual ~MMFExporter();
 
 	virtual QString createContent( const RecipeList & );

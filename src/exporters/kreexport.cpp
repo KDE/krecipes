@@ -21,8 +21,8 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-KreExporter::KreExporter( RecipeDB *db, const QString& filename, const QString format ) :
-  BaseExporter( db, filename, format )
+KreExporter::KreExporter( const QString& filename, const QString &format ) :
+  BaseExporter( filename, format )
 {
 }
 

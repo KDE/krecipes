@@ -165,9 +165,11 @@ public slots:
 
 private slots:
     void actionRecipe(int recipeID, int action);
+    void actionRecipes(const QValueList<int> &ids, int action);
     void addRecipeButton(QWidget *w, QString title);
     void closeRecipe(void);
     void showRecipe(int recipeID);
+    void showRecipes( const QValueList<int> &recipeIDs);
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
     void slotSetDietWizardPanel(void);

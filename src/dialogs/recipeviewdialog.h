@@ -33,17 +33,20 @@ public:
 
     ~RecipeViewDialog();
     void loadRecipe(int recipeID);
+    void loadRecipes( const QValueList<int> &ids );
 
 private:
 
   // Internal Variables
   KHTMLPart *recipeView;
   RecipeDB  *database;
-  Recipe *loadedRecipe;
+  bool recipe_loaded;
+  QValueList<int> ids_loaded;
   QString tmp_filename;
 
   // Internal Methods
-  void showRecipe(void);
+  void showRecipes( const QValueList<int> &ids );
+  void removeOldFiles();
 
 public slots:
 	void print(void);

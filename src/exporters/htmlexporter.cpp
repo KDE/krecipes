@@ -29,8 +29,9 @@
 #include "gui/setupdisplay.h"
 #include "image.h"
 
-HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString format, int width ) :
-  BaseExporter( db, filename, format ), database(db), m_width(width)
+//TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
+HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
+  BaseExporter( filename, format ), database(db), m_width(width)
 {
 	div_elements.setAutoDelete(true);
 	properties = new IngredientPropertyList;
@@ -490,16 +491,27 @@ void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect 
 
 void HTMLExporter::removeHTMLFiles( const QString &filename, const QString &recipe_title )
 {
+	QStringList title;
+	title << recipe_title;
+	removeHTMLFiles( filename, title );
+}
+
+void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &recipe_titles )
+{
 	//remove HTML file
 	QFile old_file(filename+".html");
 	if ( old_file.exists() )
 		old_file.remove();
 
-	//remove photo directory
-	QFile photo( filename+"_photos/"+recipe_title+".png");
-	if ( photo.exists() )
-		photo.remove(); //remove photos in directory before removing it (there should only be one photo in this directory)
+	//remove photos
+	for ( QStringList::const_iterator it = recipe_titles.begin(); it != recipe_titles.end(); ++it )
+	{
+		QFile photo( filename+"_photos/"+*it+".png");
+		if ( photo.exists() )
+			photo.remove(); //remove photos in directory before removing it (there should only be one photo in this directory)
+	}
 
+	//remove photo directory
 	QDir photo_dir;
 	photo_dir.rmdir( filename+"_photos" );
 }

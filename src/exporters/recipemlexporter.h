@@ -24,7 +24,7 @@
 class RecipeMLExporter : public BaseExporter
 {
 public:
-	RecipeMLExporter( RecipeDB *, const QString&, const QString );
+	RecipeMLExporter( const QString&, const QString& );
 	virtual ~RecipeMLExporter();
 
 	virtual QString createContent( const RecipeList& );

@@ -20,8 +20,8 @@
 #include "mixednumber.h"
 #include "mmdata.h"
 
-MMFExporter::MMFExporter( RecipeDB *db, const QString& filename, const QString format ) :
-  BaseExporter( db, filename, format )
+MMFExporter::MMFExporter( const QString& filename, const QString& format ) :
+  BaseExporter( filename, format )
 {
 }
 

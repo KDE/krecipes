@@ -77,7 +77,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
  	layout->addMultiCellWidget(buttonBar,4,4,1,3);
 
 	openButton=new QPushButton(buttonBar);
-	openButton->setText(i18n("Open Recipe"));
+	openButton->setText(i18n("Open Recipe(s)"));
   openButton->setDisabled(true);
 	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
 	editButton=new QPushButton(buttonBar);
@@ -201,6 +201,13 @@ if ( it )
 {
 	if ( !it->firstChild() && itemIsRecipe(it) )
 		emit recipeSelected(it->text(1).toInt(),0);
+	else if ( it->firstChild() )
+	{
+		QValueList<int> ids;
+		for (QListViewItem *sub_it=it->firstChild();sub_it;sub_it=sub_it->nextSibling())
+			ids.append( sub_it->text(1).toInt() );
+		emit recipesSelected( ids, 0 );
+	}
 }
 }
 
@@ -208,21 +215,21 @@ void SelectRecipeDialog::edit(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),1);
+if ( it && !it->firstChild() && itemIsRecipe(it) ) emit recipeSelected(it->text(1).toInt(),1);
 }
 
 void SelectRecipeDialog::remove(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),2);
+if ( it && !it->firstChild() && itemIsRecipe(it) ) emit recipeSelected(it->text(1).toInt(),2);
 }
 
 void SelectRecipeDialog::removeFromCat(void)
 {
   QListViewItem *it;
   it=recipeListView->selectedItem();
-  if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/){
+  if ( it != 0 && !it->firstChild() && itemIsRecipe(it) ){
     if(it->parent() != 0){
       int categoryID;
       categoryID = database->findExistingCategoryByName((it->parent())->text(0));
@@ -335,17 +342,18 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 		{
 			BaseExporter *exporter;
 			if ( fd->currentFilter() == "*.xml" )
-				exporter = new RecipeMLExporter(database, fileName, fd->currentFilter());
+				exporter = new RecipeMLExporter(fileName, fd->currentFilter());
 			else if ( fd->currentFilter() == "*.mmf" )
-				exporter = new MMFExporter(database, fileName, fd->currentFilter());
+				exporter = new MMFExporter(fileName, fd->currentFilter());
 			else if ( fd->currentFilter() == "*.html" )
 				exporter = new HTMLExporter(database, fileName, fd->currentFilter(), 650);
 			else if ( fd->currentFilter() == "*.cml" )
-				exporter = new CookMLExporter(database, fileName, fd->currentFilter());
+				exporter = new CookMLExporter(fileName, fd->currentFilter());
 			else
-				exporter = new KreExporter(database, fileName, fd->currentFilter());
+				exporter = new KreExporter(fileName, fd->currentFilter());
 
-			exporter->exporter( ids );
+			RecipeList recipes; database->loadRecipes( &recipes, ids );
+			exporter->exporter( recipes );
 			delete exporter;
 		}
 	}

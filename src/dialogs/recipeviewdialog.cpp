@@ -24,13 +24,11 @@
 
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {
-
 // Initialize UI Elements
 recipeView=new KHTMLPart(this);
 
 // Store/Initialize local variables
 database=db; // Store the database pointer.
-loadedRecipe=new Recipe();
 
 tmp_filename = locateLocal("tmp", "krecipes_recipe_view");
 kdDebug()<<tmp_filename<<endl;
@@ -43,25 +41,34 @@ loadRecipe(recipeID);
 
 RecipeViewDialog::~RecipeViewDialog()
 {
-HTMLExporter::removeHTMLFiles(tmp_filename,loadedRecipe->title);
+	if ( recipe_loaded )
+		removeOldFiles();
 }
 
 void RecipeViewDialog::loadRecipe(int recipeID)
 {
-// Remove any files created by the last recipe loaded
-HTMLExporter::removeHTMLFiles(tmp_filename,loadedRecipe->title);
-
-// Load specified Recipe ID
-database->loadRecipe(loadedRecipe,recipeID);
-
-// Display the recipe
-showRecipe();
+	QValueList<int> ids; ids.append(recipeID);
+	loadRecipes(ids);
 }
 
-void RecipeViewDialog::showRecipe(void)
+void RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 {
-HTMLExporter html_generator( database, tmp_filename+".html", "html", ((QWidget*)parent())->width() );
-html_generator.exporter( loadedRecipe->recipeID );
+// Remove any files created by the last recipe loaded
+removeOldFiles();
+
+ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
+
+recipe_loaded = ( ids.count() > 0 && ids[0] >= 0 );
+
+showRecipes( ids );
+}
+
+void RecipeViewDialog::showRecipes( const QValueList<int> &ids )
+{
+HTMLExporter html_generator( database, tmp_filename+".html", "html", parentWidget()->width() );
+
+RecipeList recipe_list; database->loadRecipes( &recipe_list, ids );
+html_generator.exporter( recipe_list ); //writes the generated HTML to 'tmp_filename+".html"'
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
@@ -73,6 +80,17 @@ recipeView->openURL( url );
 
 void RecipeViewDialog::print(void)
 {
-	if ( recipeView && loadedRecipe->recipeID >= 0 )
+	if ( recipeView && recipe_loaded )
 		recipeView->view()->print();
+}
+
+void RecipeViewDialog::removeOldFiles()
+{
+	RecipeList recipe_list; database->loadRecipes( &recipe_list, ids_loaded );
+
+	QStringList recipe_titles;
+	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
+		recipe_titles << (*it).title;
+
+	HTMLExporter::removeHTMLFiles(tmp_filename,recipe_titles);
 }

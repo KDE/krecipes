@@ -16,6 +16,8 @@
 
 #include <qsqldatabase.h>
 #include <qstring.h>
+#include <qvaluelist.h>
+
 #include "recipe.h"
 #include "datablocks/recipelist.h"
 #include "elementlist.h"
@@ -89,6 +91,8 @@ public:
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
 	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-2)=0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
+	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
+	void loadRecipes(RecipeList *recipes,const QValueList<int> &ids); //note: isn't virtual because this can be done with loadRecipe()
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
 	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false)=0;// Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names, just IDs

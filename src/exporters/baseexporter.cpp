@@ -22,11 +22,10 @@
 
 #include "DBBackend/recipedb.h"
 
-BaseExporter::BaseExporter( RecipeDB *db, const QString& _filename, const QString _format ) :
+BaseExporter::BaseExporter( const QString& _filename, const QString &_format ) :
   file(0),
   format(_format),
-  filename(_filename),
-  database(db)
+  filename(_filename)
 {
 }
 
@@ -35,7 +34,7 @@ BaseExporter::~BaseExporter()
 {
 }
 
-void BaseExporter::exporter( const QValueList<int>& l )
+void BaseExporter::exporter( const RecipeList& recipes )
 {
 	if ( createFile() )
 	{
@@ -45,35 +44,22 @@ void BaseExporter::exporter( const QValueList<int>& l )
 			overwrite = KMessageBox::questionYesNo( 0,QString(i18n("File \"%1\" exists. Would you like to overwrite it?")).arg(file->name()),i18n("Saving recipe") );
 
 		if(!fileExists || overwrite == KMessageBox::Yes)
-		{
-			RecipeList recipes;
-
-			QValueList<int>::const_iterator it;
-			for ( it = l.begin(); it != l.end(); ++it )
-			{
-				Recipe recipe;
-				database->loadRecipe( &recipe, *it );
-
-				recipes.append( recipe );
-			}
-
 			saveToFile( recipes );
-		}
 	}
 	else
 		kdDebug()<<"no output file has been selected for export."<<endl;
 }
 
-void BaseExporter::exporter( int id )
+void BaseExporter::exporter( const Recipe &recipe )
 {
-	QValueList<int> single_id_list;
-	single_id_list.append(id);
-	exporter( single_id_list );
+	RecipeList single_recipe_list;
+	single_recipe_list.append( recipe );
+	exporter( single_recipe_list );
 }
 
 bool BaseExporter::createFile()
 {
-	if(filename != QString::null)
+	if( !filename.isEmpty() )
 	{
 		QStringList possible_formats = QStringList::split(',',extensions());
 		for ( QStringList::const_iterator it = possible_formats.begin(); it != possible_formats.end(); ++it )

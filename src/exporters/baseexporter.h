@@ -14,20 +14,18 @@
 
 #include <qstringlist.h>
 
-#include "DBBackend/recipedb.h"
 #include "datablocks/recipelist.h"
 
 class QFile;
-class RecipeDB;
 
 class BaseExporter
 {
 public:
-	BaseExporter( RecipeDB *, const QString &file, const QString format );
+	BaseExporter( const QString &file, const QString &format );
 	virtual ~BaseExporter();
 
-	void exporter( const QValueList<int>& ids);
-	void exporter( int id );
+	void exporter( const RecipeList& recipes );
+	void exporter( const Recipe & );
 
 	virtual QString createContent( const RecipeList & ) = 0;
 
@@ -52,8 +50,6 @@ protected:
 
 private:
 	bool createFile();
-
-	RecipeDB *database;
 };
 
 #endif //BASEEXPORTER_H

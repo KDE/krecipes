@@ -19,11 +19,12 @@
   *
   * Note: This format does not handle all the properties of recipes.
   *       Data lost in export to this format include:
+  *          ---none?---
   */
 class CookMLExporter : public BaseExporter
 {
 public:
-	CookMLExporter( RecipeDB *, const QString&, const QString );
+	CookMLExporter( const QString&, const QString& );
 	virtual ~CookMLExporter();
 
 	virtual QString createContent( const RecipeList & );
