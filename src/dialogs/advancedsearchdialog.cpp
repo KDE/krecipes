@@ -24,6 +24,7 @@
 #include <qframe.h>
 #include <qdatetimeedit.h>
 #include <qvbox.h>
+#include <qglobal.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -357,8 +358,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoriesBox = new QGroupBox( searchPage, "categoriesBox" );
 	categoriesBox->setAlignment( int( QGroupBox::AlignTop ) );
+	#if QT_VERSION >= 0x030200
 	categoriesBox->setCheckable( TRUE );
 	categoriesBox->setChecked( FALSE );
+	#endif
 	categoriesBox->setColumnLayout(0, Qt::Vertical );
 	categoriesBox->layout()->setSpacing( 6 );
 	categoriesBox->layout()->setMargin( 11 );
@@ -395,8 +398,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientsBox = new QGroupBox( searchPage, "ingredientsBox" );
 	ingredientsBox->setMinimumSize( QSize( 0, 0 ) );
 	ingredientsBox->setAlignment( int( QGroupBox::AlignTop ) );
+	#if QT_VERSION >= 0x030200
 	ingredientsBox->setCheckable( TRUE );
 	ingredientsBox->setChecked( FALSE );
+	#endif
 	ingredientsBox->setColumnLayout(0, Qt::Vertical );
 	ingredientsBox->layout()->setSpacing( 6 );
 	ingredientsBox->layout()->setMargin( 11 );
@@ -436,8 +441,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	authorsBox = new QGroupBox( searchPage, "authorsBox" );
 	authorsBox->setAlignment( int( QGroupBox::AlignTop ) );
+	#if QT_VERSION >= 0x030200
 	authorsBox->setCheckable( TRUE );
 	authorsBox->setChecked( FALSE );
+	#endif
 	authorsBox->setColumnLayout(0, Qt::Vertical );
 	authorsBox->layout()->setSpacing( 6 );
 	authorsBox->layout()->setMargin( 11 );
@@ -473,8 +480,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	servingsBox = new QGroupBox( searchPage, "servingsBox" );
 	servingsBox->setAlignment( int( QGroupBox::AlignVCenter ) );
+	#if QT_VERSION >= 0x030200
 	servingsBox->setCheckable( TRUE );
 	servingsBox->setChecked( FALSE );
+	#endif
 	servingsBox->setColumnLayout(0, Qt::Vertical );
 	servingsBox->layout()->setSpacing( 6 );
 	servingsBox->layout()->setMargin( 11 );
@@ -499,8 +508,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	prepTimeBox = new QGroupBox( searchPage, "prepTimeBox" );
 	prepTimeBox->setAlignment( int( QGroupBox::AlignVCenter ) );
+	#if QT_VERSION >= 0x030200
 	prepTimeBox->setCheckable( TRUE );
 	prepTimeBox->setChecked( FALSE );
+	#endif
 	prepTimeBox->setColumnLayout(0, Qt::Vertical );
 	prepTimeBox->layout()->setSpacing( 6 );
 	prepTimeBox->layout()->setMargin( 11 );
@@ -579,10 +590,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( searchButton, SIGNAL(clicked()), SLOT(search()) );
 	connect( backButton, SIGNAL(clicked()), SLOT(back()) );
+	#if QT_VERSION >= 0x030200
 	connect( authorsBox, SIGNAL(toggled(bool)), authorsFrame, SLOT(setEnabled(bool)) );
 	connect( categoriesBox, SIGNAL(toggled(bool)), categoriesFrame, SLOT(setEnabled(bool)) );
 	connect( ingredientsBox, SIGNAL(toggled(bool)), ingredientsFrame, SLOT(setEnabled(bool)) );
 	connect( servingsBox, SIGNAL(toggled(bool)), servingsFrame, SLOT(setEnabled(bool)) );
+	#endif
 	connect( authorTypeComboBox, SIGNAL(activated(int)), authorListView, SLOT(change(int)) );
 	connect( ingTypeComboBox, SIGNAL(activated(int)), ingListView, SLOT(change(int)) );
 	connect( catTypeComboBox, SIGNAL(activated(int)), catListView, SLOT(change(int)) );
@@ -725,7 +738,9 @@ void AdvancedSearchDialog::search()
 	RecipeList allRecipes; database->loadRecipeDetails( &allRecipes, true, true, false, true );
 	
 	//narrow down by servings
+	#if QT_VERSION >= 0x030200
 	if ( servingsBox->isChecked() )
+	#endif
 	{
 		int servings = servingsSpinBox->value();
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
@@ -749,7 +764,9 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by prep time
+	#if QT_VERSION >= 0x030200
 	if ( prepTimeBox->isChecked() )
+	#endif
 	{
 		QTime time = prepTimeEdit->time();
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
@@ -780,7 +797,9 @@ void AdvancedSearchDialog::search()
 	}
 	
 	//narrow down by authors
+	#if QT_VERSION >= 0x030200
 	if ( authorsBox->isChecked() )
+	#endif
 	{
 		authorListView->updateMap( authorTypeComboBox->currentItem() ); //the other won't have been updated yet
 
@@ -818,7 +837,9 @@ void AdvancedSearchDialog::search()
 	}
 	
 	//narrow down by categories
+	#if QT_VERSION >= 0x030200
 	if ( categoriesBox->isChecked() )
+	#endif
 	{
 		catListView->updateMap( catTypeComboBox->currentItem() ); //the other won't have been updated yet
 
@@ -856,7 +877,9 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by ingredients
+	#if QT_VERSION >= 0x030200
 	if ( ingredientsBox->isChecked() )
+	#endif
 	{
 		ingListView->updateMap( ingTypeComboBox->currentItem() ); //the other won't have been updated yet
 

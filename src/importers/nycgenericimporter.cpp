@@ -102,7 +102,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		else if ( current.startsWith("Preparation Time:") )
 		{
 			m_preptime = QTime::fromString(current.mid(current.find(':'),current.length()));
-			kdDebug()<<"Found preptime: "<<m_preptime<<endl;
+			kdDebug()<<"Found preptime: "<<m_preptime.toString("hh:mm")<<endl;
 		}
 		else if ( current.startsWith("Yield:") )
 		{
