@@ -60,7 +60,7 @@ void RecipeViewDialog::loadRecipe(int recipeID)
 database->loadRecipe(loadedRecipe,recipeID);
 
 // Calculate the property list
-calculateProperties(loadedRecipe,database,properties);
+calculateProperties(*loadedRecipe,database,properties);
 
   // Store Photo
   KConfig *config = kapp->config();

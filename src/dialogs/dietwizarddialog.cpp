@@ -26,6 +26,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
+#include "propertycalculator.h"
 
 DietWizardDialog::DietWizardDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
@@ -113,6 +114,15 @@ RecipeList rlist;
 // Get the whole list of recipes, detailed
 database->loadRecipeDetails(&rlist,true);
 
+// Calculate properties of the recipes
+IngredientPropertyList properties;
+
+RecipeList::Iterator recipeIt;
+for (recipeIt=rlist.begin();recipeIt!=rlist.end();recipeIt++)
+{
+std::cerr<<"recipe\n";
+calculateProperties(*recipeIt,database,&properties); // *(recipeIt) is of class Recipe
+}
 }
 
 

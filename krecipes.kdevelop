@@ -14,10 +14,11 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevDebugger</part>
     </ignoreparts>
+    <secondaryLanguages/>
   </general>
   <kdevautoproject>
     <general>
@@ -26,11 +27,11 @@
     </general>
     <run>
       <mainprogram>src/krecipes</mainprogram>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>executable</directoryradio>
-      <customdirectory/>
+      <customdirectory>/</customdirectory>
       <autocompile>true</autocompile>
     </run>
     <make>
@@ -41,7 +42,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
     </make>
   </kdevautoproject>
   <kdevfileview>
@@ -51,11 +52,10 @@
       <group pattern="*.png" name="Icons" />
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*" name="Others" />
-      <hidenonprojectfiles>false</hidenonprojectfiles>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns></hidepatterns>
+      <hidepatterns/>
       <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>
@@ -71,6 +71,10 @@
       <userdocDir>/home/uga/krecipes/html/</userdocDir>
       <apidocDir>/home/uga/krecipes/html/</apidocDir>
     </projectdoc>
+    <ignoreqt_xml/>
+    <ignoredoxygen/>
+    <ignorekdocs/>
+    <ignoredevhelp/>
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
@@ -97,13 +101,13 @@
   </kdevfilecreate>
   <kdevcvs>
     <cvsoptions>-f</cvsoptions>
-    <commitoptions></commitoptions>
+    <commitoptions/>
     <updateoptions>-dP</updateoptions>
-    <addoptions></addoptions>
+    <addoptions/>
     <removeoptions>-f</removeoptions>
     <diffoptions>-u3 -p</diffoptions>
-    <logoptions></logoptions>
-    <rshoptions></rshoptions>
+    <logoptions/>
+    <rshoptions/>
     <revertoptions>-C -d -P</revertoptions>
   </kdevcvs>
   <cppsupportpart>
