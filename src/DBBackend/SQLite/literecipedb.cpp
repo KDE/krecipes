@@ -1216,7 +1216,7 @@ QString s_escaped;
 s_escaped=escape(s.utf8());
 
 // Return encoded
-return s_escaped.data(); // Note that the text has already been converted into utf8 before escaping.
+return s_escaped.latin1(); // Note that the text has already been converted into utf8 before escaping.
 }
 
 QString LiteRecipeDB::escape(const QString &s)
@@ -1224,7 +1224,7 @@ QString LiteRecipeDB::escape(const QString &s)
 QString s_escaped=s;
 
 // Escape using SQLite's function
-char * escaped= sqlite_mprintf("%q",s.data()); // Escape the string(allocates memory)
+char * escaped= sqlite_mprintf("%q",s.latin1()); // Escape the string(allocates memory)
 s_escaped=escaped;
 sqlite_freemem(escaped); // free allocated memory
 
@@ -1233,7 +1233,7 @@ return(s_escaped);
 
 QString LiteRecipeDB::unescapeAndDecode(const QString &s)
 {
-QString s_escaped=QString::fromUtf8(s.data());
+QString s_escaped=QString::fromUtf8(s.latin1());
 s_escaped.replace(";@",";");
 return (s_escaped); // Use unicode encoding
 }
@@ -1958,3 +1958,4 @@ int LiteRecipeDB::sqlite_decode_binary(const unsigned char *in, unsigned char *o
 }
 
 //#include "literecipedb.moc"
+#include "literecipedb.moc"

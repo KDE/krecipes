@@ -451,7 +451,7 @@ else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%
 		.arg(escapeAndEncode(recipe->instructions))
 		.arg(recipe->recipeID);
 		}
-size = mysql_real_query(mysqlDB, command.data() , command.length()+1);
+size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
 
 // If it's a new recipe, identify the ID that was given to the recipe and store in the Recipe itself
 int recipeID;
@@ -481,7 +481,7 @@ QFileInfo fi(".krecipe_photo.jpg");
        mysql_real_escape_string( mysqlDB, p, from, fi.size() );
        strcat(to, "'");
        QString st; st=to; st+= " WHERE id="; st+=QString::number(recipeID); // Note, we assume this ID exists (created or existing)!
-         size=mysql_real_query( mysqlDB, st.data(), st.length()+1);
+         size=mysql_real_query( mysqlDB, st.latin1(), st.length()+1);
 
      }
      free(to);
@@ -1180,7 +1180,7 @@ return(s_escaped.utf8());
 
 QString MySQLRecipeDB::unescapeAndDecode(const QString &s)
 {
-QString s_escaped=QString::fromUtf8(s.data());
+QString s_escaped=QString::fromUtf8(s.latin1());
 s_escaped.replace("\";@",";");
 return (s_escaped); // Use unicode encoding
 }
