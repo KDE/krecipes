@@ -252,7 +252,7 @@ recipeToLoad=database->executeQuery(command);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames)
+void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames,bool loadAuthors)
 {
 
 QMap <int,RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
@@ -343,6 +343,34 @@ QSQLiteResult categoriesToLoad=database->executeQuery( command);
             }
 
 
+}
+
+if (loadAuthors)
+{
+command=QString("SELECT recipe_id,author_id FROM author_list;" ); // Note that we get no names
+
+QSQLiteResult authorsToLoad=database->executeQuery( command);
+
+	    if (authorsToLoad.getStatus() != QSQLiteResult::Failure) {
+	    QSQLiteResultRow row = authorsToLoad.first();
+                while ( !authorsToLoad.atEnd() ) {
+		    Element cty;
+
+		    // get this category
+		    cty.id=row.data(1).toInt();
+
+		    // find the corresponding recipe iterator
+		    if (recipeIterators.contains(row.data(0).toInt()))
+		    {
+		    RecipeList::Iterator it=recipeIterators[row.data(0).toInt()];
+		    //add the ingredient to the recipe
+		    (*it).authorList.add(cty);
+		    }
+
+		    row=authorsToLoad.next();
+
+                }
+            }
 }
 
 }

@@ -13,12 +13,15 @@
 #include "selectrecipedialog.h"
 
 #include <qsignalmapper.h>
+#include <qtabwidget.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
 
+#include "advancedsearchdialog.h"
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
@@ -42,23 +45,32 @@ categoryList=new ElementList;
 
 categoryComboRows.setAutoDelete(true);
 
+QVBoxLayout *tabLayout = new QVBoxLayout( this );
+QTabWidget *tabWidget = new QTabWidget( this );
+tabWidget->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+tabLayout->addWidget(tabWidget);
+
+QGroupBox *basicSearchTab =new QGroupBox(this);
+basicSearchTab->setFrameStyle(QFrame::NoFrame);
+basicSearchTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+
 //Design dialog
 
-layout = new QGridLayout( this, 1, 1, 0, 0);
+layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 
 	// Border Spacers
 	QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	layout->addMultiCell( spacer_left, 1,4,0,0 );
 	QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addMultiCell(spacer_top,0,0,1,4);
 
-	searchBar=new QHBox(this);
+	searchBar=new QHBox(basicSearchTab);
 	layout->addWidget(searchBar,1,1);
 
 	searchLabel=new QLabel(searchBar); searchLabel->setText(i18n("Search:")); searchLabel->setFixedWidth(searchLabel->fontMetrics().width(i18n("Search:"))+5);
 	searchBox=new KLineEdit(searchBar);
 
 	QSpacerItem* searchSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum); layout->addItem(searchSpacer,1,2);
-	categoryBox=new KComboBox(this);
+	categoryBox=new KComboBox(basicSearchTab);
 	layout->addWidget(categoryBox,1,3);
 
 
@@ -66,7 +78,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     	layout->addItem(spacerFromSearchBar,2,1);
 
 	il=new KIconLoader;
-	recipeListView=new KListView(this);
+	recipeListView=new KListView(basicSearchTab);
 	recipeListView->addColumn(i18n("Category"));
     	recipeListView->addColumn(i18n("Id"));
     	recipeListView->addColumn(i18n("Title"));
@@ -75,7 +87,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	recipeListView->setAllColumnsShowFocus(true);
 	layout->addMultiCellWidget(recipeListView,3,3,1,3);
 
-	buttonBar=new QHBox(this);
+	buttonBar=new QHBox(basicSearchTab);
  	layout->addMultiCellWidget(buttonBar,4,4,1,3);
 
 	openButton=new QPushButton(buttonBar);
@@ -91,6 +103,11 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
   removeButton->setDisabled(true);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
+
+tabWidget->insertTab( basicSearchTab, "Basic" );
+
+AdvancedSearchDialog *advancedSearch = new AdvancedSearchDialog(this,database);
+tabWidget->insertTab( advancedSearch, "Advanced" );
 
 // Popup menus
     kpop = new KPopupMenu( recipeListView );
@@ -127,6 +144,7 @@ connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()
 connect(recipeListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(open()));
 connect(recipeListView,SIGNAL(contextMenu (KListView *, QListViewItem *, const QPoint &)),this, SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
 connect(categoryBox,SIGNAL(activated(int)),this,SLOT(filterComboCategory(int)));
+connect(advancedSearch,SIGNAL(recipeSelected(int,int)),SIGNAL(recipeSelected(int,int)));
 }
 
 

@@ -237,7 +237,7 @@ mysql_close(mysqlDB);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames)
+void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames,bool loadAuthors)
 {
 rlist->clear();
 
@@ -317,6 +317,32 @@ QSqlQuery categoriesToLoad(command,database);
 
 
 
+}
+
+if (loadAuthors)
+{
+command=QString("SELECT recipe_id,author_id FROM author_list;" ); // Note that we get no names
+
+QSqlQuery authorsToLoad(command,database);
+
+	    if (authorsToLoad.isActive()) {
+                while ( authorsToLoad.next() ) {
+		    Element cty;
+
+		    // get this category
+		    cty.id=authorsToLoad.value(1).toInt();
+
+		    // find the corresponding recipe iterator
+		    if (recipeIterators.contains(authorsToLoad.value(0).toInt()))
+		    {
+		    RecipeList::Iterator it=recipeIterators[authorsToLoad.value(0).toInt()];
+
+		    //add the ingredient to the recipe
+		    (*it).authorList.add(cty);
+
+		    }
+                }
+            }
 }
 
 }

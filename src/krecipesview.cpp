@@ -696,7 +696,7 @@ setContextHelp(RecipeEdit);
 void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
-rightPanel->setHeader(i18n("Find/Edit Recipe"),"filefind");
+rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
 rightPanel->raise(selectPanel);
 setContextHelp(SelectP);
 buttonsList->removeLast(); recipeButton=0;
@@ -706,7 +706,7 @@ buttonsList->removeLast(); recipeButton=0;
 
 void KrecipesView::show (void)
 {
-	rightPanel->setHeader(i18n("Find/Edit Recipe"),"filefind");
+	rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
 	rightPanel->raise(this->selectPanel);
 	setContextHelp(SelectP);
 	QWidget::show();

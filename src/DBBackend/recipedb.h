@@ -115,7 +115,7 @@ public:
 	void loadRecipes(RecipeList *recipes,const QValueList<int> &ids,KProgressDialog *progress_dlg = 0); //note: isn't virtual because this can be done with loadRecipe()
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
-	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false, bool loadIngredientNames=false)=0;// Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
+	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false, bool loadIngredientNames=false,bool loadAuthors=false)=0;// Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;
 	virtual void loadUnits(ElementList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
