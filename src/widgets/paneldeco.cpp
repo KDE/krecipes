@@ -106,6 +106,7 @@ if (title!=QString::null)
 
 TopDeco::~TopDeco()
 {
+	if ( icon ) delete icon;
 }
 
 
