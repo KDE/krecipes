@@ -27,6 +27,7 @@ public:
     // Public variables
 
     int recipeID;
+    int persons;
     QString title;
     QString author;
     QString instructions;

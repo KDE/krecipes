@@ -22,6 +22,7 @@ Recipe::~Recipe()
 void Recipe::empty(void)
 {
 recipeID=-1;
+persons=1;
 title=QString::null;
 instructions=QString::null;
 author=QString::null,
