@@ -355,7 +355,7 @@ database=db;
     connect(ingredientList,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredientAmount( QListViewItem* )));
     	// Function buttons
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
-    connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
+    connect (closeButton,SIGNAL(clicked()),this,SLOT(closeOptions()));
     connect (showButton,SIGNAL(clicked()),this,SLOT(showRecipe()));
     connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
     connect (resizeButton,SIGNAL(clicked()),this,SLOT(resizeRecipe()));
@@ -684,7 +684,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   KConfig *config=kapp->config();
   config->setGroup("Units");
   QString amount_str;
-  
+
   #if defined(KDE_MAKE_VERSION)
   # if KDE_VERSION >KDE_MAKE_VERSION(3,1,4)
      if ( config->readBoolEntry("Fraction"))
@@ -941,7 +941,7 @@ void RecipeInputDialog::enableSaveButton(bool enabled)
 saveButton->setEnabled(enabled);
 }
 
-void RecipeInputDialog::close(void)
+void RecipeInputDialog::closeOptions(void)
 {
 
 // First check if there's anything unsaved in the recipe

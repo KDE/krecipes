@@ -141,7 +141,7 @@ private:
 	void addAuthor(void);
 	void slotIngredientBoxLostFocus(void);
 	void enableSaveButton(bool enabled);
-	void close(void);
+	void closeOptions(void);
 	void showRecipe(void);
 	void addToShoppingList(void);
 	public slots:
