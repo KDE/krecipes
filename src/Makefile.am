@@ -26,7 +26,7 @@ endif
 krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkreexport.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la datablocks/libdatablocks.la $(qsqlite_libadds) $(mysql_libadds) $(LIB_KHTML) $(LIB_KSPELL) $(DATABASE_LIBS)
 
 # which sources should be compiled for krecipes
-krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp ingredientproperty.cpp ingredientpropertylist.cpp editbox.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp shoppingcalculator.cpp fractioninput.cpp mixednumber.cpp menugroup.cpp serverprefs.ui numbersprefs.ui importprefs.ui
+krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp ingredientproperty.cpp ingredientpropertylist.cpp editbox.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp shoppingcalculator.cpp fractioninput.cpp mixednumber.cpp menugroup.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO

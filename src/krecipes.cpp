@@ -52,10 +52,6 @@
 //Settings headers
 #include <kdeversion.h>
 
-# if KDE_IS_VERSION(3,1,92 )
-     #include <kautoconfigdialog.h>
-# endif
-
 #include "serverprefs.h"
 #include "numbersprefs.h"
 #include "importprefs.h"
@@ -413,23 +409,10 @@ void Krecipes::newToolbarConfig()
 void Krecipes::optionsPreferences()
 {
 
-#if KDE_IS_VERSION(3,2,92 )
-
-     if(KAutoConfigDialog::showDialog("settings"))
-		return;
-
-    KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
-    dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server"), "Server", "identity", i18n("Database Server Options"));
-    dialog->addPage(new numbersprefs(0, "NumberFormat"), i18n("Numbers"), "Numbers", "math_frac", i18n("Customize Number Format"));
-    dialog->addPage(new importprefs(0, "Import"), i18n("Importing"), "Import", "redo", i18n("Recipe Import Options"));
-    //connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadSettings()));
-    dialog->show();
-# else
-   // popup some sort of preference dialog, here
+// popup some sort of preference dialog, here
     KrecipesPreferences dlg(this);
     if (dlg.exec())
     {}
-# endif
 
 }
 
