@@ -7,6 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <unistd.h>
 #include <pwd.h>
@@ -514,7 +517,18 @@ layout->addWidget(bg,3,3);
 
 liteCheckBox=new QRadioButton(i18n("Simple Local File (SQLite)"),bg,"liteCheckBox");
 mysqlCheckBox=new QRadioButton(i18n("Local or Remote MySQL Database"),bg,"liteCheckBox");
-bg->setButton(0);
+bg->setButton(0); // By default, SQLite 
+
+#if (!HAVE_MYSQL)
+mysqlCheckBox->setEnabled(false);
+#endif
+ #if (!HAVE_SQLITE)
+liteCheckBox->setEnabled(false);
+	#if (HAVE_MYSQL)
+	bg->setButton(1); // Otherwise by default liteCheckBox is checked even if it's disabled
+	#endif
+#endif
+
 
 QSpacerItem *spacer_bottom=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 layout->addItem(spacer_bottom,4,3);
