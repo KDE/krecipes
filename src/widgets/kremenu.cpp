@@ -640,3 +640,5 @@ void Menu::copyMap(QMap <KreMenuButton*,int> &destMap, const QMap <KreMenuButton
 	destMap[it.key()]=it.data();
 	}
 }
+
+#include "kremenu.moc"

@@ -216,3 +216,5 @@ unitIDs.clear();
 resize(0,0);
 
 }
+
+#include "conversiontable.moc"

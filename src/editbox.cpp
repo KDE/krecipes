@@ -72,3 +72,5 @@ void RatioInput::keyPressEvent ( QKeyEvent * e )
 RatioInput::RatioInput(QWidget *parent):KDoubleNumInput(parent)
 {
 }
+
+#include "editbox.moc"

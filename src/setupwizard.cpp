@@ -582,3 +582,5 @@ if (rb==0) // Hide pages
 else // Show pages
 	emit showPages(true);
 }
+
+#include "setupwizard.moc"

@@ -50,7 +50,7 @@ void KreExporter::saveToFile( const RecipeList& recipes )
         // compress and save file
         KTar* kre = new KTar(file->name(), "application/x-gzip");
         kre->open( IO_WriteOnly );
-        kre->writeFile(filename+".kreml",getenv( "LOGNAME" ), "", size, kreml);
+        kre->writeFile(filename+".kreml",getenv( "LOGNAME" ), "", size, kreml.latin1());
         kre->close();
 	delete kre;
       }

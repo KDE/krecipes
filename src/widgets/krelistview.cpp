@@ -78,3 +78,5 @@ for (QListViewItem *it=list->firstChild();it;it=it->nextSibling())
 
 	}
 }
+
+#include "krelistview.moc"

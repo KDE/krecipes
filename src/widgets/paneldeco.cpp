@@ -159,3 +159,5 @@ QSize TopDeco::sizeHint(void)
 {
 	return (QSize(parentWidget()->width(),30));
 }
+
+#include "paneldeco.moc"

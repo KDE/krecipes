@@ -161,7 +161,7 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 					if (pic.tagName() == "pic")
             kdDebug()<<"Found photo"<<endl;
             QPixmap pix;
-            KCodecs::base64Decode(QCString(pic.text()), decodedPic);
+            KCodecs::base64Decode(QCString(pic.text().latin1()), decodedPic);
             int len = decodedPic.size();
             QByteArray picData(len);
             memcpy(picData.data(),decodedPic.data(),len);

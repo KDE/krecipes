@@ -122,3 +122,5 @@ void DragArea::update()
 {
 	selection->updateGeometry();
 }
+
+#include "dragarea.moc"

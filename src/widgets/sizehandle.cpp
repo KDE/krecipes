@@ -367,3 +367,5 @@ QWidget *WidgetSelection::widget() const
 {
     return wid;
 }
+
+#include "sizehandle.moc"
