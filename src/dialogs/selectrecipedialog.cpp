@@ -9,9 +9,17 @@
  ***************************************************************************/
 #include "selectrecipedialog.h"
 
-SelectRecipeDialog::SelectRecipeDialog()
- : QVBox()
+SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
+ : QVBox(parent)
 {
+//Store pointer to Recipe Database
+database=db;
+
+//Initialize internal data
+recipeList=new ElementList;
+
+// Load Recipe List
+
 }
 
 
@@ -19,4 +27,12 @@ SelectRecipeDialog::~SelectRecipeDialog()
 {
 }
 
+void SelectRecipeDialog::loadRecipeList(void)
+{
+database->loadRecipeList(recipeList);
 
+for ( Element *recipe =recipeList->getFirst(); ing; ing =recipeList->getNext() ) int a=1;
+	//ingredientBox->insertItem(ing->name);
+
+
+}

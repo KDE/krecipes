@@ -15,12 +15,18 @@
 /**
 @author Unai Garro
 */
-class SelectRecipeDialog : public QVBox
+class SelectRecipeDialog : public QVBox (QWidget *parent, RecipeDB *db)
 {
 public:
     SelectRecipeDialog();
 
     ~SelectRecipeDialog();
+private:
+  // Internal Data
+  RecipeDB *database;
+  ElementList *recipeList;
+  // Internal Methods
+  void SelectRecipeDialog::loadRecipeList(void);
 
 };
 
