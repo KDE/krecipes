@@ -89,6 +89,7 @@ signals:
 
 public slots:
 	void setTitle(const QString &s) {text=s; update();}
+	void rescale(int w, int h);
 
 private:
 	// Button parts
@@ -97,7 +98,7 @@ private:
 	 bool highlighted;
 
 private slots:
-	void rescale(int w, int h);
+
 	void forwardClicks(void){emit clicked(this);}
 
 protected:

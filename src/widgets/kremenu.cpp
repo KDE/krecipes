@@ -124,6 +124,10 @@ QSize KreMenu::sizeHint() const {
 
 void KreMenu::paintEvent(QPaintEvent *)
 {
+
+    // Make sure the size is bigger than the minimum necessary
+    if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
+    
     // Get gradient colors
     QColor c=colorGroup().button();
     QColor c1=c.dark(130);
@@ -183,11 +187,12 @@ void KreMenu::childEvent (QChildEvent *e)
 			}
 
 		button->move(0,childPos);
+		button->rescale(width(),height());
 		childPos+=button->height();
 		positionList[button]=widgetNumber; // Store index for this widget, and increment number
 		widgetList[widgetNumber]=button; // Store the button in the list (the inverse mapping of the previous one)
 		 widgetNumber++;
-
+		 
 		connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
  		if (!button->isShown()) button->show();
 		}
@@ -317,36 +322,106 @@ void KreMenuButton::paintEvent(QPaintEvent *)
     painter.drawLine(width()/5,height()-2,width()-1,height()-2);
     painter.setPen(colorGroup().button().light(lighten));
     painter.drawLine(width()/5,height()-1,width()-1,height()-1);
+    painter.end();
+    
+    // If it's highlighted, draw a rounded area for the icon and text
 
+    	// Text and icon area
+    	
+	int areaw=width()-18,areah=height()-18;// -18=-16 (border)-2 (2 lines on top)	
+	int areax=8, areay=8;
+	int roundy=99, roundx=(int)((float)roundy*areah/areaw); //Make corners round
+	
+	// Make sure the area is sensible for text
+	if (areah<fontMetrics().height()) 
+		{
+			areah=fontMetrics().height()+6;
+			
+			if (areah>(height()-4)) 
+			{
+			areah=height()-4; // Limit to button height
+			}
+			areay=(height()-areah-2)/2+1;
+		}
+	
 
-    // Now Add the icon
-
-    int xPos=0, yPos=0;
-
-    if (icon)
+	
+    if (highlighted)
     {
+    
+	// Draw the gradient
+	KPixmap area; area.resize(areaw,areah);
+	
+	
+	KPixmapEffect::gradient(area,c2h.light(150),c1h.light(150), KPixmapEffect::VerticalGradient);
+	
+	painter.begin(&area);
+	painter.setPen(c1h);
+	painter.setBrush(Qt::NoBrush);
+	painter.drawRoundRect(0,0,areaw,areah,roundx,roundy);
+	painter.end();
+	
+	// Make it round
+	QBitmap mask(QSize(areaw,areah));
+	mask.fill(Qt::color0);
+	painter.begin(&mask);
+	painter.setPen(Qt::color1);
+	painter.setBrush(Qt::color1);
+	painter.drawRoundRect(0,0,areaw,areah,roundx,roundy);
+	painter.end();
+	area.setMask(mask);
+	
+	// Copy it to the button
+	bitBlt(&kpm,areax,areay,&area);
+	
+	
+    }
+    
+    // Now Add the icon
+    
+	painter.begin(&kpm);
+	int xPos=0, yPos=0;
 
+	if (icon)
+	{
 
-	// Make sure it fits in
+	// Calculate the icon's desired horizontal position
+	
+	xPos=areaw/5-10; if (xPos<areax+10) xPos=areax+10; // Try to maintain 10 px distance minimum
+	
+	
+	// Make sure it fits in the area
+	// If not, resize and reposition horizontally to be centered
+	
 	QPixmap scaledIcon=*icon;
-	if (   (icon->height()>height() )  ||  (icon->width()>width()/2)   ) // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
+	
+	if (   (icon->height()>areah )  ||  (icon->width()>areaw/2)   ) // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
 		{
 		QImage image; image=(*icon);
-		scaledIcon.convertFromImage(image.smoothScale(width()/2,height(),QImage::ScaleMin));
+		scaledIcon.convertFromImage(image.smoothScale(areaw/2,areah,QImage::ScaleMin));
+		
+		// Center the icon horizontally
+		xPos=areax+(areaw-scaledIcon.width())/2+1;
+		
 		}
 
+	// Calculate the icon's vertical position
+	
+	yPos=(height()-scaledIcon.height())/2-1;
+		
 
 	// Now draw it
-	xPos=width()/5-10; if (xPos<2) xPos=2;
-	yPos=(height()-scaledIcon.height())/2-1;
+	
 	painter.drawPixmap(xPos,yPos,scaledIcon);
 	xPos+=scaledIcon.width(); // Move it so that later we can easily place the text
-    }
+	}
 
     // Finally, draw the text besides the icon
     xPos+=15;
-    QRect r=rect(); r.setLeft(xPos);
+    QRect r=rect(); r.setLeft(xPos); r.setWidth(areaw-xPos);
+    
     painter.setPen(QColor(0x00,0x00,0x00));
+    painter.setClipRect(r);
     painter.drawText(r,Qt::AlignVCenter,text);
 
     painter.end();
