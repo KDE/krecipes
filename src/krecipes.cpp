@@ -230,7 +230,7 @@ void Krecipes::filePrint()
 
 void Krecipes::import()
 {
-	KFileDialog file_dialog( QString::null,
+	KFileDialog file_dialog( i18n("Import Recipes"),
 	  "*.mx2|MasterCook (*.mx2)\n"
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
 	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
