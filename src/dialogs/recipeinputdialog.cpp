@@ -404,7 +404,6 @@ void RecipeInputDialog::save (void)
 {
 emit enableSaveOption(false);
 saveRecipe();
-enableChangedSignal(false);
 }
 
 void RecipeInputDialog::saveRecipe(void)
