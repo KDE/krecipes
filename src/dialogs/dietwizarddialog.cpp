@@ -246,7 +246,12 @@ public:
 
 class CategoriesListItem:public QCheckListItem{
 public:
-	CategoriesListItem(QListView* klv, const Element &category ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){ctyStored.id=category.id; ctyStored.name=category.name;}
+	CategoriesListItem(QListView* klv, const Element &category ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox)
+	{
+	ctyStored.id=category.id;
+	ctyStored.name=category.name;
+	setOn(true); // Set checked by default
+	}
 	~CategoriesListItem(void){}
 	virtual QString text(int column) const
 		{
