@@ -14,6 +14,7 @@ CONVENIENCES/MINOR FEATURES:
 	*Give option to import recipe formats by pasting the recipe text into a widget
 	*Allow saving and loading diet info from a file (or just store it in the database?)
 	*Database maintenance options (Empty database, Remove unused elements, etc.)
+	*Configurable shopping list (Maybe allow the user to select a style sheet or add a section to settings dialog... or both)
 
 BUGS/OTHER:
 	*PRIORITY: Secure database access passwords
