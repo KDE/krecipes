@@ -1,4 +1,5 @@
 Changes from 0.6 to CVS:
+  -Updated USDA data from SR16-1 to SR17 (released September, 2004)
   -'Configure' options to disable particular backends
   -Database to database transfer (Remote or local).
   -Autocomplete ingredients typed in the instructions text edit
