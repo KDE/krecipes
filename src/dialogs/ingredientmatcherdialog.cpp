@@ -179,6 +179,9 @@ void IngredientMatcherDialog::findRecipes(void)
 		
 		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit,++ilit)
 		{
+			if ( !(*it).ingList.containsAny(ilist) )
+				continue;
+
 			if ((*nit)==missingNo) 
 				{	
 					if (!titleShownYet)
