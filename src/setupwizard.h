@@ -58,16 +58,23 @@ private:
 
 
 class PermissionsSetupPage:public QWidget{
+Q_OBJECT
 public:
 	// Methods
 	PermissionsSetupPage(QWidget *parent);
 
 private:
 	// Widgets
-	QCheckBox *rootCheckBox;
 	QLabel *logo;
+	QLabel *permissionsText;
+	QCheckBox *noSetupCheckBox;
+	QCheckBox *rootCheckBox;
 	QLineEdit *userEdit;
 	QLineEdit *passEdit;
+
+private slots:
+	void rootCheckBoxChanged(bool on);
+	void noSetupCheckBoxChanged(bool on);
 
 };
 

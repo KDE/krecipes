@@ -79,6 +79,14 @@ layout->addItem(spacer_top,0,1);
 QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_left,1,0);
 
+// Explanation Text
+permissionsText=new QLabel(this);
+permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions access the KRecipes MySQL database.<br><br><b>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press Next.</b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password."));
+permissionsText->setMinimumWidth(200);
+permissionsText->setMaximumWidth(10000);
+permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop |QLabel::AlignJustify  ) );
+layout->addWidget(permissionsText,1,3);
 
 // Logo
 QPixmap permissionsSetupPixmap (locate("data", "krecipes/pics/dbpermissions.png"));
@@ -87,18 +95,25 @@ logo->setPixmap(permissionsSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addMultiCellWidget(logo,1,8,1,1);
 
+// Spacer to separate the logo
+QSpacerItem *logoSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(logoSpacer,1,2);
+
+// "The user already has permissions" checkbox
+noSetupCheckBox=new QCheckBox(i18n("I have already set the necessary permissions"),this,"noSetupCheckBox");
+layout->addWidget(noSetupCheckBox,3,3);
 // root checkbox
-rootCheckBox=new QCheckBox(i18n("I already have a MySQL root/admin account set"),this,"rootCheckBox");
-layout->addWidget(rootCheckBox,1,2);
+rootCheckBox=new QCheckBox(i18n("I have already set a MySQL root/admin account"),this,"rootCheckBox");
+layout->addWidget(rootCheckBox,4,3);
 
 QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(rootInfoSpacer,2,2);
+layout->addItem(rootInfoSpacer,5,3);
 
 // MySQL root/admin info
 QVGroupBox *rootInfoVGBox=new QVGroupBox(this,"rootInfoVGBox"); rootInfoVGBox->setTitle(i18n("MySQL root info"));
 rootInfoVGBox->setEnabled(false); // Disable by default
 rootInfoVGBox->setInsideSpacing(10);
-layout->addWidget(rootInfoVGBox,3,2);
+layout->addWidget(rootInfoVGBox,6,3);
 
 // Input boxes (widgets inserted below)
 QHBox *userBox=new QHBox(rootInfoVGBox); userBox->setSpacing(10);
@@ -111,11 +126,22 @@ userEdit=new KLineEdit(userBox);
 // Password Entry
 QLabel *passLabel=new QLabel(passBox); passLabel->setText(i18n("Password:"));
 passEdit=new KLineEdit(passBox);
+passEdit->setEchoMode(QLineEdit::Password);
 
 // Connect Signals & slots
 
 connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoVGBox,SLOT(setEnabled(bool)));
+connect(rootCheckBox,SIGNAL(toggled(bool)),noSetupCheckBox,SLOT(rootCheckBoxChanged(bool)));
+connect(noSetupCheckBox,SIGNAL(toggled(bool)),rootCheckBox,SLOT(noSetupCheckBoxChanged(bool)));
+}
+void PermissionsSetupPage::rootCheckBoxChanged(bool on)
+{
+if (on) noSetupCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
+}
 
+void PermissionsSetupPage::noSetupCheckBoxChanged(bool on)
+{
+if (on) rootCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
 }
 
 ServerSetupPage::ServerSetupPage(QWidget *parent):QWidget(parent)
@@ -265,5 +291,3 @@ config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
 
 }
-
-
