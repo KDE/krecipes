@@ -240,15 +240,16 @@ else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%
 		}
 
 int lastID=-1; QSQLiteResult insertedRecipe=database->executeQuery(command,&lastID);
-
 // If it's a new recipe, identify the ID that was given to the recipe and store in the Recipe itself
-int recipeID;
+
+
 if (newRecipe)
 {
-recipeID=lastID;
+recipe->recipeID=lastID; // store the new ID in the recipe
 }
 
-recipeID=recipe->recipeID;
+int recipeID=recipe->recipeID; // Set the recipeID (either new or old)
+
 
 // Let's begin storing the Image
 recipe->photo.save(".krecipe_photo.jpg", "JPEG");
