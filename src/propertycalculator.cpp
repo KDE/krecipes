@@ -103,7 +103,7 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 		if (ratio>0.0) // Could convert units to perUnit
 			{
 			property.amount=(prop->amount)*(ing.amount)*ratio;
-			if (undefined) property.amount=-(abs(property.amount));
+			if (undefined) property.amount=-(fabs(property.amount));
 			recipePropertyList->add(property);
 			}
 		else { // Could not convert units
@@ -183,7 +183,7 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 	if (ratio>0.0) // Could convert units to perUnit
 		{
 		property.amount=(prop->amount)*(ing.amount)*ratio;
-		if (undefined) property.amount=-(abs(property.amount));
+		if (undefined) property.amount=-(fabs(property.amount));
 		recipePropertyList->add(property);
 		}
 	else { // Could not convert units
@@ -205,7 +205,7 @@ void checkUndefined(IngredientPropertyList *recipePropertyList,IngredientPropert
 for (IngredientProperty *prop=recipePropertyList->getFirst();prop;prop=recipePropertyList->getNext())
 	{
 	int pos=addedPropertyList.find(prop);
-	if (pos<0) prop->amount=-(abs(prop->amount)); // undefined
+	if (pos<0) prop->amount=-(fabs(prop->amount)); // undefined
 	}
 }
 

@@ -156,7 +156,7 @@ private:
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
 private slots:
-	int setPages(int rb); // hides/shows pages given the radio button state
+	void setPages(int rb); // hides/shows pages given the radio button state
 signals:
 	void showPages(bool show);
 };

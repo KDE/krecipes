@@ -539,7 +539,7 @@ else
 ** hides/shows pages given the radio button state
 */
 
-int DBTypeSetupPage::setPages(int rb)
+void DBTypeSetupPage::setPages(int rb)
 {
 if (rb==0) // Hide pages
 	emit showPages(false);

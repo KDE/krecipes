@@ -82,7 +82,6 @@ htmlCode+=QString("<center><div STYLE=\"width: 90%\">");
 htmlCode+=QString("<table><tbody>");
 
 
-int day; // Counts days
 QValueList <int>::ConstIterator it; it=dishNumbers.begin();
 RecipeList::ConstIterator rit; rit=recipeList.begin();
 

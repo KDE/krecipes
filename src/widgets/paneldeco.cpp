@@ -109,7 +109,7 @@ TopDeco::~TopDeco()
 }
 
 
-void TopDeco::paintEvent(QPaintEvent *e)
+void TopDeco::paintEvent(QPaintEvent *)
 {
     // Get gradient colors
     QColor c1=colorGroup().button().light(120);

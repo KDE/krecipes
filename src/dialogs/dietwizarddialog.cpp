@@ -191,7 +191,7 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 			bool found=false;
 			while ((!found) && recipes_left)
 			{
-				int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
+				int random_index=(int)((float)(kapp->random())/(float)RAND_MAX*recipes_left);
 				QValueList<RecipeList::Iterator>::Iterator iit=tempRList.at(random_index); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
 				RecipeList::Iterator rit=*iit;
 				if (found=(((!categoryFiltering(meal,dish)) ||checkCategories(*rit,meal,dish)) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
@@ -368,7 +368,6 @@ MealInput::~MealInput()
 
 void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &propertyList)
 {
-int pgcount=0;
 QValueList<DishInput*>::iterator it;
 
 categoriesListLocalCache.clear();
@@ -396,7 +395,6 @@ reload(); //load from the cache now
 
 void MealInput::reload()
 {
-int pgcount=0;
 QValueList<DishInput*>::iterator it;
 for (it=dishInputList.begin(); it != dishInputList.end();it++)
 {
@@ -648,7 +646,7 @@ DishTitle::~DishTitle()
 {
 }
 
-void DishTitle::paintEvent(QPaintEvent *p )
+void DishTitle::paintEvent(QPaintEvent * )
 {
 
 
@@ -664,7 +662,7 @@ void DishTitle::paintEvent(QPaintEvent *p )
     // First draw the decoration
     painter.setPen(KGlobalSettings::activeTitleColor());
     painter.setBrush(QBrush(KGlobalSettings::activeTitleColor()));
-    painter.drawRoundRect(0,20,30,height()-40,50,50.0/(height()-40)*35.0);
+    painter.drawRoundRect(0,20,30,height()-40,50,(int)(50.0/(height()-40)*35.0));
 
     // Now draw the text
 
@@ -692,7 +690,7 @@ void DishTitle::paintEvent(QPaintEvent *p )
     // First draw the decoration
     painter.setPen(KGlobalSettings::activeTitleColor());
     painter.setBrush(QBrush(KGlobalSettings::activeTitleColor()));
-    painter.drawRoundRect(20,0,height()-40,30,50.0/(height()-40)*35.0,50);
+    painter.drawRoundRect(20,0,height()-40,30,(int)(50.0/(height()-40)*35.0),50);
 
     // Now draw the text
     QFont titleFont=KGlobalSettings::windowTitleFont ();
@@ -710,7 +708,7 @@ void DishTitle::paintEvent(QPaintEvent *p )
     painter.begin(&mask);
     painter.setPen(Qt::color1);
     painter.setBrush(Qt::color1);
-    painter.drawRoundRect(20,0,height()-40,30,50.0/(height()-40)*35.0,50);
+    painter.drawRoundRect(20,0,height()-40,30,(int)(50.0/(height()-40)*35.0),50);
 
     painter.end();
     pm.setMask(mask);

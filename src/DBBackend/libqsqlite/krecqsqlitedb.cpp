@@ -26,7 +26,7 @@
 #include <sqlite.h>
 #include <stdlib.h>
 
-QSQLiteDB::QSQLiteDB(QObject *parent, const char *name)
+QSQLiteDB::QSQLiteDB(QObject *, const char *)
 {
 }
 

@@ -57,7 +57,7 @@ void KreMenu::mouseMoveEvent (QMouseEvent *e)
 
 
 // Set the mouse cursor in any case
-int x=e->x(),y=e->y();
+int x=e->x();
 if (x > (width()-15))
 	{
 
@@ -113,7 +113,7 @@ if (dragging)
 }
 
 
-void KreMenu::mouseReleaseEvent (QMouseEvent *e)
+void KreMenu::mouseReleaseEvent (QMouseEvent *)
 {
 dragging=false;
 }
@@ -122,7 +122,7 @@ QSize KreMenu::sizeHint() const {
   return(QSize(300,150));
 }
 
-void KreMenu::paintEvent(QPaintEvent *e )
+void KreMenu::paintEvent(QPaintEvent *)
 {
     // Get gradient colors
     QColor c=colorGroup().button();
@@ -144,14 +144,14 @@ void KreMenu::paintEvent(QPaintEvent *e )
     painter.begin(&mask);
     painter.setPen(Qt::color1);
     painter.setBrush(Qt::color1);
-    painter.drawRoundRect(0,0,width(),height(),2.0/width()*height(),2);
+    painter.drawRoundRect(0,0,width(),height(),(int)(2.0/width()*height()),2);
     painter.end();
     kpm.setMask(mask);
 
     //Draw the border line
     painter.begin(&kpm);
     painter.setPen(c1);
-    painter.drawRoundRect(0,0,width(),height(),2.0/width()*height(),2);
+    painter.drawRoundRect(0,0,width(),height(),(int)(2.0/width()*height()),2);
 
     //Draw the top line bordering with the first button
     if (activeButton) // draw only if there's a button
@@ -253,12 +253,12 @@ KreMenuButton::~KreMenuButton()
 {
 }
 
-void KreMenuButton::mousePressEvent (QMouseEvent *e)
+void KreMenuButton::mousePressEvent (QMouseEvent *)
 {
 emit clicked();
 }
 
-void KreMenuButton::rescale(int w, int h)
+void KreMenuButton::rescale(int w, int)
 {
 	resize(w-10,height()); // Leave space for the handle
 }
@@ -266,9 +266,10 @@ void KreMenuButton::rescale(int w, int h)
 QSize KreMenuButton::sizeHint() const
 {
 	if (parentWidget()) return(QSize(parentWidget()->size().width()-10,40));
+	else return QSize(100,30);
 }
 
-void KreMenuButton::paintEvent(QPaintEvent *e )
+void KreMenuButton::paintEvent(QPaintEvent *)
 {
 
     // First draw the gradient

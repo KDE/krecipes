@@ -1287,7 +1287,7 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 void LiteRecipeDB::portOldDatabases(float version)
 {
 // This is the first SQLite version (0.4). There's no need to upgrade anything
-
+float v; v=version; // remove warnings for now, version will be used in future krecipes versions
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -1661,7 +1661,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 */
 
 int LiteRecipeDB::sqlite_encode_binary(const unsigned char *in, int n, unsigned char *out){
-  int i, j, e, m;
+  int i=0, j=0, e=0, m=0;
   int cnt[256];
   if( n<=0 ){
     out[0] = 'x';

@@ -12,12 +12,12 @@
  ***************************************************************************/
 #include "ingredientlist.h"
 
-IngredientList::IngredientList()
+IngredientList::IngredientList():QPtrList<Ingredient>()
 {
 setAutoDelete(true); //Deletes automatically when remove() is used.
 }
 
-IngredientList::IngredientList(const IngredientList &il)
+IngredientList::IngredientList(const IngredientList &il):QPtrList<Ingredient>(il)
 {
 clear();
 setAutoDelete(true);

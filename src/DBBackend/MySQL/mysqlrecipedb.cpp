@@ -1046,7 +1046,7 @@ QCString MySQLRecipeDB::escapeAndEncode(const QString &s)
 QString s_escaped=s;
 
 s_escaped.replace ("'","\\'");
-s_escaped.replace (";","\";\@"); // Small trick for only for parsing later on
+s_escaped.replace (";","\";@"); // Small trick for only for parsing later on
 
 return(s_escaped.utf8());
 }
@@ -1145,7 +1145,6 @@ void MySQLRecipeDB::createTable(QString tableName)
 {
 
 QString command;
-bool createIndex;
 
 if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 

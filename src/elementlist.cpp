@@ -9,12 +9,12 @@
  ***************************************************************************/
 #include "elementlist.h"
 
-ElementList::ElementList()
+ElementList::ElementList():QPtrList <Element>()
 {
 setAutoDelete(true);
 }
 
-ElementList::ElementList(const ElementList &el)
+ElementList::ElementList(const ElementList &el):QPtrList <Element>(el)
 {
 clear();
 setAutoDelete(true);

@@ -601,10 +601,10 @@ void SetupDisplay::toAbsolute(QRect *r)
 QSize scaledSize;
 QPoint scaledPoint;
 
-scaledSize.setWidth(r->width()/100.0*width());
-scaledSize.setHeight(r->height()/100.0*width());
-scaledPoint.setX(r->left()/100.0*width());
-scaledPoint.setY(r->top()/100.0*width());
+scaledSize.setWidth((int)(r->width()/100.0*width()));
+scaledSize.setHeight((int)(r->height()/100.0*width()));
+scaledPoint.setX((int)(r->left()/100.0*width()));
+scaledPoint.setY((int) (r->top()/100.0*width()));
 r->setTopLeft(scaledPoint);
 r->setSize(scaledSize);
 
@@ -619,10 +619,10 @@ void SetupDisplay::toPercentage(QRect *r)
 QSize scaledSize;
 QPoint scaledPoint;
 
-scaledSize.setWidth(r->width()*100.0/width());
-scaledSize.setHeight(r->height()*100.0/width());
-scaledPoint.setX(r->left()*100.0/width());
-scaledPoint.setY(r->top()*100.0/width());
+scaledSize.setWidth((int)(r->width()*100.0/width()));
+scaledSize.setHeight((int)(r->height()*100.0/width()));
+scaledPoint.setX((int)(r->left()*100.0/width()));
+scaledPoint.setY((int)(r->top()*100.0/width()));
 r->setTopLeft(scaledPoint);
 r->setSize(scaledSize);
 

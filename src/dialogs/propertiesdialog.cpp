@@ -78,7 +78,6 @@ CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(this,&list);
 if ( propertyDialog->exec() == QDialog::Accepted ) {
    QString name = propertyDialog->newPropertyName();
    QString units= propertyDialog->newUnitsName();
-   int perUnits= 1;
    if (!((name.isNull()) || (units.isNull()))) // Make sure none of the fields are empty
       database->addProperty(name, units);
 }

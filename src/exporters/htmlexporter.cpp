@@ -109,8 +109,8 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	config->setGroup("PhotoSetup");
 	temp_photo_geometry = config->readRectEntry("Geometry");
 
-	int phwidth = temp_photo_geometry.width()/100.0*m_width; // Scale to this dialog
-	int phheight =temp_photo_geometry.height()/100.0*m_width; // Scale to this dialog
+	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
+	int phheight =(int) (temp_photo_geometry.height()/100.0*m_width); // Scale to this dialog
 
 	QImage image;
 	if (recipe.photo.isNull())
@@ -197,8 +197,8 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	config->setGroup("PhotoSetup");
 	geometry=new QRect(temp_photo_geometry);
 	geometry->moveBy( 0, offset );
-	geometry->setWidth(geometry->width()*100.0/m_width);// The size of all objects needs to be saved in percentage format
-	geometry->setHeight(geometry->height()*100.0/m_width);// The size of all objects needs to be saved in percentage format
+	geometry->setWidth((int)(geometry->width()*100.0/m_width));// The size of all objects needs to be saved in percentage format
+	geometry->setHeight((int) (geometry->height()*100.0/m_width));// The size of all objects needs to be saved in percentage format
 	geometries.append( geometry );
 
 	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(recipe.title);
@@ -386,8 +386,8 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 
 		// For those elements that have no fixed height (lists), calculate the height
 
-		int elementHeight=rect->height()/100.0*m_width; //Initialize with the current user settings
-		int elementWidth=rect->width()/100.0*m_width;
+		int elementHeight=(int) (rect->height()/100.0*m_width); //Initialize with the current user settings
+		int elementWidth=(int) (rect->width()/100.0*m_width);
 
 		if ( !element->fixedHeight() )
 		{
@@ -416,7 +416,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 
 			delete sizeCalculator;
 		}
-		rect->setHeight(ceil(elementHeight*100.0/m_width)); // set the new height to the element
+		rect->setHeight((int)(ceil(elementHeight*100.0/m_width))); // set the new height to the element
 									 // Note that ceil is needed to avoid size
 									 // shrinking due to float->int conversion
 

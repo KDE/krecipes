@@ -702,7 +702,7 @@ void KrecipesView::moveTipButton(int,int)
 contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
 }
 
-void KrecipesView::resizeRightPane(int lpw,int lph)
+void KrecipesView::resizeRightPane(int lpw,int)
 {
 QSize rpsize=rightPanel->size();
 QPoint rpplace=rightPanel->pos();
