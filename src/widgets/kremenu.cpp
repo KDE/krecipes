@@ -502,7 +502,8 @@ if (!isShown()) return;
     QRect r=rect(); r.setLeft(areax+5); r.setWidth(areaw-10);
     
     painter.begin(&kpm);
-    painter.setPen(QColor(0x00,0x00,0x00));
+    if (highlighted) painter.setPen(KGlobalSettings::highlightedTextColor());
+    else painter.setPen(KGlobalSettings::textColor());
     painter.setClipRect(r);
     painter.drawText(r,Qt::AlignVCenter,text);
 
