@@ -87,7 +87,7 @@ public:
 	virtual void loadCategories(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
-	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-1)=0;
+	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-2)=0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;

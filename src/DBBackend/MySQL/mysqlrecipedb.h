@@ -91,7 +91,7 @@ public:
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);
 	void loadPossibleUnits(int ingredientID, ElementList *list);
-	void loadProperties(IngredientPropertyList *list,int ingredientID=-1);
+	void loadProperties(IngredientPropertyList *list,int ingredientID=-2); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);

@@ -738,9 +738,14 @@ bool usePerUnit;
 if (ingredientID>=0) // Load properties of this ingredient
 {
 usePerUnit=true;
-command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.ingredient_id=%1 AND ii.property_id=ip.id AND ii.per_units=u.id").arg(ingredientID);
+command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.ingredient_id=%1 AND ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID);
 }
-else // Load the whole property list
+else if (ingredientID==-1) // Load the properties of all the ingredients
+{
+usePerUnit=true;
+command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID);
+}
+else // Load the whole property list (just the list of possible properties, not the ingredient properties)
 {
 usePerUnit=false;
 command=QString("SELECT  id,name,units FROM ingredient_properties;");
