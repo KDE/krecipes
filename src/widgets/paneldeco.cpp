@@ -9,25 +9,22 @@
  ***************************************************************************/
 #include "paneldeco.h"
 
-#include <qbitmap.h>
-#include <qimage.h>
 #include <qpainter.h>
 #include <qpoint.h>
-#include <qpixmap.h>
+#include <qrect.h>
 
-#include <kglobalsettings.h>
-#include <kimageeffect.h>
+#include <kiconloader.h>
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 
 
 // Panel decoration
 
-PanelDeco::PanelDeco(QWidget *parent, const char *name):QVBox(parent, name)
+PanelDeco::PanelDeco(QWidget *parent, const char *name, const QString &title, const QString &iconName):QVBox(parent, name)
 {
 
 // Top decoration
-tDeco=new TopDeco(this,"TopDecoration");
+tDeco=new TopDeco(this,"TopDecoration",title,iconName);
 
 hbox=new QHBox(this);
 
@@ -37,7 +34,6 @@ lDeco=new LeftDeco(hbox,"LeftDecoration");
 //The widget stack (panels)
 stack=new QWidgetStack(hbox);
 stack->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-
 
 }
 
@@ -75,6 +71,11 @@ QWidget* PanelDeco::visiblePanel(void)
 return (stack->visibleWidget());
 }
 
+void PanelDeco::setHeader(const QString &title,const QString &icon)
+{
+	tDeco->setHeader(title,icon);
+}
+
 // Left part of the decoration
 
 LeftDeco::LeftDeco(QWidget *parent, const char *name): QWidget(parent, name)
@@ -87,10 +88,73 @@ LeftDeco::~LeftDeco()
 
 // Top part of the decoration
 
-TopDeco::TopDeco(QWidget *parent, const char *name): QWidget(parent, name)
+TopDeco::TopDeco(QWidget *parent, const char *name,const QString &title, const QString &iconName): QWidget(parent, name)
 {
+setMinimumHeight(30);
+icon=0;
+panelTitle=QString::null;
+if (iconName!=QString::null)
+	{
+	KIconLoader il; icon=new QPixmap(il.loadIcon(iconName,KIcon::NoGroup,22));
+	}
+
+if (title!=QString::null)
+	{
+	panelTitle=title;
+	}
 }
 
 TopDeco::~TopDeco()
 {
+}
+
+
+void TopDeco::paintEvent(QPaintEvent *e)
+{
+    // Get gradient colors
+    QColor c1=colorGroup().button().light(120);
+    QColor c2=paletteBackgroundColor();
+
+    // Draw the gradient
+    KPixmap kpm;kpm.resize(size()); KPixmapEffect::unbalancedGradient (kpm,c1,c2, KPixmapEffect::VerticalGradient,150,150);
+
+    // Add a line on top
+    QPainter painter(&kpm);
+    painter.setPen(colorGroup().button().dark(130));
+    painter.drawLine(0,0,width(),0);
+
+    // Now Add the icon
+    int xpos=0, ypos=0;
+    if (icon)
+	{
+	xpos=20;
+	ypos=(height()-icon->height())/2-1;
+	painter.drawPixmap(xpos,ypos,*icon);
+	xpos+=icon->width(); // Move it so that later we can easily place the text
+	}
+
+    // Finally, draw the text besides the icon
+    if (panelTitle!=QString::null)
+	{
+	xpos+=15;
+	QRect r=rect(); r.setLeft(xpos);
+	painter.setPen(QColor(0x00,0x00,0x00));
+	QFont ft=font(); ft.setBold(true); painter.setFont(ft);
+	painter.drawText(r,Qt::AlignVCenter,panelTitle);
+	}
+    painter.end();
+    // Copy the pixmap to the widget
+    bitBlt(this, 0, 0, &kpm);
+}
+
+void TopDeco::setHeader(const QString &title,const QString &iconName)
+{
+	if (title!=QString::null) panelTitle=title;
+	if (iconName!=QString::null) {KIconLoader il; icon=new QPixmap(il.loadIcon(iconName,KIcon::NoGroup,22));}
+	if (title!=QString::null || iconName !=QString::null) update();
+}
+
+QSize TopDeco::sizeHint(void)
+{
+	return (QSize(parentWidget()->width(),30));
 }

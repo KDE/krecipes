@@ -15,6 +15,7 @@
 #include <qiconset.h>
 #include <qstring.h>
 #include <qhbox.h>
+#include <qpixmap.h>
 #include <qvbox.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
@@ -33,7 +34,7 @@ class PanelDeco : public QVBox
 Q_OBJECT
 public:
 	// Methods
-	PanelDeco(QWidget *parent = 0, const char *name = 0);
+	PanelDeco(QWidget *parent = 0, const char *name = 0, const QString &title=QString::null, const QString &iconName=QString::null);
 	~PanelDeco();
 	int id(QWidget* w); // obtain the id of the given panel
 	QWidget* visiblePanel(void); // obtain the current active panel no.
@@ -45,6 +46,7 @@ private:
 
 public slots:
 	void raise(QWidget *w);
+	void setHeader(const QString &title=QString::null,const QString &icon=QString::null);
 protected:
 	virtual void childEvent(QChildEvent *e);
 
@@ -64,9 +66,16 @@ class TopDeco: public QWidget
 {
 Q_OBJECT
 public:
-	TopDeco(QWidget *parent = 0, const char *name = 0);
-
+	TopDeco(QWidget *parent = 0, const char *name = 0, const QString &title=QString::null, const QString &iconName=QString::null);
 	~TopDeco();
+	virtual QSize sizeHint(void);
+public slots:
+	void setHeader(const QString &title=QString::null,const QString &iconName=QString::null);
+protected:
+	virtual void paintEvent(QPaintEvent *e);
+private:
+	QPixmap *icon;
+	QString panelTitle;
 };
 
 #endif

@@ -133,7 +133,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     KIconLoader il;
     leftPanel=new KreMenu(splitter,"leftPanel");
-    rightPanel=new PanelDeco(splitter,"rightPanel");
+    rightPanel=new PanelDeco(splitter,"rightPanel",i18n("Find/Edit Recipes"),"filefind");
     leftPanel->setMinimumWidth(22);
     leftPanel->setMaximumWidth(200);
     leftPanel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding));
@@ -302,27 +302,38 @@ void KrecipesView::slotSetPanel(int w)
 switch (w)
 {
 case SelectP: selectPanel->reload(); // Reload data
-	this->rightPanel->raise(selectPanel);
+	rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
+	rightPanel->raise(selectPanel);
 	break;
 case ShoppingP: shoppingListPanel->reload(); // Reload data
-	this->rightPanel->raise(shoppingListPanel);
+	rightPanel->setHeader(i18n("Shopping List"),"trolley");
+	rightPanel->raise(shoppingListPanel);
 	break;
 case IngredientsP: ingredientsPanel->reload();// Reload data
-	this->rightPanel->raise(ingredientsPanel);
+	rightPanel->setHeader(i18n("Ingredients"),"ingredients");
+	rightPanel->raise(ingredientsPanel);
 	break;
 case PropertiesP: propertiesPanel->reload();
-	this->rightPanel->raise(propertiesPanel);
+	rightPanel->setHeader(i18n("Properties"),"properties");
+	rightPanel->raise(propertiesPanel);
+
 	break;
 case UnitsP: unitsPanel->reload(); // Reload data
-	this->rightPanel->raise(unitsPanel);
+	rightPanel->setHeader(i18n("Units"),"units");
+	rightPanel->raise(unitsPanel);
 	break;
-case CategoriesP: this->rightPanel->raise(categoriesPanel);
+case CategoriesP:
+	categoriesPanel->reload();
+	rightPanel->setHeader(i18n("Categories"),"categories");
+	rightPanel->raise(categoriesPanel);
 	break;
 case DietWizardP: dietPanel->reload();
-	this->rightPanel->raise(dietPanel);
+	rightPanel->setHeader(i18n("Diet Wizard"),"diet");
+	rightPanel->raise(dietPanel);
 	break;
 case AuthorsP: authorsPanel->reload();
-	this->rightPanel->raise(authorsPanel);
+	rightPanel->setHeader(i18n("Authors"),"personal");
+	rightPanel->raise(authorsPanel);
 	break;
 case ContextHelp:
   break;
@@ -382,6 +393,7 @@ else if (action==1) // Edit
 	}
 
 	inputPanel->loadRecipe(recipeID);
+	rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 	rightPanel->raise(inputPanel);
   setContextHelp(RecipeEdit);
 }
@@ -417,6 +429,7 @@ if ( !inputPanel->everythingSaved() )
 }
 
 inputPanel->newRecipe();
+rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 rightPanel->raise(inputPanel);
 setContextHelp(RecipeEdit);
 }
@@ -496,6 +509,7 @@ delete setupWizard;
 void KrecipesView::slotSetDietWizardPanel(void)
 {
 dietPanel->reload();
+rightPanel->setHeader(i18n("Diet Wizard"),"wizard");
 rightPanel->raise(dietPanel);
     setContextHelp(DietWizardP);
 }
@@ -586,6 +600,7 @@ if (!recipeButton)
 
 void KrecipesView::switchToRecipe(void)
 {
+rightPanel->setHeader(i18n("View Recipe"),"filefind");
 rightPanel->raise(recipeWidget);
 setContextHelp(RecipeEdit);
 }
@@ -593,6 +608,7 @@ setContextHelp(RecipeEdit);
 void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
+rightPanel->setHeader(i18n("Find/Edit Recipe"),"filefind");
 rightPanel->raise(selectPanel);
 buttonsList->removeLast();
 setContextHelp(SelectP);
@@ -603,6 +619,7 @@ recipeButton=0;
 
 void KrecipesView::show (void)
 {
+	rightPanel->setHeader(i18n("Find/Edit Recipe"),"filefind");
 	rightPanel->raise(this->selectPanel);
 	setContextHelp(SelectP);
 	QWidget::show();
@@ -611,6 +628,7 @@ void KrecipesView::show (void)
 void KrecipesView::showRecipe(int recipeID)
 {
 viewPanel->loadRecipe(recipeID);
+rightPanel->setHeader(i18n("View Recipe"),"filefind");
 rightPanel->raise(viewPanel);
 }
 
@@ -679,6 +697,7 @@ void KrecipesView::setContextHelp(int action){
 void KrecipesView::createShoppingListFromDiet(void)
 {
 shoppingListPanel->createShopping(dietPanel->dietList());
+rightPanel->setHeader(i18n("Shopping List"),"trolley");
 rightPanel->raise(shoppingListPanel);
 }
 

@@ -13,6 +13,7 @@
 
 #include <qbitmap.h>
 #include <qcursor.h>
+#include <qfont.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -124,7 +125,7 @@ QSize KreMenu::sizeHint() const {
 void KreMenu::paintEvent(QPaintEvent *e )
 {
     // Get gradient colors
-    QColor c=KGlobalSettings::baseColor();
+    QColor c=colorGroup().button();
     QColor c1=c.dark(130);
     QColor c2=c.light(120);
 
@@ -254,8 +255,8 @@ void KreMenuButton::paintEvent(QPaintEvent *e )
 
     	// Set the gradient colors
 
-    	c1=KGlobalSettings::baseColor().dark(darken);
-    	c2=KGlobalSettings::baseColor().light(lighten);
+    	c1=colorGroup().button().dark(darken);
+    	c2=colorGroup().button().light(lighten);
 
     	if (highlighted)
     	{
@@ -289,9 +290,9 @@ void KreMenuButton::paintEvent(QPaintEvent *e )
 
     // Draw the line
     painter.begin(&kpm);
-    painter.setPen(KGlobalSettings::baseColor().dark(darken));
+    painter.setPen(colorGroup().button().dark(darken));
     painter.drawLine(width()/5,height()-2,width()-1,height()-2);
-    painter.setPen(KGlobalSettings::baseColor().light(lighten));
+    painter.setPen(colorGroup().button().light(lighten));
     painter.drawLine(width()/5,height()-1,width()-1,height()-1);
 
 
@@ -324,9 +325,6 @@ void KreMenuButton::paintEvent(QPaintEvent *e )
     QRect r=rect(); r.setLeft(xPos);
     painter.setPen(QColor(0x00,0x00,0x00));
     painter.drawText(r,Qt::AlignVCenter,text);
-
-
-
 
     painter.end();
 
