@@ -69,7 +69,7 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	kdDebug()<<"I'll check the DB integrity now\n";
 	if (!checkIntegrity()) {
 		kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
-		dbErr=i18n("Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the atabase structure may be too corrupted.\n");
+		dbErr=i18n("Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the database structure may be too corrupted.\n");
 		return;
 	}
 	dbOK=true;
