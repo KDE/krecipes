@@ -22,9 +22,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include "mixednumber.h"
-#include "mmdata.h"
-
 CookMLExporter::CookMLExporter( RecipeDB *db, const QString& filename, const QString format ) :
   BaseExporter( db, filename, format )
 {
