@@ -258,7 +258,7 @@ layout->addItem(logoSpacer,1,2);
 
 // Explanation Text
 permissionsText=new QLabel(this);
-permissionsText->setText(i18n("This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases<b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must<b> select the appropriate option below to enter the information of a privileged PostgreSQL account."));
+permissionsText->setText(i18n("This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account."));
 
 permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
