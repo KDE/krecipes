@@ -8,25 +8,6 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-/**********************************************************************
-** Copyright (C)
-**               2003 Jason Kivlighn <mizunoami44@users.sourceforge.net>
-**
-** This file may be distributed and/or modified under the terms of the
-** GNU General Public License version 2 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-** See http://www.trolltech.com/gpl/ for GPL licensing information.
-**
-** Contact info@trolltech.com if any conditions of this licensing are
-** not clear to you.
-**
-**********************************************************************/
-
 #include "dragarea.h"
 
 #include "sizehandle.h"
@@ -49,18 +30,20 @@ void DragArea::mousePressEvent( QMouseEvent *e )
 	mouse_down = true;
 
 	m_current_box = childAt(e->pos());
+
 	if ( m_current_box )
 	{
 		m_current_box->raise();
-		selection->setWidget(m_current_box);
 
-		widgetGeom = QRect( m_current_box->pos(), m_current_box->size() ); //widget may be on the move
+		widgetGeom = QRect( m_current_box->pos(), m_current_box->size() ); //widget may be on the move, so store this
 		m_last_point = m_current_box->mapFromGlobal( e->globalPos() );
 		m_begin_point = m_last_point;
 	}
+
+	selection->setWidget(m_current_box); //widget should be raise()'ed before calling this to display correctly
 }
 
-void DragArea::mouseReleaseEvent( QMouseEvent *e )
+void DragArea::mouseReleaseEvent( QMouseEvent * )
 {
 	mouse_down = false;
 }
