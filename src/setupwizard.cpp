@@ -11,6 +11,9 @@
 #include <iostream>
 #include <qlayout.h>
 #include <qpixmap.h>
+#include <qpushbutton.h>
+#include <kconfig.h>
+#include <kapp.h>
 #include "setupwizard.h"
 
 SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f):KWizard(parent,name, modal,f)
@@ -22,6 +25,7 @@ addPage(serverSetupPage,"Server Settings");
 savePage = new SavePage(this);
 addPage(savePage,"Finish and Save Settings");
 setFinishEnabled(savePage,true); // Enable finish button
+connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
 }
 
 
@@ -110,6 +114,26 @@ QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding
 layout->addItem( spacerRight, 1,5 );
 }
 
+QString ServerSetupPage::server(void)
+{
+return(this->serverEdit->text());
+}
+
+QString ServerSetupPage::user(void)
+{
+return(this->usernameEdit->text());
+}
+
+QString ServerSetupPage::password(void)
+{
+return(this->passwordEdit->text());
+}
+
+QString ServerSetupPage::dbName(void)
+{
+return(this->dbNameEdit->text());;
+}
+
 SavePage::SavePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
@@ -125,4 +149,23 @@ layout->addWidget(saveText,1,2);
 
 
 }
+
+void SetupWizard::save(void)
+{
+KConfig *config=kapp->config();
+
+// Save the server data
+config->setGroup("Server");
+config->writeEntry("Host",serverSetupPage->server());
+config->writeEntry("Username",serverSetupPage->user());
+config->writeEntry("Password",serverSetupPage->password());
+config->writeEntry("DBName",serverSetupPage->dbName());
+
+// Indicate that settings were already made
+
+config->setGroup("Wizard");
+config->writeEntry( "SystemSetup",true);
+
+}
+
 

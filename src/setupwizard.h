@@ -26,6 +26,7 @@ class ServerSetupPage;
 class SavePage;
 
 class SetupWizard:public KWizard{
+Q_OBJECT
 public:
 
      SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
@@ -35,6 +36,8 @@ private:
 	WelcomePage *welcomePage;
 	ServerSetupPage *serverSetupPage;
 	SavePage *savePage;
+private slots:
+	void save(void);
 
 };
 
@@ -54,7 +57,10 @@ class ServerSetupPage:public QWidget{
 public:
 	// Methods
 	ServerSetupPage(QWidget *parent);
-
+	QString server(void);
+	QString user(void);
+	QString password(void);
+	QString dbName(void);
 private:
 	// Widgets
 	QLabel *logo;
@@ -62,6 +68,7 @@ private:
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+
 
 };
 
