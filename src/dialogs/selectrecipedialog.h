@@ -15,6 +15,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcursor.h>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -22,6 +23,7 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
+#include <kpopupmenu.h>
 
 #include "exporters/kreexport.h"
 
@@ -57,6 +59,7 @@ private:
   QLabel *searchLabel;
   KLineEdit *searchBox;
   KComboBox *categoryBox;
+  KPopupMenu *kpop;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
@@ -74,6 +77,7 @@ private slots:
   void edit(void);
   void remove(void);
   void filter(const QString &s);
+  void showPopup( KListView *, QListViewItem *, const QPoint & );
 public slots:
   void exportRecipe();
   void haveSelectedItems();

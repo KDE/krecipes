@@ -73,6 +73,14 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
+// Popup menu
+    kpop = new KPopupMenu( recipeListView );
+    kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),tr2i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
+    kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),tr2i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
+    kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(exportRecipe()), CTRL+Key_S );
+    kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
+    kpop->polish();
+
 // Load Recipe List
 loadRecipeList();
 
@@ -88,6 +96,7 @@ connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const Q
 connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()));
 connect(recipeListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(open()));
+connect(recipeListView,SIGNAL(contextMenu (KListView *, QListViewItem *, const QPoint &)),this, SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
 }
 
 
@@ -214,5 +223,11 @@ void SelectRecipeDialog::haveSelectedItems(){
   }
   else{
     emit recipeSelected(false);
+  }
+}
+
+void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
+  if(!i->firstChild()){
+    kpop->exec(p);
   }
 }
