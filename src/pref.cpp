@@ -5,7 +5,8 @@
 #include "pref.h"
 
 #include <klocale.h>
-
+#include <kapp.h>
+#include <kconfig.h>
 #include <qlayout.h>
 #include <qlabel.h>
 
@@ -22,8 +23,8 @@ KrecipesPreferences::KrecipesPreferences()
     QHBoxLayout* layout = new QHBoxLayout( frame );
     layout->setSpacing(0);
     layout->setMargin(0);
-    m_pageOne = new ServerPrefs(frame);
-    layout->addWidget(m_pageOne);
+    m_pageServer = new ServerPrefs(frame);
+    layout->addWidget(m_pageServer);
 
 
     frame = addPage(i18n("Appearance"), i18n("Customize Krecipes Appearance"));
@@ -31,9 +32,14 @@ KrecipesPreferences::KrecipesPreferences()
 
     setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 
+    // Signals & Slots
+    connect (this, SIGNAL(okClicked()), this, SLOT(saveSettings()));
 
 }
 
+
+
+// Server Setttings Dialog
 ServerPrefs::ServerPrefs(QWidget *parent)
     : QWidget(parent)
 {
@@ -41,8 +47,6 @@ ServerPrefs::ServerPrefs(QWidget *parent)
     QGridLayout *layout = new QGridLayout(this,1,1,0,0);
     layout->setSpacing( KDialog::spacingHint() );
     layout->setMargin(0);
-
-
 
     QSpacerItem* spacerTop = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem( spacerTop, 0,1);
@@ -103,6 +107,16 @@ ServerPrefs::ServerPrefs(QWidget *parent)
     QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
     layout->addItem( spacerRight, 1,4 );
 
+
+    // Load & Save Current Settings
+    KConfig *config=kapp->config();
+    config->setGroup("Server");
+    serverEdit->setText( config->readEntry( "Host","localhost"));
+    usernameEdit->setText( config->readEntry( "Username",""));
+    passwordEdit->setText( config->readEntry("Password",""));
+    dbNameEdit->setText( config->readEntry( "DBName", "Krecipes") );
+
+
 }
 
 KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
@@ -113,4 +127,25 @@ KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
 
     new QLabel(i18n("Add something here"), this);
 }
+
+
+void KrecipesPreferences::saveSettings(void)
+{
+m_pageServer->saveOptions();
+
+}
+
+// Save Server settings
+void ServerPrefs::saveOptions(void)
+{
+KConfig *config=kapp->config();
+config->setGroup("Server");
+config->writeEntry("Host",serverEdit->text());
+config->writeEntry("Username",usernameEdit->text());
+config->writeEntry("Password",passwordEdit->text());
+config->writeEntry("DBName",dbNameEdit->text());
+}
+
+
+
 #include "pref.moc"

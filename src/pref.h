@@ -19,8 +19,10 @@ public:
     KrecipesPreferences();
 
 private:
-    ServerPrefs *m_pageOne;
+    ServerPrefs *m_pageServer;
     KrecipesPrefPageTwo *m_pageTwo;
+private slots:
+    void saveSettings(void);
 };
 
 class ServerPrefs : public QWidget
@@ -28,11 +30,17 @@ class ServerPrefs : public QWidget
     Q_OBJECT
 public:
     ServerPrefs(QWidget *parent = 0);
+
+    // Public Methods
+    void saveOptions(void);
 private:
+    // Internal Widgets
     KLineEdit *serverEdit;
     KLineEdit *usernameEdit;
     KLineEdit *passwordEdit;
     KLineEdit *dbNameEdit;
+
+
 };
 
 class KrecipesPrefPageTwo : public QFrame

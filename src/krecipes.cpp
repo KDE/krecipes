@@ -60,6 +60,7 @@ Krecipes::Krecipes()
     connect(this->m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)));
     enableSaveOption(false); // Disables saving initially
 
+
 }
 
 Krecipes::~Krecipes()
