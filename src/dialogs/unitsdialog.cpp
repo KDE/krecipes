@@ -45,6 +45,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     unitListView->addColumn(i18n("Unit"));
     unitListView->setRenameable(1, true);
     unitListView->setDefaultRenameAction(QListView::Reject);
+    unitListView->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget(unitListView,0,3,0,0);
 
     conversionTable=new ConversionTable(this,1,1);

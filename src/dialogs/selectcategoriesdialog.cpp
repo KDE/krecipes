@@ -53,6 +53,7 @@ categoryListView=new KListView(this);
 categoryListView->addColumn("*");
 categoryListView->addColumn(i18n("Category"));
 categoryListView->setSorting(-1);
+categoryListView->setAllColumnsShowFocus(true);
 layout->addMultiCellWidget(categoryListView,1,1,1,3);
 
 //Ok/Cancel buttons

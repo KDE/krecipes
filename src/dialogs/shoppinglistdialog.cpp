@@ -36,6 +36,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     recipeListView->listView()->addColumn(i18n("Id"));
     recipeListView->listView()->addColumn(i18n("Recipe Title"));
     recipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
+    recipeListView->listView()->setAllColumnsShowFocus(true);
 
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
@@ -65,6 +66,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
     shopRecipeListView->listView()->setSorting(-1);
     shopRecipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
+    shopRecipeListView->listView()->setAllColumnsShowFocus(true);
 
     QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(spacerToButtonBar,5,1);

@@ -37,6 +37,7 @@ unitListBack =new ElementList;
     propertyChooseView = new KListView( box, "propertyChooseView" );
     propertyChooseView->addColumn( i18n( "Id" ) );
     propertyChooseView->addColumn( i18n( "Property" ) );
+    propertyChooseView->setAllColumnsShowFocus(true);
     boxLayout->addWidget( propertyChooseView );
 
     QHBoxLayout *layout2 = new QHBoxLayout( this, 0, 6 );

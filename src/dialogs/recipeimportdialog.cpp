@@ -31,6 +31,7 @@ RecipeImportDialog::RecipeImportDialog( const QPtrList<Recipe> &list, QWidget *p
 	kListView->addColumn( i18n( "Recipes" ) );
 	kListView->setProperty( "selectionMode", "NoSelection" );
 	kListView->setRootIsDecorated( true );
+	kListView->setAllColumnsShowFocus(true);
 
 	Form1Layout->addWidget( kListView );
 

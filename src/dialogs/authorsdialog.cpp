@@ -35,6 +35,7 @@ authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author's Name"));
 authorListView->setRenameable(1, true);
 authorListView->setDefaultRenameAction(QListView::Reject);
+authorListView->setAllColumnsShowFocus(true);
 layout->addWidget(authorListView,1,1);
 
 //Buttons

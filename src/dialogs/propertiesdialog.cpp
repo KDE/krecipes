@@ -39,6 +39,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     propertyListView->addColumn(i18n("Id"));
     propertyListView->addColumn(i18n("Property"));
     propertyListView->addColumn(i18n("Units"));
+    propertyListView->setAllColumnsShowFocus(true);
     QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,7);
     addPropertyButton=new QPushButton(this);

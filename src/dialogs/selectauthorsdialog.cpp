@@ -58,6 +58,7 @@ layout->addItem(spacerFromAddRemoveButtons,1,2);
 authorListView=new KListView(this);
 authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author"));
+authorListView->setAllColumnsShowFocus(true);
 layout->addMultiCellWidget(authorListView,1,5,3,4);
 
 //Ok/Cancel buttons

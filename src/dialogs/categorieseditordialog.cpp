@@ -34,6 +34,7 @@ categoryListView->addColumn(i18n("Id"));
 categoryListView->addColumn(i18n("Category Name"));
 categoryListView->setRenameable(1, true);
 categoryListView->setDefaultRenameAction(QListView::Reject);
+categoryListView->setAllColumnsShowFocus(true);
 layout->addWidget(categoryListView,1,1);
 
 //Buttons

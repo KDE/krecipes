@@ -44,6 +44,7 @@ recipeBox=new QGroupBox(1,Qt::Vertical,i18n("Recipes"),this);
 recipeListView=new KListView(recipeBox);
 recipeListView->addColumn(i18n("Id"));
 recipeListView->addColumn(i18n("Recipe Title"));
+recipeListView->setAllColumnsShowFocus(true);
 layout->addWidget(recipeBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(list_spacer, row+1,col);

@@ -494,6 +494,7 @@ categoriesView=new KListView(categoriesBox);
 categoriesView->addColumn("*");
 categoriesView->addColumn(i18n("Category"));
 categoriesView->setEnabled(false); // Disable it by default
+categoriesView->setAllColumnsShowFocus(true);
 
 	//Constraints list
 constraintsView=new KListView(listBox);
@@ -501,6 +502,7 @@ constraintsView->addColumn(i18n("Enabled"));
 constraintsView->addColumn(i18n("Property"));
 constraintsView->addColumn(i18n("Min. Value"));
 constraintsView->addColumn(i18n("Max. Value"));
+constraintsView->setAllColumnsShowFocus(true);
 
 	// KDoubleInput based edit boxes
 constraintsEditBox1=new EditBox(this);

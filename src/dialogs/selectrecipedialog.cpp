@@ -63,6 +63,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     	recipeListView->addColumn(i18n("Title"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	recipeListView->setRootIsDecorated(true); // Show "+" open icons
+	recipeListView->setAllColumnsShowFocus(true);
 	layout->addMultiCellWidget(recipeListView,3,3,1,3);
 
 	buttonBar=new QHBox(this);

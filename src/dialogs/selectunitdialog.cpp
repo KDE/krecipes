@@ -31,6 +31,7 @@ unitChooseView=new KListView(box);
 unitChooseView->addColumn(i18n("Id"));
 unitChooseView->addColumn(i18n("Unit"));
 unitChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
+unitChooseView->setAllColumnsShowFocus(true);
 boxLayout->addWidget( unitChooseView );
 
 QHBoxLayout *buttonsLayout = new QHBoxLayout( this, 0, 6 );
