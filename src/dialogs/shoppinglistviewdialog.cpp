@@ -49,7 +49,7 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, El
  QPushButton *okButton = new QPushButton(il->loadIconSet("ok",KIcon::Small),i18n("&OK"),buttonsBox);
  QPushButton *printButton = new QPushButton(il->loadIconSet("fileprint",KIcon::Small),i18n("&Print"),buttonsBox);
 
- connect( okButton, SIGNAL(clicked()), SLOT(hide()) );
+ connect( okButton, SIGNAL(clicked()), SLOT(close()) );
  connect( printButton, SIGNAL(clicked()), SLOT(print()) );
 
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
