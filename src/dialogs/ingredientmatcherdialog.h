@@ -84,12 +84,16 @@ public:
 		
 	}
 	
+	int rtti() const { return 1000; }
+
 	~RecipeListItem(void)
 	{
 	delete recipeStored;
 	delete ingredientListStored;
 	}
 
+	int recipeID() const { return recipeStored->recipeID; }
+	
 private:
 	Recipe *recipeStored;
 	QStringList *ingredientListStored;
@@ -135,6 +139,9 @@ public:
     ~IngredientMatcherDialog();
     void reloadIngredients (void);
 
+signals:
+	void recipeSelected(int,int);    
+    
 private:
 	//Private variables
 	RecipeDB *database;
@@ -153,6 +160,7 @@ private:
 	
 private slots:
 	void findRecipes(void);
+	void open(QListViewItem*);
 
 };
 #endif

@@ -235,6 +235,10 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
     connect (selectPanel, SIGNAL(recipesSelected(const QValueList<int>&,int)),this, SLOT(actionRecipes(const QValueList<int>&,int)));
+    
+    // Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
+    
+    connect (ingredientMatcherPanel, SIGNAL(recipeSelected(int,int)),SLOT(actionRecipe(int,int)));
 
     // Close a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));

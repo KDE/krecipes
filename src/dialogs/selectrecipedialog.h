@@ -85,7 +85,7 @@ private:
   void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
   QValueList<int> getAllVisibleItems();
   bool isParentOf(QListViewItem *parent, QListViewItem *to_check);
-  void hideIfEmpty(QListViewItem *parent=0);
+  bool hideIfEmpty(QListViewItem *parent=0);
 
 signals:
   void recipeSelected(int id, int action);

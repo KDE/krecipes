@@ -158,7 +158,7 @@ void SelectRecipeDialog::showEvent(QShowEvent* e){
     openButton->setEnabled(false);
     editButton->setEnabled(false);
     removeButton->setEnabled(false);
-    collapseAll();
+    //collapseAll();
   }
 }
 
@@ -293,13 +293,19 @@ void SelectRecipeDialog::removeFromCat(void)
 
 void SelectRecipeDialog::reload()
 {
+QString remember_cat_filter = categoryBox->currentText();
+
 advancedSearch->reload();
 loadRecipeList();
 loadCategoryCombo();
-collapseAll();
+
+if ( categoryBox->listBox()->findItem(remember_cat_filter,Qt::ExactMatch) ) {
+	categoryBox->setCurrentText(remember_cat_filter);
+	filterComboCategory(categoryBox->currentItem());
+}
 }
 
-void SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
+bool SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
 {
 	QListViewItem *it;
 	if ( parent == 0 )
@@ -307,47 +313,52 @@ void SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
 	else
 		it = parent->firstChild();
 	
+	bool parent_should_show = false;
 	for ( ; it; it = it->nextSibling() ) {
-		bool should_show = true;
-		if ( !it->firstChild() ){
-			should_show = it->isVisible();
-			if ( parent && parent->firstChild() )
-			{
-				parent->setVisible(!should_show);
-				parent->setVisible(should_show);
-			}
+		if ( itemIsRecipe(it) && it->isVisible() ) {
+				parent_should_show = true;
 		}
-		else
-			hideIfEmpty(it);
+		else {
+			bool result = hideIfEmpty(it);
+			if ( parent_should_show == false )
+				parent_should_show = result;
+		}
 	}
+	
+	if ( parent && !itemIsRecipe(parent) )
+	{
+		if ( parent_should_show )
+			parent->setOpen(true);
+		parent->setVisible(parent_should_show);
+	}
+	return parent_should_show;
 }
 
 void SelectRecipeDialog::filter(const QString& s)
 {
-#if 0
+//Re-show everything
 QListViewItemIterator list_it( recipeListView );
 while ( QListViewItem *it = list_it.current() ) {
-	if ( s.isEmpty() ) // Don't filter if the filter text is empty
-	{
-		if ( !isFilteringCategories )
-		{
-			it->setVisible(false); //this insures that the call to setVisible(true) will show all the children of 'it'
-			it->setVisible(true);
-		}
-	}
-	else if ( !it->firstChild() ) // It's not a category or it's empty
-	{
-		if (it->text(2).contains(s,false) && !isFilteringCategories)
-			it->setVisible(true);
-		else
-			it->setVisible(false);
-	}
-	
-	++list_it;
+	it->setVisible(true);
+	list_it++;
 }
 
-hideIfEmpty();
-#endif
+// Only filter if the filter text isn't empty
+if ( !s.isEmpty() ) {
+	QListViewItemIterator list_it( recipeListView );
+	while ( QListViewItem *it = list_it.current() ) {
+		if ( !it->firstChild() ) // It's not a category or it's empty
+		{
+			if (it->text(2).contains(s,false))
+				it->setVisible(true);
+			else
+				it->setVisible(false);
+		}
+		
+		++list_it;
+	}
+	hideIfEmpty();
+}
 }
 
 void SelectRecipeDialog::filterCategories(int categoryID)

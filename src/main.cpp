@@ -47,6 +47,7 @@ int main(int argc, char **argv)
         if (args->count() == 0)
         {
             Krecipes *widget = new Krecipes;
+	    app.setMainWidget(widget);
             widget->show();
         }
         else
@@ -55,6 +56,7 @@ int main(int argc, char **argv)
             for (; i < args->count(); i++)
             {
                 Krecipes *widget = new Krecipes;
+		app.setMainWidget(widget);
                 widget->show();
             }
         }

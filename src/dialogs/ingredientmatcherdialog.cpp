@@ -74,6 +74,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	// Connect signals & slots
 	connect (okButton,SIGNAL(clicked()), this,SLOT(findRecipes()));
 	connect (clearButton,SIGNAL(clicked()),recipeListView->listView(),SLOT(clear()));
+	connect (recipeListView->listView(),SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),SLOT(open(QListViewItem*)));
 
 }
 
@@ -192,6 +193,15 @@ void IngredientMatcherDialog::reloadIngredients(void)
 		Element ingredient=*it;
 		new IngredientListItem(ingredientListView->listView(),ingredient);
 		}
+}
+
+void IngredientMatcherDialog::open(QListViewItem* it)
+{
+	if ( it->rtti() == 1000 )
+	{
+		RecipeListItem *recipe_it = (RecipeListItem*)it;
+		emit recipeSelected(recipe_it->recipeID(),0);
+	}
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int /*width*/, int /*align*/ )
