@@ -288,6 +288,7 @@ if (setupUser) // Don't setup user if checkbox of existing user... was set
 
 if (initData)
 	{
+	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
 	initializeData(host,dbName,user,pass); // Populate data as normal user
 	}
 
