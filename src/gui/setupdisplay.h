@@ -27,6 +27,8 @@ class QWidget;
 
 class DragArea;
 
+typedef QMap< QWidget*, unsigned int > PropertiesMap;
+
 // ### maybe we should move koffice's KoRect/KoPoint/KoSize to kdelibs...
 class PreciseRect
 {
@@ -66,12 +68,21 @@ Q_OBJECT
 public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
+	
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
 	virtual QSize sizeHint(void) const;
 	QSize minimumSize() const;
 	bool hasChanges() const { return has_changes; };
+	
+	void setItemShown( QWidget *item, bool visible );
+
+	const PropertiesMap properties() const { return *box_properties; }
+	
+signals:
+	void itemVisibilityChanged( QWidget *, bool );
 
 protected slots:
 	void widgetClicked( QMouseEvent *, QWidget * );
@@ -97,12 +108,10 @@ private:
 	QLabel *properties_box;
 
 	QSize m_size;
-	
-	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
-	QMap< QWidget*, unsigned int > *box_properties;
+
+	PropertiesMap *box_properties;
 
 	bool has_changes;
-	QMap<QWidget*,bool> show_widget;
 	KPopupMenu *popup;
 
 	// Methods

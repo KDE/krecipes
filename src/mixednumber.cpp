@@ -199,6 +199,11 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 	return result;
 }
 
+bool MixedNumber::operator!=( const MixedNumber &fraction )
+{
+	return( fraction.toDouble() != this->toDouble());
+}
+
 MixedNumber MixedNumber::operator+( const MixedNumber &fraction )
 {
 	m_numerator = (m_numerator * fraction.m_denominator) + (m_denominator * fraction.m_numerator);

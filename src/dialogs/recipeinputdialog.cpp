@@ -313,7 +313,11 @@ database=db;
     ingredientList->setMinimumSize(QSize(200,100));
     ingredientList->setMaximumSize(QSize(10000,10000));
     ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    ingredientList->setRenameable(1, true);
+    ingredientList->setItemsRenameable(true);
+    ingredientList->setRenameable(0, false); //name
+    ingredientList->setRenameable(1, true ); //amount
+    ingredientList->setRenameable(2, true ); //units
+    ingredientList->setRenameable(3, true ); //prep method
     ingredientList->setDefaultRenameAction(QListView::Reject);
     ingredientsLayout->addMultiCellWidget(ingredientList,3,8,1,3);
 
@@ -377,8 +381,7 @@ database=db;
     connect(prepMethodBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotPrepMethodBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
     connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
-    connect(ingredientList,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredientAmount( QListViewItem* )));
-    connect(ingredientList,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredientAmount( QListViewItem* )));
+    connect(ingredientList,SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), SLOT( syncListView(QListViewItem*,const QString &,int) ));
     	// Function buttons
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
     connect (closeButton,SIGNAL(clicked()),this,SLOT(closeOptions()));
@@ -506,8 +509,9 @@ void RecipeInputDialog::loadIngredientListCombo(void)
 
 void RecipeInputDialog::loadUnitListCombo(void)
 {
+	QString store_unit = unitBox->currentText();	kdDebug()<<"storing: "<<store_unit<<endl;
 	unitBox->clear(); // Empty the combo first
-	unitComboList->clear(); // Empty the list also
+	unitBox->completionObject()->clear();
 
 	int comboIndex=ingredientBox->currentItem();
 	int comboCount=ingredientBox->count();
@@ -524,10 +528,12 @@ void RecipeInputDialog::loadUnitListCombo(void)
 			unitBox->completionObject()->addItem((*unit_it).name);
 		}
 	}
+	unitBox->lineEdit()->setText(store_unit); kdDebug()<<"restoring: "<<store_unit<<endl;
 }
 
 void RecipeInputDialog::loadPrepMethodListCombo(void)
 {
+	QString store_prep = prepMethodBox->currentText();
 	database->loadPrepMethods(prepMethodComboList);
 
 	//Populate this data into the ComboBox
@@ -538,14 +544,12 @@ void RecipeInputDialog::loadPrepMethodListCombo(void)
 		prepMethodBox->insertItem((*prep_it).name);
 		prepMethodBox->completionObject()->addItem((*prep_it).name);
 	}
-	prepMethodBox->lineEdit()->clear();
+
+	prepMethodBox->setCurrentText(store_prep);
 }
 
 void RecipeInputDialog::reloadUnitsCombo(int)
 {
-unitBox->clear();
-unitBox->completionObject()->clear();
-unitComboList->clear();
 loadUnitListCombo();
 }
 
@@ -640,21 +644,21 @@ if (it)
 
 void RecipeInputDialog::createNewIngredientIfNecessary()
 {
+	if (unitBox->currentText().stripWhiteSpace().isEmpty())
+	{
+		QMessageBox::information( this,
+		  i18n("Unit missing"),
+		  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
+		  " Before this can be done, please enter a unit to associate with"
+		  " this ingredient.")).arg(ingredientBox->currentText()),
+		  QMessageBox::Ok
+		  );
+		return;
+	}
+
 	if ( !ingredientBox->currentText().stripWhiteSpace().isEmpty() &&
 	     !ingredientBox->contains(ingredientBox->currentText()) )
 	{
-		if (unitBox->currentText().stripWhiteSpace() == "")
-		{
-			QMessageBox::information( this,
-			  i18n("Unit missing"),
-			  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
-			  " Before this can be done, please enter a unit to associate with"
-			  " this ingredient.")).arg(ingredientBox->currentText()),
-			  QMessageBox::Ok
-			  );
-			return;
-		}
-
 		QString newIngredient(ingredientBox->currentText());
 		database->createNewIngredient(newIngredient);
 
@@ -667,42 +671,39 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 	}
 }
 
-void RecipeInputDialog::createNewUnitIfNecessary()
+int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, const QString &ingredient )
 {
-	if ( !unitBox->currentText().stripWhiteSpace().isEmpty() &&
-	     !unitBox->contains(unitBox->currentText()) )
+	if ( unit.stripWhiteSpace().isEmpty() )
+		return -1;
+	else if ( !unitBox->contains(unit) )
 	{
-		QString newUnit(unitBox->currentText());
-
-		int id;
-		if ( ( id = database->findExistingUnitByName(newUnit) ) == -1 )
-		{
-			database->createNewUnit(newUnit);
-			id = database->lastInsertID();
-		}
+		database->createNewUnit(unit);
+		int id = database->lastInsertID();
 
 		database->addUnitToIngredient(
-		  ingredientComboList->getElement(ingredientBox->currentItem()).id,
+		  ingredientComboList->findByName(ingredient).id,
 		  id );
 
-		reloadUnitsCombo(0);
-		unitBox->setCurrentItem(newUnit);
+		loadUnitListCombo();
+		return id;
 	}
+	else
+		return unitComboList->findByName(unit).id;
 }
 
-void RecipeInputDialog::createNewPrepIfNecessary()
+int RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
 {
-	if ( !prepMethodBox->currentText().stripWhiteSpace().isEmpty() &&
-	     !prepMethodBox->contains(prepMethodBox->currentText()) )
-	{
-		QString newPrepMethod(prepMethodBox->currentText());
-		database->createNewPrepMethod(newPrepMethod);
+	if ( prep.stripWhiteSpace().isEmpty() ) //no prep method
+		return -1;
+	else if ( !prepMethodBox->contains(prep) ) //creating new
+	{ 
+		database->createNewPrepMethod(prep);
 
-		prepMethodComboList->clear();
 		loadPrepMethodListCombo();
-
-		prepMethodBox->setCurrentItem(newPrepMethod);
+		return database->lastInsertID();
 	}
+	else //already exists
+		return prepMethodComboList->findByName(prep).id;
 }
 
 bool RecipeInputDialog::checkAmountEdit()
@@ -724,8 +725,10 @@ void RecipeInputDialog::addIngredient(void)
 		return;
 
 	createNewIngredientIfNecessary();
-	createNewUnitIfNecessary();
-	createNewPrepIfNecessary();
+	int unitID = createNewUnitIfNecessary(unitBox->currentText(),ingredientBox->currentText());
+	if ( unitID == -1 ) //require unit
+		return;
+	int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
 
 //Add it first to the Recipe list then to the ListView
 if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
@@ -735,16 +738,11 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   ing.name=ingredientBox->currentText();
   ing.amount=amountEdit->value().toDouble();
   ing.units=unitBox->currentText();
-  ing.unitID=unitComboList->getElement(unitBox->currentItem()).id;
+  ing.unitID=unitID;
   ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
 
-  if ( prepMethodBox->count() > 0 && !prepMethodBox->currentText().isEmpty() )
-  {
-  	ing.prepMethod=prepMethodBox->currentText();
-  	ing.prepMethodID=prepMethodComboList->getElement(prepMethodBox->currentItem()).id;
-  }
-  else
-  	ing.prepMethodID=-1;
+  ing.prepMethod=prepMethodBox->currentText();
+  ing.prepMethodID=prepID;
 
   loadedRecipe->ingList.append(ing);
   //Append also to the ListView
@@ -768,50 +766,77 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
 emit changed();
 }
 
-void RecipeInputDialog::modIngredientAmount( QListViewItem *it){
-  saveButton->setEnabled(false);
-  closeButton->setEnabled(false);
-  showButton->setEnabled(false);
-  shopButton->setEnabled(false);
-  resizeButton->setEnabled(false);
-  addButton->setEnabled(false);
-  removeButton->setEnabled(false);
-  downButton->setEnabled(false);
-  upButton->setEnabled(false);
-  previousAmount = it->text(1);
-  ingredientList->rename(it, 1);
-}
-
-void RecipeInputDialog::saveIngredientAmount( QListViewItem *it)
+void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text, int col )
 {
-  bool ok;
 	int index=ingredientList->itemIndex(it);
-  IngredientList::iterator ing = loadedRecipe->ingList.at(index);
-  KConfig *config=kapp->config();
-  config->setGroup("Formatting");
+	IngredientList::iterator ing = loadedRecipe->ingList.at(index);
 
-  MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	switch (col)
+	{
+	case 1: //amount
+	{
+		KConfig *config=kapp->config();
+		config->setGroup("Formatting");
+			
+		MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-    MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
-    if(ok){
-      (*ing).amount = mn.toDouble();
-      it->setText(1, mn.toString( number_format ));
-    }
-    else{
-      it->setText(1, previousAmount);
-    }
+		bool ok;
+		MixedNumber new_mn = MixedNumber::fromString( new_text, &ok );
+		MixedNumber prev_mn( (*ing).amount );
+		if (ok)
+		{
+			(*ing).amount = new_mn.toDouble();
+			it->setText(1, new_mn.toString( number_format ));
+		}
+		else
+		{
+			it->setText(1, prev_mn.toString( number_format ));
+		}
+			
+		if (new_mn != prev_mn)
+		{
+			emit changed();
+		}
+		break;
+	}
+	case 2: //unit
+	{
+		QString old_text = (*ing).units;
+		
+		if ( old_text != new_text )
+		{
+			int new_id = createNewUnitIfNecessary(new_text,it->text(0));
 
-  if(it->text(1) != previousAmount){
-    emit changed();
-  }
-  closeButton->setEnabled(true);
-  showButton->setEnabled(true);
-  shopButton->setEnabled(true);
-  resizeButton->setEnabled(true);
-  addButton->setEnabled(true);
-  removeButton->setEnabled(true);
-  downButton->setEnabled(true);
-  upButton->setEnabled(true);
+			if ( new_id != -1 )
+			{
+				(*ing).units=new_text;
+				(*ing).unitID=new_id;
+				
+				emit changed();
+			}
+			else
+			{
+				it->setText(2,old_text);
+			}
+		}
+		break;
+	}
+	case 3: //prep method
+	{
+		QString old_text = (*ing).prepMethod;
+		
+		if ( old_text != new_text )
+		{
+			int new_id = createNewPrepIfNecessary(new_text);
+
+			(*ing).prepMethod=new_text;
+			(*ing).prepMethodID=new_id;
+				
+			emit changed();
+		}
+		break;
+	}
+	}
 }
 
 void RecipeInputDialog::recipeChanged(void)
@@ -945,6 +970,8 @@ void RecipeInputDialog::slotIngredientBoxLostFocus(void)
 	if ( ingredientBox->contains(ingredientBox->currentText()) )
 	{
 		ingredientBox->setCurrentItem(ingredientBox->currentText());
+		kdDebug()<<"reloading"<<endl;
+		kdDebug()<<"text: "<<unitBox->currentText()<<endl;
 		reloadUnitsCombo(0);
 	}
 	else

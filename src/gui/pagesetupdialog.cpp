@@ -16,6 +16,7 @@
 #include <qfileinfo.h>
 #include <qpushbutton.h>
 #include <qpopupmenu.h>
+#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -30,13 +31,13 @@
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
 
-#include "setupdisplay.h"
-
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDialog(parent,0,true)
 {
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	KToolBar *toolbar = new KToolBar(this);
+	setup_display = new SetupDisplay(sample,this);
+
 	KActionCollection *actionCollection = new KActionCollection(this);
 	
 	KAction *std_open = KStdAction::open(0,0,0); //use this to create a custom open action
@@ -56,11 +57,15 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	KStdAction::save(this, SLOT(saveLayout()), actionCollection)->plug(toolbar);
 	KStdAction::saveAs(this, SLOT(saveAsLayout()), actionCollection)->plug(toolbar);
 	KStdAction::redisplay(this, SLOT(reloadLayout()), actionCollection)->plug(toolbar);
+	
+	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n("Items Shown"), "frame_edit" );
+	shown_items->setDelayed(false);
+	shown_items_popup = shown_items->popupMenu();
+	shown_items_popup->insertTitle( i18n("Show Items") );
+	shown_items->plug(toolbar);
 
 	layout->addWidget(toolbar);
 
-	setup_display = new SetupDisplay(sample,this);
-	
 	KConfig *config=kapp->config();
 	config->setGroup( "Page Setup" );
 	
@@ -69,6 +74,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	if ( filename.isEmpty() || !QFile::exists(filename) )
 		filename = locate("appdata","layouts/default.klo");
 	loadLayout( filename );
+	initShownItems();
 
 	layout->addWidget(setup_display);
 
@@ -80,6 +86,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 
 	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
+	connect( setup_display, SIGNAL(itemVisibilityChanged(QWidget*,bool)), SLOT(updateItemVisibility(QWidget*,bool)) );
 }
 
 void PageSetupDialog::accept()
@@ -120,6 +127,34 @@ return(QSize(300,400));
 QSize PageSetupDialog::sizeHint(void) const
 {
 return (minimumSize());
+}
+
+void PageSetupDialog::updateItemVisibility( QWidget *item, bool visible )
+{
+	shown_items_popup->setItemChecked( widget_popup_map[item], visible );
+}
+
+//TODO: Sort these by alphabetical order
+void PageSetupDialog::initShownItems()
+{
+	for ( PropertiesMap::const_iterator it = setup_display->properties().begin(); it != setup_display->properties().end(); ++it )
+	{
+		if ( it.data() & SetupDisplay::Visibility )
+		{
+			int new_id = shown_items_popup->insertItem( QToolTip::textFor(it.key()) );
+			shown_items_popup->setItemChecked( new_id, it.key()->isShown() );
+			shown_items_popup->connectItem( new_id, this, SLOT(setItemShown(int)) );
+
+			popup_widget_map.insert( new_id, it.key() );
+			widget_popup_map.insert( it.key(), new_id );
+		}
+	}
+}
+
+void PageSetupDialog::setItemShown( int id )
+{
+	shown_items_popup->setItemChecked( id, !shown_items_popup->isItemChecked(id) );
+	setup_display->setItemShown( popup_widget_map[id], shown_items_popup->isItemChecked(id) );
 }
 
 void PageSetupDialog::loadLayout()

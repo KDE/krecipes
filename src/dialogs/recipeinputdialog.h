@@ -62,7 +62,6 @@ private:
 	RecipeDB *database;
 	bool changedSignalEnabled;
 	bool unsavedChanges;
-	QString previousAmount;
 
 	// Widgets
 	QTabWidget* tabWidget;
@@ -121,8 +120,8 @@ private:
 	// Internal functions
 	bool checkAmountEdit();
 	void createNewIngredientIfNecessary();
-	void createNewUnitIfNecessary();
-	void createNewPrepIfNecessary();
+	int createNewUnitIfNecessary( const QString &unit, const QString &ingredient );
+	int createNewPrepIfNecessary( const QString &prep );
 	void checkIfNewUnits();
 	void findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected);
 	void loadIngredientListCombo(void);
@@ -141,8 +140,7 @@ private:
 	void moveIngredientDown(void);
 	void removeIngredient(void);
 	void addIngredient(void);
-	void modIngredientAmount( QListViewItem* );
-	void saveIngredientAmount( QListViewItem* );
+	void syncListView( QListViewItem* it, const QString &new_text, int col );
 	void recipeChanged(void);
 	void recipeChanged(const QString &t);
 	void enableChangedSignal(bool en=true);

@@ -16,8 +16,9 @@
 #include <kdialog.h>
 
 #include "../recipe.h"
+#include "setupdisplay.h"
 
-class SetupDisplay;
+class KPopupMenu;
 
 /**
   * @author Jason Kivlighn
@@ -45,17 +46,23 @@ private slots:
 	void reloadLayout();
 	void saveLayout();
 	void saveAsLayout();
+	void updateItemVisibility(QWidget*,bool);
+	void setItemShown( int id );
 
 private:
 	QString getIncludedLayoutDir() const;
 	void setActiveFile( const QString &filename );
 	bool haveWritePerm( const QString &filename );
+	void initShownItems();
 
 	SetupDisplay *setup_display;
 	
 	QString active_filename;
 	bool have_write_perm;
 	QMap<int,QString> included_layouts_map;
+	QMap<int,QWidget*> popup_widget_map;
+	QMap<QWidget*,int> widget_popup_map;
+	KPopupMenu *shown_items_popup;
 };
 
 #endif //PAGESETUPDIALOG_H

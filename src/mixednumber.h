@@ -38,6 +38,7 @@ public:
 
 	~MixedNumber();
 
+	bool operator!=( const MixedNumber &fraction );
 	MixedNumber operator+( const MixedNumber &fraction );
 	bool operator>( double d ){return (toDouble() > d);}
 

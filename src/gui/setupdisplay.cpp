@@ -33,7 +33,7 @@
 #include <cmath>
 
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent, "background" ),
-  box_properties(new QMap< QWidget*, unsigned int >),
+  box_properties(new PropertiesMap),
   has_changes(false)
 {
 	setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding) );
@@ -155,7 +155,9 @@ void SetupDisplay::loadTextColor( QWidget *widget, const QDomElement &tag )
 
 void SetupDisplay::loadVisibility( QWidget *widget, const QDomElement &tag )
 {
-	show_widget.insert(widget, (tag.text()=="false") ? false : true, true);
+	bool visible = (tag.text()=="false") ? false : true;
+	widget->setShown( visible );
+	emit itemVisibilityChanged( widget, visible );
 }
 
 void SetupDisplay::loadAlignment( QWidget *widget, const QDomElement &tag )
@@ -174,7 +176,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
-	for ( QMap<QWidget*,unsigned int>::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it )
+	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it )
 	{
 		QDomElement base_tag = doc.createElement(it.key()->name());
 		layout_tag.appendChild(base_tag);
@@ -203,7 +205,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 		if ( it.data() & Visibility )
 		{
 			QDomElement visibility_tag = doc.createElement("visible");
-			visibility_tag.appendChild( doc.createTextNode( (show_widget[it.key()]) ? "true" : "false" ) );
+			visibility_tag.appendChild( doc.createTextNode( (it.key()->isShown()) ? "true" : "false" ) );
 			base_tag.appendChild(visibility_tag);
 		}
 
@@ -409,7 +411,7 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		if ( properties & Visibility )
 		{
 			int id = popup->insertItem( i18n("Show"), this, SLOT(setShown(int)) );
-			popup->setItemChecked( id, show_widget[w] );
+			popup->setItemChecked( id, w->isShown() );
 		}
 
 		if ( properties & Alignment )
@@ -489,10 +491,10 @@ void SetupDisplay::setShown( int id )
 		has_changes = true;
 	
 		QWidget *box = static_cast<QWidget*>(obj);
-		show_widget.insert( box, !popup->isItemChecked(id) );
-
-		//if ( popup->isItemChecked(id) )
-		//	this->setWidget( 0 ); //clears the selection
+		box->setShown( !popup->isItemChecked(id) );
+		emit itemVisibilityChanged( box, !popup->isItemChecked(id) );
+		
+		setWidget( 0 );
 	}
 }
 
@@ -525,6 +527,16 @@ void SetupDisplay::setAlignment( QAction *action )
 
 		box->setAlignment( align );
 	}
+}
+
+void SetupDisplay::setItemShown( QWidget *item, bool visible )
+{
+	item->raise(); //raise it to make sure the user can see it (and doesn't think it didn't work)
+	item->setShown( visible );
+	
+	setWidget( 0 );
+	
+	has_changes = true;
 }
 
 /*
