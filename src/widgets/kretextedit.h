@@ -1,16 +1,16 @@
 /***************************************************************************
- *   Copyright (C) 2004 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
- 
+*   Copyright (C) 2004 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
 #ifndef KRETEXTEDIT_H
 #define KRETEXTEDIT_H
- 
+
 #include <ktextedit.h>
 #include <kcompletion.h>
 
@@ -21,7 +21,7 @@
  */
 class KreTextEdit : public KTextEdit, KCompletionBase
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	KreTextEdit( QWidget *parent, const ElementList &ingredients );

@@ -37,10 +37,10 @@ public:
 	virtual ~MX2Importer();
 
 protected:
-	void parseFile(const QString& filename);
+	void parseFile( const QString& filename );
 
 private:
-	void readRecipe(const QDomNodeList& l, Recipe*);
+	void readRecipe( const QDomNodeList& l, Recipe* );
 } ;
 
 #endif //MX2IMPORTER_H

@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef HTMLEXPORTER_H
 #define HTMLEXPORTER_H
@@ -26,18 +26,36 @@ class DivElement
 public:
 	DivElement( const QString &id, const QString &className, const QString &content );
 
-	void addProperty( const QString &s ){ m_properties << s; }
+	void addProperty( const QString &s )
+	{
+		m_properties << s;
+	}
 
-	QString innerHTML() const{ return m_content; }
-	QString id() const{return m_id;}
-	QString className() const{ return m_class; }
+	QString innerHTML() const
+	{
+		return m_content;
+	}
+	QString id() const
+	{
+		return m_id;
+	}
+	QString className() const
+	{
+		return m_class;
+	}
 	QFont font();
 
-	bool fixedHeight(){ return m_fixed_height; }
-	void setFixedHeight( bool b ){ m_fixed_height = b; }
+	bool fixedHeight()
+	{
+		return m_fixed_height;
+	}
+	void setFixedHeight( bool b )
+	{
+		m_fixed_height = b;
+	}
 
 	QString generateHTML();
-	QString generateCSS(bool noPositioning=false);
+	QString generateCSS( bool noPositioning = false );
 
 private:
 	QString m_id;
@@ -64,7 +82,10 @@ public:
 	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 
 protected:
-	virtual QString extensions() const{ return ".html"; }
+	virtual QString extensions() const
+	{
+		return ".html";
+	}
 
 private:
 	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
@@ -78,11 +99,11 @@ private:
 	QString readFontProperties( const QDomDocument &doc, const QString &object );
 	QString readTextColorProperties( const QDomDocument &doc, const QString &object );
 	QString readVisibilityProperties( const QDomDocument &doc, const QString &object );
-	
+
 	QString generateCSSClasses( const QDomDocument &layout );
-	QMap<QString,QString> generateBlocksHTML( const Recipe & );
+	QMap<QString, QString> generateBlocksHTML( const Recipe & );
 	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
-	
+
 	static QString escape( const QString & );
 
 	QPtrList<DivElement> div_elements;

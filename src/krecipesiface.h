@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
- */
+* Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
+*/
 
 #ifndef _KRECIPESIFACE_H_
 #define _KRECIPESIFACE_H_
@@ -9,7 +9,7 @@
 
 class KrecipesIface : virtual public DCOPObject
 {
-  K_DCOP
+	K_DCOP
 public:
 
 k_dcop:

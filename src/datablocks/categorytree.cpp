@@ -1,20 +1,20 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Jason Kivlighn                                  *
- *   mizunoami44@users.sourceforge.net                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
- 
-#include "categorytree.h" 
+*   Copyright (C) 2004 by Jason Kivlighn                                  *
+*   mizunoami44@users.sourceforge.net                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
+#include "categorytree.h"
 #include <kdebug.h>
-CategoryTree::CategoryTree( CategoryTree *parent ) : m_children(new CategoryTreeChildren),
-  m_parent(0), m_child(0), m_sibling(0)
+CategoryTree::CategoryTree( CategoryTree *parent ) : m_children( new CategoryTreeChildren ),
+		m_parent( 0 ), m_child( 0 ), m_sibling( 0 )
 {
 	if ( parent )
-		parent->insertItem(this);
+		parent->insertItem( this );
 }
 
 CategoryTree::~CategoryTree()
@@ -34,9 +34,10 @@ const CategoryTreeChildren * CategoryTree::children() const
 	return m_children;
 }
 
-CategoryTree *CategoryTree::add(const Element &cat)
+CategoryTree *CategoryTree::add
+	( const Element &cat )
 {
-	CategoryTree *new_child = new CategoryTree(this);
+	CategoryTree * new_child = new CategoryTree( this );
 	new_child->category = cat;
 	m_children->append( new_child );
 
@@ -53,8 +54,9 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 void CategoryTree::takeItem( CategoryTree *tree )
 {
 	for ( CategoryTreeChildren::iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
-		if ( (*child_it) == tree ) {
-			m_children->remove( child_it );
+		if ( ( *child_it ) == tree ) {
+			m_children->remove
+			( child_it );
 			break;
 		}
 	}
@@ -63,7 +65,7 @@ void CategoryTree::takeItem( CategoryTree *tree )
 	CategoryTree ** nextChild = &m_child;
 	while( nextChild && *nextChild && tree != *nextChild )
 		nextChild = &((*nextChild)->m_sibling);
-	
+
 	if ( nextChild && tree == *nextChild )
 		*nextChild = (*nextChild)->m_sibling;
 	tree->m_parent = 0;
@@ -80,14 +82,13 @@ bool CategoryTree::contains( int id ) const
 {
 	bool result = false;
 
-	for ( CategoryTreeChildren::const_iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it )
-	{
+	for ( CategoryTreeChildren::const_iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
 		const CategoryTree *node = *child_it;
-		
-		if ( node->category.id == id ) 
+
+		if ( node->category.id == id )
 			return true;
 
-		result = node->contains(id);
+		result = node->contains( id );
 	}
 
 	return result;

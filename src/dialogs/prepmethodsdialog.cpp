@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "prepmethodsdialog.h"
 #include "createelementdialog.h"
@@ -20,49 +20,49 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-PrepMethodsDialog::PrepMethodsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
+PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
 
-// Store pointer to database
-database=db;
+	// Store pointer to database
+	database = db;
 
-QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
-//PrepMethod List
-prepMethodListView=new StdPrepMethodListView(this,database,true);
-prepMethodListView->reload();
-layout->addWidget(prepMethodListView);
+	//PrepMethod List
+	prepMethodListView = new StdPrepMethodListView( this, database, true );
+	prepMethodListView->reload();
+	layout->addWidget( prepMethodListView );
 
-//Buttons
-QVBoxLayout* vboxl=new QVBoxLayout(KDialog::spacingHint());
+	//Buttons
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 
-newPrepMethodButton=new QPushButton(this);
-newPrepMethodButton->setText(i18n("Create ..."));
-newPrepMethodButton->setFlat(true);
-vboxl->addWidget(newPrepMethodButton);
+	newPrepMethodButton = new QPushButton( this );
+	newPrepMethodButton->setText( i18n( "Create ..." ) );
+	newPrepMethodButton->setFlat( true );
+	vboxl->addWidget( newPrepMethodButton );
 
-removePrepMethodButton=new QPushButton(this);
-removePrepMethodButton->setText(i18n("Delete"));
-removePrepMethodButton->setFlat(true);
-vboxl->addWidget(removePrepMethodButton);
-vboxl->addStretch();
+	removePrepMethodButton = new QPushButton( this );
+	removePrepMethodButton->setText( i18n( "Delete" ) );
+	removePrepMethodButton->setFlat( true );
+	vboxl->addWidget( removePrepMethodButton );
+	vboxl->addStretch();
 
-layout->addLayout(vboxl);
+	layout->addLayout( vboxl );
 
-//Connect Signals & Slots
+	//Connect Signals & Slots
 
-connect (newPrepMethodButton,SIGNAL(clicked()),prepMethodListView,SLOT(createNew()));
-connect (removePrepMethodButton,SIGNAL(clicked()),prepMethodListView,SLOT(remove()));
+	connect ( newPrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( createNew() ) );
+	connect ( removePrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( remove
+		          () ) );
 }
 
 PrepMethodsDialog::~PrepMethodsDialog()
-{
-}
+{}
 
 // (Re)loads the data from the database
-void PrepMethodsDialog::reload(void)
+void PrepMethodsDialog::reload( void )
 {
-prepMethodListView->reload();
+	prepMethodListView->reload();
 }
 
 #include "prepmethodsdialog.moc"

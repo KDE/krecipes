@@ -1,14 +1,14 @@
- /**************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn(mizunoami44@users.sourceforge.net)                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+/**************************************************************************
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn(mizunoami44@users.sourceforge.net)                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef SELECTRECIPEDIALOG_H
 #define SELECTRECIPEDIALOG_H
@@ -47,50 +47,56 @@ class CategoryComboBox;
 */
 class SelectRecipeDialog : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 public:
-    SelectRecipeDialog(QWidget *parent, RecipeDB *db);
-    ~SelectRecipeDialog();
+	SelectRecipeDialog( QWidget *parent, RecipeDB *db );
+	~SelectRecipeDialog();
 
 
-  //Public Methods
-  void getCurrentRecipe( Recipe *recipe );
-  
-  RecipeActionsHandler * getActionsHandler() const { return actionHandler; }
+	//Public Methods
+	void getCurrentRecipe( Recipe *recipe );
+
+	RecipeActionsHandler * getActionsHandler() const
+	{
+		return actionHandler;
+	}
 
 private:
 
-  // Widgets
-  QGridLayout *layout;
-  QHBox *searchBar;
-  RecipeListView* recipeListView;
-  QHBox *buttonBar;
-  QPushButton *openButton;
-  QPushButton *removeButton;
-  QPushButton *editButton;
-  KIconLoader *il;
-  QLabel *searchLabel;
-  KLineEdit *searchBox;
-  CategoryComboBox *categoryBox;
-  AdvancedSearchDialog *advancedSearch;
-  // Internal Data
-  RecipeDB *database;
-  ElementList *recipeList;
-  RecipeActionsHandler *actionHandler;
-  RecipeFilter *recipeFilter;
+	// Widgets
+	QGridLayout *layout;
+	QHBox *searchBar;
+	RecipeListView* recipeListView;
+	QHBox *buttonBar;
+	QPushButton *openButton;
+	QPushButton *removeButton;
+	QPushButton *editButton;
+	KIconLoader *il;
+	QLabel *searchLabel;
+	KLineEdit *searchBox;
+	CategoryComboBox *categoryBox;
+	AdvancedSearchDialog *advancedSearch;
+	// Internal Data
+	RecipeDB *database;
+	ElementList *recipeList;
+	RecipeActionsHandler *actionHandler;
+	RecipeFilter *recipeFilter;
 
 signals:
-  void recipeSelected(int id, int action);
-  void recipesSelected(const QValueList<int> &ids, int action);
-  void recipeSelected(bool);
+	void recipeSelected( int id, int action );
+	void recipesSelected( const QValueList<int> &ids, int action );
+	void recipeSelected( bool );
 
 private slots:
-  void filterComboCategory(int row);
+	void filterComboCategory( int row );
 
 public slots:
-  void haveSelectedItems();
-  void slotExportRecipe(){actionHandler->recipeExport();}
-  void reload(void);
+	void haveSelectedItems();
+	void slotExportRecipe()
+	{
+		actionHandler->recipeExport();
+	}
+	void reload( void );
 };
 
 #endif

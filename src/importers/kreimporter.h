@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
+*                                                                         *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 #ifndef KREIMPORTER_H
 #define KREIMPORTER_H
 
@@ -28,21 +28,22 @@ class CategoryTree;
 
 /**
 Import for Krecipes native file format (.kre, .kreml)
-
+ 
 @author Cyril Bosselut
 */
-class KreImporter:public BaseImporter{
+class KreImporter: public BaseImporter
+{
 public:
-    KreImporter();
-    virtual ~KreImporter();
-    
+	KreImporter();
+	virtual ~KreImporter();
+
 private:
 	void parseFile( const QString& filename );
 
 private:
 	void readCategoryStructure( const QDomNodeList& l, CategoryTree *tree );
-	void readDescription(const QDomNodeList& l, Recipe*);
-	void readIngredients(const QDomNodeList& l, Recipe*, const QString &header = QString::null);
+	void readDescription( const QDomNodeList& l, Recipe* );
+	void readIngredients( const QDomNodeList& l, Recipe*, const QString &header = QString::null );
 };
 
 #endif

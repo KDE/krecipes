@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Jason Kivlighn                                  *
- *   mizunoami44@users.sourceforge.net                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by Jason Kivlighn                                  *
+*   mizunoami44@users.sourceforge.net                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef DRAGAREA_H
 #define DRAGAREA_H
@@ -24,7 +24,7 @@ class WidgetSelection;
   */
 class DragArea : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	DragArea( QWidget *parent = 0, const char *name = 0 );
@@ -32,9 +32,16 @@ public:
 
 	void setWidget( QWidget * );
 	void setReadOnly( bool );
-	
-	QPoint gridSpacing(){ return grid_spacing; }
-	void setGridSpacing( int x, int y ){ grid_spacing.setX(x); grid_spacing.setY(y); }
+
+	QPoint gridSpacing()
+	{
+		return grid_spacing;
+	}
+	void setGridSpacing( int x, int y )
+	{
+		grid_spacing.setX( x );
+		grid_spacing.setY( y );
+	}
 
 signals:
 	void widgetClicked( QMouseEvent *, QWidget* );
@@ -48,11 +55,14 @@ protected:
 	virtual void mouseMoveEvent( QMouseEvent * );
 
 	void moveWidget( QWidget *w, int dx, int dy );
-	
+
 	void update();
-	
+
 protected slots:
-	void emitWidgetGeometryChanged(){ emit widgetGeometryChanged(); }
+	void emitWidgetGeometryChanged()
+	{
+		emit widgetGeometryChanged();
+	}
 
 private:
 	bool m_read_only;

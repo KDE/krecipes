@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef BASEEXPORTER_H
 #define BASEEXPORTER_H
@@ -29,7 +29,7 @@ public:
 
 	void exporter( const RecipeList& recipes, KProgressDialog * = 0 );
 	void exporter( const Recipe &, KProgressDialog * = 0 );
-	
+
 	/** Returns the actual filename that will be written to during the export.
 	  * Note that this can differ somewhat from the filename passed in the 
 	  * constructor.

@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef MMFEXPORTER_H
 #define MMFEXPORTER_H
@@ -37,7 +37,10 @@ public:
 	virtual QString createContent( const RecipeList & );
 
 protected:
-	virtual QString extensions() const{ return ".mmf"; }
+	virtual QString extensions() const
+	{
+		return ".mmf";
+	}
 
 private:
 	void writeMMFHeader( QString &content, const Recipe &recipe );
@@ -45,7 +48,7 @@ private:
 	void writeSingleIngredient( QString &content, const Ingredient &ing );
 	void writeMMFDirections( QString &content, const Recipe &recipe );
 
-	QStringList wrapText( const QString& str, int at) const;
+	QStringList wrapText( const QString& str, int at ) const;
 };
 
 #endif //MMFEXPORTER_H

@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef RESIZERECIPEDIALOG_H
 #define RESIZERECIPEDIALOG_H
@@ -29,23 +29,23 @@ class KLineEdit;
 class QRadioButton;
 class QPushButton;
 
- /**
-   *@author Jason Kivlighn
-   */
+/**
+  *@author Jason Kivlighn
+  */
 class ResizeRecipeDialog : public QDialog
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	ResizeRecipeDialog( QWidget *parent, Recipe* );
 
 protected slots:
 	void accept();
-	void activateCurrentOption(int);
+	void activateCurrentOption( int );
 	virtual void languageChange();
 
 private:
-	void resizeRecipe(double factor);
+	void resizeRecipe( double factor );
 
 	Recipe *m_recipe;
 

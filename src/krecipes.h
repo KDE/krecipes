@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004 by                                            *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003-2004 by                                            *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef _KRECIPES_H_
 #define _KRECIPES_H_
@@ -38,77 +38,77 @@ class KDialog;
  */
 class Krecipes : public KMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    Krecipes();
+	/**
+	 * Default Constructor
+	 */
+	Krecipes();
 
-    /**
-     * Default Destructor
-     */
-    virtual ~Krecipes();
+	/**
+	 * Default Destructor
+	 */
+	virtual ~Krecipes();
 
-
-protected:
-    /**
-     * Overridden virtuals for Qt drag 'n drop (XDND)
-     */
-    virtual void dragEnterEvent(QDragEnterEvent *event);
 
 protected:
-    /**
-     * This function is called when it is time for the app to save its
-     * properties for session management purposes.
-     */
-    void saveProperties(KConfig *);
+	/**
+	 * Overridden virtuals for Qt drag 'n drop (XDND)
+	 */
+	virtual void dragEnterEvent( QDragEnterEvent *event );
 
-    /**
-     * This function is called when this app is restored.  The KConfig
-     * object points to the session management config file that was saved
-     * with @ref saveProperties
-     */
-    void readProperties(KConfig *);
+protected:
+	/**
+	 * This function is called when it is time for the app to save its
+	 * properties for session management purposes.
+	 */
+	void saveProperties( KConfig * );
 
-    virtual bool queryClose();
+	/**
+	 * This function is called when this app is restored.  The KConfig
+	 * object points to the session management config file that was saved
+	 * with @ref saveProperties
+	 */
+	void readProperties( KConfig * );
+
+	virtual bool queryClose();
 
 
 private slots:
-    void fileNew();
-    void fileOpen();
-    void fileSave();
-    void fileExport();
-    void filePrint();
-    void optionsShowToolbar();
-    void optionsShowStatusbar();
-    void optionsConfigureKeys();
-    void optionsConfigureToolbars();
-    void optionsPreferences();
-    void newToolbarConfig();
-    void import();
-    void kreDBImport();
-    void pageSetupSlot();
-    
-    /**  This function is called whenever a panel is shown or hidden and then sets
-      *  actions as enabled as appropriate.
-      */
-    void updateActions( KrePanel panel, bool show );
+	void fileNew();
+	void fileOpen();
+	void fileSave();
+	void fileExport();
+	void filePrint();
+	void optionsShowToolbar();
+	void optionsShowStatusbar();
+	void optionsConfigureKeys();
+	void optionsConfigureToolbars();
+	void optionsPreferences();
+	void newToolbarConfig();
+	void import();
+	void kreDBImport();
+	void pageSetupSlot();
 
-    void changeStatusbar(const QString& text);
-    void changeCaption(const QString& text);
+	/**  This function is called whenever a panel is shown or hidden and then sets
+	  *  actions as enabled as appropriate.
+	  */
+	void updateActions( KrePanel panel, bool show );
 
-private:
-    // Private methods
-    void setupAccel();
-    void setupActions();
+	void changeStatusbar( const QString& text );
+	void changeCaption( const QString& text );
 
 private:
-    KrecipesView *m_view;
+	// Private methods
+	void setupAccel();
+	void setupActions();
 
-    KPrinter   *m_printer;
-    KToggleAction *m_toolbarAction;
-    KToggleAction *m_statusbarAction;
+private:
+	KrecipesView *m_view;
+
+	KPrinter *m_printer;
+	KToggleAction *m_toolbarAction;
+	KToggleAction *m_statusbarAction;
 
 private:
 	// Internal variables
@@ -123,7 +123,7 @@ private:
 	QValueList<KAction*> recipe_actions;
 
 private slots:
-	void enableSaveOption(bool en=true);
+	void enableSaveOption( bool en = true );
 };
 
 #endif // _KRECIPES_H_

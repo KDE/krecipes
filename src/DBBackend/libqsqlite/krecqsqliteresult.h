@@ -1,22 +1,22 @@
 /***************************************************************************
- *                                                                         *
- *                           Copyright (C) 2003                            *
- *                by Unai Garro (ugarro@users.sourceforge.net)             *
- *                       Martin Imobersteg <imm@gmx.ch>                    *
- *                          and opie project                               *
- *                                                                         *
- *                                                                         *
- *    This code was originally developed by the opie project, on which     *
- *                    Martin Imobersteg based his work.                    *
- * This file is adds a small extension, necessary to perform some minimum  * 
- * SQL actions                                                             *
- *                                                                         *
- *         (this project is different from that in qsqlite.sf.net)         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*                                                                         *
+*                           Copyright (C) 2003                            *
+*                by Unai Garro (ugarro@users.sourceforge.net)             *
+*                       Martin Imobersteg <imm@gmx.ch>                    *
+*                          and opie project                               *
+*                                                                         *
+*                                                                         *
+*    This code was originally developed by the opie project, on which     *
+*                    Martin Imobersteg based his work.                    *
+* This file is adds a small extension, necessary to perform some minimum  * 
+* SQL actions                                                             *
+*                                                                         *
+*         (this project is different from that in qsqlite.sf.net)         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef QSQLITERESULT_H
 #define QSQLITERESULT_H
@@ -66,12 +66,12 @@ public:
 	 * retrieves the Data from columnName
 	 *
 	 */
-	QString data( const QString& columnName, bool *ok = 0);
+	QString data( const QString& columnName, bool *ok = 0 );
 
 	/**
 	 * QString for column number
 	 */
-	QString data(int columnNumber, bool *ok = 0);
+	QString data( int columnNumber, bool *ok = 0 );
 
 	/**
 	 * Date conversion from columnName
@@ -123,7 +123,7 @@ public:
 	void setResults( const Columns &result );
 	void setError( const QString &error );
 
-	void addRow(QSQLiteResultRow row);
+	void addRow( QSQLiteResultRow row );
 
 	QSQLiteResultRow first();
 	QSQLiteResultRow next();

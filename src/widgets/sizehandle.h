@@ -30,63 +30,64 @@ class QPaintEvent;
 
 class SizeHandle : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    enum Direction { LeftTop, Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left };
+	enum Direction { LeftTop, Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left };
 
-    SizeHandle( DragArea *parent, Direction d, WidgetSelection *s );
-    void setWidget( QWidget *w );
-    void setActive( bool a );
-    void updateCursor();
+	SizeHandle( DragArea *parent, Direction d, WidgetSelection *s );
+	void setWidget( QWidget *w );
+	void setActive( bool a );
+	void updateCursor();
 
-    void setEnabled( bool ) {}
-    
+	void setEnabled( bool )
+	{}
+
 signals:
 	void widgetGeometryChanged();
 
 protected:
-    void paintEvent( QPaintEvent *e );
-    void mousePressEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
+	void paintEvent( QPaintEvent *e );
+	void mousePressEvent( QMouseEvent *e );
+	void mouseMoveEvent( QMouseEvent *e );
+	void mouseReleaseEvent( QMouseEvent *e );
 
 private:
-    void trySetGeometry( QWidget *w, int x, int y, int width, int height );
-    void tryResize( QWidget *w, int width, int height );
+	void trySetGeometry( QWidget *w, int x, int y, int width, int height );
+	void tryResize( QWidget *w, int width, int height );
 
 private:
-    QWidget *widget;
-    Direction dir;
-    QPoint oldPressPos;
-    DragArea *dragArea;
-    WidgetSelection *sel;
-    QRect geom, origGeom;
-    bool active;
+	QWidget *widget;
+	Direction dir;
+	QPoint oldPressPos;
+	DragArea *dragArea;
+	WidgetSelection *sel;
+	QRect geom, origGeom;
+	bool active;
 
 };
 
 class WidgetSelection
 {
 public:
-    WidgetSelection( DragArea *parent/*, QPtrDict<WidgetSelection> *selDict*/ );
+	WidgetSelection( DragArea *parent /*, QPtrDict<WidgetSelection> *selDict*/ );
 
-    void setWidget( QWidget *w/*, bool updateDict = TRUE*/ );
-    bool isUsed() const;
+	void setWidget( QWidget *w /*, bool updateDict = TRUE*/ );
+	bool isUsed() const;
 
-    void updateGeometry();
-    void hide();
-    void show();
-    void update();
+	void updateGeometry();
+	void hide();
+	void show();
+	void update();
 
-    QWidget *widget() const;
+	QWidget *widget() const;
 
 protected:
 
-    QIntDict<SizeHandle> handles;
-    QWidget *wid;
-    DragArea *dragArea;
-    //QPtrDict<WidgetSelection> *selectionDict;
+	QIntDict<SizeHandle> handles;
+	QWidget *wid;
+	DragArea *dragArea;
+	//QPtrDict<WidgetSelection> *selectionDict;
 };
 
 #endif

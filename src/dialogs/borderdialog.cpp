@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2004 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2004 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "borderdialog.h"
 
@@ -28,93 +28,92 @@
 #include "datablocks/kreborder.h"
 
 BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char* name )
-    : QDialog( parent, name, true )
+		: QDialog( parent, name, true )
 {
-	BorderDialogLayout = new QVBoxLayout( this, 11, 6, "BorderDialogLayout"); 
-	
+	BorderDialogLayout = new QVBoxLayout( this, 11, 6, "BorderDialogLayout" );
+
 	borderGroupBox = new QGroupBox( this, "borderGroupBox" );
-	borderGroupBox->setColumnLayout(0, Qt::Vertical );
-	borderGroupBox->layout()->setSpacing( 6 );
-	borderGroupBox->layout()->setMargin( 11 );
+	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
+	borderGroupBox->layout() ->setSpacing( 6 );
+	borderGroupBox->layout() ->setMargin( 11 );
 	borderGroupBoxLayout = new QVBoxLayout( borderGroupBox->layout() );
 	borderGroupBoxLayout->setAlignment( Qt::AlignTop );
-	
-	layout4 = new QHBoxLayout( 0, 0, 6, "layout4"); 
-	
-	layout3 = new QVBoxLayout( 0, 0, 6, "layout3"); 
-	
+
+	layout4 = new QHBoxLayout( 0, 0, 6, "layout4" );
+
+	layout3 = new QVBoxLayout( 0, 0, 6, "layout3" );
+
 	styleLabel = new QLabel( borderGroupBox, "styleLabel" );
 	layout3->addWidget( styleLabel );
-	
+
 	styleListBox = new KListBox( borderGroupBox, "styleListBox" );
 	layout3->addWidget( styleListBox );
 	layout4->addLayout( layout3 );
-	
-	layout2 = new QVBoxLayout( 0, 0, 6, "layout2"); 
-	
+
+	layout2 = new QVBoxLayout( 0, 0, 6, "layout2" );
+
 	colorLabel = new QLabel( borderGroupBox, "colorLabel" );
 	layout2->addWidget( colorLabel );
 
-	QHBox *color_hbox = new QHBox(borderGroupBox);
+	QHBox *color_hbox = new QHBox( borderGroupBox );
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	hsSelector = new KHSSelector( color_hbox );
-	hsSelector->setMinimumSize(140, 70);
+	hsSelector->setMinimumSize( 140, 70 );
 	connect( hsSelector, SIGNAL( valueChanged( int, int ) ), SLOT( slotHSChanged( int, int ) ) );
-	
+
 	valuePal = new KValueSelector( color_hbox );
-	valuePal->setMinimumSize(26, 70);
+	valuePal->setMinimumSize( 26, 70 );
 	connect( valuePal, SIGNAL( valueChanged( int ) ), SLOT( slotVChanged( int ) ) );
 
 	layout2->addWidget( color_hbox );
 	layout4->addLayout( layout2 );
-	
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1"); 
-	
+
+	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+
 	widthLabel = new QLabel( borderGroupBox, "widthLabel" );
 	layout1->addWidget( widthLabel );
-	
+
 	widthSpinBox = new QSpinBox( borderGroupBox, "widthSpinBox" );
-	widthSpinBox->setMinValue(1);
+	widthSpinBox->setMinValue( 1 );
 	layout1->addWidget( widthSpinBox );
-	
+
 	widthListBox = new KListBox( borderGroupBox, "widthListBox" );
 	layout1->addWidget( widthListBox );
 	layout4->addLayout( layout1 );
 	borderGroupBoxLayout->addLayout( layout4 );
-	
+
 	borderPreview = new KHTMLPart( borderGroupBox );
-	borderPreview->view()->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+	borderPreview->view() ->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 	borderGroupBoxLayout->addWidget( borderPreview->view() );
 	BorderDialogLayout->addWidget( borderGroupBox );
-	
+
 	QHBoxLayout *bottom_layout = new QHBoxLayout( 0, 0, 6 );
 	QSpacerItem* spacer = new QSpacerItem( 20, 40, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	bottom_layout->addItem( spacer );
-	QPushButton *ok_button = new QPushButton(i18n("&OK"),this);
-	bottom_layout->addWidget(ok_button);
-	QPushButton *cancel_button = new QPushButton(i18n("&Cancel"),this);
-	bottom_layout->addWidget(cancel_button);
-	
-	BorderDialogLayout->addLayout(bottom_layout);
+	QPushButton *ok_button = new QPushButton( i18n( "&OK" ), this );
+	bottom_layout->addWidget( ok_button );
+	QPushButton *cancel_button = new QPushButton( i18n( "&Cancel" ), this );
+	bottom_layout->addWidget( cancel_button );
+
+	BorderDialogLayout->addLayout( bottom_layout );
 
 	languageChange();
 
-	connect(widthSpinBox,SIGNAL(valueChanged(int)),SLOT(updatePreview()));
-	connect(widthListBox,SIGNAL(highlighted(int)),SLOT(updateSpinBox(int)));
-	connect(styleListBox,SIGNAL(highlighted(int)),SLOT(updatePreview()));
+	connect( widthSpinBox, SIGNAL( valueChanged( int ) ), SLOT( updatePreview() ) );
+	connect( widthListBox, SIGNAL( highlighted( int ) ), SLOT( updateSpinBox( int ) ) );
+	connect( styleListBox, SIGNAL( highlighted( int ) ), SLOT( updatePreview() ) );
 
-	connect(ok_button,SIGNAL(clicked()),SLOT(accept()));
-	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+	connect( ok_button, SIGNAL( clicked() ), SLOT( accept() ) );
+	connect( cancel_button, SIGNAL( clicked() ), SLOT( reject() ) );
 
 	initListBoxs();
 	loadBorder( border );
-	
+
 	clearWState( WState_Polished );
 }
 
 BorderDialog::~BorderDialog()
-{
-}
+{}
 
 void BorderDialog::languageChange()
 {
@@ -130,24 +129,42 @@ KreBorder BorderDialog::border() const
 
 	QString style;
 	switch ( styleListBox->currentItem() ) {
-	case 0: style = "none"; break;
-	case 1: style = "dotted"; break;
-	case 2: style = "dashed"; break;
-	case 3: style = "solid"; break;
-	case 4: style = "double"; break;
-	case 5: style = "groove"; break;
-	case 6: style = "ridge"; break;
-	case 7: style = "inset"; break;
-	case 8: style = "outset"; break;
+	case 0:
+		style = "none";
+		break;
+	case 1:
+		style = "dotted";
+		break;
+	case 2:
+		style = "dashed";
+		break;
+	case 3:
+		style = "solid";
+		break;
+	case 4:
+		style = "double";
+		break;
+	case 5:
+		style = "groove";
+		break;
+	case 6:
+		style = "ridge";
+		break;
+	case 7:
+		style = "inset";
+		break;
+	case 8:
+		style = "outset";
+		break;
 	}
 
-	return KreBorder(width,style,selColor);
+	return KreBorder( width, style, selColor );
 }
 
 void BorderDialog::loadBorder( const KreBorder &border )
 {
 	widthSpinBox->setValue( border.width );
-	widthListBox->setCurrentItem( border.width-1 );
+	widthListBox->setCurrentItem( border.width - 1 );
 
 	if ( border.style == "none" )
 		styleListBox->setCurrentItem( 0 );
@@ -196,51 +213,52 @@ void BorderDialog::initListBoxs()
 
 void BorderDialog::updatePreview()
 {
-	KreBorder b(border());
-	
-	QString html_str = QString("<html><body><div style=\"vertical-align: middle; border: %1px %2 %3;\"><center><h1>%4</h1></center></div></body></html>").arg(b.width).arg(b.style).arg(b.color.name()).arg(i18n("Border Preview"));
+	KreBorder b( border() );
+
+	QString html_str = QString( "<html><body><div style=\"vertical-align: middle; border: %1px %2 %3;\"><center><h1>%4</h1></center></div></body></html>" ).arg( b.width ).arg( b.style ).arg( b.color.name() ).arg( i18n( "Border Preview" ) );
 
 	borderPreview->begin();
-	borderPreview->write(html_str);
+	borderPreview->write( html_str );
 	borderPreview->end();
 	borderPreview->show();
 }
 
 void BorderDialog::updateSpinBox( int index )
 {
-	widthSpinBox->setValue( index+1 );
+	widthSpinBox->setValue( index + 1 );
 }
 
 void BorderDialog::slotHSChanged( int h, int s )
 {
 	int _h, _s, v;
-	selColor.hsv(&_h, &_s, &v);
-	if (v < 1)
+	selColor.hsv( &_h, &_s, &v );
+	if ( v < 1 )
 		v = 1;
 
 	KColor col;
 	col.setHsv( h, s, v );
 
-	setColor(col);
+	setColor( col );
 	updatePreview();
 }
 
 void BorderDialog::slotVChanged( int v )
 {
 	int h, s, _v;
-	selColor.hsv(&h, &s, &_v);
-	
+	selColor.hsv( &h, &s, &_v );
+
 	KColor col;
 	col.setHsv( h, s, v );
-	
-	setColor(col);
+
+	setColor( col );
 	updatePreview();
 }
 
-void BorderDialog::setColor(const KColor &color)
+void BorderDialog::setColor( const KColor &color )
 {
-	if (color == selColor) return;
-	
+	if ( color == selColor )
+		return ;
+
 	selColor = color;
 
 	int h, s, v;

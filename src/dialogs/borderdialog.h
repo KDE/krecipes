@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2004 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2004 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef BORDERDIALOG_H
 #define BORDERDIALOG_H
@@ -30,14 +30,14 @@ class KreBorder;
 
 class BorderDialog : public QDialog
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	BorderDialog( const KreBorder &border, QWidget* parent = 0, const char* name = 0 );
 	~BorderDialog();
 
 	KreBorder border() const;
-	
+
 	QGroupBox* borderGroupBox;
 	QLabel* styleLabel;
 	KListBox* styleListBox;
@@ -64,8 +64,8 @@ protected slots:
 
 	void slotHSChanged( int h, int s );
 	void slotVChanged( int v );
-	void setColor(const KColor &color);
-    
+	void setColor( const KColor &color );
+
 private:
 	void loadBorder( const KreBorder &border );
 	void initListBoxs();

@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef RECIPEINPUTDIALOG_H
 #define RECIPEINPUTDIALOG_H
@@ -48,20 +48,21 @@ class KreTextEdit;
 /**
 @author Unai Garro
 */
-class RecipeInputDialog: public QVBox{
-Q_OBJECT
+class RecipeInputDialog: public QVBox
+{
+	Q_OBJECT
 
 public:
 
-    RecipeInputDialog( QWidget* parent, RecipeDB* db);
-    void loadRecipe(int recipeID);
-    ~RecipeInputDialog();
-    void newRecipe(void);
-    void reloadCombos(void);
-    bool everythingSaved();
-    void reload(void);
-    int loadedRecipeID() const;
-   
+	RecipeInputDialog( QWidget* parent, RecipeDB* db );
+	void loadRecipe( int recipeID );
+	~RecipeInputDialog();
+	void newRecipe( void );
+	void reloadCombos( void );
+	bool everythingSaved();
+	void reload( void );
+	int loadedRecipeID() const;
+
 private:
 
 	// Internal Data
@@ -127,7 +128,7 @@ private:
 	QToolButton* resizeButton;
 
 	QToolButton* spellCheckButton;
-	
+
 	QStringList ingItemsCache;
 
 	// Internal functions
@@ -138,52 +139,52 @@ private:
 	int createNewPrepIfNecessary( const QString &prep );
 	int createNewGroupIfNecessary( const QString &group );
 	void checkIfNewUnits();
-	void findCategoriesInRecipe(const ElementList &categoryList, QMap<Element,bool> &selected);
-	void loadIngredientListCombo(void);
-	void loadUnitListCombo(void);
-	void loadPrepMethodListCombo(void);
-	void saveRecipe(void);
-	void showCategories(void);
-	void showAuthors(void);
+	void findCategoriesInRecipe( const ElementList &categoryList, QMap<Element, bool> &selected );
+	void loadIngredientListCombo( void );
+	void loadUnitListCombo( void );
+	void loadPrepMethodListCombo( void );
+	void saveRecipe( void );
+	void showCategories( void );
+	void showAuthors( void );
 	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
 
 	// Signals & Slots
 
-	private slots:
-	void reloadUnitsCombo(int);
-	void changePhoto(void);
-	void clearPhoto(void);
-	void moveIngredientUp(void);
-	void moveIngredientDown(void);
-	void removeIngredient(void);
-	void addIngredient(void);
+private slots:
+	void reloadUnitsCombo( int );
+	void changePhoto( void );
+	void clearPhoto( void );
+	void moveIngredientUp( void );
+	void moveIngredientDown( void );
+	void removeIngredient( void );
+	void addIngredient( void );
 	void syncListView( QListViewItem* it, const QString &new_text, int col );
-	void recipeChanged(void);
-	void recipeChanged(const QString &t);
-	void enableChangedSignal(bool en=true);
-	void addCategory(void);
-	void addAuthor(void);
-	void slotIngredientBoxLostFocus(void);
-	void slotUnitBoxLostFocus(void);
-	void slotPrepMethodBoxLostFocus(void);
-	void enableSaveButton(bool enabled);
-	void closeOptions(void);
-	void showRecipe(void);
-	void prepTitleChanged(const QString &title);
-	void typeButtonClicked(int);
+	void recipeChanged( void );
+	void recipeChanged( const QString &t );
+	void enableChangedSignal( bool en = true );
+	void addCategory( void );
+	void addAuthor( void );
+	void slotIngredientBoxLostFocus( void );
+	void slotUnitBoxLostFocus( void );
+	void slotPrepMethodBoxLostFocus( void );
+	void enableSaveButton( bool enabled );
+	void closeOptions( void );
+	void showRecipe( void );
+	void prepTitleChanged( const QString &title );
+	void typeButtonClicked( int );
 
-	public slots:
-	bool save (void); // Activated when krecipes.cpp sends signal save()
-	void spellCheck(void);
-	void resizeRecipe(void);
+public slots:
+	bool save ( void ); // Activated when krecipes.cpp sends signal save()
+	void spellCheck( void );
+	void resizeRecipe( void );
 
-	signals:
-	void changed(void);
-	void closeRecipe(void);
-	void createButton(QWidget* w,const QString &title);
-	void enableSaveOption(bool en=true);
-	void showRecipe(int recipeID); //Indicates krecipesview to show it
-	void titleChanged(const QString &title);
+signals:
+	void changed( void );
+	void closeRecipe( void );
+	void createButton( QWidget* w, const QString &title );
+	void enableSaveOption( bool en = true );
+	void showRecipe( int recipeID ); //Indicates krecipesview to show it
+	void titleChanged( const QString &title );
 
 
 };
@@ -191,17 +192,17 @@ private:
 
 class ImageDropLabel : public QLabel
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	ImageDropLabel(QWidget *parent, QPixmap &_sourcePhoto);
+	ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto );
 
 signals:
 	void changed();
 
 protected:
-	void dragEnterEvent(QDragEnterEvent* event);
-	void dropEvent(QDropEvent* event);
+	void dragEnterEvent( QDragEnterEvent* event );
+	void dropEvent( QDropEvent* event );
 
 private:
 	QPixmap &sourcePhoto;

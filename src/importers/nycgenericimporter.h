@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
- 
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
 #ifndef NYCGENERICIMPORTER_H
 #define NYCGENERICIMPORTER_H
 
@@ -28,7 +28,7 @@ public:
 	~NYCGenericImporter();
 
 protected:
-	void parseFile(const QString& filename);
+	void parseFile( const QString& filename );
 
 private:
 	void importNYCGeneric( QTextStream &stream );
@@ -43,11 +43,11 @@ private:
 	QString m_instructions;
 	QString m_title;
 	QString current_header;
-	
+
 	ElementList m_authors;
 	ElementList m_categories;
 	IngredientList m_ingredients;
-	
+
 	QTime m_preptime;
 
 	bool first;

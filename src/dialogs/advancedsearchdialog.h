@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004 by                                            *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003-2004 by                                            *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef ADVANCEDSEARCHDIALOG_H
 #define ADVANCEDSEARCHDIALOG_H
@@ -40,75 +40,75 @@ class RecipeDB;
 
 class DualAuthorListView : public AuthorListView
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	DualAuthorListView(QWidget *parent, RecipeDB *db);
+	DualAuthorListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
 
-	QMap<QCheckListItem*,bool> positiveMap;
-	QMap<QCheckListItem*,bool> negativeMap;
+	QMap<QCheckListItem*, bool> positiveMap;
+	QMap<QCheckListItem*, bool> negativeMap;
 
 public slots:
-	void change(int index);
+	void change( int index );
 	void updateMap( int index );
-	
+
 protected:
-	virtual void createAuthor(const Element &ing);
-	virtual void removeAuthor(int id);
-	
+	virtual void createAuthor( const Element &ing );
+	virtual void removeAuthor( int id );
+
 private:
 	int last_state;
 };
 
 class DualCategoryListView : public CategoryListView
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	DualCategoryListView(QWidget *parent, RecipeDB *db);
+	DualCategoryListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
 
-	QMap<QCheckListItem*,bool> positiveMap;
-	QMap<QCheckListItem*,bool> negativeMap;
+	QMap<QCheckListItem*, bool> positiveMap;
+	QMap<QCheckListItem*, bool> negativeMap;
 
 public slots:
-	void change(int index);
+	void change( int index );
 	void updateMap( int index );
-	
+
 protected:
-	virtual void createCategory(const Element &,int);
-	virtual void removeCategory(int id);
-	virtual void modifyCategory(const Element &category);
-	virtual void modifyCategory(int id, int parent_id);
-	virtual void mergeCategories(int id1, int id2);
-	
+	virtual void createCategory( const Element &, int );
+	virtual void removeCategory( int id );
+	virtual void modifyCategory( const Element &category );
+	virtual void modifyCategory( int id, int parent_id );
+	virtual void mergeCategories( int id1, int id2 );
+
 private:
 	int last_state;
 };
 
 class DualIngredientListView : public IngredientListView
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	DualIngredientListView(QWidget *parent, RecipeDB *db);
+	DualIngredientListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
 
-	QMap<QCheckListItem*,bool> positiveMap;
-	QMap<QCheckListItem*,bool> negativeMap;
+	QMap<QCheckListItem*, bool> positiveMap;
+	QMap<QCheckListItem*, bool> negativeMap;
 
 public slots:
-	void change(int index);
+	void change( int index );
 	void updateMap( int index );
-	
+
 protected:
-	virtual void createIngredient(const Element &ing);
-	virtual void removeIngredient(int id);
-	
+	virtual void createIngredient( const Element &ing );
+	virtual void removeIngredient( int id );
+
 private:
 	int last_state;
 };
@@ -116,12 +116,12 @@ private:
 
 class AdvancedSearchDialog : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	AdvancedSearchDialog( QWidget *parent, RecipeDB * );
 	~AdvancedSearchDialog();
-	
+
 	void reload();
 	virtual void languageChange();
 
@@ -189,8 +189,8 @@ protected:
 	RecipeDB *database;
 
 signals:
-	void recipeSelected(int,int);
-	
+	void recipeSelected( int, int );
+
 private slots:
 	void search();
 

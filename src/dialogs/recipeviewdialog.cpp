@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "recipeviewdialog.h"
 
@@ -30,20 +30,20 @@
 #include "DBBackend/recipedb.h"
 #include "exporters/htmlexporter.h"
 
-RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
+RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent )
 {
-// Initialize UI Elements
+	// Initialize UI Elements
 
-recipeView=new KHTMLPart(this);
+	recipeView = new KHTMLPart( this );
 
-// Store/Initialize local variables
-database=db; // Store the database pointer.
+	// Store/Initialize local variables
+	database = db; // Store the database pointer.
 
-tmp_filename = locateLocal("tmp", "krecipes_recipe_view");
+	tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
 
-//----------Load  the recipe --------
-if ( recipeID != -1 )
-	loadRecipe(recipeID);
+	//----------Load  the recipe --------
+	if ( recipeID != -1 )
+		loadRecipe( recipeID );
 }
 
 RecipeViewDialog::~RecipeViewDialog()
@@ -52,81 +52,83 @@ RecipeViewDialog::~RecipeViewDialog()
 		removeOldFiles();
 }
 
-bool RecipeViewDialog::loadRecipe(int recipeID)
+bool RecipeViewDialog::loadRecipe( int recipeID )
 {
-	QValueList<int> ids; ids.append(recipeID);
-	return loadRecipes(ids);
+	QValueList<int> ids;
+	ids.append( recipeID );
+	return loadRecipes( ids );
 }
 
 bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 {
-KApplication::setOverrideCursor( KCursor::waitCursor() );
+	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
-// Remove any files created by the last recipe loaded
-removeOldFiles();
+	// Remove any files created by the last recipe loaded
+	removeOldFiles();
 
-ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
-recipe_loaded = ( ids.count() > 0 && ids[0] >= 0 );
+	ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
+	recipe_loaded = ( ids.count() > 0 && ids[ 0 ] >= 0 );
 
-bool success = showRecipes( ids );
+	bool success = showRecipes( ids );
 
-KApplication::restoreOverrideCursor();
-return success;
+	KApplication::restoreOverrideCursor();
+	return success;
 }
 
 bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 {
-KProgressDialog *progress_dialog = 0;
+	KProgressDialog * progress_dialog = 0;
 
-if ( ids.count() > 1 ) //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
-{
-	progress_dialog = new KProgressDialog(this, "open_progress_dialog", QString::null, i18n("Opening recipes, please wait..."), true );
-	progress_dialog->resize(240,80);
-}
+	if ( ids.count() > 1 )  //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
+	{
+		progress_dialog = new KProgressDialog( this, "open_progress_dialog", QString::null, i18n( "Opening recipes, please wait..." ), true );
+		progress_dialog->resize( 240, 80 );
+	}
 
-int sb_width = recipeView->view()->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;
-HTMLExporter html_generator( database, tmp_filename+".html", "html", parentWidget()->width() - sb_width );
+	int sb_width = recipeView->view() ->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;
+	HTMLExporter html_generator( database, tmp_filename + ".html", "html", parentWidget() ->width() - sb_width );
 
-RecipeList recipe_list; database->loadRecipes( &recipe_list, ids );
-html_generator.exporter( recipe_list, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
-if ( progress_dialog && progress_dialog->wasCancelled() )
-{
+	RecipeList recipe_list;
+	database->loadRecipes( &recipe_list, ids );
+	html_generator.exporter( recipe_list, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
+	if ( progress_dialog && progress_dialog->wasCancelled() ) {
+		delete progress_dialog;
+		return false;
+	}
+
+	delete recipeView;              // Temporary workaround
+	recipeView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
+
+	KURL url;
+	url.setPath( tmp_filename + ".html" );
+	recipeView->openURL( url );
+	recipeView->show();
+	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+
 	delete progress_dialog;
-	return false;
+	return true;
 }
 
-delete recipeView;              // Temporary workaround
-recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
-
-KURL url;
-url.setPath( tmp_filename+".html" );
-recipeView->openURL( url );
-recipeView->show();
-kdDebug()<<"Opening URL: "<<url.htmlURL()<<endl;
-
-delete progress_dialog;
-return true;
-}
-
-void RecipeViewDialog::print(void)
+void RecipeViewDialog::print( void )
 {
 	if ( recipe_loaded )
-		recipeView->view()->print();
+		recipeView->view() ->print();
 }
 
 void RecipeViewDialog::reload()
 {
-	loadRecipes(ids_loaded);
+	loadRecipes( ids_loaded );
 }
 
 void RecipeViewDialog::removeOldFiles()
 {
-	RecipeList recipe_list; database->loadRecipes( &recipe_list, ids_loaded );
+	RecipeList recipe_list;
+	database->loadRecipes( &recipe_list, ids_loaded );
 
 	QStringList recipe_titles;
 	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
-		recipe_titles << (*it).title;
+		recipe_titles << ( *it ).title;
 
-	HTMLExporter::removeHTMLFiles(tmp_filename,recipe_titles);
+	HTMLExporter::removeHTMLFiles( tmp_filename, recipe_titles );
 }
 #include "recipeviewdialog.moc"

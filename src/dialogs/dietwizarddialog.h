@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef DIETWIZARDDIALOG_H
 #define DIETWIZARDDIALOG_H
@@ -53,14 +53,15 @@ class PropertyConstraintListView;
 */
 
 
-class DietWizardDialog:public QVBox{
+class DietWizardDialog: public QVBox
+{
 
-Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    DietWizardDialog(QWidget *parent, RecipeDB* db);
-    ~DietWizardDialog();
+	DietWizardDialog( QWidget *parent, RecipeDB* db );
+	~DietWizardDialog();
 
 private:
 	//Private variables
@@ -72,7 +73,7 @@ private:
 	IngredientPropertyList propertyList;
 	RecipeList *dietRList;
 
-		// Cache data blocks
+	// Cache data blocks
 	UnitRatioList cachedUnitRatios;
 	IngredientPropertyList cachedIngredientProperties;
 
@@ -89,120 +90,126 @@ private:
 	QPushButton *okButton;
 
 	//Methods
-	bool checkCategories(Recipe &rec,int meal,int dish);
-	bool checkConstraints(Recipe &rec,int meal,int dish);
-	bool checkLimits(IngredientPropertyList &properties,ConstraintList &constraints);
-	void loadConstraints(int meal,int dish,ConstraintList *constraints);
-	void loadEnabledCategories(int meal,int dish,ElementList *categories);
-	void newTab(const QString &name);
-	bool categoryFiltering(int meal,int dish);
+	bool checkCategories( Recipe &rec, int meal, int dish );
+	bool checkConstraints( Recipe &rec, int meal, int dish );
+	bool checkLimits( IngredientPropertyList &properties, ConstraintList &constraints );
+	void loadConstraints( int meal, int dish, ConstraintList *constraints );
+	void loadEnabledCategories( int meal, int dish, ElementList *categories );
+	void newTab( const QString &name );
+	bool categoryFiltering( int meal, int dish );
 
 public:
 	//Methods
-	void reload(void);
-	RecipeList& dietList(void);
+	void reload( void );
+	RecipeList& dietList( void );
 
 private slots:
-	void changeDayNumber(int dn);
-	void changeMealNumber(int mn);
-	void createDiet(void);
+	void changeDayNumber( int dn );
+	void changeMealNumber( int mn );
+	void createDiet( void );
 	void clear();
-	void createShoppingList(void);
-	void populateIteratorList(RecipeList &rl, QValueList <RecipeList::Iterator> *il);
+	void createShoppingList( void );
+	void populateIteratorList( RecipeList &rl, QValueList <RecipeList::Iterator> *il );
 signals:
-	void dietReady(void);
+	void dietReady( void );
 };
 
-class MealInput:public QWidget{
-Q_OBJECT
+class MealInput: public QWidget
+{
+	Q_OBJECT
 
 public:
 	// Methods
 
-	 MealInput(QWidget *parent,RecipeDB *database);
-	 ~MealInput();
-	 void reload(IngredientPropertyList &propertyList);
-	 int dishNo(void){return dishNumber;};
-	 void setDishNo(int dn);
-	 void showDish(int dn);
+	MealInput( QWidget *parent, RecipeDB *database );
+	~MealInput();
+	void reload( IngredientPropertyList &propertyList );
+	int dishNo( void )
+	{
+		return dishNumber;
+	};
+	void setDishNo( int dn );
+	void showDish( int dn );
 
-	 // Public widgets and variables
-	 QValueList <DishInput*> dishInputList; // The list of dishes
+	// Public widgets and variables
+	QValueList <DishInput*> dishInputList; // The list of dishes
 
 private:
 	// Widgets
-		// Private Variables
-		int dishNumber;
-		IngredientPropertyList propertyListLocalCache;
-		RecipeDB *database;
+	// Private Variables
+	int dishNumber;
+	IngredientPropertyList propertyListLocalCache;
+	RecipeDB *database;
 
-		// Settings section for the meal
-		QHBox *mealOptions;
+	// Settings section for the meal
+	QHBox *mealOptions;
 
-			// Dish number setting
-		QHBox *dishNumberBox;
-		QLabel *dishNumberLabel;
-		QSpinBox *dishNumberInput;
+	// Dish number setting
+	QHBox *dishNumberBox;
+	QLabel *dishNumberLabel;
+	QSpinBox *dishNumberInput;
 
-			// Move <-> buttons
-		QHGroupBox *toolBar;
-		QToolButton *buttonNext;
-		QToolButton *buttonPrev;
+	// Move <-> buttons
+	QHGroupBox *toolBar;
+	QToolButton *buttonNext;
+	QToolButton *buttonPrev;
 
-		// Settings for the dish
-		QWidgetStack *dishStack;
+	// Settings for the dish
+	QWidgetStack *dishStack;
 
 	// Methods
-		void reload(); // Reloads again from the cached data
+	void reload(); // Reloads again from the cached data
 public slots:
-	void nextDish(void);
-	void prevDish(void);
+	void nextDish( void );
+	void prevDish( void );
 
 private slots:
-	void changeDishNumber(int dn);
+	void changeDishNumber( int dn );
 
 };
 
-class DishInput:public QWidget{
-Q_OBJECT
+class DishInput: public QWidget
+{
+	Q_OBJECT
 
 public:
-	DishInput(QWidget *parent,RecipeDB *database,const QString &title);
+	DishInput( QWidget *parent, RecipeDB *database, const QString &title );
 	~DishInput();
 	// Methods
-	bool isCategoryFilteringEnabled(void);
-	void loadConstraints(ConstraintList *constraints);
-	void loadEnabledCategories(ElementList* categories);
-	void reload(IngredientPropertyList *propertyList);
-	void setDishTitle(const QString & text);
+	bool isCategoryFilteringEnabled( void );
+	void loadConstraints( ConstraintList *constraints );
+	void loadEnabledCategories( ElementList* categories );
+	void reload( IngredientPropertyList *propertyList );
+	void setDishTitle( const QString & text );
 	void clear();
 
 
 private:
-		// Variables
-		bool categoryFiltering;
-		// Widgets
-		QHGroupBox *listBox;
-		DishTitle *dishTitle;
-		QVBox *categoriesBox;
-		QCheckBox *categoriesEnabledBox;
-		CategoryCheckListView *categoriesView;
-		PropertyConstraintListView *constraintsView;
-		EditBox *constraintsEditBox1;
-		EditBox *constraintsEditBox2;
+	// Variables
+	bool categoryFiltering;
+	// Widgets
+	QHGroupBox *listBox;
+	DishTitle *dishTitle;
+	QVBox *categoriesBox;
+	QCheckBox *categoriesEnabledBox;
+	CategoryCheckListView *categoriesView;
+	PropertyConstraintListView *constraintsView;
+	EditBox *constraintsEditBox1;
+	EditBox *constraintsEditBox2;
 private slots:
-		void enableCategories(bool enable);
-		void insertConstraintsEditBoxes(QListViewItem* it);
-		void setMinValue(double minValue);
-		void setMaxValue(double maxValue);
+	void enableCategories( bool enable );
+	void insertConstraintsEditBoxes( QListViewItem* it );
+	void setMinValue( double minValue );
+	void setMaxValue( double maxValue );
 };
 
-class DishTitle:public QWidget{
+class DishTitle: public QWidget
+{
 
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	DishTitle(QWidget *parent,const QString &title);
+	DishTitle( QWidget *parent, const QString &title );
 	~DishTitle();
 	virtual QSize sizeHint () const;
 	virtual QSize minimumSizeHint() const;
@@ -210,7 +217,7 @@ protected:
 	//Variables
 	QString titleText;
 	//Methods
-	virtual void paintEvent(QPaintEvent *p );
+	virtual void paintEvent( QPaintEvent *p );
 };
 
 #endif

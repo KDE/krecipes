@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
- */
+* Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
+*/
 
 #ifndef KRECIPESVIEW_H
 #define KRECIPESVIEW_H
@@ -64,48 +64,48 @@ typedef QValueList <Menu>::Iterator MenuId;
  */
 
 
- // Declarations
+// Declarations
 
 
 
- // Some constants
- typedef enum KrePanel {SelectP=0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit, RecipeView };
+// Some constants
+typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit, RecipeView };
 
 
- // Class KrecipesView
+// Class KrecipesView
 class KrecipesView : public QVBox, public KrecipesIface
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
 	/**
 	 * Default constructor
 	 */
-    KrecipesView(QWidget *parent);
+	KrecipesView( QWidget *parent );
 
 	/**
 	 * Destructor
 	 */
-    virtual ~KrecipesView();
+	virtual ~KrecipesView();
 
-    /**
-     * Print this view to any medium -- paper or not
-     */
-    void print();
-    
-    virtual void show (void); //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
+	/**
+	 * Print this view to any medium -- paper or not
+	 */
+	void print();
+
+	virtual void show ( void ); //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
 
 signals:
-    /**
-     * Use this signal to change the content of the statusbar
-     */
-    void signalChangeStatusbar(const QString& text);
+	/**
+	 * Use this signal to change the content of the statusbar
+	 */
+	void signalChangeStatusbar( const QString& text );
 
-    /**
-     * Use this signal to change the content of the caption
-     */
-    void signalChangeCaption(const QString& text);
-    
-    void panelShown(KrePanel,bool);
+	/**
+	 * Use this signal to change the content of the caption
+	 */
+	void signalChangeCaption( const QString& text );
+
+	void panelShown( KrePanel, bool );
 
 
 public:
@@ -125,29 +125,32 @@ public:
 	IngredientMatcherDialog *ingredientMatcherPanel;
 
 	// public methods
-	void createNewRecipe(void);
-	void createNewElement(void);
+	void createNewRecipe( void );
+	void createNewElement( void );
 
-	void import( BaseImporter &importer ){ importer.import(database); }
+	void import( BaseImporter &importer )
+	{
+		importer.import( database );
+	}
 
 private:
 
 	// Internal methods
-	QString checkCorrectDBType(KConfig *config);
-	void initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass);
-	void initDatabase(KConfig *config);
-	void questionRerunWizard(const QString &message, const QString &error="");
-	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
-	void wizard(bool force=false);
-	
-	
-	
+	QString checkCorrectDBType( KConfig *config );
+	void initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass );
+	void initDatabase( KConfig *config );
+	void questionRerunWizard( const QString &message, const QString &error = "" );
+	void setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser = QString::null, const QString &adminPass = QString::null );
+	void wizard( bool force = false );
+
+
+
 	// Widgets
 	QHBox *splitter;
 	KreMenu *leftPanel;
 	MenuId dataMenu;
 	PanelDeco *rightPanel;
-  QPtrList<KreMenuButton> *buttonsList;
+	QPtrList<KreMenuButton> *buttonsList;
 	KreMenuButton *button0;
 	KreMenuButton *button1;
 	KreMenuButton *button2;
@@ -158,11 +161,11 @@ private:
 	KreMenuButton *button7;
 	KreMenuButton *button8;
 	KreMenuButton *button9;
-  QWidget* contextHelp;
-  QPushButton* contextButton;
-  QPushButton* contextClose;
-  QLabel* contextTitle;
-  KTextBrowser* contextText;
+	QWidget* contextHelp;
+	QPushButton* contextButton;
+	QPushButton* contextClose;
+	QLabel* contextTitle;
+	KTextBrowser* contextText;
 
 	KreMenuButton *recipeButton;
 	QWidget *recipeWidget;
@@ -170,37 +173,37 @@ private:
 	// Internal variables
 	RecipeDB *database;
 	QString dbType;
-	
-	QMap<QWidget*,KrePanel> panelMap;
 
-  // i18n
-  void translate();
-  
+	QMap<QWidget*, KrePanel> panelMap;
+
+	// i18n
+	void translate();
+
 
 signals:
-	void enableSaveOption(bool en);
+	void enableSaveOption( bool en );
 
 public slots:
-	bool save(void);
+	bool save( void );
 	void exportRecipe();
 	void reloadDisplay();
 
 private slots:
-    void actionRecipe(int recipeID, int action);
-    void actionRecipes(const QValueList<int> &ids, int action);
-    void addRecipeButton(QWidget *w, const QString &title);
-    void closeRecipe(void);
-    void showRecipe(int recipeID);
-    void showRecipes( const QValueList<int> &recipeIDs);
-    void slotSetTitle(const QString& title);
-    void slotSetPanel(KrePanel);
-    void switchToRecipe(void);
-    void setContextHelp(KrePanel);
-    void createShoppingListFromDiet(void);
-    void moveTipButton(int,int);
-    void resizeRightPane(int lpw,int lph);
-    void panelRaised(QWidget *w, QWidget *old_w);
-    void editRecipe();
+	void actionRecipe( int recipeID, int action );
+	void actionRecipes( const QValueList<int> &ids, int action );
+	void addRecipeButton( QWidget *w, const QString &title );
+	void closeRecipe( void );
+	void showRecipe( int recipeID );
+	void showRecipes( const QValueList<int> &recipeIDs );
+	void slotSetTitle( const QString& title );
+	void slotSetPanel( KrePanel );
+	void switchToRecipe( void );
+	void setContextHelp( KrePanel );
+	void createShoppingListFromDiet( void );
+	void moveTipButton( int, int );
+	void resizeRightPane( int lpw, int lph );
+	void panelRaised( QWidget *w, QWidget *old_w );
+	void editRecipe();
 };
 
 

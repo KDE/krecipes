@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *   Richard Lärkäng                                                       *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Richard Lärkäng                                                       *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 
 #ifndef RECIPEMLIMPORTER_H
@@ -31,16 +31,16 @@ public:
 	virtual ~RecipeMLImporter();
 
 protected:
-	void parseFile(const QString& filename);
+	void parseFile( const QString& filename );
 
 private:
-	void readRecipemlDirections(const QDomElement& dirs);
-	void readRecipemlHead(const QDomElement& head);
-	void readRecipemlIng(const QDomElement& ing, const QString &header = QString::null);
-	void readRecipemlIngs(const QDomElement& ings);
-	void readRecipemlMenu(const QDomElement& menu);
-	void readRecipemlSrcItems(const QDomElement& sources);
-	void readRecipemlRecipe(const QDomElement& recipe);
+	void readRecipemlDirections( const QDomElement& dirs );
+	void readRecipemlHead( const QDomElement& head );
+	void readRecipemlIng( const QDomElement& ing, const QString &header = QString::null );
+	void readRecipemlIngs( const QDomElement& ings );
+	void readRecipemlMenu( const QDomElement& menu );
+	void readRecipemlSrcItems( const QDomElement& sources );
+	void readRecipemlRecipe( const QDomElement& recipe );
 	void readRecipemlPreptime( const QDomElement &preptime );
 
 	Recipe recipe;

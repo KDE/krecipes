@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "cookmlexporter.h"
 
@@ -23,19 +23,17 @@
 #include <kstandarddirs.h>
 
 CookMLExporter::CookMLExporter( const QString& filename, const QString &format ) :
-  BaseExporter( filename, format )
-{
-}
+		BaseExporter( filename, format )
+{}
 
 
 CookMLExporter::~CookMLExporter()
-{
-}
+{}
 
 QString CookMLExporter::createContent( const RecipeList& recipes )
 {
 	QDomImplementation dom_imp;
-	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd") );
+	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd" ) );
 
 	QDomElement cookml_tag = doc.documentElement();
 	cookml_tag.setAttribute( "version", "1.0.13" );
@@ -45,70 +43,66 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 	doc.appendChild( cookml_tag );
 
 	RecipeList::const_iterator recipe_it;
-	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
-	{
-		QDomElement recipe_tag = doc.createElement("recipe");
-		recipe_tag.setAttribute("lang",(KGlobal::locale())->language());
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
+		QDomElement recipe_tag = doc.createElement( "recipe" );
+		recipe_tag.setAttribute( "lang", ( KGlobal::locale() ) ->language() );
 
 		cookml_tag.appendChild( recipe_tag );
 
-			QDomElement head_tag = doc.createElement("head");
-			head_tag.setAttribute("title",(*recipe_it).title);
-			head_tag.setAttribute("servingqty",(*recipe_it).persons);
-			head_tag.setAttribute("servingtype",i18n("Persons"));
-			head_tag.setAttribute("rid",i18n("")); //FIXME:what's this...recipe ID??
-			recipe_tag.appendChild( head_tag );
+		QDomElement head_tag = doc.createElement( "head" );
+		head_tag.setAttribute( "title", ( *recipe_it ).title );
+		head_tag.setAttribute( "servingqty", ( *recipe_it ).persons );
+		head_tag.setAttribute( "servingtype", i18n( "Persons" ) );
+		head_tag.setAttribute( "rid", i18n( "" ) ); //FIXME:what's this...recipe ID??
+		recipe_tag.appendChild( head_tag );
 
-				for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
-				{
-					QDomElement cat_tag = doc.createElement("cat");
-					cat_tag.appendChild( doc.createTextNode((*cat_it).name) );
-					head_tag.appendChild(cat_tag);
-				}
+		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
+			QDomElement cat_tag = doc.createElement( "cat" );
+			cat_tag.appendChild( doc.createTextNode( ( *cat_it ).name ) );
+			head_tag.appendChild( cat_tag );
+		}
 
-				for ( ElementList::const_iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
-				{
-					QDomElement sourceline_tag = doc.createElement("sourceline");
-					sourceline_tag.appendChild( doc.createTextNode( (*author_it).name) );
-					head_tag.appendChild(sourceline_tag);
-				}
+		for ( ElementList::const_iterator author_it = ( *recipe_it ).authorList.begin(); author_it != ( *recipe_it ).authorList.end(); ++author_it ) {
+			QDomElement sourceline_tag = doc.createElement( "sourceline" );
+			sourceline_tag.appendChild( doc.createTextNode( ( *author_it ).name ) );
+			head_tag.appendChild( sourceline_tag );
+		}
 
-				QDomElement picbin_tag = doc.createElement( "picbin");
-				picbin_tag.setAttribute("format","JPG");
+		QDomElement picbin_tag = doc.createElement( "picbin" );
+		picbin_tag.setAttribute( "format", "JPG" );
 
-				KTempFile* fn = new KTempFile(locateLocal("tmp", "cml"), ".jpg", 0600);
-				fn->setAutoDelete(true);
-				(*recipe_it).photo.save(fn->name(), "JPEG");
-				QByteArray data;
-				if( fn )
-				{
-					data = (fn->file())->readAll();
-					fn->close();
-					delete fn;
-				}
-				picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode(data, true) ) );
-				head_tag.appendChild( picbin_tag );
+		KTempFile* fn = new KTempFile( locateLocal( "tmp", "cml" ), ".jpg", 0600 );
+		fn->setAutoDelete( true );
+		( *recipe_it ).photo.save( fn->name(), "JPEG" );
+		QByteArray data;
+		if ( fn ) {
+			data = ( fn->file() ) ->readAll();
+			fn->close();
+			delete fn;
+		}
+		picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode( data, true ) ) );
+		head_tag.appendChild( picbin_tag );
 
-			QDomElement part_tag = doc.createElement("part");
-			for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
-			{
-				QDomElement ingredient_tag = doc.createElement("ingredient");
-				ingredient_tag.setAttribute("qty",QString::number((*ing_it).amount));
-				ingredient_tag.setAttribute("unit",((*ing_it).amount>1)?(*ing_it).units.plural:(*ing_it).units.name);
-				ingredient_tag.setAttribute("item",(*ing_it).name);
-				ingredient_tag.setAttribute("preparation",(*ing_it).prepMethod);
-				part_tag.appendChild( ingredient_tag );
-			}
-			recipe_tag.appendChild( part_tag );
+		QDomElement part_tag = doc.createElement( "part" );
+		for ( IngredientList::const_iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ( *recipe_it ).ingList.end(); ++ing_it ) {
+			QDomElement ingredient_tag = doc.createElement( "ingredient" );
+			ingredient_tag.setAttribute( "qty", QString::number( ( *ing_it ).amount ) );
+			ingredient_tag.setAttribute( "unit", ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name );
+			ingredient_tag.setAttribute( "item", ( *ing_it ).name );
+			ingredient_tag.setAttribute( "preparation", ( *ing_it ).prepMethod );
+			part_tag.appendChild( ingredient_tag );
+		}
+		recipe_tag.appendChild( part_tag );
 
-			QDomElement preparation_tag = doc.createElement("preparation");
-			recipe_tag.appendChild( preparation_tag );
+		QDomElement preparation_tag = doc.createElement( "preparation" );
+		recipe_tag.appendChild( preparation_tag );
 
-				QDomElement text_tag = doc.createElement("text");
-				preparation_tag.appendChild( text_tag );
-				text_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
-		
-		if ( progressBarCancelled() ) return QString::null;
+		QDomElement text_tag = doc.createElement( "text" );
+		preparation_tag.appendChild( text_tag );
+		text_tag.appendChild( doc.createTextNode( ( *recipe_it ).instructions ) );
+
+		if ( progressBarCancelled() )
+			return QString::null;
 		advanceProgressBar();
 	}
 

@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef DUALPROGRESSDIALOG_H
 #define DUALPROGRESSDIALOG_H
@@ -25,12 +25,15 @@ class QLabel;
   */
 class DualProgressDialog : public KProgressDialog
 {
-        Q_OBJECT
+	Q_OBJECT
 
 public:
 	DualProgressDialog( QWidget* parent = 0, const char* name = 0, const QString& caption = QString::null, const QString& text = QString::null, const QString &sub_text = QString::null, bool modal = false );
 
-	KProgress *subProgressBar(){ return m_sub_progress_bar; };
+	KProgress *subProgressBar()
+	{
+		return m_sub_progress_bar;
+	};
 	void setSubLabel( const QString & );
 	void setTotalSteps( int steps );
 	QString subLabelText();
@@ -42,7 +45,10 @@ private:
 	int m_total_steps;
 
 	//make this private
-	KProgress * progressBar(){ return KProgressDialog::progressBar(); }
+	KProgress * progressBar()
+	{
+		return KProgressDialog::progressBar();
+	}
 
 private slots:
 	void slotUpdateTotalProgress( int percentage );

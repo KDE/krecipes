@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
- */
+* Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
+*/
 
 #ifndef _KRECIPESPREF_H_
 #define _KRECIPESPREF_H_
@@ -20,17 +20,17 @@ class QVBoxLayout;
 
 class KrecipesPreferences : public KDialogBase
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    KrecipesPreferences(QWidget *parent);
+	KrecipesPreferences( QWidget *parent );
 
 private:
-    ServerPrefs *m_pageServer;
-    NumbersPrefs *m_pageNumbers;
-    ImportPrefs *m_pageImport;
+	ServerPrefs *m_pageServer;
+	NumbersPrefs *m_pageNumbers;
+	ImportPrefs *m_pageImport;
 
 private slots:
-    void saveSettings(void);
+	void saveSettings( void );
 };
 
 
@@ -39,7 +39,7 @@ class MySQLServerPrefs : public QWidget
 public:
 	MySQLServerPrefs( QWidget *parent );
 
-	void saveOptions(void);
+	void saveOptions( void );
 private:
 	// Internal Widgets
 	KLineEdit *serverEdit;
@@ -53,7 +53,7 @@ class PostgreSQLServerPrefs : public QWidget
 public:
 	PostgreSQLServerPrefs( QWidget *parent );
 
-	void saveOptions(void);
+	void saveOptions( void );
 private:
 	// Internal Widgets
 	KLineEdit *serverEdit;
@@ -64,12 +64,12 @@ private:
 
 class SQLiteServerPrefs : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	SQLiteServerPrefs( QWidget *parent );
 
-	void saveOptions(void);
+	void saveOptions( void );
 
 private slots:
 	void selectFile();
@@ -82,23 +82,23 @@ private:
 
 class ServerPrefs : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    ServerPrefs(QWidget *parent = 0);
+	ServerPrefs( QWidget *parent = 0 );
 
-    // Public Methods
-    void saveOptions(void);
+	// Public Methods
+	void saveOptions( void );
 private:
-    QWidget *serverWidget;
-    QCheckBox *wizard_button;
+	QWidget *serverWidget;
+	QCheckBox *wizard_button;
 };
 
 class NumbersPrefs : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	NumbersPrefs(QWidget *parent = 0);
+	NumbersPrefs( QWidget *parent = 0 );
 
 	void saveOptions();
 
@@ -109,7 +109,7 @@ protected:
 
 	QVBoxLayout* Form1Layout;
 	QVBoxLayout* numberButtonGroupLayout;
-	
+
 	KLineEdit *ingredientEdit;
 
 protected slots:
@@ -118,10 +118,10 @@ protected slots:
 
 class ImportPrefs : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	ImportPrefs(QWidget *parent = 0);
+	ImportPrefs( QWidget *parent = 0 );
 
 	void saveOptions();
 

@@ -1,12 +1,12 @@
- /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+/***************************************************************************
+*   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
+*                                                                         *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "recipedb.h"
 
@@ -18,7 +18,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kprogress.h> 
+#include <kprogress.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -59,47 +59,49 @@ double RecipeDB::latestDBVersion() const
 
 QString RecipeDB::krecipes_version() const
 {
-	KInstance *this_instance = KGlobal::instance();
+	KInstance * this_instance = KGlobal::instance();
 	if ( this_instance && this_instance->aboutData() )
-		return this_instance->aboutData()->version();
+		return this_instance->aboutData() ->version();
 
 	return QString::null; //Oh, well.  We couldn't get the version (shouldn't happen).
 }
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 {
-	KConfig *config = kapp->config();
-	config->setGroup("Server");
-	QString host=config->readEntry( "Host","localhost");
-	QString user=config->readEntry( "Username",QString::null);
-	QString pass=config->readEntry("Password",QString::null);
-	QString dbname=config->readEntry("DBName", DEFAULT_DB_NAME);
+	KConfig * config = kapp->config();
+	config->setGroup( "Server" );
+	QString host = config->readEntry( "Host", "localhost" );
+	QString user = config->readEntry( "Username", QString::null );
+	QString pass = config->readEntry( "Password", QString::null );
+	QString dbname = config->readEntry( "DBName", DEFAULT_DB_NAME );
 
-	return createDatabase(dbType,host,user,pass,dbname,file);
+	return createDatabase( dbType, host, user, pass, dbname, file );
 }
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, const QString &file )
 {
-	RecipeDB *database = 0;
+	RecipeDB * database = 0;
 
-	if ( 0 ); //we need some condition here
-	#if HAVE_SQLITE || HAVE_SQLITE3
+	if ( 0 )
+		; //we need some condition here
+#if HAVE_SQLITE || HAVE_SQLITE3
+
 	else if ( dbType == "SQLite" ) {
-		database = new LiteRecipeDB(file);
+		database = new LiteRecipeDB( file );
 	}
-	#endif //HAVE_SQLITE || HAVE_SQLITE3
+#endif //HAVE_SQLITE || HAVE_SQLITE3
 	#if HAVE_MYSQL
 	else if ( dbType == "MySQL" ) {
-		database=new MySQLRecipeDB(host,user,pass,dbname);
+		database = new MySQLRecipeDB( host, user, pass, dbname );
 	}
-	#endif //HAVE_MYSQL
+#endif //HAVE_MYSQL
 	#if HAVE_POSTGRESQL
 	else if ( dbType == "PostgreSQL" ) {
-		database=new PSqlRecipeDB(host,user,pass,dbname);
+		database = new PSqlRecipeDB( host, user, pass, dbname );
 	}
-	#endif //HAVE_POSTGRESQL
+#endif //HAVE_POSTGRESQL
 	else {
-		kdDebug()<<"No database support included (or available) for the "<<dbType<<" database."<<endl;
+		kdDebug() << "No database support included (or available) for the " << dbType << " database." << endl;
 	}
 
 	return database;
@@ -108,19 +110,17 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KProgressDialog *progress_dlg )
 {
 	if ( progress_dlg )
-		progress_dlg->progressBar()->setTotalSteps( ids.count() );
+		progress_dlg->progressBar() ->setTotalSteps( ids.count() );
 
 	recipes->empty();
 
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it )
-	{
+	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		Recipe recipe;
 		loadRecipe( &recipe, *it );
 		recipes->append( recipe );
-		
-		if ( progress_dlg )
-		{
-			progress_dlg->progressBar()->advance(1);
+
+		if ( progress_dlg ) {
+			progress_dlg->progressBar() ->advance( 1 );
 			kapp->processEvents();
 			if ( progress_dlg->wasCancelled() )
 				break;
@@ -130,75 +130,73 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 
 void RecipeDB::importSamples()
 {
-	QString sample_recipes = locate("appdata", "data/samples-"+KGlobal::locale()->language()+".kreml");
+	QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
-		kdDebug()<<"NOTICE: Samples recipes for the language \""<<KGlobal::locale()->language()<<"\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release."<<endl;
+		kdDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release." << endl;
 
-		sample_recipes = locate("appdata", "data/samples-en_US.kreml"); //default to English
+		sample_recipes = locate( "appdata", "data/samples-en_US.kreml" ); //default to English
 	}
 	if ( !sample_recipes.isEmpty() ) {
 		KreImporter importer;
-		
-		QStringList file; file << sample_recipes;
-		importer.parseFiles(file);
 
-		importer.import(this,true);
+		QStringList file;
+		file << sample_recipes;
+		importer.parseFiles( file );
+
+		importer.import( this, true );
 	}
 	else
-		kdDebug()<<"Unable to find samples recipe file (samples-en_US.kreml)"<<endl;
+		kdDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" << endl;
 }
 
 //These are helper functions solely for use by the USDA data importer
-void getIngredientNameAndID( std::multimap<int,QString> * );
-int createUnit(const QString &name, RecipeDB*);
-int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*);
+void getIngredientNameAndID( std::multimap<int, QString> * );
+int createUnit( const QString &name, RecipeDB* );
+int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB* );
 void create_properties( RecipeDB* );
 
 void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 {
-	KProgress *progress = 0;
+	KProgress * progress = 0;
 	if ( progress_dlg )
 		progress = progress_dlg->progressBar();
-		
+
 	//check if the data file even exists before we do anything
-	QString abbrev_file = locate("appdata","data/abbrev.txt");
-	if ( abbrev_file.isEmpty() )
-	{
-		kdDebug()<<"Unable to find abbrev.txt data file."<<endl;
-		return;
+	QString abbrev_file = locate( "appdata", "data/abbrev.txt" );
+	if ( abbrev_file.isEmpty() ) {
+		kdDebug() << "Unable to find abbrev.txt data file." << endl;
+		return ;
 	}
 
 	QFile file( abbrev_file );
-	if ( !file.open( IO_ReadOnly ) )
-	{
-		kdDebug()<<"Unable to open data file: "<<abbrev_file<<endl;
-		return;
+	if ( !file.open( IO_ReadOnly ) ) {
+		kdDebug() << "Unable to open data file: " << abbrev_file << endl;
+		return ;
 	}
 
-	create_properties(this);
+	create_properties( this );
 
-	std::multimap<int,QString> *ings_and_ids = new std::multimap<int,QString>;
+	std::multimap<int, QString> *ings_and_ids = new std::multimap<int, QString>;
 	getIngredientNameAndID( ings_and_ids );
 
 	QTextStream stream( &file );
 	QValueList<ingredient_nutrient_data> *data = new QValueList<ingredient_nutrient_data>;
 
-	kdDebug()<<"Parsing abbrev.txt"<<endl;
-	while ( !stream.atEnd() )
-	{
+	kdDebug() << "Parsing abbrev.txt" << endl;
+	while ( !stream.atEnd() ) {
 		QStringList fields = QStringList::split( "^", stream.readLine(), true );
 
-		int id = fields[0].mid(1,fields[0].length()-2).toInt();
+		int id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
 
-		std::multimap<int,QString>::iterator current_pair;
-		while ( (current_pair = ings_and_ids->find(id)) != ings_and_ids->end() ) //there may be more than one ingredients with the same id
+		std::multimap<int, QString>::iterator current_pair;
+		while ( ( current_pair = ings_and_ids->find( id ) ) != ings_and_ids->end() )  //there may be more than one ingredients with the same id
 		{
 			ingredient_nutrient_data current_ing;
-			current_ing.name = (*current_pair).second.latin1();
+			current_ing.name = ( *current_pair ).second.latin1();
 
-			for ( int i = 2; i < TOTAL_USDA_PROPERTIES + 2; i++ ) //properties start at the third field (index 2)
-				current_ing.data << fields[i].toDouble();
+			for ( int i = 2; i < TOTAL_USDA_PROPERTIES + 2; i++ )  //properties start at the third field (index 2)
+				current_ing.data << fields[ i ].toDouble();
 
 			data->append( current_ing );
 
@@ -207,57 +205,60 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	}
 
 	delete ings_and_ids;
-	
-	if (progress) { progress->setTotalSteps(data->count()); }
+
+	if ( progress ) {
+		progress->setTotalSteps( data->count() );
+	}
 
 	//since there are only two units used, lets just create them and store their id for speed
-	int unit_g_id = createUnit("g",this);
-	int unit_mg_id = createUnit("mg",this);
+	int unit_g_id = createUnit( "g", this );
+	int unit_mg_id = createUnit( "mg", this );
 
-	QValueList<ingredient_nutrient_data>::iterator it; const int total = data->count(); int counter = 0;
-	for ( it = data->begin(); it != data->end(); ++it )
-	{
+	QValueList<ingredient_nutrient_data>::iterator it;
+	const int total = data->count();
+	int counter = 0;
+	for ( it = data->begin(); it != data->end(); ++it ) {
 		counter++;
-		kdDebug()<<"Inserting ("<<counter<<" of "<<total<<"): "<<(*it).name<<endl;
-		if ( progress )
-		{
-			progress->advance(1);
+		kdDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
+		if ( progress ) {
+			progress->advance( 1 );
 			kapp->processEvents();
-			
+
 			if ( progress_dlg->wasCancelled() )
 				break;
 		}
 
-		int assigned_id = createIngredient((*it).name,unit_g_id,unit_mg_id,this);
+		int assigned_id = createIngredient( ( *it ).name, unit_g_id, unit_mg_id, this );
 
 		//for now, only check if there is any info on the ingredient to see whether or not we will import this data,
 		//because checking to see that each property exists is quite slow
-		IngredientPropertyList ing_properties; loadProperties( &ing_properties, assigned_id );
-		if ( ing_properties.count() == 0 ) //ingredient doesn't already have any properties
+		IngredientPropertyList ing_properties;
+		loadProperties( &ing_properties, assigned_id );
+		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
-			QValueList<double>::iterator property_it; int i = 0;
-			for ( property_it = (*it).data.begin(); property_it != (*it).data.end(); ++property_it, ++i )
-				addPropertyToIngredient(assigned_id,property_data_list[i].id,(*property_it)/100.0,unit_g_id);
+			QValueList<double>::iterator property_it;
+			int i = 0;
+			for ( property_it = ( *it ).data.begin(); property_it != ( *it ).data.end(); ++property_it, ++i )
+				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
 	}
 
 	delete data;
 
-	kdDebug()<<"USDA SR 16 data import successful"<<endl;
+	kdDebug() << "USDA SR 16 data import successful" << endl;
 }
 
-void getIngredientNameAndID( std::multimap<int,QString> *data )
+void getIngredientNameAndID( std::multimap<int, QString> *data )
 {
-	for ( int i = 0; !ingredient_data_list[i].name.isEmpty(); i++ )
-		data->insert( std::make_pair(ingredient_data_list[i].usda_id, ingredient_data_list[i].name) );
+	for ( int i = 0; !ingredient_data_list[ i ].name.isEmpty(); i++ )
+		data->insert( std::make_pair( ingredient_data_list[ i ].usda_id, ingredient_data_list[ i ].name ) );
 }
 
-int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database)
+int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database )
 {
 	int assigned_id = database->findExistingIngredientByName( name );
 
-	if ( assigned_id == -1 )
-	{
+	if ( assigned_id == -1 ) {
 		database->createNewIngredient( name );
 		assigned_id = database->lastInsertID();
 	}
@@ -271,11 +272,11 @@ int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeD
 	return assigned_id;
 }
 
-int createUnit(const QString &name, RecipeDB *database)
+int createUnit( const QString &name, RecipeDB *database )
 {
 	int assigned_id = database->findExistingUnitByName( name );
 
-	if ( assigned_id == -1 ) //create unit since it doesn't exist
+	if ( assigned_id == -1 )  //create unit since it doesn't exist
 	{
 		database->createNewUnit( name, name );
 		assigned_id = database->lastInsertID();
@@ -286,15 +287,15 @@ int createUnit(const QString &name, RecipeDB *database)
 
 void create_properties( RecipeDB *database )
 {
-	IngredientPropertyList property_list; database->loadProperties( &property_list );
+	IngredientPropertyList property_list;
+	database->loadProperties( &property_list );
 
-	for ( int i = 0; !property_data_list[i].name.isEmpty(); i++ )
-	{
-		property_data_list[i].id = property_list.findByName( property_data_list[i].name );
-		if ( property_data_list[i].id == -1 )//doesn't exist, so insert it and set property_data_list[i].id
+	for ( int i = 0; !property_data_list[ i ].name.isEmpty(); i++ ) {
+		property_data_list[ i ].id = property_list.findByName( property_data_list[ i ].name );
+		if ( property_data_list[ i ].id == -1 ) //doesn't exist, so insert it and set property_data_list[i].id
 		{
-			database->addProperty( property_data_list[i].name, property_data_list[i].unit );
-			property_data_list[i].id = database->lastInsertID();
+			database->addProperty( property_data_list[ i ].name, property_data_list[ i ].unit );
+			property_data_list[ i ].id = database->lastInsertID();
 		}
 	}
 }

@@ -1,103 +1,108 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by Unai Garro                                      *
+*   ugarro@users.sourceforge.net                                          *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 #include "ingredientpropertylist.h"
 #include <iostream>
 IngredientPropertyList::IngredientPropertyList()
-{
-}
+{}
 
 
 IngredientPropertyList::~IngredientPropertyList()
+{}
+
+void IngredientPropertyList::add
+	( IngredientProperty &property )
 {
+	list.append ( new IngredientProperty( property ) );
 }
 
-void IngredientPropertyList::add(IngredientProperty &property)
+IngredientProperty* IngredientPropertyList::getFirst( void )
 {
-list.append (new IngredientProperty(property));
+	return ( list.first() );
 }
 
-IngredientProperty* IngredientPropertyList::getFirst(void){
-return(list.first());
-}
-
-IngredientProperty* IngredientPropertyList::getNext(void){
-return(list.next());
-}
-
-IngredientProperty* IngredientPropertyList::getElement(int index){
-return(list.at(index));
-}
-
-void IngredientPropertyList::clear(void)
+IngredientProperty* IngredientPropertyList::getNext( void )
 {
-list.clear();
+	return ( list.next() );
 }
 
-bool IngredientPropertyList::isEmpty(void)
+IngredientProperty* IngredientPropertyList::getElement( int index )
 {
-return(list.isEmpty());
+	return ( list.at( index ) );
 }
 
-int IngredientPropertyList::find(IngredientProperty* it)
+void IngredientPropertyList::clear( void )
 {
-return(list.find(it));
+	list.clear();
 }
 
-int IngredientPropertyList::find(int id)
+bool IngredientPropertyList::isEmpty( void )
 {
-IngredientProperty ip; ip.id=id;
-return(list.find(&ip));
+	return ( list.isEmpty() );
 }
 
-int IngredientPropertyList::findByName(const QString &name)
+int IngredientPropertyList::find( IngredientProperty* it )
 {
-IngredientProperty *prop;
-for ( prop = list.first(); prop; prop = list.next() )
-{
-	if ( prop->name == name )
-		return prop->id;
+	return ( list.find( it ) );
 }
 
-return -1;
+int IngredientPropertyList::find( int id )
+{
+	IngredientProperty ip;
+	ip.id = id;
+	return ( list.find( &ip ) );
 }
 
-IngredientProperty* IngredientPropertyList::at(int pos)
+int IngredientPropertyList::findByName( const QString &name )
 {
-return(list.at(pos));
+	IngredientProperty * prop;
+	for ( prop = list.first(); prop; prop = list.next() ) {
+		if ( prop->name == name )
+			return prop->id;
+	}
+
+	return -1;
 }
 
-void IngredientPropertyList::append(IngredientProperty *property)
+IngredientProperty* IngredientPropertyList::at( int pos )
 {
-list.append (property);
+	return ( list.at( pos ) );
 }
 
-void IngredientPropertyList::divide(int persons)
+void IngredientPropertyList::append( IngredientProperty *property )
 {
-for (IngredientProperty* ip=getFirst();ip;ip=getNext())
-	ip->amount/=persons;
+	list.append ( property );
 }
 
-void IngredientPropertyList::filter(int ingredientID,IngredientPropertyList *filteredList)
+void IngredientPropertyList::divide( int persons )
 {
-filteredList->clear();
-for (IngredientProperty* ip=getFirst();ip;ip=getNext())
-	if (ip->ingredientID==ingredientID) filteredList->add(*ip);
+	for ( IngredientProperty * ip = getFirst();ip;ip = getNext() )
+		ip->amount /= persons;
+}
+
+void IngredientPropertyList::filter( int ingredientID, IngredientPropertyList *filteredList )
+{
+	filteredList->clear();
+	for ( IngredientProperty * ip = getFirst();ip;ip = getNext() )
+		if ( ip->ingredientID == ingredientID )
+			filteredList->add
+			( *ip );
 
 }
 
-int IngredientPropertyList::count(void)
+int IngredientPropertyList::count( void )
 {
-return (list.count());
+	return ( list.count() );
 }
 
-void IngredientPropertyList::remove(IngredientProperty* ip)
+void IngredientPropertyList::remove
+	( IngredientProperty* ip )
 {
-list.remove(ip);
+	list.remove( ip );
 }

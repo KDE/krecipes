@@ -1,61 +1,62 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by Unai Garro                                      *
+*   ugarro@users.sourceforge.net                                          *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 #include "constraintlist.h"
 
 #include "ingredientproperty.h"
 
 ConstraintList::ConstraintList()
-{
-}
+{}
 
 
 ConstraintList::~ConstraintList()
+{}
+
+void ConstraintList::add
+	( Constraint &constraint )
 {
+	list.append ( new Constraint( constraint ) );
 }
 
-void ConstraintList::add(Constraint &constraint)
+Constraint* ConstraintList::getFirst( void )
 {
-list.append (new Constraint(constraint));
+	return ( list.first() );
 }
 
-Constraint* ConstraintList::getFirst(void){
-return(list.first());
-}
-
-Constraint* ConstraintList::getNext(void){
-return(list.next());
-}
-
-Constraint* ConstraintList::getElement(int index){
-return(list.at(index));
-}
-
-void ConstraintList::clear(void)
+Constraint* ConstraintList::getNext( void )
 {
-list.clear();
+	return ( list.next() );
 }
 
-bool ConstraintList::isEmpty(void)
+Constraint* ConstraintList::getElement( int index )
 {
-return(list.isEmpty());
+	return ( list.at( index ) );
 }
 
-int ConstraintList::find(Constraint* it)
+void ConstraintList::clear( void )
 {
-return(list.find(it));
+	list.clear();
+}
+
+bool ConstraintList::isEmpty( void )
+{
+	return ( list.isEmpty() );
+}
+
+int ConstraintList::find( Constraint* it )
+{
+	return ( list.find( it ) );
 }
 
 Constraint* ConstraintList::findByPty( IngredientProperty *pty )
 {
-	for (Constraint* ct=getFirst();ct; ct=getNext())
-	{
+	for ( Constraint * ct = getFirst();ct; ct = getNext() ) {
 		if ( ct->id == pty->id )
 			return ct;
 	}
@@ -65,12 +66,12 @@ Constraint* ConstraintList::findByPty( IngredientProperty *pty )
 
 
 
-Constraint* ConstraintList::at(int pos)
+Constraint* ConstraintList::at( int pos )
 {
-return(list.at(pos));
+	return ( list.at( pos ) );
 }
 
-void ConstraintList::append(Constraint *constraint)
+void ConstraintList::append( Constraint *constraint )
 {
-list.append (constraint);
+	list.append ( constraint );
 }

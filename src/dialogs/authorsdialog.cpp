@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by                                                 *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "authorsdialog.h"
 #include "createelementdialog.h"
@@ -19,47 +19,47 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-AuthorsDialog::AuthorsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
+AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
 
-// Store pointer to database
-database=db;
+	// Store pointer to database
+	database = db;
 
-QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
-//Author List
-authorListView=new StdAuthorListView(this,database,true);
-authorListView->reload();
-layout->addWidget(authorListView);
+	//Author List
+	authorListView = new StdAuthorListView( this, database, true );
+	authorListView->reload();
+	layout->addWidget( authorListView );
 
-//Buttons
-QVBoxLayout* vboxl=new QVBoxLayout(KDialog::spacingHint());
+	//Buttons
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 
-newAuthorButton=new QPushButton(this);
-newAuthorButton->setText(i18n("Create ..."));
-newAuthorButton->setFlat(true);
-vboxl->addWidget(newAuthorButton);
+	newAuthorButton = new QPushButton( this );
+	newAuthorButton->setText( i18n( "Create ..." ) );
+	newAuthorButton->setFlat( true );
+	vboxl->addWidget( newAuthorButton );
 
-removeAuthorButton=new QPushButton(this);
-removeAuthorButton->setText(i18n("Delete"));
-removeAuthorButton->setFlat(true);
-vboxl->addWidget(removeAuthorButton);
-vboxl->addStretch();
+	removeAuthorButton = new QPushButton( this );
+	removeAuthorButton->setText( i18n( "Delete" ) );
+	removeAuthorButton->setFlat( true );
+	vboxl->addWidget( removeAuthorButton );
+	vboxl->addStretch();
 
-layout->addLayout(vboxl);
+	layout->addLayout( vboxl );
 
-//Connect Signals & Slots
+	//Connect Signals & Slots
 
-connect (newAuthorButton,SIGNAL(clicked()),authorListView,SLOT(createNew()));
-connect (removeAuthorButton,SIGNAL(clicked()),authorListView,SLOT(remove()));
+	connect ( newAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( createNew() ) );
+	connect ( removeAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( remove
+		          () ) );
 }
 
 AuthorsDialog::~AuthorsDialog()
-{
-}
+{}
 
 // (Re)loads the data from the database
-void AuthorsDialog::reload(void)
+void AuthorsDialog::reload( void )
 {
 	authorListView->reload();
 }

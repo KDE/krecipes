@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Jason Kivlighn                                  *
- *   mizunoami44@users.sourceforge.net                                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003 by Jason Kivlighn                                  *
+*   mizunoami44@users.sourceforge.net                                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #ifndef SETUPDISPLAY_H
 #define SETUPDISPLAY_H
@@ -31,7 +31,8 @@ class DragArea;
 class KreDisplayItem
 {
 public:
-	KreDisplayItem( QWidget *w = 0 ) : widget(w) {}
+	KreDisplayItem( QWidget *w = 0 ) : widget( w )
+	{}
 
 	//bool operator<(const KreDisplayItem & ) const { return true; } //required to be a map key
 
@@ -45,23 +46,56 @@ typedef QMap< KreDisplayItem*, unsigned int > PropertiesMap;
 class PreciseRect
 {
 public:
-	PreciseRect(double top = 0, double left = 0, double width = 0, double height = 0) :
-	  m_top(top), m_left(left), m_width(width), m_height(height)
+	PreciseRect( double top = 0, double left = 0, double width = 0, double height = 0 ) :
+			m_top( top ), m_left( left ), m_width( width ), m_height( height )
 	{}
-	
-	PreciseRect( const QRect &r ){ m_top = r.top(); m_left = r.left(); m_width = r.width(); m_height = r.height(); }
-	
-	QRect toQRect() const{ return QRect(qRound(m_top),qRound(m_left),qRound(m_width),qRound(m_height)); }
-	
-	double top(){ return m_top; }
-	double left(){ return m_left; }
-	double width(){ return m_width; }
-	double height(){ return m_height; }
-	
-	void setTop(double d){ m_top = d; }
-	void setLeft(double d){ m_left = d; }
-	void setWidth(double d){ m_width = d; }
-	void setHeight(double d){ m_height = d; }
+
+	PreciseRect( const QRect &r )
+	{
+		m_top = r.top();
+		m_left = r.left();
+		m_width = r.width();
+		m_height = r.height();
+	}
+
+	QRect toQRect() const
+	{
+		return QRect( qRound( m_top ), qRound( m_left ), qRound( m_width ), qRound( m_height ) );
+	}
+
+	double top()
+	{
+		return m_top;
+	}
+	double left()
+	{
+		return m_left;
+	}
+	double width()
+	{
+		return m_width;
+	}
+	double height()
+	{
+		return m_height;
+	}
+
+	void setTop( double d )
+	{
+		m_top = d;
+	}
+	void setLeft( double d )
+	{
+		m_left = d;
+	}
+	void setWidth( double d )
+	{
+		m_width = d;
+	}
+	void setHeight( double d )
+	{
+		m_height = d;
+	}
 
 private:
 	double m_top, m_left, m_width, m_height;
@@ -75,24 +109,30 @@ private:
   */
 class SetupDisplay : public DragArea
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
-	
+
 	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64, Border = 128 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
-	virtual QSize sizeHint(void) const;
+	virtual QSize sizeHint( void ) const;
 	QSize minimumSize() const;
-	bool hasChanges() const { return has_changes; };
-	
+	bool hasChanges() const
+	{
+		return has_changes;
+	};
+
 	void setItemShown( QWidget *item, bool visible );
 
-	const PropertiesMap properties() const { return *box_properties; }
-	
+	const PropertiesMap properties() const
+	{
+		return * box_properties;
+	}
+
 signals:
 	void itemVisibilityChanged( QWidget *, bool );
 
@@ -105,7 +145,7 @@ protected slots:
 	void setBorder();
 	void setTextColor();
 	void setFont();
-	void setShown(int id);
+	void setShown( int id );
 	void setAlignment( QAction * );
 
 private:
@@ -124,15 +164,15 @@ private:
 	QSize m_size;
 
 	PropertiesMap *box_properties;
-	QMap<QWidget*,KreDisplayItem*> *widget_item_map;
+	QMap<QWidget*, KreDisplayItem*> *widget_item_map;
 
 	bool has_changes;
 	KPopupMenu *popup;
 
 	// Methods
 	void createWidgets( const Recipe &sample );
-	void toAbsolute(PreciseRect *);
-	void toPercentage(PreciseRect *);
+	void toAbsolute( PreciseRect * );
+	void toPercentage( PreciseRect * );
 
 	void loadFont( KreDisplayItem *, const QDomElement &tag );
 	void loadGeometry( KreDisplayItem *, const QDomElement &tag );

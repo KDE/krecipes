@@ -1,14 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004 by                                            *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2003-2004 by                                            *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "krecipesview.h"
 
@@ -50,354 +50,356 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
-KrecipesView::KrecipesView(QWidget *parent)
-    : QVBox(parent)
+KrecipesView::KrecipesView( QWidget *parent )
+		: QVBox( parent )
 {
-    
-
-    // Init the setup wizard if necessary
-    kdDebug()<<"Beginning wizard"<<endl;
-    wizard();
-    kdDebug()<<"Wizard finished correctly"<<endl;
-    
-    // Show Splash Screen
-
-    KStartupLogo* start_logo = 0L;
-    start_logo = new KStartupLogo();
-    start_logo -> setHideEnabled( true );
-    start_logo->show();
-    start_logo->raise();
-
-    // Initialize Database
-    
-    // Read the database setup
-
-    KConfig *config; config=kapp->config(); config->sync(); 
-    
-
-    // Check if the database type is among those supported
-    // and initialize the database in each case
-    
-   initDatabase(config);
-
-    
-    // Design the GUI
-    splitter=new QHBox(this);
-
-   // Create Left and Right Panels (splitter)
 
 
-    KIconLoader il;
-    leftPanel=new KreMenu(splitter,"leftPanel");
-    rightPanel=new PanelDeco(splitter,"rightPanel",i18n("Find/Edit Recipes"),"filefind");
+	// Init the setup wizard if necessary
+	kdDebug() << "Beginning wizard" << endl;
+	wizard();
+	kdDebug() << "Wizard finished correctly" << endl;
 
-    // Design Left Panel
-    
-     
-         // Buttons
-    buttonsList = new QPtrList<KreMenuButton>();
-    buttonsList->setAutoDelete( TRUE );
+	// Show Splash Screen
 
-    button0=new KreMenuButton(leftPanel,SelectP);
-    button0->setIconSet(il.loadIconSet("filefind", KIcon::Panel, 32));
-    buttonsList->append(button0);
+	KStartupLogo* start_logo = 0L;
+	start_logo = new KStartupLogo();
+	start_logo -> setHideEnabled( true );
+	start_logo->show();
+	start_logo->raise();
 
-    button1=new KreMenuButton(leftPanel,ShoppingP);
-    button1->setIconSet(il.loadIconSet( "trolley", KIcon::Panel,32 ));
-    buttonsList->append(button1);
-    
-    button7=new KreMenuButton(leftPanel,DietP);
-    button7->setIconSet(il.loadIconSet( "diet", KIcon::Panel,32));
-    buttonsList->append(button7);
-    
-    button8=new KreMenuButton(leftPanel,MatcherP);
-    button8->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32));
-    buttonsList->append(button8);
-    
-    
-    // Submenus
-    dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
-    
-    button2=new KreMenuButton(leftPanel,IngredientsP,dataMenu);
-    button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Panel,32 ));
-    //buttonsList->append(button2);
+	// Initialize Database
 
-    button3=new KreMenuButton(leftPanel,PropertiesP,dataMenu);
-    button3->setIconSet(il.loadIconSet( "properties", KIcon::Panel,32 ));
-    buttonsList->append(button3);
+	// Read the database setup
 
-    button4=new KreMenuButton(leftPanel,UnitsP,dataMenu);
-    button4->setIconSet(il.loadIconSet( "units", KIcon::Panel,32 ));
-    buttonsList->append(button4);
-    
-    button9=new KreMenuButton(leftPanel,PrepMethodsP,dataMenu);
-    button9->setIconSet(il.loadIconSet( "ICON PLEASE", KIcon::Panel,32 ));
-    buttonsList->append(button9);
-
-    button5=new KreMenuButton(leftPanel,CategoriesP,dataMenu);
-    button5->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32 ));
-    buttonsList->append(button5);
-
-    button6=new KreMenuButton(leftPanel,AuthorsP,dataMenu);
-    button6->setIconSet(il.loadIconSet( "personal", KIcon::Panel,32 ));
-    buttonsList->append(button6);
-
-    contextButton = new QPushButton(leftPanel, "contextButton");
-    contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Panel, 32));
-    contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
-    contextButton->setPaletteBackgroundColor(contextButton->paletteBackgroundColor().light(140));
-    contextButton->setFlat(true);
-
-    contextHelp = new QWidget(leftPanel, "contextHelp");
-    contextHelp->setPaletteBackgroundColor(contextHelp->paletteBackgroundColor().dark(120));
-    contextHelp->resize(leftPanel->size());
-    contextHelp->hide();
-
-    QGridLayout* contextLayout = new QGridLayout( contextHelp, 0, 0, 0, 0);
-    contextTitle = new QLabel(contextHelp, "contextTitle");
-    contextTitle->setTextFormat(Qt::RichText);
-    contextLayout->addMultiCellWidget(contextTitle, 0, 0, 0, 2);
-    contextClose = new QPushButton(contextHelp, "contextClose");
-    contextClose->setFixedSize(QSize(16,16));
-    contextClose->setIconSet(il.loadIconSet("fileclose", KIcon::Small, 16));
-    contextClose->setPaletteBackgroundColor(contextClose->paletteBackgroundColor().light(140));
-
-    contextLayout->addWidget(contextClose, 0, 2);
-    contextText = new KTextBrowser(contextHelp, "contextText");
-    contextText->setPaletteBackgroundColor(contextText->paletteBackgroundColor().light(140));
-    contextText->setTextFormat(Qt::RichText);
-    contextText->setReadOnly(true);
-    contextText->setWordWrap(QTextEdit::WidgetWidth);
-    contextLayout->addMultiCellWidget(contextText, 1, 4, 0, 2);
-
-    // Right Panel Widgets
-    inputPanel=new RecipeInputDialog(rightPanel,database);
-    viewPanel=new RecipeViewDialog(rightPanel,database);
-    selectPanel=new SelectRecipeDialog(rightPanel,database);
-    ingredientsPanel=new IngredientsDialog(rightPanel,database);
-    propertiesPanel=new PropertiesDialog(rightPanel,database);
-    unitsPanel=new UnitsDialog(rightPanel,database);
-    shoppingListPanel=new ShoppingListDialog(rightPanel,database);
-    dietPanel=new DietWizardDialog(rightPanel,database);
-    categoriesPanel=new CategoriesEditorDialog(rightPanel,database);
-    authorsPanel=new AuthorsDialog(rightPanel,database);
-    prepMethodsPanel=new PrepMethodsDialog(rightPanel,database);
-    ingredientMatcherPanel=new IngredientMatcherDialog(rightPanel,database);
-    
-    // Use to keep track of the panels
-    panelMap.insert(inputPanel,RecipeEdit);
-    panelMap.insert(viewPanel,RecipeView);
-    panelMap.insert(selectPanel,SelectP);
-    panelMap.insert(ingredientsPanel,IngredientsP);
-    panelMap.insert(propertiesPanel,PropertiesP);
-    panelMap.insert(unitsPanel,UnitsP);
-    panelMap.insert(shoppingListPanel,ShoppingP);
-    panelMap.insert(dietPanel,DietP);
-    panelMap.insert(categoriesPanel,CategoriesP);
-    panelMap.insert(authorsPanel,AuthorsP);
-    panelMap.insert(prepMethodsPanel,PrepMethodsP);
-    panelMap.insert(ingredientMatcherPanel,MatcherP);
-
-    // i18n
-    translate();
-
-    // Initialize Variables
-    recipeButton=0;
+	KConfig *config;
+	config = kapp->config();
+	config->sync();
 
 
+	// Check if the database type is among those supported
+	// and initialize the database in each case
 
-    // Connect Signals from Left Panel to slotSetPanel()
-     connect( leftPanel, SIGNAL(clicked(KrePanel)),this, SLOT(slotSetPanel(KrePanel)) );
-
-     connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
-     connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(raise()) );
-     connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
-
-     connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
+	initDatabase( config );
 
 
-    // Retransmit signal to parent to Enable/Disable the Save Button
-    connect (inputPanel, SIGNAL(enableSaveOption(bool)), this, SIGNAL(enableSaveOption(bool)));
+	// Design the GUI
+	splitter = new QHBox( this );
 
-    // Create a new button when a recipe is unsaved
-    connect (inputPanel, SIGNAL(createButton(QWidget*,const QString &)), this, SLOT(addRecipeButton(QWidget*,const QString &)));
+	// Create Left and Right Panels (splitter)
 
-    // Connect Signals from selectPanel (SelectRecipeDialog)
 
-    connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
-    connect (selectPanel, SIGNAL(recipesSelected(const QValueList<int>&,int)),this, SLOT(actionRecipes(const QValueList<int>&,int)));
-    
-    // Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
-    
-    connect (ingredientMatcherPanel, SIGNAL(recipeSelected(int,int)),SLOT(actionRecipe(int,int)));
+	KIconLoader il;
+	leftPanel = new KreMenu( splitter, "leftPanel" );
+	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "filefind" );
 
-    // Close a recipe when requested (just switch panels)
-    connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));
+	// Design Left Panel
 
-    // Show a recipe when requested (just switch panels)
-    connect(inputPanel,SIGNAL(showRecipe(int)),this,SLOT(showRecipe(int)));
 
-    // Create a new shopping list when a new diet is generated and accepted
-    connect(dietPanel,SIGNAL(dietReady()),this,SLOT(createShoppingListFromDiet()));
+	// Buttons
+	buttonsList = new QPtrList<KreMenuButton>();
+	buttonsList->setAutoDelete( TRUE );
 
-    // Place the Tip Button in correct position when the left pane is resized
-    connect(leftPanel,SIGNAL(resized(int,int)),this,SLOT(moveTipButton(int,int)));
+	button0 = new KreMenuButton( leftPanel, SelectP );
+	button0->setIconSet( il.loadIconSet( "filefind", KIcon::Panel, 32 ) );
+	buttonsList->append( button0 );
 
-    // Resize the Tip Viewer properly
-    connect(leftPanel,SIGNAL(resized(int,int)),contextHelp,SLOT(resize(int,int)));
+	button1 = new KreMenuButton( leftPanel, ShoppingP );
+	button1->setIconSet( il.loadIconSet( "trolley", KIcon::Panel, 32 ) );
+	buttonsList->append( button1 );
 
-    connect(rightPanel,SIGNAL(panelRaised(QWidget*,QWidget*)),SLOT(panelRaised(QWidget*,QWidget*)));
+	button7 = new KreMenuButton( leftPanel, DietP );
+	button7->setIconSet( il.loadIconSet( "diet", KIcon::Panel, 32 ) );
+	buttonsList->append( button7 );
 
-    // Close Splash Screen
-    sleep(2);
-    delete start_logo;
+	button8 = new KreMenuButton( leftPanel, MatcherP );
+	button8->setIconSet( il.loadIconSet( "categories", KIcon::Panel, 32 ) );
+	buttonsList->append( button8 );
+
+
+	// Submenus
+	dataMenu = leftPanel->createSubMenu( i18n( "Data" ), "2rightarrow" );
+
+	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
+	button2->setIconSet( il.loadIconSet( "ingredients", KIcon::Panel, 32 ) );
+	//buttonsList->append(button2);
+
+	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
+	button3->setIconSet( il.loadIconSet( "properties", KIcon::Panel, 32 ) );
+	buttonsList->append( button3 );
+
+	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
+	button4->setIconSet( il.loadIconSet( "units", KIcon::Panel, 32 ) );
+	buttonsList->append( button4 );
+
+	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
+	button9->setIconSet( il.loadIconSet( "ICON PLEASE", KIcon::Panel, 32 ) );
+	buttonsList->append( button9 );
+
+	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
+	button5->setIconSet( il.loadIconSet( "categories", KIcon::Panel, 32 ) );
+	buttonsList->append( button5 );
+
+	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
+	button6->setIconSet( il.loadIconSet( "personal", KIcon::Panel, 32 ) );
+	buttonsList->append( button6 );
+
+	contextButton = new QPushButton( leftPanel, "contextButton" );
+	contextButton->setIconSet( il.loadIconSet( "krectip", KIcon::Panel, 32 ) );
+	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
+	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );
+	contextButton->setFlat( true );
+
+	contextHelp = new QWidget( leftPanel, "contextHelp" );
+	contextHelp->setPaletteBackgroundColor( contextHelp->paletteBackgroundColor().dark( 120 ) );
+	contextHelp->resize( leftPanel->size() );
+	contextHelp->hide();
+
+	QGridLayout* contextLayout = new QGridLayout( contextHelp, 0, 0, 0, 0 );
+	contextTitle = new QLabel( contextHelp, "contextTitle" );
+	contextTitle->setTextFormat( Qt::RichText );
+	contextLayout->addMultiCellWidget( contextTitle, 0, 0, 0, 2 );
+	contextClose = new QPushButton( contextHelp, "contextClose" );
+	contextClose->setFixedSize( QSize( 16, 16 ) );
+	contextClose->setIconSet( il.loadIconSet( "fileclose", KIcon::Small, 16 ) );
+	contextClose->setPaletteBackgroundColor( contextClose->paletteBackgroundColor().light( 140 ) );
+
+	contextLayout->addWidget( contextClose, 0, 2 );
+	contextText = new KTextBrowser( contextHelp, "contextText" );
+	contextText->setPaletteBackgroundColor( contextText->paletteBackgroundColor().light( 140 ) );
+	contextText->setTextFormat( Qt::RichText );
+	contextText->setReadOnly( true );
+	contextText->setWordWrap( QTextEdit::WidgetWidth );
+	contextLayout->addMultiCellWidget( contextText, 1, 4, 0, 2 );
+
+	// Right Panel Widgets
+	inputPanel = new RecipeInputDialog( rightPanel, database );
+	viewPanel = new RecipeViewDialog( rightPanel, database );
+	selectPanel = new SelectRecipeDialog( rightPanel, database );
+	ingredientsPanel = new IngredientsDialog( rightPanel, database );
+	propertiesPanel = new PropertiesDialog( rightPanel, database );
+	unitsPanel = new UnitsDialog( rightPanel, database );
+	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
+	dietPanel = new DietWizardDialog( rightPanel, database );
+	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
+	authorsPanel = new AuthorsDialog( rightPanel, database );
+	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
+	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
+
+	// Use to keep track of the panels
+	panelMap.insert( inputPanel, RecipeEdit );
+	panelMap.insert( viewPanel, RecipeView );
+	panelMap.insert( selectPanel, SelectP );
+	panelMap.insert( ingredientsPanel, IngredientsP );
+	panelMap.insert( propertiesPanel, PropertiesP );
+	panelMap.insert( unitsPanel, UnitsP );
+	panelMap.insert( shoppingListPanel, ShoppingP );
+	panelMap.insert( dietPanel, DietP );
+	panelMap.insert( categoriesPanel, CategoriesP );
+	panelMap.insert( authorsPanel, AuthorsP );
+	panelMap.insert( prepMethodsPanel, PrepMethodsP );
+	panelMap.insert( ingredientMatcherPanel, MatcherP );
+
+	// i18n
+	translate();
+
+	// Initialize Variables
+	recipeButton = 0;
+
+
+
+	// Connect Signals from Left Panel to slotSetPanel()
+	connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
+
+	connect( contextButton, SIGNAL( clicked() ), contextHelp, SLOT( show() ) );
+	connect( contextButton, SIGNAL( clicked() ), contextHelp, SLOT( raise() ) );
+	connect( contextClose, SIGNAL( clicked() ), contextHelp, SLOT( close() ) );
+
+	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
+
+
+	// Retransmit signal to parent to Enable/Disable the Save Button
+	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
+
+	// Create a new button when a recipe is unsaved
+	connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
+
+	// Connect Signals from selectPanel (SelectRecipeDialog)
+
+	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
+	connect ( selectPanel, SIGNAL( recipesSelected( const QValueList<int>&, int ) ), this, SLOT( actionRecipes( const QValueList<int>&, int ) ) );
+
+	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
+
+	connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
+
+	// Close a recipe when requested (just switch panels)
+	connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
+
+	// Show a recipe when requested (just switch panels)
+	connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
+
+	// Create a new shopping list when a new diet is generated and accepted
+	connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
+
+	// Place the Tip Button in correct position when the left pane is resized
+	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
+
+	// Resize the Tip Viewer properly
+	connect( leftPanel, SIGNAL( resized( int, int ) ), contextHelp, SLOT( resize( int, int ) ) );
+
+	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
+
+	// Close Splash Screen
+	sleep( 2 );
+	delete start_logo;
 }
 
 KrecipesView::~KrecipesView()
 {
-delete buttonsList;
-delete viewPanel; //manually delete viewPanel because we need to be sure it is deleted
-                  //before the database is because its destructor uses 'database'
-delete database;
+	delete buttonsList;
+	delete viewPanel; //manually delete viewPanel because we need to be sure it is deleted
+	//before the database is because its destructor uses 'database'
+	delete database;
 }
 
-void KrecipesView::questionRerunWizard(const QString &message, const QString &error)
+void KrecipesView::questionRerunWizard( const QString &message, const QString &error )
 {
-QString yesNoMessage=message+" "+i18n("\nWould you like to run the setup wizard again? Otherwise, the application will be closed.");
-int answer=KMessageBox::questionYesNo(this,yesNoMessage);
+	QString yesNoMessage = message + " " + i18n( "\nWould you like to run the setup wizard again? Otherwise, the application will be closed." );
+	int answer = KMessageBox::questionYesNo( this, yesNoMessage );
 
-	if (answer==KMessageBox::Yes) wizard(true);
-	else
-		{
-		kdError()<<error<<". "<<i18n("Exiting")<<endl;
-		exit(1);
-		}
+	if ( answer == KMessageBox::Yes )
+		wizard( true );
+	else {
+		kdError() << error << ". " << i18n( "Exiting" ) << endl;
+		exit( 1 );
+	}
 }
 
-void KrecipesView::translate(){
-  button0->setTitle(i18n("Find/Edit Recipes"));
-  button1->setTitle(i18n("Shopping List"));
-  button2->setTitle(i18n("Ingredients"));
-  button3->setTitle(i18n("Properties"));
-  button4->setTitle(i18n("Units"));
-  button9->setTitle(i18n("Preparation Methods"));
-  button5->setTitle(i18n("Categories"));
-  button6->setTitle(i18n("Authors"));
-  button7->setTitle(i18n("Diet Helper"));
-  button8->setTitle(i18n("Ingredient Matcher"));
+void KrecipesView::translate()
+{
+	button0->setTitle( i18n( "Find/Edit Recipes" ) );
+	button1->setTitle( i18n( "Shopping List" ) );
+	button2->setTitle( i18n( "Ingredients" ) );
+	button3->setTitle( i18n( "Properties" ) );
+	button4->setTitle( i18n( "Units" ) );
+	button9->setTitle( i18n( "Preparation Methods" ) );
+	button5->setTitle( i18n( "Categories" ) );
+	button6->setTitle( i18n( "Authors" ) );
+	button7->setTitle( i18n( "Diet Helper" ) );
+	button8->setTitle( i18n( "Ingredient Matcher" ) );
 }
 
 void KrecipesView::print()
 {
-    // do the actual printing, here
-    // p->drawText(etc..)
+	// do the actual printing, here
+	// p->drawText(etc..)
 
-    viewPanel->print();
+	viewPanel->print();
 }
 
 
-void KrecipesView::slotSetTitle(const QString& title)
+void KrecipesView::slotSetTitle( const QString& title )
 {
-    emit signalChangeCaption(title);
+	emit signalChangeCaption( title );
 }
 
 // Function to switch panels
-void KrecipesView::slotSetPanel(KrePanel p)
+void KrecipesView::slotSetPanel( KrePanel p )
 {
-	switch (p)
-	{
-		case SelectP:
-			rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
-			rightPanel->raise(selectPanel);
-			break;
-		case ShoppingP:
-			rightPanel->setHeader(i18n("Shopping List"),"trolley");
-			rightPanel->raise(shoppingListPanel);
-			break;
-		case DietP:
-			rightPanel->setHeader(i18n("Diet Helper"),"diet");
-			rightPanel->raise(dietPanel);
-			break;
-		case MatcherP:
-			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
-			rightPanel->raise(ingredientMatcherPanel);
-			break;
+	switch ( p ) {
+	case SelectP:
+		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "filefind" );
+		rightPanel->raise( selectPanel );
+		break;
+	case ShoppingP:
+		rightPanel->setHeader( i18n( "Shopping List" ), "trolley" );
+		rightPanel->raise( shoppingListPanel );
+		break;
+	case DietP:
+		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
+		rightPanel->raise( dietPanel );
+		break;
+	case MatcherP:
+		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "categories" );
+		rightPanel->raise( ingredientMatcherPanel );
+		break;
 
-		case IngredientsP:
-			rightPanel->setHeader(i18n("Ingredients"),"ingredients");
-			rightPanel->raise(ingredientsPanel);
-			break;
-		case PropertiesP:
-			rightPanel->setHeader(i18n("Properties"),"properties");
-			rightPanel->raise(propertiesPanel);
-			break;
-		case UnitsP:
-			rightPanel->setHeader(i18n("Units"),"units");
-			rightPanel->raise(unitsPanel);
-			break;
-		case PrepMethodsP:
-			rightPanel->setHeader(i18n("Preparation Methods"),"GIVE ME AN ICON :p");
-			rightPanel->raise(prepMethodsPanel);
-			break;
-		case CategoriesP:
-			rightPanel->setHeader(i18n("Categories"),"categories");
-			rightPanel->raise(categoriesPanel);
-			break;
-		case AuthorsP:
-			rightPanel->setHeader(i18n("Authors"),"personal");
-			rightPanel->raise(authorsPanel);
-			break;
-		case ContextHelp:
-			break;
-		case RecipeEdit:
-			rightPanel->setHeader(i18n("Edit Recipe"),"edit");
-			rightPanel->raise(inputPanel);
-			break;
-		case RecipeView:
-			rightPanel->setHeader(i18n("View Recipe"),"filefind");
-			rightPanel->raise(viewPanel);
-			break;
+	case IngredientsP:
+		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
+		rightPanel->raise( ingredientsPanel );
+		break;
+	case PropertiesP:
+		rightPanel->setHeader( i18n( "Properties" ), "properties" );
+		rightPanel->raise( propertiesPanel );
+		break;
+	case UnitsP:
+		rightPanel->setHeader( i18n( "Units" ), "units" );
+		rightPanel->raise( unitsPanel );
+		break;
+	case PrepMethodsP:
+		rightPanel->setHeader( i18n( "Preparation Methods" ), "GIVE ME AN ICON :p" );
+		rightPanel->raise( prepMethodsPanel );
+		break;
+	case CategoriesP:
+		rightPanel->setHeader( i18n( "Categories" ), "categories" );
+		rightPanel->raise( categoriesPanel );
+		break;
+	case AuthorsP:
+		rightPanel->setHeader( i18n( "Authors" ), "personal" );
+		rightPanel->raise( authorsPanel );
+		break;
+	case ContextHelp:
+		break;
+	case RecipeEdit:
+		rightPanel->setHeader( i18n( "Edit Recipe" ), "edit" );
+		rightPanel->raise( inputPanel );
+		break;
+	case RecipeView:
+		rightPanel->setHeader( i18n( "View Recipe" ), "filefind" );
+		rightPanel->raise( viewPanel );
+		break;
 	}
 
-	setContextHelp(p);
+	setContextHelp( p );
 }
 
-bool KrecipesView::save(void)
+bool KrecipesView::save( void )
 {
-return inputPanel->save();
+	return inputPanel->save();
 }
 
 /*!
     \fn KrecipesView::exportRecipe()
  */
 void KrecipesView::exportRecipe()
-{/*
-	if ( !inputPanel->everythingSaved() )
-	{
-		Recipe *recipe;  selectPanel->getCurrentRecipe( recipe );
-		if ( recipe->recipeID == inputPanel->loadedRecipeID() )
+{ /*
+		if ( !inputPanel->everythingSaved() )
 		{
-			switch( KMessageBox::questionYesNoCancel( this,
-			  i18n("This recipe has unsaved changes.\n"
-			  "In order to have these changes saved to a file, this recipe must first be saved to the database.\n"
-			  "Do you want to save this recipe to a file with or without these changes?"),
-			  i18n("Unsaved Changes") ) )
+			Recipe *recipe;  selectPanel->getCurrentRecipe( recipe );
+			if ( recipe->recipeID == inputPanel->loadedRecipeID() )
 			{
-			case KMessageBox::Yes: save();
-			case KMessageBox::No: selectPanel->slotExportRecipe();
-			case KMessageBox::Cancel: break;
-			default: break;
+				switch( KMessageBox::questionYesNoCancel( this,
+				  i18n("This recipe has unsaved changes.\n"
+				  "In order to have these changes saved to a file, this recipe must first be saved to the database.\n"
+				  "Do you want to save this recipe to a file with or without these changes?"),
+				  i18n("Unsaved Changes") ) )
+				{
+				case KMessageBox::Yes: save();
+				case KMessageBox::No: selectPanel->slotExportRecipe();
+				case KMessageBox::Cancel: break;
+				default: break;
+				}
 			}
 		}
-	}
-	else*/
-	QWidget *vis_panel = rightPanel->visiblePanel();
+		else*/
+	QWidget * vis_panel = rightPanel->visiblePanel();
 	if ( vis_panel == viewPanel ) {
 		if ( viewPanel->recipesLoaded() > 0 ) {
 			if ( viewPanel->recipesLoaded() == 1 )
-				RecipeActionsHandler::exportRecipes(viewPanel->currentRecipes(),i18n("Export Recipe"),database->recipeTitle(viewPanel->currentRecipes()[0]),database);
+				RecipeActionsHandler::exportRecipes( viewPanel->currentRecipes(), i18n( "Export Recipe" ), database->recipeTitle( viewPanel->currentRecipes() [ 0 ] ), database );
 			else
-				RecipeActionsHandler::exportRecipes(viewPanel->currentRecipes(),i18n("Export Recipe"),i18n("Recipes"),database);
+				RecipeActionsHandler::exportRecipes( viewPanel->currentRecipes(), i18n( "Export Recipe" ), i18n( "Recipes" ), database );
 		}
 	}
 	else if ( vis_panel == selectPanel ) {
@@ -405,218 +407,223 @@ void KrecipesView::exportRecipe()
 	}
 }
 
-void KrecipesView::actionRecipe(int recipeID, int action)
+void KrecipesView::actionRecipe( int recipeID, int action )
 {
-switch (action) {
-case 0: //Show
-{
-	showRecipe(recipeID);
-	break;
-}
-case 1: // Edit
-{
-	if ( !inputPanel->everythingSaved() )
-	{
-		switch( KMessageBox::questionYesNoCancel( this,
-		  QString(i18n("A recipe contains unsaved changes.\n"
-		  "Do you want to save changes made to this recipe before editing another recipe?")),
-		   i18n("Unsaved changes") ) )
+	switch ( action ) {
+	case 0:  //Show
 		{
-			case KMessageBox::Yes: inputPanel->save(); break;
-			case KMessageBox::No: break;
-			case KMessageBox::Cancel: return;
+			showRecipe( recipeID );
+			break;
+		}
+	case 1:  // Edit
+		{
+			if ( !inputPanel->everythingSaved() )
+			{
+				switch ( KMessageBox::questionYesNoCancel( this,
+				         QString( i18n( "A recipe contains unsaved changes.\n"
+				                        "Do you want to save changes made to this recipe before editing another recipe?" ) ),
+				         i18n( "Unsaved changes" ) ) ) {
+				case KMessageBox::Yes:
+					inputPanel->save();
+					break;
+				case KMessageBox::No:
+					break;
+				case KMessageBox::Cancel:
+					return ;
+				}
+			}
+
+			inputPanel->loadRecipe( recipeID );
+			slotSetPanel( RecipeEdit );
+			break;
+		}
+	case 2:  //Remove
+		{
+			switch ( KMessageBox::questionYesNo( this,
+			                                     QString( i18n( "Are you sure you want to permanently remove the selected recipe?" ) ),
+			                                     i18n( "Confirm remove" ) ) )
+			{
+			case KMessageBox::Yes:
+				database->removeRecipe( recipeID );
+				selectPanel->reload();
+				break;
+			case KMessageBox::No:
+				break;
+			}
+			break;
+		}
+	case 3:  //Add to shopping list
+		{
+			shoppingListPanel->addRecipeToShoppingList( recipeID );
+			break;
 		}
 	}
-
-	inputPanel->loadRecipe(recipeID);
-	slotSetPanel(RecipeEdit);
-	break;
-}
-case 2: //Remove
-{
-	switch( KMessageBox::questionYesNo( this,
-	  QString(i18n("Are you sure you want to permanently remove the selected recipe?")),
-	  i18n("Confirm remove") ) )
-	{
-		case KMessageBox::Yes:
-			database->removeRecipe(recipeID);
-			selectPanel->reload();
-			break;
-		case KMessageBox::No: break;
-	}
-	break;
-}
-case 3: //Add to shopping list
-{
-	shoppingListPanel->addRecipeToShoppingList(recipeID);
-	break;
-}
-}
 }
 
 void KrecipesView::actionRecipes( const QValueList<int> &ids, int action )
 {
-	if ( action == 0 ) //show
+	if ( action == 0 )  //show
 	{
-		showRecipes(ids);
+		showRecipes( ids );
 	}
 }
 
 
-void KrecipesView::createNewRecipe(void)
+void KrecipesView::createNewRecipe( void )
 {
-if ( !inputPanel->everythingSaved() )
-{
-	switch( KMessageBox::questionYesNoCancel( this,
-	  QString(i18n("A recipe contains unsaved changes.\n"
-	  "Do you want to save changes made to this recipe before creating a new recipe?")),
-	   i18n("Unsaved changes") ) )
-	{
-		case KMessageBox::Yes: inputPanel->save(); break;
-		case KMessageBox::No: break;
-		case KMessageBox::Cancel: return;
-	}
-}
-
-inputPanel->newRecipe();
-slotSetPanel(RecipeEdit);
-}
-
-void KrecipesView::createNewElement(void)
-{
-//this is inconstant as the program stands...
-/*if (rightPanel->visiblePanel())==4) //Properties Panel is the active one
-{
-propertiesPanel->createNewProperty();
-}
-else*/{
-  createNewRecipe();
-  }
-}
-
-void KrecipesView::wizard(bool force)
-{
-KConfig *config=kapp->config();
-config->setGroup("Wizard");
-bool setupDone=config->readBoolEntry("SystemSetup",false);
-
-QString setupVersion=config->readEntry("Version","0.3");  // By default assume it's 0.3. This parameter didn't exist in that version yet.
-
-if (!setupDone || (setupVersion.toDouble()<0.5) || force) // The config structure changed in version 0.4 to have DBType and Config Structure version
-{
-
-bool setupUser,initData,doUSDAImport,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
-bool isRemote;
-
-SetupWizard *setupWizard=new SetupWizard(this);
-if(setupWizard->exec()== QDialog::Accepted)
-{
-KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
-dbType=config->readEntry("Type","SQLite");
-
-kdDebug()<<"Setting up"<<endl;
-setupWizard->getOptions(setupUser,initData,doUSDAImport);
-
-// Setup user if necessary
-if ((dbType=="MySQL"||dbType=="PostgreSQL") && setupUser) // Don't setup user if checkbox of existing user... was set
-	{
-	kdDebug()<<"Setting up user\n";
-	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass,dbType);
-	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
-
-	if (!adminEnabled) // Use root without password
-	{
-	kdDebug()<<"Using default admin\n";
-	if ( dbType=="MySQL" )
-		adminUser="root";
-	else if (dbType=="PostgreSQL")
-		adminUser="postgres";
-	adminPass=QString::null;
-	}
-	if (!isRemote) // Use localhost
-	{
-	kdDebug()<<"Using localhost\n";
-	host="localhost";
-	client="localhost";
-	}
-
-	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
-	}
-
-// Initialize database with data if requested
-if (initData)
-	{
-	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
-	initializeData(host,dbName,user,pass); // Populate data as normal user
-	}
-	
-if (doUSDAImport)
-	{
-        // Open the DB first
-	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass); //only used if needed by backend
-	RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
-
-	// Import the data
-	if (db)
-	{
-		db->connect();
-
-		if (db->ok())
-		{
-			KProgressDialog progress( this, "progress_dlg", i18n("Nutrient Import"), i18n("Importing USDA nutrient data"), true );
-			db->importUSDADatabase( &progress );
+	if ( !inputPanel->everythingSaved() ) {
+		switch ( KMessageBox::questionYesNoCancel( this,
+		         QString( i18n( "A recipe contains unsaved changes.\n"
+		                        "Do you want to save changes made to this recipe before creating a new recipe?" ) ),
+		         i18n( "Unsaved changes" ) ) ) {
+		case KMessageBox::Yes:
+			inputPanel->save();
+			break;
+		case KMessageBox::No:
+			break;
+		case KMessageBox::Cancel:
+			return ;
 		}
-		
-		//close the database whether ok() or not
-		delete db;
-	}
 	}
 
-}
-delete setupWizard;
-}
+	inputPanel->newRecipe();
+	slotSetPanel( RecipeEdit );
 }
 
-
-void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
+void KrecipesView::createNewElement( void )
 {
-QString user = adminUser;
-QString pass = adminPass;
-if ( user.isNull() ) {
-	pass = QString::null;
-
-	if ( dbType=="PostgreSQL" )
-		user = "postgres";
-	else if ( dbType=="MySQL" )
-		user = "root";
-
-	kdDebug()<<"Open db as "<<user<<", with no password\n";
-}
-else
-	kdDebug()<<"Open db as:"<<user<<",*** with password ****\n";
-
-RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
-if ( db ) {
-	db->connect();
-	if ( db->ok() )
-		db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
-	else
-		questionRerunWizard(db->err(), i18n("Unable to setup database"));
-}
-
-delete db; //it closes the db automatically
-}
-
-
-void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
-{
-	RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
-	if ( !db )
+	//this is inconstant as the program stands...
+	/*if (rightPanel->visiblePanel())==4) //Properties Panel is the active one
 	{
-		kdError()<<i18n("Code error. No DB support has been included. Exiting")<<endl;
-		exit(1);
+	propertiesPanel->createNewProperty();
 	}
-	
+	else*/{
+		createNewRecipe();
+	}
+}
+
+void KrecipesView::wizard( bool force )
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "Wizard" );
+	bool setupDone = config->readBoolEntry( "SystemSetup", false );
+
+	QString setupVersion = config->readEntry( "Version", "0.3" );  // By default assume it's 0.3. This parameter didn't exist in that version yet.
+
+	if ( !setupDone || ( setupVersion.toDouble() < 0.5 ) || force )  // The config structure changed in version 0.4 to have DBType and Config Structure version
+	{
+
+		bool setupUser, initData, doUSDAImport, adminEnabled;
+		QString adminUser, adminPass, user, pass, host, client, dbName;
+		bool isRemote;
+
+		SetupWizard *setupWizard = new SetupWizard( this );
+		if ( setupWizard->exec() == QDialog::Accepted )
+		{
+			KConfig * config;
+			config = kapp->config();
+			config->sync();
+			config->setGroup( "DBType" );
+			dbType = config->readEntry( "Type", "SQLite" );
+
+			kdDebug() << "Setting up" << endl;
+			setupWizard->getOptions( setupUser, initData, doUSDAImport );
+
+			// Setup user if necessary
+			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
+			{
+				kdDebug() << "Setting up user\n";
+				setupWizard->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass );
+
+				if ( !adminEnabled )  // Use root without password
+				{
+					kdDebug() << "Using default admin\n";
+					if ( dbType == "MySQL" )
+						adminUser = "root";
+					else if ( dbType == "PostgreSQL" )
+						adminUser = "postgres";
+					adminPass = QString::null;
+				}
+				if ( !isRemote )  // Use localhost
+				{
+					kdDebug() << "Using localhost\n";
+					host = "localhost";
+					client = "localhost";
+				}
+
+				setupUserPermissions( host, client, dbName, user, pass, adminUser, adminPass );
+			}
+
+			// Initialize database with data if requested
+			if ( initData ) {
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass );
+				initializeData( host, dbName, user, pass ); // Populate data as normal user
+			}
+
+			if ( doUSDAImport ) {
+				// Open the DB first
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass ); //only used if needed by backend
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+
+				// Import the data
+				if ( db ) {
+					db->connect();
+
+					if ( db->ok() ) {
+						KProgressDialog progress( this, "progress_dlg", i18n( "Nutrient Import" ), i18n( "Importing USDA nutrient data" ), true );
+						db->importUSDADatabase( &progress );
+					}
+
+					//close the database whether ok() or not
+					delete db;
+				}
+			}
+
+		}
+		delete setupWizard;
+	}
+}
+
+
+void KrecipesView::setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser, const QString &adminPass )
+{
+	QString user = adminUser;
+	QString pass = adminPass;
+	if ( user.isNull() ) {
+		pass = QString::null;
+
+		if ( dbType == "PostgreSQL" )
+			user = "postgres";
+		else if ( dbType == "MySQL" )
+			user = "root";
+
+		kdDebug() << "Open db as " << user << ", with no password\n";
+	}
+	else
+		kdDebug() << "Open db as:" << user << ",*** with password ****\n";
+
+	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+	if ( db ) {
+		db->connect();
+		if ( db->ok() )
+			db->givePermissions( dbName, newUser, newPass, client ); // give permissions to the user
+		else
+			questionRerunWizard( db->err(), i18n( "Unable to setup database" ) );
+	}
+
+	delete db; //it closes the db automatically
+}
+
+
+void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass )
+{
+	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+	if ( !db ) {
+		kdError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
+		exit( 1 );
+	}
+
 	db->connect();
 
 	if ( db->ok() ) {
@@ -627,253 +634,251 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	delete db;
 }
 
-void KrecipesView::addRecipeButton(QWidget *w,const QString &title)
+void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 {
-recipeWidget=w;
-KIconLoader il;
-if (!recipeButton)
-{
-	recipeButton=new KreMenuButton(leftPanel,RecipeEdit);
+	recipeWidget = w;
+	KIconLoader il;
+	if ( !recipeButton ) {
+		recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
 
-	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
+		recipeButton->setIconSet( il.loadIconSet( "filesave", KIcon::Small ) );
 
-	QString short_title = title.left(20);
-	if ( title.length() > 20 )
-		short_title.append("...");
+		QString short_title = title.left( 20 );
+		if ( title.length() > 20 )
+			short_title.append( "..." );
 
-	recipeButton->setTitle(short_title);
-	if(contextHelp->isShown())
-		{
-		contextHelp->hide();
+		recipeButton->setTitle( short_title );
+		if ( contextHelp->isShown() ) {
+			contextHelp->hide();
 		}
 
-	buttonsList->append(recipeButton);
-	leftPanel->highlightButton(recipeButton);
-	
-	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
-	connect((RecipeInputDialog *)w,SIGNAL(titleChanged(const QString&)),recipeButton,SLOT(setTitle(const QString&)));
-}
+		buttonsList->append( recipeButton );
+		leftPanel->highlightButton( recipeButton );
+
+		connect( recipeButton, SIGNAL( clicked() ), this, SLOT( switchToRecipe() ) );
+		connect( ( RecipeInputDialog * ) w, SIGNAL( titleChanged( const QString& ) ), recipeButton, SLOT( setTitle( const QString& ) ) );
+	}
 
 }
 
-void KrecipesView::switchToRecipe(void)
+void KrecipesView::switchToRecipe( void )
 {
-inputPanel->reloadCombos(); //### Temporary until the combo boxes are database-aware... I'm holding off until the next release
-slotSetPanel(RecipeEdit);
+	inputPanel->reloadCombos(); //### Temporary until the combo boxes are database-aware... I'm holding off until the next release
+	slotSetPanel( RecipeEdit );
 }
 
-void KrecipesView::closeRecipe(void)
+void KrecipesView::closeRecipe( void )
 {
-slotSetPanel(SelectP);
-buttonsList->removeLast(); recipeButton=0;
+	slotSetPanel( SelectP );
+	buttonsList->removeLast();
+	recipeButton = 0;
 }
 
 //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
 
-void KrecipesView::show (void)
+void KrecipesView::show ( void )
 {
-	slotSetPanel(SelectP);
+	slotSetPanel( SelectP );
 	QWidget::show();
 }
 
-void KrecipesView::showRecipe(int recipeID)
+void KrecipesView::showRecipe( int recipeID )
 {
-QValueList<int> ids;
-ids << recipeID;
-showRecipes( ids );
+	QValueList<int> ids;
+	ids << recipeID;
+	showRecipes( ids );
 }
 
-void KrecipesView::showRecipes( const QValueList<int> &recipeIDs)
+void KrecipesView::showRecipes( const QValueList<int> &recipeIDs )
 {
-if ( viewPanel->loadRecipes(recipeIDs) )
-	slotSetPanel(RecipeView);
+	if ( viewPanel->loadRecipes( recipeIDs ) )
+		slotSetPanel( RecipeView );
 }
 
-void KrecipesView::setContextHelp(KrePanel p)
+void KrecipesView::setContextHelp( KrePanel p )
 {
-	switch(p)
-	{
-		case RecipeView:
-		contextTitle->setText(i18n("<b>Recipe view</b>"));
-		contextText->setText("");
+	switch ( p ) {
+	case RecipeView:
+		contextTitle->setText( i18n( "<b>Recipe view</b>" ) );
+		contextText->setText( "" );
 		break;
 
-		case SelectP:
-		contextTitle->setText(i18n("<b>Recipes list</b>"));
-		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily: just type part of its name.<br><br>"
-		"Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i>.<br><br>"
-		"Right-click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends.<br><br>"
-		"Oh, and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
-		));
-		break;
-		
-		case ShoppingP:
-		contextTitle->setText(i18n("<b>Shopping list</b>"));
-		contextText->setText(i18n("Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
-		"If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Helper</b> to autogenerate your diet, and then the shopping list.<br><br>"
-		));
-		break;
-		
-		case DietP:
-		contextTitle->setText(i18n("<b>Diet Helper</b>"));
-		contextText->setText(i18n("This dialog will help you in creating a diet for several weeks/days.<br><br>"
-		"Choose how many days the diet will be for, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too....<br><br>"
-		));
+	case SelectP:
+		contextTitle->setText( i18n( "<b>Recipes list</b>" ) );
+		contextText->setText( i18n( "<b>Search</b> for your favourite recipes easily: just type part of its name.<br><br>"
+		                            "Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i>.<br><br>"
+		                            "Right-click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends.<br><br>"
+		                            "Oh, and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
+		                          ) );
 		break;
 
-		case MatcherP:
-		contextTitle->setText(i18n("<b>Ingredient Matcher</b>"));
-		contextText->setText(i18n("Do you have a bunch a ingredients lying around, but you do not know what to make?  Use this dialog to find out what you can.<br><br>"
-		"Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you are missing."
-		));
+	case ShoppingP:
+		contextTitle->setText( i18n( "<b>Shopping list</b>" ) );
+		contextText->setText( i18n( "Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
+		                            "If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Helper</b> to autogenerate your diet, and then the shopping list.<br><br>"
+		                          ) );
 		break;
 
-		case RecipeEdit:
-		contextTitle->setText(i18n("<b>Edit recipe</b>"));
-		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
-		"If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
-		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
-		));
+	case DietP:
+		contextTitle->setText( i18n( "<b>Diet Helper</b>" ) );
+		contextText->setText( i18n( "This dialog will help you in creating a diet for several weeks/days.<br><br>"
+		                            "Choose how many days the diet will be for, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
+		                            "Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too....<br><br>"
+		                          ) );
+		break;
+
+	case MatcherP:
+		contextTitle->setText( i18n( "<b>Ingredient Matcher</b>" ) );
+		contextText->setText( i18n( "Do you have a bunch a ingredients lying around, but you do not know what to make?  Use this dialog to find out what you can.<br><br>"
+		                            "Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you are missing."
+		                          ) );
+		break;
+
+	case RecipeEdit:
+		contextTitle->setText( i18n( "<b>Edit recipe</b>" ) );
+		contextText->setText( i18n( "Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
+		                            "If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
+		                            "Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
+		                          ) );
 		break;
 
 
-		case IngredientsP:
-		contextTitle->setText(i18n("<b>Ingredients list</b>"));
-		contextText->setText(i18n("Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
-		"Note that you can add more properties and units to the list from the <i>Properties List</i> menu"
-		));
+	case IngredientsP:
+		contextTitle->setText( i18n( "<b>Ingredients list</b>" ) );
+		contextText->setText( i18n( "Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
+		                            "Note that you can add more properties and units to the list from the <i>Properties List</i> menu"
+		                          ) );
 		break;
-		
-		case PropertiesP:
-		contextTitle->setText(i18n("<b>Properties list</b>"));
-			contextText->setText(i18n("What properties do you want to know from your recipes? <i>Fat, Energy, Vitamins, Cost,...</i>?<br><br>"
-			"Add those here and later define the characteristics in the ingredients."
-			));
+
+	case PropertiesP:
+		contextTitle->setText( i18n( "<b>Properties list</b>" ) );
+		contextText->setText( i18n( "What properties do you want to know from your recipes? <i>Fat, Energy, Vitamins, Cost,...</i>?<br><br>"
+		                            "Add those here and later define the characteristics in the ingredients."
+		                          ) );
 		break;
-		
-		case UnitsP:
-		contextTitle->setText(i18n("<b>Units list</b>"));
-		contextText->setText(i18n("Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
-		));
+
+	case UnitsP:
+		contextTitle->setText( i18n( "<b>Units list</b>" ) );
+		contextText->setText( i18n( "Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
+		                          ) );
 		break;
-		
-		case PrepMethodsP:
-		contextTitle->setText(i18n("<b>Preparation Methods list</b>"));
-		contextText->setText(i18n("With the preparation method, you can give extra information about an ingredient. <i>sliced, cooked, optional,...</i> <br><br> Instead of adding this information to the ingredient itself, put this information here so that it is easier, for example, to create a shopping list or calculate nutrient information.<br><br>Just add and edit those here."));
+
+	case PrepMethodsP:
+		contextTitle->setText( i18n( "<b>Preparation Methods list</b>" ) );
+		contextText->setText( i18n( "With the preparation method, you can give extra information about an ingredient. <i>sliced, cooked, optional,...</i> <br><br> Instead of adding this information to the ingredient itself, put this information here so that it is easier, for example, to create a shopping list or calculate nutrient information.<br><br>Just add and edit those here." ) );
 		break;
-		
-		case CategoriesP:
-		contextTitle->setText(i18n("<b>Categories list</b>"));
-		contextText->setText(i18n("How do you want to classify your recipes? <i>Desserts, Main Course, Low Fat, Chocolate, Delicious, Vegetarian, ....</i> Just add and edit those here."
-		));
+
+	case CategoriesP:
+		contextTitle->setText( i18n( "<b>Categories list</b>" ) );
+		contextText->setText( i18n( "How do you want to classify your recipes? <i>Desserts, Main Course, Low Fat, Chocolate, Delicious, Vegetarian, ....</i> Just add and edit those here."
+		                          ) );
 		break;
-		
-		
-		case AuthorsP:
-		contextTitle->setText(i18n("<b>Authors list</b>"));
-		contextText->setText(i18n("Keep track of the authors that created the recipes.<br><br>"
-		"You can use this dialog to edit the details of the authors or add/remove them."
-		));
+
+
+	case AuthorsP:
+		contextTitle->setText( i18n( "<b>Authors list</b>" ) );
+		contextText->setText( i18n( "Keep track of the authors that created the recipes.<br><br>"
+		                            "You can use this dialog to edit the details of the authors or add/remove them."
+		                          ) );
 		break;
-		
-		case ContextHelp:
+
+	case ContextHelp:
 		break;
 	}
 }
 
-void KrecipesView::panelRaised(QWidget *w, QWidget *old_w)
+void KrecipesView::panelRaised( QWidget *w, QWidget *old_w )
 {
-	emit panelShown( panelMap[old_w], false );
-	emit panelShown( panelMap[w], true );
+	emit panelShown( panelMap[ old_w ], false );
+	emit panelShown( panelMap[ w ], true );
 }
 
 
-void KrecipesView::createShoppingListFromDiet(void)
+void KrecipesView::createShoppingListFromDiet( void )
 {
-shoppingListPanel->createShopping(dietPanel->dietList());
-slotSetPanel(ShoppingP);
+	shoppingListPanel->createShopping( dietPanel->dietList() );
+	slotSetPanel( ShoppingP );
 }
 
-void KrecipesView::moveTipButton(int,int)
+void KrecipesView::moveTipButton( int, int )
 {
-contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
+	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 }
 
-void KrecipesView::resizeRightPane(int lpw,int)
+void KrecipesView::resizeRightPane( int lpw, int )
 {
-QSize rpsize=rightPanel->size();
-QPoint rpplace=rightPanel->pos();
-rpsize.setWidth(width()-lpw);
-rpplace.setX(lpw);
-rightPanel->move(rpplace);
-rightPanel->resize(rpsize);
+	QSize rpsize = rightPanel->size();
+	QPoint rpplace = rightPanel->pos();
+	rpsize.setWidth( width() - lpw );
+	rpplace.setX( lpw );
+	rightPanel->move( rpplace );
+	rightPanel->resize( rpsize );
 
 }
 
 
 
-void KrecipesView::initDatabase(KConfig *config)
-{   
-	
+void KrecipesView::initDatabase( KConfig *config )
+{
+
 	// Read the database type
 	config->sync();
-	config->setGroup("DBType");
-   		dbType=checkCorrectDBType(config);
-	
-		
-		
+	config->setGroup( "DBType" );
+	dbType = checkCorrectDBType( config );
+
+
+
 	// Open the database
-	database = RecipeDB::createDatabase(dbType);
+	database = RecipeDB::createDatabase( dbType );
 	if ( !database ) {
 		// No DB type has been enabled(should not happen at all, but just in case)
-		
-		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
-		exit(1);
+
+		kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+		exit( 1 );
 	}
 
 	database->connect();
-	
-	while (!database->ok()) 
-	{
+
+	while ( !database->ok() ) {
 		// Ask the user if he wants to rerun the wizard
-		questionRerunWizard(database->err(), i18n("Unable to open database"));
-		
+		questionRerunWizard( database->err(), i18n( "Unable to open database" ) );
+
 		// Reread the configuration file.
 		// The user may have changed the data and/or DB type
-		
+
 		config->sync();
-		config->setGroup("DBType");
-		dbType=checkCorrectDBType(config);
+		config->setGroup( "DBType" );
+		dbType = checkCorrectDBType( config );
 
 		delete database;
-		database = RecipeDB::createDatabase(dbType);
+		database = RecipeDB::createDatabase( dbType );
 		if ( database )
 			database->connect();
 		else {
 			// No DB type has been enabled (should not happen at all, but just in case)
-			
-			kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
-			exit(1);
+
+			kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+			exit( 1 );
 		}
 	}
-	kdDebug()<<i18n("DB started correctly\n").latin1();
+	kdDebug() << i18n( "DB started correctly\n" ).latin1();
 }
 
-QString KrecipesView::checkCorrectDBType(KConfig *config)
+QString KrecipesView::checkCorrectDBType( KConfig *config )
 {
-	dbType=config->readEntry("Type","SQLite");
-	
-	while ((dbType!="SQLite") && (dbType!="MySQL") && (dbType!="PostgreSQL"))
-		{
-		questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL."));
-			
+	dbType = config->readEntry( "Type", "SQLite" );
+
+	while ( ( dbType != "SQLite" ) && ( dbType != "MySQL" ) && ( dbType != "PostgreSQL" ) ) {
+		questionRerunWizard( i18n( "The configured database type (%1) is unsupported." ).arg( dbType ), i18n( "Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL." ) );
+
 		// Read the database setup again
-		
-		config=kapp->config(); config->sync(); config->setGroup("DBType");
-		dbType=config->readEntry("Type","SQLite");
-		}
-	return (dbType);
+
+		config = kapp->config();
+		config->sync();
+		config->setGroup( "DBType" );
+		dbType = config->readEntry( "Type", "SQLite" );
+	}
+	return ( dbType );
 }
 
 void KrecipesView::reloadDisplay()
@@ -883,17 +888,17 @@ void KrecipesView::reloadDisplay()
 
 void KrecipesView::editRecipe()
 {
-	KrePanel vis_panel = panelMap[rightPanel->visiblePanel()];
-	
-	switch ( vis_panel )
-	{
+	KrePanel vis_panel = panelMap[ rightPanel->visiblePanel() ];
+
+	switch ( vis_panel ) {
 	case RecipeView:
-		actionRecipe(viewPanel->currentRecipes()[0],1);
+		actionRecipe( viewPanel->currentRecipes() [ 0 ], 1 );
 		break;
 	case SelectP:
-		selectPanel->getActionsHandler()->edit();
+		selectPanel->getActionsHandler() ->edit();
 		break;
-	default: break;
+	default:
+		break;
 	}
 }
 

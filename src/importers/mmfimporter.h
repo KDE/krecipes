@@ -1,13 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
- 
+*   Copyright (C) 2003 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
 #ifndef MMFIMPORTER_H
 #define MMFIMPORTER_H
 
@@ -28,7 +28,7 @@ public:
 
 private:
 	enum FormatVersion { FromDatabase, VersionMMMMM, VersionBB, VersionNormal };
-	
+
 	virtual void parseFile( const QString &filename );
 
 	void importMMF( QTextStream &stream );
@@ -58,7 +58,7 @@ private:
 	IngredientList m_all_ing;
 
 	FormatVersion version;
-	
+
 	QString current_header;
 };
 

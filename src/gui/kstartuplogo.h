@@ -1,10 +1,10 @@
 /***************************************************************************
-                          kstartuplogo.h  -  description
-                             -------------------
-    begin                : Sun Feb 28 1999
-    copyright            : (C) 1999 by
-    email                :
- ***************************************************************************/
+                         kstartuplogo.h  -  description
+                            -------------------
+   begin                : Sun Feb 28 1999
+   copyright            : (C) 1999 by
+   email                :
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -27,16 +27,18 @@
 /**
  * Displays a startup splash screen
  */
-class KStartupLogo : public QWidget  {
+class KStartupLogo : public QWidget
+{
 	Q_OBJECT
 public:
-	KStartupLogo(QWidget *parent=0, const char *name=0);
+	KStartupLogo( QWidget *parent = 0, const char *name = 0 );
 	~KStartupLogo();
-	void setHideEnabled(bool bEnabled) {
+	void setHideEnabled( bool bEnabled )
+	{
 		m_bReadyToHide = bEnabled;
 	};
 protected:
-	virtual void mousePressEvent( QMouseEvent*);
+	virtual void mousePressEvent( QMouseEvent* );
 	bool m_bReadyToHide;
 };
 

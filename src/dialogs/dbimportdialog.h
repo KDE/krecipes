@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2004 by                                                 *
- *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+*   Copyright (C) 2004 by                                                 *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 #ifndef DBIMPORTDIALOG_H
 #define DBIMPORTDIALOG_H
 
@@ -30,14 +30,15 @@ class KURLRequester;
 @author Jason Kivlighn
 */
 
-class DBImportDialog:public QDialog{
-Q_OBJECT
+class DBImportDialog: public QDialog
+{
+	Q_OBJECT
 public:
-	DBImportDialog(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
+	DBImportDialog( QWidget *parent = 0, const char *name = 0, bool modal = true, WFlags f = 0 );
 	~DBImportDialog();
 
 	QString dbType() const;
-	void serverParams(QString &host, QString &user, QString &pass, QString &table) const;
+	void serverParams( QString &host, QString &user, QString &pass, QString &table ) const;
 	QString dbFile() const;
 
 private:
@@ -71,7 +72,7 @@ private:
 
 protected slots:
 	void languageChange();
-	void switchDBPage(int id);
+	void switchDBPage( int id );
 
 };
 

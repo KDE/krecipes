@@ -1,12 +1,12 @@
 /***************************************************************************
- * Copyright (C) 2000 Trolltech AS.  All rights reserved.                  *
- *               2003 by Jason Kivlighn <mizunoami44@users.sourceforge.net>*
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+* Copyright (C) 2000 Trolltech AS.  All rights reserved.                  *
+*               2003 by Jason Kivlighn <mizunoami44@users.sourceforge.net>*
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
 
 #include "dragarea.h"
 
@@ -16,18 +16,18 @@
 
 #include "sizehandle.h"
 
-DragArea::DragArea( QWidget *parent, const char *name ) : QWidget(parent,name),
- m_read_only(false),
- m_last_point(0,0),
- m_current_box(0),
- selection(new WidgetSelection(this))
+DragArea::DragArea( QWidget *parent, const char *name ) : QWidget( parent, name ),
+		m_read_only( false ),
+		m_last_point( 0, 0 ),
+		m_current_box( 0 ),
+		selection( new WidgetSelection( this ) )
 {
-	setMouseTracking(true);
+	setMouseTracking( true );
 
 	KConfig *config = KGlobal::config();
-	config->setGroup("Page Setup");
-	QPoint default_spacing(5,5);
-	grid_spacing = config->readPointEntry("SnapInterval",&default_spacing);
+	config->setGroup( "Page Setup" );
+	QPoint default_spacing( 5, 5 );
+	grid_spacing = config->readPointEntry( "SnapInterval", &default_spacing );
 }
 
 DragArea::~DragArea()
@@ -45,39 +45,37 @@ void DragArea::setReadOnly( bool read_only )
 
 void DragArea::setWidget( QWidget *w )
 {
-	selection->setWidget(w);
+	selection->setWidget( w );
 }
 
 void DragArea::mousePressEvent( QMouseEvent *e )
 {
 	if ( m_read_only )
-		return;
+		return ;
 
 	mouse_down = true;
 
-	m_current_box = childAt(e->pos());
+	m_current_box = childAt( e->pos() );
 
 	e->ignore();
-	emit widgetClicked( e, (m_current_box) ? m_current_box : this ); //we'll say 'this' was clicked if no widget was clicked
+	emit widgetClicked( e, ( m_current_box ) ? m_current_box : this ); //we'll say 'this' was clicked if no widget was clicked
 	if ( e->isAccepted() )
 		mouse_down = false;
 	e->accept();
 
-	if ( m_current_box && m_current_box->isEnabled() )
-	{
+	if ( m_current_box && m_current_box->isEnabled() ) {
 		m_current_box->raise();
 
 		widgetGeom = QRect( m_current_box->pos(), m_current_box->size() ); //widget may be on the move, so store this
 		m_last_point = m_current_box->mapFromGlobal( e->globalPos() );
 		m_begin_point = m_last_point;
 	}
-	else
-	{
+	else {
 		m_current_box = 0;
 		mouse_down = false;
 	}
 
-	selection->setWidget(m_current_box); //widget should be raise()'ed before calling this to display correctly
+	selection->setWidget( m_current_box ); //widget should be raise()'ed before calling this to display correctly
 }
 
 void DragArea::mouseReleaseEvent( QMouseEvent * )
@@ -87,8 +85,7 @@ void DragArea::mouseReleaseEvent( QMouseEvent * )
 
 void DragArea::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( !m_read_only && mouse_down && m_current_box )
-	{
+	if ( !m_read_only && mouse_down && m_current_box ) {
 		// calc correct position
 		QPoint pos = m_current_box->mapFromGlobal( e->globalPos() );
 
@@ -103,13 +100,13 @@ void DragArea::mouseMoveEvent( QMouseEvent *e )
 		// snap to grid
 		int x = widgetGeom.x() - d.x();
 		widgetGeom.setX( x );
-		 x = ( x / gridSpacing().x() ) * gridSpacing().x();
+		x = ( x / gridSpacing().x() ) * gridSpacing().x();
 		int y = widgetGeom.y() - d.y();
 		widgetGeom.setY( y );
 		y = ( y / gridSpacing().y() ) * gridSpacing().y();
 		QPoint p = m_current_box->pos();
 
-		if ( x - p.x() != 0 || y - p.y() != 0 ) // if we actually have to move
+		if ( x - p.x() != 0 || y - p.y() != 0 )  // if we actually have to move
 			moveWidget( m_current_box, x - p.x(), y - p.y() );
 
 		m_last_point += ( p - m_current_box->pos() );
