@@ -138,7 +138,7 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_a
 				return MixedNumber();
 			}
 
-			double decimal = ( locale_aware ) ? locale->readNumber( input, &num_ok ) : input.toDouble();
+			double decimal = ( locale_aware ) ? locale->readNumber( input, &num_ok ) : input.toDouble( &num_ok );
 
 			if ( !num_ok )
 			{
