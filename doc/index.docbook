@@ -29,13 +29,20 @@ as Authors, publish date, the abstract, and Keywords -->
 <address><email>cbeamer interlynx.net</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Jason</firstname>
+<surname>Kivlighn</surname>
+<affiliation>
+<address><email>mizunoami44 users.sourceforge.net</email></address>
+</affiliation>
+</author>
 </authorgroup>
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
 <year>2004-2005</year>
-<holder>Colleen Beamer</holder>
+<holder>Colleen Beamer and Jason Kivlighn</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
 <!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
@@ -1433,34 +1440,44 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>Alternatively, you can use the scroll bars to scroll through the <emphasis>Actions</emphasis> until the one for which you want to change the shortcut is found.</para>
 
-<informaltable><tgroup cols="2"><tbody><row><entry><para>
-<inlinemediaobject>
-	<imageobject>
-	<imagedata fileref="configure-shortcuts.png" format="PNG"/>
-	</imageobject>
-</inlinemediaobject>
-</para></entry>
-<entry><para>To begin creating your shortcut, ensure that the <emphasis>Action</emphasis> for which you want to create the shortcut is selected.</para>
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the Configure Shortcuts &ndash; &krecipes; starting screen.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="configure-shortcuts.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>Configure Shortcuts &ndash; &krecipes; Starting Point</para></caption>
+	</mediaobject>
+</screenshot>
+</para>
+
+<para>To begin creating your shortcut, ensure that the <emphasis>Action</emphasis> for which you want to create the shortcut is selected.</para>
 <para>If the <emphasis>Action</emphasis> has no attached shortcut, the radio button beside <guilabel>None</guilabel> will be selected by default.  If there is a shortcut attached, the <guilabel>Default</guilabel> radio button will be selected as shown in the example in the screenshot.</para>
-<para>To create a shortcut for an <emphasis>Action</emphasis> that does not have one attached, or to change an existing shortcut, click the radio button beside the <guilabel>Custom</guilabel> label.</para></entry>
-</row></tbody></tgroup></informaltable>
+<para>To create a shortcut for an <emphasis>Action</emphasis> that does not have one attached, or to change an existing shortcut, click the radio button beside the <guilabel>Custom</guilabel> label.</para>
 
 <para>When you click the <guibutton>Custom</guibutton> radio button, the window for doing the actual defining of your shortcut will appear.</para>
 
-<informaltable><tgroup cols="2"><tbody><row><entry>
 <para>
-<inlinemediaobject>
-	<imageobject>
-	<imagedata fileref="configure-shortcuts-basic.png" format="PNG"/>
-	</imageobject>
-</inlinemediaobject>
-</para></entry>
+<screenshot>
+<screeninfo>Here's a screenshot of the <emphasis>&krecipes;</emphasis> Basic Shortcut configuration screen.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="configure-shortcuts-basic.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>Configure Shortcuts &ndash; Basic Configuration</para></caption>
+	</mediaobject>
+</screenshot>
+</para>
 
-<entry>
-<para>If a shortcut already exists, the textbox will contain an entry, as seen in the screenshot to the left.  To clear this entry in order to enter a new one, click on the <guiicon>Brush</guiicon> icon on the left of the textbox.
-</para></entry>
-</row></tbody></tgroup></informaltable>
-
+<para>If a shortcut already exists, the textbox will contain an entry, as seen in the screenshot above.  To clear this entry in order to enter a new one, click on the <guiicon>Brush</guiicon> icon on the left of the textbox.
+</para>
 
 <para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the <keycap>Ctrl</keycap> and simulataneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <guilabel>Custom</guilabel> label.</para>
 
@@ -1468,19 +1485,24 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>Clicking the <guibutton>Advanced&gt;&gt;</guibutton> button will expand the shortcut entry screen as shown in the screenshot below.</para>
 
-<informaltable><tgroup cols="2"><tbody><row><entry>
 <para>
-<inlinemediaobject>
-	<imageobject>
-	<imagedata fileref="configure-shortcuts-adv.png" format="PNG"/>
-	</imageobject>
-</inlinemediaobject>
+<screenshot>
+<screeninfo>Here's a screenshot of the <emphasis>&krecipes;</emphasis> Advanced Shortcut configuration screen.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="configure-shortcuts-adv.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>Configure Shortcuts &ndash; Advanced Configuration</para></caption>
+	</mediaobject>
+</screenshot>
 </para>
-</entry>
-<entry><para>On the <emphasis>Advanced</emphasis> shortcut entry screen, shortcuts are defined in the same manner as previously described.  However, you will note that the  definition of an <guilabel>Alternate shortcut:</guilabel> is possible.</para>
+
+<para>On the <emphasis>Advanced</emphasis> shortcut entry screen, shortcuts are defined in the same manner as previously described.  However, you will note that the  definition of an <guilabel>Alternate shortcut:</guilabel> is possible.</para>
 
 <para>The <guibutton>OK</guibutton> and <guibutton>Cancel</guibutton> buttons also operate in the same manner as previously described.  The <guibutton>Advanced&lt;&lt;</guibutton> button collapses the window to the single shortcut entry interface.</para>
-</entry></row></tbody></tgroup></informaltable>
 
 <para>You will also notice beneath the <guilabel>Alternate shortcut:</guilabel> textbox, that there is a tickbox labeled <guilabel>Multi-key mode</guilabel>.  Selecting this provides very cool functionality!  Follow these steps to see how it works &mdash;</para>
 
@@ -1918,7 +1940,7 @@ distribution. -->
 </variablelist>
 
 <para>
-Documentation copyright 2004-2005 Colleen Beamer <email>cbeamer interlynx.net</email>
+Documentation copyright 2004-2005 Colleen Beamer <email>cbeamer interlynx.net</email> and Jason Kivlighn <email>mizunoami44 users.sourceforge.net</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
