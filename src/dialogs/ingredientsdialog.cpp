@@ -19,11 +19,13 @@
 #include "usdadatadialog.h"
 #include "selectpropertydialog.h"
 #include "selectunitdialog.h"
+#include "dependanciesdialog.h"
+
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <qheader.h>
 #include <qmessagebox.h>
-#include "dependanciesdialog.h"
-#include <klocale.h>
 
 IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -45,7 +47,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     ingredientListView=new KreListView (this,i18n("Ingredient list"));
     ingredientListView->listView()->setAllColumnsShowFocus(true);
-    layout->addMultiCellWidget (ingredientListView,1,9,1,1);
+    layout->addMultiCellWidget (ingredientListView,1,10,1,1);
     ingredientListView->listView()->addColumn(i18n("Id"));
     ingredientListView->listView()->addColumn(i18n("Ingredient"));
     ingredientListView->listView()->setRenameable(1, true);
@@ -150,7 +152,8 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_Prop_Buttons,7,7);
 
-    inputBox=new EditBox(this);
+    inputBox=new EditBox(propertiesListView->listView()->viewport());
+    propertiesListView->listView()->addChild(inputBox);
     inputBox->hide();
 
     // Initialize
@@ -169,6 +172,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
     connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
     connect(propertiesListView->listView(),SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
+    connect(propertiesListView->listView(),SIGNAL(selectionChanged()),inputBox,SLOT(hide()));
     connect(inputBox,SIGNAL(valueChanged(double)),this,SLOT(setPropertyAmount(double)));
     connect(loadUsdaButton,SIGNAL(clicked()),this,SLOT(openUSDADialog()));
 }
@@ -351,6 +355,8 @@ propertiesList->clear();
 propertiesListView->listView()->clear();
 perUnitListBack->clear();
 
+inputBox->hide();
+
 
 //If none is selected, select first item
 QListViewItem *it;
@@ -438,23 +444,29 @@ reloadPropertyList(); // Reload the list from database
 void IngredientsDialog::insertPropertyEditBox(QListViewItem* it)
 {
 
-QRect r;
+QRect r = propertiesListView->listView()->header()->sectionRect(2);
 
 
-r=propertiesListView->listView()->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
+//r=propertiesListView->listView()->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
 
-r.moveBy(propertiesListView->x(),propertiesListView->y()); // Move to the position of the KreListView
+//r.moveBy(propertiesListView->x(),propertiesListView->y()); // Move to the position of the KreListView
 
-r.moveBy(propertiesListView->listView()->pos().x(),propertiesListView->listView()->pos().y()); // Move to the position of KListView
-r.moveBy(propertiesListView->listView()->header()->x(),propertiesListView->listView()->header()->y()); // Move to the position of the KListView Header
+//r.moveBy(propertiesListView->listView()->pos().x(),propertiesListView->listView()->pos().y()); // Move to the position of KListView
+//r.moveBy(propertiesListView->listView()->header()->x(),propertiesListView->listView()->header()->y()); // Move to the position of the KListView Header
 
-r.moveBy(0,r.height()+propertiesListView->listView()->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
+//r.moveBy(propertiesListView->listView()->viewport()->x(),propertiesListView->listView()->viewport()->y()); // Move to the position of the KListView viewport
+
+//r.moveBy(propertiesListView->listView()->header()->sectionRect(2).x(),0);
+
+r.moveBy(0,propertiesListView->listView()->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
 
 r.setHeight(it->height()); // Set the item's height
 
 
 
 inputBox->setGeometry(r);
+
+inputBox->setValue( it->text(2).toDouble() );
 inputBox->show();
 }
 
