@@ -62,16 +62,17 @@ SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, WFlags 
 	setFinishEnabled( savePage, true ); // Enable finish button
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
-#if (HAVE_SQLITE || HAVE_SQLITE3)
-	setAppropriate( permissionsSetupPage, false ); // Disable By Default
-	setAppropriate( pSqlPermissionsSetupPage, false ); // Disable By Default
-	setAppropriate( serverSetupPage, false ); // if we have SQLite (since it's default, and doesn't require these settings)
-	setAppropriate( sqliteSetupPage, true );
-#else
-	setAppropriate( sqliteSetupPage, false );
-#endif
-
-
+	#if (!(HAVE_SQLITE || HAVE_SQLITE3))
+		#if (HAVE_MYSQL)
+			showPages( MySQL );
+		#else
+		#if (HAVE_POSTGRESQL)
+			showPages( PostgreSQL );
+		#endif
+		#endif
+	#else
+		showPages( SQLite );
+	#endif
 
 	connect( finishButton(), SIGNAL( clicked() ), this, SLOT( save() ) );
 	connect( dbTypeSetupPage, SIGNAL( showPages( DBType ) ), this, SLOT( showPages( DBType ) ) );
@@ -795,12 +796,10 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 #if (HAVE_MYSQL)
 
 	bg->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
-	setPages(1);
 #else
 	#if (HAVE_POSTGRESQL)
 
 	bg->setButton( 2 );
-	setPages(2);
 #endif
 	#endif
 #endif
