@@ -127,6 +127,8 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
     connect(this->removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
+    connect(this->addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
+    connect(this->removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
 }
 
 
@@ -301,4 +303,29 @@ it=ingredientListView->firstChild();
 
 reloadUnitList();
 reloadPropertyList();
+}
+
+void IngredientsDialog::addPropertyToIngredient(void)
+{
+
+// Find selected ingredient item
+QListViewItem *it;
+int ingredientID=-1;
+if (it=ingredientListView->selectedItem())
+  {
+  ingredientID=it->text(0).toInt();
+  }
+if (ingredientID>=0) // an ingredient was selected previously
+{
+ IngredientPropertyList allProperties;
+  database->loadProperties(&allProperties);
+
+  SelectPropertyDialog* propertyDialog=new SelectPropertyDialog(0,&allProperties);
+
+  if ( propertyDialog->exec() == QDialog::Accepted ) {
+    int propertyID = propertyDialog->propertyID();
+    database->AddPropertyToIngredient(ingredientID,propertyID,0); // Add result chosen property to ingredient in database, with amount 0 by default
+    reloadPropertyList(); // Reload the list from database
+}
+}
 }

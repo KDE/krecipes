@@ -20,6 +20,7 @@
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 #include "ingredientpropertylist.h"
+#include "selectpropertydialog.h"
 
 /**
 @author Unai Garro
@@ -65,6 +66,7 @@ private:
     void removeUnitFromIngredient(void);
     void removeIngredient(void);
     void updateLists(void);
+    void addPropertyToIngredient(void);
 
 
 
