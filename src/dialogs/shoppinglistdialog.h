@@ -57,6 +57,7 @@ private slots:
 	void addRecipe(void);
 	void removeRecipe(void);
 	void showShoppingList(void);
+	void clear(void);
 signals:
 	void wizardClicked(void);
 };
