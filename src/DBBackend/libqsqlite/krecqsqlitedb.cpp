@@ -1,3 +1,13 @@
+ /**************************************************************************
+ *   Copyright (C) 2003 by qsqlite.sourceforge.net authors                 *
+ *                                                                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
 #include "krecqsqlitedb.h"
 #include "krecqsqliteresult.h"
 
@@ -14,7 +24,7 @@ bool QSQLiteDB::open(const QString &dbname)
 	char *errmsg = 0;
 
 	m_db = sqlite_open(dbname.latin1(), 0, &errmsg);
-	
+
 	if (m_db == 0L)
 	{
         free(errmsg);
@@ -38,7 +48,7 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query)
 
 	if (!m_db)
 	{
-		return *res;		
+		return *res;
 	}
 
 	char *errmsg = 0;
@@ -49,7 +59,7 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query)
         free(errmsg);
 	}
 
-	return *res;		
+	return *res;
 }
 
 int QSQLiteDB::call_back(void* result, int argc, char** argv, char** columns)
