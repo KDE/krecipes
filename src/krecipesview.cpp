@@ -129,12 +129,10 @@ KrecipesView::KrecipesView(QWidget *parent)
     splitter->setFrameShadow( QSplitter::Plain );
     splitter->setOrientation( QSplitter::Horizontal );
 
-    #if defined(KDE_MAKE_VERSION)
-  	# if KDE_VERSION <= KDE_MAKE_VERSION(3,1,4)
-     	splitter->setOpaqueResize();
-	#else
-	splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
-	# endif
+    #if KDE_IS_VERSION(3,1,92 )
+    splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
+    #else
+    splitter->setOpaqueResize();
     #endif
 
 
