@@ -201,6 +201,7 @@ passwordText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addWidget(passwordText,5,3);
 
 passwordEdit=new KLineEdit(this);
+passwordEdit->setEchoMode(QLineEdit::Password);
 passwordEdit->setFixedSize(QSize(120,20));
 passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addWidget(passwordEdit,5,4);
