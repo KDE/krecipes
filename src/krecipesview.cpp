@@ -51,6 +51,11 @@
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
 {
+    // Initialize Database
+    KConfig *config; config=kapp->config(); config->setGroup("DBType");
+
+    dbtype=config->readEntry("Type","SQLite");
+
     // Init the setup wizard if necessary
     wizard();
 
@@ -61,11 +66,6 @@ KrecipesView::KrecipesView(QWidget *parent)
     start_logo -> setHideEnabled( true );
     start_logo->show();
     start_logo->raise();
-
-    // Initialize Database
-    KConfig *config; config=kapp->config(); config->setGroup("DBType");
-
-    dbtype=config->readEntry("Type","SQLite");
 
     // Check if the database type is among those supported
 
@@ -482,7 +482,6 @@ delete db; //it closes the db automatically
 
 void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
 {
-
 if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly
 {
 std::cerr<<"Unrecognized database type. Exiting\n";
