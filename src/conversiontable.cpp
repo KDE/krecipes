@@ -7,37 +7,28 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef EDITBOX_H
-#define EDITBOX_H
-#include <qpushbutton.h>
-#include <qhbox.h>
-#include <knuminput.h>
+#include "conversiontable.h"
 
 
-/**
-@author Unai Garro
-*/
+ConversionTable::ConversionTable(QWidget* parent):QTable(parent)
+{
+editBoxValue=-1;
+}
 
-class EditBox:public QWidget{
-Q_OBJECT
-public:
-
-     EditBox(QWidget* parent);
-    ~EditBox();
-    //Methods
-    double value(void);
-    void setValue(double newValue);
-private:
-    // Widgets
-    KDoubleNumInput *editBox;
-    QPushButton *okButton;
-
-signals:
-    void valueChanged(double);
-private slots:
-    void acceptValue(void);
+ConversionTable::~ConversionTable()
+{
+}
 
 
-};
+void ConversionTable::setCellContentFromEditor ( int row, int col)
+{
+setText (row,col,QString::number(editBoxValue));
+}
 
-#endif
+
+QWidget* ConversionTable::createEditor( int row, int col, bool initFromCell ) const
+{
+((ConversionTable*) this)->eb=new EditBox(viewport());
+//connect(eb,SIGNAL(valueChanged(double)),this,SLOT(doValueChanged()));
+return(eb);
+}

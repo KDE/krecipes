@@ -7,35 +7,33 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef EDITBOX_H
-#define EDITBOX_H
-#include <qpushbutton.h>
-#include <qhbox.h>
-#include <knuminput.h>
-
+#ifndef UNITSDIALOG_H
+#define UNITSDIALOG_H
+#include <qwidget.h>
+#include <klistview.h>
+#include "recipedb.h"
+#include "editbox.h"
+#include "conversiontable.h"
 
 /**
 @author Unai Garro
 */
-
-class EditBox:public QWidget{
+class UnitsDialog:public QWidget{
 Q_OBJECT
 public:
-
-     EditBox(QWidget* parent);
-    ~EditBox();
-    //Methods
-    double value(void);
-    void setValue(double newValue);
+    UnitsDialog(QWidget *parent, RecipeDB *db);
+    ~UnitsDialog();
 private:
-    // Widgets
-    KDoubleNumInput *editBox;
-    QPushButton *okButton;
+	// Widgets
+	KListView *unitListView;
+	ConversionTable *conversionTable;
+	QPushButton *newUnitButton;
+	QPushButton *removeUnitButton;
+	// Internal methods
+	void loadUnitsTable(void);
 
-signals:
-    void valueChanged(double);
-private slots:
-    void acceptValue(void);
+	// Internal Variables
+	RecipeDB *database;
 
 
 };

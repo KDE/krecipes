@@ -72,6 +72,7 @@ public:
 	SelectRecipeDialog *selectPanel;
 	IngredientsDialog *ingredientsPanel;
 	PropertiesDialog *propertiesPanel;
+	UnitsDialog* unitsPanel;
 
 	// public methods
 	void createNewRecipe(void);
@@ -90,6 +91,7 @@ private:
 	QPushButton *boton3;
 	QPushButton *boton4;
 	QPushButton *boton5;
+	QPushButton *boton6;
 
 signals:
 	void enableSaveOption(bool en);

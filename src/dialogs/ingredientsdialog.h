@@ -22,6 +22,7 @@
 #include "ingredientpropertylist.h"
 #include "selectpropertydialog.h"
 #include "editbox.h"
+#include "unitsdialog.h"
 
 /**
 @author Unai Garro

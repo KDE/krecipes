@@ -53,12 +53,16 @@ KrecipesView::KrecipesView(QWidget *parent)
         boton4->setGeometry(0,90,130,30);
     boton5=new QPushButton(leftPanel); boton5->setFlat(true); boton5->setText("Edit Property List");
 	boton5->setGeometry(0,120,130,30);
+    boton6=new QPushButton(leftPanel); boton6->setFlat(true); boton6->setText("Edit Units");
+	boton6->setGeometry(0,150,130,30);
+
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);rightPanel->addWidget(viewPanel);
     selectPanel=new SelectRecipeDialog(rightPanel,database);rightPanel->addWidget(selectPanel);
     ingredientsPanel=new IngredientsDialog(rightPanel,database);rightPanel->addWidget(ingredientsPanel);
     propertiesPanel=new PropertiesDialog(rightPanel,database);rightPanel->addWidget(propertiesPanel);
+    unitsPanel=new UnitsDialog(rightPanel,database); rightPanel->addWidget(unitsPanel);
 
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
@@ -94,6 +98,7 @@ void KrecipesView::slotSetTitle(const QString& title)
     emit signalChangeCaption(title);
 }
 
+// Function to switch panels
 void KrecipesView::slotSetPanel(int w)
 {
 switch (w)
@@ -107,6 +112,8 @@ case 2: this->rightPanel->raiseWidget(inputPanel);
 case 3: this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
 case 4: this->rightPanel->raiseWidget(propertiesPanel);
+	break;
+case 5: this->rightPanel->raiseWidget(unitsPanel);
 	break;
 }
 

@@ -35,5 +35,14 @@ EditBox::~EditBox()
 {
 }
 
+double EditBox::value(void)
+{
+return editBox->value();
+}
+
+void EditBox::setValue(double newValue)
+{
+editBox->setValue(newValue);
+}
 
 
