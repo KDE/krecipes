@@ -125,30 +125,26 @@ void IngredientMatcherDialog::findRecipes(void)
 
 	//Check if the user wants to show missing ingredients
 	
-	if (this->missingNumberCombo->currentItem()==0) return; //None 
+	if (this->missingNumberCombo->currentItem()==0) return; //"None"
 	
-	// Show recipes with missing ingredients
+	
 	new SectionItem(recipeListView->listView(),i18n("You are missing some ingredients for:"));
 	
+	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
+	int missingNoAllowed;
 	
-	if (this->missingNumberCombo->currentItem()==4) // Any
-	{
-		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it)
-		{
-			new RecipeListItem(recipeListView->listView(),*it);
-		}
-	}
-	else // 1..3
-	{
-		int missingNoAllowed=missingNumberCombo->currentText().toInt();
-		nit=missingNumbers.begin();	
+	if (missingNumberCombo->currentItem()!=4) missingNoAllowed=missingNumberCombo->currentText().toInt(); //"1..3"
+	else missingNoAllowed=-1; // "Any"
+	
+	nit=missingNumbers.begin();	
+	
 		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit)
 		{
-			if ((*nit)<=missingNoAllowed)
+			if (missingNoAllowed<0||(*nit)<=missingNoAllowed)
 				new RecipeListItem(recipeListView->listView(),*it);
 		}
-	}
+	
 }
 
 void IngredientMatcherDialog::reloadIngredients(void)
