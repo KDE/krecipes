@@ -54,9 +54,6 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, co
 
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
 
- this->setMinimumSize(QSize(500,600));
-
-
 
 //---------- Calculate & Load  the list --------
 

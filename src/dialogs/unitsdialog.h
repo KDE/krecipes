@@ -30,7 +30,7 @@ Q_OBJECT
 public:
     UnitsDialog(QWidget *parent, RecipeDB *db);
     ~UnitsDialog();
-    virtual QSize sizeHint () const{return QSize(600,400);}
+    virtual QSize sizeHint () const{return QSize(300,200);}
 
 public slots:
     void reload (void);

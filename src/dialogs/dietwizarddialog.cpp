@@ -71,7 +71,7 @@ optionsBox=new QHBox(this);
 
 // Tabs
 mealTabs=new QTabWidget(this);
-mealTabs->setMargin(20);
+mealTabs->setMargin(10);
 
 // Button bar
 KIconLoader il;
@@ -249,7 +249,7 @@ propertyListLocalCache.clear();
 
 // Design the dialog
 QVBoxLayout *layout=new QVBoxLayout(this);
-layout->setSpacing(20);
+layout->setSpacing(10);
 
 	// Options box
 
@@ -405,7 +405,7 @@ categoryFiltering=false;
 // Design the widget
 
 QVBoxLayout *layout=new QVBoxLayout(this);
-layout->setSpacing(20);
+layout->setSpacing(10);
 
 	//Horizontal Box to hold the KListView's
 listBox=new QHGroupBox(i18n("Dish Characteristics"),this);

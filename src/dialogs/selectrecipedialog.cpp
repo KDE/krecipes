@@ -77,7 +77,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 
 	il=new KIconLoader;
 	recipeListView=new RecipeListView(basicSearchTab,database);
-	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Preferred );
+	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	recipeListView->reload();
 	layout->addMultiCellWidget(recipeListView,3,3,1,3);
 

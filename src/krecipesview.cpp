@@ -284,7 +284,7 @@ void KrecipesView::translate(){
   button2->setTitle(i18n("Ingredients"));
   button3->setTitle(i18n("Properties"));
   button4->setTitle(i18n("Units"));
-  button9->setTitle(i18n("Preparation Method"));
+  button9->setTitle(i18n("Preparation Methods"));
   button5->setTitle(i18n("Categories"));
   button6->setTitle(i18n("Authors"));
   button7->setTitle(i18n("Diet Helper"));

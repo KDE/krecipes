@@ -334,22 +334,26 @@ void DualCategoryListView::mergeCategories(int id1, int id2)
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),
   database(db)
 {
+	setSizePolicy( QSizePolicy::Ignored,QSizePolicy::Ignored );
+
 	///AUTOMATICALLY GENERATED GUI CODE///
 	advancedSearchLayout = new QHBoxLayout( this, 0, 0, "advancedSearchLayout"); 
 	
 	widgetStack = new QWidgetStack( this, "widgetStack" );
 	
 	searchPage = new QWidget( widgetStack, "searchPage" );
-	searchPageLayout = new QGridLayout( searchPage, 1, 1, 3, 3, "searchPageLayout"); 
+	searchPageLayout = new QGridLayout( searchPage, 1, 1, 11, 6, "searchPageLayout"); 
 	
-	searchButtonsLayout = new QHBoxLayout( 0, 0, 6, "searchButtonsLayout"); 
-	searchSpacer = new QSpacerItem( 481, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	searchButtonsLayout->addItem( searchSpacer );
+	layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
+	searchSpacer = new QSpacerItem( 575, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	layout3->addItem( searchSpacer );
 	
 	searchButton = new QPushButton( searchPage, "searchButton" );
-	searchButtonsLayout->addWidget( searchButton );
+	layout3->addWidget( searchButton );
 	
-	searchPageLayout->addMultiCellLayout( searchButtonsLayout, 2, 2, 0, 2 );
+	searchPageLayout->addMultiCellLayout( layout3, 1, 1, 0, 1 );
+	
+	layout3_2 = new QVBoxLayout( 0, 0, 6, "layout3_2"); 
 	
 	categoriesBox = new QGroupBox( searchPage, "categoriesBox" );
 	categoriesBox->setAlignment( int( QGroupBox::AlignTop ) );
@@ -366,28 +370,69 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoriesFrame->setFrameShadow( QFrame::Raised );
 	categoriesFrame->setLineWidth( 0 );
 	categoriesFrameLayout = new QGridLayout( categoriesFrame, 1, 1, 0, 0, "categoriesFrameLayout"); 
-	catSpacer = new QSpacerItem( 158, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	categoriesFrameLayout->addItem( catSpacer, 3, 2 );
+	catSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	categoriesFrameLayout->addItem( catSpacer, 2, 2 );
 	
 	catTypeComboBox = new QComboBox( FALSE, categoriesFrame, "catTypeComboBox" );
-	catTypeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, catTypeComboBox->sizePolicy().hasHeightForWidth() ) );
 	
 	categoriesFrameLayout->addMultiCellWidget( catTypeComboBox, 0, 0, 0, 2 );
 	
 	catListView = new DualCategoryListView( categoriesFrame, database );
+	catListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, catListView->sizePolicy().hasHeightForWidth() ) );
 	
 	categoriesFrameLayout->addMultiCellWidget( catListView, 1, 1, 0, 2 );
 	
 	catSelectAllButton = new QPushButton( categoriesFrame, "catSelectAllButton" );
 	
-	categoriesFrameLayout->addMultiCellWidget( catSelectAllButton, 2, 3, 0, 0 );
+	categoriesFrameLayout->addWidget( catSelectAllButton, 2, 0 );
 	
 	catUnselectAllButton = new QPushButton( categoriesFrame, "catUnselectAllButton" );
 	
-	categoriesFrameLayout->addMultiCellWidget( catUnselectAllButton, 2, 3, 1, 1 );
+	categoriesFrameLayout->addWidget( catUnselectAllButton, 2, 1 );
 	categoriesBoxLayout->addWidget( categoriesFrame );
+	layout3_2->addWidget( categoriesBox );
 	
-	searchPageLayout->addWidget( categoriesBox, 0, 0 );
+	ingredientsBox = new QGroupBox( searchPage, "ingredientsBox" );
+	ingredientsBox->setMinimumSize( QSize( 0, 0 ) );
+	ingredientsBox->setAlignment( int( QGroupBox::AlignTop ) );
+	ingredientsBox->setCheckable( TRUE );
+	ingredientsBox->setChecked( FALSE );
+	ingredientsBox->setColumnLayout(0, Qt::Vertical );
+	ingredientsBox->layout()->setSpacing( 6 );
+	ingredientsBox->layout()->setMargin( 11 );
+	ingredientsBoxLayout = new QVBoxLayout( ingredientsBox->layout() );
+	ingredientsBoxLayout->setAlignment( Qt::AlignTop );
+	
+	ingredientsFrame = new QFrame( ingredientsBox, "ingredientsFrame" );
+	ingredientsFrame->setFrameShape( QFrame::StyledPanel );
+	ingredientsFrame->setFrameShadow( QFrame::Raised );
+	ingredientsFrame->setLineWidth( 0 );
+	ingredientsFrameLayout = new QGridLayout( ingredientsFrame, 1, 1, 0, 0, "ingredientsFrameLayout"); 
+	
+	ingListView = new DualIngredientListView( ingredientsFrame, database );
+	ingListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, ingListView->sizePolicy().hasHeightForWidth() ) );
+	
+	ingredientsFrameLayout->addMultiCellWidget( ingListView, 1, 1, 0, 2 );
+	
+	ingTypeComboBox = new QComboBox( FALSE, ingredientsFrame, "ingTypeComboBox" );
+	
+	ingredientsFrameLayout->addMultiCellWidget( ingTypeComboBox, 0, 0, 0, 2 );
+	ingSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	ingredientsFrameLayout->addItem( ingSpacer, 2, 2 );
+	
+	ingSelectAllButton = new QPushButton( ingredientsFrame, "ingSelectAllButton" );
+	
+	ingredientsFrameLayout->addWidget( ingSelectAllButton, 2, 0 );
+	
+	ingUnselectAllButton = new QPushButton( ingredientsFrame, "ingUnselectAllButton" );
+	
+	ingredientsFrameLayout->addWidget( ingUnselectAllButton, 2, 1 );
+	ingredientsBoxLayout->addWidget( ingredientsFrame );
+	layout3_2->addWidget( ingredientsBox );
+	
+	searchPageLayout->addLayout( layout3_2, 0, 0 );
+	
+	layout4 = new QVBoxLayout( 0, 0, 6, "layout4"); 
 	
 	authorsBox = new QGroupBox( searchPage, "authorsBox" );
 	authorsBox->setAlignment( int( QGroupBox::AlignTop ) );
@@ -406,14 +451,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrameLayout = new QGridLayout( authorsFrame, 1, 1, 0, 0, "authorsFrameLayout"); 
 	
 	authorTypeComboBox = new QComboBox( FALSE, authorsFrame, "authorTypeComboBox" );
-	authorTypeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, authorTypeComboBox->sizePolicy().hasHeightForWidth() ) );
 	
 	authorsFrameLayout->addMultiCellWidget( authorTypeComboBox, 0, 0, 0, 2 );
 	
 	authorUnselectAllButton = new QPushButton( authorsFrame, "authorUnselectAllButton" );
 	
 	authorsFrameLayout->addWidget( authorUnselectAllButton, 2, 1 );
-	authorSpacer = new QSpacerItem( 27, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	authorSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	authorsFrameLayout->addItem( authorSpacer, 2, 2 );
 	
 	authorSelectAllButton = new QPushButton( authorsFrame, "authorSelectAllButton" );
@@ -421,15 +465,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrameLayout->addWidget( authorSelectAllButton, 2, 0 );
 	
 	authorListView = new DualAuthorListView( authorsFrame, database );
+	authorListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, authorListView->sizePolicy().hasHeightForWidth() ) );
 	
 	authorsFrameLayout->addMultiCellWidget( authorListView, 1, 1, 0, 2 );
 	authorsBoxLayout->addWidget( authorsFrame );
+	layout4->addWidget( authorsBox );
 	
-	searchPageLayout->addMultiCellWidget( authorsBox, 0, 0, 1, 2 );
-	
-	QVBox *serv_prep_box = new QVBox(searchPage);
-
-	servingsBox = new QGroupBox( serv_prep_box, "servingsBox" );
+	servingsBox = new QGroupBox( searchPage, "servingsBox" );
 	servingsBox->setAlignment( int( QGroupBox::AlignVCenter ) );
 	servingsBox->setCheckable( TRUE );
 	servingsBox->setChecked( FALSE );
@@ -453,10 +495,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsSpinBox->setMinValue( 1 );
 	servingsFrameLayout->addWidget( servingsSpinBox );
 	servingsBoxLayout->addWidget( servingsFrame );
+	layout4->addWidget( servingsBox );
 	
-	//searchPageLayout->addWidget( servingsBox, 1, 2 );
-
-	prepTimeBox = new QGroupBox( serv_prep_box, "prepTimeBox" );
+	prepTimeBox = new QGroupBox( searchPage, "prepTimeBox" );
 	prepTimeBox->setAlignment( int( QGroupBox::AlignVCenter ) );
 	prepTimeBox->setCheckable( TRUE );
 	prepTimeBox->setChecked( FALSE );
@@ -477,50 +518,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeFrameLayout->addWidget( prepTimeComboBox );
 	
 	prepTimeEdit = new QTimeEdit( prepTimeFrame, "prepTimeEdit" );
-	prepTimeEdit->setMinValue( QTime(0,0) );
-	prepTimeEdit->setDisplay( QTimeEdit::Hours | QTimeEdit::Minutes );
+	prepTimeEdit->setDisplay( int( QTimeEdit::Minutes | QTimeEdit::Hours ) );
 	prepTimeFrameLayout->addWidget( prepTimeEdit );
 	prepTimeBoxLayout->addWidget( prepTimeFrame );
+	layout4->addWidget( prepTimeBox );
 	
-	searchPageLayout->addWidget( serv_prep_box, 1, 2 );
-	
-	ingredientsBox = new QGroupBox( searchPage, "ingredientsBox" );
-	ingredientsBox->setAlignment( int( QGroupBox::AlignTop ) );
-	ingredientsBox->setCheckable( TRUE );
-	ingredientsBox->setChecked( FALSE );
-	ingredientsBox->setColumnLayout(0, Qt::Vertical );
-	ingredientsBox->layout()->setSpacing( 6 );
-	ingredientsBox->layout()->setMargin( 11 );
-	ingredientsBoxLayout = new QHBoxLayout( ingredientsBox->layout() );
-	ingredientsBoxLayout->setAlignment( Qt::AlignTop );
-	
-	ingredientsFrame = new QFrame( ingredientsBox, "ingredientsFrame" );
-	ingredientsFrame->setFrameShape( QFrame::StyledPanel );
-	ingredientsFrame->setFrameShadow( QFrame::Raised );
-	ingredientsFrame->setLineWidth( 0 );
-	ingredientsFrameLayout = new QGridLayout( ingredientsFrame, 1, 1, 0, 0, "ingredientsFrameLayout"); 
-	
-	ingListView = new DualIngredientListView( ingredientsFrame, database );
-
-	ingredientsFrameLayout->addMultiCellWidget( ingListView, 1, 1, 0, 3 );
-	
-	ingTypeComboBox = new QComboBox( FALSE, ingredientsFrame, "ingTypeComboBox" );
-	ingTypeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, ingTypeComboBox->sizePolicy().hasHeightForWidth() ) );
-	
-	ingredientsFrameLayout->addMultiCellWidget( ingTypeComboBox, 0, 0, 0, 2 );
-	ingSpacer = new QSpacerItem( 184, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	ingredientsFrameLayout->addItem( ingSpacer, 2, 2 );
-	
-	ingSelectAllButton = new QPushButton( ingredientsFrame, "ingSelectAllButton" );
-	
-	ingredientsFrameLayout->addWidget( ingSelectAllButton, 2, 0 );
-	
-	ingUnselectAllButton = new QPushButton( ingredientsFrame, "ingUnselectAllButton" );
-	
-	ingredientsFrameLayout->addWidget( ingUnselectAllButton, 2, 1 );
-	ingredientsBoxLayout->addWidget( ingredientsFrame );
-	
-	searchPageLayout->addMultiCellWidget( ingredientsBox, 1, 1, 0, 1 );
+	searchPageLayout->addLayout( layout4, 0, 1 );
 	widgetStack->addWidget( searchPage, 0 );
 	
 	resultPage = new QWidget( widgetStack, "resultPage" );
@@ -560,14 +563,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	languageChange();
 	clearWState( WState_Polished );
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
-	
-	// ### At present, this is the only way I can get this dialog's size down
-	//     Should I put each element in its own tab to avoid squeezing them
-	//     into this one page???
-	authorListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-	catListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-	ingListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-	
+
 	KIconLoader *il=new KIconLoader;
 	openButton->setIconSet(il->loadIcon("ok", KIcon::NoGroup,16));
 	backButton->setIconSet(il->loadIcon("back", KIcon::NoGroup,16));

@@ -350,6 +350,11 @@ void KreMenuButton::setTitle(const QString &s)
 {
 	text=s;
 
+	//adjust text to two lines if needed
+	if ( fontMetrics().width(text) > 110 ) {
+		text.replace(' ',"\n");
+	}
+
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget()->minimumWidth() < minimumSizeHint().width() )
 		parentWidget()->setMinimumWidth( minimumSizeHint().width()+10 );
@@ -374,10 +379,12 @@ QSize KreMenuButton::sizeHint() const
 
 QSize KreMenuButton::minimumSizeHint() const
 {
+	int text_width = QMAX( fontMetrics().width(text.section('\n',0,0)), fontMetrics().width(text.section('\n',1,1)) );
+
 	if ( icon )
-		return QSize( 40+icon->width()+fontMetrics().width(text), 30 );
+		return QSize( 40+icon->width()+text_width, 30 );
 	else
-		return QSize( 40+fontMetrics().width(text), 30 );
+		return QSize( 40+text_width, 30 );
 }
 
 void KreMenuButton::paintEvent(QPaintEvent *)
