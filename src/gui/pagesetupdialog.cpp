@@ -224,3 +224,5 @@ bool PageSetupDialog::haveWritePerm( const QString &filename )
 	}
 }
 
+
+#include "pagesetupdialog.moc"

@@ -567,3 +567,5 @@ void SetupDisplay::changeMade(void)
 {
 	has_changes = true;
 }
+
+#include "setupdisplay.moc"

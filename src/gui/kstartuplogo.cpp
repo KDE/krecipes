@@ -10,7 +10,7 @@
 
 #include "kstartuplogo.h"
 
-KStartupLogo::KStartupLogo(QWidget * parent, const char *name) : QWidget(parent,name, WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose ),m_bReadyToHide(false) {
+KStartupLogo::KStartupLogo(QWidget * parent, const char *name) : QWidget(parent,name, WStyle_NoBorder | WStyle_Customize | WDestructiveClose ),m_bReadyToHide(false) {
   QString dataDir = locate("data", "krecipes/pics/startlogo.png");
   QPixmap pm(dataDir);
   setBackgroundPixmap(pm);
