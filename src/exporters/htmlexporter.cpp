@@ -16,6 +16,7 @@
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
 #include <qurl.h>
 
 #include <kconfig.h>
@@ -256,7 +257,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	html_map.insert("title",recipe.title);
 
 	//=======================INSTRUCTIONS======================//
-	QString instr_html = recipe.instructions;
+	QString instr_html = QStyleSheet::escape(recipe.instructions);
 	instr_html.replace("\n","<BR>");
 	html_map.insert("instructions",instr_html);
 
@@ -277,7 +278,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it )
 	{
 		if (counter) authors_html += ", ";
-		authors_html += (*author_it).name;
+		authors_html += QStyleSheet::escape((*author_it).name);
 		counter++;
 	}
 	if ( !authors_html.isEmpty() )
@@ -291,7 +292,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it )
 	{
 		if (counter) categories_html += ", ";
-		categories_html += (*cat_it).name;
+		categories_html += QStyleSheet::escape((*cat_it).name);
 		counter++;
 	}
 	if ( !categories_html.isEmpty() )
@@ -323,7 +324,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),(*ing_it).units);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ?
-				   QString::fromLatin1("") : QString::fromLatin1("; ")+(*ing_it).prepMethod);
+				   QString::fromLatin1("") : QString::fromLatin1("; ")+QStyleSheet::escape((*ing_it).prepMethod));
 
 		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}
@@ -351,9 +352,9 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 			}
 
 		properties_html += QString("<li>%1: %2  %3</li>")
-			    .arg(prop->name)
+			    .arg(QStyleSheet::escape(prop->name))
 			    .arg(amount_str)
-			    .arg(prop->units);
+			    .arg(QStyleSheet::escape(prop->units));
 	}
 	if ( !properties_html.isEmpty() )
 	{

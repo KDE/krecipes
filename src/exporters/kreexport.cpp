@@ -12,6 +12,7 @@
 #include "kreexport.h"
 
 #include <qfile.h>
+#include <qstylesheet.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -73,10 +74,10 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
     xml +="<krecipes-recipe>\n";
     xml += "<krecipes-description>\n";
-    xml += "<title>"+(*recipe_it).title.utf8()+"</title>\n";
+    xml += "<title>"+QStyleSheet::escape((*recipe_it).title.utf8())+"</title>\n";
 
 	for ( ElementList::const_iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
-		xml += "<author>"+(*author_it).name.utf8()+"</author>\n";
+		xml += "<author>"+QStyleSheet::escape((*author_it).name.utf8())+"</author>\n";
 
     xml += "<pictures>\n";
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
@@ -96,7 +97,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "<category>\n";
 
 	for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
-		xml += "<cat>"+(*cat_it).name.utf8()+"</cat>\n";
+		xml += "<cat>"+QStyleSheet::escape((*cat_it).name.utf8())+"</cat>\n";
 
     xml += "</category>\n";
     xml += "<serving>";
@@ -108,19 +109,19 @@ QString KreExporter::createContent( const RecipeList& recipes )
 	for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 	{
       xml += "<ingredient>\n";
-      xml += "<name>"+(*ing_it).name.utf8()+"</name>\n";
+      xml += "<name>"+QStyleSheet::escape((*ing_it).name.utf8())+"</name>\n";
       xml += "<amount>";
       xml += QString::number((*ing_it).amount);
       xml += "</amount>\n";
-      xml += "<unit>"+(*ing_it).units.utf8()+"</unit>\n";
-      xml += "<prep>"+(*ing_it).prepMethod.utf8()+"</prep>\n";
+      xml += "<unit>"+QStyleSheet::escape((*ing_it).units.utf8())+"</unit>\n";
+      xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
       xml += "</ingredient>\n";
       /// @todo add ingredient properties
 	}
 
     xml += "</krecipes-ingredients>\n";
     xml += "<krecipes-instructions>\n";
-    xml += (*recipe_it).instructions.utf8();
+    xml += QStyleSheet::escape((*recipe_it).instructions.utf8());
     xml += "</krecipes-instructions>\n";
     xml += "</krecipes-recipe>\n";
     
