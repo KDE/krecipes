@@ -235,7 +235,7 @@ void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
 	{
 		QDomElement el = l.item(i).toElement();
 
-		if (el.tagName()="step")
+		if (el.tagName()=="step")
 			directions.append(el.text().stripWhiteSpace());
 		else
 			kdDebug()<<"Unknown tag within <directions>: "<<el.tagName()<<endl;
