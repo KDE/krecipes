@@ -122,6 +122,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	if ( m_cat_structure ) {
 		importCategoryStructure( db, m_cat_structure );
 		delete m_cat_structure;
+		m_cat_structure = 0;
 	}
 
 	RecipeList::iterator recipe_it;

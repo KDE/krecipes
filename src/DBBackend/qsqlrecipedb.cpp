@@ -646,7 +646,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 		else {
 			CategoryTree tree; loadCategories(&tree,limit,offset);
 			QStringList ids; getIDList(&tree,ids);
-			ids << "-1"; //add the default category
+			ids << "-1"; //add the default category FIXME: doesn't work right with 'limit'/'offset'
 			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
 		}
 

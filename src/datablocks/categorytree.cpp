@@ -19,6 +19,7 @@ CategoryTree::CategoryTree( CategoryTree *parent ) : m_children( new CategoryTre
 
 CategoryTree::~CategoryTree()
 {
+	//FIXME
 	if ( m_parent )
 		m_parent->takeItem( this );
 
