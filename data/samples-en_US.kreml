@@ -46,12 +46,10 @@
 <ingredient>
 <name>egg yolks</name>
 <amount>7</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>eggs</name>
 <amount>1</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>icing sugar</name>
@@ -61,12 +59,11 @@
 <ingredient>
 <name>cinamon</name>
 <amount>1</amount>
-<unit>sticks</unit>
+<unit>stick</unit>
 </ingredient>
 <ingredient>
 <name>vanilla pods</name>
 <amount>1</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>almonds</name>
@@ -151,7 +148,6 @@ Paint the cake's top part with a bit of whisked egg, and put it in the oven at 1
 <ingredient>
 <name>Roma tomato</name>
 <amount>1</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>vinegar</name>
@@ -203,7 +199,6 @@ Note: Be careful adding the cumin and cinnamon. They tend to clump, and you shou
 <ingredient>
 <name>zucchini</name>
 <amount>1</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>mushrooms</name>
@@ -263,7 +258,6 @@ Note: Be careful adding the cumin and cinnamon. They tend to clump, and you shou
 <ingredient>
 <name>tomatoes</name>
 <amount>2</amount>
-<unit>units</unit>
 </ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>
@@ -301,7 +295,6 @@ Serve topped with cheese and with sliced tomato around the edge of the plate.</k
 <ingredient>
 <name>onion</name>
 <amount>1</amount>
-<unit>units</unit>
 </ingredient>
 <ingredient>
 <name>butter</name>

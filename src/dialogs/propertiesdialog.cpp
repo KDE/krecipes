@@ -50,7 +50,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     connect(removePropertyButton,SIGNAL(clicked()),propertyListView,SLOT(remove()));
 
     //FIXME: We've got some sort of build issue... we get undefined references to CreatePropertyDialog without this dummy code here
-    ElementList list;
+    UnitList list;
     CreatePropertyDialog d(this,&list);
 }
 

@@ -23,8 +23,9 @@
 #include <klistview.h>
 #include <kcombobox.h>
 
+#include "datablocks/unit.h"
+
 class IngredientPropertyList;
-class ElementList;
 
 /**
 @author Unai Garro
@@ -32,7 +33,7 @@ class ElementList;
 class SelectPropertyDialog:public QDialog{
 public:
     // Methods
-    SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,ElementList *unitList);
+    SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,UnitList *unitList);
     ~SelectPropertyDialog();
     int propertyID(void);
     int perUnitsID(void);
@@ -47,10 +48,10 @@ private:
   QPushButton* okButton;
   QPushButton* cancelButton;
   void loadProperties(IngredientPropertyList *propertyList);
-  void loadUnits(ElementList *unitList);
+  void loadUnits(UnitList *unitList);
 
   //Internal variables
-  ElementList  *unitListBack; // To store unit list with ID's for later use
+  UnitList  *unitListBack; // To store unit list with ID's for later use
 
 };
 

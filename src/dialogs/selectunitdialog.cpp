@@ -16,10 +16,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "element.h"
-#include "elementlist.h"
-
-SelectUnitDialog::SelectUnitDialog(QWidget* parent,const ElementList &unitList)
+SelectUnitDialog::SelectUnitDialog(QWidget* parent,const UnitList &unitList)
 : QDialog(parent)
 {
 container=new QVBoxLayout(this,5,5);
@@ -79,9 +76,9 @@ return(it->text(0).toInt());
 else return(-1);
 }
 
-void SelectUnitDialog::loadUnits(const ElementList &unitList)
+void SelectUnitDialog::loadUnits(const UnitList &unitList)
 {
-for ( ElementList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
+for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
 {
 (void)new QListViewItem(unitChooseView,QString::number((*unit_it).id),(*unit_it).name);
 }

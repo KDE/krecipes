@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -10,49 +10,38 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-/**
-@author Unai Garro
-*/
+#ifndef CREATEUNITDIALOG_H
+#define CREATEUNITDIALOG_H
 
-#ifndef CREATEPROPERTYDIALOG_H
-#define CREATEPROPERTYDIALOG_H
-
-#include <qcombobox.h>
-#include <qlayout.h>
+#include <qdialog.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
+#include <qlayout.h>
 #include <qvbox.h>
-#include <qdialog.h>
-#include <qlabel.h>
 #include <klineedit.h>
 
 #include "datablocks/unit.h"
 
-class CreatePropertyDialog:public QDialog{
+/**
+@author Unai Garro
+*/
+class CreateUnitDialog : public QDialog
+{
 public:
-    CreatePropertyDialog(QWidget *parent,UnitList *list);
-    ~CreatePropertyDialog();
-    QString newPropertyName(void);
-    QString newUnitsName(void);
-
+	CreateUnitDialog(QWidget *parent,const QString &name = QString::null, const QString &plural = QString::null );
+	~CreateUnitDialog();
+	Unit newUnit(void);
 
 private:
-  //Widgets
-  QVBoxLayout *container;
-  QGroupBox *box;
-  QVBox *vbox;
-  KLineEdit *propertyNameEdit;
-  KLineEdit *propertyUnits;
-  QPushButton* okButton;
-  QPushButton* cancelButton;
-  QLabel *nameEditText;
-  QLabel *unitsText;
+	//Widgets
+	QVBoxLayout *container;
+	QGroupBox *box;
+	QVBox *vbox;
+	KLineEdit *nameEdit;
+	KLineEdit *pluralEdit;
+	QPushButton* okButton;
+	QPushButton* cancelButton;
 
-  //Internal variables
-  UnitList *unitList;
-
-  //Methods
-  void loadUnits();
 };
 
 #endif

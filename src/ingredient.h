@@ -12,6 +12,8 @@
 
 #include <qstring.h>
 
+#include "datablocks/unit.h"
+
 /**
 @author Unai Garro
 */
@@ -19,13 +21,13 @@ class Ingredient{
 public:
     Ingredient();
     Ingredient(const Ingredient& i);
-    Ingredient( const QString &name, double amount, const QString &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
+    Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
     ~Ingredient();
     int ingredientID;
     QString name;
     double amount;
     int unitID;
-    QString units;
+    Unit units;
     QString prepMethod;
     int prepMethodID;
     int groupID;

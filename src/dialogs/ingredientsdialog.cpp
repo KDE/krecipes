@@ -167,7 +167,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     // Initialize
     ingredientList =new ElementList;
-    unitList=new ElementList;
+    unitList=new UnitList;
 
     // Signals & Slots
     connect(ingredientListView->listView(),SIGNAL(selectionChanged()),this, SLOT(updateLists()));
@@ -219,7 +219,7 @@ database->loadPossibleUnits(ingredientID,unitList);
 
 //Populate this data into the KListView
 
-	for ( ElementList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it )
+	for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it )
 	{
 	(void)new QListViewItem(unitsListView->listView(),QString::number((*unit_it).id),(*unit_it).name);
 	}
@@ -242,7 +242,7 @@ if ( (it=ingredientListView->listView()->selectedItem()) )
   }
 if (ingredientID>=0) // an ingredient was selected previously
 {
-  ElementList allUnits;
+  UnitList allUnits;
   database->loadUnits(&allUnits);
 
   SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,allUnits);
@@ -338,7 +338,7 @@ if ( (it=ingredientListView->listView()->selectedItem()) )
 if (ingredientID>=0) // an ingredient was selected previously
 {
  IngredientPropertyList allProperties; database->loadProperties(&allProperties);
- ElementList unitList; database->loadPossibleUnits(ingredientID,&unitList);
+ UnitList unitList; database->loadPossibleUnits(ingredientID,&unitList);
  SelectPropertyDialog* propertyDialog=new SelectPropertyDialog(0,&allProperties,&unitList);
 
  if ( propertyDialog->exec() == QDialog::Accepted ) {

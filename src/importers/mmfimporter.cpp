@@ -227,7 +227,10 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			return false;
 		}
 
-		new_ingredient.units = unit;
+		if ( new_ingredient.amount > 1 )
+			new_ingredient.units.plural = unit;
+		else
+			new_ingredient.units.name = unit;
 	}
 
 	//unit/name separator
@@ -242,9 +245,6 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 
 	//if we made it this far it is an ingredient line
 	list.append( new_ingredient );
-	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
-	  <<", unit:"<<new_ingredient.units
-	  <<", name:"<<new_ingredient.name<<endl;
 
 	return true;
 }

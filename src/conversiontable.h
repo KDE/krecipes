@@ -15,6 +15,7 @@
 
 #include "unitratio.h"
 #include "elementlist.h"
+#include "datablocks/unit.h"
 
 /**
 @author Unai Garro
@@ -62,7 +63,7 @@ private slots:
 	void repaintCell(int r,int c);
 	
 	void unitRemoved(int);
-	void unitCreated(const Element&);
+	void unitCreated(const Unit&);
 signals:
 	void ratioChanged(int row, int col, double value);
 };

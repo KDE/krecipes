@@ -105,7 +105,7 @@ list->recipeIdList.clear();
 QString command;
 if (withNames)
 {
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.recipe_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id);" );
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.recipe_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id);" );
 }
 else
 {
@@ -124,8 +124,9 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.name=unescapeAndDecode(row.data(1));
 		    ing.amount=row.data(2).toDouble();
 		    ing.unitID=row.data(3).toInt();
-		    ing.units=unescapeAndDecode(row.data(4));
-		    list->recipeIdList.append(row.data(5).toInt());
+		    ing.units.name=unescapeAndDecode(row.data(4));
+		    ing.units.plural=unescapeAndDecode(row.data(5));
+		    list->recipeIdList.append(row.data(6).toInt());
 		    }
 		    else
 		    {
@@ -183,7 +184,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 
 // Read the ingredients
 
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
 
 recipeToLoad=database->executeQuery( command);
             if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
@@ -194,9 +195,17 @@ recipeToLoad=database->executeQuery( command);
 		    ing.name=unescapeAndDecode(row.data(1));
 		    ing.amount=row.data(2).toDouble();
 		    ing.unitID=row.data(3).toInt();
-		    ing.units=unescapeAndDecode(row.data(4));
-		    ing.prepMethodID=row.data(5).toInt();
-		    ing.groupID=row.data(6).toInt();
+		    ing.units.name=unescapeAndDecode(row.data(4));
+		    ing.units.plural=unescapeAndDecode(row.data(5));
+
+		    //if we don't have both name and plural, use what we have as both
+		    if ( ing.units.name.isEmpty() )
+		    	ing.units.name = ing.units.plural;
+		    else if ( ing.units.plural.isEmpty() )
+		    	ing.units.plural = ing.units.name;
+
+		    ing.prepMethodID=row.data(6).toInt();
+		    ing.groupID=row.data(7).toInt();
 		    
 		    if ( ing.prepMethodID != -1 )
 		    {
@@ -478,13 +487,13 @@ void LiteRecipeDB::loadPrepMethods( ElementList *list)
 	}
 }
 
-void LiteRecipeDB::loadPossibleUnits(int ingredientID, ElementList *list)
+void LiteRecipeDB::loadPossibleUnits(int ingredientID, UnitList *list)
 {
 list->clear();
 
 QString command;
 
-command=QString("SELECT u.id,u.name FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;").arg(ingredientID);
+command=QString("SELECT u.id,u.name,u.plural FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;").arg(ingredientID);
 
 QSQLiteResult unitToLoad=database->executeQuery( command);
 
@@ -493,10 +502,11 @@ if ( unitToLoad.getStatus()!=QSQLiteResult::Failure ) {
             if (!unitToLoad.atEnd() ) {
 
                 while ( !unitToLoad.atEnd() ) {
-		    Element unit;
+		    Unit unit;
 		    unit.id=row.data(0).toInt();
 		    unit.name=unescapeAndDecode(row.data(1));
-		    list->add(unit);
+		    unit.plural=unescapeAndDecode(row.data(2));
+		    list->append(unit);
 		    row=unitToLoad.next();
                 }
 	}
@@ -751,13 +761,13 @@ command=QString("INSERT INTO unit_list VALUES(%1,%2);").arg(ingredientID).arg(un
 database->executeQuery(command);
 }
 
-void LiteRecipeDB::loadUnits(ElementList *list)
+void LiteRecipeDB::loadUnits(UnitList *list)
 {
 list->clear();
 
 QString command;
 
-command="SELECT id,name FROM units;";
+command="SELECT id,name,plural FROM units;";
 
 QSQLiteResult unitToLoad=database->executeQuery(command);
 if (unitToLoad.getStatus()!=QSQLiteResult::Failure)
@@ -765,10 +775,11 @@ if (unitToLoad.getStatus()!=QSQLiteResult::Failure)
 	QSQLiteResultRow row =unitToLoad.first();
 	while (!unitToLoad.atEnd())
             {
-		Element unit;
+		Unit unit;
 		unit.id=row.data(0).toInt();
 		unit.name=unescapeAndDecode(row.data(1));
-		list->add(unit);
+		unit.plural=unescapeAndDecode(row.data(2));
+		list->append(unit);
 		row=unitToLoad.next();
              }
 }
@@ -1160,27 +1171,28 @@ database->executeQuery(command);
 emit unitRemoved(unitID);
 }
 
-void LiteRecipeDB::createNewUnit(const QString &unitName)
+void LiteRecipeDB::createNewUnit(const QString &unitName, const QString &unitPlural)
 {
 QString command;
 QString real_name = unitName.left(maxUnitNameLength());
+QString real_plural = unitPlural.left(maxUnitNameLength());
 
-command=QString("INSERT INTO units VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
+command=QString("INSERT INTO units VALUES(NULL,'"+escapeAndEncode(real_name)+"','"+escapeAndEncode(real_plural)+"');");
 database->executeQuery(command);
 
-emit unitCreated(Element(real_name,lastInsertID()));
+emit unitCreated(Unit(real_name,real_plural,lastInsertID()));
 }
 
 
-void LiteRecipeDB::modUnit(int unitID, QString newLabel)
+void LiteRecipeDB::modUnit(int unitID, const QString &newName, const QString &newPlural)
 {
 QString command;
 
-command=QString("UPDATE units SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(unitID);
-database->executeQuery(command);
+database->executeQuery("UPDATE units SET name='"+QString(escapeAndEncode(newName))+"' WHERE id='"+QString::number(unitID)+"';");
+database->executeQuery("UPDATE units SET plural='"+QString(escapeAndEncode(newPlural))+"' WHERE id='"+QString::number(unitID)+"';");
 
 emit unitRemoved(unitID);
-emit unitCreated( Element(newLabel,unitID) );
+emit unitCreated( Unit(newName,newPlural,unitID) );
 }
 
 void LiteRecipeDB::findUseOf_Unit_InRecipes(ElementList *results, int unitID)
@@ -1462,17 +1474,26 @@ return(IngredientProperty(QString::null,QString::null));
 }
 
 
-QString LiteRecipeDB::unitName(int ID)
+Unit LiteRecipeDB::unitName(int ID)
 {
-QString command=QString("SELECT name FROM units WHERE id=%1;").arg(ID);
+QString command=QString("SELECT name,plural FROM units WHERE id=%1;").arg(ID);
 QSQLiteResult toLoad=database->executeQuery(command);
 if (toLoad.getStatus()!=QSQLiteResult::Failure)
 {
 QSQLiteResultRow row=toLoad.first();
-if (!toLoad.atEnd()) // Go to the first record (there should be only one anyway.
- return(unescapeAndDecode(row.data(0)));
+if (!toLoad.atEnd()) { // Go to the first record (there should be only one anyway.
+	Unit unit(unescapeAndDecode(row.data(0)),unescapeAndDecode(row.data(1)));
+
+	//if we don't have both name and plural, use what we have as both
+	if ( unit.name.isEmpty() )
+		unit.name = unit.plural;
+	else if ( unit.plural.isEmpty() )
+		unit.plural = unit.name;
+
+	return unit;
+ }
 }
-return(QString::null);
+return Unit();
 }
 
 bool LiteRecipeDB::checkIntegrity(void)
@@ -1556,7 +1577,7 @@ else if (tableName=="ingredient_list")
 
 else if (tableName=="unit_list") commands<<"CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
+else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), plural VARCHAR(%2), PRIMARY KEY (id));").arg(maxUnitNameLength()).arg(maxUnitNameLength());
 
 else if (tableName== "prep_methods") commands<<QString("CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 
@@ -1877,6 +1898,52 @@ if ( version < 0.62 )
 	database->executeQuery("COMMIT TRANSACTION;");
 }
 
+if ( version < 0.63 )
+{
+	database->executeQuery("BEGIN TRANSACTION;");
+
+	//==================add a column to 'units' to allow handling plurals
+	database->executeQuery("CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));");
+	QSQLiteResult copyQuery = database->executeQuery("SELECT id,name FROM units;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = "INSERT INTO units_copy VALUES('"+escape(row.data(0))
+			 +"','"+escape(row.data(1))
+			 +"');";
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE units");
+	database->executeQuery("CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20), PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT id,name FROM units_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = "INSERT INTO units VALUES('"+escape(row.data(0))
+			 +"','"+escape(row.data(1))
+			 +"',NULL)";
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE units_copy");
+
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		database->executeQuery(command);
+	command="INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
+		database->executeQuery(command);
+
+	database->executeQuery("COMMIT TRANSACTION;");
+}
+
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -2090,15 +2157,15 @@ database->executeQuery(command);
 
 int LiteRecipeDB::findExistingUnitsByName(const QString& name,int ingredientID, ElementList *list)
 {
-QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
+QString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 QString command;
 	if (ingredientID<0) // We're looking for units with that name all through the table, no specific ingredient
 	{
-	command=QString("SELECT id,name FROM units WHERE name LIKE '%1';").arg(search_str);
+	command="SELECT id,name FROM units WHERE name='"+search_str+"' OR plural='"+search_str+"';";
 	}
 	else // Look for units  with that name for the specified ingredient
 	{
-	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name LIKE '%2';").arg(ingredientID).arg(search_str);
+	command="SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id="+QString::number(ingredientID)+" AND ( u.name='"+search_str+"' OR u.plural='"+search_str+"' );";
 	}
 
 	QSQLiteResult unitsToLoad=database->executeQuery(command); // Run the query
@@ -2215,7 +2282,7 @@ int LiteRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM units WHERE name LIKE '%1';").arg(search_str);
+	QString command="SELECT id FROM units WHERE name LIKE '"+search_str+"' OR plural LIKE '"+search_str+"';";
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 

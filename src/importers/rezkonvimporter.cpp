@@ -157,7 +157,8 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 		new_ingredient.amount = readRange( string.mid(0,7) );
 
 	//unit
-	new_ingredient.units = string.mid( 8, 9 ).stripWhiteSpace();
+	QString unit_str = string.mid( 8, 9 ).stripWhiteSpace();
+	new_ingredient.units = Unit(unit_str,new_ingredient.amount);
 
 	//name and preparation method
 	new_ingredient.name = string.mid( 18, string.length()-18 ).stripWhiteSpace();
@@ -166,9 +167,6 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 	new_ingredient.group = current_header;
 
 	recipe.ingList.append( new_ingredient );
-	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
-	  <<", unit:"<<new_ingredient.units
-	  <<", name:"<<new_ingredient.name<<endl;
 }
 
 //for now, make header an ingredient

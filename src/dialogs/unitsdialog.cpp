@@ -62,7 +62,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
 
     //TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
-    connect(database,SIGNAL(unitCreated(const Element&)),this,SLOT(loadConversionTable()));
+    connect(database,SIGNAL(unitCreated(const Unit&)),this,SLOT(loadConversionTable()));
     connect(database,SIGNAL(unitRemoved(int)),this,SLOT(loadConversionTable()));
     
     //this is for the above TODO, but it still has some bugs to be worked out
@@ -94,12 +94,12 @@ loadConversionTable();
 
 void UnitsDialog::loadConversionTable(void)
 {
-ElementList unitList;
+UnitList unitList;
 database->loadUnits(&unitList);
 QStringList unitNames;
 IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
 conversionTable->clear();
-for ( ElementList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
+for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
 {
 unitNames.append((*unit_it).name);
 int *newId=new int((*unit_it).id); // Create the new int element

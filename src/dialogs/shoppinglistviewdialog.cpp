@@ -90,7 +90,7 @@ QString recipeHTML;
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 	QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 
-		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg((*ing_it).name).arg(amount_str).arg((*ing_it).units);
+		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg((*ing_it).name).arg(amount_str).arg((*ing_it).amount>1?(*ing_it).units.plural:(*ing_it).units.name);
         }
 	recipeHTML+="</tbody></table></div>";
 	// Close

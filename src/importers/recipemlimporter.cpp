@@ -218,10 +218,10 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing, const QString &he
 			kdDebug()<<"Unknown tag within <ing>: "<<ingChild.tagName()<<endl;
 	}
 
-	if ( !size.isNull() )
+	if ( !size.isEmpty() )
 		unit.prepend(size+" ");
 
-	Ingredient new_ing(name, quantity, unit, -1, -1, prep_method);
+	Ingredient new_ing(name, quantity, Unit(unit,quantity), -1, -1, prep_method);
 	new_ing.group = header;
 	recipe.ingList.append( new_ing );
 }

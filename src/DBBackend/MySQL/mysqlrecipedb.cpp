@@ -60,7 +60,7 @@ else if (tableName=="ingredient_list") commands<<"CREATE TABLE ingredient_list (
 
 else if (tableName=="unit_list") commands<<"CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
+else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), plural VARCHAR(%2), PRIMARY KEY (id));").arg(maxUnitNameLength()).arg(maxUnitNameLength());
 
 else if (tableName== "prep_methods") commands<<QString("CREATE TABLE prep_methods (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 
@@ -211,6 +211,17 @@ if ( version < 0.62 )
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
 	command="INSERT INTO db_info VALUES(0.62,'Krecipes 0.7');";
+		tableToAlter.exec(command);
+}
+
+if ( version < 0.63 )
+{
+	QString command="ALTER TABLE `units` ADD COLUMN `plural` varchar(20) AFTER name;";
+		QSqlQuery tableToAlter(command,database);
+	
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		tableToAlter.exec(command);
+        command="INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
 		tableToAlter.exec(command);
 }
 

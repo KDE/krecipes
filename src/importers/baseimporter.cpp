@@ -23,6 +23,7 @@
 #include "recipedb.h"
 #include "dialogs/recipeimportdialog.h"
 #include "datablocks/categorytree.h"
+#include "datablocks/unit.h"
 
 /** @brief A vector designed for fast searches and sorted insertions.
   *
@@ -220,8 +221,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	ElementList ingList; db->loadIngredients( &ingList );
 	CustomVector ingVector( ingList ); qHeapSort( ingVector );
 
-	ElementList unitList; db->loadUnits( &unitList );
-	CustomVector unitVector( unitList ); qHeapSort( unitVector );
+	UnitList unitList; db->loadUnits( &unitList );
+	/*CustomVector unitVector( unitList ); qHeapSort( unitVector );*/
 	
 	ElementList authorList; db->loadAuthors( &authorList );
 	CustomVector authorVector( authorList ); qHeapSort( authorVector );
@@ -271,13 +272,13 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 				ingVector.inSort( Element( real_ing_name.lower(), new_ing_id ) );
 			}
 
-			QString real_unit_name = (*ing_it).units.left(max_units_length);
-			int new_unit_id = unitVector.bsearch(real_unit_name.lower());
+			Unit real_unit((*ing_it).units.name.left(max_units_length),(*ing_it).units.plural.left(max_units_length));
+			int new_unit_id = (*unitList.find(real_unit)).id;
 			if ( new_unit_id == -1 )
 			{
-				db->createNewUnit( real_unit_name );
+				db->createNewUnit( real_unit.name, real_unit.plural );
 				new_unit_id = db->lastInsertID();
-				unitVector.inSort( Element( real_unit_name.lower(), new_unit_id ) );
+				unitList.append( Unit( real_unit.name, real_unit.plural, new_unit_id ) );
 			}
 			
 			int new_prep_id = -1;
@@ -299,7 +300,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			(*ing_it).ingredientID = new_ing_id;
 
 			ElementList unitsWithIng;
-			db->findExistingUnitsByName( (*ing_it).units, new_ing_id, &unitsWithIng );
+			db->findExistingUnitsByName( (*ing_it).units.name, new_ing_id, &unitsWithIng );
+			db->findExistingUnitsByName( (*ing_it).units.plural, new_ing_id, &unitsWithIng );
 
 			if ( !unitsWithIng.containsId(new_unit_id) )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );

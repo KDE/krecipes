@@ -336,7 +336,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 			QString tmp_format(ingredient_format);
 			tmp_format.replace(QRegExp(QString::fromLatin1("%n")),QStyleSheet::escape((*ing_it).name));
 			tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
-			tmp_format.replace(QRegExp(QString::fromLatin1("%u")),QStyleSheet::escape((*ing_it).units));
+			tmp_format.replace(QRegExp(QString::fromLatin1("%u")),QStyleSheet::escape(((*ing_it).amount>1)?(*ing_it).units.plural:(*ing_it).units.name));
 			tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ?
 					QString::fromLatin1("") : QString::fromLatin1("; ")+QStyleSheet::escape((*ing_it).prepMethod));
 	

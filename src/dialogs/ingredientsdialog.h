@@ -20,6 +20,7 @@
 #include <knuminput.h>
 
 #include "widgets/krelistview.h"
+#include "datablocks/unit.h"
 
 class RecipeDB;
 class ElementList;
@@ -65,7 +66,7 @@ private:
   // Internal Variables
   RecipeDB *database;
   ElementList *ingredientList;
-  ElementList *unitList;
+  UnitList *unitList;
   IngredientPropertyList *propertiesList;
   ElementList  *perUnitListBack;
 

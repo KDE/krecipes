@@ -31,6 +31,7 @@
 #include <qvbox.h>
 
 #include "elementlist.h"
+#include "datablocks/unit.h"
 
 class QTabWidget;
 class Recipe;
@@ -66,7 +67,7 @@ private:
 	// Internal Data
 	Recipe *loadedRecipe; //Loaded Recipe
 	ElementList *ingredientComboList;
-	ElementList *unitComboList;
+	UnitList *unitComboList;
 	ElementList *prepMethodComboList;
 	RecipeDB *database;
 	bool changedSignalEnabled;
@@ -133,7 +134,7 @@ private:
 	bool checkAmountEdit();
 	bool checkBounds();
 	void createNewIngredientIfNecessary();
-	int createNewUnitIfNecessary( const QString &unit, const QString &ingredient );
+	int createNewUnitIfNecessary( const QString &unit, bool plural, const QString &ingredient, Unit &new_unit );
 	int createNewPrepIfNecessary( const QString &prep );
 	int createNewGroupIfNecessary( const QString &group );
 	void checkIfNewUnits();

@@ -143,7 +143,7 @@ QString command;
 
 if (withNames)
 {
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.recipe_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;");
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.recipe_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;");
 }
 else
 {
@@ -160,8 +160,9 @@ QSqlQuery ingredientsToLoad(command,database);
 		    ing.name=unescapeAndDecode(ingredientsToLoad.value(1).toString());
 		    ing.amount=ingredientsToLoad.value(2).toDouble();
 		    ing.unitID=ingredientsToLoad.value(3).toInt();
-		    ing.units=unescapeAndDecode(ingredientsToLoad.value(4).toString());
-		    list->recipeIdList.append(ingredientsToLoad.value(5).toInt());
+		    ing.units.name=unescapeAndDecode(ingredientsToLoad.value(4).toString());
+		    ing.units.plural=unescapeAndDecode(ingredientsToLoad.value(5).toString());
+		    list->recipeIdList.append(ingredientsToLoad.value(6).toInt());
 		    }
 		    else
 		    {
@@ -199,7 +200,7 @@ if (recipeToLoad.isActive())
 }
 
 // Read the ingredients
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
 
 recipeToLoad.exec( command);
             if ( recipeToLoad.isActive() ) {
@@ -209,9 +210,16 @@ recipeToLoad.exec( command);
 		    ing.name=unescapeAndDecode(recipeToLoad.value(1).toString());
 		    ing.amount=recipeToLoad.value(2).toDouble();
 		    ing.unitID=recipeToLoad.value(3).toInt();
-		    ing.units=unescapeAndDecode(recipeToLoad.value(4).toString());
+		    ing.units.name=unescapeAndDecode(recipeToLoad.value(4).toString());
+		    ing.units.plural=unescapeAndDecode(recipeToLoad.value(5).toString());
+
+		    //if we don't have both name and plural, use what we have as both
+		    if ( ing.units.name.isEmpty() )
+		    	ing.units.name = ing.units.plural;
+		    else if ( ing.units.plural.isEmpty() )
+		    	ing.units.plural = ing.units.name;
 		    
-		    ing.prepMethodID=recipeToLoad.value(5).toInt();
+		    ing.prepMethodID=recipeToLoad.value(6).toInt();
 		    if ( ing.prepMethodID != -1 )
 		    {
 		    	QSqlQuery prepMethodToLoad(QString("SELECT name FROM prep_methods WHERE id=%1").arg(ing.prepMethodID),database);
@@ -219,7 +227,7 @@ recipeToLoad.exec( command);
 		    		ing.prepMethod=unescapeAndDecode(prepMethodToLoad.value(0).toString());
 		    }
 
-		    ing.groupID=recipeToLoad.value(6).toInt();
+		    ing.groupID=recipeToLoad.value(7).toInt();
 		    if ( ing.groupID != -1 ) {
 		    	QSqlQuery toLoad(QString("SELECT name FROM ingredient_groups WHERE id=%1").arg(ing.groupID),database);
 		    	if ( toLoad.isActive() && toLoad.first() )
@@ -465,22 +473,23 @@ emit propertyRemoved(propertyID);
 emit propertyCreated( propertyName(propertyID) );
 }
 
-void QSqlRecipeDB::loadPossibleUnits(int ingredientID, ElementList *list)
+void QSqlRecipeDB::loadPossibleUnits(int ingredientID, UnitList *list)
 {
 list->clear();
 
 QString command;
 
-command=QString("SELECT u.id,u.name FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;").arg(ingredientID);
+command=QString("SELECT u.id,u.name,u.plural FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;").arg(ingredientID);
 
 QSqlQuery unitToLoad( command,database);
 
             if ( unitToLoad.isActive() ) {
                 while ( unitToLoad.next() ) {
-		    Element unit;
+		    Unit unit;
 		    unit.id=unitToLoad.value(0).toInt();
 		    unit.name=unescapeAndDecode(unitToLoad.value(1).toString());
-		    list->add(unit);
+		    unit.plural=unescapeAndDecode(unitToLoad.value(2).toString());
+		    list->append(unit);
                 }
 	}
 
@@ -749,22 +758,23 @@ command=QString("INSERT INTO unit_list VALUES(%1,%2);").arg(ingredientID).arg(un
 QSqlQuery ingredientToCreate( command,database);
 }
 
-void QSqlRecipeDB::loadUnits(ElementList *list)
+void QSqlRecipeDB::loadUnits(UnitList *list)
 {
 list->clear();
 
 QString command;
 
-command="SELECT id,name FROM units;";
+command="SELECT id,name,plural FROM units;";
 
 QSqlQuery unitToLoad( command,database);
 
             if ( unitToLoad.isActive() ) {
                 while ( unitToLoad.next() ) {
-		    Element unit;
+		    Unit unit;
 		    unit.id=unitToLoad.value(0).toInt();
 		    unit.name=unescapeAndDecode(unitToLoad.value(1).toString());
-		    list->add(unit);
+		    unit.plural=unescapeAndDecode(unitToLoad.value(2).toString());
+		    list->append(unit);
                 }
 	}
 
@@ -1171,27 +1181,28 @@ emit prepMethodRemoved( prepMethodID );
 }
 
 
-void QSqlRecipeDB::createNewUnit(const QString &unitName)
+void QSqlRecipeDB::createNewUnit(const QString &unitName, const QString &unitPlural)
 {
 QString command;
 QString real_name = unitName.left(maxUnitNameLength());
+QString real_plural = unitPlural.left(maxUnitNameLength());
 
-command=QString("INSERT INTO units VALUES(%2,'%1');").arg(escapeAndEncode(real_name)).arg(getNextInsertIDStr("units","id"));
+command="INSERT INTO units VALUES("+getNextInsertIDStr("units","id")+",'"+real_name+"','"+real_plural+"');";
 QSqlQuery unitToCreate( command,database);
 
-emit unitCreated( Element(real_name,lastInsertID()) );
+emit unitCreated( Unit(real_name,real_plural,lastInsertID()) );
 }
 
 
-void QSqlRecipeDB::modUnit(int unitID, QString newLabel)
+void QSqlRecipeDB::modUnit(int unitID, const QString &newName, const QString &newPlural)
 {
-QString command;
+QSqlQuery unitQuery(database);
 
-command=QString("UPDATE units SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(unitID);
-QSqlQuery ingredientToCreate( command,database);
+unitQuery.exec("UPDATE units SET name='"+QString(escapeAndEncode(newName))+"' WHERE id='"+QString::number(unitID)+"';");
+unitQuery.exec("UPDATE units SET plural='"+QString(escapeAndEncode(newPlural))+"' WHERE id='"+QString::number(unitID)+"';");
 
 emit unitRemoved(unitID);
-emit unitCreated( Element(newLabel,unitID) );
+emit unitCreated( Unit(newName,newPlural,unitID) );
 }
 
 void QSqlRecipeDB::findUseOf_Unit_InRecipes(ElementList *results, int unitID)
@@ -1428,14 +1439,23 @@ if (toLoad.isActive() && toLoad.next()) { // Go to the first record (there shoul
 return(IngredientProperty(QString::null,QString::null));
 }
 
-QString QSqlRecipeDB::unitName(int ID)
+Unit QSqlRecipeDB::unitName(int ID)
 {
-QString command=QString("SELECT name FROM units WHERE id=%1;").arg(ID);
+QString command=QString("SELECT name,plural FROM units WHERE id=%1;").arg(ID);
 QSqlQuery toLoad( command,database);
-if (toLoad.isActive() && toLoad.next()) // Go to the first record (there should be only one anyway.
-	return(unescapeAndDecode(toLoad.value(0).toString()));
+if (toLoad.isActive() && toLoad.next()) { // Go to the first record (there should be only one anyway.
+	Unit unit(unescapeAndDecode(toLoad.value(0).toString()),unescapeAndDecode(toLoad.value(1).toString()));
 
-return(QString::null);
+	//if we don't have both name and plural, use what we have as both
+	if ( unit.name.isEmpty() )
+		unit.name = unit.plural;
+	else if ( unit.plural.isEmpty() )
+		unit.plural = unit.name;
+
+	return unit;
+}
+
+return Unit();
 }
 
 bool QSqlRecipeDB::checkIntegrity(void)
@@ -1469,6 +1489,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 kdDebug()<<"Checking database version...\n";
 float version=databaseVersion();
 kdDebug()<<"version found... "<<version<<" \n";
+kdDebug()<<"latest version... "<<latestDBVersion()<<endl;
 if ( int(qRound(databaseVersion()*1e5)) < int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
 	switch ( KMessageBox::questionYesNo(0,i18n("<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.</b>")) ) {
 	case KMessageBox::Yes:
@@ -1688,15 +1709,15 @@ QSqlQuery authorToAdd( command,database);
 
 int QSqlRecipeDB::findExistingUnitsByName(const QString& name,int ingredientID, ElementList *list)
 {
-QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
+QString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 QString command;
 	if (ingredientID<0) // We're looking for units with that name all through the table, no specific ingredient
 	{
-	command=QString("SELECT id,name FROM units WHERE name='%1';").arg(search_str);
+	command="SELECT id,name FROM units WHERE name='"+search_str+"' OR plural='"+search_str+"';";
 	}
 	else // Look for units  with that name for the specified ingredient
 	{
-	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name='%2';").arg(ingredientID).arg(search_str);
+	command="SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id="+QString::number(ingredientID)+" AND ( u.name='"+search_str+"' OR u.plural='"+search_str+"' );";
 	}
 
 	QSqlQuery unitsToLoad(command,database); // Run the query
@@ -1791,7 +1812,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM units WHERE name='%1';").arg(search_str);
+	QString command="SELECT id FROM units WHERE name='"+search_str+"' OR plural='"+search_str+"';";
 	QSqlQuery elementToLoad(command,database); // Run the query
 	int id = -1;
 

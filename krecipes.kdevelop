@@ -14,7 +14,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts>
       <part>KDevBookmarks</part>
       <part>KDevClassView</part>
@@ -29,7 +29,7 @@
     </general>
     <run>
       <mainprogram>src/krecipes</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>executable</directoryradio>
@@ -45,7 +45,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
     </make>
   </kdevautoproject>
   <kdevfileview>
@@ -60,7 +60,7 @@
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns/>
+      <hidepatterns></hidepatterns>
       <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>

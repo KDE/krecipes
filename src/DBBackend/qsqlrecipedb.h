@@ -78,7 +78,7 @@ public:
 	void createNewIngGroup( const QString &name );
 	void createNewIngredient(const QString &ingredientName);
 	void createNewPrepMethod(const QString &prepMethodName);
-	void createNewUnit(const QString &unitName);
+	void createNewUnit(const QString &unitName, const QString &unitPlural);
 
 	void emptyData(void);
 
@@ -115,7 +115,7 @@ public:
 	void loadCategories(ElementList *list);
 	void loadIngredientGroups(ElementList *list);
 	void loadIngredients(ElementList *list);
-	void loadPossibleUnits(int ingredientID, ElementList *list);
+	void loadPossibleUnits(int ingredientID, UnitList *list);
 	void loadPrepMethods( ElementList *list);
 	void loadProperties(IngredientPropertyList *list,int ingredientID=-2); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipe(Recipe *recipe,int recipeID=0);
@@ -124,7 +124,7 @@ public:
 	void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false, bool loadCategories=false,bool loadIngredientNames=false,bool loadAuthors=false); // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
 	void loadRecipeList(ElementList *list, int categoryID=0);
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
-	void loadUnits(ElementList *list);
+	void loadUnits(UnitList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 
 	void mergeAuthors(int id1, int id2);
@@ -141,7 +141,7 @@ public:
   /**
   * set newLabel for unitID
   */
-	void modUnit(int unitID, QString newLabel);
+	void modUnit(int unitID, const QString &newName, const QString &newPlural);
   /**
   * set newLabel for categoryID
   */
@@ -179,7 +179,7 @@ public:
 
 	QString categoryName(int ID);
 	IngredientProperty propertyName(int ID);
-	QString unitName(int ID);
+	Unit unitName(int ID);
 
 	bool checkIntegrity(void);
 

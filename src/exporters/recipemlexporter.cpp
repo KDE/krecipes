@@ -135,7 +135,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 	
 							QDomElement unit_tag = doc.createElement("unit");
 							amt_tag.appendChild(unit_tag);
-							unit_tag.appendChild( doc.createTextNode((*ing_it).units) );
+							unit_tag.appendChild( doc.createTextNode(((*ing_it).amount>1)?(*ing_it).units.plural:(*ing_it).units.name) );
 	
 						QDomElement item_tag = doc.createElement("item");
 						item_tag.appendChild( doc.createTextNode((*ing_it).name ) );

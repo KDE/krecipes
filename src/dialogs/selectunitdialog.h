@@ -21,7 +21,7 @@
 #include <qvbox.h>
 #include <klistview.h>
 
-class ElementList;
+#include "datablocks/unit.h"
 
 /**
 @author Unai Garro
@@ -29,7 +29,7 @@ class ElementList;
 class SelectUnitDialog : public QDialog
 {
 public:
-    SelectUnitDialog(QWidget* parent,const ElementList &unitList);
+    SelectUnitDialog(QWidget* parent,const UnitList &unitList);
 
     ~SelectUnitDialog();
 
@@ -43,7 +43,7 @@ private:
   KListView *unitChooseView;
   QPushButton* okButton;
   QPushButton* cancelButton;
-  void loadUnits(const ElementList &unitList);
+  void loadUnits(const UnitList &unitList);
 
 };
 

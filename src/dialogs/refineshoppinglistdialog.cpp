@@ -131,7 +131,7 @@ void RefineShoppingListDialog::loadData()
 		if ( (*it).amount > 0 )
 			amount_str = MixedNumber((*it).amount).toString();
 
-		QListViewItem *new_item = new QListViewItem( ingListView->listView(), (*it).name, amount_str, (*it).units );
+		QListViewItem *new_item = new QListViewItem( ingListView->listView(), (*it).name, amount_str, (*it).amount>1?(*it).units.plural:(*it).units.name );
 		item_ing_map.insert( new_item, it );
 	}
 }
@@ -145,7 +145,7 @@ void RefineShoppingListDialog::addIngredient()
 		ingListView->listView()->ensureItemVisible(new_item);
 		allIngListView->listView()->setSelected(item,false);
 
-		item_ing_map.insert( new_item, ingredientList.append(Ingredient(item->text(0),0,QString::null)) );
+		item_ing_map.insert( new_item, ingredientList.append(Ingredient(item->text(0),0,Unit())) );
 	}
 }
 
@@ -184,7 +184,11 @@ void RefineShoppingListDialog::itemRenamed( QListViewItem* item, const QString &
 	}
 	else if ( col == 2 ) {
 		IngredientList::iterator found_it = *item_ing_map.find(item);
-		(*found_it).units = new_text;
+
+		if ( (*found_it).amount > 1 )
+			(*found_it).units.plural = new_text;
+		else
+			(*found_it).units.name = new_text;
 	}
 }
 

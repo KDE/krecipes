@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -10,76 +10,77 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "createpropertydialog.h"
+#include "createunitdialog.h"
 
 #include <klocale.h>
+#include <qlabel.h>
 
-CreatePropertyDialog::CreatePropertyDialog(QWidget *parent,UnitList* list):QDialog(parent,0,true)
+CreateUnitDialog::CreateUnitDialog(QWidget *parent,const QString &name,const QString &plural)
+ : QDialog(parent,0,true)
 {
 
-// Initialize Internal Variables
-unitList=list; // Store the pointer to the unitList;
-
-// Initialize widgets
 container=new QVBoxLayout(this,5,5);
-
 box=new QGroupBox(this);
 box->setColumnLayout(0, Qt::Vertical );
 box->layout()->setSpacing( 6 );
 box->layout()->setMargin( 11 );
 QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 boxLayout->setAlignment( Qt::AlignTop );
-box->setTitle(i18n("New Property"));
+
+box->setTitle(i18n("New Unit"));
 
 QGridLayout *gridLayout = new QGridLayout( this, 2, 2, 5, 5);
 
-nameEditText=new QLabel(i18n("Property name:"),this);
-propertyNameEdit=new KLineEdit(this);
-propertyNameEdit->setMinimumWidth(150);
-gridLayout->addWidget(nameEditText, 0, 0);
-gridLayout->addWidget(propertyNameEdit, 0, 1);
+QLabel *nameLabel = new QLabel(i18n("Singular:"),this);
+nameEdit=new KLineEdit(name,this);
 
-unitsText=new QLabel(i18n("Units:"),this);
-propertyUnits=new KLineEdit(this);
-propertyUnits->setMinimumWidth(150);
-gridLayout->addWidget(unitsText, 1, 0);
-gridLayout->addWidget(propertyUnits, 1, 1);
+gridLayout->addWidget(nameLabel, 0, 0);
+gridLayout->addWidget(nameEdit, 0, 1);
 
-QHBoxLayout *buttonsHBox = new QHBoxLayout( this, 5, 5 );
+QLabel *pluralLabel = new QLabel(i18n("Plural:"),this);
+pluralEdit=new KLineEdit(plural,this);
+
+gridLayout->addWidget(pluralLabel, 1, 0);
+gridLayout->addWidget(pluralEdit, 1, 1);
+
+QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
 okButton=new QPushButton(i18n("&OK"),this);
 cancelButton=new QPushButton(i18n("&Cancel"),this);
-QSpacerItem* spacer = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-buttonsHBox->addWidget(okButton);
-buttonsHBox->addWidget(cancelButton);
-buttonsHBox->addItem( spacer );
+button_hbox->addWidget(okButton);
+button_hbox->addWidget(cancelButton);
 
 boxLayout->addLayout( gridLayout );
-boxLayout->addLayout( buttonsHBox );
+boxLayout->addLayout(button_hbox);
 
 container->addWidget(box);
 
 adjustSize();
-setFixedSize(size());
+setFixedSize(size()); //we've got all the widgets put in, now let's keep it this size
 
-// Signals & Slots
 connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));
 connect (cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+
+if ( name.isEmpty() )
+	nameEdit->setFocus();
+else if ( plural.isEmpty() )
+	pluralEdit->setFocus();
 }
 
 
-CreatePropertyDialog::~CreatePropertyDialog()
+CreateUnitDialog::~CreateUnitDialog()
 {
 }
 
-
-QString CreatePropertyDialog::newPropertyName(void)
+Unit CreateUnitDialog::newUnit(void)
 {
-return(propertyNameEdit->text());
-}
+QString name = nameEdit->text();
+QString plural = pluralEdit->text();
 
-QString CreatePropertyDialog::newUnitsName(void)
-{
-return(propertyUnits->text());
-}
+if ( name.isEmpty() )
+	name = plural;
+if ( plural.isEmpty() )
+	plural = name;
 
+return Unit(name,plural);
+}
 

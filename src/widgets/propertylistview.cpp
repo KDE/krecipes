@@ -107,7 +107,7 @@ void StdPropertyListView::showPopup(KListView */*l*/, QListViewItem *i, const QP
 
 void StdPropertyListView::createNew()
 {
-	ElementList list;
+	UnitList list;
 	database->loadUnits(&list);
 	CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(this,&list);
 	

@@ -52,6 +52,11 @@ struct ingredient_nutrient_data
 	QValueList<double> data;
 };
 
+double RecipeDB::latestDBVersion() const
+{
+	return 0.63;
+}
+
 QString RecipeDB::krecipes_version() const
 {
 	KInstance *this_instance = KGlobal::instance();
@@ -272,7 +277,7 @@ int createUnit(const QString &name, RecipeDB *database)
 
 	if ( assigned_id == -1 ) //create unit since it doesn't exist
 	{
-		database->createNewUnit( name );
+		database->createNewUnit( name, QString::null );
 		assigned_id = database->lastInsertID();
 	}
 

@@ -210,12 +210,12 @@ void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe, const Q
 						new_ing.amount = (QString(ing.text()).stripWhiteSpace()).toDouble();
 				}
 				else if (ing.tagName() == "unit"){
-						new_ing.units = QString(ing.text()).stripWhiteSpace();
+					new_ing.units = Unit(ing.text().stripWhiteSpace(),new_ing.amount);
 				}
 				else if (ing.tagName() == "prep"){
 					new_ing.prepMethod = QString(ing.text()).stripWhiteSpace();
 				}
-      }
+			}
 		new_ing.group = header;
 		recipe->ingList.append( new_ing );
     }

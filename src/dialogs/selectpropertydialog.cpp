@@ -16,15 +16,13 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "element.h"
-#include "elementlist.h"
 #include "ingredientpropertylist.h"
 
-SelectPropertyDialog::SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,ElementList *unitList): QDialog(parent)
+SelectPropertyDialog::SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,UnitList *unitList): QDialog(parent)
 {
 
 // Initialize internal variables
-unitListBack =new ElementList;
+unitListBack =new UnitList;
 
 // Initialize Widgets
     QVBoxLayout *layout = new QVBoxLayout( this, 11, 6 );
@@ -108,7 +106,7 @@ int SelectPropertyDialog::perUnitsID()
 int comboCount=perUnitsBox->count();
 if (comboCount>0){ // If not, the list may be empty (no list defined) and crashes while reading as seen before. So check just in case.
 int comboID=perUnitsBox->currentItem();
-return unitListBack->getElement(comboID).id;
+return (*unitListBack->at(comboID)).id;
 }
 else return(-1);
 }
@@ -120,15 +118,15 @@ for ( IngredientProperty *property =propertyList->getFirst(); property; property
 (void)new QListViewItem(propertyChooseView,QString::number(property->id),property->name);
 }
 }
-void SelectPropertyDialog::loadUnits(ElementList *unitList)
+void SelectPropertyDialog::loadUnits(UnitList *unitList)
 {
-for ( ElementList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it )
+for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it )
 {
 // Insert in the combobox
 perUnitsBox->insertItem((*unit_it).name);
 
 // Store with index for using later
-Element newUnit((*unit_it).name,(*unit_it).id);
-unitListBack->add(newUnit);
+Unit newUnit(*unit_it);
+unitListBack->append(newUnit);
 }
 }

@@ -7,7 +7,7 @@
 INCLUDES         = -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES=libdatablocks.la
-libdatablocks_la_SOURCES=recipelist.cpp constraintlist.cpp categorytree.cpp kreborder.cpp
+libdatablocks_la_SOURCES=recipelist.cpp constraintlist.cpp categorytree.cpp kreborder.cpp unit.cpp
 libdatablocks_la_METASOURCES=AUTO
 
 #the library search path.

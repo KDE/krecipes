@@ -33,10 +33,12 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#include "createunitdialog.h"
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
 #include "recipe.h"
 #include "datablocks/categorytree.h"
+#include "datablocks/unit.h"
 #include "DBBackend/recipedb.h"
 #include "selectcategoriesdialog.h"
 #include "fractioninput.h"
@@ -116,11 +118,16 @@ public:
 		}
 		
 		m_ing.amount = amount;
+
+		//FIXME: make sure the right unit is showing after changing this (force a repaint... repaint() doesn't do the job right because it gets caught in a loop)
 	}
 
-	void setUnit( const QString &unit )
+	void setUnit( const Unit &unit )
 	{
-		m_ing.units = unit;
+		if ( !unit.name.isEmpty() )
+			m_ing.units.name = unit.name;
+		if ( !unit.plural.isEmpty() )
+			m_ing.units.plural = unit.plural;
 	}
 
 	void setPrepMethod( const QString &prepMethod )
@@ -132,8 +139,8 @@ public:
 	{
 		switch ( column ) {
 		case 0: break;
-		case 1: setAmount( text.toDouble() ); break;
-		case 2: setUnit(text); break;
+		case 1: setAmount( MixedNumber::fromString(text).toDouble() ); break;
+		case 2: setUnit(Unit(text,m_ing.amount)); break;
 		case 3: setPrepMethod(text); break;
 		default: break;
 		}
@@ -149,7 +156,7 @@ public:
 		{
 		case 0: return m_ing.name; break;
 		case 1: return amount_str; break;
-		case 2: return m_ing.units; break;
+		case 2: return (m_ing.amount>1)?m_ing.units.plural:m_ing.units.name; break;
 		case 3: return m_ing.prepMethod; break;
 		default: return(QString::null);
 		}
@@ -159,7 +166,7 @@ private:
 	void init( const Ingredient &i )
 	{
 		m_ing = i;
-		
+
 		setAmount( i.amount );
 	}
 };
@@ -528,7 +535,7 @@ il=new KIconLoader;
 
     // Initialize internal data
     ingredientComboList=new ElementList;
-    unitComboList=new ElementList;
+    unitComboList=new UnitList;
     prepMethodComboList=new ElementList;
     unsavedChanges=false; // Indicates if there's something not saved yet.
     enableChangedSignal(); // Enables the signal "changed()"
@@ -736,10 +743,11 @@ void RecipeInputDialog::loadUnitListCombo(void)
 		database->loadPossibleUnits(selectedIngredient,unitComboList);
 
 		//Populate this data into the ComboBox
-		for ( ElementList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it )
+		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it )
 		{
 			unitBox->insertItem((*unit_it).name);
 			unitBox->completionObject()->addItem((*unit_it).name);
+			unitBox->completionObject()->addItem((*unit_it).plural);
 		}
 	}
 	unitBox->lineEdit()->setText(store_unit);
@@ -985,15 +993,20 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 	}
 }
 
-int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, const QString &ingredient )
+int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, bool plural, const QString &ingredient, Unit &new_unit )
 {
 	if ( !unitBox->contains(unit) ) // returns always false if unit is empty string, even if exists
 	{
 		int id = database->findExistingUnitByName(unit);
 		if ( -1 == id ) 
 		{
-			database->createNewUnit(unit);
-			id = database->lastInsertID();
+			CreateUnitDialog getUnit(this,(plural)?QString::null:unit,(!plural)?QString::null:unit);
+			if ( getUnit.exec() == QDialog::Accepted ) {
+				new_unit = getUnit.newUnit();
+				database->createNewUnit(new_unit.name,new_unit.plural);
+	
+				id = database->lastInsertID();
+			}
 		}
 
 		if ( !database->ingredientContainsUnit(
@@ -1008,8 +1021,11 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, const QStr
 		loadUnitListCombo();
 		return id;
 	}
-	else
-		return unitComboList->findByName(unit).id;
+	else {
+		int id = database->findExistingUnitByName(unit);
+		new_unit = database->unitName(id);
+		return id;
+	}
 }
 
 int RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
@@ -1106,8 +1122,10 @@ void RecipeInputDialog::addIngredient(void)
 		slotIngredientBoxLostFocus(); //ensure that the matching item in the ingredient box combo list is selected
 
 		createNewIngredientIfNecessary();
-		int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),ingredientBox->currentText().stripWhiteSpace());
-		if ( unitID == -1 ) // shouldn't happen, as empty units are allowed now
+		
+		Unit new_unit;
+		int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),(amountEdit->value()>1)?true:false,ingredientBox->currentText().stripWhiteSpace(),new_unit);
+		if ( unitID == -1 ) // this will happen if the dialog to create a unit was cancelled
 			return;
 		int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
 	
@@ -1118,7 +1136,7 @@ void RecipeInputDialog::addIngredient(void)
 			
 			ing.name=ingredientBox->currentText();
 			ing.amount=amountEdit->value().toDouble();
-			ing.units=unitBox->currentText();
+			ing.units=new_unit;
 			ing.unitID=unitID;
 			ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
 			
@@ -1186,29 +1204,33 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 	}
 	case 2: //unit
 	{
-		QString old_text = (*ing).units;
+		Unit old_unit = (*ing).units;
 
 		if ( new_text.length() > database->maxUnitNameLength() )
 		{
 			KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
-			ing_item->setUnit(old_text);
+			ing_item->setUnit(old_unit);
 			break;
 		}
 
-		if ( old_text != new_text.stripWhiteSpace() )
+		QString approp_unit = (*ing).amount>1 ? (*ing).units.plural:(*ing).units.name;
+		if ( approp_unit != new_text.stripWhiteSpace() )
 		{
-			int new_id = createNewUnitIfNecessary(new_text.stripWhiteSpace(),it->text(0).stripWhiteSpace());
+			Unit new_unit;
+			int new_id = createNewUnitIfNecessary(new_text.stripWhiteSpace(),(*ing).amount>1,it->text(0).stripWhiteSpace(),new_unit);
 
 			if ( new_id != -1 )
 			{
-				(*ing).units=new_text;
+				(*ing).units=new_unit;
 				(*ing).unitID=new_id;
+
+				ing_item->setUnit((*ing).units);
 				
 				emit changed();
 			}
 			else
 			{
-				ing_item->setUnit(old_text);
+				ing_item->setUnit(old_unit);
 			}
 		}
 		break;
@@ -1558,6 +1580,9 @@ int RecipeInputDialog::ingItemIndex( QListView *listview, const QListViewItem *i
 
 void RecipeInputDialog::typeButtonClicked( int button_id )
 {
+	if ( amountEdit->isEnabled() == !bool(button_id) ) //it is already set (the same button was clicked more than once)
+		return;
+
 	amountEdit->setEnabled( !bool(button_id) );
 	unitBox->setEnabled( !bool(button_id) );
 	prepMethodBox->setEnabled( !bool(button_id) );

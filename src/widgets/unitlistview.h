@@ -15,7 +15,7 @@
  
 #include "klistview.h"
 
-#include "element.h"
+#include "datablocks/unit.h"
 
 class RecipeDB;
 class KPopupMenu;
@@ -33,7 +33,7 @@ protected:
 	RecipeDB *database;
 
 protected slots:
-	virtual void createUnit(const Element &)=0;
+	virtual void createUnit(const Unit &)=0;
 	virtual void removeUnit(int)=0;
 
 private:
@@ -49,7 +49,7 @@ public:
 	StdUnitListView( QWidget *parent, RecipeDB *db, bool editable=false );
 
 protected:
-	virtual void createUnit(const Element &);
+	virtual void createUnit(const Unit &);
 	virtual void removeUnit(int);
 
 private slots:
@@ -59,11 +59,11 @@ private slots:
 	void remove();
 	void rename();
 
-	void modUnit(QListViewItem* i);
-	void saveUnit(QListViewItem* i);
+	void modUnit(QListViewItem* i, const QPoint &p, int c);
+	void saveUnit(QListViewItem* i, const QString &text, int c);
 
 private:
-	bool checkBounds( const QString &name );
+	bool checkBounds( const Unit &unit );
 
 	KPopupMenu *kpop;
 };

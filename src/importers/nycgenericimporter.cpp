@@ -214,11 +214,9 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	name = name.left( prep_sep_index );
 	prep = name.mid( prep_sep_index, name.length() );
 
-	Ingredient new_ingredient( name, amount.toDouble(), unit, -1, -1, prep );
+	Ingredient new_ingredient( name, amount.toDouble(), Unit(unit,amount.toDouble()), -1, -1, prep );
 	new_ingredient.group = current_header;
 	m_ingredients.append(new_ingredient);
-	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
-	  <<", unit:"<<new_ingredient.units
-	  <<", name:"<<new_ingredient.name<<endl;
+
 }
 

@@ -28,7 +28,7 @@ Ingredient::Ingredient(const Ingredient &i)
 	group=i.group;
 	}
 	
-Ingredient::Ingredient( const QString &_name, double _amount, const QString &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
+Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
   ingredientID(_ingredientID),
   name(_name),
   amount(_amount),

@@ -207,7 +207,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 
 			//units
 			QString units(current.mid(9, 13));
-			new_ingredient.units = units.simplifyWhiteSpace();
+			new_ingredient.units = Unit(units.simplifyWhiteSpace(),new_ingredient.amount);
 
 			//name
 			int dash_index = current.find("--");

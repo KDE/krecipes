@@ -124,7 +124,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
 			xml += "<amount>";
 			xml += QString::number((*ing_it).amount);
 			xml += "</amount>\n";
-			xml += "<unit>"+QStyleSheet::escape((*ing_it).units.utf8())+"</unit>\n";
+			QString unit_str = ((*ing_it).amount>1)?(*ing_it).units.plural:(*ing_it).units.name;
+			xml += "<unit>"+QStyleSheet::escape(unit_str.utf8())+"</unit>\n";
 			if ( !(*ing_it).prepMethod.isEmpty() ) xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
 			xml += "</ingredient>\n";
 		}

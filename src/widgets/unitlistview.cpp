@@ -20,13 +20,14 @@
 #include <kpopupmenu.h>
 
 #include "DBBackend/recipedb.h"
-#include "dialogs/createelementdialog.h"
+#include "dialogs/createunitdialog.h"
 #include "dialogs/dependanciesdialog.h"
+#include "datablocks/unit.h"
  
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
 {
-	connect(database,SIGNAL(unitCreated(const Element &)),SLOT(createUnit(const Element &)));
+	connect(database,SIGNAL(unitCreated(const Unit &)),SLOT(createUnit(const Unit &)));
 	connect(database,SIGNAL(unitRemoved(int)),SLOT(removeUnit(int)));
 
 	setAllColumnsShowFocus(true);
@@ -37,10 +38,10 @@ void UnitListView::reload()
 {
 	clear();
 
-	ElementList unitList;
+	UnitList unitList;
 	database->loadUnits(&unitList);
 
-	for ( ElementList::const_iterator ing_it = unitList.begin(); ing_it != unitList.end(); ++ing_it )
+	for ( UnitList::const_iterator ing_it = unitList.begin(); ing_it != unitList.end(); ++ing_it )
 		createUnit(*ing_it);
 }
 
@@ -54,11 +55,13 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 	addColumn( i18n("Id"), show_id ? -1 : 0 );
 
 	addColumn(i18n("Unit"));
+	addColumn(i18n("Plural"));
 
 	setSorting(1);
 
 	if ( editable ) {
 		setRenameable(1, true);
+		setRenameable(2, true);
 
 		KIconLoader *il = new KIconLoader;
 
@@ -71,8 +74,8 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		delete il;
 
 		connect(this,SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)), SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
-		connect(this,SIGNAL(doubleClicked( QListViewItem* )),this, SLOT(modUnit( QListViewItem* )));
-		connect(this,SIGNAL(itemRenamed(QListViewItem*)),this, SLOT(saveUnit(QListViewItem*)));
+		connect(this,SIGNAL(doubleClicked( QListViewItem*,const QPoint &,int)),this, SLOT(modUnit( QListViewItem*,const QPoint &,int)));
+		connect(this,SIGNAL(itemRenamed(QListViewItem*,const QString &,int)),this, SLOT(saveUnit(QListViewItem*,const QString &,int)));
 	}
 }
 
@@ -84,16 +87,16 @@ void StdUnitListView::showPopup(KListView */*l*/, QListViewItem *i, const QPoint
 
 void StdUnitListView::createNew()
 {
-	CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Unit")));
+	CreateUnitDialog* unitDialog=new CreateUnitDialog(this);
 	
-	if ( elementDialog->exec() == QDialog::Accepted ) {
-		QString result = elementDialog->newElementName();
+	if ( unitDialog->exec() == QDialog::Accepted ) {
+		Unit result = unitDialog->newUnit();
 	
 		//check bounds first
 		if ( checkBounds(result) )
-			database->createNewUnit(result); // Create the new unit in database
+			database->createNewUnit(result.name,result.plural);
 	}
-	delete elementDialog;
+	delete unitDialog;
 }
 
 void StdUnitListView::remove()
@@ -124,9 +127,9 @@ void StdUnitListView::rename()
 		UnitListView::rename( item, 1 );
 }
 
-void StdUnitListView::createUnit(const Element &ing)
+void StdUnitListView::createUnit(const Unit &unit)
 {
-	(void)new QListViewItem(this,QString::number(ing.id),ing.name);
+	(void)new QListViewItem(this,QString::number(unit.id),unit.name,unit.plural);
 }
 
 void StdUnitListView::removeUnit(int id)
@@ -138,20 +141,20 @@ void StdUnitListView::removeUnit(int id)
 	delete item;
 }
 
-void StdUnitListView::modUnit(QListViewItem* i)
+void StdUnitListView::modUnit(QListViewItem* i, const QPoint &/*p*/, int c)
 {
 	if ( i )
-		UnitListView::rename(i, 1);
+		UnitListView::rename(i, c);
 }
 
-void StdUnitListView::saveUnit(QListViewItem* i)
+void StdUnitListView::saveUnit(QListViewItem* i, const QString &text, int c)
 {
-	if ( !checkBounds(i->text(1)) ) {
+	if ( !checkBounds(Unit(text,text)) ) {
 		reload(); //reset the changed text
 		return;
 	}
 
-	int existing_id = database->findExistingUnitByName( i->text(1) );
+	int existing_id = database->findExistingUnitByName( text );
 	int unit_id = i->text(0).toInt();
 	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
 		switch (KMessageBox::warningContinueCancel(this,i18n("This unit already exists.  Continuing will merge these two units into one.  Are you sure?")))
@@ -165,13 +168,13 @@ void StdUnitListView::saveUnit(QListViewItem* i)
 		}
 	}
 	else {
-		database->modUnit((i->text(0)).toInt(), i->text(1));
+		database->modUnit((i->text(0)).toInt(), i->text(1), i->text(2));
 	}
 }
 
-bool StdUnitListView::checkBounds( const QString &name )
+bool StdUnitListView::checkBounds( const Unit &unit )
 {
-	if ( name.length() > database->maxUnitNameLength() ) {
+	if ( unit.name.length() > database->maxUnitNameLength() || unit.plural.length() > database->maxUnitNameLength() ) {
 		KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
 		return false;
 	}

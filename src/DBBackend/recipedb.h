@@ -23,6 +23,7 @@
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
 #include "unitratiolist.h"
+#include "datablocks/unit.h"
 
 #define DEFAULT_DB_NAME "Krecipes"
 
@@ -47,7 +48,7 @@ Q_OBJECT
 protected:
 	RecipeDB():QObject(){dbOK=false; dbErr="";}
 	
-	double latestDBVersion() const{ return 0.62; }
+	double latestDBVersion() const;
 	QString krecipes_version() const;
 
 public:
@@ -80,7 +81,7 @@ signals:
 	void propertyCreated( const IngredientProperty & );
 	void propertyRemoved( int id );
 
-	void unitCreated( const Element & );
+	void unitCreated( const Unit & );
 	void unitRemoved( int id );
 
 	void recipeCreated( const Element &, const ElementList &categories );
@@ -119,7 +120,7 @@ public:
 	virtual void createNewIngGroup( const QString &name )=0;
 	virtual void createNewIngredient(const QString &ingredientName)=0;
 	virtual void createNewPrepMethod(const QString &prepMethodName)=0;
-	virtual void createNewUnit(const QString &unitName)=0;
+	virtual void createNewUnit(const QString &unitName,const QString &unitPlural)=0;
 
 	virtual void emptyData(void)=0;
 
@@ -158,7 +159,7 @@ public:
 	virtual void loadCategories(ElementList *list)=0;
 	virtual void loadIngredientGroups(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
-	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
+	virtual void loadPossibleUnits(int ingredientID, UnitList *list)=0;
 	virtual void loadPrepMethods( ElementList *list)=0;
 	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-2)=0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
@@ -168,7 +169,7 @@ public:
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
 	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false, bool loadIngredientNames=false,bool loadAuthors=false)=0;// Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;
-	virtual void loadUnits(ElementList *list)=0;
+	virtual void loadUnits(UnitList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
 
 	/** Change all instances of authors with id @param id2 to @param id1 */
@@ -195,7 +196,7 @@ public:
   /**
   * set newLabel for unitID
   */
-	virtual void modUnit(int unitID, QString newLabel)=0;
+	virtual void modUnit(int unitID, const QString &newName, const QString &newPlural)=0;
   /**
   * set newLabel for categoryID
   */
@@ -233,7 +234,7 @@ public:
 
 	virtual QString categoryName(int ID)=0;
 	virtual IngredientProperty propertyName(int ID)=0;
-	virtual QString unitName(int ID)=0;
+	virtual Unit unitName(int ID)=0;
 
 	virtual bool checkIntegrity(void)=0;
 

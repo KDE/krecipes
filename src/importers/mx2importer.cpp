@@ -125,7 +125,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 		{
 			Ingredient new_ing( el.attribute("name"),
 			  el.attribute("qty").toDouble(),
-			  el.attribute("unit") );
+			  Unit(el.attribute("unit"),el.attribute("qty").toDouble()) );
 			if (el.hasChildNodes())
 			{
 				QDomNodeList iChilds = el.childNodes();

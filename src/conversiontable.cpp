@@ -74,7 +74,7 @@ removeColumn(index);
 kdDebug()<<"done"<<endl;
 }
 
-void ConversionTable::unitCreated(const Element &unit)
+void ConversionTable::unitCreated(const Unit &unit)
 {
 insertColumns(numCols());
 insertRows(numRows());

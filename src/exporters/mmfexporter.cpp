@@ -127,9 +127,9 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	bool found_short_form = false;
 	for ( int i = 0; unit_info[i].short_form; i++ )
 	{
-		if ( unit_info[i].expanded_form == ing.units ||
-		unit_info[i].plural_expanded_form == ing.units ||
-		unit_info[i].short_form == ing.units )
+		if ( unit_info[i].expanded_form == ing.units.name ||
+		unit_info[i].plural_expanded_form == ing.units.plural ||
+		unit_info[i].short_form == ing.units.name )
 		{
 			found_short_form = true;
 			content += QString(unit_info[i].short_form).leftJustify(2)+" ";
@@ -138,7 +138,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	}
 	if ( !found_short_form )
 	{
-		kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<ing.units<<endl;
+		kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<ing.units.name<<endl;
 		kdDebug()<<"         This ingredient ("<<ing.name<<") will be exported without a unit"<<endl;
 		content += "   ";
 	}
@@ -148,7 +148,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	if ( ing.prepMethodID != -1 )
 		ing_name += "; " + ing.prepMethod;
 	
-	if ( !found_short_form ) ing_name.prepend(ing.units+" ");
+	if ( !found_short_form ) ing_name.prepend((ing.amount>1?ing.units.plural:ing.units.name)+" ");
 	ing_name.truncate(28);
 	content += ing_name+"\n";
 
