@@ -213,7 +213,7 @@ void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients)
 {
 rlist->clear();
 
-QIntDict <RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
+QMap <int,RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
 QString command="SELECT id,title,persons FROM recipes";
 QSqlQuery recipesToLoad( command,database);
@@ -225,7 +225,7 @@ QSqlQuery recipesToLoad( command,database);
 		    rec.title=unescapeAndDecode(recipesToLoad.value(1).toString());
 		    rec.persons=recipesToLoad.value(2).toInt();
 		    RecipeList::Iterator it=rlist->append(rec);
-		    recipeIterators.insert(rec.recipeID,&it);
+		    recipeIterators[rec.recipeID]=it;
                 }
 	}
 
@@ -245,11 +245,14 @@ QSqlQuery ingredientsToLoad(command,database);
 		    ing.unitID=ingredientsToLoad.value(2).toInt();
 
 		    // find the corresponding recipe iterator
-		    RecipeList::Iterator *it=recipeIterators[ingredientsToLoad.value(3).toInt()]; // Get a pointer to the iterator
+		    if (recipeIterators.contains(ingredientsToLoad.value(3).toInt()))
+		    {
+		    RecipeList::Iterator it=recipeIterators[ingredientsToLoad.value(3).toInt()]; // Get a pointer to the iterator
 
-		    // add the ingredient to the recipe
-		    if (it) (*(*it)).ingList.add(ing); // (*it)= the iterator (*(*it))=the recipe
+		    //add the ingredient to the recipe
+		    (*it).ingList.add(ing);
 
+		    }
                 }
             }
 

@@ -120,7 +120,6 @@ IngredientPropertyList properties;
 RecipeList::Iterator recipeIt;
 for (recipeIt=rlist.begin();recipeIt!=rlist.end();recipeIt++)
 {
-std::cerr<<"recipe\n";
 calculateProperties(*recipeIt,database,&properties); // *(recipeIt) is of class Recipe
 }
 }

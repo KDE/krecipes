@@ -241,7 +241,7 @@ Loads a recipe detail list (no instructions, no photo, no ingredients)
 void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients)
 {
 
-QIntDict <RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
+QMap <int,RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
 rlist->clear();
 
@@ -261,7 +261,7 @@ Recipe rec; // To be used to load the recipes one by one
 		    rec.title=unescapeAndDecode(row.data(1));
 		    rec.persons=row.data(2).toInt();
 		    RecipeList::Iterator it=rlist->append(rec);
-		    recipeIterators.insert(rec.recipeID,&it);
+		    recipeIterators[rec.recipeID]=it;
 
 		    row =recipesToLoad.next();
                 }
@@ -285,11 +285,13 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.unitID=row.data(2).toInt();
 
 		    // find the corresponding recipe iterator
-		    RecipeList::Iterator *it=recipeIterators[row.data(3).toInt()]; // Get a pointer to the iterator
+		    if (recipeIterators.contains(row.data(3).toInt()))
+		    {
+		    RecipeList::Iterator it=recipeIterators[row.data(3).toInt()]; // Get a pointer to the iterator
 
-		    // add the ingredient to the recipe
-		    if (it) (*(*it)).ingList.add(ing); // (*it)= the iterator (*(*it))=the recipe
-
+		    //add the ingredient to the recipe
+		    (*it)->ingList.add(ing);
+		    }
 
 		    row=ingredientsToLoad.next();
 
