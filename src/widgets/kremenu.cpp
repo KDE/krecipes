@@ -1,5 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro (ugarro@users.sourceforge.net)       *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
