@@ -13,6 +13,8 @@
 
 #include <qstring.h>
 
+class KLocale;
+
 /** A class to hold a mixed number.
   * @author Jason Kivlighn
   */
@@ -73,6 +75,8 @@ private:
 	int m_whole;
 	int m_numerator;
 	int m_denominator;
+	
+	KLocale *locale;
 };
 
 #endif //MIXEDNUMBER_H

@@ -9,25 +9,28 @@
  ***************************************************************************/
 #include "mixednumber.h"
 
-#include <cmath>
-
-#define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
+#include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 MixedNumber::MixedNumber() :
   m_whole(0),
   m_numerator(0),
-  m_denominator(1)
+  m_denominator(1),
+  locale(KGlobal::locale())
 {
 }
 
 MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
   m_whole(whole),
   m_numerator(numerator),
-  m_denominator(denominator)
+  m_denominator(denominator),
+  locale(KGlobal::locale())
 {
 }
 
-MixedNumber::MixedNumber( double decimal, double precision )
+MixedNumber::MixedNumber( double decimal, double precision ) :
+  locale(KGlobal::locale())
 {
 	// find nearest fraction
 	int intPart = static_cast<int>(decimal);
@@ -102,6 +105,8 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 
 MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 {
+	KLocale *locale = KGlobal::locale();
+
 	bool num_ok;
 
 	int whole;
@@ -115,9 +120,9 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 	{
 		if ( slash_index == -1 ) //input contains no fractional part
 		{
-			if ( input.endsWith(".") ){ if (ok){*ok = false;} return MixedNumber(); }
+			if ( input.endsWith(locale->decimalSymbol()) ){ if (ok){*ok = false;} return MixedNumber(); }
 
-			double decimal = input.toDouble(&num_ok);
+			double decimal = locale->readNumber(input,&num_ok);
 
 			if ( !num_ok ){ if (ok){*ok = false;} return MixedNumber(); }
 
@@ -156,14 +161,15 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 
 QString MixedNumber::toString( Format format ) const
 {
-	QString result;
-
 	if ( format == DecimalFormat )
-		return QString::number(toDouble());
+		return locale->formatNumber(toDouble());
 
 	if ( m_numerator == 0 && m_whole == 0 )
 		return QString("0");
 
+
+	QString result;
+	
 	if ( m_whole != 0 )
 	{
 		result += QString::number(m_whole);

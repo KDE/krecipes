@@ -9,6 +9,11 @@
  ***************************************************************************/
 
 #include "conversiontable.h"
+#include "editbox.h"
+
+#include <kglobal.h>
+#include <klocale.h>
+
 #include <iostream>
 
 ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable( maxrows, maxcols, parent, "table" )
@@ -63,7 +68,7 @@ if (w) w->deleteLater();
 }
 
 
-ConversionTableItem::ConversionTableItem( QTable *t, EditType et ):QTableItem( t, et, QString::null), eb( 0 )
+ConversionTableItem::ConversionTableItem( QTable *t, EditType et ):QTableItem( t, et, QString::null)
 {
 // we do not want this item to be replaced
 	setReplaceable( false );
@@ -82,10 +87,11 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 
 QWidget* ConversionTableItem::createEditor() const
 {
-	((ConversionTableItem*)this)->eb=new EditBox(table()->viewport());
+	EditBox *eb = new EditBox(0);
+	//EditBox *eb = new EditBox(table()->viewport());
 	eb->setPrecision(3);
 	eb->setRange(1e-4,10000,1,false);
-	eb->setValue(text().toDouble()); // Initialize the box with this value
+	eb->setValue(KGlobal::locale()->readNumber(text())); // Initialize the box with this value
 	QObject::connect(eb,SIGNAL(valueChanged(double)),table(),SLOT(acceptValueAndClose()));
 	return eb;
 }
@@ -101,10 +107,11 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	// value of the item (its text), with the value of the combobox
     if ( w->inherits( "EditBox" ) )
 	{
+	EditBox *eb = (EditBox*)w;
 	if (eb->accepted)
 		{
 		eb->accepted=false;
-		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
+		setText(KGlobal::locale()->formatNumber(eb->value())); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
 		}
 	}
@@ -139,7 +146,7 @@ void ConversionTable::createNewItem(int r, int c, double amount)
 
 ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
 setItem(r,c, ci );
-ci->setText(QString::number(amount));
+ci->setText(KGlobal::locale()->formatNumber(amount));
 // connect signal (forward) to know when it's actually changed
 connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
 connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));
@@ -177,8 +184,6 @@ if (!item(row,col))
 	{
 	createNewItem(row,col,0);
 	}
-
-	if (!(item(col,row)) && (row!=col)) createNewItem(col,row,0); // Create the symmetric one.It shouldn't be necessary to do this if (row,col) exists, but just in case, it's checked. row==col is neither supposed to be editable, but check anyway
 
 // Then call normal beginEdit
 return QTable::beginEdit(row,col,replace);

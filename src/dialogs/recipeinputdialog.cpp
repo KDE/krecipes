@@ -448,7 +448,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		if ( config->readBoolEntry("Fraction"))
 			amount_str = MixedNumber((*ing_it).amount).toString();
 		else
-			amount_str = QString::number((*ing_it).amount);
+			amount_str = KGlobal::locale()->formatNumber((*ing_it).amount);
 
 		 //Insert ingredient after last one
 		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units,(*ing_it).prepMethod);
@@ -754,7 +754,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   if ( config->readBoolEntry("Fraction"))
     amount_str = MixedNumber(ing.amount).toString();
   else
-    amount_str = QString::number(ing.amount);
+    amount_str = KGlobal::locale()->formatNumber(ing.amount);
 
   (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units,ing.prepMethod);
 

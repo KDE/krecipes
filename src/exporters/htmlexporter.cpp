@@ -31,6 +31,8 @@
 #include "gui/setupdisplay.h"
 #include "image.h"
 
+#include <cmath>
+
 //TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
 HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
   BaseExporter( filename, format ), database(db), m_width(width)
@@ -312,7 +314,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	{
 		QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 
-		if (amount_str == "0")
+		if ((*ing_it).amount <= 1e-10)
 			amount_str = "";
 
 		QString tmp_format(ingredient_format);
@@ -323,6 +325,12 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}
+	if ( !ingredients_html.isEmpty() )
+	{
+		ingredients_html.prepend("<ul>");
+		ingredients_html.append("</ul>");
+	}
+	
 	new_element = new DivElement( "ingredients_"+QString::number(recipe.recipeID), ingredients_html );
 
 	readFontProperties( new_element, doc, "ingredients" );
@@ -341,16 +349,16 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 	QString properties_html;
 	IngredientProperty * prop;
+	
 	for ( prop = properties->getFirst(); prop; prop = properties->getNext() )
 	{
-
 		// if the amount given is <0, it means the property calculator found that the property was undefined for some ingredients, so the amount will be actually bigger
 
 		QString amount_str;
 
-		if (prop->amount>0) amount_str = QString::number(prop->amount);
+		if (prop->amount>0) amount_str = KGlobal::locale()->formatNumber(prop->amount);
 		else {
-			amount_str = QString::number(-(prop->amount));
+			amount_str = KGlobal::locale()->formatNumber(-(prop->amount));
 			amount_str+="+";
 			}
 
@@ -358,6 +366,11 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			    .arg(prop->name)
 			    .arg(amount_str)
 			    .arg(prop->units);
+	}
+	if ( !properties_html.isEmpty() )
+	{
+		properties_html.prepend("<ul>");
+		properties_html.append("</ul>");
 	}
 	new_element = new DivElement( "properties_"+QString::number(recipe.recipeID), properties_html );
 

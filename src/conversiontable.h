@@ -12,7 +12,6 @@
 #include <qstring.h>
 #include <qtable.h>
 #include <qobject.h>
-#include "editbox.h"
 
 #include "elementlist.h"
 
@@ -51,8 +50,6 @@ private:
  	QWidget *cellWidget( int r, int c ) const;
 	void clearCellWidget( int r, int c );
 	void initTable();
-	//Internal Widgets
-	EditBox *eb;
 protected:
 	QWidget* beginEdit ( int row, int col, bool replace );
 private slots:
@@ -75,8 +72,6 @@ public:
 signals:
 	void ratioChanged(int row, int col, double value);
 	void signalRepaintCell(int r,int c);
-private:
-	EditBox *eb;
 
 };
 

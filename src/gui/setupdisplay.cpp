@@ -354,7 +354,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		if (ingredients.isNull()) ingredients += "<ul>";
 
 		QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
-		if (amount_str == "0")
+		if ((*ing_it).amount <= 1e-10)
 			amount_str = "";
 
 		QString tmp_format(ingredient_format);
