@@ -43,7 +43,7 @@ class QPainter;
  *
  * @short Main view
  * @author Unai Garro <ugarro@users.sourceforge.net>
- * @version 0.2
+ * @version 0.3
  */
 
 
