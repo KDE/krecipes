@@ -34,6 +34,7 @@ public:
 	~MixedNumber();
 
 	MixedNumber operator+( const MixedNumber &fraction );
+	bool operator>( double d ){return (toDouble() > d);}
 
 	typedef enum Format { DecimalFormat, MixedNumberFormat };
 
