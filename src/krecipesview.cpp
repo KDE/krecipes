@@ -75,12 +75,11 @@ KrecipesView::KrecipesView(QWidget *parent)
     start_logo->show();
     start_logo->raise();
 
-
+    
     // Read the database setup
 
     KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
     dbtype=config->readEntry("Type","SQLite");
-
 
     // Check if the database type is among those supported
 
@@ -442,6 +441,9 @@ bool isRemote;
 SetupWizard *setupWizard=new SetupWizard(this);
 if(setupWizard->exec()== QDialog::Accepted)
 {
+KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
+dbtype=config->readEntry("Type","SQLite");
+
 std::cerr<<"Setting up\n";
 setupWizard->getOptions(setupUser,initData);
 
