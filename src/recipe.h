@@ -27,6 +27,7 @@ public:
 
     int recipeID;
     QString title;
+    QString author;
     QString instructions;
     QPixmap photo;
     IngredientList ingList;
