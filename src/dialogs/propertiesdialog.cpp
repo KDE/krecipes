@@ -105,7 +105,7 @@ propertyID=it->text(0).toInt();
 }
 database->removeProperty(propertyID);
 
-
+reloadPropertyList(); //Update the list
 }
 
 void PropertiesDialog::reload(void)
