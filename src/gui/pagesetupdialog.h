@@ -28,6 +28,8 @@ Q_OBJECT
 public:
 	PageSetupDialog( QWidget *parent, const Recipe &sample );
 	~PageSetupDialog(){}
+	QSize minimumSize(void) const;
+	virtual QSize sizeHint(void) const;
 
 protected:
 	virtual void accept();

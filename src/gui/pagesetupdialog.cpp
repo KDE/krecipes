@@ -32,8 +32,10 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDia
 	QPushButton *cancelButton = new QPushButton(il->loadIconSet("cancel",KIcon::Small),i18n("&Cancel"),buttonsBox);
 	layout->addWidget(buttonsBox);
 
+
 	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
+
 }
 
 void PageSetupDialog::accept()
@@ -41,4 +43,14 @@ void PageSetupDialog::accept()
 	setup_display->save(); //save to this app's config file
 
 	QDialog::accept();
+}
+
+QSize PageSetupDialog::minimumSize() const
+{
+return(QSize(300,400));
+}
+
+QSize PageSetupDialog::sizeHint(void) const
+{
+return (minimumSize());
 }
