@@ -462,9 +462,6 @@ rightPanel->raiseWidget(dietPanel);
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
 #if HAVE_MYSQL
-
-if (dbtype=="MySQL")
-{
 MySQLRecipeDB *db;
 
 if (!adminPass.isNull())
@@ -480,7 +477,6 @@ if (!adminPass.isNull())
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
 delete db; //it closes the db automatically
-}
 #endif // HAVE_MYSQL
 }
 
@@ -649,26 +645,19 @@ void MenuButton::setIconSet(QIconSet i){
 }
 
 
-void MenuButton::drawButton( QPainter *p ){
+void MenuButton::drawButtonLabel( QPainter *p ){
 
     QPixmap* pm( (QPixmap*)p->device() );
     KPixmap pn;
     QFont font( KGlobalSettings::generalFont() );
     bool sunken = isDown();
 
-    // draw base button
-    if(mouseOver && sunken){
-      style().drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Down);
-    }
-    else{
-      style().drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Enabled);
-    }
     // draw icon
     style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
 
     // copy base button
     pn = *pm;
-
+    
     // create gradient image
     QPixmap tmp(size());
     tmp.fill(Qt::white);

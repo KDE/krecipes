@@ -191,7 +191,7 @@ private:
 
 public slots:
 	void setTitle(const QString &title);
-  void drawButton( QPainter * );
+  void drawButtonLabel( QPainter * );
   void setIconSet( QIconSet );
   void enterEvent( QEvent * );
   void leaveEvent( QEvent * );
