@@ -769,12 +769,12 @@ bool usePerUnit;
 if (ingredientID>=0) // Load properties of this ingredient
 {
 usePerUnit=true;
-command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.ingredient_id=%1 AND ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID);
+command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount,ii.ingredient_id FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.ingredient_id=%1 AND ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID);
 }
 else if (ingredientID==-1) // Load the properties of all the ingredients
 {
 usePerUnit=true;
-command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.property_id=ip.id AND ii.per_units=u.id;");
+command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount,ii.ingredient_id FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.property_id=ip.id AND ii.per_units=u.id;");
 }
 else // Load the whole property list (just the list of possible properties, not the ingredient properties)
 {
@@ -806,7 +806,13 @@ if (propertiesToLoad.getStatus()!=QSQLiteResult::Failure) {
 		      prop.amount=row.data(5).toDouble();
 		    else
 		      prop.amount=-1; // Property is generic, not attached to an ingredient
+
+		    if (ingredientID>=-1) prop.ingredientID=row.data(6).toInt();
+
 		    list->add(prop);
+
+
+
 
 		    row=propertiesToLoad.next();
                 }
