@@ -87,6 +87,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     connect(addRecipeButton,SIGNAL(clicked()),this,SLOT(addRecipe()));
     connect(removeRecipeButton,SIGNAL(clicked()),this,SLOT(removeRecipe()));
     connect(okButton, SIGNAL(clicked()),this,SLOT(showShoppingList()));
+    connect(clearButton,SIGNAL(clicked()),this,SLOT(clear()));
     connect(autoFillButton, SIGNAL(clicked()),this,SIGNAL(wizardClicked()));
     }
 
@@ -146,4 +147,9 @@ void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
 
 QString title=database->recipeTitle(recipeID);
 QListViewItem *it=new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
+}
+
+void ShoppingListDialog::clear()
+{
+shopRecipeListView->clear();
 }
