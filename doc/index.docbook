@@ -26,7 +26,7 @@ as Authors, publish date, the abstract, and Keywords -->
 <firstname>Colleen</firstname>
 <surname>Beamer</surname>
 <affiliation>
-<address><email>cbeamer@interlynx.net</email></address>
+<address><email>cbeamer interlynx.net</email></address>
 </affiliation>
 </author>
 </authorgroup>
@@ -1903,21 +1903,21 @@ distribution. -->
 <variablelist>
 <title>The &krecipes; team:</title>
 <varlistentry>
-<term>Unai Garro <email>ugarro@users.sourceforge.net</email></term>
+<term>Unai Garro <email>ugarro users.sourceforge.net</email></term>
 <listitem><para>Creator &amp; Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>Jason Kivlighn <email>mizunoami44@users.sourceforge.net</email></term>
+<term>Jason Kivlighn <email>mizunoami44 users.sourceforge.net</email></term>
 <listitem><para>Project Maintainer &amp; Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>Cyril Bosselut <email>bosselut@b1project.com</email></term>
+<term>Cyril Bosselut <email>bosselut b1project.com</email></term>
 <listitem><para>Core Developer</para></listitem>
 </varlistentry>
 </variablelist>
 
 <para>
-Documentation copyright 2004-2005 Colleen Beamer <email>cbeamer@interlynx.net</email>
+Documentation copyright 2004-2005 Colleen Beamer <email>cbeamer interlynx.net</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
