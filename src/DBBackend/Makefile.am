@@ -9,7 +9,7 @@ INCLUDES         = $(all_includes)
 SUBDIRS=libqsqlite
 
 noinst_LTLIBRARIES=libkrecipesdbs.la
-libkrecipesdbs_la_SOURCES=recipedb.cpp recipedb.h
+libkrecipesdbs_la_SOURCES=literecipedb.cpp literecipedb.h recipedb.cpp recipedb.h
 libkrecipesdbs_la_METASOURCES=AUTO
 
 #the library search path.
