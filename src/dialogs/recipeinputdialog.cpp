@@ -322,7 +322,7 @@ database=db;
     	// Function buttons
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
     connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
-    connect (showButton,SIGNAL(clicked()),this,SLOT(show()));
+    connect (showButton,SIGNAL(clicked()),this,SLOT(showRecipe()));
     connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
     connect (this, SIGNAL(enableSaveOption(bool)),this,SLOT(enableSaveButton(bool)));
 }
@@ -777,7 +777,7 @@ void RecipeInputDialog::enableSaveButton(bool enabled)
 saveButton->setEnabled(enabled);
 }
 
-void RecipeInputDialog::close()
+void RecipeInputDialog::close(void)
 {
 
 // First check if there's anything unsaved in the recipe
@@ -801,4 +801,39 @@ void RecipeInputDialog::close()
 emit closeRecipe();
 
 
+}
+
+void RecipeInputDialog::showRecipe(void)
+{
+// First check if there's anything unsaved in the recipe
+
+if (!loadedRecipe->recipeID)
+{
+switch( KMessageBox::questionYesNo( this,i18n("You need to save the recipe before displaying it. Would you like to save it now?"),i18n("Unsaved changes") ) )
+		{
+		case KMessageBox::Yes:
+			save();
+			break;
+		case KMessageBox::Cancel:
+			return;
+		}
+}
+else if (unsavedChanges)
+ 	{
+
+	switch( KMessageBox::questionYesNoCancel( this,i18n("This recipe has unsaved changes that will not be shown in the recipe view. Would you like to save them now?"),i18n("Unsaved changes") ) )
+		{
+		case KMessageBox::Yes:
+			save();
+			break;
+		case KMessageBox::No:
+			break;
+		case KMessageBox::Cancel:
+			return;
+		}
+
+	}
+
+// Now open it really
+emit showRecipe(loadedRecipe->recipeID);
 }

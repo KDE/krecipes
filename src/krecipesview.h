@@ -149,6 +149,7 @@ private slots:
     void addRecipeButton(QWidget *w, QString title);
     void closeRecipe(void);
     void resizeButtons();
+    void showRecipe(int recipeID);
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
     void slotSetDietWizardPanel(void);

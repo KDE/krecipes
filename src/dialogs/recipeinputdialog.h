@@ -129,7 +129,7 @@ private:
 	void slotIngredientBoxLostFocus(void);
 	void enableSaveButton(bool enabled);
 	void close(void);
-
+	void showRecipe(void);
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
 
@@ -138,6 +138,7 @@ private:
 	void closeRecipe(void);
 	void createButton(QWidget* w,QString title);
 	void enableSaveOption(bool en=true);
+	void showRecipe(int recipeID); //Indicates krecipesview to show it
 	void titleChanged(const QString &title);
 
 

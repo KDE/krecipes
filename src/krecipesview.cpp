@@ -142,7 +142,8 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Close a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));
 
-
+    // Show a recipe when requested (just switch panels)
+    connect(inputPanel,SIGNAL(showRecipe(int)),this,SLOT(showRecipe(int)));
 }
 
 KrecipesView::~KrecipesView()
@@ -218,12 +219,10 @@ inputPanel->save();
 
 void KrecipesView::actionRecipe(int recipeID, int action)
 {
-
-if (action==0) // Open
-  {
-  viewPanel->loadRecipe(recipeID);
-  rightPanel->raiseWidget(viewPanel);
-  }
+if (action==0) //Show
+	{
+	showRecipe(recipeID);
+	}
 else if (action==1) // Edit
 {
 	if ( !inputPanel->everythingSaved() )
@@ -410,6 +409,12 @@ void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
 rightPanel->raiseWidget(selectPanel);
+}
+
+void KrecipesView::showRecipe(int recipeID)
+{
+viewPanel->loadRecipe(recipeID);
+rightPanel->raiseWidget(viewPanel);
 }
 
 ////////////////// Class MenuButton Methods///////////////////
