@@ -107,6 +107,10 @@ public:
   * set newLabel for categoryID
   */
 	void modCategory(int categoryID, QString newLabel);
+  /**
+  * set newLabel for authorID
+  */
+	void modAuthor(int authorID, QString newLabel);
 
 	QString recipeTitle(int recipeID);
 

@@ -1212,6 +1212,14 @@ command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(au
 QSqlQuery authorToCreate( command,database);
 }
 
+void MySQLRecipeDB::modAuthor(int authorID, QString newLabel)
+{
+QString command;
+
+command=QString("UPDATE authors SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(authorID);
+QSqlQuery authorToCreate( command,database);
+}
+
 void MySQLRecipeDB::removeAuthor(int authorID)
 {
 QString command;

@@ -46,6 +46,8 @@ private:
 private slots:
 	void createNewAuthor(void);
 	void removeAuthor(void);
+  void modAuthor(QListViewItem*);
+  void saveAuthor(QListViewItem*);
 
 };
 #endif

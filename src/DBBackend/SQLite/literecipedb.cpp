@@ -1254,6 +1254,14 @@ command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(au
 database->executeQuery(command);
 }
 
+void LiteRecipeDB::modAuthor(int authorID, QString newLabel)
+{
+QString command;
+
+command=QString("UPDATE authors SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(authorID);
+database->executeQuery(command);
+}
+
 void LiteRecipeDB::removeAuthor(int authorID)
 {
 QString command;

@@ -30,6 +30,8 @@ layout->addItem(spacerLeft,1,0);
 authorListView=new KListView(this);
 authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author's Name"));
+authorListView->setRenameable(1, true);
+authorListView->setDefaultRenameAction(QListView::Reject);
 layout->addWidget(authorListView,1,1);
 
 //Buttons
@@ -54,6 +56,8 @@ reload();
 
 connect (newAuthorButton,SIGNAL(clicked()),this,SLOT(createNewAuthor()));
 connect (removeAuthorButton,SIGNAL(clicked()),this,SLOT(removeAuthor()));
+connect(authorListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modAuthor( QListViewItem* )));
+connect(authorListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveAuthor( QListViewItem* )));
 }
 
 AuthorsDialog::~AuthorsDialog()
@@ -101,6 +105,20 @@ database->removeAuthor(authorID);
 
 reload();// Reload the list from the database
 
+}
+
+void AuthorsDialog::modAuthor(QListViewItem* i)
+{
+  newAuthorButton->setEnabled(false);
+  removeAuthorButton->setEnabled(false);
+  authorListView->rename(i, 1);
+}
+
+void AuthorsDialog::saveAuthor(QListViewItem* i)
+{
+  database->modAuthor((i->text(0)).toInt(), i->text(1));
+  newAuthorButton->setEnabled(true);
+  removeAuthorButton->setEnabled(true);
 }
 
 
