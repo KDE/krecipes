@@ -265,6 +265,14 @@ QString ServerSetupPage::dbName(void)
 return(this->dbNameEdit->text());;
 }
 
+void ServerSetupPage::getServerInfo(QString &host, QString &client, QString &user, QString &pass)
+{
+host=serverEdit->text();
+client=serverEdit->text(); //FIXME!
+user=usernameEdit->text();
+pass=passwordEdit->text();
+}
+
 SavePage::SavePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
@@ -324,6 +332,11 @@ void SetupWizard::getAdminInfo(bool &enabled,QString &adminUser,QString &adminPa
 enabled=permissionsSetupPage->useAdmin();
 permissionsSetupPage->getAdmin(adminUser,adminPass);
 
+}
+
+void SetupWizard::getServerInfo(QString &host, QString &client, QString &user, QString &pass)
+{
+serverSetupPage->getServerInfo(host,client,user,pass);
 }
 
 DataInitializePage::DataInitializePage(QWidget *parent):QWidget(parent)

@@ -251,7 +251,7 @@ bool setupDone=config->readBoolEntry( "SystemSetup",false);
 if (!setupDone)
 {
 
-bool setupUser,initializeData,adminEnabled; QString adminUser,adminPass;
+bool setupUser,initializeData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
 
 SetupWizard *setupWizard=new SetupWizard(this);
 if(setupWizard->exec()== QDialog::Accepted)
@@ -261,7 +261,8 @@ setupWizard->getOptions(setupUser,initializeData);
 if (setupUser)
 	{
 	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
-	//setupUserPermissions(); // FIXME!
+	setupWizard->getServerInfo(host,client,user,pass);
+	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
 	}
 
 }

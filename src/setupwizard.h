@@ -35,6 +35,7 @@ public:
     ~SetupWizard();
     void getOptions(bool &setupUser, bool &initializeData);
     void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass);
+    void getServerInfo(QString &host,QString &client,QString &user,QString &pass);
 private:
 	// Widgets
 	WelcomePage *welcomePage;
@@ -92,6 +93,7 @@ public:
 	QString user(void);
 	QString password(void);
 	QString dbName(void);
+	void getServerInfo(QString &host,QString &client,QString &user,QString &pass);
 private:
 	// Widgets
 	QLabel *logo;
