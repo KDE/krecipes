@@ -88,8 +88,7 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 
 QWidget* ConversionTableItem::createEditor() const
 {
-	EditBox *eb = new EditBox(0);
-	//EditBox *eb = new EditBox(table()->viewport());
+	EditBox *eb = new EditBox(table()->viewport());
 	eb->setPrecision(3);
 	eb->setRange(1e-4,10000,1,false);
 	eb->setValue(KGlobal::locale()->readNumber(text())); // Initialize the box with this value
