@@ -25,6 +25,7 @@ addPage(serverSetupPage,"Server Settings");
 savePage = new SavePage(this);
 addPage(savePage,"Finish and Save Settings");
 setFinishEnabled(savePage,true); // Enable finish button
+setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
 }
 
@@ -37,14 +38,23 @@ SetupWizard::~SetupWizard()
 WelcomePage::WelcomePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(5,5,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(5,5,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
 
 QPixmap logoPixmap ("../pics/wizard.png");
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addWidget(logo,1,1);
 
-welcomeText=new KTextEdit(this);
-welcomeText->setText("Thanks very much for choosing Krecipes.\n It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly. \n\nWelcome and enjoy cooking! ;-) ");
+welcomeText=new QLabel(this);
+welcomeText->setText("Thanks very much for choosing Krecipes.\nIt looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.\n\nWelcome and enjoy cooking! ;-) ");
+welcomeText->setMinimumWidth(200);
+welcomeText->setMaximumWidth(10000);
+welcomeText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+welcomeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 layout->addWidget(welcomeText,1,2);
 
 }
@@ -53,10 +63,16 @@ layout->addWidget(welcomeText,1,2);
 ServerSetupPage::ServerSetupPage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
+
 
 QPixmap networkSetupPixmap ("../pics/network.png");
 logo=new QLabel(this);
 logo->setPixmap(networkSetupPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addMultiCellWidget(logo,1,8,1,1);
 
 QLabel* serverText=new QLabel("Server:", this);
@@ -141,10 +157,16 @@ QGridLayout *layout=new QGridLayout(this,1,1,0,0);
 QPixmap logoPixmap ("../pics/save.png");
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addWidget(logo,1,1);
 
-saveText=new KTextEdit(this);
+saveText=new QLabel(this);
 saveText->setText("Congratulations! The necessary configuration was already setup. Press 'Finish' to continue, and enjoy cooking!");
+saveText->setMinimumWidth(200);
+saveText->setMaximumWidth(10000);
+saveText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+
+saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 layout->addWidget(saveText,1,2);
 
 

@@ -49,7 +49,7 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
-	KTextEdit *welcomeText;
+	QLabel *welcomeText;
 
 };
 
@@ -79,7 +79,7 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
-	KTextEdit *saveText;
+	QLabel *saveText;
 
 };
 
