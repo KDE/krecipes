@@ -53,15 +53,44 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Initialize Database
     KConfig *config; config=kapp->config(); config->setGroup("Server");
-    QString host=config->readEntry( "Host","localhost");
-    QString user=config->readEntry( "Username",QString::null);
-    QString pass=config->readEntry("Password",QString::null);
-    QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+
+    QString dbtype=config->readEntry("DBType","SQLite");
+
+    // Check if the database type is among those supported
+
+    if ((dbtype!="SQLite") && (dbtype!="MySQL"))
+    {
+    std::cerr<<"Unrecognized database type "<<dbtype<<"\n";
+    exit(1);
+    }
     #ifdef USE_MYSQL_DATABASE
-    database=new MySQLRecipeDB(host,user,pass,dbname);
+
+    else if(dbtype=="MySQL")  // First case, MySQL
+    	{
+
+	// Read the server parameters
+
+	QString host=config->readEntry( "Host","localhost");
+    	QString user=config->readEntry( "Username",QString::null);
+    	QString pass=config->readEntry("Password",QString::null);
+    	QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+
+	// Open the database
+
+	database=new MySQLRecipeDB(host,user,pass,dbname);
+
+	}
+
     #endif //USE_MYSQL_DATABASE
+
+
     #ifdef USE_SQLITE_DATABASE
-    database=new LiteRecipeDB(host,user,pass,dbname);
+
+    else // SQLite case
+    	{
+    	database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+	}
+
     #endif //USE_SQLITE_DATABASE
 
     splitter=new QSplitter(this);
