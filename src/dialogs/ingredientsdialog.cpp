@@ -249,13 +249,15 @@ if (it=unitsListView->selectedItem()) unitID=it->text(0).toInt();
 
 if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was selected previously
 {
-  ElementList dependingRecipes,dependingIngredientInfo;
+  ElementList dependingRecipes,dependingPropertiesInfo;
 
-  database->findIngredientUnitDependancies(ingredientID,unitID,&dependingRecipes,&dependingIngredientInfo);
-  if (dependingRecipes.isEmpty() && dependingIngredientInfo.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
+  database->findIngredientUnitDependancies(ingredientID,unitID,&dependingRecipes,&dependingPropertiesInfo);
+  if (dependingRecipes.isEmpty() && dependingPropertiesInfo.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
   else { // must warn!
-  DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes,&dependingIngredientInfo); warnDialog->exec();
-  database->removeUnitFromIngredient(ingredientID,unitID);
+  DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes,0,&dependingPropertiesInfo);
+
+  if (warnDialog->exec()==QDialog::Accepted) database->removeUnitFromIngredient(ingredientID,unitID);
+  delete warnDialog;
   }
 reloadUnitList(); // Reload the list from database
 reloadPropertyList(); // Properties could have been removed if a unit is removed, so we need to reload.

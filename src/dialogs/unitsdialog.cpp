@@ -105,15 +105,15 @@ if (it=unitListView->selectedItem()) unitID=it->text(0).toInt();
 
 if (unitID>=0) // a unit was selected previously
 {
-ElementList recipeDependancies, ingredientDependancies;
-database->findUnitDependancies(unitID,&ingredientDependancies,&recipeDependancies);
+ElementList recipeDependancies, propertyDependancies;
+database->findUnitDependancies(unitID,&propertyDependancies,&recipeDependancies);
 
-if (recipeDependancies.isEmpty() && ingredientDependancies.isEmpty()) database->removeUnit(unitID);
+if (recipeDependancies.isEmpty() && propertyDependancies.isEmpty()) database->removeUnit(unitID);
 else {// need warning!
-	database->removeUnit(unitID);
-	DependanciesDialog *warnDialog=new DependanciesDialog(0,&recipeDependancies,&ingredientDependancies); warnDialog->exec();
-	//delete warnDialog;
-	 }
+	DependanciesDialog *warnDialog=new DependanciesDialog(0,&recipeDependancies,0,&propertyDependancies);
+	if (warnDialog->exec()==QDialog::Accepted) database->removeUnit(unitID);
+	delete warnDialog;
+	}
 
 
 reloadData();// Reload the list from database

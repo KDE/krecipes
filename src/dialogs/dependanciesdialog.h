@@ -11,6 +11,9 @@
 #define DEPENDANCIESDIALOG_H
 
 #include <qdialog.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 #include <klistview.h>
 #include "elementlist.h"
 /**
@@ -23,10 +26,24 @@ public:
     ~DependanciesDialog();
 private:
     //Widgets
+
+    QLabel *instructionsLabel;
+    QGroupBox *recipeBox;
+    QGroupBox *ingredientBox;
+    QGroupBox *propertiesBox;
+
+    QGroupBox *buttonBox;
+    QPushButton* okButton;
+    QPushButton* cancelButton;
+
     KListView *recipeListView;
     KListView *ingredientListView;
     KListView *propertiesListView;
+
+    // Methods
     void loadList(KListView* listView,ElementList *list);
+
+
 };
 
 #endif

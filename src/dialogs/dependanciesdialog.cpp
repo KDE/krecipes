@@ -13,6 +13,7 @@
 
 DependanciesDialog::DependanciesDialog(QWidget *parent,ElementList* recipeList, ElementList* ingredientList,ElementList* propertiesList):QDialog(parent,0,true)
 {
+int row=3, col=1;
 
 // Design the dialog
 QGridLayout *layout=new QGridLayout(this);
@@ -21,32 +22,97 @@ layout->addItem(spacer_top,0,1);
 QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_left,1,0);
 
+instructionsLabel=new QLabel(this);
+instructionsLabel->setMinimumSize(QSize(100,30));
+instructionsLabel->setMaximumSize(QSize(10000,10000));
+instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+instructionsLabel->setText("The following elements will have to be removed also, since currently they use the element you have chosen to be removed.");
+layout->addWidget(instructionsLabel,1,1);
+QSpacerItem *instructions_spacer=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(instructions_spacer, 2,1);
+
+
 if (recipeList)
 {
-recipeListView=new KListView(this);
+if (!(recipeList->isEmpty()))
+{
+recipeBox=new QGroupBox(1,Qt::Vertical,"Recipes",this);
+recipeListView=new KListView(recipeBox);
 recipeListView->addColumn("Id.");
 recipeListView->addColumn("Recipe Title");
-layout->addWidget(recipeListView,1,1);
+layout->addWidget(recipeBox,row,col);
+QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(list_spacer, row+1,col);
 loadList(recipeListView,recipeList);
+row+=2;
+if (row>6) {row=3; col+=2;} // Only two listview rows per column
 }
+}
+
+
 
 if (ingredientList)
 {
-ingredientListView=new KListView(this);
+if (!(ingredientList->isEmpty()))
+{
+ingredientBox=new QGroupBox(1,Qt::Vertical,"Ingredients",this);
+ingredientListView=new KListView(ingredientBox);
 ingredientListView->addColumn("Id.");
 ingredientListView->addColumn("Ingredient Name");
-layout->addWidget(ingredientListView,3,1);
+layout->addWidget(ingredientBox,row,col);
+QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(list_spacer, row+1,col);
 loadList(ingredientListView,ingredientList);
+row+=2;
+if (row>6) {row=3; col+=2;} // Only two listview rows per column
+}
 }
 
 if (propertiesList)
 {
-propertiesListView=new KListView(this);
+if (!(propertiesList->isEmpty()))
+{
+propertiesBox=new QGroupBox(1,Qt::Vertical,"Properties",this);
+propertiesListView=new KListView(propertiesBox);
 propertiesListView->addColumn("Id.");
-propertiesListView->addColumn("Property Name");
-layout->addWidget(propertiesListView,1,3);
+propertiesListView->addColumn("Property");
+layout->addWidget(propertiesBox,row,col);
+QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(list_spacer, row+1,col);
 loadList(propertiesListView,propertiesList);
+row+=2;
+if (row>6) {row=3; col+=2;} // Only two listview rows per column
 }
+}
+
+
+// Put the necessary vertical spacers
+if (col>1) // There have been multiple (2) rows, so add vertical spacer
+{
+QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(list_spacer, 4,1);
+}
+
+
+// Ok/Cancel Buttons
+buttonBox=new QGroupBox(2,Qt::Horizontal,this); buttonBox->setFlat(true);
+okButton=new QPushButton(buttonBox); okButton->setText("Ok"); okButton->setFlat(true);
+cancelButton=new QPushButton(buttonBox); cancelButton->setText("Cancel"); cancelButton->setFlat(true);
+QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+if (col>1) // There are 2 rows
+	{
+	layout->addItem(list_spacer, 6,1);
+	layout->addMultiCellWidget(buttonBox,7,7,1,col-1);
+	}
+else // There is a single row (and single column)
+	{
+	layout->addItem(list_spacer, 4,1);
+	layout->addWidget(buttonBox,5,1);
+	}
+
+// Connect signals & slots
+connect (okButton, SIGNAL(clicked()), this, SLOT(accept()));
+connect (cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
 }
 
@@ -59,7 +125,9 @@ void DependanciesDialog::loadList(KListView* listView,ElementList *list)
 {
 Element *el;
 for (el=list->getFirst();el;el=list->getNext()){
-	QListViewItem* it=new QListViewItem(listView,QString::number(el->id),el->name);
+	QString id; int idnum=el->id;
+	if (idnum<0) id="-"; else id=QString::number(idnum);
+	QListViewItem* it=new QListViewItem(listView,id,el->name);
 	listView->insertItem(it);
 	}
 }
