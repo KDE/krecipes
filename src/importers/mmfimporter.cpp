@@ -64,13 +64,6 @@ static expand_unit_info unit_info[] = {
 
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
-	//the pointers these contain will be passed to created recipe
-	m_left_col_ing.setAutoDelete(false);
-	m_right_col_ing.setAutoDelete(false);
-	m_all_ing.setAutoDelete(false);
-	m_categories.setAutoDelete(false);
-	m_authors.setAutoDelete(false);
-
 	resetVars();
 
 	QFile input( file );
