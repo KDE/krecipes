@@ -1,7 +1,6 @@
 Things found to be done before the release:
 
 
-*Add texts to every listview... and so on so they're meaningful
 *Fit in the layout dialog in 800x600. Current one is too big
 *Show the recipes correctly in kde 3.2 and 3.1 (CSS)
 *Format the recipes and add texts, so they're readable
