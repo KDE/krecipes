@@ -551,7 +551,7 @@ void DishInput::loadConstraints( ConstraintList *constraints )
 		( constraint );
 	}
 }
-//TODO: clean me up!!
+
 void DishInput::loadEnabledCategories( ElementList* categories )
 {
 	categories->clear();
@@ -567,32 +567,7 @@ void DishInput::loadEnabledCategories( ElementList* categories )
 			//add this enabled category
 			category.id = current_item->categoryId();
 			category.name = current_item->categoryName();
-			categories->add
-			( category );
-
-			//and now add all of it's children (they won't be selected, though it is implied)
-			QListViewItem *pEndItem = NULL;
-			QListViewItem *pStartItem = current_item;
-			do {
-				if ( pStartItem->nextSibling() )
-					pEndItem = pStartItem->nextSibling();
-				else
-					pStartItem = pStartItem->parent();
-			}
-			while ( pStartItem && !pEndItem );
-
-			CategoryCheckListItem* sub_current_item;
-			QListViewItemIterator sub_it( current_item );
-			while ( sub_it.current() && sub_it.current() != pEndItem ) {
-				sub_current_item = ( CategoryCheckListItem* ) sub_it.current();
-				if ( sub_current_item != current_item ) {
-					category.id = sub_current_item->categoryId();
-					category.name = sub_current_item->categoryName();
-					categories->add
-					( category );
-				}
-				++sub_it;
-			}
+			categories->add( category );
 		}
 
 		++it;
