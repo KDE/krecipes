@@ -81,7 +81,7 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 		{
 		htmlCode+=QString("<td><div id=\"day\"");
 		htmlCode+=QString("<div id=\"dayheader\"><center>");
-		htmlCode+=QString(i18n("Day %1")).arg(day);
+		htmlCode+=QString(i18n("Day %1")).arg(day+1);
 		htmlCode+=QString("</center></div>");
 		for (int meal=0;meal<mealNumber;meal++) // Meals in each cell
 			{
