@@ -76,6 +76,37 @@ this->remove( tmp_it );
 tmp_it = this->at(index2);
 this->insert(tmp_it,tmp_ing);
 }
+#include <kdebug.h>
+void IngredientList::move(int index1, int count1, int index2) //moves element in pos index1 and the following count1 items, to pos after index2
+{kdDebug()<<"moving "<<index1<<" and following "<<count1<<" items right after "<<index2<<endl;
+IngredientList::iterator tmp_it = at(index1);
+IngredientList::iterator after_it = at(index2+1);
+
+kdDebug()<<"before: "<<endl;
+for ( IngredientList::const_iterator it = begin(); it != end(); ++it )
+	kdDebug()<<"\tname: "<<(*it).name<<endl;
+
+for ( int i = 0; i < count1; ++i ) {
+	Ingredient tmp_ing(*tmp_it);
+	
+	IngredientList::iterator remove_me_it = tmp_it;
+	++tmp_it;
+	remove( remove_me_it );
+
+	kdDebug()<<"moving "<<tmp_ing.name<<" before "<<(*after_it).name<<endl;
+	insert(after_it,tmp_ing);
+
+kdDebug()<<"during: "<<endl;
+for ( IngredientList::const_iterator it = begin(); it != end(); ++it )
+	kdDebug()<<"\tname: "<<(*it).name<<endl;
+}
+kdDebug()<<"afterwards: "<<endl;
+for ( IngredientList::const_iterator it = begin(); it != end(); ++it )
+	kdDebug()<<"\tname: "<<(*it).name<<endl;
+/*
+for ( QValueList<IngredientList::iterator>::iterator it = rem_later.begin(); it != rem_later.end(); ++it )
+	remove( *it );
+*/}
 
 IngredientList IngredientList::groupMembers(int id, IngredientList::const_iterator begin ) const
 {

@@ -29,6 +29,7 @@ public:
     bool containsSubSet(IngredientList &il,IngredientList &missing);
     IngredientList groupMembers(int id, IngredientList::const_iterator begin) const;
     void move(int index1,int index2);
+    void move(int index1, int count, int index2);
     void empty(void);
     int find(int id) const;
     IngredientList::const_iterator find(IngredientList::const_iterator,int id) const;

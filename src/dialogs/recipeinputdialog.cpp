@@ -802,38 +802,51 @@ void RecipeInputDialog::clearPhoto(void)
 void RecipeInputDialog::moveIngredientUp(void)
 {
 QListViewItem *it=ingredientList->selectedItem();
-if ( !it || it->rtti() != INGLISTVIEWITEM_RTTI ) return;
+if ( !it ) return;
 
 QListViewItem *iabove = it->itemAbove();
 
 if (iabove) {
-	int it_index=ingItemIndex(ingredientList,it);
-	int iabove_index=ingItemIndex(ingredientList,iabove);
-	IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+	if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
+		if ( iabove->parent() )
+			iabove = iabove->parent();
 
-	if ( iabove->parent() != it->parent() ) {
-		if ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI && it->parent() ) { //move the item out of the group
-			it->parent()->takeItem(it);
-			ingredientList->insertItem(it);
-			it->moveItem((iabove->itemAbove()->parent())?iabove->itemAbove()->parent():iabove->itemAbove()); //Move the Item
-		}
-		else { //move the item into the group
-			ingredientList->takeItem(it);
-			iabove->parent()->insertItem(it); 
-			it->moveItem(iabove); //Move the Item
-		}
+		int it_index=ingItemIndex(ingredientList,it);
+		int iabove_index=ingItemIndex(ingredientList,iabove);
 
-		ingredientList->setCurrentItem(it); //Keep selected
+		iabove->moveItem(it); //Move the Item
+
+		loadedRecipe->ingList.move(iabove_index,(iabove->rtti()==INGGRPLISTVIEWITEM_RTTI)?iabove->childCount():1,it_index+it->childCount()-1);
 	}
 	else {
-		iabove->moveItem(it); //Move the Item
-		loadedRecipe->ingList.move(it_index,iabove_index);
+		int it_index=ingItemIndex(ingredientList,it);
+		int iabove_index=ingItemIndex(ingredientList,iabove);
+		IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+	
+		if ( iabove->parent() != it->parent() ) {
+			if ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI && it->parent() ) { //move the item out of the group
+				it->parent()->takeItem(it);
+				ingredientList->insertItem(it);
+				it->moveItem((iabove->itemAbove()->parent())?iabove->itemAbove()->parent():iabove->itemAbove()); //Move the Item
+			}
+			else { //move the item into the group
+				ingredientList->takeItem(it);
+				iabove->parent()->insertItem(it); 
+				it->moveItem(iabove); //Move the Item
+			}
+	
+			ingredientList->setCurrentItem(it); //Keep selected
+		}
+		else {
+			iabove->moveItem(it); //Move the Item
+			loadedRecipe->ingList.move(it_index,iabove_index);
+		}
+	
+		if ( it->parent() )
+			(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
+		else
+			(*ing).groupID = -1;
 	}
-
-	if ( it->parent() )
-		(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
-	else
-		(*ing).groupID = -1;
 
 	emit changed();
 }
@@ -842,42 +855,60 @@ if (iabove) {
 void RecipeInputDialog::moveIngredientDown(void)
 {
 QListViewItem *it=ingredientList->selectedItem();
-if ( !it || it->rtti() != INGLISTVIEWITEM_RTTI ) return;
+if ( !it ) return;
 
 QListViewItem *ibelow = it->itemBelow();
 
 if (ibelow) {
-	int it_index=ingItemIndex(ingredientList,it);
-	int ibelow_index=ingItemIndex(ingredientList,ibelow);
-	IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+	if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
+		QListViewItem *next_sibling = it->nextSibling();
 
-	if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI || (ibelow->parent() != it->parent()) ) {
-		if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI && !it->parent() ) { //move the item into the group
-			if ( !it->parent() )
-				ingredientList->takeItem(it);
-			else
-				it->parent()->takeItem(it);
-
-			ibelow->insertItem(it); 
+		if ( next_sibling ) {
+			int it_index=ingItemIndex(ingredientList,it);
+			int ibelow_index=ingItemIndex(ingredientList,next_sibling);
+	
+			it->moveItem(next_sibling); //Move the Item
+	
+			int skip = 0;
+			if ( next_sibling->childCount() > 0 )
+				skip = next_sibling->childCount() - 1;
+	
+			loadedRecipe->ingList.move(it_index,it->childCount(),ibelow_index+skip);
 		}
-		else { //move the item out of the group
-			QListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
-			parent->takeItem(it);
-			ingredientList->insertItem(it);
-			it->moveItem(parent); //Move the Item
-		}
-
-		ingredientList->setCurrentItem(it); //Keep selected
 	}
 	else {
-		it->moveItem(ibelow); //Move the Item
-		loadedRecipe->ingList.move(it_index,ibelow_index);
+		int it_index=ingItemIndex(ingredientList,it);
+		int ibelow_index=ingItemIndex(ingredientList,ibelow);
+		IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+	
+		if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI || (ibelow->parent() != it->parent()) ) {
+			if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI && !it->parent() ) { //move the item into the group
+				if ( !it->parent() )
+					ingredientList->takeItem(it);
+				else
+					it->parent()->takeItem(it);
+	
+				ibelow->insertItem(it); 
+			}
+			else { //move the item out of the group
+				QListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
+				parent->takeItem(it);
+				ingredientList->insertItem(it);
+				it->moveItem(parent); //Move the Item
+			}
+	
+			ingredientList->setCurrentItem(it); //Keep selected
+		}
+		else {
+			it->moveItem(ibelow); //Move the Item
+			loadedRecipe->ingList.move(it_index,ibelow_index);
+		}
+	
+		if ( it->parent() )
+			(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
+		else
+			(*ing).groupID = -1;
 	}
-
-	if ( it->parent() )
-		(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
-	else
-		(*ing).groupID = -1;
 
 	emit changed();
 }
