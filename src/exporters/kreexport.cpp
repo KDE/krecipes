@@ -61,7 +61,7 @@ void KreExporter::exporter(const int recipeId)
       if(type == "kreml"){
         if ( file->open( IO_WriteOnly ) ) {
           QTextStream stream( file );
-          stream << "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+          stream << "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
           stream << createKRE();
           stream << "</krecipes>";
           file->close();
@@ -69,7 +69,7 @@ void KreExporter::exporter(const int recipeId)
       }
       else{
         // create a temporary .kre file
-        QString kreml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+        QString kreml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
         kreml += createKRE();
         kreml += "</krecipes>";
         int size = kreml.length();
@@ -98,7 +98,7 @@ void KreExporter::categoryExporter(QValueList<int>* l){
       overwrite = KMessageBox::questionYesNo( 0,i18n("File ")+file->name()+i18n(" exists. Would you like to overwrite it?"),i18n("Saving recipe") );
     }
     if(!fileExists || overwrite == KMessageBox::Yes){
-      kreml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+      kreml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
       for ( it = l->begin(); it != l->end(); ++it ){
         database->loadRecipe( recipe, *it );
         kreml += createKRE();
@@ -138,12 +138,12 @@ QString KreExporter::createKRE(const int recipeId)
       recipe = new Recipe();
       recipe->recipeID = -1;
       database->loadRecipe( recipe, recipeId );
-      xml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+      xml = "<krecipes version=\"0.4\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
     }
     else{
       xml = "";
     }
-    xml +="<krecipes-recipe>";
+    xml +="<krecipes-recipe>\n";
     xml += "<krecipes-description>\n";
     xml += "<title>"+recipe->title.utf8()+"</title>\n";
     for (Element *el = (recipe->authorList).getFirst(); el; el= (recipe->authorList).getNext()){
