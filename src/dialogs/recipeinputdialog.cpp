@@ -24,7 +24,7 @@
 #include "image.h" //Initializes default photo
 
 
-RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db): QWidget( parent)
+RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db): QVBox( parent)
 {
 
 // Adjust internal parameters

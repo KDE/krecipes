@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 #include <qobject.h>
 #include <qtabwidget.h>
+#include <qvbox.h>
 
 #include "elementlist.h"
 
@@ -33,7 +34,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class RecipeInputDialog: public QWidget{
+class RecipeInputDialog: public QVBox{
 Q_OBJECT
 
 public:
