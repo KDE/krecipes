@@ -12,15 +12,13 @@
 
 #include "shoppinglistdialog.h"
 
-#include <kapplication.h>
-#include <kcursor.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
-#include "shoppinglistviewdialog.h"
+#include "refineshoppinglistdialog.h"
 #include "datablocks/recipelist.h"
 #include "widgets/recipelistview.h"
 #include "recipefilter.h"
@@ -228,10 +226,8 @@ Element newEl; newEl.id=it->recipeID(); newEl.name=it->title(); // Storing the t
 recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
 }
 
-KApplication::setOverrideCursor( KCursor::waitCursor() );
-shoppingListDisplay=new ShoppingListViewDialog(0,database,recipeList);
-shoppingListDisplay->show();
-KApplication::restoreOverrideCursor();
+RefineShoppingListDialog refineDialog(this,database,recipeList);
+refineDialog.exec();
 }
 
 void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
@@ -264,10 +260,9 @@ void ShoppingListDialog::slotDropped(KListView *list, QDropEvent *e, QListViewIt
 	else if ( list == recipeListView->listView() && e->source() == shopRecipeListView->listView() ) {
 		QListViewItemIterator list_it = QListViewItemIterator(shopRecipeListView->listView());
 		while ( list_it.current() ) {
-		kdDebug()<<"hi"<<endl;
 			if ( ((RecipeListItem*)list_it.current())->recipeID() == item->recipeID() ) {
-					delete list_it.current();kdDebug()<<"bye"<<endl;
-					break;
+				delete list_it.current();
+				break;
 			}
 			list_it++;
 		}

@@ -19,15 +19,13 @@
 #include <khtml_part.h>
 #include <khtmlview.h>
 
-class ElementList;
-class RecipeDB;
 class IngredientList;
 
 class ShoppingListViewDialog:public QWidget{
 Q_OBJECT
 
 public:
-    ShoppingListViewDialog(QWidget *parent, RecipeDB *db, const ElementList &recipeList);
+    ShoppingListViewDialog(QWidget *parent, const IngredientList &ingredientList);
     ~ShoppingListViewDialog();
 
 public slots:
@@ -40,11 +38,7 @@ private:
   QVBox *htmlBox;
   KHTMLPart *shoppingListView;
 
-  // Internal Variables
-  RecipeDB  *database;
-
   // Internal Methods
-  void showShoppingList(const ElementList &recipeList);
   void display(const IngredientList &ingredientList);
 };
 

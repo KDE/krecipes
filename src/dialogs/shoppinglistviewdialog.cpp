@@ -11,10 +11,7 @@
  ***************************************************************************/
 
 #include "shoppinglistviewdialog.h"
-#include "shoppingcalculator.h"
 #include "ingredientlist.h"
-#include "elementlist.h"
-#include "DBBackend/recipedb.h"
 #include "mixednumber.h"
 
 #include <qpushbutton.h>
@@ -24,12 +21,8 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 
-ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, const ElementList &recipeList):QWidget(parent)
+ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, const IngredientList &ingredientList ):QWidget(parent,"shoppingview",WDestructiveClose)
 {
-
- // Store pointer to database
- database=db;
-
  // Design dialog
 
  layout = new QGridLayout( this, 1, 1, 0, 0);
@@ -55,23 +48,13 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, co
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
 
 
-//---------- Calculate & Load  the list --------
-
-showShoppingList(recipeList);
-
+//---------- Load  the list --------
+display(ingredientList);
 }
 
 
 ShoppingListViewDialog::~ShoppingListViewDialog()
 {
-}
-
-void ShoppingListViewDialog::showShoppingList(const ElementList &recipeList)
-{
-IngredientList ingredientList;
-calculateShopping(recipeList,&ingredientList,database);
-display(ingredientList);
-
 }
 
 void ShoppingListViewDialog::display(const IngredientList &ingredientList)
