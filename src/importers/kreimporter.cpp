@@ -42,8 +42,8 @@ KreImporter::KreImporter(const QString& filename)
         }
     }
     if(name == QString::null){
-			kdDebug()<<"error: Archive doesn't contain a valid krecipes file"<<endl;
-			setErrorMsg( i18n("Archive doesn't contain a valid krecipes file") );
+			kdDebug()<<"error: Archive doesn't contain a valid Krecipes file"<<endl;
+			setErrorMsg( i18n("Archive doesn't contain a valid Krecipes file") );
 			return;
     }
     dir->copyTo("/tmp/");
