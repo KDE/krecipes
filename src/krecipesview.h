@@ -34,7 +34,7 @@ class QPainter;
  *
  * @short Main view
  * @author Unai Garro <ugarro@users.sourceforge.net>
- * @version 0.1
+ * @version 0.2
  */
 class KrecipesView : public QVBox, public KrecipesIface
 {
