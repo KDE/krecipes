@@ -198,6 +198,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	else
 		selected_recipes = *m_recipe_list;
 
+	m_recipe_list->empty();
+
 	//cache some data we'll need
 	int max_author_length = db->maxAuthorNameLength();
 	int max_category_length = db->maxCategoryNameLength();
@@ -242,15 +244,21 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	CustomVector catVector( catList );
 	qHeapSort( catVector );
 
-	if ( m_cat_structure )
+	if ( m_cat_structure ) {
 		importCategoryStructure( db, catVector, m_cat_structure );
+		delete m_cat_structure;
+	}
 
 	RecipeList::iterator recipe_it;
+	RecipeList::iterator recipe_it_old = selected_recipes.end();
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it ) {
 		if ( progress_dialog->wasCancelled() ) {
 			KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
 			return ;
 		}
+
+		if ( recipe_it_old != selected_recipes.end() )
+			selected_recipes.remove( recipe_it_old );
 
 		progress_dialog->setLabel( QString( i18n( "Importing recipe: %1" ) ).arg( ( *recipe_it ).title ) );
 		progress->advance( 1 );
@@ -351,6 +359,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 
 		//save into the database
 		db->saveRecipe( &( *recipe_it ) );
+
+		recipe_it_old = recipe_it; //store to delete once we've got the next recipe
 	}
 
 	importUnitRatios( db );
