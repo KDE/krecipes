@@ -31,27 +31,33 @@ SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f
 {
 welcomePage= new WelcomePage(this);
 addPage(welcomePage,i18n("Welcome to Krecipes"));
+
 dbTypeSetupPage=new DBTypeSetupPage(this);
 addPage(dbTypeSetupPage,i18n("Database Type"));
 
 permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
-setAppropriate(permissionsSetupPage,false);// Disable By Default
 
 serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,i18n("Server Settings"));
-setAppropriate(serverSetupPage,false); // Disable By Default
 
 dataInitializePage= new DataInitializePage(this);
 addPage(dataInitializePage,i18n("Initialize Database"));
+
 savePage = new SavePage(this);
 addPage(savePage,i18n("Finish & Save Settings"));
 
 setFinishEnabled(savePage,true); // Enable finish button
 setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
+#if (HAVE_SQLITE)
+setAppropriate(permissionsSetupPage,false);// Disable By Default
+setAppropriate(serverSetupPage,false); // if we have SQLite (since it's default, and doesn't require these settings)
+#endif
+
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
 connect(dbTypeSetupPage,SIGNAL(showPages(bool)),this,SLOT(showPages(bool)));
+
 }
 
 
@@ -522,7 +528,8 @@ bg->setButton(0); // By default, SQLite
 #if (!HAVE_MYSQL)
 mysqlCheckBox->setEnabled(false);
 #endif
- #if (!HAVE_SQLITE)
+
+#if (!HAVE_SQLITE)
 liteCheckBox->setEnabled(false);
 	#if (HAVE_MYSQL)
 	bg->setButton(1); // Otherwise by default liteCheckBox is checked even if it's disabled
@@ -545,7 +552,8 @@ int id=bg->id(bg->selected()); //QT 3.1
 if (id==1) // MySQL (note index=0,1....)
 	 return (MySQL);
 else
-	return(SQLite);
+	 return(SQLite);
+
 
 }
 
