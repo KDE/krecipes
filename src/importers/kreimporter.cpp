@@ -41,13 +41,18 @@ KreImporter::KreImporter(const QString& filename)
     }
     if(name == QString::null){
 			qDebug("error: Archive doesn't contain a valid krecipes file");
-			setErrorMsg( i18n("error: Archive doesn't contain a valid krecipes file") );
+			setErrorMsg( i18n("Archive doesn't contain a valid krecipes file") );
 			return;
     }
     dir->copyTo("/tmp/");
 	  file = new QFile( "/tmp/"+name );
     kre->close();
     unlink = true; //remove file after import
+  }
+  else
+  {
+	setErrorMsg( i18n("File extention doesn't match that of a valid Krecipes file.") );
+	return;
   }
 
 	if ( file->open( IO_ReadOnly ) )
