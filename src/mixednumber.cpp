@@ -170,10 +170,15 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok )
 	return MixedNumber(whole,numerator,denominator);
 }
 
-QString MixedNumber::toString( Format format ) const
+QString MixedNumber::toString( Format format, bool locale_aware ) const
 {
 	if ( format == DecimalFormat )
-		return beautify(locale->formatNumber(toDouble(),5));
+	{
+		if ( locale_aware )
+			return beautify(locale->formatNumber(toDouble(),5));
+		else
+			return QString::number(toDouble());
+	}
 
 	if ( m_numerator == 0 && m_whole == 0 )
 		return QString("0");

@@ -98,10 +98,6 @@ Krecipes::Krecipes()
     connect(this->m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)));
     enableSaveOption(false); // Disables saving initially
 
-    // Enable/Disable the SaveAs Button (Initialize disabled, and connect signal)
-
-    connect(this->m_view->selectPanel, SIGNAL(recipeSelected(bool)), saveAsAction, SLOT(setEnabled(bool)));
-
     parsing_file_dlg = new KDialog(this,"parsing_file_dlg",true,Qt::WX11BypassWM);
     QLabel *parsing_file_dlg_label = new QLabel(i18n("Gathering recipe data from file.\nPlease wait..."),parsing_file_dlg);
     parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
@@ -118,10 +114,9 @@ Krecipes::~Krecipes()
 void Krecipes::setupActions()
 {
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
-    KStdAction::open(this, SLOT(fileOpen()), actionCollection());
+    //KStdAction::open(this, SLOT(fileOpen()), actionCollection());
     saveAction=KStdAction::save(this, SLOT(fileSave()), actionCollection());
     saveAsAction=KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-    saveAsAction->setEnabled(false);
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 

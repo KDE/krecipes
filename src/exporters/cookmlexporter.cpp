@@ -106,6 +106,8 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 				QDomElement text_tag = doc.createElement("text");
 				preparation_tag.appendChild( text_tag );
 				text_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
+				
+		advanceProgressBar();
 	}
 
 	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

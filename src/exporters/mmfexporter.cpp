@@ -42,6 +42,8 @@ QString MMFExporter::createContent( const RecipeList& recipes )
 		writeMMFDirections( content, *recipe_it ); content += "\n";
 
 		content += "-----\n"; //end of recipe indicator
+		
+		advanceProgressBar();
 	}
 
 	return content;
@@ -83,14 +85,14 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
  */
 void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 {
-	KConfig *config = kapp->config();
+	KConfig *config = kapp->config(); config->setGroup("Formatting");
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{
 		//columns 1-7
 		if ( (*ing_it).amount > 0 )
-			content += MixedNumber((*ing_it).amount).toString( number_format ).rightJustify(7,' ',true)+" ";
+			content += MixedNumber((*ing_it).amount).toString( number_format, false ).rightJustify(7,' ',true)+" ";
 		else
 			content += "        ";
 
@@ -115,8 +117,14 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		}
 
 		//columns 12-39
-		QString ing_name = (*ing_it).name + "; " + (*ing_it).prepMethod; ing_name.truncate(28);
+		QString ing_name((*ing_it).name);
+		if ( (*ing_it).prepMethodID != -1 )
+			ing_name += "; " + (*ing_it).prepMethod;
+		
+		if ( !found_short_form ) ing_name.prepend((*ing_it).units+" ");
+		ing_name.truncate(28);
 		content += ing_name+"\n";
+
 		for ( unsigned int i = 0; i < ((*ing_it).name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
 			content += "           -"+(*ing_it).name.mid(28*(i+1),28)+"\n";
 	}

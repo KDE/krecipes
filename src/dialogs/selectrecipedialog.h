@@ -79,6 +79,7 @@ private:
   bool itemIsRecipe( const QListViewItem *item );
 
   void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
+  QValueList<int> getAllVisibleItems();
 
 signals:
   void recipeSelected(int id, int action);

@@ -45,7 +45,9 @@ void BaseExporter::exporter( const RecipeList& recipes, KProgressDialog *progres
 		bool fileExists = file->exists();
 		int overwrite;
 		if(fileExists)
+		{
 			overwrite = KMessageBox::questionYesNo( 0,QString(i18n("File \"%1\" exists. Would you like to overwrite it?")).arg(file->name()),i18n("Saving recipe") );
+		}
 
 		if(!fileExists || overwrite == KMessageBox::Yes)
 			saveToFile( recipes );

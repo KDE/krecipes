@@ -123,6 +123,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += (*recipe_it).instructions.utf8();
     xml += "</krecipes-instructions>\n";
     xml += "</krecipes-recipe>\n";
+    
+    advanceProgressBar();
     }
     
     xml += "</krecipes>\n";

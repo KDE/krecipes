@@ -47,7 +47,7 @@ public:
 	double toDouble() const;
 
 	/** Returns the fraction as a string */
-	QString toString( Format = MixedNumberFormat ) const;
+	QString toString( Format = MixedNumberFormat, bool locale_aware = true ) const;
 
 	/** The whole part of the input */
 	int whole() const{ return m_whole; }

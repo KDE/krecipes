@@ -118,6 +118,8 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				QDomElement step_tag = doc.createElement("step"); //we've just got everything in one step
 				directions_tag.appendChild( step_tag );
 				step_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
+				
+		advanceProgressBar();
 	}
 
 	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

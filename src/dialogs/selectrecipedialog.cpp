@@ -16,6 +16,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kprogress.h>
 
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
@@ -249,12 +250,11 @@ loadCategoryCombo();
 collapseAll();
 }
 
-//FIXME: This seems to be working, but it still needs work
 void SelectRecipeDialog::filter(const QString& s)
 {
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	if ( s.isNull() || s == "" ) // Don't filter if the filter text is empty
+	if ( s.isEmpty() ) // Don't filter if the filter text is empty
 	{
 		if ( !isFilteringCategories )
 			it->setVisible(true);
@@ -266,20 +266,22 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	}
 	else // It's a category. Check the children
 	{
+		if (!isFilteringCategories) it->setVisible( true ); //make sure it is visible
+
 		bool cat_has_matches = false;
 		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
 		{
-			if (cit->text(2).contains(s,false) && !s.isNull())
+			if (cit->text(2).contains(s,false) && !s.isEmpty())
 			{
 				cat_has_matches = true;
 				cit->setVisible(true);
 				it->setOpen(true);
 			}
-			else cit->setVisible(false);
+			else
+				cit->setVisible(false);
 		}
-
-		if (!isFilteringCategories)
-			it->setVisible( cat_has_matches ); //hide or show category if there aren't or are matches within it, respectively
+		
+		if (!isFilteringCategories && !cat_has_matches) it->setVisible(false);
 	}
 	}
 }
@@ -353,7 +355,9 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 				exporter = new KreExporter(fileName, fd->currentFilter());
 
 			RecipeList recipes; database->loadRecipes( &recipes, ids );
-			exporter->exporter( recipes );
+
+			KProgressDialog progress_dialog(this, "export_progress_dialog", QString::null, i18n("Saving recipes, please wait...") );
+			exporter->exporter( recipes, &progress_dialog );
 			delete exporter;
 		}
 	}
@@ -365,12 +369,20 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
  */
 void SelectRecipeDialog::slotExportRecipe()
 {
-	if (recipeListView->selectedItem() )
+	if ( recipeListView->selectedItem() )
 	{
 		QValueList<int> id;
 		id.append( (recipeListView->selectedItem())->text(1).toInt() );
 
 		exportRecipes( id, i18n("Save Recipe"), (recipeListView->selectedItem())->text(2) );
+	}
+	else //if nothing selected, export all visible recipes
+	{
+		QValueList<int> ids = getAllVisibleItems();
+
+		if ( ids.count() > 0 )
+			exportRecipes( ids, i18n("Save Recipes"), "Recipes" );
+		//else TODO: give notice
 	}
 }
 
@@ -384,6 +396,33 @@ void SelectRecipeDialog::slotExportRecipeFromCat()
 
 		exportRecipes( ids, i18n("Save Recipes"), (recipeListView->selectedItem())->text(0) );
 	}
+}
+
+QValueList<int> SelectRecipeDialog::getAllVisibleItems()
+{
+	QValueList<int> ids;
+
+	for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+	{
+		if ( it->isVisible() )
+		{
+			if ( !it->firstChild() ) // It's not a category or it's empty
+			{
+				if ( !it->text(1).isEmpty() && ids.find(it->text(1).toInt()) == ids.end() )
+					ids << it->text(1).toInt();
+			}
+			else // It's a category. Check the children
+			{
+				for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
+				{
+					if ( cit->isVisible() && ids.find(cit->text(1).toInt()) == ids.end() )
+						ids << cit->text(1).toInt();
+				}
+			}
+		}
+	}
+	
+	return ids;
 }
 
 void SelectRecipeDialog::haveSelectedItems()
