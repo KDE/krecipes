@@ -1196,7 +1196,7 @@ void QSqlRecipeDB::createNewUnit( const QString &unitName, const QString &unitPl
 	else if ( real_plural.isEmpty() )
 		real_plural = real_name;
 
-	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + real_name + "','" + real_plural + "');";
+	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + QString(escapeAndEncode( real_name )) + "','" + QString(escapeAndEncode( real_plural )) + "');";
 	QSqlQuery unitToCreate( command, database );
 
 	emit unitCreated( Unit( real_name, real_plural, lastInsertID() ) );
