@@ -496,7 +496,7 @@ layout->addItem(spacer_from_image,1,2);
 
 // Explanation text
 dbTypeSetupText=new QLabel(this);
-dbTypeSetupText->setText(i18n("Choose the type of recipe that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL database."));
+dbTypeSetupText->setText(i18n("Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL database."));
 dbTypeSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 dbTypeSetupText->setAlignment( int( QLabel::AlignTop |QLabel::WordBreak ) );
 layout->addWidget(dbTypeSetupText,1,3);
