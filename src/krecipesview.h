@@ -170,6 +170,7 @@ private slots:
     void slotSetDietWizardPanel(void);
     void switchToRecipe(void);
     void setContextHelp(int);
+    void createShoppingListFromDiet(void);
 
 };
 

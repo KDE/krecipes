@@ -20,7 +20,9 @@
 #include <klistview.h>
 
 class RecipeDB;
+class RecipeList;
 class ShoppingListViewDialog;
+
 
 /**
 @author Unai Garro
@@ -33,6 +35,7 @@ public:
     ShoppingListDialog(QWidget *parent,RecipeDB *db);
     ~ShoppingListDialog();
     void reload(void);
+    void createShopping(RecipeList &rlist);
 
 private:
 

@@ -273,6 +273,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Add recipe to the shopping list when requested
     connect(inputPanel,SIGNAL(addRecipeToShoppingList(int)),shoppingListPanel,SLOT(addRecipeToShoppingList(int)));
 
+    // Create a new shopping list when a new diet is generated and accepted
+    connect(dietPanel,SIGNAL(dietReady()),this,SLOT(createShoppingListFromDiet()));
+
     // Close Splash Screen
     sleep(2);
     delete start_logo;
@@ -722,6 +725,11 @@ void MenuButton::drawButtonLabel( QPainter *p ){
     bitBlt(pm, 0, 0, &button, 0, Qt::CopyROP);
 }
 
-#include "krecipesview.moc"
+void KrecipesView::createShoppingListFromDiet(void)
+{
+shoppingListPanel->createShopping(dietPanel->dietList());
+rightPanel->raiseWidget(shoppingListPanel);
+}
 
+#include "krecipesview.moc"
 

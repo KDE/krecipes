@@ -15,6 +15,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "shoppinglistviewdialog.h"
+#include "datablocks/recipelist.h"
 
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
@@ -61,6 +62,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
     shopRecipeListView->addColumn(i18n("Id"));
     shopRecipeListView->addColumn(i18n("Recipe Title"));
+    shopRecipeListView->setSorting(-1);
 
     QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(spacerToButtonBar,5,1);
@@ -101,6 +103,16 @@ ShoppingListDialog::~ShoppingListDialog()
 {
 }
 
+void ShoppingListDialog::createShopping(RecipeList &rlist)
+{
+clear();
+RecipeList::Iterator it;
+for (it=rlist.begin(); it != rlist.end(); it++)
+{
+	new QListViewItem(shopRecipeListView,shopRecipeListView->lastItem(),QString::number((*it).recipeID),(*it).title);
+}
+}
+
 void ShoppingListDialog::reloadRecipeList(void)
 {
 ElementList recipeList;
@@ -108,7 +120,7 @@ recipeListView->clear();
 database->loadRecipeList(&recipeList);
 
 for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext() )
-	(void)new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
+	new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
 }
 
 void ShoppingListDialog::reload(void)
@@ -152,7 +164,7 @@ void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
 {
 
 QString title=database->recipeTitle(recipeID);
-(void)new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
+new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
 }
 
 void ShoppingListDialog::clear()
