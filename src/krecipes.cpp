@@ -416,8 +416,9 @@ void Krecipes::newToolbarConfig()
 
 void Krecipes::optionsPreferences()
 {
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
+
+#if KDE_IS_VERSION(3,1,92 )
+
      if(KAutoConfigDialog::showDialog("settings"))
 		return;
 
@@ -433,12 +434,7 @@ void Krecipes::optionsPreferences()
     if (dlg.exec())
     {}
 # endif
-#else
-      // popup some sort of preference dialog, here
-    KrecipesPreferences dlg(this);
-    if (dlg.exec())
-    {}
-#endif
+
 }
 
 void Krecipes::changeStatusbar(const QString& text)
