@@ -173,7 +173,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     buttonsList->append(button6);
 
     contextButton = new QPushButton(leftPanel, "contextButton");
-    contextButton->setIconSet(il->loadIconSet("ktip", KIcon::Small, 32));
+    contextButton->setIconSet(il->loadIconSet("krectip", KIcon::Small, 32));
     contextButton->setGeometry(112, 486, 32, 32);
     contextButton->setPaletteBackgroundColor(QColor(238, 218, 156));
     contextButton->setFlat(true);
