@@ -12,10 +12,15 @@
 #define PAGESETUPDIALOG_H
 
 #include <qdialog.h>
+#include <qmap.h>
+#include <qvaluelist.h>
 
 #include "../recipe.h"
 
+class QPopupMenu;
+class QAction;
 class QLabel;
+
 class DragArea;
 
 /**
@@ -23,12 +28,25 @@ class DragArea;
   */
 class PageSetupDialog : public QDialog
 {
+Q_OBJECT;
+
 public:
 	PageSetupDialog( QWidget *parent, const Recipe &sample );
+	~PageSetupDialog();
 
 protected:
 	virtual void accept();
 	void save();
+
+protected slots:
+	void widgetClicked( QMouseEvent *, QWidget * );
+
+	//slots to set properties of item boxes
+	void setBackgroundColor();
+	void setTextColor();
+	void setFont();
+	void setShown(int id);
+	void setAlignment( QAction * );
 
 private:
 	void loadSetup();
@@ -40,6 +58,15 @@ private:
 	QLabel *instr_box;
 	QLabel *photo_box;
 	QLabel *servings_box;
+	QLabel *categories_box;
+	QLabel *authors_box;
+	QLabel *id_box;
+	QLabel *ingredients_box;
+
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32 };
+	QMap< QWidget*, unsigned int > *box_properties;
+
+	QPopupMenu *popup;
 };
 
 #endif //PAGESETUPDIALOG_H
