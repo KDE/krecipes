@@ -21,7 +21,7 @@ INSERT INTO units VALUES (19,'tsp','tsp');
 INSERT INTO units VALUES (20,'quart','quarts');
 INSERT INTO units VALUES (21,'gallon','gallons');
 INSERT INTO units VALUES (22,'ounce','ounces');
-INSERT INTO units VALUES (24,'fl oz','fl oz');
+INSERT INTO units VALUES (11,'fl oz','fl oz');
 INSERT INTO units VALUES (7,'unit','units');
 INSERT INTO units VALUES (9,'dash','dashes');
 INSERT INTO units VALUES (10,'to taste','to taste');
