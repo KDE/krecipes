@@ -111,24 +111,32 @@ for ( Element *category=categoryList.getFirst(); category; category=categoryList
 int *categoryID;
 Element *recipe;
 QPtrList <int> recipeCategoryList;
-
+QIntDict <bool> categorisedRecipes; // Stores if recipes that are categorised already
 
 database->loadRecipeList(recipeList,0,&recipeCategoryList); // Read the whole list of recipes including category
 
+
+// Add those that are categorised
 for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
 	{
 	if (QListViewItem* categoryItem=categoryItems[*categoryID])
-	{
-	QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
-	}
-	else
-	{
-	QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
-	}
+		{
+		QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
+
+		bool value=false; categorisedRecipes.insert(recipe->id,&value);
+		}
+
 	}
 
+// Add those that are not in any category (except -1)
+for ( recipe=recipeList->getFirst();recipe;recipe=recipeList->getNext())
+{
+if (!categorisedRecipes[recipe->id])
+QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
+}
 
 
+// Do the filtering again
 filter(searchBox->text());
 
 }
