@@ -141,16 +141,23 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 
 	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
 
-	QImage image;
-	if (recipe.photo.isNull())
+	QImage image; QString photo_name;
+	if (recipe.photo.isNull()) {
 		image = QImage(defaultPhoto);
-	else
+		photo_name = "default_photo";
+	}
+	else {
 		image = recipe.photo.convertToImage();
+		photo_name = recipe.title;
+	}
 
 	QPixmap pm = image.smoothScale(phwidth, 0, QImage::ScaleMax);
 
 	QFileInfo fi(*file);
-	pm.save(fi.dirPath()+"/"+filename+"_photos/"+escape(recipe.title)+".png","PNG");
+	QString photo_path = fi.dirPath()+"/"+filename+"_photos/"+escape(photo_name)+".png";
+	if ( !QFile::exists(photo_path) ) {
+		pm.save(photo_path,"PNG");
+	}
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 }
 
@@ -274,7 +281,13 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	html_map.insert("prep_time",preptime_html);
 
 	//========================PHOTO========================//
-	QString image_url = QString("%1_photos/%2.png").arg(filename).arg(escape(recipe.title));
+	QString photo_name;
+	if ( recipe.photo.isNull() )
+		photo_name = "default_photo";
+	else
+		photo_name = recipe.title;
+
+	QString image_url = filename+"_photos/"+escape(photo_name)+".png";
  	image_url = KURL::encode_string(image_url);
 	QString photo_html = QString("<img src=\"%1\">").arg(image_url);
 	html_map.insert("photo",photo_html);
