@@ -25,6 +25,7 @@
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include "propertycalculator.h"
 
@@ -83,16 +84,16 @@ DietWizardDialog::~DietWizardDialog()
 void DietWizardDialog::reload(void)
 {
 database->loadCategories(&categoriesList);
-database->loadProperties(&constraintList);
+database->loadProperties(&propertyList);
 int pgcount=0;
 for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++)
-	tab->reload(categoriesList,constraintList);
+	tab->reload(categoriesList,propertyList);
 }
 
 void DietWizardDialog::newTab(const QString &name)
 {
 mealTab=new MealInput(mealTabs);
-mealTab->reload(categoriesList,constraintList);
+mealTab->reload(categoriesList,propertyList);
 mealTabs->addTab(mealTab,name);
 mealTabs->setCurrentPage(mealTabs->indexOf(mealTab));
 }
@@ -110,38 +111,63 @@ if (mn>mealNumber)
 void DietWizardDialog::createDiet(void)
 {
 RecipeList rlist;
-
+RecipeList dietRList;
 // Get the whole list of recipes, detailed
 database->loadRecipeDetails(&rlist,true);
 
-// Calculate properties of the recipes
-IngredientPropertyList properties;
+int recipes_left=rlist.count();
 
-RecipeList::Iterator recipeIt;
-for (recipeIt=rlist.begin();recipeIt!=rlist.end();recipeIt++)
+RecipeList tempRList; // FIXME: it helps removing elements without loosing them, but may take too long copying. Better avoid this if possible. Also, we may not want to repeat recipes. Then better use the same array always.
+for (int meal=0;meal<mealNumber;meal++)
 {
-calculateProperties(*recipeIt,database,&properties); // *(recipeIt) is of class Recipe
+int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
+
+	for (int dish=0;dish<dishNo;dish++)
+	{
+	tempRList=rlist; // temporal RecipeList so elements can be removed without reloading them again from the DB
+		bool found=false;
+		while ((!found) && recipes_left)
+		{
+			int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
+			RecipeList::Iterator rit=tempRList.at(random_index);
+			if (found=checkConstraints(*rit,meal,dish)) // Check that the recipe is inside the constraint limits
+			{
+			dietRList.append(*rit);// Add recipe to the diet list
+			}
+
+			// Remove this analized recipe from teh list
+			tempRList.remove(rit);
+			recipes_left--;
+		}
+		if (!found) KMessageBox::information(this,i18n("I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. "));
+		recipes_left=rlist.count();
+	}
 }
+
+
+
 }
 
 
 class ConstraintsListItem:public QCheckListItem{
 public:
-	ConstraintsListItem(QListView* klv, IngredientProperty *ip ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){ ipStored=new IngredientProperty(ip);}
+	ConstraintsListItem(QListView* klv, IngredientProperty *pty ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){ ptyStored=new IngredientProperty(pty);}
 private:
-	IngredientProperty *ipStored;
+	IngredientProperty *ptyStored;
 
 public:
 	virtual QString text(int column) const
 		{
-		if (column==1) return(QString("0.0"));
-		else if (column==2) return(ipStored->name);
+		if (column==1) return(ptyStored->name);
+		else if (column==2) return(QString("0.0"));
 		else if (column==3) return(QString("0.0"));
+
+
 		else return(QString::null);
 		}
 	~ConstraintsListItem(void)
 	{
-	delete ipStored;
+	delete ptyStored;
 	}
 };
 
@@ -164,7 +190,7 @@ MealInput::MealInput(QWidget *parent):QWidget(parent)
 
 // Initialize data
 categoriesListLocalCache.clear();
-constraintListLocalCache.clear();
+propertyListLocalCache.clear();
 
 // Design the dialog
 QVBoxLayout *layout=new QVBoxLayout(this);
@@ -225,20 +251,20 @@ MealInput::~MealInput()
 
 // reload from outside with new data
 
-void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
+void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &propertyList)
 {
 int pgcount=0;
 QValueList<DishInput*>::iterator it;
 
 categoriesListLocalCache.clear();
-constraintListLocalCache.clear();
+propertyListLocalCache.clear();
 
 // Cache the data into the internal lists so it can be reused when creating new dishes
 
 	//Cache the possible constraints (properties) list
-	for (IngredientProperty *ip=constraintList.getFirst(); ip; ip=constraintList.getNext())
+	for (IngredientProperty *pty=propertyList.getFirst(); pty; pty=propertyList.getNext())
 	{
-	constraintListLocalCache.add(*ip);
+	propertyListLocalCache.add(*pty);
 	}
 
 	//Cache the categories list
@@ -260,7 +286,7 @@ QValueList<DishInput*>::iterator it;
 for (it=dishInputList.begin(); it != dishInputList.end();it++)
 {
 	DishInput *di; di=(*it);
-	di->reload(&categoriesListLocalCache,&constraintListLocalCache);
+	di->reload(&categoriesListLocalCache,&propertyListLocalCache);
 	}
 }
 
@@ -269,7 +295,7 @@ void MealInput::changeDishNumber(int dn)
 if (dn>dishNumber)
 	{
 	DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
-	newDish->reload(&categoriesListLocalCache,&constraintListLocalCache);
+	newDish->reload(&categoriesListLocalCache,&propertyListLocalCache);
 	dishStack->addWidget(newDish);
 	dishInputList.append(newDish);
 	dishStack->raiseWidget(newDish);
@@ -325,8 +351,8 @@ categoriesView->addColumn(i18n("Category"));
 	//Constraints list
 constraintsView=new KListView(listBox);
 constraintsView->addColumn(i18n("Enabled"));
-constraintsView->addColumn(i18n("Min. Value"));
 constraintsView->addColumn(i18n("Property"));
+constraintsView->addColumn(i18n("Min. Value"));
 constraintsView->addColumn(i18n("Max. Value"));
 
 	// KDoubleInput based edit boxes
@@ -344,15 +370,15 @@ DishInput::~DishInput()
 {
 }
 
-void DishInput::reload(ElementList *categoryList, IngredientPropertyList *constraintList)
+void DishInput::reload(ElementList *categoryList, IngredientPropertyList *propertyList)
 {
 categoriesView->clear();
 constraintsView->clear();
 
 	//Load the possible constraints (properties) list
-for (IngredientProperty *ip=constraintList->getFirst();ip; ip=constraintList->getNext())
+for (IngredientProperty *pty=propertyList->getFirst();pty; pty=propertyList->getNext())
 {
-ConstraintsListItem *it=new ConstraintsListItem(constraintsView,ip);
+ConstraintsListItem *it=new ConstraintsListItem(constraintsView,pty);
 constraintsView->insertItem(it);
 }
 
@@ -373,18 +399,18 @@ QRect r;
 // Constraints Box1
 r.setTopLeft(this->pos());r.setSize(QSize(30,30));
 r.moveBy(listBox->pos().x()+constraintsView->pos().x()+constraintsView->header()->pos().x(),listBox->pos().y()+constraintsView->pos().y()+constraintsView->header()->pos().y()); // Place it on top of the header of the list view
-r.moveBy(constraintsView->header()->sectionRect(1).x(),0); // Move it to column no 1
-r.moveBy(0,constraintsView->header()->sectionRect(1).height()+constraintsView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
+r.moveBy(constraintsView->header()->sectionRect(2).x(),0); // Move it to column no 1
+r.moveBy(0,constraintsView->header()->sectionRect(2).height()+constraintsView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
 
 r.setHeight(it->height()); // Set the item's height
-r.setWidth(constraintsView->header()->sectionRect(1).width()); // and width
+r.setWidth(constraintsView->header()->sectionRect(2).width()); // and width
 constraintsEditBox1->setGeometry(r);
 
 
 //Constraints Box2
 r.setTopLeft(this->pos());r.setSize(QSize(30,30));
 r.moveBy(listBox->pos().x()+constraintsView->pos().x()+constraintsView->header()->pos().x(),listBox->pos().y()+constraintsView->pos().y()+constraintsView->header()->pos().y()); // Place it on top of the header of the list view
-r.moveBy(constraintsView->header()->sectionRect(3).x(),0); // Move it to column no 1
+r.moveBy(constraintsView->header()->sectionRect(3).x(),0); // Move it to column no 2
 r.moveBy(0,constraintsView->header()->sectionRect(3).height()+constraintsView->itemRect(it).y()); //Move down to the item
 
 r.setHeight(it->height()); // Set the item's height
@@ -393,6 +419,19 @@ constraintsEditBox2->setGeometry(r);
 // Show Boxes
 constraintsEditBox1->show();
 constraintsEditBox2->show();
+}
+
+void DishInput::loadConstraints(ConstraintList *constraints)
+{
+constraints->clear();
+Constraint constraint;
+	for (QListViewItem *it=constraintsView->firstChild();it;it=it->nextSibling())
+	{
+	constraint.id=-1; //FIXME: it must contain the property's ID
+	constraint.min=it->text(2).toInt();
+	constraint.max=it->text(3).toInt();
+	constraints->add(constraint);
+	}
 }
 
 
@@ -489,4 +528,25 @@ return(QSize(40,200));
 QSize DishTitle::minimumSizeHint() const
 {
 return(QSize(40,200));
+}
+
+bool DietWizardDialog::checkConstraints(Recipe &rec,int meal,int dish)
+{
+
+// Calculate properties of the recipes
+IngredientPropertyList properties;
+calculateProperties(rec,database,&properties); // FIXME: this function accesses to the DB every time. It must use a cache to avoid too many queries
+
+// Check if the properties are within the constraints
+ConstraintList constraints; loadConstraints(meal,dish,&constraints); //load the constraints
+bool withinLimits=false;// FIXME: check the limits
+
+return (withinLimits);
+}
+
+void DietWizardDialog::loadConstraints(int meal,int dish,ConstraintList *constraints)
+{
+MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
+DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
+dishInput->loadConstraints(constraints); //Load the constraints form the KListView
 }

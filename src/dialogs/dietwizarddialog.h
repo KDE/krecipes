@@ -13,9 +13,6 @@
 #ifndef DIETWIZARDDIALOG_H
 #define DIETWIZARDDIALOG_H
 
-#include "elementlist.h"
-#include "ingredientpropertylist.h"
-
 #include <klistview.h>
 
 #include <qpushbutton.h>
@@ -30,6 +27,11 @@
 #include <qvgroupbox.h>
 #include <qspinbox.h>
 #include <qwidgetstack.h>
+
+#include "datablocks/constraintlist.h"
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
+#include "recipe.h"
 
 class RecipeDB;
 class EditBox;
@@ -57,7 +59,7 @@ private:
 	RecipeDB *database;
 	int mealNumber;
 	ElementList categoriesList;
-	IngredientPropertyList constraintList;
+	IngredientPropertyList propertyList;
 	//Widgets
 	QHBox *optionsBox;
 	QVGroupBox *sliderBox;
@@ -69,8 +71,9 @@ private:
 	QPushButton *okButton;
 
 	//Methods
+	bool checkConstraints(Recipe &rec,int meal,int dish);
+	void loadConstraints(int meal,int dish,ConstraintList *constraints);
 	void newTab(const QString &name);
-
 
 public:
 	//Methods
@@ -84,16 +87,22 @@ class MealInput:public QWidget{
 Q_OBJECT
 
 public:
+	// Methods
+
 	 MealInput(QWidget *parent);
 	 ~MealInput();
-	 void reload(ElementList &categoriesList,IngredientPropertyList &constraintList);
+	 void reload(ElementList &categoriesList,IngredientPropertyList &propertyList);
+	 int dishNo(void){return dishNumber;};
+
+	 // Public widgets and variables
+	 QValueList <DishInput*> dishInputList; // The list of dishes
+
 private:
 	// Widgets
 		// Private Variables
 		int dishNumber;
-		QValueList <DishInput*> dishInputList;
 		ElementList categoriesListLocalCache;
-		IngredientPropertyList constraintListLocalCache;
+		IngredientPropertyList propertyListLocalCache;
 
 		// Settings section for the meal
 		QHBox *mealOptions;
@@ -128,8 +137,10 @@ public:
 	DishInput(QWidget *parent,const QString &title);
 	~DishInput();
 	// Methods
+	void loadConstraints(ConstraintList *constraints);
+	void reload(ElementList *categoryList, IngredientPropertyList *propertyList);
 	void setDishTitle(const QString & text);
-	void reload(ElementList *categoryList, IngredientPropertyList *constraintList);
+
 
 private:
 		QHGroupBox *listBox;
