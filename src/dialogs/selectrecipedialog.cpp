@@ -193,8 +193,8 @@ void SelectRecipeDialog::exportRecipe()
     KFileDialog* fd = new KFileDialog("", "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName("", "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
-      KreManager* kre = new KreManager(database, fileName, fd->currentFilter());
-      kre->kreExport((recipeListView->selectedItem())->text(1).toInt());
+      KreExporter* kre = new KreExporter(database, (recipeListView->selectedItem())->text(1).toInt(), fileName, fd->currentFilter());
+      kre->exporter();
     }
   }
 }

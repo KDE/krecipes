@@ -23,7 +23,7 @@
 #include <kdialog.h>
 #include <kfiledialog.h>
 
-#include "importers/kremanager.h"
+#include "exporters/kreexport.h"
 
 class QHBox;
 
