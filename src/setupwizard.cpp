@@ -10,13 +10,13 @@
 #include "setupwizard.h"
 
 
-SetUpWizard::SetupWizard(QWidget *parent):KWizard(parent)
+SetupWizard::SetupWizard(QWidget *parent):KWizard(parent)
 {
 
 }
 
 
-SetUpWizard::~SetupWizard()
+SetupWizard::~SetupWizard()
 {
 }
 
