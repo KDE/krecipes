@@ -368,6 +368,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 {
 RecipeDB *db;
 db= new RecipeDB(host,user,pass,dbName);
+db->emptyData();
 db->initializeData();
 delete db; //it closes the db automatically
 }
