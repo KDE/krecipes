@@ -141,12 +141,12 @@ void PageSetupDialog::initShownItems()
 	{
 		if ( it.data() & SetupDisplay::Visibility )
 		{
-			int new_id = shown_items_popup->insertItem( QToolTip::textFor(it.key()) );
-			shown_items_popup->setItemChecked( new_id, it.key()->isShown() );
+			int new_id = shown_items_popup->insertItem( QToolTip::textFor(it.key()->widget) );
+			shown_items_popup->setItemChecked( new_id, it.key()->widget->isShown() );
 			shown_items_popup->connectItem( new_id, this, SLOT(setItemShown(int)) );
 
-			popup_widget_map.insert( new_id, it.key() );
-			widget_popup_map.insert( it.key(), new_id );
+			popup_widget_map.insert( new_id, it.key()->widget );
+			widget_popup_map.insert( it.key()->widget, new_id );
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004                                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,16 +29,18 @@
 
 #include "../image.h"
 #include "../mixednumber.h"
+#include "dialogs/borderdialog.h"
 
 #include <cmath>
 
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent, "background" ),
   box_properties(new PropertiesMap),
+  widget_item_map(new QMap<QWidget*,KreDisplayItem*>),
   has_changes(false)
 {
 	setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding) );
 
-	box_properties->insert( this, BackgroundColor );
+	createItem(this,BackgroundColor);
 
 	connect( this, SIGNAL(widgetClicked(QMouseEvent*,QWidget*)), SLOT(widgetClicked(QMouseEvent*,QWidget*)) );
 	connect( this, SIGNAL(widgetGeometryChanged()), SLOT(changeMade()) );
@@ -56,6 +58,14 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( 
 SetupDisplay::~SetupDisplay()
 {
 	delete box_properties;
+	delete widget_item_map;
+}
+
+void SetupDisplay::createItem( QWidget *w, unsigned int properties )
+{
+	KreDisplayItem *item = new KreDisplayItem(w);
+	box_properties->insert( item, properties );
+	widget_item_map->insert( w, item );
 }
 
 void SetupDisplay::loadLayout( const QString &filename )
@@ -81,10 +91,10 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return;
 		}
 
-		QMap<QString,QWidget*> widget_map;
-		QValueList<QWidget*> widgets = box_properties->keys();
-		for ( QValueList<QWidget*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
-			widget_map.insert((*it)->name(),*it);
+		QMap<QString,KreDisplayItem*> widget_map;
+		QValueList<KreDisplayItem*> widgets = box_properties->keys();
+		for ( QValueList<KreDisplayItem*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
+			widget_map.insert((*it)->widget->name(),*it);
 
 		QDomNodeList l = layout.childNodes();
 		for (unsigned i = 0 ; i < l.count(); i++)
@@ -92,7 +102,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 			QDomElement el = l.item(i).toElement();
 			QString tagName = el.tagName();
 
-			QMap<QString,QWidget*>::const_iterator map_it = widget_map.find(tagName);
+			QMap<QString,KreDisplayItem*>::iterator map_it = widget_map.find(tagName);
 			if ( map_it != widget_map.end() )
 			{
 				QDomNodeList l = el.childNodes();
@@ -113,6 +123,8 @@ void SetupDisplay::loadLayout( const QString &filename )
 						loadVisibility( *map_it, el );
 					else if (subTagName == "alignment")
 						loadAlignment( *map_it, el );
+					else if (subTagName == "border")
+						loadBorder( *map_it, el );
 					else
 						kdDebug()<<"Warning: Unknown tag within <"<<tagName<<">: "<<subTagName<<endl;
 				}
@@ -127,43 +139,52 @@ void SetupDisplay::loadLayout( const QString &filename )
 		kdDebug()<<"Unable to open file: "<<filename<<endl;
 }
 
-void SetupDisplay::loadBackgroundColor( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadBackgroundColor( KreDisplayItem *item, const QDomElement &tag )
 {
 	QColor c; c.setNamedColor(tag.text());
-	widget->setPaletteBackgroundColor(c);
+	item->widget->setPaletteBackgroundColor(c);
 }
 
-void SetupDisplay::loadFont( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadFont( KreDisplayItem *item, const QDomElement &tag )
 {
 	QFont f;
 	if ( f.fromString( tag.text() ) )
-		widget->setFont( f );
+		item->widget->setFont( f );
 }
 
-void SetupDisplay::loadGeometry( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadGeometry( KreDisplayItem *item, const QDomElement &tag )
 {
 	PreciseRect r( tag.attribute("left").toDouble(), tag.attribute("top").toDouble(), tag.attribute("width").toDouble(), tag.attribute("height").toDouble() );
 	toAbsolute( &r );
-	widget->setGeometry( r.toQRect() );
+	item->widget->setGeometry( r.toQRect() );
 }
 
-void SetupDisplay::loadTextColor( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadTextColor( KreDisplayItem *item, const QDomElement &tag )
 {
 	QColor c; c.setNamedColor(tag.text());
-	widget->setPaletteForegroundColor(c);
+	item->widget->setPaletteForegroundColor(c);
 }
 
-void SetupDisplay::loadVisibility( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadVisibility( KreDisplayItem *item, const QDomElement &tag )
 {
 	bool visible = (tag.text()=="false") ? false : true;
-	widget->setShown( visible );
-	emit itemVisibilityChanged( widget, visible );
+	item->widget->setShown( visible );
+	emit itemVisibilityChanged( item->widget, visible );
 }
 
-void SetupDisplay::loadAlignment( QWidget *widget, const QDomElement &tag )
+void SetupDisplay::loadAlignment( KreDisplayItem *item, const QDomElement &tag )
 {
-	if ( widget->inherits("QLabel") )
-		static_cast<QLabel*>(widget)->setAlignment( tag.text().toInt() );
+	if ( item->widget->inherits("QLabel") )
+		static_cast<QLabel*>(item->widget)->setAlignment( tag.text().toInt() );
+}
+
+void SetupDisplay::loadBorder( KreDisplayItem *item, const QDomElement &tag )
+{
+//	if ( widget->inherits("QFrame") )
+//		static_cast<QLabel*>(item->widget)->setAlignment( tag.text().toInt() );
+
+	QColor c; c.setNamedColor(tag.attribute("color"));
+	item->border = KreBorder( tag.attribute("width").toInt(), tag.attribute("style"), c );
 }
 
 void SetupDisplay::saveLayout( const QString &filename )
@@ -172,46 +193,46 @@ void SetupDisplay::saveLayout( const QString &filename )
 	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
 
 	QDomElement layout_tag = doc.documentElement();
-	layout_tag.setAttribute( "version", 0.2 );
+	layout_tag.setAttribute( "version", 0.3 );
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it )
 	{
-		QDomElement base_tag = doc.createElement(it.key()->name());
+		QDomElement base_tag = doc.createElement(it.key()->widget->name());
 		layout_tag.appendChild(base_tag);
 
 		if ( it.data() & BackgroundColor )
 		{
 			QDomElement backgroundcolor_tag = doc.createElement("background-color");
-			backgroundcolor_tag.appendChild( doc.createTextNode(it.key()->backgroundColor().name()) );
+			backgroundcolor_tag.appendChild( doc.createTextNode(it.key()->widget->backgroundColor().name()) );
 			base_tag.appendChild(backgroundcolor_tag);
 		}
 
 		if ( it.data() & TextColor )
 		{
 			QDomElement textcolor_tag = doc.createElement("text-color");
-			textcolor_tag.appendChild( doc.createTextNode(it.key()->foregroundColor().name()) );
+			textcolor_tag.appendChild( doc.createTextNode(it.key()->widget->foregroundColor().name()) );
 			base_tag.appendChild(textcolor_tag);
 		}
 
 		if ( it.data() & Font )
 		{
 			QDomElement font_tag = doc.createElement("font");
-			font_tag.appendChild( doc.createTextNode(static_cast<QLabel*>(it.key())->font().toString()) );
+			font_tag.appendChild( doc.createTextNode(static_cast<QLabel*>(it.key()->widget)->font().toString()) );
 			base_tag.appendChild(font_tag);
 		}
 
 		if ( it.data() & Visibility )
 		{
 			QDomElement visibility_tag = doc.createElement("visible");
-			visibility_tag.appendChild( doc.createTextNode( (it.key()->isShown()) ? "true" : "false" ) );
+			visibility_tag.appendChild( doc.createTextNode( (it.key()->widget->isShown()) ? "true" : "false" ) );
 			base_tag.appendChild(visibility_tag);
 		}
 
 		if ( it.data() & Geometry )
 		{
-			PreciseRect r( it.key()->geometry() );
+			PreciseRect r( it.key()->widget->geometry() );
 			toPercentage( &r );
 		
 			QDomElement geometry_tag = doc.createElement("geometry");
@@ -225,8 +246,17 @@ void SetupDisplay::saveLayout( const QString &filename )
 		if ( it.data() & Alignment )
 		{
 			QDomElement alignment_tag = doc.createElement("alignment");
-			alignment_tag.appendChild( doc.createTextNode(QString::number(static_cast<QLabel*>(it.key())->alignment())) );
+			alignment_tag.appendChild( doc.createTextNode(QString::number(static_cast<QLabel*>(it.key()->widget)->alignment())) );
 			base_tag.appendChild(alignment_tag);
+		}
+
+		if ( it.data() & Border )
+		{
+			QDomElement border_tag = doc.createElement("border");
+			border_tag.setAttribute("width",it.key()->border.width);
+			border_tag.setAttribute("style",it.key()->border.style);
+			border_tag.setAttribute("color",it.key()->border.color.name());
+			base_tag.appendChild(border_tag);
 		}
 	}
 	
@@ -262,7 +292,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 	QToolTip::add(title_box,i18n("Title"));
 
-	box_properties->insert( title_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem(title_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//======================INSTRUCTIONS===================//
 	QString instr;
@@ -279,21 +309,21 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	instr_box->setTextFormat( Qt::RichText ); //allows for wrapping
 	QToolTip::add(instr_box,i18n("Instructions"));
 
-	box_properties->insert( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem(instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//=======================SERVINGS======================//
 	servings_box = new QLabel(QString("<b>%1:</b> %2").arg(i18n("Servings")).arg(sample.persons),this,"servings");
 	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add(servings_box,i18n("Servings"));
 
-	box_properties->insert( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//=======================PREP TIME======================//
 	preptime_box = new QLabel(QString("<b>%1:</b> %2").arg(i18n("Preparation Time")).arg(sample.prepTime.toString("h:mm")),this,"prep_time");
 	preptime_box->setFrameShape( QFrame::Box );
 	QToolTip::add(preptime_box,i18n("Preparation Time"));
 
-	box_properties->insert( preptime_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( preptime_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//========================PHOTO========================//
 	photo_box = new QLabel(this,"photo");
@@ -306,7 +336,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		photo_box->setPixmap(defaultPhoto);
 	QToolTip::add(photo_box,i18n("Photo"));
 
-	box_properties->insert( photo_box, Visibility | Geometry | StaticHeight );
+	createItem( photo_box, Visibility | Geometry | StaticHeight );
 
 	//========================AUTHORS========================//
 	QString authors;
@@ -324,7 +354,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	authors_box->setFrameShape( QFrame::Box );
 	QToolTip::add(authors_box,i18n("Authors"));
 
-	box_properties->insert( authors_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( authors_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//========================CATEGORIES========================//
 	QString categories;
@@ -342,14 +372,14 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	categories_box->setFrameShape( QFrame::Box );
 	QToolTip::add(categories_box,i18n("Categories"));
 
-	box_properties->insert( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//=======================ID======================//
 	id_box = new QLabel(QString(i18n("Recipe: #%1")).arg(sample.recipeID),this,"header");
 	id_box->setFrameShape( QFrame::Box );
 	QToolTip::add(id_box,i18n("Header"));
 
-	box_properties->insert( id_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( id_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//========================INGREDIENTS========================//
 	QString ingredients;
@@ -387,14 +417,14 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	ingredients_box->setFrameShape( QFrame::Box );
 	QToolTip::add(ingredients_box,i18n("Ingredients"));
 
-	box_properties->insert( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//========================PROPERTIES========================//
 	properties_box = new QLabel(i18n("<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>"),this,"properties");
 	properties_box->setFrameShape( QFrame::Box );
 	QToolTip::add(properties_box,i18n("Properties"));
 
-	box_properties->insert( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
@@ -404,7 +434,13 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		popup = new KPopupMenu( w ); //parent _must_ be widget acting on
 		popup->insertTitle( ( w == this ) ? i18n("Background") : QToolTip::textFor(w) );
 
-		unsigned int properties = *box_properties->find(w);
+		unsigned int properties = 0;
+		for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
+			if ( it.key()->widget == w ) {
+				properties = it.data();
+				break;
+			}
+		}
 
 		if ( properties & BackgroundColor )
 			popup->insertItem( i18n("Background color..."), this, SLOT(setBackgroundColor()) );
@@ -439,6 +475,9 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 			alignment_actions->addTo( sub_popup );
 		}
 
+		if ( properties & Border )
+			popup->insertItem( i18n("Border..."), this, SLOT(setBorder()) );
+
 		popup->popup( mapToGlobal(e->pos()) );
 
 		e->accept();
@@ -457,6 +496,22 @@ void SetupDisplay::setBackgroundColor()
 		QColor new_color = box->backgroundColor();
 		if ( KColorDialog::getColor( new_color, this ) == QDialog::Accepted )
 			box->setPaletteBackgroundColor( new_color );
+	}
+}
+
+void SetupDisplay::setBorder()
+{
+	QObject *obj = popup->parent();
+	if ( obj->inherits("QWidget") ) {
+		QWidget *box = static_cast<QWidget*>(obj);
+
+		KreDisplayItem *item = *widget_item_map->find(box);
+		BorderDialog borderDialog(item->border,this);
+		if ( borderDialog.exec() == QDialog::Accepted ) {
+			has_changes = true;
+	
+			item->border = borderDialog.border();
+		}
 	}
 }
 

@@ -12,28 +12,36 @@
 #ifndef RECIPELISTVIEW_H
 #define RECIPELISTVIEW_H 
 
+#include <qdragobject.h>
+
 #include "categorylistview.h"
 #include "recipe.h"
+
+class QDragObject;
+class QDropEvent;
 
 class RecipeDB;
 
 #define RECIPELISTITEM_RTTI 1000
+
+#define RECIPEITEMMIMETYPE "data/x-kde.recipe.item"
 
 class RecipeListItem : public QListViewItem
 {
 public:
 	RecipeListItem(QListView* qlv, const Recipe &r ):QListViewItem(qlv)
 	{
-		recipeStored=new Recipe();
-		recipeStored->recipeID=r.recipeID;
-		recipeStored->title=r.title;
+		init(r);
+	}
+
+	RecipeListItem(QListView* qlv, QListViewItem *after, const Recipe &r ):QListViewItem(qlv,after)
+	{
+		init(r);
 	}
 
 	RecipeListItem(CategoryListItem* it, const Recipe &r ):QListViewItem(it)
 	{
-		recipeStored=new Recipe();
-		recipeStored->recipeID=r.recipeID;
-		recipeStored->title=r.title;
+		init(r);
 	}
 
 	int rtti() const { return RECIPELISTITEM_RTTI; }
@@ -44,7 +52,10 @@ public:
 
 	int recipeID() const { return recipeStored->recipeID; }
 	QString title() const { return recipeStored->title; }
-	
+
+	void setRecipeID( int id ){ recipeStored->recipeID=id; }
+	void setTitle( const QString &title ){ recipeStored->title=title; }
+
 protected:
 	Recipe *recipeStored;
 
@@ -57,6 +68,24 @@ public:
 		default: return(QString::null);
 		}
 	}
+
+private:
+	void init( const Recipe &r )
+	{
+		recipeStored=new Recipe();
+
+		//note: we only store the title and id
+		recipeStored->recipeID=r.recipeID;
+		recipeStored->title=r.title;
+	}
+};
+
+class RecipeItemDrag : public QStoredDrag
+{
+public:
+	RecipeItemDrag(RecipeListItem *recipeItem, QWidget *dragSource = 0, const char *name = 0);
+	static bool canDecode(QMimeSource* e);
+	static bool decode( const QMimeSource* e, RecipeListItem& item );
 };
 
 class RecipeListView : public StdCategoryListView
@@ -77,6 +106,8 @@ protected slots:
 
 protected:
 	virtual void removeCategory(int id);
+	virtual QDragObject *dragObject(); 
+	virtual bool acceptDrag(QDropEvent *event) const;
 	
 private:
 	void moveChildrenToRoot( QListViewItem * );

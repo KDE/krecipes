@@ -98,10 +98,10 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
-tabWidget->insertTab( basicSearchTab, "Basic" );
+tabWidget->insertTab( basicSearchTab, i18n("Basic") );
 
 advancedSearch = new AdvancedSearchDialog(this,database);
-tabWidget->insertTab( advancedSearch, "Advanced" );
+tabWidget->insertTab( advancedSearch, i18n("Advanced") );
 
 //Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 actionHandler = new RecipeActionsHandler( recipeListView, database );

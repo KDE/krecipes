@@ -43,6 +43,7 @@ private:
     RecipeDB *database;
 // Internal Methods
     void reloadRecipeList(void);
+    void addRecipe( QListViewItem *item );
 // Widgets
     QGridLayout* layout;
     QPushButton* addRecipeButton;
@@ -63,6 +64,7 @@ private slots:
 	void removeRecipe(void);
 	void showShoppingList(void);
 	void clear(void);
+	void slotDropped(KListView *list, QDropEvent *e, QListViewItem *after);
 };
 
 #endif

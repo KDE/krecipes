@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes)
+INCLUDES = $(all_includes) -I../
 METASOURCES = AUTO
 noinst_LTLIBRARIES=libkstartuplogo.la
 libkstartuplogo_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)

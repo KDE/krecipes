@@ -26,6 +26,34 @@
 #include "recipefilter.h"
 #include "recipeactionshandler.h"
 
+/** A simple listview to accept dropping a RecipeItemDrag */
+class ShoppingListView : public KListView
+{
+public:
+	ShoppingListView(QWidget *parent) : KListView(parent){}
+
+protected:
+	bool acceptDrag(QDropEvent *event) const
+	{
+		return RecipeItemDrag::canDecode( event );
+	}
+
+	QDragObject *dragObject()
+	{
+		RecipeListItem *item = dynamic_cast<RecipeListItem*>(selectedItem());
+		if ( item != 0 ) {
+			
+			RecipeItemDrag *obj = new RecipeItemDrag(item,this,"Recipe drag item");
+			/*const QPixmap *pm = item->pixmap(0);
+			if( pm )
+				obj->setPixmap( *pm );*/
+			return obj;
+		}
+		return 0;
+	}
+};
+
+
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
    // Store pointer to database
@@ -38,6 +66,11 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addWidget(recipeListView,0,0);
     RecipeListView *listview = new RecipeListView(recipeListView,database);
     listview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
+    listview->setDragEnabled(true);
+    listview->setAcceptDrops(true);
+    listview->setDropVisualizer(false);
+    connect(listview, SIGNAL(dropped(KListView*,QDropEvent*,QListViewItem*)),
+            this,     SLOT(slotDropped(KListView*,QDropEvent*,QListViewItem*)));
     listview->reload();
     recipeListView->setListView(listview);
     recipeListView->setCustomFilter(new RecipeFilter(recipeListView->listView()),SLOT(filter(const QString &)));
@@ -61,15 +94,23 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addItem(vboxl,0,1);
 
     shopRecipeListView=new KreListView (this,"Shopping list");
-    shopRecipeListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
+    ShoppingListView *slistview = new ShoppingListView(shopRecipeListView);
+    slistview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
+    slistview->setDragEnabled(true);
+    slistview->setAcceptDrops(true);
+    slistview->setDropVisualizer(false);
+    connect(slistview, SIGNAL(dropped(KListView*,QDropEvent*,QListViewItem*)),
+            this,      SLOT(slotDropped(KListView*,QDropEvent*,QListViewItem*)));
+    shopRecipeListView->setListView(slistview);
     layout->addWidget(shopRecipeListView,0,2);
     
+    shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
+
     KConfig *config = KGlobal::config();
     config->setGroup( "Advanced" );
     bool show_id = config->readBoolEntry("ShowID",false);
     shopRecipeListView->listView()->addColumn(i18n("Id"), show_id ? -1 : 0 );
-    
-    shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
+        
     shopRecipeListView->listView()->setSorting(-1);
     shopRecipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
     shopRecipeListView->listView()->setAllColumnsShowFocus(true);
@@ -111,7 +152,7 @@ clear();
 RecipeList::const_iterator it;
 for (it=rlist.begin(); it != rlist.end(); it++)
 {
-	new QListViewItem(shopRecipeListView->listView(),shopRecipeListView->listView()->lastItem(),QString::number((*it).recipeID),(*it).title);
+	new RecipeListItem(shopRecipeListView->listView(),shopRecipeListView->listView()->lastItem(),*it);
 }
 }
 
@@ -128,15 +169,24 @@ reloadRecipeList (); // Missing: check if there's non-existing recipes in the li
 void ShoppingListDialog::addRecipe(void)
 {
 QListViewItem *it = recipeListView->listView()->selectedItem();
-if (it) {
-	if (it->rtti() == 1000) {
-		RecipeListItem *recipe_it = (RecipeListItem*)it;
-		(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipe_it->recipeID()),recipe_it->title());
+addRecipe(it);
+}
+
+void ShoppingListDialog::addRecipe( QListViewItem *item )
+{
+if (item) {
+	if (item->rtti() == 1000) {
+		RecipeListItem *recipe_it = (RecipeListItem*)item;
+		
+		Recipe r;
+		r.title = recipe_it->title();
+		r.recipeID = recipe_it->recipeID();
+		(void)new RecipeListItem(shopRecipeListView->listView(),r);
 	}
-	else if (it->rtti() == 1001) { //add everything in the category
-		//do this to only iterate over children of 'it'
+	else if (item->rtti() == 1001) { //add everything in the category
+		//do this to only iterate over children of 'item'
 		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = it;
+		QListViewItem *pStartItem = item;
 		do
 		{
 			if(pStartItem->nextSibling())
@@ -146,11 +196,14 @@ if (it) {
 		}
 		while(pStartItem && !pEndItem);
 		
-		QListViewItemIterator list_it = QListViewItemIterator(it);
+		QListViewItemIterator list_it = QListViewItemIterator(item);
 		while ( list_it.current() != pEndItem ) {
 			if ( list_it.current()->rtti() == 1000 && list_it.current()->isVisible() ) {
 				RecipeListItem *recipe_it = (RecipeListItem*)list_it.current();
-				(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipe_it->recipeID()),recipe_it->title());
+				Recipe r;
+				r.title = recipe_it->title();
+				r.recipeID = recipe_it->recipeID();
+				(void)new RecipeListItem(shopRecipeListView->listView(),r);
 			}
 			list_it++;
 		}
@@ -168,10 +221,10 @@ if (it) delete it;
 void ShoppingListDialog::showShoppingList(void)
 {
 // Store the recipe list in ElementList object first
-ElementList recipeList; QListViewItem *it;
-for (it=this->shopRecipeListView->listView()->firstChild();it;it=it->nextSibling())
+ElementList recipeList; RecipeListItem *it;
+for (it=(RecipeListItem*)this->shopRecipeListView->listView()->firstChild();it;it=(RecipeListItem*)it->nextSibling())
 {
-Element newEl; newEl.id=it->text(0).toInt(); newEl.name=it->text(1); // Storing the title is not necessary, but do it just in case it's used later on
+Element newEl; newEl.id=it->recipeID(); newEl.name=it->title(); // Storing the title is not necessary, but do it just in case it's used later on
 recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
 }
 
@@ -183,14 +236,44 @@ KApplication::restoreOverrideCursor();
 
 void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
 {
+Recipe r;
+r.title = database->recipeTitle(recipeID);
+r.recipeID = recipeID;
 
-QString title=database->recipeTitle(recipeID);
-new QListViewItem(shopRecipeListView->listView(),QString::number(recipeID),title);
+new RecipeListItem(shopRecipeListView->listView(),r);
 }
 
 void ShoppingListDialog::clear()
 {
 shopRecipeListView->listView()->clear();
+}
+
+void ShoppingListDialog::slotDropped(KListView *list, QDropEvent *e, QListViewItem */*after*/)
+{
+	Recipe r;
+	RecipeListItem *item = new RecipeListItem(recipeListView->listView(),r); // needs parent, use this temporarily
+	if( !RecipeItemDrag::decode(e,*item) ) {
+		delete item;
+		return;
+	}
+	
+	if ( list == shopRecipeListView->listView() ) {
+		addRecipe(item);
+	}
+	//find and delete the item if we just dropped onto the recipe list from the shopping list
+	else if ( list == recipeListView->listView() && e->source() == shopRecipeListView->listView() ) {
+		QListViewItemIterator list_it = QListViewItemIterator(shopRecipeListView->listView());
+		while ( list_it.current() ) {
+		kdDebug()<<"hi"<<endl;
+			if ( ((RecipeListItem*)list_it.current())->recipeID() == item->recipeID() ) {
+					delete list_it.current();kdDebug()<<"bye"<<endl;
+					break;
+			}
+			list_it++;
+		}
+	}
+	
+	delete item; item = 0; // not needed anymore
 }
 
 #include "shoppinglistdialog.moc"

@@ -17,6 +17,7 @@
 
 #include "../recipe.h"
 #include "../widgets/dragarea.h"
+#include "datablocks/kreborder.h"
 #include <math.h>
 
 class KPopupMenu;
@@ -27,7 +28,18 @@ class QWidget;
 
 class DragArea;
 
-typedef QMap< QWidget*, unsigned int > PropertiesMap;
+class KreDisplayItem
+{
+public:
+	KreDisplayItem( QWidget *w = 0 ) : widget(w) {}
+
+	//bool operator<(const KreDisplayItem & ) const { return true; } //required to be a map key
+
+	QWidget *widget;
+	KreBorder border;
+};
+
+typedef QMap< KreDisplayItem*, unsigned int > PropertiesMap;
 
 // ### maybe we should move koffice's KoRect/KoPoint/KoSize to kdelibs...
 class PreciseRect
@@ -69,7 +81,7 @@ public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
 	
-	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64, Border = 128 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
@@ -90,6 +102,7 @@ protected slots:
 
 	//slots to set properties of item boxes
 	void setBackgroundColor();
+	void setBorder();
 	void setTextColor();
 	void setFont();
 	void setShown(int id);
@@ -111,6 +124,7 @@ private:
 	QSize m_size;
 
 	PropertiesMap *box_properties;
+	QMap<QWidget*,KreDisplayItem*> *widget_item_map;
 
 	bool has_changes;
 	KPopupMenu *popup;
@@ -120,12 +134,15 @@ private:
 	void toAbsolute(PreciseRect *);
 	void toPercentage(PreciseRect *);
 
-	void loadFont( QWidget *, const QDomElement &tag );
-	void loadGeometry( QWidget *, const QDomElement &tag );
-	void loadBackgroundColor( QWidget *, const QDomElement &tag );
-	void loadTextColor( QWidget *, const QDomElement &tag );
-	void loadVisibility( QWidget *, const QDomElement &tag );
-	void loadAlignment( QWidget *, const QDomElement &tag );
+	void loadFont( KreDisplayItem *, const QDomElement &tag );
+	void loadGeometry( KreDisplayItem *, const QDomElement &tag );
+	void loadBackgroundColor( KreDisplayItem *, const QDomElement &tag );
+	void loadTextColor( KreDisplayItem *, const QDomElement &tag );
+	void loadVisibility( KreDisplayItem *, const QDomElement &tag );
+	void loadAlignment( KreDisplayItem *, const QDomElement &tag );
+	void loadBorder( KreDisplayItem *, const QDomElement &tag );
+
+	void createItem( QWidget *w, unsigned int properties );
 };
 
 #endif //SETUPDISPLAY_H

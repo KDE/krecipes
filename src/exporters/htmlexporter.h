@@ -73,6 +73,7 @@ private:
 
 	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
 	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
+	QString readBorderProperties( const QDomDocument &doc, const QString &object );
 	QString readBgColorProperties( const QDomDocument &doc, const QString &object );
 	QString readFontProperties( const QDomDocument &doc, const QString &object );
 	QString readTextColorProperties( const QDomDocument &doc, const QString &object );

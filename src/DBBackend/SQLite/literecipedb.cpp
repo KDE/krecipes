@@ -511,7 +511,7 @@ if( fn ){
 
 char *photoEncodedArray=new char[2 +(257*n)/254+1]; //Just in case, add+1
 sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
- command=QString("UPDATE recipes SET photo='%1' WHERE id=%2;").arg(photoEncodedArray).arg(recipeID);
+ command=QString("UPDATE recipes SET photo='%2' WHERE id=%1;").arg(recipeID).arg(photoEncodedArray); //insert binary data LAST, otherwise if the data contains a '%2', it will be replaced
  database->executeQuery(command);
 }
 else {

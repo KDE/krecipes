@@ -12,12 +12,52 @@
 #include "recipelistview.h"
 
 #include <qintdict.h>
+#include <qdatastream.h>
 
 #include <kconfig.h>
 #include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
  
+RecipeItemDrag::RecipeItemDrag(RecipeListItem *recipeItem, QWidget *dragSource, const char *name)
+: QStoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
+{
+	if (recipeItem) {
+		QByteArray data;
+		QDataStream out(data, IO_WriteOnly);
+		out << recipeItem->recipeID();
+		out << recipeItem->title();
+		setEncodedData(data);
+	}
+}
+
+bool RecipeItemDrag::canDecode(QMimeSource* e)
+{
+	return e->provides(RECIPEITEMMIMETYPE);
+}
+
+bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
+{
+	if (!e)
+		return false;
+	
+	QByteArray data = e->encodedData(RECIPEITEMMIMETYPE);
+	if ( data.isEmpty() )
+		return false;
+	
+	QString title;
+	int recipeID;
+	QDataStream in(data, IO_ReadOnly);
+	in >> recipeID;
+	in >> title;
+	
+	item.setTitle( title );
+	item.setRecipeID( recipeID );
+	
+	return true;
+}
+
+
 RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryListView(parent,db),
 	flat_list(false)
 {
@@ -26,7 +66,7 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	connect(database,SIGNAL(recipeRemoved(int,int)),SLOT(removeRecipe(int,int)));
 	connect(database,SIGNAL(recipeModified(const Element &,const ElementList &)),SLOT(modifyRecipe(const Element &,const ElementList &)));
 
-	setColumnText(0,"Recipe");
+	setColumnText(0,i18n("Recipe"));
 	/*addColumn( i18n("Recipe") );
 
 	KConfig *config = KGlobal::config();
@@ -35,6 +75,24 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	addColumn( i18n("Id"), show_id ? -1 : 0 );*/
 
 	setSorting(0);
+}
+
+QDragObject *RecipeListView::dragObject()
+{
+	RecipeListItem *item = dynamic_cast<RecipeListItem*>(selectedItem());
+	if ( item != 0 ) {
+		RecipeItemDrag *obj = new RecipeItemDrag(item,this,"Recipe drag item");
+		/*const QPixmap *pm = item->pixmap(0);
+		if( pm )
+			obj->setPixmap( *pm );*/
+		return obj;
+	}
+	return 0;
+}
+
+bool RecipeListView::acceptDrag(QDropEvent *event) const
+{
+	return RecipeItemDrag::canDecode( event );
 }
 
 void RecipeListView::reload()

@@ -390,6 +390,9 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 {
 	QString css;
 
+	css += "DIV { position: absolute; vertical-align: middle;}\n";
+	css += "UL { padding-left: 1.25em; }\n";
+
 	QStringList classes_list;
 	classes_list << "title" << "instructions" << "servings" << "prep_time" << "photo" << "authors" << 
 	  "categories" << "header" << "ingredients" << "properties";
@@ -403,11 +406,9 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 		css += readBgColorProperties( doc, *it );
 		css += readTextColorProperties( doc, *it );
 		css += readVisibilityProperties( doc, *it );
-		css += "position: absolute;\n";
+		css += readBorderProperties( doc, *it );
 		css += "}\n\n";
 	}
-	
-	css += "UL { padding-left: 1.25em; }\n";
 
 	return css;
 }
@@ -450,6 +451,17 @@ QString HTMLExporter::readAlignmentProperties( const QDomDocument &doc, const QS
 		return text;
 	}
 	
+	return QString::null;
+}
+
+QString HTMLExporter::readBorderProperties( const QDomDocument &doc, const QString &object )
+{
+	QDomElement el = getLayoutAttribute( doc, object, "border" );
+
+	if ( !el.isNull() ) {
+		return QString("border: %1px %2 %3;\n").arg(el.attribute("width")).arg(el.attribute("style")).arg(el.attribute("color"));
+	}
+		
 	return QString::null;
 }
 
