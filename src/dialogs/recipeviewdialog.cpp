@@ -19,13 +19,34 @@ recipeView=new KHTMLPart(this);
 database=db; // Store the database pointer.
 loadedRecipe=new Recipe();
 
-//------------------ Show the recipe --------
+//----------Load  the recipe --------
+loadRecipe(recipeID);
+
+
+ }
+
+RecipeViewDialog::~RecipeViewDialog()
+{
+}
+
+void RecipeViewDialog::loadRecipe(int recipeID)
+{
+
+// Load specified Recipe ID
+
+database->loadRecipe(loadedRecipe,recipeID);
+showRecipe();
+
+}
+
+void RecipeViewDialog::showRecipe(void)
+{
 QString recipeHTML;
 
 
 
 // Create HTML Code
-if (recipeID<0)
+if (loadedRecipe->recipeID<0)
 {
 // Show default (empty) recipe
 recipeHTML="<html><head><title>Title of the Recipe</title></head><body>";
@@ -37,8 +58,8 @@ recipeHTML+="<p>Recipe Instructions </p></div></body></html>";
 }
 else
 {
-// Load the recipe and format as HTML code
-loadRecipe (recipeID);
+// Format the loaded recipe as HTML code
+
 // title (not shown)
 recipeHTML= QString("<html><head><title>%1</title></head><body>").arg( loadedRecipe->title);
 // Ingredient Block
@@ -68,7 +89,7 @@ recipeHTML+=QString("<img src=\"/tmp/krecipes_photo.png\" width=220px height=165
 // Header
 
 recipeHTML+="<div STYLE=\"position: absolute; top: 5px; left:1%; width: 98%; height:30px; background-color: #EDD89E\">";
-recipeHTML+=QString("<p align=right >Recipe: #%1</p></div>").arg(recipeID);
+recipeHTML+=QString("<p align=right >Recipe: #%1</p></div>").arg(loadedRecipe->recipeID);
 
 // Close HTML
 recipeHTML+="</body></html>";
@@ -80,18 +101,5 @@ loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
 recipeView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where the photo was stored
 recipeView->write(recipeHTML);
 recipeView->end();
-
- }
-
-RecipeViewDialog::~RecipeViewDialog()
-{
-}
-
-void RecipeViewDialog::loadRecipe(int recipeID)
-{
-
-// Load specified Recipe ID
-
-database->loadRecipe(loadedRecipe,recipeID);
 
 }

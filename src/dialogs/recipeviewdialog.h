@@ -23,15 +23,26 @@
 */
 class RecipeViewDialog : public QVBox
 {
+Q_OBJECT
+
 public:
     RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID=-1);
 
     ~RecipeViewDialog();
+    void loadRecipe(int recipeID);
+
 private:
+
+  // Internal Variables
   KHTMLPart *recipeView;
   RecipeDB  *database;
   Recipe *loadedRecipe;
-  void loadRecipe(int recipeID);
+
+
+
+private slots:
+  void showRecipe(void);
+
 };
 
 #endif

@@ -30,6 +30,7 @@ public:
     void debug(void);
     Ingredient* getLast(void);
     Ingredient* getPrev(void);
+    void empty(void);
 private:
     QPtrList<Ingredient> list;
 

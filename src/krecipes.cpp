@@ -128,7 +128,11 @@ void Krecipes::fileNew()
     // button is clicked
 
     // create a new window
-    (new Krecipes)->show();
+    //(new Krecipes)->show();
+
+
+    // Create a new recipe
+    m_view->createNewRecipe();
 }
 
 void Krecipes::fileOpen()

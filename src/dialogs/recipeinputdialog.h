@@ -36,6 +36,8 @@ public:
     RecipeInputDialog( QWidget* parent, RecipeDB* db);
     void loadRecipe(int recipeID);
     ~RecipeInputDialog();
+    void newRecipe(void);
+    void reloadCombos(void);
 private:
 
 	// Internal Data

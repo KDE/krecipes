@@ -57,14 +57,19 @@ KrecipesView::KrecipesView(QWidget *parent)
     viewPanel=new RecipeViewDialog(rightPanel,database,1);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
 
-    // Connect Signals from Left Panel to ChangePanel()
-     connect( leftPanel, SIGNAL(clicked(int)), SLOT(slotSetPanel(int)) );
+    // Connect Signals from Left Panel to slotSetPanel()
+     connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
 
     rightPanel->raiseWidget(boton4);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
     connect (inputPanel, SIGNAL(enableSaveOption(bool)), this, SIGNAL(enableSaveOption(bool)));
+
+    // Connect Signals from selectPanel (SelectRecipeDialog)
+
+    connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
+
 
     inputPanel->loadRecipe(1);
 
@@ -103,4 +108,34 @@ void KrecipesView::save(void)
 {
 inputPanel->save();
 }
+
+void KrecipesView::actionRecipe(int recipeID, int action)
+{
+
+if (action==0) // Open
+  {
+  viewPanel->loadRecipe(recipeID);
+  rightPanel->raiseWidget(viewPanel);
+  }
+else if (action==1) // Edit
+ {
+ inputPanel->loadRecipe(recipeID);
+ rightPanel->raiseWidget(inputPanel);
+ }
+else if (action==2) //Remove
+{
+std::cerr<<"Deleting recipe "<<recipeID<<"\n";
+database->removeRecipe(recipeID);
+selectPanel->loadRecipeList();
+}
+}
+
+
+void KrecipesView::createNewRecipe(void)
+{
+inputPanel->newRecipe();
+rightPanel->raiseWidget(inputPanel);
+}
+
+
 #include "krecipesview.moc"

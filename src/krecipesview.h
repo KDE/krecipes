@@ -61,12 +61,22 @@ signals:
      */
     void signalChangeCaption(const QString& text);
 
-private slots:
-    void slotSetTitle(const QString& title);
-    void slotSetPanel(int);
+
+public:
+
+	// public widgets
+	RecipeInputDialog *inputPanel;
+	RecipeViewDialog *viewPanel;
+	SelectRecipeDialog *selectPanel;
+
+	// public methods
+	void createNewRecipe(void);
 
 private:
+
+        // Internal variables
 	RecipeDB *database;
+	// Internal widgets
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
 	QWidgetStack *rightPanel;
@@ -76,15 +86,17 @@ private:
 	QPushButton *boton4;
 	QPushButton *boton5;
 
-public:
-	RecipeInputDialog *inputPanel;
-	RecipeViewDialog *viewPanel;
-	SelectRecipeDialog *selectPanel;
-
 signals:
 	void enableSaveOption(bool en);
 public slots:
 	void save(void);
+
+private slots:
+    void slotSetTitle(const QString& title);
+    void slotSetPanel(int);
+    void actionRecipe(int recipeID, int action);
+
+
 };
 
 #endif // _KRECIPESVIEW_H_

@@ -11,6 +11,7 @@
 
 Recipe::Recipe()
 {
+empty(); //Create & initialize the recipe empty originally
 }
 
 
@@ -18,4 +19,12 @@ Recipe::~Recipe()
 {
 }
 
+void Recipe::empty(void)
+{
+recipeID=-1;
+title=QString::null;
+instructions=QString::null;
+photo.resize(0,0); //Resizing any dimension to 0, the image becomes a null image
+ingList.empty();
+}
 

@@ -61,3 +61,8 @@ Ingredient* IngredientList::getPrev(void)
 {
 return(list.prev());
 }
+
+void IngredientList::empty(void)
+{
+list.clear();
+}

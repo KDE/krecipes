@@ -49,7 +49,6 @@ database=db;
     ingredientGBox->setFlat(true);
     il=new KIconLoader;
 
-
     addButton = new KPushButton(ingredientGBox);
     addButton->setGeometry( QRect( 210,65, 31, 31 ) );
     addButton->setFlat(true);
@@ -107,8 +106,8 @@ database=db;
     enableChangedSignal(); // Enables the signal "changed()"
 
     // Initialize lists
-    loadIngredientListCombo();
-    loadUnitListCombo();
+    reloadCombos();
+
     // Connect signals & Slots
     connect(this->ingredientBox, SIGNAL(activated(int)), this, SLOT(reloadUnitsCombo(int)));
     connect(this->changePhotoButton, SIGNAL(clicked()), this, SLOT(changePhoto()));
@@ -132,6 +131,16 @@ void RecipeInputDialog::loadRecipe(int recipeID)
 
 //Disable changed() signals
 enableChangedSignal(false);
+
+
+//Empty current recipe
+loadedRecipe->empty();
+ingredientComboList->clear();
+unitComboList->clear();
+reloadCombos();
+amountEdit->setValue(0.0);
+ingredientList->clear();
+
 
 // Load specified Recipe ID
 
@@ -170,8 +179,10 @@ void RecipeInputDialog::loadIngredientListCombo(void)
 database->loadIngredients(ingredientComboList);
 
 //Populate this data into the ComboBox
+ingredientBox->clear();
 	for ( Element *ing =ingredientComboList->getFirst(); ing; ing =ingredientComboList->getNext() )
-	ingredientBox->insertItem(ing->name);
+	{ingredientBox->insertItem(ing->name);
+	}
 }
 void RecipeInputDialog::loadUnitListCombo(void)
 {
@@ -335,4 +346,24 @@ loadedRecipe->title=titleEdit->text();
 database->saveRecipe(loadedRecipe);
 
 
+}
+
+void RecipeInputDialog::newRecipe(void)
+{
+loadedRecipe->empty();
+ingredientComboList->clear();
+unitComboList->clear();
+reloadCombos();
+QPixmap image(defaultPhoto); photoLabel->setPixmap(image);
+instructionsEdit->setText("Write the recipe instructions here");
+titleEdit->setText("Write the recipe title here");
+amountEdit->setValue(0.0);
+ingredientList->clear();
+
+}
+
+void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
+{
+loadIngredientListCombo();
+loadUnitListCombo();
 }

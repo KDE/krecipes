@@ -22,11 +22,19 @@ public:
     Recipe();
 
     ~Recipe();
+
+    // Public variables
+
     int recipeID;
     QString title;
     QString instructions;
     QPixmap photo;
     IngredientList ingList;
+
+    // Public methods
+    void empty(void);
+
+
 
 };
 

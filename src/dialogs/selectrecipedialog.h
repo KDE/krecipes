@@ -12,7 +12,10 @@
 
 #include <qwidget.h>
 #include <qvbox.h>
+#include <qpushbutton.h>
 #include <klistview.h>
+#include <kiconloader.h>
+
 #include "recipedb.h"
 #include "recipe.h"
 
@@ -21,19 +24,35 @@
 */
 class SelectRecipeDialog : public QVBox
 {
+Q_OBJECT
 public:
     SelectRecipeDialog(QWidget *parent, RecipeDB *db);
 
     ~SelectRecipeDialog();
+
+  //Public Methods
+  void loadRecipeList(void);
 private:
 
   // Widgets
   KListView* recipeListView;
+  QHBox *buttonBar;
+  QPushButton *openButton;
+  QPushButton *removeButton;
+  QPushButton *editButton;
+  KIconLoader *il;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
-  // Internal Methods
-  void loadRecipeList(void);
+
+
+signals:
+  void recipeSelected(int id, int action);
+private slots:
+  void open(void);
+  void edit(void);
+  void remove(void);
+
 
 
 
