@@ -237,6 +237,8 @@ void Krecipes::import()
 
 	if ( file_dialog.exec() == KFileDialog::Accepted )
 	{
+		QStringList warnings_list;
+
 		QString selected_filter = file_dialog.currentFilter();
 		QStringList files = file_dialog.selectedFiles();
 
@@ -278,24 +280,19 @@ void Krecipes::import()
 			QString error = importer->getErrorMsg();
 			if ( error != QString::null )
 				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
-/* right now this is only good for debugging
-			QStringList warnings = importer->getWarningMsgs();
-			if ( warnings.count() > 0 )
+
+			if ( importer->getWarningMsgs().count() > 0 )
 			{
-				//TODO: this needs to have a scroll bar (for when there are many warnings)
-				switch ( KMessageBox::warningContinueCancel( this, QString(i18n("Warning importing file %1\n%2")).arg(*it).arg(warnings.join("\n")) ) )
-				{
-				case KMessageBox::Cancel: continue; break;
-				case KMessageBox::Continue: break;
-				}
-			}*/
+				warnings_list += QString(i18n("The file \"%1\" generated the following warnings:")).arg(*it);
+				warnings_list += importer->getWarningMsgs();
+			}
 
 			m_view->import( *importer, progress_dialog );
 			delete importer;
 
 			if ( progress_dialog->wasCancelled() )
 			{
-				KMessageBox::information( this, i18n("All recipes before this point have been successfully imported.") );
+				KMessageBox::information( this, i18n("All recipes up unto this point have been successfully imported.") );
 				return;
 			}
 			i++;
@@ -303,6 +300,21 @@ void Krecipes::import()
 
 		delete progress_dialog;
 
+		if ( warnings_list.count() > 0 )
+		{
+			warnings_list.prepend(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occured."));
+
+			KTextEdit *warningEdit = new KTextEdit( this );
+			warningEdit->setText( warnings_list.join("\n\n") );
+			warningEdit->setReadOnly(true);
+
+			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n("Import warnings"), KDialogBase::Ok, KDialogBase::Default, this );
+			showWarningsDlg.setMainWidget( warningEdit ); //KDialogBase will delete warningEdit for us
+			showWarningsDlg.resize( QSize(550,250) );
+			showWarningsDlg.exec();
+		}
+
+		//TODO: to just reload the active panel would be preferable
 		m_view->selectPanel->reload();
 		m_view->ingredientsPanel->reload();
 		m_view->propertiesPanel->reload();
