@@ -156,7 +156,7 @@ void RecipeActionsHandler::recipeExport()
 		{
 			if ( parentListView->selectedItem()->rtti() == 1000 ) {
 				RecipeListItem *recipe_it = (RecipeListItem*)parentListView->selectedItem();
-				exportRecipe( recipe_it->recipeID(), i18n("Save Recipe"), recipe_it->title(), database );
+				exportRecipe( recipe_it->recipeID(), i18n("Export Recipe"), recipe_it->title(), database );
 			}
 		}
 	}
@@ -165,7 +165,7 @@ void RecipeActionsHandler::recipeExport()
 		QValueList<int> ids = getAllVisibleItems();
 
 		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n("Save Recipes"), i18n("Recipes"), database );
+			exportRecipes( ids, i18n("Export Recipes"), i18n("Recipes"), database );
 		//else TODO: give notice
 	}
 }
@@ -255,7 +255,7 @@ void RecipeActionsHandler::categoryExport()
 			++iterator;
 		}
 
-		exportRecipes( ids, i18n("Save Recipes"), cat_it->categoryName(), database );
+		exportRecipes( ids, i18n("Export Recipes"), cat_it->categoryName(), database );
 	}
 }
 
