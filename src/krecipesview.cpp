@@ -172,8 +172,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     shoppingListPanel=new ShoppingListDialog(rightPanel,database); rightPanel->addWidget(shoppingListPanel);
     dietPanel=new DietWizardDialog(rightPanel,database);rightPanel->addWidget(dietPanel);
     categoriesPanel=new CategoriesEditorDialog(rightPanel,database); rightPanel->addWidget(categoriesPanel);
-    authorsPanel=new AuthorsDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
-    rightPanel->addWidget(authorsPanel);
+    authorsPanel=new AuthorsDialog(rightPanel,database); rightPanel->addWidget(authorsPanel);
 
     // i18n
     translate();
