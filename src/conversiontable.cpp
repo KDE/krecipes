@@ -65,7 +65,7 @@ if (w) w->deleteLater();
 }
 
 
-ConversionTableItem::ConversionTableItem( QTable *t, EditType et ):QTableItem( t, et), eb( 0 )
+ConversionTableItem::ConversionTableItem( QTable *t, EditType et ):QTableItem( t, et, QString::null), eb( 0 )
 {
 // we do not want this item to be replaced
 	setReplaceable( false );
