@@ -18,7 +18,7 @@
 #include <krecipesiface.h>
 #include <qwidgetstack.h>
 
-#include "baseimporter.h"
+#include "importers/baseimporter.h"
 
 class RecipeInputDialog;
 class RecipeViewDialog;

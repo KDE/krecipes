@@ -15,10 +15,10 @@
 #include "unitsdialog.h"
 #include "dualprogressdialog.h"
 
-#include "mmfimporter.h"
-#include "mx2importer.h"
-#include "mxpimporter.h"
-#include "nycgenericimporter.h"
+#include "importers/mmfimporter.h"
+#include "importers/mx2importer.h"
+#include "importers/mxpimporter.h"
+#include "importers/nycgenericimporter.h"
 
 #include "recipe.h"
 #include "DBBackend/recipedb.h"
