@@ -15,7 +15,17 @@
 Ingredient::Ingredient()
 {
 }
-
+Ingredient::Ingredient(const Ingredient &i)
+    	{
+	amount=i.amount;
+	ingredientID=i.ingredientID;
+	name=i.name;
+	prepMethodID=i.prepMethodID;
+	prepMethod=i.prepMethod;
+	unitID=i.unitID;
+	units=i.units;
+	}
+	
 Ingredient::Ingredient( const QString &_name, double _amount, const QString &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
   ingredientID(_ingredientID),
   name(_name),
@@ -35,3 +45,15 @@ bool Ingredient::operator==(const Ingredient &ing) const
 {
 	return (ing.ingredientID == this->ingredientID);
 }
+
+Ingredient & Ingredient::operator=(const Ingredient &i)
+    	{
+    	amount=i.amount;
+	ingredientID=i.ingredientID;
+	name=i.name;
+	prepMethodID=i.prepMethodID;
+	prepMethod=i.prepMethod;
+	unitID=i.unitID;
+	units=i.units;
+	return *this;
+	}
