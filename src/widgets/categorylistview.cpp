@@ -440,8 +440,6 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, boo
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-	setSorting( 0 );
 }
 
 void CategoryCheckListView::removeCategory( int id )
