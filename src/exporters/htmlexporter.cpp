@@ -403,7 +403,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 			int newHeight=sizeCalculator->view()->contentsHeight();
 			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
 
-			//delete sizeCalculator;
+			delete sizeCalculator;
 		}
 		rect->setHeight((int)(ceil(elementHeight*100.0/m_width))); // set the new height to the element
 									 // Note that ceil is needed to avoid size
