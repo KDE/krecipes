@@ -37,9 +37,6 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     m_pageImport = new ImportPrefs(frame);
     layout->addWidget(m_pageImport);
 
-    frame = addPage(i18n("Appearance"), i18n("Customize Krecipes Appearance"));
-    m_pageTwo = new KrecipesPrefPageTwo(frame);
-
     setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 
     // Signals & Slots
@@ -129,14 +126,6 @@ ServerPrefs::ServerPrefs(QWidget *parent)
 
 }
 
-KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
-    : QWidget(parent)
-{
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setAutoAdd(true);
-
-    new QLabel(i18n("Add something here"), this);
-}
 
 void KrecipesPreferences::saveSettings(void)
 {

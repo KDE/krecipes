@@ -10,7 +10,6 @@
 #include <qframe.h>
 
 class ServerPrefs;
-class KrecipesPrefPageTwo;
 class NumbersPrefs;
 class ImportPrefs;
 
@@ -27,7 +26,6 @@ public:
 
 private:
     ServerPrefs *m_pageServer;
-    KrecipesPrefPageTwo *m_pageTwo;
     NumbersPrefs *m_pageNumbers;
     ImportPrefs *m_pageImport;
 
@@ -50,14 +48,6 @@ private:
     KLineEdit *passwordEdit;
     KLineEdit *dbNameEdit;
 
-
-};
-
-class KrecipesPrefPageTwo : public QWidget
-{
-    Q_OBJECT
-public:
-    KrecipesPrefPageTwo(QWidget *parent = 0);
 
 };
 
