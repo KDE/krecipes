@@ -1,21 +1,33 @@
 
 jkivlighn:
-Just some ideas that popped into my mind...
+
+MAJOR FEATURES:
 	*Handle plurals in units
 	*Calendar for meal planning
-	*Add auto-complete feature to the instructions text edit based on ingredients in the recipe
-	*Allow putting ingredients into groups with headers - i.e. Pie Crust and Filling
+	*Instead of saving "servings" of a recipe, change it to "yield" and allow a unit ( i.e. 5 servings, 2 dozen )
+	*Command-line interface
+
+CONVENIENCES/MINOR FEATURES:
+	*Show properties in columns
+	*Select which properties to show
 	*Give option to import recipe formats by pasting the recipe text into a widget
 	*Allow saving and loading diet info from a file (or just store it in the database?)
-	*Instead of saving "servings" of a recipe, change it to "yield" and allow a unit ( i.e. 5 servings, 2 dozen )
+	*Database maintenance options (Empty database, Remove unused elements, etc.)
+
+BUGS/OTHER:
+	*Make use of transactions in database backends where appropriate
+	*Give a warning when deleting categories (such as when a recipe was a part of that category)
+	*Update configure scripts - MySQL is a run-time dependency and so configure doesn't deal with it.
+	*Allow not compiling particular backends through 'configure'.
+	*Don't show the empty unit in the unit page
 
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
 
-planned for 0.5:
+planned for 0.7:
 	*remote database recipe importing (multiple databases open and recipe transfer)
 	
-planned for 0.6:
+planned for 0.8:
 	*Step-by-Step recipe instructions with photos
 	*Check ingredients from existing kitchen resource table? Check amounts in the ingredient matcher?
 	*Add an option to popup for newly created ingredients, and include the USDA nutritional info at the same time

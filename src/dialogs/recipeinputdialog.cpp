@@ -40,6 +40,7 @@
 #include "DBBackend/recipedb.h"
 #include "selectcategoriesdialog.h"
 #include "fractioninput.h"
+#include "widgets/kretextedit.h"
 #include "image.h" //Initializes default photo
 
 
@@ -485,7 +486,8 @@ il=new KIconLoader;
 
     QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
 
-    instructionsEdit = new KTextEdit( instructionsTab );
+    ElementList ing_list; database->loadIngredients( &ing_list );
+    instructionsEdit = new KreTextEdit( instructionsTab, ing_list );
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     instructionsEdit->setTabChangesFocus ( true );
     instructionsLayout->addWidget(instructionsEdit);
@@ -667,6 +669,9 @@ prepTimeEdit->setTime(loadedRecipe->prepTime);
 					lastElement = lastElement->parent();
 				(void)new IngListViewItem (ingredientList,lastElement,*ing_it);
 			}
+
+			//update completion
+			instructionsEdit->addCompletionItem((*ing_it).name);
 		}
 	}
 // 
@@ -901,6 +906,9 @@ if ( it && it->rtti() == INGLISTVIEWITEM_RTTI )
 		else if ( (iabove=it->itemAbove()) ) iselect=iabove;
 	int index=ingItemIndex(ingredientList,it);
 
+	//Remove it from the instruction's completion
+	instructionsEdit->removeCompletionItem(it->text(0));
+
 	//Now remove the ingredient
 	it->setSelected(false);
 	delete it;
@@ -917,6 +925,9 @@ else if ( it && it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
 	int index=ingItemIndex(ingredientList,header->firstChild()); //use this same index because after an item is deleted, the next to delete is still the same index number
 	for ( QListViewItem* sub_item = header->firstChild(); sub_item; sub_item = sub_item->nextSibling() ) {
 		loadedRecipe->ingList.remove( loadedRecipe->ingList.at(index) );
+
+		//Remove it from the instruction's completion
+		instructionsEdit->removeCompletionItem(sub_item->text(0));
 	}
 
 	delete header;
@@ -1096,6 +1107,9 @@ void RecipeInputDialog::addIngredient(void)
 				(void)new IngListViewItem(ingredientList,lastElement,ing);
 
 			loadedRecipe->ingList.append(ing);
+
+			//update the completion in the instructions edit
+			instructionsEdit->addCompletionItem(ing.name);
 			
 			emit changed();
 		}
@@ -1259,6 +1273,7 @@ reloadCombos();
 QPixmap image(defaultPhoto);
 photoLabel->setPixmap(image);
 instructionsEdit->setText(i18n("Write the recipe instructions here"));
+instructionsEdit->clearCompletionItems();
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
 ingredientList->clear();
@@ -1271,6 +1286,10 @@ instructionsEdit->selectAll();
 
 //Set back to the first page
 tabWidget->setCurrentPage(0);
+
+//put back to ingredient input
+typeButtonGrp->setButton(0);
+typeButtonClicked(0);
 
 //Set focus to the title
 titleEdit->setFocus();

@@ -203,14 +203,14 @@ if ( version < 0.61 )
 		tableToAlter.exec(command);
 }
 
-if ( version < 0.7 )
+if ( version < 0.62 )
 {
 	QString command="ALTER TABLE `ingredient_list` ADD COLUMN `group_id` int(11) default '-1' AFTER order_index;";
 		QSqlQuery tableToAlter(command,database);
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
-	command="INSERT INTO db_info VALUES(0.7,'Krecipes 0.7');";
+	command="INSERT INTO db_info VALUES(0.62,'Krecipes 0.7');";
 		tableToAlter.exec(command);
 }
 

@@ -42,6 +42,7 @@ class QDragEvent;
 class QButtonGroup;
 
 class ImageDropLabel;
+class KreTextEdit;
 
 /**
 @author Unai Garro
@@ -82,7 +83,7 @@ private:
 	QPushButton *changePhotoButton;
 
 	//Recipe Body
-	KTextEdit* instructionsEdit;
+	KreTextEdit* instructionsEdit;
 	QLabel* titleLabel;
 	KLineEdit* titleEdit;
 

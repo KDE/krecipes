@@ -1794,7 +1794,7 @@ if ( version < 0.61 )
 		database->executeQuery(command);
 }
 
-if ( version < 0.7 )
+if ( version < 0.62 )
 {
 	database->executeQuery("BEGIN TRANSACTION;");
 
@@ -1842,7 +1842,7 @@ if ( version < 0.7 )
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.7,'Krecipes 0.7');";
+	command="INSERT INTO db_info VALUES(0.62,'Krecipes 0.7');";
 		database->executeQuery(command);
 
 	database->executeQuery("COMMIT TRANSACTION;");
