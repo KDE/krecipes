@@ -1,2 +1,2 @@
 #!/bin/sh
-mysqldump --databases $1 > $2
+mysqldump --databases $1> $2
