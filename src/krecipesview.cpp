@@ -251,32 +251,46 @@ bool setupDone=config->readBoolEntry( "SystemSetup",false);
 if (!setupDone)
 {
 
-bool setupUser,initializeData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
+bool setupUser,initData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
 bool isRemote;
 
 SetupWizard *setupWizard=new SetupWizard(this);
 if(setupWizard->exec()== QDialog::Accepted)
 {
 std::cerr<<"Setting up\n";
-setupWizard->getOptions(setupUser,initializeData);
+setupWizard->getOptions(setupUser,initData);
 
 // Setup user if necessary
 
-if (setupUser)
+if (setupUser) // Don't setup user if checkbox of existing user... was set
 	{
 	std::cerr<<"Setting up user\n";
 	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
 	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
 
-	if (!adminEnabled)
+	if (!adminEnabled) // Use root without password
 	{
 	std::cerr<<"Using default admin\n";
 	adminUser="root";
 	adminPass=QString::null;
 	}
+	if (!isRemote) // Use localhost
+	{
+	std::cerr<<"Using localhost\n";
+	host="localhost";
+	client="localhost";
+	}
 
 	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
 	}
+
+// Initialize database with data if requested
+
+if (initData)
+	{
+	initializeData(host,dbName,user,pass); // Populate data as normal user
+	}
+
 }
 delete setupWizard;
 }
@@ -296,15 +310,24 @@ RecipeDB *db;
 
 if (adminUser!=QString::null)
 	{ // Login as admin in the (remote) server and createDB if necessary
-	std::cerr<<"Open db as:"<< adminUser<<" "<<adminPass<<"\n";
-	db= new RecipeDB(host,adminUser,adminPass,dbName,false); // false means don't initialize db
+	std::cerr<<"Open db as:"<< adminUser<<",*** with password ****\n";
+	db= new RecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
 	}
 	else{ // Login as root with no password
-	db=new RecipeDB(host,"root",QString::null,dbName,false);
+	std::cerr<<"Open db as root, with no password\n";
+	db=new RecipeDB(host,"root",QString::null,dbName,true);
 	}
 
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
+delete db; //it closes the db automatically
+}
+
+void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
+{
+RecipeDB *db;
+db= new RecipeDB(host,user,pass,dbName);
+db->initializeData();
 delete db; //it closes the db automatically
 }
 
