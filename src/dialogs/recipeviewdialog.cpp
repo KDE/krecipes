@@ -242,15 +242,18 @@ void RecipeViewDialog::createBlocks()
 	geometries.append( geometry );
 
 	QString authors_html;
+	authors_html=QString("<b>%1</b>: ").arg(i18n("Authors"));
+
 	QPtrListIterator<Element> author_it( loadedRecipe->authorList );
 	Element *author_el;
+	int counter=0;
 	while ( (author_el = author_it.current()) != 0 )
 	{
         	++author_it;
 
-		if (authors_html != QString::null) authors_html += ", ";
-		else authors_html+=QString("<b>%1</b>: ").arg(i18n("Authors"));
+		if (counter) authors_html += ", ";
 		authors_html += author_el->name;
+		counter++;
 	}
 	new_element = new DivElement( "authors", authors_html );
 
@@ -269,15 +272,19 @@ void RecipeViewDialog::createBlocks()
 	geometries.append( geometry );
 
 	QString categories_html;
+	categories_html=QString("<b>%1: </b>").arg(i18n("Categories"));
+
 	QPtrListIterator<Element> cat_it( loadedRecipe->categoryList );
+
 	Element *cat_el;
+	counter=0;
 	while ( (cat_el = cat_it.current()) != 0 )
 	{
         	++cat_it;
 
-		if (categories_html != QString::null) categories_html += ", ";
-		else categories_html+=QString("<b>%1: </b>").arg(i18n("Categories"));
+		if (counter) categories_html += ", ";
 		categories_html += cat_el->name;
+		counter++;
 	}
 	new_element = new DivElement( "categories", categories_html );
 
