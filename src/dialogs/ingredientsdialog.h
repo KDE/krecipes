@@ -67,6 +67,7 @@ private:
     void removeIngredient(void);
     void updateLists(void);
     void addPropertyToIngredient(void);
+    void removePropertyFromIngredient(void);
 
 
 

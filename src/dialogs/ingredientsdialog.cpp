@@ -92,8 +92,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     propertiesListView=new KListView (this);
     layout->addMultiCellWidget (propertiesListView,1,4,15,16);
-    propertiesListView->addColumn("Prop.");
+    propertiesListView->addColumn("Id");
+    propertiesListView->addColumn("Property");
     propertiesListView->addColumn("Amount");
+    propertiesListView->addColumn("units");
 
     QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
     layout->addMultiCell(spacer_rightProperties,1,3,17,17);
@@ -285,7 +287,7 @@ if (it){// make sure that the ingredient list is not empty
 	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
 	{
 	std::cerr<<prop;
-	  QListViewItem *it= new QListViewItem(propertiesListView,prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	  QListViewItem *it= new QListViewItem(propertiesListView,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
 	}
 	}
 }
@@ -327,5 +329,24 @@ if (ingredientID>=0) // an ingredient was selected previously
     database->AddPropertyToIngredient(ingredientID,propertyID,0); // Add result chosen property to ingredient in database, with amount 0 by default
     reloadPropertyList(); // Reload the list from database
 }
+}
+}
+
+void IngredientsDialog::removePropertyFromIngredient(void)
+{
+
+// Find selected ingredient/property item combination
+QListViewItem *it;
+int ingredientID=-1, propertyID=-1;
+if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
+if (it=propertiesListView->selectedItem()) propertyID=it->text(0).toInt();
+
+if ((ingredientID>=0)&&(propertyID>=0)) // an ingredient/property combination was selected previously
+{
+  ElementList results;
+  database->removePropertyFromIngredient(ingredientID,propertyID);
+
+reloadPropertyList(); // Reload the list from database
+
 }
 }

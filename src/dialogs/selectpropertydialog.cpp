@@ -11,6 +11,7 @@
 
 SelectPropertyDialog::SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList): QDialog(parent)
 {
+
 container=new QVBoxLayout(this,5,5);
 box=new QGroupBox(this);
 container->addWidget(box);
