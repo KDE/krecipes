@@ -38,8 +38,8 @@ void UnitListView::reload()
 {
 	clear();
 
-	UnitList unitList;
-	database->loadUnits( &unitList );
+	UnitList unitList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	database->loadUnits( &unitList, limit, offset );
 
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
 		if ( !( *it ).name.isEmpty() || !( *it ).plural.isEmpty() )

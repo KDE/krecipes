@@ -31,11 +31,6 @@ public:
 	Element findByName( const QString & ) const;
 
 	Element getElement( int index ) const;
-	void add
-		( const Element &element )
-	{
-		append( element );
-	} //get rid of this function... use append()
 };
 
 

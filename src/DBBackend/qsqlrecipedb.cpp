@@ -346,7 +346,7 @@ void QSqlRecipeDB::loadRecipeDetails( RecipeList *rlist, bool loadIngredients, b
 					RecipeList::Iterator it = recipeIterators[ categoriesToLoad.value( 0 ).toInt() ];
 
 					//add the ingredient to the recipe
-					( *it ).categoryList.add( cty );
+					( *it ).categoryList.append( cty );
 
 				}
 			}
@@ -374,7 +374,7 @@ void QSqlRecipeDB::loadRecipeDetails( RecipeList *rlist, bool loadIngredients, b
 					RecipeList::Iterator it = recipeIterators[ authorsToLoad.value( 0 ).toInt() ];
 
 					//add the ingredient to the recipe
-					( *it ).authorList.add( cty );
+					( *it ).authorList.append( cty );
 
 				}
 			}
@@ -396,18 +396,17 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 			Element group;
 			group.id = toLoad.value( 0 ).toInt();
 			group.name = unescapeAndDecode( toLoad.value( 1 ).toString() );
-			list->add
-			( group );
+			list->append( group );
 		}
 	}
 }
 
-void QSqlRecipeDB::loadIngredients( ElementList *list )
+void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
-	QString command;
-	command = "SELECT id,name FROM ingredients ORDER BY name;";
+	QString command = "SELECT id,name FROM ingredients ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery ingredientToLoad( command, database );
 
 	if ( ingredientToLoad.isActive() ) {
@@ -415,17 +414,17 @@ void QSqlRecipeDB::loadIngredients( ElementList *list )
 			Element ing;
 			ing.id = ingredientToLoad.value( 0 ).toInt();
 			ing.name = unescapeAndDecode( ingredientToLoad.value( 1 ).toString() );
-			list->add
-			( ing );
+			list->append( ing );
 		}
 	}
 }
 
-void QSqlRecipeDB::loadPrepMethods( ElementList *list )
+void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM prep_methods ORDER BY name;";
+	QString command = "SELECT id,name FROM prep_methods ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery prepMethodsToLoad( command, database );
 
 	if ( prepMethodsToLoad.isActive() ) {
@@ -433,8 +432,7 @@ void QSqlRecipeDB::loadPrepMethods( ElementList *list )
 			Element prep_method;
 			prep_method.id = prepMethodsToLoad.value( 0 ).toInt();
 			prep_method.name = unescapeAndDecode( prepMethodsToLoad.value( 1 ).toString() );
-			list->add
-			( prep_method );
+			list->append( prep_method );
 		}
 	}
 }
@@ -666,8 +664,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			Element recipe;
 			recipe.id = recipeToLoad.value( 0 ).toInt();
 			recipe.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
-			list->add
-			( recipe );
+			list->append( recipe );
 
 			if ( recipeCategoryList ) {
 				int * category = new int;
@@ -758,13 +755,14 @@ void QSqlRecipeDB::addUnitToIngredient( int ingredientID, int unitID )
 	QSqlQuery ingredientToCreate( command, database );
 }
 
-void QSqlRecipeDB::loadUnits( UnitList *list )
+void QSqlRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 {
 	list->clear();
 
 	QString command;
 
-	command = "SELECT id,name,plural FROM units;";
+	command = "SELECT id,name,plural FROM units ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 
 	QSqlQuery unitToLoad( command, database );
 
@@ -853,8 +851,7 @@ void QSqlRecipeDB::findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingre
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
 			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
-			results->add
-			( recipe );
+			results->append( recipe );
 		}
 	}
 }
@@ -870,8 +867,7 @@ void QSqlRecipeDB::findUseOfIngInRecipes( ElementList *results, int ingredientID
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
 			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
-			results->add
-			( recipe );
+			results->append( recipe );
 		}
 	}
 }
@@ -1005,8 +1001,7 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 			if ( ingredientID >= -1 )
 				prop.ingredientID = propertiesToLoad.value( 6 ).toInt();
 
-			list->add
-			( prop );
+			list->add( prop );
 		}
 
 	}
@@ -1223,8 +1218,7 @@ void QSqlRecipeDB::findUseOf_Unit_InRecipes( ElementList *results, int unitID )
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
 			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
-			results->add
-			( recipe );
+			results->append( recipe );
 		}
 	}
 }
@@ -1240,8 +1234,7 @@ void QSqlRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
 			recipe.name = recipeFound.value( 1 ).toString();
-			results->add
-			( recipe );
+			results->append( recipe );
 		}
 	}
 
@@ -1367,8 +1360,7 @@ void QSqlRecipeDB::loadElementList( ElementList *elList, QSqlQuery *query )
 			Element el;
 			el.id = query->value( 0 ).toInt();
 			el.name = unescapeAndDecode( query->value( 1 ).toString() );
-			elList->add
-			( el ); // Note that ElementList _copies_, does not take the pointer while adding.
+			elList->append( el );
 		}
 	}
 }
@@ -1385,8 +1377,7 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 			QString propPerUnits = unescapeAndDecode( query->value( 3 ).toString() );
 
 			el.name = QString( "In ingredient %1: property \"%2\" [%3/%4]" ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
-			elList->add
-			( el ); // Note that ElementList _copies_, does not take the pointer while adding.
+			elList->append( el );
 		}
 	}
 }
@@ -1531,19 +1522,19 @@ float QSqlRecipeDB::databaseVersion( void )
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
 }
 
-void QSqlRecipeDB::loadCategories( ElementList *list )
+void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
-	QString command = "SELECT * FROM categories ORDER BY name;";
+	QString command = "SELECT id,name FROM categories ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery categoryToLoad( command, database );
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
 			Element el;
 			el.id = categoryToLoad.value( 0 ).toInt();
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
-			list->add
-			( el );
+			list->append( el );
 		}
 	}
 }
@@ -1553,7 +1544,8 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 	if ( parent_id == -1 )
 		list->clear();
 
-	QString command = QString( "SELECT * FROM categories WHERE parent_id=%1 ORDER BY name;" ).arg( parent_id );
+	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"'"
+	  " ORDER BY name";
 	QSqlQuery categoryToLoad( command, database );
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
@@ -1561,8 +1553,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 			Element el;
 			el.id = id;
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
-			CategoryTree *list_child = list->add
-			                           ( el );
+			CategoryTree *list_child = list->add( el );
 
 			loadCategories( list_child, id );
 		}
@@ -1578,8 +1569,7 @@ void QSqlRecipeDB::loadRecipeCategories( int recipeID, ElementList *list )
 			Element el;
 			el.id = categoryToLoad.value( 0 ).toInt();
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
-			list->add
-			( el );
+			list->append( el );
 		}
 	}
 }
@@ -1644,18 +1634,18 @@ void QSqlRecipeDB::addCategoryToRecipe( int recipeID, int categoryID )
 
 
 
-void QSqlRecipeDB::loadAuthors( ElementList *list )
+void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 {
 	list->clear();
-	QString command = "SELECT * FROM authors;";
+	QString command = "SELECT id,name FROM authors ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery authorToLoad( command, database );
 	if ( authorToLoad.isActive() ) {
 		while ( authorToLoad.next() ) {
 			Element el;
 			el.id = authorToLoad.value( 0 ).toInt();
 			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toString() );
-			list->add
-			( el );
+			list->append( el );
 		}
 	}
 }
@@ -1670,8 +1660,7 @@ void QSqlRecipeDB::loadRecipeAuthors( int recipeID, ElementList *list )
 			Element el;
 			el.id = authorToLoad.value( 0 ).toInt();
 			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toString() );
-			list->add
-			( el );
+			list->append( el );
 		}
 	}
 }
@@ -1738,8 +1727,7 @@ int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 				Element el;
 				el.id = unitsToLoad.value( 0 ).toInt();
 				el.name = unescapeAndDecode( unitsToLoad.value( 1 ).toString() );
-				list->add
-				( el );
+				list->append( el );
 			}
 		}
 	}

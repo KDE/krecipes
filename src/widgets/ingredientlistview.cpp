@@ -35,8 +35,8 @@ void IngredientListView::reload()
 {
 	clear();
 
-	ElementList ingredientList;
-	database->loadIngredients( &ingredientList );
+	ElementList ingredientList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	database->loadIngredients( &ingredientList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )
 		createIngredient( *ing_it );

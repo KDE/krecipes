@@ -262,7 +262,7 @@ void LiteRecipeDB::loadRecipe( Recipe *recipe, int recipeID )
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
 			if ( el.id != -1 )
-				recipe->categoryList.add( el ); // add to list except for default category (-1)
+				recipe->categoryList.append( el ); // add to list except for default category (-1)
 			row = recipeToLoad.next();
 		}
 	}
@@ -279,7 +279,7 @@ void LiteRecipeDB::loadRecipe( Recipe *recipe, int recipeID )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			recipe->authorList.add( el );
+			recipe->authorList.append( el );
 			row = recipeToLoad.next();
 		}
 	}
@@ -374,7 +374,7 @@ void LiteRecipeDB::loadRecipeDetails( RecipeList *rlist, bool loadIngredients, b
 				if ( recipeIterators.contains( row.data( 0 ).toInt() ) ) {
 					RecipeList::Iterator it = recipeIterators[ row.data( 0 ).toInt() ];
 					//add the ingredient to the recipe
-					( *it ).categoryList.add( cty );
+					( *it ).categoryList.append( cty );
 				}
 
 				row = categoriesToLoad.next();
@@ -402,7 +402,7 @@ void LiteRecipeDB::loadRecipeDetails( RecipeList *rlist, bool loadIngredients, b
 				if ( recipeIterators.contains( row.data( 0 ).toInt() ) ) {
 					RecipeList::Iterator it = recipeIterators[ row.data( 0 ).toInt() ];
 					//add the ingredient to the recipe
-					( *it ).authorList.add( cty );
+					( *it ).authorList.append( cty );
 				}
 
 				row = authorsToLoad.next();
@@ -427,19 +427,19 @@ void LiteRecipeDB::loadIngredientGroups( ElementList *list )
 			Element group;
 			group.id = row.data( 0 ).toInt();
 			group.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( group );
+			list->append( group );
 			row = toLoad.next();
 		}
 	}
 }
 
-void LiteRecipeDB::loadIngredients( ElementList *list )
+void LiteRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
 	QString command;
-	command = "SELECT id,name FROM ingredients ORDER BY name;";
+	command = "SELECT id,name FROM ingredients ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 
 	QSQLiteResult ingredientToLoad = database->executeQuery( command );
 
@@ -449,18 +449,18 @@ void LiteRecipeDB::loadIngredients( ElementList *list )
 			Element ing;
 			ing.id = row.data( 0 ).toInt();
 			ing.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( ing );
+			list->append( ing );
 			row = ingredientToLoad.next();
 		}
 	}
 }
 
-void LiteRecipeDB::loadPrepMethods( ElementList *list )
+void LiteRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM prep_methods ORDER BY name;";
+	QString command = "SELECT id,name FROM prep_methods ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSQLiteResult prepMethodsToLoad = database->executeQuery( command );
 
 	if ( prepMethodsToLoad.getStatus() != QSQLiteResult::Failure ) {
@@ -469,8 +469,7 @@ void LiteRecipeDB::loadPrepMethods( ElementList *list )
 			Element prep_method;
 			prep_method.id = row.data( 0 ).toInt();
 			prep_method.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( prep_method );
+			list->append( prep_method );
 			row = prepMethodsToLoad.next();
 		}
 	}
@@ -669,8 +668,7 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( recipe );
+			list->append( recipe );
 
 			if ( recipeCategoryList ) {
 				int * category = new int;
@@ -751,13 +749,14 @@ void LiteRecipeDB::addUnitToIngredient( int ingredientID, int unitID )
 	database->executeQuery( command );
 }
 
-void LiteRecipeDB::loadUnits( UnitList *list )
+void LiteRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 {
 	list->clear();
 
 	QString command;
 
-	command = "SELECT id,name,plural FROM units;";
+	command = "SELECT id,name,plural FROM units ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 
 	QSQLiteResult unitToLoad = database->executeQuery( command );
 	if ( unitToLoad.getStatus() != QSQLiteResult::Failure ) {
@@ -825,8 +824,7 @@ void LiteRecipeDB::findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingre
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = unescapeAndDecode( row.data( 1 ) );
-			results->add
-			( recipe );
+			results->append( recipe );
 			row = recipeFound.next();
 		}
 	}
@@ -844,8 +842,7 @@ void LiteRecipeDB::findUseOfIngInRecipes( ElementList *results, int ingredientID
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = unescapeAndDecode( row.data( 1 ) );
-			results->add
-			( recipe );
+			results->append( recipe );
 			row = recipeFound.next();
 		}
 	}
@@ -983,8 +980,7 @@ void LiteRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 			if ( ingredientID >= -1 )
 				prop.ingredientID = row.data( 6 ).toInt();
 
-			list->add
-			( prop );
+			list->add( prop );
 
 
 
@@ -1198,8 +1194,7 @@ void LiteRecipeDB::findUseOf_Unit_InRecipes( ElementList *results, int unitID )
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = unescapeAndDecode( row.data( 1 ) );
-			results->add
-			( recipe );
+			results->append( recipe );
 			row = recipeFound.next();
 		}
 	}
@@ -1217,8 +1212,7 @@ void LiteRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = row.data( 1 );
-			results->add
-			( recipe );
+			results->append( recipe );
 			row = recipeFound.next();
 		}
 	}
@@ -1349,8 +1343,7 @@ void LiteRecipeDB::loadElementList( ElementList *elList, QSQLiteResult *query )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			elList->add
-			( el ); // Note that ElementList _copies_, does not take the pointer while adding.
+			elList->append( el ); // Note that ElementList _copies_, does not take the pointer while adding.
 			row = query->next();
 
 		}
@@ -1371,8 +1364,7 @@ void LiteRecipeDB::loadPropertyElementList( ElementList *elList, QSQLiteResult *
 			QString propPerUnits = unescapeAndDecode( row.data( 3 ) );
 
 			el.name = QString( "In ingredient %1: property \"%2\" [%3/%4]" ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
-			elList->add
-			( el ); // Note that ElementList _copies_, does not take the pointer while adding.
+			elList->append( el ); // Note that ElementList _copies_, does not take the pointer while adding.
 		}
 	}
 }
@@ -1946,7 +1938,8 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 	if ( parent_id == -1 )
 		list->clear();
 
-	QString command = QString( "SELECT * FROM categories WHERE parent_id=%1 ORDER BY name;" ).arg( parent_id );
+	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"'"
+	  " ORDER BY name;";
 	QSQLiteResult categoryToLoad = database->executeQuery( command );
 	if ( categoryToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = categoryToLoad.first();
@@ -1955,8 +1948,7 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 			Element el;
 			el.id = id;
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			CategoryTree *list_child = list->add
-			                           ( el );
+			CategoryTree *list_child = list->add( el );
 
 			loadCategories( list_child, id );
 			row = categoryToLoad.next();
@@ -1964,10 +1956,11 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 	}
 }
 
-void LiteRecipeDB::loadCategories( ElementList *list )
+void LiteRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 {
 	list->clear();
-	QString command = "SELECT * FROM categories ORDER BY name;";
+	QString command = "SELECT id,name FROM categories ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSQLiteResult categoryToLoad = database->executeQuery( command );
 	if ( categoryToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = categoryToLoad.first();
@@ -1975,8 +1968,7 @@ void LiteRecipeDB::loadCategories( ElementList *list )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( el );
+			list->append( el );
 			row = categoryToLoad.next();
 		}
 	}
@@ -1992,8 +1984,7 @@ void LiteRecipeDB::loadRecipeCategories( int recipeID, ElementList *list )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( el );
+			list->append( el );
 			row = categoryToLoad.next();
 		}
 	}
@@ -2060,10 +2051,11 @@ void LiteRecipeDB::addCategoryToRecipe( int recipeID, int categoryID )
 
 
 
-void LiteRecipeDB::loadAuthors( ElementList *list )
+void LiteRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 {
 	list->clear();
-	QString command = "SELECT * FROM authors;";
+	QString command = "SELECT id,name FROM authors ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSQLiteResult authorToLoad = database->executeQuery( command );
 	if ( authorToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = authorToLoad.first();
@@ -2071,8 +2063,7 @@ void LiteRecipeDB::loadAuthors( ElementList *list )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( el );
+			list->append( el );
 			row = authorToLoad.next();
 		}
 	}
@@ -2089,8 +2080,7 @@ void LiteRecipeDB::loadRecipeAuthors( int recipeID, ElementList *list )
 			Element el;
 			el.id = row.data( 0 ).toInt();
 			el.name = unescapeAndDecode( row.data( 1 ) );
-			list->add
-			( el );
+			list->append( el );
 			row = authorToLoad.next();
 		}
 	}
@@ -2159,8 +2149,7 @@ int LiteRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 				Element el;
 				el.id = row.data( 0 ).toInt();
 				el.name = unescapeAndDecode( row.data( 1 ) );
-				list->add
-				( el );
+				list->append( el );
 				row = unitsToLoad.next();
 			}
 		}

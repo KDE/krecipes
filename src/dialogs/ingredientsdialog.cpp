@@ -317,8 +317,7 @@ void IngredientsDialog:: reloadPropertyList( void )
 			Element perUnitEl;
 			perUnitEl.id = prop->perUnit.id;
 			perUnitEl.name = prop->perUnit.name;
-			perUnitListBack->add
-			( perUnitEl );
+			perUnitListBack->append( perUnitEl );
 
 		}
 	}

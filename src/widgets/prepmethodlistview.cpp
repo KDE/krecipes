@@ -35,8 +35,8 @@ void PrepMethodListView::reload()
 {
 	clear();
 
-	ElementList prepMethodList;
-	database->loadPrepMethods( &prepMethodList );
+	ElementList prepMethodList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	database->loadPrepMethods( &prepMethodList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = prepMethodList.begin(); ing_it != prepMethodList.end(); ++ing_it )
 		createPrepMethod( *ing_it );

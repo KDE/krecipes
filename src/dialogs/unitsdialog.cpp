@@ -108,7 +108,6 @@ void UnitsDialog::loadConversionTable( void )
 {
 	UnitList unitList;
 	database->loadUnits( &unitList );
-	qHeapSort( unitList );
 
 	QStringList unitNames;
 	IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.

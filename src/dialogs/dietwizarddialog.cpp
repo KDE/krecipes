@@ -566,7 +566,7 @@ void DishInput::loadEnabledCategories( ElementList* categories )
 			//add this enabled category
 			category.id = current_item->categoryId();
 			category.name = current_item->categoryName();
-			categories->add( category );
+			categories->append( category );
 		}
 
 		++it;

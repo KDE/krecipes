@@ -97,20 +97,20 @@ public:
 	int lastInsertID();
 
 	void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true );
-	void loadAuthors( ElementList *list );
+	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
 	void loadCategories( CategoryTree *list, int parent_id = -1 );
-	void loadCategories( ElementList *list );
+	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientGroups( ElementList *list );
-	void loadIngredients( ElementList *list );
+	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
 	void loadPossibleUnits( int ingredientID, UnitList *list );
-	void loadPrepMethods( ElementList *list );
+	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipe( Recipe *recipe, int recipeID = 0 );
 	void loadRecipeAuthors( int recipeID, ElementList *list );
 	void loadRecipeCategories( int recipeID, ElementList *list );
 	void loadRecipeDetails( RecipeList *rlist, bool loadIngredients = false, bool loadCategories = false, bool loadIngredientNames = false, bool loadAuthors = false ); // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs)
 	void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0 );
-	void loadUnits( UnitList *list );
+	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList );
 
 	void mergeAuthors( int id1, int id2 );

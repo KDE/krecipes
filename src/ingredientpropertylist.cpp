@@ -8,7 +8,7 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "ingredientpropertylist.h"
-#include <iostream>
+
 IngredientPropertyList::IngredientPropertyList()
 {}
 

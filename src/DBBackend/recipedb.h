@@ -162,13 +162,13 @@ public:
 	virtual int lastInsertID() = 0;
 
 	virtual void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true ) = 0;
-	virtual void loadAuthors( ElementList *list ) = 0;
+	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadCategories( CategoryTree *list, int parent_id = -1 ) = 0;
-	virtual void loadCategories( ElementList *list ) = 0;
+	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadIngredientGroups( ElementList *list ) = 0;
-	virtual void loadIngredients( ElementList *list ) = 0;
+	virtual void loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
-	virtual void loadPrepMethods( ElementList *list ) = 0;
+	virtual void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	virtual void loadRecipe( Recipe *recipe, int recipeID = 0 ) = 0;
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
@@ -177,7 +177,7 @@ public:
 	virtual void loadRecipeCategories( int recipeID, ElementList *categoryList ) = 0;
 	virtual void loadRecipeDetails( RecipeList *rlist, bool loadIngredients = false, bool loadCategories = false, bool loadIngredientNames = false, bool loadAuthors = false ) = 0; // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
 	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0 ) = 0;
-	virtual void loadUnits( UnitList *list ) = 0;
+	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
 
 	/** Change all instances of authors with id @param id2 to @param id1 */

@@ -34,8 +34,8 @@ void AuthorListView::reload()
 {
 	clear();
 
-	ElementList authorList;
-	database->loadAuthors( &authorList );
+	ElementList authorList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	database->loadAuthors( &authorList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = authorList.begin(); ing_it != authorList.end(); ++ing_it )
 		createAuthor( *ing_it );

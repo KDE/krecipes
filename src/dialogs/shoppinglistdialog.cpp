@@ -226,7 +226,7 @@ void ShoppingListDialog::showShoppingList( void )
 		Element newEl;
 		newEl.id = it->recipeID();
 		newEl.name = it->title(); // Storing the title is not necessary, but do it just in case it's used later on
-		recipeList.add( newEl ); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
+		recipeList.append( newEl );
 	}
 
 	RefineShoppingListDialog refineDialog( this, database, recipeList );
