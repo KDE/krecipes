@@ -754,9 +754,33 @@ bool RecipeInputDialog::checkAmountEdit()
 	}
 }
 
+bool RecipeInputDialog::checkBounds()
+{
+	if ( ingredientBox->currentText().length() > database->maxIngredientNameLength() )
+	{
+		KMessageBox::error(this,QString(i18n("Ingredient name cannot be longer than %1 characters.")).arg(database->maxIngredientNameLength()));
+		ingredientBox->lineEdit()->selectAll();
+		return false;
+	}
+
+	if ( unitBox->currentText().length() > database->maxUnitNameLength() )
+	{
+		KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
+		unitBox->lineEdit()->selectAll();
+		return false;
+	}
+
+	if ( prepMethodBox->currentText().length() > database->maxPrepMethodNameLength() )
+	{
+		KMessageBox::error(this,QString(i18n("Preparation method cannot be longer than %1 characters.")).arg(database->maxPrepMethodNameLength()));
+		prepMethodBox->lineEdit()->selectAll();
+		return false;
+	}
+}
+
 void RecipeInputDialog::addIngredient(void)
 {
-	if ( !checkAmountEdit() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
+	if ( !checkAmountEdit() || !checkBounds() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
 		return;
 
 	createNewIngredientIfNecessary();
@@ -841,7 +865,14 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 	case 2: //unit
 	{
 		QString old_text = (*ing).units;
-		
+
+		if ( new_text.length() > database->maxUnitNameLength() )
+		{
+			KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
+			it->setText(2,old_text);
+			break;
+		}
+
 		if ( old_text != new_text.stripWhiteSpace() )
 		{
 			int new_id = createNewUnitIfNecessary(new_text.stripWhiteSpace(),it->text(0).stripWhiteSpace());
@@ -863,7 +894,14 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 	case 3: //prep method
 	{
 		QString old_text = (*ing).prepMethod;
-		
+
+		if ( new_text.length() > database->maxPrepMethodNameLength() )
+		{
+			KMessageBox::error(this,QString(i18n("Preparation method cannot be longer than %1 characters.")).arg(database->maxPrepMethodNameLength()));
+			it->setText(3,old_text);
+			break;
+		}
+
 		if ( old_text != new_text )
 		{
 			int new_id = createNewPrepIfNecessary(new_text);
@@ -906,7 +944,7 @@ bool RecipeInputDialog::save (void)
 //check bounds first
 if ( titleEdit->text().length() > database->maxRecipeTitleLength() )
 {
-	KMessageBox::error(this,QString(i18n("Recipe title is longer than %1 characters.")).arg(database->maxRecipeTitleLength()),i18n("Unable to save recipe"));
+	KMessageBox::error(this,QString(i18n("Recipe title cannot be longer than %1 characters.")).arg(database->maxRecipeTitleLength()),i18n("Unable to save recipe"));
 	return false;
 }
 
@@ -950,6 +988,9 @@ ingredientList->clear();
 authorShow->clear();
 categoryShow->clear();
 servingsNumInput->setValue(1);
+
+//Set back to the first page
+tabWidget->setCurrentPage(0);
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients, units, and preparation methods

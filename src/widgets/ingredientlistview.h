@@ -101,6 +101,8 @@ private slots:
 	void saveIngredient(QListViewItem* i);
 
 private:
+	bool checkBounds( const QString &name );
+
 	KPopupMenu *kpop;
 };
 

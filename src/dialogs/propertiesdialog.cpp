@@ -13,6 +13,7 @@
 #include "propertiesdialog.h"
 #include <klocale.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 
 #include "DBBackend/recipedb.h"
 #include "createpropertydialog.h"
@@ -45,39 +46,17 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     layout->addLayout(vboxl);
 
     // Connect signals & slots
-    connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(createNewProperty()));
-    connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removeProperty()));
+    connect(addPropertyButton,SIGNAL(clicked()),propertyListView,SLOT(createNew()));
+    connect(removePropertyButton,SIGNAL(clicked()),propertyListView,SLOT(remove()));
+
+    //FIXME: We've got some sort of build issue... we get undefined references to CreatePropertyDialog without this dummy code here
+    ElementList list;
+    CreatePropertyDialog d(this,&list);
 }
 
 
 PropertiesDialog::~PropertiesDialog()
 {
-}
-
-void PropertiesDialog::createNewProperty(void)
-{
-ElementList list;
-database->loadUnits(&list);
-CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(this,&list);
-
-if ( propertyDialog->exec() == QDialog::Accepted ) {
-   QString name = propertyDialog->newPropertyName();
-   QString units= propertyDialog->newUnitsName();
-   if (!((name.isNull()) || (units.isNull()))) // Make sure none of the fields are empty
-      database->addProperty(name, units);
-}
-delete propertyDialog;
-}
-
-void PropertiesDialog::removeProperty(void)
-{
-int propertyID = -1;
-QListViewItem *it;
-if ( (it=propertyListView->selectedItem()) )
-{
-propertyID=it->text(0).toInt();
-}
-database->removeProperty(propertyID);
 }
 
 void PropertiesDialog::reload(void)

@@ -37,7 +37,7 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 	if ( actions & RemoveFromCategory )
 		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove from &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
 	if ( actions & Remove )
-		kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
+		kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 	if ( actions & AddToShoppingList )
 		kpop->insertItem( il->loadIcon("trolley", KIcon::NoGroup,16),i18n("&Add to Shopping List"), this, SLOT(addToShoppingList()), CTRL+Key_A );
 	kpop->polish();

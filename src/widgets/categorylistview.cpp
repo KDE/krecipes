@@ -190,7 +190,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		
 		kpop = new KPopupMenu( this );
 		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_C );
-		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->insertSeparator();
 		kpop->insertItem( il->loadIcon("editcut", KIcon::NoGroup,16),i18n("Cu&t"), this, SLOT(cut()), CTRL+Key_X );
@@ -234,7 +234,10 @@ void StdCategoryListView::createNew()
 	if ( categoryDialog->exec() == QDialog::Accepted ) {
 		QString result = categoryDialog->newCategoryName();
 		int subcategory = categoryDialog->subcategory();
-		database->createNewCategory(result,subcategory); // Create the new category in the database
+	
+		//check bounds first
+		if ( checkBounds(result) )
+			database->createNewCategory(result,subcategory); // Create the new category in the database
 	}
 	delete categoryDialog;
 }
@@ -407,6 +410,11 @@ void StdCategoryListView::saveCategory(QListViewItem* i)
 {
 	CategoryListItem *cat_it = (CategoryListItem*)i;
 
+	if ( !checkBounds(cat_it->categoryName()) ) {
+		reload(); //reset the changed text
+		return;
+	}
+
 	int existing_id = database->findExistingCategoryByName( cat_it->categoryName() );
 	int cat_id = cat_it->categoryId();
 	if ( existing_id != -1 && existing_id != cat_id ) //category already exists with this label... merge the two
@@ -423,6 +431,16 @@ void StdCategoryListView::saveCategory(QListViewItem* i)
 	}
 	else
 		database->modCategory(cat_id, cat_it->categoryName());
+}
+
+bool StdCategoryListView::checkBounds( const QString &name )
+{
+	if ( name.length() > database->maxCategoryNameLength() ) {
+		KMessageBox::error(this,QString(i18n("Category name cannot be longer than %1 characters.")).arg(database->maxCategoryNameLength()));
+		return false;
+	}
+
+	return true;
 }
 
 

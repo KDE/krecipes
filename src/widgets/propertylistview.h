@@ -128,6 +128,8 @@ private slots:
 	void saveProperty(QListViewItem* i);
 
 private:
+	bool checkBounds( const QString &name );
+
 	KPopupMenu *kpop;
 };
 

@@ -47,10 +47,6 @@ private:
 	QPushButton *newCategoryButton;
 	QPushButton *removeCategoryButton;
 	KIconLoader *il;
-
-private slots:
-	void createNewCategory(void);
-	void removeCategory(void);
 };
 
 #endif

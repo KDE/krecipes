@@ -70,10 +70,8 @@ private:
   ElementList  *perUnitListBack;
 
   private slots:
-    void addIngredient(void);
     void addUnitToIngredient(void);
     void removeUnitFromIngredient(void);
-    void removeIngredient(void);
     void updateLists(void);
     void addPropertyToIngredient(void);
     void removePropertyFromIngredient(void);

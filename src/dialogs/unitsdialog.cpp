@@ -57,17 +57,19 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     layout->addWidget(conversionTable);
 
     // Connect signals & slots
-    connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
-    connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
+    connect(newUnitButton,SIGNAL(clicked()),unitListView,SLOT(createNew()));
+    connect(removeUnitButton,SIGNAL(clicked()),unitListView,SLOT(remove()));
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
-    
+
     //TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
     connect(database,SIGNAL(unitCreated(const Element&)),SLOT(loadConversionTable()));
     connect(database,SIGNAL(unitRemoved(int)),SLOT(loadConversionTable()));
 
     //Populate data into the table
     loadConversionTable();
-
+   
+    //FIXME: We've got some sort of build issue... we get undefined references to CreateElementDialog without this dummy code here
+    CreateElementDialog d(this,"");
 }
 
 UnitsDialog::~UnitsDialog()
@@ -85,39 +87,6 @@ void UnitsDialog::reloadData(void)
 loadUnitsList();
 loadConversionTable();
 }
-
-void UnitsDialog::createNewUnit(void)
-{
-CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Unit")));
-
-if ( elementDialog->exec() == QDialog::Accepted ) {
-   QString result = elementDialog->newElementName();
-   database->createNewUnit(result); // Create the new unit in database
-}
-delete elementDialog;
-}
-
-void UnitsDialog::removeUnit(void)
-{
-// Find selected unit item
-QListViewItem *it;
-int unitID=-1;
-if ( (it=unitListView->selectedItem()) ) unitID=it->text(0).toInt();
-
-if (unitID>=0) // a unit was selected previously
-{
-ElementList recipeDependancies, propertyDependancies;
-database->findUnitDependancies(unitID,&propertyDependancies,&recipeDependancies);
-
-if (recipeDependancies.isEmpty() && propertyDependancies.isEmpty()) database->removeUnit(unitID);
-else {// need warning!
-	DependanciesDialog *warnDialog=new DependanciesDialog(0,&recipeDependancies,0,&propertyDependancies);
-	if (warnDialog->exec()==QDialog::Accepted) database->removeUnit(unitID);
-	delete warnDialog;
-	}
-}
-}
-
 
 void UnitsDialog::loadConversionTable(void)
 {

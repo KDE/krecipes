@@ -13,6 +13,7 @@
 #include "selectauthorsdialog.h"
 #include <klocale.h>
 #include <qhbox.h>
+#include <kmessagebox.h>
 #include <qmessagebox.h>
 
 #include "DBBackend/recipedb.h"
@@ -129,6 +130,14 @@ for ( ElementList::const_iterator author_it = currentAuthors.begin(); author_it 
 
 void SelectAuthorsDialog::addAuthor(void)
 {
+//check bounds first
+if ( authorsCombo->currentText().length() > database->maxAuthorNameLength() )
+{
+	KMessageBox::error(this,QString(i18n("Author name cannot be longer than %1 characters.")).arg(database->maxAuthorNameLength()));
+	authorsCombo->lineEdit()->selectAll();
+	return;
+}
+
 if ( authorsCombo->contains(authorsCombo->currentText()) )
 	authorsCombo->setCurrentItem(authorsCombo->currentText());
 

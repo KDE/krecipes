@@ -59,8 +59,8 @@ StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editab
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&New"), this, SLOT(createNew()), CTRL+Key_N );
-		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_N );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->polish();
 
@@ -84,7 +84,10 @@ void StdAuthorListView::createNew()
 	
 	if ( elementDialog->exec() == QDialog::Accepted ) {
 		QString result = elementDialog->newElementName();
-		database->createNewAuthor(result); // Create the new author in the database
+	
+		//check bounds first
+		if ( checkBounds(result) )
+			database->createNewAuthor(result); // Create the new author in the database
 	}
 }
 
@@ -132,6 +135,11 @@ void StdAuthorListView::modAuthor(QListViewItem* i)
 
 void StdAuthorListView::saveAuthor(QListViewItem* i)
 {
+if ( !checkBounds(i->text(1)) ) {
+	reload(); //reset the changed text
+	return;
+}
+
 int existing_id = database->findExistingAuthorByName( i->text(1) );
 int author_id = i->text(0).toInt();
 if ( existing_id != -1 && existing_id != author_id ) //category already exists with this label... merge the two
@@ -150,6 +158,16 @@ else
 {
   database->modAuthor((i->text(0)).toInt(), i->text(1));
 }
+}
+
+bool StdAuthorListView::checkBounds( const QString &name )
+{
+	if ( name.length() > database->maxAuthorNameLength() ) {
+		KMessageBox::error(this,QString(i18n("Author name cannot be longer than %1 characters.")).arg(database->maxAuthorNameLength()));
+		return false;
+	}
+
+	return true;
 }
 
 #include "authorlistview.moc"

@@ -172,10 +172,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     // Signals & Slots
     connect(ingredientListView->listView(),SIGNAL(selectionChanged()),this, SLOT(updateLists()));
-    connect(addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
+    connect(addIngredientButton,SIGNAL(clicked()),list_view,SLOT(createNew()));
     connect(addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
-    connect(removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
+    connect(removeIngredientButton,SIGNAL(clicked()),list_view,SLOT(remove()));
     connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
     connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
     connect(propertiesListView->listView(),SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
@@ -229,17 +229,6 @@ database->loadPossibleUnits(ingredientID,unitList);
 unitsListView->listView()->setSelected(unitsListView->listView()->firstChild(),true);
 
 }
-}
-
-void IngredientsDialog::addIngredient(void)
-{
-CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Ingredient")));
-
-if ( elementDialog->exec() == QDialog::Accepted ) {
-   QString result = elementDialog->newElementName();
-   database->createNewIngredient(result); // Create the new ingredient in database
-}
-delete elementDialog;
 }
 
 void IngredientsDialog::addUnitToIngredient(void)
@@ -297,29 +286,6 @@ if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was select
 reloadUnitList(); // Reload the list from database
 reloadPropertyList(); // Properties could have been removed if a unit is removed, so we need to reload.
 }
-}
-
-
-void IngredientsDialog::removeIngredient(void)
-{
-// Find selected ingredient item
-QListViewItem *it;
-int ingredientID=-1;
-if ( (it=ingredientListView->listView()->selectedItem()) ) ingredientID=it->text(0).toInt();
-
-if (ingredientID>=0) // an ingredient/unit combination was selected previously
-{
-ElementList dependingRecipes;
-database->findIngredientDependancies(ingredientID,&dependingRecipes);
-if (dependingRecipes.isEmpty()) database->removeIngredient(ingredientID);
-else { // Need Warning!
-  DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes);
-  if (warnDialog->exec()==QDialog::Accepted) database->removeIngredient(ingredientID);
-  delete warnDialog;
-	}
-
-}
-
 }
 
 void IngredientsDialog:: reloadPropertyList(void)

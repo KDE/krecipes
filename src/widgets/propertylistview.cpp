@@ -87,7 +87,7 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 
 		kpop = new KPopupMenu( this );
 		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_C );
-		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->polish();
 
@@ -115,7 +115,11 @@ void StdPropertyListView::createNew()
 		QString name = propertyDialog->newPropertyName();
 		QString units= propertyDialog->newUnitsName();
 		if (!((name.isNull()) || (units.isNull()))) // Make sure none of the fields are empty
-		database->addProperty(name, units);
+		{
+			//check bounds first
+			if ( checkBounds(name) )
+				database->addProperty(name, units);
+		}
 	}
 	delete propertyDialog;
 }
@@ -164,6 +168,11 @@ void StdPropertyListView::modProperty(QListViewItem* i)
 
 void StdPropertyListView::saveProperty(QListViewItem* i)
 {
+	if ( !checkBounds(i->text(1)) ) {
+		reload(); //reset the changed text
+		return;
+	}
+
 	int existing_id = database->findExistingPropertyByName( i->text(1) );
 	int prop_id = i->text(0).toInt();
 	if ( existing_id != -1 && existing_id != prop_id ) //category already exists with this label... merge the two
@@ -180,6 +189,16 @@ void StdPropertyListView::saveProperty(QListViewItem* i)
 	}
 	else
 		database->modProperty(prop_id, i->text(1));
+}
+
+bool StdPropertyListView::checkBounds( const QString &name )
+{
+	if ( name.length() > database->maxPropertyNameLength() ) {
+		KMessageBox::error(this,QString(i18n("Property name cannot be longer than %1 characters.")).arg(database->maxPropertyNameLength()));
+		return false;
+	}
+
+	return true;
 }
 
 

@@ -62,6 +62,8 @@ private slots:
 	void saveAuthor(QListViewItem* i);
 
 private:
+	bool checkBounds( const QString &name );
+
 	KPopupMenu *kpop;
 };
 

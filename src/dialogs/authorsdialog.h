@@ -44,10 +44,5 @@ private:
 	QPushButton *newAuthorButton;
 	QPushButton *removeAuthorButton;
 	KIconLoader *il;
-
-private slots:
-	void createNewAuthor(void);
-	void removeAuthor(void);
-
 };
 #endif

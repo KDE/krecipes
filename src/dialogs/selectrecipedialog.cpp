@@ -93,7 +93,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
   editButton->setDisabled(true);
 	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setIconSet(pm);
 	removeButton=new QPushButton(buttonBar);
-	removeButton->setText(i18n("Remove"));
+	removeButton->setText(i18n("Delete"));
   removeButton->setDisabled(true);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);

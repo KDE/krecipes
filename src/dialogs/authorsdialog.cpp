@@ -50,8 +50,8 @@ layout->addLayout(vboxl);
 
 //Connect Signals & Slots
 
-connect (newAuthorButton,SIGNAL(clicked()),this,SLOT(createNewAuthor()));
-connect (removeAuthorButton,SIGNAL(clicked()),this,SLOT(removeAuthor()));
+connect (newAuthorButton,SIGNAL(clicked()),authorListView,SLOT(createNew()));
+connect (removeAuthorButton,SIGNAL(clicked()),authorListView,SLOT(remove()));
 }
 
 AuthorsDialog::~AuthorsDialog()
@@ -62,31 +62,6 @@ AuthorsDialog::~AuthorsDialog()
 void AuthorsDialog::reload(void)
 {
 	authorListView->reload();
-}
-
-void AuthorsDialog::createNewAuthor(void)
-{
-CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Author"));
-
-if ( elementDialog->exec() == QDialog::Accepted ) {
-   QString result = elementDialog->newElementName();
-   database->createNewAuthor(result); // Create the new author in the database
-}
-}
-
-void AuthorsDialog::removeAuthor(void)
-{
-// Find the selected author item
-QListViewItem *item = authorListView->selectedItem();
-
-if ( item )
-{
-	switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this author?")))
-	{
-	case KMessageBox::Continue: database->removeAuthor(item->text(0).toInt()); break;
-	default: break;
-	}
-}
 }
 
 #include "authorsdialog.moc"

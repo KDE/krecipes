@@ -46,10 +46,5 @@ private:
 	QPushButton *newPrepMethodButton;
 	QPushButton *removePrepMethodButton;
 	KIconLoader *il;
-
-private slots:
-	void createNewPrepMethod(void);
-	void removePrepMethod(void);
-
 };
 #endif

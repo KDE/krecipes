@@ -206,6 +206,8 @@ private slots:
 	void saveCategory(QListViewItem* i);
 
 private:
+	bool checkBounds( const QString &name );
+	
 	KPopupMenu *kpop;
 	QListViewItem *clipboard_item;
 	QListViewItem *clipboard_parent;

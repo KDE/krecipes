@@ -41,18 +41,18 @@ private:
 	ConversionTable *conversionTable;
 	QPushButton *newUnitButton;
 	QPushButton *removeUnitButton;
+
 	// Internal methods
 	void loadUnitsList(void);
 	void reloadData(void);
 	void saveAllRatios( UnitRatioList &ratioList );
+	bool checkBounds( const QString &name );
+
 	// Internal Variables
 	RecipeDB *database;
 private slots:
 	void loadConversionTable(void);
-	void createNewUnit(void);
-	void removeUnit(void);
 	void saveRatio(int r, int c, double value);
-
 };
 
 #endif

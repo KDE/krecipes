@@ -16,6 +16,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
+#include <kmessagebox.h>
 
 #include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
@@ -114,6 +115,14 @@ void SelectCategoriesDialog::createNewCategory(void)
 	{
 		QString result = categoryDialog->newCategoryName();
 		int subcategory = categoryDialog->subcategory();
+	
+		//check bounds first
+		if ( result.length() > database->maxCategoryNameLength() )
+		{
+			KMessageBox::error(this,QString(i18n("Category name cannot be longer than %1 characters.")).arg(database->maxCategoryNameLength()));
+			return;
+		}
+
 		database->createNewCategory(result,subcategory); // Create the new category in the database
 		
 		Element new_cat(result,database->lastInsertID());

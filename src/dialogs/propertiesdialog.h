@@ -30,9 +30,7 @@ public:
     PropertiesDialog(QWidget *parent,RecipeDB *db);
     ~PropertiesDialog();
     void reload(void);
-public slots:
-    void createNewProperty(void);
-    void removeProperty(void);
+
 private:
   // Variables
     RecipeDB *database;

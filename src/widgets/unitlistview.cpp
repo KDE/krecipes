@@ -63,7 +63,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 
 		kpop = new KPopupMenu( this );
 		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_C );
-		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->polish();
 
@@ -83,12 +83,16 @@ void StdUnitListView::showPopup(KListView */*l*/, QListViewItem *i, const QPoint
 
 void StdUnitListView::createNew()
 {
-	CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Unit"));
+	CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Unit")));
 	
 	if ( elementDialog->exec() == QDialog::Accepted ) {
 		QString result = elementDialog->newElementName();
-		database->createNewUnit(result); // Create the new author in the database
+	
+		//check bounds first
+		if ( checkBounds(result) )
+			database->createNewUnit(result); // Create the new unit in database
 	}
+	delete elementDialog;
 }
 
 void StdUnitListView::remove()
@@ -141,6 +145,11 @@ void StdUnitListView::modUnit(QListViewItem* i)
 
 void StdUnitListView::saveUnit(QListViewItem* i)
 {
+	if ( !checkBounds(i->text(1)) ) {
+		reload(); //reset the changed text
+		return;
+	}
+
 	int existing_id = database->findExistingUnitByName( i->text(1) );
 	int unit_id = i->text(0).toInt();
 	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
@@ -157,6 +166,16 @@ void StdUnitListView::saveUnit(QListViewItem* i)
 	else {
 		database->modUnit((i->text(0)).toInt(), i->text(1));
 	}
+}
+
+bool StdUnitListView::checkBounds( const QString &name )
+{
+	if ( name.length() > database->maxUnitNameLength() ) {
+		KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
+		return false;
+	}
+
+	return true;
 }
 
 #include "unitlistview.moc"

@@ -58,39 +58,12 @@ layout->addLayout(vboxl);
 
 //Connect Signals & Slots
 
-connect (newCategoryButton,SIGNAL(clicked()),this,SLOT(createNewCategory()));
-connect (removeCategoryButton,SIGNAL(clicked()),this,SLOT(removeCategory()));
+connect (newCategoryButton,SIGNAL(clicked()),categoryListView,SLOT(createNew()));
+connect (removeCategoryButton,SIGNAL(clicked()),categoryListView,SLOT(remove()));
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()
 {
-}
-
-void CategoriesEditorDialog::createNewCategory(void)
-{
-ElementList categories; database->loadCategories(&categories);
-CreateCategoryDialog* categoryDialog=new CreateCategoryDialog(this,categories);
-
-if ( categoryDialog->exec() == QDialog::Accepted ) {
-   QString result = categoryDialog->newCategoryName();
-   int subcategory = categoryDialog->subcategory();
-   database->createNewCategory(result,subcategory); // Create the new category in the database
-}
-delete categoryDialog;
-}
-
-void CategoriesEditorDialog::removeCategory(void)
-{
-	QListViewItem *item = categoryListView->selectedItem();
-
-	if ( item )
-	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this category and all its subcategories?")))
-		{
-		case KMessageBox::Continue: database->removeCategory(item->text(1).toInt()); break;
-		default: break;
-		}
-	}
 }
 
 #include "categorieseditordialog.moc"

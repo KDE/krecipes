@@ -123,6 +123,7 @@ private:
 
 	// Internal functions
 	bool checkAmountEdit();
+	bool checkBounds();
 	void createNewIngredientIfNecessary();
 	int createNewUnitIfNecessary( const QString &unit, const QString &ingredient );
 	int createNewPrepIfNecessary( const QString &prep );
