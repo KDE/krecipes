@@ -316,12 +316,6 @@ void Krecipes::import()
 		}
 		
 		delete importer;
-
-		KApplication::setOverrideCursor( KCursor::waitCursor() );
-		m_view->selectPanel->reload();
-		m_view->unitsPanel->reload();
-		m_view->shoppingListPanel->reload();
-		KApplication::restoreOverrideCursor();
 	}
 }
 
