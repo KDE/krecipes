@@ -10,6 +10,8 @@
 
 #include "resizerecipedialog.h"
 
+#include <cmath>
+
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
@@ -135,7 +137,7 @@ void ResizeRecipeDialog::languageChange()
     newServingsLabel->setText( i18n( "New servings:" ) );
     currentServingsLabel->setText( i18n( "Current servings:" ) );
     factorRadioButton->setText( i18n( "Scale by factor" ) );
-    factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple, etc.):" ) ); //Maybe make this more description, describing exactly what multiplying by a factor does
+    factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple, etc.):" ) );
     buttonOk->setText( i18n( "&OK" ) );
     buttonOk->setAccel( QKeySequence( QString::null ) );
     buttonCancel->setText( i18n( "&Cancel" ) );
