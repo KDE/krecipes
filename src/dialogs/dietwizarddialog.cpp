@@ -170,7 +170,7 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 			{
 				int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
 				RecipeList::Iterator rit=tempRList.at(random_index);
-				if (found=(checkCategories(*rit,meal,dish) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
+				if (found=(((!categoryFiltering(meal,dish)) ||checkCategories(*rit,meal,dish)) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
 				{
 				dietRList.append(*rit);// Add recipe to the diet list
 				}
@@ -414,6 +414,12 @@ dishStack->raiseWidget(*it);
 
 DishInput::DishInput(QWidget* parent,const QString &title):QWidget(parent)
 {
+
+// Initialize internal variables
+categoryFiltering=false;
+
+// Design the widget
+
 QVBoxLayout *layout=new QVBoxLayout(this);
 layout->setSpacing(20);
 
@@ -425,9 +431,14 @@ layout->addWidget(listBox);
 dishTitle=new DishTitle(listBox,title);
 
 	//Categories list
-categoriesView=new KListView(listBox);
+categoriesBox=new QVBox(listBox);
+categoriesEnabledBox=new QCheckBox(categoriesBox);
+categoriesEnabledBox->setText(i18n("Enable Category Filtering"));
+
+categoriesView=new KListView(categoriesBox);
 categoriesView->addColumn("*");
 categoriesView->addColumn(i18n("Category"));
+categoriesView->setEnabled(false); // Disable it by default
 
 	//Constraints list
 constraintsView=new KListView(listBox);
@@ -447,10 +458,22 @@ constraintsEditBox2->hide();
 connect(constraintsView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertConstraintsEditBoxes(QListViewItem*)));
 connect(constraintsEditBox1,SIGNAL(valueChanged(double)),this,SLOT(setMinValue(double)));
 connect(constraintsEditBox2,SIGNAL(valueChanged(double)),this,SLOT(setMaxValue(double)));
+connect(categoriesEnabledBox,SIGNAL(toggled(bool)),this,SLOT(enableCategories(bool)));
 }
 
 DishInput::~DishInput()
 {
+}
+
+void DishInput::enableCategories(bool enable)
+{
+categoriesView->setEnabled(enable);
+categoryFiltering=enable;
+}
+
+bool DishInput::isCategoryFilteringEnabled(void)
+{
+return categoryFiltering;
 }
 
 void DishInput::reload(ElementList *categoryList, IngredientPropertyList *propertyList)
@@ -696,6 +719,13 @@ void DietWizardDialog::loadEnabledCategories(int meal,int dish,ElementList *cate
 MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
 DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
 dishInput->loadEnabledCategories(categories); //Load the categories that have been checked in the KListView
+}
+
+bool DietWizardDialog::categoryFiltering(int meal,int dish)
+{
+MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
+DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
+return(dishInput->isCategoryFilteringEnabled()); //Load the categories that have been checked in the KListView
 }
 
 bool DietWizardDialog::checkLimits(IngredientPropertyList &properties,ConstraintList &constraints)

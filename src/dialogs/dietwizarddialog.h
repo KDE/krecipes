@@ -13,20 +13,21 @@
 #ifndef DIETWIZARDDIALOG_H
 #define DIETWIZARDDIALOG_H
 
-#include <klistview.h>
-
-#include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
+#include <qpushbutton.h>
 #include <qslider.h>
+#include <qspinbox.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <qvaluelist.h>
 #include <qvbox.h>
 #include <qvgroupbox.h>
-#include <qspinbox.h>
 #include <qwidgetstack.h>
+
+#include <klistview.h>
 
 #include "datablocks/constraintlist.h"
 #include "elementlist.h"
@@ -81,6 +82,7 @@ private:
 	void loadConstraints(int meal,int dish,ConstraintList *constraints);
 	void loadEnabledCategories(int meal,int dish,ElementList *categories);
 	void newTab(const QString &name);
+	bool categoryFiltering(int meal,int dish);
 
 public:
 	//Methods
@@ -145,6 +147,7 @@ public:
 	DishInput(QWidget *parent,const QString &title);
 	~DishInput();
 	// Methods
+	bool isCategoryFilteringEnabled(void);
 	void loadConstraints(ConstraintList *constraints);
 	void loadEnabledCategories(ElementList* categories);
 	void reload(ElementList *categoryList, IngredientPropertyList *propertyList);
@@ -152,13 +155,19 @@ public:
 
 
 private:
+		// Variables
+		bool categoryFiltering;
+		// Widgets
 		QHGroupBox *listBox;
 		DishTitle *dishTitle;
+		QVBox *categoriesBox;
+		QCheckBox *categoriesEnabledBox;
 		KListView *categoriesView;
 		KListView *constraintsView;
 		EditBox *constraintsEditBox1;
 		EditBox *constraintsEditBox2;
 private slots:
+		void enableCategories(bool enable);
 		void insertConstraintsEditBoxes(QListViewItem* it);
 		void setMinValue(double minValue);
 		void setMaxValue(double maxValue);
