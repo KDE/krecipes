@@ -950,22 +950,41 @@ bool MySQLRecipeDB::checkIntegrity(void)
 // Check existence of the necessary tables (the database may be created, but empty)
 QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
 QString command=QString("SHOW TABLES;");
+
 QSqlQuery tablesToCheck( command,database);
+
+QStringList existingTableList;
+
+// Get the existing list first
+
 if (tablesToCheck.isActive())
 {
-	for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
-	{
-	bool found=false;
-	while (tablesToCheck.next() && !found)
+	while (tablesToCheck.next())
 		{
 		QString tableName=tablesToCheck.value(0).toString();
-		found=(tableName==*it); // Table exists
+		existingTableList<<tableName;
 		}
-	if (!found) createTable(*it);
-	}
 }
 
 else return(false);
+
+for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
+{
+	bool found=false;
+
+	for (QStringList::Iterator ex_it = existingTableList.begin(); ((ex_it != existingTableList.end()) && (!found)); ++ex_it)
+	{
+	found=(*ex_it==*it);
+	}
+
+	if (!found)
+	{
+	std::cerr<<"Recreating missing table: "<<*it<<"\n";
+	createTable(*it);
+	}
+}
+
+
 
 // Check for older versions, and port
 
@@ -1008,6 +1027,8 @@ else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id 
 else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
 else return;
+
+QSqlQuery databaseToCreate(command,database); // execute the query
 
 }
 
