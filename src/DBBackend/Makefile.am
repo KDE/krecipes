@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 
 # set the include path for X, qt and KDE
-INCLUDES         = -I $(srcdir) -I $(srcdir)/.. -I $(all_includes)
+INCLUDES         = -I $(srcdir) -I $(srcdir)/.. $(all_includes)
 
 # Check for optional database libs
 if link_lib_MYSQL
