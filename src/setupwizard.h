@@ -10,16 +10,19 @@
 #ifndef SETUPWIZARD_H
 #define SETUPWIZARD_H
 
-#include <kwizard.h>
 #include <qlabel.h>
-#include <qlineedit.h>
+
+#include <kwizard.h>
+#include <klineedit.h>
+#include <ktextedit.h>
+
 
 /**
 @author Unai Garro
 */
 
 class WelcomePage;
-
+class ServerSetupPage;
 class SetupWizard:public KWizard{
 public:
 
@@ -28,8 +31,7 @@ public:
 private:
 	// Widgets
 	WelcomePage *welcomePage;
-
-
+	ServerSetupPage *serverSetupPage;
 
 };
 
@@ -41,7 +43,22 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
-	QLabel *welcomeText;
+	KTextEdit *welcomeText;
+
+};
+
+class ServerSetupPage:public QWidget{
+public:
+	// Methods
+	ServerSetupPage(QWidget *parent);
+
+private:
+	// Widgets
+	QLabel *logo;
+	KLineEdit *serverEdit;
+	KLineEdit *usernameEdit;
+	KLineEdit *passwordEdit;
+	KLineEdit *dbNameEdit;
 
 };
 
