@@ -22,6 +22,8 @@
 #include "ingredientsdialog.h"
 #include "propertiesdialog.h"
 #include "shoppinglistdialog.h"
+#include "dietwizarddialog.h"
+
 
 class QPainter;
 
@@ -36,6 +38,12 @@ class QPainter;
  * @author Unai Garro <ugarro@users.sourceforge.net>
  * @version 0.2
  */
+
+
+ // Some constants
+
+ enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, DietWizardP=10};
+
 class KrecipesView : public QVBox, public KrecipesIface
 {
     Q_OBJECT
@@ -77,6 +85,7 @@ public:
 	PropertiesDialog *propertiesPanel;
 	UnitsDialog* unitsPanel;
 	ShoppingListDialog* shoppingListPanel;
+	DietWizardDialog* dietPanel;
 
 	// public methods
 	void createNewRecipe(void);
@@ -110,6 +119,7 @@ public slots:
 private slots:
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
+    void slotSetDietWizardPanel(void);
     void actionRecipe(int recipeID, int action);
 
 

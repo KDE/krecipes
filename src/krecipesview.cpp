@@ -46,8 +46,8 @@ KrecipesView::KrecipesView(QWidget *parent)
 // Create Left and Right Panels (splitter)
 
 
-    leftPanel=new QButtonGroup(splitter);
-    rightPanel=new QWidgetStack(splitter);
+    leftPanel=new QButtonGroup(splitter,"leftPanel");
+    rightPanel=new QWidgetStack(splitter,"rightPanel");
 
     // Design Resizing of the panels
    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
@@ -81,8 +81,12 @@ KrecipesView::KrecipesView(QWidget *parent)
     propertiesPanel=new PropertiesDialog(rightPanel,database);rightPanel->addWidget(propertiesPanel);
     unitsPanel=new UnitsDialog(rightPanel,database); rightPanel->addWidget(unitsPanel);
     shoppingListPanel=new ShoppingListDialog(rightPanel,database); rightPanel->addWidget(shoppingListPanel);
+    dietPanel=new DietWizardDialog(rightPanel,database);
+    rightPanel->addWidget(dietPanel);
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
+     connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
+
 
     rightPanel->raiseWidget(selectPanel);
 
@@ -118,20 +122,22 @@ void KrecipesView::slotSetPanel(int w)
 {
 switch (w)
 {
-case 0: selectPanel->reload(); // Reload data
+case SelectP: selectPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(selectPanel);
 	break;
-case 1: shoppingListPanel->reload(); // Reload data
+case ShoppingP: shoppingListPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(shoppingListPanel);
 	break;
-case 2: ingredientsPanel->reload();// Reload data
+case IngredientsP: ingredientsPanel->reload();// Reload data
 	this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
-case 3: propertiesPanel->reload();
+case PropertiesP: propertiesPanel->reload();
 	this->rightPanel->raiseWidget(propertiesPanel);
 	break;
-case 4: unitsPanel->reload(); // Reload data
+case UnitsP: unitsPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(unitsPanel);
+	break;
+case DietWizardP: this->rightPanel->raiseWidget(dietPanel);
 	break;
 
 }
@@ -192,6 +198,11 @@ SetupWizard* setupWizard=new SetupWizard();
 setupWizard->exec();
 }
 
+}
+
+void KrecipesView::slotSetDietWizardPanel(void)
+{
+rightPanel->raiseWidget(dietPanel);
 }
 
 #include "krecipesview.moc"
