@@ -11,28 +11,22 @@
 #define ELEMENTLIST_H
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
+
 #include "element.h"
 
 /**
 @author Unai Garro
 */
-class ElementList: public QPtrList<Element>{
+class ElementList: public QValueList<Element>
+{
 public:
     ElementList();
-    ElementList(const ElementList &el);
     ~ElementList();
 
-    bool containsId(int id);
-    Element* getFirst(void);
-    Element* getPrev(void);
-    Element* getNext(void);
-    Element* getLast(void);
-    Element* getElement(int index);
-    void add(Element &element);
-
-    ElementList &operator=(const ElementList& el);
-    protected:
-    virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Element*)item1)->id-((Element*)item2)->id);};
+    bool containsId(int id) const;
+    Element getElement(int index) const;
+    void add(const Element &element){ append(element); } //get rid of this function... use append()
 };
 
 

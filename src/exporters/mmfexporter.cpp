@@ -60,15 +60,13 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 	QString title = recipe.title; title.truncate(60);
 	content += "      Title: "+title+"\n";
 
-	QPtrListIterator<Element> cat_it( recipe.categoryList );
-	Element *cat; int i = 0; QStringList categories;
-	while ( (cat = cat_it.current()) != 0 )
+	int i = 0; QStringList categories;
+	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it )
 	{
-		++cat_it; i++;
+		i++;
 
 		if ( i == 6 ) break; //maximum of 5 categories
-
-		categories << cat->name;
+		categories << (*cat_it).name;
 	}
 	QString cat_str =  " Categories: "+categories.join(", "); cat_str.truncate(67);
 	content += cat_str+"\n";

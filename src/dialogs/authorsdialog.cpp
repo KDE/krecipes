@@ -77,9 +77,9 @@ authorListView->clear();
 
 ElementList authorList;
 database->loadAuthors(&authorList);
-for (Element *author=authorList.getFirst();author; author=authorList.getNext())
+for ( ElementList::const_iterator author_it = authorList.begin(); author_it != authorList.end(); ++author_it )
 	{
-	(void)new QListViewItem(authorListView,QString::number(author->id),author->name);
+	(void)new QListViewItem(authorListView,QString::number((*author_it).id),(*author_it).name);
 	}
 }
 

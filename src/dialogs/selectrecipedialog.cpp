@@ -154,38 +154,38 @@ ElementList categoryList;
 
 database->loadCategories(&categoryList);
 
-for ( Element *category=categoryList.getFirst(); category; category=categoryList.getNext())
+for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
 	{
-	QListViewItem *it=new QListViewItem(recipeListView,category->name,"","");
-	categoryItems.insert(category->id,it);
+	QListViewItem *it=new QListViewItem(recipeListView,(*cat_it).name,"","");
+	categoryItems.insert((*cat_it).id,it);
 	}
 
 
 // Now show the recipes
 
-int *categoryID;
-Element *recipe;
 QIntDict <bool> recipeCategorized; recipeCategorized.setAutoDelete(true); // it deletes the bools after finished
 QPtrList <int> recipeCategoryList;
 
 database->loadRecipeList(recipeList,0,&recipeCategoryList); // Read the whole list of recipes including category
 
-for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
+int *categoryID;
+ElementList::const_iterator recipe_it;
+for ( recipe_it=recipeList->begin(),categoryID=recipeCategoryList.first();recipe_it != recipeList->end() && categoryID;++recipe_it,categoryID=recipeCategoryList.next() )
 	{
 	if (QListViewItem* categoryItem=categoryItems[*categoryID])
 	{
-	(void)new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
-	bool* b=new bool; *b=true;recipeCategorized.insert(recipe->id,b); // mark the recipe as categorized
+	(void)new QListViewItem (categoryItem,"",QString::number((*recipe_it).id),(*recipe_it).name,"");
+	bool* b=new bool; *b=true;recipeCategorized.insert((*recipe_it).id,b); // mark the recipe as categorized
 	}
 	}
 
 
 // Add those recipes that have not been categorised in any categories
-for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
+for ( recipe_it=recipeList->begin(),categoryID=recipeCategoryList.first();recipe_it != recipeList->end() && categoryID;++recipe_it,categoryID=recipeCategoryList.next() )
 	{
-	if (!recipeCategorized[recipe->id])
+	if (!recipeCategorized[(*recipe_it).id])
 	{
-	(void)new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
+	(void)new QListViewItem (recipeListView,"...",QString::number((*recipe_it).id),(*recipe_it).name);
 	}
 	}
 
@@ -280,7 +280,7 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 
 void SelectRecipeDialog::filterCategories(int categoryID)
 {
-std::cerr<<"I got category :"<<categoryID<<"\n";
+kdDebug()<<"I got category :"<<categoryID<<"\n";
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (categoryID==-1) it->setVisible(true); // We're not filtering categories
@@ -306,10 +306,10 @@ categoryBox->insertItem(i18n("All Categories"));
 
 //Now load the categories
 int row=1;
-for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
+for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
 	{
-	categoryBox->insertItem(category->name);
-	categoryComboRows.insert(row,new int(category->id)); // store category id's in the combobox position to obtain the category id later
+	categoryBox->insertItem((*cat_it).name);
+	categoryComboRows.insert(row,new int((*cat_it).id)); // store category id's in the combobox position to obtain the category id later
 	row++;
 	}
 
@@ -407,7 +407,7 @@ void SelectRecipeDialog::showPopup( KListView */*l*/, QListViewItem *i, const QP
 
 void SelectRecipeDialog::filterComboCategory(int row)
 {
-std::cerr<<"I got row "<<row<<"\n";
+kdDebug()<<"I got row "<<row<<"\n";
 
 //First get the category ID corresponding to this combo row
 int categoryID;

@@ -11,29 +11,27 @@
  ***************************************************************************/
 
 #include "selectcategoriesdialog.h"
+
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "DBBackend/recipedb.h"
 
 class CategoryListItem:public QCheckListItem{
 public:
-	CategoryListItem(QListView* qlv, Element *el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox){ elStored=new Element(*el);}
+	CategoryListItem(QListView* qlv, const Element &el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox),elStored(el){}
 private:
-	Element *elStored;
+	const Element elStored;
 
 public:
 	virtual QString text(int column) const
 		{
-		if (column==1) return(elStored->name);
+		if (column==1) return(elStored.name);
 		else return(QString::null);
 		}
-	~CategoryListItem(void)
-	{
-	delete elStored;
-	}
 };
 
-SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, ElementList *categoryList,QPtrList <bool> *selected):QDialog(parent,0,true)
+SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected):QDialog(parent,0,true)
 {
 
 // Store pointer
@@ -88,25 +86,29 @@ SelectCategoriesDialog::~SelectCategoriesDialog()
 
 void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected)
 {
-Element *el=categoryListPC->getFirst(); // Initialize to first element
+ElementList::const_iterator element_it = categoryListPC.begin(); // Initialize to first element
 
 for (CategoryListItem *it=(CategoryListItem *) categoryListView->firstChild();it; it=(CategoryListItem *) it->nextSibling())
 	{
-
 	/*bool *newValue=new bool;*/
-	if (it->isOn()) newSelected->add(*el); // If checked, add
-	el=categoryListPC->getNext();
+	if (it->isOn()) newSelected->append(*element_it); // If checked, add
+
+	element_it++;
 	}
 
 }
 
-void SelectCategoriesDialog::loadCategories(ElementList *categoryList, QPtrList <bool> *selected)
+void SelectCategoriesDialog::loadCategories(const ElementList &categoryList, QPtrList <bool> *selected)
 {
-bool *checked=selected->first();
-for (Element *el=categoryList->getLast();el;el=categoryList->getPrev())
+bool *checked=selected->last();
+
+ElementList::const_iterator cat_it = categoryList.end();
+--cat_it;
+for ( int i = 0; i < categoryList.count(); i++ )
 {
-CategoryListItem *it=new CategoryListItem(categoryListView,el);
-if (*checked) it->setOn(true);
-checked=selected->next();
+	CategoryListItem *it=new CategoryListItem(categoryListView,*cat_it);
+	if (*checked) it->setOn(true);
+	checked=selected->prev();
+	--cat_it;
 }
 }

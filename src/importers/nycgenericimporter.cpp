@@ -110,7 +110,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		{
 			Element new_cat( QString(*it).stripWhiteSpace() );
 			kdDebug()<<"Found category: "<<new_cat.name<<endl;
-			m_categories.add( new_cat );
+			m_categories.append( new_cat );
 		}
 	}
 
@@ -126,7 +126,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		{
 			Element new_author( current.mid(current.find(':')+1,current.length()).stripWhiteSpace() );
 			kdDebug()<<"Found author: "<<new_author.name<<endl;
-			m_authors.add( new_author );
+			m_authors.append( new_author );
 		}
 		else if ( current.startsWith("Preparation Time:") )
 		{
@@ -190,7 +190,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	if ( current.contains("-----") )
 	{
 		Ingredient new_ingredient( current.stripWhiteSpace(), 0, "" );
-		m_ingredients.add(new_ingredient);
+		m_ingredients.append(new_ingredient);
 		kdDebug()<<"Found ingredient header: "<<new_ingredient.name<<endl;
 		return;
 	}
@@ -243,7 +243,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	*/
 
 	Ingredient new_ingredient( name, amount.toDouble(), unit );
-	m_ingredients.add(new_ingredient);
+	m_ingredients.append(new_ingredient);
 	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
 	  <<", unit:"<<new_ingredient.units
 	  <<", name:"<<new_ingredient.name<<endl;

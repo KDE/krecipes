@@ -180,9 +180,9 @@ database->loadIngredients(ingredientList);
 
 //Populate this data into the KListView
 
-	for ( Element *ing =ingredientList->getFirst(); ing; ing =ingredientList->getNext() )
+	for ( ElementList::const_iterator ing_it = ingredientList->begin(); ing_it != ingredientList->end(); ++ing_it )
 	{
-	(void) new QListViewItem(ingredientListView->listView(),QString::number(ing->id),ing->name);
+	(void) new QListViewItem(ingredientListView->listView(),QString::number((*ing_it).id),(*ing_it).name);
 	}
 
 // Reload Unit List
@@ -211,9 +211,9 @@ database->loadPossibleUnits(ingredientID,unitList);
 
 //Populate this data into the KListView
 
-	for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
+	for ( ElementList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it )
 	{
-	(void)new QListViewItem(unitsListView->listView(),QString::number(unit->id),unit->name);
+	(void)new QListViewItem(unitsListView->listView(),QString::number((*unit_it).id),(*unit_it).name);
 	}
 
 // Select the first unit
@@ -271,7 +271,7 @@ if (ingredientID>=0) // an ingredient was selected previously
   ElementList allUnits;
   database->loadUnits(&allUnits);
 
-  SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,&allUnits);
+  SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,allUnits);
 
   if ( unitsDialog->exec() == QDialog::Accepted ) {
     int unitID = unitsDialog->unitID();
@@ -416,7 +416,7 @@ QListViewItem *it;
 int ingredientID=-1, propertyID=-1; int perUnitsID=-1;
 if ( (it=ingredientListView->listView()->selectedItem()) ) ingredientID=it->text(0).toInt();
 if ( (it=propertiesListView->listView()->selectedItem()) ) propertyID=it->text(0).toInt();
-if (propertyID>=0) perUnitsID=perUnitListBack->getElement(findPropertyNo(it))->id ;
+if (propertyID>=0) perUnitsID=perUnitListBack->getElement(findPropertyNo(it)).id ;
 
 if ((ingredientID>=0)&&(propertyID>=0) && (perUnitsID>=0)) // an ingredient/property combination was selected previously
 {
@@ -465,7 +465,7 @@ if (ing_it && prop_it)// Appart from property, Check if an ingredient is selecte
 prop_it->setText(2,QString::number(amount));
 int propertyID=prop_it->text(0).toInt();
 int ingredientID=ing_it->text(0).toInt();
-int per_units=perUnitListBack->getElement(findPropertyNo(prop_it))->id ;
+int per_units=perUnitListBack->getElement(findPropertyNo(prop_it)).id ;
 database->changePropertyAmountToIngredient(ingredientID,propertyID,amount,per_units);
 }
 

@@ -72,7 +72,7 @@ MX2Importer::MX2Importer(const QString& filename)
 				recipe->title = el.attribute("name");
 
 				Element author( el.attribute("author") );
-				recipe->authorList.add( author );
+				recipe->authorList.append( author );
 
 				readRecipe( el.childNodes(), recipe );
 				add(recipe);
@@ -110,7 +110,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 					if (c.text().length() > 0)
 					{
 						Element cat( c.text().stripWhiteSpace() );
-						recipe->categoryList.add( cat );
+						recipe->categoryList.append( cat );
 					}
 				}
 			}
@@ -132,7 +132,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 						; // TODO: What does it mean?... ingredient nutrient info?
 				}
 			}
-			recipe->ingList.add(new_ing);
+			recipe->ingList.append(new_ing);
 		}
 		else if (tagName == "DirS")
 		{

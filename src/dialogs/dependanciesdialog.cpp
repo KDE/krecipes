@@ -15,7 +15,7 @@
 #include <qlayout.h>
 #include <klocale.h>
 
-DependanciesDialog::DependanciesDialog(QWidget *parent,ElementList* recipeList, ElementList* ingredientList,ElementList* propertiesList):QDialog(parent,0,true)
+DependanciesDialog::DependanciesDialog(QWidget *parent,const ElementList* recipeList, const ElementList* ingredientList,const ElementList* propertiesList):QDialog(parent,0,true)
 {
 int row=3, col=1;
 
@@ -126,13 +126,13 @@ DependanciesDialog::~DependanciesDialog()
 }
 
 
-void DependanciesDialog::loadList(KListView* listView,ElementList *list)
+void DependanciesDialog::loadList(KListView* listView,const ElementList *list)
 {
-Element *el;
-for (el=list->getFirst();el;el=list->getNext()){
-	QString id; int idnum=el->id;
+for ( ElementList::const_iterator el_it = list->begin(); el_it != list->end(); ++el_it )
+{
+	QString id; int idnum=(*el_it).id;
 	if (idnum<0) id="-"; else id=QString::number(idnum);
-	QListViewItem* it=new QListViewItem(listView,id,el->name);
+	QListViewItem* it=new QListViewItem(listView,id,(*el_it).name);
 	listView->insertItem(it);
 	}
 }

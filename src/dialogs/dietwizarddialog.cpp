@@ -382,9 +382,9 @@ propertyListLocalCache.clear();
 	}
 
 	//Cache the categories list
-	for (Element *el=categoriesList.getFirst(); el; el=categoriesList.getNext())
+	for ( ElementList::const_iterator cat_it = categoriesList.begin(); cat_it != categoriesList.end(); ++cat_it )
 	{
-	categoriesListLocalCache.add(*el);
+	categoriesListLocalCache.add(*cat_it);
 	}
 
 reload(); //load from the cache now
@@ -544,9 +544,9 @@ constraintsView->insertItem(it);
 }
 
 	//Load the categories list
-for (Element *el=categoryList->getFirst(); el; el=categoryList->getNext())
+for ( ElementList::const_iterator cat_it = categoryList->begin(); cat_it != categoryList->end(); ++cat_it )
 {
-CategoriesListItem *it=new CategoriesListItem(categoriesView,*el);
+CategoriesListItem *it=new CategoriesListItem(categoriesView,*cat_it);
 categoriesView->insertItem(it);
 }
 
@@ -738,9 +738,9 @@ bool DietWizardDialog::checkCategories(Recipe &rec,int meal,int dish)
 ElementList categoryList; loadEnabledCategories(meal,dish,&categoryList);
 
 
-for (Element *category=rec.categoryList.getFirst();category; category=rec.categoryList.getNext())
+for ( ElementList::const_iterator cat_it = rec.categoryList.begin(); cat_it != rec.categoryList.end(); ++cat_it )
 	{
-	if (categoryList.containsId(category->id)) return true;
+	if (categoryList.containsId((*cat_it).id)) return true;
 	}
 
 return false;

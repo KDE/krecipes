@@ -18,8 +18,9 @@
 #include <qpushbutton.h>
 #include <klistview.h>
 
+#include "elementlist.h"
+
 class RecipeDB;
-class ElementList;
 
 /**
 @author Unai Garro
@@ -30,7 +31,7 @@ Q_OBJECT
 
 public:
 
-    SelectCategoriesDialog(QWidget *parent, ElementList *categoryList,QPtrList <bool> *selected);
+    SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected);
     ~SelectCategoriesDialog();
     void getSelectedCategories(ElementList *selected);
 private:
@@ -42,9 +43,9 @@ private:
 	QPushButton *cancelButton;
 
 	//Variables
-	ElementList *categoryListPC; //Pointer copy
+	ElementList categoryListPC;
 	//Private methods
-	void loadCategories(ElementList *categoryList, QPtrList <bool> *selected);
+	void loadCategories(const ElementList &categoryList, QPtrList <bool> *selected);
 };
 
 #endif

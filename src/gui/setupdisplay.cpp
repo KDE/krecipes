@@ -326,14 +326,10 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//========================AUTHORS========================//
 	QString authors;
-	QPtrListIterator<Element> author_it( sample.authorList );
-	Element *author_el;
-	while ( (author_el = author_it.current()) != 0 )
+	for ( ElementList::const_iterator author_it = sample.authorList.begin(); author_it != sample.authorList.end(); ++author_it )
 	{
-        	++author_it;
-
 		if (authors != QString::null) authors += ",";
-		authors += author_el->name;
+		authors += (*author_it).name;
 	}
 
 	if ( authors.isNull() )
@@ -347,14 +343,10 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//========================CATEGORIES========================//
 	QString categories;
-	QPtrListIterator<Element> cat_it( sample.categoryList );
-	Element *cat_el;
-	while ( (cat_el = cat_it.current()) != 0 )
+	for ( ElementList::const_iterator cat_it = sample.categoryList.begin(); cat_it != sample.categoryList.end(); ++cat_it )
 	{
-        	++cat_it;
-
 		if (categories != QString::null) categories += ",";
-		categories += cat_el->name;
+		categories += (*cat_it).name;
 	}
 
 	if ( categories.isNull() )

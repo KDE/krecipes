@@ -27,7 +27,7 @@ class ShoppingListViewDialog:public QWidget{
 Q_OBJECT
 
 public:
-    ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList);
+    ShoppingListViewDialog(QWidget *parent, RecipeDB *db, const ElementList &recipeList);
     ~ShoppingListViewDialog();
 
 public slots:
@@ -44,8 +44,8 @@ private:
   RecipeDB  *database;
 
   // Internal Methods
-  void showShoppingList(ElementList *recipeList);
-  void display(IngredientList *ingredientList);
+  void showShoppingList(const ElementList &recipeList);
+  void display(const IngredientList &ingredientList);
 };
 
 #endif

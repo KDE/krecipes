@@ -107,7 +107,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 		Element new_cat;
 		new_cat.name = QString(*it).stripWhiteSpace();
 		kdDebug()<<"Found category: "<<new_cat.name<<endl;
-		m_categories.add( new_cat );
+		m_categories.append( new_cat );
 	}
 
 	//servings
@@ -232,7 +232,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	new_ingredient.name = string.mid( 11, 32 ).stripWhiteSpace();
 
 	//if we made it this far it is an ingredient line
-	list.add( new_ingredient );
+	list.append( new_ingredient );
 	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
 	  <<", unit:"<<new_ingredient.units
 	  <<", name:"<<new_ingredient.name<<endl;
@@ -264,7 +264,7 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		Ingredient title;
 		title.name = header;
 		title.units = ""; title.amount = 0;
-		m_all_ing.add( title );
+		m_all_ing.append( title );
 		return true;
 	}
 	else

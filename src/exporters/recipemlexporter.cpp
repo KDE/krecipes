@@ -66,25 +66,19 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				head_tag.appendChild( title_tag );
 
 				QDomElement source_tag = doc.createElement("source");
-				QPtrListIterator<Element> author_it( (*recipe_it).authorList );
-				Element *author;
-				while ( (author = author_it.current()) != 0 )
+				for ( ElementList::const_iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
 				{
-					++author_it;
 					QDomElement srcitem_tag = doc.createElement("srcitem");
-					srcitem_tag.appendChild( doc.createTextNode(author->name) );
+					srcitem_tag.appendChild( doc.createTextNode((*author_it).name) );
 					source_tag.appendChild(srcitem_tag);
 				}
 				head_tag.appendChild( source_tag );
 
 				QDomElement categories_tag = doc.createElement("categories");
-				QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
-				Element *cat;
-				while ( (cat = cat_it.current()) != 0 )
+				for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 				{
-					++cat_it;
 					QDomElement cat_tag = doc.createElement("cat");
-					cat_tag.appendChild( doc.createTextNode(cat->name) );
+					cat_tag.appendChild( doc.createTextNode( (*cat_it).name) );
 					categories_tag.appendChild(cat_tag);
 				}
 				head_tag.appendChild(categories_tag);

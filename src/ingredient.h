@@ -28,6 +28,8 @@ public:
     QString units;
     Ingredient& operator=(const Ingredient &ing);
 
+    /** Compare two elements by their id */
+    bool operator==(const Ingredient &);
 };
 
 #endif

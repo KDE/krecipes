@@ -26,7 +26,7 @@ Ingredient *i;
 while ( (i = it.current()) != 0 )
 {
 ++it;
-this->add(*i);
+this->append(*i);
 }
 }
 
@@ -34,8 +34,7 @@ IngredientList::~IngredientList()
 {
 }
 
-
-void IngredientList::add(Ingredient &ing)
+void IngredientList::append(const Ingredient &ing)
 {
 Ingredient *newIng=new Ingredient(ing);
 this->append (newIng);
@@ -96,7 +95,7 @@ Ingredient *i;
 while ( (i = it.current()) != 0 )
 {
 ++it;
-this->add(*i);
+this->append(*i);
 }
 return *this;
 }

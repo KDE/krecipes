@@ -129,7 +129,7 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
     }
     else if (el.tagName() == "author"){
       kdDebug()<<"Found author: "<<el.text()<<endl;
-      recipe->authorList.append( new Element(el.text()) );
+      recipe->authorList.append( Element(el.text()) );
     }
 		else if (el.tagName() == "serving"){
 			recipe->persons = el.text().toInt();
@@ -141,7 +141,7 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 				QDomElement c = categories.item(j).toElement();
 				if (c.tagName() == "cat"){
 						kdDebug()<<"Found category: "<<QString(c.text()).stripWhiteSpace()<<endl;
-						recipe->categoryList.append( new Element(QString(c.text()).stripWhiteSpace()) );
+						recipe->categoryList.append( Element(QString(c.text()).stripWhiteSpace()) );
 				}
 			}
 		}
@@ -189,7 +189,7 @@ void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe)
 						new_ing.units = QString(ing.text()).stripWhiteSpace();
 				}
       }
-		  recipe->ingList.add( new_ing );
+		  recipe->ingList.append( new_ing );
     }
   }
 }

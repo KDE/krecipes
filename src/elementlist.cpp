@@ -11,66 +11,19 @@
 
 ElementList::ElementList():QPtrList <Element>()
 {
-setAutoDelete(true);
-}
-
-ElementList::ElementList(const ElementList &el):QPtrList <Element>(el)
-{
-clear();
-setAutoDelete(true);
-QPtrListIterator<Element> it(el);
-Element *e;
-while ( (e = it.current()) != 0 )
-{
-++it;
-this->add(*e);
-}
 }
 
 ElementList::~ElementList()
 {
 }
 
-void ElementList::add(Element &element)
+Element ElementList::getElement(int index) const
 {
-this->append (new Element(element));
+return *(this->at(index));
 }
 
-Element* ElementList::getFirst(void){
-return(this->first());
-}
-
-Element* ElementList::getLast(void){
-return(this->last());
-}
-
-Element* ElementList::getPrev(void){
-return(this->prev());
-}
-
-Element* ElementList::getNext(void){
-return(this->next());
-}
-
-Element* ElementList::getElement(int index){
-return(this->at(index));
-}
-
-bool ElementList::containsId(int id) // Search by id (which uses search by item, with comparison defined on header)
+bool ElementList::containsId(int id) const // Search by id (which uses search by item, with comparison defined on header)
 {
 Element i; i.id=id;
-return((find(&i)>=0));
-}
-
-ElementList& ElementList::operator=(const ElementList &el)
-{
-clear();
-QPtrListIterator<Element> it(el);
-Element *e;
-while ( (e = it.current()) != 0 )
-{
-++it;
-this->add(*e);
-}
-return *this;
+return ( find(i) != end() );
 }

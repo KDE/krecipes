@@ -17,7 +17,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-void calculateShopping(ElementList *recipeList,IngredientList *ingredientList, RecipeDB *db);
+void calculateShopping(const ElementList &recipeList,IngredientList *ingredientList, RecipeDB *db);
 void sum (IngredientList *totalIngredientList,IngredientList *newIngredientList, RecipeDB *db);
 int autoConvertUnits(RecipeDB* database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID);
 #endif

@@ -35,7 +35,7 @@ public:
     ShoppingListDialog(QWidget *parent,RecipeDB *db);
     ~ShoppingListDialog();
     void reload(void);
-    void createShopping(RecipeList &rlist);
+    void createShopping(const RecipeList &rlist);
 
 private:
 

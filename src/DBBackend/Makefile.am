@@ -11,12 +11,12 @@ INCLUDES = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
 
 if link_lib_SQLITE
 sqlite_subdirs=libqsqlite SQLite
-sqlite_libs=SQLite/krecsqlite.la
+sqlite_libs=SQLite/libkrecsqlite.la
 endif
 
 if link_lib_MYSQL
 mysql_subdirs=MySQL
-mysql_libs=MySQL/krecmysql.la
+mysql_libs=MySQL/libkrecmysql.la
 endif
 
 # Optional subdirectories
@@ -25,7 +25,7 @@ SUBDIRS=$(mysql_subdirs) $(sqlite_subdirs)
 
 # Instructions for building the convenience library
 noinst_LTLIBRARIES=libkrecipesdbs.la
-libkrecipesdbs_la_SOURCES=recipedb.cpp 
+libkrecipesdbs_la_SOURCES=recipedb.cpp
 libkrecipesdbs_la_METASOURCES=AUTO
 
 #the library search path.

@@ -12,13 +12,13 @@
 #include "ingredientlist.h"
 #include "DBBackend/recipedb.h"
 
-void calculateShopping(ElementList *recipeList,IngredientList *ingredientList, RecipeDB *db)
+void calculateShopping(const ElementList &recipeList,IngredientList *ingredientList, RecipeDB *db)
 {
 
-for (Element *recipe=recipeList->getFirst();recipe; recipe=recipeList->getNext())
+for ( ElementList::const_iterator recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it )
 {
 Recipe rec;
-db->loadRecipe(&rec,recipe->id);
+db->loadRecipe(&rec,(*recipe_it).id);
 sum(ingredientList,&(rec.ingList),db);
 }
 
@@ -76,13 +76,13 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		else // Otherwise append this ingredient at the end of the list
 		{
 		// Insert ingredient ID in the list
-		totalIngredientList->add(*i);
+		totalIngredientList->append(*i);
 		}
 	}
 
 	else // The ingredient is not in the list, just append
 	{
-	totalIngredientList->add(*i);
+	totalIngredientList->append(*i);
 	}
 }
 

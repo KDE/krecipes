@@ -102,7 +102,7 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.unitID=row.data(2).toInt();
 		    list->recipeIdList.append(row.data(3).toInt());
 		    }
-		    list->ilist.add(ing);
+		    list->ilist.append(ing);
 
 		    row=ingredientsToLoad.next();
 
@@ -163,7 +163,7 @@ recipeToLoad=database->executeQuery( command);
 		    ing.unitID=row.data(3).toInt();
 		    ing.units=unescapeAndDecode(row.data(4));
 
-		    recipe->ingList.add(ing);
+		    recipe->ingList.append(ing);
 		    row=recipeToLoad.next();
 
                 }
@@ -287,7 +287,7 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    {
 		    RecipeList::Iterator it=recipeIterators[row.data(3).toInt()];
 		    //add the ingredient to the recipe
-		    (*it).ingList.add(ing);
+		    (*it).ingList.append(ing);
 		    }
 
 		    row=ingredientsToLoad.next();
@@ -461,12 +461,16 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 database->executeQuery(command);
 
-for (Element *cat=recipe->categoryList.getLast(); cat; cat=recipe->categoryList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
-	{
+ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+--cat_it;
+for ( int i = 0; i < recipe->categoryList.count(); i++ )
+{
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
-	.arg(cat->id);
+	.arg((*cat_it).id);
 	database->executeQuery(command);
+
+	--cat_it;
 }
 
 // Add the default category -1 to ease and speed up searches
@@ -480,12 +484,16 @@ command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 database->executeQuery(command);
 
-for (Element *author=recipe->authorList.getLast(); author; author=recipe->authorList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+--author_it;
+for ( int i = 0; i < recipe->authorList.count(); i++ )
 	{
 	command=QString("INSERT INTO author_list VALUES (%1,%2);")
 	.arg(recipeID)
-	.arg(author->id);
+	.arg((*author_it).id);
 	database->executeQuery(command);
+
+	--author_it;
 	}
 
 }

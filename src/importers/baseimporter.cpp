@@ -91,33 +91,32 @@ void BaseImporter::import( RecipeDB *db )
 			ElementList unitsWithIng;
 			db->findExistingUnitsByName( ing->units, new_ing_id, &unitsWithIng );
 
-			Element find_unit; find_unit.id = new_unit_id;
-			if ( unitsWithIng.find(&find_unit) == -1 )
+			if ( !unitsWithIng.containsId(new_unit_id) )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
-		for ( Element *author = (*recipe_it).authorList.getFirst(); author; author = (*recipe_it).authorList.getNext() )
+		for ( ElementList::iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
 		{
-			int new_author_id = db->findExistingAuthorByName( author->name );
-			if ( new_author_id == -1 && author->name != "" )
+			int new_author_id = db->findExistingAuthorByName( (*author_it).name );
+			if ( new_author_id == -1 && (*author_it).name != "" )
 			{
-				db->createNewAuthor(author->name);
+				db->createNewAuthor((*author_it).name);
 				new_author_id = db->lastInsertID();
 			}
 
-			author->id = new_author_id;
+			(*author_it).id = new_author_id;
 		}
 
-		for ( Element *category = (*recipe_it).categoryList.getFirst(); category; category = (*recipe_it).categoryList.getNext() )
+		for ( ElementList::iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 		{
-			int new_cat_id = db->findExistingCategoryByName( category->name );
-			if ( new_cat_id == -1 && category->name != "" )
+			int new_cat_id = db->findExistingCategoryByName( (*cat_it).name );
+			if ( new_cat_id == -1 && (*cat_it).name != "" )
 			{
-				db->createNewCategory(category->name);
+				db->createNewCategory((*cat_it).name);
 				new_cat_id = db->lastInsertID();
 			}
 
-			category->id = new_cat_id;
+			(*cat_it).id = new_cat_id;
 		}
 
 		if ( overwrite ) //overwrite existing

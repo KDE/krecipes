@@ -16,16 +16,20 @@
 /**
 @author Unai Garro
 */
-class Element{
+class Element
+{
 public:
     Element();
     Element( const QString &name, int id = -1 );
-    Element(Element &el);
+    Element(const Element &el);
 
     ~Element();
     QString name;
     int id;
     Element& operator=(const Element &el);
-    };
+
+    /** Compare two elements by their id */
+    bool operator==(const Element &) const;
+};
 
 #endif

@@ -71,13 +71,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "<krecipes-description>\n";
     xml += "<title>"+(*recipe_it).title.utf8()+"</title>\n";
 
-	QPtrListIterator<Element> author_it( (*recipe_it).authorList );
-	Element *author;
-	while ( (author = author_it.current()) != 0 )
-	{
-		++author_it;
-		xml += "<author>"+author->name.utf8()+"</author>\n";
-	}
+	for ( ElementList::const_iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
+		xml += "<author>"+(*author_it).name.utf8()+"</author>\n";
 
     xml += "<pictures>\n";
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
@@ -96,13 +91,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "</pictures>\n";
     xml += "<category>\n";
 
-	QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
-	Element *cat;
-	while ( (cat = cat_it.current()) != 0 )
-	{
-		++cat_it;
-		xml += "<cat>"+cat->name.utf8()+"</cat>\n";
-	}
+	for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
+		xml += "<cat>"+(*cat_it).name.utf8()+"</cat>\n";
 
     xml += "</category>\n";
     xml += "<serving>";

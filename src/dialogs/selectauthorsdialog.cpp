@@ -17,7 +17,7 @@
 
 #include "DBBackend/recipedb.h"
 
-SelectAuthorsDialog::SelectAuthorsDialog(QWidget *parent, ElementList *currentAuthors,RecipeDB *db):QDialog(parent,0,true)
+SelectAuthorsDialog::SelectAuthorsDialog(QWidget *parent, const ElementList &currentAuthors,RecipeDB *db):QDialog(parent,0,true)
 {
 
 
@@ -81,9 +81,6 @@ cancelButton=new QPushButton(okCancelButtonBox);
 cancelButton->setText(i18n("&Cancel"));
 cancelButton->setFlat(true);
 
-//Initialize some internal variables
-authorList=new ElementList;
-
 // Load the list
 loadAuthors(currentAuthors);
 
@@ -96,7 +93,6 @@ connect (removeAuthorButton,SIGNAL(clicked()),this,SLOT(removeAuthor()));
 
 SelectAuthorsDialog::~SelectAuthorsDialog()
 {
-delete authorList;
 }
 
 void SelectAuthorsDialog::getSelectedAuthors(ElementList *newAuthors)
@@ -107,12 +103,12 @@ for (QListViewItem *it=authorListView->firstChild();it; it=it->nextSibling())
 	Element author;
 	author.id=it->text(0).toInt();
 	author.name=it->text(1);
-	newAuthors->add(author);
+	newAuthors->append(author);
 	}
 
 }
 
-void SelectAuthorsDialog::loadAuthors(ElementList *currentAuthors)
+void SelectAuthorsDialog::loadAuthors(const ElementList &currentAuthors)
 {
 
 // Load the combo
@@ -120,9 +116,9 @@ reloadAuthorsCombo();
 
 // Load the ListView with the authors of this recipe
 authorListView->clear();
-for (Element *el =currentAuthors->getFirst(); el; el=currentAuthors->getNext())
+for ( ElementList::const_iterator author_it = currentAuthors.begin(); author_it != currentAuthors.end(); ++author_it )
 {
-(void)new QListViewItem(authorListView,QString::number(el->id),el->name);
+(void)new QListViewItem(authorListView,QString::number((*author_it).id),(*author_it).name);
 }
 
 }
@@ -135,9 +131,9 @@ if ( authorsCombo->contains(authorsCombo->currentText()) )
 createNewAuthorIfNecessary();
 
 int currentItem=authorsCombo->currentItem();
-Element *currentElement=authorList->getElement(currentItem);
+Element currentElement=authorList.getElement(currentItem);
 
-if (currentElement) (void)new QListViewItem(authorListView,QString::number(currentElement->id),currentElement->name);
+(void)new QListViewItem(authorListView,QString::number(currentElement.id),currentElement.name);
 
 }
 
@@ -178,17 +174,16 @@ void SelectAuthorsDialog::reloadAuthorsCombo(void)
 {
 
 //Load the author list
-authorList->clear();
-database->loadAuthors(authorList);
+database->loadAuthors(&authorList);
 
 // Load combo with all the authors
 authorsCombo->clear();
 authorsCombo->completionObject()->clear();
 
-for (Element *el =authorList->getFirst(); el; el=authorList->getNext())
+for ( ElementList::const_iterator author_it = authorList.begin(); author_it != authorList.end(); ++author_it )
 {
-authorsCombo->insertItem(el->name);
-authorsCombo->completionObject()->addItem(el->name);
+authorsCombo->insertItem((*author_it).name);
+authorsCombo->completionObject()->addItem((*author_it).name);
 }
 
 }

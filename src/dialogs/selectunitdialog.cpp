@@ -17,7 +17,7 @@
 #include "element.h"
 #include "elementlist.h"
 
-SelectUnitDialog::SelectUnitDialog(QWidget* parent,ElementList *unitList)
+SelectUnitDialog::SelectUnitDialog(QWidget* parent,const ElementList &unitList)
 : QDialog(parent)
 {
 container=new QVBoxLayout(this,5,5);
@@ -72,11 +72,11 @@ return(it->text(0).toInt());
 else return(-1);
 }
 
-void SelectUnitDialog::loadUnits(ElementList *unitList)
+void SelectUnitDialog::loadUnits(const ElementList &unitList)
 {
-for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
+for ( ElementList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
 {
-(void)new QListViewItem(unitChooseView,QString::number(unit->id),unit->name);
+(void)new QListViewItem(unitChooseView,QString::number((*unit_it).id),(*unit_it).name);
 }
 }
 

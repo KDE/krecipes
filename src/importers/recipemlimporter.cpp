@@ -121,7 +121,7 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 				QDomElement c = categories.item(j).toElement();
 				if (c.tagName() == "cat")
 				{
-					recipe->categoryList.append( new Element(c.text()) );
+					recipe->categoryList.append( Element(c.text()) );
 				}
 			}
 		}
@@ -222,7 +222,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 	if ( !size.isNull() )
 		unit.prepend(size+" ");
 
-	recipe->ingList.append( new Ingredient(name, quantity, unit) );
+	recipe->ingList.append( Ingredient(name, quantity, unit) );
 }
 
 void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
@@ -290,7 +290,7 @@ void RecipeMLImporter::readRecipemlSrcItems(const QDomElement& sources)
 		QString tagName = srcitem.tagName();
 
 		if ( tagName == "srcitem" )
-			recipe->authorList.append( new Element( srcitem.text().stripWhiteSpace() ) );
+			recipe->authorList.append( Element( srcitem.text().stripWhiteSpace() ) );
 		else
 			kdDebug()<<"Unknown tag within <source>: "<<tagName<<endl;
 	}

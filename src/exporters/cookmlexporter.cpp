@@ -59,23 +59,17 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 			head_tag.setAttribute("rid",i18n("")); //FIXME:what's this...recipe ID??
 			recipe_tag.appendChild( head_tag );
 
-				QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
-				Element *cat;
-				while ( (cat = cat_it.current()) != 0 )
+				for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 				{
-					++cat_it;
 					QDomElement cat_tag = doc.createElement("cat");
-					cat_tag.appendChild( doc.createTextNode(cat->name) );
+					cat_tag.appendChild( doc.createTextNode((*cat_it).name) );
 					head_tag.appendChild(cat_tag);
 				}
 
-				QPtrListIterator<Element> author_it( (*recipe_it).authorList );
-				Element *author;
-				while ( (author = author_it.current()) != 0 )
+				for ( ElementList::const_iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
 				{
-					++author_it;
 					QDomElement sourceline_tag = doc.createElement("sourceline");
-					sourceline_tag.appendChild( doc.createTextNode(author->name) );
+					sourceline_tag.appendChild( doc.createTextNode( (*author_it).name) );
 					head_tag.appendChild(sourceline_tag);
 				}
 

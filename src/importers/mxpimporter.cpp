@@ -76,7 +76,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "recipe by" )
 	{
 		Element new_author( current.mid( current.find(":")+1, current.length() ).stripWhiteSpace() );
-		m_authors.add( new_author );
+		m_authors.append( new_author );
 		kdDebug()<<"Found author: "<<new_author.name<<endl;
 	}
 	else
@@ -132,7 +132,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 				{
 					Element new_cat( (*it).stripWhiteSpace() );
-					m_categories.add( new_cat );
+					m_categories.append( new_cat );
 
 					kdDebug()<<"Found category: "<<new_cat.name<<endl;
 				}
@@ -203,7 +203,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 					new_ingredient.name += " -- " + prep_method.stripWhiteSpace();
 			}
 
-			m_ingredients.add( new_ingredient );
+			m_ingredients.append( new_ingredient );
 			kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
 			  <<", unit:"<<new_ingredient.units
 			  <<", name:"<<new_ingredient.name
@@ -223,7 +223,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		if ( current.stripWhiteSpace() == "Source:" )
 		{
 			Element new_author( getNextQuotedString(stream) );
-			m_authors.add( new_author );
+			m_authors.append( new_author );
 			kdDebug()<<"Found source: "<<new_author.name<<" (adding as author)"<<endl;
 		}
 		else if ( current.stripWhiteSpace() == "Description:" )
@@ -251,7 +251,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else if ( current.stripWhiteSpace() == "Cuisine:" )
 		{
 			Element new_cat( getNextQuotedString(stream) );
-			m_categories.add( new_cat );
+			m_categories.append( new_cat );
 			kdDebug()<<"Found cuisine (adding as category): "<<new_cat.name<<endl;
 		}
 		else

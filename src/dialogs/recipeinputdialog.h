@@ -120,7 +120,7 @@ private:
 	void createNewIngredientIfNecessary();
 	void createNewUnitIfNecessary();
 	void checkIfNewUnits();
-	void findCategoriesInRecipe(ElementList &categoryList, QPtrList <bool>  &selected);
+	void findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected);
 	void loadIngredientListCombo(void);
 	void loadUnitListCombo(void);
 	void saveRecipe(void);

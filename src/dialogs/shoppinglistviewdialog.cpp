@@ -24,7 +24,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 
-ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)
+ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, const ElementList &recipeList):QWidget(parent)
 {
 
  // Store pointer to database
@@ -69,15 +69,15 @@ ShoppingListViewDialog::~ShoppingListViewDialog()
 {
 }
 
-void ShoppingListViewDialog::showShoppingList(ElementList *recipeList)
+void ShoppingListViewDialog::showShoppingList(const ElementList &recipeList)
 {
 IngredientList ingredientList;
 calculateShopping(recipeList,&ingredientList,database);
-display(&ingredientList);
+display(ingredientList);
 
 }
 
-void ShoppingListViewDialog::display(IngredientList *ingredientList)
+void ShoppingListViewDialog::display(const IngredientList &ingredientList)
 {
 QString recipeHTML;
 
@@ -95,8 +95,12 @@ QString recipeHTML;
 
 	recipeHTML+="<div STYLE=\"border:medium solid blue; width:90%\"><table cellspacing=0px width=100%><tbody>";
 	int counter=0;
-	for (Ingredient *i=ingredientList->getFirst();i;i=ingredientList->getNext())
+
+	QPtrListIterator<Ingredient> it( ingredientList );
+	Ingredient *i;
+	while ( (i = it.current()) )
 	{
+		++it;
 
 	QString color;
 	if (counter) color="#CBCEFF";

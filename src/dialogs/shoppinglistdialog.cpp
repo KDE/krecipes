@@ -109,10 +109,10 @@ ShoppingListDialog::~ShoppingListDialog()
 {
 }
 
-void ShoppingListDialog::createShopping(RecipeList &rlist)
+void ShoppingListDialog::createShopping(const RecipeList &rlist)
 {
 clear();
-RecipeList::Iterator it;
+RecipeList::const_iterator it;
 for (it=rlist.begin(); it != rlist.end(); it++)
 {
 	new QListViewItem(shopRecipeListView->listView(),shopRecipeListView->listView()->lastItem(),QString::number((*it).recipeID),(*it).title);
@@ -125,8 +125,8 @@ ElementList recipeList;
 recipeListView->listView()->clear();
 database->loadRecipeList(&recipeList);
 
-for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext() )
-	new QListViewItem (recipeListView->listView(),QString::number(recipe->id),recipe->name);
+for ( ElementList::const_iterator recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it )
+	new QListViewItem (recipeListView->listView(),QString::number((*recipe_it).id),(*recipe_it).name);
 }
 
 void ShoppingListDialog::reload(void)
@@ -162,7 +162,7 @@ Element newEl; newEl.id=it->text(0).toInt(); newEl.name=it->text(1); // Storing 
 recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
 }
 
-shoppingListDisplay=new ShoppingListViewDialog(0,database,&recipeList);
+shoppingListDisplay=new ShoppingListViewDialog(0,database,recipeList);
 shoppingListDisplay->show();
 }
 

@@ -83,13 +83,10 @@ void RecipeImportDialog::loadListView()
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = list_copy.begin(); recipe_it != list_copy.end(); ++recipe_it )
 	{
-		QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
-		Element *cat;
-		while ( (cat = cat_it.current()) != 0 )
+		for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 		{
-			++cat_it;
-			if ( categoryList.contains( cat->name ) < 1 )
-				categoryList << cat->name;
+			if ( categoryList.contains( (*cat_it).name ) < 1 )
+				categoryList << (*cat_it).name;
 		}
 	}
 
@@ -125,13 +122,10 @@ void RecipeImportDialog::loadListView()
 		}
 		else
 		{
-			QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
-			Element *cat;
-			while ( (cat = cat_it.current()) != 0 )
+			for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 			{
-				++cat_it;
 
-				CustomCheckListItem *category_item = all_categories[cat->name];
+				CustomCheckListItem *category_item = all_categories[(*cat_it).name];
 
 				item = new CustomCheckListItem( category_item, item, (*recipe_it).title, QCheckListItem::CheckBox );
 				recipe_items->insert(item,recipe_it);

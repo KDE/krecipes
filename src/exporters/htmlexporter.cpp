@@ -219,15 +219,11 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	QString authors_html;
 	authors_html=QString("<b>%1</b>: ").arg(i18n("Authors"));
 
-	QPtrListIterator<Element> author_it( recipe.authorList );
-	Element *author_el;
 	int counter=0;
-	while ( (author_el = author_it.current()) != 0 )
+	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it )
 	{
-        	++author_it;
-
 		if (counter) authors_html += ", ";
-		authors_html += author_el->name;
+		authors_html += (*author_it).name;
 		counter++;
 	}
 	new_element = new DivElement( "authors_"+QString::number(recipe.recipeID), authors_html );
@@ -250,16 +246,11 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	QString categories_html;
 	categories_html=QString("<b>%1: </b>").arg(i18n("Categories"));
 
-	QPtrListIterator<Element> cat_it( recipe.categoryList );
-
-	Element *cat_el;
 	counter=0;
-	while ( (cat_el = cat_it.current()) != 0 )
+	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it )
 	{
-        	++cat_it;
-
 		if (counter) categories_html += ", ";
-		categories_html += cat_el->name;
+		categories_html += (*cat_it).name;
 		counter++;
 	}
 	new_element = new DivElement( "categories_"+QString::number(recipe.recipeID), categories_html );
@@ -405,7 +396,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
 			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
 			sizeCalculator->view()->resize(QSize(elementWidth+40,0));
-			sizeCalculator->begin(KURL("file:/tmp/" ));
+			sizeCalculator->begin(KURL("file:/tmp/" )); //TODO: use locateLocal("tmp",...)
 			sizeCalculator->write(tempHTML);
 			sizeCalculator->end();
 

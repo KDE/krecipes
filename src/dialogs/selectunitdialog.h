@@ -29,7 +29,7 @@ class ElementList;
 class SelectUnitDialog : public QDialog
 {
 public:
-    SelectUnitDialog(QWidget* parent,ElementList *unitList);
+    SelectUnitDialog(QWidget* parent,const ElementList &unitList);
 
     ~SelectUnitDialog();
 
@@ -43,7 +43,7 @@ private:
   KListView *unitChooseView;
   QPushButton* okButton;
   QPushButton* cancelButton;
-  void loadUnits(ElementList *unitList);
+  void loadUnits(const ElementList &unitList);
 
 };
 

@@ -76,9 +76,9 @@ categoryListView->clear();
 
 ElementList categoryList;
 database->loadCategories(&categoryList);
-for (Element *category=categoryList.getFirst();category; category=categoryList.getNext())
+for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
 	{
-	(void)new QListViewItem(categoryListView,QString::number(category->id),category->name);
+	(void)new QListViewItem(categoryListView,QString::number((*cat_it).id),(*cat_it).name);
 	}
 }
 

@@ -26,6 +26,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -473,10 +474,10 @@ void RecipeInputDialog::loadIngredientListCombo(void)
 	//Populate this data into the ComboBox
 	ingredientBox->clear();
 	ingredientBox->completionObject()->clear();
-	for ( Element *ing =ingredientComboList->getFirst(); ing; ing =ingredientComboList->getNext() )
+	for ( ElementList::const_iterator ing_it = ingredientComboList->begin(); ing_it != ingredientComboList->end(); ++ing_it )
 	{
-		ingredientBox->insertItem(ing->name);
-		ingredientBox->completionObject()->addItem(ing->name);
+		ingredientBox->insertItem((*ing_it).name);
+		ingredientBox->completionObject()->addItem((*ing_it).name);
 	}
 }
 
@@ -490,14 +491,14 @@ void RecipeInputDialog::loadUnitListCombo(void)
 
 	if (comboCount>0)
 	{ // If not, the list may be empty (no ingredient list defined) and crashes while reading
-		int selectedIngredient=ingredientComboList->getElement(comboIndex)->id;
+		int selectedIngredient=ingredientComboList->getElement(comboIndex).id;
 		database->loadPossibleUnits(selectedIngredient,unitComboList);
 
 		//Populate this data into the ComboBox
-		for ( Element *unit =unitComboList->getFirst(); unit; unit =unitComboList->getNext() )
+		for ( ElementList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it )
 		{
-			unitBox->insertItem(unit->name);
-			unitBox->completionObject()->addItem(unit->name);
+			unitBox->insertItem((*unit_it).name);
+			unitBox->completionObject()->addItem((*unit_it).name);
 		}
 	}
 }
@@ -642,8 +643,8 @@ void RecipeInputDialog::createNewUnitIfNecessary()
 		database->findExistingUnitsByName(newUnit,-1,&newUnitElement);
 
 		database->addUnitToIngredient(
-		  ingredientComboList->getElement(ingredientBox->currentItem())->id,
-		  newUnitElement.getFirst()->id );
+		  ingredientComboList->getElement(ingredientBox->currentItem()).id,
+		  (*newUnitElement.begin()).id );
 
 		reloadUnitsCombo(0);
 		unitBox->setCurrentItem(newUnit);
@@ -679,9 +680,9 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   ing.name=ingredientBox->currentText();
   ing.amount=amountEdit->value().toDouble();
   ing.units=unitBox->currentText();
-  ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
-  ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;
-  loadedRecipe->ingList.add(ing);
+  ing.unitID=unitComboList->getElement(unitBox->currentItem()).id;
+  ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
+  loadedRecipe->ingList.append(ing);
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
 
@@ -788,6 +789,7 @@ loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
 loadedRecipe->persons=servingsNumInput->value();
 // Now save()
+kdDebug()<<"Saving..."<<endl;
 database->saveRecipe(loadedRecipe);
 
 
@@ -828,7 +830,7 @@ ElementList categoryList; database->loadCategories(&categoryList);
 QPtrList <bool>selected;
 findCategoriesInRecipe(categoryList,selected);
 
-SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,&categoryList,&selected);
+SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,categoryList,&selected);
 
 
 if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
@@ -847,27 +849,27 @@ showCategories();
 }
 
 // Find which of the elements in the category lists is selected in the recipe (i.e. which categories this recipe belongs to)
-void RecipeInputDialog::findCategoriesInRecipe(ElementList &categoryList, QPtrList <bool>  &selected)
+void RecipeInputDialog::findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected)
 {
 
-for (Element *el=categoryList.getFirst();el;el=categoryList.getNext())
+for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
 	{
 	bool *value=new bool;
-	if ((loadedRecipe->categoryList.find(el))>=0)  // Recipe contains this category?
+	if ((loadedRecipe->categoryList.contains(*cat_it)) > 0)  // Recipe contains this category?
 		*value=true;
 	else
 		*value=false;
 	selected.append(value);
-}
+	}
 }
 
 void RecipeInputDialog::showCategories(void)
 {
-QString categories=QString::null;
-for (Element *el=loadedRecipe->categoryList.getFirst();el;el=loadedRecipe->categoryList.getNext())
+QString categories;
+for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.begin(); cat_it != loadedRecipe->categoryList.end(); ++cat_it )
 	{
-	if (categories!=QString::null) categories+=",";
-	categories+=el->name;
+	if ( !categories.isEmpty() ) categories+=",";
+	categories+=(*cat_it).name;
 	}
 categoryShow->setText(categories);
 }
@@ -889,7 +891,7 @@ void RecipeInputDialog::slotIngredientBoxLostFocus(void)
 
 void RecipeInputDialog::addAuthor(void)
 {
-SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(this,&(loadedRecipe->authorList),database);
+SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(this,loadedRecipe->authorList,database);
 
 
 if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
@@ -906,11 +908,11 @@ showAuthors();
 
 void RecipeInputDialog::showAuthors(void)
 {
-QString authors=QString::null;
-for (Element *el=loadedRecipe->authorList.getFirst();el;el=loadedRecipe->authorList.getNext())
+QString authors;
+for ( ElementList::const_iterator author_it = loadedRecipe->authorList.begin(); author_it != loadedRecipe->authorList.end(); ++author_it )
 	{
-	if (authors!=QString::null) authors+=",";
-	authors+=el->name;
+	if ( !authors.isEmpty() ) authors+=",";
+	authors+=(*author_it).name;
 	}
 authorShow->setText(authors);
 }

@@ -14,7 +14,6 @@
 
 Element::Element()
 {
-
 }
 
 Element::Element( const QString &_name, int _id ) :
@@ -23,7 +22,7 @@ Element::Element( const QString &_name, int _id ) :
 {
 }
 
-Element::Element(Element &el)
+Element::Element(const Element &el)
 {
 id=el.id;
 name=el.name;
@@ -38,4 +37,9 @@ Element& Element::operator=(const Element &el)
 id=el.id;
 name=el.name;
 return *this;
+}
+
+bool Element::operator==(const Element &el) const
+{
+	return (el.id == this->id);
 }

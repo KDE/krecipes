@@ -12,9 +12,8 @@
  ***************************************************************************/
 #ifndef INGREDIENTLIST_H
 #define INGREDIENTLIST_H
-//
+
 #include <qptrlist.h>
-#include <iostream>
 
 #include "ingredient.h"
 
@@ -28,7 +27,8 @@ public:
     ~IngredientList();
     Ingredient* getFirst(void);
     Ingredient* getNext(void);
-    void add(Ingredient &ing);
+    void append(const Ingredient &ing);
+    void append(Ingredient *ing){QPtrList<Ingredient>::append(ing);} //for the transition to QValueList...
     void addReverse(Ingredient &ing);
     void move(int index1,int index2);
     Ingredient* getLast(void);
@@ -37,8 +37,6 @@ public:
     int find(int id);
     int findNext(int id);
     IngredientList& operator=(const IngredientList &il);
-protected:
-    virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Ingredient*)item1)->ingredientID-((Ingredient*)item2)->ingredientID);};  // so find() works as expected (not searching for pointers, but id)
 };
 
 #endif

@@ -20,8 +20,9 @@
 #include <klistview.h>
 #include <kcombobox.h>
 
+#include "elementlist.h"
+
 class RecipeDB;
-class ElementList;
 
 /**
 @author Unai Garro
@@ -32,7 +33,7 @@ Q_OBJECT
 
 public:
 
-    SelectAuthorsDialog(QWidget *parent, ElementList *currentAuthors, RecipeDB *db);
+    SelectAuthorsDialog(QWidget *parent, const ElementList &currentAuthors, RecipeDB *db);
     ~SelectAuthorsDialog();
     void getSelectedAuthors(ElementList *newAuthors);
 
@@ -49,11 +50,11 @@ private:
 	KIconLoader *il;
 
 	//Variables
-	ElementList *authorList; //Copy of pointer to authorList
+	ElementList authorList;
 	RecipeDB *database;
 
 	//Private methods
-	void loadAuthors(ElementList *authorList);
+	void loadAuthors(const ElementList &authorList);
 	void createNewAuthorIfNecessary(void);
 	void reloadAuthorsCombo(void);
 private slots:

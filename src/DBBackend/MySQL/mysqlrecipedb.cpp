@@ -108,7 +108,7 @@ QSqlQuery ingredientsToLoad(command,database);
 		    list->recipeIdList.append(ingredientsToLoad.value(3).toInt());
 
 		    }
-		    list->ilist.add(ing);
+		    list->ilist.append(ing);
                 }
             }
 }
@@ -147,7 +147,7 @@ recipeToLoad.exec( command);
 		    ing.unitID=recipeToLoad.value(3).toInt();
 		    ing.units=unescapeAndDecode(recipeToLoad.value(4).toString());
 
-		    recipe->ingList.add(ing);
+		    recipe->ingList.append(ing);
                 }
             }
 
@@ -185,7 +185,7 @@ recipeToLoad.exec( command);
 		    Element el;
 		    el.id=recipeToLoad.value(0).toInt();
 		    el.name=unescapeAndDecode(recipeToLoad.value(1).toString());
-		    if (el.id!=-1) recipe->categoryList.add(el); // add to list except for default category (-1)
+		    if (el.id!=-1) recipe->categoryList.append(el); // add to list except for default category (-1)
                 }
             }
 
@@ -198,7 +198,7 @@ recipeToLoad.exec( command);
 		    Element el;
 		    el.id=recipeToLoad.value(0).toInt();
 		    el.name=unescapeAndDecode(recipeToLoad.value(1).toString());
-		    recipe->authorList.add(el);
+		    recipe->authorList.append(el);
                 }
             }
 
@@ -250,7 +250,7 @@ QSqlQuery ingredientsToLoad(command,database);
 		    RecipeList::Iterator it=recipeIterators[ingredientsToLoad.value(3).toInt()];
 
 		    //add the ingredient to the recipe
-		    (*it).ingList.add(ing);
+		    (*it).ingList.append(ing);
 
 		    }
                 }
@@ -334,9 +334,9 @@ QSqlQuery unitToLoad( command,database);
 
 
 }
+
 void MySQLRecipeDB::saveRecipe(Recipe *recipe)
 {
-
 // Check if it's a new recipe or it exists (supossedly) already.
 
 bool newRecipe; newRecipe=(recipe->recipeID==-1);
@@ -427,12 +427,16 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
-for (Element *cat=recipe->categoryList.getLast(); cat; cat=recipe->categoryList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
-	{
+ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+--cat_it;
+for ( int i = 0; i < recipe->categoryList.count(); i++ )
+{
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
-	.arg(cat->id);
+	.arg((*cat_it).id);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+
+	--cat_it;
 }
 
 //Add the default category -1 to ease and speed up searches
@@ -447,12 +451,16 @@ command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
-for (Element *author=recipe->authorList.getLast(); author; author=recipe->authorList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
-	{
+ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+--author_it;
+for ( int i = 0; i < recipe->authorList.count(); i++ )
+{
 	command=QString("INSERT INTO author_list VALUES (%1,%2);")
 	.arg(recipeID)
-	.arg(author->id);
+	.arg((*author_it).id);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+
+	--author_it;
 }
 
 
