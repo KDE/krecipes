@@ -1,3 +1,3 @@
-datadir = $(kde_datadir)/krecipes/data
-data_DATA = data.sql litestructure.sql mysqlstructure.sql
+basedir = $(kde_datadir)/krecipes/data
+base_DATA = data.sql litestructure.sql mysqlstructure.sql
 
