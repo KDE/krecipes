@@ -153,7 +153,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 
 void getIngredientNameAndID( std::multimap<int,QString> *data )
 {
-	for ( int i = 0; ingredient_data_list[i].name; i++ )
+	for ( int i = 0; !ingredient_data_list[i].name.isEmpty(); i++ )
 		data->insert( std::make_pair(ingredient_data_list[i].usda_id, ingredient_data_list[i].name) );
 }
 
@@ -193,7 +193,7 @@ void create_properties( RecipeDB *database )
 {
 	IngredientPropertyList property_list; database->loadProperties( &property_list );
 
-	for ( int i = 0; property_data_list[i].name; i++ )
+	for ( int i = 0; !property_data_list[i].name.isEmpty(); i++ )
 	{
 		property_data_list[i].id = property_list.findByName( property_data_list[i].name );
 		if ( property_data_list[i].id == -1 )//doesn't exist, so insert it and set property_data_list[i].id
