@@ -630,7 +630,10 @@ if (!adminPass.isNull())
 	db=new MySQLRecipeDB(host,"root",QString::null,dbName,true);
 	}
 
-db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+if ( db->ok() )
+	db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+else
+	questionRerunWizard(db->err(), i18n("Unable to open database"));
 
 delete db; //it closes the db automatically
 }
