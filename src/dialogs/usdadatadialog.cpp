@@ -25,61 +25,7 @@
 #include <qvbox.h>
 
 #include "DBBackend/recipedb.h"
-
-struct property_data
-{
-	int id;
-	const char *name;
-	const char *unit;
-};
-
-//NOTE: the following must be in this order
-static property_data property_data_list[] = {
-  {-1,I18N_NOOP("water"),"g"},
-  {-1,I18N_NOOP("energy"),"kcal"},
-  {-1,I18N_NOOP("protein"),"g"},
-  {-1,I18N_NOOP("fat"),"g"},
-  {-1,I18N_NOOP("ash"),"g"},
-  {-1,I18N_NOOP("carbohydrates"),"g"},
-  {-1,I18N_NOOP("dietary fiber"),"g"},
-  {-1,I18N_NOOP("sugar"),"g"},
-  {-1,I18N_NOOP("calcuim"),"mg"},
-  {-1,I18N_NOOP("iron"),"mg"},
-  {-1,I18N_NOOP("magnesium"),"mg"},
-  {-1,I18N_NOOP("phosphorus"),"mg"},
-  {-1,I18N_NOOP("potassium"),"mg"},
-  {-1,I18N_NOOP("sodium"),"mg"},
-  {-1,I18N_NOOP("zinc"),"mg"},
-  {-1,I18N_NOOP("copper"),"mg"},
-  {-1,I18N_NOOP("manganese"),"mg"},
-  {-1,I18N_NOOP("selenium"),"g"},
-  {-1,I18N_NOOP("vitamin C"),"mg"},
-  {-1,I18N_NOOP("thiamin"),"mg"},
-  {-1,I18N_NOOP("riboflavin"),"mg"},
-  {-1,I18N_NOOP("niacin"),"mg"},
-  {-1,I18N_NOOP("pantothenic acid"),"mg"},
-  {-1,I18N_NOOP("vitamin B"),"mg"},
-  {-1,I18N_NOOP("folate"),"g"},
-  {-1,I18N_NOOP("folic acid"),"g"},
-  {-1,I18N_NOOP("food folate"),"g"},
-  {-1,I18N_NOOP("folate (DFE)"),"g"},
-  {-1,I18N_NOOP("vitamin B12"),"g"},
-  {-1,I18N_NOOP("vitamin A (IU)"),"g"},
-  {-1,I18N_NOOP("vitamin A"),"mg"},
-  {-1,I18N_NOOP("retinol"),"g"},
-  {-1,I18N_NOOP("vitamin E"),"g"},
-  {-1,I18N_NOOP("vitamin K"),"g"},
-  {-1,I18N_NOOP("alpha-carotene"),"g"},
-  {-1,I18N_NOOP("beta-carotene"),"g"},
-  {-1,I18N_NOOP("beta-cryptoxanthin"),"g"},
-  {-1,I18N_NOOP("lycopene"),"g"},
-  {-1,I18N_NOOP("lutein+zeazanthin"),"g"},
-  {-1,I18N_NOOP("saturated fat"),"g"},
-  {-1,I18N_NOOP("monounsaturated fat"),"g"},
-  {-1,I18N_NOOP("polyunsaturated fat"),"g"},
-  {-1,I18N_NOOP("cholesterol"),"mg"},
-  { 0, 0, 0 }
-};
+#include "DBBackend/usda_property_data.h"
 
 USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent ) : KDialog(parent,0,true),
   ingredient(ing),
@@ -126,10 +72,10 @@ USDADataDialog::~USDADataDialog()
 
 void USDADataDialog::loadDataFromFile()
 {
-	QString abbrev_file = locate("appdata","abbrev.txt");
+	QString abbrev_file = locate("appdata","data/abbrev.txt");
 	if ( abbrev_file.isEmpty() )
 	{
-		KMessageBox::error(this,i18n("Unable to find abbrev.txt data file."));
+		kdDebug()<<"Unable to find abbrev.txt data file."<<endl;
 		return;
 	}
 
@@ -144,7 +90,7 @@ void USDADataDialog::loadDataFromFile()
 	QTextStream stream( &file );
 	while ( !stream.atEnd() )
 	{
-		QStringList fields = QStringList::split( "^", stream.readLine() );
+		QStringList fields = QStringList::split( "^", stream.readLine(), true );
 		loaded_data << fields;
 
 		QString ing_id = fields[0].mid(1,fields[1].length()-2);
