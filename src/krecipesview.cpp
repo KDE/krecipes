@@ -139,43 +139,49 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Design Left Panel
     
-         // Submenus
-    dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
      
          // Buttons
     buttonsList = new QPtrList<KreMenuButton>();
     buttonsList->setAutoDelete( TRUE );
 
     button0=new KreMenuButton(leftPanel);
-    button0->setIconSet(il.loadIconSet("filefind", KIcon::Small));
+    button0->setIconSet(il.loadIconSet("filefind", KIcon::Panel, 32));
     buttonsList->append(button0);
 
     button1=new KreMenuButton(leftPanel);
-    button1->setIconSet(il.loadIconSet( "trolley", KIcon::Small ));
+    button1->setIconSet(il.loadIconSet( "trolley", KIcon::Panel,32 ));
     buttonsList->append(button1);
-
+    
+    button7=new KreMenuButton(leftPanel);
+    button7->setIconSet(il.loadIconSet( "diet", KIcon::Panel,32));
+    buttonsList->append(button7);
+    
+    
+    // Submenus
+    dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
+    
     button2=new KreMenuButton(leftPanel,dataMenu);
-    button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Small ));
+    button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Panel,32 ));
     //buttonsList->append(button2);
 
     button3=new KreMenuButton(leftPanel,dataMenu);
-    button3->setIconSet(il.loadIconSet( "properties", KIcon::Small ));
+    button3->setIconSet(il.loadIconSet( "properties", KIcon::Panel,32 ));
     buttonsList->append(button3);
 
     button4=new KreMenuButton(leftPanel,dataMenu);
-    button4->setIconSet(il.loadIconSet( "units", KIcon::Small ));
+    button4->setIconSet(il.loadIconSet( "units", KIcon::Panel,32 ));
     buttonsList->append(button4);
 
     button5=new KreMenuButton(leftPanel,dataMenu);
-    button5->setIconSet(il.loadIconSet( "categories", KIcon::Small ));
+    button5->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32 ));
     buttonsList->append(button5);
 
     button6=new KreMenuButton(leftPanel,dataMenu);
-    button6->setIconSet(il.loadIconSet( "personal", KIcon::Small ));
+    button6->setIconSet(il.loadIconSet( "personal", KIcon::Panel,32 ));
     buttonsList->append(button6);
-
+    
     contextButton = new QPushButton(leftPanel, "contextButton");
-    contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Small, 32));
+    contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Panel, 32));
     contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
     contextButton->setPaletteBackgroundColor(QColor(238, 218, 156));
     contextButton->setFlat(true);
@@ -284,6 +290,7 @@ void KrecipesView::translate(){
   button4->setTitle(i18n("Units"));
   button5->setTitle(i18n("Categories"));
   button6->setTitle(i18n("Authors"));
+  button7->setTitle(i18n("Diet Helper"));
 }
 
 void KrecipesView::print()

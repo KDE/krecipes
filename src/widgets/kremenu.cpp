@@ -5,7 +5,7 @@
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
+ *   it under the terms of the GNU General Public License as publishfed by *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
@@ -123,14 +123,14 @@ MenuId KreMenu::createSubMenu(const QString &title, const QString &icon)
 	KreMenuButton *newMenuButton=new KreMenuButton(this);
 	newMenuButton->subMenuId=id;
 	newMenuButton->setTitle(title);
-	newMenuButton->setIconSet(il.loadIconSet(icon, KIcon::Small));
+	newMenuButton->setIconSet(il.loadIconSet(icon, KIcon::Panel));
 	
 	// Add a button to the submenu to go back to the top menu
 	KreMenuButton *newSubMenuButton=new KreMenuButton(this);
 	newSubMenuButton->menuId=id;
 	newSubMenuButton->subMenuId=mainMenuId;
 	newSubMenuButton->setTitle(i18n("Up"));
-	newSubMenuButton->setIconSet(il.loadIconSet("1uparrow", KIcon::Small));
+	newSubMenuButton->setIconSet(il.loadIconSet("1uparrow", KIcon::Panel));
 	
 	connect(newMenuButton, SIGNAL(clicked(MenuId)),this, SLOT(showMenu(MenuId)) );
 	connect(newSubMenuButton, SIGNAL(clicked(MenuId)),this, SLOT(showMenu(MenuId)) );
@@ -279,9 +279,10 @@ void KreMenu::paintEvent(QPaintEvent *)
 	painter.drawLine(w/5,8,w-1,8);
 	painter.setPen(c2);
 	painter.drawLine(w/5,9,w-1,9);
-	painter.end();
     }
-
+    
+    painter.end();
+    
     // Copy the pixmap to the widget
     bitBlt(this, 0, 0, &kpm);
     }
@@ -333,7 +334,7 @@ else menuId=id;
 
 subMenuId=0; // By default it's not a submenu button
 
-resize(parent->size().width(),40);
+resize(parent->size().width(),55);
 connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale()));
 connect(this,SIGNAL(clicked()),this,SLOT(forwardClicks()));
 setCursor(QCursor(KCursor::handCursor()));
@@ -409,29 +410,65 @@ if (!isShown()) return;
     painter.drawLine(width()/5,height()-1,width()-1,height()-1);
     painter.end();
     
-    // If it's highlighted, draw a rounded area for the icon and text
-
-    	// Text and icon area
-    	
-	int areaw=width()-18,areah=height()-18;// -18=-16 (border)-2 (2 lines on top)	
-	int areax=8, areay=8;
-	int roundy=99, roundx=(int)((float)roundy*areah/areaw); //Make corners round
+    
+    // Now Add the icon
+    
+	painter.begin(&kpm);
+	int xPos,yPos;
+	if (icon)
+	{
+	// Set the icon's desired horizontal position
 	
-	// Make sure the area is sensible for text
-	if (areah<fontMetrics().height()) 
+	xPos=10; yPos=0;
+	
+	
+	// Make sure it fits in the area
+	// If not, resize and reposition horizontally to be centered
+	
+	QPixmap scaledIcon=*icon;
+	
+	if (   (icon->height()>height() )  ||  (icon->width()>width()/3)   ) // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
 		{
-			areah=fontMetrics().height()+6;
-			
-			if (areah>(height()-4)) 
-			{
-			areah=height()-4; // Limit to button height
-			}
-			areay=(height()-areah-2)/2+1;
+		QImage image; image=(*icon);
+		scaledIcon.convertFromImage(image.smoothScale(width()/3,height(),QImage::ScaleMin));
 		}
+
+	// Calculate the icon's vertical position
 	
+	yPos=(height()-scaledIcon.height())/2-1;
+		
+
+	// Now draw it
+	
+	painter.drawPixmap(xPos,yPos,scaledIcon);
+	
+	xPos+=scaledIcon.width(); // increase it to place the text area correctly
+	}
+    	
+	painter.end();
+	
+	// If it's highlighted, draw a rounded area around the text
+
+    	// Calculate the rounded area
+	
+	int areax=xPos+10;
+	int areah=fontMetrics().height()+6; // Make sure the area is sensible for text
+	int areaw=width()-areax-10;
+	
+	if (areah>(height()-4)) 
+		{
+		areah=height()-4; // Limit to button height
+		}
+		
+	int areay=(height()-areah-2)/2+1; // Center the area vertically	
+			
+	
+	// Calculate roundness
+	
+	int roundy=99, roundx=(int)((float)roundy*areah/areaw); //Make corners round
 
 	
-    if (highlighted)
+    if (highlighted && areaw>0) // If there is no space for the text area do not draw it
     {
     
 	// Draw the gradient
@@ -458,53 +495,12 @@ if (!isShown()) return;
 	
 	// Copy it to the button
 	bitBlt(&kpm,areax,areay,&area);
-	
-	
     }
     
-    // Now Add the icon
-    
-	painter.begin(&kpm);
-	int xPos=0, yPos=0;
-
-	if (icon)
-	{
-
-	// Calculate the icon's desired horizontal position
-	
-	xPos=areaw/5-10; if (xPos<areax+10) xPos=areax+10; // Try to maintain 10 px distance minimum
-	
-	
-	// Make sure it fits in the area
-	// If not, resize and reposition horizontally to be centered
-	
-	QPixmap scaledIcon=*icon;
-	
-	if (   (icon->height()>areah )  ||  (icon->width()>areaw/2)   ) // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
-		{
-		QImage image; image=(*icon);
-		scaledIcon.convertFromImage(image.smoothScale(areaw/2,areah,QImage::ScaleMin));
-		
-		// Center the icon horizontally
-		xPos=areax+(areaw-scaledIcon.width())/2+1;
-		
-		}
-
-	// Calculate the icon's vertical position
-	
-	yPos=(height()-scaledIcon.height())/2-1;
-		
-
-	// Now draw it
-	
-	painter.drawPixmap(xPos,yPos,scaledIcon);
-	xPos+=scaledIcon.width(); // Move it so that later we can easily place the text
-	}
-
     // Finally, draw the text besides the icon
-    xPos+=15;
-    QRect r=rect(); r.setLeft(xPos); r.setWidth(areaw-xPos);
+    QRect r=rect(); r.setLeft(areax+5); r.setWidth(areaw-10);
     
+    painter.begin(&kpm);
     painter.setPen(QColor(0x00,0x00,0x00));
     painter.setClipRect(r);
     painter.drawText(r,Qt::AlignVCenter,text);
