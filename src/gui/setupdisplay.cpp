@@ -42,7 +42,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( 
 	loadSetup();
 
 	adjustSize(); //this seems to need to be called to set a fixed size...
-	setFixedSize(500,600);
+	setFixedSize(600,700);
 }
 
 SetupDisplay::~SetupDisplay()
@@ -50,136 +50,203 @@ SetupDisplay::~SetupDisplay()
 	delete box_properties;
 }
 
-void SetupDisplay::setReadOnly( bool read_only )
+void SetupDisplay::createSetupIfNecessary()
 {
-	DragArea::setReadOnly( read_only );
+	KConfig *config=kapp->config();
+
+	if ( !config->hasGroup("BackgroundSetup") )
+	{
+		config->setGroup( "BackgroundSetup" );
+		config->writeEntry( "BackgroundColor", Qt::white );
+	}
+
+	if ( !config->hasGroup("TitleSetup") )
+	{
+		config->setGroup( "TitleSetup" );
+		config->writeEntry( "Geometry", QRect(169,33,426,45) );
+		QFont font = kapp->font();
+		font.setBold( true );
+		font.setPointSize( font.pointSize() * 2 );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::AlignHCenter | Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("InstructionsSetup") )
+	{
+		config->setGroup("InstructionsSetup");
+		config->writeEntry( "Geometry", QRect(169,148,426,548) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("ServingsSetup") )
+	{
+		config->setGroup("ServingsSetup");
+		config->writeEntry( "Geometry", QRect(169,82,91,27) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("PhotoSetup") )
+	{
+		config->setGroup("PhotoSetup");
+		config->writeEntry( "Geometry", QRect(2,30,164,123) );
+		config->writeEntry( "Visibility", true );
+	}
+
+	if ( !config->hasGroup("AuthorsSetup") )
+	{
+		config->setGroup("AuthorsSetup");
+		config->writeEntry( "Geometry", QRect(264,82,331,27) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::AlignRight | Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("CategoriesSetup") )
+	{
+		config->setGroup("CategoriesSetup");
+		config->writeEntry( "Geometry", QRect(169,113,426,31) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("HeaderSetup") )
+	{
+		config->setGroup("HeaderSetup");
+		config->writeEntry( "Geometry", QRect(3,5,592,23) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::AlignRight | Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("IngredientsSetup") )
+	{
+		config->setGroup("IngredientsSetup");
+		config->writeEntry( "Geometry", QRect(3,155,162,30) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::WordBreak );
+	}
+
+	if ( !config->hasGroup("PropertiesSetup") )
+	{
+		config->setGroup("PropertiesSetup");
+		config->writeEntry( "Geometry", QRect(3,190,162,30) );
+		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
+		config->writeEntry( "TextColor", Qt::black );
+		config->writeEntry( "Visibility", true );
+		config->writeEntry( "Alignment", Qt::WordBreak );
+	}
 }
 
 //do not call until createWidgets() has been called!
 void SetupDisplay::loadSetup()
 {
-	QColor color;
-	QFont default_font = title_box->font();
+	SetupDisplay::createSetupIfNecessary();
 
 	//TODO: we have just one setup available for now. Later setup may be a separate file
 	KConfig *config=kapp->config();
 
 	//=========================this=======================//
 	config->setGroup("BackgroundSetup");
-
-	color.setRgb(255,255,255);
- 	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
+ 	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor"));
 
 	//=========================TITLE=======================//
 	config->setGroup("TitleSetup");
-	QRect default_title_geom( 185, 35, 306, title_box->sizeHint().height() );
-	title_box->setGeometry( config->readRectEntry( "Geometry", &default_title_geom ));
-
-	color.setRgb(0,0,0);
-	title_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	title_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-	title_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	title_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	title_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignHCenter | Qt::WordBreak ));
+	title_box->setGeometry( config->readRectEntry( "Geometry" ));
+	title_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	title_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	title_box->setFont(config->readFontEntry( "Font" ) );
+	title_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	title_box->setAlignment(config->readNumEntry( "Alignment" ) );
 
 	//======================INSTRUCTIONS===================//
 	config->setGroup("InstructionsSetup");
-	QRect default_instr_geom( 179, 134, 318, instr_box->sizeHint().height() );
-	instr_box->setGeometry( config->readRectEntry( "Geometry", &default_instr_geom ));
-
-	color.setRgb(0,0,0);
-	instr_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	instr_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	instr_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	instr_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	instr_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak ));
+	instr_box->setGeometry( config->readRectEntry( "Geometry" ));
+	instr_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	instr_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	instr_box->setFont(config->readFontEntry( "Font" ) );
+	instr_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	instr_box->setAlignment(config->readNumEntry( "Alignment" ));
 
 	//=======================SERVINGS======================//
 	config->setGroup("ServingsSetup");
-	QRect default_servings_geom( 393, 124, 85, servings_box->sizeHint().height() );
-	servings_box->setGeometry( config->readRectEntry( "Geometry", &default_servings_geom ));
-
-	color.setRgb(0,0,0);
-	servings_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	servings_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	servings_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	servings_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	servings_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::AlignVCenter | Qt::WordBreak ));
+	servings_box->setGeometry( config->readRectEntry( "Geometry" ));
+	servings_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	servings_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	servings_box->setFont(config->readFontEntry( "Font" ) );
+	servings_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	servings_box->setAlignment(config->readNumEntry( "Alignment" ));
 
 	//========================PHOTO========================//
 	config->setGroup("PhotoSetup");
-	QRect default_photo_geom( 4, 38, 220, 165 );
-	photo_box->setGeometry( config->readRectEntry( "Geometry", &default_photo_geom ));
-
-	photo_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
+	photo_box->setGeometry( config->readRectEntry( "Geometry" ));
+	photo_box->setEnabled(config->readBoolEntry( "Visibility" ) );
 
 	//=======================AUTHORS======================//
 	config->setGroup("AuthorsSetup");
-	QRect default_authors_geom( 186, 68, 123, authors_box->sizeHint().height() );
-	authors_box->setGeometry( config->readRectEntry( "Geometry", &default_authors_geom ));
-
-	color.setRgb(0,0,0);
-	authors_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	authors_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	authors_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	authors_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	authors_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak ));
+	authors_box->setGeometry( config->readRectEntry( "Geometry" ));
+	authors_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	authors_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	authors_box->setFont(config->readFontEntry( "Font" ) );
+	authors_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	authors_box->setAlignment(config->readNumEntry( "Alignment" ));
 
 	//=======================CATEGORIES======================//
 	config->setGroup("CategoriesSetup");
-	QRect default_categories_geom( 312, 68, 184, categories_box->sizeHint().height() );
-	categories_box->setGeometry( config->readRectEntry( "Geometry", &default_categories_geom ));
-
-	color.setRgb(0,0,0);
-	categories_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	categories_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	categories_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	categories_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	categories_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak ));
+	categories_box->setGeometry( config->readRectEntry( "Geometry" ));
+	categories_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	categories_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	categories_box->setFont(config->readFontEntry( "Font" ) );
+	categories_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	categories_box->setAlignment(config->readNumEntry( "Alignment" ));
 
 	//=======================ID======================//
-	config->setGroup("RecipeIDSetup");
-	QRect default_header_geom( 6, 3, 486, id_box->sizeHint().height() );
-	id_box->setGeometry( config->readRectEntry( "Geometry", &default_header_geom ));
-
-	color.setRgb(0,0,0);
-	id_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	id_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	id_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	id_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	id_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak ));
+	config->setGroup("HeaderSetup");
+	id_box->setGeometry( config->readRectEntry( "Geometry" ));
+	id_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	id_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	id_box->setFont(config->readFontEntry( "Font" ) );
+	id_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	id_box->setAlignment(config->readNumEntry( "Alignment" ));
 
 	//=======================INGREDIENTS======================//
 	config->setGroup("IngredientsSetup");
-	QRect default_ings_geom( 3, 177, 205, ingredients_box->sizeHint().height() );
-	ingredients_box->setGeometry( config->readRectEntry( "Geometry", &default_ings_geom ));
+	ingredients_box->setGeometry( config->readRectEntry( "Geometry" ));
+	ingredients_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	ingredients_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	ingredients_box->setFont(config->readFontEntry( "Font" ) );
+	ingredients_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	ingredients_box->setAlignment(config->readNumEntry( "Alignment" ));
 
-	color.setRgb(0,0,0);
-	ingredients_box->setPaletteForegroundColor(config->readColorEntry( "TextColor", &color ));
-
-	color.setRgb(255,255,255);
-	ingredients_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor", &color ));
-
-	ingredients_box->setFont(config->readFontEntry( "Font", &default_font ) );
-	ingredients_box->setEnabled(config->readBoolEntry( "Visibility", true ) );
-	ingredients_box->setAlignment(config->readNumEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak ));
+	//=======================INGREDIENTS======================//
+	config->setGroup("PropertiesSetup");
+	properties_box->setGeometry( config->readRectEntry( "Geometry" ));
+	properties_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
+	properties_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	properties_box->setFont(config->readFontEntry( "Font" ) );
+	properties_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+	properties_box->setAlignment(config->readNumEntry( "Alignment" ));
 }
 
 void SetupDisplay::createWidgets( const Recipe &sample )
@@ -195,7 +262,6 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	title_box->setFrameShape( QFrame::Box );
 	title_box->setMinimumSize(5,5);
 	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-	//title_box->setTextFormat( Qt::RichText ); //allows for wrapping
 	QToolTip::add(title_box,i18n("Title"));
 
 	box_properties->insert( title_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
@@ -280,7 +346,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	box_properties->insert( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//=======================ID======================//
-	id_box = new QLabel(QString(i18n("Recipe: #%1")).arg(sample.recipeID),this,"RecipeIDSetup");
+	id_box = new QLabel(QString(i18n("Recipe: #%1")).arg(sample.recipeID),this,"HeaderSetup");
 	id_box->setFrameShape( QFrame::Box );
 	QToolTip::add(id_box,i18n("Recipe ID"));
 
@@ -321,6 +387,13 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add(ingredients_box,i18n("Ingredients"));
 
 	box_properties->insert( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+
+	//========================PROPERTIES========================//
+	properties_box = new QLabel(i18n("<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>"),this,"PropertiesSetup");
+	properties_box->setFrameShape( QFrame::Box );
+	QToolTip::add(properties_box,i18n("Properties"));
+
+	box_properties->insert( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 }
 
 void SetupDisplay::save()

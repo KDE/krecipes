@@ -24,7 +24,6 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDia
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	setup_display = new SetupDisplay(sample,this);
-	//setup_display->setReadOnly(true);
 	layout->addWidget(setup_display);
 
 	QHBox *buttonsBox = new QHBox(this);
@@ -35,6 +34,9 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDia
 
 	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
+
+	adjustSize();
+	setFixedSize(size());
 }
 
 void PageSetupDialog::accept()

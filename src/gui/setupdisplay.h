@@ -25,12 +25,9 @@ class QWidget;
 
 class DragArea;
 
-/** @brief A very specialized @ref DragArea for displaying recipes or editing the recipe setup
+/** @brief A very specialized @ref DragArea for editing the recipe setup
   *
   * Set up the items of a recipe for display.
-  *
-  * In read-only mode, displays the given recipe according to the setup
-  * in this app's config file.
   *
   * @author Jason Kivlighn
   */
@@ -44,7 +41,7 @@ public:
 
 	void save();
 
-	void setReadOnly( bool );
+	static void createSetupIfNecessary();
 
 protected slots:
 	void widgetClicked( QMouseEvent *, QWidget * );
@@ -68,6 +65,7 @@ private:
 	QLabel *authors_box;
 	QLabel *id_box;
 	QLabel *ingredients_box;
+	QLabel *properties_box;
 
 	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
 	QMap< QWidget*, unsigned int > *box_properties;

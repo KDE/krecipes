@@ -15,6 +15,7 @@
 #include "mixednumber.h"
 #include "image.h"
 #include "propertycalculator.h"
+#include "gui/setupdisplay.h"
 
 #include <klocale.h>
 #include <kapplication.h>
@@ -62,28 +63,25 @@ database->loadRecipe(loadedRecipe,recipeID);
 // Calculate the property list
 calculateProperties(*loadedRecipe,database,properties);
 
-  // Store Photo
-  KConfig *config = kapp->config();
-  config->setGroup("PhotoSetup");
+//Creates initial layout and saves to config file
+SetupDisplay::createSetupIfNecessary();
 
-  QRect default_dimensions( 4, 38, 220, 165 );
-  temp_photo_geometry = config->readRectEntry("Geometry", &default_dimensions);
-  int width = temp_photo_geometry.width();
-  int height = temp_photo_geometry.height();
+// Store Photo
+KConfig *config = kapp->config();
+config->setGroup("PhotoSetup");
+temp_photo_geometry = config->readRectEntry("Geometry");
+int width = temp_photo_geometry.width();
+int height = temp_photo_geometry.height();
 
-  if (!loadedRecipe->photo.isNull())
-  {
-      /*if( (loadedRecipe->photo.width() > width || loadedRecipe->photo.height() > height) || (loadedRecipe->photo.width() < width || loadedRecipe->photo.height() < height) ){*/
-        QImage image = loadedRecipe->photo.convertToImage();
-	QPixmap pm = image.smoothScale(width, height, QImage::ScaleMin);
-        pm.save("/tmp/krecipes_photo.png","PNG");
-	temp_photo_geometry = QRect(QPoint(temp_photo_geometry.topLeft()),pm.size()); //preserve aspect ratio
-      /*}
-      else{
-        loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
-      }*/
-  }
-  else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
+QImage image;
+if (loadedRecipe->photo.isNull())
+	image = QImage(defaultPhoto);
+else
+	image = loadedRecipe->photo.convertToImage();
+
+QPixmap pm = image.smoothScale(width, height, QImage::ScaleMin);
+pm.save("/tmp/krecipes_photo.png","PNG");
+temp_photo_geometry = QRect(QPoint(temp_photo_geometry.topLeft()),pm.size()); //preserve aspect ratio
 
 // Loads the layout according to the config file
 createBlocks();
@@ -121,8 +119,7 @@ recipeHTML += "<STYLE type=\"text/css\">\n";
 
 KConfig *config = kapp->config();
 config->setGroup("BackgroundSetup");
-QColor default_color = QColor(255,255,255);
-QColor color = config->readColorEntry( "BackgroundColor", &default_color );
+QColor color = config->readColorEntry( "BackgroundColor" );
 recipeHTML += "BODY\n";
 recipeHTML += "{\n";
 recipeHTML += QString("background-color: %1;\n").arg(color.name());
@@ -133,12 +130,6 @@ for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 recipeHTML += "</STYLE>\n";
 
 recipeHTML += "</head><body>";
-
-/*
-if((QPixmap("/tmp/krecipes_photo.png")).height() < 165){
-  int m = (165 - (QPixmap("/tmp/krecipes_photo.png")).height())/2;
-  recipeHTML+=QString("STYLE=\"margin-top:"+QString::number(m)+"px;\"");
-}*/
 
 for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 	recipeHTML += div->generateHTML();
@@ -179,8 +170,7 @@ void RecipeViewDialog::createBlocks()
 
 	//=======================TITLE======================//
 	config->setGroup("TitleSetup");
-	QRect default_title_geom( 185, 35, 306, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_title_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	new_element = new DivElement( "title", loadedRecipe->title );
@@ -197,8 +187,7 @@ void RecipeViewDialog::createBlocks()
 	//=======================INSTRUCTIONS======================//
 
 	config->setGroup("InstructionsSetup");
-	QRect default_instr_geom( 179, 134, 318, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_instr_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString instr_html = loadedRecipe->instructions;
@@ -216,8 +205,7 @@ void RecipeViewDialog::createBlocks()
 
 	//=======================SERVINGS======================//
 	config->setGroup("ServingsSetup");
-	QRect default_servings_geom( 393, 124, 85, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_servings_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString servings_html = QString(i18n("Servings: %1")).arg(loadedRecipe->persons);
@@ -248,8 +236,7 @@ void RecipeViewDialog::createBlocks()
 
 	//=======================AUTHORS======================//
 	config->setGroup("AuthorsSetup");
-	QRect default_authors_geom( 186, 68, 123, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_authors_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString authors_html;
@@ -275,8 +262,7 @@ void RecipeViewDialog::createBlocks()
 
 	//=======================CATEGORIES======================//
 	config->setGroup("CategoriesSetup");
-	QRect default_cats_geom( 312, 68, 184, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_cats_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString categories_html;
@@ -301,9 +287,8 @@ void RecipeViewDialog::createBlocks()
 	div_elements.append( new_element );
 
 	//=======================ID======================//
-	config->setGroup("RecipeIDSetup");
-	QRect default_header_geom( 6, 3, 486, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_header_geom ) );
+	config->setGroup("HeaderSetup");
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString header_html = QString(i18n("Recipe: #%1")).arg(loadedRecipe->recipeID);
@@ -320,8 +305,7 @@ void RecipeViewDialog::createBlocks()
 
 	//=======================INGREDIENTS======================//
 	config->setGroup("IngredientsSetup");
-	QRect default_ings_geom( 6, 177, 205, 1 );
-	geometry = new QRect( config->readRectEntry( "Geometry", &default_ings_geom ) );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString ingredients_html;
@@ -337,10 +321,11 @@ void RecipeViewDialog::createBlocks()
 		if (amount_str == "0")
 			amount_str = "";
 
-		ingredients_html+=QString("<li>%1: %2 %3</li>")
-			    .arg(ing->name)
-			    .arg(amount_str)
-			    .arg(ing->units);
+		ingredients_html += "<li>" + ing->name;
+		if ( amount_str != "" || ing->units != "" )
+		{
+			ingredients_html += ": " + amount_str + " " + ing->units;
+		}
 	}
 	new_element = new DivElement( "ingredients", ingredients_html );
 
@@ -353,17 +338,10 @@ void RecipeViewDialog::createBlocks()
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
-/*
+
 	//=======================PROPERTIES======================//
 	config->setGroup("PropertiesSetup");
-	QValueList<int> prop_dim_info = config->readIntListEntry( "Geometry" );
-	if ( prop_dim_info.count() < 3 )
-	{
-		prop_dim_info.append( 3 );   //left
-		prop_dim_info.append( 177 ); //top
-		prop_dim_info.append( 205 ); //width
-	}
-	geometry = new QRect( prop_dim_info[0], prop_dim_info[1], prop_dim_info[2], 1 );
+	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
 	QString properties_html;
@@ -383,7 +361,7 @@ void RecipeViewDialog::createBlocks()
 	readVisibilityProperties( new_element, config );
 
 	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );*/
+	div_elements.append( new_element );
 
 	//this takes expands all items to an appropriate size, and ensures no widgets
 	//overlap in the process
@@ -410,9 +388,9 @@ void RecipeViewDialog::createBlocks()
 	}
 }
 
-void RecipeViewDialog::readAlignmentProperties( DivElement *element, KConfig *config, int default_align )
+void RecipeViewDialog::readAlignmentProperties( DivElement *element, KConfig *config )
 {
-	unsigned int alignment = config->readNumEntry( "Alignment", default_align );
+	unsigned int alignment = config->readNumEntry( "Alignment" );
 
 	if ( alignment & Qt::AlignLeft )
 		element->addProperty( "text-align: left;" );
@@ -430,17 +408,13 @@ void RecipeViewDialog::readAlignmentProperties( DivElement *element, KConfig *co
 
 void RecipeViewDialog::readBgColorProperties( DivElement *element, KConfig *config )
 {
-	QColor default_color = QColor(255,255,255);
-
-	QColor color = config->readColorEntry( "BackgroundColor", &default_color );
+	QColor color = config->readColorEntry( "BackgroundColor" );
 	element->addProperty( QString("background-color: %1;").arg(color.name()) );
 }
 
 void RecipeViewDialog::readFontProperties( DivElement *element, KConfig *config )
 {
-	QFont default_font;
-
-	QFont font = config->readFontEntry( "Font", &default_font );
+	QFont font = config->readFontEntry( "Font" );
 	element->addProperty( QString("font-family: %1;").arg(font.family()) );
 	element->addProperty( QString("font-size: %1pt;").arg(font.pointSize()) );
 	element->addProperty( QString("font-weight: %1;").arg(font.weight()) );
@@ -448,15 +422,13 @@ void RecipeViewDialog::readFontProperties( DivElement *element, KConfig *config 
 
 void RecipeViewDialog::readTextColorProperties( DivElement *element, KConfig *config )
 {
-	QColor default_color = foregroundColor();
-
-	QColor color = config->readColorEntry( "TextColor", &default_color );
+	QColor color = config->readColorEntry( "TextColor" );
 	element->addProperty( QString("color: %1;").arg(color.name()) );
 }
 
 void RecipeViewDialog::readVisibilityProperties( DivElement *element, KConfig *config )
 {
-	bool shown = config->readBoolEntry( "Visibility", true );
+	bool shown = config->readBoolEntry( "Visibility" );
 
 	if ( shown )
 		element->addProperty( "visibility: visible;" );

@@ -83,8 +83,8 @@ private:
   void createBlocks();
   void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 
-  void readAlignmentProperties( DivElement *, KConfig *, int default_align = 0 );
-  void readBgColorProperties( DivElement *, KConfig *);
+  void readAlignmentProperties( DivElement *, KConfig * );
+  void readBgColorProperties( DivElement *, KConfig * );
   void readFontProperties( DivElement *, KConfig * );
   void readTextColorProperties( DivElement *, KConfig * );
   void readVisibilityProperties( DivElement *, KConfig * );
