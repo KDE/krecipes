@@ -38,7 +38,7 @@ MX2Importer::MX2Importer(const QString& filename)
 		if (!doc.setContent(&file,&error,&line,&column))
 		{
 			qDebug("error: \"%s\" at line %d, column %d",error.latin1(),line,column);
-			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3") ).arg(error).arg(line).arg(column) );
+			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3.  This may not be a *.mx2 file.") ).arg(error).arg(line).arg(column) );
 			return;
 		}
 

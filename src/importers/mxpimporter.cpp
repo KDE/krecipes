@@ -27,6 +27,7 @@ MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 	if ( input.open( IO_ReadOnly ) )
 	{
 		QTextStream stream( &input );
+		stream.skipWhiteSpace();
 
 		QString line;
 		while ( !stream.atEnd() )
@@ -39,6 +40,13 @@ MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 				{importMac( stream );}
 			else if ( line == "@@@@@" )
 				{importGeneric( stream );}
+			else
+			{
+				setErrorMsg( i18n("File does not appear to be a valid MasterCook Export.") );
+				return;
+			}
+
+			stream.skipWhiteSpace();
 		}
 	}
 	else
@@ -348,11 +356,13 @@ Ratings       : Cholesterol Rating 5            Complete Meal 3
 
 void MXPImporter::importGeneric( QTextStream &stream )
 {
+	setErrorMsg( i18n("MasterCook's Generic Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format.") );
 //not even sure it this is worth writing... its rather obsolete
 }
 
 void MXPImporter::importMac( QTextStream &stream )
 {
+	setErrorMsg( i18n("MasterCook Mac's Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format.") );
 //not even sure it this is worth writing... its rather obsolete
 }
 

@@ -66,11 +66,12 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 	resetVars();
 
 	QFile input( file );
-	qDebug("loading file: %s",file.latin1());
+
 	if ( input.open( IO_ReadOnly ) )
 	{
 		QTextStream stream( &input );
-		qDebug("file opened");
+		stream.skipWhiteSpace();
+
 		QString line;
 		while ( !stream.atEnd() )
 		{
@@ -101,6 +102,13 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 				importMMF( stream );
 				error_code = 0;
 			}
+			else
+			{
+				setErrorMsg( i18n("File does not appear to be a valid Meal-Master export.") );
+				return;
+			}
+
+			stream.skipWhiteSpace();
 		}
 	}
 	else
