@@ -169,15 +169,14 @@ void DBListViewBase::createElement( QListViewItem *it )
 
 		QListViewItem *last_it = 0;
 
-		//start it out below the "Prev" item
-		//### How does this work???
-		if ( firstChild() && firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
+		//start it out below the "Prev" item... currently it will be at firstChild()
+		if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
 			it->moveItem( firstChild()->nextSibling() );
 		}
 
 		//skip the "Next" item
 		for ( QListViewItem *search_it = firstChild()->nextSibling(); search_it; search_it = search_it->nextSibling() ) {
-			if ( search_it == lastElement->nextSibling() ) {
+			if ( lastElement && search_it == lastElement->nextSibling() ) {
 				it->moveItem(lastElement);
 				lastElement = it;
 			}
