@@ -404,7 +404,7 @@ kdDebug()<<"Finished setting the database parameters for MySQL (non SQLite)..."<
 
 config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
-config->writeEntry("Version","0.4");
+config->writeEntry("Version","0.4.1");
 kdDebug()<<"Setting in kconfig the lines to disable wizard startup..."<<sDBType<<endl;
 }
 
