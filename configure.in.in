@@ -29,6 +29,7 @@ AC_DEFUN([AC_HAVE_SQLITE3],
 [
         AC_DEFINE(HAVE_SQLITE3, 1, [have SQLite3])
         have_sqlite3=true
+	AC_NO_SQLITE
 	SQLITE_LIB="-lsqlite3"
 	AC_SUBST(SQLITE_LIB)
 ])
