@@ -30,11 +30,12 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "recipe.h"
 #include "fractioninput.h"
 
-#define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
+#define ROUND(a) (((a) - floor((a)) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 #define FACTOR_RADIO_BUTTON 0
 #define SERVINGS_RADIO_BUTTON 1
 
@@ -76,6 +77,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
     servingsFrameLayout->addMultiCellWidget( currentServingsInput, 0, 0, 1, 2 );
 
     newServingsInput = new KIntNumInput( servingsFrame );
+    newServingsInput->setMinValue( 1 );
     servingsFrameLayout->addWidget( newServingsInput, 1, 2 );
 
     buttonGroupLayout->addWidget( servingsFrame );
@@ -173,7 +175,7 @@ void ResizeRecipeDialog::accept()
 	}
 	else
 	{
-		if ( factorInput->isInputValid() )
+		if ( factorInput->isInputValid() && factorInput->value() > 0 )
 			resizeRecipe( factorInput->value().toDouble() );
 		else
 		{
@@ -188,8 +190,14 @@ void ResizeRecipeDialog::accept()
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	//TODO: adjust factor to rounding done
-	m_recipe->persons = static_cast<int>(ROUND(m_recipe->persons * factor));
+	int rounded_persons = static_cast<int>(ROUND(m_recipe->persons * factor));
+
+	//adjust factor if when using this factor, we come out with a fraction of a person
+	kdDebug()<<"factor given: "<<factor<<endl;
+	factor = static_cast<double>(rounded_persons) / static_cast<double>(m_recipe->persons);
+	kdDebug()<<"modified factor: "<<factor<<endl;
+
+	m_recipe->persons = rounded_persons;
 
 	for ( Ingredient *ing = m_recipe->ingList.getFirst(); ing; ing = m_recipe->ingList.getNext() )
 		ing->amount = ing->amount * factor;
