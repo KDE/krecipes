@@ -17,7 +17,6 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
-#include <qurl.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -27,6 +26,7 @@
 #include <khtmlview.h>
 #include <kprogress.h>
 #include <kstandarddirs.h>
+#include <kurl.h>
 
 #include "propertycalculator.h"
 #include "mixednumber.h"
@@ -267,7 +267,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 
 	//========================PHOTO========================//
 	QString image_url = QString("%1_photos/%2.png").arg(filename).arg(escape(recipe.title));
-	QUrl::encode(image_url);
+ 	image_url = KURL::encode_string(image_url);
 	QString photo_html = QString("<img src=\"%1\">").arg(image_url);
 	html_map.insert("photo",photo_html);
 
