@@ -185,6 +185,9 @@ database=db;
     QToolTip::add(showButton, i18n("Show recipe"));
     QToolTip::add(shopButton,i18n("Add to shopping list"));
     QToolTip::add(closeButton,i18n("Close"));
+
+    //------- END OF Recipe Tab ---------------
+
     //------- Ingredients Tab -----------------
 
     ingredientGBox =new QGroupBox(this);
@@ -199,30 +202,36 @@ database=db;
     ingredientsLayout->addItem(spacerBoxTop, 0,1);
 
     //Input Widgets
-
-    amountEdit = new FractionInput(ingredientGBox);
+    QVBox *amountVBox = new QVBox( ingredientGBox );
+    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    amountLabel = new QLabel( i18n("Amount:"), amountVBox );
+    amountEdit = new FractionInput( amountVBox);
     amountEdit->setFixedSize(QSize(60,30));
     amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(amountEdit,1,1);
+    ingredientsLayout->addWidget(amountVBox,1,1);
 
-
-    ingredientBox = new KComboBox( TRUE,ingredientGBox);
+    QVBox *ingredientVBox = new QVBox( ingredientGBox );
+    ingredientVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
+    ingredientBox = new KComboBox( TRUE, ingredientVBox );
     ingredientBox->setAutoCompletion( TRUE );
     //çingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setMinimumSize(QSize(100,30));
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(ingredientBox,1,2);
+    ingredientsLayout->addWidget(ingredientVBox,1,2);
 
-
-    unitBox = new KComboBox( TRUE,ingredientGBox);
+    QVBox *unitVBox = new QVBox( ingredientGBox );
+    unitVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    unitLabel = new QLabel( i18n("Unit:"), unitVBox );
+    unitBox = new KComboBox( TRUE, unitVBox );
     unitBox->setAutoCompletion( TRUE );
     //unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
     unitBox->setMinimumSize(QSize(100,30));
     unitBox->setMaximumSize(QSize(10000,30));
     unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    ingredientsLayout->addMultiCellWidget(unitBox,1,1,3,5);
+    ingredientsLayout->addMultiCellWidget(unitVBox,1,1,3,5);
 
     // Spacers to list and buttons
     QSpacerItem* spacerToList = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -911,7 +920,7 @@ void RecipeInputDialog::spellCheck(void)
 {
 	QString text = instructionsEdit->text();
 	KSpell::modalCheck( text );
-	KMessageBox::information( this, i18n("Spell check complete."), i18n("Complete") );
+	KMessageBox::information( this, i18n("Spell check complete.") );
 
 	if ( text != instructionsEdit->text() ) //check if there were changes
 		instructionsEdit->setText( text );

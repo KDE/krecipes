@@ -84,8 +84,11 @@ private:
 
 	//Ingredient inputs
 	QGroupBox *ingredientGBox;
+	QLabel *amountLabel;
 	FractionInput* amountEdit;
+	QLabel *unitLabel;
 	KComboBox* unitBox;
+	QLabel *ingredientLabel;
 	KComboBox* ingredientBox;
 	KListView* ingredientList;
 	KIconLoader *il;
