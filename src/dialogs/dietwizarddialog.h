@@ -35,19 +35,18 @@
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
 #include "recipe.h"
+#include "unitratiolist.h"
 
-
-class RecipeDB;
 class EditBox;
-class MealInput;
 class DishInput;
 class DishTitle;
+class MealInput;
+class RecipeDB;
 class RecipeList;
 
 /**
 @author Unai Garro
 */
-
 
 
 class DietWizardDialog:public QVBox{
@@ -62,11 +61,18 @@ public:
 private:
 	//Private variables
 	RecipeDB *database;
-	int mealNumber;
+
 	int dayNumber;
+	int mealNumber;
+
 	ElementList categoriesList;
 	IngredientPropertyList propertyList;
 	RecipeList *dietRList;
+
+		// Cache data blocks
+	UnitRatioList cachedUnitRatios;
+	IngredientPropertyList cachedIngredientProperties;
+
 	//Widgets
 	QHBox *optionsBox;
 	QVGroupBox *mealsSliderBox;

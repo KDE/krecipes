@@ -104,6 +104,11 @@ database->loadProperties(&propertyList);
 int pgcount=0;
 for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++)
 	tab->reload(categoriesList,propertyList);
+
+//Fill in the caches from the database
+database->loadUnitRatios(&cachedUnitRatios);
+database->loadProperties(&cachedIngredientProperties);
+
 }
 
 void DietWizardDialog::newTab(const QString &name)
@@ -741,12 +746,17 @@ for (Element *category=rec.categoryList.getFirst();category; category=rec.catego
 return false;
 }
 
+/*
+** Calculate the recipe Properties and check if they're within the constraints
+*/
+
 bool DietWizardDialog::checkConstraints(Recipe &rec,int meal,int dish)
 {
 
-// Calculate properties of the recipes
+// Calculate properties of the recipe
 IngredientPropertyList properties;
-calculateProperties(rec,database,&properties); // FIXME: this function accesses to the DB every time. It must use a cache to avoid too many queries
+
+calculateProperties(rec,cachedIngredientProperties,cachedUnitRatios,&properties);
 
 // Check if the properties are within the constraints
 ConstraintList constraints; loadConstraints(meal,dish,&constraints); //load the constraints

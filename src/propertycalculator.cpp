@@ -40,6 +40,9 @@ else
 
 }
 
+/*
+** Version with database I/O. DB must be provided
+*/
 
 void calculateProperties(Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList)
 {
@@ -54,6 +57,7 @@ for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
 	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing);
 	}
 }
+
 
 void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
 {
@@ -85,6 +89,74 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 	property.units=prop->units;
 
 	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
+
+	if (ratio>0.0) // Could convert units to perUnit
+		{
+		property.amount=(prop->amount)*(ing.amount)*ratio;
+		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
+		recipePropertyList->add(property);
+		}
+	else { // Could not convert units
+	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     }
+
+
+
+
+	}
+
+	}
+}
+
+/*
+** Version with no database I/O. necessary DB data must be provided. Useful for caching data
+*/
+
+
+void calculateProperties(Recipe& recipe,IngredientPropertyList& ipl,UnitRatioList& url, IngredientPropertyList *recipePropertyList)
+{
+recipePropertyList->clear();
+
+IngredientPropertyList filteredPropertyList;
+
+for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
+	{
+	ipl.filter(ing->ingredientID,&filteredPropertyList); // Get the properties for the respective ingredient
+	filteredPropertyList.divide(recipe.persons); // calculates properties per person
+	addPropertyToList(recipePropertyList,filteredPropertyList,*ing,url);
+	}
+}
+
+void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,Ingredient &ing,UnitRatioList &url)
+{
+for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.getNext())
+	{
+	// Find if property was listed before
+	int pos=recipePropertyList->find(prop);
+	if (pos>=0) //The property exists in the list. Add to it
+	{
+	IngredientProperty *property=recipePropertyList->at(pos);
+	double ratio; ratio=url.getRatio(ing.unitID, prop->perUnit.id);
+
+	if (ratio>0.0) // Could convert units to perUnit
+		{
+		property->amount+=(prop->amount)*(ing.amount)*ratio;
+		}
+	else { // Could not convert units
+	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     }
+
+	}
+	else // The property doesn't exist in the list. Append new property
+	{
+	IngredientProperty property;
+	property.id=prop->id;
+	property.name=prop->name;
+	property.perUnit.id=-1; // It's not per unit, it's total sum of the recipe
+	property.perUnit.name=QString::null; // "
+	property.units=prop->units;
+
+	double ratio; ratio=url.getRatio(ing.unitID, prop->perUnit.id);
 
 	if (ratio>0.0) // Could convert units to perUnit
 		{
