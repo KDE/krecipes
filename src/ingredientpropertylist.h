@@ -37,6 +37,7 @@ public:
     IngredientProperty* getNext(void);
     IngredientProperty* getElement(int index);
     void clear(void);
+    int count(void);
     bool isEmpty(void);
     void add(IngredientProperty &element);
     void append(IngredientProperty *property);

@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "ingredientpropertylist.h"
-
+#include <iostream>
 IngredientPropertyList::IngredientPropertyList()
 {
 }
@@ -76,6 +76,11 @@ void IngredientPropertyList::filter(int ingredientID,IngredientPropertyList *fil
 {
 filteredList->clear();
 for (IngredientProperty* ip=getFirst();ip;ip=getNext())
-	if ((*ip).ingredientID==ingredientID) filteredList->add(*ip);
+	if (ip->ingredientID==ingredientID) filteredList->add(*ip);
 
+}
+
+int IngredientPropertyList::count(void)
+{
+return (list.count());
 }
