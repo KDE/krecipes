@@ -985,7 +985,7 @@ if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT 
 
 else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
-else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);";
+else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
 
 else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
@@ -1047,6 +1047,12 @@ if (version<0.4)  // Upgrade to DB version 0.4
 	tableToAlter.exec(command);
 
 	command="CREATE index cid_index ON category_list(category_id)";
+	tableToAlter.exec(command);
+
+	command="CREATE index ridil_index ON ingredient_list(recipe_id)";
+	tableToAlter.exec(command);
+
+	command="CREATE index iidil_index ON ingredient_list(ingredient_id)";
 	tableToAlter.exec(command);
 
 	// Port data

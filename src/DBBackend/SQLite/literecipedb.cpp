@@ -1046,7 +1046,11 @@ if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT 
 
 else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
-else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);";
+else if (tableName=="ingredient_list")
+	{
+	command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);";
+	createIndex=true;
+	}
 
 else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
@@ -1077,13 +1081,20 @@ else return;
 
 database->executeQuery(command);
 
+// Create necessary indexes
+
 if (createIndex)
 {
 if (tableName=="category_list")
 	{
-	database->executeQuery("CREATE index rid_index ON category_list(recipe_id)");
-	database->executeQuery("CREATE index cid_index ON category_list(category_id)");
+	database->executeQuery("CREATE index rid_index ON category_list(recipe_id);");
+	database->executeQuery("CREATE index cid_index ON category_list(category_id);");
+	}
 
+else if (tableName=="ingredient_list")
+	{
+	database->executeQuery("CREATE index ridil_index ON ingredient_list(recipe_id);");
+	database->executeQuery("CREATE index iidil_index ON ingredient_list(ingredient_id);");
 	}
 
 }
