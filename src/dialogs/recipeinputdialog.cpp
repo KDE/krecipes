@@ -322,6 +322,7 @@ il=new KIconLoader;
 
     instructionsEdit = new KTextEdit( instructionsTab );
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    instructionsEdit->setTabChangesFocus ( true );
     instructionsLayout->addWidget(instructionsEdit);
 
     spellCheckButton=new QToolButton( instructionsTab );
@@ -749,6 +750,7 @@ bool RecipeInputDialog::checkAmountEdit()
 	{
 		KMessageBox::error( this, i18n("Invalid input"),
 		  i18n("Amount field contains invalid input.") );
+		amountEdit->setFocus();
 		amountEdit->selectAll();
 		return false;
 	}
@@ -759,6 +761,7 @@ bool RecipeInputDialog::checkBounds()
 	if ( ingredientBox->currentText().length() > database->maxIngredientNameLength() )
 	{
 		KMessageBox::error(this,QString(i18n("Ingredient name cannot be longer than %1 characters.")).arg(database->maxIngredientNameLength()));
+		ingredientBox->lineEdit()->setFocus();
 		ingredientBox->lineEdit()->selectAll();
 		return false;
 	}
@@ -766,6 +769,7 @@ bool RecipeInputDialog::checkBounds()
 	if ( unitBox->currentText().length() > database->maxUnitNameLength() )
 	{
 		KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
+		unitBox->lineEdit()->setFocus();
 		unitBox->lineEdit()->selectAll();
 		return false;
 	}
@@ -773,6 +777,7 @@ bool RecipeInputDialog::checkBounds()
 	if ( prepMethodBox->currentText().length() > database->maxPrepMethodNameLength() )
 	{
 		KMessageBox::error(this,QString(i18n("Preparation method cannot be longer than %1 characters.")).arg(database->maxPrepMethodNameLength()));
+		prepMethodBox->lineEdit()->setFocus();
 		prepMethodBox->lineEdit()->selectAll();
 		return false;
 	}
@@ -991,6 +996,10 @@ servingsNumInput->setValue(1);
 
 //Set back to the first page
 tabWidget->setCurrentPage(0);
+
+//Set focus to the title
+titleEdit->setFocus();
+titleEdit->selectAll();
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients, units, and preparation methods

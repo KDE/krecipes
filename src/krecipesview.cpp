@@ -421,8 +421,8 @@ case 1: // Edit
 	if ( !inputPanel->everythingSaved() )
 	{
 		switch( KMessageBox::questionYesNoCancel( this,
-		  QString(i18n("Recipe \"%1\" contains unsaved changes.\n"
-		  "Do you want to save changes made to this recipe before editing another recipe?")).arg(recipeButton->title()),
+		  QString(i18n("A recipe contains unsaved changes.\n"
+		  "Do you want to save changes made to this recipe before editing another recipe?")),
 		   i18n("Unsaved changes") ) )
 		{
 			case KMessageBox::Yes: inputPanel->save(); break;
@@ -473,8 +473,8 @@ void KrecipesView::createNewRecipe(void)
 if ( !inputPanel->everythingSaved() )
 {
 	switch( KMessageBox::questionYesNoCancel( this,
-	  QString(i18n("Recipe \"%1\" contains unsaved changes.\n"
-	  "Do you want to save changes made to this recipe before creating a new recipe?")).arg(recipeButton->title()),
+	  QString(i18n("A recipe contains unsaved changes.\n"
+	  "Do you want to save changes made to this recipe before creating a new recipe?")),
 	   i18n("Unsaved changes") ) )
 	{
 		case KMessageBox::Yes: inputPanel->save(); break;

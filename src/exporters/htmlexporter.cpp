@@ -401,6 +401,8 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 		css += "position: absolute;\n";
 		css += "}\n\n";
 	}
+	
+	css += "UL { padding-left: 1.25em; }\n";
 
 	return css;
 }
