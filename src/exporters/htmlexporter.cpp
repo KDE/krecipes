@@ -98,7 +98,10 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 	QString recipeBodyHTML = "<BODY>\n";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
-		calculateProperties( *recipe_it, database, properties ); // Calculate the property list
+		QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
+		if ( el.isNull() || el.text() == "true" ) // Calculate the property list
+			calculateProperties( *recipe_it, database, properties );
+
 		storePhoto( *recipe_it, doc );
 		offset = createBlocks( *recipe_it, doc, offset ) + 10;
 
