@@ -121,7 +121,10 @@ void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
 		if ( recipe->categoryList.count() == 0 )
 		{
 			if ( !category_item ) //don't create this until there are recipes to put in it
+			{
 				category_item = new CustomCheckListItem( head_item, i18n("Uncategorized"), QCheckListItem::CheckBox );
+				all_categories.insert( i18n("Uncategorized"), category_item );
+			}
 			CustomCheckListItem *item = new CustomCheckListItem(category_item,recipe->title, QCheckListItem::CheckBox);
 			recipe_items->insert(item,recipe);
 		}
