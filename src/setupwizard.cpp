@@ -123,7 +123,7 @@ layout->addItem(logoSpacer,1,2);
 
 // Explanation Text
 permissionsText=new QLabel(this);
-permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=+1>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]"));
+permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]"));
 
 permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
