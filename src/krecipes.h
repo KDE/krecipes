@@ -17,6 +17,7 @@ class KrecipesView;
 class KPrinter;
 class KToggleAction;
 class KURL;
+class KDialog;
 
 /**
  * This class serves as the main window for Krecipes.  It handles the
@@ -98,6 +99,8 @@ private:
 	// Internal variables
 	KAction *saveAction;
 	KAction *saveAsAction;
+
+	KDialog *parsing_file_dlg;
 
 private slots:
 	void enableSaveOption(bool en=true);

@@ -30,6 +30,7 @@
 #include <kprinter.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
+#include <qmessagebox.h>
 
 #include <kprogress.h>
 #include <kmessagebox.h>
@@ -109,6 +110,12 @@ Krecipes::Krecipes()
 
     connect(this->m_view->selectPanel, SIGNAL(recipeSelected(bool)), saveAsAction, SLOT(setEnabled(bool)));
 
+    parsing_file_dlg = new KDialog(this,"parsing_file_dlg",true,Qt::WX11BypassWM);
+    QLabel *parsing_file_dlg_label = new QLabel(i18n("Gathering recipe data from file.\nPlease wait..."),parsing_file_dlg);
+    parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
+    (new QVBoxLayout(parsing_file_dlg))->addWidget( parsing_file_dlg_label );
+    parsing_file_dlg->adjustSize();
+    //parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
 }
 
 Krecipes::~Krecipes()
@@ -239,6 +246,8 @@ void Krecipes::import()
 
 		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
 		{
+			parsing_file_dlg->show();
+
 			BaseImporter *importer;
 			if ( selected_filter == "*.mxp *.txt" )
 				importer = new MXPImporter( *it );
@@ -259,9 +268,12 @@ void Krecipes::import()
 				    "Please select one of the provided filters.")).arg(selected_filter),
 				  i18n("Unrecognized Filter")
 				);
+				parsing_file_dlg->hide();
 				import(); //let's try again :)
 				return;
 			}
+
+			parsing_file_dlg->hide();
 
 			QString error = importer->getErrorMsg();
 			if ( !error.isNull() )
