@@ -10,6 +10,7 @@
 #include "kremenu.h"
 
 #include <qbitmap.h>
+#include <qcursor.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -48,6 +49,14 @@ dragging=true;
 
 void KreMenu::mouseMoveEvent (QMouseEvent *e)
 {
+// Set the mouse cursor in any case
+int x=e->x(),y=e->y();
+if (x > (width()-15))
+	{
+	setCursor(QCursor(Qt::SplitHCursor));
+	}
+
+// If already dragging, resize
 if (dragging)
 	{
 	xDest=e->x();
