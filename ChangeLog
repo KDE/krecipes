@@ -1,14 +1,16 @@
-Changes from 0.6 to CVS:
-  -Updated USDA data from SR16-1 to SR17 (released September, 2004)
-  -'Configure' options to disable particular backends
+Changes from 0.6 to 0.7:
+  -BETA support for PostgreSQL database backend
   -Database to database transfer (Remote or local).
-  -Autocomplete ingredients typed in the instructions text edit
   -Support for grouping ingredients.  Also imports group information from import formats, such as Meal-Master.
   -There's a new intermediate interface between displaying the shopping list and selecting recipes for it.  Here you can add, remove, or modify ingredients used in those selected recipes.
   -Load sample recipes based on locale.  If we don't currently have your locale, please submit some recipes to us!
-  -BETA support for PostgreSQL database backend
   -Border options added to recipe display
+  -Autocomplete ingredients typed in the instructions text edit
+  -Updated USDA data from SR16-1 to SR17 (released September, 2004)
+  -'Configure' options to disable particular backends
   -Support for drag and drop in the shopping list dialog
+  -Behind the scenes, the internal structure of Krecipes has improved, quickly bringing it closer toward our 1.0 release
+  -Overall, more stability, interface, and useability enhancements
 
 Changes from 0.5 to 0.6:
   -Support for subcategories
