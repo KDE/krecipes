@@ -6,6 +6,18 @@
 #include "pref.h"
 #include "krecipesview.h"
 #include "recipeinputdialog.h"
+#include "selectrecipedialog.h"
+#include "ingredientsdialog.h"
+#include "propertiesdialog.h"
+#include "shoppinglistdialog.h"
+#include "categorieseditordialog.h"
+#include "authorsdialog.h"
+#include "unitsdialog.h"
+
+#include "mxpimporter.h"
+#include "mmfimporter.h"
+#include "recipe.h"
+#include "recipedb.h"
 
 #include <qdragobject.h>
 #include <kprinter.h>
@@ -23,6 +35,7 @@
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
+#include <kfiledialog.h>
 
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
@@ -103,6 +116,11 @@ void Krecipes::setupActions()
     KAction *custom = new KAction(i18n("Cus&tom Menuitem"), 0,
                                   this, SLOT(optionsPreferences()),
                                   actionCollection(), "custom_action");
+
+    KAction *import = new KAction(i18n("Import..."), 0,
+                                  this, SLOT(import()),
+                                  actionCollection(), "import_action");
+
     createGUI();
 }
 
@@ -199,6 +217,58 @@ void Krecipes::filePrint()
     }
 }
 
+//TODO: use a progress dialog
+void Krecipes::import()
+{
+	KFileDialog file_dialog( QString::null,
+	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
+	  "*.mmf|Meal-Master Format (*.mmf)",
+	  this,
+	  "file_dialog",
+	  true
+	);
+	file_dialog.setMode( KFile::Files );
+
+	if ( file_dialog.exec() == KFileDialog::Accepted )
+	{
+		QString selected_filter = file_dialog.currentFilter();
+
+		QStringList files = file_dialog.selectedFiles();
+		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
+		{
+			qDebug(selected_filter);
+			if ( selected_filter == "*.mxp *.txt" )
+			{
+				MXPImporter mxp( *it );
+				m_view->import( mxp );
+			}
+			else if ( selected_filter == "*.mmf" )
+			{
+				MMFImporter mmf( *it );
+				m_view->import( mmf );
+			}
+			else
+			{
+				KMessageBox::sorry( this,
+				  i18n(QString("Filter \"%1\" not recognized.\n"
+				    "Please select one of the provided filters.").arg(selected_filter)),
+				  i18n("Unrecognized Filter")
+				);
+				import(); //let's try again :)
+				return;
+			}
+		}
+
+		m_view->selectPanel->reload();
+		m_view->ingredientsPanel->reload();
+		m_view->propertiesPanel->reload();
+		m_view->unitsPanel->reload();
+		m_view->shoppingListPanel->reload();
+		m_view->categoriesPanel->reload();
+		m_view->authorsPanel->reload();
+	}
+}
+
 //return true to close app
 bool Krecipes::queryClose()
 {
@@ -212,6 +282,7 @@ bool Krecipes::queryClose()
 		case KMessageBox::Yes: m_view->save();
 		case KMessageBox::No: return true;
 		case KMessageBox::Cancel: return false;
+		default: return true;
 		}
 	}
 	else

@@ -18,6 +18,8 @@
 #include <krecipesiface.h>
 #include <qwidgetstack.h>
 
+#include "baseimporter.h"
+
 class RecipeInputDialog;
 class RecipeViewDialog;
 class SelectRecipeDialog;
@@ -103,6 +105,8 @@ public:
 	// public methods
 	void createNewRecipe(void);
 	void createNewElement(void);
+
+	void import( BaseImporter &importer ){ importer.import(database); }
 
 private:
 
