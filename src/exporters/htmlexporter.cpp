@@ -345,13 +345,18 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 
 		QString amount_str;
 
-		if (prop->amount>0) amount_str = beautify(KGlobal::locale()->formatNumber(prop->amount,5));
+		double prop_amount = prop->amount;
+		if (prop_amount>0) { //TODO: make the precision configuratble
+			prop_amount = double(qRound(prop_amount*10.0))/10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place 
+			amount_str = beautify(KGlobal::locale()->formatNumber(prop_amount,5));
+		}
 		else {
-			amount_str = beautify(KGlobal::locale()->formatNumber(-(prop->amount),5));
+			prop_amount = double(qRound(-prop_amount*10.0))/10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
+			amount_str = beautify(KGlobal::locale()->formatNumber(prop_amount,5));
 			amount_str+="+";
-			}
+		}
 
-		properties_html += QString("<li>%1: %2  %3</li>")
+		properties_html += QString("<li>%1: <nobr>%2 %3</nobr></li>")
 			    .arg(QStyleSheet::escape(prop->name))
 			    .arg(amount_str)
 			    .arg(QStyleSheet::escape(prop->units));

@@ -90,7 +90,7 @@ void RecipeActionsHandler::open()
 			RecipeListItem *recipe_it = (RecipeListItem*)it;
 			emit recipeSelected(recipe_it->recipeID(),0);
 		}
-		else if ( it->rtti() == 1001 ) //CategoryListItem
+		else if ( it->rtti() == 1001 && it->firstChild() ) //CategoryListItem and not empty
 		{
 			QValueList<int> ids;
 			
@@ -109,10 +109,11 @@ void RecipeActionsHandler::open()
 			QListViewItemIterator iterator(it);
 			while(iterator.current() != pEndItem)
 			{
-				if ( it->rtti() == 1000 ) {
+				if ( iterator.current()->rtti() == 1000 ) {
 					RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
-					if ( ids.find(recipe_it->recipeID()) == ids.end() )
+					if ( ids.find(recipe_it->recipeID()) == ids.end() ) {
 						ids.append(recipe_it->recipeID());
+					}
 				}
 				++iterator;
 			}
