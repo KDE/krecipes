@@ -32,7 +32,7 @@
 #include "recipe.h"
 #include "fractioninput.h"
 
-#define ROUND(a) (floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a))
+#define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 #define FACTOR_RADIO_BUTTON 0
 #define SERVINGS_RADIO_BUTTON 1
 
