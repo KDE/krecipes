@@ -3,7 +3,6 @@
  */
 
 #include "krecipes.h"
-#include "pref.h"
 #include "krecipesview.h"
 #include "recipeinputdialog.h"
 #include "selectrecipedialog.h"
@@ -48,7 +47,11 @@
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
-
+//Settings headers
+#include <kautoconfigdialog.h>
+#include "serverprefs.h"
+#include "unitsprefs.h"
+#include "importprefs.h"
 
 Krecipes::Krecipes()
     : KMainWindow( 0, "Krecipes" ),
@@ -140,7 +143,7 @@ void Krecipes::setupActions()
     createGUI();
 }
 
-void Krecipes::saveProperties(KConfig *config)
+void Krecipes::saveProperties(KConfig *)
 {
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
@@ -150,7 +153,7 @@ void Krecipes::saveProperties(KConfig *config)
       //  config->writeEntry("lastURL", m_view->currentURL());
 }
 
-void Krecipes::readProperties(KConfig *config)
+void Krecipes::readProperties(KConfig *)
 {
     // the 'config' object points to the session managed
     // config file.  this function is automatically called whenever
@@ -402,12 +405,13 @@ void Krecipes::newToolbarConfig()
 
 void Krecipes::optionsPreferences()
 {
-    // popup some sort of preference dialog, here
-    KrecipesPreferences dlg(this);
-    if (dlg.exec())
-    {
-        // redo your settings
-    }
+     if(KAutoConfigDialog::showDialog("settings"))
+		return;
+
+    KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
+    dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server Settings"), "Server", "identity", i18n("Database Server Options"));
+    dialog->addPage(new unitsprefs(0, "NumberFormat"), i18n("Units"), "Units", "frac", i18n("Customize Units"));
+    dialog->addPage(new importprefs(0, "Import"), i18n("Units"), "Import", "redo", i18n("Recipe Import Options"));
 }
 
 void Krecipes::changeStatusbar(const QString& text)

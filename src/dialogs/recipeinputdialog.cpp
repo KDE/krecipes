@@ -412,7 +412,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		KConfig *config=kapp->config();
 		config->setGroup("Units");
 		QString amount_str;
-		if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+		if ( config->readBoolEntry("Fraction"))
 			amount_str = MixedNumber(ing->amount).toString();
 		else
 			amount_str = QString::number(ing->amount);
@@ -676,7 +676,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   KConfig *config=kapp->config();
   config->setGroup("Units");
   QString amount_str;
-  if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+  if ( config->readBoolEntry("Fraction"))
   	amount_str = MixedNumber(ing.amount).toString();
   else
   	amount_str = QString::number(ing.amount);
@@ -710,7 +710,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
   Ingredient* ing = (loadedRecipe->ingList).at(index);
   KConfig *config=kapp->config();
   config->setGroup("Units");
-  if ( config->readEntry( "NumberFormat" ) == "Fraction" ){
+  if ( config->readBoolEntry("Fraction")){
     MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
     if(ok){
       ing->amount = mn.toDouble();
