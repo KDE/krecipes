@@ -48,7 +48,7 @@ public:
 	void addCategoryToRecipe(int recipeID, int categoryID);
 
 
-	void addProperty(QString &name, QString &units);
+	void addProperty(const QString &name, const QString &units);
 	void addPropertyToIngredient(int ingredientID,int propertyID,double amount, int perUnitsID);
 	void addUnitToIngredient(int ingredientID,int unitID);
 

@@ -732,7 +732,7 @@ QSqlQuery initializeQuery(command,database);
 
 }
 
-void MySQLRecipeDB::addProperty(QString &name, QString &units)
+void MySQLRecipeDB::addProperty(const QString &name, const QString &units)
 {
 QString command;
 command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(name)).arg(escapeAndEncode(units));
@@ -1442,8 +1442,6 @@ int MySQLRecipeDB::findExistingAuthorByName( const QString& name )
 int MySQLRecipeDB::findExistingCategoryByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxCategoryNameLength())); //truncate to the maximum size db holds
-
-	kdDebug()<<"Searching for: "<<search_str<<endl;
 
 	QString command=QString("SELECT id FROM categories WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query

@@ -763,7 +763,7 @@ void LiteRecipeDB::initializeData(void)
 
 }
 
-void LiteRecipeDB::addProperty(QString &name, QString &units)
+void LiteRecipeDB::addProperty(const QString &name, const QString &units)
 {
 QString command;
 command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(name)).arg(escapeAndEncode(units));

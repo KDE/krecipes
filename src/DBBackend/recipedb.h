@@ -45,7 +45,7 @@ public:
 	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
 
 
-	virtual void addProperty(QString &name, QString &units)=0;
+	virtual void addProperty(const QString &name, const QString &units)=0;
 	virtual void addPropertyToIngredient(int ingredientID,int propertyID,double amount, int perUnitsID)=0;
 	virtual void addUnitToIngredient(int ingredientID,int unitID)=0;
 
