@@ -177,10 +177,10 @@ database=db;
     showButton=new QPushButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
     shopButton=new QPushButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QPushButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
-    QToolTip::add(saveButton, i18n("Save the recipe"));
+    QToolTip::add(saveButton, i18n("Save recipe"));
     QToolTip::add(showButton, i18n("Show recipe"));
     QToolTip::add(shopButton,i18n("Add to shopping list"));
-    QToolTip::add(shopButton,i18n("Close"));
+    QToolTip::add(closeButton,i18n("Close"));
     //------- Ingredients Tab -----------------
 
     ingredientGBox =new QGroupBox(this);
