@@ -35,6 +35,7 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
         if (!(DBuser==QString::null)) database->setUserName(DBuser );
         if (!(DBpass==QString::null)) database->setPassword(DBpass);
         database->setHostName(DBhost);
+
 	kdDebug()<<i18n("Parameters set. Calling db->open()\n").latin1();
 	
         if ( !database->open() ) {
@@ -75,11 +76,24 @@ if (dbOK) database->close();
 
 void MySQLRecipeDB::createDB()
 {
-QString command;
+QString real_db_name = database->databaseName();
 
-// Create the Database (Note: needs permissions)
-command=QString("CREATE DATABASE %1;").arg(database->databaseName());
-QSqlQuery query(command,database);
+//we have to be connected to some database in order to create the Krecipes database
+//so long as the permissions given are allowed access to "mysql', this works
+database->setDatabaseName("mysql");
+if ( database->open() ) {
+	// Create the Database (Note: needs permissions)
+	//FIXME: I've noticed certain characters cause this to fail (such as '-').  Somehow let the user know.
+	QSqlQuery query(QString("CREATE DATABASE %1").arg(real_db_name),database);
+	if ( !query.isActive() )
+		kdDebug()<<"create query failed: "<<database->lastError().databaseText()<<endl;
+	
+	database->close();
+}
+else
+	kdDebug()<<"create open failed: "<<database->lastError().databaseText()<<endl;
+
+database->setDatabaseName(real_db_name);
 }
 
 void MySQLRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list, bool withNames)
