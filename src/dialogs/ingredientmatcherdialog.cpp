@@ -93,16 +93,26 @@ void IngredientMatcherDialog::findRecipes(void)
 	
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
+	RecipeList incompleteRecipes;
+	
 	RecipeList::Iterator it;
 	for (it=rlist.begin();it!=rlist.end();++it)
 		{
 		IngredientList il=(*it).ingList;
-		
-		if (ilist.containsSubSet(il))
+		IngredientList missing;
+		if (ilist.containsSubSet(il,missing))
 			{
 			new RecipeListItem(recipeListView->listView(),*it);
 			}
-		
+		else incompleteRecipes.append(*it);
+		}
+
+	// Show recipes with missing ingredients
+	new SectionItem(recipeListView->listView(),i18n("You are missing some ingredients for:"));
+	
+	for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it)
+		{
+			new RecipeListItem(recipeListView->listView(),*it);
 		}
 }
 

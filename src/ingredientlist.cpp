@@ -25,14 +25,19 @@ bool IngredientList::contains(Ingredient &ing) const
 return(find(ing.ingredientID)!=-1);
 }
 
-bool IngredientList::containsSubSet(IngredientList &il)
+bool IngredientList::containsSubSet(IngredientList &il,IngredientList &missing)
 {
+missing.empty();
+bool contained=true;
 IngredientList::Iterator it;
+
 for (it=il.begin();it!=il.end();++it)
 	{
-	if (!contains(*it)) return false;
+	if (!contains(*it)) contained=false;
+	missing.append(*it);
 	}
-return true;
+
+return contained;
 }
 
 void IngredientList::empty(void)

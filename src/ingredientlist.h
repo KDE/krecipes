@@ -26,7 +26,7 @@ public:
     IngredientList();
     ~IngredientList();
     bool contains(Ingredient &ing) const;
-    bool containsSubSet(IngredientList &il);
+    bool containsSubSet(IngredientList &il,IngredientList &missing);
     void move(int index1,int index2);
     void empty(void);
     int find(int id) const;
