@@ -263,9 +263,9 @@ void MySQLRecipeDB::givePermissions( const QString &dbName, const QString &usern
 	QString command;
 
 	if ( !password.isEmpty() )
-		command = QString( "GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';" ).arg( dbName ).arg( username ).arg( clientHost ).arg( password );
+		command = QString( "GRANT ALL ON %1.* TO '%2'@'%3' IDENTIFIED BY '%4';" ).arg( dbName ).arg( username ).arg( clientHost ).arg( password );
 	else
-		command = QString( "GRANT ALL ON %1.* TO %2@%3;" ).arg( dbName ).arg( username ).arg( clientHost );
+		command = QString( "GRANT ALL ON %1.* TO '%2'@'%3';" ).arg( dbName ).arg( username ).arg( clientHost );
 
 	kdDebug() << "I'm doing the query to setup permissions\n";
 
