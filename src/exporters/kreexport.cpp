@@ -84,6 +84,7 @@ QString KreExporter::createContent( const QPtrList<Recipe>& recipes )
     xml += "<pictures>\n";
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
     KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
+    fn->setAutoDelete(true);
     recipe->photo.save(fn->name(), "JPEG");
     QByteArray data;
     if( fn ){
