@@ -41,7 +41,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     ingredientListView=new KListView (this);
     ingredientListView->setAllColumnsShowFocus(true);
-    layout->addMultiCellWidget (ingredientListView,1,4,1,1);
+    layout->addMultiCellWidget (ingredientListView,1,9,1,1);
     ingredientListView->addColumn(i18n("Id"));
     ingredientListView->addColumn(i18n("Ingredient"));
     ingredientListView->setRenameable(1, true);
@@ -84,7 +84,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     unitsListView->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
     unitsListView->setMinimumWidth(150);
-    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightUnits,1,6);
@@ -106,11 +106,12 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removeUnitButton->setMaximumSize(QSize(30,30));
     removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeUnitButton->setFlat(true);
-    QSpacerItem* spacer_Units_Properties = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(spacer_Units_Properties,1,8);
+    QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addItem(spacer_Units_Properties,5,5);
+
 
     propertiesListView=new KListView (this);
-    layout->addMultiCellWidget (propertiesListView,1,4,9,9);
+    layout->addMultiCellWidget (propertiesListView,6,9,5,5);
     propertiesListView->addColumn(i18n("Id"));
     propertiesListView->addColumn(i18n("Property"));
     propertiesListView->addColumn(i18n("Amount"));
@@ -118,12 +119,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     propertiesListView->setAllColumnsShowFocus(true);
     propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
-    QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
-    layout->addItem(spacer_rightProperties,1,10);
 
     addPropertyButton= new QPushButton(this);
     addPropertyButton->setText("+");
-    layout->addWidget( addPropertyButton, 1, 11 );
+    layout->addWidget( addPropertyButton, 6, 7 );
     addPropertyButton->resize(QSize(30,30));
     addPropertyButton->setMinimumSize(QSize(30,30));
     addPropertyButton->setMaximumSize(QSize(30,30));
@@ -132,13 +131,15 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     removePropertyButton=new QPushButton(this);
     removePropertyButton->setText("-");
-    layout->addWidget( removePropertyButton, 3, 11 );
+    layout->addWidget( removePropertyButton, 8, 7 );
     removePropertyButton->resize(QSize(30,30));
     removePropertyButton->setMinimumSize(QSize(30,30));
     removePropertyButton->setMaximumSize(QSize(30,30));
     removePropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removePropertyButton->setFlat(true);
 
+    QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addItem(spacer_Prop_Buttons,7,7);
 
     inputBox=new EditBox(this);
     inputBox->hide();

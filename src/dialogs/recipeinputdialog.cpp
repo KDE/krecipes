@@ -78,13 +78,13 @@ database=db;
     photoLabel->setFixedSize(QSize(221,166));
     photoLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     photoLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    recipeLayout->addMultiCellWidget(photoLabel,3,6,1,1);
+    recipeLayout->addMultiCellWidget(photoLabel,3,7,1,1);
 
     changePhotoButton=new QPushButton(recipeTab);
     changePhotoButton->setFixedSize(QSize(20,166));
     changePhotoButton->setText("...");
     changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    recipeLayout->addMultiCellWidget(changePhotoButton,3,6,2,2);
+    recipeLayout->addMultiCellWidget(changePhotoButton,3,7,2,2);
 
 
     //Title->photo spacer
@@ -141,7 +141,7 @@ database=db;
     categoryShow->setMinimumSize(QSize(100,20));
     categoryShow->setMaximumSize(QSize(10000,20));
     categoryShow->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    recipeLayout->addWidget(categoryBox,3,6);
+    recipeLayout->addWidget(categoryBox,4,4);
 
     addCategoryButton= new QPushButton(categoryInput);
     addCategoryButton->setText("+");
@@ -150,7 +150,7 @@ database=db;
 
     //Author ->Servings spacer
     QSpacerItem* author_servings = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    recipeLayout->addItem(author_servings,4,4 );
+    recipeLayout->addItem(author_servings,6,4 );
 
     QVBox *servingsBox = new QVBox(recipeTab);
     servingsBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
