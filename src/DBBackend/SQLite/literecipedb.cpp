@@ -1189,6 +1189,9 @@ QString command;
 
 command=QString("DELETE FROM categories WHERE id=%1;").arg(categoryID);
 database->executeQuery(command);
+
+command=QString("DELETE FROM category_list WHERE category_id=%1;").arg(categoryID);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)

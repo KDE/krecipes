@@ -1152,6 +1152,9 @@ QString command;
 
 command=QString("DELETE FROM categories WHERE id=%1;").arg(categoryID);
 QSqlQuery categoryToRemove( command,database);
+
+command=QString("DELETE FROM category_list WHERE category_id=%1;").arg(categoryID);
+categoryToRemove.exec(command);
 }
 
 void MySQLRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)
