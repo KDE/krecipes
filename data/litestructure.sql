@@ -16,4 +16,4 @@ CREATE index iidil_index ON ingredient_list(ingredient_id);
 CREATE index rid_index ON category_list(recipe_id);
 CREATE index ridil_index ON ingredient_list(recipe_id);
 
-INSERT INTO db_info VALUES(0.4,'Krecipes 0.4');
+INSERT INTO db_info VALUES(0.4,'Krecipes 0.4.1');
