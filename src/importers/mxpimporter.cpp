@@ -81,7 +81,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 	else
 	{
-		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		addWarningMsg(QString(i18n("While loading recipe \"%1\" "
 		  "the field \"Recipe By:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
