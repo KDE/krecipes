@@ -13,7 +13,6 @@
 
 #include "baseexporter.h"
 
-class RecipeDB;
 /**
 Export classe for Krecipes native file format (.kre, .kreml)
 

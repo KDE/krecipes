@@ -238,6 +238,7 @@ collapseAll();
 
 void SelectRecipeDialog::filter(const QString& s)
 {
+if ( s.isNull() ) kdDebug()<<"test"<<endl;
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (!it->firstChild()) // It's not a category or it's empty

@@ -13,10 +13,6 @@
 
 #include "baseexporter.h"
 
-#include <qstringlist.h>
-
-class RecipeDB;
-
 /**
   * Export class for the Meal-Master file format
   * @author Jason Kivlighn
@@ -29,7 +25,7 @@ class RecipeDB;
   *           -Title is limited to 60 characters
   *           -Servings are limited to the range of 0-9999
   *           -Units are limited: If a given unit does not have a
-  *            cooresponding MM abbrev., otherwise it will be
+  *            coresponding MM abbrev., otherwise it will be
   *            exported without a unit.
   */
 class MMFExporter : public BaseExporter

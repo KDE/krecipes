@@ -13,8 +13,6 @@
 
 #include "baseexporter.h"
 
-class RecipeDB;
-
 /**
   * Export class for the RecipeML file format <http://www.formatdata.com/recipeml>
   * @author Jason Kivlighn
