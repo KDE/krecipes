@@ -26,6 +26,9 @@ cancelButton=new QPushButton(box);
 cancelButton->setGeometry( QRect( 110, 60, 60, 20 ) );
 cancelButton->setText("Cancel");
 resize(QSize(200,100));
+
+connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));
+connect (cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
 
@@ -33,4 +36,8 @@ CreateElementDialog::~CreateElementDialog()
 {
 }
 
+QString CreateElementDialog::newElementName(void)
+{
+return(elementEdit->text());
+}
 

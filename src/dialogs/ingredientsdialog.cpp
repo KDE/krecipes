@@ -161,7 +161,12 @@ database->loadPossibleUnits(ingredientID,unitList);
 void IngredientsDialog::addIngredient(void)
 {
 CreateElementDialog* elementDialog=new CreateElementDialog(QString("New Ingredient"));
-elementDialog->show();
+
+if ( elementDialog->exec() == QDialog::Accepted ) {
+   QString result = elementDialog->newElementName();
+   database->createNewIngredient(result); // Create the new ingredient in database
+   reloadIngredientList(); // Reload the list from database
+}
 
 }
 

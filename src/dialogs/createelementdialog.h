@@ -24,8 +24,8 @@ class CreateElementDialog : public QDialog
 {
 public:
     CreateElementDialog(const QString &text);
-
     ~CreateElementDialog();
+    QString newElementName(void);
 
 private:
   //Widgets
