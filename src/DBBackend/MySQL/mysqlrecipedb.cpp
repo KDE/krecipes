@@ -229,7 +229,7 @@ mysql_close(mysqlDB);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories)
+void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames)
 {
 rlist->clear();
 
@@ -251,7 +251,9 @@ QSqlQuery recipesToLoad( command,database);
 
 if (loadIngredients) // Note that names of ingredients, units....are not loaded just the needed id's
 {
-command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+
+if (!loadIngredientNames) command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+else command=QString("SELECT il.ingredient_id,il.amount,il.unit_id,il.recipe_id,i.name FROM ingredient_list il,ingredients i WHERE il.ingredient_id=i.id;");
 
 QSqlQuery ingredientsToLoad(command,database);
 
@@ -263,7 +265,7 @@ QSqlQuery ingredientsToLoad(command,database);
 		    ing.ingredientID=ingredientsToLoad.value(0).toInt();
 		    ing.amount=ingredientsToLoad.value(1).toDouble();
 		    ing.unitID=ingredientsToLoad.value(2).toInt();
-
+		    if (loadIngredientNames) ing.name=unescapeAndDecode(ingredientsToLoad.value(4).toString());
 		    // find the corresponding recipe iterator
 		    if (recipeIterators.contains(ingredientsToLoad.value(3).toInt()))
 		    {

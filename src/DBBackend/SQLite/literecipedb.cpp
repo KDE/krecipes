@@ -252,7 +252,7 @@ recipeToLoad=database->executeQuery(command);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories)
+void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients,bool loadCategories,bool loadIngredientNames)
 {
 
 QMap <int,RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
@@ -284,7 +284,8 @@ if (loadIngredients) // Note that names of ingredients, units....are not loaded 
 {
 
 
-command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+if (!loadIngredientNames) command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+else command=QString("SELECT il.ingredient_id,il.amount,il.unit_id,il.recipe_id,i.name FROM ingredient_list il,ingredients i WHERE il.ingredient_id=i.id;");
 
 QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 
@@ -297,6 +298,7 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.ingredientID=row.data(0).toInt();
 		    ing.amount=row.data(1).toDouble();
 		    ing.unitID=row.data(2).toInt();
+		    if (loadIngredientNames) ing.name=unescapeAndDecode(row.data(4));
 
 		    // find the corresponding recipe iterator
 		    if (recipeIterators.contains(row.data(3).toInt()))
