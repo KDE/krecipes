@@ -685,6 +685,8 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 
 void QSqlRecipeDB::removeRecipe( int id )
 {
+	emit recipeRemoved( id );
+
 	QString command;
 
 	command = QString( "DELETE FROM recipes WHERE id=%1;" ).arg( id );
@@ -708,8 +710,6 @@ void QSqlRecipeDB::removeRecipe( int id )
 	}
 	command = QString( "DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );" ).arg( ( ids.count() == 0 ) ? "-1" : ids.join( "," ) );
 	recipeToRemove.exec( command );
-
-	emit recipeRemoved( id );
 }
 
 void QSqlRecipeDB::removeRecipeFromCategory( int recipeID, int categoryID )

@@ -30,14 +30,13 @@
 #include "DBBackend/recipedb.h"
 #include "exporters/htmlexporter.h"
 
-RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent )
+RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
+	database(db)
 {
 	// Initialize UI Elements
-
 	recipeView = new KHTMLPart( this );
 
-	// Store/Initialize local variables
-	database = db; // Store the database pointer.
+	connect( database, SIGNAL(recipeRemoved(int)), SLOT(recipeRemoved(int)) );
 
 	tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
 
@@ -131,4 +130,15 @@ void RecipeViewDialog::removeOldFiles()
 
 	HTMLExporter::removeHTMLFiles( tmp_filename, recipe_titles );
 }
+
+void RecipeViewDialog::recipeRemoved( int id )
+{
+	//if the deleted recipe is loaded, clean the view up
+	if ( ids_loaded.find(id) != ids_loaded.end() ) { 
+		Recipe recipe; database->loadRecipe( &recipe, id );
+		HTMLExporter::removeHTMLFiles( tmp_filename, recipe.title );
+		ids_loaded.remove(id);
+	}
+}
+
 #include "recipeviewdialog.moc"

@@ -51,6 +51,9 @@ public:
 
 	void reload();
 
+public slots:
+	void print( void );
+
 private:
 
 	// Internal Variables
@@ -64,8 +67,8 @@ private:
 	bool showRecipes( const QValueList<int> &ids );
 	void removeOldFiles();
 
-public slots:
-	void print( void );
+private slots:
+	void recipeRemoved(int);
 
 };
 

@@ -172,6 +172,7 @@ private slots:
 	void showRecipe( void );
 	void prepTitleChanged( const QString &title );
 	void typeButtonClicked( int );
+	void recipeRemoved( int id );
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

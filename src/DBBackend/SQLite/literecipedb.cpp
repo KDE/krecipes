@@ -687,6 +687,8 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 
 void LiteRecipeDB::removeRecipe( int id )
 {
+	emit recipeRemoved( id );
+
 	QString command;
 
 	command = QString( "DELETE FROM recipes WHERE id=%1;" ).arg( id );
@@ -699,8 +701,6 @@ void LiteRecipeDB::removeRecipe( int id )
 	// Clean up ingredient_groups which have no recipe that they belong to
 	command = "DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
 	database->executeQuery( command );
-
-	emit recipeRemoved( id );
 }
 
 void LiteRecipeDB::removeRecipeFromCategory( int recipeID, int categoryID )

@@ -634,6 +634,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect ( resizeButton, SIGNAL( clicked() ), this, SLOT( resizeRecipe() ) );
 	connect ( spellCheckButton, SIGNAL( clicked() ), this, SLOT( spellCheck() ) );
 	connect ( this, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveButton( bool ) ) );
+
+	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
 }
 
 
@@ -643,6 +645,14 @@ RecipeInputDialog::~RecipeInputDialog()
 	delete ingredientComboList;
 	delete unitComboList;
 	delete prepMethodComboList;
+}
+
+void RecipeInputDialog::recipeRemoved( int id )
+{
+	if ( loadedRecipe->recipeID == id ) {
+		loadedRecipe->recipeID = -1;
+		recipeChanged();
+	}
 }
 
 void RecipeInputDialog::prepTitleChanged( const QString &title )
