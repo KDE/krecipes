@@ -17,6 +17,8 @@
 #include <qstringlist.h>
 
 #include "datablocks/recipelist.h"
+#include "elementlist.h"
+#include "unitratiolist.h"
 
 class Recipe;
 class RecipeDB;
@@ -56,6 +58,7 @@ protected:
 	void add( const RecipeList &recipe_list );
 
 	void setCategoryStructure( CategoryTree *cat_structure );
+	void setUnitRatioInfo( UnitRatioList &ratioList, UnitList &unitList );
 	
 	int totalCount() const { return m_recipe_list->count(); }
 	int fileRecipeCount() const { return file_recipe_count; }
@@ -65,9 +68,13 @@ protected:
 
 private:
 	void importCategoryStructure( RecipeDB *, CustomVector &, const CategoryTree * );
+	void importUnitRatios( RecipeDB * );
 
 	RecipeList *m_recipe_list;
 	CategoryTree *m_cat_structure;
+	UnitRatioList m_ratioList;
+	UnitList m_unitList;
+
 	QStringList m_warning_msgs;
 	QStringList m_error_msgs;
 	QString m_master_warning;

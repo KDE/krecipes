@@ -347,6 +347,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		db->saveRecipe( &(*recipe_it) );
 	}
 
+	importUnitRatios( db );
+
 	delete progress_dialog;
 }
 
@@ -373,4 +375,39 @@ void BaseImporter::importCategoryStructure( RecipeDB *db, CustomVector &catVecto
 	}
 }
 
+void BaseImporter::setUnitRatioInfo( UnitRatioList &ratioList, UnitList &unitList )
+{
+	m_ratioList = ratioList;
+	m_unitList = unitList;
+}
 
+void BaseImporter::importUnitRatios( RecipeDB *db )
+{
+	for ( UnitRatioList::const_iterator it = m_ratioList.begin(); it != m_ratioList.end(); ++it ) {
+		QString unitName1, unitName2;
+		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
+			if ( (*it).uID1 == (*unit_it).id ) {
+			 	unitName1 = (*unit_it).name;
+				if ( !unitName2.isNull() )
+					break;
+			}
+			else if ( (*it).uID2 == (*unit_it).id ) {
+				unitName2 = (*unit_it).name;
+				if ( !unitName1.isNull() )
+					break;
+			}
+		}
+
+		int unitId1 = db->findExistingUnitByName(unitName1);
+		int unitId2 = db->findExistingUnitByName(unitName2);
+
+		//the unit needed for the ratio may not have been added, because the
+		//recipes chosen did not include the unit
+		if ( unitId1 != -1 && unitId2 != -1 ) {
+			UnitRatio ratio;
+			ratio.uID1 = unitId1; ratio.uID2 = unitId2;
+			ratio.ratio = (*it).ratio;
+			db->saveUnitRatio( &ratio );
+		}
+	}
+}

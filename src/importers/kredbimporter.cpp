@@ -43,6 +43,12 @@ void KreDBImporter::parseFile( const QString &file ) //this is either a database
 			database->loadCategories(tree);
 			setCategoryStructure(tree);
 
+			//set unit ratios
+			UnitRatioList ratioList; UnitList unitList;
+			database->loadUnitRatios( &ratioList ); database->loadUnits( &unitList );
+
+			setUnitRatioInfo(ratioList,unitList);
+
 			//get the ids
 			ElementList list;
 			database->loadRecipeList(&list);
