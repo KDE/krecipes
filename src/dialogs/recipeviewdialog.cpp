@@ -122,10 +122,11 @@ recipeHTML+="</body></html>";
 if (!loadedRecipe->photo.isNull()) loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
 else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
 }
+delete recipeView;              // Temporary workaround
+recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
 
 recipeView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where the photo was stored
 recipeView->write(recipeHTML);
 recipeView->end();
-
 }
 
