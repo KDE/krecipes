@@ -31,7 +31,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	layout->addWidget(searchBar,1,1);
 
 	searchLabel=new QLabel(searchBar); searchLabel->setText("Search:"); searchLabel->setFixedWidth(searchLabel->fontMetrics().width("Search:")+5);
-	searchBox=new KComboBox(true,searchBar);
+	searchBox=new KLineEdit(searchBar);
 
 
 	QSpacerItem* spacerFromSearchBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -66,6 +66,8 @@ loadRecipeList();
 connect(openButton,SIGNAL(clicked()),this, SLOT(open()));
 connect(editButton,SIGNAL(clicked()),this, SLOT(edit()));
 connect(removeButton,SIGNAL(clicked()),this, SLOT(remove()));
+connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const QString&)));
+connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 }
 
 
@@ -105,4 +107,14 @@ if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),2
 void SelectRecipeDialog::reload()
 {
 this->loadRecipeList();
+}
+
+void SelectRecipeDialog::filter(const QString& s)
+{
+for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+	{
+	if (s==QString::null) it->setVisible(true); // Don't filter if text is empty
+	else if (it->text(1).contains(s,false)) it->setVisible(true);
+	else it->setVisible(false);
+	}
 }

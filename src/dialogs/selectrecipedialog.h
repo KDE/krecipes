@@ -16,7 +16,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
-#include <kcombobox.h>
+#include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>
 
@@ -50,7 +50,7 @@ private:
   QPushButton *editButton;
   KIconLoader *il;
   QLabel *searchLabel;
-  KComboBox *searchBox;
+  KLineEdit *searchBox;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
@@ -65,10 +65,7 @@ private slots:
   void open(void);
   void edit(void);
   void remove(void);
-
-
-
-
+  void filter(const QString &s);
 };
 
 #endif
