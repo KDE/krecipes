@@ -32,7 +32,7 @@
 #include "ingredientsdialog.h"
 #include "propertiesdialog.h"
 #include "shoppinglistdialog.h"
-#include "dietwizarddialog.h"
+#include "dialogs/dietwizarddialog.h"
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"

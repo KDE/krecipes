@@ -7,7 +7,7 @@
 INCLUDES         = $(all_includes) -I$(srcdir)/..
 
 noinst_LTLIBRARIES=libkrecipesdialogs.la
-libkrecipesdialogs_la_SOURCES=recipeimportdialog.cpp
+libkrecipesdialogs_la_SOURCES=recipeimportdialog.cpp dietwizarddialog.cpp
 libkrecipesdialogs_la_METASOURCES=AUTO
 
 #the library search path.
