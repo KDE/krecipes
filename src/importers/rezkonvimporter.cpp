@@ -153,7 +153,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 	}
 
 	//amount
-	if ( string.mid(0,7).stripWhiteSpace() != "" )
+	if ( !string.mid(0,7).stripWhiteSpace().isEmpty() )
 		new_ingredient.amount = readRange( string.mid(0,7) );
 
 	//unit
