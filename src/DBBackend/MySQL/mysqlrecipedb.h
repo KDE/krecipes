@@ -86,7 +86,7 @@ public:
 	void initializeData(void);
 
 	int lastInsertID();
-
+	void loadAllRecipeIngredients(IngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);

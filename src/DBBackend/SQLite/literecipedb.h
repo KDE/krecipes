@@ -84,6 +84,7 @@ public:
 
 	int lastInsertID();
 
+	void loadAllRecipeIngredients(IngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);
@@ -93,7 +94,7 @@ public:
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
-	void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false);
+	void loadRecipes(RecipeList *rlist,bool getInstructions=true,bool getPhoto=true);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 

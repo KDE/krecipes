@@ -67,6 +67,44 @@ mysql_close(mysqlDB);
 
 }
 
+void MySQLRecipeDB::loadAllRecipeIngredients(IngredientList *list, bool withNames)
+{
+
+QString command;
+
+if (withNames)
+{
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;");
+}
+else
+{
+command=QString("SELECT ingredient_id,amount,unit_id  FROM ingredient_list;");
+}
+
+QSqlQuery ingredientsToLoad(command,database);
+            if ( ingredientsToLoad.isActive() ) {
+                while ( ingredientsToLoad.next() ) {
+		    Ingredient ing;
+		    if (withNames)
+		    {
+		    ing.ingredientID=ingredientsToLoad.value(0).toInt();
+		    ing.name=unescapeAndDecode(ingredientsToLoad.value(1).toString());
+		    ing.amount=ingredientsToLoad.value(2).toDouble();
+		    ing.unitID=ingredientsToLoad.value(3).toInt();
+		    ing.units=unescapeAndDecode(ingredientsToLoad.value(4).toString());
+		    }
+		    else
+		    {
+		    ing.ingredientID=ingredientsToLoad.value(0).toInt();
+		    ing.amount=ingredientsToLoad.value(2).toDouble();
+		    ing.unitID=ingredientsToLoad.value(3).toInt();
+
+		    }
+		    list->add(ing);
+                }
+            }
+}
+
 void MySQLRecipeDB::loadRecipe(Recipe *recipe,int recipeID)
 {
 

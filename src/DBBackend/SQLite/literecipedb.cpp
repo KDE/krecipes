@@ -61,6 +61,49 @@ void LiteRecipeDB::createDB()
 // FIXME : create database file?
 }
 
+void LiteRecipeDB::loadAllRecipeIngredients(IngredientList *list,bool withNames)
+{
+list->clear();
+
+QString command;
+if (withNames)
+{
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id);" );
+}
+else
+{
+command=QString("SELECT ingredient_id,amount,unit_id FROM ingredient_list;" );
+}
+
+QSQLiteResult ingredientsToLoad=database->executeQuery( command);
+
+	    if (ingredientsToLoad.getStatus() != QSQLiteResult::Failure) {
+	    QSQLiteResultRow row = ingredientsToLoad.first();
+                while ( !ingredientsToLoad.atEnd() ) {
+		    Ingredient ing;
+		    if (withNames)
+		    {
+		    ing.ingredientID=row.data(0).toInt();
+		    ing.name=unescapeAndDecode(row.data(1));
+		    ing.amount=row.data(2).toDouble();
+		    ing.unitID=row.data(3).toInt();
+		    ing.units=unescapeAndDecode(row.data(4));
+		    }
+		    else
+		    {
+		    ing.ingredientID=row.data(0).toInt();
+		    ing.amount=row.data(1).toDouble();
+		    ing.unitID=row.data(2).toInt();
+		    }
+
+		    list->add(ing);
+		    row=ingredientsToLoad.next();
+
+                }
+            }
+
+}
+
 void LiteRecipeDB::loadRecipe(Recipe *recipe,int recipeID)
 {
 
@@ -184,7 +227,7 @@ recipeToLoad=database->executeQuery(command);
 
 void LiteRecipeDB::loadRecipes(RecipeList *rlist,bool getInstructions,bool getPhoto)
 {
-
+// FIXME: still unfinished. (doesn't follow all parameters)
 rlist->clear();
 
 QString command;
