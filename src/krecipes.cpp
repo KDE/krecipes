@@ -14,6 +14,7 @@
 #include "authorsdialog.h"
 #include "unitsdialog.h"
 
+#include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
 #include "importers/mx2importer.h"
 #include "importers/mxpimporter.h"
@@ -231,6 +232,7 @@ void Krecipes::filePrint()
 void Krecipes::import()
 {
 	KFileDialog file_dialog( i18n("Import Recipes"),
+	  "*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
 	  "*.mx2|MasterCook (*.mx2)\n"
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
 	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
@@ -259,6 +261,8 @@ void Krecipes::import()
 				importer = new NYCGenericImporter( *it );
 			else if ( selected_filter == "*.mx2" )
 				importer = new MX2Importer( *it );
+			else if ( selected_filter == "*.kre *.kreml" )
+				importer = new KreImporter( *it );
 			else
 			{
 				KMessageBox::sorry( this,
