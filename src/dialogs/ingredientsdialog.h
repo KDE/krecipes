@@ -81,6 +81,7 @@ private:
     void removePropertyFromIngredient(void);
     void insertPropertyEditBox(QListViewItem* it);
     void setPropertyAmount(double amount);
+    void openUSDADialog(void);
 
 };
 

@@ -12,12 +12,13 @@
 
 #include "ingredientsdialog.h"
 #include "DBBackend/recipedb.h"
-#include "selectunitdialog.h"
 #include "createelementdialog.h"
-#include "ingredientpropertylist.h"
-#include "selectpropertydialog.h"
 #include "editbox.h"
+#include "ingredientpropertylist.h"
 #include "unitsdialog.h"
+#include "usdadatadialog.h"
+#include "selectpropertydialog.h"
+#include "selectunitdialog.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -141,6 +142,11 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removePropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removePropertyButton->setFlat(true);
 
+    QPushButton *loadUsdaButton = new QPushButton(this);
+    loadUsdaButton->setText(i18n("Load USDA data"));
+    layout->addMultiCellWidget( loadUsdaButton, 10, 10, 5, 6 );
+    loadUsdaButton->setFlat(true);
+
     QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_Prop_Buttons,7,7);
 
@@ -164,6 +170,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
     connect(propertiesListView->listView(),SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
     connect(inputBox,SIGNAL(valueChanged(double)),this,SLOT(setPropertyAmount(double)));
+    connect(loadUsdaButton,SIGNAL(clicked()),this,SLOT(openUSDADialog()));
 }
 
 
@@ -499,4 +506,18 @@ else
 void IngredientsDialog::reload(void)
 {
 this->reloadIngredientList();
+}
+
+void IngredientsDialog::openUSDADialog(void)
+{
+	QListViewItem *ing_it = ingredientListView->listView()->selectedItem(); // Find selected ingredient
+	if ( ing_it )
+	{
+		USDADataDialog usda_dialog( Element(ing_it->text(1),ing_it->text(0).toInt()),database,this);
+
+		if ( usda_dialog.exec() == QDialog::Accepted )
+			reloadPropertyList(); //update property list upon success
+	}
+	else
+		QMessageBox::information(this,QString::null,i18n("No ingredient selected!"));
 }
