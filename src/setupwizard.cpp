@@ -18,7 +18,9 @@ SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f
 welcomePage= new WelcomePage(this);
 addPage(welcomePage,"Welcome to Krecipes");
 serverSetupPage = new ServerSetupPage(this);
-addPage(serverSetupPage,"ServerSettings");
+addPage(serverSetupPage,"Server Settings");
+savePage = new SavePage(this);
+addPage(savePage,"Finish and Save Settings");
 
 }
 
@@ -106,4 +108,19 @@ QSpacerItem* spacerRow4 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePol
 layout->addItem( spacerRow4, 8,2 );
 QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 layout->addItem( spacerRight, 1,5 );
+}
+
+SavePage::SavePage(QWidget *parent):QWidget(parent)
+{
+QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+
+QPixmap logoPixmap ("../pics/save.png");
+logo=new QLabel(this);
+logo->setPixmap(logoPixmap);
+layout->addWidget(logo,1,1);
+
+saveText=new KTextEdit(this);
+saveText->setText("Congratulations! The necessary configuration was already setup. Press 'Finish' to continue, and enjoy cooking!");
+layout->addWidget(saveText,1,2);
+
 }

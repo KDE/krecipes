@@ -23,15 +23,18 @@
 
 class WelcomePage;
 class ServerSetupPage;
+class SavePage;
+
 class SetupWizard:public KWizard{
 public:
 
-     SetupWizard(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
+     SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
     ~SetupWizard();
 private:
 	// Widgets
 	WelcomePage *welcomePage;
 	ServerSetupPage *serverSetupPage;
+	SavePage *savePage;
 
 };
 
@@ -59,6 +62,17 @@ private:
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+
+};
+
+class SavePage:public QWidget{
+public:
+	// Methods
+	SavePage(QWidget *parent);
+private:
+	// Widgets
+	QLabel *logo;
+	KTextEdit *saveText;
 
 };
 
