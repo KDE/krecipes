@@ -21,9 +21,11 @@
 #include <qlabel.h>
 #include <qgroupbox.h>
 #include <qobject.h>
+#include <qtabwidget.h>
 
 #include "elementlist.h"
 
+class QTabWidget;
 class Recipe;
 class ElementList;
 class RecipeDB;
@@ -53,9 +55,12 @@ private:
 	bool unsavedChanges;
 
 	// Widgets
+    QTabWidget* tabWidget;
+    QGroupBox* recipeTab;
 
 	//Recipe Photo
 	QLabel *photoLabel;
+  QPixmap regularPhoto;
 	QPushButton *changePhotoButton;
 
 	//Recipe Body
