@@ -50,7 +50,6 @@ private:
     QPushButton* autoFillButton;
     QPushButton* okButton;
     QPushButton* clearButton;
-    KIconLoader* il;
     ShoppingListViewDialog *shoppingListDisplay;
 
 public slots:
