@@ -246,6 +246,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		progress->advance( 1 );
 		kapp->processEvents();
 
+		( *recipe_it ).recipeID = -1; //make sure an importer didn't give this a value
+
 		ElementList ingGroupList;
 
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already

@@ -63,8 +63,7 @@ void KreDBImporter::parseFile( const QString &file )  //this is either a databas
 			database->loadRecipes( &recipes, ids );
 
 			//now add these recipes to the importer
-			add
-				( recipes );
+			add( recipes );
 		}
 		else
 			setErrorMsg( database->err() );
