@@ -22,15 +22,17 @@
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 
-CategoryCheckListItem::CategoryCheckListItem(QListView* klv, const Element &category ) : QCheckListItem(klv,QString::null,QCheckListItem::CheckBox),
+CategoryCheckListItem::CategoryCheckListItem(QListView* klv, const Element &category, bool _exclusive ) : QCheckListItem(klv,QString::null,QCheckListItem::CheckBox),
 	locked(false),
+	exclusive(_exclusive),
 	ctyStored(category)
 {
 	setOn(false); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem(QListViewItem* it, const Element &category ) : QCheckListItem(it,QString::null,QCheckListItem::CheckBox),
+CategoryCheckListItem::CategoryCheckListItem(QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem(it,QString::null,QCheckListItem::CheckBox),
 	locked(false),
+	exclusive(_exclusive),
 	ctyStored(category)
 {
 	setOn(false); // Set unchecked by default
@@ -55,7 +57,7 @@ void CategoryCheckListItem::stateChange(bool on)
 {
 	if ( locked ) return;
 
-	if ( on )
+	if ( on && exclusive )
 	{
 		setParentsState(false);
 		setChildrenState(false);

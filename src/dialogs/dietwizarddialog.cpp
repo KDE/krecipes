@@ -420,11 +420,13 @@ categoriesEnabledBox=new QCheckBox(categoriesBox);
 categoriesEnabledBox->setText(i18n("Enable Category Filtering"));
 
 categoriesView=new CategoryCheckListView(categoriesBox,database);
+categoriesView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 categoriesView->setEnabled(false); // Disable it by default
 categoriesView->reload();
 
 	//Constraints list
 constraintsView=new PropertyConstraintListView(listBox,database);
+constraintsView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 constraintsView->reload();
 
 	// KDoubleInput based edit boxes

@@ -260,14 +260,14 @@ void DualCategoryListView::createCategory(const Element &category,int parent_id)
 {
 	CategoryCheckListItem *new_item;
 	if ( parent_id == -1 )
-		new_item = new CategoryCheckListItem(this,category);
+		new_item = new CategoryCheckListItem(this,category,false);
 	else
 	{
 		QListViewItem *parent = findItem(QString::number(parent_id),1);
 
 		Q_ASSERT(parent);
 
-		new_item = new CategoryCheckListItem(parent,category);
+		new_item = new CategoryCheckListItem(parent,category,false);
 	}
 
 	new_item->setOpen(true);

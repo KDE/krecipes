@@ -215,42 +215,33 @@ il=new KIconLoader;
 
     //Input Widgets
     QHBox *allInputHBox = new QHBox( ingredientGBox );
-    allInputHBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    allInputHBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
     
     QVBox *ingredientVBox = new QVBox( allInputHBox );
-    ingredientVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
     ingredientBox = new KComboBox( TRUE, ingredientVBox );
     ingredientBox->setAutoCompletion( TRUE );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
-    ingredientBox->setMinimumSize(QSize(100,30));
-    ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Fixed));
 
     QVBox *amountVBox = new QVBox( allInputHBox );
-    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
     amountLabel = new QLabel( i18n("Amount:"), amountVBox );
     amountEdit = new FractionInput( amountVBox);
-    amountEdit->setMinimumSize(QSize(60,30));
     amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
 
     QVBox *unitVBox = new QVBox( allInputHBox );
-    unitVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     unitLabel = new QLabel( i18n("Unit:"), unitVBox );
     unitBox = new KComboBox( TRUE, unitVBox );
     unitBox->setAutoCompletion( TRUE );
     unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
-    unitBox->setMinimumSize(QSize(100,30));
-    unitBox->setMaximumSize(QSize(10000,30));
-    unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    unitBox->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Fixed));
     
     QVBox *prepMethodVBox = new QVBox( allInputHBox );
-    prepMethodVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     prepMethodLabel = new QLabel( i18n("Preparation Method:"), prepMethodVBox );
     prepMethodBox = new KComboBox( TRUE, prepMethodVBox );
     prepMethodBox->setAutoCompletion( TRUE );
     prepMethodBox->lineEdit()->disconnect(prepMethodBox); //so hitting enter doesn't enter the item into the box
-    prepMethodBox->setMinimumSize(QSize(100,30));
-    prepMethodBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    prepMethodBox->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Fixed));
     
     allInputHBox->setStretchFactor( ingredientVBox, 5 );
     allInputHBox->setStretchFactor( amountVBox, 1 );
@@ -312,9 +303,7 @@ il=new KIconLoader;
     ingredientList->addColumn(i18n("Units"));
     ingredientList->addColumn(i18n("Preparation Method"));
     ingredientList->setSorting(-1); // Do not sort
-    ingredientList->setMinimumSize(QSize(200,100));
-    ingredientList->setMaximumSize(QSize(10000,10000));
-    ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::MinimumExpanding));
     ingredientList->setItemsRenameable(true);
     ingredientList->setRenameable(0, false); //name
     ingredientList->setRenameable(1, true ); //amount
@@ -332,8 +321,6 @@ il=new KIconLoader;
     QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
 
     instructionsEdit = new KTextEdit( instructionsTab );
-    instructionsEdit->setMinimumSize(QSize(360,320));
-    instructionsEdit->setMaximumSize(QSize(10000,10000));
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     instructionsLayout->addWidget(instructionsEdit);
 

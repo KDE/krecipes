@@ -12,16 +12,53 @@
 #include "editbox.h"
 #include "mixednumber.h"
 
+#include <qtooltip.h>
+
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <iostream>
+class ConversionTableToolTip : public QToolTip
+{
+public:
+	ConversionTableToolTip( ConversionTable *t ) : QToolTip(t->viewport()),
+	  table(t)
+	{
+	}
+
+	void maybeTip( const QPoint &pos )
+	{
+		if ( !table ) 
+			return;
+
+		QPoint cp = table->viewportToContents( pos );
+
+		int row = table->rowAt(cp.y());
+		int col = table->columnAt(cp.x());
+
+		if ( row == col )
+			return;
+
+		QString row_unit = table->verticalHeader()->label(row);
+		QString col_unit = table->horizontalHeader()->label(col);
+		QString text = table->text(row,col);
+		if ( text.isEmpty() ) text = "X"; //### Is this i18n friendly???
+
+		QRect cr = table->cellGeometry( row, col );
+		cr.moveTopLeft( table->contentsToViewport( cr.topLeft() ) );
+		tip( cr, QString("1 %1 = %2 %3").arg(row_unit).arg(text).arg(col_unit) );
+	}
+
+private:
+	ConversionTable *table;
+};
 
 ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable( maxrows, maxcols, parent, "table" )
 {
 editBoxValue=-1;
 items.setAutoDelete(true);
 widgets.setAutoDelete(true);
+
+(void)new ConversionTableToolTip( this );
 }
 
 ConversionTable::~ConversionTable()
@@ -126,10 +163,10 @@ void ConversionTableItem::setText( const QString &s )
 }
 QString ConversionTable::text(int r, int c ) const			 // without this function, the usual (text(r,c)) won't work
 {
-
-return(item(r,c)->text());  //Note that item(r,c) was reimplemented here for large sparse tables...
-
-
+if ( item(r,c) )
+	return item(r,c)->text();  //Note that item(r,c) was reimplemented here for large sparse tables...
+else
+	return QString::null;
 }
 
 void ConversionTable::initTable()

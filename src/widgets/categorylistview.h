@@ -25,8 +25,8 @@ class CategoryTree;
 
 class CategoryCheckListItem : public QCheckListItem {
 public:
-	CategoryCheckListItem(QListView* klv, const Element &category );
-	CategoryCheckListItem(QListViewItem* it, const Element &category );
+	CategoryCheckListItem(QListView* klv, const Element &category, bool exclusive=true );
+	CategoryCheckListItem(QListViewItem* it, const Element &category, bool exclusive=true );
 
 	~CategoryCheckListItem(void){}
 	virtual QString text(int column) const;
@@ -43,6 +43,7 @@ protected:
 	void setParentsState( bool );
 
 	bool locked;
+	bool exclusive;
 
 private:
 	Element ctyStored;

@@ -677,7 +677,11 @@ if (!recipeButton)
 	recipeButton=new KreMenuButton(leftPanel,0,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 
-	recipeButton->setTitle(title);
+	QString short_title = title.left(20);
+	if ( title.length() > 20 )
+		short_title.append("...");
+
+	recipeButton->setTitle(short_title);
 	if(contextHelp->isShown())
 		{
 		contextHelp->hide();

@@ -39,6 +39,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	
 		// Ingredient list
 	ingredientListView=new KreListView(this,i18n("Ingredients"),true,1);
+	ingredientListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	IngredientCheckListView *list_view = new IngredientCheckListView(ingredientListView,database);
 	list_view->reload();
 	ingredientListView->setListView(list_view);
@@ -57,6 +58,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	
 		// Found recipe list
 	recipeListView=new KreListView(this,i18n("Matching Recipes"),false,1,missingBox);
+	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	recipeListView->listView()->setAllColumnsShowFocus(true);
 	recipeListView->listView()->addColumn(i18n("Title"));
 
