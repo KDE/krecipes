@@ -14,6 +14,11 @@ Element::Element()
 
 }
 
+Element::Element(Element *el)
+{
+id=el->id;
+name=el->name;
+}
 
 Element::~Element()
 {

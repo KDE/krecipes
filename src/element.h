@@ -16,6 +16,7 @@
 class Element{
 public:
     Element();
+    Element(Element *el);
 
     ~Element();
     int id;

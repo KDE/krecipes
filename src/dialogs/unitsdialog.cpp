@@ -12,7 +12,6 @@
 #include "unitsdialog.h"
 #include "createelementdialog.h"
 
-
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
 
@@ -66,26 +65,6 @@ UnitsDialog::~UnitsDialog()
 }
 
 
-void UnitsDialog::loadConversionTable(void)
-{
-ElementList unitList;
-database->loadUnits(&unitList);
-QStringList unitNames;
-for (Element *unit=unitList.getFirst();unit;unit=unitList.getNext())
-{
-unitNames.append(unit->name);
-}
-
-// Resize the table
-conversionTable->setNumRows(unitNames.count());
-conversionTable->setNumCols(unitNames.count());
-// Set the table lables
-conversionTable->setRowLabels(unitNames);
-conversionTable->setColumnLabels(unitNames);
-// Populate the data in the table
-conversionTable->createNewItem(4,4,10);
-}
-
 void UnitsDialog::loadUnitsList(void)
 {
 ElementList unitList;
@@ -135,4 +114,45 @@ else database->removeUnit(unitID); // need warning!
 reloadData();// Reload the list from database
 
 }
+}
+
+
+void UnitsDialog::loadConversionTable(void)
+{
+ElementList unitList;
+database->loadUnits(&unitList);
+QStringList unitNames;
+IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
+for (Element* unit=unitList.getFirst();unit;unit=unitList.getNext())
+{
+unitNames.append(unit->name);
+int *newId=new int; *newId=unit->id; // Create the new int element
+unitIDs.append(newId); // append the element
+std::cerr<<"appending: "<<unit->id<<"\n";
+}
+
+int *id;
+for (id=unitIDs.first();id; id=unitIDs.next())
+{
+std::cerr<<"index: "<<*id<<"\n";
+}
+
+// Resize the table
+conversionTable->setNumRows(unitNames.count());
+conversionTable->setNumCols(unitNames.count());
+// Set the table labels, and id's
+conversionTable->setRowLabels(unitNames);
+conversionTable->setColumnLabels(unitNames);
+conversionTable->setUnitIDs(unitIDs);
+
+// Load and Populate the data into the table
+UnitRatioList ratioList;
+database->loadUnitRatios(&ratioList);
+UnitRatio *ratio;
+for (ratio=ratioList.getFirst();ratio;ratio=ratioList.getNext())
+{
+std::cerr<<ratio->ratio<<"\n";
+conversionTable->setRatio(ratio->ingID1,ratio->ingID2,ratio->ratio );
+}
+
 }

@@ -16,6 +16,17 @@
 /**
 @author Unai Garro
 */
+
+class IDList: public QPtrList <int>
+{
+public:
+IDList(){};
+~IDList(){};
+protected:
+ virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2);
+
+};
+
 class ConversionTable:public QTable{
 Q_OBJECT
 public:
@@ -23,12 +34,15 @@ public:
 	ConversionTable(QWidget* parent,int maxrows,int maxcols);
 	~ConversionTable();
 	void createNewItem(int r, int c, double amount);
+	void setUnitIDs(const IDList &idList);
+	void setRatio(int ingID1, int ingID2, double ratio);
 private:
 
 	//Internal Variables
 	double editBoxValue;
 	QIntDict<QTableItem> items;
 	QIntDict<QWidget> widgets;
+	IDList unitIDs; // unit ID list to know the units by ID, not name
 	//Internal Methods
 	void resizeData(int) {};
 	QTableItem *item( int r, int c ) const;
@@ -59,4 +73,6 @@ private:
 	EditBox *eb;
 
 };
+
+
 #endif

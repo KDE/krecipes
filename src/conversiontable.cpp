@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "conversiontable.h"
-
+#include <iostream>
 
 ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable( maxrows, maxcols, parent, "table" )
 {
@@ -121,3 +121,27 @@ setItem(r,c, ci );
 setText(r,c,QString::number(amount));
 }
 
+void ConversionTable::setUnitIDs(const IDList &idList)
+{
+unitIDs=idList;
+int *id;
+for (id=unitIDs.first();id; id=unitIDs.next())
+{
+std::cerr<<"index taken: "<<*id<<"\n";
+}
+}
+
+void ConversionTable::setRatio(int ingID1, int ingID2, double ratio)
+{
+int indexID1=unitIDs.find(&ingID1);
+int indexID2=unitIDs.find(&ingID2);
+std::cerr<<"Found indexID1: "<< indexID1<<"\n";
+std::cerr<<"Found indexID2: "<< indexID2<<"\n";
+createNewItem(indexID1,indexID2,ratio);
+}
+
+int IDList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2)
+{
+std::cerr<<"Items comparing: "<<*((int*)item1)<<" "<<*((int*)item2)<<"\n";
+return (*((int*)item1)-*((int*)item2));
+}
