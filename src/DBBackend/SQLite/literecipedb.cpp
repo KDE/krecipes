@@ -1359,7 +1359,7 @@ else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_
 
 else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL, parent_id INGEGER NOT NULL, PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL, parent_id INGEGER NOT NULL default -1, PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list")
 	{

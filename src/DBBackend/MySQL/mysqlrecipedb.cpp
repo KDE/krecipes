@@ -1292,7 +1292,7 @@ else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_
 
 else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL, parent_id int(11) NO NULL, PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL, parent_id int(11) NOT NULL default -1, PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list") commands<<"CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
 

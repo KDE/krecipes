@@ -383,6 +383,12 @@ database=db;
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
     connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
     connect(ingredientList,SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), SLOT( syncListView(QListViewItem*,const QString &,int) ));
+    
+    connect(unitBox->lineEdit(),SIGNAL(returnPressed()),this, SLOT(addIngredient()) );
+    connect(ingredientBox->lineEdit(),SIGNAL(returnPressed()),this, SLOT(addIngredient()) );
+    connect(prepMethodBox->lineEdit(),SIGNAL(returnPressed()),this, SLOT(addIngredient()) );
+    connect(amountEdit,SIGNAL(returnPressed(const QString &)),this, SLOT(addIngredient()) );
+
     	// Function buttons
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
     connect (closeButton,SIGNAL(clicked()),this,SLOT(closeOptions()));
@@ -654,6 +660,7 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 		  " this ingredient.")).arg(ingredientBox->currentText()),
 		  QMessageBox::Ok
 		  );
+		unitBox->setFocus();
 		return;
 	}
 
