@@ -16,6 +16,8 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
+
 #include "recipeinputdialog.h"
 #include "selectauthorsdialog.h"
 #include "recipe.h"
@@ -33,6 +35,7 @@ loadedRecipe->recipeID=-1; // No loaded recipe initially
 loadedRecipe->title=QString::null;
 loadedRecipe->instructions=QString::null;
 database=db;
+
 
 // Tabs
     tabWidget = new QTabWidget( this, "tabWidget" );
@@ -312,10 +315,21 @@ RecipeInputDialog::~RecipeInputDialog()
 
 void RecipeInputDialog::loadRecipe(int recipeID)
 {
+	if ( !everythingSaved() )
+	{
+		switch( KMessageBox::questionYesNoCancel( this,
+		  i18n(QString("Recipe \"%1\" contains unsaved changes.\n"
+		  "Do you want to save changes made to this recipe before editing another recipe?").arg(titleEdit->text())),
+		  i18n("Save Recipe?") ) )
+		{
+		case KMessageBox::Yes: save(); break;
+		case KMessageBox::No: break;
+		case KMessageBox::Cancel: return;
+		}
+	}
 
 //Disable changed() signals
 enableChangedSignal(false);
-
 
 //Empty current recipe
 loadedRecipe->empty();
@@ -619,6 +633,36 @@ loadedRecipe->photo= regularPhoto;
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
 loadedRecipe->persons=servingsNumInput->value();
+
+if ( loadedRecipe->recipeID == -1 ) //don't want to tell user it already exists if we are editing an existing recipe
+{
+	int id = database->findExistingRecipeByName( loadedRecipe->title );
+	if ( id != -1 )
+	{
+		QString unique_title = database->getUniqueRecipeTitle( loadedRecipe->title );
+		switch( KMessageBox::questionYesNoCancel( this,
+		  i18n(QString("The recipe \"%1\" already exists.\n"
+		  "Do you want to rename this recipe to \"%2\"?").arg(loadedRecipe->title).arg(unique_title)),
+		  i18n("Recipe Exists"),
+		  i18n("&Rename"),
+		  i18n("&Overwrite") )
+		)
+		{
+		case KMessageBox::Yes: //rename
+			loadedRecipe->title = unique_title;
+			titleEdit->setText(unique_title);
+			break;
+		case KMessageBox::No: //overwrite
+			loadedRecipe->recipeID = id;
+			break;
+		case KMessageBox::Cancel: //we didn't make changes after all
+			emit enableSaveOption(true);
+			unsavedChanges=true;
+			return;
+		}
+	}
+}
+
 // Now save()
 database->saveRecipe(loadedRecipe);
 
@@ -636,7 +680,8 @@ instructionsEdit->setText(i18n("Write the recipe instructions here"));
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
 ingredientList->clear();
-
+authorShow->clear();
+categoryShow->clear();
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
