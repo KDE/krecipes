@@ -7,8 +7,8 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef FRACTION_H
-#define FRACTION_H
+#ifndef MIXEDNUMBER_H
+#define MIXEDNUMBER_H
 
 #include <qstring.h>
 
@@ -31,7 +31,7 @@ public:
 	double toDouble();
 
 	/** Returns the fraction as a string */
-	QString toString( Format );
+	QString toString( Format = MixedNumberFormat );
 
 	/** The whole part of the input when the inputType() is a fraction. */
 	int whole(){ return m_whole; }
@@ -45,15 +45,19 @@ public:
 	/** Simplify the fraction to its lowest terms */
 	void simplify();
 
+	void simplifyRoundingErrors();
+
 	static MixedNumber fromString( const QString &input, bool *ok = 0 );
 
 private:
 	static int getNumerator( const QString &input, int space_index, int slash_index, bool *ok );
 	static int getDenominator( const QString &input, int slash_index, bool *ok );
 
+	int gcd( int, int );
+
 	int m_whole;
 	int m_numerator;
 	int m_denominator;
 };
 
-#endif //FRACTION_H
+#endif //MIXEDNUMBER_H

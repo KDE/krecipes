@@ -13,7 +13,7 @@
 
 #include <qregexp.h>
 
-#define ROUND(a) (floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a))
+#define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 
 MixedNumber::MixedNumber()
 {
@@ -32,11 +32,12 @@ MixedNumber::MixedNumber( double decimal )
 	int decimal_index = as_string.find('.');
 	m_whole = as_string.left( decimal_index ).toInt();
 
-	if ( (decimal_index != -1) && (fabs(decimal-ROUND(decimal)) > 0.000001) )
+	if ( fabs(decimal-ROUND(decimal)) > 0.000001 )
 	{
 		QString decimal_part = as_string.mid( decimal_index+1, as_string.length() );
 		m_numerator = decimal_part.toInt();
 		m_denominator = static_cast<int>(pow(10, static_cast<double>(decimal_part.length())));
+		simplifyRoundingErrors();
 		simplify();
 	}
 	else
@@ -149,7 +150,20 @@ MixedNumber MixedNumber::operator+( const MixedNumber &fraction )
 
 void MixedNumber::simplify()
 {
+	int divisor = gcd( m_numerator, m_denominator );
+	m_numerator /= divisor;
+	m_denominator /= divisor;
+}
 
+void MixedNumber::simplifyRoundingErrors()
+{
+	int orig_num = m_numerator;
+	int orig_den = m_denominator;
+
+
+
+	m_numerator = orig_num;
+	m_denominator = orig_den;
 }
 
 double MixedNumber::toDouble()
@@ -157,3 +171,15 @@ double MixedNumber::toDouble()
 	return static_cast<double>(m_whole)+(static_cast<double>(m_numerator)/static_cast<double>(m_denominator));
 }
 
+int MixedNumber::gcd( int n, int m )
+{
+	int r;
+	while ( n != 0 )
+	{
+		r = m % n;
+		m = n;
+		n = r;
+	}
+
+	return m;
+}
