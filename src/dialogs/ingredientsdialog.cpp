@@ -220,7 +220,7 @@ unitsListView->setSelected(unitsListView->firstChild(),true);
 
 void IngredientsDialog::addIngredient(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(QString(i18n("New Ingredient")));
+CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Ingredient")));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
