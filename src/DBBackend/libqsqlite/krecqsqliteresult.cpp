@@ -1,6 +1,13 @@
  /**************************************************************************
- *               Copyright (C) 2003 by the opie project and                *
+ *                                                                         *
+ *                Copyright (C) 2003 by the opie project,                  *
  *                    qsqlite.sourceforge.net authors                      *
+ *                 and krecipes.courceforge.net authors                    *
+ *                                                                         *
+ * This code was originally developed by the opie project, on which the    *
+ *           qsqlite.sourceforge.netproject based their work.              *
+ * This file is a small extension to it, necessary to perform some minimum *
+ * SQL actions)                                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -183,4 +190,9 @@ QSQLiteResult::Columns::ConstIterator QSQLiteResult::iterator() const
     QSQLiteResult::Columns::ConstIterator it;
     it = m_list.begin();
     return it;
+}
+
+int QSQLiteResult::size() const
+{
+return(m_list.size());
 }

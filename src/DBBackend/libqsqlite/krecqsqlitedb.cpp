@@ -1,6 +1,13 @@
  /**************************************************************************
- *               Copyright (C) 2003 by the opie project and                *
+ *                                                                         *
+ *                Copyright (C) 2003 by the opie project,                  *
  *                    qsqlite.sourceforge.net authors                      *
+ *                 and krecipes.courceforge.net authors                    *
+ *                                                                         *
+ * This code was originally developed by the opie project, on which the    *
+ *           qsqlite.sourceforge.netproject based their work.              *
+ * This file is a small extension to it, necessary to perform some minimum *
+ * SQL actions)                                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +49,7 @@ void QSQLiteDB::close()
 	}
 }
 
-QSQLiteResult QSQLiteDB::executeQuery(const QString &query)
+QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 {
 	QSQLiteResult *res = new QSQLiteResult();
 
@@ -57,6 +64,11 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query)
 		res->setError(errmsg);
 		res->setStatus(QSQLiteResult::Failure);
         free(errmsg);
+	}
+
+	if (lastID)
+	{
+	*lastID=sqlite_last_insert_rowid(m_db);
 	}
 
 	return *res;

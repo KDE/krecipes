@@ -1,12 +1,20 @@
  /**************************************************************************
- *               Copyright (C) 2003 by the opie project and                *
+ *                                                                         *
+ *                Copyright (C) 2003 by the opie project,                  *
  *                    qsqlite.sourceforge.net authors                      *
+ *                 and krecipes.courceforge.net authors                    *
+ *                                                                         *
+ * This code was originally developed by the opie project, on which the    *
+ *           qsqlite.sourceforge.netproject based their work.              *
+ * This file is a small extension to it, necessary to perform some minimum *
+ * SQL actions)                                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 
 #ifndef QSQLITERESULT_H
 #define QSQLITERESULT_H
@@ -120,6 +128,7 @@ public:
 	bool atEnd();
 
 	Columns::ConstIterator iterator() const;
+	int size() const;
 
 private:
 	enum Status m_status;
