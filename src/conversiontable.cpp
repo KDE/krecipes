@@ -38,6 +38,7 @@ void ConversionTable::setItem(int r, int c, QTableItem *i )
 items.replace( indexOf( r, c ), i );
 i->setRow(r); // Otherwise the item
 i->setCol(c); //doesn't know where it is!
+updateCell(r,c);
 }
 
 void ConversionTable::clearCell( int r, int c )
@@ -145,12 +146,11 @@ void ConversionTable::createNewItem(int r, int c, double amount)
 {
 
 ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
-setItem(r,c, ci );
 ci->setText(beautify(KGlobal::locale()->formatNumber(amount,5)));
+setItem(r,c, ci );
 // connect signal (forward) to know when it's actually changed
 connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
 connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));
-
 }
 
 void ConversionTable::setUnitIDs(IDList &idList)

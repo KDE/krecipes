@@ -17,8 +17,11 @@
 #include "DBBackend/recipedb.h"
 #include "editbox.h"
 #include "conversiontable.h"
-#include <klocale.h>
+
+#include <kapplication.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kprogress.h>
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
@@ -191,22 +194,33 @@ database->saveUnitRatio(&ratio);
 
 UnitRatio reverse_ratio; reverse_ratio.uID1 = ratio.uID2; reverse_ratio.uID2 = ratio.uID1; reverse_ratio.ratio = 1.0/ratio.ratio;
 database->saveUnitRatio(&reverse_ratio);
+conversionTable->setRatio(reverse_ratio);
 
+#if 0
 UnitRatioList ratioList;
 database->loadUnitRatios(&ratioList);
 
 saveAllRatios(ratioList);
-
-loadConversionTable(); //TODO: Just repaint the changed cells
+#endif
 }
 
 void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 {
+	#if 0
+	KProgressDialog progress_dialog(this,"progress_dialog",i18n("Finding Unit Ratios"),QString::null,true);
+	progress_dialog.progressBar()->setTotalSteps(ratioList.count()*ratioList.count());
+
 	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); current_it++ )
 	{
 		UnitRatio current_ratio = *current_it;
 		for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ratio_it++ )
 		{
+			if (progress_dialog.wasCancelled())
+				return;
+
+			progress_dialog.progressBar()->advance(1);
+			kapp->processEvents();
+
 			UnitRatio new_ratio;
 			new_ratio.uID1 = current_ratio.uID1;
 			new_ratio.uID2 = (*ratio_it).uID2;
@@ -216,15 +230,16 @@ void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 				continue;
 
 			if ( ((*ratio_it).uID1 == current_ratio.uID2) && ((*ratio_it).uID2!=current_ratio.uID1) )
-			{
+			{			
 				UnitRatio reverse_ratio; reverse_ratio.uID1 = new_ratio.uID2; reverse_ratio.uID2 = new_ratio.uID1; reverse_ratio.ratio = 1.0/new_ratio.ratio;
 	
 				database->saveUnitRatio(&new_ratio); database->saveUnitRatio(&reverse_ratio);
-	
-				ratioList.append(new_ratio); ratioList.append(reverse_ratio);
+				conversionTable->setRatio(new_ratio); conversionTable->setRatio(reverse_ratio);
+				//ratioList.append(new_ratio); ratioList.append(reverse_ratio);
 			}
 		}
 	}
+	#endif
 }
 
 void UnitsDialog::reload(void)

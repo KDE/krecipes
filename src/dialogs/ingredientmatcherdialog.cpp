@@ -15,6 +15,7 @@
 #include "DBBackend/recipedb.h"
 #include "widgets/krelistview.h"
 
+#include <qheader.h>
 #include <qpainter.h>
 #include <qstringlist.h>
 #include <kiconloader.h>
@@ -189,31 +190,33 @@ void IngredientMatcherDialog::reloadIngredients(void)
 		}
 }
 
-void SectionItem::paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align )
+void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int /*width*/, int /*align*/ )
 {
-int totalWidth=listView()->columnWidth(0)+listView()->columnWidth(1);
-
-QPixmap sectionPm(totalWidth,height()); QPainter painter(&sectionPm);
-
-// Draw the section's deco
-painter.setPen(KGlobalSettings::activeTitleColor());
-painter.setBrush(KGlobalSettings::activeTitleColor());
-painter.drawRect(0,0,totalWidth,height());
-
-// Draw the section's text
-
-QFont titleFont=KGlobalSettings::windowTitleFont ();
-painter.setFont(titleFont);
-
-painter.setPen(KGlobalSettings::activeTextColor());
-painter.drawText(0,0,totalWidth,height(),Qt::AlignHCenter|Qt::AlignVCenter,mText);
-
-// Paint only this cell (causes trouble while resizing)
-
-/*if (column==0) bitBlt(p->device(), 0, 0, &textPm,0,0,width,height());
-else if (column==1) bitBlt(p->device(),listView()->columnWidth(0),0,&textPm,listView()->columnWidth(0),0,width,height());*/
-
-// Paint full row
-bitBlt(p->device(), 0, itemPos(), &sectionPm,0,0,totalWidth,height());
-
+	if ( column == 0 ) //we only need to do this once
+	{
+		int totalWidth=listView()->columnWidth(0)+listView()->columnWidth(1);
+		
+		QPixmap sectionPm(totalWidth,height()); QPainter painter(&sectionPm);
+		
+		// Draw the section's deco
+		painter.setPen(KGlobalSettings::activeTitleColor());
+		painter.setBrush(KGlobalSettings::activeTitleColor());
+		painter.drawRect(0,0,totalWidth,height());
+		
+		// Draw the section's text
+		
+		QFont titleFont=KGlobalSettings::windowTitleFont ();
+		painter.setFont(titleFont);
+		
+		painter.setPen(KGlobalSettings::activeTextColor());
+		painter.drawText(0,0,totalWidth,height(),Qt::AlignHCenter|Qt::AlignVCenter,mText);
+		
+		// Paint only this cell (causes trouble while resizing)
+		
+		/*if (column==0) bitBlt(p->device(), 0, 0, &textPm,0,0,width,height());
+		else if (column==1) bitBlt(p->device(),listView()->columnWidth(0),0,&textPm,listView()->columnWidth(0),0,width,height());*/
+		
+		// Paint full row
+		bitBlt(p->device(), 0, listView()->contentsToViewport(QPoint(0,itemPos())).y(), &sectionPm,0,0,totalWidth,height());
+	}
 }
