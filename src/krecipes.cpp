@@ -13,7 +13,8 @@
 #include "dialogs/categorieseditordialog.h"
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
-#include "dialogs/pagesetupdialog.h"
+
+#include "gui/pagesetupdialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
