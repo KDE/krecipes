@@ -34,8 +34,15 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
+
+#ifdef USE_MYSQL_DATABASE
 #include "DBBackend/mysqlrecipedb.h"
+#endif
+
+#ifdef USE_SQLITE_DATABASE
 #include "DBBackend/literecipedb.h"
+#endif
+
 #include "menugroup.h"
 
 KrecipesView::KrecipesView(QWidget *parent)
