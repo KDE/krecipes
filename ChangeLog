@@ -1,0 +1,3 @@
+2003-07-18  <>
+	Few changes to have a proper find() function. Now it inherits from QPtrList <Ingredient> instead of only using it. 
+
