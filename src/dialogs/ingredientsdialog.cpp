@@ -8,7 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "ingredientsdialog.h"
+
 #include <qheader.h>
+#include "dependanciesdialog.h"
 
 IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -250,8 +252,10 @@ if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was select
   ElementList results;
   database->findUseOf_Ing_Unit_InRecipes(&results,ingredientID,unitID); // Find if this ingredient-unit combination is being used
   if (results.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
-  else database->removeUnitFromIngredient(ingredientID,unitID); //must warn!
-
+  else { // must warn!
+  DependanciesDialog *warnDialog=new DependanciesDialog(0,&results); warnDialog->exec();
+  database->removeUnitFromIngredient(ingredientID,unitID);
+  }
 reloadUnitList(); // Reload the list from database
 reloadPropertyList(); // Properties could have been removed if a unit is removed, so we need to reload.
 }
@@ -271,7 +275,6 @@ ElementList results;
 database->findUseOfIngInRecipes(&results,ingredientID);
 if (results.isEmpty()) database->removeIngredient(ingredientID);
 else database->removeIngredient(ingredientID);
-
 
 reloadIngredientList();// Reload the list from database
 

@@ -10,15 +10,23 @@
 #ifndef DEPENDANCIESDIALOG_H
 #define DEPENDANCIESDIALOG_H
 
+#include <qdialog.h>
+#include <klistview.h>
+#include "elementlist.h"
 /**
 @author Unai Garro
 */
-class DependanciesDialog{
+class DependanciesDialog:public QDialog{
 public:
-
-
+    //Methods
+    DependanciesDialog(QWidget *parent=0,ElementList* recipeList=0, ElementList* ingredientList=0,ElementList* propertiesList=0);
     ~DependanciesDialog();
-
+private:
+    //Widgets
+    KListView *recipeListView;
+    KListView *ingredientListView;
+    KListView *propertiesListView;
+    void loadList(KListView* listView,ElementList *list);
 };
 
 #endif
