@@ -7,10 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include <iostream>
 #include "propertycalculator.h"
 
-
+#include <kdebug.h>
 
 int autoConvert(RecipeDB* database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)
 {
@@ -44,15 +43,20 @@ else
 ** Version with database I/O. DB must be provided
 */
 
-void calculateProperties(Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList)
+void calculateProperties(const Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList)
 {
 recipePropertyList->clear();
 // Note that recipePropertyList is not attached to any ingredient. It's just the total of the recipe
 IngredientPropertyList ingredientPropertyList; // property list for each ingredient
 
 int ingredientNo=1;
-for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
+
+QPtrListIterator<Ingredient> ing_it( recipe.ingList );
+Ingredient *ing;
+while ( (ing = ing_it.current()) != 0 )
 	{
+	++ing_it;
+
 	database->loadProperties(&ingredientPropertyList,ing->ingredientID);
 	ingredientPropertyList.divide(recipe.persons); // calculates properties per person
 	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing,ingredientNo);
@@ -78,7 +82,7 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 		else property->amount-=(prop->amount)*(ing.amount)*ratio; //The recipe was marked as undefined previously. Keep it negative
 		}
 	else { // Could not convert units
-	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     kdDebug()<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 	     }
 
 	}
@@ -103,7 +107,7 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 			recipePropertyList->add(property);
 			}
 		else { // Could not convert units
-		std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+		kdDebug()<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 		}
 
 
@@ -122,15 +126,17 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 */
 
 
-void calculateProperties(Recipe& recipe,IngredientPropertyList& ipl,UnitRatioList& url, IngredientPropertyList *recipePropertyList)
+void calculateProperties(const Recipe& recipe,IngredientPropertyList& ipl,UnitRatioList& url, IngredientPropertyList *recipePropertyList)
 {
 recipePropertyList->clear();
 
 IngredientPropertyList filteredPropertyList;
 
 int ingredientNo=1;
-for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
-	{
+QPtrListIterator<Ingredient> ing_it( recipe.ingList );
+Ingredient *ing;
+while ( (ing = ing_it.current()) != 0 )
+{
 	ipl.filter(ing->ingredientID,&filteredPropertyList); // Get the properties for the respective ingredient
 	filteredPropertyList.divide(recipe.persons); // calculates properties per person
 	addPropertyToList(recipePropertyList,filteredPropertyList,*ing,url,ingredientNo);
@@ -155,7 +161,7 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 		else property->amount-=(prop->amount)*(ing.amount)*ratio; //The recipe was marked as undefined previously. Keep it negative
 		}
 	else { // Could not convert units
-	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion";
+	     kdDebug()<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion";
 	     }
 
 	}
@@ -181,7 +187,7 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 		recipePropertyList->add(property);
 		}
 	else { // Could not convert units
-	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     kdDebug()<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 	     }
 	}
 

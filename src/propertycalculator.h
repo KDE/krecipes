@@ -22,12 +22,12 @@ void checkUndefined(IngredientPropertyList *recipePropertyList,IngredientPropert
 ** Version with database I/O. DB must be provided
 */
 
-void calculateProperties(Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList);
+void calculateProperties(const Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList);
 void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing,int ingredientNo);
 
 /*
 ** Version with no database I/O. necessary DB data must be provided. Useful for caching data
 */
-void calculateProperties(Recipe& recipe,IngredientPropertyList& ipl,UnitRatioList& url, IngredientPropertyList *recipePropertyList);
+void calculateProperties(const Recipe& recipe,IngredientPropertyList& ipl,UnitRatioList& url, IngredientPropertyList *recipePropertyList);
 void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,Ingredient &ing,UnitRatioList &url, int ingredientNo);
 

@@ -25,7 +25,7 @@ RecipeMLExporter::~RecipeMLExporter()
 {
 }
 
-QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
+QString RecipeMLExporter::createContent( const RecipeList& recipes )
 {
 	QDomImplementation dom_imp;
 	QDomDocument doc = dom_imp.createDocument( QString::null, "recipeml", dom_imp.createDocumentType( "recipeml", "-//FormatData//DTD RecipeML 0.5//EN", "http://www.formatdata.com/recipeml/recipeml.dtd") );
@@ -51,12 +51,9 @@ QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 	}
 	#endif
 
-	Recipe *recipe;
-	QValueList<Recipe*>::const_iterator recipe_it;
+	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
-
 		QDomElement recipe_tag = doc.createElement("recipe");
 
 		recipe_root.appendChild( recipe_tag ); //will append to either <menu> if exists or else <recipeml>
@@ -65,11 +62,11 @@ QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 			recipe_tag.appendChild( head_tag );
 
 				QDomElement title_tag = doc.createElement("title");
-				title_tag.appendChild( doc.createTextNode(recipe->title) );
+				title_tag.appendChild( doc.createTextNode((*recipe_it).title) );
 				head_tag.appendChild( title_tag );
 
 				QDomElement source_tag = doc.createElement("source");
-				QPtrListIterator<Element> author_it( recipe->authorList );
+				QPtrListIterator<Element> author_it( (*recipe_it).authorList );
 				Element *author;
 				while ( (author = author_it.current()) != 0 )
 				{
@@ -81,7 +78,7 @@ QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 				head_tag.appendChild( source_tag );
 
 				QDomElement categories_tag = doc.createElement("categories");
-				QPtrListIterator<Element> cat_it( recipe->categoryList );
+				QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
 				Element *cat;
 				while ( (cat = cat_it.current()) != 0 )
 				{
@@ -93,11 +90,11 @@ QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 				head_tag.appendChild(categories_tag);
 
 				QDomElement yield_tag = doc.createElement("yield");
-				yield_tag.appendChild( doc.createTextNode(QString::number(recipe->persons)) );
+				yield_tag.appendChild( doc.createTextNode(QString::number((*recipe_it).persons)) );
 				head_tag.appendChild( yield_tag );
 
 			QDomElement ingredients_tag = doc.createElement("ingredients");
-			QPtrListIterator<Ingredient> ing_it( recipe->ingList );
+			QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
 			Ingredient *ing;
 			while ( (ing = ing_it.current()) != 0 )
 			{
@@ -130,7 +127,7 @@ QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 
 				QDomElement step_tag = doc.createElement("step"); //we've just got everything in one step
 				directions_tag.appendChild( step_tag );
-				step_tag.appendChild( doc.createTextNode(recipe->instructions) );
+				step_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
 	}
 
 	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

@@ -30,19 +30,16 @@ MMFExporter::~MMFExporter()
 {
 }
 
-QString MMFExporter::createContent( const QValueList<Recipe*>& recipes )
+QString MMFExporter::createContent( const RecipeList& recipes )
 {
 	QString content;
 
-	Recipe *recipe;
-	QValueList<Recipe*>::const_iterator recipe_it;
+	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
-
-		writeMMFHeader( content, recipe ); content += "\n";
-		writeMMFIngredients( content, recipe ); content += "\n";
-		writeMMFDirections( content, recipe ); content += "\n";
+		writeMMFHeader( content, *recipe_it ); content += "\n";
+		writeMMFIngredients( content, *recipe_it ); content += "\n";
+		writeMMFDirections( content, *recipe_it ); content += "\n";
 
 		content += "-----\n"; //end of recipe indicator
 	}
@@ -56,14 +53,14 @@ QString MMFExporter::createContent( const QValueList<Recipe*>& recipes )
  * Line 3 - "Categories:" followed by a blank space; Maximum of 5
  * Line 4 - Numeric quantity representing the # of servings (1-9999)
  */
-void MMFExporter::writeMMFHeader( QString &content, Recipe *recipe )
+void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 {
 	content += QString("----- Exported by Krecipes v%1 [Meal-Master Export Format] -----\n\n").arg(krecipes_version());
 
-	QString title = recipe->title; title.truncate(60);
+	QString title = recipe.title; title.truncate(60);
 	content += "      Title: "+title+"\n";
 
-	QPtrListIterator<Element> cat_it( recipe->categoryList );
+	QPtrListIterator<Element> cat_it( recipe.categoryList );
 	Element *cat; int i = 0; QStringList categories;
 	while ( (cat = cat_it.current()) != 0 )
 	{
@@ -76,7 +73,7 @@ void MMFExporter::writeMMFHeader( QString &content, Recipe *recipe )
 	QString cat_str =  " Categories: "+categories.join(", "); cat_str.truncate(67);
 	content += cat_str+"\n";
 
-	content += "   Servings: "+QString::number(QMIN(9999,recipe->persons))+"\n";
+	content += "   Servings: "+QString::number(QMIN(9999,recipe.persons))+"\n";
 }
 
 /* Ingredient lines:
@@ -86,12 +83,12 @@ void MMFExporter::writeMMFHeader( QString &content, Recipe *recipe )
  *   in position 12 and text in positions 13-39 (the latter is a
  *   "continuation" line for the previous ingredient name)
  */
-void MMFExporter::writeMMFIngredients( QString &content, Recipe *recipe )
+void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 {
 	KConfig *config = kapp->config();
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	QPtrListIterator<Ingredient> ing_it( recipe->ingList );
+	QPtrListIterator<Ingredient> ing_it( recipe.ingList );
 	Ingredient *ing;
 	while ( (ing = ing_it.current()) != 0 )
 	{
@@ -131,9 +128,9 @@ void MMFExporter::writeMMFIngredients( QString &content, Recipe *recipe )
 	}
 }
 
-void MMFExporter::writeMMFDirections( QString &content, Recipe *recipe )
+void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )
 {
-	content += wrapText(recipe->instructions,80).join("\n")+"\n";
+	content += wrapText(recipe.instructions,80).join("\n")+"\n";
 }
 
 QStringList MMFExporter::wrapText( const QString& str, int at) const

@@ -10,7 +10,7 @@
 
 #include "fractioninput.h"
 
-FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ), m_fraction()
+FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name )
 {
 }
 
@@ -18,22 +18,15 @@ FractionInput::~FractionInput()
 {
 }
 
-void FractionInput::parseText( bool *ok )
-{
-	const QString input = text();
-	m_fraction = MixedNumber::fromString( input, ok );
-}
-
 void FractionInput::setValue( double d )
 {
-	m_fraction = MixedNumber(d);
-	setText( m_fraction.toString( MixedNumber::MixedNumberFormat ) );
+	MixedNumber m(d);
+	setText( m.toString( MixedNumber::MixedNumberFormat ) );
 }
 
-void FractionInput::setValue( MixedNumber &m )
+void FractionInput::setValue( const MixedNumber &m )
 {
-	m_fraction = m;
-	setText( m_fraction.toString( MixedNumber::MixedNumberFormat ) );
+	setText( m.toString( MixedNumber::MixedNumberFormat ) );
 }
 
 MixedNumber FractionInput::value() const

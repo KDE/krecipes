@@ -42,7 +42,7 @@ HTMLExporter::~HTMLExporter()
 	delete properties;
 }
 
-QString HTMLExporter::createContent( const QValueList<Recipe*>& recipes )
+QString HTMLExporter::createContent( const RecipeList& recipes )
 {
 	if ( recipes.count() == 0 )
 		return "<html></html>";
@@ -53,22 +53,20 @@ QString HTMLExporter::createContent( const QValueList<Recipe*>& recipes )
 	//Creates initial layout and saves to config file
 	SetupDisplay::createSetupIfNecessary();
 
-	Recipe *recipe = recipes[0];
-	QValueList<Recipe*>::const_iterator recipe_it;
+	//Recipe recipe = recipes[0];
+	RecipeList::const_iterator recipe_it;
 
 	recipeHTML += "<html><head>";
-	recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipe->title : i18n("Krecipes Recipes") );
+	recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipes[0].title : i18n("Krecipes Recipes") );
 
 	//loop through recipes and only create the css properties
 	int offset = 0;
 	recipeHTML += "<STYLE type=\"text/css\">\n";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
-
 		// Calculate the property list
-		calculateProperties(*recipe,database,properties);
-		offset = createBlocks( *recipe, offset ) + 15;
+		calculateProperties( *recipe_it, database, properties );
+		offset = createBlocks( *recipe_it, offset ) + 15;
 
 		config->setGroup("BackgroundSetup");
 		QColor color = config->readColorEntry( "BackgroundColor" );
@@ -90,12 +88,10 @@ QString HTMLExporter::createContent( const QValueList<Recipe*>& recipes )
 	//now loop through the recipes, generating the content
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
-
 		// Calculate the property list
-		calculateProperties(*recipe,database,properties);
-		(void)createBlocks( *recipe );
-		storePhoto( *recipe );
+		calculateProperties( *recipe_it, database, properties );
+		(void)createBlocks( *recipe_it );
+		storePhoto( *recipe_it );
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 			recipeHTML += div->generateHTML();

@@ -11,9 +11,10 @@
 #ifndef BASEIMPORTER_H
 #define BASEIMPORTER_H
 
-#include <qvaluelist.h>
 #include <qstring.h>
 #include <qstringlist.h>
+
+#include "datablocks/recipelist.h"
 
 class Recipe;
 class RecipeDB;
@@ -41,14 +42,18 @@ public:
 	void import( RecipeDB *db );
 
 protected:
+	/** Add a recipe to be imported into the database. Note, I'm only keeping this function
+	  * around until I update the importers to use @ref add( const Recipe&). */
+	void add( Recipe *recipe ){ m_recipe_list->append( *recipe ); }
+
 	/** Add a recipe to be imported into the database */
-	void add( Recipe *recipe ){ m_recipe_list->append( recipe ); }
+	void add( const Recipe &recipe ){ m_recipe_list->append( recipe ); }
 
 	void setErrorMsg( const QString & s ){ m_error_msg += s + "\n"; }
 	void addWarningMsg( const QString & s ){ m_warning_msgs.append(s); }
 
 private:
-	QValueList<Recipe*> *m_recipe_list;
+	RecipeList *m_recipe_list;
 	QString m_error_msg;
 	QStringList m_warning_msgs;
 };

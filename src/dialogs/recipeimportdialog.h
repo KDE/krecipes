@@ -15,8 +15,10 @@
 
 #include <qdialog.h>
 #include <qvaluelist.h>
-#include <qptrdict.h>
+#include <qmap.h>
 #include <qlistview.h>
+
+#include "datablocks/recipelist.h"
 
 class KPushButton;
 class KListView;
@@ -35,16 +37,16 @@ class CustomCheckListItem;
 class RecipeImportDialog : public QDialog
 {
 public:
-	RecipeImportDialog( const QValueList<Recipe*> &all_recipes, QWidget *parent = 0 );
+	RecipeImportDialog( const RecipeList &all_recipes, QWidget *parent = 0 );
 	~RecipeImportDialog();
 
-	QValueList<Recipe*> getSelectedRecipes();
+	RecipeList getSelectedRecipes();
 
 protected slots:
 	virtual void languageChange();
 
 private:
-	void loadListView( const QValueList<Recipe*> & );
+	void loadListView();
 
 	KListView* kListView;
 	KPushButton* okButton;
@@ -53,7 +55,8 @@ private:
 	QHBoxLayout* Form1Layout;
 	QVBoxLayout* layout2;
 
-	QPtrDict<Recipe> *recipe_items;
+	QMap<CustomCheckListItem*,RecipeList::const_iterator> *recipe_items;
+	const RecipeList list_copy;
 };
 
 /** A specialized QCheckListItem that sets the state of its children to its
@@ -69,7 +72,7 @@ public:
 
 protected:
 	virtual void stateChange(bool);
-	bool locked(){ return m_locked; }
+	bool locked() const{ return m_locked; }
 	void setLocked( bool b ){ m_locked = b; }
 
 private:

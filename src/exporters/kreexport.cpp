@@ -28,7 +28,7 @@ KreExporter::~KreExporter()
 {
 }
 
-void KreExporter::saveToFile( const QValueList<Recipe*>& recipes )
+void KreExporter::saveToFile( const RecipeList& recipes )
 {
 	if(format == "kreml")
 	{
@@ -56,24 +56,22 @@ void KreExporter::saveToFile( const QValueList<Recipe*>& recipes )
     \fn KreManager::createContent()
  * return a QString containing XML encoded recipe
  */
-QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
+QString KreExporter::createContent( const RecipeList& recipes )
 {
     QString xml;
 
     xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
     xml += "<krecipes version=\""+krecipes_version()+"\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
-	Recipe *recipe;
-	QValueList<Recipe*>::const_iterator recipe_it;
+	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
 
     xml +="<krecipes-recipe>\n";
     xml += "<krecipes-description>\n";
-    xml += "<title>"+recipe->title.utf8()+"</title>\n";
+    xml += "<title>"+(*recipe_it).title.utf8()+"</title>\n";
 
-	QPtrListIterator<Element> author_it( recipe->authorList );
+	QPtrListIterator<Element> author_it( (*recipe_it).authorList );
 	Element *author;
 	while ( (author = author_it.current()) != 0 )
 	{
@@ -85,7 +83,7 @@ QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
     KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
     fn->setAutoDelete(true);
-    recipe->photo.save(fn->name(), "JPEG");
+    (*recipe_it).photo.save(fn->name(), "JPEG");
     QByteArray data;
     if( fn ){
       data = (fn->file())->readAll();
@@ -98,7 +96,7 @@ QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
     xml += "</pictures>\n";
     xml += "<category>\n";
 
-	QPtrListIterator<Element> cat_it( recipe->categoryList );
+	QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
 	Element *cat;
 	while ( (cat = cat_it.current()) != 0 )
 	{
@@ -108,12 +106,12 @@ QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
 
     xml += "</category>\n";
     xml += "<serving>";
-    xml += QString::number(recipe->persons);
+    xml += QString::number((*recipe_it).persons);
     xml += "</serving>\n";
     xml += "</krecipes-description>\n";
     xml += "<krecipes-ingredients>\n";
 
-	QPtrListIterator<Ingredient> ing_it( recipe->ingList );
+	QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
 	Ingredient *ing;
 	while ( (ing = ing_it.current()) != 0 )
 	{
@@ -130,7 +128,7 @@ QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
 
     xml += "</krecipes-ingredients>\n";
     xml += "<krecipes-instructions>\n";
-    xml += recipe->instructions.utf8();
+    xml += (*recipe_it).instructions.utf8();
     xml += "</krecipes-instructions>\n";
     xml += "</krecipes-recipe>\n";
     }

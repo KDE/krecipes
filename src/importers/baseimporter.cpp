@@ -21,17 +21,13 @@
 #include "dialogs/recipeimportdialog.h"
 
 BaseImporter::BaseImporter() :
-  m_recipe_list(new QValueList<Recipe*>),
+  m_recipe_list(new RecipeList),
   m_error_msg(QString::null)
 {
 }
 
 BaseImporter::~BaseImporter()
 {
-	QValueList<Recipe*>::iterator recipe_it;
-	for ( recipe_it = m_recipe_list->begin(); recipe_it != m_recipe_list->end(); ++recipe_it )
-		delete *recipe_it;
-
 	delete m_recipe_list;
 }
 
@@ -47,7 +43,7 @@ void BaseImporter::import( RecipeDB *db )
 		return;
 	}
 
-	QValueList<Recipe*> selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete recipe pointers this contains; contains the same pointers as m_recipe_list
+	RecipeList selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete recipe pointers this contains; contains the same pointers as m_recipe_list
 
 	// Load Current Settings
 	KConfig *config=kapp->config();
@@ -59,23 +55,21 @@ void BaseImporter::import( RecipeDB *db )
 	progress->setTotalSteps( selected_recipes.count() );
 	progress->setFormat(i18n("%v/%m Recipes"));
 
-	Recipe *new_recipe;
-	QValueList<Recipe*>::const_iterator recipe_it;
+	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
 	{
-		new_recipe = *recipe_it;
 		if ( progress_dialog->wasCancelled() )
 		{
 			KMessageBox::information( kapp->mainWidget(), i18n("All recipes up unto this point have been successfully imported.") );
 			return;
 		}
 
-		progress_dialog->setLabel( QString(i18n("Importing recipe: %1")).arg(new_recipe->title) );
+		progress_dialog->setLabel( QString(i18n("Importing recipe: %1")).arg((*recipe_it).title) );
 		progress->advance( 1 );
 		kapp->processEvents();
 
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
-		for ( Ingredient *ing = new_recipe->ingList.getFirst(); ing; ing = new_recipe->ingList.getNext() )
+		for ( Ingredient *ing = (*recipe_it).ingList.getFirst(); ing; ing = (*recipe_it).ingList.getNext() )
 		{
 			int new_ing_id = db->findExistingIngredientByName(ing->name);
 			if ( new_ing_id == -1 && ing->name != "" )
@@ -102,7 +96,7 @@ void BaseImporter::import( RecipeDB *db )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
-		for ( Element *author = new_recipe->authorList.getFirst(); author; author = new_recipe->authorList.getNext() )
+		for ( Element *author = (*recipe_it).authorList.getFirst(); author; author = (*recipe_it).authorList.getNext() )
 		{
 			int new_author_id = db->findExistingAuthorByName( author->name );
 			if ( new_author_id == -1 && author->name != "" )
@@ -114,7 +108,7 @@ void BaseImporter::import( RecipeDB *db )
 			author->id = new_author_id;
 		}
 
-		for ( Element *category = new_recipe->categoryList.getFirst(); category; category = new_recipe->categoryList.getNext() )
+		for ( Element *category = (*recipe_it).categoryList.getFirst(); category; category = (*recipe_it).categoryList.getNext() )
 		{
 			int new_cat_id = db->findExistingCategoryByName( category->name );
 			if ( new_cat_id == -1 && category->name != "" )
@@ -127,13 +121,13 @@ void BaseImporter::import( RecipeDB *db )
 		}
 
 		if ( overwrite ) //overwrite existing
-			new_recipe->recipeID = db->findExistingRecipeByName( new_recipe->title );
+			(*recipe_it).recipeID = db->findExistingRecipeByName( (*recipe_it).title );
 		else //rename
-			new_recipe->title = db->getUniqueRecipeTitle( new_recipe->title );
+			(*recipe_it).title = db->getUniqueRecipeTitle( (*recipe_it).title );
 
 
 		//save into the database
-		db->saveRecipe( new_recipe );
+		db->saveRecipe( &(*recipe_it) );
 	}
 
 	delete progress_dialog;

@@ -34,15 +34,15 @@ public:
 	MMFExporter( RecipeDB *, const QString&, const QString );
 	virtual ~MMFExporter();
 
-	virtual QString createContent( const QValueList<Recipe*> & );
+	virtual QString createContent( const RecipeList & );
 
 protected:
 	virtual QString extensions() const{ return ".mmf"; }
 
 private:
-	void writeMMFHeader( QString &content, Recipe *recipe );
-	void writeMMFIngredients( QString &content, Recipe *recipe );
-	void writeMMFDirections( QString &content, Recipe *recipe );
+	void writeMMFHeader( QString &content, const Recipe &recipe );
+	void writeMMFIngredients( QString &content, const Recipe &recipe );
+	void writeMMFDirections( QString &content, const Recipe &recipe );
 
 	QStringList wrapText( const QString& str, int at) const;
 };

@@ -12,7 +12,9 @@
  ***************************************************************************/
 
 #include "literecipedb.h"
-#include "kstandarddirs.h"
+
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #define DB_FILENAME "krecipes.krecdb"
 
@@ -23,21 +25,21 @@ LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBn
 
 QString  dbFile=locateLocal ("appdata",DB_FILENAME);
 
-std::cerr<<"Connecting to the SQLite database\n";
+kdDebug()<<"Connecting to the SQLite database\n";
 	DBuser=user;DBpass=pass;DBhost=host;
 
         database= new QSQLiteDB();
 	database->open(dbFile);
         if ( !database->open(dbFile) ) {
 	     //Try to create the database
-	     std::cerr<<"Creating the SQLite database!\n";
+	     kdDebug()<<"Creating the SQLite database!\n";
 	     createDB();
 
 	     //Now Reopen the Database and exit if it fails
 	     if (!database->open(dbFile))
 		{
-		std::cerr<<"Retrying to open the db after creation\n";
-		std::cerr<<QString("Could not open DB. You may not have permissions. Exiting.\n").arg(user).latin1();
+		kdDebug()<<"Retrying to open the db after creation\n";
+		kdDebug()<<QString("Could not open DB. You may not have permissions. Exiting.\n").arg(user).latin1();
 		exit(1);
 		}
 
@@ -46,10 +48,10 @@ std::cerr<<"Connecting to the SQLite database\n";
 	     }
 	 else // Check integrity of the database (tables). If not possible, exit
 	 {
-	 std::cerr<<"I'll check the DB integrity now\n";
+	 kdDebug()<<"I'll check the DB integrity now\n";
 	 	if (!checkIntegrity())
 			{
-			std::cerr<<"Failed to fix database structure. Exiting.\n";
+			kdDebug()<<"Failed to fix database structure. Exiting.\n";
 			 exit(1);
 			 }
 	 }
@@ -142,7 +144,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
         }
         else
         {
-                std::cerr<<recipeToLoad.getError();
+                kdDebug()<<recipeToLoad.getError();
 		return; // There were problems while loading the recipe
         }
 
@@ -1199,16 +1201,16 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 	if (!found)
 	{
-	std::cerr<<"Recreating missing table: "<<*it<<"\n";
+	kdDebug()<<"Recreating missing table: "<<*it<<"\n";
 	createTable(*it);
 	}
 }
 
 // Check for older versions, and port
 
-std::cerr<<"Checking database version...\n";
+kdDebug()<<"Checking database version...\n";
 float version=databaseVersion();
-std::cerr<<"version found... "<<version<<" \n";
+kdDebug()<<"version found... "<<version<<" \n";
 portOldDatabases(version);
 return true;
 }
@@ -1576,7 +1578,7 @@ void LiteRecipeDB::givePermissions(const QString & /*dbName*/,const QString &/*u
 if ((password!="")&&(password!=QString::null)) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
 else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
 
-std::cerr<<"I'm doing the query to setup permissions\n";
+kdDebug()<<"I'm doing the query to setup permissions\n";
 
 QSqlQuery permissionsToSet( command,database);*/
 }

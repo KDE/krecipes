@@ -16,28 +16,20 @@
 #include "mixednumber.h"
 
 /** A KLineEdit widget extended to allow input of decimals and fractions.
-  * Input is returned as a @ref Fraction class.
+  * Input is returned as a @ref MixedNumber class.
   * @author Jason Kivlighn
   */
 class FractionInput : public KLineEdit
 {
-Q_OBJECT
-
 public:
 	FractionInput( QWidget *parent = 0, const char *name = 0 );
 	~FractionInput();
 
 	void setValue( double );
-	void setValue( MixedNumber & );
+	void setValue( const MixedNumber & );
 
 	MixedNumber value() const;
 	bool isInputValid() const;
-
-protected slots:
-	void parseText( bool *ok = 0 );
-
-private:
-	MixedNumber m_fraction;
 };
 
 #endif //FRACTIONINPUT_H

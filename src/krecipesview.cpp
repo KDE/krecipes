@@ -16,9 +16,6 @@
 #include "config.h"
 #endif
 
-#include <iostream>
-#include <unistd.h>
-
 #include <qlayout.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -87,7 +84,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     if ((dbtype!="SQLite") && (dbtype!="MySQL"))
     {
-    std::cerr<<"Unrecognized database type "<<dbtype<<"\n";
+    kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
     exit(1);
     }
     #if HAVE_MYSQL
@@ -107,7 +104,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 	}
 
-    #endif //USE_MYSQL_DATABASE
+    #endif //HAVE_MYSQL
 
 
     #if HAVE_SQLITE
@@ -117,9 +114,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     	database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
 	}
 
-    #endif //USE_SQLITE_DATABASE
+    #endif //HAVE_SQLITE
     else{
-    std::cerr<<"Unsupported database type. Exiting\n";
+    kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
     exit(1);
     }
 
@@ -278,7 +275,7 @@ void KrecipesView::translate(){
   button2->setTitle(i18n("Ingredients"));
   button3->setTitle(i18n("Properties"));
   button4->setTitle(i18n("Units"));
-  button5->setTitle(i18n("Recipe Categories"));
+  button5->setTitle(i18n("Categories"));
   button6->setTitle(i18n("Authors"));
 }
 
@@ -465,26 +462,26 @@ if(setupWizard->exec()== QDialog::Accepted)
 KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
 dbtype=config->readEntry("Type","SQLite");
 
-std::cerr<<"Setting up\n";
+kdDebug()<<"Setting up"<<endl;
 setupWizard->getOptions(setupUser,initData);
 
 // Setup user if necessary
 
 if (setupUser) // Don't setup user if checkbox of existing user... was set
 	{
-	std::cerr<<"Setting up user\n";
+	kdDebug()<<"Setting up user\n";
 	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
 	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
 
 	if (!adminEnabled) // Use root without password
 	{
-	std::cerr<<"Using default admin\n";
+	kdDebug()<<"Using default admin\n";
 	adminUser="root";
 	adminPass=QString::null;
 	}
 	if (!isRemote) // Use localhost
 	{
-	std::cerr<<"Using localhost\n";
+	kdDebug()<<"Using localhost\n";
 	host="localhost";
 	client="localhost";
 	}
@@ -524,11 +521,11 @@ MySQLRecipeDB *db;
 
 if (!adminPass.isNull())
 	{ // Login as admin in the (remote) server and createDB if necessary
-	std::cerr<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
+	kdDebug()<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
 	db= new MySQLRecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
 	}
 	else{ // Login as root with no password
-	std::cerr<<"Open db as root, with no password\n";
+	kdDebug()<<"Open db as root, with no password\n";
 	db=new MySQLRecipeDB(host,"root",QString::null,dbName,true);
 	}
 
@@ -544,7 +541,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 {
 if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly
 {
-std::cerr<<"Unrecognized database type. Exiting\n";
+kdDebug()<<"Unrecognized database type. Exiting\n";
 exit(1);
 }
 
@@ -571,7 +568,7 @@ delete db; //it closes the db automatically
 #endif //HAVE_SQLITE
 else
 {
-std::cerr<<"Unsupported database type. Exiting\n";
+kdDebug()<<"Unsupported database type. Exiting\n";
 exit(1);
 }
 

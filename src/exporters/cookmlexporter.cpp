@@ -32,7 +32,7 @@ CookMLExporter::~CookMLExporter()
 {
 }
 
-QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
+QString CookMLExporter::createContent( const RecipeList& recipes )
 {
 	QDomImplementation dom_imp;
 	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd") );
@@ -44,25 +44,22 @@ QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 
 	doc.appendChild( cookml_tag );
 
-	Recipe *recipe;
-	QValueList<Recipe*>::const_iterator recipe_it;
+	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		recipe = *recipe_it;
-
 		QDomElement recipe_tag = doc.createElement("recipe");
 		recipe_tag.setAttribute("lang",(KGlobal::locale())->language());
 
 		cookml_tag.appendChild( recipe_tag );
 
 			QDomElement head_tag = doc.createElement("head");
-			head_tag.setAttribute("title",recipe->title);
-			head_tag.setAttribute("servingqty",recipe->persons);
+			head_tag.setAttribute("title",(*recipe_it).title);
+			head_tag.setAttribute("servingqty",(*recipe_it).persons);
 			head_tag.setAttribute("servingtype",i18n("Persons"));
 			head_tag.setAttribute("rid",i18n("")); //FIXME:what's this...recipe ID??
 			recipe_tag.appendChild( head_tag );
 
-				QPtrListIterator<Element> cat_it( recipe->categoryList );
+				QPtrListIterator<Element> cat_it( (*recipe_it).categoryList );
 				Element *cat;
 				while ( (cat = cat_it.current()) != 0 )
 				{
@@ -72,7 +69,7 @@ QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 					head_tag.appendChild(cat_tag);
 				}
 
-				QPtrListIterator<Element> author_it( recipe->authorList );
+				QPtrListIterator<Element> author_it( (*recipe_it).authorList );
 				Element *author;
 				while ( (author = author_it.current()) != 0 )
 				{
@@ -87,7 +84,7 @@ QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 
 				KTempFile* fn = new KTempFile(locateLocal("tmp", "cml"), ".jpg", 0600);
 				fn->setAutoDelete(true);
-				recipe->photo.save(fn->name(), "JPEG");
+				(*recipe_it).photo.save(fn->name(), "JPEG");
 				QByteArray data;
 				if( fn )
 				{
@@ -99,7 +96,7 @@ QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 				head_tag.appendChild( picbin_tag );
 
 			QDomElement part_tag = doc.createElement("part");
-			QPtrListIterator<Ingredient> ing_it( recipe->ingList );
+			QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
 			Ingredient *ing;
 			while ( (ing = ing_it.current()) != 0 )
 			{
@@ -118,7 +115,7 @@ QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 
 				QDomElement text_tag = doc.createElement("text");
 				preparation_tag.appendChild( text_tag );
-				text_tag.appendChild( doc.createTextNode(recipe->instructions) );
+				text_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
 	}
 
 	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";

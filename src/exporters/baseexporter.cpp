@@ -46,23 +46,18 @@ void BaseExporter::exporter( const QValueList<int>& l )
 
 		if(!fileExists || overwrite == KMessageBox::Yes)
 		{
-			QValueList<Recipe*> recipes;
+			RecipeList recipes;
 
 			QValueList<int>::const_iterator it;
 			for ( it = l.begin(); it != l.end(); ++it )
 			{
-				Recipe *recipe = new Recipe;
-				database->loadRecipe( recipe, *it );
+				Recipe recipe;
+				database->loadRecipe( &recipe, *it );
 
 				recipes.append( recipe );
 			}
 
 			saveToFile( recipes );
-
-			//delete all the pointers in the list; TODO: Make RecipeList handle this automatically?
-			QValueList<Recipe*>::const_iterator recipe_it;
-			for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
-				delete *recipe_it;
 		}
 	}
 	else
@@ -110,7 +105,7 @@ bool BaseExporter::createFile()
 		return false;
 }
 
-void BaseExporter::saveToFile( const QValueList<Recipe*>& recipes )
+void BaseExporter::saveToFile( const RecipeList& recipes )
 {
 	if ( file->open( IO_WriteOnly ) )
 	{
