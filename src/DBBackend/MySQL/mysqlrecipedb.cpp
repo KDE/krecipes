@@ -1049,6 +1049,20 @@ if (version<0.4)  // Upgrade to DB version 0.4
 	command="CREATE index cid_index ON category_list(category_id)";
 	tableToAlter.exec(command);
 
+	// Port data
+
+	//*1:: Recipes have a minimum category of -1
+	command="SELECT r.id FROM recipes r LEFT JOIN category_list cl ON(r.id=cl.recipe_id) WHERE cl.recipe_id IS NULL;"; // Find those recipes without category
+	QSqlQuery categoryToAdd(QString::null,database);
+	tableToAlter.exec( command);
+            if ( tableToAlter.isActive() ) {
+                while ( tableToAlter.next() ) {
+		    int recipeId=tableToAlter.value(0).toInt();
+		    QString cCommand=QString("INSERT INTO category_list VALUES (%1,-1);").arg(recipeId);
+		    categoryToAdd.exec(cCommand);
+                }
+            }
+
 	// Set the version to the new one (0.4)
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
