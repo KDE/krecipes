@@ -64,6 +64,8 @@ static expand_unit_info unit_info[] = {
 
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
+	m_left_col_ing.setAutoDelete(false);
+	m_right_col_ing.setAutoDelete(false);
 	resetVars();
 
 	QFile input( file );
