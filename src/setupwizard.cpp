@@ -30,11 +30,15 @@ welcomePage= new WelcomePage(this);
 addPage(welcomePage,i18n("Welcome to Krecipes"));
 dbTypeSetupPage=new DBTypeSetupPage(this);
 addPage(dbTypeSetupPage,i18n("Database Type"));
+
 permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
+setAppropriate(permissionsSetupPage,false);// Disable By Default
 
 serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,i18n("Server Settings"));
+setAppropriate(serverSetupPage,false); // Disable By Default
+
 dataInitializePage= new DataInitializePage(this);
 addPage(dataInitializePage,i18n("Initialize Database"));
 savePage = new SavePage(this);
@@ -42,7 +46,9 @@ addPage(savePage,i18n("Finish & Save Settings"));
 
 setFinishEnabled(savePage,true); // Enable finish button
 setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
+connect(dbTypeSetupPage,SIGNAL(showPages(bool)),this,SLOT(showPages(bool)));
 }
 
 
@@ -50,6 +56,14 @@ SetupWizard::~SetupWizard()
 {
 
 }
+
+
+void SetupWizard::showPages(bool show)
+{
+setAppropriate(serverSetupPage,show);
+setAppropriate(permissionsSetupPage,show);
+}
+
 
 WelcomePage::WelcomePage(QWidget *parent):QWidget(parent)
 {
@@ -505,6 +519,8 @@ bg->setButton(0);
 QSpacerItem *spacer_bottom=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 layout->addItem(spacer_bottom,4,3);
 
+connect(bg,SIGNAL(clicked(int)),this,SLOT(setPages(int)));
+
 }
 
 int DBTypeSetupPage::dbType(void)
@@ -517,4 +533,16 @@ if (id==1) // MySQL (note index=0,1....)
 else
 	return(SQLite);
 
+}
+
+/*
+** hides/shows pages given the radio button state
+*/
+
+int DBTypeSetupPage::setPages(int rb)
+{
+if (rb==0) // Hide pages
+	emit showPages(false);
+else // Show pages
+	emit showPages(true);
 }

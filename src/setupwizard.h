@@ -51,6 +51,7 @@ private:
 
 private slots:
 	void save(void);
+	void showPages(bool show);
 
 };
 
@@ -138,6 +139,9 @@ private:
 };
 
 class DBTypeSetupPage:public QWidget{
+
+Q_OBJECT
+
 public:
 
 enum DBType {SQLite,MySQL};
@@ -151,6 +155,10 @@ private:
 	QVButtonGroup *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
+private slots:
+	int setPages(int rb); // hides/shows pages given the radio button state
+signals:
+	void showPages(bool show);
 };
 
 #endif
