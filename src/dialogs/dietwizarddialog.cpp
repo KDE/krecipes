@@ -116,6 +116,7 @@ mealTabs->setCurrentPage(mealTabs->indexOf(mealTab));
 
 void DietWizardDialog::changeMealNumber(int mn)
 {
+mealNumberLabel->setText(QString(i18n("- %1 -")).arg(mn));
 if (mn>mealNumber)
 	{
 
@@ -123,10 +124,18 @@ if (mn>mealNumber)
 	 {
 	 	mealNumber++;
 		newTab(i18n("Meal %1").arg(mealNumber));
-	 	mealNumberLabel->setText(QString(i18n("- %1 -")).arg(mealNumber));
-	 }
-	 }
 
+	 }
+	 }
+if (mn<mealNumber)
+	{
+
+	 while (mealNumber!=mn)
+	 {
+	 	mealNumber--;
+		delete mealTabs->page(mealTabs->count()-1);
+	 }
+	 }
 }
 
 void DietWizardDialog::changeDayNumber(int dn)
