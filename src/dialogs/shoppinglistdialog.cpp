@@ -41,8 +41,9 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
 
+    KIconLoader il;
     addRecipeButton=new QPushButton(this);
-    addRecipeButton->setText("->");
+    addRecipeButton->setIconSet(il.loadIconSet("forward", KIcon::Small));
     addRecipeButton->setFixedSize(QSize(32,32));
     addRecipeButton->setFlat(true);
     layout->addWidget(addRecipeButton,1,3);
@@ -51,7 +52,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addItem(buttonSpacer,2,3);
 
     removeRecipeButton=new QPushButton(this);
-    removeRecipeButton->setText("<-");
+    removeRecipeButton->setIconSet(il.loadIconSet("back", KIcon::Small));
     removeRecipeButton->setFixedSize(QSize(32,32));
     removeRecipeButton->setFlat(true);
     layout->addWidget(removeRecipeButton,3,3);
@@ -75,7 +76,6 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCellWidget(buttonBar,6,6,1,5);
     buttonBar->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed);
 
-    KIconLoader il;
     autoFillButton=new QPushButton(buttonBar,"dietWizardButton");
     autoFillButton->setText(i18n("Diet Wizard"));
     QPixmap pm=il.loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
