@@ -44,6 +44,7 @@ public:
     int find(int id);
     IngredientProperty* at(int pos);
     void divide(int persons);
+    void filter(int ingredientID,IngredientPropertyList *filteredList);
     private:
     PropertyPtrList list;
 

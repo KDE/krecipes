@@ -71,3 +71,11 @@ void IngredientPropertyList::divide(int persons)
 for (IngredientProperty* ip=getFirst();ip;ip=getNext())
 	ip->amount/=persons;
 }
+
+void IngredientPropertyList::filter(int ingredientID,IngredientPropertyList *filteredList)
+{
+filteredList->clear();
+for (IngredientProperty* ip=getFirst();ip;ip=getNext())
+	if ((*ip).ingredientID==ingredientID) filteredList->add(*ip);
+
+}
