@@ -10,8 +10,8 @@ in /usr/bin /opt/mysql/bin /usr/local/mysql/bin ], [
 ])
 
 if test -n "$MYSQL_CONFIG"; then
-   mysql_incdir=`$MYSQL_CONFIG --cflags| $SED -e "s,-I',,g" | $SED -e "s,'$,,g"`
-   mysql_libdir=`$MYSQL_CONFIG --libs| $SED -e "s,',,g"`
+   mysql_incdir=`$MYSQL_CONFIG --cflags`
+   mysql_libdir=`$MYSQL_CONFIG --libs`
    MYSQL_INC=$mysql_incdir
    MYSQL_LIBS=$mysql_libdir
    AC_SUBST(MYSQL_INC)
