@@ -24,7 +24,7 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 		((QHBox*)header)->setSpacing(15);
 	}
 	
-	if (title!=QString::null)
+	if (!title.isNull())
 	{
 		listLabel=new QLabel(header);
 		listLabel->setFrameShape(QFrame::GroupBoxPanel);

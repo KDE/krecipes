@@ -2355,7 +2355,7 @@ void LiteRecipeDB::givePermissions(const QString & /*dbName*/,const QString &/*u
 // FIXME: you can't give permissions in SQLite :)
 /*QString command;
 
-if ((password!="")&&(password!=QString::null)) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
+if ((!password.isEmpty())&&(!password.isNull())) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
 else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
 
 std::cerr<<"I'm doing the query to setup permissions\n";

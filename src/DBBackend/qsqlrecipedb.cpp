@@ -54,8 +54,8 @@ void QSqlRecipeDB::connect()
         database= QSqlDatabase::addDatabase( qsqlDriver() );
         
 	database->setDatabaseName(DBname);
-        if (!(DBuser==QString::null)) database->setUserName(DBuser );
-        if (!(DBpass==QString::null)) database->setPassword(DBpass);
+        if (!(DBuser.isNull())) database->setUserName(DBuser );
+        if (!(DBpass.isNull())) database->setPassword(DBpass);
         database->setHostName(DBhost);
 
 	kdDebug()<<i18n("Parameters set. Calling db->open()")<<endl;
