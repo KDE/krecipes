@@ -19,7 +19,7 @@ public:
     UnitRatio();
     UnitRatio(UnitRatio &ur);
     ~UnitRatio();
-    int ingID1,ingID2;
+    int uID1,uID2;
     double ratio;
 };
 

@@ -12,12 +12,12 @@
 
 UnitRatio::UnitRatio()
 {
-ingID1=-1;ingID2=-1;ratio=-1;
+uID1=-1;uID2=-1;ratio=-1;
 }
 
 UnitRatio::UnitRatio(UnitRatio &ur)
 {
-ingID1=ur.ingID1;ingID2=ur.ingID2;ratio=ur.ratio;
+uID1=ur.uID1;uID2=ur.uID2;ratio=ur.ratio;
 }
 
 UnitRatio::~UnitRatio()

@@ -26,6 +26,8 @@ public:
     void clear(void);
     bool isEmpty(void);
     void add(UnitRatio &ratio);
+    double getRatio(int uid1, int uid2);
+
     private:
     QPtrList<UnitRatio> list;
 };

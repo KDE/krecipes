@@ -47,3 +47,13 @@ bool UnitRatioList::isEmpty(void)
 {
 return(list.isEmpty());
 }
+
+double UnitRatioList::getRatio(int uid1, int uid2)
+{
+for (UnitRatio *ur=getFirst();ur;ur=getNext())
+	{
+	if (ur->uID1==uid1 && ur->uID2==uid2) return (ur->ratio);
+	else if (ur->uID1==uid2 && ur->uID2==uid1) return (1.0/ur->ratio);
+	}
+return (-1);
+}
