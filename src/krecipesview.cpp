@@ -61,9 +61,6 @@ KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
 {
     // Initialize Database
-    KConfig *config; config=kapp->config(); config->setGroup("DBType");
-
-    dbtype=config->readEntry("Type","SQLite");
 
     // Init the setup wizard if necessary
     kdDebug()<<"Beginning wizard"<<endl;
@@ -76,6 +73,13 @@ KrecipesView::KrecipesView(QWidget *parent)
     start_logo -> setHideEnabled( true );
     start_logo->show();
     start_logo->raise();
+
+
+    // Read the database setup
+
+    KConfig *config; config=kapp->config();config->setGroup("DBType");
+    dbtype=config->readEntry("Type","SQLite");
+
 
     // Check if the database type is among those supported
 
