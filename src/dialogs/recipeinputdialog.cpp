@@ -416,7 +416,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		QListViewItem* lastElement=ingredientList->lastItem();
 
 		KConfig *config=kapp->config();
-		config->setGroup("Units");
+		config->setGroup("Numbers");
 		QString amount_str;
 
 		if ( config->readBoolEntry("Fraction"))
@@ -681,7 +681,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   QListViewItem* lastElement=ingredientList->lastItem();
 
   KConfig *config=kapp->config();
-  config->setGroup("Units");
+  config->setGroup("Numbers");
   QString amount_str;
 
   if ( config->readBoolEntry("Fraction"))
@@ -717,7 +717,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
 	int index=ingredientList->itemIndex(it);
   Ingredient* ing = (loadedRecipe->ingList).at(index);
   KConfig *config=kapp->config();
-  config->setGroup("Units");
+  config->setGroup("Numbers");
 
   MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 

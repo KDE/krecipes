@@ -310,7 +310,7 @@ void RecipeViewDialog::createBlocks()
 	geometries.append( geometry );
 
 	QString ingredients_html;
-	config->setGroup("Units");
+	config->setGroup("Numbers");
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 

@@ -29,11 +29,11 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     m_pageServer = new ServerPrefs(frame);
     layout->addWidget(m_pageServer);
 
-    frame = addPage(i18n("Units"), i18n("Customize Units"));
-    m_pageUnits = new UnitsPrefs(frame);
-    layout->addWidget(m_pageUnits);
+    frame = addPage(i18n("Numbers"), i18n("Customize Number Format"));
+    m_pageNumbers = new NumbersPrefs(frame);
+    layout->addWidget(m_pageNumbers);
 
-    frame = addPage(i18n("Import"), i18n("Recipe import options"));
+    frame = addPage(i18n("Import"), i18n("Recipe Import Options"));
     m_pageImport = new ImportPrefs(frame);
     layout->addWidget(m_pageImport);
 
@@ -141,7 +141,7 @@ KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
 void KrecipesPreferences::saveSettings(void)
 {
 m_pageServer->saveOptions();
-m_pageUnits->saveOptions();
+m_pageNumbers->saveOptions();
 m_pageImport->saveOptions();
 }
 
@@ -156,8 +156,8 @@ config->writeEntry("Password",passwordEdit->text());
 config->writeEntry("DBName",dbNameEdit->text());
 }
 
-//=============Units Preferences Dialog================//
-UnitsPrefs::UnitsPrefs(QWidget *parent)
+//=============Numbers Preferences Dialog================//
+NumbersPrefs::NumbersPrefs(QWidget *parent)
     : QWidget(parent)
 {
     Form1Layout = new QVBoxLayout( this, 11, 6 );
@@ -189,22 +189,22 @@ UnitsPrefs::UnitsPrefs(QWidget *parent)
 
     // Load Current Settings
     KConfig *config=kapp->config();
-    config->setGroup("Units");
+    config->setGroup("Numbers");
 
     int button = ( config->readBoolEntry( "Fraction", false ) ) ? 1 : 0;
     numberButtonGroup->setButton( button );
 }
 
-void UnitsPrefs::saveOptions()
+void NumbersPrefs::saveOptions()
 {
 	KConfig *config=kapp->config();
-	config->setGroup("Units");
+	config->setGroup("Numbers");
 
 	bool fraction = !numberButtonGroup->find( 0 )->isOn();
 	config->writeEntry("Fraction",fraction);
 }
 
-void UnitsPrefs::languageChange()
+void NumbersPrefs::languageChange()
 {
     numberButtonGroup->setTitle( i18n( "Number Format" ) );
     fractionRadioButton->setText( i18n( "Fraction" ) );

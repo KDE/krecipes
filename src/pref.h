@@ -11,7 +11,7 @@
 
 class ServerPrefs;
 class KrecipesPrefPageTwo;
-class UnitsPrefs;
+class NumbersPrefs;
 class ImportPrefs;
 
 class QButtonGroup;
@@ -28,7 +28,7 @@ public:
 private:
     ServerPrefs *m_pageServer;
     KrecipesPrefPageTwo *m_pageTwo;
-    UnitsPrefs *m_pageUnits;
+    NumbersPrefs *m_pageNumbers;
     ImportPrefs *m_pageImport;
 
 private slots:
@@ -61,12 +61,12 @@ public:
 
 };
 
-class UnitsPrefs : public QWidget
+class NumbersPrefs : public QWidget
 {
 Q_OBJECT
 
 public:
-	UnitsPrefs(QWidget *parent = 0);
+	NumbersPrefs(QWidget *parent = 0);
 
 	void saveOptions();
 

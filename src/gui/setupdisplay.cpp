@@ -356,7 +356,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString ingredients;
 
 	KConfig *config=kapp->config();
-	config->setGroup("Units");
+	config->setGroup("Numbers");
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
