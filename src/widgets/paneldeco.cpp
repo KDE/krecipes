@@ -78,7 +78,7 @@ void PanelDeco::setHeader(const QString &title,const QString &icon)
 
 // Left part of the decoration
 
-LeftDeco::LeftDeco(QWidget *parent, const char *name): QWidget(parent, name)
+LeftDeco::LeftDeco(QWidget *parent, const char *name): QWidget(parent, name, Qt::WNoAutoErase)
 {
 }
 
@@ -88,7 +88,7 @@ LeftDeco::~LeftDeco()
 
 // Top part of the decoration
 
-TopDeco::TopDeco(QWidget *parent, const char *name,const QString &title, const QString &iconName): QWidget(parent, name)
+TopDeco::TopDeco(QWidget *parent, const char *name,const QString &title, const QString &iconName): QWidget(parent, name, Qt::WNoAutoErase)
 {
 setMinimumHeight(30);
 icon=0;

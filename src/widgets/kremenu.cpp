@@ -32,7 +32,7 @@
 #include <kpixmapeffect.h>
 
 KreMenu::KreMenu(QWidget *parent, const char *name)
- : QWidget(parent, name)
+ : QWidget(parent, name, Qt::WNoAutoErase)
 {
 Menu newMenu;
 
@@ -377,7 +377,7 @@ m_currentMenu=&(*(currentMenuId));
 
 
 
-KreMenuButton::KreMenuButton(KreMenu *parent, MenuId id, const char *name):QWidget(parent, name)
+KreMenuButton::KreMenuButton(KreMenu *parent, MenuId id, const char *name):QWidget(parent, name, Qt::WNoAutoErase)
 {
 icon=0;
 highlighted=false;
