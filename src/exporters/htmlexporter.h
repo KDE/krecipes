@@ -53,7 +53,7 @@ public:
 	HTMLExporter( RecipeDB *, const QString&, const QString, int width );
 	virtual ~HTMLExporter();
 
-	virtual QString createContent( const QPtrList<Recipe> & );
+	virtual QString createContent( const QValueList<Recipe*> & );
 
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
 

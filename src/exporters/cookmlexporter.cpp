@@ -32,7 +32,7 @@ CookMLExporter::~CookMLExporter()
 {
 }
 
-QString CookMLExporter::createContent( const QPtrList<Recipe>& recipes )
+QString CookMLExporter::createContent( const QValueList<Recipe*>& recipes )
 {
 	QDomImplementation dom_imp;
 	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd") );
@@ -44,11 +44,11 @@ QString CookMLExporter::createContent( const QPtrList<Recipe>& recipes )
 
 	doc.appendChild( cookml_tag );
 
-	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
-	while ( (recipe = recipes_it.current()) != 0 )
+	QValueList<Recipe*>::const_iterator recipe_it;
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		++recipes_it;
+		recipe = *recipe_it;
 
 		QDomElement recipe_tag = doc.createElement("recipe");
 		recipe_tag.setAttribute("lang",(KGlobal::locale())->language());

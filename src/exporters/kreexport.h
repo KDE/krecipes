@@ -24,10 +24,10 @@ public:
 
     virtual ~KreExporter();
 
-    virtual QString createContent( const QPtrList<Recipe> & );
+    virtual QString createContent( const QValueList<Recipe*> & );
 
 protected:
-    virtual void saveToFile( const QPtrList<Recipe> & );
+    virtual void saveToFile( const QValueList<Recipe*> & );
     virtual QString extensions() const{ return ".kre,.kreml"; }
 };
 

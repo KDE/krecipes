@@ -14,7 +14,7 @@
 #define RECIPEIMPORTDIALOG_H
 
 #include <qdialog.h>
-#include <qptrlist.h>
+#include <qvaluelist.h>
 #include <qptrdict.h>
 #include <qlistview.h>
 
@@ -35,16 +35,16 @@ class CustomCheckListItem;
 class RecipeImportDialog : public QDialog
 {
 public:
-	RecipeImportDialog( const QPtrList<Recipe> &all_recipes, QWidget *parent = 0 );
+	RecipeImportDialog( const QValueList<Recipe*> &all_recipes, QWidget *parent = 0 );
 	~RecipeImportDialog();
 
-	QPtrList<Recipe> * getSelectedRecipes();
+	QValueList<Recipe*> getSelectedRecipes();
 
 protected slots:
 	virtual void languageChange();
 
 private:
-	void loadListView( const QPtrList<Recipe> & );
+	void loadListView( const QValueList<Recipe*> & );
 
 	KListView* kListView;
 	KPushButton* okButton;

@@ -30,15 +30,15 @@ MMFExporter::~MMFExporter()
 {
 }
 
-QString MMFExporter::createContent( const QPtrList<Recipe>& recipes )
+QString MMFExporter::createContent( const QValueList<Recipe*>& recipes )
 {
 	QString content;
 
-	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
-	while ( (recipe = recipes_it.current()) != 0 )
+	QValueList<Recipe*>::const_iterator recipe_it;
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		++recipes_it;
+		recipe = *recipe_it;
 
 		writeMMFHeader( content, recipe ); content += "\n";
 		writeMMFIngredients( content, recipe ); content += "\n";

@@ -14,7 +14,6 @@
 
 #include <qvaluelist.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
 
 #include "DBBackend/recipedb.h"
 #include "datablocks/recipelist.h"
@@ -31,11 +30,11 @@ public:
 	void exporter( const QValueList<int>& ids);
 	void exporter( int id );
 
-	virtual QString createContent( const QPtrList<Recipe> & ) = 0;
+	virtual QString createContent( const QValueList<Recipe*> & ) = 0;
 
 protected:
 	/** Default implementation writes the return value of createContent() to a file. */
-	virtual void saveToFile( const QPtrList<Recipe> & );
+	virtual void saveToFile( const QValueList<Recipe*> & );
 
 	/** Returns the extension (comma-separated if a single exporter can save to more than one format)
 	  * of the file format.

@@ -21,14 +21,17 @@
 #include "dialogs/recipeimportdialog.h"
 
 BaseImporter::BaseImporter() :
-  m_recipe_list(new QPtrList<Recipe>),
+  m_recipe_list(new QValueList<Recipe*>),
   m_error_msg(QString::null)
 {
-	m_recipe_list->setAutoDelete( true );
 }
 
 BaseImporter::~BaseImporter()
 {
+	QValueList<Recipe*>::iterator recipe_it;
+	for ( recipe_it = m_recipe_list->begin(); recipe_it != m_recipe_list->end(); ++recipe_it )
+		delete *recipe_it;
+
 	delete m_recipe_list;
 }
 
@@ -44,23 +47,26 @@ void BaseImporter::import( RecipeDB *db )
 		return;
 	}
 
-	QPtrList<Recipe> *selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete recipe pointers this contains; contains the same pointers as m_recipe_list
+	QValueList<Recipe*> selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete recipe pointers this contains; contains the same pointers as m_recipe_list
 
 	// Load Current Settings
 	KConfig *config=kapp->config();
 	config->setGroup("Import");
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
 
-	KProgressDialog *progress_dialog = new KProgressDialog( 0,0,i18n("Importing selected recipes"), QString::null, true );
+	KProgressDialog *progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n("Importing selected recipes"), QString::null, true );
 	KProgress *progress = progress_dialog->progressBar();
-	progress->setTotalSteps( selected_recipes->count() );
+	progress->setTotalSteps( selected_recipes.count() );
 	progress->setFormat(i18n("%v/%m Recipes"));
 
-	for ( Recipe *new_recipe = selected_recipes->first(); new_recipe; new_recipe = selected_recipes->next() )
+	Recipe *new_recipe;
+	QValueList<Recipe*>::const_iterator recipe_it;
+	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
 	{
+		new_recipe = *recipe_it;
 		if ( progress_dialog->wasCancelled() )
 		{
-			KMessageBox::information( 0, i18n("All recipes up unto this point have been successfully imported.") );
+			KMessageBox::information( kapp->mainWidget(), i18n("All recipes up unto this point have been successfully imported.") );
 			return;
 		}
 
@@ -130,7 +136,6 @@ void BaseImporter::import( RecipeDB *db )
 		db->saveRecipe( new_recipe );
 	}
 
-	delete selected_recipes;
 	delete progress_dialog;
 }
 

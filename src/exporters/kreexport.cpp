@@ -28,7 +28,7 @@ KreExporter::~KreExporter()
 {
 }
 
-void KreExporter::saveToFile( const QPtrList<Recipe>& recipes )
+void KreExporter::saveToFile( const QValueList<Recipe*>& recipes )
 {
 	if(format == "kreml")
 	{
@@ -56,18 +56,18 @@ void KreExporter::saveToFile( const QPtrList<Recipe>& recipes )
     \fn KreManager::createContent()
  * return a QString containing XML encoded recipe
  */
-QString KreExporter::createContent( const QPtrList<Recipe>& recipes )
+QString KreExporter::createContent( const QValueList<Recipe*>& recipes )
 {
     QString xml;
 
     xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
     xml += "<krecipes version=\""+krecipes_version()+"\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
-	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
-	while ( (recipe = recipes_it.current()) != 0 )
+	QValueList<Recipe*>::const_iterator recipe_it;
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-	++recipes_it;
+		recipe = *recipe_it;
 
     xml +="<krecipes-recipe>\n";
     xml += "<krecipes-description>\n";

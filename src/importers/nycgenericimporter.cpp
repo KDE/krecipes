@@ -76,7 +76,7 @@ NYCGenericImporter::NYCGenericImporter( const QString &file ) : BaseImporter()
 		}
 	}
 	else
-		error_code = FileOpenError;
+		setErrorMsg(i18n("Unable to open file."));
 }
 
 NYCGenericImporter::~NYCGenericImporter()

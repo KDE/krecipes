@@ -46,26 +46,22 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 			{
 				version = VersionMMMMM;
 				importMMF( stream );
-				error_code = 0;
 			}
 			else if ( line.contains("Recipe Extracted from Meal-Master (tm) Database") )
 			{
 				version = FromDatabase;
 				importMMF( stream );
-				error_code = 0;
 			}
 			else if ( line.startsWith("-----") )
 			{
 				version = VersionNormal;
 				importMMF( stream );
-				error_code = 0;
 			}
 			else if ( line.startsWith("MM") )
 			{
 				version = VersionBB;
 				(void)stream.readLine();
 				importMMF( stream );
-				error_code = 0;
 			}
 			else
 			{
@@ -77,7 +73,7 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 		}
 	}
 	else
-		error_code = FileOpenError;
+		setErrorMsg(i18n("Unable to open file."));
 }
 
 MMFImporter::~MMFImporter()

@@ -25,7 +25,7 @@ RecipeMLExporter::~RecipeMLExporter()
 {
 }
 
-QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
+QString RecipeMLExporter::createContent( const QValueList<Recipe*>& recipes )
 {
 	QDomImplementation dom_imp;
 	QDomDocument doc = dom_imp.createDocument( QString::null, "recipeml", dom_imp.createDocumentType( "recipeml", "-//FormatData//DTD RecipeML 0.5//EN", "http://www.formatdata.com/recipeml/recipeml.dtd") );
@@ -51,11 +51,11 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	}
 	#endif
 
-	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
-	while ( (recipe = recipes_it.current()) != 0 )
+	QValueList<Recipe*>::const_iterator recipe_it;
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		++recipes_it;
+		recipe = *recipe_it;
 
 		QDomElement recipe_tag = doc.createElement("recipe");
 

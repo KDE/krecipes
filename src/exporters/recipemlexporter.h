@@ -27,7 +27,7 @@ public:
 	RecipeMLExporter( RecipeDB *, const QString&, const QString );
 	virtual ~RecipeMLExporter();
 
-	virtual QString createContent( const QPtrList<Recipe> & );
+	virtual QString createContent( const QValueList<Recipe*> & );
 
 protected:
 	QString extensions() const{ return ".xml"; }

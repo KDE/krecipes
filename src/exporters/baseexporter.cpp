@@ -13,7 +13,6 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qptrlist.h>
 
 #include <kaboutdata.h>
 #include <kdebug.h>
@@ -47,8 +46,7 @@ void BaseExporter::exporter( const QValueList<int>& l )
 
 		if(!fileExists || overwrite == KMessageBox::Yes)
 		{
-			QPtrList<Recipe> recipes;
-			recipes.setAutoDelete(true);
+			QValueList<Recipe*> recipes;
 
 			QValueList<int>::const_iterator it;
 			for ( it = l.begin(); it != l.end(); ++it )
@@ -60,6 +58,11 @@ void BaseExporter::exporter( const QValueList<int>& l )
 			}
 
 			saveToFile( recipes );
+
+			//delete all the pointers in the list; TODO: Make RecipeList handle this automatically?
+			QValueList<Recipe*>::const_iterator recipe_it;
+			for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
+				delete *recipe_it;
 		}
 	}
 	else
@@ -107,7 +110,7 @@ bool BaseExporter::createFile()
 		return false;
 }
 
-void BaseExporter::saveToFile( const QPtrList<Recipe>& recipes )
+void BaseExporter::saveToFile( const QValueList<Recipe*>& recipes )
 {
 	if ( file->open( IO_WriteOnly ) )
 	{

@@ -26,7 +26,7 @@ public:
 	CookMLExporter( RecipeDB *, const QString&, const QString );
 	virtual ~CookMLExporter();
 
-	virtual QString createContent( const QPtrList<Recipe> & );
+	virtual QString createContent( const QValueList<Recipe*> & );
 
 protected:
 	virtual QString extensions() const{ return ".cml"; }

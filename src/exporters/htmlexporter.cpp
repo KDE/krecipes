@@ -42,7 +42,7 @@ HTMLExporter::~HTMLExporter()
 	delete properties;
 }
 
-QString HTMLExporter::createContent( const QPtrList<Recipe>& recipes )
+QString HTMLExporter::createContent( const QValueList<Recipe*>& recipes )
 {
 	if ( recipes.count() == 0 )
 		return "<html></html>";
@@ -53,19 +53,18 @@ QString HTMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	//Creates initial layout and saves to config file
 	SetupDisplay::createSetupIfNecessary();
 
-	QPtrListIterator<Recipe> recipes_it( recipes );
-	Recipe *recipe = recipes_it.toFirst();
+	Recipe *recipe = recipes[0];
+	QValueList<Recipe*>::const_iterator recipe_it;
 
 	recipeHTML += "<html><head>";
 	recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipe->title : i18n("Krecipes Recipes") );
 
 	//loop through recipes and only create the css properties
-	(void)recipes_it.toFirst();
 	int offset = 0;
 	recipeHTML += "<STYLE type=\"text/css\">\n";
-	while ( (recipe = recipes_it.current()) != 0 )
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		++recipes_it;
+		recipe = *recipe_it;
 
 		// Calculate the property list
 		calculateProperties(*recipe,database,properties);
@@ -89,10 +88,9 @@ QString HTMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	dir.mkdir( fi.dirPath()+"/"+filename+"_photos" );
 
 	//now loop through the recipes, generating the content
-	(void)recipes_it.toFirst();
-	while ( (recipe = recipes_it.current()) != 0 )
+	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		++recipes_it;
+		recipe = *recipe_it;
 
 		// Calculate the property list
 		calculateProperties(*recipe,database,properties);

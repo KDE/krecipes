@@ -15,6 +15,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <klistview.h>
+#include <kdebug.h>
 
 #include <qlayout.h>
 #include <qheader.h>
@@ -23,7 +24,7 @@
 
 #include "recipe.h"
 
-RecipeImportDialog::RecipeImportDialog( const QPtrList<Recipe> &list, QWidget *parent ) : QDialog(parent,0,true)
+RecipeImportDialog::RecipeImportDialog( const QValueList<Recipe*> &list, QWidget *parent ) : QDialog(parent,0,true)
 {
 	Form1Layout = new QHBoxLayout( this, 11, 6 );
 
@@ -71,7 +72,7 @@ void RecipeImportDialog::languageChange()
 	cancelButton->setText( i18n( "&Cancel" ) );
 }
 
-void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
+void RecipeImportDialog::loadListView( const QValueList<Recipe*> &list )
 {
 	CustomCheckListItem *head_item = new CustomCheckListItem( kListView, QString(i18n("All (%1)")).arg(list.count()), QCheckListItem::CheckBox );
 	head_item->setOpen(true);
@@ -80,11 +81,11 @@ void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
 	QStringList categoryList;
 
 	Recipe *recipe;
+	QValueList<Recipe*>::const_iterator recipe_it;
 
-	QPtrListIterator<Recipe> recipe_it( list );
-	while ( (recipe = recipe_it.current()) != 0 )
+	for ( recipe_it = list.begin(); recipe_it != list.end(); ++recipe_it )
 	{
-		++recipe_it;
+		recipe = *recipe_it;
 
 		QPtrListIterator<Element> cat_it( recipe->categoryList );
 		Element *cat;
@@ -114,10 +115,9 @@ void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
 	CustomCheckListItem *item = 0;
 	CustomCheckListItem *category_item = 0;
 
-	QPtrListIterator<Recipe> list_it( list );
-	while ( (recipe = list_it.current()) != 0 )
+	for ( recipe_it = list.begin(); recipe_it != list.end(); ++recipe_it )
 	{
-		++list_it;
+		recipe = *recipe_it;
 
 		if ( recipe->categoryList.count() == 0 )
 		{
@@ -158,16 +158,16 @@ void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
 	}
 }
 
-QPtrList<Recipe> * RecipeImportDialog::getSelectedRecipes()
+QValueList<Recipe*> RecipeImportDialog::getSelectedRecipes()
 {
-	QPtrList<Recipe> *selected_recipes = new QPtrList<Recipe>;
+	QValueList<Recipe*> selected_recipes;
 
 	QPtrDictIterator<Recipe> it( *recipe_items );
 	for( ; it.current(); ++it )
 	{
 		if ( static_cast<CustomCheckListItem*>(it.currentKey())->isOn() &&
-		     selected_recipes->findRef( it.current() ) == -1 )
-			selected_recipes->prepend( it.current() );
+		     (selected_recipes.contains( it.current() ) == 0) ) //make sure it isn't already in the list
+			selected_recipes.prepend( it.current() );
 	}
 
 	return selected_recipes;
