@@ -208,7 +208,9 @@ void RecipeListView::removeCategory( int id )
 
 void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 {
-	for ( QListViewItem *it=item->firstChild(); it; it=it->nextSibling() ) {
+	QListViewItem *next_sibling;
+	for ( QListViewItem *it=item->firstChild(); it; it = next_sibling ) {
+		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
 			//move this item to the root
 			it->parent()->takeItem(it);
