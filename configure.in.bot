@@ -1,0 +1,22 @@
+echo ""
+echo ""
+echo "--         Configure Results           --"
+echo "-                                       -"
+echo "-                                       -"
+
+if test "x$have_mysql" = "xtrue"; then
+echo "- MySQL Found.....................  YES -"
+else
+echo "- MySQL Found.....................  NO  -"
+fi
+
+echo "-                                       -"
+
+if test "x$have_sqlite" = "xtrue"; then
+echo "- SQLite Found..................... YES -"
+else
+echo "- SQLite Found..................... NO  -"
+fi
+echo "-                                       -"
+echo "-----------------------------------------"
+
