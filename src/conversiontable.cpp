@@ -104,6 +104,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	{
 	if (eb->accepted)
 		{
+		eb->accepted=false;
 		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
 		if (row()!=col()) emit signalSymmetric(row(),col(),eb->value()); // Signal to make symmetric. just in case, check if row,col are different (it shouldn't be editable, anyway)
