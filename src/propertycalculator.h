@@ -7,44 +7,19 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef RECIPEVIEWDIALOG_H
-#define RECIPEVIEWDIALOG_H
 
-#include <qvbox.h>
-#include <qstring.h>
-#include <khtml_part.h>
-#include <khtmlview.h>
-#include <iostream>
 
-#include "recipedb.h"
+ #include <qptrlist.h>
+ #include <recipedb.h>
+  #include "elementlist.h"
+ #include "ingredientpropertylist.h"
+ #include "recipe.h"
 
-/**
-@author Unai Garro
-*/
+void calculateIngredients(RecipeDB *database, IDList &ingList, QPtrList <int> &unitList, QPtrList <double> &amountList);
 
-class RecipeViewDialog : public QVBox
-{
-Q_OBJECT
+int autoConvert(RecipeDB *database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID);
 
-public:
-    RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID=-1);
+void calculateProperties(Recipe* recipe,RecipeDB* database);
 
-    ~RecipeViewDialog();
-    void loadRecipe(int recipeID);
 
-private:
-
-  // Internal Variables
-  KHTMLPart *recipeView;
-  RecipeDB  *database;
-  Recipe *loadedRecipe;
-
-  // Internal Methods
-
-private slots:
-  void showRecipe(void);
-
-};
-
-#endif
-
+void addPropertyToList(RecipeDB *database,IngredientPropertyList &recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing);
