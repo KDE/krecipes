@@ -1097,10 +1097,10 @@ QCString LiteRecipeDB::escapeAndEncode(const QString &s)
 QString s_escaped;
 
 // Escape
-s_escaped=escape(s);
+s_escaped=escape(s.utf8());
 
 // Return encoded
-return(s_escaped.utf8());
+return s_escaped.latin1(); // Note that the text has already been converted into utf8 before escaping.
 }
 
 QString LiteRecipeDB::escape(const QString &s)
