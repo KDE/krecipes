@@ -12,6 +12,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -93,7 +94,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	//title
 	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
 		m_title = current;
-	qDebug("Found title: %s",m_title.latin1());
+	kdDebug()<<"Found title: "<<m_title<<endl;
 
 	//categories
 	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
@@ -108,7 +109,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 		{
 			Element new_cat( QString(*it).stripWhiteSpace() );
-			qDebug("Found category: %s", new_cat.name.latin1() );
+			kdDebug()<<"Found category: "<<new_cat.name<<endl;
 			m_categories.add( new_cat );
 		}
 	}
@@ -124,7 +125,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		if ( current.startsWith("Contributor:") )
 		{
 			Element new_author( current.mid(current.find(':')+1,current.length()).stripWhiteSpace() );
-			qDebug("Found author: %s", new_author.name.latin1() );
+			kdDebug()<<"Found author: "<<new_author.name<<endl;
 			m_authors.add( new_author );
 		}
 		else if ( current.startsWith("Preparation Time:") )
@@ -134,11 +135,11 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		else if ( current.startsWith("Yield:") )
 		{
 			m_servings = current.mid(current.find(':'),current.length()).toInt();
-			qDebug("Found servings: %d", m_servings );
+			kdDebug()<<"Found servings: "<<m_servings<<endl;
 		}
 		else
 		{
-			qDebug("Found instruction line: %s",current.latin1());
+			kdDebug()<<"Found instruction line: "<<current<<endl;
 			m_instructions += current+"\n";
 		}
 	}
@@ -181,12 +182,6 @@ void NYCGenericImporter::resetVars()
 	m_instructions = QString::null;
 }
 
-/*
-fix headers: ----SOUP----
-fix for ingredients like:
-salt to taste
-pepper to taste
-*/
 void NYCGenericImporter::loadIngredientLine( const QString &line )
 {
 	QString current = line;
@@ -196,7 +191,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	{
 		Ingredient new_ingredient( current.stripWhiteSpace(), 0, "" );
 		m_ingredients.add(new_ingredient);
-		qDebug("Found ingredient header %s",new_ingredient.name.latin1());
+		kdDebug()<<"Found ingredient header: "<<new_ingredient.name<<endl;
 		return;
 	}
 
@@ -238,6 +233,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 		ingredient_line.pop_front();
 	}
 
+	//now join each separate part of ingredient (name, unit, amount)
 	name = ingredient_line.join(" ");
 
 	/*uncomment this when Krecipes uses preparation method
@@ -248,9 +244,8 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 
 	Ingredient new_ingredient( name, amount.toDouble(), unit );
 	m_ingredients.add(new_ingredient);
-	qDebug("Found ingredient: amount=%f, unit:%s, name:%s",
-	  new_ingredient.amount,
-	  new_ingredient.units.latin1(),
-	  new_ingredient.name.latin1());
+	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
+	  <<", unit:"<<new_ingredient.units
+	  <<", name:"<<new_ingredient.name<<endl;
 }
 

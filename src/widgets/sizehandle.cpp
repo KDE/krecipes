@@ -204,7 +204,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
     oldPressPos += ( p - pos() );
 }
 
-void SizeHandle::mouseReleaseEvent( QMouseEvent *e )
+void SizeHandle::mouseReleaseEvent( QMouseEvent */*e*/ )
 {/*
     if ( e->button() != LeftButton || !active )
 	return;

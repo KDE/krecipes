@@ -1534,7 +1534,7 @@ int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 	return id;
 }
 
-void LiteRecipeDB::givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost)
+void LiteRecipeDB::givePermissions(const QString & /*dbName*/,const QString &/*username*/, const QString &/*password*/, const QString &/*clientHost*/)
 {
 // FIXME: you can't give permissions in SQLite :)
 /*QString command;

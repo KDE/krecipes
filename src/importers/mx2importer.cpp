@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "mx2importer.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 #include <qstringlist.h>
@@ -29,15 +30,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 MX2Importer::MX2Importer(const QString& filename)
 {
 	QFile file( filename );
-	qDebug("loading file: %s",filename.latin1());
+	kdDebug()<<"loading file: "<<filename<<endl;
 	if ( file.open( IO_ReadWrite ) )
 	{
-		qDebug("file opened");
+		kdDebug()<<"file opened"<<endl;
 		QDomDocument doc;
 		QString error; int line; int column;
 		if (!doc.setContent(&file,&error,&line,&column))
 		{
-			qDebug("error: \"%s\" at line %d, column %d",error.latin1(),line,column);
+			kdDebug()<<QString("error: \"%1\" at line %2, column %3").arg(error).arg(line).arg(column)<<endl;
 			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3.  This may not be a *.mx2 file.") ).arg(error).arg(line).arg(column) );
 			return;
 		}

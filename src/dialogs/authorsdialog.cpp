@@ -78,7 +78,7 @@ ElementList authorList;
 database->loadAuthors(&authorList);
 for (Element *author=authorList.getFirst();author; author=authorList.getNext())
 	{
-	QListViewItem *it= new QListViewItem(authorListView,QString::number(author->id),author->name);
+	(void)new QListViewItem(authorListView,QString::number(author->id),author->name);
 	}
 }
 
@@ -99,7 +99,7 @@ void AuthorsDialog::removeAuthor(void)
 QListViewItem *it;
 int authorID=-1;
 
-if (it=authorListView->selectedItem()) authorID=it->text(0).toInt();
+if ( (it=authorListView->selectedItem()) ) authorID=it->text(0).toInt();
 
 if (authorID>=0) // an author was selected previously
 {

@@ -86,7 +86,7 @@ database->loadUnits(&unitList);
 unitListView->clear();
 for (Element *unit=unitList.getFirst();unit;unit=unitList.getNext())
 {
-QListViewItem *it=new QListViewItem(unitListView,QString::number(unit->id),unit->name);
+(void)new QListViewItem(unitListView,QString::number(unit->id),unit->name);
 }
 }
 
@@ -127,7 +127,7 @@ void UnitsDialog::removeUnit(void)
 // Find selected unit item
 QListViewItem *it;
 int unitID=-1;
-if (it=unitListView->selectedItem()) unitID=it->text(0).toInt();
+if ( (it=unitListView->selectedItem()) ) unitID=it->text(0).toInt();
 
 if (unitID>=0) // a unit was selected previously
 {

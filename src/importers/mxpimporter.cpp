@@ -1,7 +1,5 @@
 /***************************************************************************
  *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,6 +16,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "mixednumber.h"
 #include "recipe.h"
@@ -63,13 +62,13 @@ void MXPImporter::importMXP( QTextStream &stream )
 {
 	kapp->processEvents(); //don't want the user to think its frozen... especially for files with thousands of recipes
 
-	qDebug("Found recipe MXP format: * Exported from MasterCook *");
+	kdDebug()<<"Found recipe MXP format: * Exported from MasterCook *"<<endl;
 	QString current;
 
 	// title
 	stream.skipWhiteSpace();
 	m_title = stream.readLine().stripWhiteSpace();
-	qDebug("Found title: %s", m_title.latin1());
+	kdDebug()<<"Found title: "<<m_title<<endl;
 
 	//author
 	stream.skipWhiteSpace();
@@ -78,7 +77,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	{
 		Element new_author( current.mid( current.find(":")+1, current.length() ).stripWhiteSpace() );
 		m_authors.add( new_author );
-		qDebug("Found author: %s", new_author.name.latin1());
+		kdDebug()<<"Found author: "<<new_author.name<<endl;
 	}
 	else
 	{
@@ -99,7 +98,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		 	end_index = current.length();
 
 		m_servings = current.mid( current.find(":")+1, end_index ).stripWhiteSpace().toInt();
-		qDebug("Found serving size: %d",m_servings);
+		kdDebug()<<"Found serving size: "<<m_servings<<endl;
 	}
 	else
 	{
@@ -111,7 +110,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	{
 		m_prep_time = current.mid( current.find(":",current.find("preparation time",0,FALSE)) + 1,
 		  current.length() ).stripWhiteSpace();
-		qDebug("Found preparation time: %s",m_prep_time.latin1());
+		kdDebug()<<"Found preparation time: "<<m_prep_time<<endl;
 	}
 	else
 	{
@@ -135,7 +134,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 					Element new_cat( (*it).stripWhiteSpace() );
 					m_categories.add( new_cat );
 
-					qDebug("Found category: %s", new_cat.name.latin1());
+					kdDebug()<<"Found category: "<<new_cat.name<<endl;
 				}
 
 				current = stream.readLine();
@@ -143,7 +142,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 			}
 		}
 		else
-			qDebug("No categories found.");
+			kdDebug()<<"No categories found."<<endl;
 	}
 	else
 	{
@@ -205,17 +204,16 @@ void MXPImporter::importMXP( QTextStream &stream )
 			}
 
 			m_ingredients.add( new_ingredient );
-			qDebug("Found ingredient: amount=%f, unit:%s, name:%s, prep_method:%s",
-			  new_ingredient.amount,
-			  new_ingredient.units.latin1(),
-			  new_ingredient.name.latin1(),
-			  prep_method.latin1());
+			kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
+			  <<", unit:"<<new_ingredient.units
+			  <<", name:"<<new_ingredient.name
+			  <<", prep_method:"<<prep_method<<endl;
 
 			current = stream.readLine();
 		}
 	}
 	else
-		qDebug("No ingredients found.");
+		kdDebug()<<"No ingredients found."<<endl;
 
 	//==========================instructions ( along with other optional fields... mxp format doesn't define end of ingredients and start of other fields )==============//
 	stream.skipWhiteSpace();
@@ -226,35 +224,35 @@ void MXPImporter::importMXP( QTextStream &stream )
 		{
 			Element new_author( getNextQuotedString(stream) );
 			m_authors.add( new_author );
-			qDebug("Found source: %s (adding as author)",new_author.name.latin1());
+			kdDebug()<<"Found source: "<<new_author.name<<" (adding as author)"<<endl;
 		}
 		else if ( current.stripWhiteSpace() == "Description:" )
 		{
 			m_description = getNextQuotedString(stream);
-			qDebug("Found description: %s (adding to end of instructions)",m_description.latin1());
+			kdDebug()<<"Found description: "<<m_description<<" (adding to end of instructions)"<<endl;
 			m_instructions += "\n\nDescription: " + m_description;
 		}
 		else if ( current.stripWhiteSpace() == "S(Internet Address):" )
 		{
 			m_internet = getNextQuotedString(stream);
-			qDebug("Found internet address: %s (adding to end of instructions)",m_internet.latin1());
+			kdDebug()<<"Found internet address: "<<m_internet<<" (adding to end of instructions)"<<endl;
 			m_instructions += "\n\nInternet address: " + m_internet;
 		}
 		else if ( current.stripWhiteSpace() == "Yield:" )
 		{
 			m_servings = getNextQuotedString(stream).stripWhiteSpace().toInt();
-			qDebug("Found yield: %d (adding as servings)",m_servings);
+			kdDebug()<<"Found yield: "<<m_servings<<" (adding as servings)"<<endl;
 		}
 		else if ( current.stripWhiteSpace() == "T(Cook Time):" )
 		{
 			m_prep_time = getNextQuotedString(stream);
-			qDebug("Found cook time: %s (adding as prep time)",m_prep_time.latin1());
+			kdDebug()<<"Found cook time: "<<m_prep_time<<" (adding as prep time)"<<endl;
 		}
 		else if ( current.stripWhiteSpace() == "Cuisine:" )
 		{
 			Element new_cat( getNextQuotedString(stream) );
 			m_categories.add( new_cat );
-			qDebug("Found cuisine (adding as category): %s",new_cat.name.latin1());
+			kdDebug()<<"Found cuisine (adding as category): "<<new_cat.name<<endl;
 		}
 		else
 			m_instructions += current + "\n";
@@ -262,7 +260,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		current = stream.readLine().stripWhiteSpace();
 	}
 	m_instructions = m_instructions.stripWhiteSpace();
-	qDebug("Found instructions: %s", m_instructions.latin1());
+	kdDebug()<<"Found instructions: "<<m_instructions<<endl;
 
 	//=================after here, fields are optional=========================//
 	stream.skipWhiteSpace();
@@ -274,7 +272,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "suggested wine" )
 		{
 			m_wine = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found suggested wine: %s (adding to end of instructions)", m_wine.latin1());
+			kdDebug()<<"Found suggested wine: "<<m_wine<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nSuggested wine: " + m_wine;
 		}
@@ -282,35 +280,35 @@ void MXPImporter::importMXP( QTextStream &stream )
 		if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "nutr. assoc." )
 		{
 			QString nutr_assoc = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found nutrient association: %s (adding to end of instructions)", nutr_assoc.latin1());
+			kdDebug()<<"Found nutrient association: "<<nutr_assoc<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nNutrient Association: " + nutr_assoc;
 		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving (excluding unknown items)" )
 		{ //per serving... maybe we can do something with this info later
 			QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found per serving (excluding unknown items): %s (adding to end of instructions)", per_serving_info.latin1());
+			kdDebug()<<"Found per serving (excluding unknown items): "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nPer Serving (excluding unknown items): " + per_serving_info;
 		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving" )
 		{ //per serving... maybe we can do something with this info later
 			QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found per serving: %s (adding to end of instructions)", per_serving_info.latin1());
+			kdDebug()<<"Found per serving: "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nPer Serving: " + per_serving_info;
 		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "food exchanges" )
 		{ //food exchanges... maybe we can do something with this info later
 			QString food_exchange_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found food exchanges: %s (adding to end of instructions)", food_exchange_info.latin1());
+			kdDebug()<<"Found food exchanges: "<<food_exchange_info<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nFood Exchanges: " + food_exchange_info;
 		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "serving ideas" )
 		{ //serving ideas
 			m_serving_ideas = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-			qDebug("Found serving ideas: %s (adding to end of instructions)", m_serving_ideas.latin1());
+			kdDebug()<<"Found serving ideas: "<<m_serving_ideas<<" (adding to end of instructions)"<<endl;
 
 			m_instructions += "\n\nServing ideas: " + m_serving_ideas;
 		}
@@ -339,7 +337,7 @@ Ratings       : Cholesterol Rating 5            Complete Meal 3
 	*/
 	if ( !m_notes.isNull() )
 	{
-		qDebug("Found notes: %s (adding to end of instructions)", m_notes.latin1());
+		kdDebug()<<QString("Found notes: %s (adding to end of instructions)").arg(m_notes)<<endl;
 		m_instructions += "\n\nNotes: " + m_notes.stripWhiteSpace();
 	}
 
@@ -352,13 +350,13 @@ Ratings       : Cholesterol Rating 5            Complete Meal 3
 	}
 }
 
-void MXPImporter::importGeneric( QTextStream &stream )
+void MXPImporter::importGeneric( QTextStream &/*stream*/ )
 {
 	setErrorMsg( i18n("MasterCook's Generic Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format.") );
 //not even sure it this is worth writing... its rather obsolete
 }
 
-void MXPImporter::importMac( QTextStream &stream )
+void MXPImporter::importMac( QTextStream &/*stream*/ )
 {
 	setErrorMsg( i18n("MasterCook Mac's Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format.") );
 //not even sure it this is worth writing... its rather obsolete

@@ -8,6 +8,8 @@
  ***************************************************************************/
 #include "kreexport.h"
 
+#include <kdebug.h>
+
 KreExporter::KreExporter( RecipeDB *db, const QString& filename = QString::null, const QString format = QString::null )
 {
   database = db;
@@ -81,7 +83,7 @@ void KreExporter::exporter(const int recipeId)
     }
   }
   else{
-    qDebug("no output file have been selected for export.");
+    kdDebug()<<"no output file have been selected for export."<<endl;
   }
 }
 
@@ -121,7 +123,7 @@ void KreExporter::categoryExporter(QValueList<int>* l){
     }
   }
   else{
-    qDebug("no output file have been selected for export.");
+    kdDebug()<<"no output file have been selected for export."<<endl;
   }
 }
 

@@ -181,7 +181,7 @@ if (!item(row,col))
 	if (!(item(col,row)) && (row!=col)) createNewItem(col,row,0); // Create the symmetric one.It shouldn't be necessary to do this if (row,col) exists, but just in case, it's checked. row==col is neither supposed to be editable, but check anyway
 
 // Then call normal beginEdit
-QTable::beginEdit(row,col,replace);
+return QTable::beginEdit(row,col,replace);
 }
 
 void ConversionTable::makeSymmetric(int r,int c,double amount)

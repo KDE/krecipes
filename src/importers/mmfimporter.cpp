@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,6 +12,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -134,7 +135,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	stream.skipWhiteSpace();
 	current = stream.readLine();
 	m_title = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-	qDebug("Found title: %s",m_title.latin1());
+	kdDebug()<<"Found title: "<<m_title<<endl;
 
 	//categories
 	stream.skipWhiteSpace();
@@ -145,7 +146,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	{
 		Element new_cat;
 		new_cat.name = QString(*it).stripWhiteSpace();
-		qDebug("Found category: %s", new_cat.name.latin1() );
+		kdDebug()<<"Found category: "<<new_cat.name<<endl;
 		m_categories.add( new_cat );
 	}
 
@@ -157,12 +158,12 @@ void MMFImporter::importMMF( QTextStream &stream )
 		//get the number between the ":" and the next space after it
 		m_servings = current.mid( current.find(":")+1,
 		  current.find(" ",current.find(":")+2) - current.find(":") ).toInt();
-		qDebug("Found yield: %d",m_servings);
+		kdDebug()<<"Found yield: "<<m_servings<<endl;
 	}
 	else if ( current.startsWith("Servings:") ) //from database version
 	{
 		m_servings = current.mid( current.find(":")+1, current.length() ).toInt();
-		qDebug("Found servings: %d",m_servings);
+		kdDebug()<<"Found servings: "<<m_servings<<endl;
 	}
 
 	//=======================VARIABLE FORMAT===================//
@@ -195,13 +196,13 @@ void MMFImporter::importMMF( QTextStream &stream )
 			if ( current.stripWhiteSpace() != "" )
 				instruction_found = true;
 			m_instructions += current.stripWhiteSpace() + "\n";
-			qDebug("Found instruction line: %s",current.stripWhiteSpace().latin1());
+			kdDebug()<<"Found instruction line: "<<current.stripWhiteSpace()<<endl;
 		}
 
 		current = stream.readLine();
 	}
 	m_instructions = m_instructions.stripWhiteSpace();
-	//qDebug("Found instructions: %s",m_instructions.latin1());
+	//kdDebug()<<"Found instructions: "<<m_instructions<<endl;
 
 	putDataInRecipe();
 }
@@ -217,7 +218,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 
 	if ( string.mid( 11, 1 ) == "-" && (string.mid( 0, 11 ).stripWhiteSpace() == "") ) //continuation of previous ingredient
 	{
-		qDebug("Appending to last ingredient in column: %s",string.stripWhiteSpace().mid(1,string.length()).latin1());
+		kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
 		if ( list.at(list.count()-1) )
 			list.at(list.count()-1)->name += " "+string.stripWhiteSpace().mid(1,string.length());
 
@@ -268,10 +269,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 
 	//if we made it this far it is an ingredient line
 	list.add( new_ingredient );
-	qDebug("Found ingredient: amount=%f, unit:%s, name:%s",
-	  new_ingredient.amount,
-	  new_ingredient.units.latin1(),
-	  new_ingredient.name.latin1());
+	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
+	  <<", unit:"<<new_ingredient.units
+	  <<", name:"<<new_ingredient.name<<endl;
 
 	return true;
 }
@@ -287,7 +287,7 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 	{
 		QString header(string.stripWhiteSpace());
 		header = header.mid( 10, header.length() - 20 );
-		qDebug("found ingredient header: %s",header.latin1());
+		kdDebug()<<"found ingredient header: "<<header<<endl;
 
 		for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
 			m_all_ing.add( *ing );

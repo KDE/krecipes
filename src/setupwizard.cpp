@@ -280,12 +280,12 @@ layout->addWidget(serverSettingsGBox,7,3);
 
 
 // Server
-QLabel* serverText=new QLabel(i18n("Server:"), serverSettingsGBox);
+(void)new QLabel(i18n("Server:"), serverSettingsGBox);
 serverEdit=new KLineEdit(serverSettingsGBox);
 serverEdit->setText("localhost");
 
 // Client
-QLabel* clientText=new QLabel(i18n("Client:"), serverSettingsGBox);
+(void)new QLabel(i18n("Client:"), serverSettingsGBox);
 clientEdit=new KLineEdit(serverSettingsGBox);
 clientEdit->setText("localhost");
 
@@ -423,10 +423,10 @@ layout->addItem(spacer_left,1,0);
 
 // Explanation Text// Widgets
 	QLabel *logo;
-	QLabel *serverSetupText;
-	KLineEdit *usernameEdit;
-	KLineEdit *passwordEdit;
-	KLineEdit *dbNameEdit;
+	//QLabel *serverSetupText;
+	//KLineEdit *usernameEdit;
+	//KLineEdit *passwordEdit;
+	//KLineEdit *dbNameEdit;
 initializeText=new QLabel(this);
 initializeText->setText(i18n("Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. "));
 

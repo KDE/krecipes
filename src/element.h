@@ -23,9 +23,8 @@ public:
     Element(Element *el);
 
     ~Element();
-    int id;
     QString name;
-
+    int id;
 };
 
 #endif

@@ -132,11 +132,11 @@ void Krecipes::setupActions()
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
-    KAction *import = new KAction(i18n("Import..."), CTRL+Key_I,
+    (void)new KAction(i18n("Import..."), CTRL+Key_I,
                                   this, SLOT(import()),
                                   actionCollection(), "import_action");
 
-    KAction *pageSetup = new KAction(i18n("Page Setup..."), 0,
+    (void)new KAction(i18n("Page Setup..."), 0,
                                   this, SLOT(pageSetupSlot()),
                                   actionCollection(), "page_setup_action");
 

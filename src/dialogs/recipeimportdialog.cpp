@@ -92,7 +92,7 @@ QPtrList<Recipe> * RecipeImportDialog::getSelectedRecipes()
 {
 	QPtrList<Recipe> *selected_recipes = new QPtrList<Recipe>;
 
-	for ( int i = 0; i < m_recipe_list->count(); i++ )
+	for ( unsigned int i = 0; i < m_recipe_list->count(); i++ )
 	{
 		if ( (*recipe_items)[i]->isOn() )
 			selected_recipes->prepend(m_recipe_list->at(i));

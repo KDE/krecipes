@@ -144,10 +144,10 @@ for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 	recipeHTML += div->generateHTML();
 
 // Close HTML
-recipeHTML+="</body></html>";
+recipeHTML+="</body></html>\n";
 }
 
-kdDebug()<<recipeHTML;
+kdDebug()<<recipeHTML<<endl;
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
@@ -387,7 +387,7 @@ void RecipeViewDialog::createBlocks()
 
 	//this takes expands all items to an appropriate size, and ensures no widgets
 	//overlap in the process
-	geometries.sort();
+	geometries.sort(); //we'll work with these in order from top to bottom
 	for ( QRect *rect = geometries.first(); rect; rect = geometries.next() )
 	{
 		DivElement *element = geom_contents.find( rect );

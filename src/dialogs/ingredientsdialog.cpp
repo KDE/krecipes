@@ -182,7 +182,7 @@ database->loadIngredients(ingredientList);
 
 	for ( Element *ing =ingredientList->getFirst(); ing; ing =ingredientList->getNext() )
 	{
-	QListViewItem *it= new QListViewItem(ingredientListView,QString::number(ing->id),ing->name);
+	(void)new QListViewItem(ingredientListView,QString::number(ing->id),ing->name);
 	}
 
 // Reload Unit List
@@ -213,7 +213,7 @@ database->loadPossibleUnits(ingredientID,unitList);
 
 	for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
 	{
-	QListViewItem *uit= new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
+	(void)new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
 	}
 
 // Select the first unit
@@ -262,7 +262,7 @@ void IngredientsDialog::addUnitToIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if (it=ingredientListView->selectedItem())
+if ( (it=ingredientListView->selectedItem()) )
   {
   ingredientID=it->text(0).toInt();
   }
@@ -293,8 +293,8 @@ void IngredientsDialog::removeUnitFromIngredient(void)
 // Find selected ingredient/unit item combination
 QListViewItem *it;
 int ingredientID=-1, unitID=-1;
-if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
-if (it=unitsListView->selectedItem()) unitID=it->text(0).toInt();
+if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
+if ( (it=unitsListView->selectedItem()) ) unitID=it->text(0).toInt();
 
 if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was selected previously
 {
@@ -319,7 +319,7 @@ void IngredientsDialog::removeIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
+if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
 
 if (ingredientID>=0) // an ingredient/unit combination was selected previously
 {
@@ -357,7 +357,7 @@ if (it){// make sure that the ingredient list is not empty
 	{
 	QListViewItem* lastElement=propertiesListView->lastItem();
 	//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-	  QListViewItem *it= new QListViewItem(propertiesListView,lastElement,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	  (void)new QListViewItem(propertiesListView,lastElement,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
 	  // Store the perUnits with the ID for using later
 	  Element perUnitEl;
 	  perUnitEl.id=prop->perUnit.id;
@@ -380,7 +380,7 @@ void IngredientsDialog::addPropertyToIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if (it=ingredientListView->selectedItem())
+if ( (it=ingredientListView->selectedItem()) )
   {
   ingredientID=it->text(0).toInt();
   }
@@ -414,8 +414,8 @@ void IngredientsDialog::removePropertyFromIngredient(void)
 // Find selected ingredient/property item combination
 QListViewItem *it;
 int ingredientID=-1, propertyID=-1; int perUnitsID=-1;
-if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
-if (it=propertiesListView->selectedItem()) propertyID=it->text(0).toInt();
+if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
+if ( (it=propertiesListView->selectedItem()) ) propertyID=it->text(0).toInt();
 if (propertyID>=0) perUnitsID=perUnitListBack->getElement(findPropertyNo(it))->id ;
 
 if ((ingredientID>=0)&&(propertyID>=0) && (perUnitsID>=0)) // an ingredient/property combination was selected previously
@@ -468,7 +468,7 @@ reloadPropertyList();
 
 }
 
-int IngredientsDialog::findPropertyNo(QListViewItem *it)
+int IngredientsDialog::findPropertyNo(QListViewItem */*it*/)
 {
 bool found=false;
 int i = 0;

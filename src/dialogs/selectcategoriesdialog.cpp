@@ -92,7 +92,7 @@ Element *el=categoryListPC->getFirst(); // Initialize to first element
 for (CategoryListItem *it=(CategoryListItem *) categoryListView->firstChild();it; it=(CategoryListItem *) it->nextSibling())
 	{
 
-	bool *newValue=new bool;
+	/*bool *newValue=new bool;*/
 	if (it->isOn()) newSelected->add(*el); // If checked, add
 	el=categoryListPC->getNext();
 	}

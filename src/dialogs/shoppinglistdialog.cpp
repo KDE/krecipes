@@ -105,7 +105,7 @@ recipeListView->clear();
 database->loadRecipeList(&recipeList);
 
 for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext() )
-	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
+	(void)new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
 }
 
 void ShoppingListDialog::reload(void)
@@ -120,7 +120,7 @@ it=recipeListView->selectedItem();
 if (it) {
 	int recipeID=it->text(0).toInt();
 	QString recipeTitle=it->text(1);
-	QListViewItem *newIt=new QListViewItem (shopRecipeListView,QString::number(recipeID),recipeTitle);
+	(void)new QListViewItem (shopRecipeListView,QString::number(recipeID),recipeTitle);
 	}
 }
 
@@ -149,7 +149,7 @@ void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
 {
 
 QString title=database->recipeTitle(recipeID);
-QListViewItem *it=new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
+(void)new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
 }
 
 void ShoppingListDialog::clear()

@@ -64,7 +64,7 @@ int SelectUnitDialog::unitID(void)
 {
 
 QListViewItem *it;
-if (it=unitChooseView->selectedItem())
+if ( (it=unitChooseView->selectedItem()) )
 {
 return(it->text(0).toInt());
 }
@@ -75,7 +75,7 @@ void SelectUnitDialog::loadUnits(ElementList *unitList)
 {
 for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
 {
-QListViewItem *it= new QListViewItem(unitChooseView,QString::number(unit->id),unit->name);
+(void)new QListViewItem(unitChooseView,QString::number(unit->id),unit->name);
 }
 }
 

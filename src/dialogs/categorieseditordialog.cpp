@@ -77,7 +77,7 @@ ElementList categoryList;
 database->loadCategories(&categoryList);
 for (Element *category=categoryList.getFirst();category; category=categoryList.getNext())
 	{
-	QListViewItem *it= new QListViewItem(categoryListView,QString::number(category->id),category->name);
+	(void)new QListViewItem(categoryListView,QString::number(category->id),category->name);
 	}
 }
 
@@ -98,7 +98,7 @@ void CategoriesEditorDialog::removeCategory(void)
 QListViewItem *it;
 int categoryID=-1;
 
-if (it=categoryListView->selectedItem()) categoryID=it->text(0).toInt();
+if ( (it=categoryListView->selectedItem()) ) categoryID=it->text(0).toInt();
 
 if (categoryID>=0) // a category was selected previously
 {

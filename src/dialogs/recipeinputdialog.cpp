@@ -421,7 +421,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
 			amount_str = QString::number(ing->amount);
 
 		 //Insert ingredient after last one
-		 QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing->name,amount_str,ing->units);
+		 (void)new QListViewItem (ingredientList,lastElement,ing->name,amount_str,ing->units);
 	}
 
 	//show photo
@@ -528,7 +528,7 @@ loadUnitListCombo();
 void RecipeInputDialog::moveIngredientUp(void)
 {
 QListViewItem *it=ingredientList->selectedItem();
-QListViewItem *iabove;
+QListViewItem *iabove = 0;
 
 if (it) iabove=it->itemAbove(); // Only check itemAbove() if it exists...
 
@@ -550,7 +550,7 @@ void RecipeInputDialog::moveIngredientDown(void)
 {
 
 QListViewItem *it=ingredientList->selectedItem();
-QListViewItem *ibelow;
+QListViewItem *ibelow = 0;
 if (it) ibelow=it->itemBelow(); // Only check itemBelow() if it exists...
 
 if (ibelow && it)
@@ -572,8 +572,8 @@ if (it)
 {
 	// Find the one below or above, and save index first
 	QListViewItem *iabove, *ibelow, *iselect=0;
-	if (ibelow=it->itemBelow()) iselect=ibelow;
-		else if (iabove=it->itemAbove()) iselect=iabove;
+	if ( (ibelow=it->itemBelow()) ) iselect=ibelow;
+		else if ( (iabove=it->itemAbove()) ) iselect=iabove;
 	int index=ingredientList->itemIndex(it);
 
 	//Now remove the ingredient
@@ -685,7 +685,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   else
     amount_str = QString::number(ing.amount);
 
-  QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units);
+  (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units);
 
   amountEdit->setFocus(); //put cursor back to amount so user can begin next ingredient
   amountEdit->selectAll();
@@ -752,7 +752,7 @@ if (changedSignalEnabled)
 
 }
 
-void RecipeInputDialog::recipeChanged(const QString &t)
+void RecipeInputDialog::recipeChanged(const QString &/*t*/)
 {
 recipeChanged(); // jumps to the real slot function
 }

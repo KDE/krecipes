@@ -86,7 +86,7 @@ int SelectPropertyDialog::propertyID(void)
 {
 
 QListViewItem *it;
-if (it=propertyChooseView->selectedItem())
+if ( (it=propertyChooseView->selectedItem()) )
 {
 return(it->text(0).toInt());
 }
@@ -108,7 +108,7 @@ void SelectPropertyDialog::loadProperties(IngredientPropertyList *propertyList)
 {
 for ( IngredientProperty *property =propertyList->getFirst(); property; property =propertyList->getNext() )
 {
-QListViewItem *it= new QListViewItem(propertyChooseView,QString::number(property->id),property->name);
+(void)new QListViewItem(propertyChooseView,QString::number(property->id),property->name);
 }
 }
 void SelectPropertyDialog::loadUnits(ElementList *unitList)

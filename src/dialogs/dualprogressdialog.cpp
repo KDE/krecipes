@@ -48,7 +48,7 @@ void DualProgressDialog::slotUpdateTotalProgress( int percentage )
 {
 	if ( percentage < 100 )
 	{
-		int total_percent = (double(m_current_step) + double(percentage)/100.0)/double(m_total_steps)*100.0;
+		int total_percent = int((double(m_current_step) + double(percentage)/100.0)/double(m_total_steps)*100.0);
 
 		progressBar()->setProgress( total_percent );
 	}

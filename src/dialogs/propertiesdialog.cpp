@@ -95,7 +95,7 @@ database->loadProperties(propertyList);
 //Populate this data into the KListView
 	for ( IngredientProperty *prop =propertyList->getFirst(); prop; prop =propertyList->getNext() )
 	{
-	QListViewItem *it= new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units);
+	(void)new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units);
 
 
 	}
@@ -104,9 +104,9 @@ database->loadProperties(propertyList);
 
 void PropertiesDialog::removeProperty(void)
 {
-int propertyID;
+int propertyID = -1;
 QListViewItem *it;
-if (it=propertyListView->selectedItem())
+if ( (it=propertyListView->selectedItem()) )
 {
 propertyID=it->text(0).toInt();
 }

@@ -11,6 +11,7 @@
 #include "kreimporter.h"
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 #include <qstringlist.h>
@@ -22,13 +23,13 @@ KreImporter::KreImporter(const QString& filename)
 {
   QFile* file = 0;
   bool unlink = false;
-	qDebug("loading file: %s",filename.latin1());
+	kdDebug()<<"loading file: %s"<<filename<<endl;
 
   if(filename.right(6) == ".kreml"){
 	  file = new QFile( filename );
   }
   else if(filename.right(4) == ".kre"){
-    qDebug("file is an archive");
+    kdDebug()<<"file is an archive"<<endl;
     KTar* kre = new KTar(filename, "application/x-gzip");
     kre->open( IO_ReadOnly );
     const KArchiveDirectory* dir = kre->directory();
@@ -40,7 +41,7 @@ KreImporter::KreImporter(const QString& filename)
         }
     }
     if(name == QString::null){
-			qDebug("error: Archive doesn't contain a valid krecipes file");
+			kdDebug()<<"error: Archive doesn't contain a valid krecipes file"<<endl;
 			setErrorMsg( i18n("Archive doesn't contain a valid krecipes file") );
 			return;
     }
@@ -57,12 +58,12 @@ KreImporter::KreImporter(const QString& filename)
 
 	if ( file->open( IO_ReadOnly ) )
 	{
-		qDebug("file opened");
+		kdDebug()<<"file opened"<<endl;
 		QDomDocument doc;
 		QString error; int line; int column;
 		if (!doc.setContent(file,&error,&line,&column))
 		{
-			qDebug("error: \"%s\" at line %d, column %d",error.latin1(),line,column);
+			kdDebug()<<QString("error: \"%1\" at line %2, column %3").arg(error).arg(line).arg(column)<<endl;
 			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3") ).arg(error).arg(line).arg(column) );
 			return;
 		}
@@ -77,7 +78,7 @@ KreImporter::KreImporter(const QString& filename)
 
 		// TODO Check if there are changes between versions
     QString kreVersion = kreml.attribute("version");
-    qDebug(QString( i18n("KreML version %1") ).arg(kreVersion));
+    kdDebug()<<QString( i18n("KreML version %1") ).arg(kreVersion)<<endl;
 
 		QDomNodeList r = kreml.childNodes();
     QDomElement krecipe;
@@ -125,12 +126,12 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
     QDomElement el = l.item(i).toElement();
     if (el.tagName() == "title"){
       recipe->title = el.text();
-      qDebug("Found title: %s",recipe->title.latin1());
+      kdDebug()<<"Found title: "<<recipe->title<<endl;
     }
     else if (el.tagName() == "author"){
       Element author;
       author.name = el.text();
-      qDebug("Found author: %s",author.name.latin1());
+      kdDebug()<<"Found author: "<<author.name<<endl;
       authors.add(author);
     }
 		else if (el.tagName() == "serving"){
@@ -144,7 +145,7 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 				if (c.tagName() == "cat"){
 						Element new_cat;
 						new_cat.name = QString(c.text()).stripWhiteSpace();
-						qDebug("Found category: %s", new_cat.name.latin1() );
+						kdDebug()<<"Found category: "<<new_cat.name<<endl;
 						categoryList.add( new_cat );
 				}
 			}
@@ -157,7 +158,7 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 					QDomElement pic = pictures.item(j).toElement();
           QCString decodedPic;
 					if (pic.tagName() == "pic")
-            qDebug("Found photo");
+            kdDebug()<<"Found photo"<<endl;
             QPixmap pix;
             KCodecs::base64Decode(QCString(pic.text()), decodedPic);
             int len = decodedPic.size();
@@ -187,7 +188,7 @@ void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe)
 				QDomElement ing = ingredient.item(j).toElement();
 				if (ing.tagName() == "name"){
 						new_ing.name = QString(ing.text()).stripWhiteSpace();
-						qDebug("Found ingredient: %s", new_ing.name.latin1() );
+						kdDebug()<<"Found ingredient: "<<new_ing.name<<endl;
 				}
 				else if (ing.tagName() == "amount"){
 						new_ing.amount = (QString(ing.text()).stripWhiteSpace()).toDouble();

@@ -162,7 +162,7 @@ for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recip
 	{
 	if (QListViewItem* categoryItem=categoryItems[*categoryID])
 	{
-	QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
+	(void)new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
 	bool* b=new bool; *b=true;recipeCategorized.insert(recipe->id,b); // mark the recipe as categorized
 	}
 	}
@@ -173,7 +173,7 @@ for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recip
 	{
 	if (!recipeCategorized[recipe->id])
 	{
-	QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
+	(void)new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
 	}
 	}
 
@@ -185,28 +185,28 @@ void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),0);
+if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),0);
 }
 
 void SelectRecipeDialog::edit(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),1);
+if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),1);
 }
 
 void SelectRecipeDialog::remove(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),2);
+if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),2);
 }
 
 void SelectRecipeDialog::removeFromCat(void)
 {
   QListViewItem *it;
   it=recipeListView->selectedItem();
-  if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL){
+  if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/){
     if(it->parent() != 0){
       int categoryID;
       categoryID = database->findExistingCategoryByName((it->parent())->text(0));
@@ -302,19 +302,19 @@ for (Element *category=categoryList.getFirst();category;category=categoryList.ge
  */
 void SelectRecipeDialog::exportRecipe()
 {
-  if((recipeListView->selectedItem())->text(1).toInt() != NULL){
+  //if((recipeListView->selectedItem())->text(1).toInt() != NULL){
     KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
       KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
       kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
     }
-  }
+  //}
 }
 
 void SelectRecipeDialog::exportRecipeFromCat()
 {
-  if((recipeListView->selectedItem())->text(1).toInt() == NULL){
+  //if((recipeListView->selectedItem())->text(1).toInt() == NULL){
     KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
@@ -327,11 +327,11 @@ void SelectRecipeDialog::exportRecipeFromCat()
       kre->categoryExporter(l);
       //kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
     }
-  }
+  //}
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
-  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() && (recipeListView->selectedItem())->text(1).toInt() != NULL){
+  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() /*&& (recipeListView->selectedItem())->text(1).toInt() != NULL*/){
     emit recipeSelected(true);
   }
   else{
@@ -343,15 +343,15 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
 	if (recipeListView->selectedItem())
 	{
-		if((recipeListView->selectedItem())->text(1).toInt() != NULL)
+		//if((recipeListView->selectedItem())->text(1).toInt() != NULL)
 			database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
 	}
 }
 
-void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
+void SelectRecipeDialog::showPopup( KListView */*l*/, QListViewItem *i, const QPoint &p ){
   if (i) // Check if the QListViewItem actually exists
   {
-  if(!i->firstChild() && i->text(1).toInt() != NULL){
+  if(!i->firstChild() /*&& i->text(1).toInt() != NULL*/){
     kpop->exec(p);
   }
   else{

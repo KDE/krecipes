@@ -121,7 +121,7 @@ reloadAuthorsCombo();
 authorListView->clear();
 for (Element *el =currentAuthors->getFirst(); el; el=currentAuthors->getNext())
 {
-QListViewItem *it=new QListViewItem(authorListView,QString::number(el->id),el->name);
+(void)new QListViewItem(authorListView,QString::number(el->id),el->name);
 }
 
 }
@@ -136,7 +136,7 @@ createNewAuthorIfNecessary();
 int currentItem=authorsCombo->currentItem();
 Element *currentElement=authorList->getElement(currentItem);
 
-if (currentElement) QListViewItem *it=new QListViewItem(authorListView,QString::number(currentElement->id),currentElement->name);
+if (currentElement) (void)new QListViewItem(authorListView,QString::number(currentElement->id),currentElement->name);
 
 }
 
