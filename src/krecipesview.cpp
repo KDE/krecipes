@@ -220,12 +220,15 @@ bool setupDone=config->readBoolEntry( "SystemSetup",false);
 if (!setupDone)
 {
 
-bool setupUser,initializeData; QString adminUser,adminPass;
+bool setupUser,initializeData,adminEnabled; QString adminUser,adminPass;
 
 SetupWizard *setupWizard=new SetupWizard(this);
 if(setupWizard->exec()== QDialog::Accepted)
 {
+
 setupWizard->getOptions(setupUser,initializeData);
+setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
+
 }
 delete setupWizard;
 }

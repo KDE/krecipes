@@ -144,6 +144,17 @@ bool PermissionsSetupPage::doUserSetup()
 return (!noSetupCheckBox->isChecked());
 }
 
+bool PermissionsSetupPage::useAdmin()
+{
+return (rootCheckBox->isChecked());
+}
+
+void PermissionsSetupPage::getAdmin(QString &adminName,QString &adminPass)
+{
+adminName=userEdit->text();
+adminPass=passEdit->text();
+}
+
 void PermissionsSetupPage::noSetupCheckBoxChanged(bool on)
 {
 if (on) rootCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
@@ -302,5 +313,12 @@ void SetupWizard::getOptions(bool &setupUser, bool &initializeData)
 {
 setupUser=permissionsSetupPage->doUserSetup();
 initializeData=0; // FIXME!!!!
+
+}
+
+void SetupWizard::getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass)
+{
+enabled=permissionsSetupPage->useAdmin();
+permissionsSetupPage->getAdmin(adminUser,adminPass);
 
 }

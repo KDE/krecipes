@@ -64,7 +64,9 @@ Q_OBJECT
 public:
 	// Methods
 	PermissionsSetupPage(QWidget *parent);
-	bool doUserSetup();
+	bool doUserSetup(void);
+	bool useAdmin(void);
+	void getAdmin(QString &adminName,QString &adminPass);
 private:
 	// Widgets
 	QLabel *logo;
