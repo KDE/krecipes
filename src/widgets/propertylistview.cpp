@@ -114,7 +114,7 @@ void StdPropertyListView::createNew()
 	if ( propertyDialog->exec() == QDialog::Accepted ) {
 		QString name = propertyDialog->newPropertyName();
 		QString units= propertyDialog->newUnitsName();
-		if (!((name.isNull()) || (units.isNull()))) // Make sure none of the fields are empty
+		if (!((name.isEmpty()) || (units.isEmpty()))) // Make sure none of the fields are empty
 		{
 			//check bounds first
 			if ( checkBounds(name) )
@@ -130,7 +130,7 @@ void StdPropertyListView::remove()
 
 	if ( item )
 	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this property?")))
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to delete this property?")))
 		{
 		case KMessageBox::Continue: database->removeProperty(item->text(0).toInt()); break;
 		default: break;

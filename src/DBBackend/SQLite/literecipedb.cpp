@@ -730,11 +730,11 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	}
 }
 
-command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
+command=QString("DELETE FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
 database->executeQuery(command);
 
 // Remove any ingredient properties from ingredient_info where the this ingredient+unit is being used (user must have been warned before calling this function!)
-command=QString("DELETE ingredient_info.* FROM ingredient_info ii WHERE ii.ingredient_id=%1 AND ii.per_units=%2;").arg(ingredientID).arg(unitID);
+command=QString("DELETE FROM ingredient_info ii WHERE ii.ingredient_id=%1 AND ii.per_units=%2;").arg(ingredientID).arg(unitID);
 database->executeQuery(command);
 // Clean up ingredient_list which have no recipe that they belong to. (I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
 command=QString("DELETE ingredient_list.* FROM ingredient_list LEFT JOIN recipes ON ingredient_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
@@ -787,12 +787,12 @@ QString command;
 
 // First remove the ingredient
 
-command=QString("DELETE ingredients.* FROM ingredients WHERE id=%1;").arg(ingredientID);
+command=QString("DELETE FROM ingredients WHERE id=%1;").arg(ingredientID);
 database->executeQuery(command);
 
 // Remove all the unit entries for this ingredient
 
-command=QString("DELETE unit_list.* FROM unit_list WHERE ingredient_id=%1;").arg(ingredientID);
+command=QString("DELETE FROM unit_list WHERE ingredient_id=%1;").arg(ingredientID);
 database->executeQuery(command);
 
 // Remove any recipe using that ingredient
@@ -807,7 +807,7 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	}
 }
 
-command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
+command=QString("DELETE FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
 database->executeQuery(command);
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
@@ -1006,7 +1006,7 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	}
 }
 
-command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
+command=QString("DELETE FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
 database->executeQuery(command);
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
@@ -1078,7 +1078,7 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	}
 }
 
-command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
+command=QString("DELETE FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
 database->executeQuery(command);
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a

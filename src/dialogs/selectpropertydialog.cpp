@@ -11,6 +11,9 @@
  ***************************************************************************/
 
 #include "selectpropertydialog.h"
+
+#include <kconfig.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 #include "element.h"
@@ -35,7 +38,12 @@ unitListBack =new ElementList;
     boxLayout->setAlignment( Qt::AlignTop );
 
     propertyChooseView = new KListView( box, "propertyChooseView" );
-    propertyChooseView->addColumn( i18n( "Id" ) );
+    
+    KConfig *config = KGlobal::config();
+    config->setGroup( "Advanced" );
+    bool show_id = config->readBoolEntry("ShowID",false);
+    propertyChooseView->addColumn( i18n("Id"), show_id ? -1 : 0 );
+
     propertyChooseView->addColumn( i18n( "Property" ) );
     propertyChooseView->setAllColumnsShowFocus(true);
     boxLayout->addWidget( propertyChooseView );

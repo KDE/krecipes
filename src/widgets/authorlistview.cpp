@@ -97,7 +97,7 @@ void StdAuthorListView::remove()
 
 	if ( item )
 	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this author?")))
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to delete this author?")))
 		{
 		case KMessageBox::Continue: database->removeAuthor(item->text(0).toInt()); break;
 		default: break;

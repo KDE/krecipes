@@ -248,7 +248,7 @@ void StdCategoryListView::remove()
 
 	if ( item )
 	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this category and all its subcategories?")))
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to delete this category and all its subcategories?")))
 		{
 		case KMessageBox::Continue: database->removeCategory(item->text(1).toInt()); break;
 		default: break;

@@ -698,6 +698,7 @@ if (!recipeButton)
 
 void KrecipesView::switchToRecipe(void)
 {
+inputPanel->reloadCombos(); //### Temporary until the combo boxes are database-aware... I'm holding off until the next release
 rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 rightPanel->raise(recipeWidget);
 setContextHelp(RecipeEdit);
@@ -768,7 +769,21 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too....<br><br>"
 		));
 		break;
-		
+
+		case MatcherP:
+		contextTitle->setText(i18n("<b>Ingredient Matcher</b>"));
+		contextText->setText(i18n("Do you have a bunch a ingredients lying around, but you don't know what to make?  Use this dialog to find out what you can.<br><br>"
+		"Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you're missing."
+		));
+		break;
+
+		case RecipeEdit:
+		contextTitle->setText(i18n("<b>Edit recipe</b>"));
+		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
+		"If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
+		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
+		));
+		break;
 		}
 	}
 else if (leftPanel->currentMenu()==dataMenu)
@@ -814,15 +829,6 @@ else if (leftPanel->currentMenu()==dataMenu)
 		"You can use this dialog to edit the details of the authors or add/remove them."
 		));
 		break;
-		
-		case RecipeEdit:
-		contextTitle->setText(i18n("<b>Edit recipe</b>"));
-		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
-		"If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
-		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
-		));
-		break;
-		
 		}
 	}
 }

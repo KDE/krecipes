@@ -12,6 +12,8 @@
 
 #include "selectunitdialog.h"
 
+#include <kconfig.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 #include "element.h"
@@ -28,7 +30,12 @@ box->setColumnLayout(0, Qt::Vertical );
 QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 
 unitChooseView=new KListView(box);
-unitChooseView->addColumn(i18n("Id"));
+
+KConfig *config = KGlobal::config();
+config->setGroup( "Advanced" );
+bool show_id = config->readBoolEntry("ShowID",false);
+unitChooseView->addColumn( i18n("Id"), show_id ? -1 : 0 );
+
 unitChooseView->addColumn(i18n("Unit"));
 unitChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
 unitChooseView->setAllColumnsShowFocus(true);
