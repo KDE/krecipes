@@ -16,6 +16,8 @@
 #include "config.h"
 #endif
 
+#include <unistd.h>
+
 #include <qlayout.h>
 #include <qimage.h>
 #include <qpainter.h>
