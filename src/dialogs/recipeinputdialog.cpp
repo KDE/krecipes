@@ -809,6 +809,9 @@ void RecipeInputDialog::close(void)
 
 	}
 
+emit enableSaveOption(false);
+unsavedChanges=false;
+
 // Now close really
 emit closeRecipe();
 
