@@ -25,7 +25,8 @@
 BaseExporter::BaseExporter( const QString& _filename, const QString &_format ) :
   file(0),
   format(_format),
-  filename(_filename)
+  filename(_filename),
+  m_progress_dlg(0)
 {
 }
 
@@ -34,8 +35,11 @@ BaseExporter::~BaseExporter()
 {
 }
 
-void BaseExporter::exporter( const RecipeList& recipes )
+void BaseExporter::exporter( const RecipeList& recipes, KProgressDialog *progress_dlg )
 {
+	m_progress_dlg = progress_dlg;
+	if (m_progress_dlg){ m_progress_dlg->progressBar()->setTotalSteps(recipes.count());}
+
 	if ( createFile() )
 	{
 		bool fileExists = file->exists();
@@ -50,11 +54,11 @@ void BaseExporter::exporter( const RecipeList& recipes )
 		kdDebug()<<"no output file has been selected for export."<<endl;
 }
 
-void BaseExporter::exporter( const Recipe &recipe )
+void BaseExporter::exporter( const Recipe &recipe, KProgressDialog *progress_dlg )
 {
 	RecipeList single_recipe_list;
 	single_recipe_list.append( recipe );
-	exporter( single_recipe_list );
+	exporter( single_recipe_list, progress_dlg );
 }
 
 bool BaseExporter::createFile()
@@ -104,10 +108,33 @@ void BaseExporter::saveToFile( const RecipeList& recipes )
 QString BaseExporter::krecipes_version() const
 {
 	KInstance *this_instance = KGlobal::instance();
-	if (  this_instance && this_instance->aboutData() )
+	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData()->version();
 
 	return QString::null; //Oh, well.  We couldn't get the version.
+}
+
+bool BaseExporter::progressBarCanceled()
+{
+	if(m_progress_dlg)
+		return m_progress_dlg->wasCancelled();
+
+	return false;
+}
+
+void BaseExporter::setProgressBarTotalSteps( int steps )
+{
+	if (m_progress_dlg)
+		m_progress_dlg->progressBar()->setTotalSteps(steps);
+}
+
+void BaseExporter::advanceProgressBar()
+{
+	if (m_progress_dlg)
+	{
+		m_progress_dlg->progressBar()->advance(1);
+		kapp->processEvents();
+	}
 }
 
 

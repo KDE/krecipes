@@ -19,6 +19,7 @@ class CustomRectList;
 class IngredientPropertyList;
 class RecipeDB;
 class KConfig;
+class KProgress;
 
 class DivElement
 {

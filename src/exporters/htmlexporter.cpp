@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
+#include <kprogress.h>
 #include <kstandarddirs.h>
 
 #include "propertycalculator.h"
@@ -48,6 +49,8 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 {
 	if ( recipes.count() == 0 )
 		return "<html></html>";
+
+	setProgressBarTotalSteps( recipes.count() * 2 ); //we'll be looping through all the recipes twice
 
 	KConfig *config = KGlobal::config();
 	QString recipeHTML;
@@ -79,6 +82,9 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 			recipeHTML += div->generateCSS();
+
+		if ( progressBarCanceled() ) return QString::null;
+		advanceProgressBar();
 	}
 	recipeHTML += "</STYLE></head><body>\n";
 
@@ -97,6 +103,9 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 			recipeHTML += div->generateHTML();
+
+		if ( progressBarCanceled() ) return QString::null;
+		advanceProgressBar();
 	}
 
 	// Close HTML
