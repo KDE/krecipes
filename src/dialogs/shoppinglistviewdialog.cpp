@@ -9,8 +9,20 @@
  ***************************************************************************/
 #include "shoppinglistviewdialog.h"
 
-ShoppingListViewDialog::ShoppingListViewDialog()
+ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
+
+// Initialize UI Elements
+shoppingListView=new KHTMLPart(this);
+
+// Store/Initialize local variables
+database=db; // Store the database pointer.
+
+
+//----------Load  the list --------
+
+showShoppingList();
+
 }
 
 
@@ -18,4 +30,15 @@ ShoppingListViewDialog::~ShoppingListViewDialog()
 {
 }
 
+void ShoppingListViewDialog::showShoppingList(void)
+{
 
+}
+
+void ShoppingListViewDialog::calculateShopping(void)
+{
+}
+
+void ShoppingListViewDialog::display(void)
+{
+}

@@ -10,12 +10,26 @@
 #ifndef SHOPPINGLISTVIEWDIALOG_H
 #define SHOPPINGLISTVIEWDIALOG_H
 
-class ShoppingListViewDialog{
+#include <khtml_part.h>
+#include <khtmlview.h>
+
+#include "recipedb.h"
+#include "qwidget.h"
+class ShoppingListViewDialog:public QWidget{
 public:
-    ShoppingListViewDialog();
-
+    ShoppingListViewDialog(QWidget *parent, RecipeDB *db);
     ~ShoppingListViewDialog();
+private:
+  // Internal Widgets
+  KHTMLPart *shoppingListView;
 
+  // Internal Variables
+  RecipeDB  *database;
+
+  // Internal Methods
+  void showShoppingList(void);
+  void calculateShopping(void);
+  void display(void);
 };
 
 #endif

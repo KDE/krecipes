@@ -83,7 +83,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     // Connect signals & slots
     connect(addRecipeButton,SIGNAL(clicked()),this,SLOT(addRecipe()));
     connect(removeRecipeButton,SIGNAL(clicked()),this,SLOT(removeRecipe()));
-
+    connect(okButton, SIGNAL(clicked()),this,SLOT(showShoppingList()));
     }
 
 ShoppingListDialog::~ShoppingListDialog()
@@ -121,4 +121,10 @@ void ShoppingListDialog::removeRecipe(void)
 QListViewItem *it;
 it=shopRecipeListView->selectedItem();
 if (it) shopRecipeListView->removeItem(it);
+}
+
+void ShoppingListDialog::showShoppingList(void)
+{
+shoppingListDisplay=new ShoppingListViewDialog(0,database);
+shoppingListDisplay->show();
 }

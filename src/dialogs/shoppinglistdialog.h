@@ -16,6 +16,7 @@
 #include <kiconloader.h>
 #include <klistview.h>
 #include "recipedb.h"
+#include "shoppinglistviewdialog.h"
 
 /**
 @author Unai Garro
@@ -46,10 +47,12 @@ private:
     QPushButton* okButton;
     QPushButton* clearButton;
     KIconLoader* il;
+    ShoppingListViewDialog *shoppingListDisplay;
 
 private slots:
 	void addRecipe(void);
 	void removeRecipe(void);
+	void showShoppingList(void);
 
 };
 
