@@ -120,7 +120,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removePropertyButton->setFlat(true);
 
 
-    inputBox=new KDoubleNumInput(this);
+    inputBox=new EditBox(this);
     inputBox->hide();
 
     // Initialize
@@ -137,6 +137,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(this->addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
     connect(this->removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
     connect(this->propertiesListView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
+    connect(this->inputBox,SIGNAL(valueChanged(double)),this,SLOT(setPropertyAmount(double)));
 }
 
 
@@ -375,4 +376,25 @@ r.setHeight(it->height()); // Set the item's height
 
 inputBox->setGeometry(r);
 inputBox->show();
+}
+
+void IngredientsDialog::setPropertyAmount(double amount)
+{
+
+inputBox->hide();
+
+
+QListViewItem *ing_it=ingredientListView->selectedItem(); // Find selected ingredient
+QListViewItem *prop_it=propertiesListView->currentItem();
+
+
+if (ing_it && prop_it)// Appart from property, Check if an ingredient is selected first, just in case
+{
+prop_it->setText(2,QString::number(amount));
+int propertyID=ing_it->text(0).toInt();
+int ingredientID=ing_it->text(0).toInt();
+database->changePropertyAmountToIngredient(ingredientID,propertyID,amount);
+}
+reloadPropertyList();
+
 }

@@ -21,6 +21,7 @@
 #include "createelementdialog.h"
 #include "ingredientpropertylist.h"
 #include "selectpropertydialog.h"
+#include "editbox.h"
 
 /**
 @author Unai Garro
@@ -47,7 +48,7 @@ private:
     KListView* unitsListView;
     KListView* propertiesListView;
     QPushButton* pushButton5;
-    KDoubleNumInput* inputBox;
+    EditBox* inputBox;
 
   // Internal Methods
   void reloadIngredientList(void);
@@ -69,7 +70,7 @@ private:
     void addPropertyToIngredient(void);
     void removePropertyFromIngredient(void);
     void insertPropertyEditBox(QListViewItem* it);
-
+    void setPropertyAmount(double amount);
 
 };
 
