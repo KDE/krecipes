@@ -75,12 +75,12 @@ void KreMenu::collectClicks(KreMenuButton *w)
 
 //Deactivate the old button
 activeButton->setActive(false);
-activeButton->repaint();
+activeButton->update();
 
 //Activate the new button
 
 int widgetn=widgetList[w];
-w->setActive(true); w->repaint();
+w->setActive(true); w->update();
 activeButton=w;
 
 // Emit signal indicating button activation with button ID

@@ -66,10 +66,17 @@ public:
 
 	QSize sizeHint() const;
 
-	void setTitle(const QString &s) {text=s;}
 	QString title(void){return text;}
 	void setActive(bool active=true){highlighted=active;}
 	void setIconSet(const QIconSet &is);
+
+signals:
+	void resized(int, int);
+	void clicked(void);
+	void clicked(KreMenuButton*); // sent together with clicked()
+
+public slots:
+	void setTitle(const QString &s) {text=s; update();}
 
 private:
 	// Button parts
@@ -77,19 +84,14 @@ private:
 	 QString text;
 	 bool highlighted;
 
+private slots:
+	void rescale(int w, int h);
+	void forwardClicks(void){emit clicked(this);}
+
 protected:
 
 	virtual void paintEvent(QPaintEvent *e );
 	virtual void mousePressEvent (QMouseEvent * e);
-
-signals:
-	void resized(int, int);
-	void clicked(void);
-	void clicked(KreMenuButton*); // sent together with clicked()
-
-private slots:
-	void rescale(int w, int h);
-	void forwardClicks(void){emit clicked(this);}
 
 };
 

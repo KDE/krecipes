@@ -560,9 +560,7 @@ if (!recipeButton)
 {
 	recipeButton=new KreMenuButton(leftPanel,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
-	recipeButton->setGeometry(2,252,146,30);
 	recipeButton->setTitle(title);
-	recipeButton->resize((leftPanel->width())-4,30);
   recipeButton->stackUnder(contextHelp);
   if(contextHelp->isShown()){
     contextHelp->hide();
