@@ -126,7 +126,8 @@ void StdPrepMethodListView::removePrepMethod(int id)
 
 void StdPrepMethodListView::modPrepMethod(QListViewItem* i)
 {
-	PrepMethodListView::rename(i, 1);
+	if ( i )
+		PrepMethodListView::rename(i, 1);
 }
 
 void StdPrepMethodListView::savePrepMethod(QListViewItem* i)

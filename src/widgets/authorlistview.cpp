@@ -124,7 +124,8 @@ void StdAuthorListView::removeAuthor(int id)
 
 void StdAuthorListView::modAuthor(QListViewItem* i)
 {
-	AuthorListView::rename(i, 1);
+	if ( i )
+		AuthorListView::rename(i, 1);
 }
 
 void StdAuthorListView::saveAuthor(QListViewItem* i)

@@ -12,6 +12,8 @@
 
 #include <qstring.h>
 #include <qpixmap.h>
+#include <qdatetime.h>
+
 #include "ingredientlist.h"
 #include "elementlist.h"
 
@@ -21,9 +23,7 @@
 class Recipe{
 public:
     Recipe();
-    Recipe(const Recipe& r);
     ~Recipe();
-    Recipe & operator=(const Recipe &r);
     // Public variables
 
     int recipeID;
@@ -34,6 +34,7 @@ public:
     IngredientList ingList;
     ElementList categoryList; // id+name
     ElementList authorList; //authors' id+name
+    QTime prepTime;
 
     // Public methods
     void empty(void);

@@ -88,7 +88,7 @@ signals:
 
 private slots:
   void filterComboCategory(int row);
-  void showEvent(QShowEvent*);
+
 public slots:
   void haveSelectedItems();
   void slotExportRecipe(){actionHandler->saveAs();}

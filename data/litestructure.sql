@@ -8,7 +8,7 @@ CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount F
 CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));
 CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(50), PRIMARY KEY (id));
 CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));
-CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));
+CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));
 CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);
 CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));
 CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);

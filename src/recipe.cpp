@@ -14,18 +14,6 @@ Recipe::Recipe()
 empty(); //Create & initialize the recipe empty originally
 }
 
-Recipe::Recipe(const Recipe &r)
-    	{
-    	recipeID=r.recipeID;
-	persons=r.persons;
-	title=r.title;
-	instructions=r.instructions;
-	photo=r.photo;
-	ingList=r.ingList;
-	categoryList=r.categoryList;
-	authorList=r.authorList;
-	}
-
 Recipe::~Recipe()
 {
 }
@@ -40,17 +28,5 @@ photo.resize(0,0); //Resizing any dimension to 0, the image becomes a null image
 ingList.empty();
 categoryList.clear();
 authorList.clear();
+prepTime=QTime(0,0);
 }
-
-Recipe & Recipe::operator=(const Recipe &r)
-    	{
-    	recipeID=r.recipeID;
-	persons=r.persons;
-	title=r.title;
-	instructions=r.instructions;
-	photo=r.photo;
-	ingList=r.ingList;
-	categoryList=r.categoryList;
-	authorList=r.authorList;
-	return *this;
-	}

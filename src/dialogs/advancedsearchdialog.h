@@ -33,6 +33,7 @@ class QCheckBox;
 class QCheckListItem;
 class QSpinBox;
 class QFrame;
+class QTimeEdit;
 
 class KListView;
 
@@ -157,7 +158,11 @@ private:
 	KListView* resultsListView;
 	QPushButton* backButton;
 	QPushButton* openButton;
-	
+	QTimeEdit* prepTimeEdit;
+	QFrame* prepTimeFrame;
+	QGroupBox* prepTimeBox;
+	QComboBox* prepTimeComboBox;
+
 	QHBoxLayout* advancedSearchLayout;
 	QGridLayout* searchPageLayout;
 	QHBoxLayout* searchButtonsLayout;
@@ -170,6 +175,8 @@ private:
 	QSpacerItem* authorSpacer;
 	QHBoxLayout* servingsBoxLayout;
 	QHBoxLayout* servingsFrameLayout;
+	QHBoxLayout* prepTimeFrameLayout;
+	QHBoxLayout* prepTimeBoxLayout;
 	QHBoxLayout* ingredientsBoxLayout;
 	QGridLayout* ingredientsFrameLayout;
 	QSpacerItem* ingSpacer;

@@ -41,6 +41,7 @@ private:
 	void readRecipemlMenu(const QDomElement& menu);
 	void readRecipemlSrcItems(const QDomElement& sources);
 	void readRecipemlRecipe(const QDomElement& recipe);
+	void readRecipemlPreptime( const QDomElement &preptime );
 
 	Recipe recipe;
 };

@@ -87,6 +87,23 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				yield_tag.appendChild( doc.createTextNode(QString::number((*recipe_it).persons)) );
 				head_tag.appendChild( yield_tag );
 
+				if ( !(*recipe_it).prepTime.isNull() ) {
+				QDomElement preptime_tag = doc.createElement("preptime");
+				head_tag.appendChild( preptime_tag );
+				preptime_tag.setAttribute("type",i18n("Total"));
+
+					QDomElement preptime_time_tag = doc.createElement("time");
+					preptime_tag.appendChild(preptime_time_tag);
+
+						QDomElement preptime_min_qty_tag = doc.createElement("qty");
+						preptime_time_tag.appendChild(preptime_min_qty_tag);
+						preptime_min_qty_tag.appendChild( doc.createTextNode( QString::number((*recipe_it).prepTime.minute()+(*recipe_it).prepTime.hour()*60) ) );
+						
+						QDomElement preptime_min_unit_tag = doc.createElement("timeunit");
+						preptime_time_tag.appendChild(preptime_min_unit_tag);
+						preptime_min_unit_tag.appendChild( doc.createTextNode("minutes") );
+				}
+
 			QDomElement ingredients_tag = doc.createElement("ingredients");
 			for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 			{

@@ -11,6 +11,8 @@
 #include "dragarea.h"
 
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "sizehandle.h"
 
@@ -18,10 +20,14 @@ DragArea::DragArea( QWidget *parent, const char *name ) : QWidget(parent,name),
  m_read_only(false),
  m_last_point(0,0),
  m_current_box(0),
- grid_spacing(5,5),
  selection(new WidgetSelection(this))
 {
 	setMouseTracking(true);
+
+	KConfig *config = KGlobal::config();
+	config->setGroup("Page Setup");
+	QPoint default_spacing(5,5);
+	grid_spacing = config->readPointEntry("SnapInterval",&default_spacing);
 }
 
 DragArea::~DragArea()

@@ -117,7 +117,7 @@ INSERT INTO ingredients VALUES (43,'almonds');
 INSERT INTO ingredients VALUES (44,'currants');
 INSERT INTO recipes VALUES (1,'Kaas, Dille, Eten',2,'Put on 1.5l of water, salted, on to boil. Slice the zucchini in thin slices (about 3mm thick). Chop the mushrooms. Heat olive oil in a heavy iron skillet, add zucchini and fry on high heat for 3 min or so, then add mushrooms and wine, reduce heat, and allow to fry/simmer/turn brown for another 5 minutes or so. By now the water for the pasta should be boiling. Add the pasta and let it cook for the 10 minutes or so it needs to become "al dente". Add the cream, dill, horseradish, herbs and pepper to the zucchini and mushroom mix, and allow to simmer while the pasta cooks. Drain the pasta, add it to the vegetables, mix well.
 Serve topped with cheese and with sliced tomato around the edge of the plate.
-',NULL);
+',NULL,'00:00:00');
 INSERT INTO recipes VALUES (2,'Carrot Soup',2,'Chop the Onion, Garlic and Ginger as fine as possible, then satue in the butter. Donâ€™t let the onion get to dark, just saute until soft.
  
 Peel and cut up the carrots into 1inch chunks so they are manageable.
@@ -126,12 +126,12 @@ Then add in the vegitable stocj, and carrots. Simmer for about 45minutes. When t
 
 Place the carrot chunks and broth into a blender and puree it. When the entire mixture is smooth its ready to eat. You can also add 2T lemon juice and/or a dash of curry powder for taste, but its great without it too.
 
-The soup is great hot or cold and is vegan friendly.',NULL);
+The soup is great hot or cold and is vegan friendly.',NULL,'00:00:00');
 INSERT INTO recipes VALUES (3,'Lamb Stuffing',1,'Chop the spring onions (from the green leaves all the way close to the root) into 1cm long pieces. Dice the tomato if you use it. In a sautee-pan, add a little oil, the mustard seeds, and eat it. When the mustard seeds start popping, add the chooped spring onions, thawed green peas, and sautee for about 2 minutes. Then, add the spinach, tomato and cilantro powder, and sautee until almost dry. Add thawed minced lamb, a cup of water and stir to make the mixture almost homogeneous. Add cumin powder, cinnamon and salt, and stir thoroughly. Let it simmer for a while until most of the water is gone. Then sprinkle crushed black pepper to required degree of spiciness. Add lemon juice (and vinegar for extra tang) and stir. The pepper should absorb all the remaining water. Stir vigorously for about 30 seconds and remove from heat.
 
 This makes great stuffing for pitas. Personally, if I have the time, I add the cooked stuffing above to wet rice flour, and steam to obtain flavoured rice cakes, which is consumed by itself or (usually) with coconut chutney.
 
-Note: Be careful adding the cumin and cinnamon. They tend to clump, and you should avoid that be adding them little by little while strirring the mixture.',NULL);
+Note: Be careful adding the cumin and cinnamon. They tend to clump, and you should avoid that be adding them little by little while strirring the mixture.',NULL,'00:00:00');
 INSERT INTO recipes VALUES (4,'Gateau Basque / Pastel Vasco',4,'First, we need to make the dough: place in a mixing bowl 375g of the flour and make a hole in the middle, where you can place the butter slightly soft, the icing (or normal) sugar, 3 egg yolks, the egg, and 375g flour. Mix all these properly until you get something quite consistant.  And leave it in the fridge for at least 1/2 an hour, covered with cling film.
 
 In the mean time, in order to make some cream, put the milk boiling in a saucepan, and add the cinamon and the vanilla pod. Midwhile, mix in a bowl the 150 g of the sugar, the rest of the flour (50g), and the 4 egg yolks that are left. Once the milk is boiling, remove the cinamon and the vanilla pod and add this mixture to the milk. Keep going on mixing continuously until the cream gets quite thick, and once it starts boiling add the almonds, previously grounded, 100 g of sugar which is left, and the currants. Leave this mixture in the fridge for 1/2 an hour.
@@ -141,7 +141,7 @@ Once these two things are done, get a mould ready for baking spreading a bit of 
 Now, put a thin (less than 5mm) layer of the dough covering the bottom and side parts of the mould, and fill it in with the cream, and cover on top with the rest of the dough in the same way.
 
 Paint the cake''s top part with a bit of whisked egg, and put it in the oven at 190ºC for around 30 mins. Et voilà you have a delicious sweet cake.
-',NULL);
+',NULL,'00:00:00');
 INSERT INTO unit_list VALUES (1,2);
 INSERT INTO unit_list VALUES (2,7);
 INSERT INTO unit_list VALUES (3,2);

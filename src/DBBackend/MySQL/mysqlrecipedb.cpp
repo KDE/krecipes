@@ -146,8 +146,8 @@ recipe->empty();
 
 QString command;
 
-// Read title, author and instructions
-command=QString("SELECT title,instructions,persons FROM recipes WHERE id=%1;").arg(recipeID);
+// Read title, author, instructions, and prep time
+command=QString("SELECT title,instructions,persons,prep_time FROM recipes WHERE id=%1;").arg(recipeID);
 
 QSqlQuery recipeToLoad( command,database);
 if (recipeToLoad.isActive())
@@ -156,6 +156,7 @@ if (recipeToLoad.isActive())
 	recipe->title=unescapeAndDecode(recipeToLoad.value(0).toString());
 	recipe->instructions=unescapeAndDecode(recipeToLoad.value(1).toString());
 	recipe->persons=recipeToLoad.value(2).toInt();
+	recipe->prepTime=recipeToLoad.value(3).toTime();
 	recipe->recipeID=recipeID;
 }
 
@@ -229,7 +230,7 @@ rlist->clear();
 
 QMap <int,RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
-QString command="SELECT id,title,persons FROM recipes";
+QString command="SELECT id,title,persons,prep_time FROM recipes";
 QSqlQuery recipesToLoad( command,database);
 
             if ( recipesToLoad.isActive() ) {
@@ -238,6 +239,7 @@ QSqlQuery recipesToLoad( command,database);
 		    rec.recipeID=recipesToLoad.value(0).toInt();
 		    rec.title=unescapeAndDecode(recipesToLoad.value(1).toString());
 		    rec.persons=recipesToLoad.value(2).toInt();
+		    rec.prepTime=recipesToLoad.value(3).toTime();
 		    RecipeList::Iterator it=rlist->append(rec);
 		    recipeIterators[rec.recipeID]=it;
                 }
@@ -437,15 +439,17 @@ QSqlQuery recipeToSave(QString::null,database);
 
 QString command;
 
-if (newRecipe) {command=QString("INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL);") // Id is autoincremented
-		.arg(escapeAndEncode(recipe->title))
-		.arg(recipe->persons)
-		.arg(escapeAndEncode(recipe->instructions));
-		}
-else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%3' WHERE id=%4;")
+if (newRecipe) {command=QString("INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL,'%4');") // Id is autoincremented
 		.arg(escapeAndEncode(recipe->title))
 		.arg(recipe->persons)
 		.arg(escapeAndEncode(recipe->instructions))
+		.arg(recipe->prepTime.toString("hh:mm:ss"));
+		}
+else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%3',prep_time='%4' WHERE id=%5;")
+		.arg(escapeAndEncode(recipe->title))
+		.arg(recipe->persons)
+		.arg(escapeAndEncode(recipe->instructions))
+		.arg(recipe->prepTime.toString("hh:mm:ss"))
 		.arg(recipe->recipeID);
 		}
 recipeToSave.exec(command);
@@ -1334,7 +1338,7 @@ void MySQLRecipeDB::createTable(QString tableName)
 
 QStringList commands;
 
-if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
+if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
 else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
@@ -1466,6 +1470,9 @@ if ( version < 0.6 )
 {
 	command="ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL default '-1' AFTER name;";
 		QSqlQuery tableToAlter(command,database);
+		
+	command="ALTER TABLE `recipes` ADD COLUMN `prep_time` TIME DEFAULT NULL";
+		tableToAlter.exec(command);
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);

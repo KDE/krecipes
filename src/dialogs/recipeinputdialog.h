@@ -37,6 +37,7 @@ class Recipe;
 class ElementList;
 class RecipeDB;
 class FractionInput;
+class QTimeEdit;
 
 /**
 @author Unai Garro
@@ -54,6 +55,7 @@ public:
     bool everythingSaved();
     void reload(void);
     int loadedRecipeID() const;
+   
 private:
 
 	// Internal Data
@@ -83,6 +85,7 @@ private:
 	//Additional recipe data
 	QLabel* servingsLabel;
 	KIntNumInput* servingsNumInput;
+	QTimeEdit *prepTimeEdit;
 	QLabel* authorLabel;
 	KLineEdit* authorShow;
 	QPushButton* addAuthorButton;

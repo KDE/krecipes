@@ -12,6 +12,7 @@
 #define NYCGENERICIMPORTER_H
 
 #include <qstring.h>
+#include <qdatetime.h>
 
 #include "baseimporter.h"
 #include "ingredientlist.h"
@@ -45,6 +46,8 @@ private:
 	ElementList m_authors;
 	ElementList m_categories;
 	IngredientList m_ingredients;
+	
+	QTime m_preptime;
 
 	bool first;
 };

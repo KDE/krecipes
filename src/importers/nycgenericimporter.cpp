@@ -100,7 +100,8 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		}
 		else if ( current.startsWith("Preparation Time:") )
 		{
-			;//TODO: what do we do with this?
+			m_preptime = QTime::fromString(current.mid(current.find(':'),current.length()));
+			kdDebug()<<"Found preptime: "<<m_preptime<<endl;
 		}
 		else if ( current.startsWith("Yield:") )
 		{
@@ -131,6 +132,7 @@ void NYCGenericImporter::putDataInRecipe()
 	new_recipe.ingList = m_ingredients;
 	new_recipe.categoryList = m_categories;
 	new_recipe.authorList = m_authors;
+	new_recipe.prepTime = m_preptime;
 	new_recipe.recipeID = -1;
 
 	//put it in the recipe list
@@ -147,6 +149,7 @@ void NYCGenericImporter::resetVars()
 	m_categories.clear();
 
 	m_servings = 0;
+	m_preptime = QTime(0,0);
 
 	m_title = QString::null;
 	m_instructions = QString::null;

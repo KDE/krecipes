@@ -128,7 +128,8 @@ void StdUnitListView::removeUnit(int id)
 
 void StdUnitListView::modUnit(QListViewItem* i)
 {
-	UnitListView::rename(i, 1);
+	if ( i )
+		UnitListView::rename(i, 1);
 }
 
 void StdUnitListView::saveUnit(QListViewItem* i)

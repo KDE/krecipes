@@ -135,15 +135,6 @@ SelectRecipeDialog::~SelectRecipeDialog()
 	delete recipeFilter;
 }
 
-void SelectRecipeDialog::showEvent(QShowEvent* e){
-  if(!e->spontaneous()){
-    openButton->setEnabled(false);
-    editButton->setEnabled(false);
-    removeButton->setEnabled(false);
-    //collapseAll();
-  }
-}
-
 void SelectRecipeDialog::reload()
 {
 QString remember_cat_filter = categoryBox->currentText();

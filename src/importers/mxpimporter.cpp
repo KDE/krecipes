@@ -13,6 +13,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -112,9 +113,10 @@ void MXPImporter::importMXP( QTextStream &stream )
 
 	if ( current.contains("preparation time",FALSE) )
 	{
-		//QString prep_time = current.mid( current.find(":",current.find("preparation time",0,FALSE)) + 1,
-		//  current.length() ).stripWhiteSpace();
-		//kdDebug()<<"Found preparation time: "<<prep_time<<endl;
+		QString prep_time = current.mid( current.find(":",current.find("preparation time",0,FALSE)) + 1,
+		  current.length() ).stripWhiteSpace();
+		recipe.prepTime = QTime::fromString(prep_time);
+		kdDebug()<<"Found preparation time: "<<prep_time<<endl;
 	}
 	else
 	{

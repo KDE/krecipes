@@ -172,7 +172,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
 
 	QDomElement layout_tag = doc.documentElement();
-	layout_tag.setAttribute( "version", 0.1 );
+	layout_tag.setAttribute( "version", 0.2 );
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
@@ -287,6 +287,13 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add(servings_box,i18n("Servings"));
 
 	box_properties->insert( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
+
+	//=======================PREP TIME======================//
+	preptime_box = new QLabel(QString("<b>%1:</b> %2").arg(i18n("Preparation Time")).arg(sample.prepTime.toString("h:mm")),this,"prep_time");
+	preptime_box->setFrameShape( QFrame::Box );
+	QToolTip::add(preptime_box,i18n("Preparation Time"));
+
+	box_properties->insert( preptime_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//========================PHOTO========================//
 	photo_box = new QLabel(this,"photo");

@@ -22,6 +22,8 @@
 #include <qwhatsthis.h>
 #include <qspinbox.h>
 #include <qframe.h>
+#include <qdatetimeedit.h>
+#include <qvbox.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -425,7 +427,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	searchPageLayout->addMultiCellWidget( authorsBox, 0, 0, 1, 2 );
 	
-	servingsBox = new QGroupBox( searchPage, "servingsBox" );
+	QVBox *serv_prep_box = new QVBox(searchPage);
+
+	servingsBox = new QGroupBox( serv_prep_box, "servingsBox" );
 	servingsBox->setAlignment( int( QGroupBox::AlignVCenter ) );
 	servingsBox->setCheckable( TRUE );
 	servingsBox->setChecked( FALSE );
@@ -450,7 +454,35 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsFrameLayout->addWidget( servingsSpinBox );
 	servingsBoxLayout->addWidget( servingsFrame );
 	
-	searchPageLayout->addWidget( servingsBox, 1, 2 );
+	//searchPageLayout->addWidget( servingsBox, 1, 2 );
+
+	prepTimeBox = new QGroupBox( serv_prep_box, "prepTimeBox" );
+	prepTimeBox->setAlignment( int( QGroupBox::AlignVCenter ) );
+	prepTimeBox->setCheckable( TRUE );
+	prepTimeBox->setChecked( FALSE );
+	prepTimeBox->setColumnLayout(0, Qt::Vertical );
+	prepTimeBox->layout()->setSpacing( 6 );
+	prepTimeBox->layout()->setMargin( 11 );
+	prepTimeBoxLayout = new QHBoxLayout( prepTimeBox->layout() );
+	prepTimeBoxLayout->setAlignment( Qt::AlignTop );
+	
+	prepTimeFrame = new QFrame( prepTimeBox, "prepTimeFrame" );
+	prepTimeFrame->setFrameShape( QFrame::StyledPanel );
+	prepTimeFrame->setFrameShadow( QFrame::Raised );
+	prepTimeFrame->setLineWidth( 0 );
+	prepTimeFrameLayout = new QHBoxLayout( prepTimeFrame, 0, 0, "prepTimeFrameLayout"); 
+	
+	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame, "prepTimeComboBox" );
+	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
+	prepTimeFrameLayout->addWidget( prepTimeComboBox );
+	
+	prepTimeEdit = new QTimeEdit( prepTimeFrame, "prepTimeEdit" );
+	prepTimeEdit->setMinValue( QTime(0,0) );
+	prepTimeEdit->setDisplay( QTimeEdit::Hours | QTimeEdit::Minutes );
+	prepTimeFrameLayout->addWidget( prepTimeEdit );
+	prepTimeBoxLayout->addWidget( prepTimeFrame );
+	
+	searchPageLayout->addWidget( serv_prep_box, 1, 2 );
 	
 	ingredientsBox = new QGroupBox( searchPage, "ingredientsBox" );
 	ingredientsBox->setAlignment( int( QGroupBox::AlignTop ) );
@@ -597,6 +629,13 @@ void AdvancedSearchDialog::languageChange()
 	servingsComboBox->insertItem( i18n( "Serves at least:" ) );
 	servingsComboBox->insertItem( i18n( "Serves at most:" ) );
 	servingsComboBox->insertItem( i18n( "Serves exactly:" ) );
+	servingsComboBox->insertItem( i18n( "Serves about:" ) );
+	prepTimeBox->setTitle( i18n( "Preparation Time" ) );
+	prepTimeComboBox->clear();
+	prepTimeComboBox->insertItem( i18n( "Ready in at least:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready in at most:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready in exactly:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
 	ingredientsBox->setTitle( i18n( "Ingredients" ) );
 	ingTypeComboBox->clear();
 	ingTypeComboBox->insertItem( i18n( "Use:" ) );
@@ -649,10 +688,15 @@ void AdvancedSearchDialog::unselectAllAuthors()
 
 void AdvancedSearchDialog::unselectAllCategories()
 {
-	for ( QCheckListItem *qlv_it = static_cast<QCheckListItem*>(catListView->firstChild()); qlv_it ; qlv_it = static_cast<QCheckListItem*>(qlv_it->nextSibling()) )
-	{
-		if ( qlv_it->isEnabled() )
-			qlv_it->setOn(false);
+	QCheckListItem* current_item;
+	QListViewItemIterator it( catListView );
+	while ( it.current() ) {
+		current_item = (QCheckListItem*)it.current();
+
+		if ( current_item->isEnabled() )
+			current_item->setOn(false);
+
+		++it;
 	}
 }
 
@@ -696,6 +740,40 @@ void AdvancedSearchDialog::search()
 			//exactly
 			case 2: if ( (*it).persons != servings ){ it = allRecipes.remove( it ); it--; }
 				break;
+			//about
+			case 3: if ( QABS((*it).persons-servings) > 5 ){ it = allRecipes.remove( it ); it--; }
+				break;
+			}
+		}
+	}
+
+	//narrow down by prep time
+	if ( prepTimeBox->isChecked() )
+	{
+		QTime time = prepTimeEdit->time();
+		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
+		{
+			switch ( prepTimeComboBox->currentItem() )
+			{
+			//at least
+			case 0: if ( (*it).prepTime > time ){ it = allRecipes.remove( it ); it--; }
+				break;
+			//at most
+			case 1: if ( (*it).prepTime < time ){ it = allRecipes.remove( it ); it--; }
+				break;
+			//exactly
+			case 2: if ( (*it).prepTime != time ){ it = allRecipes.remove( it ); it--; }
+				break;
+			//about
+			case 3:
+			{
+				int rec_minutes = (*it).prepTime.minute() + (*it).prepTime.hour()*60;
+				int test_minutes = time.minute() + time.hour()*60;
+				
+				//TODO: have a configurable 'about'.  It tests within 15 minutes for now.
+				if ( QABS(test_minutes-rec_minutes) > 15 ){ it = allRecipes.remove( it ); it--; }
+				break;
+			}
 			}
 		}
 	}

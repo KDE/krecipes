@@ -105,6 +105,9 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "<serving>";
     xml += QString::number((*recipe_it).persons);
     xml += "</serving>\n";
+    xml += "<preparation-time>";
+    xml += (*recipe_it).prepTime.toString("hh:mm");
+    xml += "</preparation-time>\n";
     xml += "</krecipes-description>\n";
     xml += "<krecipes-ingredients>\n";
 

@@ -12,6 +12,7 @@
 #include "recipemlimporter.h"
 
 #include <qfile.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -132,8 +133,7 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 		else if (tagName == "description")
 			recipe.instructions += "\n\nDescription: "+el.text().stripWhiteSpace();
 		else if (tagName == "preptime")
-			// TODO check for "range, sep, timeunit" etc
-			recipe.instructions += "\n\nPreparation time: "+el.text().stripWhiteSpace();
+			readRecipemlPreptime(el);
 		else if (tagName == "yield")
 			// TODO check for "range, sep, unit" etc
 			recipe.persons = el.text().toInt();
@@ -297,5 +297,47 @@ void RecipeMLImporter::readRecipemlSrcItems(const QDomElement& sources)
 			recipe.authorList.append( Element( srcitem.text().stripWhiteSpace() ) );
 		else
 			kdDebug()<<"Unknown tag within <source>: "<<tagName<<endl;
+	}
+}
+
+void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
+{
+	QDomNodeList l = preptime.childNodes();
+	for (unsigned i = 0 ; i < l.count(); i++)
+	{
+		QDomElement el = l.item(i).toElement();
+		QString tagName = el.tagName();
+
+		if ( tagName == "time" ) {
+			int qty = 0;
+			QString timeunit;
+		
+			QDomNodeList time_l = el.childNodes();
+			for (unsigned i = 0 ; i < time_l.count(); i++)
+			{
+				QDomElement time_el = time_l.item(i).toElement();
+				QString time_tagName = time_el.tagName();
+
+				if ( time_tagName == "qty" )
+					qty = time_el.text().toInt();
+				else if ( time_tagName = "timeunit" )
+					timeunit = time_el.text();
+				else
+					kdDebug()<<"Unknown tag within <time>: "<<time_tagName<<endl;
+			}
+
+			int minutes = 0;
+			int hours = 0;
+			if ( timeunit == "minutes" )
+				minutes = qty;
+			else if ( timeunit == "hours" )
+				hours = qty;
+			else
+				kdDebug()<<"Unknown timeunit: "<<timeunit<<endl;
+
+			recipe.prepTime = QTime(hours+minutes/60,minutes%60);
+		}
+		else
+			kdDebug()<<"Unknown tag within <preptime>: "<<tagName<<endl;
 	}
 }

@@ -312,7 +312,6 @@ void KrecipesView::slotSetTitle(const QString& title)
 // Function to switch panels
 void KrecipesView::slotSetPanel(int w)
 {
-KApplication::setOverrideCursor( KCursor::waitCursor() );
 if (leftPanel->currentMenu()==leftPanel->mainMenu())
 	{
 	switch (w)
@@ -368,7 +367,6 @@ else if (leftPanel->currentMenu()==dataMenu)
 		break;
 		}
 	}
-KApplication::restoreOverrideCursor();
 }
 
 void KrecipesView::save(void)
@@ -486,11 +484,12 @@ setContextHelp(RecipeEdit);
 
 void KrecipesView::createNewElement(void)
 {
-if (rightPanel->id(rightPanel->visiblePanel())==4) //Properties Panel is the active one
+//this is inconstant as the program stands...
+/*if (rightPanel->id(rightPanel->visiblePanel())==4) //Properties Panel is the active one
 {
 propertiesPanel->createNewProperty();
 }
-else{
+else*/{
   createNewRecipe();
   }
 }

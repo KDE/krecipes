@@ -265,6 +265,12 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	QString servings_html = QString("<b>%1: </b>%2").arg(i18n("Servings")).arg(recipe.persons);
 	html_map.insert("servings",servings_html);
 
+	//=======================PREP TIME======================//
+	QString preptime_html;
+	if ( !recipe.prepTime.isNull() )
+		preptime_html = QString("<b>%1: </b>%2").arg(i18n("Preparation Time")).arg(recipe.prepTime.toString("h:mm"));
+	html_map.insert("prep_time",preptime_html);
+
 	//========================PHOTO========================//
 	QString image_url = QString("%1_photos/%2.png").arg(filename).arg(escape(recipe.title));
  	image_url = KURL::encode_string(image_url);
@@ -378,7 +384,7 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 	QString css;
 
 	QStringList classes_list;
-	classes_list << "title" << "instructions" << "servings" << "photo" << "authors" << 
+	classes_list << "title" << "instructions" << "servings" << "prep_time" << "photo" << "authors" << 
 	  "categories" << "header" << "ingredients" << "properties";
 	  
 	for ( QStringList::const_iterator it = classes_list.begin(); it != classes_list.end(); ++it )

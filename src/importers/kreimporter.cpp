@@ -139,7 +139,10 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
     }
 		else if (el.tagName() == "serving"){
 			recipe->persons = el.text().toInt();
-    }
+		}
+		else if (el.tagName() == "preparation-time") {
+			recipe->prepTime = QTime::fromString(el.text());
+		}
 		else if (el.tagName() == "category"){
 			QDomNodeList categories = el.childNodes();
 			for (unsigned j=0; j < categories.count(); j++)

@@ -126,7 +126,8 @@ void StdIngredientListView::removeIngredient(int id)
 
 void StdIngredientListView::modIngredient(QListViewItem* i)
 {
-	IngredientListView::rename(i, 1);
+	if ( i )
+		IngredientListView::rename(i, 1);
 }
 
 void StdIngredientListView::saveIngredient(QListViewItem* i)

@@ -397,7 +397,8 @@ void StdCategoryListView::mergeCategories(int id1, int id2)
 
 void StdCategoryListView::modCategory(QListViewItem* i)
 {
-	CategoryListView::rename(i, 0);
+	if ( i )
+		CategoryListView::rename(i, 0);
 }
 
 void StdCategoryListView::saveCategory(QListViewItem* i)

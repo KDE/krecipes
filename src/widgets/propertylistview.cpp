@@ -158,7 +158,8 @@ void StdPropertyListView::createProperty(const IngredientProperty &property)
 
 void StdPropertyListView::modProperty(QListViewItem* i)
 {
-	PropertyListView::rename(i, 1);
+	if ( i )
+		PropertyListView::rename(i, 1);
 }
 
 void StdPropertyListView::saveProperty(QListViewItem* i)

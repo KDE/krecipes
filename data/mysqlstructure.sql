@@ -56,6 +56,7 @@ CREATE TABLE recipes (
   persons int(11) default NULL,
   instructions text,
   photo blob,
+  prep_time time,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE unit_list (

@@ -106,6 +106,7 @@ private:
 	QLabel *id_box;
 	QLabel *ingredients_box;
 	QLabel *properties_box;
+	QLabel *preptime_box;
 
 	QSize m_size;
 

@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <qfile.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
+#include <qdatetime.h>
 
 #include "recipe.h"
 
@@ -103,7 +104,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 		if (tagName == "Serv")
 			recipe->persons = el.attribute("qty").toInt();
 		else if (tagName == "PrpT")
-			;//recipe->prep_time = el.attrubute("elapsed");
+			recipe->prepTime = QTime::fromString(el.attribute("elapsed"));
 		else if (tagName == "CatS")
 		{
 			QDomNodeList categories = el.childNodes();

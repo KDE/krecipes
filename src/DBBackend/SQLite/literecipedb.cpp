@@ -68,6 +68,7 @@ kdDebug()<<"Connecting to the SQLite database\n";
 LiteRecipeDB::~LiteRecipeDB()
 {
 database->close();
+delete database;
 }
 
 void LiteRecipeDB::createDB()
@@ -131,7 +132,7 @@ recipe->empty();
 QString command;
 
 // Read title, author and instructions
-command=QString("SELECT title,instructions,persons FROM recipes WHERE id=%1;").arg(recipeID);
+command=QString("SELECT title,instructions,persons,prep_time FROM recipes WHERE id=%1;").arg(recipeID);
 
 
 QSQLiteResult recipeToLoad = database->executeQuery(command);
@@ -144,6 +145,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 		recipe->title=unescapeAndDecode(row.data(0));
 		recipe->instructions=unescapeAndDecode(row.data(1));
 		recipe->persons=row.data(2).toInt();
+		recipe->prepTime=QTime::fromString(row.data(3));
 		recipe->recipeID=recipeID;
 		}
 		else
@@ -268,7 +270,7 @@ rlist->clear();
 
 QString command;
 
-command=QString("SELECT id,title,persons FROM recipes;");
+command=QString("SELECT id,title,persons,prep_time FROM recipes;");
 
 QSQLiteResult recipesToLoad = database->executeQuery(command);
 
@@ -281,6 +283,7 @@ Recipe rec; // To be used to load the recipes one by one
 		    rec.recipeID=row.data(0).toInt();
 		    rec.title=unescapeAndDecode(row.data(1));
 		    rec.persons=row.data(2).toInt();
+		    rec.prepTime=QTime::fromString(row.data(3));
 		    RecipeList::Iterator it=rlist->append(rec);
 		    recipeIterators[rec.recipeID]=it;
 
@@ -460,15 +463,18 @@ bool newRecipe; newRecipe=(recipe->recipeID==-1);
 // Be carefull, first check if the recipe hasn't been deleted while changing.
 
 QString command;
-if (newRecipe) {command=QString("INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL);") // Id is autoincremented
-		.arg(escapeAndEncode(recipe->title))
-		.arg(recipe->persons)
-		.arg(escapeAndEncode(recipe->instructions));
-		}
-else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%3' WHERE id=%4;")
+
+if (newRecipe) {command=QString("INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL,'%4');") // Id is autoincremented
 		.arg(escapeAndEncode(recipe->title))
 		.arg(recipe->persons)
 		.arg(escapeAndEncode(recipe->instructions))
+		.arg(recipe->prepTime.toString("hh:mm:ss"));
+		}
+else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%3',prep_time='%4' WHERE id=%5;")
+		.arg(escapeAndEncode(recipe->title))
+		.arg(recipe->persons)
+		.arg(escapeAndEncode(recipe->instructions))
+		.arg(recipe->prepTime.toString("hh:mm:ss"))
 		.arg(recipe->recipeID);
 		}
 
@@ -1448,7 +1454,7 @@ void LiteRecipeDB::createTable(QString tableName)
 
 QStringList commands;
 
-if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
+if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
 else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
@@ -1664,6 +1670,49 @@ if ( version < 0.6 )
 		}
 	}
 	database->executeQuery("DROP TABLE categories_copy");
+
+
+	//==================add a column to 'recipes' to allow prep time
+	database->executeQuery("CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT * FROM recipes;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO recipes_copy VALUES(%1,'%2','%3','%4','%5');")
+			  .arg(row.data(0))
+			  .arg(row.data(1))
+			  .arg(row.data(2))
+			  .arg(row.data(3))
+			  .arg(row.data(4));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE recipes");
+	database->executeQuery("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT * FROM recipes_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO recipes VALUES(%1,'%2','%3','%4','%5',NULL);")
+			  .arg(row.data(0))
+			  .arg(row.data(1))
+			  .arg(row.data(2))
+			  .arg(row.data(3))
+			  .arg(row.data(4));
+
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE recipes_copy");
+
 
 	//================Set the version to the new one (0.6)
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist

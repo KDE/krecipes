@@ -19,6 +19,7 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
+#include <qdatetimeedit.h>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
@@ -169,15 +170,26 @@ il=new KIconLoader;
     QSpacerItem* category_servings = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     recipeLayout->addItem(category_servings,5,4 );
 
-    QVBox *servingsBox = new QVBox(recipeTab);
+    QHBox *serv_prep_box = new QHBox(recipeTab);
+    
+    QVBox *servingsBox = new QVBox(serv_prep_box);
     servingsBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
     servingsBox->setSpacing(5);
 
     servingsLabel = new QLabel(i18n("Servings"),servingsBox);
     servingsNumInput = new KIntNumInput(servingsBox);
     servingsNumInput->setMinValue(1);
+    
+    QVBox *prepTimeBox = new QVBox(serv_prep_box);
+    prepTimeBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
+    prepTimeBox->setSpacing(5);
 
-    recipeLayout->addWidget(servingsBox,6,4);
+    (void)new QLabel(i18n("Preparation Time"),prepTimeBox);
+    prepTimeEdit = new QTimeEdit(prepTimeBox);
+    prepTimeEdit->setMinValue( QTime(0,0) );
+    prepTimeEdit->setDisplay( QTimeEdit::Hours | QTimeEdit::Minutes );
+
+    recipeLayout->addWidget(serv_prep_box,6,4);
 
     //------- END OF Recipe Tab ---------------
 
@@ -371,6 +383,7 @@ il=new KIconLoader;
     connect(addButton, SIGNAL(clicked()), this, SLOT(addIngredient()));
     connect(this, SIGNAL(changed()), this, SLOT(recipeChanged()));
     connect(servingsNumInput, SIGNAL(valueChanged(int)), this, SLOT(recipeChanged()));
+    connect(prepTimeEdit, SIGNAL(valueChanged(const QTime &)), SLOT(recipeChanged()));
     connect(titleEdit, SIGNAL(textChanged(const QString&)), this, SLOT(recipeChanged(const QString&)));
     connect(instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
     connect(addCategoryButton,SIGNAL(clicked()),this,SLOT(addCategory()));
@@ -411,6 +424,9 @@ int RecipeInputDialog::loadedRecipeID() const
 
 void RecipeInputDialog::loadRecipe(int recipeID)
 {
+emit enableSaveOption(false);
+unsavedChanges=false;
+
 //Disable changed() signals
 enableChangedSignal(false);
 
@@ -444,6 +460,7 @@ ingredientList->clear();
 titleEdit->setText(loadedRecipe->title);
 instructionsEdit->setText(loadedRecipe->instructions);
 servingsNumInput->setValue(loadedRecipe->persons);
+prepTimeEdit->setTime(loadedRecipe->prepTime);
 
 	//show ingredient list
 	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it )
@@ -882,6 +899,8 @@ loadedRecipe->photo=sourcePhoto;
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
 loadedRecipe->persons=servingsNumInput->value();
+loadedRecipe->prepTime = prepTimeEdit->time();
+
 // Now save()
 kdDebug()<<"Saving..."<<endl;
 database->saveRecipe(loadedRecipe);
@@ -1113,6 +1132,5 @@ void RecipeInputDialog::resizeRecipe(void)
 	if ( dlg.exec() == QDialog::Accepted )
 		reload();
 }
-
 
 #include "recipeinputdialog.moc"
