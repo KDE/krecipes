@@ -59,3 +59,8 @@ Ingredient i; i.ingredientID=id;
 return(QPtrList <Ingredient>::find(&i)); // (If we don't specify class, gcc will only find "find(int)"
 }
 
+int IngredientList::findNext(int id) // Search by id (which uses search by item, with comparison defined on header)
+{
+Ingredient i; i.ingredientID=id;
+return(QPtrList <Ingredient>::findNext(&i)); // (If we don't specify class, gcc will only find "findNext(int)"
+}
