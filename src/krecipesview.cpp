@@ -93,31 +93,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     #if HAVE_MYSQL
 
     else if(dbtype=="MySQL")  // First case, MySQL
-    	{
-	
-	kdDebug()<<i18n("Configured type... MySQL\n").latin1();
-	
-	// Read the server parameters
-	config->setGroup("Server");
-	QString host=config->readEntry( "Host","localhost");
-    	QString user=config->readEntry( "Username",QString::null);
-    	QString pass=config->readEntry("Password",QString::null);
-    	QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-	kdDebug()<<i18n("MySQL parameters read. Now starting DB\n").latin1();
-	// Open the database
-
-	database=new MySQLRecipeDB(host,user,pass,dbname);
-	while (!database->ok()) 
 	{
-		// Ask the user if he wants to rerun the wizard
-		questionRerunWizard(i18n(i18n("Unable to open database"),database->err()));
-		
-		// Try opening the database again
-		delete (MySQLRecipeDB *)database;
-		database=new MySQLRecipeDB(host,user,pass,dbname);
-	}
-	kdDebug()<<i18n("DB started correctly\n").latin1();
-
+	kdDebug()<<i18n("Configured type... MySQL\n").latin1();
+	initMySQLDatabase(config);
 	}
 
     #endif //HAVE_MYSQL
@@ -899,6 +877,36 @@ QString dbType=config->readEntry("Type","SQLite");
 	return (dbType);
 	}
 }
+
+#if HAVE_MYSQL
+void KrecipesView::initMySQLDatabase(KConfig *config)
+{   
+	
+	// Read the server parameters
+	config->setGroup("Server");
+	QString host=config->readEntry( "Host","localhost");
+    	QString user=config->readEntry( "Username",QString::null);
+    	QString pass=config->readEntry("Password",QString::null);
+    	QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+	kdDebug()<<i18n("MySQL parameters read. Now starting DB\n").latin1();
+	// Open the database
+
+	database=new MySQLRecipeDB(host,user,pass,dbname);
+	while (!database->ok()) 
+	{
+		// Ask the user if he wants to rerun the wizard
+		questionRerunWizard(database->err(), i18n("Unable to open database"));
+		
+		// Try opening the database again
+		delete (MySQLRecipeDB *)database;
+		database=new MySQLRecipeDB(host,user,pass,dbname);
+	}
+	kdDebug()<<i18n("DB started correctly\n").latin1();
+}
+#endif //HAVE_MYSQL
+
+
+
 
 #include "krecipesview.moc"
 
