@@ -979,6 +979,7 @@ else return(false);
 
 std::cerr<<"Checking database version...\n";
 float version=databaseVersion();
+std::cerr<<"version found... "<<version<<" \n";
 portOldDatabases(version);
 return true;
 }
@@ -1041,9 +1042,9 @@ if ( dbVersion.getStatus()!=QSQLiteResult::Failure ) {
 QSQLiteResultRow row=dbVersion.first();
 	if (!dbVersion.atEnd())
 		return(row.data(0).toDouble());// There should be only one (or none for old DB) element, so go to first
-	else return (0.2); // if table is empty, assume oldest (0.2), and port
+	else return (0.4); // if table is empty, assume oldest (0.4), and port
 }
-else return(0.2); // 0.2 didn't have this table yet
+else return(0.4); // By default go for oldest (0.4)
 }
 
 void LiteRecipeDB::loadCategories(ElementList *list)
