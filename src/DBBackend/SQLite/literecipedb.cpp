@@ -1590,7 +1590,7 @@ if ( version < 0.5 )
 		{
 			command = QString("INSERT INTO authors_copy VALUES(%1,'%2');")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1606,7 +1606,7 @@ if ( version < 0.5 )
 		{
 			command = QString("INSERT INTO authors VALUES(%1,'%2');")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1625,7 +1625,7 @@ if ( version < 0.5 )
 		{
 			command = QString("INSERT INTO categories_copy VALUES(%1,'%2');")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1641,7 +1641,7 @@ if ( version < 0.5 )
 		{
 			command = QString("INSERT INTO categories VALUES(%1,'%2');")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1668,7 +1668,7 @@ if ( version < 0.6 )
 		{
 			command = QString("INSERT INTO categories_copy VALUES(%1,'%2');")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1684,7 +1684,7 @@ if ( version < 0.6 )
 		{
 			command = QString("INSERT INTO categories VALUES(%1,'%2',-1);")
 			  .arg(row.data(0).toInt())
-			  .arg(row.data(1));
+			  .arg(escape(row.data(1)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1710,11 +1710,11 @@ if ( version < 0.61 )
 		while (!copyQuery.atEnd())
 		{
 			command = QString("INSERT INTO recipes_copy VALUES(%1,'%2','%3','%4','%5');")
-			  .arg(row.data(0))
-			  .arg(row.data(1))
-			  .arg(row.data(2))
-			  .arg(row.data(3))
-			  .arg(row.data(4));
+			  .arg(escape(row.data(0)))
+			  .arg(escape(row.data(1)))
+			  .arg(escape(row.data(2)))
+			  .arg(escape(row.data(3)))
+			  .arg(escape(row.data(4)));
 			database->executeQuery(command);
 			
 			row = copyQuery.next();
@@ -1729,11 +1729,11 @@ if ( version < 0.61 )
 		while (!copyQuery.atEnd())
 		{
 			command = QString("INSERT INTO recipes VALUES(%1,'%2','%3','%4','%5',NULL);")
-			  .arg(row.data(0))
-			  .arg(row.data(1))
-			  .arg(row.data(2))
-			  .arg(row.data(3))
-			  .arg(row.data(4));
+			  .arg(escape(row.data(0)))
+			  .arg(escape(row.data(1)))
+			  .arg(escape(row.data(2)))
+			  .arg(escape(row.data(3)))
+			  .arg(escape(row.data(4)));
 
 			database->executeQuery(command);
 			
