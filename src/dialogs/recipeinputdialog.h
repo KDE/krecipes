@@ -47,6 +47,7 @@ public:
     void newRecipe(void);
     void reloadCombos(void);
     bool everythingSaved();
+    void reload(void);
 private:
 
 	// Internal Data
@@ -105,6 +106,7 @@ private:
 	QToolButton* closeButton;
 	QToolButton* showButton;
 	QToolButton* shopButton;
+	QToolButton* resizeButton;
 
 	QToolButton* spellCheckButton;
 
@@ -142,6 +144,7 @@ private:
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
 	void spellCheck(void);
+	void resizeRecipe(void);
 
 	signals:
 	void addRecipeToShoppingList(int recipeID);

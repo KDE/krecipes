@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "recipeinputdialog.h"
+
 #include <qstring.h>
 #include <qlayout.h>
 #include <qhbox.h>
@@ -21,8 +23,9 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include "recipeinputdialog.h"
+
 #include "selectauthorsdialog.h"
+#include "resizerecipedialog.h"
 #include "recipe.h"
 #include "DBBackend/recipedb.h"
 #include "selectcategoriesdialog.h"
@@ -174,18 +177,20 @@ database=db;
 
     il=new KIconLoader;
 
-    functionsBox=new QGroupBox(recipeTab);
+    functionsBox=new QGroupBox(this);
     functionsBox->setFrameStyle(QFrame::NoFrame);
     functionsBox->setColumns(3);
-    recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
+    //recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
     saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small)); saveButton->setEnabled(false);
     showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
     shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
+    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("resize", KIcon::Small));
     QToolTip::add(saveButton, i18n("Save recipe"));
     QToolTip::add(showButton, i18n("Show recipe"));
     QToolTip::add(shopButton,i18n("Add to shopping list"));
     QToolTip::add(closeButton,i18n("Close"));
+    QToolTip::add(resizeButton,i18n("Resize Recipe"));
 
     //------- END OF Recipe Tab ---------------
 
@@ -348,6 +353,7 @@ database=db;
     connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
     connect (showButton,SIGNAL(clicked()),this,SLOT(showRecipe()));
     connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
+    connect (resizeButton,SIGNAL(clicked()),this,SLOT(resizeRecipe()));
     connect (spellCheckButton,SIGNAL(clicked()),this,SLOT(spellCheck()));
     connect (this, SIGNAL(enableSaveOption(bool)),this,SLOT(enableSaveButton(bool)));
 }
@@ -365,19 +371,27 @@ void RecipeInputDialog::loadRecipe(int recipeID)
 //Disable changed() signals
 enableChangedSignal(false);
 
-
 //Empty current recipe
 loadedRecipe->empty();
+
+// Load specified Recipe ID
+database->loadRecipe(loadedRecipe,recipeID);
+
+reload();
+
+//Enable changed() signals
+enableChangedSignal();
+
+}
+
+void RecipeInputDialog::reload(void)
+{
 ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
 servingsNumInput->setValue(1);
 amountEdit->setValue(0.0);
 ingredientList->clear();
-
-
-// Load specified Recipe ID
-database->loadRecipe(loadedRecipe,recipeID);
 
 //Load Values in Interface
 titleEdit->setText(loadedRecipe->title);
@@ -424,10 +438,6 @@ showCategories();
 
 // Show authors
 showAuthors();
-
-//Enable changed() signals
-enableChangedSignal();
-
 }
 
 void RecipeInputDialog::loadIngredientListCombo(void)
@@ -925,4 +935,12 @@ void RecipeInputDialog::spellCheck(void)
 
 	if ( text != instructionsEdit->text() ) //check if there were changes
 		instructionsEdit->setText( text );
+}
+
+void RecipeInputDialog::resizeRecipe(void)
+{
+	ResizeRecipeDialog dlg(this,loadedRecipe);
+
+	if ( dlg.exec() == QDialog::Accepted )
+		reload();
 }
