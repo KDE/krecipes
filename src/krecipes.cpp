@@ -13,7 +13,7 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
-//#include "dualprogressdialog.h"
+#include "dualprogressdialog.h"
 
 #include "mxpimporter.h"
 #include "mmfimporter.h"
