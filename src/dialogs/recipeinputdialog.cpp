@@ -412,15 +412,8 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		KConfig *config=kapp->config();
 		config->setGroup("Units");
 		QString amount_str;
-		#if defined(KDE_MAKE_VERSION)
-		#if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
-     		   if ( config->readBoolEntry("Fraction"))
-  		  # else
-    		   if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  		 # endif
-  		 #else
-    		 if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  		 #endif
+
+		if ( config->readBoolEntry("Fraction"))
 			amount_str = MixedNumber(ing->amount).toString();
 		else
 			amount_str = QString::number(ing->amount);
@@ -685,18 +678,10 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   config->setGroup("Units");
   QString amount_str;
 
-  #if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION >KDE_MAKE_VERSION(3,1,4)
-     if ( config->readBoolEntry("Fraction"))
-  # else
-    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  # endif
-  #else
-    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  #endif
-	amount_str = MixedNumber(ing.amount).toString();
+  if ( config->readBoolEntry("Fraction"))
+    amount_str = MixedNumber(ing.amount).toString();
   else
-  	amount_str = QString::number(ing.amount);
+    amount_str = QString::number(ing.amount);
 
   QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units);
 
@@ -727,35 +712,18 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
   Ingredient* ing = (loadedRecipe->ingList).at(index);
   KConfig *config=kapp->config();
   config->setGroup("Units");
-    #if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
-     if ( config->readBoolEntry("Fraction"))
-  # else
-    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  # endif
-  #else
-    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-  #endif
-  {
+
+  MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+
     MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
     if(ok){
       ing->amount = mn.toDouble();
-      it->setText(1, mn.toString());
+      it->setText(1, mn.toString( number_format ));
     }
     else{
       it->setText(1, previousAmount);
     }
-  }
-  else{
-    MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
-    if(ok){
-      ing->amount = mn.toDouble();
-      it->setText(1, QString::number(mn.toDouble()));
-    }
-    else{
-      it->setText(1, previousAmount);
-    }
-  }
+
   if(it->text(1) != previousAmount){
     emit changed();
   }
