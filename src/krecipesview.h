@@ -14,6 +14,7 @@
 #include <qtooltip.h>
 #include <qbitmap.h>
 #include <qwidgetstack.h>
+#include <qlabel.h>
 
 #include <kiconloader.h>
 #include <kpixmap.h>
@@ -133,6 +134,7 @@ private:
 	MenuButton *button5;
 	MenuButton *button6;
 	MenuButton *button7;
+  QLabel* logo;
 
 	MenuButton *recipeButton;
 	QWidget *recipeWidget;

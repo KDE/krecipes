@@ -120,7 +120,12 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     leftPanel=new MenuGroup(splitter,"leftPanel");
     rightPanel=new QWidgetStack(splitter,"rightPanel");
-   leftPanel->setMinimumWidth(22);
+    leftPanel->setMinimumWidth(22);
+    leftPanel->setPaletteBackgroundColor(QColor(238, 218, 156));
+
+    logo = new QLabel(leftPanel, "logo");
+    logo->setGeometry(1, 220, 144, 296);
+    logo->setPixmap(QPixmap(locate("data", "krecipes/pics/menubg.png")));
 
     // Design Resizing of the panels
    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
@@ -489,6 +494,7 @@ void KrecipesView::resizeButtons(){
     bt->resize((leftPanel->width())-1, 30);
     ++it;
   }
+  logo->setGeometry(1, (leftPanel->height() - 298), 144, 296);
 }
 
 void KrecipesView::addRecipeButton(QWidget *w,QString title)
