@@ -9,7 +9,6 @@
  ***************************************************************************/
 #include "selectrecipedialog.h"
 #include <klocale.h>
-#include <qintdict.h>
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
@@ -83,6 +82,8 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 // Load Recipe List
 loadRecipeList();
+loadCategoryCombo();
+
 
 // Signals & Slots
 
@@ -113,7 +114,7 @@ categoryList->clear();
 // First show the categories
 
 ElementList categoryList;
-QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
+
 database->loadCategories(&categoryList);
 
 for ( Element *category=categoryList.getFirst(); category; category=categoryList.getNext())
@@ -201,6 +202,34 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 
 	}
 }
+
+
+void SelectRecipeDialog::filterCategories(int categoryID)
+{
+for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+	{
+	if (it!=categoryItems[categoryID]) it->setVisible(false);
+	else it->setVisible(true);
+	}
+
+}
+
+
+
+
+void SelectRecipeDialog::loadCategoryCombo(void)
+{
+
+ElementList categoryList;
+database->loadCategories(&categoryList);
+
+for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
+	{
+	categoryBox->insertItem(category->name);
+	}
+
+}
+
 
 /*!
     \fn SelectRecipeDialog::exportRecipe()

@@ -17,6 +17,7 @@
 #include <qlayout.h>
 
 #include <kcombobox.h>
+#include <qintdict.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>
@@ -63,6 +64,8 @@ private:
   RecipeDB *database;
   ElementList *recipeList;
   ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
+  QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
+
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);
@@ -76,6 +79,7 @@ private slots:
   void edit(void);
   void remove(void);
   void filter(const QString &s);
+  void filterCategories(int categoryID);
   void showPopup( KListView *, QListViewItem *, const QPoint & );
 public slots:
   void exportRecipe();
