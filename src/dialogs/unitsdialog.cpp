@@ -157,7 +157,7 @@ saveAllRatios(ratioList);
 #endif
 }
 
-void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
+void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 {
 	#if 0
 	KProgressDialog progress_dialog(this,"progress_dialog",i18n("Finding Unit Ratios"),QString::null,true);

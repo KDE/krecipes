@@ -248,7 +248,7 @@ Note: Be careful adding the cumin and cinnamon. They tend to clump, and you shou
 <ingredient>
 <name>olive oil</name>
 <amount>1</amount>
-<unit>n/a</unit>
+<unit></unit>
 </ingredient>
 <ingredient>
 <name>grated cheese</name>
@@ -285,7 +285,7 @@ Serve topped with cheese and with sliced tomato around the edge of the plate.</k
 <ingredient>
 <name>ginger</name>
 <amount>0.25</amount>
-<unit>cloves</unit>
+<unit>clove</unit>
 </ingredient>
 <ingredient>
 <name>garlic</name>
@@ -304,7 +304,7 @@ Serve topped with cheese and with sliced tomato around the edge of the plate.</k
 <ingredient>
 <name>carrot</name>
 <amount>2</amount>
-<unit>lb</unit>
+<unit>lbs</unit>
 </ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>

@@ -32,5 +32,22 @@ Unit::Unit( const QString &_name, double amount )
 
 bool Unit::operator==( const Unit &u ) const
 {
-	return u.plural.lower() == plural.lower() || u.name.lower() == name.lower();
+	//treat QString::null and "" as the same
+	QString plural_test1 = u.plural.lower();
+	if ( plural_test1.isNull() )
+		plural_test1 = "";
+
+	QString plural_test2 = name.lower();
+	if ( plural_test2.isNull() )
+		plural_test2 = "";
+
+	QString single_test1 = u.name.lower();
+	if ( single_test1.isNull() )
+		single_test1 = "";
+
+	QString single_test2 = name.lower();
+	if ( single_test2.isNull() )
+		single_test2 = "";
+
+	return plural_test1 == plural_test2 || single_test1 == single_test2;
 }

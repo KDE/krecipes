@@ -41,8 +41,10 @@ void UnitListView::reload()
 	UnitList unitList;
 	database->loadUnits(&unitList);
 
-	for ( UnitList::const_iterator ing_it = unitList.begin(); ing_it != unitList.end(); ++ing_it )
-		createUnit(*ing_it);
+	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
+		if ( !(*it).name.isEmpty() || !(*it).plural.isEmpty() )
+			createUnit(*it);
+	}
 }
 
 

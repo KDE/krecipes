@@ -273,13 +273,16 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			}
 
 			Unit real_unit((*ing_it).units.name.left(max_units_length),(*ing_it).units.plural.left(max_units_length));
-			int new_unit_id = (*unitList.find(real_unit)).id;
-			if ( new_unit_id == -1 )
+			UnitList::const_iterator unit_result = unitList.find(real_unit);
+			int new_unit_id;
+			if ( unit_result == unitList.end() )
 			{
 				db->createNewUnit( real_unit.name, real_unit.plural );
 				new_unit_id = db->lastInsertID();
 				unitList.append( Unit( real_unit.name, real_unit.plural, new_unit_id ) );
 			}
+			else
+				new_unit_id = (*unit_result).id;
 			
 			int new_prep_id = -1;
 			if ( !(*ing_it).prepMethod.isEmpty() )
