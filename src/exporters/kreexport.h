@@ -34,7 +34,7 @@ Export classe for Krecipes native file format (.kre, .kreml)
 */
 class KreExporter{
 public:
-    KreExporter( RecipeDB *, int , const QString&, QString );
+    KreExporter( RecipeDB *, const int , const QString&, const QString );
 
     ~KreExporter();
     void exporter( );

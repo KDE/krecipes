@@ -9,19 +9,23 @@
  ***************************************************************************/
 #include "kreexport.h"
 
-KreExporter::KreExporter( RecipeDB *db, int recipeId, const QString& filename = 0, QString format = 0 )
+KreExporter::KreExporter( RecipeDB *db, const int recipeId, const QString& filename = QString::null, const QString format = QString::null )
 {
   database = db;
   recipe = new Recipe();
   recipe->recipeID = -1;
   database->loadRecipe( recipe, recipeId );
-  if(filename != 0){
+  if(filename != QString::null){
     if(filename.contains(".kre") || filename.contains(".kreml")){
       file = new QFile(filename);
     }
     else{
-      format = format.remove('*');
-      file = new QFile(filename+format);
+      QString form = format;
+      form = form.remove('*');
+      if(form != ".kre" && form != ".kreml"){
+        form = ".kre";
+      }
+      file = new QFile(filename+form);
     }
     QFileInfo fi(*file);
     type = fi.extension();
