@@ -12,8 +12,10 @@
 #define INGREDIENTMATCHERDIALOG_H
 
 #include "element.h"
+#include "ingredientlist.h"
 #include "recipe.h"
 
+#include <qfontmetrics.h>
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
@@ -21,6 +23,7 @@
 #include <qvbox.h>
 
 #include <kcombobox.h>
+#include <kstringhandler.h>
 
 class KreListView;
 class RecipeDB;
@@ -62,26 +65,41 @@ public:
 class RecipeListItem:public QListViewItem
 {
 public:
-	RecipeListItem(QListView* qlv, const Recipe &r ):QListViewItem(qlv,qlv->lastItem())
+	RecipeListItem(QListView* qlv, const Recipe &r, const IngredientList &il ):QListViewItem(qlv,qlv->lastItem())
 	{
-	// Initialize the ingredient  data with the the property data
 		recipeStored=new Recipe();
+		ingredientListStored=new QStringList();
 		recipeStored->recipeID=r.recipeID;
 		recipeStored->title=r.title;
+		IngredientList::ConstIterator ili;
+		for (ili=il.begin();ili!=il.end();++ili) ingredientListStored->append((*ili).name);
+		
 	}
-
+	RecipeListItem(QListView* qlv, const Recipe &r):QListViewItem(qlv,qlv->lastItem())
+	{
+		recipeStored=new Recipe();
+		ingredientListStored=0;
+		recipeStored->recipeID=r.recipeID;
+		recipeStored->title=r.title;
+		
+	}
+	
 	~RecipeListItem(void)
 	{
 	delete recipeStored;
+	delete ingredientListStored;
 	}
 
 private:
 	Recipe *recipeStored;
+	QStringList *ingredientListStored;
 
 public:
 	virtual QString text(int column) const
 		{
 		if (column==0) return(recipeStored->title);
+		else if ((column==1) && ingredientListStored) 
+			return (KStringHandler::rPixelSqueeze(ingredientListStored->join (","),listView()->fontMetrics(),150));
 		else return(QString::null);
 		}
 };

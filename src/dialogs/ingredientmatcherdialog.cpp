@@ -84,7 +84,7 @@ void IngredientMatcherDialog::findRecipes(void)
 {
 	RecipeList rlist;
 	IngredientList ilist;
-	database->loadRecipeDetails(&rlist,true,false);
+	database->loadRecipeDetails(&rlist,true,false,true);
 	
 	
 	QListViewItem *qlv_it;
@@ -109,6 +109,7 @@ void IngredientMatcherDialog::findRecipes(void)
 	// of ingredients
 	RecipeList incompleteRecipes;
 	QValueList <int> missingNumbers;
+	QValueList <IngredientList> missingIngredients;
 	
 	RecipeList::Iterator it;
 	for (it=rlist.begin();it!=rlist.end();++it)
@@ -122,6 +123,7 @@ void IngredientMatcherDialog::findRecipes(void)
 		else 
 			{
 			incompleteRecipes.append(*it);
+			missingIngredients.append(missing);
 			missingNumbers.append(missing.count());
 			}
 		}
@@ -135,6 +137,7 @@ void IngredientMatcherDialog::findRecipes(void)
 	
 	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
+	QValueList<IngredientList>::Iterator ilit;
 	int missingNoAllowed;
 	
 	if (missingNumberCombo->currentItem()!=4) missingNoAllowed=missingNumberCombo->currentText().toInt(); //"1..3"
@@ -148,9 +151,11 @@ void IngredientMatcherDialog::findRecipes(void)
 	for (int missingNo=1; missingNo<=missingNoAllowed; missingNo++)
 	{
 		nit=missingNumbers.begin();
+		ilit=missingIngredients.begin();
+		
 		bool titleShownYet=false;
 		
-		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit)
+		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit,++ilit)
 		{
 			if ((*nit)==missingNo) 
 				{	
@@ -159,7 +164,7 @@ void IngredientMatcherDialog::findRecipes(void)
 						new SectionItem(recipeListView->listView(),i18n("You are missing %1 ingredients for:").arg(missingNo));
 						titleShownYet=true;
 					}
-				new RecipeListItem(recipeListView->listView(),*it);
+				new RecipeListItem(recipeListView->listView(),*it,*ilit);
 				}
 		}
 	}
