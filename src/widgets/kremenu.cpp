@@ -29,6 +29,7 @@ childPos=10; // Initial button is on top (10px), then keep scrolling down
 widgetNumber=0; // Initially we have no buttons
 activeButton=0; // Button that is highlighted
 dragging=false;
+setMouseTracking(true);
 }
 
 
@@ -55,7 +56,10 @@ if (x > (width()-15))
 	{
 	setCursor(QCursor(Qt::SplitHCursor));
 	}
-
+else
+	{
+	setCursor(QCursor(Qt::ArrowCursor));
+	}
 // If already dragging, resize
 if (dragging)
 	{
@@ -70,6 +74,11 @@ if (dragging)
 			resize(width()+xIncrease,height());
 			xOrig=xDest;yOrig=yDest;
 			}
+		else
+			{
+			resize(maximumWidth(),height());
+			xOrig=xDest;yOrig=yDest;
+			}
 		}
 	else if (xDest<xOrig) // Reduce menu size
 		{
@@ -77,6 +86,11 @@ if (dragging)
 		if ((width()-xDecrease) > minimumWidth())
 			{
 			resize(width()-xDecrease,height());
+			xOrig=xDest;yOrig=yDest;
+			}
+		else
+			{
+			resize(minimumWidth(),height());
 			xOrig=xDest;yOrig=yDest;
 			}
 		}
