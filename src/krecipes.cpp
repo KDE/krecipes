@@ -274,14 +274,28 @@ void Krecipes::import()
 			progress_dialog->setSubLabel( QString(i18n("Importing file (%1 of %2): %3"))
 			  .arg(i).arg(files.count()).arg(*it) );
 			kapp->processEvents();
+
+			QString error = importer->getErrorMsg();
+			if ( error != QString::null )
+				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
+
+			QStringList warnings = importer->getWarningMsgs();
+			if ( warnings.count() > 0 )
+			{
+				//TODO: this needs to have a scroll bar (for when there are many warnings)
+				switch ( KMessageBox::warningContinueCancel( this, QString(i18n("Warning importing file %1\n%2")).arg(*it).arg(warnings.join("\n")) ) )
+				{
+				case KMessageBox::Cancel: continue; break;
+				case KMessageBox::Continue: break;
+				}
+			}
+
 			m_view->import( *importer, progress_dialog );
 			delete importer;
 
 			if ( progress_dialog->wasCancelled() )
 			{
-				KMessageBox::information( this,
-				  i18n("All recipes before this point have been successfully imported."),
-				  i18n("Import canceled") );
+				KMessageBox::information( this, i18n("All recipes before this point have been successfully imported.") );
 				return;
 			}
 			i++;
@@ -307,7 +321,7 @@ bool Krecipes::queryClose()
 		switch( KMessageBox::questionYesNoCancel( this,
 		  i18n("A recipe contains unsaved changes.\n"
 		  "Do you want to save the changes before exiting?"),
-		  i18n("Save Recipe?") ) )
+		  i18n("Unsaved Changes") ) )
 		{
 		case KMessageBox::Yes: m_view->save();
 		case KMessageBox::No: return true;
