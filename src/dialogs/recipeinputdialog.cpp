@@ -159,7 +159,7 @@ database=db;
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));
     titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addMultiCellWidget(titleEdit,1,1,5,7);
+    layout->addMultiCellWidget(titleEdit,1,1,5,8);
 
     // Title ->author spacer
     QSpacerItem* title_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -172,11 +172,16 @@ database=db;
     authorEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     layout->addWidget(authorEdit,3,5);
 
-    categoryBox=new KComboBox(this);
-    categoryBox->setMinimumSize(QSize(100,30));
-    categoryBox->setMaximumSize(QSize(10000,30));
-    categoryBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addWidget(categoryBox,3,7);
+    categoryShow=new KLineEdit(this);
+    categoryShow->setMinimumSize(QSize(100,30));
+    categoryShow->setMaximumSize(QSize(10000,30));
+    categoryShow->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    layout->addWidget(categoryShow,3,7);
+
+    addCategoryButton= new QPushButton(this);
+    addCategoryButton->setText("+");
+    addCategoryButton->setFixedSize(QSize(30,30));
+    layout->addWidget(addCategoryButton,3,8);
 
     //Author ->instructions spacer
     QSpacerItem* author_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -186,7 +191,7 @@ database=db;
     instructionsEdit->setMinimumSize(QSize(360,320));
     instructionsEdit->setMaximumSize(QSize(10000,10000));
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    layout->addMultiCellWidget(instructionsEdit,5,7,5,7);
+    layout->addMultiCellWidget(instructionsEdit,5,7,5,8);
 
 
 
@@ -390,7 +395,7 @@ Ingredient ing;
 if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
 {
   ing.name=ingredientBox->currentText();
- ing.amount=amountEdit->value();
+  ing.amount=amountEdit->value();
   ing.units=unitBox->currentText();
   ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
   ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;

@@ -59,7 +59,8 @@ private:
 
 	//Additional recipe data
 	KLineEdit* authorEdit;
-	KComboBox* categoryBox;
+	KLineEdit* categoryShow;
+	QPushButton* addCategoryButton;
 
 	//Ingredient inputs
 	QGroupBox *ingredientGBox;
