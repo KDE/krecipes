@@ -45,7 +45,15 @@ void DietViewDialog::showDiet(const RecipeList &recipeList, int dayNumber, int m
 
 
 // Header
-QString htmlCode=QString("<html><head><title>%1</title></head><body>").arg(i18n("Diet"));
+QString htmlCode=QString("<html><head><title>%1</title>").arg(i18n("Diet"));
+
+// CSS
+htmlCode += "<STYLE type=\"text/css\">\n";
+htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #d6d6d6;}";
+htmlCode +="</STYLE>";
+
+
+htmlCode+="</head><body>"; //  /Header
 
 // Title
 htmlCode+=QString("<center><div STYLE=\"width: 80%\">");
@@ -68,7 +76,7 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 
 	for (int col=0; (col<7) && (day<dayNumber); col++,day++) // New column (day)
 		{
-		htmlCode+=QString("<td>");
+		htmlCode+=QString("<td id=\"day\">");
 		for (int meal=0;meal<mealNumber;meal++) // Meals in each cell
 			{
 			int dishNumber=*it;
