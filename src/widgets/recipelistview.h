@@ -44,6 +44,11 @@ public:
 		init( r );
 	}
 
+	RecipeListItem( QListViewItem* it, const Recipe &r ) : QListViewItem( it )
+	{
+		init( r );
+	}
+
 	int rtti() const
 	{
 		return RECIPELISTITEM_RTTI;

@@ -36,6 +36,8 @@ protected:
 	bool reloading(){ return bulk_load; }
 
 	RecipeDB *database;
+	int curr_limit;
+	int curr_offset;
 
 protected slots:
 	void elementCreated();
@@ -46,8 +48,6 @@ private:
 	void clear(){KListView::clear();}
 	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
 
-	int curr_limit;
-	int curr_offset;
 	int total;
 	
 	bool bulk_load;

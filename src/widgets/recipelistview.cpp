@@ -119,7 +119,7 @@ void RecipeListView::load(int limit, int offset)
 		QPtrList <int> recipeCategoryList;
 
 		//FIXME 0.8: This loads more than it has to if limiting the view
-		database->loadRecipeList( &recipeList, 0, &recipeCategoryList ); // Read the whole list of recipes including category
+		database->loadRecipeList( &recipeList, 0, &recipeCategoryList, curr_limit, curr_offset ); // Read the whole list of recipes including category
 
 		int *categoryID;
 		ElementList::const_iterator recipe_it;
@@ -138,12 +138,15 @@ void RecipeListView::load(int limit, int offset)
 
 
 		// Add those recipes that have not been categorised in any categories
+		QListViewItem *uncat_item = 0;
 		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.first();recipe_it != recipeList.end() && categoryID;++recipe_it, categoryID = recipeCategoryList.next() ) {
 			if ( !recipeCategorized[ ( *recipe_it ).id ] ) {
+				if ( !uncat_item )
+					uncat_item = new QListViewItem(this,i18n("Uncategorized"));
 				Recipe recipe;
 				recipe.recipeID = ( *recipe_it ).id;
 				recipe.title = ( *recipe_it ).name;
-				createRecipe( recipe, -1 );
+				(void)new RecipeListItem( uncat_item, recipe );
 			}
 		}
 	}

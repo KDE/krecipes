@@ -42,6 +42,7 @@
 #include "DBBackend/SQLite/literecipedb.h"
 #endif
 
+#include "datablocks/categorytree.h"
 #include "ingredientpropertylist.h"
 #include "usda_property_data.h"
 #include "usda_ingredient_data.h"
@@ -173,6 +174,17 @@ void RecipeDB::importSamples()
 	}
 	else
 		kdDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" << endl;
+}
+
+void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
+{
+	const CategoryTreeChildren * children = categoryTree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
+		
+		const CategoryTree *node = *child_it;
+		ids << QString::number(node->category.id);
+		getIDList( node,ids );
+	}
 }
 
 //These are helper functions solely for use by the USDA data importer

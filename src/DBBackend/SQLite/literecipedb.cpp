@@ -632,8 +632,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-
-void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <int>*recipeCategoryList )
+void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <int>*recipeCategoryList, int limit, int offset )
 {
 	list->clear();
 
@@ -647,8 +646,11 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 	{
 		if ( !recipeCategoryList )
 			command = "SELECT id,title FROM recipes;";
-		else
-			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id;";
+		else {
+			CategoryTree tree; loadCategories(&tree,limit,offset);
+			QStringList ids; getIDList(&tree,ids);
+			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
+		}
 
 	}
 	else  // load the list of those in the specified category

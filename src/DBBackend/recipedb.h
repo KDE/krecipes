@@ -149,6 +149,7 @@ public:
 	virtual void findUseOf_Unit_InRecipes( ElementList *results, int unitID ) = 0;
 	virtual void findUseOf_Unit_InProperties( ElementList *results, int unitID ) = 0;
 
+	void getIDList( const CategoryTree *categoryTree, QStringList &ids );
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title ) = 0;
 	virtual void givePermissions( const QString &dbName, const QString &username, const QString &password = QString::null, const QString &clientHost = "localhost" ) = 0;
 
@@ -176,7 +177,7 @@ public:
 	virtual void loadRecipeAuthors( int recipeID, ElementList *list ) = 0;
 	virtual void loadRecipeCategories( int recipeID, ElementList *categoryList ) = 0;
 	virtual void loadRecipeDetails( RecipeList *rlist, bool loadIngredients = false, bool loadCategories = false, bool loadIngredientNames = false, bool loadAuthors = false ) = 0; // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
-	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0 ) = 0;
+	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
 
