@@ -81,7 +81,7 @@ layout->addItem(spacer_left,1,0);
 
 // Explanation Text
 permissionsText=new QLabel(this);
-permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions access the KRecipes MySQL database.<br><br><b>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press Next.</b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password."));
+permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions to access the KRecipes MySQL database.<br><br><b>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type: mysqladmin password <i>your_password</i>]"));
 permissionsText->setMinimumWidth(200);
 permissionsText->setMaximumWidth(10000);
 permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
