@@ -112,6 +112,14 @@ void PSqlRecipeDB::createTable( QString tableName )
 		databaseToCreate.exec( *it );
 }
 
+void PSqlRecipeDB::initializeData()
+{
+	QSqlRecipeDB::initializeData();
+
+	QSqlQuery updateSeq( "SELECT setval('units_id_seq',(SELECT COUNT(1) FROM units))", database );
+	updateSeq.exec( "SELECT setval('categories_id_seq',(SELECT COUNT(1) FROM categories))" );
+}
+
 void PSqlRecipeDB::portOldDatabases( float version )
 {
 	kdDebug() << "Current database version is..." << version << "\n";

@@ -34,6 +34,7 @@ public:
 	~PSqlRecipeDB( void );
 
 	int lastInsertID();
+	void initializeData();
 
 	void createTable( QString tableName );
 	void givePermissions( const QString &dbName, const QString &username, const QString &password, const QString &clientHost );
