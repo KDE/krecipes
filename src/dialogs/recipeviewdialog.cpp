@@ -70,8 +70,11 @@ else
 
 // title (not shown)
 recipeHTML= QString("<html><head><title>%1</title></head><body>").arg( loadedRecipe->title);
+
+// Left Block (ingredients+properties)
+
 // Ingredient Block
-recipeHTML+="<div STYLE=\"position: absolute; top: 250px; left:1%; width: 220px; background-color: #D4A143\">";
+recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px; height: 240px; background-color:#D4A143 \">";
     //Ingredients
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
@@ -85,7 +88,7 @@ recipeHTML+="</div>";
 
 // Properties Block
 
-recipeHTML+="<div STYLE=\"position: absolute; top: 550px; left:1%; width: 220px; background-color: #D4A143\">";
+recipeHTML+="<div STYLE=\"position: absolute; top: 480px; left:1%; width: 220px; background-color: #0071D3\">";
     //Properties
     IngredientProperty * prop;
     for ( prop = properties->getFirst(); prop; prop = properties->getNext() )
@@ -97,9 +100,8 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 550px; left:1%; width: 220px;
        }
 recipeHTML+="</div>";
 
-
 // Instructions Block
-recipeHTML+="<div STYLE=\"margin-left: 240px;margin-right: 1%;margin-top: 80px\">";
+recipeHTML+="<div STYLE=\"margin-left: 240px;margin-right: 150;margin-top: 80px\">";
 recipeHTML+=QString("<center><h1>%1</h1></center>").arg(loadedRecipe->title);
 recipeHTML+=QString("<p>%1</p></div>").arg(loadedRecipe->instructions);
 
