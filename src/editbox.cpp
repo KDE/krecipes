@@ -57,8 +57,7 @@ void RatioInput::keyPressEvent ( QKeyEvent * e )
 	}
 	else
 	{
-	std::cerr<<e->key()<<"\n";
-	//e->ignore();
+	e->ignore();
 	}
 }
 
