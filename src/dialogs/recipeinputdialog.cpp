@@ -399,7 +399,7 @@ il=new KIconLoader;
     connect(unitBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotUnitBoxLostFocus()) );
     connect(prepMethodBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotPrepMethodBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
-    connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
+    connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SLOT(prepTitleChanged(const QString&)));
     connect(ingredientList,SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), SLOT( syncListView(QListViewItem*,const QString &,int) ));
     
     connect(unitBox->lineEdit(),SIGNAL(returnPressed()),this, SLOT(addIngredient()) );
@@ -423,6 +423,17 @@ RecipeInputDialog::~RecipeInputDialog()
 	delete ingredientComboList;
 	delete unitComboList;
 	delete prepMethodComboList;
+}
+
+void RecipeInputDialog::prepTitleChanged(const QString &title)
+{
+	//we don't want the menu to grow due to a long title
+	//### KStringHandler::rsqueeze does this but I can't remember when it was added (compatibility issue...)
+	QString short_title = title.left(20);
+	if ( title.length() > 20 )
+		short_title.append("...");
+
+	emit titleChanged(short_title);
 }
 
 int RecipeInputDialog::loadedRecipeID() const

@@ -350,7 +350,7 @@ void StdCategoryListView::createCategory(const Element &category, int parent_id)
 	}
 
 	items_map.insert(category.id,new_item);
-	new_item->setOpen(true);
+	//new_item->setOpen(true);
 }
 
 void StdCategoryListView::modifyCategory(const Element &category)

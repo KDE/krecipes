@@ -157,6 +157,7 @@ private:
 	void enableSaveButton(bool enabled);
 	void closeOptions(void);
 	void showRecipe(void);
+	void prepTitleChanged(const QString &title);
 
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()

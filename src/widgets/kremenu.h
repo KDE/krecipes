@@ -67,6 +67,7 @@ public:
 	MenuId mainMenu(void){return mainMenuId;}
 	MenuId currentMenu(void){return currentMenuId;}
 	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
 	void resizeEvent(QResizeEvent* e);
 	void highlightButton(KreMenuButton *button);
 	
@@ -76,10 +77,6 @@ protected:
 	virtual void paintEvent (QPaintEvent *e);
 	virtual void childEvent (QChildEvent *e);
 	virtual void keyPressEvent( QKeyEvent *e );
-	virtual void mouseMoveEvent (QMouseEvent *e);
-	virtual void mousePressEvent (QMouseEvent *e);
-	virtual void mouseReleaseEvent (QMouseEvent *e);
-
 
 private:
 	//Variables
@@ -87,15 +84,11 @@ private:
 	MenuId mainMenuId;
 	MenuId currentMenuId;
 	Menu *m_currentMenu;
-	
-	
-	int xOrig, yOrig; //For dragging the menu
-	int xDest, yDest;
-	bool dragging;
 
 signals:
   	void resized(int, int);
 	void clicked(int);
+
 private slots:
 	void collectClicks(KreMenuButton *w);
 	void showMenu(MenuId id);
@@ -111,6 +104,7 @@ public:
 	~KreMenuButton();
 
 	QSize sizeHint() const;
+	QSize minimumSizeHint() const;
 
 	QString title(void){return text;}
 	void setActive(bool active=true){highlighted=active;}
@@ -125,7 +119,7 @@ signals:
 	void clicked(MenuId); // sent together with clicked()
 
 public slots:
-	void setTitle(const QString &s) {text=s; update();}
+	void setTitle(const QString &s);
 	void rescale(void);
 
 private:

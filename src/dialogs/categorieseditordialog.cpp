@@ -32,6 +32,12 @@ QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spac
 //Category List
 categoryListView=new StdCategoryListView(this,database,true);
 categoryListView->reload();
+QListViewItemIterator it( categoryListView );//expand all items
+while ( it.current() ) {
+	QListViewItem *item = it.current();
+	item->setOpen(true);
+	++it;
+}
 layout->addWidget(categoryListView);
 
 //Buttons
@@ -81,7 +87,7 @@ void CategoriesEditorDialog::removeCategory(void)
 	{
 		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this category and all its subcategories?")))
 		{
-		case KMessageBox::Continue: database->removeCategory(item->text(0).toInt()); break;
+		case KMessageBox::Continue: database->removeCategory(item->text(1).toInt()); break;
 		default: break;
 		}
 	}

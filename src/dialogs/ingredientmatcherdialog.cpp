@@ -133,6 +133,8 @@ void IngredientMatcherDialog::findRecipes(void)
 	for (it=rlist.begin();it!=rlist.end();++it)
 		{
 		IngredientList il=(*it).ingList;
+		if ( il.isEmpty() ) continue;
+
 		IngredientList missing;
 		if (ilist.containsSubSet(il,missing))
 			{

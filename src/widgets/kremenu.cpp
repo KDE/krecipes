@@ -20,10 +20,9 @@
 #include <qpixmap.h>
 #include <qsignalmapper.h>
 
-#include <iostream>
-
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageeffect.h>
@@ -41,9 +40,9 @@ mainMenuId=menus.append(newMenu);
 currentMenuId=mainMenuId;
 m_currentMenu=&(*currentMenuId);
 
-dragging=false;
 setMouseTracking(true);
 setFocusPolicy( QWidget::StrongFocus );
+setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
 }
 
 
@@ -97,6 +96,8 @@ void KreMenu::childEvent (QChildEvent *e)
 			KreMenuButton *lastButton=m_currentMenu->widgetList[(m_currentMenu->widgetNumber)-1];
 			if (lastButton) m_currentMenu->childPos=lastButton->y()+lastButton->height();
 			m_currentMenu->activeButton=0;
+			
+			setMinimumWidth( minimumSizeHint().width()+10 ); //update the minimum width
 			}
 		
 		}
@@ -209,92 +210,37 @@ void KreMenu::keyPressEvent( QKeyEvent *e )
 	}
 }
 
-void KreMenu::mousePressEvent (QMouseEvent *e)
-{
-int x=e->x(),y=e->y();
-if (x > (width()-15))
-	{
-	xOrig=x;
-	yOrig=y;
-	}
-dragging=true;
-
-QWidget::mousePressEvent(e);
-}
-
-void KreMenu::mouseMoveEvent (QMouseEvent *e)
-{
-
-// Set the mouse cursor in any case
-int x=e->x();
-if (x > (width()-15))
-	{
-
-	if (QT_VERSION>=0x030200)
-		{
-		setCursor(QCursor(Qt::SplitHCursor));
-		}
-	else
-		{
-		setCursor(QCursor(Qt::SplitVCursor));
-		}
-	}
-else
-	{
-	setCursor(QCursor(Qt::ArrowCursor));
-	}
-// If already dragging, resize
-if (dragging)
-	{
-	xDest=e->x();
-	yDest=e->y();
-
-	if (xDest>xOrig) // Increase menu size
-		{
-		int xIncrease=xDest-xOrig;
-		if ((width()+xIncrease) < maximumWidth())
-			{
-			resize(width()+xIncrease,height());
-			xOrig=xDest;yOrig=yDest;
-			}
-		else
-			{
-			resize(maximumWidth(),height());
-			xOrig=xDest;yOrig=yDest;
-			}
-		}
-	else if (xDest<xOrig) // Reduce menu size
-		{
-		int xDecrease=xOrig-xDest;
-		if ((width()-xDecrease) > minimumWidth())
-			{
-			resize(width()-xDecrease,height());
-			xOrig=xDest;yOrig=yDest;
-			}
-		else
-			{
-			resize(minimumWidth(),height());
-			xOrig=xDest;yOrig=yDest;
-			}
-		}
-
-	}
-}
-
-
-void KreMenu::mouseReleaseEvent (QMouseEvent *)
-{
-dragging=false;
-}
-
 QSize KreMenu::sizeHint() const {
-  return(QSize(300,150));
+  return minimumSizeHint();
+}
+
+//the minimum size hint will be the minimum size hint of the largest child
+QSize KreMenu::minimumSizeHint() const
+{
+	int width = 30;
+
+	QObjectList *childElements=queryList(0,0,false,false); //only first-generation children (not recursive)
+	QObjectListIterator it(*childElements);
+
+	QObject *obj;
+	while ((obj=it.current())!=0) {
+		++it;
+
+		if ( obj->isWidgetType() ) {
+			int obj_width_hint = ((QWidget*)obj)->minimumSizeHint().width();
+			
+			if ( obj_width_hint > width )
+				width = obj_width_hint;
+		}
+	}
+  
+	return QSize(width,150);
 }
 
 void KreMenu::paintEvent(QPaintEvent *)
 {
     // Make sure the size is bigger than the minimum necessary
-    if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
+    //if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
     
     // Get gradient colors
     QColor c=colorGroup().button();
@@ -339,7 +285,7 @@ void KreMenu::paintEvent(QPaintEvent *)
     
     // Copy the pixmap to the widget
     bitBlt(this, 0, 0, &kpm);
-    }
+}
 
 void KreMenu::resizeEvent(QResizeEvent* e)
 {
@@ -400,6 +346,17 @@ KreMenuButton::~KreMenuButton()
 	delete icon;
 }
 
+void KreMenuButton::setTitle(const QString &s)
+{
+	text=s;
+
+	setMinimumWidth( minimumSizeHint().width() );
+	if ( parentWidget()->minimumWidth() < minimumSizeHint().width() )
+		parentWidget()->setMinimumWidth( minimumSizeHint().width()+10 );
+
+	update();
+}
+
 void KreMenuButton::mousePressEvent (QMouseEvent *)
 {
 emit clicked();
@@ -413,6 +370,14 @@ QSize KreMenuButton::sizeHint() const
 {
 	if (parentWidget()) return(QSize(parentWidget()->size().width()-10,40));
 	else return QSize(100,30);
+}
+
+QSize KreMenuButton::minimumSizeHint() const
+{
+	if ( icon )
+		return QSize( 40+icon->width()+fontMetrics().width(text), 30 );
+	else
+		return QSize( 40+fontMetrics().width(text), 30 );
 }
 
 void KreMenuButton::paintEvent(QPaintEvent *)
@@ -507,7 +472,8 @@ if (!isShown()) return;
     	// Calculate the rounded area
 	
 	int areax=xPos+10;
-	int areah=fontMetrics().height()+6; // Make sure the area is sensible for text
+	int areah=fontMetrics().height()*(text.contains('\n')+1)+fontMetrics().lineSpacing()*text.contains('\n')+6; // Make sure the area is sensible for text and adjust for multiple lines
+	
 	int areaw=width()-areax-10;
 	
 	if (areah>(height()-4)) 
@@ -560,7 +526,6 @@ if (!isShown()) return;
     else painter.setPen(KGlobalSettings::textColor());
     painter.setClipRect(r);
     painter.drawText(r,Qt::AlignVCenter,text);
-
     painter.end();
 
     // Copy the offscreen button to the widget
@@ -573,6 +538,10 @@ void KreMenuButton::setIconSet(const QIconSet &is)
 	delete icon;
 
 	icon = new QPixmap(is.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
+	
+	setMinimumWidth( minimumSizeHint().width() );
+	if ( parentWidget()->minimumWidth() < minimumSizeHint().width() )
+		parentWidget()->setMinimumWidth( minimumSizeHint().width()+10 );
 }
 
 Menu::Menu(void)

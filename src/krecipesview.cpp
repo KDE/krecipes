@@ -104,11 +104,6 @@ KrecipesView::KrecipesView(QWidget *parent)
     KIconLoader il;
     leftPanel=new KreMenu(splitter,"leftPanel");
     rightPanel=new PanelDeco(splitter,"rightPanel",i18n("Find/Edit Recipes"),"filefind");
-    leftPanel->setMinimumWidth(24);
-    leftPanel->setMaximumWidth(200);
-    leftPanel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding));
-    //rightPanel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding));
-    //rightPanel->setMaximumWidth(10000);
 
     // Design Left Panel
     
@@ -681,6 +676,7 @@ if (!recipeButton)
 {
 	recipeButton=new KreMenuButton(leftPanel,0,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
+
 	recipeButton->setTitle(title);
 	if(contextHelp->isShown())
 		{
