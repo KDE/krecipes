@@ -100,7 +100,7 @@ private:
 
 	// Internal methods
 	void wizard(void);
-
+	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
 	// Widgets
 	KIconLoader *il;
 	QSplitter *splitter;

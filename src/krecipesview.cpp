@@ -227,7 +227,11 @@ if(setupWizard->exec()== QDialog::Accepted)
 {
 
 setupWizard->getOptions(setupUser,initializeData);
-setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
+if (setupUser)
+	{
+	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
+	//setupUserPermissions(); // FIXME!
+	}
 
 }
 delete setupWizard;
@@ -240,5 +244,23 @@ void KrecipesView::slotSetDietWizardPanel(void)
 dietPanel->reload();
 rightPanel->raiseWidget(dietPanel);
 }
+
+void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
+{
+RecipeDB *db;
+
+if (adminUser!=QString::null)
+	{ // Login as admin in the (remote) server and createDB if necessary
+	db= new RecipeDB(host,adminUser,adminPass,dbName,false); // false means don't initialize db
+	}
+	else{ // Login as root with no password
+	db=new RecipeDB(host,"root",QString::null,dbName,false);
+	}
+
+db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+
+delete db; //it closes the db automatically
+}
+
 
 #include "krecipesview.moc"
