@@ -18,7 +18,7 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmainwindow.h>
+#include <kglobal.h>
 #include <kmessagebox.h>
 
 #include "recipedb.h"
@@ -119,13 +119,9 @@ void BaseExporter::saveToFile( const QPtrList<Recipe>& recipes )
 
 QString BaseExporter::krecipes_version() const
 {
-	//hopefully we'll get the version from the first in the list
-	if ( KMainWindow::memberList && KMainWindow::memberList->at(0) )
-	{
-		KInstance *this_instance = KMainWindow::memberList->at(0)->instance();
-		if (  this_instance && this_instance->aboutData() )
-			return this_instance->aboutData()->version();
-	}
+	KInstance *this_instance = KGlobal::instance();
+	if (  this_instance && this_instance->aboutData() )
+		return this_instance->aboutData()->version();
 
 	return QString::null; //Oh, well.  We couldn't get the version.
 }
