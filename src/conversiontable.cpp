@@ -10,7 +10,7 @@
 #include "conversiontable.h"
 
 
-ConversionTable::ConversionTable(QWidget* parent):QTable(parent)
+ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable( maxrows, maxcols, parent, "table" )
 {
 editBoxValue=-1;
 items.setAutoDelete(true);
@@ -103,7 +103,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 void ConversionTableItem::setText( const QString &s )
 {
 	if (eb) {
-	// initialize the editbox from the text
+	// initialize the editbox from the text
 	eb->setValue(s.toDouble());
 	}
 	QTableItem::setText(s);
@@ -111,9 +111,13 @@ void ConversionTableItem::setText( const QString &s )
 
 void ConversionTable::initTable()
 {
-	// insert the data into the table
-	setText(5,5,"5");
-	ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
-	setItem( 5, 5, ci );
+}
+
+void ConversionTable::createNewItem(int r, int c, double amount)
+{
+ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
+setItem(r,c, ci );
+// insert the data into the table
+setText(r,c,QString::number(amount));
 }
 

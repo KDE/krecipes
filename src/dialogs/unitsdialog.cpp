@@ -37,7 +37,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     layout->addMultiCellWidget(unitListView,0,3,0,0);
     unitListView->addColumn("Id.");
     unitListView->addColumn("Unit");
-    conversionTable=new ConversionTable(this);
+    conversionTable=new ConversionTable(this,1,1);
     layout->addMultiCellWidget(conversionTable,0,3,4,4);
 
     newUnitButton=new QPushButton(this);
@@ -75,10 +75,15 @@ for (Element *unit=unitList.getFirst();unit;unit=unitList.getNext())
 {
 unitNames.append(unit->name);
 }
+
+// Resize the table
 conversionTable->setNumRows(unitNames.count());
 conversionTable->setNumCols(unitNames.count());
+// Set the table lables
 conversionTable->setRowLabels(unitNames);
 conversionTable->setColumnLabels(unitNames);
+// Populate the data in the table
+conversionTable->createNewItem(4,4,10);
 }
 
 void UnitsDialog::loadUnitsList(void)

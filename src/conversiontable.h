@@ -20,8 +20,9 @@ class ConversionTable:public QTable{
 Q_OBJECT
 public:
 
-	ConversionTable(QWidget* parent);
+	ConversionTable(QWidget* parent,int maxrows,int maxcols);
 	~ConversionTable();
+	void createNewItem(int r, int c, double amount);
 private:
 
 	//Internal Variables
