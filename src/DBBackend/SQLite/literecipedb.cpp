@@ -342,32 +342,12 @@ list->clear();
 QString command;
 
 // Load the recipe list
-
-if (!categoryID)
-{
-command="SELECT id,title FROM recipes;";
-
-QSQLiteResult recipeToLoad=database->executeQuery(command);
-if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
-	QSQLiteResultRow row=recipeToLoad.first();
-            while ( !recipeToLoad.atEnd() ) {
-
-		    Element recipe;
-		    recipe.id=row.data(0).toInt();
-		    recipe.name=unescapeAndDecode(row.data(1));
-		    list->add(recipe);
-		    row=recipeToLoad.next();
-
-		}
-	}
-
-}
-
-
-// If requested, load by category
+if (!categoryID) command="SELECT id,title FROM recipes;";
 else
-{
-command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
+	{
+	// If requested, load by category
+	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID); //
+	}
 
 QSQLiteResult recipeToLoad=database->executeQuery(command);
 if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
@@ -384,11 +364,6 @@ if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 	}
 
 }
-
-}
-
-
-
 
 void LiteRecipeDB::removeRecipe(int id)
 {

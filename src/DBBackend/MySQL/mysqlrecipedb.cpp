@@ -326,9 +326,12 @@ QString command;
 
 
 // Load recipe list
-if (!categoryID)
-{
-command="SELECT id,title FROM recipes;";
+if (!categoryID) command="SELECT id,title FROM recipes;";
+else
+	{
+	// If requested, load by category
+	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID); //
+	}
 
 QSqlQuery recipeToLoad( command,database);
 
@@ -341,51 +344,7 @@ QSqlQuery recipeToLoad( command,database);
                 }
 	}
 }
-// If requested, load categories too
-else
-{
-command="SELECT r.id,r.title,cl.category_id,c.name FROM recipes r, category_list cl, categories c WHERE r.id=cl.recipe_id AND cl.category_id=c.id;";
 
-int previousID=-1; // Ideintifies the last recipe ID that was inserted
-Element category;
-
-QSqlQuery recipeToLoad( command,database);
-
-            if ( recipeToLoad.isActive() ) {
-                while ( recipeToLoad.next() ) {
-
-		    // Load recipe
-		    Element recipe;
-		    recipe.id=recipeToLoad.value(0).toInt();
-		    recipe.name=unescapeAndDecode(recipeToLoad.value(1).toString());
-		    QString categoryS=unescapeAndDecode(recipeToLoad.value(3).toString());
-		    // Increase category list or add new recipe?
-
-		    if (recipe.id!=previousID) // new recipe
-		    {
-
-		    //if (previousID!=-1) categoryList->add (category);// Store the category list for the previous recipe
-		    list->add(recipe); // Create a new recipe
-		    category.id=recipe.id; // it stores the corresponding recipe, not category id (there are several cat. ID's and the recipeID may be useful) // FIXME: check which is best and other options for later categorizing.
-		    category.name=categoryS; // Set the (first) category of this recipe
-		    }
-		    else
-		    {
-		    category.name+=QString(", ")+categoryS; // Add the new category
-		    }
-
-		    // Store new ID as last ID
-		    previousID=recipe.id;
-
-		}
-
-		   // categoryList->add(category);// Add the last missing categories to the list
-	}
-
-}
-
-
-}
 
 void MySQLRecipeDB::removeRecipe(int id)
 {

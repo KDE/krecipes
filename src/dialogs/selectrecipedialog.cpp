@@ -106,7 +106,6 @@ for ( Element *category=categoryList->getFirst();category;category=categoryList-
 
 	for ( Element *recipe=recipeList->getFirst();recipe;recipe=recipeList->getNext())
 	{
-	std::cerr<<recipe->name<<"\n";
 	QListViewItem *it=new QListViewItem (categoryIt,"",QString::number(recipe->id),recipe->name,"");
 	}
 
@@ -119,7 +118,7 @@ filter(searchBox->text());
 void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),0);
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),0);
 }
 void SelectRecipeDialog::edit(void)
 {
@@ -129,7 +128,7 @@ if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),1
 void SelectRecipeDialog::remove(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),2);
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),2);
 
 }
 
