@@ -15,7 +15,7 @@
 
 #include <qhbox.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
+#include <kpushbutton.h>
 #include <kiconloader.h>
 #include "widgets/krelistview.h"
 

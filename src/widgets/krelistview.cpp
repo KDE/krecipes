@@ -19,6 +19,8 @@ if (title!=QString::null)
 	label->setText(title);
 	}
 list=new KListView(this);
+list->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 setSpacing(10);
 }
 

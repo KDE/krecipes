@@ -26,15 +26,16 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     layout = new QGridLayout( this, 1, 1, 0, 0);
     QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_left, 1,4,0,0 );
+    layout->addItem( spacer_left,1,0);
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addMultiCell(spacer_top,0,0,1,4);
+    layout->addItem(spacer_top,0,1);
 
 
     recipeListView=new KreListView (this,i18n("Full recipe list"));
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
     recipeListView->listView()->addColumn(i18n("Id"));
     recipeListView->listView()->addColumn(i18n("Recipe Title"));
+    recipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
 
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
@@ -46,7 +47,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addWidget(addRecipeButton,1,3);
 
     QSpacerItem* buttonSpacer = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
-    layout->addItem(buttonSpacer,2,2);
+    layout->addItem(buttonSpacer,2,3);
 
     removeRecipeButton=new QPushButton(this);
     removeRecipeButton->setText("<-");
@@ -63,28 +64,31 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     shopRecipeListView->listView()->addColumn(i18n("Id"));
     shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
     shopRecipeListView->listView()->setSorting(-1);
+    shopRecipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
 
     QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(spacerToButtonBar,5,1);
 
     buttonBar=new QHBox(this,"buttonBar");
     layout->addMultiCellWidget(buttonBar,6,6,1,5);
-    buttonBar->setFixedHeight(30);
     buttonBar->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed);
 
     KIconLoader il;
     autoFillButton=new QPushButton(buttonBar,"dietWizardButton");
     autoFillButton->setText(i18n("Diet Wizard"));
     QPixmap pm=il.loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
+    autoFillButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
     okButton=new QPushButton(buttonBar,"okButton");
     okButton->setText(i18n("&OK"));
     pm=il.loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
+    okButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
     clearButton=new QPushButton(buttonBar,"clearButton");
     clearButton->setText(i18n("Clear"));
     clearButton->setMaximumWidth(100);
     pm=il.loadIcon("editclear", KIcon::NoGroup,16); clearButton->setIconSet(pm);
+    clearButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
 
 
