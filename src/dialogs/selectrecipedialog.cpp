@@ -308,8 +308,12 @@ void SelectRecipeDialog::exportRecipe()
     if(fileName != NULL){
       KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
       kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
+
+      delete kre;
     }
+    delete fd;
   //}
+
 }
 
 void SelectRecipeDialog::exportRecipeFromCat()
@@ -326,8 +330,11 @@ void SelectRecipeDialog::exportRecipeFromCat()
       }
       kre->categoryExporter(l);
       //kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
+      delete kre;
+      delete l;
     }
   //}
+  delete fd;
 }
 
 void SelectRecipeDialog::haveSelectedItems(){

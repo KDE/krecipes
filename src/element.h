@@ -9,7 +9,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
- 
+
 #ifndef ELEMENT_H
 #define ELEMENT_H
 #include <qstring.h>
@@ -20,7 +20,7 @@ class Element{
 public:
     Element();
     Element( const QString &name, int id = -1 );
-    Element(Element *el);
+    Element(Element &el);
 
     ~Element();
     QString name;

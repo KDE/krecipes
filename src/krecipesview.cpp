@@ -75,7 +75,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     start_logo->show();
     start_logo->raise();
 
-    
+
     // Read the database setup
 
     KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");

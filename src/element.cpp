@@ -23,10 +23,10 @@ Element::Element( const QString &_name, int _id ) :
 {
 }
 
-Element::Element(Element *el)
+Element::Element(Element &el)
 {
-id=el->id;
-name=el->name;
+id=el.id;
+name=el.name;
 }
 
 Element::~Element()

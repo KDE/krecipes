@@ -17,7 +17,7 @@
 
 class CategoryListItem:public QCheckListItem{
 public:
-	CategoryListItem(QListView* qlv, Element *el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox){ elStored=new Element(el);}
+	CategoryListItem(QListView* qlv, Element *el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox){ elStored=new Element(*el);}
 private:
 	Element *elStored;
 

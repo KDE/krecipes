@@ -15,9 +15,9 @@ UnitRatio::UnitRatio()
 ingID1=-1;ingID2=-1;ratio=-1;
 }
 
-UnitRatio::UnitRatio(UnitRatio *ur)
+UnitRatio::UnitRatio(UnitRatio &ur)
 {
-ingID1=ur->ingID1;ingID2=ur->ingID2;ratio=ur->ratio;
+ingID1=ur.ingID1;ingID2=ur.ingID2;ratio=ur.ratio;
 }
 
 UnitRatio::~UnitRatio()

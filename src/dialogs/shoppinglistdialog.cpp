@@ -34,12 +34,15 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
     recipeListView->addColumn(i18n("Id"));
     recipeListView->addColumn(i18n("Recipe Title"));
+
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
+
     addRecipeButton=new QPushButton(this);
     addRecipeButton->setText("->");
     addRecipeButton->setFixedSize(QSize(32,32));
     addRecipeButton->setFlat(true);
+    layout->addWidget(addRecipeButton,1,3);
 
     QSpacerItem* buttonSpacer = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(buttonSpacer,2,2);
@@ -49,7 +52,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     removeRecipeButton->setFixedSize(QSize(32,32));
     removeRecipeButton->setFlat(true);
     layout->addWidget(removeRecipeButton,3,3);
-    layout->addWidget(addRecipeButton,1,3);
+
 
     QSpacerItem* spacerFromButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacerFromButtons,1,4);

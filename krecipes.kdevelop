@@ -14,7 +14,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts>
       <part>KDevDebugger</part>
     </ignoreparts>
@@ -27,7 +27,7 @@
     </general>
     <run>
       <mainprogram>src/krecipes</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>executable</directoryradio>
@@ -42,7 +42,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
     </make>
   </kdevautoproject>
   <kdevfileview>
@@ -52,10 +52,11 @@
       <group pattern="*.png" name="Icons" />
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*" name="Others" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns/>
+      <hidepatterns></hidepatterns>
       <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>
@@ -101,13 +102,13 @@
   </kdevfilecreate>
   <kdevcvs>
     <cvsoptions>-f</cvsoptions>
-    <commitoptions/>
+    <commitoptions></commitoptions>
     <updateoptions>-dP</updateoptions>
-    <addoptions/>
+    <addoptions></addoptions>
     <removeoptions>-f</removeoptions>
     <diffoptions>-u3 -p</diffoptions>
-    <logoptions/>
-    <rshoptions/>
+    <logoptions></logoptions>
+    <rshoptions></rshoptions>
     <revertoptions>-C -d -P</revertoptions>
   </kdevcvs>
   <cppsupportpart>

@@ -22,20 +22,17 @@ IngredientList::~IngredientList()
 {
 }
 
-QPtrCollection::Item IngredientList::newItem( QPtrCollection::Item ingredient )
-{
-	Ingredient *ing = static_cast<Ingredient*>(ingredient);
-	return new Ingredient(*ing);
-}
 
 void IngredientList::add(Ingredient &ing)
 {
-this->append (&ing);
+Ingredient *newIng=new Ingredient(ing);
+this->append (newIng);
 }
 
 void IngredientList::addReverse(Ingredient &ing)
 {
-this->prepend (&ing);
+Ingredient *newIng=new Ingredient(ing);
+this->prepend (newIng);
 }
 
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2

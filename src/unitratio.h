@@ -17,7 +17,7 @@ class UnitRatio{
 public:
 
     UnitRatio();
-    UnitRatio(UnitRatio *ur);
+    UnitRatio(UnitRatio &ur);
     ~UnitRatio();
     int ingID1,ingID2;
     double ratio;

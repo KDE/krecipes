@@ -151,9 +151,14 @@ connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));
 
 }
 
-void ConversionTable::setUnitIDs(const IDList &idList)
+void ConversionTable::setUnitIDs(IDList &idList)
 {
-unitIDs=idList;
+unitIDs.clear();
+for (int *id=idList.first();id;id=idList.next())
+{
+int *newId=new int; *newId=*id;
+unitIDs.append(newId);
+}
 }
 
 void ConversionTable::setRatio(int ingID1, int ingID2, double ratio)

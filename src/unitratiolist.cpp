@@ -13,6 +13,7 @@
 
 UnitRatioList::UnitRatioList()
 {
+list.setAutoDelete(true);
 }
 
 

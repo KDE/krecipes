@@ -288,7 +288,6 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    if (recipeIterators.contains(row.data(3).toInt()))
 		    {
 		    RecipeList::Iterator it=recipeIterators[row.data(3).toInt()];
-
 		    //add the ingredient to the recipe
 		    (*it).ingList.add(ing);
 		    }

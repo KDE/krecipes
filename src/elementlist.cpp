@@ -11,6 +11,7 @@
 
 ElementList::ElementList()
 {
+setAutoDelete(true);
 }
 
 

@@ -28,7 +28,7 @@ public:
 	ConversionTable(QWidget* parent,int maxrows,int maxcols);
 	~ConversionTable();
 	void createNewItem(int r, int c, double amount);
-	void setUnitIDs(const IDList &idList);
+	void setUnitIDs(IDList &idList);
 	void setRatio(int ingID1, int ingID2, double ratio);
 	int getUnitID(int rc);
 	QString text(int r, int c ) const; //Reimplement, otherwise it won't work this way

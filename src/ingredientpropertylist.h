@@ -19,7 +19,7 @@
 class PropertyPtrList: public QPtrList <IngredientProperty>
 {
 public:
-PropertyPtrList(){};
+PropertyPtrList(){setAutoDelete(true);};
 ~PropertyPtrList(){};
 protected:
  virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((IngredientProperty*)item1)->id-((IngredientProperty*)item2)->id);};

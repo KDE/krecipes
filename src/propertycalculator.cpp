@@ -43,6 +43,7 @@ else
 
 void calculateProperties(Recipe& recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList)
 {
+recipePropertyList->clear();
 // Note that recipePropertyList is not attached to any ingredient. It's just the total of the recipe
 IngredientPropertyList ingredientPropertyList; // property list for each ingredient
 
