@@ -30,6 +30,7 @@
 class RecipeDB;
 class EditBox;
 class MealInput;
+class DishInput;
 class DishTitle;
 
 /**
@@ -98,18 +99,29 @@ private:
 		QToolButton *buttonPrev;
 
 		// Settings for the dish
+		QWidgetStack *dishStack;
+
+};
+
+class DishInput:public QWidget{
+Q_OBJECT
+
+public:
+	DishInput(QWidget *parent);
+	~DishInput();
+	// Methods
+	void setDishTitle(const QString & text);
+	void reload(ElementList &categoriesList,IngredientPropertyList &constraintList);
+
+private:
 		QHGroupBox *listBox;
 		DishTitle *dishTitle;
 		KListView *categoriesView;
 		KListView *constraintsView;
 		EditBox *constraintsEditBox1;
 		EditBox *constraintsEditBox2;
-	// Methods
-		void setDishTitle(const QString & text);
-
 private slots:
-	void insertConstraintsEditBoxes(QListViewItem* it);
-
+		void insertConstraintsEditBoxes(QListViewItem* it);
 };
 
 class DishTitle:public QWidget{

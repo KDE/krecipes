@@ -164,6 +164,23 @@ toolBar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Mi
 buttonPrev=new QToolButton(toolBar); buttonPrev->setText(i18n("Prev"));
 buttonNext=new QToolButton(toolBar); buttonNext->setText(i18n("Next"));
 
+}
+
+MealInput::~MealInput()
+{
+}
+
+void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
+{
+// FIXME add code to reload all the DishInput here
+}
+
+
+DishInput::DishInput(QWidget* parent):QWidget(parent)
+{
+QVBoxLayout *layout=new QVBoxLayout(this);
+layout->setSpacing(20);
+
 	//Horizontal Box to hold the KListView's
 listBox=new QHGroupBox(i18n("Dish Characteristics"),this);
 layout->addWidget(listBox);
@@ -192,14 +209,13 @@ constraintsEditBox2->hide();
 
 // Connect Signals & Slots
 connect(constraintsView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertConstraintsEditBoxes(QListViewItem*)));
-
 }
 
-MealInput::~MealInput()
+DishInput::~DishInput()
 {
 }
 
-void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
+void DishInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
 {
 categoriesView->clear();
 constraintsView->clear();
@@ -220,8 +236,7 @@ categoriesView->insertItem(it);
 
 }
 
-
-void MealInput::insertConstraintsEditBoxes(QListViewItem* it)
+void DishInput::insertConstraintsEditBoxes(QListViewItem* it)
 {
 
 QRect r;
@@ -249,9 +264,11 @@ constraintsEditBox1->show();
 constraintsEditBox2->show();
 }
 
+
 DishTitle::DishTitle(QWidget *parent):QWidget(parent)
 {
 }
+
 
 DishTitle::~DishTitle()
 {
