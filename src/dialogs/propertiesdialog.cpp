@@ -107,3 +107,8 @@ database->removeProperty(propertyID);
 
 
 }
+
+void PropertiesDialog::reload(void)
+{
+this->reloadPropertyList();
+}

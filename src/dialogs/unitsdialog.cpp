@@ -163,3 +163,8 @@ ratio.ingID2=conversionTable->getUnitID(c);
 ratio.ratio=value;
 database->saveUnitRatio(&ratio);
 }
+
+void UnitsDialog::reload(void)
+{
+this->reloadData();
+}

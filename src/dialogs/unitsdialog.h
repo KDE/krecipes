@@ -23,6 +23,7 @@ Q_OBJECT
 public:
     UnitsDialog(QWidget *parent, RecipeDB *db);
     ~UnitsDialog();
+    void reload (void);
 private:
 	// Widgets
 	KListView *unitListView;

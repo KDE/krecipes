@@ -33,8 +33,8 @@ Q_OBJECT
 
 public:
     IngredientsDialog(QWidget* parent, RecipeDB *db);
-
     ~IngredientsDialog();
+    void reload(void);
 
 private:
   // Widgets

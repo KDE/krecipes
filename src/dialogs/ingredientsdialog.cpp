@@ -435,3 +435,8 @@ else
   return (-1);
   }
 }
+
+void IngredientsDialog::reload(void)
+{
+this->reloadIngredientList();
+}

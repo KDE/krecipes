@@ -82,3 +82,7 @@ if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),2
 
 }
 
+void SelectRecipeDialog::reload()
+{
+this->loadRecipeList();
+}

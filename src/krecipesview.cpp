@@ -116,17 +116,21 @@ void KrecipesView::slotSetPanel(int w)
 {
 switch (w)
 {
-case 0: this->rightPanel->raiseWidget(selectPanel);
+case 0: selectPanel->reload(); // Reload data
+	this->rightPanel->raiseWidget(selectPanel);
 	break;
 case 1: this->rightPanel->raiseWidget(viewPanel);
 	break;
 case 2: this->rightPanel->raiseWidget(inputPanel);
 	break;
-case 3: this->rightPanel->raiseWidget(ingredientsPanel);
+case 3: ingredientsPanel->reload();// Reload data
+	this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
-case 4: this->rightPanel->raiseWidget(propertiesPanel);
+case 4: propertiesPanel->reload();
+	this->rightPanel->raiseWidget(propertiesPanel);
 	break;
-case 5: this->rightPanel->raiseWidget(unitsPanel);
+case 5: unitsPanel->reload(); // Reload data
+	this->rightPanel->raiseWidget(unitsPanel);
 	break;
 }
 
@@ -152,7 +156,7 @@ else if (action==1) // Edit
 else if (action==2) //Remove
 {
 database->removeRecipe(recipeID);
-selectPanel->loadRecipeList();
+selectPanel->reload();
 }
 }
 

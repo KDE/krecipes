@@ -33,7 +33,7 @@ public:
     ~SelectRecipeDialog();
 
   //Public Methods
-  void loadRecipeList(void);
+  void reload(void);
 private:
 
   // Widgets
@@ -46,6 +46,9 @@ private:
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
+
+  // Internal Methods
+  void loadRecipeList(void);
 
 
 signals:
