@@ -170,7 +170,8 @@ void DBListViewBase::createElement( QListViewItem *it )
 		QListViewItem *last_it = 0;
 
 		//start it out below the "Prev" item
-		if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
+		//### How does this work???
+		if ( firstChild() && firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
 			it->moveItem( firstChild()->nextSibling() );
 		}
 
