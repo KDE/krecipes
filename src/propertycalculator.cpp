@@ -45,21 +45,12 @@ void calculateProperties(Recipe* recipe,RecipeDB* database,IngredientPropertyLis
 {
 // Note that recipePropertyList is not attached to any ingredient. It's just the total of the recipe
 IngredientPropertyList ingredientPropertyList; // property list for each ingredient
-std::cerr<<"\n\nCalculating recipe properties:\n";
 
 for (Ingredient *ing=recipe->ingList.getFirst();ing;ing=recipe->ingList.getNext())
 	{
-	std::cerr<<"Ingredient amount:"<<ing->amount<<"\n";
 	database->loadProperties(&ingredientPropertyList,ing->ingredientID);
 	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing);
 	}
-
-for (IngredientProperty *prop=recipePropertyList->getFirst();prop;prop=recipePropertyList->getNext())
-	{
-
-	std::cerr<<QString("PropertyID: %1 Amount: %2 Units: %3 \n").arg(prop->id).arg(prop->amount).arg(prop->units);
-	}
-
 }
 
 void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
@@ -70,7 +61,6 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 	int pos=recipePropertyList->find(prop);
 	if (pos>=0) //Exists. Add to it
 	{
-	std::cerr<<"Adding to property: "<<prop->id<< "\n";
 	IngredientProperty *property=recipePropertyList->at(pos);
 	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
 
