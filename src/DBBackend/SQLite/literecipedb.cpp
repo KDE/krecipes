@@ -1965,11 +1965,11 @@ QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncat
 QString command;
 	if (ingredientID<0) // We're looking for units with that name all through the table, no specific ingredient
 	{
-	command=QString("SELECT id,name FROM units WHERE name='%1';").arg(search_str);
+	command=QString("SELECT id,name FROM units WHERE name LIKE '%1';").arg(search_str);
 	}
 	else // Look for units  with that name for the specified ingredient
 	{
-	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name='%2';").arg(ingredientID).arg(search_str);
+	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name LIKE '%2';").arg(ingredientID).arg(search_str);
 	}
 
 	QSQLiteResult unitsToLoad=database->executeQuery(command); // Run the query
@@ -1996,7 +1996,7 @@ int LiteRecipeDB::findExistingAuthorByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxAuthorNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM authors WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM authors WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2014,7 +2014,7 @@ int LiteRecipeDB::findExistingCategoryByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxCategoryNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM categories WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM categories WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2032,7 +2032,7 @@ int LiteRecipeDB::findExistingIngredientByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxIngredientNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM ingredients WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM ingredients WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2050,7 +2050,7 @@ int LiteRecipeDB::findExistingPrepByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxPrepMethodNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM prep_methods WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM prep_methods WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2068,7 +2068,7 @@ int LiteRecipeDB::findExistingPropertyByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxPropertyNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM ingredient_properties WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM ingredient_properties WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2086,7 +2086,7 @@ int LiteRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM units WHERE name='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM units WHERE name LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
@@ -2104,7 +2104,7 @@ int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxRecipeTitleLength())); //truncate to the maximum size db holds
 
-	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(search_str);
+	QString command=QString("SELECT id FROM recipes WHERE title LIKE '%1';").arg(search_str);
 	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 

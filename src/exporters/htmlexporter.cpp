@@ -274,7 +274,7 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 
 	//=======================PREP TIME======================//
 	QString preptime_html;
-	if ( !recipe.prepTime.isNull() )
+	if ( !recipe.prepTime.isNull() && recipe.prepTime.isValid() )
 		preptime_html = QString("<b>%1: </b>%2").arg(i18n("Preparation Time")).arg(recipe.prepTime.toString("h:mm"));
 	html_map.insert("prep_time",preptime_html);
 
