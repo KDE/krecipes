@@ -10,23 +10,27 @@
 
 #include "literecipedb.h"
 #include "kstandarddirs.h"
-#define DB_FILENAME "/tmp/try.krecdb"
+#define DB_FILENAME "krecipes.krecdb"
 
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
+
+// Define the DB file to be working on. Right now, only hardcoded
+
+QString  dbFile=locateLocal ("appdata",DB_FILENAME);
 
 std::cerr<<"Connecting to the SQLite database\n";
 	DBuser=user;DBpass=pass;DBhost=host;
 
         database= new QSQLiteDB();
-	database->open(DB_FILENAME);
-        if ( !database->open(DB_FILENAME) ) {
+	database->open(dbFile);
+        if ( !database->open(dbFile) ) {
 	     //Try to create the database
 	     std::cerr<<"Creating the SQLite database!\n";
 	     createDB();
 
 	     //Now Reopen the Database and exit if it fails
-	     if (!database->open(DB_FILENAME))
+	     if (!database->open(dbFile))
 		{
 		std::cerr<<"Retrying to open the db after creation\n";
 		std::cerr<<QString("Could not open DB. You may not have permissions. Exiting.\n").arg(user).latin1();
