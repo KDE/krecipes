@@ -445,8 +445,8 @@ Constraint constraint;
 	for (ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->firstChild());it;it=(ConstraintsListItem*)(it->nextSibling()))
 	{
 	constraint.id=it->propertyId();
-	constraint.min=it->maxVal();
-	constraint.max=it->minVal();
+	constraint.min=it->minVal();
+	constraint.max=it->maxVal();
 	constraints->add(constraint);
 	}
 }
@@ -454,7 +454,6 @@ Constraint constraint;
 void DishInput::setMinValue(double minValue)
 {
 this->constraintsEditBox1->hide();
-
 
 ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->selectedItem()); // Find selected property
 
