@@ -6,11 +6,9 @@
 # set the include path for X, qt and KDE
 INCLUDES         = $(all_includes)
 
-SUBDIRS=libqsqlite
-
-noinst_LTLIBRARIES=libkrecipesdbs.la
-libkrecipesdbs_la_SOURCES=recipedb.cpp recipedb.h
-libkrecipesdbs_la_METASOURCES=AUTO
+lib_LTLIBRARIES=libkrecqsqlite.la
+libkrecqsqlite_la_SOURCES=qsqlitedb.cpp  qsqlitedb.h  qsqliteresult.cpp  qsqliteresult.h
+libkrecqsqlite_la_METASOURCES=AUTO
 
 #the library search path.
-libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+libkrecqsqlite_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
