@@ -18,6 +18,7 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
   database(db),
   curr_offset(0),
   total(t),
+  bulk_load(false),
   lastElement(0)
 {
 	setSorting(-1);
@@ -64,14 +65,17 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 void DBListViewBase::reload()
 {
 	clear();
+	lastElement = 0;
+
+	bulk_load=true;
+	load(curr_limit,curr_offset);
+	bulk_load=false;
 
 	if ( curr_offset + curr_limit < total )
-		new QListViewItem(this,"Next >>");
-
-	load(curr_limit,curr_offset);
+		new QListViewItem(this,lastElement,"Next >>"); //FIXME: Note to self: i18n'ize this when I'm ready
 
 	if ( curr_offset != 0 )
-		new QListViewItem(this,"Prev <<");
+		new QListViewItem(this,"Prev <<"); //FIXME: Note to self: i18n'ize this when I'm ready
 	
 }
 
@@ -79,10 +83,42 @@ void DBListViewBase::createElement( QListViewItem *it )
 {
 	Q_ASSERT(it);
 
-	if ( lastElement )
-		it->moveItem(lastElement);
+	if ( bulk_load ) { //this can be much faster if we know the elements are already in order
+		if ( lastElement ) it->moveItem(lastElement);
+		lastElement = it;
+	}
+	else {
+		int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
-	lastElement = it;
+		QListViewItem *last_it = 0;
+		
+		//skip the "Next" item
+		for ( QListViewItem *search_it = firstChild()->nextSibling(); search_it; search_it = search_it->nextSibling() ) {
+			if ( search_it == lastElement->nextSibling() ) {
+				it->moveItem(lastElement);
+				lastElement = it;
+			}
+			else if ( it->text(c) < search_it->text(c) ) { //we assume the list is sorted, as it should stay
+				if ( last_it ) it->moveItem(last_it);
+				if ( search_it == it ) lastElement=it;
+				break;
+			}
+			last_it = search_it;
+		}
+	}
+}
+
+void DBListViewBase::removeElement( QListViewItem *it )
+{
+	if ( !it ) return;
+
+	if ( it == lastElement ) {
+		for ( QListViewItem *search_it = firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
+			if ( lastElement == search_it->nextSibling() )
+				lastElement = search_it; 
+		}
+	}
+	delete it;
 }
 
 void DBListViewBase::elementCreated()
@@ -97,9 +133,14 @@ void DBListViewBase::elementRemoved()
 
 bool DBListViewBase::handleElement( const QString &name )
 {
-	int c = sortColumn();
-	if ( name < firstChild()->text(c) || name >= lastElement->text(c) ) {
-		return false;
+	int c = 0;//FIXME: the column used should be variable (set by a subclass)
+
+	if ( childCount()-2 >= curr_limit ) {
+		if ( name < firstChild()->text(c) || name >= lastElement->text(c) ) {
+			return false;
+		}
+		else
+			return true;
 	}
 	else
 		return true;

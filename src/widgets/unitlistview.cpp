@@ -143,8 +143,7 @@ void StdUnitListView::createUnit( const Unit &unit )
 void StdUnitListView::removeUnit( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 2 );
-
-	delete item;
+	removeElement(item);
 }
 
 void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )

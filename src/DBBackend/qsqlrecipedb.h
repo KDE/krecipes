@@ -185,6 +185,7 @@ public:
 	Unit unitName( int ID );
 
 	int getCount( const QString &table_name );
+	int categoryTopLevelCount();
 
 	bool checkIntegrity( void );
 

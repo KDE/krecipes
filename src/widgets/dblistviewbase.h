@@ -31,6 +31,7 @@ protected:
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );
 	void createElement( QListViewItem * );
+	void removeElement( QListViewItem * );
 
 	RecipeDB *database;
 
@@ -46,6 +47,8 @@ private:
 	int curr_limit;
 	int curr_offset;
 	int total;
+	
+	bool bulk_load;
 
 	QListViewItem *lastElement;
 };

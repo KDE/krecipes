@@ -12,8 +12,12 @@
 
 #include "dependanciesdialog.h"
 #include "elementlist.h"
+
 #include <qlayout.h>
+
 #include <klocale.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* ingredientList, const ElementList* propertiesList ) : QDialog( parent, 0, true )
 {
@@ -30,7 +34,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
-	instructionsLabel->setText( i18n( "The following elements will have to be removed also, since currently they use the element you have chosen to be removed." ) );
+	instructionsLabel->setText( i18n( "<b>WARNING:</b> The following elements will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	layout->addWidget( instructionsLabel, 1, 1 );
 	QSpacerItem *instructions_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( instructions_spacer, 2, 1 );
@@ -40,7 +44,12 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 		if ( !( recipeList->isEmpty() ) ) {
 			recipeBox = new QGroupBox( 1, Qt::Vertical, i18n( "Recipes" ), this );
 			recipeListView = new KListView( recipeBox );
-			recipeListView->addColumn( i18n( "Id" ) );
+
+			KConfig * config = KGlobal::config();
+			config->setGroup( "Advanced" );
+			bool show_id = config->readBoolEntry( "ShowID", false );
+			recipeListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+
 			recipeListView->addColumn( i18n( "Recipe Title" ) );
 			recipeListView->setAllColumnsShowFocus( true );
 			layout->addWidget( recipeBox, row, col );
@@ -61,7 +70,12 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 		if ( !( ingredientList->isEmpty() ) ) {
 			ingredientBox = new QGroupBox( 1, Qt::Vertical, i18n( "Ingredients" ), this );
 			ingredientListView = new KListView( ingredientBox );
-			ingredientListView->addColumn( i18n( "Id" ) );
+
+			KConfig * config = KGlobal::config();
+			config->setGroup( "Advanced" );
+			bool show_id = config->readBoolEntry( "ShowID", false );
+			ingredientListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+
 			ingredientListView->addColumn( i18n( "Ingredient Name" ) );
 			layout->addWidget( ingredientBox, row, col );
 			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -79,7 +93,12 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 		if ( !( propertiesList->isEmpty() ) ) {
 			propertiesBox = new QGroupBox( 1, Qt::Vertical, i18n( "Properties" ), this );
 			propertiesListView = new KListView( propertiesBox );
-			propertiesListView->addColumn( i18n( "Id" ) );
+
+			KConfig * config = KGlobal::config();
+			config->setGroup( "Advanced" );
+			bool show_id = config->readBoolEntry( "ShowID", false );
+			propertiesListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+			
 			propertiesListView->addColumn( i18n( "Property" ) );
 			layout->addWidget( propertiesBox, row, col );
 			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );

@@ -1491,6 +1491,19 @@ int LiteRecipeDB::getCount( const QString &table_name )
 	return -1;
 }
 
+int LiteRecipeDB::categoryTopLevelCount()
+{
+	QSQLiteResult count = database->executeQuery( "SELECT COUNT(1) FROM categories WHERE parent_id='-1';" );
+	if ( count.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = count.first();
+		if ( !count.atEnd() ) { // Go to the first record (there should be only one anyway.
+			return row.data(0).toInt();
+		}
+	}
+
+	return -1;
+}
+
 bool LiteRecipeDB::checkIntegrity( void )
 {
 
@@ -1956,7 +1969,7 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 		limit_str = (limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset);
 	}
 
-	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name;"+limit_str;
+	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name"+limit_str+";";
 	QSQLiteResult categoryToLoad = database->executeQuery( command );
 	if ( categoryToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = categoryToLoad.first();

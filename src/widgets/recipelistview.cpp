@@ -14,6 +14,7 @@
 #include <qintdict.h>
 #include <qdatastream.h>
 
+#include <kdebug.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -109,7 +110,7 @@ void RecipeListView::load(int limit, int offset)
 		}
 	}
 	else {
-		CategoryListView::load(limit,offset);
+		StdCategoryListView::load(limit,offset);
 
 		// Now show the recipes
 		ElementList recipeList;
@@ -152,8 +153,11 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 {
 	if ( parent_id == -1 )
 		( void ) new RecipeListItem( this, recipe );
-	else
-		( void ) new RecipeListItem( items_map[ parent_id ], recipe );
+	else {
+		CategoryListItem *parent = items_map[ parent_id ];
+		if ( parent )
+			( void ) new RecipeListItem( parent, recipe );
+	}
 }
 
 void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &categories )

@@ -1189,7 +1189,7 @@ void QSqlRecipeDB::createNewUnit( const QString &unitName, const QString &unitPl
 	else if ( real_plural.isEmpty() )
 		real_plural = real_name;
 
-	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + real_name + "','" + real_plural + "');";
+	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + QString(escapeAndEncode( real_name )) + "','" + QString(escapeAndEncode( real_plural )) + "');";
 	QSqlQuery unitToCreate( command, database );
 
 	emit unitCreated( Unit( real_name, real_plural, lastInsertID() ) );
@@ -1462,6 +1462,16 @@ Unit QSqlRecipeDB::unitName( int ID )
 int QSqlRecipeDB::getCount( const QString &table_name )
 {
 	QSqlQuery count( "SELECT COUNT(1) FROM "+table_name, database );
+	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
+		return count.value( 0 ).toInt();
+	}
+
+	return -1;
+}
+
+int QSqlRecipeDB::categoryTopLevelCount()
+{
+	QSqlQuery count( "SELECT COUNT(1) FROM categories WHERE parent_id='-1'", database );
 	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
 		return count.value( 0 ).toInt();
 	}

@@ -134,7 +134,7 @@ void StdPrepMethodListView::createPrepMethod( const Element &ing )
 void StdPrepMethodListView::removePrepMethod( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-	delete item;
+	removeElement(item);
 }
 
 void StdPrepMethodListView::modPrepMethod( QListViewItem* i )

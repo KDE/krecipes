@@ -208,6 +208,8 @@ protected:
 	virtual void modifyCategory( int id, int parent_id );
 	virtual void mergeCategories( int id1, int id2 );
 
+	virtual void load(int limit, int offset);
+
 	QMap<int, CategoryListItem*> items_map;
 
 private slots:

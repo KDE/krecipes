@@ -128,6 +128,11 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 	}
 }
 
+int RecipeDB::categoryCount()
+{
+	return getCount("categories");
+}
+
 int RecipeDB::authorCount()
 {
 	return getCount("authors");

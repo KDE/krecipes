@@ -185,7 +185,7 @@ void StdIngredientListView::createIngredient( const Element &ing )
 void StdIngredientListView::removeIngredient( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-	delete item;
+	removeElement(item);
 }
 
 void StdIngredientListView::modIngredient( QListViewItem* i )
@@ -251,7 +251,7 @@ void IngredientCheckListView::createIngredient( const Element &ing )
 void IngredientCheckListView::removeIngredient( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-	delete item;
+	removeElement(item);
 }
 
 void IngredientCheckListView::reload()

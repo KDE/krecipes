@@ -133,7 +133,7 @@ void CategoryListItem::setText( int column, const QString &text )
 
 
 
-CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, 100 )
+CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() )
 {
 	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -216,6 +216,13 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 StdCategoryListView::~StdCategoryListView()
 {
 	delete clipboard_item;
+}
+
+void StdCategoryListView::load(int limit, int offset)
+{
+	items_map.clear();
+
+	CategoryListView::load(limit,offset);
 }
 
 void StdCategoryListView::preparePopup()
@@ -341,7 +348,7 @@ void StdCategoryListView::removeCategory( int id )
 	//Q_ASSERT(item);
 
 	items_map.remove( id );
-	delete item;
+	removeElement(item);
 }
 
 void StdCategoryListView::createCategory( const Element &category, int parent_id )
@@ -468,7 +475,7 @@ void CategoryCheckListView::removeCategory( int id )
 	QListViewItem * item = items_map[ id ];
 
 	items_map.remove( id );
-	delete item;
+	removeElement(item);
 }
 
 void CategoryCheckListView::createCategory( const Element &category, int parent_id )

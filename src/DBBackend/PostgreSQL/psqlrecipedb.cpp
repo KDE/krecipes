@@ -66,7 +66,7 @@ void PSqlRecipeDB::createTable( QString tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
+		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, plural CHARACTER VARYING );";
 
 	else if ( tableName == "prep_methods" )
 		commands << "CREATE TABLE prep_methods (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";

@@ -128,8 +128,7 @@ void StdAuthorListView::createAuthor( const Element &author )
 void StdAuthorListView::removeAuthor( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-
-	delete item;
+	removeElement(item);
 }
 
 void StdAuthorListView::modAuthor( QListViewItem* i )
@@ -229,7 +228,7 @@ void AuthorCheckListView::createAuthor( const Element &author )
 void AuthorCheckListView::removeAuthor( int id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-	delete item;
+	removeElement(item);
 }
 
 void AuthorCheckListView::reload()
