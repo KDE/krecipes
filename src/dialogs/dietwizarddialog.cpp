@@ -539,7 +539,7 @@ calculateProperties(rec,database,&properties); // FIXME: this function accesses 
 
 // Check if the properties are within the constraints
 ConstraintList constraints; loadConstraints(meal,dish,&constraints); //load the constraints
-bool withinLimits=false;// FIXME: check the limits
+bool withinLimits=checkLimits(properties,constraints);
 
 return (withinLimits);
 }
@@ -549,4 +549,18 @@ void DietWizardDialog::loadConstraints(int meal,int dish,ConstraintList *constra
 MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
 DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
 dishInput->loadConstraints(constraints); //Load the constraints form the KListView
+}
+
+bool DietWizardDialog::checkLimits(IngredientPropertyList &properties,ConstraintList &constraints)
+{
+for (Constraint* ct=constraints.getFirst();ct; ct=constraints.getNext())
+	{
+	IngredientProperty* ip=properties.at(properties.find(ct->id));
+	if (ip)
+		{
+		if ((ip->amount>ct->max)||(ip->amount<ct->min)) return false;
+		}
+	else return false;
+	}
+return true;
 }

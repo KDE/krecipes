@@ -72,6 +72,7 @@ private:
 
 	//Methods
 	bool checkConstraints(Recipe &rec,int meal,int dish);
+	bool checkLimits(IngredientPropertyList &properties,ConstraintList &constraints);
 	void loadConstraints(int meal,int dish,ConstraintList *constraints);
 	void newTab(const QString &name);
 
