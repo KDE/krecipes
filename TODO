@@ -8,6 +8,7 @@ MAJOR FEATURES:
 	*Command-line interface
 
 CONVENIENCES/MINOR FEATURES:
+	*E-mail recipe(s) option (using kapp->invokeMailer())
 	*Show properties in columns
 	*Select which properties to show
 	*Give option to import recipe formats by pasting the recipe text into a widget
