@@ -33,7 +33,7 @@ DietViewDialog::DietViewDialog(QWidget *parent, const RecipeList &recipeList, in
  dietView=new KHTMLPart(htmlBox);
  	// Buttons
  KIconLoader il;
- buttonBox=new QHBox(htmlBox); layout->addWidget(buttonBox,1,2);
+ buttonBox=new QHBox(htmlBox);
  okButton=new QPushButton(il.loadIconSet("ok",KIcon::Small),i18n("Create &Shopping List"),buttonBox);
  printButton=new QPushButton(il.loadIconSet("fileprint",KIcon::Small),i18n("&Print"),buttonBox);
  cancelButton=new QPushButton(il.loadIconSet("cancel",KIcon::Small),i18n("&Cancel"),buttonBox);
