@@ -20,7 +20,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <iostream>
 IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
 	// Initialize internal variables
@@ -139,19 +138,20 @@ void IngredientMatcherDialog::findRecipes(void)
 	int missingNoAllowed;
 	
 	if (missingNumberCombo->currentItem()!=4) missingNoAllowed=missingNumberCombo->currentText().toInt(); //"1..3"
-	else missingNoAllowed=-1; // "Any"
+	else  // "Any"
+		{
+		missingNoAllowed=0;
+		for (nit=missingNumbers.begin();nit!=missingNumbers.end();++nit) if ((*nit)>missingNoAllowed) missingNoAllowed=(*nit);
+		}
 	
-	std::cerr<<"missingNoAllowed: "<<missingNoAllowed<<"\n";
 	
 	for (int missingNo=1; missingNo<=missingNoAllowed; missingNo++)
 	{
-		std::cerr<<"missingNo: "<<missingNo<<"\n";
 		nit=missingNumbers.begin();
 		bool titleShownYet=false;
 		
 		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit)
 		{
-		std::cerr<<"*nit: "<<*nit<<"missingNo:"<<missingNo<<"\n";
 			if ((*nit)==missingNo) 
 				{	
 					if (!titleShownYet)
@@ -163,6 +163,8 @@ void IngredientMatcherDialog::findRecipes(void)
 				}
 		}
 	}
+	
+	
 	
 }
 
