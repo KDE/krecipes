@@ -247,7 +247,7 @@ rlist->clear();
 
 QString command;
 
-command=QString("SELECT id,title,persons FROM recipes");
+command=QString("SELECT id,title,persons FROM recipes;");
 
 QSQLiteResult recipesToLoad = database->executeQuery(command);
 
