@@ -74,15 +74,22 @@ QSQLiteResult recipeToLoad = database->executeQuery(command);
 if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
         {
                 QSQLiteResultRow row = recipeToLoad.first();
-
+		if (!recipeToLoad.atEnd())
+		{
 		recipe->title=unescapeAndDecode(row.data(0));
 		recipe->instructions=unescapeAndDecode(row.data(1));
 		recipe->persons=row.data(2).toInt();
 		recipe->recipeID=recipeID;
+		}
+		else
+		{
+		return; // Recipe doesn't exist
+		}
         }
         else
         {
                 std::cerr<<recipeToLoad.getError();
+		return; // There were problems while loading the recipe
         }
 
 
@@ -116,6 +123,8 @@ recipeToLoad = database->executeQuery(command);
 
  if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
  	QSQLiteResultRow row = recipeToLoad.first();
+	if (!recipeToLoad.atEnd())
+	{
    	bool ok; QString photoString=row.data(0,&ok);
 
 	// Decode the photo
@@ -126,6 +135,7 @@ recipeToLoad = database->executeQuery(command);
 
 	if (ok) recipe->photo.loadFromData( photoArray,photoString.length());
      	// picture will now have a ready-to-use image
+	}
 
   }
 
