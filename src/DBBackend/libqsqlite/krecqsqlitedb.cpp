@@ -81,14 +81,14 @@ int QSQLiteDB::call_back(void* result, int argc, char** argv, char** columns)
 {
 	QSQLiteResult *res = (QSQLiteResult*)result;
 
-    QMap<QString, QString> tableString;
-    QMap<int, QString> tableInt;
+    QMap<QString, QCString> tableString;
+    QMap<int, QCString> tableInt;
 
 	for (int i = 0; i < argc; i++ )
 	{
-		tableInt.insert(i, QString::fromUtf8(argv[i]));
-		tableString.insert(QString::fromUtf8(columns[i]),
-	                       QString::fromUtf8(argv[i]));
+		tableInt.insert(i, argv[i]);
+		tableString.insert(columns[i],
+	                       argv[i]);
 	}
 
     QSQLiteResultRow row(tableString, tableInt);

@@ -53,13 +53,7 @@ public:
 signals:
 	void recipeSelected(int id, int action);
 	void recipesSelected(const QValueList<int> &ids, int action);
-		
-	/** When this class is unable to sync the list view with the database after
-	  * certain operations, we emit this signal, allowing the appropriate class
-	  * to update the list view.
-	  */
-	void reloadNeeded();
-	
+
 public slots:
 	void exec( ItemType type, const QPoint &p );
 	void showPopup( KListView *, QListViewItem *, const QPoint & );

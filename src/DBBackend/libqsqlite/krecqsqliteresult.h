@@ -35,13 +35,13 @@ public:
 	 * TableString is used to establish the relations
 	 * between the column name and the real item
 	 */
-	typedef QMap<QString, QString> TableString;
+	typedef QMap<QString, QCString> TableString;
 
 	/**
 	 * TableInt is used to establish a relation between a
 	 * position of a column and the row value
 	 */
-	typedef QMap<int, QString> TableInt;
+	typedef QMap<int, QCString> TableInt;
 
 	/**
 	 * Default c'tor. It has a TableString and a TableInt

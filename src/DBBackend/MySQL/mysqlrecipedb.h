@@ -16,7 +16,7 @@
 
 #define DB_DRIVER "QMYSQL3"
 #define DEFAULT_DB_NAME "Krecipes"
-#include <mysql.h>
+
 #include <qobject.h>
 #include <qsqldatabase.h>
 #include <qimage.h>

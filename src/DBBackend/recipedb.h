@@ -79,6 +79,7 @@ signals:
 
 	void recipeCreated( const Element &, const ElementList &categories );
 	void recipeRemoved( int id );
+	void recipeRemoved( int id, int cat_id );
 	void recipeModified( const Element &, const ElementList &categories );
 
 	// Public methods

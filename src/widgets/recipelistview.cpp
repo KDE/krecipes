@@ -23,6 +23,7 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 {
 	connect(database,SIGNAL(recipeCreated(const Element &,const ElementList &)),SLOT(createRecipe(const Element &,const ElementList &)));
 	connect(database,SIGNAL(recipeRemoved(int)),SLOT(removeRecipe(int)));
+	connect(database,SIGNAL(recipeRemoved(int,int)),SLOT(removeRecipe(int,int)));
 	connect(database,SIGNAL(recipeModified(const Element &,const ElementList &)),SLOT(modifyRecipe(const Element &,const ElementList &)));
 
 	setColumnText(0,"Recipe");
@@ -129,6 +130,60 @@ void RecipeListView::removeRecipe( int id )
 			RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
 			if ( recipe_it->recipeID() == id )
 				delete recipe_it;
+		}
+		++iterator;
+	}
+}
+
+void RecipeListView::removeRecipe( int recipe_id, int cat_id )
+{
+	QListViewItem *item = items_map[cat_id];
+
+	//find out if this is the only category the recipe belongs to
+	int finds = 0;
+	QListViewItemIterator iterator(this);
+	while(iterator.current())
+	{
+		if ( iterator.current()->rtti() == 1000 ) {
+			RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
+			
+			if ( recipe_it->recipeID() == recipe_id ) {
+				if ( finds > 1 ) break;
+				finds++;
+			}
+		}
+		++iterator;
+	}
+
+	//do this to only iterate over children of 'item'
+	QListViewItem *pEndItem = NULL;
+	QListViewItem *pStartItem = item;
+	do
+	{
+		if(pStartItem->nextSibling())
+			pEndItem = pStartItem->nextSibling();
+		else
+			pStartItem = pStartItem->parent();
+	}
+	while(pStartItem && !pEndItem);
+	
+	iterator = QListViewItemIterator(item);
+	while(iterator.current() != pEndItem)
+	{
+		if ( iterator.current()->rtti() == 1000 ) {
+			RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
+			
+			if ( recipe_it->recipeID() == recipe_id ) {
+				if ( finds > 1 ) {
+					delete recipe_it;
+				}
+				else {
+					//move this item to the root
+					recipe_it->parent()->takeItem(recipe_it);
+					insertItem(recipe_it);
+				}
+				break;
+			}
 		}
 		++iterator;
 	}

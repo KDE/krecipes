@@ -171,8 +171,6 @@ void RecipeActionsHandler::removeFromCategory()
 
 			CategoryListItem *cat_it = (CategoryListItem*)it->parent();
 			database->removeRecipeFromCategory(recipe_id, cat_it->categoryId());
-		
-			emit reloadNeeded();
 		}
 	}
 }

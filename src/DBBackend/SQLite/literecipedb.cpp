@@ -636,10 +636,12 @@ database->executeQuery( command);
 emit recipeRemoved(id);
 }
 
-void LiteRecipeDB::removeRecipeFromCategory(int ingredientID, int categoryID){
+void LiteRecipeDB::removeRecipeFromCategory(int recipeID, int categoryID){
 QString command;
-command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;").arg(ingredientID).arg(categoryID);
+command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;").arg(recipeID).arg(categoryID);
 database->executeQuery( command);
+
+emit recipeRemoved(recipeID,categoryID);
 }
 
 void LiteRecipeDB::createNewIngredient(const QString &ingredientName)
@@ -1315,7 +1317,7 @@ return(s_escaped);
 
 QString LiteRecipeDB::unescapeAndDecode(const QString &s)
 {
-QString s_escaped=s; //libqsqlite already took care of decoding
+QString s_escaped=QString::fromUtf8(s.latin1());
 s_escaped.replace(";@",";");
 return (s_escaped); // Use unicode encoding
 }

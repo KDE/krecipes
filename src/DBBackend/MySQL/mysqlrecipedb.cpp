@@ -75,20 +75,11 @@ if (dbOK) database->close();
 
 void MySQLRecipeDB::createDB()
 {
-
-MYSQL* mysqlDB;
-mysqlDB=mysql_init(NULL);
-mysql_real_connect(mysqlDB,DBhost.latin1(),DBuser.latin1(),DBpass.latin1(),NULL,0,NULL,0);
-
 QString command;
 
 // Create the Database (Note: needs permissions)
 command=QString("CREATE DATABASE %1;").arg(database->databaseName());
-mysql_query(mysqlDB,command.latin1());
-
-// Close the Database
-mysql_close(mysqlDB);
-
+QSqlQuery query(command,database);
 }
 
 void MySQLRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list, bool withNames)
@@ -180,30 +171,11 @@ recipeToLoad.exec( command);
             }
 
 
-//Load the Image (Using mysql, no qsql here due to problems that I could have with BLOB)
-// (I'll try later with qsql)
-
-MYSQL* mysqlDB;
-mysqlDB=mysql_init(NULL);
-mysql_real_connect(mysqlDB,DBhost.latin1(),DBuser.latin1(),DBpass.latin1(),NULL,0,NULL,0);
-
-command=QString("USE %1").arg(database->databaseName());
-
-int size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+//Load the Image
 command=QString("SELECT photo FROM recipes WHERE id=%1").arg(recipeID); //Be careful: No semicolon here at the end
-
-
-size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
-
-MYSQL_RES *res_set = mysql_store_result (mysqlDB);
-MYSQL_ROW row;
-if((row = mysql_fetch_row (res_set)) != NULL) {
-   unsigned long *lengths = mysql_fetch_lengths( res_set );
-   if(row[0])
-     recipe->photo.loadFromData( (unsigned char *)row[0], lengths[0] );
-     // picture will now have a ready-to-use image
-     }
-
+recipeToLoad.exec(command);
+if (recipeToLoad.isActive() && recipeToLoad.first())
+     recipe->photo.loadFromData( recipeToLoad.value(0).toByteArray() );
 
 //Load the category list
 command=QString("SELECT cl.category_id,c.name FROM category_list cl, categories c WHERE recipe_id=%1 AND cl.category_id=c.id;").arg(recipeID);
@@ -231,7 +203,6 @@ recipeToLoad.exec( command);
                 }
             }
 
-mysql_close(mysqlDB);
 }
 
 /*
@@ -448,14 +419,9 @@ bool newRecipe; newRecipe=(recipe->recipeID==-1);
 // First check if the recipe ID is set, if so, update (not create)
 // Be carefull, first check if the recipe hasn't been deleted while changing.
 
-MYSQL* mysqlDB;
-mysqlDB=mysql_init(NULL);
-mysql_real_connect(mysqlDB,DBhost.latin1(),DBuser.latin1(),DBpass.latin1(),NULL,0,NULL,0);
+QSqlQuery recipeToSave(QString::null,database);
 
 QString command;
-
-command=QString("USE %1").arg(database->databaseName());
-int size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
 
 if (newRecipe) {command=QString("INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL);") // Id is autoincremented
 		.arg(escapeAndEncode(recipe->title))
@@ -468,13 +434,13 @@ else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%
 		.arg(escapeAndEncode(recipe->instructions))
 		.arg(recipe->recipeID);
 		}
-size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+recipeToSave.exec(command);
 
 // If it's a new recipe, identify the ID that was given to the recipe and store in the Recipe itself
 int recipeID;
 if (newRecipe)
 {
-	recipeID=mysql_insert_id(mysqlDB);
+	recipeID=lastInsertID();
 	recipe->recipeID=recipeID;
 }
 recipeID=recipe->recipeID;
@@ -485,35 +451,26 @@ if ( !recipe->photo.isNull() )
 recipe->photo.save(".krecipe_photo.jpg", "JPEG");
 QFileInfo fi(".krecipe_photo.jpg");
 
- char *from, *to, *p;
- if((from = (char *)malloc( fi.size()+1024 )) != NULL) {
-   if((to = (char *)malloc( (fi.size()*2)+2048 )) != NULL) {
-     memset(to, 0, (fi.size()*2)+2048);
-     QFile f(".krecipe_photo.jpg");
-     if(f.open( IO_ReadOnly )) {
-       f.readBlock( from, fi.size() );
-         f.close();
-         strcpy(to, "UPDATE recipes SET photo='");
-       p = &to[strlen(to)];
-       mysql_real_escape_string( mysqlDB, p, from, fi.size() );
-       strcat(to, "'");
-       QString st; st=to; st+= " WHERE id="; st+=QString::number(recipeID); // Note, we assume this ID exists (created or existing)!
-         size=mysql_real_query( mysqlDB, st.latin1(), st.length()+1);
+QFile f(".krecipe_photo.jpg");
+QByteArray photoArray;
+     if(f.open( IO_ReadOnly ))
+     {
+     photoArray = f.readAll();
+     f.close();
+     }
+recipeToSave.prepare("UPDATE recipes SET photo=? WHERE id="+QString::number(recipeID));
+recipeToSave.addBindValue (photoArray); //this handles the binary encoding
+recipeToSave.exec();
 
      }
-     free(to);
-   }
-   free(from);
- }
  //_unlink(".krecipe_photo.jpg");
-}
 
 
  // Save the ingredient list (first delete if we are updating)
 
- command=QString("DELETE FROM ingredient_list WHERE recipe_id=%1;")
+command=QString("DELETE FROM ingredient_list WHERE recipe_id=%1;")
  	.arg(recipeID);
- size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+recipeToSave.exec(command);
 
 int order_index=0;
 for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
@@ -526,13 +483,13 @@ for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it !=
 	.arg((*ing_it).unitID)
 	.arg((*ing_it).prepMethodID)
 	.arg(order_index);
-	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+	recipeToSave.exec(command);
 	}
 
 // Save the category list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
-size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
+recipeToSave.exec(command);
 
 ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --cat_it;
@@ -541,7 +498,7 @@ for ( unsigned int i = 0; i < recipe->categoryList.count(); i++ )
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
 	.arg((*cat_it).id);
-	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+	recipeToSave.exec(command);
 
 	--cat_it;
 }
@@ -550,13 +507,13 @@ for ( unsigned int i = 0; i < recipe->categoryList.count(); i++ )
 
 command=QString("INSERT INTO category_list VALUES (%1,-1);")
 	.arg(recipeID);
-size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+recipeToSave.exec(command);
 
 
 // Save the author list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
 	.arg(recipeID);
-size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
+recipeToSave.exec(command);
 
 ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --author_it;
@@ -565,14 +522,10 @@ for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 	command=QString("INSERT INTO author_list VALUES (%1,%2);")
 	.arg(recipeID)
 	.arg((*author_it).id);
-	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+	recipeToSave.exec(command);
 
 	--author_it;
 }
-
-
-
-mysql_close(mysqlDB);
 
 if (newRecipe)
 	emit recipeCreated(Element(recipe->title,recipeID),recipe->categoryList);
@@ -642,10 +595,12 @@ recipeToRemove.exec( command);
 emit recipeRemoved(id);
 }
 
-void MySQLRecipeDB::removeRecipeFromCategory(int ingredientID, int categoryID){
+void MySQLRecipeDB::removeRecipeFromCategory(int recipeID, int categoryID){
 QString command;
-command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;").arg(ingredientID).arg(categoryID);
+command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;").arg(recipeID).arg(categoryID);
 QSqlQuery recipeToRemove( command,database);
+
+emit recipeRemoved(recipeID,categoryID);
 }
 
 void MySQLRecipeDB::createNewIngredient(const QString &ingredientName)

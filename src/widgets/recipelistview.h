@@ -73,6 +73,7 @@ protected slots:
 	virtual void createRecipe(const Element &recipe, const ElementList &categories );
 	virtual void modifyRecipe(const Element &recipe, const ElementList &categories );
 	virtual void removeRecipe(int);
+	virtual void removeRecipe(int,int);
 
 protected:
 	virtual void removeCategory(int id);
