@@ -71,16 +71,17 @@ calculateProperties(loadedRecipe,database,properties);
   int width = temp_photo_geometry.width();
   int height = temp_photo_geometry.height();
 
-  if (!loadedRecipe->photo.isNull()){
-      if( (loadedRecipe->photo.width() > width || loadedRecipe->photo.height() > height) || (loadedRecipe->photo.width() < width && loadedRecipe->photo.height() < height) ){
+  if (!loadedRecipe->photo.isNull())
+  {
+      /*if( (loadedRecipe->photo.width() > width || loadedRecipe->photo.height() > height) || (loadedRecipe->photo.width() < width || loadedRecipe->photo.height() < height) ){*/
         QImage image = loadedRecipe->photo.convertToImage();
 	QPixmap pm = image.smoothScale(width, height, QImage::ScaleMin);
         pm.save("/tmp/krecipes_photo.png","PNG");
 	temp_photo_geometry = QRect(QPoint(temp_photo_geometry.topLeft()),pm.size()); //preserve aspect ratio
-      }
+      /*}
       else{
         loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
-      }
+      }*/
   }
   else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
 
@@ -111,15 +112,16 @@ else
 {
 // Format the loaded recipe as HTML code
 
-// title (not shown)
 recipeHTML += "<html><head>";
+
+// title (not shown)
 recipeHTML += QString("<title>%1</title>").arg( loadedRecipe->title);
 
 recipeHTML += "<STYLE type=\"text/css\">\n";
 
 KConfig *config = kapp->config();
 config->setGroup("BackgroundSetup");
-QColor default_color = backgroundColor();
+QColor default_color = QColor(255,255,255);
 QColor color = config->readColorEntry( "BackgroundColor", &default_color );
 recipeHTML += "BODY\n";
 recipeHTML += "{\n";
@@ -257,7 +259,7 @@ void RecipeViewDialog::createBlocks()
 	{
         	++author_it;
 
-		if (authors_html != QString::null) authors_html += ",";
+		if (authors_html != QString::null) authors_html += ", ";
 		authors_html += author_el->name;
 	}
 	new_element = new DivElement( "authors", authors_html );
@@ -284,7 +286,7 @@ void RecipeViewDialog::createBlocks()
 	{
         	++cat_it;
 
-		if (categories_html != QString::null) categories_html += ",";
+		if (categories_html != QString::null) categories_html += ", ";
 		categories_html += cat_el->name;
 	}
 	new_element = new DivElement( "categories", categories_html );
@@ -423,12 +425,12 @@ void RecipeViewDialog::readAlignmentProperties( DivElement *element, KConfig *co
 	if ( alignment & Qt::AlignBottom )
 		element->addProperty( "vertical-align: bottom;" );
 	if ( alignment & Qt::AlignVCenter )
-		element->addProperty( "vertical-align: center;" );
+		element->addProperty( "vertical-align: middle;" );
 }
 
 void RecipeViewDialog::readBgColorProperties( DivElement *element, KConfig *config )
 {
-	QColor default_color = backgroundColor();
+	QColor default_color = QColor(255,255,255);
 
 	QColor color = config->readColorEntry( "BackgroundColor", &default_color );
 	element->addProperty( QString("background-color: %1;").arg(color.name()) );
@@ -464,8 +466,6 @@ void RecipeViewDialog::readVisibilityProperties( DivElement *element, KConfig *c
 
 void RecipeViewDialog::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect *top_geom )
 {
-	geometries.find( top_geom );
-
 	for ( QRect *item = geometries.next(); item; item = geometries.next() )
 	{
 		int height_offset = 0;
@@ -479,7 +479,7 @@ void RecipeViewDialog::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QR
 		}
 	}
 
-	geometries.find( top_geom ); //set it back to where is was
+	geometries.findRef( top_geom ); //set it back to where is was
 }
 
 
