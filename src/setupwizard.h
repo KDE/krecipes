@@ -89,18 +89,20 @@ class ServerSetupPage:public QWidget{
 public:
 	// Methods
 	ServerSetupPage(QWidget *parent);
-	QString server(void);
 	QString user(void);
 	QString password(void);
 	QString dbName(void);
+	QString server(void);
+	QString client(void);
 	void getServerInfo(QString &host,QString &client,QString &user,QString &pass);
 private:
 	// Widgets
 	QLabel *logo;
-	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+	KLineEdit *serverEdit;
+	KLineEdit *clientEdit;
 };
 
 

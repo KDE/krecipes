@@ -173,33 +173,21 @@ layout->addItem(spacer_left,1,0);
 
 
 
-QPixmap networkSetupPixmap (locate("data", "krecipes/pics/network.png"));
+QPixmap serverSetupPixmap (locate("data", "krecipes/pics/network.png"));
 logo=new QLabel(this);
-logo->setPixmap(networkSetupPixmap);
+logo->setPixmap(serverSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addMultiCellWidget(logo,1,8,1,1);
+layout->addMultiCellWidget(logo,1,10,1,1);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_from_image,1,2);
 
-QLabel* serverText=new QLabel(i18n("Server:"), this);
-serverText->setFixedSize(QSize(100,20));
-serverText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(serverText,1,3);
-
-serverEdit=new KLineEdit(this);
-serverEdit->setFixedSize(QSize(120,20));
-serverEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-serverEdit->setText("localhost");
-layout->addWidget(serverEdit,1,4);
-
-QSpacerItem* spacerRow1 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow1,2,3 );
+// Username Input
 
 QLabel* usernameText=new QLabel(i18n("Username:"), this);
 usernameText->setFixedSize(QSize(100,20));
 usernameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(usernameText,3,3);
+layout->addWidget(usernameText,1,3);
 
 usernameEdit=new KLineEdit(this);
 usernameEdit->setFixedSize(QSize(120,20));
@@ -209,40 +197,86 @@ usernameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	userID=getuid();user=getpwuid (userID); username=user->pw_name;
 
 usernameEdit->setText(username);
-layout->addWidget(usernameEdit,3,4);
+layout->addWidget(usernameEdit,1,4);
 
-QSpacerItem* spacerRow2 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow2,4,3 );
+
+// Spacer 1
+
+QSpacerItem* spacerRow1 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( spacerRow1,2,3 );
+
+
+// Password
 
 QLabel* passwordText=new QLabel(i18n("Password:"), this);
 passwordText->setFixedSize(QSize(100,20));
 passwordText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(passwordText,5,3);
+layout->addWidget(passwordText,3,3);
 
 passwordEdit=new KLineEdit(this);
 passwordEdit->setEchoMode(QLineEdit::Password);
 passwordEdit->setFixedSize(QSize(120,20));
 passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(passwordEdit,5,4);
+layout->addWidget(passwordEdit,3,4);
 
-QSpacerItem* spacerRow3 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow3, 6,3 );
+// Spacer 2
+QSpacerItem* spacerRow2 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( spacerRow2,4,3 );
+
+
+
+// DB Name
 
 QLabel* dbNameText=new QLabel(i18n("Database Name:"), this);
 dbNameText->setFixedSize(QSize(100,20));
 dbNameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(dbNameText,7,3);
+layout->addWidget(dbNameText,5,3);
 
 dbNameEdit=new KLineEdit(this);
 dbNameEdit->setFixedSize(QSize(120,20));
 dbNameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 dbNameEdit->setText("Krecipes");
-layout->addWidget(dbNameEdit,7,4);
+layout->addWidget(dbNameEdit,5,4);
 
-QSpacerItem* spacerRow4 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+
+// Spacer 3
+QSpacerItem* spacerRow3 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( spacerRow3, 6,3 );
+
+// Server
+QLabel* serverText=new QLabel(i18n("Server:"), this);
+serverText->setFixedSize(QSize(100,20));
+serverText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addWidget(serverText,7,3);
+
+serverEdit=new KLineEdit(this);
+serverEdit->setFixedSize(QSize(120,20));
+serverEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+serverEdit->setText("localhost");
+layout->addWidget(serverEdit,7,4);
+
+// Spacer 4
+QSpacerItem* spacerRow4 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed);
 layout->addItem( spacerRow4, 8,3 );
+
+// Client
+QLabel* clientText=new QLabel(i18n("Client:"), this);
+clientText->setFixedSize(QSize(100,20));
+clientText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addWidget(clientText,9,3);
+
+clientEdit=new KLineEdit(this);
+clientEdit->setFixedSize(QSize(120,20));
+clientEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+clientEdit->setText("localhost");
+layout->addWidget(clientEdit,9,4);
+
+// Spacer 5
+QSpacerItem* spacerRow5 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+layout->addItem( spacerRow5, 10,3 );
+
 QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-layout->addItem( spacerRight, 1,5 );
+layout->addItem( spacerRight, 10,5 );
 }
 
 QString ServerSetupPage::server(void)
