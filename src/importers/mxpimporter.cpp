@@ -115,8 +115,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 	{
 		QString prep_time = current.mid( current.find(":",current.find("preparation time",0,FALSE)) + 1,
 		  current.length() ).stripWhiteSpace();
-		recipe.prepTime = QTime::fromString(prep_time);
-		//kdDebug()<<"Found preparation time: "<<prep_time<<endl;
+		recipe.prepTime = QTime(prep_time.section(':',0,0).toInt(),prep_time.section(':',1,1).toInt());
+		kdDebug()<<"Found preparation time: "<<prep_time<<endl;
 	}
 	else
 	{
