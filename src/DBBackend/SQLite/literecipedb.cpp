@@ -986,7 +986,7 @@ void LiteRecipeDB::createTable(QString tableName)
 
 QString command;
 
-if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
+if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
 else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
@@ -1002,13 +1002,13 @@ else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_pr
 
 else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") command=QString("CREATE TABLE categories (id int(11) NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="categories") command=QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
-else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL);";
+else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);";
 
-else if (tableName=="authors") command=QString("CREATE TABLE authors (id int(11) NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
+else if (tableName=="authors") command=QString("CREATE TABLE authors (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
-else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
+else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id INTEGER NOT NULL,author_id INTEGER NOT NULL);";
 
 else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
