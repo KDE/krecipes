@@ -110,3 +110,8 @@ void DragArea::moveWidget( QWidget *w, int dx, int dy )
 	w->move( w->x() + dx, w->y() + dy );
 	selection->updateGeometry();
 }
+
+void DragArea::update()
+{
+	selection->update();
+}

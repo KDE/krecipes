@@ -42,6 +42,8 @@ protected:
 	virtual void mouseMoveEvent( QMouseEvent * );
 
 	void moveWidget( QWidget *w, int dx, int dy );
+	
+	void update();
 
 private:
 	bool m_read_only;
