@@ -44,10 +44,23 @@ protected:
 			for ( cat_it = (CategoryListItem*)parent(); cat_it; cat_it = (CategoryListItem*)cat_it->parent() )
 				 cat_it->setOn(false);
 
-			QListViewItemIterator it( firstChild() );
-			while ( it.current() ) {
+			//do this to only iterate over this item's children
+			QListViewItem *pEndItem = NULL;
+			QListViewItem *pStartItem = this;
+			do
+			{
+				if(pStartItem->nextSibling())
+					pEndItem = pStartItem->nextSibling();
+				else
+					pStartItem = pStartItem->parent();
+			}
+			while(pStartItem && !pEndItem);
+
+			QListViewItemIterator it( this );
+			while ( it.current() && it.current() != pEndItem ) {
 				cat_it = (CategoryListItem*)it.current();
-				cat_it->setOn(false);
+				if ( cat_it != this ) 
+					cat_it->setOn(false);
 				++it;
 			}
 		}

@@ -167,6 +167,7 @@ if ( existing_id != -1 && existing_id != cat_id ) //category already exists with
   {
   	database->mergeCategories(existing_id,cat_id);
   	delete i;
+	reload();
   	break;
   }
   default: reload(); break;

@@ -251,7 +251,7 @@ if ( it )
 		QListViewItemIterator iterator(it);
 		while(iterator.current() != pEndItem)
 		{
-			if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+			if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
 				ids.append(iterator.current()->text(1).toInt());
 			++iterator;
 		}
@@ -324,6 +324,7 @@ void SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
 
 void SelectRecipeDialog::filter(const QString& s)
 {
+#if 0
 QListViewItemIterator list_it( recipeListView );
 while ( QListViewItem *it = list_it.current() ) {
 	if ( s.isEmpty() ) // Don't filter if the filter text is empty
@@ -346,6 +347,7 @@ while ( QListViewItem *it = list_it.current() ) {
 }
 
 hideIfEmpty();
+#endif
 }
 
 void SelectRecipeDialog::filterCategories(int categoryID)
@@ -496,7 +498,7 @@ void SelectRecipeDialog::slotExportRecipeFromCat()
 		QListViewItemIterator iterator(recipeListView->selectedItem());
 		while(iterator.current() != pEndItem)
 		{
-			if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+			if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
 				ids.append(iterator.current()->text(1).toInt());
 			++iterator;
 		}
@@ -509,22 +511,10 @@ QValueList<int> SelectRecipeDialog::getAllVisibleItems()
 {
 	QValueList<int> ids;
 
-	//do this to only iterate over children of 'it'
-	QListViewItem *pEndItem = NULL;
-	QListViewItem *pStartItem = recipeListView->selectedItem();
-	do
+	QListViewItemIterator iterator(recipeListView,QListViewItemIterator::Visible);
+	while(iterator.current())
 	{
-		if(pStartItem->nextSibling())
-			pEndItem = pStartItem->nextSibling();
-		else
-			pStartItem = pStartItem->parent();
-	}
-	while(pStartItem && !pEndItem);
-	
-	QListViewItemIterator iterator(recipeListView->selectedItem(),QListViewItemIterator::Visible);
-	while(iterator.current() != pEndItem)
-	{
-		if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+		if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
 			ids.append(iterator.current()->text(1).toInt());
 		++iterator;
 	}
