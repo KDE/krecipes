@@ -11,6 +11,8 @@
  ***************************************************************************/
 
 #include <qlayout.h>
+#include <qtabwidget.h>
+
 #include "unitsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
@@ -29,51 +31,61 @@
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
 
-    // Store pointer to database
-    database=db;
-    // Design dialog
-    QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	// Store pointer to database
+	database=db;
 
-    unitListView =new StdUnitListView(this,database,true);
-    unitListView->reload(); //load the initial data
-    layout->addWidget(unitListView);
+	// Design dialog
+	QHBoxLayout* page_layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
-    newUnitButton=new QPushButton(this);
-    newUnitButton->setText(i18n("Create ..."));
-    newUnitButton->setFlat(true);
-    newUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    vboxl->addWidget(newUnitButton);
+	QTabWidget *tabWidget = new QTabWidget( this );
+	
+	QWidget *unitTab = new QWidget( tabWidget );
+	QHBoxLayout* layout = new QHBoxLayout( unitTab, KDialog::marginHint(), KDialog::spacingHint() );
+	
+	unitListView =new StdUnitListView(unitTab,database,true);
+	unitListView->reload(); //load the initial data
+	layout->addWidget(unitListView);
+	
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	newUnitButton=new QPushButton(unitTab);
+	newUnitButton->setText(i18n("Create ..."));
+	newUnitButton->setFlat(true);
+	newUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+	vboxl->addWidget(newUnitButton);
+	
+	removeUnitButton=new QPushButton(unitTab);
+	removeUnitButton->setText(i18n("Delete"));
+	removeUnitButton->setFlat(true);
+	removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+	vboxl->addWidget(removeUnitButton);
+	vboxl->addStretch();
+	layout->addLayout(vboxl);
 
-    removeUnitButton=new QPushButton(this);
-    removeUnitButton->setText(i18n("Delete"));
-    removeUnitButton->setFlat(true);
-    removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    vboxl->addWidget(removeUnitButton);
-    vboxl->addStretch();
-    layout->addLayout(vboxl);
+	tabWidget->insertTab(unitTab, i18n("Units") );
 
-    conversionTable=new ConversionTable(this,1,1);
-    layout->addWidget(conversionTable);
+	conversionTable=new ConversionTable(tabWidget,1,1);
+	tabWidget->insertTab(conversionTable, i18n("Unit Conversions") );
 
-    // Connect signals & slots
-    connect(newUnitButton,SIGNAL(clicked()),unitListView,SLOT(createNew()));
-    connect(removeUnitButton,SIGNAL(clicked()),unitListView,SLOT(remove()));
-    connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
-
-    //TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
-    connect(database,SIGNAL(unitCreated(const Unit&)),this,SLOT(loadConversionTable()));
-    connect(database,SIGNAL(unitRemoved(int)),this,SLOT(loadConversionTable()));
-    
-    //this is for the above TODO, but it still has some bugs to be worked out
-    //connect(database,SIGNAL(unitCreated(const Element&)),conversionTable,SLOT(unitCreated(const Element&)));
-    //connect(database,SIGNAL(unitRemoved(int)),conversionTable,SLOT(unitRemoved(int)));
-
-    //Populate data into the table
-    loadConversionTable();
-   
-    //FIXME: We've got some sort of build issue... we get undefined references to CreateElementDialog without this dummy code here
-    CreateElementDialog d(this,"");
+	page_layout->addWidget(tabWidget);
+	
+	// Connect signals & slots
+	connect(newUnitButton,SIGNAL(clicked()),unitListView,SLOT(createNew()));
+	connect(removeUnitButton,SIGNAL(clicked()),unitListView,SLOT(remove()));
+	connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
+	
+	//TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
+	connect(database,SIGNAL(unitCreated(const Unit&)),this,SLOT(loadConversionTable()));
+	connect(database,SIGNAL(unitRemoved(int)),this,SLOT(loadConversionTable()));
+	
+	//this is for the above TODO, but it still has some bugs to be worked out
+	//connect(database,SIGNAL(unitCreated(const Element&)),conversionTable,SLOT(unitCreated(const Element&)));
+	//connect(database,SIGNAL(unitRemoved(int)),conversionTable,SLOT(unitRemoved(int)));
+	
+	//Populate data into the table
+	loadConversionTable();
+	
+	//FIXME: We've got some sort of build issue... we get undefined references to CreateElementDialog without this dummy code here
+	CreateElementDialog d(this,"");
 }
 
 UnitsDialog::~UnitsDialog()
