@@ -26,14 +26,14 @@ as Authors, publish date, the abstract, and Keywords -->
 <firstname>Colleen</firstname>
 <surname>Beamer</surname>
 <affiliation>
-<address><email>cbeamer interlynx.net</email></address>
+<address><email>cbeamer&#064;interlynx.net</email></address>
 </affiliation>
 </author>
 <author>
 <firstname>Jason</firstname>
 <surname>Kivlighn</surname>
 <affiliation>
-<address><email>mizunoami44 users.sourceforge.net</email></address>
+<address><email>mizunoami44&#064;users.sourceforge.net</email></address>
 </affiliation>
 </author>
 </authorgroup>
@@ -121,7 +121,7 @@ When <emphasis>&krecipes;</emphasis> starts, the window displays the following c
 </para>
 
 <itemizedlist>
-<listitem><para>A menubar containing selections for <guimenu>File</guimenu>, <guimenu>View</guimenu>, <guimenu>Tools</guimenu>, <guimenu>Settings</guimenu>, and <guimenu>Help</guimenu></para></listitem>
+<listitem><para>A menubar containing selections for <guimenu>File</guimenu>, <guimenu>Edit</guimenu>, <guimenu>Tools</guimenu>, <guimenu>Settings</guimenu>, and <guimenu>Help</guimenu></para></listitem>
 <listitem><para>A toolbar with icons for <guiicon>New</guiicon>, <guiicon>Save</guiicon>, and <guiicon>Print</guiicon></para></listitem>
 <listitem><para>A left-hand pane containing icons depicting and buttons for access to the various components of <emphasis>&krecipes;</emphasis></para></listitem>
 <listitem><para>A right-hand pane, which is the main <emphasis>&krecipes;</emphasis> window, that by default contains a recipe category list</para></listitem>
@@ -164,7 +164,7 @@ By default, <emphasis>&krecipes;</emphasis> starts with the "Find/Edit Recipes" 
 <listitem><para>Buttons for <guibutton>Open</guibutton>, <guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing the corresponding action on a recipe</para></listitem>
 </itemizedlist>
 
-<tip><para>For more information on the basic search functionality, click the <guiicon>lightbulb</guiicon> icon in the bottom, right-hand corner of the pane containing the component list.</para></tip>
+<tip><para>For more information on the basic search functionality, click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="krectip.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon in the bottom, right-hand corner of the pane containing the component list.</para></tip>
 
 <para> With the <guilabel>Basic</guilabel> tab active and the list of recipe categories displayed, a category with a plus (+) sign beside it indicates that the category contains recipes.
 </para>
@@ -232,7 +232,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 <sect2 id="add-recipe">
 <title>Adding a New Recipe</title>
 
-<para>To add a new recipe, click on the <guiicon>+</guiicon> icon that appears in the first position on the <emphasis>&krecipes;</emphasis> toolbar.  The "Edit Recipe" screen will display.
+<para>To add a new recipe, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="filenew.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon that appears in the first position on the <emphasis>&krecipes;</emphasis> toolbar.  The "Edit Recipe" screen will display.
 </para>
 
 <para>The "Edit Recipe" screen has three tabs.  Each permits entry of a different aspect of the recipe.  These tabs are &minus;</para>
@@ -276,10 +276,10 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 
 <para>To enter an author for the recipe, click on the <guibutton>+</guibutton> that appears to the right of the "Authors" box.</para>
 
-<para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box below by clicking on the <guibutton>ᐁ</guibutton> button that appears to the right of the list box.</para>
+<para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box below by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears to the right of the list box.</para>
 
 <tip><itemizedlist><listitem><para>An author's name can be typed into the textbox and transferred to the list box as described above.  In this situation an alert box will appear with the message "A new author "<emphasis>Name of New Author</emphasis>" was  successfully added to the list of authors".  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
-<listitem><para>An author may also be removed from the list by clicking the <guibutton>ᐃ</guibutton> button.</para></listitem>
+<listitem><para>An author may also be removed from the list by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
 </itemizedlist>
 </tip>
 
@@ -329,7 +329,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 
 <note><para>The change in the graphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
 
-<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guibutton>⌫</guibutton> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
+<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_left.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
 <listitem><para>To display NO photo in the recipe, refer to the section <link linkend="displayed-items">Selecting Items to Display</link> for further instructions.</para></listitem>
 </itemizedlist>
 </tip>
@@ -344,7 +344,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 	  <textobject>
 	    <phrase>Screenshot</phrase>
 	  </textobject>
-	  <caption><para>New Recipe Entry  The Completed Recipe Tab</para></caption>
+	  <caption><para>New Recipe Entry - The Completed Recipe Tab</para></caption>
 	</mediaobject>
 </screenshot>
 </para>
@@ -359,7 +359,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 
 <para>Ideally, the header should be created first, for example "Cake" or "Frosting".  To do this, ensure that the <guilabel>Header:</guilabel> radio button is selected. Enter the desired name for the header in the textbox then, press the <keycap>Enter</keycap> key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <guilabel>Ingredient:</guilabel> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a "file tree" type of format.</para>
 
-<note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guibutton>ᐁ</guibutton> or <guibutton>ᐃ</guibutton> button to position the ingredient until it appears indented below the appropriate header.</para></note>
+<note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to position the ingredient until it appears indented below the appropriate header.</para></note>
 
 <para> Ingredients are entered by filling in the appropriate textbox under the headings &minus;</para>
 
@@ -392,9 +392,9 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 
 <listitem><para>If a particular field is not required to describe an ingredient and it has information retained from a previous ingredient, simply delete the information.  <emphasis>A field can be left blank if not required</emphasis>!</para></listitem>
 
-<listitem><para>An ingredient may be removed from the list by clicking on the <guibutton>ⓧ</guibutton> button to the right of the ingredient list.</para></listitem>
+<listitem><para>An ingredient may be removed from the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="no.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to the right of the ingredient list.</para></listitem>
 
-<listitem><para>An ingredient may also be repositioned in the list by clicking on the <guibutton>ᐃ</guibutton> or the <guibutton>ᐁ</guibutton> button that appear on the right of the ingredient list.</para></listitem>
+<listitem><para>An ingredient may also be repositioned in the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appear on the right of the ingredient list.</para></listitem>
 
 <listitem><para>Once an ingredient has been transferred to the ingredient list, the "Amount", "Units" and "Preparation Method" fields may be edited by doubleclicking on the particular component that needs to be changed.</para>  </listitem> 
 </itemizedlist></note>
@@ -519,7 +519,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 <itemizedlist>
 <listitem><para>the Recipe Name, Authors, Categories, Servings, Preparation Time and/or graphic from the <guilabel>Recipe</guilabel> tab</para></listitem>
 <listitem><para>the Amount, Units, and/or Preparation method for each listed ingredients in the <guilabel>Ingredients</guilabel> tab</para>
-<note><para>Also in this tab, an ingredient can be added by clicking on the <guibutton>New Ingredient</guibutton> button that appears on the top, left-hand side of the ingredient list, or deleted by clicking on the <guibutton>ⓧ</guibutton> button</para></note></listitem>
+<note><para>Also in this tab, an ingredient can be added by clicking on the <guibutton>New Ingredient</guibutton> button that appears on the top, left-hand side of the ingredient list, or deleted by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="no.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button</para></note></listitem>
 <listitem><para>the preparation directions from the <guilabel>Instructions</guilabel> tab</para></listitem>
 </itemizedlist>
 
@@ -599,7 +599,7 @@ The last icon allows access to a list of items that are available for display in
 By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the checkbox beside it.
 </para>
 
-<note><para>All sections chosen to display in the recipe will also print.  It may be desireable to have a section display, but not print.  In order to avoid having any section print, deselect it prior to printing.</para>
+<note><para>All sections chosen to display in the recipe will also print.  It may be desirable to have a section display, but not print.  In order to avoid having any section print, deselect it prior to printing.</para>
 </note>
 
 </sect2>
@@ -811,7 +811,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <itemizedlist>
 <listitem><para>Compressed Krecipes format  files of this format will have extensions of .kre</para>
-<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the internet easier.  This format also provides a useful means of backup.</para></listitem>
+<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the Internet easier.  This format also provides a useful means of backup.</para></listitem>
 
 <listitem><para>Krecipes  files of this format will have extensions of .kreml</para>
 <para>Using this format exports your recipe in plain text which makes it easier to edit the recipe XML.</para>
@@ -837,13 +837,13 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>The <guilabel>Filter:</guilabel> box is used to select the format that you wish to use for the exported recipe from the drop-down menu.</para>
 
-<para>  You will also note that at the bottom of this window, there is a tickbox that allows you to select or deselect to <guilabel>Automatically select filename extension</guilabel>.  The extension of the chosen export format will appear beside the phrase.  If you choose to keep the tickbox selected, this extension will automatcially be attached to the filename of your exported recipe. </para>
+<para>  You will also note that at the bottom of this window, there is a tickbox that allows you to select or deselect to <guilabel>Automatically select filename extension</guilabel>.  The extension of the chosen export format will appear beside the phrase.  If you choose to keep the tickbox selected, this extension will automatically be attached to the filename of your exported recipe. </para>
 
 <tip><para>To position the cursor for entry into the <guilabel>Location:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo> can be used.  To position the cursor for entry into the <guilabel>Filter:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>F</keycap></keycombo> can be used.</para></tip>
 
 <para>Once the name of the exported recipe appears in the <guilabel>Location:</guilabel> box and you have chosen the format you wish to use for your exported recipe, click the <guibutton>Save</guibutton> button to proceed with the export, or the <guibutton>Cancel</guibutton> button to halt the export process and return to the previous screen.</para>
 
-<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format  for example, if you have chosen to export your recipe in "Meal-Master" format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the graphics releated to your exported recipe are stored.</para>
+<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format  for example, if you have chosen to export your recipe in "Meal-Master" format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the graphics related to your exported recipe are stored.</para>
 
 <note><para>You may also export categories of recipes or your whole database in this same manner.  However, if you want to export your entire database, you must ensure that no recipe or category is selected in your recipe list.</para>
 
@@ -878,11 +878,11 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>When selected, the component title appears at the top in the right pane of the window.</para>
   
-<para>Below this is a textbox to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <guilabel>Shopping List</guilabel> by clicking on the <guibutton>&gt;</guibutton>  button between the two portions of the screen.</para>
+<para>Below this is a textbox to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <guilabel>Shopping List</guilabel> by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>  button between the two portions of the screen.</para>
 
 <para>Once the desired recipes have been transferred to the shopping list side of the screen, click the <guibutton>OK</guibutton> button.</para>
 
-<tip><itemizedlist><listitem><para>Recipe names can also be transferred out of the shopping list side of the screen by clicking on the <guibutton>&lt;</guibutton> button.</para></listitem>
+<tip><itemizedlist><listitem><para>Recipe names can also be transferred out of the shopping list side of the screen by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
 
 <listitem><para>The entire list of recipes that has been selected for producing the shopping list can be cleared by clicking the <guibutton>Clear</guibutton> button.</para></listitem>
 
@@ -891,7 +891,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>When the <guibutton>OK</guibutton> button is clicked, a window will appear that lists all ingredients contained in the <emphasis>&krecipes;</emphasis> database on the left and the ingredients required for the selected recipe(s) on the right.  Above each of these is a <guilabel>Search:</guilabel> textbox to <userinput>enter the name of an ingredient</userinput> to search for within each of the lists.</para>
 
-<para>Ingredients can be transferred to and from either side by clicking on the <guibutton>&lt;</guibutton> or <guibutton>&gt;</guibutton> button that appears between the lists, as needed.</para>
+<para>Ingredients can be transferred to and from either side by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears between the lists, as needed.</para>
 
 <para>In the recipe ingredient list on the right, the "Amount" and the "Unit" of each ingredient can be edited by double-clicking on the appropriate value.  For example, if the recipe requires 4 eggs and a purchase of eggs is required to make the recipe, it is unlikely that you would buy 4 eggs.  In this case, the eggs ingredient could be selected, the "Amount" changed to 1 and the "Unit" changed to doz. or dozen.</para>
 
@@ -966,7 +966,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Before you can include nutrients in your menu plan, you must ensure the following &minus;</para>
 
-<orderedlist><listitem><para>Nutrients or <emphasis>properties</emphasis> must be loaded for the ingredients.  See the section <link linkend="ingredient-properties">Properties in Ingredients</link> for futher instructions.  If an ingredient does not contain nutrient values, it will be ignored.</para></listitem>
+<orderedlist><listitem><para>Nutrients or <emphasis>properties</emphasis> must be loaded for the ingredients.  See the section <link linkend="ingredient-properties">Properties in Ingredients</link> for further instructions.  If an ingredient does not contain nutrient values, it will be ignored.</para></listitem>
 <listitem><para>Units of measure must be associated with the ingredients. Since most nutrients are measured in <emphasis>g/g</emphasis> or <emphasis>mg/g</emphasis>, ensure that <emphasis>g</emphasis> is one of the units associated with each ingredient.  See the section <link linkend="ingredient-units">Units in Ingredients</link> for additional information.</para></listitem>
 <listitem><para>The equivalencies between the units of measure must be completed in the "Units Component" within the <guilabel>Unit Conversions</guilabel> tab.  See the section <link linkend="set-equivalents">Setting Equivalencies</link> for instructions.</para></listitem>
 </orderedlist>
@@ -1015,7 +1015,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Below the <guilabel>Search:</guilabel> box, under the heading <guilabel>Ingredient</guilabel> there is a list of all the ingredients that are in the <emphasis>&krecipes;</emphasis> database, both ones provided by default and those that you have entered by either adding them in the "Ingredients" component or by entering them in a recipe, which automatically adds the ingredient to the database.  Elsewhere in this document, further information is provided on the use of the <link linkend="ingredients-component">Ingredients Component</link>.</para>
  
-<para>Beside each ingredient in the list is a tick box which will allow the selection of the ingredient(s) that you have on hand that might be utilizied in some of your recipes.  <action>Click on the tick box</action> to select the ingredient.  The scrollbar to the right of the list allows you to scroll through the entire list of ingredients.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
+<para>Beside each ingredient in the list is a tick box which will allow the selection of the ingredient(s) that you have on hand that might be utilized in some of your recipes.  <action>Click on the tick box</action> to select the ingredient.  The scrollbar to the right of the list allows you to scroll through the entire list of ingredients.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
 
 <para>Before the recipes containing the selected ingredients will display, you must select the number of missing ingredients permitted in your recipes.  This is accomplished by using the spinbox beside the label <guilabel>Missing ingredients allowed:</guilabel>.  There will always be certain ingredients that you have on hand, for example, <emphasis>Salt</emphasis> or <emphasis>Sugar</emphasis>.  One of the purposes of allowing missing ingredients is to compensate for those ingredients that are normally in your cupboard.</para>
   
@@ -1365,7 +1365,7 @@ The <guibutton>Data</guibutton> button performs one simple function  when clic
 
 <para>A window will pop up where the name of the new category can be entered in a textbox under the label <guilabel>New Category</guilabel>.  A subcategory can be selected using the <guimenu>Subcategory of</guimenu> drop-down menu, which lists existing categories.  The default for the subcategory is <emphasis>&#042;&#042;NONE&#042;&#042;</emphasis>.</para>
 
-<para>Once the name of the new category has been entered in the textbox, click the <guibutton>Ok</guibutton> button to create the category and return to the category list.  The list will now show the new category.</para>
+<para>Once the name of the new category has been entered in the textbox, click the <guibutton>OK</guibutton> button to create the category and return to the category list.  The list will now show the new category.</para>
 
 <para>To cancel the addition of a new category and clear the window, click on the <guibutton>Cancel</guibutton> button.</para>
 
@@ -1412,7 +1412,7 @@ The <guibutton>Data</guibutton> button performs one simple function  when clic
 </screenshot>
 </para>
 
-<para>Once a name has been entered, click the <guibutton>Ok</guibutton> button to create the entry, or the <guibutton>Cancel</guibutton> button to cancel entry of a new author's name and close the window.</para>
+<para>Once a name has been entered, click the <guibutton>OK</guibutton> button to create the entry, or the <guibutton>Cancel</guibutton> button to cancel entry of a new author's name and close the window.</para>
 </sect3>
 
 <sect3 id="remove-author">
@@ -1444,7 +1444,7 @@ The <guibutton>Data</guibutton> button performs one simple function  when clic
 
 <para>For example, in the screenshot below, two <emphasis>Actions</emphasis> exist for the expression "Import"  Therefore, if you type "Import", the cursor will be positioned on "Import from Database...", although it may not be this Action that you want to create the shortcut for.  However, if you type "Import from File", the cursor will be positioned on the "Import from File..." Action.</para>
 
-<para>Clicking the <guiicon>Brush</guiicon> icon located beside the <guilabel>Search:</guilabel> textbox clears the contents of the textbox.</para>
+<para>Clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="locationbar_erase.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon located beside the <guilabel>Search:</guilabel> textbox clears the contents of the textbox.</para>
 
 <para>Alternatively, you can use the scroll bars to scroll through the <emphasis>Actions</emphasis> until the one for which you want to change the shortcut is found.</para>
 
@@ -1484,10 +1484,10 @@ The <guibutton>Data</guibutton> button performs one simple function  when clic
 </screenshot>
 </para>
 
-<para>If a shortcut already exists, the textbox will contain an entry, as seen in the screenshot above.  To clear this entry in order to enter a new one, click on the <guiicon>Brush</guiicon> icon on the left of the textbox.
+<para>If a shortcut already exists, the textbox will contain an entry, as seen in the screenshot above.  To clear this entry in order to enter a new one, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="locationbar_erase.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon on the left of the textbox.
 </para>
 
-<para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the <keycap>Ctrl</keycap> and simulataneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you to the main <interface>Configure Shortcuts  &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <guilabel>Custom</guilabel> label.</para>
+<para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the <keycap>Ctrl</keycap> and simultaneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you to the main <interface>Configure Shortcuts  &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <guilabel>Custom</guilabel> label.</para>
 
 <para>Clicking the <guibutton>OK</guibutton> button, will set a change made, for instance if you cleared a shortcut and didn't want to set another, and return you to the main <interface>Configure Shortcuts  &krecipes;</interface> screen.  The <guibutton>Cancel</guibutton> button on the shortcut entry screen will cancel setting of the shortcut and return you to the main interface.</para>
 
@@ -1570,7 +1570,7 @@ The <guibutton>Data</guibutton> button performs one simple function  when clic
 
 <para>From the screenshot, you will notice that choices available for addition to the toolbar are on the left under the heading <guilabel>Available actions:</guilabel>.  On the right, under the heading <guilabel>Current actions:</guilabel> are the icons that presently appear on the toolbar  note that your toolbar, by default, may appear differently from that displayed in the screenshot.</para>
 
-<para>Between the two lists are four arrows, which allow for directional movement between the lists, or up and down in the list.  When an item is selected from either list, the directional arrow(s) that are functional are colored, while the non-fuctional arrow(s) are grayed.  Movement is accomplished by clicking on the appropriate directional arrow, as necessary, to move the selection into the desired postion.</para>
+<para>Between the two lists are four arrows, which allow for directional movement between the lists, or up and down in the list.  When an item is selected from either list, the directional arrow(s) that are functional are colored, while the non-functional arrow(s) are grayed.  Movement is accomplished by clicking on the appropriate directional arrow, as necessary, to move the selection into the desired position.</para>
 
 <para>The icon for your selection can be changed by clicking the <guibutton>Change Icon...</guibutton> button.  This will bring up a window from which you can select the icon that you want to use.  Once selected, click the <guibutton>OK</guibutton> button that appears on the icon selection screen to close the window and attach the icon to the toolbar selection.</para>
 
