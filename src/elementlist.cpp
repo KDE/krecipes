@@ -43,3 +43,9 @@ return(this->next());
 Element* ElementList::getElement(int index){
 return(this->at(index));
 }
+
+bool ElementList::containsId(int id) // Search by id (which uses search by item, with comparison defined on header)
+{
+Element i; i.id=id;
+return((find(&i)>=0));
+}

@@ -21,6 +21,7 @@ public:
     ElementList();
 
     ~ElementList();
+    bool containsId(int id);
     Element* getFirst(void);
     Element* getPrev(void);
     Element* getNext(void);
