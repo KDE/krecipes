@@ -71,7 +71,7 @@ void DBListViewBase::reload()
 	load(curr_limit,curr_offset);
 	bulk_load=false;
 
-	if ( curr_offset + curr_limit < total )
+	if ( curr_limit != -1 && curr_offset + curr_limit < total )
 		new QListViewItem(this,lastElement,"Next >>"); //FIXME: Note to self: i18n'ize this when I'm ready
 
 	if ( curr_offset != 0 )
@@ -135,7 +135,7 @@ bool DBListViewBase::handleElement( const QString &name )
 {
 	int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
-	if ( childCount()-2 >= curr_limit ) {
+	if ( curr_limit != -1 && childCount()-2 >= curr_limit ) {
 		if ( name < firstChild()->text(c) || name >= lastElement->text(c) ) {
 			return false;
 		}
