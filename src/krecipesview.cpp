@@ -455,6 +455,7 @@ void KrecipesView::slotSetDietWizardPanel(void)
 {
 dietPanel->reload();
 rightPanel->raiseWidget(dietPanel);
+    setContextHelp(DietWizardP);
 }
 
 
