@@ -46,8 +46,12 @@ protected:
 protected slots:
 	void elementCreated();
 	void elementRemoved();
+	void slotDoubleClicked( QListViewItem * );
 
 private:
+	void activatePrev();
+	void activateNext();
+
 	//make this private because the data should always be synced with the database
 	void clear(){KListView::clear();}
 	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways

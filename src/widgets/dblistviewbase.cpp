@@ -12,7 +12,46 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kcursor.h>
 #include <kglobal.h>
+#include <klocale.h>
+
+#define PREVLISTITEM_RTTI 1002
+#define NEXTLISTITEM_RTTI 1003
+
+
+//These two classes are used to identify the "Next" and "Prev" items, which are identified through rtti().  This also prevents renaming, even if it is enabled.
+class PrevListViewItem : public QListViewItem
+{
+public:
+	PrevListViewItem( QListView *parent ) : QListViewItem(parent){}
+
+	virtual int rtti() const { return PREVLISTITEM_RTTI; }
+
+	QString text( int c ) const {
+		if ( c == 0 ) {
+			return QString("<< %1").arg(i18n("Prev"));
+		}
+		else
+			return QString::null;
+	}
+};
+
+class NextListViewItem : public QListViewItem
+{
+public:
+	NextListViewItem( QListView *parent, QListViewItem *after ) : QListViewItem(parent,after){}
+
+	virtual int rtti() const { return NEXTLISTITEM_RTTI; }
+
+	QString text( int c ) const {
+		if ( c == 0 ) {
+			return QString("%1 >>").arg(i18n("Next"));
+		}
+		else
+			return QString::null;
+	}
+};
 
 DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListView(parent),
   database(db),
@@ -25,6 +64,37 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
 
 	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
 	curr_limit = config->readNumEntry( "Limit", -1 );
+
+	connect(this,SIGNAL(executed(QListViewItem*)),SLOT(slotDoubleClicked(QListViewItem*)));
+}
+
+void DBListViewBase::activatePrev()
+{
+	curr_offset -= curr_limit;
+	if ( curr_offset >= 0 ) {
+		reload();
+		emit prevGroupLoaded();
+	}
+	else
+		curr_offset = 0;
+}
+
+void DBListViewBase::activateNext()
+{
+	curr_offset += curr_limit;
+
+	reload();
+	emit nextGroupLoaded();
+}
+
+void DBListViewBase::slotDoubleClicked( QListViewItem *it )
+{
+	if ( it->rtti() == PREVLISTITEM_RTTI ) {
+		activatePrev();
+	}
+	else if ( it->rtti() == NEXTLISTITEM_RTTI ) {
+		activateNext();
+	}
 }
 
 void DBListViewBase::keyPressEvent( QKeyEvent *k )
@@ -37,23 +107,14 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 				return;
 			}
 
-			curr_offset += curr_limit;
-
 			kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
-			reload();
-			emit nextGroupLoaded();
+			activateNext();
 			k->accept();
 			break;
 		}
 		case Qt::Key_P: {
-			curr_offset -= curr_limit;
-			if ( curr_offset >= 0 ) {
-				kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
-				reload();
-				emit prevGroupLoaded();
-			}
-			else
-				curr_offset = 0;
+			kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
+			activatePrev();
 			k->accept();
 			break;
 		}
@@ -66,7 +127,10 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 
 void DBListViewBase::reload()
 {
-	clear();
+	KApplication::setOverrideCursor( KCursor::waitCursor() );
+
+	clear(); kapp->processEvents();
+
 	lastElement = 0;
 
 	bulk_load=true;
@@ -74,11 +138,12 @@ void DBListViewBase::reload()
 	bulk_load=false;
 
 	if ( curr_limit != -1 && curr_offset + curr_limit < total )
-		new QListViewItem(this,lastElement,"Next >>"); //FIXME: Note to self: i18n'ize this when I'm ready
+		new NextListViewItem(this,lastElement);
 
 	if ( curr_offset != 0 )
-		new QListViewItem(this,"Prev <<"); //FIXME: Note to self: i18n'ize this when I'm ready
-	
+		new PrevListViewItem(this);
+
+	KApplication::restoreOverrideCursor();
 }
 
 void DBListViewBase::createElement( QListViewItem *it )
@@ -93,14 +158,19 @@ void DBListViewBase::createElement( QListViewItem *it )
 		int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
 		QListViewItem *last_it = 0;
-		
+
+		//start it out below the "Prev" item
+		if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
+			it->moveItem( firstChild()->nextSibling() );
+		}
+
 		//skip the "Next" item
 		for ( QListViewItem *search_it = firstChild()->nextSibling(); search_it; search_it = search_it->nextSibling() ) {
 			if ( search_it == lastElement->nextSibling() ) {
 				it->moveItem(lastElement);
 				lastElement = it;
 			}
-			else if ( it->text(c) < search_it->text(c) ) { //we assume the list is sorted, as it should stay
+			else if ( QString::localeAwareCompare(it->text(c),search_it->text(c)) < 0 ) { //we assume the list is sorted, as it should stay
 				if ( last_it ) it->moveItem(last_it);
 				if ( search_it == it ) lastElement=it;
 				break;

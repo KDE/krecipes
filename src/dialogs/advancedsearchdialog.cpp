@@ -241,7 +241,8 @@ void DualCategoryListView::modifyCategory( const Element &category )
 {
 	QListViewItem * item = findItem( QString::number( category.id ), 1 );
 
-	item->setText( 0, category.name );
+	if ( item )
+		item->setText( 0, category.name );
 }
 
 void DualCategoryListView::modifyCategory( int id, int parent_id )
