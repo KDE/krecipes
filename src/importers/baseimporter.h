@@ -23,7 +23,6 @@
 class Recipe;
 class RecipeDB;
 class CategoryTree;
-class CustomVector;
 
 /** @brief Subclass this class to create an importer for a specific file type.
   *
@@ -88,7 +87,7 @@ protected:
 	}
 
 private:
-	void importCategoryStructure( RecipeDB *, CustomVector &, const CategoryTree * );
+	void importCategoryStructure( RecipeDB *, const CategoryTree * );
 	void importUnitRatios( RecipeDB * );
 
 	RecipeList *m_recipe_list;

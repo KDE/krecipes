@@ -25,105 +25,6 @@
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
 
-/** @brief A vector designed for fast searches and sorted insertions.
-  *
-  * This is accomplished by keeping a sorted list that is searched
-  * using the binary search algorithm.  When items are inserted into
-  * the vector the list remains sorted;  the position that new items
-  * will be inserted is determined by a fast binary search.
-  *
-  * @author Jason Kivlighn
-  */
-class CustomVector : public QValueVector<Element>
-{
-public:
-	CustomVector( const ElementList &list ) : QValueVector<Element>()
-	{
-		reserve( list.count() );
-
-		for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-			QString name = ( *it ).name;
-			if ( name.isNull() )
-				name = "";
-
-			push_back( Element( name.lower(), ( *it ).id ) ); //lowercase to speed comparisons... this doesn't affect the way it is actually stored
-		}
-	}
-
-	/** Find the string of this list assuming it is sorted using the binary search algorithm */
-	int bsearch( const QString &d ) const
-	{
-		QString test_str = d;
-		if ( test_str.isNull() )
-			test_str = "";
-
-		int n1 = 0;
-		int n2 = count() - 1;
-		int mid = 0;
-		bool found = false;
-		while ( n1 <= n2 ) {
-			int res;
-			mid = ( n1 + n2 ) / 2;
-			res = QString::compare( test_str, at( mid ).name );
-			if ( res < 0 )
-				n2 = mid - 1;
-			else if ( res > 0 )
-				n1 = mid + 1;
-			else {
-				found = true;
-				break;
-			}
-		}
-
-		if ( !found )
-			return -1;
-
-		// search to first of equal items
-		//while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, vec[mid-1]) )
-		//	mid--;
-		return at( mid ).id;
-	}
-
-	/** Insert the element into a sorted list, keeping the list sorted.
-	  * This uses a modified binary search to determine the location to
-	  * insert the element.
-	  */
-	void inSort( const Element &element )
-	{
-		Element new_el = element;
-		if ( new_el.name.isNull() )
-			new_el.name = "";
-
-		if ( count() == 0 ) {
-			push_back( new_el );
-			return ;
-		}
-
-		int n1 = 0;
-		int n2 = count() - 1;
-		int mid = 0;
-
-		int res;
-		while ( n1 <= n2 ) {
-			mid = ( n1 + n2 ) / 2;
-			res = QString::compare( new_el.name, at( mid ).name );
-			if ( res < 0 )
-				n2 = mid - 1;
-			else if ( res > 0 )
-				n1 = mid + 1;
-			else
-				break;
-		}
-
-		if ( res > 0 )
-			insert( begin() + mid + 1, new_el );
-		else
-			insert( begin() + mid , new_el );
-	}
-};
-
-
-
 BaseImporter::BaseImporter() :
 		m_recipe_list( new RecipeList ),
 		m_cat_structure( 0 ),
@@ -218,34 +119,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	progress->setTotalSteps( selected_recipes.count() );
 	progress->setFormat( i18n( "%v/%m Recipes" ) );
 
-
-	//binary search these vectors instead of querying the database to see if elements exist
-	ElementList prepMethodList;
-	db->loadPrepMethods( &prepMethodList );
-	CustomVector prepMethodVector( prepMethodList );
-	qHeapSort( prepMethodVector );
-
-	ElementList ingList;
-	db->loadIngredients( &ingList );
-	CustomVector ingVector( ingList );
-	qHeapSort( ingVector );
-
-	UnitList unitList;
-	db->loadUnits( &unitList );
-	/*CustomVector unitVector( unitList ); qHeapSort( unitVector );*/
-
-	ElementList authorList;
-	db->loadAuthors( &authorList );
-	CustomVector authorVector( authorList );
-	qHeapSort( authorVector );
-
-	ElementList catList;
-	db->loadCategories( &catList );
-	CustomVector catVector( catList );
-	qHeapSort( catVector );
-
 	if ( m_cat_structure ) {
-		importCategoryStructure( db, catVector, m_cat_structure );
+		importCategoryStructure( db, m_cat_structure );
 		delete m_cat_structure;
 	}
 
@@ -280,12 +155,11 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 				ingGroupList.append( Element( ( *ing_it ).group, ( *ing_it ).groupID ) );
 			}
 
-			QString real_ing_name = ( *ing_it ).name.left( max_ing_length );
-			int new_ing_id = ingVector.bsearch( real_ing_name.lower() );
-			if ( new_ing_id == -1 && !real_ing_name.isEmpty() ) {
-				db->createNewIngredient( real_ing_name );
+			int new_ing_id = db->findExistingIngredientByName((*ing_it).name);
+			if ( new_ing_id == -1 && !(*ing_it).name.isEmpty() )
+			{
+				db->createNewIngredient( (*ing_it).name );
 				new_ing_id = db->lastInsertID();
-				ingVector.inSort( Element( real_ing_name.lower(), new_ing_id ) );
 			}
 
 			Unit real_unit( ( *ing_it ).units.name.left( max_units_length ), ( *ing_it ).units.plural.left( max_units_length ) );
@@ -294,25 +168,18 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			else if ( real_unit.plural.isEmpty() )
 				real_unit.plural = real_unit.name;
 
-			UnitList::const_iterator unit_result = unitList.find( real_unit );
-			int new_unit_id;
-			if ( unit_result == unitList.end() ) {
+			int new_unit_id = db->findExistingUnitByName(real_unit.name);
+			if ( new_unit_id == -1 ) {
 				db->createNewUnit( real_unit.name, real_unit.plural );
 				new_unit_id = db->lastInsertID();
-				unitList.append( Unit( real_unit.name, real_unit.plural, new_unit_id ) );
 			}
-			else
-				new_unit_id = ( *unit_result ).id;
 
 			int new_prep_id = -1;
 			if ( !( *ing_it ).prepMethod.isEmpty() ) {
-				QString real_prep_name = ( *ing_it ).prepMethod.left( max_prepmethod_length );
-
-				new_prep_id = prepMethodVector.bsearch( real_prep_name.lower() );
+				new_prep_id = db->findExistingPrepByName(( *ing_it ).prepMethod);
 				if ( new_prep_id == -1 ) {
-					db->createNewPrepMethod( real_prep_name );
+					db->createNewPrepMethod( ( *ing_it ).prepMethod );
 					new_prep_id = db->lastInsertID();
-					prepMethodVector.inSort( Element( real_prep_name.lower(), new_prep_id ) );
 				}
 			}
 
@@ -329,24 +196,20 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		}
 
 		for ( ElementList::iterator author_it = ( *recipe_it ).authorList.begin(); author_it != ( *recipe_it ).authorList.end(); ++author_it ) {
-			QString real_author_name = ( *author_it ).name.left( max_author_length );
-			int new_author_id = authorVector.bsearch( real_author_name.lower() );
-			if ( new_author_id == -1 && !real_author_name.isEmpty() ) {
-				db->createNewAuthor( real_author_name );
+			int new_author_id = db->findExistingAuthorByName(( *author_it ).name);
+			if ( new_author_id == -1 && !( *author_it ).name.isEmpty() ) {
+				db->createNewAuthor( ( *author_it ).name );
 				new_author_id = db->lastInsertID();
-				authorVector.inSort( Element( real_author_name.lower(), new_author_id ) );
 			}
 
 			( *author_it ).id = new_author_id;
 		}
 
 		for ( ElementList::iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			QString real_category_name = ( *cat_it ).name.left( max_category_length );
-			int new_cat_id = catVector.bsearch( real_category_name.lower() );
-			if ( new_cat_id == -1 && !real_category_name.isEmpty() ) {
-				db->createNewCategory( real_category_name );
+			int new_cat_id = db->findExistingCategoryByName(( *cat_it ).name);
+			if ( new_cat_id == -1 && !( *cat_it ).name.isEmpty() ) {
+				db->createNewCategory( ( *cat_it ).name );
 				new_cat_id = db->lastInsertID();
-				catVector.inSort( Element( real_category_name.lower(), new_cat_id ) );
 			}
 
 			( *cat_it ).id = new_cat_id;
@@ -374,20 +237,19 @@ void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )
 	m_cat_structure = cat_structure;
 }
 
-void BaseImporter::importCategoryStructure( RecipeDB *db, CustomVector &catVector, const CategoryTree *cat_tree )
+void BaseImporter::importCategoryStructure( RecipeDB *db, const CategoryTree *cat_tree )
 {
 	const CategoryTreeChildren * children = cat_tree->children();
 	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
-		int new_cat_id = catVector.bsearch( ( *child_it ) ->category.name.lower() );
+		int new_cat_id = db->findExistingCategoryByName( ( *child_it )->category.name );
 		if ( new_cat_id == -1 ) {
-			db->createNewCategory( ( *child_it ) ->category.name, cat_tree->category.id );
+			db->createNewCategory( ( *child_it )->category.name, cat_tree->category.id );
 			new_cat_id = db->lastInsertID();
-			catVector.inSort( Element( ( *child_it ) ->category.name.lower(), new_cat_id ) );
 		}
 
 		( *child_it ) ->category.id = new_cat_id;
 
-		importCategoryStructure( db, catVector, *child_it );
+		importCategoryStructure( db, *child_it );
 	}
 }
 
