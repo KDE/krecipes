@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 
 # set the include path for X, qt and KDE
-INCLUDES         = $(all_includes) -I$(srcdir)/..
+INCLUDES         = -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES=libkrecipesdialogs.la
 libkrecipesdialogs_la_SOURCES=recipeimportdialog.cpp dietwizarddialog.cpp recipeinputdialog.cpp recipeviewdialog.cpp selectrecipedialog.cpp ingredientsdialog.cpp selectunitdialog.cpp createelementdialog.cpp propertiesdialog.cpp createpropertydialog.cpp selectpropertydialog.cpp unitsdialog.cpp dependanciesdialog.cpp shoppinglistdialog.cpp shoppinglistviewdialog.cpp selectcategoriesdialog.cpp categorieseditordialog.cpp authorsdialog.cpp selectauthorsdialog.cpp dualprogressdialog.cpp resizerecipedialog.cpp
