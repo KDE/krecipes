@@ -397,10 +397,11 @@ void RecipeViewDialog::createBlocks()
 		pushItemsDownIfNecessary( geometries, rect );
 
 		element->addProperty( "position: absolute;" );
-		element->addProperty( QString("top: %1%;").arg(rect->top()) );
-		element->addProperty( QString("left: %1%;").arg(rect->left()) );
-		element->addProperty( QString("width: %1%;").arg(rect->width()) );
-		element->addProperty( QString("height: %1%;").arg(rect->height()) );
+		QWidget *p=(QWidget*)parent();
+		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->height())) );
+		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
+		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
+		element->addProperty( QString("height: %1px;").arg(rect->height()/100.0*(p->height())) );
 	}
 }
 
@@ -445,7 +446,6 @@ void RecipeViewDialog::readTextColorProperties( DivElement *element, KConfig *co
 void RecipeViewDialog::readVisibilityProperties( DivElement *element, KConfig *config )
 {
 	bool shown = config->readBoolEntry( "Visibility" );
-
 	if ( shown )
 		element->addProperty( "visibility: visible;" );
 	else
