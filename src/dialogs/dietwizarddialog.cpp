@@ -83,6 +83,10 @@ okButton=new QPushButton(bottom_layout);
 okButton->setIconSet(il.loadIconSet("button_ok", KIcon::Small));
 okButton->setText(i18n("Create the diet"));
 
+QPushButton *clearButton=new QPushButton(bottom_layout);
+clearButton->setIconSet(il.loadIconSet("editclear", KIcon::Small));
+clearButton->setText(i18n("Clear"));
+
 // Create Tabs
 newTab(i18n("Meal 1"));
 
@@ -93,12 +97,28 @@ reload();
 connect(mealNumberSelector,SIGNAL(valueChanged(int)),this,SLOT(changeMealNumber(int)));
 connect(dayNumberSelector,SIGNAL(valueChanged(int)),this,SLOT(changeDayNumber(int)));
 connect(okButton,SIGNAL(clicked()),this,SLOT(createDiet()));
+connect(clearButton,SIGNAL(clicked()),this,SLOT(clear()));
 }
 
 
 DietWizardDialog::~DietWizardDialog()
 {
 delete dietRList;
+}
+
+void DietWizardDialog::clear()
+{
+	mealNumberSelector->setValue(1);
+	dayNumberSelector->setValue(1);
+
+	MealInput* mealTab=(MealInput*)(mealTabs->page(0)); // Get the meal
+	mealTab->setDishNo(3);
+	mealTab->showDish(0);
+
+	for ( int i = 0; i < 3; ++i ) {
+		DishInput* dishInput=mealTab->dishInputList[i]; // Get the dish input
+		dishInput->clear();
+	}
 }
 
 void DietWizardDialog::reload(void)
@@ -334,6 +354,11 @@ for (it=dishInputList.begin(); it != dishInputList.end();it++)
 	}
 }
 
+void MealInput::setDishNo(int dn)
+{
+	dishNumberInput->setValue(dn);
+}
+
 void MealInput::changeDishNumber(int dn)
 {
 if (dn>dishNumber)
@@ -396,6 +421,13 @@ dishStack->raiseWidget(*it);
 }
 }
 
+void MealInput::showDish(int dn)
+{
+QValueList <DishInput*>::iterator it=dishInputList.at(dn);
+if ( it != dishInputList.end() )
+	dishStack->raiseWidget(*it);
+}
+
 DishInput::DishInput(QWidget* parent,RecipeDB *database,const QString &title):QWidget(parent)
 {
 
@@ -447,6 +479,19 @@ connect(categoriesEnabledBox,SIGNAL(toggled(bool)),this,SLOT(enableCategories(bo
 
 DishInput::~DishInput()
 {
+}
+
+void DishInput::clear()
+{
+	QListViewItemIterator it( categoriesView );
+	while ( it.current() ) {
+		QCheckListItem *item = (QCheckListItem*)it.current();
+		item->setOn(false);
+		++it;
+	}
+
+	constraintsView->reload();
+	categoriesEnabledBox->setChecked(false);
 }
 
 void DishInput::enableCategories(bool enable)

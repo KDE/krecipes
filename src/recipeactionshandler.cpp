@@ -324,10 +324,10 @@ QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 {
 	QValueList<int> ids;
 
-	QListViewItemIterator iterator(parentListView,QListViewItemIterator::Visible);
+	QListViewItemIterator iterator(parentListView);
 	while(iterator.current())
 	{
-		if ( iterator.current()->rtti() == 1000 ) {
+		if ( iterator.current()->isVisible() && iterator.current()->rtti() == 1000 ) {
 			RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
 			int recipe_id = recipe_it->recipeID();
 

@@ -106,6 +106,7 @@ private slots:
 	void changeDayNumber(int dn);
 	void changeMealNumber(int mn);
 	void createDiet(void);
+	void clear();
 	void createShoppingList(void);
 	void populateIteratorList(RecipeList &rl, QValueList <RecipeList::Iterator> *il);
 signals:
@@ -122,6 +123,8 @@ public:
 	 ~MealInput();
 	 void reload(IngredientPropertyList &propertyList);
 	 int dishNo(void){return dishNumber;};
+	 void setDishNo(int dn);
+	 void showDish(int dn);
 
 	 // Public widgets and variables
 	 QValueList <DishInput*> dishInputList; // The list of dishes
@@ -156,7 +159,7 @@ public slots:
 	void prevDish(void);
 
 private slots:
-		void changeDishNumber(int dn);
+	void changeDishNumber(int dn);
 
 };
 
@@ -172,6 +175,7 @@ public:
 	void loadEnabledCategories(ElementList* categories);
 	void reload(IngredientPropertyList *propertyList);
 	void setDishTitle(const QString & text);
+	void clear();
 
 
 private:
