@@ -3,13 +3,13 @@ jkivlighn:
 
 MAJOR FEATURES:
 	*Improve scaleability (planned as a key improvement for 0.8)
-	*Handle plurals in units
 	*Calendar for meal planning
 	*Instead of saving "servings" of a recipe, change it to "yield" and allow a unit ( i.e. 5 servings, 2 dozen )
 	*Command-line interface
 	*Improved printing support: I'd like to allow, for example, printing on recipe cards.
 
 CONVENIENCES/MINOR FEATURES:
+	*Improved navigation - add a forward and back button
 	*E-mail recipe(s) option (using kapp->invokeMailer())
 	*Show properties in columns
 	*Select which properties to show
@@ -21,11 +21,11 @@ CONVENIENCES/MINOR FEATURES:
 	*Web album export (a spiffed-up multiple-page website ;)
 
 BUGS/OTHER:
-	*PRIORITY: Secure database access passwords
+	*Secure database access passwords??
 	*The icons on the left menu at times will disappear... I can't seem to reproduce this, however
 	*Make use of transactions in database backends where appropriate
 	*Give a warning when deleting categories (such as when a recipe was a part of that category)
-	*Don't show the empty unit in the unit page
+	*Delete the database table when deleting Krecipes
 
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
