@@ -258,7 +258,7 @@ layout->addItem(logoSpacer,1,2);
 
 // Explanation Text
 permissionsText=new QLabel(this);
-permissionsText->setText(i18n("This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases<b>.<br><br>If no superuser or priviledged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must<b> select the appropriate option below to enter the information of a priviledged PostgreSQL account."));
+permissionsText->setText(i18n("This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases<b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must<b> select the appropriate option below to enter the information of a privileged PostgreSQL account."));
 
 permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
@@ -277,14 +277,14 @@ QSpacerItem *checkBoxSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePoli
 layout->addItem(checkBoxSpacer,4,3);
 
 // root checkbox
-rootCheckBox=new QCheckBox(i18n("I have already set a superuser or priviledged account"),this,"rootCheckBox");
+rootCheckBox=new QCheckBox(i18n("I have already set a superuser or privileged account"),this,"rootCheckBox");
 layout->addWidget(rootCheckBox,5,3);
 
 QSpacerItem *rootInfoSpacer=new QSpacerItem(10,20,QSizePolicy::Minimum,QSizePolicy::Fixed);
 layout->addItem(rootInfoSpacer,6,3);
 
 // MySQL root/admin info
-QGroupBox *rootInfoGBox=new QGroupBox(this,"rootInfoGBox"); rootInfoGBox->setTitle(i18n("PostgreSQL Superuser or Priviledged Account"));
+QGroupBox *rootInfoGBox=new QGroupBox(this,"rootInfoGBox"); rootInfoGBox->setTitle(i18n("PostgreSQL Superuser or Privileged Account"));
 rootInfoGBox->setEnabled(false); // Disable by default
 rootInfoGBox->setColumns(2);
 rootInfoGBox->setInsideSpacing(10);
