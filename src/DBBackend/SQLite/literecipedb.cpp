@@ -1277,51 +1277,6 @@ void LiteRecipeDB::portOldDatabases(float version)
 {
 // This is the first SQLite version (0.4). There's no need to upgrade anything
 
-
-// FIXME: this code has to be removed before 0.4 is released. Just for temporal BC reasons Not necessary for 0.3,
-// since 0.3 SQLite never existed :)
-
-if (version<0.4)  // "Upgrade" to 0.4
-	{
-
-
-	// Missing indexes in the previous versions
-	QString command="CREATE index rid_index ON category_list(recipe_id)";
-	database->executeQuery(command);
-
-	command="CREATE index cid_index ON category_list(category_id)";
-	database->executeQuery(command);
-
-	command="CREATE index ridil_index ON ingredient_list(recipe_id)";
-	database->executeQuery(command);
-
-	command="CREATE index iidil_index ON ingredient_list(ingredient_id)";
-	database->executeQuery(command);
-
-	// Port data
-
-	//*1:: Recipes have always category -1 to speed up searches (no JOINs needed)
-	command="SELECT r.id FROM recipes r LEFT JOIN category_list cl ON r.id=cl.recipe_id WHERE cl.category_id IS NULL;"; // Find all recipes
-	QSQLiteResult recipesFound=database->executeQuery(command);
-
-	if ( recipesFound.getStatus()!=QSQLiteResult::Failure ){
-	QSQLiteResultRow recipe=recipesFound.first();
-                while ( !recipesFound.atEnd() ) {
-		    int recipeId=recipe.data(0).toInt();
-		    QString cCommand=QString("INSERT INTO category_list VALUES (%1,-1);").arg(recipeId);
-		    database->executeQuery(cCommand);
-		    recipe=recipesFound.next();
-                }
-            }
-
-	// Set the version to the new one (0.4)
-
-	command="DELETE FROM db_info;"; // Remove previous version records if they exist
-		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.3+(CVS)');"; // Set the new version
-		database->executeQuery(command);
-	}
-
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -1334,9 +1289,9 @@ if ( dbVersion.getStatus()!=QSQLiteResult::Failure ) {
 QSQLiteResultRow row=dbVersion.first();
 	if (!dbVersion.atEnd())
 		return(row.data(0).toDouble());// There should be only one (or none for old DB) element, so go to first
-	else return (0.31); // if table is empty, assume oldest (0.4), and port //FIXME: put 0.4 before the release
+	else return (0.4); // if table is empty, assume oldest (0.4), and port
 }
-else return(0.31); // By default go for oldest (0.4) // FIXME: put 0.4 here for the release
+else return(0.4); // By default go for oldest (0.4)
 }
 
 void LiteRecipeDB::loadCategories(ElementList *list)

@@ -1179,7 +1179,9 @@ void MySQLRecipeDB::portOldDatabases(float version)
 {
 std::cerr<<"Current database version is..."<<version<<"\n";
 QString command;
-if (version<0.3)	// The database was generated with an old version of Krecipes, needs upgrade to 			//the current v 0.3 (version no means the version in which this DB structure 				//was introduced)
+if (version<0.3)	// The database was generated with a version older than v 0.3. First update to 0.3 version
+			// ( note that version no. means the version in which this DB structure
+			// was introduced)
 	{
 
 	// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
@@ -1190,11 +1192,11 @@ if (version<0.3)	// The database was generated with an old version of Krecipes, 
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
-	command="INSERT INTO db_info VALUES(0.3,'Krecipes 0.3');"; // Set the new version
+	command="INSERT INTO db_info VALUES(0.3,'Krecipes 0.4');"; // Set the new version
 		tableToAlter.exec(command);
 	}
 
-if (version<0.4)  // Upgrade to DB version 0.4
+if (version<0.4)  // Upgrade to the current DB version 0.4
 	{
 
 	// Add new columns to existing tables (creating any new tables is not necessary. Integrity check does that before)
@@ -1232,7 +1234,7 @@ if (version<0.4)  // Upgrade to DB version 0.4
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
-	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.3+(CVS)');"; // Set the new version
+	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.4');"; // Set the new version
 		tableToAlter.exec(command);
 	}
 }
