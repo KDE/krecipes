@@ -27,6 +27,7 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocale.h>
 
 #include "DBBackend/recipedb.h"
@@ -37,12 +38,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
   ingredientLast(0),
   database(db)
 {
-	advancedSearchLayout = new QHBoxLayout( this, 11, 6, "advancedSearchLayout"); 
+	///AUTOMATICALLY GENERATED GUI CODE///
+	advancedSearchLayout = new QHBoxLayout( this, 0, 0, "advancedSearchLayout"); 
 	
 	widgetStack = new QWidgetStack( this, "widgetStack" );
 	
 	searchPage = new QWidget( widgetStack, "searchPage" );
-	searchPageLayout = new QGridLayout( searchPage, 1, 1, 11, 6, "searchPageLayout"); 
+	searchPageLayout = new QGridLayout( searchPage, 1, 1, 3, 3, "searchPageLayout"); 
 	
 	searchButtonsLayout = new QHBoxLayout( 0, 0, 6, "searchButtonsLayout"); 
 	searchSpacer = new QSpacerItem( 481, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -68,7 +70,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoriesFrame->setFrameShadow( QFrame::Raised );
 	categoriesFrame->setLineWidth( 0 );
 	categoriesFrameLayout = new QGridLayout( categoriesFrame, 1, 1, 0, 0, "categoriesFrameLayout"); 
-	catSpacer = new QSpacerItem( 158, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	catSpacer = new QSpacerItem( 158, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	categoriesFrameLayout->addItem( catSpacer, 3, 2 );
 	
 	catTypeComboBox = new QComboBox( FALSE, categoriesFrame, "catTypeComboBox" );
@@ -118,7 +120,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorUnselectAllButton = new QPushButton( authorsFrame, "authorUnselectAllButton" );
 	
 	authorsFrameLayout->addWidget( authorUnselectAllButton, 2, 1 );
-	authorSpacer = new QSpacerItem( 27, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	authorSpacer = new QSpacerItem( 27, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	authorsFrameLayout->addItem( authorSpacer, 2, 2 );
 	
 	authorSelectAllButton = new QPushButton( authorsFrame, "authorSelectAllButton" );
@@ -149,7 +151,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsFrame->setFrameShape( QFrame::StyledPanel );
 	servingsFrame->setFrameShadow( QFrame::Raised );
 	servingsFrame->setLineWidth( 0 );
-	servingsFrameLayout = new QHBoxLayout( servingsFrame, 11, 6, "servingsFrameLayout"); 
+	servingsFrameLayout = new QHBoxLayout( servingsFrame, 0, 0, "servingsFrameLayout"); 
 	
 	servingsComboBox = new QComboBox( FALSE, servingsFrame, "servingsComboBox" );
 	servingsComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, servingsComboBox->sizePolicy().hasHeightForWidth() ) );
@@ -189,7 +191,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingTypeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, ingTypeComboBox->sizePolicy().hasHeightForWidth() ) );
 	
 	ingredientsFrameLayout->addMultiCellWidget( ingTypeComboBox, 0, 0, 0, 2 );
-	ingSpacer = new QSpacerItem( 184, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	ingSpacer = new QSpacerItem( 184, 21, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	ingredientsFrameLayout->addItem( ingSpacer, 2, 2 );
 	
 	ingSelectAllButton = new QPushButton( ingredientsFrame, "ingSelectAllButton" );
@@ -217,6 +219,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView = new QListView( resultBox, "resultsListView" );
 	resultsListView->addColumn( i18n( "Recipe" ) );
 	resultsListView->addColumn( i18n( "Id" ) );
+	resultsListView->setAllColumnsShowFocus( TRUE );
 	resultBoxLayout->addWidget( resultsListView );
 	resultPageLayout->addWidget( resultBox );
 	
@@ -234,6 +237,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	advancedSearchLayout->addWidget( widgetStack );
 	languageChange();
 	clearWState( WState_Polished );
+	///END OF AUTOMATICALLY GENERATED GUI CODE///
+	
+	KIconLoader *il=new KIconLoader;
+	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
+	pm=il->loadIcon("back", KIcon::NoGroup,16); backButton->setIconSet(pm);
 
 	authorsFrame->setEnabled(false);
 	categoriesFrame->setEnabled(false);
@@ -648,8 +656,6 @@ void AdvancedSearchDialog::search()
 				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
  				{
 					int id = map_it.key()->text(1).toInt();
-					kdDebug()<<"find result: "<<(*it).ingList.find( id )<<endl;
-				kdDebug()<<"  recipe: "<<(*it).recipeID<<endl;
 					if ( (*it).ingList.find( id ) == -1 )
 					{
 						it = allRecipes.remove( it ); it--;

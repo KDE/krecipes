@@ -78,7 +78,7 @@ private:
 	QListView* resultsListView;
 	QPushButton* backButton;
 	QPushButton* openButton;
-
+	
 	QHBoxLayout* advancedSearchLayout;
 	QGridLayout* searchPageLayout;
 	QHBoxLayout* searchButtonsLayout;
