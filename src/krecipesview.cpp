@@ -138,6 +138,11 @@ KrecipesView::KrecipesView(QWidget *parent)
     //rightPanel->setMaximumWidth(10000);
 
     // Design Left Panel
+    
+         // Submenus
+    dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
+     
+         // Buttons
     buttonsList = new QPtrList<KreMenuButton>();
     buttonsList->setAutoDelete( TRUE );
 
@@ -149,23 +154,23 @@ KrecipesView::KrecipesView(QWidget *parent)
     button1->setIconSet(il.loadIconSet( "trolley", KIcon::Small ));
     buttonsList->append(button1);
 
-    button2=new KreMenuButton(leftPanel);
+    button2=new KreMenuButton(leftPanel,dataMenu);
     button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Small ));
     //buttonsList->append(button2);
 
-    button3=new KreMenuButton(leftPanel);
+    button3=new KreMenuButton(leftPanel,dataMenu);
     button3->setIconSet(il.loadIconSet( "properties", KIcon::Small ));
     buttonsList->append(button3);
 
-    button4=new KreMenuButton(leftPanel);
+    button4=new KreMenuButton(leftPanel,dataMenu);
     button4->setIconSet(il.loadIconSet( "units", KIcon::Small ));
     buttonsList->append(button4);
 
-    button5=new KreMenuButton(leftPanel);
+    button5=new KreMenuButton(leftPanel,dataMenu);
     button5->setIconSet(il.loadIconSet( "categories", KIcon::Small ));
     buttonsList->append(button5);
 
-    button6=new KreMenuButton(leftPanel);
+    button6=new KreMenuButton(leftPanel,dataMenu);
     button6->setIconSet(il.loadIconSet( "personal", KIcon::Small ));
     buttonsList->append(button6);
 
@@ -298,46 +303,57 @@ void KrecipesView::slotSetTitle(const QString& title)
 // Function to switch panels
 void KrecipesView::slotSetPanel(int w)
 {
-switch (w)
-{
-case SelectP: selectPanel->reload(); // Reload data
-	rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
-	rightPanel->raise(selectPanel);
-	break;
-case ShoppingP: shoppingListPanel->reload(); // Reload data
-	rightPanel->setHeader(i18n("Shopping List"),"trolley");
-	rightPanel->raise(shoppingListPanel);
-	break;
-case IngredientsP: ingredientsPanel->reload();// Reload data
-	rightPanel->setHeader(i18n("Ingredients"),"ingredients");
-	rightPanel->raise(ingredientsPanel);
-	break;
-case PropertiesP: propertiesPanel->reload();
-	rightPanel->setHeader(i18n("Properties"),"properties");
-	rightPanel->raise(propertiesPanel);
+if (leftPanel->currentMenu()==leftPanel->mainMenu())
+	{
+	switch (w)
+		{
+		case SelectP: selectPanel->reload(); // Reload data
+			rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
+			rightPanel->raise(selectPanel);
+			break;
+		case ShoppingP: shoppingListPanel->reload(); // Reload data
+			rightPanel->setHeader(i18n("Shopping List"),"trolley");
+			rightPanel->raise(shoppingListPanel);
+			break;
+		}
+	}
 
-	break;
-case UnitsP: unitsPanel->reload(); // Reload data
-	rightPanel->setHeader(i18n("Units"),"units");
-	rightPanel->raise(unitsPanel);
-	break;
-case CategoriesP:
-	categoriesPanel->reload();
-	rightPanel->setHeader(i18n("Categories"),"categories");
-	rightPanel->raise(categoriesPanel);
-	break;
-case DietWizardP: dietPanel->reload();
-	rightPanel->setHeader(i18n("Diet Wizard"),"diet");
-	rightPanel->raise(dietPanel);
-	break;
-case AuthorsP: authorsPanel->reload();
-	rightPanel->setHeader(i18n("Authors"),"personal");
-	rightPanel->raise(authorsPanel);
-	break;
-case ContextHelp:
-  break;
+else if (leftPanel->currentMenu()==dataMenu)
+	{
+	switch(w)
+		{
+		case IngredientsP: ingredientsPanel->reload();// Reload data
+			rightPanel->setHeader(i18n("Ingredients"),"ingredients");
+			rightPanel->raise(ingredientsPanel);
+			break;
+		case PropertiesP: propertiesPanel->reload();
+			rightPanel->setHeader(i18n("Properties"),"properties");
+			rightPanel->raise(propertiesPanel);
+		
+			break;
+		case UnitsP: unitsPanel->reload(); // Reload data
+			rightPanel->setHeader(i18n("Units"),"units");
+			rightPanel->raise(unitsPanel);
+			break;
+		case CategoriesP:
+			categoriesPanel->reload();
+			rightPanel->setHeader(i18n("Categories"),"categories");
+			rightPanel->raise(categoriesPanel);
+			break;
+		case DietWizardP: dietPanel->reload();
+			rightPanel->setHeader(i18n("Diet Wizard"),"diet");
+			rightPanel->raise(dietPanel);
+			break;
+		case AuthorsP: authorsPanel->reload();
+			rightPanel->setHeader(i18n("Authors"),"personal");
+			rightPanel->raise(authorsPanel);
+			break;
+		case ContextHelp:
+		break;
+		}
+	}
 }
-}
+
 void KrecipesView::save(void)
 {
 inputPanel->save();
@@ -590,7 +606,7 @@ recipeWidget=w;
 KIconLoader il;
 if (!recipeButton)
 {
-	recipeButton=new KreMenuButton(leftPanel,"recipeButton");
+	recipeButton=new KreMenuButton(leftPanel,0,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 	recipeButton->setTitle(title);
 	if(contextHelp->isShown())
@@ -648,64 +664,83 @@ rightPanel->raise(viewPanel);
 }
 
 void KrecipesView::setContextHelp(int action){
-  switch(action){
-    case SelectP:
-      contextTitle->setText(i18n("<b>Recipes list</b>"));
-      contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
-      "Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i><br><br>"
-      "Right click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends <br><br>"
-      "Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a> and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, appart from our excellent Krecipes format obviously.<br><br>"
-      ));
-    break;
-    case ShoppingP:
-      contextTitle->setText(i18n("<b>Shopping list</b>"));
-      contextText->setText(i18n("Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
-      "If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Wizard</b> to autogenerate your diet, and then the shopping list.<br><br>"
-      ));
-    break;
-  case IngredientsP:
-      contextTitle->setText(i18n("<b>Ingredients list</b>"));
-      contextText->setText(i18n("Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
-      "Note that you can add more properties and units to the list from the <i>Properties List</i> menu"
-      ));
-    break;
-  case PropertiesP:
-      contextTitle->setText(i18n("<b>Properties list</b>"));
-            contextText->setText(i18n("What properties do you want to know from your recipes? <i>Fat, Energy, Vitamins, Cost,...</i>?<br><br>"
-	    "Add those here and later define the characteristics in the ingredients."
-	    ));
-    break;
-  case UnitsP:
-      contextTitle->setText(i18n("<b>Units list</b>"));
-      contextText->setText(i18n("Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
-      ));
-    break;
-  case CategoriesP:
-      contextTitle->setText(i18n("<b>Categories list</b>"));
-      contextText->setText(i18n("How do you want to classify your recipes? <i>Desserts, Main Course, Low Fat, Chocolate, Delicious, Vegetarian, ....</i> Just add and edit those here."
-      ));
-    break;
-  case DietWizardP:
-      contextTitle->setText(i18n("<b>Diet Wizard</b>"));
-      contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
-      "Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-      "Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
-      ));
-    break;
-  case AuthorsP:
-      contextTitle->setText(i18n("<b>Authors list</b>"));
-      contextText->setText(i18n("Keep track of the authors that created the recipes.<br><br>"
-      "You can use this dialog to edit the details of the authors or add/remove them."
-      ));
-    break;
-  case RecipeEdit:
-      contextTitle->setText(i18n("<b>Edit recipe</b>"));
-      contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes!<br><br>"
-      "If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
-      "Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
-      ));
-    break;
-  }
+if (leftPanel->currentMenu()==leftPanel->mainMenu())
+	{
+  	switch(action)
+		{
+		case SelectP:
+		contextTitle->setText(i18n("<b>Recipes list</b>"));
+		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
+		"Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i><br><br>"
+		"Right click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends <br><br>"
+		"Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a> and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, appart from our excellent Krecipes format obviously.<br><br>"
+		));
+		break;
+		
+		case ShoppingP:
+		contextTitle->setText(i18n("<b>Shopping list</b>"));
+		contextText->setText(i18n("Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
+		"If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Wizard</b> to autogenerate your diet, and then the shopping list.<br><br>"
+		));
+		break;
+		}
+	}
+else if (leftPanel->currentMenu()==dataMenu)
+	{
+	
+	switch(action)
+			{
+		case IngredientsP:
+		contextTitle->setText(i18n("<b>Ingredients list</b>"));
+		contextText->setText(i18n("Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
+		"Note that you can add more properties and units to the list from the <i>Properties List</i> menu"
+		));
+		break;
+		
+		case PropertiesP:
+		contextTitle->setText(i18n("<b>Properties list</b>"));
+			contextText->setText(i18n("What properties do you want to know from your recipes? <i>Fat, Energy, Vitamins, Cost,...</i>?<br><br>"
+			"Add those here and later define the characteristics in the ingredients."
+			));
+		break;
+		
+		case UnitsP:
+		contextTitle->setText(i18n("<b>Units list</b>"));
+		contextText->setText(i18n("Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
+		));
+		break;
+		
+		case CategoriesP:
+		contextTitle->setText(i18n("<b>Categories list</b>"));
+		contextText->setText(i18n("How do you want to classify your recipes? <i>Desserts, Main Course, Low Fat, Chocolate, Delicious, Vegetarian, ....</i> Just add and edit those here."
+		));
+		break;
+		
+		case DietWizardP:
+		contextTitle->setText(i18n("<b>Diet Wizard</b>"));
+		contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
+		"Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
+		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
+		));
+		break;
+		
+		case AuthorsP:
+		contextTitle->setText(i18n("<b>Authors list</b>"));
+		contextText->setText(i18n("Keep track of the authors that created the recipes.<br><br>"
+		"You can use this dialog to edit the details of the authors or add/remove them."
+		));
+		break;
+		
+		case RecipeEdit:
+		contextTitle->setText(i18n("<b>Edit recipe</b>"));
+		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes!<br><br>"
+		"If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
+		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
+		));
+		break;
+		
+		}
+	}
 }
 
 

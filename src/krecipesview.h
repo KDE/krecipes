@@ -12,6 +12,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qhbox.h>
+#include <qvaluelist.h>
 #include <qvbox.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
@@ -33,6 +34,7 @@ class AuthorsDialog;
 class CategoriesEditorDialog;
 class DietWizardDialog;
 class IngredientsDialog;
+class Menu;
 class KreMenu;
 class KreMenuButton;
 class PanelDeco;
@@ -43,7 +45,7 @@ class RecipeViewDialog;
 class SelectRecipeDialog;
 class ShoppingListDialog;
 class UnitsDialog;
-
+typedef QValueList <Menu>::Iterator MenuId;
 
 
 /**
@@ -64,7 +66,8 @@ class UnitsDialog;
 
 
  // Some constants
- enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, ContextHelp=7, RecipeEdit=8, DietWizardP=10};
+ enum mainPanels{SelectP=1,ShoppingP=2};
+ enum dataPanels{IngredientsP=1, PropertiesP=2, UnitsP=3, CategoriesP=4,AuthorsP=5, ContextHelp=6, RecipeEdit=7, DietWizardP=8};
 
 
  // Class KrecipesView
@@ -130,6 +133,7 @@ private:
 	// Widgets
 	QHBox *splitter;
 	KreMenu *leftPanel;
+	MenuId dataMenu;
 	PanelDeco *rightPanel;
   QPtrList<KreMenuButton> *buttonsList;
 	KreMenuButton *button0;

@@ -15,28 +15,33 @@
 #include <qcursor.h>
 #include <qfont.h>
 #include <qimage.h>
+#include <qobjectlist.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qsignalmapper.h>
 
 #include <iostream>
 
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kiconloader.h>
 #include <kimageeffect.h>
+#include <klocale.h>
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 
 KreMenu::KreMenu(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-std::cerr<<"Creating menu widget\n";
-Menu mainMenu; 
-mainMenu.childPos=10; // Initial button is on top (10px), then keep scrolling down
-mainMenu.widgetNumber=0; // Initially we have no buttons
-mainMenu.activeButton=0; // Button that is highlighted
-menus.append(mainMenu);
+kdDebug()<<"Creating menu widget\n";
+Menu newMenu;
 
-currentMenu=&(*(menus.begin()));
+mainMenuId=menus.append(newMenu);
+
+currentMenuId=mainMenuId;
+m_currentMenu=&(*currentMenuId);
+
 dragging=false;
 setMouseTracking(true);
 }
@@ -44,27 +49,127 @@ setMouseTracking(true);
 
 KreMenu::~KreMenu()
 {
-std::cerr<<"Destroying menu widget\n";
+kdDebug()<<"Destroying menu widget\n";
+}
+
+void KreMenu::childEvent (QChildEvent *e)
+{
+kdDebug()<<"A child event in the menu widget\n";
+	if (e->type()==QChildEvent::ChildInserted)
+		{
+		
+		QObject *child=e->child();
+		if (child->inherits("KreMenuButton"))
+			{
+			kdDebug()<<"New child in menu\n";
+			KreMenuButton* button=(KreMenuButton*) child;
+			
+			Menu *buttonMenu=&(*(button->menuId));
+			
+			
+			
+			if (!(buttonMenu->activeButton))  // Highlight the button if it's the first in the menu
+				{
+				button->setActive(true);
+				buttonMenu->activeButton=button;
+				}
+			
+			buttonMenu->addButton(button);
+			
+			if (buttonMenu!=m_currentMenu) button->hide();
+			else button->show();
+			
+			connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+			}
+		}
+	else if (e->type()==QChildEvent::ChildRemoved)
+		{
+		QObject *child=e->child();
+		
+		kdDebug()<<"A child button was destroyed. Lets remove?\n";
+		KreMenuButton *button=(KreMenuButton*) child;
+		if (m_currentMenu->positionList.find(button)!=m_currentMenu->positionList.end()) // Ensure that what was removed was a button
+			{
+			kdDebug()<<"Removing child from menu\n";
+			// Remove the button from the list first
+			int pos=m_currentMenu->positionList[button];// FIXME: this works only if the button is removed from the main menu
+			m_currentMenu->widgetList.remove(pos); // FIXME: this works only if the button is removed from the main menu
+			m_currentMenu->positionList.remove(button);// FIXME: this works only if the button is removed from the main menu
+	
+			// Now recalculate the position of the next button
+			(m_currentMenu->widgetNumber)--;// FIXME: this works only if the button is removed from the main menu
+			kdDebug()<<"Will be inserted after widget id.:"<<(m_currentMenu->widgetNumber)-1<<"\n";
+			KreMenuButton *lastButton=m_currentMenu->widgetList[(m_currentMenu->widgetNumber)-1];
+			if (lastButton) m_currentMenu->childPos=lastButton->y()+lastButton->height();
+			m_currentMenu->activeButton=0;
+			}
+		
+		}
+QWidget::childEvent(e);
+}
+
+void KreMenu::collectClicks(KreMenuButton *w)
+{
+kdDebug()<<"Menu clicked\n";
+
+highlightButton(w);
+
+// Emit signal indicating button activation with button ID
+int widgetn=(*(w->menuId)).positionList[w];
+emit clicked(widgetn);
+}
+
+MenuId KreMenu::createSubMenu(const QString &title, const QString &icon)
+{
+	kdDebug()<<"Creating new submenu\n";
+	
+	// Create the new menu
+	Menu newMenu;
+	MenuId id=menus.append(newMenu);
+	
+	// Add a button to the main menu for this submenu
+	KIconLoader il;
+	KreMenuButton *newMenuButton=new KreMenuButton(this);
+	newMenuButton->subMenuId=id;
+	newMenuButton->setTitle(title);
+	newMenuButton->setIconSet(il.loadIconSet(icon, KIcon::Small));
+	
+	// Add a button to the submenu to go back to the top menu
+	KreMenuButton *newSubMenuButton=new KreMenuButton(this);
+	newSubMenuButton->menuId=id;
+	newSubMenuButton->subMenuId=mainMenuId;
+	newSubMenuButton->setTitle(i18n("Up"));
+	newSubMenuButton->setIconSet(il.loadIconSet("1uparrow", KIcon::Small));
+	
+	connect(newMenuButton, SIGNAL(clicked(MenuId)),this, SLOT(showMenu(MenuId)) );
+	connect(newSubMenuButton, SIGNAL(clicked(MenuId)),this, SLOT(showMenu(MenuId)) );
+	
+	
+	return id;
 }
 
 void KreMenu::highlightButton(KreMenuButton *button)
 {
+kdDebug()<<"Highlighting button\n";
+MenuId buttonMenuId=button->menuId;
+Menu *buttonMenu=&(*buttonMenuId);
+
 //Deactivate the old button
-if (currentMenu->activeButton) 
+if (buttonMenu->activeButton)
 	{
-	currentMenu->activeButton->setActive(false);
-	currentMenu->activeButton->update();
+	buttonMenu->activeButton->setActive(false);
+	buttonMenu->activeButton->update();
 	}
 
 //Activate the new button
 
 button->setActive(true); button->update();
-currentMenu->activeButton=button;
+buttonMenu->activeButton=button;
 }
 
 void KreMenu::mousePressEvent (QMouseEvent *e)
 {
-std::cerr<<"Mouse clicked on menu\n";
+kdDebug()<<"Mouse clicked on menu\n";
 int x=e->x(),y=e->y();
 if (x > (width()-15))
 	{
@@ -136,7 +241,7 @@ if (dragging)
 
 void KreMenu::mouseReleaseEvent (QMouseEvent *)
 {
-std::cerr<<"Mouse released over menu\n";
+kdDebug()<<"Mouse released over menu\n";
 dragging=false;
 }
 
@@ -146,7 +251,7 @@ QSize KreMenu::sizeHint() const {
 
 void KreMenu::paintEvent(QPaintEvent *)
 {
-std::cerr<<"Painting menu\n";
+kdDebug()<<"Painting menu\n";
     // Make sure the size is bigger than the minimum necessary
     if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
     
@@ -180,9 +285,9 @@ std::cerr<<"Painting menu\n";
     painter.drawRoundRect(0,0,width(),height(),(int)(2.0/width()*height()),2);
 
     //Draw the top line bordering with the first button
-    if (currentMenu->activeButton) // draw only if there's a button
+    if (m_currentMenu->activeButton) // draw only if there's a button
     {
-        int w=currentMenu->activeButton->width();
+        int w=m_currentMenu->activeButton->width();
 	painter.setPen(c1);
 	painter.drawLine(w/5,8,w-1,8);
 	painter.setPen(c2);
@@ -194,78 +299,55 @@ std::cerr<<"Painting menu\n";
     bitBlt(this, 0, 0, &kpm);
     }
 
-void KreMenu::childEvent (QChildEvent *e)
-{
-std::cerr<<"A child event in the menu widget\n";
-	if (e->type()==QChildEvent::ChildInserted)
-		{
-		
-		QObject *child=e->child();
-		if (child->inherits("KreMenuButton"))
-			{
-			std::cerr<<"New child in menu\n";
-			KreMenuButton* button=(KreMenuButton*)(e->child());
-			if (!currentMenu->activeButton)  // Highlight the button if it's the first
-				{
-				button->setActive(true);
-				currentMenu->activeButton=button;
-				}
-				
-			currentMenu->addButton(button); 
-			connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
-			if (!button->isShown()) button->show();
-			}
-		}
-	else if (e->type()==QChildEvent::ChildRemoved)
-		{
-		QObject *child=e->child();
-		
-		std::cerr<<"A child button was destroyed. Lets remove?\n";
-		KreMenuButton *button=(KreMenuButton*) child;
-		if (currentMenu->positionList.find(button)!=currentMenu->positionList.end()) // Ensure that what was removed was a button
-			{
-			std::cerr<<"Removing child from menu\n";
-			// Remove the button from the list first
-			int pos=currentMenu->positionList[button];
-			currentMenu->widgetList.remove(pos);
-			currentMenu->positionList.remove(button);
-	
-			// Now recalculate the position of the next button
-			(currentMenu->widgetNumber)--;
-			std::cerr<<"Will be inserted after widget id.:"<<(currentMenu->widgetNumber)-1<<"\n";
-			KreMenuButton *lastButton=currentMenu->widgetList[(currentMenu->widgetNumber)-1];
-			if (lastButton) currentMenu->childPos=lastButton->y()+lastButton->height();
-			currentMenu->activeButton=0;
-			}
-		
-		}
-QWidget::childEvent(e);
-}
-
-void KreMenu::collectClicks(KreMenuButton *w)
-{
-std::cerr<<"Menu clicked\n";
-
-highlightButton(w);
-
-// Emit signal indicating button activation with button ID
-int widgetn=currentMenu->positionList[w];
-emit clicked(widgetn);
-}
-
 void KreMenu::resizeEvent(QResizeEvent* e)
 {
-std::cerr<<"Menu was resized\n";
+    kdDebug()<<"Menu was resized\n";
     emit resized((e->size()).width(), (e->size()).height());
 }
 
-
-KreMenuButton::KreMenuButton(QWidget *parent, const char *name):QWidget(parent, name)
+void KreMenu::showMenu(MenuId id)
 {
-std::cerr<<"Created new button\n";
+
+// Hide the buttons in the current menu
+// and show the ones in the new menu
+
+QObjectList *childElements=queryList();
+QObjectListIterator it(*childElements);
+
+QObject *obj;
+while ((obj=it.current())!=0)
+	{
+	++it;
+	if (obj->inherits("KreMenuButton"))
+		 {
+		 KreMenuButton *button=(KreMenuButton*) obj;
+		 if (button->menuId==currentMenuId) button->hide();
+		 else if (button->menuId==id) button->show();
+		 }
+	}
+
+
+// Set the new menu as current
+currentMenuId=id;
+m_currentMenu=&(*(currentMenuId));
+}
+
+
+
+
+
+KreMenuButton::KreMenuButton(KreMenu *parent, MenuId id, const char *name):QWidget(parent, name)
+{
+kdDebug()<<"Created new button\n";
 icon=0;
 highlighted=false;
 text=QString::null;
+
+if (id==0) menuId=parent->mainMenu();
+else menuId=id;
+
+subMenuId=0; // By default it's not a submenu button
+
 resize(parent->size().width(),40);
 connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale()));
 connect(this,SIGNAL(clicked()),this,SLOT(forwardClicks()));
@@ -275,12 +357,12 @@ setCursor(QCursor(KCursor::handCursor()));
 
 KreMenuButton::~KreMenuButton()
 {
-std::cerr<<"Destroyed a button\n";
+kdDebug()<<"Destroyed a button\n";
 }
 
 void KreMenuButton::mousePressEvent (QMouseEvent *)
 {
-std::cerr<<"Clicked on a button\n";
+kdDebug()<<"Clicked on a button\n";
 emit clicked();
 }
 
@@ -296,7 +378,7 @@ QSize KreMenuButton::sizeHint() const
 
 void KreMenuButton::paintEvent(QPaintEvent *)
 {
-
+if (!isShown()) return;
     // First draw the gradient
     int darken=130,lighten=120;
     QColor c1,c2,c1h,c2h; //non-highlighted and highlighted versions
@@ -458,12 +540,15 @@ void KreMenuButton::setIconSet(const QIconSet &is)
 
 Menu::Menu(void)
 {
+childPos=10; // Initial button is on top (10px), then keep scrolling down
+widgetNumber=0; // Initially we have no buttons
+activeButton=0; // Button that is highlighted
 }
 
 
 Menu::Menu(const Menu &m)
 {
-std::cerr<<"New menu list\n";
+kdDebug()<<"New menu list\n";
 activeButton=m.activeButton;
 childPos=m.childPos;
 widgetNumber=m.widgetNumber;
@@ -474,7 +559,7 @@ copyMap(widgetList,m.widgetList);
 
 Menu::~Menu(void)
 {
-std::cerr<<"Destroyed menu list\n";
+kdDebug()<<"Destroyed menu list\n";
 }
 
 Menu& Menu::operator=(const Menu &m)
@@ -493,7 +578,7 @@ return *this;
 
 void Menu::addButton(KreMenuButton* button)
 {
-std::cerr<<"Adding button to menu list\n";
+kdDebug()<<"Adding button to menu list\n";
 	button->move(0,childPos);
 	button->rescale();
 	childPos+=button->height();
