@@ -138,6 +138,11 @@ private: QString nameStored;
 MealInput::MealInput(QWidget *parent):QWidget(parent)
 {
 
+// Initialize data
+categoriesListLocalCache.clear();
+constraintListLocalCache.clear();
+
+// Design the dialog
 QVBoxLayout *layout=new QVBoxLayout(this);
 layout->setSpacing(20);
 
@@ -184,14 +189,44 @@ MealInput::~MealInput()
 {
 }
 
+// reload from outside with new data
+
 void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
+{
+int pgcount=0;
+QValueList<DishInput*>::iterator it;
+
+categoriesListLocalCache.clear();
+constraintListLocalCache.clear();
+
+// Cache the data into the internal lists so it can be reused when creating new dishes
+
+	//Cache the possible constraints (properties) list
+	for (IngredientProperty *ip=constraintList.getFirst(); ip; ip=constraintList.getNext())
+	{
+	constraintListLocalCache.add(*ip);
+	}
+
+	//Cache the categories list
+	for (Element *el=categoriesList.getFirst(); el; el=categoriesList.getNext())
+	{
+	categoriesListLocalCache.add(*el);
+	}
+
+reload(); //load from the cache now
+
+}
+
+// reload internally with the cached data
+
+void MealInput::reload()
 {
 int pgcount=0;
 QValueList<DishInput*>::iterator it;
 for (it=dishInputList.begin(); it != dishInputList.end();it++)
 {
 	DishInput *di; di=(*it);
-	di->reload(categoriesList,constraintList);
+	di->reload(&categoriesListLocalCache,&constraintListLocalCache);
 	}
 }
 
@@ -199,12 +234,13 @@ void MealInput::changeDishNumber(int dn)
 {
 if (dn>dishNumber)
 	{
-	 DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
-	 dishStack->addWidget(newDish);
-	 dishInputList.append(newDish);
-	 dishStack->raiseWidget(newDish);
-	 dishNumber++;
-	 }
+	DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
+	newDish->reload(&categoriesListLocalCache,&constraintListLocalCache);
+	dishStack->addWidget(newDish);
+	dishInputList.append(newDish);
+	dishStack->raiseWidget(newDish);
+	dishNumber++;
+	}
 }
 
 
@@ -247,20 +283,20 @@ DishInput::~DishInput()
 {
 }
 
-void DishInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
+void DishInput::reload(ElementList *categoryList, IngredientPropertyList *constraintList)
 {
 categoriesView->clear();
 constraintsView->clear();
 
 	//Load the possible constraints (properties) list
-for (IngredientProperty *ip=constraintList.getFirst(); ip; ip=constraintList.getNext())
+for (IngredientProperty *ip=constraintList->getFirst();ip; ip=constraintList->getNext())
 {
 ConstraintsListItem *it=new ConstraintsListItem(constraintsView,ip);
 constraintsView->insertItem(it);
 }
 
 	//Load the categories list
-for (Element *el=categoriesList.getFirst(); el; el=categoriesList.getNext())
+for (Element *el=categoryList->getFirst(); el; el=categoryList->getNext())
 {
 CategoriesListItem *it=new CategoriesListItem(categoriesView,el->name);
 categoriesView->insertItem(it);

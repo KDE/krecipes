@@ -92,6 +92,8 @@ private:
 		// Private Variables
 		int dishNumber;
 		QValueList <DishInput*> dishInputList;
+		ElementList categoriesListLocalCache;
+		IngredientPropertyList constraintListLocalCache;
 
 		// Settings section for the meal
 		QHBox *mealOptions;
@@ -108,6 +110,9 @@ private:
 
 		// Settings for the dish
 		QWidgetStack *dishStack;
+	// Methods
+		void reload(); // Reloads again from the cached data
+
 private slots:
 		void changeDishNumber(int dn);
 
@@ -121,7 +126,7 @@ public:
 	~DishInput();
 	// Methods
 	void setDishTitle(const QString & text);
-	void reload(ElementList &categoriesList,IngredientPropertyList &constraintList);
+	void reload(ElementList *categoryList, IngredientPropertyList *constraintList);
 
 private:
 		QHGroupBox *listBox;
