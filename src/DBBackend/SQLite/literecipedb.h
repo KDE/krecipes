@@ -132,7 +132,6 @@ public:
 	float databaseVersion(void);
 
 private:
-	int  findExistingElementByName( const QString& name, const QString &element );
 	void loadElementList(ElementList *elList, QSQLiteResult *query);
 	void loadPropertyElementList(ElementList *elList, QSQLiteResult *query);
 	void portOldDatabases(float version);

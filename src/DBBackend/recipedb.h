@@ -118,8 +118,13 @@ public:
 
 	virtual float databaseVersion(void)=0;
 
+	int maxAuthorNameLength() const{ return 20; }
+	int maxCategoryNameLength() const{ return 20; }
+	int maxIngredientNameLength() const{ return 50; }
+	int maxRecipeTitleLength() const{ return 200; }
+	int maxUnitNameLength() const{ return 20; }
+
 protected:
-	virtual int  findExistingElementByName( const QString& name, const QString &element )=0;
 	virtual void portOldDatabases(float version)=0;
 };
 

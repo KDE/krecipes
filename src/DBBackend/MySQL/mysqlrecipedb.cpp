@@ -945,15 +945,15 @@ void MySQLRecipeDB::createTable(QString tableName)
 
 QString command;
 
-if (tableName=="recipes") command="CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(200),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));";
+if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
-else if (tableName=="ingredients") command="CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id));";
+else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
 else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER);";
 
 else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") command="CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(20), PRIMARY KEY (id));";
+else if (tableName== "units") command=QString("CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
 
 else if  (tableName=="ingredient_info") command="CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
@@ -961,11 +961,11 @@ else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_pr
 
 else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") command="CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(20) default NULL,PRIMARY KEY (id));";
+else if (tableName=="categories") command=QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL);";
 
-else if (tableName=="authors") command="CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(20) default NULL,PRIMARY KEY (id));";
+else if (tableName=="authors") command=QString("CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
 else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
 
@@ -1167,9 +1167,12 @@ QString command;
 	return(unitsToLoad.size());
 }
 
-int MySQLRecipeDB::findExistingElementByName( const QString& name, const QString &element )
+int MySQLRecipeDB::findExistingAuthorByName( const QString& name )
 {
-	QString command=QString("SELECT id FROM %1 WHERE name='%2';").arg(element).arg(escapeAndEncode(name));
+	QCString search_str = escapeAndEncode(name);
+	search_str.truncate(maxAuthorNameLength()); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM authors WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
 	int id = -1;
 
@@ -1179,29 +1182,57 @@ int MySQLRecipeDB::findExistingElementByName( const QString& name, const QString
 	return id;
 }
 
-int MySQLRecipeDB::findExistingAuthorByName( const QString& name )
-{
-	return findExistingElementByName( name, "authors" );
-}
-
 int MySQLRecipeDB::findExistingCategoryByName( const QString& name )
 {
-	return findExistingElementByName( name, "categories" );
+	QCString search_str = escapeAndEncode(name);
+	search_str.truncate(maxCategoryNameLength()); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM categories WHERE name='%1';").arg(search_str);
+	QSqlQuery elementToLoad(command,database); // Run the query
+	int id = -1;
+
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
+	return id;
 }
 
 int MySQLRecipeDB::findExistingIngredientByName( const QString& name )
 {
-	return findExistingElementByName( name, "ingredients" );
+	QCString search_str = escapeAndEncode(name);
+	search_str.truncate(maxIngredientNameLength()); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM ingredients WHERE name='%1';").arg(search_str);
+	QSqlQuery elementToLoad(command,database); // Run the query
+	int id = -1;
+
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
+	return id;
 }
 
 int MySQLRecipeDB::findExistingUnitByName( const QString& name )
 {
-	return findExistingElementByName( name, "units" );
+	QCString search_str = escapeAndEncode(name);
+	search_str.truncate(maxUnitNameLength()); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM units WHERE name='%1';").arg(search_str);
+	QSqlQuery elementToLoad(command,database); // Run the query
+	int id = -1;
+
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
+	return id;
 }
 
 int MySQLRecipeDB::findExistingRecipeByName( const QString& name )
 {
-	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(escapeAndEncode(name));
+	QCString search_str = escapeAndEncode(name);
+	search_str.truncate(maxRecipeTitleLength()); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
 
 	int id = -1;
