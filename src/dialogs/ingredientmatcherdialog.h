@@ -99,7 +99,7 @@ public:
 		{
 		if (column==0) return(recipeStored->title);
 		else if ((column==1) && ingredientListStored) 
-			return (KStringHandler::rPixelSqueeze(ingredientListStored->join (","),listView()->fontMetrics(),150));
+			return ingredientListStored->join (",");
 		else return(QString::null);
 		}
 };
