@@ -74,7 +74,6 @@ temp_photo_geometry = config->readRectEntry("Geometry");
 
 int phwidth = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
 int phheight =temp_photo_geometry.height()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
-std::cerr<<"Photo size is: "<<phwidth<<" "<<phheight<<"\n";
 
 QImage image;
 if (loadedRecipe->photo.isNull())
