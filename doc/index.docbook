@@ -1,0 +1,1393 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY krecipes "<application>Krecipes</application>">
+  <!ENTITY kappname "&krecipes;"><!-- replace kapp here, do *not* replace kappname-->
+  <!ENTITY package "kdeextragear-3"><!-- kdebase, kdeadmin, etc -->
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+  
+  
+  <!-- Do not define any other entities; instead, use the entities
+       from kde-genent.entities and $LANG/user.entities. -->
+]>
+
+<!-- The language must NOT be changed here. -->
+
+<book lang="&language;">
+
+<!-- This header contains all of the meta-information for the document such
+as Authors, publish date, the abstract, and Keywords -->
+
+<bookinfo>
+<title>The &krecipes; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Colleen</firstname>
+<surname>Beamer</surname>
+<affiliation>
+<address><email>cbeamer@interlynx.net</email></address>
+</affiliation>
+</author>
+</authorgroup>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+<copyright>
+<year>2004-2005</year>
+<holder>Colleen Beamer</holder>
+</copyright>
+<!-- Translators: put here the copyright notice of the translation -->
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook 
+     and in the FDL itself on how to use it. -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (YYYY-MM-DD) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>2005-01-21</date>
+<releaseinfo>0.7 CVS</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&krecipes; is an application to manage recipes.
+</para>
+</abstract>
+
+<!-- This is a set of Keywords for indexing by search engines.
+Please at least include KDE, the KDE package it is in, the name
+ of your application, and a few relevant keywords. -->
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeextragear-3</keyword>
+<keyword>Krecipes</keyword>
+<keyword>cookbook</keyword>
+<keyword>recipes</keyword>
+</keywordset>
+
+</bookinfo>
+
+<!-- The contents of the documentation begin here.  Label
+each chapter so with the id attribute. This is necessary for two reasons: it
+allows you to easily reference the chapter from other chapters of your
+document, and if there is no ID, the name of the generated HTML files will vary
+from time to time making it hard to manage for maintainers and for the CVS
+system. Any chapter labelled (OPTIONAL) may be left out at the author's
+discretion. Other chapters should not be left out in order to maintain a
+consistent documentation style across all KDE apps. -->
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<!-- The introduction chapter contains a brief introduction for the
+application that explains what it does and where to report
+problems. Basically a long version of the abstract.  Don't include a
+revision history. (see installation appendix comment) -->
+
+<para>
+<emphasis>&krecipes;</emphasis> is a program that lets you to manage your recipes, create shopping lists, choose a recipe based on available ingredients and plan your menu/diet in advance.
+</para>
+</chapter>
+
+<chapter id="using-krecipes">
+<title>Using &krecipes;</title>
+
+<!-- This chapter should tell the user how to use your app. You should use as
+many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
+your application. -->
+
+<!-- Note that all graphics should be in .png format. Use no gifs because of
+patent issues. -->
+
+<sect1 id="krecipes-components">
+<title>Krecipes Components</title>
+
+<para>
+
+<screenshot>
+<screeninfo>Here's a screenshot of <emphasis>&krecipes;</emphasis></screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="screenshot.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<sect2 id="getting-familiar">
+<title>Getting Familiar</title>
+<para>
+When <emphasis><emphasis>&krecipes;</emphasis></emphasis> starts, the window displays the following components &mdash;
+</para>
+
+<itemizedlist>
+<listitem><para>A menubar containing selections for <guimenu>File</guimenu>, <guimenu>View</guimenu>, <guimenu>Tools</guimenu>, <guimenu>Settings</guimenu>, and <guimenu>Help</guimenu></para></listitem>
+<listitem><para>A toolbar with icons for <guiicon>New</guiicon>, <guiicon>Save</guiicon>, and <guiicon>Print</guiicon></para></listitem>
+<listitem><para>A left-hand pane containing icons depicting and buttons for access to the various components of <emphasis>&krecipes;</emphasis></para></listitem>
+<listitem><para>A right-hand pane, which is the main <emphasis>&krecipes;</emphasis> window, that by default contains a recipe category list</para></listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="find-edit">
+<title>Finding and Editing Recipes</title>
+
+<para>
+By default, <emphasis>&krecipes;</emphasis> starts with the <quote>Find/Edit Recipes</quote> component selected in the left pane of the window.
+</para>
+
+<note><para>This section describes the method of finding recipes in the <quote>Find/Edit Recipes</quote> component.  For more specific details on <emphasis>Editing</emphasis> recipes, see the section <link linkend="edit-recipe">Editing Saved Recipes</link></para>
+</note>
+
+<para>With the <guibutton>Find/Edit Recipes</guibutton> component button selected, the main <emphasis>&krecipes;</emphasis> window displays the following &mdash;</para>
+ 
+<itemizedlist><listitem><para>A title showing the name of the component selected</para></listitem>
+<listitem><para><guilabel>Basic</guilabel> (the default) and <guilabel>Advanced</guilabel> tabs</para></listitem>
+<listitem><para>A textbox to <userinput>enter search criteria</userinput></para></listitem>
+<listitem><para>A drop-down menu for selecting the recipe category to search, or which can be used to select a single category of recipes to display</para></listitem>
+<listitem><para>A list of all recipe categories</para></listitem>
+<listitem><para>Buttons for <guibutton>Open</guibutton>, <guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing the corresponding action on a recipe</para></listitem>
+</itemizedlist>
+
+<tip><para>For more information on the basic search functionality, click the <guiicon>lightbulb</guiicon> icon in the bottom, right-hand corner of the pane containing the component list.</para></tip>
+
+<para> With the <guilabel>Basic</guilabel> tab active and the list of recipe categories displayed, a category with a plus (+) sign beside it indicates that the category contains recipes.
+</para>
+
+<sect3 id="advanced-tab">
+<title>The Advanced Tab</title>
+<para>
+The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced search capability.  Queries for recipes can be made based on five search criteria &mdash; 
+</para>
+
+<itemizedlist>
+<listitem><para>Category</para></listitem>
+<listitem><para>Ingredients</para></listitem>
+<listitem><para>Authors</para></listitem>
+<listitem><para>Servings</para></listitem>
+<listitem><para>Preparation Time</para></listitem>
+</itemizedlist>
+
+<para><guilabel>Ingredients</guilabel>,<guilabel>Categories</guilabel>, and <guilabel>Authors</guilabel> each have their own tab.  <guilabel>Servings/Preparation Time</guilabel> appear on the same tab.  To enable one of the tabs for search purposes, select the appropriate tab and click the tickbox beside the label <guilabel>Enabled</guilabel> that appears on the left side of the screen.</para>
+  
+<para>
+For <quote>Category</quote>, <quote>Ingredients</quote>, and <quote>Authors</quote>, the search can be narrowed further by selecting <emphasis>sub-criteria</emphasis>.  To select sub-criteria, click on the check box beside the name of a specific <quote>Category</quote>, <quote>Ingredient</quote> or <quote>Author</quote>.  Also in these tabs, the <guibutton>Select All</guibutton> button may be used as an alternative means of selection.  If this button has been pressed and it is decided that all sub-criteria are not desired, the <guibutton>Unselect All</guibutton> button can be utilized to clear the selections.
+</para>
+
+<para>For <quote>Servings</quote> and <quote>Preparation Time</quote> criteria, a <quote>Spin button</quote> is used to increase/decrease the values.
+</para>
+
+<para>When all desired criteria have been selected, click the <guibutton>Find</guibutton> button that appears on the right-hand side of the screen near the top to reveal a list of recipes meeting the specified criteria.  This button may be selected from within any of the tabs once all search criteria have been selected.</para>
+
+<para>The results of the search will appear in the list area below the criteria under the heading <guilabel>Title</guilabel>.  The <guibutton>Clear</guibutton> button, which appears below the <guibutton>Find</guibutton> button is used to clear the results in order to perform a new search.</para>
+
+<note><itemizedlist><listitem><para>Searching is case-sensitive.  If the ingredient list contains <emphasis>Eggs</emphasis> and <emphasis>eggs</emphasis> and <emphasis>eggs</emphasis> is specified as one of the criteria, only recipes containing <emphasis>eggs</emphasis> will display, although recipes containing the ingredient <emphasis>Eggs</emphasis> might exist.</para></listitem>
+
+<listitem><para>Only recipes meeting ALL criteria will display!</para></listitem>
+</itemizedlist>
+</note>
+
+</sect3>
+</sect2>
+
+<sect2 id="shopping-list">
+<title>The Shopping List</title>
+
+<para>The <quote>Shopping List</quote> component appears when the <guibutton>Shopping List</guibutton> button is clicked in the left pane of the <emphasis>&krecipes;</emphasis> window.</para>
+
+<para>When selected, the component title appears at the top in the right pane of the window.</para>
+  
+<para>Below this is a text box to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <guilabel>Shopping List</guilabel> by clicking on the <guibutton>&gt;</guibutton>  button between the two portions of the screen.</para>
+
+<para>Once the desired recipes have been transferred to the shopping list side of the screen, click the <guibutton>OK</guibutton> button.</para>
+
+<tip><itemizedlist><listitem><para>Recipe names can also be transferred out of the shopping list side of the screen by clicking on the <guibutton>&lt;</guibutton> button.</para></listitem>
+
+<listitem><para>The entire list of recipes that has been selected for producing the shopping list can be cleared by clicking the <guibutton>Clear</guibutton> button.</para></listitem>
+
+</itemizedlist>
+</tip>
+
+<para>When the <guibutton>OK</guibutton> button is clicked, a window will appear that lists all ingredients contained in the <emphasis>&krecipes;</emphasis> database on the left and the ingredients required for the selected recipe(s) on the right.  Above each of these is a <guilabel>Search:</guilabel> textbox to <userinput>enter the name of an ingredient</userinput> to search for within each of the lists.</para>
+
+<para>Ingredients can be transferred to and from either side by clicking on the <guibutton>&lt;</guibutton> or <guibutton>&gt;</guibutton> button that appears between the lists, as needed.</para>
+
+<para>In the recipe ingredient list on the right, the <quote>Amount</quote> and the <quote>Unit</quote> of each ingredient can be edited by double-clicking on the appropriate value.  For example, if the recipe requires 4 eggs and a purchase of eggs is required to make the recipe, it is unlikely that you would buy 4 eggs.  In this case, the eggs ingredient could be selected, the <quote>Amount</quote> changed to 1 and the <quote>Unit</quote> changed to doz. or dozen.</para>
+
+<para>When all desired changes have been made to the ingredients for the recipe(s) selected, click the <guibutton>Done</guibutton> button and the <interface>Shopping List</interface> will display.</para> 
+
+<para>From the <interface>Shopping List</interface> window, click the <guibutton>Print</guibutton> button to print the shopping list, or click the <guibutton>Close</guibutton> button to close the window.</para> 
+
+</sect2>
+
+<sect2 id="diet-helper">
+<title>The Diet Helper</title>
+
+<para>The purpose of the <quote>Diet Helper</quote> component is to help plan menus for days, or weeks, at a time.  Because of the ability to select nutrient values in this component, you are also able to plan your meals to adhere to nutrient limits.  This makes either restricting or enhancing your diet much easier and more efficient.</para>
+
+<para>The <quote>Diet Helper</quote> component is accessed by clicking on the <guibutton>Diet Helper</guibutton> button in the left pane of the <emphasis>&krecipes;</emphasis> window.  As with other <emphasis>&krecipes;</emphasis> components, the user interface appears in the right pane under the heading <emphasis>Diet Helper</emphasis>.</para>
+
+<para>To start setting up your menus, the first thing your have to do is select the number of days that you are planning for and the number of meals per day.</para>
+  
+<para>In the rectangular area under the heading <guilabel>Number of Days</guilabel>, the number of days is set at <quote>- 1 -</quote>.  To increase this value, click and hold the &LMB; and move the slider to the right.  The value will increment up to <quote>- 6 -</quote> and then, change to <quote>- 1 week -</quote>.  After the number of days changes to <quote>- 1 week -</quote>, increases are in increments of 1 week to a maximum of 4 weeks.</para>
+
+<para>Similarly, in the rectangular area under the heading <guilabel>Meals per Day</guilabel>, the number of meals displays as <quote>- 1 -</quote>.  This value is incremented by clicking and holding the &LMB; and moving the slider to the right until the desired number of meals is displayed, up to a maximum of 10.  When the slider is adjusted, a tab will appear for each of the meals.</para>
+
+<para>The next step is to specify the number of dishes per meal.  This is done by using the spinbox beside the <guilabel>No. of dishes:</guilabel> label to adjust the number.</para>
+  
+<para>Beside the <guilabel>No. of dishes:</guilabel> are the <guibutton>Previous Dish</guibutton> and <guibutton>Next Dish</guibutton> buttons that are used to navigate back and forth between dishes as you specify the type of recipe for each.  As you utilize these buttons to move back and forth between dishes, you will note that in the <emphasis>Dish Characteristics</emphasis> area of the screen, the dish label changes as follows &mdash;</para>
+
+<itemizedlist><listitem><para><guilabel>1st Course</guilabel></para></listitem>
+<listitem><para><guilabel>2nd Course</guilabel></para></listitem>
+<listitem><para><guilabel>Dessert</guilabel></para></listitem>
+</itemizedlist>
+
+<para>And for subsequent meals &mdash;</para>
+<itemizedlist>
+<listitem><para><guilabel>Dish 4</guilabel>, <guilabel>Dish 5</guilabel>, etc.</para></listitem>
+</itemizedlist>
+
+<sect3 id="menu-plan-only">
+<title>Planning Menus</title>
+<para>In the <emphasis>Dish Characteristics</emphasis> area of the screen and beside the dish label, there is a tick box to <guilabel>Enable Category Filtering</guilabel>.  Clicking this box <action>enables the feature</action>.  It is important that you choose to do this because you may otherwise end up having <emphasis>Cheesecake</emphasis>, or some other unreasonable dish for breakfast!</para>
+
+<para>With <quote>category filtering</quote> turned on, you can select the category to be used for the dish as specified by the dish label located beside the category selection box.  For instance, the dish label might show <guilabel>1st Course</guilabel>.  If you are selecting courses for your dinner meal, you might then select the category <emphasis>Salads</emphasis> from the category list.  A scrollbar exists to the right that allows moving up and down within the list.</para>
+
+<para>Continuing with the example of selecting dishes for your dinner meal, you would then click the <guibutton>Next Dish</guibutton> button.  When you do this, you will note that the dish label changes to <guilabel>2nd Course</guilabel> and that again, you must turn <emphasis>category filtering</emphasis> on.  Now, you can proceed with the selection of the category for your next dish, for example, <emphasis>Pasta</emphasis>.</para>
+
+<para>Continue selecting the types of dishes for your meals in this same manner.  When you have completed selecting the types of dishes, at this point, you can click the <guibutton>Create the diet</guibutton> button.</para>
+
+<note><para>At this point, you are planning a menu only and not taking any dietary and nutrient constraints into consideration.  To plan menus and consider nutrient consumption, see the section <link linkend="plan-menu-diet">Planning Diet-Conscious Menus</link>.</para></note>
+
+<para>When you click the <guibutton>Create the diet</guibutton> button, the <interface>Diet</interface> window appears which displays your menus for the number of days that you have selected.  In this window, you can click the <guibutton>Create Shopping List</guibutton> button to create the shopping list for your menus.  You can also choose to <action>print the menu</action> by clicking the <guibutton>Print</guibutton> button.  Clicking the <guibutton>Cancel</guibutton> button closes the <interface>Diet</interface> window and returns you to the previous screen.</para>
+
+</sect3>
+
+<sect3 id="plan-menu-diet">
+<title>Planning Diet-Conscious Menus</title>
+
+<para>All the steps listed in the section <link linkend="menu-plan-only">Planning Menus</link> also apply here.  This section will discuss the incorporation of nutrient values into your menus.</para>
+
+<para>Before you can include nutrients in your menu plan, you must ensure the following &mdash;</para>
+
+<orderedlist><listitem><para>Nutrients or <emphasis>properties</emphasis> must be loaded for the ingredients.  See the section <link linkend="ingredient-properties">Properties in Ingredients</link> for futher instructions.  If an ingredient does not contain nutrient values, it will be ignored.</para></listitem>
+<listitem><para>Units of measure must be associated with the ingredients. Since most nutrients are measured in <emphasis>g/g</emphasis> or <emphasis>mg/g</emphasis>, ensure that <emphasis>g</emphasis> is one of the units associated with each ingredient.  See the section <link linkend="ingredient-units">Units in Ingredients</link> for additional information.</para></listitem>
+<listitem><para>The equivalencies between the units of measure must be completed in the <quote>Units Component</quote> within the <guilabel>Unit Conversions</guilabel> tab.  See the section <link linkend="set-equivalents">Setting Equivalencies</link> for instructions.</para></listitem>
+</orderedlist>
+
+<para>Once you have ensured that all necessary details have been provided for your ingredients, you are ready to consider nutrients in your menu plan.  Of course, attending to these details should be done prior to the start of creating your menu/diet, since the consideration of nutrient values is a continuation of planning a basic menu.</para>
+
+<para>In the portion of the screen that lists the nutrients, under the heading <guilabel>Enabled</guilabel>, select the nutrient that you want to consider by clicking on the tick box that appears to the left of the nutrient name.  Note that you do not have to select <emphasis>every</emphasis> ingredient, only those that you wish to take into consideration.  A scrollbar exists to the right that allows moving up and down within the list.</para>
+
+<para>To the right of the nutrient name, columns labeled <guilabel>Min. Value</guilabel> and <guilabel>Max. Value</guilabel> exist.  These are used to set the minimum and maximum values of nutrients so that when the search for appropriate recipes is done, only recipes that have a particular nutrient falling into the specified range will be considered for your menu/diet.</para>
+  
+<para>To set the minimum value for the nutrient in question, double-click on the <quote>0</quote> beside the nutrient name and under the <guilabel>Min. Value</guilabel>.  A spinbox will appear that you can utilize to set the value that you want, or you can highlight the <quote>0.00</quote> value and manually type the value that you want to set. Once the desired value has been entered, click the <guibutton>OK</guibutton> to set it.  Likewise, the maximum value is set in the same way under the <guilabel>Max. Value</guilabel> heading.  These steps must be completed in each course category for each nutrient that you want to consider.</para>
+
+<para>It should be noted that you may omit providing a minimum value for a nutrient, in which case the minimum value would remain as <quote>0</quote>.  However, if you provide a minimum value, you must provide a maximum because, obviously, a maximum cannot be less than a minimum.</para>
+
+<note><para>At any point in the process of planning a menu/diet, you can click the <guibutton>Clear</guibutton> to clear all entries and begin again.</para></note>
+
+<para>Once you have completed entering all the nutrient information, click the <guibutton>Create the diet</guibutton> to create your menu/diet.</para>
+
+<para>When you click the <guibutton>Create the diet</guibutton> button, the <interface>Diet</interface> window appears which displays your menus for the number of days that you have selected.  In this window, you can click the <guibutton>Create Shopping List</guibutton> button to create the shopping list for your menus.  You can also choose to <action>print the menu</action> by clicking the <guibutton>Print</guibutton> button.  Clicking the <guibutton>Cancel</guibutton> button closes the <interface>Diet</interface> window and returns you to the previous screen.</para>
+
+</sect3>
+
+</sect2>
+
+
+
+<sect2 id="ingredient-matcher">
+<title>The Ingredient Matcher</title>
+
+<para>The purpose of the <quote>Ingredient Matcher</quote> component is to find recipes that you are able to make (or almost make) with ingredients that you have on hand.  To access the <quote>Ingredient Matcher</quote> component, click on the <guibutton>Ingredient Matcher</guibutton> button that is  visible in the left frame of the <emphasis>&krecipes;</emphasis> window.</para>
+
+<para>Once the component starts, typical of all <emphasis>&krecipes;</emphasis> components, the name will appear at the top of the window in the right frame.  Beneath this, beside the <guilabel>Search:</guilabel> label, there is a text box to <userinput> enter the recipe ingredient</userinput> that you want to search for.</para>
+
+<para>Below the <guilabel>Search:</guilabel> box, under the heading <guilabel>Ingredient</guilabel> there is a list of all the ingredients that are in the <emphasis>&krecipes;</emphasis> database, both ones provided by default and those that you have entered by either adding them in the <quote>Ingredients</quote> component or by entering them in a recipe, which automatically adds the ingredient to the database.  Elsewhere in this document, further information is provided on the use of the <link linkend="ingredients-component">Ingredients Component</link>.</para>
+ 
+<para>Beside each ingredient in the list is a tick box which will allow the selection of the ingredient(s) that you have on hand that might be utilizied in some of your recipes.  <action>Click on the tick box</action> to select the ingredient.  The scrollbar to the right of the list allows you to scroll through the entire list of ingredients.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
+
+<para>Before the recipes containing the selected ingredients will display, you must select the number of missing ingredients permitted in your recipes.  This is accomplished by using the spinbox beside the label <guilabel>Missing ingredients allowed:</guilabel>.  There will always be certain ingredients that you have on hand, for example, <emphasis>Salt</emphasis> or <emphasis>Sugar</emphasis>.  One of the purposes of allowing missing ingredients is to compensate for those ingredients that are normally in your cupboard.</para>
+  
+<caution><para>Setting the missing ingredients too high will result in a longer list of recipes.  Setting the missing ingredients too low will result in either no recipes being found, or cause the search to exclude recipes that you might also be able to make had you allowed for slightly more missing ingredients.</para></caution>
+  
+<para>Click the <guibutton>Find matching recipes</guibutton> button to display the search results in the area that, by default, displays <emphasis>Possible recipes with the specified ingredients</emphasis>.  The recipe title will appear under the heading <guilabel>Title</guilabel>.  The recipe id will appear under the heading <guilabel>Id</guilabel> and the missing ingredients will display under the heading <guilabel>Missing ingredients</guilabel>.  The width of the columns that apply to each of these headings can be adjusted for viewing purposes.  The recipe list provided by the search is further sectioned under a heading that specifies the number of missing ingredients.</para>
+
+<para>If your search does not provide recipes that are of interest, you can adjust the number of missing ingredients and click the <guibutton>Find matching recipes</guibutton> button to display new results based on the ingredients selected.  Alternatively, you can press the <guibutton>Clear recipe list</guibutton> button to clear the recipe list to perform a whole new search with different ingredients.</para>
+
+<para><emphasis>&krecipes;</emphasis> makes in easy for you to find a recipe that you can make with ingredients on hand.  However, if you do have to run to the store, once you decide on the recipe that you want to make, you can use the <link linkend="shopping-list">The Shopping List</link> to make your shopping list.</para>
+
+</sect2>
+
+<sect2 id="data-button">
+<title>The Data Button</title>
+
+<para>
+The <guibutton>Data</guibutton> button performs one simple function &ndash; when clicked, it gives access to additional components.
+</para>
+
+<tip><para>When the additional components are revealed, click the <guibutton>Up</guibutton> button to return to the previous list.
+</para></tip>
+
+</sect2>
+
+<sect2 id="ingredients-component">
+<title>The Ingredients Component</title>
+
+<para>The <quote>Ingredients</quote> component is accessed by first, clicking on the <guibutton>Data</guibutton> button to reveal the additional <emphasis>&krecipes;</emphasis> components, and then, clicking on the <guibutton>Ingredients</guibutton> button.</para>
+
+<para>When the <quote>Ingredients</quote> component opens, the component title will be seen at the top.  Below this, there are 3 sections &mdash;</para>
+
+<orderedlist>
+<listitem><para>Below the heading <guilabel>Ingredient list</guilabel>, the list of ingredients contained in the <emphasis>&krecipes;</emphasis> database is shown.  These include ingredients that have be provided as defaults in the program and also, ingredients that you have added.</para>
+<para>Beside the heading is a text box to <userinput>enter an ingredient</userinput> to search for in the ingredient list.</para>
+<para>To the right of this section is a <guibutton>+</guibutton> button, for adding ingredients to the list, and a <guibutton>-</guibutton> button, for removing ingredients.  See the section on <link linkend="working-ingredients">Working with Ingredients</link> for more details.</para>
+</listitem>
+
+<listitem><para>On the right-hand side of the window under the heading <guilabel>Unit list</guilabel>, the section for listing the ingredient units of measure is displayed.  These include default units of measure that have been provided with the program, as well as ones you have added.</para>
+<para>Again, a <guibutton>+</guibutton> button, for adding units of measure to the list, and a <guibutton>-</guibutton>, for removing units, appears to the right of this section. See the section on <link linkend="ingredient-units">Units in Ingredients</link> for more details.</para>
+</listitem>
+
+<listitem><para>Below the <quote>Units list</quote> is the <guilabel>Ingredient Properties</guilabel> list.  This list contains the nutrient values of each ingredient.</para>
+
+<para>In this list, the name of the nutrient is shown under the heading <guilabel>Property</guilabel>, the amount of the nutrient present in the ingredient is shown under the heading <guilabel>Amount</guilabel> and the measurement value for the nutrient is shown under the heading <guilabel>Units</guilabel>.  For example, if the ingredient <emphasis>orange&nbsp;juice</emphasis> has been selected, one of the nutrients displayed will be <emphasis>Vitamin C</emphasis>.  Under the <guilabel>Units</guilabel> heading, <emphasis>mg/g</emphasis> will display, which means that there are the number of milligrams shown under the amount (in this case, 0.5) per gram of the nutrient.</para>
+
+<para>For those ingredients provided by default in the program, the USDA data has been loaded and this is what provides the nutrient values (or <quote>Properties</quote>) for each ingredient.  However, if you have added an ingredient to the list, in order to display the nutrient value, the USDA data must be loaded by clicking on the <guibutton>Load USDA data</guibutton> button that appears below the <emphasis>Ingredient Properties</emphasis> list.</para>
+
+<para>Again, a <guibutton>+</guibutton> button, for adding ingredient properties to the list, and a <guibutton>-</guibutton>, for removing properties, appears to the right of the section to allow addition and removal of nutrient values for an ingredient.  See the section on <link linkend="ingredient-properties">Properties in Ingredients</link> for more details.</para>
+</listitem>
+</orderedlist>
+
+<sect3 id="working-ingredients">
+<title>Working with Ingredients</title>
+
+<para>Ingredients may be added, removed or edited in the <emphasis>&krecipes;</emphasis> <quote>Ingredients</quote> Component.</para>
+
+<sect4 id="adding-ingredients">
+<title>Adding:</title>
+<para>To add an ingredient to the list, click on the <guibutton>+</guibutton> button that appears beside the ingredient list.  A window will be presented where <userinput>the name of the new ingredient</userinput> can be typed in the text box beneath the heading <guilabel>New Ingredient</guilabel>.  Once the name has been added, click the <guibutton>OK</guibutton> button to complete the addition and close the window.  The ingredient will now appear in the ingredient list.  If you do not wish to add the ingredient to the list, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen. </para>
+</sect4>
+
+<sect4 id="remove-ingredients">
+<title>Removing:</title>
+<para>To remove an ingredient from the list, click on the <guibutton>-</guibutton> button that appears beside the ingredient list.  The ingredient will be removed <emphasis>provided there are no recipes using that ingredient</emphasis>.</para>
+  
+<para>If recipes exist that use the ingredient, a window will display with the prompt <prompt>The following elements will have to be removed also, since currently they use the element you have chosen to be removed.</prompt>  Below the prompt, under the heading <guilabel>Recipe</guilabel>, a list of recipes that use that ingredient will display, showing the recipe <guilabel>Id</guilabel> and <guilabel>Recipe Title</guilabel> under the appropriate headings.  Click the <guibutton>OK</guibutton> button to proceed with the removal of the ingredient AND recipe, or the <guibutton>Cancel</guibutton> to close the window and return to the previous screen.</para>
+</sect4>
+
+<sect4 id="edit-ingredients">
+<title>Editing:</title>
+<para>An ingredient may be edited by selecting the ingredient in the list and double-clicking on it.  The ingredient will remain highlighted, but if either the <keycap>&larr;</keycap> or <keycap>&rarr;</keycap> directional arrows is pressed, the cursor can be positioned to the point you wish to edit.  If you wish to rename the entire ingredient, for example from <quote>butter</quote> to <quote>BUTTER</quote>, simply begin typing with the ingredient highlighted.</para>
+<para>If you choose to rename an ingredient and another ingredient exists with the name chosen, an alert box will appear with the prompt <prompt>This ingredient already exists.  Continuing will merge these two ingredients into one.  Are you sure?</prompt>  Click the <guibutton>Continue</guibutton> button to proceed with renaming the ingredient, or the <guibutton>Cancel</guibutton> button to abort.</para>
+
+<tip><para>If you have two ingredients, one named <quote>cinnamon</quote> and the other named <quote>Cinnamon</quote> and you would like all recipes to show the ingredient as <quote>Cinnamon</quote>, first check which of the ingredients lists the properties &ndash; <abbrev>i.e.</abbrev> the nutrient values.  If the nutrient values show for the ingredient <quote>cinnamon</quote>, renaming <quote>cinnamon</quote> to <quote>Cinnamon</quote> will result in a loss of the properties for that ingredient and they will have to be reloaded.</para>
+<para>However, if you rename <quote>Cinnamon</quote> to <quote>cinnamon</quote> and then after the two ingredients have been merged, the single ingredient <quote>cinnamon</quote> to <quote>Cinnamon</quote>, your nutrient values will be retained.</para></tip>  
+</sect4>
+
+<sect4 id="alternative-method">
+<title>Alternatively:</title>
+<para>An alternative method to either add, remove, or edit an ingredient is to first, select the ingredient and then, right-click to display a menu from which you can select <guimenuitem>Create</guimenuitem>, <guimenuitem>Delete</guimenuitem>, or <guimenuitem>Rename</guimenuitem>.  Each choice performs as explained in the previous sections.</para>
+
+<para>For quick functionality, the <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> key combination can be used to <emphasis>Create</emphasis> a new ingredient.  To <emphasis>Delete</emphasis> an ingredient, press the <keycap>Del</keycap> key on the keyboard &ndash; a prompt will be received if the ingredient is used by a recipe.  The key combination <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo> can be used to <emphasis>Rename</emphasis> an ingredient.</para>
+</sect4>
+</sect3>
+
+<sect3 id="ingredient-units">
+<title>Units in Ingredients</title>
+<para>This section describes how to work with the units of measure, or <emphasis>Units</emphasis>, that apply to specific ingredients in the <emphasis>&krecipes;</emphasis> <quote>Ingredients</quote> component.  For details on working with ingredients globally, see the section <link linkend="units-component">The Units Component</link>.</para>
+
+<para>Within the <quote>Ingredients</quote> component, select an ingredient.  In the <interface>Unit list</interface> portion of the screen, the units of measure that are associated with that ingredient will display.</para>
+ 
+<para>Units can be added by clicking on the <guibutton>+</guibutton> button that appears to the right of the <emphasis>Unit  list</emphasis>.</para>
+
+<para>For example, one of the preloaded ingredients in the ingredients list is <quote>apple juice</quote>.  By default, the units associated with this ingredient are <quote>g</quote>, for grams, and <quote>mg</quote>, for milligrams.  If apple juice is a required ingredient in a recipe, it is more likely that it will be measured by cup, or portion thereof.  Therefore, it may be desired that <quote>cup</quote> or <quote>c.</quote> be added to the <emphasis>Unit list</emphasis>.  To do this, click on the <guibutton>+</guibutton> button that is beside the <emphasis>Unit list</emphasis>.  The <interface>Choose Unit</interface> window will appear, from which you can select <emphasis>cup</emphasis>, for example, from the list.  Then, click the <guibutton>OK</guibutton> button to add the unit, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
+
+<para>Units can be removed by clicking on the <guibutton>-</guibutton> button that appears to the right of the <emphasis>Unit list</emphasis>.  In a manner similar to that described in the <emphasis>Working with Ingredients</emphasis> section under the heading <link linkend="remove-ingredients">Removing:</link>, if an attempt is made to remove a unit that is associated with an ingredient used by a recipe in the database, a prompt will be displayed that permits confirmation of removal of the unit AND the recipe that is associated with the ingredient unit, or that will allow the cancellation of the action.</para> 
+
+</sect3>
+
+<sect3 id="ingredient-properties">
+<title>Properties in Ingredients</title>
+
+<para>As previously stated, for those ingredients that are provided by default in the <emphasis>&krecipes;</emphasis> program, the <emphasis>Properties</emphasis> or nutrient values have been pre-loaded with the USDA values.</para>
+
+<para>However, if a property has been added in the <quote>Properties</quote> component, a second step must be completed in the <quote>Ingredients</quote> component to add the <emphasis>Property</emphasis> and its associated value to the list.</para>
+
+<sect4 id="add-ingredient-properties">
+<title>Adding Ingredient Properties</title>
+
+<para>The first step to adding a new property for an ingredient is to ensure that the appropriate unit is listed in the <emphasis>Unit list</emphasis> in the top right-hand corner of the <quote>Ingredients</quote> component.  If the unit is not listed &ndash; <abbrev>i.e.</abbrev> the unit specified when the property was added, for instance <quote>g</quote>, it must be added in the manner described in the section <link linkend="ingredient-units">Units in Ingredients</link>.</para>
+
+<para>Assuming that the appropriate unit is listed in the <emphasis>Unit list</emphasis>, to add the new property to the <emphasis>Ingredient Properties</emphasis> list, select an ingredient in the <emphasis>Ingredient</emphasis> list then, click the <guibutton>+</guibutton> button that appears to the right of the properties list.</para>
+
+<para>The <quote>Choose Property</quote> box will appear, from which you can select the property to be added for the ingredient.  A drop-down menu shows below the property list, from which the unit associated with the property must be selected.  Click the <guibutton>OK</guibutton> button to proceed, or the <guibutton>Cancel</guibutton> button to cancel the addition of the property and close the window.</para>
+
+<para>If you choose to proceed with the addition, the property will be added to the <emphasis>Ingredient Properties</emphasis> list.  However, you will note that it has a <quote>0</quote> value.  This value must by supplied by you.  To add the value, double-click on the property and increment the value using the spin-box that appears, or manually type the value.  Once the value is entered, click the <guibutton>OK</guibutton> button that appears beside the spin-box.</para>
+
+<note><para>If the USDA data does not show for the ingredient for which the new property has been added, it can be loaded either before adding the new property or after.  If the USDA data is added after adding the new property, the new property will still show in the list.</para>
+
+<para>The new property must be added to <emphasis>EACH</emphasis> ingredient separately.</para></note>
+</sect4>
+
+<sect4 id="remove-ingredient-properties">
+<title>Removing Ingredient Properties</title>
+
+<para>To remove a property from the <emphasis>Ingredient Properties</emphasis> list, simply select the property to be removed and click the <guibutton>-</guibutton> that appears to the right of the list.  The property will be removed without a prompt.  However, this will remove the property within the <quote>Ingredients</quote> component <emphasis>ONLY</emphasis>.  The property will be retained in the list in the <quote>Properties</quote> component.</para>
+
+</sect4>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="properties-component">
+<title>The Properties Component</title>
+
+<para>The <quote>Properties</quote> component is where nutrients are globally added and removed.  To access this component, first click on the <guibutton>Data</guibutton> button in the left pane of the <emphasis>&krecipes;</emphasis> window and then, click on the <guibutton>Properties</guibutton> button.</para>
+
+<para>As with other <emphasis>&krecipes;</emphasis> components, the name of the component appears in the right pane of the window at the top.  Below this, beneath the heading, <guilabel>Property</guilabel> the list of nutrients is displayed.  Beneath the heading <guilabel>Units</guilabel> the units associated with the properties are shown.</para>
+
+<para>For example, one of the nutrients under the <guilabel>Property</guilabel> heading is <quote>iron</quote>.  If a recipe ingredient contains this nutrient, the amount of iron contained in the ingredient will show as a number of <emphasis>milligrams</emphasis> or <quote>mg</quote>.</para>
+
+<sect3 id="add-properties">
+<title>Adding Properties</title>
+
+<para>A number of nutrients have been provided by default in the <emphasis>&krecipes;</emphasis> program.  Although this list is quite extensive, if there is a nutrient missing, it is possible to add it to the list.</para>
+
+<para>To add a missing nutrient, click the <guibutton>Create...</guibutton> button that appears near the top in the right-hand side of the <emphasis>&krecipes;</emphasis> window.  The <interface>New Property</interface> window will appear.  In this window, the <userinput>name of the nutrient</userinput> can be entered in the text box beside the <guilabel>Property name:</guilabel> label, and the associated <userinput>unit of measure</userinput> is entered in the text box beside the <guilabel>Units:</guilabel> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
+
+<warning><para>Adding a nutrient, or <emphasis>Property</emphasis>, is a two-step procedure.  First, the nutrient and associated unit is added in the <quote>Properties</quote> component as described above.  However,  the actual nutrient value &ndash; <abbrev>i.e.</abbrev> the number of mg of iron, for example, contained in a particular ingredient must be added within the <quote>Ingredients</quote> component.  This must be done for <emphasis>EACH</emphasis> ingredient.  Refer to the section <link linkend="ingredient-properties">Properties in Ingredients</link> for more information.</para></warning>
+
+</sect3>
+
+<sect3 id="delete-properties">
+<title>Deleting Properties</title>
+
+<para>To remove a nutrient from the list, click the <guibutton>Delete</guibutton> button that appears below the <guibutton>Create...</guibutton> that was used to create a new nutrient.</para>
+
+<para>An <quote>alert</quote> box will appear asking <prompt>Are you sure you want to delete this property?</prompt>  Click the <guibutton>Continue</guibutton> button to proceed with the removal of the nutrient, or the <guibutton>Cancel</guibutton> button to cancel the action and close the alert.</para>
+
+<sect4 id="another-method">
+<title>Another method:</title>
+
+<para>An alternative method to either add, remove, or edit a nutrient  is to first, select the nutrient and then, right-click to display a menu from which you can select <guimenuitem>Create</guimenuitem>, <guimenuitem>Delete</guimenuitem>, or <guimenuitem>Rename</guimenuitem>.</para>
+
+<para>For quick functionality, the <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> key combination can be used to <emphasis>Create</emphasis> a new nutrient.  To <emphasis>Delete</emphasis> a nutrient, press the <keycap>Del</keycap> key on the keyboard &ndash; a prompt will be received if the nutrient is used by a recipe.  The key combination <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo> can be used to <emphasis>Rename</emphasis> an nutrient.</para>
+</sect4>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="units-component">
+<title>The Units Component</title>
+
+<para>In the <quote>Units</quote> component, not only can units of measure that are to be used in the <emphasis>&krecipes;</emphasis> program be added and removed, but equivalencies between the various measures can be set up!</para>
+
+<para>The <quote>Units</quote> component is accessed by first, clicking on the <guibutton>Data</guibutton> button to reveal the additional <emphasis>&krecipes;</emphasis> components, and then, clicking on the <guibutton>Units</guibutton> button.</para>
+
+<para>Like other <emphasis>&krecipes;</emphasis> components, the <quote>Units</quote> component appears in the right-hand side of the <emphasis>&krecipes;</emphasis> window with the name of the component appearing at the top.  Two tabs exist &ndash; one for listing and maintaining the units of measure and one for setting up the equivalencies between the various units of measure.</para>
+
+<para>In the <guilabel>Units</guilabel> tab, a list of all the units of measure will appear.  This list includes the units of measure that have been provided by default and those that you have added, either by entering a new unit while entering a new recipe, or by adding the unit within the <quote>Units</quote> component.</para>
+
+<para>You will also note that each unit allows a singular and plural form of that unit, if one exists.  For example, a recipe could require 1 teaspoon of an ingredient, which is the singular form, or it could contain 2 teaspoons, which is the plural.  However, for the unit grams in its abbreviated form of <quote>g</quote>, both the singular and the plural are the same, so <quote>g</quote> would also be listed under the plural column.</para> 
+
+<sect3 id="add-units">
+<title>Adding Units of Measure</title>
+<para>To add a unit of measure, click the <guibutton>Create...</guibutton> button that appears to the right of the <emphasis>Unit</emphasis> list.  The <interface>New Unit</interface> dialog box will appear where the name of the new unit can be added.  Beneath the heading <guilabel>New Unit</guilabel>, there is a text box to <userinput>enter the singular form of the unit</userinput> and one to <userinput>enter the plural form of the unit</userinput>.  Once the entries have been made for singular and plural of the new unit, click the <guibutton>OK</guibutton> button to complete the addition, or the <guibutton>Cancel</guibutton> button to cancel the addition and close the box.</para>
+</sect3>
+
+<sect3 id="remove-units">
+<title> Removing Units of Measure</title>
+<para>To remove a unit of measure, in the <emphasis>Unit</emphasis> list, select the unit that you wish to remove.  Click the <guibutton>Delete</guibutton> button that appears to the right of the  list and below the <guibutton>Create...</guibutton> button that is used to add units of measure.  A slight delay will occur while the database is searched to ensure that no recipes exist that use that unit of measure and then, the unit of measure will be removed.</para>
+
+<para>If a recipe exists that uses the unit of measure selected to be removed, a window will appear with the <quote>alert</quote> <prompt>The following elements will have to be removed also, since currently they use the element you have chosen to be removed</prompt>.  Beneath the heading <guilabel>Recipes</guilabel>, the list of recipes utilizing that unit will appear.  Click the <guibutton>OK</guibutton> button to proceed with the removal of the unit of measure AND <emphasis>any or all</emphasis> recipes using that unit.  Click the <guibutton>Cancel</guibutton> button to cancel the action and close the window.</para>
+
+</sect3>
+
+<sect3 id="set-equivalents">
+<title>Setting Equivalencies</title>
+<para>Equivalencies are entered in the <guilabel>Unit Conversions</guilabel> tab in a <quote>spreadsheet</quote> style table.  Down the side of the table, you will note that each <quote>row</quote> is labelled with a unit name.  Similarly, along the top, each <quote>column</quote> is also labelled with a unit name.  The<quote>cells</quote> in the body of the table are used to set the equivalencies.  1 to 1 equivalencies are provided by default.</para>
+
+<para>For instance, down the left side of the spreadsheet, suppose there is a unit of measure labelled <emphasis>pound</emphasis>.  Using the <quote>horizontal scroll bar</quote> at the bottom of the window, scroll until the unit <emphasis>ounces</emphasis> is revealed along the top.  Double-click the cell that is beside <emphasis>pound</emphasis> and below <emphasis>ounces</emphasis>.  This will cause a <quote>spinbox</quote> to appear with a value set to <quote>0.00000</quote> that can be utilized to set the equivalency to <emphasis>16</emphasis> &ndash; <abbrev>i.e.</abbrev> there are 16 ounces in a pound.  Once the value of <emphasis>16</emphasis> has been set, click the <guibutton>OK</guibutton> button.</para>
+
+<para>In a similar manner, the equivalency between pound and grams could be set by double-clicking on the appropriate cell.  However, in this instance, it is unlikely that you would want to use the spinbox to increment the value to 454.  To allow the manual typing of the value, simply position the cursor by clicking at the beginning of the <quote>0.00000</quote> value and type <userinput>454</userinput>.  Click the <guibutton>OK</guibutton> button, or simply hit the <keycap>Enter</keycap> key to complete.</para>
+
+<para>Once the <emphasis>&krecipes;</emphasis> program knows the equivalency, it can automatically calculate other equivaliencies.  For example, if the program has been informed that there are 16 ounces in a pound, <emphasis>&krecipes;</emphasis> will automatically calculate that 1 ounce is equal to 0.0625 pounds.</para>   
+
+</sect3>
+</sect2>
+
+<sect2 id="prep-methods">
+<title>The Preparation Methods Component</title>
+
+<para>To access the <quote>Preparation Methods</quote> component, first click on the <guibutton>Data</guibutton> button to reveal additional components and then, click the <guibutton>Preparation Methods</guibutton> button.  In the right-hand pane of the <emphasis>&krecipes;</emphasis> window, a list of preparation methods will be displayed under the heading <quote>Preparation Method</quote>.  Note that the name of the component also appears at the top of the pane.</para>
+ 
+<para>The preparation methods listed include those installed by default with the program and those that are automatically added when a method is typed into the <quote>Preparation Method</quote> field while entering a new recipe.  See the section <link linkend="add-recipe">Adding a New Recipe</link>.</para>
+ 
+<sect3 id="add-prep">
+<title>Adding a New Preparation Method</title>
+
+<para>To add a new preparation method, click the <guibutton>Create...</guibutton> button that is seen in the upper right-hand portion of the screen.  A dialog box will appear containing a text box that allows entry of the new preparation method under the heading <quote>New Preparation Method</quote>.</para>
+
+<para><userinput>Enter the name of the new preparation method</userinput>, for example, <emphasis>Slightly beaten</emphasis> in the text box provided.  Click the <guibutton>OK</guibutton> button to complete the addition, or the <guibutton>Cancel</guibutton> button to cancel the addition and return to the <quote>Preparation Method</quote> list.</para>
+</sect3>
+
+<sect3 id="remove-prep">
+<title>Deleting a Preparation Method</title>
+
+<para>To remove a preparation method, first select the method to be removed from the list of preparation methods displayed.  Then, click on the <guibutton>Delete</guibutton> button that is displayed in the upper, right-hand portion of the screen beneath the <guibutton>Create...</guibutton> button.</para>
+
+<para>Should the preparation method selected for deletion be used by a recipe, a dialog box will appear stating <prompt>The following elements will have to be removed also, since currently they use the element you have chosen to be removed.</prompt>  Below this, the list of recipes utilizing the preparation method will show.  Click the <guibutton>OK</guibutton> button to proceed &ndash; REMINDER:  This will delete not only the preparation method, but the recipes utilizing that method as well!  To cancel removal of the preparation method, click the <guibutton>Cancel</guibutton> button.</para>
+
+<para>Should no recipe utilize the preparation method selected for deletion, no prompt will be given.</para>
+
+</sect3>
+
+<sect3 id="edit-prep">
+<title>Editing Preparation Methods</title>
+<para>Preparation methods can also be edited simply by double-clicking on the desired method.</para>
+
+<para>For example, to change the method <emphasis>Slightly beaten</emphasis> to <emphasis>Slightly Beaten</emphasis>, double-click on the method in the list.  A box will appear around the method, the method will be highlighted and an insertion point will appear.  Use the <keycap>&larr;</keycap> or the <keycap>&rarr;</keycap> directional arrow keys as required to position the cursor in the appropriate position to change the lowercase b in <quote>beaten</quote> to uppercase.  Press the <keycap>Enter</keycap> key to complete the change.</para>
+</sect3>
+
+</sect2>
+
+<sect2 id="categories-component">
+<title>The Categories Component</title>
+
+<para>When the <quote>Categories</quote> component is selected, the list of all created categories will appear under the heading <guilabel>Category</guilabel>.</para>
+
+<sect3 id="add-category">
+<title>Adding a New Category</title>
+
+<para>To add a new category, click on the <guibutton>Create...</guibutton> button.</para>
+
+<para>A window will pop up where the name of the new category can be entered in a text box under the label <guilabel>New Category</guilabel>.  A subcategory can be selected using the <guimenu>Subcategory of</guimenu> drop-down menu, which lists existing categories.  The default for the subcategory is <emphasis>&#042;&#042;NONE&#042;&#042;</emphasis>.</para>
+
+<para>Once the name of the new category has been entered in the text box, click the <guibutton>Ok</guibutton> button to create the category and return to the category list.  The list will now show the new category.</para>
+
+<para>To cancel the addition of a new category and clear the window, click on the <guibutton>Cancel</guibutton> button.</para>
+
+</sect3>
+
+<sect3 id="delete-category">
+<title>Removing a Category</title>
+
+<para>To remove a category, select it from the list of categories and click the <guibutton>Delete</guibutton> button.</para>
+
+<para>An prompt will appear asking, <prompt>Are you sure you want to remove this category and all its subcategories?</prompt>.  Click the <guibutton>Continue</guibutton> button to remove the category, or the <guibutton>Cancel</guibutton> button to cancel the removal.</para>
+
+<warning><para>Before deleting a category, ensure that it contains NO recipes!  Despite the warning <prompt>Are you sure you want to remove this category and all its subcategories?</prompt>, clicking the <guibutton>Continue</guibutton> button will result in the deletion of the category whether or not it contains recipes!</para></warning>
+
+</sect3>
+</sect2>
+
+<sect2 id="authors-component">
+<title>The Authors Component</title>
+
+<para>The <quote>Authors</quote> component is where the author or contributor of the recipe is maintained.</para>
+  
+<para>Within this component, the component title appears at the top and the list of authors appears in the main portion of the window.</para>
+
+<sect3 id="add-author">
+<title>Adding an Author or Contributor</title>
+
+<para>To add an author/contributor, click on the <guibutton>Create...</guibutton> button on the right-hand side of the screen.</para>
+
+<para>A window will appear that allows entry of the author's name in the text box labelled <guilabel>New Author</guilabel></para>
+
+<para>Once a name has been entered, click the <guibutton>Ok</guibutton> button to create the entry, or the <guibutton>Cancel</guibutton> button to cancel entry of a new author's name and close the window.</para>
+</sect3>
+
+<sect3 id="remove-author">
+<title>Removing an Author/Contributor</title>
+
+<para>To remove an author/contributor from the list, select the author from the list and click the <guibutton>Delete</guibutton> button on the right-hand side of the screen.
+</para>
+ 
+<para>When this button has been clicked, an alert will appear with the prompt <prompt>Are your sure you want to remove this author?</prompt>  Click the <guibutton>Continue</guibutton> button to delete the author, or the <guibutton>Cancel</guibutton> button to cancel the deletion.</para>
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="krecipes-page-setup">
+<title>Page Setup</title>
+
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the Page Setup dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="page-setup.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<para>
+To access Page Setup, select <guimenu>View</guimenu> and <guimenuitem>Page Setup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.
+</para>
+
+<sect2 id="displayed-items">
+<title>Selecting Items to Display</title>
+
+<para>
+In the Page Setup window, the toolbar displays the icons for <guiicon>Open</guiicon>, <guiicon>Save</guiicon>, <guiicon>Save As</guiicon> and <guiicon>Redisplay</guiicon>.  
+</para>
+
+<para>
+With regard to <guiicon>Redisplay</guiicon>, a word of caution is in order.  Clicking on <guiicon>Redisplay</guiicon> after changes have been made in the Page Setup window, will reload the currently active layout file, erasing all changes <emphasis>unless they have been saved</emphasis>.  However, an alert will be provided prompting to save the changes if desired.
+</para>
+
+<para>
+If the entire Page Setup window is resized, <guiicon>Redisplay</guiicon> will scale the contents to fit within the limits of the window.
+</para>
+
+<para>
+The last icon allows access to a list of items that are available for display in the recipe.  These include &mdash;
+</para>
+
+<itemizedlist>
+<listitem><para><guimenuitem>Properties</guimenuitem> &ndash; The list of nutrients in the recipe</para></listitem>
+<listitem><para><guimenuitem>Authors</guimenuitem> &ndash; The authors or contributors of the recipe</para></listitem>
+<listitem><para><guimenuitem>Ingredients</guimenuitem> &ndash; The list of recipe ingredients</para></listitem>
+<listitem><para><guimenuitem>Preparation Time</guimenuitem> &ndash; The time for preparation</para></listitem>
+<listitem><para><guimenuitem>Servings</guimenuitem> &ndash; The number of servings expected from the recipe</para></listitem>
+<listitem><para><guimenuitem>Instructions</guimenuitem> &ndash; The method of preparation</para></listitem>
+<listitem><para><guimenuitem>Title</guimenuitem> &ndash; The title of the recipe</para></listitem>
+<listitem><para><guimenuitem>Photo</guimenuitem> &ndash; To display a photo in the recipe</para></listitem>
+<listitem><para><guimenuitem>Header</guimenuitem> &ndash; This is the recipe database ID</para></listitem>
+<listitem><para><guimenuitem>Categories</guimenuitem> &ndash; The category to which the recipe belongs</para></listitem>
+</itemizedlist>
+
+<para>
+By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the checkbox beside it.
+</para>
+
+<note><para>All sections chosen to display in the recipe will also print.  It may be desireable to have a section display, but not print.  In order to avoid having any section print, deselect it prior to printing.</para>
+</note>
+
+</sect2>
+
+<sect2>
+<title>Changing The Recipe Display</title>
+
+<para>Display of the recipe is highly configurable.</para>
+
+<para>Each section can be moved by selecting a it, holding the &LMB; mouse button and dragging to a new position.</para>
+ 
+<para>To resize a section, hover the mouse over one of the resizing handles until a <guiicon>&harr;</guiicon> arrow appears, hold the &LMB; mouse button and drag until the desired sized is achieved.</para>
+</sect2>
+
+<sect2>
+<title>Changing Attributes</title>
+
+<para>Characteristics of each section can be changed individually.</para>
+
+<para>
+Right-click on any section in the Page Setup window.  A menu will display with the title of the section appearing at the top.  From this menu, you can &mdash;
+</para>
+
+<itemizedlist>
+<listitem><para>Change the <guimenuitem>Background color...</guimenuitem></para></listitem>
+<listitem><para>Change the <guimenuitem>Text color...</guimenuitem></para></listitem>
+<listitem><para>Change the <guimenuitem>Font...</guimenuitem></para></listitem>
+<listitem><para>Choose whether or not to display the section by selecting or deselecting the checkbox beside <guimenuitem>Show</guimenuitem></para></listitem>
+<listitem><para>Change the <guimenu>Alignment</guimenu> &ndash; This menu item has a sub-menu that allows you to select the alignment</para></listitem>
+<listitem><para>Define a <guimenuitem>Border...</guimenuitem> that will appear around the selected section </para>
+<para>When the <quote>Requested Border</quote> configuration window appears, there are sections that allow the definition of various elements under the appropriate headings.  For example &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Under the heading <quote>Style</quote>, a border style can be selected</para></listitem>
+<listitem><para> Under the heading <quote>Color</quote>, a color can be selected from the color spectrum and this can be fine-tuned, using the color slider</para></listitem>
+<listitem><para>Under the heading <quote>Width</quote> the width of the border, in pixels, can be selected.  <emphasis>For a border such as <quote>Groove</quote>, or <quote>Ridge</quote> a minimum pixel size of 4 to 6 has been found to work best.</emphasis>  The border size can be selected using a spinbox or selecting a numeric value from a list</para></listitem>
+</itemizedlist>
+ 
+<para>Finally, at the bottom is a section that allows the preview of the border as it will appear in the recipe.</para>
+<note><para>When <quote>OK</quote> is selected to insert the border, the main Page Setup window appears.  <emphasis>The selected border definition will NOT show in this window, but will appear properly when the recipe is viewed or printed.</emphasis></para></note></listitem>
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="enter-edit-recipes">
+<title>Entering and Editing Recipes</title>
+
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the Page Setup dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="tbd.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</para>
+
+<sect2 id="add-recipe">
+<title>Adding a New Recipe</title>
+
+<para>To add a new recipe, click on the <guiicon>+</guiicon> icon that appears in the first position on the <emphasis>&krecipes;</emphasis> toolbar.  The <quote>Edit Recipe</quote> screen will display.
+</para>
+
+<para>The <quote>Edit Recipe</quote> screen has three tabs.  Each permits entry of a different aspect of the recipe.  These tabs are &mdash;</para>
+
+<itemizedlist>
+<listitem><para><guilabel>Recipe</guilabel></para></listitem>
+<listitem><para><guilabel>Ingredients</guilabel></para></listitem>
+<listitem><para><guilabel>Instructions</guilabel></para></listitem>
+
+</itemizedlist>
+
+<para>It should also be noted that in the left-hand pane of the window, a button shows at the bottom of the component list that initially displays <quote>Write the recipe title here</quote>.  This will change to the name of the recipe once it has been entered.</para> 
+
+</sect2>
+
+<sect2 id="recipe-description">
+<title>The Recipe Description</title>
+
+<sect3 id="recipe-name">
+<title>Adding the Recipe Name</title>
+<para>The title of the recipe is entered in the text box containing the prompt <quote>Write the recipe title here</quote>.</para>
+</sect3>
+
+<sect3 id="recipe-author">
+<title>Adding the Recipe Author/Contributor</title>
+
+<para>To enter an author for the recipe, click on the <guibutton>+</guibutton> that appears to the right of the <quote>Authors</quote> box.</para>
+
+<para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box on the right by clicking on the <guibutton>&gt;</guibutton> button.</para>
+
+<tip><itemizedlist><listitem><para>An author's name can be typed into the text box and transferred to the list box as described above.  In this situation an alert box will appear with the message <quote>A new author <quote><emphasis>Name of New Author</emphasis></quote> was  successfully added to the list of authors</quote>.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
+<listitem><para>An author may also be removed from the list by clicking the <guibutton>&lt;</guibutton> button.</para></listitem>
+</itemizedlist>
+</tip>
+
+<para>Click on the <guibutton>OK</guibutton> button to accept.  The window will close and the name of the selected author will appear under the heading.</para>
+
+<para>To cancel selection of an author, click on the <guibutton>Cancel</guibutton> button.</para>
+
+</sect3>
+
+<sect3 id="recipe-category">
+<title>Selecting the Recipe Category</title>
+
+<para>Next, the recipe category is selected by clicking on the <guibutton>+</guibutton> beside the category box.</para>
+
+<para>To select a category, click on the checkbox beside the category name and click the <guibutton>OK</guibutton> button to accept the selection or, the <guibutton>Cancel</guibutton> button to cancel the selection.  Either way, the window will close.</para>
+
+<tip><para>It is also possible to add a category here.  Simply click on the <guibutton>New Category...</guibutton> button.  Add a new category in the same manner as described in the section entitled <link linkend="categories-component">The Categories Component</link>.</para></tip>
+
+</sect3>
+
+<sect3 id="select-servings">
+<title>Setting the Number of Servings</title>
+
+<para>Setting the number of servings provided by the recipe is performed by utilizing a spinbox.  Simply increment (or decrement if a mistake is made) the number until the desired number is displayed.</para>
+
+</sect3>
+
+<sect3 id="prep-time">
+<title>Specifying Preparation Time</title>
+
+<para>Similar to setting the number of servings for the recipe, the time it takes to prepare a recipe is also done utilizing a spinbox.</para>
+
+<para>However, the time must be specified in two steps &mdash;</para>
+
+<orderedlist>
+<listitem><para>Select the digits prior to the <emphasis>&#058;</emphasis> symbol that specify the hours and increment the time until the desired number is reached.</para></listitem>
+
+<listitem><para>Select the digits after to the <emphasis>&#058;</emphasis> symbol that specify the minutes and increment the time until the desired number is reached.</para></listitem>
+</orderedlist>
+
+</sect3>
+
+<sect3 id="photo-change">
+<title>Changing the Default Photo</title>
+
+<para>In the <guilabel>Recipe</guilabel> tab, the displayed photo can also be changed by clicking on the <guibutton>&#8230;</guibutton> button and selecting a photo for insertion.  Alternatively, a  photo may be inserted by dragging a graphic from any other application, for example a web page, and dropping it onto the photo in the Recipe tab while in edit mode.</para>
+
+<note><para>The change in the graphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
+
+<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guibutton>x</guibutton> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
+<listitem><para>To display NO photo in the recipe, refer to the section <link linkend="displayed-items">Selecting Items to Display</link> for further instructions.</para></listitem>
+</itemizedlist>
+</tip>
+
+</sect3>
+</sect2>
+
+<sect2 id="ingredients-tab">
+<title>Entering Recipe Ingredients</title>
+
+<para>To enter the recipe ingredients, click on the <guilabel>Ingredients</guilabel> tab.  By default, the radio button beside the label <guilabel>Ingredient:</guilabel> is selected.  However, <emphasis>&krecipes;</emphasis> also allows the entry of a <guilabel>Header:</guilabel> by selecting the radio button beside this label.</para>
+
+<para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <guilabel>Header:</guilabel> radio button is selected. Enter the desired name for the header in the text box then, press the <keycap>Enter</keycap> key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <guilabel>Ingredient:</guilabel> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
+
+<note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guibutton>&#8743;</guibutton> or <guibutton>&#8744;</guibutton> button to position the ingredient until it appears indented below the appropriate header.</para></note>
+
+<para> Ingredients are entered by filling in the appropriate text box under the headings &mdash; </para>
+
+<itemizedlist>
+<listitem><para>Ingredient: &ndash; the ingredient is entered here, for example, Sugar</para>
+
+<tip><itemizedlist><listitem><para>Type in the first few letters of the ingredient.  If it exists in the ingredient list, it will appear in the text box <quote>grayed-out</quote>.  To select the gray-out ingredient, tab to the next text box.</para></listitem>
+
+<listitem><para>The Ingredient can also be selected from the <quote>drop-down</quote> menu.</para></listitem></itemizedlist>
+
+</tip>
+</listitem>
+
+<listitem><para>Amount: &ndash; the amount of the ingredient required, for example, &#189;</para></listitem>
+
+<listitem><para>Unit: &ndash; the unit of measurement, for example, <emphasis>tsp.</emphasis>  When you enter a unit, if it does not exist in your <emphasis>Units list</emphasis>, it will automatically be added and a dialog box will appear prompting for the entry of a plural for the unit.  Enter the plural in the text box beside the label <guilabel>Plural:</guilabel>.  For more information on adding and maintaining units of measure, see <link linkend="units-component">The Units Component</link>.</para></listitem>
+
+<listitem><para>Preparation Method: &ndash; the method of preparing the ingredient, for example, <emphasis>chopped</emphasis></para>
+
+<tip><para>The Preparation Method can also be selected from a drop-down menu.</para></tip></listitem>
+
+</itemizedlist>
+
+<para>To add the ingredient to the ingredient list, simply press the <keycap>Enter</keycap> key.</para>
+
+<para>Alternatively, click on the <guibutton>Add Ingredient</guibutton> button on the right-hand side of the ingredient list.</para>
+
+<note><itemizedlist>
+<listitem><para>Once the ingredient has been added, the text boxes will retain the information from the previous ingredient.  The ingredient should be highlighted, in which case it is possible to just start typing.  However, if this is not the case, simply delete the entry and start typing the new ingredient information.</para></listitem>
+
+<listitem><para>If a particular field is not required to describe an ingredient and it has information retained from a previous ingredient, simply delete the information.  <emphasis>A field can be left blank if not required</emphasis>!</para></listitem>
+
+<listitem><para>An ingredient may be removed from the list by clicking on the <guibutton>&#8855;</guibutton> button to the right of the ingredient list.</para></listitem>
+
+<listitem><para>An ingredient may also be repositioned in the list by clicking on the <guibutton>&#8743;</guibutton> or the <guibutton>&#8744;</guibutton> button that appear on the right of the ingredient list.</para></listitem>
+
+<listitem><para>Once an ingredient has been transferred to the ingredient list, the <quote>Amount</quote>, <quote>Units</quote> and <quote>Preparation Method</quote> fields may be edited by doubleclicking on the particular component that needs to be changed.</para>  </listitem> 
+</itemizedlist></note>
+
+</sect2>
+
+<sect2 id="instructions-tab">
+<title>Entering the Recipe Instructions</title>
+
+<para>To enter the recipe instructions, click on the <guilabel>Instructions</guilabel> tab.</para>
+
+<para>Entering the recipe instructions is simple &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
+
+<para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! :-)</para>
+
+</sect2>
+
+<sect2 id="recipe-actions">
+<title>Recipe Actions</title>
+
+<para>OK! Now that the recipe has been input, what needs to be done?</para>
+
+<para>The following options can be selected &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Spell-check &ndash; this is accomplished by clicking on the <guiicon>ABC</guiicon> icon that appears on the bar below the input area in the <guilabel>Instructions</guilabel> tab</para></listitem>
+<listitem><para>Save &ndash; click on the <guibutton>Save</guibutton> button that appears on the bottom of the screen</para>
+
+<tip><para>The <guibutton>Save</guibutton> button can be used to save the recipe at any point during the input.  As with any other application, when editing, it is always a good idea to save frequently!</para></tip> 
+</listitem> 
+
+<listitem><para>Show recipe &ndash; click on the <guibutton>Show recipe</guibutton> button to view the recipe.</para>
+
+<note><para>To view a recipe, it must be saved.  If the recipe has NOT been saved at the time that the <guibutton>Show recipe</guibutton> button is clicked, the following alert will appear &mdash;</para>
+
+<para><prompt>You need to save the recipe before displaying it.  Would you like to save it now?</prompt></para>
+
+<para>Click the <guibutton>Yes</guibutton> button to save the recipe, or the <guibutton>No</guibutton> button to close the dialog and return to the recipe entry interface</para>
+
+<para>If the <guibutton>Show</guibutton> button is pressed, the recipe will display.  To return to the <interface>Edit Recipe</interface> interface in the event that the recipe has not been completely entered, click on the <guibutton>Recipe Name</guibutton> button that appears at the bottom of the component list in the left-hand pane of the window.  Alternatively, <guimenu>Tools</guimenu> and <guimenuitem>Edit</guimenuitem> can be chosen from the <emphasis>&krecipes;</emphasis> menu, or select the <keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo> key combination.</para> 
+</note>
+</listitem>
+
+<listitem><para>Close &ndash; click the <guibutton>Close</guibutton> button.</para>
+
+<para>Again, if the recipe has not been saved an alert will appear stating &mdash;</para>
+
+<para><prompt>This recipe contains unsaved changes.  Would you like to save it before closing?</prompt></para>
+
+<para>The course of action can be selected by clicking the <guibutton>Yes</guibutton> button to save, the <guibutton>No</guibutton> button to close the recipe without saving, or the <guibutton>Cancel</guibutton> button to close the dialog and return to the recipe entry interface.</para>
+</listitem>
+
+<listitem><para>Resize &ndash; click the <guibutton>Resize</guibutton> button to resize the recipe</para>
+
+<tip><para>The recipe can be resized by either of two methods &mdash;</para>
+
+<orderedlist>
+<listitem><para>Scale by servings &ndash; the current number of servings that the recipe will provide is shown.  Change in the number of servings is accomplished by using a spinbox.  Once the new number of servings has been specified, the recipe ingredients will be sized accordingly</para></listitem>
+
+<listitem><para>Scale by factor &ndash; to scale the recipe by a specified factor, for example, &#189; to half the recipe, or 3 to triple it</para></listitem>
+</orderedlist>
+
+<para>In either of these scenarios, click the <guibutton>OK</guibutton> button to continue and resize the recipe, or the <guibutton>Cancel</guibutton> to close the window and return to the previous screen.</para></tip></listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="edit-recipe">
+<title>Editing Saved Recipes</title>
+
+<para>The feature for editing recipes can be accessed in a number of ways.  With the <quote>Find/Edit Recipes</quote> component selected, </para>
+
+<orderedlist><listitem><para>Select the recipe to be edited from the recipe list in the main portion of the <emphasis>&krecipes;</emphasis> window.  Click on the <guibutton>Open Recipe(s)</guibutton> button.  From the <guimenu>Tools</guimenu> menu, select <guimenuitem>Edit Recipe</guimenuitem>, or the <keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo> key combination can be pressed.</para></listitem>
+
+<listitem><para>Select the recipe to be edited from the recipe list in the main portion of the <emphasis>&krecipes;</emphasis> window.  Click the <guibutton>Edit Recipe</guibutton> button.</para>
+</listitem>
+</orderedlist>
+
+<para>Either way, the identical screen that appeared when entering a new recipe displays. <emphasis>For a complete description of this screen, refer to the section</emphasis> <link linkend="add-recipe">Adding a New Recipe</link>.</para>
+
+<para>All aspects of the recipe can now be edited &ndash;</para>
+
+<itemizedlist>
+<listitem><para>the Recipe Name, Authors, Categories, Servings, Preparation Time and/or graphic from the <guilabel>Recipe</guilabel> tab</para></listitem>
+<listitem><para>the Amount, Units, and/or Preparation method for each listed ingredient in the <guilabel>Ingredients</guilabel> tab</para>
+<note><para>Also in this tab, an ingredient can be added by clicking on the <guibutton>?</guibutton> button, or deleted by clicking on the <guibutton>&#8855;</guibutton> button</para></note></listitem>
+<listitem><para>the preparation directions from the <guilabel>Instructions</guilabel> tab</para></listitem>
+</itemizedlist>
+
+<para>As with entering a new recipe, the buttons <guibutton>Save Recipe</guibutton>, <guibutton>Show Recipe</guibutton>, <guibutton>Close</guibutton> and <guibutton>Resize Recipe</guibutton> are available from each of the tabs</para>
+
+<para>While editing the recipe, if the <guibutton>Show Recipe</guibutton> button is selected, the <interface>Unsaved changes - krecipes</interface> dialog box appears stating <prompt>This recipe has changes that will not be displayed unless the recipe is saved. Would you like to save it now?</prompt>.  The <guibutton>Yes</guibutton>, <guibutton>No</guibutton> or <guibutton>Cancel</guibutton> buttons are available for selection.</para>
+
+<para>The important detail to note is that in order to continue editing the recipe, the <interface>Edit Recipe</interface> interface must be accessed.  This can be done in a variety of ways &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Select <guimenu>Tools</guimenu> and then, <guimenuitem>Edit Recipe</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu</para></listitem>
+<listitem><para>Press the <keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo> key combination</para></listitem>
+<listitem><para>Click on the <guibutton>Recipe Name</guibutton> button that appears at the bottom of the component list in the left-hand pane of the window &ndash; this button appears once the recipe to be edited has been loaded and a change has been initiated </para></listitem>
+</itemizedlist>
+
+<tip><para>With the <quote>Find/Edit Recipes</quote> component selected and the list of recipes showing on the right-hand side of the screen, an entire recipe may be deleted by selecting it from the list and clicking the <guibutton>Delete</guibutton> button.</para></tip> 
+
+</sect2>
+
+</sect1>
+
+<sect1 id="import-export-recipes">
+<title>Importing and Exporting Recipes</title>
+<para><emphasis>&krecipes;</emphasis> allows the import of recipes from a file or from a database.  Recipes can also be exported to other formats.</para>
+
+<sect2 id="file-import">
+<title>Importing from a File</title>
+
+<para><emphasis>&krecipes;</emphasis> allows the import of recipes from the following formats &mdash;</para>
+<itemizedlist><listitem><para><emphasis>&krecipes;</emphasis> &ndash; files of this format will have extensions of .kre or .kreml</para></listitem>
+<listitem><para>MasterCook &ndash; files of this format will have extensions of .mx2 and originate from MasterCook 5 or 6</para></listitem>
+<listitem><para>MasterCook Export &ndash; files of this format will have extensions of .mxp or .txt and originate from MasterCook 4</para></listitem>
+<listitem><para>Meal-Master &ndash; files of this format will have extensions of .mmf or .txt</para></listitem>
+<listitem><para><quote>Now You're Cooking</quote> Generic Export &ndash; files of this format will have extensions of .txt</para></listitem>
+<listitem><para>RecipeML &ndash; files of this format will have extensions of .xml or .recipeml</para></listitem>
+<listitem><para>Rezkonv &ndash; files of this format will have extensions of .rk or .txt</para></listitem>
+
+</itemizedlist>
+
+<para>To import a recipe from a file of one of the above formats, select <guimenu>File</guimenu> from the <emphasis>&krecipes;</emphasis> menu bar.  From the available choices, select <guimenuitem>Import from File ...</guimenuitem></para>
+
+<para>A window will appear that allows the navigation to the file that you wish to import.  Navigation can be done using the <quote>point and click</quote> method, or the location of the file may be entered directly into the box labelled <guilabel>Location:</guilabel>.</para>
+
+<para>The <guilabel>Filter:</guilabel> box is used to select the format of the recipe being imported from the drop-down menu.</para>
+
+<tip><para>To position the cursor for entry into the <guilabel>Location:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo> can be used.  To position the cursor for entry into the <guilabel>Filter:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>F</keycap></keycombo> can be used.</para></tip>
+
+<para>Once you have navigated to the location of the recipe file that you want to import and have selected the correct format, all the recipes saved in the selected format will appear in the file list.  If  import of only one recipe is desired, select the file that you wish to import and its name will appear in the <guilabel>Location:</guilabel> box.  Press the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> to close the file selection window and return to the previous screen.</para>
+
+<para>When you click on the <guibutton>OK</guibutton> button, the <emphasis>&krecipes;</emphasis> <interface>Import Recipes</interface> window will appear.  Under the heading <guilabel>Recipes</guilabel>, drop-down lists will appear &mdash;</para>
+
+<itemizedlist><listitem><para>All &ndash; This list will be expanded by default and is selected by default whether one recipe or multiple recipes are being imported (the tickbox to the left of the label will contain  a check mark).  In brackets, to the right of the label, the number of recipes being imported will appear.</para></listitem>
+
+<listitem><para>Uncategorized &ndash; You may have to click on the <guibutton>+</guibutton> button to expand the list to reveal the recipe names.  Again, to the left of the label, the tick box will be selected and the number of recipes being imported will show to the right.  From the list of recipes, any recipes that you do not wish to import can be deselected by clicking on the tickbox to remove the check mark.</para>
+
+<note><para>You may also see (or only see) a list item named <quote>Categorized</quote> if any of the recipes that are being import have had categories, for example <quote>Desserts</quote>, attached to them.</para></note></listitem>
+</itemizedlist>
+
+<para>Click the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> button to prevent the import and close the window.</para>
+
+<para>It should be noted that the <guibutton>Cancel</guibutton> button can be pressed after the import starts.  In this situation, any recipes that have been imported prior to pressing the <guibutton>Cancel</guibutton> button will remain in the database &ndash; <emphasis>&krecipes;</emphasis> does not <quote>rollback</quote> completed imports on cancellation of the import process.</para>
+
+<para>If the recipe(s) being imported are uncategorized, the recipe name(s) will appear intermingled with the category names in the <emphasis>&krecipes;</emphasis> <interface>Find/Edit Recipes</interface> window.  In this case, you would select each recipe and edit it to either place it into its appropriate category or define a new category in which to place it. See the section <link linkend="edit-recipe">Editing Saved Recipes</link> and <link linkend="categories-component">The Categories Component</link> for instruction on how to do this.</para>
+  
+<para>If the recipe(s) are categorized, <emphasis>&krecipes;</emphasis> will put the recipe(s) into the appropriate category or create a new category if the appropriate one does not exist.</para>
+
+<para>Regardless of whether the recipe being imported is uncategorized or categorized, it may still be appropriate to edit the recipe to define <quote>Preparation Time</quote>, or otherwise fine-tune the recipe.</para>
+
+<warning><para>The manner in which the recipe imports into <emphasis>&krecipes;</emphasis> is <emphasis>DEPENDENT ON THE WAY IT HAS BEEN INPUT INTO THE ORIGINAL PROGRAM!</emphasis>  If the recipe has been input into the original program in a sloppy manner, it will not import neatly into <emphasis>&krecipes;</emphasis>!</para></warning> 
+
+</sect2>
+
+<sect2 id="database-import">
+<title>Importing from a Database</title>
+<para>To import a recipe from an existing database, select <guimenu>File</guimenu> from the <emphasis>&krecipes;</emphasis> menu bar.  From the available choices, select <guimenuitem>Import from Database ...</guimenuitem>  The <interface>Database Import</interface> window will appear.  Under the heading <emphasis>Database</emphasis>, you can make one of three selections.  Your selection can be made by clicking the radio button beside <link linkend="import-sqlite">SQLite</link>, <link linkend="import-mysql">MySQL</link>, or <link linkend="import-postgresql">PostgreSQL</link>.</para>
+
+<sect3 id="import-sqlite">
+<title>Importing from SQLite</title>
+
+<para>If you choose SQLite, beneath the heading <guilabel>Database file:</guilabel>, there is a text box and beside this, the <guiicon>Open File Dialog</guiicon> icon which, when clicked, will <action>open the file dialog window</action>.  This window is used to navigate to the location of the database that you want to import.  Once you have located the appropriate database file, select it from the file list.  The name will appear in the <guilabel>Location:</guilabel> box.  Click the <guibutton>OK</guibutton> button to proceed or the <guibutton>Cancel</guibutton> button to close the file dialog window and return to the previous screen.</para>
+
+<para>Once the <guibutton>OK</guibutton> button is pressed, the file dialog window will close.  You will be returned to the <interface> Database Import</interface> window and you should see the name of the database file with its <quote>path</quote> showing in the textbox.  Click the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> button to discontinue the import.</para>
+
+<para>At this point, the import becomes <link linkend="common-import">common</link> for whatever database you are importing.</para>
+
+</sect3>
+
+<sect3 id="import-mysql">
+<title>Importing from MySQL</title>
+
+<para>If the MySQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label &mdash;</para>
+
+<itemizedlist><listitem><para><guilabel>Server:</guilabel></para></listitem>
+<listitem><para><guilabel>Username:</guilabel></para></listitem>
+<listitem><para><guilabel>Password:</guilabel></para></listitem>
+<listitem><para><guilabel>Database name:</guilabel></para></listitem>
+
+</itemizedlist>
+
+<para>Once this information has been supplied, click the <guibutton>OK</guibutton> button to proceed with the import steps that are <link linkend="common-import">common</link> to all.  At this point, you may also click the <guibutton>Cancel</guibutton> button the cancel the import and return to the previous screen.</para>
+
+</sect3>
+
+<sect3 id="import-postgresql">
+<title>Importing from PostgreSQL</title>
+
+<para>If the PostgreSQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label &mdash;</para>
+
+<itemizedlist><listitem><para><guilabel>Server:</guilabel></para></listitem>
+<listitem><para><guilabel>Username:</guilabel></para></listitem>
+<listitem><para><guilabel>Password:</guilabel></para></listitem>
+<listitem><para><guilabel>Database name:</guilabel></para></listitem>
+
+</itemizedlist>
+
+<para>Once this information has been supplied, click the <guibutton>OK</guibutton> button to proceed with the import steps that are <link linkend="common-import">common</link> to all.  At this point, you may also click the <guibutton>Cancel</guibutton> button the cancel the import and return to the previous screen.</para>
+</sect3>
+
+<sect3 id="common-import">
+<title>Steps Common to All Database Imports</title>
+<para>Similar to importing recipes from a file, the <interface>Import Recipes</interface> window will appear with the list item <quote>All</quote> and beneath this, sub-lists showing the categories being import.  Also like importing from a file, the list items will have tick boxes on the left from which whole categories and/or recipes can be deselected by clicking on the box to remove the check mark.  The total number of recipes will show to the right of the <quote>All</quote> list item and the number of recipes in each category will display to the right of the category item.</para>
+
+<para>Click the <guibutton>OK</guibutton> button to proceed with importing the database, or the <guibutton>Cancel</guibutton> button to stop the import.  If you choose to proceed, the categories and recipes that are in the database file being imported will appear in your <emphasis>&krecipes;</emphasis> recipe list.</para>
+
+</sect3>
+
+
+</sect2>
+
+<sect2 id="export-recipe">
+<title>Exporting Recipes to Other Formats</title>
+
+<para><emphasis>&krecipes;</emphasis> can export your recipes to the following formats &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Compressed Krecipes format &ndash; files of this format will have extensions of .kre</para>
+<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the internet easier.  This format also provides a useful means of backup.</para></listitem>
+
+<listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
+<para>Using this format exports your recipe in plain text which makes it easier to edit the recipe XML.</para>
+
+<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>Headers</quote>, and this is not supported by the export format that you have specified, that information is lost.</para></note></listitem>
+
+<listitem><para>Web page &ndash; files of this format will have extensions of .html</para>
+ 
+<para>You might choose to export in this format in order to create a web page that contains your recipes.  However, it should be noted that once exported in Web page format, you are unable to import these recipes back into <emphasis>&krecipes;</emphasis>.</para></listitem>
+
+<listitem><para>Meal-Master &ndash; files of this format will have extensions of .mmf and you might want to export in this format to be able to import into the Meal-Master program to share will other Meal-Master users</para>
+
+<para>This is the most widely-used recipe format.  However, you should note that if your choose to export in this format, certain <emphasis>&krecipes;</emphasis> recipe information will be lost.</para></listitem>
+
+<listitem><para>RecipeML &ndash; files of this format will have extensions of .xml</para>
+
+<para>This is a standard recipe XML format, although not yet widely used by most recipe software.  However, you may wish to use this format to have recipes recognized by programs that use it.</para></listitem>
+</itemizedlist>
+
+<para>To export a single recipe to one of the above formats, first select the recipe that you wish to export.  Then, select <guimenu>File</guimenu> from the <emphasis>&krecipes;</emphasis> menu bar.  From the available choices, select <guimenuitem>Export ...</guimenuitem></para>
+
+<para>A window will appear that allows you to navigate to location where you wish to save your exported recipe.  The location will default to your home directory, but another existing directory can be chosen, or you can create a new directory.  The name of the recipe will appear in the box labelled <guilabel>Location:</guilabel> and this will default to the name that was given to the recipe in the <emphasis>&krecipes;</emphasis> database.  However, this name can be changed to another at your discretion.</para>
+
+<para>The <guilabel>Filter:</guilabel> box is used to select the format that you wish to use for the exported recipe from the drop-down menu.</para>
+
+<para>  You will also note that at the bottom of this window, there is a tickbox that allows you to select or deselect to <guilabel>Automatically select filename extension</guilabel>.  The extension of the chosen export format will appear beside the phrase.  If you choose to keep the tickbox selected, this extension will automatcially be attached to the filename of your exported recipe. </para>
+
+<tip><para>To position the cursor for entry into the <guilabel>Location:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo> can be used.  To position the cursor for entry into the <guilabel>Filter:</guilabel> box, the key combination <keycombo action="simul">&Alt;<keycap>F</keycap></keycombo> can be used.</para></tip>
+
+<para>Once the name of the exported recipe appears in the <guilabel>Location:</guilabel> box and you have chosen the format you wish to use for your exported recipe, click the <guibutton>Save</guibutton> button to proceed with the export, or the <guibutton>Cancel</guibutton> button to halt the export process and return to the previous screen.</para>
+
+<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format &ndash; for example, if you have chosen to export your recipe in <quote>Meal-Master</quote> format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the graphics releated to your exported recipe are stored.</para>
+
+<note><para>You may also export categories of recipes or your whole database in this same manner.  However, if you want to export your entire database, you must ensure that no recipe or category is selected in your recipe list.</para>
+
+<para>If you recall, when <emphasis>&krecipes;</emphasis> starts, by default the <quote>Find/Edit Recipes</quote> component is active and if you have recipes and categories, they appear in the right pane of the window.  At this point nothing is selected, so you could choose to export your entire database.  However, if there is something selected and you want to export, simple click on the white area of the category/recipe list.  The highlight will disappear from the choice and you can now proceed to export your entire database.</para>
+
+</note>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<!-- (OPTIONAL, BUT RECOMMENDED) This chapter should list all of the
+application windows and their menubar and toolbar commands for easy reference.
+Also include any keys that have a special function but have no equivalent in the
+menus or toolbars. This may not be necessary for small apps or apps with no tool
+or menu bars. -->
+
+<sect1 id="kapp-mainwindow">
+<title>The main &krecipes; window</title>
+
+<sect2>
+<title>The File Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &krecipes;</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect2>
+
+<sect2 id="tools-menu">
+<title>The <guimenu>Tools</guimenu> Menu</title>
+
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo>
+</shortcut>
+<guimenu>Tools</guimenu>
+<guimenuitem>Edit</guimenuitem>
+</menuchoice></term>
+<listitem><para>Accesses the &krecipes; <action>Edit</action> mode</para></listitem>
+</varlistentry>
+</variablelist>
+</para> 
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+<!-- Assuming you have a standard help menu (help, what's this, about -->
+<!-- &krecipes;, about KDE) then the documentation is already written. -->
+<!-- The following entity is valid anywhere that a variablelist is -->
+<!-- valid.  -->
+
+&help.menu.documentation;
+
+</sect2>
+
+</sect1>
+</chapter>
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<!-- (OPTIONAL but recommended) This chapter should include all of the silly
+(and not-so-silly) newbie questions that fill up your mailbox. This chapter
+should be reserved for BRIEF questions and answers! If one question uses more
+than a page or so then it should probably be part of the
+"Using this Application" chapter instead. You should use links to
+cross-reference questions to the parts of your documentation that answer them.
+This is also a great place to provide pointers to other FAQ's if your users
+must do some complicated configuration on other programs in order for your
+application work. -->
+
+&reporting.bugs;
+&updating.documentation;
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>My Mouse doesn't work. How do I quit &krecipes;?</para>
+</question>
+<answer>
+<para>You silly goose! Check out the <link linkend="commands">Commands
+Section</link> for the answer.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Why can't I twiddle my documents?</para>
+</question>
+<answer>
+<para>You can only twiddle your documents if you have the foobar.lib
+installed.</para>
+</answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+<chapter id="credits">
+
+<!-- Include credits for the programmers, documentation writers, and
+contributors here. The license for your software should then be included below
+the credits with a reference to the appropriate license file included in the KDE
+distribution. -->
+
+<title>Credits and License</title>
+
+<para>
+&krecipes;. Program copyright 2003, 2004, 2005 by the &krecipes; developer team.
+</para>
+
+<variablelist>
+<title>The &krecipes; team:</title>
+<varlistentry>
+<term>Unai Garro <email>ugarro@users.sourceforge.net</email></term>
+<listitem><para>Creator &amp; Core Developer</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Jason Kivlighn <email>mizunoami44@users.sourceforge.net</email></term>
+<listitem><para>Project Maintainer &amp; Core Developer</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Cyril Bosselut <email>bosselut@b1project.com</email></term>
+<listitem><para>Core Developer</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+Documentation copyright 2004-2005 Colleen Beamer <email>cbeamer@interlynx.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+
+<!-- Determine which license your application is licensed under, 
+     and delete all the remaining licenses below:
+
+     (NOTE:  All documentation are licensed under the FDL, 
+     regardless of what license the application uses) -->
+
+&underGPL;        	 <!-- GPL License -->
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kapp">
+<title>How to obtain &krecipes;</title>
+
+<!-- This first entity contains boiler plate for applications that are
+part of KDE CVS.  You should remove it if you are releasing your
+application --> 
+
+&install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<!--
+List any special requirements for your application here. This should include:
+.Libraries or other software that is not included in kdesupport,
+kdelibs, or kdebase.
+.Hardware requirements like amount of RAM, disk space, graphics card
+capabilities, screen resolution, special expansion cards, etc.
+.Operating systems the app will run on. If your app is designed only for a
+specific OS, (you wrote a graphical LILO configurator for example) put this
+information here.
+-->
+
+<para>
+In order to successfully use &krecipes;, make sure you have at least one of the two necessary databases installed: <emphasis>SQLite</emphasis> or <emphasis>MySQL</emphasis>. In case you decide to use MySQL, make sure also that you have <emphasis>&Qt;'s MySQL plugin</emphasis> properly installed. The program won't work without database support.
+</para>
+
+<para>
+&krecipes; also requires &kde; &gt;= 3.1 and &Qt; &gt;= 3.1
+</para>
+
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<!-- This entity contains the boilerplate text for standard -->
+<!-- compilation instructions.  If your application requires any -->
+<!-- special handling, remove it, and replace with your own text. -->
+
+&install.compile.documentation;
+
+<para>
+Krecipes can also be compiled without support for certain databases... finish
+</para>
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab 
+-->
+
