@@ -23,14 +23,11 @@ box->setTitle("New Property");
 
 propertyNameEdit=new KLineEdit(box); propertyNameEdit->setGeometry( QRect( 105, 30, 210, 25 ) );
 propertyUnits=new KLineEdit(box); propertyUnits->setGeometry(QRect(105,60,80,25));
-propertyPerUnits=new QComboBox(box); propertyPerUnits->setGeometry(QRect(235,60,80,25));
 okButton=new QPushButton(box); okButton->setGeometry( QRect( 5, 120, 100, 20 ) ); okButton->setText("Ok");
 cancelButton=new QPushButton(box); cancelButton->setGeometry( QRect( 110, 120, 60, 20 ) ); cancelButton->setText("Cancel");
 nameEditText=new QLabel("Property Name:",box); nameEditText->setGeometry(QRect(5,30,100,20));
 unitsText=new QLabel("Units:",box); unitsText->setGeometry(QRect(5,60,100,20));
-perUnitsText=new QLabel("per",box); perUnitsText->setGeometry(QRect(195,60,30,20));
 
-loadUnits();
 
 resize(QSize(400,200));
 
@@ -55,18 +52,4 @@ QString CreatePropertyDialog::newUnitsName(void)
 return(propertyUnits->text());
 }
 
-int CreatePropertyDialog::perUnits(void)
-{
-if (propertyPerUnits->count()>0) // Make sure that the unit list is not empty
-  return(unitList->getElement(propertyPerUnits->currentItem())->id);
-else return(-1);
-}
-
-void CreatePropertyDialog::loadUnits()
-{
-for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
-{
-  propertyPerUnits->insertItem(unit->name);
-}
-}
 

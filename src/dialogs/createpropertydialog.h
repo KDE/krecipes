@@ -31,7 +31,6 @@ public:
     ~CreatePropertyDialog();
     QString newPropertyName(void);
     QString newUnitsName(void);
-    int perUnits(void);
 
 
 private:
@@ -41,12 +40,10 @@ private:
   QVBox *vbox;
   KLineEdit *propertyNameEdit;
   KLineEdit *propertyUnits;
-  QComboBox *propertyPerUnits;
   QPushButton* okButton;
   QPushButton* cancelButton;
   QLabel *nameEditText;
   QLabel *unitsText;
-  QLabel *perUnitsText;
 
   //Internal variables
   ElementList *unitList;
