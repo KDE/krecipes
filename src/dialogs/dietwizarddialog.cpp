@@ -109,7 +109,19 @@ if (mn>mealNumber)
 void DietWizardDialog::createDiet(void)
 {
 RecipeList rlist;
-database->loadRecipes(&rlist);
+RecipeIngredientList ilist;
+
+database->loadRecipeDetails(&rlist);
+database->loadAllRecipeIngredients(&ilist,false);
+
+// fill the recipe list with the ingredients
+
+for (Ingredient *ing=ilist.ilist.getFirst();ing;ing=ilist.ilist.getNext() )
+{
+
+}
+
+
 }
 
 
