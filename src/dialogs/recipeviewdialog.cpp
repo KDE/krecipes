@@ -93,13 +93,15 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px;
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
        {
-	QString amount_str;
-	if ( format == "Fraction" )
-		amount_str = MixedNumber(ing->amount).toString();
-	else
-		amount_str = QString::number(ing->amount);
-
-       recipeHTML+=QString("<li>%1: %2 %3</li>")
+          QString amount_str;
+          if ( format == "Fraction" )
+            amount_str = MixedNumber(ing->amount).toString();
+          else
+            amount_str = QString::number(ing->amount);
+          if(amount_str == "0"){
+            amount_str = "";
+          }
+          recipeHTML+=QString("<li>%1: %2 %3</li>")
 			    .arg(ing->name)
 			    .arg(amount_str)
 			    .arg(ing->units);
@@ -113,7 +115,7 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 480px; left:1%; width: 220px;
     IngredientProperty * prop;
     for ( prop = properties->getFirst(); prop; prop = properties->getNext() )
        {
-       recipeHTML+=QString("<li>%1: %2  %3</li>")
+          recipeHTML+=QString("<li>%1: %2  %3</li>")
 			    .arg(prop->name)
 			    .arg(prop->amount)
 			    .arg(prop->units);
@@ -151,7 +153,7 @@ recipeHTML+=QString("> </div>");
 // Header
 
 recipeHTML+="<div STYLE=\"position: absolute; top: 5px; left:1%; width: 98%; height:30px; background-color: #EDD89E\">";
-recipeHTML+=QString("<p align=right >Recipe: #%1</p></div>").arg(loadedRecipe->recipeID);
+recipeHTML+="<p align=right >"+i18n("Recipe")+QString(": #%1</p></div>").arg(loadedRecipe->recipeID);
 
 // Close HTML
 recipeHTML+="</body></html>";
