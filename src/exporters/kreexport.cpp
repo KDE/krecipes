@@ -162,13 +162,14 @@ void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recip
 		}
 	}
 
-	//only keep the relevant category structure
-	removeIfUnused( categoriesUsed, categories );
-
-
-	xml += "<krecipes-category-structure>\n";
-	writeCategoryStructure( xml, categories );
-	xml += "</krecipes-category-structure>\n";
+	if ( !categoriesUsed.empty() ) {
+		//only keep the relevant category structure
+		removeIfUnused( categoriesUsed, categories );
+	
+		xml += "<krecipes-category-structure>\n";
+		writeCategoryStructure( xml, categories );
+		xml += "</krecipes-category-structure>\n";
+	}
 }
 
 bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
@@ -185,7 +186,7 @@ bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *
 		}
 	}
 
-	if ( !parent_should_show ) {
+	if ( !parent_should_show /*&& parent->category.id != -1*/ ) {
 		delete parent;
 	}
 
