@@ -10,9 +10,10 @@
 #ifndef SETUPWIZARD_H
 #define SETUPWIZARD_H
 
-#include <qlabel.h>
+#include <qvbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
+#include <qlabel.h>
 #include <kwizard.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -145,6 +146,7 @@ private:
 	// Widgets
 	QLabel *dbTypeSetupText;
 	QLabel *logo;
+	QVButtonGroup *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
 };

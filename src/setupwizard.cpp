@@ -456,7 +456,7 @@ QPixmap serverSetupPixmap (locate("data", "krecipes/pics/network.png"));
 logo=new QLabel(this);
 logo->setPixmap(serverSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
+layout->addMultiCellWidget(logo,1,4,1,1,Qt::AlignTop);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_from_image,1,2);
@@ -464,9 +464,9 @@ layout->addItem(spacer_from_image,1,2);
 
 // Explanation text
 dbTypeSetupText=new QLabel(this);
-dbTypeSetupText->setText(i18n("In this dialog you can choose the type of recipe database you want to use."));
+dbTypeSetupText->setText(i18n("Choose the type of recipe that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL database."));
 dbTypeSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
-dbTypeSetupText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
+dbTypeSetupText->setAlignment( int( QLabel::AlignTop |QLabel::WordBreak ) );
 layout->addWidget(dbTypeSetupText,1,3);
 
 // Text spacer
@@ -477,13 +477,15 @@ layout->addItem(textSpacer,2,3 );
 
 
 // Database type choice
+bg=new QVButtonGroup(this);
+layout->addWidget(bg,3,3);
 
-liteCheckBox=new QRadioButton(i18n("Simple Local File (SQLite)"),this,"liteCheckBox");
-layout->addWidget(liteCheckBox,3,3);
-QSpacerItem* radioButtonSpacer = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( radioButtonSpacer,4,3 );
-mysqlCheckBox=new QRadioButton(i18n("Local or Remote MySQL Database"),this,"liteCheckBox");
-layout->addWidget(mysqlCheckBox,5,3);
+liteCheckBox=new QRadioButton(i18n("Simple Local File (SQLite)"),bg,"liteCheckBox");
+mysqlCheckBox=new QRadioButton(i18n("Local or Remote MySQL Database"),bg,"liteCheckBox");
+bg->setButton(0);
+
+QSpacerItem *spacer_bottom=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+layout->addItem(spacer_bottom,4,3);
 
 // Signals & Slots
 }
