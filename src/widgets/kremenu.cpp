@@ -50,11 +50,21 @@ dragging=true;
 
 void KreMenu::mouseMoveEvent (QMouseEvent *e)
 {
+
+
 // Set the mouse cursor in any case
 int x=e->x(),y=e->y();
 if (x > (width()-15))
 	{
-	setCursor(QCursor(Qt::SplitHCursor));
+
+	if (QT_VERSION>=0x030200)
+		{
+		setCursor(QCursor(Qt::SplitHCursor));
+		}
+	else
+		{
+		setCursor(QCursor(Qt::SplitVCursor));
+		}
 	}
 else
 	{
