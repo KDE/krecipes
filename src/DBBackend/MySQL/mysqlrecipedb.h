@@ -93,6 +93,7 @@ public:
 	void loadPossibleUnits(int ingredientID, ElementList *list);
 	void loadProperties(IngredientPropertyList *list,int ingredientID=-1);
 	void loadRecipe(Recipe *recipe,int recipeID=0);
+	void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
 	void loadRecipeList(ElementList *list, int categoryID=0);

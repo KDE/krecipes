@@ -159,6 +159,25 @@ recipeToLoad.exec( command);
 mysql_close(mysqlDB);
 }
 
+void MySQLRecipeDB::loadRecipes(RecipeList *rlist,bool getInstructions,bool getPhoto)
+{
+rlist->clear();
+
+QString command="SELECT id,title,persons FROM recipes";
+QSqlQuery recipesToLoad( command,database);
+
+            if ( recipesToLoad.isActive() ) {
+                while ( recipesToLoad.next() ) {
+		    Recipe rec;
+		    rec.recipeID=recipesToLoad.value(0).toInt();
+		    rec.title=unescapeAndDecode(recipesToLoad.value(1).toString());
+		    rec.persons=recipesToLoad.value(2).toInt();
+		    rlist->append(rec);
+                }
+	}
+}
+
+
 void MySQLRecipeDB::loadIngredients(ElementList *list)
 {
 list->clear();

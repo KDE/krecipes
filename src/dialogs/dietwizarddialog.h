@@ -77,7 +77,7 @@ public:
 	void reload(void);
 private slots:
 	void changeMealNumber(int mn);
-
+	void createDiet(void);
 };
 
 class MealInput:public QWidget{

@@ -13,10 +13,11 @@
 
 #include <qsqldatabase.h>
 #include <qstring.h>
-#include "../recipe.h"
-#include "../elementlist.h"
-#include "../ingredientpropertylist.h"
-#include "../unitratiolist.h"
+#include "recipe.h"
+#include "datablocks/recipelist.h"
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
+#include "unitratiolist.h"
 
 /**
 @author Unai Garro
@@ -76,6 +77,7 @@ public:
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
 	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-1)=0;
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
+	virtual void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false)=0;
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;

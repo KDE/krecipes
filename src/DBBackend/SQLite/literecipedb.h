@@ -19,10 +19,11 @@
 #include <qstring.h>
 #include <iostream>
 #include <asm/unistd.h>
-#include "../recipe.h"
-#include "../elementlist.h"
-#include "../ingredientpropertylist.h"
-#include "../unitratiolist.h"
+#include "recipe.h"
+#include "datablocks/recipelist.h"
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
+#include "unitratiolist.h"
 #include "recipedb.h"
 #include "libqsqlite/krecqsqlitedb.h"
 
@@ -92,6 +93,7 @@ public:
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
+	void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 

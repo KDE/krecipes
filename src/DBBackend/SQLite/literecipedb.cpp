@@ -182,6 +182,32 @@ recipeToLoad=database->executeQuery(command);
 
 }
 
+void LiteRecipeDB::loadRecipes(RecipeList *rlist,bool getInstructions,bool getPhoto)
+{
+
+rlist->clear();
+
+QString command;
+// Read all the recipe details (id,title,persons, instructions)
+command=QString("SELECT id,title,persons FROM recipes");
+
+QSQLiteResult recipesToLoad = database->executeQuery(command);
+
+Recipe rec; // To be used to load the recipes one by one
+
+            if ( recipesToLoad.getStatus()!=QSQLiteResult::Failure ) {
+	    QSQLiteResultRow row=recipesToLoad.first();
+                while ( !recipesToLoad.atEnd() ) {
+
+		    rec.recipeID=row.data(0).toInt();
+		    rec.title=unescapeAndDecode(row.data(1));
+		    rec.persons=row.data(2).toInt();
+		    rlist->append(rec);
+		    row =recipesToLoad.next();
+                }
+	}
+
+}
 
 void LiteRecipeDB::loadIngredients(ElementList *list)
 {

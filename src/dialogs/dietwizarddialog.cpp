@@ -12,6 +12,7 @@
 
 #include "dietwizarddialog.h"
 #include "DBBackend/recipedb.h"
+#include "datablocks/recipelist.h"
 #include "editbox.h"
 
 #include <qbitmap.h>
@@ -70,7 +71,7 @@ reload();
 
 // Signals & Slots
 connect(mealNumberSelector,SIGNAL(valueChanged(int)),this,SLOT(changeMealNumber(int)));
-
+connect(okButton,SIGNAL(clicked()),this,SLOT(createDiet()));
 }
 
 
@@ -104,6 +105,13 @@ if (mn>mealNumber)
 	 mealNumberLabel->setText(QString("- %1 -").arg(mn));
 	 }
 }
+
+void DietWizardDialog::createDiet(void)
+{
+RecipeList rlist;
+database->loadRecipes(&rlist);
+}
+
 
 class ConstraintsListItem:public QCheckListItem{
 public:
