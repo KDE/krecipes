@@ -22,6 +22,7 @@
 #include <qgroupbox.h>
 #include <qobject.h>
 #include <qtabwidget.h>
+#include <qtoolbutton.h>
 #include <qvbox.h>
 
 #include "elementlist.h"
@@ -95,10 +96,10 @@ private:
 
 	//Function buttons
 	QGroupBox* functionsBox;
-	QPushButton* saveButton;
-	QPushButton* closeButton;
-	QPushButton* showButton;
-	QPushButton* shopButton;
+	QToolButton* saveButton;
+	QToolButton* closeButton;
+	QToolButton* showButton;
+	QToolButton* shopButton;
 
 	// Internal functions
 	void createNewIngredientIfNecessary();
