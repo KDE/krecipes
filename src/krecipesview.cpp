@@ -81,11 +81,13 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Read the database setup
 
-    KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
+    KConfig *config; config=kapp->config(); config->sync(); 
     
 
     // Check if the database type is among those supported
-
+    // and initialize the database in each case
+    
+   config->setGroup("DBType");
    dbtype=checkCorrectDBType(config);
     
     if (0) {}// necessary for the next optional else if lines
@@ -118,6 +120,8 @@ KrecipesView::KrecipesView(QWidget *parent)
     exit(1);
     }
 
+    
+    // Design the GUI
     splitter=new QHBox(this);
 
 
@@ -897,9 +901,45 @@ void KrecipesView::initMySQLDatabase(KConfig *config)
 		// Ask the user if he wants to rerun the wizard
 		questionRerunWizard(database->err(), i18n("Unable to open database"));
 		
-		// Try opening the database again
-		delete (MySQLRecipeDB *)database;
-		database=new MySQLRecipeDB(host,user,pass,dbname);
+		// Reread the configuration file.
+		// The user may have changed the data and/or DB type
+		
+		config->setGroup("DBType");
+   		dbtype=checkCorrectDBType(config);
+		config->setGroup("Server");
+		QString host=config->readEntry( "Host","localhost");
+    		QString user=config->readEntry( "Username",QString::null);
+    		QString pass=config->readEntry("Password",QString::null);
+    		QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+		
+		
+		if(dbtype=="MySQL")  // First case, MySQL
+			{
+			kdDebug()<<i18n("Configured type... MySQL\n").latin1();
+			
+			// Try opening the database again with the new details
+			delete (MySQLRecipeDB *)database;
+			database=new MySQLRecipeDB(host,user,pass,dbname);
+			}
+		
+		#if HAVE_SQLITE
+		
+		else if (dbtype=="SQLite")// The user chose SQLite this time
+			{
+			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
+			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+			}
+		
+		#endif //HAVE_SQLITE
+		else{
+		
+		// No DB type has been enabled (should not happen at all, but just in case)
+		
+		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
+		exit(1);
+		}
+		
+		
 	}
 	kdDebug()<<i18n("DB started correctly\n").latin1();
 }
