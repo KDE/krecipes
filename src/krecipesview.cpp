@@ -52,9 +52,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     wizard();
 
     // Initialize Database
-    KConfig *config; config=kapp->config(); config->setGroup("Server");
+    KConfig *config; config=kapp->config(); config->setGroup("DBType");
 
-    QString dbtype=config->readEntry("DBType","SQLite");
+    QString dbtype=config->readEntry("Type","SQLite");
 
     // Check if the database type is among those supported
 
@@ -67,9 +67,8 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     else if(dbtype=="MySQL")  // First case, MySQL
     	{
-
 	// Read the server parameters
-
+	config->setGroup("Server");
 	QString host=config->readEntry( "Host","localhost");
     	QString user=config->readEntry( "Username",QString::null);
     	QString pass=config->readEntry("Password",QString::null);
