@@ -26,6 +26,7 @@ BUGS/OTHER:
 	*Make use of transactions in database backends where appropriate
 	*Give a warning when deleting categories (such as when a recipe was a part of that category)
 	*Delete the database table when deleting Krecipes
+	*Give a message box when exporting recipes, letting the user know what they are exporting (Is it the whole database, just what is visible, or a specific recipe)... Make it a "Don't ask me again" dialog.
 
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
