@@ -260,8 +260,10 @@ void Krecipes::import()
 			}
 
 			QString error = importer->getErrorMsg();
-			if ( error != QString::null )
+			if ( !error.isNull() )
 				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
+			else
+				m_view->import( *importer );
 
 			if ( importer->getWarningMsgs().count() > 0 )
 			{
@@ -269,7 +271,6 @@ void Krecipes::import()
 				warnings_list += importer->getWarningMsgs();
 			}
 
-			m_view->import( *importer );
 			delete importer;
 		}
 
