@@ -225,10 +225,23 @@ if (action==0) // Open
   rightPanel->raiseWidget(viewPanel);
   }
 else if (action==1) // Edit
- {
- inputPanel->loadRecipe(recipeID);
- rightPanel->raiseWidget(inputPanel);
- }
+{
+	if ( !inputPanel->everythingSaved() )
+	{
+		switch( KMessageBox::questionYesNoCancel( this,
+		  i18n(QString("Recipe \"%1\" contains unsaved changes.\n"
+		  "Do you want to save changes made to this recipe before editing another recipe?").arg(recipeButton->text())),
+		   i18n("Unsaved changes") ) )
+		{
+			case KMessageBox::Yes: inputPanel->save(); break;
+			case KMessageBox::No: break;
+			case KMessageBox::Cancel: return;
+		}
+	}
+
+	inputPanel->loadRecipe(recipeID);
+	rightPanel->raiseWidget(inputPanel);
+}
 else if (action==2) //Remove
 {
 database->removeRecipe(recipeID);
@@ -239,6 +252,19 @@ selectPanel->reload();
 
 void KrecipesView::createNewRecipe(void)
 {
+if ( !inputPanel->everythingSaved() )
+{
+	switch( KMessageBox::questionYesNoCancel( this,
+	  i18n(QString("Recipe \"%1\" contains unsaved changes.\n"
+	  "Do you want to save changes made to this recipe before creating a new recipe?").arg(recipeButton->text())),
+	   i18n("Unsaved changes") ) )
+	{
+		case KMessageBox::Yes: inputPanel->save(); break;
+		case KMessageBox::No: break;
+		case KMessageBox::Cancel: return;
+	}
+}
+
 inputPanel->newRecipe();
 rightPanel->raiseWidget(inputPanel);
 }

@@ -337,7 +337,6 @@ RecipeInputDialog::~RecipeInputDialog()
 
 void RecipeInputDialog::loadRecipe(int recipeID)
 {
-
 //Disable changed() signals
 enableChangedSignal(false);
 
@@ -663,7 +662,8 @@ instructionsEdit->setText(i18n("Write the recipe instructions here"));
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
 ingredientList->clear();
-
+authorShow->clear();
+categoryShow->clear();
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
