@@ -16,8 +16,6 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-
 #include "recipeinputdialog.h"
 #include "selectauthorsdialog.h"
 #include "recipe.h"
@@ -35,7 +33,6 @@ loadedRecipe->recipeID=-1; // No loaded recipe initially
 loadedRecipe->title=QString::null;
 loadedRecipe->instructions=QString::null;
 database=db;
-
 
 // Tabs
     tabWidget = new QTabWidget( this, "tabWidget" );
@@ -59,15 +56,15 @@ database=db;
     recipeTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
     // Design the Dialog
-    QGridLayout* layout = new QGridLayout( recipeTab, 1, 1, 0, 0);
+    QGridLayout* recipeLayout = new QGridLayout( recipeTab, 1, 1, 0, 0);
 
     // Border
     QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem( spacer_left, 1,0 );
+    recipeLayout->addItem( spacer_left, 1,0 );
     QSpacerItem* spacer_right = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem( spacer_right, 1,8 );
+    recipeLayout->addItem( spacer_right, 1,8 );
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum ,QSizePolicy::Fixed );
-    layout->addItem( spacer_top, 0,1 );
+    recipeLayout->addItem( spacer_top, 0,1 );
 
     QVBox *titleBox = new QVBox(recipeTab);
     titleBox->setSpacing(5);
@@ -76,17 +73,17 @@ database=db;
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));
     titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addMultiCellWidget(titleBox,1,1,1,7);
+    recipeLayout->addMultiCellWidget(titleBox,1,1,1,7);
 
 
     // Title ->author spacer
     QSpacerItem* title_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(title_spacer,2,5 );
+    recipeLayout->addItem(title_spacer,2,5 );
 
     // Author(s) & Categories
     QVBox *authorBox = new QVBox(recipeTab); // contains label and authorInput (input widgets)
     authorBox->setSpacing(5);
-    layout->addWidget(authorBox,3,1);
+    recipeLayout->addWidget(authorBox,3,1);
     authorLabel = new QLabel(i18n("Authors"),authorBox);
     QHBox *authorInput= new QHBox(authorBox); // Contains input + button
 
@@ -105,7 +102,7 @@ database=db;
 
 
     QSpacerItem* author_category = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(author_category,3,3 );
+    recipeLayout->addItem(author_category,3,3 );
 
     QVBox *categoryBox = new QVBox(recipeTab); // Contains the label and categoryInput (input widgets)
     categoryBox->setSpacing(5);
@@ -117,7 +114,7 @@ database=db;
     categoryShow->setMinimumSize(QSize(100,20));
     categoryShow->setMaximumSize(QSize(10000,20));
     categoryShow->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addWidget(categoryBox,3,4);
+    recipeLayout->addWidget(categoryBox,3,4);
 
     addCategoryButton= new QPushButton(categoryInput);
     addCategoryButton->setText("+");
@@ -126,7 +123,7 @@ database=db;
 
     //Categories ->Servings spacer
     QSpacerItem* category_servings = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(category_servings,3,6 );
+    recipeLayout->addItem(category_servings,3,6 );
 
     QVBox *servingsBox = new QVBox(recipeTab);
     servingsBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
@@ -136,12 +133,12 @@ database=db;
     servingsNumInput = new KIntNumInput(servingsBox);
     servingsNumInput->setMinValue(1);
 
-    layout->addWidget(servingsBox,3,7);
+    recipeLayout->addWidget(servingsBox,3,7);
 
 
     //Info ->Photo spacer
     QSpacerItem* info_photo = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(info_photo,4,1 );
+    recipeLayout->addItem(info_photo,4,1 );
 
     // Recipe Photo
     QPixmap image1(defaultPhoto);
@@ -151,13 +148,13 @@ database=db;
     photoLabel->setFixedSize(QSize(221,166));
     photoLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     photoLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    layout->addWidget(photoLabel,5,1);
+    recipeLayout->addWidget(photoLabel,5,1);
 
     changePhotoButton=new QPushButton(recipeTab);
     changePhotoButton->setFixedSize(QSize(20,166));
     changePhotoButton->setText("...");
     changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    layout->addWidget(changePhotoButton,5,2);
+    recipeLayout->addWidget(changePhotoButton,5,2);
 
 
     //Author ->instructions spacer
@@ -169,20 +166,20 @@ database=db;
     ingredientGBox =new QGroupBox(this);
     ingredientGBox->setFlat(true);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    QGridLayout* boxLayout=new QGridLayout(ingredientGBox);
+    QGridLayout* ingredientsLayout=new QGridLayout(ingredientGBox);
 
     // Border
     QSpacerItem* spacerBoxLeft = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    boxLayout->addItem( spacerBoxLeft,1,0);
+    ingredientsLayout->addItem( spacerBoxLeft,1,0);
     QSpacerItem* spacerBoxTop = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    boxLayout->addItem(spacerBoxTop, 0,1);
+    ingredientsLayout->addItem(spacerBoxTop, 0,1);
 
     //Input Widgets
 
     amountEdit = new KDoubleNumInput(ingredientGBox);
     amountEdit->setFixedSize(QSize(60,30));
     amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(amountEdit,1,1);
+    ingredientsLayout->addWidget(amountEdit,1,1);
 
 
     ingredientBox = new KComboBox( TRUE,ingredientGBox);
@@ -191,7 +188,7 @@ database=db;
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setFixedSize( QSize(120, 30 ) );
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(ingredientBox,1,2);
+    ingredientsLayout->addWidget(ingredientBox,1,2);
 
 
     unitBox = new KComboBox( TRUE,ingredientGBox);
@@ -201,13 +198,13 @@ database=db;
     unitBox->setMinimumSize(QSize(51,30));
     unitBox->setMaximumSize(QSize(10000,30));
     unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    boxLayout->addMultiCellWidget(unitBox,1,1,3,5);
+    ingredientsLayout->addMultiCellWidget(unitBox,1,1,3,5);
 
     // Spacers to list and buttons
     QSpacerItem* spacerToList = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    boxLayout->addItem( spacerToList, 2,1 );
+    ingredientsLayout->addItem( spacerToList, 2,1 );
     QSpacerItem* spacerToButtons = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    boxLayout->addItem( spacerToButtons, 3,4);
+    ingredientsLayout->addItem( spacerToButtons, 3,4);
 
     // Add, Up,down,... buttons
     il=new KIconLoader;
@@ -217,32 +214,32 @@ database=db;
     addButton->setFlat(true);
     QPixmap pm=il->loadIcon("new", KIcon::NoGroup,16); addButton->setPixmap(pm);
     addButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(addButton,3,5);
+    ingredientsLayout->addWidget(addButton,3,5);
 
      // Spacer to the rest of buttons
     QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    boxLayout->addItem( spacerToOtherButtons,4,5 );
+    ingredientsLayout->addItem( spacerToOtherButtons,4,5 );
 
     upButton = new KPushButton(ingredientGBox);
     upButton->setFixedSize( QSize(31, 31 ) );
     upButton->setFlat(true);
     pm=il->loadIcon("up", KIcon::NoGroup,16); upButton->setPixmap(pm);
     upButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(upButton,5,5);
+    ingredientsLayout->addWidget(upButton,5,5);
 
     downButton = new KPushButton(ingredientGBox);
     downButton->setFixedSize( QSize(31, 31 ) );
     downButton->setFlat(true);
     pm=il->loadIcon("down", KIcon::NoGroup,16); downButton->setPixmap(pm);
     downButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(downButton,6,5);
+    ingredientsLayout->addWidget(downButton,6,5);
 
     removeButton = new KPushButton(ingredientGBox);
     removeButton->setFixedSize( QSize(31, 31 ) );
     removeButton->setFlat(true);
     pm=il->loadIcon("remove", KIcon::NoGroup,16); removeButton->setPixmap(pm);
     removeButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    boxLayout->addWidget(removeButton,7,5);
+    ingredientsLayout->addWidget(removeButton,7,5);
 
     // Ingredient List
     ingredientList = new KListView(ingredientGBox, "ingredientList" );
@@ -254,16 +251,15 @@ database=db;
     ingredientList->setMinimumSize(QSize(200,100));
     ingredientList->setMaximumSize(QSize(10000,10000));
     ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    boxLayout->addMultiCellWidget(ingredientList,3,8,1,3);
+    ingredientsLayout->addMultiCellWidget(ingredientList,3,8,1,3);
 
     // ------- Recipe Instructions Tab -----------
+
 
     instructionsEdit = new KTextEdit( this );
     instructionsEdit->setMinimumSize(QSize(360,320));
     instructionsEdit->setMaximumSize(QSize(10000,10000));
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    layout->addMultiCellWidget(instructionsEdit,5,7,5,11);
-
 
 
 
@@ -315,21 +311,10 @@ RecipeInputDialog::~RecipeInputDialog()
 
 void RecipeInputDialog::loadRecipe(int recipeID)
 {
-	if ( !everythingSaved() )
-	{
-		switch( KMessageBox::questionYesNoCancel( this,
-		  i18n(QString("Recipe \"%1\" contains unsaved changes.\n"
-		  "Do you want to save changes made to this recipe before editing another recipe?").arg(titleEdit->text())),
-		  i18n("Save Recipe?") ) )
-		{
-		case KMessageBox::Yes: save(); break;
-		case KMessageBox::No: break;
-		case KMessageBox::Cancel: return;
-		}
-	}
 
 //Disable changed() signals
 enableChangedSignal(false);
+
 
 //Empty current recipe
 loadedRecipe->empty();
@@ -363,7 +348,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
     regularPhoto = loadedRecipe->photo;
     if( regularPhoto.width() > photoLabel->width() || regularPhoto.height() > photoLabel->height() ){
       QImage pm = regularPhoto.convertToImage();
-		  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->height(), photoLabel->width(), QImage::ScaleMin)));
+		  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->width(), QImage::ScaleMin)));
     }
     else{
       photoLabel->setPixmap( regularPhoto );
@@ -440,7 +425,7 @@ unitBox->setCurrentText("");
       regularPhoto = pixmap;
       if( regularPhoto.width() > photoLabel->width() || regularPhoto.height() > photoLabel->height() ){
         QImage pm = regularPhoto.convertToImage();
-    	  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->height(), photoLabel->width(), QImage::ScaleMin)));
+    	  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->height(), QImage::ScaleMin)));
        }
        else{
         photoLabel->setPixmap( regularPhoto );
@@ -633,36 +618,6 @@ loadedRecipe->photo= regularPhoto;
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
 loadedRecipe->persons=servingsNumInput->value();
-
-if ( loadedRecipe->recipeID == -1 ) //don't want to tell user it already exists if we are editing an existing recipe
-{
-	int id = database->findExistingRecipeByName( loadedRecipe->title );
-	if ( id != -1 )
-	{
-		QString unique_title = database->getUniqueRecipeTitle( loadedRecipe->title );
-		switch( KMessageBox::questionYesNoCancel( this,
-		  i18n(QString("The recipe \"%1\" already exists.\n"
-		  "Do you want to rename this recipe to \"%2\"?").arg(loadedRecipe->title).arg(unique_title)),
-		  i18n("Recipe Exists"),
-		  i18n("&Rename"),
-		  i18n("&Overwrite") )
-		)
-		{
-		case KMessageBox::Yes: //rename
-			loadedRecipe->title = unique_title;
-			titleEdit->setText(unique_title);
-			break;
-		case KMessageBox::No: //overwrite
-			loadedRecipe->recipeID = id;
-			break;
-		case KMessageBox::Cancel: //we didn't make changes after all
-			emit enableSaveOption(true);
-			unsavedChanges=true;
-			return;
-		}
-	}
-}
-
 // Now save()
 database->saveRecipe(loadedRecipe);
 
@@ -680,8 +635,7 @@ instructionsEdit->setText(i18n("Write the recipe instructions here"));
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
 ingredientList->clear();
-authorShow->clear();
-categoryShow->clear();
+
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
