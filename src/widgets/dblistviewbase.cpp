@@ -226,15 +226,31 @@ bool DBListViewBase::handleElement( const QString &name )
 {
 	int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
-	if ( curr_limit != -1 && childCount()-2 >= curr_limit ) {
-		if ( name < firstChild()->text(c) || name >= lastElement->text(c) ) {
+	int child_count = childCount();
+	if ( firstChild()->rtti() == PREVLISTITEM_RTTI ){ child_count--; } //"Prev" item
+	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
+
+	if ( curr_limit != -1 && child_count >= curr_limit ) {
+		QListViewItem *firstElement = firstChild();
+		if (firstElement->rtti() == PREVLISTITEM_RTTI) {
+			firstElement = firstElement->nextSibling();
+		}
+		else if ( name < firstElement->text(c) ) { //provide access to this new element if we need to
+			new PrevListViewItem(this);
+			curr_offset++;
 			return false;
 		}
-		else
-			return true;
+
+		if ( name < firstElement->text(c) ) {
+			curr_offset++;
+			return false;
+		}
+		else if ( name >= lastElement->text(c) ) {
+			return false;
+		}
 	}
-	else
-		return true;
+		
+	return true;
 }
 
 #include "dblistviewbase.moc"
