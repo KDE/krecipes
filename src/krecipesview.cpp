@@ -56,18 +56,20 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Design Left Panel
 
-    boton1=new QPushButton(leftPanel); boton1->setFlat(true); boton1->setText("Select Recipe");
-    	boton1->setGeometry(0,0,130,30);
-    boton2=new QPushButton(leftPanel); boton2->setFlat(true); boton2->setText("View Recipe");
-    	boton2->setGeometry(0,30,130,30);
-    boton3=new QPushButton(leftPanel); boton3->setFlat(true); boton3->setText("Edit Recipe");
-        boton3->setGeometry(0,60,130,30);
-    boton4=new QPushButton(leftPanel); boton4->setFlat(true); boton4->setText("Edit Ingredients");
-        boton4->setGeometry(0,90,130,30);
-    boton5=new QPushButton(leftPanel); boton5->setFlat(true); boton5->setText("Edit Property List");
-	boton5->setGeometry(0,120,130,30);
-    boton6=new QPushButton(leftPanel); boton6->setFlat(true); boton6->setText("Edit Units");
-	boton6->setGeometry(0,150,130,30);
+    button1=new QPushButton(leftPanel); button1->setFlat(true); button1->setText("Select Recipe");
+    	button1->setGeometry(0,0,130,30);
+    button2=new QPushButton(leftPanel); button2->setFlat(true); button2->setText("View Recipe");
+    	button2->setGeometry(0,30,130,30);
+    button3=new QPushButton(leftPanel); button3->setFlat(true); button3->setText("Edit Recipe");
+        button3->setGeometry(0,60,130,30);
+    button4=new QPushButton(leftPanel); button4->setFlat(true); button4->setText("Edit Ingredients");
+        button4->setGeometry(0,90,130,30);
+    button5=new QPushButton(leftPanel); button5->setFlat(true); button5->setText("Edit Property List");
+	button5->setGeometry(0,120,130,30);
+    button6=new QPushButton(leftPanel); button6->setFlat(true); button6->setText("Edit Units");
+	button6->setGeometry(0,150,130,30);
+    button7=new QPushButton(leftPanel); button7->setFlat(true); button7->setText("Shopping List");
+	button7->setGeometry(0,150,130,30);
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
@@ -76,7 +78,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     ingredientsPanel=new IngredientsDialog(rightPanel,database);rightPanel->addWidget(ingredientsPanel);
     propertiesPanel=new PropertiesDialog(rightPanel,database);rightPanel->addWidget(propertiesPanel);
     unitsPanel=new UnitsDialog(rightPanel,database); rightPanel->addWidget(unitsPanel);
-
+    shoppingListPanel=new ShoppingListDialog(rightPanel,database); rightPanel->addWidget(shoppingListPanel);
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
 
@@ -131,6 +133,9 @@ case 4: propertiesPanel->reload();
 	break;
 case 5: unitsPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(unitsPanel);
+	break;
+case 6: shoppingListPanel->reload(); // Reload data
+	this->rightPanel->raiseWidget(shoppingListPanel);
 	break;
 }
 

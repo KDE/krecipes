@@ -19,6 +19,7 @@
 #include "selectrecipedialog.h"
 #include "ingredientsdialog.h"
 #include "propertiesdialog.h"
+#include "shoppinglistdialog.h"
 
 class QPainter;
 
@@ -73,6 +74,7 @@ public:
 	IngredientsDialog *ingredientsPanel;
 	PropertiesDialog *propertiesPanel;
 	UnitsDialog* unitsPanel;
+	ShoppingListDialog* shoppingListPanel;
 
 	// public methods
 	void createNewRecipe(void);
@@ -87,12 +89,13 @@ private:
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
 	QWidgetStack *rightPanel;
-	QPushButton *boton1;
-	QPushButton *boton2;
-	QPushButton *boton3;
-	QPushButton *boton4;
-	QPushButton *boton5;
-	QPushButton *boton6;
+	QPushButton *button1;
+	QPushButton *button2;
+	QPushButton *button3;
+	QPushButton *button4;
+	QPushButton *button5;
+	QPushButton *button6;
+	QPushButton *button7;
 	// Internal variables
 	RecipeDB *database;
 

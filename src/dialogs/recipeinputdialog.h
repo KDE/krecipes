@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@ public:
     ~RecipeInputDialog();
     void newRecipe(void);
     void reloadCombos(void);
+    bool everythingSaved();
 private:
 
 	// Internal Data
@@ -46,6 +47,7 @@ private:
 	ElementList *unitComboList;
 	RecipeDB *database;
 	bool changedSignalEnabled;
+	bool unsavedChanges;
 
 	//Recipe Photo
 	QLabel *photoLabel;

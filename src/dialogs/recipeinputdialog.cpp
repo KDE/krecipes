@@ -177,6 +177,7 @@ database=db;
     // Initialize internal data
     ingredientComboList=new ElementList;
     unitComboList=new ElementList;
+    unsavedChanges=false; // Indicates if there's something not saved yet.
     enableChangedSignal(); // Enables the signal "changed()"
 
     // Initialize lists
@@ -385,6 +386,7 @@ if (changedSignalEnabled)
 	{
 	// Enable Save Button
 	emit enableSaveOption(true);
+	unsavedChanges=true;
 
 	}
 
@@ -404,6 +406,8 @@ void RecipeInputDialog::save (void)
 {
 emit enableSaveOption(false);
 saveRecipe();
+enableChangedSignal(false);
+unsavedChanges=false;
 }
 
 void RecipeInputDialog::saveRecipe(void)
@@ -439,4 +443,9 @@ void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and un
 {
 loadIngredientListCombo();
 loadUnitListCombo();
+}
+
+bool RecipeInputDialog::everythingSaved()
+{
+return (!(unsavedChanges));
 }
