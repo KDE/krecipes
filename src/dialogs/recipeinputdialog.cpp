@@ -24,6 +24,7 @@
 #include "recipe.h"
 #include "recipedb.h"
 #include "selectcategoriesdialog.h"
+#include "fractioninput.h"
 #include "image.h" //Initializes default photo
 
 
@@ -198,7 +199,7 @@ database=db;
 
     //Input Widgets
 
-    amountEdit = new KDoubleNumInput(ingredientGBox);
+    amountEdit = new FractionInput(ingredientGBox);
     amountEdit->setFixedSize(QSize(60,30));
     amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     ingredientsLayout->addWidget(amountEdit,1,1);
@@ -590,8 +591,24 @@ void RecipeInputDialog::createNewUnitIfNecessary()
 	}
 }
 
+bool RecipeInputDialog::checkAmountEdit()
+{
+	if ( amountEdit->isInputValid() )
+		return true;
+	else
+	{
+		KMessageBox::error( this, i18n("Invalid input"),
+		  i18n("Amount field contains invalid input.") );
+		amountEdit->selectAll();
+		return false;
+	}
+}
+
 void RecipeInputDialog::addIngredient(void)
 {
+	if ( !checkAmountEdit() )
+		return;
+
 	createNewIngredientIfNecessary();
 	createNewUnitIfNecessary();
 
@@ -601,7 +618,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   Ingredient ing;
 
   ing.name=ingredientBox->currentText();
-  ing.amount=amountEdit->value();
+  ing.amount=amountEdit->value().toDouble();
   ing.units=unitBox->currentText();
   ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
   ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;
@@ -610,8 +627,8 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   QListViewItem* lastElement=ingredientList->lastItem();
   QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
 
-  amountEdit->setFocus();
-  amountEdit->setValue(0.0);
+  amountEdit->setFocus(); //put cursor back to amount so user can begin next ingredient
+  amountEdit->selectAll();
 }
 
 emit changed();

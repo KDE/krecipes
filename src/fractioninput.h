@@ -26,11 +26,14 @@ public:
 	FractionInput( QWidget *parent = 0, const char *name = 0 );
 	~FractionInput();
 
-	MixedNumber value(){ return m_fraction; }
-	bool isInputValid(){ return m_fraction.isValid(); }
+	void setValue( double );
+	void setValue( MixedNumber & );
+
+	MixedNumber value();
+	bool isInputValid();
 
 protected slots:
-	void parseText();
+	void parseText( bool *ok = 0 );
 
 private:
 	MixedNumber m_fraction;

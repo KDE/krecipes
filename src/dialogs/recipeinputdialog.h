@@ -31,6 +31,7 @@ class QTabWidget;
 class Recipe;
 class ElementList;
 class RecipeDB;
+class FractionInput;
 
 /**
 @author Unai Garro
@@ -82,7 +83,7 @@ private:
 
 	//Ingredient inputs
 	QGroupBox *ingredientGBox;
-	KDoubleNumInput* amountEdit;
+	FractionInput* amountEdit;
 	KComboBox* unitBox;
 	KComboBox* ingredientBox;
 	KListView* ingredientList;
@@ -102,6 +103,7 @@ private:
 	QToolButton* shopButton;
 
 	// Internal functions
+	bool checkAmountEdit();
 	void createNewIngredientIfNecessary();
 	void createNewUnitIfNecessary();
 	void checkIfNewUnits();

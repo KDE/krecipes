@@ -226,7 +226,7 @@ void Krecipes::import()
 	KFileDialog file_dialog( QString::null,
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
 	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
-	  "*.txt|Now You're Cooking Generic Export (*.txt)",
+	  "*.txt|\"Now You're Cooking\" Generic Export (*.txt)",
 	  this,
 	  "file_dialog",
 	  true

@@ -9,11 +9,14 @@
  ***************************************************************************/
 #include "mixednumber.h"
 
+#include <cmath>
+
 #include <qregexp.h>
+
+#define ROUND(a) (floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a))
 
 MixedNumber::MixedNumber()
 {
-	m_has_errors = true;
 }
 
 MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
@@ -21,16 +24,26 @@ MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
   m_numerator(numerator),
   m_denominator(denominator)
 {
-	m_has_errors = false;
-	m_input_type = InputMixedNumber;
-	m_decimal = static_cast<double>(m_whole) + (static_cast<double>(m_numerator)/static_cast<double>(m_denominator));
 }
 
-MixedNumber::MixedNumber( double decimal ) :
-  m_decimal(decimal)
+MixedNumber::MixedNumber( double decimal )
 {
-	m_input_type = InputDecimal;
-	m_has_errors = false;
+	QString as_string = QString::number(decimal);
+	int decimal_index = as_string.find('.');
+	m_whole = as_string.left( decimal_index ).toInt();
+
+	if ( fabs(decimal-ROUND(decimal)) > 0.000001 )
+	{
+		QString decimal_part = as_string.mid( decimal_index+1, as_string.length() );
+		m_numerator = decimal_part.toInt();
+		m_denominator = 10 * decimal_part.length();
+		simplify();
+	}
+	else
+	{
+		m_numerator = 0;
+		m_denominator = 1;
+	}
 }
 
 MixedNumber::~MixedNumber()
@@ -105,22 +118,31 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 	return MixedNumber(whole,numerator,denominator);
 }
 
-QString MixedNumber::toString()
+QString MixedNumber::toString( Format format )
 {
+	QString result;
 
+	if ( format == DecimalFormat )
+		return QString::number(toDouble());
+
+	if ( m_numerator == 0 && m_whole == 0 )
+		return QString("0");
+
+	if ( m_whole != 0 )
+		result += QString::number(m_whole)+" ";
+
+	if ( m_numerator != 0 )
+		result += QString::number(m_numerator)+"/"+QString::number(m_denominator);
+
+	return result;
 }
 
 MixedNumber MixedNumber::operator+( const MixedNumber &fraction )
 {
-	if ( m_input_type == InputMixedNumber )
-	{
-		m_numerator = (m_numerator * fraction.m_denominator) + (m_denominator * fraction.m_numerator);
-		m_denominator = m_denominator * fraction.m_denominator;
-		m_whole += fraction.m_whole;
-		simplify();
-	}
-
-	m_decimal += fraction.m_decimal;
+	m_numerator = (m_numerator * fraction.m_denominator) + (m_denominator * fraction.m_numerator);
+	m_denominator = m_denominator * fraction.m_denominator;
+	m_whole += fraction.m_whole;
+	simplify();
 
 	return *this;
 }
@@ -130,8 +152,8 @@ void MixedNumber::simplify()
 
 }
 
-double MixedNumber::decimal()
+double MixedNumber::toDouble()
 {
-	return m_decimal;
+	return static_cast<double>(m_whole)+(static_cast<double>(m_numerator)/static_cast<double>(m_denominator));
 }
 

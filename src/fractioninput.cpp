@@ -12,15 +12,39 @@
 
 FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ), m_fraction()
 {
-	connect( this, SIGNAL(lostFocus()), SLOT(parseText()) );
 }
 
 FractionInput::~FractionInput()
 {
 }
 
-void FractionInput::parseText()
+void FractionInput::parseText( bool *ok )
 {
 	const QString input = text();
-	m_fraction = MixedNumber::fromString( input );
+	m_fraction = MixedNumber::fromString( input, ok );
+}
+
+void FractionInput::setValue( double d )
+{
+	m_fraction = MixedNumber(d);
+	setText( m_fraction.toString( MixedNumber::MixedNumberFormat ) );
+}
+
+void FractionInput::setValue( MixedNumber &m )
+{
+	m_fraction = m;
+	setText( m_fraction.toString( MixedNumber::MixedNumberFormat ) );
+}
+
+MixedNumber FractionInput::value()
+{
+	parseText();
+	return m_fraction;
+}
+
+bool FractionInput::isInputValid()
+{
+	bool ok;
+	parseText( &ok );
+	return ok;
 }

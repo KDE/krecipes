@@ -23,12 +23,15 @@ public:
 	MixedNumber();
 	~MixedNumber();
 
-	enum InputType { InputMixedNumber, InputDecimal };
-
 	MixedNumber operator+( const MixedNumber &fraction );
 
+	enum Format { DecimalFormat, MixedNumberFormat };
+
 	/** The input as a decimal.  This can be used with either @ref InputType. */
-	double decimal();
+	double toDouble();
+
+	/** Returns the fraction as a string */
+	QString toString( Format );
 
 	/** The whole part of the input when the inputType() is a fraction. */
 	int whole(){ return m_whole; }
@@ -39,19 +42,6 @@ public:
 	/** The denominator of the fractional part of the input when @ref inputType() is a fraction. */
 	int denominator(){ return m_denominator; }
 
-	/** Returns the fraction as a string */
-	QString toString();
-
-	/** Be sure to call this function before trying to extract input.  Results from any function
-	  * access fraction data will be unpredictable.
-	  */
-	bool isValid(){ return !m_has_errors; }
-
-	/** Either MixedNumber or Decimal.  This is determined automatically by
-	  * the input given.
-	  */
-	InputType inputType(){ return m_input_type; }
-
 	/** Simplify the fraction to its lowest terms */
 	void simplify();
 
@@ -61,15 +51,9 @@ private:
 	static int getNumerator( const QString &input, int space_index, int slash_index, bool *ok );
 	static int getDenominator( const QString &input, int slash_index, bool *ok );
 
-	double m_decimal;
 	int m_whole;
 	int m_numerator;
 	int m_denominator;
-
-	QString m_input;
-
-	bool m_has_errors;
-	InputType m_input_type;
 };
 
 #endif //FRACTION_H
