@@ -174,12 +174,12 @@ buttonPrev=new QToolButton(toolBar);
 	buttonPrev->setUsesTextLabel(true);
 	buttonPrev->setTextLabel(i18n("Previous Dish"));
 	buttonPrev->setIconSet(il.loadIconSet("back", KIcon::Small));
-	buttonPrev->setTextPosition(QToolButton::BelowIcon);
+	buttonPrev->setTextPosition(QToolButton::Under);
 buttonNext=new QToolButton(toolBar);
 	buttonNext->setUsesTextLabel(true);
 	buttonNext->setTextLabel(i18n("Next Dish"));
 	buttonNext->setIconSet(il.loadIconSet("forward", KIcon::Small));
-	buttonNext->setTextPosition(QToolButton::BelowIcon);
+	buttonNext->setTextPosition(QToolButton::Under);
 
 
 	// Dish widgets
