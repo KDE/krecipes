@@ -58,7 +58,7 @@
 #endif
 
 #include "serverprefs.h"
-#include "unitsprefs.h"
+#include "numbersprefs.h"
 #include "importprefs.h"
 
 Krecipes::Krecipes()
@@ -423,9 +423,9 @@ void Krecipes::optionsPreferences()
 		return;
 
     KAutoConfigDialog *dialog = new KAutoConfigDialog(this, "settings");
-    dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server Settings"), "Server", "identity", i18n("Database Server Options"));
-    dialog->addPage(new unitsprefs(0, "NumberFormat"), i18n("Units"), "Units", "frac", i18n("Customize Units"));
-    dialog->addPage(new importprefs(0, "Import"), i18n("Units"), "Import", "redo", i18n("Recipe Import Options"));
+    dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server"), "Server", "identity", i18n("Database Server Options"));
+    dialog->addPage(new numbersprefs(0, "NumberFormat"), i18n("Numbers"), "Numbers", "math_frac", i18n("Customize Number Format"));
+    dialog->addPage(new importprefs(0, "Import"), i18n("Importing"), "Import", "redo", i18n("Recipe Import Options"));
     //connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadSettings()));
     dialog->show();
 # else
