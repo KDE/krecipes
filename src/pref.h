@@ -12,8 +12,10 @@
 class ServerPrefs;
 class KrecipesPrefPageTwo;
 class UnitsPrefs;
+class ImportPrefs;
 
 class QButtonGroup;
+class QCheckBox;
 class QRadioButton;
 class QVBoxLayout;
 
@@ -27,6 +29,8 @@ private:
     ServerPrefs *m_pageServer;
     KrecipesPrefPageTwo *m_pageTwo;
     UnitsPrefs *m_pageUnits;
+    ImportPrefs *m_pageImport;
+
 private slots:
     void saveSettings(void);
 };
@@ -76,6 +80,20 @@ protected:
 
 protected slots:
 	virtual void languageChange();
+};
+
+class ImportPrefs : public QWidget
+{
+Q_OBJECT
+
+public:
+	ImportPrefs(QWidget *parent = 0);
+
+	void saveOptions();
+
+protected:
+	QVBoxLayout* Form1Layout;
+	QCheckBox* overwriteCheckbox;
 };
 
 #endif // _KRECIPESPREF_H_

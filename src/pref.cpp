@@ -10,6 +10,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
+#include <qcheckbox.h>
 #include <qradiobutton.h>
 
 KrecipesPreferences::KrecipesPreferences(QWidget *parent)
@@ -31,6 +32,10 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     frame = addPage(i18n("Units"), i18n("Customize Units"));
     m_pageUnits = new UnitsPrefs(frame);
     layout->addWidget(m_pageUnits);
+
+    frame = addPage(i18n("Import"), i18n("Recipe import options"));
+    m_pageImport = new ImportPrefs(frame);
+    layout->addWidget(m_pageImport);
 
     frame = addPage(i18n("Appearance"), i18n("Customize Krecipes Appearance"));
     m_pageTwo = new KrecipesPrefPageTwo(frame);
@@ -137,6 +142,7 @@ void KrecipesPreferences::saveSettings(void)
 {
 m_pageServer->saveOptions();
 m_pageUnits->saveOptions();
+m_pageImport->saveOptions();
 }
 
 // Save Server settings
@@ -209,6 +215,35 @@ void UnitsPrefs::languageChange()
     numberButtonGroup->setTitle( i18n( "Number Format" ) );
     fractionRadioButton->setText( i18n( "Fraction" ) );
     decimalRadioButton->setText( i18n( "Decimal" ) );
+}
+
+//=============Import Preferences Dialog================//
+ImportPrefs::ImportPrefs(QWidget *parent)
+    : QWidget(parent)
+{
+    // Load Current Settings
+    KConfig *config=kapp->config();
+    config->setGroup("Import");
+
+    bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
+
+    Form1Layout = new QVBoxLayout( this, 11, 6 );
+
+    overwriteCheckbox = new QCheckBox( i18n("Overwrite recipes with same title"), this );
+    overwriteCheckbox->setChecked( overwrite );
+
+    Form1Layout->addWidget(overwriteCheckbox);
+
+    adjustSize();
+    resize(300,height());
+}
+
+void ImportPrefs::saveOptions()
+{
+	KConfig *config=kapp->config();
+	config->setGroup("Import");
+
+	config->writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
 }
 
 #include "pref.moc"
