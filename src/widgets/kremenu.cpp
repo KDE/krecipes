@@ -343,7 +343,7 @@ setCursor(QCursor(KCursor::handCursor()));
 
 KreMenuButton::~KreMenuButton()
 {
-	if ( icon ) delete icon;
+	delete icon;
 }
 
 void KreMenuButton::mousePressEvent (QMouseEvent *)
@@ -515,7 +515,7 @@ if (!isShown()) return;
 
 void KreMenuButton::setIconSet(const QIconSet &is)
 {
-	if ( icon ) delete icon;
+	delete icon;
 
 	icon = new QPixmap(is.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
 }
