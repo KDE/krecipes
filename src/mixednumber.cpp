@@ -13,7 +13,10 @@
 
 #define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 
-MixedNumber::MixedNumber()
+MixedNumber::MixedNumber() :
+  m_whole(0),
+  m_numerator(0),
+  m_denominator(1)
 {
 }
 
@@ -151,7 +154,7 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 	return MixedNumber(whole,numerator,denominator);
 }
 
-QString MixedNumber::toString( Format format )
+QString MixedNumber::toString( Format format ) const
 {
 	QString result;
 
@@ -191,7 +194,7 @@ void MixedNumber::simplify()
 	m_denominator /= divisor;
 }
 
-double MixedNumber::toDouble()
+double MixedNumber::toDouble() const
 {
 	return static_cast<double>(m_whole)+(static_cast<double>(m_numerator)/static_cast<double>(m_denominator));
 }

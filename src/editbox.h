@@ -27,7 +27,7 @@ public:
      EditBox(QWidget* parent);
     ~EditBox();
     //Methods
-    double value(void);
+    double value(void) const;
     void setValue(double newValue);
     void setPrecision(int dec);
     void setRange(double min,double max,double step,bool slider);

@@ -37,7 +37,7 @@ EditBox::~EditBox()
 {
 }
 
-double EditBox::value(void)
+double EditBox::value(void) const
 {
 return editBox->value();
 }

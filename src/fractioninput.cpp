@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,15 +36,14 @@ void FractionInput::setValue( MixedNumber &m )
 	setText( m_fraction.toString( MixedNumber::MixedNumberFormat ) );
 }
 
-MixedNumber FractionInput::value()
+MixedNumber FractionInput::value() const
 {
-	parseText();
-	return m_fraction;
+	return MixedNumber::fromString( text() );
 }
 
-bool FractionInput::isInputValid()
+bool FractionInput::isInputValid() const
 {
 	bool ok;
-	parseText( &ok );
+	MixedNumber::fromString( text(), &ok );
 	return ok;
 }
