@@ -78,6 +78,7 @@ public:
 	virtual int  findExistingAuthorByName(const QString& name)=0;
 	virtual int  findExistingCategoryByName(const QString& name)=0;
 	virtual int  findExistingIngredientByName(const QString& name)=0;
+	virtual int  findExistingPrepByName(const QString& name)=0;
 	virtual int  findExistingRecipeByName(const QString& name)=0;
 	virtual int  findExistingUnitByName(const QString& name)=0;
 	virtual int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0)=0;
@@ -119,6 +120,21 @@ public:
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;
 	virtual void loadUnits(ElementList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
+
+	/** Change all instances of authors with id @param id2 to @param id1 */
+	virtual void mergeAuthors(int id1, int id2)=0;
+
+	/** Change all instances of categories with id @param id2 to @param id1 */
+	virtual void mergeCategories(int id1, int id2)=0;
+
+	/** Change all instances of ingredients with id @param id2 to @param id1 */
+	virtual void mergeIngredients(int id1, int id2)=0;
+
+	/** Change all instances of units with id @param id2 to @param id1 */
+	virtual void mergeUnits(int id1, int id2)=0;
+	
+	/** Change all instances of prep methods with id @param id2 to @param id1 */
+	virtual void mergePrepMethods(int id1, int id2)=0;
 
   /**
   * set newLabel for ingredientID

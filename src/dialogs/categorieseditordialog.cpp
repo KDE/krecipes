@@ -11,9 +11,12 @@
  ***************************************************************************/
 
 #include "categorieseditordialog.h"
+
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include "createelementdialog.h"
 #include "DBBackend/recipedb.h"
-#include <klocale.h>
 
 CategoriesEditorDialog::CategoriesEditorDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -120,10 +123,28 @@ void CategoriesEditorDialog::modCategory(QListViewItem* i)
 
 void CategoriesEditorDialog::saveCategory(QListViewItem* i)
 {
-  database->modCategory((i->text(0)).toInt(), i->text(1));
-  newCategoryButton->setEnabled(true);
-  removeCategoryButton->setEnabled(true);
+int existing_id = database->findExistingCategoryByName( i->text(1) );
+int cat_id = i->text(0).toInt();
+if ( existing_id != -1 && existing_id != cat_id ) //category already exists with this label... merge the two
+{  
+  switch (KMessageBox::warningContinueCancel(this,i18n("This category already exists.  Continuing will merge these two categories into one.  Are you sure?")))
+  {
+  case KMessageBox::Continue:
+  {
+  	database->mergeCategories(existing_id,cat_id);
+  	delete i;
+  	break;
+  }
+  default: reload(); break;
+  }
+}
+else
+{
+  database->modCategory(cat_id, i->text(1));
 }
 
+newCategoryButton->setEnabled(true);
+removeCategoryButton->setEnabled(true);
+}
 
 #include "categorieseditordialog.moc"

@@ -1577,10 +1577,9 @@ database->executeQuery( command);
 
 void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
 {
-QString command;
-
-command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
-database->executeQuery( command);
+	QString command;
+	command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+	database->executeQuery( command);
 }
 
 void LiteRecipeDB::removeCategory(int categoryID)
@@ -1756,6 +1755,24 @@ int LiteRecipeDB::findExistingIngredientByName( const QString& name )
 	return id;
 }
 
+int LiteRecipeDB::findExistingPrepByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode(name.left(maxPrepMethodNameLength())); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM prep_methods WHERE name='%1';").arg(search_str);
+	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
+	int id = -1;
+
+	if (elementToLoad.getStatus()!=QSQLiteResult::Failure)
+		{
+		QSQLiteResultRow row=elementToLoad.first();
+		if (!elementToLoad.atEnd())
+			id=row.data(0).toInt();
+		}
+
+	return id;
+}
+
 int LiteRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
@@ -1789,6 +1806,227 @@ int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 			id=row.data(0).toInt();
 	}
 	return id;
+}
+
+void LiteRecipeDB::mergeAuthors( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE author_list SET author_id=%1 WHERE author_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT recipe_id FROM author_list WHERE author_id=%1 ORDER BY recipe_id")
+	  .arg(id1);
+	QSQLiteResult unit_list = database->executeQuery(command);
+	int last_id = -1;
+	if (unit_list.getStatus()!=QSQLiteResult::Failure) {
+		QSQLiteResultRow row = unit_list.first();
+		while (!unit_list.atEnd()) {
+			int current_id = row.data(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM author_list WHERE author_id=%1 AND recipe_id=%2")
+				.arg(id1)
+				.arg(last_id);
+				database->executeQuery( command );
+				database->executeQuery( QString("INSERT INTO author_list VALUES(%1,%2)").arg(last_id).arg(id1) );
+				row = unit_list.next();
+			}
+			last_id = current_id;
+		}
+	}
+	
+	//remove author with id 'id2'
+	command=QString("DELETE FROM authors WHERE id=%1;").arg(id2);
+	database->executeQuery( command );
+}
+
+void LiteRecipeDB::mergeCategories( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE category_list SET category_id=%1 WHERE category_id=%2")
+			   .arg(id1)
+			   .arg(id2);
+	database->executeQuery( command );
+
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT recipe_id FROM category_list WHERE category_id=%1 ORDER BY recipe_id")
+	  .arg(id1);
+	QSQLiteResult unit_list = database->executeQuery(command);
+	int last_id = -1;
+	if (unit_list.getStatus()!=QSQLiteResult::Failure) {
+		QSQLiteResultRow row = unit_list.first();
+		while (!unit_list.atEnd()) {
+			int current_id = row.data(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM category_list WHERE category_id=%1 AND recipe_id=%2")
+				.arg(id1)
+				.arg(last_id);
+				database->executeQuery( command );
+				database->executeQuery( QString("INSERT INTO category_list VALUES(%1,%2)").arg(last_id).arg(id1) );
+				row = unit_list.next();
+			}
+			last_id = current_id;
+		}
+	}
+
+	//remove category with id 'id2'
+	command=QString("DELETE FROM categories WHERE id=%1;").arg(id2);
+	database->executeQuery( command );
+}
+
+void LiteRecipeDB::mergeIngredients( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE ingredient_list SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//delete nutrient info associated with ingredient with id 'id2'
+	command = QString("DELETE FROM ingredient_info WHERE ingredient_id=%1")
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//update the unit_list
+	command = QString("UPDATE unit_list SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT unit_id FROM unit_list WHERE ingredient_id=%1 ORDER BY unit_id")
+	  .arg(id1);
+	QSQLiteResult unit_list = database->executeQuery(command);
+	int last_id = -1;
+	if (unit_list.getStatus()!=QSQLiteResult::Failure) {
+		QSQLiteResultRow row = unit_list.first();
+		while (!unit_list.atEnd()) {
+			int current_id = row.data(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2")
+				.arg(id1)
+				.arg(last_id);
+				database->executeQuery( command );
+				database->executeQuery( QString("INSERT INTO unit_list VALUES(%1,%2)").arg(id1).arg(last_id) );
+				row = unit_list.next();
+			}
+			last_id = current_id;
+		}
+	}
+	
+	//update the ingredient_info
+	command = QString("UPDATE ingredient_info SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	
+	//ensure no duplicates were created in this process
+	command = QString("SELECT * FROM ingredient_info WHERE ingredient_id=%1 ORDER BY property_id")
+	  .arg(id1);
+	unit_list = database->executeQuery(command);
+	last_id = -1;
+	if (unit_list.getStatus()!=QSQLiteResult::Failure) {
+		double stored_amount = -1; int stored_unit_id = -1;
+		QSQLiteResultRow row = unit_list.first();
+		while (!unit_list.atEnd()) {
+			int current_id = row.data(1).toInt();
+			double current_amount = row.data(2).toDouble(); int current_unit_id = row.data(3).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2") //delete them all (doesn't support "LIMIT")
+				.arg(id1)
+				.arg(last_id);
+				database->executeQuery( command );
+				command = QString("INSERT INTO ingredient_info VALUES(%1,%2,%3,%4)") //put back one of what we deleted
+				  .arg(id1)
+				  .arg(last_id)
+				  .arg(stored_amount)
+				  .arg(stored_unit_id);
+				database->executeQuery( command );
+				row = unit_list.next();
+			}
+			last_id = current_id;
+			stored_amount = current_amount; stored_unit_id = current_unit_id;
+		}
+	}
+	
+	//remove ingredient with id 'id2'
+	command=QString("DELETE FROM ingredients WHERE id=%1;").arg(id2);
+	database->executeQuery( command );
+}
+
+void LiteRecipeDB::mergePrepMethods( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1' in ingredient list
+	QString command = QString("UPDATE ingredient_list SET prep_method_id=%1 WHERE prep_method_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//remove prep method with id 'id2'
+	command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(id2);
+	database->executeQuery( command );
+}
+
+void LiteRecipeDB::mergeUnits( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1' in ingredient list
+	QString command = QString("UPDATE unit_list SET unit_id=%1 WHERE unit_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//change all instances of 'id2' to 'id1' in ingredient list
+	command = QString("UPDATE ingredient_list SET unit_id=%1 WHERE unit_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT ingredient_id FROM unit_list WHERE unit_id=%1 ORDER BY ingredient_id")
+	  .arg(id1);
+	QSQLiteResult unit_list = database->executeQuery(command);
+	int last_id = -1;
+	if (unit_list.getStatus()!=QSQLiteResult::Failure) {
+		QSQLiteResultRow row = unit_list.first();
+		while (!unit_list.atEnd()) {
+			int current_id = row.data(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM unit_list WHERE unit_id=%1 AND ingredient_id=%2")
+				.arg(id1)
+				.arg(last_id);
+				database->executeQuery( command );
+				database->executeQuery( QString("INSERT INTO unit_list VALUES(%1,%2)").arg(last_id).arg(id1) );
+				row = unit_list.next();
+			}
+			last_id = current_id;
+		}
+	}
+
+	//change all instances of 'id2' to 'id1' in ingredient_info
+	command = QString("UPDATE ingredient_info SET per_units=%1 WHERE per_units=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	
+	//change all instances of 'id2' to 'id1' in unit_conversion
+	command = QString("UPDATE units_conversion SET unit1_id=%1 WHERE unit1_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	command = QString("UPDATE units_conversion SET unit2_id=%1 WHERE unit2_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+	
+	//and ensure that the one to one ratio wasn't created
+	command = QString("DELETE FROM units_conversion WHERE unit1_id=unit2_id");
+	database->executeQuery( command );
+
+	//remove units with id 'id2'
+	command=QString("DELETE FROM units WHERE id=%1;").arg(id2);
+	database->executeQuery( command );
 }
 
 void LiteRecipeDB::givePermissions(const QString & /*dbName*/,const QString &/*username*/, const QString &/*password*/, const QString &/*clientHost*/)

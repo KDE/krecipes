@@ -21,6 +21,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kprogress.h>
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
@@ -121,11 +122,30 @@ void UnitsDialog::modUnit(QListViewItem* i)
 
 void UnitsDialog::saveUnit(QListViewItem* i)
 {
+int existing_id = database->findExistingUnitByName( i->text(1) );
+int unit_id = i->text(0).toInt();
+if ( existing_id != -1 && existing_id != unit_id ) //category already exists with this label... merge the two
+{  
+  switch (KMessageBox::warningContinueCancel(this,i18n("This unit already exists.  Continuing will merge these two units into one.  Are you sure?")))
+  {
+  case KMessageBox::Continue:
+  {
+  	database->mergeUnits(existing_id,unit_id);
+  	delete i;
+	loadConversionTable(); //apply the change to the table
+  	break;
+  }
+  default: reload(); break;
+  }
+}
+else
+{
   database->modUnit((i->text(0)).toInt(), i->text(1));
-  newUnitButton->setEnabled(true);
-  removeUnitButton->setEnabled(true);
-  
   loadConversionTable(); //apply the change to the table...TODO: is there a way to only rename the column and row labels on the table?
+}
+
+newUnitButton->setEnabled(true);
+removeUnitButton->setEnabled(true);
 }
 
 void UnitsDialog::removeUnit(void)

@@ -1455,10 +1455,8 @@ QSqlQuery categoryToCreate( command,database);
 
 void MySQLRecipeDB::modCategory(int categoryID, QString newLabel)
 {
-QString command;
-
-command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
-QSqlQuery categoryToCreate( command,database);
+	QString command = QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+	QSqlQuery categoryToUpdate( command,database);
 }
 
 void MySQLRecipeDB::removeCategory(int categoryID)
@@ -1616,6 +1614,20 @@ int MySQLRecipeDB::findExistingIngredientByName( const QString& name )
 	return id;
 }
 
+int MySQLRecipeDB::findExistingPrepByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode(name.left(maxPrepMethodNameLength())); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM prep_methods WHERE name='%1';").arg(search_str);
+	QSqlQuery elementToLoad(command,database); // Run the query
+	int id = -1;
+
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
+	return id;
+}
+
 int MySQLRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
@@ -1642,6 +1654,220 @@ int MySQLRecipeDB::findExistingRecipeByName( const QString& name )
 		id=elementToLoad.value(0).toInt();
 
 	return id;
+}
+
+void MySQLRecipeDB::mergeAuthors( int id1, int id2 )
+{
+	QSqlQuery update(QString::null,database);
+
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE author_list SET author_id=%1 WHERE author_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT recipe_id FROM author_list WHERE author_id=%1 ORDER BY recipe_id")
+	  .arg(id1);
+	update.exec(command);
+	int last_id = -1;
+	if (update.isActive()) {
+		while (update.next()) {
+			int current_id = update.value(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM author_list WHERE author_id=%1 AND recipe_id=%2 LIMIT 1")
+				.arg(id1)
+				.arg(last_id);
+				QSqlQuery remove(command,database);
+				
+			}
+			last_id = current_id;
+		}
+	}
+	
+	//remove author with id 'id2'
+	command=QString("DELETE FROM authors WHERE id=%1").arg(id2);
+	update.exec(command);
+}
+
+void MySQLRecipeDB::mergeCategories( int id1, int id2 )
+{
+	QSqlQuery update(QString::null,database);
+
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE category_list SET category_id=%1 WHERE category_id=%2")
+			   .arg(id1)
+			   .arg(id2);
+	update.exec(command);
+	
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT recipe_id FROM category_list WHERE category_id=%1 ORDER BY recipe_id")
+	  .arg(id1);
+	update.exec(command);
+	int last_id = -1;
+	if (update.isActive()) {
+		while (update.next()) {
+			int current_id = update.value(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM category_list WHERE category_id=%1 AND recipe_id=%2 LIMIT 1")
+				.arg(id1)
+				.arg(last_id);
+				QSqlQuery remove(command,database);
+				
+			}
+			last_id = current_id;
+		}
+	}
+
+	//remove category with id 'id2'
+	command=QString("DELETE FROM categories WHERE id=%1").arg(id2);
+	update.exec(command);
+}
+
+void MySQLRecipeDB::mergeIngredients( int id1, int id2 )
+{
+	QSqlQuery update(QString::null,database);
+
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE ingredient_list SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//delete nutrient info associated with ingredient with id 'id2'
+	command = QString("DELETE FROM ingredient_info WHERE ingredient_id=%1")
+	   .arg(id2);
+	update.exec(command);
+
+	//update the unit_list
+	command = QString("UPDATE unit_list SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT unit_id FROM unit_list WHERE ingredient_id=%1 ORDER BY unit_id")
+	  .arg(id1);
+	update.exec(command);
+	int last_id = -1;
+	if (update.isActive()) {
+		while (update.next()) {
+			int current_id = update.value(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2 LIMIT 1")
+				.arg(id1)
+				.arg(last_id);
+				QSqlQuery remove(command,database);
+				
+			}
+			last_id = current_id;
+		}
+	}
+	
+	//update ingredient info
+	command = QString("UPDATE ingredient_info SET ingredient_id=%1 WHERE ingredient_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+	
+	//and ensure no duplicates were created in this process
+	//info associated with one ingredient will be lost... they should be the same ingredient and thus info anyways
+	command = QString("SELECT property_id FROM ingredient_info WHERE ingredient_id=%1 ORDER BY property_id")
+	  .arg(id1);
+	update.exec(command);
+	last_id = -1;
+	if (update.isActive()) {
+		while (update.next()) {
+			int current_id = update.value(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 LIMIT 1")
+				.arg(id1)
+				.arg(last_id);
+				QSqlQuery remove(command,database);
+				
+			}
+			last_id = current_id;
+		}
+	}
+
+	//remove ingredient with id 'id2'
+	command=QString("DELETE FROM ingredients WHERE id=%1").arg(id2);
+	update.exec(command);
+}
+
+void MySQLRecipeDB::mergePrepMethods( int id1, int id2 )
+{
+	QSqlQuery update(QString::null,database);
+
+	//change all instances of 'id2' to 'id1' in ingredient list
+	QString command = QString("UPDATE ingredient_list SET prep_method_id=%1 WHERE prep_method_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//remove prep method with id 'id2'
+	command=QString("DELETE FROM prep_methods WHERE id=%1").arg(id2);
+	update.exec(command);
+}
+
+void MySQLRecipeDB::mergeUnits( int id1, int id2 )
+{
+	QSqlQuery update(QString::null,database);
+
+	//change all instances of 'id2' to 'id1' in ingredient list
+	QString command = QString("UPDATE unit_list SET unit_id=%1 WHERE unit_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//change all instances of 'id2' to 'id1' in ingredient list
+	command = QString("UPDATE ingredient_list SET unit_id=%1 WHERE unit_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//and ensure no duplicates were created in this process
+	command = QString("SELECT ingredient_id FROM unit_list WHERE unit_id=%1 ORDER BY ingredient_id")
+	  .arg(id1);
+	update.exec(command);
+	int last_id = -1;
+	if (update.isActive()) {
+		while (update.next()) {
+			int current_id = update.value(0).toInt();
+			if ( last_id == current_id ) {
+				command = QString("DELETE FROM unit_list WHERE unit_id=%1 AND ingredient_id=%2 LIMIT 1")
+				.arg(id1)
+				.arg(last_id);
+				QSqlQuery remove(command,database);
+				
+			}
+			last_id = current_id;
+		}
+	}
+	
+	//update ingredient info
+	command = QString("UPDATE ingredient_info SET per_units=%1 WHERE per_units=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec(command);
+
+	//change all instances of 'id2' to 'id1' in unit_conversion
+	command = QString("UPDATE units_conversion SET unit1_id=%1 WHERE unit1_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec( command );
+	command = QString("UPDATE units_conversion SET unit2_id=%1 WHERE unit2_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	update.exec( command );
+
+	//and ensure that the one to one ratio wasn't created
+	command = QString("DELETE FROM units_conversion WHERE unit1_id=unit2_id");
+	update.exec( command );
+
+	//remove units with id 'id2'
+	command=QString("DELETE FROM units WHERE id=%1").arg(id2);
+	update.exec(command);
 }
 
 void MySQLRecipeDB::givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost)

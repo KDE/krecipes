@@ -16,6 +16,7 @@
 #include "DBBackend/recipedb.h"
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 PrepMethodsDialog::PrepMethodsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -128,11 +129,29 @@ void PrepMethodsDialog::modPrepMethod(QListViewItem* i)
 
 void PrepMethodsDialog::savePrepMethod(QListViewItem* i)
 {
+int existing_id = database->findExistingPrepByName( i->text(1) );
+int prep_id = i->text(0).toInt();
+if ( existing_id != -1 && existing_id != prep_id ) //category already exists with this label... merge the two
+{  
+  switch (KMessageBox::warningContinueCancel(this,i18n("This preparation method already exists.  Continuing will merge these two into one.  Are you sure?")))
+  {
+  case KMessageBox::Continue:
+  {
+  	database->mergePrepMethods(existing_id,prep_id);
+  	delete i;
+  	break;
+  }
+  default: reload(); break;
+  }
+}
+else
+{
   database->modPrepMethod((i->text(0)).toInt(), i->text(1));
-  newPrepMethodButton->setEnabled(true);
-  removePrepMethodButton->setEnabled(true);
 }
 
+newPrepMethodButton->setEnabled(true);
+removePrepMethodButton->setEnabled(true);
+}
 
 
 #include "prepmethodsdialog.moc"

@@ -25,6 +25,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -260,13 +261,32 @@ void IngredientsDialog::modIngredient(QListViewItem* i)
 
 void IngredientsDialog::saveIngredient(QListViewItem* i)
 {
+int existing_id = database->findExistingIngredientByName( i->text(1) );
+int ing_id = i->text(0).toInt();
+if ( existing_id != -1 && existing_id != ing_id ) //category already exists with this label... merge the two
+{  
+  switch (KMessageBox::warningContinueCancel(this,i18n("This ingredient already exists.  Continuing will merge these two ingredients into one.  Are you sure?")))
+  {
+  case KMessageBox::Continue:
+  {
+  	database->mergeIngredients(existing_id,ing_id);
+  	delete i;
+  	break;
+  }
+  default: reload(); break;
+  }
+}
+else
+{
   database->modIngredient((i->text(0)).toInt(), i->text(1));
-  addIngredientButton->setEnabled(true);
-  removeIngredientButton->setEnabled(true);
-  addUnitButton->setEnabled(true);
-  removeUnitButton->setEnabled(true);
-  addPropertyButton->setEnabled(true);
-  removePropertyButton->setEnabled(true);
+}
+
+addIngredientButton->setEnabled(true);
+removeIngredientButton->setEnabled(true);
+addUnitButton->setEnabled(true);
+removeUnitButton->setEnabled(true);
+addPropertyButton->setEnabled(true);
+removePropertyButton->setEnabled(true);
 }
 
 void IngredientsDialog::addUnitToIngredient(void)

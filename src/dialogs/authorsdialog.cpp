@@ -15,6 +15,7 @@
 #include "DBBackend/recipedb.h"
 
 #include <klocale.h>
+#include <kmessagebox.h>
 
 AuthorsDialog::AuthorsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -120,9 +121,28 @@ void AuthorsDialog::modAuthor(QListViewItem* i)
 
 void AuthorsDialog::saveAuthor(QListViewItem* i)
 {
+int existing_id = database->findExistingAuthorByName( i->text(1) );
+int author_id = i->text(0).toInt();
+if ( existing_id != -1 && existing_id != author_id ) //category already exists with this label... merge the two
+{  
+  switch (KMessageBox::warningContinueCancel(this,i18n("This author already exists.  Continuing will merge these two authors into one.  Are you sure?")))
+  {
+  case KMessageBox::Continue:
+  {
+  	database->mergeAuthors(existing_id,author_id);
+  	delete i;
+  	break;
+  }
+  default: reload(); break;
+  }
+}
+else
+{
   database->modAuthor((i->text(0)).toInt(), i->text(1));
-  newAuthorButton->setEnabled(true);
-  removeAuthorButton->setEnabled(true);
+}
+
+newAuthorButton->setEnabled(true);
+removeAuthorButton->setEnabled(true);
 }
 
 

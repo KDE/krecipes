@@ -69,6 +69,7 @@ public:
 	int  findExistingAuthorByName(const QString& name);
 	int  findExistingCategoryByName(const QString& name);
 	int  findExistingIngredientByName(const QString& name);
+	int  findExistingPrepByName(const QString& name);
 	int  findExistingRecipeByName(const QString& name);
 	int  findExistingUnitByName(const QString& name);
 	int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0);
@@ -107,6 +108,12 @@ public:
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
+
+	void mergeAuthors(int id1, int id2);
+	void mergeCategories(int id1, int id2);
+	void mergeIngredients(int id1, int id2);
+	void mergeUnits(int id1, int id2);
+	void mergePrepMethods(int id1, int id2);
 
   /**
   * set newLabel for ingredientID

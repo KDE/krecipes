@@ -509,7 +509,7 @@ void RecipeInputDialog::loadIngredientListCombo(void)
 
 void RecipeInputDialog::loadUnitListCombo(void)
 {
-	QString store_unit = unitBox->currentText();	kdDebug()<<"storing: "<<store_unit<<endl;
+	QString store_unit = unitBox->currentText();
 	unitBox->clear(); // Empty the combo first
 	unitBox->completionObject()->clear();
 
@@ -528,7 +528,7 @@ void RecipeInputDialog::loadUnitListCombo(void)
 			unitBox->completionObject()->addItem((*unit_it).name);
 		}
 	}
-	unitBox->lineEdit()->setText(store_unit); kdDebug()<<"restoring: "<<store_unit<<endl;
+	unitBox->lineEdit()->setText(store_unit);
 }
 
 void RecipeInputDialog::loadPrepMethodListCombo(void)
@@ -970,8 +970,6 @@ void RecipeInputDialog::slotIngredientBoxLostFocus(void)
 	if ( ingredientBox->contains(ingredientBox->currentText()) )
 	{
 		ingredientBox->setCurrentItem(ingredientBox->currentText());
-		kdDebug()<<"reloading"<<endl;
-		kdDebug()<<"text: "<<unitBox->currentText()<<endl;
 		reloadUnitsCombo(0);
 	}
 	else
