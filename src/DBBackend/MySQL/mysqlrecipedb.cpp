@@ -1427,8 +1427,7 @@ QString command;
 
 int MySQLRecipeDB::findExistingAuthorByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode(name);
-	search_str.truncate(maxAuthorNameLength()); //truncate to the maximum size db holds
+	QCString search_str = escapeAndEncode(name.left(maxAuthorNameLength())); //truncate to the maximum size db holds
 
 	QString command=QString("SELECT id FROM authors WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
@@ -1442,8 +1441,9 @@ int MySQLRecipeDB::findExistingAuthorByName( const QString& name )
 
 int MySQLRecipeDB::findExistingCategoryByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode(name);
-	search_str.truncate(maxCategoryNameLength()); //truncate to the maximum size db holds
+	QCString search_str = escapeAndEncode(name.left(maxCategoryNameLength())); //truncate to the maximum size db holds
+
+	kdDebug()<<"Searching for: "<<search_str<<endl;
 
 	QString command=QString("SELECT id FROM categories WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
@@ -1457,8 +1457,7 @@ int MySQLRecipeDB::findExistingCategoryByName( const QString& name )
 
 int MySQLRecipeDB::findExistingIngredientByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode(name);
-	search_str.truncate(maxIngredientNameLength()); //truncate to the maximum size db holds
+	QCString search_str = escapeAndEncode(name.left(maxIngredientNameLength())); //truncate to the maximum size db holds
 
 	QString command=QString("SELECT id FROM ingredients WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
@@ -1472,8 +1471,7 @@ int MySQLRecipeDB::findExistingIngredientByName( const QString& name )
 
 int MySQLRecipeDB::findExistingUnitByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode(name);
-	search_str.truncate(maxUnitNameLength()); //truncate to the maximum size db holds
+	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 
 	QString command=QString("SELECT id FROM units WHERE name='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
@@ -1487,8 +1485,7 @@ int MySQLRecipeDB::findExistingUnitByName( const QString& name )
 
 int MySQLRecipeDB::findExistingRecipeByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode(name);
-	search_str.truncate(maxRecipeTitleLength()); //truncate to the maximum size db holds
+	QCString search_str = escapeAndEncode(name.left(maxRecipeTitleLength())); //truncate to the maximum size db holds
 
 	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(search_str);
 	QSqlQuery elementToLoad(command,database); // Run the query
