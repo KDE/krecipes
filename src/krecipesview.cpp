@@ -9,6 +9,7 @@
 #endif
 
 #include <iostream>
+#include <unistd.h>
 
 #include <qpainter.h>
 #include <qlayout.h>
@@ -213,6 +214,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     connect(inputPanel,SIGNAL(addRecipeToShoppingList(int)),shoppingListPanel,SLOT(addRecipeToShoppingList(int)));
 
     // Close Splash Screen
+    sleep(2);
     delete start_logo;
 }
 
