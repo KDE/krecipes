@@ -11,7 +11,7 @@
  ***************************************************************************/
 
 #include "selectcategoriesdialog.h"
-#include "createelementdialog.h"
+#include "createcategorydialog.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -31,8 +31,7 @@ private:
 public:
 	virtual QString text(int column) const
 		{
-		if (column==1) return(elStored.name);
-		else return(QString::null);
+		return(elStored.name);
 		}
 
 protected:
@@ -84,7 +83,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 //Category List
 categoryListView=new KListView(this);
-categoryListView->addColumn("*");
+//categoryListView->addColumn("*");
 categoryListView->addColumn(i18n("Category"));
 categoryListView->setAllColumnsShowFocus(true);
 categoryListView->setRootIsDecorated(true);
@@ -168,29 +167,28 @@ void SelectCategoriesDialog::loadCategories(const CategoryTree *categoryTree, co
 
 void SelectCategoriesDialog::createNewCategory(void)
 {
-	CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Category"));
+	ElementList categories; database->loadCategories(&categories);
+	CreateCategoryDialog* categoryDialog=new CreateCategoryDialog(this,categories);
 
-	if ( elementDialog->exec() == QDialog::Accepted )
+	if ( categoryDialog->exec() == QDialog::Accepted )
 	{
-		QString result = elementDialog->newElementName();
-		
-		int parent_id = -1;
-		if ( CategoryListItem *current = (CategoryListItem*)categoryListView->selectedItem() )
-			parent_id = current->element().id;
-		
-		database->createNewCategory(result,parent_id); // Create the new category in the database
+		QString result = categoryDialog->newCategoryName();
+		int subcategory = categoryDialog->subcategory();
+		database->createNewCategory(result,subcategory); // Create the new category in the database
 		
 		Element new_cat(result,database->lastInsertID());
 		
 		CategoryListItem *it;
-		if ( parent_id == -1 )
+		if ( subcategory == -1 )
 			it = new CategoryListItem(categoryListView,new_cat);
-		else
-			it = new CategoryListItem((CategoryListItem*)categoryListView->selectedItem(),new_cat);
+		else {
+			Element el("",subcategory);
+			it = new CategoryListItem((CategoryListItem*)categoryListView->findItem((*categories.find(el)).name,0),new_cat);
+		}
 		it->setOn(true);
 	}
 	
-	delete elementDialog;
+	delete categoryDialog;
 }
 
 

@@ -16,8 +16,91 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include "createelementdialog.h"
+#include "createcategorydialog.h"
 #include "DBBackend/recipedb.h"
+
+/** All this class does is reimplement findDrop() so that it allows dropping into 
+  * subchildren that aren't expandable.  The code is taken from KDE's KListView with
+  * one line commented out.
+  *
+  * It's rather hackish so if there is a better workaround, please let me know...
+  */
+class CustomListView : public KListView
+{
+public:
+	CustomListView( QWidget *parent ) : KListView(parent){}
+
+protected:
+	void findDrop(const QPoint &pos, QListViewItem *&parent, QListViewItem *&after)
+	{
+		QPoint p (contentsToViewport(pos));
+		
+		// Get the position to put it in
+		QListViewItem *atpos = itemAt(p);
+		
+		QListViewItem *above;
+		if (!atpos) // put it at the end
+			above = lastItem();
+		else
+		{
+			// Get the closest item before us ('atpos' or the one above, if any)
+			if (p.y() - itemRect(atpos).topLeft().y() < (atpos->height()/2))
+			above = atpos->itemAbove();
+			else
+			above = atpos;
+		}
+		
+		if (above)
+		{
+			// if above has children, I might need to drop it as the first item there
+		
+			if (above->firstChild() && above->isOpen())
+			{
+			parent = above;
+			after = 0;
+			return;
+			}
+		
+		// Now, we know we want to go after "above". But as a child or as a sibling ?
+		// We have to ask the "above" item if it accepts children.
+		// ### NOTE: Here is the one line commented out so that "above" always accepts children
+		//if (above->isExpandable())
+		{
+			// The mouse is sufficiently on the right ? - doesn't matter if 'above' has visible children
+			if (p.x() >= depthToPixels( above->depth() + 1 ) ||
+			(above->isOpen() && above->childCount() > 0) )
+			{
+			parent = above;
+			after = 0L;
+			return;
+			}
+		}
+		
+		// Ok, there's one more level of complexity. We may want to become a new
+		// sibling, but of an upper-level group, rather than the "above" item
+		QListViewItem * betterAbove = above->parent();
+		QListViewItem * last = above;
+		while ( betterAbove )
+		{
+			// We are allowed to become a sibling of "betterAbove" only if we are
+			// after its last child
+			if ( last->nextSibling() == 0 )
+			{
+			if (p.x() < depthToPixels ( betterAbove->depth() + 1 ))
+				above = betterAbove; // store this one, but don't stop yet, there may be a better one
+			else
+				break; // not enough on the left, so stop
+			last = betterAbove;
+			betterAbove = betterAbove->parent(); // up one level
+			} else
+			break; // we're among the child of betterAbove, not after the last one
+		}
+		}
+		// set as sibling
+		after = above;
+		parent = after ? after->parent() : 0L ;
+	}
+};
 
 CategoriesEditorDialog::CategoriesEditorDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -33,7 +116,7 @@ QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Mi
 layout->addItem(spacerLeft,1,0);
 
 //Category List
-categoryListView=new KListView(this);
+categoryListView=new CustomListView(this);
 categoryListView->addColumn(i18n("Category Name"));
 categoryListView->addColumn(i18n("Id"));
 categoryListView->setRenameable(0, true);
@@ -108,7 +191,7 @@ void CategoriesEditorDialog::loadListView(const CategoryTree *categoryTree, QLis
 			new_item = new QListViewItem(categoryListView,node->category.name,QString::number(node->category.id));
 		else
 			new_item = new QListViewItem(parent,node->category.name,QString::number(node->category.id));
-
+		
 		new_item->setOpen(true);
 		loadListView( node, new_item );
 	}
@@ -116,19 +199,17 @@ void CategoriesEditorDialog::loadListView(const CategoryTree *categoryTree, QLis
 
 void CategoriesEditorDialog::createNewCategory(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Category"));
+ElementList categories; database->loadCategories(&categories);
+CreateCategoryDialog* categoryDialog=new CreateCategoryDialog(this,categories);
 
-if ( elementDialog->exec() == QDialog::Accepted ) {
-   QString result = elementDialog->newElementName();
-   
-   int parent_id = -1;
-   if ( QListViewItem *current = categoryListView->selectedItem() )
-   	parent_id = current->text(1).toInt();
-   database->createNewCategory(result,parent_id); // Create the new category in the database
+if ( categoryDialog->exec() == QDialog::Accepted ) {
+   QString result = categoryDialog->newCategoryName();
+   int subcategory = categoryDialog->subcategory();
+   database->createNewCategory(result,subcategory); // Create the new category in the database
 
    reload(); // Reload the list from the database
 }
-delete elementDialog;
+delete categoryDialog;
 }
 
 void CategoriesEditorDialog::removeCategory(void)

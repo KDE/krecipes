@@ -275,7 +275,7 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 
 void AdvancedSearchDialog::languageChange()
 {
-	searchButton->setText( i18n( "Search." ) );
+	searchButton->setText( i18n( "Search" ) );
 	categoriesBox->setTitle( i18n( "Categories" ) );
 	catTypeComboBox->clear();
 	catTypeComboBox->insertItem( i18n( "Belong to:" ) );
