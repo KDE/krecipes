@@ -7,35 +7,17 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef SHOPPINGLISTVIEWDIALOG_H
-#define SHOPPINGLISTVIEWDIALOG_H
-
-#include <qlayout.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <khtml_part.h>
-#include <khtmlview.h>
+#ifndef SHOPPINGCALCULATOR_H
+#define SHOPPINGCALCULATOR_H
 
 #include "elementlist.h"
+#include "ingredientlist.h"
 #include "recipedb.h"
 
-class ShoppingListViewDialog:public QWidget{
-public:
-    ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList);
-    ~ShoppingListViewDialog();
-private:
-
-  // Widgets
-  QGridLayout* layout;
-  QVBox *htmlBox;
-  KHTMLPart *shoppingListView;
-
-  // Internal Variables
-  RecipeDB  *database;
-
-  // Internal Methods
-  void showShoppingList(ElementList *recipeList);
-  void display(IngredientList *ingredientList);
-};
+/**
+@author Unai Garro
+*/
+void calculateShopping(ElementList *recipeList,IngredientList *ingredientList, RecipeDB *db);
+void sum (IngredientList *totalIngredientList,IngredientList *newIngredientList);
 
 #endif

@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "shoppinglistviewdialog.h"
+#include "shoppingcalculator.h"
+#include "ingredientlist.h"
 
 ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)
 {
@@ -43,13 +45,36 @@ ShoppingListViewDialog::~ShoppingListViewDialog()
 
 void ShoppingListViewDialog::showShoppingList(ElementList *recipeList)
 {
+IngredientList ingredientList;
+calculateShopping(recipeList,&ingredientList,database);
+display(&ingredientList);
 
 }
 
-void ShoppingListViewDialog::calculateShopping(void)
+void ShoppingListViewDialog::display(IngredientList *ingredientList)
 {
-}
+QString recipeHTML;
 
-void ShoppingListViewDialog::display(void)
-{
+
+
+// Create HTML Code
+
+	// Headers
+	recipeHTML="<html><head><title>Shopping List</title></head><body>";
+	recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:10px; width: 80%\">";
+	recipeHTML+="<center><h1>Shopping List</h1></center>";
+	recipeHTML+="<p>Recipe Instructions </p>";
+
+	// Ingredient List
+
+	// Close
+	recipeHTML+="</div></body></html>";
+
+
+// Display
+shoppingListView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where photos and logos are stored
+shoppingListView->write(recipeHTML);
+shoppingListView->end();
+
+
 }
