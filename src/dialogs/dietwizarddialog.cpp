@@ -162,6 +162,12 @@ public:
 		ctStored->max=0;
 		ctStored->min=0;
 		}
+
+	~ConstraintsListItem(void)
+	{
+	delete ctStored;
+	}
+
 private:
 	Constraint *ctStored;
 
@@ -175,10 +181,8 @@ public:
 
 		else return(QString::null);
 		}
-	~ConstraintsListItem(void)
-	{
-	delete ctStored;
-	}
+
+	int propertyId(){return ctStored->id;}
 };
 
 class CategoriesListItem:public QCheckListItem{
