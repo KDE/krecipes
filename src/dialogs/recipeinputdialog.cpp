@@ -205,7 +205,7 @@ database=db;
 
     ingredientBox = new KComboBox( TRUE,ingredientGBox);
     ingredientBox->setAutoCompletion( TRUE );
-    //ingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+    //çingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setFixedSize( QSize(120, 30 ) );
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
@@ -448,7 +448,6 @@ unitBox->clear();
 unitBox->completionObject()->clear();
 unitComboList->clear();
 loadUnitListCombo();
-unitBox->setCurrentText("");
 }
 
  void RecipeInputDialog::changePhoto(void)
@@ -684,8 +683,6 @@ void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and un
 {
 loadIngredientListCombo();
 loadUnitListCombo();
-ingredientBox->setCurrentText("");
-unitBox->setCurrentText("");
 }
 
 bool RecipeInputDialog::everythingSaved()
