@@ -354,6 +354,7 @@ else if (action==1) // Edit
 
 	inputPanel->loadRecipe(recipeID);
 	rightPanel->raiseWidget(inputPanel);
+  setContextHelp(RecipeEdit);
 }
 else if (action==2) //Remove
 {
@@ -380,6 +381,7 @@ if ( !inputPanel->everythingSaved() )
 
 inputPanel->newRecipe();
 rightPanel->raiseWidget(inputPanel);
+setContextHelp(RecipeEdit);
 }
 
 void KrecipesView::createNewElement(void)
@@ -556,6 +558,7 @@ if (!recipeButton)
 void KrecipesView::switchToRecipe(void)
 {
 rightPanel->raiseWidget(recipeWidget);
+setContextHelp(RecipeEdit);
 }
 
 void KrecipesView::closeRecipe(void)
@@ -564,6 +567,7 @@ selectPanel->reload();
 rightPanel->raiseWidget(selectPanel);
 recipeButton->disconnect();
 buttonsList->removeLast();
+setContextHelp(SelectP);
 delete recipeButton; recipeButton=0;
 }
 
@@ -601,6 +605,9 @@ void KrecipesView::setContextHelp(int action){
     break;
   case AuthorsP:
       contextTitle->setText(i18n("<b>Authors list</b>"));
+    break;
+  case RecipeEdit:
+      contextTitle->setText(i18n("<b>Edit recipe</b>"));
     break;
   }
 }

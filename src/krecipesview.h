@@ -59,7 +59,7 @@ class QPainter;
  class MenuButton;
 
  // Some constants
- enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, ContextHelp=7, DietWizardP=10};
+ enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, ContextHelp=7, RecipeEdit=8, DietWizardP=10};
 
 
  // Class KrecipesView
