@@ -120,6 +120,7 @@ public:
 	void removeProperty(int propertyID);
 	void removePropertyFromIngredient(int ingredientID, int propertyID,int perUnitID);
 	void removeRecipe(int id);
+	void removeRecipeFromCategory(int ingredientID, int categoryID);
 	void removeUnit(int unitID);
 	void removeUnitFromIngredient(int ingredientID, int unitID);
 

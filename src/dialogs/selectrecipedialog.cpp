@@ -83,6 +83,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),tr2i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
     kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),tr2i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
     kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(exportRecipe()), CTRL+Key_S );
+    kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("Remove from &Category"), this, SLOT(removeFromCat()), CTRL+Key_C );
     kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
     kpop->polish();
 
@@ -112,6 +113,14 @@ connect(categoryBox,SIGNAL(activated(int)),this,SLOT(filterComboCategory(int)));
 
 SelectRecipeDialog::~SelectRecipeDialog()
 {
+}
+
+void SelectRecipeDialog::showEvent(QShowEvent* e){
+  if(!e->spontaneous()){
+    openButton->setEnabled(false);
+    editButton->setEnabled(false);
+    removeButton->setEnabled(false);
+  }
 }
 
 void SelectRecipeDialog::loadRecipeList(void)
@@ -164,19 +173,38 @@ void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),0);
+if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),0);
 }
+
 void SelectRecipeDialog::edit(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),1);
+if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),1);
 }
+
 void SelectRecipeDialog::remove(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),2);
+if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL) emit recipeSelected(it->text(1).toInt(),2);
+}
+
+void SelectRecipeDialog::removeFromCat(void)
+{
+  QListViewItem *it;
+  it=recipeListView->selectedItem();
+  if ( it != 0 && !it->firstChild() && it->text(1).toInt() != NULL){
+    if(it->parent() != 0){
+      int categoryID;
+      categoryID = database->findExistingCategoryByName((it->parent())->text(0));
+      database->removeRecipeFromCategory(it->text(1).toInt(), categoryID);
+    }
+    else{
+      database->removeRecipeFromCategory(it->text(1).toInt(), -1);
+    }
+    reload();
+  }
 }
 
 void SelectRecipeDialog::reload()
@@ -261,7 +289,7 @@ for (Element *category=categoryList.getFirst();category;category=categoryList.ge
  */
 void SelectRecipeDialog::exportRecipe()
 {
-  if((recipeListView->selectedItem())->text(1) != NULL){
+  if((recipeListView->selectedItem())->text(1).toInt() != NULL){
     KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
@@ -272,7 +300,7 @@ void SelectRecipeDialog::exportRecipe()
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
-  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() ){
+  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() && (recipeListView->selectedItem())->text(1).toInt() != NULL){
     emit recipeSelected(true);
   }
   else{
@@ -284,13 +312,13 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
 	if (recipeListView->selectedItem())
 	{
-		if((recipeListView->selectedItem())->text(1) != NULL)
+		if((recipeListView->selectedItem())->text(1).toInt() != NULL)
 			database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
 	}
 }
 
 void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
-  if(!i->firstChild()){
+  if(!i->firstChild() && i->text(1).toInt() != NULL){
     kpop->exec(p);
   }
 }

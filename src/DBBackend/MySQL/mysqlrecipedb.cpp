@@ -388,6 +388,12 @@ recipeToRemove.exec( command);
 
 }
 
+void MySQLRecipeDB::removeRecipeFromCategory(int ingredientID, int categoryID){
+QString command;
+command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;").arg(ingredientID).arg(categoryID);
+QSqlQuery recipeToRemove( command,database);
+}
+
 void MySQLRecipeDB::createNewIngredient(QString ingredientName)
 {
 QString command;

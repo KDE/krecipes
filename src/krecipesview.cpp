@@ -576,7 +576,9 @@ void KrecipesView::setContextHelp(int action){
   switch(action){
     case SelectP:
       contextTitle->setText(i18n("<b>Recipes list</b>"));
-      contextText->setText(i18n("Now we can add text for helping users<br><a href=\"http://krecipes.sourceforge.net\">http://krecipes.sourceforge.net</a>"));
+      contextText->setText(i18n("Now we can add text for helping users<br>"
+      "<a href=\"http://krecipes.sourceforge.net\">http://krecipes.sourceforge.net</a><br>"
+      "We can add text, links and images"));
     break;
     case ShoppingP:
       contextTitle->setText(i18n("<b>Shopping list</b>"));

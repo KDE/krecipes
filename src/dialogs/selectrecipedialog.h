@@ -85,10 +85,12 @@ private slots:
   void open(void);
   void edit(void);
   void remove(void);
+  void removeFromCat(void);
   void filter(const QString &s);
   void filterCategories(int categoryID);
   void showPopup( KListView *, QListViewItem *, const QPoint & );
   void filterComboCategory(int row);
+  void showEvent(QShowEvent*);
 public slots:
   void exportRecipe();
   void haveSelectedItems();
