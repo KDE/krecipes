@@ -314,6 +314,9 @@ void RecipeViewDialog::createBlocks()
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
+	config->setGroup("IngredientsSetup");
+	QString ingredient_format = config->readEntry("Format","%n: %a %u");
+
 	Ingredient * ing;
 	for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
 	{
@@ -322,11 +325,12 @@ void RecipeViewDialog::createBlocks()
 		if (amount_str == "0")
 			amount_str = "";
 
-		ingredients_html += "<li>" + ing->name;
-		if ( amount_str != "" || ing->units != "" )
-		{
-			ingredients_html += ": " + amount_str + " " + ing->units;
-		}
+		QString tmp_format(ingredient_format);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),ing->name);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),ing->units);
+
+		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}
 	new_element = new DivElement( "ingredients", ingredients_html );
 
