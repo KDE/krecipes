@@ -19,7 +19,7 @@
 #include <kstandarddirs.h>
 
 #include "recipe.h"
-
+#include "datablocks/categorytree.h"
 
 KreImporter::KreImporter() : BaseImporter()
 {
@@ -84,35 +84,39 @@ void KreImporter::parseFile( const QString &filename )
 		}
 
 		// TODO Check if there are changes between versions
-    QString kreVersion = kreml.attribute("version");
-    kdDebug()<<QString( i18n("KreML version %1") ).arg(kreVersion)<<endl;
+		QString kreVersion = kreml.attribute("version");
+		kdDebug()<<QString( i18n("KreML version %1") ).arg(kreVersion)<<endl;
 
 		QDomNodeList r = kreml.childNodes();
-    QDomElement krecipe;
+		QDomElement krecipe;
 
 		for (unsigned z = 0; z < r.count(); z++)
 		{
-      krecipe = r.item(z).toElement();
-      QDomNodeList l = krecipe.childNodes();
-      QDomElement el;
-      if(krecipe.tagName() == "krecipes-recipe"){
-        Recipe recipe;
-        for (unsigned i = 0; i < l.count(); i++)
-        {
-          el = l.item(i).toElement();
-          if (el.tagName() == "krecipes-description"){
-            readDescription(el.childNodes(), &recipe);
-          }
-          if (el.tagName() == "krecipes-ingredients"){
-            readIngredients(el.childNodes(), &recipe);
-          }
-          if (el.tagName() == "krecipes-instructions"){
-            recipe.instructions = el.text().stripWhiteSpace();
-          }
-        }
-        add(recipe);
-      }
-    }
+			krecipe = r.item(z).toElement();
+			QDomNodeList l = krecipe.childNodes();
+			if(krecipe.tagName() == "krecipes-recipe"){
+				Recipe recipe;
+				for (unsigned i = 0; i < l.count(); i++)
+				{
+					QDomElement el = l.item(i).toElement();
+					if (el.tagName() == "krecipes-description"){
+					readDescription(el.childNodes(), &recipe);
+					}
+					if (el.tagName() == "krecipes-ingredients"){
+					readIngredients(el.childNodes(), &recipe);
+					}
+					if (el.tagName() == "krecipes-instructions"){
+					recipe.instructions = el.text().stripWhiteSpace();
+					}
+				}
+				add(recipe);
+			}
+			else if ( krecipe.tagName() == "krecipes-category-structure" ) {
+				CategoryTree *tree = new CategoryTree;
+				readCategoryStructure(l,tree);
+				setCategoryStructure(tree);
+			}
+		}
 	}
   if(unlink){
     file->remove();
@@ -122,6 +126,17 @@ void KreImporter::parseFile( const QString &filename )
 KreImporter::~KreImporter()
 {
 
+}
+
+void KreImporter::readCategoryStructure( const QDomNodeList& l, CategoryTree *tree )
+{
+	for (unsigned i = 0; i < l.count(); i++) {
+		QDomElement el = l.item(i).toElement();
+
+		QString category = el.attribute("name");
+		CategoryTree *child_node = tree->add( Element(category) );
+		readCategoryStructure( el.childNodes(), child_node );
+	}
 }
 
 void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)

@@ -201,33 +201,21 @@ void RecipeListView::removeCategory( int id )
 	QListViewItem *item = items_map[id];
 	if ( !item ) return; //this may have been deleted already by its parent being deleted
 
-	//do this to only iterate over children of 'item'
-	//these children will all be moved to the listview root
-	QListViewItem *pEndItem = NULL;
-	QListViewItem *pStartItem = item;
-	do
-	{
-		if(pStartItem->nextSibling())
-			pEndItem = pStartItem->nextSibling();
-		else
-			pStartItem = pStartItem->parent();
-	}
-	while(pStartItem && !pEndItem);
-	
-	QListViewItemIterator iterator(item);
-	while(iterator.current() != pEndItem)
-	{
-		if ( iterator.current()->rtti() == 1000 ) {
-			QListViewItem *recipe_it = iterator.current();
-
-			//move this item to the root
-			recipe_it->parent()->takeItem(recipe_it);
-			insertItem(recipe_it);
-		}
-		++iterator;
-	}
+	moveChildrenToRoot( item );
 
 	StdCategoryListView::removeCategory(id);
+}
+
+void RecipeListView::moveChildrenToRoot( QListViewItem *item )
+{
+	for ( QListViewItem *it=item->firstChild(); it; it=it->nextSibling() ) {
+		if ( it->rtti() == 1000 ) {
+			//move this item to the root
+			it->parent()->takeItem(it);
+			insertItem(it);
+		}
+		moveChildrenToRoot( it );
+	}
 }
 
 #include "recipelistview.moc"

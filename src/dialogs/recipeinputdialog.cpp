@@ -1052,7 +1052,7 @@ for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categ
 		value=true;
 	else
 		value=false;
-	selected.insert(*cat_it,value);
+	selected.insert(*cat_it,value);kdDebug()<<"category: "<<(*cat_it).name<<" (id :"<<(*cat_it).id<<") is: "<<value<<endl;
 	}
 }
 

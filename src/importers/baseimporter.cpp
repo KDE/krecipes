@@ -22,6 +22,7 @@
 #include "recipe.h"
 #include "recipedb.h"
 #include "dialogs/recipeimportdialog.h"
+#include "datablocks/categorytree.h"
 
 /** @brief A vector designed for fast searches and sorted insertions.
   *
@@ -127,6 +128,7 @@ public:
 
 BaseImporter::BaseImporter() :
   m_recipe_list(new RecipeList),
+  m_cat_structure(0),
   file_recipe_count(0)
 {
 }
@@ -134,6 +136,7 @@ BaseImporter::BaseImporter() :
 BaseImporter::~BaseImporter()
 {
 	delete m_recipe_list;
+	delete m_cat_structure;
 }
 
 void BaseImporter::parseFiles( const QStringList &filenames )
@@ -210,6 +213,9 @@ void BaseImporter::import( RecipeDB *db )
 	
 	ElementList catList; db->loadCategories( &catList );
 	CustomVector catVector( catList ); qHeapSort( catVector );
+
+	if ( m_cat_structure )
+		importCategoryStructure(db,catVector,m_cat_structure);
 
 	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
@@ -309,4 +315,28 @@ void BaseImporter::import( RecipeDB *db )
 
 	delete progress_dialog;
 }
+
+void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )
+{
+	delete m_cat_structure;
+	m_cat_structure = cat_structure;
+}
+
+void BaseImporter::importCategoryStructure( RecipeDB *db, CustomVector &catVector, const CategoryTree *cat_tree )
+{
+	const CategoryTreeChildren *children = cat_tree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
+		int new_cat_id = catVector.bsearch( (*child_it)->category.name.lower() );
+		if ( new_cat_id == -1 ) {
+			db->createNewCategory( (*child_it)->category.name, cat_tree->category.id );
+			new_cat_id = db->lastInsertID();
+			catVector.inSort( Element( (*child_it)->category.name.lower(), new_cat_id) );
+		}
+
+		(*child_it)->category.id = new_cat_id;
+
+		importCategoryStructure( db, catVector, *child_it );
+	}
+}
+
 

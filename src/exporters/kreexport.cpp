@@ -22,14 +22,15 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-KreExporter::KreExporter( const QString& filename, const QString &format ) :
-  BaseExporter( filename, format )
+KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, const QString &format ) :
+  BaseExporter( filename, format ), categories(_categories)
 {
 }
 
 
 KreExporter::~KreExporter()
 {
+	delete categories;
 }
 
 void KreExporter::saveToFile( const RecipeList& recipes )
@@ -68,6 +69,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
     xml += "<krecipes version=\""+krecipes_version()+"\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
+    createCategoryStructure(xml,recipes);
+    
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
@@ -137,5 +140,60 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "</krecipes>\n";
 
     return xml;
+}
+
+void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recipes )
+{
+	QValueList<int> categoriesUsed;
+	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
+		for ( ElementList::const_iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it ) {
+			if ( categoriesUsed.find( (*cat_it).id ) == categoriesUsed.end() )
+				categoriesUsed << (*cat_it).id;
+		}
+	}
+
+	//only keep the relevant category structure
+	removeIfUnused(categoriesUsed,categories);
+
+
+	xml += "<krecipes-category-structure>\n";
+	writeCategoryStructure(xml,categories);
+	xml += "</krecipes-category-structure>\n";
+}
+
+bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
+{
+	for ( CategoryTree *it = parent->firstChild(); it; it = it->nextSibling() ) {
+		if ( cat_ids.find(it->category.id) != cat_ids.end() ) {
+			parent_should_show = true;
+			removeIfUnused(cat_ids,it,true); //still recurse, but doesn't affect 'parent'
+		}
+		else {
+			bool result = removeIfUnused(cat_ids,it);
+			if ( parent_should_show == false )
+				parent_should_show = result;
+		}
+	}
+	
+	if ( !parent_should_show ) {
+		delete parent;
+	}
+
+	return parent_should_show;
+}
+
+void KreExporter::writeCategoryStructure(QString &xml, const CategoryTree *categoryTree )
+{
+	if ( categoryTree->category.id != -1 )
+		xml += "<category name=\""+categoryTree->category.name+"\">\n";
+
+	const CategoryTreeChildren *children = categoryTree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
+		writeCategoryStructure( xml, *child_it );
+	}
+
+	if ( categoryTree->category.id != -1 )
+		xml += "</category>\n";
+
 }
 

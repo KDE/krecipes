@@ -99,8 +99,9 @@ void SelectCategoriesDialog::loadCategories(const CategoryTree *categoryTree, co
 			new_item = new CategoryCheckListItem(categoryListView,node->category);
 		else
 			new_item = new CategoryCheckListItem(parent,node->category);
-		
-		new_item->setOn(selected[node->category]);
+
+		if ( selected[node->category] )
+			new_item->setOn(true);
 		new_item->setOpen(true);
 		loadCategories( node, selected, new_item );
 	}

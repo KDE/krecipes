@@ -12,7 +12,8 @@
 
 #include "element.h"
 
-Element::Element()
+Element::Element() :
+  id(-1)
 {
 }
 

@@ -36,7 +36,7 @@ public:
 
 	int categoryId(void){return ctyStored.id;}
 	QString categoryName(void){return ctyStored.name;}
-	
+
 protected:
 	virtual void stateChange(bool);
 	void setChildrenState( bool );

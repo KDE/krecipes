@@ -257,10 +257,14 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 		else //everything else is an author
 		#endif
 		{
-			QString author = *text_it;
-			author.remove( rx_line_begin );
-			
-			recipe.authorList.append( Element(author) );
+			if ( (*text_it).contains(rx_line_begin) ) {
+				QString author = *text_it;
+				author.remove( rx_line_begin );
+				
+				recipe.authorList.append( Element(author) );
+			}
+			else
+				break;
 		}
 	}
 }

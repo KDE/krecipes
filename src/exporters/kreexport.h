@@ -15,6 +15,7 @@
 #include <stdlib.h> // For getenv()
 
 #include "baseexporter.h"
+#include "datablocks/categorytree.h"
 
 /**
 Export class for Krecipes native file format (.kre, .kreml)
@@ -23,7 +24,7 @@ Export class for Krecipes native file format (.kre, .kreml)
 */
 class KreExporter : public BaseExporter{
 public:
-    KreExporter( const QString&, const QString& );
+    KreExporter( CategoryTree *, const QString&, const QString& );
 
     virtual ~KreExporter();
 
@@ -32,6 +33,13 @@ public:
 protected:
     virtual void saveToFile( const RecipeList & );
     virtual QString extensions() const{ return ".kre,.kreml"; }
+
+private:
+    bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+    void createCategoryStructure( QString &xml, const RecipeList &recipes );
+    void writeCategoryStructure(QString &xml, const CategoryTree *categoryTree );
+
+    CategoryTree *categories;
 };
 
 #endif

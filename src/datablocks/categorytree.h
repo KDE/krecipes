@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
+ *   Copyright (C) 2004 by Jason Kivlighn                                  *
  *   mizunoami44@users.sourceforge.net                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,17 +20,34 @@ typedef QValueList<CategoryTree*> CategoryTreeChildren;
 class CategoryTree
 {
 public:
-	CategoryTree();
+	CategoryTree( CategoryTree *parent=0 );
+
 	~CategoryTree();
 
 	Element category;
 
-	CategoryTreeChildren *children() const;
+	const CategoryTreeChildren *children() const;
 	CategoryTree *add(const Element &cat);
 	void clear();
 
+	bool contains( int id ) const;
+	
+	CategoryTree *parent() { return m_parent; }
+	CategoryTree *firstChild() { return m_child; }
+	CategoryTree *nextSibling() { return m_sibling; }
+	
+	void takeItem( CategoryTree * );
+	void insertItem( CategoryTree * );
+
 private:
+	CategoryTree( const CategoryTree & );
+	CategoryTree &operator=( const CategoryTree & );
+
 	CategoryTreeChildren *m_children;
+
+	CategoryTree *m_parent;
+	CategoryTree *m_child;
+	CategoryTree *m_sibling;
 };
 
 #endif

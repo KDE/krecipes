@@ -20,6 +20,8 @@
 
 class Recipe;
 class RecipeDB;
+class CategoryTree;
+class CustomVector;
 
 /** @brief Subclass this class to create an importer for a specific file type.
   *
@@ -51,6 +53,8 @@ protected:
 
 	/** Add a recipe to be imported into the database */
 	void add( const Recipe &recipe ){ file_recipe_count++; m_recipe_list->append( recipe ); }
+
+	void setCategoryStructure( CategoryTree *cat_structure );
 	
 	int totalCount() const { return m_recipe_list->count(); }
 	int fileRecipeCount() const { return file_recipe_count; }
@@ -59,7 +63,10 @@ protected:
 	void addWarningMsg( const QString & s ){ m_warning_msgs.append(s); }
 
 private:
+	void importCategoryStructure( RecipeDB *, CustomVector &, const CategoryTree * );
+
 	RecipeList *m_recipe_list;
+	CategoryTree *m_cat_structure;
 	QStringList m_warning_msgs;
 	QStringList m_error_msgs;
 	QString m_master_warning;

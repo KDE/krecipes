@@ -283,8 +283,10 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new HTMLExporter(database, fileName, fd->currentFilter(), 650);
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter(fileName, fd->currentFilter());
-			else
-				exporter = new KreExporter(fileName, fd->currentFilter());
+			else {
+				CategoryTree *cat_structure = new CategoryTree; database->loadCategories(cat_structure);
+				exporter = new KreExporter(cat_structure, fileName, fd->currentFilter());
+			}
 
 			int overwrite = -1;
 			if ( QFile::exists( exporter->fileName() ) )

@@ -63,33 +63,15 @@ void CategoryCheckListItem::stateChange(bool on)
 		setChildrenState(false);
 	}
 }
+
 void CategoryCheckListItem::setChildrenState(bool on)
 {
-	locked = true;
-
-	CategoryCheckListItem *cat_it;
-
-	//do this to only iterate over this item's children
-	QListViewItem *pEndItem = NULL;
-	QListViewItem *pStartItem = this;
-	do
-	{
-		if(pStartItem->nextSibling())
-			pEndItem = pStartItem->nextSibling();
-		else
-			pStartItem = pStartItem->parent();
+	for ( CategoryCheckListItem *cat_it = (CategoryCheckListItem*)firstChild(); cat_it; cat_it = (CategoryCheckListItem*)cat_it->nextSibling() ) {
+		cat_it->locked = true;
+		cat_it->setOn(on);
+		cat_it->setChildrenState(on);
+		cat_it->locked = false;
 	}
-	while(pStartItem && !pEndItem);
-
-	QListViewItemIterator it( this );
-	while ( it.current() && it.current() != pEndItem ) {
-		cat_it = (CategoryCheckListItem*)it.current();
-		if ( cat_it != this ) 
-			cat_it->setOn(on);
-		++it;
-	}
-
-	locked = false;
 }
 
 void CategoryCheckListItem::setParentsState(bool on)
@@ -102,6 +84,7 @@ void CategoryCheckListItem::setParentsState(bool on)
 
 	locked = false;
 }
+
 
 
 

@@ -79,6 +79,8 @@ protected:
 	virtual void removeCategory(int id);
 	
 private:
+	void moveChildrenToRoot( QListViewItem * );
+
 	bool flat_list;
 };
 

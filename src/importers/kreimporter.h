@@ -24,6 +24,8 @@
 #include "../recipe.h"
 
 class Recipe;
+class CategoryTree;
+
 /**
 Import for Krecipes native file format (.kre, .kreml)
 
@@ -38,6 +40,7 @@ private:
 	void parseFile( const QString& filename );
 
 private:
+	void readCategoryStructure( const QDomNodeList& l, CategoryTree *tree );
 	void readDescription(const QDomNodeList& l, Recipe*);
 	void readIngredients(const QDomNodeList& l, Recipe*);
 };
