@@ -657,7 +657,7 @@ void KrecipesView::setContextHelp(int action){
       contextTitle->setText(i18n("<b>Diet Wizard</b>"));
       contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
       "Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-      "Oh, do not for get to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
+      "Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
       ));
     break;
   case AuthorsP:
