@@ -10,9 +10,9 @@
 
 #include "literecipedb.h"
 #include "kstandarddirs.h"
-#define DB_FILENAME "/home/uga/try.krecdb"
+#define DB_FILENAME "/tmp/try.krecdb"
 
-LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init)
+LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
 
 

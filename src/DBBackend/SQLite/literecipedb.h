@@ -23,12 +23,13 @@
 #include "../elementlist.h"
 #include "../ingredientpropertylist.h"
 #include "../unitratiolist.h"
+#include "recipedb.h"
 #include "libqsqlite/krecqsqlitedb.h"
 
 /**
 @author Unai Garro
 */
-class LiteRecipeDB{
+class LiteRecipeDB:public RecipeDB{
 private:
 	QSQLiteDB *database;
 	void createDB(void);
