@@ -51,18 +51,17 @@ void QSQLiteDB::close()
 
 QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 {
-	QSQLiteResult *res = new QSQLiteResult();
-
+	QSQLiteResult res;
 	if (!m_db)
 	{
-		return *res;
+		return res;
 	}
 
 	char *errmsg = 0;
-	if (sqlite_exec(m_db, query.latin1(), &call_back, res, &errmsg) > 0)
+	if (sqlite_exec(m_db, query.latin1(), &call_back, &res, &errmsg) > 0)
 	{
-		res->setError(errmsg);
-		res->setStatus(QSQLiteResult::Failure);
+		res.setError(errmsg);
+		res.setStatus(QSQLiteResult::Failure);
         free(errmsg);
 	}
 
@@ -71,7 +70,7 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 	*lastID=sqlite_last_insert_rowid(m_db);
 	}
 
-	return *res;
+	return res;
 }
 
 int QSQLiteDB::call_back(void* result, int argc, char** argv, char** columns)
