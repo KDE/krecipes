@@ -110,8 +110,6 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 void KreTextEdit::setCompletedText( const QString &txt )
 {
-	kdDebug() << "setCompletedText" << endl;
-
 	int para, index;
 	getCursorPosition( &para, &index );
 
@@ -134,17 +132,13 @@ void KreTextEdit::tryCompletion()
 	getCursorPosition( &para, &index );
 
 	QString para_text = text( para );
-	kdDebug() << "isSpace: " << para_text.at( index ).isSpace() << endl;
 	if ( para_text.at( index ).isSpace() || completing ) {
 		if ( !completing )
 			completion_begin = para_text.findRev( ' ', index - 1 ) + 1;
 
 		QString completing_word = para_text.mid( completion_begin, index - completion_begin );
 
-		kdDebug() << "Completing_word: " << completing_word << endl;
-
 		QString match = compObj() ->makeCompletion( completing_word );
-		kdDebug() << "Matched: " << match << endl;
 
 		if ( !match.isNull() && match != completing_word )
 			setCompletedText( match );
