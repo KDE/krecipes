@@ -39,6 +39,8 @@ public:
 	void setRatio(int ingID1, int ingID2, double ratio);
 	int getUnitID(int rc);
 	QString text(int r, int c ) const; //Reimplement, otherwise it won't work this way
+	void resize(int r,int c);
+	void clear(void);
 private:
 
 	//Internal Variables
@@ -58,10 +60,15 @@ private:
 	void initTable();
 	//Internal Widgets
 	EditBox *eb;
+protected:
+	QWidget* beginEdit ( int row, int col, bool replace );
 private slots:
 	void acceptValueAndClose(void);
+	void makeSymmetric(int r,int c,double amount);
+	void repaintCell(int r,int c);
 signals:
 	void ratioChanged(int row, int col, double value);
+	void signalSymmetric(int row, int col, double value);
 };
 
 class ConversionTableItem:public QObject, public QTableItem
@@ -73,8 +80,11 @@ public:
 	void setContentFromEditor( QWidget *w );
 	void setText( const QString &s );
 	void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
+	void setTextAndSave(const QString &s);
 signals:
 	void ratioChanged(int row, int col, double value);
+	void signalSymmetric(int row, int col, double value);
+	void signalRepaintCell(int r,int c);
 private:
 	EditBox *eb;
 

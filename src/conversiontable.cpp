@@ -15,7 +15,9 @@ ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable
 editBoxValue=-1;
 items.setAutoDelete(true);
 widgets.setAutoDelete(true);
-initTable();
+
+
+connect(this,SIGNAL(signalSymmetric(int,int,double)),this,SLOT(makeSymmetric(int,int,double)));
 }
 
 ConversionTable::~ConversionTable()
@@ -83,6 +85,7 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 QWidget* ConversionTableItem::createEditor() const
 {
 	((ConversionTableItem*)this)->eb=new EditBox(table()->viewport());
+	eb->setValue(text().toDouble()); // Initialize the box with this value
 	QObject::connect(eb,SIGNAL(valueChanged(double)),table(),SLOT(acceptValueAndClose()));
 	return eb;
 }
@@ -101,7 +104,8 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	if (eb->accepted)
 		{
 		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
-		emit ratioChanged(row(),col(),eb->value());
+		emit ratioChanged(row(),col(),eb->value()); // Signal to store
+		if (row()!=col()) emit signalSymmetric(row(),col(),eb->value()); // Signal to make symmetric. just in case, check if row,col are different (it shouldn't be editable, anyway)
 		}
 	}
     else
@@ -110,6 +114,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 
 void ConversionTableItem::setText( const QString &s )
 {
+std::cerr<<"Setting text:"<<s<<"\n";
 	if (eb) {
 	// initialize the editbox from the text
 	eb->setValue(s.toDouble());
@@ -126,44 +131,41 @@ return(item(r,c)->text());  //Note that item(r,c) was reimplemented here for lar
 
 void ConversionTable::initTable()
 {
+
+for (int r=0;r<numRows();r++)
+{
+this->createNewItem(r,r,1.0);
+item(r,r)->setEnabled(false); // Diagonal is not editable
+}
 }
 
 void ConversionTable::createNewItem(int r, int c, double amount)
 {
+
 ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
-std::cerr<<r<<";"<<c<<"\n";
 setItem(r,c, ci );
 ci->setText(QString::number(amount));
-// insert the data into the table
-//setText(r,c,QString::number(amount));
-
-
 // connect signal (forward) to know when it's actually changed
 connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
+connect(ci, SIGNAL(signalSymmetric(int,int,double)),this,SIGNAL(signalSymmetric(int,int,double)));
+connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));
+
 }
 
 void ConversionTable::setUnitIDs(const IDList &idList)
 {
 unitIDs=idList;
-int *id;
-for (id=unitIDs.first();id; id=unitIDs.next())
-{
-std::cerr<<"index taken: "<<*id<<"\n";
-}
 }
 
 void ConversionTable::setRatio(int ingID1, int ingID2, double ratio)
 {
 int indexID1=unitIDs.find(&ingID1);
 int indexID2=unitIDs.find(&ingID2);
-std::cerr<<"Found indexID1: "<< indexID1<<"\n";
-std::cerr<<"Found indexID2: "<< indexID2<<"\n";
 createNewItem(indexID1,indexID2,ratio);
 }
 
 int IDList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2)
 {
-std::cerr<<"Items comparing: "<<*((int*)item1)<<" "<<*((int*)item2)<<"\n";
 return (*((int*)item1)-*((int*)item2));
 }
 
@@ -171,4 +173,57 @@ int ConversionTable::getUnitID(int rc)
 {
 return(*(unitIDs.at(rc)));
 return(1);
+}
+
+QWidget * ConversionTable::beginEdit ( int row, int col, bool replace )
+{
+// If there's no item, create it first.
+if (!item(row,col))
+	{
+	createNewItem(row,col,0);
+	}
+
+	if (!(item(col,row)) && (row!=col)) createNewItem(col,row,0); // Create the symmetric one.It shouldn't be necessary to do this if (row,col) exists, but just in case, it's checked. row==col is neither supposed to be editable, but check anyway
+
+// Then call normal beginEdit
+QTable::beginEdit(row,col,replace);
+}
+
+void ConversionTable::makeSymmetric(int r,int c,double amount)
+{
+std::cerr<<"Making symmetric...\n";
+QTableItem *it;
+it=item(c,r);
+if (amount)
+(( ConversionTableItem *) it)->setTextAndSave(QString::number(1.0/amount)); // Change value and store in database
+else
+(( ConversionTableItem *) it)->setTextAndSave(QString::number(0));// Change value and store in database
+}
+
+void ConversionTableItem::setTextAndSave(const QString &s)
+{
+setText(s); // Change text
+emit signalRepaintCell(row(),col()); // Indicate to update the cell to the table. Otherwise it's not repainted
+emit ratioChanged(row(),col(),s.toDouble()); // Signal to store
+}
+
+void ConversionTable::repaintCell(int r,int c)
+{
+QTable::updateCell(r,c);
+}
+
+void ConversionTable::resize(int r,int c)
+{
+setNumRows(r);
+setNumCols(c);
+initTable();
+}
+
+void ConversionTable::clear(void)
+{
+items.clear();
+widgets.clear();
+unitIDs.clear();
+resize(0,0);
+
 }
