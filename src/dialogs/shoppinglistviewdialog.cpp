@@ -67,7 +67,7 @@ QString recipeHTML;
 	// Headers
 	recipeHTML=QString("<html><head><title>%1</title></head><body>").arg(i18n("Shopping List"));
 	recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:10px; width: 80%\">";
-	recipeHTML+=QString("<center><h1>%1</h1></center>").arg("Shopping List");
+	recipeHTML+=QString("<center><h1>%1</h1></center>").arg(i18n("Shopping List"));
 
 
 	// Ingredient List
