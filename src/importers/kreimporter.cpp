@@ -64,14 +64,15 @@ KreImporter::KreImporter(const QString& filename)
 
 		QDomElement kreml = doc.documentElement();
 
-		if (kreml.tagName() != "krecipes-recipe" /*|| kreml.attribute("source") != "MasterCook 5.0"*/)
+		if (kreml.tagName() != "krecipes-recipe")
 		{
 			setErrorMsg( i18n("This file doesn't appear to be a *.kreml file") );
 			return;
 		}
 
 		// TODO Check if there are changes between versions
-    QString version = kreml.attribute("version");
+    QString kreVersion = kreml.attribute("version");
+    qDebug(QString( i18n("KreML version %1") ).arg(kreVersion));
 
 		QDomNodeList l = kreml.childNodes();
     QDomElement el;
