@@ -113,7 +113,7 @@ void DietWizardDialog::createDiet(void)
 RecipeList rlist;
 RecipeList dietRList;
 // Get the whole list of recipes, detailed
-database->loadRecipeDetails(&rlist,true);
+database->loadRecipeDetails(&rlist,true,true);
 
 int recipes_left=rlist.count();
 
@@ -130,7 +130,7 @@ int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
 		{
 			int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
 			RecipeList::Iterator rit=tempRList.at(random_index);
-			if (found=checkConstraints(*rit,meal,dish)) // Check that the recipe is inside the constraint limits
+			if (found=(checkCategories(*rit,meal,dish) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
 			{
 			dietRList.append(*rit);// Add recipe to the diet list
 			}
@@ -188,14 +188,17 @@ public:
 
 class CategoriesListItem:public QCheckListItem{
 public:
-	CategoriesListItem(QListView* klv, QString name ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){nameStored=name;}
+	CategoriesListItem(QListView* klv, const Element &category ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){ctyStored.id=category.id; ctyStored.name=category.name;}
 	~CategoriesListItem(void){}
 	virtual QString text(int column) const
 		{
-		if (column==1) return(nameStored);
+		if (column==1) return(ctyStored.name);
 		else return(QString::null);
 		}
-private: QString nameStored;
+	int categoryId(void){return ctyStored.id;}
+	QString categoryName(void){return ctyStored.name;}
+private:
+	Element ctyStored;
 
 };
 
@@ -402,7 +405,7 @@ constraintsView->insertItem(it);
 	//Load the categories list
 for (Element *el=categoryList->getFirst(); el; el=categoryList->getNext())
 {
-CategoriesListItem *it=new CategoriesListItem(categoriesView,el->name);
+CategoriesListItem *it=new CategoriesListItem(categoriesView,*el);
 categoriesView->insertItem(it);
 }
 
@@ -455,6 +458,21 @@ Constraint constraint;
 	constraint.max=it->maxVal();
 	constraint.enabled=it->isOn();
 	constraints->add(constraint);
+	}
+}
+
+void DishInput::loadEnabledCategories(ElementList* categories)
+{
+categories->clear();
+Element category;
+	for (CategoriesListItem *it=(CategoriesListItem*)(categoriesView->firstChild());it;it=(CategoriesListItem*)(it->nextSibling()))
+	{
+	if (it->isOn()) // Only load those that are checked
+		{
+		category.id=it->categoryId();
+		category.name=it->categoryName();
+		categories->add(category);
+		}
 	}
 }
 
@@ -572,6 +590,23 @@ QSize DishTitle::minimumSizeHint() const
 return(QSize(40,200));
 }
 
+bool DietWizardDialog::checkCategories(Recipe &rec,int meal,int dish)
+{
+
+// Check if the recipe is among the categories chosen
+ElementList categoryList; loadEnabledCategories(meal,dish,&categoryList);
+
+
+for (Element *category=rec.categoryList.getFirst();category; category=rec.categoryList.getNext())
+	{
+	std::cerr<<QString("Recipe is in category %1:%2 \n").arg(category->id).arg(category->name);
+	if (categoryList.containsId(category->id)) return true;
+	}
+std::cerr<<"But the recipe is not within the categories chosen\n";
+
+return false;
+}
+
 bool DietWizardDialog::checkConstraints(Recipe &rec,int meal,int dish)
 {
 
@@ -591,6 +626,13 @@ void DietWizardDialog::loadConstraints(int meal,int dish,ConstraintList *constra
 MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
 DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
 dishInput->loadConstraints(constraints); //Load the constraints form the KListView
+}
+
+void DietWizardDialog::loadEnabledCategories(int meal,int dish,ElementList *categories)
+{
+MealInput* mealTab=(MealInput*)(mealTabs->page(meal)); // Get the meal
+DishInput* dishInput=mealTab->dishInputList[dish]; // Get the dish input
+dishInput->loadEnabledCategories(categories); //Load the categories that have been checked in the KListView
 }
 
 bool DietWizardDialog::checkLimits(IngredientPropertyList &properties,ConstraintList &constraints)

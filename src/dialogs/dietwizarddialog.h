@@ -71,9 +71,11 @@ private:
 	QPushButton *okButton;
 
 	//Methods
+	bool checkCategories(Recipe &rec,int meal,int dish);
 	bool checkConstraints(Recipe &rec,int meal,int dish);
 	bool checkLimits(IngredientPropertyList &properties,ConstraintList &constraints);
 	void loadConstraints(int meal,int dish,ConstraintList *constraints);
+	void loadEnabledCategories(int meal,int dish,ElementList *categories);
 	void newTab(const QString &name);
 
 public:
@@ -139,6 +141,7 @@ public:
 	~DishInput();
 	// Methods
 	void loadConstraints(ConstraintList *constraints);
+	void loadEnabledCategories(ElementList* categories);
 	void reload(ElementList *categoryList, IngredientPropertyList *propertyList);
 	void setDishTitle(const QString & text);
 
