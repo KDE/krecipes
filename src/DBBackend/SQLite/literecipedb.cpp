@@ -330,7 +330,7 @@ command="SELECT id,title FROM recipes;";
 QSQLiteResult recipeToLoad=database->executeQuery(command);
 if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 	QSQLiteResultRow row=recipeToLoad.first();
-            if ( !recipeToLoad.atEnd() ) {
+            while ( !recipeToLoad.atEnd() ) {
 
 		    Element recipe;
 		    recipe.id=row.data(0).toInt();
