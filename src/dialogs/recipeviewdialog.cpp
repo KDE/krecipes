@@ -143,7 +143,7 @@ kdDebug()<<recipeHTML<<endl;
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
-
+std::cerr<<recipeHTML<<"\n";
 recipeView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where the photo was stored
 recipeView->write(recipeHTML);
 recipeView->end();
@@ -397,10 +397,10 @@ void RecipeViewDialog::createBlocks()
 		pushItemsDownIfNecessary( geometries, rect );
 
 		element->addProperty( "position: absolute;" );
-		element->addProperty( QString("top: %1px;").arg(rect->top()) );
-		element->addProperty( QString("left: %1px;").arg(rect->left()) );
-		element->addProperty( QString("width: %1px;").arg(rect->width()) );
-		element->addProperty( QString("height: %1px;").arg(rect->height()) );
+		element->addProperty( QString("top: %1%;").arg(rect->top()) );
+		element->addProperty( QString("left: %1%;").arg(rect->left()) );
+		element->addProperty( QString("width: %1%;").arg(rect->width()) );
+		element->addProperty( QString("height: %1%;").arg(rect->height()) );
 	}
 }
 

@@ -32,7 +32,8 @@
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent ),
   box_properties(new QMap< QWidget*, unsigned int >)
 {
-	setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 1 ) );
+	resize(300,400);
+	setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding) );
 
 	box_properties->insert( this, BackgroundColor | Geometry );
 
@@ -40,6 +41,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( 
 
 	createWidgets( sample );
 	loadSetup();
+
 }
 
 SetupDisplay::~SetupDisplay()
@@ -55,13 +57,13 @@ void SetupDisplay::createSetupIfNecessary()
 	{
 		config->setGroup( "BackgroundSetup" );
 		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "Geometry", QRect(0,0,600,700) );
+		config->writeEntry( "Geometry", QRect(0,0,300,400) );
 	}
 
 	if ( !config->hasGroup("TitleSetup") )
 	{
 		config->setGroup( "TitleSetup" );
-		config->writeEntry( "Geometry", QRect(169,33,426,45) );
+		config->writeEntry( "Geometry", QRect(31,1,68,5) );
 		QFont font = kapp->font();
 		font.setBold( true );
 		font.setPointSize( font.pointSize() * 2 );
@@ -75,7 +77,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("InstructionsSetup") )
 	{
 		config->setGroup("InstructionsSetup");
-		config->writeEntry( "Geometry", QRect(169,148,426,548) );
+		config->writeEntry( "Geometry", QRect(32,18,67,80) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -86,7 +88,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("ServingsSetup") )
 	{
 		config->setGroup("ServingsSetup");
-		config->writeEntry( "Geometry", QRect(169,82,91,27) );
+		config->writeEntry( "Geometry", QRect(0,55,27,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -97,14 +99,14 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("PhotoSetup") )
 	{
 		config->setGroup("PhotoSetup");
-		config->writeEntry( "Geometry", QRect(2,30,164,123) );
+		config->writeEntry( "Geometry", QRect(0,0,28,15) );
 		config->writeEntry( "Visibility", true );
 	}
 
 	if ( !config->hasGroup("AuthorsSetup") )
 	{
 		config->setGroup("AuthorsSetup");
-		config->writeEntry( "Geometry", QRect(264,82,331,27) );
+		config->writeEntry( "Geometry", QRect(31,12,48,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -115,7 +117,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("CategoriesSetup") )
 	{
 		config->setGroup("CategoriesSetup");
-		config->writeEntry( "Geometry", QRect(169,113,426,31) );
+		config->writeEntry( "Geometry", QRect(31,6,68,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -126,7 +128,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("HeaderSetup") )
 	{
 		config->setGroup("HeaderSetup");
-		config->writeEntry( "Geometry", QRect(3,5,592,23) );
+		config->writeEntry( "Geometry", QRect(1,61,25,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
 		config->writeEntry( "TextColor", Qt::black );
@@ -137,9 +139,9 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("IngredientsSetup") )
 	{
 		config->setGroup("IngredientsSetup");
-		config->writeEntry( "Geometry", QRect(3,155,162,30) );
+		config->writeEntry( "Geometry", QRect(0,17,29,18) );
 		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
+		config->writeEntry( "BackgroundColor", QColor(119,109,78) );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
 		config->writeEntry( "Alignment", Qt::WordBreak );
@@ -148,7 +150,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("PropertiesSetup") )
 	{
 		config->setGroup("PropertiesSetup");
-		config->writeEntry( "Geometry", QRect(3,190,162,30) );
+		config->writeEntry( "Geometry", QRect(0,36,29,18) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
 		config->writeEntry( "TextColor", Qt::black );
@@ -160,6 +162,10 @@ void SetupDisplay::createSetupIfNecessary()
 //do not call until createWidgets() has been called!
 void SetupDisplay::loadSetup()
 {
+
+QSize newsize;
+QPoint newposition;
+
 	SetupDisplay::createSetupIfNecessary();
 
 	//TODO: we have just one setup available for now. Later setup may be a separate file
@@ -168,11 +174,15 @@ void SetupDisplay::loadSetup()
 	//=========================this=======================//
 	config->setGroup("BackgroundSetup");
  	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	m_size = config->readRectEntry( "Geometry" ).size();
+
+	QRect r=config->readRectEntry( "Geometry" );
+	m_size =r.size() ;
 
 	//=========================TITLE=======================//
 	config->setGroup("TitleSetup");
-	title_box->setGeometry( config->readRectEntry( "Geometry" ));
+
+	r=config->readRectEntry( "Geometry" );toAbsolute(&r);
+	title_box->setGeometry(r);
 	title_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	title_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	title_box->setFont(config->readFontEntry( "Font" ) );
@@ -180,8 +190,10 @@ void SetupDisplay::loadSetup()
 	title_box->setAlignment(config->readNumEntry( "Alignment" ) );
 
 	//======================INSTRUCTIONS===================//
+
 	config->setGroup("InstructionsSetup");
-	instr_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry( "Geometry" ); toAbsolute(&r);
+	instr_box->setGeometry(r);
 	instr_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	instr_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	instr_box->setFont(config->readFontEntry( "Font" ) );
@@ -190,7 +202,9 @@ void SetupDisplay::loadSetup()
 
 	//=======================SERVINGS======================//
 	config->setGroup("ServingsSetup");
-	servings_box->setGeometry( config->readRectEntry( "Geometry" ));
+
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	servings_box->setGeometry(r);
 	servings_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	servings_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	servings_box->setFont(config->readFontEntry( "Font" ) );
@@ -199,12 +213,16 @@ void SetupDisplay::loadSetup()
 
 	//========================PHOTO========================//
 	config->setGroup("PhotoSetup");
-	photo_box->setGeometry( config->readRectEntry( "Geometry" ));
+
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	photo_box->setGeometry(r);
 	photo_box->setEnabled(config->readBoolEntry( "Visibility" ) );
 
 	//=======================AUTHORS======================//
 	config->setGroup("AuthorsSetup");
-	authors_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+
+	authors_box->setGeometry(r);
 	authors_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	authors_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	authors_box->setFont(config->readFontEntry( "Font" ) );
@@ -213,7 +231,8 @@ void SetupDisplay::loadSetup()
 
 	//=======================CATEGORIES======================//
 	config->setGroup("CategoriesSetup");
-	categories_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	categories_box->setGeometry(r);
 	categories_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	categories_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	categories_box->setFont(config->readFontEntry( "Font" ) );
@@ -222,7 +241,8 @@ void SetupDisplay::loadSetup()
 
 	//=======================ID======================//
 	config->setGroup("HeaderSetup");
-	id_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	id_box->setGeometry(r);
 	id_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	id_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	id_box->setFont(config->readFontEntry( "Font" ) );
@@ -231,7 +251,8 @@ void SetupDisplay::loadSetup()
 
 	//=======================INGREDIENTS======================//
 	config->setGroup("IngredientsSetup");
-	ingredients_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	ingredients_box->setGeometry(r);
 	ingredients_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	ingredients_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	ingredients_box->setFont(config->readFontEntry( "Font" ) );
@@ -240,7 +261,8 @@ void SetupDisplay::loadSetup()
 
 	//=======================INGREDIENTS======================//
 	config->setGroup("PropertiesSetup");
-	properties_box->setGeometry( config->readRectEntry( "Geometry" ));
+	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+	properties_box->setGeometry(r);
 	properties_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	properties_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 	properties_box->setFont(config->readFontEntry( "Font" ) );
@@ -397,6 +419,8 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 void SetupDisplay::save()
 {
+
+	QRect r;
 	KConfig *config=kapp->config();
 
 	const QObjectList *list = this->children();
@@ -413,7 +437,10 @@ void SetupDisplay::save()
 			unsigned int properties = (*box_properties->find(w));
 
 			if ( properties & Geometry )
-				config->writeEntry( "Geometry", w->geometry() );
+				{
+				r=w->geometry(); toPercentage(&r);
+				config->writeEntry( "Geometry",r);
+				}
 
 			if ( properties & Font )
 				config->writeEntry( "Font", static_cast<QLabel*>(w)->font() );
@@ -534,7 +561,7 @@ void SetupDisplay::setShown( int id )
 		if ( popup->isItemChecked(id) )
 			this->setWidget( 0 ); //clears the selection
 	}
-}
+}QRect scaled;
 
 void SetupDisplay::setAlignment( QAction *action )
 {
@@ -565,3 +592,44 @@ void SetupDisplay::setAlignment( QAction *action )
 	}
 }
 
+/*
+**  Rescales the dimensions according to the page size
+*/
+
+void SetupDisplay::toAbsolute(QRect *r)
+{
+QSize scaledSize;
+QPoint scaledPoint;
+
+scaledSize.setWidth(r->width()/100.0*width());
+scaledSize.setHeight(r->height()/100.0*height());
+scaledPoint.setX(r->left()/100.0*width());
+scaledPoint.setY(r->top()/100.0*height());
+r->setTopLeft(scaledPoint);
+r->setSize(scaledSize);
+
+}
+
+void SetupDisplay::toPercentage(QRect *r)
+{
+QSize scaledSize;
+QPoint scaledPoint;
+
+scaledSize.setWidth(r->width()*100.0/width());
+scaledSize.setHeight(r->height()*100.0/height());
+scaledPoint.setX(r->left()*100.0/width());
+scaledPoint.setY(r->top()*100.0/height());
+r->setTopLeft(scaledPoint);
+r->setSize(scaledSize);
+
+}
+
+QSize SetupDisplay::minimumSize() const
+{
+return(QSize(300,400));
+}
+
+QSize SetupDisplay::sizeHint(void) const
+{
+return (minimumSize());
+}

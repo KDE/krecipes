@@ -40,6 +40,8 @@ public:
 	~SetupDisplay();
 
 	void save();
+	virtual QSize sizeHint(void) const;
+	QSize minimumSize() const;
 
 	static void createSetupIfNecessary();
 
@@ -53,13 +55,7 @@ protected slots:
 	void setShown(int id);
 	void setAlignment( QAction * );
 
-protected:
-	virtual QSize sizeHint() const{ return m_size; }
-	virtual QSize minimumSizeHint() const{ return QSize(1,1); }
-
 private:
-	void loadSetup();
-	void createWidgets( const Recipe &sample );
 
 	QLabel *title_box;
 	QLabel *instr_box;
@@ -77,6 +73,15 @@ private:
 	QMap< QWidget*, unsigned int > *box_properties;
 
 	QPopupMenu *popup;
+
+	// Methods
+	void createWidgets( const Recipe &sample );
+	void loadSetup();
+	void toAbsolute(QRect *r);
+	void toPercentage(QRect *r);
+
+
+
 };
 
 #endif //SETUPDISPLAY_H

@@ -31,6 +31,7 @@ public:
 	QSize minimumSize(void) const;
 	virtual QSize sizeHint(void) const;
 
+
 protected:
 	virtual void accept();
 	void save();
