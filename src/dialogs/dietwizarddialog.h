@@ -25,6 +25,7 @@
 #include <qslider.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
+#include <qvaluelist.h>
 #include <qvbox.h>
 #include <qvgroupbox.h>
 #include <qspinbox.h>
@@ -88,6 +89,10 @@ public:
 	 void reload(ElementList &categoriesList,IngredientPropertyList &constraintList);
 private:
 	// Widgets
+		// Private Variables
+		int dishNumber;
+		QValueList <DishInput*> dishInputList;
+
 		// Settings section for the meal
 		QHBox *mealOptions;
 
@@ -103,6 +108,8 @@ private:
 
 		// Settings for the dish
 		QWidgetStack *dishStack;
+private slots:
+		void changeDishNumber(int dn);
 
 };
 
@@ -110,7 +117,7 @@ class DishInput:public QWidget{
 Q_OBJECT
 
 public:
-	DishInput(QWidget *parent);
+	DishInput(QWidget *parent,const QString &title);
 	~DishInput();
 	// Methods
 	void setDishTitle(const QString & text);
@@ -132,7 +139,7 @@ class DishTitle:public QWidget{
 Q_OBJECT
 
 public:
-	DishTitle(QWidget *parent);
+	DishTitle(QWidget *parent,const QString &title);
 	~DishTitle();
 	virtual QSize sizeHint () const;
 	virtual QSize minimumSizeHint() const;

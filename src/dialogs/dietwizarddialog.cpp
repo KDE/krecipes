@@ -169,8 +169,13 @@ dishStack= new QWidgetStack(this);
 layout->addWidget(dishStack);
 
 	// Add a dish
-DishInput *newDish=new DishInput(this);
+DishInput *newDish=new DishInput(this,i18n("Dish 1"));
 dishStack->addWidget(newDish);
+dishInputList.append(newDish);
+
+// Signals & Slots
+connect(dishNumberInput,SIGNAL(valueChanged(int)),this,SLOT(changeDishNumber(int)));
+
 
 }
 
@@ -180,11 +185,27 @@ MealInput::~MealInput()
 
 void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &constraintList)
 {
-// FIXME add code to reload all the DishInput here
+int pgcount=0;
+QValueList<DishInput*>::iterator it;
+for (it=dishInputList.begin(); it != dishInputList.end();it++)
+{
+	DishInput *di; di=(*it);
+	di->reload(categoriesList,constraintList);
+	}
+}
+
+void MealInput::changeDishNumber(int dn)
+{
+if (dn>dishNumber)
+	{
+	 DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
+	 dishStack->addWidget(newDish);
+	 dishInputList.append(newDish);
+	 }
 }
 
 
-DishInput::DishInput(QWidget* parent):QWidget(parent)
+DishInput::DishInput(QWidget* parent,const QString &title):QWidget(parent)
 {
 QVBoxLayout *layout=new QVBoxLayout(this);
 layout->setSpacing(20);
@@ -194,7 +215,7 @@ listBox=new QHGroupBox(i18n("Dish Characteristics"),this);
 layout->addWidget(listBox);
 
 	// Dish id
-dishTitle=new DishTitle(listBox);
+dishTitle=new DishTitle(listBox,title);
 
 	//Categories list
 categoriesView=new KListView(listBox);
@@ -273,7 +294,7 @@ constraintsEditBox2->show();
 }
 
 
-DishTitle::DishTitle(QWidget *parent):QWidget(parent)
+DishTitle::DishTitle(QWidget *parent,const QString &title):QWidget(parent)
 {
 }
 
