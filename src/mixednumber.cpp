@@ -82,10 +82,10 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 		if ( slash_index == -1 ) //input contains no fractional part
 		{
 			double decimal = input.toDouble(&num_ok);
-
+qDebug("%f",decimal);
 			if ( !num_ok ){ if (ok){*ok = false;} return MixedNumber(); }
 
-			if(ok){*ok = false;}
+			if (ok){*ok = true;}
 			return MixedNumber(decimal);
 		}
 		else //input just contains a fraction
@@ -93,10 +93,10 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 			whole = 0;
 
 			numerator = MixedNumber::getNumerator( input, space_index, slash_index, &num_ok );
-			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();;}
+			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 			denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();;}
+			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 			if (ok){*ok = true;}
 			return MixedNumber(whole,numerator,denominator);
@@ -106,13 +106,13 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 	}
 
 	whole = input.mid(0,space_index).toInt(&num_ok);
-	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();;}
+	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 	numerator = MixedNumber::getNumerator( input, space_index, slash_index, &num_ok );
-	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();;}
+	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 	denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();;}
+	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 	if (ok){*ok = true;}
 	return MixedNumber(whole,numerator,denominator);
