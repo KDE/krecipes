@@ -4,14 +4,17 @@
 
 #include "pref.h"
 
-#include <klocale.h>
-#include <kapp.h>
-#include <kconfig.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
+
+#include <kapp.h>
+#include <kconfig.h>
+#include <kiconloader.h>
+#include <klocale.h>
+
 
 KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     : KDialogBase(IconList, i18n("Krecipes Preferences"),
@@ -21,19 +24,19 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     // a TreeList dialog.. but there are a number of other
     // possibilities (including Tab, Swallow, and just Plain)
     QFrame *frame;
-
-    frame = addPage(i18n("Server Settings"), i18n("Database Server Options"));
+    KIconLoader il;
+    frame = addPage(i18n("Server Settings"), i18n("Database Server Options"),il.loadIcon("network_local",KIcon::NoGroup,32));
     QHBoxLayout* layout = new QHBoxLayout( frame );
     layout->setSpacing(0);
     layout->setMargin(0);
     m_pageServer = new ServerPrefs(frame);
     layout->addWidget(m_pageServer);
 
-    frame = addPage(i18n("Numbers"), i18n("Customize Number Format"));
+    frame = addPage(i18n("Numbers"), i18n("Customize Number Format"),il.loadIcon("math_frac",KIcon::NoGroup,32));
     m_pageNumbers = new NumbersPrefs(frame);
     layout->addWidget(m_pageNumbers);
 
-    frame = addPage(i18n("Import"), i18n("Recipe Import Options"));
+    frame = addPage(i18n("Import"), i18n("Recipe Import Options"),il.loadIcon("down",KIcon::NoGroup,32));
     m_pageImport = new ImportPrefs(frame);
     layout->addWidget(m_pageImport);
 
