@@ -60,15 +60,18 @@ AC_DEFUN([AC_NO_SQLITE3],
 ])
 
 if test "x$disable_sqlite" != "xyes"; then
-  KDE_CHECK_HEADER(sqlite.h,
-           AC_HAVE_SQLITE,
-           AC_NO_SQLITE
-  )
-
   KDE_CHECK_HEADER(sqlite3.h,
            AC_HAVE_SQLITE3,
            AC_NO_SQLITE3
   )
+  
+  if test "x$have_sqlite3" = "xfalse"; then
+  KDE_CHECK_HEADER(sqlite.h,
+           AC_HAVE_SQLITE,
+           AC_NO_SQLITE
+  )
+  fi
+  
 else
   AC_NO_SQLITE
   AC_NO_SQLITE3
