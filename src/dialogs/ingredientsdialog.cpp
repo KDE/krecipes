@@ -50,9 +50,9 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     ingredientListView->listView()->setRenameable(1, true);
     ingredientListView->listView()->setDefaultRenameAction(QListView::Reject);
     ingredientListView->listView()->setMinimumWidth(150);
-    ingredientListView->listView()->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
-    QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    QSpacerItem* spacer_rightIngredients = new QSpacerItem(10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightIngredients,1,2);
 
 
@@ -72,7 +72,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removeIngredientButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeIngredientButton->setFlat(true);
 
-    QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    QSpacerItem* spacer_Ing_Buttons = new QSpacerItem(10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_Ing_Buttons,2,3);
 
 
@@ -87,7 +87,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     unitsListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
     unitsListView->listView()->setMinimumWidth(150);
-    unitsListView->listView()->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightUnits,1,6);
