@@ -456,18 +456,20 @@ QSQLiteResult recipeFound=database->executeQuery( command); // Find the entries
 	}
 }
 
-/*void LiteRecipeDB::findUseOfIngInRecipes(ElementList *results,int ingredientID)
+void LiteRecipeDB::findUseOfIngInRecipes(ElementList *results,int ingredientID)
 {
  QString command=QString("SELECT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1").arg(ingredientID);
-QSqlQuery recipeFound( command,database); // Find the entries
+QSQLiteResult recipeFound=database->executeQuery(command); // Find the entries
 
 // Populate data in the ElementList*
-            if ( recipeFound.isActive() ) {
-                while ( recipeFound.next() ) {
+            if ( recipeFound.getStatus()!=QSQLiteResult::Failure ) {
+	    QSQLiteResultRow row=recipeFound.first();
+                while ( !recipeFound.atEnd() ) {
 		    Element recipe;
-		    recipe.id=recipeFound.value(0).toInt();
-		    recipe.name=unescapeAndDecode(recipeFound.value(1).toString());
+		    recipe.id=row.data(0).toInt();
+		    recipe.name=unescapeAndDecode(row.data(1));
 		    results->add(recipe);
+		    row=recipeFound.next();
                 }
 	}
 }
@@ -479,36 +481,33 @@ QString command;
 // First remove the ingredient
 
 command=QString("DELETE ingredients.* FROM ingredients WHERE id=%1;").arg(ingredientID);
-QSqlQuery ingredientToDelete(command,database);
+database->executeQuery(command);
 
 // Remove all the unit entries for this ingredient
 
 command=QString("DELETE unit_list.* FROM unit_list WHERE ingredient_id=%1;").arg(ingredientID);
-ingredientToDelete.exec(command);
+database->executeQuery(command);
 
 // Remove any recipe using that ingredient
 
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
-ingredientToDelete.exec(command);
+database->executeQuery(command);
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
 command=QString("DELETE ingredient_list.* FROM ingredient_list LEFT JOIN recipes ON ingredient_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
-ingredientToDelete.exec( command );
+database->executeQuery( command );
 
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE category_list.* FROM category_list LEFT JOIN recipes ON category_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
-ingredientToDelete.exec( command);
+database->executeQuery( command);
 
 // Remove property list of this ingredient
 command=QString("DELETE FROM ingredient_info WHERE ingredient_id=%1;").arg(ingredientID);
-ingredientToDelete.exec(command);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::initializeDB(void)
 {
-// Select the database
-QString command=QString("USE %1;").arg(database->databaseName());
-QSqlQuery initializeQuery(command,database);
 
 // Create the table structure
 
@@ -527,7 +526,7 @@ QSqlQuery initializeQuery(command,database);
 	splitCommands(commands,commandList);
 	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
 	 {
-	 initializeQuery.exec((*it)+QString(";")); //Split removes the semicolons
+	 database->executeQuery((*it)+QString(";")); //Split removes the semicolons
 	 }
 
 
@@ -536,12 +535,6 @@ QSqlQuery initializeQuery(command,database);
 
 void LiteRecipeDB::initializeData(void)
 {
-
-// Select the database
-QString command=QString("USE %1;").arg(database->databaseName());
-QSqlQuery initializeQuery(command,database);
-
-//
 
 // Populate with data
 
@@ -562,7 +555,7 @@ QSqlQuery initializeQuery(command,database);
 	// Execute commands
 	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it )
 	 {
-	 initializeQuery.exec((*it)+QString(";")); //Split removes the semicolons
+	 database->executeQuery((*it)+QString(";")); //Split removes the semicolons
 	 }
 
 }
@@ -571,7 +564,7 @@ void LiteRecipeDB::addProperty(QString &name, QString &units)
 {
 QString command;
 command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(name)).arg(escapeAndEncode(units));
-QSqlQuery propertyToAdd(command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::loadProperties(IngredientPropertyList *list,int ingredientID)
@@ -590,18 +583,19 @@ usePerUnit=false;
 command=QString("SELECT  id,name,units FROM ingredient_properties;");
 }
 
-QSqlQuery propertiesToLoad (command,database);
+QSQLiteResult propertiesToLoad=database->executeQuery(command);
 // Load the results into the list
-if ( propertiesToLoad.isActive() ) {
-                while ( propertiesToLoad.next() ) {
+if (propertiesToLoad.getStatus()!=QSQLiteResult::Failure) {
+                while ( !propertiesToLoad.atEnd() ) {
+		QSQLiteResultRow row=propertiesToLoad.first();
 		    IngredientProperty prop;
-		    prop.id=propertiesToLoad.value(0).toInt();
-		    prop.name=unescapeAndDecode(propertiesToLoad.value(1).toString());
-		    prop.units=unescapeAndDecode(propertiesToLoad.value(2).toString());
+		    prop.id=row.data(0).toInt();
+		    prop.name=unescapeAndDecode(row.data(1));
+		    prop.units=unescapeAndDecode(row.data(2));
 		    if (usePerUnit)
 		    {
-		    prop.perUnit.id=propertiesToLoad.value(3).toInt();
-		    prop.perUnit.name=unescapeAndDecode(propertiesToLoad.value(4).toString());
+		    prop.perUnit.id=row.data(3).toInt();
+		    prop.perUnit.name=unescapeAndDecode(row.data(4));
 		    }
 		    else
 		    {
@@ -610,7 +604,7 @@ if ( propertiesToLoad.isActive() ) {
 		    }
 
 		    if (ingredientID>=0)
-		      prop.amount=propertiesToLoad.value(5).toDouble();
+		      prop.amount=row.data(5).toDouble();
 		    else
 		      prop.amount=-1; // Property is generic, not attached to an ingredient
 		    list->add(prop);
@@ -623,7 +617,7 @@ void LiteRecipeDB::changePropertyAmountToIngredient(int ingredientID,int propert
 {
 QString command;
 command=QString("UPDATE ingredient_info SET amount=%1 WHERE ingredient_id=%2 AND property_id=%3 AND per_units=%4;").arg(amount).arg(ingredientID).arg(propertyID).arg(per_units);
-QSqlQuery infoToChange(command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::addPropertyToIngredient(int ingredientID,int propertyID,double amount, int perUnitsID)
@@ -631,7 +625,7 @@ void LiteRecipeDB::addPropertyToIngredient(int ingredientID,int propertyID,doubl
 QString command;
 
 command=QString("INSERT INTO ingredient_info VALUES(%1,%2,%3,%4);").arg(ingredientID).arg(propertyID).arg(amount).arg(perUnitsID);
-QSqlQuery propertyToAdd( command,database);
+database->executeQuery(command);
 }
 
 
@@ -640,7 +634,7 @@ void LiteRecipeDB::removePropertyFromIngredient(int ingredientID, int propertyID
 QString command;
 // remove property from ingredient info. Note that there could be duplicates with different units (per_units). Remove just the one especified.
 command=QString("DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 AND per_units=%3;").arg(ingredientID).arg(propertyID).arg(perUnitID);
-QSqlQuery propertyToRemove( command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::removeProperty(int propertyID)
@@ -649,11 +643,11 @@ QString command;
 
 // Remove property from the ingredient_properties
 command=QString("DELETE FROM ingredient_properties WHERE id=%1;").arg(propertyID);
-QSqlQuery propertyToRemove( command,database);
+database->executeQuery(command);
 
 // Remove any ingredient info that uses this property
 command=QString("DELETE FROM ingredient_info WHERE property_id=%1;").arg(propertyID);
-propertyToRemove.exec( command);
+database->executeQuery(command);
 
 }
 
@@ -662,34 +656,34 @@ void LiteRecipeDB::removeUnit(int unitID)
 QString command;
 // Remove the unit first
 command=QString("DELETE FROM units WHERE id=%1;").arg(unitID);
-QSqlQuery unitToRemove( command,database);
+database->executeQuery(command);
 
 //Remove the unit from ingredients using it
 
 command=QString("DELETE FROM unit_list WHERE unit_id=%1;").arg(unitID);
-unitToRemove.exec(command);
+database->executeQuery(command);
 
 
 // Remove any recipe using that unit in the ingredient list (user must have been warned before calling this function!)
 
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
-unitToRemove.exec(command);
+database->executeQuery(command);
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
 command=QString("DELETE ingredient_list.* FROM ingredient_list LEFT JOIN recipes ON ingredient_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
-unitToRemove.exec( command );
+database->executeQuery( command );
 
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE category_list.* FROM category_list LEFT JOIN recipes ON category_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
-unitToRemove.exec( command);
+database->executeQuery( command);
 
 // Remove the ingredient properties using this unit (user must be warned before calling this function)
 command=QString("DELETE FROM ingredient_info WHERE per_units=%1;").arg(unitID);
-unitToRemove.exec(command);
+database->executeQuery(command);
 
 // Remove the unit conversion ratios with this unit
 command=QString("DELETE FROM units_conversion WHERE unit1_id=%1 OR unit2_id=%2;").arg(unitID).arg(unitID);
-unitToRemove.exec(command);
+database->executeQuery(command);
 
 }
 
@@ -699,7 +693,7 @@ void LiteRecipeDB::createNewUnit(QString &unitName)
 QString command;
 
 command=QString("INSERT INTO units VALUES(NULL,'%1');").arg(escapeAndEncode(unitName));
-QSqlQuery unitToCreate( command,database);
+database->executeQuery(command);
 }
 
 
@@ -708,21 +702,23 @@ void LiteRecipeDB::modUnit(int unitID, QString newLabel)
 QString command;
 
 command=QString("UPDATE units SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(unitID);
-QSqlQuery ingredientToCreate( command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::findUseOf_Unit_InRecipes(ElementList *results, int unitID)
 {
  QString command=QString("SELECT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
-QSqlQuery recipeFound( command,database); // Find the entries
+QSQLiteResult recipeFound=database->executeQuery( command ); // Find the entries
 
 // Populate data in the ElementList*
-            if ( recipeFound.isActive() ) {
+            if ( recipeFound.getStatus()!=QSQLiteResult::Failure ) {
+	    QSQLiteResultRow row=recipeFound.first();
                 while ( recipeFound.next() ) {
 		    Element recipe;
 		    recipe.id=recipeFound.value(0).toInt();
 		    recipe.name=unescapeAndDecode(recipeFound.value(1).toString());
 		    results->add(recipe);
+		    row=recipeFound.next();
                 }
 	}
 }
@@ -730,15 +726,17 @@ QSqlQuery recipeFound( command,database); // Find the entries
 void LiteRecipeDB::findUseOf_Unit_InProperties(ElementList *results, int unitID)
 {
  QString command=QString("SELECT ip.id,ip.name FROM ingredient_info ii, ingredient_properties ip WHERE ii.per_units=%1 AND ip.id=ii.property_id;").arg(unitID);
-QSqlQuery recipeFound( command,database); // Find the entries
+QSQLiteResult recipeFound= database->executeQuery(command); // Find the entries
 
 // Populate data in the ElementList*
-            if ( recipeFound.isActive() ) {
-                while ( recipeFound.next() ) {
+            if ( recipeFound.getStatus!=QSQLiteResult::Failure ) {
+	    QSQLiteResultRow row=recipeFound.first();
+                while (!recipeFound.atEnd()) {
 		    Element recipe;
-		    recipe.id=recipeFound.value(0).toInt();
-		    recipe.name=recipeFound.value(1).toString();
+		    recipe.id=recipeFound.data(0).toInt();
+		    recipe.name=recipeFound.data(1);
 		    results->add(recipe);
+		    row=recipeFound.next();
                 }
 	}
 
@@ -751,20 +749,22 @@ ratioList->clear();
 
 QString command;
 command="SELECT unit1_id,unit2_id,ratio FROM units_conversion;";
-QSqlQuery ratiosToLoad( command,database);
+QSQLiteResult ratiosToLoad=database->executeQuery(command);
 
-            if ( ratiosToLoad.isActive() ) {
-                while ( ratiosToLoad.next() ) {
+            if (ratiosToLoad.getStatus()!=QSQLiteResult::Failure ) {
+	    QSQLiteResultRow row=ratiosToLoad.first();
+                while ( !ratiosToLoad.atEnd() ) {
 		    UnitRatio ratio;
 		    ratio.ingID1=ratiosToLoad.value(0).toInt();
 		    ratio.ingID2=ratiosToLoad.value(1).toInt();
 		    ratio.ratio=ratiosToLoad.value(2).toDouble();
 		    ratioList->add(ratio);
+		    row=ratiosToLoad.next();
                 }
 	}
 }
 
-void LiteRecipeDB::saveUnitRatio(const UnitRatio *ratio)
+/*void LiteRecipeDB::saveUnitRatio(const UnitRatio *ratio)
 {
 QString command;
 
