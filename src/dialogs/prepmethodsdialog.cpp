@@ -12,6 +12,7 @@
 
 #include "prepmethodsdialog.h"
 #include "createelementdialog.h"
+#include "dependanciesdialog.h"
 #include "DBBackend/recipedb.h"
 
 #include <klocale.h>
@@ -104,11 +105,18 @@ if ( (it=prepMethodListView->selectedItem()) ) prepMethodID=it->text(0).toInt();
 
 if (prepMethodID>=0) // an prepMethod was selected previously
 {
-database->removePrepMethod(prepMethodID);
+	ElementList dependingRecipes;
+	database->findPrepMethodDependancies(prepMethodID,&dependingRecipes);
+	if (dependingRecipes.isEmpty()) database->removePrepMethod(prepMethodID);
+	else // Need Warning! 
+	{
+		DependanciesDialog *warnDialog = new DependanciesDialog(this,&dependingRecipes);
+		if (warnDialog->exec()==QDialog::Accepted) database->removePrepMethod(prepMethodID);
+		delete warnDialog;
+	}
 }
 
 reload();// Reload the list from the database
-
 }
 
 void PrepMethodsDialog::modPrepMethod(QListViewItem* i)

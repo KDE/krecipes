@@ -102,7 +102,7 @@ layout->addItem(list_spacer, 4,1);
 // Ok/Cancel Buttons
 buttonBox=new QGroupBox(2,Qt::Horizontal,this); buttonBox->setFlat(true);
 okButton=new QPushButton(buttonBox); okButton->setText(i18n("Ok")); okButton->setFlat(true);
-cancelButton=new QPushButton(buttonBox); cancelButton->setText(i18n("Cancel")); cancelButton->setFlat(true);
+cancelButton=new QPushButton(buttonBox); cancelButton->setText(i18n("Cancel")); cancelButton->setFlat(true); cancelButton->setDefault(true);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 if (col>1) // There are 2 rows
 	{

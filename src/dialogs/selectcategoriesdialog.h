@@ -31,7 +31,7 @@ Q_OBJECT
 
 public:
 
-    SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected);
+    SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected, RecipeDB* db);
     ~SelectCategoriesDialog();
     void getSelectedCategories(ElementList *selected);
 private:
@@ -44,8 +44,12 @@ private:
 
 	//Variables
 	ElementList categoryListPC;
+	RecipeDB *database;
 	//Private methods
 	void loadCategories(const ElementList &categoryList, QPtrList <bool> *selected);
+	
+private slots:
+	void createNewCategory(void);
 };
 
 #endif

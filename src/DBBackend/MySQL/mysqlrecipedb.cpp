@@ -1082,6 +1082,15 @@ loadElementList(recipes,&unitToRemove);
 
 }
 
+void MySQLRecipeDB::findPrepMethodDependancies(int prepMethodID,ElementList *recipes)
+{
+QString command=QString("SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1").arg(prepMethodID);
+
+QSqlQuery prepMethodToRemove(command,database);
+loadElementList(recipes,&prepMethodToRemove);
+}
+
+
 void MySQLRecipeDB::loadElementList(ElementList *elList, QSqlQuery *query)
 {
 if ( query->isActive() ) {

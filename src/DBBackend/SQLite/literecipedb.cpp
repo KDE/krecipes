@@ -1128,6 +1128,14 @@ loadElementList(recipes,&unitToRemove);
 
 }
 
+void LiteRecipeDB::findPrepMethodDependancies(int prepMethodID,ElementList *recipes)
+{
+QString command=QString("SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1").arg(prepMethodID);
+
+QSQLiteResult prepMethodToRemove=database->executeQuery(command);
+loadElementList(recipes,&prepMethodToRemove);
+}
+
 void LiteRecipeDB::loadElementList(ElementList *elList, QSQLiteResult *query)
 {
 if ( query->getStatus()!=QSQLiteResult::Failure )

@@ -13,6 +13,7 @@
 #include "dialogs/categorieseditordialog.h"
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
+#include "dialogs/ingredientmatcherdialog.h"
 
 #include "gui/pagesetupdialog.h"
 
@@ -295,7 +296,7 @@ void Krecipes::import()
 			showWarningsDlg.exec();
 		}
 
-		//TODO: to just reload the active panel would be preferable
+		//TODO: is this the best way to do it???
 		m_view->selectPanel->reload();
 		m_view->ingredientsPanel->reload();
 		m_view->propertiesPanel->reload();
@@ -303,6 +304,7 @@ void Krecipes::import()
 		m_view->shoppingListPanel->reload();
 		m_view->categoriesPanel->reload();
 		m_view->authorsPanel->reload();
+		m_view->ingredientMatcherPanel->reloadIngredients();
 	}
 }
 

@@ -893,7 +893,7 @@ ElementList categoryList; database->loadCategories(&categoryList);
 QPtrList <bool>selected;
 findCategoriesInRecipe(categoryList,selected);
 
-SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,categoryList,&selected);
+SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,categoryList,&selected,database);
 
 
 if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
