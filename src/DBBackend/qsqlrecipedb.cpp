@@ -1185,8 +1185,13 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 void QSqlRecipeDB::createNewUnit( const QString &unitName, const QString &unitPlural )
 {
 	QString command;
-	QString real_name = unitName.left( maxUnitNameLength() );
-	QString real_plural = unitPlural.left( maxUnitNameLength() );
+	QString real_name = unitName.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural = unitPlural.left( maxUnitNameLength() ).stripWhiteSpace();
+
+	if ( real_name.isEmpty() )
+		real_name = real_plural;
+	else if ( real_plural.isEmpty() )
+		real_plural = real_name;
 
 	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + real_name + "','" + real_plural + "');";
 	QSqlQuery unitToCreate( command, database );

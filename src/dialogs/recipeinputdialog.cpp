@@ -130,6 +130,7 @@ public:
 
 	void setUnit( const Unit &unit )
 	{
+		//### This shouldn't be necessary... the db backend should ensure this doesn't happen
 		if ( !unit.name.isEmpty() )
 			m_ing.units.name = unit.name;
 		if ( !unit.plural.isEmpty() )

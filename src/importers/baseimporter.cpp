@@ -271,6 +271,11 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			}
 
 			Unit real_unit( ( *ing_it ).units.name.left( max_units_length ), ( *ing_it ).units.plural.left( max_units_length ) );
+			if ( real_unit.name.isEmpty() )
+				real_unit.name = real_unit.plural;
+			else if ( real_unit.plural.isEmpty() )
+				real_unit.plural = real_unit.name;
+
 			UnitList::const_iterator unit_result = unitList.find( real_unit );
 			int new_unit_id;
 			if ( unit_result == unitList.end() ) {

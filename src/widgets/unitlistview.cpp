@@ -102,8 +102,7 @@ void StdUnitListView::createNew()
 	delete unitDialog;
 }
 
-void StdUnitListView::remove
-	()
+void StdUnitListView::remove()
 {
 	// Find selected unit item
 	QListViewItem * it = currentItem();
@@ -165,7 +164,8 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
-				database->mergeUnits( existing_id, unit_id );
+				database->modUnit( unit_id, i->text( 1 ), i->text( 2 ) );
+				database->mergeUnits( unit_id, existing_id );
 				break;
 			}
 		default:
@@ -174,7 +174,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 		}
 	}
 	else {
-		database->modUnit( ( i->text( 0 ) ).toInt(), i->text( 1 ), i->text( 2 ) );
+		database->modUnit( unit_id, i->text( 1 ), i->text( 2 ) );
 	}
 }
 
@@ -184,6 +184,8 @@ bool StdUnitListView::checkBounds( const Unit &unit )
 		KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
 		return false;
 	}
+	else if ( unit.name.stripWhiteSpace().isEmpty() || unit.plural.stripWhiteSpace().isEmpty() )
+		return false;
 
 	return true;
 }

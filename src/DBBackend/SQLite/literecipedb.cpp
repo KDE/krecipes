@@ -1162,8 +1162,13 @@ void LiteRecipeDB::removeUnit( int unitID )
 void LiteRecipeDB::createNewUnit( const QString &unitName, const QString &unitPlural )
 {
 	QString command;
-	QString real_name = unitName.left( maxUnitNameLength() );
-	QString real_plural = unitPlural.left( maxUnitNameLength() );
+	QString real_name = unitName.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural = unitPlural.left( maxUnitNameLength() ).stripWhiteSpace();
+
+	if ( real_name.isEmpty() )
+		real_name = real_plural;
+	else if ( real_plural.isEmpty() )
+		real_plural = real_name;
 
 	command = QString( "INSERT INTO units VALUES(NULL,'" + escapeAndEncode( real_name ) + "','" + escapeAndEncode( real_plural ) + "');" );
 	database->executeQuery( command );
