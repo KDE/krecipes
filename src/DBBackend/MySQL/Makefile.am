@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 
 # set the include path for X, qt and KDE
-INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. $(all_includes)
+INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. $(all_includes) -I$(MYSQL_INC)
 
 
 # Instructions for building the convenience library
@@ -14,4 +14,5 @@ libkrecmysql_la_METASOURCES=AUTO
 
 
 #the library search path.
-libkrecmysql_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+libkrecmysql_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(MYSQL_LIBS)
+

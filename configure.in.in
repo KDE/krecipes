@@ -4,22 +4,22 @@ AC_CHECK_KDEMAXPATHLEN
 
 dnl ----- Check for existing MySQL ------
 
-AC_DEFUN(AC_HAVE_MYSQL,
-[
-        AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
-        have_mysql=true
+KDE_FIND_PATH(mysql_config, MYSQL_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/b\
+in /usr/bin /opt/mysql/bin /usr/local/mysql/bin ], [
+  AC_MSG_WARN([Could not find MySQL anywhere, check http://www.mysql.com/])
 ])
 
-AC_DEFUN(AC_NO_MYSQL,
-[
-        AC_DEFINE(HAVE_MYSQL, 0, [have MySQL])
-        have_mysql=false
-])
-
-KDE_CHECK_HEADER(mysql/mysql.h,
-        AC_HAVE_MYSQL,
-        AC_NO_MYSQL
-)
+if test -n "$MYSQL_CONFIG"; then
+   mysql_incdir=`$MYSQL_CONFIG --cflags| $SED -e "s,-I',,g" | $SED -e "s,'$,,g"`
+   mysql_libdir=`$MYSQL_CONFIG --libs| $SED -e "s,',,g"`
+   MYSQL_INC=$mysql_incdir
+   MYSQL_LIBS=$mysql_libdir
+   AC_SUBST(MYSQL_INC)
+   AC_SUBST(MYSQL_LIBS)
+   have_mysql="true"
+else
+	have_mysql="no"
+fi
 
 dnl ------ Check for the SQLite headers -----
 
