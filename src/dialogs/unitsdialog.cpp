@@ -35,7 +35,8 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 
     unitListView =new KListView(this);
     layout->addMultiCellWidget(unitListView,0,3,0,0);
-
+    unitListView->addColumn("Id.");
+    unitListView->addColumn("Unit");
     conversionTable=new ConversionTable(this);
     layout->addMultiCellWidget(conversionTable,0,3,4,4);
 
@@ -52,7 +53,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 
 
     //Populate data into the table
-    loadUnitsTable();
+    reloadData();
 
 }
 
@@ -61,7 +62,7 @@ UnitsDialog::~UnitsDialog()
 }
 
 
-void UnitsDialog::loadUnitsTable(void)
+void UnitsDialog::loadConversionTable(void)
 {
 ElementList unitList;
 database->loadUnits(&unitList);
@@ -76,3 +77,18 @@ conversionTable->setRowLabels(unitNames);
 conversionTable->setColumnLabels(unitNames);
 }
 
+void UnitsDialog::loadUnitsList(void)
+{
+ElementList unitList;
+database->loadUnits(&unitList);
+for (Element *unit=unitList.getFirst();unit;unit=unitList.getNext())
+{
+QListViewItem *it=new QListViewItem(unitListView,QString::number(unit->id),unit->name);
+}
+}
+
+void UnitsDialog::reloadData(void)
+{
+loadUnitsList();
+loadConversionTable();
+}

@@ -30,8 +30,9 @@ private:
 	QPushButton *newUnitButton;
 	QPushButton *removeUnitButton;
 	// Internal methods
-	void loadUnitsTable(void);
-
+	void loadConversionTable(void);
+	void loadUnitsList(void);
+	void reloadData(void);
 	// Internal Variables
 	RecipeDB *database;
 
