@@ -370,16 +370,25 @@ servingsNumInput->setValue(loadedRecipe->persons);
 
 	//show photo
 	if (!loadedRecipe->photo.isNull()){
-    sourcePhoto = loadedRecipe->photo;
-    if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) ){
-      QImage pm = sourcePhoto.convertToImage();
 
-		  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->width(), QImage::ScaleMin)));
-    }
-    else{
-      photoLabel->setPixmap( sourcePhoto );
-    }
-  }
+
+//     		//get the photo
+    		sourcePhoto = loadedRecipe->photo;
+
+		if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) )
+    			{
+			QImage pm = sourcePhoto.convertToImage();
+			QPixmap pm_scaled;
+			pm_scaled.convertFromImage(pm.smoothScale(photoLabel->width(),photoLabel->height(), QImage::ScaleMin));
+			photoLabel->setPixmap(pm_scaled);
+
+			sourcePhoto=pm_scaled; // to save scaled later on
+    			}
+		else
+		{
+		photoLabel->setPixmap( sourcePhoto );
+		}
+	}
 	else {
 		sourcePhoto = QPixmap(defaultPhoto);
 		photoLabel->setPixmap(sourcePhoto);
@@ -452,7 +461,12 @@ unitBox->setCurrentText("");
       sourcePhoto = pixmap;
       if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) ){
         QImage pm = sourcePhoto.convertToImage();
-    	  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->height(), QImage::ScaleMin)));
+	QPixmap pm_scaled;
+	pm_scaled.convertFromImage(pm.smoothScale(photoLabel->width(),photoLabel->height(), QImage::ScaleMin));
+	photoLabel->setPixmap(pm_scaled);
+
+	sourcePhoto=pm_scaled; // to save scaled later on
+	photoLabel->setPixmap(pm_scaled);
        }
        else{
         photoLabel->setPixmap( sourcePhoto );
