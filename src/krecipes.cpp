@@ -52,10 +52,6 @@
 //Settings headers
 #include <kdeversion.h>
 
-#include "serverprefs.h"
-#include "numbersprefs.h"
-#include "importprefs.h"
-
 Krecipes::Krecipes()
     : KMainWindow( 0, "Krecipes" ),
       m_view(new KrecipesView(this)),
