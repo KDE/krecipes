@@ -99,16 +99,17 @@ delete dietRList;
 
 void DietWizardDialog::reload(void)
 {
+
+// Load the lists
 database->loadCategories(&categoriesList);
-database->loadProperties(&propertyList);
+database->loadProperties(&propertyList); // Loads the properties of all the ingredients
 int pgcount=0;
 for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++)
 	tab->reload(categoriesList,propertyList);
 
 //Fill in the caches from the database
 database->loadUnitRatios(&cachedUnitRatios);
-database->loadProperties(&cachedIngredientProperties);
-
+database->loadProperties(&cachedIngredientProperties,-1);
 }
 
 void DietWizardDialog::newTab(const QString &name)
@@ -752,6 +753,7 @@ return false;
 
 bool DietWizardDialog::checkConstraints(Recipe &rec,int meal,int dish)
 {
+// FIXME: Before 0.5: why check constraints if none of the constraints is enabled?
 
 // Calculate properties of the recipe
 IngredientPropertyList properties;

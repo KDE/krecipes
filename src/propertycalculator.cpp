@@ -93,15 +93,11 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 	if (ratio>0.0) // Could convert units to perUnit
 		{
 		property.amount=(prop->amount)*(ing.amount)*ratio;
-		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
 		recipePropertyList->add(property);
 		}
 	else { // Could not convert units
 	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 	     }
-
-
-
 
 	}
 
@@ -143,7 +139,7 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 		property->amount+=(prop->amount)*(ing.amount)*ratio;
 		}
 	else { // Could not convert units
-	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion";
 	     }
 
 	}
@@ -161,16 +157,11 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 	if (ratio>0.0) // Could convert units to perUnit
 		{
 		property.amount=(prop->amount)*(ing.amount)*ratio;
-		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
 		recipePropertyList->add(property);
 		}
 	else { // Could not convert units
 	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 	     }
-
-
-
-
 	}
 
 	}
