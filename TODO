@@ -16,6 +16,8 @@ CONVENIENCES/MINOR FEATURES:
 	*Allow saving and loading diet info from a file (or just store it in the database?)
 	*Database maintenance options (Empty database, Remove unused elements, etc.)
 	*Configurable shopping list (Maybe allow the user to select a style sheet or add a section to settings dialog... or both)
+	*Let the user know when nutrient info for a recipe is incomplete (due to missing info for one or more ingredients)
+	*Web album export (a spiffed-up multiple-page website ;)
 
 BUGS/OTHER:
 	*PRIORITY: Secure database access passwords
