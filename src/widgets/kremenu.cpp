@@ -189,6 +189,7 @@ void KreMenu::childEvent (QChildEvent *e)
 		 widgetNumber++;
 
 		connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+ 		if (!button->isShown()) button->show();
 		}
 	}
 	else if (e->type()==QEvent::ChildRemoved)

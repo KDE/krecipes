@@ -586,11 +586,10 @@ if (!recipeButton)
 	recipeButton=new KreMenuButton(leftPanel,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 	recipeButton->setTitle(title);
-  recipeButton->stackUnder(contextHelp);
   if(contextHelp->isShown()){
     contextHelp->hide();
   }
-	recipeButton->show();
+
   buttonsList->append(recipeButton);
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
 	connect((RecipeInputDialog *)w,SIGNAL(titleChanged(const QString&)),recipeButton,SLOT(setTitle(const QString&)));
