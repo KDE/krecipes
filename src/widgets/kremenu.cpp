@@ -22,6 +22,7 @@
 
 #include <iostream>
 
+#include <kapplication.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -42,6 +43,7 @@ m_currentMenu=&(*currentMenuId);
 
 dragging=false;
 setMouseTracking(true);
+setFocusPolicy( QWidget::StrongFocus );
 }
 
 
@@ -103,6 +105,7 @@ QWidget::childEvent(e);
 
 void KreMenu::collectClicks(KreMenuButton *w)
 {
+setFocus();
 
 highlightButton(w);
 
@@ -157,6 +160,55 @@ button->setActive(true); button->update();
 buttonMenu->activeButton=button;
 }
 
+void KreMenu::keyPressEvent( QKeyEvent *e )
+{
+	switch ( e->key() )
+	{
+	case Qt::Key_Up:
+	{
+		int current_index = m_currentMenu->positionList[m_currentMenu->activeButton];
+		if ( current_index > 0 )
+		{
+			highlightButton(m_currentMenu->widgetList[current_index - 1]);
+
+			//simulate a mouse click
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+			KApplication::sendEvent( m_currentMenu->activeButton, &me );
+	
+			e->accept();
+		}
+		break;
+	}
+	case Qt::Key_Down:
+	{
+		int current_index = m_currentMenu->positionList[m_currentMenu->activeButton];
+		if ( current_index < int(m_currentMenu->positionList.count()) - 1 )
+		{
+			highlightButton(m_currentMenu->widgetList[current_index + 1]);
+
+			//simulate a mouse click
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+			KApplication::sendEvent( m_currentMenu->activeButton, &me );
+	
+			e->accept();
+		}
+		break;
+	}
+	case Qt::Key_Enter:
+	case Qt::Key_Return:
+	case Qt::Key_Space:
+	{
+		//simulate a mouse click
+		QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+		KApplication::sendEvent( m_currentMenu->activeButton, &me );
+
+		e->accept();
+		break;
+	}
+	default: e->ignore();
+	}
+}
+
 void KreMenu::mousePressEvent (QMouseEvent *e)
 {
 int x=e->x(),y=e->y();
@@ -166,6 +218,8 @@ if (x > (width()-15))
 	yOrig=y;
 	}
 dragging=true;
+
+QWidget::mousePressEvent(e);
 }
 
 void KreMenu::mouseMoveEvent (QMouseEvent *e)

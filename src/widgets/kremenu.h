@@ -75,6 +75,7 @@ protected:
 
 	virtual void paintEvent (QPaintEvent *e);
 	virtual void childEvent (QChildEvent *e);
+	virtual void keyPressEvent( QKeyEvent *e );
 	virtual void mouseMoveEvent (QMouseEvent *e);
 	virtual void mousePressEvent (QMouseEvent *e);
 	virtual void mouseReleaseEvent (QMouseEvent *e);
