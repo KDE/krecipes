@@ -23,7 +23,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("krecipes", I18N_NOOP("Krecipes"), version, description,
-                     KAboutData::License_GPL, "(C) 2003 Unai Garro", 0, 0, "ugarro@users.sourceforge.net");
+                     KAboutData::License_GPL, "(C) 2003 Unai Garro\n\n___________\n\n\nThis product is RecipeML compatible.\n You can get more information about this file format in:\n http://www.formatdata.com/recipeml", 0, 0, "ugarro@users.sourceforge.net");
     about.addAuthor( "Unai Garro", 0, "ugarro@users.sourceforge.net" );
     about.addAuthor( "Jason Kivlighn", 0, "mizunoami44@users.sourceforge.net" );    about.addAuthor( "Cyril Bosselut", 0, "bosselut@b1project.com" );
     about.setTranslator(I18N_NOOP("INSERT YOUR NAME HERE"),I18N_NOOP("INSERT YOUR EMAIL ADDRESS"));
