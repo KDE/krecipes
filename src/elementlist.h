@@ -31,4 +31,15 @@ public:
     QPtrList<Element> list;
 };
 
+
+class IDList: public QPtrList <int>
+{
+public:
+IDList(){};
+~IDList(){};
+protected:
+ virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (*((int*)item1)-*((int*)item2));};
+
+};
+
 #endif

@@ -164,10 +164,6 @@ int indexID2=unitIDs.find(&ingID2);
 createNewItem(indexID1,indexID2,ratio);
 }
 
-int IDList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2)
-{
-return (*((int*)item1)-*((int*)item2));
-}
 
 int ConversionTable::getUnitID(int rc)
 {

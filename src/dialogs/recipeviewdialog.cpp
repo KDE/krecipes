@@ -105,3 +105,22 @@ recipeView->write(recipeHTML);
 recipeView->end();
 
 }
+
+
+
+void RecipeViewDialog::calculateIngredients(void)
+{
+Ingredient *ing;
+IDList ingList;
+QPtrList <int> unitList;
+QPtrList <double> amountList;
+
+
+	for (ing=loadedRecipe->ingList.getFirst();ing; ing=loadedRecipe->ingList.getNext())
+	{
+	// Find out if ingredient exists in list already
+	int pos=ingList.find(&(ing->unitID));
+
+	}
+
+}

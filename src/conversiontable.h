@@ -11,22 +11,14 @@
 #define CONVERSIONTABLE_H
 #include <qstring.h>
 #include <qtable.h>
-#include "editbox.h"
 #include <qobject.h>
+#include "editbox.h"
+#include "elementlist.h"
 
 /**
 @author Unai Garro
 */
 
-class IDList: public QPtrList <int>
-{
-public:
-IDList(){};
-~IDList(){};
-protected:
- virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2);
-
-};
 
 class ConversionTable:public QTable{
 Q_OBJECT

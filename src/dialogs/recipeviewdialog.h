@@ -21,6 +21,7 @@
 /**
 @author Unai Garro
 */
+
 class RecipeViewDialog : public QVBox
 {
 Q_OBJECT
@@ -37,6 +38,9 @@ private:
   KHTMLPart *recipeView;
   RecipeDB  *database;
   Recipe *loadedRecipe;
+
+  // Internal Methods
+  void calculateIngredients(void);
 
 
 
