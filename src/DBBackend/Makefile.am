@@ -28,7 +28,7 @@ noinst_LTLIBRARIES=libkrecipesdbs.la
 libkrecipesdbs_la_SOURCES=recipedb.cpp
 libkrecipesdbs_la_METASOURCES=AUTO
 
-libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_subdirs)
+libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs)
 
 #the library search path.
-libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(mysql_libs) $(sqlite_libs)
+libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) 
