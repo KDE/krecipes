@@ -361,7 +361,8 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),(*ing_it).name);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),(*ing_it).units);
-		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ? "" : "; "+(*ing_it).prepMethod);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ?
+				   QString::fromLatin1("") : QString::fromLatin1("; ")+(*ing_it).prepMethod);
 
 		ingredients += QString("<li>%1</li>").arg(tmp_format);
 	}
