@@ -22,6 +22,11 @@
 * @author Unai Garro
 * @author Bosselut Cyril
 */
+
+
+class KreMenu;
+class KreMenuButton;
+
 class KreMenu : public QWidget
 {
 Q_OBJECT
@@ -30,7 +35,6 @@ public:
 
 	~KreMenu();
 
-	//QSize sizeHint () const {QSize size;size=QButtonGroup::sizeHint();size.setWidth(150);return(size);}
 	QSize sizeHint() const;
 	void resizeEvent(QResizeEvent* e);
 protected:
@@ -41,13 +45,14 @@ private:
 	//Variables
 	int childPos;
 	int widgetNumber;
-	QMap <QWidget*,int> widgetList; // Stores the indexes for the widgets
+	QMap <KreMenuButton*,int> widgetList; // Stores the indexes for the widgets
+	KreMenuButton* activeButton; // Indicates which button is highlighted
 
 signals:
   	void resized(int, int);
 	void clicked(int);
 private slots:
-	void collectClicks(QWidget *w);
+	void collectClicks(KreMenuButton *w);
 
 };
 
@@ -63,12 +68,14 @@ public:
 
 	void setTitle(const QString &s) {text=s;}
 	QString title(void){return text;}
+	void setActive(bool active=true){highlighted=active;}
 	void setIconSet(const QIconSet &is);
 
 private:
 	// Button parts
 	 QPixmap* icon;
 	 QString text;
+	 bool highlighted;
 
 protected:
 
@@ -78,7 +85,7 @@ protected:
 signals:
 	void resized(int, int);
 	void clicked(void);
-	void clicked(QWidget*); // sent together with clicked()
+	void clicked(KreMenuButton*); // sent together with clicked()
 
 private slots:
 	void rescale(int w, int h);
