@@ -649,9 +649,9 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 		else {
 			CategoryTree tree; loadCategories(&tree,limit,offset);
 			QStringList ids; getIDList(&tree,ids);
+			ids << "-1"; //add the default category
 			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
 		}
-
 	}
 	else  // load the list of those in the specified category
 	{
