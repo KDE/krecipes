@@ -11,7 +11,7 @@
 #include "shoppingcalculator.h"
 #include "ingredientlist.h"
 #include "elementlist.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include <klocale.h>
 
 ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)

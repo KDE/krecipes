@@ -30,7 +30,7 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "menugroup.h"
 
 KrecipesView::KrecipesView(QWidget *parent)

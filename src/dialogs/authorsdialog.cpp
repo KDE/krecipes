@@ -9,7 +9,7 @@
  ***************************************************************************/
 #include "authorsdialog.h"
 #include "createelementdialog.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 #include <klocale.h>
 

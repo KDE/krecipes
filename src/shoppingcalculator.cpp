@@ -10,7 +10,7 @@
 #include "shoppingcalculator.h"
 #include "elementlist.h"
 #include "ingredientlist.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 void calculateShopping(ElementList *recipeList,IngredientList *ingredientList, RecipeDB *db)
 {

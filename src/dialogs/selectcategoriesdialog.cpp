@@ -10,7 +10,7 @@
 #include "selectcategoriesdialog.h"
 #include <klocale.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 class CategoryListItem:public QCheckListItem{
 public:

@@ -10,7 +10,7 @@
 #include "propertiesdialog.h"
 #include <klocale.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "createpropertydialog.h"
 
 PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)

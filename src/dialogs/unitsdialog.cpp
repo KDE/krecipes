@@ -12,7 +12,7 @@
 #include "unitsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "editbox.h"
 #include "conversiontable.h"
 #include <klocale.h>

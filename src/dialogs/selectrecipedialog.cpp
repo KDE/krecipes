@@ -10,7 +10,7 @@
 #include "selectrecipedialog.h"
 #include <klocale.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
 #include "createelementdialog.h"

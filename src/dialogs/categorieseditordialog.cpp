@@ -9,7 +9,7 @@
  ***************************************************************************/
 #include "categorieseditordialog.h"
 #include "createelementdialog.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include <klocale.h>
 
 CategoriesEditorDialog::CategoriesEditorDialog(QWidget* parent, RecipeDB *db):QWidget(parent)

@@ -10,7 +10,7 @@
 #include "shoppinglistdialog.h"
 #include <klocale.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "shoppinglistviewdialog.h"
 
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)

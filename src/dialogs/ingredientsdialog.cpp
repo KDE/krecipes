@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "ingredientsdialog.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 #include "ingredientpropertylist.h"

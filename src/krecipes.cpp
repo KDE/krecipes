@@ -21,7 +21,7 @@
 #include "nycgenericimporter.h"
 
 #include "recipe.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 #include <qdragobject.h>
 #include <kprinter.h>

@@ -12,7 +12,7 @@
 #include "propertycalculator.h"
 #include <klocale.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {

@@ -10,7 +10,7 @@
 
 
  #include <qptrlist.h>
- #include <recipedb.h>
+ #include <DBBackend/recipedb.h>
  #include "elementlist.h"
  #include "ingredientpropertylist.h"
  #include "recipe.h"

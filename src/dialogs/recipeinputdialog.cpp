@@ -22,7 +22,7 @@
 #include "recipeinputdialog.h"
 #include "selectauthorsdialog.h"
 #include "recipe.h"
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 #include "selectcategoriesdialog.h"
 #include "fractioninput.h"
 #include "image.h" //Initializes default photo

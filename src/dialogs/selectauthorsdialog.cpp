@@ -12,7 +12,7 @@
 #include <qhbox.h>
 #include <qmessagebox.h>
 
-#include "recipedb.h"
+#include "DBBackend/recipedb.h"
 
 SelectAuthorsDialog::SelectAuthorsDialog(QWidget *parent, ElementList *currentAuthors,RecipeDB *db):QDialog(parent,0,true)
 {
