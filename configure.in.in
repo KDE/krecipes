@@ -18,7 +18,7 @@ if test -n "$MYSQL_CONFIG"; then
    AC_SUBST(MYSQL_LIBS)
    have_mysql="true"
 else
-	have_mysql="no"
+	have_mysql="false"
 fi
 
 dnl ------ Check for the SQLite headers -----
