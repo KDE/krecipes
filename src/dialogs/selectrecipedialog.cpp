@@ -134,6 +134,7 @@ void SelectRecipeDialog::loadRecipeList(void)
 recipeListView->clear();
 recipeList->clear();
 categoryList->clear();
+categoryItems.clear();
 
 // First show the categories
 
@@ -152,8 +153,8 @@ for ( Element *category=categoryList.getFirst(); category; category=categoryList
 
 int *categoryID;
 Element *recipe;
+QIntDict <bool> recipeCategorized; recipeCategorized.setAutoDelete(true); // it deletes the bools after finished
 QPtrList <int> recipeCategoryList;
-
 
 database->loadRecipeList(recipeList,0,&recipeCategoryList); // Read the whole list of recipes including category
 
@@ -162,14 +163,19 @@ for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recip
 	if (QListViewItem* categoryItem=categoryItems[*categoryID])
 	{
 	QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
+	bool* b=new bool; *b=true;recipeCategorized.insert(recipe->id,b); // mark the recipe as categorized
 	}
-	else
+	}
+
+
+// Add those recipes that have not been categorised in any categories
+for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
+	{
+	if (!recipeCategorized[recipe->id])
 	{
 	QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
 	}
 	}
-
-
 
 filter(searchBox->text());
 
