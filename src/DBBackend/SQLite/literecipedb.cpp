@@ -1526,7 +1526,7 @@ float version=databaseVersion();
 kdDebug()<<"version found... "<<version<<" \n";
 
 if ( int(qRound(databaseVersion()*1e5)) < int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
-	switch ( KMessageBox::questionYesNo(0,i18n("<!doc>This database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes!</b>")) ) {
+	switch ( KMessageBox::questionYesNo(0,i18n("<!doc>This database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.</b>")) ) {
 	case KMessageBox::Yes:
 		portOldDatabases(version);
 		break;
