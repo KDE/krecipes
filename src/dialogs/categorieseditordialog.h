@@ -45,6 +45,8 @@ private:
 private slots:
 	void createNewCategory(void);
 	void removeCategory(void);
+  void modCategory(QListViewItem*);
+  void saveCategory(QListViewItem*);
 
 };
 

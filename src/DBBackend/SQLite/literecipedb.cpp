@@ -1183,6 +1183,14 @@ command=QString("INSERT INTO categories VALUES(NULL,'%1');").arg(escapeAndEncode
 database->executeQuery( command);
 }
 
+void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
+{
+QString command;
+
+command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+database->executeQuery( command);
+}
+
 void LiteRecipeDB::removeCategory(int categoryID)
 {
 QString command;

@@ -1146,6 +1146,14 @@ command=QString("INSERT INTO categories VALUES(NULL,'%1');").arg(escapeAndEncode
 QSqlQuery categoryToCreate( command,database);
 }
 
+void MySQLRecipeDB::modCategory(int categoryID, QString newLabel)
+{
+QString command;
+
+command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+QSqlQuery categoryToCreate( command,database);
+}
+
 void MySQLRecipeDB::removeCategory(int categoryID)
 {
 QString command;

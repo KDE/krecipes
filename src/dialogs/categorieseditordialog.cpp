@@ -29,6 +29,8 @@ layout->addItem(spacerLeft,1,0);
 categoryListView=new KListView(this);
 categoryListView->addColumn(i18n("Id"));
 categoryListView->addColumn(i18n("Category Name"));
+categoryListView->setRenameable(1, true);
+categoryListView->setDefaultRenameAction(QListView::Reject);
 layout->addWidget(categoryListView,1,1);
 
 //Buttons
@@ -53,6 +55,8 @@ reload();
 
 connect (newCategoryButton,SIGNAL(clicked()),this,SLOT(createNewCategory()));
 connect (removeCategoryButton,SIGNAL(clicked()),this,SLOT(removeCategory()));
+connect(this->categoryListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modCategory( QListViewItem* )));
+connect(this->categoryListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveCategory( QListViewItem* )));
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()
@@ -101,3 +105,18 @@ database->removeCategory(categoryID);
 reload();// Reload the list from the database
 
 }
+
+void CategoriesEditorDialog::modCategory(QListViewItem* i)
+{
+  newCategoryButton->setEnabled(false);
+  removeCategoryButton->setEnabled(false);
+  categoryListView->rename(i, 1);
+}
+
+void CategoriesEditorDialog::saveCategory(QListViewItem* i)
+{
+  database->modCategory((i->text(0)).toInt(), i->text(1));
+  newCategoryButton->setEnabled(true);
+  removeCategoryButton->setEnabled(true);
+}
+

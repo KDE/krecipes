@@ -90,6 +90,10 @@ public:
   * set newLabel for unitID
   */
 	virtual void modUnit(int unitID, QString newLabel)=0;
+  /**
+  * set newLabel for categoryID
+  */
+	virtual void modCategory(int categoryID, QString newLabel)=0;
 
 	virtual QString recipeTitle(int recipeID)=0;
 

@@ -103,6 +103,10 @@ public:
   * set newLabel for unitID
   */
 	void modUnit(int unitID, QString newLabel);
+  /**
+  * set newLabel for categoryID
+  */
+	void modCategory(int categoryID, QString newLabel);
 
 	QString recipeTitle(int recipeID);
 
