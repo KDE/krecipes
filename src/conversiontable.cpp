@@ -13,22 +13,107 @@
 ConversionTable::ConversionTable(QWidget* parent):QTable(parent)
 {
 editBoxValue=-1;
+items.setAutoDelete(true);
+widgets.setAutoDelete(true);
+initTable();
 }
 
 ConversionTable::~ConversionTable()
 {
 }
 
-
-void ConversionTable::setCellContentFromEditor ( int row, int col)
+QTableItem* ConversionTable::item( int r, int c ) const
 {
-setText (row,col,QString::number(editBoxValue));
+return items.find(indexOf(r,c));
+}
+
+void ConversionTable::setItem(int r, int c, QTableItem *i )
+{
+items.replace( indexOf( r, c ), i );
+}
+
+void ConversionTable::clearCell( int r, int c )
+{
+items.remove(indexOf(r,c));
+}
+
+void ConversionTable::takeItem(QTableItem *item)
+{
+items.setAutoDelete(false);
+items.remove(indexOf(item->row(),item->col()));
+items.setAutoDelete(true);
+}
+
+void ConversionTable::insertWidget(int r, int c, QWidget *w )
+{
+widgets.replace(indexOf(r,c),w);
+}
+
+QWidget* ConversionTable::cellWidget( int r, int c ) const
+{
+return widgets.find( indexOf( r, c ) );
+}
+
+void ConversionTable::clearCellWidget( int r, int c )
+{
+QWidget *w = widgets.take(indexOf(r,c));
+if (w) w->deleteLater();
 }
 
 
-QWidget* ConversionTable::createEditor( int row, int col, bool initFromCell ) const
+ConversionTableItem::ConversionTableItem( QTable *t, EditType et ):QTableItem( t, et), eb( 0 )
 {
-((ConversionTable*) this)->eb=new EditBox(viewport());
-//connect(eb,SIGNAL(valueChanged(double)),this,SLOT(doValueChanged()));
-return(eb);
+// we do not want this item to be replaced
+	setReplaceable( false );
 }
+
+void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected )
+{
+	QColorGroup g(cg);
+
+	// Draw in gray all those cells which are not editable
+
+	if ( row() == col())
+	g.setColor( QColorGroup::Base, gray );
+	QTableItem::paint( p, g, cr, selected );
+}
+
+QWidget* ConversionTableItem::createEditor() const
+{
+	((ConversionTableItem*)this)->eb=new EditBox(table()->viewport());
+	QObject::connect(eb,SIGNAL(valueChanged(double)),table(),SLOT(acceptValueAndClose()));
+	return eb;
+}
+
+void ConversionTable::acceptValueAndClose()
+{
+QTable::endEdit(currentRow(),currentColumn(),true,false);
+}
+
+void ConversionTableItem::setContentFromEditor( QWidget *w )
+{
+	// the user changed the value of the combobox, so synchronize the
+	// value of the item (its text), with the value of the combobox
+    if ( w->inherits( "EditBox" ) )
+	setText(QString::number(eb->value()));
+    else
+	QTableItem::setContentFromEditor( w );
+}
+
+void ConversionTableItem::setText( const QString &s )
+{
+	if (eb) {
+	// initialize the editbox from the text
+	eb->setValue(s.toDouble());
+	}
+	QTableItem::setText(s);
+}
+
+void ConversionTable::initTable()
+{
+	// insert the data into the table
+	setText(5,5,"5");
+	ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
+	setItem( 5, 5, ci );
+}
+

@@ -20,18 +20,42 @@ class ConversionTable:public QTable{
 Q_OBJECT
 public:
 
-    ConversionTable(QWidget* parent);
-    ~ConversionTable();
+	ConversionTable(QWidget* parent);
+	~ConversionTable();
 private:
 
 	//Internal Variables
 	double editBoxValue;
+	QIntDict<QTableItem> items;
+	QIntDict<QWidget> widgets;
 	//Internal Methods
-	void setCellContentFromEditor ( int row, int col);
-	QWidget* createEditor(int row,int col, bool initFromCell ) const;
+	void resizeData(int) {};
+	QTableItem *item( int r, int c ) const;
+	void setItem(int r, int c, QTableItem *i );
+	void clearCell( int r, int c );
+	void takeItem(QTableItem *item);
+	void insertWidget(int r, int c, QWidget *w );
+	QWidget *cellWidget( int r, int c ) const;
+	void clearCellWidget( int r, int c );
+	void initTable();
 	//Internal Widgets
 	EditBox *eb;
+private slots:
+	void acceptValueAndClose(void);
 
 };
 
+class ConversionTableItem:public QTableItem
+{
+public:
+	ConversionTableItem( QTable *t, EditType et );
+	QWidget *createEditor() const;
+	void setContentFromEditor( QWidget *w );
+	void setText( const QString &s );
+	void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
+
+private:
+	EditBox *eb;
+
+};
 #endif

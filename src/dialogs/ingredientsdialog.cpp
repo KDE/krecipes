@@ -398,3 +398,4 @@ database->changePropertyAmountToIngredient(ingredientID,propertyID,amount);
 reloadPropertyList();
 
 }
+
