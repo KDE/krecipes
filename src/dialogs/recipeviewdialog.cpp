@@ -386,14 +386,6 @@ void RecipeViewDialog::createBlocks()
 	{
 		DivElement *element = geom_contents.find( rect );
 
-		if ( !element->fixedHeight() )
-		{
-			QString text = element->innerHTML();
-			QSimpleRichText rt( text, element->font(), "file:/tmp/" );
-			rt.setWidth( rect->width() );
-			rect->setHeight( rt.height() );
-		}
-
 		pushItemsDownIfNecessary( geometries, rect );
 
 		element->addProperty( "position: absolute;" );
