@@ -40,7 +40,7 @@ public:
 	Menu(const Menu &m);
 	~Menu(void);
 	void addButton(KreMenuButton *button);
-	Menu& Menu::operator=(const Menu &m);
+	Menu& operator=(const Menu &m);
 	
 	// Variables
 	
