@@ -15,6 +15,7 @@
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
 #include "dialogs/ingredientmatcherdialog.h"
+#include "dialogs/dbimportdialog.h"
 
 #include "gui/pagesetupdialog.h"
 
@@ -326,18 +327,26 @@ void Krecipes::import()
 
 void Krecipes::kreDBImport()
 {
-	//TODO: Create a wizard/dialog to get the necessary parameters (below is an example of how it works)
+	DBImportDialog importOptions;
+	if (importOptions.exec()== QDialog::Accepted)
+	{
+		//Get all params, even if we don't use them
+		QString host, user, pass, table;
+		importOptions.serverParams(host,user,pass,table);
 
-	KreDBImporter importer("MySQL","localhost","fungmeista",QString::null);
-	//KreDBImporter importer("SQLite");
-
-	parsing_file_dlg->show(); KApplication::setOverrideCursor( KCursor::waitCursor() );
-	QStringList tables; tables << "Krecipes";
-	importer.parseFiles(tables);
-	//importer.parseFiles("home/fungmeista/.kde/share/apps/krecipes/krecipes.krecdb");
-	parsing_file_dlg->hide(); KApplication::restoreOverrideCursor();
-
-	m_view->import( importer );
+		KreDBImporter importer(importOptions.dbType(),host,user,pass); //last 3 params may or may not be even used (depends on dbType)
+	
+		parsing_file_dlg->show(); KApplication::setOverrideCursor( KCursor::waitCursor() );
+		QStringList tables;
+		if ( importOptions.dbType() == "SQLite" )
+			tables << importOptions.dbFile();
+		else //MySQL or PostgreSQL
+			tables << table;
+		importer.parseFiles(tables);
+		parsing_file_dlg->hide(); KApplication::restoreOverrideCursor();
+	
+		m_view->import( importer );
+	}
 }
 
 void Krecipes::pageSetupSlot()

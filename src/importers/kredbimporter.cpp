@@ -56,4 +56,6 @@ void KreDBImporter::parseFile( const QString &file ) //this is either a database
 		else
 			; //TODO: Give an error
 	}
+	
+	delete database;
 }
