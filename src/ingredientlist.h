@@ -25,9 +25,12 @@ class IngredientList: public QValueList <Ingredient>
 public:
     IngredientList();
     ~IngredientList();
-    bool contains(Ingredient &ing) const;
+    bool contains(const Ingredient &ing) const;
     bool containsSubSet(IngredientList &il,IngredientList &missing);
+    bool containsAny(const IngredientList &);
+
     IngredientList groupMembers(int id, IngredientList::const_iterator begin) const;
+
     void move(int index1,int index2);
     void move(int index1, int count, int index2);
     void empty(void);

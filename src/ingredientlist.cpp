@@ -20,7 +20,7 @@ IngredientList::~IngredientList()
 {
 }
 
-bool IngredientList::contains(Ingredient &ing) const
+bool IngredientList::contains(const Ingredient &ing) const
 {
 return(find(ing.ingredientID)!=-1);
 }
@@ -41,6 +41,18 @@ for (it=il.begin();it!=il.end();++it)
 	}
 
 return contained;
+}
+
+bool IngredientList::containsAny(const IngredientList &list)
+{
+	for ( IngredientList::const_iterator this_list_it = begin(); this_list_it != end(); ++this_list_it ) {
+		for ( IngredientList::const_iterator contains_list_it = list.begin(); contains_list_it != list.end(); ++contains_list_it ) {
+			if ( contains(*contains_list_it) )
+				return true; 
+		}
+	}
+
+	return false;
 }
 
 void IngredientList::empty(void)
