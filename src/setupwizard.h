@@ -32,6 +32,7 @@ public:
 
      SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
     ~SetupWizard();
+    void getOptions(bool &setupUser, bool &initializeData);
 private:
 	// Widgets
 	WelcomePage *welcomePage;
@@ -62,7 +63,7 @@ Q_OBJECT
 public:
 	// Methods
 	PermissionsSetupPage(QWidget *parent);
-
+	bool doUserSetup();
 private:
 	// Widgets
 	QLabel *logo;

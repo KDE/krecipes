@@ -134,9 +134,15 @@ connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoVGBox,SLOT(setEnabled(bool)))
 connect(rootCheckBox,SIGNAL(toggled(bool)),this,SLOT(rootCheckBoxChanged(bool)));
 connect(noSetupCheckBox,SIGNAL(toggled(bool)),this,SLOT(noSetupCheckBoxChanged(bool)));
 }
+
 void PermissionsSetupPage::rootCheckBoxChanged(bool on)
 {
 if (on) noSetupCheckBox->setChecked(false); // exclude mutually the options (both can be unset)
+}
+
+bool PermissionsSetupPage::doUserSetup()
+{
+return (!noSetupCheckBox->isChecked());
 }
 
 void PermissionsSetupPage::noSetupCheckBoxChanged(bool on)
@@ -290,5 +296,12 @@ config->writeEntry("DBName",serverSetupPage->dbName());
 
 config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
+
+}
+
+void SetupWizard::getOptions(bool &setupUser, bool &initializeData)
+{
+setupUser=permissionsSetupPage->doUserSetup();
+initializeData=0; // FIXME!!!!
 
 }
