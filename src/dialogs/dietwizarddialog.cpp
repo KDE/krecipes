@@ -312,7 +312,7 @@ buttonNext=new QToolButton(toolBar);
 	// Dish widgets
 dishStack= new QWidgetStack(this);
 layout->addWidget(dishStack);
-
+dishStack->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 	// Add default dishes
 DishInput *newDish=new DishInput(this,i18n("1st Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
 newDish=new DishInput(this,i18n("2nd Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
