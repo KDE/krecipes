@@ -128,7 +128,16 @@ KrecipesView::KrecipesView(QWidget *parent)
     splitter->setFrameShape( QSplitter::NoFrame );
     splitter->setFrameShadow( QSplitter::Plain );
     splitter->setOrientation( QSplitter::Horizontal );
-    splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
+
+    #if defined(KDE_MAKE_VERSION)
+  	# if KDE_VERSION <= KDE_MAKE_VERSION(3,1,4)
+     	splitter->setOpaqueResize();
+	#else
+	splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
+	# endif
+    #endif
+
+
 
 
 // Create Left and Right Panels (splitter)
