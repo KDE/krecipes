@@ -128,7 +128,7 @@ public:
 private:
 
 	// Internal methods
-	void wizard(void);
+	void wizard(bool force=false);
 	void initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass);
 	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
 

@@ -83,11 +83,25 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Check if the database type is among those supported
 
-    if ((dbtype!="SQLite") && (dbtype!="MySQL"))
-    {
-    kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
-    exit(1);
-    }
+    while ((dbtype!="SQLite") && (dbtype!="MySQL"))
+	{
+	int answer=KMessageBox::questionYesNo(this,i18n("The configured database type is unsupported. Would you like to run the setup wizard again? Otherwise, the application will be closed"));
+	if (answer==KMessageBox::Yes) wizard(true);
+	else
+		{
+		kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
+		exit(1);
+		}
+		
+	// Read the database setup again
+	
+	config=kapp->config(); config->sync(); config->setGroup("DBType");
+	dbtype=config->readEntry("Type","SQLite");
+	
+	}
+    
+    if (0) {}// necessary for the next optional else if lines
+    
     #if HAVE_MYSQL
 
     else if(dbtype=="MySQL")  // First case, MySQL
@@ -489,7 +503,7 @@ else{
   }
 }
 
-void KrecipesView::wizard(void)
+void KrecipesView::wizard(bool force)
 {
 KConfig *config=kapp->config();
 config->setGroup("Wizard");
@@ -497,7 +511,7 @@ bool setupDone=config->readBoolEntry("SystemSetup",false);
 
 QString setupVersion=config->readEntry("Version","0.3");  // By default assume it's 0.3. This parameter didn't exist in that version yet.
 
-if (!setupDone || (setupVersion.toDouble()<0.4)) // The config structure changed in version 0.4 to have DBType and Config Structure version
+if (!setupDone || (setupVersion.toDouble()<0.4) || force) // The config structure changed in version 0.4 to have DBType and Config Structure version
 {
 
 bool setupUser,initData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
