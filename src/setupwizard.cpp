@@ -13,7 +13,6 @@
 
 #include <iostream>
 #include <qhbox.h>
-#include <qvbox.h>
 #include <qvgroupbox.h>
 #include <qlayout.h>
 #include <qpixmap.h>
@@ -267,7 +266,7 @@ logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addWidget(logo,1,1);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
-layout->addItem(spacer_left,1,2);
+layout->addItem(spacer_from_image,1,2);
 
 saveText=new QLabel(this);
 saveText->setText(i18n("Congratulations! All the necessary configuration setup are done. Press 'Finish' to continue, and enjoy cooking!"));

@@ -33,6 +33,7 @@ public:
      SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
     ~SetupWizard();
     void getOptions(bool &setupUser, bool &initializeData);
+    void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass);
 private:
 	// Widgets
 	WelcomePage *welcomePage;

@@ -4,6 +4,8 @@
 
 #include "krecipesview.h"
 
+#include <iostream>
+
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qsplitter.h>
@@ -220,9 +222,12 @@ if (!setupDone)
 
 bool setupUser,initializeData; QString adminUser,adminPass;
 
-SetupWizard* setupWizard=new SetupWizard();
-setupWizard->exec();
+SetupWizard *setupWizard=new SetupWizard(this);
+if(setupWizard->exec()== QDialog::Accepted)
+{
 setupWizard->getOptions(setupUser,initializeData);
+}
+delete setupWizard;
 }
 }
 
