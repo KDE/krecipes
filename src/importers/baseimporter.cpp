@@ -87,7 +87,7 @@ void BaseImporter::import( RecipeDB *db )
 			db->findExistingUnitsByName( ing->units, new_ing_id, &unitsWithIng );
 
 			Element find_unit; find_unit.id = new_unit_id;
-			if ( !unitsWithIng.find(&find_unit) )
+			if ( unitsWithIng.find(&find_unit) == -1 )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
