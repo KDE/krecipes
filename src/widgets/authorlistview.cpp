@@ -27,9 +27,11 @@ AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : KListView( par
 	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( createAuthor( const Element & ) ) );
 	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( removeAuthor( int ) ) );
 
-	listViewHandler = new ListViewHandler(this);
+	listViewHandler = new ListViewHandler(this,database->authorCount());
 	installEventFilter(listViewHandler);
 	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+	connect( database, SIGNAL( authorCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
+	connect( database, SIGNAL( authorRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );

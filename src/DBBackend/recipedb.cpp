@@ -128,6 +128,26 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 	}
 }
 
+int RecipeDB::authorCount()
+{
+	return getCount("authors");
+}
+
+int RecipeDB::ingredientCount()
+{
+	return getCount("ingredients");
+}
+
+int RecipeDB::prepMethodCount()
+{
+	return getCount("prep_methods");
+}
+
+int RecipeDB::unitCount()
+{
+	return getCount("units");
+}
+
 void RecipeDB::importSamples()
 {
 	QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );

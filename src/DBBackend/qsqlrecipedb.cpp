@@ -1459,6 +1459,16 @@ Unit QSqlRecipeDB::unitName( int ID )
 	return Unit();
 }
 
+int QSqlRecipeDB::getCount( const QString &table_name )
+{
+	QSqlQuery count( "SELECT COUNT(1) FROM "+table_name, database );
+	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
+		return count.value( 0 ).toInt();
+	}
+
+	return -1;
+}
+
 bool QSqlRecipeDB::checkIntegrity( void )
 {
 

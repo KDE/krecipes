@@ -28,9 +28,11 @@ PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : KListV
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 
-	listViewHandler = new ListViewHandler(this);
+	listViewHandler = new ListViewHandler(this,database->prepMethodCount());
 	installEventFilter(listViewHandler);
 	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
+	connect( database, SIGNAL( prepMethodRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );

@@ -168,6 +168,8 @@ public:
 	IngredientProperty propertyName( int ID );
 	Unit unitName( int ID );
 
+	int getCount( const QString &table_name );
+
 	bool checkIntegrity( void );
 
 	void createTable( QString tableName );

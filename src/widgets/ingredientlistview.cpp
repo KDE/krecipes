@@ -71,9 +71,11 @@ IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : KListV
 	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
 	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
 
-	listViewHandler = new ListViewHandler(this);
+	listViewHandler = new ListViewHandler(this,database->ingredientCount());
 	installEventFilter(listViewHandler);
 	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+	connect( database, SIGNAL( ingredientCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
+	connect( database, SIGNAL( ingredientRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );

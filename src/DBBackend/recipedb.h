@@ -244,6 +244,12 @@ public:
 	virtual IngredientProperty propertyName( int ID ) = 0;
 	virtual Unit unitName( int ID ) = 0;
 
+	virtual int getCount( const QString &table_name ) = 0;
+	int authorCount();
+	int ingredientCount();
+	int prepMethodCount();
+	int unitCount();
+
 	virtual bool checkIntegrity( void ) = 0;
 
 	virtual void createTable( QString tableName ) = 0;

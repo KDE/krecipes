@@ -14,11 +14,22 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-ListViewHandler::ListViewHandler( QObject *parent ) : QObject(parent),
-  curr_offset(0)
+ListViewHandler::ListViewHandler( QObject *parent, int t ) : QObject(parent),
+  curr_offset(0),
+  total(t)
 {
 	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
 	curr_limit = config->readNumEntry( "Limit", -1 );
+}
+
+void ListViewHandler::increaseTotal()
+{
+	total++;
+}
+
+void ListViewHandler::decreaseTotal()
+{
+	total--;
 }
 
 bool ListViewHandler::eventFilter( QObject *, QEvent *e )
@@ -29,7 +40,11 @@ bool ListViewHandler::eventFilter( QObject *, QEvent *e )
 		if ( k->state() == Qt::ShiftButton ) {
 			switch ( k->key() ) {
 			case Qt::Key_N: {
+				if ( curr_offset + curr_limit >= total )
+					return true;
+
 				curr_offset += curr_limit;
+
 				kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
 				emit reload(curr_limit,curr_offset);
 				return true; // eat event

@@ -18,9 +18,13 @@ class ListViewHandler : public QObject
 Q_OBJECT
 
 public:
-	ListViewHandler( QObject * );
+	ListViewHandler( QObject *, int total );
 
 	void emitReload(){ emit reload(curr_limit,curr_offset); }
+
+public slots:
+	void increaseTotal();
+	void decreaseTotal();
 
 signals:
 	void reload(int limit,int offset);
@@ -31,6 +35,7 @@ protected:
 private:
 	int curr_limit;
 	int curr_offset;
+	int total;
 };
 
 #endif //LISTVIEWHANDLER_H

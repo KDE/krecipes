@@ -1478,6 +1478,19 @@ Unit LiteRecipeDB::unitName( int ID )
 	return Unit();
 }
 
+int LiteRecipeDB::getCount( const QString &table_name )
+{
+	QSQLiteResult count = database->executeQuery( "SELECT COUNT(1) FROM "+table_name+";" );
+	if ( count.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = count.first();
+		if ( !count.atEnd() ) { // Go to the first record (there should be only one anyway.
+			return row.data(0).toInt();
+		}
+	}
+
+	return -1;
+}
+
 bool LiteRecipeDB::checkIntegrity( void )
 {
 

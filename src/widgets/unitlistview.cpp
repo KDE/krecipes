@@ -31,9 +31,11 @@ UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView( parent 
 	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
 
-	listViewHandler = new ListViewHandler(this);
+	listViewHandler = new ListViewHandler(this,database->unitCount());
 	installEventFilter(listViewHandler);
 	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+	connect( database, SIGNAL( unitCreated( const Unit & ) ), listViewHandler, SLOT( increaseTotal() ) );
+	connect( database, SIGNAL( unitRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
