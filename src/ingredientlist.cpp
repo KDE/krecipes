@@ -33,8 +33,11 @@ IngredientList::Iterator it;
 
 for (it=il.begin();it!=il.end();++it)
 	{
-	if (!contains(*it)) contained=false;
-	missing.append(*it);
+	if (!contains(*it)) 
+		{
+		contained=false;
+		missing.append(*it);
+		}
 	}
 
 return contained;
