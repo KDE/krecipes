@@ -25,13 +25,13 @@ fi
 
 dnl ------ Check for the SQLite headers -----
 
-AC_DEFUN(AC_HAVE_SQLITE,
+AC_DEFUN([AC_HAVE_SQLITE],
 [
         AC_DEFINE(HAVE_SQLITE, 1, [have SQLite])
         have_sqlite=true
 ])
 
-AC_DEFUN(AC_NO_SQLITE,
+AC_DEFUN([AC_NO_SQLITE],
 [
         AC_DEFINE(HAVE_SQLITE, 0, [have SQLite])
         have_sqlite=false
