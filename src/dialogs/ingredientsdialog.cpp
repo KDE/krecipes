@@ -23,22 +23,23 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     layout = new QGridLayout( this, 1, 1, 0, 0);
     QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_left, 1,4,0,0 );
+    layout->addItem( spacer_left, 1,0 );
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addMultiCell(spacer_top,0,0,1,4);
+    layout->addItem(spacer_top,0,1);
 
     ingredientListView=new KListView (this);
-    layout->addMultiCellWidget (ingredientListView,1,4,1,6);
+    layout->addMultiCellWidget (ingredientListView,1,4,1,1);
     ingredientListView->addColumn("Id");
     ingredientListView->addColumn("Ingredient");
+    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell(spacer_rightIngredients,1,3,7,7);
+    layout->addItem(spacer_rightIngredients,1,2);
 
 
     addIngredientButton = new QPushButton( this);
     addIngredientButton->setText("+");
-    layout->addWidget( addIngredientButton, 1, 8 );
+    layout->addWidget( addIngredientButton, 1, 3 );
     addIngredientButton->setMinimumSize(QSize(30,30));
     addIngredientButton->setMaximumSize(QSize(30,30));
     addIngredientButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
@@ -46,33 +47,33 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     removeIngredientButton = new QPushButton( this);
     removeIngredientButton->setText("-");
-    layout->addWidget( removeIngredientButton, 3, 8 );
+    layout->addWidget( removeIngredientButton, 3, 3 );
     removeIngredientButton->setMinimumSize(QSize(30,30));
     removeIngredientButton->setMaximumSize(QSize(30,30));
     removeIngredientButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeIngredientButton->setFlat(true);
 
     QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(spacer_Ing_Buttons,2,8);
+    layout->addItem(spacer_Ing_Buttons,2,3);
 
 
     QSpacerItem* spacer_Ing_Units = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell(spacer_Ing_Units,1,3,9,9);
+    layout->addItem(spacer_Ing_Units,1,4);
 
 
 
     unitsListView=new KListView (this);
     unitsListView->addColumn("i.");
     unitsListView->addColumn("Units");
-    layout->addMultiCellWidget (unitsListView,1,4,10,11);
-
+    layout->addMultiCellWidget (unitsListView,1,4,5,5);
+    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell(spacer_rightUnits,1,3,12,12);
+    layout->addItem(spacer_rightUnits,1,6);
 
     addUnitButton = new QPushButton( this);
     addUnitButton->setText("+");
-    layout->addWidget( addUnitButton, 1, 13 );
+    layout->addWidget( addUnitButton, 1, 7 );
     addUnitButton->resize(QSize(30,30));
     addUnitButton->setMinimumSize(QSize(30,30));
     addUnitButton->setMaximumSize(QSize(30,30));
@@ -81,29 +82,30 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     removeUnitButton = new QPushButton( this);
     removeUnitButton->setText("-");
-    layout->addWidget( removeUnitButton, 3, 13 );
+    layout->addWidget( removeUnitButton, 3, 7 );
     removeUnitButton->resize(QSize(30,30));
     removeUnitButton->setMinimumSize(QSize(30,30));
     removeUnitButton->setMaximumSize(QSize(30,30));
     removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeUnitButton->setFlat(true);
     QSpacerItem* spacer_Units_Properties = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell(spacer_Units_Properties,1,3,14,14);
+    layout->addItem(spacer_Units_Properties,1,8);
 
     propertiesListView=new KListView (this);
-    layout->addMultiCellWidget (propertiesListView,1,4,15,16);
+    layout->addMultiCellWidget (propertiesListView,1,4,9,9);
     propertiesListView->addColumn("Id");
     propertiesListView->addColumn("Property");
     propertiesListView->addColumn("Amount");
     propertiesListView->addColumn("units");
     propertiesListView->setAllColumnsShowFocus(true);
+    propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
-    layout->addMultiCell(spacer_rightProperties,1,3,17,17);
+    layout->addItem(spacer_rightProperties,1,10);
 
     addPropertyButton= new QPushButton(this);
     addPropertyButton->setText("+");
-    layout->addWidget( addPropertyButton, 1, 18 );
+    layout->addWidget( addPropertyButton, 1, 11 );
     addPropertyButton->resize(QSize(30,30));
     addPropertyButton->setMinimumSize(QSize(30,30));
     addPropertyButton->setMaximumSize(QSize(30,30));
@@ -112,7 +114,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     removePropertyButton=new QPushButton(this);
     removePropertyButton->setText("-");
-    layout->addWidget( removePropertyButton, 3, 18 );
+    layout->addWidget( removePropertyButton, 3, 11 );
     removePropertyButton->resize(QSize(30,30));
     removePropertyButton->setMinimumSize(QSize(30,30));
     removePropertyButton->setMaximumSize(QSize(30,30));
@@ -382,16 +384,16 @@ inputBox->hide();
 
 
 QListViewItem *ing_it=ingredientListView->selectedItem(); // Find selected ingredient
-QListViewItem *prop_it=propertiesListView->currentItem();
-
+QListViewItem *prop_it=propertiesListView->selectedItem();
 
 if (ing_it && prop_it)// Appart from property, Check if an ingredient is selected first, just in case
 {
 prop_it->setText(2,QString::number(amount));
-int propertyID=ing_it->text(0).toInt();
+int propertyID=prop_it->text(0).toInt();
 int ingredientID=ing_it->text(0).toInt();
 database->changePropertyAmountToIngredient(ingredientID,propertyID,amount);
 }
+
 reloadPropertyList();
 
 }

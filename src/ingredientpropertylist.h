@@ -15,6 +15,18 @@
 /**
 @author Unai Garro
 */
+
+class PropertyPtrList: public QPtrList <IngredientProperty>
+{
+public:
+PropertyPtrList(){};
+~PropertyPtrList(){};
+protected:
+ virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (*((int*)item1)-*((int*)item2));};
+
+};
+
+
 class IngredientPropertyList{
 public:
     IngredientPropertyList();
@@ -27,8 +39,11 @@ public:
     void clear(void);
     bool isEmpty(void);
     void add(IngredientProperty &element);
+    void append(IngredientProperty *property);
+    int find(IngredientProperty* it);
+    IngredientProperty* at(int pos);
     private:
-    QPtrList<IngredientProperty> list;
+    PropertyPtrList list;
 
 };
 

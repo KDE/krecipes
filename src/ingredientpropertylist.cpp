@@ -45,4 +45,17 @@ bool IngredientPropertyList::isEmpty(void)
 return(list.isEmpty());
 }
 
+int IngredientPropertyList::find(IngredientProperty* it)
+{
+return(list.find(it));
+}
 
+IngredientProperty* IngredientPropertyList::at(int pos)
+{
+return(list.at(pos));
+}
+
+void IngredientPropertyList::append(IngredientProperty *property)
+{
+list.append (property);
+}

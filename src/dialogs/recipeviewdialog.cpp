@@ -23,7 +23,7 @@ loadedRecipe=new Recipe();
 //----------Load  the recipe --------
 loadRecipe(recipeID);
 
-this->calculateIngredients();
+//this->calculateProperties();
 
 
  }
@@ -39,7 +39,7 @@ void RecipeViewDialog::loadRecipe(int recipeID)
 
 database->loadRecipe(loadedRecipe,recipeID);
 showRecipe();
-calculateIngredients();
+calculateProperties();
 
 }
 
@@ -111,13 +111,9 @@ recipeView->end();
 
 
 
-void RecipeViewDialog::calculateIngredients(void)
+void RecipeViewDialog::calculateIngredients(IDList &ingList, QPtrList <int> &unitList, QPtrList <double> &amountList)
 {
 Ingredient *ing;
-IDList ingList;
-QPtrList <int> unitList;
-QPtrList <double> amountList;
-
 
 	for (ing=loadedRecipe->ingList.getFirst();ing; ing=loadedRecipe->ingList.getNext())
 	{
@@ -125,7 +121,6 @@ QPtrList <double> amountList;
 	int pos=ingList.find(&(ing->ingredientID));
 	if (pos>=0) // the ingredient is already listed
 		{
-		std::cerr<<"Increasing ingredient"<<ing->ingredientID<<"\n";
 
 		// Variables to store the current values
 		int *currentUnit; double * currentAmount;
@@ -156,7 +151,6 @@ QPtrList <double> amountList;
 		// Insert ingredient ID in the list
 		int *ingID=new int; *ingID=ing->ingredientID;
 		ingList.append(ingID);
-		std::cerr<<"I was unable to find a proper conversion\n";
 
 		// Set values for this ingredient
 		int *unitID=new int; *unitID=ing->unitID;
@@ -172,7 +166,6 @@ QPtrList <double> amountList;
 		// Insert ingredient ID in the list
 		int *ingID=new int; *ingID=ing->ingredientID;
 		ingList.append(ingID);
-		std::cerr<<"Adding new ingredient"<<ing->ingredientID<<"\n";
 
 		// Set values for this ingredient
 		int *unitID=new int; *unitID=ing->unitID;
@@ -184,13 +177,10 @@ QPtrList <double> amountList;
 
 	}
 
-
-	for (int *id=ingList.first();id; id=ingList.next()) //warning, use "first" not getFirst with QPtrList
+for (int *id=ingList.first();id;id=ingList.next()) // Warning! use first(),next() with QPtrLists... getFirst
 	{
-	int pos =ingList.at();
-	double *amount=amountList.at(pos);
-	int *unitID=unitList.at(pos);
-	std::cerr<<"Ingredient: "<<*id<<" Amount: "<<*amount<<" UnitID: "<<*unitID<<"\n";
+	int pos= ingList.at();
+	std::cerr<<"ID: "<<*id<<" Amount: "<<*(amountList.at(pos))<<" "<<*(unitList.at(pos))<<"\n";
 	}
 
 }
@@ -198,7 +188,6 @@ QPtrList <double> amountList;
 int RecipeViewDialog::autoConvert(double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)
 {
 
-std::cerr<<"Finding ratio between: "<<unit1<<" and "<<unit2<<"\n";
 
 double ratio=database->unitRatio(unit1,unit2);
 if (ratio>=0) // There is a ratio
@@ -222,4 +211,167 @@ else
 	return(-1);
 	}
 
+}
+
+void RecipeViewDialog::calculatePropertiesOld(void)
+{
+
+std::cerr<<"\n\nCalculating recipe properties:\n";
+// For ingredients reorganization
+IDList ingList;
+QPtrList <int> ingUnitList;
+QPtrList <double> ingAmountList;
+
+// Properties data
+IngredientPropertyList ingPropertyList; // To store properties of each ingredient
+IDList propertyList; // To store the final result
+QPtrList <double> propertyAmountList;
+QPtrList <QString> propertyUnitList;
+
+// Recalculate (reorganize) the ingredient list
+calculateIngredients(ingList,ingUnitList,ingAmountList);
+
+for (int *ing=ingList.first();ing;ing=ingList.next()) // Warning! use first(),next() with QPtrLists... getFirst behaves differently
+	{
+	int pos=ingList.at();
+	database->loadProperties(&ingPropertyList,*ing);
+	addPropertyToList(propertyList,propertyAmountList,propertyUnitList,ingPropertyList,*(ingUnitList.at(pos)),*(ingAmountList.at(pos)));
+	}
+
+for (int *propid=propertyList.first();propid;propid=propertyList.next()) // Warning! use first(),next() with QPtrLists... getFirst
+	{
+	int pos= propertyList.at();
+	std::cerr<<"Property ID: "<<*propid<<" Amount: "<<*(propertyAmountList.at(pos))<<*(propertyUnitList.at(pos))<<"\n";
+	}
+
+}
+
+void RecipeViewDialog::addPropertyToList(IDList &idList,QPtrList <double> & amountList,QPtrList <QString> &unitList,IngredientPropertyList &list,int ingUnitID, double ingAmount )
+{
+IngredientProperty *prop;
+	for (prop=list.getFirst();prop; prop=list.getNext())
+	{
+		int pos=idList.find(&(prop->id)); // Find out if property already exists in the list
+
+		if (pos>=0) // the property is already listed
+		{
+		double ratio=database->unitRatio(ingUnitID,prop->perUnit.id);
+		double *currentAmount=amountList.at(pos);
+
+		if (ratio>0.0)
+			{
+			*currentAmount+=ingAmount*ratio*prop->amount;
+			std::cerr<<"\n"<<*currentAmount<<"\n";
+			}
+		else    {
+			std::cerr<<"Warning: could not calculate ingredient ratio. The final property list won't be accurate. \n";
+		        }
+
+		}
+
+		else // add the property to the list
+		{
+		// Insert property ID in the list
+		int *propID=new int; *propID=prop->id;
+		idList.append(propID);
+
+		// Set values for this property
+
+		// Set the units
+		QString *unit=new QString; *unit=prop->units;
+		unitList.append(unit);
+
+		// Calculate and set amount
+		double *amount=new double; *amount=prop->amount;
+		double ratio=database->unitRatio(ingUnitID,prop->perUnit.id);
+		if (ratio>0)
+			{
+			*amount=ingAmount*ratio*prop->amount;
+			amountList.append(amount);
+			}
+		else
+			{
+			std::cerr<<"I couldn't convert units properly. The final result will be inaccurate\n";
+			*amount=0;
+			amountList.append(amount);
+			}
+
+
+		}
+
+	}
+
+}
+
+
+void RecipeViewDialog::calculateProperties(void)
+{
+IngredientPropertyList recipePropertyList; // It's not attached to any ingredient. It's just the total
+IngredientPropertyList ingredientPropertyList; // property list for each ingredient
+std::cerr<<"\n\nCalculating recipe properties:\n";
+
+for (Ingredient *ing=loadedRecipe->ingList.getFirst();ing;ing=loadedRecipe->ingList.getNext())
+	{
+	std::cerr<<"Ingredient amount:"<<ing->amount<<"\n";
+	database->loadProperties(&ingredientPropertyList,ing->ingredientID);
+	addPropertyToList(recipePropertyList,ingredientPropertyList,*ing);
+	}
+
+for (IngredientProperty *prop=recipePropertyList.getFirst();prop;prop=recipePropertyList.getNext())
+	{
+
+	std::cerr<<QString("PropertyID: %1 Amount: %2 Units: %3 \n").arg(prop->id).arg(prop->amount).arg(prop->units);
+	}
+
+}
+
+void RecipeViewDialog::addPropertyToList(IngredientPropertyList &recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
+{
+for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyList.getNext())
+	{
+	// Find if property was listed before
+	int pos=recipePropertyList.find(prop);
+	if (pos>=0) //Exists. Add to it
+	{
+	std::cerr<<"Adding to property: "<<prop->id<< "\n";
+	IngredientProperty *property=recipePropertyList.at(pos);
+	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
+
+	if (ratio>0.0) // Could convert units to perUnit
+		{
+		property->amount+=(prop->amount)*(ing.amount)*ratio;
+		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
+		}
+	else { // Could not convert units
+	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     }
+
+	}
+	else // Append new property
+	{
+	IngredientProperty*property; property=new IngredientProperty;
+	property->id=prop->id;
+	property->name=property->name;
+	property->perUnit.id=-1; // It's not per unit, it's total sum of the recipe
+	property->perUnit.name=QString::null; // "
+	property->units=property->units;
+
+	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
+
+	if (ratio>0.0) // Could convert units to perUnit
+		{
+		property->amount=(prop->amount)*(ing.amount)*ratio;
+		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
+		recipePropertyList.append(property);
+		}
+	else { // Could not convert units
+	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+	     }
+
+
+
+
+	}
+
+	}
 }

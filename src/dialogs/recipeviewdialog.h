@@ -40,10 +40,12 @@ private:
   Recipe *loadedRecipe;
 
   // Internal Methods
-  void calculateIngredients(void);
+  void calculateIngredients(IDList &ingList, QPtrList <int> &unitList, QPtrList <double> &amountList);
   int autoConvert(double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID);
-
-
+  void calculatePropertiesOld(void);
+  void calculateProperties(void);
+  void addPropertyToList(IDList &idList,QPtrList <double> & amountList,QPtrList <QString> &unitList,IngredientPropertyList &list,int ingUnitID, double ingAmount);
+  void addPropertyToList(IngredientPropertyList &recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing);
 
 private slots:
   void showRecipe(void);
