@@ -220,7 +220,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     connect (inputPanel, SIGNAL(enableSaveOption(bool)), this, SIGNAL(enableSaveOption(bool)));
 
     // Create a new button when a recipe is unsaved
-    connect (inputPanel, SIGNAL(createButton(QWidget*,QString)), this, SLOT(addRecipeButton(QWidget*,QString)));
+    connect (inputPanel, SIGNAL(createButton(QWidget*,const QString &)), this, SLOT(addRecipeButton(QWidget*,const QString &)));
 
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
@@ -624,7 +624,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	delete db;
 }
 
-void KrecipesView::addRecipeButton(QWidget *w,QString title)
+void KrecipesView::addRecipeButton(QWidget *w,const QString &title)
 {
 recipeWidget=w;
 KIconLoader il;

@@ -1350,9 +1350,9 @@ SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,&ca
 
 
 if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
-   this->loadedRecipe->categoryList.clear();
+   loadedRecipe->categoryList.clear();
    editCategoriesDialog->getSelectedCategories(&(loadedRecipe->categoryList)); // get the category list chosen
-   emit(this->recipeChanged()); //Indicate that the recipe changed
+   emit(recipeChanged()); //Indicate that the recipe changed
 
 }
 
@@ -1423,9 +1423,9 @@ SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(this,loadedRecipe
 
 
 if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
-this->loadedRecipe->authorList.clear();
+loadedRecipe->authorList.clear();
 editAuthorsDialog->getSelectedAuthors(&(loadedRecipe->authorList)); // get the category list chosen
-emit(this->recipeChanged()); //Indicate that the recipe changed
+emit(recipeChanged()); //Indicate that the recipe changed
 }
 
 delete editAuthorsDialog;

@@ -184,7 +184,7 @@ void CustomCheckListItem::stateChange( bool on )
 {
 	if ( !m_locked )
 	{
-		for (QCheckListItem *it=static_cast<QCheckListItem*>(this->firstChild()); it; it = static_cast<QCheckListItem*>(it->nextSibling()))
+		for (QCheckListItem *it=static_cast<QCheckListItem*>(firstChild()); it; it = static_cast<QCheckListItem*>(it->nextSibling()))
 		{
 			it->setOn(on);
 		}

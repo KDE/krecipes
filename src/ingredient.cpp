@@ -47,7 +47,7 @@ Ingredient::~Ingredient()
 //compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group
 bool Ingredient::operator==(const Ingredient &ing) const
 {
-	return ((ing.ingredientID == this->ingredientID) && (ing.groupID == this->groupID));
+	return ((ing.ingredientID == ingredientID) && (ing.groupID == groupID));
 }
 
 Ingredient & Ingredient::operator=(const Ingredient &i)

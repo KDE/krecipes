@@ -2,8 +2,8 @@
  * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
-#ifndef _KRECIPESVIEW_H_
-#define _KRECIPESVIEW_H_
+#ifndef KRECIPESVIEW_H
+#define KRECIPESVIEW_H
 
 #include <qbitmap.h>
 #include <qbuttongroup.h>
@@ -188,7 +188,7 @@ public slots:
 private slots:
     void actionRecipe(int recipeID, int action);
     void actionRecipes(const QValueList<int> &ids, int action);
-    void addRecipeButton(QWidget *w, QString title);
+    void addRecipeButton(QWidget *w, const QString &title);
     void closeRecipe(void);
     void showRecipe(int recipeID);
     void showRecipes( const QValueList<int> &recipeIDs);
@@ -204,4 +204,4 @@ private slots:
 };
 
 
-#endif // _KRECIPESVIEW_H_
+#endif // KRECIPESVIEW_H

@@ -165,7 +165,7 @@ void SelectAuthorsDialog::createNewAuthorIfNecessary(void)
 {
 
 if (!authorsCombo->contains(authorsCombo->currentText()) &&
-	authorsCombo->currentText().stripWhiteSpace() != "") // author is not in the list and is not empty
+	!(authorsCombo->currentText().stripWhiteSpace()).isEmpty()) // author is not in the list and is not empty
 	{ // Create new author
 	QString newAuthorName=authorsCombo->currentText();
 	database->createNewAuthor(newAuthorName);

@@ -154,7 +154,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 		if ( !col_one_used &&
 		     !loadIngredientHeader( current.stripWhiteSpace() ) )
 		{
-			if ( current.stripWhiteSpace() != "" )
+			if ( !current.stripWhiteSpace().isEmpty() )
 				instruction_found = true;
 			m_instructions += current.stripWhiteSpace() + "\n";
 			//kdDebug()<<"Found instruction line: "<<current.stripWhiteSpace()<<endl;

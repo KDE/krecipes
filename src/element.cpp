@@ -42,5 +42,5 @@ return *this;
 
 bool Element::operator==(const Element &el) const
 {
-	return (el.id == this->id);
+	return (el.id == id);
 }

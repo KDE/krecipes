@@ -184,15 +184,15 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 	stream.skipWhiteSpace();
 	(void)stream.readLine();
 	QString current = stream.readLine();
-	if ( !current.contains("NONE") && current != "" )
+	if ( !current.contains("NONE") && !current.isEmpty() )
 	{
-		while ( current != "" && !stream.atEnd() )
+		while ( !current.isEmpty() && !stream.atEnd() )
 		{
 			Ingredient new_ingredient;
 
 			//amount
 			QString amount_str = current.mid(0, 9).simplifyWhiteSpace();
-			if ( amount_str != "" ) // case of amount_str=="" correctly handled by class default
+			if ( !amount_str.isEmpty() ) // case of amount_str=="" correctly handled by class default
 			{
 				bool ok;
 				MixedNumber amount(MixedNumber::fromString(amount_str,&ok));
@@ -346,7 +346,7 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "notes" ) //notes
 			notes = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-		else if ( current != "" && current != "_____" ) //if it doesn't belong to any other field, assume it a part of a multi-line notes field
+		else if ( !current.isEmpty() && current != "_____" ) //if it doesn't belong to any other field, assume it a part of a multi-line notes field
 			notes += "\n" + current;
 
 		current = stream.readLine().stripWhiteSpace();

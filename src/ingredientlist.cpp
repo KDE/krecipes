@@ -45,7 +45,7 @@ return contained;
 
 void IngredientList::empty(void)
 {
-this->clear();
+clear();
 }
 
 int IngredientList::find(int id) const // Search by id (which uses search by item, with comparison defined on header)
@@ -68,13 +68,13 @@ return QValueList<Ingredient>::find(it,i);
 
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
 {
-IngredientList::iterator tmp_it = this->at(index1);
+IngredientList::iterator tmp_it = at(index1);
 Ingredient tmp_ing(*tmp_it);
 
-this->remove( tmp_it );
+remove( tmp_it );
 
-tmp_it = this->at(index2);
-this->insert(tmp_it,tmp_ing);
+tmp_it = at(index2);
+insert(tmp_it,tmp_ing);
 }
 
 void IngredientList::move(int index1, int count1, int index2) //moves element in pos index1 and the following count1 items, to pos after index2

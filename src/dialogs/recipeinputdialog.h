@@ -179,7 +179,7 @@ private:
 	signals:
 	void changed(void);
 	void closeRecipe(void);
-	void createButton(QWidget* w,QString title);
+	void createButton(QWidget* w,const QString &title);
 	void enableSaveOption(bool en=true);
 	void showRecipe(int recipeID); //Indicates krecipesview to show it
 	void titleChanged(const QString &title);

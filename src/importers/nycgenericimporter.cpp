@@ -63,12 +63,12 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	stream.skipWhiteSpace();
 
 	//title
-	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
+	while ( !(current = stream.readLine() ).isEmpty() && !stream.atEnd() )
 		m_title = current;
 	kdDebug()<<"Found title: "<<m_title<<endl;
 
 	//categories
-	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
+	while ( !(current = stream.readLine() ).isEmpty() && !stream.atEnd() )
 	{
 		if ( current[0].isNumber() ){ loadIngredientLine(current); break; } //oops, this is really an ingredient line (there was no category line)
 
@@ -86,7 +86,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	}
 
 	//ingredients
-	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
+	while ( !(current = stream.readLine() ).isEmpty() && !stream.atEnd() )
 		loadIngredientLine(current);
 
 	//everything else is the instructions with optional "contributor", "prep time" and "yield"

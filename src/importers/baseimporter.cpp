@@ -64,7 +64,7 @@ public:
 		{
 			int  res;
 			mid = (n1 + n2)/2;
-			res = QString::compare( test_str, this->at(mid).name );
+			res = QString::compare( test_str, at(mid).name );
 			if ( res < 0 )
 				n2 = mid - 1;
 			else if ( res > 0 )
@@ -82,7 +82,7 @@ public:
 		// search to first of equal items
 		//while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, vec[mid-1]) )
 		//	mid--;
-		return this->at(mid).id;
+		return at(mid).id;
 	}
 	
 	/** Insert the element into a sorted list, keeping the list sorted.
@@ -108,7 +108,7 @@ public:
 		while ( n1 <= n2 )
 		{
 			mid = (n1 + n2)/2;
-			res = QString::compare( new_el.name, this->at(mid).name );
+			res = QString::compare( new_el.name, at(mid).name );
 			if ( res < 0 )
 				n2 = mid - 1;
 			else if ( res > 0 )
@@ -264,7 +264,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 
 			QString real_ing_name = (*ing_it).name.left(max_ing_length);
 			int new_ing_id = ingVector.bsearch(real_ing_name.lower());
-			if ( new_ing_id == -1 && real_ing_name != "" )
+			if ( new_ing_id == -1 && !real_ing_name.isEmpty() )
 			{
 				db->createNewIngredient( real_ing_name );
 				new_ing_id = db->lastInsertID();
@@ -309,7 +309,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		{
 			QString real_author_name = (*author_it).name.left(max_author_length);
 			int new_author_id = authorVector.bsearch( real_author_name.lower() );
-			if ( new_author_id == -1 && real_author_name != "" )
+			if ( new_author_id == -1 && !real_author_name.isEmpty() )
 			{
 				db->createNewAuthor(real_author_name);
 				new_author_id = db->lastInsertID();
@@ -323,7 +323,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		{
 			QString real_category_name = (*cat_it).name.left(max_category_length);
 			int new_cat_id = catVector.bsearch( real_category_name.lower() );
-			if ( new_cat_id == -1 && real_category_name != "" )
+			if ( new_cat_id == -1 && !real_category_name.isEmpty() )
 			{
 				db->createNewCategory(real_category_name);
 				new_cat_id = db->lastInsertID();

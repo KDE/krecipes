@@ -207,7 +207,7 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 
 bool MixedNumber::operator!=( const MixedNumber &fraction )
 {
-	return( fraction.toDouble() != this->toDouble());
+	return( fraction.toDouble() != toDouble());
 }
 
 MixedNumber MixedNumber::operator+( const MixedNumber &fraction )
