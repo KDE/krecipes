@@ -51,11 +51,10 @@
 #include <kstdaction.h>
 //Settings headers
 #include <kdeversion.h>
-#if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
+
+# if KDE_IS_VERSION(3,1,92 )
      #include <kautoconfigdialog.h>
-  # endif
-#endif
+# endif
 
 #include "serverprefs.h"
 #include "numbersprefs.h"
@@ -368,16 +367,13 @@ void Krecipes::optionsShowStatusbar()
 
 void Krecipes::optionsConfigureKeys()
 {
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
+#if KDE_IS_VERSION(3,1,92 )
    // for KDE 3.2: KKeyDialog::configureKeys is deprecated
    KKeyDialog::configure(actionCollection(), this, true);
- #else
+#else
     KKeyDialog::configureKeys(actionCollection(), "krecipesui.rc");
 #endif
- #else
-  KKeyDialog::configureKeys(actionCollection(), "krecipesui.rc");
-#endif
+
 }
 
 void Krecipes::optionsConfigureToolbars()
