@@ -52,7 +52,8 @@ private:
 	//Variables
 	int childPos;
 	int widgetNumber;
-	QMap <KreMenuButton*,int> widgetList; // Stores the indexes for the widgets
+	QMap <KreMenuButton*,int> positionList; // Stores the indexes for the widgets
+	QMap <int,KreMenuButton*> widgetList; // Stores the widgets for each position (just the inverse mapping)
 	KreMenuButton* activeButton; // Indicates which button is highlighted
 
 	int xOrig, yOrig; //For dragging the menu

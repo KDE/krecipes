@@ -18,7 +18,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
-#include <iostream.h>
+#include <iostream>
 
 #include <kcursor.h>
 #include <kglobalsettings.h>
@@ -184,8 +184,29 @@ void KreMenu::childEvent (QChildEvent *e)
 
 		button->move(0,childPos);
 		childPos+=button->height();
-		widgetList[button]=widgetNumber; widgetNumber++; // Store index for this widget, and increment number
+		positionList[button]=widgetNumber; // Store index for this widget, and increment number
+		widgetList[widgetNumber]=button; // Store the button in the list (the inverse mapping of the previous one)
+		 widgetNumber++;
+
 		connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+		}
+	}
+	else if (e->type()==QEvent::ChildRemoved)
+	{
+	QObject *child=e->child();
+	KreMenuButton *button=(KreMenuButton*) child;
+	if (positionList.find(button)!=positionList.end()) // Ensure that what was removed was a button
+		{
+		// Remove the button from the list first
+		int pos=positionList[button];
+		widgetList.remove(pos);
+		positionList.remove(button);
+
+		// Now recalculate the position of the next button
+		widgetNumber--;
+		std::cerr<<"Will be inserted after widget id.:"<<widgetNumber-1<<"\n";
+		KreMenuButton *lastButton=widgetList[widgetNumber-1];
+		if (lastButton) childPos=lastButton->y()+lastButton->height();
 		}
 	}
 
@@ -200,7 +221,7 @@ activeButton->update();
 
 //Activate the new button
 
-int widgetn=widgetList[w];
+int widgetn=positionList[w];
 w->setActive(true); w->update();
 activeButton=w;
 
