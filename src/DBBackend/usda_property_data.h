@@ -16,7 +16,7 @@
 struct property_data
 {
 	int id;
-	const char *name;
+	QString name;
 	const char *unit;
 };
 
