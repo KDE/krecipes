@@ -770,7 +770,7 @@ if ( propertiesToLoad.isActive() ) {
 		    prop.perUnit.name=QString::null;
 		    }
 
-		    if (ingredientID>=0)
+		    if (ingredientID>=-1)
 		      prop.amount=propertiesToLoad.value(5).toDouble();
 		    else
 		      prop.amount=-1; // Property is generic, not attached to an ingredient
