@@ -103,7 +103,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     propertiesListView->addColumn("units");
     propertiesListView->setAllColumnsShowFocus(true);
     propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-
+    propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
     QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
     layout->addItem(spacer_rightProperties,1,10);
 
@@ -313,7 +313,9 @@ if (it){// make sure that the ingredient list is not empty
 	database->loadProperties(propertiesList,it->text(0).toInt()); // load the list for this ingredient
 	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
 	{
-	  QListViewItem *it= new QListViewItem(propertiesListView,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	QListViewItem* lastElement=propertiesListView->lastItem();
+	//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
+	  QListViewItem *it= new QListViewItem(propertiesListView,lastElement,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
 	  // Store the perUnits with the ID for using later
 	  Element perUnitEl;
 	  perUnitEl.id=prop->perUnit.id;
@@ -426,6 +428,7 @@ prop_it->setText(2,QString::number(amount));
 int propertyID=prop_it->text(0).toInt();
 int ingredientID=ing_it->text(0).toInt();
 int per_units=perUnitListBack->getElement(findPropertyNo(prop_it))->id ;
+std::cerr<<QString("Property ID: %1 Unit ID: %2\n").arg(propertyID).arg(per_units);
 database->changePropertyAmountToIngredient(ingredientID,propertyID,amount,per_units);
 }
 
