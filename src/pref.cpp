@@ -96,6 +96,7 @@ ServerPrefs::ServerPrefs(QWidget *parent)
 
     passwordEdit=new KLineEdit(this);
     passwordEdit->setFixedSize(QSize(120,20));
+    passwordEdit->setEchoMode(QLineEdit::Password);
     passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     layout->addWidget(passwordEdit,5,2);
 
