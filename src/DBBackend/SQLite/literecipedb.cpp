@@ -940,23 +940,26 @@ if (!unitToLoad.atEnd()) // Go to the first record (there should be only one any
 return(QString::null);
 }
 
-/*bool LiteRecipeDB::checkIntegrity(void)
+bool LiteRecipeDB::checkIntegrity(void)
 {
 
 
 // Check existence of the necessary tables (the database may be created, but empty)
 QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
 QString command=QString("SHOW TABLES;");
-QSqlQuery tablesToCheck( command,database);
-if (tablesToCheck.isActive())
+QSQLiteResult tablesToCheck=database->executeQuery(command);
+
+if (tablesToCheck.getStatus()!=QSQLiteResult::Failure)
 {
+QSQLiteResultRow row=tablesToCheck.first();
 	for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{
 	bool found=false;
-	while (tablesToCheck.next() && !found)
+	while ((!tablesToCheck.atEnd()) && !found)
 		{
-		QString tableName=tablesToCheck.value(0).toString();
+		QString tableName=row.data(0);
 		found=(tableName==*it); // Table exists
+		row=tablesToCheck.next();
 		}
 	if (!found) createTable(*it);
 	}
@@ -1005,7 +1008,7 @@ else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL
 
 
 
-QSqlQuery tableToCreate(command,database);
+database->executeQuery(command);
 
 }
 
@@ -1023,14 +1026,14 @@ if (version<0.3)	// The database was generated with an old version of Krecipes, 
 
 	// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
 	command="ALTER TABLE recipes ADD COLUMN persons int(11) AFTER title;";
-	QSqlQuery tableToAlter(command,database);
+		database->executeQuery(command);
 
 	// Set the version to the new one (0.3)
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
-		tableToAlter.exec(command);
+		database->executeQuery(command);
 	command="INSERT INTO db_info VALUES(0.3,'Krecipes 0.3');"; // Set the new version
-		tableToAlter.exec(command);
+		database->executeQuery(command);
 	}
 
 if (version<0.4)  // Upgrade to DB version 0.4
@@ -1038,14 +1041,14 @@ if (version<0.4)  // Upgrade to DB version 0.4
 
 	// Add new columns to existing tables (creating any new tables is not necessary. Integrity check does that before)
 	command="ALTER TABLE ingredient_list ADD COLUMN order_index int(11) AFTER unit_id;";
-	QSqlQuery tableToAlter(command,database);
+		database->executeQuery(command);
 
 	// Set the version to the new one (0.4)
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
-		tableToAlter.exec(command);
+		database->executeQuery(command);
 	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.3+(CVS)');"; // Set the new version
-		tableToAlter.exec(command);
+		database->executeQuery(command);
 	}
 }
 
@@ -1053,11 +1056,12 @@ float LiteRecipeDB::databaseVersion(void)
 {
 
 QString command="SELECT ver FROM db_info";
-QSqlQuery dbVersion(command,database);
+QSQLiteResult dbVersion=database->executeQuery(command);
 
-if ( dbVersion.isActive() ) {
-	if (dbVersion.next())
-		return(dbVersion.value(0).toDouble());// There should be only one (or none for old DB) element, so go to first
+if ( dbVersion.getStatus()!=QSQLiteResult::Failure ) {
+QSQLiteResultRow row=dbVersion.first();
+	if (!dbVersion.atEnd())
+		return(row.data(0).toDouble());// There should be only one (or none for old DB) element, so go to first
 	else return (0.2); // if table is empty, assume oldest (0.2), and port
 }
 else return(0.2); // 0.2 didn't have this table yet
@@ -1066,14 +1070,16 @@ else return(0.2); // 0.2 didn't have this table yet
 void LiteRecipeDB::loadCategories(ElementList *list)
 {
 QString command="SELECT * FROM categories ORDER BY name;";
-QSqlQuery categoryToLoad(command,database);
-if (categoryToLoad.isActive()) {
-	while (categoryToLoad.next())
+QSQLiteResult categoryToLoad=database->executeQuery(command);
+if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
+QSQLiteResultRow row=categoryToLoad.first();
+	while (!categoryToLoad.atEnd())
 	{
 	Element el;
-	el.id=categoryToLoad.value(0).toInt();
-	el.name=unescapeAndDecode(categoryToLoad.value(1).toString());
+	el.id=row.data(0).toInt();
+	el.name=unescapeAndDecode(row.data(1));
 	list->add(el);
+	row=categoryToLoad.next();
 	}
 }
 }
@@ -1081,14 +1087,16 @@ if (categoryToLoad.isActive()) {
 void LiteRecipeDB::loadRecipeCategories(int recipeID, ElementList *list)
 {
 QString command=QString("SELECT c.id,c.name FROM categories c,category_list cl WHERE cl.recipe_id=%1 AND c.id=cl.category_id;").arg(recipeID);
-QSqlQuery categoryToLoad(command,database);
-if (categoryToLoad.isActive()) {
-	while (categoryToLoad.next())
+QSQLiteResult categoryToLoad=database->executeQuery(command);
+if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
+QSQLiteResultRow row=categoryToLoad.first();
+	while (!categoryToLoad.atEnd())
 	{
 	Element el;
-	el.id=categoryToLoad.value(0).toInt();
-	el.name=unescapeAndDecode(categoryToLoad.value(1).toString());
+	el.id=row.data(0).toInt();
+	el.name=unescapeAndDecode(row.data(1));
 	list->add(el);
+	row=categoryToLoad.next();
 	}
 }
 }
@@ -1098,7 +1106,7 @@ void LiteRecipeDB::createNewCategory(QString &categoryName)
 QString command;
 
 command=QString("INSERT INTO categories VALUES(NULL,'%1');").arg(escapeAndEncode(categoryName));
-QSqlQuery categoryToCreate( command,database);
+database->executeQuery( command);
 }
 
 void LiteRecipeDB::removeCategory(int categoryID)
@@ -1106,13 +1114,13 @@ void LiteRecipeDB::removeCategory(int categoryID)
 QString command;
 
 command=QString("DELETE FROM categories WHERE id=%1;").arg(categoryID);
-QSqlQuery categoryToRemove( command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)
 {
 QString command=QString("INSERT INTO categories_list VALUES(%1,%2);").arg(recipeID).arg(categoryID);
-QSqlQuery categoryToAdd( command,database);
+database->executeQuery(command);
 }
 
 
@@ -1121,14 +1129,16 @@ void LiteRecipeDB::loadAuthors(ElementList *list)
 {
 list->clear();
 QString command="SELECT * FROM authors;";
-QSqlQuery authorToLoad(command,database);
-if (authorToLoad.isActive()) {
-	while (authorToLoad.next())
+QSQLiteResult authorToLoad=database->executeQuery(command);
+if (authorToLoad.getStatus()!=QSQLiteResult::Failure) {
+QSQLiteResultRow row=authorToLoad.first();
+	while (!authorToLoad.atEnd())
 	{
 	Element el;
-	el.id=authorToLoad.value(0).toInt();
-	el.name=unescapeAndDecode(authorToLoad.value(1).toString());
+	el.id=row.data(0).toInt();
+	el.name=unescapeAndDecode(row.data(1));
 	list->add(el);
+	row=authorToLoad.next();
 	}
 }
 }
@@ -1137,14 +1147,16 @@ void LiteRecipeDB::loadRecipeAuthors(int recipeID, ElementList *list)
 {
 list->clear();
 QString command=QString("SELECT a.id,a.name FROM authors a, author_list al WHERE al.recipe_id=%1 AND a.id=al.author_id;").arg(recipeID);
-QSqlQuery authorToLoad(command,database);
-if (authorToLoad.isActive()) {
-	while (authorToLoad.next())
+QSQLiteResult authorToLoad=database->executeQuery(command);
+if (authorToLoad.getStatus()!=QSQLiteResult::Failure) {
+QSQLiteResultRow row=authorToLoad.first();
+	while (!authorToLoad.atEnd())
 	{
 	Element el;
-	el.id=authorToLoad.value(0).toInt();
-	el.name=unescapeAndDecode(authorToLoad.value(1).toString());
+	el.id=row.data(0).toInt();
+	el.name=unescapeAndDecode(row.data(1));
 	list->add(el);
+	row=authorToLoad.next();
 	}
 }
 }
@@ -1154,7 +1166,7 @@ void LiteRecipeDB::createNewAuthor(const QString &authorName)
 QString command;
 
 command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(authorName));
-QSqlQuery authorToCreate( command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::removeAuthor(int authorID)
@@ -1162,13 +1174,13 @@ void LiteRecipeDB::removeAuthor(int authorID)
 QString command;
 
 command=QString("DELETE FROM authors WHERE id=%1;").arg(authorID);
-QSqlQuery authorToRemove( command,database);
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::addAuthorToRecipe(int recipeID, int authorID)
 {
 QString command=QString("INSERT INTO author_list VALUES(%1,%2);").arg(recipeID).arg(authorID);
-QSqlQuery authorToAdd( command,database);
+database->executeQuery(command);
 }
 
 
@@ -1184,32 +1196,38 @@ QString command;
 	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name='%2';").arg(ingredientID).arg(name);
 	}
 
-	QSqlQuery unitsToLoad(command,database); // Run the query
+	QSQLiteResult unitsToLoad=database->executeQuery(command); // Run the query
 
 	if (list) //If the pointer exists, then load all the values found into it
 	{
-	if (unitsToLoad.isActive()) {
-		while (unitsToLoad.next())
+	if (unitsToLoad.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row=unitsToLoad.first();
+		while (!unitsToLoad.atEnd())
 		{
 		Element el;
-		el.id=unitsToLoad.value(0).toInt();
-		el.name=unescapeAndDecode(unitsToLoad.value(1).toString());
+		el.id=row.data(0).toInt();
+		el.name=unescapeAndDecode(row.data(1));
 		list->add(el);
+		row=unitsToLoad.next();
 		}
 	}
 	}
 
-	return(unitsToLoad.size());
+	/*return(unitsToLoad.size());*/ // FIXME: Need to add this to the API
 }
 
 int LiteRecipeDB::findExistingElementByName( const QString& name, const QString &element )
 {
 	QString command=QString("SELECT id FROM %1 WHERE name='%2';").arg(element).arg(escapeAndEncode(name));
-	QSqlQuery elementToLoad(command,database); // Run the query
+	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
-	if (elementToLoad.isActive() && elementToLoad.first())
-		id=elementToLoad.value(0).toInt();
+	if (elementToLoad.getStatus()!=QSQLiteResult::Failure)
+		{
+		QSQLiteResultRow row=elementToLoad.first();
+		if (!elementToLoad.atEnd())
+			id=row.data(0).toInt();
+		}
 
 	return id;
 }
@@ -1237,46 +1255,57 @@ int LiteRecipeDB::findExistingUnitByName( const QString& name )
 int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 {
 	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(escapeAndEncode(name));
-	QSqlQuery elementToLoad(command,database); // Run the query
+	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
 	int id = -1;
 
-	if (elementToLoad.isActive() && elementToLoad.first())
-		id=elementToLoad.value(0).toInt();
-
+	if (elementToLoad.getStatus()!=QSQLiteResult::Failure)
+	{
+	 QSQLiteResultRow row= elementToLoad.first();
+	 	if (!elementToLoad.atEnd())
+			id=row.data(0).toInt();
+	}
 	return id;
 }
 
 void LiteRecipeDB::givePermissions(const QString &dbName,const QString &username, const QString &password, const QString &clientHost)
 {
-QString command;
+// FIXME: you can't give permissions in SQLite :)
+/*QString command;
 
 if ((password!="")&&(password!=QString::null)) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
 else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
 
 std::cerr<<"I'm doing the query to setup permissions\n";
 
-QSqlQuery permissionsToSet( command,database);
+QSqlQuery permissionsToSet( command,database);*/
 }
-
 QString LiteRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 {
 	//already is unique
 	if ( findExistingRecipeByName( recipe_title ) == -1 )
 		return recipe_title;
 
+	QString return_title=recipe_title; //If any error is produced, just go for default value (always return something)
+
 	QString command = QString( "SELECT COUNT(DISTINCT title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg(escapeAndEncode(recipe_title));
-	QSqlQuery alikeRecipes( command, database );
 
-	alikeRecipes.first();
-	int count = alikeRecipes.value(0).toInt();
-
-	QString return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
-
-	//make sure this newly created title is unique (just in case)
-	while ( findExistingRecipeByName( return_title ) != -1 )
+	QSQLiteResult alikeRecipes=database->executeQuery( command);
+	if (alikeRecipes.getStatus()!=QSQLiteResult::Failure)
 	{
-		count--;
+	QSQLiteResultRow row =alikeRecipes.first();
+	int count=0;
+	if (!alikeRecipes.atEnd());
+		{
+		count = row.data(0).toInt();
 		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
+
+		//make sure this newly created title is unique (just in case)
+		while ( findExistingRecipeByName( return_title ) != -1 )
+		{
+		count++;
+		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
+		}
+		}
 	}
 
 	return return_title;
@@ -1285,34 +1314,37 @@ QString LiteRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 QString LiteRecipeDB::recipeTitle(int recipeID)
 {
 QString command=QString("SELECT * FROM recipes WHERE id=%1;").arg(recipeID);
-QSqlQuery recipeToLoad( command,database);
-if (recipeToLoad.isActive())
+QSQLiteResult recipeToLoad=database->executeQuery(command);
+if (recipeToLoad.getStatus()!=QSQLiteResult::Failure)
 {
-if(recipeToLoad.next()) // Go to the first record (there should be only one anyway.
- return(recipeToLoad.value(1).toString());
+QSQLiteResultRow row=recipeToLoad.first();
+if(!recipeToLoad.atEnd()) // Go to the first record (there should be only one anyway.
+ return(row.data(1));
 }
 return(QString::null);
 }
 
 int LiteRecipeDB::lastInsertID()
 {
-	QSqlQuery lastInsertID("SELECT LAST_INSERT_ID();", database);
+	QSQLiteResult lastInsertID=database->executeQuery("SELECT LAST_INSERT_ID();");
 
 	int id = -1;
-	if (lastInsertID.isActive() && lastInsertID.next()) //this will always return a value
-		id = lastInsertID.value(0).toInt();
-
+	if (lastInsertID.getStatus()!=QSQLiteResult::Failure)
+	{
+	QSQLiteResultRow row=lastInsertID.first();
+	  if(!lastInsertID.atEnd())
+		id = row.data(0).toInt();
+	}
 	return id;
 }
 
 void LiteRecipeDB::emptyData(void)
 {
 QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list";
-QSqlQuery tablesToEmpty(QString::null,database);
+
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{
 	QString command=QString("DELETE FROM %1;").arg(*it);
-	tablesToEmpty.exec(command);
+	database->executeQuery(command);
 	}
 }
-*/
