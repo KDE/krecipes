@@ -20,8 +20,11 @@
 
 class Constraint{
 public:
-    Constraint(){max=0.0;min=0.0;id=-1;};
-    Constraint(Constraint *cnt){id=cnt->id;name=cnt->name;units=cnt->units;perUnit=cnt->perUnit; max=cnt->max;min=cnt->min;};
+
+    Constraint(Constraint *cnt){id=cnt->id;name=cnt->name;units=cnt->units;perUnit=cnt->perUnit; max=cnt->max;min=cnt->min;enabled=cnt->enabled;}
+
+    Constraint(){max=0.0;min=0.0;id=-1;enabled=false;}
+
     ~Constraint(){};
     int id;
     QString name;
@@ -29,6 +32,7 @@ public:
     Element perUnit; // stores the unit ID and Name
     double max;
     double min;
+    bool enabled;
 };
 
 

@@ -453,6 +453,7 @@ Constraint constraint;
 	constraint.id=it->propertyId();
 	constraint.min=it->minVal();
 	constraint.max=it->maxVal();
+	constraint.enabled=it->isOn();
 	constraints->add(constraint);
 	}
 }
@@ -596,12 +597,15 @@ bool DietWizardDialog::checkLimits(IngredientPropertyList &properties,Constraint
 {
 for (Constraint* ct=constraints.getFirst();ct; ct=constraints.getNext())
 	{
-	IngredientProperty* ip=properties.at(properties.find(ct->id));
-	if (ip)
+	if (ct->enabled)
 		{
-		if ((ip->amount>ct->max)||(ip->amount<ct->min)) return false;
+		IngredientProperty* ip=properties.at(properties.find(ct->id));
+		if (ip)
+			{
+			if ((ip->amount>ct->max)||(ip->amount<ct->min)) return false;
+			}
+		else return false;
 		}
-	else return false;
 	}
 return true;
 }
