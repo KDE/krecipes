@@ -34,6 +34,7 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
+#include "gui/kstartuplogo.h"
 
 #ifdef USE_MYSQL_DATABASE
 #include "DBBackend/mysqlrecipedb.h"
@@ -50,6 +51,14 @@ KrecipesView::KrecipesView(QWidget *parent)
 {
     // Init the setup wizard if necessary
     wizard();
+
+    // Show Splash Screen
+
+    KStartupLogo* start_logo = 0L;
+    start_logo = new KStartupLogo();
+    start_logo -> setHideEnabled( true );
+    start_logo->show();
+    start_logo->raise();
 
     // Initialize Database
     KConfig *config; config=kapp->config(); config->setGroup("DBType");
@@ -202,6 +211,9 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Add recipe to the shopping list when requested
     connect(inputPanel,SIGNAL(addRecipeToShoppingList(int)),shoppingListPanel,SLOT(addRecipeToShoppingList(int)));
+
+    // Close Splash Screen
+    delete start_logo;
 }
 
 KrecipesView::~KrecipesView()
