@@ -10,15 +10,18 @@
 #ifndef SELECTRECIPEDIALOG_H
 #define SELECTRECIPEDIALOG_H
 
+#include <qwidget.h>
 #include <qvbox.h>
+#include "recipedb.h"
+#include "recipe.h"
 
 /**
 @author Unai Garro
 */
-class SelectRecipeDialog : public QVBox (QWidget *parent, RecipeDB *db)
+class SelectRecipeDialog : public QVBox
 {
 public:
-    SelectRecipeDialog();
+    SelectRecipeDialog(QWidget *parent, RecipeDB *db);
 
     ~SelectRecipeDialog();
 private:
@@ -26,7 +29,7 @@ private:
   RecipeDB *database;
   ElementList *recipeList;
   // Internal Methods
-  void SelectRecipeDialog::loadRecipeList(void);
+  void loadRecipeList(void);
 
 };
 

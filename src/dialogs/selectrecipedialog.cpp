@@ -19,7 +19,7 @@ database=db;
 recipeList=new ElementList;
 
 // Load Recipe List
-
+loadRecipeList();
 }
 
 
@@ -31,7 +31,7 @@ void SelectRecipeDialog::loadRecipeList(void)
 {
 database->loadRecipeList(recipeList);
 
-for ( Element *recipe =recipeList->getFirst(); ing; ing =recipeList->getNext() ) int a=1;
+for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNext() ) int a=1;
 	//ingredientBox->insertItem(ing->name);
 
 
