@@ -881,9 +881,12 @@ QCString LiteRecipeDB::escapeAndEncode(const QString &s)
 {
 QString s_escaped=s;
 
-s_escaped.replace ("'","\\'");
-s_escaped.replace (";","\";\@"); // Small trick for only for parsing later on
-
+// Escape using SQLite's function
+char * escaped= sqlite_mprintf("%q",s.latin1()); // Escape the string(allocates memory)
+s_escaped=escaped;
+sqlite_freemem(escaped); // free allocated memory
+std::cerr<<"Escaped text: "<<s_escaped<<"\n";
+// Return encoded
 return(s_escaped.utf8());
 }
 
