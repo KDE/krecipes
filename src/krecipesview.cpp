@@ -34,6 +34,7 @@
 #include <krun.h>
 #include <ktrader.h>
 #include <kurl.h>
+#include <kcursor.h>
 
 #include "setupwizard.h"
 #include "dialogs/recipeinputdialog.h"
@@ -311,6 +312,7 @@ void KrecipesView::slotSetTitle(const QString& title)
 // Function to switch panels
 void KrecipesView::slotSetPanel(int w)
 {
+KApplication::setOverrideCursor( KCursor::waitCursor() );
 if (leftPanel->currentMenu()==leftPanel->mainMenu())
 	{
 	switch (w)
@@ -368,6 +370,7 @@ else if (leftPanel->currentMenu()==dataMenu)
 		break;
 		}
 	}
+KApplication::restoreOverrideCursor();
 }
 
 void KrecipesView::save(void)

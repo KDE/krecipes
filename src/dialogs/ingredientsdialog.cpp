@@ -21,6 +21,8 @@
 #include "selectunitdialog.h"
 #include "dependanciesdialog.h"
 
+#include <kapplication.h>
+#include <kcursor.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -525,7 +527,9 @@ void IngredientsDialog::openUSDADialog(void)
 	QListViewItem *ing_it = ingredientListView->listView()->selectedItem(); // Find selected ingredient
 	if ( ing_it )
 	{
+		KApplication::setOverrideCursor( KCursor::waitCursor() );
 		USDADataDialog usda_dialog( Element(ing_it->text(1),ing_it->text(0).toInt()),database,this);
+		KApplication::restoreOverrideCursor();
 
 		if ( usda_dialog.exec() == QDialog::Accepted )
 			reloadPropertyList(); //update property list upon success

@@ -22,6 +22,7 @@
 #include <qwmatrix.h>
 
 #include <kapp.h>
+#include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -166,6 +167,8 @@ else
 
 void DietWizardDialog::createDiet(void)
 {
+KApplication::setOverrideCursor( KCursor::waitCursor() );
+
 RecipeList rlist;
 dietRList->clear();
 // Get the whole list of recipes, detailed
@@ -229,6 +232,7 @@ else // show the resulting diet
 	dietDisplay->show();
 	}
 
+KApplication::restoreOverrideCursor();
 }
 
 

@@ -18,6 +18,9 @@
 #include <qheader.h>
 #include <qpainter.h>
 #include <qstringlist.h>
+
+#include <kapplication.h>
+#include <kcursor.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -83,6 +86,8 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 
 void IngredientMatcherDialog::findRecipes(void)
 {
+	KApplication::setOverrideCursor( KCursor::waitCursor() );
+
 	RecipeList rlist;
 	IngredientList ilist;
 	database->loadRecipeDetails(&rlist,true,false,true);
@@ -131,7 +136,7 @@ void IngredientMatcherDialog::findRecipes(void)
 
 	//Check if the user wants to show missing ingredients
 	
-	if (this->missingNumberCombo->currentItem()==0) return; //"None"
+	if (this->missingNumberCombo->currentItem()==0){ KApplication::restoreOverrideCursor(); return; } //"None"
 	
 	
 	
@@ -169,9 +174,8 @@ void IngredientMatcherDialog::findRecipes(void)
 				}
 		}
 	}
-	
-	
-	
+
+	KApplication::restoreOverrideCursor();
 }
 
 void IngredientMatcherDialog::reloadIngredients(void)

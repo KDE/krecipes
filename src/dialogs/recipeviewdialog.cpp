@@ -17,6 +17,7 @@
 #include <qstyle.h>
 
 #include <kapplication.h>
+#include <kcursor.h>
 #include <kdebug.h>
 #include <khtmlview.h>
 #include <khtml_part.h>
@@ -71,14 +72,18 @@ bool RecipeViewDialog::loadRecipe(int recipeID)
 
 bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 {
+KApplication::setOverrideCursor( KCursor::waitCursor() );
+
 // Remove any files created by the last recipe loaded
 removeOldFiles();
 
 ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
-
 recipe_loaded = ( ids.count() > 0 && ids[0] >= 0 );
 
-return showRecipes( ids );
+bool success = showRecipes( ids );
+
+KApplication::restoreOverrideCursor();
+return success;
 }
 
 bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )

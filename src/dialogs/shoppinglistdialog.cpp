@@ -11,6 +11,9 @@
  ***************************************************************************/
 
 #include "shoppinglistdialog.h"
+
+#include <kapplication.h>
+#include <kcursor.h>
 #include <klocale.h>
 
 #include "DBBackend/recipedb.h"
@@ -163,8 +166,10 @@ Element newEl; newEl.id=it->text(0).toInt(); newEl.name=it->text(1); // Storing 
 recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
 }
 
+KApplication::setOverrideCursor( KCursor::waitCursor() );
 shoppingListDisplay=new ShoppingListViewDialog(0,database,recipeList);
 shoppingListDisplay->show();
+KApplication::restoreOverrideCursor();
 }
 
 void ShoppingListDialog::addRecipeToShoppingList(int recipeID)

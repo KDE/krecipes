@@ -46,6 +46,7 @@
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
+#include <kcursor.h>
 
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
@@ -258,9 +259,9 @@ void Krecipes::import()
 			return;
 		}
 
-		parsing_file_dlg->show();
+		parsing_file_dlg->show(); KApplication::setOverrideCursor( KCursor::waitCursor() );
 		importer->parseFiles(file_dialog.selectedFiles());
-		parsing_file_dlg->hide();
+		parsing_file_dlg->hide(); KApplication::restoreOverrideCursor();
 
 		m_view->import( *importer );
 
@@ -280,6 +281,7 @@ void Krecipes::import()
 		delete importer;
 
 		//TODO: is this the best way to do it???
+		KApplication::setOverrideCursor( KCursor::waitCursor() );
 		m_view->selectPanel->reload();
 		m_view->ingredientsPanel->reload();
 		m_view->propertiesPanel->reload();
@@ -288,6 +290,7 @@ void Krecipes::import()
 		m_view->categoriesPanel->reload();
 		m_view->authorsPanel->reload();
 		m_view->ingredientMatcherPanel->reloadIngredients();
+		KApplication::restoreOverrideCursor();
 	}
 }
 
