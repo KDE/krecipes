@@ -1,7 +1,7 @@
-Things found to be done before the release:
+Things found to be done before the 0.4 release:
 
 
-*Show the recipes correctly in kde 3.2 and 3.1 (CSS)
+*Avoid overlapping elements in the RecipeViewDialog (CSS)
 *Add tips for every dialog
 *Translations
 *package
