@@ -152,7 +152,7 @@ public:
 	virtual float databaseVersion(void)=0;
 
 	int maxAuthorNameLength() const{ return 50; }
-	int maxCategoryNameLength() const{ return 20; }
+	int maxCategoryNameLength() const{ return 40; }
 	int maxIngredientNameLength() const{ return 50; }
 	int maxRecipeTitleLength() const{ return 200; }
 	int maxUnitNameLength() const{ return 20; }

@@ -1332,7 +1332,7 @@ if ( version < 0.5 )
 	command="UPDATE ingredient_list SET prep_method_id=-1 WHERE prep_method_id IS NULL;";
 		tableToAlter.exec(command);
 
-	command="ALTER TABLE authors MODIFY name VARCHAR(40);";
+	command="ALTER TABLE authors MODIFY name VARCHAR(50);";
 		tableToAlter.exec(command);
 	command="ALTER TABLE categories MODIFY name VARCHAR(40);";
 		tableToAlter.exec(command);
@@ -1340,7 +1340,7 @@ if ( version < 0.5 )
 	// Set the version to the new one (0.5)
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
-	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');"; // Set the new version TODO: make the version numbering dynamic
+	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');";
 		tableToAlter.exec(command);
 }
 

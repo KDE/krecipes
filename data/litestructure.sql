@@ -1,5 +1,5 @@
 CREATE TABLE author_list (recipe_id INTEGER NOT NULL,author_id INTEGER NOT NULL);
-CREATE TABLE authors (id INTEGER NOT NULL, name varchar(40) default NULL,PRIMARY KEY (id));
+CREATE TABLE authors (id INTEGER NOT NULL, name varchar(50) default NULL,PRIMARY KEY (id));
 CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL,PRIMARY KEY (id));
 CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);
 CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);

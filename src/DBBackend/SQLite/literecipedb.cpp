@@ -1351,20 +1351,125 @@ if ( version < 0.5 )
 	command = QString("CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 		database->executeQuery(command);
 
-	command="ALTER TABLE ingredient_list ADD COLUMN prep_method_id int(11) AFTER unit_id;";
-		database->executeQuery(command);
-	command="UPDATE ingredient_list SET prep_method_id=-1 WHERE prep_method_id IS NULL;";
-		database->executeQuery(command);
-		
-	command="ALTER TABLE authors MODIFY name VARCHAR(40);";
-		database->executeQuery(command);
-	command="ALTER TABLE categories MODIFY name VARCHAR(40);";
-		database->executeQuery(command);
-		
-	// Set the version to the new one (0.5)
+	//===========add prep_method_id to ingredient_list table
+	//There's no ALTER command in SQLite, so we have to copy all data to a new table and then recreate the table with the prep_method_id
+	database->executeQuery("CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);");
+	QSQLiteResult copyQuery = database->executeQuery("SELECT * FROM ingredient_list;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO ingredient_list_copy VALUES(%1,%2,%3,%4,%5);")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1).toInt())
+			  .arg(row.data(2).toFloat())
+			  .arg(row.data(3).toInt())
+			  .arg(row.data(4).toInt());
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE ingredient_list");
+	database->executeQuery("CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);");
+	copyQuery = database->executeQuery("SELECT * FROM ingredient_list_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO ingredient_list VALUES(%1,%2,%3,%4,%5,%6);")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1).toInt())
+			  .arg(row.data(2).toFloat())
+			  .arg(row.data(3).toInt())
+			  .arg(-1) //default prep method
+			  .arg(row.data(4).toInt());
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE ingredient_list_copy");
+	
+	database->executeQuery("CREATE index ridil_index ON ingredient_list(recipe_id);");
+	database->executeQuery("CREATE index iidil_index ON ingredient_list(ingredient_id);");
+
+
+	//==============expand length of author name to 50 characters
+	database->executeQuery("CREATE TABLE authors_copy (id INTEGER, name varchar(20));");
+	copyQuery = database->executeQuery("SELECT * FROM authors;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO authors_copy VALUES(%1,'%2');")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE authors");
+	database->executeQuery("CREATE TABLE authors (id INTEGER NOT NULL, name varchar(50) default NULL,PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT * FROM authors_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO authors VALUES(%1,'%2');")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE authors_copy");
+
+
+	//==================expand length of category name to 40 characters
+	database->executeQuery("CREATE TABLE categories_copy (id INTEGER, name varchar(20));");
+	copyQuery = database->executeQuery("SELECT * FROM categories;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO categories_copy VALUES(%1,'%2');")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE categories");
+	database->executeQuery("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL,PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT * FROM categories_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO categories VALUES(%1,'%2');")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE categories_copy");
+
+	//================Set the version to the new one (0.5)
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');"; // Set the new version TODO: make the version numbering dynamic
+	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');";
 		database->executeQuery(command);
 }
 }

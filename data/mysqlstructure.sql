@@ -4,7 +4,7 @@ CREATE TABLE author_list (
 ) TYPE=MyISAM;
 CREATE TABLE authors (
   id int(11) NOT NULL auto_increment,
-  name varchar(40) default NULL,
+  name varchar(50) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE categories (
