@@ -55,12 +55,13 @@ private:
   void reloadIngredientList(void);
   void reloadUnitList(void);
   void reloadPropertyList(void);
+  int findPropertyNo(QListViewItem *it);
   // Internal Variables
   RecipeDB *database;
   ElementList *ingredientList;
   ElementList *unitList;
   IngredientPropertyList *propertiesList;
-
+  ElementList  *perUnitListBack;
 
   private slots:
     void addIngredient(void);

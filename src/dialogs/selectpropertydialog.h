@@ -47,7 +47,7 @@ private:
   void loadUnits(ElementList *unitList);
 
   //Internal variables
-  ElementList  *unitListBack;
+  ElementList  *unitListBack; // To store unit list with ID's for later use
 
 };
 

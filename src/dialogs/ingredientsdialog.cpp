@@ -18,6 +18,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     // Initialize internal variables
     propertiesList= new IngredientPropertyList;
+    perUnitListBack= new ElementList;
 
     // Design dialog
 
@@ -282,7 +283,7 @@ void IngredientsDialog:: reloadPropertyList(void)
 {
 propertiesList->clear();
 propertiesListView->clear();
-
+perUnitListBack->clear();
 
 
 //If none is selected, select first item
@@ -296,6 +297,12 @@ if (it){// make sure that the ingredient list is not empty
 	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
 	{
 	  QListViewItem *it= new QListViewItem(propertiesListView,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	  // Store the perUnits with the ID for using later
+	  Element perUnitEl;
+	  perUnitEl.id=prop->perUnit.id;
+	  perUnitEl.name=prop->perUnit.name;
+	  perUnitListBack->add(perUnitEl);
+
 	}
 	}
 }
@@ -391,10 +398,33 @@ if (ing_it && prop_it)// Appart from property, Check if an ingredient is selecte
 prop_it->setText(2,QString::number(amount));
 int propertyID=prop_it->text(0).toInt();
 int ingredientID=ing_it->text(0).toInt();
-database->changePropertyAmountToIngredient(ingredientID,propertyID,amount);
+int per_units=perUnitListBack->getElement(findPropertyNo(prop_it))->id ;
+database->changePropertyAmountToIngredient(ingredientID,propertyID,amount,per_units);
 }
 
 reloadPropertyList();
 
 }
 
+int IngredientsDialog::findPropertyNo(QListViewItem *it)
+{
+bool found=false;
+int i = 0;
+QListViewItem* item = propertiesListView->firstChild();
+while (i < propertiesListView->childCount() && !found) {
+  if (item == propertiesListView->currentItem())
+    found = true;
+  else {
+    item = item->nextSibling();
+    ++i;
+  }
+}
+if (found)
+  {
+  return (i);
+  }
+else
+  {
+  return (-1);
+  }
+}

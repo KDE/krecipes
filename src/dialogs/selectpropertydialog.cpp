@@ -37,8 +37,12 @@ cancelButton->setGeometry( QRect( 110, 320, 60, 20 ) );
 cancelButton->setText("Cancel");
 cancelButton->setFlat(true);
 resize(QSize(200,380));
+
+// Load data
 loadProperties(propertyList);
 loadUnits(unitList);
+
+// Connect signals & Slots
 connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));
 connect (cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
