@@ -51,7 +51,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 
-	ingredientListView = new KreListView ( this, i18n( "Ingredient list" ), true, 1 );
+	ingredientListView = new KreListView ( this, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	list_view->reload();
 	ingredientListView->setListView( list_view );
