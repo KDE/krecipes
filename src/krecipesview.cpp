@@ -17,6 +17,7 @@
 
 #include <kurl.h>
 #include <kapp.h>
+#include <qpalette.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
@@ -573,25 +574,18 @@ void MenuButton::setIconSet(QIconSet i){
   icon = new QPixmap(i.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
 }
 
+
 void MenuButton::drawButton( QPainter *p ){
-    /*const QPushButton* btn;
-    btn = new QPushButton(this);
-    QPixmap* pbtn = new QPixmap(size());
-    pbtn->grabWidget((QWidget*)btn);
-    pbtn->save("/root/tmp/btn.png", "PNG");*/
+
     QPixmap* pm( (QPixmap*)p->device() );
     KPixmap pn;
     QFont font( KGlobalSettings::generalFont() );
-    KStyle* s = new KStyle();
     bool sunken = isDown();
 
     // draw base button
-    s->drawControl( QStyle::CE_PushButton, p, this, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised );
-    //s->drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised ); //do the same thing as upper line
-    //s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, pbtn, 0);
-
+    style().drawPrimitive( QStyle::PE_ButtonDefault, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_ButtonDefault); //do the same thing as upper line
     // draw icon
-    s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
+    style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
 
     // copy base button
     pn = *pm;
@@ -600,15 +594,15 @@ void MenuButton::drawButton( QPainter *p ){
     QPixmap tmp(size());
     tmp.fill(Qt::white);
     QImage gradient = tmp.convertToImage();
-    QImage grad = KImageEffect::gradient (QSize(width()/2, height()), Qt::white, Qt::black, KImageEffect::HorizontalGradient, 65536);
-    bitBlt(&gradient, width()/2, 0, &grad, 0, Qt::CopyROP);
+    QImage grad = KImageEffect::gradient (QSize(20, height()), Qt::white, Qt::black, KImageEffect::HorizontalGradient, 65536);
+    bitBlt(&gradient, width()-20, 0, &grad, 0, Qt::CopyROP);
 
     // draw button text
-    s->drawItem(p, QRect(22, 0, width()-22, height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, 0, text());
+    style().drawItem(p, QRect(25, 0, width()-25, height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, 0, text());
 
     // draw focus border
     if(hasFocus()){
-      s->drawPrimitive( QStyle::PE_FocusRect, p, s->subRect(QStyle::SR_PushButtonFocusRect, this), colorGroup() );
+      style().drawPrimitive( QStyle::PE_FocusRect, p, style().subRect(QStyle::SR_PushButtonFocusRect, this), colorGroup() );
     }
 
     // blend button with text with button without text using gradient
