@@ -445,7 +445,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *database, const QString &title 
 	categoriesEnabledBox = new QCheckBox( categoriesBox );
 	categoriesEnabledBox->setText( i18n( "Enable Category Filtering" ) );
 
-	categoriesView = new CategoryCheckListView( categoriesBox, database );
+	categoriesView = new CategoryCheckListView( categoriesBox, database, false );
 	categoriesView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	categoriesView->setEnabled( false ); // Disable it by default
 	categoriesView->reload();

@@ -240,7 +240,7 @@ class CategoryCheckListView : public CategoryListView
 	Q_OBJECT
 
 public:
-	CategoryCheckListView( QWidget *parent, RecipeDB * );
+	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true );
 
 protected:
 	virtual void removeCategory( int id );
@@ -250,6 +250,7 @@ protected:
 	virtual void mergeCategories( int id1, int id2 );
 
 	QMap<int, CategoryCheckListItem*> items_map;
+	bool exclusive;
 };
 
 #endif //CATEGORYLISTVIEW_H

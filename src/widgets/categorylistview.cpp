@@ -60,7 +60,7 @@ void CategoryCheckListItem::setText( int column, const QString &text )
 void CategoryCheckListItem::stateChange( bool on )
 {
 	if ( locked )
-		return ;
+		return;
 
 	if ( on && exclusive ) {
 		setParentsState( false );
@@ -431,7 +431,8 @@ bool StdCategoryListView::checkBounds( const QString &name )
 
 
 
-CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db ) : CategoryListView( parent, db )
+CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive ) : CategoryListView( parent, db ),
+  exclusive(_exclusive)
 {
 	addColumn( i18n( "Category" ) );
 
@@ -457,13 +458,13 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 {
 	CategoryCheckListItem * new_item;
 	if ( parent_id == -1 )
-		new_item = new CategoryCheckListItem( this, category );
+		new_item = new CategoryCheckListItem( this, category, exclusive );
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
 
 		Q_ASSERT( parent );
 
-		new_item = new CategoryCheckListItem( parent, category );
+		new_item = new CategoryCheckListItem( parent, category, exclusive );
 	}
 
 	items_map.insert( category.id, new_item );
