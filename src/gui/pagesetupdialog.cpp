@@ -66,7 +66,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	
 	//let's do everything we can to be sure at least some layout is loaded
 	QString filename = config->readEntry("Layout",locate("appdata","layouts/default.klo"));
-	if ( filename.isEmpty() )
+	if ( filename.isEmpty() || !QFile::exists(filename) )
 		filename = locate("appdata","layouts/default.klo");
 	loadLayout( filename );
 

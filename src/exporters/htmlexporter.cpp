@@ -31,8 +31,6 @@
 #include "gui/setupdisplay.h"
 #include "image.h"
 
-#define ROUND(a) (int((floor(a) - a < ceil(a) - a) ? floor(a) : ceil(a)))
-
 //TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
 HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
   BaseExporter( filename, format ), database(db), m_width(width)
@@ -57,7 +55,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	
 	//let's do everything we can to be sure at least some layout is loaded
 	QString layout_filename = config->readEntry("Layout",locate("appdata","layouts/default.klo"));
-	if ( layout_filename.isEmpty() )
+	if ( layout_filename.isEmpty() || !QFile::exists(layout_filename) )
 		layout_filename = locate("appdata","layouts/default.klo");
 	kdDebug()<<"Using layout file: "<<layout_filename<<endl;
 	QFile input( layout_filename );
@@ -123,10 +121,10 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 {
 	QDomElement photo_geom_el = getLayoutAttribute( doc, "photo", "geometry" );
-	temp_photo_geometry = QRect(    ROUND(photo_geom_el.attribute("left").toDouble()),
-					ROUND(photo_geom_el.attribute("top").toDouble()),
-					ROUND(photo_geom_el.attribute("width").toDouble()),
-					ROUND(photo_geom_el.attribute("height").toDouble())
+	temp_photo_geometry = QRect(    qRound(photo_geom_el.attribute("left").toDouble()),
+					qRound(photo_geom_el.attribute("top").toDouble()),
+					qRound(photo_geom_el.attribute("width").toDouble()),
+					qRound(photo_geom_el.attribute("height").toDouble())
 				);
 
 	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
@@ -437,10 +435,10 @@ void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QSt
 
 	if ( !geom_el.isNull() )
 	{
-		geom->setLeft( ROUND(geom_el.attribute("left").toDouble()) );
-		geom->setTop( ROUND(geom_el.attribute("top").toDouble()) );
-		geom->setWidth( ROUND(geom_el.attribute("width").toDouble()) );
-		geom->setHeight( ROUND(geom_el.attribute("height").toDouble()) );
+		geom->setLeft( qRound(geom_el.attribute("left").toDouble()) );
+		geom->setTop( qRound(geom_el.attribute("top").toDouble()) );
+		geom->setWidth( qRound(geom_el.attribute("width").toDouble()) );
+		geom->setHeight( qRound(geom_el.attribute("height").toDouble()) );
 	}
 }
 

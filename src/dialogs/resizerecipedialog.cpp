@@ -35,7 +35,6 @@
 #include "recipe.h"
 #include "fractioninput.h"
 
-#define ROUND(a) (((a) - floor((a)) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 #define FACTOR_RADIO_BUTTON 0
 #define SERVINGS_RADIO_BUTTON 1
 
@@ -192,7 +191,7 @@ void ResizeRecipeDialog::accept()
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	int rounded_persons = static_cast<int>(ROUND(currentServingsInput->text().toInt() * factor));
+	int rounded_persons = static_cast<int>(qRound(currentServingsInput->text().toInt() * factor));
 
 	//adjust factor if when using this factor, we come out with a fraction of a person
 	kdDebug()<<"factor given: "<<factor<<endl;

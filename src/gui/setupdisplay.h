@@ -27,9 +27,6 @@ class QWidget;
 
 class DragArea;
 
-// ### use qRound? (DF)
-#define ROUND(a) (int((floor(a) - a < ceil(a) - a) ? floor(a) : ceil(a)))
-
 // ### maybe we should move koffice's KoRect/KoPoint/KoSize to kdelibs...
 class PreciseRect
 {
@@ -40,7 +37,7 @@ public:
 	
 	PreciseRect( const QRect &r ){ m_top = r.top(); m_left = r.left(); m_width = r.width(); m_height = r.height(); }
 	
-	QRect toQRect() const{ return QRect(ROUND(m_top),ROUND(m_left),ROUND(m_width),ROUND(m_height)); }
+	QRect toQRect() const{ return QRect(qRound(m_top),qRound(m_left),qRound(m_width),qRound(m_height)); }
 	
 	double top(){ return m_top; }
 	double left(){ return m_left; }
