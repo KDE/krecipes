@@ -2,13 +2,13 @@ AM_INIT_AUTOMAKE(krecipes, 0.7)
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
-AC_ARG_ENABLE(sqlite,    [  --disable-sqlite]     [Don't compile SQLite backend support],disable_sqlite=yes)
-AC_ARG_ENABLE(mysql,     [  --disable-mysql]      [Don't compile MySQL backend support],disable_mysql=yes)
-AC_ARG_ENABLE(postgresql,[  --disable-postgresql] [Don't compile PostgreSQL backend support],disable_postgresql=yes)
+AC_ARG_WITH(sqlite, AC_HELP_STRING([--without-sqlite], [Don't compile SQLite backend support]), , with_sqlite=yes)
+AC_ARG_WITH(mysql, AC_HELP_STRING([--without-mysql], [Don't compile MySQL backend support]), , with_mysql=yes)
+AC_ARG_WITH(postgresql, AC_HELP_STRING([--without-postgresql], [Don't compile PostgreSQL backend support]), , with_postgresql=yes)
 
 dnl ----- Check if we should enable MySQL ------
 
-if test "x$disable_mysql" != "xyes"; then
+if test "x$with_mysql" != "xno"; then
   AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
   have_mysql="true"
 else
@@ -19,7 +19,7 @@ fi
 
 dnl ----- Check if we should enable PostgreSQL ------
 
-if test "x$disable_postgresql" != "xyes"; then
+if test "x$with_postgresql" != "xno"; then
   AC_DEFINE(HAVE_POSTGRESQL, 1, [have PostgreSQL])
   have_postgresql="true"
 else
@@ -59,19 +59,19 @@ AC_DEFUN([AC_NO_SQLITE3],
         have_sqlite3=false
 ])
 
-if test "x$disable_sqlite" != "xyes"; then
+if test "x$with_sqlite" != "xno"; then
   KDE_CHECK_HEADER(sqlite3.h,
            AC_HAVE_SQLITE3,
            AC_NO_SQLITE3
   )
-  
+ 
   if test "x$have_sqlite3" = "xfalse"; then
   KDE_CHECK_HEADER(sqlite.h,
            AC_HAVE_SQLITE,
            AC_NO_SQLITE
   )
   fi
-  
+
 else
   AC_NO_SQLITE
   AC_NO_SQLITE3
