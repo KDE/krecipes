@@ -44,9 +44,9 @@ Q_OBJECT
 
 protected:
 	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init):QObject(){dbOK=false; dbErr="";}
-
-public:
 	virtual ~RecipeDB(){};
+public:
+
 	
 	// Error handling (passive)
 	bool dbOK;
@@ -54,7 +54,7 @@ public:
 
 	// Public methods
 public:
-	
+		
 	virtual void addAuthorToRecipe(int recipeID, int categoryID)=0;
 	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
 
@@ -178,8 +178,6 @@ protected:
 public:
 	virtual bool ok(){return (dbOK);}
 	virtual QString err(){return (dbErr);}
-signals:
-	void questionRerunWizard(const QString &message,const QString &error);
 };
 
 

@@ -591,6 +591,9 @@ if (initData)
 	
 if (doUSDAImport)
 {
+
+        // Open the DB first
+	
 	RecipeDB *db = 0;
 
 	if ((dbtype!="MySQL") && (dbtype!="SQLite")) // Need it Just to have the else's properly. This should not happen anyway
@@ -607,12 +610,33 @@ if (doUSDAImport)
 		db = new LiteRecipeDB(QString::null);
 	#endif //HAVE_SQLITE
 	
-	if ( db )
-	{
-		db->importUSDADatabase();
-		delete db;
+	
+	// Now import the data and close the database
+	if (0){}
+	
+	#if HAVE_MYSQL
+	else if (dbtype=="MySQL")
+		db = new MySQLRecipeDB(host,dbName,user,pass);
+	#endif //HAVE_MYSQL
+	#if HAVE_SQLITE
+	else if (dbtype=="SQLite")
+		db = new LiteRecipeDB(QString::null);
+	#endif //HAVE_SQLITE
+	 
+	if (db && db->ok()) db->importUSDADatabase(); // Import the data
+	
+	if (0){}
+	
+	#if HAVE_MYSQL
+	else if (dbtype=="MySQL")
+		delete (MySQLRecipeDB*) db;
+	#endif //HAVE_MYSQL
+	#if HAVE_SQLITE
+	else if (dbtype=="SQLite")
+		delete (LiteRecipeDB*) db;
+	#endif //HAVE_SQLITE
+		
 	}
-}
 
 
 }
