@@ -249,11 +249,12 @@ if (it=unitsListView->selectedItem()) unitID=it->text(0).toInt();
 
 if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was selected previously
 {
-  ElementList results;
-  database->findUseOf_Ing_Unit_InRecipes(&results,ingredientID,unitID); // Find if this ingredient-unit combination is being used
-  if (results.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
+  ElementList dependingRecipes,dependingIngredientInfo;
+
+  database->findIngredientUnitDependancies(ingredientID,unitID,&dependingRecipes,&dependingIngredientInfo);
+  if (dependingRecipes.isEmpty() && dependingIngredientInfo.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
   else { // must warn!
-  DependanciesDialog *warnDialog=new DependanciesDialog(0,&results); warnDialog->exec();
+  DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes,&dependingIngredientInfo); warnDialog->exec();
   database->removeUnitFromIngredient(ingredientID,unitID);
   }
 reloadUnitList(); // Reload the list from database
