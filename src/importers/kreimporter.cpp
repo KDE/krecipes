@@ -53,7 +53,7 @@ KreImporter::KreImporter(const QString& filename)
   }
   else
   {
-	setErrorMsg( i18n("File extention doesn't match that of a valid Krecipes file.") );
+	setErrorMsg( i18n("File extension doesn't match that of a valid Krecipes file.") );
 	return;
   }
 
