@@ -578,7 +578,7 @@ void AdvancedSearchDialog::languageChange()
 	ingTypeComboBox->clear();
 	ingTypeComboBox->insertItem( i18n( "Use:" ) );
 	ingTypeComboBox->insertItem( i18n( "Do not use:" ) );
-	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses or doesn't use certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
+	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
 	ingListView->header()->setLabel( 0, i18n( "Name" ) );
 	ingListView->header()->setLabel( 1, i18n( "Id" ) );
 	ingSelectAllButton->setText( i18n( "Select All" ) );
