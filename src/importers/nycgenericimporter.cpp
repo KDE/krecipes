@@ -123,7 +123,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		if ( current.startsWith("Contributor:") )
 		{
 			Element new_author;
-			new_author.name = current.mid(current.find(':'),current.length());
+			new_author.name = current.mid(current.find(':')+1,current.length()).stripWhiteSpace();
 			qDebug("Found author: %s", new_author.name.latin1() );
 			m_authors.add( new_author );
 		}
@@ -143,12 +143,11 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		}
 	}
 
+	m_instructions = m_instructions.stripWhiteSpace();
+	putDataInRecipe();
+
 	if ( found_next )
 		importNYCGeneric(stream);
-
-	m_instructions = m_instructions.stripWhiteSpace();
-
-	putDataInRecipe();
 }
 
 void NYCGenericImporter::putDataInRecipe()
@@ -182,16 +181,28 @@ void NYCGenericImporter::resetVars()
 	m_instructions = QString::null;
 }
 
+/*
+fix headers: ----SOUP----
+fix for ingredients like:
+salt to taste
+pepper to taste
+*/
 void NYCGenericImporter::loadIngredientLine( const QString &line )
 {
 	QString current = line;
 
-	/* We can't really do anything with the ingredient header... just add it as an ingredient for now (uncomment this to use header in the future)
+	// We can't really do anything with the ingredient header... just add it as an ingredient for now
 	if ( current.contains("-----") )
 	{
-		QString ing_header = current.replace('-',"").stripWhiteSpace();
+		Ingredient new_ingredient;
+		new_ingredient.amount = 0;
+		new_ingredient.units = "";
+		new_ingredient.name = current.stripWhiteSpace();
+
+		m_ingredients.add(new_ingredient);
+		qDebug("Found ingredient header %s",new_ingredient.name.latin1());
 		return;
-	}*/
+	}
 
 	MixedNumber amount(0,0,1);
 	QString unit;
@@ -199,21 +210,30 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	QString prep;
 
 	QStringList ingredient_line = QStringList::split(' ', current );
-	for ( QStringList::const_iterator it = ingredient_line.begin(); it != ingredient_line.end(); ++it )
-	{
-		current = *it;
 
+	if ( !ingredient_line.empty() ) //probably an unnecessary check... but to be safe
+	{
 		bool ok;
-		MixedNumber test_amount = MixedNumber::fromString(current,&ok);
-		if ( ok && unit.isNull() )
+		MixedNumber test_amount = MixedNumber::fromString(ingredient_line[0],&ok);
+		if ( ok )
 		{
 			amount = amount + test_amount;
+			ingredient_line.pop_front();
 		}
-		else if ( unit.isNull() )
-			unit = current;
-		else
-			name += current+" ";
 	}
+	if ( !ingredient_line.empty() ) //probably an unnecessary check... but to be safe
+	{
+		bool ok;
+		MixedNumber test_amount = MixedNumber::fromString(ingredient_line[0],&ok);
+		if ( ok )
+		{
+			amount = amount + test_amount;
+			ingredient_line.pop_front();
+		}
+	}
+
+	name = ingredient_line.join(" ");
+
 	/*uncomment this when Krecipes uses preparation method
 	int prep_sep_index = name.find(QRegExp("[,;]"));
 	name = name.left( prep_sep_index );
