@@ -598,7 +598,10 @@ else
 RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
 if ( db ) {
 	db->connect();
-	db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+	if ( db->ok() )
+		db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+	else
+		questionRerunWizard(db->err(), i18n("Unable to setup database"));
 }
 
 delete db; //it closes the db automatically
