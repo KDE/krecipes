@@ -106,7 +106,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 
 tabWidget->insertTab( basicSearchTab, "Basic" );
 
-AdvancedSearchDialog *advancedSearch = new AdvancedSearchDialog(this,database);
+advancedSearch = new AdvancedSearchDialog(this,database);
 tabWidget->insertTab( advancedSearch, "Advanced" );
 
 // Popup menus
@@ -264,6 +264,7 @@ void SelectRecipeDialog::removeFromCat(void)
 
 void SelectRecipeDialog::reload()
 {
+advancedSearch->reload();
 loadRecipeList();
 loadCategoryCombo();
 collapseAll();

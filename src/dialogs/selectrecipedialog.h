@@ -34,6 +34,7 @@ class QHBox;
 class RecipeDB;
 class ElementList;
 class Recipe;
+class AdvancedSearchDialog;
 
 /**
 @author Unai Garro
@@ -66,6 +67,7 @@ private:
   KComboBox *categoryBox;
   KPopupMenu *kpop;
   KPopupMenu *catPop;
+  AdvancedSearchDialog *advancedSearch;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;

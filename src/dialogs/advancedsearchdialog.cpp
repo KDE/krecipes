@@ -378,11 +378,9 @@ void AdvancedSearchDialog::unselectAllIngredients()
 
 void AdvancedSearchDialog::reload()
 {
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
 	loadAuthorListView();
 	loadCategoryListView();
 	loadIngredientListView();
-	KApplication::restoreOverrideCursor();
 }
 
 void AdvancedSearchDialog::loadAuthorListView()
