@@ -1610,7 +1610,7 @@ QString LiteRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 		//make sure this newly created title is unique (just in case)
 		while ( findExistingRecipeByName( return_title ) != -1 )
 		{
-		count++;
+		count--; //go down to find the skipped recipe(s)
 		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
 		}
 		}
