@@ -1281,8 +1281,9 @@ int RecipeDB::lastInsertID()
 	QSqlQuery lastInsertID("SELECT LAST_INSERT_ID();", database);
 
 	int id = -1;
-	if (lastInsertID.isActive() && lastInsertID.next()) //this will always return a value
-		id = lastInsertID.value(0).toInt();
+	if (lastInsertID.isActive())
+		if (lastInsertID.next())
+			id = lastInsertID.value(0).toInt();
 
 	return id;
 }
