@@ -69,33 +69,43 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Design Left Panel
     il=new KIconLoader;
-    button0=new QPushButton(leftPanel); button0->setFlat(true);
+    buttonsList = new QPtrList<MenuButton>();
+    buttonsList->setAutoDelete( TRUE );
+
+    button0=new MenuButton(leftPanel); button0->setFlat(true);
     button0->setIconSet(il->loadIconSet("filefind", KIcon::Small));
     button0->setGeometry(0,0,150,30);
+    buttonsList->append(button0);
 
-    button1=new QPushButton(leftPanel); button1->setFlat(true);
+    button1=new MenuButton(leftPanel); button1->setFlat(true);
     button1->setIconSet(il->loadIconSet( "trolley", KIcon::Small ));
 	  button1->setGeometry(0,30,150,30);
+    buttonsList->append(button1);
 
-    button2=new QPushButton(leftPanel); button2->setFlat(true);
+    button2=new MenuButton(leftPanel); button2->setFlat(true);
     button2->setIconSet(il->loadIconSet( "ingredients", KIcon::Small ));
     button2->setGeometry(0,60,150,30);
+    buttonsList->append(button2);
 
-    button3=new QPushButton(leftPanel); button3->setFlat(true);
+    button3=new MenuButton(leftPanel); button3->setFlat(true);
     button3->setIconSet(il->loadIconSet( "properties", KIcon::Small ));
 	  button3->setGeometry(0,90,150,30);
+    buttonsList->append(button3);
 
-    button4=new QPushButton(leftPanel); button4->setFlat(true);
+    button4=new MenuButton(leftPanel); button4->setFlat(true);
     button4->setIconSet(il->loadIconSet( "units", KIcon::Small ));
 	  button4->setGeometry(0,120,150,30);
+    buttonsList->append(button4);
 
-    button5=new QPushButton(leftPanel); button5->setFlat(true);
+    button5=new MenuButton(leftPanel); button5->setFlat(true);
     button5->setIconSet(il->loadIconSet( "categories", KIcon::Small ));
 	  button5->setGeometry(0,150,150,30);
+    buttonsList->append(button5);
 
-    button6=new QPushButton(leftPanel); button6->setFlat(true);
+    button6=new MenuButton(leftPanel); button6->setFlat(true);
     button6->setIconSet(il->loadIconSet( "personal", KIcon::Small ));
 	  button6->setGeometry(0,180,150,30);
+    buttonsList->append(button6);
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
@@ -155,20 +165,13 @@ delete il; // remove iconloader
 }
 
 void KrecipesView::translate(){
-  button0->setText(i18n("Find/Edit Recipes"));
-  QToolTip::add(button0, i18n("Find/Edit Recipes"));
+  button0->setTitle(i18n("Find/Edit Recipes"));
   button1->setText(i18n("Shopping List"));
-  QToolTip::add(button1, i18n("Shopping List"));
   button2->setText(i18n("Ingredients"));
-  QToolTip::add(button2, i18n("Ingredients"));
   button3->setText(i18n("Properties"));
-  QToolTip::add(button3, i18n("Properties"));
   button4->setText(i18n("Units"));
-  QToolTip::add(button4, i18n("Units"));
   button5->setText(i18n("Recipe Categories"));
-  QToolTip::add(button5, i18n("Recipe Categories"));
   button6->setText(i18n("Authors"));
-  QToolTip::add(button6, i18n("Authors"));
 }
 
 void KrecipesView::print(QPainter *p, int height, int width)
@@ -374,15 +377,13 @@ delete db; //it closes the db automatically
 }
 
 void KrecipesView::resizeButtons(){
-  button0->resize(leftPanel->width(), 30);
-  button1->resize(leftPanel->width(), 30);
-  button2->resize(leftPanel->width(), 30);
-  button3->resize(leftPanel->width(), 30);
-  button4->resize(leftPanel->width(), 30);
-  button5->resize(leftPanel->width(), 30);
-  button6->resize(leftPanel->width(), 30);
-  if(recipeButton){
-    recipeButton->resize(leftPanel->width(), 30);
+  QPtrListIterator<MenuButton> it( *buttonsList);	// iterate over menu buttons
+  MenuButton *bt;
+  while ( (bt = it.current()) != 0 ){
+    bt->resize(leftPanel->width(), 30);
+    bt->repaint();
+    bt->fade();
+    ++it;
   }
 }
 
@@ -398,6 +399,7 @@ if (!recipeButton)
 	recipeButton->setTitle(title);
 	recipeButton->resize(leftPanel->width(),30);
 	recipeButton->show();
+  buttonsList->append(recipeButton);
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
 	connect((RecipeInputDialog *)w,SIGNAL(titleChanged(const QString&)),recipeButton,SLOT(setTitle(const QString&)));
 }
@@ -438,5 +440,33 @@ void MenuButton::setTitle(const QString &title)
   QToolTip::add(this, title);
 }
 
+void MenuButton::enterEvent( QEvent * ){
+  fade();
+}
+
+void MenuButton::leaveEvent( QEvent * ){
+  fade();
+}
+
+void MenuButton::focusInEvent( QFocusEvent * ){
+  repaint();
+  fade();
+}
+
+void MenuButton::focusOutEvent( QFocusEvent * ){
+  repaint();
+  fade();
+}
+
+void MenuButton::fade(){
+    int w = width();
+    int h = height();
+    KPixmap img1 = KPixmap(QSize(w/4, h-4));
+    QBitmap bm( QSize( w/4, h-4 ) );
+    bm = KPixmapEffect::gradient( img1, Qt::white, Qt::black, KPixmapEffect::HorizontalGradient, 0 );
+    img1.fill(this->paletteBackgroundColor());
+    img1.setMask( bm );
+    bitBlt(this,3*w/4,2,&img1,0,Qt::CopyROP);
+}
 
 #include "krecipesview.moc"

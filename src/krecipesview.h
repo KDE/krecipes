@@ -12,8 +12,11 @@
 #include <qsplitter.h>
 #include <qevent.h>
 #include <qtooltip.h>
+#include <qbitmap.h>
 
 #include <kiconloader.h>
+#include <kpixmap.h>
+#include <kpixmapeffect.h>
 #include <kparts/part.h>
 #include <krecipesiface.h>
 #include <qwidgetstack.h>
@@ -120,14 +123,15 @@ private:
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
 	QWidgetStack *rightPanel;
-	QPushButton *button0;
-	QPushButton *button1;
-	QPushButton *button2;
-	QPushButton *button3;
-	QPushButton *button4;
-	QPushButton *button5;
-	QPushButton *button6;
-	QPushButton *button7;
+  QPtrList<MenuButton> *buttonsList;
+	MenuButton *button0;
+	MenuButton *button1;
+	MenuButton *button2;
+	MenuButton *button3;
+	MenuButton *button4;
+	MenuButton *button5;
+	MenuButton *button6;
+	MenuButton *button7;
 
 	MenuButton *recipeButton;
 	QWidget *recipeWidget;
@@ -155,8 +159,6 @@ private slots:
     void slotSetDietWizardPanel(void);
     void switchToRecipe(void);
 
-
-
 };
 
 
@@ -173,6 +175,11 @@ public:
 
 public slots:
 	void setTitle(const QString &title);
+  void fade();
+  void enterEvent( QEvent * );
+  void leaveEvent( QEvent * );
+  void focusInEvent( QFocusEvent * );
+  void focusOutEvent( QFocusEvent * );
 };
 
 #endif // _KRECIPESVIEW_H_
