@@ -385,8 +385,6 @@ void RecipeViewDialog::createBlocks()
 	{
 		DivElement *element = geom_contents.find( rect );
 
-		pushItemsDownIfNecessary( geometries, rect );
-
 		element->addProperty( "position: absolute;" );
 		QWidget *p=(QWidget*)parent();
 		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->height())) );
