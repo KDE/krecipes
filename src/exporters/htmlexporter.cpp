@@ -66,8 +66,14 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 	QDomDocument doc;
 
-	if ( !input.open( IO_ReadOnly ) )
-		return "<HTML></HTML>";
+	if ( !input.open( IO_ReadOnly ) ) {
+		QString errorStr = i18n("<html><body>\n"
+			"<p><b>Error: </b>Unable to find a layout file, which is"
+			" needed to view the recipe.</p>"
+			"<p>Krecipes was probably not properly installed.</p>"
+			"</body></html>");
+		return errorStr;
+	}
 
 	QString error;
 	int line;
