@@ -120,6 +120,7 @@ public:
 
 	double unitRatio(int unitID1, int unitID2);
 
+	QString escape(const QString &s);
 	QCString escapeAndEncode(const QString &s);
 	QString unescapeAndDecode(const QString &s);
 
@@ -135,6 +136,8 @@ private:
 	void loadElementList(ElementList *elList, QSQLiteResult *query);
 	void loadPropertyElementList(ElementList *elList, QSQLiteResult *query);
 	void portOldDatabases(float version);
+	int sqlite_encode_binary(const unsigned char *in, int n, unsigned char *out);
+	int sqlite_decode_binary(const unsigned char *in, unsigned char *out);
 };
 
 
