@@ -29,7 +29,7 @@ elementEdit=new KLineEdit(box);
 boxLayout->addWidget(elementEdit);
 
 QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
-okButton=new QPushButton(i18n("&Ok"),this);
+okButton=new QPushButton(i18n("&OK"),this);
 cancelButton=new QPushButton(i18n("&Cancel"),this);
 button_hbox->addWidget(okButton);
 button_hbox->addWidget(cancelButton);

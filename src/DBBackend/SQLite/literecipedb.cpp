@@ -727,13 +727,15 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	while (!query.atEnd()) {
 		emit recipeRemoved(row.data(0).toInt());
 		database->executeQuery(QString("DELETE FROM recipes WHERE id=%1;").arg(row.data(0).toInt()));
-		database->executeQuery(QString("DELETE FROM ingredient_list WHERE ingredient_id=%1 AND unit_id=%2;").arg(ingredientID).arg(unitID));
 		row=query.next();
 	}
 }
 
+// Remove any ingredient in ingredient_list which has references to this unit and ingredient
+database->executeQuery(QString("DELETE FROM ingredient_list WHERE ingredient_id=%1 AND unit_id=%2;").arg(ingredientID).arg(unitID));
+
 // Remove any ingredient properties from ingredient_info where the this ingredient+unit is being used (user must have been warned before calling this function!)
-command=QString("DELETE FROM ingredient_info ii WHERE ii.ingredient_id=%1 AND ii.per_units=%2;").arg(ingredientID).arg(unitID);
+command=QString("DELETE FROM ingredient_info WHERE ingredient_id=%1 AND per_units=%2;").arg(ingredientID).arg(unitID);
 database->executeQuery(command);
 // Clean up ingredient_list which have no recipe that they belong to.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
@@ -803,10 +805,12 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	while (!query.atEnd()) {
 		emit recipeRemoved(row.data(0).toInt());
 		database->executeQuery(QString("DELETE FROM recipes WHERE id=%1;").arg(row.data(0).toInt()));
-		database->executeQuery(QString("DELETE FROM ingredient_list WHERE ingredient_id=%1;").arg(ingredientID));
 		row=query.next();
 	}
 }
+
+// Remove any ingredient in ingredient_list which has references to this ingredient
+database->executeQuery(QString("DELETE FROM ingredient_list WHERE ingredient_id=%1;").arg(ingredientID));
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
@@ -1001,10 +1005,12 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	while (!query.atEnd()) {
 		emit recipeRemoved(row.data(0).toInt());
 		database->executeQuery(QString("DELETE FROM recipes WHERE id=%1;").arg(row.data(0).toInt()));
-		database->executeQuery(QString("DELETE FROM ingredient_list WHERE prep_method_id=%1;").arg(prepMethodID));
 		row=query.next();
 	}
 }
+
+// Remove any ingredient in ingredient_list which has references to this prep method
+database->executeQuery(QString("DELETE FROM ingredient_list WHERE prep_method_id=%1;").arg(prepMethodID));
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
@@ -1072,10 +1078,12 @@ if (query.getStatus()!=QSQLiteResult::Failure) {
 	while (!query.atEnd()) {
 		emit recipeRemoved(row.data(0).toInt());
 		database->executeQuery(QString("DELETE FROM recipes WHERE id=%1;").arg(row.data(0).toInt()));
-		database->executeQuery(QString("DELETE FROM ingredient_list WHERE unit_id=%1;").arg(unitID));
 		row=query.next();
 	}
 }
+
+// Remove any ingredient in ingredient_list which has references to this unit
+database->executeQuery(QString("DELETE FROM ingredient_list WHERE unit_id=%1;").arg(unitID));
 
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");

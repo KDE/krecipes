@@ -23,6 +23,9 @@
 #include "krecqsqliteresult.h"
 
 #include <qvaluelist.h>
+
+#include <kdebug.h>
+
 #include "config.h"
 #if HAVE_SQLITE
 #include <sqlite.h>
@@ -84,6 +87,8 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 	if (sqlite3_exec(m_db, query.latin1(), &call_back, &res, &errmsg) > 0)
 #endif
 	{
+		kdDebug()<<"SQLite error: "<<errmsg<<endl<<
+		  "\t (Query: "<<query<<")"<<endl;
 		res.setError(errmsg);
 		res.setStatus(QSQLiteResult::Failure);
         free(errmsg);

@@ -994,6 +994,8 @@ authorShow->clear();
 categoryShow->clear();
 servingsNumInput->setValue(1);
 
+instructionsEdit->selectAll();
+
 //Set back to the first page
 tabWidget->setCurrentPage(0);
 
