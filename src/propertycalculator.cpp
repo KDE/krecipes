@@ -9,6 +9,8 @@
  ***************************************************************************/
 #include "propertycalculator.h"
 
+#include <math.h> // For fabs()
+
 #include <kdebug.h>
 
 int autoConvert(RecipeDB* database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)

@@ -11,6 +11,8 @@
 #ifndef HTMLEXPORTER_H
 #define HTMLEXPORTER_H
 
+#include <math.h> // For ceil()
+
 #include "baseexporter.h"
 
 class CustomRectList;

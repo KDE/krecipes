@@ -12,6 +12,8 @@
 #ifndef KREEXPORTER_H
 #define KREEXPORTER_H
 
+#include <stdlib.h> // For getenv()
+
 #include "baseexporter.h"
 
 /**

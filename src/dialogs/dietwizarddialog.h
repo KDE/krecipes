@@ -13,6 +13,8 @@
 #ifndef DIETWIZARDDIALOG_H
 #define DIETWIZARDDIALOG_H
 
+#include <stdlib.h> // For RAND_MAX
+
 #include <qcheckbox.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
