@@ -101,12 +101,12 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	// value of the item (its text), with the value of the combobox
     if ( w->inherits( "EditBox" ) )
 	{
-	if (eb->accepted)
-		{
+	//if (eb->accepted)
+	//	{
 		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
 		if (row()!=col()) emit signalSymmetric(row(),col(),eb->value()); // Signal to make symmetric. just in case, check if row,col are different (it shouldn't be editable, anyway)
-		}
+	//	}
 	}
     else
 	QTableItem::setContentFromEditor( w );
