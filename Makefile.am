@@ -1,6 +1,4 @@
 SUBDIRS = src icons pics data
 
 messages:
-	$(XGETTEXT) src/*.cpp src/*.h -o $(podir)/krecipes.pot
-
-
+	$(XGETTEXT) `find ./src/ -name "*.cpp"` -o $(podir)/krecipes.pot
