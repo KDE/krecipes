@@ -13,9 +13,13 @@
 #include "dietwizarddialog.h"
 #include "DBBackend/recipedb.h"
 #include "editbox.h"
+
+#include <qbitmap.h>
 #include <qheader.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qwmatrix.h>
+
 #include <kapp.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -385,6 +389,14 @@ DishTitle::~DishTitle()
 void DishTitle::paintEvent(QPaintEvent *p )
 {
 
+
+
+    // Now draw the text
+
+    if (QT_VERSION>=0x030200)
+    {
+    // Case 1: Qt 3.2+
+
     QPainter painter(this);
 
     // First draw the decoration
@@ -393,6 +405,7 @@ void DishTitle::paintEvent(QPaintEvent *p )
     painter.drawRoundRect(0,20,30,height()-40,50,50.0/(height()-40)*35.0);
 
     // Now draw the text
+
     QFont titleFont=KGlobalSettings::windowTitleFont ();
     titleFont.setPointSize(15);
     painter.setFont(titleFont);
@@ -401,8 +414,52 @@ void DishTitle::paintEvent(QPaintEvent *p )
     painter.drawText(0,0,-height(),30,AlignCenter,titleText);
     painter.setPen(QColor(0xFF,0xFF,0xFF));
     painter.drawText(-1,-1,-height()-1,29,AlignCenter,titleText);
+    painter.end();
+    }
+    else
+    {
+    // Case 2: Qt 3.1
+
+    // Use a pixmap
+
+    QSize pmSize(height(),width()); //inverted size so we can rotate later
+    QPixmap pm(pmSize);
+    pm.fill(QColor(0xFF,0xFF,0xFF));
+    QPainter painter(&pm);
+
+    // First draw the decoration
+    painter.setPen(KGlobalSettings::activeTitleColor());
+    painter.setBrush(QBrush(KGlobalSettings::activeTitleColor()));
+    painter.drawRoundRect(20,0,height()-40,30,50.0/(height()-40)*35.0,50);
+
+    // Now draw the text
+    QFont titleFont=KGlobalSettings::windowTitleFont ();
+    titleFont.setPointSize(15);
+    painter.setFont(titleFont);
+    painter.setPen(QColor(0x00,0x00,0x00));
+    painter.drawText(0,0,height(),30,AlignCenter,titleText);
+    painter.setPen(QColor(0xFF,0xFF,0xFF));
+    painter.drawText(-1,-1,height()-1,29,AlignCenter,titleText);
+    painter.end();
+
+    //Set the border transparent using a mask
+    QBitmap mask(pm.size());
+    mask.fill(Qt::color0);
+    painter.begin(&mask);
+    painter.setPen(Qt::color1);
+    painter.setBrush(Qt::color1);
+    painter.drawRoundRect(20,0,height()-40,30,50.0/(height()-40)*35.0,50);
 
     painter.end();
+    pm.setMask(mask);
+
+    //And Rotate
+    QWMatrix m ; m.rotate(-90);
+    pm=pm.xForm(m);
+
+    bitBlt(this, 0, 0, &pm);
+    }
+
 }
 QSize DishTitle::sizeHint () const
 {

@@ -110,7 +110,7 @@ private:
 
 		// Settings for the dish
 		QWidgetStack *dishStack;
-	// Methodsdeve
+	// Methods
 		void reload(); // Reloads again from the cached data
 public slots:
 	void nextDish(void);
