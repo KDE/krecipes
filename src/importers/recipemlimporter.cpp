@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <klocale.h>
 
 #include "recipe.h"
+#include "mixednumber.h"
 
 RecipeMLImporter::RecipeMLImporter( const QString& file ) : BaseImporter()
 {
@@ -39,12 +40,13 @@ RecipeMLImporter::RecipeMLImporter( const QString& file ) : BaseImporter()
 			return;
 		}
 
+		/* I guess we won't make the doctype tag necessary.  I've found several RecipeML files without one.
 		if (doc.doctype().name() != "recipeml")
 		{
 			//maybe give user actual doc.doctype().name()?
 			setErrorMsg( i18n("This file does not appear to be a valid RecipeML archive.") );
 			return;
-		}
+		} */
 
 		QDomElement recipeml = doc.documentElement();
 
@@ -189,7 +191,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 				QDomElement amtChild = amtChilds.item(k).toElement();
 
 				if (amtChild.tagName() == "qty")
-					quantity = amtChild.text().toDouble();
+					quantity = MixedNumber::fromString(amtChild.text()).toDouble();
 				else if (amtChild.tagName() == "unit")
 					unit = amtChild.text().stripWhiteSpace();
 			}
