@@ -427,9 +427,11 @@ constraintsView=new PropertyConstraintListView(listBox,database);
 constraintsView->reload();
 
 	// KDoubleInput based edit boxes
-constraintsEditBox1=new EditBox(this);
+constraintsEditBox1=new EditBox(constraintsView->viewport());
+constraintsView->addChild(constraintsEditBox1);
 constraintsEditBox1->hide();
-constraintsEditBox2=new EditBox(this);
+constraintsEditBox2=new EditBox(constraintsView->viewport());
+constraintsView->addChild(constraintsEditBox2);
 constraintsEditBox2->hide();
 
 
@@ -465,11 +467,12 @@ void DishInput::insertConstraintsEditBoxes(QListViewItem* it)
 
 QRect r;
 
+
+
+
 // Constraints Box1
-r.setTopLeft(this->pos());r.setSize(QSize(30,30));
-r.moveBy(listBox->pos().x()+constraintsView->pos().x()+constraintsView->header()->pos().x(),listBox->pos().y()+constraintsView->pos().y()+constraintsView->header()->pos().y()); // Place it on top of the header of the list view
-r.moveBy(constraintsView->header()->sectionRect(2).x(),0); // Move it to column no 1
-r.moveBy(0,constraintsView->header()->sectionRect(2).height()+constraintsView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
+r = constraintsView->header()->sectionRect(2); //start at the section 2 header
+r.moveBy(0,constraintsView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
 
 r.setHeight(it->height()); // Set the item's height
 r.setWidth(constraintsView->header()->sectionRect(2).width()); // and width
@@ -477,10 +480,8 @@ constraintsEditBox1->setGeometry(r);
 
 
 //Constraints Box2
-r.setTopLeft(this->pos());r.setSize(QSize(30,30));
-r.moveBy(listBox->pos().x()+constraintsView->pos().x()+constraintsView->header()->pos().x(),listBox->pos().y()+constraintsView->pos().y()+constraintsView->header()->pos().y()); // Place it on top of the header of the list view
-r.moveBy(constraintsView->header()->sectionRect(3).x(),0); // Move it to column no 2
-r.moveBy(0,constraintsView->header()->sectionRect(3).height()+constraintsView->itemRect(it).y()); //Move down to the item
+r = constraintsView->header()->sectionRect(3); //start at the section 3 header
+r.moveBy(0,constraintsView->itemRect(it).y()); //Move down to the item
 
 r.setHeight(it->height()); // Set the item's height
 r.setWidth(constraintsView->header()->sectionRect(3).width()); // and width
