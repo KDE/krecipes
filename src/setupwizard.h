@@ -37,7 +37,7 @@ public:
 
      SetupWizard(QWidget *parent=0, const char *name=0, bool modal=true, WFlags f=0);
     ~SetupWizard();
-    void getOptions(bool &setupUser, bool &initializeData);
+    void getOptions(bool &setupUser, bool &initializeData, bool &doUSDAImport);
     void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass);
     void getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName,QString &user, QString &pass);
 private:
@@ -119,11 +119,15 @@ public:
 	// Methods
 	DataInitializePage(QWidget *parent);
 	bool doInitialization(void);
+	bool doUSDAImport(void);
+
 private:
 	// Widgets
 	QLabel *logo;
 	QLabel *initializeText;
+	QLabel *USDAImportText;
 	QCheckBox *initializeCheckBox;
+	QCheckBox *USDAImportCheckBox;
 
 };
 

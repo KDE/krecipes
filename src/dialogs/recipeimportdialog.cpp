@@ -144,6 +144,8 @@ void RecipeImportDialog::loadListView()
 		}
 		categories_it.current()->setText( 0, categories_it.current()->text(0) + QString(" (%1)").arg(count) );
 	}
+	
+	head_item->setOn(true); //this will check all recipes
 }
 
 RecipeList RecipeImportDialog::getSelectedRecipes()

@@ -233,7 +233,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database);
-    viewPanel=new RecipeViewDialog(rightPanel,database,1);
+    viewPanel=new RecipeViewDialog(rightPanel,database,-1);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
     ingredientsPanel=new IngredientsDialog(rightPanel,database);
     propertiesPanel=new PropertiesDialog(rightPanel,database);
@@ -535,7 +535,7 @@ QString setupVersion=config->readEntry("Version","0.3");  // By default assume i
 if (!setupDone || (setupVersion.toDouble()<0.5) || force) // The config structure changed in version 0.4 to have DBType and Config Structure version
 {
 
-bool setupUser,initData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
+bool setupUser,initData,doUSDAImport,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
 bool isRemote;
 
 SetupWizard *setupWizard=new SetupWizard(this);
@@ -545,10 +545,9 @@ KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType
 dbtype=config->readEntry("Type","SQLite");
 
 kdDebug()<<"Setting up"<<endl;
-setupWizard->getOptions(setupUser,initData);
+setupWizard->getOptions(setupUser,initData,doUSDAImport);
 
 // Setup user if necessary
-
 #if HAVE_MYSQL
 if (dbtype=="MySQL" && setupUser) // Don't setup user if checkbox of existing user... was set
 	{
@@ -584,6 +583,32 @@ if (initData)
 	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
 	initializeData(host,dbName,user,pass); // Populate data as normal user
 	}
+	
+if (doUSDAImport)
+{
+	RecipeDB *db = 0;
+
+	if ((dbtype!="MySQL") && (dbtype!="SQLite")) // Need it Just to have the else's properly. This should not happen anyway
+	{
+		kdError()<<i18n("Code error. Unrecognized database type. Exiting\n");
+		exit(1);
+	}
+	#if HAVE_MYSQL
+	else if (dbtype=="MySQL")
+		db = new MySQLRecipeDB(host,dbName,user,pass);
+	#endif //HAVE_MYSQL
+	#if HAVE_SQLITE
+	else if (dbtype=="SQLite")
+		db = new LiteRecipeDB(QString::null);
+	#endif //HAVE_SQLITE
+	
+	if ( db )
+	{
+		db->importUSDADatabase();
+		delete db;
+	}
+}
+
 
 }
 delete setupWizard;

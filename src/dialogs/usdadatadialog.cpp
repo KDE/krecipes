@@ -90,7 +90,10 @@ void USDADataDialog::loadDataFromFile()
 	QTextStream stream( &file );
 	while ( !stream.atEnd() )
 	{
-		QStringList fields = QStringList::split( "^", stream.readLine(), true );
+		QString line = stream.readLine();
+		if ( line.isEmpty() ){ continue; }
+		
+		QStringList fields = QStringList::split( "^", line, true );
 		loaded_data << fields;
 
 		QString ing_id = fields[0].mid(1,fields[1].length()-2);

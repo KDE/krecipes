@@ -88,7 +88,7 @@ void BaseImporter::import( RecipeDB *db )
 				new_unit_id = db->lastInsertID();
 			}
 			
-			int new_prep_id = 1; //1 is the null preparation method
+			int new_prep_id = -1;
 			if ( !(*ing_it).prepMethod.isEmpty() )
 			{
 				Element prepMethodFound = prepMethodList.findByName( (*ing_it).prepMethod );

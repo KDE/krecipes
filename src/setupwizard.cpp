@@ -417,11 +417,11 @@ config->writeEntry("Version","0.5");
 kdDebug()<<"Setting in kconfig the lines to disable wizard startup..."<<sDBType<<endl;
 }
 
-void SetupWizard::getOptions(bool &setupUser, bool &initializeData)
+void SetupWizard::getOptions(bool &setupUser, bool &initializeData, bool &doUSDAImport)
 {
 setupUser=permissionsSetupPage->doUserSetup();
 initializeData=dataInitializePage->doInitialization();
-
+doUSDAImport=dataInitializePage->doUSDAImport();
 }
 
 void SetupWizard::getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass)
@@ -470,16 +470,31 @@ layout->addItem(logoSpacer,1,2);
 
 // Initialize data checkbox
 
-QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(rootInfoSpacer,5,3);
-
 initializeCheckBox=new QCheckBox(i18n("Yes please, initialize the database with the examples"),this,"initializeCheckBox");
 layout->addWidget(initializeCheckBox,3,3);
+
+QSpacerItem *textInfoSpacer=new QSpacerItem(0,50,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(textInfoSpacer,4,3);
+
+USDAImportText=new QLabel(i18n("Krecipes can import nutrient data from the USDA's nutrient database for over 400 foods.  A total of 43 food properties are included for each food, such as energy, fat, vitamin C, etc.<br><br>Would you like to import this data now?  Note that this operation is safe to use on an existing database, and no data loss will occur.  This operation may take several minutes."),this);
+layout->addWidget(USDAImportText,5,3);
+
+QSpacerItem *importInfoSpacer=new QSpacerItem(0,50,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(importInfoSpacer,6,3);
+
+USDAImportCheckBox=new QCheckBox(i18n("Yes please, load the database with nutrient data for 400+ foods. (Note: ENGLISH ONLY!)"),this,"USDAImportCheckBox");
+layout->addWidget(USDAImportCheckBox,7,3);
+USDAImportCheckBox->setEnabled(false);
 }
 
 bool DataInitializePage::doInitialization(void)
 {
 return (initializeCheckBox->isChecked());
+}
+
+bool DataInitializePage::doUSDAImport(void)
+{
+return (USDAImportCheckBox->isChecked());
 }
 
 DBTypeSetupPage::DBTypeSetupPage(QWidget *parent):QWidget(parent)

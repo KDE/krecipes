@@ -39,8 +39,10 @@ class RecipeDB{
 
 protected:
 	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init){};
-	virtual ~RecipeDB(){};
+
 public:
+	virtual ~RecipeDB(){};
+	
 	virtual void addAuthorToRecipe(int recipeID, int categoryID)=0;
 	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
 
