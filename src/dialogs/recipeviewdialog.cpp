@@ -145,7 +145,7 @@ for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 recipeHTML+="</body></html>";
 }
 
-qDebug(recipeHTML);
+kdDebug()<<recipeHTML;
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
