@@ -716,6 +716,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
     MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
     if(ok){
       ing->amount = mn.toDouble();
+      it->setText(1, QString::number(mn.toDouble()));
       emit changed();
     }
     else{
