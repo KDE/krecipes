@@ -13,6 +13,8 @@
 
 #include "baseexporter.h"
 
+#include <qstringlist.h>
+
 class RecipeDB;
 
 /**
@@ -26,6 +28,13 @@ public:
 	virtual ~MMFExporter();
 
 	virtual QString createContent( const QPtrList<Recipe> & );
+
+private:
+	void writeMMFHeader( QString &content, Recipe *recipe );
+	void writeMMFIngredients( QString &content, Recipe *recipe );
+	void writeMMFDirections( QString &content, Recipe *recipe );
+
+	QStringList wrapText( const QString& str, int at) const;
 };
 
 #endif //MMFEXPORTER_H
