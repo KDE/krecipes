@@ -66,7 +66,7 @@ welcomeText->setText(i18n("Thank you very much for choosing Krecipes.\nIt looks 
 welcomeText->setMinimumWidth(200);
 welcomeText->setMaximumWidth(10000);
 welcomeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
-welcomeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop |QLabel::AlignJustify  ) );
+welcomeText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
 layout->addWidget(welcomeText,1,3);
 
 }
@@ -85,7 +85,7 @@ permissionsText->setText(i18n("This dialog will allow you to specify a MySQL acc
 permissionsText->setMinimumWidth(200);
 permissionsText->setMaximumWidth(10000);
 permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
-permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop |QLabel::AlignJustify  ) );
+permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
 layout->addWidget(permissionsText,1,3);
 
 // Logo
@@ -110,7 +110,7 @@ QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePoli
 layout->addItem(rootInfoSpacer,5,3);
 
 // MySQL root/admin info
-QVGroupBox *rootInfoVGBox=new QVGroupBox(this,"rootInfoVGBox"); rootInfoVGBox->setTitle(i18n("MySQL root info"));
+QVGroupBox *rootInfoVGBox=new QVGroupBox(this,"rootInfoVGBox"); rootInfoVGBox->setTitle(i18n("MySQL Administrator Account"));
 rootInfoVGBox->setEnabled(false); // Disable by default
 rootInfoVGBox->setInsideSpacing(10);
 layout->addWidget(rootInfoVGBox,6,3);
@@ -269,7 +269,7 @@ saveText->setMinimumWidth(200);
 saveText->setMaximumWidth(10000);
 saveText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 
-saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter | QLabel::AlignJustify) );
+saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter) );
 layout->addWidget(saveText,1,3);
 
 
