@@ -136,6 +136,7 @@ recipeToLoad.exec( command);
 		    Element el;
 		    el.id=recipeToLoad.value(0).toInt();
 		    el.name=unescapeAndDecode(recipeToLoad.value(1).toString());
+		    if (el.id!=-1) recipe->categoryList.add(el); // add to list except for default category (-1)
 		    recipe->categoryList.add(el);
                 }
             }
@@ -291,13 +292,22 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
+int categoryCounter=0;
+
 for (Element *cat=recipe->categoryList.getLast(); cat; cat=recipe->categoryList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	{
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
 	.arg(cat->id);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+	categoryCounter++;
 }
+	if (!categoryCounter) // If there are no categories, add the default -1 to ease and speed up searches
+	{
+	command=QString("INSERT INTO category_list VALUES (%1,-1);")
+	.arg(recipeID);
+	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+	}
 
 // Save the author list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
@@ -360,31 +370,6 @@ QSqlQuery recipeToLoad( command,database);
  		    }
                 }
 	}
-
-// While loading the whole list categorised, don't forget the uncategorised ones, add them with category=-1
-
-if ((!categoryID) && (recipeCategoryList))
-{
-	command="SELECT r.id,r.title FROM recipes r LEFT JOIN category_list cl ON(r.id=cl.recipe_id) WHERE cl.recipe_id IS NULL;";
-
-	recipeToLoad.exec(command);
-
-            if ( recipeToLoad.isActive() ) {
-                while ( recipeToLoad.next() ) {
-		    Element recipe;
-		    recipe.id=recipeToLoad.value(0).toInt();
-		    recipe.name=unescapeAndDecode(recipeToLoad.value(1).toString());
-		    list->add(recipe);
-
-		    if (recipeCategoryList)
-		    {
-		    int *category=new int;
-		    *category=-1;
-		    recipeCategoryList->append (category);
- 		    }
-                }
-	}
-}
 
 
 }
