@@ -1,13 +1,17 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
-//  *   (at your option) any later version.                                   *
+ *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "propertiesdialog.h"
+#include <klocale.h>
+
+#include "recipedb.h"
+#include "createpropertydialog.h"
 
 PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
@@ -29,9 +33,9 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 
     propertyListView=new KListView (this);
     layout->addMultiCellWidget (propertyListView,1,4,1,6);
-    propertyListView->addColumn("Id");
-    propertyListView->addColumn("Property");
-    propertyListView->addColumn("Units");
+    propertyListView->addColumn(i18n("Id."));
+    propertyListView->addColumn(i18n("Property"));
+    propertyListView->addColumn(i18n("Units"));
     QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,7);
     addPropertyButton=new QPushButton(this);

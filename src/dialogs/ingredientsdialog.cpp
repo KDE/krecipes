@@ -8,10 +8,18 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "ingredientsdialog.h"
+#include "recipedb.h"
+#include "selectunitdialog.h"
+#include "createelementdialog.h"
+#include "ingredientpropertylist.h"
+#include "selectpropertydialog.h"
+#include "editbox.h"
+#include "unitsdialog.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
 #include "dependanciesdialog.h"
+#include <klocale.h>
 
 IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -32,9 +40,13 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     layout->addItem(spacer_top,0,1);
 
     ingredientListView=new KListView (this);
+    ingredientListView->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (ingredientListView,1,4,1,1);
-    ingredientListView->addColumn("Id");
-    ingredientListView->addColumn("Ingredient");
+    ingredientListView->addColumn(i18n("Id"));
+    ingredientListView->addColumn(i18n("Ingredient"));
+    ingredientListView->setRenameable(1, true);
+    ingredientListView->setDefaultRenameAction(QListView::Reject);
+    ingredientListView->setMinimumWidth(150);
     ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -67,9 +79,11 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
 
     unitsListView=new KListView (this);
-    unitsListView->addColumn("i.");
-    unitsListView->addColumn("Units");
+    unitsListView->addColumn(i18n("Id."));
+    unitsListView->addColumn(i18n("Units"));
+    unitsListView->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
+    unitsListView->setMinimumWidth(150);
     unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -97,10 +111,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     propertiesListView=new KListView (this);
     layout->addMultiCellWidget (propertiesListView,1,4,9,9);
-    propertiesListView->addColumn("Id");
-    propertiesListView->addColumn("Property");
-    propertiesListView->addColumn("Amount");
-    propertiesListView->addColumn("units");
+    propertiesListView->addColumn(i18n("Id."));
+    propertiesListView->addColumn(i18n("Property"));
+    propertiesListView->addColumn(i18n("Amount"));
+    propertiesListView->addColumn(i18n("units"));
     propertiesListView->setAllColumnsShowFocus(true);
     propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
@@ -136,6 +150,8 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     // Signals & Slots
     connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateLists()));
+    connect(this->ingredientListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredient( QListViewItem* )));
+    connect(this->ingredientListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredient( QListViewItem* )));
     connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
     connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
@@ -204,7 +220,7 @@ unitsListView->setSelected(unitsListView->firstChild(),true);
 
 void IngredientsDialog::addIngredient(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(QString("New Ingredient"));
+CreateElementDialog* elementDialog=new CreateElementDialog(QString(i18n("New Ingredient")));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
@@ -212,6 +228,28 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    reloadIngredientList(); // Reload the list from database
 }
 delete elementDialog;
+}
+
+void IngredientsDialog::modIngredient(QListViewItem* i)
+{
+  addIngredientButton->setEnabled(false);
+  removeIngredientButton->setEnabled(false);
+  addUnitButton->setEnabled(false);
+  removeUnitButton->setEnabled(false);
+  addPropertyButton->setEnabled(false);
+  removePropertyButton->setEnabled(false);
+  ingredientListView->rename(i, 1);
+}
+
+void IngredientsDialog::saveIngredient(QListViewItem* i)
+{
+  database->modIngredient((i->text(0)).toInt(), i->text(1));
+  addIngredientButton->setEnabled(true);
+  removeIngredientButton->setEnabled(true);
+  addUnitButton->setEnabled(true);
+  removeUnitButton->setEnabled(true);
+  addPropertyButton->setEnabled(true);
+  removePropertyButton->setEnabled(true);
 }
 
 void IngredientsDialog::addUnitToIngredient(void)
@@ -235,10 +273,10 @@ if (ingredientID>=0) // an ingredient was selected previously
     int unitID = unitsDialog->unitID();
 
     if (!(database->ingredientContainsUnit(ingredientID,unitID)))
-    	database->AddUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
+    	database->addUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
     else
     	{
-	QMessageBox::information(this,"Unit exists","The ingredient contains already the unit that you have chosen.");
+	QMessageBox::information(this,i18n("Unit exists"),i18n("The ingredient contains already the unit that you have chosen."));
 	}
     reloadUnitList(); // Reload the list from database
 }
@@ -328,15 +366,6 @@ if (it){// make sure that the ingredient list is not empty
 
 void IngredientsDialog:: updateLists(void)
 {
-
-//If no ingredient is selected, select first item
-
-QListViewItem *it;
-if (!(it=ingredientListView->selectedItem()))
-{
-it=ingredientListView->firstChild();
-}
-
 reloadUnitList();
 reloadPropertyList();
 }
@@ -368,7 +397,7 @@ if (ingredientID>=0) // an ingredient was selected previously
     }
     else
     {
-    QMessageBox::information(this,"Property exists","The property you tried to add already exists in the ingredient with the same per units.");
+    QMessageBox::information(this,i18n("Property exists"),i18n("The property you tried to add already exists in the ingredient with the same per units."));
     }
     reloadPropertyList(); // Reload the list from database
 }
@@ -428,7 +457,6 @@ prop_it->setText(2,QString::number(amount));
 int propertyID=prop_it->text(0).toInt();
 int ingredientID=ing_it->text(0).toInt();
 int per_units=perUnitListBack->getElement(findPropertyNo(prop_it))->id ;
-std::cerr<<QString("Property ID: %1 Unit ID: %2\n").arg(propertyID).arg(per_units);
 database->changePropertyAmountToIngredient(ingredientID,propertyID,amount,per_units);
 }
 

@@ -16,13 +16,15 @@
 #include <qwidget.h>
 #include <klistview.h>
 #include <knuminput.h>
-#include "recipedb.h"
-#include "selectunitdialog.h"
-#include "createelementdialog.h"
-#include "ingredientpropertylist.h"
-#include "selectpropertydialog.h"
-#include "editbox.h"
-#include "unitsdialog.h"
+
+class RecipeDB;
+class ElementList;
+class SelectUnitDialog;
+class CreateElementDialog;
+class IngredientPropertyList;
+class SelectPropertyDialog;
+class EditBox;
+class UnitsDialog;
 
 /**
 @author Unai Garro
@@ -65,6 +67,8 @@ private:
 
   private slots:
     void addIngredient(void);
+    void modIngredient(QListViewItem*);
+    void saveIngredient(QListViewItem*);
     void addUnitToIngredient(void);
     void removeUnitFromIngredient(void);
     void removeIngredient(void);

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,7 +11,7 @@
 #define SETUPWIZARD_H
 
 #include <qlabel.h>
-
+#include <qcheckbox.h>
 #include <kwizard.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -22,6 +22,7 @@
 */
 
 class WelcomePage;
+class PermissionsSetupPage;
 class ServerSetupPage;
 class SavePage;
 
@@ -34,8 +35,10 @@ public:
 private:
 	// Widgets
 	WelcomePage *welcomePage;
+	PermissionsSetupPage *permissionsSetupPage;
 	ServerSetupPage *serverSetupPage;
 	SavePage *savePage;
+
 private slots:
 	void save(void);
 
@@ -53,6 +56,20 @@ private:
 
 };
 
+
+class PermissionsSetupPage:public QWidget{
+public:
+	// Methods
+	PermissionsSetupPage(QWidget *parent);
+
+private:
+	// Widgets
+	QLabel *logo;
+	QLineEdit *userEdit;
+	QLineEdit *passEdit;
+
+};
+
 class ServerSetupPage:public QWidget{
 public:
 	// Methods
@@ -64,13 +81,16 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
+	QCheckBox *rootCheckBox;
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
 
 
+
 };
+
 
 class SavePage:public QWidget{
 public:

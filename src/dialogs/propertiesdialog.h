@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,8 +14,9 @@
 #include <qpushbutton.h>
 #include <qvbox.h>
 #include <klistview.h>
-#include "recipedb.h"
-#include "createpropertydialog.h"
+
+class RecipeDB;
+class IngredientPropertyList;
 
 /**
 @author Unai Garro

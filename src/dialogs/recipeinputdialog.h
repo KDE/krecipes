@@ -22,8 +22,11 @@
 #include <qgroupbox.h>
 #include <qobject.h>
 
-#include "recipe.h"
-#include "recipedb.h"
+#include "elementlist.h"
+
+class Recipe;
+class ElementList;
+class RecipeDB;
 
 /**
 @author Unai Garro
@@ -49,16 +52,24 @@ private:
 	bool changedSignalEnabled;
 	bool unsavedChanges;
 
+	// Widgets
+
 	//Recipe Photo
 	QLabel *photoLabel;
 	QPushButton *changePhotoButton;
 
 	//Recipe Body
 	KTextEdit* instructionsEdit;
+	QLabel* titleLabel;
 	KLineEdit* titleEdit;
 
 	//Additional recipe data
-	KLineEdit* authorEdit;
+	QLabel* servingsLabel;
+	KIntNumInput* servingsNumInput;
+	QLabel* authorLabel;
+	KLineEdit* authorShow;
+	QPushButton* addAuthorButton;
+	QLabel* categoryLabel;
 	KLineEdit* categoryShow;
 	QPushButton* addCategoryButton;
 
@@ -76,15 +87,19 @@ private:
 	KPushButton* removeButton;
 	KPushButton* addButton;
 
-	//Try
-	KPushButton* trial;
-
 	// Internal functions
+	void createNewIngredientIfNecessary();
+	void createNewUnitIfNecessary();
+	void checkIfNewUnits();
+	void findCategoriesInRecipe(ElementList &categoryList, QPtrList <bool>  &selected);
 	void loadIngredientListCombo(void);
 	void loadUnitListCombo(void);
 	void saveRecipe(void);
+	void showCategories(void);
+	void showAuthors(void);
 
 	// Signals & Slots
+
 	private slots:
 	void reloadUnitsCombo(int);
 	void changePhoto(void);
@@ -95,6 +110,9 @@ private:
 	void recipeChanged(void);
 	void recipeChanged(const QString &t);
 	void enableChangedSignal(bool en=true);
+	void addCategory(void);
+	void addAuthor(void);
+	void slotIngredientBoxLostFocus(void);
 
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()

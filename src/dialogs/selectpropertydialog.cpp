@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,35 +8,61 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "selectpropertydialog.h"
+#include <klocale.h>
+
+#include "element.h"
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
 
 SelectPropertyDialog::SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,ElementList *unitList): QDialog(parent)
 {
 
 // Initialize internal variables
 unitListBack =new ElementList;
+
 // Initialize Widgets
-container=new QVBoxLayout(this,5,5);
-box=new QGroupBox(this);
-container->addWidget(box);
-box->setTitle("Choose a Property");
-propertyChooseView=new KListView(box);
-propertyChooseView->addColumn("id.");
-propertyChooseView->addColumn("Property");
-propertyChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
-perUnitsLabel=new QLabel(box);
-perUnitsLabel->setGeometry(QRect(5,285,100,30));
-perUnitsLabel->setText("Per units:");
-perUnitsBox=new KComboBox(box);
-perUnitsBox->setGeometry(QRect(110,285,75,30));
-okButton=new QPushButton(box);
-okButton->setGeometry( QRect( 5, 320, 100, 20 ) );
-okButton->setText("Ok");
-okButton->setFlat(true);
-cancelButton=new QPushButton(box);
-cancelButton->setGeometry( QRect( 110, 320, 60, 20 ) );
-cancelButton->setText("Cancel");
-cancelButton->setFlat(true);
-resize(QSize(200,380));
+    QVBoxLayout *layout = new QVBoxLayout( this, 11, 6 );
+
+    box = new QGroupBox( this );
+    box->setTitle(i18n("Choose a Property"));
+    box->setColumnLayout(0, Qt::Vertical );
+    box->layout()->setSpacing( 6 );
+    box->layout()->setMargin( 11 );
+    QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+    boxLayout->setAlignment( Qt::AlignTop );
+
+    propertyChooseView = new KListView( box, "propertyChooseView" );
+    propertyChooseView->addColumn( i18n( "id." ) );
+    propertyChooseView->addColumn( i18n( "Property" ) );
+    boxLayout->addWidget( propertyChooseView );
+
+    QHBoxLayout *layout2 = new QHBoxLayout( this, 0, 6 );
+
+    perUnitsLabel = new QLabel( box );
+    perUnitsLabel->setGeometry(QRect(5,285,100,30));
+    perUnitsLabel->setText(i18n("Per units:"));
+    layout2->addWidget( perUnitsLabel );
+
+    perUnitsBox = new KComboBox( FALSE, box );
+    layout2->addWidget( perUnitsBox );
+    boxLayout->addLayout( layout2 );
+
+    QHBoxLayout *layout1 = new QHBoxLayout( this, 0, 6 );
+
+    okButton = new QPushButton( box );
+    okButton->setText(i18n("Ok"));
+    okButton->setFlat(true);
+    layout1->addWidget( okButton );
+
+    cancelButton = new QPushButton( box );
+    cancelButton->setText(i18n("Cancel"));
+    cancelButton->setFlat(true);
+    layout1->addWidget( cancelButton );
+    boxLayout->addLayout( layout1 );
+    layout->addWidget( box );
+
+    resize( QSize(200, 380).expandedTo(minimumSizeHint()) );
+    clearWState( WState_Polished );
 
 // Load data
 loadProperties(propertyList);

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,9 +11,10 @@
 #define UNITSDIALOG_H
 #include <qwidget.h>
 #include <klistview.h>
-#include "recipedb.h"
-#include "editbox.h"
-#include "conversiontable.h"
+#include <qpushbutton.h>
+
+class RecipeDB;
+class ConversionTable;
 
 /**
 @author Unai Garro
@@ -38,6 +39,8 @@ private:
 	RecipeDB *database;
 private slots:
 	void createNewUnit(void);
+  void modUnit(QListViewItem*);
+  void saveUnit(QListViewItem*);
 	void removeUnit(void);
 	void saveRatio(int r, int c, double value);
 

@@ -16,8 +16,9 @@
 #include <khtml_part.h>
 #include <khtmlview.h>
 
-#include "elementlist.h"
-#include "recipedb.h"
+class ElementList;
+class RecipeDB;
+class IngredientList;
 
 class ShoppingListViewDialog:public QWidget{
 public:

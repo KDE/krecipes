@@ -7,55 +7,55 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef SHOPPINGLISTDIALOG_H
-#define SHOPPINGLISTDIALOG_H
+#ifndef SELECTAUTHORSDIALOG_H
+#define SELECTAUTHORSDIALOG_H
 
-#include <qhbox.h>
+#include <qdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <kiconloader.h>
 #include <klistview.h>
+#include <kcombobox.h>
 
 class RecipeDB;
-class ShoppingListViewDialog;
+class ElementList;
 
 /**
 @author Unai Garro
 */
+class SelectAuthorsDialog:public QDialog{
 
-class ShoppingListDialog:public QWidget{
 Q_OBJECT
+
 public:
 
-    ShoppingListDialog(QWidget *parent,RecipeDB *db);
-    ~ShoppingListDialog();
-    void reload(void);
+    SelectAuthorsDialog(ElementList *currentAuthors, RecipeDB *db);
+    ~SelectAuthorsDialog();
+    void getSelectedAuthors(ElementList *newAuthors);
 
 private:
 
-// Internal variables
-    RecipeDB *database;
-// Internal Methods
-    void reloadRecipeList(void);
-// Widgets
-    QGridLayout* layout;
-    QPushButton* addRecipeButton;
-    QPushButton* removeRecipeButton;
-    KListView* recipeListView;
-    KListView* shopRecipeListView;
-    QHBox *buttonBar;
-    QPushButton* autoFillButton;
-    QPushButton* okButton;
-    QPushButton* clearButton;
-    KIconLoader* il;
-    ShoppingListViewDialog *shoppingListDisplay;
+	//Widgets
+	KComboBox *authorsCombo;
+	KListView *authorListView;
+	QGridLayout *layout;
+	QPushButton *okButton;
+	QPushButton *cancelButton;
+	QPushButton *addAuthorButton;
+	QPushButton *removeAuthorButton;
+	KIconLoader *il;
 
+	//Variables
+	ElementList *authorList; //Copy of pointer to authorList
+	RecipeDB *database;
+
+	//Private methods
+	void loadAuthors(ElementList *authorList);
+	void createNewAuthorIfNecessary(void);
+	void reloadAuthorsCombo(void);
 private slots:
-	void addRecipe(void);
-	void removeRecipe(void);
-	void showShoppingList(void);
-signals:
-	void wizardClicked(void);
+	void addAuthor(void);
+	void removeAuthor(void);
 };
 
 #endif

@@ -10,28 +10,38 @@
 #ifndef SELECTCATEGORIESDIALOG_H
 #define SELECTCATEGORIESDIALOG_H
 
-#include <qwidget.h>
+#include <qdialog.h>
 #include <qlayout.h>
+#include <qpushbutton.h>
 #include <klistview.h>
-#include "recipedb.h"
+
+class RecipeDB;
+class ElementList;
 
 /**
 @author Unai Garro
 */
-class SelectCategoriesDialog:public QWidget{
+class SelectCategoriesDialog:public QDialog{
 
 Q_OBJECT
 
 public:
 
-    SelectCategoriesDialog(QWidget *parent, RecipeDB *db);
+    SelectCategoriesDialog(ElementList *categoryList,QPtrList <bool> *selected);
     ~SelectCategoriesDialog();
+    void getSelectedCategories(ElementList *selected);
 private:
 
 	//Widgets
 	KListView *categoryListView;
 	QGridLayout *layout;
+	QPushButton *okButton;
+	QPushButton *cancelButton;
 
+	//Variables
+	ElementList *categoryListPC; //Pointer copy
+	//Private methods
+	void loadCategories(ElementList *categoryList, QPtrList <bool> *selected);
 };
 
 #endif

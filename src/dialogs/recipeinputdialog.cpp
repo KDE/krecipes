@@ -7,11 +7,20 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include <kfiledialog.h>
+
 #include <qstring.h>
-#include <kurl.h>
 #include <qlayout.h>
+#include <qhbox.h>
+#include <qvbox.h>
+#include <qmessagebox.h>
+#include <kurl.h>
+#include <kfiledialog.h>
+#include <klocale.h>
 #include "recipeinputdialog.h"
+#include "selectauthorsdialog.h"
+#include "recipe.h"
+#include "recipedb.h"
+#include "selectcategoriesdialog.h"
 #include "image.h" //Initializes default photo
 
 
@@ -65,7 +74,7 @@ database=db;
     ingredientGBox =new QGroupBox(this);
     ingredientGBox->setMinimumSize(QSize(275,200));
     ingredientGBox->setMaximumSize(QSize(275,10000));
-    ingredientGBox->setTitle("Ingredients");
+    ingredientGBox->setTitle(i18n("Ingredients"));
     ingredientGBox->setFlat(true);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
     QGridLayout* boxLayout=new QGridLayout(ingredientGBox);
@@ -85,13 +94,17 @@ database=db;
     boxLayout->addWidget(amountEdit,1,1);
 
 
-    ingredientBox = new KComboBox( FALSE,ingredientGBox);
+    ingredientBox = new KComboBox( TRUE,ingredientGBox);
+    ingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+    ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setFixedSize( QSize(120, 30 ) );
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     boxLayout->addWidget(ingredientBox,1,2);
 
 
-    unitBox = new KComboBox( FALSE,ingredientGBox);
+    unitBox = new KComboBox( TRUE,ingredientGBox);
+    unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+    unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
     unitBox->setMinimumSize(QSize(51,30));
     unitBox->setMaximumSize(QSize(10000,30));
     unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
@@ -105,9 +118,10 @@ database=db;
 
     // Ingredient List
     ingredientList = new KListView(ingredientGBox, "ingredientList" );
-    ingredientList->addColumn("Ingredient");
-    ingredientList->addColumn("Amount");
-    ingredientList->addColumn("Units");
+    ingredientList->addColumn(i18n("Ingredient"));
+    ingredientList->addColumn(i18n("Amount"));
+    ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
+    ingredientList->addColumn(i18n("Units"));
     ingredientList->setSorting(-1); // Do not sort
     ingredientList->setMinimumSize(QSize(200,100));
     ingredientList->setMaximumSize(QSize(10000,10000));
@@ -155,33 +169,75 @@ database=db;
 
     // ------- Recipe Instructions Widgets -----------
 
-    titleEdit = new KLineEdit( this);
+    QVBox *titleBox = new QVBox(this);
+    titleBox->setSpacing(5);
+    titleLabel = new QLabel(i18n("Recipe Name"),titleBox);
+    titleEdit = new KLineEdit(titleBox);
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));
     titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addMultiCellWidget(titleEdit,1,1,5,8);
+    layout->addMultiCellWidget(titleBox,1,1,5,11);
+
+    QVBox *servingsBox = new QVBox(this);
+    servingsBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
+    servingsBox->setSpacing(5);
+
+    servingsLabel = new QLabel(i18n("Servings"),servingsBox);
+    servingsNumInput = new KIntNumInput(servingsBox);
+    servingsNumInput->setMinValue(1);
+
+    layout->addWidget(servingsBox,3,11);
+
 
     // Title ->author spacer
     QSpacerItem* title_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(title_spacer,2,5 );
 
-    // Author & Categories
-    authorEdit = new KLineEdit( this);
-    authorEdit->setMinimumSize(QSize(100,30));
-    authorEdit->setMaximumSize(QSize(10000,30));
-    authorEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addWidget(authorEdit,3,5);
+    // Author(s) & Categories
+    QVBox *authorBox = new QVBox(this); // contains label and authorInput (input widgets)
+    authorBox->setSpacing(5);
+    layout->addWidget(authorBox,3,5);
+    authorLabel = new QLabel(i18n("Authors"),authorBox);
+    QHBox *authorInput= new QHBox(authorBox); // Contains input + button
 
-    categoryShow=new KLineEdit(this);
-    categoryShow->setMinimumSize(QSize(100,30));
-    categoryShow->setMaximumSize(QSize(10000,30));
+
+    authorShow = new KLineEdit(authorInput);
+    authorShow->setReadOnly(true);
+    authorShow->setMinimumSize(QSize(100,20));
+    authorShow->setMaximumSize(QSize(10000,20));
+    authorShow->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+
+
+    addAuthorButton= new QPushButton(authorInput);
+    addAuthorButton->setText("+");
+    addAuthorButton->setFixedSize(QSize(20,20));
+    addAuthorButton->setFlat(true);
+
+
+    QSpacerItem* author_category = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    layout->addItem(author_category,3,7 );
+
+    QVBox *categoryBox = new QVBox(this); // Contains the label and categoryInput (input widgets)
+    categoryBox->setSpacing(5);
+    categoryLabel = new QLabel(i18n("Categories"),categoryBox);
+    QHBox *categoryInput= new QHBox(categoryBox); // Contains the input widgets
+
+    categoryShow=new KLineEdit(categoryInput);
+    categoryShow->setReadOnly(true);
+    categoryShow->setMinimumSize(QSize(100,20));
+    categoryShow->setMaximumSize(QSize(10000,20));
     categoryShow->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addWidget(categoryShow,3,7);
+    layout->addWidget(categoryBox,3,8);
 
-    addCategoryButton= new QPushButton(this);
+    addCategoryButton= new QPushButton(categoryInput);
     addCategoryButton->setText("+");
-    addCategoryButton->setFixedSize(QSize(30,30));
-    layout->addWidget(addCategoryButton,3,8);
+    addCategoryButton->setFixedSize(QSize(20,20));
+    addCategoryButton->setFlat(true);
+
+    QSpacerItem* category_servings = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    layout->addItem(category_servings,3,10 );
+
+
 
     //Author ->instructions spacer
     QSpacerItem* author_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -191,7 +247,7 @@ database=db;
     instructionsEdit->setMinimumSize(QSize(360,320));
     instructionsEdit->setMaximumSize(QSize(10000,10000));
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    layout->addMultiCellWidget(instructionsEdit,5,7,5,8);
+    layout->addMultiCellWidget(instructionsEdit,5,7,5,11);
 
 
 
@@ -217,15 +273,20 @@ database=db;
     connect(this->removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()));
     connect(this->addButton, SIGNAL(clicked()), this, SLOT(addIngredient()));
     connect(this, SIGNAL(changed()), this, SLOT(recipeChanged()));
+    connect(this->servingsNumInput, SIGNAL(valueChanged(int)), this, SLOT(recipeChanged()));
     connect(this->titleEdit, SIGNAL(textChanged(const QString&)), this, SLOT(recipeChanged(const QString&)));
     connect(this->instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
-    connect(this->authorEdit,SIGNAL(textChanged(const QString&)),this,SLOT(recipeChanged(const QString&)));
-
+    connect(addCategoryButton,SIGNAL(clicked()),this,SLOT(addCategory()));
+    connect(ingredientBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotIngredientBoxLostFocus()) );
+    connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
 }
 
 
 RecipeInputDialog::~RecipeInputDialog()
 {
+	delete loadedRecipe;
+	delete ingredientComboList;
+	delete unitComboList;
 }
 
 void RecipeInputDialog::loadRecipe(int recipeID)
@@ -240,19 +301,19 @@ loadedRecipe->empty();
 ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
+servingsNumInput->setValue(1);
 amountEdit->setValue(0.0);
 ingredientList->clear();
 
 
 // Load specified Recipe ID
-
 database->loadRecipe(loadedRecipe,recipeID);
 
 //Load Values in Interface
-
 titleEdit->setText(loadedRecipe->title);
 instructionsEdit->setText(loadedRecipe->instructions);
-authorEdit->setText(loadedRecipe->author);
+servingsNumInput->setValue(loadedRecipe->persons);
+
 	//show ingredient list
 	Ingredient * ing;
 	for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
@@ -271,6 +332,8 @@ authorEdit->setText(loadedRecipe->author);
 		}
 
 
+// Show categories
+showCategories();
 
 //Enable changed() signals
 enableChangedSignal();
@@ -279,40 +342,53 @@ enableChangedSignal();
 
 void RecipeInputDialog::loadIngredientListCombo(void)
 {
-database->loadIngredients(ingredientComboList);
+	database->loadIngredients(ingredientComboList);
 
-//Populate this data into the ComboBox
-ingredientBox->clear();
+	//Populate this data into the ComboBox
+	ingredientBox->clear();
+	ingredientBox->completionObject()->clear();
 	for ( Element *ing =ingredientComboList->getFirst(); ing; ing =ingredientComboList->getNext() )
-	{ingredientBox->insertItem(ing->name);
+	{
+		ingredientBox->insertItem(ing->name);
+		ingredientBox->completionObject()->addItem(ing->name);
 	}
 }
+
 void RecipeInputDialog::loadUnitListCombo(void)
 {
-int comboIndex=ingredientBox->currentItem();
-int comboCount=ingredientBox->count();
-if (comboCount>0){ // If not, the list may be empty (no ingredient list defined) and crashes while reading
-int selectedIngredient=ingredientComboList->getElement(comboIndex)->id;
+	unitBox->clear(); // Empty the combo first
+	unitComboList->clear(); // Empty the list also
 
-database->loadPossibleUnits(selectedIngredient,unitComboList);
+	int comboIndex=ingredientBox->currentItem();
+	int comboCount=ingredientBox->count();
 
-//Populate this data into the ComboBox
-	for ( Element *unit =unitComboList->getFirst(); unit; unit =unitComboList->getNext() )
-	unitBox->insertItem(unit->name);
+	if (comboCount>0)
+	{ // If not, the list may be empty (no ingredient list defined) and crashes while reading
+		int selectedIngredient=ingredientComboList->getElement(comboIndex)->id;
+		database->loadPossibleUnits(selectedIngredient,unitComboList);
+
+		//Populate this data into the ComboBox
+		for ( Element *unit =unitComboList->getFirst(); unit; unit =unitComboList->getNext() )
+		{
+			unitBox->insertItem(unit->name);
+			unitBox->completionObject()->addItem(unit->name);
+		}
 	}
 }
 
 void RecipeInputDialog::reloadUnitsCombo(int)
 {
-
 unitBox->clear();
+unitBox->completionObject()->clear();
 unitComboList->clear();
 loadUnitListCombo();
+unitBox->setCurrentText("");
 }
+
  void RecipeInputDialog::changePhoto(void)
  {
 // standard filedialog
-    KURL filename = KFileDialog::getOpenURL(QString::null, "*.png *.jpg *.jpeg *.xpm *.gif", this);
+    KURL filename = KFileDialog::getOpenURL(QString::null, "*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)", this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
     	photoLabel->setPixmap(pixmap);
@@ -386,14 +462,67 @@ if (it)
 
 }
 
+void RecipeInputDialog::createNewIngredientIfNecessary()
+{
+	if ( ingredientBox->currentText().stripWhiteSpace() != "" &&
+	     !ingredientBox->contains(ingredientBox->currentText()) )
+	{
+		if (unitBox->currentText().stripWhiteSpace() == "")
+		{
+			QMessageBox::information( this,
+			  "Unit missing",
+			  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
+			  " Before this can be done, please enter a unit to associate with"
+			  " this ingredient.")).arg(ingredientBox->currentText()),
+			  QMessageBox::Ok
+			  );
+			return;
+		}
+
+		QString newIngredient(ingredientBox->currentText());
+		database->createNewIngredient(newIngredient);
+
+		ingredientComboList->clear();
+		loadIngredientListCombo();
+
+		QString saveUnit(unitBox->currentText());
+		ingredientBox->setCurrentItem(newIngredient);
+		unitBox->setCurrentText(saveUnit);
+	}
+}
+
+void RecipeInputDialog::createNewUnitIfNecessary()
+{
+	if ( unitBox->currentText().stripWhiteSpace() != "" &&
+	     !unitBox->contains(unitBox->currentText()) )
+	{
+		QString newUnit(unitBox->currentText());
+
+		if ( !database->findExistingUnitsByName(newUnit) )
+			database->createNewUnit(newUnit);
+
+		ElementList newUnitElement;
+		database->findExistingUnitsByName(newUnit,-1,&newUnitElement);
+
+		database->addUnitToIngredient(
+		  ingredientComboList->getElement(ingredientBox->currentItem())->id,
+		  newUnitElement.getFirst()->id );
+
+		reloadUnitsCombo(0);
+		unitBox->setCurrentItem(newUnit);
+	}
+}
+
 void RecipeInputDialog::addIngredient(void)
 {
-Ingredient ing;
-
+	createNewIngredientIfNecessary();
+	createNewUnitIfNecessary();
 
 //Add it first to the Recipe list then to the ListView
 if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
 {
+  Ingredient ing;
+
   ing.name=ingredientBox->currentText();
   ing.amount=amountEdit->value();
   ing.units=unitBox->currentText();
@@ -445,7 +574,7 @@ void RecipeInputDialog::saveRecipe(void)
 loadedRecipe->photo=*(photoLabel->pixmap());
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
-loadedRecipe->author=authorEdit->text();
+loadedRecipe->persons=servingsNumInput->value();
 // Now save()
 database->saveRecipe(loadedRecipe);
 
@@ -459,8 +588,8 @@ ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
 QPixmap image(defaultPhoto); photoLabel->setPixmap(image);
-instructionsEdit->setText("Write the recipe instructions here");
-titleEdit->setText("Write the recipe title here");
+instructionsEdit->setText(i18n("Write the recipe instructions here"));
+titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
 ingredientList->clear();
 
@@ -470,9 +599,104 @@ void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and un
 {
 loadIngredientListCombo();
 loadUnitListCombo();
+ingredientBox->setCurrentText("");
+unitBox->setCurrentText("");
 }
 
 bool RecipeInputDialog::everythingSaved()
 {
 return (!(unsavedChanges));
+}
+
+void RecipeInputDialog::addCategory(void)
+{
+ElementList categoryList; database->loadCategories(&categoryList);
+QPtrList <bool>selected;
+findCategoriesInRecipe(categoryList,selected);
+
+SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(&categoryList,&selected);
+
+
+if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
+   this->loadedRecipe->categoryList.clear();
+   editCategoriesDialog->getSelectedCategories(&(loadedRecipe->categoryList)); // get the category list chosen
+   emit(this->recipeChanged()); //Indicate that the recipe changed
+
+}
+
+delete editCategoriesDialog;
+
+// show category list
+showCategories();
+
+
+}
+
+// Find which of the elements in the category lists is selected in the recipe (i.e. which categories this recipe belongs to)
+void RecipeInputDialog::findCategoriesInRecipe(ElementList &categoryList, QPtrList <bool>  &selected)
+{
+
+for (Element *el=categoryList.getFirst();el;el=categoryList.getNext())
+	{
+	bool *value=new bool;
+	if ((loadedRecipe->categoryList.find(el))>=0)  // Recipe contains this category?
+		*value=true;
+	else
+		*value=false;
+	selected.append(value);
+}
+}
+
+void RecipeInputDialog::showCategories(void)
+{
+QString categories=QString::null;
+for (Element *el=loadedRecipe->categoryList.getFirst();el;el=loadedRecipe->categoryList.getNext())
+	{
+	if (categories!=QString::null) categories+=",";
+	categories+=el->name;
+	}
+categoryShow->setText(categories);
+}
+
+void RecipeInputDialog::slotIngredientBoxLostFocus(void)
+{
+	if ( ingredientBox->contains(ingredientBox->currentText()) )
+	{
+		ingredientBox->setCurrentItem(ingredientBox->currentText());
+		reloadUnitsCombo(0);
+	}
+	else
+	{
+		unitBox->clear();
+		unitBox->completionObject()->clear();
+		unitComboList->clear();
+	}
+}
+
+void RecipeInputDialog::addAuthor(void)
+{
+SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(&(loadedRecipe->authorList),database);
+
+
+if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
+this->loadedRecipe->authorList.clear();
+editAuthorsDialog->getSelectedAuthors(&(loadedRecipe->authorList)); // get the category list chosen
+emit(this->recipeChanged()); //Indicate that the recipe changed
+}
+
+delete editAuthorsDialog;
+
+// show authors list
+showAuthors();
+}
+
+void RecipeInputDialog::showAuthors(void)
+{
+QString authors=QString::null;
+for (Element *el=loadedRecipe->authorList.getFirst();el;el=loadedRecipe->authorList.getNext())
+	{
+	if (authors!=QString::null) authors+=",";
+	authors+=el->name;
+	}
+authorShow->setText(authors);
 }

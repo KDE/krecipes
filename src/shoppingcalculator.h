@@ -10,9 +10,9 @@
 #ifndef SHOPPINGCALCULATOR_H
 #define SHOPPINGCALCULATOR_H
 
-#include "elementlist.h"
-#include "ingredientlist.h"
-#include "recipedb.h"
+class ElementList;
+class IngredientList;
+class RecipeDB;
 
 /**
 @author Unai Garro

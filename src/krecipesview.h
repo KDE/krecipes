@@ -7,7 +7,6 @@
 
 #include <qwidget.h>
 #include <qvbox.h>
-#include "recipedb.h"
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
@@ -16,14 +15,18 @@
 #include <kparts/part.h>
 #include <krecipesiface.h>
 #include <qwidgetstack.h>
-#include "recipeinputdialog.h"
-#include "recipeviewdialog.h"
-#include "selectrecipedialog.h"
-#include "ingredientsdialog.h"
-#include "propertiesdialog.h"
-#include "shoppinglistdialog.h"
-#include "dietwizarddialog.h"
 
+class RecipeInputDialog;
+class RecipeViewDialog;
+class SelectRecipeDialog;
+class IngredientsDialog;
+class PropertiesDialog;
+class ShoppingListDialog;
+class DietWizardDialog;
+class CategoriesEditorDialog;
+class AuthorsDialog;
+class UnitsDialog;
+class RecipeDB;
 
 class QPainter;
 
@@ -42,7 +45,7 @@ class QPainter;
 
  // Some constants
 
- enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, DietWizardP=10};
+ enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, DietWizardP=10};
 
 class KrecipesView : public QVBox, public KrecipesIface
 {
@@ -86,6 +89,8 @@ public:
 	UnitsDialog* unitsPanel;
 	ShoppingListDialog* shoppingListPanel;
 	DietWizardDialog* dietPanel;
+	CategoriesEditorDialog *categoriesPanel;
+	AuthorsDialog *authorsPanel;
 
 	// public methods
 	void createNewRecipe(void);
@@ -101,6 +106,7 @@ private:
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
 	QWidgetStack *rightPanel;
+	QPushButton *button0;
 	QPushButton *button1;
 	QPushButton *button2;
 	QPushButton *button3;

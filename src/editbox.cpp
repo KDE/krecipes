@@ -10,7 +10,7 @@
 #include "editbox.h"
 #include <qlayout.h>
 #include <iostream>
-
+#include <klocale.h>
 EditBox::EditBox(QWidget* parent):QWidget(parent)
 {
 QHBoxLayout *layout= new QHBoxLayout(this);
@@ -18,8 +18,8 @@ layout->setMargin(0);
 editBox=new RatioInput(this);
 editBox->setMinimumWidth(10);
 layout->addWidget(editBox);
-okButton=new QPushButton("ok",this);
-okButton->setFixedWidth(okButton->fontMetrics().width("ok"));
+okButton=new QPushButton(i18n("ok"),this);
+okButton->setFixedWidth(okButton->fontMetrics().width(i18n("ok")));
 okButton->setFlat(true);
 layout->addWidget(okButton);
 accepted=false;

@@ -4,12 +4,15 @@
 
 #include "krecipes.h"
 #include "pref.h"
+#include "krecipesview.h"
+#include "recipeinputdialog.h"
 
 #include <qdragobject.h>
 #include <kprinter.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 
+#include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -76,7 +79,7 @@ void Krecipes::setupActions()
     saveAction=KStdAction::save(this, SLOT(fileSave()), actionCollection());
     KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+    KStdAction::quit(this, SLOT(qApp->quit()), actionCollection());
 
     m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
     m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
@@ -184,6 +187,25 @@ void Krecipes::filePrint()
         // and send the result to the printer
         p.end();
     }
+}
+
+//return true to close app
+bool Krecipes::queryClose()
+{
+	if ( !m_view->inputPanel->everythingSaved() )
+	{
+		switch( KMessageBox::questionYesNoCancel( this,
+		  i18n("A recipe contains unsaved changes\n"
+		  "Do you want to save the changes before exiting?"),
+		  i18n("Save Recipe?") ) )
+		{
+		case KMessageBox::Yes: m_view->save();
+		case KMessageBox::No: return true;
+		case KMessageBox::Cancel: return false;
+		}
+	}
+	else
+		return true;
 }
 
 void Krecipes::optionsShowToolbar()

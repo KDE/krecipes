@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,6 +12,10 @@
 #include "unitsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
+#include "recipedb.h"
+#include "editbox.h"
+#include "conversiontable.h"
+#include <klocale.h>
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
@@ -34,25 +38,31 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     layout->addMultiCell( spacer_left, 0,2,3,3 );
 
     unitListView =new KListView(this);
+    unitListView->setAllColumnsShowFocus(true);
+    unitListView->addColumn(i18n("Id."));
+    unitListView->addColumn(i18n("Unit"));
+    unitListView->setRenameable(1, true);
+    unitListView->setDefaultRenameAction(QListView::Reject);
     layout->addMultiCellWidget(unitListView,0,3,0,0);
-    unitListView->addColumn("Id.");
-    unitListView->addColumn("Unit");
+
     conversionTable=new ConversionTable(this,1,1);
     layout->addMultiCellWidget(conversionTable,0,3,4,4);
 
     newUnitButton=new QPushButton(this);
-    newUnitButton->setText("Create a new Unit");
+    newUnitButton->setText(i18n("Create a new Unit"));
     newUnitButton->setFlat(true);
     layout->addWidget(newUnitButton,0,2);
 
     removeUnitButton=new QPushButton(this);
-    removeUnitButton->setText("Remove a Unit");
+    removeUnitButton->setText(i18n("Remove a Unit"));
     removeUnitButton->setFlat(true);
     layout->addWidget(removeUnitButton,2,2);
 
 
     // Connect signals & slots
     connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
+    connect(this->unitListView,SIGNAL(doubleClicked( QListViewItem* )),this, SLOT(modUnit( QListViewItem* )));
+    connect(this->unitListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveUnit( QListViewItem* )));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
 
@@ -86,7 +96,7 @@ loadConversionTable();
 
 void UnitsDialog::createNewUnit(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(QString("New Unit"));
+CreateElementDialog* elementDialog=new CreateElementDialog(QString(i18n("New Unit")));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
@@ -94,6 +104,16 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    reloadData(); // Reload the unitlist from the database
 }
 delete elementDialog;
+}
+
+void UnitsDialog::modUnit(QListViewItem* i)
+{
+  unitListView->rename(i, 1);
+}
+
+void UnitsDialog::saveUnit(QListViewItem* i)
+{
+  database->modUnit((i->text(0)).toInt(), i->text(1));
 }
 
 void UnitsDialog::removeUnit(void)

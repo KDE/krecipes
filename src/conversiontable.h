@@ -13,6 +13,7 @@
 #include <qtable.h>
 #include <qobject.h>
 #include "editbox.h"
+
 #include "elementlist.h"
 
 /**

@@ -7,38 +7,45 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "elementlist.h"
+#ifndef AUTHORSDIALOG_H
+#define AUTHORSDIALOG_H
 
-ElementList::ElementList()
-{
-}
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qhbox.h>
+#include <qlayout.h>
+#include <kiconloader.h>
+#include <klistview.h>
 
+class RecipeDB;
 
-ElementList::~ElementList()
-{
-}
+/**
+@author Unai Garro
+*/
 
-void ElementList::add(Element &element)
-{
-this->append (new Element(element));
-}
+class AuthorsDialog:public QWidget{
 
-Element* ElementList::getFirst(void){
-return(this->first());
-}
+Q_OBJECT
 
-Element* ElementList::getLast(void){
-return(this->last());
-}
+public:
 
-Element* ElementList::getPrev(void){
-return(this->prev());
-}
+	AuthorsDialog(QWidget* parent, RecipeDB *db);
+	~AuthorsDialog();
+	void reload(void);
+private:
+	// Internal data
+	RecipeDB *database;
+	//Widgets
+	QGridLayout *layout;
+	KListView *authorListView;
+	QHBox *buttonBar;
+	QPushButton *newAuthorButton;
+	QPushButton *removeAuthorButton;
+	KIconLoader *il;
 
-Element* ElementList::getNext(void){
-return(this->next());
-}
+private slots:
+	void createNewAuthor(void);
+	void removeAuthor(void);
 
-Element* ElementList::getElement(int index){
-return(this->at(index));
-}
+};
+#endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,8 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "dependanciesdialog.h"
-#include  <qlayout.h>
-
+#include "elementlist.h"
+#include <qlayout.h>
+#include <klocale.h>
 
 DependanciesDialog::DependanciesDialog(QWidget *parent,ElementList* recipeList, ElementList* ingredientList,ElementList* propertiesList):QDialog(parent,0,true)
 {
@@ -26,7 +27,7 @@ instructionsLabel=new QLabel(this);
 instructionsLabel->setMinimumSize(QSize(100,30));
 instructionsLabel->setMaximumSize(QSize(10000,10000));
 instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
-instructionsLabel->setText("The following elements will have to be removed also, since currently they use the element you have chosen to be removed.");
+instructionsLabel->setText(i18n("The following elements will have to be removed also, since currently they use the element you have chosen to be removed."));
 layout->addWidget(instructionsLabel,1,1);
 QSpacerItem *instructions_spacer=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
 layout->addItem(instructions_spacer, 2,1);
@@ -36,10 +37,10 @@ if (recipeList)
 {
 if (!(recipeList->isEmpty()))
 {
-recipeBox=new QGroupBox(1,Qt::Vertical,"Recipes",this);
+recipeBox=new QGroupBox(1,Qt::Vertical,i18n("Recipes"),this);
 recipeListView=new KListView(recipeBox);
-recipeListView->addColumn("Id.");
-recipeListView->addColumn("Recipe Title");
+recipeListView->addColumn(i18n("Id."));
+recipeListView->addColumn(i18n("Recipe Title"));
 layout->addWidget(recipeBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(list_spacer, row+1,col);
@@ -55,10 +56,10 @@ if (ingredientList)
 {
 if (!(ingredientList->isEmpty()))
 {
-ingredientBox=new QGroupBox(1,Qt::Vertical,"Ingredients",this);
+ingredientBox=new QGroupBox(1,Qt::Vertical,i18n("Ingredients"),this);
 ingredientListView=new KListView(ingredientBox);
-ingredientListView->addColumn("Id.");
-ingredientListView->addColumn("Ingredient Name");
+ingredientListView->addColumn(i18n("Id."));
+ingredientListView->addColumn(i18n("Ingredient Name"));
 layout->addWidget(ingredientBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(list_spacer, row+1,col);
@@ -72,10 +73,10 @@ if (propertiesList)
 {
 if (!(propertiesList->isEmpty()))
 {
-propertiesBox=new QGroupBox(1,Qt::Vertical,"Properties",this);
+propertiesBox=new QGroupBox(1,Qt::Vertical,i18n("Properties"),this);
 propertiesListView=new KListView(propertiesBox);
-propertiesListView->addColumn("Id.");
-propertiesListView->addColumn("Property");
+propertiesListView->addColumn(i18n("Id."));
+propertiesListView->addColumn(i18n("Property"));
 layout->addWidget(propertiesBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(list_spacer, row+1,col);
@@ -96,8 +97,8 @@ layout->addItem(list_spacer, 4,1);
 
 // Ok/Cancel Buttons
 buttonBox=new QGroupBox(2,Qt::Horizontal,this); buttonBox->setFlat(true);
-okButton=new QPushButton(buttonBox); okButton->setText("Ok"); okButton->setFlat(true);
-cancelButton=new QPushButton(buttonBox); cancelButton->setText("Cancel"); cancelButton->setFlat(true);
+okButton=new QPushButton(buttonBox); okButton->setText(i18n("Ok")); okButton->setFlat(true);
+cancelButton=new QPushButton(buttonBox); cancelButton->setText(i18n("Cancel")); cancelButton->setFlat(true);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 if (col>1) // There are 2 rows
 	{

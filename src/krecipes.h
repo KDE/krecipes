@@ -12,7 +12,7 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 
-#include "krecipesview.h"
+class KrecipesView;
 
 class KPrinter;
 class KToggleAction;
@@ -60,6 +60,8 @@ protected:
      * with @ref saveProperties
      */
     void readProperties(KConfig *);
+
+    virtual bool queryClose();
 
 
 private slots:

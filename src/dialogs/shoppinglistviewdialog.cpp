@@ -10,6 +10,9 @@
 #include "shoppinglistviewdialog.h"
 #include "shoppingcalculator.h"
 #include "ingredientlist.h"
+#include "elementlist.h"
+#include "recipedb.h"
+#include <klocale.h>
 
 ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)
 {
@@ -62,9 +65,9 @@ QString recipeHTML;
 // Create HTML Code
 
 	// Headers
-	recipeHTML="<html><head><title>Shopping List</title></head><body>";
+	recipeHTML=QString("<html><head><title>%1</title></head><body>").arg(i18n("Shopping List"));
 	recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:10px; width: 80%\">";
-	recipeHTML+="<center><h1>Shopping List</h1></center>";
+	recipeHTML+=QString("<center><h1>%1</h1></center>").arg("Shopping List");
 
 
 	// Ingredient List

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "createelementdialog.h"
-
+#include <klocale.h>
 CreateElementDialog::CreateElementDialog(const QString &text)
  : QDialog(0,0,true)
 {
@@ -21,11 +21,13 @@ elementEdit=new KLineEdit(box);
 elementEdit->setGeometry( QRect( 5, 30, 180, 25 ) );
 okButton=new QPushButton(box);
 okButton->setGeometry( QRect( 5, 60, 100, 20 ) );
-okButton->setText("Ok");
+okButton->setText(i18n("Ok"));
 cancelButton=new QPushButton(box);
 cancelButton->setGeometry( QRect( 110, 60, 60, 20 ) );
-cancelButton->setText("Cancel");
+cancelButton->setText(i18n("Cancel"));
 resize(QSize(200,100));
+
+setFixedSize(size()); //we've got all the widgets put in, now let's keep it this size
 
 connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));
 connect (cancelButton,SIGNAL(clicked()),this,SLOT(reject()));

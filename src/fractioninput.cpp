@@ -1,31 +1,26 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
+ *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef INGREDIENT_H
-#define INGREDIENT_H
 
-#include <qstring.h>
+#include "fractioninput.h"
 
-/**
-@author Unai Garro
-*/
-class Ingredient{
-public:
-    Ingredient();
-    Ingredient(Ingredient &ing);
-    ~Ingredient();
-    int ingredientID;
-    QString name;
-    double amount;
-    int unitID;
-    QString units;
+FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ), Fraction()
+{
+	connect( this, SIGNAL(lostFocus()), SLOT(parseText()) );
+}
 
-};
+FractionInput::~FractionInput()
+{
+}
 
-#endif
+void FractionInput::parseText()
+{
+	const QString input = text();
+	Fraction::parseText( input );
+}

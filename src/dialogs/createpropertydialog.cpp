@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,7 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "createpropertydialog.h"
-
+#include "elementlist.h"
+#include <klocale.h>
 CreatePropertyDialog::CreatePropertyDialog(ElementList* list):QDialog(0,0,true)
 {
 
@@ -19,17 +20,18 @@ unitList=list; // Store the pointer to the unitList;
 container=new QVBoxLayout(this,5,5);
 box=new QGroupBox(this);
 container->addWidget(box);
-box->setTitle("New Property");
+box->setTitle(i18n("New Property"));
 
 propertyNameEdit=new KLineEdit(box); propertyNameEdit->setGeometry( QRect( 105, 30, 210, 25 ) );
 propertyUnits=new KLineEdit(box); propertyUnits->setGeometry(QRect(105,60,80,25));
-okButton=new QPushButton(box); okButton->setGeometry( QRect( 5, 120, 100, 20 ) ); okButton->setText("Ok");
-cancelButton=new QPushButton(box); cancelButton->setGeometry( QRect( 110, 120, 60, 20 ) ); cancelButton->setText("Cancel");
-nameEditText=new QLabel("Property Name:",box); nameEditText->setGeometry(QRect(5,30,100,20));
-unitsText=new QLabel("Units:",box); unitsText->setGeometry(QRect(5,60,100,20));
+okButton=new QPushButton(box); okButton->setGeometry( QRect( 5, 120, 100, 20 ) ); okButton->setText(i18n("Ok"));
+cancelButton=new QPushButton(box); cancelButton->setGeometry( QRect( 110, 120, 60, 20 ) ); cancelButton->setText(i18n("Cancel"));
+nameEditText=new QLabel(i18n("Property Name:"),box); nameEditText->setGeometry(QRect(5,30,100,20));
+unitsText=new QLabel(i18n("Units:"),box); unitsText->setGeometry(QRect(5,60,100,20));
 
 
 resize(QSize(400,200));
+setFixedSize(size());
 
 // Signals & Slots
 connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));

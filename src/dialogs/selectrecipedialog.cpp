@@ -8,6 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "selectrecipedialog.h"
+#include <klocale.h>
+
+#include "recipedb.h"
+#include "recipe.h"
+#include "selectunitdialog.h"
+#include "createelementdialog.h"
 
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
  : QWidget(parent)
@@ -30,7 +36,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	searchBar=new QHBox(this);
 	layout->addWidget(searchBar,1,1);
 
-	searchLabel=new QLabel(searchBar); searchLabel->setText("Search:"); searchLabel->setFixedWidth(searchLabel->fontMetrics().width("Search:")+5);
+	searchLabel=new QLabel(searchBar); searchLabel->setText(i18n("Search:")); searchLabel->setFixedWidth(searchLabel->fontMetrics().width(i18n("Search:"))+5);
 	searchBox=new KLineEdit(searchBar);
 
 
@@ -39,8 +45,8 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 	il=new KIconLoader;
 	recipeListView=new KListView(this);
-    	recipeListView->addColumn("Id.");
-    	recipeListView->addColumn("Title");
+    	recipeListView->addColumn(i18n("Id."));
+    	recipeListView->addColumn(i18n("Title"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	layout->addWidget(recipeListView,3,1);
 
@@ -48,13 +54,13 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	layout->addWidget(buttonBar,4,1);
 
 	openButton=new QPushButton(buttonBar);
-	openButton->setText("Open Recipe");
+	openButton->setText(i18n("Open Recipe"));
 	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
 	editButton=new QPushButton(buttonBar);
-	editButton->setText("Edit Recipe");
+	editButton->setText(i18n("Edit Recipe"));
 	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setIconSet(pm);
 	removeButton=new QPushButton(buttonBar);
-	removeButton->setText("Delete");
+	removeButton->setText(i18n("Delete"));
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 

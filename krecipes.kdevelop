@@ -131,4 +131,12 @@
       <argumentsHintDelay>400</argumentsHintDelay>
     </codecompletion>
   </kdevcppsupport>
+  <kdevcvsservice>
+    <recursivewhenupdate>true</recursivewhenupdate>
+    <prunedirswhenupdate>true</prunedirswhenupdate>
+    <createdirswhenupdate>true</createdirswhenupdate>
+    <recursivewhencommitremove>true</recursivewhencommitremove>
+    <revertoptions>-C</revertoptions>
+    <location>ERROR-LOCATION-IS-NOT-SET-IN-PROJECT</location>
+  </kdevcvsservice>
 </kdevelop>

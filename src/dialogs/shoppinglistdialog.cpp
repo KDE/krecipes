@@ -8,6 +8,10 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "shoppinglistdialog.h"
+#include <klocale.h>
+
+#include "recipedb.h"
+#include "shoppinglistviewdialog.h"
 
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
@@ -25,8 +29,8 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     recipeListView=new KListView (this);
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
-    recipeListView->addColumn("Id");
-    recipeListView->addColumn("Recipe Title");
+    recipeListView->addColumn(i18n("Id."));
+    recipeListView->addColumn(i18n("Recipe Title"));
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
     addRecipeButton=new QPushButton(this);
@@ -49,8 +53,8 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     shopRecipeListView=new KListView (this);
     layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
-    shopRecipeListView->addColumn("Id");
-    shopRecipeListView->addColumn("Recipe Title");
+    shopRecipeListView->addColumn(i18n("Id"));
+    shopRecipeListView->addColumn(i18n("Recipe Title"));
 
     QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(spacerToButtonBar,5,1);
@@ -62,15 +66,15 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     il=new KIconLoader;
     autoFillButton=new QPushButton(buttonBar,"dietWizardButton");
-    autoFillButton->setText("Diet Wizard");
+    autoFillButton->setText(i18n("Diet Wizard"));
     QPixmap pm=il->loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
 
     okButton=new QPushButton(buttonBar,"okButton");
-    okButton->setText("Ok");
+    okButton->setText(i18n("Ok"));
     pm=il->loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
 
     clearButton=new QPushButton(buttonBar,"clearButton");
-    clearButton->setText("Clear");
+    clearButton->setText(i18n("Clear"));
     clearButton->setMaximumWidth(100);
     pm=il->loadIcon("editclear", KIcon::NoGroup,16); clearButton->setIconSet(pm);
 

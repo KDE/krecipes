@@ -16,7 +16,7 @@
 /**
 @author Unai Garro
 */
-class ElementList{
+class ElementList: public QPtrList<Element>{
 public:
     ElementList();
 
@@ -26,11 +26,10 @@ public:
     Element* getNext(void);
     Element* getLast(void);
     Element* getElement(int index);
-    void clear(void);
-    bool isEmpty(void);
     void add(Element &element);
-    private:
-    QPtrList<Element> list;
+
+    protected:
+    virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Element*)item1)->id-((Element*)item2)->id);};
 };
 
 

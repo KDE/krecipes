@@ -20,10 +20,10 @@
 #include <klistview.h>
 #include <kiconloader.h>
 
-#include "recipedb.h"
-#include "recipe.h"
-#include "selectunitdialog.h"
-#include "createelementdialog.h"
+class QHBox;
+
+class RecipeDB;
+class ElementList;
 
 /**
 @author Unai Garro

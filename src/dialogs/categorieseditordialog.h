@@ -7,38 +7,44 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef RECIPE_H
-#define RECIPE_H
+#ifndef CATEGORIESEDITORDIALOG_H
+#define CATEGORIESEDITORDIALOG_H
 
-#include <qstring.h>
-#include <qpixmap.h>
-#include "ingredientlist.h"
-#include "elementlist.h"
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qhbox.h>
+#include <qlayout.h>
+#include <kiconloader.h>
+#include <klistview.h>
+
+class RecipeDB;
 
 /**
 @author Unai Garro
 */
-class Recipe{
+class CategoriesEditorDialog:public QWidget{
+
+Q_OBJECT
+
 public:
-    Recipe();
 
-    ~Recipe();
+	CategoriesEditorDialog(QWidget* parent, RecipeDB *db);
+	~CategoriesEditorDialog();
+	void reload(void);
+private:
+	// Internal data
+	RecipeDB *database;
+	//Widgets
+	QGridLayout *layout;
+	KListView *categoryListView;
+	QHBox *buttonBar;
+	QPushButton *newCategoryButton;
+	QPushButton *removeCategoryButton;
+	KIconLoader *il;
 
-    // Public variables
-
-    int recipeID;
-    int persons;
-    QString title;
-    QString instructions;
-    QPixmap photo;
-    IngredientList ingList;
-    ElementList categoryList; // id+name
-    ElementList authorList; //authors' id+name
-
-    // Public methods
-    void empty(void);
-
-
+private slots:
+	void createNewCategory(void);
+	void removeCategory(void);
 
 };
 

@@ -10,6 +10,9 @@
 #include "recipeviewdialog.h"
 #include "image.h"
 #include "propertycalculator.h"
+#include <klocale.h>
+
+#include "recipedb.h"
 
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {
@@ -57,12 +60,12 @@ QString recipeHTML;
 if (loadedRecipe->recipeID<0)
 {
 // Show default (empty) recipe
-recipeHTML="<html><head><title>Title of the Recipe</title></head><body>";
-recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:1%; width: 22%\"> <li>Ingredient 1</li>";
-recipeHTML+="<li>Ingredient 2</li> <li>Ingredient 3</li> </div>";
+recipeHTML=QString("<html><head><title>%1</title></head>").arg(i18n("Title of the Recipe"));
+recipeHTML+=QString("<div STYLE=\"position: absolute; top: 30px; left:1%; width: 22%\"> <li>%1</li>").arg(i18n("Ingredient 1"));
+recipeHTML+=QString("<li>%1</li> <li>%2</li> </div>").arg(i18n("Ingredient 2")).arg(i18n("Ingredient 3"));
 recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:25%; width: 74%\">";
-recipeHTML+="<center><h1>Title of the Recipe</h1></center>";
-recipeHTML+="<p>Recipe Instructions </p></div></body></html>";
+recipeHTML+=QString("<center><h1>%1</h1></center>").arg(i18n("Title of the Recipe"));
+recipeHTML+=QString("<p>%1 </p></div></body></html>").arg(i18n("Recipe Instructions"));
 }
 else
 {

@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     KAboutData about("krecipes", I18N_NOOP("Krecipes"), version, description,
                      KAboutData::License_GPL, "(C) 2003 Unai Garro", 0, 0, "ugarro@users.sourceforge.net");
     about.addAuthor( "Unai Garro", 0, "ugarro@users.sourceforge.net" );
+    about.addAuthor( "Jason Kivlighn", 0, "mizunoami44@users.sourceforge.net" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
