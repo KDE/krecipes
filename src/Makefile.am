@@ -2,7 +2,7 @@
 
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables
-bin_PROGRAMS = krecipes krecipes_client
+bin_PROGRAMS = krecipes
 
 # set the include path for X, qt and KDE
 INCLUDES         = $(all_includes)
@@ -18,11 +18,6 @@ krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp 		      pref.cpp kreci
 
 # these are the headers for your project
 noinst_HEADERS = krecipes.h krecipesview.h pref.h categorieseditordialog.h authorsdialog.h selectauthorsdialog.h
-
-# client stuff
-krecipes_client_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-krecipes_client_LDADD   = $(LIB_KDECORE)
-krecipes_client_SOURCES = krecipes_client.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
