@@ -15,12 +15,16 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <khtmlview.h>
 #include <khtml_part.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kmainwindow.h>
+#include <kprogress.h>
 #include <kstandarddirs.h>
+#include <kstatusbar.h>
 
 #include "mixednumber.h"
 #include "DBBackend/recipedb.h"
@@ -57,13 +61,13 @@ RecipeViewDialog::~RecipeViewDialog()
 		removeOldFiles();
 }
 
-void RecipeViewDialog::loadRecipe(int recipeID)
+bool RecipeViewDialog::loadRecipe(int recipeID)
 {
 	QValueList<int> ids; ids.append(recipeID);
-	loadRecipes(ids);
+	return loadRecipes(ids);
 }
 
-void RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 {
 // Remove any files created by the last recipe loaded
 removeOldFiles();
@@ -72,15 +76,28 @@ ids_loaded = ids; //need to save these ids in order to delete the html files lat
 
 recipe_loaded = ( ids.count() > 0 && ids[0] >= 0 );
 
-showRecipes( ids );
+return showRecipes( ids );
 }
 
-void RecipeViewDialog::showRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 {
+KProgressDialog *progress_dialog = 0;
+
+if ( ids.count() > 1 ) //we don't want a progress bar coming up when there is only one recipes... it may show up during the splash screen
+{
+	progress_dialog = new KProgressDialog(this, "open_progress_dialog", QString::null, i18n("Opening recipes, please wait..."), true );
+	progress_dialog->resize(240,80);
+}
+
 HTMLExporter html_generator( database, tmp_filename+".html", "html", parentWidget()->width() );
 
 RecipeList recipe_list; database->loadRecipes( &recipe_list, ids );
-html_generator.exporter( recipe_list ); //writes the generated HTML to 'tmp_filename+".html"'
+html_generator.exporter( recipe_list, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
+if ( progress_dialog && progress_dialog->wasCancelled() )
+{
+	delete progress_dialog;
+	return false;
+}
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
@@ -88,6 +105,9 @@ recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHT
 KURL url;
 url.setPath( tmp_filename+".html" );
 recipeView->openURL( url );
+
+delete progress_dialog;
+return true;
 }
 
 void RecipeViewDialog::print(void)

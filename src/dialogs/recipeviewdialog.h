@@ -33,8 +33,12 @@ public:
     RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID=-1);
 
     ~RecipeViewDialog();
-    void loadRecipe(int recipeID);
-    void loadRecipes( const QValueList<int> &ids );
+
+    /** @return Boolean indicating whether or not the recipe was successfully loaded */
+    bool loadRecipe(int recipeID);
+
+    /** @return Boolean indicating whether or not the recipes were successfully loaded */
+    bool loadRecipes( const QValueList<int> &ids );
 
 signals:
   void recipeSelected(int,int);
@@ -50,7 +54,7 @@ private:
   QString tmp_filename;
 
   // Internal Methods
-  void showRecipes( const QValueList<int> &ids );
+  bool showRecipes( const QValueList<int> &ids );
   void removeOldFiles();
 
 protected:

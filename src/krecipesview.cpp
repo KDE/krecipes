@@ -455,7 +455,7 @@ else if (action==1) // Edit
 	inputPanel->loadRecipe(recipeID);
 	rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 	rightPanel->raise(inputPanel);
-  setContextHelp(RecipeEdit);
+	setContextHelp(RecipeEdit);
 }
 else if (action==2) //Remove
 {
@@ -703,9 +703,11 @@ showRecipes( ids );
 
 void KrecipesView::showRecipes( const QValueList<int> &recipeIDs)
 {
-viewPanel->loadRecipes(recipeIDs);
-rightPanel->setHeader(i18n("View Recipe"),"filefind");
-rightPanel->raise(viewPanel);
+if ( viewPanel->loadRecipes(recipeIDs) )
+{
+	rightPanel->setHeader(i18n("View Recipe"),"filefind");
+	rightPanel->raise(viewPanel);
+}
 }
 
 void KrecipesView::setContextHelp(int action){
