@@ -45,7 +45,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_top,0,1);
 
-    ingredientListView=new KreListView (this,i18n("Ingredient list"));
+    ingredientListView=new KreListView (this,i18n("Ingredient list"),true,1);
     ingredientListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (ingredientListView,1,10,1,1);
     ingredientListView->listView()->addColumn(i18n("Id"));
