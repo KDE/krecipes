@@ -47,9 +47,12 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, const Ingredient
 
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
 
+//---------- Sort the list --------
+IngredientList list_copy = ingredientList;
+qHeapSort(list_copy);
 
 //---------- Load  the list --------
-display(ingredientList);
+display(list_copy);
 }
 
 

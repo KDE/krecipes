@@ -38,6 +38,9 @@ class ElementList;
 class RecipeDB;
 class FractionInput;
 class QTimeEdit;
+class QDragEvent;
+
+class ImageDropLabel;
 
 /**
 @author Unai Garro
@@ -73,7 +76,7 @@ private:
 	QGroupBox* instructionsTab;
 
 	//Recipe Photo
-	QLabel *photoLabel;
+	ImageDropLabel *photoLabel;
 	QPixmap sourcePhoto;
 	QPushButton *changePhotoButton;
 
@@ -176,6 +179,23 @@ private:
 
 };
 
-//#include "recipeinputdialog.moc"
+
+class ImageDropLabel : public QLabel
+{
+Q_OBJECT
+
+public:
+	ImageDropLabel(QWidget *parent, QPixmap &_sourcePhoto);
+
+signals:
+	void changed();
+
+protected:
+	void dragEnterEvent(QDragEnterEvent* event);
+	void dropEvent(QDropEvent* event);
+
+private:
+	QPixmap &sourcePhoto;
+};
 
 #endif

@@ -32,6 +32,9 @@ public:
     
     /** Compare two elements by their id */
     bool operator==(const Ingredient &) const;
+    
+    /** This is used for sorting, and so we compare by name */
+    bool operator<(const Ingredient &) const;
 };
 
 #endif

@@ -20,6 +20,7 @@
 #include <qmessagebox.h>
 #include <qtooltip.h>
 #include <qdatetimeedit.h>
+#include <qdragobject.h>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
@@ -38,6 +39,39 @@
 #include "selectcategoriesdialog.h"
 #include "fractioninput.h"
 #include "image.h" //Initializes default photo
+
+
+ImageDropLabel::ImageDropLabel(QWidget *parent, QPixmap &_sourcePhoto) : QLabel(parent),
+	sourcePhoto(_sourcePhoto)
+{
+	setAcceptDrops(TRUE);
+}
+
+void ImageDropLabel::dragEnterEvent(QDragEnterEvent* event)
+{
+	event->accept( QImageDrag::canDecode(event) );
+}
+
+void ImageDropLabel::dropEvent(QDropEvent* event)
+{
+	QImage image;
+	
+	if ( QImageDrag::decode(event, image) ) {
+		if( (image.width() > width() || image.height() > height()) || (image.width() < width() && image.height() < height()) ){
+			QPixmap pm_scaled;
+			pm_scaled.convertFromImage(image.smoothScale(width(),height(), QImage::ScaleMin));
+			setPixmap(pm_scaled);
+		
+			sourcePhoto=pm_scaled; // to save scaled later on
+		}
+		else{
+			setPixmap( image );
+			sourcePhoto = image;
+		}
+		
+		emit changed();
+	}
+}
 
 
 RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db): QVBox( parent)
@@ -91,7 +125,7 @@ il=new KIconLoader;
 
     QPixmap image1(defaultPhoto);
 
-    photoLabel=new QLabel(recipeTab);
+    photoLabel=new ImageDropLabel(recipeTab,sourcePhoto);
     photoLabel->setPixmap(image1);
     photoLabel->setFixedSize(QSize(221,166));
     photoLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
@@ -377,6 +411,7 @@ il=new KIconLoader;
     connect(downButton, SIGNAL(clicked()), this, SLOT(moveIngredientDown()));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()));
     connect(addButton, SIGNAL(clicked()), this, SLOT(addIngredient()));
+    connect(photoLabel, SIGNAL(changed()), this, SIGNAL(changed()));
     connect(this, SIGNAL(changed()), this, SLOT(recipeChanged()));
     connect(servingsNumInput, SIGNAL(valueChanged(int)), this, SLOT(recipeChanged()));
     connect(prepTimeEdit, SIGNAL(valueChanged(const QTime &)), SLOT(recipeChanged()));

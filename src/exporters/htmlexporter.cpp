@@ -140,7 +140,6 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 				);
 
 	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
-	int phheight =(int) (temp_photo_geometry.height()/100.0*m_width); // Scale to this dialog
 
 	QImage image;
 	if (recipe.photo.isNull())
@@ -148,12 +147,8 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 	else
 		image = recipe.photo.convertToImage();
 
-	QPixmap pm;
-	if ( phwidth > phheight )
-		pm = image.smoothScale(phwidth, phheight, QImage::ScaleMax);
-	else
-		pm = image.smoothScale(phwidth, phheight, QImage::ScaleMin);
-	//QPixmap pm = image.scaleWidth(phwidth);
+	QPixmap pm = image.smoothScale(phwidth, 0, QImage::ScaleMax);
+
 	QFileInfo fi(*file);
 	pm.save(fi.dirPath()+"/"+filename+"_photos/"+escape(recipe.title)+".png","PNG");
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio

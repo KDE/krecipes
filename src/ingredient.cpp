@@ -57,3 +57,8 @@ Ingredient & Ingredient::operator=(const Ingredient &i)
 	units=i.units;
 	return *this;
 	}
+
+bool Ingredient::operator<(const Ingredient &ing) const
+{
+	return(QString::localeAwareCompare(name,ing.name) < 0);
+}
