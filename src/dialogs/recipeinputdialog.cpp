@@ -11,7 +11,6 @@
 #include <qstring.h>
 #include <kurl.h>
 #include <qlayout.h>
-#include <qmessagebox.h>
 #include "recipeinputdialog.h"
 #include "image.h" //Initializes default photo
 
