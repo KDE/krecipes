@@ -232,7 +232,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else
 			m_instructions += current + "\n";
 
-		current = stream.readLine();
+		current = stream.readLine().stripWhiteSpace();
 	}
 	m_instructions = m_instructions.stripWhiteSpace();
 	qDebug("Found instructions: %s", m_instructions.latin1());

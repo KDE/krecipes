@@ -96,7 +96,10 @@ void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
 		{
 			int new_cat_id = db->findExistingCategoryByName( category->name );
 			if ( new_cat_id == -1 && category->name != "" )
+			{
 				db->createNewCategory(category->name);
+				new_cat_id = db->lastInsertID();
+			}
 
 			category->id = new_cat_id;
 		}

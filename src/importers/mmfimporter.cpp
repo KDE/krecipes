@@ -59,6 +59,8 @@ static expand_unit_info unit_info[] = {
   { 0, 0 }
 };
 
+//TODO: pre-parse file and try to correct alignment errors in ingredients
+
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
 	resetVars();
@@ -224,6 +226,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			new_ingredient.amount = amount.toDouble();
 	}
 
+	if ( string[7] != ' ' )
+		return false;
+
 	if ( string.mid( 8, 2 ).stripWhiteSpace() != "" )
 	{
 		bool is_unit = false;
@@ -248,6 +253,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		new_ingredient.units = unit;
 	}
 
+	if ( string[10] != ' ' || string[11] == ' ' )
+		return false;
+
 	new_ingredient.name = string.mid( 11, 32 ).stripWhiteSpace();
 
 	//if we made it this far it is an ingredient line
@@ -260,22 +268,31 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	return true;
 }
 
+//for now, make header an ingredient
 bool MMFImporter::loadIngredientHeader( const QString &string )
 {
-	if ( string.startsWith("-----") &&
+	if ( (string.startsWith("-----") || string.startsWith("MMMMM") ) &&
 	     string.length() >= 40 &&
-	     (string.at( string.length()/2 ).isLetter() || string.at( string.length()/2 ) == " " ) )
+	     (  (string.at( string.length()/2 ) != "-") ||
+	        (string.at( string.length()/2 + 1 ) != "-") ||
+		(string.at( string.length()/2 - 1 ) != "-") ) )
 	{
-
 		QString header(string.stripWhiteSpace());
-		header.replace('-',"");
-		header = "----" + header + "----";
+		header = header.mid( 10, header.length() - 20 );
 		qDebug("found ingredient header: %s",header.latin1());
+
+		for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
+			m_all_ing.add( *ing );
+		m_left_col_ing.empty();
+
+		for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
+			m_all_ing.add( *ing );
+		m_right_col_ing.empty();
 
 		Ingredient title;
 		title.name = header;
 		title.units = ""; title.amount = 0;
-		m_left_col_ing.addReverse( title );
+		m_all_ing.add( title );
 		return true;
 	}
 	else
@@ -284,16 +301,17 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 
 void MMFImporter::putDataInRecipe()
 {
-	//join left and right columns
+	for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
+		m_all_ing.add( *ing );
 	for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
-		m_left_col_ing.addReverse( *ing );
+		m_all_ing.add( *ing );
 
 	//create the recipe
 	Recipe *new_recipe = new Recipe;
 	new_recipe->persons = m_servings;
 	new_recipe->title = m_title;
 	new_recipe->instructions = m_instructions;
-	new_recipe->ingList = m_left_col_ing;
+	new_recipe->ingList = m_all_ing;
 	new_recipe->categoryList = m_categories;
 	new_recipe->authorList = m_authors;
 	new_recipe->recipeID = -1;
@@ -309,6 +327,7 @@ void MMFImporter::resetVars()
 {
 	m_left_col_ing.empty();
 	m_right_col_ing.empty();
+	m_all_ing.empty();
 	m_authors.clear();
 	m_categories.clear();
 

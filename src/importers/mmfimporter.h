@@ -58,6 +58,7 @@ private:
 	ElementList m_categories;
 	IngredientList m_left_col_ing;
 	IngredientList m_right_col_ing;
+	IngredientList m_all_ing;
 
 	FormatVersion version;
 };
