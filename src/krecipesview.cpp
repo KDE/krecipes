@@ -223,7 +223,6 @@ bool setupUser,initializeData; QString adminUser,adminPass;
 SetupWizard* setupWizard=new SetupWizard();
 setupWizard->exec();
 setupWizard->getOptions(setupUser,initializeData);
-delete setupWizard;
 }
 }
 
