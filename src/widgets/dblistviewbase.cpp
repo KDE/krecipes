@@ -70,13 +70,14 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
 
 void DBListViewBase::activatePrev()
 {
-	curr_offset -= curr_limit;
-	if ( curr_offset >= 0 ) {
+	if ( curr_offset != 0 ) {
+		curr_offset -= curr_limit;
+		if ( curr_offset < 0 )
+			curr_offset = 0;
+	
 		reload();
 		emit prevGroupLoaded();
 	}
-	else
-		curr_offset = 0;
 }
 
 void DBListViewBase::activateNext()
@@ -85,6 +86,15 @@ void DBListViewBase::activateNext()
 
 	reload();
 	emit nextGroupLoaded();
+}
+
+void DBListViewBase::rename( QListViewItem *it, int c )
+{
+	if ( it->rtti() == PREVLISTITEM_RTTI || it->rtti() == NEXTLISTITEM_RTTI ) {
+		return;
+	}
+
+	KListView::rename(it,c);
 }
 
 void DBListViewBase::slotDoubleClicked( QListViewItem *it )

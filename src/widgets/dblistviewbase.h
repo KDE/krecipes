@@ -46,6 +46,8 @@ protected:
 protected slots:
 	void elementCreated();
 	void elementRemoved();
+	
+	void rename( QListViewItem *, int c );
 	void slotDoubleClicked( QListViewItem * );
 
 private:
