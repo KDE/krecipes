@@ -56,7 +56,7 @@ database=db;
     // Recipe Photo
 
     recipeTab =new QGroupBox(this);
-    recipeTab->setFlat(true);
+    recipeTab->setFrameStyle(QFrame::NoFrame);
     recipeTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
 
@@ -172,6 +172,7 @@ database=db;
     il=new KIconLoader;
 
     functionsBox=new QGroupBox(recipeTab);
+    functionsBox->setFrameStyle(QFrame::NoFrame);
     functionsBox->setColumns(3);
     recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
     saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small)); saveButton->setEnabled(false);
@@ -185,7 +186,7 @@ database=db;
     //------- Ingredients Tab -----------------
 
     ingredientGBox =new QGroupBox(this);
-    ingredientGBox->setFlat(true);
+    ingredientGBox->setFrameStyle(QFrame::NoFrame);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     QGridLayout* ingredientsLayout=new QGridLayout(ingredientGBox);
 
