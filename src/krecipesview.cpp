@@ -203,6 +203,7 @@ setupWizard->exec();
 
 void KrecipesView::slotSetDietWizardPanel(void)
 {
+dietPanel->reload();
 rightPanel->raiseWidget(dietPanel);
 }
 
