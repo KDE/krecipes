@@ -1,6 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Jason Kivlighn                                  *
- *   mizunoami44@users.sourceforge.net                                     *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -470,7 +472,16 @@ void SetupDisplay::setAlignment( QAction *action )
 	{
 		QLabel *box = static_cast<QLabel*>(obj);
 
-		int align = box->alignment() ^ ( Qt::AlignRight | Qt::AlignHCenter | Qt::AlignLeft ); //preserve non-horizontal alignment flags
+		int align = box->alignment();
+
+		//TODO: isn't there a simpler way to do this...
+		//preserve non-horizontal alignment flags
+		if ( align & Qt::AlignRight )
+			align ^= Qt::AlignRight;
+		if ( align & Qt::AlignHCenter )
+			align ^= Qt::AlignHCenter;
+		if ( align & Qt::AlignLeft )
+			align ^= Qt::AlignLeft;
 
 		if ( action->text() == i18n("Center") )
 			align |= Qt::AlignHCenter;
