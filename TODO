@@ -1,2 +1,17 @@
-RecipeML import/export
-Give option to import recipe formats by pasting the recipe text into a widget
+jkivlighn:
+
+*RecipeML import/export
+*Give option to import recipe formats by pasting the recipe text into a
+widget
+
+uga:
+(I don't claim ownership of these. If you do it, I'll be happy too :) )
+
+*debug SQLite support
+*searching recipes by category
+*printing recipes
+*daily/weekly recipe suggestions (diet wizard)
+
+
+
+
