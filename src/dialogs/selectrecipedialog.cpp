@@ -343,11 +343,14 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 }
 
 void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
+  if (i) // Check if the QListViewItem actually exists
+  {
   if(!i->firstChild() && i->text(1).toInt() != NULL){
     kpop->exec(p);
   }
   else{
     catPop->exec(p);
+  }
   }
 }
 
