@@ -24,6 +24,7 @@
 class WelcomePage;
 class PermissionsSetupPage;
 class ServerSetupPage;
+class DataInitializePage;
 class SavePage;
 
 class SetupWizard:public KWizard{
@@ -39,6 +40,7 @@ private:
 	WelcomePage *welcomePage;
 	PermissionsSetupPage *permissionsSetupPage;
 	ServerSetupPage *serverSetupPage;
+	DataInitializePage *dataInitializePage;
 	SavePage *savePage;
 
 private slots:
@@ -97,11 +99,20 @@ private:
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
-
-
-
 };
 
+
+class DataInitializePage:public QWidget{
+public:
+	// Methods
+	DataInitializePage(QWidget *parent);
+private:
+	// Widgets
+	QLabel *logo;
+	QLabel *initializeText;
+	QCheckBox *initializeCheckBox;
+
+};
 
 class SavePage:public QWidget{
 public:

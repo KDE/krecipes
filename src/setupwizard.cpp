@@ -31,8 +31,11 @@ permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
 serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,i18n("Server Settings"));
+dataInitializePage= new DataInitializePage(this);
+addPage(dataInitializePage,i18n("Initialize Database"));
 savePage = new SavePage(this);
 addPage(savePage,i18n("Finish and Save Settings"));
+
 setFinishEnabled(savePage,true); // Enable finish button
 setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
@@ -322,3 +325,42 @@ enabled=permissionsSetupPage->useAdmin();
 permissionsSetupPage->getAdmin(adminUser,adminPass);
 
 }
+
+DataInitializePage::DataInitializePage(QWidget *parent):QWidget(parent)
+{
+QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
+
+// Explanation Text
+initializeText=new QLabel(this);
+initializeText->setText(i18n("Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. "));
+initializeText->setMinimumWidth(200);
+initializeText->setMaximumWidth(10000);
+initializeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+initializeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
+layout->addWidget(initializeText,1,3);
+
+// Logo
+QPixmap dataInitializePixmap (locate("data", "krecipes/pics/dbpermissions.png"));
+logo=new QLabel(this);
+logo->setPixmap(dataInitializePixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addMultiCellWidget(logo,1,8,1,1);
+
+// Spacer to separate the logo
+QSpacerItem *logoSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(logoSpacer,1,2);
+
+// Initialize data checkbox
+
+QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(rootInfoSpacer,5,3);
+
+initializeCheckBox=new QCheckBox(i18n("Yes please, initialize the database with the examples"),this,"initializeCheckBox");
+layout->addWidget(initializeCheckBox,3,3);
+}
+
+
