@@ -969,27 +969,27 @@ void LiteRecipeDB::createTable(QString tableName)
 
 QString command;
 
-if (tableName=="recipes") command="CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(200),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));";
+if (tableName=="recipes") command="CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));";
 
-else if (tableName=="ingredients") command="CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(50), PRIMARY KEY (id));";
+else if (tableName=="ingredients") command="CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(50), PRIMARY KEY (id));";
 
 else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER);";
 
 else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") command="CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(20), PRIMARY KEY (id));";
+else if (tableName== "units") command="CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));";
 
 else if  (tableName=="ingredient_info") command="CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
-else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_properties (id INTEGER NOT NULL AUTO_INCREMENT,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
+else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
 else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") command="CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(20) default NULL,PRIMARY KEY (id));";
+else if (tableName=="categories") command="CREATE TABLE categories (id int(11) NOT NULL, name varchar(20) default NULL,PRIMARY KEY (id));";
 
 else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL);";
 
-else if (tableName=="authors") command="CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(20) default NULL,PRIMARY KEY (id));";
+else if (tableName=="authors") command="CREATE TABLE authors (id int(11) NOT NULL, name varchar(20) default NULL,PRIMARY KEY (id));";
 
 else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
 
