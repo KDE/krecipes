@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "ingredientsdialog.h"
-
+#include <qheader.h>
 
 IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 {
@@ -96,6 +96,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     propertiesListView->addColumn("Property");
     propertiesListView->addColumn("Amount");
     propertiesListView->addColumn("units");
+    propertiesListView->setAllColumnsShowFocus(true);
 
     QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
     layout->addMultiCell(spacer_rightProperties,1,3,17,17);
@@ -118,6 +119,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removePropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removePropertyButton->setFlat(true);
 
+
+    inputBox=new KDoubleNumInput(this);
+    inputBox->hide();
+
     // Initialize
     ingredientList =new ElementList;
     unitList=new ElementList;
@@ -131,6 +136,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(this->removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
     connect(this->addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
     connect(this->removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
+    connect(this->propertiesListView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
 }
 
 
@@ -349,4 +355,24 @@ if ((ingredientID>=0)&&(propertyID>=0)) // an ingredient/property combination wa
 reloadPropertyList(); // Reload the list from database
 
 }
+}
+
+void IngredientsDialog::insertPropertyEditBox(QListViewItem* it)
+{
+
+std::cerr<<"Somebody Clicked me! ;-)\n";
+QRect r;
+//r.setWidth(propertiesListView->columnWidth(2));
+
+r=propertiesListView->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
+
+r.moveBy(propertiesListView->pos().x(),propertiesListView->pos().y()); // Move to the position of qlistview
+r.moveBy(0,r.height()+propertiesListView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
+
+r.setHeight(it->height()); // Set the item's height
+
+
+
+inputBox->setGeometry(r);
+inputBox->show();
 }

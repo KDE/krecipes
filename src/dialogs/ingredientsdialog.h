@@ -47,7 +47,7 @@ private:
     KListView* unitsListView;
     KListView* propertiesListView;
     QPushButton* pushButton5;
-
+    KDoubleNumInput* inputBox;
 
   // Internal Methods
   void reloadIngredientList(void);
@@ -68,7 +68,7 @@ private:
     void updateLists(void);
     void addPropertyToIngredient(void);
     void removePropertyFromIngredient(void);
-
+    void insertPropertyEditBox(QListViewItem* it);
 
 
 };
