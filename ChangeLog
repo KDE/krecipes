@@ -1,4 +1,7 @@
+2003-07-27  <>
+	Fix enabling save button.
+
 2003-07-23  <>
-	Use UTF8 encoding (to fix for the use of some international symbols) 
+	Use UTF8 encoding (to fix for the use of some international symbols)
 
 2003-07-23: Workaround for image caching problem
