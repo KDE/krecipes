@@ -353,9 +353,20 @@ void RecipeViewDialog::createBlocks()
 	IngredientProperty * prop;
 	for ( prop = properties->getFirst(); prop; prop = properties->getNext() )
 	{
+
+		// if the amount given is <0, it means the property calculator found that the property was undefined for some ingredients, so the amount will be actually bigger
+
+		QString amount_str;
+
+		if (prop->amount>0) amount_str = QString::number(prop->amount);
+		else {
+			amount_str = QString::number(-(prop->amount));
+			amount_str+="+";
+			}
+
 		properties_html += QString("<li>%1: %2  %3</li>")
 			    .arg(prop->name)
-			    .arg(prop->amount)
+			    .arg(amount_str)
 			    .arg(prop->units);
 	}
 	new_element = new DivElement( "properties", properties_html );
