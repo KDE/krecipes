@@ -218,13 +218,26 @@ if ( version < 0.63 )
 {
 	QString command="ALTER TABLE `units` ADD COLUMN `plural` varchar(20) AFTER name;";
 		QSqlQuery tableToAlter(command,database);
+
+	QSqlQuery result("SELECT id,name,plural FROM units WHERE name='' OR plural=''",database);
+	if ( result.isActive() ) {
+		while ( result.next() ) {
+			QString name = unescapeAndDecode(result.value(1).toString());
+			QString plural = unescapeAndDecode(result.value(2).toString());
+
+			if ( name.isEmpty() ) name = plural;
+			else if ( plural.isEmpty() ) plural = name;
+
+			command = "UPDATE units SET name='"+QString(escapeAndEncode(name))+"', plural='"+QString(escapeAndEncode(plural))+"' WHERE id="+QString::number(result.value(0).toInt());
+			QSqlQuery query(command,database);
+		}
+	}
 	
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
         command="INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
 		tableToAlter.exec(command);
 }
-
 }
 
 int MySQLRecipeDB::lastInsertID()

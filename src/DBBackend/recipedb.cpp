@@ -277,7 +277,7 @@ int createUnit(const QString &name, RecipeDB *database)
 
 	if ( assigned_id == -1 ) //create unit since it doesn't exist
 	{
-		database->createNewUnit( name, QString::null );
+		database->createNewUnit( name, name );
 		assigned_id = database->lastInsertID();
 	}
 

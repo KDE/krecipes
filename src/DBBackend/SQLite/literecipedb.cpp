@@ -1935,6 +1935,25 @@ if ( version < 0.63 )
 	}
 	database->executeQuery("DROP TABLE units_copy");
 
+	QSQLiteResult result = database->executeQuery("SELECT id,name,plural FROM units WHERE name ISNULL OR plural ISNULL");
+	if (result.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= result.first();
+		while (!result.atEnd())
+		{
+			QString name = row.data(1);
+			QString plural = row.data(2);
+
+			if ( name.isEmpty() ) name = plural;
+			if ( plural.isEmpty() ) plural = name;
+
+			command = "UPDATE units SET name='"+escape(name)+"',plural='"+escape(plural)+"' WHERE id="+QString::number(row.data(0).toInt());
+			database->executeQuery(command);
+			
+			row = result.next();
+		}
+	}
+
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		database->executeQuery(command);
 	command="INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
@@ -1942,7 +1961,6 @@ if ( version < 0.63 )
 
 	database->executeQuery("COMMIT TRANSACTION;");
 }
-
 }
 
 float LiteRecipeDB::databaseVersion(void)
