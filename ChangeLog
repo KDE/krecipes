@@ -1,3 +1,8 @@
+Changes from 0.7 to 0.7.1:
+  -Portuguese Handbook is now properly installed
+  -Fix a Meal-Master import bug where in certain instances, ingredient lines were interpreted as instructions
+  -Fix database structure for PostgreSQL
+
 Changes from 0.6 to 0.7:
   -BETA support for PostgreSQL database backend
   -Database to database transfer (Remote or local).
