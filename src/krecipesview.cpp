@@ -622,7 +622,7 @@ void KrecipesView::setContextHelp(int action){
       contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
       "Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i><br><br>"
       "Right click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends <br><br>"
-      "Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net:  <a\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, <a href=\"http://www.mealmaster.com/\">MealMaster</a> and <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, appart from our excellent Krecipes format obviously.<br><br>"
+      "Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net:  <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, <a href=\"http://www.mealmaster.com/\">MealMaster</a> and <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, appart from our excellent Krecipes format obviously.<br><br>"
       ));
     break;
     case ShoppingP:
