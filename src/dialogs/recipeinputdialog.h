@@ -60,6 +60,7 @@ private:
 	// Widgets
     QTabWidget* tabWidget;
     QGroupBox* recipeTab;
+    QGroupBox* instructionsTab;
 
 	//Recipe Photo
 	QLabel *photoLabel;
@@ -102,6 +103,8 @@ private:
 	QToolButton* showButton;
 	QToolButton* shopButton;
 
+	QToolButton* spellCheckButton;
+
 	// Internal functions
 	bool checkAmountEdit();
 	void createNewIngredientIfNecessary();
@@ -135,6 +138,7 @@ private:
 	void addToShoppingList(void);
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
+	void spellCheck(void);
 
 	signals:
 	void addRecipeToShoppingList(int recipeID);

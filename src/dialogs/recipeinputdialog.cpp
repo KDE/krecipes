@@ -277,20 +277,31 @@ database=db;
 
     // ------- Recipe Instructions Tab -----------
 
+    instructionsTab = new QGroupBox(this);
+    instructionsTab->setFrameStyle(QFrame::NoFrame);
+    instructionsTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
-    instructionsEdit = new KTextEdit( this );
+    QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
+
+    instructionsEdit = new KTextEdit( instructionsTab );
     instructionsEdit->setMinimumSize(QSize(360,320));
     instructionsEdit->setMaximumSize(QSize(10000,10000));
     instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    instructionsLayout->addWidget(instructionsEdit);
 
+    spellCheckButton=new QToolButton( instructionsTab );
+    spellCheckButton->setIconSet(il->loadIconSet("spellcheck", KIcon::Small));
+    QToolTip::add(spellCheckButton, i18n("Check spelling"));
+    instructionsLayout->addWidget(spellCheckButton);
 
+    // ------- END OF Recipe Instructions Tab -----------
 
     tabWidget->insertTab( recipeTab, "" );
     tabWidget->insertTab( ingredientGBox, "" );
-    tabWidget->insertTab( instructionsEdit, "" );
+    tabWidget->insertTab( instructionsTab, "" );
     tabWidget->changeTab( recipeTab, tr2i18n( "Recipe" ) );
     tabWidget->changeTab( ingredientGBox, tr2i18n( "Ingredients" ) );
-    tabWidget->changeTab( instructionsEdit, tr2i18n( "Instructions" ) );
+    tabWidget->changeTab( instructionsTab, tr2i18n( "Instructions" ) );
 
 
     // Dialog design
@@ -326,6 +337,7 @@ database=db;
     connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
     connect (showButton,SIGNAL(clicked()),this,SLOT(showRecipe()));
     connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
+    connect (spellCheckButton,SIGNAL(clicked()),this,SLOT(spellCheck()));
     connect (this, SIGNAL(enableSaveOption(bool)),this,SLOT(enableSaveButton(bool)));
 }
 
@@ -892,4 +904,13 @@ QMessageBox::information( this,
 			  );
 
 
+}
+
+void RecipeInputDialog::spellCheck(void)
+{
+	KMessageBox::sorry(this,"Sorry, I'm not implemented just yet :(","Coming soon (hopefully)");
+	//I imagine doing something like this...
+	//instructionsEdit->setText( SpellChecker::checkSpelling( instructionsEdit->text() ) );
+	//it opens a dialog to correct each word, which the user corrects; when
+	//its all done, it returns the fixed text
 }
