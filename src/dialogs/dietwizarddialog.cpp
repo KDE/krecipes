@@ -182,36 +182,35 @@ void DietWizardDialog::createDiet( void )
 	// Get the whole list of recipes, detailed
 	database->loadRecipeDetails( &rlist, true, true );
 
-	int recipes_left;
-
-
-	QValueList <RecipeList::Iterator> tempRList; // temporal iterator list so elements can be removed without reloading them again from the DB
+	// temporal iterator list so elements can be removed without reloading them again from the DB
+	// this list prevents the same meal from showing up in the same day twice
+	QValueList <RecipeList::Iterator> tempRList; 
 
 	bool alert = false;
 
 	for ( int day = 0;day < dayNumber;day++ )  // Create the diet for the number of days defined by the user
 	{
 		populateIteratorList( rlist, &tempRList ); // temporal iterator list so elements can be removed without reloading them again from the DB
-		recipes_left = rlist.count();
 		for ( int meal = 0;meal < mealNumber;meal++ )
 		{
 			int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
 
 			for ( int dish = 0;dish < dishNo;dish++ ) {
 				bool found = false;
-				while ( ( !found ) && recipes_left ) {
-					int random_index = ( int ) ( ( float ) ( kapp->random() ) / ( float ) RAND_MAX * recipes_left );
-					QValueList<RecipeList::Iterator>::Iterator iit = tempRList.at( random_index ); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
+				QValueList <RecipeList::Iterator> tempDishRList = tempRList;
+				while ( ( !found ) && !tempDishRList.empty() ) {
+					int random_index = ( int ) ( ( float ) ( kapp->random() ) / ( float ) RAND_MAX * tempDishRList.count() );
+					QValueList<RecipeList::Iterator>::Iterator iit = tempDishRList.at( random_index ); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
+
 					RecipeList::Iterator rit = *iit;
 					if ( found = ( ( ( !categoryFiltering( meal, dish ) ) || checkCategories( *rit, meal, dish ) ) && checkConstraints( *rit, meal, dish ) ) )  // Check that the recipe is inside the constraint limits and in the categories specified
 					{
 						dietRList->append( *rit ); // Add recipe to the diet list
+						tempRList.remove( tempRList.find(*iit) ); //can't just remove()... the iterator isn't from this list (its an iterator from tempDishRList)
 					}
-
-					// Remove this analized recipe from teh list
-					tempRList.remove( iit );
-					recipes_left--;
-
+					else {
+						tempDishRList.remove( iit ); // Remove this analized recipe from teh list
+					}
 				}
 				if ( !found )
 					alert = true;
