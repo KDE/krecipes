@@ -287,7 +287,7 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    // find the corresponding recipe iterator
 		    if (recipeIterators.contains(row.data(3).toInt()))
 		    {
-		    RecipeList::Iterator it=recipeIterators[row.data(3).toInt()]; // Get a pointer to the iterator
+		    RecipeList::Iterator it=recipeIterators[row.data(3).toInt()];
 
 		    //add the ingredient to the recipe
 		    (*it).ingList.add(ing);

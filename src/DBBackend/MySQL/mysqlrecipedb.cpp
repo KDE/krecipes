@@ -247,7 +247,7 @@ QSqlQuery ingredientsToLoad(command,database);
 		    // find the corresponding recipe iterator
 		    if (recipeIterators.contains(ingredientsToLoad.value(3).toInt()))
 		    {
-		    RecipeList::Iterator it=recipeIterators[ingredientsToLoad.value(3).toInt()]; // Get a pointer to the iterator
+		    RecipeList::Iterator it=recipeIterators[ingredientsToLoad.value(3).toInt()];
 
 		    //add the ingredient to the recipe
 		    (*it).ingList.add(ing);
