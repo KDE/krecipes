@@ -302,12 +302,11 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometries.append( geometry );
 
 	QString ingredients_html;
-	config->setGroup("Numbers");
+	config->setGroup("Formatting");
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	config->setGroup("IngredientsSetup");
-	QString ingredient_format = config->readEntry("Format","%n%p: %a %u");
+	QString ingredient_format = config->readEntry("Ingredient","%n%p: %a %u");
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{

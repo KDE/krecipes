@@ -67,6 +67,8 @@ protected:
 
 	QVBoxLayout* Form1Layout;
 	QVBoxLayout* numberButtonGroupLayout;
+	
+	KLineEdit *ingredientEdit;
 
 protected slots:
 	virtual void languageChange();

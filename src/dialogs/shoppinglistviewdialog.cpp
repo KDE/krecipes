@@ -103,7 +103,7 @@ QString recipeHTML;
 	else color="#BFC2F0";
 	counter=1-counter;
 
-	KConfig *config = kapp->config(); config->setGroup("Numbers");
+	KConfig *config = kapp->config(); config->setGroup("Formatting");
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 	QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 

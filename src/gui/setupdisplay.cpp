@@ -21,6 +21,7 @@
 #include <qaction.h>
 #include <qlabel.h>
 #include <qfile.h>
+#include <qregexp.h>
 #include <qtextedit.h>
 #include <qtooltip.h>
 #include <qobjectlist.h>
@@ -343,10 +344,10 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString ingredients;
 
 	KConfig *config=kapp->config();
-	config->setGroup("Numbers");
+	config->setGroup("Formatting");
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
+	QString ingredient_format = config->readEntry("Ingredient","%n%p: %a %u");
 
 	for ( IngredientList::const_iterator ing_it = sample.ingList.begin(); ing_it != sample.ingList.end(); ++ing_it )
 	{
@@ -356,10 +357,13 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		if (amount_str == "0")
 			amount_str = "";
 
-		ingredients += QString("<li>%1: %2 %3</li>")
-			    .arg((*ing_it).name)
-			    .arg(amount_str)
-			    .arg((*ing_it).units);
+		QString tmp_format(ingredient_format);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),(*ing_it).name);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),(*ing_it).units);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ? "" : "; "+(*ing_it).prepMethod);
+
+		ingredients += QString("<li>%1</li>").arg(tmp_format);
 	}
 
 	if ( !ingredients.isNull() )

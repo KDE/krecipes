@@ -6,6 +6,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qhbox.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -32,7 +33,7 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     m_pageServer = new ServerPrefs(frame);
     layout->addWidget(m_pageServer);
 
-    frame = addPage(i18n("Numbers"), i18n("Customize Number Format"),il.loadIcon("math_frac",KIcon::NoGroup,32));
+    frame = addPage(i18n("Formatting"), i18n("Customize Formatting"),il.loadIcon("math_frac",KIcon::NoGroup,32));
     m_pageNumbers = new NumbersPrefs(frame);
     layout->addWidget(m_pageNumbers);
 
@@ -175,6 +176,20 @@ NumbersPrefs::NumbersPrefs(QWidget *parent)
     numberButtonGroup->insert( decimalRadioButton, 0 );
     numberButtonGroup->insert( fractionRadioButton, 1 );
 
+    //ingredient display format
+    QGroupBox *ingredientGrpBox = new QGroupBox(2,Qt::Vertical,i18n("Ingredient"),this);
+
+    QHBox *ingredientBox = new QHBox(ingredientGrpBox);
+    (void)new QLabel(i18n("Ingredient Format:"), ingredientBox);
+    ingredientEdit=new KLineEdit(ingredientBox);
+    QLabel *ingredientHelpText=new QLabel(i18n(	"%n: Name<br>"
+    						"%p: Preparation method<br>" 
+						"%a: Amount<br>"
+						"%u: Unit"
+						),ingredientGrpBox);
+
+    Form1Layout->addWidget(ingredientGrpBox);
+        
     adjustSize();
     resize(300,height());
 
@@ -182,19 +197,23 @@ NumbersPrefs::NumbersPrefs(QWidget *parent)
 
     // Load Current Settings
     KConfig *config=kapp->config();
-    config->setGroup("Numbers");
+    config->setGroup("Formatting");
 
     int button = ( config->readBoolEntry( "Fraction", false ) ) ? 1 : 0;
     numberButtonGroup->setButton( button );
+    
+    ingredientEdit->setText( config->readEntry("Ingredient","%n%p: %a %u") );
 }
 
 void NumbersPrefs::saveOptions()
 {
 	KConfig *config=kapp->config();
-	config->setGroup("Numbers");
-
+	config->setGroup("Formatting");
+	
 	bool fraction = !numberButtonGroup->find( 0 )->isOn();
 	config->writeEntry("Fraction",fraction);
+	
+	config->writeEntry("Ingredient",ingredientEdit->text());
 }
 
 void NumbersPrefs::languageChange()

@@ -44,6 +44,8 @@ public:
 protected:
 	/** Add a recipe to be imported into the database */
 	void add( const Recipe &recipe ){ m_recipe_list->append( recipe ); }
+	
+	int count() const { return m_recipe_list->count(); }
 
 	void setErrorMsg( const QString & s ){ m_error_msg += s + "\n"; }
 	void addWarningMsg( const QString & s ){ m_warning_msgs.append(s); }

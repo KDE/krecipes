@@ -62,14 +62,12 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 				(void)stream.readLine();
 				importMMF( stream );
 			}
-			else
-			{
-				setErrorMsg( i18n("File does not appear to be a valid Meal-Master export.") );
-				return;
-			}
 
 			stream.skipWhiteSpace();
 		}
+		
+		if ( count() == 0 )
+			setErrorMsg( i18n("No recipes found in this.") );
 	}
 	else
 		setErrorMsg(i18n("Unable to open file."));
