@@ -202,7 +202,6 @@ else
 
 void ConversionTableItem::setTextAndSave(const QString &s)
 {
-std::cerr<<s<<"\n";
 setText(s); // Change text
 emit signalRepaintCell(row(),col()); // Indicate to update the cell to the table. Otherwise it's not repainted
 emit ratioChanged(row(),col(),s.toDouble()); // Signal to store
