@@ -61,7 +61,7 @@ private:
 
 	//Recipe Photo
 	QLabel *photoLabel;
-  QPixmap regularPhoto;
+	QPixmap sourcePhoto;
 	QPushButton *changePhotoButton;
 
 	//Recipe Body

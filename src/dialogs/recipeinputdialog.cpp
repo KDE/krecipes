@@ -345,18 +345,18 @@ servingsNumInput->setValue(loadedRecipe->persons);
 
 	//show photo
 	if (!loadedRecipe->photo.isNull()){
-    regularPhoto = loadedRecipe->photo;
-    if( regularPhoto.width() > photoLabel->width() || regularPhoto.height() > photoLabel->height() ){
-      QImage pm = regularPhoto.convertToImage();
+    sourcePhoto = loadedRecipe->photo;
+    if( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ){
+      QImage pm = sourcePhoto.convertToImage();
 		  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->width(), QImage::ScaleMin)));
     }
     else{
-      photoLabel->setPixmap( regularPhoto );
+      photoLabel->setPixmap( sourcePhoto );
     }
   }
 	else {
-		regularPhoto = QPixmap(defaultPhoto);
-		photoLabel->setPixmap(regularPhoto);
+		sourcePhoto = QPixmap(defaultPhoto);
+		photoLabel->setPixmap(sourcePhoto);
 		}
 
 
@@ -422,13 +422,16 @@ unitBox->setCurrentText("");
     KURL filename = KFileDialog::getOpenURL(QString::null, "*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)", this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
-      regularPhoto = pixmap;
-      if( regularPhoto.width() > photoLabel->width() || regularPhoto.height() > photoLabel->height() ){
-        QImage pm = regularPhoto.convertToImage();
+      sourcePhoto = pixmap;
+
+      // If photo is bigger than the label, or smaller in width, than photoLabel, scale it
+      if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) )
+	{
+        QImage pm = sourcePhoto.convertToImage();
     	  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->height(), QImage::ScaleMin)));
        }
        else{
-        photoLabel->setPixmap( regularPhoto );
+        photoLabel->setPixmap( sourcePhoto );
        }
 	    emit changed();
 	  }
@@ -614,7 +617,7 @@ void RecipeInputDialog::saveRecipe(void)
 // Nothing except for the ingredient list (loadedRecipe->ingList)
 // was stored before for performance. (recipeID is already there)
 
-loadedRecipe->photo= regularPhoto;
+loadedRecipe->photo=sourcePhoto;
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
 loadedRecipe->persons=servingsNumInput->value();
