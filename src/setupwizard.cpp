@@ -409,7 +409,7 @@ initializeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
 layout->addWidget(initializeText,1,3);
 
 // Logo
-QPixmap dataInitializePixmap (locate("data", "krecipes/pics/dbpermissions.png"));
+QPixmap dataInitializePixmap (locate("data", "krecipes/pics/pengwithfork.png"));
 logo=new QLabel(this);
 logo->setPixmap(dataInitializePixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
