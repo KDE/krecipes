@@ -601,7 +601,7 @@ if (it)
 
 void RecipeInputDialog::createNewIngredientIfNecessary()
 {
-	if ( ingredientBox->currentText().stripWhiteSpace() != "" &&
+	if ( !ingredientBox->currentText().stripWhiteSpace().isEmpty() &&
 	     !ingredientBox->contains(ingredientBox->currentText()) )
 	{
 		if (unitBox->currentText().stripWhiteSpace() == "")
@@ -630,20 +630,21 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 
 void RecipeInputDialog::createNewUnitIfNecessary()
 {
-	if ( unitBox->currentText().stripWhiteSpace() != "" &&
+	if ( !unitBox->currentText().stripWhiteSpace().isEmpty() &&
 	     !unitBox->contains(unitBox->currentText()) )
 	{
 		QString newUnit(unitBox->currentText());
 
-		if ( !database->findExistingUnitsByName(newUnit) )
+		int id;
+		if ( ( id = database->findExistingUnitByName(newUnit) ) == -1 )
+		{
 			database->createNewUnit(newUnit);
-
-		ElementList newUnitElement;
-		database->findExistingUnitsByName(newUnit,-1,&newUnitElement);
+			id = database->lastInsertID();
+		}
 
 		database->addUnitToIngredient(
 		  ingredientComboList->getElement(ingredientBox->currentItem()).id,
-		  (*newUnitElement.begin()).id );
+		  id );
 
 		reloadUnitsCombo(0);
 		unitBox->setCurrentItem(newUnit);
@@ -1013,7 +1014,8 @@ QMessageBox::information( this,
 void RecipeInputDialog::spellCheck(void)
 {
 	QString text = instructionsEdit->text();
-	KSpell::modalCheck( text );
+	KSpellConfig default_cfg(this);
+	KSpell::modalCheck( text, &default_cfg );
 	KMessageBox::information( this, i18n("Spell check complete.") );
 
 	if ( text != instructionsEdit->text() ) //check if there were changes

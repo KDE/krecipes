@@ -1453,14 +1453,15 @@ database->executeQuery(command);
 
 int LiteRecipeDB::findExistingUnitsByName(const QString& name,int ingredientID, ElementList *list)
 {
+QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
 QString command;
 	if (ingredientID<0) // We're looking for units with that name all through the table, no specific ingredient
 	{
-	command=QString("SELECT id,name FROM units WHERE name='%1';").arg(name);
+	command=QString("SELECT id,name FROM units WHERE name='%1';").arg(search_str);
 	}
 	else // Look for units  with that name for the specified ingredient
 	{
-	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name='%2';").arg(ingredientID).arg(name);
+	command=QString("SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=%1 AND u.name='%2';").arg(ingredientID).arg(search_str);
 	}
 
 	QSQLiteResult unitsToLoad=database->executeQuery(command); // Run the query

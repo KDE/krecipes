@@ -52,8 +52,13 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
-	kdDebug()<<"Using layout file: "<<config->readEntry("Layout",locate("appdata","layouts/default.klo"))<<endl;
-	QFile input( config->readEntry("Layout",locate("appdata","layouts/default.klo")) );
+	
+	//let's do everything we can to be sure at least some layout is loaded
+	QString layout_filename = config->readEntry("Layout",locate("appdata","layouts/default.klo"));
+	if ( layout_filename.isEmpty() )
+		layout_filename = locate("appdata","layouts/default.klo");
+	kdDebug()<<"Using layout file: "<<layout_filename<<endl;
+	QFile input( layout_filename );
 	
 	QDomDocument doc;
 	
