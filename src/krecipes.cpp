@@ -13,12 +13,13 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
-#include "dualprogressdialog.h"
 
 #include "importers/mmfimporter.h"
 #include "importers/mx2importer.h"
 #include "importers/mxpimporter.h"
 #include "importers/nycgenericimporter.h"
+
+#include "gui/pagesetupdialog.h"
 
 #include "recipe.h"
 #include "DBBackend/recipedb.h"
@@ -125,6 +126,10 @@ void Krecipes::setupActions()
     KAction *import = new KAction(i18n("Import..."), 0,
                                   this, SLOT(import()),
                                   actionCollection(), "import_action");
+
+    KAction *pageSetup = new KAction(i18n("Page Setup..."), 0,
+                                  this, SLOT(pageSetupSlot()),
+                                  actionCollection(), "page_setup_action");
 
     createGUI();
 }
@@ -242,17 +247,8 @@ void Krecipes::import()
 		QString selected_filter = file_dialog.currentFilter();
 		QStringList files = file_dialog.selectedFiles();
 
-		DualProgressDialog *progress_dialog = new DualProgressDialog( this, "import_progress",
-		  i18n("Importing recipes"), i18n("Total:"), QString::null, true );
-		progress_dialog->subProgressBar()->setFormat(i18n("%v/%m Recipes"));
-		progress_dialog->setTotalSteps( files.count() );
-		int i = 1;
 		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
 		{
-			progress_dialog->setSubLabel( QString(i18n("Parsing file (%1 of %2): %3"))
-			  .arg(i).arg(files.count()).arg(*it) );
-			kapp->processEvents();
-
 			BaseImporter *importer;
 			if ( selected_filter == "*.mxp *.txt" )
 				importer = new MXPImporter( *it );
@@ -273,10 +269,6 @@ void Krecipes::import()
 				return;
 			}
 
-			progress_dialog->setSubLabel( QString(i18n("Importing file (%1 of %2): %3"))
-			  .arg(i).arg(files.count()).arg(*it) );
-			kapp->processEvents();
-
 			QString error = importer->getErrorMsg();
 			if ( error != QString::null )
 				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
@@ -287,18 +279,9 @@ void Krecipes::import()
 				warnings_list += importer->getWarningMsgs();
 			}
 
-			m_view->import( *importer, progress_dialog );
+			m_view->import( *importer );
 			delete importer;
-
-			if ( progress_dialog->wasCancelled() )
-			{
-				KMessageBox::information( this, i18n("All recipes up unto this point have been successfully imported.") );
-				return;
-			}
-			i++;
 		}
-
-		delete progress_dialog;
 
 		if ( warnings_list.count() > 0 )
 		{
@@ -323,6 +306,13 @@ void Krecipes::import()
 		m_view->categoriesPanel->reload();
 		m_view->authorsPanel->reload();
 	}
+}
+
+void Krecipes::pageSetupSlot()
+{
+	PageSetupDialog *page_setup = new PageSetupDialog(this);
+	page_setup->exec();
+	delete page_setup;
 }
 
 //return true to close app

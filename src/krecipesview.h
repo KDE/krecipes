@@ -55,7 +55,6 @@ class QPainter;
  // Declarations
 
  class MenuButton;
- class DualProgressDialog;
 
  // Some constants
  enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, DietWizardP=10};
@@ -111,7 +110,7 @@ public:
 	void createNewRecipe(void);
 	void createNewElement(void);
 
-	void import( BaseImporter &importer, DualProgressDialog *progress_dialog ){ importer.import(database, progress_dialog); }
+	void import( BaseImporter &importer ){ importer.import(database); }
 
 private:
 

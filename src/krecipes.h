@@ -77,6 +77,7 @@ private slots:
     void optionsPreferences();
     void newToolbarConfig();
     void import();
+    void pageSetupSlot();
 
     void changeStatusbar(const QString& text);
     void changeCaption(const QString& text);

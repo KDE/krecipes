@@ -14,9 +14,10 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+class KProgressDialog;
+
 class Recipe;
 class RecipeDB;
-class DualProgressDialog;
 
 /** @briefSubclass this class to create an importer for a specific file type.
   *
@@ -39,7 +40,7 @@ public:
 	/** Import the all recipes into the given database.  These recipes are the
 	  * recipes added to this class by a subclass using the @ref add() method.
 	  */
-	void import( RecipeDB *db, DualProgressDialog *progress_dialog = 0 );
+	void import( RecipeDB *db );
 
 protected:
 	/** Add a recipe to be imported into the database */

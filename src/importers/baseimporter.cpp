@@ -13,10 +13,12 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kprogress.h>
+#include <kmessagebox.h>
 
 #include "recipe.h"
 #include "recipedb.h"
-#include "dualprogressdialog.h"
+#include "dialogs/recipeimportdialog.h"
 
 BaseImporter::BaseImporter() :
   m_recipe_list(new QPtrList<Recipe>),
@@ -30,32 +32,36 @@ BaseImporter::~BaseImporter()
 	delete m_recipe_list;
 }
 
-void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
+void BaseImporter::import( RecipeDB *db )
 {
+	RecipeImportDialog import_dialog(m_recipe_list);
+
+	if ( import_dialog.exec() != QDialog::Accepted )
+		return;
+
+	QPtrList<Recipe> *selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete, uses pointers from given list
+
 	// Load Current Settings
 	KConfig *config=kapp->config();
 	config->setGroup("Import");
-
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
 
-	KProgress *sub_progress = 0;
-	if (progress_dialog)
-	{
-		sub_progress = progress_dialog->subProgressBar();
-		sub_progress->setTotalSteps( m_recipe_list->count() );
-	}
+	KProgressDialog *progress_dialog = new KProgressDialog(0,0,i18n("Importing"));
+	progress_dialog->setLabel( i18n("Importing selected recipes") );
+	KProgress *progress = progress_dialog->progressBar();
+	progress->setTotalSteps( selected_recipes->count() );
+	progress->setFormat(i18n("%v/%m Recipes"));
 
-	for ( Recipe *new_recipe = m_recipe_list->first(); new_recipe; new_recipe = m_recipe_list->next() )
+	for ( Recipe *new_recipe = selected_recipes->first(); new_recipe; new_recipe = selected_recipes->next() )
 	{
-		if (progress_dialog)
+		if ( progress_dialog->wasCancelled() )
 		{
-			if ( progress_dialog->wasCancelled() )
-				return;
-
-			//progress_dialog->setSubLabel( QString( i18n("Importing recipe: %1") ).arg(new_recipe->title) );
-			sub_progress->advance( 1 );
-			kapp->processEvents();
+			KMessageBox::information( 0, i18n("All recipes up unto this point have been successfully imported.") );
+			return;
 		}
+
+		progress->advance( 1 );
+		kapp->processEvents();
 
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		for ( Ingredient *ing = new_recipe->ingList.getFirst(); ing; ing = new_recipe->ingList.getNext() )
@@ -79,11 +85,9 @@ void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
 
 			ElementList unitsWithIng;
 			db->findExistingUnitsByName( ing->units, new_ing_id, &unitsWithIng );
-			bool duplicate = false;
-			for ( Element *unit = unitsWithIng.getFirst(); unit; unit = unitsWithIng.getNext() )
-				if ( unit->id == new_unit_id ){ duplicate = true; break;}
 
-			if ( !duplicate )
+			Element find_unit; find_unit.id = new_unit_id;
+			if ( !unitsWithIng.find(&find_unit) )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
@@ -120,5 +124,7 @@ void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
 		//save into the database
 		db->saveRecipe( new_recipe );
 	}
+
+	delete progress_dialog;
 }
 
