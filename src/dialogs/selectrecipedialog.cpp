@@ -9,7 +9,7 @@
  ***************************************************************************/
 #include "selectrecipedialog.h"
 #include <klocale.h>
-
+#include <qintdict.h>
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
@@ -89,27 +89,41 @@ recipeListView->clear();
 recipeList->clear();
 categoryList->clear();
 
+// First show the categories
 
+ElementList categoryList;
+QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
+database->loadCategories(&categoryList);
 
-
-// Load the recipe list
-
-// Show the categories first
-
-database->loadCategories(categoryList);
-for ( Element *category=categoryList->getFirst();category;category=categoryList->getNext())
+for ( Element *category=categoryList.getFirst(); category; category=categoryList.getNext())
 	{
-	QListViewItem *categoryIt=new QListViewItem (recipeListView,category->name,"","");
-	// Load the recipes in this category
-
-	database->loadRecipeList(recipeList,category->id);
-
-	for ( Element *recipe=recipeList->getFirst();recipe;recipe=recipeList->getNext())
-	{
-	QListViewItem *it=new QListViewItem (categoryIt,"",QString::number(recipe->id),recipe->name,"");
+	QListViewItem *it=new QListViewItem(recipeListView,category->name,"","");
+	categoryItems.insert(category->id,it);
 	}
 
+
+// Now show the recipes
+
+int *categoryID;
+Element *recipe;
+QPtrList <int> recipeCategoryList;
+
+
+database->loadRecipeList(recipeList,0,&recipeCategoryList); // Read the whole list of recipes including category
+
+for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
+	{
+	if (QListViewItem* categoryItem=categoryItems[*categoryID])
+	{
+	QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
 	}
+	else
+	{
+	QListViewItem *it=new QListViewItem (recipeListView,"unc",QString::number(recipe->id),recipe->name,"");
+	}
+	}
+
+
 
 filter(searchBox->text());
 

@@ -335,21 +335,37 @@ for (Element *author=recipe->authorList.getLast(); author; author=recipe->author
 }
 
 
-void LiteRecipeDB::loadRecipeList(ElementList *list,int categoryID)
+void LiteRecipeDB::loadRecipeList(ElementList *list,int categoryID,QPtrList <int>*recipeCategoryList)
 {
 list->clear();
 
 QString command;
-
+QString outputData;
 // Load the recipe list
-if (!categoryID) command="SELECT id,title FROM recipes;";
-else
+
+
+
+if (!categoryID) // load just the list
 	{
-	// If requested, load by category
-	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID); //
+	 if (!recipeCategoryList)
+	 command="SELECT id,title FROM recipes;";
+	 else
+	 command="SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id;";
+
+	 }
+else  // load the list of those in the specified category
+	{
+
+	if (!recipeCategoryList)
+	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
+	else
+	command=QString("SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
 	}
 
+
+std::cerr<<"Executing query for category "<<categoryID<<"\n";
 QSQLiteResult recipeToLoad=database->executeQuery(command);
+std::cerr<<"Query run\n";
 if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 	QSQLiteResultRow row=recipeToLoad.first();
             while ( !recipeToLoad.atEnd() ) {
@@ -358,6 +374,14 @@ if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 		    recipe.id=row.data(0).toInt();
 		    recipe.name=unescapeAndDecode(row.data(1));
 		    list->add(recipe);
+
+		    if (recipeCategoryList)
+		    {
+		    int *category=new int;
+		    *category=row.data(2).toInt();
+		    recipeCategoryList->append (category);
+		    }
+
 		    row=recipeToLoad.next();
 
 		}

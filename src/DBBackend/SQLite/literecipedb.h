@@ -12,7 +12,7 @@
 #define LITERECIPEDB_H
 
 #define DEFAULT_DB_NAME "Krecipes"
-#include <mysql/mysql.h>
+
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
@@ -91,7 +91,7 @@ public:
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
-	void loadRecipeList(ElementList *list,int categoryID=0);
+	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 

@@ -140,7 +140,7 @@ private:
 
 	// Internal variables
 	RecipeDB *database;
-  QString dbtype;
+	QString dbtype;
 
   // i18n
   void translate();

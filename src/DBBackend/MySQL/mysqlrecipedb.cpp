@@ -317,21 +317,31 @@ for (Element *author=recipe->authorList.getLast(); author; author=recipe->author
 mysql_close(mysqlDB);
 }
 
-
-void MySQLRecipeDB::loadRecipeList(ElementList *list, int categoryID)
+void MySQLRecipeDB::loadRecipeList(ElementList *list,int categoryID,QPtrList <int>*recipeCategoryList)
 {
 list->clear();
 
 QString command;
 
 
-// Load recipe list
-if (!categoryID) command="SELECT id,title FROM recipes;";
-else
+
+if (!categoryID) // load just the list
 	{
-	// If requested, load by category
-	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID); //
+	 if (!recipeCategoryList)
+	 command="SELECT id,title FROM recipes;";
+	 else
+	 command="SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id;";
+
+	 }
+else  // load the list of those in the specified category
+	{
+
+	if (!recipeCategoryList)
+	command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
+	else
+	command=QString("SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
 	}
+
 
 QSqlQuery recipeToLoad( command,database);
 
@@ -341,6 +351,13 @@ QSqlQuery recipeToLoad( command,database);
 		    recipe.id=recipeToLoad.value(0).toInt();
 		    recipe.name=unescapeAndDecode(recipeToLoad.value(1).toString());
 		    list->add(recipe);
+
+		    if (recipeCategoryList)
+		    {
+		    int *category=new int;
+		    *category=recipeToLoad.value(2).toInt();
+		    recipeCategoryList->append (category);
+ 		    }
                 }
 	}
 }
