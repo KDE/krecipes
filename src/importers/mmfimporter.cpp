@@ -171,7 +171,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &list )
 {
 	//just ignore an empty line
-	if ( string.stripWhiteSpace() == "" )
+	if ( string.stripWhiteSpace().isEmpty() )
 		return false;
 
 	Ingredient new_ingredient;
@@ -187,10 +187,10 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	}
 
 	//amount
-	if ( string.mid(0,7).stripWhiteSpace() != "" )
+	if ( !string.mid(0,7).stripWhiteSpace().isEmpty() )
 	{
 		bool ok;
-		MixedNumber amount = MixedNumber::fromString(string.mid(0,7).stripWhiteSpace(),&ok);
+		MixedNumber amount = MixedNumber::fromString(string.mid(0,7).stripWhiteSpace(),&ok,false);
 		if ( !ok )
 			return false;
 		else
@@ -202,7 +202,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		return false;
 
 	//unit
-	if ( string.mid( 8, 2 ).stripWhiteSpace() != "" )
+	if ( !string.mid( 8, 2 ).stripWhiteSpace().isEmpty() )
 	{
 		bool is_unit = false;
 		QString unit( string.mid( 8, 2 ).stripWhiteSpace() );
@@ -246,7 +246,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	return true;
 }
 
-//for now, make header an ingredient
+//### for now, make header an ingredient
 bool MMFImporter::loadIngredientHeader( const QString &string )
 {
 	if ( (string.startsWith("-----") || string.startsWith("MMMMM") ) &&

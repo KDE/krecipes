@@ -68,7 +68,7 @@ public:
 	/** Parses the given QString as a mixed number.  The input can be
 	  * expressed as a mixed number in the form "a b/c", or as a decimal.
 	  */
-	static MixedNumber fromString( const QString &input, bool *ok = 0 );
+	static MixedNumber fromString( const QString &input, bool *ok = 0, bool locale_aware=true );
 
 private:
 	static int getNumerator( const QString &input, int space_index, int slash_index, bool *ok );

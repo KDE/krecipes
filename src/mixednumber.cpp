@@ -112,7 +112,7 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 	return input.mid( slash_index+1, input.length() ).toInt(ok);
 }
 
-MixedNumber MixedNumber::fromString( const QString &str, bool *ok )
+MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_aware )
 {
 	QString input = str.stripWhiteSpace();
 
@@ -131,9 +131,10 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok )
 	{
 		if ( slash_index == -1 ) //input contains no fractional part
 		{
-			if ( input.endsWith(locale->decimalSymbol()) ){ if (ok){*ok = false;} return MixedNumber(); }
+			QString decimal_symbol = (locale_aware) ? locale->decimalSymbol() : ".";
+			if ( input.endsWith(decimal_symbol) ){ if (ok){*ok = false;} return MixedNumber(); }
 
-			double decimal = locale->readNumber(input,&num_ok);
+			double decimal = (locale_aware) ? locale->readNumber(input,&num_ok) : input.toDouble();
 
 			if ( !num_ok ){ if (ok){*ok = false;} return MixedNumber(); }
 
