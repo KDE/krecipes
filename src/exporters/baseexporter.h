@@ -29,6 +29,12 @@ public:
 
 	void exporter( const RecipeList& recipes, KProgressDialog * = 0 );
 	void exporter( const Recipe &, KProgressDialog * = 0 );
+	
+	/** Returns the actual filename that will be written to during the export.
+	  * Note that this can differ somewhat from the filename passed in the 
+	  * constructor.
+	  */
+	QString fileName();
 
 	virtual QString createContent( const RecipeList & ) = 0;
 
@@ -67,7 +73,7 @@ protected:
 	  * Subclasses should check the return value of the function and cancel exporting,
 	  * as is appropriate.
 	  */
-	bool progressBarCanceled();
+	bool progressBarCancelled();
 
 	QFile* file;
 	QString format;

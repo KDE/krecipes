@@ -30,8 +30,11 @@ struct ingredient_nutrient_data
 	QValueList<double> data;
 };
 
-void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids )
+void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KProgressDialog *progress_dlg )
 {
+	if ( progress_dlg )
+		progress_dlg->progressBar()->setTotalSteps( ids.count() );
+
 	recipes->empty();
 
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it )
@@ -39,6 +42,14 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids )
 		Recipe recipe;
 		loadRecipe( &recipe, *it );
 		recipes->append( recipe );
+		
+		if ( progress_dlg )
+		{
+			progress_dlg->progressBar()->advance(1);
+			kapp->processEvents();
+			if ( progress_dlg->wasCancelled() )
+				break;
+		}
 	}
 }
 

@@ -124,6 +124,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "</krecipes-instructions>\n";
     xml += "</krecipes-recipe>\n";
     
+    if ( progressBarCancelled() ) return QString::null;
     advanceProgressBar();
     }
     

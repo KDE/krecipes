@@ -38,20 +38,11 @@ BaseExporter::~BaseExporter()
 void BaseExporter::exporter( const RecipeList& recipes, KProgressDialog *progress_dlg )
 {
 	m_progress_dlg = progress_dlg;
-	if (m_progress_dlg){ m_progress_dlg->progressBar()->setTotalSteps(recipes.count());}
+	if (m_progress_dlg)
+		m_progress_dlg->progressBar()->setTotalSteps(recipes.count());
 
 	if ( createFile() )
-	{
-		bool fileExists = file->exists();
-		int overwrite;
-		if(fileExists)
-		{
-			overwrite = KMessageBox::questionYesNo( 0,QString(i18n("File \"%1\" exists. Would you like to overwrite it?")).arg(file->name()),i18n("Saving recipe") );
-		}
-
-		if(!fileExists || overwrite == KMessageBox::Yes)
-			saveToFile( recipes );
-	}
+		saveToFile( recipes );
 	else
 		kdDebug()<<"no output file has been selected for export."<<endl;
 }
@@ -65,6 +56,8 @@ void BaseExporter::exporter( const Recipe &recipe, KProgressDialog *progress_dlg
 
 bool BaseExporter::createFile()
 {
+	if ( file )
+		return true;
 	if( !filename.isEmpty() )
 	{
 		QStringList possible_formats = QStringList::split(',',extensions());
@@ -97,12 +90,24 @@ bool BaseExporter::createFile()
 		return false;
 }
 
+QString BaseExporter::fileName()
+{
+	if ( createFile() )
+		return file->name();
+	else
+		return QString::null;
+}
+
 void BaseExporter::saveToFile( const RecipeList& recipes )
 {
 	if ( file->open( IO_WriteOnly ) )
 	{
 		QTextStream stream( file );
-		stream << createContent(recipes);
+		
+		QString content = createContent(recipes);
+		if ( !content.isEmpty() )
+			stream << content;
+
 		file->close();
 	}
 }
@@ -116,7 +121,7 @@ QString BaseExporter::krecipes_version() const
 	return QString::null; //Oh, well.  We couldn't get the version.
 }
 
-bool BaseExporter::progressBarCanceled()
+bool BaseExporter::progressBarCancelled()
 {
 	if(m_progress_dlg)
 		return m_progress_dlg->wasCancelled();

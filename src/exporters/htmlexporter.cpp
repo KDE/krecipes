@@ -16,6 +16,7 @@
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <qurl.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -103,7 +104,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 			recipeBodyHTML += div->generateHTML();
 		}
 
-		if ( progressBarCanceled() ) return QString::null; //FIXME: should we just return what we've generated so far?  It does simplify things elsewhere... (all we have to do is put "break;" here and anything works out; it will return the complete recipes generated so far)
+		if ( progressBarCancelled() ) return QString::null; //FIXME: should we just return what we've generated so far?  It does simplify things elsewhere... (all we have to do is put "break;" here and anything works out; it will return the complete recipes generated so far)
 		advanceProgressBar();
 	}
 	recipeStyleHTML += "</STYLE>";
@@ -220,7 +221,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
-	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(escape(recipe.title));
+	QString image_url = QString("%1_photos/%2.png").arg(filename).arg(escape(recipe.title));
+	QUrl::encode(image_url);
+	QString photo_html = QString("<img src=\"%1\">").arg(image_url);
 	new_element = new DivElement( "photo_"+QString::number(recipe.recipeID), photo_html );
 	new_element->setFixedHeight(true);
 
@@ -595,7 +598,7 @@ QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QSt
 QString HTMLExporter::escape( const QString & str )
 {
 	QString tmp(str);
-	return tmp.replace('\\',"_").replace('/',"_");
+	return tmp.replace('/',"_");
 }
 
 

@@ -119,6 +119,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				directions_tag.appendChild( step_tag );
 				step_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
 				
+		if ( progressBarCancelled() ) return QString::null;
 		advanceProgressBar();
 	}
 

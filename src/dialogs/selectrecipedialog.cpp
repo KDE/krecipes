@@ -17,6 +17,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kprogress.h>
+#include <kmessagebox.h>
 
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
@@ -354,10 +355,21 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 			else
 				exporter = new KreExporter(fileName, fd->currentFilter());
 
-			RecipeList recipes; database->loadRecipes( &recipes, ids );
+			int overwrite = -1;
+			if ( QFile::exists( exporter->fileName() ) )
+			{
+				overwrite = KMessageBox::warningYesNo( 0,QString(i18n("File \"%1\" exists.  Are you sure you want to overwrite it?")).arg(exporter->fileName()),i18n("Saving recipe") );
+			}
 
-			KProgressDialog progress_dialog(this, "export_progress_dialog", QString::null, i18n("Saving recipes, please wait...") );
-			exporter->exporter( recipes, &progress_dialog );
+			if ( overwrite == KMessageBox::Yes || overwrite == -1 )
+			{
+				KProgressDialog progress_dialog(this, "export_progress_dialog", QString::null, i18n("Preparing to save recipes...") );
+				progress_dialog.setAutoClose(false); progress_dialog.setAutoReset(true);
+				RecipeList recipes; database->loadRecipes( &recipes, ids, &progress_dialog );
+
+				progress_dialog.setLabel( i18n("Saving recipes...") );
+				exporter->exporter( recipes, &progress_dialog );
+			}
 			delete exporter;
 		}
 	}

@@ -106,7 +106,8 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 				QDomElement text_tag = doc.createElement("text");
 				preparation_tag.appendChild( text_tag );
 				text_tag.appendChild( doc.createTextNode((*recipe_it).instructions) );
-				
+		
+		if ( progressBarCancelled() ) return QString::null;
 		advanceProgressBar();
 	}
 
