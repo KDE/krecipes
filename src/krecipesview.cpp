@@ -583,7 +583,7 @@ void MenuButton::drawButton( QPainter *p ){
     bool sunken = isDown();
 
     // draw base button
-    style().drawPrimitive( QStyle::PE_ButtonDefault, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_ButtonDefault); //do the same thing as upper line
+    style().drawPrimitive( QStyle::PE_ButtonTool, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Default); //do the same thing as upper line
     // draw icon
     style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
 
