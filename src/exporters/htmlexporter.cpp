@@ -52,7 +52,7 @@ HTMLExporter::~HTMLExporter()
 QString HTMLExporter::createContent( const RecipeList& recipes )
 {
 	if ( recipes.count() == 0 )
-		return "<HTML></HTML>";
+		return "<html></html>";
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
@@ -67,14 +67,14 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	QDomDocument doc;
 
 	if ( !input.open( IO_ReadOnly ) )
-		return "<HTML></HTML>";
+		return "<html></html>";
 
 	QString error;
 	int line;
 	int column;
 	if ( !doc.setContent( &input, &error, &line, &column ) ) {
 		kdDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column ) << endl;
-		return "<HTML></HTML>";
+		return "<html></html>";
 	}
 
 	//put all the recipe photos into this directory
@@ -83,12 +83,12 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	dir.mkdir( fi.dirPath() + "/" + filename + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
-	QString recipeTitleHTML = QString( "<TITLE>%1</TITLE>" ).arg( ( recipes.count() == 1 ) ? recipes[ 0 ].title : i18n( "Krecipes Recipes" ) );
+	QString recipeTitleHTML = QString( "<title>%1</title>" ).arg( ( recipes.count() == 1 ) ? recipes[ 0 ].title : i18n( "Krecipes Recipes" ) );
 	int offset = 0;
 
 	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
-	QString recipeStyleHTML = "<STYLE type=\"text/css\">\n";
-	recipeStyleHTML += "BODY\n";
+	QString recipeStyleHTML = "<style type=\"text/css\">\n";
+	recipeStyleHTML += "body\n";
 	recipeStyleHTML += "{\n";
 	recipeStyleHTML += QString( "background-color: %1;\n" ).arg( bg_element.text() );
 	recipeStyleHTML += "}\n";
@@ -96,7 +96,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	classesCSS = generateCSSClasses( doc );
 	recipeStyleHTML += classesCSS;
 
-	QString recipeBodyHTML = "<BODY>\n";
+	QString recipeBodyHTML = "<body>\n";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
 		if ( el.isNull() || el.text() == "true" ) // Calculate the property list
@@ -114,21 +114,21 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 			return QString::null; //FIXME: should we just return what we've generated so far?  It does simplify things elsewhere... (all we have to do is put "break;" here and anything works out; it will return the complete recipes generated so far)
 		advanceProgressBar();
 	}
-	recipeStyleHTML += "</STYLE>";
-	recipeBodyHTML += "</BODY>\n";
+	recipeStyleHTML += "</style>";
+	recipeBodyHTML += "</body>\n";
 
 
 	KLocale*loc = KGlobal::locale();
 	QString encoding = loc->encoding();
 
 	//and now piece it all together
-	QString recipeHTML = "<HTML>\n<HEAD>\n";
+	QString recipeHTML = "<html>\n<head>\n";
 	recipeHTML += "<meta name=\"lang\" content=\"" + loc->language() + "\">\n";
 	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + encoding.replace( " ", "-" ) + "\" />\n";
 	recipeHTML += recipeStyleHTML;
-	recipeHTML += "</HEAD>\n";
+	recipeHTML += "</head>\n";
 	recipeHTML += recipeBodyHTML;
-	recipeHTML += "</HTML>";
+	recipeHTML += "</html>";
 
 	return recipeHTML;
 }
@@ -214,16 +214,16 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			int elementWidth = ( int ) ( rect->width() / 100.0 * m_width );
 
 			// Generate a test page to calculate the size in khtml
-			QString tempHTML = "<HTML><HEAD><STYLE type=\"text/css\">";
+			QString tempHTML = "<html><head><style type=\"text/css\">";
 			tempHTML += classesCSS;
 			tempHTML += QString( "#%1 {" ).arg( element->id() );
 			tempHTML += QString( "width: %1px;" ).arg( elementWidth );
-			tempHTML += "}";
-			tempHTML += "BODY { margin: 0px; }"; //very important subtlety in determining the exact width
-			tempHTML += "</STYLE></HEAD>";
-			tempHTML += "<BODY>";
+			tempHTML += "}\n";
+			tempHTML += "body { margin: 0px; }"; //very important subtlety in determining the exact width
+			tempHTML += "</style></head>";
+			tempHTML += "<body>";
 			tempHTML += element->generateHTML();
-			tempHTML += "</BODY></HTML>";
+			tempHTML += "</body></html>";
 
 			KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
 			sizeCalculator->view() ->setVScrollBarMode ( QScrollView::AlwaysOff );
@@ -233,7 +233,8 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			sizeCalculator->write( tempHTML );
 			sizeCalculator->end();
 
-			sizeCalculator->view() ->layout(); //force a layout... I assume khtml otherwise puts this off until it is shown
+			sizeCalculator->view()->show(); //this seems to be necessary to do a proper layout
+			sizeCalculator->view() ->layout(); //force a layout... I assume khtml otherwise puts this off
 
 			// Set the size of the element
 			int newHeight = sizeCalculator->view() ->contentsHeight();

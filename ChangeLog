@@ -1,4 +1,5 @@
 Changes from 0.7.1 to 0.7.2
+  -Fix recipe view in KDE 3.4
   -Fix kre export when no recipes being exported have a category 
 
 Changes from 0.7b to 0.7.1:
