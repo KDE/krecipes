@@ -56,8 +56,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-02-03</date>
-<releaseinfo>0.7 CVS</releaseinfo>
+<date>2005-02-12</date>
+<releaseinfo>0.7</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -424,6 +424,14 @@ For <quote>Categories</quote>, <quote>Ingredients</quote>, and <quote>Authors</q
 <para>Entering the recipe instructions is simple &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
 
 <para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! :-)</para>
+
+<tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
+
+<para>In the <quote>Carrot Soup</quote> recipe shown in the screenshot, we have the ingredient <quote>vegetable stock</quote>.  As you begin typing <quote>vegetable stock</quote> in your recipe instructions, &krecipes; will match typed characters with ingredients in your ingredient list and automatically complete the remaining characters.</para>
+ 
+<para>For example, if you type <quote>veg</quote>, the characters <quote>etable stock</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the <keycap>Enter</keycap> key.</para>
+  
+<para>However, suppose that in your instructions, you simply wanted to refer to <quote>vegetable stock</quote> as <emphasis>stock</emphasis> and you enter the character <quote>s</quote>.  &krecipes; will search your ingredients and match the first ingredient beginning with <quote>s</quote> that it finds, for instance, <emphasis>salt</emphasis>. The remaining characters, <abbrev>i.e.</abbrev> the <quote>alt</quote>, will be auto-completed and highlighted.  Simply press the <keycap>Delete</keycap> key on the keyboard to remove the unwanted characters and continue typing.  Alternatively, you can just continue typing the entire word and your instructions will remain as typed.</para></tip>
 
 </sect2>
 
