@@ -13,6 +13,7 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include "ingredientlist.h"
+#include "elementlist.h"
 
 /**
 @author Unai Garro
@@ -31,6 +32,7 @@ public:
     QString instructions;
     QPixmap photo;
     IngredientList ingList;
+    ElementList categoryList; // id+name
 
     // Public methods
     void empty(void);
