@@ -349,7 +349,7 @@ void KrecipesView::setupUserPermissions(const QString &host, const QString &clie
 {
 RecipeDB *db;
 
-if (adminUser!=QString::null)
+if (!adminPass.isNull())
 	{ // Login as admin in the (remote) server and createDB if necessary
 	std::cerr<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
 	db= new RecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
