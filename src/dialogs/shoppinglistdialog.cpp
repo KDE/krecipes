@@ -16,6 +16,7 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kdialog.h>
 #include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
@@ -31,48 +32,35 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     database=db;
 
     // Design dialog
+    layout = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
-    layout = new QGridLayout( this, 1, 1, 0, 0);
-    QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem( spacer_left,1,0);
-    QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(spacer_top,0,1);
-
-    layout->setRowStretch(1,1); layout->setRowStretch(2,1); layout->setRowStretch(3,1); layout->setRowStretch(4,1); //so the list views will expand to fill any extra space
-    
     recipeListView=new KreListView (this,i18n("Full recipe list"),true,1);
-    layout->addMultiCellWidget(recipeListView,1,4,1,1);
+    layout->addWidget(recipeListView,0,0);
     RecipeListView *listview = new RecipeListView(recipeListView,database);
     listview->reload();
     recipeListView->setListView(listview);
     recipeListView->setCustomFilter(new RecipeFilter(recipeListView->listView()),SLOT(filter(const QString &)));
     recipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
 
-    QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
-    layout->addItem(spacer_toButtons,1,2);
-
+    QBoxLayout* vboxl = new QVBoxLayout( this, 0, KDialog::spacingHint() );
     KIconLoader il;
     addRecipeButton=new QPushButton(this);
     addRecipeButton->setIconSet(il.loadIconSet("forward", KIcon::Small));
     addRecipeButton->setFixedSize(QSize(32,32));
     addRecipeButton->setFlat(true);
-    layout->addWidget(addRecipeButton,1,3);
-
-    QSpacerItem* buttonSpacer = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
-    layout->addItem(buttonSpacer,2,3);
+    vboxl->addWidget(addRecipeButton);
 
     removeRecipeButton=new QPushButton(this);
     removeRecipeButton->setIconSet(il.loadIconSet("back", KIcon::Small));
     removeRecipeButton->setFixedSize(QSize(32,32));
     removeRecipeButton->setFlat(true);
-    layout->addWidget(removeRecipeButton,3,3);
+    vboxl->addWidget(removeRecipeButton);
+    vboxl->addStretch();
 
-
-    QSpacerItem* spacerFromButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
-    layout->addItem(spacerFromButtons,1,4);
+    layout->addItem(vboxl,0,1);
 
     shopRecipeListView=new KreListView (this,"Shopping list");
-    layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
+    layout->addWidget(shopRecipeListView,0,2);
     
     KConfig *config = KGlobal::config();
     config->setGroup( "Advanced" );
@@ -84,11 +72,12 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     shopRecipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
     shopRecipeListView->listView()->setAllColumnsShowFocus(true);
 
-    QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
-    layout->addItem(spacerToButtonBar,5,1);
-
     buttonBar=new QHBox(this,"buttonBar");
-    layout->addMultiCellWidget(buttonBar,6,6,1,5);
+    layout->addMultiCellWidget(buttonBar,1,1,0,2);
+
+    layout->setColStretch(0,1);
+    layout->setColStretch(1,0);
+    layout->setColStretch(2,1);
 
     okButton=new QPushButton(buttonBar,"okButton");
     okButton->setText(i18n("&OK"));

@@ -12,6 +12,7 @@
 
 #include "propertiesdialog.h"
 #include <klocale.h>
+#include <kdialog.h>
 
 #include "DBBackend/recipedb.h"
 #include "createpropertydialog.h"
@@ -25,30 +26,23 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 
     // Design dialog
 
-    layout = new QGridLayout( this, 1, 1, 0, 0);
-    QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_left, 1,4,0,0 );
-    QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addMultiCell(spacer_top,0,0,1,4);
-
+    QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
     propertyListView=new StdPropertyListView(this,database,true);
     propertyListView->reload();
-    layout->addMultiCellWidget (propertyListView,1,4,1,6);
-    QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
-    layout->addItem(spacer_toButtons,1,7);
+    layout->addWidget (propertyListView);
+
+    QVBoxLayout* vboxl = new QVBoxLayout( this, 0, KDialog::spacingHint() );
     addPropertyButton=new QPushButton(this);
-    addPropertyButton->setText("+");
-    addPropertyButton->setFixedSize(QSize(32,32));
+    addPropertyButton->setText(i18n("Create ..."));
     addPropertyButton->setFlat(true);
-    layout->addWidget(addPropertyButton,1,8);
-    QSpacerItem* spacer_betweenButtons = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
-    layout->addItem(spacer_betweenButtons,2,7);
+    vboxl->addWidget(addPropertyButton);
     removePropertyButton=new QPushButton(this);
-    removePropertyButton->setText("-");
-    removePropertyButton->setFixedSize(QSize(32,32));
+    removePropertyButton->setText(i18n("Delete"));
     removePropertyButton->setFlat(true);
-    layout->addWidget(removePropertyButton,3,8);
+    vboxl->addWidget(removePropertyButton);
+    vboxl->addStretch();
+    layout->addLayout(vboxl);
 
     // Connect signals & slots
     connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(createNewProperty()));

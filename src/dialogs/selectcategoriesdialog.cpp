@@ -15,6 +15,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 #include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
@@ -27,13 +28,7 @@ SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const CategoryTr
 database = db;
 
 //Design UI
-
-layout = new QGridLayout( this, 1, 1, 0, 0);
-
-	// Border Spacers
-	QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	layout->addItem( spacer_left, 1,0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem(spacer_top,0,1);
+layout = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
 
 //Category List
 categoryListView=new KListView(this);
@@ -41,34 +36,25 @@ categoryListView=new KListView(this);
 categoryListView->addColumn(i18n("Category"));
 categoryListView->setAllColumnsShowFocus(true);
 categoryListView->setRootIsDecorated(true);
-layout->addMultiCellWidget(categoryListView,1,1,1,3);
+layout->addMultiCellWidget(categoryListView,0,0,0,1);
 
 //New category button
-QSpacerItem* catButtonSpacer=new QSpacerItem(10,10, QSizePolicy::Minimum, QSizePolicy::Fixed);
-layout->addItem(catButtonSpacer,2,1);
-
 QPushButton *newCatButton = new QPushButton(this);
 newCatButton->setText(i18n("&New Category..."));
 newCatButton->setFlat(true);
-layout->addMultiCellWidget(newCatButton,3,3,1,3);
+layout->addMultiCellWidget(newCatButton,1,1,0,1);
 
 //Ok/Cancel buttons
-QSpacerItem* buttonsSpacer=new QSpacerItem(10,10, QSizePolicy::Minimum, QSizePolicy::Fixed);
-layout->addItem(buttonsSpacer,4,1);
-
 okButton=new QPushButton(this);
 okButton->setText(i18n("&OK"));
 okButton->setFlat(true);
 okButton->setDefault(true);
-layout->addWidget(okButton,5,1);
-
-QSpacerItem* spacerBetweenButtons=new QSpacerItem(10,10, QSizePolicy::Fixed, QSizePolicy::Minimum);
-layout->addItem(spacerBetweenButtons,5,2);
+layout->addWidget(okButton,2,0);
 
 cancelButton=new QPushButton(this);
 cancelButton->setText(i18n("&Cancel"));
 cancelButton->setFlat(true);
-layout->addWidget(cancelButton,5,3);
+layout->addWidget(cancelButton,2,1);
 
 // Load the list
 loadCategories(categoryTree,selected);

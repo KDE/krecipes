@@ -20,6 +20,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
+#include "dialogs/dependanciesdialog.h"
  
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
@@ -92,14 +93,20 @@ void StdUnitListView::createNew()
 
 void StdUnitListView::remove()
 {
-	QListViewItem *item = currentItem();
+	// Find selected unit item
+	QListViewItem *it = currentItem();
+	
+	if ( it ) {
+		int unitID=it->text(0).toInt();
 
-	if ( item )
-	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this unit?")))
-		{
-		case KMessageBox::Continue: database->removeUnit(item->text(0).toInt()); break;
-		default: break;
+		ElementList recipeDependancies, propertyDependancies;
+		database->findUnitDependancies(unitID,&propertyDependancies,&recipeDependancies);
+		
+		if (recipeDependancies.isEmpty() && propertyDependancies.isEmpty()) database->removeUnit(unitID);
+		else {// need warning!
+			DependanciesDialog *warnDialog=new DependanciesDialog(0,&recipeDependancies,0,&propertyDependancies);
+			if (warnDialog->exec()==QDialog::Accepted) database->removeUnit(unitID);
+			delete warnDialog;
 		}
 	}
 }

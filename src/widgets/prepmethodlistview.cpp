@@ -18,7 +18,8 @@
 
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
- 
+#include "dialogs/dependanciesdialog.h"
+
 PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
 {
@@ -94,10 +95,15 @@ void StdPrepMethodListView::remove()
 
 	if ( item )
 	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this preparation method?")))
+		ElementList dependingRecipes;
+		int prepMethodID=item->text(0).toInt();
+		database->findPrepMethodDependancies(prepMethodID,&dependingRecipes);
+		if (dependingRecipes.isEmpty()) database->removePrepMethod(prepMethodID);
+		else // Need Warning!
 		{
-		case KMessageBox::Continue: database->removePrepMethod(item->text(0).toInt()); break;
-		default: break;
+			DependanciesDialog *warnDialog = new DependanciesDialog(this,&dependingRecipes);
+			if (warnDialog->exec()==QDialog::Accepted) database->removePrepMethod(prepMethodID);
+			delete warnDialog;
 		}
 	}
 }

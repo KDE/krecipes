@@ -21,6 +21,7 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprogress.h>
@@ -31,37 +32,29 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     // Store pointer to database
     database=db;
     // Design dialog
-    QGridLayout* layout = new QGridLayout( this, 1, 1, 0, 0);
-
-    QSpacerItem* spacer_buttonright = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_buttonright, 0,2,3,3 );
-    QSpacerItem* spacer_tobutton = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_tobutton, 0,2,1,1 );
-
-    QSpacerItem* spacer_betweenbuttons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem( spacer_betweenbuttons, 1,2 );
-
-
-    QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_left, 0,2,3,3 );
+    QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
     unitListView =new StdUnitListView(this,database,true);
     unitListView->reload(); //load the initial data
-    layout->addMultiCellWidget(unitListView,0,3,0,0);
+    layout->addWidget(unitListView);
 
-    conversionTable=new ConversionTable(this,1,1);
-    layout->addMultiCellWidget(conversionTable,0,3,4,4);
-
+    QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
     newUnitButton=new QPushButton(this);
-    newUnitButton->setText(i18n("Create New Unit"));
+    newUnitButton->setText(i18n("Create ..."));
     newUnitButton->setFlat(true);
-    layout->addWidget(newUnitButton,0,2);
+    newUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    vboxl->addWidget(newUnitButton);
 
     removeUnitButton=new QPushButton(this);
-    removeUnitButton->setText(i18n("Remove Unit"));
+    removeUnitButton->setText(i18n("Delete"));
     removeUnitButton->setFlat(true);
-    layout->addWidget(removeUnitButton,2,2);
+    removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    vboxl->addWidget(removeUnitButton);
+    vboxl->addStretch();
+    layout->addLayout(vboxl);
 
+    conversionTable=new ConversionTable(this,1,1);
+    layout->addWidget(conversionTable);
 
     // Connect signals & slots
     connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
@@ -100,7 +93,6 @@ CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("Ne
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
    database->createNewUnit(result); // Create the new unit in database
-   reloadData(); // Reload the unitlist from the database
 }
 delete elementDialog;
 }
@@ -123,9 +115,6 @@ else {// need warning!
 	if (warnDialog->exec()==QDialog::Accepted) database->removeUnit(unitID);
 	delete warnDialog;
 	}
-
-
-reloadData();// Reload the list from database
 }
 }
 

@@ -15,6 +15,7 @@
 #include "DBBackend/recipedb.h"
 #include "widgets/authorlistview.h"
 
+#include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -24,33 +25,28 @@ AuthorsDialog::AuthorsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
 // Store pointer to database
 database=db;
 
-// Top & left spacers
-layout = new QGridLayout(this);
-QSpacerItem *spacerTop=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(spacerTop,0,1);
-QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum);
-layout->addItem(spacerLeft,1,0);
+QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
 //Author List
 authorListView=new StdAuthorListView(this,database,true);
 authorListView->reload();
-layout->addWidget(authorListView,1,1);
+layout->addWidget(authorListView);
 
 //Buttons
-buttonBar=new QHBox(this);
-//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
-layout->addWidget(buttonBar,2,1);
+QVBoxLayout* vboxl=new QVBoxLayout(KDialog::spacingHint());
 
-il=new KIconLoader;
+newAuthorButton=new QPushButton(this);
+newAuthorButton->setText(i18n("Create ..."));
+newAuthorButton->setFlat(true);
+vboxl->addWidget(newAuthorButton);
 
-newAuthorButton=new QPushButton(buttonBar);
-newAuthorButton->setText(i18n("Create New Author"));
-QPixmap pm=il->loadIcon("fileNew2", KIcon::NoGroup,16); newAuthorButton->setIconSet(pm);
+removeAuthorButton=new QPushButton(this);
+removeAuthorButton->setText(i18n("Delete"));
+removeAuthorButton->setFlat(true);
+vboxl->addWidget(removeAuthorButton);
+vboxl->addStretch();
 
-removeAuthorButton=new QPushButton(buttonBar);
-removeAuthorButton->setText(i18n("Remove"));
-pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeAuthorButton->setIconSet(pm);
-removeAuthorButton->setMaximumWidth(100);
+layout->addLayout(vboxl);
 
 //Connect Signals & Slots
 
@@ -81,14 +77,15 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
 void AuthorsDialog::removeAuthor(void)
 {
 // Find the selected author item
-QListViewItem *it;
-int authorID=-1;
+QListViewItem *item = authorListView->selectedItem();
 
-if ( (it=authorListView->selectedItem()) ) authorID=it->text(0).toInt();
-
-if (authorID>=0) // an author was selected previously
+if ( item )
 {
-database->removeAuthor(authorID);
+	switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this author?")))
+	{
+	case KMessageBox::Continue: database->removeAuthor(item->text(0).toInt()); break;
+	default: break;
+	}
 }
 }
 

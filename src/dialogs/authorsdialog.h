@@ -40,9 +40,7 @@ private:
 	// Internal data
 	RecipeDB *database;
 	//Widgets
-	QGridLayout *layout;
 	StdAuthorListView *authorListView;
-	QHBox *buttonBar;
 	QPushButton *newAuthorButton;
 	QPushButton *removeAuthorButton;
 	KIconLoader *il;

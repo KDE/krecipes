@@ -16,6 +16,7 @@
 #include "DBBackend/recipedb.h"
 #include "widgets/prepmethodlistview.h"
 
+#include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -25,33 +26,28 @@ PrepMethodsDialog::PrepMethodsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 // Store pointer to database
 database=db;
 
-// Top & left spacers
-layout = new QGridLayout(this);
-QSpacerItem *spacerTop=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(spacerTop,0,1);
-QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum);
-layout->addItem(spacerLeft,1,0);
+QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
 //PrepMethod List
 prepMethodListView=new StdPrepMethodListView(this,database,true);
 prepMethodListView->reload();
-layout->addWidget(prepMethodListView,1,1);
+layout->addWidget(prepMethodListView);
 
 //Buttons
-buttonBar=new QHBox(this);
-//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
-layout->addWidget(buttonBar,2,1);
+QVBoxLayout* vboxl=new QVBoxLayout(KDialog::spacingHint());
 
-il=new KIconLoader;
+newPrepMethodButton=new QPushButton(this);
+newPrepMethodButton->setText(i18n("Create ..."));
+newPrepMethodButton->setFlat(true);
+vboxl->addWidget(newPrepMethodButton);
 
-newPrepMethodButton=new QPushButton(buttonBar);
-newPrepMethodButton->setText(i18n("Create New Preparation Method"));
-QPixmap pm=il->loadIcon("fileNew2", KIcon::NoGroup,16); newPrepMethodButton->setIconSet(pm);
+removePrepMethodButton=new QPushButton(this);
+removePrepMethodButton->setText(i18n("Delete"));
+removePrepMethodButton->setFlat(true);
+vboxl->addWidget(removePrepMethodButton);
+vboxl->addStretch();
 
-removePrepMethodButton=new QPushButton(buttonBar);
-removePrepMethodButton->setText(i18n("Remove"));
-pm=il->loadIcon("editshred", KIcon::NoGroup,16); removePrepMethodButton->setIconSet(pm);
-removePrepMethodButton->setMaximumWidth(100);
+layout->addLayout(vboxl);
 
 //Connect Signals & Slots
 

@@ -50,6 +50,8 @@ StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editab
 	addColumn( i18n("Id"), show_id ? -1 : 0 );
 
 	addColumn(i18n("Author"));
+	
+	setSorting(1);
 
 	if ( editable ) {
 		setRenameable(1, true);

@@ -18,6 +18,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
+#include "dialogs/dependanciesdialog.h"
  
 IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
@@ -90,14 +91,18 @@ void StdIngredientListView::createNew()
 
 void StdIngredientListView::remove()
 {
-	QListViewItem *item = currentItem();
+	QListViewItem *it = currentItem();
 
-	if ( item )
-	{
-		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this ingredient?")))
-		{
-		case KMessageBox::Continue: database->removeIngredient(item->text(0).toInt()); break;
-		default: break;
+	if ( it ) {
+		int ingredientID = it->text(0).toInt();
+
+		ElementList dependingRecipes;
+		database->findIngredientDependancies(ingredientID,&dependingRecipes);
+		if (dependingRecipes.isEmpty()) database->removeIngredient(ingredientID);
+		else { // Need Warning!
+			DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes);
+			if (warnDialog->exec()==QDialog::Accepted) database->removeIngredient(ingredientID);
+			delete warnDialog;
 		}
 	}
 }
@@ -143,7 +148,7 @@ if ( existing_id != -1 && existing_id != ing_id ) //category already exists with
   	database->mergeIngredients(existing_id,ing_id);
   	break;
   }
-  default: reload(); break;
+  default: reload(); break; //we have to reload because the ingredient was renamed, and we need to reset it
   }
 }
 else

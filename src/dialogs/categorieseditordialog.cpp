@@ -13,10 +13,11 @@
 #include "categorieseditordialog.h"
 
 #include <kdebug.h>
-#include <kmessagebox.h>
+#include <kdialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
-#include "widgets/categorylistview.h"
+#include "widgets/categorylistview.h" 
 #include "createcategorydialog.h"
 #include "DBBackend/recipedb.h"
 
@@ -26,33 +27,28 @@ CategoriesEditorDialog::CategoriesEditorDialog(QWidget* parent, RecipeDB *db):QW
 // Store pointer to database
 database=db;
 
-// Top & left spacers
-layout = new QGridLayout(this);
-QSpacerItem *spacerTop=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(spacerTop,0,1);
-QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum);
-layout->addItem(spacerLeft,1,0);
+QHBoxLayout* layout = new QHBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
 //Category List
 categoryListView=new StdCategoryListView(this,database,true);
 categoryListView->reload();
-layout->addWidget(categoryListView,1,1);
+layout->addWidget(categoryListView);
 
 //Buttons
-buttonBar=new QHBox(this);
-//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
-layout->addWidget(buttonBar,2,1);
+QVBoxLayout* vboxl=new QVBoxLayout(KDialog::spacingHint());
 
-il=new KIconLoader;
+newCategoryButton=new QPushButton(this);
+newCategoryButton->setText(i18n("Create ..."));
+newCategoryButton->setFlat(true);
+vboxl->addWidget(newCategoryButton);
 
-newCategoryButton=new QPushButton(buttonBar);
-newCategoryButton->setText(i18n("Create New Category"));
-QPixmap pm=il->loadIcon("fileNew2", KIcon::NoGroup,16); newCategoryButton->setIconSet(pm);
+removeCategoryButton=new QPushButton(this);
+removeCategoryButton->setText(i18n("Delete"));
+removeCategoryButton->setFlat(true);
+vboxl->addWidget(removeCategoryButton);
+vboxl->addStretch();
 
-removeCategoryButton=new QPushButton(buttonBar);
-removeCategoryButton->setText(i18n("Remove"));
-pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeCategoryButton->setIconSet(pm);
-removeCategoryButton->setMaximumWidth(100);
+layout->addLayout(vboxl);
 
 //Connect Signals & Slots
 
@@ -79,17 +75,16 @@ delete categoryDialog;
 
 void CategoriesEditorDialog::removeCategory(void)
 {
-// Find the selected category item
-QListViewItem *it;
-int categoryID=-1;
+	QListViewItem *item = categoryListView->selectedItem();
 
-if ( (it=categoryListView->selectedItem()) ) categoryID=it->text(1).toInt();
-
-if (categoryID>=0) // a category was selected previously
-{
-database->removeCategory(categoryID);
-}
-
+	if ( item )
+	{
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this category and all its subcategories?")))
+		{
+		case KMessageBox::Continue: database->removeCategory(item->text(0).toInt()); break;
+		default: break;
+		}
+	}
 }
 
 #include "categorieseditordialog.moc"
