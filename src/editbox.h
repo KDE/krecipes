@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
 @author Unai Garro
 */
 
+class RatioInput;
+
 class EditBox:public QWidget{
 Q_OBJECT
 public:
@@ -32,7 +34,7 @@ public:
     bool accepted; // Indicates if the current value has been accepted (ok) or not
 private:
     // Widgets
-    KDoubleNumInput *editBox;
+    RatioInput *editBox;
     QPushButton *okButton;
 
 signals:
@@ -40,7 +42,17 @@ signals:
 private slots:
     void acceptValue(void);
 
+};
 
+class RatioInput:public KDoubleNumInput{
+Q_OBJECT
+public:
+	RatioInput(QWidget *parent);
+
+signals:
+	void valueAccepted(void);
+protected:
+	void keyPressEvent ( QKeyEvent * e );
 };
 
 #endif

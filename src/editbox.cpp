@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,12 +9,13 @@
  ***************************************************************************/
 #include "editbox.h"
 #include <qlayout.h>
+#include <iostream>
 
 EditBox::EditBox(QWidget* parent):QWidget(parent)
 {
 QHBoxLayout *layout= new QHBoxLayout(this);
 layout->setMargin(0);
-editBox=new KDoubleNumInput(this);
+editBox=new RatioInput(this);
 editBox->setMinimumWidth(10);
 layout->addWidget(editBox);
 okButton=new QPushButton("ok",this);
@@ -23,6 +24,7 @@ okButton->setFlat(true);
 layout->addWidget(okButton);
 accepted=false;
 connect(this->okButton,SIGNAL(clicked()),this,SLOT(acceptValue()));
+connect(this->editBox,SIGNAL(valueAccepted()),this,SLOT(acceptValue()));
 }
 
 void EditBox::acceptValue(void)
@@ -47,4 +49,19 @@ void EditBox::setValue(double newValue)
 editBox->setValue(newValue);
 }
 
+void RatioInput::keyPressEvent ( QKeyEvent * e )
+{
+	if (e->key()==Key_Enter || e->key()==Key_Return)
+	{
+	emit valueAccepted();
+	}
+	else
+	{
+	std::cerr<<e->key()<<"\n";
+	//e->ignore();
+	}
+}
 
+RatioInput::RatioInput(QWidget *parent):KDoubleNumInput(parent)
+{
+}
