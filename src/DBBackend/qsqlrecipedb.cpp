@@ -10,6 +10,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include <stdlib.h>
+
 #include "qsqlrecipedb.h"
 #include "datablocks/categorytree.h"
 
@@ -1345,7 +1347,7 @@ void QSqlRecipeDB::splitCommands(QString& s,QStringList& sl)
 sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 }
 
-void QSqlRecipeDB::portOldDatabases(float version)
+void QSqlRecipeDB::portOldDatabases(float /* version */)
 {
 }
 
