@@ -232,10 +232,12 @@ void KrecipesView::translate(){
   button6->setTitle(i18n("Authors"));
 }
 
-void KrecipesView::print(QPainter *p, int height, int width)
+void KrecipesView::print(QPainter *p, int width, int height)
 {
     // do the actual printing, here
     // p->drawText(etc..)
+
+    viewPanel->print(p,width,height);
 }
 
 

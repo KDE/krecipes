@@ -79,7 +79,7 @@ public:
     /**
      * Print this view to any medium -- paper or not
      */
-    void print(QPainter *, int height, int width);
+    void print(QPainter *, int width, int height);
 
 signals:
     /**

@@ -215,7 +215,7 @@ void Krecipes::filePrint()
 
         // we let our view do the actual printing
         QPaintDeviceMetrics metrics(m_printer);
-        m_view->print(&p, metrics.height(), metrics.width());
+        m_view->print(&p, metrics.width(), metrics.height());
 
         // and send the result to the printer
         p.end();

@@ -33,6 +33,7 @@ public:
 
     ~RecipeViewDialog();
     void loadRecipe(int recipeID);
+    void print(QPainter *, int width, int height);
 
 private:
 

@@ -88,12 +88,13 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px;
     //Ingredients
 	KConfig *config=kapp->config();
 	config->setGroup("Units");
+	QString format = config->readEntry( "NumberFormat" );
 
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
        {
 	QString amount_str;
-	if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+	if ( format == "Fraction" )
 		amount_str = MixedNumber(ing->amount).toString();
 	else
 		amount_str = QString::number(ing->amount);
@@ -163,3 +164,8 @@ recipeView->write(recipeHTML);
 recipeView->end();
 }
 
+void RecipeViewDialog::print(QPainter *p,int width, int height)
+{
+	if ( recipeView && loadedRecipe->recipeID >= 0 )
+		recipeView->paint(p,QRect(0,0,width,height));
+}
