@@ -1158,7 +1158,7 @@ bool RecipeInputDialog::checkBounds()
 
 void RecipeInputDialog::addIngredient( void )
 {
-	if ( typeButtonGrp->selectedId() == 1 ) { //Header
+	if ( typeButtonGrp->id( typeButtonGrp->selected() ) == 1 ) { //Header
 		if ( ingredientBox->currentText().stripWhiteSpace().isEmpty() )
 			return ;
 
