@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,6 +52,28 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
     shopRecipeListView->addColumn("Id");
     shopRecipeListView->addColumn("Recipe Title");
+
+    QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+    layout->addItem(spacerToButtonBar,5,1);
+
+    buttonBar=new QHBox(this);
+    layout->addMultiCellWidget(buttonBar,6,6,1,5);
+    buttonBar->setFixedHeight(30);
+    buttonBar->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed);
+
+    il=new KIconLoader;
+    autoFillButton=new QPushButton(buttonBar);
+    autoFillButton->setText("Diet Wizard");
+    QPixmap pm=il->loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setPixmap(pm);
+
+    okButton=new QPushButton(buttonBar);
+    okButton->setText("Ok");
+    pm=il->loadIcon("ok", KIcon::NoGroup,16); okButton->setPixmap(pm);
+
+    clearButton=new QPushButton(buttonBar);
+    clearButton->setText("Clear");
+    clearButton->setMaximumWidth(40);
+    pm=il->loadIcon("editclear", KIcon::NoGroup,16); clearButton->setPixmap(pm);
 
 
 
