@@ -64,7 +64,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Initialize Database
     KConfig *config; config=kapp->config(); config->setGroup("DBType");
 
-    QString dbtype=config->readEntry("Type","SQLite");
+    dbtype=config->readEntry("Type","SQLite");
 
     // Check if the database type is among those supported
 
@@ -95,12 +95,16 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     #if HAVE_SQLITE
 
-    else // SQLite case
+    else if (dbtype=="SQLite")// SQLite case
     	{
     	database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
 	}
 
     #endif //USE_SQLITE_DATABASE
+    else{
+    std::cerr<<"Unsupported database type. Exiting\n";
+    exit(1);
+    }
 
     splitter=new QSplitter(this);
 
@@ -412,6 +416,7 @@ rightPanel->raiseWidget(dietPanel);
 
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
+#if HAVE_MYSQL
 MySQLRecipeDB *db;
 
 if (!adminPass.isNull())
@@ -427,15 +432,46 @@ if (!adminPass.isNull())
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
 delete db; //it closes the db automatically
+#endif // HAVE_MYSQL
 }
 
+
 void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
+{
+
+if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly
+{
+std::cerr<<"Unrecognized database type. Exiting\n";
+exit(1);
+}
+
+#if HAVE_MYSQL
+else if (dbtype=="MySQL")
 {
 MySQLRecipeDB *db;
 db= new MySQLRecipeDB(host,user,pass,dbName);
 db->emptyData();
 db->initializeData();
 delete db; //it closes the db automatically
+}
+#endif //HAVE_MYSQL
+
+#if HAVE_SQLITE
+else if(dbtype=="SQLite")
+{
+LiteRecipeDB *db;
+db= new LiteRecipeDB(host,user,pass,dbName);
+db->emptyData();
+db->initializeData();
+delete db; //it closes the db automatically
+}
+#endif //HAVE_SQLITE
+else
+{
+std::cerr<<"Unsupported database type. Exiting\n";
+exit(1);
+}
+
 }
 
 void KrecipesView::resizeButtons(){
