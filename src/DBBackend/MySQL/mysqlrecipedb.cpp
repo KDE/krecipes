@@ -224,21 +224,13 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	}
 
 	if ( version < 0.63 ) {
-		QString command = "ALTER TABLE `units` ADD COLUMN `plural` varchar(20) AFTER name;";
+		QString command = "ALTER TABLE `units` ADD COLUMN `plural` varchar(20) DEFAULT NULL AFTER name;";
 		QSqlQuery tableToAlter( command, database );
 
-		QSqlQuery result( "SELECT id,name,plural FROM units WHERE name='' OR plural=''", database );
+		QSqlQuery result( "SELECT id,name FROM units WHERE plural IS NULL", database );
 		if ( result.isActive() ) {
 			while ( result.next() ) {
-				QString name = unescapeAndDecode( result.value( 1 ).toString() );
-				QString plural = unescapeAndDecode( result.value( 2 ).toString() );
-
-				if ( name.isEmpty() )
-					name = plural;
-				else if ( plural.isEmpty() )
-					plural = name;
-
-				command = "UPDATE units SET name='" + QString( escapeAndEncode( name ) ) + "', plural='" + QString( escapeAndEncode( plural ) ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
+				command = "UPDATE units SET plural='" + result.value( 1 ).toString() + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
 				QSqlQuery query( command, database );
 			}
 		}

@@ -1897,19 +1897,11 @@ void LiteRecipeDB::portOldDatabases( float version )
 		}
 		database->executeQuery( "DROP TABLE units_copy" );
 
-		QSQLiteResult result = database->executeQuery( "SELECT id,name,plural FROM units WHERE name ISNULL OR plural ISNULL" );
+		QSQLiteResult result = database->executeQuery( "SELECT id,name FROM units WHERE plural ISNULL;" );
 		if ( result.getStatus() != QSQLiteResult::Failure ) {
 			QSQLiteResultRow row = result.first();
 			while ( !result.atEnd() ) {
-				QString name = row.data( 1 );
-				QString plural = row.data( 2 );
-
-				if ( name.isEmpty() )
-					name = plural;
-				if ( plural.isEmpty() )
-					plural = name;
-
-				command = "UPDATE units SET name='" + escape( name ) + "',plural='" + escape( plural ) + "' WHERE id=" + QString::number( row.data( 0 ).toInt() );
+				command = "UPDATE units SET plural='" + escape( row.data( 1 ) ) + "' WHERE id=" + QString::number( row.data( 0 ).toInt() );
 				database->executeQuery( command );
 
 				row = result.next();
