@@ -23,7 +23,7 @@
 #include <kpixmapeffect.h>
 #include <kimageeffect.h>
 #include <kparts/part.h>
-#include <krecipesiface.h>
+#include "krecipesiface.h"
 #include <kstyle.h>
 #include <ktextbrowser.h>
 

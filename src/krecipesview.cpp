@@ -23,7 +23,7 @@
 #include <qpainter.h>
 #include <qpalette.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>

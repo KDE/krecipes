@@ -21,7 +21,7 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
