@@ -372,7 +372,6 @@ servingsNumInput->setValue(loadedRecipe->persons);
 	//show photo
 	if (!loadedRecipe->photo.isNull()){
 
-
 //     		//get the photo
     		sourcePhoto = loadedRecipe->photo;
 
@@ -613,8 +612,6 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
 
   amountEdit->setFocus();
   amountEdit->setValue(0.0);
-  unitBox->setCurrentText("");
-  ingredientBox->setCurrentText("");
 }
 
 emit changed();
@@ -671,7 +668,9 @@ loadedRecipe->empty();
 ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
-QPixmap image(defaultPhoto); photoLabel->setPixmap(image);
+QPixmap image(defaultPhoto);
+photoLabel->setPixmap(image);
+sourcePhoto=image;
 instructionsEdit->setText(i18n("Write the recipe instructions here"));
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);
