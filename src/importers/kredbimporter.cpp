@@ -15,6 +15,7 @@
 #include <kdebug.h>
 
 #include "datablocks/recipelist.h"
+#include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
 
 KreDBImporter::KreDBImporter( const QString &_dbType, const QString &_host, const QString &_user, const QString &_pass ) : BaseImporter(),
@@ -37,6 +38,11 @@ void KreDBImporter::parseFile( const QString &file ) //this is either a database
 		database->connect(false); //don't create the database if it fails to connect
 	
 		if ( database->ok() ) {
+			//set the category structure
+			CategoryTree *tree = new CategoryTree;
+			database->loadCategories(tree);
+			setCategoryStructure(tree);
+
 			//get the ids
 			ElementList list;
 			database->loadRecipeList(&list);
