@@ -13,42 +13,28 @@
 #ifndef UNITLISTVIEW_H
 #define UNITLISTVIEW_H
 
-#include "klistview.h"
+#include "dblistviewbase.h"
 
 #include "datablocks/unit.h"
 
 class RecipeDB;
 class KPopupMenu;
 
-class ListViewHandler;
-
-class UnitListView : public KListView
+class UnitListView : public DBListViewBase
 {
 	Q_OBJECT
 
 public:
 	UnitListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
-
 public slots:
-	virtual void reload( int curr_limit, int curr_offset );
-
-protected:
-	RecipeDB *database;
+	virtual void load( int curr_limit, int curr_offset );
 
 protected slots:
 	virtual void createUnit( const Unit & ) = 0;
 	virtual void removeUnit( int ) = 0;
 
-private:
-	//make this private because the data should always be synced with the database
-	void clear()
-	{
-		KListView::clear();
-	}
-
-	ListViewHandler *listViewHandler;
+	void checkCreateUnit( const Unit &el );
 };
 
 class StdUnitListView : public UnitListView

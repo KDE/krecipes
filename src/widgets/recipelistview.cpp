@@ -74,8 +74,6 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry("ShowID",false);
 	addColumn( i18n("Id"), show_id ? -1 : 0 );*/
-
-	setSorting( 0 );
 }
 
 QDragObject *RecipeListView::dragObject()
@@ -96,7 +94,7 @@ bool RecipeListView::acceptDrag( QDropEvent *event ) const
 	return RecipeItemDrag::canDecode( event );
 }
 
-void RecipeListView::reload()
+void RecipeListView::load(int limit, int offset)
 {
 	if ( flat_list ) {
 		ElementList recipeList;
@@ -111,7 +109,7 @@ void RecipeListView::reload()
 		}
 	}
 	else {
-		CategoryListView::reload();
+		CategoryListView::load(limit,offset);
 
 		// Now show the recipes
 		ElementList recipeList;
@@ -119,6 +117,7 @@ void RecipeListView::reload()
 		recipeCategorized.setAutoDelete( true ); // it deletes the bools after finished
 		QPtrList <int> recipeCategoryList;
 
+		//FIXME 0.8: This loads more than it has to if limiting the view
 		database->loadRecipeList( &recipeList, 0, &recipeCategoryList ); // Read the whole list of recipes including category
 
 		int *categoryID;
@@ -129,6 +128,9 @@ void RecipeListView::reload()
 				recipe.recipeID = ( *recipe_it ).id;
 				recipe.title = ( *recipe_it ).name;
 				createRecipe( recipe, *categoryID );
+				recipeCategorized.insert( ( *recipe_it ).id, new bool( true ) ); // mark the recipe as categorized
+			}
+			else if ( *categoryID != -1 ) { //we must be limiting the categories shown, so we'll ignore this recipe that goes in this category
 				recipeCategorized.insert( ( *recipe_it ).id, new bool( true ) ); // mark the recipe as categorized
 			}
 		}

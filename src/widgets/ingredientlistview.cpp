@@ -20,9 +20,17 @@
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
-#include "listviewhandler.h"
 
 IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
+	m_listview(qlv)
+{
+	// Initialize the ingredient data with the the property data
+	ingStored = new Element();
+	ingStored->id = ing.id;
+	ingStored->name = ing.name;
+}
+
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, QListViewItem *after, const Element &ing ) : QCheckListItem( qlv, after, QString::null, QCheckListItem::CheckBox ),
 	m_listview(qlv)
 {
 	// Initialize the ingredient data with the the property data
@@ -65,31 +73,19 @@ void IngredientCheckListItem::stateChange( bool on )
 	m_listview->stateChange(this,on);
 }
 
-IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
-		database( db )
+IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db, db->ingredientCount() )
 {
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
+	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( checkCreateIngredient( const Element & ) ) );
 	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
-
-	listViewHandler = new ListViewHandler(this,database->ingredientCount());
-	installEventFilter(listViewHandler);
-	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
-	connect( database, SIGNAL( ingredientRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
+	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( elementCreated() ) );
+	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
-void IngredientListView::reload()
+void IngredientListView::load( int limit, int offset )
 {
-	listViewHandler->emitReload();
-}
-
-void IngredientListView::reload( int limit, int offset )
-{
-	clear();
-
 	ElementList ingredientList;
 	database->loadIngredients( &ingredientList, limit, offset );
 
@@ -97,17 +93,22 @@ void IngredientListView::reload( int limit, int offset )
 		createIngredient( *ing_it );
 }
 
+void IngredientListView::checkCreateIngredient( const Element &el )
+{
+	if ( handleElement(el.name) ) { //only create this ingredient if the base class okays it
+		createIngredient(el);
+	}
+}
+
 
 StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, bool editable ) : IngredientListView( parent, db )
 {
+	addColumn( i18n( "Ingredient" ) );
+
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-	addColumn( i18n( "Ingredient" ) );
-
-	setSorting( 1 );
 
 	if ( editable ) {
 		setRenameable( 1, true );
@@ -153,7 +154,7 @@ void StdIngredientListView::remove
 	QListViewItem * it = currentItem();
 
 	if ( it ) {
-		int ingredientID = it->text( 0 ).toInt();
+		int ingredientID = it->text( 1 ).toInt();
 
 		ElementList dependingRecipes;
 		database->findIngredientDependancies( ingredientID, &dependingRecipes );
@@ -173,38 +174,35 @@ void StdIngredientListView::rename()
 	QListViewItem * item = currentItem();
 
 	if ( item )
-		IngredientListView::rename( item, 1 );
+		IngredientListView::rename( item, 0 );
 }
 
 void StdIngredientListView::createIngredient( const Element &ing )
 {
-	( void ) new QListViewItem( this, QString::number( ing.id ), ing.name );
+	createElement(new QListViewItem( this, ing.name, QString::number( ing.id ) ));
 }
 
 void StdIngredientListView::removeIngredient( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 0 );
-
-	Q_ASSERT( item );
-
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 	delete item;
 }
 
 void StdIngredientListView::modIngredient( QListViewItem* i )
 {
 	if ( i )
-		IngredientListView::rename( i, 1 );
+		IngredientListView::rename( i, 0);
 }
 
 void StdIngredientListView::saveIngredient( QListViewItem* i )
 {
-	if ( !checkBounds( i->text( 1 ) ) ) {
+	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(); //reset the changed text
 		return ;
 	}
 
-	int existing_id = database->findExistingIngredientByName( i->text( 1 ) );
-	int ing_id = i->text( 0 ).toInt();
+	int existing_id = database->findExistingIngredientByName( i->text( 0 ) );
+	int ing_id = i->text( 1 ).toInt();
 	if ( existing_id != -1 && existing_id != ing_id )  //category already exists with this label... merge the two
 	{
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This ingredient already exists.  Continuing will merge these two ingredients into one.  Are you sure?" ) ) )
@@ -219,7 +217,7 @@ void StdIngredientListView::saveIngredient( QListViewItem* i )
 		}
 	}
 	else {
-		database->modIngredient( ( i->text( 0 ) ).toInt(), i->text( 1 ) );
+		database->modIngredient( ( i->text( 1 ) ).toInt(), i->text( 0 ) );
 	}
 }
 
@@ -247,7 +245,7 @@ IngredientCheckListView::IngredientCheckListView( QWidget *parent, RecipeDB *db 
 
 void IngredientCheckListView::createIngredient( const Element &ing )
 {
-	new IngredientCheckListItem( this, ing );
+	createElement(new IngredientCheckListItem( this, ing ));
 }
 
 void IngredientCheckListView::removeIngredient( int id )

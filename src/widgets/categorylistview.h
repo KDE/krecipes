@@ -14,7 +14,7 @@
 
 #include <qmap.h>
 
-#include <klistview.h>
+#include "dblistviewbase.h"
 
 #include "elementlist.h"
 
@@ -29,6 +29,7 @@ class CategoryCheckListItem : public QCheckListItem
 public:
 	CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool exclusive = true );
 	CategoryCheckListItem( QListViewItem* it, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool exclusive = true );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -68,6 +69,7 @@ class CategoryListItem : public QListViewItem
 public:
 	CategoryListItem( QListView* klv, const Element &category );
 	CategoryListItem( QListViewItem* it, const Element &category );
+	CategoryListItem( QListView* klv, QListViewItem* it, const Element &category );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -97,17 +99,16 @@ private:
 
 
 
-class CategoryListView : public KListView
+class CategoryListView : public DBListViewBase
 {
 	Q_OBJECT
 
 public:
 	CategoryListView( QWidget *parent, RecipeDB * );
 
-public slots:
-	void reload( void );
-
 protected:
+	virtual void load( int limit, int offset );
+
 	/** so that it allows dropping into
 	         * subchildren that aren't expandable.  The code is taken from KDE's KListView with
 	         * one line commented out.
@@ -178,14 +179,14 @@ protected:
 		parent = after ? after->parent() : 0L ;
 	}
 
-	RecipeDB *database;
-
 protected slots:
 	virtual void removeCategory( int id ) = 0;
 	virtual void createCategory( const Element &category, int parent_id ) = 0;
 	virtual void modifyCategory( const Element &category ) = 0;
 	virtual void modifyCategory( int id, int parent_id ) = 0;
 	virtual void mergeCategories( int id1, int id2 ) = 0;
+
+	virtual void checkCreateCategory( const Element &, int parent_id );
 
 private:
 	void loadListView( const CategoryTree *categoryTree, int parent_id = -1 );

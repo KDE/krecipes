@@ -116,8 +116,6 @@ class RecipeListView : public StdCategoryListView
 public:
 	RecipeListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
-
 protected slots:
 	virtual void createRecipe( const Recipe &, int parent_id );
 	virtual void createRecipe( const Element &recipe, const ElementList &categories );
@@ -129,6 +127,8 @@ protected:
 	virtual void removeCategory( int id );
 	virtual QDragObject *dragObject();
 	virtual bool acceptDrag( QDropEvent *event ) const;
+
+	void load(int limit, int offset);
 
 private:
 	void moveChildrenToRoot( QListViewItem * );

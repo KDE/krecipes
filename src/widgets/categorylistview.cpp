@@ -40,6 +40,15 @@ CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &
 	setOn( false ); // Set unchecked by default
 }
 
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( klv, it, QString::null, QCheckListItem::CheckBox ),
+		locked( false ),
+		exclusive( _exclusive ),
+		ctyStored( category ),
+		m_listview(klv)
+{
+	setOn( false ); // Set unchecked by default
+}
+
 QString CategoryCheckListItem::text( int column ) const
 {
 	if ( column == 1 )
@@ -104,6 +113,10 @@ CategoryListItem::CategoryListItem( QListViewItem* it, const Element &category )
 		ctyStored( category )
 {}
 
+CategoryListItem::CategoryListItem( QListView* klv, QListViewItem* it, const Element &category ) : QListViewItem( klv, it ),
+		ctyStored( category )
+{}
+
 QString CategoryListItem::text( int column ) const
 {
 	if ( column == 1 )
@@ -120,8 +133,7 @@ void CategoryListItem::setText( int column, const QString &text )
 
 
 
-CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
-		database( db )
+CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, 100 )
 {
 	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -135,12 +147,10 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView(
 }
 
 // (Re)loads the data from the database
-void CategoryListView::reload( void )
+void CategoryListView::load( int limit, int offset )
 {
-	//Clear the listview first
-	clear();
 	CategoryTree categoryTree;
-	database->loadCategories( &categoryTree );
+	database->loadCategories( &categoryTree, limit, offset );
 	loadListView( &categoryTree );
 }
 
@@ -156,6 +166,12 @@ void CategoryListView::loadListView( const CategoryTree *categoryTree, int paren
 	}
 }
 
+void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
+{
+	if ( parent_id == -1 && handleElement(el.name) ) { //only create this category if the base class okays it and it is a top level item
+		createCategory(el,parent_id);
+	}
+}
 
 
 StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) : CategoryListView( parent, db ),
@@ -168,8 +184,6 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-	setSorting( 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -333,14 +347,15 @@ void StdCategoryListView::removeCategory( int id )
 void StdCategoryListView::createCategory( const Element &category, int parent_id )
 {
 	CategoryListItem * new_item;
-	if ( parent_id == -1 )
+	if ( parent_id == -1 ) {
 		new_item = new CategoryListItem( this, category );
+		createElement(new_item);
+	}
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
 
-		Q_ASSERT( parent );
-
-		new_item = new CategoryListItem( parent, category );
+		if ( parent )
+			new_item = new CategoryListItem( parent, category );
 	}
 
 	items_map.insert( category.id, new_item );
@@ -351,31 +366,33 @@ void StdCategoryListView::modifyCategory( const Element &category )
 {
 	QListViewItem * item = items_map[ category.id ];
 
-	Q_ASSERT( item );
-
-	item->setText( 0, category.name );
+	if ( item )
+		item->setText( 0, category.name );
 }
 
 void StdCategoryListView::modifyCategory( int id, int parent_id )
 {
 	QListViewItem * item = items_map[ id ];
-	if ( !item->parent() )
-		takeItem( item );
-	else
-		item->parent() ->takeItem( item );
-
-	Q_ASSERT( item );
-
-	if ( parent_id == -1 )
-		insertItem( item );
-	else
-		items_map[ parent_id ] ->insertItem( item );
+	if ( item ) {
+		if ( !item->parent() )
+			takeItem( item );
+		else
+			item->parent() ->takeItem( item );
+	
+		if ( parent_id == -1 )
+			insertItem( item );
+		else
+			items_map[ parent_id ] ->insertItem( item );
+	}
 }
 
 void StdCategoryListView::mergeCategories( int id1, int id2 )
 {
 	QListViewItem * to_item = items_map[ id1 ];
 	QListViewItem *from_item = items_map[ id2 ];
+
+	if ( !to_item && !from_item ) 
+		return;
 
 	//note that this takes care of any recipes that may be children as well
 	QListViewItem *next_sibling;
@@ -444,15 +461,11 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, boo
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-	setSorting( 0 );
 }
 
 void CategoryCheckListView::removeCategory( int id )
 {
 	QListViewItem * item = items_map[ id ];
-
-	//Q_ASSERT(item);
 
 	items_map.remove( id );
 	delete item;
@@ -460,28 +473,28 @@ void CategoryCheckListView::removeCategory( int id )
 
 void CategoryCheckListView::createCategory( const Element &category, int parent_id )
 {
-	CategoryCheckListItem * new_item;
+	CategoryCheckListItem * new_item = 0;
 	if ( parent_id == -1 )
 		new_item = new CategoryCheckListItem( this, category, exclusive );
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
-
-		Q_ASSERT( parent );
-
-		new_item = new CategoryCheckListItem( parent, category, exclusive );
+		if ( parent )
+			new_item = new CategoryCheckListItem( parent, category, exclusive );
 	}
 
-	items_map.insert( category.id, new_item );
-	new_item->setOpen( true );
+	if ( new_item ) {
+		items_map.insert( category.id, new_item );
+		new_item->setOpen( true );
+		createElement(new_item);
+	}
 }
 
 void CategoryCheckListView::modifyCategory( const Element &category )
 {
 	QListViewItem * item = items_map[ category.id ];
 
-	Q_ASSERT( item );
-
-	item->setText( 0, category.name );
+	if ( item )
+		item->setText( 0, category.name );
 }
 
 void CategoryCheckListView::modifyCategory( int id, int parent_id )

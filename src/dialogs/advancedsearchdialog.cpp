@@ -88,7 +88,7 @@ void DualAuthorListView::change( int index )
 
 void DualAuthorListView::createAuthor( const Element &author )
 {
-	(void)new AuthorCheckListItem( this, author );
+	createElement(new AuthorCheckListItem( this, author ));
 }
 
 void DualAuthorListView::removeAuthor( int id )
@@ -167,7 +167,7 @@ void DualIngredientListView::change( int index )
 
 void DualIngredientListView::createIngredient( const Element &ing )
 {
-	(void)new IngredientCheckListItem( this, ing );
+	createElement(new IngredientCheckListItem( this, ing ));
 }
 
 void DualIngredientListView::removeIngredient( int id )
@@ -212,14 +212,15 @@ void DualCategoryListView::change( int index )
 void DualCategoryListView::createCategory( const Element &category, int parent_id )
 {
 	CategoryCheckListItem * new_item;
-	if ( parent_id == -1 )
+	if ( parent_id == -1 ) {
 		new_item = new CategoryCheckListItem( this, category, false );
+		createElement(new_item);
+	}
 	else {
 		QListViewItem *parent = findItem( QString::number( parent_id ), 1 );
 
-		Q_ASSERT( parent );
-
-		new_item = new CategoryCheckListItem( parent, category, false );
+		if ( parent )
+			new_item = new CategoryCheckListItem( parent, category, false );
 	}
 
 	new_item->setOpen( true );

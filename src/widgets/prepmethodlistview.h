@@ -11,43 +11,30 @@
 #ifndef PREPMETHODLISTVIEW_H
 #define PREPMETHODLISTVIEW_H
 
-#include "klistview.h"
+#include "dblistviewbase.h"
 
 #include "element.h"
 
 class RecipeDB;
 class KPopupMenu;
 
-class ListViewHandler;
-
-class PrepMethodListView : public KListView
+class PrepMethodListView : public DBListViewBase
 {
 	Q_OBJECT
 
 public:
 	PrepMethodListView( QWidget *parent, RecipeDB *db );
 
-	virtual void reload();
-
 public slots:
-	virtual void reload( int curr_limit, int curr_offset );
-
-protected:
-	RecipeDB *database;
+	virtual void load( int curr_limit, int curr_offset );
 
 protected slots:
 	virtual void createPrepMethod( const Element & ) = 0;
 	virtual void removePrepMethod( int ) = 0;
 
-private:
-	//make this private because the data should always be synced with the database
-	void clear()
-	{
-		KListView::clear();
-	}
-
-	ListViewHandler *listViewHandler;
+	void checkCreatePrepMethod( const Element &el );
 };
+
 
 class StdPrepMethodListView : public PrepMethodListView
 {

@@ -20,33 +20,20 @@
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
-#include "listviewhandler.h"
 
-PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
-		database( db )
+PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->prepMethodCount())
 {
-	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
+	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( checkCreatePrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
-
-	listViewHandler = new ListViewHandler(this,database->prepMethodCount());
-	installEventFilter(listViewHandler);
-	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
-	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
-	connect( database, SIGNAL( prepMethodRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
+	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( elementCreated() ) );
+	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
-void PrepMethodListView::reload()
+void PrepMethodListView::load( int limit, int offset )
 {
-	listViewHandler->emitReload();
-}
-
-void PrepMethodListView::reload( int limit, int offset )
-{
-	clear();
-
 	ElementList prepMethodList;
 	database->loadPrepMethods( &prepMethodList, limit, offset );
 
@@ -54,21 +41,25 @@ void PrepMethodListView::reload( int limit, int offset )
 		createPrepMethod( *ing_it );
 }
 
+void PrepMethodListView::checkCreatePrepMethod( const Element &el )
+{
+	if ( handleElement(el.name) ) { //only create this prep method if the base class okays it
+		createPrepMethod(el);
+	}
+}
 
 
 StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, bool editable ) : PrepMethodListView( parent, db )
 {
+	addColumn( i18n( "Preparation Method" ) );
+
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	addColumn( i18n( "Preparation Method" ) );
-
-	setSorting( 1 );
-
 	if ( editable ) {
-		setRenameable( 1, true );
+		setRenameable( 0, true );
 
 		KIconLoader *il = new KIconLoader;
 
@@ -113,7 +104,7 @@ void StdPrepMethodListView::remove
 
 	if ( item ) {
 		ElementList dependingRecipes;
-		int prepMethodID = item->text( 0 ).toInt();
+		int prepMethodID = item->text( 1 ).toInt();
 		database->findPrepMethodDependancies( prepMethodID, &dependingRecipes );
 		if ( dependingRecipes.isEmpty() )
 			database->removePrepMethod( prepMethodID );
@@ -132,38 +123,35 @@ void StdPrepMethodListView::rename()
 	QListViewItem * item = currentItem();
 
 	if ( item )
-		PrepMethodListView::rename( item, 1 );
+		PrepMethodListView::rename( item, 0 );
 }
 
 void StdPrepMethodListView::createPrepMethod( const Element &ing )
 {
-	( void ) new QListViewItem( this, QString::number( ing.id ), ing.name );
+	createElement(new QListViewItem( this, ing.name, QString::number( ing.id ) ));
 }
 
 void StdPrepMethodListView::removePrepMethod( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 0 );
-
-	Q_ASSERT( item );
-
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 	delete item;
 }
 
 void StdPrepMethodListView::modPrepMethod( QListViewItem* i )
 {
 	if ( i )
-		PrepMethodListView::rename( i, 1 );
+		PrepMethodListView::rename( i, 0 );
 }
 
 void StdPrepMethodListView::savePrepMethod( QListViewItem* i )
 {
-	if ( !checkBounds( i->text( 1 ) ) ) {
+	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(); //reset the changed text
 		return ;
 	}
 
-	int existing_id = database->findExistingPrepByName( i->text( 1 ) );
-	int prep_id = i->text( 0 ).toInt();
+	int existing_id = database->findExistingPrepByName( i->text( 0 ) );
+	int prep_id = i->text( 1 ).toInt();
 	if ( existing_id != -1 && existing_id != prep_id )  //category already exists with this label... merge the two
 	{
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This preparation method already exists.  Continuing will merge these two into one.  Are you sure?" ) ) )
@@ -178,7 +166,7 @@ void StdPrepMethodListView::savePrepMethod( QListViewItem* i )
 		}
 	}
 	else {
-		database->modPrepMethod( ( i->text( 0 ) ).toInt(), i->text( 1 ) );
+		database->modPrepMethod( ( i->text( 1 ) ).toInt(), i->text( 0 ) );
 	}
 }
 

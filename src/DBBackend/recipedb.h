@@ -163,7 +163,7 @@ public:
 
 	virtual void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true ) = 0;
 	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadCategories( CategoryTree *list, int parent_id = -1 ) = 0;
+	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 ) = 0;
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadIngredientGroups( ElementList *list ) = 0;
 	virtual void loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;

@@ -13,29 +13,41 @@
 
 #include <qobject.h>
 
-class ListViewHandler : public QObject
+#include <klistview.h>
+
+class RecipeDB;
+
+class DBListViewBase : public KListView
 {
 Q_OBJECT
 
 public:
-	ListViewHandler( QObject *, int total );
+	DBListViewBase( QWidget *, RecipeDB *, int total );
 
-	void emitReload(){ emit reload(curr_limit,curr_offset); }
-
-public slots:
-	void increaseTotal();
-	void decreaseTotal();
-
-signals:
-	void reload(int limit,int offset);
+	void reload();
 
 protected:
-	bool eventFilter( QObject *o, QEvent *e );
+	virtual void load(int limit, int offset) = 0;
+	virtual void keyPressEvent( QKeyEvent *e );
+	bool handleElement( const QString & );
+	void createElement( QListViewItem * );
+
+	RecipeDB *database;
+
+protected slots:
+	void elementCreated();
+	void elementRemoved();
 
 private:
+	//make this private because the data should always be synced with the database
+	void clear(){KListView::clear();}
+	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
+
 	int curr_limit;
 	int curr_offset;
 	int total;
+
+	QListViewItem *lastElement;
 };
 
 #endif //LISTVIEWHANDLER_H

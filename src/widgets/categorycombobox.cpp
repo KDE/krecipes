@@ -15,6 +15,8 @@
 #include <qlistbox.h>
 
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
 #include "elementlist.h"
@@ -34,8 +36,10 @@ void CategoryComboBox::reload()
 {
 	QString remember_cat_filter = currentText();
 
+	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
+	int limit = config->readNumEntry( "Limit", -1 );
 	ElementList categoryList;
-	database->loadCategories( &categoryList );
+	database->loadCategories( &categoryList, limit, 0 );
 
 	clear();
 	categoryComboRows.clear();

@@ -19,33 +19,20 @@
 
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
-#include "listviewhandler.h"
 
-AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
-		database( db )
+AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->authorCount() )
 {
-	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( createAuthor( const Element & ) ) );
+	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( checkCreateAuthor( const Element & ) ) );
 	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( removeAuthor( int ) ) );
-
-	listViewHandler = new ListViewHandler(this,database->authorCount());
-	installEventFilter(listViewHandler);
-	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
-	connect( database, SIGNAL( authorCreated( const Element & ) ), listViewHandler, SLOT( increaseTotal() ) );
-	connect( database, SIGNAL( authorRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
+	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( elementCreated() ) );
+	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
-void AuthorListView::reload()
+void AuthorListView::load( int limit, int offset )
 {
-	listViewHandler->emitReload();
-}
-
-void AuthorListView::reload( int limit, int offset )
-{
-	clear();
-
 	ElementList authorList;
 	database->loadAuthors( &authorList, limit, offset );
 
@@ -53,21 +40,25 @@ void AuthorListView::reload( int limit, int offset )
 		createAuthor( *ing_it );
 }
 
+void AuthorListView::checkCreateAuthor( const Element &el )
+{
+	if ( handleElement(el.name) ) { //only create this author if the base class okays it
+		createAuthor(el);
+	}
+}
 
 
 StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editable ) : AuthorListView( parent, db )
 {
+	addColumn( i18n( "Author" ) );
+
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	addColumn( i18n( "Author" ) );
-
-	setSorting( 1 );
-
 	if ( editable ) {
-		setRenameable( 1, true );
+		setRenameable( 0, true );
 
 		KIconLoader *il = new KIconLoader;
 
@@ -113,7 +104,7 @@ void StdAuthorListView::remove
 	if ( item ) {
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this author?" ) ) ) {
 		case KMessageBox::Continue:
-			database->removeAuthor( item->text( 0 ).toInt() );
+			database->removeAuthor( item->text( 1 ).toInt() );
 			break;
 		default:
 			break;
@@ -126,19 +117,17 @@ void StdAuthorListView::rename()
 	QListViewItem * item = currentItem();
 
 	if ( item )
-		AuthorListView::rename( item, 1 );
+		AuthorListView::rename( item, 0 );
 }
 
-void StdAuthorListView::createAuthor( const Element &ing )
+void StdAuthorListView::createAuthor( const Element &author )
 {
-	( void ) new QListViewItem( this, QString::number( ing.id ), ing.name );
+	createElement(new QListViewItem( this, author.name, QString::number( author.id ) ));
 }
 
 void StdAuthorListView::removeAuthor( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 0 );
-
-	Q_ASSERT( item );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 
 	delete item;
 }
@@ -146,18 +135,18 @@ void StdAuthorListView::removeAuthor( int id )
 void StdAuthorListView::modAuthor( QListViewItem* i )
 {
 	if ( i )
-		AuthorListView::rename( i, 1 );
+		AuthorListView::rename( i, 0 );
 }
 
 void StdAuthorListView::saveAuthor( QListViewItem* i )
 {
-	if ( !checkBounds( i->text( 1 ) ) ) {
+	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(); //reset the changed text
 		return ;
 	}
 
-	int existing_id = database->findExistingAuthorByName( i->text( 1 ) );
-	int author_id = i->text( 0 ).toInt();
+	int existing_id = database->findExistingAuthorByName( i->text( 0 ) );
+	int author_id = i->text( 1 ).toInt();
 	if ( existing_id != -1 && existing_id != author_id )  //category already exists with this label... merge the two
 	{
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This author already exists.  Continuing will merge these two authors into one.  Are you sure?" ) ) )
@@ -172,7 +161,7 @@ void StdAuthorListView::saveAuthor( QListViewItem* i )
 		}
 	}
 	else {
-		database->modAuthor( ( i->text( 0 ) ).toInt(), i->text( 1 ) );
+		database->modAuthor( ( i->text( 1 ) ).toInt(), i->text( 0 ) );
 	}
 }
 
@@ -188,6 +177,12 @@ bool StdAuthorListView::checkBounds( const QString &name )
 
 
 AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
+	authorStored(author),
+	m_listview(qlv)
+{
+}
+
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, QListViewItem *after, const Element &author ) : QCheckListItem( qlv, after, QString::null, QCheckListItem::CheckBox ),
 	authorStored(author),
 	m_listview(qlv)
 {
@@ -228,7 +223,7 @@ AuthorCheckListView::AuthorCheckListView( QWidget *parent, RecipeDB *db ) : Auth
 
 void AuthorCheckListView::createAuthor( const Element &author )
 {
-	new AuthorCheckListItem( this, author );
+	createElement(new AuthorCheckListItem( this, author ));
 }
 
 void AuthorCheckListView::removeAuthor( int id )

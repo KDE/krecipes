@@ -98,7 +98,7 @@ public:
 
 	void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true );
 	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
-	void loadCategories( CategoryTree *list, int parent_id = -1 );
+	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientGroups( ElementList *list );
 	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );

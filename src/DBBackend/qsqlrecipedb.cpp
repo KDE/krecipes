@@ -1549,13 +1549,17 @@ void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 	}
 }
 
-void QSqlRecipeDB::loadCategories( CategoryTree *list, int parent_id )
+void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, int parent_id )
 {
-	if ( parent_id == -1 )
+	QString limit_str;
+	if ( parent_id == -1 ) {
 		list->clear();
 
-	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"'"
-	  " ORDER BY name";
+		//only limit the number of top-level categories
+		limit_str = (limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset);
+	}
+
+	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
 	QSqlQuery categoryToLoad( command, database );
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
@@ -1565,7 +1569,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int parent_id )
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
 			CategoryTree *list_child = list->add( el );
 
-			loadCategories( list_child, id );
+			loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
 		}
 	}
 }

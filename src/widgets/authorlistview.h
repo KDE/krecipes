@@ -12,20 +12,19 @@
 #ifndef AUTHORLISTVIEW_H
 #define AUTHORLISTVIEW_H
 
-#include "klistview.h"
-
+#include "dblistviewbase.h"
 #include "element.h"
 
 class RecipeDB;
 class KPopupMenu;
 
 class AuthorCheckListView;
-class ListViewHandler;
 
 class AuthorCheckListItem: public QCheckListItem
 {
 public:
 	AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author );
+	AuthorCheckListItem( AuthorCheckListView* qlv, QListViewItem *after, const Element &author );
 
 	Element author() const;
 
@@ -40,33 +39,18 @@ private:
 };
 
 
-class AuthorListView : public KListView
+class AuthorListView : public DBListViewBase
 {
 	Q_OBJECT
 
 public:
 	AuthorListView( QWidget *parent, RecipeDB *db );
 
-	virtual void reload();
-
-public slots:
-	virtual void reload( int curr_limit, int curr_offset );
-
-protected:
-	RecipeDB *database;
-
 protected slots:
+	void checkCreateAuthor( const Element &el );
 	virtual void createAuthor( const Element & ) = 0;
 	virtual void removeAuthor( int ) = 0;
-
-private:
-	//make this private because the data should always be synced with the database
-	void clear()
-	{
-		KListView::clear();
-	}
-
-	ListViewHandler *listViewHandler;
+	virtual void load( int curr_limit, int curr_offset );
 };
 
 class StdAuthorListView : public AuthorListView

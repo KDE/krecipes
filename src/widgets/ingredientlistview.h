@@ -12,14 +12,13 @@
 #ifndef INGREDIENTLISTVIEW_H
 #define INGREDIENTLISTVIEW_H
 
-#include "klistview.h"
+#include "dblistviewbase.h"
 
 #include "element.h"
 
 class RecipeDB;
 class KPopupMenu;
 class IngredientCheckListView;
-class ListViewHandler;
 
 /**
 @author Unai Garro
@@ -28,6 +27,7 @@ class IngredientCheckListItem: public QCheckListItem
 {
 public:
 	IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing );
+	IngredientCheckListItem( IngredientCheckListView* qlv, QListViewItem *after, const Element &ing );
 	~IngredientCheckListItem( void );
 
 	int id( void ) const;
@@ -46,33 +46,20 @@ private:
 
 
 
-class IngredientListView : public KListView
+class IngredientListView : public DBListViewBase
 {
 	Q_OBJECT
 
 public:
 	IngredientListView( QWidget *parent, RecipeDB *db );
 
-	virtual void reload();
-
-public slots:
-	virtual void reload( int curr_limit, int curr_offset );
-
 protected slots:
 	virtual void createIngredient( const Element & ) = 0;
 	virtual void removeIngredient( int ) = 0;
+	virtual void load(int limit,int offset);
 
-protected:
-	//make this protected because the data should always be synced with the database
-	void clear()
-	{
-		KListView::clear();
-	}
-
-	RecipeDB *database;
-
-private:
-	ListViewHandler *listViewHandler;
+private slots:
+	virtual void checkCreateIngredient( const Element & );
 };
 
 

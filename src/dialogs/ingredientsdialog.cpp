@@ -207,7 +207,7 @@ void IngredientsDialog::reloadUnitList()
 	it = ingredientListView->listView() ->selectedItem();
 
 	if ( it ) {  // Check if an ingredient is selected first
-		ingredientID = it->text( 0 ).toInt();
+		ingredientID = it->text( 1 ).toInt();
 	}
 
 
@@ -238,7 +238,7 @@ void IngredientsDialog::addUnitToIngredient( void )
 	QListViewItem * it;
 	int ingredientID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) ) {
-		ingredientID = it->text( 0 ).toInt();
+		ingredientID = it->text( 1 ).toInt();
 	}
 	if ( ingredientID >= 0 )  // an ingredient was selected previously
 	{
@@ -268,9 +268,9 @@ void IngredientsDialog::removeUnitFromIngredient( void )
 	QListViewItem * it;
 	int ingredientID = -1, unitID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) )
-		ingredientID = it->text( 0 ).toInt();
+		ingredientID = it->text( 1 ).toInt();
 	if ( ( it = unitsListView->listView() ->selectedItem() ) )
-		unitID = it->text( 0 ).toInt();
+		unitID = it->text( 1 ).toInt();
 
 	if ( ( ingredientID >= 0 ) && ( unitID >= 0 ) )  // an ingredient/unit combination was selected previously
 	{
@@ -308,7 +308,7 @@ void IngredientsDialog:: reloadPropertyList( void )
 	//Populate this data into the KListView
 	if ( it ) { // make sure that the ingredient list is not empty
 
-		database->loadProperties( propertiesList, it->text( 0 ).toInt() ); // load the list for this ingredient
+		database->loadProperties( propertiesList, it->text( 1 ).toInt() ); // load the list for this ingredient
 		for ( IngredientProperty * prop = propertiesList->getFirst(); prop; prop = propertiesList->getNext() ) {
 			QListViewItem * lastElement = propertiesListView->listView() ->lastItem();
 			//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
@@ -336,7 +336,7 @@ void IngredientsDialog::addPropertyToIngredient( void )
 	QListViewItem * it;
 	int ingredientID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) ) {
-		ingredientID = it->text( 0 ).toInt();
+		ingredientID = it->text( 1 ).toInt();
 	}
 	if ( ingredientID >= 0 )  // an ingredient was selected previously
 	{
@@ -371,7 +371,7 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 	int ingredientID = -1, propertyID = -1;
 	int perUnitsID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) )
-		ingredientID = it->text( 0 ).toInt();
+		ingredientID = it->text( 1 ).toInt();
 	if ( ( it = propertiesListView->listView() ->selectedItem() ) )
 		propertyID = it->text( 0 ).toInt();
 	if ( propertyID >= 0 )
@@ -429,7 +429,7 @@ void IngredientsDialog::setPropertyAmount( double amount )
 	{
 		prop_it->setText( 2, QString::number( amount ) );
 		int propertyID = prop_it->text( 0 ).toInt();
-		int ingredientID = ing_it->text( 0 ).toInt();
+		int ingredientID = ing_it->text( 1 ).toInt();
 		int per_units = perUnitListBack->getElement( findPropertyNo( prop_it ) ).id ;
 		database->changePropertyAmountToIngredient( ingredientID, propertyID, amount, per_units );
 	}
@@ -469,7 +469,7 @@ void IngredientsDialog::openUSDADialog( void )
 	QListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
 	if ( ing_it ) {
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
-		USDADataDialog usda_dialog( Element( ing_it->text( 1 ), ing_it->text( 0 ).toInt() ), database, this );
+		USDADataDialog usda_dialog( Element( ing_it->text( 0 ), ing_it->text( 1 ).toInt() ), database, this );
 		KApplication::restoreOverrideCursor();
 
 		if ( usda_dialog.exec() == QDialog::Accepted )

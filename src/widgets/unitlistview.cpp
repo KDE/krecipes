@@ -23,33 +23,20 @@
 #include "dialogs/createunitdialog.h"
 #include "dialogs/dependanciesdialog.h"
 #include "datablocks/unit.h"
-#include "listviewhandler.h"
 
-UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
-		database( db )
+UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
-	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
+	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( checkCreateUnit( const Unit & ) ) );
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
-
-	listViewHandler = new ListViewHandler(this,database->unitCount());
-	installEventFilter(listViewHandler);
-	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
-	connect( database, SIGNAL( unitCreated( const Unit & ) ), listViewHandler, SLOT( increaseTotal() ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), listViewHandler, SLOT( decreaseTotal() ) );
+	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( elementCreated() ) );
+	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
-void UnitListView::reload()
+void UnitListView::load( int limit, int offset )
 {
-	listViewHandler->emitReload();
-}
-
-void UnitListView::reload( int limit, int offset )
-{
-	clear();
-
 	UnitList unitList;
 	database->loadUnits( &unitList, limit, offset );
 
@@ -59,23 +46,27 @@ void UnitListView::reload( int limit, int offset )
 	}
 }
 
+void UnitListView::checkCreateUnit( const Unit &el )
+{
+	if ( handleElement(el.name) ) { //only create this unit if the base class okays it
+		createUnit(el);
+	}
+}
 
 
 StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable ) : UnitListView( parent, db )
 {
+	addColumn( i18n( "Unit" ) );
+	addColumn( i18n( "Plural" ) );
+
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	addColumn( i18n( "Unit" ) );
-	addColumn( i18n( "Plural" ) );
-
-	setSorting( 1 );
-
 	if ( editable ) {
+		setRenameable( 0, true );
 		setRenameable( 1, true );
-		setRenameable( 2, true );
 
 		KIconLoader *il = new KIconLoader;
 
@@ -120,7 +111,7 @@ void StdUnitListView::remove()
 	QListViewItem * it = currentItem();
 
 	if ( it ) {
-		int unitID = it->text( 0 ).toInt();
+		int unitID = it->text( 2 ).toInt();
 
 		ElementList recipeDependancies, propertyDependancies;
 		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies );
@@ -141,19 +132,17 @@ void StdUnitListView::rename()
 	QListViewItem * item = currentItem();
 
 	if ( item )
-		UnitListView::rename( item, 1 );
+		UnitListView::rename( item, 0 );
 }
 
 void StdUnitListView::createUnit( const Unit &unit )
 {
-	( void ) new QListViewItem( this, QString::number( unit.id ), unit.name, unit.plural );
+	createElement(new QListViewItem( this, unit.name, unit.plural, QString::number( unit.id ) ));
 }
 
 void StdUnitListView::removeUnit( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 0 );
-
-	Q_ASSERT( item );
+	QListViewItem * item = findItem( QString::number( id ), 2 );
 
 	delete item;
 }
@@ -172,11 +161,11 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 	}
 
 	int existing_id = database->findExistingUnitByName( text );
-	int unit_id = i->text( 0 ).toInt();
+	int unit_id = i->text( 2 ).toInt();
 	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
-				database->modUnit( unit_id, i->text( 1 ), i->text( 2 ) );
+				database->modUnit( unit_id, i->text( 0 ), i->text( 1 ) );
 				database->mergeUnits( unit_id, existing_id );
 				break;
 			}
@@ -186,7 +175,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 		}
 	}
 	else {
-		database->modUnit( unit_id, i->text( 1 ), i->text( 2 ) );
+		database->modUnit( unit_id, i->text( 0 ), i->text( 1 ) );
 	}
 }
 
