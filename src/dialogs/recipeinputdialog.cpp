@@ -726,6 +726,16 @@ void RecipeInputDialog::loadIngredientListCombo(void)
 		ingredientBox->insertItem((*ing_it).name);
 		ingredientBox->completionObject()->addItem((*ing_it).name);
 	}
+
+	ElementList headerList;
+	database->loadIngredientGroups(&headerList);
+
+	//Populate this data into the cache (which will be swapped out when "Header" is selected
+	ingItemsCache.clear();
+	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
+		if ( ingItemsCache.find((*it).name) == ingItemsCache.end() )
+			ingItemsCache << (*it).name;
+	}
 }
 
 void RecipeInputDialog::loadUnitListCombo(void)
@@ -1588,13 +1598,18 @@ void RecipeInputDialog::typeButtonClicked( int button_id )
 	prepMethodBox->setEnabled( !bool(button_id) );
 
 	if ( button_id == 1 ) { //Header
-		ingItemsCache = ingredientBox->completionObject()->items();
-		ingredientBox->completionObject()->clear();
+		QStringList tmp_ingItemsCache = ingredientBox->completionObject()->items();
+		ingredientBox->completionObject()->setItems(ingItemsCache);
 		ingredientBox->clear();
+		ingredientBox->insertStringList(ingItemsCache);
+		ingItemsCache = tmp_ingItemsCache;
 	}
 	else {
+		QStringList tmp_ingItemsCache = ingredientBox->completionObject()->items();
 		ingredientBox->completionObject()->setItems(ingItemsCache);
+		ingredientBox->clear();
 		ingredientBox->insertStringList(ingItemsCache);
+		ingItemsCache = tmp_ingItemsCache;
 	}
 }
 

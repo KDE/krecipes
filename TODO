@@ -19,6 +19,7 @@ CONVENIENCES/MINOR FEATURES:
 
 BUGS/OTHER:
 	*PRIORITY: Secure database access passwords
+	*The icons on the left menu at times will disappear... I can't seem to reproduce this, however
 	*Make use of transactions in database backends where appropriate
 	*Give a warning when deleting categories (such as when a recipe was a part of that category)
 	*Don't show the empty unit in the unit page
