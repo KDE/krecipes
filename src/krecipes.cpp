@@ -26,13 +26,14 @@
 #include <kaction.h>
 #include <kstdaction.h>
 
-#include "setupwizard.h"
 
 Krecipes::Krecipes()
     : KMainWindow( 0, "Krecipes" ),
       m_view(new KrecipesView(this)),
       m_printer(0)
 {
+
+
     // accept dnd
     setAcceptDrops(true);
 
@@ -61,8 +62,6 @@ Krecipes::Krecipes()
     connect(this->m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)));
     enableSaveOption(false); // Disables saving initially
 
-    // Init the setup wizard if necessary
-    wizard();
 }
 
 Krecipes::~Krecipes()
@@ -267,21 +266,6 @@ void Krecipes::changeCaption(const QString& text)
 void Krecipes::enableSaveOption(bool en)
 {
 saveAction->setEnabled(en);
-}
-
-void Krecipes::wizard(void)
-{
-KConfig *config=kapp->config();
-config->setGroup("Wizard");
-
-
-bool setupDone=config->readBoolEntry( "SystemSetup",false);
-if (!setupDone)
-{
-SetupWizard* setupWizard=new SetupWizard();
-setupWizard->exec();
-}
-
 }
 
 #include "krecipes.moc"

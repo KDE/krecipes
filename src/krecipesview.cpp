@@ -17,16 +17,13 @@
 #include <klocale.h>
 #include <kconfig.h>
 
+#include "setupwizard.h"
+
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
 {
-  splitter=new QSplitter(this);
-
-    // Set Splitter Parameters
-    splitter->setFrameShape( QSplitter::NoFrame );
-    splitter->setFrameShadow( QSplitter::Plain );
-    splitter->setOrientation( QSplitter::Horizontal );
-    splitter->setOpaqueResize();
+    // Init the setup wizard if necessary
+    wizard();
 
     // Initialize Database
     KConfig *config; config=kapp->config(); config->setGroup("Server");
@@ -35,8 +32,16 @@ KrecipesView::KrecipesView(QWidget *parent)
     QString pass=config->readEntry("Password",QString::null);
     QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
     std::cerr<<"Connecting to: "<<host<<"\n";
-
     database=new RecipeDB(host,user,pass,dbname);
+
+    splitter=new QSplitter(this);
+
+    // Set Splitter Parameters
+    splitter->setFrameShape( QSplitter::NoFrame );
+    splitter->setFrameShadow( QSplitter::Plain );
+    splitter->setOrientation( QSplitter::Horizontal );
+    splitter->setOpaqueResize();
+
 
 // Create Left and Right Panels (splitter)
 
@@ -169,5 +174,18 @@ else{
   }
 }
 
+void KrecipesView::wizard(void)
+{
+KConfig *config=kapp->config();
+config->setGroup("Wizard");
+
+bool setupDone=config->readBoolEntry( "SystemSetup",false);
+if (!setupDone)
+{
+SetupWizard* setupWizard=new SetupWizard();
+setupWizard->exec();
+}
+
+}
 
 #include "krecipesview.moc"

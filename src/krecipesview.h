@@ -80,8 +80,9 @@ public:
 
 private:
 
-        // Internal variables
-	RecipeDB *database;
+	// Internal methods
+	void wizard(void);
+
 	// Internal widgets
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
@@ -92,6 +93,8 @@ private:
 	QPushButton *boton4;
 	QPushButton *boton5;
 	QPushButton *boton6;
+	// Internal variables
+	RecipeDB *database;
 
 signals:
 	void enableSaveOption(bool en);

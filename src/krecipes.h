@@ -79,9 +79,9 @@ private slots:
     void changeCaption(const QString& text);
 
 private:
+    // Private methods
     void setupAccel();
     void setupActions();
-    void wizard(void);
 
 private:
     KrecipesView *m_view;
@@ -91,8 +91,9 @@ private:
     KToggleAction *m_statusbarAction;
 
 private:
-	// Private variables
+	// Internal variables
 	KAction *saveAction;
+
 private slots:
 	void enableSaveOption(bool en=true);
 };
