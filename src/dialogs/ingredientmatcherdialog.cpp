@@ -178,7 +178,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 			if ( ( *nit ) == missingNo ) {
 				if ( !titleShownYet ) {
-					new SectionItem( recipeListView->listView(), i18n( "You are missing %1 ingredients for:" ).arg( missingNo ) );
+					new SectionItem( recipeListView->listView(), i18n( "You are missing 1 ingredient for:", "You are missing %n ingredients for:", missingNo ) );
 					titleShownYet = true;
 				}
 				new CustomRecipeListItem( recipeListView->listView(), *it, *ilit );
