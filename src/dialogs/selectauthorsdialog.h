@@ -43,7 +43,6 @@ private:
 	//Widgets
 	KComboBox *authorsCombo;
 	KListView *authorListView;
-	QGridLayout *layout;
 	QPushButton *okButton;
 	QPushButton *cancelButton;
 	QPushButton *addAuthorButton;
