@@ -52,7 +52,7 @@ htmlCode += "<STYLE type=\"text/css\">\n";
 htmlCode+="#dayheader{ background-color: #D6D6D6; color: black; border:none;}";
 htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
 htmlCode+="#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;align:center;}";
-htmlCode+="#dish{overflow:hidden; height:1em;};";
+htmlCode+="#dish{overflow:hidden; height:1em;}";
 htmlCode +="</STYLE>";
 
 
