@@ -95,7 +95,9 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 
 
 // Read the ingredients
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
+
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
+
 recipeToLoad=database->executeQuery( command);
             if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
 	    QSQLiteResultRow row = recipeToLoad.first();
