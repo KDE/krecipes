@@ -68,7 +68,7 @@ for ( IngredientList::const_iterator ing_it = newIngredientList->begin(); ing_it
 
 		// Try to convert
 		converted =autoConvertUnits(db,(*ing_it).amount,(*ing_it).unitID,currentAmount,currentUnit,newAmount,newUnit);
-		} while ( (converted<0) && (((pos_it=totalIngredientList->find(pos_it,(*ing_it).ingredientID)))!=totalIngredientList->end()) );
+		} while ( (converted<0) && (((pos_it=totalIngredientList->find(++pos_it,(*ing_it).ingredientID)))!=totalIngredientList->end()) );
 
 		// If the conversion was succesful, Set the New Values
 		if (converted>=0)
