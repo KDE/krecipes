@@ -16,6 +16,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include "DBBackend/recipedb.h"
  

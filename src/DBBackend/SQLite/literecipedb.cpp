@@ -18,6 +18,7 @@
 #include <ktempfile.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include "config.h"
 
@@ -25,16 +26,24 @@
 
 #define DB_FILENAME "krecipes.krecdb"
 
-LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
+LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname):RecipeDB(host, user,pass,DBname)
 {
-// Define the DB file to be working on. Right now, only hardcoded
+DBuser=user;DBpass=pass;DBhost=host;
+}
 
+LiteRecipeDB::~LiteRecipeDB()
+{
+database->close();
+delete database;
+}
+
+void LiteRecipeDB::connect(bool init)
+{
 KConfig *config = KGlobal::config();
 config->setGroup("Server");
 QString  dbFile=config->readEntry("DBFile",locateLocal ("appdata",DB_FILENAME));
 
 kdDebug()<<"Connecting to the SQLite database\n";
-	DBuser=user;DBpass=pass;DBhost=host;
 
         database= new QSQLiteDB();
 	 //if the file didn't exist before, then we need to do this to initialize the database
@@ -54,23 +63,16 @@ kdDebug()<<"Connecting to the SQLite database\n";
 
 	     // Initialize database if requested
 	      if (init) initializeDB();
-	     }
-	 else // Check integrity of the database (tables). If not possible, exit
-	 {
-	 kdDebug()<<"I'll check the DB integrity now\n";
-	 	if (!checkIntegrity())
-			{
-			kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
-			dbErr=i18n("Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the database structure may be too corrupted.\n");
-			return;
-			}
-	 }
-	 dbOK=true;
-}
-LiteRecipeDB::~LiteRecipeDB()
-{
-database->close();
-delete database;
+	}
+
+	// Check integrity of the database (tables). If not possible, exit
+	kdDebug()<<"I'll check the DB integrity now\n";
+	if (!checkIntegrity()) {
+		kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
+		dbErr=i18n("Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the atabase structure may be too corrupted.\n");
+		return;
+	}
+	dbOK=true;
 }
 
 void LiteRecipeDB::createDB()
@@ -2392,7 +2394,7 @@ QString LiteRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 
 	QString return_title=recipe_title; //If any error is produced, just go for default value (always return something)
 
-	QString command = QString( "SELECT COUNT(DISTINCT title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg(escapeAndEncode(recipe_title));
+	QString command = QString( "SELECT COUNT(title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg(escapeAndEncode(recipe_title));
 
 	QSQLiteResult alikeRecipes=database->executeQuery( command);
 	if (alikeRecipes.getStatus()!=QSQLiteResult::Failure)

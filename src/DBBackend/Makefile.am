@@ -19,16 +19,19 @@ mysql_subdirs=MySQL
 mysql_libs=MySQL/libkrecmysql.la
 endif
 
+psql_libs=PostgreSQL/libkrecpsql.la
+psql_subdirs=PostgreSQL
+
 # Optional subdirectories
 
-SUBDIRS=$(mysql_subdirs) $(sqlite_subdirs)
+SUBDIRS=$(sqlite_subdirs) $(mysql_subdirs) $(psql_subdirs)
 
 # Instructions for building the convenience library
 noinst_LTLIBRARIES=libkrecipesdbs.la
-libkrecipesdbs_la_SOURCES=recipedb.cpp
+libkrecipesdbs_la_SOURCES=recipedb.cpp qsqlrecipedb.cpp
 libkrecipesdbs_la_METASOURCES=AUTO
 
-libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs)
+libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs) $(psql_libs)
 
 #the library search path.
-libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) 
+libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(mysql_libs) $(sqlite_libs) $(psql_libs)

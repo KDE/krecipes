@@ -15,11 +15,8 @@
 #define RECIPEDB_H
 
 #include <qobject.h>
-#include <qsqldatabase.h>
 #include <qstring.h>
 #include <qvaluelist.h>
-
-#include <klocale.h>
 
 #include "recipe.h"
 #include "datablocks/recipelist.h"
@@ -47,10 +44,12 @@ class RecipeDB:public QObject {
 Q_OBJECT
 
 protected:
-	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init):QObject(){dbOK=false; dbErr="";}
+	RecipeDB(QString host, QString user, QString pass, QString DBname):QObject(){dbOK=false; dbErr="";}
 
 public:
 	virtual ~RecipeDB(){};
+	
+	virtual void connect(bool init=true) = 0;
 	
 	// Error handling (passive)
 	bool dbOK;

@@ -140,6 +140,92 @@ void MySQLServerPrefs::saveOptions(void)
 }
 
 
+PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget(parent)
+{
+	QGridLayout *layout = new QGridLayout(this,1,1,0,0);
+	layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin(0);
+	
+	QSpacerItem* spacerTop = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerTop, 0,1);
+	QSpacerItem* spacerLeft = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum);
+	layout->addItem( spacerLeft,1,0 );
+	
+	QLabel* serverText=new QLabel(i18n("Server:"), this);
+	serverText->setFixedSize(QSize(100,20));
+	serverText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(serverText,1,1);
+	
+	serverEdit=new KLineEdit(this);
+	serverEdit->setFixedSize(QSize(120,20));
+	serverEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(serverEdit,1,2);
+	
+	QSpacerItem* spacerRow1 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerRow1,2,1 );
+	
+	QLabel* usernameText=new QLabel(i18n("Username:"), this);
+	usernameText->setFixedSize(QSize(100,20));
+	usernameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(usernameText,3,1);
+	
+	usernameEdit=new KLineEdit(this);
+	usernameEdit->setFixedSize(QSize(120,20));
+	usernameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(usernameEdit,3,2);
+	
+	QSpacerItem* spacerRow2 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerRow2,4,1 );
+	
+	QLabel* passwordText=new QLabel(i18n("Password:"), this);
+	passwordText->setFixedSize(QSize(100,20));
+	passwordText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(passwordText,5,1);
+	
+	passwordEdit=new KLineEdit(this);
+	passwordEdit->setFixedSize(QSize(120,20));
+	passwordEdit->setEchoMode(QLineEdit::Password);
+	passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(passwordEdit,5,2);
+	
+	QSpacerItem* spacerRow3 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerRow3, 6,1 );
+	
+	QLabel* dbNameText=new QLabel(i18n("Database name:"), this);
+	dbNameText->setFixedSize(QSize(100,20));
+	dbNameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(dbNameText,7,1);
+	
+	dbNameEdit=new KLineEdit(this);
+	dbNameEdit->setFixedSize(QSize(120,20));
+	dbNameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addWidget(dbNameEdit,7,2);
+	
+	QSpacerItem* spacerRow4 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+	layout->addItem( spacerRow4, 8,1 );
+	QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
+	layout->addItem( spacerRight, 1,4 );
+
+	// Load & Save Current Settings
+	KConfig *config=kapp->config();
+	config->setGroup("Server");
+	serverEdit->setText( config->readEntry( "Host","localhost"));
+	usernameEdit->setText( config->readEntry( "Username",""));
+	passwordEdit->setText( config->readEntry("Password",""));
+	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes") );
+}
+
+void PostgreSQLServerPrefs::saveOptions(void)
+{
+	KConfig *config=kapp->config();
+	config->setGroup("Server");
+	config->writeEntry("Host",serverEdit->text());
+	config->writeEntry("Username",usernameEdit->text());
+	config->writeEntry("Password",passwordEdit->text());
+	config->writeEntry("DBName",dbNameEdit->text());
+}
+
+
 
 SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget(parent)
 {
@@ -190,10 +276,14 @@ ServerPrefs::ServerPrefs(QWidget *parent)
 
 	KConfig *config=kapp->config();
 	config->setGroup("DBType");
-	if ( config->readEntry("Type") == "MySQL" )
+	QString DBtype = config->readEntry("Type");
+	if ( DBtype == "MySQL" )
 		serverWidget = new MySQLServerPrefs(this);
+	else if ( DBtype == "PostgreSQL" )
+		serverWidget = new PostgreSQLServerPrefs(this);
 	else
 		serverWidget = new SQLiteServerPrefs(this);
+
 	serverWidget->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 	Form1Layout->addWidget( serverWidget );
 
@@ -222,8 +312,11 @@ void ServerPrefs::saveOptions(void)
 {
 KConfig *config=kapp->config();
 config->setGroup("DBType");
-if ( config->readEntry("Type") == "MySQL" )
+QString DBtype = config->readEntry("Type");
+if ( DBtype == "MySQL" )
    ((MySQLServerPrefs*)serverWidget)->saveOptions();
+else if ( DBtype == "MySQL" )
+   ((PostgreSQLServerPrefs*)serverWidget)->saveOptions();
 else
    ((SQLiteServerPrefs*)serverWidget)->saveOptions();
    

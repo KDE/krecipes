@@ -48,6 +48,20 @@ private:
 	KLineEdit *dbNameEdit;
 };
 
+class PostgreSQLServerPrefs : public QWidget
+{
+public:
+	PostgreSQLServerPrefs( QWidget *parent );
+
+	void saveOptions(void);
+private:
+	// Internal Widgets
+	KLineEdit *serverEdit;
+	KLineEdit *usernameEdit;
+	KLineEdit *passwordEdit;
+	KLineEdit *dbNameEdit;
+};
+
 class SQLiteServerPrefs : public QWidget
 {
 Q_OBJECT

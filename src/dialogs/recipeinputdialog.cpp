@@ -993,6 +993,7 @@ ingredientList->clear();
 authorShow->clear();
 categoryShow->clear();
 servingsNumInput->setValue(1);
+prepTimeEdit->setTime( QTime(0,0) );
 
 instructionsEdit->selectAll();
 

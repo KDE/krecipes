@@ -14,6 +14,8 @@
 
 #include <qlistbox.h>
 
+#include <klocale.h>
+
 #include "DBBackend/recipedb.h"
 #include "elementlist.h"
 

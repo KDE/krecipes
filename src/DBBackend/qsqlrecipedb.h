@@ -1,6 +1,5 @@
- /**************************************************************************
- *   Copyright (C) 2003 by                                                 *
- *                                                                         *
+/***************************************************************************
+ *   Copyright (C) 2004 by                                                 *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -11,45 +10,59 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef LITERECIPEDB_H
-#define LITERECIPEDB_H
+
+#ifndef QSQLRECIPEDB_H
+#define QSQLRECIPEDB_H
 
 #define DEFAULT_DB_NAME "Krecipes"
 
 #include <qglobal.h>
+#include <qobject.h>
+#include <qsqldatabase.h>
 #include <qimage.h>
 #include <qfileinfo.h>
-#include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
-#include <iostream>
-#ifdef Q_OS_LINUX
-#include <asm/unistd.h>
-#endif
+
 #include "recipe.h"
-#include "datablocks/recipelist.h"
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
 #include "unitratiolist.h"
 #include "recipedb.h"
-#include "libqsqlite/krecqsqlitedb.h"
+
 
 /**
-@author Unai Garro
+@author Unai Garro, Jason Kivlighn
 */
-class LiteRecipeDB:public RecipeDB{
+class QSqlRecipeDB : public RecipeDB
+{
 
 Q_OBJECT
 
-private:
-	QSQLiteDB *database;
-	void createDB(void);
+protected:
+	virtual QString qsqlDriver() const = 0;
+	virtual void createDB(void) = 0;
+	virtual void portOldDatabases(float version);
+	virtual void storePhoto(int recipeID, const QByteArray &data);
+	virtual void loadPhoto(int recipeID, QPixmap &photo);
+
+	/** Return the next id for the given table and column.
+	  * If the database supports getting this afterwards,
+	  * leave the default implementation which returns -1.
+	  *
+	  * Note: Only call when an insert is actually going to take place.
+	  *       This function will increment the sequence counter.
+	  */
+	virtual int getNextInsertID( const QString &/*table*/, const QString &/*column*/ ){return -1;}
+
+	QSqlDatabase *database;
 	QString DBuser;
 	QString DBpass;
 	QString DBhost;
+
 public:
-	LiteRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
-	~LiteRecipeDB(void);
+	QSqlRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
+	~QSqlRecipeDB(void);
 
 	void connect(bool init=true);
 
@@ -75,9 +88,9 @@ public:
 	int  findExistingCategoryByName(const QString& name);
 	int  findExistingIngredientByName(const QString& name);
 	int  findExistingPrepByName(const QString& name);
-	int  findExistingPropertyByName(const QString& name);
 	int  findExistingRecipeByName(const QString& name);
 	int  findExistingUnitByName(const QString& name);
+	int  findExistingPropertyByName(const QString& name);
 	int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0);
 	void findIngredientUnitDependancies(int ingredientID,int unitID,ElementList *recipes,ElementList *ingredientInfo);
 	void findIngredientDependancies(int ingredientID,ElementList *recipes);
@@ -95,10 +108,8 @@ public:
 	bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID);
 	bool ingredientContainsUnit(int ingredientID, int unitID);
 
-	void initializeDB(void);
-	void initializeData(void);
-
-	int lastInsertID();
+	//void initializeDB(void);
+	//void initializeData(void);
 
 	void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
@@ -111,7 +122,8 @@ public:
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
-	void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false,bool loadIngredientNames=false,bool loadAuthors=false); // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs)
+	void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false, bool loadCategories=false,bool loadIngredientNames=false,bool loadAuthors=false); // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
+	void loadRecipeList(ElementList *list, int categoryID=0);
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
@@ -163,7 +175,6 @@ public:
 
 	double unitRatio(int unitID1, int unitID2);
 
-	QString escape(const QString &s);
 	QCString escapeAndEncode(const QString &s);
 	QString unescapeAndDecode(const QString &s);
 
@@ -173,17 +184,16 @@ public:
 
 	bool checkIntegrity(void);
 
-	void createTable(QString tableName);
 	void splitCommands(QString& s,QStringList& sl);
 
 	float databaseVersion(void);
 
 private:
-	void loadElementList(ElementList *elList, QSQLiteResult *query);
-	void loadPropertyElementList(ElementList *elList, QSQLiteResult *query);
-	void portOldDatabases(float version);
-	int sqlite_encode_binary(const unsigned char *in, int n, unsigned char *out);
-	int sqlite_decode_binary(const unsigned char *in, unsigned char *out);
+	void loadElementList(ElementList *elList, QSqlQuery *query);
+	void loadPropertyElementList(ElementList *elList, QSqlQuery *query);
+	QString getNextInsertIDStr( const QString &table, const QString &column );
+
+	QString DBname;
 };
 
 

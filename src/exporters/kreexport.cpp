@@ -13,6 +13,7 @@
 
 #include <qfile.h>
 #include <qstylesheet.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -85,16 +86,12 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "<pictures>\n";
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
     if ( !(*recipe_it).photo.isNull() ) {
-	KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
-	fn->setAutoDelete(true);
-	(*recipe_it).photo.save(fn->name(), "JPEG");
 	QByteArray data;
-	if( fn ){
-	data = (fn->file())->readAll();
-	fn->close();
+	QBuffer buffer( data );
+	buffer.open( IO_WriteOnly );
+	(*recipe_it).photo.save( &buffer, "JPEG" );
+	
 	xml += KCodecs::base64Encode(data, true);
-	}
-	delete fn;
     }
 
     xml += "]]></pic>\n";

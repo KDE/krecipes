@@ -7,7 +7,7 @@ bin_PROGRAMS = krecipes
 SUBDIRS = DBBackend importers gui dialogs exporters widgets datablocks
 
 # set the include path for X, qt and KDE
-INCLUDES         = -I$(srcdir) $(MYSQL_INC) -I$(srcdir)/DBBackend -I$(srcdir)/DBBackend/SQLite $(all_includes)
+INCLUDES         = -I$(srcdir) -I$(srcdir)/DBBackend -I$(srcdir)/DBBackend/SQLite $(all_includes)
 
 # the library search path.
 krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
@@ -19,11 +19,13 @@ qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la DBBackend/SQLite/libkrec
 endif
 
 if link_lib_MYSQL
-mysql_libadds =DBBackend/MySQL/libkrecmysql.la $(MYSQL_LIB)
+mysql_libadds =DBBackend/MySQL/libkrecmysql.la
 endif
 
+psql_libadds =DBBackend/PostgreSQL/libkrecpsql.la
+
 # the shared libraries to link against.
-krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkrecipesexporters.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la datablocks/libdatablocks.la DBBackend/recipedb.lo $(qsqlite_libadds) $(mysql_libadds) $(LIB_KHTML) $(LIB_KSPELL)
+krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkrecipesexporters.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la datablocks/libdatablocks.la DBBackend/recipedb.lo $(qsqlite_libadds) $(mysql_libadds) $(psql_libadds) $(LIB_KHTML) $(LIB_KSPELL)
 
 # which sources should be compiled for krecipes
 krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp ingredientproperty.cpp ingredientpropertylist.cpp editbox.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp shoppingcalculator.cpp fractioninput.cpp mixednumber.cpp recipeactionshandler.cpp recipefilter.cpp

@@ -54,6 +54,8 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
+#include "DBBackend/PostgreSQL/psqlrecipedb.h"
+
 #if HAVE_MYSQL
 #include "DBBackend/MySQL/mysqlrecipedb.h"
 #endif
@@ -557,8 +559,10 @@ if (dbType=="MySQL" && setupUser) // Don't setup user if checkbox of existing us
 #endif //HAVE_MYSQL
 
 #if HAVE_SQLITE || HAVE_SQLITE3
-if (dbType=="SQLite")
-	(void)LiteRecipeDB(QString::null,QString::null,QString::null,QString::null,true); //initialize database structure
+if (dbType=="SQLite") {
+	LiteRecipeDB db(QString::null,QString::null,QString::null,QString::null); 
+	db.connect(true); //initialize database structure
+}
 #endif //HAVE_SQLITE||HAVE_SQLITE3
 
 // Initialize database with data if requested
@@ -584,11 +588,13 @@ if (doUSDAImport)
 	{
 		setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
 		db = new MySQLRecipeDB(host,user,pass,dbName);
+		db->connect();
 	}
 	#endif //HAVE_MYSQL
 	#if HAVE_SQLITE || HAVE_SQLITE3
 	else if (dbType=="SQLite")
 		db = new LiteRecipeDB(QString::null);
+		db->connect();
 	#endif //HAVE_SQLITE||HAVE_SQLITE3
 	
 	// Import the data
@@ -623,13 +629,14 @@ MySQLRecipeDB *db;
 if (!adminPass.isNull())
 	{ // Login as admin in the (remote) server and createDB if necessary
 	kdDebug()<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
-	db= new MySQLRecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
+	db= new MySQLRecipeDB(host,adminUser,adminPass,dbName); // true means initialize db structure (It won't destroy data if exists)
 	}
 	else{ // Login as root with no password
 	kdDebug()<<"Open db as root, with no password\n";
-	db=new MySQLRecipeDB(host,"root",QString::null,dbName,true);
+	db=new MySQLRecipeDB(host,"root",QString::null,dbName);
 	}
 
+db->connect(true);
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
 delete db; //it closes the db automatically
@@ -651,6 +658,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	{
 	MySQLRecipeDB *db;
 	db= new MySQLRecipeDB(host,user,pass,dbName);
+	db->connect();
 	db->emptyData();
 	db->initializeData();
 	delete db; //it closes the db automatically
@@ -662,6 +670,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	{
 		LiteRecipeDB *db;
 		db= new LiteRecipeDB(host,user,pass,dbName);
+		db->connect();
 		db->emptyData();
 		db->initializeData();
 		delete db; //it closes the db automatically
@@ -890,12 +899,22 @@ void KrecipesView::initDatabase(KConfig *config)
 	#if HAVE_SQLITE || HAVE_SQLITE3
 	else if (dbType=="SQLite") database=new LiteRecipeDB(QString::null);
 	#endif // HAVE_SQLITE || HAVE_SQLITE3
-	else{	
+	else if (dbType=="PostgreSQL") {
+		config->setGroup("Server");
+		QString host=config->readEntry( "Host","localhost");
+    		QString user=config->readEntry( "Username",QString::null);
+    		QString pass=config->readEntry("Password",QString::null);
+    		QString dbname=config->readEntry("DBName", DEFAULT_DB_NAME);
+		database=new PSqlRecipeDB(host,user,pass,dbname);
+	}
+	else {
 		// No DB type has been enabled(should not happen at all, but just in case)
 		
 		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
 		exit(1);
 	}
+
+	database->connect();
 	
 	while (!database->ok()) 
 	{
@@ -924,6 +943,7 @@ void KrecipesView::initDatabase(KConfig *config)
 			// Try opening the database again with the new details
 			delete database;
 			database=new MySQLRecipeDB(host,user,pass,dbname);
+			database->connect();
 			}
 		#endif //HAVE_MYSQL
 		
@@ -933,6 +953,7 @@ void KrecipesView::initDatabase(KConfig *config)
 			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
 			delete database;
 			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
+			database->connect(true);
 			}
 		
 		#endif //HAVE_SQLITE || HAVE_SQLITE3
@@ -953,9 +974,9 @@ QString KrecipesView::checkCorrectDBType(KConfig *config)
 {
 	dbType=config->readEntry("Type","SQLite");
 	
-	while ((dbType!="SQLite") && (dbType!="MySQL"))
+	while ((dbType!="SQLite") && (dbType!="MySQL") && (dbType!="PostgreSQL"))
 		{
-		questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
+		questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL."));
 			
 		// Read the database setup again
 		

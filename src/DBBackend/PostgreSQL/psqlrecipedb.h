@@ -11,17 +11,17 @@
  ***************************************************************************/
 
 
-#ifndef MYSQLRECIPEDB_H
-#define MYSQLRECIPEDB_H
+#ifndef PSQLRECIPEDB_H
+#define PSQLRECIPEDB_H
 
-#define MYSQL_DRIVER "QMYSQL3"
+#define PSQL_DRIVER "QPSQL7"
 
 #include "qsqlrecipedb.h"
 
 /**
-@author Unai Garro
+@author Jason Kivlighn
 */
-class MySQLRecipeDB : public QSqlRecipeDB
+class PSqlRecipeDB : public QSqlRecipeDB
 {
 
 Q_OBJECT
@@ -30,8 +30,8 @@ private:
 	void createDB(void);
 
 public:
-	MySQLRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
-	~MySQLRecipeDB(void);
+	PSqlRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
+	~PSqlRecipeDB(void);
 
 	void initializeDB(void);
 	void initializeData(void);
@@ -41,10 +41,16 @@ public:
 	void createTable(QString tableName);
 
 protected:
-	QString qsqlDriver() const { return MYSQL_DRIVER; }
+	virtual QString qsqlDriver() const { return PSQL_DRIVER; }
+	virtual int getNextInsertID( const QString &table, const QString &column );
+
+	virtual void storePhoto(int recipeID, const QByteArray &data);
+	virtual void loadPhoto(int recipeID, QPixmap &photo);
 
 private:
 	void portOldDatabases(float version);
+
+	int last_insert_id;
 };
 
 
