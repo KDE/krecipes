@@ -24,9 +24,11 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, El
 
  layout = new QGridLayout( this, 1, 1, 0, 0);
  QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
- layout->addMultiCell( spacer_left, 1,4,0,0 );
+ layout->addItem( spacer_left, 1,0 );
  QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
- layout->addMultiCell(spacer_top,0,0,1,4);
+ layout->addItem(spacer_top,0,1);
+ QSpacerItem* spacer_right = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+ layout->addItem(spacer_right,1,5);
 
 
  htmlBox=new QVBox (this);
@@ -66,18 +68,28 @@ QString recipeHTML;
 
 	// Headers
 	recipeHTML=QString("<html><head><title>%1</title></head><body>").arg(i18n("Shopping List"));
-	recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:10px; width: 80%\">";
+	recipeHTML+="<center><div STYLE=\"width: 80%\">";
 	recipeHTML+=QString("<center><h1>%1</h1></center>").arg(i18n("Shopping List"));
 
 
 	// Ingredient List
-	recipeHTML+="<p>";
-	for (Ingredient *i=ingredientList->getFirst();i;i=ingredientList->getNext())
-		recipeHTML+=QString("%1: %2 %3<br>").arg(i->name).arg(i->amount).arg(i->units);
 
-	recipeHTML+="</p>";
+	recipeHTML+="<div STYLE=\"border:medium solid blue; width:90%\"><table cellspacing=0px width=100%><tbody>";
+	int counter=0;
+	for (Ingredient *i=ingredientList->getFirst();i;i=ingredientList->getNext())
+	{
+
+	QString color;
+	if (counter) color="#CBCEFF";
+	else color="#BFC2F0";
+	counter=1-counter;
+
+
+		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg(i->name).arg(i->amount).arg(i->units);
+        }
+	recipeHTML+="</tbody></table></div>";
 	// Close
-	recipeHTML+="</div></body></html>";
+	recipeHTML+="</div></center></body></html>";
 
 
 // Display
