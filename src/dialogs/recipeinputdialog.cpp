@@ -448,7 +448,7 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		if ( config->readBoolEntry("Fraction"))
 			amount_str = MixedNumber((*ing_it).amount).toString();
 		else
-			amount_str = KGlobal::locale()->formatNumber((*ing_it).amount);
+			amount_str = beautify(KGlobal::locale()->formatNumber((*ing_it).amount,5));
 
 		 //Insert ingredient after last one
 		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units,(*ing_it).prepMethod);
@@ -754,7 +754,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   if ( config->readBoolEntry("Fraction"))
     amount_str = MixedNumber(ing.amount).toString();
   else
-    amount_str = KGlobal::locale()->formatNumber(ing.amount);
+    amount_str = beautify(KGlobal::locale()->formatNumber(ing.amount,5));
 
   (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units,ing.prepMethod);
 
@@ -783,7 +783,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it)
 {
   bool ok;
 	int index=ingredientList->itemIndex(it);
-  Ingredient ing = *(loadedRecipe->ingList).at(index);
+  IngredientList::iterator ing = loadedRecipe->ingList.at(index);
   KConfig *config=kapp->config();
   config->setGroup("Formatting");
 
@@ -791,7 +791,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it)
 
     MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
     if(ok){
-      ing.amount = mn.toDouble();
+      (*ing).amount = mn.toDouble();
       it->setText(1, mn.toString( number_format ));
     }
     else{

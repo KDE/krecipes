@@ -10,6 +10,7 @@
 
 #include "conversiontable.h"
 #include "editbox.h"
+#include "mixednumber.h"
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -111,7 +112,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	if (eb->accepted)
 		{
 		eb->accepted=false;
-		setText(KGlobal::locale()->formatNumber(eb->value())); // Only accept value if Ok was pressed before
+		setText(beautify(KGlobal::locale()->formatNumber(eb->value(),5))); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
 		}
 	}
@@ -146,7 +147,7 @@ void ConversionTable::createNewItem(int r, int c, double amount)
 
 ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
 setItem(r,c, ci );
-ci->setText(KGlobal::locale()->formatNumber(amount));
+ci->setText(beautify(KGlobal::locale()->formatNumber(amount,5)));
 // connect signal (forward) to know when it's actually changed
 connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
 connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));

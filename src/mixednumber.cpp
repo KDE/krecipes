@@ -9,9 +9,18 @@
  ***************************************************************************/
 #include "mixednumber.h"
 
-#include <kdebug.h>
+#include <qregexp.h>
+
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
+
+QString beautify(const QString &num)
+{
+	QString copy(num);
+	copy.remove(QRegExp(QString("0+$|%10+$").arg(KGlobal::locale()->decimalSymbol())));
+	return copy;
+}
 
 MixedNumber::MixedNumber() :
   m_whole(0),
@@ -162,7 +171,7 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 QString MixedNumber::toString( Format format ) const
 {
 	if ( format == DecimalFormat )
-		return locale->formatNumber(toDouble());
+		return beautify(locale->formatNumber(toDouble(),5));
 
 	if ( m_numerator == 0 && m_whole == 0 )
 		return QString("0");

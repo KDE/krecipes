@@ -356,9 +356,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 		QString amount_str;
 
-		if (prop->amount>0) amount_str = KGlobal::locale()->formatNumber(prop->amount);
+		if (prop->amount>0) amount_str = beautify(KGlobal::locale()->formatNumber(prop->amount,5));
 		else {
-			amount_str = KGlobal::locale()->formatNumber(-(prop->amount));
+			amount_str = beautify(KGlobal::locale()->formatNumber(-(prop->amount),5));
 			amount_str+="+";
 			}
 
