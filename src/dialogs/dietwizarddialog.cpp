@@ -135,14 +135,10 @@ else if (dn==7)
 	dayNumber=7;
 	dayNumberLabel->setText(QString(i18n("- 1 week -")));
 	}
-else if (dn<10)
+else
 	{
 	dayNumber=(dn-6)*7;
 	dayNumberLabel->setText(QString(i18n("- %1 weeks -")).arg(dn-6));
-	}
-else
-	{
-	dayNumberLabel->setText(QString(i18n("- 1 month -")));
 	}
 }
 
