@@ -86,16 +86,16 @@ public:
 	void initializeData(void);
 
 	int lastInsertID();
-	void loadAllRecipeIngredients(IngredientList *list,bool withNames=true);
+	void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);
 	void loadPossibleUnits(int ingredientID, ElementList *list);
 	void loadProperties(IngredientPropertyList *list,int ingredientID=-1);
 	void loadRecipe(Recipe *recipe,int recipeID=0);
-	void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
+	void loadRecipeDetails(RecipeList *rlist); //Loads a recipe detail list (no instructions, no photo, no ingredients)
 	void loadRecipeList(ElementList *list, int categoryID=0);
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
 	void loadUnits(ElementList *list);

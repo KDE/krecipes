@@ -84,7 +84,7 @@ public:
 
 	int lastInsertID();
 
-	void loadAllRecipeIngredients(IngredientList *list,bool withNames=true);
+	void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);
@@ -93,8 +93,8 @@ public:
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
+	void loadRecipeDetails(RecipeList *rlist); // Read only the recipe details (no instructions, no photo, no ingredients)
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
-	void loadRecipes(RecipeList *rlist,bool getInstructions=true,bool getPhoto=true);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 

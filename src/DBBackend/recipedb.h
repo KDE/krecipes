@@ -19,9 +19,17 @@
 #include "ingredientpropertylist.h"
 #include "unitratiolist.h"
 
+
 /**
 @author Unai Garro
 */
+
+typedef struct
+{
+QValueList <int> recipeIdList;
+IngredientList ilist;
+} RecipeIngredientList;
+
 class RecipeDB{
 
 protected:
@@ -71,7 +79,7 @@ public:
 
 	virtual int lastInsertID()=0;
 
-	virtual void loadAllRecipeIngredients(IngredientList *list,bool withNames=true)=0;
+	virtual void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true)=0;
 	virtual void loadAuthors(ElementList *list)=0;
 	virtual void loadCategories(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
@@ -80,8 +88,8 @@ public:
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
+	virtual void loadRecipeDetails(RecipeList *rlist)=0; //Loads a recipe detail list (no instructions, no photo, no ingredients)
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;
-	virtual void loadRecipes(RecipeList *rlist,bool getInstructions=false,bool getPhoto=false)=0;
 	virtual void loadUnits(ElementList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
 

@@ -67,18 +67,18 @@ mysql_close(mysqlDB);
 
 }
 
-void MySQLRecipeDB::loadAllRecipeIngredients(IngredientList *list, bool withNames)
+void MySQLRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list, bool withNames)
 {
 
 QString command;
 
 if (withNames)
 {
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;");
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.recipe_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;");
 }
 else
 {
-command=QString("SELECT ingredient_id,amount,unit_id  FROM ingredient_list;");
+command=QString("SELECT ingredient_id,amount,unit_id,recipe_id  FROM ingredient_list;");
 }
 
 QSqlQuery ingredientsToLoad(command,database);
@@ -92,15 +92,17 @@ QSqlQuery ingredientsToLoad(command,database);
 		    ing.amount=ingredientsToLoad.value(2).toDouble();
 		    ing.unitID=ingredientsToLoad.value(3).toInt();
 		    ing.units=unescapeAndDecode(ingredientsToLoad.value(4).toString());
+		    list->recipeIdList.append(ingredientsToLoad.value(5).toInt());
 		    }
 		    else
 		    {
 		    ing.ingredientID=ingredientsToLoad.value(0).toInt();
-		    ing.amount=ingredientsToLoad.value(2).toDouble();
-		    ing.unitID=ingredientsToLoad.value(3).toInt();
+		    ing.amount=ingredientsToLoad.value(1).toDouble();
+		    ing.unitID=ingredientsToLoad.value(2).toInt();
+		    list->recipeIdList.append(ingredientsToLoad.value(3).toInt());
 
 		    }
-		    list->add(ing);
+		    list->ilist.add(ing);
                 }
             }
 }
@@ -197,7 +199,11 @@ recipeToLoad.exec( command);
 mysql_close(mysqlDB);
 }
 
-void MySQLRecipeDB::loadRecipes(RecipeList *rlist,bool getInstructions,bool getPhoto)
+/*
+Loads a recipe detail list (no instructions, no photo, no ingredients)
+*/
+
+void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist)
 {
 rlist->clear();
 

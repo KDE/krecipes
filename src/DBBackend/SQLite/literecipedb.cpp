@@ -61,18 +61,19 @@ void LiteRecipeDB::createDB()
 // FIXME : create database file?
 }
 
-void LiteRecipeDB::loadAllRecipeIngredients(IngredientList *list,bool withNames)
+void LiteRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames)
 {
-list->clear();
+list->ilist.clear();
+list->recipeIdList.clear();
 
 QString command;
 if (withNames)
 {
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id);" );
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.recipe_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id);" );
 }
 else
 {
-command=QString("SELECT ingredient_id,amount,unit_id FROM ingredient_list;" );
+command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
 }
 
 QSQLiteResult ingredientsToLoad=database->executeQuery( command);
@@ -88,15 +89,20 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.amount=row.data(2).toDouble();
 		    ing.unitID=row.data(3).toInt();
 		    ing.units=unescapeAndDecode(row.data(4));
+		    list->recipeIdList.append(row.data(5).toInt());
 		    }
 		    else
 		    {
 		    ing.ingredientID=row.data(0).toInt();
 		    ing.amount=row.data(1).toDouble();
 		    ing.unitID=row.data(2).toInt();
+		    list->recipeIdList.append(row.data(3).toInt());
 		    }
+		    RecipeIngredientList lista;
+		    list->ilist.add(ing);
 
-		    list->add(ing);
+
+
 		    row=ingredientsToLoad.next();
 
                 }
@@ -225,13 +231,17 @@ recipeToLoad=database->executeQuery(command);
 
 }
 
-void LiteRecipeDB::loadRecipes(RecipeList *rlist,bool getInstructions,bool getPhoto)
+/*
+Loads a recipe detail list (no instructions, no photo, no ingredients)
+*/
+
+void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist)
 {
-// FIXME: still unfinished. (doesn't follow all parameters)
+
 rlist->clear();
 
 QString command;
-// Read all the recipe details (id,title,persons, instructions)
+
 command=QString("SELECT id,title,persons FROM recipes");
 
 QSQLiteResult recipesToLoad = database->executeQuery(command);
