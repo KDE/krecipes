@@ -12,14 +12,25 @@
 ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
 
-// Initialize UI Elements
-shoppingListView=new KHTMLPart(this);
+ // Store pointer to database
+ database=db;
 
-// Store/Initialize local variables
-database=db; // Store the database pointer.
+ // Design dialog
+
+ layout = new QGridLayout( this, 1, 1, 0, 0);
+ QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+ layout->addMultiCell( spacer_left, 1,4,0,0 );
+ QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+ layout->addMultiCell(spacer_top,0,0,1,4);
 
 
-//----------Load  the list --------
+ htmlBox=new QVBox (this);
+ shoppingListView=new KHTMLPart(htmlBox);
+ layout->addMultiCellWidget(htmlBox,1,4,1,4);
+
+
+
+//---------- Calculate & Load  the list --------
 
 showShoppingList();
 
