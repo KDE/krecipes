@@ -12,7 +12,7 @@ AC_DEFUN(AC_HAVE_MYSQL,
 
 AC_DEFUN(AC_NO_MYSQL,
 [
-        AC_DEFINE(HAVE_MYSQK, 0, [have MySQL])
+        AC_DEFINE(HAVE_MYSQL, 0, [have MySQL])
         have_mysql=false
 ])
 
@@ -45,6 +45,3 @@ dnl ----------- Should I link or should I not link? ---------
 AM_CONDITIONAL(link_lib_MYSQL, test x$have_mysql = xtrue)
 AM_CONDITIONAL(link_lib_SQLITE, test x$have_sqlite = xtrue)
 
-dnl -- For the moment leave this here. Enable the MySQL code in
-krecipesview  --
-AC_DEFINE(USE_MYSQL_DATABASE, 1, [Use the MySQL database])
