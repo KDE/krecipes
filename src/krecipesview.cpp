@@ -19,20 +19,21 @@
 #include <iostream>
 #include <unistd.h>
 
-#include <qpainter.h>
 #include <qlayout.h>
+#include <qpainter.h>
+#include <qpalette.h>
 #include <qsplitter.h>
 
-#include <kdebug.h>
-#include <kurl.h>
 #include <kapp.h>
-#include <qpalette.h>
-#include <ktrader.h>
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kglobalsettings.h>
 #include <klibloader.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <krun.h>
-#include <klocale.h>
-#include <kconfig.h>
+#include <ktrader.h>
+#include <kurl.h>
 
 #include "setupwizard.h"
 #include "dialogs/recipeinputdialog.h"
@@ -127,7 +128,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     splitter->setFrameShape( QSplitter::NoFrame );
     splitter->setFrameShadow( QSplitter::Plain );
     splitter->setOrientation( QSplitter::Horizontal );
-    splitter->setOpaqueResize();
+    splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
 
 
 // Create Left and Right Panels (splitter)
