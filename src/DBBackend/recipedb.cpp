@@ -872,7 +872,7 @@ return(s_escaped.utf8());
 QString RecipeDB::unescapeAndDecode(const QString &s)
 {
 QString s_escaped=QString::fromUtf8(s.latin1());
-s_escaped.replace(";@",";");
+s_escaped.replace("\";@",";");
 return (s_escaped); // Use unicode encoding
 }
 
@@ -902,11 +902,8 @@ QString RecipeDB::unitName(int unitID)
 {
 QString command=QString("SELECT * FROM units WHERE id=%1;").arg(unitID);
 QSqlQuery unitToLoad( command,database);
-if (unitToLoad.isActive())
-{
-if(unitToLoad.next()) // Go to the first record (there should be only one anyway.
- return(unitToLoad.value(1).toString());
-}
+if (unitToLoad.isActive() && unitToLoad.next()) // Go to the first record (there should be only one anyway.
+	return(unitToLoad.value(1).toString());
 
 return(QString::null);
 }
@@ -1026,12 +1023,9 @@ float RecipeDB::databaseVersion(void)
 QString command="SELECT ver FROM db_info";
 QSqlQuery dbVersion(command,database);
 
-if ( dbVersion.isActive() ) {
-	if (dbVersion.next())
-		return(dbVersion.value(0).toDouble());// There should be only one (or none for old DB) element, so go to first
-	else return (0.2); // if table is empty, assume oldest (0.2), and port
-}
-else return(0.2); // 0.2 didn't have this table yet
+if ( dbVersion.isActive() && dbVersion.next() )
+	return(dbVersion.value(0).toDouble());// There should be only one (or none for old DB) element, so go to first
+else return (0.2); // if table is empty, assume oldest (0.2), and port
 }
 
 void RecipeDB::loadCategories(ElementList *list)
@@ -1179,11 +1173,9 @@ int RecipeDB::findExistingElementByName( const QString& name, const QString &ele
 	QSqlQuery elementToLoad(command,database); // Run the query
 	int id = -1;
 
-	if (elementToLoad.isActive())
-		{
-		if( elementToLoad.first())
-			id=elementToLoad.value(0).toInt();
-		}
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
 	return id;
 }
 
@@ -1211,13 +1203,11 @@ int RecipeDB::findExistingRecipeByName( const QString& name )
 {
 	QString command=QString("SELECT id FROM recipes WHERE title='%1';").arg(escapeAndEncode(name));
 	QSqlQuery elementToLoad(command,database); // Run the query
-	int id = -1;
 
-	if (elementToLoad.isActive())
-		{
-		if (elementToLoad.first())
-			id=elementToLoad.value(0).toInt();
-		}
+	int id = -1;
+	if (elementToLoad.isActive() && elementToLoad.first())
+		id=elementToLoad.value(0).toInt();
+
 	return id;
 }
 
@@ -1244,20 +1234,16 @@ QString RecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 	QString command = QString( "SELECT COUNT(DISTINCT title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg(escapeAndEncode(recipe_title));
 
 	QSqlQuery alikeRecipes( command, database );
-	if (alikeRecipes.isActive())
+	if (alikeRecipes.isActive() && alikeRecipes.first());
 	{
-	int count=0;
-	if (alikeRecipes.first());
-		{
-		count = alikeRecipes.value(0).toInt();
+		int count = alikeRecipes.value(0).toInt();
 		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
 
 		//make sure this newly created title is unique (just in case)
 		while ( findExistingRecipeByName( return_title ) != -1 )
 		{
-		count++;
-		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
-		}
+			count--; //go down to find the skipped recipe(s)
+			return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
 		}
 	}
 
@@ -1268,11 +1254,9 @@ QString RecipeDB::recipeTitle(int recipeID)
 {
 QString command=QString("SELECT * FROM recipes WHERE id=%1;").arg(recipeID);
 QSqlQuery recipeToLoad( command,database);
-if (recipeToLoad.isActive())
-{
-if(recipeToLoad.next()) // Go to the first record (there should be only one anyway.
- return(recipeToLoad.value(1).toString());
-}
+if (recipeToLoad.isActive() && recipeToLoad.next()) // Go to the first record (there should be only one anyway.
+	return(recipeToLoad.value(1).toString());
+
 return(QString::null);
 }
 
@@ -1281,9 +1265,8 @@ int RecipeDB::lastInsertID()
 	QSqlQuery lastInsertID("SELECT LAST_INSERT_ID();", database);
 
 	int id = -1;
-	if (lastInsertID.isActive())
-		if (lastInsertID.next())
-			id = lastInsertID.value(0).toInt();
+	if (lastInsertID.isActive() && lastInsertID.next())
+		id = lastInsertID.value(0).toInt();
 
 	return id;
 }
@@ -1298,3 +1281,4 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	tablesToEmpty.exec(command);
 	}
 }
+
