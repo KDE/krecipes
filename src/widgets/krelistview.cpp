@@ -18,7 +18,11 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 
 	filteredColumn=filterCol;
 	QWidget *header=this;
-	if (filter) header=new QHBox(this);	
+	if (filter||embeddedWidget) 
+	{
+		header=new QHBox(this);	
+		((QHBox*)header)->setSpacing(30);
+	}
 	
 	if (title!=QString::null)
 	{
@@ -32,7 +36,7 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 	}
 	
 	if (filter) {
-			filterBox=new QHBox(header); ((QHBox*)header)->setSpacing(30);
+			filterBox=new QHBox(header); 
 			filterBox->setFrameShape(QFrame::Box); filterBox->setMargin(2);
 			filterLabel=new QLabel(filterBox); filterLabel->setText(i18n("Search:"));
 			filterEdit=new KLineEdit(filterBox);
