@@ -25,19 +25,35 @@ DragArea::~DragArea()
 	delete selection;
 }
 
+void DragArea::setWidget( QWidget *w )
+{
+	selection->setWidget(w);
+}
+
 void DragArea::mousePressEvent( QMouseEvent *e )
 {
 	mouse_down = true;
 
 	m_current_box = childAt(e->pos());
 
-	if ( m_current_box )
+	e->ignore();
+	emit widgetClicked( e, (m_current_box) ? m_current_box : this ); //we'll say 'this' was clicked if no widget was clicked
+	if ( e->isAccepted() )
+		mouse_down = false;
+	e->accept();
+
+	if ( m_current_box && m_current_box->isEnabled() )
 	{
 		m_current_box->raise();
 
 		widgetGeom = QRect( m_current_box->pos(), m_current_box->size() ); //widget may be on the move, so store this
 		m_last_point = m_current_box->mapFromGlobal( e->globalPos() );
 		m_begin_point = m_last_point;
+	}
+	else
+	{
+		m_current_box = 0;
+		mouse_down = false;
 	}
 
 	selection->setWidget(m_current_box); //widget should be raise()'ed before calling this to display correctly

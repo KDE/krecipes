@@ -24,9 +24,16 @@ class WidgetSelection;
   */
 class DragArea : public QWidget
 {
+Q_OBJECT
+
 public:
 	DragArea( QWidget *parent = 0, const char *name = 0 );
 	~DragArea();
+
+	void setWidget( QWidget * );
+
+signals:
+	void widgetClicked( QMouseEvent *, QWidget* );
 
 protected:
 	virtual void mousePressEvent( QMouseEvent * );
