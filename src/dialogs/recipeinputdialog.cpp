@@ -174,7 +174,7 @@ database=db;
 
     recipeLayout->addWidget(servingsBox,6,4);
 
-
+    //------- END OF Recipe Tab ---------------
 
     // Functions Box
 
@@ -189,13 +189,12 @@ database=db;
     shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
     resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("resize", KIcon::Small)); //TODO: give me an icon :)
+
     QToolTip::add(saveButton, i18n("Save recipe"));
     QToolTip::add(showButton, i18n("Show recipe"));
     QToolTip::add(shopButton,i18n("Add to shopping list"));
     QToolTip::add(closeButton,i18n("Close"));
     QToolTip::add(resizeButton,i18n("Resize Recipe"));
-
-    //------- END OF Recipe Tab ---------------
 
     //------- Ingredients Tab -----------------
 
@@ -281,6 +280,11 @@ database=db;
     pm=il->loadIcon("remove", KIcon::NoGroup,16); removeButton->setPixmap(pm);
     removeButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     ingredientsLayout->addWidget(removeButton,7,5);
+
+    QToolTip::add(addButton, i18n("Add ingredient"));
+    QToolTip::add(upButton, i18n("Move ingredient up"));
+    QToolTip::add(downButton, i18n("Move ingredient down"));
+    QToolTip::add(removeButton, i18n("Remove ingredient"));
 
     // Ingredient List
     ingredientList = new KListView(ingredientGBox, "ingredientList" );
