@@ -110,8 +110,25 @@ recipeHTML+=QString("<p>%1</p></div>").arg(loadedRecipe->instructions);
 
 // Photo Block
 
-recipeHTML+="<div STYLE=\"position: absolute; top: 50px; left:1%; width: 220px; height: 165px; border: solid #000000 1px \">";
-recipeHTML+=QString("<img src=\"/tmp/krecipes_photo.png\" width=220px height=165px> </div>");
+  // Store Photo
+  if (!loadedRecipe->photo.isNull()){
+      if( loadedRecipe->photo.width() > 220 || loadedRecipe->photo.height() > 165 ){
+        QImage pm = loadedRecipe->photo.convertToImage();
+        (QPixmap(pm.smoothScale(220, 165, QImage::ScaleMin))).save("/tmp/krecipes_photo.png","PNG");
+      }
+      else{
+        loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
+      }
+  }
+  else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
+  }
+recipeHTML+="<div STYLE=\"position: absolute; top: 50px; left:1%; width: 220px; height: 165px; border: solid #000000 1px;\" ALIGN=\"center\">";
+recipeHTML+=QString("<img src=\"/tmp/krecipes_photo.png\" ");
+if((QPixmap("/tmp/krecipes_photo.png")).height() < 165){
+  int m = (165 - (QPixmap("/tmp/krecipes_photo.png")).height())/2;
+  recipeHTML+=QString("STYLE=\"margin-top:"+QString::number(m)+"px;\"");
+}
+recipeHTML+=QString("> </div>");
 
 // Header
 
@@ -121,10 +138,6 @@ recipeHTML+=QString("<p align=right >Recipe: #%1</p></div>").arg(loadedRecipe->r
 // Close HTML
 recipeHTML+="</body></html>";
 
-// Store Photo
-if (!loadedRecipe->photo.isNull()) loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
-else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
-}
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
 
