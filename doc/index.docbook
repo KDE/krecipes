@@ -56,8 +56,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-02-03</date>
-<releaseinfo>0.7 CVS</releaseinfo>
+<date>2005-02-13</date>
+<releaseinfo>0.7</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -329,7 +329,7 @@ For "Categories", "Ingredients", and "Authors", the search can be narrowed furth
 
 <note><para>The change in the graphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
 
-<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guibutton>x</guibutton> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
+<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guibutton>⌫</guibutton> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
 <listitem><para>To display NO photo in the recipe, refer to the section <link linkend="displayed-items">Selecting Items to Display</link> for further instructions.</para></listitem>
 </itemizedlist>
 </tip>
@@ -765,7 +765,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </para>
 
 
-<para>If the MySQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label </para>
+<para>If the MySQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label &minus;</para>
 
 <itemizedlist><listitem><para><guilabel>Server:</guilabel></para></listitem>
 <listitem><para><guilabel>Username:</guilabel></para></listitem>
