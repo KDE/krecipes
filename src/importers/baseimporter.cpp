@@ -136,13 +136,23 @@ BaseImporter::~BaseImporter()
 	delete m_cat_structure;
 }
 
-void BaseImporter::add
-	( const RecipeList &recipe_list )
+void BaseImporter::add( const RecipeList &recipe_list )
 {
 	file_recipe_count += recipe_list.count();
 
-	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
-		m_recipe_list->append( *it );
+	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it ) {
+		Recipe copy = *it;
+		copy.recipeID = -1; //make sure an importer didn't give this a value
+		m_recipe_list->append( copy );
+	}
+}
+
+void BaseImporter::add( const Recipe &recipe )
+{
+	file_recipe_count++;
+	Recipe copy = recipe;
+	copy.recipeID = -1; //make sure an importer didn't give this a value
+	m_recipe_list->append( copy );
 }
 
 void BaseImporter::parseFiles( const QStringList &filenames )
@@ -245,8 +255,6 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		progress_dialog->setLabel( QString( i18n( "Importing recipe: %1" ) ).arg( ( *recipe_it ).title ) );
 		progress->advance( 1 );
 		kapp->processEvents();
-
-		( *recipe_it ).recipeID = -1; //make sure an importer didn't give this a value
 
 		ElementList ingGroupList;
 

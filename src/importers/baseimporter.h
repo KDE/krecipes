@@ -63,14 +63,8 @@ protected:
 	virtual void parseFile( const QString &filename ) = 0;
 
 	/** Add a recipe to be imported into the database */
-	void add
-		( const Recipe &recipe )
-	{
-		file_recipe_count++;
-		m_recipe_list->append( recipe );
-	}
-	void add
-		( const RecipeList &recipe_list );
+	void add( const Recipe &recipe );
+	void add( const RecipeList &recipe_list );
 
 	void setCategoryStructure( CategoryTree *cat_structure );
 	void setUnitRatioInfo( UnitRatioList &ratioList, UnitList &unitList );
