@@ -85,7 +85,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     while ((dbtype!="SQLite") && (dbtype!="MySQL"))
 	{
-	questionRerunWizard("The configured database type is unsupported.","Unsupported database type. Database must be either MySQL or SQLite.");
+	questionRerunWizard(i18n("The configured database type is unsupported."),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
 		
 	// Read the database setup again
 	
@@ -128,7 +128,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     
     // No DB type has been enabled (should not happen at all, but just in case)
     
-    kdError()<<"Code error. No DB support was built. Exiting"<<endl;
+    kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
     exit(1);
     }
 
@@ -310,7 +310,7 @@ int answer=KMessageBox::questionYesNo(this,yesNoMessage);
 	if (answer==KMessageBox::Yes) wizard(true);
 	else
 		{
-		kdError()<<error<<"."<<" Exiting"<<endl;
+		kdError()<<error<<". "<<i18n("Exiting")<<endl;
 		exit(1);
 		}
 }
@@ -612,7 +612,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 {
 	if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly. This should not happen anyway
 	{
-	kdError()<<"Code error. Unrecognized database type. Exiting\n";
+	kdError()<<i18n("Code error. Unrecognized database type. Exiting\n");
 	exit(1);
 	}
 
@@ -639,7 +639,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	#endif //HAVE_SQLITE
 	else
 	{
-		kdError()<<"Code error. No DB support has been included. Exiting\n";
+		kdError()<<i18n("Code error. No DB support has been included. Exiting\n");
 		exit(1);
 	}
 
