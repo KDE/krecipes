@@ -1458,7 +1458,6 @@ void RecipeInputDialog::findCategoriesInRecipe( const ElementList &categoryList,
 		else
 			value = false;
 		selected.insert( *cat_it, value );
-		kdDebug() << "category: " << ( *cat_it ).name << " (id :" << ( *cat_it ).id << ") is: " << value << endl;
 	}
 }
 

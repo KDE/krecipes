@@ -11,10 +11,15 @@
 ***************************************************************************/
 
 #include "selectauthorsdialog.h"
-#include <klocale.h>
-#include <qhbox.h>
-#include <kmessagebox.h>
+
 #include <qmessagebox.h>
+#include <qhbox.h>
+
+#include <kconfig.h>
+#include <kdialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
 
@@ -26,54 +31,50 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	//Design UI
 
-	layout = new QGridLayout( this, 1, 1, 0, 0 );
-	// Border Spacers
-	//QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	//layout->addItem( spacer_left, 1,0 );
-	//QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	//layout->addItem(spacer_top,0,1);
-
+	layout = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
 	// Combo to Pick authors
 
 	authorsCombo = new KComboBox( true, this );
-	layout->addWidget( authorsCombo, 1, 1 );
+	layout->addWidget( authorsCombo, 0, 0 );
 	authorsCombo->completionObject() ->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
 	authorsCombo->lineEdit() ->disconnect( authorsCombo ); //so hitting enter doesn't enter the item into the box
+	
 	// Add/Remove buttons
-	QSpacerItem* spacerFromCombo = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerFromCombo, 2, 1 );
 
 	il = new KIconLoader;
 	addAuthorButton = new QPushButton( this );
-	QPixmap pm = il->loadIcon( "forward", KIcon::NoGroup, 16 );
+	QPixmap pm = il->loadIcon( "down", KIcon::NoGroup, 16 );
 	addAuthorButton->setIconSet( pm );
-	layout->addWidget( addAuthorButton, 3, 1 );
+	layout->addWidget( addAuthorButton, 0, 1 );
 	removeAuthorButton = new QPushButton( this );
-	pm = il->loadIcon( "back", KIcon::NoGroup, 16 );
+	pm = il->loadIcon( "up", KIcon::NoGroup, 16 );
 	removeAuthorButton->setIconSet( pm );
-	layout->addWidget( removeAuthorButton, 4, 1 );
+	layout->addWidget( removeAuthorButton, 0, 2 );
 
 
 	// Author List
-	QSpacerItem* spacerFromAddRemoveButtons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacerFromAddRemoveButtons, 1, 2 );
 
 	authorListView = new KListView( this );
-	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-	authorListView->addColumn( i18n( "Id" ) );
+	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+
+	KConfig * config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry( "ShowID", false );
+	authorListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	authorListView->addColumn( i18n( "Author" ) );
 	authorListView->setAllColumnsShowFocus( true );
-	layout->addMultiCellWidget( authorListView, 1, 5, 3, 4 );
-	layout->setColStretch( 3, 1 ); //give the column with the list view added space when the dialog grows
+	layout->addMultiCellWidget( authorListView, 1, 5, 0, 2 );
+	layout->setColStretch( 1, 1 ); //give the column with the list view added space when the dialog grows
 
 
 	//Ok/Cancel buttons
 	QSpacerItem* buttonSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( buttonSpacer, 6, 1 );
+	layout->addItem( buttonSpacer, 6, 0 );
 
 	QHBox *okCancelButtonBox = new QHBox( this );
 	okCancelButtonBox->setSpacing( 10 );
-	layout->addMultiCellWidget( okCancelButtonBox, 7, 7, 1, 4 );
+	layout->addMultiCellWidget( okCancelButtonBox, 7, 7, 0, 2 );
 	layout->setRowStretch( 5, 1 ); //this will expand only the list view when the dialog grows vertically
 
 	okButton = new QPushButton( okCancelButtonBox );
@@ -82,7 +83,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 
 	QSpacerItem* spacerBetweenButtons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacerBetweenButtons, 5, 2 );
+	layout->addItem( spacerBetweenButtons, 5, 1 );
 
 	cancelButton = new QPushButton( okCancelButtonBox );
 	cancelButton->setText( i18n( "&Cancel" ) );
@@ -90,6 +91,9 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	// Load the list
 	loadAuthors( currentAuthors );
+
+	adjustSize();
+	resize(450, height());
 
 	// Connect signals & Slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
