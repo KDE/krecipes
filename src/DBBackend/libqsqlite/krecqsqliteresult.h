@@ -1,5 +1,16 @@
+ /***************************************************************************
+ *   Copyright (C) 2003 by qsqlite.sourceforge.net authors                 *
+ *                                                                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
+
 #ifndef QSQLITERESULT_H
-#define QSQLITERESULT_H 
+#define QSQLITERESULT_H
 
 #include <qdatetime.h>
 #include <qmap.h>
@@ -88,7 +99,7 @@ public:
 	 * default c'tor
 	 * @param status The Status of the Result
 	 * @param r ResultItems
-	 * @param error Error Message 
+	 * @param error Error Message
 	 */
 	QSQLiteResult( enum Status status = Undefined,
 	               const Columns &r = Columns(),
