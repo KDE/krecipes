@@ -69,7 +69,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     button6=new QPushButton(leftPanel); button6->setFlat(true); button6->setText("Edit Units");
 	button6->setGeometry(0,150,130,30);
     button7=new QPushButton(leftPanel); button7->setFlat(true); button7->setText("Shopping List");
-	button7->setGeometry(0,150,130,30);
+	button7->setGeometry(0,180,130,30);
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
