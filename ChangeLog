@@ -1,11 +1,16 @@
-2003-07-30  <>
-	-- Function to upgrade database structure version 
-	-- Light change in table column ordering 
+Important changs from 0.2 to 0.3:
 
-2003-07-27  <>
-	Fix enabling save button.
-
-2003-07-23  <>
-	Use UTF8 encoding (to fix for the use of some international symbols)
-
-2003-07-23: Workaround for image caching problem
+	
+* Recipes can be classified in categories
+* Number of servings per recipe
+* Authors support
+* New MySQL database autosetup to make setup easier
+* "In-place" creation of new ingredients and units
+* Renaming of units and ingredients
+* Resizing of photos
+* Improved shopping list presentation
+* New smaller and smarter layout for editing recipes
+* i18n: Language support: English, Spanish, French and Euskara
+* UTF support	
+* Thousands of other touches and bugfixes
+* New recipe samples	
