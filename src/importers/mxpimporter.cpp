@@ -272,6 +272,14 @@ void MXPImporter::importMXP( QTextStream &stream )
 
 			m_instructions += "\n\nSuggested wine: " + m_wine;
 		}
+		//Nutr. Assoc.
+		if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "nutr. assoc." )
+		{
+			QString nutr_assoc = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found nutrient association: %s (adding to end of instructions)", nutr_assoc.latin1());
+
+			m_instructions += "\n\nNutrient Association: " + nutr_assoc;
+		}
 		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving (excluding unknown items)" )
 		{ //per serving... maybe we can do something with this info later
 			QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
