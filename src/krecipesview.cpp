@@ -268,6 +268,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 KrecipesView::~KrecipesView()
 {
+delete buttonsList;
 }
 
 void KrecipesView::translate(){
@@ -592,11 +593,14 @@ if (!recipeButton)
 	recipeButton=new KreMenuButton(leftPanel,"recipeButton");
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 	recipeButton->setTitle(title);
-  if(contextHelp->isShown()){
-    contextHelp->hide();
-  }
+	if(contextHelp->isShown())
+		{
+		contextHelp->hide();
+		}
 
-  buttonsList->append(recipeButton);
+	buttonsList->append(recipeButton);
+	leftPanel->highlightButton(recipeButton);
+	
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
 	connect((RecipeInputDialog *)w,SIGNAL(titleChanged(const QString&)),recipeButton,SLOT(setTitle(const QString&)));
 }
@@ -615,9 +619,8 @@ void KrecipesView::closeRecipe(void)
 selectPanel->reload();
 rightPanel->setHeader(i18n("Find/Edit Recipe"),"filefind");
 rightPanel->raise(selectPanel);
-buttonsList->removeLast();
 setContextHelp(SelectP);
-recipeButton=0;
+buttonsList->removeLast(); recipeButton=0;
 }
 
 //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.

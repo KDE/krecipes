@@ -25,7 +25,7 @@
 * @author Bosselut Cyril
 */
 
-
+class Menu;
 class KreMenu;
 class KreMenuButton;
 
@@ -39,6 +39,8 @@ public:
 
 	QSize sizeHint() const;
 	void resizeEvent(QResizeEvent* e);
+	void highlightButton(KreMenuButton *button);
+	
 protected:
 
 	virtual void paintEvent (QPaintEvent *e);
@@ -50,12 +52,8 @@ protected:
 
 private:
 	//Variables
-	int childPos;
-	int widgetNumber;
-	QMap <KreMenuButton*,int> positionList; // Stores the indexes for the widgets
-	QMap <int,KreMenuButton*> widgetList; // Stores the widgets for each position (just the inverse mapping)
-	KreMenuButton* activeButton; // Indicates which button is highlighted
-
+	QValueList <Menu> menus;
+	Menu *currentMenu;
 	int xOrig, yOrig; //For dragging the menu
 	int xDest, yDest;
 	bool dragging;
@@ -89,7 +87,7 @@ signals:
 
 public slots:
 	void setTitle(const QString &s) {text=s; update();}
-	void rescale(int w, int h);
+	void rescale(void);
 
 private:
 	// Button parts
@@ -106,6 +104,31 @@ protected:
 	virtual void paintEvent(QPaintEvent *e );
 	virtual void mousePressEvent (QMouseEvent * e);
 
+};
+
+
+class Menu
+{
+public:
+	// Methods
+	
+	Menu(void);
+	Menu(const Menu &m);
+	~Menu(void);
+	void addButton(KreMenuButton *button);
+	Menu& Menu::operator=(const Menu &m);
+	
+	// Variables
+	
+	QMap <KreMenuButton*,int> positionList; // Stores the indexes for the widgets
+	QMap <int,KreMenuButton*> widgetList; // Stores the widgets for each position (just the inverse mapping)
+	KreMenuButton* activeButton; // Indicates which button is highlighted
+	int childPos;
+	int widgetNumber;
+private:
+	// Methods
+	void copyMap(QMap <int,KreMenuButton*> &destMap, const QMap <int,KreMenuButton*> &origMap);
+	void copyMap(QMap <KreMenuButton*,int> &destMap, const QMap <KreMenuButton*,int> &origMap);
 };
 
 #endif

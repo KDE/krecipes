@@ -29,9 +29,14 @@
 KreMenu::KreMenu(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-childPos=10; // Initial button is on top (10px), then keep scrolling down
-widgetNumber=0; // Initially we have no buttons
-activeButton=0; // Button that is highlighted
+std::cerr<<"Creating menu widget\n";
+Menu mainMenu; 
+mainMenu.childPos=10; // Initial button is on top (10px), then keep scrolling down
+mainMenu.widgetNumber=0; // Initially we have no buttons
+mainMenu.activeButton=0; // Button that is highlighted
+menus.append(mainMenu);
+
+currentMenu=&(*(menus.begin()));
 dragging=false;
 setMouseTracking(true);
 }
@@ -39,10 +44,27 @@ setMouseTracking(true);
 
 KreMenu::~KreMenu()
 {
+std::cerr<<"Destroying menu widget\n";
+}
+
+void KreMenu::highlightButton(KreMenuButton *button)
+{
+//Deactivate the old button
+if (currentMenu->activeButton) 
+	{
+	currentMenu->activeButton->setActive(false);
+	currentMenu->activeButton->update();
+	}
+
+//Activate the new button
+
+button->setActive(true); button->update();
+currentMenu->activeButton=button;
 }
 
 void KreMenu::mousePressEvent (QMouseEvent *e)
 {
+std::cerr<<"Mouse clicked on menu\n";
 int x=e->x(),y=e->y();
 if (x > (width()-15))
 	{
@@ -54,7 +76,6 @@ dragging=true;
 
 void KreMenu::mouseMoveEvent (QMouseEvent *e)
 {
-
 
 // Set the mouse cursor in any case
 int x=e->x();
@@ -115,6 +136,7 @@ if (dragging)
 
 void KreMenu::mouseReleaseEvent (QMouseEvent *)
 {
+std::cerr<<"Mouse released over menu\n";
 dragging=false;
 }
 
@@ -124,7 +146,7 @@ QSize KreMenu::sizeHint() const {
 
 void KreMenu::paintEvent(QPaintEvent *)
 {
-
+std::cerr<<"Painting menu\n";
     // Make sure the size is bigger than the minimum necessary
     if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
     
@@ -158,9 +180,9 @@ void KreMenu::paintEvent(QPaintEvent *)
     painter.drawRoundRect(0,0,width(),height(),(int)(2.0/width()*height()),2);
 
     //Draw the top line bordering with the first button
-    if (activeButton) // draw only if there's a button
+    if (currentMenu->activeButton) // draw only if there's a button
     {
-        int w=activeButton->width();
+        int w=currentMenu->activeButton->width();
 	painter.setPen(c1);
 	painter.drawLine(w/5,8,w-1,8);
 	painter.setPen(c2);
@@ -174,81 +196,78 @@ void KreMenu::paintEvent(QPaintEvent *)
 
 void KreMenu::childEvent (QChildEvent *e)
 {
-	if (e->type()==QEvent::ChildInserted)
-	{
-	QObject *child=e->child();
-	if (child->inherits("KreMenuButton"))
+std::cerr<<"A child event in the menu widget\n";
+	if (e->type()==QChildEvent::ChildInserted)
 		{
-		KreMenuButton* button=(KreMenuButton*)(e->child());
-		if (!activeButton)  // Highlight the button if it's the firsts
+		
+		QObject *child=e->child();
+		if (child->inherits("KreMenuButton"))
 			{
-			button->setActive(true);
-			activeButton=button;
+			std::cerr<<"New child in menu\n";
+			KreMenuButton* button=(KreMenuButton*)(e->child());
+			if (!currentMenu->activeButton)  // Highlight the button if it's the first
+				{
+				button->setActive(true);
+				currentMenu->activeButton=button;
+				}
+				
+			currentMenu->addButton(button); 
+			connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+			if (!button->isShown()) button->show();
 			}
-
-		button->move(0,childPos);
-		button->rescale(width(),height());
-		childPos+=button->height();
-		positionList[button]=widgetNumber; // Store index for this widget, and increment number
-		widgetList[widgetNumber]=button; // Store the button in the list (the inverse mapping of the previous one)
-		 widgetNumber++;
-		 
-		connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
- 		if (!button->isShown()) button->show();
 		}
-	}
-	else if (e->type()==QEvent::ChildRemoved)
-	{
-	QObject *child=e->child();
-	KreMenuButton *button=(KreMenuButton*) child;
-	if (positionList.find(button)!=positionList.end()) // Ensure that what was removed was a button
+	else if (e->type()==QChildEvent::ChildRemoved)
 		{
-		// Remove the button from the list first
-		int pos=positionList[button];
-		widgetList.remove(pos);
-		positionList.remove(button);
-
-		// Now recalculate the position of the next button
-		widgetNumber--;
-		std::cerr<<"Will be inserted after widget id.:"<<widgetNumber-1<<"\n";
-		KreMenuButton *lastButton=widgetList[widgetNumber-1];
-		if (lastButton) childPos=lastButton->y()+lastButton->height();
+		QObject *child=e->child();
+		
+		std::cerr<<"A child button was destroyed. Lets remove?\n";
+		KreMenuButton *button=(KreMenuButton*) child;
+		if (currentMenu->positionList.find(button)!=currentMenu->positionList.end()) // Ensure that what was removed was a button
+			{
+			std::cerr<<"Removing child from menu\n";
+			// Remove the button from the list first
+			int pos=currentMenu->positionList[button];
+			currentMenu->widgetList.remove(pos);
+			currentMenu->positionList.remove(button);
+	
+			// Now recalculate the position of the next button
+			(currentMenu->widgetNumber)--;
+			std::cerr<<"Will be inserted after widget id.:"<<(currentMenu->widgetNumber)-1<<"\n";
+			KreMenuButton *lastButton=currentMenu->widgetList[(currentMenu->widgetNumber)-1];
+			if (lastButton) currentMenu->childPos=lastButton->y()+lastButton->height();
+			currentMenu->activeButton=0;
+			}
+		
 		}
-	}
-
+QWidget::childEvent(e);
 }
 
 void KreMenu::collectClicks(KreMenuButton *w)
 {
+std::cerr<<"Menu clicked\n";
 
-//Deactivate the old button
-activeButton->setActive(false);
-activeButton->update();
-
-//Activate the new button
-
-int widgetn=positionList[w];
-w->setActive(true); w->update();
-activeButton=w;
+highlightButton(w);
 
 // Emit signal indicating button activation with button ID
-
+int widgetn=currentMenu->positionList[w];
 emit clicked(widgetn);
 }
 
 void KreMenu::resizeEvent(QResizeEvent* e)
 {
+std::cerr<<"Menu was resized\n";
     emit resized((e->size()).width(), (e->size()).height());
 }
 
 
 KreMenuButton::KreMenuButton(QWidget *parent, const char *name):QWidget(parent, name)
 {
+std::cerr<<"Created new button\n";
 icon=0;
 highlighted=false;
 text=QString::null;
 resize(parent->size().width(),40);
-connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale(int,int)));
+connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale()));
 connect(this,SIGNAL(clicked()),this,SLOT(forwardClicks()));
 setCursor(QCursor(KCursor::handCursor()));
 }
@@ -256,18 +275,19 @@ setCursor(QCursor(KCursor::handCursor()));
 
 KreMenuButton::~KreMenuButton()
 {
+std::cerr<<"Destroyed a button\n";
 }
 
 void KreMenuButton::mousePressEvent (QMouseEvent *)
 {
+std::cerr<<"Clicked on a button\n";
 emit clicked();
 }
 
-void KreMenuButton::rescale(int w, int)
+void KreMenuButton::rescale()
 {
-	resize(w-10,height()); // Leave space for the handle
+	resize(parentWidget()->width()-10,height());
 }
-
 QSize KreMenuButton::sizeHint() const
 {
 	if (parentWidget()) return(QSize(parentWidget()->size().width()-10,40));
@@ -434,4 +454,70 @@ void KreMenuButton::paintEvent(QPaintEvent *)
 void KreMenuButton::setIconSet(const QIconSet &is)
 {
 	icon = new QPixmap(is.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
+}
+
+Menu::Menu(void)
+{
+}
+
+
+Menu::Menu(const Menu &m)
+{
+std::cerr<<"New menu list\n";
+activeButton=m.activeButton;
+childPos=m.childPos;
+widgetNumber=m.widgetNumber;
+
+copyMap(positionList,m.positionList);
+copyMap(widgetList,m.widgetList);
+}
+
+Menu::~Menu(void)
+{
+std::cerr<<"Destroyed menu list\n";
+}
+
+Menu& Menu::operator=(const Menu &m)
+{
+
+activeButton=m.activeButton;
+childPos=m.childPos;
+widgetNumber=m.widgetNumber;
+
+copyMap(positionList,m.positionList);
+copyMap(widgetList,m.widgetList);
+
+return *this;
+}
+
+
+void Menu::addButton(KreMenuButton* button)
+{
+std::cerr<<"Adding button to menu list\n";
+	button->move(0,childPos);
+	button->rescale();
+	childPos+=button->height();
+	positionList[button]=widgetNumber; // Store index for this widget, and increment number
+	widgetList[widgetNumber]=button; // Store the button in the list (the inverse mapping of the previous one)
+	widgetNumber++;
+}
+
+void Menu::copyMap(QMap <int,KreMenuButton*> &destMap, const QMap <int,KreMenuButton*> &origMap)
+{
+	QMap<int,KreMenuButton*>::ConstIterator it;
+	destMap.clear();
+	for ( it = origMap.begin(); it != origMap.end(); ++it ) 
+	{
+	destMap[it.key()]=it.data();
+	}
+}
+
+void Menu::copyMap(QMap <KreMenuButton*,int> &destMap, const QMap <KreMenuButton*,int> &origMap)
+{
+	QMap<KreMenuButton*,int>::ConstIterator it;
+	destMap.clear();
+	for ( it = origMap.begin(); it != origMap.end(); ++it ) 
+	{
+	destMap[it.key()]=it.data();
+	}
 }
