@@ -13,7 +13,7 @@
 #include "mysqlrecipedb.h"
 
 #include <kstandarddirs.h>
-
+#include <kdebug.h>
 
 MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
@@ -32,6 +32,7 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 	     if (!database->open())
 		{
 		std::cerr<<QString("Could not open DB as user: %1. You may not have permissions. Exiting.\n").arg(user).latin1();
+		kdDebug()<<"MySQL database message: "<<database->lastError().databaseText()<<endl;
 		exit(1);
 		}
 
