@@ -127,13 +127,12 @@ void MMFExporter::writeMMFIngredients( QString &content, Recipe *recipe )
 		QString ing_name = ing->name; ing_name.truncate(28);
 		content += ing_name+"\n";
 		for ( unsigned int i = 0; i < (ing->name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
-			content += "           -"+ing->name.mid(28*(i+1)+1,28)+"\n";
+			content += "           -"+ing->name.mid(28*(i+1),28)+"\n";
 	}
 }
 
 void MMFExporter::writeMMFDirections( QString &content, Recipe *recipe )
 {
-	//FIXME: I don't seem to be preserving new-lines
 	content += wrapText(recipe->instructions,80).join("\n")+"\n";
 }
 
