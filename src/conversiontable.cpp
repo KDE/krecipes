@@ -95,7 +95,9 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	// the user changed the value of the combobox, so synchronize the
 	// value of the item (its text), with the value of the combobox
     if ( w->inherits( "EditBox" ) )
-	setText(QString::number(eb->value()));
+	{
+	if (eb->accepted) setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
+	}
     else
 	QTableItem::setContentFromEditor( w );
 }

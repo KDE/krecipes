@@ -21,11 +21,13 @@ okButton=new QPushButton("ok",this);
 okButton->setFixedWidth(okButton->fontMetrics().width("ok"));
 okButton->setFlat(true);
 layout->addWidget(okButton);
+accepted=false;
 connect(this->okButton,SIGNAL(clicked()),this,SLOT(acceptValue()));
 }
 
 void EditBox::acceptValue(void)
 {
+accepted=true;
 emit valueChanged(editBox->value());
 }
 

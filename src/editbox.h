@@ -27,6 +27,9 @@ public:
     //Methods
     double value(void);
     void setValue(double newValue);
+
+    // Variables
+    bool accepted; // Indicates if the current value has been accepted (ok) or not
 private:
     // Widgets
     KDoubleNumInput *editBox;
