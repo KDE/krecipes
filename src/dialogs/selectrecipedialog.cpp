@@ -306,7 +306,7 @@ for (Element *category=categoryList.getFirst();category;category=categoryList.ge
  */
 void SelectRecipeDialog::exportRecipe()
 {
-  //if((recipeListView->selectedItem())->text(1).toInt() != NULL){
+  if(recipeListView->selectedItem()){
     KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
     fd->setCaption( i18n("Save recipe") );
     fd->setOperationMode( KFileDialog::Saving );
@@ -324,12 +324,12 @@ void SelectRecipeDialog::exportRecipe()
       }
     }
     delete fd;
-  //}
+  }
 }
 
 void SelectRecipeDialog::exportRecipeFromCat()
 {
-  //if((recipeListView->selectedItem())->text(1).toInt() != NULL){
+  if(recipeListView->selectedItem()){
     KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
     fd->setCaption( i18n("Save recipes") );
     fd->setOperationMode( KFileDialog::Saving );
@@ -349,7 +349,7 @@ void SelectRecipeDialog::exportRecipeFromCat()
       }
     }
     delete fd;
-  //}
+  }
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
