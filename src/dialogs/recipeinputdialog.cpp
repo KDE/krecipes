@@ -165,13 +165,16 @@ database=db;
 
 
     // Functions Box
+
+    il=new KIconLoader;
+
     functionsBox=new QGroupBox(recipeTab);
     functionsBox->setColumns(3);
     recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
-    saveButton=new QPushButton(functionsBox);
-    showButton=new QPushButton(functionsBox);
-    shopButton=new QPushButton(functionsBox);
-    closeButton=new QPushButton(functionsBox);
+    saveButton=new QPushButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small));
+    showButton=new QPushButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
+    shopButton=new QPushButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
+    closeButton=new QPushButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
     //------- Ingredients Tab -----------------
 
     ingredientGBox =new QGroupBox(this);
@@ -218,7 +221,6 @@ database=db;
     ingredientsLayout->addItem( spacerToButtons, 3,4);
 
     // Add, Up,down,... buttons
-    il=new KIconLoader;
 
     addButton = new KPushButton(ingredientGBox);
     addButton->setFixedSize( QSize(31, 31 ) );
