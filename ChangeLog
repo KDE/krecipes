@@ -4,6 +4,7 @@ Changes from 0.7b to 0.7.1:
   -Minor Handbook updates
   -Fix a Meal-Master import bug where in certain instances, ingredient lines were interpreted as instructions
   -Fix database structure for PostgreSQL
+  -Fix encoding of units for MySQL and PostgreSQL
   -Turning off nutrient properties in the Page Setup will speed things up, especially for SQLite
 
 Changes from 0.7 to 0.7b:
