@@ -42,7 +42,7 @@ MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 		}
 	}
 	else
-		setErrorMsg("Unable to open file");
+		setErrorMsg(i18n("Unable to open file."));
 }
 
 MXPImporter::~MXPImporter()
@@ -71,6 +71,11 @@ void MXPImporter::importMXP( QTextStream &stream )
 		m_authors.add( new_author );
 		qDebug("Found author: %s", new_author.name.latin1());
 	}
+	else
+	{
+		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		  "the field \"Recipe By:\" is either missing or could not be detected.")).arg(m_title));
+	}
 
 	//servings
 	stream.skipWhiteSpace();
@@ -87,12 +92,22 @@ void MXPImporter::importMXP( QTextStream &stream )
 		m_servings = current.mid( current.find(":")+1, end_index ).stripWhiteSpace().toInt();
 		qDebug("Found serving size: %d",m_servings);
 	}
+	else
+	{
+		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		  "the field \"Serving Size:\" is either missing or could not be detected.")).arg(m_title));
+	}
 
 	if ( current.contains("preparation time",FALSE) )
 	{
 		m_prep_time = current.mid( current.find(":",current.find("preparation time",0,FALSE)) + 1,
 		  current.length() ).stripWhiteSpace();
 		qDebug("Found preparation time: %s",m_prep_time.latin1());
+	}
+	else
+	{
+		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		  "the field \"Preparation Time:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
 	//categories
@@ -122,6 +137,12 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else
 			qDebug("No categories found.");
 	}
+	else
+	{
+		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		  "the field \"Categories:\" is either missing or could not be detected.")).arg(m_title));
+	}
+
 
 	//ingredients
 	stream.skipWhiteSpace();
@@ -143,7 +164,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 				MixedNumber amount(MixedNumber::fromString(amount_str,&ok));
 				if ( !ok )
 				{
-					addWarningMsg( QString(i18n("Invalid amount \"%1\" in the line \"%2\"")).arg(amount_str).arg(current.stripWhiteSpace()) );
+					addWarningMsg( QString(i18n("While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"")).arg(m_title).arg(amount_str).arg(current.stripWhiteSpace()) );
 					current = stream.readLine();
 					continue;
 				}
@@ -170,7 +191,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 			QString prep_method;
 			if ( dash_index != -1 )
 			{
-				QString prep_method = current.mid( dash_index + 2, current.length() );
+				QString prep_method = current.mid( dash_index + 1, current.length() );
 				if ( prep_method != "" )
 					new_ingredient.name += " -- " + prep_method;
 			}
