@@ -17,6 +17,7 @@
 
 #include "../recipe.h"
 #include "../widgets/dragarea.h"
+#include <math.h>
 
 class KPopupMenu;
 
@@ -26,8 +27,10 @@ class QWidget;
 
 class DragArea;
 
+// ### use qRound? (DF)
 #define ROUND(a) (int((floor(a) - a < ceil(a) - a) ? floor(a) : ceil(a)))
 
+// ### maybe we should move koffice's KoRect/KoPoint/KoSize to kdelibs...
 class PreciseRect
 {
 public:
