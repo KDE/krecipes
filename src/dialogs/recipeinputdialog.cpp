@@ -188,7 +188,7 @@ database=db;
     showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
     shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
-    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("resize", KIcon::Small)); //TODO: give me an icon :)
+    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("2uparrow", KIcon::Small)); //TODO: give me an icon :)
 
     QToolTip::add(saveButton, i18n("Save recipe"));
     QToolTip::add(showButton, i18n("Show recipe"));
