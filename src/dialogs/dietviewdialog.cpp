@@ -75,8 +75,9 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 			for (int dish=0; dish<dishNumber;dish++) // Dishes in each Meal
 				{
 				htmlCode+=(*rit).title; htmlCode+="<br>";
+				rit++;
 				}
-			rit++; it++;
+			it++;
 			}
 		it=dishNumbers.begin(); // meals have same dish number everyday
 		htmlCode+=QString("</td>");
