@@ -22,7 +22,7 @@ public:
 PropertyPtrList(){};
 ~PropertyPtrList(){};
 protected:
- virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (*((int*)item1)-*((int*)item2));};
+ virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((IngredientProperty*)item1)->id-((IngredientProperty*)item2)->id);};
 
 };
 
