@@ -240,6 +240,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	clearWState( WState_Polished );
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	
+	// ### At present, this is the only way I can get this dialog's size down
+	//     Should I put each element in its own tab to avoid squeezing them
+	//     into this one page???
+	authorListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+	catListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+	ingListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+	
 	KIconLoader *il=new KIconLoader;
 	openButton->setIconSet(il->loadIcon("ok", KIcon::NoGroup,16));
 	backButton->setIconSet(il->loadIcon("back", KIcon::NoGroup,16));

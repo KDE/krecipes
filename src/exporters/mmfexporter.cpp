@@ -145,9 +145,12 @@ QStringList MMFExporter::wrapText( const QString& str, int at) const
 	{
 		QString line( copy.left( at));
 		if (line.length() >= copy.length()) stop = true;
-		QRegExp rxp( "(\\s\\S*)$", false); // last word in the new line
-		rxp.setMinimal( true);    // one word, only one word, please
-		line = line.replace( rxp, ""); // remove last word
+		else
+		{
+			QRegExp rxp( "(\\s\\S*)$", false); // last word in the new line
+			rxp.setMinimal( true);    // one word, only one word, please
+			line = line.replace( rxp, ""); // remove last word
+		}
 		copy = copy.remove( 0, line.length());
 		line = line.simplifyWhiteSpace();
 		line.prepend( " ");       // indent line by one char
