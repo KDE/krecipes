@@ -685,10 +685,8 @@ ElementList categoryList; loadEnabledCategories(meal,dish,&categoryList);
 
 for (Element *category=rec.categoryList.getFirst();category; category=rec.categoryList.getNext())
 	{
-	std::cerr<<QString("Recipe is in category %1:%2 \n").arg(category->id).arg(category->name);
 	if (categoryList.containsId(category->id)) return true;
 	}
-std::cerr<<"But the recipe is not within the categories chosen\n";
 
 return false;
 }
