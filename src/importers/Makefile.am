@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 
 # set the include path for X, qt and KDE
-INCLUDES         = $(all_includes) -I.. -I../DBBackend
+INCLUDES         = $(all_includes) -I$(srcdir)/.. -I$(srcdir)/../DBBackend
 
 noinst_LTLIBRARIES=libkrecipesimporters.la
 libkrecipesimporters_la_SOURCES = mx2importer.cpp mmfimporter.cpp mxpimporter.cpp nycgenericimporter.cpp baseimporter.cpp kreimporter.cpp
