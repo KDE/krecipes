@@ -1,3 +1,15 @@
+Most important changes from 0.4 to 0.5:
+
+  -Ingredient matcher - select what ingredients you have, and find out what you can make with them
+  -A new field for ingredients: preparation method
+  -Easier and faster imports
+  -Load nutrient data from the USDA's nutrient database
+  -Layouts can now be saved and loaded from files in the Krecipes layout format.
+  -Improved locale support
+  -Category and author names can now be up to 40 and 50 characters respectively (previously 20)
+  -Complete keyboard navigation now possible
+
+
 Most important new features from 0.3 to 0.4:
 
 * New Krecipes file format for recipe exchange! (.kre compressed, and .kreml
