@@ -795,10 +795,12 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 #if (HAVE_MYSQL)
 
 	bg->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
+	setPages(1);
 #else
 	#if (HAVE_POSTGRESQL)
 
 	bg->setButton( 2 );
+	setPages(2);
 #endif
 	#endif
 #endif
