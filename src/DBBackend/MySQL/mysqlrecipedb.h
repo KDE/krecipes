@@ -24,10 +24,10 @@
 #include <qstring.h>
 #include <iostream>
 #include <asm/unistd.h>
-#include "../recipe.h"
-#include "../elementlist.h"
-#include "../ingredientpropertylist.h"
-#include "../unitratiolist.h"
+#include "recipe.h"
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
+#include "unitratiolist.h"
 #include "recipedb.h"
 
 /**

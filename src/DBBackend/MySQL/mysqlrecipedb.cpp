@@ -31,7 +31,7 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 	     //Now Reopen the Database and exit if it fails
 	     if (!database->open())
 		{
-		kdDebug()<<QString("Could not open DB as user: %1. You may not have permissions. Exiting.\n").arg(user).latin1();
+		std::cerr<<QString("Could not open DB as user: %1. You may not have permissions. Exiting.\n").arg(user).latin1();
 		kdDebug()<<"MySQL database message: "<<database->lastError().databaseText()<<endl;
 		exit(1);
 		}
@@ -43,7 +43,7 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 	 {
 	 	if (!checkIntegrity())
 			{
-			kdDebug()<<"Failed to fix database structure. Exiting.\n";
+			std::cerr<<"Failed to fix database structure. Exiting.\n";
 			 exit(1);
 			 }
 	 }
@@ -1126,7 +1126,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 	if (!found)
 	{
-	kdDebug()<<"Recreating missing table: "<<*it<<"\n";
+	std::cerr<<"Recreating missing table: "<<*it<<"\n";
 	createTable(*it);
 	}
 }
@@ -1135,7 +1135,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 // Check for older versions, and port
 
-kdDebug()<<"Checking database version...\n";
+std::cerr<<"Checking database version...\n";
 float version=databaseVersion();
 portOldDatabases(version);
 return true;
@@ -1186,7 +1186,7 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void MySQLRecipeDB::portOldDatabases(float version)
 {
-kdDebug()<<"Current database version is..."<<version<<"\n";
+std::cerr<<"Current database version is..."<<version<<"\n";
 QString command;
 if (version<0.3)	// The database was generated with a version older than v 0.3. First update to 0.3 version
 			// ( note that version no. means the version in which this DB structure
@@ -1500,7 +1500,7 @@ QString command;
 if ((password!="")&&(password!=QString::null)) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
 else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
 
-kdDebug()<<"I'm doing the query to setup permissions\n";
+std::cerr<<"I'm doing the query to setup permissions\n";
 
 QSqlQuery permissionsToSet( command,database);
 }

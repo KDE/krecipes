@@ -48,11 +48,11 @@
 #include "widgets/paneldeco.h"
 
 #if HAVE_MYSQL
-#include "DBBackend/mysqlrecipedb.h"
+#include "DBBackend/MySQL/mysqlrecipedb.h"
 #endif
 
 #if HAVE_SQLITE
-#include "DBBackend/literecipedb.h"
+#include "DBBackend/SQLite/literecipedb.h"
 #endif
 
 

@@ -7,7 +7,7 @@ bin_PROGRAMS = krecipes
 SUBDIRS = DBBackend importers gui dialogs exporters widgets datablocks
 
 # set the include path for X, qt and KDE
-INCLUDES         = $(all_includes)
+INCLUDES         = $(all_includes) -I$(srcdir) -I$(srcdir)/DBBackend -I$(srcdir)/DBBackend/SQLite
 
 # the library search path.
 krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
@@ -15,11 +15,11 @@ krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # Check for optional libs
 if link_lib_SQLITE
-qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la -lsqlite
+qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la DBBackend/SQLite/libkrecsqlite.la -lsqlite
 endif
 
 if link_lib_MYSQL
-mysql_libadds =-lmysqlclient
+mysql_libadds =DBBackend/MySQL/libkrecmysql.la -lmysqlclient
 endif
 
 # the shared libraries to link against.

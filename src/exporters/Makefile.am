@@ -1,4 +1,4 @@
-INCLUDES = -I $(srcdir)/.. -I$(srcdir)/../DBBackend $(all_includes)
+INCLUDES = -I$(srcdir) -I$(srcdir)/.. $(all_includes)
 METASOURCES = AUTO
 lib_LTLIBRARIES =  libkrecipesexporters.la
 libkrecipesexporters_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
