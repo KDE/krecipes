@@ -887,9 +887,9 @@ void KrecipesView::initDatabase(KConfig *config)
 		config->setGroup("DBType");
    		dbType=checkCorrectDBType(config);
 		
-		
-		
-		if(dbType=="MySQL")  // First case, MySQL
+		if (0) {}
+		#if HAVE_MYSQL
+		else if(dbType=="MySQL")  // First case, MySQL
 			{
 			config->setGroup("Server");
 			QString host=config->readEntry( "Host","localhost");
@@ -903,9 +903,9 @@ void KrecipesView::initDatabase(KConfig *config)
 			delete database;
 			database=new MySQLRecipeDB(host,user,pass,dbname);
 			}
+		#endif //HAVE_MYSQL
 		
 		#if HAVE_SQLITE
-		
 		else if (dbType=="SQLite")// The user chose SQLite this time
 			{
 			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
