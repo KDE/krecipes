@@ -963,3 +963,19 @@ void RecipeInputDialog::resizeRecipe(void)
 	if ( dlg.exec() == QDialog::Accepted )
 		reload();
 }
+
+
+/*!
+    \fn RecipeInputDialog::export()
+ */
+void RecipeInputDialog::exportRecipe()
+{
+  if(loadedRecipe->recipeID != NULL){
+    KFileDialog* fd = new KFileDialog("", "*.kre|Krecipes file (*.kre)\n*.krz|Gzip Krecipes file (*.krz)", 0, "Save recipe", true);
+    QString fileName = fd->getSaveFileName("", "*.kre|Krecipes file (*.kre)\n*.krz|Gzip Krecipes file (*.krz)", 0, "Save recipe");
+    if(fileName != NULL){
+      KreManager* kre = new KreManager(database, fileName, fd->currentFilter());
+      kre->kreExport(loadedRecipe->recipeID);
+    }
+  }
+}

@@ -26,6 +26,7 @@
 #include <qvbox.h>
 
 #include "elementlist.h"
+#include "importers/kremanager.h"
 
 class QTabWidget;
 class Recipe;
@@ -143,6 +144,7 @@ private:
 	void addToShoppingList(void);
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
+  void exportRecipe();
 	void spellCheck(void);
 	void resizeRecipe(void);
 

@@ -197,11 +197,7 @@ m_view->save();
 void Krecipes::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
-    /*KURL file_url = KFileDialog::getSaveURL();
-    if (!file_url.isEmpty() && !file_url.isMalformed())
-    {
-        // save your info, here
-    }*/
+m_view->exportRecipe();
 }
 
 void Krecipes::filePrint()

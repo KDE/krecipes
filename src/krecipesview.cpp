@@ -287,6 +287,14 @@ void KrecipesView::save(void)
 inputPanel->save();
 }
 
+/*!
+    \fn KrecipesView::exportRecipe()
+ */
+void KrecipesView::exportRecipe()
+{
+  inputPanel->exportRecipe();
+}
+
 void KrecipesView::actionRecipe(int recipeID, int action)
 {
 if (action==0) //Show
@@ -560,6 +568,11 @@ void MenuButton::setIconSet(QIconSet i){
 }
 
 void MenuButton::drawButton( QPainter *p ){
+    /*const QPushButton* btn;
+    btn = new QPushButton(this);
+    QPixmap* pbtn = new QPixmap(size());
+    pbtn->grabWidget((QWidget*)btn);
+    pbtn->save("/root/tmp/btn.png", "PNG");*/
     QPixmap* pm( (QPixmap*)p->device() );
     KPixmap pn;
     QFont font( KGlobalSettings::generalFont() );
@@ -569,6 +582,7 @@ void MenuButton::drawButton( QPainter *p ){
     // draw base button
     s->drawControl( QStyle::CE_PushButton, p, this, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised );
     //s->drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised ); //do the same thing as upper line
+    //s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, pbtn, 0);
 
     // draw icon
     s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
@@ -609,3 +623,5 @@ void MenuButton::drawButton( QPainter *p ){
 }
 
 #include "krecipesview.moc"
+
+

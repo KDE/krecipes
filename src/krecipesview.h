@@ -149,6 +149,7 @@ signals:
 
 public slots:
 	void save(void);
+  void exportRecipe();
 
 private slots:
     void actionRecipe(int recipeID, int action);
