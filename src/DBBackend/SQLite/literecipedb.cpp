@@ -579,8 +579,8 @@ command=QString("SELECT  id,name,units FROM ingredient_properties;");
 QSQLiteResult propertiesToLoad=database->executeQuery(command);
 // Load the results into the list
 if (propertiesToLoad.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row=propertiesToLoad.first();
                 while ( !propertiesToLoad.atEnd() ) {
-		QSQLiteResultRow row=propertiesToLoad.first();
 		    IngredientProperty prop;
 		    prop.id=row.data(0).toInt();
 		    prop.name=unescapeAndDecode(row.data(1));
@@ -601,6 +601,8 @@ if (propertiesToLoad.getStatus()!=QSQLiteResult::Failure) {
 		    else
 		      prop.amount=-1; // Property is generic, not attached to an ingredient
 		    list->add(prop);
+
+		    row=propertiesToLoad.next();
                 }
 
             }
