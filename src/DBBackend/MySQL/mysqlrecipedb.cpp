@@ -12,8 +12,9 @@
 
 #include "mysqlrecipedb.h"
 
-#include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
+
 
 MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
@@ -1133,7 +1134,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 	if (!found)
 	{
-	std::cerr<<"Recreating missing table: "<<*it<<"\n";
+	kdDebug()<<"Recreating missing table: "<<*it<<"\n";
 	createTable(*it);
 	}
 }
@@ -1142,7 +1143,7 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 // Check for older versions, and port
 
-std::cerr<<"Checking database version...\n";
+kdDebug()<<"Checking database version...\n";
 float version=databaseVersion();
 portOldDatabases(version);
 return true;
@@ -1192,7 +1193,7 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void MySQLRecipeDB::portOldDatabases(float version)
 {
-std::cerr<<"Current database version is..."<<version<<"\n";
+kdDebug()<<"Current database version is..."<<version<<"\n";
 QString command;
 if (version<0.3)	// The database was generated with a version older than v 0.3. First update to 0.3 version
 			// ( note that version no. means the version in which this DB structure
@@ -1506,7 +1507,7 @@ QString command;
 if ( !password.isEmpty() ) command=QString("GRANT ALL ON %1.* TO %2@%3 IDENTIFIED BY '%4';").arg(dbName).arg(username).arg(clientHost).arg(password);
 else command=QString("GRANT ALL ON %1.* TO %2@%3;").arg(dbName).arg(username).arg(clientHost);
 
-std::cerr<<"I'm doing the query to setup permissions\n";
+kdDebug()<<"I'm doing the query to setup permissions\n";
 
 QSqlQuery permissionsToSet( command,database);
 }

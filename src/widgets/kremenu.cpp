@@ -23,7 +23,6 @@
 #include <iostream>
 
 #include <kcursor.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <kimageeffect.h>
@@ -34,7 +33,6 @@
 KreMenu::KreMenu(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-kdDebug()<<"Creating menu widget\n";
 Menu newMenu;
 
 mainMenuId=menus.append(newMenu);
@@ -49,19 +47,16 @@ setMouseTracking(true);
 
 KreMenu::~KreMenu()
 {
-kdDebug()<<"Destroying menu widget\n";
 }
 
 void KreMenu::childEvent (QChildEvent *e)
 {
-kdDebug()<<"A child event in the menu widget\n";
 	if (e->type()==QChildEvent::ChildInserted)
 		{
 		
 		QObject *child=e->child();
 		if (child->inherits("KreMenuButton"))
 			{
-			kdDebug()<<"New child in menu\n";
 			KreMenuButton* button=(KreMenuButton*) child;
 			
 			Menu *buttonMenu=&(*(button->menuId));
@@ -86,11 +81,9 @@ kdDebug()<<"A child event in the menu widget\n";
 		{
 		QObject *child=e->child();
 		
-		kdDebug()<<"A child button was destroyed. Lets remove?\n";
 		KreMenuButton *button=(KreMenuButton*) child;
 		if (m_currentMenu->positionList.find(button)!=m_currentMenu->positionList.end()) // Ensure that what was removed was a button
 			{
-			kdDebug()<<"Removing child from menu\n";
 			// Remove the button from the list first
 			int pos=m_currentMenu->positionList[button];// FIXME: this works only if the button is removed from the main menu
 			m_currentMenu->widgetList.remove(pos); // FIXME: this works only if the button is removed from the main menu
@@ -98,7 +91,7 @@ kdDebug()<<"A child event in the menu widget\n";
 	
 			// Now recalculate the position of the next button
 			(m_currentMenu->widgetNumber)--;// FIXME: this works only if the button is removed from the main menu
-			kdDebug()<<"Will be inserted after widget id.:"<<(m_currentMenu->widgetNumber)-1<<"\n";
+			
 			KreMenuButton *lastButton=m_currentMenu->widgetList[(m_currentMenu->widgetNumber)-1];
 			if (lastButton) m_currentMenu->childPos=lastButton->y()+lastButton->height();
 			m_currentMenu->activeButton=0;
@@ -110,7 +103,6 @@ QWidget::childEvent(e);
 
 void KreMenu::collectClicks(KreMenuButton *w)
 {
-kdDebug()<<"Menu clicked\n";
 
 highlightButton(w);
 
@@ -121,7 +113,6 @@ emit clicked(widgetn);
 
 MenuId KreMenu::createSubMenu(const QString &title, const QString &icon)
 {
-	kdDebug()<<"Creating new submenu\n";
 	
 	// Create the new menu
 	Menu newMenu;
@@ -150,7 +141,6 @@ MenuId KreMenu::createSubMenu(const QString &title, const QString &icon)
 
 void KreMenu::highlightButton(KreMenuButton *button)
 {
-kdDebug()<<"Highlighting button\n";
 MenuId buttonMenuId=button->menuId;
 Menu *buttonMenu=&(*buttonMenuId);
 
@@ -169,7 +159,6 @@ buttonMenu->activeButton=button;
 
 void KreMenu::mousePressEvent (QMouseEvent *e)
 {
-kdDebug()<<"Mouse clicked on menu\n";
 int x=e->x(),y=e->y();
 if (x > (width()-15))
 	{
@@ -241,7 +230,6 @@ if (dragging)
 
 void KreMenu::mouseReleaseEvent (QMouseEvent *)
 {
-kdDebug()<<"Mouse released over menu\n";
 dragging=false;
 }
 
@@ -251,7 +239,6 @@ QSize KreMenu::sizeHint() const {
 
 void KreMenu::paintEvent(QPaintEvent *)
 {
-kdDebug()<<"Painting menu\n";
     // Make sure the size is bigger than the minimum necessary
     if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
     
@@ -301,7 +288,6 @@ kdDebug()<<"Painting menu\n";
 
 void KreMenu::resizeEvent(QResizeEvent* e)
 {
-    kdDebug()<<"Menu was resized\n";
     emit resized((e->size()).width(), (e->size()).height());
 }
 
@@ -338,7 +324,6 @@ m_currentMenu=&(*(currentMenuId));
 
 KreMenuButton::KreMenuButton(KreMenu *parent, MenuId id, const char *name):QWidget(parent, name)
 {
-kdDebug()<<"Created new button\n";
 icon=0;
 highlighted=false;
 text=QString::null;
@@ -357,12 +342,10 @@ setCursor(QCursor(KCursor::handCursor()));
 
 KreMenuButton::~KreMenuButton()
 {
-kdDebug()<<"Destroyed a button\n";
 }
 
 void KreMenuButton::mousePressEvent (QMouseEvent *)
 {
-kdDebug()<<"Clicked on a button\n";
 emit clicked();
 }
 
@@ -548,7 +531,6 @@ activeButton=0; // Button that is highlighted
 
 Menu::Menu(const Menu &m)
 {
-kdDebug()<<"New menu list\n";
 activeButton=m.activeButton;
 childPos=m.childPos;
 widgetNumber=m.widgetNumber;
@@ -559,7 +541,6 @@ copyMap(widgetList,m.widgetList);
 
 Menu::~Menu(void)
 {
-kdDebug()<<"Destroyed menu list\n";
 }
 
 Menu& Menu::operator=(const Menu &m)
@@ -578,7 +559,6 @@ return *this;
 
 void Menu::addButton(KreMenuButton* button)
 {
-kdDebug()<<"Adding button to menu list\n";
 	button->move(0,childPos);
 	button->rescale();
 	childPos+=button->height();
