@@ -30,6 +30,8 @@ class QCheckListItem;
 class QSpinBox;
 class QFrame;
 
+class KListView;
+
 class RecipeDB;
 
 class AdvancedSearchDialog : public QWidget
@@ -75,7 +77,7 @@ private:
 	QPushButton* ingUnselectAllButton;
 	QWidget* resultPage;
 	QGroupBox* resultBox;
-	QListView* resultsListView;
+	KListView* resultsListView;
 	QPushButton* backButton;
 	QPushButton* openButton;
 	
@@ -118,8 +120,7 @@ signals:
 private slots:
 	void search();
 	void back();
-	void open();
-	
+
 	void selectAllAuthors();
 	void selectAllCategories();
 	void selectAllIngredients();

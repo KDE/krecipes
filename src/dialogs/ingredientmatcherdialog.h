@@ -62,6 +62,9 @@ public:
 		}
 };
 
+// ### Should we make this the standard class for representing recipes? (we'd subclass it here to provide the ingredient list)
+//     This way it would be consistent all around and maybe we wouldn't show the user the recipe id (which is probably just confusing).
+//     It would even be easily configurable.
 class RecipeListItem:public QListViewItem
 {
 public:
@@ -160,7 +163,6 @@ private:
 	
 private slots:
 	void findRecipes(void);
-	void open(QListViewItem*);
 
 };
 #endif

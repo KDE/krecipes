@@ -17,7 +17,6 @@
 #include <qgroupbox.h>
 #include <qcombobox.h>
 #include <qheader.h>
-#include <qlistview.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
@@ -28,9 +27,11 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <klistview.h>
 #include <klocale.h>
 
 #include "DBBackend/recipedb.h"
+#include "recipeactionshandler.h"
 
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),
   authorLast(0),
@@ -216,7 +217,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultBoxLayout = new QHBoxLayout( resultBox->layout() );
 	resultBoxLayout->setAlignment( Qt::AlignTop );
 	
-	resultsListView = new QListView( resultBox, "resultsListView" );
+	resultsListView = new KListView( resultBox, "resultsListView" );
 	resultsListView->addColumn( i18n( "Recipe" ) );
 	resultsListView->addColumn( i18n( "Id" ) );
 	resultsListView->setAllColumnsShowFocus( TRUE );
@@ -240,13 +241,17 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	
 	KIconLoader *il=new KIconLoader;
-	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
-	pm=il->loadIcon("back", KIcon::NoGroup,16); backButton->setIconSet(pm);
+	openButton->setIconSet(il->loadIcon("ok", KIcon::NoGroup,16));
+	backButton->setIconSet(il->loadIcon("back", KIcon::NoGroup,16));
+	searchButton->setIconSet(il->loadIcon("find", KIcon::NoGroup,16));
+	
 
 	authorsFrame->setEnabled(false);
 	categoriesFrame->setEnabled(false);
 	ingredientsFrame->setEnabled(false);
 	servingsFrame->setEnabled(false);
+	
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,0,1,-1,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs);
 
 	connect( searchButton, SIGNAL(clicked()), SLOT(search()) );
 	connect( backButton, SIGNAL(clicked()), SLOT(back()) );
@@ -263,8 +268,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( authorUnselectAllButton, SIGNAL(clicked()), SLOT(unselectAllAuthors()) );
 	connect( catUnselectAllButton, SIGNAL(clicked()), SLOT(unselectAllCategories()) );
 	connect( ingUnselectAllButton, SIGNAL(clicked()), SLOT(unselectAllIngredients()) );
+	connect( actionHandler, SIGNAL(recipeSelected(int,int)),SIGNAL(recipeSelected(int,int)) );
 	
-	connect( openButton, SIGNAL(clicked()), SLOT(open()) );
+	connect( openButton, SIGNAL(clicked()), actionHandler, SLOT(open()) );
 
 	reload();
 }
@@ -313,13 +319,6 @@ void AdvancedSearchDialog::languageChange()
 	resultsListView->header()->setLabel( 1, i18n( "Id" ) );
 	backButton->setText( i18n( "Back" ) );
 	openButton->setText( i18n( "Open" ) );
-}
-
-void AdvancedSearchDialog::open()
-{
-	QListViewItem *it = resultsListView->selectedItem();
-	if ( it )
-		emit recipeSelected(it->text(1).toInt(),0);
 }
 
 void AdvancedSearchDialog::selectAllAuthors()

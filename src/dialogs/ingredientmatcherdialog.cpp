@@ -14,6 +14,7 @@
 #include "elementlist.h"
 #include "DBBackend/recipedb.h"
 #include "widgets/krelistview.h"
+#include "recipeactionshandler.h"
 
 #include <qheader.h>
 #include <qpainter.h>
@@ -56,7 +57,9 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	recipeListView->listView()->addColumn(i18n("Title"));
 	recipeListView->listView()->addColumn(i18n("Missing Ingredients"));
 	recipeListView->listView()->setSorting(-1);
-	
+
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, 0, -1, -1,  RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs );
+
 	KIconLoader il;
 	QHBox *buttonBox=new QHBox(this);
 	
@@ -74,7 +77,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	// Connect signals & slots
 	connect (okButton,SIGNAL(clicked()), this,SLOT(findRecipes()));
 	connect (clearButton,SIGNAL(clicked()),recipeListView->listView(),SLOT(clear()));
-	connect (recipeListView->listView(),SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),SLOT(open(QListViewItem*)));
+	connect (actionHandler, SIGNAL(recipeSelected(int,int)), SIGNAL(recipeSelected(int,int)) );
 
 }
 
@@ -193,15 +196,6 @@ void IngredientMatcherDialog::reloadIngredients(void)
 		Element ingredient=*it;
 		new IngredientListItem(ingredientListView->listView(),ingredient);
 		}
-}
-
-void IngredientMatcherDialog::open(QListViewItem* it)
-{
-	if ( it->rtti() == 1000 )
-	{
-		RecipeListItem *recipe_it = (RecipeListItem*)it;
-		emit recipeSelected(recipe_it->recipeID(),0);
-	}
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int /*width*/, int /*align*/ )

@@ -29,6 +29,8 @@
 #include <kfiledialog.h>
 #include <kpopupmenu.h>
 
+#include "recipeactionshandler.h"
+
 class QHBox;
 
 class RecipeDB;
@@ -49,7 +51,6 @@ public:
 
 
   //Public Methods
-  void reload(void);
   void getCurrentRecipe( Recipe *recipe );
 
 private:
@@ -66,8 +67,6 @@ private:
   QLabel *searchLabel;
   KLineEdit *searchBox;
   KComboBox *categoryBox;
-  KPopupMenu *kpop;
-  KPopupMenu *catPop;
   AdvancedSearchDialog *advancedSearch;
   // Internal Data
   RecipeDB *database;
@@ -77,14 +76,13 @@ private:
   QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
   bool isFilteringCategories;
   QListViewItem *currentCategory;
+  RecipeActionsHandler *actionHandler;
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);
   void loadListView(const CategoryTree *categoryTree, QListViewItem *parent=0 );
   bool itemIsRecipe( const QListViewItem *item );
 
-  void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
-  QValueList<int> getAllVisibleItems();
   bool isParentOf(QListViewItem *parent, QListViewItem *to_check);
   bool hideIfEmpty(QListViewItem *parent=0);
 
@@ -94,21 +92,14 @@ signals:
   void recipeSelected(bool);
 
 private slots:
-  void open(void);
-  void edit(void);
-  void remove(void);
-  void removeFromCat(void);
   void filter(const QString &s);
   void filterCategories(int categoryID);
-  void showPopup( KListView *, QListViewItem *, const QPoint & );
   void filterComboCategory(int row);
   void showEvent(QShowEvent*);
-  void expandAll();
-  void collapseAll();
 public slots:
-  void slotExportRecipe();
-  void slotExportRecipeFromCat();
   void haveSelectedItems();
+  void slotExportRecipe(){actionHandler->saveAs();}
+  void reload(void);
 };
 
 #endif

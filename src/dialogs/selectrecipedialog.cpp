@@ -28,12 +28,6 @@
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 
-#include "exporters/cookmlexporter.h"
-#include "exporters/htmlexporter.h"
-#include "exporters/kreexport.h"
-#include "exporters/mmfexporter.h"
-#include "exporters/recipemlexporter.h"
-
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
  : QWidget(parent)
 {
@@ -101,7 +95,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
   editButton->setDisabled(true);
 	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setIconSet(pm);
 	removeButton=new QPushButton(buttonBar);
-	removeButton->setText(i18n("Delete"));
+	removeButton->setText(i18n("Remove"));
   removeButton->setDisabled(true);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
@@ -111,19 +105,8 @@ tabWidget->insertTab( basicSearchTab, "Basic" );
 advancedSearch = new AdvancedSearchDialog(this,database);
 tabWidget->insertTab( advancedSearch, "Advanced" );
 
-// Popup menus
-    kpop = new KPopupMenu( recipeListView );
-    kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),tr2i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
-    kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),tr2i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
-    kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(slotExportRecipe()), CTRL+Key_S );
-    kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("Remove from &Category"), this, SLOT(removeFromCat()), CTRL+Key_C );
-    kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
-    kpop->polish();
-
-    catPop = new KPopupMenu( recipeListView );
-    catPop->insertItem( tr2i18n("&Expand All"), this, SLOT(expandAll()), CTRL+Key_Plus );
-    catPop->insertItem( tr2i18n("&Collapse All"), this, SLOT(collapseAll()), CTRL+Key_Minus );
-    catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(slotExportRecipeFromCat()), CTRL+Key_S );
+//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
+actionHandler = new RecipeActionsHandler( recipeListView, database, 2, 1, 0 );
 
 // Load Recipe List
 loadRecipeList();
@@ -134,24 +117,25 @@ isFilteringCategories=false;
 
 // Signals & Slots
 
-connect(openButton,SIGNAL(clicked()),this, SLOT(open()));
+connect(openButton,SIGNAL(clicked()),actionHandler, SLOT(open()));
 connect(this,SIGNAL(recipeSelected(bool)),openButton, SLOT(setEnabled(bool)));
-connect(editButton,SIGNAL(clicked()),this, SLOT(edit()));
+connect(editButton,SIGNAL(clicked()),actionHandler, SLOT(edit()));
 connect(this,SIGNAL(recipeSelected(bool)),editButton, SLOT(setEnabled(bool)));
-connect(removeButton,SIGNAL(clicked()),this, SLOT(remove()));
+connect(removeButton,SIGNAL(clicked()),actionHandler, SLOT(remove()));
 connect(this,SIGNAL(recipeSelected(bool)),removeButton, SLOT(setEnabled(bool)));
 connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const QString&)));
 connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()));
-connect(recipeListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(open()));
-connect(recipeListView,SIGNAL(contextMenu (KListView *, QListViewItem *, const QPoint &)),this, SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
 connect(categoryBox,SIGNAL(activated(int)),this,SLOT(filterComboCategory(int)));
 connect(advancedSearch,SIGNAL(recipeSelected(int,int)),SIGNAL(recipeSelected(int,int)));
+connect(actionHandler,SIGNAL(recipeSelected(int,int)),SIGNAL(recipeSelected(int,int)));
+connect(actionHandler,SIGNAL(recipesSelected(const QValueList<int> &,int)),SIGNAL(recipesSelected(const QValueList<int> &,int)));
+connect(actionHandler,SIGNAL(reloadNeeded()),SLOT(reload()));
 }
-
 
 SelectRecipeDialog::~SelectRecipeDialog()
 {
+	delete il;
 }
 
 void SelectRecipeDialog::showEvent(QShowEvent* e){
@@ -223,73 +207,6 @@ void SelectRecipeDialog::loadListView(const CategoryTree *categoryTree, QListVie
 		categoryItems.insert(node->category.id,new_item);
 		loadListView( node, new_item );
 	}
-}
-
-void SelectRecipeDialog::open(void)
-{
-QListViewItem *it;
-it=recipeListView->selectedItem();
-if ( it )
-{
-	if ( !it->firstChild() && itemIsRecipe(it) )
-		emit recipeSelected(it->text(1).toInt(),0);
-	else if ( it->firstChild() )
-	{
-		QValueList<int> ids;
-		
-		//do this to only iterate over children of 'it'
-		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = it;
-		do
-		{
-			if(pStartItem->nextSibling())
-				pEndItem = pStartItem->nextSibling();
-			else
-				pStartItem = pStartItem->parent();
-		}
-		while(pStartItem && !pEndItem);
-		
-		QListViewItemIterator iterator(it);
-		while(iterator.current() != pEndItem)
-		{
-			if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
-				ids.append(iterator.current()->text(1).toInt());
-			++iterator;
-		}
-		emit recipesSelected( ids, 0 );
-	}
-}
-}
-
-void SelectRecipeDialog::edit(void)
-{
-QListViewItem *it;
-it=recipeListView->selectedItem();
-if ( it && !it->firstChild() && itemIsRecipe(it) ) emit recipeSelected(it->text(1).toInt(),1);
-}
-
-void SelectRecipeDialog::remove(void)
-{
-QListViewItem *it;
-it=recipeListView->selectedItem();
-if ( it && !it->firstChild() && itemIsRecipe(it) ) emit recipeSelected(it->text(1).toInt(),2);
-}
-
-void SelectRecipeDialog::removeFromCat(void)
-{
-  QListViewItem *it;
-  it=recipeListView->selectedItem();
-  if ( it != 0 && !it->firstChild() && itemIsRecipe(it) ){
-    if(it->parent() != 0){
-      int categoryID;
-      categoryID = database->findExistingCategoryByName((it->parent())->text(0));
-      database->removeRecipeFromCategory(it->text(1).toInt(), categoryID);
-    }
-    else{
-      database->removeRecipeFromCategory(it->text(1).toInt(), -1);
-    }
-    reload();
-  }
 }
 
 void SelectRecipeDialog::reload()
@@ -439,130 +356,6 @@ for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categ
 
 }
 
-void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection )
-{
-	KFileDialog* fd = new KFileDialog( QString::null,
-	  "*.kre|Gzip Krecipes file (*.kre)\n"
-	  "*.kreml|Krecipes xml file (*.kreml)\n"
-	  "*.cml|CookML file (*.cml)\n"
-	  "*.html|HTML file (*.html)\n"
-	  "*.mmf|Meal-Master file (*.mmf)\n"
-	  "*.xml|RecipeML file (*.xml)",
-	  this, "export_dlg", true);
-	fd->setCaption( caption );
-	fd->setOperationMode( KFileDialog::Saving );
-	fd->setSelection( selection );
-	if ( fd->exec() == KFileDialog::Accepted )
-	{
-		QString fileName = fd->selectedFile();
-		if( !fileName.isNull() )
-		{
-			BaseExporter *exporter;
-			if ( fd->currentFilter() == "*.xml" )
-				exporter = new RecipeMLExporter(fileName, fd->currentFilter());
-			else if ( fd->currentFilter() == "*.mmf" )
-				exporter = new MMFExporter(fileName, fd->currentFilter());
-			else if ( fd->currentFilter() == "*.html" )
-				exporter = new HTMLExporter(database, fileName, fd->currentFilter(), 650);
-			else if ( fd->currentFilter() == "*.cml" )
-				exporter = new CookMLExporter(fileName, fd->currentFilter());
-			else
-				exporter = new KreExporter(fileName, fd->currentFilter());
-
-			int overwrite = -1;
-			if ( QFile::exists( exporter->fileName() ) )
-			{
-				overwrite = KMessageBox::warningYesNo( 0,QString(i18n("File \"%1\" exists.  Are you sure you want to overwrite it?")).arg(exporter->fileName()),i18n("Saving recipe") );
-			}
-
-			if ( overwrite == KMessageBox::Yes || overwrite == -1 )
-			{
-				KProgressDialog progress_dialog(this, "export_progress_dialog", QString::null, i18n("Preparing to save recipes...") );
-				progress_dialog.setAutoClose(false); progress_dialog.setAutoReset(true);
-				RecipeList recipes; database->loadRecipes( &recipes, ids, &progress_dialog );
-				progress_dialog.setAutoReset(false);
-
-				progress_dialog.setLabel( i18n("Saving recipes...") );
-				exporter->exporter( recipes, &progress_dialog );
-			}
-			delete exporter;
-		}
-	}
-	delete fd;
-}
-
-/*!
-    \fn SelectRecipeDialog::slotExportRecipe()
- */
-void SelectRecipeDialog::slotExportRecipe()
-{
-	if ( recipeListView->selectedItem() )
-	{
-		if ( recipeListView->selectedItem()->firstChild() )
-			slotExportRecipeFromCat();
-		else
-		{
-			QValueList<int> id;
-			id.append( (recipeListView->selectedItem())->text(1).toInt() );
-	
-			exportRecipes( id, i18n("Save Recipe"), (recipeListView->selectedItem())->text(2) );
-		}
-	}
-	else //if nothing selected, export all visible recipes
-	{
-		QValueList<int> ids = getAllVisibleItems();
-
-		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n("Save Recipes"), "Recipes" );
-		//else TODO: give notice
-	}
-}
-
-void SelectRecipeDialog::slotExportRecipeFromCat()
-{
-	if (recipeListView->selectedItem() )
-	{
-		QValueList<int> ids;
-
-		//do this to only iterate over children of 'it'
-		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = recipeListView->selectedItem();
-		do
-		{
-			if(pStartItem->nextSibling())
-				pEndItem = pStartItem->nextSibling();
-			else
-				pStartItem = pStartItem->parent();
-		}
-		while(pStartItem && !pEndItem);
-		
-		QListViewItemIterator iterator(recipeListView->selectedItem());
-		while(iterator.current() != pEndItem)
-		{
-			if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
-				ids.append(iterator.current()->text(1).toInt());
-			++iterator;
-		}
-
-		exportRecipes( ids, i18n("Save Recipes"), (recipeListView->selectedItem())->text(0) );
-	}
-}
-
-QValueList<int> SelectRecipeDialog::getAllVisibleItems()
-{
-	QValueList<int> ids;
-
-	QListViewItemIterator iterator(recipeListView,QListViewItemIterator::Visible);
-	while(iterator.current())
-	{
-		if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
-			ids.append(iterator.current()->text(1).toInt());
-		++iterator;
-	}
-
-	return ids;
-}
-
 void SelectRecipeDialog::haveSelectedItems()
 {
 	if( recipeListView->selectedItem() )
@@ -578,16 +371,6 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
 	if (recipeListView->selectedItem() && itemIsRecipe(recipeListView->selectedItem()) )
 		database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
-}
-
-void SelectRecipeDialog::showPopup( KListView */*l*/, QListViewItem *i, const QPoint &p ){
-	if (i) // Check if the QListViewItem actually exists
-	{
-		if ( itemIsRecipe(i) )
-			kpop->exec(p);
-		else if ( i->firstChild() ) //is a category... don't pop-up for an empty category though
-			catPop->exec(p);
-	}
 }
 
 void SelectRecipeDialog::filterComboCategory(int row)
@@ -614,24 +397,6 @@ isFilteringCategories=true;
 else isFilteringCategories=false;
 
 filter(searchBox->text());
-}
-
-void SelectRecipeDialog::expandAll(){
-	QListViewItemIterator it( recipeListView );
-	while ( it.current() ) {
-		QListViewItem *item = it.current();
-		item->setOpen(true);
-		++it;
-	}
-}
-
-void SelectRecipeDialog::collapseAll(){
-	QListViewItemIterator it( recipeListView );
-	while ( it.current() ) {
-		QListViewItem *item = it.current();
-		item->setOpen(false);
-		++it;
-	}
 }
 
 //item is a recipe if the 2nd column is an integer (the recipe's ID)
