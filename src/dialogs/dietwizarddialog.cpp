@@ -171,7 +171,7 @@ dietRList->clear();
 // Get the whole list of recipes, detailed
 database->loadRecipeDetails(&rlist,true,true);
 
-int recipes_left=rlist.count();
+int recipes_left;
 
 
 QValueList <RecipeList::Iterator> tempRList; // temporal iterator list so elements can be removed without reloading them again from the DB
@@ -180,14 +180,14 @@ bool alert=false;
 
 for (int day=0;day<dayNumber;day++) // Create the diet for the number of days defined by the user
 {
-
+	populateIteratorList(rlist,&tempRList); // temporal iterator list so elements can be removed without reloading them again from the DB
+	recipes_left=rlist.count();
 	for (int meal=0;meal<mealNumber;meal++)
 	{
 	int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
 
 		for (int dish=0;dish<dishNo;dish++)
 		{
-		populateIteratorList(rlist,&tempRList); // temporal iterator list so elements can be removed without reloading them again from the DB
 			bool found=false;
 			while ((!found) && recipes_left)
 			{
@@ -205,7 +205,6 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 
 			}
 			if (!found) alert=true;
-			recipes_left=rlist.count();
 		}
 	}
 }
