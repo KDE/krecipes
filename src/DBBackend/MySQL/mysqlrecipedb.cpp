@@ -743,7 +743,7 @@ command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount,ii.
 else if (ingredientID==-1) // Load the properties of all the ingredients
 {
 usePerUnit=true;
-command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount,ii.ingredient_id FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.property_id=ip.id AND ii.per_units=u.id;").arg(ingredientID);
+command=QString("SELECT ip.id,ip.name,ip.units,ii.per_units,u.name,ii.amount,ii.ingredient_id FROM ingredient_properties ip, ingredient_info ii, units u WHERE ii.property_id=ip.id AND ii.per_units=u.id;");
 }
 else // Load the whole property list (just the list of possible properties, not the ingredient properties)
 {
