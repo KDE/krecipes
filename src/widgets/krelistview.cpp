@@ -13,7 +13,7 @@
 #include <klocale.h>
 
 
-KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int filterCol):QVBox(parent)
+KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int filterCol, QWidget *embeddedWidget):QVBox(parent)
 {
 
 	filteredColumn=filterCol;
@@ -44,6 +44,9 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 	setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 	setSpacing(10);
 	
+	
+	// If the user provides a widget, embed it into the header
+	if (embeddedWidget) embeddedWidget->reparent(header,QPoint(0,0));
 	//Connect Signals & Slots
 	if (filter) connect(filterEdit,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 }

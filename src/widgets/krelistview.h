@@ -25,7 +25,7 @@ class KreListView:public QVBox{
 Q_OBJECT
 public:
 
-    KreListView(QWidget *parent,const QString &title=QString::null, bool filter=false, int filterCol=0);
+    KreListView(QWidget *parent,const QString &title=QString::null, bool filter=false, int filterCol=0, QWidget *embeddedWidget=0);
     ~KreListView();
     KListView *listView(){return list;}
 
