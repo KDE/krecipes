@@ -9,6 +9,8 @@
 #include <kconfig.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     : KDialogBase(IconList, i18n("Krecipes Preferences"),
@@ -26,6 +28,9 @@ KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     m_pageServer = new ServerPrefs(frame);
     layout->addWidget(m_pageServer);
 
+    frame = addPage(i18n("Units"), i18n("Customize Units"));
+    m_pageUnits = new UnitsPrefs(frame);
+    layout->addWidget(m_pageUnits);
 
     frame = addPage(i18n("Appearance"), i18n("Customize Krecipes Appearance"));
     m_pageTwo = new KrecipesPrefPageTwo(frame);
@@ -120,7 +125,7 @@ ServerPrefs::ServerPrefs(QWidget *parent)
 }
 
 KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
-    : QFrame(parent)
+    : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setAutoAdd(true);
@@ -128,11 +133,10 @@ KrecipesPrefPageTwo::KrecipesPrefPageTwo(QWidget *parent)
     new QLabel(i18n("Add something here"), this);
 }
 
-
 void KrecipesPreferences::saveSettings(void)
 {
 m_pageServer->saveOptions();
-
+m_pageUnits->saveOptions();
 }
 
 // Save Server settings
@@ -146,6 +150,65 @@ config->writeEntry("Password",passwordEdit->text());
 config->writeEntry("DBName",dbNameEdit->text());
 }
 
+//=============Units Preferences Dialog================//
+UnitsPrefs::UnitsPrefs(QWidget *parent)
+    : QWidget(parent)
+{
+    Form1Layout = new QVBoxLayout( this, 11, 6 );
 
+    numberButtonGroup = new QButtonGroup( this );
+    numberButtonGroup->setColumnLayout(0, Qt::Vertical );
+    numberButtonGroup->layout()->setSpacing( 6 );
+    numberButtonGroup->layout()->setMargin( 11 );
+    numberButtonGroup->resize( QSize() );
+    numberButtonGroupLayout = new QVBoxLayout( numberButtonGroup->layout() );
+    numberButtonGroupLayout->setAlignment( Qt::AlignTop );
+
+    fractionRadioButton = new QRadioButton( numberButtonGroup );
+    numberButtonGroupLayout->addWidget( fractionRadioButton );
+
+    decimalRadioButton = new QRadioButton( numberButtonGroup );
+    numberButtonGroupLayout->addWidget( decimalRadioButton );
+    Form1Layout->addWidget( numberButtonGroup );
+    QSpacerItem* spacer = new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    Form1Layout->addItem( spacer );
+
+    numberButtonGroup->insert( decimalRadioButton, 0 );
+    numberButtonGroup->insert( fractionRadioButton, 1 );
+
+    adjustSize();
+    resize(300,height());
+
+    languageChange();
+
+    // Load Current Settings
+    KConfig *config=kapp->config();
+    config->setGroup("Units");
+
+    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+    	numberButtonGroup->setButton( 1 );
+    else
+    	numberButtonGroup->setButton( 0 );
+}
+
+void UnitsPrefs::saveOptions()
+{
+	KConfig *config=kapp->config();
+	config->setGroup("Units");
+
+	QString number_format;
+	if ( numberButtonGroup->find( 0 )->isOn() )
+		number_format="Decimal";
+	else
+		number_format="Fraction";
+	config->writeEntry("NumberFormat",number_format);
+}
+
+void UnitsPrefs::languageChange()
+{
+    numberButtonGroup->setTitle( i18n( "Number Format" ) );
+    fractionRadioButton->setText( i18n( "Fraction" ) );
+    decimalRadioButton->setText( i18n( "Decimal" ) );
+}
 
 #include "pref.moc"

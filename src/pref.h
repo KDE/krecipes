@@ -11,6 +11,11 @@
 
 class ServerPrefs;
 class KrecipesPrefPageTwo;
+class UnitsPrefs;
+
+class QButtonGroup;
+class QRadioButton;
+class QVBoxLayout;
 
 class KrecipesPreferences : public KDialogBase
 {
@@ -21,6 +26,7 @@ public:
 private:
     ServerPrefs *m_pageServer;
     KrecipesPrefPageTwo *m_pageTwo;
+    UnitsPrefs *m_pageUnits;
 private slots:
     void saveSettings(void);
 };
@@ -43,12 +49,33 @@ private:
 
 };
 
-class KrecipesPrefPageTwo : public QFrame
+class KrecipesPrefPageTwo : public QWidget
 {
     Q_OBJECT
 public:
     KrecipesPrefPageTwo(QWidget *parent = 0);
 
+};
+
+class UnitsPrefs : public QWidget
+{
+Q_OBJECT
+
+public:
+	UnitsPrefs(QWidget *parent = 0);
+
+	void saveOptions();
+
+protected:
+	QButtonGroup* numberButtonGroup;
+	QRadioButton* fractionRadioButton;
+	QRadioButton* decimalRadioButton;
+
+	QVBoxLayout* Form1Layout;
+	QVBoxLayout* numberButtonGroupLayout;
+
+protected slots:
+	virtual void languageChange();
 };
 
 #endif // _KRECIPESPREF_H_
