@@ -25,6 +25,7 @@
 #include "importers/nycgenericimporter.h"
 #include "importers/recipemlimporter.h"
 #include "importers/rezkonvimporter.h"
+#include "importers/kredbimporter.h"
 
 #include "recipe.h"
 #include "DBBackend/recipedb.h"
@@ -163,9 +164,13 @@ void Krecipes::setupActions()
 	KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
 	KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 	
-	(void)new KAction(i18n("Import..."), CTRL+Key_I,
+	(void)new KAction(i18n("Import from File..."), CTRL+Key_I,
 	  this, SLOT(import()),
 	  actionCollection(), "import_action");
+
+	(void)new KAction(i18n("Import from Database..."), 0,
+	  this, SLOT(kreDBImport()),
+	  actionCollection(), "import_db_action");
 
 	(void)new KAction(i18n("Page Setup..."), 0,
 	  this, SLOT(pageSetupSlot()),
@@ -317,6 +322,22 @@ void Krecipes::import()
 		
 		delete importer;
 	}
+}
+
+void Krecipes::kreDBImport()
+{
+	//TODO: Create a wizard/dialog to get the necessary parameters (below is an example of how it works)
+
+	KreDBImporter importer("MySQL","localhost","fungmeista",QString::null);
+	//KreDBImporter importer("SQLite");
+
+	parsing_file_dlg->show(); KApplication::setOverrideCursor( KCursor::waitCursor() );
+	QStringList tables; tables << "Krecipes";
+	importer.parseFiles(tables);
+	//importer.parseFiles("home/fungmeista/.kde/share/apps/krecipes/krecipes.krecdb");
+	parsing_file_dlg->hide(); KApplication::restoreOverrideCursor();
+
+	m_view->import( importer );
 }
 
 void Krecipes::pageSetupSlot()

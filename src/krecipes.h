@@ -80,6 +80,7 @@ private slots:
     void optionsPreferences();
     void newToolbarConfig();
     void import();
+    void kreDBImport();
     void pageSetupSlot();
     
     /**  This function is called whenever a panel is shown or hidden and then sets

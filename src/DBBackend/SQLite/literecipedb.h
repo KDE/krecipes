@@ -14,8 +14,6 @@
 #ifndef LITERECIPEDB_H
 #define LITERECIPEDB_H
 
-#define DEFAULT_DB_NAME "Krecipes"
-
 #include <qglobal.h>
 #include <qimage.h>
 #include <qfileinfo.h>
@@ -44,11 +42,9 @@ Q_OBJECT
 private:
 	QSQLiteDB *database;
 	void createDB(void);
-	QString DBuser;
-	QString DBpass;
-	QString DBhost;
+
 public:
-	LiteRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
+	LiteRecipeDB(const QString &dbFile = QString::null);
 	~LiteRecipeDB(void);
 
 	void connect();
@@ -180,6 +176,8 @@ public:
 	float databaseVersion(void);
 
 private:
+	QString dbFile;
+
 	void loadElementList(ElementList *elList, QSQLiteResult *query);
 	void loadPropertyElementList(ElementList *elList, QSQLiteResult *query);
 	void portOldDatabases(float version);

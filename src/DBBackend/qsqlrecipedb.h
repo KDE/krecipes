@@ -14,8 +14,6 @@
 #ifndef QSQLRECIPEDB_H
 #define QSQLRECIPEDB_H
 
-#define DEFAULT_DB_NAME "Krecipes"
-
 #include <qglobal.h>
 #include <qobject.h>
 #include <qsqldatabase.h>
@@ -61,7 +59,7 @@ protected:
 	QString DBhost;
 
 public:
-	QSqlRecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME);
+	QSqlRecipeDB(const QString &host, const QString &user=QString::null, const QString &pass=QString::null, const QString &DBName=DEFAULT_DB_NAME);
 	~QSqlRecipeDB(void);
 
 	void connect();

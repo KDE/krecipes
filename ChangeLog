@@ -1,4 +1,6 @@
 Changes from 0.6 to CVS:
+  -'Configure' options to disable particular backends
+  -Database to database transfer (Remote or local).
   -Autocomplete ingredients typed in the instructions text edit
   -Support for grouping ingredients.  Also imports group information from import formats, such as Meal-Master.
   -There's a new intermediate interface between displaying the shopping list and selecting recipes for it.  Here you can add, remove, or modify ingredients used in those selected recipes.

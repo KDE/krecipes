@@ -4,9 +4,17 @@ echo "-----          Configure Results           -----"
 echo "-                                              -"
 
 if test "x$have_mysql" = "xtrue"; then
-echo "-     MySQL Found.....................  YES    -"
+echo "-     MySQL Support...................  YES    -"
 else
-echo "-     MySQL Found.....................  NO     -"
+echo "-     MySQL Support...................  NO     -"
+fi
+
+echo "-                                              -"
+
+if test "x$have_postgresql" = "xtrue"; then
+echo "-     PostgreSQL Support..............  YES    -"
+else
+echo "-     PostgreSQL Support..............  NO     -"
 fi
 
 echo "-                                              -"
@@ -22,8 +30,9 @@ echo "------------------------------------------------"
 
 if test "x$will_not_build_krecipes" = "xtrue"; then
 echo ""
-echo "*** Krecipes needs either MySQL or SQLite installed. ***"
-echo "*** It cannot work without a Database Backend.       ***"
+echo "*** Krecipes needs a database backend enabled. If    ***"
+echo "*** you wish to use SQLite, you must have SQLite     ***"
+echo "***        installed before compiling.               ***"
 echo "***         KRECIPES WILL NOT BE BUILT               ***"
 echo ""
 echo "You can get SQLite from:  http://www.hwaci.com/sw/sqlite/"
@@ -35,26 +44,14 @@ else if test "x$have_mysql" = "xtrue"; then
 	echo "-     Fine, you can build Krecipes now         -"
 	echo "------------------------------------------------"
      else
-	echo "-                                              -"
-	echo "-   You don't have SQLite installed, but       -"
-        echo "-   Krecipes can work just fine with MySQL.    -"
+        echo "-                                              -"
+        echo "-   You don't have SQLite installed (or have   -"
+        echo "-   chosen to disable it), but Krecipes can    -"
+        echo "-   work just fine with another supported      -"
+        echo "-   database.                                  -"
         echo "-   If you still want to, you can get SQLite   -"
         echo "-   from  http://www.hwaci.com/sw/sqlite/      -"
         echo "------------------------------------------------"
      fi
-
-     else
-	echo "-                                              -"
-	echo "- You don't have MySQL installed, but Krecipes -" 
-        echo "- can work without it just fine, using a local -"
-	echo "- SQLite database.                             -"
-	echo "-                                              -" 
-	echo "- You can get MySQL from: http://www.mysql.com -"
-	echo "- if you want to use a powerful database or    -"
-        echo "- use a remote database server.                -"
-        echo "------------------------------------------------"
      fi
-
-
 fi
-

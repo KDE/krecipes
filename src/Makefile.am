@@ -22,7 +22,9 @@ if link_lib_MYSQL
 mysql_libadds =DBBackend/MySQL/libkrecmysql.la
 endif
 
+if link_lib_POSTGRESQL
 psql_libadds =DBBackend/PostgreSQL/libkrecpsql.la
+endif
 
 # the shared libraries to link against.
 krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkrecipesexporters.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la datablocks/libdatablocks.la DBBackend/recipedb.lo $(qsqlite_libadds) $(mysql_libadds) $(psql_libadds) $(LIB_KHTML) $(LIB_KSPELL)

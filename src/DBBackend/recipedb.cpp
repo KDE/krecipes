@@ -10,7 +10,12 @@
 
 #include "recipedb.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <kapplication.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kprogress.h> 
@@ -24,6 +29,18 @@
 #include <map>
 
 #include "importers/kreimporter.h"
+
+#if HAVE_POSTGRESQL
+#include "DBBackend/PostgreSQL/psqlrecipedb.h"
+#endif
+
+#if HAVE_MYSQL
+#include "DBBackend/MySQL/mysqlrecipedb.h"
+#endif
+
+#if HAVE_SQLITE || HAVE_SQLITE3
+#include "DBBackend/SQLite/literecipedb.h"
+#endif
 
 #include "ingredientpropertylist.h"
 #include "usda_property_data.h"
@@ -41,7 +58,46 @@ QString RecipeDB::krecipes_version() const
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData()->version();
 
-	return QString::null; //Oh, well.  We couldn't get the version.
+	return QString::null; //Oh, well.  We couldn't get the version (shouldn't happen).
+}
+
+RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
+{
+	KConfig *config = kapp->config();
+	config->setGroup("Server");
+	QString host=config->readEntry( "Host","localhost");
+	QString user=config->readEntry( "Username",QString::null);
+	QString pass=config->readEntry("Password",QString::null);
+	QString dbname=config->readEntry("DBName", DEFAULT_DB_NAME);
+
+	return createDatabase(dbType,host,user,pass,dbname,file);
+}
+
+RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, const QString &file )
+{
+	RecipeDB *database = 0;
+
+	if ( 0 ); //we need some condition here
+	#if HAVE_SQLITE || HAVE_SQLITE3
+	else if ( dbType == "SQLite" ) {
+		database = new LiteRecipeDB(file);
+	}
+	#endif //HAVE_SQLITE || HAVE_SQLITE3
+	#if HAVE_MYSQL
+	else if ( dbType == "MySQL" ) {
+		database=new MySQLRecipeDB(host,user,pass,dbname);
+	}
+	#endif //HAVE_MYSQL
+	#if HAVE_POSTGRESQL
+	else if ( dbType == "PostgreSQL" ) {
+		database=new PSqlRecipeDB(host,user,pass,dbname);
+	}
+	#endif //HAVE_POSTGRESQL
+	else {
+		kdDebug()<<"No database support included (or available) for the "<<dbType<<" database."<<endl;
+	}
+
+	return database;
 }
 
 void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KProgressDialog *progress_dlg )

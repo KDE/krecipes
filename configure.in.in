@@ -2,12 +2,31 @@ AM_INIT_AUTOMAKE(krecipes, 0.6)
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
-dnl ----- Check for existing MySQL ------
-dnl ----- Since we don't need mysql.h, we can always compile MySQL support -----
-dnl ----- TODO: Give option to turn off support -----
+AC_ARG_ENABLE(sqlite,    [  --disable-sqlite]     [Don't compile SQLite backend support],disable_sqlite=yes)
+AC_ARG_ENABLE(mysql,     [  --disable-mysql]      [Don't compile MySQL backend support],disable_mysql=yes)
+AC_ARG_ENABLE(postgresql,[  --disable-postgresql] [Don't compile PostgreSQL backend support],disable_postgresql=yes)
 
-AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
-have_mysql="true"
+dnl ----- Check if we should enable MySQL ------
+
+if test "x$disable_mysql" != "xyes"; then
+  AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
+  have_mysql="true"
+else
+  AC_DEFINE(HAVE_MYSQL, 0, [have MySQL])
+  have_mysql="false"
+fi
+
+
+dnl ----- Check if we should enable PostgreSQL ------
+
+if test "x$disable_postgresql" != "xyes"; then
+  AC_DEFINE(HAVE_POSTGRESQL, 1, [have PostgreSQL])
+  have_postgresql="true"
+else
+  AC_DEFINE(HAVE_POSTGRESQL, 0, [have PostgreSQL])
+  have_postgresql="false"
+fi
+
 
 dnl ------ Check for the SQLite headers -----
 
@@ -39,25 +58,30 @@ AC_DEFUN([AC_NO_SQLITE3],
         have_sqlite3=false
 ])
 
-KDE_CHECK_HEADER(sqlite.h,
-         AC_HAVE_SQLITE,
-         AC_NO_SQLITE
-)
+if test "x$disable_sqlite" != "xyes"; then
+  KDE_CHECK_HEADER(sqlite.h,
+           AC_HAVE_SQLITE,
+           AC_NO_SQLITE
+  )
 
-KDE_CHECK_HEADER(sqlite3.h,
-         AC_HAVE_SQLITE3,
-         AC_NO_SQLITE3
-)
-
+  KDE_CHECK_HEADER(sqlite3.h,
+           AC_HAVE_SQLITE3,
+           AC_NO_SQLITE3
+  )
+else
+  AC_NO_SQLITE
+  AC_NO_SQLITE3
+fi
 
 dnl ----------- Should I link or should I not link? ---------
 AM_CONDITIONAL(link_lib_MYSQL, test x$have_mysql = xtrue)
+AM_CONDITIONAL(link_lib_POSTGRESQL, test x$have_postgresql = xtrue)
 AM_CONDITIONAL(link_lib_SQLITE, test x$have_sqlite = xtrue || test x$have_sqlite3 = xtrue)
 
 dnl ----------- Should Krecipes be built at all? ------------
-if test "x$have_mysql" = "xfalse"; then
-	if test "x$have_sqlite" = "xfalse" || test "x$have_sqlite3" = "xfalse"; then
-	DO_NOT_COMPILE="$DO_NOT_COMPILE krecipes"
-	will_not_build_krecipes=true
-	fi
+if test "x$have_mysql" = "xfalse" && test "x$have_postgresql" = "xfalse"; then
+        if test "x$have_sqlite" = "xfalse" && test "x$have_sqlite3" = "xfalse"; then
+        DO_NOT_COMPILE="$DO_NOT_COMPILE krecipes"
+        will_not_build_krecipes=true
+        fi
 fi

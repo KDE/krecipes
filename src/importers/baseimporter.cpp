@@ -139,6 +139,14 @@ BaseImporter::~BaseImporter()
 	delete m_cat_structure;
 }
 
+void BaseImporter::add( const RecipeList &recipe_list )
+{
+	file_recipe_count += recipe_list.count();
+
+	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
+		m_recipe_list->append( *it );
+}
+
 void BaseImporter::parseFiles( const QStringList &filenames )
 {
 	for ( QStringList::const_iterator file_it = filenames.begin(); file_it != filenames.end(); ++file_it )

@@ -12,11 +12,7 @@
 
 #include "krecipesview.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <unistd.h>
+#include <unistd.h> //FIXME: is this used?
 
 #include <qlayout.h>
 #include <qimage.h>
@@ -53,18 +49,6 @@
 #include "gui/kstartuplogo.h"
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
-
-#include "DBBackend/PostgreSQL/psqlrecipedb.h"
-
-#if HAVE_MYSQL
-#include "DBBackend/MySQL/mysqlrecipedb.h"
-#endif
-
-#if HAVE_SQLITE || HAVE_SQLITE3
-#include "DBBackend/SQLite/literecipedb.h"
-#endif
-
-
 
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
@@ -569,33 +553,10 @@ if (initData)
 if (doUSDAImport)
 	{
         // Open the DB first
-	
-	RecipeDB *db = 0;
+	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass); //only used if needed by backend
+	RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
 
-	if ((dbType!="MySQL") && (dbType!="SQLite") && (dbType!="PostgreSQL")) // Need it Just to have the else's properly. This should not happen anyway
-	{
-		kdError()<<i18n("Code error. Unrecognized database type. Exiting\n");
-		exit(1);
-	}
-	#if HAVE_MYSQL
-	else if (dbType=="MySQL")
-	{
-		setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
-		db = new MySQLRecipeDB(host,user,pass,dbName);
-	}
-	#endif //HAVE_MYSQL
-	#if HAVE_SQLITE || HAVE_SQLITE3
-	else if (dbType=="SQLite") {
-		db = new LiteRecipeDB(QString::null);
-	}
-	#endif //HAVE_SQLITE||HAVE_SQLITE3
-	else if (dbType=="PostgreSQL")
-	{
-		setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
-		db = new PSqlRecipeDB(host,user,pass,dbName);
-	}
 	// Import the data
-
 	if (db)
 	{
 		db->connect();
@@ -611,7 +572,6 @@ if (doUSDAImport)
 	}
 	}
 
-
 }
 delete setupWizard;
 }
@@ -620,77 +580,37 @@ delete setupWizard;
 
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
-if (0){}
-#if HAVE_MYSQL
-else if (dbType=="MySQL")
-{
-MySQLRecipeDB *db;
+QString user = adminUser;
+QString pass = adminPass;
+if ( user.isNull() ) {
+	pass = QString::null;
 
-if (!adminPass.isNull())
-	{ // Login as admin in the (remote) server and createDB if necessary
-	kdDebug()<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
-	db= new MySQLRecipeDB(host,adminUser,adminPass,dbName);
-	}
-	else{ // Login as root with no password
-	kdDebug()<<"Open db as root, with no password\n";
-	db=new MySQLRecipeDB(host,"root",QString::null,dbName);
-	}
+	if ( dbType=="PostgreSQL" )
+		user = "postgres";
+	else if ( dbType=="MySQL" )
+		user = "root";
 
-db->connect();
-db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+	kdDebug()<<"Open db as "<<user<<", with no password\n";
+}
+else
+	kdDebug()<<"Open db as:"<<user<<",*** with password ****\n";
+
+RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
+if ( db ) {
+	db->connect();
+	db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
+}
 
 delete db; //it closes the db automatically
-}
-#endif // HAVE_MYSQL
-else if (dbType=="PostgreSQL") {
-PSqlRecipeDB *db;
-
-if (!adminPass.isNull())
-	{ // Login as admin in the (remote) server and createDB if necessary
-	kdDebug()<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
-	db= new PSqlRecipeDB(host,adminUser,adminPass,dbName);
-	}
-	else{ // Login as postgres with no password
-	kdDebug()<<"Trying to open db as postgres, with no password\n";
-	db=new PSqlRecipeDB(host,"postgres",QString::null,dbName);
-	}
-
-db->connect();
-db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
-}
 }
 
 
 void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
 {
-	RecipeDB *db;
-
-	if ((dbType!="MySQL")  && (dbType!="SQLite") && (dbType!="PostgreSQL")) // Need it Just to have the else's properly. This should not happen anyway
+	RecipeDB *db = RecipeDB::createDatabase(dbType,host,user,pass,dbName);
+	if ( !db )
 	{
-	kdError()<<i18n("Code error. Unrecognized database type. Exiting\n");
-	exit(1);
-	}
-
-	#if HAVE_MYSQL
-	else if (dbType=="MySQL")
-	{
-		db= new MySQLRecipeDB(host,user,pass,dbName);
-	}
-	#endif //HAVE_MYSQL
-	
-	#if HAVE_SQLITE || HAVE_SQLITE3
-	else if(dbType=="SQLite")
-	{
-		db= new LiteRecipeDB(host,user,pass,dbName);
-	}
-	#endif //HAVE_SQLITE || HAVE_SQLITE3
-	else if(dbType=="PostgreSQL")
-	{
-		db= new PSqlRecipeDB(host,user,pass,dbName);
-	}
-	else
-	{
-		kdError()<<i18n("Code error. No DB support has been included. Exiting\n");
+		kdError()<<i18n("Code error. No DB support has been included. Exiting")<<endl;
 		exit(1);
 	}
 	
@@ -901,33 +821,8 @@ void KrecipesView::initDatabase(KConfig *config)
 		
 		
 	// Open the database
-	
-	if (0) {}
-	#if HAVE_MYSQL
-	else if (dbType=="MySQL")
-		{
-		config->setGroup("Server");
-		QString host=config->readEntry( "Host","localhost");
-    		QString user=config->readEntry( "Username",QString::null);
-    		QString pass=config->readEntry("Password",QString::null);
-    		QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-		database=new MySQLRecipeDB(host,user,pass,dbname);
-		}
-			
-	#endif // HAVE_MYSQL
-	
-	#if HAVE_SQLITE || HAVE_SQLITE3
-	else if (dbType=="SQLite") database=new LiteRecipeDB(QString::null);
-	#endif // HAVE_SQLITE || HAVE_SQLITE3
-	else if (dbType=="PostgreSQL") {
-		config->setGroup("Server");
-		QString host=config->readEntry( "Host","localhost");
-    		QString user=config->readEntry( "Username",QString::null);
-    		QString pass=config->readEntry("Password",QString::null);
-    		QString dbname=config->readEntry("DBName", DEFAULT_DB_NAME);
-		database=new PSqlRecipeDB(host,user,pass,dbname);
-	}
-	else {
+	database = RecipeDB::createDatabase(dbType);
+	if ( !database ) {
 		// No DB type has been enabled(should not happen at all, but just in case)
 		
 		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
@@ -946,61 +841,18 @@ void KrecipesView::initDatabase(KConfig *config)
 		
 		config->sync();
 		config->setGroup("DBType");
-   		dbType=checkCorrectDBType(config);
-		
-		if (0) {}
-		#if HAVE_MYSQL
-		else if(dbType=="MySQL")  // First case, MySQL
-			{
-			config->setGroup("Server");
-			QString host=config->readEntry( "Host","localhost");
-    			QString user=config->readEntry( "Username",QString::null);
-    			QString pass=config->readEntry("Password",QString::null);
-    			QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-		
-			kdDebug()<<i18n("Configured type... MySQL\n").latin1();
+		dbType=checkCorrectDBType(config);
+
+		delete database;
+		database = RecipeDB::createDatabase(dbType);
+		if ( database )
+			database->connect();
+		else {
+			// No DB type has been enabled (should not happen at all, but just in case)
 			
-			// Try opening the database again with the new details
-			delete database;
-			database=new MySQLRecipeDB(host,user,pass,dbname);
-			database->connect();
-			}
-		#endif //HAVE_MYSQL
-		
-		#if HAVE_SQLITE || HAVE_SQLITE3
-		else if (dbType=="SQLite")// The user chose SQLite this time
-			{
-			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
-			delete database;
-			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
-			database->connect();
-			}
-		
-		#endif //HAVE_SQLITE || HAVE_SQLITE3
-		else if(dbType=="PostgreSQL")  // PostgreSQL chosen
-			{
-			config->setGroup("Server");
-			QString host=config->readEntry( "Host","localhost");
-    			QString user=config->readEntry( "Username",QString::null);
-    			QString pass=config->readEntry("Password",QString::null);
-    			QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-		
-			kdDebug()<<i18n("Configured type... PostgreSQL\n").latin1();
-			
-			// Try opening the database again with the new details
-			delete database;
-			database=new PSqlRecipeDB(host,user,pass,dbname);
-			database->connect();
-			}
-		else{
-		
-		// No DB type has been enabled (should not happen at all, but just in case)
-		
-		kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
-		exit(1);
+			kdError()<<i18n("Code error. No DB support was built in. Exiting")<<endl;
+			exit(1);
 		}
-		
-		
 	}
 	kdDebug()<<i18n("DB started correctly\n").latin1();
 }

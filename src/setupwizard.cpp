@@ -759,10 +759,18 @@ bg->setButton(0); // By default, SQLite
 mysqlCheckBox->setEnabled(false);
 #endif
 
+#if (!HAVE_POSTGRESQL)
+psqlCheckBox->setEnabled(false);
+#endif
+
 #if (!(HAVE_SQLITE || HAVE_SQLITE3))
 liteCheckBox->setEnabled(false);
 	#if (HAVE_MYSQL)
 	bg->setButton(1); // Otherwise by default liteCheckBox is checked even if it's disabled
+	#else
+	#if (HAVE_POSTGRESQL)
+	bg->setButton(2);
+	#endif
 	#endif
 #endif
 

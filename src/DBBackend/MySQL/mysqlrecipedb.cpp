@@ -17,7 +17,7 @@
 #include <ktempfile.h>
 #include <klocale.h>
 
-MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname):QSqlRecipeDB(host, user,pass,DBname)
+MySQLRecipeDB::MySQLRecipeDB(const QString &host, const QString &user, const QString &pass, const QString &DBname):QSqlRecipeDB(host, user,pass,DBname)
 {
 }
 

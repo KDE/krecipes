@@ -16,18 +16,14 @@ CONVENIENCES/MINOR FEATURES:
 	*Database maintenance options (Empty database, Remove unused elements, etc.)
 
 BUGS/OTHER:
+	*PRIORITY: Secure database access passwords
 	*Make use of transactions in database backends where appropriate
 	*Give a warning when deleting categories (such as when a recipe was a part of that category)
-	*Update configure scripts - MySQL is a run-time dependency and so configure doesn't deal with it.
-	*Allow not compiling particular backends through 'configure'.
 	*Don't show the empty unit in the unit page
 
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
 
-planned for 0.7:
-	*remote database recipe importing (multiple databases open and recipe transfer)
-	
 planned for 0.8:
 	*Step-by-Step recipe instructions with photos
 	*Check ingredients from existing kitchen resource table? Check amounts in the ingredient matcher?

@@ -24,6 +24,7 @@
 #include "ingredientpropertylist.h"
 #include "unitratiolist.h"
 
+#define DEFAULT_DB_NAME "Krecipes"
 
 /**
 @author Unai Garro
@@ -44,9 +45,9 @@ class RecipeDB:public QObject {
 Q_OBJECT
 
 protected:
-	RecipeDB(QString host, QString user, QString pass, QString DBname):QObject(){dbOK=false; dbErr="";}
+	RecipeDB():QObject(){dbOK=false; dbErr="";}
 	
-	double latestDBVersion() const{ return 0.61; }
+	double latestDBVersion() const{ return 0.62; }
 	QString krecipes_version() const;
 
 public:
@@ -89,7 +90,20 @@ signals:
 
 	// Public methods
 public:
-		
+	/** Returns a database object of the given type or NULL upon failure.
+	  * This function should be called to create a new database, rather
+	  * than directly calling the constructor of a specific backend.
+	  */
+	static RecipeDB* createDatabase( const QString &dbType,
+	  const QString &host,
+	  const QString &user,
+	  const QString &pass,
+	  const QString &DBname,
+	  const QString &file = QString::null );
+
+	/** Convenience method.  Calls the above with arguments from KConfig. */
+	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString::null );
+
 	virtual void addAuthorToRecipe(int recipeID, int categoryID)=0;
 	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
 

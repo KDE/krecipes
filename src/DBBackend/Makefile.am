@@ -19,8 +19,10 @@ mysql_subdirs=MySQL
 mysql_libs=MySQL/libkrecmysql.la
 endif
 
-psql_libs=PostgreSQL/libkrecpsql.la
+if link_lib_POSTGRESQL
 psql_subdirs=PostgreSQL
+psql_libs=PostgreSQL/libkrecpsql.la
+endif
 
 # Optional subdirectories
 

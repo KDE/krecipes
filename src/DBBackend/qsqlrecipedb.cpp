@@ -22,7 +22,7 @@
 #include <ktempfile.h>
 #include <klocale.h>
 
-QSqlRecipeDB::QSqlRecipeDB(QString host, QString user, QString pass, QString name):RecipeDB(host, user,pass,name)
+QSqlRecipeDB::QSqlRecipeDB(const QString &host, const QString &user, const QString &pass, const QString &name):RecipeDB()
 {
 	DBuser=user;DBpass=pass;DBhost=host;DBname=name;
 
@@ -37,6 +37,7 @@ if (dbOK) database->close();
 void QSqlRecipeDB::connect()
 {
 	kdDebug()<<i18n("QSqlRecipeDB: Opening Database...")<<endl;
+	kdDebug()<<"Parameters: \n\thost: "<<DBhost<<"\n\tuser: "<<DBuser<<"\n\ttable: "<<DBname<<endl;
 
 	QStringList drivers = QSqlDatabase::drivers();
 	bool driver_found = false;

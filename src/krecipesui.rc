@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="krecipes" version="2">
+<kpartgui name="krecipes" version="3">
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="reload_action" />
     <Separator />
     <Action name="import_action" />
+    <Action name="import_db_action" />
   </Menu>
   <Menu name="view"><text>&amp;View</text>
     <Action name="page_setup_action" />

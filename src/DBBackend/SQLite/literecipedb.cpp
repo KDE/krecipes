@@ -20,15 +20,21 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #include "datablocks/categorytree.h"
 
 #define DB_FILENAME "krecipes.krecdb"
 
-LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname):RecipeDB(host, user,pass,DBname)
+LiteRecipeDB::LiteRecipeDB(const QString &_dbFile):RecipeDB(), dbFile(_dbFile)
 {
-DBuser=user;DBpass=pass;DBhost=host;
+	KConfig *config = KGlobal::config();
+	config->setGroup("Server");
+
+	if ( dbFile.isNull() )
+		dbFile = config->readEntry("DBFile",locateLocal ("appdata",DB_FILENAME));
 }
 
 LiteRecipeDB::~LiteRecipeDB()
@@ -39,10 +45,6 @@ delete database;
 
 void LiteRecipeDB::connect()
 {
-KConfig *config = KGlobal::config();
-config->setGroup("Server");
-QString  dbFile=config->readEntry("DBFile",locateLocal ("appdata",DB_FILENAME));
-
 kdDebug()<<"Connecting to the SQLite database\n";
 
         database= new QSQLiteDB();
