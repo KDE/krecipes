@@ -280,16 +280,10 @@ void Krecipes::import()
 		
 		delete importer;
 
-		//TODO: is this the best way to do it???
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
 		m_view->selectPanel->reload();
-		m_view->ingredientsPanel->reload();
-		m_view->propertiesPanel->reload();
 		m_view->unitsPanel->reload();
 		m_view->shoppingListPanel->reload();
-		m_view->categoriesPanel->reload();
-		m_view->authorsPanel->reload();
-		m_view->ingredientMatcherPanel->reloadIngredients();
 		KApplication::restoreOverrideCursor();
 	}
 }

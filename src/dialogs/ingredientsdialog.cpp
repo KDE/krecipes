@@ -20,6 +20,7 @@
 #include "selectpropertydialog.h"
 #include "selectunitdialog.h"
 #include "dependanciesdialog.h"
+#include "widgets/ingredientlistview.h"
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -49,12 +50,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     layout->addItem(spacer_top,0,1);
 
     ingredientListView=new KreListView (this,i18n("Ingredient list"),true,1);
-    ingredientListView->listView()->setAllColumnsShowFocus(true);
+    StdIngredientListView *list_view = new StdIngredientListView(ingredientListView,database,true);
+    list_view->reload();
+    ingredientListView->setListView(list_view);
     layout->addMultiCellWidget (ingredientListView,1,10,1,1);
-    ingredientListView->listView()->addColumn(i18n("Id"));
-    ingredientListView->listView()->addColumn(i18n("Ingredient"));
-    ingredientListView->listView()->setRenameable(1, true);
-    ingredientListView->listView()->setDefaultRenameAction(QListView::Reject);
     ingredientListView->listView()->setMinimumWidth(150);
     ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
@@ -162,12 +161,9 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     // Initialize
     ingredientList =new ElementList;
     unitList=new ElementList;
-    reloadIngredientList();
 
     // Signals & Slots
     connect(ingredientListView->listView(),SIGNAL(selectionChanged()),this, SLOT(updateLists()));
-    connect(ingredientListView->listView(),SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredient( QListViewItem* )));
-    connect(ingredientListView->listView(),SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredient( QListViewItem* )));
     connect(addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
     connect(addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
@@ -188,16 +184,7 @@ IngredientsDialog::~IngredientsDialog()
 
 void IngredientsDialog::reloadIngredientList(void)
 {
-ingredientListView->listView()->clear();
-ingredientList->clear();
-database->loadIngredients(ingredientList);
-
-//Populate this data into the KListView
-
-	for ( ElementList::const_iterator ing_it = ingredientList->begin(); ing_it != ingredientList->end(); ++ing_it )
-	{
-	(void) new QListViewItem(ingredientListView->listView(),QString::number((*ing_it).id),(*ing_it).name);
-	}
+((StdIngredientListView*)ingredientListView->listView())->reload();
 
 // Reload Unit List
 updateLists();
@@ -243,50 +230,8 @@ CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("Ne
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
    database->createNewIngredient(result); // Create the new ingredient in database
-   reloadIngredientList(); // Reload the list from database
 }
 delete elementDialog;
-}
-
-void IngredientsDialog::modIngredient(QListViewItem* i)
-{
-  addIngredientButton->setEnabled(false);
-  removeIngredientButton->setEnabled(false);
-  addUnitButton->setEnabled(false);
-  removeUnitButton->setEnabled(false);
-  addPropertyButton->setEnabled(false);
-  removePropertyButton->setEnabled(false);
-  ingredientListView->listView()->rename(i, 1);
-}
-
-void IngredientsDialog::saveIngredient(QListViewItem* i)
-{
-int existing_id = database->findExistingIngredientByName( i->text(1) );
-int ing_id = i->text(0).toInt();
-if ( existing_id != -1 && existing_id != ing_id ) //category already exists with this label... merge the two
-{  
-  switch (KMessageBox::warningContinueCancel(this,i18n("This ingredient already exists.  Continuing will merge these two ingredients into one.  Are you sure?")))
-  {
-  case KMessageBox::Continue:
-  {
-  	database->mergeIngredients(existing_id,ing_id);
-  	delete i;
-  	break;
-  }
-  default: reload(); break;
-  }
-}
-else
-{
-  database->modIngredient((i->text(0)).toInt(), i->text(1));
-}
-
-addIngredientButton->setEnabled(true);
-removeIngredientButton->setEnabled(true);
-addUnitButton->setEnabled(true);
-removeUnitButton->setEnabled(true);
-addPropertyButton->setEnabled(true);
-removePropertyButton->setEnabled(true);
 }
 
 void IngredientsDialog::addUnitToIngredient(void)
@@ -364,8 +309,6 @@ else { // Need Warning!
   if (warnDialog->exec()==QDialog::Accepted) database->removeIngredient(ingredientID);
   delete warnDialog;
 	}
-
-reloadIngredientList();// Reload the list from database
 
 }
 

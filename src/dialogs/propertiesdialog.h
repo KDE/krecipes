@@ -19,7 +19,7 @@
 #include <klistview.h>
 
 class RecipeDB;
-class IngredientPropertyList;
+class StdPropertyListView;
 
 /**
 @author Unai Garro
@@ -36,15 +36,13 @@ public slots:
 private:
   // Variables
     RecipeDB *database;
-    IngredientPropertyList *propertyList;
+
   // Widgets
     QGridLayout* layout;
     QPushButton* addPropertyButton;
     QPushButton* removePropertyButton;
-    KListView* propertyListView;
+    StdPropertyListView* propertyListView;
 
-  // Methods
-  void reloadPropertyList(void);
 };
 
 #endif

@@ -11,6 +11,7 @@
 #include "ingredientmatcherdialog.h"
 
 #include "datablocks/recipelist.h"
+#include "widgets/ingredientlistview.h"
 #include "elementlist.h"
 #include "DBBackend/recipedb.h"
 #include "widgets/krelistview.h"
@@ -35,9 +36,9 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	
 		// Ingredient list
 	ingredientListView=new KreListView(this,i18n("Ingredients"),true,1);
-	ingredientListView->listView()->setAllColumnsShowFocus(true);
-	ingredientListView->listView()->addColumn("*");
-	ingredientListView->listView()->addColumn(i18n("Ingredient"));
+	IngredientCheckListView *list_view = new IngredientCheckListView(ingredientListView,database);
+	list_view->reload();
+	ingredientListView->setListView(list_view);
 		// Box to select allowed number of missing ingredients
 	missingBox=new QHBox(this);
 	missingNumberLabel=new QLabel(missingBox);
@@ -70,10 +71,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	clearButton=new QPushButton(buttonBox);
 	clearButton->setIconSet(il.loadIconSet("editclear", KIcon::Small));
 	clearButton->setText(i18n("Clear recipe list"));
-	
-	// Load the data
-	reloadIngredients();
-	
+
 	// Connect signals & slots
 	connect (okButton,SIGNAL(clicked()), this,SLOT(findRecipes()));
 	connect (clearButton,SIGNAL(clicked()),recipeListView->listView(),SLOT(clear()));
@@ -95,14 +93,13 @@ void IngredientMatcherDialog::findRecipes(void)
 	RecipeList rlist;
 	IngredientList ilist;
 	database->loadRecipeDetails(&rlist,true,false,true);
-	
-	
+		
 	QListViewItem *qlv_it;
 	
 	// First make a list of the ingredients that we have
 	for (qlv_it=ingredientListView->listView()->firstChild();qlv_it;qlv_it=qlv_it->nextSibling())
 		{
-		IngredientListItem *il_it=(IngredientListItem*) qlv_it;
+		IngredientCheckListItem *il_it=(IngredientCheckListItem*) qlv_it;
 		if (il_it->isOn())
 			{
 			Ingredient ing; ing.name=il_it->name(); ing.ingredientID=il_it->id();
@@ -184,18 +181,7 @@ void IngredientMatcherDialog::findRecipes(void)
 
 void IngredientMatcherDialog::reloadIngredients(void)
 {
-
-	ingredientListView->listView()->clear();
-	ElementList ingredientList;
-	database->loadIngredients(&ingredientList);
-	
-	ElementList::Iterator it;
-	
-	for (it=ingredientList.begin();it!=ingredientList.end();++it)
-		{
-		Element ingredient=*it;
-		new IngredientListItem(ingredientListView->listView(),ingredient);
-		}
+	((StdIngredientListView*)ingredientListView->listView())->reload();
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int /*width*/, int /*align*/ )

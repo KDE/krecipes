@@ -329,11 +329,11 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 			rightPanel->setHeader(i18n("Shopping List"),"trolley");
 			rightPanel->raise(shoppingListPanel);
 			break;
-		case DietP: dietPanel->reload(); // Reload data
+		case DietP:
 			rightPanel->setHeader(i18n("Diet Helper"),"diet");
 			rightPanel->raise(dietPanel);
 			break;
-		case MatcherP: ingredientMatcherPanel->reloadIngredients(); // Reload data
+		case MatcherP:
 			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
 			rightPanel->raise(ingredientMatcherPanel);
 			break;
@@ -344,11 +344,11 @@ else if (leftPanel->currentMenu()==dataMenu)
 	{
 	switch(w)
 		{
-		case IngredientsP: ingredientsPanel->reload();// Reload data
+		case IngredientsP:
 			rightPanel->setHeader(i18n("Ingredients"),"ingredients");
 			rightPanel->raise(ingredientsPanel);
 			break;
-		case PropertiesP: propertiesPanel->reload();
+		case PropertiesP:
 			rightPanel->setHeader(i18n("Properties"),"properties");
 			rightPanel->raise(propertiesPanel);
 		
@@ -362,11 +362,10 @@ else if (leftPanel->currentMenu()==dataMenu)
 			rightPanel->raise(prepMethodsPanel);
 			break;
 		case CategoriesP:
-			categoriesPanel->reload();
 			rightPanel->setHeader(i18n("Categories"),"categories");
 			rightPanel->raise(categoriesPanel);
 			break;
-		case AuthorsP: authorsPanel->reload();
+		case AuthorsP:
 			rightPanel->setHeader(i18n("Authors"),"personal");
 			rightPanel->raise(authorsPanel);
 			break;
@@ -598,7 +597,6 @@ delete setupWizard;
 
 void KrecipesView::slotSetDietWizardPanel(void)
 {
-dietPanel->reload();
 rightPanel->setHeader(i18n("Diet Helper"),"wizard");
 rightPanel->raise(dietPanel);
     setContextHelp(DietP);

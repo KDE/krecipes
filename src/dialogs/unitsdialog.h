@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -20,6 +20,7 @@
 
 class RecipeDB;
 class ConversionTable;
+class StdUnitListView;
 
 /**
 @author Unai Garro
@@ -29,26 +30,27 @@ Q_OBJECT
 public:
     UnitsDialog(QWidget *parent, RecipeDB *db);
     ~UnitsDialog();
+    virtual QSize sizeHint () const{return QSize(600,400);}
+
+public slots:
     void reload (void);
-    virtual QSize sizeHint () const{return QSize(600,400);};
+
 private:
 	// Widgets
-	KListView *unitListView;
+	StdUnitListView *unitListView;
 	ConversionTable *conversionTable;
 	QPushButton *newUnitButton;
 	QPushButton *removeUnitButton;
 	// Internal methods
-	void loadConversionTable(void);
 	void loadUnitsList(void);
 	void reloadData(void);
 	void saveAllRatios( UnitRatioList &ratioList );
 	// Internal Variables
 	RecipeDB *database;
 private slots:
+	void loadConversionTable(void);
 	void createNewUnit(void);
-	void modUnit(QListViewItem*);
 	void removeUnit(void);
-	void saveUnit(QListViewItem*);
 	void saveRatio(int r, int c, double value);
 
 };

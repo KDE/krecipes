@@ -70,6 +70,7 @@ public:
 	int  findExistingCategoryByName(const QString& name);
 	int  findExistingIngredientByName(const QString& name);
 	int  findExistingPrepByName(const QString& name);
+	int  findExistingPropertyByName(const QString& name);
 	int  findExistingRecipeByName(const QString& name);
 	int  findExistingUnitByName(const QString& name);
 	int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0);
@@ -115,6 +116,7 @@ public:
 	void mergeIngredients(int id1, int id2);
 	void mergeUnits(int id1, int id2);
 	void mergePrepMethods(int id1, int id2);
+	void mergeProperties(int id1, int id2);
 
   /**
   * set newLabel for ingredientID
@@ -135,6 +137,8 @@ public:
 	void modAuthor(int authorID, QString newLabel);
 	
 	void modPrepMethod(int prepMethodID, const QString &newLabel);
+
+	void modProperty(int propertyID, const QString &newLabel);
 
 	QString recipeTitle(int recipeID);
 
@@ -158,7 +162,10 @@ public:
 	QCString escapeAndEncode(const QString &s);
 	QString unescapeAndDecode(const QString &s);
 
-	QString unitName(int unitID);
+	QString categoryName(int ID);
+	IngredientProperty propertyName(int ID);
+	QString unitName(int ID);
+
 	bool checkIntegrity(void);
 
 	void createTable(QString tableName);

@@ -15,15 +15,13 @@
 
 #include "DBBackend/recipedb.h"
 #include "createpropertydialog.h"
+#include "widgets/propertylistview.h"
 
 PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
 
     // Store pointer to database
     database=db;
-
-    // Initialize internal variables
-    propertyList=new IngredientPropertyList;
 
     // Design dialog
 
@@ -34,12 +32,9 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     layout->addMultiCell(spacer_top,0,0,1,4);
 
 
-    propertyListView=new KListView (this);
+    propertyListView=new StdPropertyListView(this,database,true);
+    propertyListView->reload();
     layout->addMultiCellWidget (propertyListView,1,4,1,6);
-    propertyListView->addColumn(i18n("Id"));
-    propertyListView->addColumn(i18n("Property"));
-    propertyListView->addColumn(i18n("Units"));
-    propertyListView->setAllColumnsShowFocus(true);
     QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,7);
     addPropertyButton=new QPushButton(this);
@@ -54,10 +49,6 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     removePropertyButton->setFixedSize(QSize(32,32));
     removePropertyButton->setFlat(true);
     layout->addWidget(removePropertyButton,3,8);
-
-
-    // Populate UI with data
-    reloadPropertyList();
 
     // Connect signals & slots
     connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(createNewProperty()));
@@ -82,24 +73,6 @@ if ( propertyDialog->exec() == QDialog::Accepted ) {
       database->addProperty(name, units);
 }
 delete propertyDialog;
-
-reloadPropertyList();
-}
-
-void PropertiesDialog::reloadPropertyList(void)
-{
-propertyList->clear(); // Empty list
-propertyListView->clear(); // Clear the view
-database->loadProperties(propertyList);
-
-//Populate this data into the KListView
-	for ( IngredientProperty *prop =propertyList->getFirst(); prop; prop =propertyList->getNext() )
-	{
-	(void)new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units);
-
-
-	}
-
 }
 
 void PropertiesDialog::removeProperty(void)
@@ -111,13 +84,11 @@ if ( (it=propertyListView->selectedItem()) )
 propertyID=it->text(0).toInt();
 }
 database->removeProperty(propertyID);
-
-reloadPropertyList(); //Update the list
 }
 
 void PropertiesDialog::reload(void)
 {
-this->reloadPropertyList();
+propertyListView->reload();
 }
 
 #include "propertiesdialog.moc"

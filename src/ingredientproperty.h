@@ -19,7 +19,7 @@
 class IngredientProperty{
 public:
     IngredientProperty();
-    IngredientProperty(IngredientProperty &ip);
+    IngredientProperty(const QString &name, const QString &units, int id=-1);
     ~IngredientProperty();
     int id; // The property's id
     int ingredientID; // (Optional) reference to the ingredient to which is attached
@@ -27,8 +27,6 @@ public:
     QString units; // The units that the property uses
     Element perUnit; // stores the unit ID and Name of the per units.
     double amount; // Stores the amount, in the case of being attached to an ingredient. If not attached to any, you can set it to -1 preferably. That's the case in which the property is treated as a characteristic any without value (amount).
-    IngredientProperty& operator=(IngredientProperty &ip);
-
 
 };
 

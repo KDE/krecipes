@@ -71,8 +71,6 @@ private:
 
   private slots:
     void addIngredient(void);
-    void modIngredient(QListViewItem*);
-    void saveIngredient(QListViewItem*);
     void addUnitToIngredient(void);
     void removeUnitFromIngredient(void);
     void removeIngredient(void);

@@ -13,6 +13,7 @@
 #include "authorsdialog.h"
 #include "createelementdialog.h"
 #include "DBBackend/recipedb.h"
+#include "widgets/authorlistview.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -31,12 +32,8 @@ QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Mi
 layout->addItem(spacerLeft,1,0);
 
 //Author List
-authorListView=new KListView(this);
-authorListView->addColumn(i18n("Id"));
-authorListView->addColumn(i18n("Author's Name"));
-authorListView->setRenameable(1, true);
-authorListView->setDefaultRenameAction(QListView::Reject);
-authorListView->setAllColumnsShowFocus(true);
+authorListView=new StdAuthorListView(this,database,true);
+authorListView->reload();
 layout->addWidget(authorListView,1,1);
 
 //Buttons
@@ -54,15 +51,10 @@ removeAuthorButton->setText(i18n("Remove"));
 pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeAuthorButton->setIconSet(pm);
 removeAuthorButton->setMaximumWidth(100);
 
-//Load the data from the database
-reload();
-
 //Connect Signals & Slots
 
 connect (newAuthorButton,SIGNAL(clicked()),this,SLOT(createNewAuthor()));
 connect (removeAuthorButton,SIGNAL(clicked()),this,SLOT(removeAuthor()));
-connect(authorListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modAuthor( QListViewItem* )));
-connect(authorListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveAuthor( QListViewItem* )));
 }
 
 AuthorsDialog::~AuthorsDialog()
@@ -72,16 +64,7 @@ AuthorsDialog::~AuthorsDialog()
 // (Re)loads the data from the database
 void AuthorsDialog::reload(void)
 {
-
-//Clear the listview first
-authorListView->clear();
-
-ElementList authorList;
-database->loadAuthors(&authorList);
-for ( ElementList::const_iterator author_it = authorList.begin(); author_it != authorList.end(); ++author_it )
-	{
-	(void)new QListViewItem(authorListView,QString::number((*author_it).id),(*author_it).name);
-	}
+	authorListView->reload();
 }
 
 void AuthorsDialog::createNewAuthor(void)
@@ -91,7 +74,6 @@ CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Author
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
    database->createNewAuthor(result); // Create the new author in the database
-   reload(); // Reload the list from the database
 }
 }
 
@@ -107,44 +89,6 @@ if (authorID>=0) // an author was selected previously
 {
 database->removeAuthor(authorID);
 }
-
-reload();// Reload the list from the database
-
 }
-
-void AuthorsDialog::modAuthor(QListViewItem* i)
-{
-  newAuthorButton->setEnabled(false);
-  removeAuthorButton->setEnabled(false);
-  authorListView->rename(i, 1);
-}
-
-void AuthorsDialog::saveAuthor(QListViewItem* i)
-{
-int existing_id = database->findExistingAuthorByName( i->text(1) );
-int author_id = i->text(0).toInt();
-if ( existing_id != -1 && existing_id != author_id ) //category already exists with this label... merge the two
-{  
-  switch (KMessageBox::warningContinueCancel(this,i18n("This author already exists.  Continuing will merge these two authors into one.  Are you sure?")))
-  {
-  case KMessageBox::Continue:
-  {
-  	database->mergeAuthors(existing_id,author_id);
-  	delete i;
-  	break;
-  }
-  default: reload(); break;
-  }
-}
-else
-{
-  database->modAuthor((i->text(0)).toInt(), i->text(1));
-}
-
-newAuthorButton->setEnabled(true);
-removeAuthorButton->setEnabled(true);
-}
-
-
 
 #include "authorsdialog.moc"

@@ -18,53 +18,7 @@
 
 #include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
-
-class CategoryListItem:public QCheckListItem{
-public:
-	CategoryListItem(QListView* qlv, const Element &el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox),elStored(el){}
-	CategoryListItem(CategoryListItem* cli, const Element &el ):QCheckListItem(cli,QString::null,QCheckListItem::CheckBox),elStored(el){}
-	Element element() const { return elStored; }
-
-private:
-	const Element elStored;
-
-public:
-	virtual QString text(int column) const
-		{
-		return(elStored.name);
-		}
-
-protected:
-	virtual void stateChange(bool on)
-	{
-		if ( on )
-		{
-			CategoryListItem *cat_it;
-			for ( cat_it = (CategoryListItem*)parent(); cat_it; cat_it = (CategoryListItem*)cat_it->parent() )
-				 cat_it->setOn(false);
-
-			//do this to only iterate over this item's children
-			QListViewItem *pEndItem = NULL;
-			QListViewItem *pStartItem = this;
-			do
-			{
-				if(pStartItem->nextSibling())
-					pEndItem = pStartItem->nextSibling();
-				else
-					pStartItem = pStartItem->parent();
-			}
-			while(pStartItem && !pEndItem);
-
-			QListViewItemIterator it( this );
-			while ( it.current() && it.current() != pEndItem ) {
-				cat_it = (CategoryListItem*)it.current();
-				if ( cat_it != this ) 
-					cat_it->setOn(false);
-				++it;
-			}
-		}
-	}
-};
+#include "widgets/categorylistview.h"
 
 SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const CategoryTree *categoryTree,const QMap<Element,bool> &selected, RecipeDB *db):QDialog(parent,0,true)
 {
@@ -130,15 +84,15 @@ SelectCategoriesDialog::~SelectCategoriesDialog()
 {
 }
 
-void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected,CategoryListItem *parent)
+void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected,CategoryCheckListItem *parent)
 {
-CategoryListItem *it;
+CategoryCheckListItem *it;
 if ( parent == 0 )
-	it = (CategoryListItem*)categoryListView->firstChild();
+	it = (CategoryCheckListItem*)categoryListView->firstChild();
 else
-	it = (CategoryListItem*)parent->firstChild();
+	it = (CategoryCheckListItem*)parent->firstChild();
 
-for (;it; it=(CategoryListItem *) it->nextSibling())
+for (;it; it=(CategoryCheckListItem *) it->nextSibling())
 	{
 	if (it->isOn()) newSelected->append(it->element()); // If checked, add
 	
@@ -146,18 +100,18 @@ for (;it; it=(CategoryListItem *) it->nextSibling())
 	}
 }
 
-void SelectCategoriesDialog::loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryListItem *parent )
+void SelectCategoriesDialog::loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryCheckListItem *parent )
 {
 	const CategoryTreeChildren *children = categoryTree->children();
 	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it )
 	{
 		const CategoryTree *node = *child_it;
 		
-		CategoryListItem *new_item;
+		CategoryCheckListItem *new_item;
 		if ( parent == 0 )
-			new_item = new CategoryListItem(categoryListView,node->category);
+			new_item = new CategoryCheckListItem(categoryListView,node->category);
 		else
-			new_item = new CategoryListItem(parent,node->category);
+			new_item = new CategoryCheckListItem(parent,node->category);
 		
 		new_item->setOn(selected[node->category]);
 		new_item->setOpen(true);
@@ -178,12 +132,12 @@ void SelectCategoriesDialog::createNewCategory(void)
 		
 		Element new_cat(result,database->lastInsertID());
 		
-		CategoryListItem *it;
+		CategoryCheckListItem *it;
 		if ( subcategory == -1 )
-			it = new CategoryListItem(categoryListView,new_cat);
+			it = new CategoryCheckListItem(categoryListView,new_cat);
 		else {
 			Element el("",subcategory);
-			it = new CategoryListItem((CategoryListItem*)categoryListView->findItem((*categories.find(el)).name,0),new_cat);
+			it = new CategoryCheckListItem((CategoryCheckListItem*)categoryListView->findItem((*categories.find(el)).name,0),new_cat);
 		}
 		it->setOn(true);
 	}

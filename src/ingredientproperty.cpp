@@ -16,29 +16,14 @@ ingredientID=-1;
 amount=0.0;
 }
 
-IngredientProperty::IngredientProperty(IngredientProperty &ip)
+IngredientProperty::IngredientProperty(const QString &_name, const QString &_units, int _id) :
+  name(_name),
+  units(_units),
+  id(_id)
 {
-amount=ip.amount;
-id=ip.id;
-ingredientID=ip.ingredientID;
-name=ip.name;
-perUnit=ip.perUnit;
-units=ip.units;
 }
 
 IngredientProperty::~IngredientProperty()
 {
 }
 
-
-
-IngredientProperty &IngredientProperty::operator=(IngredientProperty &ip)
-{
-amount=ip.amount;
-id=ip.id;
-ingredientID=ip.ingredientID;
-name=ip.name;
-perUnit=ip.perUnit;
-units=ip.units;
-return *this;
-}

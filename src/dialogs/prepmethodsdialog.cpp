@@ -14,6 +14,7 @@
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
 #include "DBBackend/recipedb.h"
+#include "widgets/prepmethodlistview.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -32,12 +33,8 @@ QSpacerItem *spacerLeft=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Mi
 layout->addItem(spacerLeft,1,0);
 
 //PrepMethod List
-prepMethodListView=new KListView(this);
-prepMethodListView->addColumn(i18n("Id"));
-prepMethodListView->addColumn(i18n("Preparation Method"));
-prepMethodListView->setRenameable(1, true);
-prepMethodListView->setDefaultRenameAction(QListView::Reject);
-prepMethodListView->setAllColumnsShowFocus(true);
+prepMethodListView=new StdPrepMethodListView(this,database,true);
+prepMethodListView->reload();
 layout->addWidget(prepMethodListView,1,1);
 
 //Buttons
@@ -55,15 +52,10 @@ removePrepMethodButton->setText(i18n("Remove"));
 pm=il->loadIcon("editshred", KIcon::NoGroup,16); removePrepMethodButton->setIconSet(pm);
 removePrepMethodButton->setMaximumWidth(100);
 
-//Load the data from the database
-reload();
-
 //Connect Signals & Slots
 
 connect (newPrepMethodButton,SIGNAL(clicked()),this,SLOT(createNewPrepMethod()));
 connect (removePrepMethodButton,SIGNAL(clicked()),this,SLOT(removePrepMethod()));
-connect(prepMethodListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modPrepMethod( QListViewItem* )));
-connect(prepMethodListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(savePrepMethod( QListViewItem* )));
 }
 
 PrepMethodsDialog::~PrepMethodsDialog()
@@ -73,16 +65,7 @@ PrepMethodsDialog::~PrepMethodsDialog()
 // (Re)loads the data from the database
 void PrepMethodsDialog::reload(void)
 {
-
-//Clear the listview first
-prepMethodListView->clear();
-
-ElementList prepMethodList;
-database->loadPrepMethods(&prepMethodList);
-for ( ElementList::const_iterator prepMethod_it = prepMethodList.begin(); prepMethod_it != prepMethodList.end(); ++prepMethod_it )
-	{
-		(void)new QListViewItem(prepMethodListView,QString::number((*prepMethod_it).id),(*prepMethod_it).name);
-	}
+prepMethodListView->reload();
 }
 
 void PrepMethodsDialog::createNewPrepMethod(void)
@@ -116,42 +99,6 @@ if (prepMethodID>=0) // an prepMethod was selected previously
 		delete warnDialog;
 	}
 }
-
-reload();// Reload the list from the database
 }
-
-void PrepMethodsDialog::modPrepMethod(QListViewItem* i)
-{
-  newPrepMethodButton->setEnabled(false);
-  removePrepMethodButton->setEnabled(false);
-  prepMethodListView->rename(i, 1);
-}
-
-void PrepMethodsDialog::savePrepMethod(QListViewItem* i)
-{
-int existing_id = database->findExistingPrepByName( i->text(1) );
-int prep_id = i->text(0).toInt();
-if ( existing_id != -1 && existing_id != prep_id ) //category already exists with this label... merge the two
-{  
-  switch (KMessageBox::warningContinueCancel(this,i18n("This preparation method already exists.  Continuing will merge these two into one.  Are you sure?")))
-  {
-  case KMessageBox::Continue:
-  {
-  	database->mergePrepMethods(existing_id,prep_id);
-  	delete i;
-  	break;
-  }
-  default: reload(); break;
-  }
-}
-else
-{
-  database->modPrepMethod((i->text(0)).toInt(), i->text(1));
-}
-
-newPrepMethodButton->setEnabled(true);
-removePrepMethodButton->setEnabled(true);
-}
-
 
 #include "prepmethodsdialog.moc"

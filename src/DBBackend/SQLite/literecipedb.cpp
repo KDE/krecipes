@@ -643,6 +643,8 @@ QString command;
 
 command=QString("INSERT INTO ingredients VALUES(NULL,'%1');").arg(escapeAndEncode(ingredientName));
 database->executeQuery(command);
+
+emit ingredientCreated(Element(ingredientName,lastInsertID()));
 }
 
 void LiteRecipeDB::modIngredient(int ingredientID, QString newLabel)
@@ -651,6 +653,9 @@ QString command;
 
 command=QString("UPDATE ingredients SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(ingredientID);
 database->executeQuery(command);
+
+emit ingredientRemoved(ingredientID);
+emit ingredientCreated( Element(newLabel,ingredientID) );
 }
 
 void LiteRecipeDB::addUnitToIngredient(int ingredientID,int unitID)
@@ -774,6 +779,8 @@ database->executeQuery( command);
 // Remove property list of this ingredient
 command=QString("DELETE FROM ingredient_info WHERE ingredient_id=%1;").arg(ingredientID);
 database->executeQuery(command);
+
+emit ingredientRemoved(ingredientID);
 }
 
 void LiteRecipeDB::initializeDB(void)
@@ -834,6 +841,8 @@ void LiteRecipeDB::addProperty(const QString &name, const QString &units)
 QString command;
 command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(name)).arg(escapeAndEncode(units));
 database->executeQuery(command);
+
+emit propertyCreated( IngredientProperty(name,units,lastInsertID()) );
 }
 
 void LiteRecipeDB::loadProperties(IngredientPropertyList *list,int ingredientID)
@@ -931,6 +940,7 @@ database->executeQuery(command);
 command=QString("DELETE FROM ingredient_info WHERE property_id=%1;").arg(propertyID);
 database->executeQuery(command);
 
+emit propertyRemoved(propertyID);
 }
 
 void LiteRecipeDB::removePrepMethod(int prepMethodID)
@@ -951,6 +961,8 @@ database->executeQuery( command );
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE category_list.* FROM category_list LEFT JOIN recipes ON category_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
 database->executeQuery( command);
+
+emit prepMethodRemoved(prepMethodID);
 }
 
 void LiteRecipeDB::modPrepMethod(int prepMethodID, const QString &newLabel)
@@ -959,6 +971,20 @@ QString command;
 
 command=QString("UPDATE prep_methods SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(prepMethodID);
 database->executeQuery(command);
+
+emit prepMethodRemoved(prepMethodID);
+emit prepMethodCreated( Element(newLabel,prepMethodID) );
+}
+
+void LiteRecipeDB::modProperty(int propertyID, const QString &newLabel)
+{
+QString command;
+
+command=QString("UPDATE ingredient_properties SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(propertyID);
+database->executeQuery(command);
+
+emit propertyRemoved(propertyID);
+emit propertyCreated( propertyName(propertyID) );
 }
 
 void LiteRecipeDB::createNewPrepMethod(const QString &prepMethodName)
@@ -967,6 +993,8 @@ QString command;
 
 command=QString("INSERT INTO prep_methods VALUES(NULL,'%1');").arg(escapeAndEncode(prepMethodName));
 database->executeQuery(command);
+
+emit prepMethodCreated(Element(prepMethodName,lastInsertID()));
 }
 
 void LiteRecipeDB::removeUnit(int unitID)
@@ -1003,6 +1031,7 @@ database->executeQuery(command);
 command=QString("DELETE FROM units_conversion WHERE unit1_id=%1 OR unit2_id=%2;").arg(unitID).arg(unitID);
 database->executeQuery(command);
 
+emit unitRemoved(unitID);
 }
 
 void LiteRecipeDB::createNewUnit(const QString &unitName)
@@ -1011,6 +1040,8 @@ QString command;
 
 command=QString("INSERT INTO units VALUES(NULL,'%1');").arg(escapeAndEncode(unitName));
 database->executeQuery(command);
+
+emit unitCreated(Element(unitName,lastInsertID()));
 }
 
 
@@ -1020,6 +1051,9 @@ QString command;
 
 command=QString("UPDATE units SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(unitID);
 database->executeQuery(command);
+
+emit unitRemoved(unitID);
+emit unitCreated( Element(newLabel,unitID) );
 }
 
 void LiteRecipeDB::findUseOf_Unit_InRecipes(ElementList *results, int unitID)
@@ -1264,17 +1298,43 @@ if (recipeToLoad.getStatus()!=QSQLiteResult::Failure)
 return false;
 }
 
-QString LiteRecipeDB::unitName(int unitID)
+QString LiteRecipeDB::categoryName(int ID)
 {
-QString command=QString("SELECT * FROM units WHERE id=%1;").arg(unitID);
-QSQLiteResult unitToLoad=database->executeQuery(command);
-if (unitToLoad.getStatus()!=QSQLiteResult::Failure)
+QString command=QString("SELECT name FROM categories WHERE id=%1;").arg(ID);
+QSQLiteResult toLoad=database->executeQuery(command);
+if (toLoad.getStatus()!=QSQLiteResult::Failure)
 {
-QSQLiteResultRow row=unitToLoad.first();
-if (!unitToLoad.atEnd()) // Go to the first record (there should be only one anyway.
- return(row.data(0));
+QSQLiteResultRow row=toLoad.first();
+if (!toLoad.atEnd()) // Go to the first record (there should be only one anyway.
+ return(unescapeAndDecode(row.data(0)));
+}
+return(QString::null);
 }
 
+IngredientProperty LiteRecipeDB::propertyName(int ID)
+{
+QString command=QString("SELECT name,units FROM ingredient_properties WHERE id=%1;").arg(ID);
+QSQLiteResult toLoad=database->executeQuery(command);
+if (toLoad.getStatus()!=QSQLiteResult::Failure)
+{
+QSQLiteResultRow row=toLoad.first();
+if (!toLoad.atEnd()) // Go to the first record (there should be only one anyway.
+ return(IngredientProperty(unescapeAndDecode(row.data(0)),unescapeAndDecode(row.data(1)),ID));
+}
+return(IngredientProperty(QString::null,QString::null));
+}
+
+
+QString LiteRecipeDB::unitName(int ID)
+{
+QString command=QString("SELECT name FROM units WHERE id=%1;").arg(ID);
+QSQLiteResult toLoad=database->executeQuery(command);
+if (toLoad.getStatus()!=QSQLiteResult::Failure)
+{
+QSQLiteResultRow row=toLoad.first();
+if (!toLoad.atEnd()) // Go to the first record (there should be only one anyway.
+ return(unescapeAndDecode(row.data(0)));
+}
 return(QString::null);
 }
 
@@ -1640,6 +1700,8 @@ QString command;
 
 command=QString("INSERT INTO categories VALUES(NULL,'%1',%2);").arg(escapeAndEncode(categoryName)).arg(parent_id);
 database->executeQuery( command);
+
+emit categoryCreated(Element(categoryName,lastInsertID()),parent_id);
 }
 
 void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
@@ -1647,6 +1709,8 @@ void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
 	QString command;
 	command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
 	database->executeQuery( command);
+
+	emit categoryModified( Element(newLabel,categoryID) );
 }
 
 void LiteRecipeDB::modCategory(int categoryID, int new_parent_id)
@@ -1654,6 +1718,8 @@ void LiteRecipeDB::modCategory(int categoryID, int new_parent_id)
 	QString command;
 	command=QString("UPDATE categories SET parent_id=%1 WHERE id=%2;").arg(new_parent_id).arg(categoryID);
 	database->executeQuery( command);
+
+	emit categoryModified( categoryID, new_parent_id );
 }
 
 void LiteRecipeDB::removeCategory(int categoryID)
@@ -1676,6 +1742,8 @@ if (categoryToRemove.getStatus()!=QSQLiteResult::Failure) {
 		row=categoryToRemove.next();
 	}
 }
+
+emit categoryRemoved(categoryID);
 }
 
 void LiteRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)
@@ -1728,6 +1796,8 @@ QString command;
 
 command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(authorName));
 database->executeQuery(command);
+
+emit authorCreated(Element(authorName,lastInsertID()));
 }
 
 void LiteRecipeDB::modAuthor(int authorID, QString newLabel)
@@ -1736,6 +1806,9 @@ QString command;
 
 command=QString("UPDATE authors SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(authorID);
 database->executeQuery(command);
+
+emit authorRemoved(authorID);
+emit authorCreated( Element(newLabel,authorID) );
 }
 
 void LiteRecipeDB::removeAuthor(int authorID)
@@ -1744,6 +1817,8 @@ QString command;
 
 command=QString("DELETE FROM authors WHERE id=%1;").arg(authorID);
 database->executeQuery(command);
+
+emit authorRemoved(authorID);
 }
 
 void LiteRecipeDB::addAuthorToRecipe(int recipeID, int authorID)
@@ -1858,6 +1933,24 @@ int LiteRecipeDB::findExistingPrepByName( const QString& name )
 	return id;
 }
 
+int LiteRecipeDB::findExistingPropertyByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode(name.left(maxPropertyNameLength())); //truncate to the maximum size db holds
+
+	QString command=QString("SELECT id FROM ingredient_properties WHERE name='%1';").arg(search_str);
+	QSQLiteResult elementToLoad=database->executeQuery(command); // Run the query
+	int id = -1;
+
+	if (elementToLoad.getStatus()!=QSQLiteResult::Failure)
+		{
+		QSQLiteResultRow row=elementToLoad.first();
+		if (!elementToLoad.atEnd())
+			id=row.data(0).toInt();
+		}
+
+	return id;
+}
+
 int LiteRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode(name.left(maxUnitNameLength())); //truncate to the maximum size db holds
@@ -1925,6 +2018,7 @@ void LiteRecipeDB::mergeAuthors( int id1, int id2 )
 	//remove author with id 'id2'
 	command=QString("DELETE FROM authors WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
+	emit authorRemoved(id2);
 }
 
 void LiteRecipeDB::mergeCategories( int id1, int id2 )
@@ -1961,9 +2055,23 @@ void LiteRecipeDB::mergeCategories( int id1, int id2 )
 			   .arg(id2);
 	database->executeQuery( command );
 
+	//we don't want to have a category be its own parent...
+	command = QString("UPDATE categories SET parent_id=-1 WHERE parent_id=id");
+	database->executeQuery(command);
+
+	int parent_id = -1;
+	QSQLiteResult categoryToLoad=database->executeQuery(QString("SELECT parent_id FROM categories WHERE id=%1").arg(id1));
+	if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
+		QSQLiteResultRow row=categoryToLoad.first();
+		if ( !categoryToLoad.atEnd() )
+			parent_id = row.data(0).toInt();
+	}
+	emit categoryModified( id1, parent_id );
+
 	//remove category with id 'id2'
 	command=QString("DELETE FROM categories WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
+	emit categoryRemoved(id2);
 }
 
 void LiteRecipeDB::mergeIngredients( int id1, int id2 )
@@ -2044,6 +2152,7 @@ void LiteRecipeDB::mergeIngredients( int id1, int id2 )
 	//remove ingredient with id 'id2'
 	command=QString("DELETE FROM ingredients WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
+	emit ingredientRemoved(id2);
 }
 
 void LiteRecipeDB::mergePrepMethods( int id1, int id2 )
@@ -2057,6 +2166,26 @@ void LiteRecipeDB::mergePrepMethods( int id1, int id2 )
 	//remove prep method with id 'id2'
 	command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
+	emit prepMethodRemoved(id2);
+}
+
+void LiteRecipeDB::mergeProperties( int id1, int id2 )
+{
+	//change all instances of 'id2' to 'id1'
+	QString command = QString("UPDATE ingredient_properties SET id=%1 WHERE id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	command = QString("UPDATE ingredient_info SET property_id=%1 WHERE property_id=%2")
+	   .arg(id1)
+	   .arg(id2);
+	database->executeQuery( command );
+
+	//remove prep method with id 'id2'
+	command=QString("DELETE FROM ingredient_properties WHERE id=%1").arg(id2);
+	database->executeQuery( command );
+	emit propertyRemoved(id2);
 }
 
 void LiteRecipeDB::mergeUnits( int id1, int id2 )
@@ -2117,6 +2246,7 @@ void LiteRecipeDB::mergeUnits( int id1, int id2 )
 	//remove units with id 'id2'
 	command=QString("DELETE FROM units WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
+	emit unitRemoved(id2);
 }
 
 void LiteRecipeDB::givePermissions(const QString & /*dbName*/,const QString &/*username*/, const QString &/*password*/, const QString &/*clientHost*/)

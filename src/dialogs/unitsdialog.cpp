@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -17,6 +17,7 @@
 #include "DBBackend/recipedb.h"
 #include "editbox.h"
 #include "conversiontable.h"
+#include "widgets/unitlistview.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -44,13 +45,8 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addMultiCell( spacer_left, 0,2,3,3 );
 
-    unitListView =new KListView(this);
-    unitListView->setAllColumnsShowFocus(true);
-    unitListView->addColumn(i18n("Id"));
-    unitListView->addColumn(i18n("Unit"));
-    unitListView->setRenameable(1, true);
-    unitListView->setDefaultRenameAction(QListView::Reject);
-    unitListView->setAllColumnsShowFocus(true);
+    unitListView =new StdUnitListView(this,database,true);
+    unitListView->reload(); //load the initial data
     layout->addMultiCellWidget(unitListView,0,3,0,0);
 
     conversionTable=new ConversionTable(this,1,1);
@@ -69,13 +65,15 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 
     // Connect signals & slots
     connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
-    connect(this->unitListView,SIGNAL(doubleClicked( QListViewItem* )),this, SLOT(modUnit( QListViewItem* )));
-    connect(this->unitListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveUnit( QListViewItem* )));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
+    
+    //TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
+    connect(database,SIGNAL(unitCreated(const Element&)),SLOT(loadConversionTable()));
+    connect(database,SIGNAL(unitRemoved(int)),SLOT(loadConversionTable()));
 
     //Populate data into the table
-    reloadData();
+    loadConversionTable();
 
 }
 
@@ -86,13 +84,7 @@ UnitsDialog::~UnitsDialog()
 
 void UnitsDialog::loadUnitsList(void)
 {
-ElementList unitList;
-database->loadUnits(&unitList);
-unitListView->clear();
-for ( ElementList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it )
-{
-(void)new QListViewItem(unitListView,QString::number((*unit_it).id),(*unit_it).name);
-}
+unitListView->reload();
 }
 
 void UnitsDialog::reloadData(void)
@@ -111,41 +103,6 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    reloadData(); // Reload the unitlist from the database
 }
 delete elementDialog;
-}
-
-void UnitsDialog::modUnit(QListViewItem* i)
-{
-  newUnitButton->setEnabled(false);
-  removeUnitButton->setEnabled(false);
-  unitListView->rename(i, 1);
-}
-
-void UnitsDialog::saveUnit(QListViewItem* i)
-{
-int existing_id = database->findExistingUnitByName( i->text(1) );
-int unit_id = i->text(0).toInt();
-if ( existing_id != -1 && existing_id != unit_id ) //category already exists with this label... merge the two
-{  
-  switch (KMessageBox::warningContinueCancel(this,i18n("This unit already exists.  Continuing will merge these two units into one.  Are you sure?")))
-  {
-  case KMessageBox::Continue:
-  {
-  	database->mergeUnits(existing_id,unit_id);
-  	delete i;
-	loadConversionTable(); //apply the change to the table
-  	break;
-  }
-  default: reload(); break;
-  }
-}
-else
-{
-  database->modUnit((i->text(0)).toInt(), i->text(1));
-  loadConversionTable(); //apply the change to the table...TODO: is there a way to only rename the column and row labels on the table?
-}
-
-newUnitButton->setEnabled(true);
-removeUnitButton->setEnabled(true);
 }
 
 void UnitsDialog::removeUnit(void)
@@ -226,7 +183,7 @@ saveAllRatios(ratioList);
 #endif
 }
 
-void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
+void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
 {
 	#if 0
 	KProgressDialog progress_dialog(this,"progress_dialog",i18n("Finding Unit Ratios"),QString::null,true);

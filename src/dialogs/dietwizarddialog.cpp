@@ -29,6 +29,8 @@
 #include <kmessagebox.h>
 
 #include "propertycalculator.h"
+#include "widgets/propertylistview.h"
+#include "widgets/categorylistview.h"
 
 DietWizardDialog::DietWizardDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
@@ -100,14 +102,6 @@ delete dietRList;
 
 void DietWizardDialog::reload(void)
 {
-
-// Load the lists
-database->loadCategories(&categoriesList);
-database->loadProperties(&propertyList); // Loads the properties of all the ingredients
-int pgcount=0;
-for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++, tab=(MealInput *) (mealTabs->page(pgcount)))
-	tab->reload(categoriesList,propertyList);
-
 //Fill in the caches from the database
 database->loadUnitRatios(&cachedUnitRatios);
 database->loadProperties(&cachedIngredientProperties,-1);
@@ -115,8 +109,8 @@ database->loadProperties(&cachedIngredientProperties,-1);
 
 void DietWizardDialog::newTab(const QString &name)
 {
-mealTab=new MealInput(mealTabs);
-mealTab->reload(categoriesList,propertyList);
+mealTab=new MealInput(mealTabs,database);
+mealTab->reload(propertyList);
 mealTabs->addTab(mealTab,name);
 mealTabs->setCurrentPage(mealTabs->indexOf(mealTab));
 }
@@ -245,77 +239,11 @@ for (it=rl.begin();it!=rl.end();it++) il->append(it);
 }
 
 
-class ConstraintsListItem:public QCheckListItem{
-public:
-	ConstraintsListItem(QListView* klv, IngredientProperty *pty ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox)
-		{
-		// Initialize the constraint data with the the property data
-		ctStored=new Constraint();
-		ctStored->id=pty->id;
-		ctStored->name=pty->name;
-		ctStored->perUnit=pty->perUnit;
-		ctStored->units=pty->units;
-		ctStored->max=0;
-		ctStored->min=0;
-		}
-
-	~ConstraintsListItem(void)
-	{
-	delete ctStored;
-	}
-
-private:
-	Constraint *ctStored;
-
-public:
-	void setConstraint( const Constraint &constraint )
-	{
-		delete ctStored;
-		ctStored = new Constraint( constraint );
-
-		setOn( ctStored->enabled );
-	}
-	double maxVal(){return ctStored->max;}
-	double minVal(){return ctStored->min;}
-	int propertyId(){return ctStored->id;}
-	void setMax(double maxValue) {ctStored->max=maxValue; setText(3,QString::number(maxValue));}
-	void setMin(double minValue) {ctStored->min=minValue; setText(2,QString::number(minValue));}
-	virtual QString text(int column) const
-		{
-		if (column==1) return(ctStored->name);
-		else if (column==2) return(QString::number(ctStored->min));
-		else if (column==3) return(QString::number(ctStored->max));
-		else return(QString::null);
-		}
-};
-
-class CategoriesListItem:public QCheckListItem{
-public:
-	CategoriesListItem(QListView* klv, const Element &category ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox)
-	{
-	ctyStored.id=category.id;
-	ctyStored.name=category.name;
-	setOn(false); // Set unchecked by default
-	}
-	~CategoriesListItem(void){}
-	virtual QString text(int column) const
-		{
-		if (column==1) return(ctyStored.name);
-		else return(QString::null);
-		}
-	int categoryId(void){return ctyStored.id;}
-	QString categoryName(void){return ctyStored.name;}
-private:
-	Element ctyStored;
-
-};
-
-
-MealInput::MealInput(QWidget *parent):QWidget(parent)
+MealInput::MealInput(QWidget *parent,RecipeDB *db):QWidget(parent),
+  database(db)
 {
 
 // Initialize data
-categoriesListLocalCache.clear();
 propertyListLocalCache.clear();
 
 // Design the dialog
@@ -359,9 +287,9 @@ dishStack= new QWidgetStack(this);
 layout->addWidget(dishStack);
 dishStack->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 	// Add default dishes
-DishInput *newDish=new DishInput(this,i18n("1st Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
-newDish=new DishInput(this,i18n("2nd Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
-newDish=new DishInput(this,i18n("Dessert")); dishStack->addWidget(newDish); dishInputList.append(newDish);
+DishInput *newDish=new DishInput(this,database,i18n("1st Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
+newDish=new DishInput(this,database,i18n("2nd Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
+newDish=new DishInput(this,database,i18n("Dessert")); dishStack->addWidget(newDish); dishInputList.append(newDish);
 dishNumber=3;dishNumberInput->setValue(dishNumber);
 
 // Signals & Slots
@@ -377,11 +305,8 @@ MealInput::~MealInput()
 
 // reload from outside with new data
 
-void MealInput::reload(ElementList &categoriesList,IngredientPropertyList &propertyList)
+void MealInput::reload(IngredientPropertyList &propertyList)
 {
-QValueList<DishInput*>::iterator it;
-
-categoriesListLocalCache.clear();
 propertyListLocalCache.clear();
 
 // Cache the data into the internal lists so it can be reused when creating new dishes
@@ -390,12 +315,6 @@ propertyListLocalCache.clear();
 	for (IngredientProperty *pty=propertyList.getFirst(); pty; pty=propertyList.getNext())
 	{
 	propertyListLocalCache.add(*pty);
-	}
-
-	//Cache the categories list
-	for ( ElementList::const_iterator cat_it = categoriesList.begin(); cat_it != categoriesList.end(); ++cat_it )
-	{
-	categoriesListLocalCache.add(*cat_it);
 	}
 
 reload(); //load from the cache now
@@ -410,7 +329,7 @@ QValueList<DishInput*>::iterator it;
 for (it=dishInputList.begin(); it != dishInputList.end();it++)
 {
 	DishInput *di; di=(*it);
-	di->reload(&categoriesListLocalCache,&propertyListLocalCache);
+	di->reload(&propertyListLocalCache);
 	}
 }
 
@@ -420,8 +339,8 @@ if (dn>dishNumber)
 	{
 	while (dishNumber!=dn)
 	{
-		DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
-		newDish->reload(&categoriesListLocalCache,&propertyListLocalCache);
+		DishInput *newDish=new DishInput(this,database,QString(i18n("Dish %1")).arg(dishNumber+1));
+		newDish->reload(&propertyListLocalCache);
 		dishStack->addWidget(newDish);
 		dishInputList.append(newDish);
 		dishStack->raiseWidget(newDish);
@@ -476,7 +395,7 @@ dishStack->raiseWidget(*it);
 }
 }
 
-DishInput::DishInput(QWidget* parent,const QString &title):QWidget(parent)
+DishInput::DishInput(QWidget* parent,RecipeDB *database,const QString &title):QWidget(parent)
 {
 
 // Initialize internal variables
@@ -499,19 +418,13 @@ categoriesBox=new QVBox(listBox);
 categoriesEnabledBox=new QCheckBox(categoriesBox);
 categoriesEnabledBox->setText(i18n("Enable Category Filtering"));
 
-categoriesView=new KListView(categoriesBox);
-categoriesView->addColumn("*");
-categoriesView->addColumn(i18n("Category"));
+categoriesView=new CategoryCheckListView(categoriesBox,database);
 categoriesView->setEnabled(false); // Disable it by default
-categoriesView->setAllColumnsShowFocus(true);
+categoriesView->reload();
 
 	//Constraints list
-constraintsView=new KListView(listBox);
-constraintsView->addColumn(i18n("Enabled"));
-constraintsView->addColumn(i18n("Property"));
-constraintsView->addColumn(i18n("Min. Value"));
-constraintsView->addColumn(i18n("Max. Value"));
-constraintsView->setAllColumnsShowFocus(true);
+constraintsView=new PropertyConstraintListView(listBox,database);
+constraintsView->reload();
 
 	// KDoubleInput based edit boxes
 constraintsEditBox1=new EditBox(this);
@@ -542,56 +455,9 @@ bool DishInput::isCategoryFilteringEnabled(void)
 return categoryFiltering;
 }
 
-void DishInput::reload(ElementList *categoryList, IngredientPropertyList *propertyList)
+void DishInput::reload(IngredientPropertyList *propertyList)
 {
-	//store existing values
-ConstraintList saveConstraints;
-Constraint constraint;
-	for (ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->firstChild());it;it=(ConstraintsListItem*)(it->nextSibling()))
-	{
-	constraint.id=it->propertyId();
-	constraint.min=it->minVal();
-	constraint.max=it->maxVal();
-	constraint.enabled=it->isOn();
-	constraint.name=it->text(1);
-	saveConstraints.add(constraint);
-	}
-
-ElementList saveEnabledCategories;
-Element category;
-for (CategoriesListItem *it=(CategoriesListItem*)(categoriesView->firstChild());it;it=(CategoriesListItem*)(it->nextSibling()))
-{
-	if ( it->isOn())
-	{
-	category.id=it->categoryId();
-	category.name=it->categoryName();
-	saveEnabledCategories.add(category);
-	}
-}
-
-categoriesView->clear();
-constraintsView->clear();
-
-	//Load the possible constraints (properties) list
-for (IngredientProperty *pty=propertyList->getFirst();pty; pty=propertyList->getNext())
-{
-ConstraintsListItem *it=new ConstraintsListItem(constraintsView,pty);
-constraintsView->insertItem(it);
-
-Constraint *constraint = saveConstraints.findByPty( pty );
-if ( constraint )
-	it->setConstraint( *constraint );
-}
-
-	//Load the categories list
-for ( ElementList::const_iterator cat_it = categoryList->begin(); cat_it != categoryList->end(); ++cat_it )
-{
-CategoriesListItem *it=new CategoriesListItem(categoriesView,*cat_it);
-categoriesView->insertItem(it);
-if ( saveEnabledCategories.contains( *cat_it ) )
-	it->setOn( true );
-}
-
+constraintsView->reload();
 }
 
 void DishInput::insertConstraintsEditBoxes(QListViewItem* it)
@@ -648,7 +514,7 @@ void DishInput::loadEnabledCategories(ElementList* categories)
 {
 categories->clear();
 Element category;
-	for (CategoriesListItem *it=(CategoriesListItem*)(categoriesView->firstChild());it;it=(CategoriesListItem*)(it->nextSibling()))
+	for (CategoryCheckListItem *it=(CategoryCheckListItem*)(categoriesView->firstChild());it;it=(CategoryCheckListItem*)(it->nextSibling()))
 	{
 	if ( !categoriesView->isEnabled() || it->isOn()) // Only load those that are checked, unless filtering is disabled
 		{

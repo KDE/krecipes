@@ -21,6 +21,7 @@
 #include <klistview.h>
 
 class RecipeDB;
+class StdAuthorListView;
 
 /**
 @author Unai Garro
@@ -40,7 +41,7 @@ private:
 	RecipeDB *database;
 	//Widgets
 	QGridLayout *layout;
-	KListView *authorListView;
+	StdAuthorListView *authorListView;
 	QHBox *buttonBar;
 	QPushButton *newAuthorButton;
 	QPushButton *removeAuthorButton;
@@ -49,8 +50,6 @@ private:
 private slots:
 	void createNewAuthor(void);
 	void removeAuthor(void);
-  void modAuthor(QListViewItem*);
-  void saveAuthor(QListViewItem*);
 
 };
 #endif

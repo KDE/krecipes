@@ -14,6 +14,10 @@
 #include <qmap.h>
 #include <qwidget.h>
 
+#include "widgets/ingredientlistview.h"
+#include "widgets/categorylistview.h"
+#include "widgets/authorlistview.h"
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -34,6 +38,82 @@ class KListView;
 
 class RecipeDB;
 
+
+class DualAuthorListView : public AuthorListView
+{
+Q_OBJECT
+
+public:
+	DualAuthorListView(QWidget *parent, RecipeDB *db);
+
+	void reload();
+
+	QMap<QCheckListItem*,bool> positiveMap;
+	QMap<QCheckListItem*,bool> negativeMap;
+
+public slots:
+	void change(int index);
+	void updateMap( int index );
+	
+protected:
+	virtual void createAuthor(const Element &ing);
+	virtual void removeAuthor(int id);
+	
+private:
+	int last_state;
+};
+
+class DualCategoryListView : public CategoryListView
+{
+Q_OBJECT
+
+public:
+	DualCategoryListView(QWidget *parent, RecipeDB *db);
+
+	void reload();
+
+	QMap<QCheckListItem*,bool> positiveMap;
+	QMap<QCheckListItem*,bool> negativeMap;
+
+public slots:
+	void change(int index);
+	void updateMap( int index );
+	
+protected:
+	virtual void createCategory(const Element &,int);
+	virtual void removeCategory(int id);
+	virtual void modifyCategory(const Element &category);
+	virtual void modifyCategory(int id, int parent_id);
+	
+private:
+	int last_state;
+};
+
+class DualIngredientListView : public IngredientListView
+{
+Q_OBJECT
+
+public:
+	DualIngredientListView(QWidget *parent, RecipeDB *db);
+
+	void reload();
+
+	QMap<QCheckListItem*,bool> positiveMap;
+	QMap<QCheckListItem*,bool> negativeMap;
+
+public slots:
+	void change(int index);
+	void updateMap( int index );
+	
+protected:
+	virtual void createIngredient(const Element &ing);
+	virtual void removeIngredient(int id);
+	
+private:
+	int last_state;
+};
+
+
 class AdvancedSearchDialog : public QWidget
 {
 Q_OBJECT
@@ -46,17 +126,13 @@ public:
 	virtual void languageChange();
 
 private:
-	void loadAuthorListView();
-	void loadCategoryListView();
-	void loadIngredientListView();
-	
 	QWidgetStack* widgetStack;
 	QWidget* searchPage;
 	QPushButton* searchButton;
 	QGroupBox* categoriesBox;
 	QFrame* categoriesFrame;
 	QComboBox* catTypeComboBox;
-	QListView* catListView;
+	DualCategoryListView* catListView;
 	QPushButton* catSelectAllButton;
 	QPushButton* catUnselectAllButton;
 	QGroupBox* authorsBox;
@@ -64,14 +140,14 @@ private:
 	QComboBox* authorTypeComboBox;
 	QPushButton* authorUnselectAllButton;
 	QPushButton* authorSelectAllButton;
-	QListView* authorListView;
+	DualAuthorListView* authorListView;
 	QGroupBox* servingsBox;
 	QFrame* servingsFrame;
 	QComboBox* servingsComboBox;
 	QSpinBox* servingsSpinBox;
 	QGroupBox* ingredientsBox;
 	QFrame* ingredientsFrame;
-	QListView* ingListView;
+	DualIngredientListView* ingListView;
 	QComboBox* ingTypeComboBox;
 	QPushButton* ingSelectAllButton;
 	QPushButton* ingUnselectAllButton;
@@ -100,18 +176,7 @@ private:
 	QHBoxLayout* resultBoxLayout;
 	QHBoxLayout* resultsButtonsLayout;
 	QSpacerItem* resultsSpacer;
-	
-	QMap<QCheckListItem*,bool> authorPosMap;
-	QMap<QCheckListItem*,bool> authorNegMap;
-	QMap<QCheckListItem*,bool> categoryPosMap;
-	QMap<QCheckListItem*,bool> categoryNegMap;
-	QMap<QCheckListItem*,bool> ingredientPosMap;
-	QMap<QCheckListItem*,bool> ingredientNegMap;
-	
-	int authorLast;
-	int categoryLast;
-	int ingredientLast;
-	
+
 	RecipeDB *database;
 
 signals:
@@ -127,14 +192,6 @@ private slots:
 	void unselectAllAuthors();
 	void unselectAllCategories();
 	void unselectAllIngredients();
-	
-	void authorSwitchType(int);
-	void categorySwitchType(int);
-	void ingredientSwitchType(int);
-	
-	void updateMaps( QMap<QCheckListItem*,bool>*, QMap<QCheckListItem*,bool>*, QListView* );
-	void storeMap(QMap<QCheckListItem*,bool> *map_to_store, QListView *listview);
-
 };
 
 #endif //ADVANCEDSEARCHDIALOG_H

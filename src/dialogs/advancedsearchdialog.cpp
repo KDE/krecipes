@@ -33,10 +33,259 @@
 #include "DBBackend/recipedb.h"
 #include "recipeactionshandler.h"
 
+void storeMap(QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
+{
+	for ( QCheckListItem *qlv_it = static_cast<QCheckListItem*>(listview->firstChild()); qlv_it ; qlv_it = static_cast<QCheckListItem*>(qlv_it->nextSibling()) )
+		map_to_store->insert(qlv_it,qlv_it->isOn());
+}
+
+void updateMaps(QMap<QCheckListItem*,bool> *map_to_load, QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
+{
+	//store
+	storeMap(map_to_store,listview);
+
+	//restore
+	for ( QMap<QCheckListItem*,bool>::Iterator it = map_to_load->begin(); it != map_to_load->end(); ++it )
+	{
+		it.key()->setOn(it.data());
+		it.key()->setEnabled(true);
+	}
+	
+	//be sensible and don't allow items to be simultaneously enabled and disabled
+	for ( QMap<QCheckListItem*,bool>::Iterator it = map_to_store->begin(); it != map_to_store->end(); ++it )
+		it.key()->setEnabled(!it.data());
+}
+
+DualAuthorListView::DualAuthorListView(QWidget *parent, RecipeDB *db) : AuthorListView(parent,db),
+	last_state(0)
+{
+	addColumn(i18n("Name"));
+	addColumn(i18n("Id"));
+}
+
+void DualAuthorListView::reload()
+{
+	positiveMap.clear();
+	negativeMap.clear();
+
+	AuthorListView::reload();
+}
+
+void DualAuthorListView::change(int index)
+{
+	if ( index == last_state ) //don't do anything unless the selection has changed
+		return;
+
+	QMap<QCheckListItem*,bool> *map_to_store;
+	QMap<QCheckListItem*,bool> *map_to_load;
+
+	if ( index == 0 ) //store negative
+	{
+		map_to_load = &positiveMap;
+		map_to_store = &negativeMap;
+	}
+	else //store positive
+	{
+		map_to_load = &negativeMap;
+		map_to_store = &positiveMap;
+	}
+	
+	updateMaps(map_to_load,map_to_store,this);
+	
+	last_state = index;
+	clearSelection();
+}
+	
+void DualAuthorListView::updateMap( int index )
+{
+	storeMap( (index == 0) ? &positiveMap : &negativeMap, this );
+}
+
+void DualAuthorListView::createAuthor(const Element &ing)
+{
+	QCheckListItem *item=new QCheckListItem(this,ing.name,QCheckListItem::CheckBox);
+	item->setText(1,QString::number(ing.id));
+	
+	negativeMap.insert(item,false);
+	positiveMap.insert(item,false);
+}
+
+void DualAuthorListView::removeAuthor(int id)
+{
+	QListViewItem *item = findItem(QString::number(id),1);
+	
+	Q_ASSERT(item);
+	
+	delete item;
+}
+
+
+DualIngredientListView::DualIngredientListView(QWidget *parent, RecipeDB *db) : IngredientListView(parent,db),
+	last_state(0)
+{
+	addColumn(i18n("Name"));
+	addColumn(i18n("Id"));
+}
+
+void DualIngredientListView::reload()
+{
+	positiveMap.clear();
+	negativeMap.clear();
+
+	IngredientListView::reload();
+}
+
+void DualIngredientListView::change(int index)
+{
+	if ( index == last_state ) //don't do anything unless the selection has changed
+		return;
+
+	QMap<QCheckListItem*,bool> *map_to_store;
+	QMap<QCheckListItem*,bool> *map_to_load;
+
+	if ( index == 0 ) //store negative
+	{
+		map_to_load = &positiveMap;
+		map_to_store = &negativeMap;
+	}
+	else //store positive
+	{
+		map_to_load = &negativeMap;
+		map_to_store = &positiveMap;
+	}
+	
+	updateMaps(map_to_load,map_to_store,this);
+	
+	last_state = index;
+	clearSelection();
+}
+	
+void DualIngredientListView::updateMap( int index )
+{
+	storeMap( (index == 0) ? &positiveMap : &negativeMap, this );
+}
+
+void DualIngredientListView::createIngredient(const Element &ing)
+{
+	QCheckListItem *item=new QCheckListItem(this,ing.name,QCheckListItem::CheckBox);
+	item->setText(1,QString::number(ing.id));
+	
+	negativeMap.insert(item,false);
+	positiveMap.insert(item,false);
+}
+
+void DualIngredientListView::removeIngredient(int id)
+{
+	QListViewItem *item = findItem(QString::number(id),1);
+	
+	Q_ASSERT(item);
+	
+	delete item;
+}
+
+
+DualCategoryListView::DualCategoryListView(QWidget *parent, RecipeDB *db) : CategoryListView(parent,db),
+	last_state(0)
+{
+	addColumn(i18n("Name"));
+	addColumn(i18n("Id"));
+}
+
+void DualCategoryListView::reload()
+{
+	positiveMap.clear();
+	negativeMap.clear();
+
+	CategoryListView::reload();
+}
+
+void DualCategoryListView::change(int index)
+{
+	if ( index == last_state ) //don't do anything unless the selection has changed
+		return;
+
+	QMap<QCheckListItem*,bool> *map_to_store;
+	QMap<QCheckListItem*,bool> *map_to_load;
+
+	if ( index == 0 ) //store negative
+	{
+		map_to_load = &positiveMap;
+		map_to_store = &negativeMap;
+	}
+	else //store positive
+	{
+		map_to_load = &negativeMap;
+		map_to_store = &positiveMap;
+	}
+	
+	updateMaps(map_to_load,map_to_store,this);
+	
+	last_state = index;
+	clearSelection();
+}
+
+void DualCategoryListView::updateMap( int index )
+{
+	storeMap( (index == 0) ? &positiveMap : &negativeMap, this );
+}
+
+void DualCategoryListView::createCategory(const Element &category,int parent_id)
+{
+	CategoryCheckListItem *new_item;
+	if ( parent_id == -1 )
+		new_item = new CategoryCheckListItem(this,category);
+	else
+	{
+		QListViewItem *parent = findItem(QString::number(parent_id),1);
+
+		Q_ASSERT(parent);
+
+		new_item = new CategoryCheckListItem(parent,category);
+	}
+
+	new_item->setOpen(true);
+	
+	negativeMap.insert(new_item,false);
+	positiveMap.insert(new_item,false);
+}
+
+void DualCategoryListView::removeCategory(int id)
+{
+	QListViewItem *item = findItem(QString::number(id),1);
+	
+	Q_ASSERT(item);
+	
+	delete item;
+}
+
+void DualCategoryListView::modifyCategory(const Element &category)
+{
+	QListViewItem *item = findItem(QString::number(category.id),1);
+
+	Q_ASSERT(item);
+
+	item->setText(0,category.name);
+}
+
+void DualCategoryListView::modifyCategory(int id, int parent_id)
+{
+	QListViewItem *item = findItem(QString::number(id),1);
+	if ( !item->parent() )
+		takeItem(item);
+	else
+		item->parent()->takeItem(item);
+	
+	Q_ASSERT(item);
+
+	if ( parent_id == -1 )
+		insertItem(item);
+	else
+		findItem(QString::number(parent_id),1)->insertItem(item);
+}
+
+
+
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),
-  authorLast(0),
-  categoryLast(0),
-  ingredientLast(0),
   database(db)
 {
 	///AUTOMATICALLY GENERATED GUI CODE///
@@ -79,10 +328,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoriesFrameLayout->addMultiCellWidget( catTypeComboBox, 0, 0, 0, 2 );
 	
-	catListView = new QListView( categoriesFrame, "catListView" );
-	catListView->addColumn( i18n( "Name" ) );
-	catListView->addColumn( i18n( "Id" ) );
-	catListView->setAllColumnsShowFocus( TRUE );
+	catListView = new DualCategoryListView( categoriesFrame, database );
 	
 	categoriesFrameLayout->addMultiCellWidget( catListView, 1, 1, 0, 2 );
 	
@@ -128,10 +374,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	authorsFrameLayout->addWidget( authorSelectAllButton, 2, 0 );
 	
-	authorListView = new QListView( authorsFrame, "authorListView" );
-	authorListView->addColumn( i18n( "Name" ) );
-	authorListView->addColumn( i18n( "Id" ) );
-	authorListView->setAllColumnsShowFocus( TRUE );
+	authorListView = new DualAuthorListView( authorsFrame, database );
 	
 	authorsFrameLayout->addMultiCellWidget( authorListView, 1, 1, 0, 2 );
 	authorsBoxLayout->addWidget( authorsFrame );
@@ -181,11 +424,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientsFrame->setLineWidth( 0 );
 	ingredientsFrameLayout = new QGridLayout( ingredientsFrame, 1, 1, 0, 0, "ingredientsFrameLayout"); 
 	
-	ingListView = new QListView( ingredientsFrame, "ingListView" );
-	ingListView->addColumn( i18n( "Name" ) );
-	ingListView->addColumn( i18n( "Id" ) );
-	ingListView->setAllColumnsShowFocus( TRUE );
-	
+	ingListView = new DualIngredientListView( ingredientsFrame, database );
+
 	ingredientsFrameLayout->addMultiCellWidget( ingListView, 1, 1, 0, 3 );
 	
 	ingTypeComboBox = new QComboBox( FALSE, ingredientsFrame, "ingTypeComboBox" );
@@ -266,9 +506,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( categoriesBox, SIGNAL(toggled(bool)), categoriesFrame, SLOT(setEnabled(bool)) );
 	connect( ingredientsBox, SIGNAL(toggled(bool)), ingredientsFrame, SLOT(setEnabled(bool)) );
 	connect( servingsBox, SIGNAL(toggled(bool)), servingsFrame, SLOT(setEnabled(bool)) );
-	connect( authorTypeComboBox, SIGNAL(activated(int)), SLOT(authorSwitchType(int)) );
-	connect( ingTypeComboBox, SIGNAL(activated(int)), SLOT(ingredientSwitchType(int)) );
-	connect( catTypeComboBox, SIGNAL(activated(int)), SLOT(categorySwitchType(int)) );
+	connect( authorTypeComboBox, SIGNAL(activated(int)), authorListView, SLOT(change(int)) );
+	connect( ingTypeComboBox, SIGNAL(activated(int)), ingListView, SLOT(change(int)) );
+	connect( catTypeComboBox, SIGNAL(activated(int)), catListView, SLOT(change(int)) );
 	connect( authorSelectAllButton, SIGNAL(clicked()), SLOT(selectAllAuthors()) );
 	connect( catSelectAllButton, SIGNAL(clicked()), SLOT(selectAllCategories()) );
 	connect( ingSelectAllButton, SIGNAL(clicked()), SLOT(selectAllIngredients()) );
@@ -294,8 +534,6 @@ void AdvancedSearchDialog::languageChange()
 	catTypeComboBox->insertItem( i18n( "Belong to:" ) );
 	catTypeComboBox->insertItem( i18n( "Do not belong to:" ) );
 	QWhatsThis::add( catTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe belongs to certain categories.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
-	catListView->header()->setLabel( 0, i18n( "Name" ) );
-	catListView->header()->setLabel( 1, i18n( "Id" ) );
 	catSelectAllButton->setText( i18n( "Select All" ) );
 	catUnselectAllButton->setText( i18n( "Unselect All" ) );
 	authorsBox->setTitle( i18n( "Authors" ) );
@@ -305,16 +543,12 @@ void AdvancedSearchDialog::languageChange()
 	QWhatsThis::add( authorTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe is by certain authors.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
 	authorUnselectAllButton->setText( i18n( "Unselect All" ) );
 	authorSelectAllButton->setText( i18n( "Select All" ) );
-	authorListView->header()->setLabel( 0, i18n( "Name" ) );
-	authorListView->header()->setLabel( 1, i18n( "Id" ) );
 	servingsBox->setTitle( i18n( "Servings" ) );
 	servingsComboBox->clear();
 	servingsComboBox->insertItem( i18n( "Serves at least:" ) );
 	servingsComboBox->insertItem( i18n( "Serves at most:" ) );
 	servingsComboBox->insertItem( i18n( "Serves exactly:" ) );
 	ingredientsBox->setTitle( i18n( "Ingredients" ) );
-	ingListView->header()->setLabel( 0, i18n( "Name" ) );
-	ingListView->header()->setLabel( 1, i18n( "Id" ) );
 	ingTypeComboBox->clear();
 	ingTypeComboBox->insertItem( i18n( "Use:" ) );
 	ingTypeComboBox->insertItem( i18n( "Do not use:" ) );
@@ -384,161 +618,9 @@ void AdvancedSearchDialog::unselectAllIngredients()
 
 void AdvancedSearchDialog::reload()
 {
-	loadAuthorListView();
-	loadCategoryListView();
-	loadIngredientListView();
-}
-
-void AdvancedSearchDialog::loadAuthorListView()
-{
-	authorListView->clear();
-	authorPosMap.clear();
-	authorNegMap.clear();
-
-	ElementList authorsList; database->loadAuthors( &authorsList );
-	
-	for ( ElementList::const_iterator it = authorsList.begin(); it != authorsList.end(); ++it )
-	{
-		QCheckListItem *item=new QCheckListItem(authorListView,(*it).name,QCheckListItem::CheckBox);
-		item->setText(1,QString::number((*it).id));
-		
-		authorNegMap.insert(item,false);
-		authorPosMap.insert(item,false);
-	}
-}
-
-void AdvancedSearchDialog::loadCategoryListView()
-{
-	catListView->clear();
-	categoryPosMap.clear();
-	categoryNegMap.clear();
-
-	ElementList catList; database->loadCategories( &catList );
-	
-	for ( ElementList::const_iterator it = catList.begin(); it != catList.end(); ++it )
-	{
-		QCheckListItem *item=new QCheckListItem(catListView,(*it).name,QCheckListItem::CheckBox);
-		item->setText(1,QString::number((*it).id));
-		
-		categoryNegMap.insert(item,false);
-		categoryPosMap.insert(item,false);
-	}
-}
-
-void AdvancedSearchDialog::loadIngredientListView()
-{
-	ingListView->clear();
-	ingredientPosMap.clear();
-	ingredientNegMap.clear();
-
-	ElementList ingList; database->loadIngredients( &ingList );
-	
-	for ( ElementList::const_iterator it = ingList.begin(); it != ingList.end(); ++it )
-	{
-		QCheckListItem *item=new QCheckListItem(ingListView,(*it).name,QCheckListItem::CheckBox);
-		item->setText(1,QString::number((*it).id));
-		
-		ingredientNegMap.insert(item,false);
-		ingredientPosMap.insert(item,false);
-	}
-}
-
-void AdvancedSearchDialog::authorSwitchType(int index)
-{
-	if ( authorLast == authorTypeComboBox->currentItem() ) //don't do anything unless the selection has changed
-		return;
-
-	QMap<QCheckListItem*,bool> *map_to_store;
-	QMap<QCheckListItem*,bool> *map_to_load;
-
-	if ( index == 0 ) //store negative
-	{
-		map_to_load = &authorPosMap;
-		map_to_store = &authorNegMap;
-	}
-	else //store positive
-	{
-		map_to_load = &authorNegMap;
-		map_to_store = &authorPosMap;
-	}
-	
-	updateMaps(map_to_load,map_to_store,authorListView);
-	
-	authorLast = authorTypeComboBox->currentItem();
-	authorListView->clearSelection();
-}
-
-void AdvancedSearchDialog::categorySwitchType(int index)
-{
-	if ( categoryLast == catTypeComboBox->currentItem() ) //don't do anything unless the selection has changed
-		return;
-
-	QMap<QCheckListItem*,bool> *map_to_store;
-	QMap<QCheckListItem*,bool> *map_to_load;
-
-	if ( index == 0 ) //store negative
-	{
-		map_to_load = &categoryPosMap;
-		map_to_store = &categoryNegMap;
-	}
-	else //store positive
-	{
-		map_to_load = &categoryNegMap;
-		map_to_store = &categoryPosMap;
-	}
-	
-	updateMaps(map_to_load,map_to_store,catListView);
-	
-	categoryLast = catTypeComboBox->currentItem();
-	catListView->clearSelection();
-}
-
-void AdvancedSearchDialog::ingredientSwitchType(int index)
-{
-	if ( ingredientLast == ingTypeComboBox->currentItem() ) //don't do anything unless the selection has changed
-		return;
-
-	QMap<QCheckListItem*,bool> *map_to_store;
-	QMap<QCheckListItem*,bool> *map_to_load;
-
-	if ( index == 0 ) //store negative
-	{
-		map_to_load = &ingredientPosMap;
-		map_to_store = &ingredientNegMap;
-	}
-	else //store positive
-	{
-		map_to_load = &ingredientNegMap;
-		map_to_store = &ingredientPosMap;
-	}
-	
-	updateMaps(map_to_load,map_to_store,ingListView);
-	
-	ingredientLast = ingTypeComboBox->currentItem();
-	ingListView->clearSelection();
-}
-
-void AdvancedSearchDialog::updateMaps(QMap<QCheckListItem*,bool> *map_to_load, QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
-{
-	//store
-	storeMap(map_to_store,listview);
-
-	//restore
-	for ( QMap<QCheckListItem*,bool>::Iterator it = map_to_load->begin(); it != map_to_load->end(); ++it )
-	{
-		it.key()->setOn(it.data());
-		it.key()->setEnabled(true);
-	}
-	
-	//be sensible and don't allow items to be simultaneously enabled and disabled
-	for ( QMap<QCheckListItem*,bool>::Iterator it = map_to_store->begin(); it != map_to_store->end(); ++it )
-		it.key()->setEnabled(!it.data());
-}
-
-void AdvancedSearchDialog::storeMap(QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
-{
-	for ( QCheckListItem *qlv_it = static_cast<QCheckListItem*>(listview->firstChild()); qlv_it ; qlv_it = static_cast<QCheckListItem*>(qlv_it->nextSibling()) )
-		map_to_store->insert(qlv_it,qlv_it->isOn());
+	authorListView->reload();
+	catListView->reload();
+	ingListView->reload();
 }
 
 void AdvancedSearchDialog::search()
@@ -574,10 +656,10 @@ void AdvancedSearchDialog::search()
 	//narrow down by authors
 	if ( authorsBox->isChecked() )
 	{
-		storeMap( (authorTypeComboBox->currentItem() == 0) ? &authorPosMap : &authorNegMap, authorListView ); //the other won't have been updated yet
+		authorListView->updateMap( authorTypeComboBox->currentItem() ); //the other won't have been updated yet
 
 		//positive search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = authorPosMap.begin(); map_it != authorPosMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = authorListView->positiveMap.begin(); map_it != authorListView->positiveMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{
@@ -593,7 +675,7 @@ void AdvancedSearchDialog::search()
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = authorNegMap.begin(); map_it != authorNegMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = authorListView->negativeMap.begin(); map_it != authorListView->negativeMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{
@@ -612,10 +694,10 @@ void AdvancedSearchDialog::search()
 	//narrow down by categories
 	if ( categoriesBox->isChecked() )
 	{
-		storeMap( (catTypeComboBox->currentItem() == 0) ? &categoryPosMap : &categoryNegMap, catListView ); //the other won't have been updated yet
+		catListView->updateMap( catTypeComboBox->currentItem() ); //the other won't have been updated yet
 
 		//positive search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = categoryPosMap.begin(); map_it != categoryPosMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = catListView->positiveMap.begin(); map_it != catListView->positiveMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{
@@ -631,7 +713,7 @@ void AdvancedSearchDialog::search()
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = categoryNegMap.begin(); map_it != categoryNegMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = catListView->negativeMap.begin(); map_it != catListView->negativeMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{
@@ -650,10 +732,10 @@ void AdvancedSearchDialog::search()
 	//narrow down by ingredients
 	if ( ingredientsBox->isChecked() )
 	{
-		storeMap( (ingTypeComboBox->currentItem() == 0) ? &ingredientPosMap : &ingredientNegMap, ingListView ); //the other won't have been updated yet
+		ingListView->updateMap( ingTypeComboBox->currentItem() ); //the other won't have been updated yet
 
 		//positive search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = ingredientPosMap.begin(); map_it != ingredientPosMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = ingListView->positiveMap.begin(); map_it != ingListView->positiveMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{
@@ -669,7 +751,7 @@ void AdvancedSearchDialog::search()
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*,bool>::Iterator map_it = ingredientNegMap.begin(); map_it != ingredientNegMap.end(); ++map_it )
+		for ( QMap<QCheckListItem*,bool>::Iterator map_it = ingListView->negativeMap.begin(); map_it != ingListView->negativeMap.end(); ++map_it )
 		{
 			if ( map_it.data() == true )
 			{

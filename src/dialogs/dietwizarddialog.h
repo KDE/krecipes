@@ -45,6 +45,8 @@ class DishTitle;
 class MealInput;
 class RecipeDB;
 class RecipeList;
+class CategoryCheckListView;
+class PropertyConstraintListView;
 
 /**
 @author Unai Garro
@@ -67,7 +69,6 @@ private:
 	int dayNumber;
 	int mealNumber;
 
-	ElementList categoriesList;
 	IngredientPropertyList propertyList;
 	RecipeList *dietRList;
 
@@ -118,9 +119,9 @@ Q_OBJECT
 public:
 	// Methods
 
-	 MealInput(QWidget *parent);
+	 MealInput(QWidget *parent,RecipeDB *database);
 	 ~MealInput();
-	 void reload(ElementList &categoriesList,IngredientPropertyList &propertyList);
+	 void reload(IngredientPropertyList &propertyList);
 	 int dishNo(void){return dishNumber;};
 
 	 // Public widgets and variables
@@ -130,8 +131,8 @@ private:
 	// Widgets
 		// Private Variables
 		int dishNumber;
-		ElementList categoriesListLocalCache;
 		IngredientPropertyList propertyListLocalCache;
+		RecipeDB *database;
 
 		// Settings section for the meal
 		QHBox *mealOptions;
@@ -164,13 +165,13 @@ class DishInput:public QWidget{
 Q_OBJECT
 
 public:
-	DishInput(QWidget *parent,const QString &title);
+	DishInput(QWidget *parent,RecipeDB *database,const QString &title);
 	~DishInput();
 	// Methods
 	bool isCategoryFilteringEnabled(void);
 	void loadConstraints(ConstraintList *constraints);
 	void loadEnabledCategories(ElementList* categories);
-	void reload(ElementList *categoryList, IngredientPropertyList *propertyList);
+	void reload(IngredientPropertyList *propertyList);
 	void setDishTitle(const QString & text);
 
 
@@ -182,8 +183,8 @@ private:
 		DishTitle *dishTitle;
 		QVBox *categoriesBox;
 		QCheckBox *categoriesEnabledBox;
-		KListView *categoriesView;
-		KListView *constraintsView;
+		CategoryCheckListView *categoriesView;
+		PropertyConstraintListView *constraintsView;
 		EditBox *constraintsEditBox1;
 		EditBox *constraintsEditBox2;
 private slots:

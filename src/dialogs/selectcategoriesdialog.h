@@ -21,7 +21,7 @@
 #include "elementlist.h"
 
 class CategoryTree;
-class CategoryListItem;
+class CategoryCheckListItem;
 class RecipeDB;
 
 /**
@@ -35,7 +35,7 @@ public:
 
     SelectCategoriesDialog(QWidget *parent, const CategoryTree *categoryTree,const QMap<Element,bool> &selected, RecipeDB* db);
     ~SelectCategoriesDialog();
-    void getSelectedCategories(ElementList *selected,CategoryListItem *parent=0);
+    void getSelectedCategories(ElementList *selected,CategoryCheckListItem *parent=0);
 private:
 
 	//Widgets
@@ -48,7 +48,7 @@ private:
 	RecipeDB *database;
 	
 	//Private methods
-	void loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryListItem *parent=0 );
+	void loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryCheckListItem *parent=0 );
 	
 private slots:
 	void createNewCategory(void);

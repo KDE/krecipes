@@ -28,6 +28,8 @@ public:
     KreListView(QWidget *parent,const QString &title=QString::null, bool filter=false, int filterCol=0, QWidget *embeddedWidget=0);
     ~KreListView();
     KListView *listView(){return list;}
+    
+    void setListView(KListView *list_view){ delete list; list = list_view; } 
 
 private:
 	QHBox *filterBox;

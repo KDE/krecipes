@@ -23,6 +23,7 @@
 #include "datablocks/categorytree.h"
 
 class RecipeDB;
+class StdCategoryListView;
 
 /**
 @author Unai Garro
@@ -35,27 +36,21 @@ public:
 
 	CategoriesEditorDialog(QWidget* parent, RecipeDB *db);
 	~CategoriesEditorDialog();
-	void reload(void);
+
 private:
 	// Internal data
 	RecipeDB *database;
 	//Widgets
 	QGridLayout *layout;
-	KListView *categoryListView;
+	StdCategoryListView *categoryListView;
 	QHBox *buttonBar;
 	QPushButton *newCategoryButton;
 	QPushButton *removeCategoryButton;
 	KIconLoader *il;
-	
-	void loadListView(const CategoryTree *categoryTree, QListViewItem *parent=0 );
 
 private slots:
 	void createNewCategory(void);
 	void removeCategory(void);
-	void changeCategoryParent(QListViewItem *item,QListViewItem *afterFirst,QListViewItem *afterNow);
-  void modCategory(QListViewItem*);
-  void saveCategory(QListViewItem*);
-
 };
 
 #endif

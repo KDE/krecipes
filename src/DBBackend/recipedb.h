@@ -55,6 +55,27 @@ public:
 	// Error handling (passive)
 	bool dbOK;
 	QString dbErr;
+	
+signals:
+	void authorCreated( const Element & );
+	void authorRemoved( int id );
+
+	void categoryCreated( const Element &, int parent_id );
+	void categoryRemoved( int id );
+	void categoryModified( const Element & );
+	void categoryModified( int id, int parent_id );
+
+	void ingredientCreated( const Element & );
+	void ingredientRemoved( int id );
+
+	void prepMethodCreated( const Element & );
+	void prepMethodRemoved( int id );
+
+	void propertyCreated( const IngredientProperty & );
+	void propertyRemoved( int id );
+
+	void unitCreated( const Element & );
+	void unitRemoved( int id );
 
 	// Public methods
 public:
@@ -81,6 +102,7 @@ public:
 	virtual int  findExistingCategoryByName(const QString& name)=0;
 	virtual int  findExistingIngredientByName(const QString& name)=0;
 	virtual int  findExistingPrepByName(const QString& name)=0;
+	virtual int  findExistingPropertyByName(const QString& name)=0;
 	virtual int  findExistingRecipeByName(const QString& name)=0;
 	virtual int  findExistingUnitByName(const QString& name)=0;
 	virtual int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0)=0;
@@ -135,9 +157,11 @@ public:
 
 	/** Change all instances of units with id @param id2 to @param id1 */
 	virtual void mergeUnits(int id1, int id2)=0;
-	
+
 	/** Change all instances of prep methods with id @param id2 to @param id1 */
 	virtual void mergePrepMethods(int id1, int id2)=0;
+
+	virtual void mergeProperties(int id1, int id2)=0;
 
   /**
   * set newLabel for ingredientID
@@ -158,6 +182,8 @@ public:
 	virtual void modAuthor(int authorID, QString newLabel)=0;
 	
 	virtual void modPrepMethod(int prepMethodID, const QString &newLabel)=0;
+
+	virtual void modProperty(int propertyID, const QString &newLabel)=0;
 
 	virtual QString recipeTitle(int recipeID)=0;
 
@@ -180,7 +206,10 @@ public:
 	virtual QCString escapeAndEncode(const QString &s)=0;
 	virtual QString unescapeAndDecode(const QString &s)=0;
 
-	virtual QString unitName(int unitID)=0;
+	virtual QString categoryName(int ID)=0;
+	virtual IngredientProperty propertyName(int ID)=0;
+	virtual QString unitName(int ID)=0;
+
 	virtual bool checkIntegrity(void)=0;
 
 	virtual void createTable(QString tableName)=0;
@@ -194,6 +223,7 @@ public:
 	int maxRecipeTitleLength() const{ return 200; }
 	int maxUnitNameLength() const{ return 20; }
 	int maxPrepMethodNameLength() const{ return 20; }
+	int maxPropertyNameLength() const{ return 20; }
 
 protected:
 	virtual void portOldDatabases(float version)=0;

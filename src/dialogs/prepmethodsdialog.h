@@ -21,6 +21,7 @@
 #include <klistview.h>
 
 class RecipeDB;
+class StdPrepMethodListView;
 
 /**
 @prepMethod Unai Garro
@@ -40,7 +41,7 @@ private:
 	RecipeDB *database;
 	//Widgets
 	QGridLayout *layout;
-	KListView *prepMethodListView;
+	StdPrepMethodListView *prepMethodListView;
 	QHBox *buttonBar;
 	QPushButton *newPrepMethodButton;
 	QPushButton *removePrepMethodButton;
@@ -49,8 +50,6 @@ private:
 private slots:
 	void createNewPrepMethod(void);
 	void removePrepMethod(void);
-	void modPrepMethod(QListViewItem*);
-	void savePrepMethod(QListViewItem*);
 
 };
 #endif

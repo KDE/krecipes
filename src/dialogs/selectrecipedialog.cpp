@@ -214,7 +214,6 @@ void SelectRecipeDialog::reload()
 currentCategory=0;
 QString remember_cat_filter = categoryBox->currentText();
 
-advancedSearch->reload();
 loadRecipeList();
 loadCategoryCombo();
 

@@ -33,35 +33,6 @@ class RecipeDB;
 @author Unai Garro
 */
 
-class IngredientListItem:public QCheckListItem
-{
-public:
-	IngredientListItem(QListView* qlv, const Element &ing ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox)
-	{
-	// Initialize the ingredient data with the the property data
-		ingStored=new Element();
-		ingStored->id=ing.id;
-		ingStored->name=ing.name;
-	}
-
-	~IngredientListItem(void)
-	{
-	delete ingStored;
-	}
-	int id(void){return ingStored->id;}
-	QString name(void){return ingStored->name;}
-
-private:
-	Element *ingStored;
-
-public:
-	virtual QString text(int column) const
-		{
-		if (column==1) return(ingStored->name);
-		else return(QString::null);
-		}
-};
-
 // ### Should we make this the standard class for representing recipes? (we'd subclass it here to provide the ingredient list)
 //     This way it would be consistent all around and maybe we wouldn't show the user the recipe id (which is probably just confusing).
 //     It would even be easily configurable.
