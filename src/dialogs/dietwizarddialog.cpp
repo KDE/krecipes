@@ -172,19 +172,18 @@ private:
 	Constraint *ctStored;
 
 public:
+	double maxVal(){return ctStored->max;}
+	double minVal(){return ctStored->min;}
+	int propertyId(){return ctStored->id;}
+	void setMax(double maxValue) {ctStored->max=maxValue; setText(3,QString::number(maxValue));}
+	void setMin(double minValue) {ctStored->min=minValue; setText(2,QString::number(minValue));}
 	virtual QString text(int column) const
 		{
 		if (column==1) return(ctStored->name);
-		else if (column==2) return(QString("0.0"));
-		else if (column==3) return(QString("0.0"));
-
-
+		else if (column==2) return(QString::number(ctStored->min));
+		else if (column==3) return(QString::number(ctStored->max));
 		else return(QString::null);
 		}
-
-	int propertyId(){return ctStored->id;}
-	double maxVal(){return ctStored->max;}
-	double minVal(){return ctStored->min;}
 };
 
 class CategoriesListItem:public QCheckListItem{
@@ -380,6 +379,8 @@ constraintsEditBox2->hide();
 
 // Connect Signals & Slots
 connect(constraintsView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertConstraintsEditBoxes(QListViewItem*)));
+connect(constraintsEditBox1,SIGNAL(valueChanged(double)),this,SLOT(setMinValue(double)));
+connect(constraintsEditBox2,SIGNAL(valueChanged(double)),this,SLOT(setMaxValue(double)));
 }
 
 DishInput::~DishInput()
@@ -450,6 +451,25 @@ Constraint constraint;
 	}
 }
 
+void DishInput::setMinValue(double minValue)
+{
+this->constraintsEditBox1->hide();
+
+
+ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->selectedItem()); // Find selected property
+
+if (it) it->setMin(minValue);
+}
+
+void DishInput::setMaxValue(double maxValue)
+{
+this->constraintsEditBox2->hide();
+
+
+ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->selectedItem()); // Find selected property
+
+if (it) it->setMax(maxValue);
+}
 
 DishTitle::DishTitle(QWidget *parent,const QString &title):QWidget(parent)
 {

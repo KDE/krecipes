@@ -152,6 +152,8 @@ private:
 		EditBox *constraintsEditBox2;
 private slots:
 		void insertConstraintsEditBoxes(QListViewItem* it);
+		void setMinValue(double minValue);
+		void setMaxValue(double maxValue);
 };
 
 class DishTitle:public QWidget{
