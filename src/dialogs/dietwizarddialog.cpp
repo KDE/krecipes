@@ -251,7 +251,7 @@ layout->addWidget(dishStack);
 DishInput *newDish=new DishInput(this,i18n("1st Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
 newDish=new DishInput(this,i18n("2nd Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
 newDish=new DishInput(this,i18n("Dessert")); dishStack->addWidget(newDish); dishInputList.append(newDish);
-dishNumber=1;
+dishNumber=3;dishNumberInput->setValue(dishNumber);
 
 // Signals & Slots
 connect(dishNumberInput,SIGNAL(valueChanged(int)),this,SLOT(changeDishNumber(int)));
