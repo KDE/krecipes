@@ -650,14 +650,13 @@ void MenuButton::drawButtonLabel( QPainter *p ){
     QPixmap* pm( (QPixmap*)p->device() );
     KPixmap pn;
     QFont font( KGlobalSettings::generalFont() );
-    bool sunken = isDown();
 
     // draw icon
     style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
 
     // copy base button
     pn = *pm;
-    
+
     // create gradient image
     QPixmap tmp(size());
     tmp.fill(Qt::white);
@@ -677,11 +676,6 @@ void MenuButton::drawButtonLabel( QPainter *p ){
     QImage src = pm->convertToImage();
     QImage blend = pn.convertToImage();
     QImage button = KImageEffect::blend (src, blend, gradient, KImageEffect::Red);
-
-    // highlight button on mouseOver
-    if(mouseOver && !sunken){
-      button = KImageEffect::intensity(button, 0.1);
-    }
 
     // draw the button
     bitBlt(pm, 0, 0, &button, 0, Qt::CopyROP);
