@@ -40,6 +40,8 @@ private:
     QPushButton* removeIngredientButton;
     QPushButton* addUnitButton;
     QPushButton* removeUnitButton;
+    QPushButton* addPropertyButton;
+    QPushButton* removePropertyButton;
     KListView* ingredientListView;
     KListView* unitsListView;
     KListView* propertiesListView;

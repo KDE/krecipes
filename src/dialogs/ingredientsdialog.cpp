@@ -95,6 +95,26 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     propertiesListView->addColumn("Prop.");
     propertiesListView->addColumn("Amount");
 
+    QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
+    layout->addMultiCell(spacer_rightProperties,1,3,17,17);
+
+    addPropertyButton= new QPushButton(this);
+    addPropertyButton->setText("+");
+    layout->addWidget( addPropertyButton, 1, 18 );
+    addPropertyButton->resize(QSize(30,30));
+    addPropertyButton->setMinimumSize(QSize(30,30));
+    addPropertyButton->setMaximumSize(QSize(30,30));
+    addPropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    addPropertyButton->setFlat(true);
+
+    removePropertyButton=new QPushButton(this);
+    removePropertyButton->setText("-");
+    layout->addWidget( removePropertyButton, 3, 18 );
+    removePropertyButton->resize(QSize(30,30));
+    removePropertyButton->setMinimumSize(QSize(30,30));
+    removePropertyButton->setMaximumSize(QSize(30,30));
+    removePropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    removePropertyButton->setFlat(true);
 
     // Initialize
     ingredientList =new ElementList;
