@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
+ * Copyright (C) 2003 krecipes.sourceforge.net developers
  */
 
 #include "krecipesview.h"
@@ -45,7 +45,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     QString user=config->readEntry( "Username",QString::null);
     QString pass=config->readEntry("Password",QString::null);
     QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-    database=new RecipeDB(host,user,pass,dbname);
+    database=new MySQLRecipeDB(host,user,pass,dbname);
 
     splitter=new QSplitter(this);
 
@@ -347,16 +347,16 @@ rightPanel->raiseWidget(dietPanel);
 
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
-RecipeDB *db;
+MySQLRecipeDB *db;
 
 if (!adminPass.isNull())
 	{ // Login as admin in the (remote) server and createDB if necessary
 	std::cerr<<"Open db as:"<< adminUser.latin1() <<",*** with password ****\n";
-	db= new RecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
+	db= new MySQLRecipeDB(host,adminUser,adminPass,dbName,true); // true means initialize db structure (It won't destroy data if exists)
 	}
 	else{ // Login as root with no password
 	std::cerr<<"Open db as root, with no password\n";
-	db=new RecipeDB(host,"root",QString::null,dbName,true);
+	db=new MySQLRecipeDB(host,"root",QString::null,dbName,true);
 	}
 
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
@@ -366,8 +366,8 @@ delete db; //it closes the db automatically
 
 void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
 {
-RecipeDB *db;
-db= new RecipeDB(host,user,pass,dbName);
+MySQLRecipeDB *db;
+db= new MySQLRecipeDB(host,user,pass,dbName);
 db->emptyData();
 db->initializeData();
 delete db; //it closes the db automatically

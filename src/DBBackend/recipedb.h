@@ -1,12 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
+ *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
@@ -29,112 +30,107 @@
 @author Unai Garro
 */
 class RecipeDB{
-private:
-	QSqlDatabase *database;
-	void createDB(void);
-	QString DBuser;
-	QString DBpass;
-	QString DBhost;
+
+protected:
+	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init){};
+	virtual ~RecipeDB(){};
 public:
-	RecipeDB(const QString host, const QString user=QString::null, const QString pass=QString::null, const QString DBName=DEFAULT_DB_NAME,bool init=true);
-	~RecipeDB(void);
-
-	void addAuthorToRecipe(int recipeID, int categoryID);
-	void addCategoryToRecipe(int recipeID, int categoryID);
+	virtual void addAuthorToRecipe(int recipeID, int categoryID)=0;
+	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
 
 
-	void addProperty(QString &name, QString &units);
-	void addPropertyToIngredient(int ingredientID,int propertyID,double amount, int perUnitsID);
-	void addUnitToIngredient(int ingredientID,int unitID);
+	virtual void addProperty(QString &name, QString &units)=0;
+	virtual void addPropertyToIngredient(int ingredientID,int propertyID,double amount, int perUnitsID)=0;
+	virtual void addUnitToIngredient(int ingredientID,int unitID)=0;
 
-	void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units);
+	virtual void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units)=0;
 
-	void createNewAuthor(const QString &authorName);
-	void createNewCategory(QString &categoryName);
-	void createNewIngredient(QString ingredientName);
-	void createNewUnit(QString &unitName);
+	virtual void createNewAuthor(const QString &authorName)=0;
+	virtual void createNewCategory(QString &categoryName)=0;
+	virtual void createNewIngredient(QString ingredientName)=0;
+	virtual void createNewUnit(QString &unitName)=0;
 
-	void emptyData(void);
+	virtual void emptyData(void)=0;
 
-	int  findExistingAuthorByName(const QString& name);
-	int  findExistingCategoryByName(const QString& name);
-	int  findExistingIngredientByName(const QString& name);
-	int  findExistingRecipeByName(const QString& name);
-	int  findExistingUnitByName(const QString& name);
-	int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0);
-	void findIngredientUnitDependancies(int ingredientID,int unitID,ElementList *recipes,ElementList *ingredientInfo);
-	void findIngredientDependancies(int ingredientID,ElementList *recipes);
-	void findUnitDependancies(int unitID,ElementList *properties,ElementList *recipes);
-	void findUseOf_Ing_Unit_InRecipes(ElementList *results, int ingredientID, int unitID);
-	void findUseOfIngInRecipes(ElementList *results,int ingredientID);
-	void findUseOf_Unit_InRecipes(ElementList *results, int unitID);
-	void findUseOf_Unit_InProperties(ElementList *results, int unitID);
+	virtual int  findExistingAuthorByName(const QString& name)=0;
+	virtual int  findExistingCategoryByName(const QString& name)=0;
+	virtual int  findExistingIngredientByName(const QString& name)=0;
+	virtual int  findExistingRecipeByName(const QString& name)=0;
+	virtual int  findExistingUnitByName(const QString& name)=0;
+	virtual int  findExistingUnitsByName(const QString& name,int ingredientID=-1, ElementList *list=0)=0;
+	virtual void findIngredientUnitDependancies(int ingredientID,int unitID,ElementList *recipes,ElementList *ingredientInfo)=0;
+	virtual void findIngredientDependancies(int ingredientID,ElementList *recipes)=0;
+	virtual void findUnitDependancies(int unitID,ElementList *properties,ElementList *recipes)=0;
+	virtual void findUseOf_Ing_Unit_InRecipes(ElementList *results, int ingredientID, int unitID)=0;
+	virtual void findUseOfIngInRecipes(ElementList *results,int ingredientID)=0;
+	virtual void findUseOf_Unit_InRecipes(ElementList *results, int unitID)=0;
+	virtual void findUseOf_Unit_InProperties(ElementList *results, int unitID)=0;
 
-	QString getUniqueRecipeTitle( const QString &recipe_title );
-	void givePermissions(const QString &dbName,const QString &username, const QString &password=QString::null, const QString &clientHost="localhost");
+	virtual QString getUniqueRecipeTitle( const QString &recipe_title )=0;
+	virtual void givePermissions(const QString &dbName,const QString &username, const QString &password=QString::null, const QString &clientHost="localhost")=0;
 
 
-	bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID);
-	bool ingredientContainsUnit(int ingredientID, int unitID);
+	virtual bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID)=0;
+	virtual bool ingredientContainsUnit(int ingredientID, int unitID)=0;
 
-	void initializeDB(void);
-	void initializeData(void);
+	virtual void initializeDB(void)=0;
+	virtual void initializeData(void)=0;
 
-	int lastInsertID();
+	virtual int lastInsertID()=0;
 
-	void loadAuthors(ElementList *list);
-	void loadCategories(ElementList *list);
-	void loadIngredients(ElementList *list);
-	void loadPossibleUnits(int ingredientID, ElementList *list);
-	void loadProperties(IngredientPropertyList *list,int ingredientID=-1);
-	void loadRecipe(Recipe *recipe,int recipeID=0);
-	void loadRecipeAuthors(int recipeID, ElementList *list);
-	void loadRecipeCategories(int recipeID, ElementList *list);
-	void loadRecipeList(ElementList *list);
-	void loadUnits(ElementList *list);
-	void loadUnitRatios(UnitRatioList *ratioList);
+	virtual void loadAuthors(ElementList *list)=0;
+	virtual void loadCategories(ElementList *list)=0;
+	virtual void loadIngredients(ElementList *list)=0;
+	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
+	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-1)=0;
+	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
+	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
+	virtual void loadRecipeCategories(int recipeID, ElementList *list)=0;
+	virtual void loadRecipeList(ElementList *list)=0;
+	virtual void loadUnits(ElementList *list)=0;
+	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
 
   /**
   * set newLabel for ingredientID
   */
-	void modIngredient(int ingredientID, QString newLabel);
+	virtual void modIngredient(int ingredientID, QString newLabel)=0;
   /**
   * set newLabel for unitID
   */
-	void modUnit(int unitID, QString newLabel);
+	virtual void modUnit(int unitID, QString newLabel)=0;
 
-	QString recipeTitle(int recipeID);
+	virtual QString recipeTitle(int recipeID)=0;
 
-	void removeAuthor(int categoryID);
-	void removeCategory(int categoryID);
-	void removeIngredient(int ingredientID);
-	void removeProperty(int propertyID);
-	void removePropertyFromIngredient(int ingredientID, int propertyID,int perUnitID);
-	void removeRecipe(int id);
-	void removeUnit(int unitID);
-	void removeUnitFromIngredient(int ingredientID, int unitID);
+	virtual void removeAuthor(int categoryID)=0;
+	virtual void removeCategory(int categoryID)=0;
+	virtual void removeIngredient(int ingredientID)=0;
+	virtual void removeProperty(int propertyID)=0;
+	virtual void removePropertyFromIngredient(int ingredientID, int propertyID,int perUnitID)=0;
+	virtual void removeRecipe(int id)=0;
+	virtual void removeUnit(int unitID)=0;
+	virtual void removeUnitFromIngredient(int ingredientID, int unitID)=0;
 
-	void saveRecipe(Recipe *recipe);
-	void saveUnitRatio(const UnitRatio *ratio);
+	virtual void saveRecipe(Recipe *recipe)=0;
+	virtual void saveUnitRatio(const UnitRatio *ratio)=0;
 
-	double unitRatio(int unitID1, int unitID2);
+	virtual double unitRatio(int unitID1, int unitID2)=0;
 
-	QCString escapeAndEncode(const QString &s);
-	QString unescapeAndDecode(const QString &s);
+	virtual QCString escapeAndEncode(const QString &s)=0;
+	virtual QString unescapeAndDecode(const QString &s)=0;
 
-	QString unitName(int unitID);
-	bool checkIntegrity(void);
+	virtual QString unitName(int unitID)=0;
+	virtual bool checkIntegrity(void)=0;
 
-	void createTable(QString tableName);
-	void splitCommands(QString& s,QStringList& sl);
+	virtual void createTable(QString tableName)=0;
+	virtual void splitCommands(QString& s,QStringList& sl)=0;
 
-	float databaseVersion(void);
+	virtual float databaseVersion(void)=0;
 
-private:
-	int  findExistingElementByName( const QString& name, const QString &element );
-	void loadElementList(ElementList *elList, QSqlQuery *query);
-	void loadPropertyElementList(ElementList *elList, QSqlQuery *query);
-	void portOldDatabases(float version);
+protected:
+	virtual int  findExistingElementByName( const QString& name, const QString &element )=0;
+	virtual void loadElementList(ElementList *elList, QSqlQuery *query)=0;
+	virtual void loadPropertyElementList(ElementList *elList, QSqlQuery *query)=0;
+	virtual void portOldDatabases(float version)=0;
 };
 
 
