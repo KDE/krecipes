@@ -168,7 +168,8 @@ void MMFImporter::importMMF( QTextStream &stream )
 		!stream.atEnd() )
 	{
 		bool col_one_used = loadIngredientLine( current.left(41), m_left_col_ing );
-		loadIngredientLine( current.mid( 41, current.length() ), m_right_col_ing );
+		if ( col_one_used ) //only check for second column if there is an ingredient in the first column
+			loadIngredientLine( current.mid( 41, current.length() ), m_right_col_ing );
 
 		if ( instruction_found && col_one_used )
 		{
@@ -181,7 +182,8 @@ void MMFImporter::importMMF( QTextStream &stream )
 		if ( !col_one_used &&
 		     !loadIngredientHeader( current.stripWhiteSpace() ) )
 		{
-			instruction_found = true;
+			if ( current.stripWhiteSpace() != "" )
+				instruction_found = true;
 			m_instructions += current.stripWhiteSpace() + "\n";
 			qDebug("Found instruction line: %s",current.stripWhiteSpace().latin1());
 		}
@@ -236,8 +238,10 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			}
 		}
 		if ( !is_unit )
-		{
-			addWarningMsg( QString(i18n("Unit \"%1\" not recognized.  Used in the context of \"%2\".")).arg(unit).arg(string.stripWhiteSpace()) );
+		{/*This gives too many false warnings...
+			addWarningMsg( QString(i18n("Unit \"%1\" not recognized. "
+			  "Used in the context of \"%2\".  If this shouldn't be an ingredient line (i.e. is part of the instructions), "
+			  "then you can safely ignore this warning, and the recipe will be correctly imported.")).arg(unit).arg(string.stripWhiteSpace()) );*/
 			return false;
 		}
 
