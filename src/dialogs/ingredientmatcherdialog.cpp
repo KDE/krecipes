@@ -15,10 +15,11 @@
 #include "DBBackend/recipedb.h"
 #include "widgets/krelistview.h"
 
-#include <qhbox.h>
 #include <qpainter.h>
+#include <qstringlist.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <iostream>
 
 IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
@@ -28,12 +29,25 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	//Design the dialog
 	setSpacing(10);
 	
+		// Ingredient list
 	ingredientListView=new KreListView(this,i18n("Ingredients"),true,1);
 	ingredientListView->listView()->setAllColumnsShowFocus(true);
 	ingredientListView->listView()->addColumn("*");
 	ingredientListView->listView()->addColumn(i18n("Ingredient"));
+		// Box to select allowed number of missing ingredients
+	missingBox=new QHBox(this);
+	missingNumberLabel=new QLabel(missingBox);
+	missingNumberLabel->setText(i18n("Missing ingredients allowed:"));
+	missingNumberCombo=new KComboBox(missingBox);
+	QStringList optionsList;
+	optionsList.append("1");
+	optionsList+="2";
+	optionsList+="3";
+	optionsList+=i18n("any");
+	missingNumberCombo->insertStringList(optionsList);
 	
-	recipeListView=new KreListView(this,i18n("Matching Recipes"));
+		// Found recipe list
+	recipeListView=new KreListView(this,i18n("Matching Recipes"),false,1,missingBox);
 	recipeListView->listView()->setAllColumnsShowFocus(true);
 	recipeListView->listView()->addColumn(i18n("Title"));
 	recipeListView->listView()->addColumn(i18n("Missing Ingredients"));
@@ -94,6 +108,7 @@ void IngredientMatcherDialog::findRecipes(void)
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
 	RecipeList incompleteRecipes;
+	QValueList <int> missingNumbers;
 	
 	RecipeList::Iterator it;
 	for (it=rlist.begin();it!=rlist.end();++it)
@@ -105,15 +120,30 @@ void IngredientMatcherDialog::findRecipes(void)
 			new RecipeListItem(recipeListView->listView(),*it);
 			}
 		else incompleteRecipes.append(*it);
+		missingNumbers.append(missing.count()); std::cerr<<missing.count()<<"\n";
 		}
 
 	// Show recipes with missing ingredients
 	new SectionItem(recipeListView->listView(),i18n("You are missing some ingredients for:"));
 	
-	for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it)
+	QValueList<int>::Iterator nit;
+	if (this->missingNumberCombo->currentItem()==3) // Any
+	{
+		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it)
 		{
 			new RecipeListItem(recipeListView->listView(),*it);
 		}
+	}
+	else // 1..3
+	{
+		int missingNoAllowed=missingNumberCombo->currentText().toInt();
+		nit=missingNumbers.begin();	
+		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it,++nit)
+		{
+			if ((*nit)<=missingNoAllowed)
+				new RecipeListItem(recipeListView->listView(),*it);
+		}
+	}
 }
 
 void IngredientMatcherDialog::reloadIngredients(void)

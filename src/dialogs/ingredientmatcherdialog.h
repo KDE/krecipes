@@ -14,9 +14,13 @@
 #include "element.h"
 #include "recipe.h"
 
+#include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
+#include <qhbox.h>
 #include <qvbox.h>
+
+#include <kcombobox.h>
 
 class KreListView;
 class RecipeDB;
@@ -117,10 +121,17 @@ private:
 	RecipeDB *database;
 	
 	//Widgets
+	
 	KreListView *ingredientListView;
+	
 	KreListView *recipeListView;
+	QHBox *missingBox;
+	QLabel *missingNumberLabel;
+	KComboBox *missingNumberCombo;
+	
 	QPushButton *okButton;
 	QPushButton *clearButton;
+	
 private slots:
 	void findRecipes(void);
 
