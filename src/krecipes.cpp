@@ -54,6 +54,16 @@ Krecipes::Krecipes()
     // position, icon size, etc.
     setAutoSaveSettings();
 
+
+
+    // Resize if the window is too small so the buttons are shown
+    QSize wsize=size();
+    if (wsize.width()<860)
+    	{
+	wsize.setWidth(860);
+	resize(wsize);
+	}
+
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
             this,   SLOT(changeStatusbar(const QString&)));
