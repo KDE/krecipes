@@ -53,6 +53,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 
     // Connect signals & slots
     connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
+    connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
 
 
     //Populate data into the table
@@ -107,4 +108,26 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    reloadData(); // Reload the unitlist from the database
 }
 delete elementDialog;
+}
+
+void UnitsDialog::removeUnit(void)
+{
+// Find selected unit item
+QListViewItem *it;
+int unitID=-1;
+if (it=unitListView->selectedItem()) unitID=it->text(0).toInt();
+
+if (unitID>=0) // a unit was selected previously
+{
+ElementList results_recipes, results_properties;
+database->findUseOf_Unit_InRecipes(&results_recipes,unitID); // Check if this unit is being used in a recipe's ingredient list, since if so, the recipe will be deleted
+database->findUseOf_Unit_InProperties(&results_properties,unitID); // Check if ths unit is being used in any property, since if so, the property will be deleted
+
+if (results_recipes.isEmpty() && results_properties.isEmpty()) database->removeUnit(unitID);
+else database->removeUnit(unitID); // need warning!
+
+
+reloadData();// Reload the list from database
+
+}
 }

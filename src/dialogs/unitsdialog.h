@@ -37,6 +37,7 @@ private:
 	RecipeDB *database;
 private slots:
 	void createNewUnit(void);
+	void removeUnit(void);
 
 };
 
