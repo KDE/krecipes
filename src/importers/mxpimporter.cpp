@@ -33,7 +33,7 @@ MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 		{
 			line = stream.readLine().stripWhiteSpace();
 
-			if ( line.simplifyWhiteSpace() == "* Exported from MasterCook *" )
+			if ( line.simplifyWhiteSpace().contains("Exported from MasterCook") )
 				{importMXP( stream );}
 			else if ( line == "{ Exported from MasterCook Mac }" )
 				{importMac( stream );}
@@ -110,7 +110,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		  "the field \"Preparation Time:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
-	//categories
+	//====================categories====================//
 	stream.skipWhiteSpace();
 	current = stream.readLine().stripWhiteSpace();
 	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "categories" )
@@ -144,7 +144,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 
 
-	//ingredients
+	//============ingredients=================//
 	stream.skipWhiteSpace();
 	(void)stream.readLine(); (void)stream.readLine();
 	current = stream.readLine();
@@ -209,7 +209,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	else
 		qDebug("No ingredients found.");
 
-	// instructions ( along with other optional fields... mxp format doesn't define end of ingredients and start of other fields )
+	//==========================instructions ( along with other optional fields... mxp format doesn't define end of ingredients and start of other fields )==============//
 	stream.skipWhiteSpace();
 	current = stream.readLine().stripWhiteSpace();
 	while ( !current.contains("- - - -" ) && !stream.atEnd() )
@@ -258,82 +258,58 @@ void MXPImporter::importMXP( QTextStream &stream )
 	m_instructions = m_instructions.stripWhiteSpace();
 	qDebug("Found instructions: %s", m_instructions.latin1());
 
-	//after here, fields are optional, have to check if the line read was used (might be beginning of next recipe)
+	//=================after here, fields are optional=========================//
 	stream.skipWhiteSpace();
 	current = stream.readLine().stripWhiteSpace();
-	bool line_used = false;
 
-	//suggested wine
-	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "suggested wine" )
+	while ( !current.simplifyWhiteSpace().contains("Exported from MasterCook") && !stream.atEnd() )
 	{
-		line_used = true;
-		m_wine = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-		qDebug("Found suggested wine: %s (adding to end of instructions)", m_wine.latin1());
-
-		m_instructions += "\n\nSuggested wine: " + m_wine;
-	}
-	else
-		line_used = false;
-
-	//per serving... maybe we can do something with this info later
-	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving (excluding unknown items)" )
-	{
-		line_used = true;
-		QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-		qDebug("Found per serving (excluding unknown items): %s (adding to end of instructions)", per_serving_info.latin1());
-
-		m_instructions += "\n\nPer Serving (excluding unknown items): " + per_serving_info;
-	}
-	else
-		line_used = false;
-
-	//serving ideas
-	if ( line_used )
-	{
-		stream.skipWhiteSpace();
-		current = stream.readLine().stripWhiteSpace();
-	}
-	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "serving ideas" )
-	{
-		line_used = true;
-		m_serving_ideas = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-		qDebug("Found serving ideas: %s (adding to end of instructions)", m_serving_ideas.latin1());
-
-		m_instructions += "\n\nServing ideas: " + m_serving_ideas;
-	}
-	else
-		line_used = false;
-
-	//notes
-	if ( line_used )
-	{
-		stream.skipWhiteSpace();
-		current = stream.readLine().stripWhiteSpace();
-	}
-	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "notes" )
-	{
-		line_used = false; //we used this line, but notes can be multiline... the end of notes will be the begin of next recipe, so we're gonna take the first line of next recipe to detect it
-
-		m_notes = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-
-		stream.skipWhiteSpace();
-		current = stream.readLine();
-		while ( current.simplifyWhiteSpace() != "* Exported from MasterCook *" && !stream.atEnd() )
+		//suggested wine
+		if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "suggested wine" )
 		{
-			m_notes += "\n"+current.stripWhiteSpace();
-			current = stream.readLine();
+			m_wine = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found suggested wine: %s (adding to end of instructions)", m_wine.latin1());
+
+			m_instructions += "\n\nSuggested wine: " + m_wine;
 		}
+		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving (excluding unknown items)" )
+		{ //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found per serving (excluding unknown items): %s (adding to end of instructions)", per_serving_info.latin1());
 
-		qDebug("Found notes: %s (adding to end of instructions)", m_notes.latin1());
+			m_instructions += "\n\nPer Serving (excluding unknown items): " + per_serving_info;
+		}
+		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "per serving" )
+		{ //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found per serving: %s (adding to end of instructions)", per_serving_info.latin1());
 
-		m_instructions += "\n\nNotes: " + m_notes.stripWhiteSpace();
+			m_instructions += "\n\nPer Serving: " + per_serving_info;
+		}
+		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "food exchanges" )
+		{ //food exchanges... maybe we can do something with this info later
+			QString food_exchange_info = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found food exchanges: %s (adding to end of instructions)", food_exchange_info.latin1());
+
+			m_instructions += "\n\nFood Exchanges: " + food_exchange_info;
+		}
+		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "serving ideas" )
+		{ //serving ideas
+			m_serving_ideas = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+			qDebug("Found serving ideas: %s (adding to end of instructions)", m_serving_ideas.latin1());
+
+			m_instructions += "\n\nServing ideas: " + m_serving_ideas;
+		}
+		else if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "notes" ) //notes
+			m_notes = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+		else if ( current != "" && current != "_____" ) //if it doesn't belong to any other field, assume it a part of a multi-line notes field
+			m_notes += "\n" + current;
+
+		current = stream.readLine().stripWhiteSpace();
 	}
-	else
-		line_used = false;
 
-	/*still to implement (examples follow) these are not official fields from an MasterCook Export (I don't think):
-	  Per serving: 262 Calories (kcal); 0g Total Fat; (0% calories from fat); 0g Protein; 0g Carbohydrate; 0mg Cholesterol; 1mg Sodium
-          Food Exchanges: 0 Grain(Starch); 0 Lean Meat; 0 Vegetable; 0 Fruit; 0 Fat; 0 Other Carbohydrates
+	/*possible fields to implement later:
+
           Nutr. Assoc. : 0 0 0 0 0
 
 Ratings       : Cholesterol Rating 5            Complete Meal 3
@@ -347,19 +323,19 @@ Ratings       : Cholesterol Rating 5            Complete Meal 3
                 Tartness 7
 
 	*/
-
-	if ( !line_used ) //oops, we might have taken the first line of the next recipe
+	if ( !m_notes.isNull() )
 	{
-		if ( current.simplifyWhiteSpace() == "* Exported from MasterCook *" )
-		{
-			putDataInRecipe();
-			importMXP( stream );
-			return;
-		}
+		qDebug("Found notes: %s (adding to end of instructions)", m_notes.latin1());
+		m_instructions += "\n\nNotes: " + m_notes.stripWhiteSpace();
 	}
 
 	putDataInRecipe();
 
+	if ( !stream.atEnd() )
+	{
+		importMXP( stream );
+		return;
+	}
 }
 
 void MXPImporter::importGeneric( QTextStream &stream )
