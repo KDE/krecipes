@@ -258,7 +258,10 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	if ( s.isEmpty() ) // Don't filter if the filter text is empty
 	{
 		if ( !isFilteringCategories )
+		{
+			it->setVisible(false); //this insures that the call to setVisible(true) will show all the children of 'it'
 			it->setVisible(true);
+		}
 	}
 	else if ( !it->firstChild() ) // It's not a category or it's empty
 	{
@@ -366,6 +369,7 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 				KProgressDialog progress_dialog(this, "export_progress_dialog", QString::null, i18n("Preparing to save recipes...") );
 				progress_dialog.setAutoClose(false); progress_dialog.setAutoReset(true);
 				RecipeList recipes; database->loadRecipes( &recipes, ids, &progress_dialog );
+				progress_dialog.setAutoReset(false);
 
 				progress_dialog.setLabel( i18n("Saving recipes...") );
 				exporter->exporter( recipes, &progress_dialog );
@@ -383,10 +387,15 @@ void SelectRecipeDialog::slotExportRecipe()
 {
 	if ( recipeListView->selectedItem() )
 	{
-		QValueList<int> id;
-		id.append( (recipeListView->selectedItem())->text(1).toInt() );
-
-		exportRecipes( id, i18n("Save Recipe"), (recipeListView->selectedItem())->text(2) );
+		if ( recipeListView->selectedItem()->firstChild() )
+			slotExportRecipeFromCat();
+		else
+		{
+			QValueList<int> id;
+			id.append( (recipeListView->selectedItem())->text(1).toInt() );
+	
+			exportRecipes( id, i18n("Save Recipe"), (recipeListView->selectedItem())->text(2) );
+		}
 	}
 	else //if nothing selected, export all visible recipes
 	{

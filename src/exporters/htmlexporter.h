@@ -11,8 +11,6 @@
 #ifndef HTMLEXPORTER_H
 #define HTMLEXPORTER_H
 
-#include <math.h> // For ceil()
-
 #include <qdom.h>
 
 #include "baseexporter.h"
@@ -26,12 +24,13 @@ class QRect;
 class DivElement
 {
 public:
-	DivElement( const QString &id, const QString &content );
+	DivElement( const QString &id, const QString &className, const QString &content );
 
 	void addProperty( const QString &s ){ m_properties << s; }
 
 	QString innerHTML() const{ return m_content; }
 	QString id() const{return m_id;}
+	QString className() const{ return m_class; }
 	QFont font();
 
 	bool fixedHeight(){ return m_fixed_height; }
@@ -42,6 +41,7 @@ public:
 
 private:
 	QString m_id;
+	QString m_class;
 	QString m_content;
 	QStringList m_properties;
 
@@ -72,15 +72,17 @@ private:
 	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 
 	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
-	void readAlignmentProperties( DivElement *, const QDomDocument &doc, const QString &object );
-	void readBgColorProperties( DivElement *, const QDomDocument &doc, const QString &object );
-	void readFontProperties( DivElement *, const QDomDocument &doc, const QString &object );
-	void readTextColorProperties( DivElement *, const QDomDocument &doc, const QString &object );
-	void readVisibilityProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
+	QString readBgColorProperties( const QDomDocument &doc, const QString &object );
+	QString readFontProperties( const QDomDocument &doc, const QString &object );
+	QString readTextColorProperties( const QDomDocument &doc, const QString &object );
+	QString readVisibilityProperties( const QDomDocument &doc, const QString &object );
 	
+	QString generateCSSClasses( const QDomDocument &layout );
+	QMap<QString,QString> generateBlocksHTML( const Recipe & );
 	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
 	
-	QString escape( const QString & );
+	static QString escape( const QString & );
 
 	QPtrList<DivElement> div_elements;
 	QPtrList<QRect> dimensions;
@@ -90,6 +92,7 @@ private:
 	RecipeDB *database;
 
 	int m_width;
+	QString classesCSS;
 };
 
 class CustomRectList : public QPtrList<QRect>

@@ -270,7 +270,6 @@ void BaseImporter::import( RecipeDB *db )
 		else //rename
 			(*recipe_it).title = db->getUniqueRecipeTitle( (*recipe_it).title );
 
-
 		//save into the database
 		db->saveRecipe( &(*recipe_it) );
 	}

@@ -32,7 +32,7 @@
 #include "gui/setupdisplay.h"
 #include "image.h"
 
-#include <cmath>
+#include <cmath> //for ceil()
 
 //TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
 HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
@@ -90,6 +90,9 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	recipeStyleHTML += "{\n";
 	recipeStyleHTML += QString("background-color: %1;\n").arg( bg_element.text() );
 	recipeStyleHTML += "}\n";
+	
+	classesCSS = generateCSSClasses( doc );
+	recipeStyleHTML += classesCSS;
 
 	QString recipeBodyHTML = "<BODY>";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
@@ -152,7 +155,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 
 int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset )
 {
-	div_elements.clear();
+	const QMap<QString,QString> html_map = generateBlocksHTML( recipe );
 
 	QRect *geometry;
 	DivElement *new_element;
@@ -161,84 +164,114 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometries.setAutoDelete(true);
 	QPtrDict<DivElement> geom_contents;
 
+	for ( QMap<QString,QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it )
+	{
+		QString key = it.key();
+				
+		new_element = new DivElement( key+"_"+QString::number(recipe.recipeID), key, it.data() );
+
+		if ( key == "photo" )
+		{
+			temp_photo_geometry.setWidth((int)(double(temp_photo_geometry.width())*100.0/m_width));// The size of all objects needs to be saved in percentage format
+			temp_photo_geometry.setHeight((int) (double(temp_photo_geometry.height())*100.0/m_width));// The size of all objects needs to be saved in percentage format
+
+			geometry = new QRect(temp_photo_geometry);
+			geometry->moveBy( 0, offset );
+			geometries.append( geometry );
+			
+			new_element->setFixedHeight(true);
+		}
+		else
+		{
+			geometry = new QRect; readGeometry( geometry, doc, key );
+			geometry->moveBy( 0, offset );
+			geometries.append( geometry );
+		}
+		
+		geom_contents.insert( geometry, new_element );
+		div_elements.append( new_element );
+	}
+
+	//this takes expands all items to an appropriate size
+	int height_taken = 0;
+	geometries.sort(); //we'll work with these in order from top to bottom
+	for ( QRect *rect = geometries.first(); rect; rect = geometries.next() )
+	{
+		DivElement *element = geom_contents.find( rect );
+
+		// For those elements that have no fixed height (lists), calculate the height
+		int elementHeight=(int) (rect->height()/100.0*m_width); //Initialize with the current user settings
+		if ( !element->fixedHeight() )
+		{
+			int elementWidth=(int) (rect->width()/100.0*m_width);
+		
+			// Generate a test page to calculate the size in khtml
+			QString tempHTML="<HTML><HEAD><STYLE type=\"text/css\">";
+			tempHTML+= classesCSS;
+			tempHTML+= QString("#%1 {").arg(element->id());
+			tempHTML+= QString("width: %1px;").arg(elementWidth);
+			tempHTML+= "}";
+			tempHTML+="BODY { margin: 0px; }"; //very important subtlety in determining the exact width
+			tempHTML+="</STYLE></HEAD>";
+			tempHTML+="<BODY>";
+			tempHTML+=element->generateHTML();
+			tempHTML+="</BODY></HTML>";
+
+			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
+			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
+			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
+			sizeCalculator->view()->resize(QSize(elementWidth,0));
+			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
+			sizeCalculator->write(tempHTML);
+			sizeCalculator->end();
+			
+			// Set the size of the element
+			int newHeight=sizeCalculator->view()->contentsHeight();
+			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
+
+			delete sizeCalculator;
+		}
+		rect->setHeight((int)(ceil(elementHeight*100.0/m_width)));
+
+		// Move elements around if there's any overlapping
+		pushItemsDownIfNecessary( geometries, rect );
+
+		element->addProperty( QString("top: %1px;").arg(static_cast<int>(rect->top()/100.0*m_width)) );
+		element->addProperty( QString("left: %1px;").arg(static_cast<int>(rect->left()/100.0*m_width)) );
+		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
+		element->addProperty( QString("height: %1px;").arg( elementHeight ) );
+
+		height_taken = QMAX(rect->top()+int(elementHeight*100.0/m_width),height_taken);
+	}
+
+	return height_taken;
+}
+
+QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
+{
 	KConfig *config = KGlobal::config();
+	QMap<QString,QString> html_map;
 
 	//=======================TITLE======================//
-	geometry = new QRect; readGeometry( geometry, doc, "title" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
-	new_element = new DivElement( "title_"+QString::number(recipe.recipeID), recipe.title);
-
-	readFontProperties( new_element, doc, "title" );
-	readAlignmentProperties( new_element, doc, "title" );
-	readBgColorProperties( new_element, doc, "title" );
-	readTextColorProperties( new_element, doc, "title" );
-	readVisibilityProperties( new_element, doc, "title" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("title",recipe.title);
 
 	//=======================INSTRUCTIONS======================//
-	geometry = new QRect; readGeometry( geometry, doc, "instructions" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString instr_html = recipe.instructions;
 	instr_html.replace("\n","<BR>");
-	new_element = new DivElement( "instructions_"+QString::number(recipe.recipeID), instr_html );
-
-	readFontProperties( new_element, doc, "instructions" );
-	readAlignmentProperties( new_element, doc, "instructions" );
-	readBgColorProperties( new_element, doc, "instructions" );
-	readTextColorProperties( new_element, doc, "instructions" );
-	readVisibilityProperties( new_element, doc, "instructions" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("instructions",instr_html);
 
 	//=======================SERVINGS======================//
-	geometry = new QRect; readGeometry( geometry, doc, "servings" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString servings_html = QString("<b>%1: </b>%2").arg(i18n("Servings")).arg(recipe.persons);
-	new_element = new DivElement( "servings_"+QString::number(recipe.recipeID), servings_html );
-
-	readFontProperties( new_element, doc, "servings" );
-	readAlignmentProperties( new_element, doc, "servings" );
-	readBgColorProperties( new_element, doc, "servings" );
-	readTextColorProperties( new_element, doc, "servings" );
-	readVisibilityProperties( new_element, doc, "servings" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("servings",servings_html);
 
 	//========================PHOTO========================//
-	geometry=new QRect(temp_photo_geometry);
-	geometry->setWidth((int)(double(geometry->width())*100.0/m_width));// The size of all objects needs to be saved in percentage format
-	geometry->setHeight((int) (double(geometry->height())*100.0/m_width));// The size of all objects needs to be saved in percentage format
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString image_url = QString("%1_photos/%2.png").arg(filename).arg(escape(recipe.title));
 	QUrl::encode(image_url);
 	QString photo_html = QString("<img src=\"%1\">").arg(image_url);
-	new_element = new DivElement( "photo_"+QString::number(recipe.recipeID), photo_html );
-	new_element->setFixedHeight(true);
-
-	readVisibilityProperties( new_element, doc, "photo" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("photo",photo_html);
 
 	//=======================AUTHORS======================//
-	geometry = new QRect; readGeometry( geometry, doc, "authors" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString authors_html;
-	authors_html=QString("<b>%1</b>: ").arg(i18n("Authors"));
 
 	int counter=0;
 	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it )
@@ -247,24 +280,12 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		authors_html += (*author_it).name;
 		counter++;
 	}
-	new_element = new DivElement( "authors_"+QString::number(recipe.recipeID), authors_html );
-
-	readFontProperties( new_element, doc, "authors" );
-	readAlignmentProperties( new_element, doc, "authors" );
-	readBgColorProperties( new_element, doc, "authors" );
-	readTextColorProperties( new_element, doc, "authors" );
-	readVisibilityProperties( new_element, doc, "authors" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	if ( !authors_html.isEmpty() )
+		authors_html.prepend( QString("<b>%1: </b>").arg(i18n("Authors")) );
+	html_map.insert("authors",authors_html);
 
 	//=======================CATEGORIES======================//
-	geometry = new QRect; readGeometry( geometry, doc, "categories" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString categories_html;
-	categories_html=QString("<b>%1: </b>").arg(i18n("Categories"));
 
 	counter=0;
 	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it )
@@ -273,39 +294,16 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		categories_html += (*cat_it).name;
 		counter++;
 	}
-	new_element = new DivElement( "categories_"+QString::number(recipe.recipeID), categories_html );
-
-	readFontProperties( new_element, doc, "categories" );
-	readAlignmentProperties( new_element, doc, "categories" );
-	readBgColorProperties( new_element, doc, "categories" );
-	readTextColorProperties( new_element, doc, "categories" );
-	readVisibilityProperties( new_element, doc, "categories" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	if ( !categories_html.isEmpty() )
+		categories_html.prepend( QString("<b>%1: </b>").arg(i18n("Categories")) );
+	
+	html_map.insert("categories",categories_html);
 
 	//=======================HEADER======================//
-	geometry = new QRect; readGeometry( geometry, doc, "header" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString header_html = QString("<b>%1 #%2</b>").arg(i18n("Recipe")).arg(recipe.recipeID);
-	new_element = new DivElement( "header_"+QString::number(recipe.recipeID), header_html );
-
-	readFontProperties( new_element, doc, "header" );
-	readAlignmentProperties( new_element, doc, "header" );
-	readBgColorProperties( new_element, doc, "header" );
-	readTextColorProperties( new_element, doc, "header" );
-	readVisibilityProperties( new_element, doc, "header" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("header",header_html);
 
 	//=======================INGREDIENTS======================//
-	geometry = new QRect; readGeometry( geometry, doc, "ingredients" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString ingredients_html;
 	config->setGroup("Formatting");
 
@@ -334,23 +332,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		ingredients_html.prepend("<ul>");
 		ingredients_html.append("</ul>");
 	}
-	
-	new_element = new DivElement( "ingredients_"+QString::number(recipe.recipeID), ingredients_html );
-
-	readFontProperties( new_element, doc, "ingredients" );
-	readAlignmentProperties( new_element, doc, "ingredients" );
-	readBgColorProperties( new_element, doc, "ingredients" );
-	readTextColorProperties( new_element, doc, "ingredients" );
-	readVisibilityProperties( new_element, doc, "ingredients" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
+	html_map.insert("ingredients",ingredients_html);
 
 	//=======================PROPERTIES======================//
-	geometry = new QRect; readGeometry( geometry, doc, "properties" );
-	geometry->moveBy( 0, offset );
-	geometries.append( geometry );
-
 	QString properties_html;
 	IngredientProperty * prop;
 	
@@ -376,73 +360,35 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		properties_html.prepend("<ul>");
 		properties_html.append("</ul>");
 	}
-	new_element = new DivElement( "properties_"+QString::number(recipe.recipeID), properties_html );
-
-	readFontProperties( new_element, doc, "properties" );
-	readAlignmentProperties( new_element, doc, "properties" );
-	readBgColorProperties( new_element, doc, "properties" );
-	readVisibilityProperties( new_element, doc, "properties" );
-
-	geom_contents.insert( geometry, new_element );
-	div_elements.append( new_element );
-
+	html_map.insert("properties",properties_html);
+	
 	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
+	
+	return html_map;
+}
 
-	//this takes expands all items to an appropriate size
+QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
+{
+	QString css;
 
-	int height_taken = 0;
-	geometries.sort(); //we'll work with these in order from top to bottom
-	for ( QRect *rect = geometries.first(); rect; rect = geometries.next() )
+	QStringList classes_list;
+	classes_list << "title" << "instructions" << "servings" << "photo" << "authors" << 
+	  "categories" << "header" << "ingredients" << "properties";
+	  
+	for ( QStringList::const_iterator it = classes_list.begin(); it != classes_list.end(); ++it )
 	{
-		DivElement *element = geom_contents.find( rect );
-
-		element->addProperty( "position: absolute;" );
-
-		// Scale the objects to page size.  Note that we haven't determined the height yet, but these settings will determine it
-		element->addProperty( QString("top: %1px;").arg(static_cast<int>(rect->top()/100.0*m_width)) );
-		element->addProperty( QString("left: %1px;").arg(static_cast<int>(rect->left()/100.0*m_width)) );
-		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
-
-		// For those elements that have no fixed height (lists), calculate the height
-		int elementHeight=(int) (rect->height()/100.0*m_width); //Initialize with the current user settings
-		if ( !element->fixedHeight() )
-		{
-			int elementWidth=(int) (rect->width()/100.0*m_width);
-		
-			// Generate a test page to calculate the size in khtml
-			QString tempHTML="<HTML><HEAD><STYLE type=\"text/css\">";
-			tempHTML+= element->generateCSS(true);
-			tempHTML+="BODY { margin: 0px; }"; //very important subtlety in determining the exact width
-			tempHTML+="</STYLE></HEAD>";
-			tempHTML+="<BODY>";
-			tempHTML+=element->generateHTML();
-			tempHTML+="</BODY></HTML>";
-
-			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
-			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
-			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
-			sizeCalculator->view()->resize(QSize(elementWidth,0));
-			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
-			sizeCalculator->write(tempHTML);
-			sizeCalculator->end();
-			
-			// Set the size of the element
-			int newHeight=sizeCalculator->view()->contentsHeight();
-			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
-
-			delete sizeCalculator;
-		}
-
-		// Move elements around if there's any overlapping
-		pushItemsDownIfNecessary( geometries, rect );
-
-		// Scale the height to page size now
-		element->addProperty(QString("height: %1px;").arg( elementHeight ) );
-
-		height_taken = QMAX(rect->top()+int(elementHeight*100.0/m_width),height_taken);
+		css += "."+*it+"\n";
+		css += "{\n";
+		css += readFontProperties( doc, *it );
+		css += readAlignmentProperties( doc, *it );
+		css += readBgColorProperties( doc, *it );
+		css += readTextColorProperties( doc, *it );
+		css += readVisibilityProperties( doc, *it );
+		css += "position: absolute;\n";
+		css += "}\n\n";
 	}
 
-	return height_taken;
+	return css;
 }
 
 void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QString &object )
@@ -458,61 +404,75 @@ void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QSt
 	}
 }
 
-void HTMLExporter::readAlignmentProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+QString HTMLExporter::readAlignmentProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "alignment" );
 	
 	if ( !el.isNull() )
 	{
+		QString text;
 		unsigned int alignment = el.text().toInt();
 
 		if ( alignment & Qt::AlignLeft )
-			element->addProperty( "text-align: left;" );
+			text += "text-align: left;\n";
 		if ( alignment & Qt::AlignRight )
-			element->addProperty( "text-align: right;" );
+			text += "text-align: right;\n";
 		if ( alignment & Qt::AlignHCenter )
-			element->addProperty( "text-align: center;" );
+			text += "text-align: center;\n";
 		if ( alignment & Qt::AlignTop )
-			element->addProperty( "vertical-align: top;" );
+			text += "vertical-align: top;\n";
 		if ( alignment & Qt::AlignBottom )
-			element->addProperty( "vertical-align: bottom;" );
+			text += "vertical-align: bottom;\n";
 		if ( alignment & Qt::AlignVCenter )
-			element->addProperty( "vertical-align: middle;" );
+			text += "vertical-align: middle;\n";
+			
+		return text;
 	}
+	
+	return QString::null;
 }
 
-void HTMLExporter::readBgColorProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+QString HTMLExporter::readBgColorProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "background-color" );
 
 	if ( !el.isNull() )
-		element->addProperty( QString("background-color: %1;").arg(el.text()) );
+		return QString("background-color: %1;\n").arg(el.text());
+		
+	return QString::null;
 }
 
-void HTMLExporter::readFontProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+QString HTMLExporter::readFontProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "font" );
 	
 	if ( !el.isNull() )
 	{
+		QString text;
 		QFont font;
 		font.fromString( el.text() );
 
-		element->addProperty( QString("font-family: %1;").arg(font.family()) );
-		element->addProperty( QString("font-size: %1pt;").arg(font.pointSize()) );
-		element->addProperty( QString("font-weight: %1;").arg(font.weight()) );
+		text += QString("font-family: %1;\n").arg(font.family());
+		text += QString("font-size: %1pt;\n").arg(font.pointSize());
+		text += QString("font-weight: %1;\n").arg(font.weight());
+		
+		return text;
 	}
+	
+	return QString::null;
 }
 
-void HTMLExporter::readTextColorProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+QString HTMLExporter::readTextColorProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "text-color" );
 
 	if ( !el.isNull() )
-		element->addProperty( QString("color: %1;").arg(el.text()) );
+		return QString("color: %1;\n").arg(el.text());
+		
+	return QString::null;
 }
 
-void HTMLExporter::readVisibilityProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+QString HTMLExporter::readVisibilityProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "visible" );
 	
@@ -520,10 +480,12 @@ void HTMLExporter::readVisibilityProperties( DivElement *element, const QDomDocu
 	{
 		bool shown = (el.text() == "false") ? false : true;
 		if ( shown )
-			element->addProperty( "visibility: visible;" );
+			return "visibility: visible;\n";
 		else
-			element->addProperty( "visibility: hidden;" );
+			return "visibility: hidden;\n";
 	}
+	
+	return QString::null;
 }
 
 void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect *top_geom )
@@ -561,7 +523,7 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	//remove photos
 	for ( QStringList::const_iterator it = recipe_titles.begin(); it != recipe_titles.end(); ++it )
 	{
-		QFile photo( filename+"_photos/"+*it+".png");
+		QFile photo( filename+"_photos/"+escape(*it)+".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it (there should only be one photo in this directory)
 	}
@@ -624,8 +586,9 @@ int CustomRectList::compareItems( QPtrCollection::Item item1, QPtrCollection::It
 
 /////////////////////////   DivElement   //////////////////////////////////
 
-DivElement::DivElement( const QString &id, const QString &content ) :
+DivElement::DivElement( const QString &id, const QString &className, const QString &content ) :
   m_id(id),
+  m_class(className),
   m_content(content),
   m_fixed_height(false)
 {
@@ -655,7 +618,7 @@ QString DivElement::generateHTML()
 {
 	QString result;
 
-	result += QString("<DIV id=\"%1\">\n").arg(m_id);
+	result += QString("<DIV id=\"%1\" class=\"%2\">\n").arg(m_id).arg(m_class);
 	result += m_content + "\n";
 	result += "</DIV>\n";
 

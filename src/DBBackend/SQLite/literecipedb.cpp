@@ -450,6 +450,8 @@ int recipeID=recipe->recipeID; // Set the recipeID (either new or old)
 
 
 // Let's begin storing the Image
+if ( !recipe->photo.isNull() )
+{
 recipe->photo.save(".krecipe_photo.jpg", "JPEG");
 QFileInfo fi(".krecipe_photo.jpg");
 
@@ -470,7 +472,7 @@ sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
  database->executeQuery(command);
 
  //_unlink(".krecipe_photo.jpg");
-
+}
 
  // Save the ingredient list (first delete in case we are updating)
 

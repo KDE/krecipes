@@ -430,7 +430,8 @@ if (newRecipe)
 recipeID=recipe->recipeID;
 
 // Let's begin storing the Image!
-
+if ( !recipe->photo.isNull() )
+{
 recipe->photo.save(".krecipe_photo.jpg", "JPEG");
 QFileInfo fi(".krecipe_photo.jpg");
 
@@ -455,6 +456,7 @@ QFileInfo fi(".krecipe_photo.jpg");
    free(from);
  }
  //_unlink(".krecipe_photo.jpg");
+}
 
 
  // Save the ingredient list (first delete if we are updating)
