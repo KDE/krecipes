@@ -7,7 +7,7 @@
 INCLUDES         = -I.. $(all_includes)
 
 noinst_LTLIBRARIES=libkrecipeswidgets.la
-libkrecipeswidgets_la_SOURCES=sizehandle.cpp dragarea.cpp krelistview.cpp kremenu.cpp
+libkrecipeswidgets_la_SOURCES=sizehandle.cpp dragarea.cpp krelistview.cpp kremenu.cpp paneldeco.cpp
 libkrecipeswidgets_la_METASOURCES=AUTO
 
 #the library search path.

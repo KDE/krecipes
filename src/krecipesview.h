@@ -35,6 +35,7 @@ class DietWizardDialog;
 class IngredientsDialog;
 class KreMenu;
 class KreMenuButton;
+class PanelDeco;
 class PropertiesDialog;
 class QPainter;
 class RecipeInputDialog;
@@ -128,7 +129,7 @@ private:
 	// Widgets
 	QHBox *splitter;
 	KreMenu *leftPanel;
-	QWidgetStack *rightPanel;
+	PanelDeco *rightPanel;
   QPtrList<KreMenuButton> *buttonsList;
 	KreMenuButton *button0;
 	KreMenuButton *button1;

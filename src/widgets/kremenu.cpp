@@ -169,21 +169,23 @@ void KreMenu::paintEvent(QPaintEvent *e )
 
 void KreMenu::childEvent (QChildEvent *e)
 {
-
-QObject *child=e->child();
-if (child->inherits("KreMenuButton"))
+	if (e->type()==QEvent::ChildInserted)
 	{
-	KreMenuButton* button=(KreMenuButton*)(e->child());
-	if (!activeButton)  // Highlight the button if it's the firsts
+	QObject *child=e->child();
+	if (child->inherits("KreMenuButton"))
 		{
-		button->setActive(true);
-		activeButton=button;
-		}
+		KreMenuButton* button=(KreMenuButton*)(e->child());
+		if (!activeButton)  // Highlight the button if it's the firsts
+			{
+			button->setActive(true);
+			activeButton=button;
+			}
 
-	button->move(0,childPos);
-	childPos+=button->height();
-	widgetList[button]=widgetNumber; widgetNumber++; // Store index for this widget, and increment number
-	connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+		button->move(0,childPos);
+		childPos+=button->height();
+		widgetList[button]=widgetNumber; widgetNumber++; // Store index for this widget, and increment number
+		connect (button,SIGNAL(clicked(KreMenuButton*)),this,SLOT(collectClicks(KreMenuButton*)));
+		}
 	}
 
 }

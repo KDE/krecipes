@@ -48,6 +48,7 @@
 #include "dialogs/unitsdialog.h"
 #include "gui/kstartuplogo.h"
 #include "widgets/kremenu.h"
+#include "widgets/paneldeco.h"
 
 #if HAVE_MYSQL
 #include "DBBackend/mysqlrecipedb.h"
@@ -132,12 +133,12 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     KIconLoader il;
     leftPanel=new KreMenu(splitter,"leftPanel");
-    rightPanel=new QWidgetStack(splitter,"rightPanel");
+    rightPanel=new PanelDeco(splitter,"rightPanel");
     leftPanel->setMinimumWidth(22);
     leftPanel->setMaximumWidth(200);
     leftPanel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding));
-    rightPanel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding));
-    rightPanel->setMaximumWidth(10000);
+    //rightPanel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding));
+    //rightPanel->setMaximumWidth(10000);
 
     // Design Left Panel
     buttonsList = new QPtrList<KreMenuButton>();
@@ -200,16 +201,16 @@ KrecipesView::KrecipesView(QWidget *parent)
     contextLayout->addMultiCellWidget(contextText, 1, 4, 0, 2);
 
     // Right Panel Widgets
-    inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
-    viewPanel=new RecipeViewDialog(rightPanel,database,1);rightPanel->addWidget(viewPanel);
-    selectPanel=new SelectRecipeDialog(rightPanel,database);rightPanel->addWidget(selectPanel);
-    ingredientsPanel=new IngredientsDialog(rightPanel,database);rightPanel->addWidget(ingredientsPanel);
-    propertiesPanel=new PropertiesDialog(rightPanel,database);rightPanel->addWidget(propertiesPanel);
-    unitsPanel=new UnitsDialog(rightPanel,database); rightPanel->addWidget(unitsPanel);
-    shoppingListPanel=new ShoppingListDialog(rightPanel,database); rightPanel->addWidget(shoppingListPanel);
-    dietPanel=new DietWizardDialog(rightPanel,database);rightPanel->addWidget(dietPanel);
-    categoriesPanel=new CategoriesEditorDialog(rightPanel,database); rightPanel->addWidget(categoriesPanel);
-    authorsPanel=new AuthorsDialog(rightPanel,database); rightPanel->addWidget(authorsPanel);
+    inputPanel=new RecipeInputDialog(rightPanel,database);
+    viewPanel=new RecipeViewDialog(rightPanel,database,1);
+    selectPanel=new SelectRecipeDialog(rightPanel,database);
+    ingredientsPanel=new IngredientsDialog(rightPanel,database);
+    propertiesPanel=new PropertiesDialog(rightPanel,database);
+    unitsPanel=new UnitsDialog(rightPanel,database);
+    shoppingListPanel=new ShoppingListDialog(rightPanel,database);
+    dietPanel=new DietWizardDialog(rightPanel,database);
+    categoriesPanel=new CategoriesEditorDialog(rightPanel,database);
+    authorsPanel=new AuthorsDialog(rightPanel,database);
 
     // i18n
     translate();
@@ -228,7 +229,7 @@ KrecipesView::KrecipesView(QWidget *parent)
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
      connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
 
-    rightPanel->raiseWidget(selectPanel);
+    rightPanel->raise(selectPanel);
     setContextHelp(SelectP);
 
 
@@ -299,27 +300,27 @@ void KrecipesView::slotSetPanel(int w)
 switch (w)
 {
 case SelectP: selectPanel->reload(); // Reload data
-	this->rightPanel->raiseWidget(selectPanel);
+	this->rightPanel->raise(selectPanel);
 	break;
 case ShoppingP: shoppingListPanel->reload(); // Reload data
-	this->rightPanel->raiseWidget(shoppingListPanel);
+	this->rightPanel->raise(shoppingListPanel);
 	break;
 case IngredientsP: ingredientsPanel->reload();// Reload data
-	this->rightPanel->raiseWidget(ingredientsPanel);
+	this->rightPanel->raise(ingredientsPanel);
 	break;
 case PropertiesP: propertiesPanel->reload();
-	this->rightPanel->raiseWidget(propertiesPanel);
+	this->rightPanel->raise(propertiesPanel);
 	break;
 case UnitsP: unitsPanel->reload(); // Reload data
-	this->rightPanel->raiseWidget(unitsPanel);
+	this->rightPanel->raise(unitsPanel);
 	break;
-case CategoriesP: this->rightPanel->raiseWidget(categoriesPanel);
+case CategoriesP: this->rightPanel->raise(categoriesPanel);
 	break;
 case DietWizardP: dietPanel->reload();
-	this->rightPanel->raiseWidget(dietPanel);
+	this->rightPanel->raise(dietPanel);
 	break;
 case AuthorsP: authorsPanel->reload();
-	this->rightPanel->raiseWidget(authorsPanel);
+	this->rightPanel->raise(authorsPanel);
 	break;
 case ContextHelp:
   break;
@@ -360,7 +361,7 @@ else if (action==1) // Edit
 	}
 
 	inputPanel->loadRecipe(recipeID);
-	rightPanel->raiseWidget(inputPanel);
+	rightPanel->raise(inputPanel);
   setContextHelp(RecipeEdit);
 }
 else if (action==2) //Remove
@@ -395,13 +396,13 @@ if ( !inputPanel->everythingSaved() )
 }
 
 inputPanel->newRecipe();
-rightPanel->raiseWidget(inputPanel);
+rightPanel->raise(inputPanel);
 setContextHelp(RecipeEdit);
 }
 
 void KrecipesView::createNewElement(void)
 {
-if (rightPanel->id(rightPanel->visibleWidget())==4) //Properties Panel is the active one
+if (rightPanel->id(rightPanel->visiblePanel())==4) //Properties Panel is the active one
 {
 propertiesPanel->createNewProperty();
 }
@@ -474,7 +475,7 @@ delete setupWizard;
 void KrecipesView::slotSetDietWizardPanel(void)
 {
 dietPanel->reload();
-rightPanel->raiseWidget(dietPanel);
+rightPanel->raise(dietPanel);
     setContextHelp(DietWizardP);
 }
 
@@ -564,14 +565,14 @@ if (!recipeButton)
 
 void KrecipesView::switchToRecipe(void)
 {
-rightPanel->raiseWidget(recipeWidget);
+rightPanel->raise(recipeWidget);
 setContextHelp(RecipeEdit);
 }
 
 void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
-rightPanel->raiseWidget(selectPanel);
+rightPanel->raise(selectPanel);
 buttonsList->removeLast();
 setContextHelp(SelectP);
 recipeButton=0;
@@ -580,7 +581,7 @@ recipeButton=0;
 void KrecipesView::showRecipe(int recipeID)
 {
 viewPanel->loadRecipe(recipeID);
-rightPanel->raiseWidget(viewPanel);
+rightPanel->raise(viewPanel);
 }
 
 void KrecipesView::setContextHelp(int action){
@@ -648,7 +649,7 @@ void KrecipesView::setContextHelp(int action){
 void KrecipesView::createShoppingListFromDiet(void)
 {
 shoppingListPanel->createShopping(dietPanel->dietList());
-rightPanel->raiseWidget(shoppingListPanel);
+rightPanel->raise(shoppingListPanel);
 }
 
 void KrecipesView::moveTipButton(int,int)

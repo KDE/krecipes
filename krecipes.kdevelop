@@ -16,6 +16,8 @@
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
     <ignoreparts>
+      <part>KDevBookmarks</part>
+      <part>KDevClassView</part>
       <part>KDevDebugger</part>
     </ignoreparts>
     <secondaryLanguages/>
