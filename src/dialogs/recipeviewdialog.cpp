@@ -104,6 +104,7 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 480px; left:1%; width: 220px;
 recipeHTML+="</div>";
 
 // Instructions Block
+loadedRecipe->instructions.replace("\n","<BR>");
 recipeHTML+="<div STYLE=\"margin-left: 240px;margin-right: 150;margin-top: 80px\">";
 recipeHTML+=QString("<center><h1>%1</h1></center>").arg(loadedRecipe->title);
 recipeHTML+=QString("<p>%1</p></div>").arg(loadedRecipe->instructions);
