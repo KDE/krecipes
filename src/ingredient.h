@@ -18,15 +18,15 @@
 class Ingredient{
 public:
     Ingredient();
-    Ingredient( const QString &name, double amount, const QString &units, int unitID = -1, int ingredientID = -1 );
-    Ingredient(const Ingredient &ing);
+    Ingredient( const QString &name, double amount, const QString &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
     ~Ingredient();
     int ingredientID;
     QString name;
     double amount;
     int unitID;
     QString units;
-    Ingredient& operator=(const Ingredient &ing);
+    QString prepMethod;
+    int prepMethodID;
 
     /** Compare two elements by their id */
     bool operator==(const Ingredient &) const;

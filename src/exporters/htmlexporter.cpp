@@ -136,9 +136,14 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 	else
 		image = recipe.photo.convertToImage();
 
-	QPixmap pm = image.smoothScale(phwidth, phheight, QImage::ScaleMin);
+	QPixmap pm;
+	if ( phwidth > phheight )
+		pm = image.smoothScale(phwidth, phheight, QImage::ScaleMax);
+	else
+		pm = image.smoothScale(phwidth, phheight, QImage::ScaleMin);
+	//QPixmap pm = image.scaleWidth(phwidth);
 	QFileInfo fi(*file);
-	pm.save(fi.dirPath()+"/"+filename+"_photos/"+recipe.title+".png","PNG");
+	pm.save(fi.dirPath()+"/"+filename+"_photos/"+escape(recipe.title)+".png","PNG");
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 }
 
@@ -213,7 +218,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
-	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(recipe.title);
+	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(escape(recipe.title));
 	new_element = new DivElement( "photo_"+QString::number(recipe.recipeID), photo_html );
 	new_element->setFixedHeight(true);
 
@@ -302,7 +307,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	config->setGroup("IngredientsSetup");
-	QString ingredient_format = config->readEntry("Format","%n: %a %u");
+	QString ingredient_format = config->readEntry("Format","%n%p: %a %u");
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{
@@ -315,6 +320,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),(*ing_it).name);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),(*ing_it).units);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ? "" : "; "+(*ing_it).prepMethod);
 
 		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}
@@ -572,6 +578,12 @@ QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QSt
 	
 	kdDebug()<<"Warning: Requested attribute \""<<attribute<<"\" not found."<<endl;
 	return QDomElement();
+}
+
+QString HTMLExporter::escape( const QString & str )
+{
+	QString tmp(str);
+	return tmp.replace('\\',"_").replace('/',"_");
 }
 
 

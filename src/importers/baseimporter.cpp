@@ -12,6 +12,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
@@ -43,7 +44,7 @@ void BaseImporter::import( RecipeDB *db )
 		return;
 	}
 
-	RecipeList selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete recipe pointers this contains; contains the same pointers as m_recipe_list
+	RecipeList selected_recipes = import_dialog.getSelectedRecipes();
 
 	// Load Current Settings
 	KConfig *config=kapp->config();
@@ -55,6 +56,8 @@ void BaseImporter::import( RecipeDB *db )
 	progress->setTotalSteps( selected_recipes.count() );
 	progress->setFormat(i18n("%v/%m Recipes"));
 
+	ElementList prepMethodList; db->loadPrepMethods( &prepMethodList );
+	
 	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
 	{
@@ -84,7 +87,21 @@ void BaseImporter::import( RecipeDB *db )
 				db->createNewUnit( (*ing_it).units );
 				new_unit_id = db->lastInsertID();
 			}
+			
+			int new_prep_id = 1; //1 is the null preparation method
+			if ( !(*ing_it).prepMethod.isEmpty() )
+			{
+				Element prepMethodFound = prepMethodList.findByName( (*ing_it).prepMethod );
+				new_prep_id = prepMethodFound.id;
+				if ( new_prep_id == -1 )
+				{
+					db->createNewPrepMethod( (*ing_it).prepMethod );
+					new_prep_id = db->lastInsertID();
+					prepMethodList.append( Element( (*ing_it).prepMethod, new_prep_id ) );
+				}
+			}
 
+			(*ing_it).prepMethodID = new_prep_id;
 			(*ing_it).unitID = new_unit_id;
 			(*ing_it).ingredientID = new_ing_id;
 

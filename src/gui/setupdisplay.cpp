@@ -16,6 +16,7 @@
 #include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <klocale.h>
+#include <kpopupmenu.h>
 
 #include <qsimplerichtext.h>
 #include <qaction.h>
@@ -24,7 +25,6 @@
 #include <qtextedit.h>
 #include <qtooltip.h>
 #include <qobjectlist.h>
-#include <qpopupmenu.h>
 #include <qvaluelist.h>
 
 #include "../image.h"
@@ -247,7 +247,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 
 void SetupDisplay::createWidgets( const Recipe &sample )
 {
-//=========================TITLE=======================//
+	//=========================TITLE=======================//
 	QString title;
 	if ( sample.title.isNull() )
 		title = i18n("Recipe Title");
@@ -303,7 +303,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString authors;
 	for ( ElementList::const_iterator author_it = sample.authorList.begin(); author_it != sample.authorList.end(); ++author_it )
 	{
-		if (authors.isNull()) authors += ",";
+		if (!authors.isEmpty()) authors += ",";
 		authors += (*author_it).name;
 	}
 
@@ -320,7 +320,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString categories;
 	for ( ElementList::const_iterator cat_it = sample.categoryList.begin(); cat_it != sample.categoryList.end(); ++cat_it )
 	{
-		if (categories.isNull()) categories += ",";
+		if (!categories.isEmpty()) categories += ",";
 		categories += (*cat_it).name;
 	}
 
@@ -386,7 +386,8 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 {
 	if ( e->button() == QMouseEvent::RightButton )
 	{
-		popup = new QPopupMenu( w ); //parent _must_ be widget acting on
+		popup = new KPopupMenu( w ); //parent _must_ be widget acting on
+		popup->insertTitle( ( w == this ) ? i18n("Background") : QToolTip::textFor(w) );
 
 		unsigned int properties = *box_properties->find(w);
 

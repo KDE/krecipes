@@ -113,6 +113,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
       xml += QString::number((*ing_it).amount);
       xml += "</amount>\n";
       xml += "<unit>"+(*ing_it).units.utf8()+"</unit>\n";
+      xml += "<prep>"+(*ing_it).prepMethod.utf8()+"</prep>\n";
       xml += "</ingredient>\n";
       /// @todo add ingredient properties
 	}

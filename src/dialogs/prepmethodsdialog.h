@@ -10,28 +10,47 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "ingredient.h"
+#ifndef PREPMETHODSDIALOG_H
+#define PREPMETHODSDIALOG_H
 
-Ingredient::Ingredient()
-{
-}
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qhbox.h>
+#include <qlayout.h>
+#include <kiconloader.h>
+#include <klistview.h>
 
-Ingredient::Ingredient( const QString &_name, double _amount, const QString &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
-  ingredientID(_ingredientID),
-  name(_name),
-  amount(_amount),
-  unitID(_unitID),
-  units(_units),
-  prepMethod(_prepMethod),
-  prepMethodID(_prepMethodID)
-{
-}
+class RecipeDB;
 
-Ingredient::~Ingredient()
-{
-}
+/**
+@prepMethod Unai Garro
+*/
 
-bool Ingredient::operator==(const Ingredient &ing) const
-{
-	return (ing.ingredientID == this->ingredientID);
-}
+class PrepMethodsDialog:public QWidget{
+
+Q_OBJECT
+
+public:
+
+	PrepMethodsDialog(QWidget* parent, RecipeDB *db);
+	~PrepMethodsDialog();
+	void reload(void);
+private:
+	// Internal data
+	RecipeDB *database;
+	//Widgets
+	QGridLayout *layout;
+	KListView *prepMethodListView;
+	QHBox *buttonBar;
+	QPushButton *newPrepMethodButton;
+	QPushButton *removePrepMethodButton;
+	KIconLoader *il;
+
+private slots:
+	void createNewPrepMethod(void);
+	void removePrepMethod(void);
+	void modPrepMethod(QListViewItem*);
+	void savePrepMethod(QListViewItem*);
+
+};
+#endif

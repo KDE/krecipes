@@ -49,6 +49,7 @@ private slots:
 private:
 	QString getIncludedLayoutDir() const;
 	void setActiveFile( const QString &filename );
+	bool haveWritePerm( const QString &filename );
 
 	SetupDisplay *setup_display;
 	

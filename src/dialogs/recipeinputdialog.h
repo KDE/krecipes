@@ -58,15 +58,16 @@ private:
 	Recipe *loadedRecipe; //Loaded Recipe
 	ElementList *ingredientComboList;
 	ElementList *unitComboList;
+	ElementList *prepMethodComboList;
 	RecipeDB *database;
 	bool changedSignalEnabled;
 	bool unsavedChanges;
-  QString previousAmount;
+	QString previousAmount;
 
 	// Widgets
-    QTabWidget* tabWidget;
-    QGroupBox* recipeTab;
-    QGroupBox* instructionsTab;
+	QTabWidget* tabWidget;
+	QGroupBox* recipeTab;
+	QGroupBox* instructionsTab;
 
 	//Recipe Photo
 	QLabel *photoLabel;
@@ -94,6 +95,8 @@ private:
 	FractionInput* amountEdit;
 	QLabel *unitLabel;
 	KComboBox* unitBox;
+	QLabel *prepMethodLabel;
+	KComboBox* prepMethodBox;
 	QLabel *ingredientLabel;
 	KComboBox* ingredientBox;
 	KListView* ingredientList;
@@ -119,10 +122,12 @@ private:
 	bool checkAmountEdit();
 	void createNewIngredientIfNecessary();
 	void createNewUnitIfNecessary();
+	void createNewPrepIfNecessary();
 	void checkIfNewUnits();
 	void findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected);
 	void loadIngredientListCombo(void);
 	void loadUnitListCombo(void);
+	void loadPrepMethodListCombo(void);
 	void saveRecipe(void);
 	void showCategories(void);
 	void showAuthors(void);

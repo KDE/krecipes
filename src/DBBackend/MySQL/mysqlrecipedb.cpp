@@ -136,7 +136,7 @@ if (recipeToLoad.isActive())
 }
 
 // Read the ingredients
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
 
 recipeToLoad.exec( command);
             if ( recipeToLoad.isActive() ) {
@@ -147,10 +147,19 @@ recipeToLoad.exec( command);
 		    ing.amount=recipeToLoad.value(2).toDouble();
 		    ing.unitID=recipeToLoad.value(3).toInt();
 		    ing.units=unescapeAndDecode(recipeToLoad.value(4).toString());
-
+		    
+		    ing.prepMethodID=recipeToLoad.value(5).toInt();
+		    if ( ing.prepMethodID != -1 )
+		    {
+		    	QSqlQuery prepMethodToLoad(QString("SELECT name FROM prep_methods WHERE id=%1").arg(ing.prepMethodID),database);
+		    	if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
+		    		ing.prepMethod=unescapeAndDecode(prepMethodToLoad.value(0).toString());
+		    }
+		    
 		    recipe->ingList.append(ing);
                 }
             }
+
 
 //Load the Image (Using mysql, no qsql here due to problems that I could have with BLOB)
 // (I'll try later with qsql)
@@ -309,9 +318,41 @@ QSqlQuery ingredientToLoad( command,database);
 		    list->add(ing);
                 }
 	}
+}
 
+void MySQLRecipeDB::loadPrepMethods( ElementList *list)
+{
+list->clear();
 
+QString command = "SELECT id,name FROM prep_methods ORDER BY name;";
+QSqlQuery prepMethodsToLoad( command, database );
 
+	if ( prepMethodsToLoad.isActive() )
+	{
+		while ( prepMethodsToLoad.next() )
+		{
+			Element prep_method;
+			prep_method.id=prepMethodsToLoad.value(0).toInt();
+			prep_method.name=unescapeAndDecode(prepMethodsToLoad.value(1).toString());
+			list->add(prep_method);
+		}
+	}
+}
+
+void MySQLRecipeDB::createNewPrepMethod(const QString &prepMethodName)
+{
+QString command;
+
+command=QString("INSERT INTO prep_methods VALUES(NULL,'%1');").arg(escapeAndEncode(prepMethodName));
+QSqlQuery prepMethodToCreate( command,database);
+}
+
+void MySQLRecipeDB::modPrepMethod(int prepMethodID, const QString &newLabel)
+{
+QString command;
+
+command=QString("UPDATE prep_methods SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(prepMethodID);
+QSqlQuery prepMethodToCreate(command,database);
 }
 
 void MySQLRecipeDB::loadPossibleUnits(int ingredientID, ElementList *list)
@@ -413,11 +454,12 @@ int order_index=0;
 for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
-	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5);")
+	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6);")
 	.arg(recipeID)
 	.arg((*ing_it).ingredientID)
 	.arg((*ing_it).amount)
 	.arg((*ing_it).unitID)
+	.arg((*ing_it).prepMethodID)
 	.arg(order_index);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
 	}
@@ -866,6 +908,26 @@ unitToRemove.exec(command);
 
 }
 
+void MySQLRecipeDB::removePrepMethod(int prepMethodID)
+{
+QString command;
+// Remove the prep method first
+command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(prepMethodID);
+QSqlQuery prepMethodToRemove( command,database);
+
+// Remove any recipe using that prep method in the ingredient list (user must have been warned before calling this function!)
+command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
+prepMethodToRemove.exec(command);
+
+// Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
+command=QString("DELETE ingredient_list.* FROM ingredient_list LEFT JOIN recipes ON ingredient_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
+prepMethodToRemove.exec( command );
+
+// Clean up category_list which have no recipe that they belong to. Same method as above
+command=QString("DELETE category_list.* FROM category_list LEFT JOIN recipes ON category_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
+prepMethodToRemove.exec( command);
+}
+
 
 void MySQLRecipeDB::createNewUnit(const QString &unitName)
 {
@@ -1103,7 +1165,7 @@ bool MySQLRecipeDB::checkIntegrity(void)
 
 
 // Check existence of the necessary tables (the database may be created, but empty)
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info"<<"prep_methods";
 QString command=QString("SHOW TABLES;");
 
 QSqlQuery tablesToCheck( command,database);
@@ -1152,38 +1214,43 @@ return true;
 void MySQLRecipeDB::createTable(QString tableName)
 {
 
-QString command;
+QStringList commands;
 
-if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
+if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
-else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
+else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
-else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
+else if (tableName=="ingredient_list") commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
 
-else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
+else if (tableName=="unit_list") commands<<"CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") command=QString("CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
+else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
 
-else if  (tableName=="ingredient_info") command="CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
+else if (tableName== "prep_methods") commands<<QString("CREATE TABLE prep_methods (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 
-else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_properties (id INTEGER NOT NULL AUTO_INCREMENT,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
+else if  (tableName=="ingredient_info") commands<<"CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
-else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
+else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_properties (id INTEGER NOT NULL AUTO_INCREMENT,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
-else if (tableName=="categories") command=QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
-else if (tableName=="authors") command=QString("CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
+else if (tableName=="category_list") commands<<"CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
 
-else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
+else if (tableName=="authors") commands<<QString("CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
-else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_id int(11) NOT NULL,author_id int(11) NOT NULL);";
+
+else if (tableName=="db_info") commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
 else return;
 
-QSqlQuery databaseToCreate(command,database); // execute the query
+QSqlQuery databaseToCreate(QString::null,database);
 
+ // execute the queries
+for ( QStringList::const_iterator it = commands.begin(); it != commands.end(); ++it )
+	databaseToCreate.exec((*it));
 }
 
 void MySQLRecipeDB::splitCommands(QString& s,QStringList& sl)
@@ -1195,6 +1262,7 @@ void MySQLRecipeDB::portOldDatabases(float version)
 {
 kdDebug()<<"Current database version is..."<<version<<"\n";
 QString command;
+
 if (version<0.3)	// The database was generated with a version older than v 0.3. First update to 0.3 version
 			// ( note that version no. means the version in which this DB structure
 			// was introduced)
@@ -1253,6 +1321,29 @@ if (version<0.4)  // Upgrade to the current DB version 0.4
 	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.4');"; // Set the new version
 		tableToAlter.exec(command);
 	}
+	
+if ( version < 0.5 )
+{
+	command = QString("CREATE TABLE prep_methods (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
+		QSqlQuery tableToAlter(command,database);
+
+	command="ALTER TABLE ingredient_list ADD COLUMN prep_method_id int(11) AFTER unit_id;";
+		tableToAlter.exec(command);
+	command="UPDATE ingredient_list SET prep_method_id=-1 WHERE prep_method_id IS NULL;";
+		tableToAlter.exec(command);
+
+	command="ALTER TABLE authors MODIFY name VARCHAR(40);";
+		tableToAlter.exec(command);
+	command="ALTER TABLE categories MODIFY name VARCHAR(40);";
+		tableToAlter.exec(command);
+		
+	// Set the version to the new one (0.5)
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		tableToAlter.exec(command);
+	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');"; // Set the new version TODO: make the version numbering dynamic
+		tableToAlter.exec(command);
+}
+
 }
 
 float MySQLRecipeDB::databaseVersion(void)
@@ -1558,7 +1649,7 @@ int MySQLRecipeDB::lastInsertID()
 
 void MySQLRecipeDB::emptyData(void)
 {
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods";
 QSqlQuery tablesToEmpty(QString::null,database);
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{

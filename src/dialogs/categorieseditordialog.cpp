@@ -91,6 +91,7 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    database->createNewCategory(result); // Create the new category in the database
    reload(); // Reload the list from the database
 }
+delete elementDialog;
 }
 
 void CategoriesEditorDialog::removeCategory(void)

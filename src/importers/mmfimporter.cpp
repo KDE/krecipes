@@ -15,6 +15,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+#include <qregexp.h>
 #include <qtextstream.h>
 #include <qstringlist.h>
 
@@ -178,12 +179,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	{
 		//kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
 		if ( !list.isEmpty() ) //so it doesn't crash when the first ingredient appears to be a continuation of another
-		{
 			(*list.at(list.count()-1)).name += " "+string.stripWhiteSpace().mid(1,string.length());
-			return true;
-		}
-		else
-			return false;
+
+		return true;
 	}
 
 	//amount
@@ -285,16 +283,16 @@ void MMFImporter::putDataInRecipe()
 	for ( IngredientList::const_iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it )
 		m_all_ing.append( *ing_it );
 	
-	//uncomment this when we support preparation method
-	#if 0
 	for ( IngredientList::iterator ing_it = m_all_ing.begin(); ing_it != m_all_ing.end(); ++ing_it )
 	{
 		QString name_and_prep = (*ing_it).name;
-		int separator_index = name_and_prep.find(';');
-		(*ing_it).name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
-		(*ing_it).prep_method = = name_and_prep.mid( separator_index+1, name_and_prep.length() ).stripWhiteSpace();
+		int separator_index = name_and_prep.find(QRegExp("(;|,)"));
+		if ( separator_index != -1 )
+		{
+			(*ing_it).name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
+			(*ing_it).prepMethod = name_and_prep.mid( separator_index+1, name_and_prep.length() ).stripWhiteSpace();
+		}
 	}
-	#endif
 
 	//create the recipe
 	Recipe new_recipe;

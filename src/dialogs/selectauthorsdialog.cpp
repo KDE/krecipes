@@ -56,10 +56,13 @@ QSpacerItem* spacerFromAddRemoveButtons=new QSpacerItem(10,10,QSizePolicy::Fixed
 layout->addItem(spacerFromAddRemoveButtons,1,2);
 
 authorListView=new KListView(this);
+authorListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author"));
 authorListView->setAllColumnsShowFocus(true);
 layout->addMultiCellWidget(authorListView,1,5,3,4);
+layout->setColStretch(3,1); //give the column with the list view added space when the dialog grows
+
 
 //Ok/Cancel buttons
 QSpacerItem* buttonSpacer=new QSpacerItem(10,10, QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -68,6 +71,7 @@ layout->addItem(buttonSpacer,6,1);
 QHBox *okCancelButtonBox=new QHBox(this);
 okCancelButtonBox->setSpacing(10);
 layout->addMultiCellWidget(okCancelButtonBox,7,7,1,4);
+layout->setRowStretch(5,1); //this will expand only the list view when the dialog grows vertically
 
 okButton=new QPushButton(okCancelButtonBox);
 okButton->setText(i18n("&OK"));

@@ -79,6 +79,8 @@ private:
 	void readVisibilityProperties( DivElement *, const QDomDocument &doc, const QString &object );
 	
 	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
+	
+	QString escape( const QString & );
 
 	QPtrList<DivElement> div_elements;
 	QPtrList<QRect> dimensions;

@@ -20,7 +20,6 @@
 
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
-
 // Define the DB file to be working on. Right now, only hardcoded
 
 QString  dbFile=locateLocal ("appdata",DB_FILENAME);
@@ -29,8 +28,8 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	DBuser=user;DBpass=pass;DBhost=host;
 
         database= new QSQLiteDB();
-	database->open(dbFile);
-        if ( !database->open(dbFile) ) {
+	 //if the file didn't exist before, then we need to do this to initialize the database
+        if ( !QFile::exists(dbFile) || !database->open(dbFile) ) { //check that the file didn't exist before trying to open the db (opening it creates the file)
 	     //Try to create the database
 	     kdDebug()<<"Creating the SQLite database!\n";
 	     createDB();
@@ -152,7 +151,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 
 // Read the ingredients
 
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
 
 recipeToLoad=database->executeQuery( command);
             if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
@@ -164,7 +163,19 @@ recipeToLoad=database->executeQuery( command);
 		    ing.amount=row.data(2).toDouble();
 		    ing.unitID=row.data(3).toInt();
 		    ing.units=unescapeAndDecode(row.data(4));
-
+		    ing.prepMethodID=row.data(5).toInt();
+		    
+		    if ( ing.prepMethodID != -1 )
+		    {
+		    	QSQLiteResult prepMethodToLoad = database->executeQuery(QString("SELECT name FROM prep_methods WHERE id=%1").arg(ing.prepMethodID));
+		    	if ( prepMethodToLoad.getStatus() != QSQLiteResult::Failure )
+		    	{
+		    		QSQLiteResultRow prep_row = prepMethodToLoad.first();
+				if ( !prepMethodToLoad.atEnd() )
+		    			ing.prepMethod=unescapeAndDecode(prep_row.data(0));
+		    	}
+		    }
+		    
 		    recipe->ingList.append(ing);
 		    row=recipeToLoad.next();
 
@@ -350,9 +361,27 @@ QSQLiteResult ingredientToLoad = database->executeQuery(command);
 		    row =ingredientToLoad.next();
                 }
 	}
+}
 
+void LiteRecipeDB::loadPrepMethods( ElementList *list)
+{
+	list->clear();
 
-
+	QString command = "SELECT id,name FROM prep_methods ORDER BY name;";
+	QSQLiteResult prepMethodsToLoad = database->executeQuery(command);
+	
+	if ( prepMethodsToLoad.getStatus()!=QSQLiteResult::Failure )
+	{
+		QSQLiteResultRow row = prepMethodsToLoad.first();
+		while ( !prepMethodsToLoad.atEnd() )
+		{
+			Element prep_method;
+			prep_method.id=row.data(0).toInt();
+			prep_method.name=unescapeAndDecode(row.data(1));
+			list->add(prep_method);
+			row = prepMethodsToLoad.next();
+		}
+	}
 }
 
 void LiteRecipeDB::loadPossibleUnits(int ingredientID, ElementList *list)
@@ -448,11 +477,12 @@ sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
 for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
-	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5);")
+	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6);")
 	.arg(recipeID)
 	.arg((*ing_it).ingredientID)
 	.arg((*ing_it).amount)
 	.arg((*ing_it).unitID)
+	.arg((*ing_it).prepMethodID)
 	.arg(order_index);
 	database->executeQuery(command);
 	}
@@ -711,7 +741,6 @@ database->executeQuery(command);
 
 void LiteRecipeDB::initializeDB(void)
 {
-
 // Create the table structure
 
 	// Read the commands form the structure file
@@ -867,6 +896,42 @@ database->executeQuery(command);
 
 }
 
+void LiteRecipeDB::removePrepMethod(int prepMethodID)
+{
+QString command;
+// Remove the unit first
+command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(prepMethodID);
+database->executeQuery(command);
+
+// Remove any recipe using that unit in the ingredient list (user must have been warned before calling this function!)
+command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
+database->executeQuery(command);
+
+// Remove any ingredient in ingredient_list whis has references to inexisting recipes. (As said above, I almost don't know how, but this seems to work ;-) Tested using MySQL 4.0.11a
+command=QString("DELETE ingredient_list.* FROM ingredient_list LEFT JOIN recipes ON ingredient_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
+database->executeQuery( command );
+
+// Clean up category_list which have no recipe that they belong to. Same method as above
+command=QString("DELETE category_list.* FROM category_list LEFT JOIN recipes ON category_list.recipe_id=recipes.id WHERE recipes.id IS NULL;");
+database->executeQuery( command);
+}
+
+void LiteRecipeDB::modPrepMethod(int prepMethodID, const QString &newLabel)
+{
+QString command;
+
+command=QString("UPDATE prep_methods SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(prepMethodID);
+database->executeQuery(command);
+}
+
+void LiteRecipeDB::createNewPrepMethod(const QString &prepMethodName)
+{
+QString command;
+
+command=QString("INSERT INTO prep_methods VALUES(NULL,'%1');").arg(escapeAndEncode(prepMethodName));
+database->executeQuery(command);
+}
+
 void LiteRecipeDB::removeUnit(int unitID)
 {
 QString command;
@@ -902,7 +967,6 @@ command=QString("DELETE FROM units_conversion WHERE unit1_id=%1 OR unit2_id=%2;"
 database->executeQuery(command);
 
 }
-
 
 void LiteRecipeDB::createNewUnit(const QString &unitName)
 {
@@ -1174,7 +1238,7 @@ bool LiteRecipeDB::checkIntegrity(void)
 
 
 // Check existence of the necessary tables (the database may be created, but empty)
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"prep_methods"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
 
 QString command=QString("SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table';"); // Get the table names (equivalent to MySQL's "SHOW TABLES;" Easy to remember, right? ;)
 
@@ -1225,66 +1289,51 @@ return true;
 void LiteRecipeDB::createTable(QString tableName)
 {
 
-QString command;
-bool createIndex=false;
+QStringList commands;
 
-if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
+if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
-else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
+else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
 else if (tableName=="ingredient_list")
 	{
-	command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);";
-	createIndex=true;
+	commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);"
+		<<"CREATE index ridil_index ON ingredient_list(recipe_id);"
+		<<"CREATE index iidil_index ON ingredient_list(ingredient_id);";
 	}
 
-else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
+else if (tableName=="unit_list") commands<<"CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
-else if (tableName== "units") command=QString("CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
+else if (tableName== "units") commands<<QString("CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxUnitNameLength());
 
-else if  (tableName=="ingredient_info") command="CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
+else if (tableName== "prep_methods") commands<<QString("CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 
-else if (tableName=="ingredient_properties") command="CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
+else if  (tableName=="ingredient_info") commands<<"CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
-else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
+else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
-else if (tableName=="categories") command=QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
+
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list")
 	{
-	 command="CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);";
-	 createIndex=true;
-	 }
+	commands<<"CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);"
+		 <<"CREATE index rid_index ON category_list(recipe_id);"
+		 <<"CREATE index cid_index ON category_list(category_id);";
+	}
 
-else if (tableName=="authors") command=QString("CREATE TABLE authors (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
+else if (tableName=="authors") commands<<QString("CREATE TABLE authors (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
-else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id INTEGER NOT NULL,author_id INTEGER NOT NULL);";
+else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_id INTEGER NOT NULL,author_id INTEGER NOT NULL);";
 
-else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
+else if (tableName=="db_info") commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
 else return;
 
-
-database->executeQuery(command);
-
-// Create necessary indexes
-
-if (createIndex)
-{
-if (tableName=="category_list")
-	{
-	database->executeQuery("CREATE index rid_index ON category_list(recipe_id);");
-	database->executeQuery("CREATE index cid_index ON category_list(category_id);");
-	}
-
-else if (tableName=="ingredient_list")
-	{
-	database->executeQuery("CREATE index ridil_index ON ingredient_list(recipe_id);");
-	database->executeQuery("CREATE index iidil_index ON ingredient_list(ingredient_id);");
-	}
-
-}
-
+ // execute the queries
+for ( QStringList::const_iterator it = commands.begin(); it != commands.end(); ++it )
+	database->executeQuery(*it);
 
 }
 
@@ -1295,8 +1344,29 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void LiteRecipeDB::portOldDatabases(float version)
 {
-// This is the first SQLite version (0.4). There's no need to upgrade anything
-float v; v=version; // remove warnings for now, version will be used in future krecipes versions
+if ( version < 0.5 )
+{
+	QString command;
+
+	command = QString("CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
+		database->executeQuery(command);
+
+	command="ALTER TABLE ingredient_list ADD COLUMN prep_method_id int(11) AFTER unit_id;";
+		database->executeQuery(command);
+	command="UPDATE ingredient_list SET prep_method_id=-1 WHERE prep_method_id IS NULL;";
+		database->executeQuery(command);
+		
+	command="ALTER TABLE authors MODIFY name VARCHAR(40);";
+		database->executeQuery(command);
+	command="ALTER TABLE categories MODIFY name VARCHAR(40);";
+		database->executeQuery(command);
+		
+	// Set the version to the new one (0.5)
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		database->executeQuery(command);
+	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');"; // Set the new version TODO: make the version numbering dynamic
+		database->executeQuery(command);
+}
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -1639,7 +1709,7 @@ int LiteRecipeDB::lastInsertID()
 
 void LiteRecipeDB::emptyData(void)
 {
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods";
 
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{

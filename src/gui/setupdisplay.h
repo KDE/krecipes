@@ -18,8 +18,9 @@
 #include "../recipe.h"
 #include "../widgets/dragarea.h"
 
+class KPopupMenu;
+
 class QAction;
-class QPopupMenu;
 class QLabel;
 class QWidget;
 
@@ -75,7 +76,7 @@ private:
 
 	bool has_changes;
 	QMap<QWidget*,bool> show_widget;
-	QPopupMenu *popup;
+	KPopupMenu *popup;
 
 	// Methods
 	void createWidgets( const Recipe &sample );

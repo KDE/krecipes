@@ -4,12 +4,12 @@ CREATE TABLE author_list (
 ) TYPE=MyISAM;
 CREATE TABLE authors (
   id int(11) NOT NULL auto_increment,
-  name varchar(20) default NULL,
+  name varchar(40) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE categories (
   id int(11) NOT NULL auto_increment,
-  name varchar(20) default NULL,
+  name varchar(40) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE category_list (
@@ -33,6 +33,7 @@ CREATE TABLE ingredient_list (
   ingredient_id int(11) default NULL,
   amount float default NULL,
   unit_id int(11) default NULL,
+  prep_method_id int(11) default NULL,
   order_index int(11) default NULL,
   INDEX  ridil_index (recipe_id),
   INDEX iidil_index (ingredient_id)
@@ -70,4 +71,9 @@ CREATE TABLE units_conversion (
   unit2_id int(11) default NULL,
   ratio float default NULL
 ) TYPE=MyISAM;
-INSERT INTO db_info VALUES(0.4,'Krecipes 0.4');
+CREATE TABLE prep_methods (
+  id int(11) NOT NULL auto_increment,
+  name varchar(20) default NULL,
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;
+INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');

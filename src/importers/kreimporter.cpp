@@ -190,6 +190,9 @@ void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe)
 				else if (ing.tagName() == "unit"){
 						new_ing.units = QString(ing.text()).stripWhiteSpace();
 				}
+				else if (ing.tagName() == "prep"){
+					new_ing.prepMethod = QString(ing.text()).stripWhiteSpace();
+				}
       }
 		  recipe->ingList.append( new_ing );
     }

@@ -52,7 +52,8 @@ database=db; // Store the database pointer.
 tmp_filename = locateLocal("tmp", "krecipes_recipe_view");
 
 //----------Load  the recipe --------
-loadRecipe(recipeID);
+if ( recipeID != -1 )
+	loadRecipe(recipeID);
 }
 
 RecipeViewDialog::~RecipeViewDialog()

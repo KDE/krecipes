@@ -54,6 +54,7 @@ public:
 	virtual void createNewAuthor(const QString &authorName)=0;
 	virtual void createNewCategory(const QString &categoryName)=0;
 	virtual void createNewIngredient(const QString &ingredientName)=0;
+	virtual void createNewPrepMethod(const QString &prepMethodName)=0;
 	virtual void createNewUnit(const QString &unitName)=0;
 
 	virtual void emptyData(void)=0;
@@ -90,6 +91,7 @@ public:
 	virtual void loadCategories(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
+	virtual void loadPrepMethods( ElementList *list)=0;
 	virtual void loadProperties(IngredientPropertyList *list,int ingredientID=-2)=0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
@@ -117,12 +119,15 @@ public:
   * set newLabel for authorID
   */
 	virtual void modAuthor(int authorID, QString newLabel)=0;
+	
+	virtual void modPrepMethod(int prepMethodID, const QString &newLabel)=0;
 
 	virtual QString recipeTitle(int recipeID)=0;
 
 	virtual void removeAuthor(int categoryID)=0;
 	virtual void removeCategory(int categoryID)=0;
 	virtual void removeIngredient(int ingredientID)=0;
+	virtual void removePrepMethod(int prepMethodID)=0;
 	virtual void removeProperty(int propertyID)=0;
 	virtual void removePropertyFromIngredient(int ingredientID, int propertyID,int perUnitID)=0;
 	virtual void removeRecipe(int id)=0;
@@ -146,11 +151,12 @@ public:
 
 	virtual float databaseVersion(void)=0;
 
-	int maxAuthorNameLength() const{ return 20; }
+	int maxAuthorNameLength() const{ return 50; }
 	int maxCategoryNameLength() const{ return 20; }
 	int maxIngredientNameLength() const{ return 50; }
 	int maxRecipeTitleLength() const{ return 200; }
 	int maxUnitNameLength() const{ return 20; }
+	int maxPrepMethodNameLength() const{ return 20; }
 
 protected:
 	virtual void portOldDatabases(float version)=0;

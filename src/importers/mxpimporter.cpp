@@ -142,9 +142,10 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "categories" )
 	{
 		QString tmp_str = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
-		if ( tmp_str != "" )
+
+		while ( current.stripWhiteSpace() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
 		{
-			while ( current != "" && current.stripWhiteSpace() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
+			if ( !tmp_str.isEmpty() )
 			{
 				QStringList categories = QStringList::split( "  ", tmp_str );
 				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
@@ -154,10 +155,10 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 
 					//kdDebug()<<"Found category: "<<new_cat.name<<endl;
 				}
-
-				current = stream.readLine();
-				tmp_str = current;
 			}
+
+			current = stream.readLine();
+			tmp_str = current;
 		}
 		//else
 		//	kdDebug()<<"No categories found."<<endl;
@@ -166,6 +167,10 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 	{
 		addWarningMsg(QString(i18n("While loading recipe \"%1\" "
 		  "the field \"Categories:\" is either missing or could not be detected.")).arg(recipe.title));
+		  
+		//the ingredient loaded will expect the last thing to have been read to be this header line
+		while ( current.stripWhiteSpace() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
+			current = stream.readLine();
 	}
 }
 
@@ -173,7 +178,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 {
 	//============ingredients=================//
 	stream.skipWhiteSpace();
-	(void)stream.readLine(); (void)stream.readLine();
+	(void)stream.readLine();
 	QString current = stream.readLine();
 	if ( !current.contains("NONE") && current != "" )
 	{
@@ -206,7 +211,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 			int dash_index = current.find("--");
 
 			int length;
-			if ( dash_index == -1 )
+			if ( dash_index == -1 || dash_index == 24 ) //ignore a dash in the first position (index 24)
 				length = current.length();
 			else
 				length = dash_index-22;
@@ -214,14 +219,9 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 			QString ingredient_name(current.mid(22, length));
 			new_ingredient.name = ingredient_name.stripWhiteSpace();
 
-			//preparation method (Krecipes doesn't yet use this, but have it here for the future)
-			QString prep_method;
-			if ( dash_index != -1 )
-			{
-				QString prep_method = current.mid( dash_index + 2, current.length() );
-				if ( prep_method != "" )
-					new_ingredient.name += " -- " + prep_method.stripWhiteSpace();
-			}
+			//prep method
+			if ( dash_index != -1 && dash_index != 24 ) //ignore a dash in the first position (index 24)
+				new_ingredient.prepMethod = current.mid( dash_index + 2, current.length() ).stripWhiteSpace();
 
 			recipe.ingList.append( new_ingredient );
 			//kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount

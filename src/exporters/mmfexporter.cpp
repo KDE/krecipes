@@ -115,7 +115,7 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		}
 
 		//columns 12-39
-		QString ing_name = (*ing_it).name; ing_name.truncate(28);
+		QString ing_name = (*ing_it).name + "; " + (*ing_it).prepMethod; ing_name.truncate(28);
 		content += ing_name+"\n";
 		for ( unsigned int i = 0; i < ((*ing_it).name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
 			content += "           -"+(*ing_it).name.mid(28*(i+1),28)+"\n";

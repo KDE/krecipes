@@ -45,6 +45,7 @@
 #include "dialogs/categorieseditordialog.h"
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
+#include "dialogs/prepmethodsdialog.h"
 #include "dialogs/ingredientmatcherdialog.h"
 #include "gui/kstartuplogo.h"
 #include "widgets/kremenu.h"
@@ -189,6 +190,10 @@ KrecipesView::KrecipesView(QWidget *parent)
     button4=new KreMenuButton(leftPanel,dataMenu);
     button4->setIconSet(il.loadIconSet( "units", KIcon::Panel,32 ));
     buttonsList->append(button4);
+    
+    button9=new KreMenuButton(leftPanel,dataMenu);
+    button9->setIconSet(il.loadIconSet( "ICON PLEASE", KIcon::Panel,32 ));
+    buttonsList->append(button9);
 
     button5=new KreMenuButton(leftPanel,dataMenu);
     button5->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32 ));
@@ -227,7 +232,6 @@ KrecipesView::KrecipesView(QWidget *parent)
     contextLayout->addMultiCellWidget(contextText, 1, 4, 0, 2);
 
     // Right Panel Widgets
-
     inputPanel=new RecipeInputDialog(rightPanel,database);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
@@ -238,8 +242,8 @@ KrecipesView::KrecipesView(QWidget *parent)
     dietPanel=new DietWizardDialog(rightPanel,database);
     categoriesPanel=new CategoriesEditorDialog(rightPanel,database);
     authorsPanel=new AuthorsDialog(rightPanel,database);
+    prepMethodsPanel=new PrepMethodsDialog(rightPanel,database);
     ingredientMatcherPanel=new IngredientMatcherDialog(rightPanel,database);
-
 
 
     // i18n
@@ -323,6 +327,7 @@ void KrecipesView::translate(){
   button2->setTitle(i18n("Ingredients"));
   button3->setTitle(i18n("Properties"));
   button4->setTitle(i18n("Units"));
+  button9->setTitle(i18n("Preparation Method"));
   button5->setTitle(i18n("Categories"));
   button6->setTitle(i18n("Authors"));
   button7->setTitle(i18n("Diet Helper"));
@@ -385,6 +390,10 @@ else if (leftPanel->currentMenu()==dataMenu)
 		case UnitsP: unitsPanel->reload(); // Reload data
 			rightPanel->setHeader(i18n("Units"),"units");
 			rightPanel->raise(unitsPanel);
+			break;
+		case PrepMethodsP: prepMethodsPanel->reload();
+			rightPanel->setHeader(i18n("Preparation Methods"),"GIVE ME AN ICON :p");
+			rightPanel->raise(prepMethodsPanel);
 			break;
 		case CategoriesP:
 			categoriesPanel->reload();
@@ -523,7 +532,7 @@ bool setupDone=config->readBoolEntry("SystemSetup",false);
 
 QString setupVersion=config->readEntry("Version","0.3");  // By default assume it's 0.3. This parameter didn't exist in that version yet.
 
-if (!setupDone || (setupVersion.toDouble()<0.4) || force) // The config structure changed in version 0.4 to have DBType and Config Structure version
+if (!setupDone || (setupVersion.toDouble()<0.5) || force) // The config structure changed in version 0.4 to have DBType and Config Structure version
 {
 
 bool setupUser,initData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
@@ -540,7 +549,8 @@ setupWizard->getOptions(setupUser,initData);
 
 // Setup user if necessary
 
-if (setupUser) // Don't setup user if checkbox of existing user... was set
+#if HAVE_MYSQL
+if (dbtype=="MySQL" && setupUser) // Don't setup user if checkbox of existing user... was set
 	{
 	kdDebug()<<"Setting up user\n";
 	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
@@ -561,9 +571,14 @@ if (setupUser) // Don't setup user if checkbox of existing user... was set
 
 	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
 	}
+#endif //HAVE_MYSQL
+
+#if HAVE_SQLITE
+if (dbtype=="SQLite")
+	(void)LiteRecipeDB(QString::null,QString::null,QString::null,QString::null,true); //initialize database structure
+#endif //HAVE_SQLITE
 
 // Initialize database with data if requested
-
 if (initData)
 	{
 	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
@@ -724,7 +739,7 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
 		"Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i><br><br>"
 		"Right click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends <br><br>"
-		"Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a> and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, appart from our excellent Krecipes format obviously.<br><br>"
+		"Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a> and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
 		));
 		break;
 		
@@ -768,6 +783,11 @@ else if (leftPanel->currentMenu()==dataMenu)
 		contextTitle->setText(i18n("<b>Units list</b>"));
 		contextText->setText(i18n("Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
 		));
+		break;
+		
+		case PrepMethodsP:
+		contextTitle->setText(i18n("<b>Preparation Methods list</b>"));
+		contextText->setText(i18n("With the preparation method, you can give extra information about an ingredient. <i>sliced, cooked, optional,...</i> <br><br> Instead of adding this information to the ingredient itself, put this information here so that it is easier, for example, to create a shopping list or calculate nutrient information.<br><br>Just add and edit those here."));
 		break;
 		
 		case CategoriesP:

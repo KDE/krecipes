@@ -31,6 +31,7 @@
 #include "DBBackend/recipedb.h"
 
 class AuthorsDialog;
+class PrepMethodsDialog;
 class CategoriesEditorDialog;
 class DietWizardDialog;
 class IngredientsDialog;
@@ -67,8 +68,8 @@ typedef QValueList <Menu>::Iterator MenuId;
 
 
  // Some constants
- enum mainPanels{SelectP=0,ShoppingP=1,DietP=2,MatcherP=3};
- enum dataPanels{IngredientsP=1, PropertiesP=2, UnitsP=3, CategoriesP=4,AuthorsP=5, ContextHelp=6, RecipeEdit=7};
+ enum mainPanels{SelectP=0,ShoppingP,DietP,MatcherP};
+ enum dataPanels{IngredientsP=1, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit };
 
 
  // Class KrecipesView
@@ -117,6 +118,7 @@ public:
 	DietWizardDialog* dietPanel;
 	CategoriesEditorDialog *categoriesPanel;
 	AuthorsDialog *authorsPanel;
+	PrepMethodsDialog *prepMethodsPanel;
 	IngredientMatcherDialog *ingredientMatcherPanel;
 
 	// public methods
@@ -150,6 +152,7 @@ private:
 	KreMenuButton *button6;
 	KreMenuButton *button7;
 	KreMenuButton *button8;
+	KreMenuButton *button9;
   QWidget* contextHelp;
   QPushButton* contextButton;
   QPushButton* contextClose;

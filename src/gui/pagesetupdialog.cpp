@@ -176,10 +176,7 @@ void PageSetupDialog::saveAsLayout()
 
 	if ( !filename.isEmpty() )
 	{
-		QFileInfo info(filename);
-		bool write_perm = info.isWritable();
-
-		if ( write_perm )
+		if ( haveWritePerm(filename) )
 		{
 			setup_display->saveLayout(filename);
 			setActiveFile(filename);
@@ -205,6 +202,22 @@ void PageSetupDialog::setActiveFile( const QString &filename )
 {
 	active_filename = filename;
 	
-	QFileInfo info(filename);
-	have_write_perm = info.isWritable();
+	have_write_perm = haveWritePerm(filename);
 }
+
+bool PageSetupDialog::haveWritePerm( const QString &filename )
+{
+	QFileInfo info(filename);
+
+	if ( info.exists() ) //check that we can write to this particular file
+	{
+		QFileInfo info(filename);
+		return info.isWritable();
+	}
+	else //check that we can write to the directory since the file doesn't exist
+	{
+		QFileInfo dir_info( info.dirPath(true) );
+		return dir_info.isWritable();
+	}
+}
+

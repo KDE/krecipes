@@ -127,7 +127,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 				{
 					QDomElement iChild = iChilds.item(j).toElement();
 					if (iChild.tagName() == "IPrp")
-						new_ing.name += " -- " + iChild.text().stripWhiteSpace();
+						new_ing.prepMethod = iChild.text().stripWhiteSpace();
 					else if (iChild.tagName() == "INtI")
 						; // TODO: What does it mean?... ingredient nutrient info?
 				}

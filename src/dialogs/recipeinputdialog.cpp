@@ -199,7 +199,7 @@ database=db;
 
     //------- Ingredients Tab -----------------
 
-    ingredientGBox =new QGroupBox(this);
+    ingredientGBox = new QGroupBox(this);
     ingredientGBox->setFrameStyle(QFrame::NoFrame);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     QGridLayout* ingredientsLayout=new QGridLayout(ingredientGBox);
@@ -211,36 +211,50 @@ database=db;
     ingredientsLayout->addItem(spacerBoxTop, 0,1);
 
     //Input Widgets
-    QVBox *ingredientVBox = new QVBox( ingredientGBox );
+    QHBox *allInputHBox = new QHBox( ingredientGBox );
+    allInputHBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    
+    QVBox *ingredientVBox = new QVBox( allInputHBox );
     ingredientVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
     ingredientBox = new KComboBox( TRUE, ingredientVBox );
     ingredientBox->setAutoCompletion( TRUE );
-    //çingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setMinimumSize(QSize(100,30));
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(ingredientVBox,1,1);
 
-    QVBox *amountVBox = new QVBox( ingredientGBox );
-    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    QVBox *amountVBox = new QVBox( allInputHBox );
+    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
     amountLabel = new QLabel( i18n("Amount:"), amountVBox );
     amountEdit = new FractionInput( amountVBox);
-    amountEdit->setFixedSize(QSize(60,30));
-    amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(amountVBox,1,2);
+    amountEdit->setMinimumSize(QSize(60,30));
+    amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
 
-    QVBox *unitVBox = new QVBox( ingredientGBox );
+    QVBox *unitVBox = new QVBox( allInputHBox );
     unitVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     unitLabel = new QLabel( i18n("Unit:"), unitVBox );
     unitBox = new KComboBox( TRUE, unitVBox );
     unitBox->setAutoCompletion( TRUE );
-    //unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
     unitBox->setMinimumSize(QSize(100,30));
     unitBox->setMaximumSize(QSize(10000,30));
     unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    ingredientsLayout->addMultiCellWidget(unitVBox,1,1,3,5);
+    
+    QVBox *prepMethodVBox = new QVBox( allInputHBox );
+    prepMethodVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    prepMethodLabel = new QLabel( i18n("Preparation Method:"), prepMethodVBox );
+    prepMethodBox = new KComboBox( TRUE, prepMethodVBox );
+    prepMethodBox->setAutoCompletion( TRUE );
+    prepMethodBox->lineEdit()->disconnect(prepMethodBox); //so hitting enter doesn't enter the item into the box
+    prepMethodBox->setMinimumSize(QSize(100,30));
+    prepMethodBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    
+    allInputHBox->setStretchFactor( ingredientVBox, 5 );
+    allInputHBox->setStretchFactor( amountVBox, 1 );
+    allInputHBox->setStretchFactor( unitVBox, 2 );
+    allInputHBox->setStretchFactor( prepMethodVBox, 3 );
+
+    ingredientsLayout->addMultiCellWidget(allInputHBox,1,1,1,5);
 
     // Spacers to list and buttons
     QSpacerItem* spacerToList = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -293,6 +307,7 @@ database=db;
     ingredientList->addColumn(i18n("Amount"));
     ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
     ingredientList->addColumn(i18n("Units"));
+    ingredientList->addColumn(i18n("Preparation Method"));
     ingredientList->setSorting(-1); // Do not sort
     ingredientList->setMinimumSize(QSize(200,100));
     ingredientList->setMaximumSize(QSize(10000,10000));
@@ -337,6 +352,7 @@ database=db;
     // Initialize internal data
     ingredientComboList=new ElementList;
     unitComboList=new ElementList;
+    prepMethodComboList=new ElementList;
     unsavedChanges=false; // Indicates if there's something not saved yet.
     enableChangedSignal(); // Enables the signal "changed()"
 
@@ -376,6 +392,7 @@ RecipeInputDialog::~RecipeInputDialog()
 	delete loadedRecipe;
 	delete ingredientComboList;
 	delete unitComboList;
+	delete prepMethodComboList;
 }
 
 int RecipeInputDialog::loadedRecipeID() const
@@ -434,9 +451,9 @@ servingsNumInput->setValue(loadedRecipe->persons);
 			amount_str = QString::number((*ing_it).amount);
 
 		 //Insert ingredient after last one
-		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units);
+		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units,(*ing_it).prepMethod);
 	}
-
+// 
 	//show photo
 	if (!loadedRecipe->photo.isNull()){
 
@@ -506,6 +523,21 @@ void RecipeInputDialog::loadUnitListCombo(void)
 	}
 }
 
+void RecipeInputDialog::loadPrepMethodListCombo(void)
+{
+	database->loadPrepMethods(prepMethodComboList);
+
+	//Populate this data into the ComboBox
+	prepMethodBox->clear();
+	prepMethodBox->completionObject()->clear();
+	for ( ElementList::const_iterator prep_it = prepMethodComboList->begin(); prep_it != prepMethodComboList->end(); ++prep_it )
+	{
+		prepMethodBox->insertItem((*prep_it).name);
+		prepMethodBox->completionObject()->addItem((*prep_it).name);
+	}
+	prepMethodBox->lineEdit()->clear();
+}
+
 void RecipeInputDialog::reloadUnitsCombo(int)
 {
 unitBox->clear();
@@ -514,8 +546,8 @@ unitComboList->clear();
 loadUnitListCombo();
 }
 
- void RecipeInputDialog::changePhoto(void)
- {
+void RecipeInputDialog::changePhoto(void)
+{
 // standard filedialog
     KURL filename = KFileDialog::getOpenURL(QString::null, i18n("*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)"), this);
     QPixmap pixmap (filename.path());
@@ -655,6 +687,21 @@ void RecipeInputDialog::createNewUnitIfNecessary()
 	}
 }
 
+void RecipeInputDialog::createNewPrepIfNecessary()
+{
+	if ( !prepMethodBox->currentText().stripWhiteSpace().isEmpty() &&
+	     !prepMethodBox->contains(prepMethodBox->currentText()) )
+	{
+		QString newPrepMethod(prepMethodBox->currentText());
+		database->createNewPrepMethod(newPrepMethod);
+
+		prepMethodComboList->clear();
+		loadPrepMethodListCombo();
+
+		prepMethodBox->setCurrentItem(newPrepMethod);
+	}
+}
+
 bool RecipeInputDialog::checkAmountEdit()
 {
 	if ( amountEdit->isInputValid() )
@@ -675,6 +722,7 @@ void RecipeInputDialog::addIngredient(void)
 
 	createNewIngredientIfNecessary();
 	createNewUnitIfNecessary();
+	createNewPrepIfNecessary();
 
 //Add it first to the Recipe list then to the ListView
 if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
@@ -686,6 +734,15 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   ing.units=unitBox->currentText();
   ing.unitID=unitComboList->getElement(unitBox->currentItem()).id;
   ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
+
+  if ( prepMethodBox->count() > 0 && !prepMethodBox->currentText().isEmpty() )
+  {
+  	ing.prepMethod=prepMethodBox->currentText();
+  	ing.prepMethodID=prepMethodComboList->getElement(prepMethodBox->currentItem()).id;
+  }
+  else
+  	ing.prepMethodID=-1;
+
   loadedRecipe->ingList.append(ing);
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
@@ -699,10 +756,10 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   else
     amount_str = QString::number(ing.amount);
 
-  (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units);
+  (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units,ing.prepMethod);
 
-  amountEdit->setFocus(); //put cursor back to amount so user can begin next ingredient
-  amountEdit->selectAll();
+  ingredientBox->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
+  ingredientBox->lineEdit()->selectAll();
 }
 
 emit changed();
@@ -818,10 +875,11 @@ categoryShow->clear();
 servingsNumInput->setValue(1);
 }
 
-void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
+void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients, units, and preparation methods
 {
 loadIngredientListCombo();
 loadUnitListCombo();
+loadPrepMethodListCombo();
 }
 
 bool RecipeInputDialog::everythingSaved()
