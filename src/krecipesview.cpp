@@ -292,7 +292,7 @@ inputPanel->save();
  */
 void KrecipesView::exportRecipe()
 {
-  inputPanel->exportRecipe();
+  selectPanel->exportRecipe();
 }
 
 void KrecipesView::actionRecipe(int recipeID, int action)

@@ -20,6 +20,10 @@
 #include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>
+#include <kdialog.h>
+#include <kfiledialog.h>
+
+#include "importers/kremanager.h"
 
 class QHBox;
 
@@ -68,6 +72,8 @@ private slots:
   void edit(void);
   void remove(void);
   void filter(const QString &s);
+public slots:
+  void exportRecipe();
 };
 
 #endif

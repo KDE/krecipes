@@ -182,3 +182,18 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 
 	}
 }
+
+/*!
+    \fn SelectRecipeDialog::exportRecipe()
+ */
+void SelectRecipeDialog::exportRecipe()
+{
+  if((recipeListView->selectedItem())->text(1) != NULL){
+    KFileDialog* fd = new KFileDialog("", "*.krz|Gzip Krecipes file (*.krz)\n*.kre|Krecipes file (*.kre)", 0, "Save recipe", true);
+    QString fileName = fd->getSaveFileName("", "*.krz|Gzip Krecipes file (*.krz)\n*.kre|Krecipes file (*.kre)", 0, "Save recipe");
+    if(fileName != NULL){
+      KreManager* kre = new KreManager(database, fileName, fd->currentFilter());
+      kre->kreExport((recipeListView->selectedItem())->text(1).toInt());
+    }
+  }
+}
