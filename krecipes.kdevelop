@@ -3,7 +3,7 @@
   <general>
     <author>Unai Garro</author>
     <email>ugarro@users.sourceforge.net</email>
-    <version>0.1</version>
+    <version>0.2</version>
     <projectmanagement>KDevKDEAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>

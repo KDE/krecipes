@@ -11,7 +11,7 @@
 static const char *description =
     I18N_NOOP("A KDE Application");
 
-static const char *version = "0.1";
+static const char *version = "0.2";
 
 static KCmdLineOptions options[] =
 {

@@ -1,6 +1,6 @@
 Begin3
 Title:          Krecipes -- Some description
-Version:        0.1
+Version:        0.2
 Entered-date:   
 Description:    
 Keywords:       KDE Qt
@@ -8,9 +8,7 @@ Author:         Unai Garro <ugarro@users.sourceforge.net>
 Maintained-by:  Unai Garro <ugarro@users.sourceforge.net>
 Home-page:      
 Alternate-site: 
-Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/utils
-                xxxxxx  krecipes-0.1.tar.gz
-                xxx     krecipes-0.1.lsm
+Primary-site:   krecipes.sourceforge.net
 Platform:       Linux. Needs KDE
 Copying-policy: GPL
 End
