@@ -691,6 +691,15 @@ emit changed();
 }
 
 void RecipeInputDialog::modIngredientAmount( QListViewItem *it){
+  saveButton->setEnabled(false);
+  closeButton->setEnabled(false);
+  showButton->setEnabled(false);
+  shopButton->setEnabled(false);
+  resizeButton->setEnabled(false);
+  addButton->setEnabled(false);
+  removeButton->setEnabled(false);
+  downButton->setEnabled(false);
+  upButton->setEnabled(false);
   previousAmount = it->text(1);
   ingredientList->rename(it, 1);
 }
@@ -706,7 +715,6 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
     if(ok){
       ing->amount = mn.toDouble();
       it->setText(1, mn.toString());
-      emit changed();
     }
     else{
       it->setText(1, previousAmount);
@@ -717,12 +725,22 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
     if(ok){
       ing->amount = mn.toDouble();
       it->setText(1, QString::number(mn.toDouble()));
-      emit changed();
     }
     else{
       it->setText(1, previousAmount);
     }
   }
+  if(it->text(1) != previousAmount){
+    emit changed();
+  }
+  closeButton->setEnabled(true);
+  showButton->setEnabled(true);
+  shopButton->setEnabled(true);
+  resizeButton->setEnabled(true);
+  addButton->setEnabled(true);
+  removeButton->setEnabled(true);
+  downButton->setEnabled(true);
+  upButton->setEnabled(true);
 }
 
 void RecipeInputDialog::recipeChanged(void)
