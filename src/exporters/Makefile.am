@@ -1,6 +1,6 @@
 INCLUDES = -I $(srcdir)/.. -I$(srcdir)/../DBBackend $(all_includes)
 METASOURCES = AUTO
-lib_LTLIBRARIES =  libkreexport.la
-libkreexport_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-libkreexport_la_SOURCES =  kreexport.cpp baseexporter.cpp
+lib_LTLIBRARIES =  libkrecipesexporters.la
+libkrecipesexporters_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+libkrecipesexporters_la_SOURCES =  kreexport.cpp baseexporter.cpp recipemlexporter.cpp
 noinst_HEADERS =  kreexport.h

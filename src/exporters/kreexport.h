@@ -25,7 +25,7 @@ public:
 
     virtual ~KreExporter();
 
-    QString createKRE( const QPtrList<Recipe> & );
+    virtual QString createContent( const QPtrList<Recipe> & );
 
 protected:
     virtual void saveToFile( const QPtrList<Recipe> & );

@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2003 by                                                 *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,9 +29,11 @@ public:
 	virtual ~BaseExporter();
 
 	void exporter( const QValueList<int>& ids);
+	virtual QString createContent( const QPtrList<Recipe> & ) = 0;
 
 protected:
-	virtual void saveToFile( const QPtrList<Recipe> & ) = 0;
+	/** Writes the return value of createContent() to a file. */
+	virtual void saveToFile( const QPtrList<Recipe> & );
 
 	QFile* file;
 	QString format;

@@ -21,6 +21,9 @@
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 
+#include "exporters/kreexport.h"
+#include "exporters/recipemlexporter.h"
+
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
  : QWidget(parent)
 {
@@ -308,7 +311,11 @@ for (Element *category=categoryList.getFirst();category;category=categoryList.ge
 void SelectRecipeDialog::exportRecipe()
 {
   if(recipeListView->selectedItem()){
-    KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
+    KFileDialog* fd = new KFileDialog( QString::null,
+      "*.kre|Gzip Krecipes file (*.kre)\n"
+      "*.kreml|Krecipes xml file (*.kreml)\n"
+      "*.xml|RecipeML file (*.xml)",
+      this, "Save recipe", true);
     fd->setCaption( i18n("Save recipe") );
     fd->setOperationMode( KFileDialog::Saving );
     fd->setSelection((recipeListView->selectedItem())->text(2));
@@ -316,12 +323,16 @@ void SelectRecipeDialog::exportRecipe()
     {
       QString fileName = fd->selectedFile();
       if( !fileName.isNull() ){
-        KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
+        BaseExporter *exporter;
+	if ( fd->currentFilter() == "*.xml" )
+		exporter = new RecipeMLExporter(database, fileName, fd->currentFilter());
+        else
+		exporter = new KreExporter(database, fileName, fd->currentFilter());
 
         QValueList<int> id;
         id.append( (recipeListView->selectedItem())->text(1).toInt() );
-        kre->exporter( id );
-        delete kre;
+        exporter->exporter( id );
+        delete exporter;
       }
     }
     delete fd;
@@ -331,7 +342,11 @@ void SelectRecipeDialog::exportRecipe()
 void SelectRecipeDialog::exportRecipeFromCat()
 {
   if(recipeListView->selectedItem()){
-    KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
+    KFileDialog* fd = new KFileDialog( QString::null,
+      "*.kre|Gzip Krecipes file (*.kre)\n"
+      "*.kreml|Krecipes xml file (*.kreml)\n"
+      "*.xml|RecipeML file (*.xml)",
+      this, "Save recipes", true);
     fd->setCaption( i18n("Save recipes") );
     fd->setOperationMode( KFileDialog::Saving );
     fd->setSelection((recipeListView->selectedItem())->text(0));
@@ -339,14 +354,19 @@ void SelectRecipeDialog::exportRecipeFromCat()
     {
       QString fileName = fd->selectedFile();
       if( !fileName.isNull() ){
-        KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
+        BaseExporter *exporter;
+	if ( fd->currentFilter() == "*.xml" )
+		exporter = new RecipeMLExporter(database, fileName, fd->currentFilter());
+        else
+		exporter = new KreExporter(database, fileName, fd->currentFilter());
+
         QValueList<int> l;
         for (QListViewItem *cit=(recipeListView->selectedItem())->firstChild();cit;cit=cit->nextSibling())
         {
           l.append(cit->text(1).toInt());
         }
-        kre->exporter(l);
-        delete kre;
+        exporter->exporter(l);
+        delete exporter;
       }
     }
     delete fd;

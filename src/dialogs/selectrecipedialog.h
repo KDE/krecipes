@@ -29,12 +29,11 @@
 #include <kfiledialog.h>
 #include <kpopupmenu.h>
 
-#include "exporters/kreexport.h"
-
 class QHBox;
 
 class RecipeDB;
 class ElementList;
+class Recipe;
 
 /**
 @author Unai Garro

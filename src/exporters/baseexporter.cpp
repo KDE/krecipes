@@ -95,3 +95,14 @@ bool BaseExporter::createFile()
 	else
 		return false;
 }
+
+void BaseExporter::saveToFile( const QPtrList<Recipe>& recipes )
+{
+	if ( file->open( IO_WriteOnly ) )
+	{
+		QTextStream stream( file );
+		stream << createContent(recipes);
+		file->close();
+	}
+}
+

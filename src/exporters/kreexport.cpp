@@ -36,13 +36,13 @@ void KreExporter::saveToFile( const QPtrList<Recipe>& recipes )
         	if ( file->open( IO_WriteOnly ) )
 		{
 			QTextStream stream( file );
-			stream << createKRE(recipes);
+			stream << createContent(recipes);
 			file->close();
 		}
 	}
 	else{
         // create a temporary .kre file
-        QString kreml = createKRE(recipes);
+        QString kreml = createContent(recipes);
         int size = kreml.length();
         // compress and save file
         KTar* kre = new KTar(file->name(), "application/x-gzip");
@@ -54,10 +54,10 @@ void KreExporter::saveToFile( const QPtrList<Recipe>& recipes )
 }
 
 /*!
-    \fn KreManager::createKRE()
+    \fn KreManager::createContent()
  * return a QString containing XML encoded recipe
  */
-QString KreExporter::createKRE( const QPtrList<Recipe>& recipes )
+QString KreExporter::createContent( const QPtrList<Recipe>& recipes )
 {
     QString xml;
 
