@@ -8,6 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "recipeviewdialog.h"
+#include "image.h"
 
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {
@@ -95,7 +96,8 @@ recipeHTML+=QString("<p align=right >Recipe: #%1</p></div>").arg(loadedRecipe->r
 recipeHTML+="</body></html>";
 
 // Store Photo
-loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
+if (!loadedRecipe->photo.isNull()) loadedRecipe->photo.save("/tmp/krecipes_photo.png","PNG");
+else {QPixmap dp(defaultPhoto); dp.save("/tmp/krecipes_photo.png","PNG");}
 }
 
 recipeView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where the photo was stored
