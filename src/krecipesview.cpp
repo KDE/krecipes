@@ -130,7 +130,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     connect (inputPanel, SIGNAL(enableSaveOption(bool)), this, SIGNAL(enableSaveOption(bool)));
 
     // Create a new button when a recipe is unsaved
-    connect (inputPanel, SIGNAL(createButton(QWidget*)), this, SLOT(addRecipeButton(QWidget*)));
+    connect (inputPanel, SIGNAL(createButton(QWidget*,QString)), this, SLOT(addRecipeButton(QWidget*,QString)));
 
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
@@ -351,18 +351,20 @@ void KrecipesView::resizeButtons(){
   button6->resize(leftPanel->width(), 30);
 }
 
-void KrecipesView::addRecipeButton(QWidget *w)
+void KrecipesView::addRecipeButton(QWidget *w,QString title)
 {
 recipeWidget=w;
 
-std::cerr<<"I'm adding a button\n";
 if (!recipeButton)
 {
-	recipeButton=new QPushButton(leftPanel);
-	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("modified",KIcon::Small));recipeButton->setGeometry(0,250,150,30);
+	recipeButton=new MenuButton(leftPanel,"recipeButton");
+	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("filesave",KIcon::Small));
+	recipeButton->setGeometry(0,250,150,30);
+	recipeButton->setTitle(title);
 	recipeButton->resize(leftPanel->width(),30);
 	recipeButton->show();
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
+	connect((RecipeInputDialog *)w,SIGNAL(titleChanged(const QString&)),recipeButton,SLOT(setTitle(const QString&)));
 }
 
 }
@@ -371,5 +373,22 @@ void KrecipesView::switchToRecipe(void)
 {
 rightPanel->raiseWidget(recipeWidget);
 }
+
+
+////////////////// Class MenuButton Methods///////////////////
+
+MenuButton::MenuButton(QWidget *parent,const char *name):QPushButton(parent,name)
+{
+}
+
+MenuButton::~MenuButton()
+{
+}
+
+void MenuButton::setTitle(const QString &title)
+{
+setText(title);
+}
+
 
 #include "krecipesview.moc"

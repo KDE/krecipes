@@ -45,10 +45,16 @@ class QPainter;
  */
 
 
- // Some constants
+ // Declarations
 
+ class MenuButton;
+
+
+ // Some constants
  enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, DietWizardP=10};
 
+
+ // Class KrecipesView
 class KrecipesView : public QVBox, public KrecipesIface
 {
     Q_OBJECT
@@ -120,7 +126,7 @@ private:
 	QPushButton *button6;
 	QPushButton *button7;
 
-	QPushButton *recipeButton;
+	MenuButton *recipeButton;
 	QWidget *recipeWidget;
 
 	// Internal variables
@@ -136,7 +142,7 @@ public slots:
 	void save(void);
 
 private slots:
-    void addRecipeButton(QWidget *w);
+    void addRecipeButton(QWidget *w, QString title);
     void actionRecipe(int recipeID, int action);
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
@@ -145,6 +151,22 @@ private slots:
     void resizeButtons();
 
 
+};
+
+
+// Class MenuButton
+
+class MenuButton:public QPushButton
+{
+
+Q_OBJECT
+
+public:
+	MenuButton(QWidget *parent,const char *name=0);
+	~MenuButton();
+
+public slots:
+	void setTitle(const QString &title);
 };
 
 #endif // _KRECIPESVIEW_H_

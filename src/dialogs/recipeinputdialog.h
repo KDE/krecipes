@@ -120,7 +120,8 @@ private:
 	signals:
 	void changed(void);
 	void enableSaveOption(bool en=true);
-	void createButton(QWidget* w);
+	void createButton(QWidget* w,QString title);
+	void titleChanged(const QString &title);
 
 
 };

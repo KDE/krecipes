@@ -264,19 +264,20 @@ database=db;
     reloadCombos();
 
     // Connect signals & Slots
-    connect(this->ingredientBox, SIGNAL(activated(int)), this, SLOT(reloadUnitsCombo(int)));
-    connect(this->changePhotoButton, SIGNAL(clicked()), this, SLOT(changePhoto()));
-    connect(this->upButton, SIGNAL(clicked()), this, SLOT(moveIngredientUp()));
-    connect(this->downButton, SIGNAL(clicked()), this, SLOT(moveIngredientDown()));
-    connect(this->removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()));
-    connect(this->addButton, SIGNAL(clicked()), this, SLOT(addIngredient()));
+    connect(ingredientBox, SIGNAL(activated(int)), this, SLOT(reloadUnitsCombo(int)));
+    connect(changePhotoButton, SIGNAL(clicked()), this, SLOT(changePhoto()));
+    connect(upButton, SIGNAL(clicked()), this, SLOT(moveIngredientUp()));
+    connect(downButton, SIGNAL(clicked()), this, SLOT(moveIngredientDown()));
+    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()));
+    connect(addButton, SIGNAL(clicked()), this, SLOT(addIngredient()));
     connect(this, SIGNAL(changed()), this, SLOT(recipeChanged()));
-    connect(this->servingsNumInput, SIGNAL(valueChanged(int)), this, SLOT(recipeChanged()));
-    connect(this->titleEdit, SIGNAL(textChanged(const QString&)), this, SLOT(recipeChanged(const QString&)));
-    connect(this->instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
+    connect(servingsNumInput, SIGNAL(valueChanged(int)), this, SLOT(recipeChanged()));
+    connect(titleEdit, SIGNAL(textChanged(const QString&)), this, SLOT(recipeChanged(const QString&)));
+    connect(instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
     connect(addCategoryButton,SIGNAL(clicked()),this,SLOT(addCategory()));
     connect(ingredientBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotIngredientBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
+    connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
 }
 
 
@@ -549,7 +550,7 @@ if (changedSignalEnabled)
 	{
 	// Enable Save Button
 	emit enableSaveOption(true);
-	emit createButton(this);
+	emit createButton(this,titleEdit->text());
 	unsavedChanges=true;
 
 	}
