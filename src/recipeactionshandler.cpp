@@ -1,3 +1,14 @@
+/***************************************************************************
+ *   Copyright (C) 2003-2004                                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
 
 #include "recipeactionshandler.h"
 
@@ -259,12 +270,12 @@ void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const 
 void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog* fd = new KFileDialog( QString::null,
-	i18n("*.kre|Compressed Krecipes file (*.kre)\n"
-	"*.kreml|Krecipes file (*.kreml)\n"
-	//"*.cml|CookML file (*.cml)\n"
-	"*.html|Web Page (*.html)\n"
-	"*.mmf|Meal-Master file (*.mmf)\n"
-	"*.xml|RecipeML file (*.xml)"),
+	QString("*.kre|%1 (*.kre)\n"
+	"*.kreml|Krecipes (*.kreml)\n"
+	//"*.cml|CookML (*.cml)\n"
+	"*.html|%2 (*.html)\n"
+	"*.mmf|Meal-Master (*.mmf)\n"
+	"*.xml|RecipeML (*.xml)").arg(i18n("Compressed Krecipes format")).arg(i18n("Web page")),
 	0, "export_dlg", true);
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );

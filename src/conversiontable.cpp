@@ -64,6 +64,24 @@ widgets.setAutoDelete(true);
 ConversionTable::~ConversionTable()
 {
 }
+#include <kdebug.h>
+void ConversionTable::unitRemoved(int id)
+{
+int index = unitIDs.find(&id);
+kdDebug()<<"index:" <<index<<endl;
+removeRow(index);
+removeColumn(index);
+kdDebug()<<"done"<<endl;
+}
+
+void ConversionTable::unitCreated(const Element &unit)
+{
+insertColumns(numCols());
+insertRows(numRows());
+unitIDs.append(new int(unit.id));
+horizontalHeader()->setLabel(numRows()-1,unit.name);
+verticalHeader()->setLabel(numCols()-1,unit.name);
+}
 
 QTableItem* ConversionTable::item( int r, int c ) const
 {
@@ -252,6 +270,163 @@ widgets.clear();
 unitIDs.clear();
 resize(0,0);
 
+}
+
+//TODO this is incomplete/wrong
+void ConversionTable::swapRows( int row1, int row2, bool swapHeader )
+{
+    //if ( swapHeader )
+	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, FALSE );
+
+    QPtrVector<QTableItem> tmpContents;
+    tmpContents.resize( numCols() );
+    QPtrVector<QWidget> tmpWidgets;
+    tmpWidgets.resize( numCols() );
+    int i;
+
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( FALSE );
+    for ( i = 0; i < numCols(); ++i ) {
+	QTableItem *i1, *i2;
+	i1 = item( row1, i );
+	i2 = item( row2, i );
+	if ( i1 || i2 ) {
+	    tmpContents.insert( i, i1 );
+	    items.remove( indexOf( row1, i ) );
+	    items.insert( indexOf( row1, i ), i2 );
+	    items.remove( indexOf( row2, i ) );
+	    items.insert( indexOf( row2, i ), tmpContents[ i ] );
+	    if ( items[ indexOf( row1, i ) ] )
+		items[ indexOf( row1, i ) ]->setRow( row1 );
+	    if ( items[ indexOf( row2, i ) ] )
+		items[ indexOf( row2, i ) ]->setRow( row2 );
+	}
+
+	QWidget *w1, *w2;
+	w1 = cellWidget( row1, i );
+	w2 = cellWidget( row2, i );
+	if ( w1 || w2 ) {
+	    tmpWidgets.insert( i, w1 );
+	    widgets.remove( indexOf( row1, i ) );
+	    widgets.insert( indexOf( row1, i ), w2 );
+	    widgets.remove( indexOf( row2, i ) );
+	    widgets.insert( indexOf( row2, i ), tmpWidgets[ i ] );
+	}
+    }
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( TRUE );
+
+    //updateRowWidgets( row1 );
+    //updateRowWidgets( row2 );
+    /*
+    if ( curRow == row1 )
+	curRow = row2;
+    else if ( curRow == row2 )
+	curRow = row1;
+    if ( editRow == row1 )
+	editRow = row2;
+    else if ( editRow == row2 )
+	editRow = row1;*/
+}
+
+//TODO this is incomplete/wrong
+void ConversionTable::swapColumns( int col1, int col2, bool swapHeader )
+{
+    //if ( swapHeader )
+	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, FALSE );
+
+    QPtrVector<QTableItem> tmpContents;
+    tmpContents.resize( numRows() );
+    QPtrVector<QWidget> tmpWidgets;
+    tmpWidgets.resize( numRows() );
+    int i;
+
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( FALSE );
+    for ( i = 0; i < numRows(); ++i ) {
+	QTableItem *i1, *i2;
+	i1 = item( i, col1 );
+	i2 = item( i, col2 );
+	if ( i1 || i2 ) {
+	    tmpContents.insert( i, i1 );
+	    items.remove( indexOf( i, col1 ) );
+	    items.insert( indexOf( i, col1 ), i2 );
+	    items.remove( indexOf( i, col2 ) );
+	    items.insert( indexOf( i, col2 ), tmpContents[ i ] );
+	    if ( items[ indexOf( i, col1 ) ] )
+		items[ indexOf( i, col1 ) ]->setCol( col1 );
+	    if ( items[ indexOf( i, col2 ) ] )
+		items[ indexOf( i, col2 ) ]->setCol( col2 );
+	}
+
+	QWidget *w1, *w2;
+	w1 = cellWidget( i, col1 );
+	w2 = cellWidget( i, col2 );
+	if ( w1 || w2 ) {
+	    tmpWidgets.insert( i, w1 );
+	    widgets.remove( indexOf( i, col1 ) );
+	    widgets.insert( indexOf( i, col1 ), w2 );
+	    widgets.remove( indexOf( i, col2 ) );
+	    widgets.insert( indexOf( i, col2 ), tmpWidgets[ i ] );
+	}
+    }
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( TRUE );
+
+    columnWidthChanged( col1 );
+    columnWidthChanged( col2 );
+    /*
+    if ( curCol == col1 )
+	curCol = col2;
+    else if ( curCol == col2 )
+	curCol = col1;
+    if ( editCol == col1 )
+	editCol = col2;
+    else if ( editCol == col2 )
+	editCol = col1;*/
+}
+
+//TODO this is incomplete/wrong
+void ConversionTable::swapCells( int row1, int col1, int row2, int col2 )
+{
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( FALSE );
+    QTableItem *i1, *i2;
+    i1 = item( row1, col1 );
+    i2 = item( row2, col2 );
+    if ( i1 || i2 ) {
+	QTableItem *tmp = i1;
+	items.remove( indexOf( row1, col1 ) );
+	items.insert( indexOf( row1, col1 ), i2 );
+	items.remove( indexOf( row2, col2 ) );
+	items.insert( indexOf( row2, col2 ), tmp );
+	if ( items[ indexOf( row1, col1 ) ] ) {
+	    items[ indexOf( row1, col1 ) ]->setRow( row1 );
+	    items[ indexOf( row1, col1 ) ]->setCol( col1 );
+	}
+	if ( items[ indexOf( row2, col2 ) ] ) {
+	    items[ indexOf( row2, col2 ) ]->setRow( row2 );
+	    items[ indexOf( row2, col2 ) ]->setCol( col2 );
+	}
+    }
+
+    QWidget *w1, *w2;
+    w1 = cellWidget( row1, col1 );
+    w2 = cellWidget( row2, col2 );
+    if ( w1 || w2 ) {
+	QWidget *tmp = w1;
+	widgets.remove( indexOf( row1, col1 ) );
+	widgets.insert( indexOf( row1, col1 ), w2 );
+	widgets.remove( indexOf( row2, col2 ) );
+	widgets.insert( indexOf( row2, col2 ), tmp );
+    }
+
+    //updateRowWidgets( row1 );
+    //updateRowWidgets( row2 );
+    //updateColWidgets( col1 );
+    //updateColWidgets( col2 );
+    items.setAutoDelete( FALSE );
+    widgets.setAutoDelete( TRUE );
 }
 
 #include "conversiontable.moc"

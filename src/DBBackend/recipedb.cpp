@@ -72,7 +72,7 @@ void RecipeDB::importSamples()
 	QString sample_recipes = locate("appdata", "data/samples-"+KGlobal::locale()->language()+".kreml");
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
-		kdDebug()<<"NOTICE: Samples recipes for the language \""<<KGlobal::locale()->language()<<"\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release."<<endl;
+		kdDebug()<<"NOTICE: Samples recipes for the language \""<<KGlobal::locale()->language()<<"\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release."<<endl;
 
 		sample_recipes = locate("appdata", "data/samples-en_US.kreml"); //default to English
 	}

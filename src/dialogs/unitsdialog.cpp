@@ -62,8 +62,12 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
 
     //TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
-    connect(database,SIGNAL(unitCreated(const Element&)),SLOT(loadConversionTable()));
-    connect(database,SIGNAL(unitRemoved(int)),SLOT(loadConversionTable()));
+    connect(database,SIGNAL(unitCreated(const Element&)),this,SLOT(loadConversionTable()));
+    connect(database,SIGNAL(unitRemoved(int)),this,SLOT(loadConversionTable()));
+    
+    //this is for the above TODO, but it still has some bugs to be worked out
+    //connect(database,SIGNAL(unitCreated(const Element&)),conversionTable,SLOT(unitCreated(const Element&)));
+    //connect(database,SIGNAL(unitRemoved(int)),conversionTable,SLOT(unitRemoved(int)));
 
     //Populate data into the table
     loadConversionTable();

@@ -52,11 +52,17 @@ private:
  	QWidget *cellWidget( int r, int c ) const;
 	void clearCellWidget( int r, int c );
 	void initTable();
+	void swapRows(int,int,bool);
+	void swapColumns(int,int,bool);
+	void swapCells(int,int,int,int);
 protected:
 	QWidget* beginEdit ( int row, int col, bool replace );
 private slots:
 	void acceptValueAndClose(void);
 	void repaintCell(int r,int c);
+	
+	void unitRemoved(int);
+	void unitCreated(const Element&);
 signals:
 	void ratioChanged(int row, int col, double value);
 };

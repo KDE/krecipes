@@ -619,7 +619,7 @@ loadUnitListCombo();
 void RecipeInputDialog::changePhoto(void)
 {
 // standard filedialog
-    KURL filename = KFileDialog::getOpenURL(QString::null, i18n("*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)"), this);
+    KURL filename = KFileDialog::getOpenURL(QString::null, QString("*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)").arg(i18n("Images")), this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
       // If photo is bigger than the label, or smaller in width, than photoLabel, scale it
@@ -816,6 +816,8 @@ bool RecipeInputDialog::checkBounds()
 		prepMethodBox->lineEdit()->selectAll();
 		return false;
 	}
+
+	return true;
 }
 
 void RecipeInputDialog::addIngredient(void)
