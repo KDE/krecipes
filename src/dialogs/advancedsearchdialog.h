@@ -22,19 +22,17 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class QWidgetStack;
+class QTabWidget;
 class QWidget;
-class QGroupBox;
+class QCheckBox;
+class QFrame;
 class QComboBox;
-class QListView;
 class QListViewItem;
 class QPushButton;
-class QCheckBox;
-class QCheckListItem;
+class QGroupBox;
 class QSpinBox;
-class QFrame;
 class QTimeEdit;
-
+class KPushButton;
 class KListView;
 
 class RecipeDB;
@@ -128,65 +126,71 @@ public:
 	virtual void languageChange();
 
 private:
-	QWidgetStack* widgetStack;
-	QWidget* searchPage;
-	QPushButton* searchButton;
-	QGroupBox* categoriesBox;
+	QTabWidget* paramsTabWidget;
+	QWidget* ingTab;
+	QCheckBox* enableIngCheckBox;
+	QFrame* ingredientsFrame;
+	QComboBox* ingTypeComboBox;
+	DualIngredientListView* ingListView;
+	QPushButton* ingSelectAllButton;
+	QPushButton* ingUnselectAllButton;
+	QWidget* catTab;
+	QCheckBox* enableCatCheckBox;
 	QFrame* categoriesFrame;
 	QComboBox* catTypeComboBox;
 	DualCategoryListView* catListView;
 	QPushButton* catSelectAllButton;
 	QPushButton* catUnselectAllButton;
-	QGroupBox* ingredientsBox;
-	QFrame* ingredientsFrame;
-	DualIngredientListView* ingListView;
-	QComboBox* ingTypeComboBox;
-	QPushButton* ingSelectAllButton;
-	QPushButton* ingUnselectAllButton;
-	QGroupBox* authorsBox;
-	QFrame* authorsFrame;
-	QComboBox* authorTypeComboBox;
-	QPushButton* authorUnselectAllButton;
-	QPushButton* authorSelectAllButton;
-	DualAuthorListView* authorListView;
+	QWidget* servPrepTab;
 	QGroupBox* servingsBox;
+	QCheckBox* enableServingsCheckBox;
 	QFrame* servingsFrame;
 	QComboBox* servingsComboBox;
 	QSpinBox* servingsSpinBox;
 	QGroupBox* prepTimeBox;
-	QFrame* prepTimeFrame;
+	QCheckBox* enablePrepTimeCheckBox;
+	QFrame* prepFrame;
 	QComboBox* prepTimeComboBox;
 	QTimeEdit* prepTimeEdit;
-	QWidget* resultPage;
-	QGroupBox* resultBox;
+	QWidget* authorTab;
+	QCheckBox* enableAuthorCheckBox;
+	QFrame* authorsFrame;
+	QComboBox* authorTypeComboBox;
+	DualAuthorListView* authorListView;
+	QPushButton* authorSelectAllButton;
+	QPushButton* authorUnselectAllButton;
+	KPushButton* findButton;
+	KPushButton* clearButton;
 	KListView* resultsListView;
-	QPushButton* backButton;
-	QPushButton* openButton;
-	
+
 protected:
-	QHBoxLayout* advancedSearchLayout;
-	QGridLayout* searchPageLayout;
-	QHBoxLayout* layout3;
-	QSpacerItem* searchSpacer;
-	QVBoxLayout* layout3_2;
-	QHBoxLayout* categoriesBoxLayout;
-	QGridLayout* categoriesFrameLayout;
-	QSpacerItem* catSpacer;
-	QVBoxLayout* ingredientsBoxLayout;
-	QGridLayout* ingredientsFrameLayout;
+	QVBoxLayout* AdvancedSearchDialogLayout;
+	QHBoxLayout* layout10;
+	QHBoxLayout* ingTabLayout;
+	QVBoxLayout* layout8;
+	QSpacerItem* spacer6;
+	QVBoxLayout* ingredientsFrameLayout;
+	QHBoxLayout* layout7_2;
 	QSpacerItem* ingSpacer;
-	QVBoxLayout* layout4;
-	QHBoxLayout* authorsBoxLayout;
-	QGridLayout* authorsFrameLayout;
-	QSpacerItem* authorSpacer;
-	QHBoxLayout* servingsBoxLayout;
+	QHBoxLayout* catTabLayout;
+	QVBoxLayout* layout7;
+	QSpacerItem* spacer5;
+	QVBoxLayout* categoriesFrameLayout;
+	QHBoxLayout* layout8_2;
+	QSpacerItem* catSpacer;
+	QHBoxLayout* servPrepTabLayout;
+	QVBoxLayout* servingsBoxLayout;
 	QHBoxLayout* servingsFrameLayout;
-	QHBoxLayout* prepTimeBoxLayout;
-	QHBoxLayout* prepTimeFrameLayout;
-	QVBoxLayout* resultPageLayout;
-	QHBoxLayout* resultBoxLayout;
-	QHBoxLayout* resultsButtonsLayout;
-	QSpacerItem* resultsSpacer;
+	QVBoxLayout* prepTimeBoxLayout;
+	QHBoxLayout* prepFrameLayout;
+	QHBoxLayout* authorTabLayout;
+	QVBoxLayout* layout6;
+	QSpacerItem* spacer4;
+	QVBoxLayout* authorsFrameLayout;
+	QHBoxLayout* layout3;
+	QSpacerItem* authorSpacer;
+	QVBoxLayout* layout9;
+	QSpacerItem* spacer7;
 
 	RecipeDB *database;
 
@@ -195,7 +199,6 @@ signals:
 	
 private slots:
 	void search();
-	void back();
 
 	void selectAllAuthors();
 	void selectAllCategories();

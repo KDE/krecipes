@@ -10,21 +10,22 @@
 
 #include "advancedsearchdialog.h"
 
-#include <qcheckbox.h>
+#include <qvariant.h>
 #include <qpushbutton.h>
-#include <qwidgetstack.h>
+#include <qtabwidget.h>
 #include <qwidget.h>
-#include <qgroupbox.h>
+#include <qcheckbox.h>
+#include <qframe.h>
 #include <qcombobox.h>
 #include <qheader.h>
+#include <qlistview.h>
+#include <qgroupbox.h>
+#include <qspinbox.h>
+#include <qdatetimeedit.h>
+#include <kpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qspinbox.h>
-#include <qframe.h>
-#include <qdatetimeedit.h>
-#include <qvbox.h>
-#include <qglobal.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -335,162 +336,107 @@ void DualCategoryListView::mergeCategories(int id1, int id2)
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),
   database(db)
 {
-	setSizePolicy( QSizePolicy::Ignored,QSizePolicy::Ignored );
-
-	///AUTOMATICALLY GENERATED GUI CODE///
-	advancedSearchLayout = new QHBoxLayout( this, 0, 0, "advancedSearchLayout"); 
+	///
+	///BEGIN OF AUTOMATICALLY GENERATED GUI CODE///
+	///
+	AdvancedSearchDialogLayout = new QVBoxLayout( this, 11, 6, "AdvancedSearchDialogLayout"); 
 	
-	widgetStack = new QWidgetStack( this, "widgetStack" );
+	layout10 = new QHBoxLayout( 0, 0, 6, "layout10"); 
 	
-	searchPage = new QWidget( widgetStack, "searchPage" );
-	searchPageLayout = new QGridLayout( searchPage, 1, 1, 11, 6, "searchPageLayout"); 
+	paramsTabWidget = new QTabWidget( this, "paramsTabWidget" );
 	
-	layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
-	searchSpacer = new QSpacerItem( 575, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout3->addItem( searchSpacer );
+	ingTab = new QWidget( paramsTabWidget, "ingTab" );
+	ingTabLayout = new QHBoxLayout( ingTab, 11, 6, "ingTabLayout"); 
 	
-	searchButton = new QPushButton( searchPage, "searchButton" );
-	layout3->addWidget( searchButton );
+	layout8 = new QVBoxLayout( 0, 0, 6, "layout8"); 
 	
-	searchPageLayout->addMultiCellLayout( layout3, 1, 1, 0, 1 );
+	enableIngCheckBox = new QCheckBox( ingTab, "enableIngCheckBox" );
+	layout8->addWidget( enableIngCheckBox );
+	spacer6 = new QSpacerItem( 21, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout8->addItem( spacer6 );
+	ingTabLayout->addLayout( layout8 );
 	
-	layout3_2 = new QVBoxLayout( 0, 0, 6, "layout3_2"); 
-	
-	categoriesBox = new QGroupBox( searchPage, "categoriesBox" );
-	categoriesBox->setAlignment( int( QGroupBox::AlignTop ) );
-	#if QT_VERSION >= 0x030200
-	categoriesBox->setCheckable( TRUE );
-	categoriesBox->setChecked( FALSE );
-	#endif
-	categoriesBox->setColumnLayout(0, Qt::Vertical );
-	categoriesBox->layout()->setSpacing( 6 );
-	categoriesBox->layout()->setMargin( 11 );
-	categoriesBoxLayout = new QHBoxLayout( categoriesBox->layout() );
-	categoriesBoxLayout->setAlignment( Qt::AlignTop );
-	
-	categoriesFrame = new QFrame( categoriesBox, "categoriesFrame" );
-	categoriesFrame->setFrameShape( QFrame::StyledPanel );
-	categoriesFrame->setFrameShadow( QFrame::Raised );
-	categoriesFrame->setLineWidth( 0 );
-	categoriesFrameLayout = new QGridLayout( categoriesFrame, 1, 1, 0, 0, "categoriesFrameLayout"); 
-	catSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	categoriesFrameLayout->addItem( catSpacer, 2, 2 );
-	
-	catTypeComboBox = new QComboBox( FALSE, categoriesFrame, "catTypeComboBox" );
-	
-	categoriesFrameLayout->addMultiCellWidget( catTypeComboBox, 0, 0, 0, 2 );
-	
-	catListView = new DualCategoryListView( categoriesFrame, database );
-	catListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, catListView->sizePolicy().hasHeightForWidth() ) );
-	
-	categoriesFrameLayout->addMultiCellWidget( catListView, 1, 1, 0, 2 );
-	
-	catSelectAllButton = new QPushButton( categoriesFrame, "catSelectAllButton" );
-	
-	categoriesFrameLayout->addWidget( catSelectAllButton, 2, 0 );
-	
-	catUnselectAllButton = new QPushButton( categoriesFrame, "catUnselectAllButton" );
-	
-	categoriesFrameLayout->addWidget( catUnselectAllButton, 2, 1 );
-	categoriesBoxLayout->addWidget( categoriesFrame );
-	layout3_2->addWidget( categoriesBox );
-	
-	ingredientsBox = new QGroupBox( searchPage, "ingredientsBox" );
-	ingredientsBox->setMinimumSize( QSize( 0, 0 ) );
-	ingredientsBox->setAlignment( int( QGroupBox::AlignTop ) );
-	#if QT_VERSION >= 0x030200
-	ingredientsBox->setCheckable( TRUE );
-	ingredientsBox->setChecked( FALSE );
-	#endif
-	ingredientsBox->setColumnLayout(0, Qt::Vertical );
-	ingredientsBox->layout()->setSpacing( 6 );
-	ingredientsBox->layout()->setMargin( 11 );
-	ingredientsBoxLayout = new QVBoxLayout( ingredientsBox->layout() );
-	ingredientsBoxLayout->setAlignment( Qt::AlignTop );
-	
-	ingredientsFrame = new QFrame( ingredientsBox, "ingredientsFrame" );
-	ingredientsFrame->setFrameShape( QFrame::StyledPanel );
-	ingredientsFrame->setFrameShadow( QFrame::Raised );
+	ingredientsFrame = new QFrame( ingTab, "ingredientsFrame" );
+	ingredientsFrame->setEnabled( FALSE );
+	ingredientsFrame->setFrameShape( QFrame::NoFrame );
+	ingredientsFrame->setFrameShadow( QFrame::Plain );
 	ingredientsFrame->setLineWidth( 0 );
-	ingredientsFrameLayout = new QGridLayout( ingredientsFrame, 1, 1, 0, 0, "ingredientsFrameLayout"); 
-	
-	ingListView = new DualIngredientListView( ingredientsFrame, database );
-	ingListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, ingListView->sizePolicy().hasHeightForWidth() ) );
-	
-	ingredientsFrameLayout->addMultiCellWidget( ingListView, 1, 1, 0, 2 );
+	ingredientsFrameLayout = new QVBoxLayout( ingredientsFrame, 0, 0, "ingredientsFrameLayout"); 
 	
 	ingTypeComboBox = new QComboBox( FALSE, ingredientsFrame, "ingTypeComboBox" );
+	ingredientsFrameLayout->addWidget( ingTypeComboBox );
 	
-	ingredientsFrameLayout->addMultiCellWidget( ingTypeComboBox, 0, 0, 0, 2 );
-	ingSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	ingredientsFrameLayout->addItem( ingSpacer, 2, 2 );
+	ingListView = new DualIngredientListView( ingredientsFrame, database );
+	ingListView->setAllColumnsShowFocus( TRUE );
+	ingredientsFrameLayout->addWidget( ingListView );
+	
+	layout7_2 = new QHBoxLayout( 0, 0, 6, "layout7_2"); 
 	
 	ingSelectAllButton = new QPushButton( ingredientsFrame, "ingSelectAllButton" );
-	
-	ingredientsFrameLayout->addWidget( ingSelectAllButton, 2, 0 );
+	layout7_2->addWidget( ingSelectAllButton );
 	
 	ingUnselectAllButton = new QPushButton( ingredientsFrame, "ingUnselectAllButton" );
+	layout7_2->addWidget( ingUnselectAllButton );
+	ingSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	layout7_2->addItem( ingSpacer );
+	ingredientsFrameLayout->addLayout( layout7_2 );
+	ingTabLayout->addWidget( ingredientsFrame );
+	paramsTabWidget->insertTab( ingTab, QString("") );
 	
-	ingredientsFrameLayout->addWidget( ingUnselectAllButton, 2, 1 );
-	ingredientsBoxLayout->addWidget( ingredientsFrame );
-	layout3_2->addWidget( ingredientsBox );
+	catTab = new QWidget( paramsTabWidget, "catTab" );
+	catTabLayout = new QHBoxLayout( catTab, 11, 6, "catTabLayout"); 
 	
-	searchPageLayout->addLayout( layout3_2, 0, 0 );
+	layout7 = new QVBoxLayout( 0, 0, 6, "layout7"); 
 	
-	layout4 = new QVBoxLayout( 0, 0, 6, "layout4"); 
+	enableCatCheckBox = new QCheckBox( catTab, "enableCatCheckBox" );
+	layout7->addWidget( enableCatCheckBox );
+	spacer5 = new QSpacerItem( 51, 111, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout7->addItem( spacer5 );
+	catTabLayout->addLayout( layout7 );
 	
-	authorsBox = new QGroupBox( searchPage, "authorsBox" );
-	authorsBox->setAlignment( int( QGroupBox::AlignTop ) );
-	#if QT_VERSION >= 0x030200
-	authorsBox->setCheckable( TRUE );
-	authorsBox->setChecked( FALSE );
-	#endif
-	authorsBox->setColumnLayout(0, Qt::Vertical );
-	authorsBox->layout()->setSpacing( 6 );
-	authorsBox->layout()->setMargin( 11 );
-	authorsBoxLayout = new QHBoxLayout( authorsBox->layout() );
-	authorsBoxLayout->setAlignment( Qt::AlignTop );
+	categoriesFrame = new QFrame( catTab, "categoriesFrame" );
+	categoriesFrame->setEnabled( FALSE );
+	categoriesFrame->setFrameShape( QFrame::NoFrame );
+	categoriesFrame->setFrameShadow( QFrame::Plain );
+	categoriesFrame->setLineWidth( 0 );
+	categoriesFrameLayout = new QVBoxLayout( categoriesFrame, 0, 0, "categoriesFrameLayout"); 
 	
-	authorsFrame = new QFrame( authorsBox, "authorsFrame" );
-	authorsFrame->setFrameShape( QFrame::StyledPanel );
-	authorsFrame->setFrameShadow( QFrame::Raised );
-	authorsFrame->setLineWidth( 0 );
-	authorsFrameLayout = new QGridLayout( authorsFrame, 1, 1, 0, 0, "authorsFrameLayout"); 
+	catTypeComboBox = new QComboBox( FALSE, categoriesFrame, "catTypeComboBox" );
+	categoriesFrameLayout->addWidget( catTypeComboBox );
 	
-	authorTypeComboBox = new QComboBox( FALSE, authorsFrame, "authorTypeComboBox" );
+	catListView = new DualCategoryListView( categoriesFrame, database );
+	catListView->setAllColumnsShowFocus( TRUE );
+	categoriesFrameLayout->addWidget( catListView );
 	
-	authorsFrameLayout->addMultiCellWidget( authorTypeComboBox, 0, 0, 0, 2 );
+	layout8_2 = new QHBoxLayout( 0, 0, 6, "layout8_2"); 
 	
-	authorUnselectAllButton = new QPushButton( authorsFrame, "authorUnselectAllButton" );
+	catSelectAllButton = new QPushButton( categoriesFrame, "catSelectAllButton" );
+	layout8_2->addWidget( catSelectAllButton );
 	
-	authorsFrameLayout->addWidget( authorUnselectAllButton, 2, 1 );
-	authorSpacer = new QSpacerItem( 5, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	authorsFrameLayout->addItem( authorSpacer, 2, 2 );
+	catUnselectAllButton = new QPushButton( categoriesFrame, "catUnselectAllButton" );
+	layout8_2->addWidget( catUnselectAllButton );
+	catSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	layout8_2->addItem( catSpacer );
+	categoriesFrameLayout->addLayout( layout8_2 );
+	catTabLayout->addWidget( categoriesFrame );
+	paramsTabWidget->insertTab( catTab, QString("") );
 	
-	authorSelectAllButton = new QPushButton( authorsFrame, "authorSelectAllButton" );
+	servPrepTab = new QWidget( paramsTabWidget, "servPrepTab" );
+	servPrepTabLayout = new QHBoxLayout( servPrepTab, 11, 6, "servPrepTabLayout"); 
 	
-	authorsFrameLayout->addWidget( authorSelectAllButton, 2, 0 );
-	
-	authorListView = new DualAuthorListView( authorsFrame, database );
-	authorListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)2, (QSizePolicy::SizeType)2, 0, 0, authorListView->sizePolicy().hasHeightForWidth() ) );
-	
-	authorsFrameLayout->addMultiCellWidget( authorListView, 1, 1, 0, 2 );
-	authorsBoxLayout->addWidget( authorsFrame );
-	layout4->addWidget( authorsBox );
-	
-	servingsBox = new QGroupBox( searchPage, "servingsBox" );
+	servingsBox = new QGroupBox( servPrepTab, "servingsBox" );
 	servingsBox->setAlignment( int( QGroupBox::AlignVCenter ) );
-	#if QT_VERSION >= 0x030200
-	servingsBox->setCheckable( TRUE );
-	servingsBox->setChecked( FALSE );
-	#endif
 	servingsBox->setColumnLayout(0, Qt::Vertical );
 	servingsBox->layout()->setSpacing( 6 );
 	servingsBox->layout()->setMargin( 11 );
-	servingsBoxLayout = new QHBoxLayout( servingsBox->layout() );
+	servingsBoxLayout = new QVBoxLayout( servingsBox->layout() );
 	servingsBoxLayout->setAlignment( Qt::AlignTop );
 	
+	enableServingsCheckBox = new QCheckBox( servingsBox, "enableServingsCheckBox" );
+	servingsBoxLayout->addWidget( enableServingsCheckBox );
+	
 	servingsFrame = new QFrame( servingsBox, "servingsFrame" );
+	servingsFrame->setEnabled( FALSE );
 	servingsFrame->setFrameShape( QFrame::StyledPanel );
 	servingsFrame->setFrameShadow( QFrame::Raised );
 	servingsFrame->setLineWidth( 0 );
@@ -504,98 +450,116 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsSpinBox->setMinValue( 1 );
 	servingsFrameLayout->addWidget( servingsSpinBox );
 	servingsBoxLayout->addWidget( servingsFrame );
-	layout4->addWidget( servingsBox );
+	servPrepTabLayout->addWidget( servingsBox );
 	
-	prepTimeBox = new QGroupBox( searchPage, "prepTimeBox" );
-	prepTimeBox->setAlignment( int( QGroupBox::AlignVCenter ) );
-	#if QT_VERSION >= 0x030200
-	prepTimeBox->setCheckable( TRUE );
-	prepTimeBox->setChecked( FALSE );
-	#endif
+	prepTimeBox = new QGroupBox( servPrepTab, "prepTimeBox" );
+	prepTimeBox->setAlignment( int( QGroupBox::WordBreak | QGroupBox::AlignJustify | QGroupBox::AlignCenter | QGroupBox::AlignRight | QGroupBox::AlignLeft ) );
 	prepTimeBox->setColumnLayout(0, Qt::Vertical );
 	prepTimeBox->layout()->setSpacing( 6 );
 	prepTimeBox->layout()->setMargin( 11 );
-	prepTimeBoxLayout = new QHBoxLayout( prepTimeBox->layout() );
+	prepTimeBoxLayout = new QVBoxLayout( prepTimeBox->layout() );
 	prepTimeBoxLayout->setAlignment( Qt::AlignTop );
 	
-	prepTimeFrame = new QFrame( prepTimeBox, "prepTimeFrame" );
-	prepTimeFrame->setFrameShape( QFrame::StyledPanel );
-	prepTimeFrame->setFrameShadow( QFrame::Raised );
-	prepTimeFrame->setLineWidth( 0 );
-	prepTimeFrameLayout = new QHBoxLayout( prepTimeFrame, 0, 0, "prepTimeFrameLayout"); 
+	enablePrepTimeCheckBox = new QCheckBox( prepTimeBox, "enablePrepTimeCheckBox" );
+	prepTimeBoxLayout->addWidget( enablePrepTimeCheckBox );
 	
-	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame, "prepTimeComboBox" );
+	prepFrame = new QFrame( prepTimeBox, "prepFrame" );
+	prepFrame->setEnabled( FALSE );
+	prepFrame->setFrameShape( QFrame::NoFrame );
+	prepFrame->setFrameShadow( QFrame::Plain );
+	prepFrame->setLineWidth( 0 );
+	prepFrameLayout = new QHBoxLayout( prepFrame, 0, 0, "prepFrameLayout"); 
+	
+	prepTimeComboBox = new QComboBox( FALSE, prepFrame, "prepTimeComboBox" );
 	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
-	prepTimeFrameLayout->addWidget( prepTimeComboBox );
+	prepFrameLayout->addWidget( prepTimeComboBox );
 	
-	prepTimeEdit = new QTimeEdit( prepTimeFrame, "prepTimeEdit" );
+	prepTimeEdit = new QTimeEdit( prepFrame, "prepTimeEdit" );
 	prepTimeEdit->setDisplay( int( QTimeEdit::Minutes | QTimeEdit::Hours ) );
-	prepTimeFrameLayout->addWidget( prepTimeEdit );
-	prepTimeBoxLayout->addWidget( prepTimeFrame );
-	layout4->addWidget( prepTimeBox );
+	prepFrameLayout->addWidget( prepTimeEdit );
+	prepTimeBoxLayout->addWidget( prepFrame );
+	servPrepTabLayout->addWidget( prepTimeBox );
+	paramsTabWidget->insertTab( servPrepTab, QString("") );
 	
-	searchPageLayout->addLayout( layout4, 0, 1 );
-	widgetStack->addWidget( searchPage, 0 );
+	authorTab = new QWidget( paramsTabWidget, "authorTab" );
+	authorTabLayout = new QHBoxLayout( authorTab, 11, 6, "authorTabLayout"); 
 	
-	resultPage = new QWidget( widgetStack, "resultPage" );
-	resultPageLayout = new QVBoxLayout( resultPage, 11, 6, "resultPageLayout"); 
+	layout6 = new QVBoxLayout( 0, 0, 6, "layout6"); 
 	
-	resultBox = new QGroupBox( resultPage, "resultBox" );
-	resultBox->setColumnLayout(0, Qt::Vertical );
-	resultBox->layout()->setSpacing( 6 );
-	resultBox->layout()->setMargin( 11 );
-	resultBoxLayout = new QHBoxLayout( resultBox->layout() );
-	resultBoxLayout->setAlignment( Qt::AlignTop );
+	enableAuthorCheckBox = new QCheckBox( authorTab, "enableAuthorCheckBox" );
+	layout6->addWidget( enableAuthorCheckBox );
+	spacer4 = new QSpacerItem( 21, 141, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout6->addItem( spacer4 );
+	authorTabLayout->addLayout( layout6 );
 	
-	resultsListView = new KListView( resultBox, "resultsListView" );
-	resultsListView->addColumn( i18n( "Recipe" ) );
+	authorsFrame = new QFrame( authorTab, "authorsFrame" );
+	authorsFrame->setEnabled( FALSE );
+	authorsFrame->setFrameShape( QFrame::StyledPanel );
+	authorsFrame->setFrameShadow( QFrame::Raised );
+	authorsFrame->setLineWidth( 0 );
+	authorsFrameLayout = new QVBoxLayout( authorsFrame, 0, 0, "authorsFrameLayout"); 
+	
+	authorTypeComboBox = new QComboBox( FALSE, authorsFrame, "authorTypeComboBox" );
+	authorsFrameLayout->addWidget( authorTypeComboBox );
+	
+	authorListView = new DualAuthorListView( authorsFrame, database );
+	authorListView->setAllColumnsShowFocus( TRUE );
+	authorsFrameLayout->addWidget( authorListView );
+	
+	layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
+	
+	authorSelectAllButton = new QPushButton( authorsFrame, "authorSelectAllButton" );
+	layout3->addWidget( authorSelectAllButton );
+	
+	authorUnselectAllButton = new QPushButton( authorsFrame, "authorUnselectAllButton" );
+	layout3->addWidget( authorUnselectAllButton );
+	authorSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	layout3->addItem( authorSpacer );
+	authorsFrameLayout->addLayout( layout3 );
+	authorTabLayout->addWidget( authorsFrame );
+	paramsTabWidget->insertTab( authorTab, QString("") );
+	layout10->addWidget( paramsTabWidget );
+	
+	layout9 = new QVBoxLayout( 0, 0, 6, "layout9"); 
+	
+	findButton = new KPushButton( this, "findButton" );
+	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
+	layout9->addWidget( findButton );
+	
+	clearButton = new KPushButton( this, "clearButton" );
+	clearButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, clearButton->sizePolicy().hasHeightForWidth() ) );
+	layout9->addWidget( clearButton );
+	spacer7 = new QSpacerItem( 21, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout9->addItem( spacer7 );
+	layout10->addLayout( layout9 );
+	AdvancedSearchDialogLayout->addLayout( layout10 );
+	
+	resultsListView = new KListView( this, "resultsListView" );
+	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
+	AdvancedSearchDialogLayout->addWidget( resultsListView );
+	languageChange();
+	clearWState( WState_Polished );
+	///
+	///END OF AUTOMATICALLY GENERATED GUI CODE///
+	///
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry("ShowID",false);
+	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n("Id"), show_id ? -1 : 0 );
 
-	resultsListView->setAllColumnsShowFocus( TRUE );
-	resultBoxLayout->addWidget( resultsListView );
-	resultPageLayout->addWidget( resultBox );
-	
-	resultsButtonsLayout = new QHBoxLayout( 0, 0, 6, "resultsButtonsLayout"); 
-	resultsSpacer = new QSpacerItem( 521, 31, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	resultsButtonsLayout->addItem( resultsSpacer );
-	
-	backButton = new QPushButton( resultPage, "backButton" );
-	resultsButtonsLayout->addWidget( backButton );
-	
-	openButton = new QPushButton( resultPage, "openButton" );
-	resultsButtonsLayout->addWidget( openButton );
-	resultPageLayout->addLayout( resultsButtonsLayout );
-	widgetStack->addWidget( resultPage, 1 );
-	advancedSearchLayout->addWidget( widgetStack );
-	languageChange();
-	clearWState( WState_Polished );
-	///END OF AUTOMATICALLY GENERATED GUI CODE///
-
-	KIconLoader *il=new KIconLoader;
-	openButton->setIconSet(il->loadIcon("ok", KIcon::NoGroup,16));
-	backButton->setIconSet(il->loadIcon("back", KIcon::NoGroup,16));
-	searchButton->setIconSet(il->loadIcon("find", KIcon::NoGroup,16));
-	
-
-	authorsFrame->setEnabled(false);
-	categoriesFrame->setEnabled(false);
-	ingredientsFrame->setEnabled(false);
-	servingsFrame->setEnabled(false);
-	
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::Export);
 
-	connect( searchButton, SIGNAL(clicked()), SLOT(search()) );
-	connect( backButton, SIGNAL(clicked()), SLOT(back()) );
-	#if QT_VERSION >= 0x030200
-	connect( authorsBox, SIGNAL(toggled(bool)), authorsFrame, SLOT(setEnabled(bool)) );
-	connect( categoriesBox, SIGNAL(toggled(bool)), categoriesFrame, SLOT(setEnabled(bool)) );
-	connect( ingredientsBox, SIGNAL(toggled(bool)), ingredientsFrame, SLOT(setEnabled(bool)) );
-	connect( servingsBox, SIGNAL(toggled(bool)), servingsFrame, SLOT(setEnabled(bool)) );
-	#endif
+	connect( findButton, SIGNAL(clicked()), SLOT(search()) );
+	connect( clearButton, SIGNAL(clicked()), resultsListView, SLOT(clear()) );
+
+	connect( enableAuthorCheckBox, SIGNAL(toggled(bool)), authorsFrame, SLOT(setEnabled(bool)) );
+	connect( enableCatCheckBox, SIGNAL(toggled(bool)), categoriesFrame, SLOT(setEnabled(bool)) );
+	connect( enableIngCheckBox, SIGNAL(toggled(bool)), ingredientsFrame, SLOT(setEnabled(bool)) );
+	connect( enableServingsCheckBox, SIGNAL(toggled(bool)), servingsFrame, SLOT(setEnabled(bool)) );
+	connect( enablePrepTimeCheckBox, SIGNAL(toggled(bool)), prepFrame, SLOT(setEnabled(bool)) );
+
 	connect( authorTypeComboBox, SIGNAL(activated(int)), authorListView, SLOT(change(int)) );
 	connect( ingTypeComboBox, SIGNAL(activated(int)), ingListView, SLOT(change(int)) );
 	connect( catTypeComboBox, SIGNAL(activated(int)), catListView, SLOT(change(int)) );
@@ -606,8 +570,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( catUnselectAllButton, SIGNAL(clicked()), SLOT(unselectAllCategories()) );
 	connect( ingUnselectAllButton, SIGNAL(clicked()), SLOT(unselectAllIngredients()) );
 	connect( actionHandler, SIGNAL(recipeSelected(int,int)),SIGNAL(recipeSelected(int,int)) );
-	
-	connect( openButton, SIGNAL(clicked()), actionHandler, SLOT(open()) );
 
 	reload();
 }
@@ -618,45 +580,55 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 
 void AdvancedSearchDialog::languageChange()
 {
-	searchButton->setText( i18n( "Search" ) );
-	categoriesBox->setTitle( i18n( "Categories" ) );
+	enableIngCheckBox->setText( i18n( "Enabled" ) );
+	ingTypeComboBox->clear();
+	ingTypeComboBox->insertItem( i18n( "Use:" ) );
+	ingTypeComboBox->insertItem( i18n( "Do not use:" ) );
+	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses or doesn't use certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
+	ingListView->header()->setLabel( 0, i18n( "Name" ) );
+	ingListView->header()->setLabel( 1, i18n( "Id" ) );
+	ingSelectAllButton->setText( i18n( "Select All" ) );
+	ingUnselectAllButton->setText( i18n( "Unselect All" ) );
+	paramsTabWidget->changeTab( ingTab, i18n( "Ingredients" ) );
+	enableCatCheckBox->setText( i18n( "Enabled" ) );
 	catTypeComboBox->clear();
 	catTypeComboBox->insertItem( i18n( "Belong to:" ) );
 	catTypeComboBox->insertItem( i18n( "Do not belong to:" ) );
 	QWhatsThis::add( catTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe belongs to certain categories.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
+	catListView->header()->setLabel( 0, i18n( "Name" ) );
+	catListView->header()->setLabel( 1, i18n( "Id" ) );
 	catSelectAllButton->setText( i18n( "Select All" ) );
 	catUnselectAllButton->setText( i18n( "Unselect All" ) );
-	authorsBox->setTitle( i18n( "Authors" ) );
-	authorTypeComboBox->clear();
-	authorTypeComboBox->insertItem( i18n( "By:" ) );
-	authorTypeComboBox->insertItem( i18n( "Not by:" ) );
-	QWhatsThis::add( authorTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe is by certain authors.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
-	authorUnselectAllButton->setText( i18n( "Unselect All" ) );
-	authorSelectAllButton->setText( i18n( "Select All" ) );
+	paramsTabWidget->changeTab( catTab, i18n( "Categories" ) );
 	servingsBox->setTitle( i18n( "Servings" ) );
+	enableServingsCheckBox->setText( i18n( "Enabled" ) );
 	servingsComboBox->clear();
 	servingsComboBox->insertItem( i18n( "Serves at least:" ) );
 	servingsComboBox->insertItem( i18n( "Serves at most:" ) );
 	servingsComboBox->insertItem( i18n( "Serves exactly:" ) );
-	servingsComboBox->insertItem( i18n( "Serves about:" ) );
 	prepTimeBox->setTitle( i18n( "Preparation Time" ) );
+	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
 	prepTimeComboBox->clear();
 	prepTimeComboBox->insertItem( i18n( "Ready in at least:" ) );
-	prepTimeComboBox->insertItem( i18n( "Ready in at most:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready in more than:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in exactly:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
-	ingredientsBox->setTitle( i18n( "Ingredients" ) );
-	ingTypeComboBox->clear();
-	ingTypeComboBox->insertItem( i18n( "Use:" ) );
-	ingTypeComboBox->insertItem( i18n( "Do not use:" ) );
-	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses or does not use certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
-	ingSelectAllButton->setText( i18n( "Select All" ) );
-	ingUnselectAllButton->setText( i18n( "Unselect All" ) );
-	resultBox->setTitle( i18n( "Search Results" ) );
-	resultsListView->header()->setLabel( 0, i18n( "Recipe" ) );
-	resultsListView->header()->setLabel( 1, i18n( "Id" ) );
-	backButton->setText( i18n( "Back" ) );
-	openButton->setText( i18n( "Open" ) );
+	paramsTabWidget->changeTab( servPrepTab, i18n( "Servings/Preparation Time" ) );
+	enableAuthorCheckBox->setText( i18n( "Enabled" ) );
+	authorTypeComboBox->clear();
+	authorTypeComboBox->insertItem( i18n( "By:" ) );
+	authorTypeComboBox->insertItem( i18n( "Not by:" ) );
+	QWhatsThis::add( authorTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe is by certain authors.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
+	authorListView->header()->setLabel( 0, i18n( "Name" ) );
+	authorListView->header()->setLabel( 1, i18n( "Id" ) );
+	authorSelectAllButton->setText( i18n( "Select All" ) );
+	authorUnselectAllButton->setText( i18n( "Unselect All" ) );
+	paramsTabWidget->changeTab( authorTab, i18n( "Authors" ) );
+	findButton->setText( i18n( "Find" ) );
+	clearButton->setText( i18n( "C&lear" ) );
+	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
+	resultsListView->header()->setLabel( 0, i18n( "Id" ) );
+	resultsListView->header()->setLabel( 1, i18n( "Title" ) );
 }
 
 void AdvancedSearchDialog::selectAllAuthors()
@@ -738,9 +710,7 @@ void AdvancedSearchDialog::search()
 	RecipeList allRecipes; database->loadRecipeDetails( &allRecipes, true, true, false, true );
 	
 	//narrow down by servings
-	#if QT_VERSION >= 0x030200
-	if ( servingsBox->isChecked() )
-	#endif
+	if ( enableServingsCheckBox->isChecked() )
 	{
 		int servings = servingsSpinBox->value();
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
@@ -764,9 +734,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by prep time
-	#if QT_VERSION >= 0x030200
-	if ( prepTimeBox->isChecked() )
-	#endif
+	if ( enablePrepTimeCheckBox->isChecked() )
 	{
 		QTime time = prepTimeEdit->time();
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
@@ -797,9 +765,7 @@ void AdvancedSearchDialog::search()
 	}
 	
 	//narrow down by authors
-	#if QT_VERSION >= 0x030200
-	if ( authorsBox->isChecked() )
-	#endif
+	if ( enableAuthorCheckBox->isChecked() )
 	{
 		authorListView->updateMap( authorTypeComboBox->currentItem() ); //the other won't have been updated yet
 
@@ -837,9 +803,7 @@ void AdvancedSearchDialog::search()
 	}
 	
 	//narrow down by categories
-	#if QT_VERSION >= 0x030200
-	if ( categoriesBox->isChecked() )
-	#endif
+	if ( enableCatCheckBox->isChecked() )
 	{
 		catListView->updateMap( catTypeComboBox->currentItem() ); //the other won't have been updated yet
 
@@ -877,9 +841,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by ingredients
-	#if QT_VERSION >= 0x030200
-	if ( ingredientsBox->isChecked() )
-	#endif
+	if ( enableIngCheckBox->isChecked() )
 	{
 		ingListView->updateMap( ingTypeComboBox->currentItem() ); //the other won't have been updated yet
 
@@ -923,13 +885,7 @@ void AdvancedSearchDialog::search()
 		(void)new RecipeListItem(resultsListView,*it);
 	}
 
-	widgetStack->raiseWidget( resultPage );
 	KApplication::restoreOverrideCursor();
-}
-
-void AdvancedSearchDialog::back()
-{
-	widgetStack->raiseWidget( searchPage );
 }
 
 #include "advancedsearchdialog.moc"
