@@ -1,14 +1,20 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (confederacy2@excite.com)                              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #include "selectrecipedialog.h"
+
+#include <qsignalmapper.h>
 #include <klocale.h>
+
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
@@ -84,6 +90,8 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 loadRecipeList();
 loadCategoryCombo();
 
+// Initialize some internal variables
+isFilteringCategories=false;
 
 // Signals & Slots
 
@@ -98,6 +106,7 @@ connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QSt
 connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()));
 connect(recipeListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(open()));
 connect(recipeListView,SIGNAL(contextMenu (KListView *, QListViewItem *, const QPoint &)),this, SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
+connect(categoryBox,SIGNAL(activated(int)),this,SLOT(filterComboCategory(int)));
 }
 
 
@@ -172,7 +181,8 @@ if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),2);
 
 void SelectRecipeDialog::reload()
 {
-this->loadRecipeList();
+loadRecipeList();
+loadCategoryCombo();
 }
 
 void SelectRecipeDialog::filter(const QString& s)
@@ -192,7 +202,10 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 		{
 		if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
 
-		else if (cit->text(2).contains(s,false)) cit->setVisible(true);
+		else if (cit->text(2).contains(s,false)) {
+								cit->setVisible(true);
+								if (!isFilteringCategories) it->setOpen(true);
+								}
 
 		else cit->setVisible(false);
 
@@ -208,7 +221,8 @@ void SelectRecipeDialog::filterCategories(int categoryID)
 {
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	if (it!=categoryItems[categoryID]) it->setVisible(false);
+	if (categoryID==-1) it->setVisible(true); // We're not filtering categories
+	else if (it!=categoryItems[categoryID]) it->setVisible(false);
 	else it->setVisible(true);
 	}
 
@@ -222,10 +236,14 @@ void SelectRecipeDialog::loadCategoryCombo(void)
 
 ElementList categoryList;
 database->loadCategories(&categoryList);
-
+int row=0;
+categoryBox->clear();
+categoryComboRows.clear();
 for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
 	{
 	categoryBox->insertItem(category->name);
+	categoryComboRows.insert(row,&category->id); // store category id's in the combobox position to obtain the category id later
+	row++;
 	}
 
 }
@@ -270,3 +288,25 @@ void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint
   }
 }
 
+void SelectRecipeDialog::filterComboCategory(int row)
+{
+//First get the category ID corresponding to this combo row
+int categoryID=*categoryComboRows[row];
+
+//Now filter
+filterCategories(categoryID); // if categoryID==-1 doesn't filter
+
+
+
+// Indicate that we are filtering by category so that
+// the rest of the trees are not opened while filtering recipes
+
+if (categoryID>=0)
+{
+// Open the corresponding category tree
+categoryItems[categoryID]->setOpen(true);
+isFilteringCategories=true;
+}
+else isFilteringCategories=false;
+
+}

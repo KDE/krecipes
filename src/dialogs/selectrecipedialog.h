@@ -1,12 +1,15 @@
-/***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ /**************************************************************************
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn(confederacy2@excite.com)                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #ifndef SELECTRECIPEDIALOG_H
 #define SELECTRECIPEDIALOG_H
 
@@ -15,6 +18,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcursor.h>
 
 #include <kcombobox.h>
 #include <qintdict.h>
@@ -40,8 +44,8 @@ class SelectRecipeDialog : public QWidget
 Q_OBJECT
 public:
     SelectRecipeDialog(QWidget *parent, RecipeDB *db);
-
     ~SelectRecipeDialog();
+
 
   //Public Methods
   void reload(void);
@@ -67,7 +71,8 @@ private:
   ElementList *recipeList;
   ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
   QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
-
+  QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
+  bool isFilteringCategories;
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);
@@ -83,6 +88,7 @@ private slots:
   void filter(const QString &s);
   void filterCategories(int categoryID);
   void showPopup( KListView *, QListViewItem *, const QPoint & );
+  void filterComboCategory(int row);
 public slots:
   void exportRecipe();
   void haveSelectedItems();
