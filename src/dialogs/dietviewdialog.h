@@ -11,6 +11,7 @@
 #ifndef DIETVIEWDIALOG_H
 #define DIETVIEWDIALOG_H
 
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qwidget.h>
@@ -29,9 +30,18 @@ private:
 	QGridLayout *layout;
 	QVBox *htmlBox;
 	KHTMLPart *dietView;
+	QHBox *buttonBox;
+	QPushButton *okButton;
+	QPushButton *printButton;
+	QPushButton *cancelButton;
 
 	// Private methods
 	void showDiet(const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers);
+private slots:
+	void print(void);
+	void slotOk(void);
+signals:
+	void signalOk(void);
 };
 
 #endif

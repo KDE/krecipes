@@ -12,7 +12,6 @@
 
 #include "dietwizarddialog.h"
 #include "DBBackend/recipedb.h"
-#include "datablocks/recipelist.h"
 #include "dietviewdialog.h"
 #include "editbox.h"
 
@@ -36,6 +35,7 @@ DietWizardDialog::DietWizardDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 database=db;
 mealNumber=1;
 dayNumber=1;
+dietRList=new RecipeList();
 
 //Design the dialog
 setSpacing(10);
@@ -94,6 +94,7 @@ connect(okButton,SIGNAL(clicked()),this,SLOT(createDiet()));
 
 DietWizardDialog::~DietWizardDialog()
 {
+delete dietRList;
 }
 
 void DietWizardDialog::reload(void)
@@ -146,7 +147,7 @@ else
 void DietWizardDialog::createDiet(void)
 {
 RecipeList rlist;
-RecipeList dietRList;
+dietRList->clear();
 // Get the whole list of recipes, detailed
 database->loadRecipeDetails(&rlist,true,true);
 
@@ -172,7 +173,7 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 				RecipeList::Iterator rit=tempRList.at(random_index);
 				if (found=(((!categoryFiltering(meal,dish)) ||checkCategories(*rit,meal,dish)) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
 				{
-				dietRList.append(*rit);// Add recipe to the diet list
+				dietRList->append(*rit);// Add recipe to the diet list
 				}
 
 				// Remove this analized recipe from teh list
@@ -200,7 +201,8 @@ else // show the resulting diet
 	}
 
 	// display the list
-	DietViewDialog *dietDisplay=new DietViewDialog(0,dietRList,dayNumber,mealNumber,dishNumbers);
+	DietViewDialog *dietDisplay=new DietViewDialog(0,*dietRList,dayNumber,mealNumber,dishNumbers);
+	connect(dietDisplay,SIGNAL(signalOk()),this,SLOT(createShoppingList()));
 	dietDisplay->show();
 	}
 
@@ -741,4 +743,14 @@ for (Constraint* ct=constraints.getFirst();ct; ct=constraints.getNext())
 		}
 	}
 return true;
+}
+
+void DietWizardDialog::createShoppingList(void)
+{
+emit dietReady();
+}
+
+RecipeList& DietWizardDialog::dietList(void)
+{
+return *dietRList;
 }

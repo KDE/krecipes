@@ -39,6 +39,7 @@ class EditBox;
 class MealInput;
 class DishInput;
 class DishTitle;
+class RecipeList;
 
 /**
 @author Unai Garro
@@ -62,6 +63,7 @@ private:
 	int dayNumber;
 	ElementList categoriesList;
 	IngredientPropertyList propertyList;
+	RecipeList *dietRList;
 	//Widgets
 	QHBox *optionsBox;
 	QVGroupBox *mealsSliderBox;
@@ -87,10 +89,15 @@ private:
 public:
 	//Methods
 	void reload(void);
+	RecipeList& dietList(void);
+
 private slots:
 	void changeDayNumber(int dn);
 	void changeMealNumber(int mn);
 	void createDiet(void);
+	void createShoppingList(void);
+signals:
+	void dietReady(void);
 };
 
 class MealInput:public QWidget{

@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "dietviewdialog.h"
-
+#include <kiconloader.h>
 #include <klocale.h>
 
 DietViewDialog::DietViewDialog(QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers):QWidget(parent)
@@ -31,6 +31,17 @@ DietViewDialog::DietViewDialog(QWidget *parent, const RecipeList &recipeList, in
  	// The html part
  htmlBox=new QVBox (this); layout->addWidget(htmlBox,1,1);
  dietView=new KHTMLPart(htmlBox);
+ 	// Buttons
+ KIconLoader il;
+ buttonBox=new QHBox(htmlBox); layout->addWidget(buttonBox,1,2);
+ okButton=new QPushButton(il.loadIconSet("ok",KIcon::Small),i18n("Create &Shopping List"),buttonBox);
+ printButton=new QPushButton(il.loadIconSet("fileprint",KIcon::Small),i18n("&Print"),buttonBox);
+ cancelButton=new QPushButton(il.loadIconSet("cancel",KIcon::Small),i18n("&Cancel"),buttonBox);
+
+
+ connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()) );
+ connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()) );
+ connect(printButton, SIGNAL(clicked()), this, SLOT(print()) );
 
  // Show the diet
  showDiet(recipeList,dayNumber,mealNumber,dishNumbers);
@@ -115,4 +126,15 @@ resize(QSize(600,400));
 dietView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where photos and logos can be stored
 dietView->write(htmlCode);
 dietView->end();
+}
+
+void DietViewDialog::print(void)
+{
+	dietView->view()->print();
+}
+
+void DietViewDialog::slotOk(void)
+{
+emit signalOk();
+close();
 }
