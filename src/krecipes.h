@@ -97,6 +97,7 @@ private:
 private:
 	// Internal variables
 	KAction *saveAction;
+	KAction *saveAsAction;
 
 private slots:
 	void enableSaveOption(bool en=true);

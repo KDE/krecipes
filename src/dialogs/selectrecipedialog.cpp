@@ -80,7 +80,7 @@ connect(editButton,SIGNAL(clicked()),this, SLOT(edit()));
 connect(removeButton,SIGNAL(clicked()),this, SLOT(remove()));
 connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const QString&)));
 connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
-connect(recipeListView,SIGNAL(seletionChanged()),this, SLOT(haveSelectedItems()));
+connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()));
 }
 
 
@@ -200,7 +200,7 @@ void SelectRecipeDialog::exportRecipe()
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
-  if(recipeListView->selectedItem() != 0){
+  if(recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() ){
     emit recipeSelected(true);
   }
   else{
