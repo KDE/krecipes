@@ -151,14 +151,24 @@ int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
 
 class ConstraintsListItem:public QCheckListItem{
 public:
-	ConstraintsListItem(QListView* klv, IngredientProperty *pty ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox){ ptyStored=new IngredientProperty(pty);}
+	ConstraintsListItem(QListView* klv, IngredientProperty *pty ):QCheckListItem(klv,QString::null,QCheckListItem::CheckBox)
+		{
+		// Initialize the constraint data with the the property data
+		ctStored=new Constraint();
+		ctStored->id=pty->id;
+		ctStored->name=pty->name;
+		ctStored->perUnit=pty->perUnit;
+		ctStored->units=pty->units;
+		ctStored->max=0;
+		ctStored->min=0;
+		}
 private:
-	IngredientProperty *ptyStored;
+	Constraint *ctStored;
 
 public:
 	virtual QString text(int column) const
 		{
-		if (column==1) return(ptyStored->name);
+		if (column==1) return(ctStored->name);
 		else if (column==2) return(QString("0.0"));
 		else if (column==3) return(QString("0.0"));
 
@@ -167,7 +177,7 @@ public:
 		}
 	~ConstraintsListItem(void)
 	{
-	delete ptyStored;
+	delete ctStored;
 	}
 };
 
