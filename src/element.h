@@ -30,6 +30,9 @@ public:
 
     /** Compare two elements by their id */
     bool operator==(const Element &) const;
+    
+    /** Compare (sort) by name */
+    bool operator<(const Element &e) const { return name < e.name; }
 };
 
 #endif
