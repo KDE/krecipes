@@ -12,4 +12,4 @@ libkrecipesimporters_la_METASOURCES=AUTO
 
 #the library search path.
 libkrecipesimporters_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-noinst_HEADERS = kremanager.h kreimporter.h
+noinst_HEADERS = kreimporter.h
