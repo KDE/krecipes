@@ -462,6 +462,9 @@ rightPanel->raiseWidget(dietPanel);
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
 #if HAVE_MYSQL
+
+if (dbtype=="MySQL")
+{
 MySQLRecipeDB *db;
 
 if (!adminPass.isNull())
@@ -477,6 +480,7 @@ if (!adminPass.isNull())
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
 delete db; //it closes the db automatically
+}
 #endif // HAVE_MYSQL
 }
 
