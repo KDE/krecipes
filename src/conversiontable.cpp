@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,12 +101,12 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	// value of the item (its text), with the value of the combobox
     if ( w->inherits( "EditBox" ) )
 	{
-	//if (eb->accepted)
-	//	{
+	if (eb->accepted)
+		{
 		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
 		if (row()!=col()) emit signalSymmetric(row(),col(),eb->value()); // Signal to make symmetric. just in case, check if row,col are different (it shouldn't be editable, anyway)
-	//	}
+		}
 	}
     else
 	QTableItem::setContentFromEditor( w );
@@ -114,11 +114,6 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 
 void ConversionTableItem::setText( const QString &s )
 {
-
-	if (eb) {
-	// initialize the editbox from the text
-	eb->setValue(s.toDouble());
-	}
 	QTableItem::setText(s);
 }
 QString ConversionTable::text(int r, int c ) const			 // without this function, the usual (text(r,c)) won't work
@@ -187,8 +182,16 @@ QTable::beginEdit(row,col,replace);
 
 void ConversionTable::makeSymmetric(int r,int c,double amount)
 {
+
 QTableItem *it;
-it=item(c,r);
+
+// If there's no item, create it first.
+if (!(it=item(c,r)))
+	{
+	createNewItem(c,r,0); // Create the new item
+	it=item(c,r); // And get the pointer
+	}
+
 if (amount)
 (( ConversionTableItem *) it)->setTextAndSave(QString::number(1.0/amount)); // Change value and store in database
 else
@@ -197,6 +200,7 @@ else
 
 void ConversionTableItem::setTextAndSave(const QString &s)
 {
+std::cerr<<s<<"\n";
 setText(s); // Change text
 emit signalRepaintCell(row(),col()); // Indicate to update the cell to the table. Otherwise it's not repainted
 emit ratioChanged(row(),col(),s.toDouble()); // Signal to store

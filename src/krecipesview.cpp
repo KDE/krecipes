@@ -84,7 +84,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
 
-    rightPanel->raiseWidget(viewPanel);
+    rightPanel->raiseWidget(selectPanel);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
@@ -94,8 +94,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
 
-
-    inputPanel->loadRecipe(1);
 
 }
 
