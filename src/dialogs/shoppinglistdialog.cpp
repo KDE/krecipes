@@ -63,6 +63,12 @@ ShoppingListDialog::~ShoppingListDialog()
 
 void ShoppingListDialog::reloadRecipeList(void)
 {
+ElementList recipeList;
+recipeListView->clear();
+database->loadRecipeList(&recipeList);
+
+for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext() )
+	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
 }
 
 void ShoppingListDialog::reload(void)
