@@ -4,6 +4,10 @@
 
 #include "krecipesview.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <iostream>
 
 #include <qpainter.h>
@@ -30,7 +34,8 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
-#include "DBBackend/recipedb.h"
+#include "DBBackend/mysqlrecipedb.h"
+#include "DBBackend/literecipedb.h"
 #include "menugroup.h"
 
 KrecipesView::KrecipesView(QWidget *parent)
@@ -45,7 +50,12 @@ KrecipesView::KrecipesView(QWidget *parent)
     QString user=config->readEntry( "Username",QString::null);
     QString pass=config->readEntry("Password",QString::null);
     QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+    #ifdef USE_MYSQL_DATABASE
     database=new MySQLRecipeDB(host,user,pass,dbname);
+    #endif //USE_MYSQL_DATABASE
+    #ifdef USE_SQLITE_DATABASE
+    database=new LiteRecipeDB(host,user,pass,dbname);
+    #endif //USE_SQLITE_DATABASE
 
     splitter=new QSplitter(this);
 

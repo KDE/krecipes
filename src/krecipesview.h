@@ -22,7 +22,7 @@
 #include <qwidgetstack.h>
 
 #include "importers/baseimporter.h"
-#include "DBBackend/mysqlrecipedb.h"
+#include "DBBackend/recipedb.h"
 
 class RecipeInputDialog;
 class RecipeViewDialog;
@@ -137,7 +137,7 @@ private:
 	QWidget *recipeWidget;
 
 	// Internal variables
-	MySQLRecipeDB *database;
+	RecipeDB *database;
 
   // i18n
   void translate();
