@@ -678,6 +678,7 @@ amountEdit->setValue(0.0);
 ingredientList->clear();
 authorShow->clear();
 categoryShow->clear();
+servingsNumInput->setValue(1);
 }
 
 void RecipeInputDialog::reloadCombos(void) //Reloads lists of ingredients and units
