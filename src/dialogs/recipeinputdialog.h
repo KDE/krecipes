@@ -93,6 +93,13 @@ private:
 	KPushButton* removeButton;
 	KPushButton* addButton;
 
+	//Function buttons
+	QGroupBox* functionsBox;
+	QPushButton* saveButton;
+	QPushButton* closeButton;
+	QPushButton* showButton;
+	QPushButton* shopButton;
+
 	// Internal functions
 	void createNewIngredientIfNecessary();
 	void createNewUnitIfNecessary();

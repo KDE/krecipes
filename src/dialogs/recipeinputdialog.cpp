@@ -100,7 +100,7 @@ database=db;
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));
     titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    recipeLayout->addMultiCellWidget(titleBox,1,1,1,6);
+    recipeLayout->addMultiCellWidget(titleBox,1,1,1,7);
 
 
     // Photo ->author spacer
@@ -148,9 +148,9 @@ database=db;
     addCategoryButton->setFixedSize(QSize(20,20));
     addCategoryButton->setFlat(true);
 
-    //Author ->Servings spacer
-    QSpacerItem* author_servings = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    recipeLayout->addItem(author_servings,6,4 );
+    //Category ->Servings spacer
+    QSpacerItem* category_servings = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    recipeLayout->addItem(category_servings,5,4 );
 
     QVBox *servingsBox = new QVBox(recipeTab);
     servingsBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
@@ -160,16 +160,18 @@ database=db;
     servingsNumInput = new KIntNumInput(servingsBox);
     servingsNumInput->setMinValue(1);
 
-    recipeLayout->addWidget(servingsBox,5,4);
+    recipeLayout->addWidget(servingsBox,6,4);
 
 
 
-
-
-    //Author ->instructions spacer
-    /*QSpacerItem* author_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(author_spacer,4,5 );*/
-
+    // Functions Box
+    functionsBox=new QGroupBox(recipeTab);
+    functionsBox->setColumns(3);
+    recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
+    saveButton=new QPushButton(functionsBox);
+    showButton=new QPushButton(functionsBox);
+    shopButton=new QPushButton(functionsBox);
+    closeButton=new QPushButton(functionsBox);
     //------- Ingredients Tab -----------------
 
     ingredientGBox =new QGroupBox(this);
@@ -279,8 +281,8 @@ database=db;
     tabWidget->changeTab( ingredientGBox, tr2i18n( "Ingredients" ) );
     tabWidget->changeTab( instructionsEdit, tr2i18n( "Instructions" ) );
 
+
     // Dialog design
-    //resize( QSize(700, 500).expandedTo(minimumSizeHint()) );
     tabWidget->resize( size().expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
 
