@@ -128,7 +128,7 @@ void Krecipes::setupActions()
                                   this, SLOT(optionsPreferences()),
                                   actionCollection(), "custom_action");
 
-    KAction *import = new KAction(i18n("Import..."), 0,
+    KAction *import = new KAction(i18n("Import..."), CTRL+Key_I,
                                   this, SLOT(import()),
                                   actionCollection(), "import_action");
 
