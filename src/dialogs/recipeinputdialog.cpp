@@ -18,6 +18,7 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include "recipeinputdialog.h"
 #include "selectauthorsdialog.h"
 #include "recipe.h"
@@ -173,7 +174,7 @@ database=db;
     functionsBox=new QGroupBox(recipeTab);
     functionsBox->setColumns(3);
     recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
-    saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small));
+    saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small)); saveButton->setEnabled(false);
     showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
     shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
@@ -323,6 +324,7 @@ database=db;
     connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
     connect (showButton,SIGNAL(clicked()),this,SLOT(show()));
     connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
+    connect (this, SIGNAL(enableSaveOption(bool)),this,SLOT(enableSaveButton(bool)));
 }
 
 
@@ -768,4 +770,35 @@ for (Element *el=loadedRecipe->authorList.getFirst();el;el=loadedRecipe->authorL
 	authors+=el->name;
 	}
 authorShow->setText(authors);
+}
+
+void RecipeInputDialog::enableSaveButton(bool enabled)
+{
+saveButton->setEnabled(enabled);
+}
+
+void RecipeInputDialog::close()
+{
+
+// First check if there's anything unsaved in the recipe
+ if (unsavedChanges)
+ 	{
+
+	switch( KMessageBox::questionYesNoCancel( this,i18n("This recipe contains unsaved changes.\n" "Would you like to save it before closing?"),i18n("Unsaved changes") ) )
+		{
+		case KMessageBox::Yes:
+			save();
+			break;
+		case KMessageBox::No:
+			break;
+		case KMessageBox::Cancel:
+			return;
+		}
+
+	}
+
+// Now close really
+emit closeRecipe();
+
+
 }

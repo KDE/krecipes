@@ -127,14 +127,17 @@ private:
 	void addCategory(void);
 	void addAuthor(void);
 	void slotIngredientBoxLostFocus(void);
+	void enableSaveButton(bool enabled);
+	void close(void);
 
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
 
 	signals:
 	void changed(void);
-	void enableSaveOption(bool en=true);
+	void closeRecipe(void);
 	void createButton(QWidget* w,QString title);
+	void enableSaveOption(bool en=true);
 	void titleChanged(const QString &title);
 
 

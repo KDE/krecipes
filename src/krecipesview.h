@@ -115,7 +115,6 @@ private:
 	void initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass);
 	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
 
-
 	// Widgets
 	KIconLoader *il;
 	QSplitter *splitter;
@@ -146,13 +145,15 @@ public slots:
 	void save(void);
 
 private slots:
-    void addRecipeButton(QWidget *w, QString title);
     void actionRecipe(int recipeID, int action);
+    void addRecipeButton(QWidget *w, QString title);
+    void closeRecipe(void);
+    void resizeButtons();
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
     void slotSetDietWizardPanel(void);
     void switchToRecipe(void);
-    void resizeButtons();
+
 
 
 };

@@ -139,6 +139,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Resize signal
     connect (leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeButtons()));
 
+    // Close a recipe when requested (just switch panels)
+    connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));
+
 
 }
 
@@ -377,6 +380,11 @@ void KrecipesView::switchToRecipe(void)
 rightPanel->raiseWidget(recipeWidget);
 }
 
+void KrecipesView::closeRecipe(void)
+{
+selectPanel->reload();
+rightPanel->raiseWidget(selectPanel);
+}
 
 ////////////////// Class MenuButton Methods///////////////////
 
