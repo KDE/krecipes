@@ -54,6 +54,7 @@ kdDebug()<<"Connecting to the SQLite database\n";
 			 exit(1);
 			 }
 	 }
+	 dbOK=true;
 }
 LiteRecipeDB::~LiteRecipeDB()
 {
