@@ -14,8 +14,6 @@
 #include <qstring.h>
 
 #include "baseimporter.h"
-#include "ingredientlist.h"
-#include "elementlist.h"
 
 /** Class to import MasterCook's MXP (MasterCook Export) file format.
   * @author Jason Kivlighn
@@ -28,28 +26,16 @@ public:
 
 private:
 	void importMXP( QTextStream &stream );
+	
+	void loadCategories( QTextStream &stream, Recipe &recipe );
+	void loadIngredients( QTextStream &stream, Recipe &recipe );
+	void loadInstructions( QTextStream &stream, Recipe &recipe );
+	void loadOptionalFields( QTextStream &stream, Recipe &recipe );
+	
 	void importMac( QTextStream &stream );
 	void importGeneric( QTextStream &stream );
 
 	QString getNextQuotedString( QTextStream &stream );
-
-	void putDataInRecipe();
-
-	int m_servings;
-
-	QString m_description;
-	QString m_instructions;
-	QString m_internet;
-	QString m_notes;
-	QString m_prep_time;
-	QString m_serving_ideas;
-	QString m_source;
-	QString m_title;
-	QString m_wine;
-
-	ElementList m_authors;
-	ElementList m_categories;
-	IngredientList m_ingredients;
 };
 
 #endif //MXPIMPORTER_H

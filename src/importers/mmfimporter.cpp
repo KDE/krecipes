@@ -154,7 +154,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 			if ( current.stripWhiteSpace() != "" )
 				instruction_found = true;
 			m_instructions += current.stripWhiteSpace() + "\n";
-			kdDebug()<<"Found instruction line: "<<current.stripWhiteSpace()<<endl;
+			//kdDebug()<<"Found instruction line: "<<current.stripWhiteSpace()<<endl;
 		}
 
 		current = stream.readLine();
@@ -174,15 +174,19 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
-	if ( string.mid( 11, 1 ) == "-" && (string.mid( 0, 11 ).stripWhiteSpace() == "") ) //continuation of previous ingredient
+	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() ) //continuation of previous ingredient
 	{
-		kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
-		if ( !list.isEmpty() )
+		//kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
+		if ( !list.isEmpty() ) //so it doesn't crash when the first ingredient appears to be a continuation of another
+		{
 			(*list.at(list.count()-1)).name += " "+string.stripWhiteSpace().mid(1,string.length());
-
-		return true;
+			return true;
+		}
+		else
+			return false;
 	}
 
+	//amount
 	if ( string.mid(0,7).stripWhiteSpace() != "" )
 	{
 		bool ok;
@@ -193,9 +197,11 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			new_ingredient.amount = amount.toDouble();
 	}
 
+	//amount/unit separator
 	if ( string[7] != ' ' )
 		return false;
 
+	//unit
 	if ( string.mid( 8, 2 ).stripWhiteSpace() != "" )
 	{
 		bool is_unit = false;
@@ -224,9 +230,11 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		new_ingredient.units = unit;
 	}
 
+	//unit/name separator
 	if ( string[10] != ' ' || string[11] == ' ' )
 		return false;
 
+	//name and preparation method
 	new_ingredient.name = string.mid( 11, 32 ).stripWhiteSpace();
 
 	//if we made it this far it is an ingredient line
@@ -251,6 +259,7 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		header = header.mid( 10, header.length() - 20 );
 		kdDebug()<<"found ingredient header: "<<header<<endl;
 
+		//merge all columns before appending to full ingredient list to maintain the ingredient order
 		for ( IngredientList::const_iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it )
 			m_all_ing.append( *ing_it );
 		m_left_col_ing.empty();
@@ -275,6 +284,17 @@ void MMFImporter::putDataInRecipe()
 		m_all_ing.append( *ing_it );
 	for ( IngredientList::const_iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it )
 		m_all_ing.append( *ing_it );
+	
+	//uncomment this when we support preparation method
+	#if 0
+	for ( IngredientList::iterator ing_it = m_all_ing.begin(); ing_it != m_all_ing.end(); ++ing_it )
+	{
+		QString name_and_prep = (*ing_it).name;
+		int separator_index = name_and_prep.find(';');
+		(*ing_it).name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
+		(*ing_it).prep_method = = name_and_prep.mid( separator_index+1, name_and_prep.length() ).stripWhiteSpace();
+	}
+	#endif
 
 	//create the recipe
 	Recipe new_recipe;
