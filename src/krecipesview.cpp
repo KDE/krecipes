@@ -412,6 +412,7 @@ void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
 rightPanel->raiseWidget(selectPanel);
+delete recipeButton; recipeButton=0;
 }
 
 void KrecipesView::showRecipe(int recipeID)
