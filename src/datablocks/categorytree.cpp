@@ -55,8 +55,7 @@ void CategoryTree::takeItem( CategoryTree *tree )
 {
 	for ( CategoryTreeChildren::iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
 		if ( ( *child_it ) == tree ) {
-			m_children->remove
-			( child_it );
+			m_children->remove( child_it );
 			break;
 		}
 	}

@@ -93,12 +93,12 @@ void DualAuthorListView::createAuthor( const Element &author )
 
 void DualAuthorListView::removeAuthor( int id )
 {
-	QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( id ), 1 );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 
 	Element author; author.id = id; //don't use item->author() since 'item' may not exist
 	negativeSelections.remove( author );
 	positiveSelections.remove( author );
-	delete item;
+	removeElement(item);
 }
 
 void DualAuthorListView::stateChange( AuthorCheckListItem *it, bool on )
@@ -172,12 +172,12 @@ void DualIngredientListView::createIngredient( const Element &ing )
 
 void DualIngredientListView::removeIngredient( int id )
 {
-	IngredientCheckListItem * item = ( IngredientCheckListItem* ) findItem( QString::number( id ), 1 );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 
 	Element ing; ing.id = id; //don't use item->ingredient() since 'item' may not exist
 	negativeSelections.remove( ing );
 	positiveSelections.remove( ing );
-	delete item;
+	removeElement(item);
 }
 
 
@@ -211,7 +211,7 @@ void DualCategoryListView::change( int index )
 
 void DualCategoryListView::createCategory( const Element &category, int parent_id )
 {
-	CategoryCheckListItem * new_item;
+	CategoryCheckListItem * new_item = 0;
 	if ( parent_id == -1 ) {
 		new_item = new CategoryCheckListItem( this, category, false );
 		createElement(new_item);
@@ -223,24 +223,23 @@ void DualCategoryListView::createCategory( const Element &category, int parent_i
 			new_item = new CategoryCheckListItem( parent, category, false );
 	}
 
-	new_item->setOpen( true );
+	if ( new_item )
+		new_item->setOpen( true );
 }
 
 void DualCategoryListView::removeCategory( int id )
 {
-	QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( id ), 1 );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 
 	Element cat; cat.id = id; //don't use item->category() since 'item' may not exist
 	negativeSelections.remove( cat );
 	positiveSelections.remove( cat );
-	delete item;
+	removeElement(item);
 }
 
 void DualCategoryListView::modifyCategory( const Element &category )
 {
 	QListViewItem * item = findItem( QString::number( category.id ), 1 );
-
-	Q_ASSERT( item );
 
 	item->setText( 0, category.name );
 }
@@ -248,17 +247,17 @@ void DualCategoryListView::modifyCategory( const Element &category )
 void DualCategoryListView::modifyCategory( int id, int parent_id )
 {
 	QListViewItem * item = findItem( QString::number( id ), 1 );
-	if ( !item->parent() )
-		takeItem( item );
-	else
-		item->parent() ->takeItem( item );
+	if ( item ) {
+		if ( !item->parent() )
+			takeItem( item );
+		else
+			item->parent() ->takeItem( item );
 
-	Q_ASSERT( item );
-
-	if ( parent_id == -1 )
-		insertItem( item );
-	else
-		findItem( QString::number( parent_id ), 1 ) ->insertItem( item );
+		if ( parent_id == -1 )
+			insertItem( item );
+		else
+			findItem( QString::number( parent_id ), 1 ) ->insertItem( item );
+	}
 }
 
 void DualCategoryListView::mergeCategories( int id1, int id2 )
@@ -266,13 +265,15 @@ void DualCategoryListView::mergeCategories( int id1, int id2 )
 	CategoryCheckListItem * to_item = ( CategoryCheckListItem* ) findItem( QString::number( id1 ), 1 );
 	CategoryCheckListItem *from_item = ( CategoryCheckListItem* ) findItem( QString::number( id2 ), 1 );
 
-	//note that this takes care of any recipes that may be children as well
-	QListViewItem *next_sibling;
-	for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
-		next_sibling = it->nextSibling(); //get the sibling before we move the item
-
-		from_item->takeItem( it );
-		to_item->insertItem( it );
+	if ( to_item && from_item ) {
+		//note that this takes care of any recipes that may be children as well
+		QListViewItem *next_sibling;
+		for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
+			next_sibling = it->nextSibling(); //get the sibling before we move the item
+	
+			from_item->takeItem( it );
+			to_item->insertItem( it );
+		}
 	}
 
 	removeCategory( id2 );
