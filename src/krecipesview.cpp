@@ -37,11 +37,11 @@
 #include "unitsdialog.h"
 #include "gui/kstartuplogo.h"
 
-#ifdef HAVE_MYSQL
+#if HAVE_MYSQL
 #include "DBBackend/mysqlrecipedb.h"
 #endif
 
-#ifdef HAVE_SQLITE
+#if HAVE_SQLITE
 #include "DBBackend/literecipedb.h"
 #endif
 
@@ -73,7 +73,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     std::cerr<<"Unrecognized database type "<<dbtype<<"\n";
     exit(1);
     }
-    #ifdef HAVE_MYSQL
+    #if HAVE_MYSQL
 
     else if(dbtype=="MySQL")  // First case, MySQL
     	{
@@ -93,7 +93,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     #endif //USE_MYSQL_DATABASE
 
 
-    #ifdef HAVE_SQLITE
+    #if HAVE_SQLITE
 
     else // SQLite case
     	{
