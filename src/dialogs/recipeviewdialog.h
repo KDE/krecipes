@@ -38,6 +38,7 @@ private:
   KHTMLPart *recipeView;
   RecipeDB  *database;
   Recipe *loadedRecipe;
+  IngredientPropertyList *properties;
 
   // Internal Methods
 

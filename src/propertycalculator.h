@@ -19,7 +19,7 @@ void calculateIngredients(RecipeDB *database, IDList &ingList, QPtrList <int> &u
 
 int autoConvert(RecipeDB *database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID);
 
-void calculateProperties(Recipe* recipe,RecipeDB* database);
+void calculateProperties(Recipe* recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList);
 
 
-void addPropertyToList(RecipeDB *database,IngredientPropertyList &recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing);
+void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing);

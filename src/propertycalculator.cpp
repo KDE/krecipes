@@ -114,9 +114,9 @@ else
 }
 
 
-void calculateProperties(Recipe* recipe,RecipeDB* database)
+void calculateProperties(Recipe* recipe,RecipeDB* database,IngredientPropertyList *recipePropertyList)
 {
-IngredientPropertyList recipePropertyList; // It's not attached to any ingredient. It's just the total
+// Note that recipePropertyList is not attached to any ingredient. It's just the total of the recipe
 IngredientPropertyList ingredientPropertyList; // property list for each ingredient
 std::cerr<<"\n\nCalculating recipe properties:\n";
 
@@ -127,7 +127,7 @@ for (Ingredient *ing=recipe->ingList.getFirst();ing;ing=recipe->ingList.getNext(
 	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing);
 	}
 
-for (IngredientProperty *prop=recipePropertyList.getFirst();prop;prop=recipePropertyList.getNext())
+for (IngredientProperty *prop=recipePropertyList->getFirst();prop;prop=recipePropertyList->getNext())
 	{
 
 	std::cerr<<QString("PropertyID: %1 Amount: %2 Units: %3 \n").arg(prop->id).arg(prop->amount).arg(prop->units);
@@ -135,16 +135,16 @@ for (IngredientProperty *prop=recipePropertyList.getFirst();prop;prop=recipeProp
 
 }
 
-void addPropertyToList(RecipeDB *database,IngredientPropertyList &recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
+void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
 {
 for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyList.getNext())
 	{
 	// Find if property was listed before
-	int pos=recipePropertyList.find(prop);
+	int pos=recipePropertyList->find(prop);
 	if (pos>=0) //Exists. Add to it
 	{
 	std::cerr<<"Adding to property: "<<prop->id<< "\n";
-	IngredientProperty *property=recipePropertyList.at(pos);
+	IngredientProperty *property=recipePropertyList->at(pos);
 	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
 
 	if (ratio>0.0) // Could convert units to perUnit
@@ -161,10 +161,10 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 	{
 	IngredientProperty*property; property=new IngredientProperty;
 	property->id=prop->id;
-	property->name=property->name;
+	property->name=prop->name;
 	property->perUnit.id=-1; // It's not per unit, it's total sum of the recipe
 	property->perUnit.name=QString::null; // "
-	property->units=property->units;
+	property->units=prop->units;
 
 	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
 
@@ -172,7 +172,7 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 		{
 		property->amount=(prop->amount)*(ing.amount)*ratio;
 		std::cerr<<(prop->amount)<<";"<<(ing.amount)<<";"<<ratio<<"\n";
-		recipePropertyList.append(property);
+		recipePropertyList->append(property);
 		}
 	else { // Could not convert units
 	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";

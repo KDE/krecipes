@@ -20,6 +20,7 @@ recipeView=new KHTMLPart(this);
 // Store/Initialize local variables
 database=db; // Store the database pointer.
 loadedRecipe=new Recipe();
+properties=new IngredientPropertyList;
 
 //----------Load  the recipe --------
 loadRecipe(recipeID);
@@ -37,11 +38,13 @@ void RecipeViewDialog::loadRecipe(int recipeID)
 {
 
 // Load specified Recipe ID
-
 database->loadRecipe(loadedRecipe,recipeID);
-showRecipe();
-calculateProperties(loadedRecipe,database);
 
+// Calculate the property list
+calculateProperties(loadedRecipe,database,properties);
+
+// Display the recipe
+showRecipe();
 }
 
 void RecipeViewDialog::showRecipe(void)
@@ -77,6 +80,20 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 250px; left:1%; width: 220px;
 			    .arg(ing->name)
 			    .arg(ing->amount)
 			    .arg(ing->units);
+       }
+recipeHTML+="</div>";
+
+// Properties Block
+
+recipeHTML+="<div STYLE=\"position: absolute; top: 550px; left:1%; width: 220px; background-color: #D4A143\">";
+    //Properties
+    IngredientProperty * prop;
+    for ( prop = properties->getFirst(); prop; prop = properties->getNext() )
+       {
+       recipeHTML+=QString("<li>%1: %2  %3</li>")
+			    .arg(prop->name)
+			    .arg(prop->amount)
+			    .arg(prop->units);
        }
 recipeHTML+="</div>";
 
