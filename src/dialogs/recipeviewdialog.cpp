@@ -176,8 +176,8 @@ recipeView->write(recipeHTML);
 recipeView->end();
 }
 
-void RecipeViewDialog::print(QPainter *p,int width, int height)
+void RecipeViewDialog::print(void)
 {
 	if ( recipeView && loadedRecipe->recipeID >= 0 )
-		recipeView->paint(p,QRect(0,0,width,height));
+		recipeView->view()->print();
 }
