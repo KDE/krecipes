@@ -91,7 +91,7 @@ public:
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
-	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false)=0; //Loads a recipe detail list (no instructions, no photo, no ingredients)
+	virtual void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false,bool loadCategories=false)=0;// Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names, just IDs
 	virtual void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0)=0;
 	virtual void loadUnits(ElementList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
