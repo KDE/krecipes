@@ -16,13 +16,16 @@
 
 #define DEFAULT_DB_NAME "Krecipes"
 
+#include <qglobal.h>
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <iostream>
+#ifdef Q_OS_LINUX
 #include <asm/unistd.h>
+#endif
 #include "recipe.h"
 #include "datablocks/recipelist.h"
 #include "elementlist.h"

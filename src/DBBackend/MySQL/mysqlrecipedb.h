@@ -17,6 +17,7 @@
 #define DB_DRIVER "QMYSQL3"
 #define DEFAULT_DB_NAME "Krecipes"
 
+#include <qglobal.h>
 #include <qobject.h>
 #include <qsqldatabase.h>
 #include <qimage.h>
@@ -24,7 +25,9 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <iostream>
+#ifdef Q_OS_LINUX
 #include <asm/unistd.h>
+#endif
 #include "recipe.h"
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
