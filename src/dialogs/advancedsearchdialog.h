@@ -165,30 +165,24 @@ private:
 
 protected:
 	QVBoxLayout* AdvancedSearchDialogLayout;
-	QHBoxLayout* layout10;
+	QHBoxLayout* layout17;
 	QHBoxLayout* ingTabLayout;
-	QVBoxLayout* layout8;
+	QVBoxLayout* layout18;
 	QSpacerItem* spacer6;
 	QVBoxLayout* ingredientsFrameLayout;
-	QHBoxLayout* layout7_2;
-	QSpacerItem* ingSpacer;
 	QHBoxLayout* catTabLayout;
-	QVBoxLayout* layout7;
+	QVBoxLayout* layout16;
 	QSpacerItem* spacer5;
 	QVBoxLayout* categoriesFrameLayout;
-	QHBoxLayout* layout8_2;
-	QSpacerItem* catSpacer;
 	QHBoxLayout* servPrepTabLayout;
 	QVBoxLayout* servingsBoxLayout;
 	QHBoxLayout* servingsFrameLayout;
 	QVBoxLayout* prepTimeBoxLayout;
 	QHBoxLayout* prepFrameLayout;
 	QHBoxLayout* authorTabLayout;
-	QVBoxLayout* layout6;
+	QVBoxLayout* layout15;
 	QSpacerItem* spacer4;
 	QVBoxLayout* authorsFrameLayout;
-	QHBoxLayout* layout3;
-	QSpacerItem* authorSpacer;
 	QVBoxLayout* layout9;
 	QSpacerItem* spacer7;
 

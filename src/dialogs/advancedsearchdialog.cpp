@@ -336,25 +336,33 @@ void DualCategoryListView::mergeCategories(int id1, int id2)
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),
   database(db)
 {
+	setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+
 	///
 	///BEGIN OF AUTOMATICALLY GENERATED GUI CODE///
 	///
 	AdvancedSearchDialogLayout = new QVBoxLayout( this, 11, 6, "AdvancedSearchDialogLayout"); 
 	
-	layout10 = new QHBoxLayout( 0, 0, 6, "layout10"); 
+	layout17 = new QHBoxLayout( 0, 0, 6, "layout17"); 
 	
 	paramsTabWidget = new QTabWidget( this, "paramsTabWidget" );
 	
 	ingTab = new QWidget( paramsTabWidget, "ingTab" );
-	ingTabLayout = new QHBoxLayout( ingTab, 11, 6, "ingTabLayout"); 
+	ingTabLayout = new QHBoxLayout( ingTab, 4, 4, "ingTabLayout"); 
 	
-	layout8 = new QVBoxLayout( 0, 0, 6, "layout8"); 
+	layout18 = new QVBoxLayout( 0, 0, 6, "layout18"); 
 	
 	enableIngCheckBox = new QCheckBox( ingTab, "enableIngCheckBox" );
-	layout8->addWidget( enableIngCheckBox );
-	spacer6 = new QSpacerItem( 21, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout8->addItem( spacer6 );
-	ingTabLayout->addLayout( layout8 );
+	layout18->addWidget( enableIngCheckBox );
+	spacer6 = new QSpacerItem( 21, 70, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout18->addItem( spacer6 );
+	
+	ingSelectAllButton = new QPushButton( ingTab, "ingSelectAllButton" );
+	layout18->addWidget( ingSelectAllButton );
+	
+	ingUnselectAllButton = new QPushButton( ingTab, "ingUnselectAllButton" );
+	layout18->addWidget( ingUnselectAllButton );
+	ingTabLayout->addLayout( layout18 );
 	
 	ingredientsFrame = new QFrame( ingTab, "ingredientsFrame" );
 	ingredientsFrame->setEnabled( FALSE );
@@ -367,32 +375,28 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientsFrameLayout->addWidget( ingTypeComboBox );
 	
 	ingListView = new DualIngredientListView( ingredientsFrame, database );
+	ingListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)5, 0, 0, ingListView->sizePolicy().hasHeightForWidth() ) );
 	ingListView->setAllColumnsShowFocus( TRUE );
 	ingredientsFrameLayout->addWidget( ingListView );
-	
-	layout7_2 = new QHBoxLayout( 0, 0, 6, "layout7_2"); 
-	
-	ingSelectAllButton = new QPushButton( ingredientsFrame, "ingSelectAllButton" );
-	layout7_2->addWidget( ingSelectAllButton );
-	
-	ingUnselectAllButton = new QPushButton( ingredientsFrame, "ingUnselectAllButton" );
-	layout7_2->addWidget( ingUnselectAllButton );
-	ingSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	layout7_2->addItem( ingSpacer );
-	ingredientsFrameLayout->addLayout( layout7_2 );
 	ingTabLayout->addWidget( ingredientsFrame );
 	paramsTabWidget->insertTab( ingTab, QString("") );
 	
 	catTab = new QWidget( paramsTabWidget, "catTab" );
-	catTabLayout = new QHBoxLayout( catTab, 11, 6, "catTabLayout"); 
+	catTabLayout = new QHBoxLayout( catTab, 4, 4, "catTabLayout"); 
 	
-	layout7 = new QVBoxLayout( 0, 0, 6, "layout7"); 
+	layout16 = new QVBoxLayout( 0, 0, 6, "layout16"); 
 	
 	enableCatCheckBox = new QCheckBox( catTab, "enableCatCheckBox" );
-	layout7->addWidget( enableCatCheckBox );
-	spacer5 = new QSpacerItem( 51, 111, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout7->addItem( spacer5 );
-	catTabLayout->addLayout( layout7 );
+	layout16->addWidget( enableCatCheckBox );
+	spacer5 = new QSpacerItem( 51, 50, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout16->addItem( spacer5 );
+	
+	catSelectAllButton = new QPushButton( catTab, "catSelectAllButton" );
+	layout16->addWidget( catSelectAllButton );
+	
+	catUnselectAllButton = new QPushButton( catTab, "catUnselectAllButton" );
+	layout16->addWidget( catUnselectAllButton );
+	catTabLayout->addLayout( layout16 );
 	
 	categoriesFrame = new QFrame( catTab, "categoriesFrame" );
 	categoriesFrame->setEnabled( FALSE );
@@ -405,19 +409,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoriesFrameLayout->addWidget( catTypeComboBox );
 	
 	catListView = new DualCategoryListView( categoriesFrame, database );
+	catListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)5, 0, 0, catListView->sizePolicy().hasHeightForWidth() ) );
 	catListView->setAllColumnsShowFocus( TRUE );
 	categoriesFrameLayout->addWidget( catListView );
-	
-	layout8_2 = new QHBoxLayout( 0, 0, 6, "layout8_2"); 
-	
-	catSelectAllButton = new QPushButton( categoriesFrame, "catSelectAllButton" );
-	layout8_2->addWidget( catSelectAllButton );
-	
-	catUnselectAllButton = new QPushButton( categoriesFrame, "catUnselectAllButton" );
-	layout8_2->addWidget( catUnselectAllButton );
-	catSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	layout8_2->addItem( catSpacer );
-	categoriesFrameLayout->addLayout( layout8_2 );
 	catTabLayout->addWidget( categoriesFrame );
 	paramsTabWidget->insertTab( catTab, QString("") );
 	
@@ -482,15 +476,21 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	paramsTabWidget->insertTab( servPrepTab, QString("") );
 	
 	authorTab = new QWidget( paramsTabWidget, "authorTab" );
-	authorTabLayout = new QHBoxLayout( authorTab, 11, 6, "authorTabLayout"); 
+	authorTabLayout = new QHBoxLayout( authorTab, 4, 4, "authorTabLayout"); 
 	
-	layout6 = new QVBoxLayout( 0, 0, 6, "layout6"); 
+	layout15 = new QVBoxLayout( 0, 0, 6, "layout15"); 
 	
 	enableAuthorCheckBox = new QCheckBox( authorTab, "enableAuthorCheckBox" );
-	layout6->addWidget( enableAuthorCheckBox );
-	spacer4 = new QSpacerItem( 21, 141, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout6->addItem( spacer4 );
-	authorTabLayout->addLayout( layout6 );
+	layout15->addWidget( enableAuthorCheckBox );
+	spacer4 = new QSpacerItem( 21, 60, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout15->addItem( spacer4 );
+	
+	authorSelectAllButton = new QPushButton( authorTab, "authorSelectAllButton" );
+	layout15->addWidget( authorSelectAllButton );
+	
+	authorUnselectAllButton = new QPushButton( authorTab, "authorUnselectAllButton" );
+	layout15->addWidget( authorUnselectAllButton );
+	authorTabLayout->addLayout( layout15 );
 	
 	authorsFrame = new QFrame( authorTab, "authorsFrame" );
 	authorsFrame->setEnabled( FALSE );
@@ -503,22 +503,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrameLayout->addWidget( authorTypeComboBox );
 	
 	authorListView = new DualAuthorListView( authorsFrame, database );
+	authorListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)5, 1, 0, authorListView->sizePolicy().hasHeightForWidth() ) );
 	authorListView->setAllColumnsShowFocus( TRUE );
 	authorsFrameLayout->addWidget( authorListView );
-	
-	layout3 = new QHBoxLayout( 0, 0, 6, "layout3"); 
-	
-	authorSelectAllButton = new QPushButton( authorsFrame, "authorSelectAllButton" );
-	layout3->addWidget( authorSelectAllButton );
-	
-	authorUnselectAllButton = new QPushButton( authorsFrame, "authorUnselectAllButton" );
-	layout3->addWidget( authorUnselectAllButton );
-	authorSpacer = new QSpacerItem( 107, 20, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	layout3->addItem( authorSpacer );
-	authorsFrameLayout->addLayout( layout3 );
 	authorTabLayout->addWidget( authorsFrame );
 	paramsTabWidget->insertTab( authorTab, QString("") );
-	layout10->addWidget( paramsTabWidget );
+	layout17->addWidget( paramsTabWidget );
 	
 	layout9 = new QVBoxLayout( 0, 0, 6, "layout9"); 
 	
@@ -531,8 +521,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout9->addWidget( clearButton );
 	spacer7 = new QSpacerItem( 21, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout9->addItem( spacer7 );
-	layout10->addLayout( layout9 );
-	AdvancedSearchDialogLayout->addLayout( layout10 );
+	layout17->addLayout( layout9 );
+	AdvancedSearchDialogLayout->addLayout( layout17 );
 	
 	resultsListView = new KListView( this, "resultsListView" );
 	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
@@ -542,6 +532,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	///
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	///
+
+	authorListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+	catListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+	ingListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
