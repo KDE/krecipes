@@ -245,9 +245,6 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Show a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(showRecipe(int)),this,SLOT(showRecipe(int)));
 
-    // Add recipe to the shopping list when requested
-    connect(inputPanel,SIGNAL(addRecipeToShoppingList(int)),shoppingListPanel,SLOT(addRecipeToShoppingList(int)));
-
     // Create a new shopping list when a new diet is generated and accepted
     connect(dietPanel,SIGNAL(dietReady()),this,SLOT(createShoppingListFromDiet()));
 
@@ -408,11 +405,13 @@ void KrecipesView::exportRecipe()
 
 void KrecipesView::actionRecipe(int recipeID, int action)
 {
-if (action==0) //Show
-	{
+switch (action) {
+case 0: //Show
+{
 	showRecipe(recipeID);
-	}
-else if (action==1) // Edit
+	break;
+}
+case 1: // Edit
 {
 	if ( !inputPanel->everythingSaved() )
 	{
@@ -431,8 +430,9 @@ else if (action==1) // Edit
 	rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 	rightPanel->raise(inputPanel);
 	setContextHelp(RecipeEdit);
+	break;
 }
-else if (action==2) //Remove
+case 2: //Remove
 {
 	switch( KMessageBox::questionYesNo( this,
 	  QString(i18n("Are you sure you want to permanently remove the selected recipe?")),
@@ -444,6 +444,13 @@ else if (action==2) //Remove
 			break;
 		case KMessageBox::No: break;
 	}
+	break;
+}
+case 3: //Add to shopping list
+{
+	shoppingListPanel->addRecipeToShoppingList(recipeID);
+	break;
+}
 }
 }
 

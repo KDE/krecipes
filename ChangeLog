@@ -1,4 +1,5 @@
 Changes from 0.5 to current CVS:
+  -Rezkonv import filter
   -Eliminated the dependence on mysql.h (mysql-devel)
   -Significant speed increases while navigating Krecipes due to the fact that reloading all data when switching dialogs is no longer necessary.
   -Support for subcategories

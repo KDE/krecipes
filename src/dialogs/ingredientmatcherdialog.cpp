@@ -20,6 +20,7 @@
 #include <qheader.h>
 #include <qpainter.h>
 #include <qstringlist.h>
+#include <qlayout.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -75,7 +76,9 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	okButton=new QPushButton(buttonBox);
 	okButton->setIconSet(il.loadIconSet("button_ok", KIcon::Small));
 	okButton->setText(i18n("Find matching recipes"));
-	
+
+	//buttonBox->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
+
 	clearButton=new QPushButton(buttonBox);
 	clearButton->setIconSet(il.loadIconSet("editclear", KIcon::Small));
 	clearButton->setText(i18n("Clear recipe list"));

@@ -114,7 +114,6 @@ private:
 	QToolButton* saveButton;
 	QToolButton* closeButton;
 	QToolButton* showButton;
-	QToolButton* shopButton;
 	QToolButton* resizeButton;
 
 	QToolButton* spellCheckButton;
@@ -154,14 +153,13 @@ private:
 	void enableSaveButton(bool enabled);
 	void closeOptions(void);
 	void showRecipe(void);
-	void addToShoppingList(void);
+
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
 	void spellCheck(void);
 	void resizeRecipe(void);
 
 	signals:
-	void addRecipeToShoppingList(int recipeID);
 	void changed(void);
 	void closeRecipe(void);
 	void createButton(QWidget* w,QString title);

@@ -38,6 +38,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove from &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
 	if ( actions & Remove )
 		kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
+	if ( actions & AddToShoppingList )
+		kpop->insertItem( il->loadIcon("trolley", KIcon::NoGroup,16),i18n("&Add to Shopping List"), this, SLOT(addToShoppingList()), CTRL+Key_A );
 	kpop->polish();
 	
 	catPop = new KPopupMenu( parentListView );
@@ -182,6 +184,15 @@ void RecipeActionsHandler::remove()
 	if ( it && it->rtti() == 1000 ) {
 		RecipeListItem *recipe_it = (RecipeListItem*)it;
 		emit recipeSelected(recipe_it->recipeID(),2);
+	}
+}
+
+void RecipeActionsHandler::addToShoppingList()
+{
+	QListViewItem *it = parentListView->selectedItem();
+	if ( it && it->rtti() == 1000 ) {
+		RecipeListItem *recipe_it = (RecipeListItem*)it;
+		emit recipeSelected(recipe_it->recipeID(),3);
 	}
 }
 

@@ -86,7 +86,6 @@ private:
 	QSlider *dayNumberSelector;
 	QTabWidget *mealTabs;
 	MealInput *mealTab; // points to the current tab
-	QHBox *buttonBox;
 	QPushButton *okButton;
 
 	//Methods

@@ -76,9 +76,10 @@ mealTabs->setMargin(20);
 // Button bar
 KIconLoader il;
 
-buttonBox=new QHBox(this);
+QHBox *bottom_layout = new QHBox(this);
+//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
-okButton=new QPushButton(buttonBox);
+okButton=new QPushButton(bottom_layout);
 okButton->setIconSet(il.loadIconSet("button_ok", KIcon::Small));
 okButton->setText(i18n("Create the diet"));
 

@@ -40,6 +40,7 @@ layout->addWidget(categoryListView,1,1);
 
 //Buttons
 buttonBar=new QHBox(this);
+//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 layout->addWidget(buttonBar,2,1);
 
 il=new KIconLoader;

@@ -36,7 +36,7 @@ Q_OBJECT
 public:
 	typedef enum ItemType { Category, Recipe };
 	typedef enum RecipeActions { 
-			AllActions =         0x00ff,
+			AllActions =         0xffff,
 			Open =               0x0001,
 			Edit =               0x0002,
 			SaveAs =             0x0004,
@@ -44,7 +44,8 @@ public:
 			Remove =             0x0010,
 			ExpandAll =          0x0020,
 			CollapseAll =        0x0040,
-			SaveCategoryAs =     0x0080
+			SaveCategoryAs =     0x0080,
+			AddToShoppingList =  0x0100
 		};
 
 	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
@@ -78,6 +79,9 @@ public slots:
 
 	/** Removes the recipe currently selected in the list view from the database */
 	void remove();
+
+	/** Add the recipe currently selected in the list view to the shopping list dialog */
+	void addToShoppingList();
 	
 	/** Expands all items in the list view */
 	void expandAll();

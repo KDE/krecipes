@@ -89,18 +89,16 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     buttonBar=new QHBox(this,"buttonBar");
     layout->addMultiCellWidget(buttonBar,6,6,1,5);
-    buttonBar->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed);
 
     okButton=new QPushButton(buttonBar,"okButton");
     okButton->setText(i18n("&OK"));
     QPixmap pm=il.loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
-    okButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
+    //buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
+    
     clearButton=new QPushButton(buttonBar,"clearButton");
     clearButton->setText(i18n("Clear"));
-    clearButton->setMaximumWidth(100);
     pm=il.loadIcon("editclear", KIcon::NoGroup,16); clearButton->setIconSet(pm);
-    clearButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
     
     //Takes care of all recipe actions and provides a popup menu to 'recipeListView'
     actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::ExpandAll | RecipeActionsHandler::CollapseAll );

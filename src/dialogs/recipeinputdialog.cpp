@@ -49,6 +49,8 @@ loadedRecipe->title=QString::null;
 loadedRecipe->instructions=QString::null;
 database=db;
 
+il=new KIconLoader;
+
 // Tabs
     tabWidget = new QTabWidget( this, "tabWidget" );
     tabWidget->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
@@ -67,7 +69,7 @@ database=db;
     //------- Recipe Tab -----------------
     // Recipe Photo
 
-    recipeTab =new QGroupBox(this);
+    recipeTab =new QGroupBox(tabWidget);
     recipeTab->setFrameStyle(QFrame::NoFrame);
     recipeTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
@@ -179,29 +181,9 @@ database=db;
 
     //------- END OF Recipe Tab ---------------
 
-    // Functions Box
-
-    il=new KIconLoader;
-
-    functionsBox=new QGroupBox(this);
-    functionsBox->setFrameStyle(QFrame::NoFrame);
-    functionsBox->setColumns(3);
-    //recipeLayout->addMultiCellWidget(functionsBox,10,10,4,8);
-    saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small)); saveButton->setEnabled(false);
-    showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
-    shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
-    closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
-    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("2uparrow", KIcon::Small)); //TODO: give me an icon :)
-
-    QToolTip::add(saveButton, i18n("Save recipe"));
-    QToolTip::add(showButton, i18n("Show recipe"));
-    QToolTip::add(shopButton,i18n("Add to shopping list"));
-    QToolTip::add(closeButton,i18n("Close"));
-    QToolTip::add(resizeButton,i18n("Resize Recipe"));
-
     //------- Ingredients Tab -----------------
 
-    ingredientGBox = new QGroupBox(this);
+    ingredientGBox = new QGroupBox(recipeTab);
     ingredientGBox->setFrameStyle(QFrame::NoFrame);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     QGridLayout* ingredientsLayout=new QGridLayout(ingredientGBox);
@@ -324,7 +306,7 @@ database=db;
 
     // ------- Recipe Instructions Tab -----------
 
-    instructionsTab = new QGroupBox(this);
+    instructionsTab = new QGroupBox(recipeTab);
     instructionsTab->setFrameStyle(QFrame::NoFrame);
     instructionsTab->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
@@ -343,13 +325,28 @@ database=db;
 
     // ------- END OF Recipe Instructions Tab -----------
 
-    tabWidget->insertTab( recipeTab, "" );
-    tabWidget->insertTab( ingredientGBox, "" );
-    tabWidget->insertTab( instructionsTab, "" );
-    tabWidget->changeTab( recipeTab, tr2i18n( "Recipe" ) );
-    tabWidget->changeTab( ingredientGBox, tr2i18n( "Ingredients" ) );
-    tabWidget->changeTab( instructionsTab, tr2i18n( "Instructions" ) );
+    tabWidget->insertTab( recipeTab, i18n( "Recipe") );
+    tabWidget->insertTab( ingredientGBox, i18n( "Ingredients" ) );
+    tabWidget->insertTab( instructionsTab,i18n( "Instructions" ) );
+    
+    
+    // Functions Box
+    QHBox* functionsLayout=new QHBox(this);
 
+    functionsBox=new QGroupBox(1,Qt::Vertical,functionsLayout);
+    functionsBox->setFrameStyle(QFrame::NoFrame);
+    
+    saveButton=new QToolButton(functionsBox); saveButton->setIconSet(il->loadIconSet("filesave", KIcon::Small)); saveButton->setEnabled(false);
+    showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
+    closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
+    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("2uparrow", KIcon::Small)); //TODO: give me an icon :)
+    
+    saveButton->setTextLabel(i18n("Save recipe"),true); saveButton->setUsesTextLabel(true);
+    showButton->setTextLabel(i18n("Show recipe"),true); showButton->setUsesTextLabel(true);
+    closeButton->setTextLabel(i18n("Close"),true); closeButton->setUsesTextLabel(true);
+    resizeButton->setTextLabel(i18n("Resize recipe"),true); resizeButton->setUsesTextLabel(true);
+    
+    functionsLayout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
     // Dialog design
     tabWidget->resize( size().expandedTo(minimumSizeHint()) );
@@ -393,7 +390,6 @@ database=db;
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
     connect (closeButton,SIGNAL(clicked()),this,SLOT(closeOptions()));
     connect (showButton,SIGNAL(clicked()),this,SLOT(showRecipe()));
-    connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
     connect (resizeButton,SIGNAL(clicked()),this,SLOT(resizeRecipe()));
     connect (spellCheckButton,SIGNAL(clicked()),this,SLOT(spellCheck()));
     connect (this, SIGNAL(enableSaveOption(bool)),this,SLOT(enableSaveButton(bool)));
@@ -1096,30 +1092,6 @@ else if (unsavedChanges)
 
 // Now open it really
 emit showRecipe(loadedRecipe->recipeID);
-}
-
-void RecipeInputDialog::addToShoppingList(void)
-{
-if (!(loadedRecipe->recipeID>=0))
-{
-switch( KMessageBox::questionYesNo( this,i18n("The recipe was not saved yet, so it cannot be added to the shopping list. Would you like to save it now?"),i18n("Unsaved changes") ) )
-		{
-		case KMessageBox::Yes:
-			save();
-			break;
-		case KMessageBox::No:
-			return;
-		}
-}
-
-emit addRecipeToShoppingList(loadedRecipe->recipeID);
-QMessageBox::information( this,
-			  i18n("Recipe added"),
-			  QString(i18n("The recipe titled \"%1\" was successfully added to the shopping list")).arg(loadedRecipe->title),
-			  QMessageBox::Ok
-			  );
-
-
 }
 
 void RecipeInputDialog::spellCheck(void)
