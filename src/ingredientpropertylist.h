@@ -42,6 +42,7 @@ public:
 
     int find(IngredientProperty* it);
     int find(int id);
+    int findByName(const QString &);
     void filter(int ingredientID,IngredientPropertyList *filteredList);
     IngredientProperty* getFirst(void);
     IngredientProperty* getNext(void);

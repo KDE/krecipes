@@ -56,6 +56,18 @@ IngredientProperty ip; ip.id=id;
 return(list.find(&ip));
 }
 
+int IngredientPropertyList::findByName(const QString &name)
+{
+IngredientProperty *prop;
+for ( prop = list.first(); prop; prop = list.next() )
+{
+	if ( prop->name == name )
+		return prop->id;
+}
+
+return -1;
+}
+
 IngredientProperty* IngredientPropertyList::at(int pos)
 {
 return(list.at(pos));
