@@ -998,6 +998,7 @@ else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id 
 
 else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
+else return;
 
 
 database->executeQuery(command);
