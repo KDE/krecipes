@@ -160,7 +160,7 @@ private:
 	void prepTitleChanged(const QString &title);
 
 	public slots:
-	void save (void); // Activated when krecipes.cpp sends signal save()
+	bool save (void); // Activated when krecipes.cpp sends signal save()
 	void spellCheck(void);
 	void resizeRecipe(void);
 

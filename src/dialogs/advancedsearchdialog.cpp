@@ -661,10 +661,15 @@ void AdvancedSearchDialog::selectAllAuthors()
 
 void AdvancedSearchDialog::selectAllCategories()
 {
-	for ( QCheckListItem *qlv_it = static_cast<QCheckListItem*>(catListView->firstChild()); qlv_it ; qlv_it = static_cast<QCheckListItem*>(qlv_it->nextSibling()) )
-	{
-		if ( qlv_it->isEnabled() )
-			qlv_it->setOn(true);
+	QCheckListItem* current_item;
+	QListViewItemIterator it( catListView );
+	while ( it.current() ) {
+		current_item = (QCheckListItem*)it.current();
+
+		if ( current_item->isEnabled() )
+			current_item->setOn(true);
+
+		++it;
 	}
 }
 

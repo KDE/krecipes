@@ -199,34 +199,20 @@ void IngredientMatcherDialog::reloadIngredients(void)
 	((StdIngredientListView*)ingredientListView->listView())->reload();
 }
 
-void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int /*width*/, int /*align*/ )
+void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int width, int /*align*/ )
 {
-	if ( column == 0 ) //we only need to do this once
-	{
-		int totalWidth=listView()->columnWidth(0)+listView()->columnWidth(1)+listView()->columnWidth(2);
-		
-		QPixmap sectionPm(totalWidth,height()); QPainter painter(&sectionPm);
-		
-		// Draw the section's deco
-		painter.setPen(KGlobalSettings::activeTitleColor());
-		painter.setBrush(KGlobalSettings::activeTitleColor());
-		painter.drawRect(0,0,totalWidth,height());
-		
-		// Draw the section's text
-		
+	// Draw the section's deco
+	p->setPen(KGlobalSettings::activeTitleColor());
+	p->setBrush(KGlobalSettings::activeTitleColor());
+	p->drawRect(0,0,width,height());
+	
+	// Draw the section's text
+	if ( column==0 ) {
 		QFont titleFont=KGlobalSettings::windowTitleFont ();
-		painter.setFont(titleFont);
-		
-		painter.setPen(KGlobalSettings::activeTextColor());
-		painter.drawText(0,0,totalWidth,height(),Qt::AlignHCenter|Qt::AlignVCenter,mText);
-		
-		// Paint only this cell (causes trouble while resizing)
-		
-		/*if (column==0) bitBlt(p->device(), 0, 0, &textPm,0,0,width,height());
-		else if (column==1) bitBlt(p->device(),listView()->columnWidth(0),0,&textPm,listView()->columnWidth(0),0,width,height());*/
-		
-		// Paint full row
-		bitBlt(p->device(), 0, listView()->contentsToViewport(QPoint(0,itemPos())).y(), &sectionPm,0,0,totalWidth,height());
+		p->setFont(titleFont);
+	
+		p->setPen(KGlobalSettings::activeTextColor());
+		p->drawText(0,0,width,height(),Qt::AlignLeft|Qt::AlignVCenter,mText);
 	}
 }
 

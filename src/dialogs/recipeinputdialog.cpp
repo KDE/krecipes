@@ -901,11 +901,20 @@ void RecipeInputDialog::enableChangedSignal(bool en)
 changedSignalEnabled=en;
 }
 
-void RecipeInputDialog::save (void)
+bool RecipeInputDialog::save (void)
 {
+//check bounds first
+if ( titleEdit->text().length() > database->maxRecipeTitleLength() )
+{
+	KMessageBox::error(this,QString(i18n("Recipe title is longer than %1 characters.")).arg(database->maxRecipeTitleLength()),i18n("Unable to save recipe"));
+	return false;
+}
+
 emit enableSaveOption(false);
 saveRecipe();
 unsavedChanges=false;
+
+return true;
 }
 
 void RecipeInputDialog::saveRecipe(void)

@@ -40,6 +40,7 @@ class AdvancedSearchDialog;
 class CategoryTree;
 class RecipeFilter;
 class RecipeListView;
+class CategoryComboBox;
 
 /**
 @author Unai Garro
@@ -68,18 +69,13 @@ private:
   KIconLoader *il;
   QLabel *searchLabel;
   KLineEdit *searchBox;
-  KComboBox *categoryBox;
+  CategoryComboBox *categoryBox;
   AdvancedSearchDialog *advancedSearch;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
-  //ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
-  QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
   RecipeActionsHandler *actionHandler;
   RecipeFilter *recipeFilter;
-
-  // Internal Methods
-  void loadCategoryCombo(void);
 
 signals:
   void recipeSelected(int id, int action);

@@ -177,7 +177,7 @@ signals:
 	void enableSaveOption(bool en);
 
 public slots:
-	void save(void);
+	bool save(void);
   void exportRecipe();
 
 private slots:

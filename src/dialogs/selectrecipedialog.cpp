@@ -32,6 +32,7 @@
 #include "recipefilter.h"
 #include "widgets/recipelistview.h"
 #include "widgets/categorylistview.h"
+#include "widgets/categorycombobox.h"
 
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
  : QWidget(parent)
@@ -41,9 +42,6 @@ database=db;
 
 //Initialize internal data
 recipeList=new ElementList;
-//categoryList=new ElementList;
-
-categoryComboRows.setAutoDelete(true);
 
 QVBoxLayout *tabLayout = new QVBoxLayout( this );
 QTabWidget *tabWidget = new QTabWidget( this );
@@ -70,7 +68,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 	searchBox=new KLineEdit(searchBar);
 
 	QSpacerItem* searchSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum); layout->addItem(searchSpacer,1,2);
-	categoryBox=new KComboBox(basicSearchTab);
+	categoryBox=new CategoryComboBox(basicSearchTab,database);
 	layout->addWidget(categoryBox,1,3);
 
 
@@ -79,6 +77,7 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 
 	il=new KIconLoader;
 	recipeListView=new RecipeListView(basicSearchTab,database);
+	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Preferred );
 	recipeListView->reload();
 	layout->addMultiCellWidget(recipeListView,3,3,1,3);
 
@@ -109,9 +108,6 @@ actionHandler = new RecipeActionsHandler( recipeListView, database );
 
 recipeFilter = new RecipeFilter( recipeListView );
 
-// Load Recipe List
-loadCategoryCombo();
-
 // Signals & Slots
 
 connect(openButton,SIGNAL(clicked()),actionHandler, SLOT(open()));
@@ -137,38 +133,10 @@ SelectRecipeDialog::~SelectRecipeDialog()
 
 void SelectRecipeDialog::reload()
 {
-QString remember_cat_filter = categoryBox->currentText();
-
 recipeListView->reload();
-loadCategoryCombo();
 
-if ( categoryBox->listBox()->findItem(remember_cat_filter,Qt::ExactMatch) ) {
-	categoryBox->setCurrentText(remember_cat_filter);
-	filterComboCategory(categoryBox->currentItem());
-}
-}
-
-void SelectRecipeDialog::loadCategoryCombo(void)
-{
-
-ElementList categoryList;
-database->loadCategories(&categoryList);
-
-categoryBox->clear();
-categoryComboRows.clear();
-
-// Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
-categoryBox->insertItem(i18n("All Categories"));
-
-//Now load the categories
-int row=1;
-for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
-	{
-	categoryBox->insertItem((*cat_it).name);
-	categoryComboRows.insert(row,new int((*cat_it).id)); // store category id's in the combobox position to obtain the category id later
-	row++;
-	}
-
+categoryBox->reload();
+filterComboCategory(categoryBox->currentItem());
 }
 
 void SelectRecipeDialog::haveSelectedItems()
@@ -195,12 +163,9 @@ void SelectRecipeDialog::filterComboCategory(int row)
 kdDebug()<<"I got row "<<row<<"\n";
 
 //First get the category ID corresponding to this combo row
-int categoryID;
-if (row) categoryID=*(categoryComboRows[row]);
-else categoryID=-1; // No category filtering
+int categoryID = categoryBox->id(row);
 
 //Now filter
-
 recipeFilter->filterCategory(categoryID); // if categoryID==-1 doesn't filter
 recipeFilter->filter(searchBox->text());
 }

@@ -365,9 +365,9 @@ else if (leftPanel->currentMenu()==dataMenu)
 	}
 }
 
-void KrecipesView::save(void)
+bool KrecipesView::save(void)
 {
-inputPanel->save();
+return inputPanel->save();
 }
 
 /*!

@@ -455,7 +455,6 @@ if ( unitToLoad.getStatus()!=QSQLiteResult::Failure ) {
 
 void LiteRecipeDB::saveRecipe(Recipe *recipe)
 {
-
 // Check if it's a new recipe or it exists (supossedly) already.
 
 bool newRecipe; newRecipe=(recipe->recipeID==-1);
@@ -578,9 +577,9 @@ for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 	}
 
 if (newRecipe)
-	emit recipeCreated(Element(recipe->title,recipeID),recipe->categoryList);
+	emit recipeCreated(Element(recipe->title.left(maxRecipeTitleLength()),recipeID),recipe->categoryList);
 else
-	emit recipeModified(Element(recipe->title,recipeID),recipe->categoryList);
+	emit recipeModified(Element(recipe->title.left(maxRecipeTitleLength()),recipeID),recipe->categoryList);
 }
 
 
@@ -660,11 +659,12 @@ emit recipeRemoved(recipeID,categoryID);
 void LiteRecipeDB::createNewIngredient(const QString &ingredientName)
 {
 QString command;
+QString real_name = ingredientName.left(maxIngredientNameLength());
 
-command=QString("INSERT INTO ingredients VALUES(NULL,'%1');").arg(escapeAndEncode(ingredientName));
+command=QString("INSERT INTO ingredients VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
 database->executeQuery(command);
 
-emit ingredientCreated(Element(ingredientName,lastInsertID()));
+emit ingredientCreated(Element(real_name,lastInsertID()));
 }
 
 void LiteRecipeDB::modIngredient(int ingredientID, QString newLabel)
@@ -879,10 +879,12 @@ void LiteRecipeDB::initializeData(void)
 void LiteRecipeDB::addProperty(const QString &name, const QString &units)
 {
 QString command;
-command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(name)).arg(escapeAndEncode(units));
+QString real_name = name.left(maxPropertyNameLength());
+
+command=QString("INSERT INTO ingredient_properties VALUES(NULL,'%1','%2');").arg(escapeAndEncode(real_name)).arg(escapeAndEncode(units));
 database->executeQuery(command);
 
-emit propertyCreated( IngredientProperty(name,units,lastInsertID()) );
+emit propertyCreated( IngredientProperty(real_name,units,lastInsertID()) );
 }
 
 void LiteRecipeDB::loadProperties(IngredientPropertyList *list,int ingredientID)
@@ -1041,11 +1043,12 @@ emit propertyCreated( propertyName(propertyID) );
 void LiteRecipeDB::createNewPrepMethod(const QString &prepMethodName)
 {
 QString command;
+QString real_name = prepMethodName.left(maxPrepMethodNameLength());
 
-command=QString("INSERT INTO prep_methods VALUES(NULL,'%1');").arg(escapeAndEncode(prepMethodName));
+command=QString("INSERT INTO prep_methods VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
 database->executeQuery(command);
 
-emit prepMethodCreated(Element(prepMethodName,lastInsertID()));
+emit prepMethodCreated(Element(real_name,lastInsertID()));
 }
 
 void LiteRecipeDB::removeUnit(int unitID)
@@ -1098,11 +1101,12 @@ emit unitRemoved(unitID);
 void LiteRecipeDB::createNewUnit(const QString &unitName)
 {
 QString command;
+QString real_name = unitName.left(maxUnitNameLength());
 
-command=QString("INSERT INTO units VALUES(NULL,'%1');").arg(escapeAndEncode(unitName));
+command=QString("INSERT INTO units VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
 database->executeQuery(command);
 
-emit unitCreated(Element(unitName,lastInsertID()));
+emit unitCreated(Element(real_name,lastInsertID()));
 }
 
 
@@ -1808,11 +1812,12 @@ QSQLiteResultRow row=categoryToLoad.first();
 void LiteRecipeDB::createNewCategory(const QString &categoryName,int parent_id)
 {
 QString command;
+QString real_name = categoryName.left(maxCategoryNameLength());
 
-command=QString("INSERT INTO categories VALUES(NULL,'%1',%2);").arg(escapeAndEncode(categoryName)).arg(parent_id);
+command=QString("INSERT INTO categories VALUES(NULL,'%1',%2);").arg(escapeAndEncode(real_name)).arg(parent_id);
 database->executeQuery( command);
 
-emit categoryCreated(Element(categoryName,lastInsertID()),parent_id);
+emit categoryCreated(Element(real_name,lastInsertID()),parent_id);
 }
 
 void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
@@ -1904,11 +1909,12 @@ QSQLiteResultRow row=authorToLoad.first();
 void LiteRecipeDB::createNewAuthor(const QString &authorName)
 {
 QString command;
+QString real_name = authorName.left(maxAuthorNameLength());
 
-command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(authorName));
+command=QString("INSERT INTO authors VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
 database->executeQuery(command);
 
-emit authorCreated(Element(authorName,lastInsertID()));
+emit authorCreated(Element(real_name,lastInsertID()));
 }
 
 void LiteRecipeDB::modAuthor(int authorID, QString newLabel)

@@ -37,6 +37,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     recipeListView=new KreListView (this,i18n("Full recipe list"),true,1);
     layout->addWidget(recipeListView,0,0);
     RecipeListView *listview = new RecipeListView(recipeListView,database);
+    listview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
     listview->reload();
     recipeListView->setListView(listview);
     recipeListView->setCustomFilter(new RecipeFilter(recipeListView->listView()),SLOT(filter(const QString &)));
@@ -60,6 +61,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addItem(vboxl,0,1);
 
     shopRecipeListView=new KreListView (this,"Shopping list");
+    shopRecipeListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
     layout->addWidget(shopRecipeListView,0,2);
     
     KConfig *config = KGlobal::config();

@@ -309,7 +309,7 @@ bool Krecipes::queryClose()
 		  "Do you want to save the changes before exiting?"),
 		  i18n("Unsaved Changes") ) )
 		{
-		case KMessageBox::Yes: m_view->save();
+		case KMessageBox::Yes: return m_view->save();
 		case KMessageBox::No: return true;
 		case KMessageBox::Cancel: return false;
 		default: return true;
