@@ -173,7 +173,8 @@ void RecipeViewDialog::createBlocks()
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
-	new_element = new DivElement( "title", loadedRecipe->title );
+	QString title_html=QString("<H1>%1</H1>").arg(loadedRecipe->title);
+	new_element = new DivElement( "title",title_html);
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -208,7 +209,7 @@ void RecipeViewDialog::createBlocks()
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
-	QString servings_html = QString(i18n("Servings: %1")).arg(loadedRecipe->persons);
+	QString servings_html = QString("<b>%1: </b>%2").arg(i18n("Servings")).arg(loadedRecipe->persons);
 	new_element = new DivElement( "servings", servings_html );
 
 	readFontProperties( new_element, config );
@@ -247,6 +248,7 @@ void RecipeViewDialog::createBlocks()
         	++author_it;
 
 		if (authors_html != QString::null) authors_html += ", ";
+		else authors_html+=QString("<b>%1</b>: ").arg(i18n("Authors"));
 		authors_html += author_el->name;
 	}
 	new_element = new DivElement( "authors", authors_html );
@@ -273,6 +275,7 @@ void RecipeViewDialog::createBlocks()
         	++cat_it;
 
 		if (categories_html != QString::null) categories_html += ", ";
+		else categories_html+=QString("<b>%1: </b>").arg(i18n("Categories"));
 		categories_html += cat_el->name;
 	}
 	new_element = new DivElement( "categories", categories_html );
@@ -291,7 +294,7 @@ void RecipeViewDialog::createBlocks()
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
-	QString header_html = QString(i18n("Recipe: #%1")).arg(loadedRecipe->recipeID);
+	QString header_html = QString("<b>%1 #%2</b>").arg(i18n("Recipe")).arg(loadedRecipe->recipeID);
 	new_element = new DivElement( "header", header_html );
 
 	readFontProperties( new_element, config );
