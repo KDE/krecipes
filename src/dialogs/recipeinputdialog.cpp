@@ -1026,6 +1026,7 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, bool plura
 			database->addUnitToIngredient(
 			  ingredientComboList->findByName(ingredient).id,
 			  id );
+			new_unit = database->unitName(id);
 		}
 
 		loadUnitListCombo();
@@ -1129,12 +1130,15 @@ void RecipeInputDialog::addIngredient(void)
 		if ( !checkAmountEdit() || !checkBounds() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
 			return;
 
+		QString unit_text = unitBox->currentText().stripWhiteSpace(); //Watch out! Get this before calling
+								// slotIngredientBoxLostFocus() because it might
+								// clear the unit entered
 		slotIngredientBoxLostFocus(); //ensure that the matching item in the ingredient box combo list is selected
 
 		createNewIngredientIfNecessary();
 		
 		Unit new_unit;
-		int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),(amountEdit->value()>1)?true:false,ingredientBox->currentText().stripWhiteSpace(),new_unit);
+		int unitID = createNewUnitIfNecessary(unit_text,(amountEdit->value()>1)?true:false,ingredientBox->currentText().stripWhiteSpace(),new_unit);
 		if ( unitID == -1 ) // this will happen if the dialog to create a unit was cancelled
 			return;
 		int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
