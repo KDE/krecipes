@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 Unai Garro <uga@ee.ed.ac.uk>
+ * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
 #include "krecipes.h"
@@ -22,8 +22,8 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("krecipes", I18N_NOOP("Krecipes"), version, description,
-                     KAboutData::License_GPL, "(C) 2003 Unai Garro", 0, 0, "uga@ee.ed.ac.uk");
-    about.addAuthor( "Unai Garro", 0, "uga@ee.ed.ac.uk" );
+                     KAboutData::License_GPL, "(C) 2003 Unai Garro", 0, 0, "ugarro@users.sourceforge.net");
+    about.addAuthor( "Unai Garro", 0, "ugarro@users.sourceforge.net" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;

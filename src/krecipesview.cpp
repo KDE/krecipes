@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 Unai Garro <uga@ee.ed.ac.uk>
+ * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
 #include "krecipesview.h"

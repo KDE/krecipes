@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 Unai Garro <uga@ee.ed.ac.uk>
+ * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
 #ifndef _KRECIPESVIEW_H_
@@ -30,7 +30,7 @@ class QPainter;
  * This krecipes uses an HTML component as an example.
  *
  * @short Main view
- * @author Unai Garro <uga@ee.ed.ac.uk>
+ * @author Unai Garro <ugarro@users.sourceforge.net>
  * @version 0.1
  */
 class KrecipesView : public QVBox, public KrecipesIface
