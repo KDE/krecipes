@@ -127,7 +127,7 @@ if (mn>mealNumber)
 
 	 }
 	 }
-if (mn<mealNumber)
+else if (mn<mealNumber)
 	{
 
 	 while (mealNumber!=mn)
@@ -399,6 +399,24 @@ if (dn>dishNumber)
 		dishInputList.append(newDish);
 		dishStack->raiseWidget(newDish);
 		dishNumber++;
+	}
+	}
+else if (dn<dishNumber)
+	{
+	QValueList <DishInput*>::Iterator it;
+	while (dishNumber!=dn)
+	{
+		it=dishInputList.fromLast();
+		DishInput *lastDish=(*it);
+		dishInputList.remove(it);
+
+		if ((*it)==(DishInput*)dishStack->visibleWidget())
+			{
+			it--;
+			dishStack->raiseWidget(*it);
+			}
+		delete lastDish;
+		dishNumber--;
 	}
 	}
 }

@@ -17,6 +17,7 @@
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
+#include <qptrlist.h>
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qspinbox.h>
@@ -136,6 +137,7 @@ private:
 
 		// Settings for the dish
 		QWidgetStack *dishStack;
+
 	// Methods
 		void reload(); // Reloads again from the cached data
 public slots:
