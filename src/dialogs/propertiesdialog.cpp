@@ -69,7 +69,7 @@ database->loadProperties(propertyList);
 //Populate this data into the KListView
 	for ( IngredientProperty *prop =propertyList->getFirst(); prop; prop =propertyList->getNext() )
 	{
-	QListViewItem *it= new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units+QString("/")+prop->perUnit.name );
+	QListViewItem *it= new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units);
 
 
 	}
