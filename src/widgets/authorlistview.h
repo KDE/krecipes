@@ -19,6 +19,27 @@
 class RecipeDB;
 class KPopupMenu;
 
+class AuthorCheckListView;
+class ListViewHandler;
+
+class AuthorCheckListItem: public QCheckListItem
+{
+public:
+	AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author );
+
+	Element author() const;
+
+	virtual QString text( int column ) const;
+
+protected:
+	virtual void stateChange( bool on );
+
+private:
+	Element authorStored;
+	AuthorCheckListView *m_listview;
+};
+
+
 class AuthorListView : public KListView
 {
 	Q_OBJECT
@@ -26,7 +47,10 @@ class AuthorListView : public KListView
 public:
 	AuthorListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
+	virtual void reload();
+
+public slots:
+	virtual void reload( int curr_limit, int curr_offset );
 
 protected:
 	RecipeDB *database;
@@ -41,6 +65,8 @@ private:
 	{
 		KListView::clear();
 	}
+
+	ListViewHandler *listViewHandler;
 };
 
 class StdAuthorListView : public AuthorListView
@@ -69,6 +95,24 @@ private:
 	bool checkBounds( const QString &name );
 
 	KPopupMenu *kpop;
+};
+
+
+class AuthorCheckListView : public AuthorListView
+{
+public:
+	AuthorCheckListView( QWidget *parent, RecipeDB *db );
+	virtual void reload();
+	virtual void stateChange(AuthorCheckListItem *,bool);
+
+	QValueList<Element> selections() const{ return m_selections; }
+
+protected:
+	virtual void createAuthor( const Element &ing );
+	virtual void removeAuthor( int );
+
+private:
+	QValueList<Element> m_selections;
 };
 
 #endif //AUTHORLISTVIEW_H

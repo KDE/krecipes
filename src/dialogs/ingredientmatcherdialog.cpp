@@ -39,7 +39,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	setSpacing( 10 );
 
 	// Ingredient list
-	ingredientListView = new KreListView( this, i18n( "Ingredients" ), true, 1 );
+	ingredientListView = new KreListView( this, i18n( "Ingredients" ), true, 0 );
 	IngredientCheckListView *list_view = new IngredientCheckListView( ingredientListView, database );
 	list_view->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	list_view->reload();
@@ -102,17 +102,15 @@ void IngredientMatcherDialog::findRecipes( void )
 	IngredientList ilist;
 	database->loadRecipeDetails( &rlist, true, false, true );
 
-	QListViewItem *qlv_it;
-
 	// First make a list of the ingredients that we have
-	for ( qlv_it = ingredientListView->listView() ->firstChild();qlv_it;qlv_it = qlv_it->nextSibling() ) {
-		IngredientCheckListItem * il_it = ( IngredientCheckListItem* ) qlv_it;
-		if ( il_it->isOn() ) {
-			Ingredient ing;
-			ing.name = il_it->name();
-			ing.ingredientID = il_it->id();
-			ilist.append( ing );
-		}
+	{
+	QValueList<Element> selections = ((IngredientCheckListView*)ingredientListView->listView())->selections();
+	for ( QValueList<Element>::const_iterator it = selections.begin(); it != selections.end(); ++it ) {
+		Ingredient ing;
+		ing.name = (*it).name;
+		ing.ingredientID = (*it).id;
+		ilist.append( ing );
+	}
 	}
 
 	// Clear the list

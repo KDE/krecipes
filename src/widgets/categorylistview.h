@@ -16,21 +16,20 @@
 
 #include <klistview.h>
 
-#include "element.h"
+#include "elementlist.h"
 
 class KPopupMenu;
 
 class RecipeDB;
 class CategoryTree;
+class CategoryCheckListView;
 
 class CategoryCheckListItem : public QCheckListItem
 {
 public:
-	CategoryCheckListItem( QListView* klv, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool exclusive = true );
 	CategoryCheckListItem( QListViewItem* it, const Element &category, bool exclusive = true );
 
-	~CategoryCheckListItem( void )
-	{}
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
 
@@ -58,6 +57,7 @@ protected:
 
 private:
 	Element ctyStored;
+	CategoryCheckListView *m_listview;
 };
 
 
@@ -242,6 +242,10 @@ class CategoryCheckListView : public CategoryListView
 public:
 	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true );
 
+	virtual void stateChange( CategoryCheckListItem*, bool );
+
+	ElementList selections() const{ return m_selections; }
+
 protected:
 	virtual void removeCategory( int id );
 	virtual void createCategory( const Element &category, int parent_id );
@@ -251,6 +255,9 @@ protected:
 
 	QMap<int, CategoryCheckListItem*> items_map;
 	bool exclusive;
+
+private:
+	ElementList m_selections;
 };
 
 #endif //CATEGORYLISTVIEW_H

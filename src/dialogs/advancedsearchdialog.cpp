@@ -40,51 +40,37 @@
 #include "recipeactionshandler.h"
 #include "widgets/recipelistview.h"
 
-void storeMap( QMap<QCheckListItem*, bool> *map_to_store, QListView *listview )
+void updateLists( QListView *listview, QValueList<Element> &positiveSelections, QValueList<Element> &negativeSelections, bool state )
 {
-	QCheckListItem * current_item;
-	QListViewItemIterator it( listview );
-	while ( it.current() ) {
-		current_item = ( QCheckListItem* ) it.current();
-		map_to_store->insert( current_item, current_item->isOn() );
-
-		++it;
+	for ( QValueList<Element>::const_iterator it = negativeSelections.begin(); it != negativeSelections.end(); ++it ) {
+		QCheckListItem * item = ( QCheckListItem* ) listview->findItem( QString::number( (*it).id ), 1 );
+		if ( item ) {
+			item->setEnabled((state==0)?false:true);
+			item->setOn((state==0)?false:true);
+		}
+	}
+	for ( QValueList<Element>::const_iterator it = positiveSelections.begin(); it != positiveSelections.end(); ++it ) {
+		QCheckListItem * item = ( QCheckListItem* ) listview->findItem( QString::number( (*it).id ), 1 );
+		if ( item ) {
+			item->setEnabled((state==0)?true:false);
+			item->setOn((state==0)?true:false);
+		}
 	}
 }
 
-void updateMaps( QMap<QCheckListItem*, bool> *map_to_load, QMap<QCheckListItem*, bool> *map_to_store, QListView *listview )
+DualAuthorListView::DualAuthorListView( QWidget *parent, RecipeDB *db ) : AuthorCheckListView( parent, db ),
+	last_state( 0 ),
+	lock_updates(false)
 {
-	//store
-	storeMap( map_to_store, listview );
-
-	//restore
-	for ( QMap<QCheckListItem*, bool>::Iterator it = map_to_load->begin(); it != map_to_load->end(); ++it ) {
-		it.key() ->setOn( it.data() );
-		it.key() ->setEnabled( true );
-	}
-
-	//be sensible and don't allow items to be simultaneously enabled and disabled
-	for ( QMap<QCheckListItem*, bool>::Iterator it = map_to_store->begin(); it != map_to_store->end(); ++it )
-		it.key() ->setEnabled( !it.data() );
-}
-
-DualAuthorListView::DualAuthorListView( QWidget *parent, RecipeDB *db ) : AuthorListView( parent, db ),
-		last_state( 0 )
-{
-	addColumn( i18n( "Name" ) );
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 }
 
 void DualAuthorListView::reload()
 {
-	positiveMap.clear();
-	negativeMap.clear();
-
 	AuthorListView::reload();
+
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,last_state);
+	lock_updates = false;
 }
 
 void DualAuthorListView::change( int index )
@@ -92,139 +78,122 @@ void DualAuthorListView::change( int index )
 	if ( index == last_state )  //don't do anything unless the selection has changed
 		return ;
 
-	QMap<QCheckListItem*, bool> *map_to_store;
-	QMap<QCheckListItem*, bool> *map_to_load;
-
-	if ( index == 0 )  //store negative
-	{
-		map_to_load = &positiveMap;
-		map_to_store = &negativeMap;
-	}
-	else //store positive
-	{
-		map_to_load = &negativeMap;
-		map_to_store = &positiveMap;
-	}
-
-	updateMaps( map_to_load, map_to_store, this );
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,index);
+	lock_updates = false;
 
 	last_state = index;
 	clearSelection();
 }
 
-void DualAuthorListView::updateMap( int index )
+void DualAuthorListView::createAuthor( const Element &author )
 {
-	storeMap( ( index == 0 ) ? &positiveMap : &negativeMap, this );
-}
-
-void DualAuthorListView::createAuthor( const Element &ing )
-{
-	QCheckListItem * item = new QCheckListItem( this, ing.name, QCheckListItem::CheckBox );
-	item->setText( 1, QString::number( ing.id ) );
-
-	negativeMap.insert( item, false );
-	positiveMap.insert( item, false );
+	(void)new AuthorCheckListItem( this, author );
 }
 
 void DualAuthorListView::removeAuthor( int id )
 {
 	QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( id ), 1 );
 
-	Q_ASSERT( item );
-
-	negativeMap.remove( item );
-	positiveMap.remove( item );
+	Element author; author.id = id; //don't use item->author() since 'item' may not exist
+	negativeSelections.remove( author );
+	positiveSelections.remove( author );
 	delete item;
 }
 
-
-DualIngredientListView::DualIngredientListView( QWidget *parent, RecipeDB *db ) : IngredientListView( parent, db ),
-		last_state( 0 )
+void DualAuthorListView::stateChange( AuthorCheckListItem *it, bool on )
 {
-	addColumn( i18n( "Name" ) );
+	if ( lock_updates ) return;
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	if ( last_state == 0 ) { //we're storing positive matches
+		if ( on )
+			positiveSelections.append(it->author());
+		else
+			positiveSelections.remove(it->author());
+	}
+	else { //we're storing negative matches
+		if ( on )
+			negativeSelections.append(it->author());
+		else
+			negativeSelections.remove(it->author());
+	}
+}
+
+
+DualIngredientListView::DualIngredientListView( QWidget *parent, RecipeDB *db ) : IngredientCheckListView( parent, db ),
+	last_state( 0 ), lock_updates(false)
+{
 }
 
 void DualIngredientListView::reload()
 {
-	positiveMap.clear();
-	negativeMap.clear();
-
 	IngredientListView::reload();
+
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,last_state);
+	lock_updates = false;
+}
+
+void DualIngredientListView::stateChange( IngredientCheckListItem *it, bool on )
+{
+	if ( lock_updates ) return;
+
+	if ( last_state == 0 ) { //we're storing positive matches
+		if ( on )
+			positiveSelections.append(it->ingredient());
+		else
+			positiveSelections.remove(it->ingredient());
+	}
+	else { //we're storing negative matches
+		if ( on )
+			negativeSelections.append(it->ingredient());
+		else
+			negativeSelections.remove(it->ingredient());
+	}
 }
 
 void DualIngredientListView::change( int index )
 {
 	if ( index == last_state )  //don't do anything unless the selection has changed
-		return ;
+		return;
 
-	QMap<QCheckListItem*, bool> *map_to_store;
-	QMap<QCheckListItem*, bool> *map_to_load;
-
-	if ( index == 0 )  //store negative
-	{
-		map_to_load = &positiveMap;
-		map_to_store = &negativeMap;
-	}
-	else //store positive
-	{
-		map_to_load = &negativeMap;
-		map_to_store = &positiveMap;
-	}
-
-	updateMaps( map_to_load, map_to_store, this );
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,index);
+	lock_updates = false;
 
 	last_state = index;
 	clearSelection();
 }
 
-void DualIngredientListView::updateMap( int index )
-{
-	storeMap( ( index == 0 ) ? &positiveMap : &negativeMap, this );
-}
-
 void DualIngredientListView::createIngredient( const Element &ing )
 {
-	QCheckListItem * item = new QCheckListItem( this, ing.name, QCheckListItem::CheckBox );
-	item->setText( 1, QString::number( ing.id ) );
-
-	negativeMap.insert( item, false );
-	positiveMap.insert( item, false );
+	(void)new IngredientCheckListItem( this, ing );
 }
 
 void DualIngredientListView::removeIngredient( int id )
 {
-	QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( id ), 1 );
+	IngredientCheckListItem * item = ( IngredientCheckListItem* ) findItem( QString::number( id ), 1 );
 
-	Q_ASSERT( item );
-
-	negativeMap.remove( item );
-	positiveMap.remove( item );
+	Element ing; ing.id = id; //don't use item->ingredient() since 'item' may not exist
+	negativeSelections.remove( ing );
+	positiveSelections.remove( ing );
 	delete item;
 }
 
 
-DualCategoryListView::DualCategoryListView( QWidget *parent, RecipeDB *db ) : CategoryListView( parent, db ),
-		last_state( 0 )
+DualCategoryListView::DualCategoryListView( QWidget *parent, RecipeDB *db ) : CategoryCheckListView( parent, db ),
+	last_state( 0 ),
+	lock_updates(false)
 {
-	addColumn( i18n( "Name" ) );
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 }
 
 void DualCategoryListView::reload()
 {
-	positiveMap.clear();
-	negativeMap.clear();
-
 	CategoryListView::reload();
+
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,last_state);
+	lock_updates = false;
 }
 
 void DualCategoryListView::change( int index )
@@ -232,29 +201,12 @@ void DualCategoryListView::change( int index )
 	if ( index == last_state )  //don't do anything unless the selection has changed
 		return ;
 
-	QMap<QCheckListItem*, bool> *map_to_store;
-	QMap<QCheckListItem*, bool> *map_to_load;
-
-	if ( index == 0 )  //store negative
-	{
-		map_to_load = &positiveMap;
-		map_to_store = &negativeMap;
-	}
-	else //store positive
-	{
-		map_to_load = &negativeMap;
-		map_to_store = &positiveMap;
-	}
-
-	updateMaps( map_to_load, map_to_store, this );
+	lock_updates = true; //the following shouldn't change the stored selection values
+	updateLists(this,positiveSelections,negativeSelections,index);
+	lock_updates = false;
 
 	last_state = index;
 	clearSelection();
-}
-
-void DualCategoryListView::updateMap( int index )
-{
-	storeMap( ( index == 0 ) ? &positiveMap : &negativeMap, this );
 }
 
 void DualCategoryListView::createCategory( const Element &category, int parent_id )
@@ -271,19 +223,15 @@ void DualCategoryListView::createCategory( const Element &category, int parent_i
 	}
 
 	new_item->setOpen( true );
-
-	negativeMap.insert( new_item, false );
-	positiveMap.insert( new_item, false );
 }
 
 void DualCategoryListView::removeCategory( int id )
 {
 	QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( id ), 1 );
 
-	Q_ASSERT( item );
-
-	negativeMap.remove( item );
-	positiveMap.remove( item );
+	Element cat; cat.id = id; //don't use item->category() since 'item' may not exist
+	negativeSelections.remove( cat );
+	positiveSelections.remove( cat );
 	delete item;
 }
 
@@ -329,6 +277,23 @@ void DualCategoryListView::mergeCategories( int id1, int id2 )
 	removeCategory( id2 );
 }
 
+void DualCategoryListView::stateChange( CategoryCheckListItem *it, bool on )
+{
+	if ( lock_updates ) return;
+
+	if ( last_state == 0 ) { //we're storing positive matches
+		if ( on )
+			positiveSelections.append(it->element());
+		else
+			positiveSelections.remove(it->element());
+	}
+	else { //we're storing negative matches
+		if ( on )
+			negativeSelections.append(it->element());
+		else
+			negativeSelections.remove(it->element());
+	}
+}
 
 
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
@@ -781,32 +746,26 @@ void AdvancedSearchDialog::search()
 
 	//narrow down by authors
 	if ( enableAuthorCheckBox->isChecked() ) {
-		authorListView->updateMap( authorTypeComboBox->currentItem() ); //the other won't have been updated yet
-
 		//positive search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = authorListView->positiveMap.begin(); map_it != authorListView->positiveMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					Element i;
-					i.id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).authorList.find( i ) == ( *it ).authorList.end() ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator author_it = authorListView->positiveSelections.begin(); author_it != authorListView->positiveSelections.end(); ++author_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				Element i;
+				i.id = (*author_it).id;
+				if ( ( *it ).authorList.find( i ) == ( *it ).authorList.end() ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = authorListView->negativeMap.begin(); map_it != authorListView->negativeMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					Element i;
-					i.id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).authorList.find( i ) != ( *it ).authorList.end() ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator author_it = authorListView->negativeSelections.begin(); author_it != authorListView->negativeSelections.end(); ++author_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				Element i;
+				i.id = (*author_it).id;
+				if ( ( *it ).authorList.find( i ) != ( *it ).authorList.end() ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}
@@ -814,32 +773,26 @@ void AdvancedSearchDialog::search()
 
 	//narrow down by categories
 	if ( enableCatCheckBox->isChecked() ) {
-		catListView->updateMap( catTypeComboBox->currentItem() ); //the other won't have been updated yet
-
 		//positive search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = catListView->positiveMap.begin(); map_it != catListView->positiveMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					Element i;
-					i.id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).categoryList.find( i ) == ( *it ).categoryList.end() ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator cat_it = catListView->positiveSelections.begin(); cat_it != catListView->positiveSelections.end(); ++cat_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				Element i;
+				i.id = (*cat_it).id;
+				if ( ( *it ).categoryList.find( i ) == ( *it ).categoryList.end() ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = catListView->negativeMap.begin(); map_it != catListView->negativeMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					Element i;
-					i.id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).categoryList.find( i ) != ( *it ).categoryList.end() ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator cat_it = catListView->negativeSelections.begin(); cat_it != catListView->negativeSelections.end(); ++cat_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				Element i;
+				i.id = (*cat_it).id;
+				if ( ( *it ).categoryList.find( i ) != ( *it ).categoryList.end() ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}
@@ -847,30 +800,24 @@ void AdvancedSearchDialog::search()
 
 	//narrow down by ingredients
 	if ( enableIngCheckBox->isChecked() ) {
-		ingListView->updateMap( ingTypeComboBox->currentItem() ); //the other won't have been updated yet
-
 		//positive search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = ingListView->positiveMap.begin(); map_it != ingListView->positiveMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					int id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).ingList.find( id ) == -1 ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator ing_it = ingListView->positiveSelections.begin(); ing_it != ingListView->positiveSelections.end(); ++ing_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				int id = (*ing_it).id;
+				if ( ( *it ).ingList.find( id ) == -1 ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}
 
 		//negative search
-		for ( QMap<QCheckListItem*, bool>::Iterator map_it = ingListView->negativeMap.begin(); map_it != ingListView->negativeMap.end(); ++map_it ) {
-			if ( map_it.data() == true ) {
-				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-					int id = map_it.key() ->text( 1 ).toInt();
-					if ( ( *it ).ingList.find( id ) != -1 ) {
-						it = allRecipes.remove( it );
-						it--;
-					}
+		for ( QValueList<Element>::const_iterator ing_it = ingListView->negativeSelections.begin(); ing_it != ingListView->negativeSelections.end(); ++ing_it ) {
+			for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+				int id = (*ing_it).id;
+				if ( ( *it ).ingList.find( id ) != -1 ) {
+					it = allRecipes.remove( it );
+					it--;
 				}
 			}
 		}

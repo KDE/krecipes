@@ -18,6 +18,8 @@
 class RecipeDB;
 class KPopupMenu;
 
+class ListViewHandler;
+
 class PrepMethodListView : public KListView
 {
 	Q_OBJECT
@@ -25,7 +27,10 @@ class PrepMethodListView : public KListView
 public:
 	PrepMethodListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
+	virtual void reload();
+
+public slots:
+	virtual void reload( int curr_limit, int curr_offset );
 
 protected:
 	RecipeDB *database;
@@ -40,6 +45,8 @@ private:
 	{
 		KListView::clear();
 	}
+
+	ListViewHandler *listViewHandler;
 };
 
 class StdPrepMethodListView : public PrepMethodListView

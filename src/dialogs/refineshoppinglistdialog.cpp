@@ -25,6 +25,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "widgets/krelistview.h"
+#include "widgets/ingredientlistview.h"
 #include "shoppinglistviewdialog.h"
 #include "shoppingcalculator.h"
 #include "mixednumber.h"
@@ -41,8 +42,10 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
 
-	allIngListView = new KreListView( this, QString::null, true );
-	allIngListView->listView() ->addColumn( i18n( "Ingredients" ) );
+	allIngListView = new KreListView( this, QString::null, true, 1 );
+	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
+	list_view->reload();
+ 	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
 	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
@@ -120,12 +123,6 @@ void RefineShoppingListDialog::accept()
 
 void RefineShoppingListDialog::loadData()
 {
-	ElementList allIngs;
-	database->loadIngredients( &allIngs );
-	for ( ElementList::const_iterator it = allIngs.begin(); it != allIngs.end(); ++it ) {
-		new QListViewItem( allIngListView->listView(), ( *it ).name );
-	}
-
 	for ( IngredientList::iterator it = ingredientList.begin(); it != ingredientList.end(); ++it ) {
 		QString amount_str;
 		if ( ( *it ).amount > 0 )

@@ -67,7 +67,7 @@ void KreListView::filter( const QString& s )
 		{
 			it->setVisible( true );
 		}
-		else // It's a category. Check the children
+		else
 		{
 
 			if ( it->text( filteredColumn ).contains( s, false ) )

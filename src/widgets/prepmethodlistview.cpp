@@ -20,6 +20,7 @@
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
+#include "listviewhandler.h"
 
 PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
 		database( db )
@@ -27,15 +28,24 @@ PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : KListV
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 
+	listViewHandler = new ListViewHandler(this);
+	installEventFilter(listViewHandler);
+	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
 void PrepMethodListView::reload()
 {
+	listViewHandler->emitReload();
+}
+
+void PrepMethodListView::reload( int limit, int offset )
+{
 	clear();
 
-	ElementList prepMethodList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	ElementList prepMethodList;
 	database->loadPrepMethods( &prepMethodList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = prepMethodList.begin(); ing_it != prepMethodList.end(); ++ing_it )

@@ -32,9 +32,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const CategoryT
 	layout = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
 	//Category List
-	categoryListView = new KListView( this );
-	//categoryListView->addColumn("*");
-	categoryListView->addColumn( i18n( "Category" ) );
+	categoryListView = new CategoryCheckListView( this, db );
 	categoryListView->setAllColumnsShowFocus( true );
 	categoryListView->setRootIsDecorated( true );
 	layout->addMultiCellWidget( categoryListView, 0, 0, 0, 1 );
@@ -70,20 +68,9 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const CategoryT
 SelectCategoriesDialog::~SelectCategoriesDialog()
 {}
 
-void SelectCategoriesDialog::getSelectedCategories( ElementList *newSelected, CategoryCheckListItem *parent )
+void SelectCategoriesDialog::getSelectedCategories( ElementList *newSelected )
 {
-	CategoryCheckListItem * it;
-	if ( parent == 0 )
-		it = ( CategoryCheckListItem* ) categoryListView->firstChild();
-	else
-		it = ( CategoryCheckListItem* ) parent->firstChild();
-
-	for ( ;it; it = ( CategoryCheckListItem * ) it->nextSibling() ) {
-		if ( it->isOn() )
-			newSelected->append( it->element() ); // If checked, add
-
-		getSelectedCategories( newSelected, it );
-	}
+	*newSelected = categoryListView->selections();
 }
 
 void SelectCategoriesDialog::loadCategories( const CategoryTree *categoryTree, const QMap<Element, bool> &selected, CategoryCheckListItem *parent )
@@ -123,16 +110,9 @@ void SelectCategoriesDialog::createNewCategory( void )
 
 		database->createNewCategory( result, subcategory ); // Create the new category in the database
 
+		//a listview item will automatically be create, but we need to turn it on
 		Element new_cat( result, database->lastInsertID() );
-
-		CategoryCheckListItem *it;
-		if ( subcategory == -1 )
-			it = new CategoryCheckListItem( categoryListView, new_cat );
-		else {
-			Element el( "", subcategory );
-			it = new CategoryCheckListItem( ( CategoryCheckListItem* ) categoryListView->findItem( ( *categories.find( el ) ).name, 0 ), new_cat );
-		}
-		it->setOn( true );
+		((QCheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ))->setOn(true);
 	}
 
 	delete categoryDialog;

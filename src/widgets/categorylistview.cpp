@@ -22,10 +22,11 @@
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 
-CategoryCheckListItem::CategoryCheckListItem( QListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ),
 		locked( false ),
 		exclusive( _exclusive ),
-		ctyStored( category )
+		ctyStored( category ),
+		m_listview(klv)
 {
 	setOn( false ); // Set unchecked by default
 }
@@ -33,7 +34,8 @@ CategoryCheckListItem::CategoryCheckListItem( QListView* klv, const Element &cat
 CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( it, QString::null, QCheckListItem::CheckBox ),
 		locked( false ),
 		exclusive( _exclusive ),
-		ctyStored( category )
+		ctyStored( category ),
+		m_listview((CategoryCheckListView*)it->listView())
 {
 	setOn( false ); // Set unchecked by default
 }
@@ -59,6 +61,8 @@ void CategoryCheckListItem::setText( int column, const QString &text )
 
 void CategoryCheckListItem::stateChange( bool on )
 {
+	m_listview->stateChange(this,on);
+
 	if ( locked )
 		return;
 
@@ -511,6 +515,14 @@ void CategoryCheckListView::mergeCategories( int id1, int id2 )
 	}
 
 	removeCategory( id2 );
+}
+
+void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
+{
+	if ( on )
+		m_selections.append(it->element());
+	else
+		m_selections.remove(it->element());
 }
 
 #include "categorylistview.moc"

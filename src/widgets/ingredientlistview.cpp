@@ -20,6 +20,50 @@
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
+#include "listviewhandler.h"
+
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
+	m_listview(qlv)
+{
+	// Initialize the ingredient data with the the property data
+	ingStored = new Element();
+	ingStored->id = ing.id;
+	ingStored->name = ing.name;
+}
+
+IngredientCheckListItem::~IngredientCheckListItem( void )
+{
+	delete ingStored;
+}
+int IngredientCheckListItem::id( void ) const
+{
+	return ingStored->id;
+}
+QString IngredientCheckListItem::name( void ) const
+{
+	return ingStored->name;
+}
+Element IngredientCheckListItem::ingredient() const
+{
+	return *ingStored;
+}
+
+QString IngredientCheckListItem::text( int column ) const
+{
+	switch ( column ) {
+	case 0:
+		return ( ingStored->name );
+	case 1:
+		return ( QString::number( ingStored->id ) );
+	default:
+		return QString::null;
+	}
+}
+
+void IngredientCheckListItem::stateChange( bool on )
+{
+	m_listview->stateChange(this,on);
+}
 
 IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
 		database( db )
@@ -27,21 +71,29 @@ IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : KListV
 	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
 	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
 
+	listViewHandler = new ListViewHandler(this);
+	installEventFilter(listViewHandler);
+	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
 void IngredientListView::reload()
 {
+	listViewHandler->emitReload();
+}
+
+void IngredientListView::reload( int limit, int offset )
+{
 	clear();
 
-	ElementList ingredientList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	ElementList ingredientList;
 	database->loadIngredients( &ingredientList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )
 		createIngredient( *ing_it );
 }
-
 
 
 StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, bool editable ) : IngredientListView( parent, db )
@@ -183,7 +235,6 @@ bool StdIngredientListView::checkBounds( const QString &name )
 
 IngredientCheckListView::IngredientCheckListView( QWidget *parent, RecipeDB *db ) : IngredientListView( parent, db )
 {
-	addColumn( "*" );
 	addColumn( i18n( "Ingredient" ) );
 
 	KConfig *config = KGlobal::config();
@@ -199,11 +250,28 @@ void IngredientCheckListView::createIngredient( const Element &ing )
 
 void IngredientCheckListView::removeIngredient( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 2 );
-
-	Q_ASSERT( item );
-
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 	delete item;
+}
+
+void IngredientCheckListView::reload()
+{
+	IngredientListView::reload();
+
+	for ( QValueList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
+		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*ing_it).id ), 1 );
+		if ( item ) {
+			item->setOn(true);
+		}
+	}
+}
+
+void IngredientCheckListView::stateChange(IngredientCheckListItem *it,bool on)
+{
+	if ( on )
+		m_selections.append(it->ingredient());
+	else
+		m_selections.remove(it->ingredient());
 }
 
 #include "ingredientlistview.moc"

@@ -38,7 +38,7 @@ class KListView;
 class RecipeDB;
 
 
-class DualAuthorListView : public AuthorListView
+class DualAuthorListView : public AuthorCheckListView
 {
 	Q_OBJECT
 
@@ -46,13 +46,13 @@ public:
 	DualAuthorListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
+	void stateChange( AuthorCheckListItem *, bool );
 
-	QMap<QCheckListItem*, bool> positiveMap;
-	QMap<QCheckListItem*, bool> negativeMap;
+	QValueList<Element> positiveSelections;
+	QValueList<Element> negativeSelections;
 
 public slots:
 	void change( int index );
-	void updateMap( int index );
 
 protected:
 	virtual void createAuthor( const Element &ing );
@@ -60,9 +60,10 @@ protected:
 
 private:
 	int last_state;
+	bool lock_updates;
 };
 
-class DualCategoryListView : public CategoryListView
+class DualCategoryListView : public CategoryCheckListView
 {
 	Q_OBJECT
 
@@ -70,13 +71,13 @@ public:
 	DualCategoryListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
+	void stateChange( CategoryCheckListItem *, bool );
 
-	QMap<QCheckListItem*, bool> positiveMap;
-	QMap<QCheckListItem*, bool> negativeMap;
+	QValueList<Element> positiveSelections;
+	QValueList<Element> negativeSelections;
 
 public slots:
 	void change( int index );
-	void updateMap( int index );
 
 protected:
 	virtual void createCategory( const Element &, int );
@@ -87,9 +88,10 @@ protected:
 
 private:
 	int last_state;
+	bool lock_updates;
 };
 
-class DualIngredientListView : public IngredientListView
+class DualIngredientListView : public IngredientCheckListView
 {
 	Q_OBJECT
 
@@ -97,13 +99,13 @@ public:
 	DualIngredientListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
+	void stateChange( IngredientCheckListItem *, bool );
 
-	QMap<QCheckListItem*, bool> positiveMap;
-	QMap<QCheckListItem*, bool> negativeMap;
+	QValueList<Element> positiveSelections;
+	QValueList<Element> negativeSelections;
 
 public slots:
 	void change( int index );
-	void updateMap( int index );
 
 protected:
 	virtual void createIngredient( const Element &ing );
@@ -111,6 +113,7 @@ protected:
 
 private:
 	int last_state;
+	bool lock_updates;
 };
 
 

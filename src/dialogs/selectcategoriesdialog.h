@@ -22,6 +22,7 @@
 
 class CategoryTree;
 class CategoryCheckListItem;
+class CategoryCheckListView;
 class RecipeDB;
 
 /**
@@ -36,11 +37,11 @@ public:
 
 	SelectCategoriesDialog( QWidget *parent, const CategoryTree *categoryTree, const QMap<Element, bool> &selected, RecipeDB* db );
 	~SelectCategoriesDialog();
-	void getSelectedCategories( ElementList *selected, CategoryCheckListItem *parent = 0 );
+	void getSelectedCategories( ElementList *selected );
 private:
 
 	//Widgets
-	KListView *categoryListView;
+	CategoryCheckListView *categoryListView;
 	QGridLayout *layout;
 	QPushButton *okButton;
 	QPushButton *cancelButton;

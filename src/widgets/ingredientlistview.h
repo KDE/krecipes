@@ -18,6 +18,8 @@
 
 class RecipeDB;
 class KPopupMenu;
+class IngredientCheckListView;
+class ListViewHandler;
 
 /**
 @author Unai Garro
@@ -25,42 +27,21 @@ class KPopupMenu;
 class IngredientCheckListItem: public QCheckListItem
 {
 public:
-	IngredientCheckListItem( QListView* qlv, const Element &ing ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox )
-	{
-		// Initialize the ingredient data with the the property data
-		ingStored = new Element();
-		ingStored->id = ing.id;
-		ingStored->name = ing.name;
-	}
+	IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing );
+	~IngredientCheckListItem( void );
 
-	~IngredientCheckListItem( void )
-	{
-		delete ingStored;
-	}
-	int id( void )
-	{
-		return ingStored->id;
-	}
-	QString name( void )
-	{
-		return ingStored->name;
-	}
+	int id( void ) const;
+	QString name( void ) const;
+	Element ingredient() const;
+
+	virtual QString text( int column ) const;
+
+protected:
+	virtual void stateChange( bool on );
 
 private:
 	Element *ingStored;
-
-public:
-	virtual QString text( int column ) const
-	{
-		switch ( column ) {
-		case 1:
-			return ( ingStored->name );
-		case 2:
-			return ( QString::number( ingStored->id ) );
-		default:
-			return QString::null;
-		}
-	}
+	IngredientCheckListView *m_listview;
 };
 
 
@@ -72,7 +53,10 @@ class IngredientListView : public KListView
 public:
 	IngredientListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
+	virtual void reload();
+
+public slots:
+	virtual void reload( int curr_limit, int curr_offset );
 
 protected slots:
 	virtual void createIngredient( const Element & ) = 0;
@@ -86,6 +70,9 @@ protected:
 	}
 
 	RecipeDB *database;
+
+private:
+	ListViewHandler *listViewHandler;
 };
 
 
@@ -124,10 +111,17 @@ class IngredientCheckListView : public IngredientListView
 {
 public:
 	IngredientCheckListView( QWidget *parent, RecipeDB *db );
+	virtual void reload();
+	virtual void stateChange(IngredientCheckListItem *,bool);
+
+	QValueList<Element> selections() const{ return m_selections; }
 
 protected:
 	virtual void createIngredient( const Element &ing );
 	virtual void removeIngredient( int );
+
+private:
+	QValueList<Element> m_selections;
 };
 
 #endif //INGREDIENTLISTVIEW_H

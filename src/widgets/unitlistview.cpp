@@ -23,6 +23,7 @@
 #include "dialogs/createunitdialog.h"
 #include "dialogs/dependanciesdialog.h"
 #include "datablocks/unit.h"
+#include "listviewhandler.h"
 
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
 		database( db )
@@ -30,15 +31,24 @@ UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : KListView( parent 
 	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
 
+	listViewHandler = new ListViewHandler(this);
+	installEventFilter(listViewHandler);
+	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
 void UnitListView::reload()
 {
+	listViewHandler->emitReload();
+}
+
+void UnitListView::reload( int limit, int offset )
+{
 	clear();
 
-	UnitList unitList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	UnitList unitList;
 	database->loadUnits( &unitList, limit, offset );
 
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {

@@ -20,6 +20,8 @@
 class RecipeDB;
 class KPopupMenu;
 
+class ListViewHandler;
+
 class UnitListView : public KListView
 {
 	Q_OBJECT
@@ -28,6 +30,9 @@ public:
 	UnitListView( QWidget *parent, RecipeDB *db );
 
 	void reload();
+
+public slots:
+	virtual void reload( int curr_limit, int curr_offset );
 
 protected:
 	RecipeDB *database;
@@ -42,6 +47,8 @@ private:
 	{
 		KListView::clear();
 	}
+
+	ListViewHandler *listViewHandler;
 };
 
 class StdUnitListView : public UnitListView

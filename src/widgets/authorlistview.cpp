@@ -19,6 +19,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "dialogs/createelementdialog.h"
+#include "listviewhandler.h"
 
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
 		database( db )
@@ -26,15 +27,24 @@ AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : KListView( par
 	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( createAuthor( const Element & ) ) );
 	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( removeAuthor( int ) ) );
 
+	listViewHandler = new ListViewHandler(this);
+	installEventFilter(listViewHandler);
+	connect( listViewHandler, SIGNAL( reload(int,int) ), SLOT( reload(int,int) ) );
+
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
 }
 
 void AuthorListView::reload()
 {
+	listViewHandler->emitReload();
+}
+
+void AuthorListView::reload( int limit, int offset )
+{
 	clear();
 
-	ElementList authorList;KConfig * config = KGlobal::config();config->setGroup( "Advanced" );int limit = config->readNumEntry( "Limit", -1 );int offset = config->readNumEntry( "Offset", 0 );
+	ElementList authorList;
 	database->loadAuthors( &authorList, limit, offset );
 
 	for ( ElementList::const_iterator ing_it = authorList.begin(); ing_it != authorList.end(); ++ing_it )
@@ -172,6 +182,77 @@ bool StdAuthorListView::checkBounds( const QString &name )
 	}
 
 	return true;
+}
+
+
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
+	authorStored(author),
+	m_listview(qlv)
+{
+}
+
+Element AuthorCheckListItem::author() const
+{
+	return authorStored;
+}
+
+QString AuthorCheckListItem::text( int column ) const
+{
+	switch ( column ) {
+	case 0:
+		return ( authorStored.name );
+	case 1:
+		return ( QString::number( authorStored.id ) );
+	default:
+		return QString::null;
+	}
+}
+
+void AuthorCheckListItem::stateChange( bool on )
+{
+	m_listview->stateChange(this,on);
+}
+
+
+AuthorCheckListView::AuthorCheckListView( QWidget *parent, RecipeDB *db ) : AuthorListView( parent, db )
+{
+	addColumn( i18n( "Author" ) );
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry( "ShowID", false );
+	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+}
+
+void AuthorCheckListView::createAuthor( const Element &author )
+{
+	new AuthorCheckListItem( this, author );
+}
+
+void AuthorCheckListView::removeAuthor( int id )
+{
+	QListViewItem * item = findItem( QString::number( id ), 1 );
+	delete item;
+}
+
+void AuthorCheckListView::reload()
+{
+	AuthorListView::reload();
+
+	for ( QValueList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
+		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );
+		if ( item ) {
+			item->setOn(true);
+		}
+	}
+}
+
+void AuthorCheckListView::stateChange(AuthorCheckListItem *it,bool on)
+{
+	if ( on )
+		m_selections.append(it->author());
+	else
+		m_selections.remove(it->author());
 }
 
 #include "authorlistview.moc"
