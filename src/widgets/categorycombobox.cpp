@@ -20,9 +20,11 @@
 
 #include "DBBackend/recipedb.h"
 #include "elementlist.h"
+#include "datablocks/categorytree.h"
 
 CategoryComboBox::CategoryComboBox( QWidget *parent, RecipeDB *db ) : KComboBox( parent ),
-		database( db )
+		database( db ),
+		m_offset(0)
 {
 	connect( database, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
 	connect( database, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -38,8 +40,9 @@ void CategoryComboBox::reload()
 
 	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
 	int limit = config->readNumEntry( "Limit", -1 );
-	ElementList categoryList;
-	database->loadCategories( &categoryList, limit, 0 );
+	
+	CategoryTree categoryList;
+	database->loadCategories( &categoryList, limit, m_offset, -1 );
 
 	clear();
 	categoryComboRows.clear();
@@ -49,15 +52,42 @@ void CategoryComboBox::reload()
 
 	//Now load the categories
 	int row = 1;
-	for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it ) {
-		insertItem( ( *cat_it ).name );
-		categoryComboRows.insert( row, ( *cat_it ).id ); // store category id's in the combobox position to obtain the category id later
-		row++;
-	}
+	loadCategories(&categoryList,row);
 
 	if ( listBox() ->findItem( remember_cat_filter, Qt::ExactMatch ) ) {
 		setCurrentText( remember_cat_filter );
 	}
+}
+
+void CategoryComboBox::loadCategories( CategoryTree *categoryList, int &row )
+{
+	const CategoryTreeChildren * children = categoryList->children();
+	for ( CategoryTreeChildren::const_iterator cat_it = children->begin(); cat_it != children->end(); ++cat_it ) {
+		insertItem( ( *cat_it )->category.name );
+		categoryComboRows.insert( row, ( *cat_it )->category.id ); // store category id's in the combobox position to obtain the category id later
+		row++;
+		loadCategories( *cat_it, row );
+	}
+}
+
+void CategoryComboBox::loadNextGroup()
+{
+	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
+	int limit = config->readNumEntry( "Limit", -1 );
+
+	m_offset += limit;
+
+	reload();
+}
+
+void CategoryComboBox::loadPrevGroup()
+{
+	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
+	int limit = config->readNumEntry( "Limit", -1 );
+
+	m_offset -= limit;
+
+	reload();
 }
 
 int CategoryComboBox::id( int row )

@@ -41,6 +41,7 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 
 			kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
 			reload();
+			emit nextGroupLoaded();
 			k->accept();
 			break;
 		}
@@ -49,6 +50,7 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 			if ( curr_offset >= 0 ) {
 				kapp->processEvents(); //if auto-repeating, user won't otherwise see change in the listview
 				reload();
+				emit prevGroupLoaded();
 			}
 			else
 				curr_offset = 0;

@@ -26,6 +26,10 @@ public:
 
 	void reload();
 
+signals:
+	void nextGroupLoaded();
+	void prevGroupLoaded();
+
 protected:
 	virtual void load(int limit, int offset) = 0;
 	virtual void keyPressEvent( QKeyEvent *e );

@@ -20,6 +20,7 @@
 #include "element.h"
 
 class RecipeDB;
+class CategoryTree;
 
 class CategoryComboBox : public KComboBox
 {
@@ -31,6 +32,10 @@ public:
 	void reload();
 	int id( int row );
 
+public slots:
+	void loadNextGroup();
+	void loadPrevGroup();
+
 private slots:
 	void createCategory( const Element &element, int /*parent_id*/ );
 	void removeCategory( int id );
@@ -40,8 +45,11 @@ private slots:
 	int findInsertionPoint( const QString &name );
 
 private:
+	void loadCategories( CategoryTree *categoryList, int &row );
+
 	RecipeDB *database;
 	QMap<int, int> categoryComboRows; // Contains the category id for every given row in the category combobox
+	int m_offset;
 };
 
 #endif //CATEGORYCOMBOBOX_H
