@@ -12,6 +12,7 @@
 #define RECIPELIST_H
 
 #include "recipe.h"
+#include <qvaluelist.h>
 
 /**
 @author Unai Garro
