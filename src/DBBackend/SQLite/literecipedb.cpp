@@ -1006,6 +1006,7 @@ void LiteRecipeDB::createTable(QString tableName)
 {
 
 QString command;
+bool createIndex=false;
 
 if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
@@ -1025,7 +1026,11 @@ else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (
 
 else if (tableName=="categories") command=QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
-else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);";
+else if (tableName=="category_list")
+	{
+	 command="CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);";
+	 createIndex=true;
+	 }
 
 else if (tableName=="authors") command=QString("CREATE TABLE authors (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
@@ -1037,6 +1042,18 @@ else return;
 
 
 database->executeQuery(command);
+
+if (createIndex)
+{
+if (tableName=="category_list")
+	{
+	database->executeQuery("CREATE index rid_index ON category_list(recipe_id)");
+	database->executeQuery("CREATE index cid_index ON category_list(category_id)");
+
+	}
+
+}
+
 
 }
 
