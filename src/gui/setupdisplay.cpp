@@ -58,6 +58,7 @@ void SetupDisplay::createSetupIfNecessary()
 		config->setGroup( "BackgroundSetup" );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "Aspect",300.0/400.0); // Aspect ratio of the page
+		config->writeEntry( "SetupWindowSize", QSize(300,400) ); //used solely for the page setup display... doesn't affect view of page
 	}
 
 	if ( !config->hasGroup("TitleSetup") )
@@ -173,10 +174,11 @@ QPoint newposition;
 
 	//=========================this=======================//
 	config->setGroup("BackgroundSetup");
- 	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 
-
-	m_size =size() ;
+	m_size =config->readSizeEntry("SetupWindowSize");
+	resize(m_size);
+	parentWidget()->resize(m_size);
 
 	//=========================TITLE=======================//
 	config->setGroup("TitleSetup");
@@ -451,7 +453,7 @@ void SetupDisplay::save()
 
 	config->setGroup( "BackgroundSetup" );
 	config->writeEntry( "BackgroundColor", backgroundColor() );
-	config->writeEntry( "Aspect", width()/height());
+	config->writeEntry( "Aspect", static_cast<double>(width())/static_cast<double>(height()));
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
