@@ -278,7 +278,7 @@ void Krecipes::import()
 			QString error = importer->getErrorMsg();
 			if ( error != QString::null )
 				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
-
+/* right now this is only good for debugging
 			QStringList warnings = importer->getWarningMsgs();
 			if ( warnings.count() > 0 )
 			{
@@ -288,7 +288,7 @@ void Krecipes::import()
 				case KMessageBox::Cancel: continue; break;
 				case KMessageBox::Continue: break;
 				}
-			}
+			}*/
 
 			m_view->import( *importer, progress_dialog );
 			delete importer;
