@@ -95,7 +95,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	classesCSS = generateCSSClasses( doc );
 	recipeStyleHTML += classesCSS;
 
-	QString recipeBodyHTML = "<BODY>";
+	QString recipeBodyHTML = "<BODY>\n";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
 		calculateProperties( *recipe_it, database, properties ); // Calculate the property list
@@ -112,11 +112,16 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 		advanceProgressBar();
 	}
 	recipeStyleHTML += "</STYLE>";
-	recipeBodyHTML += "</BODY>";
+	recipeBodyHTML += "</BODY>\n";
 
 
+	KLocale*loc = KGlobal::locale();
+	QString encoding = loc->encoding();
+	
 	//and now piece it all together
-	QString recipeHTML = "<HTML><HEAD>";
+	QString recipeHTML = "<HTML>\n<HEAD>\n";
+	recipeHTML += "<meta name=\"lang\" content=\""+ loc->language()+"\">\n";
+	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+encoding.replace(" ", "-")+"\" />\n";
 	recipeHTML += recipeStyleHTML;
 	recipeHTML += "</HEAD>\n";
 	recipeHTML += recipeBodyHTML;
