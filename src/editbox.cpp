@@ -49,6 +49,16 @@ void EditBox::setValue(double newValue)
 editBox->setValue(newValue);
 }
 
+void EditBox::setRange(double min,double max,double step,bool slider)
+{
+editBox->setRange(min,max,step,slider);
+}
+
+void EditBox::setPrecision(int dec)
+{
+editBox->setPrecision(dec);
+}
+
 void RatioInput::keyPressEvent ( QKeyEvent * e )
 {
 	if (e->key()==Key_Enter || e->key()==Key_Return)

@@ -29,6 +29,8 @@ public:
     //Methods
     double value(void);
     void setValue(double newValue);
+    void setPrecision(int dec);
+    void setRange(double min,double max,double step,bool slider);
 
     // Variables
     bool accepted; // Indicates if the current value has been accepted (ok) or not
