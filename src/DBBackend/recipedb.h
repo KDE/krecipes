@@ -120,8 +120,6 @@ public:
 
 protected:
 	virtual int  findExistingElementByName( const QString& name, const QString &element )=0;
-	virtual void loadElementList(ElementList *elList, QSqlQuery *query)=0;
-	virtual void loadPropertyElementList(ElementList *elList, QSqlQuery *query)=0;
 	virtual void portOldDatabases(float version)=0;
 };
 
