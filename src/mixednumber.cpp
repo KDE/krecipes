@@ -32,9 +32,10 @@ MixedNumber::MixedNumber( double decimal )
 	int decimal_index = as_string.find('.');
 	m_whole = as_string.left( decimal_index ).toInt();
 
-	if ( fabs(decimal-ROUND(decimal)) > 0.000001 )
+	if ( (decimal_index != -1) && (fabs(decimal-ROUND(decimal)) > 0.000001) )
 	{
 		QString decimal_part = as_string.mid( decimal_index+1, as_string.length() );
+		qDebug("decimal_part: %s",decimal_part.latin1());
 		m_numerator = decimal_part.toInt();
 		m_denominator = 10 * decimal_part.length();
 		simplify();
@@ -62,7 +63,9 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 
 MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 {
-	if ( input.contains( QRegExp("[a-z]",false) ) )
+	qDebug("input: %s",input.latin1());
+	//is this right?
+	if ( input.contains( QRegExp("^(\\d|\\s|/|.)",false) ) ) //change ".", to "decimal" of current locale
 	{
 		if (ok){*ok = false;}
 		return MixedNumber();
