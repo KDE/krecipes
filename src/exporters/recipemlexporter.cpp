@@ -32,7 +32,9 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 
 	QDomElement recipeml_tag = doc.documentElement();
 	recipeml_tag.setAttribute( "version", 0.5 );
-	recipeml_tag.setAttribute( "generator", "Krecipes v0.4" );
+
+	recipeml_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
+
 	doc.appendChild( recipeml_tag );
 
 	QDomElement recipe_root = recipeml_tag;

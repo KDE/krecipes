@@ -40,6 +40,12 @@ protected:
 	  */
 	virtual QString extensions() const = 0;
 
+	/** Attempt to return the version of the application via
+	  * KMainWindow::memberList[0]->instance()->aboutData()->version()
+	  * This can be used by exporters to put the version of the app exporting the file.
+	  */
+	QString krecipes_version() const;
+
 	QFile* file;
 	QString format;
 	QString filename;

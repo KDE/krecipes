@@ -15,6 +15,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kmainwindow.h>
 #include <kapplication.h>
 
 #include "mixednumber.h"
@@ -58,7 +59,7 @@ QString MMFExporter::createContent( const QPtrList<Recipe>& recipes )
  */
 void MMFExporter::writeMMFHeader( QString &content, Recipe *recipe )
 {
-	content += "----- Exported by Krecipes v0.4 [Meal-Master Export Format] -----\n\n";
+	content += QString("----- Exported by Krecipes v%1 [Meal-Master Export Format] -----\n\n").arg(krecipes_version());
 
 	QString title = recipe->title; title.truncate(60);
 	content += "      Title: "+title+"\n";
@@ -69,7 +70,7 @@ void MMFExporter::writeMMFHeader( QString &content, Recipe *recipe )
 	{
 		++cat_it; i++;
 
-		if ( i == 6 ) break;
+		if ( i == 6 ) break; //maximum of 5 categories
 
 		categories << cat->name;
 	}
