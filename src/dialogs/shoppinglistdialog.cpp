@@ -30,6 +30,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_top,0,1);
 
+    layout->setRowStretch(1,1); layout->setRowStretch(2,1); layout->setRowStretch(3,1); layout->setRowStretch(4,1); //so the list views will expand to fill any extra space
 
     recipeListView=new KreListView (this,i18n("Full recipe list"));
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
