@@ -11,8 +11,6 @@
 
 #include <cmath>
 
-#include <qregexp.h>
-
 #define ROUND(a) ((floor((a)) - (a) < ceil((a)) - (a)) ? floor((a)) : ceil((a)))
 
 MixedNumber::MixedNumber()
@@ -26,25 +24,63 @@ MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
 {
 }
 
-MixedNumber::MixedNumber( double decimal )
+MixedNumber::MixedNumber( double decimal, double precision )
 {
-	QString as_string = QString::number(decimal);
-	int decimal_index = as_string.find('.');
-	m_whole = as_string.left( decimal_index ).toInt();
+	// find nearest fraction
+	int intPart = static_cast<int>(decimal);
+	decimal -= static_cast<double>(intPart);
 
-	if ( fabs(decimal-ROUND(decimal)) > 0.000001 )
+	MixedNumber low(0, 0, 1);     // "A" = 0/1
+	MixedNumber high(0, 1, 1);    // "B" = 1/1
+
+	for (int i = 0; i < 100; ++i)
 	{
-		QString decimal_part = as_string.mid( decimal_index+1, as_string.length() );
-		m_numerator = decimal_part.toInt();
-		m_denominator = static_cast<int>(pow(10, static_cast<double>(decimal_part.length())));
-		simplifyRoundingErrors();
-		simplify();
+		double testLow = low.denominator() * decimal - low.numerator();
+		double testHigh = high.numerator() - high.denominator() * decimal;
+
+		if (testHigh < precision * high.denominator())
+			break; // high is answer
+		if (testLow < precision * low.denominator())
+		{  // low is answer
+			high = low;
+			break;
+		}
+
+		if (i & 1)
+		{  // odd step: add multiple of low to high
+			double test = testHigh / testLow;
+			int count = (int)test;// "N"
+			int num = (count + 1) * low.numerator() + high.numerator();
+			int denom = (count + 1) * low.denominator() + high.denominator();
+
+			if ((num > 0x8000) || (denom > 0x10000))
+				break;
+
+			high.setNumerator(num - low.numerator());// new "A"
+			high.setDenominator(denom - low.denominator());
+			low.setNumerator(num);// new "B"
+			low.setDenominator(denom);
+		}
+		else
+		{  // even step: add multiple of high to low
+			double test = testLow / testHigh;
+			int count = (int)test;// "N"
+			int num = low.numerator() + (count + 1) * high.numerator();
+			int denom = low.denominator() + (count + 1) * high.denominator();
+
+			if ((num > 0x10000) || (denom > 0x10000))
+				break;
+
+			low.setNumerator(num - high.numerator());// new "A"
+			low.setDenominator(denom - high.denominator());
+			high.setNumerator(num);// new "B"
+			high.setDenominator(denom);
+		}
 	}
-	else
-	{
-		m_numerator = 0;
-		m_denominator = 1;
-	}
+
+	m_numerator = high.numerator();
+	m_denominator = high.denominator();
+	m_whole = intPart;
 }
 
 MixedNumber::~MixedNumber()
@@ -153,17 +189,6 @@ void MixedNumber::simplify()
 	int divisor = gcd( m_numerator, m_denominator );
 	m_numerator /= divisor;
 	m_denominator /= divisor;
-}
-
-void MixedNumber::simplifyRoundingErrors()
-{
-	int orig_num = m_numerator;
-	int orig_den = m_denominator;
-
-
-
-	m_numerator = orig_num;
-	m_denominator = orig_den;
 }
 
 double MixedNumber::toDouble()
