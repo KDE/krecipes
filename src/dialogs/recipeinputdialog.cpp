@@ -333,6 +333,9 @@ servingsNumInput->setValue(loadedRecipe->persons);
 // Show categories
 showCategories();
 
+// Show authors
+showAuthors();
+
 //Enable changed() signals
 enableChangedSignal();
 
