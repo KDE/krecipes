@@ -58,7 +58,7 @@ public:
 class RecipeListItem:public QListViewItem
 {
 public:
-	RecipeListItem(QListView* qlv, const Recipe &r ):QListViewItem(qlv)
+	RecipeListItem(QListView* qlv, const Recipe &r ):QListViewItem(qlv,qlv->lastItem())
 	{
 	// Initialize the ingredient  data with the the property data
 		recipeStored=new Recipe();
@@ -82,6 +82,26 @@ public:
 		}
 };
 
+class SectionItem:public QListViewItem
+{
+public:
+	SectionItem(QListView* qlv, QString sectionText ):QListViewItem(qlv,qlv->lastItem())
+	{
+	mText=sectionText;
+	}
+
+	~SectionItem(void){}
+	virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align );
+private:
+	QString mText;
+
+public:
+	virtual QString text(int column) const
+	{
+		if (column==0) return(mText);
+		else return(QString::null);
+	}
+};
 class IngredientMatcherDialog:public QVBox{
 
 Q_OBJECT
