@@ -168,20 +168,20 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 		{
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n"+el.text();
+			recipe->instructions += "\n\n"+el.text().stripWhiteSpace();
 		}
 		else if (tagName == "Note")
 		{
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n"+el.text();
+			recipe->instructions += "\n\n"+el.text().stripWhiteSpace();
 		}
 		else if (tagName == "Nutr")
 		{
 			//example: <Nutr>Per Serving (excluding unknown items): 51 Calories; 6g Fat (99.5% calories from fat); trace Protein; trace Carbohydrate; 0g Dietary Fiber; 16mg Cholesterol; 137mg Sodium.  Exchanges: 1 Fat.</Nutr>
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n"+el.text();
+			recipe->instructions += "\n\n"+el.text().stripWhiteSpace();
 		}
 		/* tags to check for (example follows:
 		<Srce>SARA&apos;S SECRETS with Sara Moulton - (Show # SS-1B43) - from the TV FOOD NETWORK</Srce>
