@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <qfile.h>
 #include <qstringlist.h>
+#include <qtextstream.h>
 
 #include "recipe.h"
 
@@ -31,12 +32,19 @@ MX2Importer::MX2Importer(const QString& filename)
 {
 	QFile file( filename );
 	kdDebug()<<"loading file: "<<filename<<endl;
-	if ( file.open( IO_ReadWrite ) )
+	if ( file.open( IO_ReadOnly ) )
 	{
 		kdDebug()<<"file opened"<<endl;
 		QDomDocument doc;
+
+		//hopefully a temporary hack, since MasterCook creates invalid xml declarations
+		QTextStream stream(&file);
+		QString all_data = stream.read();
+		if ( all_data.startsWith("<?xml") )
+			all_data.remove(0,all_data.find("?>")+2);
+
 		QString error; int line; int column;
-		if (!doc.setContent(&file,&error,&line,&column))
+		if (!doc.setContent(all_data,&error,&line,&column))
 		{
 			kdDebug()<<QString("error: \"%1\" at line %2, column %3").arg(error).arg(line).arg(column)<<endl;
 			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3.  This may not be a *.mx2 file.") ).arg(error).arg(line).arg(column) );
@@ -97,7 +105,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 				QDomElement c = categories.item(j).toElement();
 				if (c.tagName() == "CatT")
 				{
-					if (c.text() > 0)
+					if (c.text().length() > 0)
 					{
 						Element cat( c.text().stripWhiteSpace() );
 						recipe->categoryList.add( cat );
@@ -117,8 +125,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 				{
 					QDomElement iChild = iChilds.item(j).toElement();
 					if (iChild.tagName() == "IPrp")
-						// Don't know if this is the best...
-						new_ing.name += "--" + iChild.text();
+						new_ing.name += " -- " + iChild.text().stripWhiteSpace();
 					else if (iChild.tagName() == "INtI")
 						; // TODO: What does it mean?... ingredient nutrient info?
 				}
@@ -133,7 +140,7 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 			{
 				QDomElement dir = dirs.item(j).toElement();
 				if (dir.tagName() == "DirT")
-					directions.append(dir.text());
+					directions.append(dir.text().stripWhiteSpace());
 			}
 			QString directionsText;
 
@@ -143,6 +150,8 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 			{
 				for (unsigned i=1; i <= directions.count(); i++)
 				{
+					if ( i != 1 ){directionsText += "\n\n";}
+
 					QString sWith = QString("%1. ").arg(i);
 					QString text = directions[i-1];
 					if (!text.stripWhiteSpace().startsWith(sWith))
