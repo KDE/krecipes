@@ -23,6 +23,15 @@
 #include "recipedb.h"
 #include "dialogs/recipeimportdialog.h"
 
+/** @brief A vector designed for fast searches and sorted insertions.
+  *
+  * This is accomplished by keeping a sorted list that is searched
+  * using the binary search algorithm.  When items are inserted into
+  * the vector the list remains sorted;  the position that new items
+  * will be inserted is determined by a fast binary search.
+  *
+  * @author Jason Kivlighn
+  */
 class CustomVector : public QValueVector<Element>
 {
 public:

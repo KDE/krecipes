@@ -16,6 +16,7 @@
 #include "baseimporter.h"
 
 /** Class to import MasterCook's MXP (MasterCook Export) file format.
+  * This is a human-readable format used in Mastercook up until version 4.
   * @author Jason Kivlighn
   */
 class MXPImporter : public BaseImporter

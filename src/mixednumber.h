@@ -13,12 +13,12 @@
 
 #include <qstring.h>
 
-//remove any extra zeros on the end of the string and the decimal if a whole number
+/** remove any extra zeros on the end of the string and the decimal if a whole number */
 QString beautify(const QString &num);
 
 class KLocale;
 
-/** A class to hold a mixed number.
+/** A class to hold and manipulate a mixed number.
   * @author Jason Kivlighn
   */
 class MixedNumber

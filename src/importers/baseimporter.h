@@ -24,7 +24,7 @@ class RecipeDB;
 /** @brief Subclass this class to create an importer for a specific file type.
   *
   * Subclasses should take the file name of the file to import in their constructor
-  * and then parse the file.  For every recipe found in the file, a Recipe pointer should
+  * and then parse the file.  For every recipe found in the file, a Recipe object should
   * be created and added to the importer using the @ref add() function.
   *
   * @author Jason Kivlighn

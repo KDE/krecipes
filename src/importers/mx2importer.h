@@ -1,5 +1,6 @@
 /*
-Copyright (C) 2003 Richard Lärkäng and Jason Kivlighn
+Copyright (C) 2003 Richard Lärkäng
+Copyright (C) 2003 Jason Kivlighn
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,6 +26,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class Recipe;
 
+/** Class to import Mastercook's MX2 file format.  This is an XML-based file
+  * format used since version 5 of Mastercook.
+  * @author Jason Kivlighn
+  */
 class MX2Importer : public BaseImporter
 {
 public:

@@ -19,6 +19,11 @@
 
 #include <qdom.h>
 
+/** Class to import the RecipeML, XML-based file format.
+  * More info at http://www.formatdata.com/recipeml
+  *
+  * @author Jason Kivlighn
+  */
 class RecipeMLImporter : public BaseImporter
 {
 public:
