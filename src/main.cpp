@@ -25,6 +25,7 @@ int main(int argc, char **argv)
                      KAboutData::License_GPL, "(C) 2003 Unai Garro", 0, 0, "ugarro@users.sourceforge.net");
     about.addAuthor( "Unai Garro", 0, "ugarro@users.sourceforge.net" );
     about.addAuthor( "Jason Kivlighn", 0, "mizunoami44@users.sourceforge.net" );    about.addAuthor( "Cyril Bosselut", 0, "bosselut@b1project.com" );
+    about.setTranslator(I18N_NOOP("INSERT YOUR NAME HERE"),I18N_NOOP("INSERT YOUR EMAIL ADDRESS"));
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
