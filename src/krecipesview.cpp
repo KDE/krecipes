@@ -69,6 +69,7 @@ KrecipesView::KrecipesView(QWidget *parent)
         pm=il->loadIcon("properties", KIcon::NoGroup,16); button5->setIconSet(pm);
 	button5->setGeometry(0,90,150,30);
     button6=new QPushButton(leftPanel); button6->setFlat(true); button6->setText("Edit Units");
+    	pm=il->loadIcon("units", KIcon::NoGroup,16); button6->setIconSet(pm);
 	button6->setGeometry(0,120,150,30);
 
 
