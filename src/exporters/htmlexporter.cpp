@@ -562,8 +562,12 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	for ( QStringList::const_iterator it = recipe_titles.begin(); it != recipe_titles.end(); ++it ) {
 		QFile photo( filename + "_photos/" + escape( *it ) + ".png" );
 		if ( photo.exists() )
-			photo.remove(); //remove photos in directory before removing it (there should only be one photo in this directory)
+			photo.remove(); //remove photos in directory before removing it 
 	}
+
+	//take care of the default photo
+	QFile photo( filename + "_photos/default_photo.png" );
+	if ( photo.exists() ) photo.remove();
 
 	//remove photo directory
 	QDir photo_dir;
