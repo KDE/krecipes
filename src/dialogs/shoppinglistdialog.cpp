@@ -35,7 +35,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     addRecipeButton->setFlat(true);
 
     QSpacerItem* buttonSpacer = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
-    layout->addItem(buttonSpacer,1,2);
+    layout->addItem(buttonSpacer,2,2);
 
     removeRecipeButton=new QPushButton(this);
     removeRecipeButton->setText("<-");
