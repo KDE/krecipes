@@ -1012,40 +1012,7 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void LiteRecipeDB::portOldDatabases(float version)
 {
-// FIXME: ALTER TABLE doesn't exist in QSQLite
-
-/*std::cerr<<"Current database version is..."<<version<<"\n";
-QString command;
-if (version<0.3)	// The database was generated with an old version of Krecipes, needs upgrade to 			//the current v 0.3 (version no means the version in which this DB structure 				//was introduced)
-	{
-
-	// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
-	command="ALTER TABLE recipes ADD COLUMN persons int(11) AFTER title;";
-		database->executeQuery(command);
-
-	// Set the version to the new one (0.3)
-
-	command="DELETE FROM db_info;"; // Remove previous version records if they exist
-		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.3,'Krecipes 0.3');"; // Set the new version
-		database->executeQuery(command);
-	}
-
-if (version<0.4)  // Upgrade to DB version 0.4
-	{
-
-	// Add new columns to existing tables (creating any new tables is not necessary. Integrity check does that before)
-	command="ALTER TABLE ingredient_list ADD COLUMN order_index int(11) AFTER unit_id;";
-		database->executeQuery(command);
-
-	// Set the version to the new one (0.4)
-
-	command="DELETE FROM db_info;"; // Remove previous version records if they exist
-		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.3+(CVS)');"; // Set the new version
-		database->executeQuery(command);
-	}
-*/
+// This is the first SQLite version (0.4). There's no need to upgrade anything
 }
 
 float LiteRecipeDB::databaseVersion(void)
