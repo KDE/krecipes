@@ -24,9 +24,15 @@ class RecipeDB;
 class IngredientList;
 
 class ShoppingListViewDialog:public QWidget{
+Q_OBJECT
+
 public:
     ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList);
     ~ShoppingListViewDialog();
+
+public slots:
+  void print();
+
 private:
 
   // Widgets

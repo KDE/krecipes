@@ -15,7 +15,14 @@
 #include "ingredientlist.h"
 #include "elementlist.h"
 #include "DBBackend/recipedb.h"
+#include "mixednumber.h"
+
+#include <qpushbutton.h>
+
 #include <klocale.h>
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kiconloader.h>
 
 ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)
 {
@@ -36,6 +43,15 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, El
 
  htmlBox=new QVBox (this);
  shoppingListView=new KHTMLPart(htmlBox);
+
+ KIconLoader *il = new KIconLoader;
+ QHBox *buttonsBox=new QHBox(htmlBox);
+ QPushButton *okButton = new QPushButton(il->loadIconSet("ok",KIcon::Small),i18n("&OK"),buttonsBox);
+ QPushButton *printButton = new QPushButton(il->loadIconSet("fileprint",KIcon::Small),i18n("&Print"),buttonsBox);
+
+ connect( okButton, SIGNAL(clicked()), SLOT(hide()) );
+ connect( printButton, SIGNAL(clicked()), SLOT(print()) );
+
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
 
  this->setMinimumSize(QSize(500,600));
@@ -87,8 +103,11 @@ QString recipeHTML;
 	else color="#BFC2F0";
 	counter=1-counter;
 
+	KConfig *config = kapp->config(); config->setGroup("Units");
+	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	QString amount_str = MixedNumber(i->amount).toString( number_format );
 
-		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg(i->name).arg(i->amount).arg(i->units);
+		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg(i->name).arg(amount_str).arg(i->units);
         }
 	recipeHTML+="</tbody></table></div>";
 	// Close
@@ -101,4 +120,9 @@ shoppingListView->write(recipeHTML);
 shoppingListView->end();
 
 
+}
+
+void ShoppingListViewDialog::print()
+{
+	shoppingListView->view()->print();
 }
