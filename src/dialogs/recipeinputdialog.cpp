@@ -8,10 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
- #include <qstring.h>
+#include <qstring.h>
 #include <qlayout.h>
 #include <qhbox.h>
 #include <qvbox.h>
+#include <qimage.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
 

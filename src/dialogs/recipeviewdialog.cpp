@@ -11,6 +11,7 @@
 #include "image.h"
 #include "propertycalculator.h"
 #include <klocale.h>
+#include <qimage.h>
 
 #include "DBBackend/recipedb.h"
 

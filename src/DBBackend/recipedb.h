@@ -11,16 +11,8 @@
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
-#define DB_DRIVER "QMYSQL3"
-#define DEFAULT_DB_NAME "Krecipes"
-#include <mysql/mysql.h>
 #include <qsqldatabase.h>
-#include <qimage.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
 #include <qstring.h>
-#include <iostream>
-#include <asm/unistd.h>
 #include "../recipe.h"
 #include "../elementlist.h"
 #include "../ingredientpropertylist.h"
