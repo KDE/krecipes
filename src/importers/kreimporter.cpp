@@ -16,6 +16,7 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
+#include <kstandarddirs.h>
 
 #include "recipe.h"
 
@@ -41,13 +42,14 @@ KreImporter::KreImporter(const QString& filename)
           name = *it;
         }
     }
-    if(name == QString::null){
+    if(name.isEmpty()){
 			kdDebug()<<"error: Archive doesn't contain a valid Krecipes file"<<endl;
 			setErrorMsg( i18n("Archive doesn't contain a valid Krecipes file") );
 			return;
     }
-    dir->copyTo("/tmp/");
-	  file = new QFile( "/tmp/"+name );
+    QString tmp_dir = locateLocal("tmp", "");
+    dir->copyTo(tmp_dir);
+	  file = new QFile( tmp_dir+name );
     kre->close();
     unlink = true; //remove file after import
   }
@@ -90,18 +92,18 @@ KreImporter::KreImporter(const QString& filename)
       QDomNodeList l = krecipe.childNodes();
       QDomElement el;
       if(krecipe.tagName() == "krecipes-recipe"){
-        Recipe *recipe = new Recipe;
+        Recipe recipe;
         for (unsigned i = 0; i < l.count(); i++)
         {
           el = l.item(i).toElement();
           if (el.tagName() == "krecipes-description"){
-            readDescription(el.childNodes(), recipe);
+            readDescription(el.childNodes(), &recipe);
           }
           if (el.tagName() == "krecipes-ingredients"){
-            readIngredients(el.childNodes(), recipe);
+            readIngredients(el.childNodes(), &recipe);
           }
           if (el.tagName() == "krecipes-instructions"){
-            recipe->instructions = el.text().stripWhiteSpace();
+            recipe.instructions = el.text().stripWhiteSpace();
           }
         }
         add(recipe);

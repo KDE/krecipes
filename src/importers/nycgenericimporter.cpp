@@ -154,14 +154,14 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 void NYCGenericImporter::putDataInRecipe()
 {
 	//create the recipe
-	Recipe *new_recipe = new Recipe;
-	new_recipe->persons = m_servings;
-	new_recipe->title = m_title;
-	new_recipe->instructions = m_instructions;
-	new_recipe->ingList = m_ingredients;
-	new_recipe->categoryList = m_categories;
-	new_recipe->authorList = m_authors;
-	new_recipe->recipeID = -1;
+	Recipe new_recipe;
+	new_recipe.persons = m_servings;
+	new_recipe.title = m_title;
+	new_recipe.instructions = m_instructions;
+	new_recipe.ingList = m_ingredients;
+	new_recipe.categoryList = m_categories;
+	new_recipe.authorList = m_authors;
+	new_recipe.recipeID = -1;
 
 	//put it in the recipe list
 	add( new_recipe );

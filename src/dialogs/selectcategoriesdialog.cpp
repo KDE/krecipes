@@ -104,7 +104,7 @@ bool *checked=selected->last();
 
 ElementList::const_iterator cat_it = categoryList.end();
 --cat_it;
-for ( int i = 0; i < categoryList.count(); i++ )
+for ( unsigned int i = 0; i < categoryList.count(); i++ )
 {
 	CategoryListItem *it=new CategoryListItem(categoryListView,*cat_it);
 	if (*checked) it->setOn(true);

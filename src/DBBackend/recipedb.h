@@ -50,9 +50,9 @@ public:
 	virtual void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units)=0;
 
 	virtual void createNewAuthor(const QString &authorName)=0;
-	virtual void createNewCategory(QString &categoryName)=0;
-	virtual void createNewIngredient(QString ingredientName)=0;
-	virtual void createNewUnit(QString &unitName)=0;
+	virtual void createNewCategory(const QString &categoryName)=0;
+	virtual void createNewIngredient(const QString &ingredientName)=0;
+	virtual void createNewUnit(const QString &unitName)=0;
 
 	virtual void emptyData(void)=0;
 

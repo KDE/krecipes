@@ -201,6 +201,6 @@ void ResizeRecipeDialog::resizeRecipe( double factor )
 
 	m_recipe->persons = rounded_persons;
 
-	for ( Ingredient *ing = m_recipe->ingList.getFirst(); ing; ing = m_recipe->ingList.getNext() )
-		ing->amount = ing->amount * factor;
+	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it )
+		(*ing_it).amount = (*ing_it).amount * factor;
 }

@@ -26,8 +26,6 @@
 
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
-	m_left_col_ing.setAutoDelete(false);
-	m_right_col_ing.setAutoDelete(false);
 	resetVars();
 
 	QFile input( file );
@@ -179,8 +177,8 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	if ( string.mid( 11, 1 ) == "-" && (string.mid( 0, 11 ).stripWhiteSpace() == "") ) //continuation of previous ingredient
 	{
 		kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
-		if ( list.at(list.count()-1) )
-			list.at(list.count()-1)->name += " "+string.stripWhiteSpace().mid(1,string.length());
+		if ( !list.isEmpty() )
+			(*list.at(list.count()-1)).name += " "+string.stripWhiteSpace().mid(1,string.length());
 
 		return true;
 	}
@@ -253,12 +251,12 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		header = header.mid( 10, header.length() - 20 );
 		kdDebug()<<"found ingredient header: "<<header<<endl;
 
-		for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
-			m_all_ing.append( ing );
+		for ( IngredientList::const_iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it )
+			m_all_ing.append( *ing_it );
 		m_left_col_ing.empty();
 
-		for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
-			m_all_ing.append( ing );
+		for ( IngredientList::const_iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it )
+			m_all_ing.append( *ing_it );
 		m_right_col_ing.empty();
 
 		Ingredient title;
@@ -273,20 +271,20 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 
 void MMFImporter::putDataInRecipe()
 {
-	for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
-		m_all_ing.append( ing );
-	for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
-		m_all_ing.append( ing );
+	for ( IngredientList::const_iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it )
+		m_all_ing.append( *ing_it );
+	for ( IngredientList::const_iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it )
+		m_all_ing.append( *ing_it );
 
 	//create the recipe
-	Recipe *new_recipe = new Recipe;
-	new_recipe->persons = m_servings;
-	new_recipe->title = m_title;
-	new_recipe->instructions = m_instructions;
-	new_recipe->ingList = m_all_ing;
-	new_recipe->categoryList = m_categories;
-	new_recipe->authorList = m_authors;
-	new_recipe->recipeID = -1;
+	Recipe new_recipe;
+	new_recipe.persons = m_servings;
+	new_recipe.title = m_title;
+	new_recipe.instructions = m_instructions;
+	new_recipe.ingList = m_all_ing;
+	new_recipe.categoryList = m_categories;
+	new_recipe.authorList = m_authors;
+	new_recipe.recipeID = -1;
 
 	//put it in the recipe list
 	add( new_recipe );

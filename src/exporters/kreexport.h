@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2003 by                                                 *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,9 +15,9 @@
 #include "baseexporter.h"
 
 /**
-Export classe for Krecipes native file format (.kre, .kreml)
+Export class for Krecipes native file format (.kre, .kreml)
 
-@author Cyril Bosselut
+@author Cyril Bosselut and Jason Kivlighn
 */
 class KreExporter : public BaseExporter{
 public:

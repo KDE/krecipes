@@ -90,16 +90,12 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 				head_tag.appendChild( picbin_tag );
 
 			QDomElement part_tag = doc.createElement("part");
-			QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
-			Ingredient *ing;
-			while ( (ing = ing_it.current()) != 0 )
+			for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 			{
-				++ing_it;
-
 				QDomElement ingredient_tag = doc.createElement("ingredient");
-				ingredient_tag.setAttribute("qty",QString::number(ing->amount));
-				ingredient_tag.setAttribute("unit",ing->units);
-				ingredient_tag.setAttribute("item",ing->name);
+				ingredient_tag.setAttribute("qty",QString::number((*ing_it).amount));
+				ingredient_tag.setAttribute("unit",(*ing_it).units);
+				ingredient_tag.setAttribute("item",(*ing_it).name);
 				part_tag.appendChild( ingredient_tag );
 			}
 			recipe_tag.appendChild( part_tag );

@@ -51,21 +51,17 @@ IngredientPropertyList ingredientPropertyList; // property list for each ingredi
 
 int ingredientNo=1;
 
-QPtrListIterator<Ingredient> ing_it( recipe.ingList );
-Ingredient *ing;
-while ( (ing = ing_it.current()) != 0 )
+for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{
-	++ing_it;
-
-	database->loadProperties(&ingredientPropertyList,ing->ingredientID);
+	database->loadProperties(&ingredientPropertyList,(*ing_it).ingredientID);
 	ingredientPropertyList.divide(recipe.persons); // calculates properties per person
-	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing,ingredientNo);
+	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing_it,ingredientNo);
 	ingredientNo++;
 	}
 }
 
 
-void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing,int ingredientNo)
+void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,const Ingredient &ing,int ingredientNo)
 {
 for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyList.getNext())
 	{
@@ -133,18 +129,17 @@ recipePropertyList->clear();
 IngredientPropertyList filteredPropertyList;
 
 int ingredientNo=1;
-QPtrListIterator<Ingredient> ing_it( recipe.ingList );
-Ingredient *ing;
-while ( (ing = ing_it.current()) != 0 )
+
+for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 {
-	ipl.filter(ing->ingredientID,&filteredPropertyList); // Get the properties for the respective ingredient
+	ipl.filter((*ing_it).ingredientID,&filteredPropertyList); // Get the properties for the respective ingredient
 	filteredPropertyList.divide(recipe.persons); // calculates properties per person
-	addPropertyToList(recipePropertyList,filteredPropertyList,*ing,url,ingredientNo);
+	addPropertyToList(recipePropertyList,filteredPropertyList,*ing_it,url,ingredientNo);
 	ingredientNo++;
 	}
 }
 
-void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,Ingredient &ing,UnitRatioList &url,int ingredientNo)
+void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,const Ingredient &ing,UnitRatioList &url,int ingredientNo)
 {
 for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.getNext())
 	{

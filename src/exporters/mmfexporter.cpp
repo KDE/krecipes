@@ -86,15 +86,11 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 	KConfig *config = kapp->config();
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	QPtrListIterator<Ingredient> ing_it( recipe.ingList );
-	Ingredient *ing;
-	while ( (ing = ing_it.current()) != 0 )
+	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{
-		++ing_it;
-
 		//columns 1-7
-		if ( ing->amount > 0 )
-			content += MixedNumber(ing->amount).toString( number_format ).rightJustify(7,' ',true)+" ";
+		if ( (*ing_it).amount > 0 )
+			content += MixedNumber((*ing_it).amount).toString( number_format ).rightJustify(7,' ',true)+" ";
 		else
 			content += "        ";
 
@@ -102,9 +98,9 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		bool found_short_form = false;
 		for ( int i = 0; unit_info[i].short_form; i++ )
 		{
-			if ( unit_info[i].expanded_form == ing->units ||
-			     unit_info[i].plural_expanded_form == ing->units ||
-			     unit_info[i].short_form == ing->units )
+			if ( unit_info[i].expanded_form == (*ing_it).units ||
+			     unit_info[i].plural_expanded_form == (*ing_it).units ||
+			     unit_info[i].short_form == (*ing_it).units )
 			{
 				found_short_form = true;
 				content += QString(unit_info[i].short_form).leftJustify(2)+" ";
@@ -113,16 +109,16 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		}
 		if ( !found_short_form )
 		{
-			kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<ing->units<<endl;
-			kdDebug()<<"         This ingredient ("<<ing->name<<") will be exported without a unit"<<endl;
+			kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<(*ing_it).units<<endl;
+			kdDebug()<<"         This ingredient ("<<(*ing_it).name<<") will be exported without a unit"<<endl;
 			content += "   ";
 		}
 
 		//columns 12-39
-		QString ing_name = ing->name; ing_name.truncate(28);
+		QString ing_name = (*ing_it).name; ing_name.truncate(28);
 		content += ing_name+"\n";
-		for ( unsigned int i = 0; i < (ing->name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
-			content += "           -"+ing->name.mid(28*(i+1),28)+"\n";
+		for ( unsigned int i = 0; i < ((*ing_it).name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
+			content += "           -"+(*ing_it).name.mid(28*(i+1),28)+"\n";
 	}
 }
 

@@ -55,9 +55,9 @@ public:
 	void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units);
 
 	void createNewAuthor(const QString &authorName);
-	void createNewCategory(QString &categoryName);
-	void createNewIngredient(QString ingredientName);
-	void createNewUnit(QString &unitName);
+	void createNewCategory(const QString &categoryName);
+	void createNewIngredient(const QString &ingredientName);
+	void createNewUnit(const QString &unitName);
 
 	void emptyData(void);
 

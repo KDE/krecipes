@@ -42,10 +42,6 @@ public:
 	void import( RecipeDB *db );
 
 protected:
-	/** Add a recipe to be imported into the database. Note, I'm only keeping this function
-	  * around until I update the importers to use @ref add( const Recipe&). */
-	void add( Recipe *recipe ){ m_recipe_list->append( *recipe ); }
-
 	/** Add a recipe to be imported into the database */
 	void add( const Recipe &recipe ){ m_recipe_list->append( recipe ); }
 

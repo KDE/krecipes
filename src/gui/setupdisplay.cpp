@@ -373,21 +373,19 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	QPtrListIterator<Ingredient> ing_it( sample.ingList );
-	Ingredient *ing;
-	while ( (ing = ing_it.current()) != 0 )
+
+	for ( IngredientList::const_iterator ing_it = sample.ingList.begin(); ing_it != sample.ingList.end(); ++ing_it )
 	{
-        	++ing_it;
 		if (ingredients.isNull()) ingredients += "<ul>";
 
-		QString amount_str = MixedNumber(ing->amount).toString( number_format );
+		QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 		if (amount_str == "0")
 			amount_str = "";
 
 		ingredients += QString("<li>%1: %2 %3</li>")
-			    .arg(ing->name)
+			    .arg((*ing_it).name)
 			    .arg(amount_str)
-			    .arg(ing->units);
+			    .arg((*ing_it).units);
 	}
 
 	if ( !ingredients.isNull() )

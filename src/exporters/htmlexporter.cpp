@@ -296,21 +296,17 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	config->setGroup("IngredientsSetup");
 	QString ingredient_format = config->readEntry("Format","%n: %a %u");
 
-	QPtrListIterator<Ingredient> ing_it( recipe.ingList );
-	Ingredient *ing;
-	while ( (ing = ing_it.current()) != 0 )
+	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
 	{
-        	++ing_it;
-
-		QString amount_str = MixedNumber(ing->amount).toString( number_format );
+		QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 
 		if (amount_str == "0")
 			amount_str = "";
 
 		QString tmp_format(ingredient_format);
-		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),ing->name);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),(*ing_it).name);
 		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
-		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),ing->units);
+		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),(*ing_it).units);
 
 		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}

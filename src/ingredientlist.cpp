@@ -12,62 +12,23 @@
  ***************************************************************************/
 #include "ingredientlist.h"
 
-IngredientList::IngredientList():QPtrList<Ingredient>()
+IngredientList::IngredientList():QValueList<Ingredient>()
 {
-setAutoDelete(true); //Deletes automatically when remove() is used.
-}
-
-IngredientList::IngredientList(const IngredientList &il):QPtrList<Ingredient>(il)
-{
-clear();
-setAutoDelete(true);
-QPtrListIterator<Ingredient> it(il);
-Ingredient *i;
-while ( (i = it.current()) != 0 )
-{
-++it;
-this->append(*i);
-}
 }
 
 IngredientList::~IngredientList()
 {
 }
 
-void IngredientList::append(const Ingredient &ing)
-{
-Ingredient *newIng=new Ingredient(ing);
-this->append (newIng);
-}
-
-void IngredientList::addReverse(Ingredient &ing)
-{
-Ingredient *newIng=new Ingredient(ing);
-this->prepend (newIng);
-}
-
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
 {
-Ingredient* ing=this->take(index1);
-this->insert(index2,ing);
-}
+IngredientList::iterator tmp_it = this->at(index1);
+Ingredient tmp_ing(*tmp_it);
 
-Ingredient* IngredientList::getFirst(void){
-return(this->first());
-}
+this->remove( tmp_it );
 
-Ingredient* IngredientList::getNext(void){
-return(this->next());
-}
-
-Ingredient* IngredientList::getLast(void)
-{
-return(this->last());
-}
-
-Ingredient* IngredientList::getPrev(void)
-{
-return(this->prev());
+tmp_it = this->at(index2);
+this->insert(tmp_it,tmp_ing);
 }
 
 void IngredientList::empty(void)
@@ -75,27 +36,21 @@ void IngredientList::empty(void)
 this->clear();
 }
 
-int IngredientList::find(int id) // Search by id (which uses search by item, with comparison defined on header)
+int IngredientList::find(int id) const // Search by id (which uses search by item, with comparison defined on header)
 {
 Ingredient i; i.ingredientID=id;
-return(QPtrList <Ingredient>::find(&i)); // (If we don't specify class, gcc will only find "find(int)"
+return findIndex(i);
 }
 
-int IngredientList::findNext(int id) // Search by id (which uses search by item, with comparison defined on header)
+IngredientList::const_iterator IngredientList::find(IngredientList::const_iterator it,int id) const // Search by id (which uses search by item, with comparison defined on header)
 {
 Ingredient i; i.ingredientID=id;
-return(QPtrList <Ingredient>::findNext(&i)); // (If we don't specify class, gcc will only find "findNext(int)"
+return QValueList<Ingredient>::find(it,i);
 }
 
-IngredientList& IngredientList::operator=(const IngredientList &il)
+IngredientList::iterator IngredientList::find(IngredientList::iterator it,int id) // Search by id (which uses search by item, with comparison defined on header)
 {
-clear();
-QPtrListIterator<Ingredient> it(il);
-Ingredient *i;
-while ( (i = it.current()) != 0 )
-{
-++it;
-this->append(*i);
+Ingredient i; i.ingredientID=id;
+return QValueList<Ingredient>::find(it,i);
 }
-return *this;
-}
+

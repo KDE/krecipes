@@ -1,11 +1,14 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Cyril Bosselut (bosselut@b1project.com)         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #include "kreexport.h"
 
 #include <qfile.h>
@@ -56,6 +59,7 @@ void KreExporter::saveToFile( const RecipeList& recipes )
     \fn KreManager::createContent()
  * return a QString containing XML encoded recipe
  */
+ //TODO: use QDOM (see recipemlexporter.cpp)?
 QString KreExporter::createContent( const RecipeList& recipes )
 {
     QString xml;
@@ -101,17 +105,14 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "</krecipes-description>\n";
     xml += "<krecipes-ingredients>\n";
 
-	QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
-	Ingredient *ing;
-	while ( (ing = ing_it.current()) != 0 )
+	for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 	{
-		++ing_it;
       xml += "<ingredient>\n";
-      xml += "<name>"+ing->name.utf8()+"</name>\n";
+      xml += "<name>"+(*ing_it).name.utf8()+"</name>\n";
       xml += "<amount>";
-      xml += QString::number(ing->amount);
+      xml += QString::number((*ing_it).amount);
       xml += "</amount>\n";
-      xml += "<unit>"+ing->units.utf8()+"</unit>\n";
+      xml += "<unit>"+(*ing_it).units.utf8()+"</unit>\n";
       xml += "</ingredient>\n";
       /// @todo add ingredient properties
 	}

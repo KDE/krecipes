@@ -12,17 +12,17 @@
 #define RECIPELIST_H
 
 #include "recipe.h"
+
 #include <qvaluelist.h>
 
 /**
 @author Unai Garro
 */
-class RecipeList:public QValueList <Recipe>{
+class RecipeList:public QValueList <Recipe>
+{
 public:
-
     RecipeList();
     ~RecipeList();
-
 };
 
 #endif

@@ -19,9 +19,9 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcursor.h>
+#include <qintdict.h>
 
 #include <kcombobox.h>
-#include <qintdict.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>

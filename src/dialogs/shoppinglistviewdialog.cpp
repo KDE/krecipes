@@ -96,12 +96,8 @@ QString recipeHTML;
 	recipeHTML+="<div STYLE=\"border:medium solid blue; width:90%\"><table cellspacing=0px width=100%><tbody>";
 	int counter=0;
 
-	QPtrListIterator<Ingredient> it( ingredientList );
-	Ingredient *i;
-	while ( (i = it.current()) )
+	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )
 	{
-		++it;
-
 	QString color;
 	if (counter) color="#CBCEFF";
 	else color="#BFC2F0";
@@ -109,9 +105,9 @@ QString recipeHTML;
 
 	KConfig *config = kapp->config(); config->setGroup("Numbers");
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-	QString amount_str = MixedNumber(i->amount).toString( number_format );
+	QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
 
-		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg(i->name).arg(amount_str).arg(i->units);
+		recipeHTML+=QString("<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>").arg(color).arg((*ing_it).name).arg(amount_str).arg((*ing_it).units);
         }
 	recipeHTML+="</tbody></table></div>";
 	// Close

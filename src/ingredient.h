@@ -29,7 +29,7 @@ public:
     Ingredient& operator=(const Ingredient &ing);
 
     /** Compare two elements by their id */
-    bool operator==(const Ingredient &);
+    bool operator==(const Ingredient &) const;
 };
 
 #endif

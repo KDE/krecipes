@@ -8,6 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "shoppingcalculator.h"
+
+#include <kdebug.h>
+
 #include "elementlist.h"
 #include "ingredientlist.h"
 #include "DBBackend/recipedb.h"
@@ -34,13 +37,16 @@ totalIngredientList->add(*i);
 
 void sum(IngredientList *totalIngredientList, IngredientList *newIngredientList, RecipeDB *db)
 {
-
-for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext())
+for ( IngredientList::const_iterator ing_it = newIngredientList->begin(); ing_it != newIngredientList->end(); ++ing_it )
 {
+	IngredientList::iterator pos_it;
+
 // Find out if ingredient exists in list already
-	int pos=totalIngredientList->find(i->ingredientID);
+	int pos=totalIngredientList->find((*ing_it).ingredientID);
+
 	if (pos>=0) // the ingredient is already listed
-		{
+	{
+		pos_it = totalIngredientList->at(pos);
 
 		// Variables to store the current values
 		int currentUnit; double currentAmount;
@@ -52,46 +58,43 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		// Do the conversion
 		// try to with this and next in the list until conversion rate is
 		// found or end of list is reached
-		int lastpos; // for 'backup'
+		IngredientList::iterator lastpos_it; // for 'backup'
 		do{
-		lastpos=pos;
+		lastpos_it=pos_it;
 		// Get current Values
 
-		currentUnit=totalIngredientList->at(pos)->unitID;
-		currentAmount=totalIngredientList->at(pos)->amount;
-			totalIngredientList->getNext(); // Otherwise findNext() gets in closed loop...
+		currentUnit=(*pos_it).unitID;
+		currentAmount=(*pos_it).amount;
 
 		// Try to convert
-		converted =autoConvertUnits(db,i->amount,i->unitID,currentAmount,currentUnit,newAmount,newUnit);
-		} while ( (converted<0) && (((pos=totalIngredientList->findNext(i->ingredientID)))>0) );
+		converted =autoConvertUnits(db,(*ing_it).amount,(*ing_it).unitID,currentAmount,currentUnit,newAmount,newUnit);
+		} while ( (converted<0) && (((pos_it=totalIngredientList->find(pos_it,(*ing_it).ingredientID)))!=totalIngredientList->end()) );
 
 		// If the conversion was succesful, Set the New Values
 		if (converted>=0)
 		{
-		Ingredient *it; it=totalIngredientList->at(lastpos);
-		it->amount=newAmount;
-		it->unitID=newUnit;
-		it->units=db->unitName(newUnit);
+			(*lastpos_it).amount=newAmount;
+			(*lastpos_it).unitID=newUnit;
+			(*lastpos_it).units=db->unitName(newUnit);
 		}
 		else // Otherwise append this ingredient at the end of the list
 		{
-		// Insert ingredient ID in the list
-		totalIngredientList->append(*i);
+			// Insert ingredient ID in the list
+			totalIngredientList->append(*ing_it);
 		}
 	}
-
 	else // The ingredient is not in the list, just append
 	{
-	totalIngredientList->append(*i);
+		totalIngredientList->append(*ing_it);
 	}
 }
-
 }
 
 
 int autoConvertUnits(RecipeDB* database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)
 {
 double ratio=database->unitRatio(unit1,unit2);
+
 if (ratio>=0) // There is a ratio
 	{
 	if (ratio>=1) // Convert to unit 1, since unit1 is bigger

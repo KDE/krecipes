@@ -408,19 +408,18 @@ QFileInfo fi(".krecipe_photo.jpg");
  	.arg(recipeID);
  size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
 
- int order_index=0;
-for (Ingredient *ing=recipe->ingList.getFirst(); ing; ing=recipe->ingList.getNext())
+int order_index=0;
+for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
 	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5);")
 	.arg(recipeID)
-	.arg(ing->ingredientID)
-	.arg(ing->amount)
-	.arg(ing->unitID)
+	.arg((*ing_it).ingredientID)
+	.arg((*ing_it).amount)
+	.arg((*ing_it).unitID)
 	.arg(order_index);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
-
-}
+	}
 
 // Save the category list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
@@ -429,7 +428,7 @@ size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
 ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --cat_it;
-for ( int i = 0; i < recipe->categoryList.count(); i++ )
+for ( unsigned int i = 0; i < recipe->categoryList.count(); i++ )
 {
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
@@ -453,7 +452,7 @@ size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
 ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --author_it;
-for ( int i = 0; i < recipe->authorList.count(); i++ )
+for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 {
 	command=QString("INSERT INTO author_list VALUES (%1,%2);")
 	.arg(recipeID)
@@ -535,7 +534,7 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2
 QSqlQuery recipeToRemove( command,database);
 }
 
-void MySQLRecipeDB::createNewIngredient(QString ingredientName)
+void MySQLRecipeDB::createNewIngredient(const QString &ingredientName)
 {
 QString command;
 
@@ -867,7 +866,7 @@ unitToRemove.exec(command);
 }
 
 
-void MySQLRecipeDB::createNewUnit(QString &unitName)
+void MySQLRecipeDB::createNewUnit(const QString &unitName)
 {
 QString command;
 
@@ -1297,7 +1296,7 @@ if (categoryToLoad.isActive()) {
 }
 }
 
-void MySQLRecipeDB::createNewCategory(QString &categoryName)
+void MySQLRecipeDB::createNewCategory(const QString &categoryName)
 {
 QString command;
 

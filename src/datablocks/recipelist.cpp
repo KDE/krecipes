@@ -10,12 +10,10 @@
 
 #include "recipelist.h"
 
-#include "qvaluelist.h"
-
-
 RecipeList::RecipeList():QValueList <Recipe>()
 {
 }
+
 RecipeList::~RecipeList()
 {
 }

@@ -443,17 +443,16 @@ sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
  database->executeQuery(command);
 
  int order_index=0;
-for (Ingredient *ing=recipe->ingList.getFirst(); ing; ing=recipe->ingList.getNext())
+for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
 	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5);")
 	.arg(recipeID)
-	.arg(ing->ingredientID)
-	.arg(ing->amount)
-	.arg(ing->unitID)
+	.arg((*ing_it).ingredientID)
+	.arg((*ing_it).amount)
+	.arg((*ing_it).unitID)
 	.arg(order_index);
 	database->executeQuery(command);
-
 	}
 
 // Save the category list for the recipe (first delete, in case we are updating)
@@ -463,7 +462,7 @@ database->executeQuery(command);
 
 ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --cat_it;
-for ( int i = 0; i < recipe->categoryList.count(); i++ )
+for ( unsigned int i = 0; i < recipe->categoryList.count(); i++ )
 {
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
@@ -486,7 +485,7 @@ database->executeQuery(command);
 
 ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 --author_it;
-for ( int i = 0; i < recipe->authorList.count(); i++ )
+for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 	{
 	command=QString("INSERT INTO author_list VALUES (%1,%2);")
 	.arg(recipeID)
@@ -569,7 +568,7 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2
 database->executeQuery( command);
 }
 
-void LiteRecipeDB::createNewIngredient(QString ingredientName)
+void LiteRecipeDB::createNewIngredient(const QString &ingredientName)
 {
 QString command;
 
@@ -903,7 +902,7 @@ database->executeQuery(command);
 }
 
 
-void LiteRecipeDB::createNewUnit(QString &unitName)
+void LiteRecipeDB::createNewUnit(const QString &unitName)
 {
 QString command;
 
@@ -1348,7 +1347,7 @@ QSQLiteResultRow row=categoryToLoad.first();
 }
 }
 
-void LiteRecipeDB::createNewCategory(QString &categoryName)
+void LiteRecipeDB::createNewCategory(const QString &categoryName)
 {
 QString command;
 

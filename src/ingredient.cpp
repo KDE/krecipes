@@ -49,7 +49,7 @@ units=ing.units;
 return *this;
 }
 
-bool Ingredient::operator==(const Ingredient &ing)
+bool Ingredient::operator==(const Ingredient &ing) const
 {
 	return (ing.ingredientID == this->ingredientID);
 }

@@ -68,13 +68,13 @@ MX2Importer::MX2Importer(const QString& filename)
 
 			if (el.tagName() == "RcpE")
 			{
-				Recipe *recipe = new Recipe;
-				recipe->title = el.attribute("name");
+				Recipe recipe;
+				recipe.title = el.attribute("name");
 
 				Element author( el.attribute("author") );
-				recipe->authorList.append( author );
+				recipe.authorList.append( author );
 
-				readRecipe( el.childNodes(), recipe );
+				readRecipe( el.childNodes(), &recipe );
 				add(recipe);
 			}
 		}

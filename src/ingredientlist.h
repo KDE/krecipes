@@ -13,30 +13,23 @@
 #ifndef INGREDIENTLIST_H
 #define INGREDIENTLIST_H
 
-#include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include "ingredient.h"
 
 /**
 @author Unai Garro
 */
-class IngredientList: public QPtrList <Ingredient>{
+class IngredientList: public QValueList <Ingredient>
+{
 public:
     IngredientList();
-    IngredientList(const IngredientList &il);
     ~IngredientList();
-    Ingredient* getFirst(void);
-    Ingredient* getNext(void);
-    void append(const Ingredient &ing);
-    void append(Ingredient *ing){QPtrList<Ingredient>::append(ing);} //for the transition to QValueList...
-    void addReverse(Ingredient &ing);
     void move(int index1,int index2);
-    Ingredient* getLast(void);
-    Ingredient* getPrev(void);
     void empty(void);
-    int find(int id);
-    int findNext(int id);
-    IngredientList& operator=(const IngredientList &il);
+    int find(int id) const;
+    IngredientList::const_iterator find(IngredientList::const_iterator,int id) const;
+    IngredientList::iterator find(IngredientList::iterator,int id);
 };
 
 #endif

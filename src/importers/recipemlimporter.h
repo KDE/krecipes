@@ -15,10 +15,9 @@
 
 #include "baseimporter.h"
 #include "ingredient.h"
+#include "recipe.h"
 
 #include <qdom.h>
-
-class Recipe;
 
 class RecipeMLImporter : public BaseImporter
 {
@@ -35,7 +34,7 @@ private:
 	void readRecipemlSrcItems(const QDomElement& sources);
 	void readRecipemlRecipe(const QDomElement& recipe);
 
-	Recipe* recipe;
+	Recipe recipe;
 };
 
 #endif //RECIPEMLIMPORTER_H

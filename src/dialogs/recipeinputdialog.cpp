@@ -416,8 +416,7 @@ instructionsEdit->setText(loadedRecipe->instructions);
 servingsNumInput->setValue(loadedRecipe->persons);
 
 	//show ingredient list
-	Ingredient * ing;
-	for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
+	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it )
 	{
 		QListViewItem* lastElement=ingredientList->lastItem();
 
@@ -426,12 +425,12 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		QString amount_str;
 
 		if ( config->readBoolEntry("Fraction"))
-			amount_str = MixedNumber(ing->amount).toString();
+			amount_str = MixedNumber((*ing_it).amount).toString();
 		else
-			amount_str = QString::number(ing->amount);
+			amount_str = QString::number((*ing_it).amount);
 
 		 //Insert ingredient after last one
-		 (void)new QListViewItem (ingredientList,lastElement,ing->name,amount_str,ing->units);
+		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units);
 	}
 
 	//show photo
@@ -592,7 +591,7 @@ if (it)
 	if (iselect) ingredientList->setSelected(iselect,true); // be careful iselect->setSelected doesn't work this way.
 
 	// Remove it from the recipe also
-	loadedRecipe->ingList.remove(index); // Note index=0...n in KListView, same as in QPtrlist
+	loadedRecipe->ingList.remove( loadedRecipe->ingList.at(index) ); // Note index=0...n in KListView, same as in QPtrlist
 
 	emit changed();
 	}
@@ -718,10 +717,11 @@ void RecipeInputDialog::modIngredientAmount( QListViewItem *it){
   ingredientList->rename(it, 1);
 }
 
-void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
+void RecipeInputDialog::saveIngredientAmount( QListViewItem *it)
+{
   bool ok;
 	int index=ingredientList->itemIndex(it);
-  Ingredient* ing = (loadedRecipe->ingList).at(index);
+  Ingredient ing = *(loadedRecipe->ingList).at(index);
   KConfig *config=kapp->config();
   config->setGroup("Numbers");
 
@@ -729,7 +729,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
 
     MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
     if(ok){
-      ing->amount = mn.toDouble();
+      ing.amount = mn.toDouble();
       it->setText(1, mn.toString( number_format ));
     }
     else{

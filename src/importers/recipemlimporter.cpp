@@ -67,7 +67,7 @@ RecipeMLImporter::~RecipeMLImporter()
 
 void RecipeMLImporter::readRecipemlRecipe(const QDomElement& recipe_element)
 {
-	recipe = new Recipe();
+	recipe.empty();
 
 	QDomNodeList l = recipe_element.childNodes();
 
@@ -106,9 +106,9 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 		QString tagName = el.tagName();
 
 		if (tagName == "title")
-			recipe->title = el.text().stripWhiteSpace();
+			recipe.title = el.text().stripWhiteSpace();
 		else if (tagName == "subtitle")
-			recipe->title += ": " + el.text().stripWhiteSpace();
+			recipe.title += ": " + el.text().stripWhiteSpace();
 		else if ( tagName == "version" )
 			{}//TODO: what do we do with this?
 		else if (tagName == "source")
@@ -121,18 +121,18 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 				QDomElement c = categories.item(j).toElement();
 				if (c.tagName() == "cat")
 				{
-					recipe->categoryList.append( Element(c.text()) );
+					recipe.categoryList.append( Element(c.text()) );
 				}
 			}
 		}
 		else if (tagName == "description")
-			recipe->instructions += "\n\nDescription: "+el.text().stripWhiteSpace();
+			recipe.instructions += "\n\nDescription: "+el.text().stripWhiteSpace();
 		else if (tagName == "preptime")
 			// TODO check for "range, sep, timeunit" etc
-			recipe->instructions += "\n\nPreparation time: "+el.text().stripWhiteSpace();
+			recipe.instructions += "\n\nPreparation time: "+el.text().stripWhiteSpace();
 		else if (tagName == "yield")
 			// TODO check for "range, sep, unit" etc
-			recipe->persons = el.text().toInt();
+			recipe.persons = el.text().toInt();
 		else
 			kdDebug()<<"Unknown tag within <head>: "<<el.tagName()<<endl;
 	}
@@ -161,7 +161,7 @@ void RecipeMLImporter::readRecipemlIngs(const QDomElement& ings)
 					if (!name.endsWith(":"))
 						name += ":";
 
-					recipe->ingList.append( new Ingredient( name, 0, "") );
+					recipe.ingList.append( Ingredient( name, 0, "") );
 				}
 				else if (cEl.tagName() == "description" )
 					{}//TODO: what do we do with this?
@@ -222,7 +222,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 	if ( !size.isNull() )
 		unit.prepend(size+" ");
 
-	recipe->ingList.append( Ingredient(name, quantity, unit) );
+	recipe.ingList.append( Ingredient(name, quantity, unit) );
 }
 
 void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
@@ -259,7 +259,7 @@ void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
 	else
 		directionsText = directions[0];
 
-	recipe->instructions = directionsText;
+	recipe.instructions = directionsText;
 }
 
 void RecipeMLImporter::readRecipemlMenu(const QDomElement& menu_el)
@@ -290,7 +290,7 @@ void RecipeMLImporter::readRecipemlSrcItems(const QDomElement& sources)
 		QString tagName = srcitem.tagName();
 
 		if ( tagName == "srcitem" )
-			recipe->authorList.append( Element( srcitem.text().stripWhiteSpace() ) );
+			recipe.authorList.append( Element( srcitem.text().stripWhiteSpace() ) );
 		else
 			kdDebug()<<"Unknown tag within <source>: "<<tagName<<endl;
 	}

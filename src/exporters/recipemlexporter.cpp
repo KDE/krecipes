@@ -88,12 +88,8 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				head_tag.appendChild( yield_tag );
 
 			QDomElement ingredients_tag = doc.createElement("ingredients");
-			QPtrListIterator<Ingredient> ing_it( (*recipe_it).ingList );
-			Ingredient *ing;
-			while ( (ing = ing_it.current()) != 0 )
+			for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 			{
-				++ing_it;
-
 				QDomElement ing_tag = doc.createElement("ing");
 				ingredients_tag.appendChild( ing_tag );
 
@@ -102,14 +98,14 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 
 						QDomElement qty_tag = doc.createElement("qty");
 						amt_tag.appendChild(qty_tag);
-						qty_tag.appendChild( doc.createTextNode(QString::number(ing->amount)) );
+						qty_tag.appendChild( doc.createTextNode(QString::number((*ing_it).amount)) );
 
 						QDomElement unit_tag = doc.createElement("unit");
 						amt_tag.appendChild(unit_tag);
-						unit_tag.appendChild( doc.createTextNode(ing->units) );
+						unit_tag.appendChild( doc.createTextNode((*ing_it).units) );
 
 					QDomElement item_tag = doc.createElement("item");
-					item_tag.appendChild( doc.createTextNode(ing->name ) );
+					item_tag.appendChild( doc.createTextNode((*ing_it).name ) );
 					ing_tag.appendChild( item_tag );
 
 

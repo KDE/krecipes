@@ -69,27 +69,27 @@ void BaseImporter::import( RecipeDB *db )
 		kapp->processEvents();
 
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
-		for ( Ingredient *ing = (*recipe_it).ingList.getFirst(); ing; ing = (*recipe_it).ingList.getNext() )
+		for ( IngredientList::iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 		{
-			int new_ing_id = db->findExistingIngredientByName(ing->name);
-			if ( new_ing_id == -1 && ing->name != "" )
+			int new_ing_id = db->findExistingIngredientByName((*ing_it).name);
+			if ( new_ing_id == -1 && (*ing_it).name != "" )
 			{
-				db->createNewIngredient( ing->name );
+				db->createNewIngredient( (*ing_it).name );
 				new_ing_id = db->lastInsertID();
 			}
 
-			int new_unit_id = db->findExistingUnitByName(ing->units);
+			int new_unit_id = db->findExistingUnitByName((*ing_it).units);
 			if ( new_unit_id == -1 )
 			{
-				db->createNewUnit( ing->units );
+				db->createNewUnit( (*ing_it).units );
 				new_unit_id = db->lastInsertID();
 			}
 
-			ing->unitID = new_unit_id;
-			ing->ingredientID = new_ing_id;
+			(*ing_it).unitID = new_unit_id;
+			(*ing_it).ingredientID = new_ing_id;
 
 			ElementList unitsWithIng;
-			db->findExistingUnitsByName( ing->units, new_ing_id, &unitsWithIng );
+			db->findExistingUnitsByName( (*ing_it).units, new_ing_id, &unitsWithIng );
 
 			if ( !unitsWithIng.containsId(new_unit_id) )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
