@@ -71,8 +71,8 @@ SetupDisplay::createSetupIfNecessary();
 KConfig *config = kapp->config();
 config->setGroup("PhotoSetup");
 temp_photo_geometry = config->readRectEntry("Geometry");
-int width = temp_photo_geometry.width();
-int height = temp_photo_geometry.height();
+int width = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width());
+int height = temp_photo_geometry.height()/100.0*(((QWidget*)parent())->height());
 
 QImage image;
 if (loadedRecipe->photo.isNull())
@@ -143,7 +143,6 @@ kdDebug()<<recipeHTML<<endl;
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
-std::cerr<<recipeHTML<<"\n";
 recipeView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where the photo was stored
 recipeView->write(recipeHTML);
 recipeView->end();
