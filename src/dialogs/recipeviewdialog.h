@@ -41,6 +41,7 @@ private:
 
   // Internal Methods
   void calculateIngredients(void);
+  int autoConvert(double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID);
 
 
 

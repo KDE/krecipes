@@ -23,6 +23,8 @@ loadedRecipe=new Recipe();
 //----------Load  the recipe --------
 loadRecipe(recipeID);
 
+this->calculateIngredients();
+
 
  }
 
@@ -37,6 +39,7 @@ void RecipeViewDialog::loadRecipe(int recipeID)
 
 database->loadRecipe(loadedRecipe,recipeID);
 showRecipe();
+calculateIngredients();
 
 }
 
@@ -119,8 +122,104 @@ QPtrList <double> amountList;
 	for (ing=loadedRecipe->ingList.getFirst();ing; ing=loadedRecipe->ingList.getNext())
 	{
 	// Find out if ingredient exists in list already
-	int pos=ingList.find(&(ing->unitID));
+	int pos=ingList.find(&(ing->ingredientID));
+	if (pos>=0) // the ingredient is already listed
+		{
+		std::cerr<<"Increasing ingredient"<<ing->ingredientID<<"\n";
 
+		// Variables to store the current values
+		int *currentUnit; double * currentAmount;
+
+		// Variables to store the new total
+		int newUnit; double newAmount;
+		int converted;
+
+		// Do the conversion
+		// try to with this and next in the list until conversion rate is
+		// found or end of list is reached
+		do{
+		// Get current Values
+		currentUnit=unitList.at(pos);
+		currentAmount=amountList.at(pos);
+		// Try to convert
+		converted =autoConvert(ing->amount,ing->unitID,*currentAmount,*currentUnit,newAmount,newUnit);
+		} while ( (converted<0) && ((pos=ingList.findNext(&(ing->ingredientID)))>0) );
+
+		// If the conversion was succesful, Set the New Values
+		if (converted>=0)
+		{
+		*currentAmount=newAmount;
+		*currentUnit=newUnit;
+		}
+		else // Otherwise append this ingredient at the end of the list
+		{
+		// Insert ingredient ID in the list
+		int *ingID=new int; *ingID=ing->ingredientID;
+		ingList.append(ingID);
+		std::cerr<<"I was unable to find a proper conversion\n";
+
+		// Set values for this ingredient
+		int *unitID=new int; *unitID=ing->unitID;
+		unitList.append(unitID);
+		double *amount=new double; *amount=ing->amount;
+		amountList.append(amount);
+
+		}
+		}
+	else
+		{
+
+		// Insert ingredient ID in the list
+		int *ingID=new int; *ingID=ing->ingredientID;
+		ingList.append(ingID);
+		std::cerr<<"Adding new ingredient"<<ing->ingredientID<<"\n";
+
+		// Set values for this ingredient
+		int *unitID=new int; *unitID=ing->unitID;
+		unitList.append(unitID);
+		double *amount=new double; *amount=ing->amount;
+		amountList.append(amount);
+
+		}
+
+	}
+
+
+	for (int *id=ingList.first();id; id=ingList.next()) //warning, use "first" not getFirst with QPtrList
+	{
+	int pos =ingList.at();
+	double *amount=amountList.at(pos);
+	int *unitID=unitList.at(pos);
+	std::cerr<<"Ingredient: "<<*id<<" Amount: "<<*amount<<" UnitID: "<<*unitID<<"\n";
+	}
+
+}
+
+int RecipeViewDialog::autoConvert(double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)
+{
+
+std::cerr<<"Finding ratio between: "<<unit1<<" and "<<unit2<<"\n";
+
+double ratio=database->unitRatio(unit1,unit2);
+if (ratio>=0) // There is a ratio
+	{
+	if (ratio>=1) // Convert to unit 1, since unit1 is bigger
+		{
+		newID=unit1;
+		newAmount=amount1+amount2/ratio;
+		}
+	else // Convert to unit2, since unit2 is bigger
+		{
+		newID=unit2;
+		newAmount=amount1*ratio+amount2;
+		}
+	return(0);
+	}
+else
+	{
+	newAmount=-1;
+	newID=-1;
+	return(-1);
 	}
 
 }
