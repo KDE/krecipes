@@ -2,6 +2,7 @@ Things found to be done before the 0.4 release:
 
 
 *Avoid overlapping elements in the RecipeViewDialog (CSS)
+*Fix printing. KHTML prints a tiny page (!)
 *Add tips for every dialog
 *Translations
 *package
