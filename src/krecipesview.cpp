@@ -15,6 +15,7 @@
 #include <qlayout.h>
 #include <qsplitter.h>
 
+#include <kdebug.h>
 #include <kurl.h>
 #include <kapp.h>
 #include <qpalette.h>
@@ -57,8 +58,9 @@ KrecipesView::KrecipesView(QWidget *parent)
     dbtype=config->readEntry("Type","SQLite");
 
     // Init the setup wizard if necessary
+    kdDebug()<<"Beginning wizard"<<endl;
     wizard();
-
+    kdDebug()<<"Wizard finished correctly"<<endl;
     // Show Splash Screen
 
     KStartupLogo* start_logo = 0L;

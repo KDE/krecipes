@@ -18,6 +18,7 @@
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kapp.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -360,6 +361,7 @@ layout->addWidget(saveText,1,3);
 
 void SetupWizard::save(void)
 {
+kdDebug()<<"Setting parameters in kconfig..."<<endl;
 KConfig *config=kapp->config();
 
 // Save the database type
@@ -372,7 +374,7 @@ else
 
 config->setGroup("DBType");
 config->writeEntry("Type",sDBType);
-
+kdDebug()<<"DB type set in kconfig was... "<<sDBType<<endl;
 // Save the server data if needed
 if (!(dbTypeSetupPage->dbType()==DBTypeSetupPage::SQLite))
 {
@@ -381,13 +383,15 @@ config->writeEntry("Host",serverSetupPage->server());
 config->writeEntry("Username",serverSetupPage->user());
 config->writeEntry("Password",serverSetupPage->password());
 config->writeEntry("DBName",serverSetupPage->dbName());
+kdDebug()<<"Finished setting the database parameters for MySQL (non SQLite)..."<<endl;
 }
+
 // Indicate that settings were already made
 
 config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
 config->writeEntry("Version","0.4");
-
+kdDebug()<<"Setting in kconfig the lines to disable wizard startup..."<<sDBType<<endl;
 }
 
 void SetupWizard::getOptions(bool &setupUser, bool &initializeData)
