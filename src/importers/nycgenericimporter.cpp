@@ -1,7 +1,5 @@
 /***************************************************************************
  *   Copyright (C) 2003 by                                                 *
- *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -13,6 +11,7 @@
 #include "nycgenericimporter.h"
 
 #include <kapplication.h>
+#include <klocale.h>
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -62,21 +61,18 @@ NYCGenericImporter::NYCGenericImporter( const QString &file ) : BaseImporter()
 	resetVars();
 
 	QFile input( file );
-	qDebug("loading file: %s",file.latin1());
 	if ( input.open( IO_ReadOnly ) )
 	{
 		QTextStream stream( &input );
-		qDebug("file opened");
+		stream.skipWhiteSpace();
 
-		while ( !stream.atEnd() )
+		if ( !stream.atEnd() && stream.readLine().startsWith("@@@@@") )
+			importNYCGeneric( stream );
+		else
 		{
-			if ( stream.readLine().startsWith("@@@@@") )
-			{
-				importNYCGeneric( stream );
-				break;
-			}
+			setErrorMsg( i18n("File does not appear to be a valid NYC export.") );
+			return;
 		}
-		error_code = 0;
 	}
 	else
 		error_code = FileOpenError;
