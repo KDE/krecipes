@@ -106,7 +106,7 @@ public:
 	void createNewRecipe(void);
 	void createNewElement(void);
 
-	void import( BaseImporter &importer, DualProgressDialog *progress_dialog ){ importer.import(database, progress_dialog); }
+	/*void import( BaseImporter &importer, DualProgressDialog *progress_dialog ){ importer.import(database, progress_dialog); }*/
 
 private:
 

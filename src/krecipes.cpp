@@ -13,11 +13,11 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
-#include "dualprogressdialog.h"
+//#include "dualprogressdialog.h"
 
 #include "mxpimporter.h"
 #include "mmfimporter.h"
-#include "nycgenericimporter.h"
+//#include "nycgenericimporter.h"
 
 #include "recipe.h"
 #include "recipedb.h"
@@ -221,7 +221,7 @@ void Krecipes::filePrint()
     }
 }
 
-void Krecipes::import()
+/*void Krecipes::import()
 {
 	KFileDialog file_dialog( QString::null,
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
@@ -294,7 +294,7 @@ void Krecipes::import()
 		m_view->authorsPanel->reload();
 	}
 }
-
+*/
 //return true to close app
 bool Krecipes::queryClose()
 {
