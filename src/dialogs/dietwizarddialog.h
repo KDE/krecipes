@@ -144,7 +144,9 @@ public:
 	virtual QSize sizeHint () const;
 	virtual QSize minimumSizeHint() const;
 protected:
-
+	//Variables
+	QString titleText;
+	//Methods
 	virtual void paintEvent(QPaintEvent *p );
 };
 

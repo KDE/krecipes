@@ -172,6 +172,7 @@ layout->addWidget(dishStack);
 DishInput *newDish=new DishInput(this,i18n("Dish 1"));
 dishStack->addWidget(newDish);
 dishInputList.append(newDish);
+dishNumber=1;
 
 // Signals & Slots
 connect(dishNumberInput,SIGNAL(valueChanged(int)),this,SLOT(changeDishNumber(int)));
@@ -201,6 +202,8 @@ if (dn>dishNumber)
 	 DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
 	 dishStack->addWidget(newDish);
 	 dishInputList.append(newDish);
+	 dishStack->raiseWidget(newDish);
+	 dishNumber++;
 	 }
 }
 
@@ -296,6 +299,7 @@ constraintsEditBox2->show();
 
 DishTitle::DishTitle(QWidget *parent,const QString &title):QWidget(parent)
 {
+titleText=title;
 }
 
 
@@ -319,9 +323,9 @@ void DishTitle::paintEvent(QPaintEvent *p )
     painter.setFont(titleFont);
     painter.rotate(-90);
     painter.setPen(QColor(0x00,0x00,0x00));
-    painter.drawText(0,0,-height(),30,AlignCenter,"Dish 1");
+    painter.drawText(0,0,-height(),30,AlignCenter,titleText);
     painter.setPen(QColor(0xFF,0xFF,0xFF));
-    painter.drawText(-1,-1,-height()-1,29,AlignCenter,"Dish 1");
+    painter.drawText(-1,-1,-height()-1,29,AlignCenter,titleText);
 
     painter.end();
 }
