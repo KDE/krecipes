@@ -153,6 +153,10 @@ return(this->dbNameEdit->text());;
 SavePage::SavePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
 
 QPixmap logoPixmap (locate("data", "krecipes/pics/save.png"));
 logo=new QLabel(this);
