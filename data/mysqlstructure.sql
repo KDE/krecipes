@@ -16,7 +16,7 @@ CREATE TABLE category_list (
   recipe_id int(11) NOT NULL default '0',
   category_id int(11) NOT NULL default '0',
   INDEX  rid_index (recipe_id),
-  INDEX cid_index (category_id))
+  INDEX cid_index (category_id)
 ) TYPE=MyISAM;
 CREATE TABLE db_info (
   ver float NOT NULL default '0',
@@ -33,8 +33,9 @@ CREATE TABLE ingredient_list (
   ingredient_id int(11) default NULL,
   amount float default NULL,
   unit_id int(11) default NULL,
+  order_index int(11) default NULL,
   INDEX  ridil_index (recipe_id),
-  INDEX iidil_index (ingredient_id))
+  INDEX iidil_index (ingredient_id)
 ) TYPE=MyISAM;
 CREATE TABLE ingredient_properties (
   id int(11) NOT NULL auto_increment,
