@@ -334,9 +334,11 @@ void KrecipesView::wizard(void)
 {
 KConfig *config=kapp->config();
 config->setGroup("Wizard");
+bool setupDone=config->readBoolEntry("SystemSetup",false);
 
-bool setupDone=config->readBoolEntry( "SystemSetup",false);
-if (!setupDone)
+QString setupVersion=config->readEntry("Version","0.3");  // By default assume it's 0.3. This parameter didn't exist in that version yet.
+
+if (!setupDone || (setupVersion.toDouble()<0.4)) // The config structure changed in version 0.4 to have DBType and Config Structure version
 {
 
 bool setupUser,initData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;

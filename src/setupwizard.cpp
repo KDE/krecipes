@@ -386,6 +386,7 @@ config->writeEntry("DBName",serverSetupPage->dbName());
 
 config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
+config->writeEntry("Version","0.4");
 
 }
 
