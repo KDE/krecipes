@@ -20,47 +20,9 @@
 
 #include "mixednumber.h"
 #include "recipe.h"
+#include "mmdata.h"
 
-static expand_unit_info unit_info[] = {
-  {"bn",I18N_NOOP("bunch")},
-  {"c" ,I18N_NOOP("cup")},
-  {"cc",I18N_NOOP("cubic cm")},
-  {"cg",I18N_NOOP("centigram")},
-  {"cl",I18N_NOOP("centiliter")},
-  {"cn",I18N_NOOP("can")},
-  {"ct",I18N_NOOP("carton")},
-  {"dg",I18N_NOOP("decigram")},
-  {"dl",I18N_NOOP("deciliter")},
-  {"dr",I18N_NOOP("drop")},
-  {"ds",I18N_NOOP("dash")},
-  {"ea",I18N_NOOP("each")},
-  {"kg",I18N_NOOP("kilogram")},
-  {"fl",I18N_NOOP("fluid ounce")},
-  {"g" ,I18N_NOOP("gram")},
-  {"ga",I18N_NOOP("gallon")},
-  {"l" ,I18N_NOOP("liter")},
-  {"lb",I18N_NOOP("pound")},
-  {"lg",I18N_NOOP("large")},
-  {"md",I18N_NOOP("medium")},
-  {"mg",I18N_NOOP("milligram")},
-  {"ml",I18N_NOOP("milliliter")},
-  {"pg",I18N_NOOP("package")},
-  {"pk",I18N_NOOP("package")},
-  {"pn",I18N_NOOP("pinch")},
-  {"pt",I18N_NOOP("pint")},
-  {"oz",I18N_NOOP("ounce")},
-  {"qt",I18N_NOOP("quart")},
-  {"sl",I18N_NOOP("slice")},
-  {"sm",I18N_NOOP("small")},
-  {"t" ,I18N_NOOP("teaspoon")},
-  {"tb",I18N_NOOP("tablespoon")},
-  {"ts",I18N_NOOP("teaspoon")},
-  {"T" ,I18N_NOOP("tablespoon")},
-  {"x" ,I18N_NOOP("per serving")},
-  { 0, 0 }
-};
-
-//TODO: pre-parse file and try to correct alignment errors in ingredients
+//TODO: pre-parse file and try to correct alignment errors in ingredients?
 
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
@@ -249,7 +211,11 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			if ( unit_info[i].short_form == unit )
 			{
 				is_unit = true;
-				unit = unit_info[i].expanded_form;
+				if ( new_ingredient.amount <= 1 )
+					unit = unit_info[i].expanded_form;
+				else
+					unit = unit_info[i].plural_expanded_form;
+
 				break;
 			}
 		}

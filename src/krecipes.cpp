@@ -204,7 +204,7 @@ m_view->save();
 
 void Krecipes::fileSaveAs()
 {
-       // this slot is called whenever the File->Save As menu is selected,
+// this slot is called whenever the File->Save As menu is selected,
 	m_view->exportRecipe();
 }
 

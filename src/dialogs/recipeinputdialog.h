@@ -51,6 +51,7 @@ public:
     void reloadCombos(void);
     bool everythingSaved();
     void reload(void);
+    int loadedRecipeID() const;
 private:
 
 	// Internal Data
@@ -135,8 +136,8 @@ private:
 	void moveIngredientDown(void);
 	void removeIngredient(void);
 	void addIngredient(void);
-  void modIngredientAmount( QListViewItem* );
-  void saveIngredientAmount( QListViewItem* );
+	void modIngredientAmount( QListViewItem* );
+	void saveIngredientAmount( QListViewItem* );
 	void recipeChanged(void);
 	void recipeChanged(const QString &t);
 	void enableChangedSignal(bool en=true);

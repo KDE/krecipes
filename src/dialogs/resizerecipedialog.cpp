@@ -166,7 +166,9 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 
 void ResizeRecipeDialog::accept()
 {
-	if ( buttonGroup->selected() == servingsRadioButton )
+	if ( currentServingsInput->text().toInt() == 0 )
+		KMessageBox::error( this, i18n("Unable to scale a recipe with zero servings") );
+	else if ( buttonGroup->selected() == servingsRadioButton )
 	{
 		int new_servings = newServingsInput->value();
 		int current_servings = currentServingsInput->text().toInt();
@@ -190,11 +192,11 @@ void ResizeRecipeDialog::accept()
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	int rounded_persons = static_cast<int>(ROUND(m_recipe->persons * factor));
+	int rounded_persons = static_cast<int>(ROUND(currentServingsInput->text().toInt() * factor));
 
 	//adjust factor if when using this factor, we come out with a fraction of a person
 	kdDebug()<<"factor given: "<<factor<<endl;
-	factor = static_cast<double>(rounded_persons) / static_cast<double>(m_recipe->persons);
+	factor = static_cast<double>(rounded_persons) / static_cast<double>(currentServingsInput->text().toInt());
 	kdDebug()<<"modified factor: "<<factor<<endl;
 
 	m_recipe->persons = rounded_persons;

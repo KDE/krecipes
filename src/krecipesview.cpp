@@ -337,8 +337,27 @@ inputPanel->save();
     \fn KrecipesView::exportRecipe()
  */
 void KrecipesView::exportRecipe()
-{
-  selectPanel->slotExportRecipe();
+{/*
+	if ( !inputPanel->everythingSaved() )
+	{
+		Recipe *recipe;  selectPanel->getCurrentRecipe( recipe );
+		if ( recipe->recipeID == inputPanel->loadedRecipeID() )
+		{
+			switch( KMessageBox::questionYesNoCancel( this,
+			  i18n("This recipe has unsaved changes.\n"
+			  "In order to have these changes saved to a file, this recipe must first be saved to the database.\n"
+			  "Do you want to save this recipe to a file with or without these changes?"),
+			  i18n("Unsaved Changes") ) )
+			{
+			case KMessageBox::Yes: save();
+			case KMessageBox::No: selectPanel->slotExportRecipe();
+			case KMessageBox::Cancel: break;
+			default: break;
+			}
+		}
+	}
+	else*/
+		selectPanel->slotExportRecipe();
 }
 
 void KrecipesView::actionRecipe(int recipeID, int action)

@@ -15,6 +15,7 @@
 #include <qsignalmapper.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include "DBBackend/recipedb.h"
 #include "recipe.h"

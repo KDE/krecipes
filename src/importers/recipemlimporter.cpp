@@ -219,7 +219,8 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 			kdDebug()<<"Unknown tag within <ing>: "<<ingChild.tagName()<<endl;
 	}
 
-	unit.prepend(size+" ");
+	if ( !size.isNull() )
+		unit.prepend(size+" ");
 
 	recipe->ingList.append( new Ingredient(name, quantity, unit) );
 }

@@ -29,6 +29,7 @@ public:
 
 protected:
     virtual void saveToFile( const QPtrList<Recipe> & );
+    virtual QString extensions() const{ return ".kre,.kreml"; }
 };
 
 #endif

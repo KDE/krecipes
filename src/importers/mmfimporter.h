@@ -17,12 +17,6 @@
 #include "ingredientlist.h"
 #include "elementlist.h"
 
-struct expand_unit_info
-{
-   const char *short_form;
-   const char *expanded_form;
-};
-
 /** Class to import Meal-Master's MMF (Meal-Master Format) file format.
   * @author Jason Kivlighn
   */

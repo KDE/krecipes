@@ -21,7 +21,6 @@
 KreExporter::KreExporter( RecipeDB *db, const QString& filename, const QString format ) :
   BaseExporter( db, filename, format )
 {
-	possible_formats << ".kre" << ".kreml";
 }
 
 

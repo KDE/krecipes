@@ -377,6 +377,11 @@ RecipeInputDialog::~RecipeInputDialog()
 	delete unitComboList;
 }
 
+int RecipeInputDialog::loadedRecipeID() const
+{
+	return loadedRecipe->recipeID;
+}
+
 void RecipeInputDialog::loadRecipe(int recipeID)
 {
 //Disable changed() signals

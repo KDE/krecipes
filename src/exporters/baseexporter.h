@@ -32,13 +32,17 @@ public:
 	virtual QString createContent( const QPtrList<Recipe> & ) = 0;
 
 protected:
-	/** Writes the return value of createContent() to a file. */
+	/** Default implementation writes the return value of createContent() to a file. */
 	virtual void saveToFile( const QPtrList<Recipe> & );
+
+	/** Returns the extension (comma-separated if a single exporter can save to more than one format)
+	  * of the file format.
+	  */
+	virtual QString extensions() const = 0;
 
 	QFile* file;
 	QString format;
 	QString filename;
-	QStringList possible_formats;
 
 private:
 	bool createFile();

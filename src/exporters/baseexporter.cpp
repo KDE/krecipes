@@ -60,13 +60,14 @@ void BaseExporter::exporter( const QValueList<int>& l )
 		}
 	}
 	else
-		kdDebug()<<"no output file have been selected for export."<<endl;
+		kdDebug()<<"no output file has been selected for export."<<endl;
 }
 
 bool BaseExporter::createFile()
 {
 	if(filename != QString::null)
 	{
+		QStringList possible_formats = QStringList::split(',',extensions());
 		for ( QStringList::const_iterator it = possible_formats.begin(); it != possible_formats.end(); ++it )
 		{
 			if ( filename.right((*it).length()) == *it )

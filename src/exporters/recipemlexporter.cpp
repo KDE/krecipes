@@ -18,7 +18,6 @@
 RecipeMLExporter::RecipeMLExporter( RecipeDB *db, const QString& filename, const QString format ) :
   BaseExporter( db, filename, format )
 {
-	possible_formats << ".xml";
 }
 
 
@@ -37,7 +36,8 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	doc.appendChild( recipeml_tag );
 
 	QDomElement recipe_root = recipeml_tag;
-
+	#if 0
+	//I might use this later....
 	if ( recipes.count() > 1 )
 	{
 		QDomElement menu_tag = doc.createElement("menu");
@@ -49,6 +49,7 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 
 		recipe_root = menu_tag;
 	}
+	#endif
 
 	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
