@@ -6,7 +6,7 @@ INSERT INTO authors VALUES (1,'Adriaan de Groot');
 INSERT INTO authors VALUES (2,'Ian Reinhart Geiser');
 INSERT INTO authors VALUES (3,'Ravikiran Rajagopal');
 INSERT INTO authors VALUES (4,'Unai Garro');
-INSERT INTO categories VALUES (1,'Vegetables');
+INSERT INTO categories VALUES (1,'Vegetables',-1);
 INSERT INTO categories VALUES (2,'Meat',-1);
 INSERT INTO categories VALUES (3,'Fish',-1);
 INSERT INTO categories VALUES (4,'Sweets',-1);
