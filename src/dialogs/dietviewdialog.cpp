@@ -49,8 +49,10 @@ QString htmlCode=QString("<html><head><title>%1</title>").arg(i18n("Diet"));
 
 // CSS
 htmlCode += "<STYLE type=\"text/css\">\n";
+htmlCode+="#dayheader{ background-color: #D6D6D6; color: black; border:none;}";
 htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
-htmlCode+="#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;}";
+htmlCode+="#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;align:center;}";
+htmlCode+="#dish{overflow:hidden; height:1em;};";
 htmlCode +="</STYLE>";
 
 
@@ -77,21 +79,26 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 
 	for (int col=0; (col<7) && (day<dayNumber); col++,day++) // New column (day)
 		{
-		htmlCode+=QString("<td id=\"day\">");
+		htmlCode+=QString("<td><div id=\"day\"");
+		htmlCode+=QString("<div id=\"dayheader\"><center>");
+		htmlCode+=QString(i18n("Day %1")).arg(day);
+		htmlCode+=QString("</center></div>");
 		for (int meal=0;meal<mealNumber;meal++) // Meals in each cell
 			{
-			htmlCode+=QString("<div id=\"meal\">");
 			int dishNumber=*it;
+			htmlCode+=QString("<div id=\"meal\">");
 			for (int dish=0; dish<dishNumber;dish++) // Dishes in each Meal
 				{
+				htmlCode+=QString("<div id=\"dish\">");
 				htmlCode+=(*rit).title; htmlCode+="<br>";
+				htmlCode+=QString("</div>");
 				rit++;
 				}
 			it++;
 			htmlCode+=QString("</div>");
 			}
 		it=dishNumbers.begin(); // meals have same dish number everyday
-		htmlCode+=QString("</td>");
+		htmlCode+=QString("</div></td>");
 		}
 
 	htmlCode+=QString("</tr>");
@@ -101,6 +108,7 @@ htmlCode+=QString("</tbody></table>");
 htmlCode+=QString("</div></center>");
 htmlCode+=QString("</body></html>");
 
+resize(QSize(600,400));
 // Display it
 dietView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where photos and logos can be stored
 dietView->write(htmlCode);
