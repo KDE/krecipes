@@ -82,20 +82,11 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Read the database setup
 
     KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
-    dbtype=config->readEntry("Type","SQLite");
+    
 
     // Check if the database type is among those supported
 
-    while ((dbtype!="SQLite") && (dbtype!="MySQL"))
-	{
-	questionRerunWizard(i18n("The configured database type is unsupported."),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
-		
-	// Read the database setup again
-	
-	config=kapp->config(); config->sync(); config->setGroup("DBType");
-	dbtype=config->readEntry("Type","SQLite");
-	
-	}
+   dbtype=checkCorrectDBType(config);
     
     if (0) {}// necessary for the next optional else if lines
     
@@ -103,16 +94,29 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     else if(dbtype=="MySQL")  // First case, MySQL
     	{
+	
+	kdDebug()<<i18n("Configured type... MySQL\n").latin1();
+	
 	// Read the server parameters
 	config->setGroup("Server");
 	QString host=config->readEntry( "Host","localhost");
     	QString user=config->readEntry( "Username",QString::null);
     	QString pass=config->readEntry("Password",QString::null);
     	QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
-
+	kdDebug()<<i18n("MySQL parameters read. Now starting DB\n").latin1();
 	// Open the database
 
 	database=new MySQLRecipeDB(host,user,pass,dbname);
+	while (!database->ok()) 
+	{
+		// Ask the user if he wants to rerun the wizard
+		questionRerunWizard(i18n(i18n("Unable to open database"),database->err()));
+		
+		// Try opening the database again
+		delete (MySQLRecipeDB *)database;
+		database=new MySQLRecipeDB(host,user,pass,dbname);
+	}
+	kdDebug()<<i18n("DB started correctly\n").latin1();
 
 	}
 
@@ -123,6 +127,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     else if (dbtype=="SQLite")// SQLite case
     	{
+	kdDebug()<<i18n("Configured type... SQLite\n").latin1();
     	database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
 	}
 
@@ -310,7 +315,7 @@ delete buttonsList;
 
 void KrecipesView::questionRerunWizard(const QString &message, const QString &error)
 {
-QString yesNoMessage=message+" "+i18n("Would you like to run the setup wizard again? Otherwise, the application will be closed.");
+QString yesNoMessage=message+" "+i18n("\nWould you like to run the setup wizard again? Otherwise, the application will be closed.");
 int answer=KMessageBox::questionYesNo(this,yesNoMessage);
 
 	if (answer==KMessageBox::Yes) wizard(true);
@@ -863,6 +868,22 @@ rpplace.setX(lpw);
 rightPanel->move(rpplace);
 rightPanel->resize(rpsize);
 
+}
+
+QString KrecipesView::checkCorrectDBType(KConfig *config)
+{
+QString dbType=config->readEntry("Type","SQLite");
+
+ while ((dbType!="SQLite") && (dbType!="MySQL"))
+	{
+	questionRerunWizard(i18n("The configured database type (%1) is unsupported.").arg(dbType),i18n("Unsupported database type. Database must be either MySQL or SQLite."));
+		
+	// Read the database setup again
+	
+	config=kapp->config(); config->sync(); config->setGroup("DBType");
+	dbType=config->readEntry("Type","SQLite");
+	return (dbType);
+	}
 }
 
 #include "krecipesview.moc"

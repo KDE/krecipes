@@ -17,6 +17,7 @@
 #define DB_DRIVER "QMYSQL3"
 #define DEFAULT_DB_NAME "Krecipes"
 #include <mysql.h>
+#include <qobject.h>
 #include <qsqldatabase.h>
 #include <qimage.h>
 #include <qfileinfo.h>
@@ -34,6 +35,9 @@
 @author Unai Garro
 */
 class MySQLRecipeDB:public RecipeDB{
+
+Q_OBJECT
+
 private:
 	QSqlDatabase *database;
 	void createDB(void);

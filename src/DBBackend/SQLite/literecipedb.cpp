@@ -38,7 +38,7 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	     //Now Reopen the Database and exit if it fails
 	     if (!database->open(dbFile))
 		{
-		std::cerr<<QString("Could not open DB. You may not have permissions. Exiting.\n").arg(user).latin1();
+		kdError()<<QString(i18n("Could not open DB. You may not have permissions. Exiting.\n")).latin1();
 		exit(1);
 		}
 
@@ -50,7 +50,7 @@ kdDebug()<<"Connecting to the SQLite database\n";
 	 kdDebug()<<"I'll check the DB integrity now\n";
 	 	if (!checkIntegrity())
 			{
-			std::cerr<<"Failed to fix database structure. Exiting.\n";
+			kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
 			 exit(1);
 			 }
 	 }
@@ -1922,3 +1922,4 @@ int LiteRecipeDB::sqlite_decode_binary(const unsigned char *in, unsigned char *o
   return i;
 }
 
+//#include "literecipedb.moc"

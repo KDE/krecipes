@@ -18,6 +18,7 @@
 
 #include <qimage.h>
 #include <qfileinfo.h>
+#include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <iostream>
@@ -34,6 +35,9 @@
 @author Unai Garro
 */
 class LiteRecipeDB:public RecipeDB{
+
+Q_OBJECT
+
 private:
 	QSQLiteDB *database;
 	void createDB(void);

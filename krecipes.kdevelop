@@ -14,7 +14,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
+    <description></description>
     <ignoreparts>
       <part>KDevBookmarks</part>
       <part>KDevClassView</part>
@@ -29,7 +29,7 @@
     </general>
     <run>
       <mainprogram>src/krecipes</mainprogram>
-      <programargs/>
+      <programargs></programargs>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>executable</directoryradio>
@@ -38,13 +38,14 @@
     </run>
     <make>
       <envvars>
+        <envvar value="$KDEDIR/unsermake/unsermake" name="UNSERMAKE" />
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
-        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+        <envvar value="1" name="WANT_AUTOMAKE_1_7" />
       </envvars>
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
     </make>
   </kdevautoproject>
   <kdevfileview>
@@ -55,10 +56,11 @@
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*" name="Others" />
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns></hidepatterns>
+      <hidepatterns/>
       <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>

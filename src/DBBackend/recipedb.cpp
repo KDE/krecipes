@@ -40,6 +40,7 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids )
 	}
 }
 
+
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int,QString> * );
 int createUnit(const QString &name, RecipeDB*);
@@ -175,3 +176,5 @@ void create_properties( RecipeDB *database )
 		}
 	}
 }
+
+#include "recipedb.moc"

@@ -14,9 +14,12 @@
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
+#include <qobject.h>
 #include <qsqldatabase.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+
+#include <klocale.h>
 
 #include "recipe.h"
 #include "datablocks/recipelist.h"
@@ -35,13 +38,22 @@ QValueList <int> recipeIdList;
 IngredientList ilist;
 } RecipeIngredientList;
 
-class RecipeDB{
+class RecipeDB:public QObject {
+
+Q_OBJECT
 
 protected:
-	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init){};
+	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init):QObject(){dbOK=false; dbErr="";}
 
 public:
 	virtual ~RecipeDB(){};
+	
+	// Error handling (passive)
+	bool dbOK;
+	QString dbErr;
+
+	// Public methods
+public:
 	
 	virtual void addAuthorToRecipe(int recipeID, int categoryID)=0;
 	virtual void addCategoryToRecipe(int recipeID, int categoryID)=0;
@@ -163,6 +175,11 @@ public:
 
 protected:
 	virtual void portOldDatabases(float version)=0;
+public:
+	virtual bool ok(){return (dbOK);}
+	virtual QString err(){return (dbErr);}
+signals:
+	void questionRerunWizard(const QString &message,const QString &error);
 };
 
 

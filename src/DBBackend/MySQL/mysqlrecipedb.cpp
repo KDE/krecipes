@@ -18,23 +18,31 @@
 
 MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
-	DBuser=user;DBpass=pass;DBhost=host;
 
+	kdDebug()<<i18n("MySQLRecipeDB: Opening MySQL Database...\n")<<endl;
+	DBuser=user;DBpass=pass;DBhost=host;
         database= QSqlDatabase::addDatabase( DB_DRIVER );
         database->setDatabaseName(DBname);
         if (!(DBuser==QString::null)) database->setUserName(DBuser );
         if (!(DBpass==QString::null)) database->setPassword(DBpass);
         database->setHostName(DBhost);
+	kdDebug()<<i18n("Parameters set. Calling db->open()\n").latin1();
+	
         if ( !database->open() ) {
-	     //Try to create the database
-	     createDB();
+		kdDebug()<<i18n("Failing to open database. Trying to create it\n").latin1();
+		//Try to create the database
+		createDB();
 
-	     //Now Reopen the Database and exit if it fails
+	     //Now Reopen the Database and signal & exit if it fails
 	     if (!database->open())
 		{
-		std::cerr<<QString("Could not open DB as user: %1. You may not have permissions. Exiting.\n").arg(user).latin1();
-		kdDebug()<<"MySQL database message: "<<database->lastError().databaseText()<<endl;
-		exit(1);
+		QString error=i18n("MySQL database message: %1").arg(database->lastError().databaseText());
+		kdDebug()<<i18n("Failing to open database. Exiting\n").latin1();
+		
+		// Handle the error (passively)
+		dbErr=QString(i18n("Krecipes could not open the database (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(user);
+		return;
+		
 		}
 
 	     // Initialize database if requested
@@ -44,14 +52,16 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 	 {
 	 	if (!checkIntegrity())
 			{
-			std::cerr<<"Failed to fix database structure. Exiting.\n";
-			 exit(1);
+			kdError()<<i18n("Failed to fix database structure. Exiting.\n").latin1();
+			exit(1);
 			 }
+		// Database was opened correctly
+		dbOK=true;
 	 }
 }
 MySQLRecipeDB::~MySQLRecipeDB()
 {
-database->close();
+if (dbOK) database->close();
 }
 
 void MySQLRecipeDB::createDB()
@@ -1667,3 +1677,4 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	}
 }
 
+#include "mysqlrecipedb.moc"
