@@ -453,7 +453,7 @@ loadUnitListCombo();
  void RecipeInputDialog::changePhoto(void)
  {
 // standard filedialog
-    KURL filename = KFileDialog::getOpenURL(QString::null, i18n("*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)"), this);
+    KURL filename = KFileDialog::getOpenURL(QString::null,"*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)", this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
       // If photo is bigger than the label, or smaller in width, than photoLabel, scale it
@@ -547,7 +547,7 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 		if (unitBox->currentText().stripWhiteSpace() == "")
 		{
 			QMessageBox::information( this,
-			  i18n("Unit missing"),
+			  "Unit missing",
 			  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
 			  " Before this can be done, please enter a unit to associate with"
 			  " this ingredient.")).arg(ingredientBox->currentText()),
