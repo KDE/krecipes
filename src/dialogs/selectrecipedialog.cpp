@@ -217,7 +217,7 @@ void SelectRecipeDialog::filter(const QString& s)
 {
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	if (!it->firstChild()) // It's not a category
+	if (!it->firstChild()) // It's not a category or it's empty
 	{
 		if (s==QString::null) it->setVisible(true); // Don't filter if the filter text is empty
 		else if (it->text(2).contains(s,false)) it->setVisible(true);
