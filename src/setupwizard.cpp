@@ -505,7 +505,8 @@ layout->addItem(spacer_bottom,4,3);
 
 int DBTypeSetupPage::dbType(void)
 {
-int id=bg->selectedId();
+//int id=bg->selectedId(); //QT 3.2
+int id=bg->id(bg->selected()); //QT 3.1
 
 if (id==1) // MySQL (note index=0,1....)
 	 return (MySQL);
