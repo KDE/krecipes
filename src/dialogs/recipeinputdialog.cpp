@@ -8,13 +8,14 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qstring.h>
+ #include <qstring.h>
 #include <qlayout.h>
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
 
+#include <kspell.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -908,9 +909,10 @@ QMessageBox::information( this,
 
 void RecipeInputDialog::spellCheck(void)
 {
-	KMessageBox::sorry(this,"Sorry, I'm not implemented just yet :(","Coming soon (hopefully)");
-	//I imagine doing something like this...
-	//instructionsEdit->setText( SpellChecker::checkSpelling( instructionsEdit->text() ) );
-	//it opens a dialog to correct each word, which the user corrects; when
-	//its all done, it returns the fixed text
+	QString text = instructionsEdit->text();
+	KSpell::modalCheck( text );
+	KMessageBox::information( this, i18n("Spell check complete."), i18n("Complete") );
+
+	if ( text != instructionsEdit->text() ) //check if there were changes
+		instructionsEdit->setText( text );
 }
