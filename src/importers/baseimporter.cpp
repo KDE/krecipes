@@ -37,7 +37,12 @@ void BaseImporter::import( RecipeDB *db )
 	RecipeImportDialog import_dialog(*m_recipe_list);
 
 	if ( import_dialog.exec() != QDialog::Accepted )
+	{
+		//clear errors and messages so they won't be displayed
+		m_error_msg = QString::null;
+		m_warning_msgs.clear();
 		return;
+	}
 
 	QPtrList<Recipe> *selected_recipes = import_dialog.getSelectedRecipes(); //no need to delete, uses pointers from given list
 
