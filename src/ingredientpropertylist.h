@@ -43,6 +43,7 @@ public:
     int find(IngredientProperty* it);
     int find(int id);
     IngredientProperty* at(int pos);
+    void divide(int persons);
     private:
     PropertyPtrList list;
 

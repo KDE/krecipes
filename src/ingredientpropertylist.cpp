@@ -65,3 +65,9 @@ void IngredientPropertyList::append(IngredientProperty *property)
 {
 list.append (property);
 }
+
+void IngredientPropertyList::divide(int persons)
+{
+for (IngredientProperty* ip=getFirst();ip;ip=getNext())
+	ip->amount/=persons;
+}
