@@ -31,9 +31,6 @@ krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/krecipes.pot
-
 KDE_ICON = krecipes
 
 # this is where the kdelnk file will go
