@@ -79,6 +79,8 @@ MX2Importer::MX2Importer(const QString& filename)
 			}
 		}
 	}
+	else
+		setErrorMsg(i18n("Unable to open file."));
 }
 
 MX2Importer::~MX2Importer()
