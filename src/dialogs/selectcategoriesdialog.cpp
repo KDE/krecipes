@@ -10,9 +10,22 @@
 #include "selectcategoriesdialog.h"
 
 
-
 SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
+//Design UI
+
+layout = new QGridLayout( this, 1, 1, 0, 0);
+
+	// Border Spacers
+	QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	layout->addMultiCell( spacer_left, 1,4,0,0 );
+	QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addMultiCell(spacer_top,0,0,1,4);
+
+//Category List
+categoryListView=new KListView(this);
+categoryListView->addColumn("*");
+categoryListView->addColumn("Category");
+layout->addMultiCellWidget(categoryListView,1,1,1,2);
 }
 
 SelectCategoriesDialog::~SelectCategoriesDialog()

@@ -11,6 +11,8 @@
 #define SELECTCATEGORIESDIALOG_H
 
 #include <qwidget.h>
+#include <qlayout.h>
+#include <klistview.h>
 #include "recipedb.h"
 
 /**
@@ -24,6 +26,11 @@ public:
 
     SelectCategoriesDialog(QWidget *parent, RecipeDB *db);
     ~SelectCategoriesDialog();
+private:
+
+	//Widgets
+	KListView *categoryListView;
+	QGridLayout *layout;
 
 };
 
