@@ -10,89 +10,39 @@
 
 #include "pagesetupdialog.h"
 
+#include "../widgets/dragarea.h"
+#include "../widgets/sizehandle.h"
+
 #include <kapplication.h>
 #include <kconfig.h>
+#include <klocale.h>
 
-#include <qpainter.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qtextedit.h>
 
 #include <cmath>
 
-PageSetupDialog::PageSetupDialog( QWidget *parent ) : QDialog(parent,0,true)
+PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDialog(parent,0,true)
 {
-	//KConfig *config=kapp->config();
-	//config->setGroup("PageSetup");
+	QVBoxLayout *layout = new QVBoxLayout(this);
 
-	QWidget *dragSurface = new QWidget(this);
-	dragSurface->resize(300,300);
+	DragArea *dragArea = new DragArea(this);
+	layout->addWidget(dragArea);
 
-	DraggableWidget *test = new DraggableWidget(dragSurface,"Test","text");
-	DraggableWidget *test2 = new DraggableWidget(dragSurface,"Test2","text2");
+	title_box = new QLabel(sample.title,dragArea);
+	instr_box = new QLabel(sample.instructions,dragArea);
+	servings_box = new QLabel(QString(i18n("Servings: %1")).arg(sample.persons),dragArea);
+
+	setFixedSize(500,600);
+
+	loadSetup();
 }
 
-DraggableWidget::DraggableWidget( QWidget *parent, const char *name, const QString &text ) : QWidget(parent,name),
- mouse_down(false),
- m_text(text),
- last_point(0,0)
+void PageSetupDialog::loadSetup()
 {
-	resize(50,50);
+	KConfig *config=kapp->config();
+	config->setGroup("PageSetup");
 
-	setPaletteBackgroundColor ( QColor(0,0,0) );
 
-	setMouseTracking(true);
 }
-
-void DraggableWidget::mousePressEvent( QMouseEvent *e )
-{
-	mouse_down = true;
-}
-
-void DraggableWidget::mouseReleaseEvent( QMouseEvent *e )
-{
-	mouse_down = false;
-}
-
-
-void DraggableWidget::mouseMoveEvent( QMouseEvent *e )
-{
-	QPoint this_point(mapToParent(e->pos())); //get the point in relation to parent, since this widget is on the move
-
-	if ( mouse_down )
-	{
-		if ( e->x() <= 2 ) //resizing from left side
-		{
-			int deltax = this_point.x() - last_point.x();
-
-			setGeometry( QRect( QPoint(this->x() + deltax, this->y()),
-			  QSize(size().width() - deltax, size().height() ) ) );
-
-		}
-		else if ( pos().x() >= size().width() - 2 ) //resizing from right side
-		{
-			int deltax = this_point.x() - last_point.x();
-
-			setGeometry( QRect( QPoint(this->x(), this->y()),
-			  QSize(size().width() + deltax, size().height() ) ) );
-
-		}
-		else
-		{
-			QPoint delta_pos = this_point - last_point;
-
-			move( pos() + delta_pos );
-			//setGeometry( QRect(QPoint(x - last_point->x(), y - last_point->y()), QSize(50,50)) );
-		}
-	}
-
-	last_point = this_point;
-}
-
-void DraggableWidget::paintEvent( QPaintEvent * )
-{
-	QPainter p(this);
-
-	p.setPen( QPen( QColor(255,0,0) ) );
-	p.drawText(10,10,m_text);
-}
-

@@ -255,8 +255,18 @@ void SelectRecipeDialog::haveSelectedItems(){
   }
 }
 
+void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
+{
+	if (recipeListView->selectedItem())
+	{
+		if((recipeListView->selectedItem())->text(1) != NULL)
+			database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
+	}
+}
+
 void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
   if(!i->firstChild()){
     kpop->exec(p);
   }
 }
+

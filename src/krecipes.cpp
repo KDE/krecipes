@@ -311,8 +311,12 @@ void Krecipes::import()
 
 void Krecipes::pageSetupSlot()
 {
-	PageSetupDialog *page_setup = new PageSetupDialog(this);
+	Recipe recipe;
+	m_view->selectPanel->getCurrentRecipe(&recipe);
+
+	PageSetupDialog *page_setup = new PageSetupDialog(this,recipe);
 	page_setup->exec();
+
 	delete page_setup;
 }
 

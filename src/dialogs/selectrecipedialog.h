@@ -45,6 +45,8 @@ public:
 
   //Public Methods
   void reload(void);
+  void getCurrentRecipe( Recipe *recipe );
+
 private:
 
   // Widgets

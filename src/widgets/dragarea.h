@@ -8,26 +8,40 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef PAGESETUPDIALOG_H
-#define PAGESETUPDIALOG_H
+#ifndef DRAGAREA_H
+#define DRAGAREA_H
 
-#include <qdialog.h>
+#include <qwidget.h>
+#include <qpoint.h>
 
-#include "../recipe.h"
+class QMouseEvent;
+class QEvent;
 
-class QLabel;
+class WidgetSelection;
 
-class PageSetupDialog : public QDialog
+/**
+  * @author Jason Kivlighn
+  */
+class DragArea : public QWidget
 {
 public:
-	PageSetupDialog( QWidget *parent, const Recipe &sample );
+	DragArea( QWidget *parent = 0, const char *name = 0 );
+	~DragArea();
+
+protected:
+	virtual void mousePressEvent( QMouseEvent * );
+	virtual void mouseReleaseEvent( QMouseEvent * );
+	virtual void mouseMoveEvent( QMouseEvent * );
+
+	void moveWidget( QWidget *w, int dx, int dy );
 
 private:
-	void loadSetup();
-
-	QLabel *title_box;
-	QLabel *instr_box;
-	QLabel *servings_box;
+	bool mouse_down;
+	QPoint m_last_point;
+	QPoint m_begin_point;
+	QWidget *m_current_box;
+	QRect widgetGeom;
+	WidgetSelection *selection;
 };
 
-#endif //PAGESETUPDIALOG_H
+#endif //DRAGAREA_H
