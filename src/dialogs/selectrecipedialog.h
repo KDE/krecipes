@@ -77,6 +77,8 @@ private:
   void loadRecipeList(void);
   void loadCategoryCombo(void);
 
+  void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
+
 signals:
   void recipeSelected(int id, int action);
   void recipeSelected(bool);
@@ -94,8 +96,8 @@ private slots:
   void expandAll();
   void collapseAll();
 public slots:
-  void exportRecipe();
-  void exportRecipeFromCat();
+  void slotExportRecipe();
+  void slotExportRecipeFromCat();
   void haveSelectedItems();
 };
 

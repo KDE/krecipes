@@ -10,15 +10,10 @@
 
 #include "recipemlexporter.h"
 
-#include <qfile.h>
 #include <qdom.h>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmdcodec.h>
-#include <ktempfile.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
 
 RecipeMLExporter::RecipeMLExporter( RecipeDB *db, const QString& filename, const QString format ) :
   BaseExporter( db, filename, format )
@@ -38,7 +33,22 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 
 	QDomElement recipeml_tag = doc.documentElement();
 	recipeml_tag.setAttribute( "version", 0.5 );
+	recipeml_tag.setAttribute( "generator", "Krecipes v0.4" );
 	doc.appendChild( recipeml_tag );
+
+	QDomElement recipe_root = recipeml_tag;
+
+	if ( recipes.count() > 1 )
+	{
+		QDomElement menu_tag = doc.createElement("menu");
+		recipeml_tag.appendChild( menu_tag );
+
+			QDomElement description_tag = doc.createElement("description");
+			description_tag.appendChild( doc.createTextNode( QString(i18n("Recipes in the category \"%1\"")).arg(filename) ) );
+			menu_tag.appendChild(description_tag);
+
+		recipe_root = menu_tag;
+	}
 
 	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;
@@ -47,7 +57,8 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 		++recipes_it;
 
 		QDomElement recipe_tag = doc.createElement("recipe");
-		recipeml_tag.appendChild( recipe_tag );
+
+		recipe_root.appendChild( recipe_tag ); //will append to either <menu> if exists or else <recipeml>
 
 			QDomElement head_tag = doc.createElement("head");
 			recipe_tag.appendChild( head_tag );
@@ -55,6 +66,18 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 				QDomElement title_tag = doc.createElement("title");
 				title_tag.appendChild( doc.createTextNode(recipe->title) );
 				head_tag.appendChild( title_tag );
+
+				QDomElement source_tag = doc.createElement("source");
+				QPtrListIterator<Element> author_it( recipe->authorList );
+				Element *author;
+				while ( (author = author_it.current()) != 0 )
+				{
+					++author_it;
+					QDomElement srcitem_tag = doc.createElement("srcitem");
+					srcitem_tag.appendChild( doc.createTextNode(author->name) );
+					source_tag.appendChild(srcitem_tag);
+				}
+				head_tag.appendChild( source_tag );
 
 				QDomElement categories_tag = doc.createElement("categories");
 				QPtrListIterator<Element> cat_it( recipe->categoryList );
@@ -64,6 +87,7 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 					++cat_it;
 					QDomElement cat_tag = doc.createElement("cat");
 					cat_tag.appendChild( doc.createTextNode(cat->name) );
+					categories_tag.appendChild(cat_tag);
 				}
 				head_tag.appendChild(categories_tag);
 
@@ -107,31 +131,6 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 				directions_tag.appendChild( step_tag );
 				step_tag.appendChild( doc.createTextNode(recipe->instructions) );
 	}
-#if 0
-	QPtrListIterator<Element> author_it( recipe->authorList );
-	Element *author;
-	while ( (author = author_it.current()) != 0 )
-	{
-		++author_it;
-		xml += "<author>"+author->name.utf8()+"</author>\n";
-	}
 
-    xml += "<pictures>\n";
-    xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
-    KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
-    recipe->photo.save(fn->name(), "JPEG");
-    QByteArray data;
-    if( fn ){
-      data = (fn->file())->readAll();
-      fn->close();
-      xml += KCodecs::base64Encode(data, true);
-    }
-    delete fn;
-
-    xml += "]]></pic>\n";
-    xml += "</pictures>\n";
-    #endif
-
-    kdDebug()<<doc.toString()<<endl;
-    return doc.toString();
+	return doc.toString();
 }

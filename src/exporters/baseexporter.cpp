@@ -88,7 +88,7 @@ bool BaseExporter::createFile()
 
 		QFileInfo fi(*file);
 		format = fi.extension();
-		filename = (fi.fileName()).remove(format);
+		filename = (fi.fileName()).remove("."+format);
 
 		return true;
 	}
