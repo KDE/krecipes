@@ -1,1 +1,5 @@
-
+Spell Check Directions (put button below directions)
+mx2 import (MasterCook's XML format)
+RecipeML import/export
+Give option to import recipe formats by pasting the recipe text into a widget
+Option to view amount as either a decimal or a fraction
