@@ -9,27 +9,20 @@
  ***************************************************************************/
 #ifndef UNITRATIOLIST_H
 #define UNITRATIOLIST_H
-#include <qptrlist.h>
+#include <qvaluelist.h>
 #include "unitratio.h"
 
 
 /**
 @author Unai Garro
 */
-class UnitRatioList{
+class UnitRatioList : public QValueList <UnitRatio>{
 public:
      UnitRatioList();
     ~UnitRatioList();
-    UnitRatio* getFirst(void);
-    UnitRatio* getNext(void);
-    UnitRatio* getElement(int index);
-    void clear(void);
-    bool isEmpty(void);
-    void add(UnitRatio &ratio);
+    
+    void add( const UnitRatio &r ){ append(r); }
     double getRatio(int uid1, int uid2);
-
-    private:
-    QPtrList<UnitRatio> list;
 };
 
 #endif

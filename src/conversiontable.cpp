@@ -16,9 +16,6 @@ ConversionTable::ConversionTable(QWidget* parent,int maxrows,int maxcols):QTable
 editBoxValue=-1;
 items.setAutoDelete(true);
 widgets.setAutoDelete(true);
-
-
-connect(this,SIGNAL(signalSymmetric(int,int,double)),this,SLOT(makeSymmetric(int,int,double)));
 }
 
 ConversionTable::~ConversionTable()
@@ -109,7 +106,6 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 		eb->accepted=false;
 		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
 		emit ratioChanged(row(),col(),eb->value()); // Signal to store
-		if (row()!=col()) emit signalSymmetric(row(),col(),eb->value()); // Signal to make symmetric. just in case, check if row,col are different (it shouldn't be editable, anyway)
 		}
 	}
     else
@@ -146,7 +142,6 @@ setItem(r,c, ci );
 ci->setText(QString::number(amount));
 // connect signal (forward) to know when it's actually changed
 connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
-connect(ci, SIGNAL(signalSymmetric(int,int,double)),this,SIGNAL(signalSymmetric(int,int,double)));
 connect(ci, SIGNAL(signalRepaintCell(int,int)),this,SLOT(repaintCell(int,int)));
 
 }
@@ -187,24 +182,6 @@ if (!item(row,col))
 
 // Then call normal beginEdit
 return QTable::beginEdit(row,col,replace);
-}
-
-void ConversionTable::makeSymmetric(int r,int c,double amount)
-{
-
-QTableItem *it;
-
-// If there's no item, create it first.
-if (!(it=item(c,r)))
-	{
-	createNewItem(c,r,0); // Create the new item
-	it=item(c,r); // And get the pointer
-	}
-
-if (amount)
-(( ConversionTableItem *) it)->setTextAndSave(QString::number(1.0/amount)); // Change value and store in database
-else
-(( ConversionTableItem *) it)->setTextAndSave(QString::number(0));// Change value and store in database
 }
 
 void ConversionTableItem::setTextAndSave(const QString &s)

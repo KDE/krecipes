@@ -57,11 +57,9 @@ protected:
 	QWidget* beginEdit ( int row, int col, bool replace );
 private slots:
 	void acceptValueAndClose(void);
-	void makeSymmetric(int r,int c,double amount);
 	void repaintCell(int r,int c);
 signals:
 	void ratioChanged(int row, int col, double value);
-	void signalSymmetric(int row, int col, double value);
 };
 
 class ConversionTableItem:public QObject, public QTableItem
@@ -76,7 +74,6 @@ public:
 	void setTextAndSave(const QString &s);
 signals:
 	void ratioChanged(int row, int col, double value);
-	void signalSymmetric(int row, int col, double value);
 	void signalRepaintCell(int r,int c);
 private:
 	EditBox *eb;

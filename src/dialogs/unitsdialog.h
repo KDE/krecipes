@@ -16,6 +16,8 @@
 #include <klistview.h>
 #include <qpushbutton.h>
 
+#include "unitratiolist.h"
+
 class RecipeDB;
 class ConversionTable;
 
@@ -39,6 +41,7 @@ private:
 	void loadConversionTable(void);
 	void loadUnitsList(void);
 	void reloadData(void);
+	void saveAllRatios( UnitRatioList &ratioList );
 	// Internal Variables
 	RecipeDB *database;
 private slots:

@@ -13,7 +13,6 @@
 
 UnitRatioList::UnitRatioList()
 {
-list.setAutoDelete(true);
 }
 
 
@@ -21,42 +20,15 @@ UnitRatioList::~UnitRatioList()
 {
 }
 
-void UnitRatioList::add(UnitRatio &ratio)
-{
-list.append (new UnitRatio(ratio));
-}
-
-UnitRatio* UnitRatioList::getFirst(void){
-return(list.first());
-}
-
-UnitRatio* UnitRatioList::getNext(void){
-return(list.next());
-}
-
-UnitRatio* UnitRatioList::getElement(int index){
-return(list.at(index));
-}
-
-void UnitRatioList::clear(void)
-{
-list.clear();
-}
-
-bool UnitRatioList::isEmpty(void)
-{
-return(list.isEmpty());
-}
-
 double UnitRatioList::getRatio(int uid1, int uid2)
 {
 if (uid1==uid2) return(1.0);
 else
 	{
-	for (UnitRatio *ur=getFirst();ur;ur=getNext())
+	for (UnitRatioList::const_iterator ur_it=begin();ur_it != end();ur_it++)
 		{
-		if (ur->uID1==uid1 && ur->uID2==uid2) return (ur->ratio);
-		else if (ur->uID1==uid2 && ur->uID2==uid1) return (1.0/ur->ratio);
+		if ((*ur_it).uID1==uid1 && (*ur_it).uID2==uid2) return ((*ur_it).ratio);
+		else if ((*ur_it).uID1==uid2 && (*ur_it).uID2==uid1) return (1.0/(*ur_it).ratio);
 		}
 	return (-1.0);
 	}

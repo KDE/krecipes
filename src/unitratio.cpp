@@ -15,7 +15,7 @@ UnitRatio::UnitRatio()
 uID1=-1;uID2=-1;ratio=-1;
 }
 
-UnitRatio::UnitRatio(UnitRatio &ur)
+UnitRatio::UnitRatio(const UnitRatio &ur)
 {
 uID1=ur.uID1;uID2=ur.uID2;ratio=ur.ratio;
 }

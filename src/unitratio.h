@@ -17,8 +17,12 @@ class UnitRatio{
 public:
 
     UnitRatio();
-    UnitRatio(UnitRatio &ur);
+    UnitRatio(const UnitRatio &ur);
     ~UnitRatio();
+    
+    bool operator!=(const UnitRatio &r) const { return !(r.uID1==uID1 && r.uID2==uID2); }
+    bool operator==(const UnitRatio &r) const { return (r.uID1==uID1 && r.uID2==uID2); }
+    
     int uID1,uID2;
     double ratio;
 };

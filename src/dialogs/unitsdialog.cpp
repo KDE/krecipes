@@ -18,6 +18,7 @@
 #include "editbox.h"
 #include "conversiontable.h"
 #include <klocale.h>
+#include <kdebug.h>
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
@@ -68,7 +69,6 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     connect(this->unitListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveUnit( QListViewItem* )));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
     connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
-
 
     //Populate data into the table
     reloadData();
@@ -174,10 +174,9 @@ conversionTable->setUnitIDs(unitIDs);
 // Load and Populate the data into the table
 UnitRatioList ratioList;
 database->loadUnitRatios(&ratioList);
-UnitRatio *ratio;
-for (ratio=ratioList.getFirst();ratio;ratio=ratioList.getNext())
+for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ratio_it++ )
 {
-conversionTable->setRatio(ratio->uID1,ratio->uID2,ratio->ratio );
+conversionTable->setRatio((*ratio_it).uID1,(*ratio_it).uID2,(*ratio_it).ratio );
 }
 }
 
@@ -189,6 +188,43 @@ ratio.uID1=conversionTable->getUnitID(r);
 ratio.uID2=conversionTable->getUnitID(c);
 ratio.ratio=value;
 database->saveUnitRatio(&ratio);
+
+UnitRatio reverse_ratio; reverse_ratio.uID1 = ratio.uID2; reverse_ratio.uID2 = ratio.uID1; reverse_ratio.ratio = 1.0/ratio.ratio;
+database->saveUnitRatio(&reverse_ratio);
+
+UnitRatioList ratioList;
+database->loadUnitRatios(&ratioList);
+
+saveAllRatios(ratioList);
+
+loadConversionTable(); //TODO: Just repaint the changed cells
+}
+
+void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
+{
+	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); current_it++ )
+	{
+		UnitRatio current_ratio = *current_it;
+		for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ratio_it++ )
+		{
+			UnitRatio new_ratio;
+			new_ratio.uID1 = current_ratio.uID1;
+			new_ratio.uID2 = (*ratio_it).uID2;
+			new_ratio.ratio = (*ratio_it).ratio * current_ratio.ratio;
+			
+			if ( ratioList.contains(new_ratio))
+				continue;
+
+			if ( ((*ratio_it).uID1 == current_ratio.uID2) && ((*ratio_it).uID2!=current_ratio.uID1) )
+			{
+				UnitRatio reverse_ratio; reverse_ratio.uID1 = new_ratio.uID2; reverse_ratio.uID2 = new_ratio.uID1; reverse_ratio.ratio = 1.0/new_ratio.ratio;
+	
+				database->saveUnitRatio(&new_ratio); database->saveUnitRatio(&reverse_ratio);
+	
+				ratioList.append(new_ratio); ratioList.append(reverse_ratio);
+			}
+		}
+	}
 }
 
 void UnitsDialog::reload(void)
