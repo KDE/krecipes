@@ -21,6 +21,8 @@
 class CategoryListItem:public QCheckListItem{
 public:
 	CategoryListItem(QListView* qlv, const Element &el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox),elStored(el){}
+	Element element() const { return elStored; }
+
 private:
 	const Element elStored;
 
@@ -37,7 +39,7 @@ SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const ElementLis
 
 // Store pointer
 database = db;
-categoryListPC=categoryList;
+
 //Design UI
 
 layout = new QGridLayout( this, 1, 1, 0, 0);
@@ -51,7 +53,6 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 categoryListView=new KListView(this);
 categoryListView->addColumn("*");
 categoryListView->addColumn(i18n("Category"));
-categoryListView->setSorting(-1);
 categoryListView->setAllColumnsShowFocus(true);
 layout->addMultiCellWidget(categoryListView,1,1,1,3);
 
@@ -98,14 +99,10 @@ SelectCategoriesDialog::~SelectCategoriesDialog()
 
 void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected)
 {
-ElementList::const_iterator element_it = categoryListPC.begin(); // Initialize to first element
-
 for (CategoryListItem *it=(CategoryListItem *) categoryListView->firstChild();it; it=(CategoryListItem *) it->nextSibling())
 	{
 	/*bool *newValue=new bool;*/
-	if (it->isOn()) newSelected->append(*element_it); // If checked, add
-
-	element_it++;
+	if (it->isOn()) newSelected->append(it->element()); // If checked, add
 	}
 
 }

@@ -43,8 +43,8 @@ private:
 	QPushButton *cancelButton;
 
 	//Variables
-	ElementList categoryListPC;
 	RecipeDB *database;
+	
 	//Private methods
 	void loadCategories(const ElementList &categoryList, QPtrList <bool> *selected);
 	
