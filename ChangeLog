@@ -1,10 +1,14 @@
-Changes from 0.7 to 0.7.1:
+Changes from 0.7b to 0.7.1:
   -Swedish translation of the Krecipes Handbook
   -Portuguese Handbook is now properly installed
   -Minor Handbook updates
   -Fix a Meal-Master import bug where in certain instances, ingredient lines were interpreted as instructions
   -Fix database structure for PostgreSQL
   -Turning off nutrient properties in the Page Setup will speed things up, especially for SQLite
+
+Changes from 0.7 to 0.7b:
+  -Fix build when both SQLite 2 and 3 are installed
+  -Fix 'configure' options
 
 Changes from 0.6 to 0.7:
   -BETA support for PostgreSQL database backend
