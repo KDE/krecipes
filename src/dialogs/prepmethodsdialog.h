@@ -24,7 +24,7 @@ class RecipeDB;
 class StdPrepMethodListView;
 
 /**
-@prepMethod Unai Garro
+@author Unai Garro
 */
 
 class PrepMethodsDialog: public QWidget
