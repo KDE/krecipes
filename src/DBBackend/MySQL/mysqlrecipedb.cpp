@@ -12,7 +12,6 @@
 
 #include "mysqlrecipedb.h"
 
-#include <qintdict.h>
 #include <kstandarddirs.h>
 
 

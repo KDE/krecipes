@@ -14,8 +14,6 @@
 #include "literecipedb.h"
 #include "kstandarddirs.h"
 
-#include <qintdict.h>
-
 #define DB_FILENAME "krecipes.krecdb"
 
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
