@@ -35,7 +35,7 @@ CookMLExporter::~CookMLExporter()
 QString CookMLExporter::createContent( const QPtrList<Recipe>& recipes )
 {
 	QDomImplementation dom_imp;
-	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", "SYSTEM", "cookml.dtd") );
+	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd") );
 
 	QDomElement cookml_tag = doc.documentElement();
 	cookml_tag.setAttribute( "version", "1.0.13" );
@@ -59,7 +59,7 @@ QString CookMLExporter::createContent( const QPtrList<Recipe>& recipes )
 			head_tag.setAttribute("title",recipe->title);
 			head_tag.setAttribute("servingqty",recipe->persons);
 			head_tag.setAttribute("servingtype",i18n("Persons"));
-			head_tag.setAttribute("rid",i18n(""));
+			head_tag.setAttribute("rid",i18n("")); //FIXME:what's this...recipe ID??
 			recipe_tag.appendChild( head_tag );
 
 				QPtrListIterator<Element> cat_it( recipe->categoryList );
@@ -72,16 +72,28 @@ QString CookMLExporter::createContent( const QPtrList<Recipe>& recipes )
 					head_tag.appendChild(cat_tag);
 				}
 
+				QPtrListIterator<Element> author_it( recipe->authorList );
+				Element *author;
+				while ( (author = author_it.current()) != 0 )
+				{
+					++author_it;
+					QDomElement sourceline_tag = doc.createElement("sourceline");
+					sourceline_tag.appendChild( doc.createTextNode(author->name) );
+					head_tag.appendChild(sourceline_tag);
+				}
+
 				QDomElement picbin_tag = doc.createElement( "picbin");
 				picbin_tag.setAttribute("format","JPG");
 
-				KTempFile* fn = new KTempFile(locateLocal("tmp", "kre"), ".jpg", 0600);
+				KTempFile* fn = new KTempFile(locateLocal("tmp", "cml"), ".jpg", 0600);
+				fn->setAutoDelete(true);
 				recipe->photo.save(fn->name(), "JPEG");
 				QByteArray data;
 				if( fn )
 				{
 					data = (fn->file())->readAll();
 					fn->close();
+					delete fn;
 				}
 				picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode(data, true) ) );
 				head_tag.appendChild( picbin_tag );
