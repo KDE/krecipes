@@ -405,6 +405,7 @@ void RecipeViewDialog::createBlocks()
 		// For those elements that have no fixed height (lists), calculate the height
 
 		int elementHeight=rect->height()/100.0*(p->width()); //Initialize with the current user settings
+		int elementWidth=rect->width()/100.0*(p->width());
 
 		if ( !element->fixedHeight() )
 		{
@@ -420,11 +421,12 @@ void RecipeViewDialog::createBlocks()
 
 			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
 			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
-			sizeCalculator->view()->setMinimumSize(QSize(0,0));
-			sizeCalculator->view()->resize(QSize(0,0));
+			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
+			sizeCalculator->view()->resize(QSize(elementWidth+40,0));
 			sizeCalculator->begin(KURL("file:/tmp/" ));
 			sizeCalculator->write(tempHTML);
 			sizeCalculator->end();
+
 
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
@@ -432,7 +434,6 @@ void RecipeViewDialog::createBlocks()
 
 			delete sizeCalculator;
 		}
-
 		rect->setHeight(ceil(elementHeight*100.0/(p->width()))); // set the new height to the element
 									 // Note that ceil is needed to avoid size
 									 // shrinking due to float->int conversion
