@@ -86,6 +86,7 @@ public:
      * Print this view to any medium -- paper or not
      */
     void print();
+    virtual void show (void); //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
 
 signals:
     /**

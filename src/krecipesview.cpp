@@ -201,6 +201,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     contextLayout->addMultiCellWidget(contextText, 1, 4, 0, 2);
 
     // Right Panel Widgets
+
     inputPanel=new RecipeInputDialog(rightPanel,database);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
@@ -211,6 +212,8 @@ KrecipesView::KrecipesView(QWidget *parent)
     dietPanel=new DietWizardDialog(rightPanel,database);
     categoriesPanel=new CategoriesEditorDialog(rightPanel,database);
     authorsPanel=new AuthorsDialog(rightPanel,database);
+
+
 
     // i18n
     translate();
@@ -228,9 +231,6 @@ KrecipesView::KrecipesView(QWidget *parent)
      connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
      connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
-
-    rightPanel->raise(selectPanel);
-    setContextHelp(SelectP);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
@@ -260,6 +260,8 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Resize the Tip Viewer properly
     connect(leftPanel,SIGNAL(resized(int,int)),contextHelp,SLOT(resize(int,int)));
+
+
 
     // Close Splash Screen
     sleep(2);
@@ -576,6 +578,15 @@ rightPanel->raise(selectPanel);
 buttonsList->removeLast();
 setContextHelp(SelectP);
 recipeButton=0;
+}
+
+//Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
+
+void KrecipesView::show (void)
+{
+	rightPanel->raise(this->selectPanel);
+	setContextHelp(SelectP);
+	QWidget::show();
 }
 
 void KrecipesView::showRecipe(int recipeID)
