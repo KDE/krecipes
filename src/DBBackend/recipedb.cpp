@@ -43,12 +43,8 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids )
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int,QString> * );
 int createUnit(const QString &name, RecipeDB*);
-int createIngredient(const QString &name, RecipeDB*);
+int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*);
 void create_properties( RecipeDB* );
-
-//store these two lone units for speed
-static int unit_g_id;
-static int unit_mg_id;
 
 void RecipeDB::importUSDADatabase()
 {
@@ -100,8 +96,8 @@ void RecipeDB::importUSDADatabase()
 	delete ings_and_ids;
 
 	//since there are only two units used, lets just create them and store their id for speed
-	unit_g_id = createUnit("g",this);
-	unit_mg_id = createUnit("mg",this);
+	int unit_g_id = createUnit("g",this);
+	int unit_mg_id = createUnit("mg",this);
 
 	QValueList<ingredient_nutrient_data>::iterator it; const int total = data->count(); int counter = 0;
 	for ( it = data->begin(); it != data->end(); ++it )
@@ -109,7 +105,7 @@ void RecipeDB::importUSDADatabase()
 		counter++;
 		kdDebug()<<"Inserting ("<<counter<<" of "<<total<<"): "<<(*it).name<<endl;
 
-		int assigned_id = createIngredient((*it).name,this);
+		int assigned_id = createIngredient((*it).name,unit_g_id,unit_mg_id,this);
 
 		//for now, only check if there is any info on the ingredient to see whether or not we will import this data,
 		//because checking to see that each property exists is quite slow
@@ -133,7 +129,7 @@ void getIngredientNameAndID( std::multimap<int,QString> *data )
 		data->insert( std::make_pair(ingredient_data_list[i].usda_id, ingredient_data_list[i].name) );
 }
 
-int createIngredient(const QString &name, RecipeDB *database)
+int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database)
 {
 	int assigned_id = database->findExistingIngredientByName( name );
 
