@@ -39,6 +39,7 @@ public:
 	};
 protected:
 	virtual void mousePressEvent( QMouseEvent* );
+	QRect splashScreenDesktopGeometry() const;
 	bool m_bReadyToHide;
 };
 

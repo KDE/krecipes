@@ -56,3 +56,8 @@ bool Unit::operator==( const Unit &u ) const
 	else
 		return ( plural_test1 == plural_test2 || single_test1 == single_test2 );
 }
+
+bool Unit::operator<( const Unit &u ) const
+{
+	return ( QString::localeAwareCompare( name.lower(), u.name.lower() ) < 0 );
+}

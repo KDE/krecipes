@@ -108,13 +108,17 @@ void UnitsDialog::loadConversionTable( void )
 {
 	UnitList unitList;
 	database->loadUnits( &unitList );
+	qHeapSort( unitList );
+
 	QStringList unitNames;
 	IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
 	conversionTable->clear();
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		unitNames.append( ( *unit_it ).name );
-		int *newId = new int( ( *unit_it ).id ); // Create the new int element
-		unitIDs.append( newId ); // append the element
+		if ( !( *unit_it ).name.isEmpty() ) {
+			unitNames.append( ( *unit_it ).name );
+			int *newId = new int( ( *unit_it ).id ); // Create the new int element
+			unitIDs.append( newId ); // append the element
+		}
 	}
 
 	// Resize the table

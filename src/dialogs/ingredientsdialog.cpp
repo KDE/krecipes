@@ -220,7 +220,9 @@ void IngredientsDialog::reloadUnitList()
 		//Populate this data into the KListView
 
 		for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
-			( void ) new QListViewItem( unitsListView->listView(), QString::number( ( *unit_it ).id ), ( *unit_it ).name );
+			if ( !( *unit_it ).name.isEmpty() ) {
+				( void ) new QListViewItem( unitsListView->listView(), QString::number( ( *unit_it ).id ), ( *unit_it ).name );
+			}
 		}
 
 		// Select the first unit

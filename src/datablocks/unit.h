@@ -24,6 +24,7 @@ public:
 	Unit( const QString &name, double amount );
 
 	bool operator==( const Unit &u ) const;
+	bool operator<( const Unit &u ) const;
 
 	int id;
 	QString name;
