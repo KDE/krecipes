@@ -558,6 +558,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 			fn->file() ->readBlock( photoArray, n );
 			fn->close();
 		}
+		delete fn;
 
 		char *photoEncodedArray = new char[ 2 + ( 257 * n ) / 254 + 1 ]; //Just in case, add+1
 		sqlite_encode_binary( ( uchar* ) photoArray, fi.size(), ( uchar* ) photoEncodedArray );
