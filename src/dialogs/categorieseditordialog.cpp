@@ -27,7 +27,7 @@ layout->addItem(spacerLeft,1,0);
 
 //Category List
 categoryListView=new KListView(this);
-categoryListView->addColumn(i18n("id"));
+categoryListView->addColumn(i18n("Id"));
 categoryListView->addColumn(i18n("Category Name"));
 layout->addWidget(categoryListView,1,1);
 

@@ -53,7 +53,7 @@ QSpacerItem* spacerFromAddRemoveButtons=new QSpacerItem(10,10,QSizePolicy::Fixed
 layout->addItem(spacerFromAddRemoveButtons,1,2);
 
 authorListView=new KListView(this);
-authorListView->addColumn(i18n("Id."));
+authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author"));
 layout->addMultiCellWidget(authorListView,1,5,3,4);
 
@@ -66,7 +66,7 @@ okCancelButtonBox->setSpacing(10);
 layout->addMultiCellWidget(okCancelButtonBox,7,7,1,4);
 
 okButton=new QPushButton(okCancelButtonBox);
-okButton->setText(i18n("Ok"));
+okButton->setText(i18n("&OK"));
 okButton->setFlat(true);
 
 
@@ -74,7 +74,7 @@ QSpacerItem* spacerBetweenButtons=new QSpacerItem(10,10, QSizePolicy::Fixed, QSi
 layout->addItem(spacerBetweenButtons,5,2);
 
 cancelButton=new QPushButton(okCancelButtonBox);
-cancelButton->setText(i18n("Cancel"));
+cancelButton->setText(i18n("&Cancel"));
 cancelButton->setFlat(true);
 
 //Initialize some internal variables

@@ -169,7 +169,7 @@ database=db;
 
     QVBox *titleBox = new QVBox(this);
     titleBox->setSpacing(5);
-    titleLabel = new QLabel(i18n("Recipe Name"),titleBox);
+    titleLabel = new QLabel(i18n("Recipe name:"),titleBox);
     titleEdit = new KLineEdit(titleBox);
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));

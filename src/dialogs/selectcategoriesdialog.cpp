@@ -57,7 +57,7 @@ QSpacerItem* buttonsSpacer=new QSpacerItem(10,10, QSizePolicy::Minimum, QSizePol
 layout->addItem(buttonsSpacer,2,1);
 
 okButton=new QPushButton(this);
-okButton->setText(i18n("Ok"));
+okButton->setText(i18n("&OK"));
 okButton->setFlat(true);
 layout->addWidget(okButton,3,1);
 
@@ -65,7 +65,7 @@ QSpacerItem* spacerBetweenButtons=new QSpacerItem(10,10, QSizePolicy::Fixed, QSi
 layout->addItem(spacerBetweenButtons,3,2);
 
 cancelButton=new QPushButton(this);
-cancelButton->setText(i18n("Cancel"));
+cancelButton->setText(i18n("&Cancel"));
 cancelButton->setFlat(true);
 layout->addWidget(cancelButton,3,3);
 

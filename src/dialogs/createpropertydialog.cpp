@@ -29,7 +29,7 @@ box->setTitle(i18n("New Property"));
 
 QGridLayout *gridLayout = new QGridLayout( this, 2, 2, 5, 5);
 
-nameEditText=new QLabel(i18n("Property Name:"),this);
+nameEditText=new QLabel(i18n("Property name:"),this);
 propertyNameEdit=new KLineEdit(this);
 propertyNameEdit->setMinimumWidth(150);
 gridLayout->addWidget(nameEditText, 0, 0);
@@ -42,8 +42,8 @@ gridLayout->addWidget(unitsText, 1, 0);
 gridLayout->addWidget(propertyUnits, 1, 1);
 
 QHBoxLayout *buttonsHBox = new QHBoxLayout( this, 5, 5 );
-okButton=new QPushButton(i18n("Ok"),this);
-cancelButton=new QPushButton(i18n("Cancel"),this);
+okButton=new QPushButton(i18n("&OK"),this);
+cancelButton=new QPushButton(i18n("&Cancel"),this);
 QSpacerItem* spacer = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 buttonsHBox->addWidget(okButton);
 buttonsHBox->addWidget(cancelButton);

@@ -39,7 +39,7 @@ if (!(recipeList->isEmpty()))
 {
 recipeBox=new QGroupBox(1,Qt::Vertical,i18n("Recipes"),this);
 recipeListView=new KListView(recipeBox);
-recipeListView->addColumn(i18n("Id."));
+recipeListView->addColumn(i18n("Id"));
 recipeListView->addColumn(i18n("Recipe Title"));
 layout->addWidget(recipeBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
@@ -58,7 +58,7 @@ if (!(ingredientList->isEmpty()))
 {
 ingredientBox=new QGroupBox(1,Qt::Vertical,i18n("Ingredients"),this);
 ingredientListView=new KListView(ingredientBox);
-ingredientListView->addColumn(i18n("Id."));
+ingredientListView->addColumn(i18n("Id"));
 ingredientListView->addColumn(i18n("Ingredient Name"));
 layout->addWidget(ingredientBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
@@ -75,7 +75,7 @@ if (!(propertiesList->isEmpty()))
 {
 propertiesBox=new QGroupBox(1,Qt::Vertical,i18n("Properties"),this);
 propertiesListView=new KListView(propertiesBox);
-propertiesListView->addColumn(i18n("Id."));
+propertiesListView->addColumn(i18n("Id"));
 propertiesListView->addColumn(i18n("Property"));
 layout->addWidget(propertiesBox,row,col);
 QSpacerItem *list_spacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);

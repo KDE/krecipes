@@ -92,7 +92,7 @@ ServerPrefs::ServerPrefs(QWidget *parent)
     QSpacerItem* spacerRow3 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem( spacerRow3, 6,1 );
 
-    QLabel* dbNameText=new QLabel(i18n("Database Name:"), this);
+    QLabel* dbNameText=new QLabel(i18n("Database name:"), this);
     dbNameText->setFixedSize(QSize(100,20));
     dbNameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     layout->addWidget(dbNameText,7,1);

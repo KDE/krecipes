@@ -18,7 +18,7 @@ layout->setMargin(0);
 editBox=new RatioInput(this);
 editBox->setMinimumWidth(10);
 layout->addWidget(editBox);
-okButton=new QPushButton(i18n("ok"),this);
+okButton=new QPushButton(i18n("&OK"),this);
 okButton->setFixedWidth(okButton->fontMetrics().width(i18n("ok")));
 okButton->setFlat(true);
 layout->addWidget(okButton);

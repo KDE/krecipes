@@ -28,7 +28,7 @@ layout->addItem(spacerLeft,1,0);
 
 //Author List
 authorListView=new KListView(this);
-authorListView->addColumn(i18n("id"));
+authorListView->addColumn(i18n("Id"));
 authorListView->addColumn(i18n("Author's Name"));
 layout->addWidget(authorListView,1,1);
 

@@ -34,7 +34,7 @@ addPage(serverSetupPage,i18n("Server Settings"));
 dataInitializePage= new DataInitializePage(this);
 addPage(dataInitializePage,i18n("Initialize Database"));
 savePage = new SavePage(this);
-addPage(savePage,i18n("Finish and Save Settings"));
+addPage(savePage,i18n("Finish & Save Settings"));
 
 setFinishEnabled(savePage,true); // Enable finish button
 setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
@@ -243,7 +243,7 @@ passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 // DB Name
 
-QLabel* dbNameText=new QLabel(i18n("Database Name:"), inputGBox);
+QLabel* dbNameText=new QLabel(i18n("Database name:"), inputGBox);
 dbNameText->setFixedSize(QSize(100,20));
 dbNameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 

@@ -26,8 +26,8 @@ elementEdit=new KLineEdit(box);
 boxLayout->addWidget(elementEdit);
 
 QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
-okButton=new QPushButton(i18n("Ok"),this);
-cancelButton=new QPushButton(i18n("Cancel"),this);
+okButton=new QPushButton(i18n("&Ok"),this);
+cancelButton=new QPushButton(i18n("&Cancel"),this);
 button_hbox->addWidget(okButton);
 button_hbox->addWidget(cancelButton);
 boxLayout->addLayout(button_hbox);

@@ -20,12 +20,12 @@ SelectUnitDialog::SelectUnitDialog(QWidget* parent,ElementList *unitList)
 container=new QVBoxLayout(this,5,5);
 
 box=new QGroupBox(this);
-box->setTitle(i18n("Choose a Unit"));
+box->setTitle(i18n("Choose Unit"));
 box->setColumnLayout(0, Qt::Vertical );
 QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 
 unitChooseView=new KListView(box);
-unitChooseView->addColumn(i18n("Id."));
+unitChooseView->addColumn(i18n("Id"));
 unitChooseView->addColumn(i18n("Unit"));
 unitChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
 boxLayout->addWidget( unitChooseView );
@@ -33,13 +33,13 @@ boxLayout->addWidget( unitChooseView );
 QHBoxLayout *buttonsLayout = new QHBoxLayout( this, 0, 6 );
 okButton=new QPushButton(box);
 okButton->setGeometry( QRect( 5, 300, 100, 20 ) );
-okButton->setText(i18n("Ok"));
+okButton->setText(i18n("&OK"));
 okButton->setFlat(true);
 buttonsLayout->addWidget( okButton );
 
 cancelButton=new QPushButton(box);
 cancelButton->setGeometry( QRect( 110, 300, 60, 20 ) );
-cancelButton->setText(i18n("Cancel"));
+cancelButton->setText(i18n("&Cancel"));
 cancelButton->setFlat(true);
 buttonsLayout->addWidget( cancelButton );
 

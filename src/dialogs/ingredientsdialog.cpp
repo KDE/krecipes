@@ -79,7 +79,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
 
     unitsListView=new KListView (this);
-    unitsListView->addColumn(i18n("Id."));
+    unitsListView->addColumn(i18n("Id"));
     unitsListView->addColumn(i18n("Units"));
     unitsListView->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
@@ -111,10 +111,10 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     propertiesListView=new KListView (this);
     layout->addMultiCellWidget (propertiesListView,1,4,9,9);
-    propertiesListView->addColumn(i18n("Id."));
+    propertiesListView->addColumn(i18n("Id"));
     propertiesListView->addColumn(i18n("Property"));
     propertiesListView->addColumn(i18n("Amount"));
-    propertiesListView->addColumn(i18n("units"));
+    propertiesListView->addColumn(i18n("Units"));
     propertiesListView->setAllColumnsShowFocus(true);
     propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
@@ -276,7 +276,7 @@ if (ingredientID>=0) // an ingredient was selected previously
     	database->addUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
     else
     	{
-	QMessageBox::information(this,i18n("Unit exists"),i18n("The ingredient contains already the unit that you have chosen."));
+	QMessageBox::information(this,i18n("Unit Exists"),i18n("The ingredient contains already the unit that you have chosen."));
 	}
     reloadUnitList(); // Reload the list from database
 }
@@ -397,7 +397,7 @@ if (ingredientID>=0) // an ingredient was selected previously
     }
     else
     {
-    QMessageBox::information(this,i18n("Property exists"),i18n("The property you tried to add already exists in the ingredient with the same per units."));
+    QMessageBox::information(this,i18n("Property Exists"),i18n("The property you tried to add already exists in the ingredient with the same per units."));
     }
     reloadPropertyList(); // Reload the list from database
 }

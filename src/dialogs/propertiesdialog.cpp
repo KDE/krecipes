@@ -33,7 +33,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 
     propertyListView=new KListView (this);
     layout->addMultiCellWidget (propertyListView,1,4,1,6);
-    propertyListView->addColumn(i18n("Id."));
+    propertyListView->addColumn(i18n("Id"));
     propertyListView->addColumn(i18n("Property"));
     propertyListView->addColumn(i18n("Units"));
     QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);

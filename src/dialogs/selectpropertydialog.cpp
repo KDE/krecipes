@@ -24,7 +24,7 @@ unitListBack =new ElementList;
     QVBoxLayout *layout = new QVBoxLayout( this, 11, 6 );
 
     box = new QGroupBox( this );
-    box->setTitle(i18n("Choose a Property"));
+    box->setTitle(i18n("Choose Property"));
     box->setColumnLayout(0, Qt::Vertical );
     box->layout()->setSpacing( 6 );
     box->layout()->setMargin( 11 );
@@ -32,7 +32,7 @@ unitListBack =new ElementList;
     boxLayout->setAlignment( Qt::AlignTop );
 
     propertyChooseView = new KListView( box, "propertyChooseView" );
-    propertyChooseView->addColumn( i18n( "id." ) );
+    propertyChooseView->addColumn( i18n( "Id" ) );
     propertyChooseView->addColumn( i18n( "Property" ) );
     boxLayout->addWidget( propertyChooseView );
 
@@ -50,12 +50,12 @@ unitListBack =new ElementList;
     QHBoxLayout *layout1 = new QHBoxLayout( this, 0, 6 );
 
     okButton = new QPushButton( box );
-    okButton->setText(i18n("Ok"));
+    okButton->setText(i18n("&OK"));
     okButton->setFlat(true);
     layout1->addWidget( okButton );
 
     cancelButton = new QPushButton( box );
-    cancelButton->setText(i18n("Cancel"));
+    cancelButton->setText(i18n("&Cancel"));
     cancelButton->setFlat(true);
     layout1->addWidget( cancelButton );
     boxLayout->addLayout( layout1 );

@@ -29,7 +29,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     recipeListView=new KListView (this);
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
-    recipeListView->addColumn(i18n("Id."));
+    recipeListView->addColumn(i18n("Id"));
     recipeListView->addColumn(i18n("Recipe Title"));
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
@@ -70,7 +70,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     QPixmap pm=il->loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
 
     okButton=new QPushButton(buttonBar,"okButton");
-    okButton->setText(i18n("Ok"));
+    okButton->setText(i18n("&OK"));
     pm=il->loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
 
     clearButton=new QPushButton(buttonBar,"clearButton");

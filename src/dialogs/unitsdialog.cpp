@@ -39,7 +39,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 
     unitListView =new KListView(this);
     unitListView->setAllColumnsShowFocus(true);
-    unitListView->addColumn(i18n("Id."));
+    unitListView->addColumn(i18n("Id"));
     unitListView->addColumn(i18n("Unit"));
     unitListView->setRenameable(1, true);
     unitListView->setDefaultRenameAction(QListView::Reject);
@@ -49,12 +49,12 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     layout->addMultiCellWidget(conversionTable,0,3,4,4);
 
     newUnitButton=new QPushButton(this);
-    newUnitButton->setText(i18n("Create a new Unit"));
+    newUnitButton->setText(i18n("Create New Unit"));
     newUnitButton->setFlat(true);
     layout->addWidget(newUnitButton,0,2);
 
     removeUnitButton=new QPushButton(this);
-    removeUnitButton->setText(i18n("Remove a Unit"));
+    removeUnitButton->setText(i18n("Remove Unit"));
     removeUnitButton->setFlat(true);
     layout->addWidget(removeUnitButton,2,2);
 

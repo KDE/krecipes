@@ -45,7 +45,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 	il=new KIconLoader;
 	recipeListView=new KListView(this);
-    	recipeListView->addColumn(i18n("Id."));
+    	recipeListView->addColumn(i18n("Id"));
     	recipeListView->addColumn(i18n("Title"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	layout->addWidget(recipeListView,3,1);
