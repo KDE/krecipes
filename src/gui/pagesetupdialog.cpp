@@ -34,9 +34,6 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDia
 
 	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
-
-	adjustSize();
-	setFixedSize(size());
 }
 
 void PageSetupDialog::accept()

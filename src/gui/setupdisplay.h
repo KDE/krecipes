@@ -53,6 +53,10 @@ protected slots:
 	void setShown(int id);
 	void setAlignment( QAction * );
 
+protected:
+	virtual QSize sizeHint() const{ return m_size; }
+	virtual QSize minimumSizeHint() const{ return QSize(1,1); }
+
 private:
 	void loadSetup();
 	void createWidgets( const Recipe &sample );
@@ -66,6 +70,8 @@ private:
 	QLabel *id_box;
 	QLabel *ingredients_box;
 	QLabel *properties_box;
+
+	QSize m_size;
 
 	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
 	QMap< QWidget*, unsigned int > *box_properties;

@@ -32,17 +32,14 @@
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent ),
   box_properties(new QMap< QWidget*, unsigned int >)
 {
-	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+	setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, 0, 1 ) );
 
-	box_properties->insert( this, BackgroundColor );
+	box_properties->insert( this, BackgroundColor | Geometry );
 
 	connect( this, SIGNAL(widgetClicked(QMouseEvent*,QWidget*)), SLOT(widgetClicked(QMouseEvent*,QWidget*)) );
 
 	createWidgets( sample );
 	loadSetup();
-
-	adjustSize(); //this seems to need to be called to set a fixed size...
-	setFixedSize(600,700);
 }
 
 SetupDisplay::~SetupDisplay()
@@ -58,6 +55,7 @@ void SetupDisplay::createSetupIfNecessary()
 	{
 		config->setGroup( "BackgroundSetup" );
 		config->writeEntry( "BackgroundColor", Qt::white );
+		config->writeEntry( "Geometry", QRect(0,0,600,700) );
 	}
 
 	if ( !config->hasGroup("TitleSetup") )
@@ -169,7 +167,8 @@ void SetupDisplay::loadSetup()
 
 	//=========================this=======================//
 	config->setGroup("BackgroundSetup");
- 	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor"));
+ 	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+	m_size = config->readRectEntry( "Geometry" ).size();
 
 	//=========================TITLE=======================//
 	config->setGroup("TitleSetup");
@@ -435,6 +434,7 @@ void SetupDisplay::save()
 
 	config->setGroup( "BackgroundSetup" );
 	config->writeEntry( "BackgroundColor", backgroundColor() );
+	config->writeEntry( "Geometry", geometry() );
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
