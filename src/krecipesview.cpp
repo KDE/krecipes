@@ -322,6 +322,10 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 			rightPanel->setHeader(i18n("Shopping List"),"trolley");
 			rightPanel->raise(shoppingListPanel);
 			break;
+		case DietP: shoppingListPanel->reload(); // Reload data
+			rightPanel->setHeader(i18n("Diet Helper"),"diet");
+			rightPanel->raise(dietPanel);
+			break;
 		}
 	}
 
