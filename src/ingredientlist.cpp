@@ -11,7 +11,7 @@
 
 IngredientList::IngredientList()
 {
-setAutoDelete(true); //Deletes automatically when remove() is used. FIXME: it crashes when I use this class and this is set...
+setAutoDelete(true); //Deletes automatically when remove() is used.
 }
 
 
@@ -19,14 +19,20 @@ IngredientList::~IngredientList()
 {
 }
 
+QPtrCollection::Item IngredientList::newItem( QPtrCollection::Item ingredient )
+{
+	Ingredient *ing = static_cast<Ingredient*>(ingredient);
+	return new Ingredient(*ing);
+}
+
 void IngredientList::add(Ingredient &ing)
 {
-this->append (new Ingredient(ing));
+this->append (&ing);
 }
 
 void IngredientList::addReverse(Ingredient &ing)
 {
-this->prepend (new Ingredient(ing));
+this->prepend (&ing);
 }
 
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2

@@ -34,8 +34,8 @@ public:
     int find(int id);
     int findNext(int id);
 protected:
+    virtual QPtrCollection::Item newItem( QPtrCollection::Item );
     virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Ingredient*)item1)->ingredientID-((Ingredient*)item2)->ingredientID);};  // so find() works as expected (not searching for pointers, but id)
-
 };
 
 #endif
