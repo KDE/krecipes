@@ -49,10 +49,16 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		// Do the conversion
 		// try to with this and next in the list until conversion rate is
 		// found or end of list is reached
+		int lastpos; // for 'backup'
 		do{
+		std::cerr<<"We are in pos: "<<pos<<"\n";
+		lastpos=pos;
 		// Get current Values
+
 		currentUnit=totalIngredientList->at(pos)->unitID;
 		currentAmount=totalIngredientList->at(pos)->amount;
+			totalIngredientList->getNext(); // Otherwise findNext() gets in closed loop...
+
 		// Try to convert
 		converted =autoConvertUnits(db,i->amount,i->unitID,currentAmount,currentUnit,newAmount,newUnit);
 		} while ( (converted<0) && (((pos=totalIngredientList->findNext(i->ingredientID)))>0) );
@@ -60,7 +66,8 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		// If the conversion was succesful, Set the New Values
 		if (converted>=0)
 		{
-		Ingredient *it; it=totalIngredientList->at(pos);
+		std::cerr<<"Summing!\n";
+		Ingredient *it; it=totalIngredientList->at(lastpos);
 		it->amount=newAmount;
 		it->unitID=newUnit;
 		it->units=db->unitName(newUnit);
@@ -68,6 +75,7 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		else // Otherwise append this ingredient at the end of the list
 		{
 		// Insert ingredient ID in the list
+		std::cerr<<"appending!\n";
 		totalIngredientList->add(*i);
 		}
 	}
@@ -84,6 +92,7 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 int autoConvertUnits(RecipeDB* database,double amount1,int unit1,double amount2,int unit2, double &newAmount, int &newID)
 {
 double ratio=database->unitRatio(unit1,unit2);
+std::cerr<<"Ratio="<<ratio<<"\n";
 if (ratio>=0) // There is a ratio
 	{
 	if (ratio>=1) // Convert to unit 1, since unit1 is bigger
