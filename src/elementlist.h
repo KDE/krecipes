@@ -25,6 +25,7 @@ public:
     ~ElementList();
 
     bool containsId(int id) const;
+    bool containsSubSet(ElementList &el);
     Element getElement(int index) const;
     void add(const Element &element){ append(element); } //get rid of this function... use append()
 };

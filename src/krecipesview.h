@@ -37,6 +37,7 @@ class IngredientsDialog;
 class Menu;
 class KreMenu;
 class KreMenuButton;
+class IngredientMatcherDialog;
 class PanelDeco;
 class PropertiesDialog;
 class QPainter;
@@ -66,8 +67,8 @@ typedef QValueList <Menu>::Iterator MenuId;
 
 
  // Some constants
- enum mainPanels{SelectP=0,ShoppingP=1,DietP=2};
- enum dataPanels{IngredientsP=1, PropertiesP=2, UnitsP=3, CategoriesP=4,AuthorsP=5, ContextHelp=6, RecipeEdit=7, DietWizardP=8};
+ enum mainPanels{SelectP=0,ShoppingP=1,DietP=2,MatcherP=3};
+ enum dataPanels{IngredientsP=1, PropertiesP=2, UnitsP=3, CategoriesP=4,AuthorsP=5, ContextHelp=6, RecipeEdit=7};
 
 
  // Class KrecipesView
@@ -116,6 +117,7 @@ public:
 	DietWizardDialog* dietPanel;
 	CategoriesEditorDialog *categoriesPanel;
 	AuthorsDialog *authorsPanel;
+	IngredientMatcherDialog *ingredientMatcherPanel;
 
 	// public methods
 	void createNewRecipe(void);
@@ -144,6 +146,7 @@ private:
 	KreMenuButton *button5;
 	KreMenuButton *button6;
 	KreMenuButton *button7;
+	KreMenuButton *button8;
   QWidget* contextHelp;
   QPushButton* contextButton;
   QPushButton* contextClose;

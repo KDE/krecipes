@@ -43,6 +43,7 @@
 #include "dialogs/categorieseditordialog.h"
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
+#include "dialogs/ingredientmatcherdialog.h"
 #include "gui/kstartuplogo.h"
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
@@ -156,6 +157,10 @@ KrecipesView::KrecipesView(QWidget *parent)
     button7->setIconSet(il.loadIconSet( "diet", KIcon::Panel,32));
     buttonsList->append(button7);
     
+    button8=new KreMenuButton(leftPanel);
+    button8->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32));
+    buttonsList->append(button8);
+    
     
     // Submenus
     dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
@@ -220,6 +225,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     dietPanel=new DietWizardDialog(rightPanel,database);
     categoriesPanel=new CategoriesEditorDialog(rightPanel,database);
     authorsPanel=new AuthorsDialog(rightPanel,database);
+    ingredientMatcherPanel=new IngredientMatcherDialog(rightPanel,database);
 
 
 
@@ -291,6 +297,7 @@ void KrecipesView::translate(){
   button5->setTitle(i18n("Categories"));
   button6->setTitle(i18n("Authors"));
   button7->setTitle(i18n("Diet Helper"));
+  button8->setTitle(i18n("Ingredient Matcher"));
 }
 
 void KrecipesView::print()
@@ -326,6 +333,10 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 			rightPanel->setHeader(i18n("Diet Helper"),"diet");
 			rightPanel->raise(dietPanel);
 			break;
+		case MatcherP:
+			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
+			rightPanel->raise(ingredientMatcherPanel);
+			break; 
 		}
 	}
 
@@ -350,10 +361,6 @@ else if (leftPanel->currentMenu()==dataMenu)
 			categoriesPanel->reload();
 			rightPanel->setHeader(i18n("Categories"),"categories");
 			rightPanel->raise(categoriesPanel);
-			break;
-		case DietWizardP: dietPanel->reload();
-			rightPanel->setHeader(i18n("Diet Wizard"),"diet");
-			rightPanel->raise(dietPanel);
 			break;
 		case AuthorsP: authorsPanel->reload();
 			rightPanel->setHeader(i18n("Authors"),"personal");
@@ -543,9 +550,9 @@ delete setupWizard;
 void KrecipesView::slotSetDietWizardPanel(void)
 {
 dietPanel->reload();
-rightPanel->setHeader(i18n("Diet Wizard"),"wizard");
+rightPanel->setHeader(i18n("Diet Helper"),"wizard");
 rightPanel->raise(dietPanel);
-    setContextHelp(DietWizardP);
+    setContextHelp(DietP);
 }
 
 
@@ -679,6 +686,8 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 	{
   	switch(action)
 		{
+		
+		
 		case SelectP:
 		contextTitle->setText(i18n("<b>Recipes list</b>"));
 		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
@@ -691,9 +700,18 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		case ShoppingP:
 		contextTitle->setText(i18n("<b>Shopping list</b>"));
 		contextText->setText(i18n("Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
-		"If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Wizard</b> to autogenerate your diet, and then the shopping list.<br><br>"
+		"If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Helper</b> to autogenerate your diet, and then the shopping list.<br><br>"
 		));
 		break;
+		
+		case DietP:
+		contextTitle->setText(i18n("<b>Diet Helper</b>"));
+		contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
+		"Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
+		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
+		));
+		break;
+		
 		}
 	}
 else if (leftPanel->currentMenu()==dataMenu)
@@ -727,13 +745,6 @@ else if (leftPanel->currentMenu()==dataMenu)
 		));
 		break;
 		
-		case DietWizardP:
-		contextTitle->setText(i18n("<b>Diet Wizard</b>"));
-		contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
-		"Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
-		));
-		break;
 		
 		case AuthorsP:
 		contextTitle->setText(i18n("<b>Authors list</b>"));

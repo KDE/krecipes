@@ -27,3 +27,14 @@ bool ElementList::containsId(int id) const // Search by id (which uses search by
 Element i; i.id=id;
 return ( find(i) != end() );
 }
+
+bool ElementList::containsSubSet(ElementList &el)
+{
+ElementList::Iterator it;
+for (it=el.begin();it!=el.end();++it)
+	{
+	if (!containsId((*it).id)) return false;
+	}
+return true;
+}
+

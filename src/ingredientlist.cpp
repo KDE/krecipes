@@ -20,15 +20,19 @@ IngredientList::~IngredientList()
 {
 }
 
-void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
+bool IngredientList::contains(Ingredient &ing) const
 {
-IngredientList::iterator tmp_it = this->at(index1);
-Ingredient tmp_ing(*tmp_it);
+return(find(ing.ingredientID)!=-1);
+}
 
-this->remove( tmp_it );
-
-tmp_it = this->at(index2);
-this->insert(tmp_it,tmp_ing);
+bool IngredientList::containsSubSet(IngredientList &il)
+{
+IngredientList::Iterator it;
+for (it=il.begin();it!=il.end();++it)
+	{
+	if (!contains(*it)) return false;
+	}
+return true;
 }
 
 void IngredientList::empty(void)
@@ -54,3 +58,13 @@ Ingredient i; i.ingredientID=id;
 return QValueList<Ingredient>::find(it,i);
 }
 
+void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
+{
+IngredientList::iterator tmp_it = this->at(index1);
+Ingredient tmp_ing(*tmp_it);
+
+this->remove( tmp_it );
+
+tmp_it = this->at(index2);
+this->insert(tmp_it,tmp_ing);
+}

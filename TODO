@@ -9,9 +9,7 @@ uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
 
 planned for 0.5:
-	*show possible list of recipes given what you have as ingredients
-	(show also almost complete ones)
-	*new nicer menu and page decos
+	*Show also almost complete recipes in the ingredient match dialog, and add the possibility to check amounts too
 	*remote database recipe importing (multiple databases open and recipe transfer)
 
 
