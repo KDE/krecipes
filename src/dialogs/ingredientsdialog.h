@@ -44,6 +44,7 @@ private:
     KListView* characteristicsListView;
     QPushButton* pushButton5;
 
+
   // Internal Methods
   void reloadIngredientList(void);
   void reloadPossibleUnitList(int recipeID);
@@ -58,6 +59,7 @@ private:
     void updateUnitList(void);
     void addIngredient(void);
     void addUnitToIngredient(void);
+    void removeUnitFromIngredient(void);
 
 
 

@@ -25,6 +25,7 @@ public:
     Element* getNext(void);
     Element* getElement(int index);
     void clear(void);
+    bool isEmpty(void);
     void add(Element &element);
     private:
     QPtrList<Element> list;

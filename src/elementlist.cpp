@@ -39,3 +39,8 @@ void ElementList::clear(void)
 {
 list.clear();
 }
+
+bool ElementList::isEmpty(void)
+{
+return(list.isEmpty());
+}

@@ -59,6 +59,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
 
     unitsListView=new KListView (this);
+    unitsListView->addColumn("i.");
     unitsListView->addColumn("Units");
     layout->addMultiCellWidget (unitsListView,1,4,10,11);
 
@@ -101,6 +102,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateUnitList()));
     connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
     connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
+    connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
 }
 
 
@@ -155,7 +157,7 @@ database->loadPossibleUnits(ingredientID,unitList);
 
 	for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
 	{
-	QListViewItem *it= new QListViewItem(unitsListView,unit->name);
+	QListViewItem *it= new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
 	}
 }
 
@@ -174,23 +176,46 @@ delete elementDialog;
 void IngredientsDialog::addUnitToIngredient(void)
 {
 
+// Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
 if (it=ingredientListView->selectedItem())
   {
   ingredientID=it->text(0).toInt();
   }
+if (ingredientID>=0) // an ingredient was selected previously
+{
+  ElementList allUnits;
+  database->loadUnits(&allUnits);
 
-ElementList allUnits;
-database->loadUnits(&allUnits);
+  SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,&allUnits);
 
-SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,&allUnits);
-
-if ( unitsDialog->exec() == QDialog::Accepted ) {
-   int result = unitsDialog->unitID();
-   database->AddUnitToIngredient(ingredientID,result); // Add result chosen unit to ingredient in database
-   updateUnitList(); // Reload the list from database
+  if ( unitsDialog->exec() == QDialog::Accepted ) {
+    int result = unitsDialog->unitID();
+    database->AddUnitToIngredient(ingredientID,result); // Add result chosen unit to ingredient in database
+    updateUnitList(); // Reload the list from database
+}
+}
 }
 
+void IngredientsDialog::removeUnitFromIngredient(void)
+{
+
+// Find selected ingredient item
+QListViewItem *it;
+int ingredientID=-1, unitID=-1;
+if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
+if (it=unitsListView->selectedItem()) unitID=it->text(0).toInt();
+
+if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was selected previously
+{
+  ElementList results;
+  database->findUseOf_Ing_Unit_InRecipes(&results,ingredientID,unitID); // Find if this ingredient-unit combination is being used
+  if (results.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
+  else database->removeUnitFromIngredient(ingredientID,unitID); //must warn!
+
+updateUnitList(); // Reload the list from database
+
+}
 }
 
