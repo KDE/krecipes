@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,6 +10,7 @@
 #include "ingredientsdialog.h"
 
 #include <qheader.h>
+#include <qmessagebox.h>
 #include "dependanciesdialog.h"
 
 IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(parent)
@@ -231,8 +232,14 @@ if (ingredientID>=0) // an ingredient was selected previously
   SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,&allUnits);
 
   if ( unitsDialog->exec() == QDialog::Accepted ) {
-    int result = unitsDialog->unitID();
-    database->AddUnitToIngredient(ingredientID,result); // Add result chosen unit to ingredient in database
+    int unitID = unitsDialog->unitID();
+
+    if (!(database->ingredientContainsUnit(unitID)))
+    	database->AddUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
+    else
+    	{
+	QMessageBox::information(this,"Unit exists","The ingredient contains already the unit that you have chosen.");
+	}
     reloadUnitList(); // Reload the list from database
 }
 }
