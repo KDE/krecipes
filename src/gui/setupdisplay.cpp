@@ -280,7 +280,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	box_properties->insert( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//=======================SERVINGS======================//
-	servings_box = new QLabel(QString(i18n("Servings: %1")).arg(sample.persons),this,"servings");
+	servings_box = new QLabel(QString("<b>%1:</b> %2").arg(i18n("Servings")).arg(sample.persons),this,"servings");
 	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add(servings_box,i18n("Servings"));
 
@@ -309,6 +309,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	if ( authors.isNull() )
 		authors = i18n("Author 1, Author 2, ...");
+	authors.prepend( QString("<b>%1: </b>").arg(i18n("Authors")) );
 
 	authors_box = new QLabel(authors,this,"authors");
 	authors_box->setFrameShape( QFrame::Box );
@@ -326,6 +327,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	if ( categories.isNull() )
 		categories = i18n("Category 1, Category 2, ...");
+	categories.prepend( QString("<b>%1: </b>").arg(i18n("Categories")) );
 
 	categories_box = new QLabel(categories,this,"categories");
 	categories_box->setFrameShape( QFrame::Box );

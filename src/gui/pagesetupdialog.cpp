@@ -158,14 +158,17 @@ void PageSetupDialog::reloadLayout()
 
 void PageSetupDialog::saveLayout()
 {
-	if ( have_write_perm )
-		setup_display->saveLayout( active_filename );
-	else
+	if ( setup_display->hasChanges() )
 	{
-		switch ( KMessageBox::warningYesNo( this, i18n("Unable to save the layout because you do not have sufficient permissions to modify this file.\nWould you like to instead save the current layout to a new file?") ) )
+		if ( have_write_perm )
+			setup_display->saveLayout( active_filename );
+		else
 		{
-		case KMessageBox::Yes: saveAsLayout(); break;
-		default: break;
+			switch ( KMessageBox::warningYesNo( this, i18n("Unable to save the layout because you do not have sufficient permissions to modify this file.\nWould you like to instead save the current layout to a new file?") ) )
+			{
+			case KMessageBox::Yes: saveAsLayout(); break;
+			default: break;
+			}
 		}
 	}
 }
