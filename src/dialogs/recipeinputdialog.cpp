@@ -955,21 +955,21 @@ void RecipeInputDialog::showRecipe(void)
 {
 // First check if there's anything unsaved in the recipe
 
-if (!loadedRecipe->recipeID)
+if (loadedRecipe->recipeID == -1)
 {
 switch( KMessageBox::questionYesNo( this,i18n("You need to save the recipe before displaying it. Would you like to save it now?"),i18n("Unsaved changes") ) )
 		{
 		case KMessageBox::Yes:
 			save();
 			break;
-		case KMessageBox::Cancel:
+		case KMessageBox::No:
 			return;
 		}
 }
 else if (unsavedChanges)
  	{
 
-	switch( KMessageBox::questionYesNoCancel( this,i18n("This recipe has unsaved changes that will not be shown in the recipe view. Would you like to save them now?"),i18n("Unsaved changes") ) )
+	switch( KMessageBox::questionYesNoCancel( this,i18n("This recipe has changes that will not be displayed unless the recipe is saved. Would you like to save it now?"),i18n("Unsaved changes") ) )
 		{
 		case KMessageBox::Yes:
 			save();
