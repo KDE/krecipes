@@ -63,16 +63,16 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     il=new KIconLoader;
     autoFillButton=new QPushButton(buttonBar);
     autoFillButton->setText("Diet Wizard");
-    QPixmap pm=il->loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setPixmap(pm);
+    QPixmap pm=il->loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
 
     okButton=new QPushButton(buttonBar);
     okButton->setText("Ok");
-    pm=il->loadIcon("ok", KIcon::NoGroup,16); okButton->setPixmap(pm);
+    pm=il->loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
 
     clearButton=new QPushButton(buttonBar);
     clearButton->setText("Clear");
-    clearButton->setMaximumWidth(40);
-    pm=il->loadIcon("editclear", KIcon::NoGroup,16); clearButton->setPixmap(pm);
+    clearButton->setMaximumWidth(100);
+    pm=il->loadIcon("editclear", KIcon::NoGroup,16); clearButton->setIconSet(pm);
 
 
 
