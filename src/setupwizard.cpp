@@ -27,8 +27,11 @@ SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f
 {
 welcomePage= new WelcomePage(this);
 addPage(welcomePage,i18n("Welcome to Krecipes"));
+dbTypeSetupPage=new DBTypeSetupPage(this);
+addPage(dbTypeSetupPage,i18n("Database Type"));
 permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
+
 serverSetupPage = new ServerSetupPage(this);
 addPage(serverSetupPage,i18n("Server Settings"));
 dataInitializePage= new DataInitializePage(this);
@@ -400,7 +403,12 @@ layout->addItem(spacer_top,0,1);
 QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_left,1,0);
 
-// Explanation Text
+// Explanation Text// Widgets
+	QLabel *logo;
+	QLabel *serverSetupText;
+	KLineEdit *usernameEdit;
+	KLineEdit *passwordEdit;
+	KLineEdit *dbNameEdit;
 initializeText=new QLabel(this);
 initializeText->setText(i18n("Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. "));
 
@@ -432,3 +440,52 @@ bool DataInitializePage::doInitialization(void)
 {
 return (initializeCheckBox->isChecked());
 }
+
+DBTypeSetupPage::DBTypeSetupPage(QWidget *parent):QWidget(parent)
+{
+QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
+
+
+// Image
+
+QPixmap serverSetupPixmap (locate("data", "krecipes/pics/network.png"));
+logo=new QLabel(this);
+logo->setPixmap(serverSetupPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
+
+QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_from_image,1,2);
+
+
+// Explanation text
+dbTypeSetupText=new QLabel(this);
+dbTypeSetupText->setText(i18n("In this dialog you can choose the type of recipe database you want to use."));
+dbTypeSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+dbTypeSetupText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
+layout->addWidget(dbTypeSetupText,1,3);
+
+// Text spacer
+
+QSpacerItem* textSpacer = new QSpacerItem( 10,30, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem(textSpacer,2,3 );
+
+
+
+// Database type choice
+
+liteCheckBox=new QRadioButton(i18n("Simple Local File (SQLite)"),this,"liteCheckBox");
+layout->addWidget(liteCheckBox,3,3);
+QSpacerItem* radioButtonSpacer = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( radioButtonSpacer,4,3 );
+mysqlCheckBox=new QRadioButton(i18n("Local or Remote MySQL Database"),this,"liteCheckBox");
+layout->addWidget(mysqlCheckBox,5,3);
+
+// Signals & Slots
+}
+
+

@@ -12,6 +12,7 @@
 
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <kwizard.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -22,10 +23,12 @@
 */
 
 class WelcomePage;
+class DBTypeSetupPage;
 class PermissionsSetupPage;
 class ServerSetupPage;
 class DataInitializePage;
 class SavePage;
+
 
 class SetupWizard:public KWizard{
 Q_OBJECT
@@ -39,6 +42,7 @@ public:
 private:
 	// Widgets
 	WelcomePage *welcomePage;
+	DBTypeSetupPage *dbTypeSetupPage;
 	PermissionsSetupPage *permissionsSetupPage;
 	ServerSetupPage *serverSetupPage;
 	DataInitializePage *dataInitializePage;
@@ -130,6 +134,19 @@ private:
 	QLabel *logo;
 	QLabel *saveText;
 
+};
+
+class DBTypeSetupPage:public QWidget{
+public:
+	// Methods
+	DBTypeSetupPage(QWidget *parent);
+	int dbType(void);
+private:
+	// Widgets
+	QLabel *dbTypeSetupText;
+	QLabel *logo;
+	QRadioButton *liteCheckBox;
+	QRadioButton *mysqlCheckBox;
 };
 
 #endif
