@@ -118,10 +118,15 @@ void DietWizardDialog::changeMealNumber(int mn)
 {
 if (mn>mealNumber)
 	{
-	 newTab(i18n("Meal %1").arg(mn));
-	 mealNumber++;
-	 mealNumberLabel->setText(QString(i18n("- %1 -")).arg(mn));
+
+	 while (mealNumber!=mn)
+	 {
+	 	mealNumber++;
+		newTab(i18n("Meal %1").arg(mealNumber));
+	 	mealNumberLabel->setText(QString(i18n("- %1 -")).arg(mealNumber));
 	 }
+	 }
+
 }
 
 void DietWizardDialog::changeDayNumber(int dn)
@@ -377,12 +382,15 @@ void MealInput::changeDishNumber(int dn)
 {
 if (dn>dishNumber)
 	{
-	DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
-	newDish->reload(&categoriesListLocalCache,&propertyListLocalCache);
-	dishStack->addWidget(newDish);
-	dishInputList.append(newDish);
-	dishStack->raiseWidget(newDish);
-	dishNumber++;
+	while (dishNumber!=dn)
+	{
+		DishInput *newDish=new DishInput(this,QString(i18n("Dish %1")).arg(dishNumber+1));
+		newDish->reload(&categoriesListLocalCache,&propertyListLocalCache);
+		dishStack->addWidget(newDish);
+		dishInputList.append(newDish);
+		dishStack->raiseWidget(newDish);
+		dishNumber++;
+	}
 	}
 }
 
