@@ -169,7 +169,7 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (!it->firstChild()) // It's not a category
 	{
-		if (s==QString::null) it->setVisible(true); // Don't filter if the filter text is empty
+		if (s=="") it->setVisible(true); // Don't filter if the filter text is empty
 		else if (it->text(2).contains(s,false)) it->setVisible(true);
 
 		else it->setVisible(false);
@@ -178,9 +178,12 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
 		{
-		if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
+		if (s=="") cit->setVisible(true); // Don't filter if the filter text is empty
 
-		else if (cit->text(2).contains(s,false)) cit->setVisible(true);
+		else if (cit->text(2).contains(s,false)) {
+						cit->setVisible(true);
+						it->setOpen(true);
+						}
 
 		else cit->setVisible(false);
 
