@@ -14,11 +14,13 @@
 
 #include <qptrdict.h>
 #include <qimage.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kapplication.h>
+#include <kglobal.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
 
@@ -45,50 +47,57 @@ QString HTMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	if ( recipes.count() == 0 )
 		return "<html></html>";
 
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	QString recipeHTML;
 
 	//Creates initial layout and saves to config file
 	SetupDisplay::createSetupIfNecessary();
 
 	QPtrListIterator<Recipe> recipes_it( recipes );
-	Recipe *recipe; bool first = true;
+	Recipe *recipe = recipes_it.toFirst();
+
+	recipeHTML += "<html><head>";
+	recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipe->title : i18n("Krecipes Recipes") );
+
+	//loop through recipes and only create the css properties
+	(void)recipes_it.toFirst();
+	int offset = 0;
+	recipeHTML += "<STYLE type=\"text/css\">\n";
 	while ( (recipe = recipes_it.current()) != 0 )
 	{
 		++recipes_it;
 
 		// Calculate the property list
 		calculateProperties(*recipe,database,properties);
-		createBlocks( *recipe );
+		offset = createBlocks( *recipe, offset ) + 15;
 
-		if ( first )
-		{
-			storePhoto( *recipe );
+		config->setGroup("BackgroundSetup");
+		QColor color = config->readColorEntry( "BackgroundColor" );
+		recipeHTML += "BODY\n";
+		recipeHTML += "{\n";
+		recipeHTML += QString("background-color: %1;\n").arg(color.name());
+		recipeHTML += "}\n";
 
-			recipeHTML += "<html><head>";
+		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
+			recipeHTML += div->generateCSS();
+	}
+	recipeHTML += "</STYLE></head><body>\n";
 
-			// title (not shown)
-			recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipe->title : i18n("Krecipes Recipes") );
+	//put all the recipe photos into this directory
+	QDir dir;
+	QFileInfo fi( *file );
+	dir.mkdir( fi.dirPath()+"/"+filename+"_photos" );
 
-			//=========================STYLE=======================//
-			recipeHTML += "<STYLE type=\"text/css\">\n";
+	//now loop through the recipes, generating the content
+	(void)recipes_it.toFirst();
+	while ( (recipe = recipes_it.current()) != 0 )
+	{
+		++recipes_it;
 
-			config->setGroup("BackgroundSetup");
-			QColor color = config->readColorEntry( "BackgroundColor" );
-			recipeHTML += "BODY\n";
-			recipeHTML += "{\n";
-			recipeHTML += QString("background-color: %1;\n").arg(color.name());
-			recipeHTML += "}\n";
-
-				for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
-				recipeHTML += div->generateCSS();
-			recipeHTML += "</STYLE>\n";
-			//=======================END-STYLE=====================//
-
-			recipeHTML += "</head><body>";
-
-			first = false;
-		}
+		// Calculate the property list
+		calculateProperties(*recipe,database,properties);
+		(void)createBlocks( *recipe );
+		storePhoto( *recipe );
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 			recipeHTML += div->generateHTML();
@@ -97,14 +106,12 @@ QString HTMLExporter::createContent( const QPtrList<Recipe>& recipes )
 	// Close HTML
 	recipeHTML+="</body></html>\n";
 
-	kdDebug()<<recipeHTML<<endl;
-
 	return recipeHTML;
 }
 
 void HTMLExporter::storePhoto( const Recipe &recipe )
 {
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup("PhotoSetup");
 	temp_photo_geometry = config->readRectEntry("Geometry");
 
@@ -118,11 +125,12 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 		image = recipe.photo.convertToImage();
 
 	QPixmap pm = image.smoothScale(phwidth, phheight, QImage::ScaleMin);
-	pm.save("/tmp/krecipes_photo.png","PNG");
+	QFileInfo fi(*file);
+	pm.save(fi.dirPath()+"/"+filename+"_photos/"+recipe.title+".png","PNG");
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 }
 
-void HTMLExporter::createBlocks( const Recipe &recipe )
+int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 {
 	div_elements.clear();
 	QFont default_font;
@@ -134,14 +142,15 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	geometries.setAutoDelete(true);
 	QPtrDict<DivElement> geom_contents;
 
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 
 	//=======================TITLE======================//
 	config->setGroup("TitleSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
-	new_element = new DivElement( "title",recipe.title);
+	new_element = new DivElement( "title_"+QString::number(recipe.recipeID), recipe.title);
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -156,11 +165,12 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 
 	config->setGroup("InstructionsSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString instr_html = recipe.instructions;
 	instr_html.replace("\n","<BR>");
-	new_element = new DivElement( "instructions", instr_html );
+	new_element = new DivElement( "instructions_"+QString::number(recipe.recipeID), instr_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -174,10 +184,11 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================SERVINGS======================//
 	config->setGroup("ServingsSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString servings_html = QString("<b>%1: </b>%2").arg(i18n("Servings")).arg(recipe.persons);
-	new_element = new DivElement( "servings", servings_html );
+	new_element = new DivElement( "servings_"+QString::number(recipe.recipeID), servings_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -191,12 +202,13 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//========================PHOTO========================//
 	config->setGroup("PhotoSetup");
 	geometry=new QRect(temp_photo_geometry);
+	geometry->moveBy( 0, offset );
 	geometry->setWidth(geometry->width()*100.0/m_width);// The size of all objects needs to be saved in percentage format
 	geometry->setHeight(geometry->height()*100.0/m_width);// The size of all objects needs to be saved in percentage format
 	geometries.append( geometry );
 
-	QString photo_html = QString("<img src=\"/tmp/krecipes_photo.png\">");
-	new_element = new DivElement( "photo", photo_html );
+	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(recipe.title);
+	new_element = new DivElement( "photo_"+QString::number(recipe.recipeID), photo_html );
 	new_element->setFixedHeight(true);
 
 	readVisibilityProperties( new_element, config );
@@ -207,6 +219,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================AUTHORS======================//
 	config->setGroup("AuthorsSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString authors_html;
@@ -223,7 +236,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 		authors_html += author_el->name;
 		counter++;
 	}
-	new_element = new DivElement( "authors", authors_html );
+	new_element = new DivElement( "authors_"+QString::number(recipe.recipeID), authors_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -237,6 +250,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================CATEGORIES======================//
 	config->setGroup("CategoriesSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString categories_html;
@@ -254,7 +268,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 		categories_html += cat_el->name;
 		counter++;
 	}
-	new_element = new DivElement( "categories", categories_html );
+	new_element = new DivElement( "categories_"+QString::number(recipe.recipeID), categories_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -268,10 +282,11 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================ID======================//
 	config->setGroup("HeaderSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString header_html = QString("<b>%1 #%2</b>").arg(i18n("Recipe")).arg(recipe.recipeID);
-	new_element = new DivElement( "header", header_html );
+	new_element = new DivElement( "header_"+QString::number(recipe.recipeID), header_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -285,6 +300,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================INGREDIENTS======================//
 	config->setGroup("IngredientsSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString ingredients_html;
@@ -313,7 +329,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 
 		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
 	}
-	new_element = new DivElement( "ingredients", ingredients_html );
+	new_element = new DivElement( "ingredients_"+QString::number(recipe.recipeID), ingredients_html );
 
 	config->setGroup("IngredientsSetup");
 	readFontProperties( new_element, config );
@@ -328,6 +344,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	//=======================PROPERTIES======================//
 	config->setGroup("PropertiesSetup");
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString properties_html;
@@ -350,7 +367,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 			    .arg(amount_str)
 			    .arg(prop->units);
 	}
-	new_element = new DivElement( "properties", properties_html );
+	new_element = new DivElement( "properties_"+QString::number(recipe.recipeID), properties_html );
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );
@@ -360,8 +377,11 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
+	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
+
 	//this takes expands all items to an appropriate size
 
+	int height_taken = 0;
 	geometries.sort(); //we'll work with these in order from top to bottom
 	for ( QRect *rect = geometries.first(); rect; rect = geometries.next() )
 	{
@@ -398,7 +418,7 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
-			if (newHeight>elementHeight) elementHeight=newHeight; // Keep user's size if it's defined as bigger
+			/*if (newHeight>elementHeight)*/ elementHeight=newHeight; // Keep user's size if it's defined as bigger
 
 			delete sizeCalculator;
 		}
@@ -407,16 +427,18 @@ void HTMLExporter::createBlocks( const Recipe &recipe )
 									 // shrinking due to float->int conversion
 
 		// Move elements around if there's any overlapping
-
 		pushItemsDownIfNecessary( geometries, rect );
 
 		// Scale the objects to page size
+		element->addProperty( QString("top: %1px;").arg(static_cast<int>(rect->top()/100.0*m_width)) );
+		element->addProperty( QString("left: %1px;").arg(static_cast<int>(rect->left()/100.0*m_width)) );
+		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
+		element->addProperty(QString("height: %1px;").arg(static_cast<int>(rect->height()/100.0*m_width)) );
 
-		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*m_width) );
-		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*m_width) );
-		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*m_width) );
-		element->addProperty(QString("height: %1px;").arg(rect->height()/100.0*m_width));
+		height_taken = QMAX(rect->bottom(),height_taken);
 	}
+
+	return height_taken;
 }
 
 
@@ -483,6 +505,22 @@ void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect 
 	}
 
 	geometries.findRef( top_geom ); //set it back to where is was
+}
+
+void HTMLExporter::removeHTMLFiles( const QString &filename, const QString &recipe_title )
+{
+	//remove HTML file
+	QFile old_file(filename+".html");
+	if ( old_file.exists() )
+		old_file.remove();
+
+	//remove photo directory
+	QFile photo( filename+"_photos/"+recipe_title+".png");
+	if ( photo.exists() )
+		photo.remove(); //remove photos in directory before removing it (there should only be one photo in this directory)
+
+	QDir photo_dir;
+	photo_dir.rmdir( filename+"_photos" );
 }
 
 

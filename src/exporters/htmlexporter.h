@@ -55,11 +55,13 @@ public:
 
 	virtual QString createContent( const QPtrList<Recipe> & );
 
+	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
+
 protected:
 	virtual QString extensions() const{ return ".html"; }
 private:
 	void storePhoto( const Recipe &recipe );
-	void createBlocks( const Recipe &recipe );
+	int createBlocks( const Recipe &recipe, int offset = 0 );
 	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 
 	void readAlignmentProperties( DivElement *, KConfig * );
