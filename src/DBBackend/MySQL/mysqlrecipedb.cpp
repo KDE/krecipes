@@ -1470,13 +1470,21 @@ if ( version < 0.6 )
 {
 	command="ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL default '-1' AFTER name;";
 		QSqlQuery tableToAlter(command,database);
-		
-	command="ALTER TABLE `recipes` ADD COLUMN `prep_time` TIME DEFAULT NULL";
-		tableToAlter.exec(command);
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
 	command="INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
+		tableToAlter.exec(command);
+}
+
+if ( version < 0.61 )
+{
+	QString command="ALTER TABLE `recipes` ADD COLUMN `prep_time` TIME DEFAULT NULL";
+		QSqlQuery tableToAlter(command,database);
+
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		tableToAlter.exec(command);
+	command="INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
 		tableToAlter.exec(command);
 }
 

@@ -1671,10 +1671,18 @@ if ( version < 0.6 )
 	}
 	database->executeQuery("DROP TABLE categories_copy");
 
+	//================Set the version to the new one (0.6)
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		database->executeQuery(command);
+	command="INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
+		database->executeQuery(command);
+}
 
+if ( version < 0.61 )
+{
 	//==================add a column to 'recipes' to allow prep time
 	database->executeQuery("CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));");
-	copyQuery = database->executeQuery("SELECT * FROM recipes;");
+	QSQLiteResult copyQuery = database->executeQuery("SELECT * FROM recipes;");
 	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
 	{
 		QSQLiteResultRow row= copyQuery.first();
@@ -1713,11 +1721,10 @@ if ( version < 0.6 )
 	}
 	database->executeQuery("DROP TABLE recipes_copy");
 
-
-	//================Set the version to the new one (0.6)
+	//================Set the version to the new one (0.61)
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		database->executeQuery(command);
-	command="INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
+	command="INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
 		database->executeQuery(command);
 }
 }
