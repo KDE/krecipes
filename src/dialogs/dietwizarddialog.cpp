@@ -13,6 +13,7 @@
 #include "dietwizarddialog.h"
 #include "DBBackend/recipedb.h"
 #include "datablocks/recipelist.h"
+#include "dietviewdialog.h"
 #include "editbox.h"
 
 #include <qbitmap.h>
@@ -185,6 +186,11 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 }
 
 if (alert) KMessageBox::information(this,i18n("I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. "));
+else // show the resulting diet
+	{
+	DietViewDialog *dietDisplay=new DietViewDialog(0,dietRList);
+	dietDisplay->show();
+	}
 
 }
 
