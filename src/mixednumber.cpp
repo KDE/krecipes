@@ -112,8 +112,10 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 	return input.mid( slash_index+1, input.length() ).toInt(ok);
 }
 
-MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
+MixedNumber MixedNumber::fromString( const QString &str, bool *ok )
 {
+	QString input = str.stripWhiteSpace();
+
 	KLocale *locale = KGlobal::locale();
 
 	bool num_ok;

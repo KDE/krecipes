@@ -69,6 +69,7 @@ public:
 	void setText( const QString &s );
 	void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
 	void setTextAndSave(const QString &s);
+	int alignment() const{ return Qt::AlignRight; }
 signals:
 	void ratioChanged(int row, int col, double value);
 	void signalRepaintCell(int r,int c);
