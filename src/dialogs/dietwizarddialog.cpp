@@ -433,6 +433,12 @@ r.moveBy(0,constraintsView->header()->sectionRect(3).height()+constraintsView->i
 r.setHeight(it->height()); // Set the item's height
 r.setWidth(constraintsView->header()->sectionRect(3).width()); // and width
 constraintsEditBox2->setGeometry(r);
+
+// Set the values from the item
+constraintsEditBox1->setValue(((ConstraintsListItem*)it)->minVal());
+constraintsEditBox2->setValue(((ConstraintsListItem*)it)->maxVal());
+
+
 // Show Boxes
 constraintsEditBox1->show();
 constraintsEditBox2->show();
