@@ -26,16 +26,16 @@
 #include <kconfig.h>
 
 #include "setupwizard.h"
-#include "recipeinputdialog.h"
-#include "recipeviewdialog.h"
-#include "selectrecipedialog.h"
-#include "ingredientsdialog.h"
-#include "propertiesdialog.h"
-#include "shoppinglistdialog.h"
+#include "dialogs/recipeinputdialog.h"
+#include "dialogs/recipeviewdialog.h"
+#include "dialogs/selectrecipedialog.h"
+#include "dialogs/ingredientsdialog.h"
+#include "dialogs/propertiesdialog.h"
+#include "dialogs/shoppinglistdialog.h"
 #include "dialogs/dietwizarddialog.h"
-#include "categorieseditordialog.h"
-#include "authorsdialog.h"
-#include "unitsdialog.h"
+#include "dialogs/categorieseditordialog.h"
+#include "dialogs/authorsdialog.h"
+#include "dialogs/unitsdialog.h"
 #include "gui/kstartuplogo.h"
 
 #if HAVE_MYSQL

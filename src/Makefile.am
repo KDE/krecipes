@@ -26,7 +26,7 @@ endif
 krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkreexport.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la $(qsqlite_libadds) $(mysql_libadds) $(LIB_KHTML) $(LIB_KSPELL) $(DATABASE_LIBS)
 
 # which sources should be compiled for krecipes
-krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipeinputdialog.cpp recipeviewdialog.cpp recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp selectrecipedialog.cpp ingredientsdialog.cpp selectunitdialog.cpp createelementdialog.cpp propertiesdialog.cpp createpropertydialog.cpp ingredientproperty.cpp ingredientpropertylist.cpp selectpropertydialog.cpp editbox.cpp unitsdialog.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp dependanciesdialog.cpp shoppinglistdialog.cpp shoppinglistviewdialog.cpp shoppingcalculator.cpp selectcategoriesdialog.cpp categorieseditordialog.cpp authorsdialog.cpp selectauthorsdialog.cpp fractioninput.cpp mixednumber.cpp menugroup.cpp dualprogressdialog.cpp resizerecipedialog.cpp serverprefs.ui unitsprefs.ui importprefs.ui
+krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp ingredientproperty.cpp ingredientpropertylist.cpp editbox.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp shoppingcalculator.cpp fractioninput.cpp mixednumber.cpp menugroup.cpp serverprefs.ui unitsprefs.ui importprefs.ui
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
