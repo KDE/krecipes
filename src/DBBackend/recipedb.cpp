@@ -1213,9 +1213,11 @@ int RecipeDB::findExistingRecipeByName( const QString& name )
 	QSqlQuery elementToLoad(command,database); // Run the query
 	int id = -1;
 
-	if (elementToLoad.isActive() && elementToLoad.first())
-		id=elementToLoad.value(0).toInt();
-
+	if (elementToLoad.isActive()
+		{
+		if (elementToLoad.first())
+			id=elementToLoad.value(0).toInt();
+		}
 	return id;
 }
 
