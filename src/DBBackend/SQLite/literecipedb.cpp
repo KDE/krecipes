@@ -935,7 +935,7 @@ bool LiteRecipeDB::checkIntegrity(void)
 
 // Check existence of the necessary tables (the database may be created, but empty)
 QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
-QString command=QString("SHOW TABLES;");
+QString command=QString("SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table';"); // Get the table names (equivalent to MySQL's "SHOW TABLES;" Easy to remember, right? ;)
 QSQLiteResult tablesToCheck=database->executeQuery(command);
 
 if (tablesToCheck.getStatus()!=QSQLiteResult::Failure)
