@@ -1213,7 +1213,7 @@ int RecipeDB::findExistingRecipeByName( const QString& name )
 	QSqlQuery elementToLoad(command,database); // Run the query
 	int id = -1;
 
-	if (elementToLoad.isActive()
+	if (elementToLoad.isActive())
 		{
 		if (elementToLoad.first())
 			id=elementToLoad.value(0).toInt();
@@ -1239,19 +1239,26 @@ QString RecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 	if ( findExistingRecipeByName( recipe_title ) == -1 )
 		return recipe_title;
 
+	QString return_title=recipe_title; //If any error is produced, just go for default value (always return something)
+
 	QString command = QString( "SELECT COUNT(DISTINCT title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg(escapeAndEncode(recipe_title));
+
 	QSqlQuery alikeRecipes( command, database );
-
-	alikeRecipes.first();
-	int count = alikeRecipes.value(0).toInt();
-
-	QString return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
-
-	//make sure this newly created title is unique (just in case)
-	while ( findExistingRecipeByName( return_title ) != -1 )
+	if (alikeRecipes.isActive())
 	{
-		count--;
+	int count=0;
+	if (alikeRecipes.first());
+		{
+		count = alikeRecipes.value(0).toInt();
 		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
+
+		//make sure this newly created title is unique (just in case)
+		while ( findExistingRecipeByName( return_title ) != -1 )
+		{
+		count++;
+		return_title = QString("%1 (%2)").arg(recipe_title).arg(count+2);
+		}
+		}
 	}
 
 	return return_title;
