@@ -315,7 +315,7 @@ config->writeEntry( "SystemSetup",true);
 void SetupWizard::getOptions(bool &setupUser, bool &initializeData)
 {
 setupUser=permissionsSetupPage->doUserSetup();
-initializeData=0; // FIXME!!!!
+initializeData=dataInitializePage->doInitialization();
 
 }
 
@@ -363,4 +363,7 @@ initializeCheckBox=new QCheckBox(i18n("Yes please, initialize the database with 
 layout->addWidget(initializeCheckBox,3,3);
 }
 
-
+bool DataInitializePage::doInitialization(void)
+{
+return (initializeCheckBox->isChecked());
+}

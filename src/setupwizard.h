@@ -106,6 +106,7 @@ class DataInitializePage:public QWidget{
 public:
 	// Methods
 	DataInitializePage(QWidget *parent);
+	bool doInitialization(void);
 private:
 	// Widgets
 	QLabel *logo;
