@@ -51,25 +51,23 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Design Resizing of the panels
    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
-   leftPanel->setMinimumWidth(130);
+   leftPanel->setMinimumWidth(150);
 
 
     // Design Left Panel
-
-    button1=new QPushButton(leftPanel); button1->setFlat(true); button1->setText("Select Recipe");
-    	button1->setGeometry(0,0,130,30);
-    button2=new QPushButton(leftPanel); button2->setFlat(true); button2->setText("View Recipe");
-    	button2->setGeometry(0,30,130,30);
-    button3=new QPushButton(leftPanel); button3->setFlat(true); button3->setText("Edit Recipe");
-        button3->setGeometry(0,60,130,30);
+    il=new KIconLoader;
+    button1=new QPushButton(leftPanel); button1->setFlat(true); button1->setText("Find/Edit Recipes");
+    	QPixmap pm=il->loadIcon("filefind", KIcon::NoGroup,16); button1->setIconSet(pm);
+    	button1->setGeometry(0,0,150,30);
     button4=new QPushButton(leftPanel); button4->setFlat(true); button4->setText("Edit Ingredients");
-        button4->setGeometry(0,90,130,30);
+        button4->setGeometry(0,30,150,30);
     button5=new QPushButton(leftPanel); button5->setFlat(true); button5->setText("Edit Property List");
-	button5->setGeometry(0,120,130,30);
+	button5->setGeometry(0,60,150,30);
     button6=new QPushButton(leftPanel); button6->setFlat(true); button6->setText("Edit Units");
-	button6->setGeometry(0,150,130,30);
+	button6->setGeometry(0,90,150,30);
     button7=new QPushButton(leftPanel); button7->setFlat(true); button7->setText("Shopping List");
-	button7->setGeometry(0,180,130,30);
+	pm=il->loadIcon("table", KIcon::NoGroup,16); button7->setIconSet(pm);
+	button7->setGeometry(0,120,150,30);
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
@@ -121,20 +119,16 @@ switch (w)
 case 0: selectPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(selectPanel);
 	break;
-case 1: this->rightPanel->raiseWidget(viewPanel);
-	break;
-case 2: this->rightPanel->raiseWidget(inputPanel);
-	break;
-case 3: ingredientsPanel->reload();// Reload data
+case 1: ingredientsPanel->reload();// Reload data
 	this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
-case 4: propertiesPanel->reload();
+case 2: propertiesPanel->reload();
 	this->rightPanel->raiseWidget(propertiesPanel);
 	break;
-case 5: unitsPanel->reload(); // Reload data
+case 3: unitsPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(unitsPanel);
 	break;
-case 6: shoppingListPanel->reload(); // Reload data
+case 4: shoppingListPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(shoppingListPanel);
 	break;
 }

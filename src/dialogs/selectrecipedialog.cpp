@@ -49,14 +49,14 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 	openButton=new QPushButton(buttonBar);
 	openButton->setText("Open Recipe");
-	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setPixmap(pm);
+	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
 	editButton=new QPushButton(buttonBar);
-	editButton->setText("Edit");
-	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setPixmap(pm);
+	editButton->setText("Edit Recipe");
+	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setIconSet(pm);
 	removeButton=new QPushButton(buttonBar);
 	removeButton->setText("Delete");
-	removeButton->setMaximumWidth(40);
-	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setPixmap(pm);
+	removeButton->setMaximumWidth(100);
+	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
 // Load Recipe List
 loadRecipeList();

@@ -11,6 +11,8 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
+
+#include <kiconloader.h>
 #include <kparts/part.h>
 #include <krecipesiface.h>
 #include <qwidgetstack.h>
@@ -85,7 +87,8 @@ private:
 	// Internal methods
 	void wizard(void);
 
-	// Internal widgets
+	// Widgets
+	KIconLoader *il;
 	QSplitter *splitter;
 	QButtonGroup *leftPanel;
 	QWidgetStack *rightPanel;
