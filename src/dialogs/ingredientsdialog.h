@@ -57,6 +57,7 @@ private:
   private slots:
     void updateUnitList(void);
     void addIngredient(void);
+    void addUnitToIngredient(void);
 
 
 

@@ -12,7 +12,14 @@
 
 #include <qwidget.h>
 #include <qdialog.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
+#include <qgroupbox.h>
+#include <qvbox.h>
+#include <klistview.h>
+#include "element.h"
+#include "elementlist.h"
+
 
 /**
 @author Unai Garro
@@ -20,11 +27,21 @@
 class SelectUnitDialog : public QDialog
 {
 public:
-    SelectUnitDialog(QWidget* parent=0);
+    SelectUnitDialog(QWidget* parent,ElementList *unitList);
 
     ~SelectUnitDialog();
+
+    int unitID(void);
+
 private:
-  QPushButton *ok_button;
+  //Widgets
+  QVBoxLayout *container;
+  QGroupBox *box;
+  QVBox *vbox;
+  KListView *unitChooseView;
+  QPushButton* okButton;
+  QPushButton* cancelButton;
+  void loadUnits(ElementList *unitList);
 
 };
 

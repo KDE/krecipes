@@ -100,6 +100,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     // Signals & Slots
     connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateUnitList()));
     connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
+    connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
 }
 
 
@@ -167,7 +168,29 @@ if ( elementDialog->exec() == QDialog::Accepted ) {
    database->createNewIngredient(result); // Create the new ingredient in database
    reloadIngredientList(); // Reload the list from database
 }
-
+delete elementDialog;
 }
 
+void IngredientsDialog::addUnitToIngredient(void)
+{
+
+QListViewItem *it;
+int ingredientID=-1;
+if (it=ingredientListView->selectedItem())
+  {
+  ingredientID=it->text(0).toInt();
+  }
+
+ElementList allUnits;
+database->loadUnits(&allUnits);
+
+SelectUnitDialog* unitsDialog=new SelectUnitDialog(0,&allUnits);
+
+if ( unitsDialog->exec() == QDialog::Accepted ) {
+   int result = unitsDialog->unitID();
+   database->AddUnitToIngredient(ingredientID,result); // Add result chosen unit to ingredient in database
+   updateUnitList(); // Reload the list from database
+}
+
+}
 
