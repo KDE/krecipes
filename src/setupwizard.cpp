@@ -37,7 +37,7 @@ savePage = new SavePage(this);
 addPage(savePage,i18n("Finish and Save Settings"));
 
 setFinishEnabled(savePage,true); // Enable finish button
-setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
 }
 
@@ -58,17 +58,17 @@ QPixmap logoPixmap (locate("data", "krecipes/pics/wizard.png"));
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(logo,1,1);
+layout->addWidget(logo,1,1,Qt::AlignTop);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_from_image,1,2);
 
 welcomeText=new QLabel(this);
-welcomeText->setText(i18n("Thank you very much for choosing Krecipes.\nIt looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.\n\nWelcome and enjoy cooking! ;-) "));
+welcomeText->setText(i18n("<b><font size=+1>Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome and enjoy cooking! ;-) "));
 welcomeText->setMinimumWidth(200);
 welcomeText->setMaximumWidth(10000);
 welcomeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
-welcomeText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
+welcomeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop) );
 layout->addWidget(welcomeText,1,3);
 
 }
@@ -81,58 +81,68 @@ layout->addItem(spacer_top,0,1);
 QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_left,1,0);
 
-// Explanation Text
-permissionsText=new QLabel(this);
-permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions to access the KRecipes MySQL database.<br><br><b>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]"));
-permissionsText->setMinimumWidth(200);
-permissionsText->setMaximumWidth(10000);
-permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
-permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
-layout->addWidget(permissionsText,1,3);
 
 // Logo
 QPixmap permissionsSetupPixmap (locate("data", "krecipes/pics/dbpermissions.png"));
 logo=new QLabel(this);
 logo->setPixmap(permissionsSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addMultiCellWidget(logo,1,8,1,1);
+layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
 
 // Spacer to separate the logo
 QSpacerItem *logoSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(logoSpacer,1,2);
 
+
+// Explanation Text
+permissionsText=new QLabel(this);
+permissionsText->setText(i18n("This dialog will allow you to specify a MySQL account that has the necessary permissions to access the KRecipes MySQL database.<br><br><b><font size=+1>Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]"));
+
+permissionsText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
+layout->addWidget(permissionsText,1,3);
+
+// Text spacer
+QSpacerItem *textSpacer=new QSpacerItem(10,30,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(textSpacer,2,3);
+
+
 // "The user already has permissions" checkbox
 noSetupCheckBox=new QCheckBox(i18n("I have already set the necessary permissions"),this,"noSetupCheckBox");
 layout->addWidget(noSetupCheckBox,3,3);
+
+QSpacerItem *checkBoxSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(checkBoxSpacer,4,3);
+
 // root checkbox
 rootCheckBox=new QCheckBox(i18n("I have already set a MySQL root/admin account"),this,"rootCheckBox");
-layout->addWidget(rootCheckBox,4,3);
+layout->addWidget(rootCheckBox,5,3);
 
-QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
-layout->addItem(rootInfoSpacer,5,3);
+QSpacerItem *rootInfoSpacer=new QSpacerItem(10,20,QSizePolicy::Minimum,QSizePolicy::Fixed);
+layout->addItem(rootInfoSpacer,6,3);
 
 // MySQL root/admin info
-QVGroupBox *rootInfoVGBox=new QVGroupBox(this,"rootInfoVGBox"); rootInfoVGBox->setTitle(i18n("MySQL Administrator Account"));
-rootInfoVGBox->setEnabled(false); // Disable by default
-rootInfoVGBox->setInsideSpacing(10);
-layout->addWidget(rootInfoVGBox,6,3);
-
-// Input boxes (widgets inserted below)
-QHBox *userBox=new QHBox(rootInfoVGBox); userBox->setSpacing(10);
-QHBox *passBox=new QHBox(rootInfoVGBox); passBox->setSpacing(10);
+QGroupBox *rootInfoGBox=new QGroupBox(this,"rootInfoGBox"); rootInfoGBox->setTitle(i18n("MySQL Administrator Account"));
+rootInfoGBox->setEnabled(false); // Disable by default
+rootInfoGBox->setColumns(2);
+rootInfoGBox->setInsideSpacing(10);
+layout->addWidget(rootInfoGBox,7,3);
 
 // User Entry
-QLabel *userLabel=new QLabel(userBox); userLabel->setText(i18n("Username:"));
-userEdit=new KLineEdit(userBox);
+QLabel *userLabel=new QLabel(rootInfoGBox); userLabel->setText(i18n("Username:"));
+userEdit=new KLineEdit(rootInfoGBox); userEdit->setText("root");
 
 // Password Entry
-QLabel *passLabel=new QLabel(passBox); passLabel->setText(i18n("Password:"));
-passEdit=new KLineEdit(passBox);
-passEdit->setEchoMode(QLineEdit::Password);
+QLabel *passLabel=new QLabel(rootInfoGBox); passLabel->setText(i18n("Password:"));
+passEdit=new KLineEdit(rootInfoGBox); passEdit->setEchoMode(QLineEdit::Password);
+
+// Bottom spacer
+QSpacerItem *bottomSpacer=new QSpacerItem(10,20,QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
+layout->addItem(bottomSpacer,8,1);
 
 // Connect Signals & slots
 
-connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoVGBox,SLOT(setEnabled(bool)));
+connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoGBox,SLOT(setEnabled(bool)));
 connect(rootCheckBox,SIGNAL(toggled(bool)),this,SLOT(rootCheckBoxChanged(bool)));
 connect(noSetupCheckBox,SIGNAL(toggled(bool)),this,SLOT(noSetupCheckBoxChanged(bool)));
 }
@@ -178,7 +188,7 @@ QPixmap serverSetupPixmap (locate("data", "krecipes/pics/network.png"));
 logo=new QLabel(this);
 logo->setPixmap(serverSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addMultiCellWidget(logo,1,12,1,1);
+layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_from_image,1,2);
@@ -186,27 +196,31 @@ layout->addItem(spacer_from_image,1,2);
 
 // Explanation text
 serverSetupText=new QLabel(this);
-serverSetupText->setText(i18n("In this dialog you can adjust the MySQL server settings. "));
-serverSetupText->setMinimumWidth(200);
-serverSetupText->setMaximumWidth(10000);
+serverSetupText->setText(i18n("In this dialog you can adjust the MySQL server settings."));
 serverSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 serverSetupText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
-layout->addMultiCellWidget(serverSetupText,1,1,3,4);
+layout->addWidget(serverSetupText,1,3);
 
 // Text spacer
 
 QSpacerItem* textSpacer = new QSpacerItem( 10,30, QSizePolicy::Minimum, QSizePolicy::Fixed );
 layout->addItem(textSpacer,2,3 );
 
+// Input Boxes
+
+QGroupBox *inputGBox=new QGroupBox(this,"inputGBox");
+inputGBox->setFrameStyle(QFrame::NoFrame);
+inputGBox->setInsideSpacing(10);
+inputGBox->setColumns(2);
+layout->addWidget(inputGBox,3,3);
 
 // Username Input
 
-QLabel* usernameText=new QLabel(i18n("Username:"), this);
+QLabel* usernameText=new QLabel(i18n("Username:"), inputGBox);
 usernameText->setFixedSize(QSize(100,20));
 usernameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(usernameText,3,3);
 
-usernameEdit=new KLineEdit(this);
+usernameEdit=new KLineEdit(inputGBox);
 usernameEdit->setFixedSize(QSize(120,20));
 usernameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	// get username
@@ -214,68 +228,51 @@ usernameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	userID=getuid();user=getpwuid (userID); username=user->pw_name;
 
 usernameEdit->setText(username);
-layout->addWidget(usernameEdit,3,4);
-
-
-// Spacer 1
-
-QSpacerItem* spacerRow1 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow1,4,3 );
 
 
 // Password
 
-QLabel* passwordText=new QLabel(i18n("Password:"), this);
+QLabel* passwordText=new QLabel(i18n("Password:"), inputGBox);
 passwordText->setFixedSize(QSize(100,20));
 passwordText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(passwordText,5,3);
 
-passwordEdit=new KLineEdit(this);
+passwordEdit=new KLineEdit(inputGBox);
 passwordEdit->setEchoMode(QLineEdit::Password);
 passwordEdit->setFixedSize(QSize(120,20));
 passwordEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(passwordEdit,5,4);
-
-// Spacer 2
-QSpacerItem* spacerRow2 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow2,6,3 );
-
-
 
 // DB Name
 
-QLabel* dbNameText=new QLabel(i18n("Database Name:"), this);
+QLabel* dbNameText=new QLabel(i18n("Database Name:"), inputGBox);
 dbNameText->setFixedSize(QSize(100,20));
 dbNameText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(dbNameText,7,3);
 
-dbNameEdit=new KLineEdit(this);
+dbNameEdit=new KLineEdit(inputGBox);
 dbNameEdit->setFixedSize(QSize(120,20));
 dbNameEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 dbNameEdit->setText("Krecipes");
-layout->addWidget(dbNameEdit,7,4);
 
 
-// Spacer 3
-QSpacerItem* spacerRow3 = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow3, 8,3 );
+// Spacer from box
+QSpacerItem* spacerFromBox = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( spacerFromBox,4,3 );
 
 
 // Remote server checkbox
 
 remoteServerCheckBox=new QCheckBox(i18n("The server is remote"),this,"remoteServerCheckBox");
-layout->addWidget(remoteServerCheckBox,9,3);
+layout->addWidget(remoteServerCheckBox,5,3);
 
-// Spacer 4
-QSpacerItem* spacerRow4 = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-layout->addItem( spacerRow4, 10,3 );
+// Spacer from CheckBox
+QSpacerItem* spacerFromCheckBox = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem( spacerFromCheckBox,6,3 );
 
 // Server & Client Box
 QGroupBox *serverSettingsGBox=new QGroupBox(this,"serverSettingsGBox"); serverSettingsGBox->setTitle(i18n("Server / Client settings"));
 serverSettingsGBox->setEnabled(false); // Disable by default
 serverSettingsGBox->setInsideSpacing(10);
 serverSettingsGBox->setColumns(2);
-layout->addMultiCellWidget(serverSettingsGBox,11,11,3,4);
+layout->addWidget(serverSettingsGBox,7,3);
 
 
 // Server
@@ -288,12 +285,13 @@ QLabel* clientText=new QLabel(i18n("Client:"), serverSettingsGBox);
 clientEdit=new KLineEdit(serverSettingsGBox);
 clientEdit->setText("localhost");
 
-// Spacer 5
-QSpacerItem* spacerRow5 = new QSpacerItem( 12,12, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-layout->addItem( spacerRow5, 12,3 );
+// Bottom Spacers
+
+QSpacerItem* bottomSpacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+layout->addItem(bottomSpacer,8,1);
 
 QSpacerItem* spacerRight = new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-layout->addItem( spacerRight,1,5 );
+layout->addItem( spacerRight,1,6 );
 
 // Signals & Slots
 connect(remoteServerCheckBox,SIGNAL(toggled(bool)),serverSettingsGBox,SLOT(setEnabled(bool)));
@@ -340,15 +338,13 @@ QPixmap logoPixmap (locate("data", "krecipes/pics/save.png"));
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addWidget(logo,1,1);
+layout->addWidget(logo,1,1,Qt::AlignTop);
 
 QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_from_image,1,2);
 
 saveText=new QLabel(this);
 saveText->setText(i18n("Congratulations! All the necessary configuration setup are done. Press 'Finish' to continue, and enjoy cooking!"));
-saveText->setMinimumWidth(200);
-saveText->setMaximumWidth(10000);
 saveText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 
 saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter) );
@@ -405,8 +401,7 @@ layout->addItem(spacer_left,1,0);
 // Explanation Text
 initializeText=new QLabel(this);
 initializeText->setText(i18n("Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. "));
-initializeText->setMinimumWidth(200);
-initializeText->setMaximumWidth(10000);
+
 initializeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
 initializeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop  ) );
 layout->addWidget(initializeText,1,3);
@@ -416,7 +411,7 @@ QPixmap dataInitializePixmap (locate("data", "krecipes/pics/dbpermissions.png"))
 logo=new QLabel(this);
 logo->setPixmap(dataInitializePixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-layout->addMultiCellWidget(logo,1,8,1,1);
+layout->addMultiCellWidget(logo,1,8,1,1,Qt::AlignTop);
 
 // Spacer to separate the logo
 QSpacerItem *logoSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
