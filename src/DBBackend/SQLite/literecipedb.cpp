@@ -362,10 +362,7 @@ else  // load the list of those in the specified category
 	command=QString("SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
 	}
 
-
-std::cerr<<"Executing query for category "<<categoryID<<"\n";
 QSQLiteResult recipeToLoad=database->executeQuery(command);
-std::cerr<<"Query run\n";
 if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 	QSQLiteResultRow row=recipeToLoad.first();
             while ( !recipeToLoad.atEnd() ) {
@@ -386,6 +383,36 @@ if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 
 		}
 	}
+
+
+// While loading the whole list categorised, don't forget the uncategorised ones, add them with category=-1
+
+if ((!categoryID) && (recipeCategoryList))
+{
+	command="SELECT r.id,r.title,cl.category_id FROM recipes r LEFT JOIN category_list cl ON(r.id=cl.recipe_id) WHERE cl.recipe_id IS NULL;";
+
+	QSQLiteResult recipeToLoad=database->executeQuery(command);
+if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
+	QSQLiteResultRow row=recipeToLoad.first();
+            while ( !recipeToLoad.atEnd() ) {
+
+		    Element recipe;
+		    recipe.id=row.data(0).toInt();
+		    recipe.name=unescapeAndDecode(row.data(1));
+		    list->add(recipe);
+
+		    if (recipeCategoryList)
+		    {
+		    int *category=new int;
+		    *category=-1;
+		    recipeCategoryList->append (category);
+		    }
+
+		    row=recipeToLoad.next();
+
+		}
+	}
+}
 
 }
 

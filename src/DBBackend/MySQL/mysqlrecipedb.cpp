@@ -360,6 +360,33 @@ QSqlQuery recipeToLoad( command,database);
  		    }
                 }
 	}
+
+// While loading the whole list categorised, don't forget the uncategorised ones, add them with category=-1
+
+if ((!categoryID) && (recipeCategoryList))
+{
+	command="SELECT r.id,r.title FROM recipes r LEFT JOIN category_list cl ON(r.id=cl.recipe_id) WHERE cl.recipe_id IS NULL;";
+
+	recipeToLoad.exec(command);
+
+            if ( recipeToLoad.isActive() ) {
+                while ( recipeToLoad.next() ) {
+		    Element recipe;
+		    recipe.id=recipeToLoad.value(0).toInt();
+		    recipe.name=unescapeAndDecode(recipeToLoad.value(1).toString());
+		    list->add(recipe);
+
+		    if (recipeCategoryList)
+		    {
+		    int *category=new int;
+		    *category=-1;
+		    recipeCategoryList->append (category);
+ 		    }
+                }
+	}
+}
+
+
 }
 
 
@@ -967,6 +994,7 @@ void MySQLRecipeDB::createTable(QString tableName)
 {
 
 QString command;
+bool createIndex;
 
 if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB,   PRIMARY KEY (id));").arg(maxRecipeTitleLength());
 
@@ -986,7 +1014,7 @@ else if (tableName=="units_conversion") command="CREATE TABLE units_conversion (
 
 else if (tableName=="categories") command=QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
-else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL);";
+else if (tableName=="category_list") command="CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
 
 else if (tableName=="authors") command=QString("CREATE TABLE authors (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxAuthorNameLength());
 
@@ -995,9 +1023,6 @@ else if (tableName=="author_list") command="CREATE TABLE author_list (recipe_id 
 else if (tableName=="db_info") command="CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 
 else return;
-
-
-QSqlQuery tableToCreate(command,database);
 
 }
 

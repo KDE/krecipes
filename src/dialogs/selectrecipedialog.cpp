@@ -119,7 +119,8 @@ for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recip
 	}
 	else
 	{
-	QListViewItem *it=new QListViewItem (recipeListView,"unc",QString::number(recipe->id),recipe->name,"");
+	std::cerr<<"Category: "<<*categoryID<<"\n";
+	QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
 	}
 	}
 
