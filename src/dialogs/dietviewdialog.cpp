@@ -1,6 +1,7 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005                                               *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -9,8 +10,10 @@
 ***************************************************************************/
 
 #include "dietviewdialog.h"
+
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers ) : QWidget( parent )
 {
@@ -61,10 +64,10 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	// CSS
 	htmlCode += "<STYLE type=\"text/css\">\n";
 	htmlCode += "#calendar{border: thin solid black}";
-	htmlCode += "#dayheader{ background-color: #D6D6D6; color: black; border:none;}";
-	htmlCode += "#day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
-	htmlCode += "#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;align:center;}";
-	htmlCode += "#dish{overflow:hidden; height:1.5em;}";
+	htmlCode += ".dayheader{ background-color: #D6D6D6; color: black; border:none;}";
+	htmlCode += ".day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
+	htmlCode += ".meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF; text-align:center;}";
+	htmlCode += ".dish{font-size: smaller; overflow: hidden; height:2.5em;}";
 	htmlCode += "</STYLE>";
 
 
@@ -74,11 +77,11 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	htmlCode += QString( "<div id=\"calendar\">" );
 
 	// Title
-	htmlCode += QString( "<center><div STYLE=\"width: 80%\">" );
+	htmlCode += QString( "<center><div STYLE=\"width: 100%\">" );
 	htmlCode += QString( "<h1>%1</h1></div></center>" ).arg( i18n( "Diet" ) );
 
 	// Diet table
-	htmlCode += QString( "<center><div STYLE=\"width: 90%\">" );
+	htmlCode += QString( "<center><div STYLE=\"width: 98%\">" );
 	htmlCode += QString( "<table><tbody>" );
 
 
@@ -93,17 +96,17 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 
 		for ( int col = 0; ( col < 7 ) && ( day < dayNumber ); col++, day++ )  // New column (day)
 		{
-			htmlCode += QString( "<td><div id=\"day\"" );
-			htmlCode += QString( "<div id=\"dayheader\"><center>" );
+			htmlCode += QString( "<td><div class=\"day\">" );
+			htmlCode += QString( "<div class=\"dayheader\"><center>" );
 			htmlCode += QString( i18n( "Day %1" ) ).arg( day + 1 );
 			htmlCode += QString( "</center></div>" );
 			for ( int meal = 0;meal < mealNumber;meal++ )  // Meals in each cell
 			{
 				int dishNumber = *it;
-				htmlCode += QString( "<div id=\"meal\">" );
+				htmlCode += QString( "<div class=\"meal\">" );
 				for ( int dish = 0; dish < dishNumber;dish++ )  // Dishes in each Meal
 				{
-					htmlCode += QString( "<div id=\"dish\">" );
+					htmlCode += QString( "<div class=\"dish\">" );
 					htmlCode += ( *rit ).title;
 					htmlCode += "<br>";
 					htmlCode += QString( "</div>" );
@@ -124,8 +127,9 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	htmlCode += QString( "</div></body></html>" );
 
 	resize( QSize( 600, 400 ) );
+
 	// Display it
-	dietView->begin( KURL( "file:/tmp/" ) ); // Initialize to /tmp, where photos and logos can be stored
+	dietView->begin( KURL( locateLocal( "tmp", "/" ) ) ); // Initialize to tmp dir, where photos and logos can be stored
 	dietView->write( htmlCode );
 	dietView->end();
 }
