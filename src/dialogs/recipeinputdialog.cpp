@@ -188,7 +188,7 @@ database=db;
     showButton=new QToolButton(functionsBox); showButton->setIconSet(il->loadIconSet("viewmag", KIcon::Small));
     shopButton=new QToolButton(functionsBox); shopButton->setIconSet(il->loadIconSet("trolley", KIcon::Small));
     closeButton=new QToolButton(functionsBox); closeButton->setIconSet(il->loadIconSet("fileclose", KIcon::Small));
-    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("resize", KIcon::Small));
+    resizeButton=new QToolButton(functionsBox); resizeButton->setIconSet(il->loadIconSet("resize", KIcon::Small)); //TODO: give me an icon :)
     QToolTip::add(saveButton, i18n("Save recipe"));
     QToolTip::add(showButton, i18n("Show recipe"));
     QToolTip::add(shopButton,i18n("Add to shopping list"));
@@ -211,14 +211,6 @@ database=db;
     ingredientsLayout->addItem(spacerBoxTop, 0,1);
 
     //Input Widgets
-    QVBox *amountVBox = new QVBox( ingredientGBox );
-    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    amountLabel = new QLabel( i18n("Amount:"), amountVBox );
-    amountEdit = new FractionInput( amountVBox);
-    amountEdit->setFixedSize(QSize(60,30));
-    amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(amountVBox,1,1);
-
     QVBox *ingredientVBox = new QVBox( ingredientGBox );
     ingredientVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
@@ -228,7 +220,15 @@ database=db;
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setMinimumSize(QSize(100,30));
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    ingredientsLayout->addWidget(ingredientVBox,1,2);
+    ingredientsLayout->addWidget(ingredientVBox,1,1);
+
+    QVBox *amountVBox = new QVBox( ingredientGBox );
+    amountVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    amountLabel = new QLabel( i18n("Amount:"), amountVBox );
+    amountEdit = new FractionInput( amountVBox);
+    amountEdit->setFixedSize(QSize(60,30));
+    amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    ingredientsLayout->addWidget(amountVBox,1,2);
 
     QVBox *unitVBox = new QVBox( ingredientGBox );
     unitVBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
