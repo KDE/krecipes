@@ -76,6 +76,7 @@ private:
   QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
   QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
   bool isFilteringCategories;
+  QListViewItem *currentCategory;
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);

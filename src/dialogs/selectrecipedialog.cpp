@@ -43,6 +43,7 @@ database=db;
 //Initialize internal data
 recipeList=new ElementList;
 //categoryList=new ElementList;
+currentCategory=0;
 
 categoryComboRows.setAutoDelete(true);
 
@@ -293,6 +294,7 @@ void SelectRecipeDialog::removeFromCat(void)
 
 void SelectRecipeDialog::reload()
 {
+currentCategory=0;
 QString remember_cat_filter = categoryBox->currentText();
 
 advancedSearch->reload();
@@ -336,10 +338,26 @@ bool SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
 
 void SelectRecipeDialog::filter(const QString& s)
 {
+//do this to only iterate over children of 'currentCategory'
+QListViewItem *pEndItem = NULL;
+if ( currentCategory ) {
+	QListViewItem *pStartItem = currentCategory;
+	do
+	{
+		if(pStartItem->nextSibling())
+			pEndItem = pStartItem->nextSibling();
+		else
+			pStartItem = pStartItem->parent();
+	}
+	while(pStartItem && !pEndItem);
+}
+
 //Re-show everything
-QListViewItemIterator list_it( recipeListView );
-while ( QListViewItem *it = list_it.current() ) {
-	it->setVisible(true);
+QListViewItemIterator list_it;
+if ( currentCategory ) list_it = QListViewItemIterator(currentCategory);
+else list_it = QListViewItemIterator(recipeListView);
+while ( list_it.current() != pEndItem ) {
+	list_it.current()->setVisible(true);
 	list_it++;
 }
 
@@ -350,7 +368,14 @@ if ( !s.isEmpty() ) {
 		if ( !it->firstChild() ) // It's not a category or it's empty
 		{
 			if (it->text(2).contains(s,false))
-				it->setVisible(true);
+			{
+				if ( currentCategory ) {
+					if ( isParentOf( currentCategory, it ) )
+						it->setVisible(true);
+					else it->setVisible(false);
+				}
+				else it->setVisible(true);
+			}
 			else
 				it->setVisible(false);
 		}
@@ -364,6 +389,11 @@ if ( !s.isEmpty() ) {
 void SelectRecipeDialog::filterCategories(int categoryID)
 {
 kdDebug()<<"I got category :"<<categoryID<<"\n";
+
+if ( categoryID == -1 )
+	currentCategory=0;
+else
+	currentCategory=categoryItems[categoryID];
 
 QListViewItemIterator list_it( recipeListView );
 while ( QListViewItem *it = list_it.current() ) {
