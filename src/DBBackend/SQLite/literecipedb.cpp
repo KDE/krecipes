@@ -1006,26 +1006,43 @@ bool LiteRecipeDB::checkIntegrity(void)
 
 // Check existence of the necessary tables (the database may be created, but empty)
 QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
+
 QString command=QString("SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table';"); // Get the table names (equivalent to MySQL's "SHOW TABLES;" Easy to remember, right? ;)
+
 QSQLiteResult tablesToCheck=database->executeQuery(command);
+QStringList existingTableList;
+
+// Get the existing list first
 
 if (tablesToCheck.getStatus()!=QSQLiteResult::Failure)
 {
 QSQLiteResultRow row=tablesToCheck.first();
-	for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
-	{
-	bool found=false;
-	while ((!tablesToCheck.atEnd()) && !found)
+	while (!tablesToCheck.atEnd())
 		{
 		QString tableName=row.data(0);
-		found=(tableName==*it); // Table exists
+		existingTableList<<tableName;
 		row=tablesToCheck.next();
 		}
-	if (!found) createTable(*it);
-	}
 }
 
 else return(false);
+
+
+for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
+{
+	bool found=false;
+
+	for (QStringList::Iterator ex_it = existingTableList.begin(); ((ex_it != existingTableList.end()) && (!found)); ++ex_it)
+	{
+	found=(*ex_it==*it);
+	}
+
+	if (!found)
+	{
+	std::cerr<<"Recreating missing table: "<<*it<<"\n";
+	createTable(*it);
+	}
+}
 
 // Check for older versions, and port
 
