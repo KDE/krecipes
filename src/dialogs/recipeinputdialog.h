@@ -149,6 +149,8 @@ private:
 	void addCategory(void);
 	void addAuthor(void);
 	void slotIngredientBoxLostFocus(void);
+	void slotUnitBoxLostFocus(void);
+	void slotPrepMethodBoxLostFocus(void);
 	void enableSaveButton(bool enabled);
 	void closeOptions(void);
 	void showRecipe(void);

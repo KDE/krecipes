@@ -322,11 +322,11 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 			rightPanel->setHeader(i18n("Shopping List"),"trolley");
 			rightPanel->raise(shoppingListPanel);
 			break;
-		case DietP: shoppingListPanel->reload(); // Reload data
+		case DietP: dietPanel->reload(); // Reload data
 			rightPanel->setHeader(i18n("Diet Helper"),"diet");
 			rightPanel->raise(dietPanel);
 			break;
-		case MatcherP:
+		case MatcherP: ingredientMatcherPanel->reloadIngredients(); // Reload data
 			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
 			rightPanel->raise(ingredientMatcherPanel);
 			break;

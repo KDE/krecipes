@@ -21,6 +21,7 @@
 #include <qtooltip.h>
 
 #include <kapplication.h>
+#include <kcompletionbox.h>
 #include <kspell.h>
 #include <kurl.h>
 #include <kfiledialog.h>
@@ -372,6 +373,8 @@ database=db;
     connect(instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
     connect(addCategoryButton,SIGNAL(clicked()),this,SLOT(addCategory()));
     connect(ingredientBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotIngredientBoxLostFocus()) );
+    connect(unitBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotUnitBoxLostFocus()) );
+    connect(prepMethodBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotPrepMethodBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
     connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
     connect(ingredientList,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredientAmount( QListViewItem* )));
@@ -950,6 +953,18 @@ void RecipeInputDialog::slotIngredientBoxLostFocus(void)
 		unitBox->completionObject()->clear();
 		unitComboList->clear();
 	}
+}
+
+void RecipeInputDialog::slotUnitBoxLostFocus(void)
+{
+	if ( unitBox->contains(unitBox->currentText()) )
+		unitBox->setCurrentItem(unitBox->currentText());
+}
+
+void RecipeInputDialog::slotPrepMethodBoxLostFocus(void)
+{
+	if ( prepMethodBox->contains(prepMethodBox->currentText()) )
+		prepMethodBox->setCurrentItem(prepMethodBox->currentText());
 }
 
 void RecipeInputDialog::addAuthor(void)
