@@ -565,7 +565,6 @@ void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
 rightPanel->raiseWidget(selectPanel);
-recipeButton->disconnect();
 buttonsList->removeLast();
 setContextHelp(SelectP);
 recipeButton=0;
