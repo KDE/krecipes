@@ -18,7 +18,7 @@
 QString beautify(const QString &num)
 {
 	QString copy(num);
-	copy.remove(QRegExp(QString("0+$|%10+$").arg(KGlobal::locale()->decimalSymbol())));
+	copy.remove(QRegExp(QString("(%1){0,1}0+$").arg(QRegExp::escape(KGlobal::locale()->decimalSymbol()))));
 	return copy;
 }
 
