@@ -18,7 +18,6 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 
-#include <qsimplerichtext.h>
 #include <qaction.h>
 #include <qlabel.h>
 #include <qfile.h>
@@ -142,9 +141,9 @@ void SetupDisplay::loadFont( QWidget *widget, const QDomElement &tag )
 
 void SetupDisplay::loadGeometry( QWidget *widget, const QDomElement &tag )
 {
-	QRect r( tag.attribute("left").toInt(), tag.attribute("top").toInt(), tag.attribute("width").toInt(), tag.attribute("height").toInt() );
+	PreciseRect r( tag.attribute("left").toDouble(), tag.attribute("top").toDouble(), tag.attribute("width").toDouble(), tag.attribute("height").toDouble() );
 	toAbsolute( &r );
-	widget->setGeometry( r );
+	widget->setGeometry( r.toQRect() );
 }
 
 void SetupDisplay::loadTextColor( QWidget *widget, const QDomElement &tag )
@@ -209,7 +208,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 
 		if ( it.data() & Geometry )
 		{
-			QRect r( it.key()->geometry() );
+			PreciseRect r( it.key()->geometry() );
 			toPercentage( &r );
 		
 			QDomElement geometry_tag = doc.createElement("geometry");
@@ -525,36 +524,26 @@ void SetupDisplay::setAlignment( QAction *action )
 **  Rescales the dimensions according to the page size
 */
 
-void SetupDisplay::toAbsolute(QRect *r)
+void SetupDisplay::toAbsolute(PreciseRect *r)
 {
-QSize scaledSize;
-QPoint scaledPoint;
+	r->setWidth(r->width()/100.0*width());
+	r->setHeight(r->height()/100.0*width());
 
-scaledSize.setWidth((int)(r->width()/100.0*width()));
-scaledSize.setHeight((int)(r->height()/100.0*width()));
-scaledPoint.setX((int)(r->left()/100.0*width()));
-scaledPoint.setY((int) (r->top()/100.0*width()));
-r->setTopLeft(scaledPoint);
-r->setSize(scaledSize);
-
+	r->setLeft(r->left()/100.0*width());
+	r->setTop(r->top()/100.0*width());
 }
 
 /*
 ** Set in percentages respect to the width
 */
 
-void SetupDisplay::toPercentage(QRect *r)
+void SetupDisplay::toPercentage(PreciseRect *r)
 {
-QSize scaledSize;
-QPoint scaledPoint;
+r->setWidth(r->width()*100.0/width());
+r->setHeight(r->height()*100.0/width());
 
-scaledSize.setWidth((int)(r->width()*100.0/width()));
-scaledSize.setHeight((int)(r->height()*100.0/width()));
-scaledPoint.setX((int)(r->left()*100.0/width()));
-scaledPoint.setY((int)(r->top()*100.0/width()));
-r->setTopLeft(scaledPoint);
-r->setSize(scaledSize);
-
+r->setLeft(r->left()*100.0/width());
+r->setTop(r->top()*100.0/width());
 }
 
 QSize SetupDisplay::minimumSize() const

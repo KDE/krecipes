@@ -31,6 +31,8 @@
 #include "gui/setupdisplay.h"
 #include "image.h"
 
+#define ROUND(a) (int((floor(a) - a < ceil(a) - a) ? floor(a) : ceil(a)))
+
 //TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
 HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
   BaseExporter( filename, format ), database(db), m_width(width)
@@ -121,10 +123,10 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 {
 	QDomElement photo_geom_el = getLayoutAttribute( doc, "photo", "geometry" );
-	temp_photo_geometry = QRect( 	photo_geom_el.attribute("left").toInt(),
-					photo_geom_el.attribute("top").toInt(),
-					photo_geom_el.attribute("width").toInt(),
-					photo_geom_el.attribute("height").toInt()
+	temp_photo_geometry = QRect(    ROUND(photo_geom_el.attribute("left").toDouble()),
+					ROUND(photo_geom_el.attribute("top").toDouble()),
+					ROUND(photo_geom_el.attribute("width").toDouble()),
+					ROUND(photo_geom_el.attribute("height").toDouble())
 				);
 
 	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
@@ -436,10 +438,10 @@ void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QSt
 
 	if ( !geom_el.isNull() )
 	{
-		geom->setLeft( geom_el.attribute("left").toInt() );
-		geom->setTop( geom_el.attribute("top").toInt() );
-		geom->setWidth( geom_el.attribute("width").toInt() );
-		geom->setHeight( geom_el.attribute("height").toInt() );
+		geom->setLeft( ROUND(geom_el.attribute("left").toDouble()) );
+		geom->setTop( ROUND(geom_el.attribute("top").toDouble()) );
+		geom->setWidth( ROUND(geom_el.attribute("width").toDouble()) );
+		geom->setHeight( ROUND(geom_el.attribute("height").toDouble()) );
 	}
 }
 

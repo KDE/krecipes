@@ -26,6 +26,33 @@ class QWidget;
 
 class DragArea;
 
+#define ROUND(a) (int((floor(a) - a < ceil(a) - a) ? floor(a) : ceil(a)))
+
+class PreciseRect
+{
+public:
+	PreciseRect(double top = 0, double left = 0, double width = 0, double height = 0) :
+	  m_top(top), m_left(left), m_width(width), m_height(height)
+	{}
+	
+	PreciseRect( const QRect &r ){ m_top = r.top(); m_left = r.left(); m_width = r.width(); m_height = r.height(); }
+	
+	QRect toQRect() const{ return QRect(ROUND(m_top),ROUND(m_left),ROUND(m_width),ROUND(m_height)); }
+	
+	double top(){ return m_top; }
+	double left(){ return m_left; }
+	double width(){ return m_width; }
+	double height(){ return m_height; }
+	
+	void setTop(double d){ m_top = d; }
+	void setLeft(double d){ m_left = d; }
+	void setWidth(double d){ m_width = d; }
+	void setHeight(double d){ m_height = d; }
+
+private:
+	double m_top, m_left, m_width, m_height;
+};
+
 /** @brief A very specialized @ref DragArea for editing the recipe setup
   *
   * Set up the items of a recipe for display.
@@ -80,8 +107,8 @@ private:
 
 	// Methods
 	void createWidgets( const Recipe &sample );
-	void toAbsolute(QRect *r);
-	void toPercentage(QRect *r);
+	void toAbsolute(PreciseRect *);
+	void toPercentage(PreciseRect *);
 
 	void loadFont( QWidget *, const QDomElement &tag );
 	void loadGeometry( QWidget *, const QDomElement &tag );
