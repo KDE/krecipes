@@ -583,7 +583,12 @@ void MenuButton::drawButton( QPainter *p ){
     bool sunken = isDown();
 
     // draw base button
-    style().drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Enabled); //do the same thing as upper line
+    if(mouseOver && sunken){
+      style().drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Down);
+    }
+    else{
+      style().drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), QStyle::Style_Enabled);
+    }
     // draw icon
     style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
 
@@ -610,12 +615,9 @@ void MenuButton::drawButton( QPainter *p ){
     QImage blend = pn.convertToImage();
     QImage button = KImageEffect::blend (src, blend, gradient, KImageEffect::Red);
 
-    // highlight button on mouseOver mouseClick
+    // highlight button on mouseOver
     if(mouseOver && !sunken){
       button = KImageEffect::intensity(button, 0.1);
-    }
-    else if(mouseOver && sunken){
-      button = KImageEffect::intensity(button, -0.1);
     }
 
     // draw the button
