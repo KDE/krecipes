@@ -293,7 +293,6 @@ if (it){// make sure that the ingredient list is not empty
 	database->loadProperties(propertiesList,it->text(0).toInt()); // load the list for this ingredient
 	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
 	{
-	std::cerr<<prop;
 	  QListViewItem *it= new QListViewItem(propertiesListView,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
 	}
 	}
@@ -361,9 +360,7 @@ reloadPropertyList(); // Reload the list from database
 void IngredientsDialog::insertPropertyEditBox(QListViewItem* it)
 {
 
-std::cerr<<"Somebody Clicked me! ;-)\n";
 QRect r;
-//r.setWidth(propertiesListView->columnWidth(2));
 
 r=propertiesListView->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
 

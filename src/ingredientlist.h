@@ -27,7 +27,6 @@ public:
     void add(Ingredient &ing);
     void remove(int index);
     void move(int index1,int index2);
-    void debug(void);
     Ingredient* getLast(void);
     Ingredient* getPrev(void);
     void empty(void);

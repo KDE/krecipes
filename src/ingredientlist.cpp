@@ -43,15 +43,6 @@ Ingredient* IngredientList::getNext(void){
 return(list.next());
 }
 
-void IngredientList::debug(void){
-Ingredient *ing;
-
-for ( ing = list.first(); ing; ing =list.next() )
-	std::cerr<<"i: "<<ing->amount<<" "<<ing->name<<"("<<ing->ingredientID<<") "<< ing->units<<"("<<ing->unitID<<")\n";
-std::cerr<<"\n";
-
-
-}
 Ingredient* IngredientList::getLast(void)
 {
 return(list.last());

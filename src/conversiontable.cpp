@@ -114,7 +114,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 
 void ConversionTableItem::setText( const QString &s )
 {
-std::cerr<<"Setting text:"<<s<<"\n";
+
 	if (eb) {
 	// initialize the editbox from the text
 	eb->setValue(s.toDouble());
@@ -191,7 +191,6 @@ QTable::beginEdit(row,col,replace);
 
 void ConversionTable::makeSymmetric(int r,int c,double amount)
 {
-std::cerr<<"Making symmetric...\n";
 QTableItem *it;
 it=item(c,r);
 if (amount)

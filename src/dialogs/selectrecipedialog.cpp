@@ -57,7 +57,6 @@ void SelectRecipeDialog::loadRecipeList(void)
 {
 recipeListView->clear();
 recipeList->clear();
-std::cerr<<"cleared table\n";
 database->loadRecipeList(recipeList);
 
 for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNext() )

@@ -371,7 +371,6 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
   ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;
   loadedRecipe->ingList.add(ing);
-  loadedRecipe->ingList.debug();
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
   QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
@@ -403,8 +402,6 @@ changedSignalEnabled=en;
 
 void RecipeInputDialog::save (void)
 {
-std::cerr<<"I'm saving!\n";
-
 emit enableSaveOption(false);
 saveRecipe();
 enableChangedSignal(false);

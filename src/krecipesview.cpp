@@ -9,12 +9,13 @@
 #include <qsplitter.h>
 
 #include <kurl.h>
-
+#include <kapp.h>
 #include <ktrader.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
@@ -28,7 +29,14 @@ KrecipesView::KrecipesView(QWidget *parent)
     splitter->setOpaqueResize();
 
     // Initialize Database
-    database=new RecipeDB("localhost");
+    KConfig *config; config=kapp->config(); config->setGroup("Server");
+    QString host=config->readEntry( "Host","localhost");
+    QString user=config->readEntry( "Username",QString::null);
+    QString pass=config->readEntry("Password",QString::null);
+    QString dbname=config->readEntry( "DBName", DEFAULT_DB_NAME);
+    std::cerr<<"Connecting to: "<<host<<"\n";
+
+    database=new RecipeDB(host,user,pass,dbname);
 
 // Create Left and Right Panels (splitter)
 
@@ -138,7 +146,6 @@ else if (action==1) // Edit
  }
 else if (action==2) //Remove
 {
-std::cerr<<"Deleting recipe "<<recipeID<<"\n";
 database->removeRecipe(recipeID);
 selectPanel->loadRecipeList();
 }
