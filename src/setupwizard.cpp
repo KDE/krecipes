@@ -91,7 +91,7 @@ QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePo
 layout->addItem(spacer_from_image,1,2);
 
 welcomeText=new QLabel(this);
-welcomeText->setText(i18n("<b><font size=+1>Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome, and enjoy cooking!"));
+welcomeText->setText(i18n("<b><font size=\"+1\">Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome, and enjoy cooking!"));
 welcomeText->setMinimumWidth(200);
 welcomeText->setMaximumWidth(10000);
 welcomeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
