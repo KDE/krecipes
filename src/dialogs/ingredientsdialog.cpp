@@ -153,17 +153,17 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     reloadIngredientList();
 
     // Signals & Slots
-    connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateLists()));
-    connect(this->ingredientListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredient( QListViewItem* )));
-    connect(this->ingredientListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredient( QListViewItem* )));
-    connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
-    connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
-    connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
-    connect(this->removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
-    connect(this->addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
-    connect(this->removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
-    connect(this->propertiesListView,SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
-    connect(this->inputBox,SIGNAL(valueChanged(double)),this,SLOT(setPropertyAmount(double)));
+    connect(ingredientListView->listView(),SIGNAL(selectionChanged()),this, SLOT(updateLists()));
+    connect(ingredientListView->listView(),SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredient( QListViewItem* )));
+    connect(ingredientListView->listView(),SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredient( QListViewItem* )));
+    connect(addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
+    connect(addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
+    connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
+    connect(removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
+    connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(addPropertyToIngredient()));
+    connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removePropertyFromIngredient()));
+    connect(propertiesListView->listView(),SIGNAL(executed(QListViewItem*)),this,SLOT(insertPropertyEditBox(QListViewItem*)));
+    connect(inputBox,SIGNAL(valueChanged(double)),this,SLOT(setPropertyAmount(double)));
 }
 
 
