@@ -30,6 +30,7 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kprogress.h>
 #include <krun.h>
 #include <ktrader.h>
 #include <kurl.h>
@@ -261,6 +262,9 @@ KrecipesView::KrecipesView(QWidget *parent)
 KrecipesView::~KrecipesView()
 {
 delete buttonsList;
+delete viewPanel; //manually delete viewPanel because we need to be sure it is deleted
+                  //before the database is because its destructor uses 'database'
+delete database;
 }
 
 void KrecipesView::questionRerunWizard(const QString &message, const QString &error)
@@ -540,8 +544,7 @@ if (initData)
 	}
 	
 if (doUSDAImport)
-{
-
+	{
         // Open the DB first
 	
 	RecipeDB *db = 0;
@@ -553,7 +556,10 @@ if (doUSDAImport)
 	}
 	#if HAVE_MYSQL
 	else if (dbType=="MySQL")
-		db = new MySQLRecipeDB(host,dbName,user,pass);
+	{
+		setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
+		db = new MySQLRecipeDB(host,user,pass,dbName);
+	}
 	#endif //HAVE_MYSQL
 	#if HAVE_SQLITE
 	else if (dbType=="SQLite")
@@ -561,21 +567,18 @@ if (doUSDAImport)
 	#endif //HAVE_SQLITE
 	
 	// Import the data
-	 
-	if (db && db->ok()) db->importUSDADatabase();
-	
-	// Close the database
-	if (0){}
-	
-	#if HAVE_MYSQL
-	else if (dbType=="MySQL")
-		delete (MySQLRecipeDB*) db;
-	#endif //HAVE_MYSQL
-	#if HAVE_SQLITE
-	else if (dbType=="SQLite")
-		delete (LiteRecipeDB*) db;
-	#endif //HAVE_SQLITE
+
+	if (db)
+	{
+		if (db->ok())
+		{
+			KProgressDialog progress( this, "progress_dlg", i18n("Nutrient Import"), i18n("Importing USDA nutrient data"), true );
+			db->importUSDADatabase( &progress );
+		}
 		
+		//close the database whether ok() or not
+		delete db;
+	}
 	}
 
 

@@ -484,7 +484,6 @@ layout->addItem(importInfoSpacer,6,3);
 
 USDAImportCheckBox=new QCheckBox(i18n("Yes please, load the database with nutrient data for 400+ foods. (Note: ENGLISH ONLY!)"),this,"USDAImportCheckBox");
 layout->addWidget(USDAImportCheckBox,7,3);
-USDAImportCheckBox->setEnabled(false);
 }
 
 bool DataInitializePage::doInitialization(void)

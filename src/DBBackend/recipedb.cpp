@@ -10,8 +10,10 @@
 
 #include "recipedb.h"
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kprogress.h> 
 
 #include <qfile.h>
 #include <qstringlist.h>
@@ -47,8 +49,12 @@ int createUnit(const QString &name, RecipeDB*);
 int createIngredient(const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*);
 void create_properties( RecipeDB* );
 
-void RecipeDB::importUSDADatabase()
+void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 {
+	KProgress *progress = 0;
+	if ( progress_dlg )
+		progress = progress_dlg->progressBar();
+		
 	//check if the data file even exists before we do anything
 	QString abbrev_file = locate("appdata","data/abbrev.txt");
 	if ( abbrev_file.isEmpty() )
@@ -95,6 +101,8 @@ void RecipeDB::importUSDADatabase()
 	}
 
 	delete ings_and_ids;
+	
+	if (progress) { progress->setTotalSteps(data->count()); }
 
 	//since there are only two units used, lets just create them and store their id for speed
 	int unit_g_id = createUnit("g",this);
@@ -105,6 +113,14 @@ void RecipeDB::importUSDADatabase()
 	{
 		counter++;
 		kdDebug()<<"Inserting ("<<counter<<" of "<<total<<"): "<<(*it).name<<endl;
+		if ( progress )
+		{
+			progress->advance(1);
+			kapp->processEvents();
+			
+			if ( progress_dlg->wasCancelled() )
+				break;
+		}
 
 		int assigned_id = createIngredient((*it).name,unit_g_id,unit_mg_id,this);
 

@@ -95,7 +95,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	{
 		calculateProperties( *recipe_it, database, properties ); // Calculate the property list
 		storePhoto( *recipe_it, doc );
-		offset = createBlocks( *recipe_it, doc, offset ) + 15;
+		offset = createBlocks( *recipe_it, doc, offset ) + 10;
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
 		{
@@ -390,9 +390,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
 
 		// For those elements that have no fixed height (lists), calculate the height
-
 		int elementHeight=(int) (rect->height()/100.0*m_width); //Initialize with the current user settings
-
 		if ( !element->fixedHeight() )
 		{
 			int elementWidth=(int) (rect->width()/100.0*m_width);
@@ -425,9 +423,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		pushItemsDownIfNecessary( geometries, rect );
 
 		// Scale the height to page size now
-		element->addProperty(QString("height: %1px;").arg(elementHeight) );
+		element->addProperty(QString("height: %1px;").arg( elementHeight ) );
 
-		height_taken = QMAX(rect->bottom(),height_taken);
+		height_taken = QMAX(rect->top()+int(elementHeight*100.0/m_width),height_taken);
 	}
 
 	return height_taken;

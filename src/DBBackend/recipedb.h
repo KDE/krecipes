@@ -32,6 +32,8 @@
 @author Unai Garro
 */
 
+class KProgressDialog;
+
 typedef struct
 {
 QValueList <int> recipeIdList;
@@ -44,9 +46,9 @@ Q_OBJECT
 
 protected:
 	RecipeDB(QString host, QString user, QString pass, QString DBname,bool init):QObject(){dbOK=false; dbErr="";}
-	virtual ~RecipeDB(){};
-public:
 
+public:
+	virtual ~RecipeDB(){};
 	
 	// Error handling (passive)
 	bool dbOK;
@@ -91,7 +93,7 @@ public:
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title )=0;
 	virtual void givePermissions(const QString &dbName,const QString &username, const QString &password=QString::null, const QString &clientHost="localhost")=0;
 
-	void importUSDADatabase();
+	void importUSDADatabase( KProgressDialog *progress_dlg = 0 );
 
 	virtual bool ingredientContainsProperty(int ingredientID, int propertyID, int perUnitsID)=0;
 	virtual bool ingredientContainsUnit(int ingredientID, int unitID)=0;

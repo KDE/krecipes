@@ -92,7 +92,7 @@ void USDADataDialog::loadDataFromFile()
 	{
 		QString line = stream.readLine();
 		if ( line.isEmpty() ){ continue; }
-		
+
 		QStringList fields = QStringList::split( "^", line, true );
 		loaded_data << fields;
 
