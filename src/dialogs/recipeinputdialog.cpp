@@ -287,18 +287,21 @@ void RecipeInputDialog::addIngredient(void)
 {
 Ingredient ing;
 
-//Add it first to the Recipe list then to the ListView
-ing.name=ingredientBox->currentText();
-ing.amount=amountEdit->value();
-ing.units=unitBox->currentText();
-ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
-ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;
-loadedRecipe->ingList.add(ing);
-loadedRecipe->ingList.debug();
-//Append also to the ListView
-QListViewItem* lastElement=ingredientList->lastItem();
-QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
 
+//Add it first to the Recipe list then to the ListView
+if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
+{
+  ing.name=ingredientBox->currentText();
+ ing.amount=amountEdit->value();
+  ing.units=unitBox->currentText();
+  ing.unitID=unitComboList->getElement(unitBox->currentItem())->id;
+  ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem())->id;
+  loadedRecipe->ingList.add(ing);
+  loadedRecipe->ingList.debug();
+  //Append also to the ListView
+  QListViewItem* lastElement=ingredientList->lastItem();
+  QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
+}
 
 emit changed();
 }
