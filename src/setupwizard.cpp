@@ -321,7 +321,7 @@ return(this->dbNameEdit->text());;
 void ServerSetupPage::getServerInfo(QString &host, QString &client, QString &user, QString &pass)
 {
 host=serverEdit->text();
-client=serverEdit->text(); //FIXME!
+client=clientEdit->text();
 user=usernameEdit->text();
 pass=passwordEdit->text();
 }
