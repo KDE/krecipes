@@ -28,7 +28,7 @@ class ElementList;
 
 class CreatePropertyDialog:public QDialog{
 public:
-    CreatePropertyDialog(ElementList *list);
+    CreatePropertyDialog(QWidget *parent,ElementList *list);
     ~CreatePropertyDialog();
     QString newPropertyName(void);
     QString newUnitsName(void);

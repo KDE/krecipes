@@ -40,7 +40,7 @@ public:
 
 private:
   // Widgets
-    QGridLayout* layout;
+    QHBoxLayout* layout;
     QPushButton* addIngredientButton;
     QPushButton* removeIngredientButton;
     QPushButton* addUnitButton;

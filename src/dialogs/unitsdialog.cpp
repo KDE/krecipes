@@ -96,7 +96,7 @@ loadConversionTable();
 
 void UnitsDialog::createNewUnit(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(QString(i18n("New Unit")));
+CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Unit")));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();

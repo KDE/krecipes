@@ -95,7 +95,8 @@ database=db;
 
 
     ingredientBox = new KComboBox( TRUE,ingredientGBox);
-    ingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+    ingredientBox->setAutoCompletion( TRUE );
+    //ingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
     ingredientBox->setFixedSize( QSize(120, 30 ) );
     ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
@@ -103,7 +104,8 @@ database=db;
 
 
     unitBox = new KComboBox( TRUE,ingredientGBox);
-    unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+    unitBox->setAutoCompletion( TRUE );
+    //unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
     unitBox->setMinimumSize(QSize(51,30));
     unitBox->setMaximumSize(QSize(10000,30));
@@ -115,19 +117,6 @@ database=db;
     boxLayout->addItem( spacerToList, 2,1 );
     QSpacerItem* spacerToButtons = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
     boxLayout->addItem( spacerToButtons, 3,4);
-
-    // Ingredient List
-    ingredientList = new KListView(ingredientGBox, "ingredientList" );
-    ingredientList->addColumn(i18n("Ingredient"));
-    ingredientList->addColumn(i18n("Amount"));
-    ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
-    ingredientList->addColumn(i18n("Units"));
-    ingredientList->setSorting(-1); // Do not sort
-    ingredientList->setMinimumSize(QSize(200,100));
-    ingredientList->setMaximumSize(QSize(10000,10000));
-    ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    boxLayout->addMultiCellWidget(ingredientList,3,8,1,3);
-
 
     // Add, Up,down,... buttons
     il=new KIconLoader;
@@ -164,8 +153,17 @@ database=db;
     removeButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     boxLayout->addWidget(removeButton,7,5);
 
-
-
+    // Ingredient List
+    ingredientList = new KListView(ingredientGBox, "ingredientList" );
+    ingredientList->addColumn(i18n("Ingredient"));
+    ingredientList->addColumn(i18n("Amount"));
+    ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
+    ingredientList->addColumn(i18n("Units"));
+    ingredientList->setSorting(-1); // Do not sort
+    ingredientList->setMinimumSize(QSize(200,100));
+    ingredientList->setMaximumSize(QSize(10000,10000));
+    ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    boxLayout->addMultiCellWidget(ingredientList,3,8,1,3);
 
     // ------- Recipe Instructions Widgets -----------
 
@@ -532,6 +530,11 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
   QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
+
+  amountEdit->setFocus();
+  amountEdit->setValue(0.0);
+  unitBox->setCurrentText("");
+  ingredientBox->setCurrentText("");
 }
 
 emit changed();
@@ -614,7 +617,7 @@ ElementList categoryList; database->loadCategories(&categoryList);
 QPtrList <bool>selected;
 findCategoriesInRecipe(categoryList,selected);
 
-SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(&categoryList,&selected);
+SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,&categoryList,&selected);
 
 
 if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
@@ -675,7 +678,7 @@ void RecipeInputDialog::slotIngredientBoxLostFocus(void)
 
 void RecipeInputDialog::addAuthor(void)
 {
-SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(&(loadedRecipe->authorList),database);
+SelectAuthorsDialog *editAuthorsDialog=new SelectAuthorsDialog(this,&(loadedRecipe->authorList),database);
 
 
 if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok

@@ -76,7 +76,7 @@ for (Element *category=categoryList.getFirst();category; category=categoryList.g
 
 void CategoriesEditorDialog::createNewCategory(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(i18n("New Category"));
+CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Category"));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();

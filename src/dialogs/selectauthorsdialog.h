@@ -29,7 +29,7 @@ Q_OBJECT
 
 public:
 
-    SelectAuthorsDialog(ElementList *currentAuthors, RecipeDB *db);
+    SelectAuthorsDialog(QWidget *parent, ElementList *currentAuthors, RecipeDB *db);
     ~SelectAuthorsDialog();
     void getSelectedAuthors(ElementList *newAuthors);
 

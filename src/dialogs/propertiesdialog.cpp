@@ -69,7 +69,7 @@ void PropertiesDialog::createNewProperty(void)
 {
 ElementList list;
 database->loadUnits(&list);
-CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(&list);
+CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(this,&list);
 
 if ( propertyDialog->exec() == QDialog::Accepted ) {
    QString name = propertyDialog->newPropertyName();

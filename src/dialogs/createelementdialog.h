@@ -23,7 +23,7 @@
 class CreateElementDialog : public QDialog
 {
 public:
-    CreateElementDialog(const QString &text);
+    CreateElementDialog(QWidget *parent,const QString &text);
     ~CreateElementDialog();
     QString newElementName(void);
 

@@ -30,7 +30,7 @@ public:
 	}
 };
 
-SelectCategoriesDialog::SelectCategoriesDialog(ElementList *categoryList,QPtrList <bool> *selected):QDialog(0,0,true)
+SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, ElementList *categoryList,QPtrList <bool> *selected):QDialog(parent,0,true)
 {
 
 // Store pointer

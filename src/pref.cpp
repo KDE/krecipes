@@ -10,9 +10,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-KrecipesPreferences::KrecipesPreferences()
+KrecipesPreferences::KrecipesPreferences(QWidget *parent)
     : KDialogBase(IconList, i18n("Krecipes Preferences"),
-                  Help|Default|Ok|Apply|Cancel, Ok)
+                  Help|Default|Ok|Apply|Cancel, Ok, parent)
 {
     // this is the base class for your preferences dialog.  it is now
     // a TreeList dialog.. but there are a number of other

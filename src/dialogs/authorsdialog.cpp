@@ -77,7 +77,7 @@ for (Element *author=authorList.getFirst();author; author=authorList.getNext())
 
 void AuthorsDialog::createNewAuthor(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(i18n("New Author"));
+CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Author"));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();

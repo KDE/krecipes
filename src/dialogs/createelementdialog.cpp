@@ -9,24 +9,32 @@
  ***************************************************************************/
 #include "createelementdialog.h"
 #include <klocale.h>
-CreateElementDialog::CreateElementDialog(const QString &text)
- : QDialog(0,0,true)
+CreateElementDialog::CreateElementDialog(QWidget *parent,const QString &text)
+ : QDialog(parent,0,true)
 {
 
 container=new QVBoxLayout(this,5,5);
 box=new QGroupBox(this);
-container->addWidget(box);
+box->setColumnLayout(0, Qt::Vertical );
+box->layout()->setSpacing( 6 );
+box->layout()->setMargin( 11 );
+QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+boxLayout->setAlignment( Qt::AlignTop );
 box->setTitle(text);
-elementEdit=new KLineEdit(box);
-elementEdit->setGeometry( QRect( 5, 30, 180, 25 ) );
-okButton=new QPushButton(box);
-okButton->setGeometry( QRect( 5, 60, 100, 20 ) );
-okButton->setText(i18n("Ok"));
-cancelButton=new QPushButton(box);
-cancelButton->setGeometry( QRect( 110, 60, 60, 20 ) );
-cancelButton->setText(i18n("Cancel"));
-resize(QSize(200,100));
 
+elementEdit=new KLineEdit(box);
+boxLayout->addWidget(elementEdit);
+
+QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
+okButton=new QPushButton(i18n("Ok"),this);
+cancelButton=new QPushButton(i18n("Cancel"),this);
+button_hbox->addWidget(okButton);
+button_hbox->addWidget(cancelButton);
+boxLayout->addLayout(button_hbox);
+
+container->addWidget(box);
+
+adjustSize();
 setFixedSize(size()); //we've got all the widgets put in, now let's keep it this size
 
 connect (okButton,SIGNAL(clicked()),this,SLOT(accept()));

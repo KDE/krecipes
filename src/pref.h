@@ -16,7 +16,7 @@ class KrecipesPreferences : public KDialogBase
 {
     Q_OBJECT
 public:
-    KrecipesPreferences();
+    KrecipesPreferences(QWidget *parent);
 
 private:
     ServerPrefs *m_pageServer;

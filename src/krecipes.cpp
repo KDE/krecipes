@@ -195,7 +195,7 @@ bool Krecipes::queryClose()
 	if ( !m_view->inputPanel->everythingSaved() )
 	{
 		switch( KMessageBox::questionYesNoCancel( this,
-		  i18n("A recipe contains unsaved changes\n"
+		  i18n("A recipe contains unsaved changes.\n"
 		  "Do you want to save the changes before exiting?"),
 		  i18n("Save Recipe?") ) )
 		{
@@ -267,7 +267,7 @@ void Krecipes::newToolbarConfig()
 void Krecipes::optionsPreferences()
 {
     // popup some sort of preference dialog, here
-    KrecipesPreferences dlg;
+    KrecipesPreferences dlg(this);
     if (dlg.exec())
     {
         // redo your settings

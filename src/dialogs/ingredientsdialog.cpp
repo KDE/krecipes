@@ -16,6 +16,7 @@
 #include "editbox.h"
 #include "unitsdialog.h"
 
+#include <qsplitter.h>
 #include <qheader.h>
 #include <qmessagebox.h>
 #include "dependanciesdialog.h"
@@ -33,111 +34,138 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     // Design dialog
 
-    layout = new QGridLayout( this, 1, 1, 0, 0);
-    QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem( spacer_left, 1,0 );
-    QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(spacer_top,0,1);
+    layout = new QHBoxLayout( this, 1, 1 );
+    QSplitter *splitter = new QSplitter( this );
+    splitter->setOrientation( QSplitter::Horizontal );
+    splitter->setOpaqueResize( TRUE );
+    //QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    //layout->addItem( spacer_left, 1,0 );
+    //QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //layout->addItem(spacer_top,0,1);
 
-    ingredientListView=new KListView (this);
+    //============ Ingredients widgets ================//
+    QWidget* privateLayoutWidget1 = new QWidget( splitter );
+    QHBoxLayout *ingredientHBox = new QHBoxLayout(privateLayoutWidget1, 1, 1);
+    ingredientListView=new KListView(privateLayoutWidget1);
     ingredientListView->setAllColumnsShowFocus(true);
-    layout->addMultiCellWidget (ingredientListView,1,4,1,1);
+    ingredientHBox->addWidget (ingredientListView);
     ingredientListView->addColumn(i18n("Id"));
     ingredientListView->addColumn(i18n("Ingredient"));
     ingredientListView->setRenameable(1, true);
     ingredientListView->setDefaultRenameAction(QListView::Reject);
     ingredientListView->setMinimumWidth(150);
-    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
-    QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(spacer_rightIngredients,1,2);
+    //QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    //layout->addItem(spacer_rightIngredients,1,2);
 
-
-    addIngredientButton = new QPushButton( this);
+    QVBoxLayout *ingredientButtonsVBox = new QVBoxLayout(privateLayoutWidget1, 1, 1);
+    addIngredientButton = new QPushButton(privateLayoutWidget1);
     addIngredientButton->setText("+");
-    layout->addWidget( addIngredientButton, 1, 3 );
+    ingredientButtonsVBox->addWidget( addIngredientButton );
     addIngredientButton->setMinimumSize(QSize(30,30));
     addIngredientButton->setMaximumSize(QSize(30,30));
     addIngredientButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     addIngredientButton->setFlat(true);
 
-    removeIngredientButton = new QPushButton( this);
+    removeIngredientButton = new QPushButton(privateLayoutWidget1);
     removeIngredientButton->setText("-");
-    layout->addWidget( removeIngredientButton, 3, 3 );
+    ingredientButtonsVBox->addWidget( removeIngredientButton );
     removeIngredientButton->setMinimumSize(QSize(30,30));
     removeIngredientButton->setMaximumSize(QSize(30,30));
     removeIngredientButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeIngredientButton->setFlat(true);
 
-    QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addItem(spacer_Ing_Buttons,2,3);
+    QSpacerItem* spacer_ing_buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    ingredientButtonsVBox->addItem(spacer_ing_buttons);
+
+    ingredientHBox->addLayout(ingredientButtonsVBox);
+    //layout->addLayout(ingredientHBox);
+    //QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //layout->addItem(spacer_Ing_Buttons,2,3);
 
 
-    QSpacerItem* spacer_Ing_Units = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(spacer_Ing_Units,1,4);
+    //QSpacerItem* spacer_Ing_Units = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    //layout->addItem(spacer_Ing_Units,1,4);
 
-
-
-    unitsListView=new KListView (this);
+    //============ Units widgets ================//
+    QWidget* privateLayoutWidget2 = new QWidget( splitter );
+    QHBoxLayout *unitsHBox = new QHBoxLayout(privateLayoutWidget2, 1, 1);
+    unitsListView=new KListView (privateLayoutWidget2);
     unitsListView->addColumn(i18n("Id."));
     unitsListView->addColumn(i18n("Units"));
     unitsListView->setAllColumnsShowFocus(true);
-    layout->addMultiCellWidget (unitsListView,1,4,5,5);
+    unitsHBox->addWidget(unitsListView);
     unitsListView->setMinimumWidth(150);
-    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
-    QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(spacer_rightUnits,1,6);
-
-    addUnitButton = new QPushButton( this);
+    //QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    //layout->addItem(spacer_rightUnits,1,6);
+    QVBoxLayout *unitsButtonsVBox = new QVBoxLayout(privateLayoutWidget2, 1, 1);
+    addUnitButton = new QPushButton(privateLayoutWidget2);
     addUnitButton->setText("+");
-    layout->addWidget( addUnitButton, 1, 7 );
+    unitsButtonsVBox->addWidget( addUnitButton );
     addUnitButton->resize(QSize(30,30));
     addUnitButton->setMinimumSize(QSize(30,30));
     addUnitButton->setMaximumSize(QSize(30,30));
     addUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     addUnitButton->setFlat(true);
 
-    removeUnitButton = new QPushButton( this);
+    removeUnitButton = new QPushButton(privateLayoutWidget2);
     removeUnitButton->setText("-");
-    layout->addWidget( removeUnitButton, 3, 7 );
+    unitsButtonsVBox->addWidget( removeUnitButton );
     removeUnitButton->resize(QSize(30,30));
     removeUnitButton->setMinimumSize(QSize(30,30));
     removeUnitButton->setMaximumSize(QSize(30,30));
     removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeUnitButton->setFlat(true);
-    QSpacerItem* spacer_Units_Properties = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addItem(spacer_Units_Properties,1,8);
 
-    propertiesListView=new KListView (this);
-    layout->addMultiCellWidget (propertiesListView,1,4,9,9);
+    QSpacerItem* spacer_units_buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    unitsButtonsVBox->addItem(spacer_units_buttons);
+
+    unitsHBox->addLayout(unitsButtonsVBox);
+    //layout->addLayout(unitsHBox);
+
+    //============ Properties widgets ================//
+    QWidget* privateLayoutWidget3 = new QWidget( splitter );
+    QHBoxLayout *propertiesHBox = new QHBoxLayout(privateLayoutWidget3, 1, 1);
+    propertiesListView=new KListView(privateLayoutWidget3);
+    propertiesHBox->addWidget (propertiesListView);
     propertiesListView->addColumn(i18n("Id."));
     propertiesListView->addColumn(i18n("Property"));
     propertiesListView->addColumn(i18n("Amount"));
-    propertiesListView->addColumn(i18n("units"));
+    propertiesListView->addColumn(i18n("Units"));
     propertiesListView->setAllColumnsShowFocus(true);
     propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
     propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
-    QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
-    layout->addItem(spacer_rightProperties,1,10);
-
-    addPropertyButton= new QPushButton(this);
+    //QSpacerItem* spacer_rightProperties= new QSpacerItem(5,5,QSizePolicy::Fixed,QSizePolicy::Minimum);
+    //layout->addItem(spacer_rightProperties,1,10);
+    QVBoxLayout *propertiesButtonsVBox = new QVBoxLayout(privateLayoutWidget3, 1, 1);
+    addPropertyButton= new QPushButton(privateLayoutWidget3);
     addPropertyButton->setText("+");
-    layout->addWidget( addPropertyButton, 1, 11 );
+    propertiesButtonsVBox->addWidget( addPropertyButton );
     addPropertyButton->resize(QSize(30,30));
     addPropertyButton->setMinimumSize(QSize(30,30));
     addPropertyButton->setMaximumSize(QSize(30,30));
     addPropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     addPropertyButton->setFlat(true);
 
-    removePropertyButton=new QPushButton(this);
+    removePropertyButton=new QPushButton(privateLayoutWidget3);
     removePropertyButton->setText("-");
-    layout->addWidget( removePropertyButton, 3, 11 );
+    propertiesButtonsVBox->addWidget( removePropertyButton );
     removePropertyButton->resize(QSize(30,30));
     removePropertyButton->setMinimumSize(QSize(30,30));
     removePropertyButton->setMaximumSize(QSize(30,30));
     removePropertyButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removePropertyButton->setFlat(true);
+
+    QSpacerItem* spacer_properties_buttons = new QSpacerItem( 5,5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    propertiesButtonsVBox->addItem(spacer_properties_buttons);
+
+    propertiesHBox->addLayout(propertiesButtonsVBox);
+
+    layout->addWidget(splitter);
+
 
 
     inputBox=new EditBox(this);
@@ -220,7 +248,7 @@ unitsListView->setSelected(unitsListView->firstChild(),true);
 
 void IngredientsDialog::addIngredient(void)
 {
-CreateElementDialog* elementDialog=new CreateElementDialog(QString(i18n("New Ingredient")));
+CreateElementDialog* elementDialog=new CreateElementDialog(this,QString(i18n("New Ingredient")));
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
@@ -276,7 +304,7 @@ if (ingredientID>=0) // an ingredient was selected previously
     	database->addUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
     else
     	{
-	QMessageBox::information(this,i18n("Unit exists"),i18n("The ingredient contains already the unit that you have chosen."));
+	QMessageBox::information(this,i18n("Unit exists"),i18n("The ingredient already contains the unit that you have chosen."));
 	}
     reloadUnitList(); // Reload the list from database
 }

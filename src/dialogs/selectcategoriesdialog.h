@@ -27,7 +27,7 @@ Q_OBJECT
 
 public:
 
-    SelectCategoriesDialog(ElementList *categoryList,QPtrList <bool> *selected);
+    SelectCategoriesDialog(QWidget *parent, ElementList *categoryList,QPtrList <bool> *selected);
     ~SelectCategoriesDialog();
     void getSelectedCategories(ElementList *selected);
 private:

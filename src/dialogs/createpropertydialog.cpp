@@ -10,7 +10,7 @@
 #include "createpropertydialog.h"
 #include "elementlist.h"
 #include <klocale.h>
-CreatePropertyDialog::CreatePropertyDialog(ElementList* list):QDialog(0,0,true)
+CreatePropertyDialog::CreatePropertyDialog(QWidget *parent,ElementList* list):QDialog(parent,0,true)
 {
 
 // Initialize Internal Variables
@@ -18,19 +18,43 @@ unitList=list; // Store the pointer to the unitList;
 
 // Initialize widgets
 container=new QVBoxLayout(this,5,5);
+
 box=new QGroupBox(this);
-container->addWidget(box);
+box->setColumnLayout(0, Qt::Vertical );
+box->layout()->setSpacing( 6 );
+box->layout()->setMargin( 11 );
+QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+boxLayout->setAlignment( Qt::AlignTop );
 box->setTitle(i18n("New Property"));
 
-propertyNameEdit=new KLineEdit(box); propertyNameEdit->setGeometry( QRect( 105, 30, 210, 25 ) );
-propertyUnits=new KLineEdit(box); propertyUnits->setGeometry(QRect(105,60,80,25));
-okButton=new QPushButton(box); okButton->setGeometry( QRect( 5, 120, 100, 20 ) ); okButton->setText(i18n("Ok"));
-cancelButton=new QPushButton(box); cancelButton->setGeometry( QRect( 110, 120, 60, 20 ) ); cancelButton->setText(i18n("Cancel"));
-nameEditText=new QLabel(i18n("Property Name:"),box); nameEditText->setGeometry(QRect(5,30,100,20));
-unitsText=new QLabel(i18n("Units:"),box); unitsText->setGeometry(QRect(5,60,100,20));
+QGridLayout *gridLayout = new QGridLayout( this, 2, 2, 5, 5);
 
+nameEditText=new QLabel(i18n("Property Name:"),this);
+propertyNameEdit=new KLineEdit(this);
+propertyNameEdit->setMinimumWidth(150);
+gridLayout->addWidget(nameEditText, 0, 0);
+gridLayout->addWidget(propertyNameEdit, 0, 1);
 
-resize(QSize(400,200));
+unitsText=new QLabel(i18n("Units:"),this);
+propertyUnits=new KLineEdit(this);
+propertyUnits->setMinimumWidth(150);
+gridLayout->addWidget(unitsText, 1, 0);
+gridLayout->addWidget(propertyUnits, 1, 1);
+
+QHBoxLayout *buttonsHBox = new QHBoxLayout( this, 5, 5 );
+okButton=new QPushButton(i18n("Ok"),this);
+cancelButton=new QPushButton(i18n("Cancel"),this);
+QSpacerItem* spacer = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+buttonsHBox->addWidget(okButton);
+buttonsHBox->addWidget(cancelButton);
+buttonsHBox->addItem( spacer );
+
+boxLayout->addLayout( gridLayout );
+boxLayout->addLayout( buttonsHBox );
+
+container->addWidget(box);
+
+adjustSize();
 setFixedSize(size());
 
 // Signals & Slots

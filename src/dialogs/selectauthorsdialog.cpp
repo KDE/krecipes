@@ -14,7 +14,7 @@
 
 #include "recipedb.h"
 
-SelectAuthorsDialog::SelectAuthorsDialog(ElementList *currentAuthors,RecipeDB *db):QDialog(0,0,true)
+SelectAuthorsDialog::SelectAuthorsDialog(QWidget *parent, ElementList *currentAuthors,RecipeDB *db):QDialog(parent,0,true)
 {
 
 
@@ -24,9 +24,9 @@ database=db;
 
 layout = new QGridLayout( this, 1, 1, 0, 0);
 	// Border Spacers
-	QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	layout->addItem( spacer_left, 1,0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem(spacer_top,0,1);
+	//QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	//layout->addItem( spacer_left, 1,0 );
+	//QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	//layout->addItem(spacer_top,0,1);
 
 
 // Combo to Pick authors
