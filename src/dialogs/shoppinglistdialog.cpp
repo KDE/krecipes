@@ -92,7 +92,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	layout->addItem( vboxl, 0, 1 );
 
-	shopRecipeListView = new KreListView ( this, "Shopping list" );
+	shopRecipeListView = new KreListView ( this, i18n("Shopping List") );
 	ShoppingListView *slistview = new ShoppingListView( shopRecipeListView );
 	slistview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	slistview->setDragEnabled( true );
