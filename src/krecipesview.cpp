@@ -508,7 +508,7 @@ if (!recipeButton)
 	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("filesave",KIcon::Small));
 	recipeButton->setGeometry(2,252,146,30);
 	recipeButton->setTitle(title);
-	recipeButton->resize((leftPanel->width())-1,30);
+	recipeButton->resize((leftPanel->width())-4,30);
 	recipeButton->show();
   buttonsList->append(recipeButton);
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
