@@ -274,10 +274,14 @@ if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
 
 if (ingredientID>=0) // an ingredient/unit combination was selected previously
 {
-ElementList results;
-database->findUseOfIngInRecipes(&results,ingredientID);
-if (results.isEmpty()) database->removeIngredient(ingredientID);
-else database->removeIngredient(ingredientID);
+ElementList dependingRecipes;
+database->findIngredientDependancies(ingredientID,&dependingRecipes);
+if (dependingRecipes.isEmpty()) database->removeIngredient(ingredientID);
+else { // Need Warning!
+  DependanciesDialog *warnDialog=new DependanciesDialog(0,&dependingRecipes);
+  if (warnDialog->exec()==QDialog::Accepted) database->removeIngredient(ingredientID);
+  delete warnDialog;
+	}
 
 reloadIngredientList();// Reload the list from database
 
