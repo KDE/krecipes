@@ -2,7 +2,7 @@
  * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
- #include "pref.h"
+#include "pref.h"
 #include "krecipes.h"
 #include "krecipesview.h"
 #include "recipeinputdialog.h"
@@ -205,13 +205,13 @@ m_view->save();
 
 void Krecipes::fileSaveAs()
 {
-    // this slot is called whenever the File->Save As menu is selected,
-m_view->exportRecipe();
+       // this slot is called whenever the File->Save As menu is selected,
+	m_view->exportRecipe();
 }
 
 void Krecipes::filePrint()
 {
-        m_view->print();
+	m_view->print();
 }
 
 void Krecipes::import()
@@ -375,6 +375,9 @@ void Krecipes::optionsConfigureToolbars()
 #else
     saveMainWindowSettings(KGlobal::config());
 #endif
+    KEditToolbar dlg(actionCollection());
+    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(newToolbarConfig()));
+    dlg.exec();
 }
 
 void Krecipes::newToolbarConfig()
@@ -405,6 +408,8 @@ void Krecipes::optionsPreferences()
     dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server Settings"), "Server", "identity", i18n("Database Server Options"));
     dialog->addPage(new unitsprefs(0, "NumberFormat"), i18n("Units"), "Units", "frac", i18n("Customize Units"));
     dialog->addPage(new importprefs(0, "Import"), i18n("Units"), "Import", "redo", i18n("Recipe Import Options"));
+    //connect(dialog, SIGNAL(settingsChanged()), this, SLOT(loadSettings()));
+    dialog->show();
 # else
    // popup some sort of preference dialog, here
     KrecipesPreferences dlg(this);
