@@ -64,7 +64,7 @@ KreImporter::KreImporter(const QString& filename)
 
 		QDomElement kreml = doc.documentElement();
 
-		if (kreml.tagName() != "krecipes-recipe")
+		if (kreml.tagName() != "krecipes")
 		{
 			setErrorMsg( i18n("This file doesn't appear to be a *.kreml file") );
 			return;
@@ -74,24 +74,32 @@ KreImporter::KreImporter(const QString& filename)
     QString kreVersion = kreml.attribute("version");
     qDebug(QString( i18n("KreML version %1") ).arg(kreVersion));
 
-		QDomNodeList l = kreml.childNodes();
-    QDomElement el;
+		QDomNodeList r = kreml.childNodes();
+    QDomElement krecipe;
 
-    Recipe *recipe = new Recipe;
-		for (unsigned i = 0; i < l.count(); i++)
+		for (unsigned z = 0; z < r.count(); z++)
 		{
-		  el = l.item(i).toElement();
-			if (el.tagName() == "krecipes-description"){
-        readDescription(el.childNodes(), recipe);
+      krecipe = r.item(z).toElement();
+      QDomNodeList l = krecipe.childNodes();
+      QDomElement el;
+      if(krecipe.tagName() == "krecipes-recipe"){
+        Recipe *recipe = new Recipe;
+        for (unsigned i = 0; i < l.count(); i++)
+        {
+          el = l.item(i).toElement();
+          if (el.tagName() == "krecipes-description"){
+            readDescription(el.childNodes(), recipe);
+          }
+          if (el.tagName() == "krecipes-ingredients"){
+            readIngredients(el.childNodes(), recipe);
+          }
+          if (el.tagName() == "krecipes-instructions"){
+            recipe->instructions = el.text();
+          }
+        }
+        add(recipe);
       }
-			if (el.tagName() == "krecipes-ingredients"){
-        readIngredients(el.childNodes(), recipe);
-      }
-			if (el.tagName() == "krecipes-instructions"){
-        recipe->instructions = el.text();
-      }
-		}
-    add(recipe);
+    }
 	}
   if(unlink){
     file->remove();

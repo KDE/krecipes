@@ -78,7 +78,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
-// Popup menu
+// Popup menus
     kpop = new KPopupMenu( recipeListView );
     kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),tr2i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
     kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),tr2i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
@@ -86,6 +86,9 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("Remove from &Category"), this, SLOT(removeFromCat()), CTRL+Key_C );
     kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),tr2i18n("&Remove"), this, SLOT(remove()), CTRL+Key_R );
     kpop->polish();
+
+    catPop = new KPopupMenu( recipeListView );
+    catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(exportRecipeFromCat()), CTRL+Key_S );
 
 // Load Recipe List
 loadRecipeList();
@@ -293,8 +296,26 @@ void SelectRecipeDialog::exportRecipe()
     KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
-      KreExporter* kre = new KreExporter(database, (recipeListView->selectedItem())->text(1).toInt(), fileName, fd->currentFilter());
-      kre->exporter();
+      KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
+      kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
+    }
+  }
+}
+
+void SelectRecipeDialog::exportRecipeFromCat()
+{
+  if((recipeListView->selectedItem())->text(1).toInt() == NULL){
+    KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
+    QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
+    if(fileName != NULL){
+      KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
+      QValueList<int>* l = new QValueList<int>;
+      for (QListViewItem *cit=(recipeListView->selectedItem())->firstChild();cit;cit=cit->nextSibling())
+      {
+        l->append(cit->text(1).toInt());
+      }
+      kre->categoryExporter(l);
+      //kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
     }
   }
 }
@@ -320,6 +341,9 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint &p ){
   if(!i->firstChild() && i->text(1).toInt() != NULL){
     kpop->exec(p);
+  }
+  else{
+    catPop->exec(p);
   }
 }
 

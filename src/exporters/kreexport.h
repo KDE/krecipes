@@ -1,6 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +23,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qimage.h>
+#include <qvaluelist.h>
 
 #include "../recipe.h"
 #include "../DBBackend/recipedb.h"
@@ -34,11 +37,12 @@ Export classe for Krecipes native file format (.kre, .kreml)
 */
 class KreExporter{
 public:
-    KreExporter( RecipeDB *, const int , const QString&, const QString );
+    KreExporter( RecipeDB *, const QString&, const QString );
 
     ~KreExporter();
-    void exporter( );
-    QString createKRE();
+    void exporter( const int );
+    void categoryExporter(QValueList<int>*);
+    QString createKRE(const int recipeid = -1);
 
     QFile* file;
     QString name;

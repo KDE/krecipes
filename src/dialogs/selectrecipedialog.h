@@ -66,6 +66,7 @@ private:
   KLineEdit *searchBox;
   KComboBox *categoryBox;
   KPopupMenu *kpop;
+  KPopupMenu *catPop;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
@@ -93,6 +94,7 @@ private slots:
   void showEvent(QShowEvent*);
 public slots:
   void exportRecipe();
+  void exportRecipeFromCat();
   void haveSelectedItems();
 };
 

@@ -9,12 +9,9 @@
  ***************************************************************************/
 #include "kreexport.h"
 
-KreExporter::KreExporter( RecipeDB *db, const int recipeId, const QString& filename = QString::null, const QString format = QString::null )
+KreExporter::KreExporter( RecipeDB *db, const QString& filename = QString::null, const QString format = QString::null )
 {
   database = db;
-  recipe = new Recipe();
-  recipe->recipeID = -1;
-  database->loadRecipe( recipe, recipeId );
   if(filename != QString::null){
     if(filename.right(4) == ".kre" || filename.right(6) == ".kreml"){
       file = new QFile(filename);
@@ -49,8 +46,11 @@ KreExporter::~KreExporter()
     \fn KreExporter::export()
  * export recipe to XML and save it to a file
  */
-void KreExporter::exporter()
+void KreExporter::exporter(const int recipeId)
 {
+  recipe = new Recipe();
+  recipe->recipeID = -1;
+  database->loadRecipe( recipe, recipeId );
   if(exportEnable){
     bool fileExists = file->exists();
     int overwrite;
@@ -61,13 +61,57 @@ void KreExporter::exporter()
       if(type == "kreml"){
         if ( file->open( IO_WriteOnly ) ) {
           QTextStream stream( file );
+          stream << "<krecipes version=\"0.1\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
           stream << createKRE();
+          stream << "</krecipes>";
           file->close();
         }
       }
       else{
         // create a temporary .kre file
-        QString kreml = createKRE();
+        QString kreml = "<krecipes version=\"0.1\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+        kreml += createKRE();
+        kreml += "</krecipes>";
+        int size = kreml.length();
+        // compress and save file
+        KTar* kre = new KTar(file->name(), "application/x-gzip");
+        kre->open( IO_WriteOnly );
+        kre->writeFile(name+".kreml",getenv( "LOGNAME" ), "", size, kreml);
+        kre->close();
+      }
+    }
+  }
+  else{
+    qDebug("no output file have been selected for export.");
+  }
+}
+
+void KreExporter::categoryExporter(QValueList<int>* l){
+  recipe = new Recipe();
+  recipe->recipeID = -1;
+  QString kreml;
+  QValueList<int>::iterator it;
+  if(exportEnable){
+    bool fileExists = file->exists();
+    int overwrite;
+    if(fileExists){
+      overwrite = KMessageBox::questionYesNo( 0,i18n("File ")+file->name()+i18n(" exists. Would you like to overwrite it?"),i18n("Saving recipe") );
+    }
+    if(!fileExists || overwrite == KMessageBox::Yes){
+      kreml = "<krecipes version=\"0.1\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+      for ( it = l->begin(); it != l->end(); ++it ){
+        database->loadRecipe( recipe, *it );
+        kreml += createKRE();
+      }
+      kreml += "</krecipes>\n";
+      if(type == "kreml"){
+        if ( file->open( IO_WriteOnly ) ) {
+          QTextStream stream( file );
+          stream << kreml;
+          file->close();
+        }
+      }
+      else{
         int size = kreml.length();
         // compress and save file
         KTar* kre = new KTar(file->name(), "application/x-gzip");
@@ -87,10 +131,19 @@ void KreExporter::exporter()
     \fn KreManager::createKRE()
  * return a QString containing XML encoded recipe
  */
-QString KreExporter::createKRE()
+QString KreExporter::createKRE(const int recipeId)
 {
     QString xml;
-    xml = "<krecipes-recipe version=\"0.1\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+    if(recipeId != -1){
+      recipe = new Recipe();
+      recipe->recipeID = -1;
+      database->loadRecipe( recipe, recipeId );
+      xml = "<krecipes version=\"0.1\" lang=\""+(KGlobal::locale())->country()+"\" >\n";
+    }
+    else{
+      xml = "";
+    }
+    xml +="<krecipes-recipe>";
     xml += "<krecipes-description>\n";
     xml += "<title>"+recipe->title.utf8()+"</title>\n";
     for (Element *el = (recipe->authorList).getFirst(); el; el= (recipe->authorList).getNext()){
@@ -133,5 +186,8 @@ QString KreExporter::createKRE()
     xml += recipe->instructions.utf8();
     xml += "</krecipes-instructions>\n";
     xml += "</krecipes-recipe>\n";
+    if(recipeId != -1){
+      xml += "</krecipes>\n";
+    }
     return xml;
 }
