@@ -34,4 +34,4 @@ libkrecipesdbs_la_METASOURCES=AUTO
 libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs) $(psql_libs)
 
 #the library search path.
-libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(mysql_libs) $(sqlite_libs) $(psql_libs)
+libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
