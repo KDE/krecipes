@@ -21,7 +21,11 @@
 #include "mixednumber.h"
 #include "recipe.h"
 
-MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
+MXPImporter::MXPImporter() : BaseImporter()
+{
+}
+
+void MXPImporter::parseFile( const QString &file )
 {
 	QFile input( file );
 
@@ -41,14 +45,12 @@ MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 				{importMac( stream );}
 			else if ( line == "@@@@@" )
 				{importGeneric( stream );}
-			else
-			{
-				setErrorMsg( i18n("File does not appear to be a valid MasterCook Export.") );
-				return;
-			}
 
 			stream.skipWhiteSpace();
 		}
+		
+		if ( fileRecipeCount() == 0 )
+			addWarningMsg( i18n("No recipes found in this file.") );
 	}
 	else
 		setErrorMsg(i18n("Unable to open file."));

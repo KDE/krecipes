@@ -28,8 +28,11 @@ class Recipe;
 class MX2Importer : public BaseImporter
 {
 public:
-	MX2Importer(const QString& filename);
-	~MX2Importer();
+	MX2Importer();
+	virtual ~MX2Importer();
+
+protected:
+	void parseFile(const QString& filename);
 
 private:
 	void readRecipe(const QDomNodeList& l, Recipe*);

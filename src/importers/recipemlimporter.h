@@ -22,8 +22,11 @@
 class RecipeMLImporter : public BaseImporter
 {
 public:
-	RecipeMLImporter(const QString& filename);
-	~RecipeMLImporter();
+	RecipeMLImporter();
+	virtual ~RecipeMLImporter();
+
+protected:
+	void parseFile(const QString& filename);
 
 private:
 	void readRecipemlDirections(const QDomElement& dirs);

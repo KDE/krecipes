@@ -21,8 +21,11 @@
 class MXPImporter : public BaseImporter
 {
 public:
-	MXPImporter( const QString &file );
-	~MXPImporter();
+	MXPImporter();
+	virtual ~MXPImporter();
+
+protected:
+	void parseFile(const QString& filename);
 
 private:
 	void importMXP( QTextStream &stream );

@@ -31,9 +31,11 @@ Import for Krecipes native file format (.kre, .kreml)
 */
 class KreImporter:public BaseImporter{
 public:
-    KreImporter( const QString& filename );
-
-    ~KreImporter();
+    KreImporter();
+    virtual ~KreImporter();
+    
+private:
+	void parseFile( const QString& filename );
 
 private:
 	void readDescription(const QDomNodeList& l, Recipe*);

@@ -23,11 +23,13 @@
 class MMFImporter : public BaseImporter
 {
 public:
-	MMFImporter( const QString &file );
-	~MMFImporter();
+	MMFImporter();
+	virtual ~MMFImporter();
 
 private:
 	enum FormatVersion { FromDatabase, VersionMMMMM, VersionBB, VersionNormal };
+	
+	virtual void parseFile( const QString &filename );
 
 	void importMMF( QTextStream &stream );
 

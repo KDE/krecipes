@@ -23,8 +23,11 @@
 class NYCGenericImporter : public BaseImporter
 {
 public:
-	NYCGenericImporter( const QString &file );
+	NYCGenericImporter();
 	~NYCGenericImporter();
+
+protected:
+	void parseFile(const QString& filename);
 
 private:
 	void importNYCGeneric( QTextStream &stream );

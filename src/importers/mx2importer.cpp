@@ -28,7 +28,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "recipe.h"
 
 
-MX2Importer::MX2Importer(const QString& filename)
+MX2Importer::MX2Importer()
+{
+}
+
+void MX2Importer::parseFile(const QString& filename)
 {
 	QFile file( filename );
 	kdDebug()<<"loading file: "<<filename<<endl;

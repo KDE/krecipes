@@ -234,60 +234,42 @@ void Krecipes::import()
 		QStringList warnings_list;
 
 		QString selected_filter = file_dialog.currentFilter();
-		QStringList files = file_dialog.selectedFiles();
 
-		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
+		BaseImporter *importer;
+		if ( selected_filter == "*.mxp *.txt" )
+			importer = new MXPImporter();
+		else if ( selected_filter == "*.mmf *.txt" )
+			importer = new MMFImporter();
+		else if ( selected_filter == "*.txt" )
+			importer = new NYCGenericImporter();
+		else if ( selected_filter == "*.mx2" )
+			importer = new MX2Importer();
+		else if ( selected_filter == "*.kre *.kreml" )
+			importer = new KreImporter();
+		else if ( selected_filter == "*.xml *.recipeml" )
+			importer = new RecipeMLImporter();
+		else
 		{
-			parsing_file_dlg->show();
-
-			BaseImporter *importer;
-			if ( selected_filter == "*.mxp *.txt" )
-				importer = new MXPImporter( *it );
-			else if ( selected_filter == "*.mmf *.txt" )
-				importer = new MMFImporter( *it );
-			else if ( selected_filter == "*.txt" )
-				importer = new NYCGenericImporter( *it );
-			else if ( selected_filter == "*.mx2" )
-				importer = new MX2Importer( *it );
-			else if ( selected_filter == "*.kre *.kreml" )
-				importer = new KreImporter( *it );
-			else if ( selected_filter == "*.xml *.recipeml" )
-				importer = new RecipeMLImporter( *it );
-			else
-			{
-				KMessageBox::sorry( this,
-				  QString(i18n("Filter \"%1\" not recognized.\n"
-				    "Please select one of the provided filters.")).arg(selected_filter),
-				  i18n("Unrecognized Filter")
-				);
-				parsing_file_dlg->hide();
-				import(); //let's try again :)
-				return;
-			}
-
-			parsing_file_dlg->hide();
-
-			QString error = importer->getErrorMsg();
-			if ( !error.isNull() )
-				KMessageBox::error( this, QString(i18n("Error importing file %1\n%2")).arg(*it).arg(error) );
-			else
-				m_view->import( *importer );
-
-			if ( importer->getWarningMsgs().count() > 0 )
-			{
-				warnings_list += QString(i18n("The file \"%1\" generated the following warnings:")).arg(*it);
-				warnings_list += importer->getWarningMsgs();
-			}
-
-			delete importer;
+			KMessageBox::sorry( this,
+			  QString(i18n("Filter \"%1\" not recognized.\n"
+			    "Please select one of the provided filters.")).arg(selected_filter),
+			  i18n("Unrecognized Filter")
+			);
+			import(); //let's try again :)
+			return;
 		}
 
-		if ( warnings_list.count() > 0 )
-		{
-			warnings_list.prepend(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occured."));
+		parsing_file_dlg->show();
+		importer->parseFiles(file_dialog.selectedFiles());
+		parsing_file_dlg->hide();
 
+		m_view->import( *importer );
+
+		if ( !importer->getMessages().isEmpty() )
+		{
 			KTextEdit *warningEdit = new KTextEdit( this );
-			warningEdit->setText( warnings_list.join("\n\n") );
+			warningEdit->setTextFormat( Qt::RichText );
+			warningEdit->setText( QString(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occured.<br><br>")) + importer->getMessages() );
 			warningEdit->setReadOnly(true);
 
 			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n("Import warnings"), KDialogBase::Ok, KDialogBase::Default, this );
@@ -295,6 +277,8 @@ void Krecipes::import()
 			showWarningsDlg.resize( QSize(550,250) );
 			showWarningsDlg.exec();
 		}
+		
+		delete importer;
 
 		//TODO: is this the best way to do it???
 		m_view->selectPanel->reload();

@@ -19,7 +19,11 @@
 #include "recipe.h"
 #include "mixednumber.h"
 
-RecipeMLImporter::RecipeMLImporter( const QString& file ) : BaseImporter()
+RecipeMLImporter::RecipeMLImporter() : BaseImporter()
+{
+}
+
+void RecipeMLImporter::parseFile( const QString& file )
 {
 	QFile input( file );
 	if ( input.open( IO_ReadOnly ) )
@@ -80,12 +84,12 @@ void RecipeMLImporter::readRecipemlRecipe(const QDomElement& recipe_element)
 			readRecipemlHead(el);
 		else if (tagName == "ingredients")
 			readRecipemlIngs(el);
+		else if (tagName == "directions")
+			readRecipemlDirections(el);
 		else if ( tagName == "description" )
 			{}//TODO: what do we do with this?
 		else if ( tagName == "equipment" )
 			{}//TODO: what do we do with this?
-		else if (tagName == "directions")
-			readRecipemlDirections(el);
 		else if ( tagName == "nutrition" )
 			{}//TODO: what do we do with this?
 		else if ( tagName == "diet-exchanges" )
@@ -184,7 +188,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 {
 	QDomNodeList ingChilds = ing.childNodes();
 
-	QString name, unit, size;
+	QString name, unit, size, prep_method;
 	double quantity = 1;
 
 	for (unsigned j=0; j < ingChilds.count(); j++)
@@ -213,7 +217,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 		else if (tagName == "item")
 		{
 			name = ingChild.text().stripWhiteSpace();
-			if (ing.attribute( "optional", "no" ) == "yes" ) name += " (optional)";
+			if (ing.attribute( "optional", "no" ) == "yes" ) prep_method = "(optional)";
 		}
 		else
 			kdDebug()<<"Unknown tag within <ing>: "<<ingChild.tagName()<<endl;
@@ -222,7 +226,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 	if ( !size.isNull() )
 		unit.prepend(size+" ");
 
-	recipe.ingList.append( Ingredient(name, quantity, unit) );
+	recipe.ingList.append( Ingredient(name, quantity, unit, -1, -1, prep_method) );
 }
 
 void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)

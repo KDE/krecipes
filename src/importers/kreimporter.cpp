@@ -21,7 +21,11 @@
 #include "recipe.h"
 
 
-KreImporter::KreImporter(const QString& filename)
+KreImporter::KreImporter() : BaseImporter()
+{
+}
+
+void KreImporter::parseFile( const QString &filename )
 {
   QFile* file = 0;
   bool unlink = false;

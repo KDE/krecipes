@@ -25,7 +25,15 @@
 
 //TODO: pre-parse file and try to correct alignment errors in ingredients?
 
-MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
+MMFImporter::MMFImporter() : BaseImporter()
+{
+}
+
+MMFImporter::~MMFImporter()
+{
+}
+
+void MMFImporter::parseFile( const QString &file )
 {
 	resetVars();
 
@@ -66,15 +74,11 @@ MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 			stream.skipWhiteSpace();
 		}
 		
-		if ( count() == 0 )
-			setErrorMsg( i18n("No recipes found in this.") );
+		if ( fileRecipeCount() == 0 )
+			addWarningMsg( i18n("No recipes found in this file.") );
 	}
 	else
 		setErrorMsg(i18n("Unable to open file."));
-}
-
-MMFImporter::~MMFImporter()
-{
 }
 
 void MMFImporter::importMMF( QTextStream &stream )

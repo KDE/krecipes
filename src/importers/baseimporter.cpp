@@ -23,7 +23,7 @@
 
 BaseImporter::BaseImporter() :
   m_recipe_list(new RecipeList),
-  m_error_msg(QString::null)
+  file_recipe_count(0)
 {
 }
 
@@ -32,14 +32,41 @@ BaseImporter::~BaseImporter()
 	delete m_recipe_list;
 }
 
+void BaseImporter::parseFiles( const QStringList &filenames )
+{
+	for ( QStringList::const_iterator file_it = filenames.begin(); file_it != filenames.end(); ++file_it )
+	{
+		file_recipe_count = 0;
+		parseFile(*file_it);
+		
+		if (  m_error_msgs.count() > 0 )
+		{
+			m_master_error += QString(i18n("Import of recipes from the file <b>%1</b> <b>failed</b> due to the following error(s):")).arg(*file_it);
+			m_master_error += "<ul><li>" + m_error_msgs.join("</li><li>") + "</li></ul>";
+
+			m_error_msgs.clear();
+		}
+		else if ( m_warning_msgs.count() > 0 )
+		{
+			m_master_warning += QString(i18n("The file <b>%1</b> generated the following warning(s):")).arg(*file_it);
+			m_master_warning += "<ul><li>" + m_warning_msgs.join("</li><li>") + "</li></ul>";
+
+			m_warning_msgs.clear();
+		}
+	}
+}
+
 void BaseImporter::import( RecipeDB *db )
 {
+	if ( m_recipe_list->count() == 0 )
+		return;
+
 	RecipeImportDialog import_dialog(*m_recipe_list);
 
 	if ( import_dialog.exec() != QDialog::Accepted )
 	{
 		//clear errors and messages so they won't be displayed
-		m_error_msg = QString::null;
+		m_error_msgs.clear();
 		m_warning_msgs.clear();
 		return;
 	}
@@ -57,7 +84,7 @@ void BaseImporter::import( RecipeDB *db )
 	progress->setFormat(i18n("%v/%m Recipes"));
 
 	ElementList prepMethodList; db->loadPrepMethods( &prepMethodList );
-	
+
 	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
 	{

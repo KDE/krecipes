@@ -21,41 +21,11 @@
 #include "mixednumber.h"
 #include "recipe.h"
 
-/* SAMPLE:
-Apple Cider Pie
+NYCGenericImporter::NYCGenericImporter() : BaseImporter()
+{
+}
 
-apple, fruits, pies
-
-1 cup sugar
-1 cup apples; cored & sliced
-1 cup apple cider
-1 teaspoon cornstarch
-1 tablespoon lemon juice
-1 teaspoon vanilla
-1 teaspoon margarine
-1 pie crust, double
-1/2 teaspoon Cinnamon
-
-Combine sugar and cider in a sauce pan. Bring to a boil and add apples. Simmer, stirring occasionally, for 5 minutes. Remove from stove. Drain juice off to measure 1 1/2 cups. (If you do not have enough juice, add some cider).
-
-
-In a saucepan, combine juice with cornstarch, lemon juice, vanilla, and butter. Bring to a boil and stir until it thickens and turns clear. Sprinkle 1/4 Tsp. of cinnamon over bottom pie crust, add drained apples, and cider mixture. Sprinkle with remaining 1/4 tsp. cinnamon. Top with pie crust. Slash the crust. Bake at 400 degrees for 45-50 minutes, until golden brown.
-
-
-WARNING: I used a deep dish pie pan, but still it bubbled over, so put something under it to catch the drips!
-
-Contributor: Senora Hauser
-Yield:  1 serving
-Preparation Time: 00:05
-
- NYC Nutrilink: N5504^19335,N1767^09004,N2032^09400,N5614^20027
- NYC Nutrilink: N1896^09153,N221^02050,N599^04522,N5063^18402
- NYC Nutrilink: N182^02010
-
-** Exported from Now You're Cooking! v5.59 **
-*/
-
-NYCGenericImporter::NYCGenericImporter( const QString &file ) : BaseImporter()
+void NYCGenericImporter::parseFile( const QString &file )
 {
 	first = true;
 
