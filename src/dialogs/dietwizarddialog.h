@@ -15,6 +15,9 @@
 
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
+
+#include <klistview.h>
+
 #include <qpushbutton.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
@@ -24,8 +27,8 @@
 #include <qtoolbutton.h>
 #include <qvbox.h>
 #include <qvgroupbox.h>
-#include <klistview.h>
 #include <qspinbox.h>
+#include <qwidgetstack.h>
 
 class RecipeDB;
 class EditBox;

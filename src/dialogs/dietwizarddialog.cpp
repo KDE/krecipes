@@ -164,6 +164,14 @@ toolBar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Mi
 buttonPrev=new QToolButton(toolBar); buttonPrev->setText(i18n("Prev"));
 buttonNext=new QToolButton(toolBar); buttonNext->setText(i18n("Next"));
 
+	// Dish widgets
+dishStack= new QWidgetStack(this);
+layout->addWidget(dishStack);
+
+	// Add a dish
+DishInput *newDish=new DishInput(this);
+dishStack->addWidget(newDish);
+
 }
 
 MealInput::~MealInput()
