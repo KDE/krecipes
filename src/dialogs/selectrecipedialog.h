@@ -92,6 +92,8 @@ private slots:
   void showPopup( KListView *, QListViewItem *, const QPoint & );
   void filterComboCategory(int row);
   void showEvent(QShowEvent*);
+  void expandAll();
+  void collapseAll();
 public slots:
   void exportRecipe();
   void exportRecipeFromCat();

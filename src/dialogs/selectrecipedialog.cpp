@@ -88,6 +88,8 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     kpop->polish();
 
     catPop = new KPopupMenu( recipeListView );
+    catPop->insertItem( tr2i18n("&Expand All"), this, SLOT(expandAll()), CTRL+Key_Plus );
+    catPop->insertItem( tr2i18n("&Collapse All"), this, SLOT(collapseAll()), CTRL+Key_Minus );
     catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),tr2i18n("&Save as"), this, SLOT(exportRecipeFromCat()), CTRL+Key_S );
 
 // Load Recipe List
@@ -123,6 +125,7 @@ void SelectRecipeDialog::showEvent(QShowEvent* e){
     openButton->setEnabled(false);
     editButton->setEnabled(false);
     removeButton->setEnabled(false);
+    collapseAll();
   }
 }
 
@@ -214,6 +217,7 @@ void SelectRecipeDialog::reload()
 {
 loadRecipeList();
 loadCategoryCombo();
+collapseAll();
 }
 
 void SelectRecipeDialog::filter(const QString& s)
@@ -370,4 +374,18 @@ isFilteringCategories=true;
 }
 else isFilteringCategories=false;
 
+}
+
+void SelectRecipeDialog::expandAll(){
+  for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+  {
+    it->setOpen(true);
+  }
+}
+
+void SelectRecipeDialog::collapseAll(){
+  for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+  {
+    it->setOpen(false);
+  }
 }
