@@ -49,7 +49,8 @@ QString htmlCode=QString("<html><head><title>%1</title>").arg(i18n("Diet"));
 
 // CSS
 htmlCode += "<STYLE type=\"text/css\">\n";
-htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #d6d6d6;}";
+htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
+htmlCode+="#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;}";
 htmlCode +="</STYLE>";
 
 
@@ -79,6 +80,7 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 		htmlCode+=QString("<td id=\"day\">");
 		for (int meal=0;meal<mealNumber;meal++) // Meals in each cell
 			{
+			htmlCode+=QString("<div id=\"meal\">");
 			int dishNumber=*it;
 			for (int dish=0; dish<dishNumber;dish++) // Dishes in each Meal
 				{
@@ -86,6 +88,7 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 				rit++;
 				}
 			it++;
+			htmlCode+=QString("</div>");
 			}
 		it=dishNumbers.begin(); // meals have same dish number everyday
 		htmlCode+=QString("</td>");
