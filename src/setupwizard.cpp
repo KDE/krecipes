@@ -131,8 +131,8 @@ passEdit->setEchoMode(QLineEdit::Password);
 // Connect Signals & slots
 
 connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoVGBox,SLOT(setEnabled(bool)));
-connect(rootCheckBox,SIGNAL(toggled(bool)),noSetupCheckBox,SLOT(rootCheckBoxChanged(bool)));
-connect(noSetupCheckBox,SIGNAL(toggled(bool)),rootCheckBox,SLOT(noSetupCheckBoxChanged(bool)));
+connect(rootCheckBox,SIGNAL(toggled(bool)),this,SLOT(rootCheckBoxChanged(bool)));
+connect(noSetupCheckBox,SIGNAL(toggled(bool)),this,SLOT(noSetupCheckBoxChanged(bool)));
 }
 void PermissionsSetupPage::rootCheckBoxChanged(bool on)
 {
