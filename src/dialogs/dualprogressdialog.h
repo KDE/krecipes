@@ -25,7 +25,7 @@ class QLabel;
   */
 class DualProgressDialog : public KProgressDialog
 {
-Q_OBJECT;
+        Q_OBJECT
 
 public:
 	DualProgressDialog( QWidget* parent = 0, const char* name = 0, const QString& caption = QString::null, const QString& text = QString::null, const QString &sub_text = QString::null, bool modal = false );
