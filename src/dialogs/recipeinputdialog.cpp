@@ -290,6 +290,8 @@ database=db;
     ingredientList->setMinimumSize(QSize(200,100));
     ingredientList->setMaximumSize(QSize(10000,10000));
     ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    ingredientList->setRenameable(1, true);
+    ingredientList->setDefaultRenameAction(QListView::Reject);
     ingredientsLayout->addMultiCellWidget(ingredientList,3,8,1,3);
 
     // ------- Recipe Instructions Tab -----------
@@ -349,6 +351,8 @@ database=db;
     connect(ingredientBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotIngredientBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
     connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
+    connect(ingredientList,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modIngredientAmount( QListViewItem* )));
+    connect(ingredientList,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveIngredientAmount( QListViewItem* )));
     	// Function buttons
     connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
     connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -684,6 +688,40 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
 }
 
 emit changed();
+}
+
+void RecipeInputDialog::modIngredientAmount( QListViewItem *it){
+  previousAmount = it->text(1);
+  ingredientList->rename(it, 1);
+}
+
+void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
+  bool ok;
+	int index=ingredientList->itemIndex(it);
+  Ingredient* ing = (loadedRecipe->ingList).at(index);
+  KConfig *config=kapp->config();
+  config->setGroup("Units");
+  if ( config->readEntry( "NumberFormat" ) == "Fraction" ){
+    MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
+    if(ok){
+      ing->amount = mn.toDouble();
+      it->setText(1, mn.toString());
+      emit changed();
+    }
+    else{
+      it->setText(1, previousAmount);
+    }
+  }
+  else{
+    MixedNumber mn = MixedNumber::fromString( it->text(1), &ok );
+    if(ok){
+      ing->amount = mn.toDouble();
+      emit changed();
+    }
+    else{
+      it->setText(1, previousAmount);
+    }
+  }
 }
 
 void RecipeInputDialog::recipeChanged(void)

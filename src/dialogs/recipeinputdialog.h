@@ -57,6 +57,7 @@ private:
 	RecipeDB *database;
 	bool changedSignalEnabled;
 	bool unsavedChanges;
+  QString previousAmount;
 
 	// Widgets
     QTabWidget* tabWidget;
@@ -131,6 +132,8 @@ private:
 	void moveIngredientDown(void);
 	void removeIngredient(void);
 	void addIngredient(void);
+  void modIngredientAmount( QListViewItem* );
+  void saveIngredientAmount( QListViewItem* );
 	void recipeChanged(void);
 	void recipeChanged(const QString &t);
 	void enableChangedSignal(bool en=true);
