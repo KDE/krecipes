@@ -412,8 +412,8 @@ servingsNumInput->setValue(loadedRecipe->persons);
 		KConfig *config=kapp->config();
 		config->setGroup("Units");
 		QString amount_str;
-		  #if defined(KDE_MAKE_VERSION)
-  		  # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+		#if defined(KDE_MAKE_VERSION)
+		#if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
      		   if ( config->readBoolEntry("Fraction"))
   		  # else
     		   if ( config->readEntry( "NumberFormat" ) == "Fraction" )
@@ -686,7 +686,7 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   QString amount_str;
   
   #if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+  # if KDE_VERSION >KDE_MAKE_VERSION(3,1,4)
      if ( config->readBoolEntry("Fraction"))
   # else
     if ( config->readEntry( "NumberFormat" ) == "Fraction" )
@@ -728,7 +728,7 @@ void RecipeInputDialog::saveIngredientAmount( QListViewItem *it){
   KConfig *config=kapp->config();
   config->setGroup("Units");
     #if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+  # if KDE_VERSION > KDE_MAKE_VERSION(3,1,4)
      if ( config->readBoolEntry("Fraction"))
   # else
     if ( config->readEntry( "NumberFormat" ) == "Fraction" )

@@ -16,6 +16,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include <qimage.h>
 
@@ -88,8 +89,17 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px;
     //Ingredients
 	KConfig *config=kapp->config();
 	config->setGroup("Units");
-	QString format = config->readEntry( "NumberFormat" );
-
+	QString format;
+	#if defined(KDE_MAKE_VERSION)
+  	# if KDE_VERSION >KDE_MAKE_VERSION(3,1,4)
+	if ( config->readBoolEntry("Fraction", false)) format="Fraction";
+	else format="Decimal";
+       # else
+	format = config->readEntry( "NumberFormat" );
+       # endif
+      #else
+       format = config->readEntry( "NumberFormat" );
+      #endif
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
        {
