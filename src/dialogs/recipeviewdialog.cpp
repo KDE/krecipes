@@ -71,14 +71,12 @@ SetupDisplay::createSetupIfNecessary();
 KConfig *config = kapp->config();
 config->setGroup("PhotoSetup");
 temp_photo_geometry = config->readRectEntry("Geometry");
-config->setGroup("BackgroundSetup");
-QRect pagegeometry=config->readRectEntry("Geometry");
 
-int width = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width());
-int height = temp_photo_geometry.height()/100.0*(((QWidget*)parent())->height())*((float)pagegeometry.height()/(float)pagegeometry.width())/((float)(((QWidget*)parent())->height())/(float)(((QWidget*)parent())->width()));
+int phwidth = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
+int phheight =temp_photo_geometry.height()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
 
 std::cerr<<"I got ("<<((QWidget*)parent())->width()<<","<<((QWidget*)parent())->height()<<") as parent's size\n";
-std::cerr<<"I got ("<<width<<","<<height<<") as size\n";
+std::cerr<<"I got ("<<phwidth<<","<<phheight<<") as size\n";
 
 QImage image;
 if (loadedRecipe->photo.isNull())
@@ -86,7 +84,7 @@ if (loadedRecipe->photo.isNull())
 else
 	image = loadedRecipe->photo.convertToImage();
 
-QPixmap pm = image.smoothScale(width, height, QImage::ScaleMin);
+QPixmap pm = image.smoothScale(phwidth, phheight, QImage::ScaleMin);
 pm.save("/tmp/krecipes_photo.png","PNG");
 temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 
@@ -395,7 +393,7 @@ void RecipeViewDialog::createBlocks()
 
 		element->addProperty( "position: absolute;" );
 		QWidget *p=(QWidget*)parent();
-		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->height())) );
+		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->width())) );
 		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
 		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
 		std::cerr<<"I got ("<<((QWidget*)parent())->width()<<","<<((QWidget*)parent())->height()<<") as parent's size\n";

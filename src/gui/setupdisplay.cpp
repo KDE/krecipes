@@ -57,13 +57,13 @@ void SetupDisplay::createSetupIfNecessary()
 	{
 		config->setGroup( "BackgroundSetup" );
 		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "Geometry", QRect(0,0,300,400) );
+		config->writeEntry( "Aspect",300.0/400.0); // Aspect ratio of the page
 	}
 
 	if ( !config->hasGroup("TitleSetup") )
 	{
 		config->setGroup( "TitleSetup" );
-		config->writeEntry( "Geometry", QRect(31,6,68,5) );
+		config->writeEntry( "Geometry", QRect(31,6,68,9) );
 		QFont font = kapp->font();
 		font.setBold( true );
 		font.setPointSize( font.pointSize() * 2 );
@@ -77,7 +77,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("InstructionsSetup") )
 	{
 		config->setGroup("InstructionsSetup");
-		config->writeEntry( "Geometry", QRect(31,28,68,60) );
+		config->writeEntry( "Geometry", QRect(31,35,68,91) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -88,7 +88,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("ServingsSetup") )
 	{
 		config->setGroup("ServingsSetup");
-		config->writeEntry( "Geometry", QRect(31,22,68,5) );
+		config->writeEntry( "Geometry", QRect(31,29,68,5) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -99,14 +99,14 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("PhotoSetup") )
 	{
 		config->setGroup("PhotoSetup");
-		config->writeEntry( "Geometry", QRect(0,0,28,15) );
+		config->writeEntry( "Geometry", QRect(0,0,29,22) );
 		config->writeEntry( "Visibility", true );
 	}
 
 	if ( !config->hasGroup("AuthorsSetup") )
 	{
 		config->setGroup("AuthorsSetup");
-		config->writeEntry( "Geometry", QRect(31,17,68,4) );
+		config->writeEntry( "Geometry", QRect(31,22,68,5) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -117,7 +117,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("CategoriesSetup") )
 	{
 		config->setGroup("CategoriesSetup");
-		config->writeEntry( "Geometry", QRect(31,12,68,4) );
+		config->writeEntry( "Geometry", QRect(31,16,68,5) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -139,7 +139,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("IngredientsSetup") )
 	{
 		config->setGroup("IngredientsSetup");
-		config->writeEntry( "Geometry", QRect(0,17,29,18) );
+		config->writeEntry( "Geometry", QRect(0,24,29,21) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", QColor(119,109,78) );
 		config->writeEntry( "TextColor", Qt::black );
@@ -150,7 +150,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("PropertiesSetup") )
 	{
 		config->setGroup("PropertiesSetup");
-		config->writeEntry( "Geometry", QRect(0,36,29,18) );
+		config->writeEntry( "Geometry", QRect(0,46,29,21) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
 		config->writeEntry( "TextColor", Qt::black );
@@ -175,13 +175,13 @@ QPoint newposition;
 	config->setGroup("BackgroundSetup");
  	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
 
-	QRect r=config->readRectEntry( "Geometry" );
-	m_size =r.size() ;
+
+	m_size =size() ;
 
 	//=========================TITLE=======================//
 	config->setGroup("TitleSetup");
 
-	r=config->readRectEntry( "Geometry" );toAbsolute(&r);
+	QRect r=config->readRectEntry( "Geometry" );toAbsolute(&r);
 	title_box->setGeometry(r);
 	title_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
 	title_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
@@ -461,7 +461,7 @@ void SetupDisplay::save()
 
 	config->setGroup( "BackgroundSetup" );
 	config->writeEntry( "BackgroundColor", backgroundColor() );
-	config->writeEntry( "Geometry", geometry() );
+	config->writeEntry( "Aspect", width()/height());
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
@@ -602,13 +602,17 @@ QSize scaledSize;
 QPoint scaledPoint;
 
 scaledSize.setWidth(r->width()/100.0*width());
-scaledSize.setHeight(r->height()/100.0*height());
+scaledSize.setHeight(r->height()/100.0*width());
 scaledPoint.setX(r->left()/100.0*width());
-scaledPoint.setY(r->top()/100.0*height());
+scaledPoint.setY(r->top()/100.0*width());
 r->setTopLeft(scaledPoint);
 r->setSize(scaledSize);
 
 }
+
+/*
+** Set in percentages respect to the width
+*/
 
 void SetupDisplay::toPercentage(QRect *r)
 {
@@ -616,9 +620,9 @@ QSize scaledSize;
 QPoint scaledPoint;
 
 scaledSize.setWidth(r->width()*100.0/width());
-scaledSize.setHeight(r->height()*100.0/height());
+scaledSize.setHeight(r->height()*100.0/width());
 scaledPoint.setX(r->left()*100.0/width());
-scaledPoint.setY(r->top()*100.0/height());
+scaledPoint.setY(r->top()*100.0/width());
 r->setTopLeft(scaledPoint);
 r->setSize(scaledSize);
 
