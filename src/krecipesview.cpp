@@ -119,6 +119,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 // Create Left and Right Panels (splitter)
 
 
+    il=new KIconLoader;
     leftPanel=new MenuGroup(splitter,"leftPanel");
     rightPanel=new QWidgetStack(splitter,"rightPanel");
     leftPanel->setMinimumWidth(22);
@@ -133,7 +134,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 
     // Design Left Panel
-    il=new KIconLoader;
     buttonsList = new QPtrList<MenuButton>();
     buttonsList->setAutoDelete( TRUE );
 
@@ -172,6 +172,32 @@ KrecipesView::KrecipesView(QWidget *parent)
 	  button6->setGeometry(2,182,146,30);
     buttonsList->append(button6);
 
+    contextButton = new QPushButton(leftPanel, "contextButton");
+    contextButton->setIconSet(il->loadIconSet("ktip", KIcon::Small, 32));
+    contextButton->setGeometry(112, 486, 32, 32);
+    contextButton->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextButton->setFlat(true);
+
+    contextHelp = new QWidget(leftPanel, "contextHelp");
+    contextHelp->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextHelp->hide();
+    QGridLayout* contextLayout = new QGridLayout( contextHelp, 0, 0, 0, 0);
+    contextTitle = new QLabel(contextHelp, "contextTitle");
+    contextTitle->setTextFormat(Qt::RichText);
+    contextLayout->addMultiCellWidget(contextTitle, 0, 0, 0, 2);
+    contextClose = new QPushButton(contextHelp, "contextClose");
+    contextClose->setFixedSize(QSize(16,16));
+    contextClose->setIconSet(il->loadIconSet("fileclose", KIcon::Small, 16));
+    contextClose->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextClose->setFlat(true);
+    contextLayout->addWidget(contextClose, 0, 2);
+    contextText = new KTextBrowser(contextHelp, "contextText");
+    contextText->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextText->setTextFormat(Qt::RichText);
+    contextText->setReadOnly(true);
+    contextText->setWordWrap(QTextEdit::WidgetWidth);
+    contextLayout->addMultiCellWidget(contextText, 1, 4, 0, 2);
+
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);rightPanel->addWidget(viewPanel);
@@ -196,8 +222,12 @@ KrecipesView::KrecipesView(QWidget *parent)
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
      connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
 
+     connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
+     connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
+     connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
 
     rightPanel->raiseWidget(selectPanel);
+    setContextHelp(SelectP);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
@@ -284,9 +314,9 @@ case DietWizardP: dietPanel->reload();
 case AuthorsP: authorsPanel->reload();
 	this->rightPanel->raiseWidget(authorsPanel);
 	break;
-
+case ContextHelp:
+  break;
 }
-
 }
 void KrecipesView::save(void)
 {
@@ -496,6 +526,8 @@ void KrecipesView::resizeButtons(){
     ++it;
   }
   logo->setGeometry(1, (leftPanel->height() - 298), 144, 296);
+  contextButton->setGeometry(leftPanel->width() - 34, leftPanel->height() - 34, 32, 32);
+  contextHelp->setGeometry(2, 2, leftPanel->width() - 4, leftPanel->height() - 4);
 }
 
 void KrecipesView::addRecipeButton(QWidget *w,QString title)
@@ -509,6 +541,10 @@ if (!recipeButton)
 	recipeButton->setGeometry(2,252,146,30);
 	recipeButton->setTitle(title);
 	recipeButton->resize((leftPanel->width())-4,30);
+  recipeButton->stackUnder(contextHelp);
+  if(contextHelp->isShown()){
+    contextHelp->hide();
+  }
 	recipeButton->show();
   buttonsList->append(recipeButton);
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
@@ -535,6 +571,36 @@ void KrecipesView::showRecipe(int recipeID)
 {
 viewPanel->loadRecipe(recipeID);
 rightPanel->raiseWidget(viewPanel);
+}
+
+void KrecipesView::setContextHelp(int action){
+  switch(action){
+    case SelectP:
+      contextTitle->setText(i18n("<b>Recipes list</b>"));
+      contextText->setText(i18n("Now we can add text for helping users<br><a href=\"http://krecipes.sourceforge.net\">http://krecipes.sourceforge.net</a>"));
+    break;
+    case ShoppingP:
+      contextTitle->setText(i18n("<b>Shopping list</b>"));
+    break;
+  case IngredientsP:
+      contextTitle->setText(i18n("<b>Ingredients list</b>"));
+    break;
+  case PropertiesP:
+      contextTitle->setText(i18n("<b>Properties list</b>"));
+    break;
+  case UnitsP:
+      contextTitle->setText(i18n("<b>Units list</b>"));
+    break;
+  case CategoriesP:
+      contextTitle->setText(i18n("<b>Categories list</b>"));
+    break;
+  case DietWizardP:
+      contextTitle->setText(i18n("<b>Diet Wizard</b>"));
+    break;
+  case AuthorsP:
+      contextTitle->setText(i18n("<b>Authors list</b>"));
+    break;
+  }
 }
 
 ////////////////// Class MenuButton Methods///////////////////

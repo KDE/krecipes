@@ -23,6 +23,7 @@
 #include <kparts/part.h>
 #include <krecipesiface.h>
 #include <kstyle.h>
+#include <ktextbrowser.h>
 
 #include "importers/baseimporter.h"
 #include "DBBackend/recipedb.h"
@@ -58,7 +59,7 @@ class QPainter;
  class MenuButton;
 
  // Some constants
- enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, DietWizardP=10};
+ enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, ContextHelp=7, DietWizardP=10};
 
 
  // Class KrecipesView
@@ -135,6 +136,11 @@ private:
 	MenuButton *button6;
 	MenuButton *button7;
   QLabel* logo;
+  QWidget* contextHelp;
+  QPushButton* contextButton;
+  QPushButton* contextClose;
+  QLabel* contextTitle;
+  KTextBrowser* contextText;
 
 	MenuButton *recipeButton;
 	QWidget *recipeWidget;
@@ -163,6 +169,7 @@ private slots:
     void slotSetPanel(int);
     void slotSetDietWizardPanel(void);
     void switchToRecipe(void);
+    void setContextHelp(int);
 
 };
 
