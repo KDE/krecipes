@@ -401,14 +401,11 @@ void RecipeViewDialog::createBlocks()
 		QWidget *p=(QWidget*)parent();
 
 
-		// Scale the objects
-
-		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->width())) );
-		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
-		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
-
 
 		// For those elements that have no fixed height (lists), calculate the height
+
+		int elementHeight=rect->height()/100.0*(p->width()); //Initialize with the current user settings
+
 		if ( !element->fixedHeight() )
 		{
 
@@ -431,13 +428,25 @@ void RecipeViewDialog::createBlocks()
 
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
-			int oldHeight=rect->height()/100.0*(p->width());
-			if (oldHeight>newHeight) newHeight=oldHeight; // Keep user's size if it's defined as bigger
-			element->addProperty(QString("height: %1px;").arg(newHeight));
-
+			if (newHeight>elementHeight) elementHeight=newHeight; // Keep user's size if it's defined as bigger
 
 			delete sizeCalculator;
 		}
+
+		rect->setHeight(ceil(elementHeight*100.0/(p->width()))); // set the new height to the element
+									 // Note that ceil is needed to avoid size
+									 // shrinking due to float->int conversion
+
+		// Move elements around if there's any overlapping
+
+		pushItemsDownIfNecessary( geometries, rect );
+
+		// Scale the objects to page size
+
+		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->width())) );
+		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
+		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
+		element->addProperty(QString("height: %1px;").arg(rect->height()/100.0*(p->width())));
 	}
 }
 
