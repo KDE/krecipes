@@ -13,13 +13,15 @@
 #include <qevent.h>
 #include <qtooltip.h>
 #include <qbitmap.h>
+#include <qwidgetstack.h>
 
 #include <kiconloader.h>
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
+#include <kimageeffect.h>
 #include <kparts/part.h>
 #include <krecipesiface.h>
-#include <qwidgetstack.h>
+#include <kstyle.h>
 
 #include "importers/baseimporter.h"
 #include "DBBackend/recipedb.h"
@@ -172,10 +174,12 @@ Q_OBJECT
 public:
 	MenuButton(QWidget *parent,const char *name=0);
 	~MenuButton();
+ QPixmap* icon; // icon
 
 public slots:
 	void setTitle(const QString &title);
-  void fade();
+  void drawButton( QPainter * );
+  void setIconSet( QIconSet );
   void enterEvent( QEvent * );
   void leaveEvent( QEvent * );
   void focusInEvent( QFocusEvent * );

@@ -439,9 +439,8 @@ void KrecipesView::resizeButtons(){
   QPtrListIterator<MenuButton> it( *buttonsList);	// iterate over menu buttons
   MenuButton *bt;
   while ( (bt = it.current()) != 0 ){
-    bt->resize(leftPanel->width(), 30);
+    bt->resize((leftPanel->width())-1, 30);
     bt->repaint();
-    bt->fade();
     ++it;
   }
 }
@@ -456,7 +455,7 @@ if (!recipeButton)
 	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("filesave",KIcon::Small));
 	recipeButton->setGeometry(0,250,150,30);
 	recipeButton->setTitle(title);
-	recipeButton->resize(leftPanel->width(),30);
+	recipeButton->resize((leftPanel->width())-1,30);
 	recipeButton->show();
   buttonsList->append(recipeButton);
 	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
@@ -500,32 +499,49 @@ void MenuButton::setTitle(const QString &title)
 }
 
 void MenuButton::enterEvent( QEvent * ){
-  fade();
 }
 
 void MenuButton::leaveEvent( QEvent * ){
-  fade();
 }
 
 void MenuButton::focusInEvent( QFocusEvent * ){
   repaint();
-  fade();
 }
 
 void MenuButton::focusOutEvent( QFocusEvent * ){
   repaint();
-  fade();
 }
 
-void MenuButton::fade(){
-    int w = width();
-    int h = height();
-    KPixmap img1 = KPixmap(QSize(w/4, h-4));
-    QBitmap bm( QSize( w/4, h-4 ) );
-    bm = KPixmapEffect::gradient( img1, Qt::white, Qt::black, KPixmapEffect::HorizontalGradient, 0 );
-    img1.fill(this->paletteBackgroundColor());
-    img1.setMask( bm );
-    bitBlt(this,3*w/4,2,&img1,0,Qt::CopyROP);
+void MenuButton::setIconSet(QIconSet i){
+  icon = new QPixmap(i.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
+}
+
+void MenuButton::drawButton( QPainter *p ){
+    QPixmap* pm( (QPixmap*)p->device() );
+    KPixmap pn;
+    QFont font( KGlobalSettings::generalFont() );
+    KStyle* s = new KStyle();
+
+    s->drawControl( QStyle::CE_PushButton, p, this, QRect(0,0,width(),height()), colorGroup() );
+    s->drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup() );
+    s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
+    pn = *pm;
+    QPixmap tmp(size());
+    tmp.fill(Qt::white);
+    QImage gradient = tmp.convertToImage();
+    QImage grad = KImageEffect::gradient (QSize(width()/2, height()), Qt::white, Qt::black, KImageEffect::HorizontalGradient, 65536);
+    bitBlt(&gradient, width()/2, 0, &grad, 0, Qt::CopyROP);
+
+    s->drawItem(p, QRect(22, 0, width()-22, height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, 0, text());
+    if(hasFocus()){
+      s->drawPrimitive( QStyle::PE_FocusRect, p, s->subRect(QStyle::SR_PushButtonFocusRect, this), colorGroup() );
+    }
+
+    QImage src = pm->convertToImage();
+    QImage blend = pn.convertToImage();
+    QImage button = KImageEffect::blend (src, blend, gradient, KImageEffect::Red);
+
+    bitBlt(pm, 0, 0, &button, 0, Qt::CopyROP);
 }
 
 #include "krecipesview.moc"
