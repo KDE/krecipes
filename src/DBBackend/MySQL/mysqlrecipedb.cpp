@@ -1057,6 +1057,13 @@ if (version<0.4)  // Upgrade to DB version 0.4
 	command="ALTER TABLE ingredient_list ADD COLUMN order_index int(11) AFTER unit_id;";
 	QSqlQuery tableToAlter(command,database);
 
+	// Missing indexes in the previous versions
+	command="CREATE index rid_index ON category_list(recipe_id)"
+	QSqlQuery tableToAlter(command,database);
+
+	command="CREATE index cid_index ON category_list(category_id)"
+	QSqlQuery tableToAlter(command,database);
+
 	// Set the version to the new one (0.4)
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
