@@ -88,14 +88,15 @@ logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 layout->addMultiCellWidget(logo,1,8,1,1);
 
 // root checkbox
-QCheckBox *rootCheckBox=new QCheckBox(i18n("I already have a MySQL root/admin account set"),this,"rootCheckBox");
+rootCheckBox=new QCheckBox(i18n("I already have a MySQL root/admin account set"),this,"rootCheckBox");
 layout->addWidget(rootCheckBox,1,2);
 
 QSpacerItem *rootInfoSpacer=new QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Fixed);
 layout->addItem(rootInfoSpacer,2,2);
 
 // MySQL root/admin info
-QVGroupBox *rootInfoVGBox=new QVGroupBox(this); rootInfoVGBox->setTitle(i18n("MySQL root info"));
+QVGroupBox *rootInfoVGBox=new QVGroupBox(this,"rootInfoVGBox"); rootInfoVGBox->setTitle(i18n("MySQL root info"));
+rootInfoVGBox->setEnabled(false); // Disable by default
 rootInfoVGBox->setInsideSpacing(10);
 layout->addWidget(rootInfoVGBox,3,2);
 
@@ -110,6 +111,11 @@ userEdit=new KLineEdit(userBox);
 // Password Entry
 QLabel *passLabel=new QLabel(passBox); passLabel->setText(i18n("Password:"));
 passEdit=new KLineEdit(passBox);
+
+// Connect Signals & slots
+
+connect(rootCheckBox,SIGNAL(toggled(bool)),rootInfoVGBox,SLOT(setEnabled(bool)));
+
 }
 
 ServerSetupPage::ServerSetupPage(QWidget *parent):QWidget(parent)

@@ -64,6 +64,7 @@ public:
 
 private:
 	// Widgets
+	QCheckBox *rootCheckBox;
 	QLabel *logo;
 	QLineEdit *userEdit;
 	QLineEdit *passEdit;
@@ -81,7 +82,6 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
-	QCheckBox *rootCheckBox;
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
