@@ -1,3 +1,9 @@
+Changes from 0.6 to 0.6.1:
+  -For the SQLite backend, fix a bug in storing certain pictures
+  -Unbreak for Qt < 3.2
+  -Reset prep time when creating a new recipe after editing another
+  -Insert missing i18n
+
 Changes from 0.5 to 0.6:
   -Support for subcategories
   -Preparation time field for recipes
