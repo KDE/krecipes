@@ -580,6 +580,21 @@ void KrecipesView::wizard( bool force )
 				}
 			}
 
+			//we can do a faster usda import if this is done after it
+			if ( initData ) {
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+				if ( db ) {
+					db->connect();
+
+					if ( db->ok() ) {
+						db->importSamples();
+					}
+
+					//close the database whether ok() or not
+					delete db;
+				}
+			}
+
 		}
 		delete setupWizard;
 	}

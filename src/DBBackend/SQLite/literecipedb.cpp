@@ -923,9 +923,6 @@ void LiteRecipeDB::initializeData( void )
 	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it ) {
 		database->executeQuery( ( *it ) + QString( ";" ) ); //Split removes the semicolons
 	}
-
-	//now import samples
-	importSamples();
 }
 
 void LiteRecipeDB::addProperty( const QString &name, const QString &units )

@@ -153,7 +153,7 @@ void RecipeDB::importSamples()
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int, QString> * );
 int createUnit( const QString &name, RecipeDB* );
-int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB* );
+int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*, bool do_checks );
 void create_properties( RecipeDB* );
 
 void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
@@ -210,6 +210,18 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 		progress->setTotalSteps( data->count() );
 	}
 
+	//if there is no data in the database, we can really speed this up with this
+	bool do_checks = true;
+	{
+		ElementList ing_list;
+		loadIngredients( &ing_list );
+
+		if ( ing_list.count() == 0 ) {
+			kdDebug()<<"Found an empty database... enabling fast nutrient import"<<endl;
+			do_checks = false;
+		}
+	}
+
 	//since there are only two units used, lets just create them and store their id for speed
 	int unit_g_id = createUnit( "g", this );
 	int unit_mg_id = createUnit( "mg", this );
@@ -228,12 +240,12 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 				break;
 		}
 
-		int assigned_id = createIngredient( ( *it ).name, unit_g_id, unit_mg_id, this );
+		int assigned_id = createIngredient( ( *it ).name, unit_g_id, unit_mg_id, this, do_checks );
 
 		//for now, only check if there is any info on the ingredient to see whether or not we will import this data,
 		//because checking to see that each property exists is quite slow
 		IngredientPropertyList ing_properties;
-		loadProperties( &ing_properties, assigned_id );
+		if ( do_checks ) loadProperties( &ing_properties, assigned_id );
 		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
 			QValueList<double>::iterator property_it;
@@ -245,7 +257,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 
 	delete data;
 
-	kdDebug() << "USDA SR 16 data import successful" << endl;
+	kdDebug() << "USDA data import successful" << endl;
 }
 
 void getIngredientNameAndID( std::multimap<int, QString> *data )
@@ -254,19 +266,21 @@ void getIngredientNameAndID( std::multimap<int, QString> *data )
 		data->insert( std::make_pair( ingredient_data_list[ i ].usda_id, ingredient_data_list[ i ].name ) );
 }
 
-int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database )
+int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database, bool do_checks )
 {
-	int assigned_id = database->findExistingIngredientByName( name );
+	int assigned_id = -1;
+	if ( do_checks )
+		assigned_id = database->findExistingIngredientByName( name );
 
 	if ( assigned_id == -1 ) {
 		database->createNewIngredient( name );
 		assigned_id = database->lastInsertID();
 	}
 
-	if ( !database->ingredientContainsUnit( assigned_id, unit_g_id ) )
+	if ( !do_checks || !database->ingredientContainsUnit( assigned_id, unit_g_id ) )
 		database->addUnitToIngredient( assigned_id, unit_g_id );
 
-	if ( !database->ingredientContainsUnit( assigned_id, unit_mg_id ) )
+	if ( !do_checks || !database->ingredientContainsUnit( assigned_id, unit_mg_id ) )
 		database->addUnitToIngredient( assigned_id, unit_mg_id );
 
 	return assigned_id;
