@@ -9,8 +9,10 @@ uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
 
 planned for 0.5:
-	*Show also almost complete recipes in the ingredient match dialog, and add the possibility to check amounts too
 	*remote database recipe importing (multiple databases open and recipe transfer)
-
+	
+planned for 0.6:
+	*Step-by-Step recipe instructions with photos
+	*Check ingredients from existing kitchen resource table? Check amounts in the ingredient matcher?
 
 
