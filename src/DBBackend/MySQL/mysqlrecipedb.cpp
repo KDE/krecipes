@@ -532,7 +532,7 @@ QSqlQuery initializeQuery(command,database);
 
 	// Read the commands form the structure file
 	QString commands;
-	QFile file (KGlobal::dirs()->findResource("appdata", "data/structure.sql"));
+	QFile file (KGlobal::dirs()->findResource("appdata", "data/mysqlstructure.sql"));
 	if ( file.open( IO_ReadOnly ) ) {
 	QTextStream stream( &file );
      	commands=stream.read();

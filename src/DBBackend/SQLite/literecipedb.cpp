@@ -558,7 +558,7 @@ void LiteRecipeDB::initializeDB(void)
 
 	// Read the commands form the structure file
 	QString commands;
-	QFile file (KGlobal::dirs()->findResource("appdata", "data/structure.sql"));
+	QFile file (KGlobal::dirs()->findResource("appdata", "data/litestructure.sql"));
 	if ( file.open( IO_ReadOnly ) ) {
 	QTextStream stream( &file );
      	commands=stream.read();
