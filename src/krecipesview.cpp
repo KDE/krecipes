@@ -610,21 +610,11 @@ if (doUSDAImport)
 		db = new LiteRecipeDB(QString::null);
 	#endif //HAVE_SQLITE
 	
-	
-	// Now import the data and close the database
-	if (0){}
-	
-	#if HAVE_MYSQL
-	else if (dbtype=="MySQL")
-		db = new MySQLRecipeDB(host,dbName,user,pass);
-	#endif //HAVE_MYSQL
-	#if HAVE_SQLITE
-	else if (dbtype=="SQLite")
-		db = new LiteRecipeDB(QString::null);
-	#endif //HAVE_SQLITE
+	// Import the data
 	 
-	if (db && db->ok()) db->importUSDADatabase(); // Import the data
+	if (db && db->ok()) db->importUSDADatabase();
 	
+	// Close the database
 	if (0){}
 	
 	#if HAVE_MYSQL
