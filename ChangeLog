@@ -1,4 +1,5 @@
 Changes from 0.7 to 0.7.1:
+  -Partial Swedish translation of the Krecipes Handbook
   -Portuguese Handbook is now properly installed
   -Minor Handbook updates
   -Fix a Meal-Master import bug where in certain instances, ingredient lines were interpreted as instructions
