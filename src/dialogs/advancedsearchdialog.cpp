@@ -125,10 +125,12 @@ void DualAuthorListView::createAuthor(const Element &ing)
 
 void DualAuthorListView::removeAuthor(int id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QCheckListItem *item = (QCheckListItem*)findItem(QString::number(id),1);
 	
 	Q_ASSERT(item);
-	
+
+	negativeMap.remove(item);
+	positiveMap.remove(item);
 	delete item;
 }
 
@@ -170,7 +172,7 @@ void DualIngredientListView::change(int index)
 		map_to_load = &negativeMap;
 		map_to_store = &positiveMap;
 	}
-	
+
 	updateMaps(map_to_load,map_to_store,this);
 	
 	last_state = index;
@@ -193,10 +195,12 @@ void DualIngredientListView::createIngredient(const Element &ing)
 
 void DualIngredientListView::removeIngredient(int id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QCheckListItem *item = (QCheckListItem*)findItem(QString::number(id),1);
 	
 	Q_ASSERT(item);
-	
+
+	negativeMap.remove(item);
+	positiveMap.remove(item);
 	delete item;
 }
 
@@ -272,10 +276,12 @@ void DualCategoryListView::createCategory(const Element &category,int parent_id)
 
 void DualCategoryListView::removeCategory(int id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QCheckListItem *item = (QCheckListItem*)findItem(QString::number(id),1);
 	
 	Q_ASSERT(item);
-	
+
+	negativeMap.remove(item);
+	positiveMap.remove(item);
 	delete item;
 }
 
