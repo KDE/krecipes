@@ -15,7 +15,10 @@ KStartupLogo::KStartupLogo( QWidget * parent, const char *name ) : QWidget( pare
 	QString dataDir = locate( "data", "krecipes/pics/startlogo.png" );
 	QPixmap pm( dataDir );
 	setBackgroundPixmap( pm );
-	setGeometry( QApplication::desktop() ->width() / 2 - pm.width() / 2, QApplication::desktop() ->height() / 2 - pm.height() / 2, pm.width(), pm.height() );
+
+	resize(pm.size());
+	QRect scr = QApplication::desktop()->screenGeometry();
+	move( scr.center() - rect().center() );
 }
 
 KStartupLogo::~KStartupLogo()
