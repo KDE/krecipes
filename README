@@ -1,1 +1,35 @@
+Krecipes is a Recipe Book for KDE. It requires at least KDE 3.1 or greater (and Qt 3.1 or greater)
+
+
+First of all, make sure you have at least one of the two necessary databases installed: SQLite or MySQL. In case you decide to use MySQL, make sure also that you have Qt's MySQL plugin properly installed. The program won't work without database support.
+ 
+**  Building The Latest (alpha 0.4.1) Release
+ 
+ Just untar the package first:
+ 
+ tar -zxf krecipes_alpha_0.4.1.tar.gz
+ 
+ And compile (see ./configure --help for more compile options like '--prefix' and '--with-qt-dir')
+ 
+ ./configure
+ make
+ make install
+ 
+ 
+** Downloading And Compiling Through CVS
+ 
+ The project is now being developed under the module kdenonbeta in KDE's servers. 
+
+Please notice that this application is still in early and heavy development. If you want to give it a try, do it at your own risk.
+
+
+ 
+ To download the package, do:
+ 
+ export CVSROOT=:pserver:anonymous@anoncvs.kde.org:/home/kde
+ cvs login (When prompted for the password just type return)
+ cvs co -l kdenonbeta
+ cvs co kdenonbeta/krecipes
+ cvs co kde-common
+ ln -s ../kde-common/admin kdenonbeta/
 
