@@ -1221,6 +1221,7 @@ else return (0.2); // if table is empty, assume oldest (0.2), and port
 
 void MySQLRecipeDB::loadCategories(ElementList *list)
 {
+list->clear();
 QString command="SELECT * FROM categories ORDER BY name;";
 QSqlQuery categoryToLoad(command,database);
 if (categoryToLoad.isActive()) {

@@ -1315,6 +1315,7 @@ else return(0.31); // By default go for oldest (0.4) // FIXME: put 0.4 here for 
 
 void LiteRecipeDB::loadCategories(ElementList *list)
 {
+list->clear();
 QString command="SELECT * FROM categories ORDER BY name;";
 QSQLiteResult categoryToLoad=database->executeQuery(command);
 if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
