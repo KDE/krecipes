@@ -320,7 +320,7 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 
 				if ( time_tagName == "qty" )
 					qty = time_el.text().toInt();
-				else if ( time_tagName = "timeunit" )
+				else if ( time_tagName == "timeunit" )
 					timeunit = time_el.text();
 				else
 					kdDebug()<<"Unknown tag within <time>: "<<time_tagName<<endl;
