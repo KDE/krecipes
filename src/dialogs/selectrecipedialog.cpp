@@ -61,12 +61,15 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 	openButton=new QPushButton(buttonBar);
 	openButton->setText(i18n("Open Recipe"));
+  openButton->setDisabled(true);
 	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setIconSet(pm);
 	editButton=new QPushButton(buttonBar);
 	editButton->setText(i18n("Edit Recipe"));
+  editButton->setDisabled(true);
 	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setIconSet(pm);
 	removeButton=new QPushButton(buttonBar);
 	removeButton->setText(i18n("Delete"));
+  removeButton->setDisabled(true);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
@@ -76,11 +79,15 @@ loadRecipeList();
 // Signals & Slots
 
 connect(openButton,SIGNAL(clicked()),this, SLOT(open()));
+connect(this,SIGNAL(recipeSelected(bool)),openButton, SLOT(setEnabled(bool)));
 connect(editButton,SIGNAL(clicked()),this, SLOT(edit()));
+connect(this,SIGNAL(recipeSelected(bool)),editButton, SLOT(setEnabled(bool)));
 connect(removeButton,SIGNAL(clicked()),this, SLOT(remove()));
+connect(this,SIGNAL(recipeSelected(bool)),removeButton, SLOT(setEnabled(bool)));
 connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const QString&)));
 connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 connect(recipeListView,SIGNAL(selectionChanged()),this, SLOT(haveSelectedItems()));
+connect(recipeListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(open()));
 }
 
 
@@ -137,18 +144,20 @@ filter(searchBox->text());
 void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),0);
+it=recipeListView->selectedItem();
+if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),0);
 }
 void SelectRecipeDialog::edit(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),1);
+it=recipeListView->selectedItem();
+if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),1);
 }
 void SelectRecipeDialog::remove(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),2);
-
+it=recipeListView->selectedItem();
+if ( it != 0 && !it->firstChild() ) emit recipeSelected(it->text(1).toInt(),2);
 }
 
 void SelectRecipeDialog::reload()
@@ -190,7 +199,7 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 void SelectRecipeDialog::exportRecipe()
 {
   if((recipeListView->selectedItem())->text(1) != NULL){
-    KFileDialog* fd = new KFileDialog("", "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
+    KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
     QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
       KreExporter* kre = new KreExporter(database, (recipeListView->selectedItem())->text(1).toInt(), fileName, fd->currentFilter());
@@ -200,7 +209,7 @@ void SelectRecipeDialog::exportRecipe()
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
-  if(recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() ){
+  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() ){
     emit recipeSelected(true);
   }
   else{
