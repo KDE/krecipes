@@ -124,6 +124,8 @@ void UnitsDialog::saveUnit(QListViewItem* i)
   database->modUnit((i->text(0)).toInt(), i->text(1));
   newUnitButton->setEnabled(true);
   removeUnitButton->setEnabled(true);
+  
+  loadConversionTable(); //apply the change to the table...TODO: is there a way to only rename the column and row labels on the table?
 }
 
 void UnitsDialog::removeUnit(void)
