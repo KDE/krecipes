@@ -362,13 +362,26 @@ void SetupWizard::save(void)
 {
 KConfig *config=kapp->config();
 
-// Save the server data
+// Save the database type
+QString sDBType;
+
+if (dbTypeSetupPage->dbType()==DBTypeSetupPage::MySQL)
+	sDBType="MySQL";
+else
+	sDBType="SQLite";
+
+config->setGroup("DBType");
+config->writeEntry("Type",sDBType);
+
+// Save the server data if needed
+if (!(dbTypeSetupPage->dbType()==DBTypeSetupPage::SQLite))
+{
 config->setGroup("Server");
 config->writeEntry("Host",serverSetupPage->server());
 config->writeEntry("Username",serverSetupPage->user());
 config->writeEntry("Password",serverSetupPage->password());
 config->writeEntry("DBName",serverSetupPage->dbName());
-
+}
 // Indicate that settings were already made
 
 config->setGroup("Wizard");
@@ -487,7 +500,15 @@ bg->setButton(0);
 QSpacerItem *spacer_bottom=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 layout->addItem(spacer_bottom,4,3);
 
-// Signals & Slots
 }
 
+int DBTypeSetupPage::dbType(void)
+{
+int id=bg->selectedId();
 
+if (id==1) // MySQL (note index=0,1....)
+	 return (MySQL);
+else
+	return(SQLite);
+
+}

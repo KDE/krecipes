@@ -139,6 +139,8 @@ private:
 
 class DBTypeSetupPage:public QWidget{
 public:
+
+enum DBType {SQLite,MySQL};
 	// Methods
 	DBTypeSetupPage(QWidget *parent);
 	int dbType(void);
