@@ -26,15 +26,34 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addMultiCell(spacer_top,0,0,1,4);
 
+
     propertyListView=new KListView (this);
     layout->addMultiCellWidget (propertyListView,1,4,1,6);
     propertyListView->addColumn("Id");
     propertyListView->addColumn("Property");
     propertyListView->addColumn("Units");
+    QSpacerItem* spacer_toButtons = new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+    layout->addItem(spacer_toButtons,1,7);
+    addPropertyButton=new QPushButton(this);
+    addPropertyButton->setText("+");
+    addPropertyButton->setFixedSize(QSize(32,32));
+    addPropertyButton->setFlat(true);
+    layout->addWidget(addPropertyButton,1,8);
+    QSpacerItem* spacer_betweenButtons = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+    layout->addItem(spacer_betweenButtons,2,7);
+    removePropertyButton=new QPushButton(this);
+    removePropertyButton->setText("-");
+    removePropertyButton->setFixedSize(QSize(32,32));
+    removePropertyButton->setFlat(true);
+    layout->addWidget(removePropertyButton,3,8);
+
 
     // Populate UI with data
     reloadPropertyList();
 
+    // Connect signals & slots
+    connect(addPropertyButton,SIGNAL(clicked()),this,SLOT(createNewProperty()));
+    connect(removePropertyButton,SIGNAL(clicked()),this,SLOT(removeProperty()));
 }
 
 
@@ -73,5 +92,18 @@ database->loadProperties(propertyList);
 
 
 	}
+
+}
+
+void PropertiesDialog::removeProperty(void)
+{
+int propertyID;
+QListViewItem *it;
+if (it=propertyListView->selectedItem())
+{
+propertyID=it->text(0).toInt();
+}
+database->removeProperty(propertyID);
+
 
 }

@@ -352,14 +352,15 @@ void IngredientsDialog::removePropertyFromIngredient(void)
 
 // Find selected ingredient/property item combination
 QListViewItem *it;
-int ingredientID=-1, propertyID=-1;
+int ingredientID=-1, propertyID=-1; int perUnitsID=-1;
 if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
 if (it=propertiesListView->selectedItem()) propertyID=it->text(0).toInt();
+if (propertyID>=0) perUnitsID=perUnitListBack->getElement(findPropertyNo(it))->id ;
 
-if ((ingredientID>=0)&&(propertyID>=0)) // an ingredient/property combination was selected previously
+if ((ingredientID>=0)&&(propertyID>=0) && (perUnitsID>=0)) // an ingredient/property combination was selected previously
 {
   ElementList results;
-  database->removePropertyFromIngredient(ingredientID,propertyID);
+  database->removePropertyFromIngredient(ingredientID,propertyID,perUnitsID);
 
 reloadPropertyList(); // Reload the list from database
 

@@ -21,10 +21,13 @@
 @author Unai Garro
 */
 class PropertiesDialog:public QWidget{
+Q_OBJECT
 public:
     PropertiesDialog(QWidget *parent,RecipeDB *db);
     ~PropertiesDialog();
+public slots:
     void createNewProperty(void);
+    void removeProperty(void);
 private:
   // Variables
     RecipeDB *database;
