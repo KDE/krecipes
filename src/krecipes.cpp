@@ -123,16 +123,9 @@ void Krecipes::dragEnterEvent(QDragEnterEvent *event)
 
 void Krecipes::fileNew()
 {
-    // this slot is called whenever the File->New menu is selected,
-    // the New shortcut is pressed (usually CTRL+N) or the New toolbar
-    // button is clicked
 
-    // create a new window
-    //(new Krecipes)->show();
-
-
-    // Create a new recipe
-    m_view->createNewRecipe();
+    // Create a new element (Element depends on active panel. New recipe by default)
+    m_view->createNewElement();
 }
 
 void Krecipes::fileOpen()

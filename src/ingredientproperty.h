@@ -7,36 +7,28 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef PROPERTIESDIALOG_H
-#define PROPERTIESDIALOG_H
+#ifndef INGREDIENTPROPERTY_H
+#define INGREDIENTPROPERTY_H
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qvbox.h>
-#include <klistview.h>
-#include "recipedb.h"
-#include "createpropertydialog.h"
+#include <qstring.h>
+#include "element.h"
 
 /**
 @author Unai Garro
 */
-class PropertiesDialog:public QWidget{
+class IngredientProperty{
 public:
-    PropertiesDialog(QWidget *parent,RecipeDB *db);
-    ~PropertiesDialog();
-    void createNewProperty(void);
-private:
-  // Variables
-    RecipeDB *database;
-    IngredientPropertyList *propertyList;
-  // Widgets
-    QGridLayout* layout;
-    QPushButton* addPropertyButton;
-    QPushButton* removePropertyButton;
-    KListView* propertyListView;
+    IngredientProperty();
 
-  // Methods
-  void reloadPropertyList(void);
+    ~IngredientProperty();
+    int id;
+    QString name;
+    QString units;
+    Element perUnit; // stores the unit ID and Name
+    double amount; // Stores the amount, in the case of being attached to an ingredient, otherwise you can set it to -1 preferably.
+
+
+
 };
 
 #endif

@@ -51,18 +51,19 @@ KrecipesView::KrecipesView(QWidget *parent)
         boton3->setGeometry(0,60,130,30);
     boton4=new QPushButton(leftPanel); boton4->setFlat(true); boton4->setText("Edit Ingredients");
         boton4->setGeometry(0,90,130,30);
-
+    boton5=new QPushButton(leftPanel); boton5->setFlat(true); boton5->setText("Edit Property List");
+	boton5->setGeometry(0,120,130,30);
     // Right Panel Widgets
-    boton5=new QPushButton(rightPanel); boton5->setFlat(true); boton5->setText("First");
-    inputPanel=new RecipeInputDialog(rightPanel,database);
-    viewPanel=new RecipeViewDialog(rightPanel,database,1);
-    selectPanel=new SelectRecipeDialog(rightPanel,database);
-    ingredientsPanel=new IngredientsDialog(rightPanel,database);
+    inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
+    viewPanel=new RecipeViewDialog(rightPanel,database,1);rightPanel->addWidget(viewPanel);
+    selectPanel=new SelectRecipeDialog(rightPanel,database);rightPanel->addWidget(selectPanel);
+    ingredientsPanel=new IngredientsDialog(rightPanel,database);rightPanel->addWidget(ingredientsPanel);
+    propertiesPanel=new PropertiesDialog(rightPanel,database);rightPanel->addWidget(propertiesPanel);
 
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
 
-    rightPanel->raiseWidget(boton5);
+    rightPanel->raiseWidget(viewPanel);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
@@ -105,6 +106,8 @@ case 2: this->rightPanel->raiseWidget(inputPanel);
 	break;
 case 3: this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
+case 4: this->rightPanel->raiseWidget(propertiesPanel);
+	break;
 }
 
 }
@@ -139,6 +142,17 @@ void KrecipesView::createNewRecipe(void)
 {
 inputPanel->newRecipe();
 rightPanel->raiseWidget(inputPanel);
+}
+
+void KrecipesView::createNewElement(void)
+{
+if (rightPanel->id(rightPanel->visibleWidget())==4) //Properties Panel is the active one
+{
+propertiesPanel->createNewProperty();
+}
+else{
+  createNewRecipe();
+  }
 }
 
 

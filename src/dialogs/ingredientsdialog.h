@@ -19,6 +19,7 @@
 #include "recipedb.h"
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
+#include "ingredientpropertylist.h"
 
 /**
 @author Unai Garro
@@ -41,26 +42,27 @@ private:
     QPushButton* removeUnitButton;
     KListView* ingredientListView;
     KListView* unitsListView;
-    KListView* characteristicsListView;
+    KListView* propertiesListView;
     QPushButton* pushButton5;
 
 
   // Internal Methods
   void reloadIngredientList(void);
-  void reloadPossibleUnitList(int recipeID);
-
+  void reloadUnitList(void);
+  void reloadPropertyList(void);
   // Internal Variables
   RecipeDB *database;
   ElementList *ingredientList;
   ElementList *unitList;
+  IngredientPropertyList *propertiesList;
 
 
   private slots:
-    void updateUnitList(void);
     void addIngredient(void);
     void addUnitToIngredient(void);
     void removeUnitFromIngredient(void);
     void removeIngredient(void);
+    void updateLists(void);
 
 
 

@@ -18,6 +18,7 @@
 #include "recipeviewdialog.h"
 #include "selectrecipedialog.h"
 #include "ingredientsdialog.h"
+#include "propertiesdialog.h"
 
 class QPainter;
 
@@ -70,9 +71,11 @@ public:
 	RecipeViewDialog *viewPanel;
 	SelectRecipeDialog *selectPanel;
 	IngredientsDialog *ingredientsPanel;
+	PropertiesDialog *propertiesPanel;
 
 	// public methods
 	void createNewRecipe(void);
+	void createNewElement(void);
 
 private:
 

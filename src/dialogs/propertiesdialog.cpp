@@ -9,11 +9,14 @@
  ***************************************************************************/
 #include "propertiesdialog.h"
 
-PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
+PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
 
     // Store pointer to database
     database=db;
+
+    // Initialize internal variables
+    propertyList=new IngredientPropertyList;
 
     // Design dialog
 
@@ -29,6 +32,9 @@ PropertiesDialog::PropertiesDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
     propertyListView->addColumn("Property");
     propertyListView->addColumn("Units");
 
+    // Populate UI with data
+    reloadPropertyList();
+
 }
 
 
@@ -36,4 +42,36 @@ PropertiesDialog::~PropertiesDialog()
 {
 }
 
+void PropertiesDialog::createNewProperty(void)
+{
+ElementList list;
+database->loadUnits(&list);
+CreatePropertyDialog* propertyDialog=new CreatePropertyDialog(&list);
 
+if ( propertyDialog->exec() == QDialog::Accepted ) {
+   QString name = propertyDialog->newPropertyName();
+   QString units= propertyDialog->newUnitsName();
+   int perUnits= propertyDialog->perUnits();
+   if (!((perUnits<0) || (name.isNull()) || (units.isNull()))) // Make sure none of the fields are empty
+      database->addProperty(name, units, perUnits);
+}
+delete propertyDialog;
+
+reloadPropertyList();
+}
+
+void PropertiesDialog::reloadPropertyList(void)
+{
+propertyList->clear(); // Empty list
+propertyListView->clear(); // Clear the view
+database->loadProperties(propertyList);
+
+//Populate this data into the KListView
+	for ( IngredientProperty *prop =propertyList->getFirst(); prop; prop =propertyList->getNext() )
+	{
+	QListViewItem *it= new QListViewItem(propertyListView,QString::number(prop->id),prop->name,prop->units+QString("/")+prop->perUnit.name );
+
+
+	}
+
+}

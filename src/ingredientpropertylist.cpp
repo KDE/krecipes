@@ -7,36 +7,42 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef PROPERTIESDIALOG_H
-#define PROPERTIESDIALOG_H
+#include "ingredientpropertylist.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qvbox.h>
-#include <klistview.h>
-#include "recipedb.h"
-#include "createpropertydialog.h"
+IngredientPropertyList::IngredientPropertyList()
+{
+}
 
-/**
-@author Unai Garro
-*/
-class PropertiesDialog:public QWidget{
-public:
-    PropertiesDialog(QWidget *parent,RecipeDB *db);
-    ~PropertiesDialog();
-    void createNewProperty(void);
-private:
-  // Variables
-    RecipeDB *database;
-    IngredientPropertyList *propertyList;
-  // Widgets
-    QGridLayout* layout;
-    QPushButton* addPropertyButton;
-    QPushButton* removePropertyButton;
-    KListView* propertyListView;
 
-  // Methods
-  void reloadPropertyList(void);
-};
+IngredientPropertyList::~IngredientPropertyList()
+{
+}
 
-#endif
+void IngredientPropertyList::add(IngredientProperty &property)
+{
+list.append (new IngredientProperty(property));
+}
+
+IngredientProperty* IngredientPropertyList::getFirst(void){
+return(list.first());
+}
+
+IngredientProperty* IngredientPropertyList::getNext(void){
+return(list.next());
+}
+
+IngredientProperty* IngredientPropertyList::getElement(int index){
+return(list.at(index));
+}
+
+void IngredientPropertyList::clear(void)
+{
+list.clear();
+}
+
+bool IngredientPropertyList::isEmpty(void)
+{
+return(list.isEmpty());
+}
+
+

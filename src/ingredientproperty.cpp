@@ -7,36 +7,13 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef PROPERTIESDIALOG_H
-#define PROPERTIESDIALOG_H
+#include "ingredientproperty.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qvbox.h>
-#include <klistview.h>
-#include "recipedb.h"
-#include "createpropertydialog.h"
+IngredientProperty::IngredientProperty()
+{
+}
 
-/**
-@author Unai Garro
-*/
-class PropertiesDialog:public QWidget{
-public:
-    PropertiesDialog(QWidget *parent,RecipeDB *db);
-    ~PropertiesDialog();
-    void createNewProperty(void);
-private:
-  // Variables
-    RecipeDB *database;
-    IngredientPropertyList *propertyList;
-  // Widgets
-    QGridLayout* layout;
-    QPushButton* addPropertyButton;
-    QPushButton* removePropertyButton;
-    KListView* propertyListView;
 
-  // Methods
-  void reloadPropertyList(void);
-};
-
-#endif
+IngredientProperty::~IngredientProperty()
+{
+}

@@ -16,6 +16,9 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     // Store pointer to database
     database=db;
 
+    // Initialize internal variables
+    propertiesList= new IngredientPropertyList;
+
     // Design dialog
 
     layout = new QGridLayout( this, 1, 1, 0, 0);
@@ -84,13 +87,13 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     removeUnitButton->setMaximumSize(QSize(30,30));
     removeUnitButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
     removeUnitButton->setFlat(true);
-    QSpacerItem* spacer_Units_Characteristics = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell(spacer_Units_Characteristics,1,3,14,14);
+    QSpacerItem* spacer_Units_Properties = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    layout->addMultiCell(spacer_Units_Properties,1,3,14,14);
 
-    characteristicsListView=new KListView (this);
-    layout->addMultiCellWidget (characteristicsListView,1,4,15,16);
-    characteristicsListView->addColumn("c.");
-    characteristicsListView->addColumn("Amount");
+    propertiesListView=new KListView (this);
+    layout->addMultiCellWidget (propertiesListView,1,4,15,16);
+    propertiesListView->addColumn("Prop.");
+    propertiesListView->addColumn("Amount");
 
 
     // Initialize
@@ -99,7 +102,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     reloadIngredientList();
 
     // Signals & Slots
-    connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateUnitList()));
+    connect(this->ingredientListView,SIGNAL(selectionChanged()),this, SLOT(updateLists()));
     connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
     connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
@@ -126,40 +129,40 @@ database->loadIngredients(ingredientList);
 	}
 
 // Reload Unit List
-updateUnitList();
+updateLists();
 
 }
 
-
-void IngredientsDialog::updateUnitList(void)
+void IngredientsDialog::reloadUnitList()
 {
-//If none is selected, select first item
 
-QListViewItem *it;
-if (!(it=ingredientListView->selectedItem()))
-{
-it=ingredientListView->firstChild();
+int ingredientID=-1;
+// Find selected ingredient
+QListViewItem *it; it=ingredientListView->selectedItem();
+
+if (it){  // Check if an ingredient is selected first
+ingredientID=it->text(0).toInt();
 }
 
-if (it) {
-ingredientListView->setSelected(it,true);
-reloadPossibleUnitList(it->text(0).toInt());
-}
 
-}
-
-void IngredientsDialog::reloadPossibleUnitList(int ingredientID)
-{
 unitList->clear();
 unitsListView->clear();
+
+if (ingredientID>=0)
+{
 database->loadPossibleUnits(ingredientID,unitList);
 
 //Populate this data into the KListView
 
 	for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
 	{
-	QListViewItem *it= new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
+	QListViewItem *uit= new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
 	}
+
+// Select the first unit
+unitsListView->setSelected(unitsListView->firstChild(),true);
+
+}
 }
 
 void IngredientsDialog::addIngredient(void)
@@ -194,7 +197,7 @@ if (ingredientID>=0) // an ingredient was selected previously
   if ( unitsDialog->exec() == QDialog::Accepted ) {
     int result = unitsDialog->unitID();
     database->AddUnitToIngredient(ingredientID,result); // Add result chosen unit to ingredient in database
-    updateUnitList(); // Reload the list from database
+    reloadUnitList(); // Reload the list from database
 }
 }
 }
@@ -215,7 +218,7 @@ if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was select
   if (results.isEmpty()) database->removeUnitFromIngredient(ingredientID,unitID);
   else database->removeUnitFromIngredient(ingredientID,unitID); //must warn!
 
-updateUnitList(); // Reload the list from database
+reloadUnitList(); // Reload the list from database
 
 }
 }
@@ -240,4 +243,42 @@ reloadIngredientList();// Reload the list from database
 
 }
 
+}
+
+void IngredientsDialog:: reloadPropertyList(void)
+{
+propertiesList->clear();
+propertiesListView->clear();
+
+
+
+//If none is selected, select first item
+QListViewItem *it;
+it=ingredientListView->selectedItem();
+
+//Populate this data into the KListView
+if (it){// make sure that the ingredient list is not empty
+
+	database->loadProperties(propertiesList,it->text(0).toInt()); // load the list for this ingredient
+	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
+	{
+	std::cerr<<prop;
+	  QListViewItem *it= new QListViewItem(propertiesListView,prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	}
+	}
+}
+
+void IngredientsDialog:: updateLists(void)
+{
+
+//If no ingredient is selected, select first item
+
+QListViewItem *it;
+if (!(it=ingredientListView->selectedItem()))
+{
+it=ingredientListView->firstChild();
+}
+
+reloadUnitList();
+reloadPropertyList();
 }
