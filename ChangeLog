@@ -2,7 +2,11 @@ Changes from 0.6.1 to 0.6.2
   -Update USDA nutrient database from SR16-1 to SR17
   -Minor UI improvements
   -*Really* fix compiling for Qt < 3.2
+  -Fix compiling for KDE < 3.2
   -Require that results of the Ingredient Matcher include at least one of the ingredients selected
+  -Fix compile when both SQLite 2.x and 3.x are installed
+  -Fix kre export when category names contain certain characters
+  -Other minor tweaks
 
 Changes from 0.6 to 0.6.1:
   -For the SQLite backend, fix a bug in storing certain pictures
