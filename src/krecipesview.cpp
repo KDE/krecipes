@@ -58,7 +58,7 @@
 #include "DBBackend/MySQL/mysqlrecipedb.h"
 #endif
 
-#if HAVE_SQLITE
+#if HAVE_SQLITE || HAVE_SQLITE3
 #include "DBBackend/SQLite/literecipedb.h"
 #endif
 
@@ -549,10 +549,10 @@ if (dbType=="MySQL" && setupUser) // Don't setup user if checkbox of existing us
 	}
 #endif //HAVE_MYSQL
 
-#if HAVE_SQLITE
+#if HAVE_SQLITE || HAVE_SQLITE3
 if (dbType=="SQLite")
 	(void)LiteRecipeDB(QString::null,QString::null,QString::null,QString::null,true); //initialize database structure
-#endif //HAVE_SQLITE
+#endif //HAVE_SQLITE||HAVE_SQLITE3
 
 // Initialize database with data if requested
 if (initData)
@@ -579,10 +579,10 @@ if (doUSDAImport)
 		db = new MySQLRecipeDB(host,user,pass,dbName);
 	}
 	#endif //HAVE_MYSQL
-	#if HAVE_SQLITE
+	#if HAVE_SQLITE || HAVE_SQLITE3
 	else if (dbType=="SQLite")
 		db = new LiteRecipeDB(QString::null);
-	#endif //HAVE_SQLITE
+	#endif //HAVE_SQLITE||HAVE_SQLITE3
 	
 	// Import the data
 
@@ -650,7 +650,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 	}
 	#endif //HAVE_MYSQL
 	
-	#if HAVE_SQLITE
+	#if HAVE_SQLITE || HAVE_SQLITE3
 	else if(dbType=="SQLite")
 	{
 		LiteRecipeDB *db;
@@ -659,7 +659,7 @@ void KrecipesView::initializeData(const QString &host,const QString &dbName, con
 		db->initializeData();
 		delete db; //it closes the db automatically
 	}
-	#endif //HAVE_SQLITE
+	#endif //HAVE_SQLITE || HAVE_SQLITE3
 	else
 	{
 		kdError()<<i18n("Code error. No DB support has been included. Exiting\n");
@@ -879,9 +879,9 @@ void KrecipesView::initDatabase(KConfig *config)
 			
 	#endif // HAVE_MYSQL
 	
-	#if HAVE_SQLITE
+	#if HAVE_SQLITE || HAVE_SQLITE3
 	else if (dbType=="SQLite") database=new LiteRecipeDB(QString::null);
-	#endif // HAVE_SQLITE
+	#endif // HAVE_SQLITE || HAVE_SQLITE3
 	else{	
 		// No DB type has been enabled(should not happen at all, but just in case)
 		
@@ -919,7 +919,7 @@ void KrecipesView::initDatabase(KConfig *config)
 			}
 		#endif //HAVE_MYSQL
 		
-		#if HAVE_SQLITE
+		#if HAVE_SQLITE || HAVE_SQLITE3
 		else if (dbType=="SQLite")// The user chose SQLite this time
 			{
 			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
@@ -927,7 +927,7 @@ void KrecipesView::initDatabase(KConfig *config)
 			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
 			}
 		
-		#endif //HAVE_SQLITE
+		#endif //HAVE_SQLITE || HAVE_SQLITE3
 		else{
 		
 		// No DB type has been enabled (should not happen at all, but just in case)

@@ -15,7 +15,7 @@ krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # Check for optional libs
 if link_lib_SQLITE
-qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la DBBackend/SQLite/libkrecsqlite.la -lsqlite
+qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la DBBackend/SQLite/libkrecsqlite.la $(SQLITE_LIB)
 endif
 
 if link_lib_MYSQL

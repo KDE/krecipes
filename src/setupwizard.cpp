@@ -57,7 +57,7 @@ addPage(savePage,i18n("Finish & Save Settings"));
 setFinishEnabled(savePage,true); // Enable finish button
 setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
-#if (HAVE_SQLITE)
+#if (HAVE_SQLITE || HAVE_SQLITE3)
 setAppropriate(permissionsSetupPage,false);// Disable By Default
 setAppropriate(serverSetupPage,false); // if we have SQLite (since it's default, and doesn't require these settings)
 setAppropriate(sqliteSetupPage,true);
@@ -635,7 +635,7 @@ bg->setButton(0); // By default, SQLite
 mysqlCheckBox->setEnabled(false);
 #endif
 
-#if (!HAVE_SQLITE)
+#if (!(HAVE_SQLITE || HAVE_SQLITE3))
 liteCheckBox->setEnabled(false);
 	#if (HAVE_MYSQL)
 	bg->setButton(1); // Otherwise by default liteCheckBox is checked even if it's disabled

@@ -25,7 +25,12 @@
 #include <qstringlist.h>
 #include <qobject.h>
 
+#include "config.h"
+#if HAVE_SQLITE
 #include <sqlite.h>
+#elif HAVE_SQLITE3
+#include <sqlite3.h>
+#endif
 
 #include "krecqsqliteresult.h"
 
@@ -42,7 +47,11 @@ public:
 private:
 	static int call_back(void* res, int argc, char** argv, char** columns);
 
+#if HAVE_SQLITE
 	sqlite *m_db;
+#elif HAVE_SQLITE3
+	sqlite3 *m_db;
+#endif
 };
 
 #endif

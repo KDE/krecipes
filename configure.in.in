@@ -15,6 +15,8 @@ AC_DEFUN([AC_HAVE_SQLITE],
 [
         AC_DEFINE(HAVE_SQLITE, 1, [have SQLite])
         have_sqlite=true
+	SQLITE_LIB="-lsqlite"
+	AC_SUBST(SQLITE_LIB)
 ])
 
 AC_DEFUN([AC_NO_SQLITE],
@@ -23,19 +25,38 @@ AC_DEFUN([AC_NO_SQLITE],
         have_sqlite=false
 ])
 
+AC_DEFUN([AC_HAVE_SQLITE3],
+[
+        AC_DEFINE(HAVE_SQLITE3, 1, [have SQLite3])
+        have_sqlite3=true
+	SQLITE_LIB="-lsqlite3"
+	AC_SUBST(SQLITE_LIB)
+])
+
+AC_DEFUN([AC_NO_SQLITE3],
+[
+        AC_DEFINE(HAVE_SQLITE3, 0, [have SQLite3])
+        have_sqlite3=false
+])
+
 KDE_CHECK_HEADER(sqlite.h,
-        AC_HAVE_SQLITE,
-        AC_NO_SQLITE
+         AC_HAVE_SQLITE,
+         AC_NO_SQLITE
+)
+
+KDE_CHECK_HEADER(sqlite3.h,
+         AC_HAVE_SQLITE3,
+         AC_NO_SQLITE3
 )
 
 
 dnl ----------- Should I link or should I not link? ---------
 AM_CONDITIONAL(link_lib_MYSQL, test x$have_mysql = xtrue)
-AM_CONDITIONAL(link_lib_SQLITE, test x$have_sqlite = xtrue)
+AM_CONDITIONAL(link_lib_SQLITE, test x$have_sqlite = xtrue || test x$have_sqlite3 = xtrue)
 
 dnl ----------- Should Krecipes be built at all? ------------
 if test "x$have_mysql" = "xfalse"; then
-	if test "x$have_sqlite" = "xfalse"; then
+	if test "x$have_sqlite" = "xfalse" || test "x$have_sqlite3" = "xfalse"; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE krecipes"
 	will_not_build_krecipes=true
 	fi

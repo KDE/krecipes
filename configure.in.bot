@@ -11,7 +11,7 @@ fi
 
 echo "-                                              -"
 
-if test "x$have_sqlite" = "xtrue"; then
+if test "x$have_sqlite" = "xtrue" || test "x$have_sqlite3" = "xtrue"; then
 echo "-     SQLite Found..................... YES    -"
 else
 echo "-     SQLite Found..................... NO     -"
@@ -30,7 +30,7 @@ echo "You can get SQLite from:  http://www.hwaci.com/sw/sqlite/"
 echo "Or MySQL from: http://www.mysql.com"
 
 else if test "x$have_mysql" = "xtrue"; then
-     if test "x$have_sqlite" = "xtrue"; then
+     if test "x$have_sqlite" = "xtrue" || test "x$have_sqlite3" = "xtrue"; then
 	echo "-                                              -"
 	echo "-     Fine, you can build Krecipes now         -"
 	echo "------------------------------------------------"

@@ -19,6 +19,8 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
+#include "config.h"
+
 #include "datablocks/categorytree.h"
 
 #define DB_FILENAME "krecipes.krecdb"
@@ -1325,9 +1327,17 @@ QString LiteRecipeDB::escape(const QString &s)
 QString s_escaped=s;
 
 // Escape using SQLite's function
+#if HAVE_SQLITE
 char * escaped= sqlite_mprintf("%q",s.latin1()); // Escape the string(allocates memory)
+#elif HAVE_SQLITE3
+char * escaped= sqlite3_mprintf("%q",s.latin1()); // Escape the string(allocates memory)
+#endif
 s_escaped=escaped;
+#if HAVE_SQLITE
 sqlite_freemem(escaped); // free allocated memory
+#elif HAVE_SQLITE3
+sqlite3_free(escaped); // free allocated memory
+#endif
 
 return(s_escaped);
 }

@@ -23,7 +23,12 @@
 #include "krecqsqliteresult.h"
 
 #include <qvaluelist.h>
+#include "config.h"
+#if HAVE_SQLITE
 #include <sqlite.h>
+#elif HAVE_SQLITE3
+#include <sqlite3.h>
+#endif
 #include <stdlib.h>
 
 QSQLiteDB::QSQLiteDB(QObject *, const char *)
@@ -34,7 +39,14 @@ bool QSQLiteDB::open(const QString &dbname)
 {
 	char *errmsg = 0;
 
+#if HAVE_SQLITE
 	m_db = sqlite_open(dbname.latin1(), 0, &errmsg);
+#elif HAVE_SQLITE3
+	int res = sqlite3_open(dbname.latin1(), &m_db);
+
+	if (res != SQLITE_OK)
+	  return false;
+#endif
 
 	if (m_db == 0L)
 	{
@@ -48,7 +60,11 @@ void QSQLiteDB::close()
 {
 	if (m_db)
 	{
+#if HAVE_SQLITE
 		sqlite_close(m_db);
+#elif HAVE_SQLITE3
+		sqlite3_close(m_db);
+#endif
 		m_db = 0L;
 	}
 }
@@ -62,7 +78,11 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 	}
 
 	char *errmsg = 0;
+#if HAVE_SQLITE
 	if (sqlite_exec(m_db, query.latin1(), &call_back, &res, &errmsg) > 0)
+#elif HAVE_SQLITE3
+	if (sqlite3_exec(m_db, query.latin1(), &call_back, &res, &errmsg) > 0)
+#endif
 	{
 		res.setError(errmsg);
 		res.setStatus(QSQLiteResult::Failure);
@@ -71,7 +91,11 @@ QSQLiteResult QSQLiteDB::executeQuery(const QString &query, int *lastID)
 
 	if (lastID)
 	{
+#if HAVE_SQLITE
 	*lastID=sqlite_last_insert_rowid(m_db);
+#elif HAVE_SQLITE3
+	*lastID=sqlite3_last_insert_rowid(m_db);
+#endif
 	}
 
 	return res;
