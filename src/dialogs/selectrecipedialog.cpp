@@ -22,9 +22,11 @@
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 
+#include "exporters/cookmlexporter.h"
+#include "exporters/htmlexporter.h"
 #include "exporters/kreexport.h"
-#include "exporters/recipemlexporter.h"
 #include "exporters/mmfexporter.h"
+#include "exporters/recipemlexporter.h"
 
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
  : QWidget(parent)
@@ -195,7 +197,12 @@ void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
 it=recipeListView->selectedItem();
-if ( it != 0 && !it->firstChild() /*&& it->text(1).toInt() != NULL*/) emit recipeSelected(it->text(1).toInt(),0);
+if ( it )
+{
+	bool is_recipe; it->text(1).toInt(&is_recipe);
+	if ( !it->firstChild() && is_recipe )
+		emit recipeSelected(it->text(1).toInt(),0);
+}
 }
 
 void SelectRecipeDialog::edit(void)
@@ -236,34 +243,35 @@ loadCategoryCombo();
 collapseAll();
 }
 
+//FIXME: This seems to be working, but it still needs work
 void SelectRecipeDialog::filter(const QString& s)
 {
-if ( s.isNull() ) kdDebug()<<"test"<<endl;
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	if (!it->firstChild()) // It's not a category or it's empty
+	bool is_recipe; it->text(1).toInt(&is_recipe);
+
+	if ( s.isNull() || s == "" ) // Don't filter if the filter text is empty
 	{
 		if ( !isFilteringCategories )
-		{
-		if (s.isNull() && !isFilteringCategories ) it->setVisible(true);// Don't filter if the filter text is empty
-		else if (it->text(2).contains(s,false)) it->setVisible(true);
+			it->setVisible(true);
+	}
+	else if ( !it->firstChild() ) // It's not a category or it's empty
+	{
+		if (it->text(2).contains(s,false) && !isFilteringCategories) it->setVisible(true);
 		else it->setVisible(false);
-		}
 	}
 	else // It's a category. Check the children
 	{
 		bool cat_has_matches = false;
 		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
 		{
-		if (s.isNull() && !isFilteringCategories) cit->setVisible(true); // Don't filter if the filter text is empty
-		else if (cit->text(2).contains(s,false) && !s.isNull()) {
-								cat_has_matches = true;
-								cit->setVisible(true);
-								if (!isFilteringCategories) it->setOpen(true);
-								}
-
-		else cit->setVisible(false);
-
+			if (cit->text(2).contains(s,false) && !s.isNull())
+			{
+				cat_has_matches = true;
+				cit->setVisible(true);
+				it->setOpen(true);
+			}
+			else cit->setVisible(false);
 		}
 
 		if (!isFilteringCategories)
@@ -315,6 +323,8 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 	KFileDialog* fd = new KFileDialog( QString::null,
 	  "*.kre|Gzip Krecipes file (*.kre)\n"
 	  "*.kreml|Krecipes xml file (*.kreml)\n"
+	  "*.cml|CookML file (*.cml)\n"
+	  "*.html|HTML file (*.html)\n"
 	  "*.mmf|Meal-Master file (*.mmf)\n"
 	  "*.xml|RecipeML file (*.xml)",
 	  this, "export_dlg", true);
@@ -331,6 +341,10 @@ void SelectRecipeDialog::exportRecipes( const QValueList<int> &ids, const QStrin
 				exporter = new RecipeMLExporter(database, fileName, fd->currentFilter());
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter(database, fileName, fd->currentFilter());
+			else if ( fd->currentFilter() == "*.html" )
+				exporter = new HTMLExporter(database, fileName, fd->currentFilter(), 650);
+			else if ( fd->currentFilter() == "*.cml" )
+				exporter = new CookMLExporter(database, fileName, fd->currentFilter());
 			else
 				exporter = new KreExporter(database, fileName, fd->currentFilter());
 

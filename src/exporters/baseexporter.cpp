@@ -66,6 +66,13 @@ void BaseExporter::exporter( const QValueList<int>& l )
 		kdDebug()<<"no output file has been selected for export."<<endl;
 }
 
+void BaseExporter::exporter( int id )
+{
+	QValueList<int> single_id_list;
+	single_id_list.append(id);
+	exporter( single_id_list );
+}
+
 bool BaseExporter::createFile()
 {
 	if(filename != QString::null)

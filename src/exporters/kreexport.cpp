@@ -60,7 +60,8 @@ QString KreExporter::createContent( const QPtrList<Recipe>& recipes )
 {
     QString xml;
 
-    xml = "<krecipes version=\""+krecipes_version()+"\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
+    xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+    xml += "<krecipes version=\""+krecipes_version()+"\" lang=\""+(KGlobal::locale())->country()+"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
 	QPtrListIterator<Recipe> recipes_it( recipes );
 	Recipe *recipe;

@@ -32,9 +32,7 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 
 	QDomElement recipeml_tag = doc.documentElement();
 	recipeml_tag.setAttribute( "version", 0.5 );
-
 	recipeml_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
-
 	doc.appendChild( recipeml_tag );
 
 	QDomElement recipe_root = recipeml_tag;
@@ -135,5 +133,6 @@ QString RecipeMLExporter::createContent( const QPtrList<Recipe>& recipes )
 				step_tag.appendChild( doc.createTextNode(recipe->instructions) );
 	}
 
-	return doc.toString();
+	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	return ret.utf8() + doc.toString().utf8();
 }

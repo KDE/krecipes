@@ -29,6 +29,8 @@ public:
 	virtual ~BaseExporter();
 
 	void exporter( const QValueList<int>& ids);
+	void exporter( int id );
+
 	virtual QString createContent( const QPtrList<Recipe> & ) = 0;
 
 protected:
