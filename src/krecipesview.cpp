@@ -184,7 +184,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     button6=new KreMenuButton(leftPanel,dataMenu);
     button6->setIconSet(il.loadIconSet( "personal", KIcon::Panel,32 ));
     buttonsList->append(button6);
-    
+
     contextButton = new QPushButton(leftPanel, "contextButton");
     contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Panel, 32));
     contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
@@ -252,6 +252,9 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Create a new button when a recipe is unsaved
     connect (inputPanel, SIGNAL(createButton(QWidget*,QString)), this, SLOT(addRecipeButton(QWidget*,QString)));
+
+    // Connect Signals from viewPanel (RecipeViewDialog)
+    connect (viewPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
 
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
@@ -336,7 +339,7 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		case MatcherP:
 			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
 			rightPanel->raise(ingredientMatcherPanel);
-			break; 
+			break;
 		}
 	}
 
@@ -669,9 +672,9 @@ void KrecipesView::show (void)
 
 void KrecipesView::showRecipe(int recipeID)
 {
-viewPanel->loadRecipe(recipeID);
-rightPanel->setHeader(i18n("View Recipe"),"filefind");
-rightPanel->raise(viewPanel);
+QValueList<int> ids;
+ids << recipeID;
+showRecipes( ids );
 }
 
 void KrecipesView::showRecipes( const QValueList<int> &recipeIDs)

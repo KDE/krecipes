@@ -19,6 +19,7 @@
 class RecipeDB;
 class Recipe;
 class KHTMLPart;
+class QPushButton;
 
 /**
 @author Unai Garro
@@ -35,10 +36,14 @@ public:
     void loadRecipe(int recipeID);
     void loadRecipes( const QValueList<int> &ids );
 
+signals:
+  void recipeSelected(int,int);
+
 private:
 
   // Internal Variables
   KHTMLPart *recipeView;
+  QPushButton *editButton;
   RecipeDB  *database;
   bool recipe_loaded;
   QValueList<int> ids_loaded;
@@ -48,8 +53,15 @@ private:
   void showRecipes( const QValueList<int> &ids );
   void removeOldFiles();
 
+protected:
+  void showEvent( QShowEvent * );
+  void resizeEvent( QResizeEvent * );
+
 public slots:
 	void print(void);
+
+private slots:
+	void slotEditButtonClicked();
 
 };
 

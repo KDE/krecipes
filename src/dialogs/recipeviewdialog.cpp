@@ -12,31 +12,43 @@
 
 #include "recipeviewdialog.h"
 
-#include <kconfig.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+
 #include <kdebug.h>
 #include <khtmlview.h>
 #include <khtml_part.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kstandarddirs.h>
 
 #include "mixednumber.h"
 #include "DBBackend/recipedb.h"
 #include "exporters/htmlexporter.h"
 
+#define EDITBUTTON_OFFSET 25
+
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {
 // Initialize UI Elements
+
 recipeView=new KHTMLPart(this);
+
+KIconLoader *il=new KIconLoader;
+editButton = new QPushButton( i18n("Edit Recipe"), parent, "editButton");
+editButton->setIconSet(il->loadIcon("edit", KIcon::NoGroup,16));
+editButton->move(parent->width()-(editButton->width()+EDITBUTTON_OFFSET),parent->height()-(editButton->height()+EDITBUTTON_OFFSET));
+editButton->show();
+
+connect( editButton, SIGNAL(clicked()), this, SLOT(slotEditButtonClicked()) );
 
 // Store/Initialize local variables
 database=db; // Store the database pointer.
 
 tmp_filename = locateLocal("tmp", "krecipes_recipe_view");
-kdDebug()<<tmp_filename<<endl;
 
 //----------Load  the recipe --------
 loadRecipe(recipeID);
-
-//this->calculateProperties();
 }
 
 RecipeViewDialog::~RecipeViewDialog()
@@ -80,7 +92,7 @@ recipeView->openURL( url );
 
 void RecipeViewDialog::print(void)
 {
-	if ( recipeView && recipe_loaded )
+	if ( recipeView && recipe_loaded ) //FIXME: isn't recipeView always true?
 		recipeView->view()->print();
 }
 
@@ -93,4 +105,22 @@ void RecipeViewDialog::removeOldFiles()
 		recipe_titles << (*it).title;
 
 	HTMLExporter::removeHTMLFiles(tmp_filename,recipe_titles);
+}
+
+void RecipeViewDialog::showEvent( QShowEvent *e )
+{
+	if ( ids_loaded.count() > 1 ) //can't edit when multiple recipes are opened
+		editButton->hide();
+	else if ( !e->spontaneous() )
+		editButton->show(); //worksround since this doesn't seem to be shown when this class is raise()d
+}
+
+void RecipeViewDialog::resizeEvent( QResizeEvent *e )
+{
+	editButton->move( e->size().width()-(editButton->width()+EDITBUTTON_OFFSET), e->size().height()-(editButton->height()+EDITBUTTON_OFFSET) );
+}
+
+void RecipeViewDialog::slotEditButtonClicked()
+{
+	emit recipeSelected(ids_loaded[0],1);
 }

@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
+#include <kstandarddirs.h>
 
 #include "propertycalculator.h"
 #include "mixednumber.h"
@@ -393,16 +394,16 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
 			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
 			sizeCalculator->view()->resize(QSize(elementWidth+40,0));
-			sizeCalculator->begin(KURL("file:/tmp/" )); //TODO: use locateLocal("tmp",...)
+			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
 			sizeCalculator->write(tempHTML);
 			sizeCalculator->end();
 
 
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
-			/*if (newHeight>elementHeight)*/ elementHeight=newHeight; // Keep user's size if it's defined as bigger
+			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
 
-			delete sizeCalculator;
+			//delete sizeCalculator;
 		}
 		rect->setHeight((int)(ceil(elementHeight*100.0/m_width))); // set the new height to the element
 									 // Note that ceil is needed to avoid size
