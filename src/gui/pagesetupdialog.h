@@ -16,17 +16,29 @@
 #include "../recipe.h"
 
 class QLabel;
+class DragArea;
 
+/**
+  * @author Jason Kivlighn
+  */
 class PageSetupDialog : public QDialog
 {
 public:
 	PageSetupDialog( QWidget *parent, const Recipe &sample );
 
+protected:
+	virtual void accept();
+	void save();
+
 private:
 	void loadSetup();
+	void createWidgets( const Recipe &sample );
+
+	DragArea *dragArea;
 
 	QLabel *title_box;
 	QLabel *instr_box;
+	QLabel *photo_box;
 	QLabel *servings_box;
 };
 
