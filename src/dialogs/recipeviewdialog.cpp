@@ -14,6 +14,7 @@
 
 #include <qpushbutton.h>
 #include <qlayout.h>
+#include <qstyle.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -90,7 +91,8 @@ if ( ids.count() > 1 ) //we don't want a progress bar coming up when there is on
 	progress_dialog->resize(240,80);
 }
 
-HTMLExporter html_generator( database, tmp_filename+".html", "html", parentWidget()->width() );
+int sb_width = recipeView->view()->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;
+HTMLExporter html_generator( database, tmp_filename+".html", "html", parentWidget()->width() - sb_width );
 
 RecipeList recipe_list; database->loadRecipes( &recipe_list, ids );
 html_generator.exporter( recipe_list, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'

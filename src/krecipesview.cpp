@@ -215,6 +215,7 @@ KrecipesView::KrecipesView(QWidget *parent)
      connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
 
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
+     connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(raise()) );
      connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
      connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
