@@ -346,8 +346,9 @@ servingsNumInput->setValue(loadedRecipe->persons);
 	//show photo
 	if (!loadedRecipe->photo.isNull()){
     sourcePhoto = loadedRecipe->photo;
-    if( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ){
+    if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) ){
       QImage pm = sourcePhoto.convertToImage();
+
 		  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->width(), QImage::ScaleMin)));
     }
     else{
@@ -422,11 +423,9 @@ unitBox->setCurrentText("");
     KURL filename = KFileDialog::getOpenURL(QString::null, "*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)", this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
-      sourcePhoto = pixmap;
-
       // If photo is bigger than the label, or smaller in width, than photoLabel, scale it
-      if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) )
-	{
+      sourcePhoto = pixmap;
+      if( (sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height()) || (sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height()) ){
         QImage pm = sourcePhoto.convertToImage();
     	  photoLabel->setPixmap(QPixmap(pm.smoothScale(photoLabel->width(), photoLabel->height(), QImage::ScaleMin)));
        }
