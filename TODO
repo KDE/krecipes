@@ -1,9 +1,7 @@
 Things found to be done before the release:
 
 
-*Fit in the layout dialog in 800x600. Current one is too big
 *Show the recipes correctly in kde 3.2 and 3.1 (CSS)
-*Format the recipes and add texts, so they're readable
 *Add tips for every dialog
 *Translations
 *package
