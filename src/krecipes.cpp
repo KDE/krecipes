@@ -13,9 +13,12 @@
 #include "categorieseditordialog.h"
 #include "authorsdialog.h"
 #include "unitsdialog.h"
+#include "dualprogressdialog.h"
 
 #include "mxpimporter.h"
 #include "mmfimporter.h"
+#include "nycgenericimporter.h"
+
 #include "recipe.h"
 #include "recipedb.h"
 
@@ -24,6 +27,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 
+#include <kprogress.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -217,12 +221,12 @@ void Krecipes::filePrint()
     }
 }
 
-//TODO: use a progress dialog
 void Krecipes::import()
 {
 	KFileDialog file_dialog( QString::null,
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
-	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)",
+	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
+	  "*.txt|Now You're Cooking Generic Export (*.txt)",
 	  this,
 	  "file_dialog",
 	  true
@@ -232,31 +236,54 @@ void Krecipes::import()
 	if ( file_dialog.exec() == KFileDialog::Accepted )
 	{
 		QString selected_filter = file_dialog.currentFilter();
-
 		QStringList files = file_dialog.selectedFiles();
+
+		DualProgressDialog *progress_dialog = new DualProgressDialog( this, "import_progress",
+		  i18n("Importing recipes"), i18n("Total:"), QString::null, true );
+		progress_dialog->subProgressBar()->setFormat(i18n("%v/%m Recipes"));
+		progress_dialog->setTotalSteps( files.count() );
+		int i = 1;
 		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
 		{
+			progress_dialog->setSubLabel( QString(i18n("Parsing file (%1 of %2): %3"))
+			  .arg(i).arg(files.count()).arg(*it) );
+			kapp->processEvents();
+
+			BaseImporter *importer;
 			if ( selected_filter == "*.mxp *.txt" )
-			{
-				MXPImporter mxp( *it );
-				m_view->import( mxp );
-			}
+				importer = new MXPImporter( *it );
 			else if ( selected_filter == "*.mmf *.txt" )
-			{
-				MMFImporter mmf( *it );
-				m_view->import( mmf );
-			}
+				importer = new MMFImporter( *it );
+			else if ( selected_filter == "*.txt" )
+				importer = new NYCGenericImporter( *it );
 			else
 			{
 				KMessageBox::sorry( this,
-				  i18n(QString("Filter \"%1\" not recognized.\n"
-				    "Please select one of the provided filters.").arg(selected_filter)),
+				  QString(i18n("Filter \"%1\" not recognized.\n"
+				    "Please select one of the provided filters.")).arg(selected_filter),
 				  i18n("Unrecognized Filter")
 				);
 				import(); //let's try again :)
 				return;
 			}
+
+			progress_dialog->setSubLabel( QString(i18n("Importing file (%1 of %2): %3"))
+			  .arg(i).arg(files.count()).arg(*it) );
+			kapp->processEvents();
+			m_view->import( *importer, progress_dialog );
+			delete importer;
+
+			if ( progress_dialog->wasCancelled() )
+			{
+				KMessageBox::information( this,
+				  i18n("All recipes before this point have been successfully imported."),
+				  i18n("Import canceled") );
+				return;
+			}
+			i++;
 		}
+
+		delete progress_dialog;
 
 		m_view->selectPanel->reload();
 		m_view->ingredientsPanel->reload();

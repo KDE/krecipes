@@ -12,13 +12,13 @@
 
 #include <klineedit.h>
 
-#include "fraction.h"
+#include "mixednumber.h"
 
-/** A KLineEdit widget extended to allow input of decimals and fractions.  See @ref Fraction documentation
-  * for info on the several ways to extract input.
+/** A KLineEdit widget extended to allow input of decimals and fractions.
+  * Input is returned as a @ref Fraction class.
   * @author Jason Kivlighn
   */
-class FractionInput : public KLineEdit, public Fraction
+class FractionInput : public KLineEdit
 {
 Q_OBJECT
 
@@ -26,9 +26,14 @@ public:
 	FractionInput( QWidget *parent = 0, const char *name = 0 );
 	~FractionInput();
 
+	MixedNumber value(){ return m_fraction; }
+	bool isInputValid(){ return m_fraction.isValid(); }
+
 protected slots:
 	void parseText();
 
+private:
+	MixedNumber m_fraction;
 };
 
 #endif //FRACTIONINPUT_H
