@@ -210,8 +210,8 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	if ( string.mid( 11, 1 ) == "-" && (string.mid( 0, 11 ).stripWhiteSpace() == "") ) //continuation of previous ingredient
 	{
 		qDebug("Appending to last ingredient in column: %s",string.stripWhiteSpace().mid(1,string.length()).latin1());
-		if ( list.at(0) )
-			list.at(0)->name += " "+string.stripWhiteSpace().mid(1,string.length());
+		if ( list.at(list.count()-1) )
+			list.at(list.count()-1)->name += " "+string.stripWhiteSpace().mid(1,string.length());
 
 		return true;
 	}
