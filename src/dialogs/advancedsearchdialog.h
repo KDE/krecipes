@@ -84,6 +84,7 @@ protected:
 	virtual void removeCategory(int id);
 	virtual void modifyCategory(const Element &category);
 	virtual void modifyCategory(int id, int parent_id);
+	virtual void mergeCategories(int id1, int id2);
 	
 private:
 	int last_state;

@@ -64,6 +64,7 @@ signals:
 	void categoryRemoved( int id );
 	void categoryModified( const Element & );
 	void categoryModified( int id, int parent_id );
+	void categoriesMerged(int id1, int id2);
 
 	void ingredientCreated( const Element & );
 	void ingredientRemoved( int id );

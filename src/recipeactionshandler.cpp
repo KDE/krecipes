@@ -203,7 +203,7 @@ void RecipeActionsHandler::collapseAll()
 		++it;
 	}
 }
-//FIXME: Handle subcategories
+
 void RecipeActionsHandler::saveCategoryAs()
 {
 	if (parentListView->selectedItem() )
@@ -211,7 +211,7 @@ void RecipeActionsHandler::saveCategoryAs()
 		CategoryListItem *cat_it = (CategoryListItem*)parentListView->selectedItem();
 		QValueList<int> ids;
 
-		//do this to only iterate over children of 'it'
+		//do this to only iterate over children of 'cat_it'
 		QListViewItem *pEndItem = NULL;
 		QListViewItem *pStartItem = cat_it;
 		do

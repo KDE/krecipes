@@ -51,13 +51,15 @@ StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, boo
 
 	addColumn(i18n("Preparation Method"));
 
+	setSorting(1);
+
 	if ( editable ) {
 		setRenameable(1, true);
 
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&New"), this, SLOT(createNew()), CTRL+Key_N );
+		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_C );
 		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->polish();

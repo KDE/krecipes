@@ -304,6 +304,23 @@ void DualCategoryListView::modifyCategory(int id, int parent_id)
 		findItem(QString::number(parent_id),1)->insertItem(item);
 }
 
+void DualCategoryListView::mergeCategories(int id1, int id2)
+{
+	CategoryCheckListItem *to_item = (CategoryCheckListItem*)findItem(QString::number(id1),1);
+	CategoryCheckListItem *from_item = (CategoryCheckListItem*)findItem(QString::number(id2),1);
+
+	//note that this takes care of any recipes that may be children as well
+	QListViewItem *next_sibling;
+	for ( QListViewItem *it = from_item->firstChild(); it; it = next_sibling ) {
+		next_sibling = it->nextSibling(); //get the sibling before we move the item
+
+		from_item->takeItem(it);
+		to_item->insertItem(it);
+	}
+
+	removeCategory(id2);
+}
+
 
 
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget(parent),

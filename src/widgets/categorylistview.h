@@ -57,6 +57,7 @@ public:
 	CategoryListItem(QListViewItem* it, const Element &category );
 
 	virtual QString text(int column) const;
+	virtual void setText(int column, const QString &text);
 
 	Element element() const{ return ctyStored; }
 
@@ -163,6 +164,7 @@ protected slots:
 	virtual void createCategory(const Element &category, int parent_id)=0;
 	virtual void modifyCategory(const Element &category)=0;
 	virtual void modifyCategory(int id, int parent_id)=0;
+	virtual void mergeCategories(int id1, int id2)=0;
 
 private:
 	void loadListView(const CategoryTree *categoryTree, int parent_id=-1 );
@@ -182,6 +184,7 @@ protected:
 	virtual void createCategory(const Element &category, int parent_id);
 	virtual void modifyCategory(const Element &category);
 	virtual void modifyCategory(int id, int parent_id);
+	virtual void mergeCategories(int id1, int id2);
 
 	QMap<int,CategoryListItem*> items_map;
 
@@ -200,7 +203,7 @@ private slots:
 	
 	void modCategory(QListViewItem* i);
 	void saveCategory(QListViewItem* i);
-	
+
 private:
 	KPopupMenu *kpop;
 	QListViewItem *clipboard_item;
@@ -220,6 +223,7 @@ protected:
 	virtual void createCategory(const Element &category, int parent_id);
 	virtual void modifyCategory(const Element &category);
 	virtual void modifyCategory(int id, int parent_id);
+	virtual void mergeCategories(int id1, int id2);
 
 	QMap<int,CategoryCheckListItem*> items_map;
 };

@@ -119,6 +119,11 @@ QString CategoryListItem::text(int column) const
 	else return(ctyStored.name);
 }
 
+void CategoryListItem::setText(int column, const QString &text)
+{
+	if (column==0) ctyStored.name = text;
+}
+
 
 
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
@@ -128,6 +133,7 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView(
 	connect(db,SIGNAL(categoryRemoved(int)),SLOT(removeCategory(int)));
 	connect(db,SIGNAL(categoryModified(const Element &)),SLOT(modifyCategory(const Element &)));
 	connect(db,SIGNAL(categoryModified(int,int)),SLOT(modifyCategory(int,int)));
+	connect(db,SIGNAL(categoriesMerged(int,int)),SLOT(mergeCategories(int,int)));
 
 	setRootIsDecorated(true);
 	setAllColumnsShowFocus(true);
@@ -170,6 +176,8 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 	bool show_id = config->readBoolEntry("ShowID",false);
 	addColumn( i18n("Id"), show_id ? -1 : 0 );
 
+	setSorting(0);
+
 	if ( editable )
 	{
 		setRenameable(0, true);
@@ -179,7 +187,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		KIconLoader *il = new KIconLoader;
 		
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&New"), this, SLOT(createNew()), CTRL+Key_N );
+		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&Create"), this, SLOT(createNew()), CTRL+Key_C );
 		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
 		kpop->insertSeparator();
@@ -322,7 +330,8 @@ void StdCategoryListView::removeCategory(int id)
 	QListViewItem *item = items_map[id];
 	
 	//Q_ASSERT(item);
-	
+
+	items_map.remove(id);
 	delete item;
 }
 
@@ -369,6 +378,23 @@ void StdCategoryListView::modifyCategory(int id, int parent_id)
 		items_map[parent_id]->insertItem(item);
 }
 
+void StdCategoryListView::mergeCategories(int id1, int id2)
+{
+	QListViewItem *to_item = items_map[id1];
+	QListViewItem *from_item = items_map[id2];
+
+	//note that this takes care of any recipes that may be children as well
+	QListViewItem *next_sibling;
+	for ( QListViewItem *it = from_item->firstChild(); it; it = next_sibling ) {
+		next_sibling = it->nextSibling(); //get the sibling before we move the item
+
+		from_item->takeItem(it);
+		to_item->insertItem(it);
+	}
+	
+	removeCategory(id2);
+}
+
 void StdCategoryListView::modCategory(QListViewItem* i)
 {
 	CategoryListView::rename(i, 0);
@@ -406,6 +432,8 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db ) : 
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry("ShowID",false);
 	addColumn( i18n("Id"), show_id ? -1 : 0 );
+
+	setSorting(0);
 }
 
 void CategoryCheckListView::removeCategory(int id)
@@ -414,6 +442,7 @@ void CategoryCheckListView::removeCategory(int id)
 	
 	//Q_ASSERT(item);
 	
+	items_map.remove(id);
 	delete item;
 }
 
@@ -458,6 +487,23 @@ void CategoryCheckListView::modifyCategory(int id, int parent_id)
 		insertItem(item);
 	else
 		items_map[parent_id]->insertItem(item);
+}
+
+void CategoryCheckListView::mergeCategories(int id1, int id2)
+{
+	QListViewItem *to_item = items_map[id1];
+	QListViewItem *from_item = items_map[id2];
+
+	//note that this takes care of any recipes that may be children as well
+	QListViewItem *next_sibling;
+	for ( QListViewItem *it = from_item->firstChild(); it; it = next_sibling ) {
+		next_sibling = it->nextSibling(); //get the sibling before we move the item
+
+		from_item->takeItem(it);
+		to_item->insertItem(it);
+	}
+
+	removeCategory(id2);
 }
 
 #include "categorylistview.moc"

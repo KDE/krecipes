@@ -33,6 +33,8 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry("ShowID",false);
 	addColumn( i18n("Id"), show_id ? -1 : 0 );*/
+
+	setSorting(0);
 }
 
 void RecipeListView::reload()
@@ -98,19 +100,24 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 	recipe.recipeID = recipe_el.id;
 	recipe.title = recipe_el.name;
 
-	for ( ElementList::const_iterator cat_it = categories.begin(); cat_it != categories.end(); ++cat_it ) {
-		int cur_cat_id = (*cat_it).id;
-
-		QListViewItemIterator iterator(this);
-		while(iterator.current())
-		{
-			if ( iterator.current()->rtti() == 1001 ) {
-				CategoryListItem *cat_item = (CategoryListItem*)iterator.current();
-				if ( cat_item->categoryId() == cur_cat_id ) {
-					createRecipe(recipe,cur_cat_id);
+	if ( categories.count() == 0 ) {
+		createRecipe(recipe,-1);
+	}
+	else {
+		for ( ElementList::const_iterator cat_it = categories.begin(); cat_it != categories.end(); ++cat_it ) {
+			int cur_cat_id = (*cat_it).id;
+	
+			QListViewItemIterator iterator(this);
+			while(iterator.current())
+			{
+				if ( iterator.current()->rtti() == 1001 ) {
+					CategoryListItem *cat_item = (CategoryListItem*)iterator.current();
+					if ( cat_item->categoryId() == cur_cat_id ) {
+						createRecipe(recipe,cur_cat_id);
+					}
 				}
+				++iterator;
 			}
-			++iterator;
 		}
 	}
 }

@@ -95,6 +95,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     unitsListView=new KreListView (this,i18n("Unit list"));
     unitsListView->listView()->addColumn( i18n("Id"), show_id ? -1 : 0 );
     unitsListView->listView()->addColumn(i18n("Units"));
+    unitsListView->listView()->setSorting(1);
     unitsListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
     unitsListView->listView()->setMinimumWidth(150);

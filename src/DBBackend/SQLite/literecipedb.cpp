@@ -15,6 +15,7 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <ktempfile.h>
 
 #include "datablocks/categorytree.h"
 
@@ -482,26 +483,25 @@ int recipeID=recipe->recipeID; // Set the recipeID (either new or old)
 // Let's begin storing the Image
 if ( !recipe->photo.isNull() )
 {
-recipe->photo.save(".krecipe_photo.jpg", "JPEG");
-QFileInfo fi(".krecipe_photo.jpg");
+KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
+fn->setAutoDelete(true);
+recipe->photo.save(fn->name(), "JPEG");
 
-// Open the file now, and load to photoArray
-QFile f(".krecipe_photo.jpg");
+QFileInfo fi(fn->name());
+
+//load to photoArray
 char * photoArray;
 long unsigned int n=fi.size();
 photoArray=new char[n];
-     if(f.open( IO_ReadOnly ))
-     {
-     f.readBlock(photoArray,n);
-     f.close();
-     }
+if( fn ){
+     fn->file()->readBlock(photoArray,n);
+     fn->close();
+}
 
 char *photoEncodedArray=new char[2 +(257*n)/254+1]; //Just in case, add+1
 sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
  command=QString("UPDATE recipes SET photo='%1' WHERE id=%2;").arg(photoEncodedArray).arg(recipeID);
  database->executeQuery(command);
-
- //_unlink(".krecipe_photo.jpg");
 }
 
  // Save the ingredient list (first delete in case we are updating)
@@ -2107,19 +2107,11 @@ void LiteRecipeDB::mergeCategories( int id1, int id2 )
 	command = QString("UPDATE categories SET parent_id=-1 WHERE parent_id=id");
 	database->executeQuery(command);
 
-	int parent_id = -1;
-	QSQLiteResult categoryToLoad=database->executeQuery(QString("SELECT parent_id FROM categories WHERE id=%1").arg(id1));
-	if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
-		QSQLiteResultRow row=categoryToLoad.first();
-		if ( !categoryToLoad.atEnd() )
-			parent_id = row.data(0).toInt();
-	}
-	emit categoryModified( id1, parent_id );
-
 	//remove category with id 'id2'
 	command=QString("DELETE FROM categories WHERE id=%1;").arg(id2);
 	database->executeQuery( command );
-	emit categoryRemoved(id2);
+
+	emit categoriesMerged(id1,id2);
 }
 
 void LiteRecipeDB::mergeIngredients( int id1, int id2 )

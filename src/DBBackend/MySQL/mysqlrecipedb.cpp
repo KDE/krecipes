@@ -16,7 +16,7 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-
+#include <ktempfile.h>
 
 MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
@@ -462,22 +462,19 @@ recipeID=recipe->recipeID;
 // Let's begin storing the Image!
 if ( !recipe->photo.isNull() )
 {
-recipe->photo.save(".krecipe_photo.jpg", "JPEG");
-QFileInfo fi(".krecipe_photo.jpg");
-
-QFile f(".krecipe_photo.jpg");
+KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
+fn->setAutoDelete(true);
+recipe->photo.save(fn->name(), "JPEG");
 QByteArray photoArray;
-     if(f.open( IO_ReadOnly ))
-     {
-     photoArray = f.readAll();
-     f.close();
-     }
+if( fn ){
+photoArray = (fn->file())->readAll();
+fn->close();
+}
 recipeToSave.prepare("UPDATE recipes SET photo=? WHERE id="+QString::number(recipeID));
 recipeToSave.addBindValue (photoArray); //this handles the binary encoding
 recipeToSave.exec();
 
      }
- //_unlink(".krecipe_photo.jpg");
 
 
  // Save the ingredient list (first delete if we are updating)
@@ -1870,16 +1867,11 @@ void MySQLRecipeDB::mergeCategories( int id1, int id2 )
 	command = QString("UPDATE categories SET parent_id=-1 WHERE parent_id=id");
 	update.exec(command);
 
-	int parent_id = -1;
-	update.exec(QString("SELECT parent_id FROM categories WHERE id=%1").arg(id1));
-	if (update.isActive() && update.first())
-		parent_id = update.value(0).toInt();
-	emit categoryModified( id1, parent_id );
-
 	//remove category with id 'id2'
 	command=QString("DELETE FROM categories WHERE id=%1").arg(id2);
 	update.exec(command);
-	emit categoryRemoved(id2);
+
+	emit categoriesMerged(id1,id2);
 }
 
 void MySQLRecipeDB::mergeIngredients( int id1, int id2 )
