@@ -1058,11 +1058,11 @@ if (version<0.4)  // Upgrade to DB version 0.4
 	QSqlQuery tableToAlter(command,database);
 
 	// Missing indexes in the previous versions
-	command="CREATE index rid_index ON category_list(recipe_id)"
-	QSqlQuery tableToAlter(command,database);
+	command="CREATE index rid_index ON category_list(recipe_id)";
+	tableToAlter.exec(command);
 
-	command="CREATE index cid_index ON category_list(category_id)"
-	QSqlQuery tableToAlter(command,database);
+	command="CREATE index cid_index ON category_list(category_id)";
+	tableToAlter.exec(command);
 
 	// Set the version to the new one (0.4)
 
