@@ -112,7 +112,7 @@ recipeHTML+=QString("<p>%1</p></div>").arg(loadedRecipe->instructions);
 
   // Store Photo
   if (!loadedRecipe->photo.isNull()){
-      if( loadedRecipe->photo.width() > 220 || loadedRecipe->photo.height() > 165 ){
+      if( (loadedRecipe->photo.width() > 220 || loadedRecipe->photo.height() > 165) || (loadedRecipe->photo.width() < 220 && loadedRecipe->photo.height() < 165) ){
         QImage pm = loadedRecipe->photo.convertToImage();
         (QPixmap(pm.smoothScale(220, 165, QImage::ScaleMin))).save("/tmp/krecipes_photo.png","PNG");
       }
