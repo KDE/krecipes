@@ -17,7 +17,7 @@
 /**
 @author Unai Garro
 */
-class IngredientList: QPtrList <Ingredient>{
+class IngredientList: public QPtrList <Ingredient>{
 public:
     IngredientList();
 
