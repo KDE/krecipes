@@ -26,6 +26,7 @@ public:
     Ingredient* getFirst(void);
     Ingredient* getNext(void);
     void add(Ingredient &ing);
+    void addReverse(Ingredient &ing);
     void move(int index1,int index2);
     Ingredient* getLast(void);
     Ingredient* getPrev(void);

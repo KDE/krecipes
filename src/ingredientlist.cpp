@@ -11,7 +11,7 @@
 
 IngredientList::IngredientList()
 {
-setAutoDelete(true); //Deletes automatically when remove() is used.
+setAutoDelete(true); //Deletes automatically when remove() is used. FIXME: it crashes when I use this class and this is set...
 }
 
 
@@ -22,6 +22,11 @@ IngredientList::~IngredientList()
 void IngredientList::add(Ingredient &ing)
 {
 this->append (new Ingredient(ing));
+}
+
+void IngredientList::addReverse(Ingredient &ing)
+{
+this->prepend (new Ingredient(ing));
 }
 
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
@@ -64,3 +69,4 @@ int IngredientList::findNext(int id) // Search by id (which uses search by item,
 Ingredient i; i.ingredientID=id;
 return(QPtrList <Ingredient>::findNext(&i)); // (If we don't specify class, gcc will only find "findNext(int)"
 }
+

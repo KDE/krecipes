@@ -222,7 +222,7 @@ void Krecipes::import()
 {
 	KFileDialog file_dialog( QString::null,
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
-	  "*.mmf|Meal-Master Format (*.mmf)",
+	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)",
 	  this,
 	  "file_dialog",
 	  true
@@ -236,13 +236,12 @@ void Krecipes::import()
 		QStringList files = file_dialog.selectedFiles();
 		for ( QStringList::const_iterator it = files.begin(); it != files.end(); ++it )
 		{
-			qDebug(selected_filter);
 			if ( selected_filter == "*.mxp *.txt" )
 			{
 				MXPImporter mxp( *it );
 				m_view->import( mxp );
 			}
-			else if ( selected_filter == "*.mmf" )
+			else if ( selected_filter == "*.mmf *.txt" )
 			{
 				MMFImporter mmf( *it );
 				m_view->import( mmf );
