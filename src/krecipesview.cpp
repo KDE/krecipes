@@ -137,7 +137,8 @@ case PropertiesP: propertiesPanel->reload();
 case UnitsP: unitsPanel->reload(); // Reload data
 	this->rightPanel->raiseWidget(unitsPanel);
 	break;
-case DietWizardP: this->rightPanel->raiseWidget(dietPanel);
+case DietWizardP: dietPanel->reload();
+	this->rightPanel->raiseWidget(dietPanel);
 	break;
 
 }
