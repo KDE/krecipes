@@ -10,7 +10,7 @@
 #include "selectrecipedialog.h"
 
 SelectRecipeDialog::SelectRecipeDialog(QWidget *parent, RecipeDB* db)
- : QVBox(parent)
+ : QWidget(parent)
 {
 //Store pointer to Recipe Database
 database=db;
@@ -18,25 +18,45 @@ database=db;
 //Initialize internal data
 recipeList=new ElementList;
 
-//Initialize widgets
-il=new KIconLoader;
-recipeListView=new KListView(this);
-    recipeListView->addColumn("Id.");
-    recipeListView->addColumn("Title");
-    recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
+//Design dialog
 
-buttonBar=new QHBox(this);
+layout = new QGridLayout( this, 1, 1, 0, 0);
 
-openButton=new QPushButton(buttonBar);
-  openButton->setText("Open Recipe");
-  QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setPixmap(pm);
-editButton=new QPushButton(buttonBar);
-  editButton->setText("Edit");
-  pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setPixmap(pm);
-removeButton=new QPushButton(buttonBar);
-  removeButton->setText("Delete");
-  removeButton->setMaximumWidth(40);
-  pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setPixmap(pm);
+	// Border Spacers
+	QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );	layout->addMultiCell( spacer_left, 1,4,0,0 );
+	QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addMultiCell(spacer_top,0,0,1,4);
+
+	searchBar=new QHBox(this);
+	layout->addWidget(searchBar,1,1);
+
+	searchLabel=new QLabel(searchBar); searchLabel->setText("Search:"); searchLabel->setFixedWidth(searchLabel->fontMetrics().width("Search:")+5);
+	searchBox=new KComboBox(true,searchBar);
+
+
+	QSpacerItem* spacerFromSearchBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+    	layout->addItem(spacerFromSearchBar,2,1);
+
+	il=new KIconLoader;
+	recipeListView=new KListView(this);
+    	recipeListView->addColumn("Id.");
+    	recipeListView->addColumn("Title");
+    	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
+	layout->addWidget(recipeListView,3,1);
+
+	buttonBar=new QHBox(this);
+	layout->addWidget(buttonBar,4,1);
+
+	openButton=new QPushButton(buttonBar);
+	openButton->setText("Open Recipe");
+	QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setPixmap(pm);
+	editButton=new QPushButton(buttonBar);
+	editButton->setText("Edit");
+	pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setPixmap(pm);
+	removeButton=new QPushButton(buttonBar);
+	removeButton->setText("Delete");
+	removeButton->setMaximumWidth(40);
+	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setPixmap(pm);
 
 // Load Recipe List
 loadRecipeList();

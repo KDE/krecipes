@@ -10,9 +10,13 @@
 #ifndef SELECTRECIPEDIALOG_H
 #define SELECTRECIPEDIALOG_H
 
+
 #include <qwidget.h>
-#include <qvbox.h>
 #include <qpushbutton.h>
+#include <qlabel.h>
+#include <qlayout.h>
+
+#include <kcombobox.h>
 #include <klistview.h>
 #include <kiconloader.h>
 
@@ -24,7 +28,7 @@
 /**
 @author Unai Garro
 */
-class SelectRecipeDialog : public QVBox
+class SelectRecipeDialog : public QWidget
 {
 Q_OBJECT
 public:
@@ -37,12 +41,16 @@ public:
 private:
 
   // Widgets
+  QGridLayout *layout;
+  QHBox *searchBar;
   KListView* recipeListView;
   QHBox *buttonBar;
   QPushButton *openButton;
   QPushButton *removeButton;
   QPushButton *editButton;
   KIconLoader *il;
+  QLabel *searchLabel;
+  KComboBox *searchBox;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
