@@ -15,18 +15,20 @@
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
 
-
+std::cerr<<"Connecting to the SQLite database\n";
 	DBuser=user;DBpass=pass;DBhost=host;
 
         database= new QSQLiteDB();
 	database->open(DB_FILENAME);
         if ( !database->open(DB_FILENAME) ) {
 	     //Try to create the database
+	     std::cerr<<"Creating the SQLite database!\n";
 	     createDB();
 
 	     //Now Reopen the Database and exit if it fails
 	     if (!database->open(DB_FILENAME))
 		{
+		std::cerr<<"Retrying to open the db after creation\n";
 		std::cerr<<QString("Could not open DB. You may not have permissions. Exiting.\n").arg(user).latin1();
 		exit(1);
 		}
@@ -36,6 +38,7 @@ LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBn
 	     }
 	 else // Check integrity of the database (tables). If not possible, exit
 	 {
+	 std::cerr<<"I'll check the DB integrity now\n";
 	 	if (!checkIntegrity())
 			{
 			std::cerr<<"Failed to fix database structure. Exiting.\n";
@@ -86,7 +89,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 
 // Read the ingredients
 command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
-
+std::cerr<<command<<"\n";
 recipeToLoad=database->executeQuery( command);
             if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
 	    QSQLiteResultRow row = recipeToLoad.first();
@@ -973,7 +976,7 @@ if (tableName=="recipes") command=QString("CREATE TABLE recipes (id INTEGER NOT 
 
 else if (tableName=="ingredients") command=QString("CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
-else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER);";
+else if (tableName=="ingredient_list") command="CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);";
 
 else if (tableName=="unit_list") command="CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
