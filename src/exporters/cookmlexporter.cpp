@@ -10,6 +10,7 @@
 
 #include "cookmlexporter.h"
 
+#include <qbuffer.h>
 #include <qdom.h>
 #include <qpixmap.h>
 #include <qfile.h>
@@ -71,15 +72,11 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		QDomElement picbin_tag = doc.createElement( "picbin" );
 		picbin_tag.setAttribute( "format", "JPG" );
 
-		KTempFile* fn = new KTempFile( locateLocal( "tmp", "cml" ), ".jpg", 0600 );
-		fn->setAutoDelete( true );
-		( *recipe_it ).photo.save( fn->name(), "JPEG" );
 		QByteArray data;
-		if ( fn ) {
-			data = ( fn->file() ) ->readAll();
-			fn->close();
-			delete fn;
-		}
+		QBuffer buffer( data );
+		buffer.open( IO_WriteOnly );
+		( *recipe_it ).photo.save( &buffer, "JPEG" );
+
 		picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode( data, true ) ) );
 		head_tag.appendChild( picbin_tag );
 

@@ -555,7 +555,6 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	// Let's begin storing the Image!
 	if ( !recipe->photo.isNull() ) {
-		QPixmap pixmap;
 		QByteArray ba;
 		QBuffer buffer( ba );
 		buffer.open( IO_WriteOnly );
