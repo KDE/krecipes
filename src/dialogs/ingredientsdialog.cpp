@@ -253,7 +253,7 @@ if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was select
   else database->removeUnitFromIngredient(ingredientID,unitID); //must warn!
 
 reloadUnitList(); // Reload the list from database
-
+reloadPropertyList(); // Properties could have been removed if a unit is removed, so we need to reload.
 }
 }
 
