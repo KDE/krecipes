@@ -234,7 +234,7 @@ if (ingredientID>=0) // an ingredient was selected previously
   if ( unitsDialog->exec() == QDialog::Accepted ) {
     int unitID = unitsDialog->unitID();
 
-    if (!(database->ingredientContainsUnit(unitID)))
+    if (!(database->ingredientContainsUnit(ingredientID,unitID)))
     	database->AddUnitToIngredient(ingredientID,unitID); // Add chosen unit to ingredient in database
     else
     	{
