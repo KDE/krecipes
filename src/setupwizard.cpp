@@ -364,7 +364,7 @@ QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePo
 layout->addItem(spacer_from_image,1,2);
 
 saveText=new QLabel(this);
-saveText->setText(i18n("Congratulations! All the necessary configuration setup are done. Press 'Finish' to continue, and enjoy cooking!"));
+saveText->setText(i18n("Congratulations! All the necessary configuration setups are done. Press 'Finish' to continue, and enjoy cooking!"));
 saveText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 
 saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter) );
