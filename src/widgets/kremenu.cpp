@@ -17,6 +17,7 @@
 
 #include <iostream.h>
 
+#include <kcursor.h>
 #include <kglobalsettings.h>
 #include <kimageeffect.h>
 #include <kpixmap.h>
@@ -217,7 +218,7 @@ text=QString::null;
 resize(parent->size().width(),40);
 connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale(int,int)));
 connect(this,SIGNAL(clicked()),this,SLOT(forwardClicks()));
-setCursor(QCursor(Qt::PointingHandCursor));
+setCursor(QCursor(KCursor::handCursor()));
 }
 
 
