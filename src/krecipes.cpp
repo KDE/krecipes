@@ -113,7 +113,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 	{
 	case RecipeView:
 	{
-		saveAsAction->setEnabled(show);
+		exportAction->setEnabled(show);
 		printAction->setEnabled(show);
 		reloadAction->setEnabled(show);
 	
@@ -128,7 +128,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 	}
 	case SelectP:
 	{
-		saveAsAction->setEnabled(show);
+		exportAction->setEnabled(show);
 		editAction->setEnabled(show);
 		break;
 	}
@@ -140,7 +140,6 @@ void Krecipes::setupActions()
 {
 	KIconLoader il;
 
-	saveAsAction=KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
 	printAction = KStdAction::print(this, SLOT(filePrint()), actionCollection());
 	reloadAction = new KAction(i18n("Reloa&d"), "reload", Key_F5, m_view, SLOT(reloadDisplay()), actionCollection(), "reload_action");
 
@@ -163,6 +162,10 @@ void Krecipes::setupActions()
 	KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
 	KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 	
+	exportAction = new KAction(i18n("Export..."), 0,
+	  this, SLOT(fileExport()),
+	  actionCollection(), "export_action");
+
 	(void)new KAction(i18n("Import..."), CTRL+Key_I,
 	  this, SLOT(import()),
 	  actionCollection(), "import_action");
@@ -237,9 +240,9 @@ void Krecipes::fileSave()
 m_view->save();
 }
 
-void Krecipes::fileSaveAs()
+void Krecipes::fileExport()
 {
-// this slot is called whenever the File->Save As menu is selected,
+// this slot is called whenever the File->Export menu is selected,
 	m_view->exportRecipe();
 }
 

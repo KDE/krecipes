@@ -586,7 +586,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientsFrame->setEnabled(false);
 	servingsFrame->setEnabled(false);
 	
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs);
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::Export);
 
 	connect( searchButton, SIGNAL(clicked()), SLOT(search()) );
 	connect( backButton, SIGNAL(clicked()), SLOT(back()) );

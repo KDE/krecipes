@@ -70,7 +70,7 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	recipeListView->listView()->addColumn(i18n("Missing Ingredients"));
 	recipeListView->listView()->setSorting(-1);
 
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database,  RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs );
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database,  RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::Export );
 
 	KIconLoader il;
 	QHBox *buttonBox=new QHBox(this);

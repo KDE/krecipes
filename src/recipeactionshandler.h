@@ -39,12 +39,12 @@ public:
 			AllActions =         0xffff,
 			Open =               0x0001,
 			Edit =               0x0002,
-			SaveAs =             0x0004,
+			Export =             0x0004,
 			RemoveFromCategory = 0x0008,
 			Remove =             0x0010,
 			ExpandAll =          0x0020,
 			CollapseAll =        0x0040,
-			SaveCategoryAs =     0x0080,
+			CategoryExport =     0x0080,
 			AddToShoppingList =  0x0100
 		};
 
@@ -75,7 +75,7 @@ public slots:
 	/** Saves the recipe currently selected in the list view, prompting with a file
           * dialog.
 	  */
-	void saveAs();
+	void recipeExport();
 
 	/** Removes the recipe currently selected in the list view from its current category */
 	void removeFromCategory();
@@ -93,7 +93,7 @@ public slots:
 	void collapseAll();
 	
 	/** Saves all recipes in the currently selected category */
-	void saveCategoryAs();
+	void categoryExport();
 
 private:
 	KPopupMenu *kpop;

@@ -1,3 +1,14 @@
+/***************************************************************************
+ *   Copyright (C) 2003-2004 by                                            *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
 
 #include "recipeactionshandler.h"
 
@@ -32,8 +43,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
 	if ( actions & Edit )
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
-	if ( actions & SaveAs )
-		kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save as"), this, SLOT(saveAs()), CTRL+Key_S );
+	if ( actions & Export )
+		kpop->insertItem( il->loadIcon("fileexport", KIcon::NoGroup,16),i18n("E&xport"), this, SLOT(recipeExport()), 0 );
 	if ( actions & RemoveFromCategory )
 		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove from &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
 	if ( actions & Remove )
@@ -47,8 +58,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		catPop->insertItem( i18n("&Expand All"), this, SLOT(expandAll()), CTRL+Key_Plus );
 	if ( actions & CollapseAll )
 		catPop->insertItem( i18n("&Collapse All"), this, SLOT(collapseAll()), CTRL+Key_Minus );
-	if ( actions & SaveCategoryAs )
-		catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save as"), this, SLOT(saveCategoryAs()), CTRL+Key_S );
+	if ( actions & CategoryExport )
+		catPop->insertItem( il->loadIcon("fileexport", KIcon::NoGroup,16),i18n("E&xport"), this, SLOT(categoryExport()), 0 );
 	catPop->polish();
 
 	delete il;
@@ -135,12 +146,12 @@ void RecipeActionsHandler::edit()
 	}
 }
 
-void RecipeActionsHandler::saveAs()
+void RecipeActionsHandler::recipeExport()
 {
 	if ( parentListView->selectedItem() )
 	{
 		if ( parentListView->selectedItem()->firstChild() )
-			saveCategoryAs();
+			categoryExport();
 		else
 		{
 			if ( parentListView->selectedItem()->rtti() == 1000 ) {
@@ -211,7 +222,7 @@ void RecipeActionsHandler::collapseAll()
 	}
 }
 
-void RecipeActionsHandler::saveCategoryAs()
+void RecipeActionsHandler::categoryExport()
 {
 	if (parentListView->selectedItem() )
 	{

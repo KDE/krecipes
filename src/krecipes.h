@@ -71,7 +71,7 @@ private slots:
     void fileNew();
     void fileOpen();
     void fileSave();
-    void fileSaveAs();
+    void fileExport();
     void filePrint();
     void optionsShowToolbar();
     void optionsShowStatusbar();
@@ -105,7 +105,7 @@ private:
 private:
 	// Internal variables
 	KAction *saveAction;
-	KAction *saveAsAction;
+	KAction *exportAction;
 	KAction *editAction;
 	KAction *printAction;
 	KAction *reloadAction;
