@@ -102,7 +102,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 	else
 	{
-		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		addWarningMsg(QString(i18n("While loading recipe \"%1\" "
 		  "the field \"Serving Size:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
@@ -114,7 +114,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 	else
 	{
-		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		addWarningMsg(QString(i18n("While loading recipe \"%1\" "
 		  "the field \"Preparation Time:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
@@ -146,7 +146,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 	else
 	{
-		addWarningMsg(QString(i18n("While loading recipe \"%1\""
+		addWarningMsg(QString(i18n("While loading recipe \"%1\" "
 		  "the field \"Categories:\" is either missing or could not be detected.")).arg(m_title));
 	}
 
