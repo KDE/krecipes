@@ -772,8 +772,8 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 
 		case MatcherP:
 		contextTitle->setText(i18n("<b>Ingredient Matcher</b>"));
-		contextText->setText(i18n("Do you have a bunch a ingredients lying around, but you don't know what to make?  Use this dialog to find out what you can.<br><br>"
-		"Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you're missing."
+		contextText->setText(i18n("Do you have a bunch a ingredients lying around, but you do not know what to make?  Use this dialog to find out what you can.<br><br>"
+		"Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you are missing."
 		));
 		break;
 
