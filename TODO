@@ -7,6 +7,7 @@ MAJOR FEATURES:
 	*Instead of saving "servings" of a recipe, change it to "yield" and allow a unit ( i.e. 5 servings, 2 dozen )
 	*Command-line interface
 	*Improved printing support: I'd like to allow, for example, printing on recipe cards.
+	*Handle "Cookbooks".  In MySQL/PostgreSQL a cookbook would be a table, and in SQLite it would be a file.
 
 CONVENIENCES/MINOR FEATURES:
 	*Improved navigation - add a forward and back button
