@@ -1020,6 +1020,7 @@ void RecipeInputDialog::spellCheck(void)
 
 void RecipeInputDialog::resizeRecipe(void)
 {
+	loadedRecipe->persons=servingsNumInput->value();
 	ResizeRecipeDialog dlg(this,loadedRecipe);
 
 	if ( dlg.exec() == QDialog::Accepted )

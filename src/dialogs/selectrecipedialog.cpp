@@ -242,18 +242,21 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (!it->firstChild()) // It's not a category or it's empty
 	{
-		if (s.isNull()) it->setVisible(true); // Don't filter if the filter text is empty
+		if ( !isFilteringCategories )
+		{
+		if (s.isNull() && !isFilteringCategories ) it->setVisible(true);// Don't filter if the filter text is empty
 		else if (it->text(2).contains(s,false)) it->setVisible(true);
-
 		else it->setVisible(false);
+		}
 	}
 	else // It's a category. Check the children
 	{
+		bool cat_has_matches = false;
 		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
 		{
-		if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
-
-		else if (cit->text(2).contains(s,false)) {
+		if (s.isNull() && !isFilteringCategories) cit->setVisible(true); // Don't filter if the filter text is empty
+		else if (cit->text(2).contains(s,false) && !s.isNull()) {
+								cat_has_matches = true;
 								cit->setVisible(true);
 								if (!isFilteringCategories) it->setOpen(true);
 								}
@@ -261,9 +264,10 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 		else cit->setVisible(false);
 
 		}
+
+		if (!isFilteringCategories)
+			it->setVisible( cat_has_matches ); //hide or show category if there aren't or are matches within it, respectively
 	}
-
-
 	}
 }
 
@@ -277,7 +281,6 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	else if (it!=categoryItems[categoryID]) it->setVisible(false);
 	else it->setVisible(true);
 	}
-
 }
 
 
@@ -363,34 +366,37 @@ void SelectRecipeDialog::slotExportRecipeFromCat()
 	}
 }
 
-void SelectRecipeDialog::haveSelectedItems(){
-  if( recipeListView->selectedItem() != 0 && !(recipeListView->selectedItem())->firstChild() /*&& (recipeListView->selectedItem())->text(1).toInt() != NULL*/){
-    emit recipeSelected(true);
-  }
-  else{
-    emit recipeSelected(false);
-  }
+void SelectRecipeDialog::haveSelectedItems()
+{
+	if( recipeListView->selectedItem() )
+	{
+		bool is_recipe; recipeListView->selectedItem()->text(1).toInt(&is_recipe);
+		if ( is_recipe || recipeListView->selectedItem()->firstChild() )
+			emit recipeSelected(true);
+		else
+			emit recipeSelected(false);
+	}
 }
 
 void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
 	if (recipeListView->selectedItem())
 	{
-		//if((recipeListView->selectedItem())->text(1).toInt() != NULL)
+		bool is_recipe; recipeListView->selectedItem()->text(1).toInt(&is_recipe);
+		if( is_recipe )
 			database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
 	}
 }
 
 void SelectRecipeDialog::showPopup( KListView */*l*/, QListViewItem *i, const QPoint &p ){
-  if (i) // Check if the QListViewItem actually exists
-  {
-  if(!i->firstChild() /*&& i->text(1).toInt() != NULL*/){
-    kpop->exec(p);
-  }
-  else{
-    catPop->exec(p);
-  }
-  }
+	if (i) // Check if the QListViewItem actually exists
+	{
+		bool is_recipe; i->text(1).toInt(&is_recipe);
+		if ( is_recipe )
+			kpop->exec(p);
+		else if ( i->firstChild() ) //is a category... don't pop-up for an empty category though
+			catPop->exec(p);
+	}
 }
 
 void SelectRecipeDialog::filterComboCategory(int row)
@@ -416,6 +422,7 @@ isFilteringCategories=true;
 }
 else isFilteringCategories=false;
 
+filter(searchBox->text());
 }
 
 void SelectRecipeDialog::expandAll(){
