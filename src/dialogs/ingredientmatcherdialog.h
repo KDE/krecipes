@@ -14,6 +14,7 @@
 #include "element.h"
 #include "ingredientlist.h"
 #include "recipe.h"
+#include "widgets/recipelistview.h"
 
 #include <qfontmetrics.h>
 #include <qlabel.h>
@@ -33,53 +34,38 @@ class RecipeDB;
 @author Unai Garro
 */
 
-// ### Should we make this the standard class for representing recipes? (we'd subclass it here to provide the ingredient list)
-//     This way it would be consistent all around and maybe we wouldn't show the user the recipe id (which is probably just confusing).
-//     It would even be easily configurable.
-class RecipeListItem:public QListViewItem
+class CustomRecipeListItem : public RecipeListItem
 {
 public:
-	RecipeListItem(QListView* qlv, const Recipe &r, const IngredientList &il ):QListViewItem(qlv,qlv->lastItem())
+	CustomRecipeListItem(QListView* qlv, const Recipe &r, const IngredientList &il ):RecipeListItem(qlv,r)
 	{
-		recipeStored=new Recipe();
 		ingredientListStored=new QStringList();
-		recipeStored->recipeID=r.recipeID;
-		recipeStored->title=r.title;
 		IngredientList::ConstIterator ili;
 		for (ili=il.begin();ili!=il.end();++ili) ingredientListStored->append((*ili).name);
 		
+		moveItem(qlv->lastItem());
 	}
-	RecipeListItem(QListView* qlv, const Recipe &r):QListViewItem(qlv,qlv->lastItem())
+	CustomRecipeListItem(QListView* qlv, const Recipe &r):RecipeListItem(qlv,r)
 	{
-		recipeStored=new Recipe();
 		ingredientListStored=0;
-		recipeStored->recipeID=r.recipeID;
-		recipeStored->title=r.title;
-		
+
+		moveItem(qlv->lastItem());
 	}
 	
-	int rtti() const { return 1000; }
-
-	~RecipeListItem(void)
+	~CustomRecipeListItem(void)
 	{
-	delete recipeStored;
 	delete ingredientListStored;
 	}
-
-	int recipeID() const { return recipeStored->recipeID; }
 	
 private:
-	Recipe *recipeStored;
 	QStringList *ingredientListStored;
 
 public:
-	virtual QString text(int column) const
-		{
-		if (column==0) return(recipeStored->title);
-		else if ((column==1) && ingredientListStored) 
+	virtual QString text(int column) const {
+		if (column==2  && ingredientListStored) 
 			return ingredientListStored->join (",");
-		else return(QString::null);
-		}
+		else return(RecipeListItem::text(column));
+	}
 };
 
 class SectionItem:public QListViewItem

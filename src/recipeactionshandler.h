@@ -47,7 +47,7 @@ public:
 			SaveCategoryAs =     0x0080
 		};
 
-	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int recipe_name_col, int recipe_id_col, int category_name_col, int actions = AllActions );
+	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
 	~RecipeActionsHandler(){}
 
 signals:
@@ -101,14 +101,10 @@ private:
 	KListView *parentListView;
 	RecipeDB *database;
 	
-	int recipe_name_col, recipe_id_col, category_name_col;
 	int remove_from_cat_item;
 
 	void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
 	
-	//item is a recipe if the 2nd column is an integer (the recipe's ID)
-	bool itemIsRecipe( const QListViewItem *item );
-
 	QValueList<int> getAllVisibleItems();
 };
 

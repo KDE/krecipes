@@ -573,6 +573,11 @@ for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 
 
 mysql_close(mysqlDB);
+
+if (newRecipe)
+	emit recipeCreated(Element(recipe->title,recipeID),recipe->categoryList);
+else
+	emit recipeModified(Element(recipe->title,recipeID),recipe->categoryList);
 }
 
 void MySQLRecipeDB::loadRecipeList(ElementList *list,int categoryID,QPtrList <int>*recipeCategoryList)
@@ -634,6 +639,7 @@ recipeToRemove.exec( command);
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;").arg(id);
 recipeToRemove.exec( command);
 
+emit recipeRemoved(id);
 }
 
 void MySQLRecipeDB::removeRecipeFromCategory(int ingredientID, int categoryID){
@@ -702,6 +708,14 @@ QSqlQuery unitToRemove( command,database);
 
 // Remove any recipe using that combination of ingredients also (user must have been warned before calling this function!)
 
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
+unitToRemove.exec(command);
+if ( unitToRemove.isActive() ) {
+   while ( unitToRemove.next() ) {
+      emit recipeRemoved(unitToRemove.value(0).toInt());
+   }
+}
+
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
 unitToRemove.exec(command);
 
@@ -764,6 +778,14 @@ command=QString("DELETE unit_list.* FROM unit_list WHERE ingredient_id=%1;").arg
 ingredientToDelete.exec(command);
 
 // Remove any recipe using that ingredient
+
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
+ingredientToDelete.exec(command);
+if ( ingredientToDelete.isActive() ) {
+   while ( ingredientToDelete.next() ) {
+      emit recipeRemoved(ingredientToDelete.value(0).toInt());
+   }
+}
 
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
 ingredientToDelete.exec(command);
@@ -962,6 +984,14 @@ unitToRemove.exec(command);
 
 // Remove any recipe using that unit in the ingredient list (user must have been warned before calling this function!)
 
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
+unitToRemove.exec(command);
+if ( unitToRemove.isActive() ) {
+   while ( unitToRemove.next() ) {
+      emit recipeRemoved(unitToRemove.value(0).toInt());
+   }
+}
+
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
 unitToRemove.exec(command);
 
@@ -992,6 +1022,15 @@ command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(prepMethodID);
 QSqlQuery prepMethodToRemove( command,database);
 
 // Remove any recipe using that prep method in the ingredient list (user must have been warned before calling this function!)
+
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
+prepMethodToRemove.exec(command);
+if ( prepMethodToRemove.isActive() ) {
+   while ( prepMethodToRemove.next() ) {
+      emit recipeRemoved(prepMethodToRemove.value(0).toInt());
+   }
+}
+
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
 prepMethodToRemove.exec(command);
 

@@ -77,6 +77,10 @@ signals:
 	void unitCreated( const Element & );
 	void unitRemoved( int id );
 
+	void recipeCreated( const Element &, const ElementList &categories );
+	void recipeRemoved( int id );
+	void recipeModified( const Element &, const ElementList &categories );
+
 	// Public methods
 public:
 		

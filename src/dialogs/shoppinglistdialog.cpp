@@ -15,10 +15,15 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
 #include "shoppinglistviewdialog.h"
 #include "datablocks/recipelist.h"
+#include "widgets/recipelistview.h"
+#include "recipefilter.h"
+#include "recipeactionshandler.h"
 
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
@@ -34,13 +39,14 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addItem(spacer_top,0,1);
 
     layout->setRowStretch(1,1); layout->setRowStretch(2,1); layout->setRowStretch(3,1); layout->setRowStretch(4,1); //so the list views will expand to fill any extra space
-
+    
     recipeListView=new KreListView (this,i18n("Full recipe list"),true,1);
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
-    recipeListView->listView()->addColumn(i18n("Id"));
-    recipeListView->listView()->addColumn(i18n("Recipe Title"));
+    RecipeListView *listview = new RecipeListView(recipeListView,database);
+    listview->reload();
+    recipeListView->setListView(listview);
+    recipeListView->setCustomFilter(new RecipeFilter(recipeListView->listView()),SLOT(filter(const QString &)));
     recipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
-    recipeListView->listView()->setAllColumnsShowFocus(true);
 
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
@@ -67,7 +73,12 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     shopRecipeListView=new KreListView (this,"Shopping list");
     layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
-    shopRecipeListView->listView()->addColumn(i18n("Id"));
+    
+    KConfig *config = KGlobal::config();
+    config->setGroup( "Advanced" );
+    bool show_id = config->readBoolEntry("ShowID",false);
+    shopRecipeListView->listView()->addColumn(i18n("Id"), show_id ? -1 : 0 );
+    
     shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
     shopRecipeListView->listView()->setSorting(-1);
     shopRecipeListView->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
@@ -90,11 +101,9 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     clearButton->setMaximumWidth(100);
     pm=il.loadIcon("editclear", KIcon::NoGroup,16); clearButton->setIconSet(pm);
     clearButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
-
-
-
-    // Populate UI with data
-    reloadRecipeList();
+    
+    //Takes care of all recipe actions and provides a popup menu to 'recipeListView'
+    actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::ExpandAll | RecipeActionsHandler::CollapseAll );
 
     // Connect signals & slots
     connect(addRecipeButton,SIGNAL(clicked()),this,SLOT(addRecipe()));
@@ -119,12 +128,7 @@ for (it=rlist.begin(); it != rlist.end(); it++)
 
 void ShoppingListDialog::reloadRecipeList(void)
 {
-ElementList recipeList;
-recipeListView->listView()->clear();
-database->loadRecipeList(&recipeList);
-
-for ( ElementList::const_iterator recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it )
-	new QListViewItem (recipeListView->listView(),QString::number((*recipe_it).id),(*recipe_it).name);
+	((RecipeListView*)recipeListView->listView())->reload();
 }
 
 void ShoppingListDialog::reload(void)
@@ -134,20 +138,42 @@ reloadRecipeList (); // Missing: check if there's non-existing recipes in the li
 
 void ShoppingListDialog::addRecipe(void)
 {
-QListViewItem *it;
-it=recipeListView->listView()->selectedItem();
+QListViewItem *it = recipeListView->listView()->selectedItem();
 if (it) {
-	int recipeID=it->text(0).toInt();
-	QString recipeTitle=it->text(1);
-	(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipeID),recipeTitle);
+	if (it->rtti() == 1000) {
+		RecipeListItem *recipe_it = (RecipeListItem*)it;
+		(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipe_it->recipeID()),recipe_it->title());
 	}
+	else if (it->rtti() == 1001) { //add everything in the category
+		//do this to only iterate over children of 'it'
+		QListViewItem *pEndItem = NULL;
+		QListViewItem *pStartItem = it;
+		do
+		{
+			if(pStartItem->nextSibling())
+				pEndItem = pStartItem->nextSibling();
+			else
+				pStartItem = pStartItem->parent();
+		}
+		while(pStartItem && !pEndItem);
+		
+		QListViewItemIterator list_it = QListViewItemIterator(it);
+		while ( list_it.current() != pEndItem ) {
+			if ( list_it.current()->rtti() == 1000 && list_it.current()->isVisible() ) {
+				RecipeListItem *recipe_it = (RecipeListItem*)list_it.current();
+				(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipe_it->recipeID()),recipe_it->title());
+			}
+			list_it++;
+		}
+	}
+}
 }
 
 void ShoppingListDialog::removeRecipe(void)
 {
 QListViewItem *it;
 it=shopRecipeListView->listView()->selectedItem();
-if (it) shopRecipeListView->listView()->removeItem(it);
+if (it) delete it;
 }
 
 void ShoppingListDialog::showShoppingList(void)

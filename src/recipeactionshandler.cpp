@@ -17,15 +17,13 @@
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
 
-#include "dialogs/ingredientmatcherdialog.h" //FIXME: currently we need this for access to RecipeListItem
+#include "widgets/recipelistview.h"
+#include "widgets/categorylistview.h"
 #include "recipedb.h"
 
-RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB *db, int _recipe_name_col, int _recipe_id_col, int _category_name_col, int actions ) : QObject(_parentListView),
+RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB *db, int actions ) : QObject(_parentListView),
   parentListView(_parentListView),
-  database(db),
-  recipe_name_col(_recipe_name_col),
-  recipe_id_col(_recipe_id_col),
-  category_name_col(_category_name_col)
+  database(db)
 {
 	KIconLoader *il = new KIconLoader;
 	
@@ -60,19 +58,25 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 void RecipeActionsHandler::exec( ItemType type, const QPoint &p )
 {
 	if ( type == Recipe )
-		kpop->exec(p);
+	{
+		if ( kpop->idAt(0) != -1 )
+			kpop->exec(p);
+	}
 	else if ( type == Category )
-		catPop->exec(p);
+	{
+		if ( catPop->idAt(0) != -1 )
+			catPop->exec(p);
+	}
 }
 
 void RecipeActionsHandler::showPopup( KListView */*l*/, QListViewItem *i, const QPoint &p )
 {
 	if (i) { // Check if the QListViewItem actually exists
-		if ( itemIsRecipe(i) ) {
+		if ( i->rtti() == 1000 ) {
 			kpop->setItemVisible( remove_from_cat_item, i->parent() != 0 );
 			exec(Recipe,p);
 		}
-		else if ( i->firstChild() ) //is a category... don't pop-up for an empty category though
+		else if ( i->rtti() == 1001 && i->firstChild() ) //is a category... don't pop-up for an empty category though
 			exec(Category,p);
 	}
 }
@@ -82,13 +86,11 @@ void RecipeActionsHandler::open()
 	QListViewItem *it = parentListView->selectedItem();
 	if ( it )
 	{
-		if ( it->rtti() == 1000 ) {
+		if ( it->rtti() == 1000 ) { //RecipeListItem
 			RecipeListItem *recipe_it = (RecipeListItem*)it;
 			emit recipeSelected(recipe_it->recipeID(),0);
 		}
-		else if ( !it->firstChild() && itemIsRecipe(it) )
-			emit recipeSelected(it->text(recipe_id_col).toInt(),0);
-		else if ( it->firstChild() )
+		else if ( it->rtti() == 1001 ) //CategoryListItem
 		{
 			QValueList<int> ids;
 			
@@ -107,8 +109,11 @@ void RecipeActionsHandler::open()
 			QListViewItemIterator iterator(it);
 			while(iterator.current() != pEndItem)
 			{
-				if ( itemIsRecipe(iterator.current()) && ids.find(iterator.current()->text(recipe_id_col).toInt()) == ids.end() )
-					ids.append(iterator.current()->text(recipe_id_col).toInt());
+				if ( it->rtti() == 1000 ) {
+					RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
+					if ( ids.find(recipe_it->recipeID()) == ids.end() )
+						ids.append(recipe_it->recipeID());
+				}
 				++iterator;
 			}
 			emit recipesSelected( ids, 0 );
@@ -124,7 +129,6 @@ void RecipeActionsHandler::edit()
 			RecipeListItem *recipe_it = (RecipeListItem*)it;
 			emit recipeSelected(recipe_it->recipeID(),1);
 		}
-		else if ( itemIsRecipe(it) ) emit recipeSelected(it->text(recipe_id_col).toInt(),1);
 	}
 }
 
@@ -136,18 +140,15 @@ void RecipeActionsHandler::saveAs()
 			saveCategoryAs();
 		else
 		{
-			int recipe_id;
 			if ( parentListView->selectedItem()->rtti() == 1000 ) {
 				RecipeListItem *recipe_it = (RecipeListItem*)parentListView->selectedItem();
-				recipe_id = recipe_it->recipeID();
-			}
-			else
-				recipe_id = (parentListView->selectedItem())->text(recipe_id_col).toInt();
+				int recipe_id = recipe_it->recipeID();
+
+				QValueList<int> id;
+				id.append( recipe_id );
 		
-			QValueList<int> id;
-			id.append( recipe_id );
-	
-			exportRecipes( id, i18n("Save Recipe"), (parentListView->selectedItem())->text(recipe_name_col) );
+				exportRecipes( id, i18n("Save Recipe"), recipe_it->title() );
+			}
 		}
 	}
 	else //if nothing selected, export all visible recipes
@@ -163,19 +164,13 @@ void RecipeActionsHandler::saveAs()
 void RecipeActionsHandler::removeFromCategory()
 {
 	QListViewItem *it = parentListView->selectedItem();
-	if ( it != 0 && !it->firstChild() && itemIsRecipe(it) ) {
+	if ( it && it->rtti() == 1000 ) {
 		if (it->parent() != 0) {
-			int recipe_id;
-			if ( it->rtti() == 1000 ) {
-				RecipeListItem *recipe_it = (RecipeListItem*)it;
-				recipe_id = recipe_it->recipeID();
-			}
-			else
-				recipe_id = it->text(recipe_id_col).toInt();
-		
-			int categoryID;
-			categoryID = database->findExistingCategoryByName((it->parent())->text(category_name_col));
-			database->removeRecipeFromCategory(recipe_id, categoryID);
+			RecipeListItem *recipe_it = (RecipeListItem*)it;
+			int recipe_id = recipe_it->recipeID();
+
+			CategoryListItem *cat_it = (CategoryListItem*)it->parent();
+			database->removeRecipeFromCategory(recipe_id, cat_it->categoryId());
 		
 			emit reloadNeeded();
 		}
@@ -185,7 +180,10 @@ void RecipeActionsHandler::removeFromCategory()
 void RecipeActionsHandler::remove()
 {
 	QListViewItem *it = parentListView->selectedItem();
-	if ( it && !it->firstChild() && itemIsRecipe(it) ) emit recipeSelected(it->text(recipe_id_col).toInt(),2);
+	if ( it && it->rtti() == 1000 ) {
+		RecipeListItem *recipe_it = (RecipeListItem*)it;
+		emit recipeSelected(recipe_it->recipeID(),2);
+	}
 }
 
 void RecipeActionsHandler::expandAll()
@@ -207,16 +205,17 @@ void RecipeActionsHandler::collapseAll()
 		++it;
 	}
 }
-
+//FIXME: Handle subcategories
 void RecipeActionsHandler::saveCategoryAs()
 {
 	if (parentListView->selectedItem() )
 	{
+		CategoryListItem *cat_it = (CategoryListItem*)parentListView->selectedItem();
 		QValueList<int> ids;
 
 		//do this to only iterate over children of 'it'
 		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = parentListView->selectedItem();
+		QListViewItem *pStartItem = cat_it;
 		do
 		{
 			if(pStartItem->nextSibling())
@@ -226,23 +225,21 @@ void RecipeActionsHandler::saveCategoryAs()
 		}
 		while(pStartItem && !pEndItem);
 		
-		QListViewItemIterator iterator(parentListView->selectedItem());
+		QListViewItemIterator iterator(cat_it);
 		while(iterator.current() != pEndItem)
 		{
-			int recipe_id;
-			if ( iterator.current()->rtti() == 1000 ) {
+			if ( iterator.current()->rtti() == 1000 )
+			{
 				RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
-				recipe_id = recipe_it->recipeID();
+				int recipe_id = recipe_it->recipeID();
+	
+				if ( ids.find(recipe_id) == ids.end() )
+					ids.append(recipe_id);
 			}
-			else
-				recipe_id = iterator.current()->text(recipe_id_col).toInt();
-
-			if ( itemIsRecipe(iterator.current()) && ids.find(recipe_id) == ids.end() )
-				ids.append(recipe_id);
 			++iterator;
 		}
 
-		exportRecipes( ids, i18n("Save Recipes"), (parentListView->selectedItem())->text(category_name_col) );
+		exportRecipes( ids, i18n("Save Recipes"), cat_it->categoryName() );
 	}
 }
 
@@ -298,19 +295,6 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	delete fd;
 }
 
-//item is a recipe if the 2nd column is an integer (the recipe's ID)
-bool RecipeActionsHandler::itemIsRecipe( const QListViewItem *item )
-{
-	bool is_recipe = false;
-	if ( item ) { //TODO: reorganize so that we have a consistent way of determining a recipe from a category
-	              // ### Should we create a QListViewItem subclass to use for all items representing recipes???
-		if ( item->rtti() == 1000 ) return true;
-		else item->text(recipe_id_col).toInt(&is_recipe);
-	}
-
-	return is_recipe;
-}
-
 QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 {
 	QValueList<int> ids;
@@ -318,16 +302,14 @@ QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 	QListViewItemIterator iterator(parentListView,QListViewItemIterator::Visible);
 	while(iterator.current())
 	{
-		int recipe_id;
 		if ( iterator.current()->rtti() == 1000 ) {
 			RecipeListItem *recipe_it = (RecipeListItem*)iterator.current();
-			recipe_id = recipe_it->recipeID();
-		}
-		else
-			recipe_id = iterator.current()->text(recipe_id_col).toInt();
+			int recipe_id = recipe_it->recipeID();
 
-		if ( itemIsRecipe(iterator.current()) && ids.find(recipe_id) == ids.end() )
-			ids.append(recipe_id);
+			if ( ids.find(recipe_id) == ids.end() )
+				ids.append(recipe_id);
+		}
+
 		++iterator;
 	}
 

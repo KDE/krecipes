@@ -34,6 +34,7 @@
 
 #include "DBBackend/recipedb.h"
 #include "recipeactionshandler.h"
+#include "widgets/recipelistview.h"
 
 void storeMap(QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
 {
@@ -479,7 +480,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	resultsListView = new KListView( resultBox, "resultsListView" );
 	resultsListView->addColumn( i18n( "Recipe" ) );
-	resultsListView->addColumn( i18n( "Id" ) );
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	resultsListView->addColumn( i18n("Id"), show_id ? -1 : 0 );
+
 	resultsListView->setAllColumnsShowFocus( TRUE );
 	resultBoxLayout->addWidget( resultsListView );
 	resultPageLayout->addWidget( resultBox );
@@ -518,7 +524,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientsFrame->setEnabled(false);
 	servingsFrame->setEnabled(false);
 	
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,0,1,-1,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs);
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler(resultsListView,database,RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs);
 
 	connect( searchButton, SIGNAL(clicked()), SLOT(search()) );
 	connect( backButton, SIGNAL(clicked()), SLOT(back()) );
@@ -788,7 +794,9 @@ void AdvancedSearchDialog::search()
 	//now display the recipes left
 	resultsListView->clear();
 	for ( RecipeList::const_iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
-		(void)new QListViewItem(resultsListView,(*it).title,QString::number((*it).recipeID));
+	{
+		(void)new RecipeListItem(resultsListView,*it);
+	}
 
 	widgetStack->raiseWidget( resultPage );
 	KApplication::restoreOverrideCursor();

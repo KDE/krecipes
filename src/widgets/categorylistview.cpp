@@ -103,6 +103,24 @@ void CategoryCheckListItem::setParentsState(bool on)
 
 
 
+CategoryListItem::CategoryListItem(QListView* klv, const Element &category ) : QListViewItem(klv),
+	ctyStored(category)
+{
+}
+
+CategoryListItem::CategoryListItem(QListViewItem* it, const Element &category ) : QListViewItem(it),
+	ctyStored(category)
+{
+}
+
+QString CategoryListItem::text(int column) const
+{
+	if (column==1) return(QString::number(ctyStored.id));
+	else return(ctyStored.name);
+}
+
+
+
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
 {
@@ -301,7 +319,7 @@ void StdCategoryListView::changeCategoryParent(QListViewItem *item,QListViewItem
 
 void StdCategoryListView::removeCategory(int id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QListViewItem *item = items_map[id];
 	
 	//Q_ASSERT(item);
 	
@@ -310,24 +328,25 @@ void StdCategoryListView::removeCategory(int id)
 
 void StdCategoryListView::createCategory(const Element &category, int parent_id)
 {
-	QListViewItem *new_item;
+	CategoryListItem *new_item;
 	if ( parent_id == -1 )
-		new_item = new QListViewItem(this,category.name,QString::number(category.id));
+		new_item = new CategoryListItem(this,category);
 	else
 	{
-		QListViewItem *parent = findItem(QString::number(parent_id),1);
+		QListViewItem *parent = items_map[parent_id];
 
 		Q_ASSERT(parent);
 
-		new_item = new QListViewItem(parent,category.name,QString::number(category.id));
+		new_item = new CategoryListItem(parent,category);
 	}
 
+	items_map.insert(category.id,new_item);
 	new_item->setOpen(true);
 }
 
 void StdCategoryListView::modifyCategory(const Element &category)
 {
-	QListViewItem *item = findItem(QString::number(category.id),1);
+	QListViewItem *item = items_map[category.id];
 
 	Q_ASSERT(item);
 
@@ -336,7 +355,7 @@ void StdCategoryListView::modifyCategory(const Element &category)
 
 void StdCategoryListView::modifyCategory(int id, int parent_id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QListViewItem *item = items_map[id];
 	if ( !item->parent() )
 		takeItem(item);
 	else
@@ -347,7 +366,7 @@ void StdCategoryListView::modifyCategory(int id, int parent_id)
 	if ( parent_id == -1 )
 		insertItem(item);
 	else
-		findItem(QString::number(parent_id),1)->insertItem(item);
+		items_map[parent_id]->insertItem(item);
 }
 
 void StdCategoryListView::modCategory(QListViewItem* i)
@@ -357,8 +376,10 @@ void StdCategoryListView::modCategory(QListViewItem* i)
 
 void StdCategoryListView::saveCategory(QListViewItem* i)
 {
-	int existing_id = database->findExistingCategoryByName( i->text(0) );
-	int cat_id = i->text(1).toInt();
+	CategoryListItem *cat_it = (CategoryListItem*)i;
+
+	int existing_id = database->findExistingCategoryByName( cat_it->categoryName() );
+	int cat_id = cat_it->categoryId();
 	if ( existing_id != -1 && existing_id != cat_id ) //category already exists with this label... merge the two
 	{  
 		switch (KMessageBox::warningContinueCancel(this,i18n("This category already exists.  Continuing will merge these two categories into one.  Are you sure?")))
@@ -372,7 +393,7 @@ void StdCategoryListView::saveCategory(QListViewItem* i)
 		}
 	}
 	else
-		database->modCategory(cat_id, i->text(0));
+		database->modCategory(cat_id, cat_it->categoryName());
 }
 
 
@@ -389,7 +410,7 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db ) : 
 
 void CategoryCheckListView::removeCategory(int id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QListViewItem *item = items_map[id];
 	
 	//Q_ASSERT(item);
 	
@@ -403,19 +424,20 @@ void CategoryCheckListView::createCategory(const Element &category, int parent_i
 		new_item = new CategoryCheckListItem(this,category);
 	else
 	{
-		QListViewItem *parent = findItem(QString::number(parent_id),1);
+		QListViewItem *parent = items_map[parent_id];
 
 		Q_ASSERT(parent);
 
 		new_item = new CategoryCheckListItem(parent,category);
 	}
 
+	items_map.insert(category.id,new_item);
 	new_item->setOpen(true);
 }
 
 void CategoryCheckListView::modifyCategory(const Element &category)
 {
-	QListViewItem *item = findItem(QString::number(category.id),1);
+	QListViewItem *item = items_map[category.id];
 
 	Q_ASSERT(item);
 
@@ -424,7 +446,7 @@ void CategoryCheckListView::modifyCategory(const Element &category)
 
 void CategoryCheckListView::modifyCategory(int id, int parent_id)
 {
-	QListViewItem *item = findItem(QString::number(id),1);
+	QListViewItem *item = items_map[id];
 	if ( !item->parent() )
 		takeItem(item);
 	else
@@ -435,7 +457,7 @@ void CategoryCheckListView::modifyCategory(int id, int parent_id)
 	if ( parent_id == -1 )
 		insertItem(item);
 	else
-		findItem(QString::number(parent_id),1)->insertItem(item);
+		items_map[parent_id]->insertItem(item);
 }
 
 #include "categorylistview.moc"

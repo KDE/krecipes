@@ -25,6 +25,8 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
@@ -56,10 +58,16 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	recipeListView=new KreListView(this,i18n("Matching Recipes"),false,1,missingBox);
 	recipeListView->listView()->setAllColumnsShowFocus(true);
 	recipeListView->listView()->addColumn(i18n("Title"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	recipeListView->listView()->addColumn( i18n("Id"), show_id ? -1 : 0 );
+
 	recipeListView->listView()->addColumn(i18n("Missing Ingredients"));
 	recipeListView->listView()->setSorting(-1);
 
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, 0, -1, -1,  RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs );
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database,  RecipeActionsHandler::Open|RecipeActionsHandler::Edit|RecipeActionsHandler::SaveAs );
 
 	KIconLoader il;
 	QHBox *buttonBox=new QHBox(this);
@@ -125,7 +133,7 @@ void IngredientMatcherDialog::findRecipes(void)
 		IngredientList missing;
 		if (ilist.containsSubSet(il,missing))
 			{
-			new RecipeListItem(recipeListView->listView(),*it);
+			new CustomRecipeListItem(recipeListView->listView(),*it);
 			}
 		else 
 			{
@@ -171,7 +179,7 @@ void IngredientMatcherDialog::findRecipes(void)
 						new SectionItem(recipeListView->listView(),i18n("You are missing %1 ingredients for:").arg(missingNo));
 						titleShownYet=true;
 					}
-				new RecipeListItem(recipeListView->listView(),*it,*ilit);
+				new CustomRecipeListItem(recipeListView->listView(),*it,*ilit);
 				}
 		}
 	}
@@ -188,7 +196,7 @@ void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int colu
 {
 	if ( column == 0 ) //we only need to do this once
 	{
-		int totalWidth=listView()->columnWidth(0)+listView()->columnWidth(1);
+		int totalWidth=listView()->columnWidth(0)+listView()->columnWidth(1)+listView()->columnWidth(2);
 		
 		QPixmap sectionPm(totalWidth,height()); QPainter painter(&sectionPm);
 		

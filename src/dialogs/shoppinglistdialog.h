@@ -22,7 +22,7 @@
 class RecipeDB;
 class RecipeList;
 class ShoppingListViewDialog;
-
+class RecipeActionsHandler;
 
 /**
 @author Unai Garro
@@ -53,6 +53,7 @@ private:
     QPushButton* okButton;
     QPushButton* clearButton;
     ShoppingListViewDialog *shoppingListDisplay;
+    RecipeActionsHandler *actionHandler;
 
 public slots:
 	void addRecipeToShoppingList(int recipeID); // Called from inputdialog-> through krecipesview

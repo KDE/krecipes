@@ -63,7 +63,7 @@ void KreListView::filter(const QString& s)
 {
 for (QListViewItem *it=list->firstChild();it;it=it->nextSibling())
 	{
-		if ( s.isNull() || s == "" ) // Don't filter if the filter text is empty
+		if ( s.isEmpty() ) // Don't filter if the filter text is empty
 		{
 			it->setVisible(true);
 		}
@@ -77,6 +77,12 @@ for (QListViewItem *it=list->firstChild();it;it=it->nextSibling())
 
 
 	}
+}
+
+void KreListView::setCustomFilter(QObject *receiver, const char *slot)
+{
+	disconnect(SIGNAL(textChanged(const QString&)),filterEdit,SLOT(filter(const QString&)));
+	connect(filterEdit,SIGNAL(textChanged(const QString&)),receiver,slot);
 }
 
 #include "krelistview.moc"

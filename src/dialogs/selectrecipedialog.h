@@ -38,6 +38,8 @@ class ElementList;
 class Recipe;
 class AdvancedSearchDialog;
 class CategoryTree;
+class RecipeFilter;
+class RecipeListView;
 
 /**
 @author Unai Garro
@@ -58,7 +60,7 @@ private:
   // Widgets
   QGridLayout *layout;
   QHBox *searchBar;
-  KListView* recipeListView;
+  RecipeListView* recipeListView;
   QHBox *buttonBar;
   QPushButton *openButton;
   QPushButton *removeButton;
@@ -72,19 +74,12 @@ private:
   RecipeDB *database;
   ElementList *recipeList;
   //ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
-  QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
   QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
-  bool isFilteringCategories;
-  QListViewItem *currentCategory;
   RecipeActionsHandler *actionHandler;
-  // Internal Methods
-  void loadRecipeList(void);
-  void loadCategoryCombo(void);
-  void loadListView(const CategoryTree *categoryTree, QListViewItem *parent=0 );
-  bool itemIsRecipe( const QListViewItem *item );
+  RecipeFilter *recipeFilter;
 
-  bool isParentOf(QListViewItem *parent, QListViewItem *to_check);
-  bool hideIfEmpty(QListViewItem *parent=0);
+  // Internal Methods
+  void loadCategoryCombo(void);
 
 signals:
   void recipeSelected(int id, int action);
@@ -92,8 +87,6 @@ signals:
   void recipeSelected(bool);
 
 private slots:
-  void filter(const QString &s);
-  void filterCategories(int categoryID);
   void filterComboCategory(int row);
   void showEvent(QShowEvent*);
 public slots:

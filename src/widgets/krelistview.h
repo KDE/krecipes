@@ -29,7 +29,8 @@ public:
     ~KreListView();
     KListView *listView(){return list;}
     
-    void setListView(KListView *list_view){ delete list; list = list_view; } 
+    void setListView(KListView *list_view){ delete list; list = list_view; }
+    void setCustomFilter(QObject *receiver, const char *slot);
 
 private:
 	QHBox *filterBox;

@@ -457,7 +457,7 @@ bool DishInput::isCategoryFilteringEnabled(void)
 return categoryFiltering;
 }
 
-void DishInput::reload(IngredientPropertyList *propertyList)
+void DishInput::reload(IngredientPropertyList */*propertyList*/)
 {
 constraintsView->reload();
 }

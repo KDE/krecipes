@@ -320,11 +320,11 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 	{
 	switch (w)
 		{
-		case SelectP: selectPanel->reload(); // Reload data
+		case SelectP:
 			rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
 			rightPanel->raise(selectPanel);
 			break;
-		case ShoppingP: shoppingListPanel->reload(); // Reload data
+		case ShoppingP:
 			rightPanel->setHeader(i18n("Shopping List"),"trolley");
 			rightPanel->raise(shoppingListPanel);
 			break;

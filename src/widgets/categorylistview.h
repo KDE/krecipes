@@ -12,6 +12,8 @@
 #ifndef CATEGORYLISTVIEW_H
 #define CATEGORYLISTVIEW_H
 
+#include <qmap.h>
+
 #include <klistview.h>
 
 #include "element.h"
@@ -41,6 +43,27 @@ protected:
 	void setParentsState( bool );
 
 	bool locked;
+
+private:
+	Element ctyStored;
+};
+
+
+#define CATEGORYLISTITEM_RTTI 1001
+
+class CategoryListItem : public QListViewItem {
+public:
+	CategoryListItem(QListView* klv, const Element &category );
+	CategoryListItem(QListViewItem* it, const Element &category );
+
+	virtual QString text(int column) const;
+
+	Element element() const{ return ctyStored; }
+
+	int categoryId(void){return ctyStored.id;}
+	QString categoryName(void){return ctyStored.name;}
+
+	int rtti() const{ return CATEGORYLISTITEM_RTTI; }
 
 private:
 	Element ctyStored;
@@ -160,6 +183,8 @@ protected:
 	virtual void modifyCategory(const Element &category);
 	virtual void modifyCategory(int id, int parent_id);
 
+	QMap<int,CategoryListItem*> items_map;
+
 private slots:
 	void preparePopup();
 	void showPopup(KListView *, QListViewItem *, const QPoint &);
@@ -195,6 +220,8 @@ protected:
 	virtual void createCategory(const Element &category, int parent_id);
 	virtual void modifyCategory(const Element &category);
 	virtual void modifyCategory(int id, int parent_id);
+
+	QMap<int,CategoryCheckListItem*> items_map;
 };
 
 #endif //CATEGORYLISTVIEW_H

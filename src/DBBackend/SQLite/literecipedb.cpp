@@ -564,6 +564,10 @@ for ( unsigned int i = 0; i < recipe->authorList.count(); i++ )
 	--author_it;
 	}
 
+if (newRecipe)
+	emit recipeCreated(Element(recipe->title,recipeID),recipe->categoryList);
+else
+	emit recipeModified(Element(recipe->title,recipeID),recipe->categoryList);
 }
 
 
@@ -629,6 +633,7 @@ database->executeQuery( command);
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;").arg(id);
 database->executeQuery( command);
 
+emit recipeRemoved(id);
 }
 
 void LiteRecipeDB::removeRecipeFromCategory(int ingredientID, int categoryID){
@@ -698,6 +703,16 @@ database->executeQuery(command);
 
 // Remove any recipe using that combination of ingredients also (user must have been warned before calling this function!)
 
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
+QSQLiteResult query=database->executeQuery(command);
+if (query.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row =query.first();
+	while (!query.atEnd()) {
+		emit recipeRemoved(row.data(0).toInt());
+		row=query.next();
+	}
+}
+
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;").arg(ingredientID).arg(unitID);
 database->executeQuery(command);
 
@@ -764,6 +779,16 @@ command=QString("DELETE unit_list.* FROM unit_list WHERE ingredient_id=%1;").arg
 database->executeQuery(command);
 
 // Remove any recipe using that ingredient
+
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
+QSQLiteResult query=database->executeQuery(command);
+if (query.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row =query.first();
+	while (!query.atEnd()) {
+		emit recipeRemoved(row.data(0).toInt());
+		row=query.next();
+	}
+}
 
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1;").arg(ingredientID);
 database->executeQuery(command);
@@ -951,6 +976,17 @@ command=QString("DELETE FROM prep_methods WHERE id=%1;").arg(prepMethodID);
 database->executeQuery(command);
 
 // Remove any recipe using that unit in the ingredient list (user must have been warned before calling this function!)
+
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
+QSQLiteResult query=database->executeQuery(command);
+if (query.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row =query.first();
+	while (!query.atEnd()) {
+		emit recipeRemoved(row.data(0).toInt());
+		row=query.next();
+	}
+}
+
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;").arg(prepMethodID);
 database->executeQuery(command);
 
@@ -1011,6 +1047,16 @@ database->executeQuery(command);
 
 
 // Remove any recipe using that unit in the ingredient list (user must have been warned before calling this function!)
+
+command=QString("SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
+QSQLiteResult query=database->executeQuery(command);
+if (query.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row =query.first();
+	while (!query.atEnd()) {
+		emit recipeRemoved(row.data(0).toInt());
+		row=query.next();
+	}
+}
 
 command=QString("DELETE recipes.*  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;").arg(unitID);
 database->executeQuery(command);
