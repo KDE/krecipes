@@ -182,6 +182,7 @@ void USDADataDialog::importSelected()
 		}
 
 		IngredientPropertyList property_list; database->loadProperties( &property_list );
+		IngredientPropertyList existing_ing_props; database->loadProperties(&existing_ing_props,ingredient.id);
 
 		int i = 0;
 		for ( QStringList::const_iterator it = data.at(2); property_data_list[i].name; it++, i++ )
@@ -189,14 +190,16 @@ void USDADataDialog::importSelected()
 			int property_id = property_list.findByName(property_data_list[i].name);
 			if ( property_id == -1 )
 			{
-				//TODO: check that the property doesn't already exist and update it if it does
 				database->addProperty(property_data_list[i].name, property_data_list[i].unit);
 				property_id = database->lastInsertID();
 			}
 
-			double amount = (*it).toDouble()/100.0; //data givin in 100g so divide by 100 to get the amount in 1 gram
+			double amount = (*it).toDouble()/100.0; //data givin per 100g so divide by 100 to get the amount in 1 gram
 
-			database->addPropertyToIngredient(ingredient.id,property_id,amount,grams_id);
+			if ( existing_ing_props.find(property_id) != -1 ) //property already added to ingredient, so just update
+				database->changePropertyAmountToIngredient(ingredient.id,property_id,amount,grams_id);
+			else
+				database->addPropertyToIngredient(ingredient.id,property_id,amount,grams_id);
 		}
 
 		accept();
