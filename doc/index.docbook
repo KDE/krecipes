@@ -1417,13 +1417,10 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <chapter id="krecipes-preferences">
 
-<title>Other &krecipes; Configuration</title>
-
-<sect1 id="configure-krecipes">
 <title>Setting Preferences in &krecipes;</title>
 <para>&krecipes; is extremely configurable and allows the setting of many preferences besides those defined in the <link linkend="krecipes-page-setup">Page Setup</link> section.</para>
 
-<sect2 id="configure-shortcuts">
+<sect1 id="configure-shortcuts">
 <title>Creating Shortcuts</title>
 
 <para>To access the Shortcut configuration interface, select <guimenu>Settings</guimenu> and <guimenuitem>Configure Shortcuts...</guimenuitem> from the &krecipes; menu.  The <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen will appear.</para>
@@ -1518,9 +1515,9 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <listitem><para><guibutton>Cancel</guibutton> &ndash; cancels any changes made and closes the <interface>Configure Shortcuts &ndash; &krecipes;</interface> window</para></listitem>
 </itemizedlist>
 
-</sect2>
+</sect1>
 
-<sect2 id="configure-toolbars">
+<sect1 id="configure-toolbars">
 <title>Customizing the Toolbar</title>
 
 <para>To access the Toolbar configuration interface, select <guimenu>Settings</guimenu> and <guimenuitem>Configure Toolbars...</guimenuitem> from the &krecipes; menu.  The <guilabel>Configure Toolbars &ndash; &krecipes;</guilabel> screen will appear.</para>
@@ -1549,14 +1546,14 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>In order to apply your changes, you must click the <guibutton>Apply</guibutton> button that appears at the bottom of the <guilabel>Configure Toolbars &ndash; &krecipes;</guilabel> screen.  This will apply your changes, but leave the window open in order to make other changes, if desired.  To apply your changes and exit the interface, click the <guibutton>OK</guibutton> button.  Clicking the  <guibutton>Cancel</guibutton> will cancel <emphasis>any changes made since the last time the <guibutton>Apply</guibutton> button was clicked</emphasis>.</para>
 
- </sect2>
+</sect1>
 
 
-<sect2 id="configure-krecipes-choice">
+<sect1 id="configure-krecipes-choice">
 <title>Configuring &krecipes;</title>
 <para>When you choose <guimenu>Settings</guimenu> and <guimenuitem>Configure Krecipes</guimenuitem> from the &krecipes; menu, the <interface>Krecipes Preferences - Krecipes</interface> window appears.  From this window, you can choose one of three buttons to configure various aspects of &krecipes;.</para>
 
-<sect3 id="configure-server-settings">
+<sect2 id="configure-server-settings">
 <title>Server Settings</title>
 <para>The first preference that you can configure is the <guilabel>Database Server Options</guilabel>.  You will notice from the following screenshot that this label shows that an SQLite database has been selected.  However, if the database selected is either <emphasis>MySQL</emphasis> or <emphasis>PostgreSQL</emphasis> the label would show the name of the appropriate database format.  The <guilabel>Database file:</guilabel> label shows the complete path to the database file.</para>
 
@@ -1585,9 +1582,9 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <listitem><para><guibutton>Cancel</guibutton> &ndash; cancels changes, if any have been made, and closes the <interface>Krecipes Preferences - Krecipes</interface> window</para></listitem>
 <listitem><para><guibutton>Help</guibutton> opens the &krecipes; documentation</para></listitem>
 </itemizedlist>
-</sect3>
+</sect2>
 
-<sect3 id="custom-formatting">
+<sect2 id="custom-formatting">
 <title>Customizing Formatting</title>
 
 <para>Like accessing the <interface>Krecipes Preferences - Krecipes</interface> <guilabel>Server Settings</guilabel> preferences, you access the <guilabel>Formatting</guilabel> preferences, by first choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the &krecipes; menu and then, choosing the <guilabel>Formatting</guilabel> option that appears on the left of the window.</para>
@@ -1616,9 +1613,9 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 </listitem>
 </orderedlist>
 
-</sect3>
+</sect2>
 
-<sect3 id="import-preference">
+<sect2 id="import-preference">
 <title>Choosing Import Preferences</title>
 
 <para>
@@ -1644,8 +1641,6 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>Chocolate Cheesecake</para>
 <para>Chocolate Cheesecake (2)</para> 
-</sect3>
-
 </sect2>
 
 </sect1>
