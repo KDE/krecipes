@@ -14,6 +14,7 @@
 #include <qfile.h>
 #include <qstylesheet.h>
 #include <qbuffer.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -85,7 +86,10 @@ QString KreExporter::createContent( const RecipeList& recipes )
 			QByteArray data;
 			QBuffer buffer( data );
 			buffer.open( IO_WriteOnly );
-			( *recipe_it ).photo.save( &buffer, "JPEG" );
+			QImageIO iio( &buffer, "JPEG" );
+			iio.setImage( ( *recipe_it ).photo.convertToImage() );
+			iio.write();
+			//( *recipe_it ).photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 			xml += KCodecs::base64Encode( data, true );
 

@@ -196,6 +196,7 @@ private:
 	QString getNextInsertIDStr( const QString &table, const QString &column );
 
 	QString DBname;
+	const QString connectionName;
 
 	static int m_refCount;
 };

@@ -25,7 +25,8 @@
 
 int QSqlRecipeDB::m_refCount = 0;
 
-QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name ) : RecipeDB()
+QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name ) : RecipeDB(),
+	connectionName("connection" + QString::number( m_refCount+1 ))
 {
 	DBuser = user;
 	DBpass = pass;
@@ -42,7 +43,7 @@ QSqlRecipeDB::~QSqlRecipeDB()
 		database->close();
 	}
 
-	QSqlDatabase::removeDatabase( database );
+	QSqlDatabase::removeDatabase( connectionName );
 	--m_refCount;
 }
 
@@ -66,7 +67,7 @@ void QSqlRecipeDB::connect( bool create )
 	}
 
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
-	database = QSqlDatabase::addDatabase( qsqlDriver(), "connection" + QString::number( m_refCount ) );
+	database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
 
 	database->setDatabaseName( DBname );
 	if ( !( DBuser.isNull() ) )
@@ -558,7 +559,10 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		QByteArray ba;
 		QBuffer buffer( ba );
 		buffer.open( IO_WriteOnly );
-		recipe->photo.save( &buffer, "JPEG" );
+		QImageIO iio( &buffer, "JPEG" );
+		iio.setImage( recipe->photo.convertToImage() );
+		iio.write();
+		//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		storePhoto( recipeID, ba );
 	}
@@ -1201,7 +1205,7 @@ void QSqlRecipeDB::createNewUnit( const QString &unitName, const QString &unitPl
 
 void QSqlRecipeDB::modUnit( int unitID, const QString &newName, const QString &newPlural )
 {
-	QSqlQuery unitQuery( database );
+	QSqlQuery unitQuery( QString::null, database );
 
 	unitQuery.exec( "UPDATE units SET name='" + QString( escapeAndEncode( newName ) ) + "' WHERE id='" + QString::number( unitID ) + "';" );
 	unitQuery.exec( "UPDATE units SET plural='" + QString( escapeAndEncode( newPlural ) ) + "' WHERE id='" + QString::number( unitID ) + "';" );

@@ -12,6 +12,7 @@
 
 #include <qbuffer.h>
 #include <qdom.h>
+#include <qimage.h>
 #include <qpixmap.h>
 #include <qfile.h>
 
@@ -75,7 +76,10 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		QByteArray data;
 		QBuffer buffer( data );
 		buffer.open( IO_WriteOnly );
-		( *recipe_it ).photo.save( &buffer, "JPEG" );
+		QImageIO iio( &buffer, "JPEG" );
+		iio.setImage( ( *recipe_it ).photo.convertToImage() );
+		iio.write();
+		//( *recipe_it ).photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode( data, true ) ) );
 		head_tag.appendChild( picbin_tag );
