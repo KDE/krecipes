@@ -1,20 +1,22 @@
- /**************************************************************************
+/***************************************************************************
  *                                                                         *
- *                Copyright (C) 2003 by the opie project,                  *
- *                    qsqlite.sourceforge.net authors                      *
- *                 and krecipes.courceforge.net authors                    *
+ *                           Copyright (C) 2003                            *
+ *                by Unai Garro (ugarro@users.sourceforge.net)             *
+ *                       Martin Imobersteg <imm@gmx.ch>                    *
+ *                          and opie project                               *
  *                                                                         *
- * This code was originally developed by the opie project, on which the    *
- *           qsqlite.sourceforge.netproject based their work.              *
- * This file is a small extension to it, necessary to perform some minimum *
- * SQL actions)                                                            *
  *                                                                         *
+ *    This code was originally developed by the opie project, on which     *
+ *                    Martin Imobersteg based his work.                    *
+ * This file is adds a small extension, necessary to perform some minimum  * 
+ * SQL actions                                                             *
+ *                                                                         *
+ *         (this project is different from that in qsqlite.sf.net)         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-
 
 #ifndef QSQLITEDB_H
 #define QSQLITEDB_H
