@@ -31,18 +31,20 @@ RecipeMLImporter::RecipeMLImporter( const QString& file ) : BaseImporter()
 	QFile input( file );
 	if ( input.open( IO_ReadOnly ) )
 	{
-		recipe = new Recipe();
 		QDomDocument doc;
 		QString error; int line; int column;
 		if (!doc.setContent(&input,&error,&line,&column))
 		{
-			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3.  This may not be a *.mx2 file.") ).arg(error).arg(line).arg(column) );
+			setErrorMsg( QString( i18n("\"%1\" at line %2, column %3.  This may not be a RecipeML file.") ).arg(error).arg(line).arg(column) );
 			return;
 		}
 
-	//	if (doc.doctype().name() != "recipeml") {
-	//		return false;
-	//	}
+		if (doc.doctype().name() != "recipeml")
+		{
+			//maybe give user actual doc.doctype().name()?
+			setErrorMsg( i18n("This file does not appear to be a valid RecipeML archive.") );
+			return;
+		}
 
 		QDomElement recipeml = doc.documentElement();
 
@@ -59,11 +61,9 @@ RecipeMLImporter::RecipeMLImporter( const QString& file ) : BaseImporter()
 			if (tagName == "recipe")
 				readRecipemlRecipe(el);
 		}
-
-		add(recipe);
 	}
 	else
-		error_code = FileOpenError;
+		setErrorMsg( i18n("Unable to open file.") );
 }
 
 RecipeMLImporter::~RecipeMLImporter()
@@ -71,11 +71,14 @@ RecipeMLImporter::~RecipeMLImporter()
 
 }
 
-void RecipeMLImporter::readRecipemlRecipe(const QDomElement& recipe)
+void RecipeMLImporter::readRecipemlRecipe(const QDomElement& recipe_element)
 {
-	QDomNodeList l = recipe.childNodes();
+	recipe = new Recipe();
 
-	for (unsigned i = 0; i < l.count(); i++) {
+	QDomNodeList l = recipe_element.childNodes();
+
+	for (unsigned i = 0; i < l.count(); i++)
+	{
 		QDomElement el = l.item(i).toElement();
 		QString tagName = el.tagName();
 
@@ -86,6 +89,8 @@ void RecipeMLImporter::readRecipemlRecipe(const QDomElement& recipe)
 		else if (tagName == "directions")
 			readRecipemlDirections(el);
 	}
+
+	add(recipe);
 }
 
 void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
@@ -96,8 +101,9 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 		QDomElement el = l.item(i).toElement();
 		QString tagName = el.tagName();
 
+		//TODO check for "subtitle"
 		if (tagName == "title")
-			recipe->title = el.text();
+			recipe->title = el.text().stripWhiteSpace();
 		else if (tagName == "categories")
 		{
 			QDomNodeList categories = el.childNodes();
@@ -111,17 +117,17 @@ void RecipeMLImporter::readRecipemlHead(const QDomElement& head)
 			}
 		}
 		else if (tagName == "description")
-			recipe->instructions += "\n\nDescription: "+el.text();
+			recipe->instructions += "\n\nDescription: "+el.text().stripWhiteSpace();
 		else if (tagName == "preptime")
 			// TODO check for "range, sep, timeunit" etc
-			recipe->instructions += "\n\nPreparation time: "+el.text();
+			recipe->instructions += "\n\nPreparation time: "+el.text().stripWhiteSpace();
 		else if (tagName == "yield")
 			// TODO check for "range, sep, unit" etc
 			recipe->persons = el.text().toInt();
 		else if (tagName == "source")
 		{
 			// TODO check for "sourceitem's"
-			recipe->authorList.append( new Element(el.text()) );
+			recipe->authorList.append( new Element(el.text().stripWhiteSpace()) );
 		}
 	}
 }
@@ -147,7 +153,7 @@ void RecipeMLImporter::readRecipemlIngs(const QDomElement& ings)
 				QDomElement cEl = ingDiv.item(j).toElement();
 				if (cEl.tagName() == "title")
 				{
-					QString name = cEl.text();
+					QString name = cEl.text().stripWhiteSpace();
 					if (!name.endsWith(":"))
 						name += ":";
 
@@ -185,11 +191,11 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 				if (amtChild.tagName() == "qty")
 					quantity = amtChild.text().toDouble();
 				else if (amtChild.tagName() == "unit")
-					unit = amtChild.text();
+					unit = amtChild.text().stripWhiteSpace();
 			}
 		}
 		else if (tagName == "item")
-			name = ingChild.text();
+			name = ingChild.text().stripWhiteSpace();
 	}
 	recipe->ingList.append( new Ingredient(name, quantity, unit) );
 }
@@ -206,7 +212,7 @@ void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
 
 		if (el.tagName()="step")
 		{
-			directions.append(el.text());
+			directions.append(el.text().stripWhiteSpace());
 		}
 	}
 
@@ -216,6 +222,8 @@ void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)
 	{
 		for (unsigned i=1; i <= directions.count(); i++)
 		{
+			if ( i != 1 ){directionsText += "\n\n";}
+
 			QString sWith = QString("%1. ").arg(i);
 			QString text = directions[i-1];
 			if (!text.stripWhiteSpace().startsWith(sWith))
