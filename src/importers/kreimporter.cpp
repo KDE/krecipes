@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -100,7 +101,7 @@ KreImporter::KreImporter(const QString& filename)
             readIngredients(el.childNodes(), recipe);
           }
           if (el.tagName() == "krecipes-instructions"){
-            recipe->instructions = el.text();
+            recipe->instructions = el.text().stripWhiteSpace();
           }
         }
         add(recipe);
@@ -119,8 +120,6 @@ KreImporter::~KreImporter()
 
 void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 {
-  ElementList authors;
-  ElementList categoryList;
   for (unsigned i = 0; i < l.count(); i++)
   {
     QDomElement el = l.item(i).toElement();
@@ -129,10 +128,8 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
       kdDebug()<<"Found title: "<<recipe->title<<endl;
     }
     else if (el.tagName() == "author"){
-      Element author;
-      author.name = el.text();
-      kdDebug()<<"Found author: "<<author.name<<endl;
-      authors.add(author);
+      kdDebug()<<"Found author: "<<el.text()<<endl;
+      recipe->authorList.append( new Element(el.text()) );
     }
 		else if (el.tagName() == "serving"){
 			recipe->persons = el.text().toInt();
@@ -143,10 +140,8 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 			{
 				QDomElement c = categories.item(j).toElement();
 				if (c.tagName() == "cat"){
-						Element new_cat;
-						new_cat.name = QString(c.text()).stripWhiteSpace();
-						kdDebug()<<"Found category: "<<new_cat.name<<endl;
-						categoryList.add( new_cat );
+						kdDebug()<<"Found category: "<<QString(c.text()).stripWhiteSpace()<<endl;
+						recipe->categoryList.append( new Element(QString(c.text()).stripWhiteSpace()) );
 				}
 			}
 		}
@@ -172,13 +167,10 @@ void KreImporter::readDescription(const QDomNodeList& l, Recipe *recipe)
 			}
 		}
   }
-  recipe->categoryList = categoryList;
-  recipe->authorList = authors;
 }
 
 void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe)
 {
-	IngredientList ingredientList;
 	for (unsigned i=0; i < l.count(); i++){
     QDomElement el = l.item(i).toElement();
 		if (el.tagName() == "ingredient"){
@@ -197,10 +189,9 @@ void KreImporter::readIngredients(const QDomNodeList& l, Recipe *recipe)
 						new_ing.units = QString(ing.text()).stripWhiteSpace();
 				}
       }
-		  ingredientList.add( new_ing );
+		  recipe->ingList.add( new_ing );
     }
   }
-	recipe->ingList = ingredientList;
 }
 
 
