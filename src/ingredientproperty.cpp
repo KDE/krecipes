@@ -11,6 +11,8 @@
 
 IngredientProperty::IngredientProperty()
 {
+id=-1;
+amount=0.0;
 }
 
 IngredientProperty::IngredientProperty(IngredientProperty *ip)
