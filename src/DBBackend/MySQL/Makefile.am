@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 
 # set the include path for X, qt and KDE
-INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. $(all_includes) -I$(MYSQL_INC)
+INCLUDES = -I$(srcdir) -I$(srcdir)/.. -I$(srcdir)/../.. $(all_includes) $(MYSQL_INC)
 
 
 # Instructions for building the convenience library
