@@ -39,7 +39,8 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	missingNumberLabel->setText(i18n("Missing ingredients allowed:"));
 	missingNumberCombo=new KComboBox(missingBox);
 	QStringList optionsList;
-	optionsList.append("1");
+	optionsList.append(i18n("None"));
+	optionsList+="1";
 	optionsList+="2";
 	optionsList+="3";
 	optionsList+=i18n("any");
@@ -122,11 +123,16 @@ void IngredientMatcherDialog::findRecipes(void)
 		missingNumbers.append(missing.count());
 		}
 
+	//Check if the user wants to show missing ingredients
+	
+	if (this->missingNumberCombo->currentItem()==0) return; //None 
+	
 	// Show recipes with missing ingredients
 	new SectionItem(recipeListView->listView(),i18n("You are missing some ingredients for:"));
 	
 	QValueList<int>::Iterator nit;
-	if (this->missingNumberCombo->currentItem()==3) // Any
+	
+	if (this->missingNumberCombo->currentItem()==4) // Any
 	{
 		for (it=incompleteRecipes.begin();it!=incompleteRecipes.end();++it)
 		{
