@@ -700,7 +700,7 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, const QStr
 {
 	if ( !unitBox->contains(unit) ) // returns always false if unit is empty string, even if exists
 	{
-		int id = unitComboList->findByName(unit).id;
+		int id = database->findExistingUnitByName(unit);
 		if ( -1 == id ) 
 		{
 			database->createNewUnit(unit);
@@ -758,7 +758,7 @@ bool RecipeInputDialog::checkAmountEdit()
 
 void RecipeInputDialog::addIngredient(void)
 {
-	if ( !checkAmountEdit() )
+	if ( !checkAmountEdit() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
 		return;
 
 	createNewIngredientIfNecessary();
@@ -825,11 +825,13 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		if (ok)
 		{
 			(*ing).amount = new_mn.toDouble();
-			it->setText(1, new_mn.toString( number_format ));
+			if ( !new_text.isEmpty() )
+				it->setText(1, new_mn.toString( number_format ));
 		}
 		else
 		{
-			it->setText(1, prev_mn.toString( number_format ));
+			if ( !new_text.isEmpty() )
+				it->setText(1, prev_mn.toString( number_format ));
 		}
 			
 		if (new_mn != prev_mn)

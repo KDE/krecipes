@@ -153,7 +153,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 	pm.save(fi.dirPath()+"/"+filename+"_photos/"+escape(recipe.title)+".png","PNG");
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 }
-
+#include <qobjectlist.h>
 int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset )
 {
 	const QMap<QString,QString> html_map = generateBlocksHTML( recipe );
@@ -225,7 +225,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
 			sizeCalculator->write(tempHTML);
 			sizeCalculator->end();
-			
+
+			sizeCalculator->view()->layout(); //force a layout... I assume khtml is otherwise puts this off until it is shown
+
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
 			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
