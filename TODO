@@ -1,13 +1,3 @@
-Things found to be done before the 0.4 release:
-
-
-*Avoid overlapping elements in the RecipeViewDialog (CSS)
-*package
-*release and annnounce
-
-French translation is still missing. Anyone?
-
-
 
 jkivlighn:
 
@@ -18,11 +8,11 @@ widget
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
 
-For 0.4:
-
-For 0.5:
+planned for 0.5:
 	*show possible list of recipes given what you have as ingredients
 	(show also almost complete ones)
+	*new nicer menu and page decos
+	*remote database recipe importing (multiple databases open and recipe transfer)
 
 
 
