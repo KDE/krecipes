@@ -900,7 +900,7 @@ void KrecipesView::initDatabase(KConfig *config)
 			kdDebug()<<i18n("Configured type... MySQL\n").latin1();
 			
 			// Try opening the database again with the new details
-			delete (MySQLRecipeDB *)database;
+			delete database;
 			database=new MySQLRecipeDB(host,user,pass,dbname);
 			}
 		
@@ -909,6 +909,7 @@ void KrecipesView::initDatabase(KConfig *config)
 		else if (dbType=="SQLite")// The user chose SQLite this time
 			{
 			kdDebug()<<i18n("Configured type... SQLite\n").latin1();
+			delete database;
 			database=new LiteRecipeDB(QString::null); // server parameterss make no sense for SQLite
 			}
 		
