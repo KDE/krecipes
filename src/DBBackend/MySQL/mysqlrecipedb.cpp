@@ -703,7 +703,7 @@ QSqlQuery initializeQuery(command,database);
 
 	QString commands;
 	// Read the commands form the data file
-	QFile datafile(KGlobal::dirs()->findResource("appdata", "data/data.sql"));
+	QFile datafile(KGlobal::dirs()->findResource("appdata", "data/mysqldata.sql"));
 	if ( datafile.open( IO_ReadOnly ) ) {
 	QTextStream stream( &datafile );
      	commands=stream.read();
