@@ -20,6 +20,8 @@
 #include <kapplication.h>
 #include <kprogress.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
@@ -76,7 +78,12 @@ layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0);
 	il=new KIconLoader;
 	recipeListView=new KListView(basicSearchTab);
 	recipeListView->addColumn(i18n("Category"));
-    	recipeListView->addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	recipeListView->addColumn( i18n("Id"), show_id ? -1 : 0 );
+	
     	recipeListView->addColumn(i18n("Title"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	recipeListView->setRootIsDecorated(true); // Show "+" open icons

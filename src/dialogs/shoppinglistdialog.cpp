@@ -80,14 +80,9 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCellWidget(buttonBar,6,6,1,5);
     buttonBar->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed);
 
-    autoFillButton=new QPushButton(buttonBar,"dietWizardButton");
-    autoFillButton->setText(i18n("Diet Wizard"));
-    QPixmap pm=il.loadIcon("wizard", KIcon::NoGroup,16); autoFillButton->setIconSet(pm);
-    autoFillButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
-
     okButton=new QPushButton(buttonBar,"okButton");
     okButton->setText(i18n("&OK"));
-    pm=il.loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
+    QPixmap pm=il.loadIcon("ok", KIcon::NoGroup,16); okButton->setIconSet(pm);
     okButton->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 
     clearButton=new QPushButton(buttonBar,"clearButton");
@@ -106,7 +101,6 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     connect(removeRecipeButton,SIGNAL(clicked()),this,SLOT(removeRecipe()));
     connect(okButton, SIGNAL(clicked()),this,SLOT(showShoppingList()));
     connect(clearButton,SIGNAL(clicked()),this,SLOT(clear()));
-    connect(autoFillButton, SIGNAL(clicked()),this,SIGNAL(wizardClicked()));
     }
 
 ShoppingListDialog::~ShoppingListDialog()

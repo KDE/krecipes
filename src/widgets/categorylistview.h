@@ -16,6 +16,8 @@
 
 #include "element.h"
 
+class KPopupMenu;
+
 class RecipeDB;
 class CategoryTree;
 
@@ -35,10 +37,13 @@ public:
 	
 protected:
 	virtual void stateChange(bool);
+	void setChildrenState( bool );
+	void setParentsState( bool );
+
+	bool locked;
 
 private:
 	Element ctyStored;
-
 };
 
 
@@ -147,6 +152,7 @@ Q_OBJECT
 
 public:
 	StdCategoryListView( QWidget *parent, RecipeDB *, bool editable=false );
+	~StdCategoryListView();
 	
 protected:
 	virtual void removeCategory(int id);
@@ -155,10 +161,25 @@ protected:
 	virtual void modifyCategory(int id, int parent_id);
 
 private slots:
+	void preparePopup();
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+	void cut();
+	void paste();
+	void pasteAsSub();
+
 	void changeCategoryParent(QListViewItem *item,QListViewItem */*afterFirst*/,QListViewItem */*afterNow*/);
 	
 	void modCategory(QListViewItem* i);
 	void saveCategory(QListViewItem* i);
+	
+private:
+	KPopupMenu *kpop;
+	QListViewItem *clipboard_item;
+	QListViewItem *clipboard_parent;
 };
 
 

@@ -16,6 +16,7 @@
 #include "element.h"
 
 class RecipeDB;
+class KPopupMenu;
 
 class PrepMethodListView : public KListView
 {
@@ -50,8 +51,17 @@ protected:
 	virtual void removePrepMethod(int);
 
 private slots:
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+
 	void modPrepMethod(QListViewItem* i);
 	void savePrepMethod(QListViewItem* i);
+
+private:
+	KPopupMenu *kpop;
 };
 
 #endif //PREPMETHODLISTVIEW_H

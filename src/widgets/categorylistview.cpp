@@ -13,17 +13,24 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
+#include <kpopupmenu.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
 #include "datablocks/categorytree.h"
+#include "dialogs/createcategorydialog.h"
 
 CategoryCheckListItem::CategoryCheckListItem(QListView* klv, const Element &category ) : QCheckListItem(klv,QString::null,QCheckListItem::CheckBox),
+	locked(false),
 	ctyStored(category)
 {
 	setOn(false); // Set unchecked by default
 }
 
 CategoryCheckListItem::CategoryCheckListItem(QListViewItem* it, const Element &category ) : QCheckListItem(it,QString::null,QCheckListItem::CheckBox),
+	locked(false),
 	ctyStored(category)
 {
 	setOn(false); // Set unchecked by default
@@ -46,33 +53,54 @@ void CategoryCheckListItem::setText(int column, const QString &text)
 
 void CategoryCheckListItem::stateChange(bool on)
 {
+	if ( locked ) return;
+
 	if ( on )
 	{
-		CategoryCheckListItem *cat_it;
-		for ( cat_it = (CategoryCheckListItem*)parent(); cat_it; cat_it = (CategoryCheckListItem*)cat_it->parent() )
-			cat_it->setOn(false);
-
-		//do this to only iterate over this item's children
-		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = this;
-		do
-		{
-			if(pStartItem->nextSibling())
-				pEndItem = pStartItem->nextSibling();
-			else
-				pStartItem = pStartItem->parent();
-		}
-		while(pStartItem && !pEndItem);
-
-		QListViewItemIterator it( this );
-		while ( it.current() && it.current() != pEndItem ) {
-			cat_it = (CategoryCheckListItem*)it.current();
-			if ( cat_it != this ) 
-				cat_it->setOn(false);
-			++it;
-		}
+		setParentsState(false);
+		setChildrenState(false);
 	}
 }
+void CategoryCheckListItem::setChildrenState(bool on)
+{
+	locked = true;
+
+	CategoryCheckListItem *cat_it;
+
+	//do this to only iterate over this item's children
+	QListViewItem *pEndItem = NULL;
+	QListViewItem *pStartItem = this;
+	do
+	{
+		if(pStartItem->nextSibling())
+			pEndItem = pStartItem->nextSibling();
+		else
+			pStartItem = pStartItem->parent();
+	}
+	while(pStartItem && !pEndItem);
+
+	QListViewItemIterator it( this );
+	while ( it.current() && it.current() != pEndItem ) {
+		cat_it = (CategoryCheckListItem*)it.current();
+		if ( cat_it != this ) 
+			cat_it->setOn(on);
+		++it;
+	}
+
+	locked = false;
+}
+
+void CategoryCheckListItem::setParentsState(bool on)
+{
+	locked = true;
+
+	CategoryCheckListItem *cat_it;
+	for ( cat_it = (CategoryCheckListItem*)parent(); cat_it; cat_it = (CategoryCheckListItem*)cat_it->parent() )
+		cat_it->setOn(on);
+
+	locked = false;
+}
+
 
 
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
@@ -113,10 +141,16 @@ void CategoryListView::loadListView(const CategoryTree *categoryTree, int parent
 
 
 
-StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) : CategoryListView(parent,db)
+StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) : CategoryListView(parent,db),
+	clipboard_item(0),
+	clipboard_parent(0)
 {
 	addColumn(i18n("Category"));
-	addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
 
 	if ( editable )
 	{
@@ -124,9 +158,131 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		setDragEnabled(true);
 		setAcceptDrops(true);
 
+		KIconLoader *il = new KIconLoader;
+		
+		kpop = new KPopupMenu( this );
+		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&New"), this, SLOT(createNew()), CTRL+Key_N );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
+		kpop->insertSeparator();
+		kpop->insertItem( il->loadIcon("editcut", KIcon::NoGroup,16),i18n("Cu&t"), this, SLOT(cut()), CTRL+Key_X );
+		kpop->insertItem( il->loadIcon("editpaste", KIcon::NoGroup,16),i18n("&Paste"), this, SLOT(paste()), CTRL+Key_V );
+		kpop->insertItem( il->loadIcon("editpaste", KIcon::NoGroup,16),i18n("Paste as Subcategory"), this, SLOT(pasteAsSub()), CTRL+SHIFT+Key_V );
+		kpop->polish();
+		
+		delete il;
+
+		connect(kpop,SIGNAL(aboutToShow()),SLOT(preparePopup()));
+		connect(this,SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)), SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
 		connect(this,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )), SLOT(modCategory( QListViewItem* )));
 		connect(this,SIGNAL(itemRenamed (QListViewItem*)), SLOT(saveCategory( QListViewItem* )));
 		connect(this,SIGNAL(moved(QListViewItem *,QListViewItem *,QListViewItem *)), SLOT(changeCategoryParent(QListViewItem *,QListViewItem *,QListViewItem *)));
+	}
+}
+
+StdCategoryListView::~StdCategoryListView()
+{
+	delete clipboard_item;
+}
+
+void StdCategoryListView::preparePopup()
+{
+	//only enable the paste items if clipboard_item isn't null
+	kpop->setItemEnabled( kpop->idAt(5), clipboard_item );
+	kpop->setItemEnabled( kpop->idAt(6), clipboard_item );
+}
+
+void StdCategoryListView::showPopup(KListView */*l*/, QListViewItem *i, const QPoint &p)
+{
+	if ( i )
+		kpop->exec(p);
+}
+
+void StdCategoryListView::createNew()
+{
+	ElementList categories; database->loadCategories(&categories);
+	CreateCategoryDialog* categoryDialog=new CreateCategoryDialog(this,categories);
+	
+	if ( categoryDialog->exec() == QDialog::Accepted ) {
+		QString result = categoryDialog->newCategoryName();
+		int subcategory = categoryDialog->subcategory();
+		database->createNewCategory(result,subcategory); // Create the new category in the database
+	}
+	delete categoryDialog;
+}
+
+void StdCategoryListView::remove()
+{
+	QListViewItem *item = currentItem();
+
+	if ( item )
+	{
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this category and all its subcategories?")))
+		{
+		case KMessageBox::Continue: database->removeCategory(item->text(0).toInt()); break;
+		default: break;
+		}
+	}
+}
+
+void StdCategoryListView::rename()
+{
+	QListViewItem *item = currentItem();
+	
+	if ( item )
+		CategoryListView::rename( item, 0 );
+}
+
+void StdCategoryListView::cut()
+{
+	//restore a never used cut
+	if ( clipboard_item )
+	{
+		if ( clipboard_parent )
+			clipboard_parent->insertItem( clipboard_item );
+		else
+			insertItem( clipboard_item );
+		clipboard_item = 0;
+	}
+
+	QListViewItem *item = currentItem();
+	
+	if ( item )
+	{
+		clipboard_item = item;
+		clipboard_parent = item->parent();
+		
+		if ( item->parent() )
+			item->parent()->takeItem(item);
+		else
+			takeItem(item);
+	}
+}
+
+void StdCategoryListView::paste()
+{
+	QListViewItem *item = currentItem();
+	if ( item && clipboard_item )
+	{
+		if ( item->parent() )
+			item->parent()->insertItem(clipboard_item);
+		else
+			insertItem(clipboard_item);
+
+		database->modCategory( clipboard_item->text(1).toInt(), item->parent() ? item->parent()->text(1).toInt() : -1 );
+		clipboard_item = 0;
+	}
+}
+
+void StdCategoryListView::pasteAsSub()
+{
+	QListViewItem *item = currentItem();
+
+	if ( item && clipboard_item )
+	{
+		item->insertItem(clipboard_item);
+		database->modCategory( clipboard_item->text(1).toInt(), item->text(1).toInt() );
+		clipboard_item = 0;
 	}
 }
 
@@ -141,7 +297,6 @@ void StdCategoryListView::changeCategoryParent(QListViewItem *item,QListViewItem
 	disconnect(SIGNAL(moved(QListViewItem *,QListViewItem *,QListViewItem *)));
 	database->modCategory( cat_id, new_parent_id );
 	connect(this,SIGNAL(moved(QListViewItem *,QListViewItem *,QListViewItem *)), SLOT(changeCategoryParent(QListViewItem *,QListViewItem *,QListViewItem *)));
-
 }
 
 void StdCategoryListView::removeCategory(int id)
@@ -197,7 +352,7 @@ void StdCategoryListView::modifyCategory(int id, int parent_id)
 
 void StdCategoryListView::modCategory(QListViewItem* i)
 {
-	rename(i, 0);
+	CategoryListView::rename(i, 0);
 }
 
 void StdCategoryListView::saveCategory(QListViewItem* i)
@@ -225,7 +380,11 @@ void StdCategoryListView::saveCategory(QListViewItem* i)
 CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db ) : CategoryListView(parent,db)
 {
 	addColumn(i18n("Category"));
-	addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
 }
 
 void CategoryCheckListView::removeCategory(int id)

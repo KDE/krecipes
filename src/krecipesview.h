@@ -189,7 +189,6 @@ private slots:
     void showRecipes( const QValueList<int> &recipeIDs);
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
-    void slotSetDietWizardPanel(void);
     void switchToRecipe(void);
     void setContextHelp(int);
     void createShoppingListFromDiet(void);

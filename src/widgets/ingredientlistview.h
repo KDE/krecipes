@@ -17,6 +17,7 @@
 #include "element.h"
 
 class RecipeDB;
+class KPopupMenu;
 
 /**
 @author Unai Garro
@@ -90,8 +91,17 @@ protected:
 	virtual void removeIngredient(int);
 
 private slots:
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+
 	void modIngredient(QListViewItem* i);
 	void saveIngredient(QListViewItem* i);
+
+private:
+	KPopupMenu *kpop;
 };
 
 

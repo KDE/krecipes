@@ -11,8 +11,13 @@
 #include "authorlistview.h"
 
 #include <kmessagebox.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <kpopupmenu.h>
 
 #include "DBBackend/recipedb.h"
+#include "dialogs/createelementdialog.h"
  
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : KListView(parent),
   database(db)
@@ -39,15 +44,68 @@ void AuthorListView::reload()
 
 StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editable ) : AuthorListView(parent,db)
 {
-	addColumn(i18n("Id"));
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
+
 	addColumn(i18n("Author"));
 
 	if ( editable ) {
 		setRenameable(1, true);
-	
+		
+		KIconLoader *il = new KIconLoader;
+
+		kpop = new KPopupMenu( this );
+		kpop->insertItem( il->loadIcon("filenew", KIcon::NoGroup,16),i18n("&New"), this, SLOT(createNew()), CTRL+Key_N );
+		kpop->insertItem( il->loadIcon("editdelete", KIcon::NoGroup,16),i18n("Remove"), this, SLOT(remove()), Key_Delete );
+		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16), i18n("&Rename"), this, SLOT(rename()), CTRL+Key_R );
+		kpop->polish();
+
+		delete il;
+
+		connect(this,SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)), SLOT(showPopup(KListView *, QListViewItem *, const QPoint &)));
 		connect(this,SIGNAL(doubleClicked( QListViewItem* )),this, SLOT(modAuthor( QListViewItem* )));
 		connect(this,SIGNAL(itemRenamed(QListViewItem*)),this, SLOT(saveAuthor(QListViewItem*)));
 	}
+}
+
+void StdAuthorListView::showPopup(KListView */*l*/, QListViewItem *i, const QPoint &p)
+{
+	if ( i )
+		kpop->exec(p);
+}
+
+void StdAuthorListView::createNew()
+{
+	CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Author"));
+	
+	if ( elementDialog->exec() == QDialog::Accepted ) {
+		QString result = elementDialog->newElementName();
+		database->createNewAuthor(result); // Create the new author in the database
+	}
+}
+
+void StdAuthorListView::remove()
+{
+	QListViewItem *item = currentItem();
+
+	if ( item )
+	{
+		switch (KMessageBox::warningContinueCancel(this,i18n("Are you sure you want to remove this author?")))
+		{
+		case KMessageBox::Continue: database->removeAuthor(item->text(0).toInt()); break;
+		default: break;
+		}
+	}
+}
+
+void StdAuthorListView::rename()
+{
+	QListViewItem *item = currentItem();
+	
+	if ( item )
+		AuthorListView::rename( item, 1 );
 }
 
 void StdAuthorListView::createAuthor(const Element &ing)
@@ -66,7 +124,7 @@ void StdAuthorListView::removeAuthor(int id)
 
 void StdAuthorListView::modAuthor(QListViewItem* i)
 {
-	rename(i, 1);
+	AuthorListView::rename(i, 1);
 }
 
 void StdAuthorListView::saveAuthor(QListViewItem* i)

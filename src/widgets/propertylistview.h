@@ -18,6 +18,7 @@
 #include "datablocks/constraintlist.h"
 
 class RecipeDB;
+class KPopupMenu;
 
 class PropertyCheckListItem : public QCheckListItem {
 public:
@@ -117,8 +118,17 @@ protected:
 	virtual void createProperty(const IngredientProperty &property);
 
 private slots:
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+
 	void modProperty(QListViewItem* i);
 	void saveProperty(QListViewItem* i);
+
+private:
+	KPopupMenu *kpop;
 };
 
 

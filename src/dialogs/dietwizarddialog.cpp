@@ -509,19 +509,50 @@ Constraint constraint;
 	constraints->add(constraint);
 	}
 }
-
+//TODO: clean me up!!
 void DishInput::loadEnabledCategories(ElementList* categories)
 {
-categories->clear();
-Element category;
-	for (CategoryCheckListItem *it=(CategoryCheckListItem*)(categoriesView->firstChild());it;it=(CategoryCheckListItem*)(it->nextSibling()))
-	{
-	if ( !categoriesView->isEnabled() || it->isOn()) // Only load those that are checked, unless filtering is disabled
-		{
-		category.id=it->categoryId();
-		category.name=it->categoryName();
-		categories->add(category);
+	categories->clear();
+	
+	Element category;
+	CategoryCheckListItem* current_item;
+
+	QListViewItemIterator it( categoriesView );
+	while ( it.current() ) {
+		current_item = (CategoryCheckListItem*)it.current();
+
+		if ( !categoriesView->isEnabled() || current_item->isOn()) {// Only load those that are checked, unless filtering is disabled
+			//add this enabled category
+			category.id=current_item->categoryId();
+			category.name=current_item->categoryName();
+			categories->add(category);
+
+			//and now add all of it's children (they won't be selected, though it is implied)
+			QListViewItem *pEndItem = NULL;
+			QListViewItem *pStartItem = current_item;
+			do
+			{
+				if(pStartItem->nextSibling())
+					pEndItem = pStartItem->nextSibling();
+				else
+					pStartItem = pStartItem->parent();
+			}
+			while(pStartItem && !pEndItem);
+	
+			CategoryCheckListItem* sub_current_item;
+			QListViewItemIterator sub_it( current_item );
+			while ( sub_it.current() && sub_it.current() != pEndItem ) {
+				sub_current_item = (CategoryCheckListItem*)sub_it.current();
+				if ( sub_current_item != current_item ) {
+					category.id=sub_current_item->categoryId();
+					category.name=sub_current_item->categoryName();
+					categories->add(category);
+				}
+				++sub_it;
+			}
 		}
+
+		++it;
 	}
 }
 

@@ -213,7 +213,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
-     connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
 
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(raise()) );
@@ -351,13 +350,12 @@ else if (leftPanel->currentMenu()==dataMenu)
 		case PropertiesP:
 			rightPanel->setHeader(i18n("Properties"),"properties");
 			rightPanel->raise(propertiesPanel);
-		
 			break;
-		case UnitsP: unitsPanel->reload(); // Reload data
+		case UnitsP:
 			rightPanel->setHeader(i18n("Units"),"units");
 			rightPanel->raise(unitsPanel);
 			break;
-		case PrepMethodsP: prepMethodsPanel->reload();
+		case PrepMethodsP:
 			rightPanel->setHeader(i18n("Preparation Methods"),"GIVE ME AN ICON :p");
 			rightPanel->raise(prepMethodsPanel);
 			break;
@@ -592,14 +590,6 @@ if (doUSDAImport)
 }
 delete setupWizard;
 }
-}
-
-
-void KrecipesView::slotSetDietWizardPanel(void)
-{
-rightPanel->setHeader(i18n("Diet Helper"),"wizard");
-rightPanel->raise(dietPanel);
-    setContextHelp(DietP);
 }
 
 

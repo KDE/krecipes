@@ -50,7 +50,6 @@ private:
     KreListView* recipeListView;
     KreListView* shopRecipeListView;
     QHBox *buttonBar;
-    QPushButton* autoFillButton;
     QPushButton* okButton;
     QPushButton* clearButton;
     ShoppingListViewDialog *shoppingListDisplay;
@@ -63,8 +62,6 @@ private slots:
 	void removeRecipe(void);
 	void showShoppingList(void);
 	void clear(void);
-signals:
-	void wizardClicked(void);
 };
 
 #endif

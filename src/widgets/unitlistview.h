@@ -18,6 +18,7 @@
 #include "element.h"
 
 class RecipeDB;
+class KPopupMenu;
 
 class UnitListView : public KListView
 {
@@ -52,8 +53,17 @@ protected:
 	virtual void removeUnit(int);
 
 private slots:
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+
 	void modUnit(QListViewItem* i);
 	void saveUnit(QListViewItem* i);
+
+private:
+	KPopupMenu *kpop;
 };
 
 #endif //UNITLISTVIEW_H

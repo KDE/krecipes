@@ -29,14 +29,22 @@
 #include <kiconloader.h>
 #include <klistview.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "DBBackend/recipedb.h"
 #include "recipeactionshandler.h"
 
 void storeMap(QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
 {
-	for ( QCheckListItem *qlv_it = static_cast<QCheckListItem*>(listview->firstChild()); qlv_it ; qlv_it = static_cast<QCheckListItem*>(qlv_it->nextSibling()) )
-		map_to_store->insert(qlv_it,qlv_it->isOn());
+	QCheckListItem* current_item;
+	QListViewItemIterator it( listview );
+	while ( it.current() ) {
+		current_item = (QCheckListItem*)it.current();
+		map_to_store->insert(current_item,current_item->isOn());
+
+		++it;
+	}
 }
 
 void updateMaps(QMap<QCheckListItem*,bool> *map_to_load, QMap<QCheckListItem*,bool> *map_to_store, QListView *listview)
@@ -60,7 +68,11 @@ DualAuthorListView::DualAuthorListView(QWidget *parent, RecipeDB *db) : AuthorLi
 	last_state(0)
 {
 	addColumn(i18n("Name"));
-	addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
 }
 
 void DualAuthorListView::reload()
@@ -124,7 +136,11 @@ DualIngredientListView::DualIngredientListView(QWidget *parent, RecipeDB *db) : 
 	last_state(0)
 {
 	addColumn(i18n("Name"));
-	addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
 }
 
 void DualIngredientListView::reload()
@@ -188,7 +204,11 @@ DualCategoryListView::DualCategoryListView(QWidget *parent, RecipeDB *db) : Cate
 	last_state(0)
 {
 	addColumn(i18n("Name"));
-	addColumn(i18n("Id"));
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry("ShowID",false);
+	addColumn( i18n("Id"), show_id ? -1 : 0 );
 }
 
 void DualCategoryListView::reload()
@@ -630,8 +650,6 @@ void AdvancedSearchDialog::search()
 	//we'll load all the recipes and whittle down the list based on constraints
 	RecipeList allRecipes; database->loadRecipeDetails( &allRecipes, true, true, false, true );
 	
-	QCheckListItem *qlv_it;
-
 	//narrow down by servings
 	if ( servingsBox->isChecked() )
 	{
@@ -704,7 +722,7 @@ void AdvancedSearchDialog::search()
 				for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it )
 				{
 					Element i; i.id = map_it.key()->text(1).toInt();
-				if ( (*it).categoryList.find( i ) == (*it).categoryList.end() )
+					if ( (*it).categoryList.find( i ) == (*it).categoryList.end() )
 					{
 						it = allRecipes.remove( it ); it--;
 					}

@@ -17,6 +17,7 @@
 #include "element.h"
 
 class RecipeDB;
+class KPopupMenu;
 
 class AuthorListView : public KListView
 {
@@ -51,8 +52,17 @@ protected:
 	virtual void removeAuthor(int);
 
 private slots:
+	void showPopup(KListView *, QListViewItem *, const QPoint &);
+
+	void createNew();
+	void remove();
+	void rename();
+
 	void modAuthor(QListViewItem* i);
 	void saveAuthor(QListViewItem* i);
+
+private:
+	KPopupMenu *kpop;
 };
 
 #endif //AUTHORLISTVIEW_H

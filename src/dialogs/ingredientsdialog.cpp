@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -84,10 +86,14 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     QSpacerItem* spacer_Ing_Units = new QSpacerItem( 30,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_Ing_Units,1,4);
 
-
+    
+    KConfig *config = KGlobal::config();
+    config->setGroup( "Advanced" );
+    bool show_id = config->readBoolEntry("ShowID",false);
+    
 
     unitsListView=new KreListView (this,i18n("Unit list"));
-    unitsListView->listView()->addColumn(i18n("Id"));
+    unitsListView->listView()->addColumn( i18n("Id"), show_id ? -1 : 0 );
     unitsListView->listView()->addColumn(i18n("Units"));
     unitsListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
@@ -120,7 +126,8 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
     propertiesListView=new KreListView (this,i18n("Ingredient Properties"));
     layout->addMultiCellWidget (propertiesListView,6,9,5,5);
-    propertiesListView->listView()->addColumn(i18n("Id"));
+
+    propertiesListView->listView()->addColumn( i18n("Id"), show_id ? -1 : 0 );
     propertiesListView->listView()->addColumn(i18n("Property"));
     propertiesListView->listView()->addColumn(i18n("Amount"));
     propertiesListView->listView()->addColumn(i18n("Units"));
