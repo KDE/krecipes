@@ -25,7 +25,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
 
     recipeListView=new KListView (this);
-    layout->addWidget(recipeListView,1,1);
+    layout->addMultiCellWidget(recipeListView,1,4,1,1);
     recipeListView->addColumn("Id");
     recipeListView->addColumn("Recipe Title");
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
@@ -43,10 +43,15 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     removeRecipeButton->setFixedSize(QSize(32,32));
     removeRecipeButton->setFlat(true);
     layout->addWidget(removeRecipeButton,3,3);
-
     layout->addWidget(addRecipeButton,1,3);
+
     QSpacerItem* spacerFromButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacerFromButtons,1,4);
+
+    shopRecipeListView=new KListView (this);
+    layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
+    shopRecipeListView->addColumn("Id");
+    shopRecipeListView->addColumn("Recipe Title");
 
 
 
@@ -54,8 +59,10 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     reloadRecipeList();
 
     // Connect signals & slots
+    connect(addRecipeButton,SIGNAL(clicked()),this,SLOT(addRecipe()));
+    connect(removeRecipeButton,SIGNAL(clicked()),this,SLOT(removeRecipe()));
 
-}
+    }
 
 ShoppingListDialog::~ShoppingListDialog()
 {
@@ -74,4 +81,12 @@ for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext
 void ShoppingListDialog::reload(void)
 {
 reloadRecipeList (); // Missing: check if there's non-existing recipes in the list now, and if so, delete.
+}
+
+void ShoppingListDialog::addRecipe(void)
+{
+}
+
+void ShoppingListDialog::removeRecipe(void)
+{
 }

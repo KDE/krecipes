@@ -39,6 +39,10 @@ private:
     KListView* shopRecipeListView;
     QPushButton* okButton;
 
+private slots:
+	void addRecipe(void);
+	void removeRecipe(void);
+
 };
 
 #endif
