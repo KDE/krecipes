@@ -9,7 +9,7 @@
  ***************************************************************************/
 #include "elementlist.h"
 
-ElementList::ElementList():QPtrList <Element>()
+ElementList::ElementList():QValueList <Element>()
 {
 }
 
