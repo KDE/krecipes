@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,7 @@ recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px;
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
        {
-       recipeHTML+=QString("<li>%2 %3  %1</li>")
+       recipeHTML+=QString("<li>%1: %2 %3</li>")
 			    .arg(ing->name)
 			    .arg(ing->amount)
 			    .arg(ing->units);
