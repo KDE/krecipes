@@ -15,6 +15,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include "DBBackend/recipedb.h"
  
@@ -26,7 +27,7 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	connect(database,SIGNAL(recipeRemoved(int,int)),SLOT(removeRecipe(int,int)));
 	connect(database,SIGNAL(recipeModified(const Element &,const ElementList &)),SLOT(modifyRecipe(const Element &,const ElementList &)));
 
-	setColumnText(0,"Recipe");
+	setColumnText(0,i18n("Recipe"));
 	/*addColumn( i18n("Recipe") );
 
 	KConfig *config = KGlobal::config();
