@@ -15,6 +15,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 #include "mixednumber.h"
 #include "mmdata.h"
