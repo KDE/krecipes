@@ -10,6 +10,8 @@
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
+#include <qevent.h>
+#include <qtooltip.h>
 
 #include <kiconloader.h>
 #include <kparts/part.h>
@@ -117,8 +119,12 @@ private:
 	// Internal variables
 	RecipeDB *database;
 
+  // i18n
+  void translate();
+
 signals:
 	void enableSaveOption(bool en);
+
 public slots:
 	void save(void);
 
@@ -127,6 +133,7 @@ private slots:
     void slotSetPanel(int);
     void slotSetDietWizardPanel(void);
     void actionRecipe(int recipeID, int action);
+    void resizeButtons();
 
 
 };

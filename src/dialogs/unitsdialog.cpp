@@ -108,12 +108,16 @@ delete elementDialog;
 
 void UnitsDialog::modUnit(QListViewItem* i)
 {
+  newUnitButton->setEnabled(false);
+  removeUnitButton->setEnabled(false);
   unitListView->rename(i, 1);
 }
 
 void UnitsDialog::saveUnit(QListViewItem* i)
 {
   database->modUnit((i->text(0)).toInt(), i->text(1));
+  newUnitButton->setEnabled(true);
+  removeUnitButton->setEnabled(true);
 }
 
 void UnitsDialog::removeUnit(void)

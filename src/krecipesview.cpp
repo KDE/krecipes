@@ -31,6 +31,7 @@
 #include "authorsdialog.h"
 #include "unitsdialog.h"
 #include "recipedb.h"
+#include "menugroup.h"
 
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
@@ -58,37 +59,43 @@ KrecipesView::KrecipesView(QWidget *parent)
 // Create Left and Right Panels (splitter)
 
 
-    leftPanel=new QButtonGroup(splitter,"leftPanel");
+    leftPanel=new MenuGroup(splitter,"leftPanel");
     rightPanel=new QWidgetStack(splitter,"rightPanel");
+   leftPanel->setMinimumWidth(22);
 
     // Design Resizing of the panels
    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
-   leftPanel->setMinimumWidth(150);
 
 
     // Design Left Panel
     il=new KIconLoader;
-    button0=new QPushButton(leftPanel); button0->setFlat(true); button0->setText(i18n("Find/Edit Recipes"));
-    	QPixmap pm=il->loadIcon("filefind", KIcon::NoGroup,16); button0->setIconSet(pm);
-    	button0->setGeometry(0,0,150,30);
-    button1=new QPushButton(leftPanel); button1->setFlat(true); button1->setText(i18n("Shopping List"));
-	pm=il->loadIcon("trolley", KIcon::NoGroup,16); button1->setIconSet(pm);
-	button1->setGeometry(0,30,150,30);
-    button2=new QPushButton(leftPanel); button2->setFlat(true); button2->setText(i18n("Ingredients"));
-    	pm=il->loadIcon("ingredients", KIcon::NoGroup,16); button2->setIconSet(pm);
-        button2->setGeometry(0,60,150,30);
-    button3=new QPushButton(leftPanel); button3->setFlat(true); button3->setText(i18n("Properties"));
-        pm=il->loadIcon("properties", KIcon::NoGroup,16); button3->setIconSet(pm);
-	button3->setGeometry(0,90,150,30);
-    button4=new QPushButton(leftPanel); button4->setFlat(true); button4->setText(i18n("Units"));
-    	pm=il->loadIcon("units", KIcon::NoGroup,16); button4->setIconSet(pm);
-	button4->setGeometry(0,120,150,30);
-    button5=new QPushButton(leftPanel); button5->setFlat(true); button5->setText(i18n("Recipe Categories"));
-    	pm=il->loadIcon("categories", KIcon::NoGroup,16); button5->setIconSet(pm);
-	button5->setGeometry(0,150,150,30);
-    button5=new QPushButton(leftPanel); button5->setFlat(true); button5->setText(i18n("Authors"));
-    	pm=il->loadIcon("personal", KIcon::NoGroup,16); button5->setIconSet(pm);
-	button5->setGeometry(0,180,150,30);
+    button0=new QPushButton(leftPanel); button0->setFlat(true);
+    button0->setIconSet(il->loadIconSet("filefind", KIcon::Small));
+    button0->setGeometry(0,0,150,30);
+
+    button1=new QPushButton(leftPanel); button1->setFlat(true);
+    button1->setIconSet(il->loadIconSet( "trolley", KIcon::Small ));
+	  button1->setGeometry(0,30,150,30);
+
+    button2=new QPushButton(leftPanel); button2->setFlat(true);
+    button2->setIconSet(il->loadIconSet( "ingredients", KIcon::Small ));
+    button2->setGeometry(0,60,150,30);
+
+    button3=new QPushButton(leftPanel); button3->setFlat(true);
+    button3->setIconSet(il->loadIconSet( "properties", KIcon::Small ));
+	  button3->setGeometry(0,90,150,30);
+
+    button4=new QPushButton(leftPanel); button4->setFlat(true);
+    button4->setIconSet(il->loadIconSet( "units", KIcon::Small ));
+	  button4->setGeometry(0,120,150,30);
+
+    button5=new QPushButton(leftPanel); button5->setFlat(true);
+    button5->setIconSet(il->loadIconSet( "categories", KIcon::Small ));
+	  button5->setGeometry(0,150,150,30);
+
+    button6=new QPushButton(leftPanel); button6->setFlat(true);
+    button6->setIconSet(il->loadIconSet( "personal", KIcon::Small ));
+	  button6->setGeometry(0,180,150,30);
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
@@ -102,6 +109,10 @@ KrecipesView::KrecipesView(QWidget *parent)
     categoriesPanel=new CategoriesEditorDialog(rightPanel,database); rightPanel->addWidget(categoriesPanel);
     authorsPanel=new AuthorsDialog(rightPanel,database); rightPanel->addWidget(inputPanel);
     rightPanel->addWidget(authorsPanel);
+
+    // i18n
+    translate();
+
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
      connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
@@ -117,11 +128,31 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
 
+    // Resize signal
+    connect (leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeButtons()));
+
 
 }
 
 KrecipesView::~KrecipesView()
 {
+}
+
+void KrecipesView::translate(){
+  button0->setText(i18n("Find/Edit Recipes"));
+  QToolTip::add(button0, i18n("Find/Edit Recipes"));
+  button1->setText(i18n("Shopping List"));
+  QToolTip::add(button1, i18n("Shopping List"));
+  button2->setText(i18n("Ingredients"));
+  QToolTip::add(button2, i18n("Ingredients"));
+  button3->setText(i18n("Properties"));
+  QToolTip::add(button3, i18n("Properties"));
+  button4->setText(i18n("Units"));
+  QToolTip::add(button4, i18n("Units"));
+  button5->setText(i18n("Recipe Categories"));
+  QToolTip::add(button5, i18n("Recipe Categories"));
+  button6->setText(i18n("Authors"));
+  QToolTip::add(button6, i18n("Authors"));
 }
 
 void KrecipesView::print(QPainter *p, int height, int width)
@@ -245,6 +276,7 @@ dietPanel->reload();
 rightPanel->raiseWidget(dietPanel);
 }
 
+
 void KrecipesView::setupUserPermissions(const QString &host, const QString &client, const QString &dbName, const QString &newUser,const QString &newPass,const QString &adminUser,const QString &adminPass)
 {
 RecipeDB *db;
@@ -260,6 +292,16 @@ if (adminUser!=QString::null)
 db->givePermissions(dbName,newUser,newPass,client); // give permissions to the user
 
 delete db; //it closes the db automatically
+}
+
+void KrecipesView::resizeButtons(){
+  button0->resize(leftPanel->width(), 30);
+  button1->resize(leftPanel->width(), 30);
+  button2->resize(leftPanel->width(), 30);
+  button3->resize(leftPanel->width(), 30);
+  button4->resize(leftPanel->width(), 30);
+  button5->resize(leftPanel->width(), 30);
+  button6->resize(leftPanel->width(), 30);
 }
 
 
