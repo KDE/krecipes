@@ -11,6 +11,7 @@
 #include "baseimporter.h"
 
 #include <kapplication.h>
+#include <kconfig.h>
 #include <klocale.h>
 
 #include "recipe.h"
@@ -31,6 +32,12 @@ BaseImporter::~BaseImporter()
 
 void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
 {
+	// Load Current Settings
+	KConfig *config=kapp->config();
+	config->setGroup("Import");
+
+	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
+
 	KProgress *sub_progress = 0;
 	if (progress_dialog)
 	{
@@ -104,9 +111,11 @@ void BaseImporter::import( RecipeDB *db, DualProgressDialog *progress_dialog )
 			category->id = new_cat_id;
 		}
 
-		//TODO: add a preference to overwrite recipes with same title, or to rename
-		new_recipe->title = db->getUniqueRecipeTitle( new_recipe->title ); //rename
-		//new_recipe->recipeID = db->findExistingRecipeByName( new_recipe->title ); //overwrite existing
+		if ( overwrite ) //overwrite existing
+			new_recipe->recipeID = db->findExistingRecipeByName( new_recipe->title );
+		else //rename
+			new_recipe->title = db->getUniqueRecipeTitle( new_recipe->title );
+
 
 		//save into the database
 		db->saveRecipe( new_recipe );
