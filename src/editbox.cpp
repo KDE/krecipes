@@ -33,8 +33,6 @@ accepted=true;
 emit valueChanged(editBox->value());
 }
 
-
-
 EditBox::~EditBox()
 {
 }
