@@ -12,7 +12,7 @@
 
 #include <klocale.h>
 
-DietViewDialog::DietViewDialog(QWidget *parent, RecipeList &recipeList):QWidget(parent)
+DietViewDialog::DietViewDialog(QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers):QWidget(parent)
 {
 
  // Design the dialog
@@ -32,17 +32,18 @@ DietViewDialog::DietViewDialog(QWidget *parent, RecipeList &recipeList):QWidget(
  htmlBox=new QVBox (this); layout->addWidget(htmlBox,1,1);
  dietView=new KHTMLPart(htmlBox);
 
-
  // Show the diet
- showDiet(recipeList);
+ showDiet(recipeList,dayNumber,mealNumber,dishNumbers);
 }
 
 DietViewDialog::~DietViewDialog()
 {
 }
 
-void DietViewDialog::showDiet(RecipeList &recipeList)
+void DietViewDialog::showDiet(const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers)
 {
+
+
 // Header
 QString htmlCode=QString("<html><head><title>%1</title></head><body>").arg(i18n("Diet"));
 
@@ -51,18 +52,46 @@ htmlCode+=QString("<center><div STYLE=\"width: 80%\">");
 htmlCode+=QString("<h1>%1</h1></div></center>").arg(i18n("Diet"));
 
 // Diet table
-/*
-recipeHTML+="<div STYLE=\"border:medium solid blue; width:90%\"><table cellspacing=0px width=100%><tbody>";
-        int counter=0;
-        for (Ingredient *i=ingredientList->getFirst();i;i=ingredientList->getNext())
-        {
+htmlCode+=QString("<center><div STYLE=\"width: 90%\">");
+htmlCode+=QString("<table><tbody>");
 
-        QString color;
-        if (counter) color="#CBCEFF";*/
+
+int day; // Counts days
+QValueList <int>::ConstIterator it; it=dishNumbers.begin();
+RecipeList::ConstIterator rit; rit=recipeList.begin();
+
+std::cerr<<"data is: "<<dayNumber<<" "<<mealNumber<<"\n";
+for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
+	{
+	std::cerr<<"one more row\n";
+	htmlCode+=QString("<tr>");
+
+	for (int col=0; (col<7) && (day<dayNumber); col++,day++) // New column (day)
+		{
+		htmlCode+=QString("<td>");
+		for (int meal=0;meal<mealNumber;meal++) // Meals in each cell
+			{
+			int dishNumber=*it;
+			for (int dish=0; dish<dishNumber;dish++) // Dishes in each Meal
+				{
+				htmlCode+=(*rit).title; htmlCode+="<br>";
+				}
+			rit++; it++;
+			}
+		it=dishNumbers.begin(); // meals have same dish number everyday
+		htmlCode+=QString("</td>");
+		}
+
+	htmlCode+=QString("</tr>");
+}
+
+htmlCode+=QString("</tbody></table>");
+htmlCode+=QString("</div></center>");
+htmlCode+=QString("</body></html>");
 
 // Display it
 dietView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where photos and logos can be stored
 dietView->write(htmlCode);
 dietView->end();
-
+std::cerr<<htmlCode<<"\n";
 }

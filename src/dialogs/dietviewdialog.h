@@ -22,7 +22,7 @@ class DietViewDialog:public QWidget{
 Q_OBJECT
 
 public:
-    DietViewDialog(QWidget *parent, RecipeList &recipeList);
+    DietViewDialog(QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers);
     ~DietViewDialog();
 private:
 	// Widgets
@@ -31,7 +31,7 @@ private:
 	KHTMLPart *dietView;
 
 	// Private methods
-	void showDiet(RecipeList &recipeList);
+	void showDiet(const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers);
 };
 
 #endif

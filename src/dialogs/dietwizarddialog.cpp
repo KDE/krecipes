@@ -186,9 +186,21 @@ for (int day=0;day<dayNumber;day++) // Create the diet for the number of days de
 }
 
 if (alert) KMessageBox::information(this,i18n("I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. "));
+
 else // show the resulting diet
 	{
-	DietViewDialog *dietDisplay=new DietViewDialog(0,dietRList);
+
+	// make a list of dishnumbers
+	QValueList<int> dishNumbers;
+
+	for (int meal=0;meal<mealNumber;meal++)
+	{
+	int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
+	dishNumbers<<dishNo;
+	}
+
+	// display the list
+	DietViewDialog *dietDisplay=new DietViewDialog(0,dietRList,dayNumber,mealNumber,dishNumbers);
 	dietDisplay->show();
 	}
 
