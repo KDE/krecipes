@@ -1,3 +1,4 @@
-2003-07-18  <>
-	Few changes to have a proper find() function. Now it inherits from QPtrList <Ingredient> instead of only using it. 
+2003-07-23  <>
+	Use UTF8 encoding (to fix for the use of some international symbols) 
 
+2003-07-23: Workaround for image caching problem

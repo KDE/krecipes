@@ -14,7 +14,7 @@
     </keywords>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description></description>
+    <description/>
     <ignoreparts>
       <part>KDevDebugger</part>
     </ignoreparts>
@@ -26,11 +26,11 @@
     </general>
     <run>
       <mainprogram>src/krecipes</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>executable</directoryradio>
-      <customdirectory></customdirectory>
+      <customdirectory/>
       <autocompile>true</autocompile>
     </run>
     <make>
@@ -41,7 +41,7 @@
       <abortonerror>false</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
     </make>
   </kdevautoproject>
   <kdevfileview>
@@ -95,21 +95,21 @@
   </kdevfilecreate>
   <kdevcvs>
     <cvsoptions>-f</cvsoptions>
-    <commitoptions/>
+    <commitoptions></commitoptions>
     <updateoptions>-dP</updateoptions>
-    <addoptions/>
+    <addoptions></addoptions>
     <removeoptions>-f</removeoptions>
     <diffoptions>-u3 -p</diffoptions>
-    <logoptions/>
-    <rshoptions/>
+    <logoptions></logoptions>
+    <rshoptions></rshoptions>
     <revertoptions>-C -d -P</revertoptions>
   </kdevcvs>
   <cppsupportpart>
     <codecompletion/>
     <filetemplates>
       <choosefiles>false</choosefiles>
-      <interfaceURL></interfaceURL>
-      <implementationURL></implementationURL>
+      <interfaceURL/>
+      <implementationURL/>
       <interfacesuffix>.h</interfacesuffix>
       <implementationsuffix>.cpp</implementationsuffix>
       <lowercasefilenames>true</lowercasefilenames>
