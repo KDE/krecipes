@@ -10,6 +10,7 @@
 #include <kfiledialog.h>
 #include <qstring.h>
 #include <kurl.h>
+#include <qlayout.h>
 #include "recipeinputdialog.h"
 #include "image.h" //Initializes default photo
 
@@ -26,7 +27,13 @@ database=db;
 
 
 // Design the Dialog
+    QGridLayout* layout = new QGridLayout( this, 1, 1, 0, 0);
 
+    // Border
+    QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    layout->addMultiCell( spacer_left, 1,5,0,0 );
+    QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addMultiCell( spacer_top, 0,0,0,2 );
     // Recipe Photo
 
     QPixmap image1(defaultPhoto);
@@ -34,68 +41,135 @@ database=db;
     photoLabel=new QLabel(this);
     photoLabel->setScaledContents(true);
     photoLabel->setPixmap(image1);
-    photoLabel->setGeometry(QRect(20,10,200,100));
+    photoLabel->setFixedSize(QSize(221,166));
+    photoLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    layout->addMultiCellWidget(photoLabel,1,3,1,1);
 
     changePhotoButton=new QPushButton(this);
-    changePhotoButton->setGeometry(QRect(221,10,20,100));
+    changePhotoButton->setFixedSize(QSize(20,166));
     changePhotoButton->setText("...");
+    changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    layout->addMultiCellWidget(changePhotoButton,1,3,2,2);
 
 
-    //Ingredient Up & Down buttons
 
-    ingredientGBox=new QGroupBox(this);
-    ingredientGBox->setGeometry(QRect(20,130,255,350));
+    // Spacers to ingredients and instructions
+    QSpacerItem* spacer_bottomphoto = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addMultiCell( spacer_bottomphoto, 4,4,1,3 );
+    //QSpacerItem* spacerToIngredients = new QSpacerItem( 10,200, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    //layout->addMultiCell( spacerToIngredients, 1,4,3,3 );
+    QSpacerItem* spacer_rightGBox = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
+    layout->addItem( spacer_rightGBox,5,4 );
+
+    //------- Ingredients Box -----------------
+    ingredientGBox =new QGroupBox(this);
+    ingredientGBox->setMinimumSize(QSize(275,200));
+    ingredientGBox->setMaximumSize(QSize(275,10000));
     ingredientGBox->setTitle("Ingredients");
     ingredientGBox->setFlat(true);
-    il=new KIconLoader;
+    ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    QGridLayout* boxLayout=new QGridLayout(ingredientGBox);
+    layout->addMultiCellWidget(ingredientGBox,5,5,1,3);
 
-    addButton = new KPushButton(ingredientGBox);
-    addButton->setGeometry( QRect( 210,65, 31, 31 ) );
-    addButton->setFlat(true);
-    QPixmap pm=il->loadIcon("new", KIcon::NoGroup,16); addButton->setPixmap(pm);
+    // Border
+    QSpacerItem* spacerBoxLeft = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    boxLayout->addMultiCell( spacerBoxLeft, 1,8,0,0 );
+    QSpacerItem* spacerBoxTop = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    boxLayout->addMultiCell( spacerBoxTop, 0,0,1,5 );
 
-    upButton = new KPushButton(ingredientGBox);
-    upButton->setGeometry( QRect( 210, 120, 31, 31 ) );
-    upButton->setFlat(true);
-    pm=il->loadIcon("up", KIcon::NoGroup,16); upButton->setPixmap(pm);
-
-    downButton = new KPushButton(ingredientGBox);
-    downButton->setGeometry( QRect( 210, 150, 31, 31 ) );
-    downButton->setFlat(true);
-    pm=il->loadIcon("down", KIcon::NoGroup,16); downButton->setPixmap(pm);
-
-    removeButton = new KPushButton(ingredientGBox);
-    removeButton->setGeometry( QRect( 210, 180, 31, 31 ) );
-    removeButton->setFlat(true);
-    pm=il->loadIcon("remove", KIcon::NoGroup,16); removeButton->setPixmap(pm);
-
-
-
-    //Ingredient Input Widgets
+    //Input Widgets
 
     amountEdit = new KDoubleNumInput(ingredientGBox);
-    amountEdit->setGeometry( QRect( 10, 25, 60, 30 ) );
+    amountEdit->setFixedSize(QSize(60,30));
+    amountEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(amountEdit,1,1);
 
-    unitBox = new KComboBox( FALSE,ingredientGBox);
-    unitBox->setGeometry( QRect( 190, 25, 60, 31 ) );
 
     ingredientBox = new KComboBox( FALSE,ingredientGBox);
-    ingredientBox->setGeometry( QRect( 70, 25, 120, 31 ) );
+    ingredientBox->setFixedSize( QSize(120, 30 ) );
+    ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(ingredientBox,1,2);
 
+
+    unitBox = new KComboBox( FALSE,ingredientGBox);
+    unitBox->setMinimumSize(QSize(51,30));
+    unitBox->setMaximumSize(QSize(10000,30));
+    unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    boxLayout->addMultiCellWidget(unitBox,1,1,3,5);
+
+    // Spacers to list and buttons
+    QSpacerItem* spacerToList = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    boxLayout->addMultiCell( spacerToList, 2,2,1,3 );
+    QSpacerItem* spacerToButtons = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
+    boxLayout->addItem( spacerToButtons, 3,4);
+
+    // Ingredient List
     ingredientList = new KListView(ingredientGBox, "ingredientList" );
     ingredientList->addColumn("Ingredient");
     ingredientList->addColumn("Amount");
     ingredientList->addColumn("Units");
     ingredientList->setSorting(-1); // Do not sort
-    ingredientList->setGeometry( QRect( 10, 65, 190, 280 ) );
+    ingredientList->setMinimumSize(QSize(200,100));
+    ingredientList->setMaximumSize(QSize(10000,10000));
+    ingredientList->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    boxLayout->addMultiCellWidget(ingredientList,3,8,1,3);
 
-    // Recipe Instructions Widgets
+
+    // Add, Up,down,... buttons
+    il=new KIconLoader;
+
+    addButton = new KPushButton(ingredientGBox);
+    addButton->setFixedSize( QSize(31, 31 ) );
+    addButton->setFlat(true);
+    QPixmap pm=il->loadIcon("new", KIcon::NoGroup,16); addButton->setPixmap(pm);
+    addButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(addButton,3,5);
+
+     // Spacer to the rest of buttons
+    QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    boxLayout->addItem( spacerToOtherButtons,4,5 );
+
+    upButton = new KPushButton(ingredientGBox);
+    upButton->setFixedSize( QSize(31, 31 ) );
+    upButton->setFlat(true);
+    pm=il->loadIcon("up", KIcon::NoGroup,16); upButton->setPixmap(pm);
+    upButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(upButton,5,5);
+
+    downButton = new KPushButton(ingredientGBox);
+    downButton->setFixedSize( QSize(31, 31 ) );
+    downButton->setFlat(true);
+    pm=il->loadIcon("down", KIcon::NoGroup,16); downButton->setPixmap(pm);
+    downButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(downButton,6,5);
+
+    removeButton = new KPushButton(ingredientGBox);
+    removeButton->setFixedSize( QSize(31, 31 ) );
+    removeButton->setFlat(true);
+    pm=il->loadIcon("remove", KIcon::NoGroup,16); removeButton->setPixmap(pm);
+    removeButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    boxLayout->addWidget(removeButton,7,5);
+
+
+
+
+    // ------- Recipe Instructions Widgets -----------
     instructionsEdit = new KTextEdit( this);
-    instructionsEdit->setGeometry( QRect( 290, 50, 360, 420 ) );
+    instructionsEdit->setMinimumSize(QSize(360,320));
+    instructionsEdit->setMaximumSize(QSize(10000,10000));
+    instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    layout->addMultiCellWidget(instructionsEdit,3,5,5,5);
 
     titleEdit = new KLineEdit( this);
-    titleEdit->setGeometry( QRect( 290, 10, 360, 30 ) );
+    titleEdit->setMinimumSize(QSize(360,30));
+    titleEdit->setMaximumSize(QSize(10000,30));
+    titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    layout->addWidget(titleEdit,1,5);
 
+    // Title ->instructions spacer
+
+    QSpacerItem* title_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addItem(title_spacer,2,5 );
     // Dialog design
     resize( QSize(500, 700).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );

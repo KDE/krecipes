@@ -6,9 +6,10 @@
 #define _KRECIPESPREF_H_
 
 #include <kdialogbase.h>
+#include <klineedit.h>
 #include <qframe.h>
 
-class KrecipesPrefPageOne;
+class ServerPrefs;
 class KrecipesPrefPageTwo;
 
 class KrecipesPreferences : public KDialogBase
@@ -18,15 +19,17 @@ public:
     KrecipesPreferences();
 
 private:
-    KrecipesPrefPageOne *m_pageOne;
+    ServerPrefs *m_pageOne;
     KrecipesPrefPageTwo *m_pageTwo;
 };
 
-class KrecipesPrefPageOne : public QFrame
+class ServerPrefs : public QFrame
 {
     Q_OBJECT
 public:
-    KrecipesPrefPageOne(QWidget *parent = 0);
+    ServerPrefs(QWidget *parent = 0);
+private:
+    KLineEdit *propertyNameEdit;
 };
 
 class KrecipesPrefPageTwo : public QFrame
@@ -34,6 +37,7 @@ class KrecipesPrefPageTwo : public QFrame
     Q_OBJECT
 public:
     KrecipesPrefPageTwo(QWidget *parent = 0);
+
 };
 
 #endif // _KRECIPESPREF_H_

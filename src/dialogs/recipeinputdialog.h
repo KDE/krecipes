@@ -69,6 +69,9 @@ private:
 	KPushButton* removeButton;
 	KPushButton* addButton;
 
+	//Try
+	KPushButton* trial;
+
 	// Internal functions
 	void loadIngredientListCombo(void);
 	void loadUnitListCombo(void);

@@ -17,19 +17,19 @@ KrecipesPreferences::KrecipesPreferences()
     // a Treelist dialog.. but there are a number of other
     // possibilities (including Tab, Swallow, and just Plain)
     QFrame *frame;
-    frame = addPage(i18n("First Page"), i18n("Page One Options"));
-    m_pageOne = new KrecipesPrefPageOne(frame);
+    frame = addPage(i18n("Server Settings"), i18n("Database Server Options"));
+    m_pageOne = new ServerPrefs(frame);
 
-    frame = addPage(i18n("Second Page"), i18n("Page Two Options"));
+    frame = addPage(i18n("Appearance"), i18n("Customize Krecipes Appearance"));
     m_pageTwo = new KrecipesPrefPageTwo(frame);
 }
 
-KrecipesPrefPageOne::KrecipesPrefPageOne(QWidget *parent)
+ServerPrefs::ServerPrefs(QWidget *parent)
     : QFrame(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setAutoAdd(true);
-
+    propertyNameEdit=new KLineEdit(this);
     new QLabel(i18n("Add something here"), this);
 }
 
