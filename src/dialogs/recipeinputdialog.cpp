@@ -391,8 +391,12 @@ enableChangedSignal(false);
 //Empty current recipe
 loadedRecipe->empty();
 
+//Set back to the first page
+tabWidget->setCurrentPage(0);
+
 // Load specified Recipe ID
 database->loadRecipe(loadedRecipe,recipeID);
+
 
 reload();
 
