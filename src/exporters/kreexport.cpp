@@ -65,7 +65,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 	QString xml;
 
 	xml += "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-	xml += "<krecipes version=\"" + krecipes_version() + "\" lang=\"" + ( KGlobal::locale() ) ->country() + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
+	xml += "<krecipes version=\"" + krecipes_version() + "\" lang=\"" + ( KGlobal::locale() )->language() + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
 	createCategoryStructure( xml, recipes );
 
