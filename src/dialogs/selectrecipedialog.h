@@ -12,6 +12,7 @@
 
 #include <qwidget.h>
 #include <qvbox.h>
+#include <klistview.h>
 #include "recipedb.h"
 #include "recipe.h"
 
@@ -25,11 +26,16 @@ public:
 
     ~SelectRecipeDialog();
 private:
+
+  // Widgets
+  KListView* recipeListView;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
   // Internal Methods
   void loadRecipeList(void);
+
+
 
 };
 

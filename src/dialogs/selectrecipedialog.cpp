@@ -17,7 +17,10 @@ database=db;
 
 //Initialize internal data
 recipeList=new ElementList;
-
+recipeListView=new KListView(this);
+    recipeListView->addColumn("Id.");
+    recipeListView->addColumn("Title");
+    recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 // Load Recipe List
 loadRecipeList();
 }
@@ -31,8 +34,8 @@ void SelectRecipeDialog::loadRecipeList(void)
 {
 database->loadRecipeList(recipeList);
 
-for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNext() ) int a=1;
-	//ingredientBox->insertItem(ing->name);
+for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNext() )
+	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
 
 
 }

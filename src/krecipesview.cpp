@@ -37,15 +37,13 @@ KrecipesView::KrecipesView(QWidget *parent)
     rightPanel=new QWidgetStack(splitter);
 
     // Design Resizing of the panels
-   //leftPanel->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-   //rightPanel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
    leftPanel->setMinimumWidth(130);
 
 
     // Design Left Panel
 
-    boton1=new QPushButton(leftPanel); boton1->setFlat(true); boton1->setText("First");
+    boton1=new QPushButton(leftPanel); boton1->setFlat(true); boton1->setText("Select Recipe");
     	boton1->setGeometry(0,0,130,30);
     boton2=new QPushButton(leftPanel); boton2->setFlat(true); boton2->setText("View Recipe");
     	boton2->setGeometry(0,30,130,30);
@@ -57,6 +55,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     boton5=new QPushButton(rightPanel); boton5->setFlat(true); boton5->setText("Second");
     inputPanel=new RecipeInputDialog(rightPanel,database);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);
+    selectPanel=new SelectRecipeDialog(rightPanel,database);
 
     // Connect Signals from Left Panel to ChangePanel()
      connect( leftPanel, SIGNAL(clicked(int)), SLOT(slotSetPanel(int)) );
@@ -91,7 +90,7 @@ void KrecipesView::slotSetPanel(int w)
 {
 switch (w)
 {
-case 0: this->rightPanel->raiseWidget(boton4);
+case 0: this->rightPanel->raiseWidget(selectPanel);
 	break;
 case 1: this->rightPanel->raiseWidget(viewPanel);
 	break;

@@ -16,6 +16,7 @@
 #include <qwidgetstack.h>
 #include "recipeinputdialog.h"
 #include "recipeviewdialog.h"
+#include "selectrecipedialog.h"
 
 class QPainter;
 
@@ -78,6 +79,7 @@ private:
 public:
 	RecipeInputDialog *inputPanel;
 	RecipeViewDialog *viewPanel;
+	SelectRecipeDialog *selectPanel;
 
 signals:
 	void enableSaveOption(bool en);
