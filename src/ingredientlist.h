@@ -1,6 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ *   Copyright (C) 2003 by                                                 *
+ *                                                                         *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,7 +12,7 @@
  ***************************************************************************/
 #ifndef INGREDIENTLIST_H
 #define INGREDIENTLIST_H
-
+//
 #include <qptrlist.h>
 #include <iostream>
 
