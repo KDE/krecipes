@@ -1235,7 +1235,7 @@ return(s_escaped);
 
 QString LiteRecipeDB::unescapeAndDecode(const QString &s)
 {
-QString s_escaped=QString::fromUtf8(s.latin1());
+QString s_escaped=s; //libqsqlite already took care of decoding
 s_escaped.replace(";@",";");
 return (s_escaped); // Use unicode encoding
 }

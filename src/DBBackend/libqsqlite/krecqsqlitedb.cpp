@@ -86,9 +86,9 @@ int QSQLiteDB::call_back(void* result, int argc, char** argv, char** columns)
 
 	for (int i = 0; i < argc; i++ )
 	{
-		tableInt.insert(i, QString::fromLocal8Bit(argv[i]));
-		tableString.insert(QString::fromLocal8Bit(columns[i]),
-	                       QString::fromLocal8Bit(argv[i]));
+		tableInt.insert(i, QString::fromUtf8(argv[i]));
+		tableString.insert(QString::fromUtf8(columns[i]),
+	                       QString::fromUtf8(argv[i]));
 	}
 
     QSQLiteResultRow row(tableString, tableInt);

@@ -1404,10 +1404,8 @@ if ( version < 0.5 )
 
 if ( version < 0.6 )
 {
-	command="ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL AFTER name;";
+	command="ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL default '-1' AFTER name;";
 		QSqlQuery tableToAlter(command,database);
-	command="UPDATE categories SET parent_id=-1;";
-		tableToAlter.exec(command);
 
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
