@@ -136,8 +136,6 @@ void QSqlRecipeDB::initializeData( void )
 	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it ) {
 		database->exec( ( *it ) + QString( ";" ) ); //Split removes the semicolons
 	}
-
-	importSamples();
 }
 
 void QSqlRecipeDB::loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames )

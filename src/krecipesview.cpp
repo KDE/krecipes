@@ -629,6 +629,7 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 	if ( db->ok() ) {
 		db->emptyData();
 		db->initializeData();
+		db->importSamples();
 	}
 
 	delete db;
