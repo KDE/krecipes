@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                                       *
+ *   ugarro@users.sourceforge.net                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,9 @@ public:
 
     ~ElementList();
     Element* getFirst(void);
+    Element* getPrev(void);
     Element* getNext(void);
+    Element* getLast(void);
     Element* getElement(int index);
     void clear(void);
     bool isEmpty(void);
