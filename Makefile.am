@@ -1,4 +1,4 @@
-SUBDIRS = src icons pics data
+SUBDIRS = src icons pics data layouts
 
 messages: rc.cpp
 	$(EXTRACTRC) `find ./src/ -name "*.ui"`  > rc.cpp

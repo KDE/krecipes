@@ -32,11 +32,17 @@ public:
 
 	void setWidget( QWidget * );
 	void setReadOnly( bool );
+	
+	QPoint gridSpacing(){ return grid_spacing; }
+	void setGridSpacing( int x, int y ){ grid_spacing.setX(x); grid_spacing.setY(y); }
 
 signals:
 	void widgetClicked( QMouseEvent *, QWidget* );
+	void widgetGeometryChanged();
 
 protected:
+	friend class MousePressEater;
+
 	virtual void mousePressEvent( QMouseEvent * );
 	virtual void mouseReleaseEvent( QMouseEvent * );
 	virtual void mouseMoveEvent( QMouseEvent * );
@@ -44,6 +50,9 @@ protected:
 	void moveWidget( QWidget *w, int dx, int dy );
 	
 	void update();
+	
+protected slots:
+	void emitWidgetGeometryChanged(){ emit widgetGeometryChanged(); }
 
 private:
 	bool m_read_only;
@@ -53,6 +62,7 @@ private:
 	QPoint m_begin_point;
 	QWidget *m_current_box;
 	QRect widgetGeom;
+	QPoint grid_spacing;
 	WidgetSelection *selection;
 };
 

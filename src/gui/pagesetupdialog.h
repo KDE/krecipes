@@ -11,8 +11,9 @@
 #ifndef PAGESETUPDIALOG_H
 #define PAGESETUPDIALOG_H
 
-#include <qdialog.h>
 #include <qmap.h>
+
+#include <kdialog.h>
 
 #include "../recipe.h"
 
@@ -21,7 +22,7 @@ class SetupDisplay;
 /**
   * @author Jason Kivlighn
   */
-class PageSetupDialog : public QDialog
+class PageSetupDialog : public KDialog
 {
 Q_OBJECT
 
@@ -34,10 +35,26 @@ public:
 
 protected:
 	virtual void accept();
+	virtual void reject();
 	void save();
 
+private slots:
+	void loadLayout();
+	void loadLayout(int);
+	void loadLayout( const QString &filename );
+	void reloadLayout();
+	void saveLayout();
+	void saveAsLayout();
+
 private:
+	QString getIncludedLayoutDir() const;
+	void setActiveFile( const QString &filename );
+
 	SetupDisplay *setup_display;
+	
+	QString active_filename;
+	bool have_write_perm;
+	QMap<int,QString> included_layouts_map;
 };
 
 #endif //PAGESETUPDIALOG_H

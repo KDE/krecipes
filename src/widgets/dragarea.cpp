@@ -10,12 +10,15 @@
 
 #include "dragarea.h"
 
+#include <kapplication.h>
+
 #include "sizehandle.h"
 
 DragArea::DragArea( QWidget *parent, const char *name ) : QWidget(parent,name),
  m_read_only(false),
  m_last_point(0,0),
  m_current_box(0),
+ grid_spacing(5,5),
  selection(new WidgetSelection(this))
 {
 	setMouseTracking(true);
@@ -94,8 +97,10 @@ void DragArea::mouseMoveEvent( QMouseEvent *e )
 		// snap to grid
 		int x = widgetGeom.x() - d.x();
 		widgetGeom.setX( x );
+		 x = ( x / gridSpacing().x() ) * gridSpacing().x();
 		int y = widgetGeom.y() - d.y();
 		widgetGeom.setY( y );
+		y = ( y / gridSpacing().y() ) * gridSpacing().y();
 		QPoint p = m_current_box->pos();
 
 		if ( x - p.x() != 0 || y - p.y() != 0 ) // if we actually have to move
@@ -107,11 +112,13 @@ void DragArea::mouseMoveEvent( QMouseEvent *e )
 
 void DragArea::moveWidget( QWidget *w, int dx, int dy )
 {
+	emit widgetGeometryChanged();
+
 	w->move( w->x() + dx, w->y() + dy );
 	selection->updateGeometry();
 }
 
 void DragArea::update()
 {
-	selection->update();
+	selection->updateGeometry();
 }

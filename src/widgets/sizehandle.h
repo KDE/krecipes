@@ -22,7 +22,6 @@
 
 #include <qwidget.h>
 #include <qintdict.h>
-#include <qptrdict.h>
 
 class QMouseEvent;
 class DragArea;
@@ -42,6 +41,9 @@ public:
     void updateCursor();
 
     void setEnabled( bool ) {}
+    
+signals:
+	void widgetGeometryChanged();
 
 protected:
     void paintEvent( QPaintEvent *e );
@@ -80,6 +82,7 @@ public:
     QWidget *widget() const;
 
 protected:
+
     QIntDict<SizeHandle> handles;
     QWidget *wid;
     DragArea *dragArea;

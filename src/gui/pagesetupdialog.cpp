@@ -10,39 +10,106 @@
 
 #include "pagesetupdialog.h"
 
+#include <qdir.h>
 #include <qlayout.h>
 #include <qhbox.h>
+#include <qfileinfo.h>
 #include <qpushbutton.h>
+#include <qpopupmenu.h>
 
-#include <kiconloader.h>
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kfiledialog.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
+#include <kconfig.h>
+#include <kstdaction.h>
+#include <ktoolbar.h>
+#include <kpopupmenu.h>
 
 #include "setupdisplay.h"
 
-PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : QDialog(parent,0,true)
+PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDialog(parent,0,true)
 {
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
+	KToolBar *toolbar = new KToolBar(this);
+	KActionCollection *actionCollection = new KActionCollection(this);
+	
+	KAction *std_open = KStdAction::open(0,0,0); //use this to create a custom open action
+	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT(loadLayout()), actionCollection, "open_popup" );
+	KPopupMenu *open_popup = custom_open->popupMenu();
+	open_popup->insertTitle( i18n("Included Layouts") );
+	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
+
+	for ( unsigned int i = 0; i < included_layouts.count(); i++ )
+	{
+		int id = open_popup->insertItem(included_layouts[i],this,SLOT(loadLayout(int)));
+		included_layouts_map.insert( id, included_layouts[i] );
+	}
+	
+	custom_open->plug(toolbar);
+
+	KStdAction::save(this, SLOT(saveLayout()), actionCollection)->plug(toolbar);
+	KStdAction::saveAs(this, SLOT(saveAsLayout()), actionCollection)->plug(toolbar);
+	KStdAction::redisplay(this, SLOT(reloadLayout()), actionCollection)->plug(toolbar);
+
+	layout->addWidget(toolbar);
+
 	setup_display = new SetupDisplay(sample,this);
+	
+	KConfig *config=kapp->config();
+	config->setGroup( "Page Setup" );
+	
+	//let's do everything we can to be sure at least some layout is loaded
+	QString filename = config->readEntry("Layout",locate("appdata","layouts/default.klo"));
+	if ( filename.isEmpty() )
+		filename = locate("appdata","layouts/default.klo");
+	loadLayout( filename );
+
 	layout->addWidget(setup_display);
 
 	QHBox *buttonsBox = new QHBox(this);
 	KIconLoader *il = new KIconLoader;
-	QPushButton *okButton = new QPushButton(il->loadIconSet("ok",KIcon::Small),i18n("&OK"),buttonsBox);
+	QPushButton *okButton = new QPushButton(il->loadIconSet("ok",KIcon::Small),i18n("Save and Close"),buttonsBox);
 	QPushButton *cancelButton = new QPushButton(il->loadIconSet("cancel",KIcon::Small),i18n("&Cancel"),buttonsBox);
 	layout->addWidget(buttonsBox);
 
-
 	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
-
 }
 
 void PageSetupDialog::accept()
 {
-	setup_display->save(); //save to this app's config file
+	if ( setup_display->hasChanges() )
+		saveLayout();
+	
+	if ( !active_filename.isEmpty() )
+	{
+		KConfig *config=kapp->config();
+		config->setGroup( "Page Setup" );
+		config->writeEntry( "Layout", active_filename );
+	}
 
 	QDialog::accept();
+}
+
+void PageSetupDialog::reject()
+{
+	if ( setup_display->hasChanges() )
+	{
+		switch ( KMessageBox::questionYesNoCancel( this, i18n("This layout has been modified.\nDo you want to save it?"), i18n("Save Layout?") ) )
+		{
+		case KMessageBox::Yes: saveLayout(); break;
+		case KMessageBox::No: break;
+		default: return;
+		}
+	}
+
+	QDialog::reject();
 }
 
 QSize PageSetupDialog::minimumSize() const
@@ -53,4 +120,91 @@ return(QSize(300,400));
 QSize PageSetupDialog::sizeHint(void) const
 {
 return (minimumSize());
+}
+
+void PageSetupDialog::loadLayout()
+{
+	loadLayout( KFileDialog::getOpenFileName( locateLocal("appdata","layouts/"), "*.klo|Krecipes Layout (*.klo)", this, i18n("Select Layout") ) );
+}
+
+void PageSetupDialog::loadLayout( int popup_param )
+{
+	loadLayout( getIncludedLayoutDir() + "/" + included_layouts_map[popup_param] );
+}
+
+void PageSetupDialog::loadLayout( const QString &filename )
+{
+	if ( setup_display->hasChanges() )
+	{
+		switch ( KMessageBox::questionYesNoCancel( this, i18n("This layout has been modified.\nDo you want to save it?"), i18n("Save Layout?") ) )
+		{
+		case KMessageBox::Yes: saveLayout(); break;
+		case KMessageBox::No: break;
+		default: return;
+		}
+	}
+
+	if ( !filename.isEmpty() )
+	{
+		setup_display->loadLayout( filename );
+		setActiveFile(filename);
+	}
+}
+
+void PageSetupDialog::reloadLayout()
+{
+	loadLayout( active_filename );
+}
+
+void PageSetupDialog::saveLayout()
+{
+	if ( have_write_perm )
+		setup_display->saveLayout( active_filename );
+	else
+	{
+		switch ( KMessageBox::warningYesNo( this, i18n("Unable to save the layout because you do not have sufficient permissions to modify this file.\nWould you like to instead save the current layout to a new file?") ) )
+		{
+		case KMessageBox::Yes: saveAsLayout(); break;
+		default: break;
+		}
+	}
+}
+
+void PageSetupDialog::saveAsLayout()
+{
+	QString filename = KFileDialog::getSaveFileName( KGlobal::instance()->dirs()->saveLocation("appdata","layouts/"), "*.klo|Krecipes Layout (*.klo)", this, QString::null );
+
+	if ( !filename.isEmpty() )
+	{
+		QFileInfo info(filename);
+		bool write_perm = info.isWritable();
+
+		if ( write_perm )
+		{
+			setup_display->saveLayout(filename);
+			setActiveFile(filename);
+		}
+		else
+		{
+			switch ( KMessageBox::warningYesNo( this, i18n("You have selected a file that you do not have the permissions to write to.\nWould you like to select another file?") ) )
+			{
+			case KMessageBox::Yes: saveAsLayout(); break;
+			default: break;
+			}
+		}
+	}
+}
+
+QString PageSetupDialog::getIncludedLayoutDir() const
+{
+	QFileInfo file_info( locate("appdata","layouts/default.klo") );
+	return file_info.dirPath(true);
+}
+
+void PageSetupDialog::setActiveFile( const QString &filename )
+{
+	active_filename = filename;
+	
+	QFileInfo info(filename);
+	have_write_perm = info.isWritable();
 }

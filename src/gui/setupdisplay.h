@@ -11,9 +11,9 @@
 #ifndef SETUPDISPLAY_H
 #define SETUPDISPLAY_H
 
+#include <qdom.h>
 #include <qwidget.h>
 #include <qmap.h>
-#include <qptrlist.h>
 
 #include "../recipe.h"
 #include "../widgets/dragarea.h"
@@ -39,14 +39,15 @@ public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
 
-	void save();
+	void saveLayout( const QString & );
+	void loadLayout( const QString & );
 	virtual QSize sizeHint(void) const;
 	QSize minimumSize() const;
-
-	static void createSetupIfNecessary();
+	bool hasChanges() const { return has_changes; };
 
 protected slots:
 	void widgetClicked( QMouseEvent *, QWidget * );
+	void changeMade();
 
 	//slots to set properties of item boxes
 	void setBackgroundColor();
@@ -68,20 +69,25 @@ private:
 	QLabel *properties_box;
 
 	QSize m_size;
-
+	
 	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64 };
 	QMap< QWidget*, unsigned int > *box_properties;
 
+	bool has_changes;
+	QMap<QWidget*,bool> show_widget;
 	QPopupMenu *popup;
 
 	// Methods
 	void createWidgets( const Recipe &sample );
-	void loadSetup();
 	void toAbsolute(QRect *r);
 	void toPercentage(QRect *r);
 
-
-
+	void loadFont( QWidget *, const QDomElement &tag );
+	void loadGeometry( QWidget *, const QDomElement &tag );
+	void loadBackgroundColor( QWidget *, const QDomElement &tag );
+	void loadTextColor( QWidget *, const QDomElement &tag );
+	void loadVisibility( QWidget *, const QDomElement &tag );
+	void loadAlignment( QWidget *, const QDomElement &tag );
 };
 
 #endif //SETUPDISPLAY_H

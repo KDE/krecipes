@@ -12,6 +12,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -19,29 +20,37 @@
 #include <qsimplerichtext.h>
 #include <qaction.h>
 #include <qlabel.h>
+#include <qfile.h>
 #include <qtextedit.h>
 #include <qtooltip.h>
 #include <qobjectlist.h>
 #include <qpopupmenu.h>
+#include <qvaluelist.h>
 
 #include "../image.h"
 #include "../mixednumber.h"
 
 #include <cmath>
 
-SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent ),
-  box_properties(new QMap< QWidget*, unsigned int >)
+SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent, "background" ),
+  box_properties(new QMap< QWidget*, unsigned int >),
+  has_changes(false)
 {
-	resize(300,400);
 	setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding) );
 
-	box_properties->insert( this, BackgroundColor | Geometry );
+	box_properties->insert( this, BackgroundColor );
 
 	connect( this, SIGNAL(widgetClicked(QMouseEvent*,QWidget*)), SLOT(widgetClicked(QMouseEvent*,QWidget*)) );
+	connect( this, SIGNAL(widgetGeometryChanged()), SLOT(changeMade()) );
 
 	createWidgets( sample );
-	loadSetup();
 
+	KConfig *config=kapp->config();
+	config->setGroup("Page Setup");
+	QSize default_size(300,400);
+	m_size = config->readSizeEntry( "WindowSize", &default_size );
+	resize(m_size);
+	parentWidget()->resize(m_size);
 }
 
 SetupDisplay::~SetupDisplay()
@@ -49,227 +58,191 @@ SetupDisplay::~SetupDisplay()
 	delete box_properties;
 }
 
-void SetupDisplay::createSetupIfNecessary()
+void SetupDisplay::loadLayout( const QString &filename )
 {
-	KConfig *config=kapp->config();
-
-	if ( !config->hasGroup("BackgroundSetup") )
+	QFile input( filename );
+	if ( input.open( IO_ReadOnly ) )
 	{
-		config->setGroup( "BackgroundSetup" );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "Aspect",300.0/400.0); // Aspect ratio of the page
-		config->writeEntry( "SetupWindowSize", QSize(300,400) ); //used solely for the page setup display... doesn't affect view of page
-	}
+		has_changes = false;
+	
+		QDomDocument doc;
+		QString error; int line; int column;
+		if (!doc.setContent(&input,&error,&line,&column))
+		{
+			kdDebug()<<QString( i18n("\"%1\" at line %2, column %3.  This may not be a Krecipes layout file.") ).arg(error).arg(line).arg(column)<<endl;
+			return;
+		}
 
-	if ( !config->hasGroup("TitleSetup") )
-	{
-		config->setGroup( "TitleSetup" );
-		config->writeEntry( "Geometry", QRect(31,6,68,9) );
-		QFont font = kapp->font();
-		font.setBold( true );
-		font.setPointSize( font.pointSize() * 2 );
-		config->writeEntry( "Font", font );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignHCenter | Qt::WordBreak );
-	}
+		QDomElement layout = doc.documentElement();
 
-	if ( !config->hasGroup("InstructionsSetup") )
-	{
-		config->setGroup("InstructionsSetup");
-		config->writeEntry( "Geometry", QRect(31,35,68,91) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::WordBreak );
-	}
+		if ( layout.tagName() != "krecipes-layout" )
+		{
+			kdDebug()<<"This file does not appear to be a valid Krecipes layout file."<<endl;
+			return;
+		}
 
-	if ( !config->hasGroup("ServingsSetup") )
-	{
-		config->setGroup("ServingsSetup");
-		config->writeEntry( "Geometry", QRect(31,29,68,5) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::WordBreak );
-	}
+		QMap<QString,QWidget*> widget_map;
+		QValueList<QWidget*> widgets = box_properties->keys();
+		for ( QValueList<QWidget*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
+			widget_map.insert((*it)->name(),*it);
 
-	if ( !config->hasGroup("PhotoSetup") )
-	{
-		config->setGroup("PhotoSetup");
-		config->writeEntry( "Geometry", QRect(0,0,29,22) );
-		config->writeEntry( "Visibility", true );
-	}
+		QDomNodeList l = layout.childNodes();
+		for (unsigned i = 0 ; i < l.count(); i++)
+		{
+			QDomElement el = l.item(i).toElement();
+			QString tagName = el.tagName();
 
-	if ( !config->hasGroup("AuthorsSetup") )
-	{
-		config->setGroup("AuthorsSetup");
-		config->writeEntry( "Geometry", QRect(31,22,68,5) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
-	}
+			QMap<QString,QWidget*>::const_iterator map_it = widget_map.find(tagName);
+			if ( map_it != widget_map.end() )
+			{
+				QDomNodeList l = el.childNodes();
+				for (unsigned i = 0 ; i < l.count(); i++)
+				{
+					QDomElement el = l.item(i).toElement();
+					QString subTagName = el.tagName();
 
-	if ( !config->hasGroup("CategoriesSetup") )
-	{
-		config->setGroup("CategoriesSetup");
-		config->writeEntry( "Geometry", QRect(31,16,68,5) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", Qt::white );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
+					if (subTagName == "background-color")
+						loadBackgroundColor( *map_it, el );
+					else if (subTagName == "geometry")
+						loadGeometry( *map_it, el );
+					else if (subTagName == "font")
+						loadFont( *map_it, el );
+					else if (subTagName == "text-color")
+						loadTextColor( *map_it, el );
+					else if (subTagName == "visible")
+						loadVisibility( *map_it, el );
+					else if (subTagName == "alignment")
+						loadAlignment( *map_it, el );
+					else
+						kdDebug()<<"Warning: Unknown tag within <"<<tagName<<">: "<<subTagName<<endl;
+				}
+			}
+			else
+				kdDebug()<<"Warning: Unknown tag within <krecipes-layout>: "<<tagName<<endl;
+		}
+		
+		setWidget( 0 );
 	}
-
-	if ( !config->hasGroup("HeaderSetup") )
-	{
-		config->setGroup("HeaderSetup");
-		config->writeEntry( "Geometry", QRect(73,0,25,5) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignRight | Qt::WordBreak );
-	}
-
-	if ( !config->hasGroup("IngredientsSetup") )
-	{
-		config->setGroup("IngredientsSetup");
-		config->writeEntry( "Geometry", QRect(0,24,29,21) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", QColor(119,109,78) );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
-	}
-
-	if ( !config->hasGroup("PropertiesSetup") )
-	{
-		config->setGroup("PropertiesSetup");
-		config->writeEntry( "Geometry", QRect(0,46,29,21) );
-		config->writeEntry( "Font", kapp->font() );
-		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
-		config->writeEntry( "TextColor", Qt::black );
-		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
-	}
+	else
+		kdDebug()<<"Unable to open file: "<<filename<<endl;
 }
 
-//do not call until createWidgets() has been called!
-void SetupDisplay::loadSetup()
+void SetupDisplay::loadBackgroundColor( QWidget *widget, const QDomElement &tag )
 {
+	QColor c; c.setNamedColor(tag.text());
+	widget->setPaletteBackgroundColor(c);
+}
 
-QSize newsize;
-QPoint newposition;
+void SetupDisplay::loadFont( QWidget *widget, const QDomElement &tag )
+{
+	QFont f;
+	if ( f.fromString( tag.text() ) )
+		widget->setFont( f );
+}
 
-	SetupDisplay::createSetupIfNecessary();
+void SetupDisplay::loadGeometry( QWidget *widget, const QDomElement &tag )
+{
+	QRect r( tag.attribute("left").toInt(), tag.attribute("top").toInt(), tag.attribute("width").toInt(), tag.attribute("height").toInt() );
+	toAbsolute( &r );
+	widget->setGeometry( r );
+}
 
-	//TODO: we have just one setup available for now. Later setup may be a separate file
-	KConfig *config=kapp->config();
+void SetupDisplay::loadTextColor( QWidget *widget, const QDomElement &tag )
+{
+	QColor c; c.setNamedColor(tag.text());
+	widget->setPaletteForegroundColor(c);
+}
 
-	//=========================this=======================//
-	config->setGroup("BackgroundSetup");
-	setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
+void SetupDisplay::loadVisibility( QWidget *widget, const QDomElement &tag )
+{
+	show_widget.insert(widget, (tag.text()=="false") ? false : true, true);
+}
 
-	m_size =config->readSizeEntry("SetupWindowSize");
-	resize(m_size);
-	parentWidget()->resize(m_size);
+void SetupDisplay::loadAlignment( QWidget *widget, const QDomElement &tag )
+{
+	if ( widget->inherits("QLabel") )
+		static_cast<QLabel*>(widget)->setAlignment( tag.text().toInt() );
+}
 
-	//=========================TITLE=======================//
-	config->setGroup("TitleSetup");
+void SetupDisplay::saveLayout( const QString &filename )
+{
+	QDomImplementation dom_imp;
+	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
 
-	QRect r=config->readRectEntry( "Geometry" );toAbsolute(&r);
-	title_box->setGeometry(r);
-	title_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	title_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	title_box->setFont(config->readFontEntry( "Font" ) );
-	title_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	title_box->setAlignment(config->readNumEntry( "Alignment" ) );
+	QDomElement layout_tag = doc.documentElement();
+	layout_tag.setAttribute( "version", 0.1 );
+	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
+	doc.appendChild( layout_tag );
 
-	//======================INSTRUCTIONS===================//
+	for ( QMap<QWidget*,unsigned int>::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it )
+	{
+		QDomElement base_tag = doc.createElement(it.key()->name());
+		layout_tag.appendChild(base_tag);
 
-	config->setGroup("InstructionsSetup");
-	r=config->readRectEntry( "Geometry" ); toAbsolute(&r);
-	instr_box->setGeometry(r);
-	instr_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	instr_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	instr_box->setFont(config->readFontEntry( "Font" ) );
-	instr_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	instr_box->setAlignment(config->readNumEntry( "Alignment" ));
+		if ( it.data() & BackgroundColor )
+		{
+			QDomElement backgroundcolor_tag = doc.createElement("background-color");
+			backgroundcolor_tag.appendChild( doc.createTextNode(it.key()->backgroundColor().name()) );
+			base_tag.appendChild(backgroundcolor_tag);
+		}
 
-	//=======================SERVINGS======================//
-	config->setGroup("ServingsSetup");
+		if ( it.data() & TextColor )
+		{
+			QDomElement textcolor_tag = doc.createElement("text-color");
+			textcolor_tag.appendChild( doc.createTextNode(it.key()->foregroundColor().name()) );
+			base_tag.appendChild(textcolor_tag);
+		}
 
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	servings_box->setGeometry(r);
-	servings_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	servings_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	servings_box->setFont(config->readFontEntry( "Font" ) );
-	servings_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	servings_box->setAlignment(config->readNumEntry( "Alignment" ));
+		if ( it.data() & Font )
+		{
+			QDomElement font_tag = doc.createElement("font");
+			font_tag.appendChild( doc.createTextNode(static_cast<QLabel*>(it.key())->font().toString()) );
+			base_tag.appendChild(font_tag);
+		}
 
-	//========================PHOTO========================//
-	config->setGroup("PhotoSetup");
+		if ( it.data() & Visibility )
+		{
+			QDomElement visibility_tag = doc.createElement("visible");
+			visibility_tag.appendChild( doc.createTextNode( (show_widget[it.key()]) ? "true" : "false" ) );
+			base_tag.appendChild(visibility_tag);
+		}
 
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	photo_box->setGeometry(r);
-	photo_box->setEnabled(config->readBoolEntry( "Visibility" ) );
+		if ( it.data() & Geometry )
+		{
+			QRect r( it.key()->geometry() );
+			toPercentage( &r );
+		
+			QDomElement geometry_tag = doc.createElement("geometry");
+			geometry_tag.setAttribute("top",r.top());
+			geometry_tag.setAttribute("left",r.left());
+			geometry_tag.setAttribute("width",r.width());
+			geometry_tag.setAttribute("height",r.height());
+			base_tag.appendChild(geometry_tag);
+		}
 
-	//=======================AUTHORS======================//
-	config->setGroup("AuthorsSetup");
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
+		if ( it.data() & Alignment )
+		{
+			QDomElement alignment_tag = doc.createElement("alignment");
+			alignment_tag.appendChild( doc.createTextNode(QString::number(static_cast<QLabel*>(it.key())->alignment())) );
+			base_tag.appendChild(alignment_tag);
+		}
+	}
+	
+	KConfig *config = kapp->config();
+	config->setGroup( "Page Setup" );
+	config->writeEntry( "Aspect", static_cast<double>(width())/static_cast<double>(height()));
+	config->writeEntry( "WindowSize", parentWidget()->size() );
 
-	authors_box->setGeometry(r);
-	authors_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	authors_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	authors_box->setFont(config->readFontEntry( "Font" ) );
-	authors_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	authors_box->setAlignment(config->readNumEntry( "Alignment" ));
-
-	//=======================CATEGORIES======================//
-	config->setGroup("CategoriesSetup");
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	categories_box->setGeometry(r);
-	categories_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	categories_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	categories_box->setFont(config->readFontEntry( "Font" ) );
-	categories_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	categories_box->setAlignment(config->readNumEntry( "Alignment" ));
-
-	//=======================ID======================//
-	config->setGroup("HeaderSetup");
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	id_box->setGeometry(r);
-	id_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	id_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	id_box->setFont(config->readFontEntry( "Font" ) );
-	id_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	id_box->setAlignment(config->readNumEntry( "Alignment" ));
-
-	//=======================INGREDIENTS======================//
-	config->setGroup("IngredientsSetup");
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	ingredients_box->setGeometry(r);
-	ingredients_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	ingredients_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	ingredients_box->setFont(config->readFontEntry( "Font" ) );
-	ingredients_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	ingredients_box->setAlignment(config->readNumEntry( "Alignment" ));
-
-	//=======================INGREDIENTS======================//
-	config->setGroup("PropertiesSetup");
-	r=config->readRectEntry("Geometry"); toAbsolute(&r);
-	properties_box->setGeometry(r);
-	properties_box->setPaletteForegroundColor(config->readColorEntry( "TextColor" ));
-	properties_box->setPaletteBackgroundColor(config->readColorEntry( "BackgroundColor" ));
-	properties_box->setFont(config->readFontEntry( "Font" ) );
-	properties_box->setEnabled(config->readBoolEntry( "Visibility" ) );
-	properties_box->setAlignment(config->readNumEntry( "Alignment" ));
+	QFile out_file( filename );
+	if ( out_file.open(IO_WriteOnly) )
+	{
+		has_changes = false;
+	
+		QTextStream stream( &out_file );
+		stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" << doc.toString();
+	}
+	else
+		kdDebug()<<"Error: Unable to write to file "<<filename<<endl;
 }
 
 void SetupDisplay::createWidgets( const Recipe &sample )
@@ -281,7 +254,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	else
 		title = sample.title;
 
-	title_box = new QLabel(title,this,"TitleSetup");
+	title_box = new QLabel(title,this,"title");
 	title_box->setFrameShape( QFrame::Box );
 	title_box->setMinimumSize(5,5);
 	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
@@ -297,7 +270,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		instr = sample.instructions;
 
 	instr.replace("\n","<BR>");
-	instr_box = new QLabel(instr,this,"InstructionsSetup");
+	instr_box = new QLabel(instr,this,"instructions");
 	instr_box->setMinimumSize(5,5);
 	instr_box->setFrameShape( QFrame::Box );
 	instr_box->setAlignment( Qt::AlignTop );
@@ -307,14 +280,14 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	box_properties->insert( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//=======================SERVINGS======================//
-	servings_box = new QLabel(QString(i18n("Servings: %1")).arg(sample.persons),this,"ServingsSetup");
+	servings_box = new QLabel(QString(i18n("Servings: %1")).arg(sample.persons),this,"servings");
 	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add(servings_box,i18n("Servings"));
 
 	box_properties->insert( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//========================PHOTO========================//
-	photo_box = new QLabel(this,"PhotoSetup");
+	photo_box = new QLabel(this,"photo");
 	photo_box->setFrameShape( QFrame::Box );
 	photo_box->setMinimumSize(5,5);
 	photo_box->setScaledContents( true );
@@ -330,14 +303,14 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString authors;
 	for ( ElementList::const_iterator author_it = sample.authorList.begin(); author_it != sample.authorList.end(); ++author_it )
 	{
-		if (authors != QString::null) authors += ",";
+		if (authors.isNull()) authors += ",";
 		authors += (*author_it).name;
 	}
 
 	if ( authors.isNull() )
 		authors = i18n("Author 1, Author 2, ...");
 
-	authors_box = new QLabel(authors,this,"AuthorsSetup");
+	authors_box = new QLabel(authors,this,"authors");
 	authors_box->setFrameShape( QFrame::Box );
 	QToolTip::add(authors_box,i18n("Authors"));
 
@@ -347,23 +320,23 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QString categories;
 	for ( ElementList::const_iterator cat_it = sample.categoryList.begin(); cat_it != sample.categoryList.end(); ++cat_it )
 	{
-		if (categories != QString::null) categories += ",";
+		if (categories.isNull()) categories += ",";
 		categories += (*cat_it).name;
 	}
 
 	if ( categories.isNull() )
 		categories = i18n("Category 1, Category 2, ...");
 
-	categories_box = new QLabel(categories,this,"CategoriesSetup");
+	categories_box = new QLabel(categories,this,"categories");
 	categories_box->setFrameShape( QFrame::Box );
 	QToolTip::add(categories_box,i18n("Categories"));
 
 	box_properties->insert( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//=======================ID======================//
-	id_box = new QLabel(QString(i18n("Recipe: #%1")).arg(sample.recipeID),this,"HeaderSetup");
+	id_box = new QLabel(QString(i18n("Recipe: #%1")).arg(sample.recipeID),this,"header");
 	id_box->setFrameShape( QFrame::Box );
-	QToolTip::add(id_box,i18n("Recipe ID"));
+	QToolTip::add(id_box,i18n("Header"));
 
 	box_properties->insert( id_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
@@ -395,65 +368,18 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	else
 		ingredients = i18n("<ul><li>Ingredient 1</li><li>Ingredient 2</li><li>...</li></ul>");
 
-	ingredients_box = new QLabel(ingredients,this,"IngredientsSetup");
+	ingredients_box = new QLabel(ingredients,this,"ingredients");
 	ingredients_box->setFrameShape( QFrame::Box );
 	QToolTip::add(ingredients_box,i18n("Ingredients"));
 
 	box_properties->insert( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
 
 	//========================PROPERTIES========================//
-	properties_box = new QLabel(i18n("<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>"),this,"PropertiesSetup");
+	properties_box = new QLabel(i18n("<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>"),this,"properties");
 	properties_box->setFrameShape( QFrame::Box );
 	QToolTip::add(properties_box,i18n("Properties"));
 
 	box_properties->insert( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment );
-}
-
-void SetupDisplay::save()
-{
-
-	QRect r;
-	KConfig *config=kapp->config();
-
-	const QObjectList *list = this->children();
-	QObjectListIt it( *list );
-	QObject * obj;
-	while ( (obj=it.current()) != 0 )
-	{
-		++it;
-		if ( obj->isWidgetType() )
-		{
-			QWidget *w = static_cast<QWidget*>(obj);
-			config->setGroup( w->name() );
-
-			unsigned int properties = (*box_properties->find(w));
-
-			if ( properties & Geometry )
-				{
-				r=w->geometry(); toPercentage(&r);
-				config->writeEntry( "Geometry",r);
-				}
-
-			if ( properties & Font )
-				config->writeEntry( "Font", static_cast<QLabel*>(w)->font() );
-
-			if ( properties & BackgroundColor )
-				config->writeEntry( "BackgroundColor", w->backgroundColor() );
-
-			if ( properties & TextColor )
-				config->writeEntry( "TextColor", w->foregroundColor() );
-
-			if ( properties & Visibility )
-				config->writeEntry( "Visibility", w->isEnabled() );
-
-			if ( properties & Alignment )
-				config->writeEntry( "Alignment", static_cast<QLabel*>(w)->alignment() );
-		}
-	}
-
-	config->setGroup( "BackgroundSetup" );
-	config->writeEntry( "BackgroundColor", backgroundColor() );
-	config->writeEntry( "Aspect", static_cast<double>(width())/static_cast<double>(height()));
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
@@ -476,7 +402,7 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		if ( properties & Visibility )
 		{
 			int id = popup->insertItem( i18n("Show"), this, SLOT(setShown(int)) );
-			popup->setItemChecked( id, w->isEnabled() );
+			popup->setItemChecked( id, show_widget[w] );
 		}
 
 		if ( properties & Alignment )
@@ -508,6 +434,8 @@ void SetupDisplay::setBackgroundColor()
 	QObject *obj = popup->parent();
 	if ( obj->inherits("QWidget") )
 	{
+		has_changes = true;
+
 		QWidget *box = static_cast<QWidget*>(obj);
 
 		QColor new_color = box->backgroundColor();
@@ -521,6 +449,8 @@ void SetupDisplay::setTextColor()
 	QObject *obj = popup->parent();
 	if ( obj->inherits("QWidget") )
 	{
+		has_changes = true;
+
 		QWidget *box = static_cast<QWidget*>(obj);
 
 		QColor new_color = box->foregroundColor();
@@ -534,6 +464,8 @@ void SetupDisplay::setFont()
 	QObject *obj = popup->parent();
 	if ( obj->inherits("QLabel") )
 	{
+		has_changes = true;
+
 		QLabel *box = static_cast<QLabel*>(obj);
 
 		QFont new_font = box->font();
@@ -547,19 +479,23 @@ void SetupDisplay::setShown( int id )
 	QObject *obj = popup->parent();
 	if ( obj->inherits("QWidget") )
 	{
+		has_changes = true;
+	
 		QWidget *box = static_cast<QWidget*>(obj);
-		box->setEnabled( !popup->isItemChecked(id) );
+		show_widget.insert( box, !popup->isItemChecked(id) );
 
-		if ( popup->isItemChecked(id) )
-			this->setWidget( 0 ); //clears the selection
+		//if ( popup->isItemChecked(id) )
+		//	this->setWidget( 0 ); //clears the selection
 	}
-}QRect scaled;
+}
 
 void SetupDisplay::setAlignment( QAction *action )
 {
 	QObject *obj = popup->parent();
 	if ( obj->inherits("QLabel") )
 	{
+		has_changes = true;
+	
 		QLabel *box = static_cast<QLabel*>(obj);
 
 		int align = box->alignment();
@@ -622,10 +558,15 @@ r->setSize(scaledSize);
 
 QSize SetupDisplay::minimumSize() const
 {
-return(QSize(300,400));
+	return(QSize(300,400));
 }
 
 QSize SetupDisplay::sizeHint(void) const
 {
-return (minimumSize());
+	return (minimumSize());
+}
+
+void SetupDisplay::changeMade(void)
+{
+	has_changes = true;
 }

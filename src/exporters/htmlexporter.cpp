@@ -48,77 +48,79 @@ HTMLExporter::~HTMLExporter()
 QString HTMLExporter::createContent( const RecipeList& recipes )
 {
 	if ( recipes.count() == 0 )
-		return "<html></html>";
-
-	setProgressBarTotalSteps( recipes.count() * 2 ); //we'll be looping through all the recipes twice
+		return "<HTML></HTML>";
 
 	KConfig *config = KGlobal::config();
-	QString recipeHTML;
-
-	//Creates initial layout and saves to config file
-	SetupDisplay::createSetupIfNecessary();
-
-	//Recipe recipe = recipes[0];
-	RecipeList::const_iterator recipe_it;
-
-	recipeHTML += "<html><head>";
-	recipeHTML += QString("<title>%1</title>").arg( (recipes.count() == 1) ? recipes[0].title : i18n("Krecipes Recipes") );
-
-	//loop through recipes and only create the css properties
-	int offset = 0;
-	recipeHTML += "<STYLE type=\"text/css\">\n";
-	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
+	config->setGroup( "Page Setup" );
+	kdDebug()<<"Using layout file: "<<config->readEntry("Layout",locate("appdata","layouts/default.klo"))<<endl;
+	QFile input( config->readEntry("Layout",locate("appdata","layouts/default.klo")) );
+	
+	QDomDocument doc;
+	
+	if ( !input.open( IO_ReadOnly ) )
+		return "<HTML></HTML>";
+	
+	QString error; int line; int column;
+	if (!doc.setContent(&input,&error,&line,&column))
 	{
-		// Calculate the property list
-		calculateProperties( *recipe_it, database, properties );
-		offset = createBlocks( *recipe_it, offset ) + 15;
-
-		config->setGroup("BackgroundSetup");
-		QColor color = config->readColorEntry( "BackgroundColor" );
-		recipeHTML += "BODY\n";
-		recipeHTML += "{\n";
-		recipeHTML += QString("background-color: %1;\n").arg(color.name());
-		recipeHTML += "}\n";
-
-		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
-			recipeHTML += div->generateCSS();
-
-		if ( progressBarCanceled() ) return QString::null;
-		advanceProgressBar();
+		kdDebug()<<QString( i18n("\"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt.") ).arg(error).arg(line).arg(column)<<endl;
+		return "<HTML></HTML>";
 	}
-	recipeHTML += "</STYLE></head><body>\n";
 
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi( *file );
 	dir.mkdir( fi.dirPath()+"/"+filename+"_photos" );
 
-	//now loop through the recipes, generating the content
+	RecipeList::const_iterator recipe_it;
+	QString recipeTitleHTML = QString("<TITLE>%1</TITLE>").arg( (recipes.count() == 1) ? recipes[0].title : i18n("Krecipes Recipes") );
+	int offset = 0;
+
+	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
+	QString recipeStyleHTML = "<STYLE type=\"text/css\">\n";
+	recipeStyleHTML += "BODY\n";
+	recipeStyleHTML += "{\n";
+	recipeStyleHTML += QString("background-color: %1;\n").arg( bg_element.text() );
+	recipeStyleHTML += "}\n";
+
+	QString recipeBodyHTML = "<BODY>";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it )
 	{
-		// Calculate the property list
-		calculateProperties( *recipe_it, database, properties );
-		(void)createBlocks( *recipe_it );
-		storePhoto( *recipe_it );
+		calculateProperties( *recipe_it, database, properties ); // Calculate the property list
+		storePhoto( *recipe_it, doc );
+		offset = createBlocks( *recipe_it, doc, offset ) + 15;
 
 		for ( DivElement *div = div_elements.first(); div; div = div_elements.next() )
-			recipeHTML += div->generateHTML();
+		{
+			recipeStyleHTML += div->generateCSS();
+			recipeBodyHTML += div->generateHTML();
+		}
 
-		if ( progressBarCanceled() ) return QString::null;
+		if ( progressBarCanceled() ) return QString::null; //FIXME: should we just return what we've generated so far?  It does simplify things elsewhere... (all we have to do is put "break;" here and anything works out; it will return the complete recipes generated so far)
 		advanceProgressBar();
 	}
+	recipeStyleHTML += "</STYLE>";
+	recipeBodyHTML += "</BODY>";
 
-	// Close HTML
-	recipeHTML+="</body></html>\n";
+
+	//and now piece it all together
+	QString recipeHTML = "<HTML><HEAD>";
+	recipeHTML += recipeStyleHTML;
+	recipeHTML += "</HEAD>\n";
+	recipeHTML += recipeBodyHTML;
+	recipeHTML += "</HTML>";
 
 	return recipeHTML;
 }
 
-void HTMLExporter::storePhoto( const Recipe &recipe )
+void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup("PhotoSetup");
-	temp_photo_geometry = config->readRectEntry("Geometry");
+	QDomElement photo_geom_el = getLayoutAttribute( doc, "photo", "geometry" );
+	temp_photo_geometry = QRect( 	photo_geom_el.attribute("left").toInt(),
+					photo_geom_el.attribute("top").toInt(),
+					photo_geom_el.attribute("width").toInt(),
+					photo_geom_el.attribute("height").toInt()
+				);
 
 	int phwidth = (int) (temp_photo_geometry.width()/100.0*m_width); // Scale to this dialog
 	int phheight =(int) (temp_photo_geometry.height()/100.0*m_width); // Scale to this dialog
@@ -135,10 +137,9 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 }
 
-int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
+int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset )
 {
 	div_elements.clear();
-	QFont default_font;
 
 	QRect *geometry;
 	DivElement *new_element;
@@ -150,26 +151,23 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	KConfig *config = KGlobal::config();
 
 	//=======================TITLE======================//
-	config->setGroup("TitleSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "title" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	new_element = new DivElement( "title_"+QString::number(recipe.recipeID), recipe.title);
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "title" );
+	readAlignmentProperties( new_element, doc, "title" );
+	readBgColorProperties( new_element, doc, "title" );
+	readTextColorProperties( new_element, doc, "title" );
+	readVisibilityProperties( new_element, doc, "title" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================INSTRUCTIONS======================//
-
-	config->setGroup("InstructionsSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "instructions" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
@@ -177,53 +175,50 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	instr_html.replace("\n","<BR>");
 	new_element = new DivElement( "instructions_"+QString::number(recipe.recipeID), instr_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "instructions" );
+	readAlignmentProperties( new_element, doc, "instructions" );
+	readBgColorProperties( new_element, doc, "instructions" );
+	readTextColorProperties( new_element, doc, "instructions" );
+	readVisibilityProperties( new_element, doc, "instructions" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================SERVINGS======================//
-	config->setGroup("ServingsSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "servings" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString servings_html = QString("<b>%1: </b>%2").arg(i18n("Servings")).arg(recipe.persons);
 	new_element = new DivElement( "servings_"+QString::number(recipe.recipeID), servings_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "servings" );
+	readAlignmentProperties( new_element, doc, "servings" );
+	readBgColorProperties( new_element, doc, "servings" );
+	readTextColorProperties( new_element, doc, "servings" );
+	readVisibilityProperties( new_element, doc, "servings" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//========================PHOTO========================//
-	config->setGroup("PhotoSetup");
 	geometry=new QRect(temp_photo_geometry);
+	geometry->setWidth((int)(double(geometry->width())*100.0/m_width));// The size of all objects needs to be saved in percentage format
+	geometry->setHeight((int) (double(geometry->height())*100.0/m_width));// The size of all objects needs to be saved in percentage format
 	geometry->moveBy( 0, offset );
-	geometry->setWidth((int)(geometry->width()*100.0/m_width));// The size of all objects needs to be saved in percentage format
-	geometry->setHeight((int) (geometry->height()*100.0/m_width));// The size of all objects needs to be saved in percentage format
 	geometries.append( geometry );
 
 	QString photo_html = QString("<img src=\"%1_photos/%2.png\">").arg(filename).arg(recipe.title);
 	new_element = new DivElement( "photo_"+QString::number(recipe.recipeID), photo_html );
 	new_element->setFixedHeight(true);
 
-	readVisibilityProperties( new_element, config );
+	readVisibilityProperties( new_element, doc, "photo" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================AUTHORS======================//
-	config->setGroup("AuthorsSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "authors" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
@@ -239,18 +234,17 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	}
 	new_element = new DivElement( "authors_"+QString::number(recipe.recipeID), authors_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "authors" );
+	readAlignmentProperties( new_element, doc, "authors" );
+	readBgColorProperties( new_element, doc, "authors" );
+	readTextColorProperties( new_element, doc, "authors" );
+	readVisibilityProperties( new_element, doc, "authors" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================CATEGORIES======================//
-	config->setGroup("CategoriesSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "categories" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
@@ -266,36 +260,34 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	}
 	new_element = new DivElement( "categories_"+QString::number(recipe.recipeID), categories_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "categories" );
+	readAlignmentProperties( new_element, doc, "categories" );
+	readBgColorProperties( new_element, doc, "categories" );
+	readTextColorProperties( new_element, doc, "categories" );
+	readVisibilityProperties( new_element, doc, "categories" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
-	//=======================ID======================//
-	config->setGroup("HeaderSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	//=======================HEADER======================//
+	geometry = new QRect; readGeometry( geometry, doc, "header" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
 	QString header_html = QString("<b>%1 #%2</b>").arg(i18n("Recipe")).arg(recipe.recipeID);
 	new_element = new DivElement( "header_"+QString::number(recipe.recipeID), header_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "header" );
+	readAlignmentProperties( new_element, doc, "header" );
+	readBgColorProperties( new_element, doc, "header" );
+	readTextColorProperties( new_element, doc, "header" );
+	readVisibilityProperties( new_element, doc, "header" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================INGREDIENTS======================//
-	config->setGroup("IngredientsSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "ingredients" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
@@ -323,19 +315,17 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	}
 	new_element = new DivElement( "ingredients_"+QString::number(recipe.recipeID), ingredients_html );
 
-	config->setGroup("IngredientsSetup");
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readTextColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "ingredients" );
+	readAlignmentProperties( new_element, doc, "ingredients" );
+	readBgColorProperties( new_element, doc, "ingredients" );
+	readTextColorProperties( new_element, doc, "ingredients" );
+	readVisibilityProperties( new_element, doc, "ingredients" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
 	//=======================PROPERTIES======================//
-	config->setGroup("PropertiesSetup");
-	geometry = new QRect( config->readRectEntry( "Geometry" ) );
+	geometry = new QRect; readGeometry( geometry, doc, "properties" );
 	geometry->moveBy( 0, offset );
 	geometries.append( geometry );
 
@@ -361,10 +351,10 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	}
 	new_element = new DivElement( "properties_"+QString::number(recipe.recipeID), properties_html );
 
-	readFontProperties( new_element, config );
-	readAlignmentProperties( new_element, config );
-	readBgColorProperties( new_element, config );
-	readVisibilityProperties( new_element, config );
+	readFontProperties( new_element, doc, "properties" );
+	readAlignmentProperties( new_element, doc, "properties" );
+	readBgColorProperties( new_element, doc, "properties" );
+	readVisibilityProperties( new_element, doc, "properties" );
 
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
@@ -389,29 +379,25 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 
 		if ( !element->fixedHeight() )
 		{
-
 			// Generate a test page to calculate the size in khtml
 			QString tempHTML="<HTML><HEAD><STYLE type=\"text/css\">";
 			tempHTML+= element->generateCSS(true);
 			tempHTML+="</STYLE></HEAD>";
 			tempHTML+="<BODY>";
-			tempHTML+=QString("<DIV id=%1>").arg(element->id());
-			tempHTML+= element->innerHTML();
-			tempHTML+="</DIV></BODY></HTML>";
+			tempHTML+=element->generateHTML();
+			tempHTML+="</BODY></HTML>";
 
 			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
 			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
-			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
-			sizeCalculator->view()->resize(QSize(elementWidth+40,0));
+			sizeCalculator->view()->setMinimumSize(QSize(elementWidth+40,0));
+			sizeCalculator->view()->resize(QSize(elementWidth,0));
 			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
 			sizeCalculator->write(tempHTML);
 			sizeCalculator->end();
-
-
+			
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
 			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
-
 			delete sizeCalculator;
 		}
 		rect->setHeight((int)(ceil(elementHeight*100.0/m_width))); // set the new height to the element
@@ -433,52 +419,85 @@ int HTMLExporter::createBlocks( const Recipe &recipe, int offset )
 	return height_taken;
 }
 
-
-void HTMLExporter::readAlignmentProperties( DivElement *element, KConfig *config )
+void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QString &object )
 {
-	unsigned int alignment = config->readNumEntry( "Alignment" );
+	QDomElement geom_el = getLayoutAttribute( doc, object, "geometry" );
 
-	if ( alignment & Qt::AlignLeft )
-		element->addProperty( "text-align: left;" );
-	if ( alignment & Qt::AlignRight )
-		element->addProperty( "text-align: right;" );
-	if ( alignment & Qt::AlignHCenter )
-		element->addProperty( "text-align: center;" );
-	if ( alignment & Qt::AlignTop )
-		element->addProperty( "vertical-align: top;" );
-	if ( alignment & Qt::AlignBottom )
-		element->addProperty( "vertical-align: bottom;" );
-	if ( alignment & Qt::AlignVCenter )
-		element->addProperty( "vertical-align: middle;" );
+	if ( !geom_el.isNull() )
+	{
+		geom->setLeft( geom_el.attribute("left").toInt() );
+		geom->setTop( geom_el.attribute("top").toInt() );
+		geom->setWidth( geom_el.attribute("width").toInt() );
+		geom->setHeight( geom_el.attribute("height").toInt() );
+	}
 }
 
-void HTMLExporter::readBgColorProperties( DivElement *element, KConfig *config )
+void HTMLExporter::readAlignmentProperties( DivElement *element, const QDomDocument &doc, const QString &object )
 {
-	QColor color = config->readColorEntry( "BackgroundColor" );
-	element->addProperty( QString("background-color: %1;").arg(color.name()) );
+	QDomElement el = getLayoutAttribute( doc, object, "alignment" );
+	
+	if ( !el.isNull() )
+	{
+		unsigned int alignment = el.text().toInt();
+
+		if ( alignment & Qt::AlignLeft )
+			element->addProperty( "text-align: left;" );
+		if ( alignment & Qt::AlignRight )
+			element->addProperty( "text-align: right;" );
+		if ( alignment & Qt::AlignHCenter )
+			element->addProperty( "text-align: center;" );
+		if ( alignment & Qt::AlignTop )
+			element->addProperty( "vertical-align: top;" );
+		if ( alignment & Qt::AlignBottom )
+			element->addProperty( "vertical-align: bottom;" );
+		if ( alignment & Qt::AlignVCenter )
+			element->addProperty( "vertical-align: middle;" );
+	}
 }
 
-void HTMLExporter::readFontProperties( DivElement *element, KConfig *config )
+void HTMLExporter::readBgColorProperties( DivElement *element, const QDomDocument &doc, const QString &object )
 {
-	QFont font = config->readFontEntry( "Font" );
-	element->addProperty( QString("font-family: %1;").arg(font.family()) );
-	element->addProperty( QString("font-size: %1pt;").arg(font.pointSize()) );
-	element->addProperty( QString("font-weight: %1;").arg(font.weight()) );
+	QDomElement el = getLayoutAttribute( doc, object, "background-color" );
+
+	if ( !el.isNull() )
+		element->addProperty( QString("background-color: %1;").arg(el.text()) );
 }
 
-void HTMLExporter::readTextColorProperties( DivElement *element, KConfig *config )
+void HTMLExporter::readFontProperties( DivElement *element, const QDomDocument &doc, const QString &object )
 {
-	QColor color = config->readColorEntry( "TextColor" );
-	element->addProperty( QString("color: %1;").arg(color.name()) );
+	QDomElement el = getLayoutAttribute( doc, object, "font" );
+	
+	if ( !el.isNull() )
+	{
+		QFont font;
+		font.fromString( el.text() );
+
+		element->addProperty( QString("font-family: %1;").arg(font.family()) );
+		element->addProperty( QString("font-size: %1pt;").arg(font.pointSize()) );
+		element->addProperty( QString("font-weight: %1;").arg(font.weight()) );
+	}
 }
 
-void HTMLExporter::readVisibilityProperties( DivElement *element, KConfig *config )
+void HTMLExporter::readTextColorProperties( DivElement *element, const QDomDocument &doc, const QString &object )
 {
-	bool shown = config->readBoolEntry( "Visibility" );
-	if ( shown )
-		element->addProperty( "visibility: visible;" );
-	else
-		element->addProperty( "visibility: hidden;" );
+	QDomElement el = getLayoutAttribute( doc, object, "text-color" );
+
+	if ( !el.isNull() )
+		element->addProperty( QString("color: %1;").arg(el.text()) );
+}
+
+void HTMLExporter::readVisibilityProperties( DivElement *element, const QDomDocument &doc, const QString &object )
+{
+	QDomElement el = getLayoutAttribute( doc, object, "visible" );
+	
+	if ( !el.isNull() )
+	{
+		bool shown = (el.text() == "false") ? false : true;
+		if ( shown )
+			element->addProperty( "visibility: visible;" );
+		else
+			element->addProperty( "visibility: hidden;" );
+	}
 }
 
 void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect *top_geom )
@@ -524,6 +543,30 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	//remove photo directory
 	QDir photo_dir;
 	photo_dir.rmdir( filename+"_photos" );
+}
+
+QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute )
+{
+	QDomNodeList node_list = doc.elementsByTagName( object );
+	if ( node_list.count() == 0 )
+	{
+		kdDebug()<<"Warning: Requested object \""<<object<<"\" not found."<<endl;
+		return QDomElement();
+	}
+		
+	QDomElement object_element = node_list.item(0).toElement(); //there should only be one, so we'll just take the first
+	
+	QDomNodeList l = object_element.childNodes();
+	for (unsigned i = 0; i < l.count(); i++)
+	{
+		QDomElement el = l.item(i).toElement();
+		
+		if ( el.tagName() == attribute )
+			return el;
+	}
+	
+	kdDebug()<<"Warning: Requested attribute \""<<attribute<<"\" not found."<<endl;
+	return QDomElement();
 }
 
 
@@ -608,7 +651,7 @@ QString DivElement::generateCSS(bool noPositioning)
 		}
 
 	//don't show empty blocks
-	if ( m_content == "" || m_content.isNull() )
+	if ( m_content.isEmpty() )
 		result += "visibility: hidden;\n";
 
 	result += "}\n";

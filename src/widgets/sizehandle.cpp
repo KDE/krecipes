@@ -120,10 +120,10 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int w = geom.width() + d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	int h = geom.height() + d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	int dx = widget->width() - w;
 	int dy = widget->height() - h;
 	trySetGeometry( widget, widget->x() + dx, widget->y() + dy, w, h );
@@ -133,7 +133,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int h = geom.height() + d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	int dy = widget->height() - h;
 	trySetGeometry( widget, widget->x(), widget->y() + dy, widget->width(), h );
     } break;
@@ -142,11 +142,11 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int h = geom.height() + d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	int dy = widget->height() - h;
 	int w = geom.width() - d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	trySetGeometry( widget, widget->x(), widget->y() + dy, w, h );
     } break;
     case Right: {
@@ -154,7 +154,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int w = geom.width() - d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	tryResize( widget, w, widget->height() );
     } break;
     case RightBottom: {
@@ -162,10 +162,10 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int w = geom.width() - d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	int h = geom.height() - d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	tryResize( widget, w, h );
     } break;
     case Bottom: {
@@ -173,7 +173,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int h = geom.height() - d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	tryResize( widget, widget->width(), h );
     } break;
     case LeftBottom: {
@@ -181,11 +181,11 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int w = geom.width() + d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	int dx = widget->width() - w;
 	int h = geom.height() - d.y();
 	geom.setHeight( h );
-	//h = ( h / dragArea->grid().y() ) * dragArea->grid().y();
+	h = ( h / dragArea->gridSpacing().y() ) * dragArea->gridSpacing().y();
 	trySetGeometry( widget, widget->x() + dx, widget->y(), w, h );
     } break;
     case Left: {
@@ -193,7 +193,7 @@ void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 	    return;
 	int w = geom.width() + d.x();
 	geom.setWidth( w );
-	//w = ( w / dragArea->grid().x() ) * dragArea->grid().x();
+	w = ( w / dragArea->gridSpacing().x() ) * dragArea->gridSpacing().x();
 	int dx = widget->width() - w;
 	trySetGeometry( widget, widget->x() + dx, widget->y(), w, widget->height() );
     } break;
@@ -221,9 +221,9 @@ void SizeHandle::mouseReleaseEvent( QMouseEvent */*e*/ )
 void SizeHandle::trySetGeometry( QWidget *w, int x, int y, int width, int height )
 {
     int minw = /*QMAX( w->minimumSizeHint().width(),*/ w->minimumSize().width() /*)*/;
-    //minw = QMAX( minw, 2 * dragArea->grid().x() );
+    minw = QMAX( minw, 2 * dragArea->gridSpacing().x() );
     int minh = /*QMAX( w->minimumSizeHint().height(),*/ w->minimumSize().height() /*)*/;
-    //minh = QMAX( minh, 2 * dragArea->grid().y() );
+    minh = QMAX( minh, 2 * dragArea->gridSpacing().y() );
     if ( QMAX( minw, width ) > w->maximumWidth() ||
 	 QMAX( minh, height ) > w->maximumHeight() )
 	return;
@@ -232,6 +232,7 @@ void SizeHandle::trySetGeometry( QWidget *w, int x, int y, int width, int height
     if ( height < minh && y != w->y() )
 	y -= minh - height;
 
+    emit widgetGeometryChanged();
     w->setGeometry( x, y, QMAX( minw, width ), QMAX( minh, height ) );
 }
 
@@ -241,6 +242,8 @@ void SizeHandle::tryResize( QWidget *w, int width, int height )
     minw = QMAX( minw, 16 );
     int minh = /*QMAX( w->minimumSizeHint().height(),*/ w->minimumSize().height() /*)*/;
     minh = QMAX( minh, 16 );
+    
+    emit widgetGeometryChanged();
     w->resize( QMAX( minw, width ), QMAX( minh, height ) );
 }
 
@@ -249,8 +252,11 @@ void SizeHandle::tryResize( QWidget *w, int width, int height )
 WidgetSelection::WidgetSelection( DragArea *parent )
 {
     dragArea = parent;
-    for ( int i = SizeHandle::LeftTop; i <= SizeHandle::Left; ++i ) {
-	handles.insert( i, new SizeHandle( dragArea, (SizeHandle::Direction)i, this ) );
+    for ( int i = SizeHandle::LeftTop; i <= SizeHandle::Left; ++i )
+    {
+	SizeHandle *size_handle = new SizeHandle( dragArea, (SizeHandle::Direction)i, this );
+	QObject::connect( size_handle, SIGNAL(widgetGeometryChanged()), dragArea, SLOT(emitWidgetGeometryChanged()) ); 
+	handles.insert( i, size_handle );
     }
     hide();
 }

@@ -13,13 +13,15 @@
 
 #include <math.h> // For ceil()
 
+#include <qdom.h>
+
 #include "baseexporter.h"
 
 class CustomRectList;
 class IngredientPropertyList;
 class RecipeDB;
-class KConfig;
 class KProgress;
+class QRect;
 
 class DivElement
 {
@@ -63,16 +65,20 @@ public:
 
 protected:
 	virtual QString extensions() const{ return ".html"; }
+
 private:
-	void storePhoto( const Recipe &recipe );
-	int createBlocks( const Recipe &recipe, int offset = 0 );
+	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
+	int createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset = 0 );
 	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 
-	void readAlignmentProperties( DivElement *, KConfig * );
-	void readBgColorProperties( DivElement *, KConfig * );
-	void readFontProperties( DivElement *, KConfig * );
-	void readTextColorProperties( DivElement *, KConfig * );
-	void readVisibilityProperties( DivElement *, KConfig * );
+	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
+	void readAlignmentProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	void readBgColorProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	void readFontProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	void readTextColorProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	void readVisibilityProperties( DivElement *, const QDomDocument &doc, const QString &object );
+	
+	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
 
 	QPtrList<DivElement> div_elements;
 	QPtrList<QRect> dimensions;
