@@ -185,7 +185,7 @@ bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *
 void KreExporter::writeCategoryStructure(QString &xml, const CategoryTree *categoryTree )
 {
 	if ( categoryTree->category.id != -1 )
-		xml += "<category name=\""+categoryTree->category.name+"\">\n";
+		xml += "<category name=\""+QStyleSheet::escape(categoryTree->category.name.utf8())+"\">\n";
 
 	const CategoryTreeChildren *children = categoryTree->children();
 	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
