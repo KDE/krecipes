@@ -440,7 +440,6 @@ void KrecipesView::resizeButtons(){
   MenuButton *bt;
   while ( (bt = it.current()) != 0 ){
     bt->resize((leftPanel->width())-1, 30);
-    bt->repaint();
     ++it;
   }
 }
@@ -486,6 +485,7 @@ rightPanel->raiseWidget(viewPanel);
 
 MenuButton::MenuButton(QWidget *parent,const char *name):QPushButton(parent,name)
 {
+  mouseOver = false;
 }
 
 MenuButton::~MenuButton()
@@ -499,9 +499,13 @@ void MenuButton::setTitle(const QString &title)
 }
 
 void MenuButton::enterEvent( QEvent * ){
+  mouseOver = true;
+  repaint();
 }
 
 void MenuButton::leaveEvent( QEvent * ){
+  mouseOver = false;
+  repaint();
 }
 
 void MenuButton::focusInEvent( QFocusEvent * ){
@@ -521,26 +525,47 @@ void MenuButton::drawButton( QPainter *p ){
     KPixmap pn;
     QFont font( KGlobalSettings::generalFont() );
     KStyle* s = new KStyle();
+    bool sunken = isDown();
 
-    s->drawControl( QStyle::CE_PushButton, p, this, QRect(0,0,width(),height()), colorGroup() );
-    s->drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup() );
+    // draw base button
+    s->drawControl( QStyle::CE_PushButton, p, this, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised );
+    //s->drawPrimitive( QStyle::PE_ButtonCommand, p, QRect(0,0,width(),height()), colorGroup(), sunken ? QStyle::Style_Down : QStyle::Style_Raised ); //do the same thing as upper line
+
+    // draw icon
     s->drawItem(p, QRect(0,0,width(),height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
+
+    // copy base button
     pn = *pm;
+
+    // create gradient image
     QPixmap tmp(size());
     tmp.fill(Qt::white);
     QImage gradient = tmp.convertToImage();
     QImage grad = KImageEffect::gradient (QSize(width()/2, height()), Qt::white, Qt::black, KImageEffect::HorizontalGradient, 65536);
     bitBlt(&gradient, width()/2, 0, &grad, 0, Qt::CopyROP);
 
+    // draw button text
     s->drawItem(p, QRect(22, 0, width()-22, height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, 0, text());
+
+    // draw focus border
     if(hasFocus()){
       s->drawPrimitive( QStyle::PE_FocusRect, p, s->subRect(QStyle::SR_PushButtonFocusRect, this), colorGroup() );
     }
 
+    // blend button with text with button without text using gradient
     QImage src = pm->convertToImage();
     QImage blend = pn.convertToImage();
     QImage button = KImageEffect::blend (src, blend, gradient, KImageEffect::Red);
 
+    // highlight button on mouseOver mouseClick
+    if(mouseOver && !sunken){
+      button = KImageEffect::intensity(button, 0.1);
+    }
+    else if(mouseOver && sunken){
+      button = KImageEffect::intensity(button, -0.1);
+    }
+
+    // draw the button
     bitBlt(pm, 0, 0, &button, 0, Qt::CopyROP);
 }
 

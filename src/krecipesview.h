@@ -174,7 +174,10 @@ Q_OBJECT
 public:
 	MenuButton(QWidget *parent,const char *name=0);
 	~MenuButton();
+
+private:
  QPixmap* icon; // icon
+ bool mouseOver;
 
 public slots:
 	void setTitle(const QString &title);
