@@ -30,8 +30,12 @@
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 
-KreMenu::KreMenu(QWidget *parent, const char *name)
- : QWidget(parent, name, Qt::WNoAutoErase)
+KreMenu::KreMenu(QWidget *parent, const char *name) :
+#if QT_VERSION >= 0x030200
+  QWidget(parent, name, Qt::WNoAutoErase)
+#else
+  QWidget(parent, name)
+#endif
 {
 Menu newMenu;
 
@@ -323,7 +327,12 @@ m_currentMenu=&(*(currentMenuId));
 
 
 
-KreMenuButton::KreMenuButton(KreMenu *parent, KrePanel _panel, MenuId id, const char *name):QWidget(parent, name, Qt::WNoAutoErase),
+KreMenuButton::KreMenuButton(KreMenu *parent, KrePanel _panel, MenuId id, const char *name) :
+#if QT_VERSION >= 0x030200
+QWidget(parent, name, Qt::WNoAutoErase),
+#else
+QWidget(parent, name),
+#endif
   panel(_panel)
 {
 icon=0;
