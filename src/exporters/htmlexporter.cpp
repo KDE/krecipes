@@ -384,17 +384,23 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 		element->addProperty( "position: absolute;" );
 
+		// Scale the objects to page size.  Note that we haven't determined the height yet, but these settings will determine it
+		element->addProperty( QString("top: %1px;").arg(static_cast<int>(rect->top()/100.0*m_width)) );
+		element->addProperty( QString("left: %1px;").arg(static_cast<int>(rect->left()/100.0*m_width)) );
+		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
 
 		// For those elements that have no fixed height (lists), calculate the height
 
 		int elementHeight=(int) (rect->height()/100.0*m_width); //Initialize with the current user settings
-		int elementWidth=(int) (rect->width()/100.0*m_width);
 
 		if ( !element->fixedHeight() )
 		{
+			int elementWidth=(int) (rect->width()/100.0*m_width);
+		
 			// Generate a test page to calculate the size in khtml
 			QString tempHTML="<HTML><HEAD><STYLE type=\"text/css\">";
 			tempHTML+= element->generateCSS(true);
+			tempHTML+="BODY { margin: 0px; }"; //very important subtlety in determining the exact width
 			tempHTML+="</STYLE></HEAD>";
 			tempHTML+="<BODY>";
 			tempHTML+=element->generateHTML();
@@ -402,7 +408,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
 			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
-			sizeCalculator->view()->setMinimumSize(QSize(elementWidth+40,0));
+			sizeCalculator->view()->setMinimumSize(QSize(elementWidth,0));
 			sizeCalculator->view()->resize(QSize(elementWidth,0));
 			sizeCalculator->begin(KURL(locateLocal("tmp","/")));
 			sizeCalculator->write(tempHTML);
@@ -411,20 +417,15 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			// Set the size of the element
 			int newHeight=sizeCalculator->view()->contentsHeight();
 			/* if (newHeight>elementHeight) */ elementHeight=newHeight; // Keep user's size if it's defined as bigger
+
 			delete sizeCalculator;
 		}
-		rect->setHeight((int)(ceil(elementHeight*100.0/m_width))); // set the new height to the element
-									 // Note that ceil is needed to avoid size
-									 // shrinking due to float->int conversion
 
 		// Move elements around if there's any overlapping
 		pushItemsDownIfNecessary( geometries, rect );
 
-		// Scale the objects to page size
-		element->addProperty( QString("top: %1px;").arg(static_cast<int>(rect->top()/100.0*m_width)) );
-		element->addProperty( QString("left: %1px;").arg(static_cast<int>(rect->left()/100.0*m_width)) );
-		element->addProperty( QString("width: %1px;").arg(static_cast<int>(rect->width()/100.0*m_width)) );
-		element->addProperty(QString("height: %1px;").arg(static_cast<int>(rect->height()/100.0*m_width)) );
+		// Scale the height to page size now
+		element->addProperty(QString("height: %1px;").arg(elementHeight) );
 
 		height_taken = QMAX(rect->bottom(),height_taken);
 	}
@@ -668,7 +669,7 @@ QString DivElement::generateCSS(bool noPositioning)
 			result += *it + "\n";
 			}
 		}
-
+		
 	//don't show empty blocks
 	if ( m_content.isEmpty() )
 		result += "visibility: hidden;\n";
