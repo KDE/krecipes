@@ -23,7 +23,6 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpalette.h>
-#include <qsplitter.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -123,18 +122,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     exit(1);
     }
 
-    splitter=new QSplitter(this);
-
-    // Set Splitter Parameters
-    splitter->setFrameShape( QSplitter::NoFrame );
-    splitter->setFrameShadow( QSplitter::Plain );
-    splitter->setOrientation( QSplitter::Horizontal );
-
-    #if KDE_IS_VERSION(3,1,92 )
-    splitter->setOpaqueResize( KGlobalSettings::opaqueResize() );
-    #else
-    splitter->setOpaqueResize();
-    #endif
+    splitter=new QHBox(this);
 
 
 
@@ -146,10 +134,10 @@ KrecipesView::KrecipesView(QWidget *parent)
     leftPanel=new KreMenu(splitter,"leftPanel");
     rightPanel=new QWidgetStack(splitter,"rightPanel");
     leftPanel->setMinimumWidth(22);
-
-    // Design Resizing of the panels
-    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
-
+    leftPanel->setMaximumWidth(200);
+    leftPanel->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding));
+    rightPanel->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::MinimumExpanding));
+    rightPanel->setMaximumWidth(10000);
 
     // Design Left Panel
     buttonsList = new QPtrList<KreMenuButton>();

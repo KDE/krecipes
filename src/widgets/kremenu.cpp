@@ -24,7 +24,7 @@
 KreMenu::KreMenu(QWidget *parent, const char *name)
  : QWidget(parent, name)
 {
-childPos=0; // Initial button is on top, then keep scrolling down
+childPos=10; // Initial button is on top (10px), then keep scrolling down
 widgetNumber=0; // Initially we have no buttons
 activeButton=0; // Button that is highlighted
 }
@@ -41,11 +41,47 @@ QSize KreMenu::sizeHint() const {
 
 void KreMenu::paintEvent(QPaintEvent *e )
 {
-    // Calculate the gradient
-    QColor c1=KGlobalSettings::baseColor().dark(130);
-    QColor c2=KGlobalSettings::baseColor().light(120);
+    // Get gradient colors
+    QColor c=KGlobalSettings::baseColor();
+    QColor c1=c.dark(130);
+    QColor c2=c.light(120);
 
+    // Draw the gradient
     KPixmap kpm;kpm.resize(size()); KPixmapEffect::unbalancedGradient (kpm,c2,c1, KPixmapEffect::HorizontalGradient,-150,-150);
+
+    // Draw the handle
+    QPainter painter(&kpm);
+    painter.setPen(c1);
+    painter.drawLine(width()-5,20,width()-5,height()-20);
+    painter.end();
+
+    //Set the border transparent using a mask
+    QBitmap mask(kpm.size());
+    mask.fill(Qt::color0);
+    painter.begin(&mask);
+    painter.setPen(Qt::color1);
+    painter.setBrush(Qt::color1);
+    painter.drawRoundRect(0,0,width(),height(),2.0/width()*height(),2);
+    painter.end();
+    kpm.setMask(mask);
+
+    //Draw the border line
+    painter.begin(&kpm);
+    painter.setPen(c1);
+    painter.drawRoundRect(0,0,width(),height(),2.0/width()*height(),2);
+
+    //Draw the top line bordering with the first button
+    if (activeButton) // draw only if there's a button
+    {
+        int w=activeButton->width();
+	painter.setPen(c1);
+	painter.drawLine(w/5,8,w-1,8);
+	painter.setPen(c2);
+	painter.drawLine(w/5,9,w-1,9);
+	painter.end();
+    }
+
+    // Copy the pixmap to the widget
     bitBlt(this, 0, 0, &kpm);
     }
 
@@ -116,12 +152,12 @@ emit clicked();
 
 void KreMenuButton::rescale(int w, int h)
 {
-	resize(w,height());
+	resize(w-10,height()); // Leave space for the handle
 }
 
 QSize KreMenuButton::sizeHint() const
 {
-	if (parentWidget()) return(QSize(parentWidget()->size().width(),40));
+	if (parentWidget()) return(QSize(parentWidget()->size().width()-10,40));
 }
 
 void KreMenuButton::paintEvent(QPaintEvent *e )
@@ -145,13 +181,13 @@ void KreMenuButton::paintEvent(QPaintEvent *e )
 
 	// draw the gradient now
 
-    QPainter painter; KPixmap kpm;
+    QPainter painter; KPixmap kpm; kpm.resize(((QWidget *)parent())->size()); // use parent's same size to obtain the same gradient
 
     if (!highlighted)
     {
 
     // first the gradient
-    kpm.resize(size()); KPixmapEffect::unbalancedGradient (kpm,c2,c1, KPixmapEffect::HorizontalGradient,-150,-150);
+    KPixmapEffect::unbalancedGradient (kpm,c2,c1, KPixmapEffect::HorizontalGradient,-150,-150);
 
     }
     else
@@ -210,7 +246,7 @@ void KreMenuButton::paintEvent(QPaintEvent *e )
     painter.end();
 
     // Copy the offscreen button to the widget
-    bitBlt(this, 0, 0, &kpm);
+    bitBlt(this, 0, 0, &kpm,0,0,width(),height()); // Copy the image with correct button size (button is already smaller than parent in width to leave space for the handle, so no need to use -10)
 
 }
 

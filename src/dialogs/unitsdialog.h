@@ -28,6 +28,7 @@ public:
     UnitsDialog(QWidget *parent, RecipeDB *db);
     ~UnitsDialog();
     void reload (void);
+    virtual QSize sizeHint () const{return QSize(600,400);};
 private:
 	// Widgets
 	KListView *unitListView;
@@ -42,9 +43,9 @@ private:
 	RecipeDB *database;
 private slots:
 	void createNewUnit(void);
-  void modUnit(QListViewItem*);
-  void saveUnit(QListViewItem*);
+	void modUnit(QListViewItem*);
 	void removeUnit(void);
+	void saveUnit(QListViewItem*);
 	void saveRatio(int r, int c, double value);
 
 };

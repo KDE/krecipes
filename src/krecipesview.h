@@ -10,8 +10,8 @@
 #include <qevent.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qsplitter.h>
 #include <qtooltip.h>
+#include <qhbox.h>
 #include <qvbox.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
@@ -126,7 +126,7 @@ private:
 	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
 
 	// Widgets
-	QSplitter *splitter;
+	QHBox *splitter;
 	KreMenu *leftPanel;
 	QWidgetStack *rightPanel;
   QPtrList<KreMenuButton> *buttonsList;
