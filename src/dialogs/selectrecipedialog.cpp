@@ -199,8 +199,7 @@ QListViewItem *it;
 it=recipeListView->selectedItem();
 if ( it )
 {
-	bool is_recipe; it->text(1).toInt(&is_recipe);
-	if ( !it->firstChild() && is_recipe )
+	if ( !it->firstChild() && itemIsRecipe(it) )
 		emit recipeSelected(it->text(1).toInt(),0);
 }
 }
@@ -248,8 +247,6 @@ void SelectRecipeDialog::filter(const QString& s)
 {
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	bool is_recipe; it->text(1).toInt(&is_recipe);
-
 	if ( s.isNull() || s == "" ) // Don't filter if the filter text is empty
 	{
 		if ( !isFilteringCategories )
@@ -385,8 +382,7 @@ void SelectRecipeDialog::haveSelectedItems()
 {
 	if( recipeListView->selectedItem() )
 	{
-		bool is_recipe; recipeListView->selectedItem()->text(1).toInt(&is_recipe);
-		if ( is_recipe || recipeListView->selectedItem()->firstChild() )
+		if ( itemIsRecipe(recipeListView->selectedItem()) || recipeListView->selectedItem()->firstChild() )
 			emit recipeSelected(true);
 		else
 			emit recipeSelected(false);
@@ -395,19 +391,14 @@ void SelectRecipeDialog::haveSelectedItems()
 
 void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
-	if (recipeListView->selectedItem())
-	{
-		bool is_recipe; recipeListView->selectedItem()->text(1).toInt(&is_recipe);
-		if( is_recipe )
-			database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
-	}
+	if (recipeListView->selectedItem() && itemIsRecipe(recipeListView->selectedItem()) )
+		database->loadRecipe( recipe, (recipeListView->selectedItem())->text(1).toInt() );
 }
 
 void SelectRecipeDialog::showPopup( KListView */*l*/, QListViewItem *i, const QPoint &p ){
 	if (i) // Check if the QListViewItem actually exists
 	{
-		bool is_recipe; i->text(1).toInt(&is_recipe);
-		if ( is_recipe )
+		if ( itemIsRecipe(i) )
 			kpop->exec(p);
 		else if ( i->firstChild() ) //is a category... don't pop-up for an empty category though
 			catPop->exec(p);
@@ -452,4 +443,14 @@ void SelectRecipeDialog::collapseAll(){
   {
     it->setOpen(false);
   }
+}
+
+//item is a recipe if the 2nd column is an integer (the recipe's ID)
+bool SelectRecipeDialog::itemIsRecipe( const QListViewItem *item )
+{
+	bool is_recipe = false;
+	if ( item )
+		item->text(1).toInt(&is_recipe);
+
+	return is_recipe;
 }

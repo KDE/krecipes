@@ -76,6 +76,7 @@ private:
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);
+  bool itemIsRecipe( const QListViewItem *item );
 
   void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
 
