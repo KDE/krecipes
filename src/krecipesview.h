@@ -29,18 +29,21 @@
 #include "importers/baseimporter.h"
 #include "DBBackend/recipedb.h"
 
+class AuthorsDialog;
+class CategoriesEditorDialog;
+class DietWizardDialog;
+class IngredientsDialog;
+class KreMenu;
+class KreMenuButton;
+class PropertiesDialog;
+class QPainter;
 class RecipeInputDialog;
 class RecipeViewDialog;
 class SelectRecipeDialog;
-class IngredientsDialog;
-class PropertiesDialog;
 class ShoppingListDialog;
-class DietWizardDialog;
-class CategoriesEditorDialog;
-class AuthorsDialog;
 class UnitsDialog;
 
-class QPainter;
+
 
 /**
  * This is the main view class for Krecipes.  Most of the non-menu,
@@ -57,7 +60,7 @@ class QPainter;
 
  // Declarations
 
- class MenuButton;
+
 
  // Some constants
  enum panels{SelectP=0,ShoppingP=1, IngredientsP=2, PropertiesP=3, UnitsP=4, CategoriesP=5,AuthorsP=6, ContextHelp=7, RecipeEdit=8, DietWizardP=10};
@@ -123,27 +126,25 @@ private:
 	void setupUserPermissions(const QString &host, const QString &client, const QString &dbName,const QString &newUser,const QString &newPass,const QString &adminUser=QString::null,const QString &adminPass=QString::null);
 
 	// Widgets
-	KIconLoader *il;
 	QSplitter *splitter;
-	QButtonGroup *leftPanel;
+	KreMenu *leftPanel;
 	QWidgetStack *rightPanel;
-  QPtrList<MenuButton> *buttonsList;
-	MenuButton *button0;
-	MenuButton *button1;
-	MenuButton *button2;
-	MenuButton *button3;
-	MenuButton *button4;
-	MenuButton *button5;
-	MenuButton *button6;
-	MenuButton *button7;
-  QLabel* logo;
+  QPtrList<KreMenuButton> *buttonsList;
+	KreMenuButton *button0;
+	KreMenuButton *button1;
+	KreMenuButton *button2;
+	KreMenuButton *button3;
+	KreMenuButton *button4;
+	KreMenuButton *button5;
+	KreMenuButton *button6;
+	KreMenuButton *button7;
   QWidget* contextHelp;
   QPushButton* contextButton;
   QPushButton* contextClose;
   QLabel* contextTitle;
   KTextBrowser* contextText;
 
-	MenuButton *recipeButton;
+	KreMenuButton *recipeButton;
 	QWidget *recipeWidget;
 
 	// Internal variables
@@ -164,7 +165,6 @@ private slots:
     void actionRecipe(int recipeID, int action);
     void addRecipeButton(QWidget *w, QString title);
     void closeRecipe(void);
-    void resizeButtons();
     void showRecipe(int recipeID);
     void slotSetTitle(const QString& title);
     void slotSetPanel(int);
@@ -172,33 +172,8 @@ private slots:
     void switchToRecipe(void);
     void setContextHelp(int);
     void createShoppingListFromDiet(void);
-
+    void moveTipButton(int,int);
 };
 
-
-// Class MenuButton
-
-class MenuButton:public QPushButton
-{
-
-Q_OBJECT
-
-public:
-	MenuButton(QWidget *parent,const char *name=0);
-	~MenuButton();
-
-private:
- QPixmap* icon; // icon
- bool mouseOver;
-
-public slots:
-	void setTitle(const QString &title);
-  void drawButtonLabel( QPainter * );
-  void setIconSet( QIconSet );
-  void enterEvent( QEvent * );
-  void leaveEvent( QEvent * );
-  void focusInEvent( QFocusEvent * );
-  void focusOutEvent( QFocusEvent * );
-};
 
 #endif // _KRECIPESVIEW_H_

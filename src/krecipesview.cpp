@@ -48,6 +48,7 @@
 #include "dialogs/authorsdialog.h"
 #include "dialogs/unitsdialog.h"
 #include "gui/kstartuplogo.h"
+#include "widgets/kremenu.h"
 
 #if HAVE_MYSQL
 #include "DBBackend/mysqlrecipedb.h"
@@ -57,7 +58,7 @@
 #include "DBBackend/literecipedb.h"
 #endif
 
-#include "menugroup.h"
+
 
 KrecipesView::KrecipesView(QWidget *parent)
     : QVBox(parent)
@@ -141,77 +142,67 @@ KrecipesView::KrecipesView(QWidget *parent)
 // Create Left and Right Panels (splitter)
 
 
-    il=new KIconLoader;
-    leftPanel=new MenuGroup(splitter,"leftPanel");
+    KIconLoader il;
+    leftPanel=new KreMenu(splitter,"leftPanel");
     rightPanel=new QWidgetStack(splitter,"rightPanel");
     leftPanel->setMinimumWidth(22);
-    leftPanel->setPaletteBackgroundColor(QColor(238, 218, 156));
-
-    logo = new QLabel(leftPanel, "logo");
-    logo->setGeometry(1, 220, 144, 296);
-    logo->setPixmap(QPixmap(locate("data", "krecipes/pics/menubg.png")));
 
     // Design Resizing of the panels
-   splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
+    splitter->setResizeMode(leftPanel,QSplitter::FollowSizeHint);
 
 
     // Design Left Panel
-    buttonsList = new QPtrList<MenuButton>();
+    buttonsList = new QPtrList<KreMenuButton>();
     buttonsList->setAutoDelete( TRUE );
 
-    button0=new MenuButton(leftPanel); button0->setFlat(true);
-    button0->setIconSet(il->loadIconSet("filefind", KIcon::Small));
-    button0->setGeometry(2,2,146,30);
+    button0=new KreMenuButton(leftPanel);
+    button0->setIconSet(il.loadIconSet("filefind", KIcon::Small));
     buttonsList->append(button0);
 
-    button1=new MenuButton(leftPanel); button1->setFlat(true);
-    button1->setIconSet(il->loadIconSet( "trolley", KIcon::Small ));
-	  button1->setGeometry(2,32,146,30);
+    button1=new KreMenuButton(leftPanel);
+    button1->setIconSet(il.loadIconSet( "trolley", KIcon::Small ));
     buttonsList->append(button1);
 
-    button2=new MenuButton(leftPanel); button2->setFlat(true);
-    button2->setIconSet(il->loadIconSet( "ingredients", KIcon::Small ));
-    button2->setGeometry(2,62,146,30);
-    buttonsList->append(button2);
+    button2=new KreMenuButton(leftPanel);
+    button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Small ));
+    //buttonsList->append(button2);
 
-    button3=new MenuButton(leftPanel); button3->setFlat(true);
-    button3->setIconSet(il->loadIconSet( "properties", KIcon::Small ));
-	  button3->setGeometry(2,92,146,30);
+    button3=new KreMenuButton(leftPanel);
+    button3->setIconSet(il.loadIconSet( "properties", KIcon::Small ));
     buttonsList->append(button3);
 
-    button4=new MenuButton(leftPanel); button4->setFlat(true);
-    button4->setIconSet(il->loadIconSet( "units", KIcon::Small ));
-	  button4->setGeometry(2,122,146,30);
+    button4=new KreMenuButton(leftPanel);
+    button4->setIconSet(il.loadIconSet( "units", KIcon::Small ));
     buttonsList->append(button4);
 
-    button5=new MenuButton(leftPanel); button5->setFlat(true);
-    button5->setIconSet(il->loadIconSet( "categories", KIcon::Small ));
-	  button5->setGeometry(2,152,146,30);
+    button5=new KreMenuButton(leftPanel);
+    button5->setIconSet(il.loadIconSet( "categories", KIcon::Small ));
     buttonsList->append(button5);
 
-    button6=new MenuButton(leftPanel); button6->setFlat(true);
-    button6->setIconSet(il->loadIconSet( "personal", KIcon::Small ));
-	  button6->setGeometry(2,182,146,30);
+    button6=new KreMenuButton(leftPanel);
+    button6->setIconSet(il.loadIconSet( "personal", KIcon::Small ));
     buttonsList->append(button6);
 
     contextButton = new QPushButton(leftPanel, "contextButton");
-    contextButton->setIconSet(il->loadIconSet("krectip", KIcon::Small, 32));
-    contextButton->setGeometry(112, 486, 32, 32);
+    contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Small, 32));
+    contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
     contextButton->setPaletteBackgroundColor(QColor(238, 218, 156));
     contextButton->setFlat(true);
 
     contextHelp = new QWidget(leftPanel, "contextHelp");
     contextHelp->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextHelp->resize(leftPanel->size());
     contextHelp->hide();
+
     QGridLayout* contextLayout = new QGridLayout( contextHelp, 0, 0, 0, 0);
     contextTitle = new QLabel(contextHelp, "contextTitle");
     contextTitle->setTextFormat(Qt::RichText);
     contextLayout->addMultiCellWidget(contextTitle, 0, 0, 0, 2);
     contextClose = new QPushButton(contextHelp, "contextClose");
     contextClose->setFixedSize(QSize(16,16));
-    contextClose->setIconSet(il->loadIconSet("fileclose", KIcon::Small, 16));
+    contextClose->setIconSet(il.loadIconSet("fileclose", KIcon::Small, 16));
     contextClose->setPaletteBackgroundColor(QColor(238, 218, 156));
-    contextClose->setFlat(true);
+
     contextLayout->addWidget(contextClose, 0, 2);
     contextText = new KTextBrowser(contextHelp, "contextText");
     contextText->setPaletteBackgroundColor(QColor(238, 218, 156));
@@ -262,9 +253,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     connect (selectPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
 
-    // Resize signal
-    connect (leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeButtons()));
-
     // Close a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(closeRecipe()),this,SLOT(closeRecipe()));
 
@@ -277,6 +265,12 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Create a new shopping list when a new diet is generated and accepted
     connect(dietPanel,SIGNAL(dietReady()),this,SLOT(createShoppingListFromDiet()));
 
+    // Place the Tip Button in correct position when the left pane is resized
+    connect(leftPanel,SIGNAL(resized(int,int)),this,SLOT(moveTipButton(int,int)));
+
+    // Resize the Tip Viewer properly
+    connect(leftPanel,SIGNAL(resized(int,int)),contextHelp,SLOT(resize(int,int)));
+
     // Close Splash Screen
     sleep(2);
     delete start_logo;
@@ -284,7 +278,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 KrecipesView::~KrecipesView()
 {
-delete il; // remove iconloader
 }
 
 void KrecipesView::translate(){
@@ -368,7 +361,7 @@ else if (action==1) // Edit
 	{
 		switch( KMessageBox::questionYesNoCancel( this,
 		  QString(i18n("Recipe \"%1\" contains unsaved changes.\n"
-		  "Do you want to save changes made to this recipe before editing another recipe?")).arg(recipeButton->text()),
+		  "Do you want to save changes made to this recipe before editing another recipe?")).arg(recipeButton->title()),
 		   i18n("Unsaved changes") ) )
 		{
 			case KMessageBox::Yes: inputPanel->save(); break;
@@ -403,7 +396,7 @@ if ( !inputPanel->everythingSaved() )
 {
 	switch( KMessageBox::questionYesNoCancel( this,
 	  QString(i18n("Recipe \"%1\" contains unsaved changes.\n"
-	  "Do you want to save changes made to this recipe before creating a new recipe?")).arg(recipeButton->text()),
+	  "Do you want to save changes made to this recipe before creating a new recipe?")).arg(recipeButton->title()),
 	   i18n("Unsaved changes") ) )
 	{
 		case KMessageBox::Yes: inputPanel->save(); break;
@@ -559,26 +552,14 @@ exit(1);
 
 }
 
-void KrecipesView::resizeButtons(){
-  QPtrListIterator<MenuButton> it( *buttonsList);	// iterate over menu buttons
-  MenuButton *bt;
-  while ( (bt = it.current()) != 0 ){
-    bt->resize((leftPanel->width())-4, 30);
-    ++it;
-  }
-  logo->setGeometry(1, (leftPanel->height() - 298), 144, 296);
-  contextButton->setGeometry(leftPanel->width() - 34, leftPanel->height() - 34, 32, 32);
-  contextHelp->setGeometry(2, 2, leftPanel->width() - 4, leftPanel->height() - 4);
-}
-
 void KrecipesView::addRecipeButton(QWidget *w,QString title)
 {
 recipeWidget=w;
-
+KIconLoader il;
 if (!recipeButton)
 {
-	recipeButton=new MenuButton(leftPanel,"recipeButton");
-	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("filesave",KIcon::Small));
+	recipeButton=new KreMenuButton(leftPanel,"recipeButton");
+	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 	recipeButton->setGeometry(2,252,146,30);
 	recipeButton->setTitle(title);
 	recipeButton->resize((leftPanel->width())-4,30);
@@ -676,86 +657,16 @@ void KrecipesView::setContextHelp(int action){
   }
 }
 
-////////////////// Class MenuButton Methods///////////////////
-
-MenuButton::MenuButton(QWidget *parent,const char *name):QPushButton(parent,name)
-{
-  mouseOver = false;
-}
-
-MenuButton::~MenuButton()
-{
-}
-
-void MenuButton::setTitle(const QString &title)
-{
-  setText(title);
-  QToolTip::add(this, title);
-}
-
-void MenuButton::enterEvent( QEvent * ){
-  mouseOver = true;
-  repaint();
-}
-
-void MenuButton::leaveEvent( QEvent * ){
-  mouseOver = false;
-  repaint();
-}
-
-void MenuButton::focusInEvent( QFocusEvent * ){
-  repaint();
-}
-
-void MenuButton::focusOutEvent( QFocusEvent * ){
-  repaint();
-}
-
-void MenuButton::setIconSet(QIconSet i){
-  icon = new QPixmap(i.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
-}
-
-
-void MenuButton::drawButtonLabel( QPainter *p ){
-
-    QPixmap* pm( (QPixmap*)p->device() );
-    KPixmap pn;
-    QFont font( KGlobalSettings::generalFont() );
-
-    // draw icon
-    style().drawItem(p, QRect(5,0,width()-5,height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, icon, 0);
-
-    // copy base button
-    pn = *pm;
-
-    // create gradient image
-    QPixmap tmp(size());
-    tmp.fill(Qt::white);
-    QImage gradient = tmp.convertToImage();
-    QImage grad = KImageEffect::gradient (QSize(20, height()), Qt::white, Qt::black, KImageEffect::HorizontalGradient, 65536);
-    bitBlt(&gradient, width()-20, 0, &grad, 0, Qt::CopyROP);
-
-    // draw button text
-    style().drawItem(p, QRect(25, 0, width()-25, height()), Qt::AlignLeft | Qt::AlignVCenter, colorGroup(), true, 0, text());
-
-    // draw focus border
-    if(hasFocus()){
-      style().drawPrimitive( QStyle::PE_FocusRect, p, style().subRect(QStyle::SR_PushButtonFocusRect, this), colorGroup() );
-    }
-
-    // blend button with text with button without text using gradient
-    QImage src = pm->convertToImage();
-    QImage blend = pn.convertToImage();
-    QImage button = KImageEffect::blend (src, blend, gradient, KImageEffect::Red);
-
-    // draw the button
-    bitBlt(pm, 0, 0, &button, 0, Qt::CopyROP);
-}
 
 void KrecipesView::createShoppingListFromDiet(void)
 {
 shoppingListPanel->createShopping(dietPanel->dietList());
 rightPanel->raiseWidget(shoppingListPanel);
+}
+
+void KrecipesView::moveTipButton(int,int)
+{
+contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
 }
 
 #include "krecipesview.moc"

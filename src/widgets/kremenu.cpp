@@ -1,0 +1,169 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by Unai Garro (ugarro@users.sourceforge.net)       *
+ *                                                                         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+#include "kremenu.h"
+
+#include <qbitmap.h>
+#include <qimage.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+
+#include <iostream.h>
+
+#include <kglobalsettings.h>
+#include <kimageeffect.h>
+#include <kpixmap.h>
+#include <kpixmapeffect.h>
+
+KreMenu::KreMenu(QWidget *parent, const char *name)
+ : QWidget(parent, name)
+{
+childPos=0; // Initial button is on top, then keep scrolling down
+widgetNumber=0; // Initially we have no buttons
+}
+
+
+KreMenu::~KreMenu()
+{
+}
+
+
+QSize KreMenu::sizeHint() const {
+  return(QSize(300,150));
+}
+
+void KreMenu::paintEvent(QPaintEvent *e )
+{
+    // Calculate the gradient
+    QColor c1=KGlobalSettings::baseColor().dark(130);
+    QColor c2=KGlobalSettings::baseColor().light(120);
+
+    KPixmap kpm;kpm.resize(size()); KPixmapEffect::unbalancedGradient (kpm,c2,c1, KPixmapEffect::HorizontalGradient,-150,-150);
+    bitBlt(this, 0, 0, &kpm);
+    }
+
+void KreMenu::childEvent (QChildEvent *e)
+{
+
+QObject *child=e->child();
+if (child->inherits("KreMenuButton"))
+	{
+	KreMenuButton* button=(KreMenuButton*)(e->child());
+	button->move(0,childPos);
+	childPos+=button->height();
+	widgetList[button]=widgetNumber; widgetNumber++; // Store index for this widget, and increment number
+	connect (button,SIGNAL(clicked(QWidget*)),this,SLOT(collectClicks(QWidget*)));
+	}
+
+}
+
+void KreMenu::collectClicks(QWidget *w)
+{
+int widgetn=widgetList[w];
+emit this->clicked(widgetn);
+}
+
+void KreMenu::resizeEvent(QResizeEvent* e)
+{
+    emit resized((e->size()).width(), (e->size()).height());
+}
+
+
+KreMenuButton::KreMenuButton(QWidget *parent, const char *name):QWidget(parent, name)
+{
+icon=0;
+text=QString::null;
+resize(parent->size().width(),40);
+connect (parent, SIGNAL(resized(int,int)), this, SLOT(rescale(int,int)));
+connect(this,SIGNAL(clicked()),this,SLOT(forwardClicks()));
+}
+
+
+KreMenuButton::~KreMenuButton()
+{
+}
+
+void KreMenuButton::mousePressEvent (QMouseEvent *e)
+{
+emit clicked();
+}
+
+void KreMenuButton::rescale(int w, int h)
+{
+	resize(w,height());
+}
+
+QSize KreMenuButton::sizeHint() const
+{
+	if (parentWidget()) return(QSize(parentWidget()->size().width(),40));
+}
+
+void KreMenuButton::paintEvent(QPaintEvent *e )
+{
+
+    // First draw the gradient
+    QColor c1=KGlobalSettings::baseColor().dark(130);
+    QColor c2=KGlobalSettings::baseColor().light(120);
+
+    KPixmap kpm;kpm.resize(size()); KPixmapEffect::unbalancedGradient (kpm,c2,c1, KPixmapEffect::HorizontalGradient,-150,-150);
+
+
+
+    // then the line
+    QPainter painter(&kpm);
+    painter.setPen(KGlobalSettings::baseColor().dark(130));
+    painter.drawLine(width()/5,height()-2,width()-1,height()-2);
+    painter.setPen(KGlobalSettings::baseColor().light(120));
+    painter.drawLine(width()/5,height()-1,width()-1,height()-1);
+
+
+    // Now Add the icon
+
+    int xPos=0, yPos=0;
+
+    if (icon)
+    {
+
+
+	// Make sure it fits in
+	QPixmap scaledIcon=*icon;
+	if (   (icon->height()>height() )  ||  (icon->width()>width()/2)   ) // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
+		{
+		QImage image; image=(*icon);
+		scaledIcon.convertFromImage(image.smoothScale(width()/2,height(),QImage::ScaleMin));
+		}
+
+
+	// Now draw it
+	xPos=width()/5-10; if (xPos<2) xPos=2;
+	yPos=(height()-scaledIcon.height())/2-1;
+	painter.drawPixmap(xPos,yPos,scaledIcon);
+	xPos+=scaledIcon.width(); // Move it so that later we can easily place the text
+    }
+
+    // Finally, draw the text besides the icon
+    xPos+=15;
+    QRect r=rect(); r.setLeft(xPos);
+    painter.setPen(QColor(0x00,0x00,0x00));
+    painter.drawText(r,Qt::AlignVCenter,text);
+
+
+
+
+    painter.end();
+
+    // Copy the offscreen button to the widget
+    bitBlt(this, 0, 0, &kpm);
+
+}
+
+void KreMenuButton::setIconSet(const QIconSet &is)
+{
+	icon = new QPixmap(is.pixmap(QIconSet::Small,QIconSet::Normal,QIconSet::On));
+}
