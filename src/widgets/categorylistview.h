@@ -246,7 +246,6 @@ public:
 	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true );
 
 	virtual void stateChange( CategoryCheckListItem*, bool );
-	void stateChange( const Element &, bool on );
 
 	ElementList selections() const{ return m_selections; }
 

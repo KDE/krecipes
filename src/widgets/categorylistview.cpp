@@ -540,23 +540,18 @@ void CategoryCheckListView::mergeCategories( int id1, int id2 )
 
 void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
 {
-	stateChange(it->element(),on);
-}
-
-void CategoryCheckListView::stateChange( const Element &el, bool on )
-{
 	if ( !reloading() ) {
 		if ( on )
-			m_selections.append(el);
+			m_selections.append(it->element());
 		else
-			m_selections.remove(el);
+			m_selections.remove(it->element());
 	}
 }
 
 void CategoryCheckListView::load( int limit, int offset )
 {
 	CategoryListView::load(limit,offset);
-	
+
 	for ( QValueList<Element>::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
 		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*it).id ), 1 );
 		if ( item ) {

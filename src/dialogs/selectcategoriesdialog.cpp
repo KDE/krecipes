@@ -80,7 +80,6 @@ void SelectCategoriesDialog::loadCategories( const QMap<Element, bool> &selected
 		CategoryCheckListItem *new_item = (CategoryCheckListItem*)categoryListView->findItem(QString::number((*it).id),1);
 		if ( new_item && selected[*it] ) {
 			new_item->setOn(true);
-			categoryListView->stateChange(*it,true);
 		}
 	}
 }
