@@ -6,7 +6,7 @@ Changes from 0.6 to CVS:
   -Support for grouping ingredients.  Also imports group information from import formats, such as Meal-Master.
   -There's a new intermediate interface between displaying the shopping list and selecting recipes for it.  Here you can add, remove, or modify ingredients used in those selected recipes.
   -Load sample recipes based on locale.  If we don't currently have your locale, please submit some recipes to us!
-  -Support for PostgreSQL database backend
+  -BETA support for PostgreSQL database backend
   -Border options added to recipe display
   -Support for drag and drop in the shopping list dialog
 
