@@ -173,6 +173,7 @@ private slots:
     void setContextHelp(int);
     void createShoppingListFromDiet(void);
     void moveTipButton(int,int);
+    void resizeRightPane(int lpw,int lph);
 };
 
 

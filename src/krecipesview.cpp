@@ -226,6 +226,7 @@ KrecipesView::KrecipesView(QWidget *parent)
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
      connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
+     connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
 
     rightPanel->raiseWidget(selectPanel);
     setContextHelp(SelectP);
@@ -653,6 +654,17 @@ rightPanel->raiseWidget(shoppingListPanel);
 void KrecipesView::moveTipButton(int,int)
 {
 contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
+}
+
+void KrecipesView::resizeRightPane(int lpw,int lph)
+{
+QSize rpsize=rightPanel->size();
+QPoint rpplace=rightPanel->pos();
+rpsize.setWidth(width()-lpw);
+rpplace.setX(lpw);
+rightPanel->move(rpplace);
+rightPanel->resize(rpsize);
+
 }
 
 #include "krecipesview.moc"
