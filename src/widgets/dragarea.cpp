@@ -13,6 +13,7 @@
 #include "sizehandle.h"
 
 DragArea::DragArea( QWidget *parent, const char *name ) : QWidget(parent,name),
+ m_read_only(false),
  m_last_point(0,0),
  m_current_box(0),
  selection(new WidgetSelection(this))
@@ -25,6 +26,14 @@ DragArea::~DragArea()
 	delete selection;
 }
 
+void DragArea::setReadOnly( bool read_only )
+{
+	m_read_only = read_only;
+
+	if ( !read_only )
+		selection->setWidget( 0 ); //unselect selected widget
+}
+
 void DragArea::setWidget( QWidget *w )
 {
 	selection->setWidget(w);
@@ -32,6 +41,9 @@ void DragArea::setWidget( QWidget *w )
 
 void DragArea::mousePressEvent( QMouseEvent *e )
 {
+	if ( m_read_only )
+		return;
+
 	mouse_down = true;
 
 	m_current_box = childAt(e->pos());
@@ -66,7 +78,7 @@ void DragArea::mouseReleaseEvent( QMouseEvent * )
 
 void DragArea::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( mouse_down && m_current_box )
+	if ( !m_read_only && mouse_down && m_current_box )
 	{
 		// calc correct position
 		QPoint pos = m_current_box->mapFromGlobal( e->globalPos() );

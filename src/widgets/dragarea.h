@@ -31,6 +31,7 @@ public:
 	~DragArea();
 
 	void setWidget( QWidget * );
+	void setReadOnly( bool );
 
 signals:
 	void widgetClicked( QMouseEvent *, QWidget* );
@@ -43,6 +44,8 @@ protected:
 	void moveWidget( QWidget *w, int dx, int dy );
 
 private:
+	bool m_read_only;
+
 	bool mouse_down;
 	QPoint m_last_point;
 	QPoint m_begin_point;
