@@ -63,7 +63,7 @@ private:
   ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
   // Internal Methods
   void loadRecipeList(void);
-
+  void loadCategoryCombo(void);
 
 signals:
   void recipeSelected(int id, int action);

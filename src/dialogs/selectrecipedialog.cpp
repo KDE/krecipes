@@ -70,8 +70,9 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
-// Load Recipe List
+// Reload the lists
 loadRecipeList();
+loadCategoryCombo();
 
 // Signals & Slots
 
@@ -193,6 +194,20 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 
 	}
 }
+
+void SelectRecipeDialog::loadCategoryCombo(void)
+{
+
+ElementList categoryList;
+database->loadCategories(&categoryList);
+
+for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
+	{
+	categoryBox->insertItem(category->name);
+	}
+
+}
+
 
 /*!
     \fn SelectRecipeDialog::exportRecipe()
