@@ -208,8 +208,8 @@ database=db;
     ingredientBox->setAutoCompletion( TRUE );
     //çingredientBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
-    ingredientBox->setFixedSize( QSize(120, 30 ) );
-    ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    ingredientBox->setMinimumSize(QSize(100,30));
+    ingredientBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     ingredientsLayout->addWidget(ingredientBox,1,2);
 
 
@@ -217,7 +217,7 @@ database=db;
     unitBox->setAutoCompletion( TRUE );
     //unitBox->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
     unitBox->lineEdit()->disconnect(unitBox); //so hitting enter doesn't enter the item into the box
-    unitBox->setMinimumSize(QSize(51,30));
+    unitBox->setMinimumSize(QSize(100,30));
     unitBox->setMaximumSize(QSize(10000,30));
     unitBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
     ingredientsLayout->addMultiCellWidget(unitBox,1,1,3,5);
@@ -453,7 +453,7 @@ loadUnitListCombo();
  void RecipeInputDialog::changePhoto(void)
  {
 // standard filedialog
-    KURL filename = KFileDialog::getOpenURL(QString::null, "*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)", this);
+    KURL filename = KFileDialog::getOpenURL(QString::null, i18n("*.png *.jpg *.jpeg *.xpm *.gif|Images (*.png *.jpg *.jpeg *.xpm *.gif)"), this);
     QPixmap pixmap (filename.path());
     if (!(pixmap.isNull())) {
       // If photo is bigger than the label, or smaller in width, than photoLabel, scale it
@@ -547,7 +547,7 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 		if (unitBox->currentText().stripWhiteSpace() == "")
 		{
 			QMessageBox::information( this,
-			  "Unit missing",
+			  i18n("Unit missing"),
 			  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
 			  " Before this can be done, please enter a unit to associate with"
 			  " this ingredient.")).arg(ingredientBox->currentText()),
