@@ -57,6 +57,10 @@ private:
 	KTextEdit* instructionsEdit;
 	KLineEdit* titleEdit;
 
+	//Additional recipe data
+	KLineEdit* authorEdit;
+	KComboBox* categoryBox;
+
 	//Ingredient inputs
 	QGroupBox *ingredientGBox;
 	KDoubleNumInput* amountEdit;

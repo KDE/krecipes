@@ -31,9 +31,9 @@ database=db;
 
     // Border
     QSpacerItem* spacer_left = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    layout->addMultiCell( spacer_left, 1,5,0,0 );
+    layout->addItem( spacer_left, 1,0 );
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addMultiCell( spacer_top, 0,0,0,2 );
+    layout->addItem( spacer_top, 0,1 );
     // Recipe Photo
 
     QPixmap image1(defaultPhoto);
@@ -43,23 +43,23 @@ database=db;
     photoLabel->setPixmap(image1);
     photoLabel->setFixedSize(QSize(221,166));
     photoLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    layout->addMultiCellWidget(photoLabel,1,3,1,1);
+    layout->addMultiCellWidget(photoLabel,1,5,1,1);
 
     changePhotoButton=new QPushButton(this);
     changePhotoButton->setFixedSize(QSize(20,166));
     changePhotoButton->setText("...");
     changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    layout->addMultiCellWidget(changePhotoButton,1,3,2,2);
+    layout->addMultiCellWidget(changePhotoButton,1,5,2,2);
 
 
 
     // Spacers to ingredients and instructions
     QSpacerItem* spacer_bottomphoto = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    layout->addMultiCell( spacer_bottomphoto, 4,4,1,3 );
+    layout->addItem( spacer_bottomphoto,6,1);
     //QSpacerItem* spacerToIngredients = new QSpacerItem( 10,200, QSizePolicy::Minimum, QSizePolicy::Fixed );
     //layout->addMultiCell( spacerToIngredients, 1,4,3,3 );
     QSpacerItem* spacer_rightGBox = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
-    layout->addItem( spacer_rightGBox,5,4 );
+    layout->addItem( spacer_rightGBox,7,4 );
 
     //------- Ingredients Box -----------------
     ingredientGBox =new QGroupBox(this);
@@ -69,13 +69,13 @@ database=db;
     ingredientGBox->setFlat(true);
     ingredientGBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
     QGridLayout* boxLayout=new QGridLayout(ingredientGBox);
-    layout->addMultiCellWidget(ingredientGBox,5,5,1,3);
+    layout->addMultiCellWidget(ingredientGBox,7,7,1,3);
 
     // Border
     QSpacerItem* spacerBoxLeft = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-    boxLayout->addMultiCell( spacerBoxLeft, 1,8,0,0 );
+    boxLayout->addItem( spacerBoxLeft,1,0);
     QSpacerItem* spacerBoxTop = new QSpacerItem( 10,20, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    boxLayout->addMultiCell( spacerBoxTop, 0,0,1,5 );
+    boxLayout->addItem(spacerBoxTop, 0,1);
 
     //Input Widgets
 
@@ -99,7 +99,7 @@ database=db;
 
     // Spacers to list and buttons
     QSpacerItem* spacerToList = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-    boxLayout->addMultiCell( spacerToList, 2,2,1,3 );
+    boxLayout->addItem( spacerToList, 2,1 );
     QSpacerItem* spacerToButtons = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
     boxLayout->addItem( spacerToButtons, 3,4);
 
@@ -154,22 +154,43 @@ database=db;
 
 
     // ------- Recipe Instructions Widgets -----------
-    instructionsEdit = new KTextEdit( this);
-    instructionsEdit->setMinimumSize(QSize(360,320));
-    instructionsEdit->setMaximumSize(QSize(10000,10000));
-    instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    layout->addMultiCellWidget(instructionsEdit,3,5,5,5);
 
     titleEdit = new KLineEdit( this);
     titleEdit->setMinimumSize(QSize(360,30));
     titleEdit->setMaximumSize(QSize(10000,30));
     titleEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
-    layout->addWidget(titleEdit,1,5);
+    layout->addMultiCellWidget(titleEdit,1,1,5,7);
 
-    // Title ->instructions spacer
-
+    // Title ->author spacer
     QSpacerItem* title_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(title_spacer,2,5 );
+
+    // Author & Categories
+    authorEdit = new KLineEdit( this);
+    authorEdit->setMinimumSize(QSize(100,30));
+    authorEdit->setMaximumSize(QSize(10000,30));
+    authorEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    layout->addWidget(authorEdit,3,5);
+
+    categoryBox=new KComboBox(this);
+    categoryBox->setMinimumSize(QSize(100,30));
+    categoryBox->setMaximumSize(QSize(10000,30));
+    categoryBox->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Fixed));
+    layout->addWidget(categoryBox,3,7);
+
+    //Author ->instructions spacer
+    QSpacerItem* author_spacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+    layout->addItem(author_spacer,4,5 );
+
+    instructionsEdit = new KTextEdit( this);
+    instructionsEdit->setMinimumSize(QSize(360,320));
+    instructionsEdit->setMaximumSize(QSize(10000,10000));
+    instructionsEdit->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    layout->addMultiCellWidget(instructionsEdit,5,7,5,7);
+
+
+
+
     // Dialog design
     resize( QSize(500, 700).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
