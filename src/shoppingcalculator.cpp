@@ -60,8 +60,10 @@ for (Ingredient *i=newIngredientList->getFirst();i;i=newIngredientList->getNext(
 		// If the conversion was succesful, Set the New Values
 		if (converted>=0)
 		{
-		currentAmount=newAmount;
-		currentUnit=newUnit;
+		Ingredient *it; it=totalIngredientList->at(pos);
+		it->amount=newAmount;
+		it->unitID=newUnit;
+		it->units=db->unitName(newUnit);
 		}
 		else // Otherwise append this ingredient at the end of the list
 		{
