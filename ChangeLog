@@ -1,3 +1,7 @@
+2003-07-30  <>
+	-- Function to upgrade database structure version 
+	-- Light change in table column ordering 
+
 2003-07-27  <>
 	Fix enabling save button.
 
