@@ -61,7 +61,8 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 
 
 RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryListView( parent, db ),
-		flat_list( false )
+		flat_list( false ),
+		m_uncat_item(0)
 {
 	connect( database, SIGNAL( recipeCreated( const Element &, const ElementList & ) ), SLOT( createRecipe( const Element &, const ElementList & ) ) );
 	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
@@ -138,15 +139,14 @@ void RecipeListView::load(int limit, int offset)
 
 
 		// Add those recipes that have not been categorised in any categories
-		QListViewItem *uncat_item = 0;
 		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.first();recipe_it != recipeList.end() && categoryID;++recipe_it, categoryID = recipeCategoryList.next() ) {
 			if ( !recipeCategorized[ ( *recipe_it ).id ] ) {
-				if ( !uncat_item )
-					uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+				if ( !m_uncat_item )
+					m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
 				Recipe recipe;
 				recipe.recipeID = ( *recipe_it ).id;
 				recipe.title = ( *recipe_it ).name;
-				(void)new RecipeListItem( uncat_item, recipe );
+				(void)new RecipeListItem( m_uncat_item, recipe );
 			}
 		}
 	}
@@ -154,8 +154,12 @@ void RecipeListView::load(int limit, int offset)
 
 void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 {
-	if ( parent_id == -1 )
-		( void ) new RecipeListItem( this, recipe );
+	if ( parent_id == -1 ) {
+		if ( !m_uncat_item )
+			m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+
+		( void ) new RecipeListItem( m_uncat_item, recipe );
+	}
 	else {
 		CategoryListItem *parent = items_map[ parent_id ];
 		if ( parent )

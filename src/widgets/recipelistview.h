@@ -139,6 +139,7 @@ private:
 	void moveChildrenToRoot( QListViewItem * );
 
 	bool flat_list;
+	QListViewItem *m_uncat_item;
 };
 
 #endif //RECIPELISTVIEW_H
