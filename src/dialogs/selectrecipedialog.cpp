@@ -29,14 +29,14 @@ buttonBar=new QHBox(this);
 
 openButton=new QPushButton(buttonBar);
   openButton->setText("Open Recipe");
-  QPixmap pm=il->loadIcon("view_choose", KIcon::NoGroup,16); openButton->setPixmap(pm);
+  QPixmap pm=il->loadIcon("ok", KIcon::NoGroup,16); openButton->setPixmap(pm);
 editButton=new QPushButton(buttonBar);
   editButton->setText("Edit");
-  pm=il->loadIcon("lineedit", KIcon::NoGroup,16); editButton->setPixmap(pm);
+  pm=il->loadIcon("edit", KIcon::NoGroup,16); editButton->setPixmap(pm);
 removeButton=new QPushButton(buttonBar);
   removeButton->setText("Delete");
   removeButton->setMaximumWidth(40);
-  pm=il->loadIcon("remove", KIcon::NoGroup,16); removeButton->setPixmap(pm);
+  pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setPixmap(pm);
 
 // Load Recipe List
 loadRecipeList();
