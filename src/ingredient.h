@@ -18,6 +18,7 @@
 class Ingredient{
 public:
     Ingredient();
+    Ingredient( const QString &name, double amount, const QString &units, int unitID = -1, int ingredientID = -1 );
     Ingredient(Ingredient &ing);
     ~Ingredient();
     int ingredientID;

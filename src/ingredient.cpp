@@ -1,15 +1,27 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Unai Garro                                      *
- *   ugarro@users.sourceforge.net                                          *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+ 
 #include "ingredient.h"
 
 Ingredient::Ingredient()
+{
+}
+
+Ingredient::Ingredient( const QString &_name, double _amount, const QString &_units, int _unitID, int _ingredientID ) :
+  ingredientID(_ingredientID),
+  name(_name),
+  amount(_amount),
+  unitID(_unitID),
+  units(_units)
 {
 }
 
