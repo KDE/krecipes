@@ -15,7 +15,6 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qcursor.h>
 
 #include <kcombobox.h>
 #include <klineedit.h>
