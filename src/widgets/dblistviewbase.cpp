@@ -165,27 +165,32 @@ void DBListViewBase::createElement( QListViewItem *it )
 		lastElement = it;
 	}
 	else {
-		int c = 0;//FIXME: the column used should be variable (set by a subclass)
-
-		QListViewItem *last_it = 0;
-
-		//start it out below the "Prev" item... currently it will be at firstChild()
-		if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
-			it->moveItem( firstChild()->nextSibling() );
+		if ( lastElement == 0 ) {
+			lastElement = it;
 		}
+		else {
+			int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
-		//skip the "Next" item
-		for ( QListViewItem *search_it = firstChild()->nextSibling(); search_it; search_it = search_it->nextSibling() ) {
-			if ( lastElement && search_it == lastElement->nextSibling() ) {
-				it->moveItem(lastElement);
-				lastElement = it;
+			QListViewItem *last_it = 0;
+
+			//start it out below the "Prev" item... currently it will be at firstChild()
+			if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
+				it->moveItem( firstChild()->nextSibling() );
 			}
-			else if ( QString::localeAwareCompare(it->text(c),search_it->text(c)) < 0 ) { //we assume the list is sorted, as it should stay
-				if ( last_it ) it->moveItem(last_it);
-				if ( search_it == it ) lastElement=it;
-				break;
+
+			//skip the "Next" item
+			for ( QListViewItem *search_it = firstChild()->nextSibling(); search_it; search_it = search_it->nextSibling() ) {
+				if ( search_it == lastElement->nextSibling() ) {
+					it->moveItem(lastElement);
+					lastElement = it;
+				}
+				else if ( QString::localeAwareCompare(it->text(c),search_it->text(c)) < 0 ) { //we assume the list is sorted, as it should stay
+					if ( last_it ) it->moveItem(last_it);
+					if ( search_it == it ) lastElement=it;
+					break;
+				}
+				last_it = search_it;
 			}
-			last_it = search_it;
 		}
 	}
 }
