@@ -11,14 +11,43 @@
 #define RECIPEVIEWDIALOG_H
 
 #include <qvbox.h>
-#include <qstring.h>
-#include <khtml_part.h>
+#include <qrect.h>
 #include <khtmlview.h>
-#include <iostream>
+#include <khtml_part.h>
+#include <qptrlist.h>
+#include <qstringlist.h>
+#include <qstring.h>
+#include <qfont.h>
 
 class RecipeDB;
 class Recipe;
 class IngredientPropertyList;
+class CustomRectList;
+class KConfig;
+
+class DivElement
+{
+public:
+	DivElement( const QString &id, const QString &content );
+
+	void addProperty( const QString &s ){ m_properties << s; }
+
+	QString innerHTML() const{ return m_content; }
+	QFont font();
+
+	bool fixedHeight(){ return m_fixed_height; }
+	void setFixedHeight( bool b ){ m_fixed_height = b; }
+
+	QString generateHTML();
+	QString generateCSS();
+
+private:
+	QString m_id;
+	QString m_content;
+	QStringList m_properties;
+
+	bool m_fixed_height;
+};
 
 /**
 @author Unai Garro
@@ -34,24 +63,41 @@ public:
     ~RecipeViewDialog();
     void loadRecipe(int recipeID);
 
-
 private:
 
   // Internal Variables
   KHTMLPart *recipeView;
+  QPtrList<DivElement> div_elements;
+  QPtrList<QRect> dimensions;
   RecipeDB  *database;
   Recipe *loadedRecipe;
   IngredientPropertyList *properties;
 
-  // Internal Methods
+  QRect temp_photo_geometry;
 
-private slots:
+  // Internal Methods
   void showRecipe(void);
+  void createBlocks();
+  void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
+
+  void readAlignmentProperties( DivElement *, KConfig *, int default_align = 0 );
+  void readBgColorProperties( DivElement *, KConfig *);
+  void readFontProperties( DivElement *, KConfig * );
+  void readTextColorProperties( DivElement *, KConfig * );
+  void readVisibilityProperties( DivElement *, KConfig * );
 
 public slots:
 	void print(void);
 
 };
 
-#endif
+class CustomRectList : public QPtrList<QRect>
+{
+public:
+	CustomRectList();
 
+protected:
+	int compareItems( QPtrCollection::Item, QPtrCollection::Item );
+};
+
+#endif
