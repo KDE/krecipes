@@ -26,6 +26,7 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <knuminput.h>
 #include <kconfig.h>
 #include <kglobal.h>
 
@@ -47,14 +48,9 @@ IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):Q
 	missingBox=new QHBox(this);
 	missingNumberLabel=new QLabel(missingBox);
 	missingNumberLabel->setText(i18n("Missing ingredients allowed:"));
-	missingNumberCombo=new KComboBox(missingBox);
-	QStringList optionsList;
-	optionsList.append(i18n("None"));
-	optionsList+="1";
-	optionsList+="2";
-	optionsList+="3";
-	optionsList+=i18n("any");
-	missingNumberCombo->insertStringList(optionsList);
+	missingNumberSpinBox=new KIntSpinBox(missingBox);
+	missingNumberSpinBox->setMinValue( -1 );
+	missingNumberSpinBox->setSpecialValueText( i18n("Any") );
 	
 		// Found recipe list
 	recipeListView=new KreListView(this,i18n("Matching Recipes"),false,1,missingBox);
@@ -152,7 +148,7 @@ void IngredientMatcherDialog::findRecipes(void)
 
 	//Check if the user wants to show missing ingredients
 	
-	if (this->missingNumberCombo->currentItem()==0){ KApplication::restoreOverrideCursor(); return; } //"None"
+	if (this->missingNumberSpinBox->value()==0){ KApplication::restoreOverrideCursor(); return; } //"None"
 	
 	
 	
@@ -160,14 +156,12 @@ void IngredientMatcherDialog::findRecipes(void)
 	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
 	QValueList<IngredientList>::Iterator ilit;
-	int missingNoAllowed;
+	int missingNoAllowed = missingNumberSpinBox->value();
 	
-	if (missingNumberCombo->currentItem()!=4) missingNoAllowed=missingNumberCombo->currentText().toInt(); //"1..3"
-	else  // "Any"
-		{
-		missingNoAllowed=0;
+	if (missingNoAllowed==-1) // "Any"
+	{
 		for (nit=missingNumbers.begin();nit!=missingNumbers.end();++nit) if ((*nit)>missingNoAllowed) missingNoAllowed=(*nit);
-		}
+	}
 	
 	
 	for (int missingNo=1; missingNo<=missingNoAllowed; missingNo++)

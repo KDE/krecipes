@@ -23,12 +23,11 @@
 #include <qhbox.h>
 #include <qvbox.h>
 
-#include <kcombobox.h>
 #include <kstringhandler.h>
 
 class KreListView;
+class KIntSpinBox;
 class RecipeDB;
-
 
 /**
 @author Unai Garro
@@ -113,7 +112,7 @@ private:
 	KreListView *recipeListView;
 	QHBox *missingBox;
 	QLabel *missingNumberLabel;
-	KComboBox *missingNumberCombo;
+	KIntSpinBox *missingNumberSpinBox;
 	
 	QPushButton *okButton;
 	QPushButton *clearButton;
