@@ -417,7 +417,7 @@ void Krecipes::newToolbarConfig()
 void Krecipes::optionsPreferences()
 {
 
-#if KDE_IS_VERSION(3,1,92 )
+#if KDE_IS_VERSION(3,2,92 )
 
      if(KAutoConfigDialog::showDialog("settings"))
 		return;

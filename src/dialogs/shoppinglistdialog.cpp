@@ -31,10 +31,10 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     layout->addMultiCell(spacer_top,0,0,1,4);
 
 
-    recipeListView=new KListView (this);
+    recipeListView=new KreListView (this,i18n("Full recipe list"));
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
-    recipeListView->addColumn(i18n("Id"));
-    recipeListView->addColumn(i18n("Recipe Title"));
+    recipeListView->listView()->addColumn(i18n("Id"));
+    recipeListView->listView()->addColumn(i18n("Recipe Title"));
 
     QSpacerItem* spacer_toButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacer_toButtons,1,2);
@@ -58,11 +58,11 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
     QSpacerItem* spacerFromButtons = new QSpacerItem(30,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
     layout->addItem(spacerFromButtons,1,4);
 
-    shopRecipeListView=new KListView (this);
+    shopRecipeListView=new KreListView (this,"Shopping list");
     layout->addMultiCellWidget(shopRecipeListView,1,4,5,5);
-    shopRecipeListView->addColumn(i18n("Id"));
-    shopRecipeListView->addColumn(i18n("Recipe Title"));
-    shopRecipeListView->setSorting(-1);
+    shopRecipeListView->listView()->addColumn(i18n("Id"));
+    shopRecipeListView->listView()->addColumn(i18n("Recipe Title"));
+    shopRecipeListView->listView()->setSorting(-1);
 
     QSpacerItem* spacerToButtonBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addItem(spacerToButtonBar,5,1);
@@ -109,18 +109,18 @@ clear();
 RecipeList::Iterator it;
 for (it=rlist.begin(); it != rlist.end(); it++)
 {
-	new QListViewItem(shopRecipeListView,shopRecipeListView->lastItem(),QString::number((*it).recipeID),(*it).title);
+	new QListViewItem(shopRecipeListView->listView(),shopRecipeListView->listView()->lastItem(),QString::number((*it).recipeID),(*it).title);
 }
 }
 
 void ShoppingListDialog::reloadRecipeList(void)
 {
 ElementList recipeList;
-recipeListView->clear();
+recipeListView->listView()->clear();
 database->loadRecipeList(&recipeList);
 
 for ( Element *recipe =recipeList.getFirst(); recipe; recipe =recipeList.getNext() )
-	new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
+	new QListViewItem (recipeListView->listView(),QString::number(recipe->id),recipe->name);
 }
 
 void ShoppingListDialog::reload(void)
@@ -131,26 +131,26 @@ reloadRecipeList (); // Missing: check if there's non-existing recipes in the li
 void ShoppingListDialog::addRecipe(void)
 {
 QListViewItem *it;
-it=recipeListView->selectedItem();
+it=recipeListView->listView()->selectedItem();
 if (it) {
 	int recipeID=it->text(0).toInt();
 	QString recipeTitle=it->text(1);
-	(void)new QListViewItem (shopRecipeListView,QString::number(recipeID),recipeTitle);
+	(void)new QListViewItem (shopRecipeListView->listView(),QString::number(recipeID),recipeTitle);
 	}
 }
 
 void ShoppingListDialog::removeRecipe(void)
 {
 QListViewItem *it;
-it=shopRecipeListView->selectedItem();
-if (it) shopRecipeListView->removeItem(it);
+it=shopRecipeListView->listView()->selectedItem();
+if (it) shopRecipeListView->listView()->removeItem(it);
 }
 
 void ShoppingListDialog::showShoppingList(void)
 {
 // Store the recipe list in ElementList object first
 ElementList recipeList; QListViewItem *it;
-for (it=this->shopRecipeListView->firstChild();it;it=it->nextSibling())
+for (it=this->shopRecipeListView->listView()->firstChild();it;it=it->nextSibling())
 {
 Element newEl; newEl.id=it->text(0).toInt(); newEl.name=it->text(1); // Storing the title is not necessary, but do it just in case it's used later on
 recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
@@ -164,10 +164,10 @@ void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
 {
 
 QString title=database->recipeTitle(recipeID);
-new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
+new QListViewItem(shopRecipeListView->listView(),QString::number(recipeID),title);
 }
 
 void ShoppingListDialog::clear()
 {
-shopRecipeListView->clear();
+shopRecipeListView->listView()->clear();
 }

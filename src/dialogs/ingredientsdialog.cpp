@@ -42,15 +42,15 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     QSpacerItem* spacer_top = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
     layout->addItem(spacer_top,0,1);
 
-    ingredientListView=new KListView (this);
-    ingredientListView->setAllColumnsShowFocus(true);
+    ingredientListView=new KreListView (this,i18n("Ingredient list"));
+    ingredientListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (ingredientListView,1,9,1,1);
-    ingredientListView->addColumn(i18n("Id"));
-    ingredientListView->addColumn(i18n("Ingredient"));
-    ingredientListView->setRenameable(1, true);
-    ingredientListView->setDefaultRenameAction(QListView::Reject);
-    ingredientListView->setMinimumWidth(150);
-    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    ingredientListView->listView()->addColumn(i18n("Id"));
+    ingredientListView->listView()->addColumn(i18n("Ingredient"));
+    ingredientListView->listView()->setRenameable(1, true);
+    ingredientListView->listView()->setDefaultRenameAction(QListView::Reject);
+    ingredientListView->listView()->setMinimumWidth(150);
+    ingredientListView->listView()->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightIngredients = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightIngredients,1,2);
@@ -81,13 +81,13 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
 
 
 
-    unitsListView=new KListView (this);
-    unitsListView->addColumn(i18n("Id"));
-    unitsListView->addColumn(i18n("Units"));
-    unitsListView->setAllColumnsShowFocus(true);
+    unitsListView=new KreListView (this,i18n("Unit list"));
+    unitsListView->listView()->addColumn(i18n("Id"));
+    unitsListView->listView()->addColumn(i18n("Units"));
+    unitsListView->listView()->setAllColumnsShowFocus(true);
     layout->addMultiCellWidget (unitsListView,1,4,5,5);
-    unitsListView->setMinimumWidth(150);
-    unitsListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    unitsListView->listView()->setMinimumWidth(150);
+    unitsListView->listView()->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightUnits = new QSpacerItem( 5,5, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightUnits,1,6);
@@ -113,15 +113,15 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     layout->addItem(spacer_Units_Properties,5,5);
 
 
-    propertiesListView=new KListView (this);
+    propertiesListView=new KreListView (this,i18n("Ingredient Properties"));
     layout->addMultiCellWidget (propertiesListView,6,9,5,5);
-    propertiesListView->addColumn(i18n("Id"));
-    propertiesListView->addColumn(i18n("Property"));
-    propertiesListView->addColumn(i18n("Amount"));
-    propertiesListView->addColumn(i18n("Units"));
-    propertiesListView->setAllColumnsShowFocus(true);
-    propertiesListView->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
-    propertiesListView->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
+    propertiesListView->listView()->addColumn(i18n("Id"));
+    propertiesListView->listView()->addColumn(i18n("Property"));
+    propertiesListView->listView()->addColumn(i18n("Amount"));
+    propertiesListView->listView()->addColumn(i18n("Units"));
+    propertiesListView->listView()->setAllColumnsShowFocus(true);
+    propertiesListView->listView()->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding));
+    propertiesListView->listView()->setSorting(-1); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
 
     addPropertyButton= new QPushButton(this);
     addPropertyButton->setText("+");
@@ -174,7 +174,7 @@ IngredientsDialog::~IngredientsDialog()
 
 void IngredientsDialog::reloadIngredientList(void)
 {
-ingredientListView->clear();
+ingredientListView->listView()->clear();
 ingredientList->clear();
 database->loadIngredients(ingredientList);
 
@@ -182,7 +182,7 @@ database->loadIngredients(ingredientList);
 
 	for ( Element *ing =ingredientList->getFirst(); ing; ing =ingredientList->getNext() )
 	{
-	(void)new QListViewItem(ingredientListView,QString::number(ing->id),ing->name);
+	(void) new QListViewItem(ingredientListView->listView(),QString::number(ing->id),ing->name);
 	}
 
 // Reload Unit List
@@ -195,7 +195,7 @@ void IngredientsDialog::reloadUnitList()
 
 int ingredientID=-1;
 // Find selected ingredient
-QListViewItem *it; it=ingredientListView->selectedItem();
+QListViewItem *it; it=ingredientListView->listView()->selectedItem();
 
 if (it){  // Check if an ingredient is selected first
 ingredientID=it->text(0).toInt();
@@ -203,7 +203,7 @@ ingredientID=it->text(0).toInt();
 
 
 unitList->clear();
-unitsListView->clear();
+unitsListView->listView()->clear();
 
 if (ingredientID>=0)
 {
@@ -213,11 +213,11 @@ database->loadPossibleUnits(ingredientID,unitList);
 
 	for ( Element *unit =unitList->getFirst(); unit; unit =unitList->getNext() )
 	{
-	(void)new QListViewItem(unitsListView,QString::number(unit->id),unit->name);
+	(void)new QListViewItem(unitsListView->listView(),QString::number(unit->id),unit->name);
 	}
 
 // Select the first unit
-unitsListView->setSelected(unitsListView->firstChild(),true);
+unitsListView->listView()->setSelected(unitsListView->listView()->firstChild(),true);
 
 }
 }
@@ -242,7 +242,7 @@ void IngredientsDialog::modIngredient(QListViewItem* i)
   removeUnitButton->setEnabled(false);
   addPropertyButton->setEnabled(false);
   removePropertyButton->setEnabled(false);
-  ingredientListView->rename(i, 1);
+  ingredientListView->listView()->rename(i, 1);
 }
 
 void IngredientsDialog::saveIngredient(QListViewItem* i)
@@ -262,7 +262,7 @@ void IngredientsDialog::addUnitToIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if ( (it=ingredientListView->selectedItem()) )
+if ( (it=ingredientListView->listView()->selectedItem()) )
   {
   ingredientID=it->text(0).toInt();
   }
@@ -293,8 +293,8 @@ void IngredientsDialog::removeUnitFromIngredient(void)
 // Find selected ingredient/unit item combination
 QListViewItem *it;
 int ingredientID=-1, unitID=-1;
-if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
-if ( (it=unitsListView->selectedItem()) ) unitID=it->text(0).toInt();
+if ( (it=ingredientListView->listView()->selectedItem()) ) ingredientID=it->text(0).toInt();
+if ( (it=unitsListView->listView()->selectedItem()) ) unitID=it->text(0).toInt();
 
 if ((ingredientID>=0)&&(unitID>=0)) // an ingredient/unit combination was selected previously
 {
@@ -319,7 +319,7 @@ void IngredientsDialog::removeIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
+if ( (it=ingredientListView->listView()->selectedItem()) ) ingredientID=it->text(0).toInt();
 
 if (ingredientID>=0) // an ingredient/unit combination was selected previously
 {
@@ -341,13 +341,13 @@ reloadIngredientList();// Reload the list from database
 void IngredientsDialog:: reloadPropertyList(void)
 {
 propertiesList->clear();
-propertiesListView->clear();
+propertiesListView->listView()->clear();
 perUnitListBack->clear();
 
 
 //If none is selected, select first item
 QListViewItem *it;
-it=ingredientListView->selectedItem();
+it=ingredientListView->listView()->selectedItem();
 
 //Populate this data into the KListView
 if (it){// make sure that the ingredient list is not empty
@@ -355,9 +355,9 @@ if (it){// make sure that the ingredient list is not empty
 	database->loadProperties(propertiesList,it->text(0).toInt()); // load the list for this ingredient
 	for ( IngredientProperty *prop =propertiesList->getFirst(); prop; prop =propertiesList->getNext() )
 	{
-	QListViewItem* lastElement=propertiesListView->lastItem();
+	QListViewItem* lastElement=propertiesListView->listView()->lastItem();
 	//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-	  (void)new QListViewItem(propertiesListView,lastElement,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
+	  (void)new QListViewItem(propertiesListView->listView(),lastElement,QString::number(prop->id),prop->name,QString::number(prop->amount),prop->units+QString("/")+prop->perUnit.name);
 	  // Store the perUnits with the ID for using later
 	  Element perUnitEl;
 	  perUnitEl.id=prop->perUnit.id;
@@ -380,7 +380,7 @@ void IngredientsDialog::addPropertyToIngredient(void)
 // Find selected ingredient item
 QListViewItem *it;
 int ingredientID=-1;
-if ( (it=ingredientListView->selectedItem()) )
+if ( (it=ingredientListView->listView()->selectedItem()) )
   {
   ingredientID=it->text(0).toInt();
   }
@@ -414,8 +414,8 @@ void IngredientsDialog::removePropertyFromIngredient(void)
 // Find selected ingredient/property item combination
 QListViewItem *it;
 int ingredientID=-1, propertyID=-1; int perUnitsID=-1;
-if ( (it=ingredientListView->selectedItem()) ) ingredientID=it->text(0).toInt();
-if ( (it=propertiesListView->selectedItem()) ) propertyID=it->text(0).toInt();
+if ( (it=ingredientListView->listView()->selectedItem()) ) ingredientID=it->text(0).toInt();
+if ( (it=propertiesListView->listView()->selectedItem()) ) propertyID=it->text(0).toInt();
 if (propertyID>=0) perUnitsID=perUnitListBack->getElement(findPropertyNo(it))->id ;
 
 if ((ingredientID>=0)&&(propertyID>=0) && (perUnitsID>=0)) // an ingredient/property combination was selected previously
@@ -433,10 +433,10 @@ void IngredientsDialog::insertPropertyEditBox(QListViewItem* it)
 
 QRect r;
 
-r=propertiesListView->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
+r=propertiesListView->listView()->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
 
-r.moveBy(propertiesListView->pos().x(),propertiesListView->pos().y()); // Move to the position of qlistview
-r.moveBy(0,r.height()+propertiesListView->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
+r.moveBy(propertiesListView->listView()->pos().x(),propertiesListView->listView()->pos().y()); // Move to the position of qlistview
+r.moveBy(0,r.height()+propertiesListView->listView()->itemRect(it).y()); //Move down to the item, note that its height is same as header's right now.
 
 r.setHeight(it->height()); // Set the item's height
 
@@ -452,8 +452,8 @@ void IngredientsDialog::setPropertyAmount(double amount)
 inputBox->hide();
 
 
-QListViewItem *ing_it=ingredientListView->selectedItem(); // Find selected ingredient
-QListViewItem *prop_it=propertiesListView->selectedItem();
+QListViewItem *ing_it=ingredientListView->listView()->selectedItem(); // Find selected ingredient
+QListViewItem *prop_it=propertiesListView->listView()->selectedItem();
 
 if (ing_it && prop_it)// Appart from property, Check if an ingredient is selected first, just in case
 {
@@ -472,9 +472,9 @@ int IngredientsDialog::findPropertyNo(QListViewItem */*it*/)
 {
 bool found=false;
 int i = 0;
-QListViewItem* item = propertiesListView->firstChild();
-while (i < propertiesListView->childCount() && !found) {
-  if (item == propertiesListView->currentItem())
+QListViewItem* item = propertiesListView->listView()->firstChild();
+while (i < propertiesListView->listView()->childCount() && !found) {
+  if (item == propertiesListView->listView()->currentItem())
     found = true;
   else {
     item = item->nextSibling();

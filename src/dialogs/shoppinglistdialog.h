@@ -17,7 +17,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <kiconloader.h>
-#include <klistview.h>
+#include "widgets/krelistview.h"
 
 class RecipeDB;
 class RecipeList;
@@ -47,8 +47,8 @@ private:
     QGridLayout* layout;
     QPushButton* addRecipeButton;
     QPushButton* removeRecipeButton;
-    KListView* recipeListView;
-    KListView* shopRecipeListView;
+    KreListView* recipeListView;
+    KreListView* shopRecipeListView;
     QHBox *buttonBar;
     QPushButton* autoFillButton;
     QPushButton* okButton;

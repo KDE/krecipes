@@ -17,8 +17,9 @@
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qwidget.h>
-#include <klistview.h>
 #include <knuminput.h>
+
+#include "widgets/krelistview.h"
 
 class RecipeDB;
 class ElementList;
@@ -50,9 +51,9 @@ private:
     QPushButton* removeUnitButton;
     QPushButton* addPropertyButton;
     QPushButton* removePropertyButton;
-    KListView* ingredientListView;
-    KListView* unitsListView;
-    KListView* propertiesListView;
+    KreListView* ingredientListView;
+    KreListView* unitsListView;
+    KreListView* propertiesListView;
     QPushButton* pushButton5;
     EditBox* inputBox;
 
