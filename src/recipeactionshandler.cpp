@@ -33,9 +33,9 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 	if ( actions & Edit )
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
 	if ( actions & SaveAs )
-		kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save as"), this, SLOT(saveAs()), CTRL+Key_S );
+		kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save As..."), this, SLOT(saveAs()), CTRL+Key_S );
 	if ( actions & RemoveFromCategory )
-		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove from &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
+		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove From &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
 	if ( actions & Remove )
 		kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("&Delete"), this, SLOT(remove()), Key_Delete );
 	if ( actions & AddToShoppingList )
@@ -48,7 +48,7 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 	if ( actions & CollapseAll )
 		catPop->insertItem( i18n("&Collapse All"), this, SLOT(collapseAll()), CTRL+Key_Minus );
 	if ( actions & SaveCategoryAs )
-		catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save as"), this, SLOT(saveCategoryAs()), CTRL+Key_S );
+		catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save As..."), this, SLOT(saveCategoryAs()), CTRL+Key_S );
 	catPop->polish();
 
 	delete il;

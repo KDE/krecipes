@@ -431,7 +431,7 @@ QSpacerItem* spacerFromCheckBox = new QSpacerItem( 10,10, QSizePolicy::Minimum, 
 layout->addItem( spacerFromCheckBox,6,3 );
 
 // Server & Client Box
-QGroupBox *serverSettingsGBox=new QGroupBox(this,"serverSettingsGBox"); serverSettingsGBox->setTitle(i18n("Server / Client settings"));
+QGroupBox *serverSettingsGBox=new QGroupBox(this,"serverSettingsGBox"); serverSettingsGBox->setTitle(i18n("Server / Client Settings"));
 serverSettingsGBox->setEnabled(false); // Disable by default
 serverSettingsGBox->setInsideSpacing(10);
 serverSettingsGBox->setColumns(2);

@@ -309,7 +309,7 @@ void Krecipes::import()
 			warningEdit->setText( QString(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>")) + importer->getMessages() );
 			warningEdit->setReadOnly(true);
 
-			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n("Import warnings"), KDialogBase::Ok, KDialogBase::Default, this );
+			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n("Import Warnings"), KDialogBase::Ok, KDialogBase::Default, this );
 			showWarningsDlg.setMainWidget( warningEdit ); //KDialogBase will delete warningEdit for us
 			showWarningsDlg.resize( QSize(550,250) );
 			showWarningsDlg.exec();
