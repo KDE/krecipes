@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 
 #include "advancedsearchdialog.h"
+#include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
 #include "selectunitdialog.h"
@@ -41,7 +42,7 @@ database=db;
 
 //Initialize internal data
 recipeList=new ElementList;
-categoryList=new ElementList;
+//categoryList=new ElementList;
 
 categoryComboRows.setAutoDelete(true);
 
@@ -165,21 +166,13 @@ void SelectRecipeDialog::loadRecipeList(void)
 {
 recipeListView->clear();
 recipeList->clear();
-categoryList->clear();
+//categoryList->clear();
 categoryItems.clear();
 
 // First show the categories
-
-ElementList categoryList;
-
-database->loadCategories(&categoryList);
-
-for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
-	{
-	QListViewItem *it=new QListViewItem(recipeListView,(*cat_it).name,"","");
-	categoryItems.insert((*cat_it).id,it);
-	}
-
+CategoryTree categoryTree;
+database->loadCategories(&categoryTree);
+loadListView(&categoryTree);
 
 // Now show the recipes
 
@@ -213,6 +206,24 @@ filter(searchBox->text());
 
 }
 
+void SelectRecipeDialog::loadListView(const CategoryTree *categoryTree, QListViewItem *parent )
+{
+	const CategoryTreeChildren *children = categoryTree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it )
+	{
+		CategoryTree *node = *child_it;
+		
+		QListViewItem *new_item;
+		if ( parent == 0 )
+			new_item = new QListViewItem(recipeListView,node->category.name,"","");
+		else
+			new_item = new QListViewItem(parent,node->category.name,"","");
+
+		categoryItems.insert(node->category.id,new_item);
+		loadListView( node, new_item );
+	}
+}
+
 void SelectRecipeDialog::open(void)
 {
 QListViewItem *it;
@@ -224,8 +235,26 @@ if ( it )
 	else if ( it->firstChild() )
 	{
 		QValueList<int> ids;
-		for (QListViewItem *sub_it=it->firstChild();sub_it;sub_it=sub_it->nextSibling())
-			ids.append( sub_it->text(1).toInt() );
+		
+		//do this to only iterate over children of 'it'
+		QListViewItem *pEndItem = NULL;
+		QListViewItem *pStartItem = it;
+		do
+		{
+			if(pStartItem->nextSibling())
+				pEndItem = pStartItem->nextSibling();
+			else
+				pStartItem = pStartItem->parent();
+		}
+		while(pStartItem && !pEndItem);
+		
+		QListViewItemIterator iterator(it);
+		while(iterator.current() != pEndItem)
+		{
+			if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+				ids.append(iterator.current()->text(1).toInt());
+			++iterator;
+		}
 		emit recipesSelected( ids, 0 );
 	}
 }
@@ -270,10 +299,33 @@ loadCategoryCombo();
 collapseAll();
 }
 
+void SelectRecipeDialog::hideIfEmpty(QListViewItem *parent)
+{
+	QListViewItem *it;
+	if ( parent == 0 )
+		it = recipeListView->firstChild();
+	else
+		it = parent->firstChild();
+	
+	for ( ; it; it = it->nextSibling() ) {
+		bool should_show = true;
+		if ( !it->firstChild() ){
+			should_show = it->isVisible();
+			if ( parent && parent->firstChild() )
+			{
+				parent->setVisible(!should_show);
+				parent->setVisible(should_show);
+			}
+		}
+		else
+			hideIfEmpty(it);
+	}
+}
+
 void SelectRecipeDialog::filter(const QString& s)
 {
-for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
-	{
+QListViewItemIterator list_it( recipeListView );
+while ( QListViewItem *it = list_it.current() ) {
 	if ( s.isEmpty() ) // Don't filter if the filter text is empty
 	{
 		if ( !isFilteringCategories )
@@ -284,45 +336,42 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	}
 	else if ( !it->firstChild() ) // It's not a category or it's empty
 	{
-		if (it->text(2).contains(s,false) && !isFilteringCategories) it->setVisible(true);
-		else it->setVisible(false);
+		if (it->text(2).contains(s,false) && !isFilteringCategories)
+			it->setVisible(true);
+		else
+			it->setVisible(false);
 	}
-	else // It's a category. Check the children
-	{
-		if (!isFilteringCategories) it->setVisible( true ); //make sure it is visible
-
-		bool cat_has_matches = false;
-		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
-		{
-			if (cit->text(2).contains(s,false) && !s.isEmpty())
-			{
-				cat_has_matches = true;
-				cit->setVisible(true);
-				it->setOpen(true);
-			}
-			else
-				cit->setVisible(false);
-		}
-		
-		if (!isFilteringCategories && !cat_has_matches) it->setVisible(false);
-	}
-	}
+	
+	++list_it;
 }
 
+hideIfEmpty();
+}
 
 void SelectRecipeDialog::filterCategories(int categoryID)
 {
 kdDebug()<<"I got category :"<<categoryID<<"\n";
-for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
-	{
+
+QListViewItemIterator list_it( recipeListView );
+while ( QListViewItem *it = list_it.current() ) {
 	if (categoryID==-1) it->setVisible(true); // We're not filtering categories
-	else if (it!=categoryItems[categoryID]) it->setVisible(false);
-	else it->setVisible(true);
-	}
+	else if (it==categoryItems[categoryID] || isParentOf(it,categoryItems[categoryID]) || isParentOf(categoryItems[categoryID],it)) it->setVisible(true);
+	else it->setVisible(false);
+
+	++list_it;
+}
 }
 
-
-
+bool SelectRecipeDialog::isParentOf(QListViewItem *parent, QListViewItem *to_check)
+{
+	for ( QListViewItem *it = to_check->parent(); it; it = it->parent() )
+	{
+		if ( it == parent )
+			return true;
+	}
+	
+	return false;
+}
 
 void SelectRecipeDialog::loadCategoryCombo(void)
 {
@@ -431,8 +480,26 @@ void SelectRecipeDialog::slotExportRecipeFromCat()
 	if (recipeListView->selectedItem() )
 	{
 		QValueList<int> ids;
-		for (QListViewItem *cit=(recipeListView->selectedItem())->firstChild();cit;cit=cit->nextSibling())
-			ids.append(cit->text(1).toInt());
+
+		//do this to only iterate over children of 'it'
+		QListViewItem *pEndItem = NULL;
+		QListViewItem *pStartItem = recipeListView->selectedItem();
+		do
+		{
+			if(pStartItem->nextSibling())
+				pEndItem = pStartItem->nextSibling();
+			else
+				pStartItem = pStartItem->parent();
+		}
+		while(pStartItem && !pEndItem);
+		
+		QListViewItemIterator iterator(recipeListView->selectedItem());
+		while(iterator.current() != pEndItem)
+		{
+			if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+				ids.append(iterator.current()->text(1).toInt());
+			++iterator;
+		}
 
 		exportRecipes( ids, i18n("Save Recipes"), (recipeListView->selectedItem())->text(0) );
 	}
@@ -442,26 +509,26 @@ QValueList<int> SelectRecipeDialog::getAllVisibleItems()
 {
 	QValueList<int> ids;
 
-	for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
+	//do this to only iterate over children of 'it'
+	QListViewItem *pEndItem = NULL;
+	QListViewItem *pStartItem = recipeListView->selectedItem();
+	do
 	{
-		if ( it->isVisible() )
-		{
-			if ( !it->firstChild() ) // It's not a category or it's empty
-			{
-				if ( !it->text(1).isEmpty() && ids.find(it->text(1).toInt()) == ids.end() )
-					ids << it->text(1).toInt();
-			}
-			else // It's a category. Check the children
-			{
-				for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
-				{
-					if ( cit->isVisible() && ids.find(cit->text(1).toInt()) == ids.end() )
-						ids << cit->text(1).toInt();
-				}
-			}
-		}
+		if(pStartItem->nextSibling())
+			pEndItem = pStartItem->nextSibling();
+		else
+			pStartItem = pStartItem->parent();
 	}
+	while(pStartItem && !pEndItem);
 	
+	QListViewItemIterator iterator(recipeListView->selectedItem(),QListViewItemIterator::Visible);
+	while(iterator.current() != pEndItem)
+	{
+		if ( !iterator.current()->firstChild() && ids.find(iterator.current()->text(1).toInt()) == ids.end() )
+			ids.append(iterator.current()->text(1).toInt());
+		++iterator;
+	}
+
 	return ids;
 }
 
@@ -519,17 +586,21 @@ filter(searchBox->text());
 }
 
 void SelectRecipeDialog::expandAll(){
-  for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
-  {
-    it->setOpen(true);
-  }
+	QListViewItemIterator it( recipeListView );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		item->setOpen(true);
+		++it;
+	}
 }
 
 void SelectRecipeDialog::collapseAll(){
-  for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
-  {
-    it->setOpen(false);
-  }
+	QListViewItemIterator it( recipeListView );
+	while ( it.current() ) {
+		QListViewItem *item = it.current();
+		item->setOpen(false);
+		++it;
+	}
 }
 
 //item is a recipe if the 2nd column is an integer (the recipe's ID)

@@ -31,6 +31,7 @@
 #include "unitratiolist.h"
 #include "recipedb.h"
 
+
 /**
 @author Unai Garro
 */
@@ -59,7 +60,7 @@ public:
 	void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units);
 
 	void createNewAuthor(const QString &authorName);
-	void createNewCategory(const QString &categoryName);
+	void createNewCategory(const QString &categoryName,int parent_id=-1);
 	void createNewIngredient(const QString &ingredientName);
 	void createNewPrepMethod(const QString &prepMethodName);
 	void createNewUnit(const QString &unitName);
@@ -95,6 +96,7 @@ public:
 	int lastInsertID();
 	void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true);
 	void loadAuthors(ElementList *list);
+	void loadCategories(CategoryTree *list,int parent_id=-1);
 	void loadCategories(ElementList *list);
 	void loadIngredients(ElementList *list);
 	void loadPossibleUnits(int ingredientID, ElementList *list);
@@ -127,6 +129,7 @@ public:
   * set newLabel for categoryID
   */
 	void modCategory(int categoryID, QString newLabel);
+	void modCategory(int categoryID, int new_parent_id);
   /**
   * set newLabel for authorID
   */

@@ -21,8 +21,10 @@
 #include <knuminput.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+
 #include <qlabel.h>
 #include <qgroupbox.h>
+#include <qmap.h>
 #include <qobject.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
@@ -123,7 +125,7 @@ private:
 	int createNewUnitIfNecessary( const QString &unit, const QString &ingredient );
 	int createNewPrepIfNecessary( const QString &prep );
 	void checkIfNewUnits();
-	void findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected);
+	void findCategoriesInRecipe(const ElementList &categoryList, QMap<Element,bool> &selected);
 	void loadIngredientListCombo(void);
 	void loadUnitListCombo(void);
 	void loadPrepMethodListCombo(void);

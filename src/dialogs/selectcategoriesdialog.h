@@ -20,6 +20,8 @@
 
 #include "elementlist.h"
 
+class CategoryTree;
+class CategoryListItem;
 class RecipeDB;
 
 /**
@@ -31,9 +33,9 @@ Q_OBJECT
 
 public:
 
-    SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected, RecipeDB* db);
+    SelectCategoriesDialog(QWidget *parent, const CategoryTree *categoryTree,const QMap<Element,bool> &selected, RecipeDB* db);
     ~SelectCategoriesDialog();
-    void getSelectedCategories(ElementList *selected);
+    void getSelectedCategories(ElementList *selected,CategoryListItem *parent=0);
 private:
 
 	//Widgets
@@ -46,7 +48,7 @@ private:
 	RecipeDB *database;
 	
 	//Private methods
-	void loadCategories(const ElementList &categoryList, QPtrList <bool> *selected);
+	void loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryListItem *parent=0 );
 	
 private slots:
 	void createNewCategory(void);

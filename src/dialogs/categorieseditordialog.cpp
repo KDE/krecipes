@@ -12,6 +12,7 @@
 
 #include "categorieseditordialog.h"
 
+#include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 
@@ -33,11 +34,14 @@ layout->addItem(spacerLeft,1,0);
 
 //Category List
 categoryListView=new KListView(this);
-categoryListView->addColumn(i18n("Id"));
 categoryListView->addColumn(i18n("Category Name"));
-categoryListView->setRenameable(1, true);
+categoryListView->addColumn(i18n("Id"));
+categoryListView->setRenameable(0, true);
 categoryListView->setDefaultRenameAction(QListView::Reject);
 categoryListView->setAllColumnsShowFocus(true);
+categoryListView->setRootIsDecorated(true);
+categoryListView->setDragEnabled(true);
+categoryListView->setAcceptDrops(true);
 layout->addWidget(categoryListView,1,1);
 
 //Buttons
@@ -64,10 +68,21 @@ connect (newCategoryButton,SIGNAL(clicked()),this,SLOT(createNewCategory()));
 connect (removeCategoryButton,SIGNAL(clicked()),this,SLOT(removeCategory()));
 connect(this->categoryListView,SIGNAL(doubleClicked( QListViewItem*,const QPoint &, int )),this, SLOT(modCategory( QListViewItem* )));
 connect(this->categoryListView,SIGNAL(itemRenamed (QListViewItem*)),this, SLOT(saveCategory( QListViewItem* )));
+connect(this->categoryListView,SIGNAL(moved(QListViewItem *,QListViewItem *,QListViewItem *)),SLOT(changeCategoryParent(QListViewItem *,QListViewItem *,QListViewItem *)));
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()
 {
+}
+
+void CategoriesEditorDialog::changeCategoryParent(QListViewItem *item,QListViewItem */*afterFirst*/,QListViewItem */*afterNow*/)
+{
+	int new_parent_id = -1;
+	if ( QListViewItem *parent = item->parent() )
+		new_parent_id = parent->text(1).toInt();
+
+	int cat_id = item->text(1).toInt();
+	database->modCategory( cat_id, new_parent_id );
 }
 
 // (Re)loads the data from the database
@@ -76,12 +91,26 @@ void CategoriesEditorDialog::reload(void)
 
 //Clear the listview first
 categoryListView->clear();
+CategoryTree categoryTree;
+database->loadCategories(&categoryTree);
+loadListView(&categoryTree);
+}
 
-ElementList categoryList;
-database->loadCategories(&categoryList);
-for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
+void CategoriesEditorDialog::loadListView(const CategoryTree *categoryTree, QListViewItem *parent )
+{
+	const CategoryTreeChildren *children = categoryTree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it )
 	{
-	(void)new QListViewItem(categoryListView,QString::number((*cat_it).id),(*cat_it).name);
+		const CategoryTree *node = *child_it;
+		
+		QListViewItem *new_item;
+		if ( parent == 0 )
+			new_item = new QListViewItem(categoryListView,node->category.name,QString::number(node->category.id));
+		else
+			new_item = new QListViewItem(parent,node->category.name,QString::number(node->category.id));
+
+		new_item->setOpen(true);
+		loadListView( node, new_item );
 	}
 }
 
@@ -91,7 +120,12 @@ CreateElementDialog* elementDialog=new CreateElementDialog(this,i18n("New Catego
 
 if ( elementDialog->exec() == QDialog::Accepted ) {
    QString result = elementDialog->newElementName();
-   database->createNewCategory(result); // Create the new category in the database
+   
+   int parent_id = -1;
+   if ( QListViewItem *current = categoryListView->selectedItem() )
+   	parent_id = current->text(1).toInt();
+   database->createNewCategory(result,parent_id); // Create the new category in the database
+
    reload(); // Reload the list from the database
 }
 delete elementDialog;
@@ -103,7 +137,7 @@ void CategoriesEditorDialog::removeCategory(void)
 QListViewItem *it;
 int categoryID=-1;
 
-if ( (it=categoryListView->selectedItem()) ) categoryID=it->text(0).toInt();
+if ( (it=categoryListView->selectedItem()) ) categoryID=it->text(1).toInt();
 
 if (categoryID>=0) // a category was selected previously
 {
@@ -118,13 +152,13 @@ void CategoriesEditorDialog::modCategory(QListViewItem* i)
 {
   newCategoryButton->setEnabled(false);
   removeCategoryButton->setEnabled(false);
-  categoryListView->rename(i, 1);
+  categoryListView->rename(i, 0);
 }
 
 void CategoriesEditorDialog::saveCategory(QListViewItem* i)
 {
-int existing_id = database->findExistingCategoryByName( i->text(1) );
-int cat_id = i->text(0).toInt();
+int existing_id = database->findExistingCategoryByName( i->text(0) );
+int cat_id = i->text(1).toInt();
 if ( existing_id != -1 && existing_id != cat_id ) //category already exists with this label... merge the two
 {  
   switch (KMessageBox::warningContinueCancel(this,i18n("This category already exists.  Continuing will merge these two categories into one.  Are you sure?")))
@@ -140,7 +174,7 @@ if ( existing_id != -1 && existing_id != cat_id ) //category already exists with
 }
 else
 {
-  database->modCategory(cat_id, i->text(1));
+  database->modCategory(cat_id, i->text(0));
 }
 
 newCategoryButton->setEnabled(true);

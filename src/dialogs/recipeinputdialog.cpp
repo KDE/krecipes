@@ -32,6 +32,7 @@
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
 #include "recipe.h"
+#include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
 #include "selectcategoriesdialog.h"
 #include "fractioninput.h"
@@ -917,11 +918,12 @@ return (!(unsavedChanges));
 
 void RecipeInputDialog::addCategory(void)
 {
+CategoryTree categoryTree; database->loadCategories(&categoryTree);
 ElementList categoryList; database->loadCategories(&categoryList);
-QPtrList <bool>selected;
+QMap<Element,bool> selected;
 findCategoriesInRecipe(categoryList,selected);
 
-SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,categoryList,&selected,database);
+SelectCategoriesDialog *editCategoriesDialog=new SelectCategoriesDialog(this,&categoryTree,selected,database);
 
 
 if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
@@ -940,17 +942,17 @@ showCategories();
 }
 
 // Find which of the elements in the category lists is selected in the recipe (i.e. which categories this recipe belongs to)
-void RecipeInputDialog::findCategoriesInRecipe(const ElementList &categoryList, QPtrList <bool>  &selected)
+void RecipeInputDialog::findCategoriesInRecipe(const ElementList &categoryList, QMap<Element,bool> &selected)
 {
 
 for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it )
 	{
-	bool *value=new bool;
+	bool value;
 	if ((loadedRecipe->categoryList.contains(*cat_it)) > 0)  // Recipe contains this category?
-		*value=true;
+		value=true;
 	else
-		*value=false;
-	selected.append(value);
+		value=false;
+	selected.insert(*cat_it,value);
 	}
 }
 

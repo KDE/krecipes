@@ -35,6 +35,7 @@ class RecipeDB;
 class ElementList;
 class Recipe;
 class AdvancedSearchDialog;
+class CategoryTree;
 
 /**
 @author Unai Garro
@@ -71,17 +72,20 @@ private:
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
-  ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
+  //ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
   QIntDict <QListViewItem> categoryItems; // Contains the QListViewItem's for every category in the QListView
   QIntDict <int> categoryComboRows; // Contains the category id for every given row in the category combobox
   bool isFilteringCategories;
   // Internal Methods
   void loadRecipeList(void);
   void loadCategoryCombo(void);
+  void loadListView(const CategoryTree *categoryTree, QListViewItem *parent=0 );
   bool itemIsRecipe( const QListViewItem *item );
 
   void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
   QValueList<int> getAllVisibleItems();
+  bool isParentOf(QListViewItem *parent, QListViewItem *to_check);
+  void hideIfEmpty(QListViewItem *parent=0);
 
 signals:
   void recipeSelected(int id, int action);

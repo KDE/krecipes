@@ -10,6 +10,7 @@ CREATE TABLE authors (
 CREATE TABLE categories (
   id int(11) NOT NULL auto_increment,
   name varchar(40) default NULL,
+  parent_id int(11) NOT NULL
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE category_list (
@@ -76,4 +77,4 @@ CREATE TABLE prep_methods (
   name varchar(20) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
-INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');
+INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');

@@ -1,4 +1,5 @@
 Changes from 0.5 to current CVS:
+  -Support for subcategories
   -When renaming an element to something that already exists, merge the two into one
   -Actually hide items in the Page Setup that aren't going to be shown in the recipe view
   -Allow renaming of unit and prep method once it is entered in the recipe input (from the list view)

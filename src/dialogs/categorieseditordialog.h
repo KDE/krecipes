@@ -20,6 +20,8 @@
 #include <kiconloader.h>
 #include <klistview.h>
 
+#include "datablocks/categorytree.h"
+
 class RecipeDB;
 
 /**
@@ -44,10 +46,13 @@ private:
 	QPushButton *newCategoryButton;
 	QPushButton *removeCategoryButton;
 	KIconLoader *il;
+	
+	void loadListView(const CategoryTree *categoryTree, QListViewItem *parent=0 );
 
 private slots:
 	void createNewCategory(void);
 	void removeCategory(void);
+	void changeCategoryParent(QListViewItem *item,QListViewItem *afterFirst,QListViewItem *afterNow);
   void modCategory(QListViewItem*);
   void saveCategory(QListViewItem*);
 

@@ -34,6 +34,8 @@
 
 class KProgressDialog;
 
+class CategoryTree;
+
 typedef struct
 {
 QValueList <int> recipeIdList;
@@ -68,7 +70,7 @@ public:
 	virtual void changePropertyAmountToIngredient(int ingredientID,int propertyID,double amount,int per_units)=0;
 
 	virtual void createNewAuthor(const QString &authorName)=0;
-	virtual void createNewCategory(const QString &categoryName)=0;
+	virtual void createNewCategory(const QString &categoryName,int parent_id=-1)=0;
 	virtual void createNewIngredient(const QString &ingredientName)=0;
 	virtual void createNewPrepMethod(const QString &prepMethodName)=0;
 	virtual void createNewUnit(const QString &unitName)=0;
@@ -106,6 +108,7 @@ public:
 
 	virtual void loadAllRecipeIngredients(RecipeIngredientList *list,bool withNames=true)=0;
 	virtual void loadAuthors(ElementList *list)=0;
+	virtual void loadCategories(CategoryTree *list,int parent_id=-1)=0;
 	virtual void loadCategories(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
@@ -148,6 +151,7 @@ public:
   * set newLabel for categoryID
   */
 	virtual void modCategory(int categoryID, QString newLabel)=0;
+	virtual void modCategory(int categoryID, int new_parent_id)=0;
   /**
   * set newLabel for authorID
   */

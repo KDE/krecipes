@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "mysqlrecipedb.h"
+#include "datablocks/categorytree.h"
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -1291,7 +1292,7 @@ else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_
 
 else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL, parent_id int(11) NO NULL, PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list") commands<<"CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
 
@@ -1401,6 +1402,19 @@ if ( version < 0.5 )
 		tableToAlter.exec(command);
 }
 
+if ( version < 0.6 )
+{
+	command="ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL AFTER name;";
+		QSqlQuery tableToAlter(command,database);
+	command="UPDATE categories SET parent_id=-1;";
+		tableToAlter.exec(command);
+
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		tableToAlter.exec(command);
+	command="INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
+		tableToAlter.exec(command);
+}
+
 }
 
 float MySQLRecipeDB::databaseVersion(void)
@@ -1417,6 +1431,7 @@ else return (0.2); // if table is empty, assume oldest (0.2), and port
 void MySQLRecipeDB::loadCategories(ElementList *list)
 {
 list->clear();
+
 QString command="SELECT * FROM categories ORDER BY name;";
 QSqlQuery categoryToLoad(command,database);
 if (categoryToLoad.isActive()) {
@@ -1426,6 +1441,27 @@ if (categoryToLoad.isActive()) {
 	el.id=categoryToLoad.value(0).toInt();
 	el.name=unescapeAndDecode(categoryToLoad.value(1).toString());
 	list->add(el);
+	}
+}
+}
+
+void MySQLRecipeDB::loadCategories(CategoryTree *list, int parent_id )
+{
+if ( parent_id == -1 )
+	list->clear();
+
+QString command=QString("SELECT * FROM categories WHERE parent_id=%1 ORDER BY name;").arg(parent_id);
+QSqlQuery categoryToLoad(command,database);
+if (categoryToLoad.isActive()) {
+	while (categoryToLoad.next())
+	{
+	int id = categoryToLoad.value(0).toInt();
+	Element el;
+	el.id=id;
+	el.name=unescapeAndDecode(categoryToLoad.value(1).toString());
+	CategoryTree *list_child = list->add(el);
+
+	loadCategories( list_child, id );
 	}
 }
 }
@@ -1445,17 +1481,23 @@ if (categoryToLoad.isActive()) {
 }
 }
 
-void MySQLRecipeDB::createNewCategory(const QString &categoryName)
+void MySQLRecipeDB::createNewCategory(const QString &categoryName,int parent_id)
 {
 QString command;
 
-command=QString("INSERT INTO categories VALUES(NULL,'%1');").arg(escapeAndEncode(categoryName));
+command=QString("INSERT INTO categories VALUES(NULL,'%1',%2);").arg(escapeAndEncode(categoryName)).arg(parent_id);
 QSqlQuery categoryToCreate( command,database);
 }
 
 void MySQLRecipeDB::modCategory(int categoryID, QString newLabel)
 {
 	QString command = QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+	QSqlQuery categoryToUpdate( command,database);
+}
+
+void MySQLRecipeDB::modCategory(int categoryID, int new_parent_id)
+{
+	QString command = QString("UPDATE categories SET parent_id=%1 WHERE id=%2;").arg(new_parent_id).arg(categoryID);
 	QSqlQuery categoryToUpdate( command,database);
 }
 
@@ -1468,6 +1510,15 @@ QSqlQuery categoryToRemove( command,database);
 
 command=QString("DELETE FROM category_list WHERE category_id=%1;").arg(categoryID);
 categoryToRemove.exec(command);
+
+//recursively delete subcategories
+command = QString("SELECT id FROM categories WHERE parent_id=%1;").arg(categoryID);
+categoryToRemove.exec(command);
+if (categoryToRemove.isActive()){
+	while ( categoryToRemove.next() ){
+		removeCategory(categoryToRemove.value(0).toInt());
+	}
+}
 }
 
 void MySQLRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)
@@ -1718,6 +1769,11 @@ void MySQLRecipeDB::mergeCategories( int id1, int id2 )
 			last_id = current_id;
 		}
 	}
+	
+	command = QString("UPDATE categories SET parent_id=%1 WHERE parent_id=%2")
+			   .arg(id1)
+			   .arg(id2);
+	update.exec(command);
 
 	//remove category with id 'id2'
 	command=QString("DELETE FROM categories WHERE id=%1").arg(id2);

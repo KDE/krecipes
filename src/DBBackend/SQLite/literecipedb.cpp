@@ -16,6 +16,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include "datablocks/categorytree.h"
+
 #define DB_FILENAME "krecipes.krecdb"
 
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
@@ -1357,7 +1359,7 @@ else if (tableName=="ingredient_properties") commands<<"CREATE TABLE ingredient_
 
 else if (tableName=="units_conversion") commands<<"CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL,PRIMARY KEY (id));").arg(maxCategoryNameLength());
+else if (tableName=="categories") commands<<QString("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL, parent_id INGEGER NOT NULL, PRIMARY KEY (id));").arg(maxCategoryNameLength());
 
 else if (tableName=="category_list")
 	{
@@ -1387,10 +1389,9 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void LiteRecipeDB::portOldDatabases(float version)
 {
+QString command;
 if ( version < 0.5 )
 {
-	QString command;
-
 	command = QString("CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxPrepMethodNameLength());
 		database->executeQuery(command);
 
@@ -1515,6 +1516,49 @@ if ( version < 0.5 )
 	command="INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');";
 		database->executeQuery(command);
 }
+
+if ( version < 0.6 )
+{
+	//==================add a column to 'categories' to allow subcategories
+	database->executeQuery("CREATE TABLE categories_copy (id INTEGER, name varchar(40));");
+	QSQLiteResult copyQuery = database->executeQuery("SELECT * FROM categories;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO categories_copy VALUES(%1,'%2');")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE categories");
+	database->executeQuery("CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL, parent_id INTEGER NOT NULL, PRIMARY KEY (id));");
+	copyQuery = database->executeQuery("SELECT * FROM categories_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = QString("INSERT INTO categories VALUES(%1,'%2',-1);")
+			  .arg(row.data(0).toInt())
+			  .arg(row.data(1));
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE categories_copy");
+
+	//================Set the version to the new one (0.6)
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		database->executeQuery(command);
+	command="INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
+		database->executeQuery(command);
+}
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -1530,6 +1574,29 @@ QSQLiteResultRow row=dbVersion.first();
 	else return (0.4); // if table is empty, assume oldest (0.4), and port
 }
 else return(0.4); // By default go for oldest (0.4)
+}
+
+void LiteRecipeDB::loadCategories(CategoryTree *list,int parent_id)
+{
+if ( parent_id == -1 )
+	list->clear();
+
+QString command=QString("SELECT * FROM categories WHERE parent_id=%1 ORDER BY name;").arg(parent_id);
+QSQLiteResult categoryToLoad=database->executeQuery(command);
+if (categoryToLoad.getStatus()!=QSQLiteResult::Failure) {
+QSQLiteResultRow row=categoryToLoad.first();
+	while (!categoryToLoad.atEnd())
+	{
+	int id = row.data(0).toInt();
+	Element el;
+	el.id=id;
+	el.name=unescapeAndDecode(row.data(1));
+	CategoryTree *list_child = list->add(el);
+
+	loadCategories( list_child, id );
+	row=categoryToLoad.next();
+	}
+}
 }
 
 void LiteRecipeDB::loadCategories(ElementList *list)
@@ -1567,11 +1634,11 @@ QSQLiteResultRow row=categoryToLoad.first();
 }
 }
 
-void LiteRecipeDB::createNewCategory(const QString &categoryName)
+void LiteRecipeDB::createNewCategory(const QString &categoryName,int parent_id)
 {
 QString command;
 
-command=QString("INSERT INTO categories VALUES(NULL,'%1');").arg(escapeAndEncode(categoryName));
+command=QString("INSERT INTO categories VALUES(NULL,'%1',%2);").arg(escapeAndEncode(categoryName)).arg(parent_id);
 database->executeQuery( command);
 }
 
@@ -1579,6 +1646,13 @@ void LiteRecipeDB::modCategory(int categoryID, QString newLabel)
 {
 	QString command;
 	command=QString("UPDATE categories SET name='%1' WHERE id=%2;").arg(escapeAndEncode(newLabel)).arg(categoryID);
+	database->executeQuery( command);
+}
+
+void LiteRecipeDB::modCategory(int categoryID, int new_parent_id)
+{
+	QString command;
+	command=QString("UPDATE categories SET parent_id=%1 WHERE id=%2;").arg(new_parent_id).arg(categoryID);
 	database->executeQuery( command);
 }
 
@@ -1591,6 +1665,17 @@ database->executeQuery(command);
 
 command=QString("DELETE FROM category_list WHERE category_id=%1;").arg(categoryID);
 database->executeQuery(command);
+
+//recursively delete subcategories
+command = QString("SELECT id FROM categories WHERE parent_id=%1;").arg(categoryID);
+QSQLiteResult categoryToRemove=database->executeQuery(command);
+if (categoryToRemove.getStatus()!=QSQLiteResult::Failure) {
+	QSQLiteResultRow row=categoryToRemove.first();
+	while (!categoryToRemove.atEnd()){
+		removeCategory(row.data(0).toInt());
+		row=categoryToRemove.next();
+	}
+}
 }
 
 void LiteRecipeDB::addCategoryToRecipe(int recipeID, int categoryID)
@@ -1870,6 +1955,11 @@ void LiteRecipeDB::mergeCategories( int id1, int id2 )
 			last_id = current_id;
 		}
 	}
+
+	command = QString("UPDATE categories SET parent_id=%1 WHERE parent_id=%2")
+			   .arg(id1)
+			   .arg(id2);
+	database->executeQuery( command );
 
 	//remove category with id 'id2'
 	command=QString("DELETE FROM categories WHERE id=%1;").arg(id2);

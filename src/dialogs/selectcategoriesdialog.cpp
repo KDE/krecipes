@@ -16,11 +16,13 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "datablocks/categorytree.h"
 #include "DBBackend/recipedb.h"
 
 class CategoryListItem:public QCheckListItem{
 public:
 	CategoryListItem(QListView* qlv, const Element &el ):QCheckListItem(qlv,QString::null,QCheckListItem::CheckBox),elStored(el){}
+	CategoryListItem(CategoryListItem* cli, const Element &el ):QCheckListItem(cli,QString::null,QCheckListItem::CheckBox),elStored(el){}
 	Element element() const { return elStored; }
 
 private:
@@ -32,9 +34,27 @@ public:
 		if (column==1) return(elStored.name);
 		else return(QString::null);
 		}
+
+protected:
+	virtual void stateChange(bool on)
+	{
+		if ( on )
+		{
+			CategoryListItem *cat_it;
+			for ( cat_it = (CategoryListItem*)parent(); cat_it; cat_it = (CategoryListItem*)cat_it->parent() )
+				 cat_it->setOn(false);
+
+			QListViewItemIterator it( firstChild() );
+			while ( it.current() ) {
+				cat_it = (CategoryListItem*)it.current();
+				cat_it->setOn(false);
+				++it;
+			}
+		}
+	}
 };
 
-SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const ElementList &categoryList,QPtrList <bool> *selected, RecipeDB *db):QDialog(parent,0,true)
+SelectCategoriesDialog::SelectCategoriesDialog(QWidget *parent, const CategoryTree *categoryTree,const QMap<Element,bool> &selected, RecipeDB *db):QDialog(parent,0,true)
 {
 
 // Store pointer
@@ -54,6 +74,7 @@ categoryListView=new KListView(this);
 categoryListView->addColumn("*");
 categoryListView->addColumn(i18n("Category"));
 categoryListView->setAllColumnsShowFocus(true);
+categoryListView->setRootIsDecorated(true);
 layout->addMultiCellWidget(categoryListView,1,1,1,3);
 
 //New category button
@@ -84,7 +105,7 @@ cancelButton->setFlat(true);
 layout->addWidget(cancelButton,5,3);
 
 // Load the list
-loadCategories(categoryList,selected);
+loadCategories(categoryTree,selected);
 
 // Connect signals & Slots
 connect (newCatButton,SIGNAL(clicked()),SLOT(createNewCategory()));
@@ -97,29 +118,39 @@ SelectCategoriesDialog::~SelectCategoriesDialog()
 {
 }
 
-void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected)
+void SelectCategoriesDialog::getSelectedCategories(ElementList *newSelected,CategoryListItem *parent)
 {
-for (CategoryListItem *it=(CategoryListItem *) categoryListView->firstChild();it; it=(CategoryListItem *) it->nextSibling())
+CategoryListItem *it;
+if ( parent == 0 )
+	it = (CategoryListItem*)categoryListView->firstChild();
+else
+	it = (CategoryListItem*)parent->firstChild();
+
+for (;it; it=(CategoryListItem *) it->nextSibling())
 	{
-	/*bool *newValue=new bool;*/
 	if (it->isOn()) newSelected->append(it->element()); // If checked, add
+	
+	getSelectedCategories(newSelected,it);
 	}
-
 }
 
-void SelectCategoriesDialog::loadCategories(const ElementList &categoryList, QPtrList <bool> *selected)
+void SelectCategoriesDialog::loadCategories(const CategoryTree *categoryTree, const QMap<Element,bool> &selected, CategoryListItem *parent )
 {
-bool *checked=selected->last();
-
-ElementList::const_iterator cat_it = categoryList.end();
---cat_it;
-for ( unsigned int i = 0; i < categoryList.count(); i++ )
-{
-	CategoryListItem *it=new CategoryListItem(categoryListView,*cat_it);
-	if (*checked) it->setOn(true);
-	checked=selected->prev();
-	--cat_it;
-}
+	const CategoryTreeChildren *children = categoryTree->children();
+	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it )
+	{
+		const CategoryTree *node = *child_it;
+		
+		CategoryListItem *new_item;
+		if ( parent == 0 )
+			new_item = new CategoryListItem(categoryListView,node->category);
+		else
+			new_item = new CategoryListItem(parent,node->category);
+		
+		new_item->setOn(selected[node->category]);
+		new_item->setOpen(true);
+		loadCategories( node, selected, new_item );
+	}
 }
 
 void SelectCategoriesDialog::createNewCategory(void)
@@ -129,10 +160,20 @@ void SelectCategoriesDialog::createNewCategory(void)
 	if ( elementDialog->exec() == QDialog::Accepted )
 	{
 		QString result = elementDialog->newElementName();
-		database->createNewCategory(result); // Create the new category in the database
+		
+		int parent_id = -1;
+		if ( CategoryListItem *current = (CategoryListItem*)categoryListView->selectedItem() )
+			parent_id = current->element().id;
+		
+		database->createNewCategory(result,parent_id); // Create the new category in the database
 		
 		Element new_cat(result,database->lastInsertID());
-		CategoryListItem *it=new CategoryListItem(categoryListView,new_cat);
+		
+		CategoryListItem *it;
+		if ( parent_id == -1 )
+			it = new CategoryListItem(categoryListView,new_cat);
+		else
+			it = new CategoryListItem((CategoryListItem*)categoryListView->selectedItem(),new_cat);
 		it->setOn(true);
 	}
 	
