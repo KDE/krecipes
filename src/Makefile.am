@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 bin_PROGRAMS = krecipes
 
-SUBDIRS=DBBackend importers
+SUBDIRS = DBBackend importers gui
 
 # set the include path for X, qt and KDE
 INCLUDES         = $(all_includes)
@@ -13,10 +13,10 @@ INCLUDES         = $(all_includes)
 krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # the shared libraries to link against.
-krecipes_LDADD = DBBackend/libkrecipesdbs.la DBBackend/libqsqlite/libkrecqsqlite.la importers/libkrecipesimporters.la $(LIB_KHTML) $(LIB_KSPELL) -lmysqlclient -lsqlite
+krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la DBBackend/libqsqlite/libkrecqsqlite.la importers/libkrecipesimporters.la $(LIB_KHTML) $(LIB_KSPELL) -lmysqlclient -lsqlite
 
 # which sources should be compiled for krecipes
-krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp 		      pref.cpp krecipesiface.skel recipeinputdialog.h recipeinputdialog.cpp recipeviewdialog.h recipeviewdialog.cpp recipe.h recipe.cpp ingredient.h ingredient.cpp ingredientlist.h ingredientlist.cpp elementlist.h elementlist.cpp element.h element.cpp selectrecipedialog.h selectrecipedialog.cpp ingredientsdialog.h ingredientsdialog.cpp selectunitdialog.h selectunitdialog.cpp createelementdialog.h createelementdialog.cpp image.h propertiesdialog.h propertiesdialog.cpp createpropertydialog.h createpropertydialog.cpp ingredientproperty.h ingredientproperty.cpp ingredientpropertylist.h ingredientpropertylist.cpp selectpropertydialog.h selectpropertydialog.cpp editbox.h editbox.cpp unitsdialog.h unitsdialog.cpp conversiontable.h conversiontable.cpp unitratio.h unitratio.cpp unitratiolist.h unitratiolist.cpp propertycalculator.cpp propertycalculator.h setupwizard.h setupwizard.cpp dependanciesdialog.h dependanciesdialog.cpp shoppinglistdialog.h shoppinglistdialog.cpp shoppinglistviewdialog.h shoppinglistviewdialog.cpp shoppingcalculator.h shoppingcalculator.cpp dietwizarddialog.h dietwizarddialog.cpp selectcategoriesdialog.h selectcategoriesdialog.cpp categorieseditordialog.cpp authorsdialog.cpp selectauthorsdialog.cpp fractioninput.h fractioninput.cpp mixednumber.h mixednumber.cpp menugroup.h menugroup.cpp dualprogressdialog.h dualprogressdialog.cpp
+krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel recipeinputdialog.h recipeinputdialog.cpp recipeviewdialog.h recipeviewdialog.cpp recipe.h recipe.cpp ingredient.h ingredient.cpp ingredientlist.h ingredientlist.cpp elementlist.h elementlist.cpp element.h element.cpp selectrecipedialog.h selectrecipedialog.cpp ingredientsdialog.h ingredientsdialog.cpp selectunitdialog.h selectunitdialog.cpp createelementdialog.h createelementdialog.cpp image.h propertiesdialog.h propertiesdialog.cpp createpropertydialog.h createpropertydialog.cpp ingredientproperty.h ingredientproperty.cpp ingredientpropertylist.h ingredientpropertylist.cpp selectpropertydialog.h selectpropertydialog.cpp editbox.h editbox.cpp unitsdialog.h unitsdialog.cpp conversiontable.h conversiontable.cpp unitratio.h unitratio.cpp unitratiolist.h unitratiolist.cpp propertycalculator.cpp propertycalculator.h setupwizard.h setupwizard.cpp dependanciesdialog.h dependanciesdialog.cpp shoppinglistdialog.h shoppinglistdialog.cpp shoppinglistviewdialog.h shoppinglistviewdialog.cpp shoppingcalculator.h shoppingcalculator.cpp dietwizarddialog.h dietwizarddialog.cpp selectcategoriesdialog.h selectcategoriesdialog.cpp categorieseditordialog.cpp authorsdialog.cpp selectauthorsdialog.cpp fractioninput.h fractioninput.cpp mixednumber.h mixednumber.cpp menugroup.h menugroup.cpp dualprogressdialog.h dualprogressdialog.cpp
 
 # these are the headers for your project
 noinst_HEADERS = krecipes.h krecipesview.h pref.h categorieseditordialog.h authorsdialog.h selectauthorsdialog.h

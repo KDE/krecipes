@@ -7,6 +7,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include "gui/kstartuplogo.h"
 
 static const char *description =
     I18N_NOOP("A KDE Application");
@@ -40,6 +41,14 @@ int main(int argc, char **argv)
     {
         // no session.. just start up normally
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        // launch splash screen
+        KStartupLogo* start_logo = 0L;
+        start_logo = new KStartupLogo();
+        start_logo -> setHideEnabled( true );
+        start_logo->show();
+        start_logo->raise();
+        QApplication::flushX();
+        //
         if (args->count() == 0)
         {
             Krecipes *widget = new Krecipes;
@@ -55,6 +64,7 @@ int main(int argc, char **argv)
             }
         }
         args->clear();
+        delete start_logo;
     }
 
     return app.exec();
