@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004                                               *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
  *   Cyril Bosselut (bosselut@b1project.com)                               *
@@ -43,8 +43,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		kpop->insertItem( il->loadIcon("ok", KIcon::NoGroup,16),i18n("&Open"), this, SLOT(open()), CTRL+Key_L );
 	if ( actions & Edit )
 		kpop->insertItem( il->loadIcon("edit", KIcon::NoGroup,16),i18n("&Edit"), this, SLOT(edit()), CTRL+Key_E );
-	if ( actions & SaveAs )
-		kpop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save As..."), this, SLOT(saveAs()), CTRL+Key_S );
+	if ( actions & Export )
+		kpop->insertItem( il->loadIcon("fileexport", KIcon::NoGroup,16),i18n("E&xport"), this, SLOT(recipeExport()), 0 );
 	if ( actions & RemoveFromCategory )
 		remove_from_cat_item = kpop->insertItem( il->loadIcon("editshred", KIcon::NoGroup,16),i18n("Remove From &Category"), this, SLOT(removeFromCategory()), CTRL+Key_C );
 	if ( actions & Remove )
@@ -58,8 +58,9 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		catPop->insertItem( i18n("&Expand All"), this, SLOT(expandAll()), CTRL+Key_Plus );
 	if ( actions & CollapseAll )
 		catPop->insertItem( i18n("&Collapse All"), this, SLOT(collapseAll()), CTRL+Key_Minus );
-	if ( actions & SaveCategoryAs )
-		catPop->insertItem( il->loadIcon("filesaveas", KIcon::NoGroup,16),i18n("&Save As..."), this, SLOT(saveCategoryAs()), CTRL+Key_S );
+	if ( actions & CategoryExport )
+		catPop->insertItem( il->loadIcon("fileexport", KIcon::NoGroup,16),i18n("E&xport"), this, SLOT(categoryExport()), 0 );
+
 	catPop->polish();
 
 	delete il;
@@ -146,17 +147,17 @@ void RecipeActionsHandler::edit()
 	}
 }
 
-void RecipeActionsHandler::saveAs()
+void RecipeActionsHandler::recipeExport()
 {
 	if ( parentListView->selectedItem() )
 	{
 		if ( parentListView->selectedItem()->firstChild() )
-			saveCategoryAs();
+			categoryExport();
 		else
 		{
 			if ( parentListView->selectedItem()->rtti() == 1000 ) {
 				RecipeListItem *recipe_it = (RecipeListItem*)parentListView->selectedItem();
-				exportRecipe( recipe_it->recipeID(), i18n("Save Recipe"), recipe_it->title(), database );
+				exportRecipe( recipe_it->recipeID(), i18n("Export Recipe"), recipe_it->title(), database );
 			}
 		}
 	}
@@ -165,7 +166,7 @@ void RecipeActionsHandler::saveAs()
 		QValueList<int> ids = getAllVisibleItems();
 
 		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n("Save Recipes"), i18n("Recipes"), database );
+			exportRecipes( ids, i18n("Export Recipes"), i18n("Recipes"), database );
 		//else TODO: give notice
 	}
 }
@@ -222,7 +223,7 @@ void RecipeActionsHandler::collapseAll()
 	}
 }
 
-void RecipeActionsHandler::saveCategoryAs()
+void RecipeActionsHandler::categoryExport()
 {
 	if (parentListView->selectedItem() )
 	{
@@ -255,7 +256,7 @@ void RecipeActionsHandler::saveCategoryAs()
 			++iterator;
 		}
 
-		exportRecipes( ids, i18n("Save Recipes"), cat_it->categoryName(), database );
+		exportRecipes( ids, i18n("Export Recipes"), cat_it->categoryName(), database );
 	}
 }
 

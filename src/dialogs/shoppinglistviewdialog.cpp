@@ -39,10 +39,10 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, const Ingredient
 
  KIconLoader *il = new KIconLoader;
  QHBox *buttonsBox=new QHBox(htmlBox);
- QPushButton *okButton = new QPushButton(il->loadIconSet("ok",KIcon::Small),i18n("&OK"),buttonsBox);
+ QPushButton *closeButton = new QPushButton(il->loadIconSet("fileclose",KIcon::Small),i18n("&Close"),buttonsBox);
  QPushButton *printButton = new QPushButton(il->loadIconSet("fileprint",KIcon::Small),i18n("&Print"),buttonsBox);
 
- connect( okButton, SIGNAL(clicked()), SLOT(close()) );
+ connect( closeButton, SIGNAL(clicked()), SLOT(close()) );
  connect( printButton, SIGNAL(clicked()), SLOT(print()) );
 
  layout->addMultiCellWidget(htmlBox,1,4,1,4);
@@ -70,13 +70,13 @@ QString recipeHTML;
 
 	// Headers
 	recipeHTML=QString("<html><head><title>%1</title></head><body>").arg(i18n("Shopping List"));
-	recipeHTML+="<center><div STYLE=\"width: 80%\">";
+	recipeHTML+="<center><div STYLE=\"width: 95%\">";
 	recipeHTML+=QString("<center><h1>%1</h1></center>").arg(i18n("Shopping List"));
 
 
 	// Ingredient List
 
-	recipeHTML+="<div STYLE=\"border:medium solid blue; width:90%\"><table cellspacing=0px width=100%><tbody>";
+	recipeHTML+="<div STYLE=\"border:medium solid blue; width:95%\"><table cellspacing=0px width=100%><tbody>";
 	int counter=0;
 
 	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )

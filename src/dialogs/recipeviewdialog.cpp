@@ -102,7 +102,7 @@ KURL url;
 url.setPath( tmp_filename+".html" );
 recipeView->openURL( url );
 recipeView->show();
-kdDebug()<<"Opening URL: "<<url<<endl;
+kdDebug()<<"Opening URL: "<<url.htmlURL()<<endl;
 
 delete progress_dialog;
 return true;

@@ -89,7 +89,7 @@ private slots:
 
 public slots:
   void haveSelectedItems();
-  void slotExportRecipe(){actionHandler->saveAs();}
+  void slotExportRecipe(){actionHandler->recipeExport();}
   void reload(void);
 };
 
