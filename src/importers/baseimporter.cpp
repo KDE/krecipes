@@ -40,12 +40,21 @@ public:
 		reserve(list.count());
 	
 		for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it )
-			push_back(Element((*it).name.lower(),(*it).id)); //lowercase to speed comparisons... this doesn't affect the way it is actually stored
+		{
+			QString name = (*it).name;
+			if ( name.isNull() ) name = "";
+				
+			push_back(Element(name.lower(),(*it).id)); //lowercase to speed comparisons... this doesn't affect the way it is actually stored
+		}
 	}
 	
 	/** Find the string of this list assuming it is sorted using the binary search algorithm */
 	int bsearch( const QString &d ) const
 	{
+		QString test_str = d;
+		if ( test_str.isNull() )
+			test_str = "";
+ 
 		int n1 = 0;
 		int n2 = count() - 1;
 		int mid = 0;
@@ -54,7 +63,7 @@ public:
 		{
 			int  res;
 			mid = (n1 + n2)/2;
-			res = QString::compare( d, this->at(mid).name );
+			res = QString::compare( test_str, this->at(mid).name );
 			if ( res < 0 )
 				n2 = mid - 1;
 			else if ( res > 0 )
@@ -81,9 +90,12 @@ public:
 	  */
 	void inSort( const Element &element )
 	{
+		Element new_el = element;
+		if ( new_el.name.isNull() ) new_el.name = "";
+
 		if ( count() == 0 )
 		{
-			push_back(element);
+			push_back(new_el);
 			return;
 		}
 
@@ -95,7 +107,7 @@ public:
 		while ( n1 <= n2 )
 		{
 			mid = (n1 + n2)/2;
-			res = QString::compare( element.name, this->at(mid).name );
+			res = QString::compare( new_el.name, this->at(mid).name );
 			if ( res < 0 )
 				n2 = mid - 1;
 			else if ( res > 0 )
@@ -105,9 +117,9 @@ public:
 		}
 
 		if ( res > 0 )
-			insert( begin()+mid+1, element );
+			insert( begin()+mid+1, new_el );
 		else
-			insert( begin()+mid  , element );
+			insert( begin()+mid  , new_el );
 	}
 };
 
@@ -191,7 +203,6 @@ void BaseImporter::import( RecipeDB *db )
 	
 	ElementList catList; db->loadCategories( &catList );
 	CustomVector catVector( catList ); qHeapSort( catVector );
-
 
 	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )

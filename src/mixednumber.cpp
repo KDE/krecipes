@@ -115,6 +115,11 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_aware )
 {
 	QString input = str.stripWhiteSpace();
+	if ( input.isEmpty() )
+	{
+		if ( ok ) { *ok = true; }
+		return MixedNumber();
+	}
 
 	KLocale *locale = KGlobal::locale();
 

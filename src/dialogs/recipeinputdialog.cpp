@@ -461,7 +461,7 @@ ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
 servingsNumInput->setValue(1);
-amountEdit->setValue(0.0);
+amountEdit->clear();
 ingredientList->clear();
 
 //Load Values in Interface
@@ -475,14 +475,16 @@ prepTimeEdit->setTime(loadedRecipe->prepTime);
 	{
 		QListViewItem* lastElement=ingredientList->lastItem();
 
-		KConfig *config=kapp->config();
-		config->setGroup("Formatting");
 		QString amount_str;
-
-		if ( config->readBoolEntry("Fraction"))
-			amount_str = MixedNumber((*ing_it).amount).toString();
-		else
-			amount_str = beautify(KGlobal::locale()->formatNumber((*ing_it).amount,5));
+		if ( (*ing_it).amount > 0 ) {
+			KConfig *config=kapp->config();
+			config->setGroup("Formatting");
+	
+			if ( config->readBoolEntry("Fraction"))
+				amount_str = MixedNumber((*ing_it).amount).toString();
+			else
+				amount_str = beautify(KGlobal::locale()->formatNumber((*ing_it).amount,5));
+		}
 
 		 //Insert ingredient after last one
 		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units,(*ing_it).prepMethod);
@@ -679,19 +681,6 @@ if (it)
 
 void RecipeInputDialog::createNewIngredientIfNecessary()
 {
-	if (unitBox->currentText().stripWhiteSpace().isEmpty())
-	{
-		QMessageBox::information( this,
-		  i18n("Unit missing"),
-		  QString(i18n("\"%1\" is being added to the list of ingredients.\n"
-		  " Before this can be done, please enter a unit to associate with"
-		  " this ingredient.")).arg(ingredientBox->currentText()),
-		  QMessageBox::Ok
-		  );
-		unitBox->setFocus();
-		return;
-	}
-
 	if ( !ingredientBox->currentText().stripWhiteSpace().isEmpty() &&
 	     !ingredientBox->contains(ingredientBox->currentText()) )
 	{
@@ -709,16 +698,23 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 
 int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, const QString &ingredient )
 {
-	if ( unit.stripWhiteSpace().isEmpty() )
-		return -1;
-	else if ( !unitBox->contains(unit) )
+	if ( !unitBox->contains(unit) ) // returns always false if unit is empty string, even if exists
 	{
-		database->createNewUnit(unit);
-		int id = database->lastInsertID();
+		int id = unitComboList->findByName(unit).id;
+		if ( -1 == id ) 
+		{
+			database->createNewUnit(unit);
+			id = database->lastInsertID();
+		}
 
-		database->addUnitToIngredient(
-		  ingredientComboList->findByName(ingredient).id,
-		  id );
+		if ( !database->ingredientContainsUnit(
+			ingredientComboList->findByName(ingredient).id,
+			id ) )
+		{
+			database->addUnitToIngredient(
+			  ingredientComboList->findByName(ingredient).id,
+			  id );
+		}
 
 		loadUnitListCombo();
 		return id;
@@ -733,10 +729,15 @@ int RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
 		return -1;
 	else if ( !prepMethodBox->contains(prep) ) //creating new
 	{ 
-		database->createNewPrepMethod(prep);
+		int id = database->findExistingPrepByName(prep);
+		if ( -1 == id )
+		{
+			database->createNewPrepMethod(prep);
+			id = database->lastInsertID();
+		}
 
 		loadPrepMethodListCombo();
-		return database->lastInsertID();
+		return id;
 	}
 	else //already exists
 		return prepMethodComboList->findByName(prep).id;
@@ -761,8 +762,8 @@ void RecipeInputDialog::addIngredient(void)
 		return;
 
 	createNewIngredientIfNecessary();
-	int unitID = createNewUnitIfNecessary(unitBox->currentText(),ingredientBox->currentText());
-	if ( unitID == -1 ) //require unit
+	int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),ingredientBox->currentText().stripWhiteSpace());
+	if ( unitID == -1 ) // shouldn't happen, as empty units are allowed now
 		return;
 	int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
 
@@ -784,14 +785,16 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
 
-  KConfig *config=kapp->config();
-  config->setGroup("Formatting");
   QString amount_str;
 
-  if ( config->readBoolEntry("Fraction"))
-    amount_str = MixedNumber(ing.amount).toString();
-  else
-    amount_str = beautify(KGlobal::locale()->formatNumber(ing.amount,5));
+  if ( ing.amount > 0 ) {
+    KConfig *config=kapp->config();
+    config->setGroup("Formatting");
+    if ( config->readBoolEntry("Fraction"))
+      amount_str = MixedNumber(ing.amount).toString();
+    else
+      amount_str = beautify(KGlobal::locale()->formatNumber(ing.amount,5));
+  }
 
   (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units,ing.prepMethod);
 
@@ -839,9 +842,9 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 	{
 		QString old_text = (*ing).units;
 		
-		if ( old_text != new_text )
+		if ( old_text != new_text.stripWhiteSpace() )
 		{
-			int new_id = createNewUnitIfNecessary(new_text,it->text(0));
+			int new_id = createNewUnitIfNecessary(new_text.stripWhiteSpace(),it->text(0).stripWhiteSpace());
 
 			if ( new_id != -1 )
 			{

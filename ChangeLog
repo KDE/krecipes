@@ -1,13 +1,16 @@
 Changes from 0.5 to current CVS:
+  -Support for subcategories
   -Preparation time field for recipes
   -Rezkonv import filter
   -Eliminated the dependence on mysql.h (mysql-devel)
+  -Advanced search which can search by ingredients, categories, authors, servings, and preparation time
   -Significant speed increases while navigating Krecipes due to the fact that reloading all data when switching dialogs is no longer necessary.
-  -Support for subcategories
   -When renaming an element to something that already exists, merge the two into one
+  -Provide popup menus to many listviews for easy access to common functions
+  -Fix display of characters in certain locales (In particular, this fixes the problem many people had displaying umlauts)
   -Actually hide items in the Page Setup that aren't going to be shown in the recipe view
   -Allow renaming of unit and prep method once it is entered in the recipe input (from the list view)
-  -Advanced search which can search by ingredients, categories, authors, and servings
+  -Allow an empty or zero amount and an empty unit for ingredients
   -Set the cursor to change to the wait cursor for operations that could take more than a few seconds -- this makes the app seem more responsive
   -Fix some escape/encoding issues in the generated HTML
 

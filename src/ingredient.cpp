@@ -12,7 +12,7 @@
 
 #include "ingredient.h"
 
-Ingredient::Ingredient()
+Ingredient::Ingredient() : amount(0)
 {
 }
 Ingredient::Ingredient(const Ingredient &i)

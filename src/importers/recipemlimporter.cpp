@@ -189,7 +189,7 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 	QDomNodeList ingChilds = ing.childNodes();
 
 	QString name, unit, size, prep_method;
-	double quantity = 1;
+	double quantity = 1; // default quantity assumed by RecipeML DTD
 
 	for (unsigned j=0; j < ingChilds.count(); j++)
 	{
