@@ -1,6 +1,9 @@
- /***************************************************************************
+ /**************************************************************************
  *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
  *                                                                         *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,6 +13,9 @@
 
 #include "literecipedb.h"
 #include "kstandarddirs.h"
+
+#include <qintdict.h>
+
 #define DB_FILENAME "krecipes.krecdb"
 
 LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
@@ -98,10 +104,7 @@ QSQLiteResult ingredientsToLoad=database->executeQuery( command);
 		    ing.unitID=row.data(2).toInt();
 		    list->recipeIdList.append(row.data(3).toInt());
 		    }
-		    RecipeIngredientList lista;
 		    list->ilist.add(ing);
-
-
 
 		    row=ingredientsToLoad.next();
 
@@ -235,8 +238,10 @@ recipeToLoad=database->executeQuery(command);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist)
+void LiteRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients)
 {
+
+QIntDict <RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
 rlist->clear();
 
@@ -255,10 +260,45 @@ Recipe rec; // To be used to load the recipes one by one
 		    rec.recipeID=row.data(0).toInt();
 		    rec.title=unescapeAndDecode(row.data(1));
 		    rec.persons=row.data(2).toInt();
-		    rlist->append(rec);
+		    RecipeList::Iterator it=rlist->append(rec);
+		    recipeIterators.insert(rec.recipeID,&it);
+
 		    row =recipesToLoad.next();
                 }
 	}
+if (loadIngredients)
+{
+
+
+command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+
+QSQLiteResult ingredientsToLoad=database->executeQuery( command);
+
+	    if (ingredientsToLoad.getStatus() != QSQLiteResult::Failure) {
+	    QSQLiteResultRow row = ingredientsToLoad.first();
+                while ( !ingredientsToLoad.atEnd() ) {
+		    Ingredient ing;
+
+		    // get this ingredient
+		    ing.ingredientID=row.data(0).toInt();
+		    ing.amount=row.data(1).toDouble();
+		    ing.unitID=row.data(2).toInt();
+
+		    // find the corresponding recipe iterator
+		    RecipeList::Iterator *it=recipeIterators[row.data(3).toInt()]; // Get a pointer to the iterator
+
+		    // add the ingredient to the recipe
+		    if (it) (*(*it)).ingList.add(ing); // (*it)= the iterator (*(*it))=the recipe
+
+
+		    row=ingredientsToLoad.next();
+
+                }
+            }
+
+
+}
+
 
 }
 

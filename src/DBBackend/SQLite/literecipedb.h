@@ -1,6 +1,9 @@
- /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
+ /**************************************************************************
+ *   Copyright (C) 2003 by                                                 *
  *                                                                         *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -93,7 +96,7 @@ public:
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
-	void loadRecipeDetails(RecipeList *rlist); // Read only the recipe details (no instructions, no photo, no ingredients)
+	void loadRecipeDetails(RecipeList *rlist,bool loadIngredients=false); // Read only the recipe details (no instructions, no photo, no ingredients)
 	void loadRecipeList(ElementList *list,int categoryID=0,QPtrList <int>*recipeCategoryList=0);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);

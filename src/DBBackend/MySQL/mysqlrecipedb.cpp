@@ -11,7 +11,11 @@
  ***************************************************************************/
 
 #include "mysqlrecipedb.h"
-#include "kstandarddirs.h"
+
+#include <qintdict.h>
+#include <kstandarddirs.h>
+
+
 MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString DBname,bool init):RecipeDB(host, user,pass,DBname,init)
 {
 	DBuser=user;DBpass=pass;DBhost=host;
@@ -69,6 +73,8 @@ mysql_close(mysqlDB);
 
 void MySQLRecipeDB::loadAllRecipeIngredients(RecipeIngredientList *list, bool withNames)
 {
+list->ilist.clear();
+list->recipeIdList.clear();
 
 QString command;
 
@@ -203,9 +209,11 @@ mysql_close(mysqlDB);
 Loads a recipe detail list (no instructions, no photo, no ingredients)
 */
 
-void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist)
+void MySQLRecipeDB::loadRecipeDetails(RecipeList *rlist,bool loadIngredients)
 {
 rlist->clear();
+
+QIntDict <RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
 QString command="SELECT id,title,persons FROM recipes";
 QSqlQuery recipesToLoad( command,database);
@@ -216,9 +224,38 @@ QSqlQuery recipesToLoad( command,database);
 		    rec.recipeID=recipesToLoad.value(0).toInt();
 		    rec.title=unescapeAndDecode(recipesToLoad.value(1).toString());
 		    rec.persons=recipesToLoad.value(2).toInt();
-		    rlist->append(rec);
+		    RecipeList::Iterator it=rlist->append(rec);
+		    recipeIterators.insert(rec.recipeID,&it);
                 }
 	}
+
+if (loadIngredients)
+{
+command=QString("SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
+
+QSqlQuery ingredientsToLoad(command,database);
+
+	    if (ingredientsToLoad.isActive()) {
+                while ( ingredientsToLoad.next() ) {
+		    Ingredient ing;
+
+		    // get this ingredient
+		    ing.ingredientID=ingredientsToLoad.value(0).toInt();
+		    ing.amount=ingredientsToLoad.value(1).toDouble();
+		    ing.unitID=ingredientsToLoad.value(2).toInt();
+
+		    // find the corresponding recipe iterator
+		    RecipeList::Iterator *it=recipeIterators[ingredientsToLoad.value(3).toInt()]; // Get a pointer to the iterator
+
+		    // add the ingredient to the recipe
+		    if (it) (*(*it)).ingList.add(ing); // (*it)= the iterator (*(*it))=the recipe
+
+                }
+            }
+
+
+}
+
 }
 
 
