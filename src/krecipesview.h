@@ -69,8 +69,7 @@ typedef QValueList <Menu>::Iterator MenuId;
 
 
  // Some constants
- enum mainPanels{SelectP=0,ShoppingP,DietP,MatcherP};
- enum dataPanels{IngredientsP=1, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit };
+ typedef enum KrePanel {SelectP=0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit, RecipeView };
 
 
  // Class KrecipesView
@@ -92,6 +91,7 @@ public:
      * Print this view to any medium -- paper or not
      */
     void print();
+    
     virtual void show (void); //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
 
 signals:
@@ -104,6 +104,8 @@ signals:
      * Use this signal to change the content of the caption
      */
     void signalChangeCaption(const QString& text);
+    
+    void panelShown(KrePanel,bool);
 
 
 public:
@@ -168,6 +170,8 @@ private:
 	// Internal variables
 	RecipeDB *database;
 	QString dbType;
+	
+	QMap<QWidget*,KrePanel> panelMap;
 
   // i18n
   void translate();
@@ -178,7 +182,8 @@ signals:
 
 public slots:
 	bool save(void);
-  void exportRecipe();
+	void exportRecipe();
+	void reloadDisplay();
 
 private slots:
     void actionRecipe(int recipeID, int action);
@@ -188,12 +193,14 @@ private slots:
     void showRecipe(int recipeID);
     void showRecipes( const QValueList<int> &recipeIDs);
     void slotSetTitle(const QString& title);
-    void slotSetPanel(int);
+    void slotSetPanel(KrePanel);
     void switchToRecipe(void);
-    void setContextHelp(int);
+    void setContextHelp(KrePanel);
     void createShoppingListFromDiet(void);
     void moveTipButton(int,int);
     void resizeRightPane(int lpw,int lph);
+    void panelRaised(QWidget *w, QWidget *old_w);
+    void editRecipe();
 };
 
 

@@ -112,19 +112,19 @@ KrecipesView::KrecipesView(QWidget *parent)
     buttonsList = new QPtrList<KreMenuButton>();
     buttonsList->setAutoDelete( TRUE );
 
-    button0=new KreMenuButton(leftPanel);
+    button0=new KreMenuButton(leftPanel,SelectP);
     button0->setIconSet(il.loadIconSet("filefind", KIcon::Panel, 32));
     buttonsList->append(button0);
 
-    button1=new KreMenuButton(leftPanel);
+    button1=new KreMenuButton(leftPanel,ShoppingP);
     button1->setIconSet(il.loadIconSet( "trolley", KIcon::Panel,32 ));
     buttonsList->append(button1);
     
-    button7=new KreMenuButton(leftPanel);
+    button7=new KreMenuButton(leftPanel,DietP);
     button7->setIconSet(il.loadIconSet( "diet", KIcon::Panel,32));
     buttonsList->append(button7);
     
-    button8=new KreMenuButton(leftPanel);
+    button8=new KreMenuButton(leftPanel,MatcherP);
     button8->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32));
     buttonsList->append(button8);
     
@@ -132,38 +132,38 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Submenus
     dataMenu=leftPanel->createSubMenu(i18n("Data"),"2rightarrow");
     
-    button2=new KreMenuButton(leftPanel,dataMenu);
+    button2=new KreMenuButton(leftPanel,IngredientsP,dataMenu);
     button2->setIconSet(il.loadIconSet( "ingredients", KIcon::Panel,32 ));
     //buttonsList->append(button2);
 
-    button3=new KreMenuButton(leftPanel,dataMenu);
+    button3=new KreMenuButton(leftPanel,PropertiesP,dataMenu);
     button3->setIconSet(il.loadIconSet( "properties", KIcon::Panel,32 ));
     buttonsList->append(button3);
 
-    button4=new KreMenuButton(leftPanel,dataMenu);
+    button4=new KreMenuButton(leftPanel,UnitsP,dataMenu);
     button4->setIconSet(il.loadIconSet( "units", KIcon::Panel,32 ));
     buttonsList->append(button4);
     
-    button9=new KreMenuButton(leftPanel,dataMenu);
+    button9=new KreMenuButton(leftPanel,PrepMethodsP,dataMenu);
     button9->setIconSet(il.loadIconSet( "ICON PLEASE", KIcon::Panel,32 ));
     buttonsList->append(button9);
 
-    button5=new KreMenuButton(leftPanel,dataMenu);
+    button5=new KreMenuButton(leftPanel,CategoriesP,dataMenu);
     button5->setIconSet(il.loadIconSet( "categories", KIcon::Panel,32 ));
     buttonsList->append(button5);
 
-    button6=new KreMenuButton(leftPanel,dataMenu);
+    button6=new KreMenuButton(leftPanel,AuthorsP,dataMenu);
     button6->setIconSet(il.loadIconSet( "personal", KIcon::Panel,32 ));
     buttonsList->append(button6);
 
     contextButton = new QPushButton(leftPanel, "contextButton");
     contextButton->setIconSet(il.loadIconSet("krectip", KIcon::Panel, 32));
     contextButton->setGeometry(leftPanel->width()-42,leftPanel->height()-42,32,32);
-    contextButton->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextButton->setPaletteBackgroundColor(contextButton->paletteBackgroundColor().light(140));
     contextButton->setFlat(true);
 
     contextHelp = new QWidget(leftPanel, "contextHelp");
-    contextHelp->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextHelp->setPaletteBackgroundColor(contextHelp->paletteBackgroundColor().dark(120));
     contextHelp->resize(leftPanel->size());
     contextHelp->hide();
 
@@ -174,11 +174,11 @@ KrecipesView::KrecipesView(QWidget *parent)
     contextClose = new QPushButton(contextHelp, "contextClose");
     contextClose->setFixedSize(QSize(16,16));
     contextClose->setIconSet(il.loadIconSet("fileclose", KIcon::Small, 16));
-    contextClose->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextClose->setPaletteBackgroundColor(contextClose->paletteBackgroundColor().light(140));
 
     contextLayout->addWidget(contextClose, 0, 2);
     contextText = new KTextBrowser(contextHelp, "contextText");
-    contextText->setPaletteBackgroundColor(QColor(238, 218, 156));
+    contextText->setPaletteBackgroundColor(contextText->paletteBackgroundColor().light(140));
     contextText->setTextFormat(Qt::RichText);
     contextText->setReadOnly(true);
     contextText->setWordWrap(QTextEdit::WidgetWidth);
@@ -186,7 +186,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Right Panel Widgets
     inputPanel=new RecipeInputDialog(rightPanel,database);
-    viewPanel=new RecipeViewDialog(rightPanel,database,-1);
+    viewPanel=new RecipeViewDialog(rightPanel,database);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
     ingredientsPanel=new IngredientsDialog(rightPanel,database);
     propertiesPanel=new PropertiesDialog(rightPanel,database);
@@ -197,7 +197,20 @@ KrecipesView::KrecipesView(QWidget *parent)
     authorsPanel=new AuthorsDialog(rightPanel,database);
     prepMethodsPanel=new PrepMethodsDialog(rightPanel,database);
     ingredientMatcherPanel=new IngredientMatcherDialog(rightPanel,database);
-
+    
+    // Use to keep track of the panels
+    panelMap.insert(inputPanel,RecipeEdit);
+    panelMap.insert(viewPanel,RecipeView);
+    panelMap.insert(selectPanel,SelectP);
+    panelMap.insert(ingredientsPanel,IngredientsP);
+    panelMap.insert(propertiesPanel,PropertiesP);
+    panelMap.insert(unitsPanel,UnitsP);
+    panelMap.insert(shoppingListPanel,ShoppingP);
+    panelMap.insert(dietPanel,DietP);
+    panelMap.insert(categoriesPanel,CategoriesP);
+    panelMap.insert(authorsPanel,AuthorsP);
+    panelMap.insert(prepMethodsPanel,PrepMethodsP);
+    panelMap.insert(ingredientMatcherPanel,MatcherP);
 
     // i18n
     translate();
@@ -208,12 +221,12 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 
     // Connect Signals from Left Panel to slotSetPanel()
-     connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
+     connect( leftPanel, SIGNAL(clicked(KrePanel)),this, SLOT(slotSetPanel(KrePanel)) );
 
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(show()) );
      connect( contextButton, SIGNAL(clicked()),contextHelp, SLOT(raise()) );
      connect( contextClose, SIGNAL(clicked()),contextHelp, SLOT(close()) );
-     connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(setContextHelp(int)) );
+
      connect( leftPanel, SIGNAL(resized(int,int)),this, SLOT(resizeRightPane(int,int)));
 
 
@@ -222,9 +235,6 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Create a new button when a recipe is unsaved
     connect (inputPanel, SIGNAL(createButton(QWidget*,QString)), this, SLOT(addRecipeButton(QWidget*,QString)));
-
-    // Connect Signals from viewPanel (RecipeViewDialog)
-    connect (viewPanel, SIGNAL(recipeSelected(int,int)),this, SLOT(actionRecipe(int,int)));
 
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
@@ -250,7 +260,7 @@ KrecipesView::KrecipesView(QWidget *parent)
     // Resize the Tip Viewer properly
     connect(leftPanel,SIGNAL(resized(int,int)),contextHelp,SLOT(resize(int,int)));
 
-
+    connect(rightPanel,SIGNAL(panelRaised(QWidget*,QWidget*)),SLOT(panelRaised(QWidget*,QWidget*)));
 
     // Close Splash Screen
     sleep(2);
@@ -306,12 +316,10 @@ void KrecipesView::slotSetTitle(const QString& title)
 }
 
 // Function to switch panels
-void KrecipesView::slotSetPanel(int w)
+void KrecipesView::slotSetPanel(KrePanel p)
 {
-if (leftPanel->currentMenu()==leftPanel->mainMenu())
+	switch (p)
 	{
-	switch (w)
-		{
 		case SelectP:
 			rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
 			rightPanel->raise(selectPanel);
@@ -328,13 +336,7 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 			rightPanel->setHeader(i18n("Ingredient Matcher"),"categories");
 			rightPanel->raise(ingredientMatcherPanel);
 			break;
-		}
-	}
 
-else if (leftPanel->currentMenu()==dataMenu)
-	{
-	switch(w)
-		{
 		case IngredientsP:
 			rightPanel->setHeader(i18n("Ingredients"),"ingredients");
 			rightPanel->raise(ingredientsPanel);
@@ -360,9 +362,18 @@ else if (leftPanel->currentMenu()==dataMenu)
 			rightPanel->raise(authorsPanel);
 			break;
 		case ContextHelp:
-		break;
-		}
+			break;
+		case RecipeEdit:
+			rightPanel->setHeader(i18n("Edit Recipe"),"edit");
+			rightPanel->raise(inputPanel);
+			break;
+		case RecipeView:
+			rightPanel->setHeader(i18n("View Recipe"),"filefind");
+			rightPanel->raise(viewPanel);
+			break;
 	}
+
+	setContextHelp(p);
 }
 
 bool KrecipesView::save(void)
@@ -432,9 +443,7 @@ case 1: // Edit
 	}
 
 	inputPanel->loadRecipe(recipeID);
-	rightPanel->setHeader(i18n("Edit Recipe"),"edit");
-	rightPanel->raise(inputPanel);
-	setContextHelp(RecipeEdit);
+	slotSetPanel(RecipeEdit);
 	break;
 }
 case 2: //Remove
@@ -484,15 +493,13 @@ if ( !inputPanel->everythingSaved() )
 }
 
 inputPanel->newRecipe();
-rightPanel->setHeader(i18n("Edit Recipe"),"edit");
-rightPanel->raise(inputPanel);
-setContextHelp(RecipeEdit);
+slotSetPanel(RecipeEdit);
 }
 
 void KrecipesView::createNewElement(void)
 {
 //this is inconstant as the program stands...
-/*if (rightPanel->id(rightPanel->visiblePanel())==4) //Properties Panel is the active one
+/*if (rightPanel->visiblePanel())==4) //Properties Panel is the active one
 {
 propertiesPanel->createNewProperty();
 }
@@ -674,7 +681,8 @@ recipeWidget=w;
 KIconLoader il;
 if (!recipeButton)
 {
-	recipeButton=new KreMenuButton(leftPanel,0,"recipeButton");
+	recipeButton=new KreMenuButton(leftPanel,RecipeEdit);
+
 	recipeButton->setIconSet(il.loadIconSet("filesave",KIcon::Small));
 
 	QString short_title = title.left(20);
@@ -699,17 +707,12 @@ if (!recipeButton)
 void KrecipesView::switchToRecipe(void)
 {
 inputPanel->reloadCombos(); //### Temporary until the combo boxes are database-aware... I'm holding off until the next release
-rightPanel->setHeader(i18n("Edit Recipe"),"edit");
-rightPanel->raise(recipeWidget);
-setContextHelp(RecipeEdit);
+slotSetPanel(RecipeEdit);
 }
 
 void KrecipesView::closeRecipe(void)
 {
-selectPanel->reload();
-rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
-rightPanel->raise(selectPanel);
-setContextHelp(SelectP);
+slotSetPanel(SelectP);
 buttonsList->removeLast(); recipeButton=0;
 }
 
@@ -717,9 +720,7 @@ buttonsList->removeLast(); recipeButton=0;
 
 void KrecipesView::show (void)
 {
-	rightPanel->setHeader(i18n("Find/Edit Recipes"),"filefind");
-	rightPanel->raise(this->selectPanel);
-	setContextHelp(SelectP);
+	slotSetPanel(SelectP);
 	QWidget::show();
 }
 
@@ -733,19 +734,18 @@ showRecipes( ids );
 void KrecipesView::showRecipes( const QValueList<int> &recipeIDs)
 {
 if ( viewPanel->loadRecipes(recipeIDs) )
-{
-	rightPanel->setHeader(i18n("View Recipe"),"filefind");
-	rightPanel->raise(viewPanel);
-}
+	slotSetPanel(RecipeView);
 }
 
-void KrecipesView::setContextHelp(int action){
-if (leftPanel->currentMenu()==leftPanel->mainMenu())
+void KrecipesView::setContextHelp(KrePanel p)
+{
+	switch(p)
 	{
-  	switch(action)
-		{
-		
-		
+		case RecipeView:
+		contextTitle->setText(i18n("<b>Recipe view</b>"));
+		contextText->setText("");
+		break;
+
 		case SelectP:
 		contextTitle->setText(i18n("<b>Recipes list</b>"));
 		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily: just type part of its name.<br><br>"
@@ -784,13 +784,8 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
 		));
 		break;
-		}
-	}
-else if (leftPanel->currentMenu()==dataMenu)
-	{
-	
-	switch(action)
-			{
+
+
 		case IngredientsP:
 		contextTitle->setText(i18n("<b>Ingredients list</b>"));
 		contextText->setText(i18n("Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
@@ -829,16 +824,23 @@ else if (leftPanel->currentMenu()==dataMenu)
 		"You can use this dialog to edit the details of the authors or add/remove them."
 		));
 		break;
-		}
+		
+		case ContextHelp:
+		break;
 	}
+}
+
+void KrecipesView::panelRaised(QWidget *w, QWidget *old_w)
+{
+	emit panelShown( panelMap[old_w], false );
+	emit panelShown( panelMap[w], true );
 }
 
 
 void KrecipesView::createShoppingListFromDiet(void)
 {
 shoppingListPanel->createShopping(dietPanel->dietList());
-rightPanel->setHeader(i18n("Shopping List"),"trolley");
-rightPanel->raise(shoppingListPanel);
+slotSetPanel(ShoppingP);
 }
 
 void KrecipesView::moveTipButton(int,int)
@@ -963,5 +965,25 @@ QString KrecipesView::checkCorrectDBType(KConfig *config)
 	return (dbType);
 }
 
-#include "krecipesview.moc"
+void KrecipesView::reloadDisplay()
+{
+	viewPanel->reload();
+}
 
+void KrecipesView::editRecipe()
+{
+	KrePanel vis_panel = panelMap[rightPanel->visiblePanel()];
+	
+	switch ( vis_panel )
+	{
+	case RecipeView:
+		actionRecipe(viewPanel->currentRecipes()[0],1);
+		break;
+	case SelectP:
+		selectPanel->getActionsHandler()->edit();
+		break;
+	default: break;
+	}
+}
+
+#include "krecipesview.moc"

@@ -12,6 +12,8 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 
+#include "krecipesview.h" //for KrePanel
+
 class KrecipesView;
 
 class KPrinter;
@@ -79,6 +81,11 @@ private slots:
     void newToolbarConfig();
     void import();
     void pageSetupSlot();
+    
+    /**  This function is called whenever a panel is shown or hidden and then sets
+      *  actions as enabled as appropriate.
+      */
+    void updateActions( KrePanel panel, bool show );
 
     void changeStatusbar(const QString& text);
     void changeCaption(const QString& text);
@@ -99,8 +106,13 @@ private:
 	// Internal variables
 	KAction *saveAction;
 	KAction *saveAsAction;
+	KAction *editAction;
+	KAction *printAction;
+	KAction *reloadAction;
 
 	KDialog *parsing_file_dlg;
+
+	QValueList<KAction*> recipe_actions;
 
 private slots:
 	void enableSaveOption(bool en=true);

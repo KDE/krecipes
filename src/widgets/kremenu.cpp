@@ -111,8 +111,8 @@ setFocus();
 highlightButton(w);
 
 // Emit signal indicating button activation with button ID
-int widgetn=(*(w->menuId)).positionList[w];
-emit clicked(widgetn);
+KrePanel panel=w->getPanel();
+emit clicked(panel);
 }
 
 MenuId KreMenu::createSubMenu(const QString &title, const QString &icon)
@@ -323,7 +323,8 @@ m_currentMenu=&(*(currentMenuId));
 
 
 
-KreMenuButton::KreMenuButton(KreMenu *parent, MenuId id, const char *name):QWidget(parent, name, Qt::WNoAutoErase)
+KreMenuButton::KreMenuButton(KreMenu *parent, KrePanel _panel, MenuId id, const char *name):QWidget(parent, name, Qt::WNoAutoErase),
+  panel(_panel)
 {
 icon=0;
 highlighted=false;

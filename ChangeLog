@@ -14,6 +14,7 @@ Changes from 0.5 to current CVS:
   -Set the cursor to change to the wait cursor for operations that could take more than a few seconds -- this makes the app seem more responsive
   -Fix some escape/encoding issues in the generated HTML
   -Support for SQLite 3
+  -Add a Reload and Edit action to the menu
 
 
 Most important changes from 0.4 to 0.5:

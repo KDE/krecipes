@@ -505,7 +505,7 @@ config->writeEntry("DBFile",sqliteSetupPage->dbFile());
 
 config->setGroup("Wizard");
 config->writeEntry( "SystemSetup",true);
-config->writeEntry("Version","0.5");
+config->writeEntry("Version","0.6");
 kdDebug()<<"Setting in kconfig the lines to disable wizard startup..."<<sDBType<<endl;
 }
 

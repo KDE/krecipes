@@ -38,6 +38,10 @@ public:
 	~PanelDeco();
 	int id(QWidget* w); // obtain the id of the given panel
 	QWidget* visiblePanel(void); // obtain the current active panel no.
+
+signals:
+	void panelRaised(QWidget *w, QWidget *old_w);
+
 private:
 	QHBox *hbox;
 	LeftDeco *lDeco;

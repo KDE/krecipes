@@ -12,7 +12,6 @@
 
 #include "recipeviewdialog.h"
 
-#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qstyle.h>
 
@@ -21,7 +20,6 @@
 #include <kdebug.h>
 #include <khtmlview.h>
 #include <khtml_part.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kprogress.h>
@@ -32,21 +30,11 @@
 #include "DBBackend/recipedb.h"
 #include "exporters/htmlexporter.h"
 
-#define EDITBUTTON_OFFSET 25
-
 RecipeViewDialog::RecipeViewDialog(QWidget *parent, RecipeDB *db, int recipeID):QVBox(parent)
 {
 // Initialize UI Elements
 
 recipeView=new KHTMLPart(this);
-
-KIconLoader *il=new KIconLoader;
-editButton = new QPushButton( i18n("Edit Recipe"), parent, "editButton");
-editButton->setIconSet(il->loadIcon("edit", KIcon::NoGroup,16));
-editButton->move(parent->width()-(editButton->width()+EDITBUTTON_OFFSET),parent->height()-(editButton->height()+EDITBUTTON_OFFSET));
-editButton->show();
-
-connect( editButton, SIGNAL(clicked()), this, SLOT(slotEditButtonClicked()) );
 
 // Store/Initialize local variables
 database=db; // Store the database pointer.
@@ -90,7 +78,7 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 {
 KProgressDialog *progress_dialog = 0;
 
-if ( ids.count() > 1 ) //we don't want a progress bar coming up when there is only one recipes... it may show up during the splash screen
+if ( ids.count() > 1 ) //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
 {
 	progress_dialog = new KProgressDialog(this, "open_progress_dialog", QString::null, i18n("Opening recipes, please wait..."), true );
 	progress_dialog->resize(240,80);
@@ -113,6 +101,8 @@ recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHT
 KURL url;
 url.setPath( tmp_filename+".html" );
 recipeView->openURL( url );
+recipeView->show();
+kdDebug()<<"Opening URL: "<<url<<endl;
 
 delete progress_dialog;
 return true;
@@ -120,8 +110,13 @@ return true;
 
 void RecipeViewDialog::print(void)
 {
-	if ( recipeView && recipe_loaded ) //FIXME: isn't recipeView always true?
+	if ( recipe_loaded )
 		recipeView->view()->print();
+}
+
+void RecipeViewDialog::reload()
+{
+	loadRecipes(ids_loaded);
 }
 
 void RecipeViewDialog::removeOldFiles()
@@ -134,23 +129,4 @@ void RecipeViewDialog::removeOldFiles()
 
 	HTMLExporter::removeHTMLFiles(tmp_filename,recipe_titles);
 }
-
-void RecipeViewDialog::showEvent( QShowEvent *e )
-{
-	if ( ids_loaded.count() > 1 ) //can't edit when multiple recipes are opened
-		editButton->hide();
-	else if ( !e->spontaneous() )
-		editButton->show(); //worksround since this doesn't seem to be shown when this class is raise()d
-}
-
-void RecipeViewDialog::resizeEvent( QResizeEvent *e )
-{
-	editButton->move( e->size().width()-(editButton->width()+EDITBUTTON_OFFSET), e->size().height()-(editButton->height()+EDITBUTTON_OFFSET) );
-}
-
-void RecipeViewDialog::slotEditButtonClicked()
-{
-	emit recipeSelected(ids_loaded[0],1);
-}
-
 #include "recipeviewdialog.moc"

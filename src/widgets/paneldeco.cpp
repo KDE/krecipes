@@ -63,7 +63,12 @@ return (stack->id(w));
 
 void PanelDeco::raise(QWidget *w)
 {
+QWidget *old_w = visiblePanel();
+
 stack->raiseWidget(w);
+
+if ( old_w != w )
+	emit panelRaised(w,old_w);
 }
 
 QWidget* PanelDeco::visiblePanel(void)

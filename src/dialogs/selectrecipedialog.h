@@ -55,6 +55,8 @@ public:
 
   //Public Methods
   void getCurrentRecipe( Recipe *recipe );
+  
+  RecipeActionsHandler * getActionsHandler() const { return actionHandler; }
 
 private:
 

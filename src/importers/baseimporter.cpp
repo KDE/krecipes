@@ -175,6 +175,13 @@ void BaseImporter::import( RecipeDB *db )
 		return;
 	}
 
+	//cache some data we'll need
+	int max_author_length = db->maxAuthorNameLength();
+	int max_category_length = db->maxCategoryNameLength();
+	int max_ing_length = db->maxIngredientNameLength();
+	int max_prepmethod_length = db->maxPrepMethodNameLength();
+	int max_units_length = db->maxUnitNameLength();
+
 	RecipeList selected_recipes = import_dialog.getSelectedRecipes();
 
 	// Load Current Settings
@@ -220,31 +227,35 @@ void BaseImporter::import( RecipeDB *db )
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		for ( IngredientList::iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 		{
-			int new_ing_id = ingVector.bsearch((*ing_it).name.lower());
-			if ( new_ing_id == -1 && (*ing_it).name != "" )
+			QString real_ing_name = (*ing_it).name.left(max_ing_length);
+			int new_ing_id = ingVector.bsearch(real_ing_name.lower());
+			if ( new_ing_id == -1 && real_ing_name != "" )
 			{
-				db->createNewIngredient( (*ing_it).name );
+				db->createNewIngredient( real_ing_name );
 				new_ing_id = db->lastInsertID();
-				ingVector.inSort( Element( (*ing_it).name.lower(), new_ing_id ) );
+				ingVector.inSort( Element( real_ing_name.lower(), new_ing_id ) );
 			}
 
-			int new_unit_id = unitVector.bsearch((*ing_it).units.lower());
+			QString real_unit_name = (*ing_it).units.left(max_units_length);
+			int new_unit_id = unitVector.bsearch(real_unit_name.lower());
 			if ( new_unit_id == -1 )
 			{
-				db->createNewUnit( (*ing_it).units );
+				db->createNewUnit( real_unit_name );
 				new_unit_id = db->lastInsertID();
-				unitVector.inSort( Element( (*ing_it).units.lower(), new_unit_id ) );
+				unitVector.inSort( Element( real_unit_name.lower(), new_unit_id ) );
 			}
 			
 			int new_prep_id = -1;
 			if ( !(*ing_it).prepMethod.isEmpty() )
 			{
-				new_prep_id = prepMethodVector.bsearch((*ing_it).prepMethod.lower());
+				QString real_prep_name = (*ing_it).prepMethod.left(max_prepmethod_length);
+
+				new_prep_id = prepMethodVector.bsearch(real_prep_name.lower());
 				if ( new_prep_id == -1 )
 				{
-					db->createNewPrepMethod( (*ing_it).prepMethod );
+					db->createNewPrepMethod( real_prep_name );
 					new_prep_id = db->lastInsertID();
-					prepMethodVector.inSort( Element( (*ing_it).prepMethod.lower(), new_prep_id ) );
+					prepMethodVector.inSort( Element( real_prep_name.lower(), new_prep_id ) );
 				}
 			}
 
@@ -261,12 +272,13 @@ void BaseImporter::import( RecipeDB *db )
 
 		for ( ElementList::iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
 		{
-			int new_author_id = authorVector.bsearch( (*author_it).name.lower() );
-			if ( new_author_id == -1 && (*author_it).name != "" )
+			QString real_author_name = (*author_it).name.left(max_author_length);
+			int new_author_id = authorVector.bsearch( real_author_name.lower() );
+			if ( new_author_id == -1 && real_author_name != "" )
 			{
-				db->createNewAuthor((*author_it).name);
+				db->createNewAuthor(real_author_name);
 				new_author_id = db->lastInsertID();
-				authorVector.inSort( Element( (*author_it).name.lower(), new_author_id ) );
+				authorVector.inSort( Element( real_author_name.lower(), new_author_id ) );
 			}
 
 			(*author_it).id = new_author_id;
@@ -274,12 +286,13 @@ void BaseImporter::import( RecipeDB *db )
 
 		for ( ElementList::iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 		{
-			int new_cat_id = catVector.bsearch( (*cat_it).name.lower() );
-			if ( new_cat_id == -1 && (*cat_it).name != "" )
+			QString real_category_name = (*cat_it).name.left(max_category_length);
+			int new_cat_id = catVector.bsearch( real_category_name.lower() );
+			if ( new_cat_id == -1 && real_category_name != "" )
 			{
-				db->createNewCategory((*cat_it).name);
+				db->createNewCategory(real_category_name);
 				new_cat_id = db->lastInsertID();
-				catVector.inSort( Element( (*cat_it).name.lower(), new_cat_id ) );
+				catVector.inSort( Element( real_category_name.lower(), new_cat_id ) );
 			}
 
 			(*cat_it).id = new_cat_id;

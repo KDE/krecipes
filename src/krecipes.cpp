@@ -5,6 +5,7 @@
 #include "pref.h"
 #include "krecipes.h"
 #include "krecipesview.h"
+#include "dialogs/recipeviewdialog.h"
 #include "dialogs/recipeinputdialog.h"
 #include "dialogs/selectrecipedialog.h"
 #include "dialogs/ingredientsdialog.h"
@@ -86,6 +87,9 @@ Krecipes::Krecipes()
     connect(m_view, SIGNAL(signalChangeCaption(const QString&)),
             this,   SLOT(changeCaption(const QString&)));
 
+    connect(m_view, SIGNAL(panelShown(KrePanel,bool)),SLOT(updateActions(KrePanel,bool)));
+
+
     // Enable/Disable the Save Button (Initialize disabled, and connect signal)
 
     connect(this->m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)));
@@ -103,32 +107,74 @@ Krecipes::~Krecipes()
 {
 }
 
+void Krecipes::updateActions( KrePanel panel, bool show )
+{
+	switch ( panel )
+	{
+	case RecipeView:
+	{
+		saveAsAction->setEnabled(show);
+		printAction->setEnabled(show);
+		reloadAction->setEnabled(show);
+	
+		//can't edit when there are multiple recipes loaded
+		if ( show && m_view->viewPanel->recipesLoaded() == 1 ) {
+			editAction->setEnabled(true);
+		}
+		else
+			editAction->setEnabled(false);
+
+		break;
+	}
+	case SelectP:
+	{
+		saveAsAction->setEnabled(show);
+		editAction->setEnabled(show);
+		break;
+	}
+	default: break;
+	}
+}
 
 void Krecipes::setupActions()
 {
-    KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
-    //KStdAction::open(this, SLOT(fileOpen()), actionCollection());
-    saveAction=KStdAction::save(this, SLOT(fileSave()), actionCollection());
-    saveAsAction=KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
-    KStdAction::print(this, SLOT(filePrint()), actionCollection());
-    KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+	KIconLoader il;
 
-    m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
-    m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
+	saveAsAction=KStdAction::saveAs(this, SLOT(fileSaveAs()), actionCollection());
+	printAction = KStdAction::print(this, SLOT(filePrint()), actionCollection());
+	reloadAction = new KAction(i18n("Reloa&d"), "reload", Key_F5, m_view, SLOT(reloadDisplay()), actionCollection(), "reload_action");
 
-    KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
-    KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+	editAction = new KAction(i18n("&Edit Recipe"), "edit", CTRL+Key_E,
+	  m_view, SLOT(editRecipe()),
+	  actionCollection(), "edit_action");
 
-    (void)new KAction(i18n("Import..."), CTRL+Key_I,
-                                  this, SLOT(import()),
-                                  actionCollection(), "import_action");
 
-    (void)new KAction(i18n("Page Setup..."), 0,
-                                  this, SLOT(pageSetupSlot()),
-                                  actionCollection(), "page_setup_action");
+	KAction *action = KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
+	action->setText(i18n("&New Recipe"));
 
-    createGUI();
+	saveAction=KStdAction::save(this, SLOT(fileSave()), actionCollection());
+	
+	KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+	
+	m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
+	m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
+	
+	KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
+	KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
+	KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+	
+	(void)new KAction(i18n("Import..."), CTRL+Key_I,
+	  this, SLOT(import()),
+	  actionCollection(), "import_action");
+
+	(void)new KAction(i18n("Page Setup..."), 0,
+	  this, SLOT(pageSetupSlot()),
+	  actionCollection(), "page_setup_action");
+
+	updateActions( SelectP, true );
+	updateActions( RecipeView, false );
+
+	createGUI();
 }
 
 void Krecipes::saveProperties(KConfig *)

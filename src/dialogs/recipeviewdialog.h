@@ -42,15 +42,13 @@ public:
     
     int recipesLoaded() const { return ids_loaded.count(); }
     const QValueList<int> currentRecipes() const { return ids_loaded; }
-
-signals:
-  void recipeSelected(int,int);
+    
+    void reload();
 
 private:
 
   // Internal Variables
   KHTMLPart *recipeView;
-  QPushButton *editButton;
   RecipeDB  *database;
   bool recipe_loaded;
   QValueList<int> ids_loaded;
@@ -60,15 +58,8 @@ private:
   bool showRecipes( const QValueList<int> &ids );
   void removeOldFiles();
 
-protected:
-  void showEvent( QShowEvent * );
-  void resizeEvent( QResizeEvent * );
-
 public slots:
 	void print(void);
-
-private slots:
-	void slotEditButtonClicked();
 
 };
 

@@ -19,6 +19,8 @@
 #include <qpushbutton.h>
 #include <qstring.h>
 
+#include "krecipesview.h" //for KrePanel enum
+
 
 /**
 * @author Unai Garro
@@ -87,7 +89,7 @@ private:
 
 signals:
   	void resized(int, int);
-	void clicked(int);
+	void clicked(KrePanel);
 
 private slots:
 	void collectClicks(KreMenuButton *w);
@@ -99,7 +101,7 @@ class KreMenuButton: public QWidget
 {
 Q_OBJECT
 public:
-	KreMenuButton(KreMenu *parent,MenuId id=0, const char *name = 0);
+	KreMenuButton(KreMenu *parent,KrePanel panel=KrePanel(-1),MenuId id=0, const char *name = 0);
 
 	~KreMenuButton();
 
@@ -111,6 +113,8 @@ public:
 	void setIconSet(const QIconSet &is);
 	MenuId menuId;
 	MenuId subMenuId;
+	
+	KrePanel getPanel() const { return panel; }
 
 signals:
 	void resized(int, int);
@@ -127,6 +131,8 @@ private:
 	 QPixmap* icon;
 	 QString text;
 	 bool highlighted;
+
+	KrePanel panel;
 
 private slots:
 
