@@ -17,6 +17,7 @@
 
 #include <qbuffer.h>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -108,7 +109,7 @@ void QSqlRecipeDB::connect( bool create )
 	// Check integrity of the database (tables). If not possible, exit
 	if ( !checkIntegrity() ) {
 		kdError() << i18n( "Failed to fix database structure. Exiting.\n" ).latin1();
-		exit( 1 );
+		kapp->exit( 1 );
 	}
 
 	// Database was opened correctly
@@ -740,7 +741,7 @@ void QSqlRecipeDB::createNewIngredient( const QString &ingredientName )
 	emit ingredientCreated( Element( real_name, lastInsertID() ) );
 }
 
-void QSqlRecipeDB::modIngredient( int ingredientID, QString newLabel )
+void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
 {
 	QString command;
 
@@ -1616,7 +1617,7 @@ void QSqlRecipeDB::createNewCategory( const QString &categoryName, int parent_id
 	emit categoryCreated( Element( real_name, lastInsertID() ), parent_id );
 }
 
-void QSqlRecipeDB::modCategory( int categoryID, QString newLabel )
+void QSqlRecipeDB::modCategory( int categoryID, const QString &newLabel )
 {
 	QString command = QString( "UPDATE categories SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( categoryID );
 	QSqlQuery categoryToUpdate( command, database );
@@ -1704,7 +1705,7 @@ void QSqlRecipeDB::createNewAuthor( const QString &authorName )
 	emit authorCreated( Element( real_name, lastInsertID() ) );
 }
 
-void QSqlRecipeDB::modAuthor( int authorID, QString newLabel )
+void QSqlRecipeDB::modAuthor( int authorID, const QString &newLabel )
 {
 	QString command;
 

@@ -11,6 +11,9 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef USDA_PROPERTY_DATA_H
+#define USDA_PROPERTY_DATA_H
+
 #include <klocale.h>
 
 struct property_data
@@ -69,3 +72,5 @@ static property_data property_data_list[] = {
             { -1, I18N_NOOP( "cholesterol" ), "mg"},
             { 0, 0, 0 }
         };
+
+#endif //USDA_PROPERTY_DATA_H

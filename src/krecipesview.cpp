@@ -272,7 +272,7 @@ void KrecipesView::questionRerunWizard( const QString &message, const QString &e
 		wizard( true );
 	else {
 		kdError() << error << ". " << i18n( "Exiting" ) << endl;
-		exit( 1 );
+		kapp->exit( 1 );
 	}
 }
 
@@ -636,7 +636,7 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
 	if ( !db ) {
 		kdError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
-		exit( 1 );
+		kapp->exit( 1 );
 	}
 
 	db->connect();
@@ -850,7 +850,7 @@ void KrecipesView::initDatabase( KConfig *config )
 		// No DB type has been enabled(should not happen at all, but just in case)
 
 		kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
-		exit( 1 );
+		kapp->exit( 1 );
 	}
 
 	database->connect();
@@ -874,7 +874,7 @@ void KrecipesView::initDatabase( KConfig *config )
 			// No DB type has been enabled (should not happen at all, but just in case)
 
 			kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
-			exit( 1 );
+			kapp->exit( 1 );
 		}
 	}
 	kdDebug() << i18n( "DB started correctly\n" ).latin1();

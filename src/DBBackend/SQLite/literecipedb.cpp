@@ -732,7 +732,7 @@ void LiteRecipeDB::createNewIngredient( const QString &ingredientName )
 	emit ingredientCreated( Element( real_name, lastInsertID() ) );
 }
 
-void LiteRecipeDB::modIngredient( int ingredientID, QString newLabel )
+void LiteRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
 {
 	QString command;
 
@@ -1566,7 +1566,7 @@ bool LiteRecipeDB::checkIntegrity( void )
 	return true;
 }
 
-void LiteRecipeDB::createTable( QString tableName )
+void LiteRecipeDB::createTable( const QString &tableName )
 {
 
 	QStringList commands;
@@ -2033,7 +2033,7 @@ void LiteRecipeDB::createNewCategory( const QString &categoryName, int parent_id
 	emit categoryCreated( Element( real_name, lastInsertID() ), parent_id );
 }
 
-void LiteRecipeDB::modCategory( int categoryID, QString newLabel )
+void LiteRecipeDB::modCategory( int categoryID, const QString &newLabel )
 {
 	QString command;
 	command = QString( "UPDATE categories SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( categoryID );
@@ -2129,7 +2129,7 @@ void LiteRecipeDB::createNewAuthor( const QString &authorName )
 	emit authorCreated( Element( real_name, lastInsertID() ) );
 }
 
-void LiteRecipeDB::modAuthor( int authorID, QString newLabel )
+void LiteRecipeDB::modAuthor( int authorID, const QString &newLabel )
 {
 	QString command;
 

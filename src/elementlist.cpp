@@ -18,12 +18,13 @@ ElementList::~ElementList()
 
 Element ElementList::getElement( int index ) const
 {
-	return * ( this->at( index ) );
+	return * ( at( index ) );
 }
 
 Element ElementList::findByName( const QString &name ) const
 {
-	for ( ElementList::const_iterator it = begin(); it != end(); ++it ) {
+	ElementList::const_iterator end = constEnd();
+	for ( ElementList::const_iterator it = constBegin(); it != end; ++it ) {
 		if ( ( *it ).name == name )
 			return * it;
 	}
@@ -42,8 +43,10 @@ bool ElementList::containsId( int id ) const // Search by id (which uses search 
 
 bool ElementList::containsSubSet( ElementList &el )
 {
-	ElementList::Iterator it;
-	for ( it = el.begin();it != el.end();++it ) {
+	ElementList::const_iterator end = el.end();
+	ElementList::const_iterator it;
+
+	for ( it = el.constBegin(); it != end; ++it ) {
 		if ( !containsId( ( *it ).id ) )
 			return false;
 	}

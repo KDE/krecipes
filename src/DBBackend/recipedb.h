@@ -201,7 +201,7 @@ public:
 	/**
 	* set newLabel for ingredientID
 	*/
-	virtual void modIngredient( int ingredientID, QString newLabel ) = 0;
+	virtual void modIngredient( int ingredientID, const QString &newLabel ) = 0;
 	/**
 	* set newLabel for unitID
 	*/
@@ -209,12 +209,12 @@ public:
 	/**
 	* set newLabel for categoryID
 	*/
-	virtual void modCategory( int categoryID, QString newLabel ) = 0;
+	virtual void modCategory( int categoryID, const QString &newLabel ) = 0;
 	virtual void modCategory( int categoryID, int new_parent_id ) = 0;
 	/**
 	* set newLabel for authorID
 	*/
-	virtual void modAuthor( int authorID, QString newLabel ) = 0;
+	virtual void modAuthor( int authorID, const QString &newLabel ) = 0;
 
 	virtual void modPrepMethod( int prepMethodID, const QString &newLabel ) = 0;
 
@@ -255,7 +255,7 @@ public:
 
 	virtual bool checkIntegrity( void ) = 0;
 
-	virtual void createTable( QString tableName ) = 0;
+	virtual void createTable( const QString &tableName ) = 0;
 	virtual void splitCommands( QString& s, QStringList& sl ) = 0;
 
 	virtual float databaseVersion( void ) = 0;

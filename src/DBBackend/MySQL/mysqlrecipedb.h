@@ -35,7 +35,7 @@ public:
 
 	int lastInsertID();
 
-	void createTable( QString tableName );
+	void createTable( const QString &tableName );
 	void givePermissions( const QString &dbName, const QString &username, const QString &password = QString::null, const QString &clientHost = "localhost" );
 
 protected:

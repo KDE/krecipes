@@ -8,12 +8,14 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef PROPERTYCALCULATOR_H
+#define PROPERTYCALCULATOR_H
 
 #include <qptrlist.h>
- #include <DBBackend/recipedb.h>
- #include "elementlist.h"
- #include "ingredientpropertylist.h"
- #include "recipe.h"
+#include <DBBackend/recipedb.h>
+#include "elementlist.h"
+#include "ingredientpropertylist.h"
+#include "recipe.h"
 
 int autoConvert( RecipeDB *database, double amount1, int unit1, double amount2, int unit2, double &newAmount, int &newID );
 void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList );
@@ -31,3 +33,4 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 void calculateProperties( const Recipe& recipe, IngredientPropertyList& ipl, UnitRatioList& url, IngredientPropertyList *recipePropertyList );
 void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPropertyList &newProperties, const Ingredient &ing, UnitRatioList &url, int ingredientNo );
 
+#endif //PROPERTYCALCULATOR_H

@@ -132,7 +132,7 @@ void UnitsDialog::loadConversionTable( void )
 	// Load and Populate the data into the table
 	UnitRatioList ratioList;
 	database->loadUnitRatios( &ratioList );
-	for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ratio_it++ ) {
+	for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ++ratio_it ) {
 		conversionTable->setRatio( ( *ratio_it ).uID1, ( *ratio_it ).uID2, ( *ratio_it ).ratio );
 	}
 }
@@ -167,9 +167,9 @@ void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 	KProgressDialog progress_dialog( this, "progress_dialog", i18n( "Finding Unit Ratios" ), QString::null, true );
 	progress_dialog.progressBar() ->setTotalSteps( ratioList.count() * ratioList.count() );
 
-	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); current_it++ ) {
+	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); ++current_it ) {
 		UnitRatio current_ratio = *current_it;
-		for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ratio_it++ ) {
+		for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ++ratio_it ) {
 			if ( progress_dialog.wasCancelled() )
 				return ;
 
@@ -203,7 +203,7 @@ void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 
 void UnitsDialog::reload( void )
 {
-	this->reloadData();
+	reloadData();
 }
 
 #include "unitsdialog.moc"

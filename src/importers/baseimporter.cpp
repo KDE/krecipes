@@ -125,9 +125,9 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		m_cat_structure = 0;
 	}
 
-	RecipeList::iterator recipe_it;
+	RecipeList::iterator recipe_it; RecipeList::iterator recipe_list_end( selected_recipes.end() );
 	RecipeList::iterator recipe_it_old = selected_recipes.end();
-	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it ) {
+	for ( recipe_it = selected_recipes.begin(); recipe_it != recipe_list_end; ++recipe_it ) {
 		if ( progress_dialog->wasCancelled() ) {
 			KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
 			return ;
@@ -143,7 +143,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		ElementList ingGroupList;
 
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
-		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ( *recipe_it ).ingList.end(); ++ing_it ) {
+		IngredientList::iterator ing_list_end( ( *recipe_it ).ingList.end() );
+		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
 			//create ingredient groups
 			Element el = ingGroupList.findByName( ( *ing_it ).group );
 			if ( el.id != -1 )
@@ -196,7 +197,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
-		for ( ElementList::iterator author_it = ( *recipe_it ).authorList.begin(); author_it != ( *recipe_it ).authorList.end(); ++author_it ) {
+		ElementList::iterator author_list_end( ( *recipe_it ).authorList.end() );
+		for ( ElementList::iterator author_it = ( *recipe_it ).authorList.begin(); author_it != author_list_end; ++author_it ) {
 			int new_author_id = db->findExistingAuthorByName(( *author_it ).name);
 			if ( new_author_id == -1 && !( *author_it ).name.isEmpty() ) {
 				db->createNewAuthor( ( *author_it ).name );
@@ -206,7 +208,8 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			( *author_it ).id = new_author_id;
 		}
 
-		for ( ElementList::iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
+		ElementList::iterator cat_list_end( ( *recipe_it ).categoryList.end() );
+		for ( ElementList::iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != cat_list_end; ++cat_it ) {
 			int new_cat_id = db->findExistingCategoryByName(( *cat_it ).name);
 			if ( new_cat_id == -1 && !( *cat_it ).name.isEmpty() ) {
 				db->createNewCategory( ( *cat_it ).name );

@@ -178,7 +178,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 
 			//amount
 			QString amount_str = current.mid( 0, 9 ).simplifyWhiteSpace();
-			if ( !amount_str.isEmpty() )  // case of amount_str=="" correctly handled by class default
+			if ( !amount_str.isEmpty() )  // case of amount_str.isEmpty() correctly handled by class default
 			{
 				bool ok;
 				MixedNumber amount( MixedNumber::fromString( amount_str, &ok ) );

@@ -484,23 +484,22 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 QString ServerSetupPage::server( void )
 {
-	return ( this->serverEdit->text() );
+	return ( serverEdit->text() );
 }
 
 QString ServerSetupPage::user( void )
 {
-	return ( this->usernameEdit->text() );
+	return ( usernameEdit->text() );
 }
 
 QString ServerSetupPage::password( void )
 {
-	return ( this->passwordEdit->text() );
+	return ( passwordEdit->text() );
 }
 
 QString ServerSetupPage::dbName( void )
 {
-	return ( this->dbNameEdit->text() );
-	;
+	return ( dbNameEdit->text() );
 }
 
 void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass )
@@ -510,7 +509,7 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 	client = clientEdit->text();
 	user = usernameEdit->text();
 	pass = passwordEdit->text();
-	dbName = this->dbNameEdit->text();
+	dbName = dbNameEdit->text();
 }
 
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )

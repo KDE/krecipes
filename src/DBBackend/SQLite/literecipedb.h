@@ -123,7 +123,7 @@ public:
 	/**
 	* set newLabel for ingredientID
 	*/
-	void modIngredient( int ingredientID, QString newLabel );
+	void modIngredient( int ingredientID, const QString &newLabel );
 	/**
 	* set newLabel for unitID
 	*/
@@ -131,12 +131,12 @@ public:
 	/**
 	* set newLabel for categoryID
 	*/
-	void modCategory( int categoryID, QString newLabel );
+	void modCategory( int categoryID, const QString &newLabel );
 	void modCategory( int categoryID, int new_parent_id );
 	/**
 	* set newLabel for authorID
 	*/
-	void modAuthor( int authorID, QString newLabel );
+	void modAuthor( int authorID, const QString &newLabel );
 
 	void modPrepMethod( int prepMethodID, const QString &newLabel );
 
@@ -173,7 +173,7 @@ public:
 
 	bool checkIntegrity( void );
 
-	void createTable( QString tableName );
+	void createTable( const QString &tableName );
 	void splitCommands( QString& s, QStringList& sl );
 
 	float databaseVersion( void );

@@ -150,7 +150,7 @@ void ShoppingListDialog::createShopping( const RecipeList &rlist )
 {
 	clear();
 	RecipeList::const_iterator it;
-	for ( it = rlist.begin(); it != rlist.end(); it++ ) {
+	for ( it = rlist.begin(); it != rlist.end(); ++it ) {
 		new RecipeListItem( shopRecipeListView->listView(), shopRecipeListView->listView() ->lastItem(), *it );
 	}
 }
@@ -222,7 +222,7 @@ void ShoppingListDialog::showShoppingList( void )
 	// Store the recipe list in ElementList object first
 	ElementList recipeList;
 	RecipeListItem *it;
-	for ( it = ( RecipeListItem* ) this->shopRecipeListView->listView() ->firstChild();it;it = ( RecipeListItem* ) it->nextSibling() ) {
+	for ( it = ( RecipeListItem* ) shopRecipeListView->listView() ->firstChild();it;it = ( RecipeListItem* ) it->nextSibling() ) {
 		Element newEl;
 		newEl.id = it->recipeID();
 		newEl.name = it->title(); // Storing the title is not necessary, but do it just in case it's used later on

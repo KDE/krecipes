@@ -246,7 +246,7 @@ void DietWizardDialog::populateIteratorList( RecipeList &rl, QValueList <RecipeL
 {
 	il->clear();
 	RecipeList::Iterator it;
-	for ( it = rl.begin();it != rl.end();it++ )
+	for ( it = rl.begin();it != rl.end(); ++it )
 		il->append( it );
 
 }
@@ -347,7 +347,7 @@ void MealInput::reload( IngredientPropertyList &propertyList )
 void MealInput::reload()
 {
 	QValueList<DishInput*>::iterator it;
-	for ( it = dishInputList.begin(); it != dishInputList.end();it++ ) {
+	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
 		DishInput *di;
 		di = ( *it );
 		di->reload( &propertyListLocalCache );
@@ -567,7 +567,7 @@ void DishInput::loadEnabledCategories( ElementList* categories )
 
 void DishInput::setMinValue( double minValue )
 {
-	this->constraintsEditBox1->hide();
+	constraintsEditBox1->hide();
 
 	ConstraintsListItem *it = ( ConstraintsListItem* ) ( constraintsView->selectedItem() ); // Find selected property
 
@@ -577,7 +577,7 @@ void DishInput::setMinValue( double minValue )
 
 void DishInput::setMaxValue( double maxValue )
 {
-	this->constraintsEditBox2->hide();
+	constraintsEditBox2->hide();
 
 
 	ConstraintsListItem *it = ( ConstraintsListItem* ) ( constraintsView->selectedItem() ); // Find selected property

@@ -11,6 +11,9 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef USDA_INGREDIENT_DATA_H
+#define USDA_INGREDIENT_DATA_H
+
 #include <klocale.h>
 
 struct ingredient_data
@@ -483,3 +486,4 @@ static ingredient_data ingredient_data_list[] = {
             {0, 0}
         };
 
+#endif //USDA_INGREDIENT_DATA_H

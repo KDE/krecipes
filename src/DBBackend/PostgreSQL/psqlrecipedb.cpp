@@ -45,7 +45,7 @@ void PSqlRecipeDB::createDB()
 	database->setDatabaseName( real_db_name );
 }
 
-void PSqlRecipeDB::createTable( QString tableName )
+void PSqlRecipeDB::createTable( const QString &tableName )
 {
 
 	QStringList commands;

@@ -8,6 +8,9 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef MMDATA_H
+#define MMDATA_H
+
 /** This file contains each of the Meal-Master unit abbreviations,
   * and their cooresponding expansions.
   */
@@ -58,3 +61,5 @@ static expand_unit_info unit_info[] = {
                                           {"", "", ""},
                                           { 0, 0, 0 }
                                       };
+
+#endif //MMDATA_H

@@ -143,7 +143,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 	//Check if the user wants to show missing ingredients
 
-	if ( this->missingNumberSpinBox->value() == 0 ) {
+	if ( missingNumberSpinBox->value() == 0 ) {
 		KApplication::restoreOverrideCursor();
 		return ;
 	} //"None"

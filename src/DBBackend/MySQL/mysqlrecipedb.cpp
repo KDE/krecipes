@@ -45,7 +45,7 @@ void MySQLRecipeDB::createDB()
 	database->setDatabaseName( real_db_name );
 }
 
-void MySQLRecipeDB::createTable( QString tableName )
+void MySQLRecipeDB::createTable( const QString &tableName )
 {
 
 	QStringList commands;

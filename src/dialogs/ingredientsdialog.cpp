@@ -461,7 +461,7 @@ int IngredientsDialog::findPropertyNo( QListViewItem * /*it*/ )
 
 void IngredientsDialog::reload( void )
 {
-	this->reloadIngredientList();
+	reloadIngredientList();
 }
 
 void IngredientsDialog::openUSDADialog( void )

@@ -1,6 +1,8 @@
 /***************************************************************************
-*   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
-*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
+*   Unai Garro (ugarro@users.sourceforge.net)                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -115,7 +117,8 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 
 	recipes->empty();
 
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	QValueList<int>::const_iterator end = ids.end();
+	for ( QValueList<int>::const_iterator it = ids.begin(); it != end; ++it ) {
 		Recipe recipe;
 		loadRecipe( &recipe, *it );
 		recipes->append( recipe );
@@ -263,10 +266,11 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	int unit_g_id = createUnit( "g", this );
 	int unit_mg_id = createUnit( "mg", this );
 
-	QValueList<ingredient_nutrient_data>::iterator it;
+	QValueList<ingredient_nutrient_data>::const_iterator it;
+	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->constEnd();
 	const int total = data->count();
 	int counter = 0;
-	for ( it = data->begin(); it != data->end(); ++it ) {
+	for ( it = data->constBegin(); it != data_end; ++it ) {
 		counter++;
 		kdDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
 		if ( progress ) {
@@ -285,9 +289,10 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 		if ( do_checks ) loadProperties( &ing_properties, assigned_id );
 		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
-			QValueList<double>::iterator property_it;
+			QValueList<double>::const_iterator property_it;
+			QValueList<double>::const_iterator property_end = ( *it ).data.constEnd();
 			int i = 0;
-			for ( property_it = ( *it ).data.begin(); property_it != ( *it ).data.end(); ++property_it, ++i )
+			for ( property_it = ( *it ).data.constBegin(); property_it != property_end; ++property_it, ++i )
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
 	}

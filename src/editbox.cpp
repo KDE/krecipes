@@ -23,8 +23,8 @@ EditBox::EditBox( QWidget* parent ) : QWidget( parent )
 	okButton->setFlat( true );
 	layout->addWidget( okButton );
 	accepted = false;
-	connect( this->okButton, SIGNAL( clicked() ), this, SLOT( acceptValue() ) );
-	connect( this->editBox, SIGNAL( valueAccepted() ), this, SLOT( acceptValue() ) );
+	connect( okButton, SIGNAL( clicked() ), this, SLOT( acceptValue() ) );
+	connect( editBox, SIGNAL( valueAccepted() ), this, SLOT( acceptValue() ) );
 }
 
 void EditBox::acceptValue( void )

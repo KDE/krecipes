@@ -101,7 +101,7 @@ Krecipes::Krecipes()
 
 	// Enable/Disable the Save Button (Initialize disabled, and connect signal)
 
-	connect( this->m_view, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOption( bool ) ) );
+	connect( m_view, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOption( bool ) ) );
 	enableSaveOption( false ); // Disables saving initially
 
 	parsing_file_dlg = new KDialog( this, "parsing_file_dlg", true, Qt::WX11BypassWM );
