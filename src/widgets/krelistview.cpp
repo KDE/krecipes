@@ -11,19 +11,56 @@
 #include "krelistview.h"
 #include <klocale.h>
 
-KreListView::KreListView(QWidget *parent,const QString &title):QVBox(parent)
+KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int filterCol):QVBox(parent)
 {
-if (title!=QString::null)
+
+	filteredColumn=filterCol;
+	QWidget *header=this;
+	if (filter) header=new QHBox(this);	
+	
+	if (title!=QString::null)
 	{
-	label=new QLabel(this);
-	label->setText(title);
+		listLabel=new QLabel(header);
+		listLabel->setText(title);
 	}
-list=new KListView(this);
-list->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
-setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
-setSpacing(10);
+	
+	if (filter) {
+			filterBox=new QHBox(header); ((QHBox*)header)->setSpacing(30);
+			filterBox->setFrameShape(QFrame::Box); filterBox->setMargin(2);
+			filterLabel=new QLabel(filterBox); filterLabel->setText(i18n("Search:"));
+			filterEdit=new KLineEdit(filterBox);
+			}
+
+
+	list=new KListView(this);
+	list->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+	setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+	setSpacing(10);
+	
+	//Connect Signals & Slots
+	if (filter) connect(filterEdit,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
 }
 
 KreListView::~KreListView()
 {
+}
+
+void KreListView::filter(const QString& s)
+{
+for (QListViewItem *it=list->firstChild();it;it=it->nextSibling())
+	{
+		if ( s.isNull() || s == "" ) // Don't filter if the filter text is empty
+		{
+			it->setVisible(true);
+		}
+		else // It's a category. Check the children
+		{
+			
+			if (it->text(filteredColumn).contains(s,false)) it->setVisible(true);
+			else it->setVisible(false);
+			
+		}
+
+
+	}
 }

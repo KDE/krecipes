@@ -14,7 +14,7 @@
 #include <qlabel.h>
 #include <qvbox.h>
 #include <klistview.h>
-
+#include <klineedit.h>
 
 
 /**
@@ -25,13 +25,19 @@ class KreListView:public QVBox{
 Q_OBJECT
 public:
 
-    KreListView(QWidget *parent,const QString &title=QString::null);
+    KreListView(QWidget *parent,const QString &title=QString::null, bool filter=false, int filterCol=0);
     ~KreListView();
     KListView *listView(){return list;}
 
 private:
-	QLabel *label;
+	QHBox *filterBox;
+	QLabel *listLabel;
+	int filteredColumn;
+	QLabel *filterLabel;
+	KLineEdit *filterEdit;
 	KListView *list;
+private slots:
+	void filter(const QString& s);
 
 };
 
