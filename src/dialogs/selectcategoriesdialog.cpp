@@ -22,7 +22,7 @@
 #include "DBBackend/recipedb.h"
 #include "widgets/categorylistview.h"
 
-SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const CategoryTree *categoryTree, const QMap<Element, bool> &selected, RecipeDB *db ) : QDialog( parent, 0, true )
+SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const QMap<Element, bool> &selected, RecipeDB *db ) : QDialog( parent, 0, true )
 {
 
 	// Store pointer
@@ -33,8 +33,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const CategoryT
 
 	//Category List
 	categoryListView = new CategoryCheckListView( this, db );
-	categoryListView->setAllColumnsShowFocus( true );
-	categoryListView->setRootIsDecorated( true );
+	categoryListView->reload();
 	layout->addMultiCellWidget( categoryListView, 0, 0, 0, 1 );
 
 	//New category button
@@ -56,7 +55,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const CategoryT
 	layout->addWidget( cancelButton, 2, 1 );
 
 	// Load the list
-	loadCategories( categoryTree, selected );
+	loadCategories( selected );
 
 	// Connect signals & Slots
 	connect ( newCatButton, SIGNAL( clicked() ), SLOT( createNewCategory() ) );
@@ -73,22 +72,16 @@ void SelectCategoriesDialog::getSelectedCategories( ElementList *newSelected )
 	*newSelected = categoryListView->selections();
 }
 
-void SelectCategoriesDialog::loadCategories( const CategoryTree *categoryTree, const QMap<Element, bool> &selected, CategoryCheckListItem *parent )
+void SelectCategoriesDialog::loadCategories( const QMap<Element, bool> &selected )
 {
-	const CategoryTreeChildren * children = categoryTree->children();
-	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
-		const CategoryTree *node = *child_it;
+	ElementList categories; database->loadCategories( &categories );
 
-		CategoryCheckListItem *new_item;
-		if ( parent == 0 )
-			new_item = new CategoryCheckListItem( categoryListView, node->category );
-		else
-			new_item = new CategoryCheckListItem( parent, node->category );
-
-		if ( selected[ node->category ] )
-			new_item->setOn( true );
-		new_item->setOpen( true );
-		loadCategories( node, selected, new_item );
+	for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+		CategoryCheckListItem *new_item = (CategoryCheckListItem*)categoryListView->findItem(QString::number((*it).id),1);
+		if ( new_item && selected[*it] ) {
+			new_item->setOn(true);
+			categoryListView->stateChange(*it,true);
+		}
 	}
 }
 

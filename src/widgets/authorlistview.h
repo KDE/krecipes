@@ -86,7 +86,7 @@ class AuthorCheckListView : public AuthorListView
 {
 public:
 	AuthorCheckListView( QWidget *parent, RecipeDB *db );
-	virtual void reload();
+
 	virtual void stateChange(AuthorCheckListItem *,bool);
 
 	QValueList<Element> selections() const{ return m_selections; }
@@ -94,6 +94,8 @@ public:
 protected:
 	virtual void createAuthor( const Element &ing );
 	virtual void removeAuthor( int );
+
+	virtual void load( int limit, int offset );
 
 private:
 	QValueList<Element> m_selections;

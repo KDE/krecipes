@@ -1432,14 +1432,12 @@ bool RecipeInputDialog::everythingSaved()
 
 void RecipeInputDialog::addCategory( void )
 {
-	CategoryTree categoryTree;
-	database->loadCategories( &categoryTree );
 	ElementList categoryList;
 	database->loadCategories( &categoryList );
 	QMap<Element, bool> selected;
 	findCategoriesInRecipe( categoryList, selected );
 
-	SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( this, &categoryTree, selected, database );
+	SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( this, selected, database );
 
 
 	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok

@@ -481,8 +481,10 @@ void CategoryCheckListView::removeCategory( int id )
 void CategoryCheckListView::createCategory( const Element &category, int parent_id )
 {
 	CategoryCheckListItem * new_item = 0;
-	if ( parent_id == -1 )
+	if ( parent_id == -1 ) {
 		new_item = new CategoryCheckListItem( this, category, exclusive );
+		createElement(new_item);
+	}
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
 		if ( parent )
@@ -492,7 +494,6 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
 		new_item->setOpen( true );
-		createElement(new_item);
 	}
 }
 
@@ -539,10 +540,22 @@ void CategoryCheckListView::mergeCategories( int id1, int id2 )
 
 void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
 {
+	stateChange(it->element(),on);
+}
+
+void CategoryCheckListView::stateChange( const Element &el, bool on )
+{
 	if ( on )
-		m_selections.append(it->element());
+		m_selections.append(el);
 	else
-		m_selections.remove(it->element());
+		m_selections.remove(el);
+}
+
+void CategoryCheckListView::load( int limit, int offset )
+{
+	CategoryListView::load(limit,offset);
+	
+	//TODO....
 }
 
 #include "categorylistview.moc"

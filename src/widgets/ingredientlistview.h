@@ -98,7 +98,7 @@ class IngredientCheckListView : public IngredientListView
 {
 public:
 	IngredientCheckListView( QWidget *parent, RecipeDB *db );
-	virtual void reload();
+
 	virtual void stateChange(IngredientCheckListItem *,bool);
 
 	QValueList<Element> selections() const{ return m_selections; }
@@ -106,6 +106,8 @@ public:
 protected:
 	virtual void createIngredient( const Element &ing );
 	virtual void removeIngredient( int );
+
+	virtual void load( int limit, int offset );
 
 private:
 	QValueList<Element> m_selections;

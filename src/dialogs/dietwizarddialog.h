@@ -196,6 +196,8 @@ private:
 	PropertyConstraintListView *constraintsView;
 	EditBox *constraintsEditBox1;
 	EditBox *constraintsEditBox2;
+	RecipeDB *database;
+
 private slots:
 	void enableCategories( bool enable );
 	void insertConstraintsEditBoxes( QListViewItem* it );

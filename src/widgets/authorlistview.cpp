@@ -231,9 +231,9 @@ void AuthorCheckListView::removeAuthor( int id )
 	removeElement(item);
 }
 
-void AuthorCheckListView::reload()
+void AuthorCheckListView::load( int limit, int offset )
 {
-	AuthorListView::reload();
+	AuthorListView::load(limit,offset);
 
 	for ( QValueList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
 		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );

@@ -421,7 +421,8 @@ void MealInput::showDish( int dn )
 		dishStack->raiseWidget( *it );
 }
 
-DishInput::DishInput( QWidget* parent, RecipeDB *database, const QString &title ) : QWidget( parent )
+DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QWidget( parent ),
+	database(db)
 {
 
 	// Initialize internal variables
@@ -555,21 +556,12 @@ void DishInput::loadEnabledCategories( ElementList* categories )
 {
 	categories->clear();
 
-	Element category;
-	CategoryCheckListItem* current_item;
-
-	QListViewItemIterator it( categoriesView );
-	while ( it.current() ) {
-		current_item = ( CategoryCheckListItem* ) it.current();
-
-		if ( !categoriesView->isEnabled() || current_item->isOn() ) { // Only load those that are checked, unless filtering is disabled
-			//add this enabled category
-			category.id = current_item->categoryId();
-			category.name = current_item->categoryName();
-			categories->append( category );
-		}
-
-		++it;
+	// Only load those that are checked, unless filtering is disabled
+	if ( !categoriesView->isEnabled() ) {
+		database->loadCategories(categories);
+	}
+	else {
+		*categories = categoriesView->selections();
 	}
 }
 

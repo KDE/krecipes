@@ -254,9 +254,9 @@ void IngredientCheckListView::removeIngredient( int id )
 	removeElement(item);
 }
 
-void IngredientCheckListView::reload()
+void IngredientCheckListView::load( int limit, int offset )
 {
-	IngredientListView::reload();
+	IngredientListView::load(limit,offset);
 
 	for ( QValueList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
 		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*ing_it).id ), 1 );

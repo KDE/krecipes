@@ -246,6 +246,7 @@ public:
 	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true );
 
 	virtual void stateChange( CategoryCheckListItem*, bool );
+	void stateChange( const Element &, bool on );
 
 	ElementList selections() const{ return m_selections; }
 
@@ -255,6 +256,8 @@ protected:
 	virtual void modifyCategory( const Element &category );
 	virtual void modifyCategory( int id, int parent_id );
 	virtual void mergeCategories( int id1, int id2 );
+
+	virtual void load( int limit, int offset );
 
 	QMap<int, CategoryCheckListItem*> items_map;
 	bool exclusive;
