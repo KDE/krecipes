@@ -327,14 +327,14 @@ if (it=ingredientListView->selectedItem())
   }
 if (ingredientID>=0) // an ingredient was selected previously
 {
- IngredientPropertyList allProperties;
-  database->loadProperties(&allProperties);
+ IngredientPropertyList allProperties; database->loadProperties(&allProperties);
+ ElementList unitList; database->loadPossibleUnits(ingredientID,&unitList);
+ SelectPropertyDialog* propertyDialog=new SelectPropertyDialog(0,&allProperties,&unitList);
 
-  SelectPropertyDialog* propertyDialog=new SelectPropertyDialog(0,&allProperties);
-
-  if ( propertyDialog->exec() == QDialog::Accepted ) {
+ if ( propertyDialog->exec() == QDialog::Accepted ) {
     int propertyID = propertyDialog->propertyID();
-    database->AddPropertyToIngredient(ingredientID,propertyID,0); // Add result chosen property to ingredient in database, with amount 0 by default
+    int perUnitsID = propertyDialog->perUnitsID();
+    database->addPropertyToIngredient(ingredientID,propertyID,0,perUnitsID); // Add result chosen property to ingredient in database, with amount 0 by default
     reloadPropertyList(); // Reload the list from database
 }
 }

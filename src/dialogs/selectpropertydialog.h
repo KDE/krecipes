@@ -13,10 +13,12 @@
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
 #include <qgroupbox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 #include <qvbox.h>
 #include <klistview.h>
+#include <kcombobox.h>
 #include "element.h"
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
@@ -26,18 +28,26 @@
 */
 class SelectPropertyDialog:public QDialog{
 public:
-    SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList);
-
+    // Methods
+    SelectPropertyDialog(QWidget* parent,IngredientPropertyList *propertyList,ElementList *unitList);
     ~SelectPropertyDialog();
     int propertyID(void);
+    int perUnitsID(void);
+private:
 //Widgets
   QVBoxLayout *container;
   QGroupBox *box;
   QVBox *vbox;
   KListView *propertyChooseView;
+  QLabel *perUnitsLabel;
+  KComboBox *perUnitsBox;
   QPushButton* okButton;
   QPushButton* cancelButton;
   void loadProperties(IngredientPropertyList *propertyList);
+  void loadUnits(ElementList *unitList);
+
+  //Internal variables
+  ElementList  *unitListBack;
 
 };
 
