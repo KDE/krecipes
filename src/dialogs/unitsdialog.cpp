@@ -11,6 +11,7 @@
 #include <qlayout.h>
 #include "unitsdialog.h"
 #include "createelementdialog.h"
+#include "dependanciesdialog.h"
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
 {
@@ -104,16 +105,18 @@ if (it=unitListView->selectedItem()) unitID=it->text(0).toInt();
 
 if (unitID>=0) // a unit was selected previously
 {
-ElementList results_recipes, results_properties;
-database->findUseOf_Unit_InRecipes(&results_recipes,unitID); // Check if this unit is being used in a recipe's ingredient list, since if so, the recipe will be deleted
-database->findUseOf_Unit_InProperties(&results_properties,unitID); // Check if ths unit is being used in any property, since if so, the property will be deleted
+ElementList recipeDependancies, ingredientDependancies;
+database->findUnitDependancies(unitID,&ingredientDependancies,&recipeDependancies);
 
-if (results_recipes.isEmpty() && results_properties.isEmpty()) database->removeUnit(unitID);
-else database->removeUnit(unitID); // need warning!
+if (recipeDependancies.isEmpty() && ingredientDependancies.isEmpty()) database->removeUnit(unitID);
+else {// need warning!
+	database->removeUnit(unitID);
+	DependanciesDialog *warnDialog=new DependanciesDialog(0,&recipeDependancies,&ingredientDependancies); warnDialog->exec();
+	//delete warnDialog;
+	 }
 
 
 reloadData();// Reload the list from database
-
 }
 }
 
