@@ -19,7 +19,6 @@
 #include <qstringlist.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <iostream>
 
 IngredientMatcherDialog::IngredientMatcherDialog(QWidget *parent,RecipeDB *db):QVBox(parent)
 {
@@ -120,7 +119,7 @@ void IngredientMatcherDialog::findRecipes(void)
 			new RecipeListItem(recipeListView->listView(),*it);
 			}
 		else incompleteRecipes.append(*it);
-		missingNumbers.append(missing.count()); std::cerr<<missing.count()<<"\n";
+		missingNumbers.append(missing.count());
 		}
 
 	// Show recipes with missing ingredients
