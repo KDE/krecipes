@@ -35,9 +35,8 @@ MixedNumber::MixedNumber( double decimal )
 	if ( (decimal_index != -1) && (fabs(decimal-ROUND(decimal)) > 0.000001) )
 	{
 		QString decimal_part = as_string.mid( decimal_index+1, as_string.length() );
-		qDebug("decimal_part: %s",decimal_part.latin1());
 		m_numerator = decimal_part.toInt();
-		m_denominator = 10 * decimal_part.length();
+		m_denominator = static_cast<int>(pow(10, static_cast<double>(decimal_part.length())));
 		simplify();
 	}
 	else
@@ -63,14 +62,6 @@ int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok
 
 MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 {
-	qDebug("input: %s",input.latin1());
-	//is this right?
-	if ( input.contains( QRegExp("^(\\d|\\s|/|.)",false) ) ) //change ".", to "decimal" of current locale
-	{
-		if (ok){*ok = false;}
-		return MixedNumber();
-	}
-
 	bool num_ok;
 
 	int whole;
@@ -84,8 +75,10 @@ MixedNumber MixedNumber::fromString( const QString &input, bool *ok )
 	{
 		if ( slash_index == -1 ) //input contains no fractional part
 		{
+			if ( input.endsWith(".") ){ if (ok){*ok = false;} return MixedNumber(); }
+
 			double decimal = input.toDouble(&num_ok);
-qDebug("%f",decimal);
+
 			if ( !num_ok ){ if (ok){*ok = false;} return MixedNumber(); }
 
 			if (ok){*ok = true;}
@@ -99,7 +92,7 @@ qDebug("%f",decimal);
 			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 			denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-			if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
+			if ( !num_ok || denominator == 0 ) {if (ok){*ok = false;} return MixedNumber();}
 
 			if (ok){*ok = true;}
 			return MixedNumber(whole,numerator,denominator);
@@ -115,7 +108,7 @@ qDebug("%f",decimal);
 	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
 
 	denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-	if ( !num_ok ) {if (ok){*ok = false;} return MixedNumber();}
+	if ( !num_ok || denominator == 0 ) {if (ok){*ok = false;} return MixedNumber();}
 
 	if (ok){*ok = true;}
 	return MixedNumber(whole,numerator,denominator);
@@ -132,7 +125,11 @@ QString MixedNumber::toString( Format format )
 		return QString("0");
 
 	if ( m_whole != 0 )
-		result += QString::number(m_whole)+" ";
+	{
+		result += QString::number(m_whole);
+		if ( m_numerator != 0 )
+			result += " ";
+	}
 
 	if ( m_numerator != 0 )
 		result += QString::number(m_numerator)+"/"+QString::number(m_denominator);
