@@ -219,6 +219,7 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 
 void SelectRecipeDialog::filterCategories(int categoryID)
 {
+std::cerr<<"I got category :"<<categoryID<<"\n";
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (categoryID==-1) it->setVisible(true); // We're not filtering categories
@@ -236,9 +237,15 @@ void SelectRecipeDialog::loadCategoryCombo(void)
 
 ElementList categoryList;
 database->loadCategories(&categoryList);
-int row=0;
+
 categoryBox->clear();
 categoryComboRows.clear();
+
+// Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
+categoryBox->insertItem(i18n("All Categories"));
+
+//Now load the categories
+int row=1;
 for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
 	{
 	categoryBox->insertItem(category->name);
@@ -290,18 +297,20 @@ void SelectRecipeDialog::showPopup( KListView *l, QListViewItem *i, const QPoint
 
 void SelectRecipeDialog::filterComboCategory(int row)
 {
+std::cerr<<"I got row "<<row<<"\n";
+
 //First get the category ID corresponding to this combo row
-int categoryID=*categoryComboRows[row];
+int categoryID;
+if (row) categoryID=*(categoryComboRows[row]);
+else categoryID=-1; // No category filtering
 
 //Now filter
+
 filterCategories(categoryID); // if categoryID==-1 doesn't filter
-
-
 
 // Indicate that we are filtering by category so that
 // the rest of the trees are not opened while filtering recipes
-
-if (categoryID>=0)
+if (row>=1)
 {
 // Open the corresponding category tree
 categoryItems[categoryID]->setOpen(true);
