@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003 by                                                 *
+ *   Copyright (C) 2003-2004 by                                            *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

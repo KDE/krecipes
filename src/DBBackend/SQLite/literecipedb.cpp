@@ -1,9 +1,8 @@
- /**************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+/***************************************************************************
+ *   Copyright (C) 2003-2004 by                                            *
  *   Unai Garro (ugarro@users.sourceforge.net)                             *
- *   Cyril Bosselut (bosselut@b1project.com)                               *
  *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
