@@ -15,8 +15,9 @@
 #include "unitsdialog.h"
 #include "dualprogressdialog.h"
 
-#include "mxpimporter.h"
 #include "mmfimporter.h"
+#include "mx2importer.h"
+#include "mxpimporter.h"
 #include "nycgenericimporter.h"
 
 #include "recipe.h"
@@ -224,6 +225,7 @@ void Krecipes::filePrint()
 void Krecipes::import()
 {
 	KFileDialog file_dialog( QString::null,
+	  "*.mx2|MasterCook (*.mx2)\n"
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
 	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
 	  "*.txt|\"Now You're Cooking\" Generic Export (*.txt)",
@@ -256,6 +258,8 @@ void Krecipes::import()
 				importer = new MMFImporter( *it );
 			else if ( selected_filter == "*.txt" )
 				importer = new NYCGenericImporter( *it );
+			else if ( selected_filter == "*.mx2" )
+				importer = new MX2Importer( *it );
 			else
 			{
 				KMessageBox::sorry( this,
