@@ -68,12 +68,12 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 
     currentServingsInput = new KLineEdit( servingsFrame );
     currentServingsInput->setReadOnly( TRUE );
-
+    currentServingsInput->setAlignment( Qt::AlignRight );
     servingsFrameLayout->addMultiCellWidget( currentServingsInput, 0, 0, 1, 2 );
 
     newServingsInput = new KIntNumInput( servingsFrame );
-
     servingsFrameLayout->addWidget( newServingsInput, 1, 2 );
+
     buttonGroupLayout->addWidget( servingsFrame );
 
     factorRadioButton = new QRadioButton( buttonGroup );
@@ -134,8 +134,8 @@ void ResizeRecipeDialog::languageChange()
     servingsRadioButton->setText( i18n( "Scale by servings" ) );
     newServingsLabel->setText( i18n( "New servings:" ) );
     currentServingsLabel->setText( i18n( "Current servings:" ) );
-    factorRadioButton->setText( i18n( "Multiply by factor" ) );
-    factorLabel->setText( i18n( "Factor:" ) ); //Maybe make this more description, describing exactly what multiplying by a factor does
+    factorRadioButton->setText( i18n( "Scale by factor" ) );
+    factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple, etc.):" ) ); //Maybe make this more description, describing exactly what multiplying by a factor does
     buttonOk->setText( i18n( "&OK" ) );
     buttonOk->setAccel( QKeySequence( QString::null ) );
     buttonCancel->setText( i18n( "&Cancel" ) );
@@ -174,7 +174,7 @@ void ResizeRecipeDialog::accept()
 		else
 		{
 			KMessageBox::error( this, i18n("Invalid input") );
-			factorInput->setFocus();
+			factorInput->selectAll();
 			return;
 		}
 	}
@@ -184,6 +184,7 @@ void ResizeRecipeDialog::accept()
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
+	//TODO: adjust factor to rounding done
 	m_recipe->persons = static_cast<int>(ROUND(m_recipe->persons * factor));
 
 	for ( Ingredient *ing = m_recipe->ingList.getFirst(); ing; ing = m_recipe->ingList.getNext() )
