@@ -7,8 +7,5 @@
   <Menu name="view"><text>&amp;View</text>
     <Action name="page_setup_action" />
   </Menu>
-  <Menu name="custom"><text>C&amp;ustom</text>
-    <Action name="custom_action" />
-  </Menu>
 </MenuBar>
 </kpartgui>

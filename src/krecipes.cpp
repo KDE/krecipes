@@ -2,6 +2,7 @@
  * Copyright (C) 2003 Unai Garro <ugarro@users.sourceforge.net>
  */
 
+ #include "pref.h"
 #include "krecipes.h"
 #include "krecipesview.h"
 #include "recipeinputdialog.h"
@@ -41,14 +42,18 @@
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
-#include <kfiledialog.h>
 
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
 #include <kaction.h>
 #include <kstdaction.h>
 //Settings headers
-#include <kautoconfigdialog.h>
+  #if defined(KDE_MAKE_VERSION)
+  # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+     #include <kautoconfigdialog.h>
+  # endif
+  #endif
+
 #include "serverprefs.h"
 #include "unitsprefs.h"
 #include "importprefs.h"
@@ -125,12 +130,6 @@ void Krecipes::setupActions()
     KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
     KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
-
-    // this doesn't do anything useful.  it's just here to illustrate
-    // how to insert a custom menu and menu item
-    KAction *custom = new KAction(i18n("Cus&tom Menuitem"), 0,
-                                  this, SLOT(optionsPreferences()),
-                                  actionCollection(), "custom_action");
 
     KAction *import = new KAction(i18n("Import..."), CTRL+Key_I,
                                   this, SLOT(import()),
@@ -405,6 +404,8 @@ void Krecipes::newToolbarConfig()
 
 void Krecipes::optionsPreferences()
 {
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
      if(KAutoConfigDialog::showDialog("settings"))
 		return;
 
@@ -412,6 +413,18 @@ void Krecipes::optionsPreferences()
     dialog->addPage(new serverprefs(0, "serverprefs"), i18n("Server Settings"), "Server", "identity", i18n("Database Server Options"));
     dialog->addPage(new unitsprefs(0, "NumberFormat"), i18n("Units"), "Units", "frac", i18n("Customize Units"));
     dialog->addPage(new importprefs(0, "Import"), i18n("Units"), "Import", "redo", i18n("Recipe Import Options"));
+# else
+   // popup some sort of preference dialog, here
+    KrecipesPreferences dlg(this);
+    if (dlg.exec())
+    {}
+# endif
+#else
+      // popup some sort of preference dialog, here
+    KrecipesPreferences dlg(this);
+    if (dlg.exec())
+    {}
+#endif
 }
 
 void Krecipes::changeStatusbar(const QString& text)
