@@ -82,7 +82,7 @@ else
 
 QPixmap pm = image.smoothScale(width, height, QImage::ScaleMin);
 pm.save("/tmp/krecipes_photo.png","PNG");
-temp_photo_geometry = QRect(QPoint(temp_photo_geometry.topLeft()),pm.size()); //preserve aspect ratio
+temp_photo_geometry = QRect(temp_photo_geometry.topLeft(),pm.size()); //preserve aspect ratio
 
 // Loads the layout according to the config file
 createBlocks();
@@ -173,8 +173,7 @@ void RecipeViewDialog::createBlocks()
 	geometry = new QRect( config->readRectEntry( "Geometry" ) );
 	geometries.append( geometry );
 
-	QString title_html=QString("<H1>%1</H1>").arg(loadedRecipe->title);
-	new_element = new DivElement( "title",title_html);
+	new_element = new DivElement( "title",loadedRecipe->title);
 
 	readFontProperties( new_element, config );
 	readAlignmentProperties( new_element, config );

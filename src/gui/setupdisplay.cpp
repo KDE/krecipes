@@ -63,11 +63,11 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("TitleSetup") )
 	{
 		config->setGroup( "TitleSetup" );
-		config->writeEntry( "Geometry", QRect(31,1,68,5) );
+		config->writeEntry( "Geometry", QRect(31,6,68,5) );
 		QFont font = kapp->font();
 		font.setBold( true );
 		font.setPointSize( font.pointSize() * 2 );
-		config->writeEntry( "Font", kapp->font() );
+		config->writeEntry( "Font", font );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
@@ -77,7 +77,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("InstructionsSetup") )
 	{
 		config->setGroup("InstructionsSetup");
-		config->writeEntry( "Geometry", QRect(32,18,67,80) );
+		config->writeEntry( "Geometry", QRect(31,28,68,60) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -88,7 +88,7 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("ServingsSetup") )
 	{
 		config->setGroup("ServingsSetup");
-		config->writeEntry( "Geometry", QRect(0,55,27,4) );
+		config->writeEntry( "Geometry", QRect(31,22,68,5) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
@@ -106,29 +106,29 @@ void SetupDisplay::createSetupIfNecessary()
 	if ( !config->hasGroup("AuthorsSetup") )
 	{
 		config->setGroup("AuthorsSetup");
-		config->writeEntry( "Geometry", QRect(31,12,48,4) );
+		config->writeEntry( "Geometry", QRect(31,17,68,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::AlignRight | Qt::WordBreak );
+		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
 	}
 
 	if ( !config->hasGroup("CategoriesSetup") )
 	{
 		config->setGroup("CategoriesSetup");
-		config->writeEntry( "Geometry", QRect(31,6,68,4) );
+		config->writeEntry( "Geometry", QRect(31,12,68,4) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", Qt::white );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::WordBreak );
+		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
 	}
 
 	if ( !config->hasGroup("HeaderSetup") )
 	{
 		config->setGroup("HeaderSetup");
-		config->writeEntry( "Geometry", QRect(1,61,25,4) );
+		config->writeEntry( "Geometry", QRect(73,0,25,5) );
 		config->writeEntry( "Font", kapp->font() );
 		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
 		config->writeEntry( "TextColor", Qt::black );
@@ -144,7 +144,7 @@ void SetupDisplay::createSetupIfNecessary()
 		config->writeEntry( "BackgroundColor", QColor(119,109,78) );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::WordBreak );
+		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
 	}
 
 	if ( !config->hasGroup("PropertiesSetup") )
@@ -155,7 +155,7 @@ void SetupDisplay::createSetupIfNecessary()
 		config->writeEntry( "BackgroundColor", QColor(238,218,156) );
 		config->writeEntry( "TextColor", Qt::black );
 		config->writeEntry( "Visibility", true );
-		config->writeEntry( "Alignment", Qt::WordBreak );
+		config->writeEntry( "Alignment", Qt::AlignLeft | Qt::WordBreak );
 	}
 }
 
