@@ -8,9 +8,15 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "recipeviewdialog.h"
+
+#include "mixednumber.h"
 #include "image.h"
 #include "propertycalculator.h"
+
 #include <klocale.h>
+#include <kapplication.h>
+#include <kconfig.h>
+
 #include <qimage.h>
 
 #include "DBBackend/recipedb.h"
@@ -80,12 +86,21 @@ recipeHTML= QString("<html><head><title>%1</title></head><body>").arg( loadedRec
 // Ingredient Block
 recipeHTML+="<div STYLE=\"position: absolute; top: 230px; left:1%; width: 220px; height: 240px; background-color:#D4A143 \">";
     //Ingredients
+	KConfig *config=kapp->config();
+	config->setGroup("Units");
+
     Ingredient * ing;
     for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
        {
+	QString amount_str;
+	if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+		amount_str = MixedNumber(ing->amount).toString();
+	else
+		amount_str = QString::number(ing->amount);
+
        recipeHTML+=QString("<li>%1: %2 %3</li>")
 			    .arg(ing->name)
-			    .arg(ing->amount)
+			    .arg(amount_str)
 			    .arg(ing->units);
        }
 recipeHTML+="</div>";

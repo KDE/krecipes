@@ -18,6 +18,7 @@
 #include <qmessagebox.h>
 #include <qtooltip.h>
 
+#include <kapplication.h>
 #include <kspell.h>
 #include <kurl.h>
 #include <kfiledialog.h>
@@ -403,8 +404,17 @@ servingsNumInput->setValue(loadedRecipe->persons);
 	for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
 	{
 		QListViewItem* lastElement=ingredientList->lastItem();
+
+		KConfig *config=kapp->config();
+		config->setGroup("Units");
+		QString amount_str;
+		if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+			amount_str = MixedNumber(ing->amount).toString();
+		else
+			amount_str = QString::number(ing->amount);
+
 		 //Insert ingredient after last one
-		 QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing->name,QString::number(ing->amount),ing->units);
+		 QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing->name,amount_str,ing->units);
 	}
 
 	//show photo
@@ -658,7 +668,16 @@ if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're n
   loadedRecipe->ingList.add(ing);
   //Append also to the ListView
   QListViewItem* lastElement=ingredientList->lastItem();
-  QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,QString::number(ing.amount),ing.units);
+
+  KConfig *config=kapp->config();
+  config->setGroup("Units");
+  QString amount_str;
+  if ( config->readEntry( "NumberFormat" ) == "Fraction" )
+  	amount_str = MixedNumber(ing.amount).toString();
+  else
+  	amount_str = QString::number(ing.amount);
+
+  QListViewItem* element = new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units);
 
   amountEdit->setFocus(); //put cursor back to amount so user can begin next ingredient
   amountEdit->selectAll();
