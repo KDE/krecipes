@@ -70,9 +70,8 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	removeButton->setMaximumWidth(100);
 	pm=il->loadIcon("editshred", KIcon::NoGroup,16); removeButton->setIconSet(pm);
 
-// Reload the lists
+// Load Recipe List
 loadRecipeList();
-loadCategoryCombo();
 
 // Signals & Slots
 
@@ -81,6 +80,7 @@ connect(editButton,SIGNAL(clicked()),this, SLOT(edit()));
 connect(removeButton,SIGNAL(clicked()),this, SLOT(remove()));
 connect(searchBox,SIGNAL(returnPressed(const QString&)),this,SLOT(filter(const QString&)));
 connect(searchBox,SIGNAL(textChanged(const QString&)),this,SLOT(filter(const QString&)));
+connect(recipeListView,SIGNAL(seletionChanged()),this, SLOT(haveSelectedItems()));
 }
 
 
@@ -112,32 +112,24 @@ for ( Element *category=categoryList.getFirst(); category; category=categoryList
 int *categoryID;
 Element *recipe;
 QPtrList <int> recipeCategoryList;
-QIntDict <bool> categorisedRecipes; // Stores if recipes that are categorised already
+
 
 database->loadRecipeList(recipeList,0,&recipeCategoryList); // Read the whole list of recipes including category
 
-
-// Add those that are categorised
 for ( recipe=recipeList->getFirst(),categoryID=recipeCategoryList.first();(recipe && categoryID);recipe=recipeList->getNext(),categoryID=recipeCategoryList.next())
 	{
 	if (QListViewItem* categoryItem=categoryItems[*categoryID])
-		{
-		QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
-
-		bool value=false; categorisedRecipes.insert(recipe->id,&value);
-		}
-
+	{
+	QListViewItem *it=new QListViewItem (categoryItem,"",QString::number(recipe->id),recipe->name,"");
+	}
+	else
+	{
+	QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
+	}
 	}
 
-// Add those that are not in any category (except -1)
-for ( recipe=recipeList->getFirst();recipe;recipe=recipeList->getNext())
-{
-if (!categorisedRecipes[recipe->id])
-QListViewItem *it=new QListViewItem (recipeListView,"...",QString::number(recipe->id),recipe->name);
-}
 
 
-// Do the filtering again
 filter(searchBox->text());
 
 }
@@ -170,7 +162,7 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (!it->firstChild()) // It's not a category
 	{
-		if (s=="") it->setVisible(true); // Don't filter if the filter text is empty
+		if (s==QString::null) it->setVisible(true); // Don't filter if the filter text is empty
 		else if (it->text(2).contains(s,false)) it->setVisible(true);
 
 		else it->setVisible(false);
@@ -179,12 +171,9 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
 		{
-		if (s=="") cit->setVisible(true); // Don't filter if the filter text is empty
+		if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
 
-		else if (cit->text(2).contains(s,false)) {
-						cit->setVisible(true);
-						it->setOpen(true);
-						}
+		else if (cit->text(2).contains(s,false)) cit->setVisible(true);
 
 		else cit->setVisible(false);
 
@@ -195,31 +184,26 @@ for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	}
 }
 
-void SelectRecipeDialog::loadCategoryCombo(void)
-{
-
-ElementList categoryList;
-database->loadCategories(&categoryList);
-
-for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
-	{
-	categoryBox->insertItem(category->name);
-	}
-
-}
-
-
 /*!
     \fn SelectRecipeDialog::exportRecipe()
  */
 void SelectRecipeDialog::exportRecipe()
 {
   if((recipeListView->selectedItem())->text(1) != NULL){
-    KFileDialog* fd = new KFileDialog("", "*.krz|Gzip Krecipes file (*.krz)\n*.kre|Krecipes file (*.kre)", 0, "Save recipe", true);
-    QString fileName = fd->getSaveFileName("", "*.krz|Gzip Krecipes file (*.krz)\n*.kre|Krecipes file (*.kre)", 0, "Save recipe");
+    KFileDialog* fd = new KFileDialog("", "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
+    QString fileName = fd->getSaveFileName("", "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
     if(fileName != NULL){
       KreManager* kre = new KreManager(database, fileName, fd->currentFilter());
       kre->kreExport((recipeListView->selectedItem())->text(1).toInt());
     }
+  }
+}
+
+void SelectRecipeDialog::haveSelectedItems(){
+  if(recipeListView->selectedItem() != 0){
+    emit recipeSelected(true);
+  }
+  else{
+    emit recipeSelected(false);
   }
 }

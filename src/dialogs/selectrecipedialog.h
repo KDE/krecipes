@@ -67,6 +67,8 @@ private:
 
 signals:
   void recipeSelected(int id, int action);
+  void recipeSelected(bool);
+
 private slots:
   void open(void);
   void edit(void);
@@ -74,6 +76,7 @@ private slots:
   void filter(const QString &s);
 public slots:
   void exportRecipe();
+  void haveSelectedItems();
 };
 
 #endif
