@@ -142,9 +142,8 @@ if ( (it=categoryListView->selectedItem()) ) categoryID=it->text(1).toInt();
 if (categoryID>=0) // a category was selected previously
 {
 database->removeCategory(categoryID);
+delete it; //this will sync the db and the listview
 }
-
-reload();// Reload the list from the database
 
 }
 
@@ -165,9 +164,11 @@ if ( existing_id != -1 && existing_id != cat_id ) //category already exists with
   {
   case KMessageBox::Continue:
   {
-  	database->mergeCategories(existing_id,cat_id);
-  	delete i;
-	reload();
+	database->mergeCategories(existing_id,cat_id);
+	if ( i->firstChild() ) //we only need to reload the entire list if the merging item has children
+		reload();
+	else                   //otherwise we can just delete the item to update the list
+		delete i;
   	break;
   }
   default: reload(); break;

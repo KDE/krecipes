@@ -81,16 +81,18 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
     xml += "<pictures>\n";
     xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
-    KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
-    fn->setAutoDelete(true);
-    (*recipe_it).photo.save(fn->name(), "JPEG");
-    QByteArray data;
-    if( fn ){
-      data = (fn->file())->readAll();
-      fn->close();
-      xml += KCodecs::base64Encode(data, true);
+    if ( !(*recipe_it).photo.isNull() ) {
+	KTempFile* fn = new KTempFile (locateLocal("tmp", "kre"), ".jpg", 0600);
+	fn->setAutoDelete(true);
+	(*recipe_it).photo.save(fn->name(), "JPEG");
+	QByteArray data;
+	if( fn ){
+	data = (fn->file())->readAll();
+	fn->close();
+	xml += KCodecs::base64Encode(data, true);
+	}
+	delete fn;
     }
-    delete fn;
 
     xml += "]]></pic>\n";
     xml += "</pictures>\n";
@@ -114,7 +116,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
       xml += QString::number((*ing_it).amount);
       xml += "</amount>\n";
       xml += "<unit>"+QStyleSheet::escape((*ing_it).units.utf8())+"</unit>\n";
-      xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
+      if ( !(*ing_it).prepMethod.isEmpty() ) xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
       xml += "</ingredient>\n";
       /// @todo add ingredient properties
 	}
