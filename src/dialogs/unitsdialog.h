@@ -35,7 +35,8 @@ private:
 	void reloadData(void);
 	// Internal Variables
 	RecipeDB *database;
-
+private slots:
+	void createNewUnit(void);
 
 };
 

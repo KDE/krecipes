@@ -10,7 +10,7 @@
 
 #include <qlayout.h>
 #include "unitsdialog.h"
-
+#include "createelementdialog.h"
 
 
 UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
@@ -51,6 +51,9 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     layout->addWidget(removeUnitButton,2,2);
 
 
+    // Connect signals & slots
+    connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
+
 
     //Populate data into the table
     reloadData();
@@ -81,6 +84,7 @@ void UnitsDialog::loadUnitsList(void)
 {
 ElementList unitList;
 database->loadUnits(&unitList);
+unitListView->clear();
 for (Element *unit=unitList.getFirst();unit;unit=unitList.getNext())
 {
 QListViewItem *it=new QListViewItem(unitListView,QString::number(unit->id),unit->name);
@@ -91,4 +95,16 @@ void UnitsDialog::reloadData(void)
 {
 loadUnitsList();
 loadConversionTable();
+}
+
+void UnitsDialog::createNewUnit(void)
+{
+CreateElementDialog* elementDialog=new CreateElementDialog(QString("New Unit"));
+
+if ( elementDialog->exec() == QDialog::Accepted ) {
+   QString result = elementDialog->newElementName();
+   database->createNewUnit(result); // Create the new unit in database
+   reloadData(); // Reload the unitlist from the database
+}
+delete elementDialog;
 }
