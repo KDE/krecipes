@@ -220,9 +220,9 @@ void SizeHandle::mouseReleaseEvent( QMouseEvent *e )
 
 void SizeHandle::trySetGeometry( QWidget *w, int x, int y, int width, int height )
 {
-    int minw = QMAX( w->minimumSizeHint().width(), w->minimumSize().width() );
+    int minw = /*QMAX( w->minimumSizeHint().width(),*/ w->minimumSize().width() /*)*/;
     //minw = QMAX( minw, 2 * dragArea->grid().x() );
-    int minh = QMAX( w->minimumSizeHint().height(), w->minimumSize().height() );
+    int minh = /*QMAX( w->minimumSizeHint().height(),*/ w->minimumSize().height() /*)*/;
     //minh = QMAX( minh, 2 * dragArea->grid().y() );
     if ( QMAX( minw, width ) > w->maximumWidth() ||
 	 QMAX( minh, height ) > w->maximumHeight() )
@@ -231,14 +231,15 @@ void SizeHandle::trySetGeometry( QWidget *w, int x, int y, int width, int height
 	x -= minw - width;
     if ( height < minh && y != w->y() )
 	y -= minh - height;
+
     w->setGeometry( x, y, QMAX( minw, width ), QMAX( minh, height ) );
 }
 
 void SizeHandle::tryResize( QWidget *w, int width, int height )
 {
-    int minw = QMAX( w->minimumSizeHint().width(), w->minimumSize().width() );
+    int minw = /*QMAX( w->minimumSizeHint().width(),*/ w->minimumSize().width() /*)*/;
     minw = QMAX( minw, 16 );
-    int minh = QMAX( w->minimumSizeHint().height(), w->minimumSize().height() );
+    int minh = /*QMAX( w->minimumSizeHint().height(),*/ w->minimumSize().height() /*)*/;
     minh = QMAX( minh, 16 );
     w->resize( QMAX( minw, width ), QMAX( minh, height ) );
 }
