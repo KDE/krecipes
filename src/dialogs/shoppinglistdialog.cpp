@@ -9,7 +9,6 @@
  ***************************************************************************/
 #include "shoppinglistdialog.h"
 
-
 ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(parent)
 {
    // Store pointer to database
@@ -125,6 +124,14 @@ if (it) shopRecipeListView->removeItem(it);
 
 void ShoppingListDialog::showShoppingList(void)
 {
-shoppingListDisplay=new ShoppingListViewDialog(0,database);
+// Store the recipe list in ElementList object first
+ElementList recipeList; QListViewItem *it;
+for (it=this->shopRecipeListView->firstChild();it;it=it->nextSibling())
+{
+Element newEl; newEl.id=it->text(0).toInt(); newEl.name=it->text(1); // Storing the title is not necessary, but do it just in case it's used later on
+recipeList.add(newEl); // Note that the element is *copied*, it's not added as pointer, so it doesn't matter it's deleted
+}
+
+shoppingListDisplay=new ShoppingListViewDialog(0,database,&recipeList);
 shoppingListDisplay->show();
 }

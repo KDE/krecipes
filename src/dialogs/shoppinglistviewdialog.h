@@ -16,11 +16,12 @@
 #include <khtml_part.h>
 #include <khtmlview.h>
 
+#include "elementlist.h"
 #include "recipedb.h"
 
 class ShoppingListViewDialog:public QWidget{
 public:
-    ShoppingListViewDialog(QWidget *parent, RecipeDB *db);
+    ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList);
     ~ShoppingListViewDialog();
 private:
 
@@ -33,7 +34,7 @@ private:
   RecipeDB  *database;
 
   // Internal Methods
-  void showShoppingList(void);
+  void showShoppingList(ElementList *recipeList);
   void calculateShopping(void);
   void display(void);
 };

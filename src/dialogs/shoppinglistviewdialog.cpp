@@ -9,7 +9,7 @@
  ***************************************************************************/
 #include "shoppinglistviewdialog.h"
 
-ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
+ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db, ElementList *recipeList):QWidget(parent)
 {
 
  // Store pointer to database
@@ -32,7 +32,7 @@ ShoppingListViewDialog::ShoppingListViewDialog(QWidget *parent, RecipeDB *db):QW
 
 //---------- Calculate & Load  the list --------
 
-showShoppingList();
+showShoppingList(recipeList);
 
 }
 
@@ -41,7 +41,7 @@ ShoppingListViewDialog::~ShoppingListViewDialog()
 {
 }
 
-void ShoppingListViewDialog::showShoppingList(void)
+void ShoppingListViewDialog::showShoppingList(ElementList *recipeList)
 {
 
 }
