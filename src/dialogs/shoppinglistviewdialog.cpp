@@ -63,10 +63,14 @@ QString recipeHTML;
 	recipeHTML="<html><head><title>Shopping List</title></head><body>";
 	recipeHTML+="<div STYLE=\"position: absolute; top: 30px; left:10px; width: 80%\">";
 	recipeHTML+="<center><h1>Shopping List</h1></center>";
-	recipeHTML+="<p>Recipe Instructions </p>";
+
 
 	// Ingredient List
+	recipeHTML+="<p>";
+	for (Ingredient *i=ingredientList->getFirst();i;i=ingredientList->getNext())
+		recipeHTML+=QString("%1: %2 %3<br>").arg(i->name).arg(i->amount).arg(i->units);
 
+	recipeHTML+="</p>";
 	// Close
 	recipeHTML+="</div></body></html>";
 
