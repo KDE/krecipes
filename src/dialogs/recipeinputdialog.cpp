@@ -214,6 +214,7 @@ database=db;
     connect(this, SIGNAL(changed()), this, SLOT(recipeChanged()));
     connect(this->titleEdit, SIGNAL(textChanged(const QString&)), this, SLOT(recipeChanged(const QString&)));
     connect(this->instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()));
+    connect(this->authorEdit,SIGNAL(textChanged(const QString&)),this,SLOT(recipeChanged(const QString&)));
 
 }
 
@@ -246,6 +247,7 @@ database->loadRecipe(loadedRecipe,recipeID);
 
 titleEdit->setText(loadedRecipe->title);
 instructionsEdit->setText(loadedRecipe->instructions);
+authorEdit->setText(loadedRecipe->author);
 	//show ingredient list
 	Ingredient * ing;
 	for ( ing = loadedRecipe->ingList.getFirst(); ing; ing = loadedRecipe->ingList.getNext() )
@@ -438,7 +440,7 @@ void RecipeInputDialog::saveRecipe(void)
 loadedRecipe->photo=*(photoLabel->pixmap());
 loadedRecipe->instructions=instructionsEdit->text();
 loadedRecipe->title=titleEdit->text();
-
+loadedRecipe->author=authorEdit->text();
 // Now save()
 database->saveRecipe(loadedRecipe);
 
