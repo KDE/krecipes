@@ -75,8 +75,6 @@ temp_photo_geometry = config->readRectEntry("Geometry");
 int phwidth = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
 int phheight =temp_photo_geometry.height()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
 
-std::cerr<<"I got ("<<((QWidget*)parent())->width()<<","<<((QWidget*)parent())->height()<<") as parent's size\n";
-std::cerr<<"I got ("<<phwidth<<","<<phheight<<") as size\n";
 
 QImage image;
 if (loadedRecipe->photo.isNull())
@@ -396,7 +394,6 @@ void RecipeViewDialog::createBlocks()
 		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->width())) );
 		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
 		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
-		std::cerr<<"I got ("<<((QWidget*)parent())->width()<<","<<((QWidget*)parent())->height()<<") as parent's size\n";
 	}
 }
 
