@@ -45,3 +45,12 @@ dnl ----------- Should I link or should I not link? ---------
 AM_CONDITIONAL(link_lib_MYSQL, test x$have_mysql = xtrue)
 AM_CONDITIONAL(link_lib_SQLITE, test x$have_sqlite = xtrue)
 
+dnl ----------- Should Krecipes be built at all? ------------
+if test "x$have_mysql" = "xfalse"; then
+	if test "x$have_sqlite" = "xfalse"; then
+	DO_NOT_COMPILE="$DO_NOT_COMPILE krecipes"
+	will_not_build_krecipes=true
+	fi
+fi
+
+
