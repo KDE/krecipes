@@ -23,7 +23,7 @@ database=db;
 
 //Initialize internal data
 recipeList=new ElementList;
-
+categoryList=new ElementList;
 //Design dialog
 
 layout = new QGridLayout( this, 1, 1, 0, 0);
@@ -47,6 +47,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	recipeListView=new KListView(this);
     	recipeListView->addColumn(i18n("Id"));
     	recipeListView->addColumn(i18n("Title"));
+	recipeListView->addColumn(i18n("Categories"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	layout->addWidget(recipeListView,3,1);
 
@@ -85,10 +86,13 @@ void SelectRecipeDialog::loadRecipeList(void)
 {
 recipeListView->clear();
 recipeList->clear();
-database->loadRecipeList(recipeList);
+categoryList->clear();
+database->loadRecipeList(recipeList,categoryList);
 
-for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNext() )
-	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name);
+for ( Element *recipe=recipeList->getFirst(),*category=categoryList->getFirst();(recipe && category);recipe=recipeList->getNext(),category=categoryList->getNext() )
+	{
+	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name,category->name);
+	}
 
 filter(searchBox->text());
 }

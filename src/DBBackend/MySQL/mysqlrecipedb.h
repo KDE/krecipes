@@ -92,7 +92,7 @@ public:
 	void loadRecipe(Recipe *recipe,int recipeID=0);
 	void loadRecipeAuthors(int recipeID, ElementList *list);
 	void loadRecipeCategories(int recipeID, ElementList *list);
-	void loadRecipeList(ElementList *list);
+	void loadRecipeList(ElementList *list, ElementList *categoryList=0);
 	void loadUnits(ElementList *list);
 	void loadUnitRatios(UnitRatioList *ratioList);
 

@@ -54,7 +54,7 @@ private:
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
-
+  ElementList *categoryList; // Stores the list of categories corresponding to "recipeList"
   // Internal Methods
   void loadRecipeList(void);
 
