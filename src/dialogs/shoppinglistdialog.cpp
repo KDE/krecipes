@@ -32,7 +32,7 @@ ShoppingListDialog::ShoppingListDialog(QWidget *parent,RecipeDB *db):QWidget(par
 
     layout->setRowStretch(1,1); layout->setRowStretch(2,1); layout->setRowStretch(3,1); layout->setRowStretch(4,1); //so the list views will expand to fill any extra space
 
-    recipeListView=new KreListView (this,i18n("Full recipe list"));
+    recipeListView=new KreListView (this,i18n("Full recipe list"),true,1);
     layout->addMultiCellWidget(recipeListView,1,4,1,1);
     recipeListView->listView()->addColumn(i18n("Id"));
     recipeListView->listView()->addColumn(i18n("Recipe Title"));
