@@ -61,14 +61,9 @@ MX2Importer::MX2Importer(const QString& filename)
 			{
 				Recipe *recipe = new Recipe;
 				recipe->title = el.attribute("name");
-				qDebug("Found title: %s",recipe->title.latin1());
 
-				ElementList authors;
-				Element author;
-				author.name = el.attribute("author");
-				qDebug("Found author: %s",author.name.latin1());
-				authors.add(author);
-				recipe->authorList = authors;
+				Element author( el.attribute("author") );
+				recipe->authorList.add( author );
 
 				readRecipe( el.childNodes(), recipe );
 				add(recipe);
@@ -84,8 +79,6 @@ MX2Importer::~MX2Importer()
 
 void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 {
-	IngredientList ingredientList;
-
 	for (unsigned i=0; i < l.count(); i++)
 	{
 		QDomElement el = l.item(i).toElement();
@@ -97,7 +90,6 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 			;//recipe->prep_time = el.attrubute("elapsed");
 		else if (tagName == "CatS")
 		{
-			ElementList categoryList;
 			QDomNodeList categories = el.childNodes();
 			for (unsigned j=0; j < categories.count(); j++)
 			{
@@ -106,21 +98,17 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 				{
 					if (c.text() > 0)
 					{
-						Element new_cat;
-						new_cat.name = QString(c.text()).stripWhiteSpace();
-						qDebug("Found category: %s", new_cat.name.latin1() );
-						categoryList.add( new_cat );
+						Element cat( c.text().stripWhiteSpace() );
+						recipe->categoryList.add( cat );
 					}
 				}
 			}
-			recipe->categoryList = categoryList;
 		}
 		else if (tagName == "IngR")
 		{
-			Ingredient new_ing;
-			new_ing.name = el.attribute("name");
-			new_ing.units = el.attribute("unit");
-			new_ing.amount = el.attribute("qty").toDouble();
+			Ingredient new_ing( el.attribute("name"),
+			  el.attribute("qty").toDouble(),
+			  el.attribute("unit") );
 			if (el.hasChildNodes())
 			{
 				QDomNodeList iChilds = el.childNodes();
@@ -131,10 +119,10 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 						// Don't know if this is the best...
 						new_ing.name += "--" + iChild.text();
 					else if (iChild.tagName() == "INtI")
-						; // TODO: What does it mean?
+						; // TODO: What does it mean?... ingredient nutrient info?
 				}
 			}
-			ingredientList.add(new_ing);
+			recipe->ingList.add(new_ing);
 		}
 		else if (tagName == "DirS")
 		{
@@ -170,29 +158,20 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 		{
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			QString text = recipe->instructions;
-
-			text += "\n" + el.text();
-			recipe->instructions = text;
+			recipe->instructions += "\n\n"+el.text();
 		}
 		else if (tagName == "Note")
 		{
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			QString text = recipe->instructions;
-
-			text += "\n" + el.text();
-			recipe->instructions = text;
+			recipe->instructions += "\n\n"+el.text();
 		}
 		else if (tagName == "Nutr")
 		{
 			//example: <Nutr>Per Serving (excluding unknown items): 51 Calories; 6g Fat (99.5% calories from fat); trace Protein; trace Carbohydrate; 0g Dietary Fiber; 16mg Cholesterol; 137mg Sodium.  Exchanges: 1 Fat.</Nutr>
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			QString text = recipe->instructions;
-
-			text += "\n" + el.text();
-			recipe->instructions = text;
+			recipe->instructions += "\n\n"+el.text();
 		}
 		/* tags to check for (example follows:
 		<Srce>SARA&apos;S SECRETS with Sara Moulton - (Show # SS-1B43) - from the TV FOOD NETWORK</Srce>
@@ -200,6 +179,5 @@ void MX2Importer::readRecipe(const QDomNodeList& l, Recipe *recipe)
 		*/
 		// TODO Have i missed some tag?
 	}
-	recipe->ingList = ingredientList;
 }
 

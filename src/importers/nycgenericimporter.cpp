@@ -1,6 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,8 +111,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 		{
-			Element new_cat;
-			new_cat.name = QString(*it).stripWhiteSpace();
+			Element new_cat( QString(*it).stripWhiteSpace() );
 			qDebug("Found category: %s", new_cat.name.latin1() );
 			m_categories.add( new_cat );
 		}
@@ -126,8 +127,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	{
 		if ( current.startsWith("Contributor:") )
 		{
-			Element new_author;
-			new_author.name = current.mid(current.find(':')+1,current.length()).stripWhiteSpace();
+			Element new_author( current.mid(current.find(':')+1,current.length()).stripWhiteSpace() );
 			qDebug("Found author: %s", new_author.name.latin1() );
 			m_authors.add( new_author );
 		}
@@ -198,11 +198,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	// We can't really do anything with the ingredient header... just add it as an ingredient for now
 	if ( current.contains("-----") )
 	{
-		Ingredient new_ingredient;
-		new_ingredient.amount = 0;
-		new_ingredient.units = "";
-		new_ingredient.name = current.stripWhiteSpace();
-
+		Ingredient new_ingredient( current.stripWhiteSpace(), 0, "" );
 		m_ingredients.add(new_ingredient);
 		qDebug("Found ingredient header %s",new_ingredient.name.latin1());
 		return;
@@ -254,11 +250,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	prep = name.mid( prep_sep_index, name.length() );
 	*/
 
-	Ingredient new_ingredient;
-	new_ingredient.amount = amount.toDouble();
-	new_ingredient.units = unit;
-	new_ingredient.name = name;
-
+	Ingredient new_ingredient( name, amount.toDouble(), unit );
 	m_ingredients.add(new_ingredient);
 	qDebug("Found ingredient: amount=%f, unit:%s, name:%s",
 	  new_ingredient.amount,

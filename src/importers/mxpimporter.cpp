@@ -1,6 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2003 by krecipes.sourceforge.net authors                *
- *                                                                         *
+ *   Copyright (C) 2003 by                                                 *
+ *   Unai Garro (ugarro@users.sourceforge.net)                             *
+ *   Cyril Bosselut (bosselut@b1project.com)                               *
+ *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,8 +76,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	current = stream.readLine().stripWhiteSpace();
 	if ( current.mid( 0, current.find(":") ).simplifyWhiteSpace().lower() == "recipe by" )
 	{
-		Element new_author;
-		new_author.name = current.mid( current.find(":")+1, current.length() ).stripWhiteSpace();
+		Element new_author( current.mid( current.find(":")+1, current.length() ).stripWhiteSpace() );
 		m_authors.add( new_author );
 		qDebug("Found author: %s", new_author.name.latin1());
 	}
@@ -131,8 +132,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 				QStringList categories = QStringList::split( "  ", tmp_str );
 				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 				{
-					Element new_cat;
-					new_cat.name = (*it).stripWhiteSpace();
+					Element new_cat( (*it).stripWhiteSpace() );
 					m_categories.add( new_cat );
 
 					qDebug("Found category: %s", new_cat.name.latin1());
@@ -224,8 +224,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	{
 		if ( current.stripWhiteSpace() == "Source:" )
 		{
-			Element new_author;
-			new_author.name = getNextQuotedString(stream);
+			Element new_author( getNextQuotedString(stream) );
 			m_authors.add( new_author );
 			qDebug("Found source: %s (adding as author)",new_author.name.latin1());
 		}
@@ -253,8 +252,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		}
 		else if ( current.stripWhiteSpace() == "Cuisine:" )
 		{
-			Element new_cat;
-			new_cat.name = getNextQuotedString(stream);
+			Element new_cat( getNextQuotedString(stream) );
 			m_categories.add( new_cat );
 			qDebug("Found cuisine (adding as category): %s",new_cat.name.latin1());
 		}
