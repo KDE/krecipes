@@ -36,13 +36,14 @@ public:
 	void addProperty( const QString &s ){ m_properties << s; }
 
 	QString innerHTML() const{ return m_content; }
+	QString id() const{return m_id;}
 	QFont font();
 
 	bool fixedHeight(){ return m_fixed_height; }
 	void setFixedHeight( bool b ){ m_fixed_height = b; }
 
 	QString generateHTML();
-	QString generateCSS();
+	QString generateCSS(bool noPositioning=false);
 
 private:
 	QString m_id;

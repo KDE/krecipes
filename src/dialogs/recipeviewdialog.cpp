@@ -390,8 +390,8 @@ void RecipeViewDialog::createBlocks()
 	geom_contents.insert( geometry, new_element );
 	div_elements.append( new_element );
 
-	//this takes expands all items to an appropriate size, and ensures no widgets
-	//overlap in the process
+	//this takes expands all items to an appropriate size
+
 	geometries.sort(); //we'll work with these in order from top to bottom
 	for ( QRect *rect = geometries.first(); rect; rect = geometries.next() )
 	{
@@ -399,9 +399,45 @@ void RecipeViewDialog::createBlocks()
 
 		element->addProperty( "position: absolute;" );
 		QWidget *p=(QWidget*)parent();
+
+
+		// Scale the objects
+
 		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->width())) );
 		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
 		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
+
+
+		// For those elements that have no fixed height (lists), calculate the height
+		if ( !element->fixedHeight() )
+		{
+
+			// Generate a test page to calculate the size in khtml
+			QString tempHTML="<HTML><HEAD><STYLE type=\"text/css\">";
+			tempHTML+= element->generateCSS(true);
+			tempHTML+="</STYLE></HEAD>";
+			tempHTML+="<BODY>";
+			tempHTML+=QString("<DIV id=%1>").arg(element->id());
+			tempHTML+= element->innerHTML();
+			tempHTML+="</DIV></BODY></HTML>";
+
+			KHTMLPart *sizeCalculator=new KHTMLPart((QWidget*) 0);
+			sizeCalculator->view()->setVScrollBarMode (QScrollView::AlwaysOff);
+			sizeCalculator->view()->setMinimumSize(QSize(0,0));
+			sizeCalculator->view()->resize(QSize(0,0));
+			sizeCalculator->begin(KURL("file:/tmp/" ));
+			sizeCalculator->write(tempHTML);
+			sizeCalculator->end();
+
+			// Set the size of the element
+			int newHeight=sizeCalculator->view()->contentsHeight();
+			int oldHeight=rect->height()/100.0*(p->width());
+			if (oldHeight>newHeight) newHeight=oldHeight; // Keep user's size if it's defined as bigger
+			element->addProperty(QString("height: %1px;").arg(newHeight));
+
+
+			delete sizeCalculator;
+		}
 	}
 }
 
@@ -531,7 +567,7 @@ QString DivElement::generateHTML()
 	return result;
 }
 
-QString DivElement::generateCSS()
+QString DivElement::generateCSS(bool noPositioning)
 {
 	QString result;
 
@@ -539,7 +575,17 @@ QString DivElement::generateCSS()
 	result += "{\n";
 
 	for ( QStringList::Iterator it = m_properties.begin(); it != m_properties.end(); ++it )
+	if (!noPositioning)
+		{
         	result += *it + "\n";
+		}
+	else // Don't use the element positions
+		{
+		if (!((*it).contains("top:")||((*it).contains("left:"))))
+			{
+			result += *it + "\n";
+			}
+		}
 
 	//don't show empty blocks
 	if ( m_content == "" || m_content.isNull() )
