@@ -14,6 +14,7 @@
 
 #include <qsignalmapper.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "DBBackend/recipedb.h"
 #include "recipe.h"
@@ -29,6 +30,9 @@ database=db;
 //Initialize internal data
 recipeList=new ElementList;
 categoryList=new ElementList;
+
+categoryComboRows.setAutoDelete(true);
+
 //Design dialog
 
 layout = new QGridLayout( this, 1, 1, 0, 0);
@@ -290,7 +294,7 @@ int row=1;
 for (Element *category=categoryList.getFirst();category;category=categoryList.getNext())
 	{
 	categoryBox->insertItem(category->name);
-	categoryComboRows.insert(row,&category->id); // store category id's in the combobox position to obtain the category id later
+	categoryComboRows.insert(row,new int(category->id)); // store category id's in the combobox position to obtain the category id later
 	row++;
 	}
 
@@ -303,38 +307,49 @@ for (Element *category=categoryList.getFirst();category;category=categoryList.ge
 void SelectRecipeDialog::exportRecipe()
 {
   //if((recipeListView->selectedItem())->text(1).toInt() != NULL){
-    KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
-    QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(2), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
-    if(fileName != NULL){
-      KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
-      kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
+    KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
+    fd->setCaption( i18n("Save recipe") );
+    fd->setOperationMode( KFileDialog::Saving );
+    fd->setSelection((recipeListView->selectedItem())->text(2));
+    if ( fd->exec() == KFileDialog::Accepted )
+    {
+      QString fileName = fd->selectedFile();
+      if( !fileName.isNull() ){
+        KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
 
-      delete kre;
+        QValueList<int> id;
+        id.append( (recipeListView->selectedItem())->text(1).toInt() );
+        kre->exporter( id );
+        delete kre;
+      }
     }
     delete fd;
   //}
-
 }
 
 void SelectRecipeDialog::exportRecipeFromCat()
 {
-  //if((recipeListView->selectedItem())->text(1).toInt() == NULL){
-    KFileDialog* fd = new KFileDialog((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe", true);
-    QString fileName = fd->getSaveFileName((recipeListView->selectedItem())->text(0), "*.kre|Gzip Krecipes file (*.kre)\n*.kre|Krecipes xml file (*.kreml)", 0, "Save recipe");
-    if(fileName != NULL){
-      KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
-      QValueList<int>* l = new QValueList<int>;
-      for (QListViewItem *cit=(recipeListView->selectedItem())->firstChild();cit;cit=cit->nextSibling())
-      {
-        l->append(cit->text(1).toInt());
+  //if((recipeListView->selectedItem())->text(1).toInt() != NULL){
+    KFileDialog* fd = new KFileDialog( QString::null, "*.kre|Gzip Krecipes file (*.kre)\n*.kreml|Krecipes xml file (*.kreml)", this, "Save recipe", true);
+    fd->setCaption( i18n("Save recipes") );
+    fd->setOperationMode( KFileDialog::Saving );
+    fd->setSelection((recipeListView->selectedItem())->text(0));
+    if ( fd->exec() == KFileDialog::Accepted )
+    {
+      QString fileName = fd->selectedFile();
+      if( !fileName.isNull() ){
+        KreExporter* kre = new KreExporter(database, fileName, fd->currentFilter());
+        QValueList<int> l;
+        for (QListViewItem *cit=(recipeListView->selectedItem())->firstChild();cit;cit=cit->nextSibling())
+        {
+          l.append(cit->text(1).toInt());
+        }
+        kre->exporter(l);
+        delete kre;
       }
-      kre->categoryExporter(l);
-      //kre->exporter( (recipeListView->selectedItem())->text(1).toInt() );
-      delete kre;
-      delete l;
     }
+    delete fd;
   //}
-  delete fd;
 }
 
 void SelectRecipeDialog::haveSelectedItems(){
