@@ -124,7 +124,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 				{
 					Element new_cat;
-					new_cat.name = *it;
+					new_cat.name = (*it).stripWhiteSpace();
 					m_categories.add( new_cat );
 
 					qDebug("Found category: %s", new_cat.name.latin1());
@@ -191,9 +191,9 @@ void MXPImporter::importMXP( QTextStream &stream )
 			QString prep_method;
 			if ( dash_index != -1 )
 			{
-				QString prep_method = current.mid( dash_index + 1, current.length() );
+				QString prep_method = current.mid( dash_index + 2, current.length() );
 				if ( prep_method != "" )
-					new_ingredient.name += " -- " + prep_method;
+					new_ingredient.name += " -- " + prep_method.stripWhiteSpace();
 			}
 
 			m_ingredients.add( new_ingredient );
