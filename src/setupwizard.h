@@ -98,9 +98,11 @@ public:
 private:
 	// Widgets
 	QLabel *logo;
+	QLabel *serverSetupText;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+	QCheckBox *remoteServerCheckBox;
 	KLineEdit *serverEdit;
 	KLineEdit *clientEdit;
 };
