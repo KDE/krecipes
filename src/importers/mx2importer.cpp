@@ -61,7 +61,7 @@ void MX2Importer::parseFile(const QString& filename)
 		// TODO Check if there are changes between versions
 		if (mx2.tagName() != "mx2" /*|| mx2.attribute("source") != "MasterCook 5.0"*/)
 		{
-			setErrorMsg( i18n("This file doesn't appear to be a *.mx2 file") );
+			setErrorMsg( i18n("This file does not appear to be a *.mx2 file") );
 			return;
 		}
 

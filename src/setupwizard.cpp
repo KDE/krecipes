@@ -91,7 +91,7 @@ QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePo
 layout->addItem(spacer_from_image,1,2);
 
 welcomeText=new QLabel(this);
-welcomeText->setText(i18n("<b><font size=+1>Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome and enjoy cooking! ;-) "));
+welcomeText->setText(i18n("<b><font size=+1>Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome, and enjoy cooking!"));
 welcomeText->setMinimumWidth(200);
 welcomeText->setMaximumWidth(10000);
 welcomeText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
@@ -373,7 +373,7 @@ QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePo
 layout->addItem(spacer_from_image,1,2);
 
 saveText=new QLabel(this);
-saveText->setText(i18n("Congratulations! All the necessary configuration setups are done. Press 'Finish' to continue, and enjoy cooking!"));
+saveText->setText(i18n("Congratulations; all the necessary configuration setup is done. Press 'Finish' to continue, and enjoy cooking!"));
 saveText->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 
 saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter) );
@@ -482,7 +482,7 @@ layout->addWidget(USDAImportText,5,3);
 QSpacerItem *importInfoSpacer=new QSpacerItem(0,50,QSizePolicy::Minimum,QSizePolicy::Fixed);
 layout->addItem(importInfoSpacer,6,3);
 
-USDAImportCheckBox=new QCheckBox(i18n("Yes please, load the database with nutrient data for 400+ foods. (Note: ENGLISH ONLY!)"),this,"USDAImportCheckBox");
+USDAImportCheckBox=new QCheckBox(i18n("Yes please, load the database with nutrient data for 400+ foods. (Note: English only.)"),this,"USDAImportCheckBox");
 layout->addWidget(USDAImportCheckBox,7,3);
 }
 

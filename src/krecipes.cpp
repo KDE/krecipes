@@ -269,7 +269,7 @@ void Krecipes::import()
 		{
 			KTextEdit *warningEdit = new KTextEdit( this );
 			warningEdit->setTextFormat( Qt::RichText );
-			warningEdit->setText( QString(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occured.<br><br>")) + importer->getMessages() );
+			warningEdit->setText( QString(i18n("NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>")) + importer->getMessages() );
 			warningEdit->setReadOnly(true);
 
 			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n("Import warnings"), KDialogBase::Ok, KDialogBase::Default, this );

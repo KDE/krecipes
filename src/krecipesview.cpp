@@ -741,10 +741,10 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		
 		case SelectP:
 		contextTitle->setText(i18n("<b>Recipes list</b>"));
-		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily! Just type part of its name.<br><br>"
-		"Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i><br><br>"
-		"Right click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends <br><br>"
-		"Oh and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a> and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
+		contextText->setText(i18n("<b>Search</b> for your favourite recipes easily: just type part of its name.<br><br>"
+		"Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i>.<br><br>"
+		"Right-click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends.<br><br>"
+		"Oh, and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
 		));
 		break;
 		
@@ -757,9 +757,9 @@ if (leftPanel->currentMenu()==leftPanel->mainMenu())
 		
 		case DietP:
 		contextTitle->setText(i18n("<b>Diet Helper</b>"));
-		contextText->setText(i18n("This dialog will help you creating a diet for several weeks/days.<br><br>"
-		"Choose how many days the diet will be, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too :) <br><br>"
+		contextText->setText(i18n("This dialog will help you in creating a diet for several weeks/days.<br><br>"
+		"Choose how many days the diet will be for, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
+		"Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too....<br><br>"
 		));
 		break;
 		
@@ -811,7 +811,7 @@ else if (leftPanel->currentMenu()==dataMenu)
 		
 		case RecipeEdit:
 		contextTitle->setText(i18n("<b>Edit recipe</b>"));
-		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes!<br><br>"
+		contextText->setText(i18n("Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
 		"If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
 		"Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
 		));

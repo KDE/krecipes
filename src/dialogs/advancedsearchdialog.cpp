@@ -275,7 +275,7 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 
 void AdvancedSearchDialog::languageChange()
 {
-	searchButton->setText( i18n( "Search!" ) );
+	searchButton->setText( i18n( "Search." ) );
 	categoriesBox->setTitle( i18n( "Categories" ) );
 	catTypeComboBox->clear();
 	catTypeComboBox->insertItem( i18n( "Belong to:" ) );
@@ -305,7 +305,7 @@ void AdvancedSearchDialog::languageChange()
 	ingTypeComboBox->clear();
 	ingTypeComboBox->insertItem( i18n( "Use:" ) );
 	ingTypeComboBox->insertItem( i18n( "Do not use:" ) );
-	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses or doesn't use certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
+	QWhatsThis::add( ingTypeComboBox, i18n( "Here you can search for recipes based on whether or not a recipe uses or does not use certain ingredients.  Note that you can use both the inclusive and exclusive searches simultaneously." ) );
 	ingSelectAllButton->setText( i18n( "Select All" ) );
 	ingUnselectAllButton->setText( i18n( "Unselect All" ) );
 	resultBox->setTitle( i18n( "Search Results" ) );

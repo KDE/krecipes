@@ -48,7 +48,7 @@ void KreImporter::parseFile( const QString &filename )
     }
     if(name.isEmpty()){
 			kdDebug()<<"error: Archive doesn't contain a valid Krecipes file"<<endl;
-			setErrorMsg( i18n("Archive doesn't contain a valid Krecipes file") );
+			setErrorMsg( i18n("Archive does not contain a valid Krecipes file") );
 			return;
     }
     QString tmp_dir = locateLocal("tmp", "");
@@ -59,7 +59,7 @@ void KreImporter::parseFile( const QString &filename )
   }
   else
   {
-	setErrorMsg( i18n("File extension doesn't match that of a valid Krecipes file.") );
+	setErrorMsg( i18n("File extension does not match that of a valid Krecipes file.") );
 	return;
   }
 
@@ -79,7 +79,7 @@ void KreImporter::parseFile( const QString &filename )
 
 		if (kreml.tagName() != "krecipes")
 		{
-			setErrorMsg( i18n("This file doesn't appear to be a *.kreml file") );
+			setErrorMsg( i18n("This file does not appear to be a *.kreml file") );
 			return;
 		}
 

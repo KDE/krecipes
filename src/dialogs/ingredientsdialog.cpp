@@ -555,7 +555,7 @@ void IngredientsDialog::openUSDADialog(void)
 			reloadPropertyList(); //update property list upon success
 	}
 	else
-		QMessageBox::information(this,QString::null,i18n("No ingredient selected!"));
+		QMessageBox::information(this,QString::null,i18n("No ingredient selected."));
 }
 
 #include "ingredientsdialog.moc"
