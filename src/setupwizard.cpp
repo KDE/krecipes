@@ -318,12 +318,14 @@ QString ServerSetupPage::dbName(void)
 return(this->dbNameEdit->text());;
 }
 
-void ServerSetupPage::getServerInfo(QString &host, QString &client, QString &user, QString &pass)
+void ServerSetupPage::getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass)
 {
+isRemote=remoteServerCheckBox->isChecked();
 host=serverEdit->text();
 client=clientEdit->text();
 user=usernameEdit->text();
 pass=passwordEdit->text();
+dbName=this->dbNameEdit->text();
 }
 
 SavePage::SavePage(QWidget *parent):QWidget(parent)
@@ -385,9 +387,9 @@ permissionsSetupPage->getAdmin(adminUser,adminPass);
 
 }
 
-void SetupWizard::getServerInfo(QString &host, QString &client, QString &user, QString &pass)
+void SetupWizard::getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName,QString &user, QString &pass)
 {
-serverSetupPage->getServerInfo(host,client,user,pass);
+serverSetupPage->getServerInfo(isRemote,host,client,dbName,user,pass);
 }
 
 DataInitializePage::DataInitializePage(QWidget *parent):QWidget(parent)

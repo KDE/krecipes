@@ -252,19 +252,31 @@ if (!setupDone)
 {
 
 bool setupUser,initializeData,adminEnabled; QString adminUser,adminPass,user,pass,host,client,dbName;
+bool isRemote;
 
 SetupWizard *setupWizard=new SetupWizard(this);
 if(setupWizard->exec()== QDialog::Accepted)
 {
-
+std::cerr<<"Setting up\n";
 setupWizard->getOptions(setupUser,initializeData);
+
+// Setup user if necessary
+
 if (setupUser)
 	{
+	std::cerr<<"Setting up user\n";
 	setupWizard->getAdminInfo(adminEnabled,adminUser,adminPass);
-	setupWizard->getServerInfo(host,client,user,pass);
-	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
+	setupWizard->getServerInfo(isRemote,host,client,dbName,user,pass);
+
+	if (!adminEnabled)
+	{
+	std::cerr<<"Using default admin\n";
+	adminUser="root";
+	adminPass=QString::null;
 	}
 
+	setupUserPermissions(host,client,dbName,user,pass,adminUser,adminPass);
+	}
 }
 delete setupWizard;
 }
@@ -284,6 +296,7 @@ RecipeDB *db;
 
 if (adminUser!=QString::null)
 	{ // Login as admin in the (remote) server and createDB if necessary
+	std::cerr<<"Open db as:"<< adminUser<<" "<<adminPass<<"\n";
 	db= new RecipeDB(host,adminUser,adminPass,dbName,false); // false means don't initialize db
 	}
 	else{ // Login as root with no password

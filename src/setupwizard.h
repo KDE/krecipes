@@ -35,7 +35,7 @@ public:
     ~SetupWizard();
     void getOptions(bool &setupUser, bool &initializeData);
     void getAdminInfo(bool &enabled,QString &adminUser,QString &adminPass);
-    void getServerInfo(QString &host,QString &client,QString &user,QString &pass);
+    void getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName,QString &user, QString &pass);
 private:
 	// Widgets
 	WelcomePage *welcomePage;
@@ -94,7 +94,7 @@ public:
 	QString dbName(void);
 	QString server(void);
 	QString client(void);
-	void getServerInfo(QString &host,QString &client,QString &user,QString &pass);
+	void getServerInfo(bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass);
 private:
 	// Widgets
 	QLabel *logo;
