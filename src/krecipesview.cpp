@@ -219,6 +219,7 @@ if (!setupDone)
 {
 SetupWizard* setupWizard=new SetupWizard();
 setupWizard->exec();
+delete setupWizard;
 }
 
 }
