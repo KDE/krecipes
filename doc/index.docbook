@@ -1462,7 +1462,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 </row></tbody></tgroup></informaltable>
 
 
-<para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the <keycap>Ctrl</keycap> and simulataneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <guilabel>Custom</guilabel> label.</para>
+<para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the <keycap>Ctrl</keycap> and simulataneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <guilabel>Custom</guilabel> label.</para>
 
 <para>Clicking the <guibutton>OK</guibutton> button, will set a change made, for instance if you cleared a shortcut and didn't want to set another, and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The <guibutton>Cancel</guibutton> button on the shortcut entry screen will cancel setting of the shortcut and return you to the main interface.</para>
 
@@ -1493,7 +1493,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <listitem><para>Click the <guibutton>OK</guibutton> button.  You will be returned to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.</para></listitem>
 <listitem><para>Select another <emphasis>Action</emphasis>, for example, <quote>About Krecipes</quote>.</para></listitem>
 <listitem><para>Again, make sure that you have selected the <guilabel>Multi-key mode</guilabel> tickbox.</para></listitem>
-<listitem><para>For your shortcut combination, type A,B by pressing the <keycap>A</keycap> key and then, the <keycap>B</keycap> key &ndash; A,B will show in the shortcut textbox.</para></listitem>
+<listitem><para>For your shortcut combination, type A,B by pressing the <keycap>A</keycap> key and then, the <keycap>B</keycap> key &ndash; <emphasis>A,B</emphasis> will show in the shortcut textbox.</para></listitem>
 <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
 <listitem><para>Back on the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen, click the <guibutton>OK</guibutton> button to close the window.</para></listitem>
 </orderedlist>
