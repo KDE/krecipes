@@ -130,10 +130,12 @@ private:
 	void enableSaveButton(bool enabled);
 	void close(void);
 	void showRecipe(void);
+	void addToShoppingList(void);
 	public slots:
 	void save (void); // Activated when krecipes.cpp sends signal save()
 
 	signals:
+	void addRecipeToShoppingList(int recipeID);
 	void changed(void);
 	void closeRecipe(void);
 	void createButton(QWidget* w,QString title);

@@ -144,6 +144,9 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Show a recipe when requested (just switch panels)
     connect(inputPanel,SIGNAL(showRecipe(int)),this,SLOT(showRecipe(int)));
+
+    // Add recipe to the shopping list when requested
+    connect(inputPanel,SIGNAL(addRecipeToShoppingList(int)),shoppingListPanel,SLOT(addRecipeToShoppingList(int)));
 }
 
 KrecipesView::~KrecipesView()

@@ -50,6 +50,9 @@ private:
     KIconLoader* il;
     ShoppingListViewDialog *shoppingListDisplay;
 
+public slots:
+	void addRecipeToShoppingList(int recipeID); // Called from inputdialog-> through krecipesview
+
 private slots:
 	void addRecipe(void);
 	void removeRecipe(void);

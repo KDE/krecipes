@@ -837,3 +837,27 @@ else if (unsavedChanges)
 // Now open it really
 emit showRecipe(loadedRecipe->recipeID);
 }
+
+void RecipeInputDialog::addToShoppingList(void)
+{
+if (!(loadedRecipe->recipeID>=0))
+{
+switch( KMessageBox::questionYesNo( this,i18n("The recipe was not saved yet, so it cannot be added to the shopping list. Would you like to save it now?"),i18n("Unsaved changes") ) )
+		{
+		case KMessageBox::Yes:
+			save();
+			break;
+		case KMessageBox::No:
+			return;
+		}
+}
+
+emit addRecipeToShoppingList(loadedRecipe->recipeID);
+QMessageBox::information( this,
+			  i18n("Recipe added"),
+			  QString(i18n("The recipe titled \"%1\" was successfully added to the shopping list")).arg(loadedRecipe->title),
+			  QMessageBox::Ok
+			  );
+
+
+}

@@ -140,3 +140,10 @@ recipeList.add(newEl); // Note that the element is *copied*, it's not added as p
 shoppingListDisplay=new ShoppingListViewDialog(0,database,&recipeList);
 shoppingListDisplay->show();
 }
+
+void ShoppingListDialog::addRecipeToShoppingList(int recipeID)
+{
+
+QString title=database->recipeTitle(recipeID);
+QListViewItem *it=new QListViewItem(shopRecipeListView,QString::number(recipeID),title);
+}
