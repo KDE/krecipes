@@ -16,6 +16,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "datablocks/categorytree.h"
 
@@ -25,7 +27,9 @@ LiteRecipeDB::LiteRecipeDB(QString host, QString user, QString pass, QString DBn
 {
 // Define the DB file to be working on. Right now, only hardcoded
 
-QString  dbFile=locateLocal ("appdata",DB_FILENAME);
+KConfig *config = KGlobal::config();
+config->setGroup("Server");
+QString  dbFile=config->readEntry("DBFile",locateLocal ("appdata",DB_FILENAME));
 
 kdDebug()<<"Connecting to the SQLite database\n";
 	DBuser=user;DBpass=pass;DBhost=host;

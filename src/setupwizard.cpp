@@ -14,17 +14,21 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <iostream>
 #include <qhbox.h>
 #include <qvgroupbox.h>
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kapp.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
+
 #include "setupwizard.h"
 
 SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f):KWizard(parent,name, modal,f)
@@ -34,6 +38,9 @@ addPage(welcomePage,i18n("Welcome to Krecipes"));
 
 dbTypeSetupPage=new DBTypeSetupPage(this);
 addPage(dbTypeSetupPage,i18n("Database Type"));
+
+sqliteSetupPage = new SQLiteSetupPage(this);
+addPage(sqliteSetupPage,i18n("Server Settings"));
 
 permissionsSetupPage=new PermissionsSetupPage(this);
 addPage(permissionsSetupPage,i18n("Database Permissions"));
@@ -53,7 +60,12 @@ setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
 #if (HAVE_SQLITE)
 setAppropriate(permissionsSetupPage,false);// Disable By Default
 setAppropriate(serverSetupPage,false); // if we have SQLite (since it's default, and doesn't require these settings)
+setAppropriate(sqliteSetupPage,true);
+#else
+setAppropriate(sqliteSetupPage,false);
 #endif
+
+
 
 connect(finishButton(),SIGNAL(clicked()),this,SLOT(save()));
 connect(dbTypeSetupPage,SIGNAL(showPages(bool)),this,SLOT(showPages(bool)));
@@ -69,8 +81,12 @@ SetupWizard::~SetupWizard()
 
 void SetupWizard::showPages(bool show)
 {
+//MySQL pages
 setAppropriate(serverSetupPage,show);
 setAppropriate(permissionsSetupPage,show);
+
+//SQLite pages
+setAppropriate(sqliteSetupPage,!show);
 }
 
 
@@ -355,6 +371,78 @@ pass=passwordEdit->text();
 dbName=this->dbNameEdit->text();
 }
 
+SQLiteSetupPage::SQLiteSetupPage(QWidget *parent):QWidget(parent)
+{
+QGridLayout *layout=new QGridLayout(this,1,1,0,0);
+QSpacerItem *spacer_top=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
+layout->addItem(spacer_top,0,1);
+QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_left,1,0);
+
+
+// Image
+
+QPixmap serverSetupPixmap (locate("data", "krecipes/pics/network.png"));
+logo=new QLabel(this);
+logo->setPixmap(serverSetupPixmap);
+logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+layout->addMultiCellWidget(logo,1,4,1,1,Qt::AlignTop);
+
+QSpacerItem *spacer_from_image=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::Minimum);
+layout->addItem(spacer_from_image,1,2);
+
+
+// Explanation text
+serverSetupText=new QLabel(this);
+serverSetupText->setText(i18n("In this dialog you can adjust SQLite settings."));
+serverSetupText->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum);
+serverSetupText->setAlignment( int( QLabel::AlignTop |QLabel::AlignJustify  ) );
+layout->addWidget(serverSetupText,1,3);
+
+// Text spacer
+
+QSpacerItem* textSpacer = new QSpacerItem( 10,30, QSizePolicy::Minimum, QSizePolicy::Fixed );
+layout->addItem(textSpacer,2,3 );
+
+// Input Boxes
+
+QHBox *hbox = new QHBox(this);
+
+(void)new QLabel(i18n("Database file:"), hbox);
+
+fileEdit=new KLineEdit(hbox);
+fileEdit->setText(locateLocal ("appdata","krecipes.krecdb"));
+hbox->setStretchFactor(fileEdit,2);
+
+KIconLoader il;
+QPushButton *file_select=new QPushButton(il.loadIcon("fileopen",KIcon::NoGroup,16),QString::null,hbox);
+QToolTip::add(file_select,i18n("Open file dialog"));
+file_select->setFixedWidth( 25 );
+
+layout->addWidget(hbox,3,3);
+
+// Bottom Spacers
+
+QSpacerItem* bottomSpacer = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+layout->addItem(bottomSpacer,4,1);
+
+connect( file_select, SIGNAL(clicked()), SLOT(selectFile()) );
+}
+
+QString SQLiteSetupPage::dbFile(void) const
+{
+return(fileEdit->text());
+}
+
+void SQLiteSetupPage::selectFile()
+{
+	KFileDialog dialog(QString::null,"*.*|All Files",this,"dialog",true);
+	if ( dialog.exec() == QDialog::Accepted ) {
+		fileEdit->setText( dialog.selectedFile() );
+	}
+}
+
+
 SavePage::SavePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
@@ -407,6 +495,10 @@ config->writeEntry("Username",serverSetupPage->user());
 config->writeEntry("Password",serverSetupPage->password());
 config->writeEntry("DBName",serverSetupPage->dbName());
 kdDebug()<<"Finished setting the database parameters for MySQL (non SQLite)..."<<endl;
+}
+else {
+config->setGroup("Server");
+config->writeEntry("DBFile",sqliteSetupPage->dbFile());
 }
 
 // Indicate that settings were already made

@@ -3,25 +3,11 @@ AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
 
 dnl ----- Check for existing MySQL ------
+dnl ----- Since we don't need mysql.h, we can always compile MySQL support -----
+dnl ----- TODO: Give option to turn off support -----
 
-KDE_FIND_PATH(mysql_config, MYSQL_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/b\
-in /usr/bin /opt/mysql/bin /usr/local/mysql/bin ], [
-  AC_MSG_WARN([Could not find MySQL anywhere, check http://www.mysql.com/])
-])
-
-if test -n "$MYSQL_CONFIG"; then
-   mysql_incdir=`$MYSQL_CONFIG --cflags`
-   mysql_libdir=`$MYSQL_CONFIG --libs`
-   MYSQL_INC=$mysql_incdir
-   MYSQL_LIBS=$mysql_libdir
-   AC_SUBST(MYSQL_INC)
-   AC_SUBST(MYSQL_LIBS)
-   AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
-   have_mysql="true"
-else
-	AC_DEFINE(HAVE_MYSQL, 0, [have MySQL])
-	have_mysql="false"
-fi
+AC_DEFINE(HAVE_MYSQL, 1, [have MySQL])
+have_mysql="true"
 
 dnl ------ Check for the SQLite headers -----
 
@@ -54,5 +40,3 @@ if test "x$have_mysql" = "xfalse"; then
 	will_not_build_krecipes=true
 	fi
 fi
-
-

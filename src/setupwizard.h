@@ -29,6 +29,7 @@ class PermissionsSetupPage;
 class ServerSetupPage;
 class DataInitializePage;
 class SavePage;
+class SQLiteSetupPage;
 
 
 class SetupWizard:public KWizard{
@@ -47,6 +48,7 @@ private:
 	PermissionsSetupPage *permissionsSetupPage;
 	ServerSetupPage *serverSetupPage;
 	DataInitializePage *dataInitializePage;
+	SQLiteSetupPage *sqliteSetupPage;
 	SavePage *savePage;
 
 private slots:
@@ -111,6 +113,25 @@ private:
 	QCheckBox *remoteServerCheckBox;
 	KLineEdit *serverEdit;
 	KLineEdit *clientEdit;
+};
+
+
+class SQLiteSetupPage:public QWidget{
+Q_OBJECT
+
+public:
+	// Methods
+	SQLiteSetupPage(QWidget *parent);
+	QString dbFile() const;
+
+private slots:
+	void selectFile();
+
+private:
+	// Widgets
+	QLabel *logo;
+	QLabel *serverSetupText;
+	KLineEdit *fileEdit;
 };
 
 

@@ -33,6 +33,39 @@ private slots:
     void saveSettings(void);
 };
 
+
+class MySQLServerPrefs : public QWidget
+{
+public:
+	MySQLServerPrefs( QWidget *parent );
+
+	void saveOptions(void);
+private:
+	// Internal Widgets
+	KLineEdit *serverEdit;
+	KLineEdit *usernameEdit;
+	KLineEdit *passwordEdit;
+	KLineEdit *dbNameEdit;
+};
+
+class SQLiteServerPrefs : public QWidget
+{
+Q_OBJECT
+
+public:
+	SQLiteServerPrefs( QWidget *parent );
+
+	void saveOptions(void);
+
+private slots:
+	void selectFile();
+
+private:
+	// Internal Widgets
+	KLineEdit *fileEdit;
+};
+
+
 class ServerPrefs : public QWidget
 {
     Q_OBJECT
@@ -42,13 +75,8 @@ public:
     // Public Methods
     void saveOptions(void);
 private:
-    // Internal Widgets
-    KLineEdit *serverEdit;
-    KLineEdit *usernameEdit;
-    KLineEdit *passwordEdit;
-    KLineEdit *dbNameEdit;
-
-
+    QWidget *serverWidget;
+    QCheckBox *wizard_button;
 };
 
 class NumbersPrefs : public QWidget
