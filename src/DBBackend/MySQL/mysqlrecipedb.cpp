@@ -136,6 +136,7 @@ recipeToLoad.exec( command);
 		    Element el;
 		    el.id=recipeToLoad.value(0).toInt();
 		    el.name=unescapeAndDecode(recipeToLoad.value(1).toString());
+		    if (el.id!=-1) recipe->categoryList.add(el); // add to list except for default category (-1)
 		    recipe->categoryList.add(el);
                 }
             }
