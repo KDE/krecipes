@@ -390,7 +390,6 @@ void RecipeViewDialog::createBlocks()
 		element->addProperty( QString("top: %1px;").arg(rect->top()/100.0*(p->height())) );
 		element->addProperty( QString("left: %1px;").arg(rect->left()/100.0*(p->width())) );
 		element->addProperty( QString("width: %1px;").arg(rect->width()/100.0*(p->width())) );
-		element->addProperty( QString("height: %1px;").arg(rect->height()/100.0*(p->height())) );
 	}
 }
 
