@@ -50,16 +50,18 @@ recipePropertyList->clear();
 // Note that recipePropertyList is not attached to any ingredient. It's just the total of the recipe
 IngredientPropertyList ingredientPropertyList; // property list for each ingredient
 
+int ingredientNo=1;
 for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
 	{
 	database->loadProperties(&ingredientPropertyList,ing->ingredientID);
 	ingredientPropertyList.divide(recipe.persons); // calculates properties per person
-	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing);
+	addPropertyToList(database,recipePropertyList,ingredientPropertyList,*ing,ingredientNo);
+	ingredientNo++;
 	}
 }
 
 
-void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing)
+void addPropertyToList(RecipeDB *database,IngredientPropertyList *recipePropertyList,IngredientPropertyList &ingPropertyList,Ingredient &ing,int ingredientNo)
 {
 for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyList.getNext())
 	{
@@ -72,7 +74,8 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 
 	if (ratio>0.0) // Could convert units to perUnit
 		{
-		property->amount+=(prop->amount)*(ing.amount)*ratio;
+		if (property->amount>=0) property->amount+=(prop->amount)*(ing.amount)*ratio; //Normal case
+		else property->amount-=(prop->amount)*(ing.amount)*ratio; //The recipe was marked as undefined previously. Keep it negative
 		}
 	else { // Could not convert units
 	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
@@ -80,28 +83,38 @@ for (IngredientProperty *prop=ingPropertyList.getFirst();prop;prop=ingPropertyLi
 
 	}
 	else // Append new property
-	{
-	IngredientProperty property;
-	property.id=prop->id;
-	property.name=prop->name;
-	property.perUnit.id=-1; // It's not per unit, it's total sum of the recipe
-	property.perUnit.name=QString::null; // "
-	property.units=prop->units;
-
-	double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
-
-	if (ratio>0.0) // Could convert units to perUnit
 		{
-		property.amount=(prop->amount)*(ing.amount)*ratio;
-		recipePropertyList->add(property);
+
+		// We are about to add a new property. Were there previous ingredients that didn't have this defined?
+		bool undefined=(ingredientNo>1);  // If 1, it's the first ingredient else, it's the second or more
+		IngredientProperty property;
+		property.id=prop->id;
+		property.name=prop->name;
+		property.perUnit.id=-1; // It's not per unit, it's total sum of the recipe
+		property.perUnit.name=QString::null; // "
+		property.units=prop->units;
+
+		double ratio; ratio=database->unitRatio(ing.unitID, prop->perUnit.id);
+
+		if (ratio>0.0) // Could convert units to perUnit
+			{
+			property.amount=(prop->amount)*(ing.amount)*ratio;
+			if (undefined) property.amount=-(abs(property.amount));
+			recipePropertyList->add(property);
+			}
+		else { // Could not convert units
+		std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
 		}
-	else { // Could not convert units
-	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
-	     }
+
+
+
+		}
 
 	}
 
-	}
+     // The previous procedure doesn't take into account if an appended ingredient has not defined a property.
+     // Mark with negative sign all those properties in the recipe properties, since they're undefined
+     checkUndefined(recipePropertyList,ingPropertyList);
 }
 
 /*
@@ -115,15 +128,17 @@ recipePropertyList->clear();
 
 IngredientPropertyList filteredPropertyList;
 
+int ingredientNo=1;
 for (Ingredient *ing=recipe.ingList.getFirst();ing;ing=recipe.ingList.getNext())
 	{
 	ipl.filter(ing->ingredientID,&filteredPropertyList); // Get the properties for the respective ingredient
 	filteredPropertyList.divide(recipe.persons); // calculates properties per person
-	addPropertyToList(recipePropertyList,filteredPropertyList,*ing,url);
+	addPropertyToList(recipePropertyList,filteredPropertyList,*ing,url,ingredientNo);
+	ingredientNo++;
 	}
 }
 
-void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,Ingredient &ing,UnitRatioList &url)
+void addPropertyToList(IngredientPropertyList *recipePropertyList,IngredientPropertyList &newProperties,Ingredient &ing,UnitRatioList &url,int ingredientNo)
 {
 for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.getNext())
 	{
@@ -136,7 +151,8 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 
 	if (ratio>0.0) // Could convert units to perUnit
 		{
-		property->amount+=(prop->amount)*(ing.amount)*ratio;
+		if (prop->amount>=0) property->amount+=(prop->amount)*(ing.amount)*ratio; //Normal case
+		else property->amount-=(prop->amount)*(ing.amount)*ratio; //The recipe was marked as undefined previously. Keep it negative
 		}
 	else { // Could not convert units
 	     std::cerr<<"\nWarning: I could not calculate the full property list, due to impossible unit conversion";
@@ -145,6 +161,10 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 	}
 	else // The property doesn't exist in the list. Append new property
 	{
+
+	// We are about to add a new property. Were there previous ingredients that didn't have this defined?
+	bool undefined=(ingredientNo>1);  // If 1, it's the first ingredient else, it's the second or more
+
 	IngredientProperty property;
 	property.id=prop->id;
 	property.name=prop->name;
@@ -157,6 +177,7 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 	if (ratio>0.0) // Could convert units to perUnit
 		{
 		property.amount=(prop->amount)*(ing.amount)*ratio;
+		if (undefined) property.amount=-(abs(property.amount));
 		recipePropertyList->add(property);
 		}
 	else { // Could not convert units
@@ -165,4 +186,21 @@ for (IngredientProperty *prop=newProperties.getFirst();prop;prop=newProperties.g
 	}
 
 	}
+
+     // The previous procedure doesn't take into account if an appended ingredient has not defined a property.
+     // Mark with negative sign all those properties in the recipe properties, since they're undefined
+     checkUndefined(recipePropertyList,newProperties);
+
 }
+
+
+void checkUndefined(IngredientPropertyList *recipePropertyList,IngredientPropertyList &addedPropertyList)
+{
+for (IngredientProperty *prop=recipePropertyList->getFirst();prop;prop=recipePropertyList->getNext())
+	{
+	int pos=addedPropertyList.find(prop);
+	if (pos<0) prop->amount=-(abs(prop->amount)); // undefined
+	}
+}
+
+
