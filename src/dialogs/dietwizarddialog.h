@@ -31,9 +31,11 @@
 #include <klistview.h>
 
 #include "datablocks/constraintlist.h"
+#include "datablocks/recipelist.h"
 #include "elementlist.h"
 #include "ingredientpropertylist.h"
 #include "recipe.h"
+
 
 class RecipeDB;
 class EditBox;
@@ -97,6 +99,7 @@ private slots:
 	void changeMealNumber(int mn);
 	void createDiet(void);
 	void createShoppingList(void);
+	void populateIteratorList(RecipeList &rl, QValueList <RecipeList::Iterator> *il);
 signals:
 	void dietReady(void);
 };

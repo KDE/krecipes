@@ -167,32 +167,36 @@ database->loadRecipeDetails(&rlist,true,true);
 
 int recipes_left=rlist.count();
 
-RecipeList tempRList; // FIXME: it helps removing elements without loosing them, but may take too long copying. Better avoid this if possible. Also, we may not want to repeat recipes. Then better use the same array always.
+
+QValueList <RecipeList::Iterator> tempRList; // temporal iterator list so elements can be removed without reloading them again from the DB
 
 bool alert=false;
 
 for (int day=0;day<dayNumber;day++) // Create the diet for the number of days defined by the user
 {
+
 	for (int meal=0;meal<mealNumber;meal++)
 	{
 	int dishNo=( (MealInput*)(mealTabs->page(meal)) )->dishNo();
 
 		for (int dish=0;dish<dishNo;dish++)
 		{
-		tempRList=rlist; // temporal RecipeList so elements can be removed without reloading them again from the DB
+		populateIteratorList(rlist,&tempRList); // temporal iterator list so elements can be removed without reloading them again from the DB
 			bool found=false;
 			while ((!found) && recipes_left)
 			{
 				int random_index=(float)(kapp->random())/(float)RAND_MAX*recipes_left;
-				RecipeList::Iterator rit=tempRList.at(random_index);
+				QValueList<RecipeList::Iterator>::Iterator iit=tempRList.at(random_index); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
+				RecipeList::Iterator rit=*iit;
 				if (found=(((!categoryFiltering(meal,dish)) ||checkCategories(*rit,meal,dish)) && checkConstraints(*rit,meal,dish))) // Check that the recipe is inside the constraint limits and in the categories specified
 				{
 				dietRList->append(*rit);// Add recipe to the diet list
 				}
 
 				// Remove this analized recipe from teh list
-				tempRList.remove(rit);
+				tempRList.remove(iit);
 				recipes_left--;
+
 			}
 			if (!found) alert=true;
 			recipes_left=rlist.count();
@@ -219,6 +223,15 @@ else // show the resulting diet
 	connect(dietDisplay,SIGNAL(signalOk()),this,SLOT(createShoppingList()));
 	dietDisplay->show();
 	}
+
+}
+
+
+void DietWizardDialog::populateIteratorList(RecipeList &rl, QValueList <RecipeList::Iterator> *il)
+{
+il->clear();
+RecipeList::Iterator it;
+for (it=rl.begin();it!=rl.end();it++) il->append(it);
 
 }
 
