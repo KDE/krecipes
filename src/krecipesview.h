@@ -5,16 +5,17 @@
 #ifndef _KRECIPESVIEW_H_
 #define _KRECIPESVIEW_H_
 
-#include <qwidget.h>
-#include <qvbox.h>
+#include <qbitmap.h>
 #include <qbuttongroup.h>
+#include <qevent.h>
+#include <qlabel.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
-#include <qevent.h>
 #include <qtooltip.h>
-#include <qbitmap.h>
+#include <qvbox.h>
+#include <qwidget.h>
 #include <qwidgetstack.h>
-#include <qlabel.h>
+
 
 #include <kiconloader.h>
 #include <kpixmap.h>

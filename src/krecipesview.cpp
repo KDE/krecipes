@@ -20,6 +20,7 @@
 #include <unistd.h>
 
 #include <qlayout.h>
+#include <qimage.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qsplitter.h>
