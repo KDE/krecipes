@@ -541,3 +541,5 @@ bool SelectRecipeDialog::itemIsRecipe( const QListViewItem *item )
 
 	return is_recipe;
 }
+
+#include "selectrecipedialog.moc"

@@ -134,3 +134,5 @@ void PrepMethodsDialog::savePrepMethod(QListViewItem* i)
 }
 
 
+
+#include "prepmethodsdialog.moc"

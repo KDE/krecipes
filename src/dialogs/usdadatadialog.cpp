@@ -120,7 +120,7 @@ void USDADataDialog::importSelected()
 		IngredientPropertyList existing_ing_props; database->loadProperties(&existing_ing_props,ingredient.id);
 
 		int i = 0;
-		for ( QStringList::const_iterator it = data.at(2); property_data_list[i].name; it++, i++ )
+		for ( QStringList::const_iterator it = data.at(2); !property_data_list[i].name.isEmpty(); it++, i++ )
 		{
 			int property_id = property_list.findByName(property_data_list[i].name);
 			if ( property_id == -1 )
@@ -143,3 +143,5 @@ void USDADataDialog::importSelected()
 		reject();
 }
 
+
+#include "usdadatadialog.moc"

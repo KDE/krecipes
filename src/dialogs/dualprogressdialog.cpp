@@ -63,3 +63,5 @@ void DualProgressDialog::setTotalSteps( int steps )
 {
 	m_total_steps = steps;
 }
+
+#include "dualprogressdialog.moc"

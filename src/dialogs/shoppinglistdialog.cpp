@@ -183,3 +183,5 @@ void ShoppingListDialog::clear()
 {
 shopRecipeListView->listView()->clear();
 }
+
+#include "shoppinglistdialog.moc"

@@ -192,3 +192,5 @@ authorsCombo->completionObject()->addItem((*author_it).name);
 
 }
 
+
+#include "selectauthorsdialog.moc"

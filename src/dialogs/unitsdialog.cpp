@@ -248,3 +248,5 @@ void UnitsDialog::reload(void)
 {
 this->reloadData();
 }
+
+#include "unitsdialog.moc"

@@ -152,3 +152,5 @@ void RecipeViewDialog::slotEditButtonClicked()
 {
 	emit recipeSelected(ids_loaded[0],1);
 }
+
+#include "recipeviewdialog.moc"

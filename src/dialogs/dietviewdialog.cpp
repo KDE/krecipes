@@ -137,3 +137,5 @@ void DietViewDialog::slotOk(void)
 emit signalOk();
 close();
 }
+
+#include "dietviewdialog.moc"

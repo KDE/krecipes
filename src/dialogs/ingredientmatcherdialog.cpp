@@ -224,3 +224,5 @@ void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int colu
 		bitBlt(p->device(), 0, listView()->contentsToViewport(QPoint(0,itemPos())).y(), &sectionPm,0,0,totalWidth,height());
 	}
 }
+
+#include "ingredientmatcherdialog.moc"

@@ -126,3 +126,5 @@ void AuthorsDialog::saveAuthor(QListViewItem* i)
 }
 
 
+
+#include "authorsdialog.moc"

@@ -139,3 +139,5 @@ void SelectCategoriesDialog::createNewCategory(void)
 	delete elementDialog;
 }
 
+
+#include "selectcategoriesdialog.moc"

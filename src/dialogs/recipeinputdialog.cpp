@@ -1108,3 +1108,5 @@ void RecipeInputDialog::resizeRecipe(void)
 		reload();
 }
 
+
+#include "recipeinputdialog.moc"

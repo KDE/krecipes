@@ -692,3 +692,5 @@ void AdvancedSearchDialog::back()
 {
 	widgetStack->raiseWidget( searchPage );
 }
+
+#include "advancedsearchdialog.moc"

@@ -203,3 +203,5 @@ void ResizeRecipeDialog::resizeRecipe( double factor )
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it )
 		(*ing_it).amount = (*ing_it).amount * factor;
 }
+
+#include "resizerecipedialog.moc"

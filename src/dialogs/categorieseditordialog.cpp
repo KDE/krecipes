@@ -125,3 +125,5 @@ void CategoriesEditorDialog::saveCategory(QListViewItem* i)
   removeCategoryButton->setEnabled(true);
 }
 
+
+#include "categorieseditordialog.moc"

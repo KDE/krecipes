@@ -537,3 +537,5 @@ void IngredientsDialog::openUSDADialog(void)
 	else
 		QMessageBox::information(this,QString::null,i18n("No ingredient selected!"));
 }
+
+#include "ingredientsdialog.moc"

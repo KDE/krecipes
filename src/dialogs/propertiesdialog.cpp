@@ -119,3 +119,5 @@ void PropertiesDialog::reload(void)
 {
 this->reloadPropertyList();
 }
+
+#include "propertiesdialog.moc"
