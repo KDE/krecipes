@@ -145,7 +145,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 
 		if ( instruction_found && col_one_used )
 		{
-			addWarningMsg( QString(i18n("While loading recipe \"%1\" "
+			addWarningMsg( QString(i18n("While loading recipe <b>%1</b> "
 			  "an ingredient line was found after the directions. "
 			  "While this is valid, it most commonly indicates an incorrectly "
 			  "formatted recipe.")).arg(m_title) );

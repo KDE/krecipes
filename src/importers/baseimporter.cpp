@@ -17,9 +17,92 @@
 #include <kprogress.h>
 #include <kmessagebox.h>
 
+#include <qvaluevector.h>
+
 #include "recipe.h"
 #include "recipedb.h"
 #include "dialogs/recipeimportdialog.h"
+
+class CustomVector : public QValueVector<Element>
+{
+public:
+	CustomVector( const ElementList &list ) : QValueVector<Element>()
+	{
+		reserve(list.count());
+	
+		for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it )
+			push_back(Element((*it).name.lower(),(*it).id)); //lowercase to speed comparisons... this doesn't affect the way it is actually stored
+	}
+	
+	/** Find the string of this list assuming it is sorted using the binary search algorithm */
+	int bsearch( const QString &d ) const
+	{
+		int n1 = 0;
+		int n2 = count() - 1;
+		int mid = 0;
+		bool found = false;
+		while ( n1 <= n2 )
+		{
+			int  res;
+			mid = (n1 + n2)/2;
+			res = QString::compare( d, this->at(mid).name );
+			if ( res < 0 )
+				n2 = mid - 1;
+			else if ( res > 0 )
+				n1 = mid + 1;
+			else
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if ( !found )
+			return -1;
+
+		// search to first of equal items
+		//while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, vec[mid-1]) )
+		//	mid--;
+		return this->at(mid).id;
+	}
+	
+	/** Insert the element into a sorted list, keeping the list sorted.
+	  * This uses a modified binary search to determine the location to
+	  * insert the element.
+	  */
+	void inSort( const Element &element )
+	{
+		if ( count() == 0 )
+		{
+			push_back(element);
+			return;
+		}
+
+		int n1 = 0;
+		int n2 = count() - 1;
+		int mid = 0;
+
+		int res;
+		while ( n1 <= n2 )
+		{
+			mid = (n1 + n2)/2;
+			res = QString::compare( element.name, this->at(mid).name );
+			if ( res < 0 )
+				n2 = mid - 1;
+			else if ( res > 0 )
+				n1 = mid + 1;
+			else
+				break;
+		}
+
+		if ( res > 0 )
+			insert( begin()+mid+1, element );
+		else
+			insert( begin()+mid  , element );
+	}
+};
+
+
 
 BaseImporter::BaseImporter() :
   m_recipe_list(new RecipeList),
@@ -83,7 +166,23 @@ void BaseImporter::import( RecipeDB *db )
 	progress->setTotalSteps( selected_recipes.count() );
 	progress->setFormat(i18n("%v/%m Recipes"));
 
+
+	//binary search these vectors instead of querying the database to see if elements exist
 	ElementList prepMethodList; db->loadPrepMethods( &prepMethodList );
+	CustomVector prepMethodVector( prepMethodList ); qHeapSort( prepMethodVector );
+	
+	ElementList ingList; db->loadIngredients( &ingList );
+	CustomVector ingVector( ingList ); qHeapSort( ingVector );
+
+	ElementList unitList; db->loadUnits( &unitList );
+	CustomVector unitVector( unitList ); qHeapSort( unitVector );
+	
+	ElementList authorList; db->loadAuthors( &authorList );
+	CustomVector authorVector( authorList ); qHeapSort( authorVector );
+	
+	ElementList catList; db->loadCategories( &catList );
+	CustomVector catVector( catList ); qHeapSort( catVector );
+
 
 	RecipeList::iterator recipe_it;
 	for ( recipe_it = selected_recipes.begin(); recipe_it != selected_recipes.end(); ++recipe_it )
@@ -101,30 +200,31 @@ void BaseImporter::import( RecipeDB *db )
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		for ( IngredientList::iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 		{
-			int new_ing_id = db->findExistingIngredientByName((*ing_it).name);
+			int new_ing_id = ingVector.bsearch((*ing_it).name.lower());
 			if ( new_ing_id == -1 && (*ing_it).name != "" )
 			{
 				db->createNewIngredient( (*ing_it).name );
 				new_ing_id = db->lastInsertID();
+				ingVector.inSort( Element( (*ing_it).name.lower(), new_ing_id ) );
 			}
 
-			int new_unit_id = db->findExistingUnitByName((*ing_it).units);
+			int new_unit_id = unitVector.bsearch((*ing_it).units.lower());
 			if ( new_unit_id == -1 )
 			{
 				db->createNewUnit( (*ing_it).units );
 				new_unit_id = db->lastInsertID();
+				unitVector.inSort( Element( (*ing_it).units.lower(), new_unit_id ) );
 			}
 			
 			int new_prep_id = -1;
 			if ( !(*ing_it).prepMethod.isEmpty() )
 			{
-				Element prepMethodFound = prepMethodList.findByName( (*ing_it).prepMethod );
-				new_prep_id = prepMethodFound.id;
+				new_prep_id = prepMethodVector.bsearch((*ing_it).prepMethod.lower());
 				if ( new_prep_id == -1 )
 				{
 					db->createNewPrepMethod( (*ing_it).prepMethod );
 					new_prep_id = db->lastInsertID();
-					prepMethodList.append( Element( (*ing_it).prepMethod, new_prep_id ) );
+					prepMethodVector.inSort( Element( (*ing_it).prepMethod.lower(), new_prep_id ) );
 				}
 			}
 
@@ -141,11 +241,12 @@ void BaseImporter::import( RecipeDB *db )
 
 		for ( ElementList::iterator author_it = (*recipe_it).authorList.begin(); author_it != (*recipe_it).authorList.end(); ++author_it )
 		{
-			int new_author_id = db->findExistingAuthorByName( (*author_it).name );
+			int new_author_id = authorVector.bsearch( (*author_it).name.lower() );
 			if ( new_author_id == -1 && (*author_it).name != "" )
 			{
 				db->createNewAuthor((*author_it).name);
 				new_author_id = db->lastInsertID();
+				authorVector.inSort( Element( (*author_it).name.lower(), new_author_id ) );
 			}
 
 			(*author_it).id = new_author_id;
@@ -153,11 +254,12 @@ void BaseImporter::import( RecipeDB *db )
 
 		for ( ElementList::iterator cat_it = (*recipe_it).categoryList.begin(); cat_it != (*recipe_it).categoryList.end(); ++cat_it )
 		{
-			int new_cat_id = db->findExistingCategoryByName( (*cat_it).name );
+			int new_cat_id = catVector.bsearch( (*cat_it).name.lower() );
 			if ( new_cat_id == -1 && (*cat_it).name != "" )
 			{
 				db->createNewCategory((*cat_it).name);
 				new_cat_id = db->lastInsertID();
+				catVector.inSort( Element( (*cat_it).name.lower(), new_cat_id ) );
 			}
 
 			(*cat_it).id = new_cat_id;
