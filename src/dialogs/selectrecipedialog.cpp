@@ -39,6 +39,10 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 	searchLabel=new QLabel(searchBar); searchLabel->setText(i18n("Search:")); searchLabel->setFixedWidth(searchLabel->fontMetrics().width(i18n("Search:"))+5);
 	searchBox=new KLineEdit(searchBar);
 
+	QSpacerItem* searchSpacer=new QSpacerItem(10,10,QSizePolicy::Fixed,QSizePolicy::Minimum); layout->addItem(searchSpacer,1,2);
+	categoryBox=new KComboBox(this);
+	layout->addWidget(categoryBox,1,3);
+
 
 	QSpacerItem* spacerFromSearchBar = new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
     	layout->addItem(spacerFromSearchBar,2,1);
@@ -50,10 +54,10 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
     	recipeListView->addColumn(i18n("Title"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
 	recipeListView->setRootIsDecorated(true); // Show "+" open icons
-	layout->addWidget(recipeListView,3,1);
+	layout->addMultiCellWidget(recipeListView,3,3,1,3);
 
 	buttonBar=new QHBox(this);
-	layout->addWidget(buttonBar,4,1);
+ 	layout->addMultiCellWidget(buttonBar,4,4,1,3);
 
 	openButton=new QPushButton(buttonBar);
 	openButton->setText(i18n("Open Recipe"));
@@ -155,21 +159,24 @@ void SelectRecipeDialog::filter(const QString& s)
 {
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
-	if ((s==QString::null)||(it->firstChild())) it->setVisible(true); // Don't filter if the filter text is empty or the item is a category
-
-	else if (it->text(2).contains(s,false)) it->setVisible(true);
-
-	else it->setVisible(false);
-
-	// Check if there are any children (is a category)
-	for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
+	if (!it->firstChild()) // It's not a category
 	{
-	if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
+		if (s==QString::null) it->setVisible(true); // Don't filter if the filter text is empty
+		else if (it->text(2).contains(s,false)) it->setVisible(true);
 
-	else if (cit->text(2).contains(s,false)) cit->setVisible(true);
+		else it->setVisible(false);
+	}
+	else // It's a category. Check the children
+	{
+		for (QListViewItem *cit=it->firstChild();cit;cit=cit->nextSibling())
+		{
+		if (s==QString::null) cit->setVisible(true); // Don't filter if the filter text is empty
 
-	else cit->setVisible(false);
+		else if (cit->text(2).contains(s,false)) cit->setVisible(true);
 
+		else cit->setVisible(false);
+
+		}
 	}
 
 

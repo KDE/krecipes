@@ -16,6 +16,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
+#include <kcombobox.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kiconloader.h>
@@ -51,6 +52,7 @@ private:
   KIconLoader *il;
   QLabel *searchLabel;
   KLineEdit *searchBox;
+  KComboBox *categoryBox;
   // Internal Data
   RecipeDB *database;
   ElementList *recipeList;
