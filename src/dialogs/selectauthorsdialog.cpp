@@ -41,10 +41,10 @@ layout->addItem(spacerFromCombo,2,1);
 
 il=new KIconLoader;
 addAuthorButton=new QPushButton(this);
-QPixmap pm=il->loadIcon("redo", KIcon::NoGroup,16); addAuthorButton->setIconSet(pm);
+QPixmap pm=il->loadIcon("forward", KIcon::NoGroup,16); addAuthorButton->setIconSet(pm);
 layout->addWidget(addAuthorButton,3,1);
 removeAuthorButton=new QPushButton(this);
-pm=il->loadIcon("undo", KIcon::NoGroup,16); removeAuthorButton->setIconSet(pm);
+pm=il->loadIcon("back", KIcon::NoGroup,16); removeAuthorButton->setIconSet(pm);
 layout->addWidget(removeAuthorButton,4,1);
 
 
