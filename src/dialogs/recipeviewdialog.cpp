@@ -74,7 +74,7 @@ temp_photo_geometry = config->readRectEntry("Geometry");
 
 int phwidth = temp_photo_geometry.width()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
 int phheight =temp_photo_geometry.height()/100.0*(((QWidget*)parent())->width()); // Scale to this dialog
-
+std::cerr<<"Photo size is: "<<phwidth<<" "<<phheight<<"\n";
 
 QImage image;
 if (loadedRecipe->photo.isNull())
@@ -224,7 +224,9 @@ void RecipeViewDialog::createBlocks()
 
 	//========================PHOTO========================//
 	config->setGroup("PhotoSetup");
-	geometry = new QRect(temp_photo_geometry);
+	geometry=new QRect(temp_photo_geometry);
+	geometry->setWidth(geometry->width()*100.0/((QWidget*)parent())->width());// The size of all objects needs to be saved in percentage format
+	geometry->setHeight(geometry->height()*100.0/((QWidget*)parent())->width());// The size of all objects needs to be saved in percentage format
 	geometries.append( geometry );
 
 	QString photo_html = QString("<img src=\"/tmp/krecipes_photo.png\">");
@@ -534,7 +536,7 @@ QString DivElement::generateCSS()
 {
 	QString result;
 
-	result += QString("DIV#%1\n").arg(m_id);
+	result += QString("#%1\n").arg(m_id);
 	result += "{\n";
 
 	for ( QStringList::Iterator it = m_properties.begin(); it != m_properties.end(); ++it )
