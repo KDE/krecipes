@@ -11,15 +11,37 @@
 #define SETUPWIZARD_H
 
 #include <kwizard.h>
+#include <qlabel.h>
+#include <qlineedit.h>
 
 /**
 @author Unai Garro
 */
-class SetupWizard:KWizard{
+
+class WelcomePage;
+
+class SetupWizard:public KWizard{
 public:
 
-     SetupWizard(QWidget *parent);
+     SetupWizard(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
     ~SetupWizard();
+private:
+	// Widgets
+	WelcomePage *welcomePage;
+
+
+
+};
+
+class WelcomePage:public QWidget{
+public:
+	// Methods
+	WelcomePage(QWidget *parent);
+
+private:
+	// Widgets
+	QLabel *logo;
+	QLabel *welcomeText;
 
 };
 
