@@ -225,12 +225,12 @@ delete il; // remove iconloader
 
 void KrecipesView::translate(){
   button0->setTitle(i18n("Find/Edit Recipes"));
-  button1->setText(i18n("Shopping List"));
-  button2->setText(i18n("Ingredients"));
-  button3->setText(i18n("Properties"));
-  button4->setText(i18n("Units"));
-  button5->setText(i18n("Recipe Categories"));
-  button6->setText(i18n("Authors"));
+  button1->setTitle(i18n("Shopping List"));
+  button2->setTitle(i18n("Ingredients"));
+  button3->setTitle(i18n("Properties"));
+  button4->setTitle(i18n("Units"));
+  button5->setTitle(i18n("Recipe Categories"));
+  button6->setTitle(i18n("Authors"));
 }
 
 void KrecipesView::print(QPainter *p, int height, int width)
