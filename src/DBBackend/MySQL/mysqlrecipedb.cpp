@@ -318,16 +318,15 @@ mysql_close(mysqlDB);
 }
 
 
-void MySQLRecipeDB::loadRecipeList(ElementList *list, ElementList *categoryList)
+void MySQLRecipeDB::loadRecipeList(ElementList *list, int categoryID)
 {
 list->clear();
-if (categoryList) categoryList->clear();
 
 QString command;
 
 
 // Load recipe list
-if (!categoryList)
+if (!categoryID)
 {
 command="SELECT id,title FROM recipes;";
 
@@ -365,7 +364,7 @@ QSqlQuery recipeToLoad( command,database);
 		    if (recipe.id!=previousID) // new recipe
 		    {
 
-		    if (previousID!=-1) categoryList->add (category);// Store the category list for the previous recipe
+		    //if (previousID!=-1) categoryList->add (category);// Store the category list for the previous recipe
 		    list->add(recipe); // Create a new recipe
 		    category.id=recipe.id; // it stores the corresponding recipe, not category id (there are several cat. ID's and the recipeID may be useful) // FIXME: check which is best and other options for later categorizing.
 		    category.name=categoryS; // Set the (first) category of this recipe
@@ -380,7 +379,7 @@ QSqlQuery recipeToLoad( command,database);
 
 		}
 
-		    categoryList->add(category);// Add the last missing categories to the list
+		   // categoryList->add(category);// Add the last missing categories to the list
 	}
 
 }

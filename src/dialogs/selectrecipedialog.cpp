@@ -45,10 +45,11 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 
 	il=new KIconLoader;
 	recipeListView=new KListView(this);
+	recipeListView->addColumn(i18n("Category"));
     	recipeListView->addColumn(i18n("Id"));
     	recipeListView->addColumn(i18n("Title"));
-	recipeListView->addColumn(i18n("Categories"));
     	recipeListView->setGeometry( QRect( 10, 65, 190, 280 ) );
+	recipeListView->setRootIsDecorated(true); // Show "+" open icons
 	layout->addWidget(recipeListView,3,1);
 
 	buttonBar=new QHBox(this);
@@ -87,14 +88,32 @@ void SelectRecipeDialog::loadRecipeList(void)
 recipeListView->clear();
 recipeList->clear();
 categoryList->clear();
-database->loadRecipeList(recipeList,categoryList);
 
-for ( Element *recipe=recipeList->getFirst(),*category=categoryList->getFirst();(recipe && category);recipe=recipeList->getNext(),category=categoryList->getNext() )
+
+
+
+// Load the recipe list
+
+// Show the categories first
+
+database->loadCategories(categoryList);
+for ( Element *category=categoryList->getFirst();category;category=categoryList->getNext())
 	{
-	QListViewItem *it=new QListViewItem (recipeListView,QString::number(recipe->id),recipe->name,category->name);
+	QListViewItem *categoryIt=new QListViewItem (recipeListView,category->name,"","");
+	// Load the recipes in this category
+
+	database->loadRecipeList(recipeList,category->id);
+
+	for ( Element *recipe=recipeList->getFirst();recipe;recipe=recipeList->getNext())
+	{
+	std::cerr<<recipe->name<<"\n";
+	QListViewItem *it=new QListViewItem (categoryIt,"",QString::number(recipe->id),recipe->name,"");
+	}
+
 	}
 
 filter(searchBox->text());
+
 }
 
 void SelectRecipeDialog::open(void)
@@ -105,7 +124,7 @@ if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),0
 void SelectRecipeDialog::edit(void)
 {
 QListViewItem *it;
-if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),1);
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(1).toInt(),1);
 }
 void SelectRecipeDialog::remove(void)
 {
@@ -124,7 +143,7 @@ void SelectRecipeDialog::filter(const QString& s)
 for (QListViewItem *it=recipeListView->firstChild();it;it=it->nextSibling())
 	{
 	if (s==QString::null) it->setVisible(true); // Don't filter if text is empty
-	else if (it->text(1).contains(s,false)) it->setVisible(true);
+	else if (it->text(0).contains(s,false)) it->setVisible(true);
 	else it->setVisible(false);
 	}
 }

@@ -78,7 +78,7 @@ public:
 	virtual void loadRecipe(Recipe *recipe,int recipeID=0)=0;
 	virtual void loadRecipeAuthors(int recipeID, ElementList *list)=0;
 	virtual void loadRecipeCategories(int recipeID, ElementList *categoryList)=0;
-	virtual void loadRecipeList(ElementList *list,ElementList *categoryList=0)=0;
+	virtual void loadRecipeList(ElementList *list,int categoryID=0)=0;
 	virtual void loadUnits(ElementList *list)=0;
 	virtual void loadUnitRatios(UnitRatioList *ratioList)=0;
 

@@ -335,16 +335,15 @@ for (Element *author=recipe->authorList.getLast(); author; author=recipe->author
 }
 
 
-void LiteRecipeDB::loadRecipeList(ElementList *list, ElementList *categoryList)
+void LiteRecipeDB::loadRecipeList(ElementList *list,int categoryID)
 {
 list->clear();
-if (categoryList) categoryList->clear();
 
 QString command;
 
 // Load the recipe list
 
-if (!categoryList)
+if (!categoryID)
 {
 command="SELECT id,title FROM recipes;";
 
@@ -365,57 +364,30 @@ if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 }
 
 
-// If requested, load categories too
+// If requested, load by category
 else
 {
-command="SELECT r.id,r.title,cl.category_id,c.name FROM recipes r, category_list cl, categories c WHERE r.id=cl.recipe_id AND cl.category_id=c.id;";
-
-int previousID=-1; // Ideintifies the last recipe ID that was inserted
-Element category;
+command=QString("SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;").arg(categoryID);
 
 QSQLiteResult recipeToLoad=database->executeQuery(command);
 if ( recipeToLoad.getStatus()!=QSQLiteResult::Failure ) {
 	QSQLiteResultRow row=recipeToLoad.first();
             while ( !recipeToLoad.atEnd() ) {
 
-		    // Load recipe
 		    Element recipe;
 		    recipe.id=row.data(0).toInt();
 		    recipe.name=unescapeAndDecode(row.data(1));
-		    QString categoryS=unescapeAndDecode(row.data(3));
-		    // Increase category list or add new recipe?
-
-		    if (recipe.id!=previousID) // new recipe
-		    {
-
-		    if (previousID!=-1) categoryList->add (category);// Store the category list for the previous recipe
-		    list->add(recipe); // Create a new recipe
-		    category.id=recipe.id; // it stores the corresponding recipe, not category id (there are several cat. ID's and the recipeID may be useful) // FIXME: check which is best and other options for later categorizing.
-		    category.name=categoryS; // Set the (first) category of this recipe
-		    }
-		    else
-		    {
-		    category.name+=QString(", ")+categoryS; // Add the new category
-		    }
-
-		    if (recipeToLoad.atEnd()) // Add the last missing categories to the list
-		    {
-		    categoryList->add(category);
-		    }
-
-		    // Store new ID as last ID
-		    previousID=recipe.id;
-
-		    // Get next recipe
+		    list->add(recipe);
 		    row=recipeToLoad.next();
 
 		}
-
 	}
 
 }
 
 }
+
+
 
 
 void LiteRecipeDB::removeRecipe(int id)
