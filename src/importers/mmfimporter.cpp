@@ -64,6 +64,13 @@ static expand_unit_info unit_info[] = {
 
 MMFImporter::MMFImporter( const QString &file ) : BaseImporter()
 {
+	//the pointers these contain will be passed to created recipe
+	m_left_col_ing.setAutoDelete(false);
+	m_right_col_ing.setAutoDelete(false);
+	m_all_ing.setAutoDelete(false);
+	m_categories.setAutoDelete(false);
+	m_authors.setAutoDelete(false);
+
 	resetVars();
 
 	QFile input( file );
@@ -290,11 +297,11 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		kdDebug()<<"found ingredient header: "<<header<<endl;
 
 		for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
-			m_all_ing.add( *ing );
+			m_all_ing.append( ing );
 		m_left_col_ing.empty();
 
 		for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
-			m_all_ing.add( *ing );
+			m_all_ing.append( ing );
 		m_right_col_ing.empty();
 
 		Ingredient title;
@@ -310,9 +317,9 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 void MMFImporter::putDataInRecipe()
 {
 	for (Ingredient *ing=m_left_col_ing.getFirst(); ing; ing=m_left_col_ing.getNext())
-		m_all_ing.add( *ing );
+		m_all_ing.append( ing );
 	for (Ingredient *ing=m_right_col_ing.getFirst(); ing; ing=m_right_col_ing.getNext())
-		m_all_ing.add( *ing );
+		m_all_ing.append( ing );
 
 	//create the recipe
 	Recipe *new_recipe = new Recipe;

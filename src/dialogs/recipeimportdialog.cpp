@@ -19,11 +19,11 @@
 #include <qlayout.h>
 #include <qheader.h>
 #include <qvariant.h>
+#include <qdict.h>
 
 #include "recipe.h"
 
-RecipeImportDialog::RecipeImportDialog( QPtrList<Recipe> *list, QWidget *parent ) : QDialog(parent,0,true),
-  m_recipe_list(list)
+RecipeImportDialog::RecipeImportDialog( const QPtrList<Recipe> &list, QWidget *parent ) : QDialog(parent,0,true)
 {
 	Form1Layout = new QHBoxLayout( this, 11, 6 );
 
@@ -70,21 +70,87 @@ void RecipeImportDialog::languageChange()
 	cancelButton->setText( i18n( "&Cancel" ) );
 }
 
-void RecipeImportDialog::loadListView( QPtrList<Recipe> *list )
+void RecipeImportDialog::loadListView( const QPtrList<Recipe> &list )
 {
-	head_item = new CustomCheckListItem( kListView, i18n("All"), QCheckListItem::CheckBox );
+	CustomCheckListItem *head_item = new CustomCheckListItem( kListView, QString(i18n("All (%1)")).arg(list.count()), QCheckListItem::CheckBox );
 	head_item->setOpen(true);
 
-	recipe_items = new QPtrVector<CustomCheckListItem>(list->count());
+	//get all categories
+	QStringList categoryList;
+
+	Recipe *recipe;
+
+	QPtrListIterator<Recipe> recipe_it( list );
+	while ( (recipe = recipe_it.current()) != 0 )
+	{
+		++recipe_it;
+
+		QPtrListIterator<Element> cat_it( recipe->categoryList );
+		Element *cat;
+		while ( (cat = cat_it.current()) != 0 )
+		{
+			++cat_it;
+			if ( categoryList.contains( cat->name ) < 1 )
+				categoryList << cat->name;
+		}
+	}
+
+	//create all category check list items
+	QDict<CustomCheckListItem> all_categories;
+
+	QStringList::iterator it;
+	for ( it = categoryList.begin(); it != categoryList.end(); ++it )
+	{
+		CustomCheckListItem *category_item = new CustomCheckListItem( head_item, *it, QCheckListItem::CheckBox );
+		//category_item->setOpen(true);
+
+		all_categories.insert( *it, category_item );
+	}
+
+	//add recipes to category check list items
+	recipe_items = new QPtrDict<Recipe>;
 
 	CustomCheckListItem *item = 0;
+	CustomCheckListItem *category_item = 0;
 
-	int i = 0;
-	for ( Recipe *recipe = list->first(); recipe; recipe = list->next() )
+	QPtrListIterator<Recipe> list_it( list );
+	while ( (recipe = list_it.current()) != 0 )
 	{
-		item = new CustomCheckListItem( head_item, item, recipe->title, QCheckListItem::CheckBox );
-		recipe_items->insert(i,item);
-		i++;
+		++list_it;
+
+		if ( recipe->categoryList.count() == 0 )
+		{
+			if ( !category_item ) //don't create this until there are recipes to put in it
+				category_item = new CustomCheckListItem( head_item, i18n("Uncategorized"), QCheckListItem::CheckBox );
+			CustomCheckListItem *item = new CustomCheckListItem(category_item,recipe->title, QCheckListItem::CheckBox);
+			recipe_items->insert(item,recipe);
+		}
+		else
+		{
+			QPtrListIterator<Element> cat_it( recipe->categoryList );
+			Element *cat;
+			while ( (cat = cat_it.current()) != 0 )
+			{
+				++cat_it;
+
+				CustomCheckListItem *category_item = all_categories[cat->name];
+
+				item = new CustomCheckListItem( category_item, item, recipe->title, QCheckListItem::CheckBox );
+				recipe_items->insert(item,recipe);
+			}
+		}
+	}
+
+	//append the number of recipes in each category to the check list item text
+	QDictIterator<CustomCheckListItem> categories_it( all_categories );
+	for( ; categories_it.current(); ++categories_it )
+	{
+		int count = 0;
+		for (QCheckListItem *it=static_cast<QCheckListItem*>(categories_it.current()->firstChild()); it; it = static_cast<QCheckListItem*>(it->nextSibling()))
+		{
+			count++;
+		}
+		categories_it.current()->setText( 0, categories_it.current()->text(0) + QString(" (%1)").arg(count) );
 	}
 }
 
@@ -92,16 +158,22 @@ QPtrList<Recipe> * RecipeImportDialog::getSelectedRecipes()
 {
 	QPtrList<Recipe> *selected_recipes = new QPtrList<Recipe>;
 
-	for ( unsigned int i = 0; i < m_recipe_list->count(); i++ )
+	QPtrDictIterator<Recipe> it( *recipe_items );
+	for( ; it.current(); ++it )
 	{
-		if ( (*recipe_items)[i]->isOn() )
-			selected_recipes->prepend(m_recipe_list->at(i));
+		if ( static_cast<CustomCheckListItem*>(it.currentKey())->isOn() &&
+		     selected_recipes->findRef( it.current() ) == -1 )
+			selected_recipes->prepend( it.current() );
 	}
 
 	return selected_recipes;
 }
 
 CustomCheckListItem::CustomCheckListItem(QListView *parent, const QString & s, Type t)
+ : QCheckListItem(parent,s,t), m_locked(false)
+{}
+
+CustomCheckListItem::CustomCheckListItem(CustomCheckListItem *parent, const QString & s, Type t)
  : QCheckListItem(parent,s,t), m_locked(false)
 {}
 

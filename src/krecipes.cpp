@@ -21,6 +21,7 @@
 #include "importers/mx2importer.h"
 #include "importers/mxpimporter.h"
 #include "importers/nycgenericimporter.h"
+#include "importers/recipemlimporter.h"
 
 #include "recipe.h"
 #include "DBBackend/recipedb.h"
@@ -221,7 +222,8 @@ void Krecipes::import()
 	  "*.mx2|MasterCook (*.mx2)\n"
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
 	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
-	  "*.txt|\"Now You're Cooking\" Generic Export (*.txt)",
+	  "*.txt|\"Now You're Cooking\" Generic Export (*.txt)\n"
+	  "*.xml *.recipeml|RecipeML (*.xml, *.recipeml)",
 	  this,
 	  "file_dialog",
 	  true
@@ -248,6 +250,8 @@ void Krecipes::import()
 				importer = new MX2Importer( *it );
 			else if ( selected_filter == "*.kre *.kreml" )
 				importer = new KreImporter( *it );
+			else if ( selected_filter == "*.xml *.recipeml" )
+				importer = new RecipeMLImporter( *it );
 			else
 			{
 				KMessageBox::sorry( this,

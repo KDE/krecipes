@@ -23,6 +23,11 @@
 
 MXPImporter::MXPImporter( const QString &file ) : BaseImporter()
 {
+	//the pointers these contain will be passed to created recipe
+	m_ingredients.setAutoDelete(false);
+	m_categories.setAutoDelete(false);
+	m_authors.setAutoDelete(false);
+
 	QFile input( file );
 
 	if ( input.open( IO_ReadOnly ) )

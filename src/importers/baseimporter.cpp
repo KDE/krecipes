@@ -34,7 +34,7 @@ BaseImporter::~BaseImporter()
 
 void BaseImporter::import( RecipeDB *db )
 {
-	RecipeImportDialog import_dialog(m_recipe_list);
+	RecipeImportDialog import_dialog(*m_recipe_list);
 
 	if ( import_dialog.exec() != QDialog::Accepted )
 		return;

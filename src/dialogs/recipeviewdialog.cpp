@@ -52,6 +52,7 @@ loadRecipe(recipeID);
 
 RecipeViewDialog::~RecipeViewDialog()
 {
+	delete properties;
 }
 
 void RecipeViewDialog::loadRecipe(int recipeID)

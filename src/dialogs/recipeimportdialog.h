@@ -15,7 +15,7 @@
 
 #include <qdialog.h>
 #include <qptrlist.h>
-#include <qptrvector.h>
+#include <qptrdict.h>
 #include <qlistview.h>
 
 class KPushButton;
@@ -35,7 +35,7 @@ class CustomCheckListItem;
 class RecipeImportDialog : public QDialog
 {
 public:
-	RecipeImportDialog( QPtrList<Recipe> *all_recipes, QWidget *parent = 0 );
+	RecipeImportDialog( const QPtrList<Recipe> &all_recipes, QWidget *parent = 0 );
 	~RecipeImportDialog();
 
 	QPtrList<Recipe> * getSelectedRecipes();
@@ -44,7 +44,7 @@ protected slots:
 	virtual void languageChange();
 
 private:
-	void loadListView( QPtrList<Recipe> * );
+	void loadListView( const QPtrList<Recipe> & );
 
 	KListView* kListView;
 	KPushButton* okButton;
@@ -53,10 +53,7 @@ private:
 	QHBoxLayout* Form1Layout;
 	QVBoxLayout* layout2;
 
-	QPtrList<Recipe> *m_recipe_list;
-	QPtrVector<CustomCheckListItem> *recipe_items;
-
-	CustomCheckListItem *head_item;
+	QPtrDict<Recipe> *recipe_items;
 };
 
 /** A specialized QCheckListItem that sets the state of its children to its
@@ -67,6 +64,7 @@ class CustomCheckListItem : public QCheckListItem
 {
 public:
 	CustomCheckListItem(QListView *parent, const QString &, Type );
+	CustomCheckListItem(CustomCheckListItem *parent, const QString &, Type );
 	CustomCheckListItem(QCheckListItem *parent, QCheckListItem *after, const QString &, Type);
 
 protected:

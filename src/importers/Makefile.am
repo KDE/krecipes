@@ -7,7 +7,7 @@
 INCLUDES         = -I$(srcdir)/.. -I$(srcdir)/../DBBackend $(all_includes)
 
 noinst_LTLIBRARIES=libkrecipesimporters.la
-libkrecipesimporters_la_SOURCES = mx2importer.cpp mmfimporter.cpp mxpimporter.cpp nycgenericimporter.cpp baseimporter.cpp kreimporter.cpp
+libkrecipesimporters_la_SOURCES = mx2importer.cpp mmfimporter.cpp mxpimporter.cpp nycgenericimporter.cpp recipemlimporter.cpp baseimporter.cpp kreimporter.cpp
 libkrecipesimporters_la_METASOURCES=AUTO
 
 #the library search path.
