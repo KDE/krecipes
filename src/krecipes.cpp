@@ -80,9 +80,9 @@ Krecipes::Krecipes()
 
     // Resize if the window is too small so the buttons are shown
     QSize wsize=size();
-    if (wsize.width()<640)
+    if (wsize.width()<740)
     	{
-	wsize.setWidth(640);
+	wsize.setWidth(740);
 	resize(wsize);
 	}
 
