@@ -193,14 +193,14 @@ void BorderDialog::loadBorder( const KreBorder &border )
 void BorderDialog::initListBoxs()
 {
 	styleListBox->insertItem( i18n( "None" ) );
-	styleListBox->insertItem( i18n( "Dotted" ) );
-	styleListBox->insertItem( i18n( "Dashed" ) );
-	styleListBox->insertItem( i18n( "Solid" ) );
-	styleListBox->insertItem( i18n( "Double" ) );
-	styleListBox->insertItem( i18n( "Groove" ) );
-	styleListBox->insertItem( i18n( "Ridge" ) );
-	styleListBox->insertItem( i18n( "Inset" ) );
-	styleListBox->insertItem( i18n( "Outset" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dotted" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dashed" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Solid" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Double" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Groove" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Ridge" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Inset" ) );
+	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Outset" ) );
 
 	widthListBox->insertItem( "1" );
 	widthListBox->insertItem( "2" );
