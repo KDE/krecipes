@@ -120,13 +120,13 @@ void MMFExporter::writeMMFIngredients( QString &content, Recipe *recipe )
 		{
 			kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<ing->units<<endl;
 			kdDebug()<<"         This ingredient ("<<ing->name<<") will be exported without a unit"<<endl;
-			content += "?? ";
+			content += "   ";
 		}
 
 		//columns 12-39
 		QString ing_name = ing->name; ing_name.truncate(28);
 		content += ing_name+"\n";
-		for ( unsigned int i = 0; i < (ing->name.length()-1) / 28; i++ )
+		for ( unsigned int i = 0; i < (ing->name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
 			content += "           -"+ing->name.mid(28*(i+1)+1,28)+"\n";
 	}
 }

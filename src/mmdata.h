@@ -41,8 +41,7 @@ static expand_unit_info unit_info[] = {
   {"ts",I18N_NOOP("teaspoon"),I18N_NOOP("teaspoons")},
   {"T" ,I18N_NOOP("tablespoon"),I18N_NOOP("tablespoons")},
   {"x" ,I18N_NOOP("per serving"),I18N_NOOP("per serving")},
-  {"", "",I18N_NOOP("")},
-  {"??","??",I18N_NOOP("??")},
+  {"", "", ""},
   { 0, 0, 0 }
 };
 

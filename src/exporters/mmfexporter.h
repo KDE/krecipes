@@ -30,7 +30,7 @@ class RecipeDB;
   *           -Servings are limited to the range of 0-9999
   *           -Units are limited: If a given unit does not have a
   *            cooresponding MM abbrev., otherwise it will be
-  *            exported as "??".
+  *            exported without a unit.
   */
 class MMFExporter : public BaseExporter
 {
