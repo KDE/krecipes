@@ -38,6 +38,7 @@ private:
 private slots:
 	void createNewUnit(void);
 	void removeUnit(void);
+	void saveRatio(int r, int c, double value);
 
 };
 

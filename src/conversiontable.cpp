@@ -30,6 +30,8 @@ return items.find(indexOf(r,c));
 void ConversionTable::setItem(int r, int c, QTableItem *i )
 {
 items.replace( indexOf( r, c ), i );
+i->setRow(r); // Otherwise the item
+i->setCol(c); //doesn't know where it is!
 }
 
 void ConversionTable::clearCell( int r, int c )
@@ -73,7 +75,7 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 
 	// Draw in gray all those cells which are not editable
 
-	if ( row() == col())
+	if (row() == col())
 	g.setColor( QColorGroup::Base, gray );
 	QTableItem::paint( p, g, cr, selected );
 }
@@ -96,7 +98,11 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 	// value of the item (its text), with the value of the combobox
     if ( w->inherits( "EditBox" ) )
 	{
-	if (eb->accepted) setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
+	if (eb->accepted)
+		{
+		setText(QString::number(eb->value())); // Only accept value if Ok was pressed before
+		emit ratioChanged(row(),col(),eb->value());
+		}
 	}
     else
 	QTableItem::setContentFromEditor( w );
@@ -110,6 +116,13 @@ void ConversionTableItem::setText( const QString &s )
 	}
 	QTableItem::setText(s);
 }
+QString ConversionTable::text(int r, int c ) const			 // without this function, the usual (text(r,c)) won't work
+{
+
+return(item(r,c)->text());  //Note that item(r,c) was reimplemented here for large sparse tables...
+
+
+}
 
 void ConversionTable::initTable()
 {
@@ -118,9 +131,15 @@ void ConversionTable::initTable()
 void ConversionTable::createNewItem(int r, int c, double amount)
 {
 ConversionTableItem *ci= new ConversionTableItem(this,QTableItem::WhenCurrent);
+std::cerr<<r<<";"<<c<<"\n";
 setItem(r,c, ci );
+ci->setText(QString::number(amount));
 // insert the data into the table
-setText(r,c,QString::number(amount));
+//setText(r,c,QString::number(amount));
+
+
+// connect signal (forward) to know when it's actually changed
+connect(ci, SIGNAL(ratioChanged(int,int,double)),this,SIGNAL(ratioChanged(int,int,double)));
 }
 
 void ConversionTable::setUnitIDs(const IDList &idList)
@@ -146,4 +165,10 @@ int IDList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2
 {
 std::cerr<<"Items comparing: "<<*((int*)item1)<<" "<<*((int*)item2)<<"\n";
 return (*((int*)item1)-*((int*)item2));
+}
+
+int ConversionTable::getUnitID(int rc)
+{
+return(*(unitIDs.at(rc)));
+return(1);
 }

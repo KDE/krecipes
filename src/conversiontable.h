@@ -12,6 +12,7 @@
 #include <qstring.h>
 #include <qtable.h>
 #include "editbox.h"
+#include <qobject.h>
 
 /**
 @author Unai Garro
@@ -36,6 +37,8 @@ public:
 	void createNewItem(int r, int c, double amount);
 	void setUnitIDs(const IDList &idList);
 	void setRatio(int ingID1, int ingID2, double ratio);
+	int getUnitID(int rc);
+	QString text(int r, int c ) const; //Reimplement, otherwise it won't work this way
 private:
 
 	//Internal Variables
@@ -50,25 +53,28 @@ private:
 	void clearCell( int r, int c );
 	void takeItem(QTableItem *item);
 	void insertWidget(int r, int c, QWidget *w );
-	QWidget *cellWidget( int r, int c ) const;
+ 	QWidget *cellWidget( int r, int c ) const;
 	void clearCellWidget( int r, int c );
 	void initTable();
 	//Internal Widgets
 	EditBox *eb;
 private slots:
 	void acceptValueAndClose(void);
-
+signals:
+	void ratioChanged(int row, int col, double value);
 };
 
-class ConversionTableItem:public QTableItem
+class ConversionTableItem:public QObject, public QTableItem
 {
+Q_OBJECT
 public:
 	ConversionTableItem( QTable *t, EditType et );
 	QWidget *createEditor() const;
 	void setContentFromEditor( QWidget *w );
 	void setText( const QString &s );
 	void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
-
+signals:
+	void ratioChanged(int row, int col, double value);
 private:
 	EditBox *eb;
 

@@ -53,6 +53,7 @@ UnitsDialog::UnitsDialog(QWidget *parent, RecipeDB *db):QWidget(parent)
     // Connect signals & slots
     connect(newUnitButton,SIGNAL(clicked()),this,SLOT(createNewUnit()));
     connect(removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnit()));
+    connect(conversionTable,SIGNAL(ratioChanged(int,int,double)),this,SLOT(saveRatio(int,int,double)));
 
 
     //Populate data into the table
@@ -155,4 +156,14 @@ std::cerr<<ratio->ratio<<"\n";
 conversionTable->setRatio(ratio->ingID1,ratio->ingID2,ratio->ratio );
 }
 
+}
+
+void UnitsDialog::saveRatio(int r, int c, double value)
+{
+UnitRatio ratio;
+
+ratio.ingID1=conversionTable->getUnitID(r);
+ratio.ingID2=conversionTable->getUnitID(c);
+ratio.ratio=value;
+database->saveUnitRatio(&ratio);
 }
