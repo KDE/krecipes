@@ -9,7 +9,9 @@
  ***************************************************************************/
 
 #include "krelistview.h"
+#include <kglobalsettings.h>
 #include <klocale.h>
+
 
 KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int filterCol):QVBox(parent)
 {
@@ -21,7 +23,11 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 	if (title!=QString::null)
 	{
 		listLabel=new QLabel(header);
+		listLabel->setFrameShape(QFrame::GroupBoxPanel);
+		listLabel->setFrameShadow(QFrame::Sunken);
+		listLabel->setPaletteBackgroundColor(KGlobalSettings::highlightColor().light(120)); // 120, to match the kremenu settings
 		listLabel->setText(title);
+		
 	}
 	
 	if (filter) {
