@@ -176,7 +176,7 @@ database->loadUnitRatios(&ratioList);
 UnitRatio *ratio;
 for (ratio=ratioList.getFirst();ratio;ratio=ratioList.getNext())
 {
-conversionTable->setRatio(ratio->ingID1,ratio->ingID2,ratio->ratio );
+conversionTable->setRatio(ratio->uID1,ratio->uID2,ratio->ratio );
 }
 }
 
@@ -184,8 +184,8 @@ void UnitsDialog::saveRatio(int r, int c, double value)
 {
 UnitRatio ratio;
 
-ratio.ingID1=conversionTable->getUnitID(r);
-ratio.ingID2=conversionTable->getUnitID(c);
+ratio.uID1=conversionTable->getUnitID(r);
+ratio.uID2=conversionTable->getUnitID(c);
 ratio.ratio=value;
 database->saveUnitRatio(&ratio);
 }

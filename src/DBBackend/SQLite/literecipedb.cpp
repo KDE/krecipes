@@ -951,8 +951,8 @@ QSQLiteResult ratiosToLoad=database->executeQuery(command);
 	    QSQLiteResultRow row=ratiosToLoad.first();
                 while ( !ratiosToLoad.atEnd() ) {
 		    UnitRatio ratio;
-		    ratio.ingID1=row.data(0).toInt();
-		    ratio.ingID2=row.data(1).toInt();
+		    ratio.uID1=row.data(0).toInt();
+		    ratio.uID2=row.data(1).toInt();
 		    ratio.ratio=row.data(2).toDouble();
 		    ratioList->add(ratio);
 		    row=ratiosToLoad.next();
@@ -965,15 +965,15 @@ void LiteRecipeDB::saveUnitRatio(const UnitRatio *ratio)
 QString command;
 
 // Check if it's a new ratio or it exists already.
-command=QString("SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;").arg(ratio->ingID1).arg(ratio->ingID2); // Find ratio between units
+command=QString("SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;").arg(ratio->uID1).arg(ratio->uID2); // Find ratio between units
 
 QSQLiteResult ratioFound=database->executeQuery(command); // Find the entries
 bool newRatio=(ratioFound.size()==0);
 
 if (newRatio)
-	command=QString("INSERT INTO units_conversion VALUES(%1,%2,%3);").arg(ratio->ingID1).arg(ratio->ingID2).arg(ratio->ratio);
+	command=QString("INSERT INTO units_conversion VALUES(%1,%2,%3);").arg(ratio->uID1).arg(ratio->uID2).arg(ratio->ratio);
 else
-	command=QString("UPDATE units_conversion SET ratio=%3 WHERE unit1_id=%1 AND unit2_id=%2").arg(ratio->ingID1).arg(ratio->ingID2).arg(ratio->ratio);
+	command=QString("UPDATE units_conversion SET ratio=%3 WHERE unit1_id=%1 AND unit2_id=%2").arg(ratio->uID1).arg(ratio->uID2).arg(ratio->ratio);
 
 database->executeQuery(command); // Enter the new ratio
 }
