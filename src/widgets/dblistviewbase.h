@@ -33,6 +33,8 @@ protected:
 	void createElement( QListViewItem * );
 	void removeElement( QListViewItem * );
 
+	bool reloading(){ return bulk_load; }
+
 	RecipeDB *database;
 
 protected slots:

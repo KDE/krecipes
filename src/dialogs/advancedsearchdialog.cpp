@@ -64,9 +64,9 @@ DualAuthorListView::DualAuthorListView( QWidget *parent, RecipeDB *db ) : Author
 {
 }
 
-void DualAuthorListView::reload()
+void DualAuthorListView::load( int limit, int offset )
 {
-	AuthorListView::reload();
+	AuthorListView::load(limit,offset);
 
 	lock_updates = true; //the following shouldn't change the stored selection values
 	updateLists(this,positiveSelections,negativeSelections,last_state);
@@ -103,7 +103,7 @@ void DualAuthorListView::removeAuthor( int id )
 
 void DualAuthorListView::stateChange( AuthorCheckListItem *it, bool on )
 {
-	if ( lock_updates ) return;
+	if ( lock_updates || reloading() ) return;
 
 	if ( last_state == 0 ) { //we're storing positive matches
 		if ( on )
@@ -125,9 +125,9 @@ DualIngredientListView::DualIngredientListView( QWidget *parent, RecipeDB *db ) 
 {
 }
 
-void DualIngredientListView::reload()
+void DualIngredientListView::load( int limit, int offset )
 {
-	IngredientListView::reload();
+	IngredientListView::load(limit,offset);
 
 	lock_updates = true; //the following shouldn't change the stored selection values
 	updateLists(this,positiveSelections,negativeSelections,last_state);
@@ -136,7 +136,7 @@ void DualIngredientListView::reload()
 
 void DualIngredientListView::stateChange( IngredientCheckListItem *it, bool on )
 {
-	if ( lock_updates ) return;
+	if ( lock_updates || reloading() ) return;
 
 	if ( last_state == 0 ) { //we're storing positive matches
 		if ( on )
@@ -187,9 +187,9 @@ DualCategoryListView::DualCategoryListView( QWidget *parent, RecipeDB *db ) : Ca
 {
 }
 
-void DualCategoryListView::reload()
+void DualCategoryListView::load( int limit, int offset )
 {
-	CategoryListView::reload();
+	CategoryListView::load(limit,offset);
 
 	lock_updates = true; //the following shouldn't change the stored selection values
 	updateLists(this,positiveSelections,negativeSelections,last_state);
@@ -280,7 +280,7 @@ void DualCategoryListView::mergeCategories( int id1, int id2 )
 
 void DualCategoryListView::stateChange( CategoryCheckListItem *it, bool on )
 {
-	if ( lock_updates ) return;
+	if ( lock_updates || reloading() ) return;
 
 	if ( last_state == 0 ) { //we're storing positive matches
 		if ( on )

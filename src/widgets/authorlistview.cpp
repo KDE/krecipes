@@ -245,10 +245,12 @@ void AuthorCheckListView::load( int limit, int offset )
 
 void AuthorCheckListView::stateChange(AuthorCheckListItem *it,bool on)
 {
-	if ( on )
-		m_selections.append(it->author());
-	else
-		m_selections.remove(it->author());
+	if ( !reloading() ) {
+		if ( on )
+			m_selections.append(it->author());
+		else
+			m_selections.remove(it->author());
+	}
 }
 
 #include "authorlistview.moc"

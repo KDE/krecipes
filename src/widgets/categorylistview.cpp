@@ -545,17 +545,24 @@ void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
 
 void CategoryCheckListView::stateChange( const Element &el, bool on )
 {
-	if ( on )
-		m_selections.append(el);
-	else
-		m_selections.remove(el);
+	if ( !reloading() ) {
+		if ( on )
+			m_selections.append(el);
+		else
+			m_selections.remove(el);
+	}
 }
 
 void CategoryCheckListView::load( int limit, int offset )
 {
 	CategoryListView::load(limit,offset);
 	
-	//TODO....
+	for ( QValueList<Element>::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
+		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*it).id ), 1 );
+		if ( item ) {
+			item->setOn(true);
+		}
+	}
 }
 
 #include "categorylistview.moc"

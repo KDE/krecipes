@@ -45,7 +45,6 @@ class DualAuthorListView : public AuthorCheckListView
 public:
 	DualAuthorListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
 	void stateChange( AuthorCheckListItem *, bool );
 
 	QValueList<Element> positiveSelections;
@@ -57,6 +56,8 @@ public slots:
 protected:
 	virtual void createAuthor( const Element &ing );
 	virtual void removeAuthor( int id );
+
+	void load( int limit, int offset );
 
 private:
 	int last_state;
@@ -70,7 +71,6 @@ class DualCategoryListView : public CategoryCheckListView
 public:
 	DualCategoryListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
 	void stateChange( CategoryCheckListItem *, bool );
 
 	QValueList<Element> positiveSelections;
@@ -86,6 +86,8 @@ protected:
 	virtual void modifyCategory( int id, int parent_id );
 	virtual void mergeCategories( int id1, int id2 );
 
+	void load( int limit, int offset );
+
 private:
 	int last_state;
 	bool lock_updates;
@@ -98,7 +100,6 @@ class DualIngredientListView : public IngredientCheckListView
 public:
 	DualIngredientListView( QWidget *parent, RecipeDB *db );
 
-	void reload();
 	void stateChange( IngredientCheckListItem *, bool );
 
 	QValueList<Element> positiveSelections;
@@ -110,6 +111,8 @@ public slots:
 protected:
 	virtual void createIngredient( const Element &ing );
 	virtual void removeIngredient( int id );
+
+	void load( int limit, int offset );
 
 private:
 	int last_state;

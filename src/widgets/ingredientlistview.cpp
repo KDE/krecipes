@@ -268,10 +268,12 @@ void IngredientCheckListView::load( int limit, int offset )
 
 void IngredientCheckListView::stateChange(IngredientCheckListItem *it,bool on)
 {
-	if ( on )
-		m_selections.append(it->ingredient());
-	else
-		m_selections.remove(it->ingredient());
+	if ( !reloading() ) {
+		if ( on )
+			m_selections.append(it->ingredient());
+		else
+			m_selections.remove(it->ingredient());
+	}
 }
 
 #include "ingredientlistview.moc"
