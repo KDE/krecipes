@@ -23,9 +23,17 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 
 	kdDebug()<<i18n("MySQLRecipeDB: Opening MySQL Database...\n")<<endl;
 	DBuser=user;DBpass=pass;DBhost=host;
-	
-	if ( !QSqlDatabase::isDriverAvailable( DB_DRIVER ) )
-	{
+
+	QStringList drivers = QSqlDatabase::drivers();
+	bool driver_found = false;
+	for ( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+		if ( (*it) == DB_DRIVER ) {
+			driver_found = true;
+			break;
+		}
+	}
+
+	if ( !driver_found ) {
 		dbErr=QString(i18n("The Qt MySQL plug-in (QMYSQL3) is not installed.  This plug-in is required for using the MySQL backend."));
 		return;
 	}
