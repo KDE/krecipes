@@ -191,10 +191,8 @@ UnitsPrefs::UnitsPrefs(QWidget *parent)
     KConfig *config=kapp->config();
     config->setGroup("Units");
 
-    if ( config->readEntry( "NumberFormat" ) == "Fraction" )
-    	numberButtonGroup->setButton( 1 );
-    else
-    	numberButtonGroup->setButton( 0 );
+    int button = ( config->readBoolEntry( "Fraction", false ) ) ? 1 : 0;
+    numberButtonGroup->setButton( button );
 }
 
 void UnitsPrefs::saveOptions()
@@ -202,12 +200,8 @@ void UnitsPrefs::saveOptions()
 	KConfig *config=kapp->config();
 	config->setGroup("Units");
 
-	QString number_format;
-	if ( numberButtonGroup->find( 0 )->isOn() )
-		number_format="Decimal";
-	else
-		number_format="Fraction";
-	config->writeEntry("NumberFormat",number_format);
+	bool fraction = !numberButtonGroup->find( 0 )->isOn();
+	config->writeEntry("Fraction",fraction);
 }
 
 void UnitsPrefs::languageChange()
