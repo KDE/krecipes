@@ -23,13 +23,16 @@ private:
     KrecipesPrefPageTwo *m_pageTwo;
 };
 
-class ServerPrefs : public QFrame
+class ServerPrefs : public QWidget
 {
     Q_OBJECT
 public:
     ServerPrefs(QWidget *parent = 0);
 private:
-    KLineEdit *propertyNameEdit;
+    KLineEdit *serverEdit;
+    KLineEdit *usernameEdit;
+    KLineEdit *passwordEdit;
+    KLineEdit *dbNameEdit;
 };
 
 class KrecipesPrefPageTwo : public QFrame
