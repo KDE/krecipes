@@ -10,6 +10,9 @@
 
 #include "dbimportdialog.h"
 
+#include <unistd.h> //for getuid()
+#include <pwd.h> //getpwuid()
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -166,6 +169,19 @@ void DBImportDialog::languageChange()
 	buttonOk->setAccel( QKeySequence( QString::null ) );
 	buttonCancel->setText( i18n( "&Cancel" ) );
 	buttonCancel->setAccel( QKeySequence( QString::null ) );
+
+	//set defaults
+	hostEdit->setText( "localhost" );
+	nameEdit->setText( "Krecipes" );
+
+	// get username
+	uid_t userID;
+	struct passwd *user;
+	userID = getuid();
+	user = getpwuid ( userID );
+	QString username(user->pw_name);
+
+	userEdit->setText( username );
 }
 
 void DBImportDialog::switchDBPage( int id )

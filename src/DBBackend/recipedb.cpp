@@ -54,7 +54,7 @@ struct ingredient_nutrient_data
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.63;
+	return 0.7;
 }
 
 QString RecipeDB::krecipes_version() const

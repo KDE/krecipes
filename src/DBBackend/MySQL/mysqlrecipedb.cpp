@@ -248,6 +248,11 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		command = "INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
 		tableToAlter.exec( command );
 	}
+
+	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
+		QString command = "UPDATE db_info SET ver='0.7';";
+		QSqlQuery query( command, database );
+	}
 }
 
 int MySQLRecipeDB::lastInsertID()

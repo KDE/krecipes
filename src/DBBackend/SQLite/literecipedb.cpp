@@ -1923,6 +1923,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
+
+	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
+		database->executeQuery( "UPDATE db_info SET ver='0.7';" );
+	}
 }
 
 float LiteRecipeDB::databaseVersion( void )
