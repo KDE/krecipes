@@ -40,7 +40,7 @@ MySQLRecipeDB::MySQLRecipeDB(QString host, QString user, QString pass, QString D
 		kdDebug()<<i18n("Failing to open database. Exiting\n").latin1();
 		
 		// Handle the error (passively)
-		dbErr=QString(i18n("Krecipes could not open the database (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(user);
+		dbErr=QString(i18n("Krecipes could not open the MySQL database (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(user);
 		return;
 		
 		}
