@@ -33,19 +33,22 @@ public:
 
     ~IngredientPropertyList();
 
+    void add(IngredientProperty &element);
+    void append(IngredientProperty *property);
+    IngredientProperty* at(int pos);
+    void clear(void);
+    int count(void);
+    void divide(int persons);
+
+    int find(IngredientProperty* it);
+    int find(int id);
+    void filter(int ingredientID,IngredientPropertyList *filteredList);
     IngredientProperty* getFirst(void);
     IngredientProperty* getNext(void);
     IngredientProperty* getElement(int index);
-    void clear(void);
-    int count(void);
     bool isEmpty(void);
-    void add(IngredientProperty &element);
-    void append(IngredientProperty *property);
-    int find(IngredientProperty* it);
-    int find(int id);
-    IngredientProperty* at(int pos);
-    void divide(int persons);
-    void filter(int ingredientID,IngredientPropertyList *filteredList);
+    void remove(IngredientProperty* ip);
+
     private:
     PropertyPtrList list;
 

@@ -84,3 +84,8 @@ int IngredientPropertyList::count(void)
 {
 return (list.count());
 }
+
+void IngredientPropertyList::remove(IngredientProperty* ip)
+{
+list->remove(ip);
+}
