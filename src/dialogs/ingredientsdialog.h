@@ -7,53 +7,56 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef SELECTRECIPEDIALOG_H
-#define SELECTRECIPEDIALOG_H
+#ifndef INGREDIENTSDIALOG_H
+#define INGREDIENTSDIALOG_H
 
-#include <qwidget.h>
-#include <qvbox.h>
 #include <qpushbutton.h>
+#include <qvbox.h>
+#include <qlayout.h>
+#include <qwidget.h>
 #include <klistview.h>
-#include <kiconloader.h>
-
+#include <knuminput.h>
 #include "recipedb.h"
-#include "recipe.h"
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 
 /**
 @author Unai Garro
 */
-class SelectRecipeDialog : public QVBox
-{
+class IngredientsDialog:public QWidget{
+
 Q_OBJECT
+
 public:
-    SelectRecipeDialog(QWidget *parent, RecipeDB *db);
+    IngredientsDialog(QWidget* parent, RecipeDB *db);
 
-    ~SelectRecipeDialog();
+    ~IngredientsDialog();
 
-  //Public Methods
-  void loadRecipeList(void);
 private:
-
   // Widgets
-  KListView* recipeListView;
-  QHBox *buttonBar;
-  QPushButton *openButton;
-  QPushButton *removeButton;
-  QPushButton *editButton;
-  KIconLoader *il;
-  // Internal Data
+    QGridLayout* layout;
+    QPushButton* addIngredientButton;
+    QPushButton* removeIngredientButton;
+    QPushButton* addUnitButton;
+    QPushButton* removeUnitButton;
+    KListView* ingredientListView;
+    KListView* unitsListView;
+    KListView* characteristicsListView;
+    QPushButton* pushButton5;
+
+  // Internal Methods
+  void reloadIngredientList(void);
+  void reloadPossibleUnitList(int recipeID);
+
+  // Internal Variables
   RecipeDB *database;
-  ElementList *recipeList;
+  ElementList *ingredientList;
+  ElementList *unitList;
 
 
-signals:
-  void recipeSelected(int id, int action);
-private slots:
-  void open(void);
-  void edit(void);
-  void remove(void);
+  private slots:
+    void updateUnitList(void);
+    void addIngredient(void);
 
 
 

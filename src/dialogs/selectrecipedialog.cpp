@@ -68,15 +68,18 @@ for ( Element *recipe =recipeList->getFirst(); recipe; recipe =recipeList->getNe
 
 void SelectRecipeDialog::open(void)
 {
-emit recipeSelected(recipeListView->selectedItem()->text(0).toInt(),0);
+QListViewItem *it;
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),0);
 }
 void SelectRecipeDialog::edit(void)
 {
-emit recipeSelected(recipeListView->selectedItem()->text(0).toInt(),1);
+QListViewItem *it;
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),1);
 }
 void SelectRecipeDialog::remove(void)
 {
-std::cerr<<"Calling to remove\n";
-emit recipeSelected(recipeListView->selectedItem()->text(0).toInt(),2);
+QListViewItem *it;
+if (it=recipeListView->selectedItem()) emit recipeSelected(it->text(0).toInt(),2);
 
 }
+

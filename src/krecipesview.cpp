@@ -49,18 +49,20 @@ KrecipesView::KrecipesView(QWidget *parent)
     	boton2->setGeometry(0,30,130,30);
     boton3=new QPushButton(leftPanel); boton3->setFlat(true); boton3->setText("Edit Recipe");
         boton3->setGeometry(0,60,130,30);
+    boton4=new QPushButton(leftPanel); boton4->setFlat(true); boton4->setText("Edit Ingredients");
+        boton4->setGeometry(0,90,130,30);
 
-
-    boton4=new QPushButton(rightPanel); boton4->setFlat(true); boton4->setText("First");
-    boton5=new QPushButton(rightPanel); boton5->setFlat(true); boton5->setText("Second");
+    // Right Panel Widgets
+    boton5=new QPushButton(rightPanel); boton5->setFlat(true); boton5->setText("First");
     inputPanel=new RecipeInputDialog(rightPanel,database);
     viewPanel=new RecipeViewDialog(rightPanel,database,1);
     selectPanel=new SelectRecipeDialog(rightPanel,database);
+    ingredientsPanel=new IngredientsDialog(rightPanel,database);
 
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
 
-    rightPanel->raiseWidget(boton4);
+    rightPanel->raiseWidget(boton5);
 
 
     // Retransmit signal to parent to Enable/Disable the Save Button
@@ -100,6 +102,8 @@ case 0: this->rightPanel->raiseWidget(selectPanel);
 case 1: this->rightPanel->raiseWidget(viewPanel);
 	break;
 case 2: this->rightPanel->raiseWidget(inputPanel);
+	break;
+case 3: this->rightPanel->raiseWidget(ingredientsPanel);
 	break;
 }
 

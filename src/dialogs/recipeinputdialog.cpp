@@ -11,7 +11,7 @@
 #include <qstring.h>
 #include <kurl.h>
 #include "recipeinputdialog.h"
-#include "/home/uga/imagen.h" //Initializes default photo
+#include "image.h" //Initializes default photo
 
 
 RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db): QWidget( parent)

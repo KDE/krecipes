@@ -7,56 +7,24 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef SELECTRECIPEDIALOG_H
-#define SELECTRECIPEDIALOG_H
+#ifndef SELECTUNITDIALOG_H
+#define SELECTUNITDIALOG_H
 
 #include <qwidget.h>
-#include <qvbox.h>
+#include <qdialog.h>
 #include <qpushbutton.h>
-#include <klistview.h>
-#include <kiconloader.h>
-
-#include "recipedb.h"
-#include "recipe.h"
-#include "selectunitdialog.h"
-#include "createelementdialog.h"
 
 /**
 @author Unai Garro
 */
-class SelectRecipeDialog : public QVBox
+class SelectUnitDialog : public QDialog
 {
-Q_OBJECT
 public:
-    SelectRecipeDialog(QWidget *parent, RecipeDB *db);
+    SelectUnitDialog(QWidget* parent=0);
 
-    ~SelectRecipeDialog();
-
-  //Public Methods
-  void loadRecipeList(void);
+    ~SelectUnitDialog();
 private:
-
-  // Widgets
-  KListView* recipeListView;
-  QHBox *buttonBar;
-  QPushButton *openButton;
-  QPushButton *removeButton;
-  QPushButton *editButton;
-  KIconLoader *il;
-  // Internal Data
-  RecipeDB *database;
-  ElementList *recipeList;
-
-
-signals:
-  void recipeSelected(int id, int action);
-private slots:
-  void open(void);
-  void edit(void);
-  void remove(void);
-
-
-
+  QPushButton *ok_button;
 
 };
 
