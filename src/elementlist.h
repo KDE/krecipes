@@ -26,6 +26,9 @@ public:
 
     bool containsId(int id) const;
     bool containsSubSet(ElementList &el);
+
+    Element findByName(const QString &) const;
+
     Element getElement(int index) const;
     void add(const Element &element){ append(element); } //get rid of this function... use append()
 };

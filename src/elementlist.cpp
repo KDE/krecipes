@@ -22,6 +22,18 @@ Element ElementList::getElement(int index) const
 return *(this->at(index));
 }
 
+Element ElementList::findByName(const QString &name) const
+{
+	for ( ElementList::const_iterator it = begin(); it != end(); ++it )
+	{
+		if ( (*it).name == name )
+			return *it;
+	}
+
+	Element el; el.id = -1;
+	return el;
+}
+
 bool ElementList::containsId(int id) const // Search by id (which uses search by item, with comparison defined on header)
 {
 Element i; i.id=id;
