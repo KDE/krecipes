@@ -37,7 +37,7 @@ database=db;
     photoLabel->setGeometry(QRect(20,10,200,100));
 
     changePhotoButton=new QPushButton(this);
-    changePhotoButton->setGeometry(QRect(201,10,20,100));
+    changePhotoButton->setGeometry(QRect(221,10,20,100));
     changePhotoButton->setText("...");
 
 
