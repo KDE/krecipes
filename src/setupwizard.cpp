@@ -14,6 +14,7 @@
 #include <qpushbutton.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <kstandarddirs.h>
 #include "setupwizard.h"
 
 SetupWizard::SetupWizard(QWidget *parent, const char *name, bool modal, WFlags f):KWizard(parent,name, modal,f)
@@ -42,8 +43,7 @@ QSpacerItem *spacer_top=new QSpacerItem(5,5,QSizePolicy::Minimum, QSizePolicy::F
 layout->addItem(spacer_top,0,1);
 QSpacerItem *spacer_left=new QSpacerItem(5,5,QSizePolicy::Fixed, QSizePolicy::Minimum);
 layout->addItem(spacer_left,1,0);
-
-QPixmap logoPixmap ("../pics/wizard.png");
+QPixmap logoPixmap (locate("data", "krecipes/pics/wizard.png"));
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -69,7 +69,7 @@ QSpacerItem *spacer_left=new QSpacerItem(10,10,QSizePolicy::Fixed, QSizePolicy::
 layout->addItem(spacer_left,1,0);
 
 
-QPixmap networkSetupPixmap ("../pics/network.png");
+QPixmap networkSetupPixmap (locate("data", "krecipes/pics/network.png"));
 logo=new QLabel(this);
 logo->setPixmap(networkSetupPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -154,7 +154,7 @@ SavePage::SavePage(QWidget *parent):QWidget(parent)
 {
 QGridLayout *layout=new QGridLayout(this,1,1,0,0);
 
-QPixmap logoPixmap ("../pics/save.png");
+QPixmap logoPixmap (locate("data", "krecipes/pics/save.png"));
 logo=new QLabel(this);
 logo->setPixmap(logoPixmap);
 logo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
