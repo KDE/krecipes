@@ -284,7 +284,7 @@ public:
 	{
 	ctyStored.id=category.id;
 	ctyStored.name=category.name;
-	setOn(true); // Set checked by default
+	setOn(false); // Set unchecked by default
 	}
 	~CategoriesListItem(void){}
 	virtual QString text(int column) const
@@ -608,7 +608,7 @@ categories->clear();
 Element category;
 	for (CategoriesListItem *it=(CategoriesListItem*)(categoriesView->firstChild());it;it=(CategoriesListItem*)(it->nextSibling()))
 	{
-	if (it->isOn()) // Only load those that are checked
+	if ( !categoriesView->isEnabled() || it->isOn()) // Only load those that are checked, unless filtering is disabled
 		{
 		category.id=it->categoryId();
 		category.name=it->categoryName();
