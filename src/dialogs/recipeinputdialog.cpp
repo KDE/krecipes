@@ -549,6 +549,7 @@ if (changedSignalEnabled)
 	{
 	// Enable Save Button
 	emit enableSaveOption(true);
+	emit createButton(this);
 	unsavedChanges=true;
 
 	}

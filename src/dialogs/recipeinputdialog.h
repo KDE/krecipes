@@ -120,6 +120,7 @@ private:
 	signals:
 	void changed(void);
 	void enableSaveOption(bool en=true);
+	void createButton(QWidget* w);
 
 
 };
