@@ -103,6 +103,10 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		if ( current[0].isNumber() ){ loadIngredientLine(current); break; } //oops, this is really an ingredient line (there was no category line)
 
 		QStringList categories = QStringList::split(',',current);
+
+		if ( categories.count() > 0 && categories[0].upper() == "none" ) //there are no categories
+			break;
+
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it )
 		{
 			Element new_cat;
@@ -116,7 +120,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	while ( (current = stream.readLine() ) != "" && !stream.atEnd() )
 		loadIngredientLine(current);
 
-	//everything else is the instructions
+	//everything else is the instructions with optional "contributor", "prep time" and "yield"
 	bool found_next;
 	while ( !(found_next = ( current = stream.readLine() ).startsWith("@@@@@")) && !stream.atEnd() )
 	{
@@ -211,6 +215,8 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 
 	QStringList ingredient_line = QStringList::split(' ', current );
 
+	bool found_amount = false;
+
 	if ( !ingredient_line.empty() ) //probably an unnecessary check... but to be safe
 	{
 		bool ok;
@@ -219,6 +225,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 		{
 			amount = amount + test_amount;
 			ingredient_line.pop_front();
+			found_amount = true;
 		}
 	}
 	if ( !ingredient_line.empty() ) //probably an unnecessary check... but to be safe
@@ -229,7 +236,14 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 		{
 			amount = amount + test_amount;
 			ingredient_line.pop_front();
+			found_amount = true;
 		}
+	}
+
+	if ( found_amount )
+	{
+		unit = ingredient_line[0];
+		ingredient_line.pop_front();
 	}
 
 	name = ingredient_line.join(" ");
