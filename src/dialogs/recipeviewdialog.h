@@ -40,6 +40,7 @@ private:
   KHTMLPart *recipeView;
   RecipeDB  *database;
   Recipe *loadedRecipe;
+  QString tmp_filename;
 
   // Internal Methods
   void showRecipe(void);

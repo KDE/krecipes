@@ -12,14 +12,11 @@
 
 #include "recipeviewdialog.h"
 
-#include <klocale.h>
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <khtmlview.h>
 #include <khtml_part.h>
-
-#include <qfile.h>
+#include <kstandarddirs.h>
 
 #include "mixednumber.h"
 #include "DBBackend/recipedb.h"
@@ -35,20 +32,24 @@ recipeView=new KHTMLPart(this);
 database=db; // Store the database pointer.
 loadedRecipe=new Recipe();
 
+tmp_filename = locateLocal("tmp", "krecipes_recipe_view");
+kdDebug()<<tmp_filename<<endl;
+
 //----------Load  the recipe --------
 loadRecipe(recipeID);
 
 //this->calculateProperties();
-
-
- }
+}
 
 RecipeViewDialog::~RecipeViewDialog()
 {
+HTMLExporter::removeHTMLFiles(tmp_filename,loadedRecipe->title);
 }
 
 void RecipeViewDialog::loadRecipe(int recipeID)
 {
+// Remove any files created by the last recipe loaded
+HTMLExporter::removeHTMLFiles(tmp_filename,loadedRecipe->title);
 
 // Load specified Recipe ID
 database->loadRecipe(loadedRecipe,recipeID);
@@ -59,15 +60,15 @@ showRecipe();
 
 void RecipeViewDialog::showRecipe(void)
 {
-QFile old_file("/tmp/krecipes_recipe_view.html");
-old_file.remove();
-
-HTMLExporter html_generator( database, "/tmp/krecipes_recipe_view.html", "html", ((QWidget*)parent())->width() );
+HTMLExporter html_generator( database, tmp_filename+".html", "html", ((QWidget*)parent())->width() );
 html_generator.exporter( loadedRecipe->recipeID );
 
 delete recipeView;              // Temporary workaround
 recipeView=new KHTMLPart(this); // to avoid the problem of caching images of KHTMLPart
-recipeView->openURL( "file:/tmp/krecipes_recipe_view.html" );
+
+KURL url;
+url.setPath( tmp_filename+".html" );
+recipeView->openURL( url );
 }
 
 void RecipeViewDialog::print(void)
