@@ -19,8 +19,9 @@
 class ElementList: public QPtrList<Element>{
 public:
     ElementList();
-
+    ElementList(const ElementList &el);
     ~ElementList();
+
     bool containsId(int id);
     Element* getFirst(void);
     Element* getPrev(void);
@@ -29,6 +30,7 @@ public:
     Element* getElement(int index);
     void add(Element &element);
 
+    ElementList &operator=(const ElementList& el);
     protected:
     virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Element*)item1)->id-((Element*)item2)->id);};
 };

@@ -14,6 +14,18 @@ ElementList::ElementList()
 setAutoDelete(true);
 }
 
+ElementList::ElementList(const ElementList &el)
+{
+clear();
+setAutoDelete(true);
+QPtrListIterator<Element> it(el);
+Element *e;
+while ( (e = it.current()) != 0 )
+{
+++it;
+this->add(*e);
+}
+}
 
 ElementList::~ElementList()
 {
@@ -48,4 +60,17 @@ bool ElementList::containsId(int id) // Search by id (which uses search by item,
 {
 Element i; i.id=id;
 return((find(&i)>=0));
+}
+
+ElementList& ElementList::operator=(const ElementList &el)
+{
+clear();
+QPtrListIterator<Element> it(el);
+Element *e;
+while ( (e = it.current()) != 0 )
+{
+++it;
+this->add(*e);
+}
+return *this;
 }

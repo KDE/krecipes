@@ -17,6 +17,18 @@ IngredientList::IngredientList()
 setAutoDelete(true); //Deletes automatically when remove() is used.
 }
 
+IngredientList::IngredientList(const IngredientList &il)
+{
+clear();
+setAutoDelete(true);
+QPtrListIterator<Ingredient> it(il);
+Ingredient *i;
+while ( (i = it.current()) != 0 )
+{
+++it;
+this->add(*i);
+}
+}
 
 IngredientList::~IngredientList()
 {
@@ -76,3 +88,15 @@ Ingredient i; i.ingredientID=id;
 return(QPtrList <Ingredient>::findNext(&i)); // (If we don't specify class, gcc will only find "findNext(int)"
 }
 
+IngredientList& IngredientList::operator=(const IngredientList &il)
+{
+clear();
+QPtrListIterator<Ingredient> it(il);
+Ingredient *i;
+while ( (i = it.current()) != 0 )
+{
+++it;
+this->add(*i);
+}
+return *this;
+}

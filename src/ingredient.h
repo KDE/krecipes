@@ -19,13 +19,14 @@ class Ingredient{
 public:
     Ingredient();
     Ingredient( const QString &name, double amount, const QString &units, int unitID = -1, int ingredientID = -1 );
-    Ingredient(Ingredient &ing);
+    Ingredient(const Ingredient &ing);
     ~Ingredient();
     int ingredientID;
     QString name;
     double amount;
     int unitID;
     QString units;
+    Ingredient& operator=(const Ingredient &ing);
 
 };
 

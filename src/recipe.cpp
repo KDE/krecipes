@@ -14,6 +14,17 @@ Recipe::Recipe()
 empty(); //Create & initialize the recipe empty originally
 }
 
+Recipe::Recipe(const Recipe &r)
+    	{
+    	recipeID=r.recipeID;
+	persons=r.persons;
+	title=r.title;
+	instructions=r.instructions;
+	photo=r.photo;
+	ingList=r.ingList;
+	categoryList=r.categoryList;
+	authorList=r.authorList;
+	}
 
 Recipe::~Recipe()
 {
@@ -31,3 +42,15 @@ categoryList.clear();
 authorList.clear();
 }
 
+Recipe & Recipe::operator=(const Recipe &r)
+    	{
+    	recipeID=r.recipeID;
+	persons=r.persons;
+	title=r.title;
+	instructions=r.instructions;
+	photo=r.photo;
+	ingList=r.ingList;
+	categoryList=r.categoryList;
+	authorList=r.authorList;
+	return *this;
+	}

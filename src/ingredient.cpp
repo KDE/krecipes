@@ -9,7 +9,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
- 
+
 #include "ingredient.h"
 
 Ingredient::Ingredient()
@@ -25,7 +25,7 @@ Ingredient::Ingredient( const QString &_name, double _amount, const QString &_un
 {
 }
 
-Ingredient::Ingredient(Ingredient &ing)
+Ingredient::Ingredient(const Ingredient &ing)
 {
 this->ingredientID=ing.ingredientID;
 this->name=ing.name;
@@ -39,4 +39,12 @@ Ingredient::~Ingredient()
 {
 }
 
-
+Ingredient& Ingredient::operator=(const Ingredient &ing)
+{
+ingredientID=ing.ingredientID;
+amount=ing.amount;
+name=ing.name;
+unitID=ing.unitID;
+units=ing.units;
+return *this;
+}

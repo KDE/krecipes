@@ -21,9 +21,9 @@
 class Recipe{
 public:
     Recipe();
-
+    Recipe(const Recipe& r);
     ~Recipe();
-
+    Recipe & operator=(const Recipe &r);
     // Public variables
 
     int recipeID;
