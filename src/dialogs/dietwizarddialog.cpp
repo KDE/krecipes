@@ -183,6 +183,8 @@ public:
 		}
 
 	int propertyId(){return ctStored->id;}
+	double maxVal(){return ctStored->max;}
+	double minVal(){return ctStored->min;}
 };
 
 class CategoriesListItem:public QCheckListItem{
@@ -439,11 +441,11 @@ void DishInput::loadConstraints(ConstraintList *constraints)
 {
 constraints->clear();
 Constraint constraint;
-	for (QListViewItem *it=constraintsView->firstChild();it;it=it->nextSibling())
+	for (ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->firstChild());it;it=(ConstraintsListItem*)(it->nextSibling()))
 	{
-	constraint.id=-1; //FIXME: it must contain the property's ID
-	constraint.min=it->text(2).toInt();
-	constraint.max=it->text(3).toInt();
+	constraint.id=it->propertyId();
+	constraint.min=it->maxVal();
+	constraint.max=it->minVal();
 	constraints->add(constraint);
 	}
 }
