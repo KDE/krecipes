@@ -103,6 +103,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     connect(this->addIngredientButton,SIGNAL(clicked()),this,SLOT(addIngredient()));
     connect(this->addUnitButton,SIGNAL(clicked()),this,SLOT(addUnitToIngredient()));
     connect(this->removeUnitButton,SIGNAL(clicked()),this,SLOT(removeUnitFromIngredient()));
+    connect(this->removeIngredientButton,SIGNAL(clicked()),this,SLOT(removeIngredient()));
 }
 
 
@@ -201,7 +202,7 @@ if (ingredientID>=0) // an ingredient was selected previously
 void IngredientsDialog::removeUnitFromIngredient(void)
 {
 
-// Find selected ingredient item
+// Find selected ingredient/unit item combination
 QListViewItem *it;
 int ingredientID=-1, unitID=-1;
 if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
@@ -219,3 +220,24 @@ updateUnitList(); // Reload the list from database
 }
 }
 
+
+void IngredientsDialog::removeIngredient(void)
+{
+// Find selected ingredient item
+QListViewItem *it;
+int ingredientID=-1;
+if (it=ingredientListView->selectedItem()) ingredientID=it->text(0).toInt();
+
+if (ingredientID>=0) // an ingredient/unit combination was selected previously
+{
+ElementList results;
+database->findUseOfIngInRecipes(&results,ingredientID);
+if (results.isEmpty()) database->removeIngredient(ingredientID);
+else database->removeIngredient(ingredientID);
+
+
+reloadIngredientList();// Reload the list from database
+
+}
+
+}

@@ -60,7 +60,7 @@ private:
     void addIngredient(void);
     void addUnitToIngredient(void);
     void removeUnitFromIngredient(void);
-
+    void removeIngredient(void);
 
 
 
