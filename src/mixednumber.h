@@ -31,7 +31,7 @@ public:
 
 	MixedNumber operator+( const MixedNumber &fraction );
 
-	enum Format { DecimalFormat, MixedNumberFormat };
+	typedef enum Format { DecimalFormat, MixedNumberFormat };
 
 	/** The input as a decimal. */
 	double toDouble();
