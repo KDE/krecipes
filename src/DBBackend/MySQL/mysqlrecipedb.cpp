@@ -292,22 +292,20 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 size=mysql_real_query(mysqlDB,command.latin1(), command.length()+1);
 
-int categoryCounter=0;
-
 for (Element *cat=recipe->categoryList.getLast(); cat; cat=recipe->categoryList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	{
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
 	.arg(cat->id);
 	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
-	categoryCounter++;
 }
-	if (!categoryCounter) // If there are no categories, add the default -1 to ease and speed up searches
-	{
-	command=QString("INSERT INTO category_list VALUES (%1,-1);")
+
+//Add the default category -1 to ease and speed up searches
+
+command=QString("INSERT INTO category_list VALUES (%1,-1);")
 	.arg(recipeID);
-	size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
-	}
+size = mysql_real_query(mysqlDB, command.latin1() , command.length()+1);
+
 
 // Save the author list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
@@ -1078,8 +1076,8 @@ if (version<0.4)  // Upgrade to DB version 0.4
 
 	// Port data
 
-	//*1:: Recipes have a minimum category of -1
-	command="SELECT r.id FROM recipes r LEFT JOIN category_list cl ON(r.id=cl.recipe_id) WHERE cl.recipe_id IS NULL;"; // Find those recipes without category
+	//*1:: Recipes have always category -1 to speed up searches (no JOINs needed)
+	command="SELECT r.id FROM recipes r;"; // Find all recipes
 	QSqlQuery categoryToAdd(QString::null,database);
 	tableToAlter.exec( command);
             if ( tableToAlter.isActive() ) {

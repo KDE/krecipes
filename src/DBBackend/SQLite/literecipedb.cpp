@@ -315,22 +315,19 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1;")
 	.arg(recipeID);
 database->executeQuery(command);
 
-int categoryCounter=0;
 for (Element *cat=recipe->categoryList.getLast(); cat; cat=recipe->categoryList.getPrev()) // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	{
 	command=QString("INSERT INTO category_list VALUES (%1,%2);")
 	.arg(recipeID)
 	.arg(cat->id);
 	database->executeQuery(command);
-	categoryCounter++;
 }
 
-if (!categoryCounter) // If there are no categories, add the default -1 to ease and speed up searches
-	{
+// Add the default category -1 to ease and speed up searches
+
 	command=QString("INSERT INTO category_list VALUES (%1,-1);")
 	.arg(recipeID);
 	database->executeQuery(command);
-	}
 
 // Save the author list for the recipe (first delete, in case we are updating)
 command=QString("DELETE FROM author_list WHERE recipe_id=%1;")
