@@ -930,10 +930,11 @@ QString LiteRecipeDB::unitName(int unitID)
 {
 QString command=QString("SELECT * FROM units WHERE id=%1;").arg(unitID);
 QSQLiteResult unitToLoad=database->executeQuery(command);
-if (unitToLoad.getResults()!=QSQLiteResult::Failure)
+if (unitToLoad.getStatus()!=QSQLiteResult::Failure)
 {
-if (unitToLoad.next()) // Go to the first record (there should be only one anyway.
- return(unitToLoad.data(0));
+QSQLiteResultRow row=unitToLoad.first();
+if (!unitToLoad.atEnd()) // Go to the first record (there should be only one anyway.
+ return(row.data(0));
 }
 
 return(QString::null);
