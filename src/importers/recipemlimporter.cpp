@@ -155,22 +155,17 @@ void RecipeMLImporter::readRecipemlIngs(const QDomElement& ings)
 		else if (tagName == "ing-div") //NOTE: this can have the "type" attribute
 		{
 			// TODO Wouldn't this be better as a recursive function?
+			QString header;
 			QDomNodeList ingDiv = el.childNodes();
 			for (unsigned j = 0; j < ingDiv.count(); j++)
 			{
 				QDomElement cEl = ingDiv.item(j).toElement();
 				if (cEl.tagName() == "title")
-				{
-					QString name = cEl.text().stripWhiteSpace();
-					if (!name.endsWith(":"))
-						name += ":";
-
-					recipe.ingList.append( Ingredient( name, 0, "") );
-				}
+					header = cEl.text().stripWhiteSpace();
 				else if (cEl.tagName() == "description" )
 					{}//TODO: what do we do with this?
 				else if (cEl.tagName() == "ing")
-					readRecipemlIng(cEl);
+					readRecipemlIng(cEl,header);
 				else if ( tagName == "note" )
 					{}//TODO: what do we do with this?
 				else
@@ -184,7 +179,7 @@ void RecipeMLImporter::readRecipemlIngs(const QDomElement& ings)
 	}
 }
 
-void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
+void RecipeMLImporter::readRecipemlIng(const QDomElement& ing, const QString &header )
 {
 	QDomNodeList ingChilds = ing.childNodes();
 
@@ -226,7 +221,9 @@ void RecipeMLImporter::readRecipemlIng(const QDomElement& ing )
 	if ( !size.isNull() )
 		unit.prepend(size+" ");
 
-	recipe.ingList.append( Ingredient(name, quantity, unit, -1, -1, prep_method) );
+	Ingredient new_ing(name, quantity, unit, -1, -1, prep_method);
+	new_ing.group = header;
+	recipe.ingList.append( new_ing );
 }
 
 void RecipeMLImporter::readRecipemlDirections(const QDomElement& dirs)

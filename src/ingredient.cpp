@@ -12,7 +12,7 @@
 
 #include "ingredient.h"
 
-Ingredient::Ingredient() : amount(0)
+Ingredient::Ingredient() : amount(0), groupID(-1)
 {
 }
 Ingredient::Ingredient(const Ingredient &i)
@@ -24,6 +24,8 @@ Ingredient::Ingredient(const Ingredient &i)
 	prepMethod=i.prepMethod;
 	unitID=i.unitID;
 	units=i.units;
+	groupID=i.groupID;
+	group=i.group;
 	}
 	
 Ingredient::Ingredient( const QString &_name, double _amount, const QString &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
@@ -33,7 +35,8 @@ Ingredient::Ingredient( const QString &_name, double _amount, const QString &_un
   unitID(_unitID),
   units(_units),
   prepMethod(_prepMethod),
-  prepMethodID(_prepMethodID)
+  prepMethodID(_prepMethodID),
+  groupID(-1)
 {
 }
 
@@ -41,9 +44,10 @@ Ingredient::~Ingredient()
 {
 }
 
+//compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group
 bool Ingredient::operator==(const Ingredient &ing) const
 {
-	return (ing.ingredientID == this->ingredientID);
+	return ((ing.ingredientID == this->ingredientID) && (ing.groupID == this->groupID));
 }
 
 Ingredient & Ingredient::operator=(const Ingredient &i)
@@ -55,6 +59,8 @@ Ingredient & Ingredient::operator=(const Ingredient &i)
 	prepMethod=i.prepMethod;
 	unitID=i.unitID;
 	units=i.units;
+	groupID=i.groupID;
+	group=i.group;
 	return *this;
 	}
 

@@ -176,7 +176,7 @@ if (recipeToLoad.isActive())
 }
 
 // Read the ingredients
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;").arg(recipeID);
 
 recipeToLoad.exec( command);
             if ( recipeToLoad.isActive() ) {
@@ -195,7 +195,14 @@ recipeToLoad.exec( command);
 		    	if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
 		    		ing.prepMethod=unescapeAndDecode(prepMethodToLoad.value(0).toString());
 		    }
-		    
+
+		    ing.groupID=recipeToLoad.value(6).toInt();
+		    if ( ing.groupID != -1 ) {
+		    	QSqlQuery toLoad(QString("SELECT name FROM ingredient_groups WHERE id=%1").arg(ing.groupID),database);
+		    	if ( toLoad.isActive() && toLoad.first() )
+		    		ing.group=unescapeAndDecode(toLoad.value(0).toString());
+		    }
+    
 		    recipe->ingList.append(ing);
                 }
             }
@@ -347,6 +354,23 @@ QSqlQuery authorsToLoad(command,database);
 
 }
 
+void QSqlRecipeDB::loadIngredientGroups(ElementList *list)
+{
+list->clear();
+
+QString command;
+command="SELECT id,name FROM ingredient_groups ORDER BY name;";
+QSqlQuery toLoad( command,database);
+
+            if ( toLoad.isActive() ) {
+                while ( toLoad.next() ) {
+		    Element group;
+		    group.id=toLoad.value(0).toInt();
+		    group.name=unescapeAndDecode(toLoad.value(1).toString());
+		    list->add(group);
+                }
+	}
+}
 
 void QSqlRecipeDB::loadIngredients(ElementList *list)
 {
@@ -520,13 +544,14 @@ int order_index=0;
 for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
-	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6);")
+	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7);")
 	.arg(recipeID)
 	.arg((*ing_it).ingredientID)
 	.arg((*ing_it).amount)
 	.arg((*ing_it).unitID)
 	.arg((*ing_it).prepMethodID)
-	.arg(order_index);
+	.arg(order_index)
+	.arg((*ing_it).groupID);
 	recipeToSave.exec(command);
 	}
 
@@ -636,6 +661,21 @@ recipeToRemove.exec( command);
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;").arg(id);
 recipeToRemove.exec( command);
 
+// Clean up ingredient_groups which have no recipe that they belong to
+// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
+// (Easy way: DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );)
+QStringList ids;
+command=QString("SELECT DISTINCT(group_id) FROM ingredient_list;");
+recipeToRemove.exec(command);
+if ( recipeToRemove.isActive() ) {
+   while ( recipeToRemove.next() ) {
+      if ( recipeToRemove.value(0).toInt() != -1 )
+         ids<<QString::number(recipeToRemove.value(0).toInt());
+   }
+}
+command=QString("DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
+recipeToRemove.exec(command);
+
 emit recipeRemoved(id);
 }
 
@@ -645,6 +685,15 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2
 QSqlQuery recipeToRemove( command,database);
 
 emit recipeRemoved(recipeID,categoryID);
+}
+
+void QSqlRecipeDB::createNewIngGroup(const QString &name)
+{
+QString command;
+QString real_name = name.left(maxIngGroupNameLength());
+
+command=QString("INSERT INTO ingredient_groups VALUES(%2,'%1');").arg(escapeAndEncode(real_name)).arg(getNextInsertIDStr("ingredient_groups","id"));
+QSqlQuery query(command,database);
 }
 
 void QSqlRecipeDB::createNewIngredient(const QString &ingredientName)
@@ -739,11 +788,24 @@ if ( unitToRemove.isActive() ) {
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
 unitToRemove.exec( command);
 
-// Clean up ingredient_list which have no recipe that they belong to
-// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
-// (Easy way: DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );)
+// Clean up category_list which have no recipe that they belong to
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
 unitToRemove.exec( command);
+
+// Clean up ingredient_groups which have no recipe that they belong to
+// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
+// (Easy way: DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );)
+ids.clear();
+command=QString("SELECT DISTINCT(group_id) FROM ingredient_list;");
+unitToRemove.exec(command);
+if ( unitToRemove.isActive() ) {
+   while ( unitToRemove.next() ) {
+      if ( unitToRemove.value(0).toInt() != -1 )
+         ids<<QString::number(unitToRemove.value(0).toInt());
+   }
+}
+command=QString("DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
+unitToRemove.exec(command);
 }
 
 
@@ -825,6 +887,21 @@ ingredientToDelete.exec( command);
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
 ingredientToDelete.exec( command);
+
+// Clean up ingredient_groups which have no recipe that they belong to
+// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
+// (Easy way: DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );)
+ids.clear();
+command=QString("SELECT DISTINCT(group_id) FROM ingredient_list;");
+ingredientToDelete.exec(command);
+if ( ingredientToDelete.isActive() ) {
+   while ( ingredientToDelete.next() ) {
+      if ( ingredientToDelete.value(0).toInt() != -1 )
+         ids<<QString::number(ingredientToDelete.value(0).toInt());
+   }
+}
+command=QString("DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
+ingredientToDelete.exec(command);
 
 // Remove property list of this ingredient
 command=QString("DELETE FROM ingredient_info WHERE ingredient_id=%1;").arg(ingredientID);
@@ -985,6 +1062,21 @@ unitToRemove.exec( command);
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
 unitToRemove.exec( command);
 
+// Clean up ingredient_groups which have no recipe that they belong to
+// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
+// (Easy way: DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );)
+ids.clear();
+command=QString("SELECT DISTINCT(group_id) FROM ingredient_list;");
+unitToRemove.exec(command);
+if ( unitToRemove.isActive() ) {
+   while ( unitToRemove.next() ) {
+      if ( unitToRemove.value(0).toInt() != -1 )
+         ids<<QString::number(unitToRemove.value(0).toInt());
+   }
+}
+command=QString("DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
+unitToRemove.exec(command);
+
 // Remove the ingredient properties using this unit (user must be warned before calling this function)
 command=QString("DELETE FROM ingredient_info WHERE per_units=%1;").arg(unitID);
 unitToRemove.exec(command);
@@ -1036,6 +1128,21 @@ prepMethodToRemove.exec( command);
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
 prepMethodToRemove.exec( command);
+
+// Clean up ingredient_groups which have no recipe that they belong to
+// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
+// (Easy way: DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );)
+ids.clear();
+command=QString("SELECT DISTINCT(group_id) FROM ingredient_list;");
+prepMethodToRemove.exec(command);
+if ( prepMethodToRemove.isActive() ) {
+   while ( prepMethodToRemove.next() ) {
+      if ( prepMethodToRemove.value(0).toInt() != -1 )
+         ids<<QString::number(prepMethodToRemove.value(0).toInt());
+   }
+}
+command=QString("DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );").arg((ids.count()==0)?"-1":ids.join(","));
+prepMethodToRemove.exec(command);
 
 emit prepMethodRemoved( prepMethodID );
 }
@@ -1313,7 +1420,7 @@ bool QSqlRecipeDB::checkIntegrity(void)
 
 
 // Check existence of the necessary tables (the database may be created, but empty)
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info"<<"prep_methods";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info"<<"prep_methods"<<"ingredient_groups";
 
 QStringList existingTableList = database->tables();
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
@@ -1964,7 +2071,7 @@ return(QString::null);
 
 void QSqlRecipeDB::emptyData(void)
 {
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods"<<"ingredient_groups";
 QSqlQuery tablesToEmpty(QString::null,database);
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{

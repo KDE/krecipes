@@ -56,7 +56,7 @@ if (tableName=="recipes") commands<<QString("CREATE TABLE recipes (id INTEGER NO
 
 else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));").arg(maxIngredientNameLength());
 
-else if (tableName=="ingredient_list") commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
+else if (tableName=="ingredient_list") commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
 
 else if (tableName=="unit_list") commands<<"CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
@@ -81,6 +81,9 @@ else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_i
 else if (tableName=="db_info") {
 commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
+}
+else if (tableName=="ingredient_groups") {
+commands<<QString("CREATE TABLE `ingredient_groups` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));").arg(maxIngGroupNameLength());
 }
 
 else return;
@@ -197,6 +200,17 @@ if ( version < 0.61 )
 	command="DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec(command);
 	command="INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
+		tableToAlter.exec(command);
+}
+
+if ( version < 0.7 )
+{
+	QString command="ALTER TABLE `ingredient_list` ADD COLUMN `group_id` int(11) default '-1' AFTER order_index;";
+		QSqlQuery tableToAlter(command,database);
+
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		tableToAlter.exec(command);
+	command="INSERT INTO db_info VALUES(0.7,'Krecipes 0.7');";
 		tableToAlter.exec(command);
 }
 

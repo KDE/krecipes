@@ -102,6 +102,7 @@ public:
 
 	virtual void createNewAuthor(const QString &authorName)=0;
 	virtual void createNewCategory(const QString &categoryName,int parent_id=-1)=0;
+	virtual void createNewIngGroup( const QString &name )=0;
 	virtual void createNewIngredient(const QString &ingredientName)=0;
 	virtual void createNewPrepMethod(const QString &prepMethodName)=0;
 	virtual void createNewUnit(const QString &unitName)=0;
@@ -141,6 +142,7 @@ public:
 	virtual void loadAuthors(ElementList *list)=0;
 	virtual void loadCategories(CategoryTree *list,int parent_id=-1)=0;
 	virtual void loadCategories(ElementList *list)=0;
+	virtual void loadIngredientGroups(ElementList *list)=0;
 	virtual void loadIngredients(ElementList *list)=0;
 	virtual void loadPossibleUnits(int ingredientID, ElementList *list)=0;
 	virtual void loadPrepMethods( ElementList *list)=0;
@@ -229,6 +231,7 @@ public:
 	int maxAuthorNameLength() const{ return 50; }
 	int maxCategoryNameLength() const{ return 40; }
 	int maxIngredientNameLength() const{ return 50; }
+	int maxIngGroupNameLength() const{ return 50; }
 	int maxRecipeTitleLength() const{ return 200; }
 	int maxUnitNameLength() const{ return 20; }
 	int maxPrepMethodNameLength() const{ return 20; }

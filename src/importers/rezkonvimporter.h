@@ -35,6 +35,8 @@ private:
 	void readRecipe( const QStringList &raw_text );
 
 	QStringList::const_iterator m_end_it;
+
+	QString current_header;
 };
 
 #endif //REZKONVIMPORTER_H

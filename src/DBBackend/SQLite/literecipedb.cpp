@@ -164,7 +164,7 @@ if (recipeToLoad.getStatus() != QSQLiteResult::Failure)
 
 // Read the ingredients
 
-command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
+command=QString("SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg(recipeID);
 
 recipeToLoad=database->executeQuery( command);
             if (recipeToLoad.getStatus() != QSQLiteResult::Failure) {
@@ -177,6 +177,7 @@ recipeToLoad=database->executeQuery( command);
 		    ing.unitID=row.data(3).toInt();
 		    ing.units=unescapeAndDecode(row.data(4));
 		    ing.prepMethodID=row.data(5).toInt();
+		    ing.groupID=row.data(6).toInt();
 		    
 		    if ( ing.prepMethodID != -1 )
 		    {
@@ -186,6 +187,16 @@ recipeToLoad=database->executeQuery( command);
 		    		QSQLiteResultRow prep_row = prepMethodToLoad.first();
 				if ( !prepMethodToLoad.atEnd() )
 		    			ing.prepMethod=unescapeAndDecode(prep_row.data(0));
+		    	}
+		    }
+		    
+		    if ( ing.groupID != -1 ) {
+		    	QSQLiteResult toLoad = database->executeQuery(QString("SELECT name FROM ingredient_groups WHERE id=%1").arg(ing.groupID));
+		    	if ( toLoad.getStatus() != QSQLiteResult::Failure )
+		    	{
+		    		QSQLiteResultRow row = toLoad.first();
+				if ( !toLoad.atEnd() )
+		    			ing.group=unescapeAndDecode(row.data(0));
 		    	}
 		    }
 		    
@@ -386,6 +397,26 @@ QSQLiteResult authorsToLoad=database->executeQuery( command);
 
 }
 
+void LiteRecipeDB::loadIngredientGroups(ElementList *list)
+{
+list->clear();
+
+QString command;
+command="SELECT id,name FROM ingredient_groups ORDER BY name;";
+QSQLiteResult toLoad = database->executeQuery(command);
+
+if ( toLoad.getStatus()!=QSQLiteResult::Failure ) {
+	QSQLiteResultRow row=toLoad.first();
+	while ( !toLoad.atEnd() ) {
+		Element group;
+		group.id=row.data(0).toInt();
+		group.name=unescapeAndDecode(row.data(1));
+		list->add(group);
+		row =toLoad.next();
+	}
+}
+}
+
 void LiteRecipeDB::loadIngredients(ElementList *list)
 {
 list->clear();
@@ -527,13 +558,14 @@ database->executeQuery("UPDATE recipes SET photo=NULL WHERE id="+QString::number
 for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it )
 	{
 	order_index++;
-	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6);")
+	command=QString("INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7);")
 	.arg(recipeID)
 	.arg((*ing_it).ingredientID)
 	.arg((*ing_it).amount)
 	.arg((*ing_it).unitID)
 	.arg((*ing_it).prepMethodID)
-	.arg(order_index);
+	.arg(order_index)
+	.arg((*ing_it).groupID);
 	database->executeQuery(command);
 	}
 
@@ -646,6 +678,10 @@ database->executeQuery( command);
 command=QString("DELETE FROM category_list WHERE recipe_id=%1;").arg(id);
 database->executeQuery( command);
 
+// Clean up ingredient_groups which have no recipe that they belong to
+command="DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
+database->executeQuery( command);
+
 emit recipeRemoved(id);
 }
 
@@ -655,6 +691,15 @@ command=QString("DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2
 database->executeQuery( command);
 
 emit recipeRemoved(recipeID,categoryID);
+}
+
+void LiteRecipeDB::createNewIngGroup(const QString &name)
+{
+QString command;
+QString real_name = name.left(maxIngGroupNameLength());
+
+command=QString("INSERT INTO ingredient_groups VALUES(NULL,'%1');").arg(escapeAndEncode(real_name));
+database->executeQuery(command);
 }
 
 void LiteRecipeDB::createNewIngredient(const QString &ingredientName)
@@ -739,6 +784,11 @@ database->executeQuery(command);
 // Clean up ingredient_list which have no recipe that they belong to.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command);
+
+// Clean up ingredient_groups which have no recipe that they belong to
+command="DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
+database->executeQuery( command);
+
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command);
@@ -814,6 +864,10 @@ database->executeQuery(QString("DELETE FROM ingredient_list WHERE ingredient_id=
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command );
+
+// Clean up ingredient_groups which have no recipe that they belong to
+command="DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
+database->executeQuery( command);
 
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
@@ -991,6 +1045,10 @@ database->executeQuery(QString("DELETE FROM ingredient_list WHERE prep_method_id
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command );
 
+// Clean up ingredient_groups which have no recipe that they belong to
+command="DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
+database->executeQuery( command);
+
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command);
@@ -1063,6 +1121,10 @@ database->executeQuery(QString("DELETE FROM ingredient_list WHERE unit_id=%1;").
 // Remove any ingredient in ingredient_list whis has references to inexisting recipes.
 command=QString("DELETE FROM ingredient_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
 database->executeQuery( command );
+
+// Clean up ingredient_groups which have no recipe that they belong to
+command="DELETE FROM ingredient_groups WHERE id NOT IN ( SELECT DISTINCT(group_id) FROM ingredient_list );";
+database->executeQuery( command);
 
 // Clean up category_list which have no recipe that they belong to. Same method as above
 command=QString("DELETE FROM category_list WHERE recipe_id NOT IN ( SELECT id FROM recipes );");
@@ -1305,6 +1367,7 @@ QString LiteRecipeDB::escape(const QString &s)
 {
 QString s_escaped=s;
 
+if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 // Escape using SQLite's function
 #if HAVE_SQLITE
 char * escaped= sqlite_mprintf("%q",s.latin1()); // Escape the string(allocates memory)
@@ -1317,6 +1380,7 @@ sqlite_freemem(escaped); // free allocated memory
 #elif HAVE_SQLITE3
 sqlite3_free(escaped); // free allocated memory
 #endif
+}
 
 return(s_escaped);
 }
@@ -1397,7 +1461,7 @@ bool LiteRecipeDB::checkIntegrity(void)
 
 
 // Check existence of the necessary tables (the database may be created, but empty)
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"prep_methods"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"prep_methods"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"db_info"<<"ingredient_groups";
 
 QString command=QString("SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table';"); // Get the table names (equivalent to MySQL's "SHOW TABLES;" Easy to remember, right? ;)
 
@@ -1456,7 +1520,7 @@ else if (tableName=="ingredients") commands<<QString("CREATE TABLE ingredients (
 
 else if (tableName=="ingredient_list")
 	{
-	commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);"
+	commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);"
 		<<"CREATE index ridil_index ON ingredient_list(recipe_id);"
 		<<"CREATE index iidil_index ON ingredient_list(ingredient_id);";
 	}
@@ -1489,6 +1553,9 @@ else if (tableName=="author_list") commands<<"CREATE TABLE author_list (recipe_i
 else if (tableName=="db_info") {
 commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by varchar(200) default NULL);";
 commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
+}
+else if (tableName=="ingredient_groups") {
+commands<<QString("CREATE TABLE ingredient_groups (id INTEGER NOT NULL, name varchar(%1), PRIMARY KEY (id));").arg(maxIngGroupNameLength());
 }
 
 else return;
@@ -1726,6 +1793,61 @@ if ( version < 0.61 )
 	command="INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
 		database->executeQuery(command);
 }
+
+if ( version < 0.7 )
+{
+	database->executeQuery("BEGIN TRANSACTION;");
+
+	//==================add a column to 'ingredient_list' to allow grouping ingredients
+	database->executeQuery("CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);");
+	QSQLiteResult copyQuery = database->executeQuery("SELECT * FROM ingredient_list;");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = "INSERT INTO ingredient_list_copy VALUES('"+escape(row.data(0))
+			 +"','"+escape(row.data(1))
+			 +"','"+escape(row.data(2))
+			 +"','"+escape(row.data(3))
+			 +"','"+escape(row.data(4))
+			 +"','"+escape(row.data(5))
+			 +"');";
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE ingredient_list");
+	database->executeQuery("CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);");
+	copyQuery = database->executeQuery("SELECT * FROM ingredient_list_copy");
+	if (copyQuery.getStatus()!=QSQLiteResult::Failure)
+	{
+		QSQLiteResultRow row= copyQuery.first();
+		while (!copyQuery.atEnd())
+		{
+			command = "INSERT INTO ingredient_list VALUES('"+escape(row.data(0))
+			 +"','"+escape(row.data(1))
+			 +"','"+escape(row.data(2))
+			 +"','"+escape(row.data(3))
+			 +"','"+escape(row.data(4))
+			 +"','"+escape(row.data(5))
+			 +"',-1)";
+			database->executeQuery(command);
+			
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery("DROP TABLE ingredient_list_copy");
+
+	command="DELETE FROM db_info;"; // Remove previous version records if they exist
+		database->executeQuery(command);
+	command="INSERT INTO db_info VALUES(0.7,'Krecipes 0.7');";
+		database->executeQuery(command);
+
+	database->executeQuery("COMMIT TRANSACTION;");
+}
+
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -2416,7 +2538,7 @@ int LiteRecipeDB::lastInsertID()
 
 void LiteRecipeDB::emptyData(void)
 {
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods"<<"ingredient_groups";
 
 for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 	{

@@ -111,18 +111,29 @@ QString KreExporter::createContent( const RecipeList& recipes )
     xml += "</krecipes-description>\n";
     xml += "<krecipes-ingredients>\n";
 
-	for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
+	IngredientList list_copy = (*recipe_it).ingList;
+	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() )
 	{
-      xml += "<ingredient>\n";
-      xml += "<name>"+QStyleSheet::escape((*ing_it).name.utf8())+"</name>\n";
-      xml += "<amount>";
-      xml += QString::number((*ing_it).amount);
-      xml += "</amount>\n";
-      xml += "<unit>"+QStyleSheet::escape((*ing_it).units.utf8())+"</unit>\n";
-      if ( !(*ing_it).prepMethod.isEmpty() ) xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
-      xml += "</ingredient>\n";
-      /// @todo add ingredient properties
+		QString group = group_list[0].group; //just use the first's name... they're all the same
+		if ( !group.isEmpty() )
+			xml += "<ingredient-group name=\""+group+"\">\n";
+
+		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
+			xml += "<ingredient>\n";
+			xml += "<name>"+QStyleSheet::escape((*ing_it).name.utf8())+"</name>\n";
+			xml += "<amount>";
+			xml += QString::number((*ing_it).amount);
+			xml += "</amount>\n";
+			xml += "<unit>"+QStyleSheet::escape((*ing_it).units.utf8())+"</unit>\n";
+			if ( !(*ing_it).prepMethod.isEmpty() ) xml += "<prep>"+QStyleSheet::escape((*ing_it).prepMethod.utf8())+"</prep>\n";
+			xml += "</ingredient>\n";
+		}
+
+		if ( !group.isEmpty() )
+			xml += "</ingredient-group>\n";
 	}
+
+      /// @todo add ingredient properties
 
     xml += "</krecipes-ingredients>\n";
     xml += "<krecipes-instructions>\n";

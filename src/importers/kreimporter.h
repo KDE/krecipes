@@ -42,7 +42,7 @@ private:
 private:
 	void readCategoryStructure( const QDomNodeList& l, CategoryTree *tree );
 	void readDescription(const QDomNodeList& l, Recipe*);
-	void readIngredients(const QDomNodeList& l, Recipe*);
+	void readIngredients(const QDomNodeList& l, Recipe*, const QString &header = QString::null);
 };
 
 #endif

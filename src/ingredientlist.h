@@ -27,11 +27,19 @@ public:
     ~IngredientList();
     bool contains(Ingredient &ing) const;
     bool containsSubSet(IngredientList &il,IngredientList &missing);
+    IngredientList groupMembers(int id, IngredientList::const_iterator begin) const;
     void move(int index1,int index2);
     void empty(void);
     int find(int id) const;
     IngredientList::const_iterator find(IngredientList::const_iterator,int id) const;
     IngredientList::iterator find(IngredientList::iterator,int id);
+
+    IngredientList firstGroup();
+    IngredientList nextGroup();
+
+private:
+    QValueList<IngredientList::const_iterator> _groupMembers(int id, IngredientList::const_iterator begin ) const;
+    QValueList<IngredientList::const_iterator> usedGroups;
 };
 
 #endif

@@ -58,6 +58,8 @@ private:
 	IngredientList m_all_ing;
 
 	FormatVersion version;
+	
+	QString current_header;
 };
 
 #endif //MMFIMPORTER_H

@@ -131,6 +131,8 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	loadInstructions( text_it, recipe );
 	
 	add( recipe );
+
+	current_header = QString::null;
 }
 
 void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
@@ -159,6 +161,9 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 
 	//name and preparation method
 	new_ingredient.name = string.mid( 18, string.length()-18 ).stripWhiteSpace();
+	
+	//header (if present)
+	new_ingredient.group = current_header;
 
 	recipe.ingList.append( new_ingredient );
 	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
@@ -174,10 +179,7 @@ void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &recip
 	
 	kdDebug()<<"found ingredient header: "<<header<<endl;
 
-	Ingredient title;
-	title.name = "----" + header + "----";
-	title.units = ""; title.amount = 0;
-	recipe.ingList.append( title );
+	current_header = header;
 }
 
 void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Recipe &recipe )

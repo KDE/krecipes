@@ -42,7 +42,8 @@ private:
 
 	QString m_instructions;
 	QString m_title;
-
+	QString current_header;
+	
 	ElementList m_authors;
 	ElementList m_categories;
 	IngredientList m_ingredients;

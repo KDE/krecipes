@@ -86,49 +86,74 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
  */
 void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 {
+	//this format requires ingredients without a group to be written first
+	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
+		if ( (*ing_it).groupID == -1 )
+			writeSingleIngredient( content, *ing_it );
+	}
+
+	IngredientList list_copy = recipe.ingList;
+	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() )
+	{
+		if ( group_list[0].groupID == -1 ) //we already handled this group
+			continue;
+
+		QString group = group_list[0].group.left(76); //just use the first's name... they're all the same
+		if ( !group.isEmpty() ) {
+			int length = group.length();
+			QString filler_lt = QString().fill('-',(76-length)/2);
+			QString filler_rt = (length%2)?QString().fill('-',(76-length)/2+1):filler_lt;
+			content += filler_lt+group+filler_rt+"\n";
+		}
+
+		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
+			writeSingleIngredient( content, *ing_it );
+		}
+	}
+}
+
+void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing )
+{
 	KConfig *config = kapp->config(); config->setGroup("Formatting");
 	MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
+	//columns 1-7
+	if ( ing.amount > 0 )
+		content += MixedNumber(ing.amount).toString( number_format, false ).rightJustify(7,' ',true)+" ";
+	else
+		content += "        ";
+
+	//columns 9-10
+	bool found_short_form = false;
+	for ( int i = 0; unit_info[i].short_form; i++ )
 	{
-		//columns 1-7
-		if ( (*ing_it).amount > 0 )
-			content += MixedNumber((*ing_it).amount).toString( number_format, false ).rightJustify(7,' ',true)+" ";
-		else
-			content += "        ";
-
-		//columns 9-10
-		bool found_short_form = false;
-		for ( int i = 0; unit_info[i].short_form; i++ )
+		if ( unit_info[i].expanded_form == ing.units ||
+		unit_info[i].plural_expanded_form == ing.units ||
+		unit_info[i].short_form == ing.units )
 		{
-			if ( unit_info[i].expanded_form == (*ing_it).units ||
-			     unit_info[i].plural_expanded_form == (*ing_it).units ||
-			     unit_info[i].short_form == (*ing_it).units )
-			{
-				found_short_form = true;
-				content += QString(unit_info[i].short_form).leftJustify(2)+" ";
-				break;
-			}
+			found_short_form = true;
+			content += QString(unit_info[i].short_form).leftJustify(2)+" ";
+			break;
 		}
-		if ( !found_short_form )
-		{
-			kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<(*ing_it).units<<endl;
-			kdDebug()<<"         This ingredient ("<<(*ing_it).name<<") will be exported without a unit"<<endl;
-			content += "   ";
-		}
-
-		//columns 12-39
-		QString ing_name((*ing_it).name);
-		if ( (*ing_it).prepMethodID != -1 )
-			ing_name += "; " + (*ing_it).prepMethod;
-		
-		if ( !found_short_form ) ing_name.prepend((*ing_it).units+" ");
-		ing_name.truncate(28);
-		content += ing_name+"\n";
-
-		for ( unsigned int i = 0; i < ((*ing_it).name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
-			content += "           -"+(*ing_it).name.mid(28*(i+1),28)+"\n";
 	}
+	if ( !found_short_form )
+	{
+		kdDebug()<<"Warning: unable to find Meal-Master abbreviation for: "<<ing.units<<endl;
+		kdDebug()<<"         This ingredient ("<<ing.name<<") will be exported without a unit"<<endl;
+		content += "   ";
+	}
+
+	//columns 12-39
+	QString ing_name(ing.name);
+	if ( ing.prepMethodID != -1 )
+		ing_name += "; " + ing.prepMethod;
+	
+	if ( !found_short_form ) ing_name.prepend(ing.units+" ");
+	ing_name.truncate(28);
+	content += ing_name+"\n";
+
+	for ( unsigned int i = 0; i < (ing.name.length()-1) / 28; i++ ) //if longer than 28 chars, continue on next line(s)
+		content += "           -"+ing.name.mid(28*(i+1),28)+"\n";
 }
 
 void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )

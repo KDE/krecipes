@@ -28,6 +28,8 @@ public:
     QString units;
     QString prepMethod;
     int prepMethodID;
+    int groupID;
+    QString group;
     Ingredient & operator=(const Ingredient &i);
     
     /** Compare two elements by their id */

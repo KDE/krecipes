@@ -17,6 +17,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qstringlist.h>
+#include <qregexp.h>
 
 #include "mixednumber.h"
 #include "recipe.h"
@@ -153,18 +154,18 @@ void NYCGenericImporter::resetVars()
 
 	m_title = QString::null;
 	m_instructions = QString::null;
+
+	current_header = QString::null;
 }
 
 void NYCGenericImporter::loadIngredientLine( const QString &line )
 {
 	QString current = line;
 
-	// We can't really do anything with the ingredient header... just add it as an ingredient for now
 	if ( current.contains("-----") )
 	{
-		Ingredient new_ingredient( current.stripWhiteSpace(), 0, "" );
-		m_ingredients.append(new_ingredient);
-		kdDebug()<<"Found ingredient header: "<<new_ingredient.name<<endl;
+		current_header = current.stripWhiteSpace();
+		kdDebug()<<"Found ingredient header: "<<current_header<<endl;
 		return;
 	}
 
@@ -209,13 +210,12 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	//now join each separate part of ingredient (name, unit, amount)
 	name = ingredient_line.join(" ");
 
-	/*uncomment this when Krecipes uses preparation method
 	int prep_sep_index = name.find(QRegExp("[,;]"));
 	name = name.left( prep_sep_index );
 	prep = name.mid( prep_sep_index, name.length() );
-	*/
 
-	Ingredient new_ingredient( name, amount.toDouble(), unit );
+	Ingredient new_ingredient( name, amount.toDouble(), unit, -1, -1, prep );
+	new_ingredient.group = current_header;
 	m_ingredients.append(new_ingredient);
 	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
 	  <<", unit:"<<new_ingredient.units

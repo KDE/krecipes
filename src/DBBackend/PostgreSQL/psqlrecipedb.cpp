@@ -57,7 +57,7 @@ if (tableName=="recipes") commands<<"CREATE TABLE recipes (id SERIAL NOT NULL PR
 else if (tableName=="ingredients") commands<<"CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 
 else if (tableName=="ingredient_list") { 
-commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);";
+commands<<"CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);";
 commands<<"CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);";
 commands<<"CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);";
 }
@@ -90,7 +90,9 @@ else if (tableName=="db_info") {
 commands<<"CREATE TABLE db_info (ver FLOAT NOT NULL,generated_by CHARACTER VARYING default NULL);";
 commands<<QString("INSERT INTO db_info VALUES(%1,'Krecipes %2');").arg(latestDBVersion()).arg(krecipes_version());
 }
-
+else if (tableName=="ingredient_groups") {
+commands<<"CREATE TABLE ingredient_groups (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
+}
 else return;
 
 QSqlQuery databaseToCreate(QString::null,database);
@@ -159,10 +161,10 @@ void PSqlRecipeDB::loadPhoto(int recipeID, QPixmap &photo)
 
 void PSqlRecipeDB::givePermissions(const QString &/*dbName*/,const QString &username, const QString &password, const QString &/*clientHost*/)
 {
-QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods"<<"db_info";
+QStringList tables; tables<<"ingredient_info"<<"ingredient_list"<<"ingredient_properties"<<"ingredients"<<"recipes"<<"unit_list"<<"units"<<"units_conversion"<<"categories"<<"category_list"<<"authors"<<"author_list"<<"prep_methods"<<"db_info"<<"ingredient_groups";
 
 //we also have to grant permissions on the sequences created
-tables<<"authors_id_seq"<<"categories_id_seq"<<"ingredient_properties_id_seq"<<"ingredients_id_seq"<<"prep_methods_id_seq"<<"recipes_id_seq"<<"units_id_seq";
+tables<<"authors_id_seq"<<"categories_id_seq"<<"ingredient_properties_id_seq"<<"ingredients_id_seq"<<"prep_methods_id_seq"<<"recipes_id_seq"<<"units_id_seq"<<"ingredient_groups_id_seq";
 
 QString command;
 

@@ -237,6 +237,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	//name and preparation method
 	new_ingredient.name = string.mid( 11, 32 ).stripWhiteSpace();
 
+	//put in the header... it there is no header, current_header will be QString::null
+	new_ingredient.group = current_header;
+
 	//if we made it this far it is an ingredient line
 	list.append( new_ingredient );
 	kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
@@ -246,7 +249,6 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	return true;
 }
 
-//### for now, make header an ingredient
 bool MMFImporter::loadIngredientHeader( const QString &string )
 {
 	if ( (string.startsWith("-----") || string.startsWith("MMMMM") ) &&
@@ -264,18 +266,17 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		kdDebug()<<"found ingredient header: "<<header<<endl;
 
 		//merge all columns before appending to full ingredient list to maintain the ingredient order
-		for ( IngredientList::const_iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it )
+		for ( IngredientList::iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it ) {
 			m_all_ing.append( *ing_it );
+		}
 		m_left_col_ing.empty();
 
-		for ( IngredientList::const_iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it )
+		for ( IngredientList::iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it ) {
 			m_all_ing.append( *ing_it );
+		}
 		m_right_col_ing.empty();
 
-		Ingredient title;
-		title.name = "----" + header + "----";
-		title.units = ""; title.amount = 0;
-		m_all_ing.append( title );
+		current_header = header;
 		return true;
 	}
 	else
@@ -329,5 +330,7 @@ void MMFImporter::resetVars()
 
 	m_title = QString::null;
 	m_instructions = QString::null;
+
+	current_header = QString::null;
 }
 

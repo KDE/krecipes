@@ -65,6 +65,7 @@ public:
 
 	void createNewAuthor(const QString &authorName);
 	void createNewCategory(const QString &categoryName,int parent_id=-1);
+	void createNewIngGroup( const QString &name );
 	void createNewIngredient(const QString &ingredientName);
 	void createNewPrepMethod(const QString &prepMethodName);
 	void createNewUnit(const QString &unitName);
@@ -103,6 +104,7 @@ public:
 	void loadAuthors(ElementList *list);
 	void loadCategories(CategoryTree *list,int parent_id=-1);
 	void loadCategories(ElementList *list);
+	void loadIngredientGroups(ElementList *list);
 	void loadIngredients(ElementList *list);
 	void loadPossibleUnits(int ingredientID, ElementList *list);
 	void loadPrepMethods( ElementList *list);

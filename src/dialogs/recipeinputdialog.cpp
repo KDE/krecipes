@@ -21,6 +21,8 @@
 #include <qtooltip.h>
 #include <qdatetimeedit.h>
 #include <qdragobject.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
@@ -72,6 +74,127 @@ void ImageDropLabel::dropEvent(QDropEvent* event)
 		emit changed();
 	}
 }
+
+#define INGLISTVIEWITEM_RTTI 1002
+#define INGGRPLISTVIEWITEM_RTTI 1003
+
+class IngListViewItem : public QListViewItem
+{
+public:
+	IngListViewItem(QListView* qlv, const Ingredient &i ):QListViewItem(qlv)
+	{
+		init(i);
+	}
+
+	IngListViewItem(QListView* qlv, QListViewItem *after, const Ingredient &i ):QListViewItem(qlv,after)
+	{
+		init(i);
+	}
+
+	IngListViewItem(QListViewItem* qli, QListViewItem *after, const Ingredient &i ):QListViewItem(qli,after)
+	{
+		init(i);
+	}
+
+	int rtti() const { return INGLISTVIEWITEM_RTTI; }
+
+	Ingredient ingredient() const { return m_ing; }
+
+	void setAmount( double amount )
+	{
+		amount_str = QString::null;
+
+		if ( amount > 0 ) {
+			KConfig *config=kapp->config();
+			config->setGroup("Formatting");
+	
+			if ( config->readBoolEntry("Fraction"))
+				amount_str = MixedNumber(amount).toString();
+			else
+				amount_str = beautify(KGlobal::locale()->formatNumber(amount,5));
+		}
+		
+		m_ing.amount = amount;
+	}
+
+	void setUnit( const QString &unit )
+	{
+		m_ing.units = unit;
+	}
+
+	void setPrepMethod( const QString &prepMethod )
+	{
+		m_ing.prepMethod = prepMethod;
+	}
+
+	virtual void setText(int column, const QString &text)
+	{
+		switch ( column ) {
+		case 0: break;
+		case 1: setAmount( text.toDouble() ); break;
+		case 2: setUnit(text); break;
+		case 3: setPrepMethod(text); break;
+		default: break;
+		}
+	}
+
+protected:
+	Ingredient m_ing;
+	QString amount_str;
+
+public:
+	virtual QString text(int column) const {
+		switch (column)
+		{
+		case 0: return m_ing.name; break;
+		case 1: return amount_str; break;
+		case 2: return m_ing.units; break;
+		case 3: return m_ing.prepMethod; break;
+		default: return(QString::null);
+		}
+	}
+
+private:
+	void init( const Ingredient &i )
+	{
+		m_ing = i;
+		
+		setAmount( i.amount );
+	}
+};
+
+class IngGrpListViewItem : public QListViewItem
+{
+public:
+	IngGrpListViewItem(QListView* qlv, QListViewItem *after, const QString &group, int id ):QListViewItem(qlv,after)
+	{
+		init(group,id);
+	}
+
+	int rtti() const { return INGGRPLISTVIEWITEM_RTTI; }
+
+	QString group() const { return m_group; }
+	int id() const { return m_id; }
+
+	virtual QString text(int column) const {
+		switch (column)
+		{
+		case 0: return m_group+":"; break;
+		default: return(QString::null);
+		}
+	}
+
+protected:
+	QString m_group;
+	int m_id;
+
+private:
+	void init( const QString &group, int id )
+	{
+		m_group = group;
+		m_id = id;
+	}
+};
 
 
 RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db): QVBox( parent)
@@ -252,7 +375,15 @@ il=new KIconLoader;
     allInputHBox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
     
     QVBox *ingredientVBox = new QVBox( allInputHBox );
-    ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
+    QHBox *typeHBox = new QHBox( ingredientVBox );
+    QRadioButton *ingredientRadioButton = new QRadioButton( i18n("Ingredient:"), typeHBox );
+    QRadioButton *headerRadioButton = new QRadioButton( i18n("Header:"), typeHBox );
+    typeButtonGrp = new QButtonGroup();
+    typeButtonGrp->insert(ingredientRadioButton);
+    typeButtonGrp->insert(headerRadioButton);
+    typeButtonGrp->setButton( 0 );
+    connect( typeButtonGrp, SIGNAL(clicked(int)), SLOT(typeButtonClicked(int)) );
+    //ingredientLabel = new QLabel( i18n("Ingredient:"), ingredientVBox );
     ingredientBox = new KComboBox( TRUE, ingredientVBox );
     ingredientBox->setAutoCompletion( TRUE );
     ingredientBox->lineEdit()->disconnect(ingredientBox); //so hitting enter doesn't enter the item into the box
@@ -491,6 +622,9 @@ enableChangedSignal();
 
 void RecipeInputDialog::reload(void)
 {
+typeButtonGrp->setButton(0); //put back to ingredient input
+typeButtonClicked(0);
+
 ingredientComboList->clear();
 unitComboList->clear();
 reloadCombos();
@@ -505,23 +639,35 @@ servingsNumInput->setValue(loadedRecipe->persons);
 prepTimeEdit->setTime(loadedRecipe->prepTime);
 
 	//show ingredient list
-	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it )
+	IngredientList list_copy = loadedRecipe->ingList;
+	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() )
 	{
 		QListViewItem* lastElement=ingredientList->lastItem();
+		QListViewItem *ing_header = 0;
 
-		QString amount_str;
-		if ( (*ing_it).amount > 0 ) {
-			KConfig *config=kapp->config();
-			config->setGroup("Formatting");
-	
-			if ( config->readBoolEntry("Fraction"))
-				amount_str = MixedNumber((*ing_it).amount).toString();
-			else
-				amount_str = beautify(KGlobal::locale()->formatNumber((*ing_it).amount,5));
+		QString group = group_list[0].group;
+		if ( !group.isEmpty() ) {
+			if ( lastElement && lastElement->parent() )
+				lastElement = lastElement->parent();
+
+			ing_header = new IngGrpListViewItem(ingredientList,lastElement,group_list[0].group, group_list[0].groupID);
+			ing_header->setOpen(true);
 		}
 
-		 //Insert ingredient after last one
-		 (void)new QListViewItem (ingredientList,lastElement,(*ing_it).name,amount_str,(*ing_it).units,(*ing_it).prepMethod);
+		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it )
+		{
+			lastElement=ingredientList->lastItem();
+
+			//Insert ingredient after last one
+			if ( ing_header ) {
+				(void)new IngListViewItem (ing_header,lastElement,*ing_it);
+			}
+			else {
+				if ( lastElement && lastElement->parent() )
+					lastElement = lastElement->parent();
+				(void)new IngListViewItem (ingredientList,lastElement,*ing_it);
+			}
+		}
 	}
 // 
 	//show photo
@@ -651,53 +797,109 @@ void RecipeInputDialog::clearPhoto(void)
 void RecipeInputDialog::moveIngredientUp(void)
 {
 QListViewItem *it=ingredientList->selectedItem();
-QListViewItem *iabove = 0;
+if ( !it || it->rtti() != INGLISTVIEWITEM_RTTI ) return;
 
-if (it) iabove=it->itemAbove(); // Only check itemAbove() if it exists...
+QListViewItem *iabove = it->itemAbove();
 
-if (it  && iabove)
-	{
+if (iabove) {
+	int it_index=ingItemIndex(ingredientList,it);
+	int iabove_index=ingItemIndex(ingredientList,iabove);
+	IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
 
-	iabove->moveItem(it); //Move the Item
+	if ( iabove->parent() != it->parent() ) {
+		if ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI && it->parent() ) { //move the item out of the group
+			it->parent()->takeItem(it);
+			ingredientList->insertItem(it);
+			it->moveItem((iabove->itemAbove()->parent())?iabove->itemAbove()->parent():iabove->itemAbove()); //Move the Item
+		}
+		else { //move the item into the group
+			ingredientList->takeItem(it);
+			iabove->parent()->insertItem(it); 
+			it->moveItem(iabove); //Move the Item
+		}
 
-	//Now move it in the Recipe (order is just opposite! above<->below index<->count-index)
-	 int it_index=ingredientList->itemIndex(it);
-	 int iabove_index=ingredientList->itemIndex(iabove);
-	 loadedRecipe->ingList.move(iabove_index,it_index);
-	 emit changed();
-
+		ingredientList->setCurrentItem(it); //Keep selected
 	}
+	else {
+		iabove->moveItem(it); //Move the Item
+		loadedRecipe->ingList.move(it_index,iabove_index);
+	}
+
+	if ( it->parent() )
+		(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
+	else
+		(*ing).groupID = -1;
+
+	emit changed();
+}
 }
 
 void RecipeInputDialog::moveIngredientDown(void)
 {
-
 QListViewItem *it=ingredientList->selectedItem();
-QListViewItem *ibelow = 0;
-if (it) ibelow=it->itemBelow(); // Only check itemBelow() if it exists...
+if ( !it || it->rtti() != INGLISTVIEWITEM_RTTI ) return;
 
-if (ibelow && it)
-{
-	 it->moveItem(ibelow);
-	 //Now move it in the Recipe
-	 int it_index=ingredientList->itemIndex(it);
-	 int ibelow_index=ingredientList->itemIndex(ibelow);
-	 loadedRecipe->ingList.move(it_index,ibelow_index);
-	 emit changed();
-	 }
+QListViewItem *ibelow = it->itemBelow();
 
+if (ibelow) {
+	int it_index=ingItemIndex(ingredientList,it);
+	int ibelow_index=ingItemIndex(ingredientList,ibelow);
+	IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+
+	if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI || (ibelow->parent() != it->parent()) ) {
+		if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI && !it->parent() ) { //move the item into the group
+			if ( !it->parent() )
+				ingredientList->takeItem(it);
+			else
+				it->parent()->takeItem(it);
+
+			ibelow->insertItem(it); 
+		}
+		else { //move the item out of the group
+			QListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
+			parent->takeItem(it);
+			ingredientList->insertItem(it);
+			it->moveItem(parent); //Move the Item
+		}
+
+		ingredientList->setCurrentItem(it); //Keep selected
+	}
+	else {
+		it->moveItem(ibelow); //Move the Item
+		loadedRecipe->ingList.move(it_index,ibelow_index);
+	}
+
+	if ( it->parent() )
+		(*ing).groupID = ((IngGrpListViewItem*)it->parent())->id();
+	else
+		(*ing).groupID = -1;
+
+	emit changed();
+}
+else if ( it->parent() ) {
+	it->parent()->takeItem(it);
+	ingredientList->insertItem(it);
+	it->moveItem((ingredientList->lastItem()->parent())?ingredientList->lastItem()->parent():ingredientList->lastItem()); //Move the Item
+	ingredientList->setCurrentItem(it); //Keep selected
+
+	int it_index = ingItemIndex(ingredientList,it);
+	IngredientList::iterator ing = loadedRecipe->ingList.at(it_index);
+	(*ing).groupID = -1;
+	
+	emit changed();
+}
 }
 
 void RecipeInputDialog::removeIngredient(void)
 {
 QListViewItem *it=ingredientList->selectedItem();
-if (it)
+if ( it && it->rtti() == INGLISTVIEWITEM_RTTI )
 {
 	// Find the one below or above, and save index first
 	QListViewItem *iabove, *ibelow, *iselect=0;
 	if ( (ibelow=it->itemBelow()) ) iselect=ibelow;
 		else if ( (iabove=it->itemAbove()) ) iselect=iabove;
-	int index=ingredientList->itemIndex(it);
+	int index=ingItemIndex(ingredientList,it);
 
 	//Now remove the ingredient
 	it->setSelected(false);
@@ -708,8 +910,19 @@ if (it)
 	loadedRecipe->ingList.remove( loadedRecipe->ingList.at(index) ); // Note index=0...n in KListView, same as in QPtrlist
 
 	emit changed();
+}
+else if ( it && it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
+	IngGrpListViewItem *header = (IngGrpListViewItem*)it;
+
+	int index=ingItemIndex(ingredientList,header->firstChild()); //use this same index because after an item is deleted, the next to delete is still the same index number
+	for ( QListViewItem* sub_item = header->firstChild(); sub_item; sub_item = sub_item->nextSibling() ) {
+		loadedRecipe->ingList.remove( loadedRecipe->ingList.at(index) );
 	}
 
+	delete header;
+
+	emit changed();
+}
 
 }
 
@@ -777,6 +990,12 @@ int RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
 		return prepMethodComboList->findByName(prep).id;
 }
 
+int RecipeInputDialog::createNewGroupIfNecessary( const QString &group )
+{
+	database->createNewIngGroup(group);
+	return database->lastInsertID();
+}
+
 bool RecipeInputDialog::checkAmountEdit()
 {
 	if ( amountEdit->isInputValid() )
@@ -822,67 +1041,83 @@ bool RecipeInputDialog::checkBounds()
 
 void RecipeInputDialog::addIngredient(void)
 {
-	if ( !checkAmountEdit() || !checkBounds() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
-		return;
+	if ( typeButtonGrp->selectedId() == 1 ) { //Header
+		if ( ingredientBox->currentText().stripWhiteSpace().isEmpty() )
+			return;
 
-	createNewIngredientIfNecessary();
-	int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),ingredientBox->currentText().stripWhiteSpace());
-	if ( unitID == -1 ) // shouldn't happen, as empty units are allowed now
-		return;
-	int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
+		int group_id = createNewGroupIfNecessary(ingredientBox->currentText());
 
-//Add it first to the Recipe list then to the ListView
-if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
-{
-  Ingredient ing;
+		QListViewItem *last_item = ingredientList->lastItem();
+		if ( last_item && last_item->parent() )
+			last_item = last_item->parent();
 
-  ing.name=ingredientBox->currentText();
-  ing.amount=amountEdit->value().toDouble();
-  ing.units=unitBox->currentText();
-  ing.unitID=unitID;
-  ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
+		IngGrpListViewItem *ing_header = new IngGrpListViewItem(ingredientList,last_item,ingredientBox->currentText(),group_id);
+		ing_header->setOpen(true);
 
-  ing.prepMethod=prepMethodBox->currentText();
-  ing.prepMethodID=prepID;
+		typeButtonGrp->setButton(0); //put back to ingredient input
+		typeButtonClicked(0);
+	}
+	else { //Ingredient
+		if ( !checkAmountEdit() || !checkBounds() || ingredientBox->currentText().stripWhiteSpace().isEmpty() )
+			return;
 
-  loadedRecipe->ingList.append(ing);
-  //Append also to the ListView
-  QListViewItem* lastElement=ingredientList->lastItem();
+		slotIngredientBoxLostFocus(); //ensure that the matching item in the ingredient box combo list is selected
 
-  QString amount_str;
+		createNewIngredientIfNecessary();
+		int unitID = createNewUnitIfNecessary(unitBox->currentText().stripWhiteSpace(),ingredientBox->currentText().stripWhiteSpace());
+		if ( unitID == -1 ) // shouldn't happen, as empty units are allowed now
+			return;
+		int prepID = createNewPrepIfNecessary(prepMethodBox->currentText());
+	
+		//Add it first to the Recipe list then to the ListView
+		if ((ingredientBox->count()>0) && (unitBox->count()>0)) // Check first they're not empty otherwise getElement crashes...
+		{
+			Ingredient ing;
+			
+			ing.name=ingredientBox->currentText();
+			ing.amount=amountEdit->value().toDouble();
+			ing.units=unitBox->currentText();
+			ing.unitID=unitID;
+			ing.ingredientID=ingredientComboList->getElement(ingredientBox->currentItem()).id;
+			
+			ing.prepMethod=prepMethodBox->currentText();
+			ing.prepMethodID=prepID;
+			
+			//Append also to the ListView
+			QListViewItem* lastElement=ingredientList->lastItem();
+			if ( lastElement && 
+			  ( lastElement->rtti() == INGGRPLISTVIEWITEM_RTTI || (lastElement->parent() && lastElement->parent()->rtti() == INGGRPLISTVIEWITEM_RTTI ) ) ) {
+				IngGrpListViewItem *header = (lastElement->parent())?(IngGrpListViewItem*)lastElement->parent():(IngGrpListViewItem*)lastElement;
+				ing.groupID = header->id();
 
-  if ( ing.amount > 0 ) {
-    KConfig *config=kapp->config();
-    config->setGroup("Formatting");
-    if ( config->readBoolEntry("Fraction"))
-      amount_str = MixedNumber(ing.amount).toString();
-    else
-      amount_str = beautify(KGlobal::locale()->formatNumber(ing.amount,5));
-  }
+				(void)new IngListViewItem(header,lastElement,ing);
+			}
+			else
+				(void)new IngListViewItem(ingredientList,lastElement,ing);
 
-  (void)new QListViewItem (ingredientList,lastElement,ing.name,amount_str,ing.units,ing.prepMethod);
+			loadedRecipe->ingList.append(ing);
+			
+			emit changed();
+		}
+	}
 
-  ingredientBox->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
-  ingredientBox->lineEdit()->selectAll();
-}
-
-emit changed();
+	ingredientBox->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
+	ingredientBox->lineEdit()->selectAll();
 }
 
 void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text, int col )
 {
-	int index=ingredientList->itemIndex(it);
+	if ( it->rtti() != INGLISTVIEWITEM_RTTI ) return;
+
+	IngListViewItem *ing_item = (IngListViewItem*)it;
+
+	int index=ingItemIndex(ingredientList,it);
 	IngredientList::iterator ing = loadedRecipe->ingList.at(index);
 
 	switch (col)
 	{
 	case 1: //amount
 	{
-		KConfig *config=kapp->config();
-		config->setGroup("Formatting");
-			
-		MixedNumber::Format number_format = (config->readBoolEntry("Fraction")) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
 		bool ok;
 		MixedNumber new_mn = MixedNumber::fromString( new_text, &ok );
 		MixedNumber prev_mn( (*ing).amount );
@@ -890,14 +1125,14 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		{
 			(*ing).amount = new_mn.toDouble();
 			if ( !new_text.isEmpty() )
-				it->setText(1, new_mn.toString( number_format ));
+				ing_item->setAmount( new_mn.toDouble() );
 		}
 		else
 		{
 			if ( !new_text.isEmpty() )
-				it->setText(1, prev_mn.toString( number_format ));
+				ing_item->setAmount( prev_mn.toDouble() );
 		}
-			
+
 		if (new_mn != prev_mn)
 		{
 			emit changed();
@@ -911,7 +1146,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		if ( new_text.length() > database->maxUnitNameLength() )
 		{
 			KMessageBox::error(this,QString(i18n("Unit name cannot be longer than %1 characters.")).arg(database->maxUnitNameLength()));
-			it->setText(2,old_text);
+			ing_item->setUnit(old_text);
 			break;
 		}
 
@@ -928,7 +1163,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 			}
 			else
 			{
-				it->setText(2,old_text);
+				ing_item->setUnit(old_text);
 			}
 		}
 		break;
@@ -940,13 +1175,13 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		if ( new_text.length() > database->maxPrepMethodNameLength() )
 		{
 			KMessageBox::error(this,QString(i18n("Preparation method cannot be longer than %1 characters.")).arg(database->maxPrepMethodNameLength()));
-			it->setText(3,old_text);
+			ing_item->setPrepMethod(old_text);
 			break;
 		}
 
-		if ( old_text != new_text )
+		if ( old_text != new_text.stripWhiteSpace() )
 		{
-			int new_id = createNewPrepIfNecessary(new_text);
+			int new_id = createNewPrepIfNecessary(new_text.stripWhiteSpace());
 
 			(*ing).prepMethod=new_text;
 			(*ing).prepMethodID=new_id;
@@ -1247,6 +1482,45 @@ void RecipeInputDialog::resizeRecipe(void)
 
 	if ( dlg.exec() == QDialog::Accepted )
 		reload();
+}
+
+int RecipeInputDialog::ingItemIndex( QListView *listview, const QListViewItem *item ) const
+{
+	if ( !item )
+		return -1;
+
+	if ( item == listview->firstChild() )
+		return 0;
+	else {
+		QListViewItemIterator it(listview->firstChild());
+		uint j = 0;
+		for (; it.current() && it.current() != item; ++it ) {
+			if ( it.current()->rtti() == INGLISTVIEWITEM_RTTI )
+				j++;
+		}
+	
+		if( !it.current() )
+			return -1;
+	
+		return j;
+	}
+}
+
+void RecipeInputDialog::typeButtonClicked( int button_id )
+{
+	amountEdit->setEnabled( !bool(button_id) );
+	unitBox->setEnabled( !bool(button_id) );
+	prepMethodBox->setEnabled( !bool(button_id) );
+
+	if ( button_id == 1 ) { //Header
+		ingItemsCache = ingredientBox->completionObject()->items();
+		ingredientBox->completionObject()->clear();
+		ingredientBox->clear();
+	}
+	else {
+		ingredientBox->completionObject()->setItems(ingItemsCache);
+		ingredientBox->insertStringList(ingItemsCache);
+	}
 }
 
 #include "recipeinputdialog.moc"

@@ -191,6 +191,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	int max_ing_length = db->maxIngredientNameLength();
 	int max_prepmethod_length = db->maxPrepMethodNameLength();
 	int max_units_length = db->maxUnitNameLength();
+	int max_group_length = db->maxIngGroupNameLength();
 
 	// Load Current Settings
 	KConfig *config=kapp->config();
@@ -235,9 +236,23 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		progress->advance( 1 );
 		kapp->processEvents();
 
+		ElementList ingGroupList;
+
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		for ( IngredientList::iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
 		{
+			//create ingredient groups
+			Element el = ingGroupList.findByName( (*ing_it).group );
+			if ( el.id != -1 )
+				(*ing_it).groupID = el.id;
+			else if ( !(*ing_it).group.isEmpty() ) {
+				QString real_group_name = (*ing_it).group.left(max_group_length);
+				db->createNewIngGroup( real_group_name );
+				(*ing_it).groupID = db->lastInsertID();
+
+				ingGroupList.append( Element((*ing_it).group,(*ing_it).groupID) );
+			}
+
 			QString real_ing_name = (*ing_it).name.left(max_ing_length);
 			int new_ing_id = ingVector.bsearch(real_ing_name.lower());
 			if ( new_ing_id == -1 && real_ing_name != "" )

@@ -105,27 +105,42 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				}
 
 			QDomElement ingredients_tag = doc.createElement("ingredients");
-			for ( IngredientList::const_iterator ing_it = (*recipe_it).ingList.begin(); ing_it != (*recipe_it).ingList.end(); ++ing_it )
+			IngredientList list_copy = (*recipe_it).ingList;
+			for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() )
 			{
-				QDomElement ing_tag = doc.createElement("ing");
-				ingredients_tag.appendChild( ing_tag );
+				QDomElement ing_root;
 
-					QDomElement amt_tag = doc.createElement("amt");
-					ing_tag.appendChild( amt_tag );
-
-						QDomElement qty_tag = doc.createElement("qty");
-						amt_tag.appendChild(qty_tag);
-						qty_tag.appendChild( doc.createTextNode(QString::number((*ing_it).amount)) );
-
-						QDomElement unit_tag = doc.createElement("unit");
-						amt_tag.appendChild(unit_tag);
-						unit_tag.appendChild( doc.createTextNode((*ing_it).units) );
-
-					QDomElement item_tag = doc.createElement("item");
-					item_tag.appendChild( doc.createTextNode((*ing_it).name ) );
-					ing_tag.appendChild( item_tag );
-
-
+				QString group = group_list[0].group; //just use the first's name... they're all the same
+				if ( !group.isEmpty() ) {
+					QDomElement ingdiv_tag = doc.createElement("ing-div");
+					QDomElement title_tag = doc.createElement("title");
+					title_tag.appendChild( doc.createTextNode(group) );
+					ingdiv_tag.appendChild(title_tag);
+					ingredients_tag.appendChild(ingdiv_tag);
+					ing_root = ingdiv_tag;
+				}
+				else
+					ing_root = ingredients_tag;
+		
+				for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
+					QDomElement ing_tag = doc.createElement("ing");
+					ing_root.appendChild( ing_tag );
+	
+						QDomElement amt_tag = doc.createElement("amt");
+						ing_tag.appendChild( amt_tag );
+	
+							QDomElement qty_tag = doc.createElement("qty");
+							amt_tag.appendChild(qty_tag);
+							qty_tag.appendChild( doc.createTextNode(QString::number((*ing_it).amount)) );
+	
+							QDomElement unit_tag = doc.createElement("unit");
+							amt_tag.appendChild(unit_tag);
+							unit_tag.appendChild( doc.createTextNode((*ing_it).units) );
+	
+						QDomElement item_tag = doc.createElement("item");
+						item_tag.appendChild( doc.createTextNode((*ing_it).name ) );
+						ing_tag.appendChild( item_tag );
+				}
 			}
 			recipe_tag.appendChild( ingredients_tag );
 

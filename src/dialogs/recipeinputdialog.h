@@ -39,6 +39,7 @@ class RecipeDB;
 class FractionInput;
 class QTimeEdit;
 class QDragEvent;
+class QButtonGroup;
 
 class ImageDropLabel;
 
@@ -97,6 +98,7 @@ private:
 	QPushButton* addCategoryButton;
 
 	//Ingredient inputs
+	QButtonGroup *typeButtonGrp;
 	QGroupBox *ingredientGBox;
 	QLabel *amountLabel;
 	FractionInput* amountEdit;
@@ -123,6 +125,8 @@ private:
 	QToolButton* resizeButton;
 
 	QToolButton* spellCheckButton;
+	
+	QStringList ingItemsCache;
 
 	// Internal functions
 	bool checkAmountEdit();
@@ -130,6 +134,7 @@ private:
 	void createNewIngredientIfNecessary();
 	int createNewUnitIfNecessary( const QString &unit, const QString &ingredient );
 	int createNewPrepIfNecessary( const QString &prep );
+	int createNewGroupIfNecessary( const QString &group );
 	void checkIfNewUnits();
 	void findCategoriesInRecipe(const ElementList &categoryList, QMap<Element,bool> &selected);
 	void loadIngredientListCombo(void);
@@ -138,6 +143,7 @@ private:
 	void saveRecipe(void);
 	void showCategories(void);
 	void showAuthors(void);
+	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
 
 	// Signals & Slots
 
@@ -162,6 +168,7 @@ private:
 	void closeOptions(void);
 	void showRecipe(void);
 	void prepTitleChanged(const QString &title);
+	void typeButtonClicked(int);
 
 	public slots:
 	bool save (void); // Activated when krecipes.cpp sends signal save()

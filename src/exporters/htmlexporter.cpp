@@ -320,21 +320,31 @@ QMap<QString,QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 
 	QString ingredient_format = config->readEntry("Ingredient","%n%p: %a %u");
 
-	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it )
+	IngredientList list_copy = recipe.ingList; //simple workaround until I fix iterating over the list dealing with groups
+	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() )
 	{
-		QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
+		QString group = group_list[0].group; //just use the first's name... they're all the same
+		if ( !group.isEmpty() ) 
+			ingredients_html += "<li>"+group+":</li><ul>";
 
-		if ((*ing_it).amount <= 1e-10)
-			amount_str = "";
-
-		QString tmp_format(ingredient_format);
-		tmp_format.replace(QRegExp(QString::fromLatin1("%n")),QStyleSheet::escape((*ing_it).name));
-		tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
-		tmp_format.replace(QRegExp(QString::fromLatin1("%u")),QStyleSheet::escape((*ing_it).units));
-		tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ?
-				   QString::fromLatin1("") : QString::fromLatin1("; ")+QStyleSheet::escape((*ing_it).prepMethod));
-
-		ingredients_html += QString("<li>%1</li>").arg(tmp_format);
+		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
+			QString amount_str = MixedNumber((*ing_it).amount).toString( number_format );
+	
+			if ((*ing_it).amount <= 1e-10)
+				amount_str = "";
+	
+			QString tmp_format(ingredient_format);
+			tmp_format.replace(QRegExp(QString::fromLatin1("%n")),QStyleSheet::escape((*ing_it).name));
+			tmp_format.replace(QRegExp(QString::fromLatin1("%a")),amount_str);
+			tmp_format.replace(QRegExp(QString::fromLatin1("%u")),QStyleSheet::escape((*ing_it).units));
+			tmp_format.replace(QRegExp(QString::fromLatin1("%p")),((*ing_it).prepMethod.isEmpty()) ?
+					QString::fromLatin1("") : QString::fromLatin1("; ")+QStyleSheet::escape((*ing_it).prepMethod));
+	
+			ingredients_html += QString("<li>%1</li>").arg(tmp_format);
+		}
+		
+		if ( !group.isEmpty() )
+			ingredients_html += "</ul>";
 	}
 	if ( !ingredients_html.isEmpty() )
 	{
