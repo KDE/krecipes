@@ -47,7 +47,7 @@ public:
 	LiteRecipeDB(const QString &dbFile = QString::null);
 	~LiteRecipeDB(void);
 
-	void connect();
+	void connect(bool create);
 
 	void addAuthorToRecipe(int recipeID, int categoryID);
 	void addCategoryToRecipe(int recipeID, int categoryID);

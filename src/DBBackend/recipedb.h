@@ -53,7 +53,7 @@ protected:
 public:
 	virtual ~RecipeDB(){};
 	
-	virtual void connect() = 0;
+	virtual void connect(bool create=true) = 0;
 	
 	void importSamples();
 	

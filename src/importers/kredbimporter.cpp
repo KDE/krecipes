@@ -34,7 +34,7 @@ void KreDBImporter::parseFile( const QString &file ) //this is either a database
 	RecipeDB *database = RecipeDB::createDatabase(dbType,host,user,pass,file,file); //uses 'file' as either table or file name, depending on the database
 
 	if ( database ) {
-		database->connect();
+		database->connect(false); //don't create the database if it fails to connect
 	
 		if ( database->ok() ) {
 			//get the ids
@@ -54,7 +54,7 @@ void KreDBImporter::parseFile( const QString &file ) //this is either a database
 			add( recipes );
 		}
 		else
-			; //TODO: Give an error
+			setErrorMsg(database->err());
 	}
 	
 	delete database;

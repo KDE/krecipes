@@ -156,7 +156,8 @@ void BaseImporter::parseFiles( const QStringList &filenames )
 		
 		if (  m_error_msgs.count() > 0 )
 		{
-			m_master_error += QString(i18n("Import of recipes from the file <b>%1</b> <b>failed</b> due to the following error(s):")).arg(*file_it);
+			//<!doc> ensures it is detected as RichText
+			m_master_error += QString(i18n("<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):")).arg(*file_it);
 			m_master_error += "<ul><li>" + m_error_msgs.join("</li><li>") + "</li></ul>";
 
 			m_error_msgs.clear();

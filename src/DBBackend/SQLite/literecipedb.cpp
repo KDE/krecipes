@@ -19,6 +19,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,14 +44,25 @@ database->close();
 delete database;
 }
 
-void LiteRecipeDB::connect()
+void LiteRecipeDB::connect(bool create)
 {
 kdDebug()<<"Connecting to the SQLite database\n";
 
         database= new QSQLiteDB();
+
+	if ( !create && !QFile::exists(dbFile) ) {
+		dbErr=i18n("Krecipes could not open the SQLite database. You may not have the necessary permissions.\n");
+		return;
+	}
+
 	 //if the file didn't exist before, then we need to do this to initialize the database
         if ( !QFile::exists(dbFile) || !database->open(dbFile) ) { //check that the file didn't exist before trying to open the db (opening it creates the file)
 	     //Try to create the database
+	     if ( !create ) {
+	     	dbErr=i18n("Krecipes could not open the SQLite database. You may not have the necessary permissions.\n");
+		return;
+	     }
+
 	     kdDebug()<<"Creating the SQLite database!\n";
 	     createDB();
 	     kdDebug()<<"Retrying to open the db after creation\n";
@@ -62,6 +74,11 @@ kdDebug()<<"Connecting to the SQLite database\n";
 		dbErr=i18n("Krecipes could not open the SQLite database. You may not have the necessary permissions.\n");
 		return;
 		}
+	}
+
+	if ( int(qRound(databaseVersion()*1e5)) > int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
+		dbErr=i18n("This database was created with a newer version of Krecipes and cannot be opened.");
+		return;
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
@@ -1507,7 +1524,17 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 kdDebug()<<"Checking database version...\n";
 float version=databaseVersion();
 kdDebug()<<"version found... "<<version<<" \n";
-portOldDatabases(version);
+
+if ( int(qRound(databaseVersion()*1e5)) < int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
+	switch ( KMessageBox::questionYesNo(0,i18n("<!doc>This database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes!</b>")) ) {
+	case KMessageBox::Yes:
+		portOldDatabases(version);
+		break;
+	case KMessageBox::No:
+		return false;
+	}
+}
+
 return true;
 }
 

@@ -21,20 +21,29 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <klocale.h>
+#include <kmessagebox.h>
+
+int QSqlRecipeDB::m_refCount = 0;
 
 QSqlRecipeDB::QSqlRecipeDB(const QString &host, const QString &user, const QString &pass, const QString &name):RecipeDB()
 {
 	DBuser=user;DBpass=pass;DBhost=host;DBname=name;
 
 	dbOK = false; //it isn't ok until we've connect()'ed
+	++m_refCount;
 }
 
 QSqlRecipeDB::~QSqlRecipeDB()
 {
-if (dbOK) database->close();
+if ( dbOK ) {
+	database->close();
 }
 
-void QSqlRecipeDB::connect()
+QSqlDatabase::removeDatabase(database);
+--m_refCount;
+}
+
+void QSqlRecipeDB::connect(bool create)
 {
 	kdDebug()<<i18n("QSqlRecipeDB: Opening Database...")<<endl;
 	kdDebug()<<"Parameters: \n\thost: "<<DBhost<<"\n\tuser: "<<DBuser<<"\n\ttable: "<<DBname<<endl;
@@ -52,7 +61,9 @@ void QSqlRecipeDB::connect()
 		dbErr=QString(i18n("The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend.")).arg(qsqlDriver());
 		return;
 	}
-        database= QSqlDatabase::addDatabase( qsqlDriver() );
+
+	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
+	database= QSqlDatabase::addDatabase( qsqlDriver(), "connection"+QString::number(m_refCount) );
         
 	database->setDatabaseName(DBname);
         if (!(DBuser.isNull())) database->setUserName(DBuser );
@@ -62,9 +73,15 @@ void QSqlRecipeDB::connect()
 	kdDebug()<<i18n("Parameters set. Calling db->open()")<<endl;
 	
         if ( !database->open() ) {
-		kdDebug()<<i18n("Failing to open database. Trying to create it")<<endl;;
 		//Try to create the database
-		createDB();
+		if ( create ) {
+			kdDebug()<<i18n("Failing to open database. Trying to create it")<<endl;
+			createDB();
+		}
+		else {
+			// Handle the error (passively)
+			dbErr=QString(i18n("Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(DBuser).arg(qsqlDriver());
+		}
 	
 		//Now Reopen the Database and signal & exit if it fails
 		if (!database->open()) {
@@ -75,6 +92,11 @@ void QSqlRecipeDB::connect()
 			dbErr=QString(i18n("Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.")).arg(DBuser).arg(qsqlDriver());
 			return;
 		}
+	}
+
+	if ( int(qRound(databaseVersion()*1e5)) > int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
+		dbErr=i18n("This database was created with a newer version of Krecipes and cannot be opened.");
+		return;
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
@@ -1446,7 +1468,17 @@ for (QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
 
 kdDebug()<<"Checking database version...\n";
 float version=databaseVersion();
-portOldDatabases(version);
+kdDebug()<<"version found... "<<version<<" \n";
+if ( int(qRound(databaseVersion()*1e5)) < int(qRound(latestDBVersion()*1e5)) ) { //correct for float's imprecision
+	switch ( KMessageBox::questionYesNo(0,i18n("<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes!</b>")) ) {
+	case KMessageBox::Yes:
+		portOldDatabases(version);
+		break;
+	case KMessageBox::No:
+		return false;
+	}
+}
+
 return true;
 }
 

@@ -28,7 +28,6 @@
 #include "unitratiolist.h"
 #include "recipedb.h"
 
-
 /**
 @author Unai Garro, Jason Kivlighn
 */
@@ -62,7 +61,7 @@ public:
 	QSqlRecipeDB(const QString &host, const QString &user=QString::null, const QString &pass=QString::null, const QString &DBName=DEFAULT_DB_NAME);
 	~QSqlRecipeDB(void);
 
-	void connect();
+	void connect(bool create);
 
 	void addAuthorToRecipe(int recipeID, int categoryID);
 	void addCategoryToRecipe(int recipeID, int categoryID);
@@ -194,6 +193,8 @@ private:
 	QString getNextInsertIDStr( const QString &table, const QString &column );
 
 	QString DBname;
+
+	static int m_refCount;
 };
 
 

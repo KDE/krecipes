@@ -335,7 +335,7 @@ void Krecipes::kreDBImport()
 		importOptions.serverParams(host,user,pass,table);
 
 		KreDBImporter importer(importOptions.dbType(),host,user,pass); //last 3 params may or may not be even used (depends on dbType)
-	
+
 		parsing_file_dlg->show(); KApplication::setOverrideCursor( KCursor::waitCursor() );
 		QStringList tables;
 		if ( importOptions.dbType() == "SQLite" )
@@ -344,8 +344,13 @@ void Krecipes::kreDBImport()
 			tables << table;
 		importer.parseFiles(tables);
 		parsing_file_dlg->hide(); KApplication::restoreOverrideCursor();
-	
-		m_view->import( importer );
+
+		QString error = importer.getErrorMsg();
+		if ( !error.isEmpty() ) {
+			KMessageBox::sorry( this, error );
+		}
+		else
+			m_view->import( importer );
 	}
 }
 
