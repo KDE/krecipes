@@ -230,24 +230,13 @@ else		{command=QString("UPDATE recipes SET title='%1',persons=%2,instructions='%
 		.arg(recipe->recipeID);
 		}
 
-QSQLiteResult insertedRecipe=database->executeQuery(command);
+int lastID=-1; QSQLiteResult insertedRecipe=database->executeQuery(command,&lastID);
 
 // If it's a new recipe, identify the ID that was given to the recipe and store in the Recipe itself
 int recipeID;
 if (newRecipe)
 {
-// FIXME: get the ID of the last inserted recipe
-// The following WON'T WORK. Need to extend API to use int sqlite_last_insert_rowid(sqlite*);
-
-	if (insertedRecipe.getStatus()!=QSQLiteResult::Failure)
-	{
-	QSQLiteResultRow row=insertedRecipe.first();
-	recipeID=row.data(0).toInt();
-	recipe->recipeID=recipeID;
-	}
-
-// FIXME: The function above is WRONG. Read comment
-
+recipeID=lastID;
 }
 
 recipeID=recipe->recipeID;
@@ -772,7 +761,7 @@ QString command;
 command=QString("SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;").arg(ratio->ingID1).arg(ratio->ingID2); // Find ratio between units
 
 QSQLiteResult ratioFound=database->executeQuery(command); // Find the entries
-bool newRatio/*=(ratioFound.size()==0)*/; // FIXME: I need size() in the API
+bool newRatio=(ratioFound.size()==0);
 
 if (newRatio)
 	command=QString("INSERT INTO units_conversion VALUES(%1,%2,%3);").arg(ratio->ingID1).arg(ratio->ingID2).arg(ratio->ratio);
@@ -794,7 +783,7 @@ QSQLiteResult ratioToLoad=database->executeQuery(command);
 
 	    if (ratioToLoad.getStatus()!=QSQLiteResult::Failure)
 	    {
-	    if ( !ratioToLoad.atEnd() ) //FIXME: Check this. This should check if there's no data found
+	    if ( !ratioToLoad.atEnd() )
 	    	{
 	    	QSQLiteResultRow row=ratioToLoad.first();
 	    	return(row.data(0).toDouble());
@@ -909,7 +898,7 @@ QSQLiteResult recipeToLoad=database->executeQuery( command);
 if (!recipeToLoad.getStatus()!=QSQLiteResult::Failure)
 	{
 	QSQLiteResultRow row=recipeToLoad.first();
-	/*return(recipeToLoad.size()>0);*/ //FIXME: I need size() in the API of QSQLiteResult
+	return(recipeToLoad.size()>0);
 	}
 return false;
 }
@@ -921,7 +910,7 @@ QSQLiteResult recipeToLoad=database->executeQuery(command);
 
 if (recipeToLoad.getStatus()!=QSQLiteResult::Failure)
 {
-	/*return(recipeToLoad.size()>0);*/ //FIXME: I need size() implemented in the API
+	return(recipeToLoad.size()>0);
 }
 return false;
 }
@@ -1019,7 +1008,9 @@ sl=QStringList::split(QRegExp(";{1}(?!@)"),s);
 
 void LiteRecipeDB::portOldDatabases(float version)
 {
-std::cerr<<"Current database version is..."<<version<<"\n";
+// FIXME: ALTER TABLE doesn't exist in QSQLite
+
+/*std::cerr<<"Current database version is..."<<version<<"\n";
 QString command;
 if (version<0.3)	// The database was generated with an old version of Krecipes, needs upgrade to 			//the current v 0.3 (version no means the version in which this DB structure 				//was introduced)
 	{
@@ -1050,6 +1041,7 @@ if (version<0.4)  // Upgrade to DB version 0.4
 	command="INSERT INTO db_info VALUES(0.4,'Krecipes 0.3+(CVS)');"; // Set the new version
 		database->executeQuery(command);
 	}
+*/
 }
 
 float LiteRecipeDB::databaseVersion(void)
@@ -1213,7 +1205,7 @@ QString command;
 	}
 	}
 
-	/*return(unitsToLoad.size());*/ // FIXME: Need to add this to the API
+	return(unitsToLoad.size());
 }
 
 int LiteRecipeDB::findExistingElementByName( const QString& name, const QString &element )
@@ -1326,16 +1318,9 @@ return(QString::null);
 
 int LiteRecipeDB::lastInsertID()
 {
-	QSQLiteResult lastInsertID=database->executeQuery("SELECT LAST_INSERT_ID();");
+	int lastID; QSQLiteResult lastInsertID=database->executeQuery("SELECT name FROM recipes;",&lastID); // Execute whatever query that doesn't insert rows
 
-	int id = -1;
-	if (lastInsertID.getStatus()!=QSQLiteResult::Failure)
-	{
-	QSQLiteResultRow row=lastInsertID.first();
-	  if(!lastInsertID.atEnd())
-		id = row.data(0).toInt();
-	}
-	return id;
+	return lastID;
 }
 
 void LiteRecipeDB::emptyData(void)
