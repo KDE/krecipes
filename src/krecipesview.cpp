@@ -113,6 +113,11 @@ KrecipesView::KrecipesView(QWidget *parent)
     // i18n
     translate();
 
+    // Initialize Variables
+    recipeButton=0;
+
+
+
     // Connect Signals from Left Panel to slotSetPanel()
      connect( leftPanel, SIGNAL(clicked(int)),this, SLOT(slotSetPanel(int)) );
      connect(shoppingListPanel,SIGNAL(wizardClicked()),this,SLOT(slotSetDietWizardPanel()));
@@ -123,6 +128,9 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Retransmit signal to parent to Enable/Disable the Save Button
     connect (inputPanel, SIGNAL(enableSaveOption(bool)), this, SIGNAL(enableSaveOption(bool)));
+
+    // Create a new button when a recipe is unsaved
+    connect (inputPanel, SIGNAL(createButton(QWidget*)), this, SLOT(addRecipeButton(QWidget*)));
 
     // Connect Signals from selectPanel (SelectRecipeDialog)
 
@@ -136,6 +144,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
 KrecipesView::~KrecipesView()
 {
+delete il; // remove iconloader
 }
 
 void KrecipesView::translate(){
@@ -342,5 +351,25 @@ void KrecipesView::resizeButtons(){
   button6->resize(leftPanel->width(), 30);
 }
 
+void KrecipesView::addRecipeButton(QWidget *w)
+{
+recipeWidget=w;
+
+std::cerr<<"I'm adding a button\n";
+if (!recipeButton)
+{
+	recipeButton=new QPushButton(leftPanel);
+	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("modified",KIcon::Small));recipeButton->setGeometry(0,250,150,30);
+	recipeButton->resize(leftPanel->width(),30);
+	recipeButton->show();
+	connect(recipeButton,SIGNAL(clicked()),this,SLOT(switchToRecipe()));
+}
+
+}
+
+void KrecipesView::switchToRecipe(void)
+{
+rightPanel->raiseWidget(recipeWidget);
+}
 
 #include "krecipesview.moc"
