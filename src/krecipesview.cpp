@@ -349,6 +349,9 @@ void KrecipesView::resizeButtons(){
   button4->resize(leftPanel->width(), 30);
   button5->resize(leftPanel->width(), 30);
   button6->resize(leftPanel->width(), 30);
+  if(recipeButton){
+    recipeButton->resize(leftPanel->width(), 30);
+  }
 }
 
 void KrecipesView::addRecipeButton(QWidget *w,QString title)
@@ -387,7 +390,8 @@ MenuButton::~MenuButton()
 
 void MenuButton::setTitle(const QString &title)
 {
-setText(title);
+  setText(title);
+  QToolTip::add(this, title);
 }
 
 
