@@ -256,7 +256,11 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		(string.at( string.length()/2 - 1 ) != "-") ) )
 	{
 		QString header(string.stripWhiteSpace());
-		header = header.mid( 10, header.length() - 20 );
+
+		//get only the header name
+		header.remove(QRegExp("^MMMMM"));
+		header.remove(QRegExp("^-*")).remove(QRegExp("-*$"));
+		
 		kdDebug()<<"found ingredient header: "<<header<<endl;
 
 		//merge all columns before appending to full ingredient list to maintain the ingredient order
@@ -269,7 +273,7 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		m_right_col_ing.empty();
 
 		Ingredient title;
-		title.name = header;
+		title.name = "----" + header + "----";
 		title.units = ""; title.amount = 0;
 		m_all_ing.append( title );
 		return true;

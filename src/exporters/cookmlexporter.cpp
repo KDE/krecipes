@@ -96,6 +96,7 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 				ingredient_tag.setAttribute("qty",QString::number((*ing_it).amount));
 				ingredient_tag.setAttribute("unit",(*ing_it).units);
 				ingredient_tag.setAttribute("item",(*ing_it).name);
+				ingredient_tag.setAttribute("preparation",(*ing_it).prepMethod);
 				part_tag.appendChild( ingredient_tag );
 			}
 			recipe_tag.appendChild( part_tag );
