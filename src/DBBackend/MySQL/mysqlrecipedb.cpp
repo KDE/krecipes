@@ -478,7 +478,10 @@ recipeToSave.prepare("UPDATE recipes SET photo=? WHERE id="+QString::number(reci
 recipeToSave.addBindValue (photoArray); //this handles the binary encoding
 recipeToSave.exec();
 
-     }
+}
+else {
+recipeToSave.exec("UPDATE recipes SET photo=NULL WHERE id="+QString::number(recipeID));
+}
 
 
  // Save the ingredient list (first delete if we are updating)

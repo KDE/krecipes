@@ -51,6 +51,9 @@ public:
 	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
 	~RecipeActionsHandler(){}
 
+	static void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
+	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
+
 signals:
 	void recipeSelected(int id, int action);
 	void recipesSelected(const QValueList<int> &ids, int action);
@@ -101,8 +104,6 @@ private:
 	
 	int remove_from_cat_item;
 
-	void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection );
-	
 	QValueList<int> getAllVisibleItems();
 };
 

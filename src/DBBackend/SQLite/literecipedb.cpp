@@ -513,6 +513,9 @@ sqlite_encode_binary((uchar*) photoArray,fi.size(), (uchar*) photoEncodedArray);
  command=QString("UPDATE recipes SET photo='%1' WHERE id=%2;").arg(photoEncodedArray).arg(recipeID);
  database->executeQuery(command);
 }
+else {
+database->executeQuery("UPDATE recipes SET photo=NULL WHERE id="+QString::number(recipeID));
+}
 
  // Save the ingredient list (first delete in case we are updating)
 

@@ -145,12 +145,7 @@ void RecipeActionsHandler::saveAs()
 		{
 			if ( parentListView->selectedItem()->rtti() == 1000 ) {
 				RecipeListItem *recipe_it = (RecipeListItem*)parentListView->selectedItem();
-				int recipe_id = recipe_it->recipeID();
-
-				QValueList<int> id;
-				id.append( recipe_id );
-		
-				exportRecipes( id, i18n("Save Recipe"), recipe_it->title() );
+				exportRecipe( recipe_it->recipeID(), i18n("Save Recipe"), recipe_it->title(), database );
 			}
 		}
 	}
@@ -159,7 +154,7 @@ void RecipeActionsHandler::saveAs()
 		QValueList<int> ids = getAllVisibleItems();
 
 		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n("Save Recipes"), "Recipes" );
+			exportRecipes( ids, i18n("Save Recipes"), "Recipes", database );
 		//else TODO: give notice
 	}
 }
@@ -249,20 +244,28 @@ void RecipeActionsHandler::saveCategoryAs()
 			++iterator;
 		}
 
-		exportRecipes( ids, i18n("Save Recipes"), cat_it->categoryName() );
+		exportRecipes( ids, i18n("Save Recipes"), cat_it->categoryName(), database );
 	}
 }
 
-void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection )
+void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db )
+{
+	QValueList<int> ids;
+	ids.append( id );
+
+	exportRecipes(ids,caption,selection,db);
+}
+
+void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog* fd = new KFileDialog( QString::null,
 	"*.kre|Gzip Krecipes file (*.kre)\n"
 	"*.kreml|Krecipes xml file (*.kreml)\n"
-	"*.cml|CookML file (*.cml)\n"
+	//"*.cml|CookML file (*.cml)\n"
 	"*.html|HTML file (*.html)\n"
 	"*.mmf|Meal-Master file (*.mmf)\n"
 	"*.xml|RecipeML file (*.xml)",
-	parentListView, "export_dlg", true);
+	0, "export_dlg", true);
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );
 	fd->setSelection( selection );
@@ -291,7 +294,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 )
 			{
-				KProgressDialog progress_dialog(parentListView, "export_progress_dialog", QString::null, i18n("Preparing to save recipes...") );
+				KProgressDialog progress_dialog(0, "export_progress_dialog", QString::null, i18n("Preparing to save recipes...") );
 				progress_dialog.setAutoClose(false); progress_dialog.setAutoReset(true);
 				RecipeList recipes; database->loadRecipes( &recipes, ids, &progress_dialog );
 				progress_dialog.setAutoReset(false);

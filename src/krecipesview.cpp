@@ -36,6 +36,7 @@
 #include <kurl.h>
 #include <kcursor.h>
 
+#include "recipeactionshandler.h"
 #include "setupwizard.h"
 #include "dialogs/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
@@ -398,7 +399,18 @@ void KrecipesView::exportRecipe()
 		}
 	}
 	else*/
+	QWidget *vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == viewPanel ) {
+		if ( viewPanel->recipesLoaded() > 0 ) {
+			if ( viewPanel->recipesLoaded() == 1 )
+				RecipeActionsHandler::exportRecipes(viewPanel->currentRecipes(),i18n("Save Recipe"),database->recipeTitle(viewPanel->currentRecipes()[0]),database);
+			else
+				RecipeActionsHandler::exportRecipes(viewPanel->currentRecipes(),i18n("Save Recipe"),i18n("Recipes"),database);
+		}
+	}
+	else if ( vis_panel == selectPanel ) {
 		selectPanel->slotExportRecipe();
+	}
 }
 
 void KrecipesView::actionRecipe(int recipeID, int action)

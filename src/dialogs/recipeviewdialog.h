@@ -39,6 +39,9 @@ public:
 
     /** @return Boolean indicating whether or not the recipes were successfully loaded */
     bool loadRecipes( const QValueList<int> &ids );
+    
+    int recipesLoaded() const { return ids_loaded.count(); }
+    const QValueList<int> currentRecipes() const { return ids_loaded; }
 
 signals:
   void recipeSelected(int,int);

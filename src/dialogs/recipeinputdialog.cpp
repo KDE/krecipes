@@ -98,11 +98,18 @@ il=new KIconLoader;
     photoLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     recipeLayout->addMultiCellWidget(photoLabel,3,7,1,1);
 
-    changePhotoButton=new QPushButton(recipeTab);
-    changePhotoButton->setFixedSize(QSize(20,166));
+    QVBox *photoButtonsBox=new QVBox(recipeTab);
+    
+    changePhotoButton=new QPushButton(photoButtonsBox);
+    changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored));
     changePhotoButton->setText("...");
-    changePhotoButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-    recipeLayout->addMultiCellWidget(changePhotoButton,3,7,2,2);
+    QToolTip::add(changePhotoButton,i18n("Select photo"));
+
+    QPushButton *clearPhotoButton=new QPushButton(photoButtonsBox);
+    clearPhotoButton->setPixmap(il->loadIcon("clear_left", KIcon::NoGroup,16));
+    QToolTip::add(clearPhotoButton,i18n("Clear photo"));
+
+    recipeLayout->addMultiCellWidget(photoButtonsBox,3,7,2,2);
 
 
     //Title->photo spacer
@@ -377,6 +384,7 @@ il=new KIconLoader;
     // Connect signals & Slots
     connect(ingredientBox, SIGNAL(activated(int)), this, SLOT(reloadUnitsCombo(int)));
     connect(changePhotoButton, SIGNAL(clicked()), this, SLOT(changePhoto()));
+    connect(clearPhotoButton, SIGNAL(clicked()), SLOT(clearPhoto()));
     connect(upButton, SIGNAL(clicked()), this, SLOT(moveIngredientUp()));
     connect(downButton, SIGNAL(clicked()), this, SLOT(moveIngredientDown()));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()));
@@ -501,8 +509,7 @@ prepTimeEdit->setTime(loadedRecipe->prepTime);
 		}
 	}
 	else {
-		sourcePhoto = QPixmap(defaultPhoto);
-		photoLabel->setPixmap(sourcePhoto);
+		photoLabel->setPixmap(QPixmap(defaultPhoto));
 		}
 
 
@@ -596,6 +603,14 @@ void RecipeInputDialog::changePhoto(void)
 	    emit changed();
 	  }
  }
+ 
+void RecipeInputDialog::clearPhoto(void)
+{
+	sourcePhoto.resize(0,0);
+	photoLabel->setPixmap(QPixmap(defaultPhoto));
+
+	emit changed();
+}
 
 void RecipeInputDialog::moveIngredientUp(void)
 {
@@ -916,7 +931,6 @@ unitComboList->clear();
 reloadCombos();
 QPixmap image(defaultPhoto);
 photoLabel->setPixmap(image);
-sourcePhoto=image;
 instructionsEdit->setText(i18n("Write the recipe instructions here"));
 titleEdit->setText(i18n("Write the recipe title here"));
 amountEdit->setValue(0.0);

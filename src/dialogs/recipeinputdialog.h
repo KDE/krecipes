@@ -140,6 +140,7 @@ private:
 	private slots:
 	void reloadUnitsCombo(int);
 	void changePhoto(void);
+	void clearPhoto(void);
 	void moveIngredientUp(void);
 	void moveIngredientDown(void);
 	void removeIngredient(void);
