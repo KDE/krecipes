@@ -16,7 +16,7 @@ KreExporter::KreExporter( RecipeDB *db, const int recipeId, const QString& filen
   recipe->recipeID = -1;
   database->loadRecipe( recipe, recipeId );
   if(filename != QString::null){
-    if(filename.contains(".kre") || filename.contains(".kreml")){
+    if(filename.right(4) == ".kre" || filename.right(6) == ".kreml"){
       file = new QFile(filename);
     }
     else{
