@@ -78,7 +78,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     // Read the database setup
 
-    KConfig *config; config=kapp->config();config->setGroup("DBType");
+    KConfig *config; config=kapp->config(); config->sync(); config->setGroup("DBType");
     dbtype=config->readEntry("Type","SQLite");
 
 
