@@ -34,6 +34,7 @@ layout = new QGridLayout( this, 1, 1, 0, 0);
 authorsCombo=new KComboBox(true,this);
 layout->addWidget(authorsCombo,1,1);
 authorsCombo->completionObject()->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
+authorsCombo->lineEdit()->disconnect(authorsCombo); //so hitting enter doesn't enter the item into the box
 // Add/Remove buttons
 QSpacerItem* spacerFromCombo=new QSpacerItem(10,10,QSizePolicy::Minimum, QSizePolicy::Fixed);
 layout->addItem(spacerFromCombo,2,1);
@@ -124,6 +125,8 @@ QListViewItem *it=new QListViewItem(authorListView,QString::number(el->id),el->n
 
 void SelectAuthorsDialog::addAuthor(void)
 {
+if ( authorsCombo->contains(authorsCombo->currentText()) )
+	authorsCombo->setCurrentItem(authorsCombo->currentText());
 
 createNewAuthorIfNecessary();
 
@@ -159,7 +162,7 @@ if (!authorsCombo->contains(authorsCombo->currentText()) &&
 	// Select the newly created author
 	authorsCombo->setCurrentItem(newAuthorName);
 QMessageBox::information( this,
-			  "New author created",
+			  i18n("New author created"),
 			  QString(i18n("A new author \"%1\" was successfully added to the list of authors")).arg(newAuthorName),
 			  QMessageBox::Ok
 			  );
@@ -185,3 +188,4 @@ authorsCombo->completionObject()->addItem(el->name);
 }
 
 }
+
