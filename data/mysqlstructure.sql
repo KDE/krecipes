@@ -10,7 +10,7 @@ CREATE TABLE authors (
 CREATE TABLE categories (
   id int(11) NOT NULL auto_increment,
   name varchar(40) default NULL,
-  parent_id int(11) NOT NULL
+  parent_id int(11) NOT NULL default '-1',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 CREATE TABLE category_list (
