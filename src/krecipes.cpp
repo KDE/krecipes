@@ -48,11 +48,10 @@
 #include <kaction.h>
 #include <kstdaction.h>
 //Settings headers
-  #if defined(KDE_MAKE_VERSION)
-  # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+#include <kdeversion.h>
+  #if KDE_VERSION >314
      #include <kautoconfigdialog.h>
   # endif
-  #endif
 
 #include "serverprefs.h"
 #include "unitsprefs.h"
