@@ -85,13 +85,7 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     while ((dbtype!="SQLite") && (dbtype!="MySQL"))
 	{
-	int answer=KMessageBox::questionYesNo(this,i18n("The configured database type is unsupported. Would you like to run the setup wizard again? Otherwise, the application will be closed"));
-	if (answer==KMessageBox::Yes) wizard(true);
-	else
-		{
-		kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
-		exit(1);
-		}
+	questionRerunWizard("The configured database type is unsupported.","Unsupported database type. Database must be either MySQL or SQLite.");
 		
 	// Read the database setup again
 	
@@ -131,7 +125,10 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     #endif //HAVE_SQLITE
     else{
-    kdDebug()<<"Unsupported database type.  Database must be either MySQL or SQLite. Exiting"<<endl;
+    
+    // No DB type has been enabled (should not happen at all, but just in case)
+    
+    kdError()<<"Code error. No DB support was built. Exiting"<<endl;
     exit(1);
     }
 
@@ -303,6 +300,19 @@ KrecipesView::KrecipesView(QWidget *parent)
 KrecipesView::~KrecipesView()
 {
 delete buttonsList;
+}
+
+void KrecipesView::questionRerunWizard(const QString &message, const QString &error)
+{
+QString yesNoMessage=message+" "+i18n("Would you like to run the setup wizard again? Otherwise, the application will be closed.");
+int answer=KMessageBox::questionYesNo(this,yesNoMessage);
+
+	if (answer==KMessageBox::Yes) wizard(true);
+	else
+		{
+		kdError()<<error<<"."<<" Exiting"<<endl;
+		exit(1);
+		}
 }
 
 void KrecipesView::translate(){
@@ -600,38 +610,38 @@ delete db; //it closes the db automatically
 
 void KrecipesView::initializeData(const QString &host,const QString &dbName, const QString &user,const QString &pass)
 {
-if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly
-{
-kdDebug()<<"Unrecognized database type. Exiting\n";
-exit(1);
-}
+	if ((dbtype!="MySQL")  && (dbtype!="SQLite")) // Need it Just to have the else's properly. This should not happen anyway
+	{
+	kdError()<<"Code error. Unrecognized database type. Exiting\n";
+	exit(1);
+	}
 
-#if HAVE_MYSQL
-else if (dbtype=="MySQL")
-{
-MySQLRecipeDB *db;
-db= new MySQLRecipeDB(host,user,pass,dbName);
-db->emptyData();
-db->initializeData();
-delete db; //it closes the db automatically
-}
-#endif //HAVE_MYSQL
-
-#if HAVE_SQLITE
-else if(dbtype=="SQLite")
-{
-LiteRecipeDB *db;
-db= new LiteRecipeDB(host,user,pass,dbName);
-db->emptyData();
-db->initializeData();
-delete db; //it closes the db automatically
-}
-#endif //HAVE_SQLITE
-else
-{
-kdDebug()<<"Unsupported database type. Exiting\n";
-exit(1);
-}
+	#if HAVE_MYSQL
+	else if (dbtype=="MySQL")
+	{
+	MySQLRecipeDB *db;
+	db= new MySQLRecipeDB(host,user,pass,dbName);
+	db->emptyData();
+	db->initializeData();
+	delete db; //it closes the db automatically
+	}
+	#endif //HAVE_MYSQL
+	
+	#if HAVE_SQLITE
+	else if(dbtype=="SQLite")
+	{
+		LiteRecipeDB *db;
+		db= new LiteRecipeDB(host,user,pass,dbName);
+		db->emptyData();
+		db->initializeData();
+		delete db; //it closes the db automatically
+	}
+	#endif //HAVE_SQLITE
+	else
+	{
+		kdError()<<"Code error. No DB support has been included. Exiting\n";
+		exit(1);
+	}
 
 }
 
