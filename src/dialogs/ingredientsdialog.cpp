@@ -56,8 +56,7 @@ IngredientsDialog::IngredientsDialog(QWidget* parent, RecipeDB *db):QWidget(pare
     list_view->reload();
     ingredientListView->setListView(list_view);
     layout->addMultiCellWidget (ingredientListView,1,10,1,1);
-    ingredientListView->listView()->setMinimumWidth(150);
-    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+    ingredientListView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,QSizePolicy::MinimumExpanding));
 
     QSpacerItem* spacer_rightIngredients = new QSpacerItem(10,10, QSizePolicy::Fixed, QSizePolicy::Minimum );
     layout->addItem(spacer_rightIngredients,1,2);

@@ -21,7 +21,7 @@ KreListView::KreListView(QWidget *parent,const QString &title,bool filter, int f
 	if (filter||embeddedWidget) 
 	{
 		header=new QHBox(this);	
-		((QHBox*)header)->setSpacing(30);
+		((QHBox*)header)->setSpacing(15);
 	}
 	
 	if (title!=QString::null)

@@ -154,7 +154,7 @@ void RecipeActionsHandler::saveAs()
 		QValueList<int> ids = getAllVisibleItems();
 
 		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n("Save Recipes"), "Recipes", database );
+			exportRecipes( ids, i18n("Save Recipes"), i18n("Recipes"), database );
 		//else TODO: give notice
 	}
 }
@@ -259,12 +259,12 @@ void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const 
 void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog* fd = new KFileDialog( QString::null,
-	"*.kre|Gzip Krecipes file (*.kre)\n"
-	"*.kreml|Krecipes xml file (*.kreml)\n"
+	i18n("*.kre|Compressed Krecipes file (*.kre)\n"
+	"*.kreml|Krecipes file (*.kreml)\n"
 	//"*.cml|CookML file (*.cml)\n"
-	"*.html|HTML file (*.html)\n"
+	"*.html|Web Page (*.html)\n"
 	"*.mmf|Meal-Master file (*.mmf)\n"
-	"*.xml|RecipeML file (*.xml)",
+	"*.xml|RecipeML file (*.xml)"),
 	0, "export_dlg", true);
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );

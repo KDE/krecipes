@@ -208,10 +208,10 @@ void Krecipes::import()
 	  "*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
 	  "*.mx2|MasterCook (*.mx2)\n"
 	  "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
-	  "*.mmf *.txt|Meal-Master Format (*.mmf, *.txt)\n"
+	  "*.mmf *.txt|Meal-Master (*.mmf, *.txt)\n"
 	  "*.txt|\"Now You're Cooking\" Generic Export (*.txt)\n"
 	  "*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
-	  "*.rk *.txt|Rezkonv Format (*.rk, *.txt)",
+	  "*.rk *.txt|Rezkonv (*.rk, *.txt)",
 	  this,
 	  "file_dialog",
 	  true

@@ -350,10 +350,12 @@ void KreMenuButton::setTitle(const QString &s)
 {
 	text=s;
 
+	#if 0 //this causes problems for the button to go back to editing a recipe
 	//adjust text to two lines if needed
 	if ( fontMetrics().width(text) > 110 ) {
 		text.replace(' ',"\n");
 	}
+	#endif
 
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget()->minimumWidth() < minimumSizeHint().width() )

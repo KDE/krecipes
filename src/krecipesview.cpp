@@ -698,7 +698,7 @@ if (!recipeButton)
 
 void KrecipesView::switchToRecipe(void)
 {
-rightPanel->setHeader(i18n("View Recipe"),"filefind");
+rightPanel->setHeader(i18n("Edit Recipe"),"edit");
 rightPanel->raise(recipeWidget);
 setContextHelp(RecipeEdit);
 }
