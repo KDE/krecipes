@@ -48,15 +48,19 @@ void DietViewDialog::showDiet(const RecipeList &recipeList, int dayNumber, int m
 QString htmlCode=QString("<html><head><title>%1</title>").arg(i18n("Diet"));
 
 // CSS
-htmlCode += "<STYLE type=\"text/css\">\n";
+htmlCode+="<STYLE type=\"text/css\">\n";
+htmlCode+="#calendar{border: thin solid black}";
 htmlCode+="#dayheader{ background-color: #D6D6D6; color: black; border:none;}";
 htmlCode+="#day{ background-color: #E5E5E5; color: black; border:medium solid #D6D6D6;}";
 htmlCode+="#meal{ background-color: #CDD4FF; color: black; border:thin solid #B4BEFF;align:center;}";
-htmlCode+="#dish{overflow:hidden; height:1em;}";
+htmlCode+="#dish{overflow:hidden; height:1.5em;}";
 htmlCode +="</STYLE>";
 
 
 htmlCode+="</head><body>"; //  /Header
+
+// Calendar border
+htmlCode+=QString("<div id=\"calendar\">");
 
 // Title
 htmlCode+=QString("<center><div STYLE=\"width: 80%\">");
@@ -71,10 +75,8 @@ int day; // Counts days
 QValueList <int>::ConstIterator it; it=dishNumbers.begin();
 RecipeList::ConstIterator rit; rit=recipeList.begin();
 
-std::cerr<<"data is: "<<dayNumber<<" "<<mealNumber<<"\n";
 for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 	{
-	std::cerr<<"one more row\n";
 	htmlCode+=QString("<tr>");
 
 	for (int col=0; (col<7) && (day<dayNumber); col++,day++) // New column (day)
@@ -106,12 +108,11 @@ for (int row=0,day=0; row<=((dayNumber-1)/7); row++) // New row (week)
 
 htmlCode+=QString("</tbody></table>");
 htmlCode+=QString("</div></center>");
-htmlCode+=QString("</body></html>");
+htmlCode+=QString("</div></body></html>");
 
 resize(QSize(600,400));
 // Display it
 dietView->begin(KURL("file:/tmp/" )); // Initialize to /tmp, where photos and logos can be stored
 dietView->write(htmlCode);
 dietView->end();
-std::cerr<<htmlCode<<"\n";
 }
