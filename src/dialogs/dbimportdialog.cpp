@@ -180,7 +180,9 @@ void DBImportDialog::switchDBPage(int id)
 
 QString DBImportDialog::dbType() const
 {
-	switch(dbButtonGroup->selectedId())
+	//int id=dbButtonGroup->selectedId(); //QT 3.2
+	int id=dbButtonGroup->id(dbButtonGroup->selected()); //QT 3.1
+	switch(id)
 	{
 	case 0: return "SQLite";
 	case 1: return "MySQL";
