@@ -568,7 +568,7 @@ rightPanel->raiseWidget(selectPanel);
 recipeButton->disconnect();
 buttonsList->removeLast();
 setContextHelp(SelectP);
-delete recipeButton; recipeButton=0;
+recipeButton=0;
 }
 
 void KrecipesView::showRecipe(int recipeID)
