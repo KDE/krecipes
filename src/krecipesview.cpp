@@ -139,37 +139,37 @@ KrecipesView::KrecipesView(QWidget *parent)
 
     button0=new MenuButton(leftPanel); button0->setFlat(true);
     button0->setIconSet(il->loadIconSet("filefind", KIcon::Small));
-    button0->setGeometry(0,0,150,30);
+    button0->setGeometry(2,2,146,30);
     buttonsList->append(button0);
 
     button1=new MenuButton(leftPanel); button1->setFlat(true);
     button1->setIconSet(il->loadIconSet( "trolley", KIcon::Small ));
-	  button1->setGeometry(0,30,150,30);
+	  button1->setGeometry(2,32,146,30);
     buttonsList->append(button1);
 
     button2=new MenuButton(leftPanel); button2->setFlat(true);
     button2->setIconSet(il->loadIconSet( "ingredients", KIcon::Small ));
-    button2->setGeometry(0,60,150,30);
+    button2->setGeometry(2,62,146,30);
     buttonsList->append(button2);
 
     button3=new MenuButton(leftPanel); button3->setFlat(true);
     button3->setIconSet(il->loadIconSet( "properties", KIcon::Small ));
-	  button3->setGeometry(0,90,150,30);
+	  button3->setGeometry(2,92,146,30);
     buttonsList->append(button3);
 
     button4=new MenuButton(leftPanel); button4->setFlat(true);
     button4->setIconSet(il->loadIconSet( "units", KIcon::Small ));
-	  button4->setGeometry(0,120,150,30);
+	  button4->setGeometry(2,122,146,30);
     buttonsList->append(button4);
 
     button5=new MenuButton(leftPanel); button5->setFlat(true);
     button5->setIconSet(il->loadIconSet( "categories", KIcon::Small ));
-	  button5->setGeometry(0,150,150,30);
+	  button5->setGeometry(2,152,146,30);
     buttonsList->append(button5);
 
     button6=new MenuButton(leftPanel); button6->setFlat(true);
     button6->setIconSet(il->loadIconSet( "personal", KIcon::Small ));
-	  button6->setGeometry(0,180,150,30);
+	  button6->setGeometry(2,182,146,30);
     buttonsList->append(button6);
 
     // Right Panel Widgets
@@ -492,7 +492,7 @@ void KrecipesView::resizeButtons(){
   QPtrListIterator<MenuButton> it( *buttonsList);	// iterate over menu buttons
   MenuButton *bt;
   while ( (bt = it.current()) != 0 ){
-    bt->resize((leftPanel->width())-1, 30);
+    bt->resize((leftPanel->width())-4, 30);
     ++it;
   }
   logo->setGeometry(1, (leftPanel->height() - 298), 144, 296);
@@ -506,7 +506,7 @@ if (!recipeButton)
 {
 	recipeButton=new MenuButton(leftPanel,"recipeButton");
 	recipeButton->setFlat(true);recipeButton->setIconSet(il->loadIconSet("filesave",KIcon::Small));
-	recipeButton->setGeometry(0,250,150,30);
+	recipeButton->setGeometry(2,252,146,30);
 	recipeButton->setTitle(title);
 	recipeButton->resize((leftPanel->width())-1,30);
 	recipeButton->show();
@@ -526,6 +526,8 @@ void KrecipesView::closeRecipe(void)
 {
 selectPanel->reload();
 rightPanel->raiseWidget(selectPanel);
+recipeButton->disconnect();
+buttonsList->removeLast();
 delete recipeButton; recipeButton=0;
 }
 
