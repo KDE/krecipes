@@ -39,14 +39,23 @@ public:
 	void resizeEvent(QResizeEvent* e);
 protected:
 
-	virtual void paintEvent(QPaintEvent *e );
-	virtual void childEvent ( QChildEvent *e );
+	virtual void paintEvent (QPaintEvent *e);
+	virtual void childEvent (QChildEvent *e);
+	virtual void mouseMoveEvent (QMouseEvent *e);
+	virtual void mousePressEvent (QMouseEvent *e);
+	virtual void mouseReleaseEvent (QMouseEvent *e);
+
+
 private:
 	//Variables
 	int childPos;
 	int widgetNumber;
 	QMap <KreMenuButton*,int> widgetList; // Stores the indexes for the widgets
 	KreMenuButton* activeButton; // Indicates which button is highlighted
+
+	int xOrig, yOrig; //For dragging the menu
+	int xDest, yDest;
+	bool dragging;
 
 signals:
   	void resized(int, int);

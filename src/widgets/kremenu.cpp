@@ -27,6 +27,7 @@ KreMenu::KreMenu(QWidget *parent, const char *name)
 childPos=10; // Initial button is on top (10px), then keep scrolling down
 widgetNumber=0; // Initially we have no buttons
 activeButton=0; // Button that is highlighted
+dragging=false;
 }
 
 
@@ -34,6 +35,51 @@ KreMenu::~KreMenu()
 {
 }
 
+void KreMenu::mousePressEvent (QMouseEvent *e)
+{
+int x=e->x(),y=e->y();
+if (x > (width()-15))
+	{
+	xOrig=x;
+	yOrig=y;
+	}
+dragging=true;
+}
+
+void KreMenu::mouseMoveEvent (QMouseEvent *e)
+{
+if (dragging)
+	{
+	xDest=e->x();
+	yDest=e->y();
+
+	if (xDest>xOrig) // Increase menu size
+		{
+		int xIncrease=xDest-xOrig;
+		if ((width()+xIncrease) < maximumWidth())
+			{
+			resize(width()+xIncrease,height());
+			xOrig=xDest;yOrig=yDest;
+			}
+		}
+	else if (xDest<xOrig) // Reduce menu size
+		{
+		int xDecrease=xOrig-xDest;
+		if ((width()-xDecrease) > minimumWidth())
+			{
+			resize(width()-xDecrease,height());
+			xOrig=xDest;yOrig=yDest;
+			}
+		}
+
+	}
+}
+
+
+void KreMenu::mouseReleaseEvent (QMouseEvent *e)
+{
+dragging=false;
+}
 
 QSize KreMenu::sizeHint() const {
   return(QSize(300,150));
