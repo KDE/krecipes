@@ -318,6 +318,11 @@ database=db;
     connect(ingredientBox->lineEdit(), SIGNAL(lostFocus()), this, SLOT(slotIngredientBoxLostFocus()) );
     connect(addAuthorButton,SIGNAL(clicked()),this,SLOT(addAuthor()));
     connect(titleEdit,SIGNAL(textChanged(const QString&)),this, SIGNAL(titleChanged(const QString&)));
+    	// Function buttons
+    connect (saveButton,SIGNAL(clicked()),this,SLOT(save()));
+    connect (closeButton,SIGNAL(clicked()),this,SLOT(close()));
+    connect (showButton,SIGNAL(clicked()),this,SLOT(show()));
+    connect (shopButton, SIGNAL (clicked()),this,SLOT(addToShoppingList()));
 }
 
 
