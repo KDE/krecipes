@@ -9,6 +9,8 @@
  ***************************************************************************/
 #include "constraintlist.h"
 
+#include "ingredientproperty.h"
+
 ConstraintList::ConstraintList()
 {
 }
@@ -49,6 +51,19 @@ int ConstraintList::find(Constraint* it)
 {
 return(list.find(it));
 }
+
+Constraint* ConstraintList::findByPty( IngredientProperty *pty )
+{
+	for (Constraint* ct=getFirst();ct; ct=getNext())
+	{
+		if ( ct->id == pty->id )
+			return ct;
+	}
+
+	return 0;
+}
+
+
 
 Constraint* ConstraintList::at(int pos)
 {

@@ -18,6 +18,8 @@
 @author Unai Garro
 */
 
+class IngredientProperty;
+
 class Constraint{
 public:
 
@@ -61,6 +63,7 @@ public:
     void add(Constraint &element);
     void append(Constraint *constraint);
     int find(Constraint* it);
+    Constraint* findByPty( IngredientProperty *pty );
     Constraint* at(int pos);
     private:
     ConstraintPtrList list;

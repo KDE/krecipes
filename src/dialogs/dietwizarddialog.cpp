@@ -104,7 +104,7 @@ void DietWizardDialog::reload(void)
 database->loadCategories(&categoriesList);
 database->loadProperties(&propertyList); // Loads the properties of all the ingredients
 int pgcount=0;
-for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++)
+for (MealInput *tab=(MealInput *) (mealTabs->page(pgcount));pgcount<mealTabs->count(); pgcount++, tab=(MealInput *) (mealTabs->page(pgcount)))
 	tab->reload(categoriesList,propertyList);
 
 //Fill in the caches from the database
@@ -264,6 +264,13 @@ private:
 	Constraint *ctStored;
 
 public:
+	void setConstraint( const Constraint &constraint )
+	{
+		delete ctStored;
+		ctStored = new Constraint( constraint );
+
+		setOn( ctStored->enabled );
+	}
 	double maxVal(){return ctStored->max;}
 	double minVal(){return ctStored->min;}
 	int propertyId(){return ctStored->id;}
@@ -533,6 +540,31 @@ return categoryFiltering;
 
 void DishInput::reload(ElementList *categoryList, IngredientPropertyList *propertyList)
 {
+	//store existing values
+ConstraintList saveConstraints;
+Constraint constraint;
+	for (ConstraintsListItem *it=(ConstraintsListItem*)(constraintsView->firstChild());it;it=(ConstraintsListItem*)(it->nextSibling()))
+	{
+	constraint.id=it->propertyId();
+	constraint.min=it->minVal();
+	constraint.max=it->maxVal();
+	constraint.enabled=it->isOn();
+	constraint.name=it->text(1);
+	saveConstraints.add(constraint);
+	}
+
+ElementList saveEnabledCategories;
+Element category;
+for (CategoriesListItem *it=(CategoriesListItem*)(categoriesView->firstChild());it;it=(CategoriesListItem*)(it->nextSibling()))
+{
+	if ( it->isOn())
+	{
+	category.id=it->categoryId();
+	category.name=it->categoryName();
+	saveEnabledCategories.add(category);
+	}
+}
+
 categoriesView->clear();
 constraintsView->clear();
 
@@ -541,6 +573,10 @@ for (IngredientProperty *pty=propertyList->getFirst();pty; pty=propertyList->get
 {
 ConstraintsListItem *it=new ConstraintsListItem(constraintsView,pty);
 constraintsView->insertItem(it);
+
+Constraint *constraint = saveConstraints.findByPty( pty );
+if ( constraint )
+	it->setConstraint( *constraint );
 }
 
 	//Load the categories list
@@ -548,6 +584,8 @@ for ( ElementList::const_iterator cat_it = categoryList->begin(); cat_it != cate
 {
 CategoriesListItem *it=new CategoriesListItem(categoriesView,*cat_it);
 categoriesView->insertItem(it);
+if ( saveEnabledCategories.contains( *cat_it ) )
+	it->setOn( true );
 }
 
 }
