@@ -165,23 +165,33 @@ toolBar->setFrameStyle (QFrame::Panel | QFrame::Sunken);
 toolBar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Minimum));
 
 	// Next dish/ Previous dish buttons
+KIconLoader il;
+buttonPrev=new QToolButton(toolBar);
+	buttonPrev->setUsesTextLabel(true);
+	buttonPrev->setTextLabel(i18n("Previous Dish"));
+	buttonPrev->setIconSet(il.loadIconSet("back", KIcon::Small));
+	buttonPrev->setTextPosition(QToolButton::BelowIcon);
+buttonNext=new QToolButton(toolBar);
+	buttonNext->setUsesTextLabel(true);
+	buttonNext->setTextLabel(i18n("Next Dish"));
+	buttonNext->setIconSet(il.loadIconSet("forward", KIcon::Small));
+	buttonNext->setTextPosition(QToolButton::BelowIcon);
 
-buttonPrev=new QToolButton(toolBar); buttonPrev->setText(i18n("Prev"));
-buttonNext=new QToolButton(toolBar); buttonNext->setText(i18n("Next"));
 
 	// Dish widgets
 dishStack= new QWidgetStack(this);
 layout->addWidget(dishStack);
 
-	// Add a dish
-DishInput *newDish=new DishInput(this,i18n("Dish 1"));
-dishStack->addWidget(newDish);
-dishInputList.append(newDish);
+	// Add default dishes
+DishInput *newDish=new DishInput(this,i18n("1st Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
+newDish=new DishInput(this,i18n("2nd Course")); dishStack->addWidget(newDish); dishInputList.append(newDish);
+newDish=new DishInput(this,i18n("Dessert")); dishStack->addWidget(newDish); dishInputList.append(newDish);
 dishNumber=1;
 
 // Signals & Slots
 connect(dishNumberInput,SIGNAL(valueChanged(int)),this,SLOT(changeDishNumber(int)));
-
+connect(buttonPrev,SIGNAL(clicked()),this,SLOT(prevDish()));
+connect(buttonNext,SIGNAL(clicked()),this,SLOT(nextDish()));
 
 }
 
@@ -243,6 +253,33 @@ if (dn>dishNumber)
 	}
 }
 
+
+void MealInput::nextDish(void)
+{
+// First get the place of the current dish input in the list
+QValueList <DishInput*>::iterator it=dishInputList.find((DishInput*)(dishStack->visibleWidget()));
+
+//Show the next dish if it exists
+it++;
+if (it!=dishInputList.end())
+{
+dishStack->raiseWidget(*it);
+}
+
+}
+
+void MealInput::prevDish(void)
+{
+// First get the place of the current dish input in the list
+QValueList <DishInput*>::iterator it=dishInputList.find((DishInput*)(dishStack->visibleWidget()));
+
+//Show the previous dish if it exists
+it--;
+if (it!=dishInputList.end())
+{
+dishStack->raiseWidget(*it);
+}
+}
 
 DishInput::DishInput(QWidget* parent,const QString &title):QWidget(parent)
 {
