@@ -43,7 +43,6 @@ private:
 	QValueList<QStringList> loaded_data;
 
 private slots:
-	void filter(const QString &);
 	void importSelected();
 };
 
