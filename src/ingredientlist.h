@@ -17,7 +17,7 @@
 /**
 @author Unai Garro
 */
-class IngredientList{
+class IngredientList: QPtrList <Ingredient>{
 public:
     IngredientList();
 
@@ -25,13 +25,13 @@ public:
     Ingredient* getFirst(void);
     Ingredient* getNext(void);
     void add(Ingredient &ing);
-    void remove(int index);
     void move(int index1,int index2);
     Ingredient* getLast(void);
     Ingredient* getPrev(void);
     void empty(void);
-private:
-    QPtrList<Ingredient> list;
+    int find(int id);
+protected:
+    virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2){return (((Ingredient*)item1)->ingredientID-((Ingredient*)item2)->ingredientID);};  // so find() works as expected (not searching for pointers, but id)
 
 };
 

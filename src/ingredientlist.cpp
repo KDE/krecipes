@@ -11,7 +11,7 @@
 
 IngredientList::IngredientList()
 {
-list.setAutoDelete(true); //Deletes automatically when remove() is used.
+setAutoDelete(true); //Deletes automatically when remove() is used.
 }
 
 
@@ -21,39 +21,41 @@ IngredientList::~IngredientList()
 
 void IngredientList::add(Ingredient &ing)
 {
-list.append (new Ingredient(ing));
-}
-
-void IngredientList::remove(int index)
-{
-list.remove (index);
+this->append (new Ingredient(ing));
 }
 
 void IngredientList::move(int index1,int index2) //moves element in pos index1, to pos after index2
 {
-Ingredient* ing=list.take(index1);
-list.insert(index2,ing);
+Ingredient* ing=this->take(index1);
+this->insert(index2,ing);
 }
 
 Ingredient* IngredientList::getFirst(void){
-return(list.first());
+return(this->first());
 }
 
 Ingredient* IngredientList::getNext(void){
-return(list.next());
+return(this->next());
 }
 
 Ingredient* IngredientList::getLast(void)
 {
-return(list.last());
+return(this->last());
 }
 
 Ingredient* IngredientList::getPrev(void)
 {
-return(list.prev());
+return(this->prev());
 }
 
 void IngredientList::empty(void)
 {
-list.clear();
+this->clear();
 }
+
+int IngredientList::find(int id) // Search by id (which uses search by item, with comparison defined on header)
+{
+Ingredient i; i.ingredientID=id;
+return(QPtrList <Ingredient>::find(&i)); // (If we don't specify class, gcc will only find "find(int)"
+}
+
