@@ -649,8 +649,28 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 		else {
 			CategoryTree tree; loadCategories(&tree,limit,offset);
 			QStringList ids; getIDList(&tree,ids);
-			ids << "-1"; //add the default category FIXME: doesn't work right with 'limit'/'offset'
+
 			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
+
+			QString uncategorized_command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
+			QSQLiteResult recipeToLoad = database->executeQuery( uncategorized_command );
+			if ( recipeToLoad.getStatus() != QSQLiteResult::Failure ) {
+				QSQLiteResultRow row = recipeToLoad.first();
+				while ( !recipeToLoad.atEnd() ) {
+		
+					Element recipe;
+					recipe.id = row.data( 0 ).toInt();
+					recipe.name = unescapeAndDecode( row.data( 1 ) );
+					list->append( recipe );
+		
+					if ( recipeCategoryList ) {
+						recipeCategoryList->append ( new int(-1) );
+					}
+		
+					row = recipeToLoad.next();
+		
+				}
+			}
 		}
 	}
 	else  // load the list of those in the specified category

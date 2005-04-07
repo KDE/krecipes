@@ -98,6 +98,8 @@ bool RecipeListView::acceptDrag( QDropEvent *event ) const
 
 void RecipeListView::load(int limit, int offset)
 {
+	m_uncat_item = 0;
+
 	if ( flat_list ) {
 		ElementList recipeList;
 		database->loadRecipeList( &recipeList );
@@ -111,15 +113,15 @@ void RecipeListView::load(int limit, int offset)
 		}
 	}
 	else {
-		StdCategoryListView::load(limit,offset);
+		StdCategoryListView::load(limit,offset); //create the categories first, since the recipes are being put into them
 
 		// Now show the recipes
 		ElementList recipeList;
 		QIntDict <bool> recipeCategorized;
 		recipeCategorized.setAutoDelete( true ); // it deletes the bools after finished
 		QPtrList <int> recipeCategoryList;
+		recipeCategoryList.setAutoDelete(true);
 
-		//FIXME 0.8: This loads more than it has to if limiting the view
 		database->loadRecipeList( &recipeList, 0, &recipeCategoryList, curr_limit, curr_offset ); // Read the whole list of recipes including category
 
 		int *categoryID;
@@ -132,11 +134,7 @@ void RecipeListView::load(int limit, int offset)
 				createRecipe( recipe, *categoryID );
 				recipeCategorized.insert( ( *recipe_it ).id, new bool( true ) ); // mark the recipe as categorized
 			}
-			else if ( *categoryID != -1 ) { //we must be limiting the categories shown, so we'll ignore this recipe that goes in this category
-				recipeCategorized.insert( ( *recipe_it ).id, new bool( true ) ); // mark the recipe as categorized
-			}
 		}
-
 
 		// Add those recipes that have not been categorised in any categories
 		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.first();recipe_it != recipeList.end() && categoryID;++recipe_it, categoryID = recipeCategoryList.next() ) {
