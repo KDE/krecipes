@@ -56,14 +56,17 @@ public:
 DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListView(parent),
   database(db),
   curr_offset(0),
+  curr_limit(-1),
   total(t),
   bulk_load(false),
   lastElement(0)
 {
 	setSorting(-1);
 
-	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
-	curr_limit = config->readNumEntry( "Limit", -1 );
+	if ( curr_limit == -1 ) { //only use the default limit if a subclass hasn't given curr_limit its own value
+		KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
+		curr_limit = config->readNumEntry( "Limit", -1 );
+	}
 
 	connect(this,SIGNAL(executed(QListViewItem*)),SLOT(slotDoubleClicked(QListViewItem*)));
 }

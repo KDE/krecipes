@@ -70,12 +70,9 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	connect( database, SIGNAL( recipeModified( const Element &, const ElementList & ) ), SLOT( modifyRecipe( const Element &, const ElementList & ) ) );
 
 	setColumnText( 0, i18n( "Recipe" ) );
-	/*addColumn( i18n("Recipe") );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry("ShowID",false);
-	addColumn( i18n("Id"), show_id ? -1 : 0 );*/
+	KConfig *config = KGlobal::config(); config->setGroup( "Advanced" );
+	curr_limit = config->readNumEntry("CategoryLimit",-1);
 }
 
 QDragObject *RecipeListView::dragObject()
