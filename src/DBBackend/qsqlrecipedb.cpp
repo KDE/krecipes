@@ -649,17 +649,19 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			QStringList ids; getIDList(&tree,ids);
 			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
 
-			QString uncategorized_command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
-			QSqlQuery loadUncategorized( uncategorized_command, database );
-			if ( loadUncategorized.isActive() ) {
-				while ( loadUncategorized.next() ) {
-					Element recipe;
-					recipe.id = loadUncategorized.value( 0 ).toInt();
-					recipe.name = unescapeAndDecode( loadUncategorized.value( 1 ).toString() );
-					list->append( recipe );
-		
-					if ( recipeCategoryList ) {
-						recipeCategoryList->append ( new int(-1) );
+			if ( offset == 0 ) {
+				QString uncategorized_command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
+				QSqlQuery loadUncategorized( uncategorized_command, database );
+				if ( loadUncategorized.isActive() ) {
+					while ( loadUncategorized.next() ) {
+						Element recipe;
+						recipe.id = loadUncategorized.value( 0 ).toInt();
+						recipe.name = unescapeAndDecode( loadUncategorized.value( 1 ).toString() );
+						list->append( recipe );
+			
+						if ( recipeCategoryList ) {
+							recipeCategoryList->append ( new int(-1) );
+						}
 					}
 				}
 			}

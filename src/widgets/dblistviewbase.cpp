@@ -55,8 +55,8 @@ public:
 
 DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListView(parent),
   database(db),
-  curr_offset(0),
   curr_limit(-1),
+  curr_offset(0),
   total(t),
   bulk_load(false),
   lastElement(0)
