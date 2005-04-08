@@ -1,4 +1,7 @@
 /***************************************************************************
+*   Copyright (C) 2004-2005 by                                            *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
 *   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *                                                                         *
@@ -9,9 +12,11 @@
 ***************************************************************************/
 
 #include "krelistview.h"
+
 #include <kglobalsettings.h>
 #include <klocale.h>
 
+#include "widgets/dblistviewbase.h"
 
 KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : QVBox( parent )
 {
@@ -63,6 +68,9 @@ KreListView::~KreListView()
 void KreListView::filter( const QString& s )
 {
 	for ( QListViewItem * it = list->firstChild();it;it = it->nextSibling() ) {
+		if ( it->rtti() == NEXTLISTITEM_RTTI || it->rtti() == PREVLISTITEM_RTTI )
+			continue;
+
 		if ( s.isEmpty() )  // Don't filter if the filter text is empty
 		{
 			it->setVisible( true );

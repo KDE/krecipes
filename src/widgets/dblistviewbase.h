@@ -15,6 +15,9 @@
 
 #include <klistview.h>
 
+#define PREVLISTITEM_RTTI 1002
+#define NEXTLISTITEM_RTTI 1003
+
 class RecipeDB;
 
 class DBListViewBase : public KListView

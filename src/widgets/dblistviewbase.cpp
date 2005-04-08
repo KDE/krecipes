@@ -16,9 +16,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#define PREVLISTITEM_RTTI 1002
-#define NEXTLISTITEM_RTTI 1003
-
 
 //These two classes are used to identify the "Next" and "Prev" items, which are identified through rtti().  This also prevents renaming, even if it is enabled.
 class PrevListViewItem : public QListViewItem
@@ -231,7 +228,7 @@ bool DBListViewBase::handleElement( const QString &name )
 
 	int child_count = childCount();
 	if ( firstChild()->rtti() == PREVLISTITEM_RTTI ){ child_count--; } //"Prev" item
-	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
+	if ( lastElement && lastElement->nextSibling() ){ child_count--; } //"Next" item
 
 	if ( curr_limit != -1 && child_count >= curr_limit ) {
 		QListViewItem *firstElement = firstChild();
