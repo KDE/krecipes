@@ -139,8 +139,8 @@ void DBListViewBase::reload()
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
+	//reset some things
 	clear(); kapp->processEvents();
-
 	lastElement = 0;
 
 	bulk_load=true;
@@ -201,34 +201,42 @@ void DBListViewBase::createElement( QListViewItem *it )
 
 void DBListViewBase::removeElement( QListViewItem *it )
 {
+	total--;
 	if ( !it ) return;
 
 	if ( it == lastElement ) {
 		for ( QListViewItem *search_it = firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
-			if ( lastElement == search_it->nextSibling() )
-				lastElement = search_it; 
+			if ( it == search_it->nextSibling() ) {
+				lastElement = search_it;
+				break;
+			}
+		}
+
+		if ( lastElement == it || lastElement->rtti() == PREVLISTITEM_RTTI ) { //there are no more items in the view if this happens
+			if ( firstChild() && firstChild()->rtti() == PREVLISTITEM_RTTI ) {
+				activatePrev();
+				it = 0; //keep 'delete it' below from segfault'ing
+			}
+			else if ( lastElement->nextSibling() && lastElement->nextSibling()->rtti() == NEXTLISTITEM_RTTI ) {
+				reload();
+				it = 0; //keep 'delete it' below from segfault'ing
+			}
 		}
 	}
 	delete it;
 }
 
-void DBListViewBase::elementCreated()
-{
-	total++;
-}
-
-void DBListViewBase::elementRemoved()
-{
-	total--;
-}
-
 bool DBListViewBase::handleElement( const QString &name )
 {
+	total++;
+
 	int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
 	int child_count = childCount();
+	if ( child_count == 0 ) return true;
+
 	if ( firstChild()->rtti() == PREVLISTITEM_RTTI ){ child_count--; } //"Prev" item
-	if ( lastElement && lastElement->nextSibling() ){ child_count--; } //"Next" item
+	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
 
 	if ( curr_limit != -1 && child_count >= curr_limit ) {
 		QListViewItem *firstElement = firstChild();
@@ -246,10 +254,16 @@ bool DBListViewBase::handleElement( const QString &name )
 			return false;
 		}
 		else if ( name >= lastElement->text(c) ) {
+			if ( lastElement->nextSibling() == 0 )
+				new NextListViewItem(this,lastElement);
+
 			return false;
 		}
+		else {
+			removeElement(lastElement);
+		}
 	}
-		
+
 	return true;
 }
 

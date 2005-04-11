@@ -25,8 +25,6 @@ PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : DBList
 {
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( checkCreatePrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
-	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( elementCreated() ) );
-	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );

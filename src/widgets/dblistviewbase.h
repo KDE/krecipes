@@ -47,9 +47,6 @@ protected:
 	int curr_offset;
 
 protected slots:
-	void elementCreated();
-	void elementRemoved();
-	
 	void rename( QListViewItem *, int c );
 	void slotDoubleClicked( QListViewItem * );
 

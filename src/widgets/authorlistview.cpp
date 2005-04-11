@@ -24,8 +24,6 @@ AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase
 {
 	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( checkCreateAuthor( const Element & ) ) );
 	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( removeAuthor( int ) ) );
-	connect( database, SIGNAL( authorCreated( const Element & ) ), SLOT( elementCreated() ) );
-	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );

@@ -28,8 +28,6 @@ UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( pa
 {
 	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( checkCreateUnit( const Unit & ) ) );
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
-	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( elementCreated() ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( elementRemoved() ) );
 
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
