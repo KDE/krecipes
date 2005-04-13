@@ -41,6 +41,7 @@ protected:
 	void removeElement( QListViewItem * );
 
 	bool reloading(){ return bulk_load; }
+	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
 
 	RecipeDB *database;
 	int curr_limit;
@@ -56,7 +57,6 @@ private:
 
 	//make this private because the data should always be synced with the database
 	void clear(){KListView::clear();}
-	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
 
 	int total;
 	

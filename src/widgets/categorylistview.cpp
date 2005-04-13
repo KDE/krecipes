@@ -156,13 +156,9 @@ void CategoryListView::load( int limit, int offset )
 
 void CategoryListView::loadListView( const CategoryTree *categoryTree, int parent_id )
 {
-	const CategoryTreeChildren * children = categoryTree->children();
-	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
-		const CategoryTree *node = *child_it;
-
-		createCategory( node->category, parent_id );
-
-		loadListView( node, node->category.id );
+	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		loadListView( child_it, child_it->category.id );
+		createCategory( child_it->category, parent_id );
 	}
 }
 

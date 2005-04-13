@@ -166,7 +166,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	inputBox->hide();
 
 	// Initialize
-	ingredientList = new ElementList;
 	unitList = new UnitList;
 
 	// Signals & Slots
@@ -187,6 +186,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 IngredientsDialog::~IngredientsDialog()
 {
+	delete unitList;
+	delete perUnitListBack;
+	delete propertiesList;
 }
 
 void IngredientsDialog::reloadIngredientList( void )

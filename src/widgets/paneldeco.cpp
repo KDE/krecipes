@@ -116,8 +116,7 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 
 TopDeco::~TopDeco()
 {
-	if ( icon )
-		delete icon;
+	delete icon;
 }
 
 

@@ -40,9 +40,6 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	//Store pointer to Recipe Database
 	database = db;
 
-	//Initialize internal data
-	recipeList = new ElementList;
-
 	QVBoxLayout *tabLayout = new QVBoxLayout( this );
 	QTabWidget *tabWidget = new QTabWidget( this );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );

@@ -102,10 +102,6 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	m_recipe_list->empty();
 
 	//cache some data we'll need
-	int max_author_length = db->maxAuthorNameLength();
-	int max_category_length = db->maxCategoryNameLength();
-	int max_ing_length = db->maxIngredientNameLength();
-	int max_prepmethod_length = db->maxPrepMethodNameLength();
 	int max_units_length = db->maxUnitNameLength();
 	int max_group_length = db->maxIngGroupNameLength();
 
@@ -241,19 +237,18 @@ void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )
 	m_cat_structure = cat_structure;
 }
 
-void BaseImporter::importCategoryStructure( RecipeDB *db, const CategoryTree *cat_tree )
+void BaseImporter::importCategoryStructure( RecipeDB *db, const CategoryTree *categoryTree )
 {
-	const CategoryTreeChildren * children = cat_tree->children();
-	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
-		int new_cat_id = db->findExistingCategoryByName( ( *child_it )->category.name );
+	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		int new_cat_id = db->findExistingCategoryByName( child_it->category.name );
 		if ( new_cat_id == -1 ) {
-			db->createNewCategory( ( *child_it )->category.name, cat_tree->category.id );
+			db->createNewCategory( child_it->category.name, categoryTree->category.id );
 			new_cat_id = db->lastInsertID();
 		}
 
-		( *child_it ) ->category.id = new_cat_id;
+		child_it->category.id = new_cat_id;
 
-		importCategoryStructure( db, *child_it );
+		importCategoryStructure( db, child_it );
 	}
 }
 

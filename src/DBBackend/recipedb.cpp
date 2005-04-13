@@ -181,12 +181,9 @@ void RecipeDB::importSamples()
 
 void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 {
-	const CategoryTreeChildren * children = categoryTree->children();
-	for ( CategoryTreeChildren::const_iterator child_it = children->begin(); child_it != children->end(); ++child_it ) {
-		
-		const CategoryTree *node = *child_it;
-		ids << QString::number(node->category.id);
-		getIDList( node,ids );
+	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		ids << QString::number(child_it->category.id);
+		getIDList(child_it,ids );
 	}
 }
 

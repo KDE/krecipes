@@ -10,12 +10,7 @@
 #ifndef CATEGORYTREE_H
 #define CATEGORYTREE_H
 
-#include <qvaluelist.h>
-
 #include "element.h"
-
-class CategoryTree;
-typedef QValueList<CategoryTree*> CategoryTreeChildren;
 
 class CategoryTree
 {
@@ -26,22 +21,21 @@ public:
 
 	Element category;
 
-	const CategoryTreeChildren *children() const;
 	CategoryTree *add
 	( const Element &cat );
 	void clear();
 
 	bool contains( int id ) const;
 
-	CategoryTree *parent()
+	CategoryTree *parent() const
 	{
 		return m_parent;
 	}
-	CategoryTree *firstChild()
+	CategoryTree *firstChild() const
 	{
 		return m_child;
 	}
-	CategoryTree *nextSibling()
+	CategoryTree *nextSibling() const
 	{
 		return m_sibling;
 	}
@@ -52,8 +46,6 @@ public:
 private:
 	CategoryTree( const CategoryTree & );
 	CategoryTree &operator=( const CategoryTree & );
-
-	CategoryTreeChildren *m_children;
 
 	CategoryTree *m_parent;
 	CategoryTree *m_child;

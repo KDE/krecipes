@@ -59,14 +59,13 @@ void CategoryComboBox::reload()
 	}
 }
 
-void CategoryComboBox::loadCategories( CategoryTree *categoryList, int &row )
+void CategoryComboBox::loadCategories( CategoryTree *categoryTree, int &row )
 {
-	const CategoryTreeChildren * children = categoryList->children();
-	for ( CategoryTreeChildren::const_iterator cat_it = children->begin(); cat_it != children->end(); ++cat_it ) {
-		insertItem( ( *cat_it )->category.name );
-		categoryComboRows.insert( row, ( *cat_it )->category.id ); // store category id's in the combobox position to obtain the category id later
+	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		insertItem( child_it->category.name );
+		categoryComboRows.insert( row, child_it->category.id ); // store category id's in the combobox position to obtain the category id later
 		row++;
-		loadCategories( *cat_it, row );
+		loadCategories( child_it, row );
 	}
 }
 

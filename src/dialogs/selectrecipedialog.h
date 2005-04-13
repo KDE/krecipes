@@ -78,7 +78,6 @@ private:
 	AdvancedSearchDialog *advancedSearch;
 	// Internal Data
 	RecipeDB *database;
-	ElementList *recipeList;
 	RecipeActionsHandler *actionHandler;
 	RecipeFilter *recipeFilter;
 

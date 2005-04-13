@@ -66,7 +66,6 @@ private:
 	int findPropertyNo( QListViewItem *it );
 	// Internal Variables
 	RecipeDB *database;
-	ElementList *ingredientList;
 	UnitList *unitList;
 	IngredientPropertyList *propertiesList;
 	ElementList *perUnitListBack;

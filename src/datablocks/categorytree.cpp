@@ -9,8 +9,12 @@
 ***************************************************************************/
 
 #include "categorytree.h"
+
 #include <kdebug.h>
-CategoryTree::CategoryTree( CategoryTree *parent ) : m_children( new CategoryTreeChildren ),
+
+#include "element.h"
+
+CategoryTree::CategoryTree( CategoryTree *parent ) :
 		m_parent( 0 ), m_child( 0 ), m_sibling( 0 )
 {
 	if ( parent )
@@ -19,20 +23,17 @@ CategoryTree::CategoryTree( CategoryTree *parent ) : m_children( new CategoryTre
 
 CategoryTree::~CategoryTree()
 {
-	//FIXME
 	if ( m_parent )
 		m_parent->takeItem( this );
 
-	//for ( CategoryTreeChildren::iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
-	//	delete *child_it;
-	//}
-
-	delete m_children;
-}
-
-const CategoryTreeChildren * CategoryTree::children() const
-{
-	return m_children;
+	CategoryTree * i = m_child;
+	m_child = 0;
+	while ( i ) {
+		i->m_parent = 0;
+		CategoryTree * n = i->m_sibling;
+		delete i;
+		i = n;
+	}
 }
 
 CategoryTree *CategoryTree::add
@@ -40,8 +41,7 @@ CategoryTree *CategoryTree::add
 {
 	CategoryTree * new_child = new CategoryTree( this );
 	new_child->category = cat;
-	m_children->append( new_child );
-
+	
 	return new_child;
 }
 
@@ -54,14 +54,6 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 
 void CategoryTree::takeItem( CategoryTree *tree )
 {
-	for ( CategoryTreeChildren::iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
-		if ( ( *child_it ) == tree ) {
-			m_children->remove( child_it );
-			break;
-		}
-	}
-
-	/* FIXME
 	CategoryTree ** nextChild = &m_child;
 	while( nextChild && *nextChild && tree != *nextChild )
 		nextChild = &((*nextChild)->m_sibling);
@@ -70,25 +62,28 @@ void CategoryTree::takeItem( CategoryTree *tree )
 		*nextChild = (*nextChild)->m_sibling;
 	tree->m_parent = 0;
 	tree->m_sibling = 0;
-	*/
 }
 
 void CategoryTree::clear()
 {
-	//m_children->clear();
+	CategoryTree *c = m_child;
+	CategoryTree *n;
+	while( c ) {
+		n = c->m_sibling;
+		delete c;
+		c = n;
+	}
 }
 
 bool CategoryTree::contains( int id ) const
 {
 	bool result = false;
 
-	for ( CategoryTreeChildren::const_iterator child_it = m_children->begin(); child_it != m_children->end(); ++child_it ) {
-		const CategoryTree *node = *child_it;
-
-		if ( node->category.id == id )
+	for ( CategoryTree * child_it = firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		if ( child_it->category.id == id )
 			return true;
 
-		result = node->contains( id );
+		result = child_it->contains( id );
 	}
 
 	return result;
