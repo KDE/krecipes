@@ -355,8 +355,15 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
 
-		if ( parent )
+		if ( parent ) {
 			new_item = new CategoryListItem( parent, category );
+
+			QListViewItem *lastItem = 0;
+			for ( QListViewItem *it = parent->firstChild(); it; it = it->nextSibling() ) {
+				lastItem = it;
+			}
+			new_item->moveItem( lastItem );
+		}
 	}
 
 	if ( new_item ) {

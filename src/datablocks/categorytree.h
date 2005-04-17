@@ -50,6 +50,7 @@ private:
 	CategoryTree *m_parent;
 	CategoryTree *m_child;
 	CategoryTree *m_sibling;
+	CategoryTree *m_last;
 };
 
 #endif

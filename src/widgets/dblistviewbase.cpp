@@ -13,6 +13,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 

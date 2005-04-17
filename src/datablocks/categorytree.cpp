@@ -15,7 +15,7 @@
 #include "element.h"
 
 CategoryTree::CategoryTree( CategoryTree *parent ) :
-		m_parent( 0 ), m_child( 0 ), m_sibling( 0 )
+		m_parent( 0 ), m_child( 0 ), m_sibling( 0 ), m_last(0)
 {
 	if ( parent )
 		parent->insertItem( this );
@@ -47,9 +47,14 @@ CategoryTree *CategoryTree::add
 
 void CategoryTree::insertItem( CategoryTree *newChild )
 {
-	newChild->m_sibling = m_child;
-	m_child = newChild;
 	newChild->m_parent = this;
+
+	if ( m_child && m_child->m_last )
+		m_child->m_last->m_sibling = newChild;
+	else
+		m_child = newChild;
+
+	m_child->m_last = newChild;
 }
 
 void CategoryTree::takeItem( CategoryTree *tree )
@@ -62,6 +67,10 @@ void CategoryTree::takeItem( CategoryTree *tree )
 		*nextChild = (*nextChild)->m_sibling;
 	tree->m_parent = 0;
 	tree->m_sibling = 0;
+
+	if ( tree == m_last ) {
+		//FIXME: unstable behavior if this is the case
+	}
 }
 
 void CategoryTree::clear()
