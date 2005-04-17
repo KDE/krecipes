@@ -25,19 +25,17 @@
 #include <qwidget.h>
 #include <qwidgetstack.h>
 
-
 #include <kiconloader.h>
 #include <kpixmap.h>
 #include <kpixmapeffect.h>
 #include <kimageeffect.h>
 #include <kparts/part.h>
-#include "krecipesiface.h"
 #include <kstyle.h>
 #include <ktextbrowser.h>
 
 #include "importers/baseimporter.h"
 #include "DBBackend/recipedb.h"
-
+#include "krecipesiface.h"
 
 class AuthorsDialog;
 class PrepMethodsDialog;
@@ -81,7 +79,7 @@ typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, Pr
 
 
 // Class KrecipesView
-class KrecipesView : public QVBox, public KrecipesIface
+class KrecipesView : public QVBox, virtual public KrecipesIface
 {
 	Q_OBJECT
 public:
@@ -94,6 +92,8 @@ public:
 	 * Destructor
 	 */
 	virtual ~KrecipesView();
+
+	virtual DCOPRef currentDatabase() const;
 
 	/**
 	 * Print this view to any medium -- paper or not
@@ -195,6 +195,7 @@ public slots:
 	bool save( void );
 	void exportRecipe();
 	void reloadDisplay();
+	virtual void reload();
 
 private slots:
 	void actionRecipe( int recipeID, int action );

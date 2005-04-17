@@ -38,6 +38,8 @@ public:
 	CategoriesEditorDialog( QWidget* parent, RecipeDB *db );
 	~CategoriesEditorDialog();
 
+	void reload();
+
 private:
 	// Internal data
 	RecipeDB *database;

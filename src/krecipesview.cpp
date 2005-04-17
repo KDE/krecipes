@@ -51,9 +51,9 @@
 #include "widgets/paneldeco.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: QVBox( parent )
+		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
 {
-
+	kapp->dcopClient()->setDefaultObject( objId() );
 
 	// Init the setup wizard if necessary
 	kdDebug() << "Beginning wizard" << endl;
@@ -917,5 +917,25 @@ void KrecipesView::editRecipe()
 		break;
 	}
 }
+
+void KrecipesView::reload()
+{
+	viewPanel->reload();
+	selectPanel->reload();
+	shoppingListPanel->reload();
+	ingredientsPanel->reload();
+	propertiesPanel->reload();
+	unitsPanel->reload();
+	dietPanel->reload();
+	authorsPanel->reload();
+	categoriesPanel->reload();
+	ingredientMatcherPanel->reload();
+}
+
+DCOPRef KrecipesView::currentDatabase() const
+{
+	return DCOPRef(database);
+}
+
 
 #include "krecipesview.moc"

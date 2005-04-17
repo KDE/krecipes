@@ -55,6 +55,18 @@ struct ingredient_nutrient_data
 	QValueList<double> data;
 };
 
+RecipeDB::RecipeDB() : 
+	DCOPObject(),
+	QObject()
+{
+	dbOK = false;
+	dbErr = "";
+}
+
+RecipeDB::~RecipeDB()
+{
+}
+
 double RecipeDB::latestDBVersion() const
 {
 	return 0.7;

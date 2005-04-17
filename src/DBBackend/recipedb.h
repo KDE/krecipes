@@ -18,6 +18,9 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 
+#include <dcopclient.h>
+
+#include "krecipesdbiface.h"
 #include "recipe.h"
 #include "datablocks/recipelist.h"
 #include "elementlist.h"
@@ -42,25 +45,13 @@ typedef struct
 }
 RecipeIngredientList;
 
-class RecipeDB: public QObject
+class RecipeDB: public QObject, virtual public KrecipesDBIface
 {
-
 	Q_OBJECT
 
-protected:
-	RecipeDB() : QObject()
-	{
-		dbOK = false;
-		dbErr = "";
-	}
-
-	double latestDBVersion() const;
-	QString krecipes_version() const;
-
 public:
-	virtual ~RecipeDB()
-	{}
-	;
+	RecipeDB();
+	virtual ~RecipeDB();
 
 	virtual void connect( bool create = true ) = 0;
 
@@ -293,9 +284,6 @@ public:
 		return 20;
 	}
 
-protected:
-	virtual void portOldDatabases( float version ) = 0;
-public:
 	virtual bool ok()
 	{
 		return ( dbOK );
@@ -304,6 +292,12 @@ public:
 	{
 		return ( dbErr );
 	}
+
+protected:
+	virtual void portOldDatabases( float version ) = 0;
+
+	double latestDBVersion() const;
+	QString krecipes_version() const;
 };
 
 

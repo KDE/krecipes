@@ -140,6 +140,7 @@ SelectRecipeDialog::~SelectRecipeDialog()
 
 void SelectRecipeDialog::reload()
 {
+	advancedSearch->reload();
 	recipeListView->reload();
 
 	categoryBox->reload();

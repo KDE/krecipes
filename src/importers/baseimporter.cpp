@@ -100,6 +100,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		selected_recipes = *m_recipe_list;
 
 	m_recipe_list->empty();
+	//db->blockSignals(true);
 
 	//cache some data we'll need
 	int max_units_length = db->maxUnitNameLength();
@@ -126,6 +127,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	for ( recipe_it = selected_recipes.begin(); recipe_it != recipe_list_end; ++recipe_it ) {
 		if ( progress_dialog->wasCancelled() ) {
 			KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
+			//db->blockSignals(false);
 			return ;
 		}
 
@@ -228,6 +230,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 
 	importUnitRatios( db );
 
+	//db->blockSignals(false);
 	delete progress_dialog;
 }
 

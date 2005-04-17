@@ -187,7 +187,7 @@ void IngredientMatcherDialog::findRecipes( void )
 	KApplication::restoreOverrideCursor();
 }
 
-void IngredientMatcherDialog::reloadIngredients( void )
+void IngredientMatcherDialog::reload( void )
 {
 	( ( StdIngredientListView* ) ingredientListView->listView() ) ->reload();
 }

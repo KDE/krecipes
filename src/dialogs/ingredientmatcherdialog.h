@@ -103,7 +103,7 @@ public:
 
 	IngredientMatcherDialog( QWidget *parent, RecipeDB* db );
 	~IngredientMatcherDialog();
-	void reloadIngredients ( void );
+	void reload();
 
 signals:
 	void recipeSelected( int, int );
