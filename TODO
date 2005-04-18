@@ -10,6 +10,7 @@ MAJOR FEATURES:
 	*Handle "Cookbooks".  In MySQL/PostgreSQL a cookbook would be a table, and in SQLite it would be a file.
 
 CONVENIENCES/MINOR FEATURES:
+	*Copy recipe
 	*Improved navigation - add a forward and back button
 	*E-mail recipe(s) option (using kapp->invokeMailer())
 	*Show properties in columns
