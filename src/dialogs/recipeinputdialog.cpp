@@ -251,7 +251,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	loadedRecipe->instructions = QString::null;
 	database = db;
 
-	il = new KIconLoader;
+	KIconLoader *il = new KIconLoader;
 
 	// Tabs
 	tabWidget = new QTabWidget( this, "tabWidget" );
@@ -636,6 +636,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect ( this, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveButton( bool ) ) );
 
 	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
+
+	delete il;
 }
 
 
@@ -645,6 +647,7 @@ RecipeInputDialog::~RecipeInputDialog()
 	delete ingredientComboList;
 	delete unitComboList;
 	delete prepMethodComboList;
+	delete typeButtonGrp;
 }
 
 void RecipeInputDialog::recipeRemoved( int id )

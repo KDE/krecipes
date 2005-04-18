@@ -244,6 +244,7 @@ void LiteRecipeDB::loadRecipe( Recipe *recipe, int recipeID )
 			if ( ok )
 				recipe->photo.loadFromData( photoArray, photoString.length() );
 			// picture will now have a ready-to-use image
+			delete[] photoArray;
 		}
 
 	}

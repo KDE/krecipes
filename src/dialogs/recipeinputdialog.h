@@ -112,7 +112,6 @@ private:
 	QLabel *ingredientLabel;
 	KComboBox* ingredientBox;
 	KListView* ingredientList;
-	KIconLoader *il;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
