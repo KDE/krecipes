@@ -308,9 +308,9 @@ void AdvancedSearchDialog::search()
 	database->search( &allRecipes, load_items,
 		"", //title
 		"", //instructions
-		QStringList::split(' ',ingredientsAnyEdit->text()),
-		QStringList::split(' ',categoriesAnyEdit->text()),
-		QStringList::split(' ',authorsAnyEdit->text()),
+		split(ingredientsAnyEdit->text()),
+		split(categoriesAnyEdit->text()),
+		split(authorsAnyEdit->text()),
 		enablePrepTimeCheckBox->isChecked()?prepTimeEdit->time():QTime(),
 		prepTimeComboBox->currentItem(), //prep_param
 		enableServingsCheckBox->isChecked()?servingsSpinBox->value():-1, //servings
@@ -322,7 +322,7 @@ void AdvancedSearchDialog::search()
 	 */
 
 	//narrow down by authors
-	QStringList items = QStringList::split(' ',authorsAllEdit->text());
+	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( *author_it ).id == -1 ) {
@@ -331,7 +331,7 @@ void AdvancedSearchDialog::search()
 			}
 		}
 	}
-	items = QStringList::split(' ',authorsWithoutEdit->text());
+	items = split(authorsWithoutEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( *author_it ).id != -1 ) {
@@ -342,7 +342,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by categories
-	items = QStringList::split(' ',categoriesAllEdit->text());
+	items = split(categoriesAllEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( *cat_it ).id == -1 ) {
@@ -351,7 +351,7 @@ void AdvancedSearchDialog::search()
 			}
 		}
 	}
-	items = QStringList::split(' ',categoriesNotEdit->text());
+	items = split(categoriesNotEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( *cat_it ).id != -1 ) {
@@ -362,7 +362,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	//narrow down by ingredients
-	items = QStringList::split(' ',ingredientsAllEdit->text());
+	items = split(ingredientsAllEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( *ing_it ).ingredientID == -1 ) {
@@ -371,7 +371,7 @@ void AdvancedSearchDialog::search()
 			}
 		}
 	}
-	items = QStringList::split(' ',ingredientsWithoutEdit->text());
+	items = split(ingredientsWithoutEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( *ing_it ).ingredientID != -1 ) {
@@ -389,6 +389,31 @@ void AdvancedSearchDialog::search()
 	}
 
 	KApplication::restoreOverrideCursor();
+}
+
+QStringList AdvancedSearchDialog::split( const QString &text ) const
+{
+	QStringList result;
+
+	// To keep quoted words together, first split on quotes,
+	// and then split again on the even numbered items
+	
+	QStringList temp = QStringList::split('"',text,true);
+	for ( int i = 0; i < temp.count(); ++i ) {
+		if ( i & 1 ) //odd
+			result += temp[i].stripWhiteSpace();
+		else         //even
+			result += QStringList::split(' ',temp[i]);
+	}
+
+	kdDebug()<<endl<<"terms: "<<endl;
+	for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
+		(*it).replace("*","%");
+		(*it).replace("?","_");
+		kdDebug()<<"\t"<<*it<<endl;
+	}
+
+	return result;
 }
 
 #include "advancedsearchdialog.moc"

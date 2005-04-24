@@ -86,8 +86,8 @@ public:
 	KPushButton* findButton;
 	KPushButton* clearButton;
 	KListView* resultsListView;
-	
-	protected:
+
+protected:
 	QVBoxLayout* AdvancedSearchDialogLayout;
 	QHBoxLayout* layout17;
 	QGridLayout* ingTabLayout;
@@ -109,6 +109,9 @@ signals:
 private slots:
 	void search();
 	void clear();
+
+private:
+	QStringList split( const QString &text ) const;
 };
 
 #endif //ADVANCEDSEARCHDIALOG_H
