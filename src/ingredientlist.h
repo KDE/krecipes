@@ -35,6 +35,7 @@ public:
 	void move( int index1, int count, int index2 );
 	void empty( void );
 	int find( int id ) const;
+	Ingredient findByName( const QString & ) const;
 	IngredientList::const_iterator find( IngredientList::const_iterator, int id ) const;
 	IngredientList::iterator find( IngredientList::iterator, int id );
 

@@ -180,7 +180,7 @@ void DietWizardDialog::createDiet( void )
 	RecipeList rlist;
 	dietRList->clear();
 	// Get the whole list of recipes, detailed
-	database->loadRecipeDetails( &rlist, true, true );
+	database->loadRecipes( &rlist, RecipeDB::Categories | RecipeDB::Ingredients | RecipeDB::Title );
 
 	// temporal iterator list so elements can be removed without reloading them again from the DB
 	// this list prevents the same meal from showing up in the same day twice

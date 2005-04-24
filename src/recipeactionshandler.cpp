@@ -300,7 +300,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 ) {
 				KProgressDialog progress_dialog( 0, "export_progress_dialog", QString::null, i18n( "Preparing to save recipes..." ) );
 				RecipeList recipes;
-				database->loadRecipes( &recipes, ids, &progress_dialog );
+				database->loadRecipes( &recipes, RecipeDB::All, ids/*, &progress_dialog*/ );
 
 				KProgressDialog progress_dialog2( 0, "export_progress_dialog2", QString::null, i18n( "Saving recipes..." ) );
 				exporter->exporter( recipes, &progress_dialog2 );

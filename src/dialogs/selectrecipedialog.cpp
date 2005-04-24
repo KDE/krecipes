@@ -161,7 +161,7 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
 	if ( recipeListView->selectedItem() && recipeListView->selectedItem() ->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* ) recipeListView->selectedItem();
-		database->loadRecipe( recipe, recipe_it->recipeID() );
+		database->loadRecipe( recipe, RecipeDB::All, recipe_it->recipeID() );
 	}
 }
 

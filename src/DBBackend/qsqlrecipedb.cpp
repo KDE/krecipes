@@ -113,6 +113,8 @@ void QSqlRecipeDB::connect( bool create )
 	}
 
 	// Database was opened correctly
+	m_query = QSqlQuery( QString::null, database );
+	m_query.setForwardOnly(true);
 	dbOK = true;
 }
 
@@ -139,264 +141,140 @@ void QSqlRecipeDB::initializeData( void )
 	}
 }
 
-void QSqlRecipeDB::loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames )
+void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )
 {
-	list->ilist.clear();
-	list->recipeIdList.clear();
-
-	QString command;
-
-	if ( withNames ) {
-		command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.recipe_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" );
-	}
-	else {
-		command = QString( "SELECT ingredient_id,amount,unit_id,recipe_id  FROM ingredient_list;" );
-	}
-
-	QSqlQuery ingredientsToLoad( command, database );
-	if ( ingredientsToLoad.isActive() ) {
-		while ( ingredientsToLoad.next() ) {
-			Ingredient ing;
-			if ( withNames ) {
-				ing.ingredientID = ingredientsToLoad.value( 0 ).toInt();
-				ing.name = unescapeAndDecode( ingredientsToLoad.value( 1 ).toString() );
-				ing.amount = ingredientsToLoad.value( 2 ).toDouble();
-				ing.unitID = ingredientsToLoad.value( 3 ).toInt();
-				ing.units.name = unescapeAndDecode( ingredientsToLoad.value( 4 ).toString() );
-				ing.units.plural = unescapeAndDecode( ingredientsToLoad.value( 5 ).toString() );
-				list->recipeIdList.append( ingredientsToLoad.value( 6 ).toInt() );
-			}
-			else {
-				ing.ingredientID = ingredientsToLoad.value( 0 ).toInt();
-				ing.amount = ingredientsToLoad.value( 1 ).toDouble();
-				ing.unitID = ingredientsToLoad.value( 2 ).toInt();
-				list->recipeIdList.append( ingredientsToLoad.value( 3 ).toInt() );
-
-			}
-			list->ilist.append( ing );
-		}
-	}
-}
-
-void QSqlRecipeDB::loadRecipe( Recipe *recipe, int recipeID )
-{
-
 	// Empty the recipe first
-	recipe->empty();
+	rlist->empty();
+
+	QMap <int, RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 
 	QString command;
 
 	// Read title, author, instructions, and prep time
-	command = QString( "SELECT title,instructions,persons,prep_time FROM recipes WHERE id=%1;" ).arg( recipeID );
-
-	QSqlQuery recipeToLoad( command, database );
-	if ( recipeToLoad.isActive() ) {
-		recipeToLoad.first(); // Moves to the first record (it should be unique)
-		recipe->title = unescapeAndDecode( recipeToLoad.value( 0 ).toString() );
-		recipe->instructions = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
-		recipe->persons = recipeToLoad.value( 2 ).toInt();
-		recipe->prepTime = recipeToLoad.value( 3 ).toTime();
-		recipe->recipeID = recipeID;
+	QStringList ids_str;
+	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		ids_str << QString::number(*it);
 	}
 
-	// Read the ingredients
-	command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( recipeID );
+	command = "SELECT id,title,instructions,persons,prep_time FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
-	recipeToLoad.exec( command );
-	if ( recipeToLoad.isActive() ) {
-		while ( recipeToLoad.next() ) {
-			Ingredient ing;
-			ing.ingredientID = recipeToLoad.value( 0 ).toInt();
-			ing.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
-			ing.amount = recipeToLoad.value( 2 ).toDouble();
-			ing.unitID = recipeToLoad.value( 3 ).toInt();
-			ing.units.name = unescapeAndDecode( recipeToLoad.value( 4 ).toString() );
-			ing.units.plural = unescapeAndDecode( recipeToLoad.value( 5 ).toString() );
+	m_query.exec( command );
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
+			Recipe recipe;
+			recipe.recipeID = m_query.value( 0 ).toInt();
+			if ( items & RecipeDB::Title ) recipe.title = unescapeAndDecode( m_query.value( 1 ).toString() );
+			if ( items & RecipeDB::Instructions ) recipe.instructions = unescapeAndDecode( m_query.value( 2 ).toString() );
+			if ( items & RecipeDB::Servings ) recipe.persons = m_query.value( 3 ).toInt();
+			if ( items & RecipeDB::PrepTime ) recipe.prepTime = m_query.value( 4 ).toTime();
+			
 
-			//if we don't have both name and plural, use what we have as both
-			if ( ing.units.name.isEmpty() )
-				ing.units.name = ing.units.plural;
-			else if ( ing.units.plural.isEmpty() )
-				ing.units.plural = ing.units.name;
-
-			ing.prepMethodID = recipeToLoad.value( 6 ).toInt();
-			if ( ing.prepMethodID != -1 ) {
-				QSqlQuery prepMethodToLoad( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ), database );
-				if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
-					ing.prepMethod = unescapeAndDecode( prepMethodToLoad.value( 0 ).toString() );
-			}
-
-			ing.groupID = recipeToLoad.value( 7 ).toInt();
-			if ( ing.groupID != -1 ) {
-				QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
-				if ( toLoad.isActive() && toLoad.first() )
-					ing.group = unescapeAndDecode( toLoad.value( 0 ).toString() );
-			}
-
-			recipe->ingList.append( ing );
+			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
 		}
 	}
 
+	// Read the ingredients
+	if ( items & RecipeDB::Ingredients ) {
+		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
+		
+			m_query.exec( command );
+			if ( m_query.isActive() ) {
+				while ( m_query.next() ) {
+					Ingredient ing;
+					ing.ingredientID = m_query.value( 0 ).toInt();
+					ing.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+					ing.amount = m_query.value( 2 ).toDouble();
+					ing.unitID = m_query.value( 3 ).toInt();
+					ing.units.name = unescapeAndDecode( m_query.value( 4 ).toString() );
+					ing.units.plural = unescapeAndDecode( m_query.value( 5 ).toString() );
+		
+					//if we don't have both name and plural, use what we have as both
+					if ( ing.units.name.isEmpty() )
+						ing.units.name = ing.units.plural;
+					else if ( ing.units.plural.isEmpty() )
+						ing.units.plural = ing.units.name;
+		
+					ing.prepMethodID = m_query.value( 6 ).toInt();
+					if ( ing.prepMethodID != -1 ) {
+						QSqlQuery prepMethodToLoad( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ), database );
+						if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
+							ing.prepMethod = unescapeAndDecode( prepMethodToLoad.value( 0 ).toString() );
+					}
+		
+					ing.groupID = m_query.value( 7 ).toInt();
+					if ( ing.groupID != -1 ) {
+						QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
+						if ( toLoad.isActive() && toLoad.first() )
+							ing.group = unescapeAndDecode( toLoad.value( 0 ).toString() );
+					}
+		
+					(*recipeIterators[ (*recipe_it).recipeID ]).ingList.append( ing );
+				}
+			}
+		}
+	}
 
 	//Load the Image
-	loadPhoto( recipeID, recipe->photo );
+	if ( items & RecipeDB::Photo ) {
+		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
+			loadPhoto( (*it).recipeID, (*it).photo );
+		}
+	}
 
 	//Load the category list
-	command = QString( "SELECT cl.category_id,c.name FROM category_list cl, categories c WHERE recipe_id=%1 AND cl.category_id=c.id;" ).arg( recipeID );
-
-	recipeToLoad.exec( command );
-	if ( recipeToLoad.isActive() ) {
-		while ( recipeToLoad.next() ) {
-			Element el;
-			el.id = recipeToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
-			if ( el.id != -1 )
-				recipe->categoryList.append( el ); // add to list except for default category (-1)
+	if ( items & RecipeDB::Categories ) {
+		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
+			
+			command = QString( "SELECT cl.category_id,c.name FROM category_list cl, categories c WHERE recipe_id=%1 AND cl.category_id=c.id;" ).arg( (*it).recipeID );
+		
+			m_query.exec( command );
+			if ( m_query.isActive() ) {
+				while ( m_query.next() ) {
+					Element el;
+					el.id = m_query.value( 0 ).toInt();
+					el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+					if ( el.id != -1 )
+						(*it).categoryList.append( el ); // add to list except for default category (-1)
+				}
+			}
 		}
 	}
 
 	//Load the author list
-	command = QString( "SELECT al.author_id,a.name FROM author_list al, authors a WHERE recipe_id=%1 AND al.author_id=a.id;" ).arg( recipeID );
+	if ( items & RecipeDB::Authors ) {
+		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 
-	recipeToLoad.exec( command );
-	if ( recipeToLoad.isActive() ) {
-		while ( recipeToLoad.next() ) {
-			Element el;
-			el.id = recipeToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
-			recipe->authorList.append( el );
-		}
-	}
-
-}
-
-/*
-Loads a recipe detail list (no instructions, no photo, no ingredients)
-*/
-
-void QSqlRecipeDB::loadRecipeDetails( RecipeList *rlist, bool loadIngredients, bool loadCategories, bool loadIngredientNames, bool loadAuthors )
-{
-	rlist->clear();
-
-	QMap <int, RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
-
-	QString command = "SELECT id,title,persons,prep_time FROM recipes";
-	QSqlQuery recipesToLoad( command, database );
-
-	if ( recipesToLoad.isActive() ) {
-		while ( recipesToLoad.next() ) {
-			Recipe rec;
-			rec.recipeID = recipesToLoad.value( 0 ).toInt();
-			rec.title = unescapeAndDecode( recipesToLoad.value( 1 ).toString() );
-			rec.persons = recipesToLoad.value( 2 ).toInt();
-			rec.prepTime = recipesToLoad.value( 3 ).toTime();
-			RecipeList::Iterator it = rlist->append( rec );
-			recipeIterators[ rec.recipeID ] = it;
-		}
-	}
-
-	if ( loadIngredients )  // Note that names of ingredients, units....are not loaded just the needed id's
-	{
-
-		if ( !loadIngredientNames )
-			command = QString( "SELECT ingredient_id,amount,unit_id,recipe_id FROM ingredient_list;" );
-		else
-			command = QString( "SELECT il.ingredient_id,il.amount,il.unit_id,il.recipe_id,i.name FROM ingredient_list il,ingredients i WHERE il.ingredient_id=i.id;" );
-
-		QSqlQuery ingredientsToLoad( command, database );
-
-		if ( ingredientsToLoad.isActive() )
-		{
-			while ( ingredientsToLoad.next() ) {
-				Ingredient ing;
-
-				// get this ingredient
-				ing.ingredientID = ingredientsToLoad.value( 0 ).toInt();
-				ing.amount = ingredientsToLoad.value( 1 ).toDouble();
-				ing.unitID = ingredientsToLoad.value( 2 ).toInt();
-				if ( loadIngredientNames )
-					ing.name = unescapeAndDecode( ingredientsToLoad.value( 4 ).toString() );
-				// find the corresponding recipe iterator
-				if ( recipeIterators.contains( ingredientsToLoad.value( 3 ).toInt() ) ) {
-					RecipeList::Iterator it = recipeIterators[ ingredientsToLoad.value( 3 ).toInt() ];
-
-					//add the ingredient to the recipe
-					( *it ).ingList.append( ing );
-
-				}
-			}
-		}
-
-
-	}
-
-	if ( loadCategories ) {
-		command = QString( "SELECT recipe_id,category_id FROM category_list;" ); // Note that we get no names, and the -1 default categories will leak here too.
-
-		QSqlQuery categoriesToLoad( command, database );
-
-		if ( categoriesToLoad.isActive() ) {
-			while ( categoriesToLoad.next() ) {
-				Element cty;
-
-				// get this category
-				cty.id = categoriesToLoad.value( 1 ).toInt();
-
-				// find the corresponding recipe iterator
-				if ( recipeIterators.contains( categoriesToLoad.value( 0 ).toInt() ) ) {
-					RecipeList::Iterator it = recipeIterators[ categoriesToLoad.value( 0 ).toInt() ];
-
-					//add the ingredient to the recipe
-					( *it ).categoryList.append( cty );
-
-				}
-			}
-		}
-
-
-
-
-	}
-
-	if ( loadAuthors ) {
-		command = QString( "SELECT recipe_id,author_id FROM author_list;" ); // Note that we get no names
-
-		QSqlQuery authorsToLoad( command, database );
-
-		if ( authorsToLoad.isActive() ) {
-			while ( authorsToLoad.next() ) {
-				Element cty;
-
-				// get this category
-				cty.id = authorsToLoad.value( 1 ).toInt();
-
-				// find the corresponding recipe iterator
-				if ( recipeIterators.contains( authorsToLoad.value( 0 ).toInt() ) ) {
-					RecipeList::Iterator it = recipeIterators[ authorsToLoad.value( 0 ).toInt() ];
-
-					//add the ingredient to the recipe
-					( *it ).authorList.append( cty );
-
+			command = QString( "SELECT al.author_id,a.name FROM author_list al, authors a WHERE recipe_id=%1 AND al.author_id=a.id;" ).arg( (*it).recipeID );
+		
+			m_query.exec( command );
+			if ( m_query.isActive() ) {
+				while ( m_query.next() ) {
+					Element el;
+					el.id = m_query.value( 0 ).toInt();
+					el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+					(*it).authorList.append( el );
 				}
 			}
 		}
 	}
-
 }
 
 void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 {
 	list->clear();
 
-	QString command;
-	command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
-	QSqlQuery toLoad( command, database );
+	QString command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
+	m_query.exec( command );
 
-	if ( toLoad.isActive() ) {
-		while ( toLoad.next() ) {
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
 			Element group;
-			group.id = toLoad.value( 0 ).toInt();
-			group.name = unescapeAndDecode( toLoad.value( 1 ).toString() );
+			group.id = m_query.value( 0 ).toInt();
+			group.name = unescapeAndDecode( m_query.value( 1 ).toString() );
 			list->append( group );
 		}
 	}
@@ -408,13 +286,13 @@ void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 
 	QString command = "SELECT id,name FROM ingredients ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery ingredientToLoad( command, database );
+	m_query.exec( command );
 
-	if ( ingredientToLoad.isActive() ) {
-		while ( ingredientToLoad.next() ) {
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
 			Element ing;
-			ing.id = ingredientToLoad.value( 0 ).toInt();
-			ing.name = unescapeAndDecode( ingredientToLoad.value( 1 ).toString() );
+			ing.id = m_query.value( 0 ).toInt();
+			ing.name = unescapeAndDecode( m_query.value( 1 ).toString() );
 			list->append( ing );
 		}
 	}
@@ -426,13 +304,13 @@ void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 
 	QString command = "SELECT id,name FROM prep_methods ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery prepMethodsToLoad( command, database );
+	m_query.exec( command );
 
-	if ( prepMethodsToLoad.isActive() ) {
-		while ( prepMethodsToLoad.next() ) {
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
 			Element prep_method;
-			prep_method.id = prepMethodsToLoad.value( 0 ).toInt();
-			prep_method.name = unescapeAndDecode( prepMethodsToLoad.value( 1 ).toString() );
+			prep_method.id = m_query.value( 0 ).toInt();
+			prep_method.name = unescapeAndDecode( m_query.value( 1 ).toString() );
 			list->append( prep_method );
 		}
 	}
@@ -638,8 +516,6 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 
 	QString command;
 
-
-
 	if ( !categoryID )  // load just the list
 	{
 		if ( !recipeCategoryList )
@@ -694,8 +570,6 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			}
 		}
 	}
-
-
 }
 
 
@@ -796,8 +670,6 @@ void QSqlRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 			list->append( unit );
 		}
 	}
-
-
 }
 
 void QSqlRecipeDB::removeUnitFromIngredient( int ingredientID, int unitID )
@@ -1024,7 +896,6 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 
 			list->add( prop );
 		}
-
 	}
 }
 
@@ -1258,8 +1129,6 @@ void QSqlRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID
 			results->append( recipe );
 		}
 	}
-
-
 }
 
 void QSqlRecipeDB::loadUnitRatios( UnitRatioList *ratioList )
@@ -1523,7 +1392,6 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	}
 
 
-
 	// Check for older versions, and port
 
 	kdDebug() << "Checking database version...\n";
@@ -1605,20 +1473,6 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 	}
 }
 
-void QSqlRecipeDB::loadRecipeCategories( int recipeID, ElementList *list )
-{
-	QString command = QString( "SELECT c.id,c.name FROM categories c,category_list cl WHERE cl.recipe_id=%1 AND c.id=cl.category_id;" ).arg( recipeID );
-	QSqlQuery categoryToLoad( command, database );
-	if ( categoryToLoad.isActive() ) {
-		while ( categoryToLoad.next() ) {
-			Element el;
-			el.id = categoryToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
-			list->append( el );
-		}
-	}
-}
-
 void QSqlRecipeDB::createNewCategory( const QString &categoryName, int parent_id )
 {
 	QString command;
@@ -1671,34 +1525,12 @@ void QSqlRecipeDB::removeCategory( int categoryID )
 	emit categoryRemoved( categoryID );
 }
 
-void QSqlRecipeDB::addCategoryToRecipe( int recipeID, int categoryID )
-{
-	QString command = QString( "INSERT INTO categories_list VALUES(%1,%2);" ).arg( recipeID ).arg( categoryID );
-	QSqlQuery categoryToAdd( command, database );
-}
-
-
 
 void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 {
 	list->clear();
 	QString command = "SELECT id,name FROM authors ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery authorToLoad( command, database );
-	if ( authorToLoad.isActive() ) {
-		while ( authorToLoad.next() ) {
-			Element el;
-			el.id = authorToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toString() );
-			list->append( el );
-		}
-	}
-}
-
-void QSqlRecipeDB::loadRecipeAuthors( int recipeID, ElementList *list )
-{
-	list->clear();
-	QString command = QString( "SELECT a.id,a.name FROM authors a, author_list al WHERE al.recipe_id=%1 AND a.id=al.author_id;" ).arg( recipeID );
 	QSqlQuery authorToLoad( command, database );
 	if ( authorToLoad.isActive() ) {
 		while ( authorToLoad.next() ) {
@@ -1741,13 +1573,6 @@ void QSqlRecipeDB::removeAuthor( int authorID )
 
 	emit authorRemoved( authorID );
 }
-
-void QSqlRecipeDB::addAuthorToRecipe( int recipeID, int authorID )
-{
-	QString command = QString( "INSERT INTO author_list VALUES(%1,%2);" ).arg( recipeID ).arg( authorID );
-	QSqlQuery authorToAdd( command, database );
-}
-
 
 int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID, ElementList *list )
 {
@@ -2162,7 +1987,7 @@ QString QSqlRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 
 QString QSqlRecipeDB::recipeTitle( int recipeID )
 {
-	QString command = QString( "SELECT * FROM recipes WHERE id=%1;" ).arg( recipeID );
+	QString command = QString( "SELECT title FROM recipes WHERE id=%1;" ).arg( recipeID );
 	QSqlQuery recipeToLoad( command, database );
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( recipeToLoad.value( 1 ).toString() );
@@ -2192,6 +2017,29 @@ QString QSqlRecipeDB::getNextInsertIDStr( const QString &table, const QString &c
 		id_str = QString::number( next_id );
 
 	return id_str;
+}
+
+void QSqlRecipeDB::search( RecipeList *list, int items,
+	const QString &title,
+	const QString &instructions,
+	const QStringList &ingsOr,
+	const QStringList &catsOr,
+	const QStringList &authorsOr,
+	const QTime &time, int prep_param,
+	int servings, int servings_param )
+{
+	QString query = buildSearchQuery(title,instructions,ingsOr,catsOr,authorsOr,time,prep_param,servings,servings_param);
+
+	QValueList<int> ids;
+	QSqlQuery recipeToLoad( query, database );
+	if ( recipeToLoad.isActive() ) {
+		while ( recipeToLoad.next() ) {
+			ids << recipeToLoad.value( 0 ).toInt();
+		}
+	}
+
+	if ( ids.count() > 0 )
+		loadRecipes( list, items, ids );
 }
 
 #include "qsqlrecipedb.moc"

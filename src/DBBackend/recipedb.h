@@ -61,6 +61,8 @@ public:
 	bool dbOK;
 	QString dbErr;
 
+	enum RecipeItems { All = 0xFF, None = 0, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Servings = 64, Title = 128 };
+
 signals:
 	void authorCreated( const Element & );
 	void authorRemoved( int id );
@@ -103,10 +105,6 @@ public:
 
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString::null );
-
-	virtual void addAuthorToRecipe( int recipeID, int categoryID ) = 0;
-	virtual void addCategoryToRecipe( int recipeID, int categoryID ) = 0;
-
 
 	virtual void addProperty( const QString &name, const QString &units ) = 0;
 	virtual void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID ) = 0;
@@ -153,7 +151,6 @@ public:
 
 	virtual int lastInsertID() = 0;
 
-	virtual void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true ) = 0;
 	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 ) = 0;
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
@@ -162,12 +159,9 @@ public:
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
 	virtual void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
-	virtual void loadRecipe( Recipe *recipe, int recipeID = 0 ) = 0;
+	void loadRecipe( Recipe *recipe, int items, int id );
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
-	void loadRecipes( RecipeList *recipes, const QValueList<int> &ids, KProgressDialog *progress_dlg = 0 ); //note: isn't virtual because this can be done with loadRecipe()
-	virtual void loadRecipeAuthors( int recipeID, ElementList *list ) = 0;
-	virtual void loadRecipeCategories( int recipeID, ElementList *categoryList ) = 0;
-	virtual void loadRecipeDetails( RecipeList *rlist, bool loadIngredients = false, bool loadCategories = false, bool loadIngredientNames = false, bool loadAuthors = false ) = 0; // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
+	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
@@ -226,6 +220,14 @@ public:
 
 	virtual void saveRecipe( Recipe *recipe ) = 0;
 	virtual void saveUnitRatio( const UnitRatio *ratio ) = 0;
+	virtual void search( RecipeList *list, int items,
+			const QString &title,
+			const QString &instructions,
+			const QStringList &ingsOr,
+			const QStringList &catsOr,
+			const QStringList &authorsOr,
+			const QTime &time, int prep_param,
+			int servings, int servings_param ) = 0;
 
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
@@ -295,6 +297,14 @@ public:
 
 protected:
 	virtual void portOldDatabases( float version ) = 0;
+
+	QString buildSearchQuery( const QString &title,
+		const QString &instructions,
+		const QStringList &ingsOr,
+		const QStringList &catsOr,
+		const QStringList &authorsOr,
+		const QTime &time, int prep_param,
+		int servings, int servings_param ) const;
 
 	double latestDBVersion() const;
 	QString krecipes_version() const;

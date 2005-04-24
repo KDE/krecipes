@@ -49,18 +49,9 @@ void KreDBImporter::parseFile( const QString &file )  //this is either a databas
 
 			setUnitRatioInfo( ratioList, unitList );
 
-			//get the ids
-			ElementList list;
-			database->loadRecipeList( &list );
-
-			QValueList<int> ids;
-			for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-				ids << ( *it ).id;
-			}
-
 			//now load recipes
 			RecipeList recipes;
-			database->loadRecipes( &recipes, ids );
+			database->loadRecipes( &recipes );
 
 			//now add these recipes to the importer
 			add( recipes );

@@ -43,6 +43,15 @@ protected:
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 
+	void search( RecipeList *list, int items,
+			const QString &title,
+			const QString &instructions,
+			const QStringList &ingsOr,
+			const QStringList &catsOr,
+			const QStringList &authorsOr,
+			const QTime &time, int prep_param,
+			int servings, int servings_param );
+
 	/** Return the next id for the given table and column.
 	  * If the database supports getting this afterwards,
 	  * leave the default implementation which returns -1.
@@ -56,6 +65,7 @@ protected:
 	}
 
 	QSqlDatabase *database;
+	QSqlQuery m_query;
 	QString DBuser;
 	QString DBpass;
 	QString DBhost;
@@ -65,10 +75,6 @@ public:
 	~QSqlRecipeDB( void );
 
 	void connect( bool create );
-
-	void addAuthorToRecipe( int recipeID, int categoryID );
-	void addCategoryToRecipe( int recipeID, int categoryID );
-
 
 	void addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
@@ -112,7 +118,6 @@ public:
 	//void initializeDB(void);
 	//void initializeData(void);
 
-	void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true );
 	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
 	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
@@ -121,10 +126,7 @@ public:
 	void loadPossibleUnits( int ingredientID, UnitList *list );
 	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
-	void loadRecipe( Recipe *recipe, int recipeID = 0 );
-	void loadRecipeAuthors( int recipeID, ElementList *list );
-	void loadRecipeCategories( int recipeID, ElementList *list );
-	void loadRecipeDetails( RecipeList *rlist, bool loadIngredients = false, bool loadCategories = false, bool loadIngredientNames = false, bool loadAuthors = false ); // Read only the recipe details (no instructions, no photo,...) and when loading ingredients and categories, no names by default, just IDs
+	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 );
 	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList );

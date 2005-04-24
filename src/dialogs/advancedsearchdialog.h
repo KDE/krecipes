@@ -32,92 +32,11 @@ class QPushButton;
 class QGroupBox;
 class QSpinBox;
 class QTimeEdit;
+class QLabel;
 class KPushButton;
 class KListView;
 
 class RecipeDB;
-
-
-class DualAuthorListView : public AuthorCheckListView
-{
-	Q_OBJECT
-
-public:
-	DualAuthorListView( QWidget *parent, RecipeDB *db );
-
-	void stateChange( AuthorCheckListItem *, bool );
-
-	QValueList<Element> positiveSelections;
-	QValueList<Element> negativeSelections;
-
-public slots:
-	void change( int index );
-
-protected:
-	virtual void createAuthor( const Element &ing );
-	virtual void removeAuthor( int id );
-
-	void load( int limit, int offset );
-
-private:
-	int last_state;
-	bool lock_updates;
-};
-
-class DualCategoryListView : public CategoryCheckListView
-{
-	Q_OBJECT
-
-public:
-	DualCategoryListView( QWidget *parent, RecipeDB *db );
-
-	void stateChange( CategoryCheckListItem *, bool );
-
-	QValueList<Element> positiveSelections;
-	QValueList<Element> negativeSelections;
-
-public slots:
-	void change( int index );
-
-protected:
-	virtual void createCategory( const Element &, int );
-	virtual void removeCategory( int id );
-	virtual void modifyCategory( const Element &category );
-	virtual void modifyCategory( int id, int parent_id );
-	virtual void mergeCategories( int id1, int id2 );
-
-	void load( int limit, int offset );
-
-private:
-	int last_state;
-	bool lock_updates;
-};
-
-class DualIngredientListView : public IngredientCheckListView
-{
-	Q_OBJECT
-
-public:
-	DualIngredientListView( QWidget *parent, RecipeDB *db );
-
-	void stateChange( IngredientCheckListItem *, bool );
-
-	QValueList<Element> positiveSelections;
-	QValueList<Element> negativeSelections;
-
-public slots:
-	void change( int index );
-
-protected:
-	virtual void createIngredient( const Element &ing );
-	virtual void removeIngredient( int id );
-
-	void load( int limit, int offset );
-
-private:
-	int last_state;
-	bool lock_updates;
-};
 
 
 class AdvancedSearchDialog : public QWidget
@@ -131,22 +50,21 @@ public:
 	void reload();
 	virtual void languageChange();
 
-private:
 	QTabWidget* paramsTabWidget;
 	QWidget* ingTab;
-	QCheckBox* enableIngCheckBox;
-	QFrame* ingredientsFrame;
-	QComboBox* ingTypeComboBox;
-	DualIngredientListView* ingListView;
-	QPushButton* ingSelectAllButton;
-	QPushButton* ingUnselectAllButton;
+	QLineEdit* ingredientsAllEdit;
+	QLineEdit* ingredientsAnyEdit;
+	QLabel* textLabel1_3;
+	QLabel* textLabel1_2;
+	QLabel* textLabel1;
+	QLineEdit* ingredientsWithoutEdit;
 	QWidget* catTab;
-	QCheckBox* enableCatCheckBox;
-	QFrame* categoriesFrame;
-	QComboBox* catTypeComboBox;
-	DualCategoryListView* catListView;
-	QPushButton* catSelectAllButton;
-	QPushButton* catUnselectAllButton;
+	QLineEdit* categoriesAnyEdit;
+	QLabel* textLabel1_3_3;
+	QLabel* textLabel1_2_3;
+	QLabel* textLabel1_5;
+	QLineEdit* categoriesNotEdit;
+	QLineEdit* categoriesAllEdit;
 	QWidget* servPrepTab;
 	QGroupBox* servingsBox;
 	QCheckBox* enableServingsCheckBox;
@@ -159,36 +77,27 @@ private:
 	QComboBox* prepTimeComboBox;
 	QTimeEdit* prepTimeEdit;
 	QWidget* authorTab;
-	QCheckBox* enableAuthorCheckBox;
-	QFrame* authorsFrame;
-	QComboBox* authorTypeComboBox;
-	DualAuthorListView* authorListView;
-	QPushButton* authorSelectAllButton;
-	QPushButton* authorUnselectAllButton;
+	QLineEdit* authorsAllEdit;
+	QLabel* textLabel1_6;
+	QLabel* textLabel1_3_4;
+	QLineEdit* authorsWithoutEdit;
+	QLabel* textLabel1_2_4;
+	QLineEdit* authorsAnyEdit;
 	KPushButton* findButton;
 	KPushButton* clearButton;
 	KListView* resultsListView;
-
-protected:
+	
+	protected:
 	QVBoxLayout* AdvancedSearchDialogLayout;
 	QHBoxLayout* layout17;
-	QHBoxLayout* ingTabLayout;
-	QVBoxLayout* layout18;
-	QSpacerItem* spacer6;
-	QVBoxLayout* ingredientsFrameLayout;
-	QHBoxLayout* catTabLayout;
-	QVBoxLayout* layout16;
-	QSpacerItem* spacer5;
-	QVBoxLayout* categoriesFrameLayout;
+	QGridLayout* ingTabLayout;
+	QGridLayout* catTabLayout;
 	QHBoxLayout* servPrepTabLayout;
 	QVBoxLayout* servingsBoxLayout;
 	QHBoxLayout* servingsFrameLayout;
 	QVBoxLayout* prepTimeBoxLayout;
 	QHBoxLayout* prepFrameLayout;
-	QHBoxLayout* authorTabLayout;
-	QVBoxLayout* layout15;
-	QSpacerItem* spacer4;
-	QVBoxLayout* authorsFrameLayout;
+	QGridLayout* authorTabLayout;
 	QVBoxLayout* layout9;
 	QSpacerItem* spacer7;
 
@@ -199,13 +108,7 @@ signals:
 
 private slots:
 	void search();
-
-	void selectAllAuthors();
-	void selectAllCategories();
-	void selectAllIngredients();
-	void unselectAllAuthors();
-	void unselectAllCategories();
-	void unselectAllIngredients();
+	void clear();
 };
 
 #endif //ADVANCEDSEARCHDIALOG_H

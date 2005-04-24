@@ -100,7 +100,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 	RecipeList rlist;
 	IngredientList ilist;
-	database->loadRecipeDetails( &rlist, true, false, true );
+	database->loadRecipes( &rlist, RecipeDB::Ingredients );
 
 	// First make a list of the ingredients that we have
 	{

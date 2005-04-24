@@ -689,7 +689,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	tabWidget->setCurrentPage( 0 );
 
 	// Load specified Recipe ID
-	database->loadRecipe( loadedRecipe, recipeID );
+	database->loadRecipe( loadedRecipe, RecipeDB::All, recipeID );
 
 
 	reload();

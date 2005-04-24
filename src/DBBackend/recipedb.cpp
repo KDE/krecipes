@@ -122,7 +122,17 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	return database;
 }
 
-void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KProgressDialog *progress_dlg )
+void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
+{
+	RecipeList rlist;
+	QValueList<int> ids; ids << id;
+	loadRecipes( &rlist, items, ids );
+
+	*recipe = *rlist.begin();
+}
+
+#if 0
+void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, int items, KProgressDialog *progress_dlg )
 {
 	if ( progress_dlg )
 		progress_dlg->progressBar() ->setTotalSteps( ids.count() );
@@ -132,7 +142,7 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 	QValueList<int>::const_iterator end = ids.end();
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != end; ++it ) {
 		Recipe recipe;
-		loadRecipe( &recipe, *it );
+		loadRecipe( &recipe, *it, items );
 		recipes->append( recipe );
 
 		if ( progress_dlg ) {
@@ -143,6 +153,7 @@ void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, KPr
 		}
 	}
 }
+#endif
 
 int RecipeDB::categoryCount()
 {
@@ -197,6 +208,104 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 		ids << QString::number(child_it->category.id);
 		getIDList(child_it,ids );
 	}
+}
+
+QString RecipeDB::buildSearchQuery( const QString &title,
+	const QString &instructions,
+	const QStringList &ingsOr,
+	const QStringList &catsOr,
+	const QStringList &authorsOr,
+	const QTime &time, int prep_param,
+	int servings, int servings_param ) const
+{
+	QStringList queryList, conditionList, tableList;
+
+	if ( ingsOr.count() != 0 ) {
+		tableList << "ingredient_list il" << "ingredients i";
+		conditionList << "il.ingredient_id=i.id" << "il.recipe_id=r.id";
+
+		QString condition = "(";
+		for ( QStringList::const_iterator it = ingsOr.begin(); it != ingsOr.end();) {
+			condition += "i.name LIKE '"+(*it)+"' ";
+			if ( ++it != ingsOr.end() ) {
+				condition += "OR ";
+			}
+		}
+		condition += ")";
+
+		conditionList << condition;
+	}
+
+	if ( catsOr.count() != 0 ) {
+		tableList << "category_list cl" << "categories c";
+		conditionList << "cl.category_id=c.id" << "cl.recipe_id=r.id";
+
+		QString condition = "(";
+		for ( QStringList::const_iterator it = catsOr.begin(); it != catsOr.end();) {
+			condition += "c.name LIKE '"+(*it)+"' ";
+			if ( ++it != catsOr.end() ) {
+				condition += "OR ";
+			}
+		}
+		condition += ")";
+
+		conditionList << condition;
+	}
+
+	if ( authorsOr.count() != 0 ) {
+		tableList << "author_list al" << "authors a";
+		conditionList << "al.author_id=a.id" << "al.recipe_id=r.id";
+
+		QString condition = "(";
+		for ( QStringList::const_iterator it = authorsOr.begin(); it != authorsOr.end();) {
+			condition += "a.name LIKE '"+(*it)+"'";
+			if ( ++it != authorsOr.end() ) {
+				condition += "OR ";
+			}
+		}
+		condition += ")";
+
+		conditionList << condition;
+	}
+
+	if ( !title.isEmpty() ) {
+		conditionList << "r.title LIKE '"+title+"'";
+	}
+
+	if ( !instructions.isEmpty() ) {
+		conditionList << "r.instructions LIKE '"+instructions+"'";
+	}
+
+	if ( !time.isNull() ) {
+		QString op;
+		switch ( prep_param ) {
+			case 0: op = "< "+time.toString( "'hh:mm:ss'" ); break;
+			case 1: op = "> "+time.toString( "'hh:mm:ss'" ); break;
+			case 2: //TODO: have a configurable 'about'.  It tests within 15 minutes for now.
+				QTime lower = time; lower.addSecs( 60*15 );
+				QTime upper = time; upper.addSecs( 60*-15 );
+				op = "BETWEEN "+lower.toString( "'hh:mm:ss'" )+" AND "+upper.toString( "'hh:mm:ss'" );
+				break;
+		}
+		conditionList << "r.prep_time "+op;
+	}
+
+	if ( servings > 0 ) {
+		QString op;
+		switch ( servings_param ) {
+			case 0: op = "> "+QString::number(servings); break;
+			case 1: op = "< "+QString::number(servings); break;
+			case 2: op = "BETWEEN "+QString::number(servings-5)+" AND "+QString::number(servings+5); break;
+		}
+		conditionList << "r.persons "+op;
+	}
+
+	QString wholeQuery = "SELECT r.id FROM recipes r"
+		+QString(tableList.count()!=0?","+tableList.join(","):"")
+		+QString(conditionList.count()!=0?" WHERE "+conditionList.join(" AND "):"");
+
+	kdDebug()<<"calling: "<<wholeQuery<<endl;
+	return wholeQuery+";";
 }
 
 //These are helper functions solely for use by the USDA data importer

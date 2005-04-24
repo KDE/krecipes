@@ -88,7 +88,7 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 	HTMLExporter html_generator( database, tmp_filename + ".html", "html", parentWidget() ->width() - sb_width );
 
 	RecipeList recipe_list;
-	database->loadRecipes( &recipe_list, ids );
+	database->loadRecipes( &recipe_list, RecipeDB::All, ids );
 	html_generator.exporter( recipe_list, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {
 		delete progress_dialog;
@@ -121,21 +121,23 @@ void RecipeViewDialog::reload()
 
 void RecipeViewDialog::removeOldFiles()
 {
-	RecipeList recipe_list;
-	database->loadRecipes( &recipe_list, ids_loaded );
+	if ( ids_loaded.count() > 0 ) {
+		RecipeList recipe_list;
+		database->loadRecipes( &recipe_list, RecipeDB::Title, ids_loaded );
 
-	QStringList recipe_titles;
-	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
-		recipe_titles << ( *it ).title;
+		QStringList recipe_titles;
+		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
+			recipe_titles << ( *it ).title;
 
-	HTMLExporter::removeHTMLFiles( tmp_filename, recipe_titles );
+		HTMLExporter::removeHTMLFiles( tmp_filename, recipe_titles );
+	}
 }
 
 void RecipeViewDialog::recipeRemoved( int id )
 {
 	//if the deleted recipe is loaded, clean the view up
 	if ( ids_loaded.find(id) != ids_loaded.end() ) { 
-		Recipe recipe; database->loadRecipe( &recipe, id );
+		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
 		HTMLExporter::removeHTMLFiles( tmp_filename, recipe.title );
 		ids_loaded.remove(id);
 	}
