@@ -39,4 +39,4 @@ libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs) $(psql_libs)
 libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 #install the following headers
-include_HEADERS = recipedb.h
+# include_HEADERS = recipedb.h
