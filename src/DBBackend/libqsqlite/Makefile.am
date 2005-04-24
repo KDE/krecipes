@@ -8,12 +8,10 @@ INCLUDES         = $(all_includes)
 
 #building the library
 
-lib_LTLIBRARIES=libkrecqsqlite.la
+noinst_LTLIBRARIES=libkrecqsqlite.la
 libkrecqsqlite_la_SOURCES=krecqsqlitedb.cpp krecqsqliteresult.cpp
 libkrecqsqlite_la_METASOURCES=AUTO
 
 #the library search path.
 libkrecqsqlite_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
-#install the following headers
-include_HEADERS = krecqsqliteresult.h krecqsqlitedb.h

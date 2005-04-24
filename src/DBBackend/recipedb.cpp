@@ -279,7 +279,7 @@ QString RecipeDB::buildSearchQuery( const QString &title,
 	if ( !time.isNull() ) {
 		QString op;
 		switch ( prep_param ) {
-			case 0: op = "< "+time.toString( "'hh:mm:ss'" ); break;
+			case 0: op = "<= "+time.toString( "'hh:mm:ss'" ); break;
 			case 1: op = "> "+time.toString( "'hh:mm:ss'" ); break;
 			case 2: //TODO: have a configurable 'about'.  It tests within 15 minutes for now.
 				QTime lower = time; lower.addSecs( 60*15 );

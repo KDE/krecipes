@@ -29,7 +29,7 @@ endif
 SUBDIRS=$(sqlite_subdirs) $(mysql_subdirs) $(psql_subdirs)
 
 # Instructions for building the convenience library
-noinst_LTLIBRARIES=libkrecipesdbs.la
+lib_LTLIBRARIES=libkrecipesdbs.la
 libkrecipesdbs_la_SOURCES=recipedb.cpp qsqlrecipedb.cpp
 libkrecipesdbs_la_METASOURCES=AUTO
 
@@ -37,3 +37,6 @@ libkrecipesdbs_la_LIBADD= $(mysql_libs) $(sqlite_libs) $(psql_libs)
 
 #the library search path.
 libkrecipesdbs_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+
+#install the following headers
+include_HEADERS = recipedb.h
