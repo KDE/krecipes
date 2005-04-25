@@ -122,7 +122,7 @@ bool RecipeFilter::hideIfEmpty( QListViewItem *parent )
 
 	bool parent_should_show = false;
 	for ( ; it; it = it->nextSibling() ) {
-		if ( it->rtti() == 1000 && it->isVisible() ) {
+		if ( (it->rtti() == 1000 && it->isVisible()) | (it->rtti() == NEXTLISTITEM_RTTI || it->rtti() == PREVLISTITEM_RTTI) ) {
 			parent_should_show = true;
 		}
 		else {
