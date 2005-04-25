@@ -47,7 +47,6 @@ public:
 	AdvancedSearchDialog( QWidget *parent, RecipeDB * );
 	~AdvancedSearchDialog();
 
-	void reload();
 	virtual void languageChange();
 
 	QTabWidget* paramsTabWidget;

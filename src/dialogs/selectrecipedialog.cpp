@@ -126,6 +126,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( recipeListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), categoryBox, SLOT( loadNextGroup() ) );
 	connect( recipeListView, SIGNAL( prevGroupLoaded() ), categoryBox, SLOT( loadPrevGroup() ) );
+	connect( recipeListView, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
+	connect( recipeListView, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
 	connect( categoryBox, SIGNAL( activated( int ) ), this, SLOT( filterComboCategory( int ) ) );
 	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
@@ -140,11 +142,15 @@ SelectRecipeDialog::~SelectRecipeDialog()
 
 void SelectRecipeDialog::reload()
 {
-	advancedSearch->reload();
 	recipeListView->reload();
 
 	categoryBox->reload();
 	filterComboCategory( categoryBox->currentItem() );
+}
+
+void SelectRecipeDialog::refilter()
+{
+	recipeFilter->filter(searchBox->text());
 }
 
 void SelectRecipeDialog::haveSelectedItems()

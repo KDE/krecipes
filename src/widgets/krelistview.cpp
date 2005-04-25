@@ -89,10 +89,24 @@ void KreListView::filter( const QString& s )
 	}
 }
 
+void KreListView::refilter()
+{
+	filter( filterEdit->text() );
+}
+
 void KreListView::setCustomFilter( QObject *receiver, const char *slot )
 {
 	disconnect( SIGNAL( textChanged( const QString& ) ), filterEdit, SLOT( filter( const QString& ) ) );
 	connect( filterEdit, SIGNAL( textChanged( const QString& ) ), receiver, slot );
+}
+
+void KreListView::setListView( DBListViewBase *list_view )
+{
+	delete list;
+
+	connect( list_view, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
+	connect( list_view, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
+	list = list_view;
 }
 
 #include "krelistview.moc"

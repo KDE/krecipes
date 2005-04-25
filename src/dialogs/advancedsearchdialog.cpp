@@ -237,8 +237,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepFrame, SLOT( setEnabled( bool ) ) );
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-
-	reload();
 }
 
 AdvancedSearchDialog::~AdvancedSearchDialog()
@@ -274,10 +272,6 @@ void AdvancedSearchDialog::languageChange()
 	findButton->setText( i18n( "Find" ) );
 	clearButton->setText( i18n( "C&lear" ) );
 	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
-}
-
-void AdvancedSearchDialog::reload()
-{
 }
 
 void AdvancedSearchDialog::clear()
@@ -406,11 +400,9 @@ QStringList AdvancedSearchDialog::split( const QString &text ) const
 			result += QStringList::split(' ',temp[i]);
 	}
 
-	kdDebug()<<endl<<"terms: "<<endl;
 	for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
 		(*it).replace("*","%");
 		(*it).replace("?","_");
-		kdDebug()<<"\t"<<*it<<endl;
 	}
 
 	return result;

@@ -88,6 +88,7 @@ signals:
 
 private slots:
 	void filterComboCategory( int row );
+	void refilter();
 
 public slots:
 	void haveSelectedItems();

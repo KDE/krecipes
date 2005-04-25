@@ -16,6 +16,7 @@
 #include <klistview.h>
 #include <klineedit.h>
 
+class DBListViewBase;
 
 /**
 @author Unai Garro
@@ -38,6 +39,8 @@ public:
 		delete list;
 		list = list_view;
 	}
+	void setListView( DBListViewBase *list_view );
+
 	void setCustomFilter( QObject *receiver, const char *slot );
 
 private:
@@ -47,8 +50,10 @@ private:
 	QLabel *filterLabel;
 	KLineEdit *filterEdit;
 	KListView *list;
+
 private slots:
 	void filter( const QString& s );
+	void refilter();
 
 };
 
