@@ -28,6 +28,7 @@
 #include <qwhatsthis.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qscrollview.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -48,170 +49,202 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	///
 	///BEGIN OF AUTOMATICALLY GENERATED GUI CODE///
 	///
-	AdvancedSearchDialogLayout = new QVBoxLayout( this, 11, 6, "AdvancedSearchDialogLayout"); 
+	AdvancedSearchDialogLayout = new QHBoxLayout( this, 11, 6, "AdvancedSearchDialogLayout"); 
 	
-	layout17 = new QHBoxLayout( 0, 0, 6, "layout17"); 
+	layout7 = new QVBoxLayout( 0, 0, 6, "layout7"); 
 	
-	paramsTabWidget = new QTabWidget( this, "paramsTabWidget" );
+	textLabel1_4 = new QLabel( this, "textLabel1_4" );
+	layout7->addWidget( textLabel1_4 );
 	
-	ingTab = new QWidget( paramsTabWidget, "ingTab" );
-	ingTabLayout = new QGridLayout( ingTab, 1, 1, 11, 6, "ingTabLayout"); 
+	scrollView1 = new QScrollView( this, "scrollView1" );
+	scrollView1->enableClipper(true);
 	
-	ingredientsAllEdit = new QLineEdit( ingTab, "ingredientsAllEdit" );
+	parametersFrame = new QFrame( scrollView1, "parametersFrame" );
+	parametersFrame->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, parametersFrame->sizePolicy().hasHeightForWidth() ) );
+	parametersFrame->setFrameShape( QFrame::NoFrame );
+	parametersFrame->setFrameShadow( QFrame::Plain );
+	parametersFrame->setLineWidth( 0 );
+	parametersFrameLayout = new QVBoxLayout( parametersFrame, 0, 0, "parametersFrameLayout"); 
 	
-	ingTabLayout->addWidget( ingredientsAllEdit, 0, 1 );
+	ingredientButton = new QPushButton( parametersFrame, "ingredientButton" );
+	ingredientButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( ingredientButton );
 	
-	ingredientsAnyEdit = new QLineEdit( ingTab, "ingredientsAnyEdit" );
+	ingredientFrame = new QFrame( parametersFrame, "ingredientFrame" );
+	ingredientFrame->setFrameShape( QFrame::StyledPanel );
+	ingredientFrame->setFrameShadow( QFrame::Raised );
+	ingredientFrameLayout = new QGridLayout( ingredientFrame, 1, 1, 11, 6, "ingredientFrameLayout"); 
 	
-	ingTabLayout->addWidget( ingredientsAnyEdit, 1, 1 );
+	ingredientsAllEdit = new QLineEdit( ingredientFrame, "ingredientsAllEdit" );
 	
-	textLabel1_3 = new QLabel( ingTab, "textLabel1_3" );
+	ingredientFrameLayout->addWidget( ingredientsAllEdit, 0, 1 );
 	
-	ingTabLayout->addWidget( textLabel1_3, 2, 0 );
+	ingredientsAnyEdit = new QLineEdit( ingredientFrame, "ingredientsAnyEdit" );
 	
-	textLabel1_2 = new QLabel( ingTab, "textLabel1_2" );
+	ingredientFrameLayout->addWidget( ingredientsAnyEdit, 1, 1 );
 	
-	ingTabLayout->addWidget( textLabel1_2, 1, 0 );
+	textLabel1_2 = new QLabel( ingredientFrame, "textLabel1_2" );
 	
-	textLabel1 = new QLabel( ingTab, "textLabel1" );
+	ingredientFrameLayout->addWidget( textLabel1_2, 1, 0 );
 	
-	ingTabLayout->addWidget( textLabel1, 0, 0 );
+	textLabel1 = new QLabel( ingredientFrame, "textLabel1" );
 	
-	ingredientsWithoutEdit = new QLineEdit( ingTab, "ingredientsWithoutEdit" );
+	ingredientFrameLayout->addWidget( textLabel1, 0, 0 );
 	
-	ingTabLayout->addWidget( ingredientsWithoutEdit, 2, 1 );
-	paramsTabWidget->insertTab( ingTab, QString::fromLatin1("") );
+	ingredientsWithoutEdit = new QLineEdit( ingredientFrame, "ingredientsWithoutEdit" );
 	
-	catTab = new QWidget( paramsTabWidget, "catTab" );
-	catTabLayout = new QGridLayout( catTab, 1, 1, 11, 6, "catTabLayout"); 
+	ingredientFrameLayout->addWidget( ingredientsWithoutEdit, 2, 1 );
 	
-	categoriesAnyEdit = new QLineEdit( catTab, "categoriesAnyEdit" );
+	textLabel1_3 = new QLabel( ingredientFrame, "textLabel1_3" );
 	
-	catTabLayout->addWidget( categoriesAnyEdit, 1, 1 );
+	ingredientFrameLayout->addWidget( textLabel1_3, 2, 0 );
+	parametersFrameLayout->addWidget( ingredientFrame );
+	spacer3_2_3_2_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	parametersFrameLayout->addItem( spacer3_2_3_2_2 );
 	
-	textLabel1_3_3 = new QLabel( catTab, "textLabel1_3_3" );
+	categoriesButton = new QPushButton( parametersFrame, "categoriesButton" );
+	categoriesButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( categoriesButton );
 	
-	catTabLayout->addWidget( textLabel1_3_3, 2, 0 );
+	categoryFrame = new QFrame( parametersFrame, "categoryFrame" );
+	categoryFrame->setFrameShape( QFrame::StyledPanel );
+	categoryFrame->setFrameShadow( QFrame::Raised );
+	categoryFrameLayout = new QGridLayout( categoryFrame, 1, 1, 11, 6, "categoryFrameLayout"); 
 	
-	textLabel1_2_3 = new QLabel( catTab, "textLabel1_2_3" );
+	categoriesAllEdit = new QLineEdit( categoryFrame, "categoriesAllEdit" );
 	
-	catTabLayout->addWidget( textLabel1_2_3, 1, 0 );
+	categoryFrameLayout->addWidget( categoriesAllEdit, 0, 2 );
 	
-	textLabel1_5 = new QLabel( catTab, "textLabel1_5" );
+	textLabel1_5 = new QLabel( categoryFrame, "textLabel1_5" );
 	
-	catTabLayout->addWidget( textLabel1_5, 0, 0 );
+	categoryFrameLayout->addMultiCellWidget( textLabel1_5, 0, 0, 0, 1 );
 	
-	categoriesNotEdit = new QLineEdit( catTab, "categoriesNotEdit" );
+	textLabel1_3_3 = new QLabel( categoryFrame, "textLabel1_3_3" );
 	
-	catTabLayout->addWidget( categoriesNotEdit, 2, 1 );
+	categoryFrameLayout->addWidget( textLabel1_3_3, 2, 0 );
 	
-	categoriesAllEdit = new QLineEdit( catTab, "categoriesAllEdit" );
+	categoriesAnyEdit = new QLineEdit( categoryFrame, "categoriesAnyEdit" );
 	
-	catTabLayout->addWidget( categoriesAllEdit, 0, 1 );
-	paramsTabWidget->insertTab( catTab, QString::fromLatin1("") );
+	categoryFrameLayout->addWidget( categoriesAnyEdit, 1, 2 );
 	
-	servPrepTab = new QWidget( paramsTabWidget, "servPrepTab" );
-	servPrepTabLayout = new QHBoxLayout( servPrepTab, 11, 6, "servPrepTabLayout"); 
+	textLabel1_2_3 = new QLabel( categoryFrame, "textLabel1_2_3" );
 	
-	servingsBox = new QGroupBox( servPrepTab, "servingsBox" );
-	servingsBox->setAlignment( int( QGroupBox::AlignVCenter ) );
-	servingsBox->setColumnLayout(0, Qt::Vertical );
-	servingsBox->layout()->setSpacing( 6 );
-	servingsBox->layout()->setMargin( 11 );
-	servingsBoxLayout = new QVBoxLayout( servingsBox->layout() );
-	servingsBoxLayout->setAlignment( Qt::AlignTop );
+	categoryFrameLayout->addMultiCellWidget( textLabel1_2_3, 1, 1, 0, 1 );
 	
-	enableServingsCheckBox = new QCheckBox( servingsBox, "enableServingsCheckBox" );
-	servingsBoxLayout->addWidget( enableServingsCheckBox );
+	categoriesNotEdit = new QLineEdit( categoryFrame, "categoriesNotEdit" );
 	
-	servingsFrame = new QFrame( servingsBox, "servingsFrame" );
-	servingsFrame->setEnabled( FALSE );
+	categoryFrameLayout->addMultiCellWidget( categoriesNotEdit, 2, 2, 1, 2 );
+	parametersFrameLayout->addWidget( categoryFrame );
+	spacer3_2_3_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	parametersFrameLayout->addItem( spacer3_2_3_2 );
+	
+	authorsButton = new QPushButton( parametersFrame, "authorsButton" );
+	authorsButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( authorsButton );
+	
+	authorsFrame = new QFrame( parametersFrame, "authorsFrame" );
+	authorsFrame->setFrameShape( QFrame::StyledPanel );
+	authorsFrame->setFrameShadow( QFrame::Raised );
+	authorsFrameLayout = new QGridLayout( authorsFrame, 1, 1, 11, 6, "authorsFrameLayout"); 
+	
+	textLabel1_2_4 = new QLabel( authorsFrame, "textLabel1_2_4" );
+	
+	authorsFrameLayout->addWidget( textLabel1_2_4, 1, 0 );
+	
+	textLabel1_6 = new QLabel( authorsFrame, "textLabel1_6" );
+	
+	authorsFrameLayout->addMultiCellWidget( textLabel1_6, 0, 0, 0, 1 );
+	
+	textLabel1_3_4 = new QLabel( authorsFrame, "textLabel1_3_4" );
+	
+	authorsFrameLayout->addMultiCellWidget( textLabel1_3_4, 2, 2, 0, 2 );
+	
+	authorsAnyEdit = new QLineEdit( authorsFrame, "authorsAnyEdit" );
+	
+	authorsFrameLayout->addMultiCellWidget( authorsAnyEdit, 1, 1, 1, 3 );
+	
+	authorsAllEdit = new QLineEdit( authorsFrame, "authorsAllEdit" );
+	
+	authorsFrameLayout->addMultiCellWidget( authorsAllEdit, 0, 0, 2, 3 );
+	
+	authorsWithoutEdit = new QLineEdit( authorsFrame, "authorsWithoutEdit" );
+	
+	authorsFrameLayout->addWidget( authorsWithoutEdit, 2, 3 );
+	parametersFrameLayout->addWidget( authorsFrame );
+	spacer3_2_3 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	parametersFrameLayout->addItem( spacer3_2_3 );
+	
+	servingsButton = new QPushButton( parametersFrame, "servingsButton" );
+	servingsButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( servingsButton );
+	
+	servingsFrame = new QFrame( parametersFrame, "servingsFrame" );
 	servingsFrame->setFrameShape( QFrame::StyledPanel );
 	servingsFrame->setFrameShadow( QFrame::Raised );
-	servingsFrame->setLineWidth( 0 );
-	servingsFrameLayout = new QHBoxLayout( servingsFrame, 0, 0, "servingsFrameLayout"); 
+	servingsFrameLayout = new QVBoxLayout( servingsFrame, 11, 6, "servingsFrameLayout"); 
+	
+	enableServingsCheckBox = new QCheckBox( servingsFrame, "enableServingsCheckBox" );
+	servingsFrameLayout->addWidget( enableServingsCheckBox );
+	
+	layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
 	
 	servingsComboBox = new QComboBox( FALSE, servingsFrame, "servingsComboBox" );
+	servingsComboBox->setEnabled( FALSE );
 	servingsComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, servingsComboBox->sizePolicy().hasHeightForWidth() ) );
-	servingsFrameLayout->addWidget( servingsComboBox );
+	layout5->addWidget( servingsComboBox );
 	
 	servingsSpinBox = new QSpinBox( servingsFrame, "servingsSpinBox" );
+	servingsSpinBox->setEnabled( FALSE );
 	servingsSpinBox->setMinValue( 1 );
-	servingsFrameLayout->addWidget( servingsSpinBox );
-	servingsBoxLayout->addWidget( servingsFrame );
-	servPrepTabLayout->addWidget( servingsBox );
+	layout5->addWidget( servingsSpinBox );
+	servingsFrameLayout->addLayout( layout5 );
+	parametersFrameLayout->addWidget( servingsFrame );
+	spacer3_2_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	parametersFrameLayout->addItem( spacer3_2_2 );
 	
-	prepTimeBox = new QGroupBox( servPrepTab, "prepTimeBox" );
-	prepTimeBox->setAlignment( int( QGroupBox::WordBreak | QGroupBox::AlignJustify | QGroupBox::AlignCenter | QGroupBox::AlignRight | QGroupBox::AlignLeft ) );
-	prepTimeBox->setColumnLayout(0, Qt::Vertical );
-	prepTimeBox->layout()->setSpacing( 6 );
-	prepTimeBox->layout()->setMargin( 11 );
-	prepTimeBoxLayout = new QVBoxLayout( prepTimeBox->layout() );
-	prepTimeBoxLayout->setAlignment( Qt::AlignTop );
+	prepTimeButton = new QPushButton( parametersFrame, "prepTimeButton" );
+	prepTimeButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( prepTimeButton );
 	
-	enablePrepTimeCheckBox = new QCheckBox( prepTimeBox, "enablePrepTimeCheckBox" );
-	prepTimeBoxLayout->addWidget( enablePrepTimeCheckBox );
+	prepTimeFrame = new QFrame( parametersFrame, "prepTimeFrame" );
+	prepTimeFrame->setFrameShape( QFrame::StyledPanel );
+	prepTimeFrame->setFrameShadow( QFrame::Raised );
+	prepTimeFrameLayout = new QVBoxLayout( prepTimeFrame, 11, 6, "prepTimeFrameLayout"); 
 	
-	prepFrame = new QFrame( prepTimeBox, "prepFrame" );
-	prepFrame->setEnabled( FALSE );
-	prepFrame->setFrameShape( QFrame::NoFrame );
-	prepFrame->setFrameShadow( QFrame::Plain );
-	prepFrame->setLineWidth( 0 );
-	prepFrameLayout = new QHBoxLayout( prepFrame, 0, 0, "prepFrameLayout"); 
+	enablePrepTimeCheckBox = new QCheckBox( prepTimeFrame, "enablePrepTimeCheckBox" );
+	prepTimeFrameLayout->addWidget( enablePrepTimeCheckBox );
 	
-	prepTimeComboBox = new QComboBox( FALSE, prepFrame, "prepTimeComboBox" );
+	layout6 = new QHBoxLayout( 0, 0, 6, "layout6"); 
+	
+	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame, "prepTimeComboBox" );
+	prepTimeComboBox->setEnabled( FALSE );
 	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
-	prepFrameLayout->addWidget( prepTimeComboBox );
+	layout6->addWidget( prepTimeComboBox );
 	
-	prepTimeEdit = new QTimeEdit( prepFrame, "prepTimeEdit" );
+	prepTimeEdit = new QTimeEdit( prepTimeFrame, "prepTimeEdit" );
+	prepTimeEdit->setEnabled( FALSE );
 	prepTimeEdit->setDisplay( int( QTimeEdit::Minutes | QTimeEdit::Hours ) );
-	prepFrameLayout->addWidget( prepTimeEdit );
-	prepTimeBoxLayout->addWidget( prepFrame );
-	servPrepTabLayout->addWidget( prepTimeBox );
-	paramsTabWidget->insertTab( servPrepTab, QString::fromLatin1("") );
+	layout6->addWidget( prepTimeEdit );
+	prepTimeFrameLayout->addLayout( layout6 );
+	parametersFrameLayout->addWidget( prepTimeFrame );
+	spacer15 = new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	parametersFrameLayout->addItem( spacer15 );
+	scrollView1->addChild( parametersFrame );
+	layout7->addWidget( scrollView1 );
 	
-	authorTab = new QWidget( paramsTabWidget, "authorTab" );
-	authorTabLayout = new QGridLayout( authorTab, 1, 1, 11, 6, "authorTabLayout"); 
-	
-	authorsAllEdit = new QLineEdit( authorTab, "authorsAllEdit" );
-	
-	authorTabLayout->addWidget( authorsAllEdit, 0, 2 );
-	
-	textLabel1_6 = new QLabel( authorTab, "textLabel1_6" );
-	
-	authorTabLayout->addMultiCellWidget( textLabel1_6, 0, 0, 0, 1 );
-	
-	textLabel1_3_4 = new QLabel( authorTab, "textLabel1_3_4" );
-	
-	authorTabLayout->addMultiCellWidget( textLabel1_3_4, 2, 2, 0, 1 );
-	
-	authorsWithoutEdit = new QLineEdit( authorTab, "authorsWithoutEdit" );
-	
-	authorTabLayout->addWidget( authorsWithoutEdit, 2, 2 );
-	
-	textLabel1_2_4 = new QLabel( authorTab, "textLabel1_2_4" );
-	
-	authorTabLayout->addWidget( textLabel1_2_4, 1, 0 );
-	
-	authorsAnyEdit = new QLineEdit( authorTab, "authorsAnyEdit" );
-	
-	authorTabLayout->addMultiCellWidget( authorsAnyEdit, 1, 1, 1, 2 );
-	paramsTabWidget->insertTab( authorTab, QString::fromLatin1("") );
-	layout17->addWidget( paramsTabWidget );
-	
-	layout9 = new QVBoxLayout( 0, 0, 6, "layout9"); 
-	
-	findButton = new KPushButton( this, "findButton" );
-	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
-	layout9->addWidget( findButton );
+	layout9 = new QHBoxLayout( 0, 0, 6, "layout9"); 
 	
 	clearButton = new KPushButton( this, "clearButton" );
 	clearButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, clearButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( clearButton );
-	spacer7 = new QSpacerItem( 21, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout9->addItem( spacer7 );
-	layout17->addLayout( layout9 );
-	AdvancedSearchDialogLayout->addLayout( layout17 );
+	spacer3 = new QSpacerItem( 136, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	layout9->addItem( spacer3 );
+	
+	findButton = new KPushButton( this, "findButton" );
+	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
+	layout9->addWidget( findButton );
+	layout7->addLayout( layout9 );
+	AdvancedSearchDialogLayout->addLayout( layout7 );
 	
 	resultsListView = new KListView( this, "resultsListView" );
 	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
@@ -221,6 +254,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	///
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	///
+
+	resultsListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+
+	scrollView1->setHScrollBarMode( QScrollView::AlwaysOff );
+	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -233,8 +271,22 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( findButton, SIGNAL( clicked() ), SLOT( search() ) );
 	connect( clearButton, SIGNAL( clicked() ), SLOT( clear() ) );
 
-	connect( enableServingsCheckBox, SIGNAL( toggled( bool ) ), servingsFrame, SLOT( setEnabled( bool ) ) );
-	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepFrame, SLOT( setEnabled( bool ) ) );
+	connect( enableServingsCheckBox, SIGNAL( toggled( bool ) ), servingsSpinBox, SLOT( setEnabled( bool ) ) );
+	connect( enableServingsCheckBox, SIGNAL( toggled( bool ) ), servingsComboBox, SLOT( setEnabled( bool ) ) );
+	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepTimeEdit, SLOT( setEnabled( bool ) ) );
+	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepTimeComboBox, SLOT( setEnabled( bool ) ) );
+
+	connect( ingredientButton, SIGNAL( toggled( bool ) ), ingredientFrame, SLOT( setShown( bool ) ) );
+	connect( authorsButton, SIGNAL( toggled( bool ) ), authorsFrame, SLOT( setShown( bool ) ) );
+	connect( categoriesButton, SIGNAL( toggled( bool ) ), categoryFrame, SLOT( setShown( bool ) ) );
+	connect( servingsButton, SIGNAL( toggled( bool ) ), servingsFrame, SLOT( setShown( bool ) ) );
+	connect( prepTimeButton, SIGNAL( toggled( bool ) ), prepTimeFrame, SLOT( setShown( bool ) ) );
+	
+	ingredientFrame->setShown(false);
+	authorsFrame->setShown(false);
+	categoryFrame->setShown(false);
+	servingsFrame->setShown(false);
+	prepTimeFrame->setShown(false);
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 }
@@ -244,34 +296,34 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 
 void AdvancedSearchDialog::languageChange()
 {
-	textLabel1_3->setText( i18n( "Without the following:" ) );
+	textLabel1_4->setText( i18n( "Search using the following criteria:" ) );
+	ingredientButton->setText( i18n( "Ingredients >>" ) );
 	textLabel1_2->setText( i18n( "Uses any of the following:" ) );
 	textLabel1->setText( i18n( "Uses all the following:" ) );
-	paramsTabWidget->changeTab( ingTab, i18n( "Ingredients" ) );
+	textLabel1_3->setText( i18n( "Without the following:" ) );
+	categoriesButton->setText( i18n( "Categories >>" ) );
+	textLabel1_5->setText( i18n( "In all the following:" ) );
 	textLabel1_3_3->setText( i18n( "Not in the following:" ) );
 	textLabel1_2_3->setText( i18n( "In any of the following:" ) );
-	textLabel1_5->setText( i18n( "In all the following:" ) );
-	paramsTabWidget->changeTab( catTab, i18n( "Categories" ) );
-	servingsBox->setTitle( i18n( "Servings" ) );
+	authorsButton->setText( i18n( "Authors >>" ) );
+	textLabel1_2_4->setText( i18n( "By any of the following:" ) );
+	textLabel1_6->setText( i18n( "By all the following:" ) );
+	textLabel1_3_4->setText( i18n( "Not by the following:" ) );
+	servingsButton->setText( i18n( "Servings >>" ) );
 	enableServingsCheckBox->setText( i18n( "Enabled" ) );
 	servingsComboBox->clear();
 	servingsComboBox->insertItem( i18n( "Serves at least:" ) );
 	servingsComboBox->insertItem( i18n( "Serves at most:" ) );
 	servingsComboBox->insertItem( i18n( "Serves about:" ) );
-	prepTimeBox->setTitle( i18n( "Preparation Time" ) );
+	prepTimeButton->setText( i18n( "Preparation Time >>" ) );
 	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
 	prepTimeComboBox->clear();
 	prepTimeComboBox->insertItem( i18n( "Ready in at least:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in more than:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
-	paramsTabWidget->changeTab( servPrepTab, i18n( "Servings/Preparation Time" ) );
-	textLabel1_6->setText( i18n( "By all the following:" ) );
-	textLabel1_3_4->setText( i18n( "Without the following:" ) );
-	textLabel1_2_4->setText( i18n( "By any of the following:" ) );
-	paramsTabWidget->changeTab( authorTab, i18n( "Authors" ) );
-	findButton->setText( i18n( "Find" ) );
 	clearButton->setText( i18n( "C&lear" ) );
 	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
+	findButton->setText( i18n( "Search" ) );
 }
 
 void AdvancedSearchDialog::clear()
