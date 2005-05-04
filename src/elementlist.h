@@ -29,6 +29,7 @@ public:
 	bool containsSubSet( ElementList &el );
 
 	Element findByName( const QString & ) const;
+	Element findByNameSubstr( const QString & ) const;
 
 	Element getElement( int index ) const;
 };

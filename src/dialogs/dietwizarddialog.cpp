@@ -41,7 +41,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( par
 	dietRList = new RecipeList();
 
 	//Design the dialog
-	setSpacing( 10 );
+	setSpacing( 5 );
 	// Options Box
 	optionsBox = new QHBox( this );
 
@@ -71,7 +71,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( par
 
 	// Tabs
 	mealTabs = new QTabWidget( this );
-	mealTabs->setMargin( 10 );
+	mealTabs->setMargin( 5 );
 
 	// Button bar
 	KIconLoader il;

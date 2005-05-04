@@ -17,9 +17,9 @@ IngredientProperty::IngredientProperty()
 }
 
 IngredientProperty::IngredientProperty( const QString &_name, const QString &_units, int _id ) :
+		id( _id ),
 		name( _name ),
-		units( _units ),
-		id( _id )
+		units( _units )
 {}
 
 IngredientProperty::~IngredientProperty()

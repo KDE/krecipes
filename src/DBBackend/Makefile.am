@@ -29,7 +29,7 @@ endif
 SUBDIRS=$(sqlite_subdirs) $(mysql_subdirs) $(psql_subdirs)
 
 # Instructions for building the convenience library
-lib_LTLIBRARIES=libkrecipesdbs.la
+noinst_LTLIBRARIES=libkrecipesdbs.la
 libkrecipesdbs_la_SOURCES=recipedb.cpp qsqlrecipedb.cpp
 libkrecipesdbs_la_METASOURCES=AUTO
 

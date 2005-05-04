@@ -257,6 +257,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	resultsListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 
+	AdvancedSearchDialogLayout->setStretchFactor( resultsListView, 2 );
+	scrollView1->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
+
 	scrollView1->setHScrollBarMode( QScrollView::AlwaysOff );
 	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
 
@@ -331,10 +334,19 @@ void AdvancedSearchDialog::clear()
 	resultsListView->clear();
 	authorsAllEdit->clear();
 	authorsWithoutEdit->clear();
+	authorsAnyEdit->clear();
 	categoriesAllEdit->clear();
 	categoriesNotEdit->clear();
+	categoriesAnyEdit->clear();
 	ingredientsAllEdit->clear();
 	ingredientsWithoutEdit->clear();
+	ingredientsAnyEdit->clear();
+
+	servingsSpinBox->setValue( 1 );
+	prepTimeEdit->setTime( QTime(0,0) );
+
+	enablePrepTimeCheckBox->setChecked(false);
+	enableServingsCheckBox->setChecked(false);
 }
 
 void AdvancedSearchDialog::search()
@@ -371,7 +383,7 @@ void AdvancedSearchDialog::search()
 	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( *author_it ).id == -1 ) {
+			if ( ( *it ).authorList.findByNameSubstr( *author_it ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -380,7 +392,7 @@ void AdvancedSearchDialog::search()
 	items = split(authorsWithoutEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( *author_it ).id != -1 ) {
+			if ( ( *it ).authorList.findByNameSubstr( *author_it ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -391,7 +403,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesAllEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( *cat_it ).id == -1 ) {
+			if ( ( *it ).categoryList.findByNameSubstr( *cat_it ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -400,7 +412,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesNotEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( *cat_it ).id != -1 ) {
+			if ( ( *it ).categoryList.findByNameSubstr( *cat_it ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -411,7 +423,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsAllEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( *ing_it ).ingredientID == -1 ) {
+			if ( ( *it ).ingList.findByNameSubstr( *ing_it ).ingredientID == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -420,7 +432,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsWithoutEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( *ing_it ).ingredientID != -1 ) {
+			if ( ( *it ).ingList.findByNameSubstr( *ing_it ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -452,10 +464,12 @@ QStringList AdvancedSearchDialog::split( const QString &text ) const
 			result += QStringList::split(' ',temp[i]);
 	}
 
+	/*
 	for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
 		(*it).replace("*","%");
 		(*it).replace("?","_");
 	}
+	*/
 
 	return result;
 }

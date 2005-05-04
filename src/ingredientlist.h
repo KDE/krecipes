@@ -36,6 +36,7 @@ public:
 	void empty( void );
 	int find( int id ) const;
 	Ingredient findByName( const QString & ) const;
+	Ingredient findByNameSubstr( const QString & ) const;
 	IngredientList::const_iterator find( IngredientList::const_iterator, int id ) const;
 	IngredientList::iterator find( IngredientList::iterator, int id );
 

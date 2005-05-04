@@ -34,6 +34,19 @@ Element ElementList::findByName( const QString &name ) const
 	return el;
 }
 
+Element ElementList::findByNameSubstr( const QString &name ) const
+{
+	ElementList::const_iterator end = constEnd();
+	for ( ElementList::const_iterator it = constBegin(); it != end; ++it ) {
+		if ( ( *it ).name.contains(name,false) )
+			return * it;
+	}
+
+	Element el;
+	el.id = -1;
+	return el;
+}
+
 bool ElementList::containsId( int id ) const // Search by id (which uses search by item, with comparison defined on header)
 {
 	Element i;

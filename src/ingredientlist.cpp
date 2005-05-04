@@ -76,6 +76,19 @@ Ingredient IngredientList::findByName( const QString &ing ) const
 	return el;
 }
 
+Ingredient IngredientList::findByNameSubstr( const QString &ing ) const
+{
+	IngredientList::const_iterator end = constEnd();
+	for ( IngredientList::const_iterator it = constBegin(); it != end; ++it ) {
+		if ( ( *it ).name.contains(ing,false) )
+			return *it;
+	}
+
+	Ingredient el;
+	el.ingredientID = -1;
+	return el;
+}
+
 IngredientList::const_iterator IngredientList::find( IngredientList::const_iterator it, int id ) const // Search by id (which uses search by item, with comparison defined on header)
 {
 	Ingredient i;
