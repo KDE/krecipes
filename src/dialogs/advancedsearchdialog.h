@@ -51,6 +51,9 @@ public:
 	QLabel* textLabel1_4;
 	QScrollView* scrollView1;
 	QFrame* parametersFrame;
+	QLineEdit* titleEdit;
+	QPushButton* titleButton;
+	QFrame* titleFrame;
 	QPushButton* ingredientButton;
 	QFrame* ingredientFrame;
 	QLineEdit* ingredientsAllEdit;
@@ -98,7 +101,9 @@ protected:
 	QSpacerItem* spacer3_2_3_2;
 	QSpacerItem* spacer3_2_3;
 	QSpacerItem* spacer3_2_2;
+	QSpacerItem* titleFrameSpacer;
 	QSpacerItem* spacer15;
+	QHBoxLayout* titleFrameLayout;
 	QGridLayout* ingredientFrameLayout;
 	QGridLayout* categoryFrameLayout;
 	QGridLayout* authorsFrameLayout;
