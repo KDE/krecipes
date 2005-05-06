@@ -27,7 +27,7 @@
 #include <kstatusbar.h>
 
 #include "mixednumber.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "exporters/htmlexporter.h"
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),

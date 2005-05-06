@@ -21,7 +21,7 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 
 SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db ) : QDialog( parent, 0, true )
 {

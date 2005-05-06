@@ -17,7 +17,7 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
 
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->authorCount() )

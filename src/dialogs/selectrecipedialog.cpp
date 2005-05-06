@@ -25,8 +25,8 @@
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
-#include "DBBackend/recipedb.h"
-#include "recipe.h"
+#include "backends/recipedb.h"
+#include "datablocks/recipe.h"
 #include "selectunitdialog.h"
 #include "createelementdialog.h"
 #include "recipefilter.h"

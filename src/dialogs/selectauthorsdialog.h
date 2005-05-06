@@ -20,7 +20,7 @@
 #include <klistview.h>
 #include <kcombobox.h>
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 class RecipeDB;
 

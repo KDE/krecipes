@@ -16,7 +16,7 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 
-#include "element.h"
+#include "datablocks/element.h"
 
 class RecipeDB;
 

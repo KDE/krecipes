@@ -10,7 +10,7 @@
 #ifndef INGREDIENTPROPERTYLIST_H
 #define INGREDIENTPROPERTYLIST_H
 #include <qptrlist.h>
-#include "ingredientproperty.h"
+#include "datablocks/ingredientproperty.h"
 
 /**
 @author Unai Garro

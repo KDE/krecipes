@@ -18,7 +18,7 @@
 #include <qstringlist.h>
 #include <kstandarddirs.h>
 
-#include "recipe.h"
+#include "datablocks/recipe.h"
 #include "datablocks/categorytree.h"
 
 KreImporter::KreImporter() : BaseImporter()

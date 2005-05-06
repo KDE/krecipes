@@ -14,7 +14,7 @@
 #include <qstringlist.h>
 
 #include "baseimporter.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 class RezkonvImporter : public BaseImporter
 {

@@ -9,7 +9,7 @@
 ***************************************************************************/
 #include "constraintlist.h"
 
-#include "ingredientproperty.h"
+#include "datablocks/ingredientproperty.h"
 
 ConstraintList::ConstraintList()
 {}

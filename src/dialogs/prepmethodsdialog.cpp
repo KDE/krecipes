@@ -13,7 +13,7 @@
 #include "prepmethodsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "widgets/prepmethodlistview.h"
 
 #include <kdialog.h>

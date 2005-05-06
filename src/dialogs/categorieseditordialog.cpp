@@ -19,7 +19,7 @@
 
 #include "widgets/categorylistview.h"
 #include "createcategorydialog.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 
 CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {

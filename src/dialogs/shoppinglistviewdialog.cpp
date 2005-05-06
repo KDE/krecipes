@@ -11,7 +11,7 @@
 ***************************************************************************/
 
 #include "shoppinglistviewdialog.h"
-#include "ingredientlist.h"
+#include "datablocks/ingredientlist.h"
 #include "mixednumber.h"
 
 #include <qpushbutton.h>

@@ -11,10 +11,10 @@
 ***************************************************************************/
 
 #include "ingredientsdialog.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "createelementdialog.h"
-#include "editbox.h"
-#include "ingredientpropertylist.h"
+#include "widgets/editbox.h"
+#include "datablocks/ingredientpropertylist.h"
 #include "unitsdialog.h"
 #include "usdadatadialog.h"
 #include "selectpropertydialog.h"

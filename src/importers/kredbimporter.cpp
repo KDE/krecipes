@@ -16,7 +16,7 @@
 
 #include "datablocks/recipelist.h"
 #include "datablocks/categorytree.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 
 KreDBImporter::KreDBImporter( const QString &_dbType, const QString &_host, const QString &_user, const QString &_pass ) : BaseImporter(),
 		dbType( _dbType ),

@@ -34,10 +34,10 @@
 
 #include "datablocks/constraintlist.h"
 #include "datablocks/recipelist.h"
-#include "elementlist.h"
-#include "ingredientpropertylist.h"
-#include "recipe.h"
-#include "unitratiolist.h"
+#include "datablocks/elementlist.h"
+#include "datablocks/ingredientpropertylist.h"
+#include "datablocks/recipe.h"
+#include "datablocks/unitratiolist.h"
 
 class EditBox;
 class DishInput;

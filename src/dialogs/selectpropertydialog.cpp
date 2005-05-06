@@ -16,7 +16,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "ingredientpropertylist.h"
+#include "datablocks/ingredientpropertylist.h"
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList ) : QDialog( parent )
 {

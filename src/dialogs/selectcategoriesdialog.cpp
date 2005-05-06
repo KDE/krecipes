@@ -19,7 +19,7 @@
 #include <kmessagebox.h>
 
 #include "datablocks/categorytree.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "widgets/categorylistview.h"
 
 SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const QMap<Element, bool> &selected, RecipeDB *db ) : QDialog( parent, 0, true )

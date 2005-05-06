@@ -15,7 +15,7 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "createpropertydialog.h"
 #include "widgets/propertylistview.h"
 

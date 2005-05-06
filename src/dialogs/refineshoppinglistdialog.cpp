@@ -23,7 +23,7 @@
 #include <kapplication.h>
 #include <kcursor.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "widgets/krelistview.h"
 #include "widgets/ingredientlistview.h"
 #include "shoppinglistviewdialog.h"

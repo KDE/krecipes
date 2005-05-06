@@ -7,7 +7,7 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
-#include "editbox.h"
+#include "widgets/editbox.h"
 #include <qlayout.h>
 #include <iostream>
 #include <klocale.h>

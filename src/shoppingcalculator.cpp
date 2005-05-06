@@ -11,9 +11,10 @@
 
 #include <kdebug.h>
 
-#include "elementlist.h"
-#include "ingredientlist.h"
-#include "DBBackend/recipedb.h"
+#include "datablocks/elementlist.h"
+#include "datablocks/ingredientlist.h"
+
+#include "backends/recipedb.h"
 
 void calculateShopping( const ElementList &recipeList, IngredientList *ingredientList, RecipeDB *db )
 {

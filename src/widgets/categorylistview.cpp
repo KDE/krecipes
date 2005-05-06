@@ -18,7 +18,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 

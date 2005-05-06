@@ -19,7 +19,7 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "dialogs/createunitdialog.h"
 #include "dialogs/dependanciesdialog.h"
 #include "datablocks/unit.h"

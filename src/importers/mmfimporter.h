@@ -14,8 +14,8 @@
 #include <qstring.h>
 
 #include "baseimporter.h"
-#include "ingredientlist.h"
-#include "elementlist.h"
+#include "datablocks/ingredientlist.h"
+#include "datablocks/elementlist.h"
 
 /** Class to import Meal-Master's MMF (Meal-Master Format) file format.
   * @author Jason Kivlighn

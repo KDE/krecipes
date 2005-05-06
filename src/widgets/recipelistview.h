@@ -15,7 +15,7 @@
 #include <qdragobject.h>
 
 #include "categorylistview.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 class QDragObject;
 class QDropEvent;

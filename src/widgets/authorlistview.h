@@ -13,7 +13,7 @@
 #define AUTHORLISTVIEW_H
 
 #include "dblistviewbase.h"
-#include "element.h"
+#include "datablocks/element.h"
 
 class RecipeDB;
 class KPopupMenu;

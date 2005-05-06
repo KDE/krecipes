@@ -16,7 +16,7 @@
 #include <klistview.h>
 #include <qpushbutton.h>
 
-#include "unitratiolist.h"
+#include "datablocks/unitratiolist.h"
 
 class RecipeDB;
 class ConversionTable;

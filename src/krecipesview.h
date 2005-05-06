@@ -34,7 +34,7 @@
 #include <ktextbrowser.h>
 
 #include "importers/baseimporter.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "krecipesiface.h"
 
 class AuthorsDialog;

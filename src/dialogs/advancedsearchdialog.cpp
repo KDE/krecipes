@@ -39,7 +39,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "recipeactionshandler.h"
 #include "widgets/recipelistview.h"
 

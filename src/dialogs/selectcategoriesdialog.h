@@ -18,7 +18,7 @@
 #include <qpushbutton.h>
 #include <klistview.h>
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 class CategoryTree;
 class CategoryCheckListItem;

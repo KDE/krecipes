@@ -11,7 +11,7 @@
 #ifndef RECIPELIST_H
 #define RECIPELIST_H
 
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 #include <qvaluelist.h>
 

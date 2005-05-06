@@ -32,8 +32,8 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "recipe.h"
-#include "fractioninput.h"
+#include "datablocks/recipe.h"
+#include "widgets/fractioninput.h"
 
 #define FACTOR_RADIO_BUTTON 0
 #define SERVINGS_RADIO_BUTTON 1

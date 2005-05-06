@@ -13,8 +13,8 @@
 
 #include <klistview.h>
 
-#include "element.h"
-#include "ingredientproperty.h"
+#include "datablocks/element.h"
+#include "datablocks/ingredientproperty.h"
 #include "datablocks/constraintlist.h"
 
 class RecipeDB;

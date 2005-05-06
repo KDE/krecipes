@@ -16,9 +16,9 @@
 #include "unitsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
-#include "DBBackend/recipedb.h"
-#include "editbox.h"
-#include "conversiontable.h"
+#include "backends/recipedb.h"
+#include "widgets/editbox.h"
+#include "widgets/conversiontable.h"
 #include "widgets/unitlistview.h"
 
 #include <kapplication.h>

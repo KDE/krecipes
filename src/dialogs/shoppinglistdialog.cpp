@@ -17,7 +17,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "refineshoppinglistdialog.h"
 #include "datablocks/recipelist.h"
 #include "widgets/recipelistview.h"

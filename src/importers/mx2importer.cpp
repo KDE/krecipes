@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <qtextstream.h>
 #include <qdatetime.h>
 
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 
 MX2Importer::MX2Importer()

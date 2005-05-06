@@ -20,7 +20,7 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 
 BaseExporter::BaseExporter( const QString& _filename, const QString &_format ) :
 		file( 0 ),

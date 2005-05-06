@@ -20,7 +20,7 @@
 #include <qregexp.h>
 
 #include "mixednumber.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 NYCGenericImporter::NYCGenericImporter() : BaseImporter()
 {}

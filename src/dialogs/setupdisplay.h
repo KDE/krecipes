@@ -15,9 +15,10 @@
 #include <qwidget.h>
 #include <qmap.h>
 
-#include "../recipe.h"
-#include "../widgets/dragarea.h"
+#include "datablocks/recipe.h"
+#include "widgets/dragarea.h"
 #include "datablocks/kreborder.h"
+
 #include <math.h>
 
 class KPopupMenu;

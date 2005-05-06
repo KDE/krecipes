@@ -11,7 +11,7 @@
 ***************************************************************************/
 
 #include "dependanciesdialog.h"
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 #include <qlayout.h>
 

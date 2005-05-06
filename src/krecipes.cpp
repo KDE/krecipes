@@ -12,6 +12,7 @@
 #include "pref.h"
 #include "krecipes.h"
 #include "krecipesview.h"
+
 #include "dialogs/recipeviewdialog.h"
 #include "dialogs/recipeinputdialog.h"
 #include "dialogs/selectrecipedialog.h"
@@ -23,8 +24,7 @@
 #include "dialogs/unitsdialog.h"
 #include "dialogs/ingredientmatcherdialog.h"
 #include "dialogs/dbimportdialog.h"
-
-#include "gui/pagesetupdialog.h"
+#include "dialogs/pagesetupdialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -35,8 +35,8 @@
 #include "importers/rezkonvimporter.h"
 #include "importers/kredbimporter.h"
 
-#include "recipe.h"
-#include "DBBackend/recipedb.h"
+#include "datablocks/recipe.h"
+#include "backends/recipedb.h"
 
 #include <qdragobject.h>
 #include <kprinter.h>

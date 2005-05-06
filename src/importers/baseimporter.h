@@ -1,5 +1,7 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
+*   Unai Garro <ugarro@users.sourceforge.net>                             *
+*   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -17,8 +19,8 @@
 #include <qstringlist.h>
 
 #include "datablocks/recipelist.h"
-#include "elementlist.h"
-#include "unitratiolist.h"
+#include "datablocks/elementlist.h"
+#include "datablocks/unitratiolist.h"
 
 class Recipe;
 class RecipeDB;

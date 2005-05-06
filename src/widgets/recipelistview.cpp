@@ -19,7 +19,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 
 RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource, const char *name )
 		: QStoredDrag( RECIPEITEMMIMETYPE, dragSource, name )

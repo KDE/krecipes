@@ -20,7 +20,7 @@
 #include <qstringlist.h>
 
 #include "mixednumber.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 #include "mmdata.h"
 
 //TODO: pre-parse file and try to correct alignment errors in ingredients?

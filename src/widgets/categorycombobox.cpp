@@ -18,8 +18,8 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include "DBBackend/recipedb.h"
-#include "elementlist.h"
+#include "backends/recipedb.h"
+#include "datablocks/elementlist.h"
 #include "datablocks/categorytree.h"
 
 CategoryComboBox::CategoryComboBox( QWidget *parent, RecipeDB *db ) : KComboBox( parent ),

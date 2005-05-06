@@ -17,7 +17,7 @@
 #include <kiconloader.h>
 #include <kpopupmenu.h>
 
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "dialogs/createpropertydialog.h"
 
 PropertyCheckListItem::PropertyCheckListItem( QListView* klv, const IngredientProperty &property ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ),

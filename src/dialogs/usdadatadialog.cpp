@@ -24,8 +24,8 @@
 #include <qtextstream.h>
 #include <qvbox.h>
 
-#include "DBBackend/recipedb.h"
-#include "DBBackend/usda_property_data.h"
+#include "backends/recipedb.h"
+#include "backends/usda_property_data.h"
 #include "widgets/krelistview.h"
 
 USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent ) : KDialog( parent, 0, true ),

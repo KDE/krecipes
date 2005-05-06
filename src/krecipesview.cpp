@@ -12,12 +12,11 @@
 
 #include "krecipesview.h"
 
-#include <unistd.h> //FIXME: is this used?
-
 #include <qlayout.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qthread.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -34,6 +33,8 @@
 
 #include "recipeactionshandler.h"
 #include "setupwizard.h"
+#include "kstartuplogo.h"
+
 #include "dialogs/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
 #include "dialogs/selectrecipedialog.h"
@@ -46,7 +47,7 @@
 #include "dialogs/unitsdialog.h"
 #include "dialogs/prepmethodsdialog.h"
 #include "dialogs/ingredientmatcherdialog.h"
-#include "gui/kstartuplogo.h"
+
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
@@ -251,7 +252,6 @@ KrecipesView::KrecipesView( QWidget *parent )
 	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
 	// Close Splash Screen
-	sleep( 2 );
 	delete start_logo;
 }
 

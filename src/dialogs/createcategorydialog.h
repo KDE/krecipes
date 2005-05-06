@@ -16,7 +16,7 @@
 #include <qdialog.h>
 #include <qmap.h>
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 class KLineEdit;
 class QPushButton;

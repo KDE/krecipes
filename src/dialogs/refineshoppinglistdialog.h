@@ -15,7 +15,7 @@
 #include <qdialog.h>
 #include <qmap.h>
 
-#include "ingredientlist.h"
+#include "datablocks/ingredientlist.h"
 
 class QVBoxLayout;
 class QHBoxLayout;

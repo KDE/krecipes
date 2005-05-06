@@ -20,7 +20,7 @@
 #include <kdebug.h>
 
 #include "mixednumber.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 MXPImporter::MXPImporter() : BaseImporter()
 {}

@@ -30,7 +30,7 @@
 
 #include "propertycalculator.h"
 #include "mixednumber.h"
-#include "gui/setupdisplay.h"
+#include "dialogs/setupdisplay.h"
 #include "image.h"
 
 #include <cmath> //for ceil()

@@ -12,8 +12,8 @@
 
 #include "datablocks/recipelist.h"
 #include "widgets/ingredientlistview.h"
-#include "elementlist.h"
-#include "DBBackend/recipedb.h"
+#include "datablocks/elementlist.h"
+#include "backends/recipedb.h"
 #include "widgets/krelistview.h"
 #include "recipeactionshandler.h"
 

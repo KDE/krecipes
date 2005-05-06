@@ -14,8 +14,8 @@
 #define RECIPEMLIMPORTER_H
 
 #include "baseimporter.h"
-#include "ingredient.h"
-#include "recipe.h"
+#include "datablocks/ingredient.h"
+#include "datablocks/recipe.h"
 
 #include <qdom.h>
 

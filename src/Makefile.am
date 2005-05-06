@@ -4,10 +4,10 @@
 # of the other Makefile.am variables
 bin_PROGRAMS = krecipes
 
-SUBDIRS = DBBackend importers gui dialogs exporters widgets datablocks
+SUBDIRS = backends importers dialogs exporters widgets datablocks
 
 # set the include path for X, qt and KDE
-INCLUDES         = -I$(srcdir) -I$(srcdir)/DBBackend -I$(srcdir)/DBBackend/SQLite $(all_includes)
+INCLUDES         = -I$(srcdir) -I$(srcdir)/backends -I$(srcdir)/backends/SQLite $(all_includes)
 
 # the library search path.
 krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
@@ -15,22 +15,32 @@ krecipes_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 # Check for optional libs
 if link_lib_SQLITE
-qsqlite_libadds =DBBackend/libqsqlite/libkrecqsqlite.la DBBackend/SQLite/libkrecsqlite.la $(SQLITE_LIB)
+qsqlite_libadds = backends/SQLite/libkrecsqlite.la $(SQLITE_LIB)
 endif
 
 if link_lib_MYSQL
-mysql_libadds =DBBackend/MySQL/libkrecmysql.la
+mysql_libadds =backends/MySQL/libkrecmysql.la
 endif
 
 if link_lib_POSTGRESQL
-psql_libadds =DBBackend/PostgreSQL/libkrecpsql.la
+psql_libadds =backends/PostgreSQL/libkrecpsql.la
 endif
 
 # the shared libraries to link against.
-krecipes_LDADD = gui/libkstartuplogo.la DBBackend/libkrecipesdbs.la exporters/libkrecipesexporters.la importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la widgets/libkrecipeswidgets.la datablocks/libdatablocks.la $(qsqlite_libadds) $(mysql_libadds) $(psql_libadds) $(LIB_KHTML) $(LIB_KSPELL)
+krecipes_LDADD = \
+	backends/libkrecipesdbs.la exporters/libkrecipesexporters.la \
+	importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la \
+	widgets/libkrecipeswidgets.la datablocks/libdatablocks.la \
+	$(qsqlite_libadds) $(mysql_libadds) $(psql_libadds) $(LIB_KHTML) $(LIB_KSPELL)
 
 # which sources should be compiled for krecipes
-krecipes_SOURCES = main.cpp krecipes.cpp krecipesview.cpp pref.cpp krecipesiface.skel krecipesdbiface.skel recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp element.cpp ingredientproperty.cpp ingredientpropertylist.cpp editbox.cpp conversiontable.cpp unitratio.cpp unitratiolist.cpp propertycalculator.cpp setupwizard.cpp shoppingcalculator.cpp fractioninput.cpp mixednumber.cpp recipeactionshandler.cpp recipefilter.cpp
+krecipes_SOURCES = \
+	main.cpp krecipes.cpp krecipesview.cpp pref.cpp \
+	krecipesiface.skel krecipesdbiface.skel \
+	propertycalculator.cpp setupwizard.cpp \
+	shoppingcalculator.cpp kstartuplogo.cpp \
+	mixednumber.cpp recipeactionshandler.cpp \
+	recipefilter.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO

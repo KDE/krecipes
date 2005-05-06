@@ -16,7 +16,7 @@
 
 #include "dblistviewbase.h"
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 class KPopupMenu;
 

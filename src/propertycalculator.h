@@ -12,10 +12,10 @@
 #define PROPERTYCALCULATOR_H
 
 #include <qptrlist.h>
-#include <DBBackend/recipedb.h>
-#include "elementlist.h"
-#include "ingredientpropertylist.h"
-#include "recipe.h"
+#include <backends/recipedb.h>
+#include "datablocks/elementlist.h"
+#include "datablocks/ingredientpropertylist.h"
+#include "datablocks/recipe.h"
 
 int autoConvert( RecipeDB *database, double amount1, int unit1, double amount2, int unit2, double &newAmount, int &newID );
 void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList );

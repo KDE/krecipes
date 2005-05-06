@@ -15,7 +15,7 @@
 
 #include <qvaluelist.h>
 
-#include "ingredient.h"
+#include "datablocks/ingredient.h"
 
 /**
 @author Unai Garro

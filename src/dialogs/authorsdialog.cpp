@@ -12,7 +12,7 @@
 
 #include "authorsdialog.h"
 #include "createelementdialog.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "widgets/authorlistview.h"
 
 #include <kdialog.h>

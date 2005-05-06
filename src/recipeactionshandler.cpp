@@ -30,7 +30,7 @@
 
 #include "widgets/recipelistview.h"
 #include "widgets/categorylistview.h"
-#include "recipedb.h"
+#include "backends/recipedb.h"
 
 RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB *db, int actions ) : QObject( _parentListView ),
 		parentListView( _parentListView ),

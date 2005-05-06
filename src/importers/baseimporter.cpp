@@ -19,8 +19,8 @@
 
 #include <qvaluevector.h>
 
-#include "recipe.h"
-#include "recipedb.h"
+#include "datablocks/recipe.h"
+#include "backends/recipedb.h"
 #include "dialogs/recipeimportdialog.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"

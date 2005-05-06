@@ -30,7 +30,7 @@
 #include <qtoolbutton.h>
 #include <qvbox.h>
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 #include "datablocks/unit.h"
 
 class QTabWidget;

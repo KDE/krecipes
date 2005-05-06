@@ -11,9 +11,9 @@
 #ifndef INGREDIENTMATCHERDIALOG_H
 #define INGREDIENTMATCHERDIALOG_H
 
-#include "element.h"
-#include "ingredientlist.h"
-#include "recipe.h"
+#include "datablocks/element.h"
+#include "datablocks/ingredientlist.h"
+#include "datablocks/recipe.h"
 #include "widgets/recipelistview.h"
 
 #include <qfontmetrics.h>

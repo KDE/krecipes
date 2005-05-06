@@ -22,7 +22,7 @@
 #include <qvariant.h>
 #include <qdict.h>
 
-#include "recipe.h"
+#include "datablocks/recipe.h"
 
 RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent ) : QDialog( parent, 0, true ), list_copy( list )
 {

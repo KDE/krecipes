@@ -10,7 +10,7 @@
 ***************************************************************************/
 
 #include "conversiontable.h"
-#include "editbox.h"
+#include "widgets/editbox.h"
 #include "mixednumber.h"
 
 #include <qtooltip.h>

@@ -14,8 +14,8 @@
 #include <qtable.h>
 #include <qobject.h>
 
-#include "unitratio.h"
-#include "elementlist.h"
+#include "datablocks/unitratio.h"
+#include "datablocks/elementlist.h"
 #include "datablocks/unit.h"
 
 /**

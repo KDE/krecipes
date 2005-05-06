@@ -11,9 +11,9 @@
 ***************************************************************************/
 
 #include "dietwizarddialog.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "dietviewdialog.h"
-#include "editbox.h"
+#include "widgets/editbox.h"
 
 #include <qbitmap.h>
 #include <qheader.h>

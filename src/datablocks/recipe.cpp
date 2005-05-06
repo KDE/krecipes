@@ -8,41 +8,25 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
-#ifndef RECIPE_H
-#define RECIPE_H
+#include "datablocks/recipe.h"
 
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qdatetime.h>
-
-#include "ingredientlist.h"
-#include "elementlist.h"
-
-/**
-@author Unai Garro
-*/
-class Recipe
+Recipe::Recipe()
 {
-public:
-	Recipe();
-	~Recipe();
-	// Public variables
+	empty(); //Create & initialize the recipe empty originally
+}
 
-	int recipeID;
-	int persons;
-	QString title;
-	QString instructions;
-	QPixmap photo;
-	IngredientList ingList;
-	ElementList categoryList; // id+name
-	ElementList authorList; //authors' id+name
-	QTime prepTime;
+Recipe::~Recipe()
+{}
 
-	// Public methods
-	void empty( void );
-
-
-
-};
-
-#endif
+void Recipe::empty( void )
+{
+	recipeID = -1;
+	persons = 1;
+	title = QString::null;
+	instructions = QString::null;
+	photo.resize( 0, 0 ); //Resizing any dimension to 0, the image becomes a null image
+	ingList.empty();
+	categoryList.clear();
+	authorList.clear();
+	prepTime = QTime( 0, 0 );
+}

@@ -36,12 +36,12 @@
 #include "createunitdialog.h"
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
-#include "recipe.h"
+#include "datablocks/recipe.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
-#include "DBBackend/recipedb.h"
+#include "backends/recipedb.h"
 #include "selectcategoriesdialog.h"
-#include "fractioninput.h"
+#include "widgets/fractioninput.h"
 #include "widgets/kretextedit.h"
 #include "image.h" //Initializes default photo
 

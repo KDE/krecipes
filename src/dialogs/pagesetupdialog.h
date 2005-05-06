@@ -15,7 +15,7 @@
 
 #include <kdialog.h>
 
-#include "../recipe.h"
+#include "datablocks/recipe.h"
 #include "setupdisplay.h"
 
 class KPopupMenu;

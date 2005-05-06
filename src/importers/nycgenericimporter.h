@@ -15,8 +15,8 @@
 #include <qdatetime.h>
 
 #include "baseimporter.h"
-#include "ingredientlist.h"
-#include "elementlist.h"
+#include "datablocks/ingredientlist.h"
+#include "datablocks/elementlist.h"
 
 /** Class to import The NYC (Now You're Cooking) Generic Export file format.
   * @author Jason Kivlighn

@@ -17,7 +17,7 @@
 
 #include <qmap.h>
 
-#include "element.h"
+#include "datablocks/element.h"
 
 class RecipeDB;
 class CategoryTree;

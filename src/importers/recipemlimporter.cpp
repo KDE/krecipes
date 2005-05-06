@@ -17,7 +17,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "recipe.h"
+#include "datablocks/recipe.h"
 #include "mixednumber.h"
 
 RecipeMLImporter::RecipeMLImporter() : BaseImporter()

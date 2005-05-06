@@ -14,7 +14,7 @@
 #include <ktextedit.h>
 #include <kcompletion.h>
 
-#include "elementlist.h"
+#include "datablocks/elementlist.h"
 
 /*  @author Jason Kivlighn
  *  @brief An extended KTextEdit that allows for text completion
