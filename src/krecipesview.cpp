@@ -394,17 +394,20 @@ void KrecipesView::exportRecipe()
 		}
 		else*/
 	QWidget * vis_panel = rightPanel->visiblePanel();
-	if ( vis_panel == viewPanel ) {
-		if ( viewPanel->recipesLoaded() > 0 ) {
-			if ( viewPanel->recipesLoaded() == 1 )
-				RecipeActionsHandler::exportRecipes( viewPanel->currentRecipes(), i18n( "Export Recipe" ), database->recipeTitle( viewPanel->currentRecipes() [ 0 ] ), database );
-			else
-				RecipeActionsHandler::exportRecipes( viewPanel->currentRecipes(), i18n( "Export Recipe" ), i18n( "Recipes" ), database );
-		}
+	if ( vis_panel == viewPanel && viewPanel->recipesLoaded() > 0 ) {
+		exportRecipes( viewPanel->currentRecipes() );
 	}
 	else if ( vis_panel == selectPanel ) {
 		selectPanel->slotExportRecipe();
 	}
+}
+
+void KrecipesView::exportRecipes( const QValueList<int> &ids )
+{
+	if ( ids.count() == 1 )
+		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), database->recipeTitle( ids[ 0 ] ), database );
+	else
+		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), i18n( "Recipes" ), database );
 }
 
 void KrecipesView::actionRecipe( int recipeID, int action )

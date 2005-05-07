@@ -140,6 +140,8 @@ public:
 	{
 		importer.import( database );
 	}
+	
+	void exportRecipes( const QValueList<int> &ids );
 
 private:
 

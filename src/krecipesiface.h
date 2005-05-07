@@ -14,6 +14,8 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
+#include <qvaluelist.h>
+
 class KrecipesIface : virtual public DCOPObject
 {
 	K_DCOP
@@ -22,6 +24,8 @@ public:
 k_dcop:
 	virtual DCOPRef currentDatabase() const = 0;
 	virtual void reload() = 0;
+	
+	virtual void exportRecipes( const QValueList<int> &ids ) = 0;
 };
 
 #endif // _KRECIPESIFACE_H_
