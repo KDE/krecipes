@@ -211,8 +211,8 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 	}
 }
 
-QString RecipeDB::buildSearchQuery( const QString &title,
-	const QString &instructions,
+QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
+	const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
 	const QStringList &ingsOr,
 	const QStringList &catsOr,
 	const QStringList &authorsOr,
@@ -269,12 +269,32 @@ QString RecipeDB::buildSearchQuery( const QString &title,
 		conditionList << condition;
 	}
 
-	if ( !title.isEmpty() ) {
-		conditionList << "r.title LIKE '%"+title+"%'";
+	if ( titleKeywords.count() != 0 ) {
+		QString op = (requireAllTitleWords) ? "AND " : "OR ";
+
+		QString condition = "(";
+		for ( QStringList::const_iterator it = titleKeywords.begin(); it != titleKeywords.end();) {
+			condition += "r.title LIKE '%"+(*it)+"%' ";
+			if ( ++it != titleKeywords.end() ) {
+				condition += op;
+			}
+		}
+		condition += ")";
+		conditionList << condition;
 	}
 
-	if ( !instructions.isEmpty() ) {
-		conditionList << "r.instructions LIKE '%"+instructions+"%'";
+	if ( instructionsKeywords.count() != 0 ) {
+		QString op = (requireAllInstructionsWords) ? "AND " : "OR ";
+
+		QString condition = "(";
+		for ( QStringList::const_iterator it = instructionsKeywords.begin(); it != instructionsKeywords.end();) {
+			condition += "r.instructions LIKE '%"+(*it)+"%' ";
+			if ( ++it != instructionsKeywords.end() ) {
+				condition += op;
+			}
+		}
+		condition += ")";
+		conditionList << condition;
 	}
 
 	if ( !time.isNull() ) {

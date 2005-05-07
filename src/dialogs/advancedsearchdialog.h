@@ -88,9 +88,14 @@ public:
 	QCheckBox* enablePrepTimeCheckBox;
 	QComboBox* prepTimeComboBox;
 	QTimeEdit* prepTimeEdit;
+	QLineEdit* instructionsEdit;
+	QPushButton* instructionsButton;
+	QFrame* instructionsFrame;
 	KPushButton* clearButton;
 	KPushButton* findButton;
 	KListView* resultsListView;
+	QCheckBox *requireAllTitle;
+	QCheckBox *requireAllInstructions;
 	
 protected:
 	QHBoxLayout* AdvancedSearchDialogLayout;
@@ -102,14 +107,16 @@ protected:
 	QSpacerItem* spacer3_2_3;
 	QSpacerItem* spacer3_2_2;
 	QSpacerItem* titleFrameSpacer;
+	QSpacerItem* instructionsFrameSpacer;
 	QSpacerItem* spacer15;
-	QHBoxLayout* titleFrameLayout;
+	QVBoxLayout* titleFrameLayout;
 	QGridLayout* ingredientFrameLayout;
 	QGridLayout* categoryFrameLayout;
 	QGridLayout* authorsFrameLayout;
 	QVBoxLayout* servingsFrameLayout;
 	QHBoxLayout* layout5;
 	QVBoxLayout* prepTimeFrameLayout;
+	QVBoxLayout* instructionsFrameLayout;
 	QHBoxLayout* layout6;
 	QHBoxLayout* layout9;
 	QSpacerItem* spacer3;
@@ -122,6 +129,7 @@ signals:
 private slots:
 	void search();
 	void clear();
+	void buttonSwitched();
 
 private:
 	QStringList split( const QString &text ) const;

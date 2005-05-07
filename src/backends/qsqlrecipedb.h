@@ -45,8 +45,8 @@ protected:
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 
 	void search( RecipeList *list, int items,
-			const QString &title,
-			const QString &instructions,
+			const QStringList &titleKeywords, bool requireAllTitleWords,
+			const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
 			const QStringList &ingsOr,
 			const QStringList &catsOr,
 			const QStringList &authorsOr,

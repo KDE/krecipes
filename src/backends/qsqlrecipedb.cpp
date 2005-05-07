@@ -2020,15 +2020,19 @@ QString QSqlRecipeDB::getNextInsertIDStr( const QString &table, const QString &c
 }
 
 void QSqlRecipeDB::search( RecipeList *list, int items,
-	const QString &title,
-	const QString &instructions,
+	const QStringList &titleKeywords, bool requireAllTitleWords,
+	const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
 	const QStringList &ingsOr,
 	const QStringList &catsOr,
 	const QStringList &authorsOr,
 	const QTime &time, int prep_param,
 	int servings, int servings_param )
 {
-	QString query = buildSearchQuery(title,instructions,ingsOr,catsOr,authorsOr,time,prep_param,servings,servings_param);
+	QString query = buildSearchQuery(titleKeywords, requireAllTitleWords,
+		instructionsKeywords, requireAllInstructionsWords,
+		ingsOr,catsOr,authorsOr,
+		time,prep_param,
+		servings,servings_param);
 
 	QValueList<int> ids;
 	QSqlQuery recipeToLoad( query, database );

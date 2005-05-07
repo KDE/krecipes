@@ -222,8 +222,8 @@ public:
 	virtual void saveRecipe( Recipe *recipe ) = 0;
 	virtual void saveUnitRatio( const UnitRatio *ratio ) = 0;
 	virtual void search( RecipeList *list, int items,
-			const QString &title,
-			const QString &instructions,
+			const QStringList &titleKeywords, bool requireAllTitleWords,
+			const QStringList &instructionsKeywords, bool requireAllInstructionWords,
 			const QStringList &ingsOr,
 			const QStringList &catsOr,
 			const QStringList &authorsOr,
@@ -299,8 +299,8 @@ public:
 protected:
 	virtual void portOldDatabases( float version ) = 0;
 
-	QString buildSearchQuery( const QString &title,
-		const QString &instructions,
+	QString buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
+		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
 		const QStringList &ingsOr,
 		const QStringList &catsOr,
 		const QStringList &authorsOr,
