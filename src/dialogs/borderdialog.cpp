@@ -270,3 +270,5 @@ void BorderDialog::setColor( const KColor &color )
 	valuePal->updateContents();
 	valuePal->repaint( FALSE );
 }
+
+#include "borderdialog.moc"
