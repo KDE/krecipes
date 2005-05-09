@@ -14,6 +14,7 @@
 #define INGREDIENTLIST_H
 
 #include <qvaluelist.h>
+#include <qregexp.h>
 
 #include "datablocks/ingredient.h"
 
@@ -36,7 +37,7 @@ public:
 	void empty( void );
 	int find( int id ) const;
 	Ingredient findByName( const QString & ) const;
-	Ingredient findByNameSubstr( const QString & ) const;
+	Ingredient findByName( const QRegExp & ) const;
 	IngredientList::const_iterator find( IngredientList::const_iterator, int id ) const;
 	IngredientList::iterator find( IngredientList::iterator, int id );
 

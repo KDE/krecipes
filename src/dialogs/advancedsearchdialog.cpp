@@ -87,7 +87,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	titleFrameLayout->addWidget( titleHBox );
 
 	parametersFrameLayout->addWidget( titleFrame );
-	titleFrameSpacer = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	titleFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( titleFrameSpacer );
 
 
@@ -100,7 +100,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientFrame->setFrameShadow( QFrame::Raised );
 	ingredientFrameLayout = new QGridLayout( ingredientFrame, 1, 1, 3, 3, "ingredientFrameLayout"); 
 
-	QLabel *ingredientInfoLabel = new QLabel(i18n("<!doc>Enter search parameters separated by a space; multi-word ingredients enclosed in quotes (e.g. chicken pasta \"white wine\")"),ingredientFrame);
+	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients, separated by a space (e.g. chicken pasta \"white wine\")"),ingredientFrame);
+	ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addMultiCellWidget( ingredientInfoLabel, 0, 0, 0, 1 );
 
 	ingredientsAllEdit = new QLineEdit( ingredientFrame, "ingredientsAllEdit" );
@@ -127,7 +128,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	ingredientFrameLayout->addWidget( textLabel1_3, 3, 0 );
 	parametersFrameLayout->addWidget( ingredientFrame );
-	spacer3_2_3_2_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	spacer3_2_3_2_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( spacer3_2_3_2_2 );
 
 
@@ -140,7 +141,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoryFrame->setFrameShadow( QFrame::Raised );
 	categoryFrameLayout = new QGridLayout( categoryFrame, 1, 1, 3, 3, "categoryFrameLayout");
 
-	QLabel *categoryInfoLabel = new QLabel(i18n("<!doc>Enter search parameters separated by a space; multi-word categories enclosed in quotes (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
+	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories, separated by a space (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
+	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addMultiCellWidget( categoryInfoLabel, 0, 0, 0, 1 );
 	
 	categoriesAllEdit = new QLineEdit( categoryFrame, "categoriesAllEdit" );
@@ -167,7 +169,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( categoriesNotEdit, 3, 1 );
 	parametersFrameLayout->addWidget( categoryFrame );
-	spacer3_2_3_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	spacer3_2_3_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( spacer3_2_3_2 );
 
 
@@ -180,7 +182,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrame->setFrameShadow( QFrame::Raised );
 	authorsFrameLayout = new QGridLayout( authorsFrame, 1, 1, 3, 3, "authorsFrameLayout"); 
 
-	QLabel *authorsInfoLabel = new QLabel(i18n("<!doc>Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
+	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
+	authorsInfoLabel->setTextFormat( Qt::RichText );
 	authorsFrameLayout->addMultiCellWidget( authorsInfoLabel, 0, 0, 0, 1 );
 
 	textLabel1_2_4 = new QLabel( authorsFrame, "textLabel1_2_4" );
@@ -207,7 +210,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	authorsFrameLayout->addWidget( authorsWithoutEdit, 3, 1 );
 	parametersFrameLayout->addWidget( authorsFrame );
-	spacer3_2_3 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	spacer3_2_3 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( spacer3_2_3 );
 
 
@@ -233,10 +236,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsSpinBox = new QSpinBox( servingsFrame, "servingsSpinBox" );
 	servingsSpinBox->setEnabled( FALSE );
 	servingsSpinBox->setMinValue( 1 );
+	servingsSpinBox->setMaxValue( 9999 );
 	layout5->addWidget( servingsSpinBox );
 	servingsFrameLayout->addLayout( layout5 );
 	parametersFrameLayout->addWidget( servingsFrame );
-	spacer3_2_2 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	spacer3_2_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( spacer3_2_2 );
 
 
@@ -265,7 +269,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout6->addWidget( prepTimeEdit );
 	prepTimeFrameLayout->addLayout( layout6 );
 	parametersFrameLayout->addWidget( prepTimeFrame );
-	spacer15 = new QSpacerItem( 31, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+	spacer15 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( spacer15 );
 
 
@@ -288,7 +292,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsFrameLayout->addWidget( instructionsHBox );
 
 	parametersFrameLayout->addWidget( instructionsFrame );
-	instructionsFrameSpacer = new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	instructionsFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	parametersFrameLayout->addItem( instructionsFrameSpacer );
 
 
@@ -457,11 +461,11 @@ void AdvancedSearchDialog::search()
 
 	RecipeList allRecipes;
 	database->search( &allRecipes, load_items,
-		split(titleEdit->text()), requireAllTitle->isChecked(), //title
-		split(instructionsEdit->text()), requireAllInstructions->isChecked(), //instructions
-		split(ingredientsAnyEdit->text()),
-		split(categoriesAnyEdit->text()),
-		split(authorsAnyEdit->text()),
+		split(titleEdit->text(),true), requireAllTitle->isChecked(), //title
+		split(instructionsEdit->text(),true), requireAllInstructions->isChecked(), //instructions
+		split(ingredientsAnyEdit->text(),true),
+		split(categoriesAnyEdit->text(),true),
+		split(authorsAnyEdit->text(),true),
 		enablePrepTimeCheckBox->isChecked()?prepTimeEdit->time():QTime(),
 		prepTimeComboBox->currentItem(), //prep_param
 		enableServingsCheckBox->isChecked()?servingsSpinBox->value():-1, //servings
@@ -476,7 +480,7 @@ void AdvancedSearchDialog::search()
 	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByNameSubstr( *author_it ).id == -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it,false, true) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -485,7 +489,7 @@ void AdvancedSearchDialog::search()
 	items = split(authorsWithoutEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByNameSubstr( *author_it ).id != -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it,false,true) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -496,7 +500,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesAllEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByNameSubstr( *cat_it ).id == -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it,false,true) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -505,7 +509,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesNotEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByNameSubstr( *cat_it ).id != -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it,false,true) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -516,7 +520,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsAllEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByNameSubstr( *ing_it ).ingredientID == -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it,false,true) ).ingredientID == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -525,7 +529,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsWithoutEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByNameSubstr( *ing_it ).ingredientID != -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it,false,true) ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -542,7 +546,7 @@ void AdvancedSearchDialog::search()
 	KApplication::restoreOverrideCursor();
 }
 
-QStringList AdvancedSearchDialog::split( const QString &text ) const
+QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards ) const
 {
 	QStringList result;
 
@@ -557,12 +561,12 @@ QStringList AdvancedSearchDialog::split( const QString &text ) const
 			result += QStringList::split(' ',temp[i]);
 	}
 
-	/*
-	for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
-		(*it).replace("*","%");
-		(*it).replace("?","_");
+	if ( sql_wildcards ) {
+		for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
+			(*it).replace("*","%");
+			(*it).replace("?","_");
+		}
 	}
-	*/
 
 	return result;
 }

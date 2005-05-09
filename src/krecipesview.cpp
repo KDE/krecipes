@@ -16,7 +16,6 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpalette.h>
-#include <qthread.h>
 
 #include <kapplication.h>
 #include <kconfig.h>

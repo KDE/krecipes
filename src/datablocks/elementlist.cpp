@@ -34,11 +34,11 @@ Element ElementList::findByName( const QString &name ) const
 	return el;
 }
 
-Element ElementList::findByNameSubstr( const QString &name ) const
+Element ElementList::findByName( const QRegExp &rx ) const
 {
 	ElementList::const_iterator end = constEnd();
 	for ( ElementList::const_iterator it = constBegin(); it != end; ++it ) {
-		if ( ( *it ).name.contains(name,false) )
+		if ( ( *it ).name.find(rx) != -1 )
 			return * it;
 	}
 

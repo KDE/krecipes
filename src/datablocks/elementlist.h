@@ -13,6 +13,7 @@
 
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qregexp.h>
 
 #include "element.h"
 
@@ -29,7 +30,7 @@ public:
 	bool containsSubSet( ElementList &el );
 
 	Element findByName( const QString & ) const;
-	Element findByNameSubstr( const QString & ) const;
+	Element findByName( const QRegExp & ) const;
 
 	Element getElement( int index ) const;
 };

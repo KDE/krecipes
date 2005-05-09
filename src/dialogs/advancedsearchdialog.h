@@ -132,7 +132,7 @@ private slots:
 	void buttonSwitched();
 
 private:
-	QStringList split( const QString &text ) const;
+	QStringList split( const QString &text, bool sql_wildcards = false ) const;
 };
 
 #endif //ADVANCEDSEARCHDIALOG_H

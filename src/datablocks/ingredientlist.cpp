@@ -76,11 +76,11 @@ Ingredient IngredientList::findByName( const QString &ing ) const
 	return el;
 }
 
-Ingredient IngredientList::findByNameSubstr( const QString &ing ) const
+Ingredient IngredientList::findByName( const QRegExp &rx ) const
 {
 	IngredientList::const_iterator end = constEnd();
 	for ( IngredientList::const_iterator it = constBegin(); it != end; ++it ) {
-		if ( ( *it ).name.contains(ing,false) )
+		if ( ( *it ).name.find(rx) != -1 )
 			return *it;
 	}
 

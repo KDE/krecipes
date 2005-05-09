@@ -15,7 +15,6 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-
 static const char *description =
     I18N_NOOP( "The KDE Cookbook" );
 
@@ -38,7 +37,6 @@ int main( int argc, char **argv )
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );
 	KApplication app;
-
 
 	// see if we are starting with session management
 	if ( app.isRestored() ) {
