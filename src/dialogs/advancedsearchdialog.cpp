@@ -100,7 +100,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientFrame->setFrameShadow( QFrame::Raised );
 	ingredientFrameLayout = new QGridLayout( ingredientFrame, 1, 1, 3, 3, "ingredientFrameLayout"); 
 
-	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients, separated by a space (e.g. chicken pasta \"white wine\")"),ingredientFrame);
+	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
 	ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addMultiCellWidget( ingredientInfoLabel, 0, 0, 0, 1 );
 
@@ -141,7 +141,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoryFrame->setFrameShadow( QFrame::Raised );
 	categoryFrameLayout = new QGridLayout( categoryFrame, 1, 1, 3, 3, "categoryFrameLayout");
 
-	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories, separated by a space (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
+	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
 	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addMultiCellWidget( categoryInfoLabel, 0, 0, 0, 1 );
 	
@@ -401,8 +401,7 @@ void AdvancedSearchDialog::languageChange()
 	prepTimeButton->setText( QString("%1 >>").arg(i18n("Preparation Time")) );
 	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
 	prepTimeComboBox->clear();
-	prepTimeComboBox->insertItem( i18n( "Ready in at least:" ) );
-	prepTimeComboBox->insertItem( i18n( "Ready in more than:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready before:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
 	clearButton->setText( i18n( "C&lear" ) );
