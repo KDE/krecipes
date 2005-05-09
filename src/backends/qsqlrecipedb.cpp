@@ -1272,7 +1272,7 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 	}
 }
 
-QCString QSqlRecipeDB::escapeAndEncode( const QString &s )
+QCString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped = s;
 
@@ -1282,7 +1282,7 @@ QCString QSqlRecipeDB::escapeAndEncode( const QString &s )
 	return ( s_escaped.utf8() );
 }
 
-QString QSqlRecipeDB::unescapeAndDecode( const QString &s )
+QString QSqlRecipeDB::unescapeAndDecode( const QString &s ) const
 {
 	QString s_escaped = QString::fromUtf8( s.latin1() );
 	s_escaped.replace( "\";@", ";" );

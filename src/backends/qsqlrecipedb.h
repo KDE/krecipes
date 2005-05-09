@@ -179,8 +179,8 @@ public:
 
 	double unitRatio( int unitID1, int unitID2 );
 
-	QCString escapeAndEncode( const QString &s );
-	QString unescapeAndDecode( const QString &s );
+	QCString escapeAndEncode( const QString &s ) const;
+	QString unescapeAndDecode( const QString &s ) const;
 
 	QString categoryName( int ID );
 	IngredientProperty propertyName( int ID );

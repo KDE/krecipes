@@ -1238,7 +1238,7 @@ void LiteRecipeDB::loadPropertyElementList( ElementList *elList, QSQLiteResult *
 }
 
 
-QCString LiteRecipeDB::escapeAndEncode( const QString &s )
+QCString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped;
 
@@ -1249,7 +1249,7 @@ QCString LiteRecipeDB::escapeAndEncode( const QString &s )
 	return s_escaped.latin1(); // Note that the text has already been converted into utf8 before escaping.
 }
 
-QString LiteRecipeDB::escape( const QString &s )
+QString LiteRecipeDB::escape( const QString &s ) const
 {
 	QString s_escaped = s;
 
@@ -1271,7 +1271,7 @@ QString LiteRecipeDB::escape( const QString &s )
 	return ( s_escaped );
 }
 
-QString LiteRecipeDB::unescapeAndDecode( const QString &s )
+QString LiteRecipeDB::unescapeAndDecode( const QString &s ) const
 {
 	QString s_escaped = QString::fromUtf8( s.latin1() );
 	s_escaped.replace( ";@", ";" );

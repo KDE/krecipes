@@ -227,7 +227,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = ingsOr.begin(); it != ingsOr.end();) {
-			condition += "i.name LIKE '%"+(*it)+"%' ";
+			condition += "i.name LIKE '%"+escapeAndEncode(*it)+"%' ";
 			if ( ++it != ingsOr.end() ) {
 				condition += "OR ";
 			}
@@ -243,7 +243,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = catsOr.begin(); it != catsOr.end();) {
-			condition += "c.name LIKE '%"+(*it)+"%' ";
+			condition += "c.name LIKE '%"+escapeAndEncode(*it)+"%' ";
 			if ( ++it != catsOr.end() ) {
 				condition += "OR ";
 			}
@@ -259,7 +259,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = authorsOr.begin(); it != authorsOr.end();) {
-			condition += "a.name LIKE '%"+(*it)+"%'";
+			condition += "a.name LIKE '%"+escapeAndEncode(*it)+"%'";
 			if ( ++it != authorsOr.end() ) {
 				condition += "OR ";
 			}
@@ -274,7 +274,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = titleKeywords.begin(); it != titleKeywords.end();) {
-			condition += "r.title LIKE '%"+(*it)+"%' ";
+			condition += "r.title LIKE '%"+escapeAndEncode(*it)+"%' ";
 			if ( ++it != titleKeywords.end() ) {
 				condition += op;
 			}
@@ -288,7 +288,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = instructionsKeywords.begin(); it != instructionsKeywords.end();) {
-			condition += "r.instructions LIKE '%"+(*it)+"%' ";
+			condition += "r.instructions LIKE '%"+escapeAndEncode(*it)+"%' ";
 			if ( ++it != instructionsKeywords.end() ) {
 				condition += op;
 			}
