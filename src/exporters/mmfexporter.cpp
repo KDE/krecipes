@@ -42,10 +42,6 @@ QString MMFExporter::createContent( const RecipeList& recipes )
 		content += "\n";
 
 		content += "-----\n"; //end of recipe indicator
-
-		if ( progressBarCancelled() )
-			return QString::null;
-		advanceProgressBar();
 	}
 
 	return content;

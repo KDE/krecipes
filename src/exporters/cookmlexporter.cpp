@@ -32,24 +32,30 @@ CookMLExporter::CookMLExporter( const QString& filename, const QString &format )
 CookMLExporter::~CookMLExporter()
 {}
 
+QString CookMLExporter::createHeader( const RecipeList& )
+{
+	QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	xml += "<!DOCTYPE cookml PUBLIC \"-\" \"cookml.dtd\">";
+	xml += "<cookml version=\"1.0.13\" prog=\"Krecipes\" progver=\""+krecipes_version()+"\">";
+	return xml;
+}
+
+QString CookMLExporter::createFooter()
+{
+	return "</cookml>";
+}
+
 QString CookMLExporter::createContent( const RecipeList& recipes )
 {
-	QDomImplementation dom_imp;
-	QDomDocument doc = dom_imp.createDocument( QString::null, "cookml", dom_imp.createDocumentType( "cookml", QString::null, "cookml.dtd" ) );
-
-	QDomElement cookml_tag = doc.documentElement();
-	cookml_tag.setAttribute( "version", "1.0.13" );
-	cookml_tag.setAttribute( "prog", "Krecipes" );
-	cookml_tag.setAttribute( "progver", krecipes_version() );
-
-	doc.appendChild( cookml_tag );
+	QString xml;
+	QDomDocument doc;
 
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		QDomElement recipe_tag = doc.createElement( "recipe" );
 		recipe_tag.setAttribute( "lang", ( KGlobal::locale() ) ->language() );
 
-		cookml_tag.appendChild( recipe_tag );
+		//cookml_tag.appendChild( recipe_tag );
 
 		QDomElement head_tag = doc.createElement( "head" );
 		head_tag.setAttribute( "title", ( *recipe_it ).title );
@@ -102,11 +108,8 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		preparation_tag.appendChild( text_tag );
 		text_tag.appendChild( doc.createTextNode( ( *recipe_it ).instructions ) );
 
-		if ( progressBarCancelled() )
-			return QString::null;
-		advanceProgressBar();
+		xml += recipe_tag.text();
 	}
 
-	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-	return ret.utf8() + doc.toString().utf8();
+	return xml;
 }

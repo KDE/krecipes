@@ -76,16 +76,15 @@ public:
 	HTMLExporter( RecipeDB *, const QString&, const QString&, int width );
 	virtual ~HTMLExporter();
 
-	virtual QString createContent( const RecipeList & );
-
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
 	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 
 protected:
-	virtual QString extensions() const
-	{
-		return ".html";
-	}
+	virtual QString createContent( const RecipeList & );
+	virtual QString createHeader( const RecipeList & );
+	virtual QString createFooter();
+
+	virtual int progressInterval() const { return 1; }
 
 private:
 	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
@@ -115,6 +114,12 @@ private:
 
 	int m_width;
 	QString classesCSS;
+
+	bool m_error;
+	QString recipeStyleHTML;
+	QString recipeBodyHTML;
+	QDomDocument doc;
+	int offset;
 };
 
 class CustomRectList : public QPtrList<QRect>

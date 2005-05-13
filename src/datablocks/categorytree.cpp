@@ -48,7 +48,6 @@ CategoryTree *CategoryTree::add
 void CategoryTree::insertItem( CategoryTree *newChild )
 {
 	newChild->m_parent = this;
-
 	if ( m_child && m_child->m_last )
 		m_child->m_last->m_sibling = newChild;
 	else
@@ -59,18 +58,33 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 
 void CategoryTree::takeItem( CategoryTree *tree )
 {
+	//FIXME: Both these methods seem to be broken... don't use this function!
+
+	CategoryTree *lastItem = m_child->m_last;
+#if 0
 	CategoryTree ** nextChild = &m_child;
 	while( nextChild && *nextChild && tree != *nextChild )
 		nextChild = &((*nextChild)->m_sibling);
 
-	if ( nextChild && tree == *nextChild )
+	if ( nextChild && tree == *nextChild ) {
 		*nextChild = (*nextChild)->m_sibling;
+	}
 	tree->m_parent = 0;
 	tree->m_sibling = 0;
-
-	if ( tree == m_last ) {
-		//FIXME: unstable behavior if this is the case
+#else
+	for ( CategoryTree *it = firstChild(); it; it = it->nextSibling() ) {
+		if ( it->nextSibling() == tree ) {
+			it->m_sibling = tree->nextSibling();
+			break;
+		}
 	}
+	tree->m_parent = 0;
+	tree->m_sibling = 0;
+#endif
+	if ( tree != m_last )
+		m_child->m_last = lastItem;
+	else //FIXME: unstable behavior if this is the case
+		kdDebug()<<"CategoryTree::takeItem: warning - unstable behavior expected"<<endl;
 }
 
 void CategoryTree::clear()
@@ -97,4 +111,5 @@ bool CategoryTree::contains( int id ) const
 
 	return result;
 }
+
 

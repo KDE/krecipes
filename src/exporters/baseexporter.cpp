@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami22@users.sourceforge.net)                    *
 *                                                                         *
@@ -12,94 +12,125 @@
 #include "baseexporter.h"
 
 #include <qfile.h>
-#include <qfileinfo.h>
 
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <kfilterdev.h>
 
 #include "backends/recipedb.h"
 
-BaseExporter::BaseExporter( const QString& _filename, const QString &_format ) :
+BaseExporter::BaseExporter( const QString& _filename, const QString &format ) :
 		file( 0 ),
-		format( _format ),
 		filename( _filename ),
-		m_progress_dlg( 0 )
-{}
-
+		m_progress_dlg( 0 ),
+		compress(false)
+{
+	//automatically append extension
+	QString extension = format.right( format.length()-2 );
+	if ( filename.right( extension.length() ) != extension )
+		filename += "." + extension;
+}
 
 BaseExporter::~BaseExporter()
-{}
+{
+	delete file;
+}
 
-void BaseExporter::exporter( const RecipeList& recipes, KProgressDialog *progress_dlg )
+int BaseExporter::headerFlags() const
+{
+	return RecipeDB::None;
+}
+
+void BaseExporter::setCompressed( bool b )
+{
+	compress = b;
+}
+
+void BaseExporter::exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog *progress_dlg )
 {
 	m_progress_dlg = progress_dlg;
-	if ( m_progress_dlg )
-		m_progress_dlg->progressBar() ->setTotalSteps( recipes.count() );
 
 	if ( createFile() )
-		saveToFile( recipes );
+		saveToFile( ids, database );
 	else
 		kdDebug() << "no output file has been selected for export." << endl;
 }
 
-void BaseExporter::exporter( const Recipe &recipe, KProgressDialog *progress_dlg )
+void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progress_dlg )
 {
-	RecipeList single_recipe_list;
-	single_recipe_list.append( recipe );
-	exporter( single_recipe_list, progress_dlg );
+	QValueList<int> single_recipe_list;
+	single_recipe_list << id ;
+	exporter( single_recipe_list, database, progress_dlg );
 }
 
 bool BaseExporter::createFile()
 {
 	if ( file )
 		return true;
+
 	if ( !filename.isEmpty() ) {
-		QStringList possible_formats = QStringList::split( ',', extensions() );
-		for ( QStringList::const_iterator it = possible_formats.begin(); it != possible_formats.end(); ++it ) {
-			if ( filename.right( ( *it ).length() ) == *it ) {
-				file = new QFile( filename );
-				break;
-			}
-		}
+		if ( compress )
+			file = KFilterDev::deviceForFile(filename,"application/x-gzip");
+		else
+			file = new QFile(filename);
 
-		if ( !file ) {
-			format = format.remove( '*' );
-
-			if ( possible_formats.contains( format ) < 1 )
-				format = possible_formats[ 0 ];
-
-			file = new QFile( filename + format );
-		}
-
-		QFileInfo fi( *file );
-		format = fi.extension();
-		filename = ( fi.fileName() ).remove( "." + format );
-
-		return true;
+		return (file != 0);
 	}
 	else
 		return false;
 }
 
-QString BaseExporter::fileName()
+QString BaseExporter::fileName() const
 {
-	if ( createFile() )
-		return file->name();
-	else
-		return QString::null;
+	return filename;
 }
 
-void BaseExporter::saveToFile( const RecipeList& recipes )
+void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 {
 	if ( file->open( IO_WriteOnly ) ) {
+		if ( m_progress_dlg )
+			m_progress_dlg->progressBar()->setTotalSteps( ids.count()/progressInterval() );
+
+		QValueList<int> ids_copy = ids;
 		QTextStream stream( file );
 
-		QString content = createContent( recipes );
-		if ( !content.isEmpty() )
-			stream << content;
+		RecipeList recipe_list;
+		if ( headerFlags() != RecipeDB::None ) {
+			database->loadRecipes( &recipe_list, headerFlags(), ids );
+		}
+		stream << createHeader( recipe_list );
+
+		recipe_list.clear();
+		for ( int i = 0; i < ids.count(); i += progressInterval() ) {
+		kdDebug()<<"at "<<i<<" of "<<ids.count()<<endl;
+			QValueList<int> sub_list;
+			for ( int sub_i = 0; sub_i < progressInterval(); ++sub_i ) {
+				if ( ids_copy.count() == 0 ) break;
+
+				sub_list << *ids_copy.begin();
+				ids_copy.remove( ids_copy.begin() );
+			}
+
+			RecipeList recipe_list;
+			database->loadRecipes( &recipe_list, RecipeDB::All, sub_list );
+
+			QString content = createContent( recipe_list );
+			if ( !content.isEmpty() )
+				stream << content;
+
+			if ( m_progress_dlg && m_progress_dlg->wasCancelled() )
+				break;
+
+			if ( m_progress_dlg ) {
+				m_progress_dlg->progressBar()->advance( progressInterval() );
+				kapp->processEvents();
+			}
+		}
+
+		stream << createFooter();
 
 		file->close();
 	}
@@ -113,27 +144,4 @@ QString BaseExporter::krecipes_version() const
 
 	return QString::null; //Oh, well.  We couldn't get the version.
 }
-
-bool BaseExporter::progressBarCancelled()
-{
-	if ( m_progress_dlg )
-		return m_progress_dlg->wasCancelled();
-
-	return false;
-}
-
-void BaseExporter::setProgressBarTotalSteps( int steps )
-{
-	if ( m_progress_dlg )
-		m_progress_dlg->progressBar() ->setTotalSteps( steps );
-}
-
-void BaseExporter::advanceProgressBar()
-{
-	if ( m_progress_dlg ) {
-		m_progress_dlg->progressBar() ->advance( 1 );
-		kapp->processEvents();
-	}
-}
-
 

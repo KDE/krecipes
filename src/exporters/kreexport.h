@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
@@ -11,8 +11,6 @@
 
 #ifndef KREEXPORTER_H
 #define KREEXPORTER_H
-
-#include <stdlib.h> // For getenv()
 
 #include "baseexporter.h"
 #include "datablocks/categorytree.h"
@@ -29,14 +27,12 @@ public:
 
 	virtual ~KreExporter();
 
-	virtual QString createContent( const RecipeList & );
-
 protected:
-	virtual void saveToFile( const RecipeList & );
-	virtual QString extensions() const
-	{
-		return ".kre,.kreml";
-	}
+	virtual QString createContent( const RecipeList & );
+	virtual QString createHeader( const RecipeList & );
+	virtual QString createFooter();
+	
+	virtual int headerFlags() const;
 
 private:
 	bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );

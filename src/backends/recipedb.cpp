@@ -132,30 +132,6 @@ void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
 	*recipe = *rlist.begin();
 }
 
-#if 0
-void RecipeDB::loadRecipes( RecipeList *recipes, const QValueList<int>& ids, int items, KProgressDialog *progress_dlg )
-{
-	if ( progress_dlg )
-		progress_dlg->progressBar() ->setTotalSteps( ids.count() );
-
-	recipes->empty();
-
-	QValueList<int>::const_iterator end = ids.end();
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != end; ++it ) {
-		Recipe recipe;
-		loadRecipe( &recipe, *it, items );
-		recipes->append( recipe );
-
-		if ( progress_dlg ) {
-			progress_dlg->progressBar() ->advance( 1 );
-			kapp->processEvents();
-			if ( progress_dlg->wasCancelled() )
-				break;
-		}
-	}
-}
-#endif
-
 int RecipeDB::categoryCount()
 {
 	return getCount("categories");

@@ -13,6 +13,8 @@
 
 #include "baseexporter.h"
 
+#include <qdom.h>
+
 /**
   * Export class for the RecipeML file format <http://www.formatdata.com/recipeml>
   * @author Jason Kivlighn
@@ -27,13 +29,10 @@ public:
 	RecipeMLExporter( const QString&, const QString& );
 	virtual ~RecipeMLExporter();
 
-	virtual QString createContent( const RecipeList& );
-
 protected:
-	QString extensions() const
-	{
-		return ".xml";
-	}
+	virtual QString createContent( const RecipeList& );
+	virtual QString createHeader( const RecipeList& );
+	virtual QString createFooter();
 };
 
 #endif //RECIPEMLEXPORTER_H

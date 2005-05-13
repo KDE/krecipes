@@ -10,8 +10,6 @@
 
 #include "recipemlexporter.h"
 
-#include <qdom.h>
-
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -23,36 +21,30 @@ RecipeMLExporter::RecipeMLExporter( const QString& filename, const QString& form
 RecipeMLExporter::~RecipeMLExporter()
 {}
 
+QString RecipeMLExporter::createHeader( const RecipeList& )
+{
+	QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	xml += "<!DOCTYPE recipeml PUBLIC \"-//FormatData//DTD RecipeML 0.5//EN\" \
+	  \"http://www.formatdata.com/recipeml/recipeml.dtd\">";
+	xml += "<recipeml version=\"0.5\" generator=\"Krecipes v"+krecipes_version()+"\">\n";
+	return xml;
+}
+
+QString RecipeMLExporter::createFooter()
+{
+	return "</recipeml>";
+}
+
 QString RecipeMLExporter::createContent( const RecipeList& recipes )
 {
-	QDomImplementation dom_imp;
-	QDomDocument doc = dom_imp.createDocument( QString::null, "recipeml", dom_imp.createDocumentType( "recipeml", "-//FormatData//DTD RecipeML 0.5//EN", "http://www.formatdata.com/recipeml/recipeml.dtd" ) );
-
-	QDomElement recipeml_tag = doc.documentElement();
-	recipeml_tag.setAttribute( "version", 0.5 );
-	recipeml_tag.setAttribute( "generator", QString( "Krecipes v%1" ).arg( krecipes_version() ) );
-	doc.appendChild( recipeml_tag );
-
-	QDomElement recipe_root = recipeml_tag;
-#if 0
-	//I might use this later....
-	if ( recipes.count() > 1 ) {
-		QDomElement menu_tag = doc.createElement( "menu" );
-		recipeml_tag.appendChild( menu_tag );
-
-		QDomElement description_tag = doc.createElement( "description" );
-		description_tag.appendChild( doc.createTextNode( QString( i18n( "Recipes in the category \"%1\"" ) ).arg( filename ) ) );
-		menu_tag.appendChild( description_tag );
-
-		recipe_root = menu_tag;
-	}
-#endif
+	QDomDocument doc;
 
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		QDomElement recipe_tag = doc.createElement( "recipe" );
 
-		recipe_root.appendChild( recipe_tag ); //will append to either <menu> if exists or else <recipeml>
+		doc.appendChild(recipe_tag);
+		//recipe_root.appendChild( recipe_tag ); //will append to either <menu> if exists or else <recipeml>
 
 		QDomElement head_tag = doc.createElement( "head" );
 		recipe_tag.appendChild( head_tag );
@@ -143,12 +135,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 		QDomElement step_tag = doc.createElement( "step" ); //we've just got everything in one step
 		directions_tag.appendChild( step_tag );
 		step_tag.appendChild( doc.createTextNode( ( *recipe_it ).instructions ) );
-
-		if ( progressBarCancelled() )
-			return QString::null;
-		advanceProgressBar();
 	}
 
-	QString ret = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-	return ret.utf8() + doc.toString().utf8();
+	return doc.toString();
 }

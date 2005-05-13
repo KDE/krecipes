@@ -19,33 +19,34 @@
 
 #include "datablocks/recipelist.h"
 
-class QFile;
+class QIODevice;
+class RecipeDB;
 
 class BaseExporter
 {
 public:
-	BaseExporter( const QString &file, const QString &format );
+	BaseExporter( const QString &file, const QString &ext );
 	virtual ~BaseExporter();
 
-	void exporter( const RecipeList& recipes, KProgressDialog * = 0 );
-	void exporter( const Recipe &, KProgressDialog * = 0 );
+	void exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
+	void exporter( int id, RecipeDB *database, KProgressDialog * = 0 );
 
 	/** Returns the actual filename that will be written to during the export.
 	  * Note that this can differ somewhat from the filename passed in the 
 	  * constructor.
 	  */
-	QString fileName();
-
-	virtual QString createContent( const RecipeList & ) = 0;
+	QString fileName() const;
 
 protected:
-	/** Default implementation writes the return value of createContent() to a file. */
-	virtual void saveToFile( const RecipeList & );
+	virtual QString createContent( const RecipeList & ) = 0;
+	virtual QString createFooter(){ return QString(); }
+	virtual QString createHeader( const RecipeList & ){ return QString(); }
 
-	/** Returns the extension (comma-separated if a single exporter can save to more than one format)
-	  * of the file format.
-	  */
-	virtual QString extensions() const = 0;
+	virtual int progressInterval() const { return 50; }
+
+	virtual int headerFlags() const;
+
+	void setCompressed( bool );
 
 	/** Attempt to return the version of the application via
 	  * KGlobal::instance()->aboutData()->version()
@@ -53,36 +54,14 @@ protected:
 	  */
 	QString krecipes_version() const;
 
-	/** If @ref exporter() was passed a KProgress object, then this function
-	  * will advance that KProgress object. Subclasses could advance the
-	  * progress after processing each recipe to let the user watch the
-	  * progress of the export.
-	  */
-	void advanceProgressBar();
-
-	/** If @ref exporter() was passed a KProgress object, then this function
-	  * will set the total number of steps in this KProgress object.  By
-	  * default, the total number of steps is the total number of recipes
-	  * being imported.  That way, most subclasses can just call advanceProgressBar()
-	  * after each recipe is processed, and won't need to mess with setting this value.
-	  */
-	void setProgressBarTotalSteps( int steps );
-
-	/** If @ref exporter() was passed a KProgress object, then this function
-	  * will return whether or not the progress bar has been canceled by the user.
-	  * Subclasses should check the return value of the function and cancel exporting,
-	  * as is appropriate.
-	  */
-	bool progressBarCancelled();
-
-	QFile* file;
-	QString format;
-	QString filename;
-
 private:
 	bool createFile();
+	void saveToFile( const QValueList<int> &ids, RecipeDB *database );
 
+	QIODevice* file;
+	QString filename;
 	KProgressDialog *m_progress_dlg;
+	bool compress;
 };
 
 #endif //BASEEXPORTER_H

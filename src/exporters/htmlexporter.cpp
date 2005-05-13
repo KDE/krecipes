@@ -17,6 +17,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
+#include <dom/dom_element.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -41,6 +42,8 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 {
 	div_elements.setAutoDelete( true );
 	properties = new IngredientPropertyList;
+
+	offset = 0;
 }
 
 
@@ -51,58 +54,7 @@ HTMLExporter::~HTMLExporter()
 
 QString HTMLExporter::createContent( const RecipeList& recipes )
 {
-	if ( recipes.count() == 0 )
-		return "<html></html>";
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-
-	//let's do everything we can to be sure at least some layout is loaded
-	QString layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
-	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/default.klo" );
-	kdDebug() << "Using layout file: " << layout_filename << endl;
-	QFile input( layout_filename );
-
-	QDomDocument doc;
-
-	if ( !input.open( IO_ReadOnly ) ) {
-		QString errorStr = i18n("<html><body>\n"
-			"<p><b>Error: </b>Unable to find a layout file, which is"
-			" needed to view the recipe.</p>"
-			"<p>Krecipes was probably not properly installed.</p>"
-			"</body></html>");
-		return errorStr;
-	}
-
-	QString error;
-	int line;
-	int column;
-	if ( !doc.setContent( &input, &error, &line, &column ) ) {
-		kdDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column ) << endl;
-		return "<html></html>";
-	}
-
-	//put all the recipe photos into this directory
-	QDir dir;
-	QFileInfo fi( *file );
-	dir.mkdir( fi.dirPath() + "/" + filename + "_photos" );
-
 	RecipeList::const_iterator recipe_it;
-	QString recipeTitleHTML = QString( "<title>%1</title>" ).arg( ( recipes.count() == 1 ) ? recipes[ 0 ].title : i18n( "Krecipes Recipes" ) );
-	int offset = 0;
-
-	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
-	QString recipeStyleHTML = "<style type=\"text/css\">\n";
-	recipeStyleHTML += "body\n";
-	recipeStyleHTML += "{\n";
-	recipeStyleHTML += QString( "background-color: %1;\n" ).arg( bg_element.text() );
-	recipeStyleHTML += "}\n";
-
-	classesCSS = generateCSSClasses( doc );
-	recipeStyleHTML += classesCSS;
-
-	QString recipeBodyHTML = "<body>\n";
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
 		if ( el.isNull() || el.text() == "true" ) // Calculate the property list
@@ -115,14 +67,71 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 			recipeStyleHTML += div->generateCSS();
 			recipeBodyHTML += div->generateHTML();
 		}
-
-		if ( progressBarCancelled() )
-			return QString::null; //FIXME: should we just return what we've generated so far?  It does simplify things elsewhere... (all we have to do is put "break;" here and anything works out; it will return the complete recipes generated so far)
-		advanceProgressBar();
 	}
+
+	//we're going to have to be clever, and end up writing the actual body when writing the footer
+	return QString::null;
+}
+
+QString HTMLExporter::createHeader( const RecipeList & )
+{
+	m_error = false;
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Page Setup" );
+
+	//let's do everything we can to be sure at least some layout is loaded
+	QString layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
+		layout_filename = locate( "appdata", "layouts/default.klo" );
+	kdDebug() << "Using layout file: " << layout_filename << endl;
+	QFile input( layout_filename );
+
+	if ( !input.open( IO_ReadOnly ) ) {
+		QString errorStr = i18n("<html><body>\n"
+			"<p><b>Error: </b>Unable to find a layout file, which is"
+			" needed to view the recipe.</p>"
+			"<p>Krecipes was probably not properly installed.</p>"
+			"</body></html>");
+
+		m_error = true;
+		return errorStr;
+	}
+
+	QString error;
+	int line;
+	int column;
+	if ( !doc.setContent( &input, &error, &line, &column ) ) {
+		kdDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column ) << endl;
+		m_error = true;
+		return "<html></html>";
+	}
+
+	//put all the recipe photos into this directory
+	QDir dir;
+	dir.mkdir( fileName() + "_photos" );
+
+	RecipeList::const_iterator recipe_it;
+
+	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
+	recipeStyleHTML = "<style type=\"text/css\">\n";
+	recipeStyleHTML += "body\n";
+	recipeStyleHTML += "{\n";
+	recipeStyleHTML += QString( "background-color: %1;\n" ).arg( bg_element.text() );
+	recipeStyleHTML += "}\n";
+
+	classesCSS = generateCSSClasses( doc );
+	recipeStyleHTML += classesCSS;
+
+	recipeBodyHTML = "<body>\n";
+
+	return QString::null;
+}
+
+QString HTMLExporter::createFooter()
+{
 	recipeStyleHTML += "</style>";
 	recipeBodyHTML += "</body>\n";
-
 
 	KLocale*loc = KGlobal::locale();
 	QString encoding = loc->encoding();
@@ -131,6 +140,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 	QString recipeHTML = "<html>\n<head>\n";
 	recipeHTML += "<meta name=\"lang\" content=\"" + loc->language() + "\">\n";
 	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + encoding.replace( " ", "-" ) + "\" />\n";
+	recipeHTML += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
 	recipeHTML += recipeStyleHTML;
 	recipeHTML += "</head>\n";
 	recipeHTML += recipeBodyHTML;
@@ -163,8 +173,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 
 	QPixmap pm = image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
-	QFileInfo fi( *file );
-	QString photo_path = fi.dirPath() + "/" + filename + "_photos/" + escape( photo_name ) + ".png";
+	QString photo_path = fileName() + "_photos/" + escape( photo_name ) + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
@@ -232,20 +241,18 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			tempHTML += "</body></html>";
 
 			KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
-			sizeCalculator->view() ->setVScrollBarMode ( QScrollView::AlwaysOff );
-			sizeCalculator->view() ->setMinimumSize( QSize( elementWidth, 0 ) );
-			sizeCalculator->view() ->resize( QSize( elementWidth, 0 ) );
+			sizeCalculator->view()->setVScrollBarMode ( QScrollView::AlwaysOff );
+			sizeCalculator->view()->setMinimumSize( QSize( elementWidth, 0 ) );
+			sizeCalculator->view()->resize( QSize( elementWidth, 0 ) );
 			sizeCalculator->begin( KURL( locateLocal( "tmp", "/" ) ) );
 			sizeCalculator->write( tempHTML );
 			sizeCalculator->end();
 
-			sizeCalculator->view()->show(); //FIXME: there must be another alternative to making sure layout() happens
-			sizeCalculator->view() ->layout(); //force a layout... I assume khtml otherwise puts this off until it is shown
+			sizeCalculator->view()->layout(); //force a layout
 
 			// Set the size of the element
-			int newHeight = sizeCalculator->view() ->contentsHeight();
-			/* if (newHeight>elementHeight) */
-			elementHeight = newHeight; // Keep user's size if it's defined as bigger
+			DOM::Document doc = sizeCalculator->document();
+			elementHeight = doc.getElementById( element->id() ).getRect().height();
 
 			delete sizeCalculator;
 		}
@@ -295,7 +302,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	else
 		photo_name = recipe.title;
 
-	QString image_url = filename + "_photos/" + escape( photo_name ) + ".png";
+	QString image_url = fileName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
 	QString photo_html = QString( "<img src=\"%1\">" ).arg( image_url );
 	html_map.insert( "photo", photo_html );

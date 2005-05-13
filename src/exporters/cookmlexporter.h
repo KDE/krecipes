@@ -27,13 +27,10 @@ public:
 	CookMLExporter( const QString&, const QString& );
 	virtual ~CookMLExporter();
 
-	virtual QString createContent( const RecipeList & );
-
 protected:
-	virtual QString extensions() const
-	{
-		return ".cml";
-	}
+	virtual QString createContent( const RecipeList& );
+	virtual QString createHeader( const RecipeList& );
+	virtual QString createFooter();
 };
 
 #endif //COOKMLEXPORTER_H

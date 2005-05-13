@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
@@ -19,14 +19,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmdcodec.h>
-#include <ktar.h>
-#include <ktempfile.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
+#include "backends/recipedb.h"
+
 KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, const QString &format ) :
 		BaseExporter( filename, format ), categories( _categories )
-{}
+{
+	if ( format == "*.kre" ) {
+		setCompressed(true);
+	}
+}
 
 
 KreExporter::~KreExporter()
@@ -34,34 +38,12 @@ KreExporter::~KreExporter()
 	delete categories;
 }
 
-void KreExporter::saveToFile( const RecipeList& recipes )
+int KreExporter::headerFlags() const
 {
-	if ( format == "kreml" ) {
-		if ( file->open( IO_WriteOnly ) ) {
-			QTextStream stream( file );
-			stream << createContent( recipes );
-			file->close();
-		}
-	}
-	else {
-		// create a temporary .kre file
-		QString kreml = createContent( recipes );
-		int size = kreml.length();
-		// compress and save file
-		KTar* kre = new KTar( file->name(), "application/x-gzip" );
-		kre->open( IO_WriteOnly );
-		kre->writeFile( filename + ".kreml", getenv( "LOGNAME" ), "", size, kreml.latin1() );
-		kre->close();
-		delete kre;
-	}
+	return RecipeDB::Categories;
 }
 
-/*!
-    \fn KreManager::createContent()
- * return a QString containing XML encoded recipe
- */ 
-//TODO: use QDOM (see recipemlexporter.cpp)?
-QString KreExporter::createContent( const RecipeList& recipes )
+QString KreExporter::createHeader( const RecipeList& recipes )
 {
 	QString xml;
 
@@ -69,6 +51,19 @@ QString KreExporter::createContent( const RecipeList& recipes )
 	xml += "<krecipes version=\"" + krecipes_version() + "\" lang=\"" + ( KGlobal::locale() )->language() + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"krecipes.xsd\">\n";
 
 	createCategoryStructure( xml, recipes );
+
+	return xml;
+}
+
+QString KreExporter::createFooter()
+{
+	return "</krecipes>\n";
+}
+
+//TODO: use QDOM (see recipemlexporter.cpp)?
+QString KreExporter::createContent( const RecipeList& recipes )
+{
+	QString xml;
 
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
@@ -141,13 +136,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += QStyleSheet::escape( ( *recipe_it ).instructions.utf8() );
 		xml += "</krecipes-instructions>\n";
 		xml += "</krecipes-recipe>\n";
-
-		if ( progressBarCancelled() )
-			return QString::null;
-		advanceProgressBar();
 	}
-
-	xml += "</krecipes>\n";
 
 	return xml;
 }
@@ -186,8 +175,13 @@ bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *
 		}
 	}
 
-	if ( !parent_should_show /*&& parent->category.id != -1*/ ) {
-		delete parent;
+	if ( !parent_should_show && parent->category.id != -1 ) {
+		kdDebug()<<"deleting: "<<parent->category.name<<" ("<<parent->category.id<<")"<<endl;
+
+		//FIXME: CategoryTree is broken when deleting items
+		//delete parent;
+
+		parent->category.id = -2; //temporary workaround
 	}
 
 	return parent_should_show;
@@ -195,15 +189,16 @@ bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *
 
 void KreExporter::writeCategoryStructure( QString &xml, const CategoryTree *categoryTree )
 {
-	if ( categoryTree->category.id != -1 )
-		xml += "<category name=\"" + QStyleSheet::escape( categoryTree->category.name.utf8() ) + "\">\n";
-
-	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
-		writeCategoryStructure( xml, child_it );
+	if ( categoryTree->category.id != -2 ) {
+		if ( categoryTree->category.id != -1 )
+			xml += "<category name=\"" + QStyleSheet::escape( categoryTree->category.name.utf8() ) + "\">\n";
+	
+		for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
+			writeCategoryStructure( xml, child_it );
+		}
+	
+		if ( categoryTree->category.id != -1 )
+			xml += "</category>\n";
 	}
-
-	if ( categoryTree->category.id != -1 )
-		xml += "</category>\n";
-
 }
 

@@ -34,13 +34,8 @@ public:
 	MMFExporter( const QString&, const QString& );
 	virtual ~MMFExporter();
 
-	virtual QString createContent( const RecipeList & );
-
 protected:
-	virtual QString extensions() const
-	{
-		return ".mmf";
-	}
+	virtual QString createContent( const RecipeList & );
 
 private:
 	void writeMMFHeader( QString &content, const Recipe &recipe );
