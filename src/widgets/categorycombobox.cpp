@@ -38,8 +38,8 @@ void CategoryComboBox::reload()
 {
 	QString remember_cat_filter = currentText();
 
-	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
-	int limit = config->readNumEntry( "Limit", -1 );
+	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
+	int limit = config->readNumEntry( "CategoryLimit", -1 );
 	
 	CategoryTree categoryList;
 	database->loadCategories( &categoryList, limit, m_offset, -1 );
@@ -71,8 +71,8 @@ void CategoryComboBox::loadCategories( CategoryTree *categoryTree, int &row )
 
 void CategoryComboBox::loadNextGroup()
 {
-	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
-	int limit = config->readNumEntry( "Limit", -1 );
+	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
+	int limit = config->readNumEntry( "CategoryLimit", -1 );
 
 	m_offset += limit;
 
@@ -81,8 +81,8 @@ void CategoryComboBox::loadNextGroup()
 
 void CategoryComboBox::loadPrevGroup()
 {
-	KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
-	int limit = config->readNumEntry( "Limit", -1 );
+	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
+	int limit = config->readNumEntry( "CategoryLimit", -1 );
 
 	m_offset -= limit;
 

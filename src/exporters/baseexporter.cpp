@@ -1,7 +1,7 @@
 /***************************************************************************
 *   Copyright (C) 2003-2005 by                                            *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
-*   Jason Kivlighn (mizunoami22@users.sourceforge.net)                    *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -105,7 +105,6 @@ void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 
 		recipe_list.clear();
 		for ( int i = 0; i < ids.count(); i += progressInterval() ) {
-		kdDebug()<<"at "<<i<<" of "<<ids.count()<<endl;
 			QValueList<int> sub_list;
 			for ( int sub_i = 0; sub_i < progressInterval(); ++sub_i ) {
 				if ( ids_copy.count() == 0 ) break;

@@ -71,7 +71,7 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 
 	setColumnText( 0, i18n( "Recipe" ) );
 
-	KConfig *config = KGlobal::config(); config->setGroup( "Advanced" );
+	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
 }
 

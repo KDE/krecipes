@@ -4,6 +4,9 @@
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
+*   Copyright (C) 2004-2005 by                                            *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -21,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qframe.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -28,6 +32,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <knuminput.h>
+#include <klineedit.h>
 
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
@@ -59,6 +65,11 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	QHBoxLayout* import_layout = new QHBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
+
+	frame = addPage( i18n( "Performance" ), i18n( "Performance Options" ), il.loadIcon( "launch", KIcon::NoGroup, 32 ) );
+	QHBoxLayout* performance_layout = new QHBoxLayout( frame );
+	m_pagePerformance = new PerformancePrefs( frame );
+	performance_layout->addWidget( m_pagePerformance );
 
 	//setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 
@@ -320,6 +331,7 @@ void KrecipesPreferences::saveSettings( void )
 	m_pageServer->saveOptions();
 	m_pageNumbers->saveOptions();
 	m_pageImport->saveOptions();
+	m_pagePerformance->saveOptions();
 }
 
 // Save Server settings
@@ -442,6 +454,62 @@ void ImportPrefs::saveOptions()
 	config->setGroup( "Import" );
 
 	config->writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
+}
+
+
+//=============Performance Options Dialog================//
+PerformancePrefs::PerformancePrefs( QWidget *parent )
+		: QWidget( parent )
+{
+	// Load Current Settings
+	KConfig * config = kapp->config();
+	config->setGroup( "Performance" );
+
+	int cat_limit = config->readNumEntry( "CategoryLimit", -1 );
+	int limit = config->readNumEntry( "Limit", -1 );
+
+	Form1Layout = new QVBoxLayout( this, 11, 6 );
+
+	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when loaded with many thousands of recipes</b>."), this );
+	explainationLabel->setTextFormat( Qt::RichText );
+
+	QHBox *catLimitHBox = new QHBox( this );
+	catLimitInput = new KIntNumInput(catLimitHBox);
+	catLimitInput->setLabel( i18n( "Number of recipes to display at once:" ) );
+	catLimitInput->setRange(0,5000,20,true);
+	catLimitInput->setSpecialValueText( i18n("Unlimited") );
+
+	if ( cat_limit > 0 )
+		catLimitInput->setValue( cat_limit );
+
+	QHBox *limitHBox = new QHBox( this );
+	limitInput = new KIntNumInput(limitHBox);
+	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
+	limitInput->setRange(0,100000,1000,true);
+	limitInput->setSpecialValueText( i18n("Unlimited") );
+
+	if ( limit > 0 )
+		limitInput->setValue( limit );
+
+	Form1Layout->addWidget( explainationLabel );
+	Form1Layout->addWidget( catLimitHBox );
+	Form1Layout->addWidget( limitHBox );
+
+	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+	adjustSize();
+}
+
+void PerformancePrefs::saveOptions()
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "Performance" );
+
+	int catLimit = ( catLimitInput->value() == 0 ) ? -1 : catLimitInput->value();
+	config->writeEntry( "CategoryLimit", catLimit );
+
+	int limit = ( limitInput->value() == 0 ) ? -1 : limitInput->value();
+	config->writeEntry( "Limit", limit );
 }
 
 #include "pref.moc"

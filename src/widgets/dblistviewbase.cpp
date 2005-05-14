@@ -62,7 +62,7 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
 	setSorting(-1);
 
 	if ( curr_limit == -1 ) { //only use the default limit if a subclass hasn't given curr_limit its own value
-		KConfig * config = KGlobal::config();config->setGroup( "Advanced" );
+		KConfig * config = KGlobal::config();config->setGroup( "Performance" );
 		curr_limit = config->readNumEntry( "Limit", -1 );
 	}
 

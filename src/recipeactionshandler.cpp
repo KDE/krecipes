@@ -86,7 +86,7 @@ void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const
 {
 	if ( i ) { // Check if the QListViewItem actually exists
 		if ( i->rtti() == 1000 ) {
-			kpop->setItemVisible( remove_from_cat_item, i->parent() != 0 );
+			kpop->setItemVisible( remove_from_cat_item, i->parent() && i->parent()->rtti() == 1001 );
 			exec( Recipe, p );
 		}
 		else if ( i->rtti() == 1001 && i->firstChild() )  //is a category... don't pop-up for an empty category though

@@ -14,12 +14,14 @@
 #define _KRECIPESPREF_H_
 
 #include <kdialogbase.h>
-#include <klineedit.h>
-#include <qframe.h>
 
 class ServerPrefs;
 class NumbersPrefs;
 class ImportPrefs;
+class PerformancePrefs;
+
+class KIntNumInput;
+class KLineEdit;
 
 class QButtonGroup;
 class QCheckBox;
@@ -36,6 +38,7 @@ private:
 	ServerPrefs *m_pageServer;
 	NumbersPrefs *m_pageNumbers;
 	ImportPrefs *m_pageImport;
+	PerformancePrefs *m_pagePerformance;
 
 private slots:
 	void saveSettings( void );
@@ -136,6 +139,22 @@ public:
 protected:
 	QVBoxLayout* Form1Layout;
 	QCheckBox* overwriteCheckbox;
+};
+
+
+class PerformancePrefs : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PerformancePrefs( QWidget *parent = 0 );
+
+	void saveOptions();
+
+protected:
+	QVBoxLayout* Form1Layout;
+	KIntNumInput* catLimitInput;
+	KIntNumInput* limitInput;
 };
 
 #endif // _KRECIPESPREF_H_
