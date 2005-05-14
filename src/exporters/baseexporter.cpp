@@ -12,18 +12,21 @@
 #include "baseexporter.h"
 
 #include <qfile.h>
+#include <qfileinfo.h>
 
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <kfilterdev.h>
+#include <ktar.h>
+#include <kstandarddirs.h>
 
 #include "backends/recipedb.h"
 
 BaseExporter::BaseExporter( const QString& _filename, const QString &format ) :
 		file( 0 ),
+		tar_file( 0 ),
 		filename( _filename ),
 		m_progress_dlg( 0 ),
 		compress(false)
@@ -37,6 +40,7 @@ BaseExporter::BaseExporter( const QString& _filename, const QString &format ) :
 BaseExporter::~BaseExporter()
 {
 	delete file;
+	delete tar_file;
 }
 
 int BaseExporter::headerFlags() const
@@ -72,8 +76,11 @@ bool BaseExporter::createFile()
 		return true;
 
 	if ( !filename.isEmpty() ) {
-		if ( compress )
-			file = KFilterDev::deviceForFile(filename,"application/x-gzip");
+		if ( compress ) {
+			tar_file = new KTar( filename, "application/x-gzip" );
+			QFileInfo fi( filename );
+			file = new QFile( locateLocal( "tmp",fi.fileName()+"ml" ) );
+		}
 		else
 			file = new QFile(filename);
 
@@ -85,7 +92,8 @@ bool BaseExporter::createFile()
 
 QString BaseExporter::fileName() const
 {
-	return filename;
+	QFileInfo fi( filename );
+	return fi.fileName();
 }
 
 void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
@@ -132,6 +140,12 @@ void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 		stream << createFooter();
 
 		file->close();
+
+		if ( tar_file && tar_file->open( IO_WriteOnly ) ) {
+			QFileInfo fi( file->name() );
+			tar_file->addLocalFile( file->name(), fi.fileName() );
+			tar_file->close();
+		}
 	}
 }
 

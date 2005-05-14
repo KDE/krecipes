@@ -176,8 +176,6 @@ bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *
 	}
 
 	if ( !parent_should_show && parent->category.id != -1 ) {
-		kdDebug()<<"deleting: "<<parent->category.name<<" ("<<parent->category.id<<")"<<endl;
-
 		//FIXME: CategoryTree is broken when deleting items
 		//delete parent;
 

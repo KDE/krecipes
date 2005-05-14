@@ -19,7 +19,10 @@
 
 #include "datablocks/recipelist.h"
 
-class QIODevice;
+class QFile;
+
+class KTar;
+
 class RecipeDB;
 
 class BaseExporter
@@ -58,7 +61,8 @@ private:
 	bool createFile();
 	void saveToFile( const QValueList<int> &ids, RecipeDB *database );
 
-	QIODevice* file;
+	QFile* file;
+	KTar *tar_file;
 	QString filename;
 	KProgressDialog *m_progress_dlg;
 	bool compress;
