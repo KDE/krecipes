@@ -29,7 +29,12 @@ BaseImporter::BaseImporter() :
 		m_recipe_list( new RecipeList ),
 		m_cat_structure( 0 ),
 		file_recipe_count( 0 )
-{}
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "Import" );
+
+	direct = config->readBoolEntry( "DirectImport", false );
+}
 
 BaseImporter::~BaseImporter()
 {
@@ -53,89 +58,135 @@ void BaseImporter::add( const Recipe &recipe )
 	file_recipe_count++;
 	Recipe copy = recipe;
 	copy.recipeID = -1; //make sure an importer didn't give this a value
-	m_recipe_list->append( copy );
+
+	if ( direct ) {
+		if ( !m_progress_dialog->wasCancelled() ) {
+			RecipeList list;
+			list.append( recipe );
+			importRecipes( list, m_database, m_progress_dialog );
+		}
+	}
+	else
+		m_recipe_list->append( copy );
 }
 
 void BaseImporter::parseFiles( const QStringList &filenames )
 {
-	for ( QStringList::const_iterator file_it = filenames.begin(); file_it != filenames.end(); ++file_it ) {
-		file_recipe_count = 0;
-		parseFile( *file_it );
-
-		if ( m_error_msgs.count() > 0 ) {
-			//<!doc> ensures it is detected as RichText
-			m_master_error += QString( i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" ) ).arg( *file_it );
-			m_master_error += "<ul><li>" + m_error_msgs.join( "</li><li>" ) + "</li></ul>";
-
-			m_error_msgs.clear();
-		}
-		else if ( m_warning_msgs.count() > 0 ) {
-			m_master_warning += QString( i18n( "The file <b>%1</b> generated the following warning(s):" ) ).arg( *file_it );
-			m_master_warning += "<ul><li>" + m_warning_msgs.join( "</li><li>" ) + "</li></ul>";
-
-			m_warning_msgs.clear();
+	if ( direct )
+		m_filenames = filenames;
+	else {
+		for ( QStringList::const_iterator file_it = filenames.begin(); file_it != filenames.end(); ++file_it ) {
+			file_recipe_count = 0;
+			parseFile( *file_it );
+	
+			if ( m_error_msgs.count() > 0 ) {
+				//<!doc> ensures it is detected as RichText
+				m_master_error += QString( i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" ) ).arg( *file_it );
+				m_master_error += "<ul><li>" + m_error_msgs.join( "</li><li>" ) + "</li></ul>";
+	
+				m_error_msgs.clear();
+			}
+			else if ( m_warning_msgs.count() > 0 ) {
+				m_master_warning += QString( i18n( "The file <b>%1</b> generated the following warning(s):" ) ).arg( *file_it );
+				m_master_warning += "<ul><li>" + m_warning_msgs.join( "</li><li>" ) + "</li></ul>";
+	
+				m_warning_msgs.clear();
+			}
 		}
 	}
 }
 
 void BaseImporter::import( RecipeDB *db, bool automatic )
 {
-	if ( m_recipe_list->count() == 0 )
-		return ;
-
-	RecipeList selected_recipes;
-	if ( !automatic ) {
-		RecipeImportDialog import_dialog( *m_recipe_list );
-
-		if ( import_dialog.exec() != QDialog::Accepted ) {
-			//clear errors and messages so they won't be displayed
-			m_error_msgs.clear();
-			m_warning_msgs.clear();
-			return ;
+	if ( direct ) {
+		m_database = db;
+	
+		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n( "Importing selected recipes" ), QString::null, true );
+		KProgress *progress = m_progress_dialog->progressBar();
+		progress->setPercentageVisible(false);
+		progress->setTotalSteps( 0 );
+	
+		for ( QStringList::const_iterator file_it = m_filenames.begin(); file_it != m_filenames.end(); ++file_it ) {
+			file_recipe_count = 0;
+			parseFile( *file_it );
+	
+			if ( m_progress_dialog->wasCancelled() )
+				break;
 		}
-
-		selected_recipes = import_dialog.getSelectedRecipes();
+		
+		importUnitRatios( db );
+		delete m_progress_dialog;
 	}
-	else
-		selected_recipes = *m_recipe_list;
+	else {
+		if ( m_recipe_list->count() == 0 )
+			return ;
+	
+		RecipeList selected_recipes;
+		if ( !automatic ) {
+			RecipeImportDialog import_dialog( *m_recipe_list );
+	
+			if ( import_dialog.exec() != QDialog::Accepted ) {
+				//clear errors and messages so they won't be displayed
+				m_error_msgs.clear();
+				m_warning_msgs.clear();
+				return ;
+			}
+	
+			selected_recipes = import_dialog.getSelectedRecipes();
+		}
+		else
+			selected_recipes = *m_recipe_list;
+	
+		m_recipe_list->empty();
+		//db->blockSignals(true);
+	
+		KProgressDialog *progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n( "Importing selected recipes" ), QString::null, true );
+		KProgress *progress = progress_dialog->progressBar();
+		progress->setTotalSteps( selected_recipes.count() );
+		progress->setFormat( i18n( "%v/%m Recipes" ) );
+	
+		if ( m_cat_structure ) {
+			importCategoryStructure( db, m_cat_structure );
+			delete m_cat_structure;
+			m_cat_structure = 0;
+		}
+	
+		importRecipes( selected_recipes, db, progress_dialog );
+	
+		importUnitRatios( db );
+	
+		//db->blockSignals(false);
+		delete progress_dialog;
+	}
+}
 
-	m_recipe_list->empty();
-	//db->blockSignals(true);
-
-	//cache some data we'll need
-	int max_units_length = db->maxUnitNameLength();
-	int max_group_length = db->maxIngGroupNameLength();
-
+void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KProgressDialog *progress_dialog )
+{
 	// Load Current Settings
 	KConfig *config = kapp->config();
 	config->setGroup( "Import" );
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
 
-	KProgressDialog *progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n( "Importing selected recipes" ), QString::null, true );
-	KProgress *progress = progress_dialog->progressBar();
-	progress->setTotalSteps( selected_recipes.count() );
-	progress->setFormat( i18n( "%v/%m Recipes" ) );
-
-	if ( m_cat_structure ) {
-		importCategoryStructure( db, m_cat_structure );
-		delete m_cat_structure;
-		m_cat_structure = 0;
-	}
+	//cache some data we'll need
+	int max_units_length = db->maxUnitNameLength();
+	int max_group_length = db->maxIngGroupNameLength();
 
 	RecipeList::iterator recipe_it; RecipeList::iterator recipe_list_end( selected_recipes.end() );
 	RecipeList::iterator recipe_it_old = selected_recipes.end();
 	for ( recipe_it = selected_recipes.begin(); recipe_it != recipe_list_end; ++recipe_it ) {
-		if ( progress_dialog->wasCancelled() ) {
-			KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
-			//db->blockSignals(false);
-			return ;
+		if ( !direct ) {
+			if ( progress_dialog->wasCancelled() ) {
+				KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
+				//db->blockSignals(false);
+				return ;
+			}
 		}
 
 		if ( recipe_it_old != selected_recipes.end() )
 			selected_recipes.remove( recipe_it_old );
 
 		progress_dialog->setLabel( QString( i18n( "Importing recipe: %1" ) ).arg( ( *recipe_it ).title ) );
-		progress->advance( 1 );
+		progress_dialog->progressBar()->advance( 1 );
 		kapp->processEvents();
 
 		ElementList ingGroupList;
@@ -227,11 +278,6 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 
 		recipe_it_old = recipe_it; //store to delete once we've got the next recipe
 	}
-
-	importUnitRatios( db );
-
-	//db->blockSignals(false);
-	delete progress_dialog;
 }
 
 void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )

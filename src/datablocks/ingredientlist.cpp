@@ -65,8 +65,8 @@ int IngredientList::find( int id ) const // Search by id (which uses search by i
 
 Ingredient IngredientList::findByName( const QString &ing ) const
 {
-	IngredientList::const_iterator end = constEnd();
-	for ( IngredientList::const_iterator it = constBegin(); it != end; ++it ) {
+	IngredientList::const_iterator it_end = end();
+	for ( IngredientList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name == ing )
 			return *it;
 	}
@@ -78,8 +78,8 @@ Ingredient IngredientList::findByName( const QString &ing ) const
 
 Ingredient IngredientList::findByName( const QRegExp &rx ) const
 {
-	IngredientList::const_iterator end = constEnd();
-	for ( IngredientList::const_iterator it = constBegin(); it != end; ++it ) {
+	IngredientList::const_iterator it_end = end();
+	for ( IngredientList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name.find(rx) != -1 )
 			return *it;
 	}

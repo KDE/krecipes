@@ -92,8 +92,7 @@ bool BaseExporter::createFile()
 
 QString BaseExporter::fileName() const
 {
-	QFileInfo fi( filename );
-	return fi.fileName();
+	return filename;
 }
 
 void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
@@ -139,13 +138,18 @@ void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 
 		stream << createFooter();
 
-		file->close();
-
 		if ( tar_file && tar_file->open( IO_WriteOnly ) ) {
+			//close, which flushes the buffer, and then open for reading
+			file->close();
+			file->open( IO_ReadOnly );
+
 			QFileInfo fi( file->name() );
-			tar_file->addLocalFile( file->name(), fi.fileName() );
+			QByteArray data = file->readAll();
+			tar_file->writeFile( fi.fileName(), fi.owner(), fi.group(), data.size(), data );
 			tar_file->close();
 		}
+
+		file->close();
 	}
 }
 

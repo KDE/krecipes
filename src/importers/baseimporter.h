@@ -22,9 +22,13 @@
 #include "datablocks/elementlist.h"
 #include "datablocks/unitratiolist.h"
 
+#define DIRECT_IMPORT 1
+
 class Recipe;
 class RecipeDB;
 class CategoryTree;
+
+class KProgressDialog;
 
 /** @brief Subclass this class to create an importer for a specific file type.
   *
@@ -62,6 +66,8 @@ public:
 
 protected:
 	virtual void parseFile( const QString &filename ) = 0;
+	
+	void importRecipes( RecipeList &selected_recipes, RecipeDB *db, KProgressDialog *progess_dialog );
 
 	/** Add a recipe to be imported into the database */
 	void add( const Recipe &recipe );
@@ -103,6 +109,11 @@ private:
 	QString m_master_error;
 
 	int file_recipe_count;
+	bool direct;
+
+	RecipeDB *m_database;
+	KProgressDialog *m_progress_dialog;
+	QStringList m_filenames;
 };
 
 #endif //BASEIMPORTER_H

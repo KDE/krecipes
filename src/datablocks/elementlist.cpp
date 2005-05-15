@@ -23,8 +23,8 @@ Element ElementList::getElement( int index ) const
 
 Element ElementList::findByName( const QString &name ) const
 {
-	ElementList::const_iterator end = constEnd();
-	for ( ElementList::const_iterator it = constBegin(); it != end; ++it ) {
+	ElementList::const_iterator it_end = end();
+	for ( ElementList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name == name )
 			return * it;
 	}
@@ -36,8 +36,8 @@ Element ElementList::findByName( const QString &name ) const
 
 Element ElementList::findByName( const QRegExp &rx ) const
 {
-	ElementList::const_iterator end = constEnd();
-	for ( ElementList::const_iterator it = constBegin(); it != end; ++it ) {
+	ElementList::const_iterator it_end = end();
+	for ( ElementList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name.find(rx) != -1 )
 			return * it;
 	}
@@ -56,10 +56,10 @@ bool ElementList::containsId( int id ) const // Search by id (which uses search 
 
 bool ElementList::containsSubSet( ElementList &el )
 {
-	ElementList::const_iterator end = el.end();
+	ElementList::const_iterator it_end = el.end();
 	ElementList::const_iterator it;
 
-	for ( it = el.constBegin(); it != end; ++it ) {
+	for ( it = el.begin(); it != it_end; ++it ) {
 		if ( !containsId( ( *it ).id ) )
 			return false;
 	}

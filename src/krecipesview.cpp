@@ -12,6 +12,8 @@
 
 #include "krecipesview.h"
 
+#include <cstdlib>
+
 #include <qlayout.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -262,7 +264,7 @@ KrecipesView::~KrecipesView()
 	delete database;
 }
 
-void KrecipesView::questionRerunWizard( const QString &message, const QString &error )
+bool KrecipesView::questionRerunWizard( const QString &message, const QString &error )
 {
 	QString yesNoMessage = message + " " + i18n( "\nWould you like to run the setup wizard again? Otherwise, the application will be closed." );
 	int answer = KMessageBox::questionYesNo( this, yesNoMessage );
@@ -271,8 +273,11 @@ void KrecipesView::questionRerunWizard( const QString &message, const QString &e
 		wizard( true );
 	else {
 		kdError() << error << ". " << i18n( "Exiting" ) << endl;
-		kapp->exit( 1 );
+		kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
+		return false;
 	}
+
+	return true;
 }
 
 void KrecipesView::translate()
@@ -859,7 +864,9 @@ void KrecipesView::initDatabase( KConfig *config )
 
 	while ( !database->ok() ) {
 		// Ask the user if he wants to rerun the wizard
-		questionRerunWizard( database->err(), i18n( "Unable to open database" ) );
+		bool rerun = questionRerunWizard( database->err(), i18n( "Unable to open database" ) );
+		if ( !rerun )
+			break;
 
 		// Reread the configuration file.
 		// The user may have changed the data and/or DB type
@@ -877,6 +884,7 @@ void KrecipesView::initDatabase( KConfig *config )
 
 			kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
 			kapp->exit( 1 );
+			break;
 		}
 	}
 	kdDebug() << i18n( "DB started correctly\n" ).latin1();

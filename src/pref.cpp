@@ -434,6 +434,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	config->setGroup( "Import" );
 
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
+	bool direct = config->readBoolEntry( "DirectImport", false );
 
 	Form1Layout = new QVBoxLayout( this, 11, 6 );
 
@@ -441,9 +442,20 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	overwriteCheckbox->setChecked( overwrite );
 	overwriteCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
+	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import when importing multiple recipes" ), this );
+	directImportCheckbox->setChecked( !direct );
+	directImportCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+
 	Form1Layout->addWidget( overwriteCheckbox );
+	Form1Layout->addWidget( directImportCheckbox );
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+	QWhatsThis::add( directImportCheckbox, 
+		i18n("When this is enabled, the importer will show every recipe in the file(s) and allow you to select which recipes you want imported.\n \
+							\
+		Disable this to always import every recipe, which allows for faster and less memory-intensive imports.")
+	);
 
 	adjustSize();
 }
@@ -454,6 +466,7 @@ void ImportPrefs::saveOptions()
 	config->setGroup( "Import" );
 
 	config->writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
+	config->writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
 }
 
 

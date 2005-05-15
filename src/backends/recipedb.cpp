@@ -381,10 +381,10 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	int unit_mg_id = createUnit( "mg", this );
 
 	QValueList<ingredient_nutrient_data>::const_iterator it;
-	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->constEnd();
+	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
 	const int total = data->count();
 	int counter = 0;
-	for ( it = data->constBegin(); it != data_end; ++it ) {
+	for ( it = data->begin(); it != data_end; ++it ) {
 		counter++;
 		kdDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
 		if ( progress ) {
@@ -404,9 +404,9 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
 			QValueList<double>::const_iterator property_it;
-			QValueList<double>::const_iterator property_end = ( *it ).data.constEnd();
+			QValueList<double>::const_iterator property_end = ( *it ).data.end();
 			int i = 0;
-			for ( property_it = ( *it ).data.constBegin(); property_it != property_end; ++property_it, ++i )
+			for ( property_it = ( *it ).data.begin(); property_it != property_end; ++property_it, ++i )
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
 	}
