@@ -483,7 +483,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 
 	Form1Layout = new QVBoxLayout( this, 11, 6 );
 
-	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when loaded with many thousands of recipes</b>."), this );
+	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
 
 	QHBox *catLimitHBox = new QHBox( this );

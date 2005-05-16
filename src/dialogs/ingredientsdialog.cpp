@@ -92,9 +92,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 
 	unitsListView = new KreListView ( this, i18n( "Unit list" ) );
-	unitsListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	unitsListView->listView() ->addColumn( i18n( "Units" ) );
-	unitsListView->listView() ->setSorting( 1 );
+	unitsListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	unitsListView->listView() ->setSorting( 0 );
 	unitsListView->listView() ->setAllColumnsShowFocus( true );
 	layout->addMultiCellWidget ( unitsListView, 1, 4, 5, 5 );
 	unitsListView->listView() ->setMinimumWidth( 150 );
@@ -127,10 +127,10 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	propertiesListView = new KreListView ( this, i18n( "Ingredient Properties" ) );
 	layout->addMultiCellWidget ( propertiesListView, 6, 9, 5, 5 );
 
-	propertiesListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	propertiesListView->listView() ->addColumn( i18n( "Property" ) );
 	propertiesListView->listView() ->addColumn( i18n( "Amount" ) );
 	propertiesListView->listView() ->addColumn( i18n( "Units" ) );
+	propertiesListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	propertiesListView->listView() ->setAllColumnsShowFocus( true );
 	propertiesListView->listView() ->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	propertiesListView->listView() ->setSorting( -1 ); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
@@ -223,7 +223,7 @@ void IngredientsDialog::reloadUnitList()
 
 		for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
 			if ( !( *unit_it ).name.isEmpty() ) {
-				( void ) new QListViewItem( unitsListView->listView(), QString::number( ( *unit_it ).id ), ( *unit_it ).name );
+				( void ) new QListViewItem( unitsListView->listView(), ( *unit_it ).name, QString::number( ( *unit_it ).id ) );
 			}
 		}
 
@@ -314,7 +314,7 @@ void IngredientsDialog:: reloadPropertyList( void )
 		for ( IngredientProperty * prop = propertiesList->getFirst(); prop; prop = propertiesList->getNext() ) {
 			QListViewItem * lastElement = propertiesListView->listView() ->lastItem();
 			//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-			( void ) new QListViewItem( propertiesListView->listView(), lastElement, QString::number( prop->id ), prop->name, QString::number( prop->amount ), prop->units + QString( "/" ) + prop->perUnit.name );
+			( void ) new QListViewItem( propertiesListView->listView(), lastElement, prop->name, QString::number( prop->amount ), prop->units + QString( "/" ) + prop->perUnit.name, QString::number( prop->id ) );
 			// Store the perUnits with the ID for using later
 			Element perUnitEl;
 			perUnitEl.id = prop->perUnit.id;
