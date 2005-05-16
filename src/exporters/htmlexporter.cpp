@@ -102,9 +102,10 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	int line;
 	int column;
 	if ( !doc.setContent( &input, &error, &line, &column ) ) {
-		kdDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column ) << endl;
+		QString error_str = QString( i18n( "Error loading layout file: \"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column );
+		kdDebug() << error_str << endl;
 		m_error = true;
-		return "<html></html>";
+		return "<html>"+error_str+"</html>";
 	}
 
 	//put all the recipe photos into this directory
@@ -130,6 +131,9 @@ QString HTMLExporter::createHeader( const RecipeList & )
 
 QString HTMLExporter::createFooter()
 {
+	if ( m_error )
+		return QString::null;
+
 	recipeStyleHTML += "</style>";
 	recipeBodyHTML += "</body>\n";
 
