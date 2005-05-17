@@ -78,20 +78,7 @@ void BaseImporter::parseFiles( const QStringList &filenames )
 		for ( QStringList::const_iterator file_it = filenames.begin(); file_it != filenames.end(); ++file_it ) {
 			file_recipe_count = 0;
 			parseFile( *file_it );
-	
-			if ( m_error_msgs.count() > 0 ) {
-				//<!doc> ensures it is detected as RichText
-				m_master_error += QString( i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" ) ).arg( *file_it );
-				m_master_error += "<ul><li>" + m_error_msgs.join( "</li><li>" ) + "</li></ul>";
-	
-				m_error_msgs.clear();
-			}
-			else if ( m_warning_msgs.count() > 0 ) {
-				m_master_warning += QString( i18n( "The file <b>%1</b> generated the following warning(s):" ) ).arg( *file_it );
-				m_master_warning += "<ul><li>" + m_warning_msgs.join( "</li><li>" ) + "</li></ul>";
-	
-				m_warning_msgs.clear();
-			}
+			processMessages();
 		}
 	}
 }
@@ -109,6 +96,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		for ( QStringList::const_iterator file_it = m_filenames.begin(); file_it != m_filenames.end(); ++file_it ) {
 			file_recipe_count = 0;
 			parseFile( *file_it );
+			processMessages();
 	
 			if ( m_progress_dialog->wasCancelled() )
 				break;
@@ -194,6 +182,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		IngredientList::iterator ing_list_end( ( *recipe_it ).ingList.end() );
 		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
+			}
+
 			//create ingredient groups
 			Element el = ingGroupList.findByName( ( *ing_it ).group );
 			if ( el.id != -1 )
@@ -213,6 +206,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 				new_ing_id = db->lastInsertID();
 			}
 
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
+			}
+
 			Unit real_unit( ( *ing_it ).units.name.left( max_units_length ), ( *ing_it ).units.plural.left( max_units_length ) );
 			if ( real_unit.name.isEmpty() )
 				real_unit.name = real_unit.plural;
@@ -223,6 +221,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			if ( new_unit_id == -1 ) {
 				db->createNewUnit( real_unit.name, real_unit.plural );
 				new_unit_id = db->lastInsertID();
+			}
+
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
 			}
 
 			int new_prep_id = -1;
@@ -248,6 +251,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 		ElementList::iterator author_list_end( ( *recipe_it ).authorList.end() );
 		for ( ElementList::iterator author_it = ( *recipe_it ).authorList.begin(); author_it != author_list_end; ++author_it ) {
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
+			}
+
 			int new_author_id = db->findExistingAuthorByName(( *author_it ).name);
 			if ( new_author_id == -1 && !( *author_it ).name.isEmpty() ) {
 				db->createNewAuthor( ( *author_it ).name );
@@ -259,6 +267,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 		ElementList::iterator cat_list_end( ( *recipe_it ).categoryList.end() );
 		for ( ElementList::iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != cat_list_end; ++cat_it ) {
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
+			}
+
 			int new_cat_id = db->findExistingCategoryByName(( *cat_it ).name);
 			if ( new_cat_id == -1 && !( *cat_it ).name.isEmpty() ) {
 				db->createNewCategory( ( *cat_it ).name );
@@ -272,6 +285,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			( *recipe_it ).recipeID = db->findExistingRecipeByName( ( *recipe_it ).title );
 		else //rename
 			( *recipe_it ).title = db->getUniqueRecipeTitle( ( *recipe_it ).title );
+
+		if ( direct ) {
+			progress_dialog->progressBar()->advance( 1 );
+			kapp->processEvents();
+		}
 
 		//save into the database
 		db->saveRecipe( &( *recipe_it ) );
@@ -336,5 +354,22 @@ void BaseImporter::importUnitRatios( RecipeDB *db )
 			ratio.ratio = ( *it ).ratio;
 			db->saveUnitRatio( &ratio );
 		}
+	}
+}
+
+void BaseImporter::processMessages()
+{
+	if ( m_error_msgs.count() > 0 ) {
+		//<!doc> ensures it is detected as RichText
+		m_master_error += QString( i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" ) ).arg( *file_it );
+		m_master_error += "<ul><li>" + m_error_msgs.join( "</li><li>" ) + "</li></ul>";
+
+		m_error_msgs.clear();
+	}
+	else if ( m_warning_msgs.count() > 0 ) {
+		m_master_warning += QString( i18n( "The file <b>%1</b> generated the following warning(s):" ) ).arg( *file_it );
+		m_master_warning += "<ul><li>" + m_warning_msgs.join( "</li><li>" ) + "</li></ul>";
+
+		m_warning_msgs.clear();
 	}
 }

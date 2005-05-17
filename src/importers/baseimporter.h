@@ -22,8 +22,6 @@
 #include "datablocks/elementlist.h"
 #include "datablocks/unitratiolist.h"
 
-#define DIRECT_IMPORT 1
-
 class Recipe;
 class RecipeDB;
 class CategoryTree;
@@ -97,6 +95,8 @@ protected:
 private:
 	void importCategoryStructure( RecipeDB *, const CategoryTree * );
 	void importUnitRatios( RecipeDB * );
+
+	void processMessages();
 
 	RecipeList *m_recipe_list;
 	CategoryTree *m_cat_structure;
