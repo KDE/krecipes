@@ -14,6 +14,7 @@
 
 #include <qwidget.h>
 
+#include <kapplication.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <klistview.h>
@@ -137,33 +138,38 @@ void RecipeActionsHandler::open()
 void RecipeActionsHandler::edit()
 {
 	QListViewItem * it = parentListView->selectedItem();
-	if ( it ) {
-		if ( it->rtti() == 1000 ) {
-			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
-			emit recipeSelected( recipe_it->recipeID(), 1 );
-		}
+	if ( it && it->rtti() == 1000 ) {
+		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
+		emit recipeSelected( recipe_it->recipeID(), 1 );
 	}
+	else
+		KMessageBox::information( kapp->mainWidget(), i18n("No recipe selected.") );
 }
 
 void RecipeActionsHandler::recipeExport()
 {
-	if ( parentListView->selectedItem() ) {
-		if ( parentListView->selectedItem() ->firstChild() )
+	if ( parentListView->selectedItem() && parentListView->selectedItem()->rtti() >= 1000 ) {
+		if ( parentListView->selectedItem()->rtti() == 1001 )
 			categoryExport();
-		else {
-			if ( parentListView->selectedItem() ->rtti() == 1000 ) {
+		else if ( parentListView->selectedItem() ->rtti() == 1000 ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) parentListView->selectedItem();
 				exportRecipe( recipe_it->recipeID(), i18n( "Export Recipe" ), recipe_it->title(), database );
-			}
 		}
 	}
 	else //if nothing selected, export all visible recipes
 	{
 		QValueList<int> ids = getAllVisibleItems();
-
-		if ( ids.count() > 0 )
-			exportRecipes( ids, i18n( "Export Recipes" ), i18n( "Recipes" ), database );
-		//else TODO: give notice
+		if ( ids.count() > 0 ) {
+			switch ( KMessageBox::questionYesNo( kapp->mainWidget(), i18n("No recipes are currently selected.\nWould you like to export all recipes in the current view?")) )
+			{
+			case KMessageBox::Yes:
+				exportRecipes( ids, i18n( "Export Recipes" ), i18n( "Recipes" ), database );
+				break;
+			default: break;
+			}
+		}
+		else
+			KMessageBox::information( kapp->mainWidget(), i18n("No recipe selected.") );
 	}
 }
 
