@@ -96,7 +96,7 @@ private:
 	void importCategoryStructure( RecipeDB *, const CategoryTree * );
 	void importUnitRatios( RecipeDB * );
 
-	void processMessages();
+	void processMessages( const QString &file );
 
 	RecipeList *m_recipe_list;
 	CategoryTree *m_cat_structure;
