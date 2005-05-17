@@ -542,6 +542,10 @@ void AdvancedSearchDialog::search()
 		( void ) new RecipeListItem( resultsListView, *it );
 	}
 
+	if ( !resultsListView->firstChild() ) {
+		( void ) new QListViewItem( resultsListView, "--- "+i18n("No matching recipes found")+" ---");
+	}
+
 	KApplication::restoreOverrideCursor();
 }
 
@@ -562,6 +566,9 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 
 	if ( sql_wildcards ) {
 		for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
+			(*it).replace("%","\\%");
+			(*it).replace("_","\\_");
+
 			(*it).replace("*","%");
 			(*it).replace("?","_");
 		}
