@@ -52,9 +52,30 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
+#define DEBUG_TIMING 1
+
+#if DEBUG_TIMING
+#define START_TIMER(MSG) \
+ dbg_timer.start(); kdDebug()<<MSG<<endl;
+#else
+#define START_TIMER(MSG)
+#endif
+
+#if DEBUG_TIMING
+#define END_TIMER() \
+ kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
+#else
+#define END_TIMER()
+#endif
+
 KrecipesView::KrecipesView( QWidget *parent )
 		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
 {
+	#if DEBUG_TIMING
+	QTime dbg_timer;
+	QTime dbg_total_timer; dbg_total_timer.start();
+	#endif
+
 	kapp->dcopClient()->setDefaultObject( objId() );
 
 	// Init the setup wizard if necessary
@@ -81,8 +102,9 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Check if the database type is among those supported
 	// and initialize the database in each case
-
+	START_TIMER("Initializing database")
 	initDatabase( config );
+	END_TIMER()
 
 
 	// Design the GUI
@@ -97,7 +119,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Design Left Panel
 
-
+	START_TIMER("Setting up buttons")
 	// Buttons
 	buttonsList = new QPtrList<KreMenuButton>();
 	buttonsList->setAutoDelete( TRUE );
@@ -173,20 +195,56 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextText->setReadOnly( true );
 	contextText->setWordWrap( QTextEdit::WidgetWidth );
 	contextLayout->addMultiCellWidget( contextText, 1, 4, 0, 2 );
+	END_TIMER()
 
 	// Right Panel Widgets
+	START_TIMER("Creating input dialog")
 	inputPanel = new RecipeInputDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating recipe view")
 	viewPanel = new RecipeViewDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating recipe selection dialog")
 	selectPanel = new SelectRecipeDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating ingredients component")
 	ingredientsPanel = new IngredientsDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating properties component")
 	propertiesPanel = new PropertiesDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating units component")
 	unitsPanel = new UnitsDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating shopping list dialog")
 	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating diet wizard dialog")
 	dietPanel = new DietWizardDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating categories component")
 	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating authors component")
 	authorsPanel = new AuthorsDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating prep methods component")
 	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
+	END_TIMER()
+
+	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
+	END_TIMER()
 
 	// Use to keep track of the panels
 	panelMap.insert( inputPanel, RecipeEdit );
@@ -254,6 +312,10 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Close Splash Screen
 	delete start_logo;
+
+	#if DEBUG_TIMING
+	kdDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
+	#endif
 }
 
 KrecipesView::~KrecipesView()
