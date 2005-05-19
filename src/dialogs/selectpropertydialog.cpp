@@ -46,7 +46,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	propertyChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( propertyChooseView );
 
-	QHBoxLayout *layout2 = new QHBoxLayout( this, 0, 6 );
+	QHBoxLayout *layout2 = new QHBoxLayout;
 
 	perUnitsLabel = new QLabel( box );
 	perUnitsLabel->setGeometry( QRect( 5, 285, 100, 30 ) );
@@ -57,7 +57,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	layout2->addWidget( perUnitsBox );
 	boxLayout->addLayout( layout2 );
 
-	QHBoxLayout *layout1 = new QHBoxLayout( this, 0, 6 );
+	QHBoxLayout *layout1 = new QHBoxLayout;
 
 	okButton = new QPushButton( box );
 	okButton->setText( i18n( "&OK" ) );

@@ -28,7 +28,7 @@ CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
 	elementEdit = new KLineEdit( box );
 	boxLayout->addWidget( elementEdit );
 
-	QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
+	QHBoxLayout *button_hbox = new QHBoxLayout( 5 );
 	okButton = new QPushButton( i18n( "&OK" ), this );
 	cancelButton = new QPushButton( i18n( "&Cancel" ), this );
 	button_hbox->addWidget( okButton );

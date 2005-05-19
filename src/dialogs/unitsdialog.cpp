@@ -50,13 +50,11 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	newUnitButton = new QPushButton( unitTab );
 	newUnitButton->setText( i18n( "Create ..." ) );
 	newUnitButton->setFlat( true );
-	newUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	vboxl->addWidget( newUnitButton );
 
 	removeUnitButton = new QPushButton( unitTab );
 	removeUnitButton->setText( i18n( "Delete" ) );
 	removeUnitButton->setFlat( true );
-	removeUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	vboxl->addWidget( removeUnitButton );
 	vboxl->addStretch();
 	layout->addLayout( vboxl );

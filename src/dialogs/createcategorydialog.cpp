@@ -43,7 +43,7 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	boxLayout->addWidget( subcatHBox );
 	loadCategories( categories );
 
-	QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
+	QHBoxLayout *button_hbox = new QHBoxLayout( 5 );
 	okButton = new QPushButton( i18n( "&OK" ), this );
 	cancelButton = new QPushButton( i18n( "&Cancel" ), this );
 	button_hbox->addWidget( okButton );

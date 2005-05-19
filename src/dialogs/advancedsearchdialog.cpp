@@ -81,8 +81,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QHBox *titleHBox = new QHBox( titleFrame );
 	QLabel *titleInfoLabel = new QLabel(i18n("Keywords:"),titleHBox);
-	titleFrameLayout->addWidget( titleInfoLabel );
-
 	titleEdit = new QLineEdit( titleHBox, "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
 

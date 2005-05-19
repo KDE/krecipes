@@ -29,7 +29,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 
 	box->setTitle( i18n( "New Unit" ) );
 
-	QGridLayout *gridLayout = new QGridLayout( this, 2, 2, 5, 5 );
+	QGridLayout *gridLayout = new QGridLayout( 2, 2, 5 );
 
 	QLabel *nameLabel = new QLabel( i18n( "Singular:" ), this );
 	nameEdit = new KLineEdit( name, this );
@@ -43,7 +43,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( pluralLabel, 1, 0 );
 	gridLayout->addWidget( pluralEdit, 1, 1 );
 
-	QHBoxLayout *button_hbox = new QHBoxLayout( this, 5, 5 );
+	QHBoxLayout *button_hbox = new QHBoxLayout;
 	okButton = new QPushButton( i18n( "&OK" ), this );
 	cancelButton = new QPushButton( i18n( "&Cancel" ), this );
 	button_hbox->addWidget( okButton );

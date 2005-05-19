@@ -33,7 +33,7 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	propertyListView->reload();
 	layout->addWidget ( propertyListView );
 
-	QVBoxLayout* vboxl = new QVBoxLayout( this, 0, KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 	addPropertyButton = new QPushButton( this );
 	addPropertyButton->setText( i18n( "Create ..." ) );
 	addPropertyButton->setFlat( true );

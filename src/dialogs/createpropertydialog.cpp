@@ -31,7 +31,7 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list ) : 
 	boxLayout->setAlignment( Qt::AlignTop );
 	box->setTitle( i18n( "New Property" ) );
 
-	QGridLayout *gridLayout = new QGridLayout( this, 2, 2, 5, 5 );
+	QGridLayout *gridLayout = new QGridLayout( 2, 2, 5 );
 
 	nameEditText = new QLabel( i18n( "Property name:" ), this );
 	propertyNameEdit = new KLineEdit( this );
@@ -45,7 +45,7 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list ) : 
 	gridLayout->addWidget( unitsText, 1, 0 );
 	gridLayout->addWidget( propertyUnits, 1, 1 );
 
-	QHBoxLayout *buttonsHBox = new QHBoxLayout( this, 5, 5 );
+	QHBoxLayout *buttonsHBox = new QHBoxLayout;
 	okButton = new QPushButton( i18n( "&OK" ), this );
 	cancelButton = new QPushButton( i18n( "&Cancel" ), this );
 	QSpacerItem* spacer = new QSpacerItem( 40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
