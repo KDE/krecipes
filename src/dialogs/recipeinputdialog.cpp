@@ -598,7 +598,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	enableChangedSignal(); // Enables the signal "changed()"
 
 	// Initialize lists
-	reloadCombos();
+	//reloadCombos();
 
 	// Connect signals & Slots
 	connect( ingredientBox, SIGNAL( activated( int ) ), this, SLOT( reloadUnitsCombo( int ) ) );

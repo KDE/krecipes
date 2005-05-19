@@ -476,7 +476,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <int>*recipeCategoryList, int limit, int offset )
+void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
 {
 	list->clear();
 
@@ -508,9 +508,7 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 						recipe.name = unescapeAndDecode( row.data( 1 ) );
 						list->append( recipe );
 			
-						if ( recipeCategoryList ) {
-							recipeCategoryList->append ( new int(-1) );
-						}
+						recipeCategoryList->append ( -1 );
 			
 						row = recipeToLoad.next();
 			
@@ -539,9 +537,7 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			list->append( recipe );
 
 			if ( recipeCategoryList ) {
-				int * category = new int;
-				*category = row.data( 2 ).toInt();
-				recipeCategoryList->append ( category );
+				recipeCategoryList->append ( row.data( 2 ).toInt() );
 			}
 
 			row = recipeToLoad.next();

@@ -163,7 +163,7 @@ public:
 	void loadRecipe( Recipe *recipe, int items, int id );
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
 	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
-	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QPtrList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
+	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
 

@@ -510,7 +510,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <int>*recipeCategoryList, int limit, int offset )
+void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
 {
 	list->clear();
 
@@ -527,17 +527,15 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 
 			if ( offset == 0 ) {
 				QString uncategorized_command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
-				QSqlQuery loadUncategorized( uncategorized_command, database );
-				if ( loadUncategorized.isActive() ) {
-					while ( loadUncategorized.next() ) {
+				m_query.exec( uncategorized_command );
+				if ( m_query.isActive() ) {
+					while ( m_query.next() ) {
 						Element recipe;
-						recipe.id = loadUncategorized.value( 0 ).toInt();
-						recipe.name = unescapeAndDecode( loadUncategorized.value( 1 ).toString() );
+						recipe.id = m_query.value( 0 ).toInt();
+						recipe.name = unescapeAndDecode( m_query.value( 1 ).toString() );
 						list->append( recipe );
 			
-						if ( recipeCategoryList ) {
-							recipeCategoryList->append ( new int(-1) );
-						}
+						recipeCategoryList->append ( -1 );
 					}
 				}
 			}
@@ -564,9 +562,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QPtrList <
 			list->append( recipe );
 
 			if ( recipeCategoryList ) {
-				int * category = new int;
-				*category = recipeToLoad.value( 2 ).toInt();
-				recipeCategoryList->append ( category );
+				recipeCategoryList->append ( recipeToLoad.value( 2 ).toInt() );
 			}
 		}
 	}
@@ -1459,7 +1455,11 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 	}
 
 	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
-	QSqlQuery categoryToLoad( command, database );
+
+	QSqlQuery categoryToLoad( QString::null, database );
+	categoryToLoad.setForwardOnly(true);
+	categoryToLoad.exec(command);
+
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
 			int id = categoryToLoad.value( 0 ).toInt();
@@ -1468,7 +1468,9 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
 			CategoryTree *list_child = list->add( el );
 
+			//QTime dbg_timer; dbg_timer.start(); kdDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
 			loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
+			// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
 		}
 	}
 }

@@ -70,7 +70,6 @@ private:
 	int dayNumber;
 	int mealNumber;
 
-	IngredientPropertyList propertyList;
 	RecipeList *dietRList;
 
 	// Cache data blocks
@@ -123,7 +122,7 @@ public:
 
 	MealInput( QWidget *parent, RecipeDB *database );
 	~MealInput();
-	void reload( IngredientPropertyList &propertyList );
+	void reload();
 	int dishNo( void )
 	{
 		return dishNumber;
@@ -138,7 +137,6 @@ private:
 	// Widgets
 	// Private Variables
 	int dishNumber;
-	IngredientPropertyList propertyListLocalCache;
 	RecipeDB *database;
 
 	// Settings section for the meal
@@ -157,8 +155,6 @@ private:
 	// Settings for the dish
 	QWidgetStack *dishStack;
 
-	// Methods
-	void reload(); // Reloads again from the cached data
 public slots:
 	void nextDish( void );
 	void prevDish( void );
@@ -179,7 +175,7 @@ public:
 	bool isCategoryFilteringEnabled( void );
 	void loadConstraints( ConstraintList *constraints );
 	void loadEnabledCategories( ElementList* categories );
-	void reload( IngredientPropertyList *propertyList );
+	void reload();
 	void setDishTitle( const QString & text );
 	void clear();
 

@@ -124,14 +124,14 @@ void DietWizardDialog::clear()
 void DietWizardDialog::reload( void )
 {
 	//Fill in the caches from the database
-	database->loadUnitRatios( &cachedUnitRatios );
-	database->loadProperties( &cachedIngredientProperties, -1 );
+	//database->loadUnitRatios( &cachedUnitRatios );
+	//database->loadProperties( &cachedIngredientProperties, -1 );
 }
 
 void DietWizardDialog::newTab( const QString &name )
 {
 	mealTab = new MealInput( mealTabs, database );
-	mealTab->reload( propertyList );
+	mealTab->reload();
 	mealTabs->addTab( mealTab, name );
 	mealTabs->setCurrentPage( mealTabs->indexOf( mealTab ) );
 }
@@ -177,6 +177,9 @@ void DietWizardDialog::createDiet( void )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
+	database->loadUnitRatios( &cachedUnitRatios );
+	database->loadProperties( &cachedIngredientProperties, -1 );
+
 	RecipeList rlist;
 	dietRList->clear();
 	// Get the whole list of recipes, detailed
@@ -219,7 +222,7 @@ void DietWizardDialog::createDiet( void )
 	}
 
 	if ( alert )
-		KMessageBox::information( this, i18n( "I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. " ) );
+		KMessageBox::sorry( this, i18n( "I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. " ) );
 
 	else // show the resulting diet
 	{
@@ -238,6 +241,9 @@ void DietWizardDialog::createDiet( void )
 		dietDisplay->show();
 	}
 
+	cachedUnitRatios.clear();
+	cachedIngredientProperties.clear();
+
 	KApplication::restoreOverrideCursor();
 }
 
@@ -255,10 +261,6 @@ void DietWizardDialog::populateIteratorList( RecipeList &rl, QValueList <RecipeL
 MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 		database( db )
 {
-
-	// Initialize data
-	propertyListLocalCache.clear();
-
 	// Design the dialog
 	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->setSpacing( 10 );
@@ -325,32 +327,13 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 MealInput::~MealInput()
 {}
 
-// reload from outside with new data
-
-void MealInput::reload( IngredientPropertyList &propertyList )
-{
-	propertyListLocalCache.clear();
-
-	// Cache the data into the internal lists so it can be reused when creating new dishes
-
-	//Cache the possible constraints (properties) list
-	for ( IngredientProperty * pty = propertyList.getFirst(); pty; pty = propertyList.getNext() ) {
-		propertyListLocalCache.add( *pty );
-	}
-
-	reload(); //load from the cache now
-
-}
-
-// reload internally with the cached data
-
 void MealInput::reload()
 {
 	QValueList<DishInput*>::iterator it;
 	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
 		DishInput *di;
 		di = ( *it );
-		di->reload( &propertyListLocalCache );
+		di->reload();
 	}
 }
 
@@ -364,7 +347,7 @@ void MealInput::changeDishNumber( int dn )
 	if ( dn > dishNumber ) {
 		while ( dishNumber != dn ) {
 			DishInput * newDish = new DishInput( this, database, QString( i18n( "Dish %1" ) ).arg( dishNumber + 1 ) );
-			newDish->reload( &propertyListLocalCache );
+			newDish->reload();
 			dishStack->addWidget( newDish );
 			dishInputList.append( newDish );
 			dishStack->raiseWidget( newDish );
@@ -498,7 +481,7 @@ bool DishInput::isCategoryFilteringEnabled( void )
 	return categoryFiltering;
 }
 
-void DishInput::reload( IngredientPropertyList * /*propertyList*/ )
+void DishInput::reload()
 {
 	constraintsView->reload();
 }

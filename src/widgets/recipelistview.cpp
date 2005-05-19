@@ -114,35 +114,17 @@ void RecipeListView::load(int limit, int offset)
 
 		// Now show the recipes
 		ElementList recipeList;
-		QIntDict <bool> recipeCategorized;
-		recipeCategorized.setAutoDelete( true ); // it deletes the bools after finished
-		QPtrList <int> recipeCategoryList;
-		recipeCategoryList.setAutoDelete(true);
+		QValueList <int> recipeCategoryList;
 
 		database->loadRecipeList( &recipeList, 0, &recipeCategoryList, curr_limit, curr_offset ); // Read the whole list of recipes including category
 
-		int *categoryID;
+		QValueList<int>::const_iterator categoryID;
 		ElementList::const_iterator recipe_it;
-		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.first();recipe_it != recipeList.end() && categoryID;++recipe_it, categoryID = recipeCategoryList.next() ) {
-			if ( items_map[ *categoryID ] ) {
-				Recipe recipe;
-				recipe.recipeID = ( *recipe_it ).id;
-				recipe.title = ( *recipe_it ).name;
-				createRecipe( recipe, *categoryID );
-				recipeCategorized.insert( ( *recipe_it ).id, new bool( true ) ); // mark the recipe as categorized
-			}
-		}
-
-		// Add those recipes that have not been categorised in any categories
-		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.first();recipe_it != recipeList.end() && categoryID;++recipe_it, categoryID = recipeCategoryList.next() ) {
-			if ( !recipeCategorized[ ( *recipe_it ).id ] ) {
-				if ( !m_uncat_item )
-					m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
-				Recipe recipe;
-				recipe.recipeID = ( *recipe_it ).id;
-				recipe.title = ( *recipe_it ).name;
-				(void)new RecipeListItem( m_uncat_item, recipe );
-			}
+		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.begin(); recipe_it != recipeList.end(); ++recipe_it, ++categoryID ) {
+			Recipe recipe;
+			recipe.recipeID = ( *recipe_it ).id;
+			recipe.title = ( *recipe_it ).name;
+			createRecipe( recipe, *categoryID );
 		}
 	}
 }
