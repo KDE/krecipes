@@ -15,7 +15,7 @@
 #include <kaccel.h>
 #include <kdebug.h>
 
-KreTextEdit::KreTextEdit( QWidget *parent, const ElementList &ingredients ) : KTextEdit( parent ), KCompletionBase()
+KreTextEdit::KreTextEdit( QWidget *parent ) : KTextEdit( parent ), KCompletionBase()
 {
 	KCompletion * comp = completionObject(); //creates the completion object
 	comp->setIgnoreCase( true );

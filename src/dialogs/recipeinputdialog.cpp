@@ -539,9 +539,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 
 	QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
 
-	ElementList ing_list;
-	database->loadIngredients( &ing_list );
-	instructionsEdit = new KreTextEdit( instructionsTab, ing_list );
+	instructionsEdit = new KreTextEdit( instructionsTab );
 	instructionsEdit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	instructionsEdit->setTabChangesFocus ( true );
 	instructionsLayout->addWidget( instructionsEdit );

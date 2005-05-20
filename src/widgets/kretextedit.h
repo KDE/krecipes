@@ -24,7 +24,7 @@ class KreTextEdit : public KTextEdit, KCompletionBase
 	Q_OBJECT
 
 public:
-	KreTextEdit( QWidget *parent, const ElementList &ingredients );
+	KreTextEdit( QWidget *parent );
 
 	virtual void setCompletedText( const QString &text );
 	virtual void setCompletedItems( const QStringList &items );
