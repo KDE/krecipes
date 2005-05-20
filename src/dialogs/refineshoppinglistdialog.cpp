@@ -42,7 +42,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
 
-	allIngListView = new KreListView( this, QString::null, true, 1 );
+	allIngListView = new KreListView( this, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->reload();
  	allIngListView->setListView(list_view);
