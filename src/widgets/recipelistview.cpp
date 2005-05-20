@@ -231,9 +231,11 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 					delete recipe_it;
 				}
 				else {
-					//move this item to the root
+					//the item is now uncategorized
 					recipe_it->parent() ->takeItem( recipe_it );
-					insertItem( recipe_it );
+					if ( !m_uncat_item )
+						m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+					m_uncat_item->insertItem( recipe_it );
 				}
 				break;
 			}
@@ -259,9 +261,11 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 	for ( QListViewItem * it = item->firstChild(); it; it = next_sibling ) {
 		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
-			//move this item to the root
+			//the item is now uncategorized
 			it->parent() ->takeItem( it );
-			insertItem( it );
+			if ( !m_uncat_item )
+				m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+			m_uncat_item->insertItem( it );
 		}
 		moveChildrenToRoot( it );
 	}
