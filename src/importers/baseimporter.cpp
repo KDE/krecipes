@@ -87,8 +87,9 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 {
 	if ( direct ) {
 		m_database = db;
-	
-		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n( "Importing selected recipes" ), QString::null, true );
+
+		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), 0,
+			i18n( "Importing selected recipes" ), QString::null, true );
 		KProgress *progress = m_progress_dialog->progressBar();
 		progress->setPercentageVisible(false);
 		progress->setTotalSteps( 0 );
@@ -107,7 +108,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	}
 	else {
 		if ( m_recipe_list->count() == 0 )
-			return ;
+			return;
 	
 		RecipeList selected_recipes;
 		if ( !automatic ) {
@@ -127,24 +128,23 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	
 		m_recipe_list->empty();
 		//db->blockSignals(true);
-	
-		KProgressDialog *progress_dialog = new KProgressDialog( kapp->mainWidget(), 0, i18n( "Importing selected recipes" ), QString::null, true );
-		KProgress *progress = progress_dialog->progressBar();
+
+		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), 0,
+			i18n( "Importing selected recipes" ), QString::null, true );
+		KProgress *progress = m_progress_dialog->progressBar();
 		progress->setTotalSteps( selected_recipes.count() );
 		progress->setFormat( i18n( "%v/%m Recipes" ) );
-	
+
 		if ( m_cat_structure ) {
 			importCategoryStructure( db, m_cat_structure );
 			delete m_cat_structure;
 			m_cat_structure = 0;
 		}
-	
-		importRecipes( selected_recipes, db, progress_dialog );
-	
+		importRecipes( selected_recipes, db, m_progress_dialog );
 		importUnitRatios( db );
 	
 		//db->blockSignals(false);
-		delete progress_dialog;
+		delete m_progress_dialog; m_progress_dialog = 0;
 	}
 }
 
@@ -300,8 +300,13 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )
 {
-	delete m_cat_structure;
-	m_cat_structure = cat_structure;
+	if ( direct ) {
+		importCategoryStructure( m_database, cat_structure );
+	}
+	else {
+		delete m_cat_structure;
+		m_cat_structure = cat_structure;
+	}
 }
 
 void BaseImporter::importCategoryStructure( RecipeDB *db, const CategoryTree *categoryTree )
