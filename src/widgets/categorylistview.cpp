@@ -460,7 +460,7 @@ bool StdCategoryListView::checkBounds( const QString &name )
 
 
 
-CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive ) : CategoryListView( parent, db ),
+CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive, const ElementList &init_items_checked ) : CategoryListView( parent, db ),
   exclusive(_exclusive)
 {
 	addColumn( i18n( "Category" ) );
@@ -469,6 +469,9 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, boo
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+
+	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )
+		m_selections.append(*it);
 }
 
 void CategoryCheckListView::removeCategory( int id )

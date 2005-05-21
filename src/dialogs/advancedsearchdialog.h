@@ -11,12 +11,7 @@
 #ifndef ADVANCEDSEARCHDIALOG_H
 #define ADVANCEDSEARCHDIALOG_H
 
-#include <qmap.h>
 #include <qwidget.h>
-
-#include "widgets/ingredientlistview.h"
-#include "widgets/categorylistview.h"
-#include "widgets/authorlistview.h"
 
 class QVBoxLayout;
 class QHBoxLayout;

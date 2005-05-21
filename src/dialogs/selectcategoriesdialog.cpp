@@ -22,7 +22,7 @@
 #include "backends/recipedb.h"
 #include "widgets/categorylistview.h"
 
-SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const QMap<Element, bool> &selected, RecipeDB *db ) : QDialog( parent, 0, true )
+SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db ) : QDialog( parent, 0, true )
 {
 
 	// Store pointer
@@ -32,7 +32,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const QMap<Elem
 	layout = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
 	//Category List
-	categoryListView = new CategoryCheckListView( this, db );
+	categoryListView = new CategoryCheckListView( this, db, true, items_on );
 	categoryListView->reload();
 	layout->addMultiCellWidget( categoryListView, 0, 0, 0, 1 );
 
@@ -55,7 +55,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const QMap<Elem
 	layout->addWidget( cancelButton, 2, 1 );
 
 	// Load the list
-	loadCategories( selected );
+	loadCategories( items_on );
 
 	// Connect signals & Slots
 	connect ( newCatButton, SIGNAL( clicked() ), SLOT( createNewCategory() ) );
@@ -72,13 +72,12 @@ void SelectCategoriesDialog::getSelectedCategories( ElementList *newSelected )
 	*newSelected = categoryListView->selections();
 }
 
-void SelectCategoriesDialog::loadCategories( const QMap<Element, bool> &selected )
+void SelectCategoriesDialog::loadCategories( const ElementList &items_on )
 {
-	ElementList categories; database->loadCategories( &categories );
-
-	for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+	ElementList::const_iterator it;
+        for ( it = items_on.begin(); it != items_on.end(); ++it ) {
 		CategoryCheckListItem *new_item = (CategoryCheckListItem*)categoryListView->findItem(QString::number((*it).id),1);
-		if ( new_item && selected[*it] ) {
+		if ( new_item ) {
 			new_item->setOn(true);
 		}
 	}
@@ -102,9 +101,11 @@ void SelectCategoriesDialog::createNewCategory( void )
 
 		database->createNewCategory( result, subcategory ); // Create the new category in the database
 
-		//a listview item will automatically be create, but we need to turn it on
+		//a listview item will automatically be created, but we need to turn it on
 		Element new_cat( result, database->lastInsertID() );
-		((QCheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ))->setOn(true);
+		QCheckListItem *new_item = ((QCheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ));
+		if ( new_item )
+			new_item->setOn(true);
 	}
 
 	delete categoryDialog;

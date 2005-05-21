@@ -1457,7 +1457,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
 
 	QSqlQuery categoryToLoad( QString::null, database );
-	//categoryToLoad.setForwardOnly(true); FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
+	//categoryToLoad.setForwardOnly(true); //FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
 	categoryToLoad.exec(command);
 
 	if ( categoryToLoad.isActive() ) {

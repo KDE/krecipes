@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -138,7 +138,6 @@ private:
 	int createNewPrepIfNecessary( const QString &prep );
 	int createNewGroupIfNecessary( const QString &group );
 	void checkIfNewUnits();
-	void findCategoriesInRecipe( const ElementList &categoryList, QMap<Element, bool> &selected );
 	void loadIngredientListCombo( void );
 	void loadUnitListCombo( void );
 	void loadPrepMethodListCombo( void );

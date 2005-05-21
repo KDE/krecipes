@@ -35,7 +35,7 @@ class SelectCategoriesDialog: public QDialog
 
 public:
 
-	SelectCategoriesDialog( QWidget *parent, const QMap<Element, bool> &selected, RecipeDB* db );
+	SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB* db );
 	~SelectCategoriesDialog();
 	void getSelectedCategories( ElementList *selected );
 private:
@@ -50,7 +50,7 @@ private:
 	RecipeDB *database;
 
 	//Private methods
-	void loadCategories( const QMap<Element, bool> &selected );
+	void loadCategories( const ElementList &items_on );
 
 private slots:
 	void createNewCategory( void );

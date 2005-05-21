@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -1053,7 +1053,7 @@ void RecipeInputDialog::removeIngredient( void )
 void RecipeInputDialog::createNewIngredientIfNecessary()
 {
 	if ( !ingredientBox->currentText().stripWhiteSpace().isEmpty() &&
-	        !ingredientBox->contains( ingredientBox->currentText() ) ) {
+	        database->findExistingIngredientByName( ingredientBox->currentText().stripWhiteSpace() ) == -1 ) {
 		QString newIngredient( ingredientBox->currentText() );
 		database->createNewIngredient( newIngredient );
 
@@ -1433,13 +1433,7 @@ bool RecipeInputDialog::everythingSaved()
 
 void RecipeInputDialog::addCategory( void )
 {
-	ElementList categoryList;
-	database->loadCategories( &categoryList );
-	QMap<Element, bool> selected;
-	findCategoriesInRecipe( categoryList, selected );
-
-	SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( this, selected, database );
-
+	SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
 
 	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
 		loadedRecipe->categoryList.clear();
@@ -1454,20 +1448,6 @@ void RecipeInputDialog::addCategory( void )
 	showCategories();
 
 
-}
-
-// Find which of the elements in the category lists is selected in the recipe (i.e. which categories this recipe belongs to)
-void RecipeInputDialog::findCategoriesInRecipe( const ElementList &categoryList, QMap<Element, bool> &selected )
-{
-
-	for ( ElementList::const_iterator cat_it = categoryList.begin(); cat_it != categoryList.end(); ++cat_it ) {
-		bool value;
-		if ( ( loadedRecipe->categoryList.contains( *cat_it ) ) > 0 )   // Recipe contains this category?
-			value = true;
-		else
-			value = false;
-		selected.insert( *cat_it, value );
-	}
 }
 
 void RecipeInputDialog::showCategories( void )

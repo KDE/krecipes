@@ -243,7 +243,7 @@ class CategoryCheckListView : public CategoryListView
 	Q_OBJECT
 
 public:
-	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true );
+	CategoryCheckListView( QWidget *parent, RecipeDB *, bool exclusive=true, const ElementList &init_items_checked = ElementList() );
 
 	virtual void stateChange( CategoryCheckListItem*, bool );
 
@@ -258,7 +258,8 @@ protected:
 
 	virtual void load( int limit, int offset );
 
-	QMap<int, CategoryCheckListItem*> items_map;
+	QMap<int, QListViewItem*> items_map;
+
 	bool exclusive;
 
 private:
