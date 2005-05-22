@@ -28,7 +28,7 @@ public:
 
 	QString text( int c ) const {
 		if ( c == 0 ) {
-			return QString("<< %1").arg(i18n("Prev"));
+			return QString("<< %1").arg(i18n("Previous"));
 		}
 		else
 			return QString::null;
@@ -133,7 +133,7 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 		}
 	}
 
-	k->ignore();
+	KListView::keyPressEvent(k);
 }
 
 void DBListViewBase::reload()
