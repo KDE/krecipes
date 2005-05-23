@@ -133,8 +133,10 @@ void RecipeListView::load(int limit, int offset)
 
 void RecipeListView::populate( QListViewItem *item )
 {
+	StdCategoryListView::populate(item);
+
 	if ( !flat_list ) {
-		if ( item->firstChild() ) return;
+		if ( item->firstChild() && item->firstChild()->rtti() == RECIPELISTITEM_RTTI ) return;
 
 		int id;
 		if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
@@ -160,8 +162,6 @@ void RecipeListView::populate( QListViewItem *item )
 			createRecipe( recipe, id );
 		}
 	}
-
-	StdCategoryListView::populate(item);
 }
 
 void RecipeListView::populateAll( QListViewItem *parent )
