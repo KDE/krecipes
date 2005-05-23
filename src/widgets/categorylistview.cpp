@@ -1,3 +1,4 @@
+
 /***************************************************************************
 *   Copyright (C) 2004 by                                                 *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
@@ -141,6 +142,10 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 	connect( db, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
 	connect( db, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
 
+	connect( this, SIGNAL( spacePressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
@@ -150,16 +155,46 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 void CategoryListView::load( int limit, int offset )
 {
 	CategoryTree categoryTree;
-	database->loadCategories( &categoryTree, limit, offset );
-	loadListView( &categoryTree );
+	database->loadCategories( &categoryTree, limit, offset, -1, false );
+
+	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		createCategory( child_it->category, -1 );
+	}
 }
 
-void CategoryListView::loadListView( const CategoryTree *categoryTree, int parent_id )
+void CategoryListView::populate( QListViewItem *item )
 {
-	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
-		createCategory( child_it->category, parent_id );
-		loadListView( child_it, child_it->category.id );
+	if ( item->firstChild() ) return;
+
+	int id;
+	if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
+		CategoryListItem *cat_item = (CategoryListItem*)item;
+		id = cat_item->categoryId();
 	}
+	else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI ) {
+		CategoryCheckListItem *cat_item = (CategoryCheckListItem*)item;
+		id = cat_item->categoryId();
+	}
+	else
+		return;
+
+	CategoryTree categoryTree;
+	database->loadCategories( &categoryTree, -1, 0, id, false );
+	
+	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		createCategory( child_it->category, id );
+	}
+}
+
+void CategoryListView::open( QListViewItem *item )
+{
+	Q_ASSERT( item );
+	if ( childCount() == 0 ) return;
+
+	if ( !item->firstChild() )
+		populate(item);
+
+	item->setOpen(true);
 }
 
 void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
@@ -219,6 +254,11 @@ void StdCategoryListView::load(int limit, int offset)
 	items_map.clear();
 
 	CategoryListView::load(limit,offset);
+}
+
+void StdCategoryListView::setPixmap( const QPixmap &icon )
+{
+	m_folder_icon = icon;
 }
 
 void StdCategoryListView::preparePopup()
@@ -368,6 +408,7 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
+		new_item->setPixmap( 0, m_folder_icon );
 	}
 }
 

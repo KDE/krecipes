@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kcursor.h>
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
@@ -122,6 +123,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 		         () ) );
 	connect( this, SIGNAL( recipeSelected( bool ) ), removeButton, SLOT( setEnabled( bool ) ) );
 	connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
+	connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
 	connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
 	connect( recipeListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), categoryBox, SLOT( loadNextGroup() ) );
@@ -150,7 +152,17 @@ void SelectRecipeDialog::reload()
 
 void SelectRecipeDialog::refilter()
 {
-	recipeFilter->filter(searchBox->text());
+	if ( !searchBox->text().isEmpty() ) {
+		KApplication::setOverrideCursor( KCursor::waitCursor() );
+		ensurePopulated();
+		recipeFilter->filter(searchBox->text());
+		KApplication::restoreOverrideCursor();
+	}
+}
+
+void SelectRecipeDialog::ensurePopulated()
+{
+	recipeListView->populateAll();
 }
 
 void SelectRecipeDialog::haveSelectedItems()

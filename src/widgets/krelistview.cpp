@@ -58,8 +58,10 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	if ( embeddedWidget )
 		embeddedWidget->reparent( header, QPoint( 0, 0 ) );
 	//Connect Signals & Slots
-	if ( filter )
+	if ( filter ) {
+		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( searchTextChanged() ) );
 		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( filter( const QString& ) ) );
+	}
 }
 
 KreListView::~KreListView()
@@ -96,7 +98,6 @@ void KreListView::refilter()
 
 void KreListView::setCustomFilter( QObject *receiver, const char *slot )
 {
-	disconnect( SIGNAL( textChanged( const QString& ) ), filterEdit, SLOT( filter( const QString& ) ) );
 	connect( filterEdit, SIGNAL( textChanged( const QString& ) ), receiver, slot );
 }
 

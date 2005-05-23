@@ -43,6 +43,9 @@ public:
 
 	void setCustomFilter( QObject *receiver, const char *slot );
 
+signals:
+	void searchTextChanged();
+
 private:
 	QHBox *filterBox;
 	QLabel *listLabel;

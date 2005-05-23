@@ -90,7 +90,7 @@ void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const
 			kpop->setItemVisible( remove_from_cat_item, i->parent() && i->parent()->rtti() == 1001 );
 			exec( Recipe, p );
 		}
-		else if ( i->rtti() == 1001 && i->firstChild() )  //is a category... don't pop-up for an empty category though
+		else if ( i->rtti() == 1001 )  //is a category... don't pop-up for an empty category though
 			exec( Category, p );
 	}
 }
@@ -103,6 +103,7 @@ void RecipeActionsHandler::open()
 			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
 			emit recipeSelected( recipe_it->recipeID(), 0 );
 		}
+		#if 0
 		else if ( it->rtti() == 1001 && it->firstChild() )  //CategoryListItem and not empty
 		{
 			QValueList<int> ids;
@@ -132,6 +133,7 @@ void RecipeActionsHandler::open()
 			}
 			emit recipesSelected( ids, 0 );
 		}
+		#endif
 	}
 }
 

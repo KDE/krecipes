@@ -153,7 +153,7 @@ public:
 	virtual int lastInsertID() = 0;
 
 	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 ) = 0;
+	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true ) = 0;
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadIngredientGroups( ElementList *list ) = 0;
 	virtual void loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
@@ -164,6 +164,7 @@ public:
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
 	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
+	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
 

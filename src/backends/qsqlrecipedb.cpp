@@ -524,21 +524,6 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList
 			CategoryTree tree; loadCategories(&tree,limit,offset);
 			QStringList ids; getIDList(&tree,ids);
 			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
-
-			if ( offset == 0 ) {
-				QString uncategorized_command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
-				m_query.exec( uncategorized_command );
-				if ( m_query.isActive() ) {
-					while ( m_query.next() ) {
-						Element recipe;
-						recipe.id = m_query.value( 0 ).toInt();
-						recipe.name = unescapeAndDecode( m_query.value( 1 ).toString() );
-						list->append( recipe );
-			
-						recipeCategoryList->append ( -1 );
-					}
-				}
-			}
 		}
 
 	}
@@ -567,6 +552,24 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList
 		}
 	}
 }
+
+
+void QSqlRecipeDB::loadUncategorizedRecipes( ElementList *list )
+{
+	list->clear();
+
+	QString command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1";
+	m_query.exec( command );
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
+			Element recipe;
+			recipe.id = m_query.value( 0 ).toInt();
+			recipe.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			list->append( recipe );
+		}
+	}
+}
+
 
 
 void QSqlRecipeDB::removeRecipe( int id )
@@ -1444,7 +1447,7 @@ void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 	}
 }
 
-void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, int parent_id )
+void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, int parent_id, bool recurse )
 {
 	QString limit_str;
 	if ( parent_id == -1 ) {
@@ -1468,9 +1471,11 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
 			CategoryTree *list_child = list->add( el );
 
-			//QTime dbg_timer; dbg_timer.start(); kdDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
-			loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
-			// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
+			if ( recurse ) {
+				//QTime dbg_timer; dbg_timer.start(); kdDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
+				loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
+				// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
+			}
 		}
 	}
 }

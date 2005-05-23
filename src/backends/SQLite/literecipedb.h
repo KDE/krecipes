@@ -93,7 +93,7 @@ public:
 
 	void loadAllRecipeIngredients( RecipeIngredientList *list, bool withNames = true );
 	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
-	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1 );
+	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientGroups( ElementList *list );
 	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
@@ -102,6 +102,7 @@ public:
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = 0, QValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 );
+	void loadUncategorizedRecipes( ElementList *list );
 	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList );
 

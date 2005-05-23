@@ -23,6 +23,7 @@ class RecipeDB;
 class RecipeList;
 class ShoppingListViewDialog;
 class RecipeActionsHandler;
+class RecipeListView;
 
 /**
 @author Unai Garro
@@ -56,6 +57,7 @@ private:
 	QPushButton* clearButton;
 	ShoppingListViewDialog *shoppingListDisplay;
 	RecipeActionsHandler *actionHandler;
+	RecipeListView *listview;
 
 public slots:
 	void addRecipeToShoppingList( int recipeID ); // Called from inputdialog-> through krecipesview
@@ -66,6 +68,7 @@ private slots:
 	void showShoppingList( void );
 	void clear( void );
 	void slotDropped( KListView *list, QDropEvent *e, QListViewItem *after );
+	void ensurePopulated();
 };
 
 #endif

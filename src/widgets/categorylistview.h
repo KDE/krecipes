@@ -13,6 +13,7 @@
 #define CATEGORYLISTVIEW_H
 
 #include <qmap.h>
+#include <qpixmap.h>
 
 #include "dblistviewbase.h"
 
@@ -23,6 +24,8 @@ class KPopupMenu;
 class RecipeDB;
 class CategoryTree;
 class CategoryCheckListView;
+
+#define CATEGORYCHECKLISTITEM_RTTI 1005
 
 class CategoryCheckListItem : public QCheckListItem
 {
@@ -46,6 +49,11 @@ public:
 	QString categoryName( void )
 	{
 		return ctyStored.name;
+	}
+
+	int rtti() const
+	{
+		return CATEGORYCHECKLISTITEM_RTTI;
 	}
 
 protected:
@@ -73,7 +81,7 @@ public:
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
-
+	
 	Element element() const
 	{
 		return ctyStored;
@@ -105,6 +113,9 @@ class CategoryListView : public DBListViewBase
 
 public:
 	CategoryListView( QWidget *parent, RecipeDB * );
+
+public slots:
+	void open( QListViewItem *item );
 
 protected:
 	virtual void load( int limit, int offset );
@@ -187,9 +198,7 @@ protected slots:
 	virtual void mergeCategories( int id1, int id2 ) = 0;
 
 	virtual void checkCreateCategory( const Element &, int parent_id );
-
-private:
-	void loadListView( const CategoryTree *categoryTree, int parent_id = -1 );
+	virtual void populate( QListViewItem *item );
 };
 
 
@@ -209,6 +218,8 @@ protected:
 	virtual void mergeCategories( int id1, int id2 );
 
 	virtual void load(int limit, int offset);
+
+	void setPixmap( const QPixmap &pixmap );
 
 	QMap<int, CategoryListItem*> items_map;
 
@@ -235,6 +246,8 @@ private:
 	KPopupMenu *kpop;
 	QListViewItem *clipboard_item;
 	QListViewItem *clipboard_parent;
+	
+	QPixmap m_folder_icon;
 };
 
 

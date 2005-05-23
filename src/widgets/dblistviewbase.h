@@ -63,6 +63,7 @@ private:
 	bool bulk_load;
 
 	QListViewItem *lastElement;
+	QListViewItem *delete_me_later;
 };
 
 #endif //LISTVIEWHANDLER_H

@@ -18,6 +18,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 #include "backends/recipedb.h"
 
@@ -73,6 +74,9 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 
 	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
+
+	KIconLoader il;
+	setPixmap( il.loadIcon( "folder", KIcon::NoGroup, 16 ) );
 }
 
 QDragObject *RecipeListView::dragObject()
@@ -110,22 +114,67 @@ void RecipeListView::load(int limit, int offset)
 		}
 	}
 	else {
-		StdCategoryListView::load(limit,offset); //create the categories first, since the recipes are being put into them
+		StdCategoryListView::load(limit,offset);
+
+		if ( offset == 0 ) {
+			ElementList recipeList;
+			database->loadUncategorizedRecipes( &recipeList );
+
+			ElementList::const_iterator recipe_it;
+			for ( recipe_it = recipeList.begin();recipe_it != recipeList.end();++recipe_it ) {
+				Recipe recipe;
+				recipe.recipeID = ( *recipe_it ).id;
+				recipe.title = ( *recipe_it ).name;
+				createRecipe( recipe, -1 );
+			}
+		}
+	}
+}
+
+void RecipeListView::populate( QListViewItem *item )
+{
+	if ( !flat_list ) {
+		if ( item->firstChild() ) return;
+
+		int id;
+		if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
+			CategoryListItem *cat_item = (CategoryListItem*)item;
+			id = cat_item->categoryId();
+		}
+		else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI ) {
+			CategoryCheckListItem *cat_item = (CategoryCheckListItem*)item;
+			id = cat_item->categoryId();
+		}
+		else
+			return;
 
 		// Now show the recipes
 		ElementList recipeList;
-		QValueList <int> recipeCategoryList;
+		database->loadRecipeList( &recipeList, id );
 
-		database->loadRecipeList( &recipeList, 0, &recipeCategoryList, curr_limit, curr_offset ); // Read the whole list of recipes including category
-
-		QValueList<int>::const_iterator categoryID;
 		ElementList::const_iterator recipe_it;
-		for ( recipe_it = recipeList.begin(), categoryID = recipeCategoryList.begin(); recipe_it != recipeList.end(); ++recipe_it, ++categoryID ) {
+		for ( recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it ) {
 			Recipe recipe;
 			recipe.recipeID = ( *recipe_it ).id;
 			recipe.title = ( *recipe_it ).name;
-			createRecipe( recipe, *categoryID );
+			createRecipe( recipe, id );
 		}
+	}
+
+	StdCategoryListView::populate(item);
+}
+
+void RecipeListView::populateAll( QListViewItem *parent )
+{
+	if ( !parent )
+		parent = firstChild();
+	else {
+		populate( parent );
+		parent = parent->firstChild();
+	}
+
+	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+		populateAll( item );
 	}
 }
 

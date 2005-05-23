@@ -78,7 +78,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	}
 }
 
-#define INGLISTVIEWITEM_RTTI 1002
+#define INGLISTVIEWITEM_RTTI 1004
 #define INGGRPLISTVIEWITEM_RTTI 1003
 
 class IngListViewItem : public QListViewItem
@@ -1056,9 +1056,6 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 	        database->findExistingIngredientByName( ingredientBox->currentText().stripWhiteSpace() ) == -1 ) {
 		QString newIngredient( ingredientBox->currentText() );
 		database->createNewIngredient( newIngredient );
-
-		ingredientComboList->clear();
-		loadIngredientListCombo();
 
 		QString saveUnit( unitBox->currentText() );
 		ingredientBox->setCurrentItem( newIngredient );

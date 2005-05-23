@@ -63,11 +63,12 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	recipeListView = new KreListView ( this, i18n( "Full recipe list" ), true, 1 );
 	layout->addWidget( recipeListView, 0, 0 );
-	RecipeListView *listview = new RecipeListView( recipeListView, database );
+	listview = new RecipeListView( recipeListView, database );
 	listview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	listview->setDragEnabled( true );
 	listview->setAcceptDrops( true );
 	listview->setDropVisualizer( false );
+	connect( recipeListView, SIGNAL( searchTextChanged() ), SLOT( ensurePopulated() ) );
 	connect( listview, SIGNAL( dropped( KListView*, QDropEvent*, QListViewItem* ) ),
 	         this, SLOT( slotDropped( KListView*, QDropEvent*, QListViewItem* ) ) );
 	listview->reload();
@@ -145,6 +146,11 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 ShoppingListDialog::~ShoppingListDialog()
 {}
+
+void ShoppingListDialog::ensurePopulated()
+{
+	listview->populateAll();
+}
 
 void ShoppingListDialog::createShopping( const RecipeList &rlist )
 {

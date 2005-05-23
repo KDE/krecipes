@@ -57,7 +57,8 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
   curr_offset(0),
   total(t),
   bulk_load(false),
-  lastElement(0)
+  lastElement(0),
+  delete_me_later(0)
 {
 	setSorting(-1);
 
@@ -100,10 +101,20 @@ void DBListViewBase::rename( QListViewItem *it, int c )
 
 void DBListViewBase::slotDoubleClicked( QListViewItem *it )
 {
+	//we can't delete the item the was double clicked
+	//and yet these functions will clear() the listview.
+	//We'll take the item from the view so it isn't deleted
+	//and delete it ourselves.
+	delete delete_me_later; delete_me_later = 0;
+
 	if ( it->rtti() == PREVLISTITEM_RTTI ) {
+		delete_me_later = it;
+		takeItem(it);
 		activatePrev();
 	}
 	else if ( it->rtti() == NEXTLISTITEM_RTTI ) {
+		delete_me_later = it;
+		takeItem(it);
 		activateNext();
 	}
 }
@@ -141,7 +152,7 @@ void DBListViewBase::reload()
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	//reset some things
-	clear(); kapp->processEvents();
+	clear();
 	lastElement = 0;
 
 	bulk_load=true;
