@@ -14,13 +14,9 @@
 #define RECIPEIMPORTDIALOG_H
 
 #include <qdialog.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <qmap.h>
-#include <q3listview.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
+#include <qlistview.h>
 
 #include "datablocks/recipelist.h"
 
@@ -30,7 +26,7 @@ class KListView;
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
-class Q3ListViewItem;
+class QListViewItem;
 
 class Recipe;
 class CustomCheckListItem;
@@ -67,12 +63,12 @@ private:
   * current state.
   * @author Jason Kivlighn
   */
-class CustomCheckListItem : public Q3CheckListItem
+class CustomCheckListItem : public QCheckListItem
 {
 public:
-	CustomCheckListItem( Q3ListView *parent, const QString &, Type );
+	CustomCheckListItem( QListView *parent, const QString &, Type );
 	CustomCheckListItem( CustomCheckListItem *parent, const QString &, Type );
-	CustomCheckListItem( Q3CheckListItem *parent, Q3CheckListItem *after, const QString &, Type );
+	CustomCheckListItem( QCheckListItem *parent, QCheckListItem *after, const QString &, Type );
 
 protected:
 	virtual void stateChange( bool );

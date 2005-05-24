@@ -22,10 +22,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qtextstream.h>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <qvbox.h>
 
 #include "backends/recipedb.h"
 #include "backends/usda_property_data.h"
@@ -39,7 +36,7 @@ USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *paren
 
 	QHBoxLayout *hbox_layout = new QHBoxLayout( this, 11, 6 );
 
-	Q3VBox *left_box = new Q3VBox( this );
+	QVBox *left_box = new QVBox( this );
 	KreListView *krelistview = new KreListView( left_box, QString::null, true, 0 );
 
 	listView = krelistview->listView();
@@ -63,7 +60,7 @@ USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *paren
 
 	connect( cancel_button, SIGNAL( clicked() ), SLOT( reject() ) );
 	connect( ok_button, SIGNAL( clicked() ), SLOT( importSelected() ) );
-	connect( listView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), this, SLOT( importSelected() ) );
+	connect( listView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( importSelected() ) );
 }
 
 USDADataDialog::~USDADataDialog()
@@ -78,7 +75,7 @@ void USDADataDialog::loadDataFromFile()
 	}
 
 	QFile file( abbrev_file );
-	if ( !file.open( QIODevice::ReadOnly ) ) {
+	if ( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << "Unable to open data file: " << abbrev_file << endl;
 		return ;
 	}
@@ -96,7 +93,7 @@ void USDADataDialog::loadDataFromFile()
 
 		QString ing_id = fields[ 0 ].mid( 1, fields[ 1 ].length() - 2 );
 		QString ing_name = fields[ 1 ].mid( 1, fields[ 1 ].length() - 2 );
-		( void ) new Q3ListViewItem( listView, ing_name, QString::number( index ) ); //using an index instead of the actual id will help find the data later
+		( void ) new QListViewItem( listView, ing_name, QString::number( index ) ); //using an index instead of the actual id will help find the data later
 
 		index++;
 	}
@@ -104,7 +101,7 @@ void USDADataDialog::loadDataFromFile()
 
 void USDADataDialog::importSelected()
 {
-	Q3ListViewItem * item = listView->selectedItem();
+	QListViewItem * item = listView->selectedItem();
 	if ( item ) {
 		int index = item->text( 1 ).toInt();
 		QStringList data = loaded_data[ index ];
@@ -121,14 +118,14 @@ void USDADataDialog::importSelected()
 		database->loadProperties( &existing_ing_props, ingredient.id );
 
 		int i = 0;
-		for ( int j = 2; !property_data_list[ i ].name.isEmpty(); ++j, ++i ) {
+		for ( QStringList::const_iterator it = data.at( 2 ); !property_data_list[ i ].name.isEmpty(); it++, i++ ) {
 			int property_id = property_list.findByName( property_data_list[ i ].name );
 			if ( property_id == -1 ) {
 				database->addProperty( property_data_list[ i ].name, property_data_list[ i ].unit );
 				property_id = database->lastInsertID();
 			}
 
-			double amount = data[j].toDouble() / 100.0; //data givin per 100g so divide by 100 to get the amount in 1 gram
+			double amount = ( *it ).toDouble() / 100.0; //data givin per 100g so divide by 100 to get the amount in 1 gram
 
 			if ( existing_ing_props.find( property_id ) != -1 )  //property already added to ingredient, so just update
 				database->changePropertyAmountToIngredient( ingredient.id, property_id, amount, grams_id );

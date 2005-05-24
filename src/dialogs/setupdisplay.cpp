@@ -22,17 +22,10 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qtooltip.h>
-#include <qobject.h>
-#include <q3valuelist.h>
-
-#include <Q3ActionGroup>
-
-//Added by qt3to4:
-#include <QTextStream>
-#include <Q3Frame>
-#include <QMouseEvent>
+#include <qobjectlist.h>
+#include <qvaluelist.h>
 
 #include "../image.h"
 #include "../mixednumber.h"
@@ -78,7 +71,7 @@ void SetupDisplay::createItem( QWidget *w, unsigned int properties )
 void SetupDisplay::loadLayout( const QString &filename )
 {
 	QFile input( filename );
-	if ( input.open( QIODevice::ReadOnly ) ) {
+	if ( input.open( IO_ReadOnly ) ) {
 		has_changes = false;
 
 		QDomDocument doc;
@@ -98,8 +91,8 @@ void SetupDisplay::loadLayout( const QString &filename )
 		}
 
 		QMap<QString, KreDisplayItem*> widget_map;
-		Q3ValueList<KreDisplayItem*> widgets = box_properties->keys();
-		for ( Q3ValueList<KreDisplayItem*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
+		QValueList<KreDisplayItem*> widgets = box_properties->keys();
+		for ( QValueList<KreDisplayItem*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
 			widget_map.insert( ( *it ) ->widget->name(), *it );
 
 		QDomNodeList l = layout.childNodes();
@@ -264,7 +257,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 	config->writeEntry( "WindowSize", parentWidget() ->size() );
 
 	QFile out_file( filename );
-	if ( out_file.open( QIODevice::WriteOnly ) ) {
+	if ( out_file.open( IO_WriteOnly ) ) {
 		has_changes = false;
 
 		QTextStream stream( &out_file );
@@ -284,7 +277,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		title = sample.title;
 
 	title_box = new QLabel( title, this, "title" );
-	title_box->setFrameShape( Q3Frame::Box );
+	title_box->setFrameShape( QFrame::Box );
 	title_box->setMinimumSize( 5, 5 );
 	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 	QToolTip::add
@@ -302,7 +295,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	instr.replace( "\n", "<BR>" );
 	instr_box = new QLabel( instr, this, "instructions" );
 	instr_box->setMinimumSize( 5, 5 );
-	instr_box->setFrameShape( Q3Frame::Box );
+	instr_box->setFrameShape( QFrame::Box );
 	instr_box->setAlignment( Qt::AlignTop );
 	instr_box->setTextFormat( Qt::RichText ); //allows for wrapping
 	QToolTip::add
@@ -312,7 +305,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//=======================SERVINGS======================//
 	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Servings" ) ).arg( sample.persons ), this, "servings" );
-	servings_box->setFrameShape( Q3Frame::Box );
+	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( servings_box, i18n( "Servings" ) );
 
@@ -320,7 +313,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//=======================PREP TIME======================//
 	preptime_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Preparation Time" ) ).arg( sample.prepTime.toString( "h:mm" ) ), this, "prep_time" );
-	preptime_box->setFrameShape( Q3Frame::Box );
+	preptime_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( preptime_box, i18n( "Preparation Time" ) );
 
@@ -328,7 +321,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//========================PHOTO========================//
 	photo_box = new QLabel( this, "photo" );
-	photo_box->setFrameShape( Q3Frame::Box );
+	photo_box->setFrameShape( QFrame::Box );
 	photo_box->setMinimumSize( 5, 5 );
 	photo_box->setScaledContents( true );
 	if ( !sample.photo.isNull() )
@@ -353,7 +346,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	authors.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
 
 	authors_box = new QLabel( authors, this, "authors" );
-	authors_box->setFrameShape( Q3Frame::Box );
+	authors_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( authors_box, i18n( "Authors" ) );
 
@@ -372,7 +365,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	categories.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
 	categories_box = new QLabel( categories, this, "categories" );
-	categories_box->setFrameShape( Q3Frame::Box );
+	categories_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( categories_box, i18n( "Categories" ) );
 
@@ -380,7 +373,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//=======================ID======================//
 	id_box = new QLabel( QString( i18n( "Recipe: #%1" ) ).arg( sample.recipeID ), this, "header" );
-	id_box->setFrameShape( Q3Frame::Box );
+	id_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( id_box, i18n( "Header" ) );
 
@@ -419,7 +412,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		ingredients = i18n( "<ul><li>Ingredient 1</li><li>Ingredient 2</li><li>...</li></ul>" );
 
 	ingredients_box = new QLabel( ingredients, this, "ingredients" );
-	ingredients_box->setFrameShape( Q3Frame::Box );
+	ingredients_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( ingredients_box, i18n( "Ingredients" ) );
 
@@ -427,7 +420,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 	//========================PROPERTIES========================//
 	properties_box = new QLabel( i18n( "<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>" ), this, "properties" );
-	properties_box->setFrameShape( Q3Frame::Box );
+	properties_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( properties_box, i18n( "Properties" ) );
 
@@ -436,9 +429,9 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 {
-	if ( e->button() == Qt::RightButton ) {
+	if ( e->button() == QMouseEvent::RightButton ) {
 		popup = new KPopupMenu( w ); //parent _must_ be widget acting on
-		popup->insertTitle( ( w == this ) ? i18n( "Background" ) : w->toolTip() );
+		popup->insertTitle( ( w == this ) ? i18n( "Background" ) : QToolTip::textFor( w ) );
 
 		unsigned int properties = 0;
 		for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
@@ -463,14 +456,14 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		}
 
 		if ( properties & Alignment ) {
-			Q3PopupMenu * sub_popup = new Q3PopupMenu( popup );
+			QPopupMenu * sub_popup = new QPopupMenu( popup );
 
-			Q3ActionGroup *alignment_actions = new Q3ActionGroup( this );
+			QActionGroup *alignment_actions = new QActionGroup( this );
 			alignment_actions->setExclusive( true );
-//FIXME:Qt4
-//			new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
-//			new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
-//			new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+
+			new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
+			new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
+			new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
 
 			connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
 

@@ -23,12 +23,6 @@
 #include "widgets/recipelistview.h"
 #include "recipefilter.h"
 #include "recipeactionshandler.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QDropEvent>
-#include <QBoxLayout>
 
 /** A simple listview to accept dropping a RecipeItemDrag */
 class ShoppingListView : public KListView
@@ -43,7 +37,7 @@ protected:
 		return RecipeItemDrag::canDecode( event );
 	}
 
-	Q3DragObject *dragObject()
+	QDragObject *dragObject()
 	{
 		RecipeListItem * item = dynamic_cast<RecipeListItem*>( selectedItem() );
 		if ( item != 0 ) {
@@ -75,8 +69,8 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	listview->setAcceptDrops( true );
 	listview->setDropVisualizer( false );
 	connect( recipeListView, SIGNAL( searchTextChanged() ), SLOT( ensurePopulated() ) );
-	connect( listview, SIGNAL( dropped( KListView*, QDropEvent*, Q3ListViewItem* ) ),
-	         this, SLOT( slotDropped( KListView*, QDropEvent*, Q3ListViewItem* ) ) );
+	connect( listview, SIGNAL( dropped( KListView*, QDropEvent*, QListViewItem* ) ),
+	         this, SLOT( slotDropped( KListView*, QDropEvent*, QListViewItem* ) ) );
 	listview->reload();
 	recipeListView->setListView( listview );
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
@@ -105,8 +99,8 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	slistview->setDragEnabled( true );
 	slistview->setAcceptDrops( true );
 	slistview->setDropVisualizer( false );
-	connect( slistview, SIGNAL( dropped( KListView*, QDropEvent*, Q3ListViewItem* ) ),
-	         this, SLOT( slotDropped( KListView*, QDropEvent*, Q3ListViewItem* ) ) );
+	connect( slistview, SIGNAL( dropped( KListView*, QDropEvent*, QListViewItem* ) ),
+	         this, SLOT( slotDropped( KListView*, QDropEvent*, QListViewItem* ) ) );
 	shopRecipeListView->setListView( slistview );
 	layout->addWidget( shopRecipeListView, 0, 2 );
 
@@ -121,7 +115,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	shopRecipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	shopRecipeListView->listView() ->setAllColumnsShowFocus( true );
 
-	buttonBar = new Q3HBox( this, "buttonBar" );
+	buttonBar = new QHBox( this, "buttonBar" );
 	layout->addMultiCellWidget( buttonBar, 1, 1, 0, 2 );
 
 	layout->setColStretch( 0, 1 );
@@ -179,11 +173,11 @@ void ShoppingListDialog::reload( void )
 
 void ShoppingListDialog::addRecipe( void )
 {
-	Q3ListViewItem * it = recipeListView->listView() ->selectedItem();
+	QListViewItem * it = recipeListView->listView() ->selectedItem();
 	addRecipe( it );
 }
 
-void ShoppingListDialog::addRecipe( Q3ListViewItem *item )
+void ShoppingListDialog::addRecipe( QListViewItem *item )
 {
 	if ( item ) {
 		if ( item->rtti() == 1000 ) {
@@ -196,8 +190,8 @@ void ShoppingListDialog::addRecipe( Q3ListViewItem *item )
 		}
 		else if ( item->rtti() == 1001 ) { //add everything in the category
 			//do this to only iterate over children of 'item'
-			Q3ListViewItem * pEndItem = NULL;
-			Q3ListViewItem *pStartItem = item;
+			QListViewItem * pEndItem = NULL;
+			QListViewItem *pStartItem = item;
 			do {
 				if ( pStartItem->nextSibling() )
 					pEndItem = pStartItem->nextSibling();
@@ -206,7 +200,7 @@ void ShoppingListDialog::addRecipe( Q3ListViewItem *item )
 			}
 			while ( pStartItem && !pEndItem );
 
-			Q3ListViewItemIterator list_it = Q3ListViewItemIterator( item );
+			QListViewItemIterator list_it = QListViewItemIterator( item );
 			while ( list_it.current() != pEndItem ) {
 				if ( list_it.current() ->rtti() == 1000 && list_it.current() ->isVisible() ) {
 					RecipeListItem * recipe_it = ( RecipeListItem* ) list_it.current();
@@ -223,7 +217,7 @@ void ShoppingListDialog::addRecipe( Q3ListViewItem *item )
 
 void ShoppingListDialog::removeRecipe( void )
 {
-	Q3ListViewItem * it;
+	QListViewItem * it;
 	it = shopRecipeListView->listView() ->selectedItem();
 	if ( it )
 		delete it;
@@ -259,7 +253,7 @@ void ShoppingListDialog::clear()
 	shopRecipeListView->listView() ->clear();
 }
 
-void ShoppingListDialog::slotDropped( KListView *list, QDropEvent *e, Q3ListViewItem * /*after*/ )
+void ShoppingListDialog::slotDropped( KListView *list, QDropEvent *e, QListViewItem * /*after*/ )
 {
 	Recipe r;
 	RecipeListItem *item = new RecipeListItem( recipeListView->listView(), r ); // needs parent, use this temporarily
@@ -273,7 +267,7 @@ void ShoppingListDialog::slotDropped( KListView *list, QDropEvent *e, Q3ListView
 	}
 	//find and delete the item if we just dropped onto the recipe list from the shopping list
 	else if ( list == recipeListView->listView() && e->source() == shopRecipeListView->listView() ) {
-		Q3ListViewItemIterator list_it = Q3ListViewItemIterator( shopRecipeListView->listView() );
+		QListViewItemIterator list_it = QListViewItemIterator( shopRecipeListView->listView() );
 		while ( list_it.current() ) {
 			if ( ( ( RecipeListItem* ) list_it.current() ) ->recipeID() == item->recipeID() ) {
 				delete list_it.current();

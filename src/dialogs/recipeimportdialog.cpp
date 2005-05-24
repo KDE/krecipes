@@ -18,13 +18,9 @@
 #include <kdebug.h>
 
 #include <qlayout.h>
-#include <q3header.h>
+#include <qheader.h>
 #include <qvariant.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <Q3ValueList>
-#include <QHBoxLayout>
+#include <qdict.h>
 
 #include "datablocks/recipe.h"
 
@@ -55,6 +51,7 @@ RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent 
 	languageChange();
 
 	resize( QSize( 600, 480 ).expandedTo( minimumSizeHint() ) );
+	clearWState( WState_Polished );
 
 	connect( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
@@ -77,7 +74,7 @@ void RecipeImportDialog::languageChange()
 
 void RecipeImportDialog::loadListView()
 {
-	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, QString( i18n( "All (%1)" ) ).arg( list_copy.count() ), Q3CheckListItem::CheckBox );
+	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, QString( i18n( "All (%1)" ) ).arg( list_copy.count() ), QCheckListItem::CheckBox );
 	head_item->setOpen( true );
 
 	//get all categories
@@ -86,17 +83,17 @@ void RecipeImportDialog::loadListView()
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = list_copy.begin(); recipe_it != list_copy.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			if ( !categoryList.contains( ( *cat_it ).name ) )
-				categoryList.append(( *cat_it ).name);
+			if ( categoryList.contains( ( *cat_it ).name ) < 1 )
+				categoryList << ( *cat_it ).name;
 		}
 	}
 
 	//create all category check list items
-	Q3Dict<CustomCheckListItem> all_categories;
+	QDict<CustomCheckListItem> all_categories;
 
 	QStringList::iterator it;
 	for ( it = categoryList.begin(); it != categoryList.end(); ++it ) {
-		CustomCheckListItem *category_item = new CustomCheckListItem( head_item, *it, Q3CheckListItem::CheckBox );
+		CustomCheckListItem *category_item = new CustomCheckListItem( head_item, *it, QCheckListItem::CheckBox );
 		//category_item->setOpen(true);
 
 		all_categories.insert( *it, category_item );
@@ -112,10 +109,10 @@ void RecipeImportDialog::loadListView()
 		if ( ( *recipe_it ).categoryList.count() == 0 ) {
 			if ( !category_item )  //don't create this until there are recipes to put in it
 			{
-				category_item = new CustomCheckListItem( head_item, i18n( "Uncategorized" ), Q3CheckListItem::CheckBox );
+				category_item = new CustomCheckListItem( head_item, i18n( "Uncategorized" ), QCheckListItem::CheckBox );
 				all_categories.insert( i18n( "Uncategorized" ), category_item );
 			}
-			CustomCheckListItem *item = new CustomCheckListItem( category_item, ( *recipe_it ).title, Q3CheckListItem::CheckBox );
+			CustomCheckListItem *item = new CustomCheckListItem( category_item, ( *recipe_it ).title, QCheckListItem::CheckBox );
 			recipe_items->insert( item, recipe_it );
 		}
 		else {
@@ -123,17 +120,17 @@ void RecipeImportDialog::loadListView()
 
 				CustomCheckListItem *category_item = all_categories[ ( *cat_it ).name ];
 
-				item = new CustomCheckListItem( category_item, item, ( *recipe_it ).title, Q3CheckListItem::CheckBox );
+				item = new CustomCheckListItem( category_item, item, ( *recipe_it ).title, QCheckListItem::CheckBox );
 				recipe_items->insert( item, recipe_it );
 			}
 		}
 	}
 
 	//append the number of recipes in each category to the check list item text
-	Q3DictIterator<CustomCheckListItem> categories_it( all_categories );
+	QDictIterator<CustomCheckListItem> categories_it( all_categories );
 	for ( ; categories_it.current(); ++categories_it ) {
 		int count = 0;
-		for ( Q3CheckListItem * it = static_cast<Q3CheckListItem*>( categories_it.current() ->firstChild() ); it; it = static_cast<Q3CheckListItem*>( it->nextSibling() ) ) {
+		for ( QCheckListItem * it = static_cast<QCheckListItem*>( categories_it.current() ->firstChild() ); it; it = static_cast<QCheckListItem*>( it->nextSibling() ) ) {
 			count++;
 		}
 		categories_it.current() ->setText( 0, categories_it.current() ->text( 0 ) + QString( " (%1)" ).arg( count ) );
@@ -146,7 +143,7 @@ RecipeList RecipeImportDialog::getSelectedRecipes()
 {
 	RecipeList selected_recipes;
 
-	Q3ValueList<RecipeList::const_iterator> already_included_recipes;
+	QValueList<RecipeList::const_iterator> already_included_recipes;
 
 	QMap<CustomCheckListItem*, RecipeList::const_iterator>::const_iterator it;
 	for ( it = recipe_items->begin(); it != recipe_items->end(); ++it ) {
@@ -161,28 +158,28 @@ RecipeList RecipeImportDialog::getSelectedRecipes()
 	return selected_recipes;
 }
 
-CustomCheckListItem::CustomCheckListItem( Q3ListView *parent, const QString & s, Type t )
-		: Q3CheckListItem( parent, s, t ), m_locked( false )
+CustomCheckListItem::CustomCheckListItem( QListView *parent, const QString & s, Type t )
+		: QCheckListItem( parent, s, t ), m_locked( false )
 {}
 
 CustomCheckListItem::CustomCheckListItem( CustomCheckListItem *parent, const QString & s, Type t )
-		: Q3CheckListItem( parent, s, t ), m_locked( false )
+		: QCheckListItem( parent, s, t ), m_locked( false )
 {}
 
-CustomCheckListItem::CustomCheckListItem( Q3CheckListItem *parent, Q3CheckListItem *after, const QString & s, Type t )
-		: Q3CheckListItem( parent, after, s, t ), m_locked( false )
+CustomCheckListItem::CustomCheckListItem( QCheckListItem *parent, QCheckListItem *after, const QString & s, Type t )
+		: QCheckListItem( parent, after, s, t ), m_locked( false )
 {}
 
 void CustomCheckListItem::stateChange( bool on )
 {
 	if ( !m_locked ) {
-		for ( Q3CheckListItem * it = static_cast<Q3CheckListItem*>( firstChild() ); it; it = static_cast<Q3CheckListItem*>( it->nextSibling() ) ) {
+		for ( QCheckListItem * it = static_cast<QCheckListItem*>( firstChild() ); it; it = static_cast<QCheckListItem*>( it->nextSibling() ) ) {
 			it->setOn( on );
 		}
 	}
 
 	if ( !on ) {
-		Q3ListViewItem * parent = this->parent();
+		QListViewItem * parent = this->parent();
 		if ( parent && ( parent->rtti() == 1 ) ) {
 			CustomCheckListItem * item = static_cast<CustomCheckListItem*>( parent );
 			item->setLocked( true );

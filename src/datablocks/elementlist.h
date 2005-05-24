@@ -11,8 +11,8 @@
 #ifndef ELEMENTLIST_H
 #define ELEMENTLIST_H
 
-#include <q3ptrlist.h>
-#include <q3valuelist.h>
+#include <qptrlist.h>
+#include <qvaluelist.h>
 #include <qregexp.h>
 
 #include "element.h"
@@ -20,7 +20,7 @@
 /**
 @author Unai Garro
 */
-class ElementList: public Q3ValueList<Element>
+class ElementList: public QValueList<Element>
 {
 public:
 	ElementList();
@@ -36,7 +36,7 @@ public:
 };
 
 
-class IDList: public Q3PtrList <int>
+class IDList: public QPtrList <int>
 {
 public:
 	IDList()
@@ -47,7 +47,7 @@ public:
 	{}
 	;
 protected:
-	virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
+	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 	{
 		return ( *( ( int* ) item1 ) - *( ( int* ) item2 ) );
 	};

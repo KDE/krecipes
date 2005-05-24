@@ -15,11 +15,9 @@
 
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
+#include <qvbox.h>
 #include <klineedit.h>
 
 /**
@@ -35,8 +33,8 @@ public:
 private:
 	//Widgets
 	QVBoxLayout *container;
-	Q3GroupBox *box;
-	Q3VBox *vbox;
+	QGroupBox *box;
+	QVBox *vbox;
 	KLineEdit *elementEdit;
 	QPushButton* okButton;
 	QPushButton* cancelButton;

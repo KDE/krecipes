@@ -17,24 +17,21 @@
 #include <klocale.h>
 
 #include "widgets/dblistviewbase.h"
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3Frame>
 
-KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : Q3VBox( parent )
+KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : QVBox( parent )
 {
 
 	filteredColumn = filterCol;
 	QWidget *header = this;
 	if ( filter || embeddedWidget ) {
-		header = new Q3HBox( this );
-		( ( Q3HBox* ) header ) ->setSpacing( 15 );
+		header = new QHBox( this );
+		( ( QHBox* ) header ) ->setSpacing( 15 );
 	}
 
 	if ( !title.isNull() ) {
 		listLabel = new QLabel( header );
-		listLabel->setFrameShape( Q3Frame::GroupBoxPanel );
-		listLabel->setFrameShadow( Q3Frame::Sunken );
+		listLabel->setFrameShape( QFrame::GroupBoxPanel );
+		listLabel->setFrameShadow( QFrame::Sunken );
 		listLabel->setPaletteForegroundColor( KGlobalSettings::highlightedTextColor() );
 		listLabel->setPaletteBackgroundColor( KGlobalSettings::highlightColor().light( 120 ) ); // 120, to match the kremenu settings
 		listLabel->setText( title );
@@ -42,8 +39,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 
 	if ( filter ) {
-		filterBox = new Q3HBox( header );
-		filterBox->setFrameShape( Q3Frame::Box );
+		filterBox = new QHBox( header );
+		filterBox->setFrameShape( QFrame::Box );
 		filterBox->setMargin( 2 );
 		filterLabel = new QLabel( filterBox );
 		filterLabel->setText( i18n( "Search:" ) );
@@ -72,7 +69,7 @@ KreListView::~KreListView()
 
 void KreListView::filter( const QString& s )
 {
-	for ( Q3ListViewItem * it = list->firstChild();it;it = it->nextSibling() ) {
+	for ( QListViewItem * it = list->firstChild();it;it = it->nextSibling() ) {
 		if ( it->rtti() == NEXTLISTITEM_RTTI || it->rtti() == PREVLISTITEM_RTTI )
 			continue;
 

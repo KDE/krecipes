@@ -12,13 +12,11 @@
 
 #include <qdir.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qfileinfo.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -45,11 +43,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	KAction *std_open = KStdAction::open( 0, 0, 0 ); //use this to create a custom open action
 	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadLayout() ), actionCollection, "open_popup" );
 	KPopupMenu *open_popup = custom_open->popupMenu();
-	open_popup->insertTitle( i18n( "Included Layouts" ) ); 
-	QDir included_layouts( getIncludedLayoutDir(), "*.klo" );
-	included_layouts.setFilter(QDir::Files);
-	/*included_layouts.setSorting(QDir::Name | QDir::IgnoreCase);FIXME:Qt4*/
-
+	open_popup->insertTitle( i18n( "Included Layouts" ) );
+	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
 
 	for ( unsigned int i = 0; i < included_layouts.count(); i++ ) {
 		int id = open_popup->insertItem( included_layouts[ i ], this, SLOT( loadLayout( int ) ) );
@@ -82,7 +77,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 
 	layout->addWidget( setup_display );
 
-	Q3HBox *buttonsBox = new Q3HBox( this );
+	QHBox *buttonsBox = new QHBox( this );
 	KIconLoader *il = new KIconLoader;
 	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
 	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
@@ -144,7 +139,7 @@ void PageSetupDialog::initShownItems()
 {
 	for ( PropertiesMap::const_iterator it = setup_display->properties().begin(); it != setup_display->properties().end(); ++it ) {
 		if ( it.data() & SetupDisplay::Visibility ) {
-			int new_id = shown_items_popup->insertItem( it.key()->widget->toolTip() );
+			int new_id = shown_items_popup->insertItem( QToolTip::textFor( it.key() ->widget ) );
 			shown_items_popup->setItemChecked( new_id, it.key() ->widget->isShown() );
 			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
 

@@ -13,11 +13,6 @@
 #include "createpropertydialog.h"
 
 #include <klocale.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
 
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list ) : QDialog( parent, 0, true )
 {
@@ -28,7 +23,7 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list ) : 
 	// Initialize widgets
 	container = new QVBoxLayout( this, 5, 5 );
 
-	box = new Q3GroupBox( this );
+	box = new QGroupBox( this );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );

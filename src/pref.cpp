@@ -17,18 +17,14 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3buttongroup.h>
+#include <qhbox.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <qwhatsthis.h>
+#include <qframe.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -47,7 +43,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	// this is the base class for your preferences dialog.  it is now
 	// a TreeList dialog.. but there are a number of other
 	// possibilities (including Tab, Swallow, and just Plain)
-	Q3Frame * frame;
+	QFrame * frame;
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "DBType" );
@@ -260,7 +256,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 {
 	QVBoxLayout * Form1Layout = new QVBoxLayout( this );
 
-	Q3HBox *hbox = new Q3HBox( this );
+	QHBox *hbox = new QHBox( this );
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 
 	fileEdit = new KLineEdit( hbox );
@@ -363,7 +359,7 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 {
 	Form1Layout = new QVBoxLayout( this, 11, 6 );
 
-	numberButtonGroup = new Q3ButtonGroup( this );
+	numberButtonGroup = new QButtonGroup( this );
 	numberButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	numberButtonGroup->layout() ->setSpacing( 6 );
 	numberButtonGroup->layout() ->setMargin( 11 );
@@ -382,9 +378,9 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	numberButtonGroup->insert( fractionRadioButton, 1 );
 
 	//ingredient display format
-	Q3GroupBox *ingredientGrpBox = new Q3GroupBox( 2, Qt::Vertical, i18n( "Ingredient" ), this );
+	QGroupBox *ingredientGrpBox = new QGroupBox( 2, Qt::Vertical, i18n( "Ingredient" ), this );
 
-	Q3HBox *ingredientBox = new Q3HBox( ingredientGrpBox );
+	QHBox *ingredientBox = new QHBox( ingredientGrpBox );
 	( void ) new QLabel( i18n( "Ingredient Format:" ), ingredientBox );
 	ingredientEdit = new KLineEdit( ingredientBox );
 	( void ) new QLabel( i18n( "%n: Name<br>"
@@ -455,7 +451,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-	Q3WhatsThis::add( directImportCheckbox, 
+	QWhatsThis::add( directImportCheckbox, 
 		i18n("When this is enabled, the importer will show every recipe in the file(s) and allow you to select which recipes you want imported.\n \
 							\
 		Disable this to always import every recipe, which allows for faster and less memory-intensive imports.")
@@ -490,7 +486,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
 
-	Q3HBox *catLimitHBox = new Q3HBox( this );
+	QHBox *catLimitHBox = new QHBox( this );
 	catLimitInput = new KIntNumInput(catLimitHBox);
 	catLimitInput->setLabel( i18n( "Number of recipes to display at once:" ) );
 	catLimitInput->setRange(0,5000,20,true);
@@ -499,7 +495,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	if ( cat_limit > 0 )
 		catLimitInput->setValue( cat_limit );
 
-	Q3HBox *limitHBox = new Q3HBox( this );
+	QHBox *limitHBox = new QHBox( this );
 	limitInput = new KIntNumInput(limitHBox);
 	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
 	limitInput->setRange(0,100000,1000,true);

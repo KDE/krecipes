@@ -20,13 +20,13 @@
 #include "backends/recipedb.h"
 #include "dialogs/createpropertydialog.h"
 
-PropertyCheckListItem::PropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox ),
+PropertyCheckListItem::PropertyCheckListItem( QListView* klv, const IngredientProperty &property ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ),
 		m_property( property )
 {
 	setOn( false ); // Set unchecked by default
 }
 
-PropertyCheckListItem::PropertyCheckListItem( Q3ListViewItem* it, const IngredientProperty &property ) : Q3CheckListItem( it, QString::null, Q3CheckListItem::CheckBox ),
+PropertyCheckListItem::PropertyCheckListItem( QListViewItem* it, const IngredientProperty &property ) : QCheckListItem( it, QString::null, QCheckListItem::CheckBox ),
 		m_property( property )
 {
 	setOn( false ); // Set unchecked by default
@@ -53,7 +53,7 @@ PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) : KListView(
 		database( db )
 {
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( Q3ListView::Reject );
+	setDefaultRenameAction( QListView::Reject );
 
 	connect( db, SIGNAL( propertyCreated( const IngredientProperty & ) ), SLOT( createProperty( const IngredientProperty & ) ) );
 	connect( db, SIGNAL( propertyRemoved( int ) ), SLOT( removeProperty( int ) ) );
@@ -91,21 +91,21 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
+		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
 		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Qt::Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+			                  () ), Key_Delete );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
 		delete il;
 
-		connect( this, SIGNAL( contextMenu( KListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, Q3ListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modProperty( Q3ListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed( Q3ListViewItem* ) ), this, SLOT( saveProperty( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modProperty( QListViewItem* ) ) );
+		connect( this, SIGNAL( itemRenamed( QListViewItem* ) ), this, SLOT( saveProperty( QListViewItem* ) ) );
 	}
 }
 
-void StdPropertyListView::showPopup( KListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
+void StdPropertyListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -133,7 +133,7 @@ void StdPropertyListView::createNew()
 void StdPropertyListView::remove
 	()
 {
-	Q3ListViewItem * item = currentItem();
+	QListViewItem * item = currentItem();
 
 	if ( item ) {
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this property?" ) ) ) {
@@ -148,7 +148,7 @@ void StdPropertyListView::remove
 
 void StdPropertyListView::rename()
 {
-	Q3ListViewItem * item = currentItem();
+	QListViewItem * item = currentItem();
 
 	if ( item )
 		PropertyListView::rename( item, 1 );
@@ -156,7 +156,7 @@ void StdPropertyListView::rename()
 
 void StdPropertyListView::removeProperty( int id )
 {
-	Q3ListViewItem * item = findItem( QString::number( id ), 0 );
+	QListViewItem * item = findItem( QString::number( id ), 0 );
 
 	Q_ASSERT( item );
 
@@ -165,16 +165,16 @@ void StdPropertyListView::removeProperty( int id )
 
 void StdPropertyListView::createProperty( const IngredientProperty &property )
 {
-	( void ) new Q3ListViewItem( this, QString::number( property.id ), property.name, property.units );
+	( void ) new QListViewItem( this, QString::number( property.id ), property.name, property.units );
 }
 
-void StdPropertyListView::modProperty( Q3ListViewItem* i )
+void StdPropertyListView::modProperty( QListViewItem* i )
 {
 	if ( i )
 		PropertyListView::rename( i, 1 );
 }
 
-void StdPropertyListView::saveProperty( Q3ListViewItem* i )
+void StdPropertyListView::saveProperty( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 1 ) ) ) {
 		reload(); //reset the changed text
@@ -225,7 +225,7 @@ PropertyConstraintListView::PropertyConstraintListView( QWidget *parent, RecipeD
 
 void PropertyConstraintListView::removeProperty( int id )
 {
-	Q3ListViewItem * item = findItem( QString::number( id ), 4 );
+	QListViewItem * item = findItem( QString::number( id ), 4 );
 
 	Q_ASSERT( item );
 

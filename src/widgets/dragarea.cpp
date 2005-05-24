@@ -15,8 +15,6 @@
 #include <kglobal.h>
 
 #include "sizehandle.h"
-//Added by qt3to4:
-#include <QMouseEvent>
 
 DragArea::DragArea( QWidget *parent, const char *name ) : QWidget( parent, name ),
 		m_read_only( false ),

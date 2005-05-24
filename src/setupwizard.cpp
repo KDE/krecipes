@@ -16,19 +16,12 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <q3hbox.h>
+#include <qhbox.h>
+#include <qvgroupbox.h>
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-
-#include <Q3GroupBox>
-#include <Q3ButtonGroup>
-
-//Added by qt3to4:
-#include <QGridLayout>
-#include <Q3Frame>
-#include <QLabel>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -40,7 +33,7 @@
 
 #include "setupwizard.h"
 
-SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : KWizard( parent, name, modal, f )
+SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, WFlags f ) : KWizard( parent, name, modal, f )
 {
 	welcomePage = new WelcomePage( this );
 	addPage( welcomePage, i18n( "Welcome to Krecipes" ) );
@@ -138,8 +131,7 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 	welcomeText->setMinimumWidth( 200 );
 	welcomeText->setMaximumWidth( 10000 );
 	welcomeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	welcomeText->setWordWrap(true);
-	welcomeText->setAlignment( Qt::AlignTop );
+	welcomeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 	layout->addWidget( welcomeText, 1, 3 );
 
 }
@@ -170,8 +162,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	permissionsText->setText( i18n( "This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]" ) );
 
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setWordWrap(true);
-	permissionsText->setAlignment( Qt::AlignTop );
+	permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -194,7 +185,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// MySQL root/admin info
-	Q3GroupBox *rootInfoGBox = new Q3GroupBox( this, "rootInfoGBox" );
+	QGroupBox *rootInfoGBox = new QGroupBox( this, "rootInfoGBox" );
 	rootInfoGBox->setTitle( i18n( "MySQL Administrator Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	rootInfoGBox->setColumns( 2 );
@@ -279,8 +270,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	permissionsText->setText( i18n( "This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account." ) );
 
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setWordWrap(true);
-	permissionsText->setAlignment( Qt::AlignTop );
+	permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -303,7 +293,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// MySQL root/admin info
-	Q3GroupBox *rootInfoGBox = new Q3GroupBox( this, "rootInfoGBox" );
+	QGroupBox *rootInfoGBox = new QGroupBox( this, "rootInfoGBox" );
 	rootInfoGBox->setTitle( i18n( "PostgreSQL Superuser or Privileged Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	rootInfoGBox->setColumns( 2 );
@@ -387,7 +377,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings." ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( Qt::AlignTop | Qt::AlignJustify );
+	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::AlignJustify ) );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -397,8 +387,8 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	Q3GroupBox *inputGBox = new Q3GroupBox( this, "inputGBox" );
-	//inputGBox->setFrameStyle( Q3Frame::NoFrame ); FIXME:Qt4
+	QGroupBox *inputGBox = new QGroupBox( this, "inputGBox" );
+	inputGBox->setFrameStyle( QFrame::NoFrame );
 	inputGBox->setInsideSpacing( 10 );
 	inputGBox->setColumns( 2 );
 	layout->addWidget( inputGBox, 3, 3 );
@@ -461,7 +451,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerFromCheckBox, 6, 3 );
 
 	// Server & Client Box
-	Q3GroupBox *serverSettingsGBox = new Q3GroupBox( this, "serverSettingsGBox" );
+	QGroupBox *serverSettingsGBox = new QGroupBox( this, "serverSettingsGBox" );
 	serverSettingsGBox->setTitle( i18n( "Server / Client Settings" ) );
 	serverSettingsGBox->setEnabled( false ); // Disable by default
 	serverSettingsGBox->setInsideSpacing( 10 );
@@ -547,7 +537,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust SQLite settings." ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( Qt::AlignTop | Qt::AlignJustify );
+	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::AlignJustify ) );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -557,7 +547,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	Q3HBox *hbox = new Q3HBox( this );
+	QHBox *hbox = new QHBox( this );
 
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 
@@ -616,7 +606,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 	saveText->setText( i18n( "Congratulations; all the necessary configuration setup is done. Press 'Finish' to continue, and enjoy cooking!" ) );
 	saveText->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
-	saveText->setAlignment( Qt::WordBreak | Qt::AlignVCenter );
+	saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 	layout->addWidget( saveText, 1, 3 );
 
 
@@ -706,8 +696,7 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	initializeText->setText( i18n( "Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. " ) );
 
 	initializeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	initializeText->setWordWrap(true);
-	initializeText->setAlignment( Qt::AlignTop );
+	initializeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
 	layout->addWidget( initializeText, 1, 3 );
 
 	// Logo
@@ -774,8 +763,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	dbTypeSetupText = new QLabel( this );
 	dbTypeSetupText->setText( i18n( "Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL or PostgreSQL database." ) );
 	dbTypeSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	dbTypeSetupText->setWordWrap(true);
-	dbTypeSetupText->setAlignment( Qt::AlignTop );
+	dbTypeSetupText->setAlignment( int( QLabel::AlignTop | QLabel::WordBreak ) );
 	layout->addWidget( dbTypeSetupText, 1, 3 );
 
 	// Text spacer
@@ -786,7 +774,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 
 	// Database type choice
-	bg = new Q3ButtonGroup( this );
+	bg = new QVButtonGroup( this );
 	layout->addWidget( bg, 3, 3 );
 
 	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg, "liteCheckBox" );

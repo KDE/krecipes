@@ -18,13 +18,6 @@
 #include <ktempfile.h>
 #include <klocale.h>
 
-#include <QVariant>
-#include <QtSql/QSqlError>
-
-//Added by qt3to4:
-#include <QPixmap>
-#include <QString>
-
 //Note: PostgreSQL's database names are always lowercase
 PSqlRecipeDB::PSqlRecipeDB( QString host, QString user, QString pass, QString DBname ) : QSqlRecipeDB( host, user, pass, DBname.lower() )
 {}
@@ -34,22 +27,22 @@ PSqlRecipeDB::~PSqlRecipeDB()
 
 void PSqlRecipeDB::createDB()
 {
-	QString real_db_name = database.databaseName();
+	QString real_db_name = database->databaseName();
 
 	//we have to be connected to some database in order to create the Krecipes database
 	//so long as the permissions given are allowed access to "template1', this works
-	database.setDatabaseName( "template1" );
-	if ( database.open() ) {
+	database->setDatabaseName( "template1" );
+	if ( database->open() ) {
 		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
 		if ( !query.isActive() )
-			kdDebug() << "create query failed: " << database.lastError().databaseText() << endl;
+			kdDebug() << "create query failed: " << database->lastError().databaseText() << endl;
 
-		database.close();
+		database->close();
 	}
 	else
-		kdDebug() << "create open failed: " << database.lastError().databaseText() << endl;
+		kdDebug() << "create open failed: " << database->lastError().databaseText() << endl;
 
-	database.setDatabaseName( real_db_name );
+	database->setDatabaseName( real_db_name );
 }
 
 void PSqlRecipeDB::createTable( const QString &tableName )
@@ -162,7 +155,7 @@ void PSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 	QSqlQuery query( QString::null, database );
 
 	query.prepare( "UPDATE recipes SET photo=? WHERE id=" + QString::number( recipeID ) );
-	query.addBindValue( QVariant(KCodecs::base64Encode( data )) );
+	query.addBindValue( KCodecs::base64Encode( data ) );
 	query.exec();
 }
 
@@ -172,8 +165,12 @@ void PSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 	QSqlQuery query( command, database );
 
 	if ( query.isActive() && query.first() ) {
+		QCString decodedPic;
 		QPixmap pix;
-		QByteArray picData = KCodecs::base64Decode( query.value( 0 ).toByteArray() );
+		KCodecs::base64Decode( QCString( query.value( 0 ).toString().latin1() ), decodedPic );
+		int len = decodedPic.size();
+		QByteArray picData( len );
+		memcpy( picData.data(), decodedPic.data(), len );
 
 		bool ok = pix.loadFromData( picData, "JPEG" );
 		if ( ok )

@@ -18,9 +18,6 @@
 #include "backends/recipedb.h"
 #include "createpropertydialog.h"
 #include "widgets/propertylistview.h"
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 {

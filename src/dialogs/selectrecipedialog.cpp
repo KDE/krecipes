@@ -14,13 +14,6 @@
 
 #include <qsignalmapper.h>
 #include <qtabwidget.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <Q3Frame>
-#include <Q3ValueList>
-#include <QGridLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -53,7 +46,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	Q3GroupBox *basicSearchTab = new Q3GroupBox( this );
+	QGroupBox *basicSearchTab = new QGroupBox( this );
+	basicSearchTab->setFrameStyle( QFrame::NoFrame );
 	basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	//Design dialog
@@ -66,7 +60,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addMultiCell( spacer_top, 0, 0, 1, 4 );
 
-	searchBar = new Q3HBox( basicSearchTab );
+	searchBar = new QHBox( basicSearchTab );
 	layout->addWidget( searchBar, 1, 1 );
 
 	searchLabel = new QLabel( searchBar );
@@ -89,7 +83,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	recipeListView->reload();
 	layout->addMultiCellWidget( recipeListView, 3, 3, 1, 3 );
 
-	buttonBar = new Q3HBox( basicSearchTab );
+	buttonBar = new QHBox( basicSearchTab );
 	layout->addMultiCellWidget( buttonBar, 4, 4, 1, 3 );
 
 	openButton = new QPushButton( buttonBar );
@@ -139,7 +133,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( categoryBox, SIGNAL( activated( int ) ), this, SLOT( filterComboCategory( int ) ) );
 	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( actionHandler, SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ), SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ) );
+	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
 }
 
 SelectRecipeDialog::~SelectRecipeDialog()

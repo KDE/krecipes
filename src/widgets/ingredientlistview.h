@@ -15,8 +15,6 @@
 #include "dblistviewbase.h"
 
 #include "datablocks/element.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 class RecipeDB;
 class KPopupMenu;
@@ -25,11 +23,11 @@ class IngredientCheckListView;
 /**
 @author Unai Garro
 */
-class IngredientCheckListItem: public Q3CheckListItem
+class IngredientCheckListItem: public QCheckListItem
 {
 public:
 	IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing );
-	IngredientCheckListItem( IngredientCheckListView* qlv, Q3ListViewItem *after, const Element &ing );
+	IngredientCheckListItem( IngredientCheckListView* qlv, QListViewItem *after, const Element &ing );
 	~IngredientCheckListItem( void );
 
 	int id( void ) const;
@@ -78,15 +76,15 @@ protected:
 	virtual void removeIngredient( int );
 
 private slots:
-	void showPopup( KListView *, Q3ListViewItem *, const QPoint & );
+	void showPopup( KListView *, QListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
 		();
 	void rename();
 
-	void modIngredient( Q3ListViewItem* i );
-	void saveIngredient( Q3ListViewItem* i );
+	void modIngredient( QListViewItem* i );
+	void saveIngredient( QListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );
@@ -103,7 +101,7 @@ public:
 
 	virtual void stateChange(IngredientCheckListItem *,bool);
 
-	Q3ValueList<Element> selections() const{ return m_selections; }
+	QValueList<Element> selections() const{ return m_selections; }
 
 protected:
 	virtual void createIngredient( const Element &ing );
@@ -112,7 +110,7 @@ protected:
 	virtual void load( int limit, int offset );
 
 private:
-	Q3ValueList<Element> m_selections;
+	QValueList<Element> m_selections;
 };
 
 #endif //INGREDIENTLISTVIEW_H

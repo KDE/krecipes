@@ -13,9 +13,6 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QTextStream>
 
 #include <kaboutdata.h>
 #include <kdebug.h>
@@ -56,7 +53,7 @@ void BaseExporter::setCompressed( bool b )
 	compress = b;
 }
 
-void BaseExporter::exporter( const Q3ValueList<int> &ids, RecipeDB *database, KProgressDialog *progress_dlg )
+void BaseExporter::exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog *progress_dlg )
 {
 	m_progress_dlg = progress_dlg;
 
@@ -68,7 +65,7 @@ void BaseExporter::exporter( const Q3ValueList<int> &ids, RecipeDB *database, KP
 
 void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progress_dlg )
 {
-	Q3ValueList<int> single_recipe_list;
+	QValueList<int> single_recipe_list;
 	single_recipe_list << id ;
 	exporter( single_recipe_list, database, progress_dlg );
 }
@@ -98,13 +95,13 @@ QString BaseExporter::fileName() const
 	return filename;
 }
 
-void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
+void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 {
-	if ( file->open( QIODevice::WriteOnly ) ) {
+	if ( file->open( IO_WriteOnly ) ) {
 		if ( m_progress_dlg )
 			m_progress_dlg->progressBar()->setTotalSteps( ids.count()/progressInterval() );
 
-		Q3ValueList<int> ids_copy = ids;
+		QValueList<int> ids_copy = ids;
 		QTextStream stream( file );
 
 		RecipeList recipe_list;
@@ -115,7 +112,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 		recipe_list.clear();
 		for ( int i = 0; i < ids.count(); i += progressInterval() ) {
-			Q3ValueList<int> sub_list;
+			QValueList<int> sub_list;
 			for ( int sub_i = 0; sub_i < progressInterval(); ++sub_i ) {
 				if ( ids_copy.count() == 0 ) break;
 
@@ -141,10 +138,10 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 		stream << createFooter();
 
-		if ( tar_file && tar_file->open( QIODevice::WriteOnly ) ) {
+		if ( tar_file && tar_file->open( IO_WriteOnly ) ) {
 			//close, which flushes the buffer, and then open for reading
 			file->close();
-			file->open( QIODevice::ReadOnly );
+			file->open( IO_ReadOnly );
 
 			QFileInfo fi( file->name() );
 			QByteArray data = file->readAll();

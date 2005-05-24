@@ -17,8 +17,6 @@
 #define PSQL_DRIVER "QPSQL7"
 
 #include "qsqlrecipedb.h"
-//Added by qt3to4:
-#include <QPixmap>
 
 /**
 @author Jason Kivlighn

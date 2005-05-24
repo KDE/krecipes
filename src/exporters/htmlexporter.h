@@ -12,8 +12,6 @@
 #define HTMLEXPORTER_H
 
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "baseexporter.h"
 
@@ -91,7 +89,7 @@ protected:
 private:
 	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
 	int createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset = 0 );
-	void pushItemsDownIfNecessary( Q3PtrList<QRect> &, QRect *top_geom );
+	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 
 	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
 	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
@@ -107,8 +105,8 @@ private:
 
 	static QString escape( const QString & );
 
-	Q3PtrList<DivElement> div_elements;
-	Q3PtrList<QRect> dimensions;
+	QPtrList<DivElement> div_elements;
+	QPtrList<QRect> dimensions;
 	IngredientPropertyList *properties;
 	QRect temp_photo_geometry;
 
@@ -124,13 +122,13 @@ private:
 	int offset;
 };
 
-class CustomRectList : public Q3PtrList<QRect>
+class CustomRectList : public QPtrList<QRect>
 {
 public:
 	CustomRectList();
 
 protected:
-	int compareItems( Q3PtrCollection::Item, Q3PtrCollection::Item );
+	int compareItems( QPtrCollection::Item, QPtrCollection::Item );
 };
 
 #endif //HTMLEXPORTER_H

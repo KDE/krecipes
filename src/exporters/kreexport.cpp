@@ -12,14 +12,9 @@
 #include "kreexport.h"
 
 #include <qfile.h>
-#include <q3stylesheet.h>
+#include <qstylesheet.h>
 #include <qbuffer.h>
 #include <qimage.h>
-
-#include <QImageWriter>
-
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -75,19 +70,20 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 		xml += "<krecipes-recipe>\n";
 		xml += "<krecipes-description>\n";
-		xml += "<title>" + Q3StyleSheet::escape( ( *recipe_it ).title.utf8() ) + "</title>\n";
+		xml += "<title>" + QStyleSheet::escape( ( *recipe_it ).title.utf8() ) + "</title>\n";
 
 		for ( ElementList::const_iterator author_it = ( *recipe_it ).authorList.begin(); author_it != ( *recipe_it ).authorList.end(); ++author_it )
-			xml += "<author>" + Q3StyleSheet::escape( ( *author_it ).name.utf8() ) + "</author>\n";
+			xml += "<author>" + QStyleSheet::escape( ( *author_it ).name.utf8() ) + "</author>\n";
 
 		xml += "<pictures>\n";
 		if ( !( *recipe_it ).photo.isNull() ) {
 			xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
 			QByteArray data;
-			QBuffer buffer( &data );
-			buffer.open( QIODevice::WriteOnly );
-			QImageWriter iio( &buffer, "JPEG" );
-			iio.write( ( *recipe_it ).photo.convertToImage() );
+			QBuffer buffer( data );
+			buffer.open( IO_WriteOnly );
+			QImageIO iio( &buffer, "JPEG" );
+			iio.setImage( ( *recipe_it ).photo.convertToImage() );
+			iio.write();
 			//( *recipe_it ).photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 			xml += KCodecs::base64Encode( data, true );
@@ -98,7 +94,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<category>\n";
 
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it )
-			xml += "<cat>" + Q3StyleSheet::escape( ( *cat_it ).name.utf8() ) + "</cat>\n";
+			xml += "<cat>" + QStyleSheet::escape( ( *cat_it ).name.utf8() ) + "</cat>\n";
 
 		xml += "</category>\n";
 		xml += "<serving>";
@@ -118,14 +114,14 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 			for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 				xml += "<ingredient>\n";
-				xml += "<name>" + Q3StyleSheet::escape( ( *ing_it ).name.utf8() ) + "</name>\n";
+				xml += "<name>" + QStyleSheet::escape( ( *ing_it ).name.utf8() ) + "</name>\n";
 				xml += "<amount>";
 				xml += QString::number( ( *ing_it ).amount );
 				xml += "</amount>\n";
 				QString unit_str = ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name;
-				xml += "<unit>" + Q3StyleSheet::escape( unit_str.utf8() ) + "</unit>\n";
+				xml += "<unit>" + QStyleSheet::escape( unit_str.utf8() ) + "</unit>\n";
 				if ( !( *ing_it ).prepMethod.isEmpty() )
-					xml += "<prep>" + Q3StyleSheet::escape( ( *ing_it ).prepMethod.utf8() ) + "</prep>\n";
+					xml += "<prep>" + QStyleSheet::escape( ( *ing_it ).prepMethod.utf8() ) + "</prep>\n";
 				xml += "</ingredient>\n";
 			}
 
@@ -137,7 +133,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 		xml += "</krecipes-ingredients>\n";
 		xml += "<krecipes-instructions>\n";
-		xml += Q3StyleSheet::escape( ( *recipe_it ).instructions.utf8() );
+		xml += QStyleSheet::escape( ( *recipe_it ).instructions.utf8() );
 		xml += "</krecipes-instructions>\n";
 		xml += "</krecipes-recipe>\n";
 	}
@@ -147,7 +143,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recipes )
 {
-	Q3ValueList<int> categoriesUsed;
+	QValueList<int> categoriesUsed;
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
 			if ( categoriesUsed.find( ( *cat_it ).id ) == categoriesUsed.end() )
@@ -165,7 +161,7 @@ void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recip
 	}
 }
 
-bool KreExporter::removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
+bool KreExporter::removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
 {
 	for ( CategoryTree * it = parent->firstChild(); it; it = it->nextSibling() ) {
 		if ( cat_ids.find( it->category.id ) != cat_ids.end() ) {
@@ -193,7 +189,7 @@ void KreExporter::writeCategoryStructure( QString &xml, const CategoryTree *cate
 {
 	if ( categoryTree->category.id != -2 ) {
 		if ( categoryTree->category.id != -1 )
-			xml += "<category name=\"" + Q3StyleSheet::escape( categoryTree->category.name.utf8() ) + "\">\n";
+			xml += "<category name=\"" + QStyleSheet::escape( categoryTree->category.name.utf8() ) + "\">\n";
 	
 		for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 			writeCategoryStructure( xml, child_it );

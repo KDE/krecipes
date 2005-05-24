@@ -13,11 +13,8 @@
 
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QGridLayout>
 #include <khtml_part.h>
 #include <khtmlview.h>
 #include "datablocks/recipelist.h"
@@ -27,20 +24,20 @@ class DietViewDialog: public QWidget
 	Q_OBJECT
 
 public:
-	DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers );
+	DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers );
 	~DietViewDialog();
 private:
 	// Widgets
 	QGridLayout *layout;
-	Q3VBox *htmlBox;
+	QVBox *htmlBox;
 	KHTMLPart *dietView;
-	Q3HBox *buttonBox;
+	QHBox *buttonBox;
 	QPushButton *okButton;
 	QPushButton *printButton;
 	QPushButton *cancelButton;
 
 	// Private methods
-	void showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers );
+	void showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers );
 private slots:
 	void print( void );
 	void slotOk( void );

@@ -12,7 +12,7 @@
 #define UNIT_H
 
 #include <qstring.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
 class Unit
 {
@@ -31,6 +31,6 @@ public:
 	QString plural;
 };
 
-typedef Q3ValueList< Unit > UnitList;
+typedef QValueList< Unit > UnitList;
 
 #endif //UNIT_H

@@ -20,9 +20,6 @@
 #include "widgets/categorylistview.h"
 #include "createcategorydialog.h"
 #include "backends/recipedb.h"
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -35,9 +32,9 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
 	categoryListView->reload();
-	Q3ListViewItemIterator it( categoryListView ); //expand all items
+	QListViewItemIterator it( categoryListView ); //expand all items
 	while ( it.current() ) {
-		Q3ListViewItem * item = it.current();
+		QListViewItem * item = it.current();
 		item->setOpen( true );
 		++it;
 	}

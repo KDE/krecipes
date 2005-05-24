@@ -13,10 +13,7 @@
 #include "selectauthorsdialog.h"
 
 #include <qmessagebox.h>
-#include <q3hbox.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QVBoxLayout>
+#include <qhbox.h>
 
 #include <kconfig.h>
 #include <kdialog.h>
@@ -38,7 +35,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	// Combo to Pick authors
 
-	Q3HBox *topBox = new Q3HBox(this);
+	QHBox *topBox = new QHBox(this);
 	topBox->setSpacing(6);
 
 	authorsCombo = new KComboBox( true, topBox );
@@ -76,7 +73,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	//Ok/Cancel buttons
 
-	Q3HBox *okCancelButtonBox = new Q3HBox( this );
+	QHBox *okCancelButtonBox = new QHBox( this );
 	okCancelButtonBox->setSpacing( 10 );
 	layout->addWidget( okCancelButtonBox );
 
@@ -107,7 +104,7 @@ SelectAuthorsDialog::~SelectAuthorsDialog()
 void SelectAuthorsDialog::getSelectedAuthors( ElementList *newAuthors )
 {
 
-	for ( Q3ListViewItem * it = authorListView->firstChild();it; it = it->nextSibling() ) {
+	for ( QListViewItem * it = authorListView->firstChild();it; it = it->nextSibling() ) {
 		Element author;
 		author.id = it->text( 0 ).toInt();
 		author.name = it->text( 1 );
@@ -125,7 +122,7 @@ void SelectAuthorsDialog::loadAuthors( const ElementList &currentAuthors )
 	// Load the ListView with the authors of this recipe
 	authorListView->clear();
 	for ( ElementList::const_iterator author_it = currentAuthors.begin(); author_it != currentAuthors.end(); ++author_it ) {
-		( void ) new Q3ListViewItem( authorListView, QString::number( ( *author_it ).id ), ( *author_it ).name );
+		( void ) new QListViewItem( authorListView, QString::number( ( *author_it ).id ), ( *author_it ).name );
 	}
 
 }
@@ -147,14 +144,14 @@ void SelectAuthorsDialog::addAuthor( void )
 	int currentItem = authorsCombo->currentItem();
 	Element currentElement = authorList.getElement( currentItem );
 
-	( void ) new Q3ListViewItem( authorListView, QString::number( currentElement.id ), currentElement.name );
+	( void ) new QListViewItem( authorListView, QString::number( currentElement.id ), currentElement.name );
 
 }
 
 void SelectAuthorsDialog::removeAuthor( void )
 {
 	// Find the selected item first
-	Q3ListViewItem * it;
+	QListViewItem * it;
 	it = authorListView->selectedItem();
 
 	if ( it ) {  // Check if an author is selected first

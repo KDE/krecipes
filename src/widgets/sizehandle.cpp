@@ -24,15 +24,12 @@
 #include <qapplication.h>
 #include <qlabel.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QPaintEvent>
 
 SizeHandle::SizeHandle( DragArea *parent, Direction d, WidgetSelection *s )
 		: QWidget( parent )
 {
 	active = TRUE;
-	setBackgroundMode( active ? Qt::PaletteText : Qt::PaletteDark );
+	setBackgroundMode( active ? PaletteText : PaletteDark );
 	setFixedSize( 6, 6 );
 	widget = 0;
 	dir = d ;
@@ -45,34 +42,34 @@ SizeHandle::SizeHandle( DragArea *parent, Direction d, WidgetSelection *s )
 void SizeHandle::updateCursor()
 {
 	if ( !active ) {
-		setCursor( Qt::arrowCursor );
+		setCursor( arrowCursor );
 		return ;
 	}
 
 	switch ( dir ) {
 	case LeftTop:
-		setCursor( Qt::sizeFDiagCursor );
+		setCursor( sizeFDiagCursor );
 		break;
 	case Top:
-		setCursor( Qt::sizeVerCursor );
+		setCursor( sizeVerCursor );
 		break;
 	case RightTop:
-		setCursor( Qt::sizeBDiagCursor );
+		setCursor( sizeBDiagCursor );
 		break;
 	case Right:
-		setCursor( Qt::sizeHorCursor );
+		setCursor( sizeHorCursor );
 		break;
 	case RightBottom:
-		setCursor( Qt::sizeFDiagCursor );
+		setCursor( sizeFDiagCursor );
 		break;
 	case Bottom:
-		setCursor( Qt::sizeVerCursor );
+		setCursor( sizeVerCursor );
 		break;
 	case LeftBottom:
-		setCursor( Qt::sizeBDiagCursor );
+		setCursor( sizeBDiagCursor );
 		break;
 	case Left:
-		setCursor( Qt::sizeHorCursor );
+		setCursor( sizeHorCursor );
 		break;
 	}
 }
@@ -80,7 +77,7 @@ void SizeHandle::updateCursor()
 void SizeHandle::setActive( bool a )
 {
 	active = a;
-	setBackgroundMode( active ? Qt::PaletteText : Qt::PaletteDark );
+	setBackgroundMode( active ? PaletteText : PaletteDark );
 	updateCursor();
 }
 
@@ -94,13 +91,13 @@ void SizeHandle::paintEvent( QPaintEvent * )
 	//   if ( ( (DragArea*)parentWidget() )->currentWidget() != widget )
 	//	return;
 	QPainter p( this );
-	p.setPen( Qt::blue );
+	p.setPen( blue );
 	p.drawRect( 0, 0, width(), height() );
 }
 
 void SizeHandle::mousePressEvent( QMouseEvent *e )
 {
-	if ( !widget || e->button() != Qt::LeftButton || !active )
+	if ( !widget || e->button() != LeftButton || !active )
 		return ;
 	oldPressPos = e->pos();
 	geom = origGeom = QRect( widget->pos(), widget->size() );
@@ -108,7 +105,7 @@ void SizeHandle::mousePressEvent( QMouseEvent *e )
 
 void SizeHandle::mouseMoveEvent( QMouseEvent *e )
 {
-	if ( !widget || ( e->state() & Qt::LeftButton ) != Qt::LeftButton || !active )
+	if ( !widget || ( e->state() & LeftButton ) != LeftButton || !active )
 		return ;
 	QPoint rp = mapFromGlobal( e->globalPos() );
 	QPoint d = oldPressPos - rp;

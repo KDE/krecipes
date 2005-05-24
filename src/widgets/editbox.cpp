@@ -9,9 +9,6 @@
 ***************************************************************************/
 #include "widgets/editbox.h"
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
-#include <QKeyEvent>
 #include <iostream>
 #include <klocale.h>
 EditBox::EditBox( QWidget* parent ) : QWidget( parent )
@@ -61,7 +58,7 @@ void EditBox::setPrecision( int dec )
 
 void RatioInput::keyPressEvent ( QKeyEvent * e )
 {
-	if ( e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) {
+	if ( e->key() == Key_Enter || e->key() == Key_Return ) {
 		emit valueAccepted();
 	}
 	else {

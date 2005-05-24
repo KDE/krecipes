@@ -14,23 +14,15 @@
 
 #include <qstring.h>
 #include <qlayout.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+#include <qhbox.h>
+#include <qvbox.h>
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
-#include <q3datetimeedit.h>
-#include <q3dragobject.h>
-#include <q3buttongroup.h>
+#include <qdatetimeedit.h>
+#include <qdragobject.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QGridLayout>
-#include <Q3Frame>
-#include <QDropEvent>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QDragEnterEvent>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
@@ -62,23 +54,23 @@ ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabe
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
 {
-	event->accept( Q3ImageDrag::canDecode( event ) );
+	event->accept( QImageDrag::canDecode( event ) );
 }
 
 void ImageDropLabel::dropEvent( QDropEvent* event )
 {
 	QImage image;
 
-	if ( Q3ImageDrag::decode( event, image ) ) {
+	if ( QImageDrag::decode( event, image ) ) {
 		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( image.smoothScale( width(), height(), Qt::KeepAspectRatio ) );
-			setPixmap( QPixmap(pm_scaled) );
+			pm_scaled.convertFromImage( image.smoothScale( width(), height(), QImage::ScaleMin ) );
+			setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
 		}
 		else {
-			setPixmap( QPixmap(image) );
+			setPixmap( image );
 			sourcePhoto = image;
 		}
 
@@ -89,20 +81,20 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 #define INGLISTVIEWITEM_RTTI 1004
 #define INGGRPLISTVIEWITEM_RTTI 1003
 
-class IngListViewItem : public Q3ListViewItem
+class IngListViewItem : public QListViewItem
 {
 public:
-	IngListViewItem( Q3ListView* qlv, const Ingredient &i ) : Q3ListViewItem( qlv )
+	IngListViewItem( QListView* qlv, const Ingredient &i ) : QListViewItem( qlv )
 	{
 		init( i );
 	}
 
-	IngListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const Ingredient &i ) : Q3ListViewItem( qlv, after )
+	IngListViewItem( QListView* qlv, QListViewItem *after, const Ingredient &i ) : QListViewItem( qlv, after )
 	{
 		init( i );
 	}
 
-	IngListViewItem( Q3ListViewItem* qli, Q3ListViewItem *after, const Ingredient &i ) : Q3ListViewItem( qli, after )
+	IngListViewItem( QListViewItem* qli, QListViewItem *after, const Ingredient &i ) : QListViewItem( qli, after )
 	{
 		init( i );
 	}
@@ -203,10 +195,10 @@ private:
 	}
 };
 
-class IngGrpListViewItem : public Q3ListViewItem
+class IngGrpListViewItem : public QListViewItem
 {
 public:
-	IngGrpListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const QString &group, int id ) : Q3ListViewItem( qlv, after )
+	IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id ) : QListViewItem( qlv, after )
 	{
 		init( group, id );
 	}
@@ -249,7 +241,7 @@ private:
 };
 
 
-RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( parent )
+RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( parent )
 {
 
 	// Adjust internal parameters
@@ -279,8 +271,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	//------- Recipe Tab -----------------
 	// Recipe Photo
 
-	recipeTab = new Q3GroupBox( tabWidget );
-	//recipeTab->setFrameStyle( Q3Frame::NoFrame ); FIXME:Qt4
+	recipeTab = new QGroupBox( tabWidget );
+	recipeTab->setFrameStyle( QFrame::NoFrame );
 	recipeTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 
@@ -307,7 +299,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	photoLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
 	recipeLayout->addMultiCellWidget( photoLabel, 3, 7, 1, 1 );
 
-	Q3VBox *photoButtonsBox = new Q3VBox( recipeTab );
+	QVBox *photoButtonsBox = new QVBox( recipeTab );
 
 	changePhotoButton = new QPushButton( photoButtonsBox );
 	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
@@ -329,7 +321,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 
 	// Title
-	Q3VBox *titleBox = new Q3VBox( recipeTab );
+	QVBox *titleBox = new QVBox( recipeTab );
 	titleBox->setSpacing( 5 );
 	titleLabel = new QLabel( i18n( "Recipe Name" ), titleBox );
 	titleEdit = new KLineEdit( titleBox );
@@ -344,11 +336,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	recipeLayout->addItem( title_spacer, 2, 1 );
 
 	// Author(s) & Categories
-	Q3VBox *authorBox = new Q3VBox( recipeTab ); // contains label and authorInput (input widgets)
+	QVBox *authorBox = new QVBox( recipeTab ); // contains label and authorInput (input widgets)
 	authorBox->setSpacing( 5 );
 	recipeLayout->addWidget( authorBox, 3, 4 );
 	authorLabel = new QLabel( i18n( "Authors" ), authorBox );
-	Q3HBox *authorInput = new Q3HBox( authorBox ); // Contains input + button
+	QHBox *authorInput = new QHBox( authorBox ); // Contains input + button
 
 
 	authorShow = new KLineEdit( authorInput );
@@ -367,10 +359,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	QSpacerItem* author_category = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	recipeLayout->addItem( author_category, 3, 5 );
 
-	Q3VBox *categoryBox = new Q3VBox( recipeTab ); // Contains the label and categoryInput (input widgets)
+	QVBox *categoryBox = new QVBox( recipeTab ); // Contains the label and categoryInput (input widgets)
 	categoryBox->setSpacing( 5 );
 	categoryLabel = new QLabel( i18n( "Categories" ), categoryBox );
-	Q3HBox *categoryInput = new Q3HBox( categoryBox ); // Contains the input widgets
+	QHBox *categoryInput = new QHBox( categoryBox ); // Contains the input widgets
 
 	categoryShow = new KLineEdit( categoryInput );
 	categoryShow->setReadOnly( true );
@@ -388,9 +380,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	QSpacerItem* category_servings = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	recipeLayout->addItem( category_servings, 5, 4 );
 
-	Q3HBox *serv_prep_box = new Q3HBox( recipeTab );
+	QHBox *serv_prep_box = new QHBox( recipeTab );
 
-	Q3VBox *servingsBox = new Q3VBox( serv_prep_box );
+	QVBox *servingsBox = new QVBox( serv_prep_box );
 	servingsBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	servingsBox->setSpacing( 5 );
 
@@ -398,14 +390,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	servingsNumInput = new KIntNumInput( servingsBox );
 	servingsNumInput->setMinValue( 1 );
 
-	Q3VBox *prepTimeBox = new Q3VBox( serv_prep_box );
+	QVBox *prepTimeBox = new QVBox( serv_prep_box );
 	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	prepTimeBox->setSpacing( 5 );
 
 	( void ) new QLabel( i18n( "Preparation Time" ), prepTimeBox );
-	prepTimeEdit = new Q3TimeEdit( prepTimeBox );
+	prepTimeEdit = new QTimeEdit( prepTimeBox );
 	prepTimeEdit->setMinValue( QTime( 0, 0 ) );
-	prepTimeEdit->setDisplay( Q3TimeEdit::Hours | Q3TimeEdit::Minutes );
+	prepTimeEdit->setDisplay( QTimeEdit::Hours | QTimeEdit::Minutes );
 
 	recipeLayout->addWidget( serv_prep_box, 6, 4 );
 
@@ -413,8 +405,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 	//------- Ingredients Tab -----------------
 
-	ingredientGBox = new Q3GroupBox( recipeTab );
-//ingredientGBox->setFrameStyle( Q3Frame::NoFrame ); FIXME:Qt4
+	ingredientGBox = new QGroupBox( recipeTab );
+	ingredientGBox->setFrameStyle( QFrame::NoFrame );
 	ingredientGBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	QGridLayout* ingredientsLayout = new QGridLayout( ingredientGBox );
 
@@ -425,14 +417,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	ingredientsLayout->addItem( spacerBoxTop, 0, 1 );
 
 	//Input Widgets
-	Q3HBox *allInputHBox = new Q3HBox( ingredientGBox );
+	QHBox *allInputHBox = new QHBox( ingredientGBox );
 	allInputHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 
-	Q3VBox *ingredientVBox = new Q3VBox( allInputHBox );
-	Q3HBox *typeHBox = new Q3HBox( ingredientVBox );
+	QVBox *ingredientVBox = new QVBox( allInputHBox );
+	QHBox *typeHBox = new QHBox( ingredientVBox );
 	QRadioButton *ingredientRadioButton = new QRadioButton( i18n( "Ingredient:" ), typeHBox );
 	QRadioButton *headerRadioButton = new QRadioButton( i18n( "Header:" ), typeHBox );
-	typeButtonGrp = new Q3ButtonGroup();
+	typeButtonGrp = new QButtonGroup();
 	typeButtonGrp->insert( ingredientRadioButton );
 	typeButtonGrp->insert( headerRadioButton );
 	typeButtonGrp->setButton( 0 );
@@ -443,19 +435,19 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	ingredientBox->lineEdit() ->disconnect( ingredientBox ); //so hitting enter doesn't enter the item into the box
 	ingredientBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 
-	Q3VBox *amountVBox = new Q3VBox( allInputHBox );
+	QVBox *amountVBox = new QVBox( allInputHBox );
 	amountLabel = new QLabel( i18n( "Amount:" ), amountVBox );
 	amountEdit = new FractionInput( amountVBox );
 	amountEdit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
-	Q3VBox *unitVBox = new Q3VBox( allInputHBox );
+	QVBox *unitVBox = new QVBox( allInputHBox );
 	unitLabel = new QLabel( i18n( "Unit:" ), unitVBox );
 	unitBox = new KComboBox( TRUE, unitVBox );
 	unitBox->setAutoCompletion( TRUE );
 	unitBox->lineEdit() ->disconnect( unitBox ); //so hitting enter doesn't enter the item into the box
 	unitBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 
-	Q3VBox *prepMethodVBox = new Q3VBox( allInputHBox );
+	QVBox *prepMethodVBox = new QVBox( allInputHBox );
 	prepMethodLabel = new QLabel( i18n( "Preparation Method:" ), prepMethodVBox );
 	prepMethodBox = new KComboBox( TRUE, prepMethodVBox );
 	prepMethodBox->setAutoCompletion( TRUE );
@@ -536,13 +528,13 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	ingredientList->setRenameable( 1, true ); //amount
 	ingredientList->setRenameable( 2, true ); //units
 	ingredientList->setRenameable( 3, true ); //prep method
-	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
+	ingredientList->setDefaultRenameAction( QListView::Reject );
 	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 8, 1, 3 );
 
 	// ------- Recipe Instructions Tab -----------
 
-	instructionsTab = new Q3GroupBox( recipeTab );
-	//instructionsTab->setFrameStyle( Q3Frame::NoFrame ); FIXME:Qt4
+	instructionsTab = new QGroupBox( recipeTab );
+	instructionsTab->setFrameStyle( QFrame::NoFrame );
 	instructionsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
@@ -566,10 +558,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 
 	// Functions Box
-	Q3HBox* functionsLayout = new Q3HBox( this );
+	QHBox* functionsLayout = new QHBox( this );
 
-	functionsBox = new Q3GroupBox( 1, Qt::Vertical, functionsLayout );
-	//functionsBox->setFrameStyle( Q3Frame::NoFrame ); FIXME:Qt4
+	functionsBox = new QGroupBox( 1, Qt::Vertical, functionsLayout );
+	functionsBox->setFrameStyle( QFrame::NoFrame );
 
 	saveButton = new QToolButton( functionsBox );
 	saveButton->setIconSet( il->loadIconSet( "filesave", KIcon::Small ) );
@@ -594,9 +586,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 	// Dialog design
 	tabWidget->resize( size().expandedTo( minimumSizeHint() ) );
+	clearWState( WState_Polished );
 
 	// Initialize internal data
 	ingredientComboList = new ElementList;
+	unitComboList = new UnitList;
 	prepMethodComboList = new ElementList;
 	unsavedChanges = false; // Indicates if there's something not saved yet.
 	enableChangedSignal(); // Enables the signal "changed()"
@@ -624,7 +618,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	connect( prepMethodBox->lineEdit(), SIGNAL( lostFocus() ), this, SLOT( slotPrepMethodBoxLostFocus() ) );
 	connect( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
 	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( prepTitleChanged( const QString& ) ) );
-	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
+	connect( ingredientList, SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( syncListView( QListViewItem*, const QString &, int ) ) );
 
 	connect( unitBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
 	connect( ingredientBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
@@ -649,6 +643,7 @@ RecipeInputDialog::~RecipeInputDialog()
 {
 	delete loadedRecipe;
 	delete ingredientComboList;
+	delete unitComboList;
 	delete prepMethodComboList;
 	delete typeButtonGrp;
 }
@@ -708,6 +703,7 @@ void RecipeInputDialog::reload( void )
 	typeButtonClicked( 0 );
 
 	ingredientComboList->clear();
+	unitComboList->clear();
 	reloadCombos();
 	servingsNumInput->setValue( 1 );
 	amountEdit->clear();
@@ -722,8 +718,8 @@ void RecipeInputDialog::reload( void )
 	//show ingredient list
 	IngredientList list_copy = loadedRecipe->ingList;
 	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
-		Q3ListViewItem * lastElement = ingredientList->lastItem();
-		Q3ListViewItem *ing_header = 0;
+		QListViewItem * lastElement = ingredientList->lastItem();
+		QListViewItem *ing_header = 0;
 
 		QString group = group_list[ 0 ].group;
 		if ( !group.isEmpty() ) {
@@ -761,7 +757,7 @@ void RecipeInputDialog::reload( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.convertToImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
+			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), QImage::ScaleMin ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -794,8 +790,15 @@ void RecipeInputDialog::loadIngredientListCombo( void )
 		ingredientBox->completionObject() ->addItem( ( *ing_it ).name );
 	}
 
+	ElementList headerList;
+	database->loadIngredientGroups( &headerList );
+
 	//Populate this data into the cache (which will be swapped out when "Header" is selected
-	database->loadIngredientGroups( &ingItemsCache );
+	ingItemsCache.clear();
+	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
+		if ( ingItemsCache.find( ( *it ).name ) == ingItemsCache.end() )
+			ingItemsCache << ( *it ).name;
+	}
 }
 
 void RecipeInputDialog::loadUnitListCombo( void )
@@ -809,11 +812,10 @@ void RecipeInputDialog::loadUnitListCombo( void )
 
 	if ( comboCount > 0 ) { // If not, the list may be empty (no ingredient list defined) and crashes while reading
 		int selectedIngredient = ingredientComboList->getElement( comboIndex ).id;
-		UnitList unitComboList;
-		database->loadPossibleUnits( selectedIngredient, &unitComboList );
+		database->loadPossibleUnits( selectedIngredient, unitComboList );
 
 		//Populate this data into the ComboBox
-		for ( UnitList::const_iterator unit_it = unitComboList.begin(); unit_it != unitComboList.end(); ++unit_it ) {
+		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
 			unitBox->insertItem( ( *unit_it ).name );
 			unitBox->completionObject() ->addItem( ( *unit_it ).name );
 			unitBox->completionObject() ->addItem( ( *unit_it ).plural );
@@ -854,7 +856,7 @@ void RecipeInputDialog::changePhoto( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.convertToImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
+			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), QImage::ScaleMin ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -877,11 +879,11 @@ void RecipeInputDialog::clearPhoto( void )
 
 void RecipeInputDialog::moveIngredientUp( void )
 {
-	Q3ListViewItem * it = ingredientList->selectedItem();
+	QListViewItem * it = ingredientList->selectedItem();
 	if ( !it )
 		return ;
 
-	Q3ListViewItem *iabove = it->itemAbove();
+	QListViewItem *iabove = it->itemAbove();
 
 	if ( iabove ) {
 		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
@@ -931,15 +933,15 @@ void RecipeInputDialog::moveIngredientUp( void )
 
 void RecipeInputDialog::moveIngredientDown( void )
 {
-	Q3ListViewItem * it = ingredientList->selectedItem();
+	QListViewItem * it = ingredientList->selectedItem();
 	if ( !it )
 		return ;
 
-	Q3ListViewItem *ibelow = it->itemBelow();
+	QListViewItem *ibelow = it->itemBelow();
 
 	if ( ibelow ) {
 		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
-			Q3ListViewItem * next_sibling = it->nextSibling();
+			QListViewItem * next_sibling = it->nextSibling();
 
 			if ( next_sibling ) {
 				int it_index = ingItemIndex( ingredientList, it );
@@ -969,7 +971,7 @@ void RecipeInputDialog::moveIngredientDown( void )
 					ibelow->insertItem( it );
 				}
 				else { //move the item out of the group
-					Q3ListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
+					QListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
 					parent->takeItem( it );
 					ingredientList->insertItem( it );
 					it->moveItem( parent ); //Move the Item
@@ -1006,10 +1008,10 @@ void RecipeInputDialog::moveIngredientDown( void )
 
 void RecipeInputDialog::removeIngredient( void )
 {
-	Q3ListViewItem * it = ingredientList->selectedItem();
+	QListViewItem * it = ingredientList->selectedItem();
 	if ( it && it->rtti() == INGLISTVIEWITEM_RTTI ) {
 		// Find the one below or above, and save index first
-		Q3ListViewItem * iabove, *ibelow, *iselect = 0;
+		QListViewItem * iabove, *ibelow, *iselect = 0;
 		if ( ( ibelow = it->itemBelow() ) )
 			iselect = ibelow;
 		else if ( ( iabove = it->itemAbove() ) )
@@ -1034,7 +1036,7 @@ void RecipeInputDialog::removeIngredient( void )
 		IngGrpListViewItem * header = ( IngGrpListViewItem* ) it;
 
 		int index = ingItemIndex( ingredientList, header->firstChild() ); //use this same index because after an item is deleted, the next to delete is still the same index number
-		for ( Q3ListViewItem * sub_item = header->firstChild(); sub_item; sub_item = sub_item->nextSibling() ) {
+		for ( QListViewItem * sub_item = header->firstChild(); sub_item; sub_item = sub_item->nextSibling() ) {
 			loadedRecipe->ingList.remove( loadedRecipe->ingList.at( index ) );
 
 			//Remove it from the instruction's completion
@@ -1077,10 +1079,13 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, bool plura
 			}
 		}
 
-		int ing_id = ingredientComboList->findByName( ingredient ).id;
-		if ( !database->ingredientContainsUnit( ing_id, id ) )
+		if ( !database->ingredientContainsUnit(
+		            ingredientComboList->findByName( ingredient ).id,
+		            id ) )
 		{
-			database->addUnitToIngredient( ing_id, id );
+			database->addUnitToIngredient(
+			    ingredientComboList->findByName( ingredient ).id,
+			    id );
 			new_unit = database->unitName( id );
 		}
 
@@ -1167,7 +1172,7 @@ void RecipeInputDialog::addIngredient( void )
 
 		int group_id = createNewGroupIfNecessary( ingredientBox->currentText() );
 
-		Q3ListViewItem *last_item = ingredientList->lastItem();
+		QListViewItem *last_item = ingredientList->lastItem();
 		if ( last_item && last_item->parent() )
 			last_item = last_item->parent();
 
@@ -1209,7 +1214,7 @@ void RecipeInputDialog::addIngredient( void )
 			ing.prepMethodID = prepID;
 
 			//Append also to the ListView
-			Q3ListViewItem* lastElement = ingredientList->lastItem();
+			QListViewItem* lastElement = ingredientList->lastItem();
 			if ( lastElement &&
 			        ( lastElement->rtti() == INGGRPLISTVIEWITEM_RTTI || ( lastElement->parent() && lastElement->parent() ->rtti() == INGGRPLISTVIEWITEM_RTTI ) ) )
 			{
@@ -1234,7 +1239,7 @@ void RecipeInputDialog::addIngredient( void )
 	ingredientBox->lineEdit() ->selectAll();
 }
 
-void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_text, int col )
+void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text, int col )
 {
 	if ( it->rtti() != INGLISTVIEWITEM_RTTI )
 		return ;
@@ -1383,6 +1388,7 @@ void RecipeInputDialog::newRecipe( void )
 {
 	loadedRecipe->empty();
 	ingredientComboList->clear();
+	unitComboList->clear();
 	reloadCombos();
 	QPixmap image( defaultPhoto );
 	photoLabel->setPixmap( image );
@@ -1461,6 +1467,7 @@ void RecipeInputDialog::slotIngredientBoxLostFocus( void )
 	else {
 		unitBox->clear();
 		unitBox->completionObject() ->clear();
+		unitComboList->clear();
 	}
 }
 
@@ -1587,7 +1594,7 @@ void RecipeInputDialog::resizeRecipe( void )
 		reload();
 }
 
-int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const
+int RecipeInputDialog::ingItemIndex( QListView *listview, const QListViewItem *item ) const
 {
 	if ( !item )
 		return -1;
@@ -1595,7 +1602,7 @@ int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem 
 	if ( item == listview->firstChild() )
 		return 0;
 	else {
-		Q3ListViewItemIterator it( listview->firstChild() );
+		QListViewItemIterator it( listview->firstChild() );
 		uint j = 0;
 		for ( ; it.current() && it.current() != item; ++it ) {
 			if ( it.current() ->rtti() == INGLISTVIEWITEM_RTTI )

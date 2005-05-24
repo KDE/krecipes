@@ -11,7 +11,7 @@
 #ifndef PROPERTYCALCULATOR_H
 #define PROPERTYCALCULATOR_H
 
-#include <q3ptrlist.h>
+#include <qptrlist.h>
 #include <backends/recipedb.h>
 #include "datablocks/elementlist.h"
 #include "datablocks/ingredientpropertylist.h"

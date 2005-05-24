@@ -63,7 +63,7 @@
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidepatterns>8</hidepatterns>
+      <hidepatterns></hidepatterns>
       <showvcsfields>true</showvcsfields>
     </tree>
   </kdevfileview>
@@ -170,9 +170,9 @@
   </kdevcvsservice>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem>Doxygen Documentation Collection</docsystem>
-      <docurl>krecipes.tag</docurl>
-      <usermanualurl>/home/fungmeista/src/svn/kde/trunk/extragear/utils/doc/krecipes/index.html</usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl>/home/fungmeista/src/svn/kde/trunk/extragear/utils/doc/krecipes/index.docbook</usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>

@@ -12,14 +12,11 @@
 
 #include "htmlexporter.h"
 
-#include <q3ptrdict.h>
+#include <qptrdict.h>
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <q3stylesheet.h> //for QStyleSheet::escape() to escape for HTML
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3PtrList>
+#include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
 #include <dom/dom_element.h>
 
 #include <kconfig.h>
@@ -90,7 +87,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	kdDebug() << "Using layout file: " << layout_filename << endl;
 	QFile input( layout_filename );
 
-	if ( !input.open( QIODevice::ReadOnly ) ) {
+	if ( !input.open( IO_ReadOnly ) ) {
 		QString errorStr = i18n("<html><body>\n"
 			"<p><b>Error: </b>Unable to find a layout file, which is"
 			" needed to view the recipe.</p>"
@@ -178,7 +175,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 		photo_name = recipe.title;
 	}
 
-	QPixmap pm( image.smoothScale( phwidth, 0, Qt::KeepAspectRatio ) );
+	QPixmap pm = image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QString photo_path = fileName() + "_photos/" + escape( photo_name ) + ".png";
 	if ( !QFile::exists( photo_path ) ) {
@@ -196,7 +193,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 	CustomRectList geometries;
 	geometries.setAutoDelete( true );
-	Q3PtrDict<DivElement> geom_contents;
+	QPtrDict<DivElement> geom_contents;
 
 	for ( QMap<QString, QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it ) {
 		QString key = it.key();
@@ -248,7 +245,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 			tempHTML += "</body></html>";
 
 			KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
-			sizeCalculator->view()->setVScrollBarMode ( Q3ScrollView::AlwaysOff );
+			sizeCalculator->view()->setVScrollBarMode ( QScrollView::AlwaysOff );
 			sizeCalculator->view()->setMinimumSize( QSize( elementWidth, 0 ) );
 			sizeCalculator->view()->resize( QSize( elementWidth, 0 ) );
 			sizeCalculator->begin( KURL( locateLocal( "tmp", "/" ) ) );
@@ -288,7 +285,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	html_map.insert( "title", recipe.title );
 
 	//=======================INSTRUCTIONS======================//
-	QString instr_html = Q3StyleSheet::escape( recipe.instructions );
+	QString instr_html = QStyleSheet::escape( recipe.instructions );
 	instr_html.replace( "\n", "<BR>" );
 	html_map.insert( "instructions", instr_html );
 
@@ -321,7 +318,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it ) {
 		if ( counter )
 			authors_html += ", ";
-		authors_html += Q3StyleSheet::escape( ( *author_it ).name );
+		authors_html += QStyleSheet::escape( ( *author_it ).name );
 		counter++;
 	}
 	if ( !authors_html.isEmpty() )
@@ -335,7 +332,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it ) {
 		if ( counter )
 			categories_html += ", ";
-		categories_html += Q3StyleSheet::escape( ( *cat_it ).name );
+		categories_html += QStyleSheet::escape( ( *cat_it ).name );
 		counter++;
 	}
 	if ( !categories_html.isEmpty() )
@@ -368,11 +365,11 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 				amount_str = "";
 
 			QString tmp_format( ingredient_format );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), Q3StyleSheet::escape( ( *ing_it ).name ) );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *ing_it ).name ) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), Q3StyleSheet::escape( ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape( ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethod.isEmpty() ) ?
-			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Q3StyleSheet::escape( ( *ing_it ).prepMethod ) );
+			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethod ) );
 
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 		}
@@ -407,9 +404,9 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		}
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
-		                   .arg( Q3StyleSheet::escape( prop->name ) )
+		                   .arg( QStyleSheet::escape( prop->name ) )
 		                   .arg( amount_str )
-		                   .arg( Q3StyleSheet::escape( prop->units ) );
+		                   .arg( QStyleSheet::escape( prop->units ) );
 	}
 	if ( !properties_html.isEmpty() ) {
 		properties_html.prepend( "<ul>" );
@@ -552,7 +549,7 @@ QString HTMLExporter::readVisibilityProperties( const QDomDocument &doc, const Q
 	return QString::null;
 }
 
-void HTMLExporter::pushItemsDownIfNecessary( Q3PtrList<QRect> &geometries, QRect *top_geom )
+void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect *top_geom )
 {
 	for ( QRect * item = geometries.next(); item; item = geometries.next() ) {
 		int height_offset = 0;
@@ -629,10 +626,10 @@ QString HTMLExporter::escape( const QString & str )
 
 /////////////////////////   CustomRectList   //////////////////////////////////
 
-CustomRectList::CustomRectList() : Q3PtrList<QRect>()
+CustomRectList::CustomRectList() : QPtrList<QRect>()
 {}
 
-int CustomRectList::compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
+int CustomRectList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
 {
 	QRect * geom1 = static_cast<QRect*>( item1 );
 	QRect *geom2 = static_cast<QRect*>( item2 );

@@ -19,8 +19,6 @@
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->authorCount() )
 {
@@ -28,7 +26,7 @@ AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase
 	connect( database, SIGNAL( authorRemoved( int ) ), SLOT( removeAuthor( int ) ) );
 
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( Q3ListView::Reject );
+	setDefaultRenameAction( QListView::Reject );
 }
 
 void AuthorListView::load( int limit, int offset )
@@ -63,21 +61,21 @@ StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editab
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_N );
+		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_N );
 		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Qt::Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+			                  () ), Key_Delete );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
 		delete il;
 
-		connect( this, SIGNAL( contextMenu( KListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, Q3ListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modAuthor( Q3ListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed( Q3ListViewItem* ) ), this, SLOT( saveAuthor( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modAuthor( QListViewItem* ) ) );
+		connect( this, SIGNAL( itemRenamed( QListViewItem* ) ), this, SLOT( saveAuthor( QListViewItem* ) ) );
 	}
 }
 
-void StdAuthorListView::showPopup( KListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
+void StdAuthorListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -99,7 +97,7 @@ void StdAuthorListView::createNew()
 void StdAuthorListView::remove
 	()
 {
-	Q3ListViewItem * item = currentItem();
+	QListViewItem * item = currentItem();
 
 	if ( item ) {
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this author?" ) ) ) {
@@ -114,7 +112,7 @@ void StdAuthorListView::remove
 
 void StdAuthorListView::rename()
 {
-	Q3ListViewItem * item = currentItem();
+	QListViewItem * item = currentItem();
 
 	if ( item )
 		AuthorListView::rename( item, 0 );
@@ -122,22 +120,22 @@ void StdAuthorListView::rename()
 
 void StdAuthorListView::createAuthor( const Element &author )
 {
-	createElement(new Q3ListViewItem( this, author.name, QString::number( author.id ) ));
+	createElement(new QListViewItem( this, author.name, QString::number( author.id ) ));
 }
 
 void StdAuthorListView::removeAuthor( int id )
 {
-	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
-void StdAuthorListView::modAuthor( Q3ListViewItem* i )
+void StdAuthorListView::modAuthor( QListViewItem* i )
 {
 	if ( i )
 		AuthorListView::rename( i, 0 );
 }
 
-void StdAuthorListView::saveAuthor( Q3ListViewItem* i )
+void StdAuthorListView::saveAuthor( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(); //reset the changed text
@@ -175,13 +173,13 @@ bool StdAuthorListView::checkBounds( const QString &name )
 }
 
 
-AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : Q3CheckListItem( qlv, QString::null, Q3CheckListItem::CheckBox ),
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
 	authorStored(author),
 	m_listview(qlv)
 {
 }
 
-AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, Q3ListViewItem *after, const Element &author ) : Q3CheckListItem( qlv, after, QString::null, Q3CheckListItem::CheckBox ),
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, QListViewItem *after, const Element &author ) : QCheckListItem( qlv, after, QString::null, QCheckListItem::CheckBox ),
 	authorStored(author),
 	m_listview(qlv)
 {
@@ -227,7 +225,7 @@ void AuthorCheckListView::createAuthor( const Element &author )
 
 void AuthorCheckListView::removeAuthor( int id )
 {
-	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
+	QListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
@@ -235,8 +233,8 @@ void AuthorCheckListView::load( int limit, int offset )
 {
 	AuthorListView::load(limit,offset);
 
-	for ( Q3ValueList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
-		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );
+	for ( QValueList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
+		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);
 		}

@@ -14,8 +14,6 @@
 
 #include "baseexporter.h"
 #include "datablocks/categorytree.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 /**
 Export class for Krecipes native file format (.kre, .kreml)
@@ -37,7 +35,7 @@ protected:
 	virtual int headerFlags() const;
 
 private:
-	bool removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+	bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
 	void createCategoryStructure( QString &xml, const RecipeList &recipes );
 	void writeCategoryStructure( QString &xml, const CategoryTree *categoryTree );
 

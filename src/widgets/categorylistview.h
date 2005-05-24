@@ -27,12 +27,12 @@ class CategoryCheckListView;
 
 #define CATEGORYCHECKLISTITEM_RTTI 1005
 
-class CategoryCheckListItem : public Q3CheckListItem
+class CategoryCheckListItem : public QCheckListItem
 {
 public:
 	CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool exclusive = true );
-	CategoryCheckListItem( Q3ListViewItem* it, const Element &category, bool exclusive = true );
-	CategoryCheckListItem( CategoryCheckListView* klv, Q3ListViewItem* it, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( QListViewItem* it, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool exclusive = true );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -72,12 +72,12 @@ private:
 
 #define CATEGORYLISTITEM_RTTI 1001
 
-class CategoryListItem : public Q3ListViewItem
+class CategoryListItem : public QListViewItem
 {
 public:
-	CategoryListItem( Q3ListView* klv, const Element &category );
-	CategoryListItem( Q3ListViewItem* it, const Element &category );
-	CategoryListItem( Q3ListView* klv, Q3ListViewItem* it, const Element &category );
+	CategoryListItem( QListView* klv, const Element &category );
+	CategoryListItem( QListViewItem* it, const Element &category );
+	CategoryListItem( QListView* klv, QListViewItem* it, const Element &category );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -115,7 +115,7 @@ public:
 	CategoryListView( QWidget *parent, RecipeDB * );
 
 public slots:
-	void open( Q3ListViewItem *item );
+	void open( QListViewItem *item );
 
 protected:
 	virtual void load( int limit, int offset );
@@ -124,14 +124,14 @@ protected:
 	         * subchildren that aren't expandable.  The code is taken from KDE's KListView with
 	         * one line commented out.
 	  */
-	void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after )
+	void findDrop( const QPoint &pos, QListViewItem *&parent, QListViewItem *&after )
 	{
 		QPoint p ( contentsToViewport( pos ) );
 
 		// Get the position to put it in
-		Q3ListViewItem *atpos = itemAt( p );
+		QListViewItem *atpos = itemAt( p );
 
-		Q3ListViewItem *above;
+		QListViewItem *above;
 		if ( !atpos )  // put it at the end
 			above = lastItem();
 		else {
@@ -168,8 +168,8 @@ protected:
 
 			// Ok, there's one more level of complexity. We may want to become a new
 			// sibling, but of an upper-level group, rather than the "above" item
-			Q3ListViewItem * betterAbove = above->parent();
-			Q3ListViewItem * last = above;
+			QListViewItem * betterAbove = above->parent();
+			QListViewItem * last = above;
 			while ( betterAbove ) {
 				// We are allowed to become a sibling of "betterAbove" only if we are
 				// after its last child
@@ -198,7 +198,7 @@ protected slots:
 	virtual void mergeCategories( int id1, int id2 ) = 0;
 
 	virtual void checkCreateCategory( const Element &, int parent_id );
-	virtual void populate( Q3ListViewItem *item );
+	virtual void populate( QListViewItem *item );
 };
 
 
@@ -225,7 +225,7 @@ protected:
 
 private slots:
 	void preparePopup();
-	void showPopup( KListView *, Q3ListViewItem *, const QPoint & );
+	void showPopup( KListView *, QListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
@@ -235,17 +235,17 @@ private slots:
 	void paste();
 	void pasteAsSub();
 
-	void changeCategoryParent( Q3ListViewItem *item, Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
+	void changeCategoryParent( QListViewItem *item, QListViewItem * /*afterFirst*/, QListViewItem * /*afterNow*/ );
 
-	void modCategory( Q3ListViewItem* i );
-	void saveCategory( Q3ListViewItem* i );
+	void modCategory( QListViewItem* i );
+	void saveCategory( QListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );
 
 	KPopupMenu *kpop;
-	Q3ListViewItem *clipboard_item;
-	Q3ListViewItem *clipboard_parent;
+	QListViewItem *clipboard_item;
+	QListViewItem *clipboard_parent;
 	
 	QPixmap m_folder_icon;
 };
@@ -271,7 +271,7 @@ protected:
 
 	virtual void load( int limit, int offset );
 
-	QMap<int, Q3ListViewItem*> items_map;
+	QMap<int, QListViewItem*> items_map;
 
 	bool exclusive;
 

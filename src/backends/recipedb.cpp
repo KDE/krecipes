@@ -27,9 +27,6 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <QTextStream>
 
 #include <map>
 
@@ -56,7 +53,7 @@
 struct ingredient_nutrient_data
 {
 	QString name;
-	Q3ValueList<double> data;
+	QValueList<double> data;
 };
 
 RecipeDB::RecipeDB() : 
@@ -129,7 +126,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
 {
 	RecipeList rlist;
-	Q3ValueList<int> ids; ids << id;
+	QValueList<int> ids; ids << id;
 	loadRecipes( &rlist, items, ids );
 
 	*recipe = *rlist.begin();
@@ -327,7 +324,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	}
 
 	QFile file( abbrev_file );
-	if ( !file.open( QIODevice::ReadOnly ) ) {
+	if ( !file.open( IO_ReadOnly ) ) {
 		kdDebug() << "Unable to open data file: " << abbrev_file << endl;
 		return ;
 	}
@@ -338,7 +335,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	getIngredientNameAndID( ings_and_ids );
 
 	QTextStream stream( &file );
-	Q3ValueList<ingredient_nutrient_data> *data = new Q3ValueList<ingredient_nutrient_data>;
+	QValueList<ingredient_nutrient_data> *data = new QValueList<ingredient_nutrient_data>;
 
 	kdDebug() << "Parsing abbrev.txt" << endl;
 	while ( !stream.atEnd() ) {
@@ -383,8 +380,8 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	int unit_g_id = createUnit( "g", this );
 	int unit_mg_id = createUnit( "mg", this );
 
-	Q3ValueList<ingredient_nutrient_data>::const_iterator it;
-	Q3ValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
+	QValueList<ingredient_nutrient_data>::const_iterator it;
+	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
 	const int total = data->count();
 	int counter = 0;
 	for ( it = data->begin(); it != data_end; ++it ) {
@@ -406,8 +403,8 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 		if ( do_checks ) loadProperties( &ing_properties, assigned_id );
 		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
-			Q3ValueList<double>::const_iterator property_it;
-			Q3ValueList<double>::const_iterator property_end = ( *it ).data.end();
+			QValueList<double>::const_iterator property_it;
+			QValueList<double>::const_iterator property_end = ( *it ).data.end();
 			int i = 0;
 			for ( property_it = ( *it ).data.begin(); property_it != property_end; ++property_it, ++i )
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );

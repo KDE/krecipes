@@ -16,17 +16,10 @@
 #include "widgets/editbox.h"
 
 #include <qbitmap.h>
-#include <q3header.h>
+#include <qheader.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <qmatrix.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QPaintEvent>
-#include <Q3Frame>
-#include <QLabel>
-#include <Q3ValueList>
-#include <QVBoxLayout>
+#include <qwmatrix.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -39,7 +32,7 @@
 #include "widgets/propertylistview.h"
 #include "widgets/categorylistview.h"
 
-DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( parent )
+DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
 {
 	// Initialize internal variables
 	database = db;
@@ -50,9 +43,9 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	//Design the dialog
 	setSpacing( 5 );
 	// Options Box
-	optionsBox = new Q3HBox( this );
+	optionsBox = new QHBox( this );
 
-	daysSliderBox = new QGroupBox( i18n( "Number of Days" ), optionsBox );
+	daysSliderBox = new QVGroupBox( i18n( "Number of Days" ), optionsBox );
 	dayNumberLabel = new QLabel( daysSliderBox );
 	dayNumberLabel->setText( "- 1 -" );
 	dayNumberLabel->setAlignment( Qt::AlignHCenter );
@@ -64,7 +57,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	dayNumberSelector->setTickmarks( QSlider::Below );
 	dayNumberSelector->setFixedWidth( 100 );
 
-	mealsSliderBox = new QGroupBox( i18n( "Meals per Day" ), optionsBox );
+	mealsSliderBox = new QVGroupBox( i18n( "Meals per Day" ), optionsBox );
 	mealNumberLabel = new QLabel( mealsSliderBox );
 	mealNumberLabel->setText( "- 1 -" );
 	mealNumberLabel->setAlignment( Qt::AlignHCenter );
@@ -83,7 +76,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	// Button bar
 	KIconLoader il;
 
-	Q3HBox *bottom_layout = new Q3HBox( this );
+	QHBox *bottom_layout = new QHBox( this );
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	okButton = new QPushButton( bottom_layout );
@@ -194,7 +187,7 @@ void DietWizardDialog::createDiet( void )
 
 	// temporal iterator list so elements can be removed without reloading them again from the DB
 	// this list prevents the same meal from showing up in the same day twice
-	Q3ValueList <RecipeList::Iterator> tempRList; 
+	QValueList <RecipeList::Iterator> tempRList; 
 
 	bool alert = false;
 
@@ -207,10 +200,10 @@ void DietWizardDialog::createDiet( void )
 
 			for ( int dish = 0;dish < dishNo;dish++ ) {
 				bool found = false;
-				Q3ValueList <RecipeList::Iterator> tempDishRList = tempRList;
+				QValueList <RecipeList::Iterator> tempDishRList = tempRList;
 				while ( ( !found ) && !tempDishRList.empty() ) {
 					int random_index = ( int ) ( ( float ) ( kapp->random() ) / ( float ) RAND_MAX * tempDishRList.count() );
-					Q3ValueList<RecipeList::Iterator>::Iterator iit = tempDishRList.at( random_index ); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
+					QValueList<RecipeList::Iterator>::Iterator iit = tempDishRList.at( random_index ); // note that at() retrieves an iterator to the iterator list, so we need to use * in order to get the RecipeList::Iterator
 
 					RecipeList::Iterator rit = *iit;
 					if ( found = ( ( ( !categoryFiltering( meal, dish ) ) || checkCategories( *rit, meal, dish ) ) && checkConstraints( *rit, meal, dish ) ) )  // Check that the recipe is inside the constraint limits and in the categories specified
@@ -235,7 +228,7 @@ void DietWizardDialog::createDiet( void )
 	{
 
 		// make a list of dishnumbers
-		Q3ValueList<int> dishNumbers;
+		QValueList<int> dishNumbers;
 
 		for ( int meal = 0;meal < mealNumber;meal++ ) {
 			int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
@@ -255,7 +248,7 @@ void DietWizardDialog::createDiet( void )
 }
 
 
-void DietWizardDialog::populateIteratorList( RecipeList &rl, Q3ValueList <RecipeList::Iterator> *il )
+void DietWizardDialog::populateIteratorList( RecipeList &rl, QValueList <RecipeList::Iterator> *il )
 {
 	il->clear();
 	RecipeList::Iterator it;
@@ -274,12 +267,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 
 	// Options box
 
-	mealOptions = new Q3HBox( this );
+	mealOptions = new QHBox( this );
 	mealOptions->setSpacing( 10 );
 	layout->addWidget( mealOptions );
 
 	// Number of dishes input
-	dishNumberBox = new Q3HBox( mealOptions );
+	dishNumberBox = new QHBox( mealOptions );
 	dishNumberBox->setSpacing( 10 );
 	dishNumberLabel = new QLabel( i18n( "No. of dishes: " ), dishNumberBox );
 	dishNumberInput = new QSpinBox( dishNumberBox );
@@ -289,8 +282,8 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 
 	// Toolbar
 
-	toolBar = new QGroupBox( mealOptions );
-	//toolBar->setFrameStyle ( Q3Frame::Panel | Q3Frame::Sunken ); FIXME:Qt4
+	toolBar = new QHGroupBox( mealOptions );
+	toolBar->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
 	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
 
 	// Next dish/ Previous dish buttons
@@ -299,16 +292,16 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	buttonPrev->setUsesTextLabel( true );
 	buttonPrev->setTextLabel( i18n( "Previous Dish" ) );
 	buttonPrev->setIconSet( il.loadIconSet( "back", KIcon::Small ) );
-	buttonPrev->setTextPosition( QToolButton::BelowIcon );
+	buttonPrev->setTextPosition( QToolButton::Under );
 	buttonNext = new QToolButton( toolBar );
 	buttonNext->setUsesTextLabel( true );
 	buttonNext->setTextLabel( i18n( "Next Dish" ) );
 	buttonNext->setIconSet( il.loadIconSet( "forward", KIcon::Small ) );
-	buttonNext->setTextPosition( QToolButton::BelowIcon );
+	buttonNext->setTextPosition( QToolButton::Under );
 
 
 	// Dish widgets
-	dishStack = new Q3WidgetStack( this );
+	dishStack = new QWidgetStack( this );
 	layout->addWidget( dishStack );
 	dishStack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	// Add default dishes
@@ -336,7 +329,7 @@ MealInput::~MealInput()
 
 void MealInput::reload()
 {
-	Q3ValueList<DishInput*>::iterator it;
+	QValueList<DishInput*>::iterator it;
 	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
 		DishInput *di;
 		di = ( *it );
@@ -362,7 +355,7 @@ void MealInput::changeDishNumber( int dn )
 		}
 	}
 	else if ( dn < dishNumber ) {
-		Q3ValueList <DishInput*>::Iterator it;
+		QValueList <DishInput*>::Iterator it;
 		while ( dishNumber != dn ) {
 			it = dishInputList.fromLast();
 			DishInput *lastDish = ( *it );
@@ -382,7 +375,7 @@ void MealInput::changeDishNumber( int dn )
 void MealInput::nextDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
+	QValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
 
 	//Show the next dish if it exists
 	it++;
@@ -395,7 +388,7 @@ void MealInput::nextDish( void )
 void MealInput::prevDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
+	QValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
 
 	//Show the previous dish if it exists
 	it--;
@@ -406,7 +399,7 @@ void MealInput::prevDish( void )
 
 void MealInput::showDish( int dn )
 {
-	Q3ValueList <DishInput*>::iterator it = dishInputList.at( dn );
+	QValueList <DishInput*>::iterator it = dishInputList.at( dn );
 	if ( it != dishInputList.end() )
 		dishStack->raiseWidget( *it );
 }
@@ -424,14 +417,14 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	layout->setSpacing( 10 );
 
 	//Horizontal Box to hold the KListView's
-	listBox = new QGroupBox( i18n( "Dish Characteristics" ), this );
+	listBox = new QHGroupBox( i18n( "Dish Characteristics" ), this );
 	layout->addWidget( listBox );
 
 	// Dish id
 	dishTitle = new DishTitle( listBox, title );
 
 	//Categories list
-	categoriesBox = new Q3VBox( listBox );
+	categoriesBox = new QVBox( listBox );
 	categoriesEnabledBox = new QCheckBox( categoriesBox );
 	categoriesEnabledBox->setText( i18n( "Enable Category Filtering" ) );
 
@@ -455,7 +448,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 
 
 	// Connect Signals & Slots
-	connect( constraintsView, SIGNAL( executed( Q3ListViewItem* ) ), this, SLOT( insertConstraintsEditBoxes( Q3ListViewItem* ) ) );
+	connect( constraintsView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( insertConstraintsEditBoxes( QListViewItem* ) ) );
 	connect( constraintsEditBox1, SIGNAL( valueChanged( double ) ), this, SLOT( setMinValue( double ) ) );
 	connect( constraintsEditBox2, SIGNAL( valueChanged( double ) ), this, SLOT( setMaxValue( double ) ) );
 	connect( categoriesEnabledBox, SIGNAL( toggled( bool ) ), this, SLOT( enableCategories( bool ) ) );
@@ -466,9 +459,9 @@ DishInput::~DishInput()
 
 void DishInput::clear()
 {
-	Q3ListViewItemIterator it( categoriesView );
+	QListViewItemIterator it( categoriesView );
 	while ( it.current() ) {
-		Q3CheckListItem * item = ( Q3CheckListItem* ) it.current();
+		QCheckListItem * item = ( QCheckListItem* ) it.current();
 		item->setOn( false );
 		++it;
 	}
@@ -493,7 +486,7 @@ void DishInput::reload()
 	constraintsView->reload();
 }
 
-void DishInput::insertConstraintsEditBoxes( Q3ListViewItem* it )
+void DishInput::insertConstraintsEditBoxes( QListViewItem* it )
 {
 
 	QRect r;
@@ -609,9 +602,9 @@ void DishTitle::paintEvent( QPaintEvent * )
 		painter.setFont( titleFont );
 		painter.rotate( -90 );
 		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
-		painter.drawText( 0, 0, -height(), 30, Qt::AlignCenter, titleText );
+		painter.drawText( 0, 0, -height(), 30, AlignCenter, titleText );
 		painter.setPen( QColor( 0xFF, 0xFF, 0xFF ) );
-		painter.drawText( -1, -1, -height() - 1, 29, Qt::AlignCenter, titleText );
+		painter.drawText( -1, -1, -height() - 1, 29, AlignCenter, titleText );
 		painter.end();
 	}
 	else {
@@ -634,9 +627,9 @@ void DishTitle::paintEvent( QPaintEvent * )
 		titleFont.setPointSize( 15 );
 		painter.setFont( titleFont );
 		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
-		painter.drawText( 0, 0, height(), 30, Qt::AlignCenter, titleText );
+		painter.drawText( 0, 0, height(), 30, AlignCenter, titleText );
 		painter.setPen( QColor( 0xFF, 0xFF, 0xFF ) );
-		painter.drawText( -1, -1, height() - 1, 29, Qt::AlignCenter, titleText );
+		painter.drawText( -1, -1, height() - 1, 29, AlignCenter, titleText );
 		painter.end();
 
 		//Set the border transparent using a mask
@@ -651,7 +644,7 @@ void DishTitle::paintEvent( QPaintEvent * )
 		pm.setMask( mask );
 
 		//And Rotate
-		QMatrix m ;
+		QWMatrix m ;
 		m.rotate( -90 );
 		pm = pm.xForm( m );
 

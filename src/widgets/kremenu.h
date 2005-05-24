@@ -12,20 +12,12 @@
 #ifndef KREMENU_H
 #define KREMENU_H
 
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qevent.h>
-#include <qicon.h>
+#include <qiconset.h>
 #include <qmap.h>
 #include <qpushbutton.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QMouseEvent>
-#include <Q3ValueList>
-#include <QResizeEvent>
-#include <QKeyEvent>
-#include <QPaintEvent>
-#include <QChildEvent>
 
 #include "krecipesview.h" //for KrePanel enum
 
@@ -38,7 +30,7 @@
 class Menu;
 class KreMenu;
 class KreMenuButton;
-typedef Q3ValueList <Menu>::Iterator MenuId;
+typedef QValueList <Menu>::Iterator MenuId;
 
 
 class Menu
@@ -96,7 +88,7 @@ protected:
 
 private:
 	//Variables
-	Q3ValueList <Menu> menus;
+	QValueList <Menu> menus;
 	MenuId mainMenuId;
 	MenuId currentMenuId;
 	Menu *m_currentMenu;
@@ -115,8 +107,7 @@ class KreMenuButton: public QWidget
 {
 	Q_OBJECT
 public:
-	KreMenuButton( KreMenu *parent, KrePanel panel, MenuId id, const char *name = 0 );
-	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ) );
+	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = 0, const char *name = 0 );
 
 	~KreMenuButton();
 
@@ -131,7 +122,7 @@ public:
 	{
 		highlighted = active;
 	}
-	void setIconSet( const QIcon &is );
+	void setIconSet( const QIconSet &is );
 	MenuId menuId;
 	MenuId subMenuId;
 
@@ -163,8 +154,8 @@ private slots:
 	void forwardClicks( void )
 	{
 		emit clicked( this );
-		//if ( subMenuId != 0 ) FIXME:Qt4
-		//	emit clicked( subMenuId );
+		if ( subMenuId != 0 )
+			emit clicked( subMenuId );
 	}
 
 protected:

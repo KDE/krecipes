@@ -14,11 +14,9 @@
 #define RECIPEACTIONSHANDLER_H
 
 #include <qobject.h>
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
-#include <QPoint>
-
-class Q3ListViewItem;
+class QListViewItem;
 class KListView;
 class KPopupMenu;
 class RecipeDB;
@@ -54,16 +52,16 @@ public:
 	~RecipeActionsHandler()
 	{}
 
-	static void exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
+	static void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
 	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
 
 signals:
 	void recipeSelected( int id, int action );
-	void recipesSelected( const Q3ValueList<int> &ids, int action );
+	void recipesSelected( const QValueList<int> &ids, int action );
 
 public slots:
 	void exec( ItemType type, const QPoint &p );
-	void showPopup( KListView *, Q3ListViewItem *, const QPoint & );
+	void showPopup( KListView *, QListViewItem *, const QPoint & );
 
 	/** Signals an open event (via the recipeSelected() signal) for the recipe currently
 	  * selected in the list view 
@@ -108,7 +106,7 @@ private:
 
 	int remove_from_cat_item;
 
-	Q3ValueList<int> getAllVisibleItems();
+	QValueList<int> getAllVisibleItems();
 };
 
 #endif //RECIPEACTIONSHANDLER_H

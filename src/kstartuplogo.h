@@ -13,13 +13,11 @@
 *   Based on kstartuplogo from Umbrello http://uml.sourceforge.net        *
 ***************************************************************************/
 
-#if 0
+
 #ifndef KSTARTUPLOGO_H
 #define KSTARTUPLOGO_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QMouseEvent>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>
@@ -44,7 +42,7 @@ protected:
 };
 
 #endif
-#endif
+
 
 
 

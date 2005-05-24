@@ -18,31 +18,27 @@
 #endif
 
 #include <qpushbutton.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <q3widgetstack.h>
+#include <qwidgetstack.h>
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
+#include <qwhatsthis.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 
-DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : QDialog( parent, name, modal, f )
+DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, WFlags f ) : QDialog( parent, name, modal, f )
 {
 	setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 0, 0, 0, sizePolicy().hasHeightForWidth() ) );
 	MyDialogLayout = new QHBoxLayout( this, 11, 6, "MyDialogLayout" );
 
-	dbButtonGroup = new Q3ButtonGroup( this, "dbButtonGroup" );
+	dbButtonGroup = new QButtonGroup( this, "dbButtonGroup" );
 	dbButtonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 4, ( QSizePolicy::SizeType ) 5, 0, 0, dbButtonGroup->sizePolicy().hasHeightForWidth() ) );
 	dbButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	dbButtonGroup->layout() ->setSpacing( 6 );
@@ -61,7 +57,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, Q
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
 	MyDialogLayout->addWidget( dbButtonGroup );
 
-	paramStack = new Q3WidgetStack( this, "paramStack" );
+	paramStack = new QWidgetStack( this, "paramStack" );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
 	sqlitePage = new QWidget( paramStack, "sqlitePage" );
@@ -122,6 +118,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, Q
 
 	adjustSize();
 	setFixedHeight( height() );
+	clearWState( WState_Polished );
 
 #if (!HAVE_MYSQL)
 

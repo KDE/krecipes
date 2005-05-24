@@ -12,9 +12,6 @@
 
 #include <qlayout.h>
 #include <qtabwidget.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 #include "unitsdialog.h"
 #include "createelementdialog.h"

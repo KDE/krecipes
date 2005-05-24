@@ -21,7 +21,7 @@
 #ifndef QSQLITEDB_H
 #define QSQLITEDB_H
 
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <qstringlist.h>
 #include <qobject.h>
 

@@ -13,12 +13,12 @@
 
 #include "datablocks/recipe.h"
 
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
 /**
 @author Unai Garro
 */
-class RecipeList: public Q3ValueList <Recipe>
+class RecipeList: public QValueList <Recipe>
 {
 public:
 	RecipeList();

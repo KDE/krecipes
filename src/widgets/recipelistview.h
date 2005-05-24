@@ -12,14 +12,12 @@
 #ifndef RECIPELISTVIEW_H
 #define RECIPELISTVIEW_H
 
-#include <q3dragobject.h>
-//Added by qt3to4:
-#include <QDropEvent>
+#include <qdragobject.h>
 
 #include "categorylistview.h"
 #include "datablocks/recipe.h"
 
-class Q3DragObject;
+class QDragObject;
 class QDropEvent;
 
 class RecipeDB;
@@ -28,25 +26,25 @@ class RecipeDB;
 
 #define RECIPEITEMMIMETYPE "data/x-kde.recipe.item"
 
-class RecipeListItem : public Q3ListViewItem
+class RecipeListItem : public QListViewItem
 {
 public:
-	RecipeListItem( Q3ListView* qlv, const Recipe &r ) : Q3ListViewItem( qlv )
+	RecipeListItem( QListView* qlv, const Recipe &r ) : QListViewItem( qlv )
 	{
 		init( r );
 	}
 
-	RecipeListItem( Q3ListView* qlv, Q3ListViewItem *after, const Recipe &r ) : Q3ListViewItem( qlv, after )
+	RecipeListItem( QListView* qlv, QListViewItem *after, const Recipe &r ) : QListViewItem( qlv, after )
 	{
 		init( r );
 	}
 
-	RecipeListItem( CategoryListItem* it, const Recipe &r ) : Q3ListViewItem( it )
+	RecipeListItem( CategoryListItem* it, const Recipe &r ) : QListViewItem( it )
 	{
 		init( r );
 	}
 
-	RecipeListItem( Q3ListViewItem* it, const Recipe &r ) : Q3ListViewItem( it )
+	RecipeListItem( QListViewItem* it, const Recipe &r ) : QListViewItem( it )
 	{
 		init( r );
 	}
@@ -108,7 +106,7 @@ private:
 	}
 };
 
-class RecipeItemDrag : public Q3StoredDrag
+class RecipeItemDrag : public QStoredDrag
 {
 public:
 	RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource = 0, const char *name = 0 );
@@ -124,7 +122,7 @@ public:
 	RecipeListView( QWidget *parent, RecipeDB *db );
 
 public slots:
-	void populateAll( Q3ListViewItem *parent = 0 );
+	void populateAll( QListViewItem *parent = 0 );
 
 protected slots:
 	virtual void createRecipe( const Recipe &, int parent_id );
@@ -135,17 +133,17 @@ protected slots:
 
 protected:
 	virtual void removeCategory( int id );
-	virtual Q3DragObject *dragObject();
+	virtual QDragObject *dragObject();
 	virtual bool acceptDrag( QDropEvent *event ) const;
-	virtual void populate( Q3ListViewItem *item );
+	virtual void populate( QListViewItem *item );
 
 	void load(int limit, int offset);
 
 private:
-	void moveChildrenToRoot( Q3ListViewItem * );
+	void moveChildrenToRoot( QListViewItem * );
 
 	bool flat_list;
-	Q3ListViewItem *m_uncat_item;
+	QListViewItem *m_uncat_item;
 };
 
 #endif //RECIPELISTVIEW_H

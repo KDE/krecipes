@@ -13,11 +13,8 @@
 #ifndef SHOPPINGLISTDIALOG_H
 #define SHOPPINGLISTDIALOG_H
 
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QDropEvent>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include "widgets/krelistview.h"
@@ -48,14 +45,14 @@ private:
 	RecipeDB *database;
 	// Internal Methods
 	void reloadRecipeList( void );
-	void addRecipe( Q3ListViewItem *item );
+	void addRecipe( QListViewItem *item );
 	// Widgets
 	QGridLayout* layout;
 	QPushButton* addRecipeButton;
 	QPushButton* removeRecipeButton;
 	KreListView* recipeListView;
 	KreListView* shopRecipeListView;
-	Q3HBox *buttonBar;
+	QHBox *buttonBar;
 	QPushButton* okButton;
 	QPushButton* clearButton;
 	ShoppingListViewDialog *shoppingListDisplay;
@@ -70,7 +67,7 @@ private slots:
 	void removeRecipe( void );
 	void showShoppingList( void );
 	void clear( void );
-	void slotDropped( KListView *list, QDropEvent *e, Q3ListViewItem *after );
+	void slotDropped( KListView *list, QDropEvent *e, QListViewItem *after );
 	void ensurePopulated();
 };
 

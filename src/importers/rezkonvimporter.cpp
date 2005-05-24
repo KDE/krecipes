@@ -30,7 +30,7 @@ void RezkonvImporter::parseFile( const QString &filename )
 {
 	QFile input( filename );
 
-	if ( input.open( QIODevice::ReadOnly ) ) {
+	if ( input.open( IO_ReadOnly ) ) {
 		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 

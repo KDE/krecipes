@@ -14,9 +14,6 @@
 #include "datablocks/elementlist.h"
 
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QGridLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -36,8 +33,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 	instructionsLabel = new QLabel( this );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
-	instructionsLabel->setWordWrap( true );
-	instructionsLabel->setAlignment( Qt::AlignVCenter );
+	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 	instructionsLabel->setText( i18n( "<b>WARNING:</b> The following elements will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	layout->addWidget( instructionsLabel, 1, 1 );
 	QSpacerItem *instructions_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -46,7 +42,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 
 	if ( recipeList ) {
 		if ( !( recipeList->isEmpty() ) ) {
-			recipeBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Recipes" ), this );
+			recipeBox = new QGroupBox( 1, Qt::Vertical, i18n( "Recipes" ), this );
 			recipeListView = new KListView( recipeBox );
 
 			KConfig * config = KGlobal::config();
@@ -72,7 +68,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 
 	if ( ingredientList ) {
 		if ( !( ingredientList->isEmpty() ) ) {
-			ingredientBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Ingredients" ), this );
+			ingredientBox = new QGroupBox( 1, Qt::Vertical, i18n( "Ingredients" ), this );
 			ingredientListView = new KListView( ingredientBox );
 
 			KConfig * config = KGlobal::config();
@@ -95,7 +91,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 
 	if ( propertiesList ) {
 		if ( !( propertiesList->isEmpty() ) ) {
-			propertiesBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Properties" ), this );
+			propertiesBox = new QGroupBox( 1, Qt::Vertical, i18n( "Properties" ), this );
 			propertiesListView = new KListView( propertiesBox );
 
 			KConfig * config = KGlobal::config();
@@ -126,7 +122,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 
 
 	// Ok/Cancel Buttons
-	buttonBox = new Q3GroupBox( 2, Qt::Horizontal, this );
+	buttonBox = new QGroupBox( 2, Qt::Horizontal, this );
 	buttonBox->setFlat( true );
 	okButton = new QPushButton( buttonBox );
 	okButton->setText( i18n( "&OK" ) );
@@ -166,7 +162,7 @@ void DependanciesDialog::loadList( KListView* listView, const ElementList *list 
 			id = "-";
 		else
 			id = QString::number( idnum );
-		Q3ListViewItem* it = new Q3ListViewItem( listView, id, ( *el_it ).name );
+		QListViewItem* it = new QListViewItem( listView, id, ( *el_it ).name );
 		listView->insertItem( it );
 	}
 }

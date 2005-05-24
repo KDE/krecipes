@@ -15,25 +15,21 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qcheckbox.h>
-#include <q3frame.h>
+#include <qframe.h>
 #include <qcombobox.h>
-#include <q3header.h>
-#include <q3listview.h>
-#include <q3groupbox.h>
+#include <qheader.h>
+#include <qlistview.h>
+#include <qgroupbox.h>
 #include <qspinbox.h>
-#include <q3datetimeedit.h>
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <qdatetimeedit.h>
 #include <kpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <q3scrollview.h>
-#include <q3hbox.h>
+#include <qscrollview.h>
+#include <qhbox.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -61,13 +57,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	textLabel1_4 = new QLabel( this, "textLabel1_4" );
 	layout7->addWidget( textLabel1_4 );
 	
-	scrollView1 = new Q3ScrollView( this, "scrollView1" );
+	scrollView1 = new QScrollView( this, "scrollView1" );
 	scrollView1->enableClipper(true);
 	
-	parametersFrame = new Q3Frame( scrollView1, "parametersFrame" );
+	parametersFrame = new QFrame( scrollView1, "parametersFrame" );
 	parametersFrame->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, parametersFrame->sizePolicy().hasHeightForWidth() ) );
-	parametersFrame->setFrameShape( Q3Frame::NoFrame );
-	parametersFrame->setFrameShadow( Q3Frame::Plain );
+	parametersFrame->setFrameShape( QFrame::NoFrame );
+	parametersFrame->setFrameShadow( QFrame::Plain );
 	parametersFrame->setLineWidth( 0 );
 	parametersFrameLayout = new QVBoxLayout( parametersFrame, 0, 0, "parametersFrameLayout"); 
 
@@ -75,15 +71,15 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	titleButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( titleButton );
 	
-	titleFrame = new Q3Frame( parametersFrame, "titleFrame" );
-	titleFrame->setFrameShape( Q3Frame::StyledPanel );
-	titleFrame->setFrameShadow( Q3Frame::Raised );
+	titleFrame = new QFrame( parametersFrame, "titleFrame" );
+	titleFrame->setFrameShape( QFrame::StyledPanel );
+	titleFrame->setFrameShadow( QFrame::Raised );
 	titleFrameLayout = new QVBoxLayout( titleFrame, 5, 3, "titleFrameLayout"); 
 
 	requireAllTitle = new QCheckBox( i18n("Require All Words"), titleFrame );
 	titleFrameLayout->addWidget( requireAllTitle );
 
-	Q3HBox *titleHBox = new Q3HBox( titleFrame );
+	QHBox *titleHBox = new QHBox( titleFrame );
 	QLabel *titleInfoLabel = new QLabel(i18n("Keywords:"),titleHBox);
 	titleEdit = new QLineEdit( titleHBox, "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
@@ -97,9 +93,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( ingredientButton );
 	
-	ingredientFrame = new Q3Frame( parametersFrame, "ingredientFrame" );
-	ingredientFrame->setFrameShape( Q3Frame::StyledPanel );
-	ingredientFrame->setFrameShadow( Q3Frame::Raised );
+	ingredientFrame = new QFrame( parametersFrame, "ingredientFrame" );
+	ingredientFrame->setFrameShape( QFrame::StyledPanel );
+	ingredientFrame->setFrameShadow( QFrame::Raised );
 	ingredientFrameLayout = new QGridLayout( ingredientFrame, 1, 1, 3, 3, "ingredientFrameLayout"); 
 
 	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
@@ -138,9 +134,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoriesButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( categoriesButton );
 	
-	categoryFrame = new Q3Frame( parametersFrame, "categoryFrame" );
-	categoryFrame->setFrameShape( Q3Frame::StyledPanel );
-	categoryFrame->setFrameShadow( Q3Frame::Raised );
+	categoryFrame = new QFrame( parametersFrame, "categoryFrame" );
+	categoryFrame->setFrameShape( QFrame::StyledPanel );
+	categoryFrame->setFrameShadow( QFrame::Raised );
 	categoryFrameLayout = new QGridLayout( categoryFrame, 1, 1, 3, 3, "categoryFrameLayout");
 
 	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
@@ -179,9 +175,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( authorsButton );
 	
-	authorsFrame = new Q3Frame( parametersFrame, "authorsFrame" );
-	authorsFrame->setFrameShape( Q3Frame::StyledPanel );
-	authorsFrame->setFrameShadow( Q3Frame::Raised );
+	authorsFrame = new QFrame( parametersFrame, "authorsFrame" );
+	authorsFrame->setFrameShape( QFrame::StyledPanel );
+	authorsFrame->setFrameShadow( QFrame::Raised );
 	authorsFrameLayout = new QGridLayout( authorsFrame, 1, 1, 3, 3, "authorsFrameLayout"); 
 
 	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
@@ -220,9 +216,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( servingsButton );
 	
-	servingsFrame = new Q3Frame( parametersFrame, "servingsFrame" );
-	servingsFrame->setFrameShape( Q3Frame::StyledPanel );
-	servingsFrame->setFrameShadow( Q3Frame::Raised );
+	servingsFrame = new QFrame( parametersFrame, "servingsFrame" );
+	servingsFrame->setFrameShape( QFrame::StyledPanel );
+	servingsFrame->setFrameShadow( QFrame::Raised );
 	servingsFrameLayout = new QVBoxLayout( servingsFrame, 3, 3, "servingsFrameLayout"); 
 	
 	enableServingsCheckBox = new QCheckBox( servingsFrame, "enableServingsCheckBox" );
@@ -250,9 +246,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( prepTimeButton );
 	
-	prepTimeFrame = new Q3Frame( parametersFrame, "prepTimeFrame" );
-	prepTimeFrame->setFrameShape( Q3Frame::StyledPanel );
-	prepTimeFrame->setFrameShadow( Q3Frame::Raised );
+	prepTimeFrame = new QFrame( parametersFrame, "prepTimeFrame" );
+	prepTimeFrame->setFrameShape( QFrame::StyledPanel );
+	prepTimeFrame->setFrameShadow( QFrame::Raised );
 	prepTimeFrameLayout = new QVBoxLayout( prepTimeFrame, 3, 3, "prepTimeFrameLayout"); 
 	
 	enablePrepTimeCheckBox = new QCheckBox( prepTimeFrame, "enablePrepTimeCheckBox" );
@@ -265,9 +261,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout6->addWidget( prepTimeComboBox );
 	
-	prepTimeEdit = new Q3TimeEdit( prepTimeFrame, "prepTimeEdit" );
+	prepTimeEdit = new QTimeEdit( prepTimeFrame, "prepTimeEdit" );
 	prepTimeEdit->setEnabled( FALSE );
-	prepTimeEdit->setDisplay( int( Q3TimeEdit::Minutes | Q3TimeEdit::Hours ) );
+	prepTimeEdit->setDisplay( int( QTimeEdit::Minutes | QTimeEdit::Hours ) );
 	layout6->addWidget( prepTimeEdit );
 	prepTimeFrameLayout->addLayout( layout6 );
 	parametersFrameLayout->addWidget( prepTimeFrame );
@@ -279,15 +275,15 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( instructionsButton );
 	
-	instructionsFrame = new Q3Frame( parametersFrame, "instructionsFrame" );
-	instructionsFrame->setFrameShape( Q3Frame::StyledPanel );
-	instructionsFrame->setFrameShadow( Q3Frame::Raised );
+	instructionsFrame = new QFrame( parametersFrame, "instructionsFrame" );
+	instructionsFrame->setFrameShape( QFrame::StyledPanel );
+	instructionsFrame->setFrameShadow( QFrame::Raised );
 	instructionsFrameLayout = new QVBoxLayout( instructionsFrame, 5, 3, "instructionsFrameLayout"); 
 
 	requireAllInstructions = new QCheckBox( i18n("Require All Words"), instructionsFrame );
 	instructionsFrameLayout->addWidget( requireAllInstructions );
 
-	Q3HBox *instructionsHBox = new Q3HBox(instructionsFrame);
+	QHBox *instructionsHBox = new QHBox(instructionsFrame);
 	QLabel *instructionsInfoLabel = new QLabel(i18n("Keywords:"),instructionsHBox);
 
 	instructionsEdit = new QLineEdit( instructionsHBox, "instructionsEdit" );
@@ -319,7 +315,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
 	AdvancedSearchDialogLayout->addWidget( resultsListView );
 	languageChange();
-
+	clearWState( WState_Polished );
 	///
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	///
@@ -329,8 +325,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	AdvancedSearchDialogLayout->setStretchFactor( resultsListView, 2 );
 
-	scrollView1->setHScrollBarMode( Q3ScrollView::AlwaysOff );
-	scrollView1->setResizePolicy( Q3ScrollView::AutoOneFit );
+	scrollView1->setHScrollBarMode( QScrollView::AlwaysOff );
+	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -442,7 +438,7 @@ void AdvancedSearchDialog::buttonSwitched()
 	if ( sent->inherits("QPushButton") ) {
 		QPushButton *pushed = (QPushButton*) sent;
 
-		QString suffix = ( pushed->isDown() ) ? " <<" : " >>";
+		QString suffix = ( pushed->state() == QButton::On ) ? " <<" : " >>";
 		pushed->setText( pushed->text().left( pushed->text().length() - 3 ) + suffix );
 	}
 }
@@ -545,7 +541,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	if ( !resultsListView->firstChild() ) {
-		( void ) new Q3ListViewItem( resultsListView, "--- "+i18n("No matching recipes found")+" ---");
+		( void ) new QListViewItem( resultsListView, "--- "+i18n("No matching recipes found")+" ---");
 	}
 
 	KApplication::restoreOverrideCursor();

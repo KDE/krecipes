@@ -21,10 +21,7 @@
 #define SIZEHANDLE_H
 
 #include <qwidget.h>
-#include <q3intdict.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <qintdict.h>
 
 class QMouseEvent;
 class DragArea;
@@ -87,7 +84,7 @@ public:
 
 protected:
 
-	Q3IntDict<SizeHandle> handles;
+	QIntDict<SizeHandle> handles;
 	QWidget *wid;
 	DragArea *dragArea;
 	//QPtrDict<WidgetSelection> *selectionDict;

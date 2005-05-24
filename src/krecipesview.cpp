@@ -18,11 +18,6 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpalette.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3ValueList>
-#include <QGridLayout>
-#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -74,7 +69,7 @@
 #endif
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: DCOPObject( "KrecipesInterface" ), Q3VBox( parent )
+		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
 {
 	#if DEBUG_TIMING
 	QTime dbg_timer;
@@ -90,13 +85,11 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Show Splash Screen
 
-	/* FIXME:Qt4
 	KStartupLogo* start_logo = 0L;
 	start_logo = new KStartupLogo();
 	start_logo -> setHideEnabled( true );
 	start_logo->show();
 	start_logo->raise();
-	*/
 
 	// Initialize Database
 
@@ -115,7 +108,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Design the GUI
-	splitter = new Q3HBox( this );
+	splitter = new QHBox( this );
 
 	// Create Left and Right Panels (splitter)
 
@@ -128,7 +121,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	START_TIMER("Setting up buttons")
 	// Buttons
-	buttonsList = new Q3PtrList<KreMenuButton>();
+	buttonsList = new QPtrList<KreMenuButton>();
 	buttonsList->setAutoDelete( TRUE );
 
 	button0 = new KreMenuButton( leftPanel, SelectP );
@@ -200,7 +193,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextText->setPaletteBackgroundColor( contextText->paletteBackgroundColor().light( 140 ) );
 	contextText->setTextFormat( Qt::RichText );
 	contextText->setReadOnly( true );
-	contextText->setWordWrap( Q3TextEdit::WidgetWidth );
+	contextText->setWordWrap( QTextEdit::WidgetWidth );
 	contextLayout->addMultiCellWidget( contextText, 1, 4, 0, 2 );
 	END_TIMER()
 
@@ -294,7 +287,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Connect Signals from selectPanel (SelectRecipeDialog)
 
 	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-	connect ( selectPanel, SIGNAL( recipesSelected( const Q3ValueList<int>&, int ) ), this, SLOT( actionRecipes( const Q3ValueList<int>&, int ) ) );
+	connect ( selectPanel, SIGNAL( recipesSelected( const QValueList<int>&, int ) ), this, SLOT( actionRecipes( const QValueList<int>&, int ) ) );
 
 	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
@@ -318,7 +311,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
 	// Close Splash Screen
-	//delete start_logo;
+	delete start_logo;
 
 	#if DEBUG_TIMING
 	kdDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
@@ -475,7 +468,7 @@ void KrecipesView::exportRecipe()
 	}
 }
 
-void KrecipesView::exportRecipes( const Q3ValueList<int> &ids )
+void KrecipesView::exportRecipes( const QValueList<int> &ids )
 {
 	if ( ids.count() == 1 )
 		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), database->recipeTitle( ids[ 0 ] ), database );
@@ -536,7 +529,7 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	}
 }
 
-void KrecipesView::actionRecipes( const Q3ValueList<int> &ids, int action )
+void KrecipesView::actionRecipes( const QValueList<int> &ids, int action )
 {
 	if ( action == 0 )  //show
 	{
@@ -776,12 +769,12 @@ void KrecipesView::show ( void )
 
 void KrecipesView::showRecipe( int recipeID )
 {
-	Q3ValueList<int> ids;
+	QValueList<int> ids;
 	ids << recipeID;
 	showRecipes( ids );
 }
 
-void KrecipesView::showRecipes( const Q3ValueList<int> &recipeIDs )
+void KrecipesView::showRecipes( const QValueList<int> &recipeIDs )
 {
 	if ( viewPanel->loadRecipes( recipeIDs ) )
 		slotSetPanel( RecipeView );

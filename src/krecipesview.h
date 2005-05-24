@@ -14,18 +14,16 @@
 #define KRECIPESVIEW_H
 
 #include <qbitmap.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qevent.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3hbox.h>
-#include <q3valuelist.h>
-#include <q3vbox.h>
+#include <qhbox.h>
+#include <qvaluelist.h>
+#include <qvbox.h>
 #include <qwidget.h>
-#include <q3widgetstack.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qwidgetstack.h>
 
 #include <kiconloader.h>
 #include <kpixmap.h>
@@ -56,7 +54,7 @@ class RecipeViewDialog;
 class SelectRecipeDialog;
 class ShoppingListDialog;
 class UnitsDialog;
-typedef Q3ValueList <Menu>::Iterator MenuId;
+typedef QValueList <Menu>::Iterator MenuId;
 
 
 /**
@@ -81,7 +79,7 @@ typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, Pr
 
 
 // Class KrecipesView
-class KrecipesView : public Q3VBox, virtual public KrecipesIface
+class KrecipesView : public QVBox, virtual public KrecipesIface
 {
 	Q_OBJECT
 public:
@@ -143,7 +141,7 @@ public:
 		importer.import( database );
 	}
 	
-	void exportRecipes( const Q3ValueList<int> &ids );
+	void exportRecipes( const QValueList<int> &ids );
 
 private:
 
@@ -158,11 +156,11 @@ private:
 
 
 	// Widgets
-	Q3HBox *splitter;
+	QHBox *splitter;
 	KreMenu *leftPanel;
 	MenuId dataMenu;
 	PanelDeco *rightPanel;
-	Q3PtrList<KreMenuButton> *buttonsList;
+	QPtrList<KreMenuButton> *buttonsList;
 	KreMenuButton *button0;
 	KreMenuButton *button1;
 	KreMenuButton *button2;
@@ -203,11 +201,11 @@ public slots:
 
 private slots:
 	void actionRecipe( int recipeID, int action );
-	void actionRecipes( const Q3ValueList<int> &ids, int action );
+	void actionRecipes( const QValueList<int> &ids, int action );
 	void addRecipeButton( QWidget *w, const QString &title );
 	void closeRecipe( void );
 	void showRecipe( int recipeID );
-	void showRecipes( const Q3ValueList<int> &recipeIDs );
+	void showRecipes( const QValueList<int> &recipeIDs );
 	void slotSetTitle( const QString& title );
 	void slotSetPanel( KrePanel );
 	void switchToRecipe( void );

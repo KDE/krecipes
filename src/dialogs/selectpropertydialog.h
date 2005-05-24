@@ -16,12 +16,10 @@
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
+#include <qvbox.h>
 #include <klistview.h>
 #include <kcombobox.h>
 
@@ -43,8 +41,8 @@ public:
 private:
 	//Widgets
 	QVBoxLayout *container;
-	Q3GroupBox *box;
-	Q3VBox *vbox;
+	QGroupBox *box;
+	QVBox *vbox;
 	KListView *propertyChooseView;
 	QLabel *perUnitsLabel;
 	KComboBox *perUnitsBox;

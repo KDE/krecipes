@@ -17,13 +17,10 @@
 #include "widgets/krelistview.h"
 #include "recipeactionshandler.h"
 
-#include <q3header.h>
+#include <qheader.h>
 #include <qpainter.h>
 #include <qstringlist.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -33,7 +30,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( parent )
+IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
 {
 	// Initialize internal variables
 	database = db;
@@ -48,7 +45,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	list_view->reload();
 	ingredientListView->setListView( list_view );
 	// Box to select allowed number of missing ingredients
-	missingBox = new Q3HBox( this );
+	missingBox = new QHBox( this );
 	missingNumberLabel = new QLabel( missingBox );
 	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
@@ -72,7 +69,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
 	KIconLoader il;
-	Q3HBox *buttonBox = new Q3HBox( this );
+	QHBox *buttonBox = new QHBox( this );
 
 	okButton = new QPushButton( buttonBox );
 	okButton->setIconSet( il.loadIconSet( "button_ok", KIcon::Small ) );
@@ -107,8 +104,8 @@ void IngredientMatcherDialog::findRecipes( void )
 
 	// First make a list of the ingredients that we have
 	{
-	Q3ValueList<Element> selections = ((IngredientCheckListView*)ingredientListView->listView())->selections();
-	for ( Q3ValueList<Element>::const_iterator it = selections.begin(); it != selections.end(); ++it ) {
+	QValueList<Element> selections = ((IngredientCheckListView*)ingredientListView->listView())->selections();
+	for ( QValueList<Element>::const_iterator it = selections.begin(); it != selections.end(); ++it ) {
 		Ingredient ing;
 		ing.name = (*it).name;
 		ing.ingredientID = (*it).id;
@@ -124,8 +121,8 @@ void IngredientMatcherDialog::findRecipes( void )
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
 	RecipeList incompleteRecipes;
-	Q3ValueList <int> missingNumbers;
-	Q3ValueList <IngredientList> missingIngredients;
+	QValueList <int> missingNumbers;
+	QValueList <IngredientList> missingIngredients;
 
 	RecipeList::Iterator it;
 	for ( it = rlist.begin();it != rlist.end();++it ) {
@@ -155,8 +152,8 @@ void IngredientMatcherDialog::findRecipes( void )
 
 
 	// Classify recipes with missing ingredients in different lists by ammount
-	Q3ValueList<int>::Iterator nit;
-	Q3ValueList<IngredientList>::Iterator ilit;
+	QValueList<int>::Iterator nit;
+	QValueList<IngredientList>::Iterator ilit;
 	int missingNoAllowed = missingNumberSpinBox->value();
 
 	if ( missingNoAllowed == -1 )  // "Any"

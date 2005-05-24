@@ -14,12 +14,6 @@
 #define RESIZERECIPEDIALOG_H
 
 #include <qdialog.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QVBoxLayout>
-#include <Q3Frame>
-#include <QHBoxLayout>
-#include <QGridLayout>
 
 class Recipe;
 
@@ -27,8 +21,8 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class FractionInput;
-class Q3ButtonGroup;
-class Q3Frame;
+class QButtonGroup;
+class QFrame;
 class QLabel;
 class KIntNumInput;
 class KLineEdit;
@@ -55,15 +49,15 @@ private:
 
 	Recipe *m_recipe;
 
-	Q3ButtonGroup* buttonGroup;
+	QButtonGroup* buttonGroup;
 	QRadioButton* servingsRadioButton;
-	Q3Frame* servingsFrame;
+	QFrame* servingsFrame;
 	QLabel* currentServingsLabel;
 	QLabel* newServingsLabel;
 	KLineEdit* currentServingsInput;
 	KIntNumInput* newServingsInput;
 	QRadioButton* factorRadioButton;
-	Q3Frame* factorFrame;
+	QFrame* factorFrame;
 	QLabel* factorLabel;
 	FractionInput* factorInput;
 	QPushButton* buttonOk;

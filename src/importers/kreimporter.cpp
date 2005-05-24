@@ -16,9 +16,6 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
 #include <kstandarddirs.h>
 
 #include "datablocks/recipe.h"
@@ -39,7 +36,7 @@ void KreImporter::parseFile( const QString &filename )
 	else if ( filename.right( 4 ) == ".kre" ) {
 		kdDebug() << "file is an archive" << endl;
 		KTar* kre = new KTar( filename, "application/x-gzip" );
-		kre->open( QIODevice::ReadOnly );
+		kre->open( IO_ReadOnly );
 		const KArchiveDirectory* dir = kre->directory();
 		QString name;
 		QStringList fileList = dir->entries();
@@ -64,7 +61,7 @@ void KreImporter::parseFile( const QString &filename )
 		return ;
 	}
 
-	if ( file->open( QIODevice::ReadOnly ) ) {
+	if ( file->open( IO_ReadOnly ) ) {
 		kdDebug() << "file opened" << endl;
 		QDomDocument doc;
 		QString error;
@@ -172,10 +169,14 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 				QDomNodeList pictures = el.childNodes();
 				for ( unsigned j = 0; j < pictures.count(); j++ ) {
 					QDomElement pic = pictures.item( j ).toElement();
+					QCString decodedPic;
 					if ( pic.tagName() == "pic" )
 						kdDebug() << "Found photo" << endl;
 					QPixmap pix;
-					QByteArray picData = KCodecs::base64Decode( pic.text().utf8() );
+					KCodecs::base64Decode( QCString( pic.text().latin1() ), decodedPic );
+					int len = decodedPic.size();
+					QByteArray picData( len );
+					memcpy( picData.data(), decodedPic.data(), len );
 					bool ok = pix.loadFromData( picData, "JPEG" );
 					if ( ok ) {
 						recipe->photo = pix;

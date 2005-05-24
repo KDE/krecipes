@@ -12,7 +12,7 @@
 #define KRELISTVIEW_H
 
 #include <qlabel.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <klistview.h>
 #include <klineedit.h>
 
@@ -22,7 +22,7 @@ class DBListViewBase;
 @author Unai Garro
 */
 
-class KreListView: public Q3VBox
+class KreListView: public QVBox
 {
 	Q_OBJECT
 public:
@@ -47,7 +47,7 @@ signals:
 	void searchTextChanged();
 
 private:
-	Q3HBox *filterBox;
+	QHBox *filterBox;
 	QLabel *listLabel;
 	int filteredColumn;
 	QLabel *filterLabel;

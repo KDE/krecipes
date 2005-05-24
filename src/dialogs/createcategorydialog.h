@@ -15,16 +15,14 @@
 
 #include <qdialog.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
 class QPushButton;
 class QVBoxLayout;
-class Q3GroupBox;
-class Q3VBox;
+class QGroupBox;
+class QVBox;
 class KComboBox;
 
 /**
@@ -43,8 +41,8 @@ private:
 
 	//Widgets
 	QVBoxLayout *container;
-	Q3GroupBox *box;
-	Q3VBox *vbox;
+	QGroupBox *box;
+	QVBox *vbox;
 	KLineEdit *elementEdit;
 	QPushButton* okButton;
 	QPushButton* cancelButton;

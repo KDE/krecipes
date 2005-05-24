@@ -14,7 +14,7 @@
 #define DEPENDANCIESDIALOG_H
 
 #include <qdialog.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <klistview.h>
@@ -34,11 +34,11 @@ private:
 	//Widgets
 
 	QLabel *instructionsLabel;
-	Q3GroupBox *recipeBox;
-	Q3GroupBox *ingredientBox;
-	Q3GroupBox *propertiesBox;
+	QGroupBox *recipeBox;
+	QGroupBox *ingredientBox;
+	QGroupBox *propertiesBox;
 
-	Q3GroupBox *buttonBox;
+	QGroupBox *buttonBox;
 	QPushButton* okButton;
 	QPushButton* cancelButton;
 

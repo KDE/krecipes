@@ -26,7 +26,7 @@ RecipeMLImporter::RecipeMLImporter() : BaseImporter()
 void RecipeMLImporter::parseFile( const QString& file )
 {
 	QFile input( file );
-	if ( input.open( QIODevice::ReadOnly ) ) {
+	if ( input.open( IO_ReadOnly ) ) {
 		QDomDocument doc;
 		QString error;
 		int line;
