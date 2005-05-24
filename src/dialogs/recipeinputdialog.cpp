@@ -1057,6 +1057,9 @@ void RecipeInputDialog::createNewIngredientIfNecessary()
 		QString newIngredient( ingredientBox->currentText() );
 		database->createNewIngredient( newIngredient );
 
+		ingredientComboList->clear();
+		loadIngredientListCombo();
+
 		QString saveUnit( unitBox->currentText() );
 		ingredientBox->setCurrentItem( newIngredient );
 		unitBox->setCurrentText( saveUnit );
