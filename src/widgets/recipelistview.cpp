@@ -76,7 +76,7 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
 
 	KIconLoader il;
-	setPixmap( il.loadIcon( "folder", KIcon::NoGroup, 16 ) );
+	setPixmap( il.loadIcon( "categories", KIcon::NoGroup, 16 ) );
 }
 
 QDragObject *RecipeListView::dragObject()

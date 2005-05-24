@@ -220,7 +220,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		return false;
 
 	//name and preparation method
-	new_ingredient.name = string.mid( 11, 32 ).stripWhiteSpace();
+	new_ingredient.name = string.mid( 11, 39 ).stripWhiteSpace();
 
 	//put in the header... it there is no header, current_header will be QString::null
 	new_ingredient.group = current_header;
