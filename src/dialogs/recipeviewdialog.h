@@ -13,8 +13,10 @@
 #ifndef RECIPEVIEWDIALOG_H
 #define RECIPEVIEWDIALOG_H
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class RecipeDB;
 class Recipe;
@@ -25,7 +27,7 @@ class QPushButton;
 @author Unai Garro
 */
 
-class RecipeViewDialog : public QVBox
+class RecipeViewDialog : public Q3VBox
 {
 	Q_OBJECT
 
@@ -38,13 +40,13 @@ public:
 	bool loadRecipe( int recipeID );
 
 	/** @return Boolean indicating whether or not the recipes were successfully loaded */
-	bool loadRecipes( const QValueList<int> &ids );
+	bool loadRecipes( const Q3ValueList<int> &ids );
 
 	int recipesLoaded() const
 	{
 		return ids_loaded.count();
 	}
-	const QValueList<int> currentRecipes() const
+	const Q3ValueList<int> currentRecipes() const
 	{
 		return ids_loaded;
 	}
@@ -60,11 +62,11 @@ private:
 	KHTMLPart *recipeView;
 	RecipeDB *database;
 	bool recipe_loaded;
-	QValueList<int> ids_loaded;
+	Q3ValueList<int> ids_loaded;
 	QString tmp_filename;
 
 	// Internal Methods
-	bool showRecipes( const QValueList<int> &ids );
+	bool showRecipes( const Q3ValueList<int> &ids );
 	void removeOldFiles();
 
 private slots:

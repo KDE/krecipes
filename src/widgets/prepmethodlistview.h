@@ -48,15 +48,15 @@ protected:
 	virtual void removePrepMethod( int );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( KListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
 		();
 	void rename();
 
-	void modPrepMethod( QListViewItem* i );
-	void savePrepMethod( QListViewItem* i );
+	void modPrepMethod( Q3ListViewItem* i );
+	void savePrepMethod( Q3ListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );

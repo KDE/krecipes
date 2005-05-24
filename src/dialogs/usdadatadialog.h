@@ -14,7 +14,7 @@
 #include <kdialog.h>
 
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "datablocks/element.h"
 
@@ -40,7 +40,7 @@ private:
 	Element ingredient;
 	RecipeDB *database;
 
-	QValueList<QStringList> loaded_data;
+	Q3ValueList<QStringList> loaded_data;
 
 private slots:
 	void importSelected();

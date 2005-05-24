@@ -14,6 +14,9 @@
 #include <qdom.h>
 #include <qwidget.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QLabel>
 
 #include "datablocks/recipe.h"
 #include "widgets/dragarea.h"

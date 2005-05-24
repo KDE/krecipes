@@ -15,13 +15,15 @@
 #include "mixednumber.h"
 
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QGridLayout>
 
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kiconloader.h>
 
-ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList ) : QWidget( parent, "shoppingview", WDestructiveClose )
+ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList ) : QWidget( parent, "shoppingview", Qt::WDestructiveClose )
 {
 	// Design dialog
 
@@ -34,11 +36,11 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 	layout->addItem( spacer_right, 1, 5 );
 
 
-	htmlBox = new QVBox ( this );
+	htmlBox = new Q3VBox ( this );
 	shoppingListView = new KHTMLPart( htmlBox );
 
 	KIconLoader *il = new KIconLoader;
-	QHBox *buttonsBox = new QHBox( htmlBox );
+	Q3HBox *buttonsBox = new Q3HBox( htmlBox );
 	QPushButton *closeButton = new QPushButton( il->loadIconSet( "fileclose", KIcon::Small ), i18n( "&Close" ), buttonsBox );
 	QPushButton *printButton = new QPushButton( il->loadIconSet( "fileprint", KIcon::Small ), i18n( "&Print" ), buttonsBox );
 
@@ -49,7 +51,7 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 
 	//---------- Sort the list --------
 	IngredientList list_copy = ingredientList;
-	qHeapSort( list_copy );
+	//qHeapSort( list_copy ); FIXME
 
 	//---------- Load  the list --------
 	display( list_copy );

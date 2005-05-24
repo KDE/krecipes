@@ -19,6 +19,9 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {

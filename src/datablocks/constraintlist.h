@@ -9,7 +9,7 @@
 ***************************************************************************/
 #ifndef CONSTRAINTLIST_H
 #define CONSTRAINTLIST_H
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 #include "element.h"
@@ -56,7 +56,7 @@ public:
 };
 
 
-class ConstraintPtrList: public QPtrList <Constraint>
+class ConstraintPtrList: public Q3PtrList <Constraint>
 {
 public:
 	ConstraintPtrList()
@@ -67,7 +67,7 @@ public:
 	{}
 	;
 protected:
-	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
+	virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
 	{
 		return ( ( ( Constraint* ) item1 ) ->id - ( ( Constraint* ) item2 ) ->id );
 	};

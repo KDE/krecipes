@@ -14,8 +14,10 @@
 #define SHOPPINGLISTVIEWDIALOG_H
 
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QGridLayout>
 #include <khtml_part.h>
 #include <khtmlview.h>
 
@@ -36,7 +38,7 @@ private:
 
 	// Widgets
 	QGridLayout* layout;
-	QVBox *htmlBox;
+	Q3VBox *htmlBox;
 	KHTMLPart *shoppingListView;
 
 	// Internal Methods

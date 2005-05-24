@@ -13,6 +13,9 @@
 
 #include <qwidget.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 
 class QMouseEvent;
 class QEvent;

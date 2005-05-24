@@ -30,7 +30,7 @@ UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( pa
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
 
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void UnitListView::load( int limit, int offset )
@@ -69,21 +69,21 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+			                  () ), Qt::Key_Delete );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
 		kpop->polish();
 
 		delete il;
 
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( modUnit( QListViewItem*, const QPoint &, int ) ) );
-		connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), this, SLOT( saveUnit( QListViewItem*, const QString &, int ) ) );
+		connect( this, SIGNAL( contextMenu( KListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), this, SLOT( modUnit( Q3ListViewItem*, const QPoint &, int ) ) );
+		connect( this, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), this, SLOT( saveUnit( Q3ListViewItem*, const QString &, int ) ) );
 	}
 }
 
-void StdUnitListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdUnitListView::showPopup( KListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -106,7 +106,7 @@ void StdUnitListView::createNew()
 void StdUnitListView::remove()
 {
 	// Find selected unit item
-	QListViewItem * it = currentItem();
+	Q3ListViewItem * it = currentItem();
 
 	if ( it ) {
 		int unitID = it->text( 2 ).toInt();
@@ -127,7 +127,7 @@ void StdUnitListView::remove()
 
 void StdUnitListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item )
 		UnitListView::rename( item, 0 );
@@ -135,22 +135,22 @@ void StdUnitListView::rename()
 
 void StdUnitListView::createUnit( const Unit &unit )
 {
-	createElement(new QListViewItem( this, unit.name, unit.plural, QString::number( unit.id ) ));
+	createElement(new Q3ListViewItem( this, unit.name, unit.plural, QString::number( unit.id ) ));
 }
 
 void StdUnitListView::removeUnit( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 2 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 2 );
 	removeElement(item);
 }
 
-void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )
+void StdUnitListView::modUnit( Q3ListViewItem* i, const QPoint & /*p*/, int c )
 {
 	if ( i )
 		UnitListView::rename( i, c );
 }
 
-void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
+void StdUnitListView::saveUnit( Q3ListViewItem* i, const QString &text, int c )
 {
 	if ( !checkBounds( Unit( text, text ) ) ) {
 		reload(); //reset the changed text

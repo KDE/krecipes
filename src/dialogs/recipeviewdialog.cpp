@@ -14,6 +14,8 @@
 
 #include <qlayout.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -30,7 +32,7 @@
 #include "backends/recipedb.h"
 #include "exporters/htmlexporter.h"
 
-RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
+RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : Q3VBox( parent ),
 	database(db)
 {
 	// Initialize UI Elements
@@ -53,12 +55,12 @@ RecipeViewDialog::~RecipeViewDialog()
 
 bool RecipeViewDialog::loadRecipe( int recipeID )
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	ids.append( recipeID );
 	return loadRecipes( ids );
 }
 
-bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::loadRecipes( const Q3ValueList<int> &ids )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
@@ -74,7 +76,7 @@ bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 	return success;
 }
 
-bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids )
 {
 	KProgressDialog * progress_dialog = 0;
 
@@ -84,7 +86,7 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 		progress_dialog->resize( 240, 80 );
 	}
 
-	int sb_width = recipeView->view() ->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;
+	int sb_width = 10;/*recipeView->view() ->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;FIXME:Qt4*/ 
 	HTMLExporter html_generator( database, tmp_filename + ".html", "html", parentWidget() ->width() - sb_width );
 	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {

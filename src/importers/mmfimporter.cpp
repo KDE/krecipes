@@ -37,7 +37,7 @@ void MMFImporter::parseFile( const QString &file )
 
 	QFile input( file );
 
-	if ( input.open( IO_ReadOnly ) ) {
+	if ( input.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 
@@ -164,7 +164,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
-	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() )  //continuation of previous ingredient
+	if ( string.at( 11 ) == '-' && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() )  //continuation of previous ingredient
 	{
 		//kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
 		if ( !list.isEmpty() )  //so it doesn't crash when the first ingredient appears to be a continuation of another
@@ -235,9 +235,9 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 {
 	if ( ( string.startsWith( "-----" ) || string.startsWith( "MMMMM" ) ) &&
 	        string.length() >= 40 &&
-	        ( ( string.at( string.length() / 2 ) != "-" ) ||
-	          ( string.at( string.length() / 2 + 1 ) != "-" ) ||
-	          ( string.at( string.length() / 2 - 1 ) != "-" ) ) ) {
+	        ( ( string.at( string.length() / 2 ) != '-' ) ||
+	          ( string.at( string.length() / 2 + 1 ) != '-' ) ||
+	          ( string.at( string.length() / 2 - 1 ) != '-' ) ) ) {
 		QString header( string.stripWhiteSpace() );
 
 		//get only the header name

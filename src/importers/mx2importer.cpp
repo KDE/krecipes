@@ -37,7 +37,7 @@ void MX2Importer::parseFile( const QString& filename )
 {
 	QFile file( filename );
 	kdDebug() << "loading file: " << filename << endl;
-	if ( file.open( IO_ReadOnly ) ) {
+	if ( file.open( QIODevice::ReadOnly ) ) {
 		kdDebug() << "file opened" << endl;
 		QDomDocument doc;
 

@@ -21,6 +21,8 @@
 #include "datablocks/categorytree.h"
 #include "backends/recipedb.h"
 #include "widgets/categorylistview.h"
+//Added by qt3to4:
+#include <QGridLayout>
 
 SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db ) : QDialog( parent, 0, true )
 {
@@ -103,7 +105,7 @@ void SelectCategoriesDialog::createNewCategory( void )
 
 		//a listview item will automatically be created, but we need to turn it on
 		Element new_cat( result, database->lastInsertID() );
-		QCheckListItem *new_item = ((QCheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ));
+		Q3CheckListItem *new_item = ((Q3CheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ));
 		if ( new_item )
 			new_item->setOn(true);
 	}

@@ -12,12 +12,14 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 DualProgressDialog::DualProgressDialog( QWidget* parent, const char* name, const QString& caption, const QString& text, const QString &sub_text, bool modal ) : KProgressDialog( parent, name, caption, text, modal ),
 		m_current_step( 0 ),
 		m_total_steps( 1 )
 {
-	QFrame * mainWidget = plainPage();
+	Q3Frame * mainWidget = plainPage();
 	QLayout* layout = mainWidget->layout();
 
 	m_sub_label = new QLabel( sub_text, mainWidget );

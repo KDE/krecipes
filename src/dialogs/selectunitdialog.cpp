@@ -15,13 +15,16 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList )
 		: QDialog( parent )
 {
 	container = new QVBoxLayout( this, 5, 5 );
 
-	box = new QGroupBox( this );
+	box = new Q3GroupBox( this );
 	box->setTitle( i18n( "Choose Unit" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
@@ -67,7 +70,7 @@ SelectUnitDialog::~SelectUnitDialog()
 int SelectUnitDialog::unitID( void )
 {
 
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	if ( ( it = unitChooseView->selectedItem() ) ) {
 		return ( it->text( 0 ).toInt() );
 	}
@@ -78,7 +81,7 @@ int SelectUnitDialog::unitID( void )
 void SelectUnitDialog::loadUnits( const UnitList &unitList )
 {
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		( void ) new QListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), ( *unit_it ).name );
+		( void ) new Q3ListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), ( *unit_it ).name );
 	}
 }
 

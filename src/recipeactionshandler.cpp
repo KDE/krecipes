@@ -13,6 +13,8 @@
 #include "recipeactionshandler.h"
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -41,25 +43,25 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 
 	kpop = new KPopupMenu( parentListView );
 	if ( actions & Open )
-		kpop->insertItem( il->loadIcon( "ok", KIcon::NoGroup, 16 ), i18n( "&Open" ), this, SLOT( open() ), CTRL + Key_L );
+		kpop->insertItem( il->loadIcon( "ok", KIcon::NoGroup, 16 ), i18n( "&Open" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
 	if ( actions & Edit )
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), CTRL + Key_E );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
 	if ( actions & Export )
 		kpop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 	if ( actions & RemoveFromCategory )
-		remove_from_cat_item = kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "Remove From &Category" ), this, SLOT( removeFromCategory() ), CTRL + Key_C );
+		remove_from_cat_item = kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "Remove From &Category" ), this, SLOT( removeFromCategory() ), Qt::CTRL + Qt::Key_C );
 	if ( actions & Remove )
 		kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Key_Delete );
+			                  () ), Qt::Key_Delete );
 	if ( actions & AddToShoppingList )
-		kpop->insertItem( il->loadIcon( "trolley", KIcon::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), CTRL + Key_A );
+		kpop->insertItem( il->loadIcon( "trolley", KIcon::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_A );
 	kpop->polish();
 
 	catPop = new KPopupMenu( parentListView );
 	if ( actions & ExpandAll )
-		catPop->insertItem( i18n( "&Expand All" ), this, SLOT( expandAll() ), CTRL + Key_Plus );
+		catPop->insertItem( i18n( "&Expand All" ), this, SLOT( expandAll() ), Qt::CTRL + Qt::Key_Plus );
 	if ( actions & CollapseAll )
-		catPop->insertItem( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), CTRL + Key_Minus );
+		catPop->insertItem( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), Qt::CTRL + Qt::Key_Minus );
 	if ( actions & CategoryExport )
 		catPop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( categoryExport() ), 0 );
 
@@ -67,8 +69,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 
 	delete il;
 
-	connect( parentListView, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-	connect( parentListView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( open() ) );
+	connect( parentListView, SIGNAL( contextMenu( KListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, Q3ListViewItem *, const QPoint & ) ) );
+	connect( parentListView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( open() ) );
 }
 
 void RecipeActionsHandler::exec( ItemType type, const QPoint &p )
@@ -83,7 +85,7 @@ void RecipeActionsHandler::exec( ItemType type, const QPoint &p )
 	}
 }
 
-void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void RecipeActionsHandler::showPopup( KListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i ) { // Check if the QListViewItem actually exists
 		if ( i->rtti() == 1000 ) {
@@ -97,7 +99,7 @@ void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const
 
 void RecipeActionsHandler::open()
 {
-	QListViewItem * it = parentListView->selectedItem();
+	Q3ListViewItem * it = parentListView->selectedItem();
 	if ( it ) {
 		if ( it->rtti() == 1000 ) { //RecipeListItem
 			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
@@ -106,11 +108,11 @@ void RecipeActionsHandler::open()
 		#if 0
 		else if ( it->rtti() == 1001 && it->firstChild() )  //CategoryListItem and not empty
 		{
-			QValueList<int> ids;
+			Q3ValueList<int> ids;
 
 			//do this to only iterate over children of 'it'
-			QListViewItem *pEndItem = NULL;
-			QListViewItem *pStartItem = it;
+			Q3ListViewItem *pEndItem = NULL;
+			Q3ListViewItem *pStartItem = it;
 			do
 			{
 				if ( pStartItem->nextSibling() )
@@ -120,7 +122,7 @@ void RecipeActionsHandler::open()
 			}
 			while ( pStartItem && !pEndItem );
 
-			QListViewItemIterator iterator( it );
+			Q3ListViewItemIterator iterator( it );
 			while ( iterator.current() != pEndItem )
 			{
 				if ( iterator.current() ->rtti() == 1000 ) {
@@ -139,7 +141,7 @@ void RecipeActionsHandler::open()
 
 void RecipeActionsHandler::edit()
 {
-	QListViewItem * it = parentListView->selectedItem();
+	Q3ListViewItem * it = parentListView->selectedItem();
 	if ( it && it->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
 		emit recipeSelected( recipe_it->recipeID(), 1 );
@@ -160,7 +162,7 @@ void RecipeActionsHandler::recipeExport()
 	}
 	else //if nothing selected, export all visible recipes
 	{
-		QValueList<int> ids = getAllVisibleItems();
+		Q3ValueList<int> ids = getAllVisibleItems();
 		if ( ids.count() > 0 ) {
 			switch ( KMessageBox::questionYesNo( kapp->mainWidget(), i18n("No recipes are currently selected.\nWould you like to export all recipes in the current view?")) )
 			{
@@ -177,7 +179,7 @@ void RecipeActionsHandler::recipeExport()
 
 void RecipeActionsHandler::removeFromCategory()
 {
-	QListViewItem * it = parentListView->selectedItem();
+	Q3ListViewItem * it = parentListView->selectedItem();
 	if ( it && it->rtti() == 1000 ) {
 		if ( it->parent() != 0 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
@@ -192,7 +194,7 @@ void RecipeActionsHandler::removeFromCategory()
 void RecipeActionsHandler::remove
 	()
 {
-	QListViewItem * it = parentListView->selectedItem();
+	Q3ListViewItem * it = parentListView->selectedItem();
 	if ( it && it->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
 		emit recipeSelected( recipe_it->recipeID(), 2 );
@@ -201,7 +203,7 @@ void RecipeActionsHandler::remove
 
 void RecipeActionsHandler::addToShoppingList()
 {
-	QListViewItem * it = parentListView->selectedItem();
+	Q3ListViewItem * it = parentListView->selectedItem();
 	if ( it && it->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
 		emit recipeSelected( recipe_it->recipeID(), 3 );
@@ -210,9 +212,9 @@ void RecipeActionsHandler::addToShoppingList()
 
 void RecipeActionsHandler::expandAll()
 {
-	QListViewItemIterator it( parentListView );
+	Q3ListViewItemIterator it( parentListView );
 	while ( it.current() ) {
-		QListViewItem * item = it.current();
+		Q3ListViewItem * item = it.current();
 		item->setOpen( true );
 		++it;
 	}
@@ -220,9 +222,9 @@ void RecipeActionsHandler::expandAll()
 
 void RecipeActionsHandler::collapseAll()
 {
-	QListViewItemIterator it( parentListView );
+	Q3ListViewItemIterator it( parentListView );
 	while ( it.current() ) {
-		QListViewItem * item = it.current();
+		Q3ListViewItem * item = it.current();
 		item->setOpen( false );
 		++it;
 	}
@@ -232,11 +234,11 @@ void RecipeActionsHandler::categoryExport()
 {
 	if ( parentListView->selectedItem() ) {
 		CategoryListItem * cat_it = ( CategoryListItem* ) parentListView->selectedItem();
-		QValueList<int> ids;
+		Q3ValueList<int> ids;
 
 		//do this to only iterate over children of 'cat_it'
-		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = cat_it;
+		Q3ListViewItem *pEndItem = NULL;
+		Q3ListViewItem *pStartItem = cat_it;
 		do {
 			if ( pStartItem->nextSibling() )
 				pEndItem = pStartItem->nextSibling();
@@ -245,7 +247,7 @@ void RecipeActionsHandler::categoryExport()
 		}
 		while ( pStartItem && !pEndItem );
 
-		QListViewItemIterator iterator( cat_it );
+		Q3ListViewItemIterator iterator( cat_it );
 		while ( iterator.current() != pEndItem ) {
 			if ( iterator.current() ->rtti() == 1000 ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -263,13 +265,13 @@ void RecipeActionsHandler::categoryExport()
 
 void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db )
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	ids.append( id );
 
 	exportRecipes( ids, caption, selection, db );
 }
 
-void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
+void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog * fd = new KFileDialog( QString::null,
 	                                    QString( "*.kre|%1 (*.kre)\n"
@@ -315,11 +317,11 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	delete fd;
 }
 
-QValueList<int> RecipeActionsHandler::getAllVisibleItems()
+Q3ValueList<int> RecipeActionsHandler::getAllVisibleItems()
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 
-	QListViewItemIterator iterator( parentListView );
+	Q3ListViewItemIterator iterator( parentListView );
 	while ( iterator.current() ) {
 		if ( iterator.current() ->isVisible() && iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();

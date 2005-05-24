@@ -11,6 +11,8 @@
 #include "kretextedit.h"
 
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <kaccel.h>
 #include <kdebug.h>
@@ -38,12 +40,12 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	KeyBindingMap keys = getKeyBindings();
 	KGlobalSettings::Completion mode = completionMode();
 	KShortcut cut;
-	bool noModifier = ( e->state() == NoButton || e->state() == ShiftButton );
+	bool noModifier = ( e->state() == Qt::NoButton || e->state() == Qt::ShiftButton );
 
 	if ( noModifier ) {
 		QString keycode = e->text();
 		if ( !keycode.isEmpty() && keycode.unicode() ->isPrint() ) {
-			QTextEdit::keyPressEvent ( e );
+			Q3TextEdit::keyPressEvent ( e );
 			tryCompletion();
 			e->accept();
 			return ;

@@ -13,10 +13,13 @@
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -37,7 +40,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	refineShoppingListDialogLayout = new QVBoxLayout( this, 11, 6 );
 
 	helpLabel = new QLabel( this, "helpLabel" );
-	helpLabel->setTextFormat( QLabel::RichText );
+	helpLabel->setTextFormat( Qt::RichText );
 	refineShoppingListDialogLayout->addWidget( helpLabel );
 
 	layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
@@ -86,12 +89,10 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	refineShoppingListDialogLayout->addLayout( layout3 );
 	languageChange();
 
-	clearWState( WState_Polished );
-
 	connect( doneButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( itemRenamed( QListViewItem*, const QString &, int ) ) );
+	connect( ingListView->listView(), SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QString &, int ) ) );
 
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 	calculateShopping( recipeList, &ingredientList, database );
@@ -128,16 +129,16 @@ void RefineShoppingListDialog::loadData()
 		if ( ( *it ).amount > 0 )
 			amount_str = MixedNumber( ( *it ).amount ).toString();
 
-		QListViewItem *new_item = new QListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
+		Q3ListViewItem *new_item = new Q3ListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
 		item_ing_map.insert( new_item, it );
 	}
 }
 
 void RefineShoppingListDialog::addIngredient()
 {
-	QListViewItem * item = allIngListView->listView() ->selectedItem();
+	Q3ListViewItem * item = allIngListView->listView() ->selectedItem();
 	if ( item ) {
-		QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
+		Q3ListViewItem * new_item = new Q3ListViewItem( ingListView->listView(), item->text( 0 ) );
 		ingListView->listView() ->setSelected( new_item, true );
 		ingListView->listView() ->ensureItemVisible( new_item );
 		allIngListView->listView() ->setSelected( item, false );
@@ -148,7 +149,7 @@ void RefineShoppingListDialog::addIngredient()
 
 void RefineShoppingListDialog::removeIngredient()
 {
-	QListViewItem * item = ingListView->listView() ->selectedItem();
+	Q3ListViewItem * item = ingListView->listView() ->selectedItem();
 	if ( item ) {
 		for ( IngredientList::iterator it = ingredientList.begin(); it != ingredientList.end(); ++it ) {
 			if ( *item_ing_map.find( item ) == it ) {
@@ -161,7 +162,7 @@ void RefineShoppingListDialog::removeIngredient()
 	}
 }
 
-void RefineShoppingListDialog::itemRenamed( QListViewItem* item, const QString &new_text, int col )
+void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString &new_text, int col )
 {
 	if ( col == 1 ) {
 		IngredientList::iterator found_it = *item_ing_map.find( item );

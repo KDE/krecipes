@@ -14,8 +14,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QGridLayout>
 
-DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers ) : QWidget( parent )
+DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers ) : QWidget( parent )
 {
 
 	// Design the dialog
@@ -32,12 +35,12 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 	layout->addItem( spacer_bottom, 2, 1 );
 
 	// The html part
-	htmlBox = new QVBox ( this );
+	htmlBox = new Q3VBox ( this );
 	layout->addWidget( htmlBox, 1, 1 );
 	dietView = new KHTMLPart( htmlBox );
 	// Buttons
 	KIconLoader il;
-	buttonBox = new QHBox( htmlBox );
+	buttonBox = new Q3HBox( htmlBox );
 	okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Create &Shopping List" ), buttonBox );
 	printButton = new QPushButton( il.loadIconSet( "fileprint", KIcon::Small ), i18n( "&Print" ), buttonBox );
 	cancelButton = new QPushButton( il.loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonBox );
@@ -54,7 +57,7 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 DietViewDialog::~DietViewDialog()
 {}
 
-void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers )
+void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 {
 
 
@@ -85,7 +88,7 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	htmlCode += QString( "<table><tbody>" );
 
 
-	QValueList <int>::ConstIterator it;
+	Q3ValueList <int>::ConstIterator it;
 	it = dishNumbers.begin();
 	RecipeList::ConstIterator rit;
 	rit = recipeList.begin();

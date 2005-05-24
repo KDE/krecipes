@@ -13,6 +13,16 @@
 #include <stdlib.h>
 
 #include "qsqlrecipedb.h"
+
+#include <QVariant>
+#include <QtSql/QSqlError>
+#include <QImageWriter>
+
+//Added by qt3to4:
+#include <QPixmap>
+#include <QString>
+#include <QTextStream>
+#include <Q3ValueList>
 #include "datablocks/categorytree.h"
 
 #include <qbuffer.h>
@@ -41,7 +51,7 @@ QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QStr
 QSqlRecipeDB::~QSqlRecipeDB()
 {
 	if ( dbOK ) {
-		database->close();
+		database.close();
 	}
 
 	QSqlDatabase::removeDatabase( connectionName );
@@ -70,16 +80,16 @@ void QSqlRecipeDB::connect( bool create )
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
 	database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
 
-	database->setDatabaseName( DBname );
+	database.setDatabaseName( DBname );
 	if ( !( DBuser.isNull() ) )
-		database->setUserName( DBuser );
+		database.setUserName( DBuser );
 	if ( !( DBpass.isNull() ) )
-		database->setPassword( DBpass );
-	database->setHostName( DBhost );
+		database.setPassword( DBpass );
+	database.setHostName( DBhost );
 
 	kdDebug() << i18n( "Parameters set. Calling db->open()" ) << endl;
 
-	if ( !database->open() ) {
+	if ( !database.open() ) {
 		//Try to create the database
 		if ( create ) {
 			kdDebug() << i18n( "Failing to open database. Trying to create it" ) << endl;
@@ -91,8 +101,8 @@ void QSqlRecipeDB::connect( bool create )
 		}
 
 		//Now Reopen the Database and signal & exit if it fails
-		if ( !database->open() ) {
-			QString error = i18n( "Database message: %1" ).arg( database->lastError().databaseText() );
+		if ( !database.open() ) {
+			QString error = i18n( "Database message: %1" ).arg( database.lastError().databaseText() );
 			kdDebug() << i18n( "Failing to open database. Exiting\n" ).latin1();
 
 			// Handle the error (passively)
@@ -125,7 +135,7 @@ void QSqlRecipeDB::initializeData( void )
 	QString commands;
 	// Read the commands form the data file
 	QFile datafile( KGlobal::dirs() ->findResource( "appdata", "data/data.sql" ) );
-	if ( datafile.open( IO_ReadOnly ) ) {
+	if ( datafile.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &datafile );
 		commands = stream.read();
 		datafile.close();
@@ -137,11 +147,11 @@ void QSqlRecipeDB::initializeData( void )
 
 	// Execute commands
 	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it ) {
-		database->exec( ( *it ) + QString( ";" ) ); //Split removes the semicolons
+		database.exec( ( *it ) + QString( ";" ) ); //Split removes the semicolons
 	}
 }
 
-void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )
+void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> ids )
 {
 	// Empty the recipe first
 	rlist->empty();
@@ -152,7 +162,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 	// Read title, author, instructions, and prep time
 	QStringList ids_str;
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		ids_str << QString::number(*it);
 	}
 
@@ -263,19 +273,16 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	}
 }
 
-void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
+void QSqlRecipeDB::loadIngredientGroups( QStringList *list )
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
+	QString command = "SELECT DISTINCT name FROM ingredient_groups ORDER BY name;";
 	m_query.exec( command );
 
 	if ( m_query.isActive() ) {
 		while ( m_query.next() ) {
-			Element group;
-			group.id = m_query.value( 0 ).toInt();
-			group.name = unescapeAndDecode( m_query.value( 1 ).toString() );
-			list->append( group );
+			list->append( unescapeAndDecode( m_query.value( 1 ).toString() ) );
 		}
 	}
 }
@@ -432,11 +439,10 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	// Let's begin storing the Image!
 	if ( !recipe->photo.isNull() ) {
 		QByteArray ba;
-		QBuffer buffer( ba );
-		buffer.open( IO_WriteOnly );
-		QImageIO iio( &buffer, "JPEG" );
-		iio.setImage( recipe->photo.convertToImage() );
-		iio.write();
+		QBuffer buffer( &ba );
+		buffer.open( QIODevice::WriteOnly );
+		QImageWriter iio( &buffer, "JPEG" );
+		iio.write( recipe->photo.convertToImage() );
 		//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		storePhoto( recipeID, ba );
@@ -510,7 +516,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
+void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, Q3ValueList <int>*recipeCategoryList, int limit, int offset )
 {
 	list->clear();
 
@@ -685,7 +691,7 @@ void QSqlRecipeDB::removeUnitFromIngredient( int ingredientID, int unitID )
 	if ( unitToRemove.isActive() ) {
 		while ( unitToRemove.next() ) {
 			emit recipeRemoved( unitToRemove.value( 0 ).toInt() );
-			database->exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( unitToRemove.value( 0 ).toInt() ) );
+			database.exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( unitToRemove.value( 0 ).toInt() ) );
 		}
 	}
 
@@ -785,7 +791,7 @@ void QSqlRecipeDB::removeIngredient( int ingredientID )
 	if ( ingredientToDelete.isActive() ) {
 		while ( ingredientToDelete.next() ) {
 			emit recipeRemoved( ingredientToDelete.value( 0 ).toInt() );
-			database->exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( ingredientToDelete.value( 0 ).toInt() ) );
+			database.exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( ingredientToDelete.value( 0 ).toInt() ) );
 		}
 	}
 
@@ -957,7 +963,7 @@ void QSqlRecipeDB::removeUnit( int unitID )
 	if ( unitToRemove.isActive() ) {
 		while ( unitToRemove.next() ) {
 			emit recipeRemoved( unitToRemove.value( 0 ).toInt() );
-			database->exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( unitToRemove.value( 0 ).toInt() ) );
+			database.exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( unitToRemove.value( 0 ).toInt() ) );
 		}
 	}
 
@@ -1023,7 +1029,7 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 	if ( prepMethodToRemove.isActive() ) {
 		while ( prepMethodToRemove.next() ) {
 			emit recipeRemoved( prepMethodToRemove.value( 0 ).toInt() );
-			database->exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( prepMethodToRemove.value( 0 ).toInt() ) );
+			database.exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( prepMethodToRemove.value( 0 ).toInt() ) );
 		}
 	}
 
@@ -1271,7 +1277,7 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 	}
 }
 
-QCString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
+QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped = s;
 
@@ -1376,7 +1382,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups";
 
-	QStringList existingTableList = database->tables();
+	QStringList existingTableList = database.tables();
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		bool found = false;
 
@@ -1614,7 +1620,7 @@ int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 
 int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM authors WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1628,7 +1634,7 @@ int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 
 int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM categories WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1642,7 +1648,7 @@ int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 
 int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredients WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1656,7 +1662,7 @@ int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 
 int QSqlRecipeDB::findExistingPrepByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM prep_methods WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1670,7 +1676,7 @@ int QSqlRecipeDB::findExistingPrepByName( const QString& name )
 
 int QSqlRecipeDB::findExistingPropertyByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_properties WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1684,7 +1690,7 @@ int QSqlRecipeDB::findExistingPropertyByName( const QString& name )
 
 int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = "SELECT id FROM units WHERE name='" + search_str + "' OR plural='" + search_str + "';";
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1698,7 +1704,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 
 int QSqlRecipeDB::findExistingRecipeByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM recipes WHERE title='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -2041,7 +2047,7 @@ void QSqlRecipeDB::search( RecipeList *list, int items,
 		time,prep_param,
 		servings,servings_param);
 
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	QSqlQuery recipeToLoad( query, database );
 	if ( recipeToLoad.isActive() ) {
 		while ( recipeToLoad.next() ) {

@@ -10,7 +10,9 @@
 #ifndef EDITBOX_H
 #define EDITBOX_H
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 #include <knuminput.h>
 
 

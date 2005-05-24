@@ -9,14 +9,14 @@
 ***************************************************************************/
 #ifndef UNITRATIOLIST_H
 #define UNITRATIOLIST_H
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include "unitratio.h"
 
 
 /**
 @author Unai Garro
 */
-class UnitRatioList : public QValueList <UnitRatio>
+class UnitRatioList : public Q3ValueList <UnitRatio>
 {
 public:
 	UnitRatioList();

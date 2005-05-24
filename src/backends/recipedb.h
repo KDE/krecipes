@@ -16,7 +16,9 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QString>
 
 #include <dcopclient.h>
 
@@ -41,7 +43,7 @@ class CategoryTree;
 
 typedef struct
 {
-	QValueList <int> recipeIdList;
+	Q3ValueList <int> recipeIdList;
 	IngredientList ilist;
 }
 RecipeIngredientList;
@@ -155,15 +157,15 @@ public:
 	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true ) = 0;
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadIngredientGroups( ElementList *list ) = 0;
+	virtual void loadIngredientGroups( QStringList *list ) = 0;
 	virtual void loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
 	virtual void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipe( Recipe *recipe, int items, int id );
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
-	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
-	virtual void loadRecipeList( ElementList *list, int categoryID = 0, QValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
+	virtual void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
+	virtual void loadRecipeList( ElementList *list, int categoryID = 0, Q3ValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
@@ -233,7 +235,7 @@ public:
 
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
-	virtual QCString escapeAndEncode( const QString &s ) const = 0;
+	virtual QString escapeAndEncode( const QString &s ) const = 0;
 	virtual QString unescapeAndDecode( const QString &s ) const = 0;
 
 	virtual QString categoryName( int ID ) = 0;

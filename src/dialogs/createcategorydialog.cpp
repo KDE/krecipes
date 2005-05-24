@@ -13,10 +13,13 @@
 #include "createcategorydialog.h"
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -26,7 +29,7 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 		: QDialog( parent, 0, true )
 {
 	container = new QVBoxLayout( this, 5, 5 );
-	box = new QGroupBox( this );
+	box = new Q3GroupBox( this );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
@@ -37,7 +40,7 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	elementEdit = new KLineEdit( box );
 	boxLayout->addWidget( elementEdit );
 
-	QHBox *subcatHBox = new QHBox( box );
+	Q3HBox *subcatHBox = new Q3HBox( box );
 	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
 	categoryComboBox = new KComboBox( subcatHBox );
 	boxLayout->addWidget( subcatHBox );

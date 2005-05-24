@@ -9,14 +9,14 @@
 ***************************************************************************/
 #ifndef INGREDIENTPROPERTYLIST_H
 #define INGREDIENTPROPERTYLIST_H
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "datablocks/ingredientproperty.h"
 
 /**
 @author Unai Garro
 */
 
-class PropertyPtrList: public QPtrList <IngredientProperty>
+class PropertyPtrList: public Q3PtrList <IngredientProperty>
 {
 public:
 	PropertyPtrList()
@@ -27,7 +27,7 @@ public:
 	{}
 	;
 protected:
-	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
+	virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
 	{
 		return ( ( ( IngredientProperty* ) item1 ) ->id - ( ( IngredientProperty* ) item2 ) ->id );
 	};

@@ -17,6 +17,10 @@
 #include <klocale.h>
 
 #include "datablocks/ingredientpropertylist.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList ) : QDialog( parent )
 {
@@ -27,7 +31,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	// Initialize Widgets
 	QVBoxLayout *layout = new QVBoxLayout( this, 11, 6 );
 
-	box = new QGroupBox( this );
+	box = new Q3GroupBox( this );
 	box->setTitle( i18n( "Choose Property" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
@@ -72,7 +76,6 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	layout->addWidget( box );
 
 	resize( QSize( 200, 380 ).expandedTo( minimumSizeHint() ) );
-	clearWState( WState_Polished );
 
 	// Load data
 	loadProperties( propertyList );
@@ -91,7 +94,7 @@ SelectPropertyDialog::~SelectPropertyDialog()
 int SelectPropertyDialog::propertyID( void )
 {
 
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	if ( ( it = propertyChooseView->selectedItem() ) ) {
 		return ( it->text( 0 ).toInt() );
 	}
@@ -114,7 +117,7 @@ int SelectPropertyDialog::perUnitsID()
 void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList )
 {
 	for ( IngredientProperty * property = propertyList->getFirst(); property; property = propertyList->getNext() ) {
-		( void ) new QListViewItem( propertyChooseView, QString::number( property->id ), property->name );
+		( void ) new Q3ListViewItem( propertyChooseView, QString::number( property->id ), property->name );
 	}
 }
 void SelectPropertyDialog::loadUnits( UnitList *unitList )

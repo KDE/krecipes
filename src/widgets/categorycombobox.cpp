@@ -12,7 +12,7 @@
 
 #include "categorycombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -54,9 +54,10 @@ void CategoryComboBox::reload()
 	int row = 1;
 	loadCategories(&categoryList,row);
 
+	/* FIXME:Qt4
 	if ( listBox() ->findItem( remember_cat_filter, Qt::ExactMatch ) ) {
 		setCurrentText( remember_cat_filter );
-	}
+	}*/
 }
 
 void CategoryComboBox::loadCategories( CategoryTree *categoryTree, int &row )

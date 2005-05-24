@@ -11,7 +11,6 @@
 #ifndef SETUPWIZARD_H
 #define SETUPWIZARD_H
 
-#include <qvbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
@@ -23,6 +22,8 @@
 /**
 @author Unai Garro
 */
+
+class Q3ButtonGroup;
 
 class WelcomePage;
 class DBTypeSetupPage;
@@ -40,7 +41,7 @@ class SetupWizard: public KWizard
 	Q_OBJECT
 public:
 
-	SetupWizard( QWidget *parent = 0, const char *name = 0, bool modal = true, WFlags f = 0 );
+	SetupWizard( QWidget *parent = 0, const char *name = 0, bool modal = true, Qt::WFlags f = 0 );
 	~SetupWizard();
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );
@@ -211,7 +212,7 @@ private:
 	// Widgets
 	QLabel *dbTypeSetupText;
 	QLabel *logo;
-	QVButtonGroup *bg;
+	Q3ButtonGroup *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
 	QRadioButton *psqlCheckBox;

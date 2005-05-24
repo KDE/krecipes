@@ -15,10 +15,17 @@
 #include <qcursor.h>
 #include <qfont.h>
 #include <qimage.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qsignalmapper.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QChildEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -45,7 +52,7 @@ KreMenu::KreMenu( QWidget *parent, const char *name ) :
 	m_currentMenu = &( *currentMenuId );
 
 	setMouseTracking( true );
-	setFocusPolicy( QWidget::StrongFocus );
+	//setFocusPolicy( QWidget::StrongFocus );FIXME:Qt4
 	setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
 }
 
@@ -218,12 +225,12 @@ QSize KreMenu::minimumSizeHint() const
 {
 	int width = 30;
 
-	QObjectList *childElements = queryList( 0, 0, false, false ); //only first-generation children (not recursive)
-	QObjectListIterator it( *childElements );
+	QObjectList childElements = queryList( 0, 0, false, false ); //only first-generation children (not recursive)
+	QListIterator<QObject*> it( childElements );
 
 	QObject *obj;
-	while ( ( obj = it.current() ) != 0 ) {
-		++it;
+	while ( it.hasNext() ) {
+		obj = it.next();
 
 		if ( obj->isWidgetType() ) {
 			int obj_width_hint = ( ( QWidget* ) obj ) ->minimumSizeHint().width();
@@ -299,12 +306,12 @@ void KreMenu::showMenu( MenuId id )
 	// Hide the buttons in the current menu
 	// and show the ones in the new menu
 
-	QObjectList * childElements = queryList();
-	QObjectListIterator it( *childElements );
+	QObjectList childElements = queryList();
+	QListIterator<QObject*> it( childElements );
 
 	QObject *obj;
-	while ( ( obj = it.current() ) != 0 ) {
-		++it;
+	while ( it.hasNext() ) {
+		obj = it.next();
 		if ( obj->inherits( "KreMenuButton" ) ) {
 			KreMenuButton * button = ( KreMenuButton* ) obj;
 			if ( button->menuId == currentMenuId )
@@ -336,12 +343,31 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const
 	highlighted = false;
 	text = QString::null;
 
-	if ( id == 0 )
-		menuId = parent->mainMenu();
-	else
-		menuId = id;
+	menuId = id;
 
-	subMenuId = 0; // By default it's not a submenu button
+	//FIXME:Qt4 subMenuId = 0; // By default it's not a submenu button
+
+	resize( parent->size().width(), 55 );
+	connect ( parent, SIGNAL( resized( int, int ) ), this, SLOT( rescale() ) );
+	connect( this, SIGNAL( clicked() ), this, SLOT( forwardClicks() ) );
+	setCursor( QCursor( KCursor::handCursor() ) );
+}
+
+KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel ) :
+#if QT_VERSION >= 0x030200
+		QWidget( parent, "", Qt::WNoAutoErase ),
+#else
+		QWidget( parent ),
+#endif
+		panel( _panel )
+{
+	icon = 0;
+	highlighted = false;
+	text = QString::null;
+
+	menuId = parent->mainMenu();
+
+	//FIXME:Qt4 subMenuId = 0; // By default it's not a submenu button
 
 	resize( parent->size().width(), 55 );
 	connect ( parent, SIGNAL( resized( int, int ) ), this, SLOT( rescale() ) );
@@ -475,7 +501,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		{
 			QImage image;
 			image = ( *icon );
-			scaledIcon.convertFromImage( image.smoothScale( width() / 3, height(), QImage::ScaleMin ) );
+			scaledIcon.convertFromImage( image.smoothScale( width() / 3, height(), Qt::KeepAspectRatio ) );
 		}
 
 		// Calculate the icon's vertical position
@@ -497,7 +523,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	// Calculate the rounded area
 
 	int areax = xPos + 10;
-	int areah = fontMetrics().height() * ( text.contains( '\n' ) + 1 ) + fontMetrics().lineSpacing() * text.contains( '\n' ) + 6; // Make sure the area is sensible for text and adjust for multiple lines
+	int areah = fontMetrics().height() * ( text.count( '\n' ) + 1 ) + fontMetrics().lineSpacing() * text.count( '\n' ) + 6; // Make sure the area is sensible for text and adjust for multiple lines
 
 	int areaw = width() - areax - 10;
 
@@ -562,11 +588,11 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 }
 
-void KreMenuButton::setIconSet( const QIconSet &is )
+void KreMenuButton::setIconSet( const QIcon &is )
 {
 	delete icon;
 
-	icon = new QPixmap( is.pixmap( QIconSet::Small, QIconSet::Normal, QIconSet::On ) );
+	icon = new QPixmap( is.pixmap( QIcon::Small, QIcon::Normal, QIcon::On ) );
 
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget() ->minimumWidth() < minimumSizeHint().width() )

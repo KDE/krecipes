@@ -12,6 +12,8 @@
 #define LISTVIEWHANDLER_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <klistview.h>
 
@@ -37,8 +39,8 @@ protected:
 	virtual void load(int limit, int offset) = 0;
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );
-	void createElement( QListViewItem * );
-	void removeElement( QListViewItem * );
+	void createElement( Q3ListViewItem * );
+	void removeElement( Q3ListViewItem * );
 
 	bool reloading(){ return bulk_load; }
 	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
@@ -48,8 +50,8 @@ protected:
 	int curr_offset;
 
 protected slots:
-	void rename( QListViewItem *, int c );
-	void slotDoubleClicked( QListViewItem * );
+	void rename( Q3ListViewItem *, int c );
+	void slotDoubleClicked( Q3ListViewItem * );
 
 private:
 	void activatePrev();
@@ -62,8 +64,8 @@ private:
 	
 	bool bulk_load;
 
-	QListViewItem *lastElement;
-	QListViewItem *delete_me_later;
+	Q3ListViewItem *lastElement;
+	Q3ListViewItem *delete_me_later;
 };
 
 #endif //LISTVIEWHANDLER_H

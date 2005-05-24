@@ -13,6 +13,8 @@
 #define BASEEXPORTER_H
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kprogress.h>
@@ -31,7 +33,7 @@ public:
 	BaseExporter( const QString &file, const QString &ext );
 	virtual ~BaseExporter();
 
-	void exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
+	void exporter( const Q3ValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
 	void exporter( int id, RecipeDB *database, KProgressDialog * = 0 );
 
 	/** Returns the actual filename that will be written to during the export.
@@ -59,7 +61,7 @@ protected:
 
 private:
 	bool createFile();
-	void saveToFile( const QValueList<int> &ids, RecipeDB *database );
+	void saveToFile( const Q3ValueList<int> &ids, RecipeDB *database );
 
 	QFile* file;
 	KTar *tar_file;

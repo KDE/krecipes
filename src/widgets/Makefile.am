@@ -8,15 +8,14 @@ INCLUDES         = -I$(srcdir)/.. $(all_includes)
 
 noinst_LTLIBRARIES=libkrecipeswidgets.la
 
-libkrecipeswidgets_la_SOURCES= \
-	sizehandle.cpp dragarea.cpp krelistview.cpp kremenu.cpp \
-	paneldeco.cpp ingredientlistview.cpp unitlistview.cpp \
-	propertylistview.cpp prepmethodlistview.cpp categorylistview.cpp \
-	authorlistview.cpp recipelistview.cpp categorycombobox.cpp \
-	kretextedit.cpp dblistviewbase.cpp editbox.cpp \
+libkrecipeswidgets_la_SOURCES = sizehandle.cpp dragarea.cpp krelistview.cpp \
+	kremenu.cpp paneldeco.cpp ingredientlistview.cpp unitlistview.cpp \
+	propertylistview.cpp prepmethodlistview.cpp categorylistview.cpp authorlistview.cpp \
+	recipelistview.cpp categorycombobox.cpp kretextedit.cpp dblistviewbase.cpp editbox.cpp \
 	conversiontable.cpp fractioninput.cpp
 
 libkrecipeswidgets_la_METASOURCES=AUTO
 
 #the library search path.
 libkrecipeswidgets_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+noinst_HEADERS = ingredientcombobox.h

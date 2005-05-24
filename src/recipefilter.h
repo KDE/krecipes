@@ -15,7 +15,7 @@
 #include <qobject.h>
 
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 
 class RecipeFilter : public QObject
 {
@@ -29,11 +29,11 @@ public slots:
 	void filterCategory( int categoryID );
 
 private:
-	bool isParentOf( QListViewItem *parent, QListViewItem *to_check );
-	bool hideIfEmpty( QListViewItem *parent = 0 );
+	bool isParentOf( Q3ListViewItem *parent, Q3ListViewItem *to_check );
+	bool hideIfEmpty( Q3ListViewItem *parent = 0 );
 
 	KListView *listview;
-	QListViewItem *currentCategory;
+	Q3ListViewItem *currentCategory;
 };
 
 #endif //RECIPEFILTER_H

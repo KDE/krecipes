@@ -49,15 +49,15 @@ protected:
 	virtual void removeUnit( int );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( KListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
 		();
 	void rename();
 
-	void modUnit( QListViewItem* i, const QPoint &p, int c );
-	void saveUnit( QListViewItem* i, const QString &text, int c );
+	void modUnit( Q3ListViewItem* i, const QPoint &p, int c );
+	void saveUnit( Q3ListViewItem* i, const QString &text, int c );
 
 private:
 	bool checkBounds( const Unit &unit );

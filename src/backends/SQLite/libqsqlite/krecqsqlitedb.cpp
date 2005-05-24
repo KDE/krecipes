@@ -22,7 +22,9 @@
 #include "krecqsqlitedb.h"
 #include "krecqsqliteresult.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -114,8 +116,8 @@ int QSQLiteDB::call_back( void* result, int argc, char** argv, char** columns )
 {
 	QSQLiteResult * res = ( QSQLiteResult* ) result;
 
-	QMap<QString, QCString> tableString;
-	QMap<int, QCString> tableInt;
+	QMap<QString, Q3CString> tableString;
+	QMap<int, Q3CString> tableInt;
 
 	for ( int i = 0; i < argc; i++ ) {
 		tableInt.insert( i, argv[ i ] );

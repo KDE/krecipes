@@ -11,8 +11,10 @@
 
 #include "recipelistview.h"
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -23,11 +25,11 @@
 #include "backends/recipedb.h"
 
 RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource, const char *name )
-		: QStoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
+		: Q3StoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
 {
 	if ( recipeItem ) {
 		QByteArray data;
-		QDataStream out( data, IO_WriteOnly );
+		QDataStream out( &data, QIODevice::WriteOnly );
 		out << recipeItem->recipeID();
 		out << recipeItem->title();
 		setEncodedData( data );
@@ -50,7 +52,7 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 
 	QString title;
 	int recipeID;
-	QDataStream in( data, IO_ReadOnly );
+	QDataStream in( &data, QIODevice::ReadOnly );
 	in >> recipeID;
 	in >> title;
 
@@ -76,10 +78,10 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
 
 	KIconLoader il;
-	setPixmap( il.loadIcon( "folder", KIcon::NoGroup, 16 ) );
+	setPixmap( il.loadIcon( "categories", KIcon::NoGroup, 16 ) );
 }
 
-QDragObject *RecipeListView::dragObject()
+Q3DragObject *RecipeListView::dragObject()
 {
 	RecipeListItem * item = dynamic_cast<RecipeListItem*>( selectedItem() );
 	if ( item != 0 ) {
@@ -131,7 +133,7 @@ void RecipeListView::load(int limit, int offset)
 	}
 }
 
-void RecipeListView::populate( QListViewItem *item )
+void RecipeListView::populate( Q3ListViewItem *item )
 {
 	StdCategoryListView::populate(item);
 
@@ -164,7 +166,7 @@ void RecipeListView::populate( QListViewItem *item )
 	}
 }
 
-void RecipeListView::populateAll( QListViewItem *parent )
+void RecipeListView::populateAll( Q3ListViewItem *parent )
 {
 	if ( !parent )
 		parent = firstChild();
@@ -173,7 +175,7 @@ void RecipeListView::populateAll( QListViewItem *parent )
 		parent = parent->firstChild();
 	}
 
-	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+	for ( Q3ListViewItem *item = parent; item; item = item->nextSibling() ) {
 		populateAll( item );
 	}
 }
@@ -182,7 +184,7 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 {
 	if ( parent_id == -1 ) {
 		if ( !m_uncat_item )
-			m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+			m_uncat_item = new Q3ListViewItem(this,i18n("Uncategorized"));
 
 		( void ) new RecipeListItem( m_uncat_item, recipe );
 	}
@@ -206,7 +208,7 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 		for ( ElementList::const_iterator cat_it = categories.begin(); cat_it != categories.end(); ++cat_it ) {
 			int cur_cat_id = ( *cat_it ).id;
 
-			QListViewItemIterator iterator( this );
+			Q3ListViewItemIterator iterator( this );
 			while ( iterator.current() ) {
 				if ( iterator.current() ->rtti() == 1001 ) {
 					CategoryListItem * cat_item = ( CategoryListItem* ) iterator.current();
@@ -228,7 +230,7 @@ void RecipeListView::modifyRecipe( const Element &recipe, const ElementList &cat
 
 void RecipeListView::removeRecipe( int id )
 {
-	QListViewItemIterator iterator( this );
+	Q3ListViewItemIterator iterator( this );
 	while ( iterator.current() ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -241,11 +243,11 @@ void RecipeListView::removeRecipe( int id )
 
 void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 {
-	QListViewItem * item = items_map[ cat_id ];
+	Q3ListViewItem * item = items_map[ cat_id ];
 
 	//find out if this is the only category the recipe belongs to
 	int finds = 0;
-	QListViewItemIterator iterator( this );
+	Q3ListViewItemIterator iterator( this );
 	while ( iterator.current() ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -260,8 +262,8 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 	}
 
 	//do this to only iterate over children of 'item'
-	QListViewItem *pEndItem = NULL;
-	QListViewItem *pStartItem = item;
+	Q3ListViewItem *pEndItem = NULL;
+	Q3ListViewItem *pStartItem = item;
 	do {
 		if ( pStartItem->nextSibling() )
 			pEndItem = pStartItem->nextSibling();
@@ -270,7 +272,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 	}
 	while ( pStartItem && !pEndItem );
 
-	iterator = QListViewItemIterator( item );
+	iterator = Q3ListViewItemIterator( item );
 	while ( iterator.current() != pEndItem ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -283,7 +285,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 					//the item is now uncategorized
 					recipe_it->parent() ->takeItem( recipe_it );
 					if ( !m_uncat_item )
-						m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+						m_uncat_item = new Q3ListViewItem(this,i18n("Uncategorized"));
 					m_uncat_item->insertItem( recipe_it );
 				}
 				break;
@@ -295,7 +297,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 
 void RecipeListView::removeCategory( int id )
 {
-	QListViewItem * item = items_map[ id ];
+	Q3ListViewItem * item = items_map[ id ];
 	if ( !item )
 		return ; //this may have been deleted already by its parent being deleted
 
@@ -304,16 +306,16 @@ void RecipeListView::removeCategory( int id )
 	StdCategoryListView::removeCategory( id );
 }
 
-void RecipeListView::moveChildrenToRoot( QListViewItem *item )
+void RecipeListView::moveChildrenToRoot( Q3ListViewItem *item )
 {
-	QListViewItem * next_sibling;
-	for ( QListViewItem * it = item->firstChild(); it; it = next_sibling ) {
+	Q3ListViewItem * next_sibling;
+	for ( Q3ListViewItem * it = item->firstChild(); it; it = next_sibling ) {
 		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
 			//the item is now uncategorized
 			it->parent() ->takeItem( it );
 			if ( !m_uncat_item )
-				m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+				m_uncat_item = new Q3ListViewItem(this,i18n("Uncategorized"));
 			m_uncat_item->insertItem( it );
 		}
 		moveChildrenToRoot( it );

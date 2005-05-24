@@ -12,6 +12,11 @@
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <QChildEvent>
+#include <QEvent>
 
 #include <kiconloader.h>
 #include <kpixmap.h>
@@ -20,19 +25,19 @@
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : QVBox( parent, name )
+PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : Q3VBox( parent, name )
 {
 
 	// Top decoration
 	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
 
-	hbox = new QHBox( this );
+	hbox = new Q3HBox( this );
 
 	//Left decoration
 	lDeco = new LeftDeco( hbox, "LeftDecoration" );
 
 	//The widget stack (panels)
-	stack = new QWidgetStack( hbox );
+	stack = new Q3WidgetStack( hbox );
 	stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 }

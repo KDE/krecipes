@@ -14,6 +14,8 @@
 #define _KRECIPESPREF_H_
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 
 class ServerPrefs;
 class NumbersPrefs;
@@ -23,7 +25,7 @@ class PerformancePrefs;
 class KIntNumInput;
 class KLineEdit;
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QCheckBox;
 class QRadioButton;
 class QVBoxLayout;
@@ -114,7 +116,7 @@ public:
 	void saveOptions();
 
 protected:
-	QButtonGroup* numberButtonGroup;
+	Q3ButtonGroup* numberButtonGroup;
 	QRadioButton* fractionRadioButton;
 	QRadioButton* decimalRadioButton;
 

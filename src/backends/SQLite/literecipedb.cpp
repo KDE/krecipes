@@ -25,6 +25,10 @@
 #endif
 
 #include "datablocks/categorytree.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
+#include <QString>
 
 #define DB_FILENAME "krecipes.krecdb"
 
@@ -95,7 +99,7 @@ void LiteRecipeDB::createDB()
 	// FIXME : create database file?
 }
 
-void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )
+void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> ids )
 {
 	// Empty the recipe first
 	rlist->empty();
@@ -106,7 +110,7 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 	// Read title, author and instructions
 	QStringList ids_str;
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		ids_str << QString::number(*it);
 	}
 
@@ -257,21 +261,18 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	}
 }
 
-void LiteRecipeDB::loadIngredientGroups( ElementList *list )
+void LiteRecipeDB::loadIngredientGroups( QStringList *list )
 {
 	list->clear();
 
 	QString command;
-	command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
+	command = "SELECT DISTINCT name FROM ingredient_groups ORDER BY name;";
 	QSQLiteResult toLoad = database->executeQuery( command );
 
 	if ( toLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = toLoad.first();
 		while ( !toLoad.atEnd() ) {
-			Element group;
-			group.id = row.data( 0 ).toInt();
-			group.name = unescapeAndDecode( row.data( 1 ) );
-			list->append( group );
+			list->append( unescapeAndDecode( row.data( 0 ) ) );
 			row = toLoad.next();
 		}
 	}
@@ -476,7 +477,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
+void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, Q3ValueList <int>*recipeCategoryList, int limit, int offset )
 {
 	list->clear();
 
@@ -774,7 +775,7 @@ void LiteRecipeDB::initializeData( void )
 	QString commands;
 	// Read the commands form the data file
 	QFile datafile( locate( "appdata", "data/data.sql" ) );
-	if ( datafile.open( IO_ReadOnly ) ) {
+	if ( datafile.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &datafile );
 		commands = stream.read();
 		datafile.close();
@@ -1239,7 +1240,7 @@ void LiteRecipeDB::loadPropertyElementList( ElementList *elList, QSQLiteResult *
 }
 
 
-QCString LiteRecipeDB::escapeAndEncode( const QString &s ) const
+QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped;
 
@@ -2014,7 +2015,7 @@ int LiteRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 
 int LiteRecipeDB::findExistingAuthorByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM authors WHERE name LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2031,7 +2032,7 @@ int LiteRecipeDB::findExistingAuthorByName( const QString& name )
 
 int LiteRecipeDB::findExistingCategoryByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM categories WHERE name LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2048,7 +2049,7 @@ int LiteRecipeDB::findExistingCategoryByName( const QString& name )
 
 int LiteRecipeDB::findExistingIngredientByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredients WHERE name LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2065,7 +2066,7 @@ int LiteRecipeDB::findExistingIngredientByName( const QString& name )
 
 int LiteRecipeDB::findExistingPrepByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM prep_methods WHERE name LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2082,7 +2083,7 @@ int LiteRecipeDB::findExistingPrepByName( const QString& name )
 
 int LiteRecipeDB::findExistingPropertyByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_properties WHERE name LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2099,7 +2100,7 @@ int LiteRecipeDB::findExistingPropertyByName( const QString& name )
 
 int LiteRecipeDB::findExistingUnitByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = "SELECT id FROM units WHERE name LIKE '" + search_str + "' OR plural LIKE '" + search_str + "';";
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2116,7 +2117,7 @@ int LiteRecipeDB::findExistingUnitByName( const QString& name )
 
 int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM recipes WHERE title LIKE '%1';" ).arg( search_str );
 	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
@@ -2478,7 +2479,7 @@ void LiteRecipeDB::search( RecipeList *list, int items,
 	
 	QSQLiteResult recipesToLoad = database->executeQuery( query );
 
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	if ( recipesToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = recipesToLoad.first();
 		while ( !recipesToLoad.atEnd() ) {

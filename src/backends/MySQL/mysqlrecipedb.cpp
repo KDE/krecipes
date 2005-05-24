@@ -17,6 +17,9 @@
 #include <ktempfile.h>
 #include <klocale.h>
 
+#include <QVariant>
+#include <QtSql/QSqlError>
+
 MySQLRecipeDB::MySQLRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &DBname ) : QSqlRecipeDB( host, user, pass, DBname )
 {}
 
@@ -25,24 +28,24 @@ MySQLRecipeDB::~MySQLRecipeDB()
 
 void MySQLRecipeDB::createDB()
 {
-	QString real_db_name = database->databaseName();
+	QString real_db_name = database.databaseName();
 
 	//we have to be connected to some database in order to create the Krecipes database
 	//so long as the permissions given are allowed access to "mysql', this works
-	database->setDatabaseName( "mysql" );
-	if ( database->open() ) {
+	database.setDatabaseName( "mysql" );
+	if ( database.open() ) {
 		// Create the Database (Note: needs permissions)
 		//FIXME: I've noticed certain characters cause this to fail (such as '-').  Somehow let the user know.
 		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
 		if ( !query.isActive() )
-			kdDebug() << "create query failed: " << database->lastError().databaseText() << endl;
+			kdDebug() << "create query failed: " << database.lastError().databaseText() << endl;
 
-		database->close();
+		database.close();
 	}
 	else
-		kdDebug() << "create open failed: " << database->lastError().databaseText() << endl;
+		kdDebug() << "create open failed: " << database.lastError().databaseText() << endl;
 
-	database->setDatabaseName( real_db_name );
+	database.setDatabaseName( real_db_name );
 }
 
 void MySQLRecipeDB::createTable( const QString &tableName )

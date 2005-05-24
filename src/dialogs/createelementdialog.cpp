@@ -12,12 +12,15 @@
 
 #include "createelementdialog.h"
 #include <klocale.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
 		: QDialog( parent, 0, true )
 {
 
 	container = new QVBoxLayout( this, 5, 5 );
-	box = new QGroupBox( this );
+	box = new Q3GroupBox( this );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );

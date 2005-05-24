@@ -17,8 +17,10 @@
 #include <qdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
+#include <q3groupbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
 #include <klistview.h>
 
 #include "datablocks/unit.h"
@@ -38,8 +40,8 @@ public:
 private:
 	//Widgets
 	QVBoxLayout *container;
-	QGroupBox *box;
-	QVBox *vbox;
+	Q3GroupBox *box;
+	Q3VBox *vbox;
 	KListView *unitChooseView;
 	QPushButton* okButton;
 	QPushButton* cancelButton;

@@ -15,7 +15,7 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <kiconloader.h>
 #include <klistview.h>

@@ -21,6 +21,9 @@
 #include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QString>
 
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
@@ -95,13 +98,13 @@ public:
 	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
 	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
-	void loadIngredientGroups( ElementList *list );
+	void loadIngredientGroups( QStringList *list );
 	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
 	void loadPossibleUnits( int ingredientID, UnitList *list );
 	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
-	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
-	void loadRecipeList( ElementList *list, int categoryID = 0, QValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 );
+	void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>() );
+	void loadRecipeList( ElementList *list, int categoryID = 0, Q3ValueList <int>*recipeCategoryList = 0, int limit = -1, int offset = 0 );
 	void loadUncategorizedRecipes( ElementList *list );
 	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList );
@@ -162,7 +165,7 @@ public:
 	double unitRatio( int unitID1, int unitID2 );
 
 	QString escape( const QString &s ) const;
-	QCString escapeAndEncode( const QString &s ) const;
+	QString escapeAndEncode( const QString &s ) const;
 	QString unescapeAndDecode( const QString &s ) const;
 
 	QString categoryName( int ID );

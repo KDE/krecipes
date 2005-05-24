@@ -27,7 +27,7 @@ PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : DBList
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void PrepMethodListView::load( int limit, int offset )
@@ -62,21 +62,21 @@ StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, boo
 		KIconLoader *il = new KIconLoader;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+			                  () ), Qt::Key_Delete );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
 		kpop->polish();
 
 		delete il;
 
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modPrepMethod( QListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed( QListViewItem* ) ), this, SLOT( savePrepMethod( QListViewItem* ) ) );
+		connect( this, SIGNAL( contextMenu( KListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modPrepMethod( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( itemRenamed( Q3ListViewItem* ) ), this, SLOT( savePrepMethod( Q3ListViewItem* ) ) );
 	}
 }
 
-void StdPrepMethodListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdPrepMethodListView::showPopup( KListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -98,7 +98,7 @@ void StdPrepMethodListView::createNew()
 void StdPrepMethodListView::remove
 	()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item ) {
 		ElementList dependingRecipes;
@@ -118,7 +118,7 @@ void StdPrepMethodListView::remove
 
 void StdPrepMethodListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item )
 		PrepMethodListView::rename( item, 0 );
@@ -126,22 +126,22 @@ void StdPrepMethodListView::rename()
 
 void StdPrepMethodListView::createPrepMethod( const Element &ing )
 {
-	createElement(new QListViewItem( this, ing.name, QString::number( ing.id ) ));
+	createElement(new Q3ListViewItem( this, ing.name, QString::number( ing.id ) ));
 }
 
 void StdPrepMethodListView::removePrepMethod( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 1 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
-void StdPrepMethodListView::modPrepMethod( QListViewItem* i )
+void StdPrepMethodListView::modPrepMethod( Q3ListViewItem* i )
 {
 	if ( i )
 		PrepMethodListView::rename( i, 0 );
 }
 
-void StdPrepMethodListView::savePrepMethod( QListViewItem* i )
+void StdPrepMethodListView::savePrepMethod( Q3ListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(); //reset the changed text

@@ -16,15 +16,19 @@
 
 #include <qvariant.h>
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qframe.h>
+#include <q3buttongroup.h>
+#include <q3frame.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <knuminput.h>
 #include <klineedit.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qimage.h>
 #include <qpixmap.h>
 
@@ -43,9 +47,9 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 {
 	resizeRecipeDialogLayout = new QVBoxLayout( this, 11, 6 );
 
-	buttonGroup = new QButtonGroup( this );
+	buttonGroup = new Q3ButtonGroup( this );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
-	buttonGroup->setLineWidth( 0 );
+	//buttonGroup->setLineWidth( 0 );
 	buttonGroup->setColumnLayout( 0, Qt::Vertical );
 	buttonGroup->layout() ->setSpacing( 6 );
 	buttonGroup->layout() ->setMargin( 11 );
@@ -56,9 +60,9 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	buttonGroup->insert( servingsRadioButton, SERVINGS_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( servingsRadioButton );
 
-	servingsFrame = new QFrame( buttonGroup );
-	servingsFrame->setFrameShape( QFrame::Box );
-	servingsFrame->setFrameShadow( QFrame::Sunken );
+	servingsFrame = new Q3Frame( buttonGroup );
+	servingsFrame->setFrameShape( Q3Frame::Box );
+	servingsFrame->setFrameShadow( Q3Frame::Sunken );
 	servingsFrame->setLineWidth( 1 );
 	servingsFrameLayout = new QGridLayout( servingsFrame, 1, 1, 11, 6 );
 
@@ -85,10 +89,10 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	buttonGroup->insert( factorRadioButton, FACTOR_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( factorRadioButton );
 
-	factorFrame = new QFrame( buttonGroup );
+	factorFrame = new Q3Frame( buttonGroup );
 	factorFrame->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 1, 0, factorFrame->sizePolicy().hasHeightForWidth() ) );
-	factorFrame->setFrameShape( QFrame::Box );
-	factorFrame->setFrameShadow( QFrame::Sunken );
+	factorFrame->setFrameShape( Q3Frame::Box );
+	factorFrame->setFrameShadow( Q3Frame::Sunken );
 	factorFrame->setLineWidth( 1 );
 	factorFrameLayout = new QHBoxLayout( factorFrame, 11, 6 );
 
@@ -118,7 +122,6 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	languageChange();
 
 	adjustSize();
-	clearWState( WState_Polished );
 
 	newServingsInput->setValue( m_recipe->persons );
 	currentServingsInput->setText( QString::number( m_recipe->persons ) );

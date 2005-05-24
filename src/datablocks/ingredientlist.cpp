@@ -11,8 +11,10 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "ingredientlist.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
-IngredientList::IngredientList() : QValueList<Ingredient>()
+IngredientList::IngredientList() : Q3ValueList<Ingredient>()
 {}
 
 IngredientList::~IngredientList()
@@ -93,14 +95,14 @@ IngredientList::const_iterator IngredientList::find( IngredientList::const_itera
 {
 	Ingredient i;
 	i.ingredientID = id;
-	return QValueList<Ingredient>::find( it, i );
+	return Q3ValueList<Ingredient>::find( it, i );
 }
 
 IngredientList::iterator IngredientList::find( IngredientList::iterator it, int id )  // Search by id (which uses search by item, with comparison defined on header)
 {
 	Ingredient i;
 	i.ingredientID = id;
-	return QValueList<Ingredient>::find( it, i );
+	return Q3ValueList<Ingredient>::find( it, i );
 }
 
 void IngredientList::move( int index1, int index2 )  //moves element in pos index1, to pos after index2
@@ -150,11 +152,11 @@ IngredientList IngredientList::groupMembers( int id, IngredientList::const_itera
 	return matches;
 }
 
-QValueList<IngredientList::const_iterator> IngredientList::_groupMembers( int id, IngredientList::const_iterator begin ) const
+Q3ValueList<IngredientList::const_iterator> IngredientList::_groupMembers( int id, IngredientList::const_iterator begin ) const
 {
 	bool first_found = false;
 
-	QValueList<IngredientList::const_iterator> matches;
+	Q3ValueList<IngredientList::const_iterator> matches;
 	for ( IngredientList::const_iterator it = begin; it != end(); ++it ) {
 		if ( ( *it ).groupID == id ) {
 			matches << it;
@@ -171,9 +173,9 @@ IngredientList IngredientList::firstGroup()
 {
 	usedGroups.clear();
 
-	QValueList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
+	Q3ValueList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
 
-	for ( QValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
+	for ( Q3ValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
 		usedGroups << *members_it;
 	}
 
@@ -184,9 +186,9 @@ IngredientList IngredientList::nextGroup()
 {
 	for ( IngredientList::const_iterator it = begin(); it != end(); ++it ) {
 		if ( usedGroups.find( it ) == usedGroups.end() ) {
-			QValueList<IngredientList::const_iterator> members = _groupMembers( ( *it ).groupID, it );
+			Q3ValueList<IngredientList::const_iterator> members = _groupMembers( ( *it ).groupID, it );
 
-			for ( QValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
+			for ( Q3ValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
 				usedGroups << *members_it;
 			}
 

@@ -29,7 +29,7 @@ void MXPImporter::parseFile( const QString &file )
 {
 	QFile input( file );
 
-	if ( input.open( IO_ReadOnly ) ) {
+	if ( input.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 

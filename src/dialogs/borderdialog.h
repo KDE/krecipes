@@ -12,6 +12,11 @@
 #define BORDERDIALOG_H
 
 #include <qdialog.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 #include <kcolordialog.h>
 
@@ -19,10 +24,10 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
 class KListBox;
-class QListBoxItem;
+class Q3ListBoxItem;
 class QSpinBox;
 class KHTMLPart;
 
@@ -38,7 +43,7 @@ public:
 
 	KreBorder border() const;
 
-	QGroupBox* borderGroupBox;
+	Q3GroupBox* borderGroupBox;
 	QLabel* styleLabel;
 	KListBox* styleListBox;
 	QLabel* colorLabel;

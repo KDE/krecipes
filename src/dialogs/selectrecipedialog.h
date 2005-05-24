@@ -19,7 +19,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcursor.h>
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QGridLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -31,7 +34,7 @@
 
 #include "recipeactionshandler.h"
 
-class QHBox;
+class Q3HBox;
 
 class RecipeDB;
 class ElementList;
@@ -65,9 +68,9 @@ private:
 
 	// Widgets
 	QGridLayout *layout;
-	QHBox *searchBar;
+	Q3HBox *searchBar;
 	RecipeListView* recipeListView;
-	QHBox *buttonBar;
+	Q3HBox *buttonBar;
 	QPushButton *openButton;
 	QPushButton *removeButton;
 	QPushButton *editButton;
@@ -83,7 +86,7 @@ private:
 
 signals:
 	void recipeSelected( int id, int action );
-	void recipesSelected( const QValueList<int> &ids, int action );
+	void recipesSelected( const Q3ValueList<int> &ids, int action );
 	void recipeSelected( bool );
 
 private slots:

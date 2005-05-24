@@ -11,13 +11,16 @@
 #include "borderdialog.h"
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
+#include <q3groupbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kdebug.h>
 #include <khtml_part.h>
@@ -32,7 +35,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 {
 	BorderDialogLayout = new QVBoxLayout( this, 11, 6, "BorderDialogLayout" );
 
-	borderGroupBox = new QGroupBox( this, "borderGroupBox" );
+	borderGroupBox = new Q3GroupBox( this, "borderGroupBox" );
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
 	borderGroupBox->layout() ->setSpacing( 6 );
 	borderGroupBox->layout() ->setMargin( 11 );
@@ -55,7 +58,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	colorLabel = new QLabel( borderGroupBox, "colorLabel" );
 	layout2->addWidget( colorLabel );
 
-	QHBox *color_hbox = new QHBox( borderGroupBox );
+	Q3HBox *color_hbox = new Q3HBox( borderGroupBox );
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	hsSelector = new KHSSelector( color_hbox );
 	hsSelector->setMinimumSize( 140, 70 );
@@ -108,8 +111,6 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	initListBoxs();
 	loadBorder( border );
-
-	clearWState( WState_Polished );
 }
 
 BorderDialog::~BorderDialog()

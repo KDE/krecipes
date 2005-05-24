@@ -9,8 +9,10 @@
 ***************************************************************************/
 
 #include "recipelist.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
-RecipeList::RecipeList() : QValueList <Recipe>()
+RecipeList::RecipeList() : Q3ValueList <Recipe>()
 {}
 
 RecipeList::~RecipeList()

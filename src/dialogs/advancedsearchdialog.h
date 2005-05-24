@@ -12,23 +12,29 @@
 #define ADVANCEDSEARCHDIALOG_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QGridLayout>
+#include <Q3Frame>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class QScrollView;
+class Q3ScrollView;
 class QPushButton;
-class QFrame;
+class Q3Frame;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
 class QSpinBox;
-class QTimeEdit;
+class Q3TimeEdit;
 class KPushButton;
 class KListView;
-class QListViewItem;
+class Q3ListViewItem;
 
 class RecipeDB;
 
@@ -44,13 +50,13 @@ public:
 	virtual void languageChange();
 
 	QLabel* textLabel1_4;
-	QScrollView* scrollView1;
-	QFrame* parametersFrame;
+	Q3ScrollView* scrollView1;
+	Q3Frame* parametersFrame;
 	QLineEdit* titleEdit;
 	QPushButton* titleButton;
-	QFrame* titleFrame;
+	Q3Frame* titleFrame;
 	QPushButton* ingredientButton;
-	QFrame* ingredientFrame;
+	Q3Frame* ingredientFrame;
 	QLineEdit* ingredientsAllEdit;
 	QLineEdit* ingredientsAnyEdit;
 	QLabel* textLabel1_2;
@@ -58,7 +64,7 @@ public:
 	QLineEdit* ingredientsWithoutEdit;
 	QLabel* textLabel1_3;
 	QPushButton* categoriesButton;
-	QFrame* categoryFrame;
+	Q3Frame* categoryFrame;
 	QLineEdit* categoriesAllEdit;
 	QLabel* textLabel1_5;
 	QLabel* textLabel1_3_3;
@@ -66,7 +72,7 @@ public:
 	QLabel* textLabel1_2_3;
 	QLineEdit* categoriesNotEdit;
 	QPushButton* authorsButton;
-	QFrame* authorsFrame;
+	Q3Frame* authorsFrame;
 	QLabel* textLabel1_2_4;
 	QLabel* textLabel1_6;
 	QLabel* textLabel1_3_4;
@@ -74,18 +80,18 @@ public:
 	QLineEdit* authorsAllEdit;
 	QLineEdit* authorsWithoutEdit;
 	QPushButton* servingsButton;
-	QFrame* servingsFrame;
+	Q3Frame* servingsFrame;
 	QCheckBox* enableServingsCheckBox;
 	QComboBox* servingsComboBox;
 	QSpinBox* servingsSpinBox;
 	QPushButton* prepTimeButton;
-	QFrame* prepTimeFrame;
+	Q3Frame* prepTimeFrame;
 	QCheckBox* enablePrepTimeCheckBox;
 	QComboBox* prepTimeComboBox;
-	QTimeEdit* prepTimeEdit;
+	Q3TimeEdit* prepTimeEdit;
 	QLineEdit* instructionsEdit;
 	QPushButton* instructionsButton;
-	QFrame* instructionsFrame;
+	Q3Frame* instructionsFrame;
 	KPushButton* clearButton;
 	KPushButton* findButton;
 	KListView* resultsListView;

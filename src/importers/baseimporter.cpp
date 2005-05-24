@@ -17,7 +17,7 @@
 #include <kprogress.h>
 #include <kmessagebox.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include "datablocks/recipe.h"
 #include "backends/recipedb.h"

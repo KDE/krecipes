@@ -16,13 +16,15 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 
 //These two classes are used to identify the "Next" and "Prev" items, which are identified through rtti().  This also prevents renaming, even if it is enabled.
-class PrevListViewItem : public QListViewItem
+class PrevListViewItem : public Q3ListViewItem
 {
 public:
-	PrevListViewItem( QListView *parent ) : QListViewItem(parent){}
+	PrevListViewItem( Q3ListView *parent ) : Q3ListViewItem(parent){}
 
 	virtual int rtti() const { return PREVLISTITEM_RTTI; }
 
@@ -35,10 +37,10 @@ public:
 	}
 };
 
-class NextListViewItem : public QListViewItem
+class NextListViewItem : public Q3ListViewItem
 {
 public:
-	NextListViewItem( QListView *parent, QListViewItem *after ) : QListViewItem(parent,after){}
+	NextListViewItem( Q3ListView *parent, Q3ListViewItem *after ) : Q3ListViewItem(parent,after){}
 
 	virtual int rtti() const { return NEXTLISTITEM_RTTI; }
 
@@ -67,7 +69,7 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
 		curr_limit = config->readNumEntry( "Limit", -1 );
 	}
 
-	connect(this,SIGNAL(executed(QListViewItem*)),SLOT(slotDoubleClicked(QListViewItem*)));
+	connect(this,SIGNAL(executed(Q3ListViewItem*)),SLOT(slotDoubleClicked(Q3ListViewItem*)));
 }
 
 void DBListViewBase::activatePrev()
@@ -90,7 +92,7 @@ void DBListViewBase::activateNext()
 	emit nextGroupLoaded();
 }
 
-void DBListViewBase::rename( QListViewItem *it, int c )
+void DBListViewBase::rename( Q3ListViewItem *it, int c )
 {
 	if ( it->rtti() == PREVLISTITEM_RTTI || it->rtti() == NEXTLISTITEM_RTTI ) {
 		return;
@@ -99,7 +101,7 @@ void DBListViewBase::rename( QListViewItem *it, int c )
 	KListView::rename(it,c);
 }
 
-void DBListViewBase::slotDoubleClicked( QListViewItem *it )
+void DBListViewBase::slotDoubleClicked( Q3ListViewItem *it )
 {
 	//we can't delete the item the was double clicked
 	//and yet these functions will clear() the listview.
@@ -168,7 +170,7 @@ void DBListViewBase::reload()
 	KApplication::restoreOverrideCursor();
 }
 
-void DBListViewBase::createElement( QListViewItem *it )
+void DBListViewBase::createElement( Q3ListViewItem *it )
 {
 	Q_ASSERT(it);
 
@@ -193,9 +195,9 @@ void DBListViewBase::createElement( QListViewItem *it )
 				lastElement = it;
 			}
 			else {
-				QListViewItem *last_it = 0;
+				Q3ListViewItem *last_it = 0;
 
-				for ( QListViewItem *search_it = it; search_it; search_it = search_it->nextSibling() ) {
+				for ( Q3ListViewItem *search_it = it; search_it; search_it = search_it->nextSibling() ) {
 					if ( search_it->rtti() == NEXTLISTITEM_RTTI ) {
 						it->moveItem(lastElement);
 						lastElement = it;
@@ -211,13 +213,13 @@ void DBListViewBase::createElement( QListViewItem *it )
 	}
 }
 
-void DBListViewBase::removeElement( QListViewItem *it )
+void DBListViewBase::removeElement( Q3ListViewItem *it )
 {
 	total--;
 	if ( !it ) return;
 
 	if ( it == lastElement ) {
-		for ( QListViewItem *search_it = firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
+		for ( Q3ListViewItem *search_it = firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
 			if ( it == search_it->nextSibling() ) {
 				lastElement = search_it;
 				break;
@@ -251,7 +253,7 @@ bool DBListViewBase::handleElement( const QString &name )
 	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
 
 	if ( curr_limit != -1 && child_count >= curr_limit ) {
-		QListViewItem *firstElement = firstChild();
+		Q3ListViewItem *firstElement = firstChild();
 		if (firstElement->rtti() == PREVLISTITEM_RTTI) {
 			firstElement = firstElement->nextSibling();
 		}

@@ -30,8 +30,10 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <QGridLayout>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -177,7 +179,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 		         () ) );
 	connect( addPropertyButton, SIGNAL( clicked() ), this, SLOT( addPropertyToIngredient() ) );
 	connect( removePropertyButton, SIGNAL( clicked() ), this, SLOT( removePropertyFromIngredient() ) );
-	connect( propertiesListView->listView(), SIGNAL( executed( QListViewItem* ) ), this, SLOT( insertPropertyEditBox( QListViewItem* ) ) );
+	connect( propertiesListView->listView(), SIGNAL( executed( Q3ListViewItem* ) ), this, SLOT( insertPropertyEditBox( Q3ListViewItem* ) ) );
 	connect( propertiesListView->listView(), SIGNAL( selectionChanged() ), inputBox, SLOT( hide() ) );
 	connect( inputBox, SIGNAL( valueChanged( double ) ), this, SLOT( setPropertyAmount( double ) ) );
 	connect( loadUsdaButton, SIGNAL( clicked() ), this, SLOT( openUSDADialog() ) );
@@ -205,7 +207,7 @@ void IngredientsDialog::reloadUnitList()
 
 	int ingredientID = -1;
 	// Find selected ingredient
-	QListViewItem *it;
+	Q3ListViewItem *it;
 	it = ingredientListView->listView() ->selectedItem();
 
 	if ( it ) {  // Check if an ingredient is selected first
@@ -223,7 +225,7 @@ void IngredientsDialog::reloadUnitList()
 
 		for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
 			if ( !( *unit_it ).name.isEmpty() ) {
-				( void ) new QListViewItem( unitsListView->listView(), ( *unit_it ).name, QString::number( ( *unit_it ).id ) );
+				( void ) new Q3ListViewItem( unitsListView->listView(), ( *unit_it ).name, QString::number( ( *unit_it ).id ) );
 			}
 		}
 
@@ -237,7 +239,7 @@ void IngredientsDialog::addUnitToIngredient( void )
 {
 
 	// Find selected ingredient item
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	int ingredientID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) ) {
 		ingredientID = it->text( 1 ).toInt();
@@ -267,7 +269,7 @@ void IngredientsDialog::removeUnitFromIngredient( void )
 {
 
 	// Find selected ingredient/unit item combination
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	int ingredientID = -1, unitID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) )
 		ingredientID = it->text( 1 ).toInt();
@@ -304,7 +306,7 @@ void IngredientsDialog:: reloadPropertyList( void )
 
 
 	//If none is selected, select first item
-	QListViewItem *it;
+	Q3ListViewItem *it;
 	it = ingredientListView->listView() ->selectedItem();
 
 	//Populate this data into the KListView
@@ -312,9 +314,9 @@ void IngredientsDialog:: reloadPropertyList( void )
 
 		database->loadProperties( propertiesList, it->text( 1 ).toInt() ); // load the list for this ingredient
 		for ( IngredientProperty * prop = propertiesList->getFirst(); prop; prop = propertiesList->getNext() ) {
-			QListViewItem * lastElement = propertiesListView->listView() ->lastItem();
+			Q3ListViewItem * lastElement = propertiesListView->listView() ->lastItem();
 			//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-			( void ) new QListViewItem( propertiesListView->listView(), lastElement, prop->name, QString::number( prop->amount ), prop->units + QString( "/" ) + prop->perUnit.name, QString::number( prop->id ) );
+			( void ) new Q3ListViewItem( propertiesListView->listView(), lastElement, prop->name, QString::number( prop->amount ), prop->units + QString( "/" ) + prop->perUnit.name, QString::number( prop->id ) );
 			// Store the perUnits with the ID for using later
 			Element perUnitEl;
 			perUnitEl.id = prop->perUnit.id;
@@ -335,7 +337,7 @@ void IngredientsDialog::addPropertyToIngredient( void )
 {
 
 	// Find selected ingredient item
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	int ingredientID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) ) {
 		ingredientID = it->text( 1 ).toInt();
@@ -369,7 +371,7 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 {
 
 	// Find selected ingredient/property item combination
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	int ingredientID = -1, propertyID = -1;
 	int perUnitsID = -1;
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) )
@@ -389,7 +391,7 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 	}
 }
 
-void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
+void IngredientsDialog::insertPropertyEditBox( Q3ListViewItem* it )
 {
 
 	QRect r = propertiesListView->listView() ->header() ->sectionRect( 2 );
@@ -424,8 +426,8 @@ void IngredientsDialog::setPropertyAmount( double amount )
 	inputBox->hide();
 
 
-	QListViewItem *ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
-	QListViewItem *prop_it = propertiesListView->listView() ->selectedItem();
+	Q3ListViewItem *ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
+	Q3ListViewItem *prop_it = propertiesListView->listView() ->selectedItem();
 
 	if ( ing_it && prop_it ) // Appart from property, Check if an ingredient is selected first, just in case
 	{
@@ -440,11 +442,11 @@ void IngredientsDialog::setPropertyAmount( double amount )
 
 }
 
-int IngredientsDialog::findPropertyNo( QListViewItem * /*it*/ )
+int IngredientsDialog::findPropertyNo( Q3ListViewItem * /*it*/ )
 {
 	bool found = false;
 	int i = 0;
-	QListViewItem* item = propertiesListView->listView() ->firstChild();
+	Q3ListViewItem* item = propertiesListView->listView() ->firstChild();
 	while ( i < propertiesListView->listView() ->childCount() && !found ) {
 		if ( item == propertiesListView->listView() ->currentItem() )
 			found = true;
@@ -468,7 +470,7 @@ void IngredientsDialog::reload( void )
 
 void IngredientsDialog::openUSDADialog( void )
 {
-	QListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
+	Q3ListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
 	if ( ing_it ) {
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
 		USDADataDialog usda_dialog( Element( ing_it->text( 0 ), ing_it->text( 1 ).toInt() ), database, this );

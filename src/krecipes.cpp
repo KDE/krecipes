@@ -38,10 +38,15 @@
 #include "datablocks/recipe.h"
 #include "backends/recipedb.h"
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <Q3Frame>
 #include <kprinter.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qmessagebox.h>
 
 #include <kprogress.h>
@@ -106,7 +111,7 @@ Krecipes::Krecipes()
 
 	parsing_file_dlg = new KDialog( this, "parsing_file_dlg", true, Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
-	parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
+	parsing_file_dlg_label->setFrameStyle( Q3Frame::Box | Q3Frame::Raised );
 	( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
@@ -147,9 +152,9 @@ void Krecipes::setupActions()
 	KIconLoader il;
 
 	printAction = KStdAction::print( this, SLOT( filePrint() ), actionCollection() );
-	reloadAction = new KAction( i18n( "Reloa&d" ), "reload", Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
+	reloadAction = new KAction( i18n( "Reloa&d" ), "reload", Qt::Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
 
-	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", CTRL + Key_E,
+	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", Qt::CTRL + Qt::Key_E,
 	                          m_view, SLOT( editRecipe() ),
 	                          actionCollection(), "edit_action" );
 
@@ -168,7 +173,7 @@ void Krecipes::setupActions()
 	KStdAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
 	KStdAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
 
-	( void ) new KAction( i18n( "Import from File..." ), CTRL + Key_I,
+	( void ) new KAction( i18n( "Import from File..." ), Qt::CTRL + Qt::Key_I,
 	                      this, SLOT( import() ),
 	                      actionCollection(), "import_action" );
 
@@ -216,7 +221,7 @@ void Krecipes::readProperties( KConfig * )
 void Krecipes::dragEnterEvent( QDragEnterEvent *event )
 {
 	// accept uri drops only
-	event->accept( QUriDrag::canDecode( event ) );
+	event->accept( Q3UriDrag::canDecode( event ) );
 }
 
 

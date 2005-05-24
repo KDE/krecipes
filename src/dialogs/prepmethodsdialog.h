@@ -15,8 +15,10 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QGridLayout>
 #include <kiconloader.h>
 #include <klistview.h>
 
@@ -43,7 +45,7 @@ private:
 	//Widgets
 	QGridLayout *layout;
 	StdPrepMethodListView *prepMethodListView;
-	QHBox *buttonBar;
+	Q3HBox *buttonBar;
 	QPushButton *newPrepMethodButton;
 	QPushButton *removePrepMethodButton;
 	KIconLoader *il;

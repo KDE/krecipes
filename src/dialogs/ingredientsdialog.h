@@ -14,9 +14,11 @@
 #define INGREDIENTSDIALOG_H
 
 #include <qpushbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QGridLayout>
 #include <knuminput.h>
 
 #include "widgets/krelistview.h"
@@ -63,7 +65,7 @@ private:
 	void reloadIngredientList( void );
 	void reloadUnitList( void );
 	void reloadPropertyList( void );
-	int findPropertyNo( QListViewItem *it );
+	int findPropertyNo( Q3ListViewItem *it );
 	// Internal Variables
 	RecipeDB *database;
 	UnitList *unitList;
@@ -76,7 +78,7 @@ private slots:
 	void updateLists( void );
 	void addPropertyToIngredient( void );
 	void removePropertyFromIngredient( void );
-	void insertPropertyEditBox( QListViewItem* it );
+	void insertPropertyEditBox( Q3ListViewItem* it );
 	void setPropertyAmount( double amount );
 	void openUSDADialog( void );
 

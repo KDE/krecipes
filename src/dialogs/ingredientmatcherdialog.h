@@ -18,10 +18,10 @@
 
 #include <qfontmetrics.h>
 #include <qlabel.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 
 #include <kstringhandler.h>
 
@@ -36,7 +36,7 @@ class RecipeDB;
 class CustomRecipeListItem : public RecipeListItem
 {
 public:
-	CustomRecipeListItem( QListView* qlv, const Recipe &r, const IngredientList &il ) : RecipeListItem( qlv, r )
+	CustomRecipeListItem( Q3ListView* qlv, const Recipe &r, const IngredientList &il ) : RecipeListItem( qlv, r )
 	{
 		ingredientListStored = new QStringList();
 		IngredientList::ConstIterator ili;
@@ -45,7 +45,7 @@ public:
 
 		moveItem( qlv->lastItem() );
 	}
-	CustomRecipeListItem( QListView* qlv, const Recipe &r ) : RecipeListItem( qlv, r )
+	CustomRecipeListItem( Q3ListView* qlv, const Recipe &r ) : RecipeListItem( qlv, r )
 	{
 		ingredientListStored = 0;
 
@@ -70,10 +70,10 @@ public:
 	}
 };
 
-class SectionItem: public QListViewItem
+class SectionItem: public Q3ListViewItem
 {
 public:
-	SectionItem( QListView* qlv, QString sectionText ) : QListViewItem( qlv, qlv->lastItem() )
+	SectionItem( Q3ListView* qlv, QString sectionText ) : Q3ListViewItem( qlv, qlv->lastItem() )
 	{
 		mText = sectionText;
 	}
@@ -94,7 +94,7 @@ public:
 			return ( QString::null );
 	}
 };
-class IngredientMatcherDialog: public QVBox
+class IngredientMatcherDialog: public Q3VBox
 {
 
 	Q_OBJECT
@@ -117,7 +117,7 @@ private:
 	KreListView *ingredientListView;
 
 	KreListView *recipeListView;
-	QHBox *missingBox;
+	Q3HBox *missingBox;
 	QLabel *missingNumberLabel;
 	KIntSpinBox *missingNumberSpinBox;
 

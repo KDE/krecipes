@@ -32,7 +32,7 @@ void NYCGenericImporter::parseFile( const QString &file )
 	resetVars();
 
 	QFile input( file );
-	if ( input.open( IO_ReadOnly ) ) {
+	if ( input.open( QIODevice::ReadOnly ) ) {
 		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 

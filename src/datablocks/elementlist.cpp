@@ -9,8 +9,10 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "datablocks/elementlist.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
-ElementList::ElementList() : QValueList <Element>()
+ElementList::ElementList() : Q3ValueList <Element>()
 {}
 
 ElementList::~ElementList()

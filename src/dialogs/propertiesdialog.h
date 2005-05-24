@@ -15,7 +15,9 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QGridLayout>
 #include <klistview.h>
 
 class RecipeDB;
