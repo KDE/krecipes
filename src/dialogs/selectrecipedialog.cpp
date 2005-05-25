@@ -185,6 +185,8 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 
 void SelectRecipeDialog::filterComboCategory( int row )
 {
+	recipeListView->populateAll();
+
 	kdDebug() << "I got row " << row << "\n";
 
 	//First get the category ID corresponding to this combo row
@@ -193,6 +195,23 @@ void SelectRecipeDialog::filterComboCategory( int row )
 	//Now filter
 	recipeFilter->filterCategory( categoryID ); // if categoryID==-1 doesn't filter
 	recipeFilter->filter( searchBox->text() );
+
+	if ( categoryID != -1 ) {
+	        QListViewItemIterator it( recipeListView );
+		while ( it.current() ) {
+			QListViewItem *item = it.current();
+			if ( item->isVisible() ) {
+				item->setOpen( true ); 	//will only open if already populated 
+							//(could be the selected category's parent
+				if ( !item->firstChild() ) {
+					recipeListView->open( item ); //populates and opens the selected category
+					break;
+				}
+			}
+			++it;
+		}
+		
+	}
 }
 
 #include "selectrecipedialog.moc"
