@@ -1,13 +1,13 @@
 Krecipes is a Recipe Book for KDE. It requires KDE 3.1 or greater (and Qt 3.1 or greater)
 
 
-First of all, make sure you have at least one of the two necessary databases installed: SQLite or MySQL. In case you decide to use MySQL, make sure also that you have Qt's MySQL plugin properly installed. The program won't work without database support.
+First of all, make sure you have at least one of the three necessary databases installed: SQLite, MySQL, or PostgreSQL. In case you decide to use MySQL or PostgreSQL, make sure also that you have Qt's MySQL or PostgreSQL plugin properly installed. The program won't work without database support.
  
-**  Building The Latest (beta 0.7) Release
+**  Building The Latest (beta 0.8) Release
  
  Just untar the package first:
  
- tar -zxf krecipes_beta_0.7.tar.gz
+ tar -zxf krecipes_beta_0.8.tar.gz
  
  And compile (see ./configure --help for more compile options like '--prefix' and '--with-qt-dir')
  
@@ -16,9 +16,9 @@ First of all, make sure you have at least one of the two necessary databases ins
  make install
  
  
-** Downloading And Compiling Through CVS
+** Downloading And Compiling Through Subversion
  
- The project is now being developed under the module kdeextragear-3 in KDE's servers. 
+ The project is now being developed under extragear/utils in KDE's servers. 
 
 Please notice that this application is beta, meaning everything is expected to work, but the possibility is there that some things might not.  Note that the more our users tells us about bugs, the faster we can find them and fix them.
 
@@ -26,10 +26,11 @@ Please notice that this application is beta, meaning everything is expected to w
  
  To download the package, do:
  
- export CVSROOT=:pserver:anonymous@anoncvs.kde.org:/home/kde
- cvs login (When prompted for the password just type return)
- cvs co -l kdeextragear-3
- cvs co kdeextragear-3/krecipes
- cvs co kde-common
- ln -s ../kde-common/admin kdeextragear-3/
+svn co -N svn://anonsvn.kde.org/home/kde/trunk/extragear/utils krecipes-svn
+cd krecipes-svn
+svn up
+svn up krecipes
 
+For documentation (optional):
+  svn up -N doc
+  svn up doc/krecipes 
