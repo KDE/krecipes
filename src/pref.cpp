@@ -442,7 +442,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	overwriteCheckbox->setChecked( overwrite );
 	overwriteCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
-	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import when importing multiple recipes" ), this );
+	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import" ), this );
 	directImportCheckbox->setChecked( !direct );
 	directImportCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
@@ -488,7 +488,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 
 	QHBox *catLimitHBox = new QHBox( this );
 	catLimitInput = new KIntNumInput(catLimitHBox);
-	catLimitInput->setLabel( i18n( "Number of recipes to display at once:" ) );
+	catLimitInput->setLabel( i18n( "Number of categories to display at once:" ) );
 	catLimitInput->setRange(0,5000,20,true);
 	catLimitInput->setSpecialValueText( i18n("Unlimited") );
 
