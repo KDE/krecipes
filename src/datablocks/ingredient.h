@@ -21,7 +21,6 @@ class Ingredient
 {
 public:
 	Ingredient();
-	Ingredient( const Ingredient& i );
 	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
 	~Ingredient();
 	int ingredientID;

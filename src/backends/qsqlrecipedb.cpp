@@ -178,16 +178,16 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
 		
-			m_query.exec( command );
-			if ( m_query.isActive() ) {
-				while ( m_query.next() ) {
+			QSqlQuery ingredietQuery( command, database );
+			if ( ingredietQuery.isActive() ) {
+				while ( ingredietQuery.next() ) {
 					Ingredient ing;
-					ing.ingredientID = m_query.value( 0 ).toInt();
-					ing.name = unescapeAndDecode( m_query.value( 1 ).toString() );
-					ing.amount = m_query.value( 2 ).toDouble();
-					ing.unitID = m_query.value( 3 ).toInt();
-					ing.units.name = unescapeAndDecode( m_query.value( 4 ).toString() );
-					ing.units.plural = unescapeAndDecode( m_query.value( 5 ).toString() );
+					ing.ingredientID = ingredietQuery.value( 0 ).toInt();
+					ing.name = unescapeAndDecode( ingredietQuery.value( 1 ).toString() );
+					ing.amount = ingredietQuery.value( 2 ).toDouble();
+					ing.unitID = ingredietQuery.value( 3 ).toInt();
+					ing.units.name = unescapeAndDecode( ingredietQuery.value( 4 ).toString() );
+					ing.units.plural = unescapeAndDecode( ingredietQuery.value( 5 ).toString() );
 		
 					//if we don't have both name and plural, use what we have as both
 					if ( ing.units.name.isEmpty() )
@@ -195,14 +195,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					else if ( ing.units.plural.isEmpty() )
 						ing.units.plural = ing.units.name;
 		
-					ing.prepMethodID = m_query.value( 6 ).toInt();
+					ing.prepMethodID = ingredietQuery.value( 6 ).toInt();
 					if ( ing.prepMethodID != -1 ) {
 						QSqlQuery prepMethodToLoad( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ), database );
 						if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
 							ing.prepMethod = unescapeAndDecode( prepMethodToLoad.value( 0 ).toString() );
 					}
 		
-					ing.groupID = m_query.value( 7 ).toInt();
+					ing.groupID = ingredietQuery.value( 7 ).toInt();
 					if ( ing.groupID != -1 ) {
 						QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 						if ( toLoad.isActive() && toLoad.first() )

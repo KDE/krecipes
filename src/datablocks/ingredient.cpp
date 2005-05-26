@@ -14,18 +14,6 @@
 
 Ingredient::Ingredient() : amount( 0 ), groupID( -1 )
 {}
-Ingredient::Ingredient( const Ingredient &i )
-{
-	amount = i.amount;
-	ingredientID = i.ingredientID;
-	name = i.name;
-	prepMethodID = i.prepMethodID;
-	prepMethod = i.prepMethod;
-	unitID = i.unitID;
-	units = i.units;
-	groupID = i.groupID;
-	group = i.group;
-}
 
 Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
 		ingredientID( _ingredientID ),
