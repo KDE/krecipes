@@ -399,7 +399,7 @@ void AdvancedSearchDialog::languageChange()
 	prepTimeButton->setText( QString("%1 >>").arg(i18n("Preparation Time")) );
 	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
 	prepTimeComboBox->clear();
-	prepTimeComboBox->insertItem( i18n( "Ready in at least:" ) );
+	prepTimeComboBox->insertItem( i18n( "Ready in at most:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
 	clearButton->setText( i18n( "C&lear" ) );
