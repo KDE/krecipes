@@ -181,10 +181,11 @@ void RecipeListView::populateAll( QListViewItem *parent )
 void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 {
 	if ( parent_id == -1 ) {
-		if ( !m_uncat_item )
+		if ( !m_uncat_item && curr_offset == 0 )
 			m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
 
-		( void ) new RecipeListItem( m_uncat_item, recipe );
+		if ( m_uncat_item )
+			( void ) new RecipeListItem( m_uncat_item, recipe );
 	}
 	else {
 		CategoryListItem *parent = items_map[ parent_id ];
@@ -282,9 +283,10 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 				else {
 					//the item is now uncategorized
 					recipe_it->parent() ->takeItem( recipe_it );
-					if ( !m_uncat_item )
+					if ( !m_uncat_item && curr_offset == 0 )
 						m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
-					m_uncat_item->insertItem( recipe_it );
+					if ( m_uncat_item )
+						m_uncat_item->insertItem( recipe_it );
 				}
 				break;
 			}
@@ -312,9 +314,10 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 		if ( it->rtti() == 1000 ) {
 			//the item is now uncategorized
 			it->parent() ->takeItem( it );
-			if ( !m_uncat_item )
+			if ( !m_uncat_item && curr_offset == 0 )
 				m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
-			m_uncat_item->insertItem( it );
+			if ( m_uncat_item )
+				m_uncat_item->insertItem( it );
 		}
 		moveChildrenToRoot( it );
 	}

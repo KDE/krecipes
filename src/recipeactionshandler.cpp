@@ -231,33 +231,16 @@ void RecipeActionsHandler::collapseAll()
 void RecipeActionsHandler::categoryExport()
 {
 	if ( parentListView->selectedItem() ) {
-		CategoryListItem * cat_it = ( CategoryListItem* ) parentListView->selectedItem();
+		CategoryListItem *cat_it = ( CategoryListItem* ) parentListView->selectedItem();
+		ElementList list;
+		database->loadRecipeList( &list, cat_it->element().id, true );
+
 		QValueList<int> ids;
-
-		//do this to only iterate over children of 'cat_it'
-		QListViewItem *pEndItem = NULL;
-		QListViewItem *pStartItem = cat_it;
-		do {
-			if ( pStartItem->nextSibling() )
-				pEndItem = pStartItem->nextSibling();
-			else
-				pStartItem = pStartItem->parent();
-		}
-		while ( pStartItem && !pEndItem );
-
-		QListViewItemIterator iterator( cat_it );
-		while ( iterator.current() != pEndItem ) {
-			if ( iterator.current() ->rtti() == 1000 ) {
-				RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-				int recipe_id = recipe_it->recipeID();
-
-				if ( ids.find( recipe_id ) == ids.end() )
-					ids.append( recipe_id );
-			}
-			++iterator;
+		for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
+			ids << (*it).id;
 		}
 
-		exportRecipes( ids, i18n( "Export Recipes" ), cat_it->categoryName(), database );
+		exportRecipes( ids, i18n( "Export Recipes" ), cat_it->element().name, database );
 	}
 }
 
@@ -321,12 +304,24 @@ QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 
 	QListViewItemIterator iterator( parentListView );
 	while ( iterator.current() ) {
-		if ( iterator.current() ->isVisible() && iterator.current() ->rtti() == 1000 ) {
-			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-			int recipe_id = recipe_it->recipeID();
-
-			if ( ids.find( recipe_id ) == ids.end() )
-				ids.append( recipe_id );
+		if ( iterator.current() ->isVisible() ) {
+			if ( iterator.current() ->rtti() == RECIPELISTITEM_RTTI ) {
+				RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
+				int recipe_id = recipe_it->recipeID();
+	
+				if ( ids.find( recipe_id ) == ids.end() )
+					ids.append( recipe_id );
+			}
+			//it is a category item and isn't populated, so get the unpopulated data from the database
+			else if ( iterator.current()->rtti() == CATEGORYLISTITEM_RTTI && !iterator.current()->firstChild() ) {
+				int cat_id = (( CategoryListItem* ) iterator.current())->element().id;
+				ElementList list;
+				database->loadRecipeList( &list, cat_id, true );
+		
+				for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
+					ids << (*it).id;
+				}
+			}
 		}
 
 		++iterator;

@@ -134,7 +134,8 @@ void CategoryListItem::setText( int column, const QString &text )
 
 
 
-CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() )
+CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() ),
+	curr_offset(-1)
 {
 	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -160,6 +161,8 @@ void CategoryListView::load( int limit, int offset )
 	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, -1 );
 	}
+
+	curr_offset = offset;
 }
 
 void CategoryListView::populate( QListViewItem *item )

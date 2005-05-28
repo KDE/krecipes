@@ -190,6 +190,8 @@ protected:
 		parent = after ? after->parent() : 0L ;
 	}
 
+	int curr_offset;
+
 protected slots:
 	virtual void removeCategory( int id ) = 0;
 	virtual void createCategory( const Element &category, int parent_id ) = 0;

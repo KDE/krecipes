@@ -476,52 +476,41 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
+void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recursive )
 {
-	list->clear();
-
 	QString command;
 	QString outputData;
-	// Load the recipe list
 
+	if ( recursive ) {
+		QSQLiteResult subcategories = database->executeQuery( QString("SELECT id FROM categories WHERE parent_id='%1'").arg(categoryID) );
+		if ( subcategories.getStatus() != QSQLiteResult::Failure ) {
+			QSQLiteResultRow row = subcategories.first();
+			while ( !subcategories.atEnd() ) {
+				loadRecipeList(list,row.data( 0 ).toInt(),true);
 
-
-	if ( !categoryID )  // load just the list
-	{
-		if ( !recipeCategoryList )
-			command = "SELECT id,title FROM recipes;";
-		else {
-			CategoryTree tree; loadCategories(&tree,limit,offset);
-			QStringList ids; getIDList(&tree,ids);
-
-			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
+				row = subcategories.next();
+			}
 		}
 	}
+
+	// Load the recipe list
+	if ( categoryID == -1 )  // load just the list
+		command = "SELECT id,title FROM recipes;";
 	else  // load the list of those in the specified category
 	{
-
-		if ( !recipeCategoryList )
 			command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;" ).arg( categoryID );
-		else
-			command = QString( "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;" ).arg( categoryID );
 	}
 
 	QSQLiteResult recipeToLoad = database->executeQuery( command );
 	if ( recipeToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = recipeToLoad.first();
 		while ( !recipeToLoad.atEnd() ) {
-
 			Element recipe;
 			recipe.id = row.data( 0 ).toInt();
 			recipe.name = unescapeAndDecode( row.data( 1 ) );
 			list->append( recipe );
 
-			if ( recipeCategoryList ) {
-				recipeCategoryList->append ( row.data( 2 ).toInt() );
-			}
-
 			row = recipeToLoad.next();
-
 		}
 	}
 

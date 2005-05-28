@@ -510,32 +510,23 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 }
 
-void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList <int>*recipeCategoryList, int limit, int offset )
+void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recursive )
 {
-	list->clear();
-
 	QString command;
 
-	if ( !categoryID )  // load just the list
-	{
-		if ( !recipeCategoryList )
-			command = "SELECT id,title FROM recipes;";
-		else {
-			CategoryTree tree; loadCategories(&tree,limit,offset);
-			QStringList ids; getIDList(&tree,ids);
-			command = "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id IN ("+ids.join(",")+");";
-		}
-
-	}
+	if ( categoryID == -1 )  // load just the list
+		command = "SELECT id,title FROM recipes;";
 	else  // load the list of those in the specified category
-	{
+		command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;" ).arg( categoryID );
 
-		if ( !recipeCategoryList )
-			command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;" ).arg( categoryID );
-		else
-			command = QString( "SELECT r.id,r.title,cl.category_id FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1;" ).arg( categoryID );
+	if ( recursive ) {
+		QSqlQuery subcategories( QString("SELECT id FROM categories WHERE parent_id='%1'").arg(categoryID), database );
+		if ( subcategories.isActive() ) {
+			while ( subcategories.next() ) {
+				loadRecipeList(list,subcategories.value( 0 ).toInt(),true);
+			}
+		}
 	}
-
 
 	QSqlQuery recipeToLoad( command, database );
 
@@ -545,10 +536,6 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, QValueList
 			recipe.id = recipeToLoad.value( 0 ).toInt();
 			recipe.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
 			list->append( recipe );
-
-			if ( recipeCategoryList ) {
-				recipeCategoryList->append ( recipeToLoad.value( 2 ).toInt() );
-			}
 		}
 	}
 }
