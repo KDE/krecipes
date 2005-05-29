@@ -1,6 +1,6 @@
 #MIN_CONFIG(3.1)
 
-AM_INIT_AUTOMAKE(krecipes, 0.7)
+AM_INIT_AUTOMAKE(krecipes, 0.8)
 
 #KDE_USE_QT(3.1)
 
