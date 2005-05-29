@@ -2114,11 +2114,30 @@ application work. -->
 
 <qandaentry>
 <question>
-<para>Where are all the questions?</para>
+<para>I've put a lot of recipes into Krecipes and now it runs and loads very slowly.  Is there anything I can do to speed it up?</para>
 </question>
 <answer>
-<para>There aren't any... yet.</para>
-<para>E-mail us at <email>mizunoami44 users.sourceforge.net</email> if you have any questions or comments.</para>
+<para>Krecipes can work fine with thousands of recipes, even on a modest machine, and it is currently being tested with 50,000+ recipes.</para>
+
+<para>Here's what you can do:</para>
+
+<itemizedlist>
+<listitem><para>Select the MySQL or PostgreSQL backends.  They provide better overall performance than SQLite, especially for a huge amount of recipes.</para></listitem>
+<listitem><para>In the Configure Krecipes dialog, tune the <link linkend="configure-performance">Performance options</link>.</para></listitem>
+<listitem><para>Categorize your recipes.  Krecipes will load much faster if all recipes are categorized.</para></listitem>
+</itemizedlist>
+
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>The Ingredient Matcher never matches any recipes.  What am I doing wrong?</para>
+</question>
+<answer>
+<para>The purpose of the Ingredient Matcher is to find recipes that you are able to make (or almost make) with ingredients that you select.  That means you have to select every single ingredient used in a recipe (or all but a few, depending on how many ingredients can be missing) to match that recipe.  See the <link linkend="ingredient-matcher">Ingredient Matcher section</link> for details.</para>
+
+<para>If you want to see which recipes use particular ingredients, then you want to use the <link linkend="advanced-tab">Advanced Search</link>.</para>
 </answer>
 </qandaentry>
 
