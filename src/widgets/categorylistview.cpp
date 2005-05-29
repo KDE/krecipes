@@ -23,28 +23,25 @@
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
-		ctyStored( category ),
 		m_listview(klv)
 {
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( it, QString::null, QCheckListItem::CheckBox ),
+CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( it, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
-		ctyStored( category ),
 		m_listview((CategoryCheckListView*)it->listView())
 {
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( klv, it, QString::null, QCheckListItem::CheckBox ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( klv, it, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
-		ctyStored( category ),
 		m_listview(klv)
 {
 	setOn( false ); // Set unchecked by default
@@ -107,15 +104,15 @@ void CategoryCheckListItem::setParentsState( bool on )
 
 
 CategoryListItem::CategoryListItem( QListView* klv, const Element &category ) : QListViewItem( klv ),
-		ctyStored( category )
+	CategoryItemInfo(category)
 {}
 
 CategoryListItem::CategoryListItem( QListViewItem* it, const Element &category ) : QListViewItem( it ),
-		ctyStored( category )
+	CategoryItemInfo(category)
 {}
 
 CategoryListItem::CategoryListItem( QListView* klv, QListViewItem* it, const Element &category ) : QListViewItem( klv, it ),
-		ctyStored( category )
+	CategoryItemInfo(category)
 {}
 
 QString CategoryListItem::text( int column ) const
@@ -134,8 +131,7 @@ void CategoryListItem::setText( int column, const QString &text )
 
 
 
-CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() ),
-	curr_offset(-1)
+CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() )
 {
 	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -161,25 +157,21 @@ void CategoryListView::load( int limit, int offset )
 	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, -1 );
 	}
-
-	curr_offset = offset;
 }
 
 void CategoryListView::populate( QListViewItem *item )
 {
-	if ( item->firstChild() ) return;
+	if ( item->firstChild() && (item->firstChild()->rtti() == CATEGORYLISTITEM_RTTI || item->firstChild()->rtti() == CATEGORYCHECKLISTITEM_RTTI ) ) return;
 
-	int id;
-	if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
-		CategoryListItem *cat_item = (CategoryListItem*)item;
-		id = cat_item->categoryId();
-	}
-	else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI ) {
-		CategoryCheckListItem *cat_item = (CategoryCheckListItem*)item;
-		id = cat_item->categoryId();
-	}
+	CategoryItemInfo *cat_item; //note: we can't go straight from QListViewItem -> CategoryInfoItem
+	if ( item->rtti() == CATEGORYLISTITEM_RTTI )
+		cat_item = (CategoryListItem*)item;
+	else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI )
+		cat_item = (CategoryCheckListItem*)item;
 	else
 		return;
+	int id = cat_item->categoryId();
+	cat_item->setPopulated(true);
 
 	CategoryTree categoryTree;
 	database->loadCategories( &categoryTree, -1, 0, id, false );

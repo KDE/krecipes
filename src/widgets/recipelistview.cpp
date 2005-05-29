@@ -138,17 +138,14 @@ void RecipeListView::populate( QListViewItem *item )
 	if ( !flat_list ) {
 		if ( item->firstChild() && item->firstChild()->rtti() == RECIPELISTITEM_RTTI ) return;
 
-		int id;
-		if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
-			CategoryListItem *cat_item = (CategoryListItem*)item;
-			id = cat_item->categoryId();
-		}
-		else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI ) {
-			CategoryCheckListItem *cat_item = (CategoryCheckListItem*)item;
-			id = cat_item->categoryId();
-		}
+		CategoryItemInfo *cat_item; //note: we can't go straight from QListViewItem -> CategoryInfoItem
+		if ( item->rtti() == CATEGORYLISTITEM_RTTI )
+			cat_item = (CategoryListItem*)item;
+		else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI )
+			cat_item = (CategoryCheckListItem*)item;
 		else
 			return;
+		int id = cat_item->categoryId();
 
 		// Now show the recipes
 		ElementList recipeList;
@@ -189,7 +186,7 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 	}
 	else {
 		CategoryListItem *parent = items_map[ parent_id ];
-		if ( parent )
+		if ( parent && parent->isPopulated() )
 			( void ) new RecipeListItem( parent, recipe );
 	}
 }

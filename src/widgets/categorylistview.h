@@ -25,9 +25,39 @@ class RecipeDB;
 class CategoryTree;
 class CategoryCheckListView;
 
+/** Category listitems inherit this class to provide a common interface for accessing this information.
+ */
+class CategoryItemInfo
+{
+public:
+	CategoryItemInfo( const Element &category ) : ctyStored( category ), populated(false){}
+	bool isPopulated() const { return populated; }
+	void setPopulated( bool b ){ populated = b; }
+
+	Element element() const
+	{
+		return ctyStored;
+	}
+
+	int categoryId() const
+	{
+		return ctyStored.id;
+	}
+	QString categoryName() const
+	{
+		return ctyStored.name;
+	}
+
+protected:
+	Element ctyStored;
+
+private:
+	bool populated;
+};
+
 #define CATEGORYCHECKLISTITEM_RTTI 1005
 
-class CategoryCheckListItem : public QCheckListItem
+class CategoryCheckListItem : public QCheckListItem, public CategoryItemInfo
 {
 public:
 	CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool exclusive = true );
@@ -36,20 +66,6 @@ public:
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
-
-	Element element() const
-	{
-		return ctyStored;
-	}
-
-	int categoryId( void )
-	{
-		return ctyStored.id;
-	}
-	QString categoryName( void )
-	{
-		return ctyStored.name;
-	}
 
 	int rtti() const
 	{
@@ -65,14 +81,13 @@ protected:
 	bool exclusive;
 
 private:
-	Element ctyStored;
 	CategoryCheckListView *m_listview;
 };
 
 
 #define CATEGORYLISTITEM_RTTI 1001
 
-class CategoryListItem : public QListViewItem
+class CategoryListItem : public QListViewItem, public CategoryItemInfo
 {
 public:
 	CategoryListItem( QListView* klv, const Element &category );
@@ -82,27 +97,10 @@ public:
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
 	
-	Element element() const
-	{
-		return ctyStored;
-	}
-
-	int categoryId( void )
-	{
-		return ctyStored.id;
-	}
-	QString categoryName( void )
-	{
-		return ctyStored.name;
-	}
-
 	int rtti() const
 	{
 		return CATEGORYLISTITEM_RTTI;
 	}
-
-private:
-	Element ctyStored;
 };
 
 
@@ -189,8 +187,6 @@ protected:
 		after = above;
 		parent = after ? after->parent() : 0L ;
 	}
-
-	int curr_offset;
 
 protected slots:
 	virtual void removeCategory( int id ) = 0;

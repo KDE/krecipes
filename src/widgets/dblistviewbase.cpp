@@ -124,7 +124,7 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 	if ( k->state() == Qt::ShiftButton ) {
 		switch ( k->key() ) {
 		case Qt::Key_N: {
-			if ( curr_offset + curr_limit >= total ) {
+			if ( curr_offset + curr_limit >= total || curr_limit == -1 ) {
 				k->accept();
 				return;
 			}
