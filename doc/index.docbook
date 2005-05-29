@@ -56,8 +56,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-05-28</date>
-<releaseinfo>0.7.95</releaseinfo>
+<date>2005-05-29</date>
+<releaseinfo>0.7.96</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -209,7 +209,7 @@ The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced sear
 
 <para>When the <guilabel>Advanced</guilabel> tab is selected, the components will be collapsed and show &gt;&gt; beside the label of the component.  To expand a section, simply click on the label of the component.  Conversely, with the component expanded,  &lt;&lt; will show beside the label and clicking on the label will collapse the section.</para>
 
-<para><note>A section can be collaped simply to get it out of the way when it is not needed for a search.  However, if you enter search criteria in any one of the search components, you can close the component and the search criteria will still be considered in the search.</note></para>
+<note><para>A section can be collaped simply to get it out of the way when it is not needed for a search.  However, if you enter search criteria in any one of the search components, you can close the component and the search criteria will still be considered in the search.</para></note>
 
 
 <para>For all search components in the <guilabel>Advanced</guilabel> tab, click the <guibutton>Search</guibutton> button to initiate the search once all desired search criteria have been selected.  Clicking the <guibutton>Clear</guibutton> button will clear the search selections and the search results.</para>
@@ -373,12 +373,12 @@ The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced sear
 <thead><row><entry>Wildcard Search</entry><entry>Possible Results Returned</entry></row></thead>
 <tbody>
 <row>
-<entry>chick*</entry><entry><itemizedlist><listitem>chicken broth</listitem><listitem>chicken breast</listitem><listitem>chicken</listitem></itemizedlist></entry>
+<entry>chick*</entry><entry><itemizedlist><listitem><para>chicken broth</para></listitem><listitem><para>chicken breast</para></listitem><listitem><para>chicken</para></listitem></itemizedlist></entry>
 </row>
 
-<row><entry>can*cherries</entry><entry><itemizedlist><listitem>canned cherries </listitem><listitem>candied red cherries</listitem><listitem>candied green cherries</listitem></itemizedlist></entry></row>
+<row><entry>can*cherries</entry><entry><itemizedlist><listitem><para>canned cherries</para></listitem><listitem><para>candied red cherries</para></listitem><listitem><para>candied green cherries</para></listitem></itemizedlist></entry></row>
 
-<row><entry>egg?</entry><entry><itemizedlist><listitem>egg </listitem><listitem>eggs</listitem></itemizedlist></entry></row>
+<row><entry>egg?</entry><entry><itemizedlist><listitem><para>egg</para></listitem><listitem><para>eggs</para></listitem></itemizedlist></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
