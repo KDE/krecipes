@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kcursor.h>
+#include <kconfig.h>
 
 #include "backends/recipedb.h"
 #include "widgets/krelistview.h"
@@ -125,8 +126,15 @@ void RefineShoppingListDialog::loadData()
 {
 	for ( IngredientList::iterator it = ingredientList.begin(); it != ingredientList.end(); ++it ) {
 		QString amount_str;
-		if ( ( *it ).amount > 0 )
-			amount_str = MixedNumber( ( *it ).amount ).toString();
+		if ( ( *it ).amount > 0 ) {
+			KConfig * config = kapp->config();
+			config->setGroup( "Formatting" );
+	
+			if ( config->readBoolEntry( "Fraction" ) )
+				amount_str = MixedNumber( ( *it ).amount ).toString();
+			else
+				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
+		}
 
 		QListViewItem *new_item = new QListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
 		item_ing_map.insert( new_item, it );
@@ -173,8 +181,15 @@ void RefineShoppingListDialog::itemRenamed( QListViewItem* item, const QString &
 		}
 		else { //revert back to the valid amount string
 			QString amount_str;
-			if ( ( *found_it ).amount > 0 )
-				amount_str = MixedNumber( ( *found_it ).amount ).toString();
+			if ( ( *found_it ).amount > 0 ) {
+				KConfig * config = kapp->config();
+				config->setGroup( "Formatting" );
+		
+				if ( config->readBoolEntry( "Fraction" ) )
+					amount_str = MixedNumber( ( *found_it ).amount ).toString();
+				else
+					amount_str = beautify( KGlobal::locale() ->formatNumber( ( *found_it ).amount, 5 ) );
+			}
 
 			item->setText( 1, amount_str );
 		}

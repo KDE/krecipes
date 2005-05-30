@@ -184,7 +184,9 @@ void DBListViewBase::createElement( QListViewItem *it )
 			int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
 			//start it out below the "Prev" item... currently it will be at firstChild()
-			if ( firstChild()->nextSibling() && firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI ) {
+			if ( firstChild()->nextSibling() && 
+			   ( firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI || 
+			      firstChild()->nextSibling()->rtti() == 1006 ) ) { //A hack to skip the Uncategorized item
 				it->moveItem( firstChild()->nextSibling() );
 			}
 
@@ -247,12 +249,12 @@ bool DBListViewBase::handleElement( const QString &name )
 	int child_count = childCount();
 	if ( child_count == 0 ) return true;
 
-	if ( firstChild()->rtti() == PREVLISTITEM_RTTI ){ child_count--; } //"Prev" item
+	if ( firstChild()->rtti() == PREVLISTITEM_RTTI || firstChild()->rtti() == 1006 ){ child_count--; } //"Prev" item
 	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
 
 	if ( curr_limit != -1 && child_count >= curr_limit ) {
 		QListViewItem *firstElement = firstChild();
-		if (firstElement->rtti() == PREVLISTITEM_RTTI) {
+		if (firstElement->rtti() == PREVLISTITEM_RTTI || firstElement->rtti() == 1006 ) {
 			firstElement = firstElement->nextSibling();
 		}
 		else if ( name < firstElement->text(c) ) { //provide access to this new element if we need to

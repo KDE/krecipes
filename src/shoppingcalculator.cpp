@@ -21,7 +21,7 @@ void calculateShopping( const ElementList &recipeList, IngredientList *ingredien
 
 	for ( ElementList::const_iterator recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it ) {
 		Recipe rec;
-		db->loadRecipe( &rec, RecipeDB::All, ( *recipe_it ).id );
+		db->loadRecipe( &rec, RecipeDB::Ingredients, ( *recipe_it ).id );
 		sum( ingredientList, &( rec.ingList ), db );
 	}
 

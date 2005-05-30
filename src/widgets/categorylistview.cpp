@@ -133,7 +133,7 @@ void CategoryListItem::setText( int column, const QString &text )
 
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() )
 {
-	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
+	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
 	connect( db, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
 	connect( db, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
@@ -194,7 +194,7 @@ void CategoryListView::open( QListViewItem *item )
 
 void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
 {
-	if ( parent_id == -1 && handleElement(el.name) ) { //only create this category if the base class okays it and it is a top level item
+	if ( parent_id != -1 || handleElement(el.name) ) { //only create this category if the base class okays it; allow all non-top-level items
 		createCategory(el,parent_id);
 	}
 }
@@ -388,9 +388,9 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		createElement(new_item);
 	}
 	else {
-		QListViewItem *parent = items_map[ parent_id ];
+		CategoryListItem *parent = items_map[ parent_id ];
 
-		if ( parent ) {
+		if ( parent && parent->isPopulated() ) {
 			new_item = new CategoryListItem( parent, category );
 
 			QListViewItem *lastItem = 0;

@@ -22,6 +22,14 @@
 
 #include "backends/recipedb.h"
 
+
+class UncategorizedItem : public QListViewItem
+{
+public:
+	UncategorizedItem( QListView *lv ) : QListViewItem( lv, i18n("Uncategorized") ){}
+	int rtti() const { return 1006; }
+};
+
 RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource, const char *name )
 		: QStoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
 {
@@ -179,7 +187,7 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 {
 	if ( parent_id == -1 ) {
 		if ( !m_uncat_item && curr_offset == 0 )
-			m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+			m_uncat_item = new UncategorizedItem(this);
 
 		if ( m_uncat_item )
 			( void ) new RecipeListItem( m_uncat_item, recipe );
@@ -281,7 +289,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 					//the item is now uncategorized
 					recipe_it->parent() ->takeItem( recipe_it );
 					if ( !m_uncat_item && curr_offset == 0 )
-						m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+						m_uncat_item = new UncategorizedItem(this);
 					if ( m_uncat_item )
 						m_uncat_item->insertItem( recipe_it );
 				}
@@ -312,7 +320,7 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 			//the item is now uncategorized
 			it->parent() ->takeItem( it );
 			if ( !m_uncat_item && curr_offset == 0 )
-				m_uncat_item = new QListViewItem(this,i18n("Uncategorized"));
+				m_uncat_item = new UncategorizedItem(this);
 			if ( m_uncat_item )
 				m_uncat_item->insertItem( it );
 		}
