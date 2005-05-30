@@ -1053,12 +1053,13 @@ void RecipeInputDialog::removeIngredient( void )
 void RecipeInputDialog::createNewIngredientIfNecessary()
 {
 	if ( !ingredientBox->currentText().stripWhiteSpace().isEmpty() &&
-	        database->findExistingIngredientByName( ingredientBox->currentText().stripWhiteSpace() ) == -1 ) {
+	    database->findExistingIngredientByName( ingredientBox->currentText().stripWhiteSpace() ) == -1 ) {
 		QString newIngredient( ingredientBox->currentText() );
 		database->createNewIngredient( newIngredient );
 
-		ingredientComboList->clear();
-		loadIngredientListCombo();
+		ingredientComboList->append( Element( newIngredient, database->lastInsertID() ) );
+		ingredientBox->insertItem( newIngredient );
+		ingredientBox->completionObject() ->addItem( newIngredient );
 
 		QString saveUnit( unitBox->currentText() );
 		ingredientBox->setCurrentItem( newIngredient );
