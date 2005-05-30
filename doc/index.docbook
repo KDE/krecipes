@@ -214,6 +214,8 @@ The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced sear
 
 <para>For all search components in the <guilabel>Advanced</guilabel> tab, click the <guibutton>Search</guibutton> button to initiate the search once all desired search criteria have been selected.  Clicking the <guibutton>Clear</guibutton> button will clear the search selections and the search results.</para>
 
+<note><para>Only recipes meeting ALL criteria will display!  No matter which parameters are used for the recipe search, should no recipes meeting the specified criteria be found, the message <quote>&mdash; No matching recipes found &mdash;</quote> will display in the recipe list area.</para></note>
+
 <para>The various components are used as follows &mdash;</para>
 
 <sect3 id="using-adv-title">
@@ -357,7 +359,7 @@ The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced sear
 
 </sect3>
 
-<note><para>Only recipes meeting ALL criteria will display!  No matter which parameters are used for the recipe search, should no recipes meeting the specified criteria be found, the message <quote><msgtext>&mdash; No matching recipes found &mdash;</msgtext></quote> will display in the recipe list area.</para></note>
+
 
 </sect2>
 
@@ -675,7 +677,7 @@ The purpose of the <guilabel>Advanced</guilabel> tab is to provide advanced sear
 </listitem>
 </orderedlist>
 
-<note><para>Be sure that you have selected the recipe that you want to edit.  It a recipe is not selected, an alert box will appear displaying the message <quote><msgtext>No recipe selected!</msgtext></quote></para></note>
+<note><para>Be sure that you have selected the recipe that you want to edit.  It a recipe is not selected, an alert box will appear displaying the message <quote>No recipe selected!</quote></para></note>
 
 <para>Either way, the identical screen that appeared when entering a new recipe displays. <emphasis>For a complete description of this screen, refer to the section</emphasis> <link linkend="add-recipe">Adding a New Recipe</link>.</para>
 
@@ -769,7 +771,7 @@ By default, all items are displayed.  To prevent display in the recipe, deselect
 
 </sect2>
 
-<sect2>
+<sect2 id="change-recipe-display">
 <title>Changing The Recipe Display</title>
 
 <para>Display of the recipe is highly configurable.</para>
@@ -779,7 +781,7 @@ By default, all items are displayed.  To prevent display in the recipe, deselect
 <para>To resize a section, hover the mouse over one of the resizing handles until a <guiicon>&harr;</guiicon> arrow appears, hold the &LMB; mouse button and drag until the desired sized is achieved.</para>
 </sect2>
 
-<sect2>
+<sect2 id="change-attributes">
 <title>Changing Attributes</title>
 
 <para>Characteristics of each section can be changed individually.</para>
@@ -1011,7 +1013,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <note><para>You may also export categories of recipes or your whole database in this same manner.  However, if you want to export your entire database, you must ensure that no recipe or category is selected in your recipe list.</para>
 
-<para>Whether you are exporting a single recipe, a category of recipes or your entire database, if no recipe or category of recipes is selected, an alert box will appear containing the message <quote><msgtext></msgtext>No recipes are currently selected.  Would you like to export all recipes in the current view?</quote>  Click the <guibutton>Yes</guibutton> button (or use the <keycombo action="simul">&Alt;<keycap>Y</keycap></keycombo>) to proceed with the export of all recipes.  You can also cancel the process in order to select recipes for export by clicking the <guibutton>No</guibutton> button (or use the <keycombo action="simul">&Alt;<keycap>N</keycap></keycombo> key combination).</para>
+<para>Whether you are exporting a single recipe, a category of recipes or your entire database, if no recipe or category of recipes is selected, an alert box will appear containing the message <quote>No recipes are currently selected.  Would you like to export all recipes in the current view?</quote>  Click the <guibutton>Yes</guibutton> button (or use the <keycombo action="simul">&Alt;<keycap>Y</keycap></keycombo>) to proceed with the export of all recipes.  You can also cancel the process in order to select recipes for export by clicking the <guibutton>No</guibutton> button (or use the <keycombo action="simul">&Alt;<keycap>N</keycap></keycombo> key combination).</para>
 
 <para>If you recall, when <emphasis>&krecipes;</emphasis> starts, by default the <quote>Find/Edit Recipes</quote> component is active and if you have recipes and categories, they appear in the right pane of the window.  At this point nothing is selected, so you could choose to export your entire database.  However, if there is something selected and you want to export, simply click on the white area of the category/recipe list.  The highlight will disappear from the choice and you can now proceed to export your entire database.</para>
 </note>
@@ -1897,7 +1899,7 @@ or menu bars. -->
 <sect1 id="kapp-mainwindow">
 <title>The main &krecipes; window</title>
 
-<sect2>
+<sect2 id="file-menu">
 <title>The File Menu</title>
 <para>
 <variablelist>
@@ -2026,7 +2028,7 @@ or menu bars. -->
 
 </sect2>
 
-<sect2>
+<sect2 id="settings-menu">
 <title>The Settings Menu</title>
 <para>
 <variablelist>
@@ -2079,7 +2081,7 @@ or menu bars. -->
 
 </sect2>
 
-<sect2>
+<sect2 id="help-menu">
 <title>The <guimenu>Help</guimenu> Menu</title>
 
 <!-- Assuming you have a standard help menu (help, what's this, about -->
