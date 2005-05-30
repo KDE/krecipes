@@ -110,7 +110,8 @@ QString HTMLExporter::createHeader( const RecipeList & )
 
 	//put all the recipe photos into this directory
 	QDir dir;
-	dir.mkdir( fileName() + "_photos" );
+	QFileInfo fi(fileName());
+	dir.mkdir( fi.dirPath(true) + "/" + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
 
@@ -177,7 +178,8 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 
 	QPixmap pm = image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
-	QString photo_path = fileName() + "_photos/" + escape( photo_name ) + ".png";
+	QFileInfo fi(fileName());
+	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
@@ -306,7 +308,8 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	else
 		photo_name = recipe.title;
 
-	QString image_url = fileName() + "_photos/" + escape( photo_name ) + ".png";
+	QFileInfo fi(fileName());
+	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
 	QString photo_html = QString( "<img src=\"%1\">" ).arg( image_url );
 	html_map.insert( "photo", photo_html );
