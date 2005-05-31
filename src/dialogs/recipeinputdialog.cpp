@@ -628,6 +628,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 
 	connect( unitBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
 	connect( ingredientBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
+	connect( headerBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
 	connect( prepMethodBox->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( addIngredient() ) );
 	connect( amountEdit, SIGNAL( returnPressed( const QString & ) ), this, SLOT( addIngredient() ) );
 
@@ -1135,7 +1136,7 @@ void RecipeInputDialog::addIngredient( void )
 		if ( last_item && last_item->parent() )
 			last_item = last_item->parent();
 
-		IngGrpListViewItem *ing_header = new IngGrpListViewItem( ingredientList, last_item, ingredientBox->currentText(), group_id );
+		IngGrpListViewItem *ing_header = new IngGrpListViewItem( ingredientList, last_item, headerBox->currentText(), group_id );
 		ing_header->setOpen( true );
 
 		typeButtonGrp->setButton( 0 ); //put back to ingredient input
