@@ -185,7 +185,7 @@ void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 
 void SelectRecipeDialog::filterComboCategory( int row )
 {
-	recipeListView->populateAll();
+	recipeListView->populateAll(); //TODO: this would be faster if we didn't need to load everything first
 
 	kdDebug() << "I got row " << row << "\n";
 

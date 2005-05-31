@@ -14,7 +14,8 @@ libkrecipeswidgets_la_SOURCES= \
 	propertylistview.cpp prepmethodlistview.cpp categorylistview.cpp \
 	authorlistview.cpp recipelistview.cpp categorycombobox.cpp \
 	kretextedit.cpp dblistviewbase.cpp editbox.cpp \
-	conversiontable.cpp fractioninput.cpp
+	conversiontable.cpp fractioninput.cpp ingredientcombobox.cpp \
+	headercombobox.cpp prepmethodcombobox.cpp
 
 libkrecipeswidgets_la_METASOURCES=AUTO
 

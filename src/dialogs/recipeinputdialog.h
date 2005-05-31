@@ -41,9 +41,13 @@ class FractionInput;
 class QTimeEdit;
 class QDragEvent;
 class QButtonGroup;
+class QWidgetStack;
 
 class ImageDropLabel;
 class KreTextEdit;
+class IngredientComboBox;
+class HeaderComboBox;
+class PrepMethodComboBox;
 
 /**
 @author Unai Garro
@@ -67,9 +71,7 @@ private:
 
 	// Internal Data
 	Recipe *loadedRecipe; //Loaded Recipe
-	ElementList *ingredientComboList;
 	UnitList *unitComboList;
-	ElementList *prepMethodComboList;
 	RecipeDB *database;
 	bool changedSignalEnabled;
 	bool unsavedChanges;
@@ -108,10 +110,12 @@ private:
 	QLabel *unitLabel;
 	KComboBox* unitBox;
 	QLabel *prepMethodLabel;
-	KComboBox* prepMethodBox;
+	PrepMethodComboBox* prepMethodBox;
 	QLabel *ingredientLabel;
-	KComboBox* ingredientBox;
+	IngredientComboBox* ingredientBox;
+	HeaderComboBox* headerBox;
 	KListView* ingredientList;
+	QWidgetStack *header_ing_stack;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
@@ -128,8 +132,6 @@ private:
 
 	QToolButton* spellCheckButton;
 
-	QStringList ingItemsCache;
-
 	// Internal functions
 	bool checkAmountEdit();
 	bool checkBounds();
@@ -138,9 +140,6 @@ private:
 	int createNewPrepIfNecessary( const QString &prep );
 	int createNewGroupIfNecessary( const QString &group );
 	void checkIfNewUnits();
-	void loadIngredientListCombo( void );
-	void loadUnitListCombo( void );
-	void loadPrepMethodListCombo( void );
 	void saveRecipe( void );
 	void showCategories( void );
 	void showAuthors( void );
@@ -149,7 +148,7 @@ private:
 	// Signals & Slots
 
 private slots:
-	void reloadUnitsCombo( int );
+	void loadUnitListCombo( void );
 	void changePhoto( void );
 	void clearPhoto( void );
 	void moveIngredientUp( void );
