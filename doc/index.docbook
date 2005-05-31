@@ -2139,7 +2139,7 @@ application work. -->
 <answer>
 <para>The purpose of the Ingredient Matcher is to find recipes that you are able to make (or almost make) with ingredients that you select.  That means you have to select every single ingredient used in a recipe (or all but a few, depending on how many ingredients can be missing) to match that recipe.  See the <link linkend="ingredient-matcher">Ingredient Matcher section</link> for details.</para>
 
-<para>If you want to see which recipes use particular ingredients, then you want to use the <link linkend="advanced-tab">Advanced Search</link>.</para>
+<para>If you want to see which recipes use particular ingredients, then you want to use the <link linkend="using-adv-ingredients">The Ingredients Search</link>.</para>
 </answer>
 </qandaentry>
 
