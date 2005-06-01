@@ -145,7 +145,7 @@ void RecipeActionsHandler::edit()
 		emit recipeSelected( recipe_it->recipeID(), 1 );
 	}
 	else
-		KMessageBox::sorry( kapp->mainWidget(), i18n("No recipe selected!"), i18n("Edit Recipe") );
+		KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Edit Recipe") );
 }
 
 void RecipeActionsHandler::recipeExport()
@@ -171,7 +171,7 @@ void RecipeActionsHandler::recipeExport()
 			}
 		}
 		else
-			KMessageBox::sorry( kapp->mainWidget(), i18n("No recipe selected!"), i18n("Export") );
+			KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Export") );
 	}
 }
 
