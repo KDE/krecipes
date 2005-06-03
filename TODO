@@ -8,6 +8,7 @@ MAJOR FEATURES:
 	*Command-line interface
 	*Improved printing support: I'd like to allow, for example, printing on recipe cards.
 	*Handle "Cookbooks".  In MySQL/PostgreSQL a cookbook would be a table, and in SQLite it would be a file.
+	*Recipe rating system
 
 CONVENIENCES/MINOR FEATURES:
 	*Copy recipe
@@ -31,6 +32,10 @@ BUGS/OTHER:
 	*Give a warning when deleting categories (such as when a recipe was a part of that category)
 	*Delete the database table when deleting Krecipes
 	*Give a message box when exporting recipes, letting the user know what they are exporting (Is it the whole database, just what is visible, or a specific recipe)... Make it a "Don't ask me again" dialog.
+
+THOUGHTS (feel free to comment):
+	*Recipe copy
+	*Reference a recipe to a cookbook (title, page number, category, etc.)
 
 uga:
 (I don't claim ownership of these. If you do it, I'll be happy too :) )
