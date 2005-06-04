@@ -427,7 +427,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	QVBox *ingredientVBox = new QVBox( allInputHBox );
 	QHBox *typeHBox = new QHBox( ingredientVBox );
 	QRadioButton *ingredientRadioButton = new QRadioButton( i18n( "Ingredient:" ), typeHBox );
-	QRadioButton *headerRadioButton = new QRadioButton( i18n( "Header:", "A \"Header\" is the name of a group of ingredients (e.g. A pie might have the ingredient headers, \"Crust\" and \"Filling\")" ), typeHBox );
+	QRadioButton *headerRadioButton = new QRadioButton( i18n( "A \"Header\" is the name of a group of ingredients (e.g. A pie might have the ingredient headers, \"Crust\" and \"Filling\")", "Header:" ), typeHBox );
 	typeButtonGrp = new QButtonGroup();
 	typeButtonGrp->insert( ingredientRadioButton );
 	typeButtonGrp->insert( headerRadioButton );
