@@ -798,9 +798,12 @@ void RecipeInputDialog::loadUnitListCombo( void )
 		//Populate this data into the ComboBox
 		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
 			unitBox->insertItem( ( *unit_it ).name );
-			unitBox->insertItem( ( *unit_it ).plural );
 			unitBox->completionObject() ->addItem( ( *unit_it ).name );
-			unitBox->completionObject() ->addItem( ( *unit_it ).plural );
+
+			if ( ( *unit_it ).name != (*unit_it ).plural ) {
+				unitBox->insertItem( ( *unit_it ).plural );
+				unitBox->completionObject() ->addItem( ( *unit_it ).plural );
+			}
 		}
 	}
 	unitBox->lineEdit() ->setText( store_unit );

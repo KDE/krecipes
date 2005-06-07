@@ -24,7 +24,7 @@ PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db ) 
 
 void PrepMethodComboBox::reload()
 {
-	QString remember_cat_filter = currentText();
+	QString remember_text = lineEdit()->text();
 
 	ElementList prepMethodList;
 	database->loadPrepMethods( &prepMethodList );
@@ -39,10 +39,9 @@ void PrepMethodComboBox::reload()
 		prepMethodComboRows.insert( row,(*it).id );
 	}
 
-	if ( listBox()->findItem( remember_cat_filter, Qt::ExactMatch ) ) {
-		setCurrentText( remember_cat_filter );
-	}
+	lineEdit()->setText( remember_text );
 
+	database->disconnect( this );
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 }

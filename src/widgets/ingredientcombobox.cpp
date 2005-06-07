@@ -24,7 +24,7 @@ IngredientComboBox::IngredientComboBox( bool b, QWidget *parent, RecipeDB *db ) 
 
 void IngredientComboBox::reload()
 {
-	QString remember_text = currentText();
+	QString remember_text = lineEdit()->text();
 
 	ElementList ingredientList;
 	database->loadIngredients( &ingredientList );
@@ -39,10 +39,9 @@ void IngredientComboBox::reload()
 		ingredientComboRows.insert( row, (*it).id );
 	}
 
-	if ( listBox()->findItem( remember_text, Qt::ExactMatch ) ) {
-		setCurrentText( remember_text );
-	}
+	lineEdit()->setText( remember_text );
 
+	database->disconnect( this );
 	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
 	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
 }
