@@ -1,4 +1,4 @@
-Changes from 0.7 to latest SVN:
+Changes from 0.7 to 0.8:
   -Redesigned advanced search: search on the "and", "or", and "not" conditions of each search term.  Can now search on nearly any item possible.
   -Reduce memory requirements for large databases.  Very large databases should now be possible, though work continues to be put into this.  It is being tested on a database with 37,000 recipes and counting.
   -Improve recipe import speeds, keeping a fairly constant speed no matter what the size of the database.
