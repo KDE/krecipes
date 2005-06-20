@@ -52,16 +52,14 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
-#define DEBUG_TIMING 1
-
-#if DEBUG_TIMING
+#ifndef NDEBUG
 #define START_TIMER(MSG) \
  dbg_timer.start(); kdDebug()<<MSG<<endl;
 #else
 #define START_TIMER(MSG)
 #endif
 
-#if DEBUG_TIMING
+#ifndef NDEBUG
 #define END_TIMER() \
  kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
 #else
@@ -71,7 +69,7 @@
 KrecipesView::KrecipesView( QWidget *parent )
 		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
 {
-	#if DEBUG_TIMING
+	#ifndef NDEBUG
 	QTime dbg_timer;
 	QTime dbg_total_timer; dbg_total_timer.start();
 	#endif
@@ -313,7 +311,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Close Splash Screen
 	delete start_logo;
 
-	#if DEBUG_TIMING
+	#ifndef NDEBUG
 	kdDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
 	#endif
 }
