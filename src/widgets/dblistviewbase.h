@@ -12,6 +12,7 @@
 #define LISTVIEWHANDLER_H
 
 #include <qobject.h>
+#include <qmap.h>
 
 #include <klistview.h>
 
@@ -62,7 +63,7 @@ private:
 	
 	bool bulk_load;
 
-	QListViewItem *lastElement;
+	QMap<QListViewItem*,QListViewItem*> lastElementMap;
 	QListViewItem *delete_me_later;
 };
 

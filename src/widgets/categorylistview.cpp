@@ -385,7 +385,6 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	CategoryListItem * new_item = 0;
 	if ( parent_id == -1 ) {
 		new_item = new CategoryListItem( this, category );
-		createElement(new_item);
 	}
 	else {
 		CategoryListItem *parent = items_map[ parent_id ];
@@ -404,6 +403,7 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
 		new_item->setPixmap( 0, m_folder_icon );
+		createElement(new_item);
 	}
 }
 
@@ -523,7 +523,6 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 	CategoryCheckListItem * new_item = 0;
 	if ( parent_id == -1 ) {
 		new_item = new CategoryCheckListItem( this, category, exclusive );
-		createElement(new_item);
 	}
 	else {
 		QListViewItem *parent = items_map[ parent_id ];
@@ -533,6 +532,7 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
+		createElement(new_item);
 		new_item->setOpen( true );
 	}
 }

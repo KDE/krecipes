@@ -44,6 +44,11 @@ public:
 		init( r );
 	}
 
+	RecipeListItem( CategoryListItem* it, QListViewItem *after, const Recipe &r ) : QListViewItem( it, after )
+	{
+		init( r );
+	}
+
 	RecipeListItem( QListViewItem* it, const Recipe &r ) : QListViewItem( it )
 	{
 		init( r );
@@ -144,6 +149,7 @@ private:
 
 	bool flat_list;
 	QListViewItem *m_uncat_item;
+	QListViewItem *lastElementCurrLevel;
 };
 
 #endif //RECIPELISTVIEW_H

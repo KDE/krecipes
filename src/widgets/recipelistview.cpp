@@ -144,7 +144,10 @@ void RecipeListView::populate( QListViewItem *item )
 	StdCategoryListView::populate(item);
 
 	if ( !flat_list ) {
-		if ( item->firstChild() && item->firstChild()->rtti() == RECIPELISTITEM_RTTI ) return;
+		for ( QListViewItem *it = item->firstChild(); it; it = it->nextSibling() ) {
+			if ( it->rtti() == RECIPELISTITEM_RTTI )
+				return;
+		}
 
 		CategoryItemInfo *cat_item; //note: we can't go straight from QListViewItem -> CategoryInfoItem
 		if ( item->rtti() == CATEGORYLISTITEM_RTTI )
@@ -190,12 +193,12 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 			m_uncat_item = new UncategorizedItem(this);
 
 		if ( m_uncat_item )
-			( void ) new RecipeListItem( m_uncat_item, recipe );
+			new RecipeListItem( m_uncat_item, recipe );
 	}
 	else {
 		CategoryListItem *parent = items_map[ parent_id ];
 		if ( parent && parent->isPopulated() )
-			( void ) new RecipeListItem( parent, recipe );
+			createElement(new RecipeListItem( parent, recipe ));
 	}
 }
 
@@ -239,7 +242,7 @@ void RecipeListView::removeRecipe( int id )
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
 			if ( recipe_it->recipeID() == id )
-				delete recipe_it;
+				removeElement(recipe_it);
 		}
 		++iterator;
 	}
@@ -282,17 +285,18 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
 
 			if ( recipe_it->recipeID() == recipe_id ) {
-				if ( finds > 1 ) {
-					delete recipe_it;
-				}
-				else {
+				
+				if ( finds == 1 ) {
 					//the item is now uncategorized
-					recipe_it->parent() ->takeItem( recipe_it );
 					if ( !m_uncat_item && curr_offset == 0 )
 						m_uncat_item = new UncategorizedItem(this);
-					if ( m_uncat_item )
-						m_uncat_item->insertItem( recipe_it );
+					if ( m_uncat_item ) {
+						Recipe r;
+						r.title = recipe_it->title(); r.recipeID = recipe_id;
+						new RecipeListItem(m_uncat_item,r);
+					}
 				}
+				removeElement(recipe_it);
 				break;
 			}
 		}
@@ -317,14 +321,19 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 	for ( QListViewItem * it = item->firstChild(); it; it = next_sibling ) {
 		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
+			RecipeListItem *recipe_it = (RecipeListItem*) it;
+			Recipe r;
+			r.title = recipe_it->title(); r.recipeID = recipe_it->recipeID();
+
 			//the item is now uncategorized
 			it->parent() ->takeItem( it );
 			if ( !m_uncat_item && curr_offset == 0 )
 				m_uncat_item = new UncategorizedItem(this);
 			if ( m_uncat_item )
-				m_uncat_item->insertItem( it );
+				new RecipeListItem(m_uncat_item,r);
 		}
 		moveChildrenToRoot( it );
+		removeElement(it);
 	}
 }
 

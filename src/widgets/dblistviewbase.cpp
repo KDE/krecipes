@@ -57,7 +57,6 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
   curr_offset(0),
   total(t),
   bulk_load(false),
-  lastElement(0),
   delete_me_later(0)
 {
 	setSorting(-1);
@@ -153,14 +152,14 @@ void DBListViewBase::reload()
 
 	//reset some things
 	clear();
-	lastElement = 0;
+	lastElementMap.clear();
 
 	bulk_load=true;
 	load(curr_limit,curr_offset);
 	bulk_load=false;
 
 	if ( curr_limit != -1 && curr_offset + curr_limit < total )
-		new NextListViewItem(this,lastElement);
+		new NextListViewItem(this,lastElementMap[0]);
 
 	if ( curr_offset != 0 )
 		new PrevListViewItem(this);
@@ -172,27 +171,38 @@ void DBListViewBase::createElement( QListViewItem *it )
 {
 	Q_ASSERT(it);
 
+	QListViewItem *lastElement;
+	QMap<QListViewItem*,QListViewItem*>::iterator map_it = lastElementMap.find(it->parent());
+	if ( map_it != lastElementMap.end() ) {
+		lastElement = map_it.data();
+	}
+	else
+		lastElement = 0;
+
 	if ( bulk_load ) { //this can be much faster if we know the elements are already in order
 		if ( lastElement ) it->moveItem(lastElement);
-		lastElement = it;
+		lastElementMap.insert(it->parent(),it);
 	}
 	else {
 		if ( lastElement == 0 ) {
-			lastElement = it;
+			lastElementMap.insert(it->parent(),it);
 		}
 		else {
+			
 			int c = 0;//FIXME: the column used should be variable (set by a subclass)
 
-			//start it out below the "Prev" item... currently it will be at firstChild()
-			if ( firstChild()->nextSibling() && 
-			   ( firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI || 
-			      firstChild()->nextSibling()->rtti() == 1006 ) ) { //A hack to skip the Uncategorized item
-				it->moveItem( firstChild()->nextSibling() );
+			if ( it->parent() == 0 ) {
+				//start it out below the "Prev" item... currently it will be at firstChild()
+				if ( firstChild()->nextSibling() && 
+				( firstChild()->nextSibling()->rtti() == PREVLISTITEM_RTTI || 
+				firstChild()->nextSibling()->rtti() == 1006 ) ) { //A hack to skip the Uncategorized item
+					it->moveItem( firstChild()->nextSibling() );
+				}
 			}
 
 			if ( QString::localeAwareCompare(it->text(c),lastElement->text(c)) >= 0 ) {
 				it->moveItem(lastElement);
-				lastElement = it;
+				lastElementMap.insert(it->parent(),it);
 			}
 			else {
 				QListViewItem *last_it = 0;
@@ -200,7 +210,7 @@ void DBListViewBase::createElement( QListViewItem *it )
 				for ( QListViewItem *search_it = it; search_it; search_it = search_it->nextSibling() ) {
 					if ( search_it->rtti() == NEXTLISTITEM_RTTI ) {
 						it->moveItem(lastElement);
-						lastElement = it;
+						lastElementMap.insert(it->parent(),it);
 					}
 					else if ( QString::localeAwareCompare(it->text(c),search_it->text(c)) < 0 ) { //we assume the list is sorted, as it should stay
 						if ( last_it ) it->moveItem(last_it);
@@ -218,10 +228,11 @@ void DBListViewBase::removeElement( QListViewItem *it )
 	total--;
 	if ( !it ) return;
 
+	QListViewItem *lastElement = lastElementMap[it->parent()];
 	if ( it == lastElement ) {
-		for ( QListViewItem *search_it = firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
+		for ( QListViewItem *search_it = it->parent()->firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
 			if ( it == search_it->nextSibling() ) {
-				lastElement = search_it;
+				lastElementMap.insert(it->parent(),search_it);
 				break;
 			}
 		}
@@ -243,6 +254,8 @@ void DBListViewBase::removeElement( QListViewItem *it )
 bool DBListViewBase::handleElement( const QString &name )
 {
 	total++;
+
+	QListViewItem *lastElement = lastElementMap[0];
 
 	int c = 0;//FIXME: the column used should be variable (set by a subclass)
 

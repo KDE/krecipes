@@ -512,7 +512,6 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 			{
 			case KMessageBox::Yes:
 				database->removeRecipe( recipeID );
-				selectPanel->reload();
 				break;
 			case KMessageBox::No:
 				break;

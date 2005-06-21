@@ -498,7 +498,7 @@ void LiteRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recur
 		command = "SELECT id,title FROM recipes;";
 	else  // load the list of those in the specified category
 	{
-			command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1 ORDER BY r.title DESC;" ).arg( categoryID );
+			command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1 ORDER BY r.title;" ).arg( categoryID );
 	}
 
 	QSQLiteResult recipeToLoad = database->executeQuery( command );
