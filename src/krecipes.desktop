@@ -9,6 +9,7 @@ Type=Application
 DocPath=krecipes/krecipes.html
 GenericName=Cooking Book
 GenericName[cs]=Kuchařka
+GenericName[da]=Kogebog
 GenericName[el]=Οδηγός μαγειρικής
 GenericName[et]=Kokaraamat
 GenericName[it]=Libro di ricette
