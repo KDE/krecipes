@@ -191,12 +191,14 @@ protected:
 protected slots:
 	virtual void removeCategory( int id ) = 0;
 	virtual void createCategory( const Element &category, int parent_id ) = 0;
-	virtual void modifyCategory( const Element &category ) = 0;
-	virtual void modifyCategory( int id, int parent_id ) = 0;
-	virtual void mergeCategories( int id1, int id2 ) = 0;
+	virtual void modifyCategory( const Element &category );
+	virtual void modifyCategory( int id, int parent_id );
+	virtual void mergeCategories( int id1, int id2 );
 
 	virtual void checkCreateCategory( const Element &, int parent_id );
 	virtual void populate( QListViewItem *item );
+
+	QMap<int, QListViewItem*> items_map;
 };
 
 
@@ -211,15 +213,8 @@ public:
 protected:
 	virtual void removeCategory( int id );
 	virtual void createCategory( const Element &category, int parent_id );
-	virtual void modifyCategory( const Element &category );
-	virtual void modifyCategory( int id, int parent_id );
-	virtual void mergeCategories( int id1, int id2 );
-
-	virtual void load(int limit, int offset);
 
 	void setPixmap( const QPixmap &pixmap );
-
-	QMap<int, CategoryListItem*> items_map;
 
 private slots:
 	void preparePopup();
@@ -263,13 +258,8 @@ public:
 protected:
 	virtual void removeCategory( int id );
 	virtual void createCategory( const Element &category, int parent_id );
-	virtual void modifyCategory( const Element &category );
-	virtual void modifyCategory( int id, int parent_id );
-	virtual void mergeCategories( int id1, int id2 );
 
 	virtual void load( int limit, int offset );
-
-	QMap<int, QListViewItem*> items_map;
 
 	bool exclusive;
 

@@ -223,14 +223,14 @@ void DBListViewBase::createElement( QListViewItem *it )
 	}
 }
 
-void DBListViewBase::removeElement( QListViewItem *it )
+void DBListViewBase::removeElement( QListViewItem *it, bool delete_item )
 {
 	total--;
 	if ( !it ) return;
 
 	QListViewItem *lastElement = lastElementMap[it->parent()];
 	if ( it == lastElement ) {
-		for ( QListViewItem *search_it = it->parent()->firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
+		for ( QListViewItem *search_it = (it->parent())?it->parent()->firstChild():firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
 			if ( it == search_it->nextSibling() ) {
 				lastElementMap.insert(it->parent(),search_it);
 				break;
@@ -248,7 +248,9 @@ void DBListViewBase::removeElement( QListViewItem *it )
 			}
 		}
 	}
-	delete it;
+
+	if ( delete_item )
+		delete it;
 }
 
 bool DBListViewBase::handleElement( const QString &name )

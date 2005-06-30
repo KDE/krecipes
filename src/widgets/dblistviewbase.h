@@ -39,7 +39,7 @@ protected:
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );
 	void createElement( QListViewItem * );
-	void removeElement( QListViewItem * );
+	void removeElement( QListViewItem *, bool delete_item = true );
 
 	bool reloading(){ return bulk_load; }
 	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways

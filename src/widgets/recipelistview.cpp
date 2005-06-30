@@ -149,13 +149,9 @@ void RecipeListView::populate( QListViewItem *item )
 				return;
 		}
 
-		CategoryItemInfo *cat_item; //note: we can't go straight from QListViewItem -> CategoryInfoItem
-		if ( item->rtti() == CATEGORYLISTITEM_RTTI )
-			cat_item = (CategoryListItem*)item;
-		else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI )
-			cat_item = (CategoryCheckListItem*)item;
-		else
-			return;
+		CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
+		if ( !cat_item ) return;
+
 		int id = cat_item->categoryId();
 
 		// Now show the recipes
@@ -196,7 +192,7 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 			new RecipeListItem( m_uncat_item, recipe );
 	}
 	else {
-		CategoryListItem *parent = items_map[ parent_id ];
+		CategoryListItem *parent = (CategoryListItem*)items_map[ parent_id ];
 		if ( parent && parent->isPopulated() )
 			createElement(new RecipeListItem( parent, recipe ));
 	}
@@ -326,6 +322,7 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 			r.title = recipe_it->title(); r.recipeID = recipe_it->recipeID();
 
 			//the item is now uncategorized
+			removeElement(it,false);
 			it->parent() ->takeItem( it );
 			if ( !m_uncat_item && curr_offset == 0 )
 				m_uncat_item = new UncategorizedItem(this);
@@ -333,7 +330,7 @@ void RecipeListView::moveChildrenToRoot( QListViewItem *item )
 				new RecipeListItem(m_uncat_item,r);
 		}
 		moveChildrenToRoot( it );
-		removeElement(it);
+		delete it;
 	}
 }
 

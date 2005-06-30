@@ -151,6 +151,8 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 // (Re)loads the data from the database
 void CategoryListView::load( int limit, int offset )
 {
+	items_map.clear();
+
 	CategoryTree categoryTree;
 	database->loadCategories( &categoryTree, limit, offset, -1, false );
 
@@ -161,15 +163,14 @@ void CategoryListView::load( int limit, int offset )
 
 void CategoryListView::populate( QListViewItem *item )
 {
-	if ( item->firstChild() && (item->firstChild()->rtti() == CATEGORYLISTITEM_RTTI || item->firstChild()->rtti() == CATEGORYCHECKLISTITEM_RTTI ) ) return;
+	if ( item->firstChild() ) {
+		CategoryItemInfo *test_for_cat = dynamic_cast<CategoryItemInfo*>(item->firstChild());
+		if ( !test_for_cat ) return;
+	}
 
-	CategoryItemInfo *cat_item; //note: we can't go straight from QListViewItem -> CategoryInfoItem
-	if ( item->rtti() == CATEGORYLISTITEM_RTTI )
-		cat_item = (CategoryListItem*)item;
-	else if ( item->rtti() == CATEGORYCHECKLISTITEM_RTTI )
-		cat_item = (CategoryCheckListItem*)item;
-	else
-		return;
+	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
+	if ( !cat_item ) return;
+
 	int id = cat_item->categoryId();
 	cat_item->setPopulated(true);
 
@@ -197,6 +198,66 @@ void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
 	if ( parent_id != -1 || handleElement(el.name) ) { //only create this category if the base class okays it; allow all non-top-level items
 		createCategory(el,parent_id);
 	}
+}
+
+void CategoryListView::modifyCategory( const Element &category )
+{
+	QListViewItem * item = items_map[ category.id ];
+
+	if ( item )
+		item->setText( 0, category.name );
+}
+
+void CategoryListView::modifyCategory( int id, int parent_id )
+{
+	QMap<int,QListViewItem*>::iterator item_it = items_map.find(id);
+	if ( item_it != items_map.end() ) {
+		QListViewItem *item = *item_it;
+		Q_ASSERT( item );
+
+		removeElement(item,false);
+		if ( !item->parent() )
+			takeItem( item );
+		else
+			item->parent() ->takeItem( item );
+	
+		if ( parent_id == -1 ) {
+			insertItem(item);
+			createElement(item);
+		}
+		else {
+			QMap<int,QListViewItem*>::iterator parent_item_it = items_map.find(parent_id);
+			if ( parent_item_it != items_map.end() &&
+ 			  dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
+				(*parent_item_it)->insertItem( item );
+				createElement(item);
+			}
+		}
+	}
+}
+
+void CategoryListView::mergeCategories( int id1, int id2 )
+{
+	QListViewItem * to_item = items_map[ id1 ];
+	QListViewItem *from_item = items_map[ id2 ];
+
+	CategoryItemInfo *info_item = dynamic_cast<CategoryItemInfo*>(to_item);
+
+	if ( to_item && info_item->isPopulated() && from_item ) {
+		//note that this takes care of any recipes that may be children as well
+		QListViewItem *next_sibling;
+		for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
+			next_sibling = it->nextSibling(); //get the sibling before we move the item
+	
+			removeElement(it,false);
+			from_item->takeItem( it );
+
+			to_item->insertItem( it );
+			createElement(it);
+		}
+	}
+
+	removeCategory( id2 );
 }
 
 
@@ -242,13 +303,6 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 StdCategoryListView::~StdCategoryListView()
 {
 	delete clipboard_item;
-}
-
-void StdCategoryListView::load(int limit, int offset)
-{
-	items_map.clear();
-
-	CategoryListView::load(limit,offset);
 }
 
 void StdCategoryListView::setPixmap( const QPixmap &icon )
@@ -387,16 +441,11 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		new_item = new CategoryListItem( this, category );
 	}
 	else {
-		CategoryListItem *parent = items_map[ parent_id ];
+		CategoryListItem *parent = (CategoryListItem*)items_map[ parent_id ];
 
 		if ( parent && parent->isPopulated() ) {
 			new_item = new CategoryListItem( parent, category );
-
-			QListViewItem *lastItem = 0;
-			for ( QListViewItem *it = parent->firstChild(); it; it = it->nextSibling() ) {
-				lastItem = it;
-			}
-			new_item->moveItem( lastItem );
+			createElement(new_item);
 		}
 	}
 
@@ -405,49 +454,6 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		new_item->setPixmap( 0, m_folder_icon );
 		createElement(new_item);
 	}
-}
-
-void StdCategoryListView::modifyCategory( const Element &category )
-{
-	QListViewItem * item = items_map[ category.id ];
-
-	if ( item )
-		item->setText( 0, category.name );
-}
-
-void StdCategoryListView::modifyCategory( int id, int parent_id )
-{
-	QListViewItem * item = items_map[ id ];
-	if ( item ) {
-		if ( !item->parent() )
-			takeItem( item );
-		else
-			item->parent() ->takeItem( item );
-	
-		if ( parent_id == -1 )
-			insertItem( item );
-		else
-			items_map[ parent_id ] ->insertItem( item );
-	}
-}
-
-void StdCategoryListView::mergeCategories( int id1, int id2 )
-{
-	QListViewItem * to_item = items_map[ id1 ];
-	QListViewItem *from_item = items_map[ id2 ];
-
-	if ( to_item && from_item ) { 
-		//note that this takes care of any recipes that may be children as well
-		QListViewItem *next_sibling;
-		for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
-			next_sibling = it->nextSibling(); //get the sibling before we move the item
-	
-			from_item->takeItem( it );
-			to_item->insertItem( it );
-		}
-	}
-
-	removeCategory( id2 );
 }
 
 void StdCategoryListView::modCategory( QListViewItem* i )
@@ -535,51 +541,6 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 		createElement(new_item);
 		new_item->setOpen( true );
 	}
-}
-
-void CategoryCheckListView::modifyCategory( const Element &category )
-{
-	QListViewItem * item = items_map[ category.id ];
-
-	if ( item )
-		item->setText( 0, category.name );
-}
-
-void CategoryCheckListView::modifyCategory( int id, int parent_id )
-{
-	QListViewItem * item = items_map[ id ];
-	if ( item ) {
-		if ( !item->parent() )
-			takeItem( item );
-		else
-			item->parent() ->takeItem( item );
-	
-		Q_ASSERT( item );
-	
-		if ( parent_id == -1 )
-			insertItem( item );
-		else
-			items_map[ parent_id ] ->insertItem( item );
-	}
-}
-
-void CategoryCheckListView::mergeCategories( int id1, int id2 )
-{
-	QListViewItem * to_item = items_map[ id1 ];
-	QListViewItem *from_item = items_map[ id2 ];
-
-	if ( to_item && from_item ) {
-		//note that this takes care of any recipes that may be children as well
-		QListViewItem *next_sibling;
-		for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
-			next_sibling = it->nextSibling(); //get the sibling before we move the item
-	
-			from_item->takeItem( it );
-			to_item->insertItem( it );
-		}
-	}
-
-	removeCategory( id2 );
 }
 
 void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
