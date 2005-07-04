@@ -232,6 +232,9 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 				(*parent_item_it)->insertItem( item );
 				createElement(item);
 			}
+			//FIXME: We can't delete the item because this function is called by a slot with 'item' as a parameter
+			//else
+			//	delete item; //removeElement() was already called on this item, so we just delete it
 		}
 	}
 }

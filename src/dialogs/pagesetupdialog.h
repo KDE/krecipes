@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by Jason Kivlighn                                  *
+*   Copyright (C) 2003-2005 by Jason Kivlighn                             *
 *   mizunoami44@users.sourceforge.net                                     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -43,23 +43,26 @@ protected:
 private slots:
 	void loadLayout();
 	void loadLayout( int );
-	void loadLayout( const QString &filename );
+	void loadLayout( const QString &filename, SetupDisplay *display = 0 );
 	void reloadLayout();
-	void saveLayout();
-	void saveAsLayout();
+	void saveLayout( SetupDisplay *display = 0 );
+	void saveAsLayout( SetupDisplay *display = 0 );
 	void updateItemVisibility( QWidget*, bool );
 	void setItemShown( int id );
+	void setActiveDisplay( QWidget * );
 
 private:
 	QString getIncludedLayoutDir() const;
-	void setActiveFile( const QString &filename );
+	void setActiveFile( const QString &filename, SetupDisplay *display = 0 );
 	bool haveWritePerm( const QString &filename );
 	void initShownItems();
 
 	SetupDisplay *setup_display;
+	PrintSetupDisplay *print_setup_display;
+	SetupDisplay *active_display;
 
-	QString active_filename;
-	bool have_write_perm;
+	QMap<SetupDisplay*, QString> active_filename_map;
+	QMap<SetupDisplay*, bool> have_write_perm_map;
 	QMap<int, QString> included_layouts_map;
 	QMap<int, QWidget*> popup_widget_map;
 	QMap<QWidget*, int> widget_popup_map;

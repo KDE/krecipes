@@ -229,38 +229,29 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	for ( QRect * rect = geometries.first(); rect; rect = geometries.next() ) {
 		DivElement * element = geom_contents.find( rect );
 
-		// For those elements that have no fixed height (lists), calculate the height
+		// For those elements that have no fixed height (lists), calculate the height or shrink it to fit
 		int elementHeight = ( int ) ( rect->height() / 100.0 * m_width ); //Initialize with the current user settings
+		int font_size = -1;
 		if ( !element->fixedHeight() ) {
-			int elementWidth = ( int ) ( rect->width() / 100.0 * m_width );
+			QDomElement el = getLayoutAttribute( doc, element->className(), "overflow" );
+			if ( !el.isNull() && el.text().toInt() == 0 ) {
+				font_size = 12; //default if none is set by the user
+				QDomElement el = getLayoutAttribute( doc, element->className(), "font" );
+				if ( !el.isNull() ) {
+					QFont font;
+					font.fromString( el.text() );
+					font_size = font.pointSize();
+				}
 
-			// Generate a test page to calculate the size in khtml
-			QString tempHTML = "<html><head><style type=\"text/css\">";
-			tempHTML += classesCSS;
-			tempHTML += QString( "#%1 {" ).arg( element->id() );
-			tempHTML += QString( "width: %1px;" ).arg( elementWidth );
-			tempHTML += "} ";
-			tempHTML += "body { margin: 0px; }"; //very important subtlety in determining the exact width
-			tempHTML += "</style></head>";
-			tempHTML += "<body>";
-			tempHTML += element->generateHTML();
-			tempHTML += "</body></html>";
-
-			KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
-			sizeCalculator->view()->setVScrollBarMode ( QScrollView::AlwaysOff );
-			sizeCalculator->view()->setMinimumSize( QSize( elementWidth, 0 ) );
-			sizeCalculator->view()->resize( QSize( elementWidth, 0 ) );
-			sizeCalculator->begin( KURL( locateLocal( "tmp", "/" ) ) );
-			sizeCalculator->write( tempHTML );
-			sizeCalculator->end();
-
-			sizeCalculator->view()->layout(); //force a layout
-
-			// Set the size of the element
-			DOM::Document doc = sizeCalculator->document();
-			elementHeight = doc.getElementById( element->id() ).getRect().height();
-
-			delete sizeCalculator;
+				int goal_height = elementHeight;
+				do {
+					font_size--;
+					elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element, font_size );
+				}
+				while ( elementHeight > goal_height && font_size > 0 );
+			}
+			else
+				elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element );
 		}
 		rect->setHeight( ( int ) ( ceil( elementHeight * 100.0 / m_width ) ) );
 
@@ -271,6 +262,8 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		element->addProperty( QString( "left: %1px;" ).arg( static_cast<int>( rect->left() / 100.0 * m_width ) ) );
 		element->addProperty( QString( "width: %1px;" ).arg( static_cast<int>( rect->width() / 100.0 * m_width ) ) );
 		element->addProperty( QString( "height: %1px;" ).arg( elementHeight ) );
+		if ( font_size > 0 )
+			element->addProperty( QString( "font-size: %1pt;" ).arg( font_size ) );
 
 		height_taken = QMAX( rect->top() + int( elementHeight * 100.0 / m_width ), height_taken );
 	}
@@ -518,8 +511,8 @@ QString HTMLExporter::readFontProperties( const QDomDocument &doc, const QString
 		font.fromString( el.text() );
 
 		text += QString( "font-family: %1;\n" ).arg( font.family() );
-		text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
 		text += QString( "font-weight: %1;\n" ).arg( font.weight() );
+		text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
 
 		return text;
 	}
@@ -624,6 +617,41 @@ QString HTMLExporter::escape( const QString & str )
 {
 	QString tmp( str );
 	return tmp.replace( '/', "_" );
+}
+
+int HTMLExporter::getHeight( int constrained_width, DivElement *element, int font_size )
+{
+	// Generate a test page to calculate the size in khtml
+	QString tempHTML = "<html><head><style type=\"text/css\">";
+	tempHTML += classesCSS;
+	tempHTML += QString( "#%1 {" ).arg( element->id() );
+	tempHTML += QString( "width: %1px;" ).arg( constrained_width );
+	if ( font_size > 0 )
+		tempHTML += QString( "font-size: %1pt;" ).arg( font_size );
+	tempHTML += "} ";
+	tempHTML += "body { margin: 0px; }"; //very important subtlety in determining the exact width
+	tempHTML += "</style></head>";
+	tempHTML += "<body>";
+	tempHTML += element->generateHTML();
+	tempHTML += "</body></html>";
+
+	KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
+	sizeCalculator->view()->setVScrollBarMode ( QScrollView::AlwaysOff );
+	sizeCalculator->view()->setMinimumSize( QSize( constrained_width, 0 ) );
+	sizeCalculator->view()->resize( QSize( constrained_width, 0 ) );
+	sizeCalculator->begin( KURL( locateLocal( "tmp", "/" ) ) );
+	sizeCalculator->write( tempHTML );
+	sizeCalculator->end();
+
+	sizeCalculator->view()->layout(); //force a layout
+
+	// Set the size of the element
+	DOM::Document size_test_doc = sizeCalculator->document();
+	int return_height = size_test_doc.getElementById( element->id() ).getRect().height();
+
+	delete sizeCalculator;
+
+	return return_height;
 }
 
 

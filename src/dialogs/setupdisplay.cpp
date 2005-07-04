@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003-2004                                               *
+*   Copyright (C) 2003-2005                                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -17,6 +17,7 @@
 #include <kcolordialog.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kruler.h>
 
 #include <qaction.h>
 #include <qlabel.h>
@@ -26,6 +27,7 @@
 #include <qtooltip.h>
 #include <qobjectlist.h>
 #include <qvaluelist.h>
+#include <qlayout.h>
 
 #include "../image.h"
 #include "../mixednumber.h"
@@ -113,6 +115,8 @@ void SetupDisplay::loadLayout( const QString &filename )
 						loadGeometry( *map_it, el );
 					else if ( subTagName == "font" )
 						loadFont( *map_it, el );
+					else if ( subTagName == "overflow" )
+						loadOverflow( *map_it, el );
 					else if ( subTagName == "text-color" )
 						loadTextColor( *map_it, el );
 					else if ( subTagName == "visible" )
@@ -147,6 +151,11 @@ void SetupDisplay::loadFont( KreDisplayItem *item, const QDomElement &tag )
 	QFont f;
 	if ( f.fromString( tag.text() ) )
 		item->widget->setFont( f );
+}
+
+void SetupDisplay::loadOverflow( KreDisplayItem *item, const QDomElement &tag )
+{
+	item->overflow = KreDisplayItem::OverflowType(tag.text().toInt());
 }
 
 void SetupDisplay::loadGeometry( KreDisplayItem *item, const QDomElement &tag )
@@ -215,6 +224,12 @@ void SetupDisplay::saveLayout( const QString &filename )
 		if ( it.data() & Font ) {
 			QDomElement font_tag = doc.createElement( "font" );
 			font_tag.appendChild( doc.createTextNode( static_cast<QLabel*>( it.key() ->widget ) ->font().toString() ) );
+			base_tag.appendChild( font_tag );
+		}
+
+		if ( it.data() & Overflow ) {
+			QDomElement font_tag = doc.createElement( "overflow" );
+			font_tag.appendChild( doc.createTextNode( QString::number(it.key()->overflow) ) );
 			base_tag.appendChild( font_tag );
 		}
 
@@ -301,7 +316,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add
 		( instr_box, i18n( "Instructions" ) );
 
-	createItem( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
+	createItem( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//=======================SERVINGS======================//
 	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Servings" ) ).arg( sample.persons ), this, "servings" );
@@ -350,7 +365,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add
 		( authors_box, i18n( "Authors" ) );
 
-	createItem( authors_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
+	createItem( authors_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//========================CATEGORIES========================//
 	QString categories;
@@ -369,7 +384,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add
 		( categories_box, i18n( "Categories" ) );
 
-	createItem( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
+	createItem( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//=======================ID======================//
 	id_box = new QLabel( QString( i18n( "Recipe: #%1" ) ).arg( sample.recipeID ), this, "header" );
@@ -416,7 +431,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add
 		( ingredients_box, i18n( "Ingredients" ) );
 
-	createItem( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
+	createItem( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//========================PROPERTIES========================//
 	properties_box = new QLabel( i18n( "<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>" ), this, "properties" );
@@ -424,7 +439,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	QToolTip::add
 		( properties_box, i18n( "Properties" ) );
 
-	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
+	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
@@ -450,6 +465,26 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 		if ( properties & Font )
 			popup->insertItem( i18n( "Font..." ), this, SLOT( setFont() ) );
 
+		if ( properties & Overflow ) {
+			QPopupMenu * sub_popup = new QPopupMenu( popup );
+
+			QActionGroup *alignment_actions = new QActionGroup( this );
+			alignment_actions->setExclusive( true );
+
+			QAction *shrink_action = new QAction( i18n( "Shrink to Fit" ), i18n( "Shrink to Fit" ), 0, alignment_actions, 0, true );
+			QAction *grow_action = new QAction( i18n( "Grow" ), i18n( "Grow" ), 0, alignment_actions, 0, true );
+
+			bool shrink = (*widget_item_map->find( w ))->overflow == KreDisplayItem::ShrinkToFit;
+			shrink_action->setOn(shrink);
+			grow_action->setOn(!shrink);
+
+			connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setOverflow( QAction* ) ) );
+
+			popup->insertItem( i18n( "Overflow" ), sub_popup );
+
+			alignment_actions->addTo( sub_popup );
+		}
+
 		if ( properties & Visibility ) {
 			int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
 			popup->setItemChecked( id, w->isShown() );
@@ -461,9 +496,17 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 			QActionGroup *alignment_actions = new QActionGroup( this );
 			alignment_actions->setExclusive( true );
 
-			new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
-			new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
-			new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+			QAction *c_action = new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
+			QAction *l_action = new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
+			QAction *r_action = new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+
+			int align = ((QLabel*)w)->alignment();
+			if ( align & Qt::AlignHCenter )
+				c_action->setOn(true);
+			if ( align & Qt::AlignLeft )
+				l_action->setOn(true);
+			if ( align & Qt::AlignRight )
+				r_action->setOn(true);
 
 			connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
 
@@ -583,6 +626,19 @@ void SetupDisplay::setAlignment( QAction *action )
 	}
 }
 
+void SetupDisplay::setOverflow( QAction *action )
+{
+	QObject * obj = popup->parent();
+	if ( obj->inherits( "QLabel" ) ) {
+		has_changes = true;
+
+		QLabel *box = static_cast<QLabel*>( obj );
+		KreDisplayItem *item = *widget_item_map->find( box );
+
+		item->overflow = (action->text() == i18n("Grow"))?KreDisplayItem::Grow : KreDisplayItem::ShrinkToFit;
+	}
+}
+
 void SetupDisplay::setItemShown( QWidget *item, bool visible )
 {
 	item->raise(); //raise it to make sure the user can see it (and doesn't think it didn't work)
@@ -632,6 +688,49 @@ QSize SetupDisplay::sizeHint( void ) const
 void SetupDisplay::changeMade( void )
 {
 	has_changes = true;
+}
+
+
+class KreRuler : public KRuler
+{
+public:
+	KreRuler( Qt::Orientation orient, QWidget *parent ) : KRuler( orient, parent ) {
+		setShowPointer(false);
+		setShowTinyMarks(false);
+		setShowLittleMarks(false);
+		setPixelPerMark(10.0);
+	}
+
+	void setInches( double inches ) {
+		setMediumMarkDistance( int(maxValue() / inches / 2.0 / pixelPerMark()) );
+		setBigMarkDistance   ( int(maxValue() / inches / pixelPerMark()) );
+	}
+
+public slots:
+	void resized(int,int){}
+
+private:
+	double factor;
+};
+
+PrintSetupDisplay::PrintSetupDisplay( const Recipe &sample, QWidget *parent ) : QWidget(parent)
+{
+	QGridLayout *layout = new QGridLayout(this,2,2);
+
+	KreRuler *hruler = new KreRuler(KRuler::Horizontal,this);
+	KreRuler *vruler = new KreRuler(KRuler::Vertical,this);
+
+	layout->addWidget(hruler,0,1);
+	layout->addWidget(vruler,1,0);
+
+	setup_display = new SetupDisplay(sample,this);
+	layout->addWidget(setup_display,1,1);
+
+	hruler->setRange(0,width());
+	vruler->setRange(0,height());
+
+	hruler->setInches(8.5);
+	vruler->setInches(11.0);
 }
 
 #include "setupdisplay.moc"

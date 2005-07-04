@@ -32,13 +32,16 @@ class DragArea;
 class KreDisplayItem
 {
 public:
-	KreDisplayItem( QWidget *w = 0 ) : widget( w )
+	enum OverflowType { ShrinkToFit = 0, Grow };
+
+	KreDisplayItem( QWidget *w = 0 ) : widget( w ), overflow( Grow )
 	{}
 
 	//bool operator<(const KreDisplayItem & ) const { return true; } //required to be a map key
 
 	QWidget *widget;
 	KreBorder border;
+	OverflowType overflow;
 };
 
 typedef QMap< KreDisplayItem*, unsigned int > PropertiesMap;
@@ -116,7 +119,7 @@ public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
 
-	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64, Border = 128 };
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64, Border = 128, Overflow = 256 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
@@ -146,6 +149,7 @@ protected slots:
 	void setBorder();
 	void setTextColor();
 	void setFont();
+	void setOverflow( QAction * );
 	void setShown( int id );
 	void setAlignment( QAction * );
 
@@ -176,6 +180,7 @@ private:
 	void toPercentage( PreciseRect * );
 
 	void loadFont( KreDisplayItem *, const QDomElement &tag );
+	void loadOverflow( KreDisplayItem *item, const QDomElement &tag );
 	void loadGeometry( KreDisplayItem *, const QDomElement &tag );
 	void loadBackgroundColor( KreDisplayItem *, const QDomElement &tag );
 	void loadTextColor( KreDisplayItem *, const QDomElement &tag );
@@ -184,6 +189,17 @@ private:
 	void loadBorder( KreDisplayItem *, const QDomElement &tag );
 
 	void createItem( QWidget *w, unsigned int properties );
+};
+
+class PrintSetupDisplay : public QWidget
+{
+public:
+	PrintSetupDisplay( const Recipe &, QWidget *parent );
+
+	SetupDisplay *display(){ return setup_display; }
+
+private:
+	SetupDisplay *setup_display;	
 };
 
 #endif //SETUPDISPLAY_H
