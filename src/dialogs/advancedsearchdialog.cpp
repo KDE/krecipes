@@ -404,7 +404,7 @@ void AdvancedSearchDialog::languageChange()
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
 	clearButton->setText( i18n( "C&lear" ) );
 	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
-	findButton->setText( i18n( "Search" ) );
+	findButton->setText( i18n( "&Search" ) );
 }
 
 void AdvancedSearchDialog::clear()
