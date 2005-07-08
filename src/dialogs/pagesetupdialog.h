@@ -16,9 +16,10 @@
 #include <kdialog.h>
 
 #include "datablocks/recipe.h"
-#include "setupdisplay.h"
 
 class KPopupMenu;
+
+class SetupDisplay;
 
 /**
   * @author Jason Kivlighn
@@ -58,7 +59,7 @@ private:
 	void initShownItems();
 
 	SetupDisplay *setup_display;
-	PrintSetupDisplay *print_setup_display;
+	SetupDisplay *print_setup_display;
 	SetupDisplay *active_display;
 
 	QMap<SetupDisplay*, QString> active_filename_map;

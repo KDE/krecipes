@@ -33,6 +33,7 @@
 #include "mixednumber.h"
 #include "dialogs/setupdisplay.h"
 #include "image.h"
+#include "krepagelayout.h"
 
 #include <cmath> //for ceil()
 
@@ -85,6 +86,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
 		layout_filename = locate( "appdata", "layouts/default.klo" );
 	kdDebug() << "Using layout file: " << layout_filename << endl;
+
 	QFile input( layout_filename );
 
 	if ( !input.open( IO_ReadOnly ) ) {
@@ -106,6 +108,13 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		kdDebug() << error_str << endl;
 		m_error = true;
 		return "<html>"+error_str+"</html>";
+	}
+
+	QDomNodeList node_list = doc.elementsByTagName( "page-layout-properties" );
+	if ( node_list.count() > 0 ) {
+		QDomElement layout_el = node_list.item( 0 ).toElement();
+		KoPageLayout page_layout; page_layout.loadKreFormat(layout_el);
+		m_width = page_layout.ptWidth;
 	}
 
 	//put all the recipe photos into this directory

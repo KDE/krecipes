@@ -18,6 +18,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kruler.h>
+#include <kiconloader.h>
 
 #include <qaction.h>
 #include <qlabel.h>
@@ -32,29 +33,54 @@
 #include "../image.h"
 #include "../mixednumber.h"
 #include "dialogs/borderdialog.h"
+#include "dialogs/krepagelayoutdia.h"
+#include "widgets/kreruler.h"
 
 #include <cmath>
 
-SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : DragArea( parent, "background" ),
+SetupDisplay::SetupDisplay( const Recipe &sample, bool show_ruler, QWidget *parent ) : QWidget(parent),
+		hruler(0), vruler(0),
 		box_properties( new PropertiesMap ),
 		widget_item_map( new QMap<QWidget*, KreDisplayItem*> ),
 		has_changes( false )
 {
-	setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	QGridLayout *layout = new QGridLayout(this);
 
-	createItem( this, BackgroundColor );
+	drag_area = new DragArea( this, "background" );
+	drag_area->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
-	connect( this, SIGNAL( widgetClicked( QMouseEvent*, QWidget* ) ), SLOT( widgetClicked( QMouseEvent*, QWidget* ) ) );
-	connect( this, SIGNAL( widgetGeometryChanged() ), SLOT( changeMade() ) );
+	if ( show_ruler ) {
+		page_layout = KoPageLayout::standardLayout();
+	
+		hruler = new KoRuler(this,drag_area,Qt::Horizontal,page_layout,0,KoUnit::U_INCH);
+		vruler = new KoRuler(this,drag_area,Qt::Vertical,page_layout,0,KoUnit::U_INCH);
+	
+		layout->addWidget(hruler,0,1);
+		layout->addWidget(vruler,1,0);
 
-	createWidgets( sample );
+		QWidget *behind_paper = new QWidget(this);
+		behind_paper->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
-	KConfig *config = kapp->config();
-	config->setGroup( "Page Setup" );
-	QSize default_size( 300, 400 );
-	m_size = config->readSizeEntry( "WindowSize", &default_size );
-	resize( m_size );
-	parentWidget() ->resize( m_size );
+		drag_area->reparent(behind_paper,QPoint(0,0),true);
+		layout->addWidget(behind_paper,1,1);
+
+		connect( hruler, SIGNAL(doubleClicked()), SLOT(openPageLayoutDia()) );
+		connect( vruler, SIGNAL(doubleClicked()), SLOT(openPageLayoutDia()) );
+
+		connect( hruler, SIGNAL(newPageLayout(const KoPageLayout&)), SLOT(updatePageLayout(const KoPageLayout&)) );
+		connect( vruler, SIGNAL(newPageLayout(const KoPageLayout&)), SLOT(updatePageLayout(const KoPageLayout&)) );
+	}
+	else
+		layout->addWidget(drag_area,0,0);
+
+	drag_area->resize(parentWidget()->size());
+
+	createItem( drag_area, BackgroundColor );
+
+	connect( drag_area, SIGNAL( widgetClicked( QMouseEvent*, QWidget* ) ), SLOT( widgetClicked( QMouseEvent*, QWidget* ) ) );
+	connect( drag_area, SIGNAL( widgetGeometryChanged() ), SLOT( changeMade() ) );
+
+	createWidgets( sample, drag_area );
 }
 
 SetupDisplay::~SetupDisplay()
@@ -101,39 +127,44 @@ void SetupDisplay::loadLayout( const QString &filename )
 		for ( unsigned i = 0 ; i < l.count(); i++ ) {
 			QDomElement el = l.item( i ).toElement();
 			QString tagName = el.tagName();
-
-			QMap<QString, KreDisplayItem*>::iterator map_it = widget_map.find( tagName );
-			if ( map_it != widget_map.end() ) {
-				QDomNodeList l = el.childNodes();
-				for ( unsigned i = 0 ; i < l.count(); i++ ) {
-					QDomElement el = l.item( i ).toElement();
-					QString subTagName = el.tagName();
-
-					if ( subTagName == "background-color" )
-						loadBackgroundColor( *map_it, el );
-					else if ( subTagName == "geometry" )
-						loadGeometry( *map_it, el );
-					else if ( subTagName == "font" )
-						loadFont( *map_it, el );
-					else if ( subTagName == "overflow" )
-						loadOverflow( *map_it, el );
-					else if ( subTagName == "text-color" )
-						loadTextColor( *map_it, el );
-					else if ( subTagName == "visible" )
-						loadVisibility( *map_it, el );
-					else if ( subTagName == "alignment" )
-						loadAlignment( *map_it, el );
-					else if ( subTagName == "border" )
-						loadBorder( *map_it, el );
-					else
-						kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
-				}
+			if ( tagName == "page-layout-properties" ) {
+				page_layout.loadKreFormat( el );
+				updatePageLayout(page_layout);
 			}
-			else
-				kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
+			else {
+				QMap<QString, KreDisplayItem*>::iterator map_it = widget_map.find( tagName );
+				if ( map_it != widget_map.end() ) {
+					QDomNodeList l = el.childNodes();
+					for ( unsigned i = 0 ; i < l.count(); i++ ) {
+						QDomElement el = l.item( i ).toElement();
+						QString subTagName = el.tagName();
+	
+						if ( subTagName == "background-color" )
+							loadBackgroundColor( *map_it, el );
+						else if ( subTagName == "geometry" )
+							loadGeometry( *map_it, el );
+						else if ( subTagName == "font" )
+							loadFont( *map_it, el );
+						else if ( subTagName == "overflow" )
+							loadOverflow( *map_it, el );
+						else if ( subTagName == "text-color" )
+							loadTextColor( *map_it, el );
+						else if ( subTagName == "visible" )
+							loadVisibility( *map_it, el );
+						else if ( subTagName == "alignment" )
+							loadAlignment( *map_it, el );
+						else if ( subTagName == "border" )
+							loadBorder( *map_it, el );
+						else
+							kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
+					}
+				}
+				else
+					kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
+			}
 		}
 
-		setWidget( 0 );
+		drag_area->setWidget( 0 );
 	}
 	else
 		kdDebug() << "Unable to open file: " << filename << endl;
@@ -205,6 +236,8 @@ void SetupDisplay::saveLayout( const QString &filename )
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
+	layout_tag.appendChild( page_layout.saveKreFormat(doc) );
+
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
 		QDomElement base_tag = doc.createElement( it.key() ->widget->name() );
 		layout_tag.appendChild( base_tag );
@@ -266,11 +299,6 @@ void SetupDisplay::saveLayout( const QString &filename )
 		}
 	}
 
-	KConfig *config = kapp->config();
-	config->setGroup( "Page Setup" );
-	config->writeEntry( "Aspect", static_cast<double>( width() ) / static_cast<double>( height() ) );
-	config->writeEntry( "WindowSize", parentWidget() ->size() );
-
 	QFile out_file( filename );
 	if ( out_file.open( IO_WriteOnly ) ) {
 		has_changes = false;
@@ -282,7 +310,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 		kdDebug() << "Error: Unable to write to file " << filename << endl;
 }
 
-void SetupDisplay::createWidgets( const Recipe &sample )
+void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
 {
 	//=========================TITLE=======================//
 	QString title;
@@ -291,7 +319,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	else
 		title = sample.title;
 
-	title_box = new QLabel( title, this, "title" );
+	title_box = new QLabel( title, canvas, "title" );
 	title_box->setFrameShape( QFrame::Box );
 	title_box->setMinimumSize( 5, 5 );
 	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
@@ -308,7 +336,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		instr = sample.instructions;
 
 	instr.replace( "\n", "<BR>" );
-	instr_box = new QLabel( instr, this, "instructions" );
+	instr_box = new QLabel( instr, canvas, "instructions" );
 	instr_box->setMinimumSize( 5, 5 );
 	instr_box->setFrameShape( QFrame::Box );
 	instr_box->setAlignment( Qt::AlignTop );
@@ -319,7 +347,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	createItem( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//=======================SERVINGS======================//
-	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Servings" ) ).arg( sample.persons ), this, "servings" );
+	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Servings" ) ).arg( sample.persons ), canvas, "servings" );
 	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( servings_box, i18n( "Servings" ) );
@@ -327,7 +355,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	createItem( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//=======================PREP TIME======================//
-	preptime_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Preparation Time" ) ).arg( sample.prepTime.toString( "h:mm" ) ), this, "prep_time" );
+	preptime_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Preparation Time" ) ).arg( sample.prepTime.toString( "h:mm" ) ), canvas, "prep_time" );
 	preptime_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( preptime_box, i18n( "Preparation Time" ) );
@@ -335,7 +363,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	createItem( preptime_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 
 	//========================PHOTO========================//
-	photo_box = new QLabel( this, "photo" );
+	photo_box = new QLabel( canvas, "photo" );
 	photo_box->setFrameShape( QFrame::Box );
 	photo_box->setMinimumSize( 5, 5 );
 	photo_box->setScaledContents( true );
@@ -360,7 +388,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		authors = i18n( "Author 1, Author 2, ..." );
 	authors.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
 
-	authors_box = new QLabel( authors, this, "authors" );
+	authors_box = new QLabel( authors, canvas, "authors" );
 	authors_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( authors_box, i18n( "Authors" ) );
@@ -379,7 +407,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 		categories = i18n( "Category 1, Category 2, ..." );
 	categories.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
-	categories_box = new QLabel( categories, this, "categories" );
+	categories_box = new QLabel( categories, canvas, "categories" );
 	categories_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( categories_box, i18n( "Categories" ) );
@@ -387,7 +415,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	createItem( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//=======================ID======================//
-	id_box = new QLabel( QString( i18n( "Recipe: #%1" ) ).arg( sample.recipeID ), this, "header" );
+	id_box = new QLabel( QString( i18n( "Recipe: #%1" ) ).arg( sample.recipeID ), canvas, "header" );
 	id_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( id_box, i18n( "Header" ) );
@@ -426,7 +454,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	else
 		ingredients = i18n( "<ul><li>Ingredient 1</li><li>Ingredient 2</li><li>...</li></ul>" );
 
-	ingredients_box = new QLabel( ingredients, this, "ingredients" );
+	ingredients_box = new QLabel( ingredients, canvas, "ingredients" );
 	ingredients_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( ingredients_box, i18n( "Ingredients" ) );
@@ -434,7 +462,7 @@ void SetupDisplay::createWidgets( const Recipe &sample )
 	createItem( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//========================PROPERTIES========================//
-	properties_box = new QLabel( i18n( "<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>" ), this, "properties" );
+	properties_box = new QLabel( i18n( "<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>" ), canvas, "properties" );
 	properties_box->setFrameShape( QFrame::Box );
 	QToolTip::add
 		( properties_box, i18n( "Properties" ) );
@@ -446,7 +474,7 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 {
 	if ( e->button() == QMouseEvent::RightButton ) {
 		popup = new KPopupMenu( w ); //parent _must_ be widget acting on
-		popup->insertTitle( ( w == this ) ? i18n( "Background" ) : QToolTip::textFor( w ) );
+		popup->insertTitle( ( w == drag_area ) ? i18n( "Background" ) : QToolTip::textFor( w ) );
 
 		unsigned int properties = 0;
 		for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
@@ -456,6 +484,8 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 			}
 		}
 
+		KIconLoader il;
+
 		if ( properties & BackgroundColor )
 			popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
 
@@ -463,7 +493,7 @@ void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
 			popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
 
 		if ( properties & Font )
-			popup->insertItem( i18n( "Font..." ), this, SLOT( setFont() ) );
+			popup->insertItem( il.loadIconSet( "text", KIcon::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
 
 		if ( properties & Overflow ) {
 			QPopupMenu * sub_popup = new QPopupMenu( popup );
@@ -592,7 +622,7 @@ void SetupDisplay::setShown( int id )
 		box->setShown( !popup->isItemChecked( id ) );
 		emit itemVisibilityChanged( box, !popup->isItemChecked( id ) );
 
-		setWidget( 0 );
+		drag_area->setWidget( 0 );
 	}
 }
 
@@ -644,7 +674,7 @@ void SetupDisplay::setItemShown( QWidget *item, bool visible )
 	item->raise(); //raise it to make sure the user can see it (and doesn't think it didn't work)
 	item->setShown( visible );
 
-	setWidget( 0 );
+	drag_area->setWidget( 0 );
 
 	has_changes = true;
 }
@@ -655,11 +685,11 @@ void SetupDisplay::setItemShown( QWidget *item, bool visible )
 
 void SetupDisplay::toAbsolute( PreciseRect *r )
 {
-	r->setWidth( r->width() / 100.0 * width() );
-	r->setHeight( r->height() / 100.0 * width() );
+	r->setWidth( r->width() / 100.0 * drag_area->width() );
+	r->setHeight( r->height() / 100.0 * drag_area->width() );
 
-	r->setLeft( r->left() / 100.0 * width() );
-	r->setTop( r->top() / 100.0 * width() );
+	r->setLeft( r->left() / 100.0 * drag_area->width() );
+	r->setTop( r->top() / 100.0 * drag_area->width() );
 }
 
 /*
@@ -668,11 +698,11 @@ void SetupDisplay::toAbsolute( PreciseRect *r )
 
 void SetupDisplay::toPercentage( PreciseRect *r )
 {
-	r->setWidth( r->width() * 100.0 / width() );
-	r->setHeight( r->height() * 100.0 / width() );
+	r->setWidth( r->width() * 100.0 / drag_area->width() );
+	r->setHeight( r->height() * 100.0 / drag_area->width() );
 
-	r->setLeft( r->left() * 100.0 / width() );
-	r->setTop( r->top() * 100.0 / width() );
+	r->setLeft( r->left() * 100.0 / drag_area->width() );
+	r->setTop( r->top() * 100.0 / drag_area->width() );
 }
 
 QSize SetupDisplay::minimumSize() const
@@ -690,47 +720,26 @@ void SetupDisplay::changeMade( void )
 	has_changes = true;
 }
 
-
-class KreRuler : public KRuler
+void SetupDisplay::openPageLayoutDia()
 {
-public:
-	KreRuler( Qt::Orientation orient, QWidget *parent ) : KRuler( orient, parent ) {
-		setShowPointer(false);
-		setShowTinyMarks(false);
-		setShowLittleMarks(false);
-		setPixelPerMark(10.0);
-	}
+	KoHeadFoot hf;
+	KoPageLayoutDia::pageLayout( page_layout, hf, (int)FORMAT_AND_BORDERS, unit, this );
+	updatePageLayout( page_layout );
+}
 
-	void setInches( double inches ) {
-		setMediumMarkDistance( int(maxValue() / inches / 2.0 / pixelPerMark()) );
-		setBigMarkDistance   ( int(maxValue() / inches / pixelPerMark()) );
-	}
-
-public slots:
-	void resized(int,int){}
-
-private:
-	double factor;
-};
-
-PrintSetupDisplay::PrintSetupDisplay( const Recipe &sample, QWidget *parent ) : QWidget(parent)
+void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout )
 {
-	QGridLayout *layout = new QGridLayout(this,2,2);
+	if ( hruler && vruler ) {
+		page_layout = new_page_layout;
 
-	KreRuler *hruler = new KreRuler(KRuler::Horizontal,this);
-	KreRuler *vruler = new KreRuler(KRuler::Vertical,this);
+		hruler->setPageLayout( page_layout );
+		vruler->setPageLayout( page_layout );
+	
+		drag_area->setGeometry( QRect( QPoint(page_layout.ptLeft,page_layout.ptTop),
+			QSize(page_layout.ptWidth,page_layout.ptHeight) ) );
 
-	layout->addWidget(hruler,0,1);
-	layout->addWidget(vruler,1,0);
-
-	setup_display = new SetupDisplay(sample,this);
-	layout->addWidget(setup_display,1,1);
-
-	hruler->setRange(0,width());
-	vruler->setRange(0,height());
-
-	hruler->setInches(8.5);
-	vruler->setInches(11.0);
+		changeMade();
+	}
 }
 
 #include "setupdisplay.moc"

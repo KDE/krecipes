@@ -32,6 +32,8 @@
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
 
+#include "setupdisplay.h"
+
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDialog( parent, 0, true )
 {
 	KIconLoader il;
@@ -39,8 +41,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	QVBoxLayout * layout = new QVBoxLayout( this );
 
 	KToolBar *toolbar = new KToolBar( this );
-	active_display = setup_display = new SetupDisplay( sample, this );
-	print_setup_display = new PrintSetupDisplay( sample, this );
+	active_display = setup_display = new SetupDisplay( sample, false, this );
+	print_setup_display = new SetupDisplay( sample, true, this );
 
 	KActionCollection *actionCollection = new KActionCollection( this );
 
@@ -72,16 +74,9 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	KConfig *config = kapp->config();
 	config->setGroup( "Page Setup" );
 
-	//let's do everything we can to be sure at least some layout is loaded
-	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
-	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/default.klo" );
-	loadLayout( filename, setup_display );
-
-	filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
-	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/default_print.klo" );
-	loadLayout( filename, print_setup_display->display() );
+	QSize default_size( 300, 400 );
+	QSize size = config->readSizeEntry( "WindowSize", &default_size );
+	resize( size );
 
 	initShownItems();
 
@@ -98,16 +93,29 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	connect( okButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
 	connect( setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
-	connect( print_setup_display->display(), SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
+	connect( print_setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
 	connect( tabWidget, SIGNAL( currentChanged( QWidget* ) ), SLOT( setActiveDisplay( QWidget* ) ) );
+
+	//let's do everything we can to be sure at least some layout is loaded
+	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	if ( filename.isEmpty() || !QFile::exists( filename ) )
+		filename = locate( "appdata", "layouts/default.klo" );
+	loadLayout( filename, setup_display );
+
+	filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
+	if ( filename.isEmpty() || !QFile::exists( filename ) )
+		filename = locate( "appdata", "layouts/default_print.klo" );
+	loadLayout( filename, print_setup_display );
+
+	resize( size );
 }
 
 void PageSetupDialog::accept()
 {
 	if ( setup_display->hasChanges() )
 		saveLayout(setup_display);
-	if ( print_setup_display->display()->hasChanges() )
-		saveLayout(print_setup_display->display());
+	if ( print_setup_display->hasChanges() )
+		saveLayout(print_setup_display);
 
 	if ( !active_filename_map[setup_display].isEmpty() ) {
 		KConfig * config = kapp->config();
@@ -115,11 +123,16 @@ void PageSetupDialog::accept()
 		config->writeEntry( "Layout", active_filename_map[setup_display] );
 	}
 
-	if ( !active_filename_map[print_setup_display->display()].isEmpty() ) {
+	if ( !active_filename_map[print_setup_display].isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
-		config->writeEntry( "PrintLayout", active_filename_map[print_setup_display->display()] );
+		config->writeEntry( "PrintLayout", active_filename_map[print_setup_display] );
 	}
+
+	KConfig *config = kapp->config();
+	config->setGroup( "Page Setup" );
+	config->writeEntry( "Aspect", static_cast<double>( width() ) / static_cast<double>( height() ) );
+	config->writeEntry( "WindowSize", size() );
 
 	QDialog::accept();
 }
@@ -138,10 +151,10 @@ void PageSetupDialog::reject()
 		}
 	}
 
-	if ( print_setup_display->display()->hasChanges() ) {
+	if ( print_setup_display->hasChanges() ) {
 		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
-			saveLayout(print_setup_display->display());
+			saveLayout(print_setup_display);
 			break;
 		case KMessageBox::No:
 			break;
@@ -287,7 +300,7 @@ void PageSetupDialog::setActiveDisplay( QWidget *widget )
 	if ( widget == setup_display )
 		active_display = setup_display;
 	else
-		active_display = print_setup_display->display();
+		active_display = print_setup_display;
 
 	for ( QMap<QWidget*,int>::const_iterator it = widget_popup_map.begin(); it != widget_popup_map.end(); ++it ) {
 		shown_items_popup->setItemChecked( it.data(), it.key()->isShown() );

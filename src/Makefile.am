@@ -40,7 +40,7 @@ krecipes_SOURCES = \
 	propertycalculator.cpp setupwizard.cpp \
 	shoppingcalculator.cpp kstartuplogo.cpp \
 	mixednumber.cpp recipeactionshandler.cpp \
-	recipefilter.cpp
+	recipefilter.cpp krepagelayout.cpp kreunit.cpp
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO

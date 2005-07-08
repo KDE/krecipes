@@ -18,6 +18,8 @@
 #include "datablocks/recipe.h"
 #include "widgets/dragarea.h"
 #include "datablocks/kreborder.h"
+#include "krepagelayout.h"
+#include "kreunit.h"
 
 #include <math.h>
 
@@ -28,6 +30,7 @@ class QLabel;
 class QWidget;
 
 class DragArea;
+class KoRuler;
 
 class KreDisplayItem
 {
@@ -111,12 +114,12 @@ private:
   *
   * @author Jason Kivlighn
   */
-class SetupDisplay : public DragArea
+class SetupDisplay : public QWidget
 {
 	Q_OBJECT
 
 public:
-	SetupDisplay( const Recipe &, QWidget *parent );
+	SetupDisplay( const Recipe &, bool show_ruler, QWidget *parent );
 	~SetupDisplay();
 
 	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Geometry = 16, Alignment = 32, StaticHeight = 64, Border = 128, Overflow = 256 };
@@ -128,7 +131,7 @@ public:
 	bool hasChanges() const
 	{
 		return has_changes;
-	};
+	}
 
 	void setItemShown( QWidget *item, bool visible );
 
@@ -153,7 +156,14 @@ protected slots:
 	void setShown( int id );
 	void setAlignment( QAction * );
 
+	void openPageLayoutDia();
+	void updatePageLayout( const KoPageLayout &page_layout );
+
 private:
+	DragArea *drag_area;
+
+	KoRuler *hruler;
+	KoRuler *vruler;
 
 	QLabel *title_box;
 	QLabel *instr_box;
@@ -166,18 +176,21 @@ private:
 	QLabel *properties_box;
 	QLabel *preptime_box;
 
-	QSize m_size;
-
 	PropertiesMap *box_properties;
 	QMap<QWidget*, KreDisplayItem*> *widget_item_map;
 
 	bool has_changes;
 	KPopupMenu *popup;
 
+	KoPageLayout page_layout;
+	KoUnit::Unit unit;
+
 	// Methods
-	void createWidgets( const Recipe &sample );
+	void createWidgets( const Recipe &sample, DragArea *canvas );
 	void toAbsolute( PreciseRect * );
 	void toPercentage( PreciseRect * );
+
+	void loadPageLayout( const QDomElement &tag );
 
 	void loadFont( KreDisplayItem *, const QDomElement &tag );
 	void loadOverflow( KreDisplayItem *item, const QDomElement &tag );
@@ -189,17 +202,6 @@ private:
 	void loadBorder( KreDisplayItem *, const QDomElement &tag );
 
 	void createItem( QWidget *w, unsigned int properties );
-};
-
-class PrintSetupDisplay : public QWidget
-{
-public:
-	PrintSetupDisplay( const Recipe &, QWidget *parent );
-
-	SetupDisplay *display(){ return setup_display; }
-
-private:
-	SetupDisplay *setup_display;	
 };
 
 #endif //SETUPDISPLAY_H
