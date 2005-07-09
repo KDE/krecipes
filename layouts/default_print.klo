@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE krecipes-layout>
+<krecipes-layout version="0.3" >
+ <title>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>New Century Schoolbook,32,-1,5,75,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="74.0864" height="5.98007" left="24.9169" top="4.15282" />
+  <alignment>2052</alignment>
+  <border width="1" style="none" color="#000000" />
+ </title>
+ <ingredients>
+  <background-color>#776d4e</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="24.2525" height="16.9435" left="0" top="20.0997" />
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </ingredients>
+ <servings>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="38.5382" height="4.15282" left="24.9169" top="16.9435" />
+  <alignment>2048</alignment>
+  <border width="1" style="none" color="#000000" />
+ </servings>
+ <photo>
+  <visible>true</visible>
+  <geometry width="24.2525" height="14.9502" left="0" top="4.15282" />
+ </photo>
+ <authors>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="74.0864" height="4.81728" left="24.9169" top="10.9635" />
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </authors>
+ <background>
+  <background-color>#ffffff</background-color>
+ </background>
+ <properties>
+  <background-color>#eeda9c</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,1,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="24.2525" height="95.1827" left="0" top="38.0399" />
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </properties>
+ <categories>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="74.0864" height="4.15282" left="24.9169" top="22.093" />
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </categories>
+ <header>
+  <background-color>#eeda9c</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="100" height="2.99003" left="0" top="0" />
+  <alignment>2050</alignment>
+  <border width="1" style="none" color="#000000" />
+ </header>
+ <prep_time>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="34.3854" height="4.15282" left="64.7841" top="16.9435" />
+  <alignment>2624</alignment>
+  <border width="1" style="none" color="#000000" />
+ </prep_time>
+ <instructions>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="74.0864" height="105.98" left="24.9169" top="27.0764" />
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </instructions>
+</krecipes-layout>
