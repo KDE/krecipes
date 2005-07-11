@@ -198,7 +198,7 @@ struct KoPageLayout
     /**
      * Load this page layout from the Krecipes layout format
      */
-    void KoPageLayout::loadKreFormat(const QDomElement &style);
+    void loadKreFormat(const QDomElement &style);
 
     /**
      * @return a page layout with the default page size depending on the locale settings,
