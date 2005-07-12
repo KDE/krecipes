@@ -163,13 +163,8 @@ void CategoryListView::load( int limit, int offset )
 
 void CategoryListView::populate( QListViewItem *item )
 {
-	if ( item->firstChild() ) {
-		CategoryItemInfo *test_for_cat = dynamic_cast<CategoryItemInfo*>(item->firstChild());
-		if ( !test_for_cat ) return;
-	}
-
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
-	if ( !cat_item ) return;
+	if ( !cat_item || cat_item->isPopulated() ) return;
 
 	int id = cat_item->categoryId();
 	cat_item->setPopulated(true);
