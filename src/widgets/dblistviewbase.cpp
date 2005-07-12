@@ -233,6 +233,7 @@ void DBListViewBase::removeElement( QListViewItem *it, bool delete_item )
 		for ( QListViewItem *search_it = (it->parent())?it->parent()->firstChild():firstChild(); search_it->nextSibling(); search_it = search_it->nextSibling() ) {
 			if ( it == search_it->nextSibling() ) {
 				lastElementMap.insert(it->parent(),search_it);
+				lastElement = search_it;
 				break;
 			}
 		}
@@ -246,6 +247,8 @@ void DBListViewBase::removeElement( QListViewItem *it, bool delete_item )
 				reload();
 				it = 0; //keep 'delete it' below from segfault'ing
 			}
+			else //the list is now empty, there is no last element
+				lastElementMap.remove(it->parent());
 		}
 	}
 

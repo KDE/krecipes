@@ -190,7 +190,7 @@ void CategoryListView::open( QListViewItem *item )
 
 void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
 {
-	if ( parent_id != -1 || handleElement(el.name) ) { //only create this category if the base class okays it; allow all non-top-level items
+	if ( parent_id == -1 || handleElement(el.name) ) { //only create this category if the base class okays it; allow all non-top-level items
 		createCategory(el,parent_id);
 	}
 }
