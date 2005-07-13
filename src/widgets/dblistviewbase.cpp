@@ -268,6 +268,8 @@ bool DBListViewBase::handleElement( const QString &name )
 	if ( child_count == 0 ) return true;
 
 	if ( firstChild()->rtti() == PREVLISTITEM_RTTI || firstChild()->rtti() == 1006 ){ child_count--; } //"Prev" item
+	if ( child_count == 0 ) return true;
+
 	if ( lastElement->nextSibling() ){ child_count--; } //"Next" item
 
 	if ( curr_limit != -1 && child_count >= curr_limit ) {
