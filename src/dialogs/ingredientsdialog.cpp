@@ -375,7 +375,7 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 	if ( ( it = ingredientListView->listView() ->selectedItem() ) )
 		ingredientID = it->text( 1 ).toInt();
 	if ( ( it = propertiesListView->listView() ->selectedItem() ) )
-		propertyID = it->text( 0 ).toInt();
+		propertyID = it->text( 3 ).toInt();
 	if ( propertyID >= 0 )
 		perUnitsID = perUnitListBack->getElement( findPropertyNo( it ) ).id ;
 
@@ -392,7 +392,7 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
 {
 
-	QRect r = propertiesListView->listView() ->header() ->sectionRect( 2 );
+	QRect r = propertiesListView->listView() ->header() ->sectionRect( 1 );
 
 
 	//r=propertiesListView->listView()->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
@@ -414,7 +414,7 @@ void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
 
 	inputBox->setGeometry( r );
 
-	inputBox->setValue( it->text( 2 ).toDouble() );
+	inputBox->setValue( it->text( 1 ).toDouble() );
 	inputBox->show();
 }
 
@@ -429,8 +429,8 @@ void IngredientsDialog::setPropertyAmount( double amount )
 
 	if ( ing_it && prop_it ) // Appart from property, Check if an ingredient is selected first, just in case
 	{
-		prop_it->setText( 2, QString::number( amount ) );
-		int propertyID = prop_it->text( 0 ).toInt();
+		prop_it->setText( 1, QString::number( amount ) );
+		int propertyID = prop_it->text( 3 ).toInt();
 		int ingredientID = ing_it->text( 1 ).toInt();
 		int per_units = perUnitListBack->getElement( findPropertyNo( prop_it ) ).id ;
 		database->changePropertyAmountToIngredient( ingredientID, propertyID, amount, per_units );

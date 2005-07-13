@@ -109,7 +109,7 @@ StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, boo
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	if ( editable ) {
-		setRenameable( 1, true );
+		setRenameable( 0, true );
 
 		KIconLoader *il = new KIconLoader;
 

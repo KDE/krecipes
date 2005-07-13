@@ -734,9 +734,12 @@ void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout )
 
 		hruler->setPageLayout( page_layout );
 		vruler->setPageLayout( page_layout );
+
+		//hruler->setFrameStartEnd( 0, page_layout.ptWidth );
+		//vruler->setFrameStartEnd( 0, page_layout.ptHeight );
 	
 		drag_area->setGeometry( QRect( QPoint(page_layout.ptLeft,page_layout.ptTop),
-			QSize(page_layout.ptWidth,page_layout.ptHeight) ) );
+			QSize(page_layout.ptWidth-page_layout.ptRight,page_layout.ptHeight-page_layout.ptBottom) ) );
 
 		changeMade();
 	}
