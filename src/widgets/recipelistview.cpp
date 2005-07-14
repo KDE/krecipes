@@ -141,17 +141,12 @@ void RecipeListView::load(int limit, int offset)
 
 void RecipeListView::populate( QListViewItem *item )
 {
+	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
+	if ( !cat_item || cat_item->isPopulated() ) return;
+
 	StdCategoryListView::populate(item);
 
 	if ( !flat_list ) {
-		for ( QListViewItem *it = item->firstChild(); it; it = it->nextSibling() ) {
-			if ( it->rtti() == RECIPELISTITEM_RTTI )
-				return;
-		}
-
-		CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
-		if ( !cat_item ) return;
-
 		int id = cat_item->categoryId();
 
 		// Now show the recipes
