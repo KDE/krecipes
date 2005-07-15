@@ -14,8 +14,10 @@
 
 #include <klocale.h>
 #include <kconfig.h>
+#include <kcursor.h>
 #include <kdialog.h>
 #include <kglobal.h>
+#include <kapplication.h>
 
 #include "backends/recipedb.h"
 #include "refineshoppinglistdialog.h"
@@ -68,7 +70,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	listview->setDragEnabled( true );
 	listview->setAcceptDrops( true );
 	listview->setDropVisualizer( false );
-	connect( recipeListView, SIGNAL( searchTextChanged() ), SLOT( ensurePopulated() ) );
+	connect( recipeListView, SIGNAL( textChanged(const QString&) ), SLOT( ensurePopulated() ) );
 	connect( listview, SIGNAL( dropped( KListView*, QDropEvent*, QListViewItem* ) ),
 	         this, SLOT( slotDropped( KListView*, QDropEvent*, QListViewItem* ) ) );
 	listview->reload();

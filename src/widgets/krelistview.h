@@ -42,9 +42,13 @@ public:
 	void setListView( DBListViewBase *list_view );
 
 	void setCustomFilter( QObject *receiver, const char *slot );
+	QString filterText() const { return filterEdit->text(); }
+
+public slots:
+	void refilter();
 
 signals:
-	void searchTextChanged();
+	void textChanged( const QString & );
 
 private:
 	QHBox *filterBox;
@@ -56,8 +60,6 @@ private:
 
 private slots:
 	void filter( const QString& s );
-	void refilter();
-
 };
 
 #endif
