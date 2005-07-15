@@ -15,6 +15,7 @@
 
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "widgets/dblistviewbase.h"
 
@@ -59,8 +60,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		embeddedWidget->reparent( header, QPoint( 0, 0 ) );
 	//Connect Signals & Slots
 	if ( filter ) {
-		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( searchTextChanged() ) );
-		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( filter( const QString& ) ) );
+		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( textChanged(const QString&) ) );
+		connect( this, SIGNAL( textChanged( const QString& ) ), SLOT( filter( const QString& ) ) );
 	}
 }
 
@@ -93,12 +94,14 @@ void KreListView::filter( const QString& s )
 
 void KreListView::refilter()
 {
-	filter( filterEdit->text() );
+	if ( !filterEdit->text().isEmpty() ) {
+		emit textChanged( filterEdit->text() );
+	}
 }
 
 void KreListView::setCustomFilter( QObject *receiver, const char *slot )
 {
-	connect( filterEdit, SIGNAL( textChanged( const QString& ) ), receiver, slot );
+	connect( this, SIGNAL( textChanged( const QString& ) ), receiver, slot );
 }
 
 void KreListView::setListView( DBListViewBase *list_view )
