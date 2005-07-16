@@ -712,6 +712,10 @@ void RecipeInputDialog::reload( void )
 	servingsNumInput->setValue( 1 );
 	amountEdit->clear();
 	ingredientList->clear();
+	ingredientBox->lineEdit()->setText("");
+	prepMethodBox->lineEdit()->setText("");
+	headerBox->lineEdit()->setText("");
+	unitBox->lineEdit()->setText("");
 
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
