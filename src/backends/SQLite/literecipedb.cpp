@@ -262,15 +262,14 @@ void LiteRecipeDB::loadIngredientGroups( ElementList *list )
 	list->clear();
 
 	QString command;
-	command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
+	command = "SELECT DISTINCT name FROM ingredient_groups ORDER BY name;";
 	QSQLiteResult toLoad = database->executeQuery( command );
 
 	if ( toLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = toLoad.first();
 		while ( !toLoad.atEnd() ) {
 			Element group;
-			group.id = row.data( 0 ).toInt();
-			group.name = unescapeAndDecode( row.data( 1 ) );
+			group.name = unescapeAndDecode( row.data( 0 ) );
 			list->append( group );
 			row = toLoad.next();
 		}

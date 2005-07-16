@@ -267,14 +267,13 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
+	QString command = "SELECT DISTINCT name FROM ingredient_groups ORDER BY name;";
 	m_query.exec( command );
 
 	if ( m_query.isActive() ) {
 		while ( m_query.next() ) {
 			Element group;
-			group.id = m_query.value( 0 ).toInt();
-			group.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			group.name = unescapeAndDecode( m_query.value( 0 ).toString() );
 			list->append( group );
 		}
 	}

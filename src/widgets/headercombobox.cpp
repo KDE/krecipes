@@ -29,13 +29,9 @@ void HeaderComboBox::reload()
 
 	clear();
 
-	QValueList<QString> used;
 	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
-		if ( used.find( ( *it ).name ) == used.end() ) {
-			insertItem((*it).name);
-			completionObject()->addItem((*it).name);
-			used << (*it).name;
-		}
+		insertItem((*it).name);
+		completionObject()->addItem((*it).name);
 	}
 
 	if ( listBox()->findItem( remember_text, Qt::ExactMatch ) ) {
