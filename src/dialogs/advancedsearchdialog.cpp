@@ -443,12 +443,22 @@ void AdvancedSearchDialog::buttonSwitched()
 	}
 }
 
+#ifndef NDEBUG
+  #define START_TIMER(MSG) \
+   dbg_timer.start(); kdDebug()<<MSG<<endl;
+  #define END_TIMER() \
+   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
+#else
+  #define START_TIMER(MSG)
+  #define END_TIMER()
+#endif
+
 void AdvancedSearchDialog::search()
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	//we need to load more than just the title because we'll be doing further refining of the search
-	int load_items = RecipeDB::Title;
+	int load_items = RecipeDB::Title | RecipeDB::NamesOnly;
 	if ( !authorsAllEdit->text().isEmpty() || !authorsWithoutEdit->text().isEmpty() )
 		load_items |= RecipeDB::Authors;
 	if ( !ingredientsAllEdit->text().isEmpty() || !ingredientsWithoutEdit->text().isEmpty() )
@@ -456,6 +466,11 @@ void AdvancedSearchDialog::search()
 	if ( !categoriesAllEdit->text().isEmpty() || !categoriesNotEdit->text().isEmpty() )
 		load_items |= RecipeDB::Categories;
 
+	#ifndef NDEBUG
+	QTime dbg_timer;
+	#endif
+
+	START_TIMER("Doing database SQL search");
 	RecipeList allRecipes;
 	database->search( &allRecipes, load_items,
 		split(titleEdit->text(),true), requireAllTitle->isChecked(), //title
@@ -468,12 +483,13 @@ void AdvancedSearchDialog::search()
 		enableServingsCheckBox->isChecked()?servingsSpinBox->value():-1, //servings
 		servingsComboBox->currentItem() //servings_param
 	);
+	END_TIMER();
 
 	/*
 	 * Ideally, would be done by the above SQL query, but I have no idea how to accomplish this.
 	 */
 
-	//narrow down by authors
+	START_TIMER("Further narrowing the search (no SQL)");
 	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
@@ -532,6 +548,7 @@ void AdvancedSearchDialog::search()
 			}
 		}
 	}
+	END_TIMER();
 
 
 	//now display the recipes left
