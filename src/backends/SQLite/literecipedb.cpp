@@ -137,8 +137,10 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
-
-			command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
+			if ( !(items & RecipeDB::NamesOnly) )
+				command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
+			else
+				command = QString( "SELECT il.ingredient_id,i.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
 		
 			recipeToLoad = database->executeQuery( command );
 			if ( recipeToLoad.getStatus() != QSQLiteResult::Failure ) {
@@ -147,35 +149,38 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					Ingredient ing;
 					ing.ingredientID = row.data( 0 ).toInt();
 					ing.name = unescapeAndDecode( row.data( 1 ) );
-					ing.amount = row.data( 2 ).toDouble();
-					ing.unitID = row.data( 3 ).toInt();
-					ing.units.name = unescapeAndDecode( row.data( 4 ) );
-					ing.units.plural = unescapeAndDecode( row.data( 5 ) );
-		
-					//if we don't have both name and plural, use what we have as both
-					if ( ing.units.name.isEmpty() )
-						ing.units.name = ing.units.plural;
-					else if ( ing.units.plural.isEmpty() )
-						ing.units.plural = ing.units.name;
-		
-					ing.prepMethodID = row.data( 6 ).toInt();
-					ing.groupID = row.data( 7 ).toInt();
-		
-					if ( ing.prepMethodID != -1 ) {
-						QSQLiteResult prepMethodToLoad = database->executeQuery( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ) );
-						if ( prepMethodToLoad.getStatus() != QSQLiteResult::Failure ) {
-							QSQLiteResultRow prep_row = prepMethodToLoad.first();
-							if ( !prepMethodToLoad.atEnd() )
-								ing.prepMethod = unescapeAndDecode( prep_row.data( 0 ) );
+
+					if ( !(items & RecipeDB::NamesOnly) ) {
+						ing.amount = row.data( 2 ).toDouble();
+						ing.unitID = row.data( 3 ).toInt();
+						ing.units.name = unescapeAndDecode( row.data( 4 ) );
+						ing.units.plural = unescapeAndDecode( row.data( 5 ) );
+			
+						//if we don't have both name and plural, use what we have as both
+						if ( ing.units.name.isEmpty() )
+							ing.units.name = ing.units.plural;
+						else if ( ing.units.plural.isEmpty() )
+							ing.units.plural = ing.units.name;
+			
+						ing.prepMethodID = row.data( 6 ).toInt();
+						ing.groupID = row.data( 7 ).toInt();
+			
+						if ( ing.prepMethodID != -1 ) {
+							QSQLiteResult prepMethodToLoad = database->executeQuery( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ) );
+							if ( prepMethodToLoad.getStatus() != QSQLiteResult::Failure ) {
+								QSQLiteResultRow prep_row = prepMethodToLoad.first();
+								if ( !prepMethodToLoad.atEnd() )
+									ing.prepMethod = unescapeAndDecode( prep_row.data( 0 ) );
+							}
 						}
-					}
-		
-					if ( ing.groupID != -1 ) {
-						QSQLiteResult toLoad = database->executeQuery( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ) );
-						if ( toLoad.getStatus() != QSQLiteResult::Failure ) {
-							QSQLiteResultRow row = toLoad.first();
-							if ( !toLoad.atEnd() )
-								ing.group = unescapeAndDecode( row.data( 0 ) );
+			
+						if ( ing.groupID != -1 ) {
+							QSQLiteResult toLoad = database->executeQuery( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ) );
+							if ( toLoad.getStatus() != QSQLiteResult::Failure ) {
+								QSQLiteResultRow row = toLoad.first();
+								if ( !toLoad.atEnd() )
+									ing.group = unescapeAndDecode( row.data( 0 ) );
+							}
 						}
 					}
 		

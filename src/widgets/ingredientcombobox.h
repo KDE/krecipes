@@ -17,6 +17,8 @@
 
 #include "datablocks/element.h"
 
+class QTimer;
+
 class RecipeDB;
 class ElementList;
 
@@ -31,15 +33,23 @@ public:
 	int id( int row );
 	int id( const QString &ing );
 
+	void startLoad();
+	void endLoad();
+
 private slots:
 	void createIngredient( const Element &element );
 	void removeIngredient( int id );
 
 	int findInsertionPoint( const QString &name );
+	void loadMore();
 
 private:
 	RecipeDB *database;
 	QMap<int, int> ingredientComboRows; // Contains the category id for every given row in the category combobox
+
+	int loading_at;
+	int ing_count;
+	QTimer *load_timer;
 };
 
 #endif //INGREDIENTCOMBOBOX_H

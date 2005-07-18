@@ -712,6 +712,10 @@ void RecipeInputDialog::reload( void )
 	servingsNumInput->setValue( 1 );
 	amountEdit->clear();
 	ingredientList->clear();
+	ingredientBox->lineEdit()->setText("");
+	prepMethodBox->lineEdit()->setText("");
+	headerBox->lineEdit()->setText("");
+	unitBox->lineEdit()->setText("");
 
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
@@ -1378,15 +1382,38 @@ void RecipeInputDialog::newRecipe( void )
 	titleEdit->selectAll();
 }
 
+#ifndef NDEBUG
+  #define START_TIMER(MSG) \
+   dbg_timer.start(); kdDebug()<<MSG<<endl;
+  #define END_TIMER() \
+   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
+#else
+  #define START_TIMER(MSG)
+  #define END_TIMER()
+#endif
+
 void RecipeInputDialog::reloadCombos( void )  //Reloads lists of units and preparation methods
 {
-	//these only needed to be reloaded once
-	if ( ingredientBox->count() == 0 )
+	#ifndef NDEBUG
+	QTime dbg_timer;
+	#endif
+
+	//these only needed to be loaded once
+	if ( ingredientBox->count() == 0 ) {
+		START_TIMER("Loading ingredient input auto-completion");
 		ingredientBox->reload();
-	if ( headerBox->count() == 0 )
+		END_TIMER();
+	}
+	if ( headerBox->count() == 0 ) {
+		START_TIMER("Loading ingredient header input auto-completion");
 		headerBox->reload();
-	if ( prepMethodBox->count() == 0 )
+		END_TIMER();
+	}
+	if ( prepMethodBox->count() == 0 ) {
+		START_TIMER("Loading prep method input auto-completion");
 		prepMethodBox->reload();
+		END_TIMER();
+	}
 
 	loadUnitListCombo();
 }

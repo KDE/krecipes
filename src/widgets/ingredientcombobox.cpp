@@ -11,15 +11,18 @@
 #include "ingredientcombobox.h"
 
 #include <qlistbox.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
+#include <kapplication.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
 
 IngredientComboBox::IngredientComboBox( bool b, QWidget *parent, RecipeDB *db ) : KComboBox( b, parent ),
-		database( db )
+		database( db ), loading_at(0), load_timer(new QTimer(this))
 {
+	connect( load_timer, SIGNAL(timeout()), SLOT(loadMore()) );
 }
 
 void IngredientComboBox::reload()
@@ -46,6 +49,43 @@ void IngredientComboBox::reload()
 	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
 }
 
+void IngredientComboBox::loadMore()
+{
+	if ( loading_at >= ing_count-1 ) {
+		endLoad();
+		return;
+	}
+
+	ElementList ingredientList;
+	database->loadIngredients( &ingredientList, 20000, loading_at );
+
+	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++loading_at ) {
+		insertItem((*it).name);
+		completionObject()->addItem((*it).name);
+		ingredientComboRows.insert( loading_at, (*it).id );
+	}
+}
+
+void IngredientComboBox::startLoad()
+{
+	//don't receive ingredient created/removed events from the database
+	database->disconnect( this );
+
+	loading_at = 0;
+	ing_count = database->ingredientCount();
+
+	load_timer->start( 0, false );
+}
+
+void IngredientComboBox::endLoad()
+{
+	load_timer->stop();
+
+	//now we're ready to receive ingredient created/removed events from the database
+	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
+	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
+}
+
 int IngredientComboBox::id( int row )
 {
 	return ingredientComboRows[ row ];
@@ -65,8 +105,12 @@ void IngredientComboBox::createIngredient( const Element &element )
 {
 	int row = findInsertionPoint( element.name );
 
+	QString remember_text = lineEdit()->text();
+
 	insertItem( element.name, row );
 	completionObject()->addItem(element.name);
+
+	lineEdit()->setText( remember_text );
 
 	//now update the map by pushing everything after this item down
 	QMap<int, int> new_map;

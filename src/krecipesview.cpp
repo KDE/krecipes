@@ -53,17 +53,13 @@
 #include "widgets/paneldeco.h"
 
 #ifndef NDEBUG
-#define START_TIMER(MSG) \
- dbg_timer.start(); kdDebug()<<MSG<<endl;
+  #define START_TIMER(MSG) \
+   dbg_timer.start(); kdDebug()<<MSG<<endl;
+  #define END_TIMER() \
+   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
 #else
-#define START_TIMER(MSG)
-#endif
-
-#ifndef NDEBUG
-#define END_TIMER() \
- kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
-#else
-#define END_TIMER()
+  #define START_TIMER(MSG)
+  #define END_TIMER()
 #endif
 
 KrecipesView::KrecipesView( QWidget *parent )

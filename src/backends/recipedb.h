@@ -62,7 +62,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { All = 0xFF, None = 0, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Servings = 64, Title = 128 };
+	enum RecipeItems { None = 0, NamesOnly = 256, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Servings = 64, Title = 128, All = 0xFFFF ^ NamesOnly };
 
 signals:
 	void authorCreated( const Element & );

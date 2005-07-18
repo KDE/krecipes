@@ -65,8 +65,12 @@ void PrepMethodComboBox::createPrepMethod( const Element &element )
 {
 	int row = findInsertionPoint( element.name );
 
+	QString remember_text = lineEdit()->text();
+
 	insertItem( element.name, row );
 	completionObject()->addItem(element.name);
+
+	lineEdit()->setText( remember_text );
 
 	//now update the map by pushing everything after this item down
 	QMap<int, int> new_map;
