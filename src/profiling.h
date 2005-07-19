@@ -6,7 +6,7 @@
 #endif
 
 #ifdef KRECIPES_PROFILING
-  #include <qdatatime.h>
+  #include <qdatetime.h>
   #include <kdebug.h>
   QTime dbg_timer;
 
