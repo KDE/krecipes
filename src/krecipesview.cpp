@@ -52,21 +52,12 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
-#ifndef NDEBUG
-  #define START_TIMER(MSG) \
-   dbg_timer.start(); kdDebug()<<MSG<<endl;
-  #define END_TIMER() \
-   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
-#else
-  #define START_TIMER(MSG)
-  #define END_TIMER()
-#endif
+#include "profiling.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
 		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
 {
 	#ifndef NDEBUG
-	QTime dbg_timer;
 	QTime dbg_total_timer; dbg_total_timer.start();
 	#endif
 

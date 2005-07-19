@@ -44,6 +44,8 @@
 #include "recipeactionshandler.h"
 #include "widgets/recipelistview.h"
 
+#include "profiling.h"
+
 AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 		database( db )
 {
@@ -443,16 +445,6 @@ void AdvancedSearchDialog::buttonSwitched()
 	}
 }
 
-#ifndef NDEBUG
-  #define START_TIMER(MSG) \
-   dbg_timer.start(); kdDebug()<<MSG<<endl;
-  #define END_TIMER() \
-   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
-#else
-  #define START_TIMER(MSG)
-  #define END_TIMER()
-#endif
-
 void AdvancedSearchDialog::search()
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
@@ -465,10 +457,6 @@ void AdvancedSearchDialog::search()
 		load_items |= RecipeDB::Ingredients;
 	if ( !categoriesAllEdit->text().isEmpty() || !categoriesNotEdit->text().isEmpty() )
 		load_items |= RecipeDB::Categories;
-
-	#ifndef NDEBUG
-	QTime dbg_timer;
-	#endif
 
 	START_TIMER("Doing database SQL search");
 	RecipeList allRecipes;

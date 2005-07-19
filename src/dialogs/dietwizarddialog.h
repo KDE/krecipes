@@ -92,10 +92,11 @@ private:
 	bool checkCategories( Recipe &rec, int meal, int dish );
 	bool checkConstraints( Recipe &rec, int meal, int dish );
 	bool checkLimits( IngredientPropertyList &properties, ConstraintList &constraints );
-	void loadConstraints( int meal, int dish, ConstraintList *constraints );
+	void loadConstraints( int meal, int dish, ConstraintList *constraints ) const;
 	void loadEnabledCategories( int meal, int dish, ElementList *categories );
 	void newTab( const QString &name );
-	bool categoryFiltering( int meal, int dish );
+	bool categoryFiltering( int meal, int dish ) const;
+	int getNecessaryFlags() const;
 
 public:
 	//Methods
@@ -172,8 +173,8 @@ public:
 	DishInput( QWidget *parent, RecipeDB *database, const QString &title );
 	~DishInput();
 	// Methods
-	bool isCategoryFilteringEnabled( void );
-	void loadConstraints( ConstraintList *constraints );
+	bool isCategoryFilteringEnabled( void ) const;
+	void loadConstraints( ConstraintList *constraints ) const;
 	void loadEnabledCategories( ElementList* categories );
 	void reload();
 	void setDishTitle( const QString & text );
