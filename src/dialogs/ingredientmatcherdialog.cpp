@@ -29,6 +29,17 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kdebug.h>
+
+#ifndef NDEBUG
+  #define START_TIMER(MSG) \
+   dbg_timer.start(); kdDebug()<<MSG<<endl;
+  #define END_TIMER() \
+   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
+#else
+  #define START_TIMER(MSG)
+  #define END_TIMER()
+#endif
 
 IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
 {
@@ -98,9 +109,15 @@ void IngredientMatcherDialog::findRecipes( void )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
+	#ifndef NDEBUG
+	QTime dbg_timer;
+	#endif
+
+	START_TIMER("Ingredient Matcher: loading database data");
+
 	RecipeList rlist;
 	IngredientList ilist;
-	database->loadRecipes( &rlist, RecipeDB::Ingredients | RecipeDB::Title );
+	database->loadRecipes( &rlist, RecipeDB::Ingredients | RecipeDB::NamesOnly | RecipeDB::Title );
 
 	// First make a list of the ingredients that we have
 	{
@@ -112,6 +129,9 @@ void IngredientMatcherDialog::findRecipes( void )
 		ilist.append( ing );
 	}
 	}
+
+	END_TIMER();
+	START_TIMER("Ingredient Matcher: analyzing data for matching recipes");
 
 	// Clear the list
 	recipeListView->listView() ->clear();
@@ -140,6 +160,7 @@ void IngredientMatcherDialog::findRecipes( void )
 			missingNumbers.append( missing.count() );
 		}
 	}
+	END_TIMER();
 
 	//Check if the user wants to show missing ingredients
 
@@ -150,7 +171,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 
 
-
+	START_TIMER("Ingredient Matcher: searching for and displaying partial matches");
 	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
 	QValueList<IngredientList>::Iterator ilit;
@@ -183,6 +204,7 @@ void IngredientMatcherDialog::findRecipes( void )
 			}
 		}
 	}
+	END_TIMER();
 
 	KApplication::restoreOverrideCursor();
 }
