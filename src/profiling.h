@@ -8,7 +8,7 @@
 #ifdef KRECIPES_PROFILING
   #include <qdatetime.h>
   #include <kdebug.h>
-  QTime dbg_timer;
+  static QTime dbg_timer;
 
   #define START_TIMER(MSG) \
    dbg_timer.start(); kdDebug()<<MSG<<endl;
