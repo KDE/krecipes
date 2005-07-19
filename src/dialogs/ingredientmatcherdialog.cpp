@@ -31,15 +31,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-#ifndef NDEBUG
-  #define START_TIMER(MSG) \
-   dbg_timer.start(); kdDebug()<<MSG<<endl;
-  #define END_TIMER() \
-   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
-#else
-  #define START_TIMER(MSG)
-  #define END_TIMER()
-#endif
+#include "profiling.h"
 
 IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
 {
@@ -108,10 +100,6 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 void IngredientMatcherDialog::findRecipes( void )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
-
-	#ifndef NDEBUG
-	QTime dbg_timer;
-	#endif
 
 	START_TIMER("Ingredient Matcher: loading database data");
 

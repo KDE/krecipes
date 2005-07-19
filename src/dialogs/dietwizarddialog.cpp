@@ -32,6 +32,8 @@
 #include "widgets/propertylistview.h"
 #include "widgets/categorylistview.h"
 
+#include "profiling.h"
+
 DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
 {
 	// Initialize internal variables
@@ -177,13 +179,17 @@ void DietWizardDialog::createDiet( void )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
+	START_TIMER("Creating the diet");
+
 	database->loadUnitRatios( &cachedUnitRatios );
 	database->loadProperties( &cachedIngredientProperties, -1 );
 
 	RecipeList rlist;
 	dietRList->clear();
+
 	// Get the whole list of recipes, detailed
-	database->loadRecipes( &rlist, RecipeDB::Categories | RecipeDB::Ingredients | RecipeDB::Title );
+	int flags = RecipeDB::Title | getNecessaryFlags();
+	database->loadRecipes( &rlist, flags );
 
 	// temporal iterator list so elements can be removed without reloading them again from the DB
 	// this list prevents the same meal from showing up in the same day twice
@@ -244,6 +250,8 @@ void DietWizardDialog::createDiet( void )
 	cachedUnitRatios.clear();
 	cachedIngredientProperties.clear();
 
+	END_TIMER();
+
 	KApplication::restoreOverrideCursor();
 }
 
@@ -255,6 +263,48 @@ void DietWizardDialog::populateIteratorList( RecipeList &rl, QValueList <RecipeL
 	for ( it = rl.begin();it != rl.end(); ++it )
 		il->append( it );
 
+}
+
+int DietWizardDialog::getNecessaryFlags() const
+{
+	bool need_ingredients = false;
+	bool need_categories = false;
+	for ( int meal = 0;meal < mealNumber;meal++ ) {
+		int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
+		for ( int dish = 0;dish < dishNo;dish++ ) {
+			if ( !need_categories ) {
+				if ( categoryFiltering( meal, dish ) ) {
+					need_categories = true;
+				}
+			}
+
+			if ( !need_ingredients ) {
+				ConstraintList constraints;
+				loadConstraints( meal, dish, &constraints );
+				for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
+					if ( ct->enabled ) {
+						need_ingredients = true;
+						break;
+					}
+				}
+			}
+
+			if ( need_ingredients && need_categories )
+				break;
+		}
+
+		if ( need_ingredients && need_categories )
+			break;
+	}
+
+	kdDebug()<<"Do we need to load ingredients: "<<need_ingredients<<endl;
+	kdDebug()<<"Do we need to load categories: "<<need_categories<<endl;
+
+	int flags = 0;
+	if ( need_ingredients ) flags |= RecipeDB::Ingredients;
+	if ( need_categories ) flags |= RecipeDB::Categories;
+
+	return flags;
 }
 
 
@@ -476,7 +526,7 @@ void DishInput::enableCategories( bool enable )
 	categoryFiltering = enable;
 }
 
-bool DishInput::isCategoryFilteringEnabled( void )
+bool DishInput::isCategoryFilteringEnabled( void ) const
 {
 	return categoryFiltering;
 }
@@ -521,7 +571,7 @@ void DishInput::insertConstraintsEditBoxes( QListViewItem* it )
 	constraintsEditBox2->show();
 }
 
-void DishInput::loadConstraints( ConstraintList *constraints )
+void DishInput::loadConstraints( ConstraintList *constraints ) const
 {
 	constraints->clear();
 	Constraint constraint;
@@ -684,22 +734,31 @@ bool DietWizardDialog::checkCategories( Recipe &rec, int meal, int dish )
 
 bool DietWizardDialog::checkConstraints( Recipe &rec, int meal, int dish )
 {
-	// FIXME: Before 0.5: why check constraints if none of the constraints is enabled?
+	// Check if the properties are within the constraints
+	ConstraintList constraints;
+	loadConstraints( meal, dish, &constraints ); //load the constraints
+
+	bool any_enabled = false;
+	for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
+		if ( ct->enabled ) {
+			any_enabled = true;
+			break;
+		}
+	}
+	if ( !any_enabled )
+		return true;
 
 	// Calculate properties of the recipe
 	IngredientPropertyList properties;
 
 	calculateProperties( rec, cachedIngredientProperties, cachedUnitRatios, &properties );
 
-	// Check if the properties are within the constraints
-	ConstraintList constraints;
-	loadConstraints( meal, dish, &constraints ); //load the constraints
 	bool withinLimits = checkLimits( properties, constraints );
 
 	return ( withinLimits );
 }
 
-void DietWizardDialog::loadConstraints( int meal, int dish, ConstraintList *constraints )
+void DietWizardDialog::loadConstraints( int meal, int dish, ConstraintList *constraints ) const
 {
 	MealInput * mealTab = ( MealInput* ) ( mealTabs->page( meal ) ); // Get the meal
 	DishInput* dishInput = mealTab->dishInputList[ dish ]; // Get the dish input
@@ -713,7 +772,7 @@ void DietWizardDialog::loadEnabledCategories( int meal, int dish, ElementList *c
 	dishInput->loadEnabledCategories( categories ); //Load the categories that have been checked in the KListView
 }
 
-bool DietWizardDialog::categoryFiltering( int meal, int dish )
+bool DietWizardDialog::categoryFiltering( int meal, int dish ) const
 {
 	MealInput * mealTab = ( MealInput* ) ( mealTabs->page( meal ) ); // Get the meal
 	DishInput* dishInput = mealTab->dishInputList[ dish ]; // Get the dish input
