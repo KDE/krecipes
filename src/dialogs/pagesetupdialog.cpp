@@ -140,7 +140,7 @@ void PageSetupDialog::accept()
 void PageSetupDialog::reject()
 {
 	if ( setup_display->hasChanges() ) {
-		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
+		switch ( KMessageBox::questionYesNoCancel( this, i18n( "The recipe view layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
 			saveLayout(setup_display);
 			break;
@@ -152,7 +152,7 @@ void PageSetupDialog::reject()
 	}
 
 	if ( print_setup_display->hasChanges() ) {
-		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
+		switch ( KMessageBox::questionYesNoCancel( this, i18n( "The print layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
 			saveLayout(print_setup_display);
 			break;
@@ -178,20 +178,21 @@ QSize PageSetupDialog::sizeHint( void ) const
 
 void PageSetupDialog::updateItemVisibility( QWidget *item, bool visible )
 {
-	shown_items_popup->setItemChecked( widget_popup_map[ item ], visible );
+	shown_items_popup->setItemChecked( widget_popup_map[active_display][ item ], visible );
 }
 
 //TODO: Sort these by alphabetical order
 void PageSetupDialog::initShownItems()
 {
+	shown_items_popup->clear();
 	for ( PropertiesMap::const_iterator it = active_display->properties().begin(); it != active_display->properties().end(); ++it ) {
 		if ( it.data() & SetupDisplay::Visibility ) {
 			int new_id = shown_items_popup->insertItem( QToolTip::textFor( it.key() ->widget ) );
 			shown_items_popup->setItemChecked( new_id, it.key() ->widget->isShown() );
 			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
 
-			popup_widget_map.insert( new_id, it.key() ->widget );
-			widget_popup_map.insert( it.key() ->widget, new_id );
+			popup_widget_map[active_display].insert( new_id, it.key() ->widget );
+			widget_popup_map[active_display].insert( it.key() ->widget, new_id );
 		}
 	}
 }
@@ -199,7 +200,7 @@ void PageSetupDialog::initShownItems()
 void PageSetupDialog::setItemShown( int id )
 {
 	shown_items_popup->setItemChecked( id, !shown_items_popup->isItemChecked( id ) );
-	active_display->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
+	active_display->setItemShown( popup_widget_map[active_display][ id ], shown_items_popup->isItemChecked( id ) );
 }
 
 void PageSetupDialog::loadLayout()
@@ -302,9 +303,7 @@ void PageSetupDialog::setActiveDisplay( QWidget *widget )
 	else
 		active_display = print_setup_display;
 
-	for ( QMap<QWidget*,int>::const_iterator it = widget_popup_map.begin(); it != widget_popup_map.end(); ++it ) {
-		shown_items_popup->setItemChecked( it.data(), it.key()->isShown() );
-	}
+	initShownItems();
 }
 
 bool PageSetupDialog::haveWritePerm( const QString &filename )

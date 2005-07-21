@@ -129,7 +129,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 			QString tagName = el.tagName();
 			if ( tagName == "page-layout-properties" ) {
 				page_layout.loadKreFormat( el );
-				updatePageLayout(page_layout);
+				updatePageLayout(page_layout,false);
 			}
 			else {
 				QMap<QString, KreDisplayItem*>::iterator map_it = widget_map.find( tagName );
@@ -728,7 +728,7 @@ void SetupDisplay::openPageLayoutDia()
 	updatePageLayout( page_layout );
 }
 
-void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout )
+void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout, bool set_change )
 {
 	if ( hruler && vruler ) {
 		page_layout = new_page_layout;
@@ -742,7 +742,8 @@ void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout )
 		drag_area->setGeometry( QRect( QPoint(page_layout.ptLeft,page_layout.ptTop),
 			QSize(page_layout.ptWidth-page_layout.ptRight,page_layout.ptHeight-page_layout.ptBottom) ) );
 
-		changeMade();
+		if ( set_change )
+			changeMade();
 	}
 }
 

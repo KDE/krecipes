@@ -157,7 +157,7 @@ protected slots:
 	void setAlignment( QAction * );
 
 	void openPageLayoutDia();
-	void updatePageLayout( const KoPageLayout &page_layout );
+	void updatePageLayout( const KoPageLayout &page_layout, bool set_change=true );
 
 private:
 	DragArea *drag_area;

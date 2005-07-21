@@ -64,9 +64,9 @@ private:
 
 	QMap<SetupDisplay*, QString> active_filename_map;
 	QMap<SetupDisplay*, bool> have_write_perm_map;
+	QMap<SetupDisplay*, QMap<int, QWidget*> > popup_widget_map;
+	QMap<SetupDisplay*, QMap<QWidget*, int> > widget_popup_map;
 	QMap<int, QString> included_layouts_map;
-	QMap<int, QWidget*> popup_widget_map;
-	QMap<QWidget*, int> widget_popup_map;
 	KPopupMenu *shown_items_popup;
 };
 
