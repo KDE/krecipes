@@ -236,7 +236,8 @@ void SetupDisplay::saveLayout( const QString &filename )
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
-	layout_tag.appendChild( page_layout.saveKreFormat(doc) );
+	if ( hruler ) //a ruler was created if we are using the page layout
+		layout_tag.appendChild( page_layout.saveKreFormat(doc) );
 
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
 		QDomElement base_tag = doc.createElement( it.key() ->widget->name() );
