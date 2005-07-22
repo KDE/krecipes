@@ -1,6 +1,8 @@
 Changes from 0.8 to 0.8.1:
-  -Fix bugs and performance in the basic search
+  -Fix bugs and performance in the basic search, advanced search, ingredient matcher, and diet helper
   -Fix bugs creating or editing items (ingredients, categories, etc.) in certain cases
+  -Added a script to convert SQLite 2 databases to SQLite 3 (Both SQLite 2 and 3 must be installed).
+  -And a few other bugs here and there...
 
 Changes from 0.7 to 0.8:
   -Redesigned advanced search: search on the "and", "or", and "not" conditions of each search term.  Can now search on nearly any item possible.
