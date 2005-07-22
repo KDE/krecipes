@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "propertycalculator.h"
 #include "widgets/propertylistview.h"
