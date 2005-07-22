@@ -2,8 +2,8 @@
 #
 # This script will convert an SQLite 2.x database file to SQLite 3.
 #
-# Calling it without any parameters, it will look for and convert the
-# file 'krecipes.krecdb', typically in ~/.kde/share/apps/krecipes/
+# Calling it without any parameters, it will convert the file specified in the
+# Krecipes configuration
 #
 # If Krecipes can't find the database file, you need to manually give
 # it on the command-line, e.g.:
@@ -13,8 +13,11 @@
 
 file=$1
 if test -z $1; then
-  file="`kde-config --localprefix`share/apps/krecipes/krecipes.krecdb"
+  file=`kreadconfig --file krecipesrc --group Server --key DBFile`
   if test "$?" -ne "0"; then
+    echo "Unable to find database file using 'kreadconfig'"
+    echo "You need to manually specify where the SQLite 2 database file is, e.g.:"
+    echo "  $./convert_sqlite3.sh /path/to/database.file"
     exit 1
   fi
 fi
