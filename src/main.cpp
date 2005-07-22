@@ -1,5 +1,6 @@
+
 /***************************************************************************
-*   Copyright (C) 2003-2004 by                                            *
+*   Copyright (C) 2003-2005 by                                            *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
@@ -15,6 +16,8 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
+#include "convert_sqlite3.h"
+
 static const char *description =
     I18N_NOOP( "The KDE Cookbook" );
 
@@ -22,7 +25,7 @@ static const char *version = "0.8";
 
 static KCmdLineOptions options[] =
     {
-        //{ "+[URL]", I18N_NOOP( "Document to open." ), 0 },
+        { "convert-sqlite3", I18N_NOOP("Convert the current SQLite 2.x database to SQLite 3 and exit") , 0 },
         { 0, 0, 0 }
     };
 
@@ -47,20 +50,16 @@ int main( int argc, char **argv )
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
 		QApplication::flushX();
-		//
-		if ( args->count() == 0 ) {
-			Krecipes * widget = new Krecipes;
-			app.setMainWidget( widget );
-			widget->show();
+
+		if ( args->isSet("convert-sqlite3") ) {
+			ConvertSQLite3();
+			return 0;
 		}
-		else {
-			int i = 0;
-			for ( ; i < args->count(); i++ ) {
-				Krecipes *widget = new Krecipes;
-				app.setMainWidget( widget );
-				widget->show();
-			}
-		}
+
+		Krecipes * widget = new Krecipes;
+		app.setMainWidget( widget );
+		widget->show();
+
 		args->clear();
 	}
 
