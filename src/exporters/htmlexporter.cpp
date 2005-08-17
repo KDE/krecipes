@@ -45,6 +45,33 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 	properties = new IngredientPropertyList;
 
 	offset = 0;
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Page Setup" );
+
+	//let's do everything we can to be sure at least some layout is loaded
+	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
+		layout_filename = locate( "appdata", "layouts/default.klo" );
+	kdDebug() << "Using layout file: " << layout_filename << endl;
+}
+
+HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format ) :
+		BaseExporter( filename, format ), database( db )
+{
+	div_elements.setAutoDelete( true );
+	properties = new IngredientPropertyList;
+
+	offset = 0;
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Page Setup" );
+
+	//let's do everything we can to be sure at least some layout is loaded
+	layout_filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
+	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
+		layout_filename = locate( "appdata", "layouts/default_print.klo" );
+	kdDebug() << "Using layout file: " << layout_filename << endl;
 }
 
 
@@ -77,15 +104,6 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 QString HTMLExporter::createHeader( const RecipeList & )
 {
 	m_error = false;
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-
-	//let's do everything we can to be sure at least some layout is loaded
-	QString layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
-	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/default.klo" );
-	kdDebug() << "Using layout file: " << layout_filename << endl;
 
 	QFile input( layout_filename );
 
@@ -366,13 +384,15 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 			QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
 
-			if ( ( *ing_it ).amount <= 1e-10 )
+			if ( (*ing_it).amount_offset > 0 )
+				amount_str += "-"+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( number_format );
+			else if ( ( *ing_it ).amount <= 1e-10 )
 				amount_str = "";
 
 			QString tmp_format( ingredient_format );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *ing_it ).name ) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape( ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape( ( ( *ing_it ).amount + ( *ing_it ).amount_offset > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethod.isEmpty() ) ?
 			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethod ) );
 

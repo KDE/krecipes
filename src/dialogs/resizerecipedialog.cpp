@@ -197,8 +197,10 @@ void ResizeRecipeDialog::resizeRecipe( double factor )
 
 	m_recipe->persons = rounded_persons;
 
-	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it )
+	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {
 		( *ing_it ).amount = ( *ing_it ).amount * factor;
+		( *ing_it ).amount_offset = ( *ing_it ).amount_offset * factor;
+	}
 }
 
 #include "resizerecipedialog.moc"

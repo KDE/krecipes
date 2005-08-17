@@ -23,16 +23,19 @@ public:
 	Ingredient();
 	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
 	~Ingredient();
+
 	int ingredientID;
 	QString name;
 	double amount;
+	double amount_offset;
 	int unitID;
 	Unit units;
 	QString prepMethod;
 	int prepMethodID;
 	int groupID;
 	QString group;
-	Ingredient & operator=( const Ingredient &i );
+
+	void setAmount( const QString &range, bool *ok = 0 );
 
 	/** Compare two elements by their id */
 	bool operator==( const Ingredient & ) const;

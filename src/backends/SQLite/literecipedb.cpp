@@ -138,7 +138,7 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 			if ( !(items & RecipeDB::NamesOnly) )
-				command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) LEFT JOIN units u  ON (u.id=il.unit_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
 			else
 				command = QString( "SELECT il.ingredient_id,i.name FROM ingredient_list il LEFT JOIN ingredients i ON (i.id=il.ingredient_id) WHERE il.recipe_id=%1 ORDER BY il.order_index;" ).arg( (*it).recipeID );
 		
@@ -152,9 +152,10 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 					if ( !(items & RecipeDB::NamesOnly) ) {
 						ing.amount = row.data( 2 ).toDouble();
-						ing.unitID = row.data( 3 ).toInt();
-						ing.units.name = unescapeAndDecode( row.data( 4 ) );
-						ing.units.plural = unescapeAndDecode( row.data( 5 ) );
+						ing.amount_offset = row.data( 3 ).toDouble();
+						ing.unitID = row.data( 4 ).toInt();
+						ing.units.name = unescapeAndDecode( row.data( 5 ) );
+						ing.units.plural = unescapeAndDecode( row.data( 6 ) );
 			
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -162,8 +163,8 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						else if ( ing.units.plural.isEmpty() )
 							ing.units.plural = ing.units.name;
 			
-						ing.prepMethodID = row.data( 6 ).toInt();
-						ing.groupID = row.data( 7 ).toInt();
+						ing.prepMethodID = row.data( 7 ).toInt();
+						ing.groupID = row.data( 8 ).toInt();
 			
 						if ( ing.prepMethodID != -1 ) {
 							QSQLiteResult prepMethodToLoad = database->executeQuery( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ) );
@@ -232,8 +233,7 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					Element el;
 					el.id = row.data( 0 ).toInt();
 					el.name = unescapeAndDecode( row.data( 1 ) );
-					if ( el.id != -1 )
-						(*it).categoryList.append( el ); // add to list except for default category (-1)
+					(*it).categoryList.append( el );
 					row = recipeToLoad.next();
 				}
 			}
@@ -425,10 +425,11 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 	int order_index = 0;
 	for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		order_index++;
-		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7);" )
+		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8);" )
 		          .arg( recipeID )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
+		          .arg( ( *ing_it ).amount_offset )
 		          .arg( ( *ing_it ).unitID )
 		          .arg( ( *ing_it ).prepMethodID )
 		          .arg( order_index )
@@ -1438,7 +1439,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" ) {
-		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);"
+		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);"
 		<< "CREATE index ridil_index ON ingredient_list(recipe_id);"
 		<< "CREATE index iidil_index ON ingredient_list(ingredient_id);";
 	}
@@ -1802,6 +1803,74 @@ void LiteRecipeDB::portOldDatabases( float version )
 	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
 		database->executeQuery( "UPDATE db_info SET ver='0.7';" );
 	}
+
+	if ( version < 0.81 ) {
+		database->executeQuery( "BEGIN TRANSACTION;" );
+		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER)","amount_offset FLOAT","'0'","ingredient_list",3);
+
+		//addColumn() doesn't preserve indexes
+		database->executeQuery("CREATE index ridil_index ON ingredient_list(recipe_id)");
+		database->executeQuery("CREATE index iidil_index ON ingredient_list(ingredient_id)");
+
+		database->executeQuery( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
+		database->executeQuery( "COMMIT TRANSACTION;" );
+	}
+}
+
+void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
+{
+	QString command;
+
+	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
+	kdDebug()<<"calling: "<<command<<endl;
+	database->executeQuery( command );
+
+	command = "SELECT * FROM "+table_name;
+	kdDebug()<<"calling: "<<command<<endl;
+	QSQLiteResult copyQuery = database->executeQuery( command );
+	if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = copyQuery.first();
+		while ( !copyQuery.atEnd() ) {
+			QStringList dataList;
+			bool ok = true;
+			for ( int i = 0 ;; ++i ) {
+				QString data = row.data(i,&ok);
+				if ( !ok ) break;
+
+				dataList << "'"+escape(data)+"'";
+			}
+			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
+			kdDebug()<<"calling: "<<command<<endl;
+			database->executeQuery( command );
+
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery( "DROP TABLE "+table_name );
+	database->executeQuery( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
+	copyQuery = database->executeQuery( "SELECT * FROM "+table_name+"_copy" );
+	if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = copyQuery.first();
+		while ( !copyQuery.atEnd() ) {
+			QStringList dataList;
+			bool ok = true; 
+			for ( int i = 0 ;; ++i ) {
+				if ( i == col_index )
+					dataList << default_value;
+
+				QString data = row.data(i,&ok);
+				if ( !ok ) break;
+
+				dataList << "'"+escape(data)+"'";
+			}
+			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
+			kdDebug()<<"calling: "<<command<<endl;
+			database->executeQuery( command );
+
+			row = copyQuery.next();
+		}
+	}
+	database->executeQuery( "DROP TABLE "+table_name+"_copy" );
 }
 
 float LiteRecipeDB::databaseVersion( void )

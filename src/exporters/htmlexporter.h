@@ -74,6 +74,7 @@ class HTMLExporter : public BaseExporter
 {
 public:
 	HTMLExporter( RecipeDB *, const QString&, const QString&, int width );
+	HTMLExporter( RecipeDB *, const QString&, const QString& );
 	virtual ~HTMLExporter();
 
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
@@ -115,6 +116,7 @@ private:
 
 	int m_width;
 	QString classesCSS;
+	QString layout_filename;
 
 	bool m_error;
 	QString recipeStyleHTML;

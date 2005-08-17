@@ -247,13 +247,20 @@ bool MixedNumber::operator!=( const MixedNumber &fraction )
 	return ( fraction.toDouble() != toDouble() );
 }
 
-MixedNumber MixedNumber::operator+( const MixedNumber &fraction )
+MixedNumber& MixedNumber::operator+=( const MixedNumber &fraction )
 {
 	m_numerator = ( m_numerator * fraction.m_denominator ) + ( m_denominator * fraction.m_numerator );
 	m_denominator = m_denominator * fraction.m_denominator;
 	m_whole += fraction.m_whole;
 	simplify();
 
+	return *this;
+}
+
+MixedNumber& MixedNumber::operator+=( double d )
+{
+	MixedNumber mn(d);
+	*this += mn;
 	return *this;
 }
 

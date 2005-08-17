@@ -49,6 +49,7 @@ private:
 
 	int loading_at;
 	int ing_count;
+	int load_limit;
 	QTimer *load_timer;
 };
 

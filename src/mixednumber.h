@@ -38,8 +38,9 @@ public:
 
 	~MixedNumber();
 
+	MixedNumber& operator+=( const MixedNumber & );
+	MixedNumber& operator+=( double );
 	bool operator!=( const MixedNumber &fraction );
-	MixedNumber operator+( const MixedNumber &fraction );
 	bool operator>( double d )
 	{
 		return ( toDouble() > d );
@@ -100,5 +101,26 @@ private:
 
 	KLocale *locale;
 };
+
+inline const MixedNumber operator+( const MixedNumber &mn1, const MixedNumber &mn2 )
+{
+	MixedNumber tmp = mn1;
+	tmp += mn2;
+	return tmp;
+}
+
+
+inline const MixedNumber operator+( double d, const MixedNumber &mn )
+{
+	MixedNumber tmp = mn;
+	tmp += d;
+	return tmp;
+}
+
+inline const MixedNumber operator+( const MixedNumber &mn, double d )
+{
+	return operator+(d,mn);
+}
+
 
 #endif //MIXEDNUMBER_H

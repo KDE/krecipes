@@ -177,7 +177,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			if ( !(items & RecipeDB::NamesOnly) )
-				command = QString( "SELECT il.ingredient_id,i.name,il.amount,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
 			else
 				command = QString( "SELECT il.ingredient_id,i.name FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id;" ).arg( (*recipe_it).recipeID );
 
@@ -191,9 +191,10 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 					if ( !(items & RecipeDB::NamesOnly) ) {
 						ing.amount = ingredietQuery.value( 2 ).toDouble();
-						ing.unitID = ingredietQuery.value( 3 ).toInt();
-						ing.units.name = unescapeAndDecode( ingredietQuery.value( 4 ).toString() );
-						ing.units.plural = unescapeAndDecode( ingredietQuery.value( 5 ).toString() );
+						ing.amount_offset = ingredietQuery.value( 3 ).toDouble();
+						ing.unitID = ingredietQuery.value( 4 ).toInt();
+						ing.units.name = unescapeAndDecode( ingredietQuery.value( 5 ).toString() );
+						ing.units.plural = unescapeAndDecode( ingredietQuery.value( 6 ).toString() );
 	
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -201,14 +202,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						else if ( ing.units.plural.isEmpty() )
 							ing.units.plural = ing.units.name;
 			
-						ing.prepMethodID = ingredietQuery.value( 6 ).toInt();
+						ing.prepMethodID = ingredietQuery.value( 7 ).toInt();
 						if ( ing.prepMethodID != -1 ) {
 							QSqlQuery prepMethodToLoad( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ), database );
 							if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
 								ing.prepMethod = unescapeAndDecode( prepMethodToLoad.value( 0 ).toString() );
 						}
 			
-						ing.groupID = ingredietQuery.value( 7 ).toInt();
+						ing.groupID = ingredietQuery.value( 8 ).toInt();
 						if ( ing.groupID != -1 ) {
 							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 							if ( toLoad.isActive() && toLoad.first() )
@@ -242,8 +243,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					Element el;
 					el.id = m_query.value( 0 ).toInt();
 					el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
-					if ( el.id != -1 )
-						(*it).categoryList.append( el ); // add to list except for default category (-1)
+					(*it).categoryList.append( el );
 				}
 			}
 		}
@@ -459,10 +459,11 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	int order_index = 0;
 	for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		order_index++;
-		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7);" )
+		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8);" )
 		          .arg( recipeID )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
+		          .arg( ( *ing_it ).amount_offset )
 		          .arg( ( *ing_it ).unitID )
 		          .arg( ( *ing_it ).prepMethodID )
 		          .arg( order_index )
@@ -1989,7 +1990,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 	QString command = QString( "SELECT title FROM recipes WHERE id=%1;" ).arg( recipeID );
 	QSqlQuery recipeToLoad( command, database );
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
-		return ( recipeToLoad.value( 1 ).toString() );
+		return ( recipeToLoad.value( 0 ).toString() );
 
 	return ( QString::null );
 }

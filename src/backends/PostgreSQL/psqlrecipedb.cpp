@@ -18,6 +18,8 @@
 #include <ktempfile.h>
 #include <klocale.h>
 
+#include <qvariant.h>
+
 //Note: PostgreSQL's database names are always lowercase
 PSqlRecipeDB::PSqlRecipeDB( QString host, QString user, QString pass, QString DBname ) : QSqlRecipeDB( host, user, pass, DBname.lower() )
 {}
@@ -57,7 +59,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 
 	else if ( tableName == "ingredient_list" ) {
-		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);";
+		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);";
 		commands << "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);";
 		commands << "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);";
 	}
@@ -129,6 +131,67 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		//version added
 	}
 
+	if ( version < 0.81 ) {
+		database->transaction();
+
+		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
+
+		QSqlQuery query(database);
+		query.exec( "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);" );
+		query.exec( "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);");
+
+		query.exec( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
+
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
+	}
+}
+
+void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
+{
+	QString command;
+
+	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
+	kdDebug()<<"calling: "<<command<<endl;
+	QSqlQuery query( command, database );
+
+	command = "SELECT * FROM "+table_name+";";
+	query.exec( command );
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			QStringList dataList;
+			for ( int i = 0 ;; ++i ) {
+				QVariant variant = query.value(i);
+				if ( variant.type() == QVariant::Invalid ) break;
+
+				dataList << "'"+variant.toString()+"'";
+			}
+			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
+			kdDebug()<<"calling: "<<command<<endl;
+			QSqlQuery insert_query( command, database );
+		}
+	}
+	query.exec( "DROP TABLE "+table_name+";" );
+	query.exec( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
+	query.exec( "SELECT * FROM "+table_name+"_copy;" );
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			QStringList dataList;
+			for ( int i = 0 ;; ++i ) {
+				if ( i == col_index )
+					dataList << default_value;
+
+				QVariant variant = query.value(i);
+				if ( variant.type() == QVariant::Invalid ) break;
+
+				dataList << "'"+variant.toString()+"'";
+			}
+			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+");";
+			QSqlQuery insert_query( command, database );
+			kdDebug()<<"calling: "<<command<<endl;
+		}
+	}
+	query.exec( "DROP TABLE "+table_name+"_copy;" );
 }
 
 int PSqlRecipeDB::lastInsertID()

@@ -343,9 +343,6 @@ void KrecipesView::translate()
 
 void KrecipesView::print()
 {
-	// do the actual printing, here
-	// p->drawText(etc..)
-
 	viewPanel->print();
 }
 
@@ -697,7 +694,6 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 	if ( db->ok() ) {
 		db->emptyData();
 		db->initializeData();
-		db->importSamples();
 	}
 
 	delete db;

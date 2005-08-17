@@ -57,7 +57,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" )
-		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
+		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER, INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
 
 	else if ( tableName == "unit_list" )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
@@ -244,6 +244,14 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
 		QString command = "UPDATE db_info SET ver='0.7';";
 		QSqlQuery query( command, database );
+	}
+
+	if ( version < 0.81 ) {
+		QString command = "ALTER TABLE `ingredient_list` ADD COLUMN `amount_offset` FLOAT DEFAULT '0' AFTER amount;";
+		QSqlQuery tableToAlter( command, database );
+
+		command = "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';";
+		tableToAlter.exec( command );
 	}
 }
 

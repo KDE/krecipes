@@ -49,6 +49,7 @@
 #include "widgets/prepmethodcombobox.h"
 #include "image.h" //Initializes default photo
 
+#include "profiling.h"
 
 ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabel( parent ),
 		sourcePhoto( _sourcePhoto )
@@ -113,7 +114,7 @@ public:
 		return m_ing;
 	}
 
-	void setAmount( double amount )
+	void setAmount( double amount, double amount_offset )
 	{
 		amount_str = QString::null;
 
@@ -126,8 +127,14 @@ public:
 			else
 				amount_str = beautify( KGlobal::locale() ->formatNumber( amount, 5 ) );
 		}
+		if ( amount_offset > 0 ) {
+			if ( amount < 1e-10 )
+				amount_str += "0";
+			amount_str += "-" + MixedNumber(amount+amount_offset).toString();
+		}
 
 		m_ing.amount = amount;
+		m_ing.amount_offset = amount_offset;
 
 		//FIXME: make sure the right unit is showing after changing this (force a repaint... repaint() doesn't do the job right because it gets caught in a loop)
 	}
@@ -151,11 +158,13 @@ public:
 		switch ( column ) {
 		case 0:
 			break;
-		case 1:
-			setAmount( MixedNumber::fromString( text ).toDouble() );
+		case 1: {
+			Ingredient i; i.setAmount(text);
+			setAmount( i.amount, i.amount_offset );
 			break;
+		}
 		case 2:
-			setUnit( Unit( text, m_ing.amount ) );
+			setUnit( Unit( text, m_ing.amount+m_ing.amount_offset ) );
 			break;
 		case 3:
 			setPrepMethod( text );
@@ -180,7 +189,7 @@ public:
 			return amount_str;
 			break;
 		case 2:
-			return ( m_ing.amount > 1 ) ? m_ing.units.plural : m_ing.units.name;
+			return ( m_ing.amount+m_ing.amount_offset > 1 ) ? m_ing.units.plural : m_ing.units.name;
 			break;
 		case 3:
 			return m_ing.prepMethod;
@@ -195,7 +204,7 @@ private:
 	{
 		m_ing = i;
 
-		setAmount( i.amount );
+		setAmount( i.amount, i.amount_offset );
 	}
 };
 
@@ -449,6 +458,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	QVBox *amountVBox = new QVBox( allInputHBox );
 	amountLabel = new QLabel( i18n( "Amount:" ), amountVBox );
 	amountEdit = new FractionInput( amountVBox );
+	amountEdit->setAllowRange(true);
 	amountEdit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
 	QVBox *unitVBox = new QVBox( allInputHBox );
@@ -1161,7 +1171,7 @@ void RecipeInputDialog::addIngredient( void )
 		createNewIngredientIfNecessary();
 
 		Unit new_unit;
-		int unitID = createNewUnitIfNecessary( unit_text, ( amountEdit->value() > 1 ) ? true : false, ingredientBox->currentText().stripWhiteSpace(), new_unit );
+		int unitID = createNewUnitIfNecessary( unit_text, ( amountEdit->maxValue() > 1 ) ? true : false, ingredientBox->currentText().stripWhiteSpace(), new_unit );
 		if ( unitID == -1 )  // this will happen if the dialog to create a unit was cancelled
 			return ;
 		int prepID = createNewPrepIfNecessary( prepMethodBox->currentText() );
@@ -1172,7 +1182,8 @@ void RecipeInputDialog::addIngredient( void )
 			Ingredient ing;
 
 			ing.name = ingredientBox->currentText();
-			ing.amount = amountEdit->value().toDouble();
+
+			amountEdit->value(ing.amount,ing.amount_offset);
 			ing.units = new_unit;
 			ing.unitID = unitID;
 			ing.ingredientID = ingredientBox->id( ingredientBox->currentItem() );
@@ -1220,24 +1231,30 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 	case 1:  //amount
 		{
 			bool ok;
-			MixedNumber new_mn = MixedNumber::fromString( new_text, &ok );
-			MixedNumber prev_mn( ( *ing ).amount );
+			
+			Ingredient new_ing_amount;
+			new_ing_amount.setAmount(new_text,&ok);
+
 			if ( ok )
 			{
-				( *ing ).amount = new_mn.toDouble();
-				if ( !new_text.isEmpty() )
-					ing_item->setAmount( new_mn.toDouble() );
+				if ( (*ing).amount != new_ing_amount.amount ||
+				     ( *ing ).amount_offset != new_ing_amount.amount_offset ) {
+					( *ing ).amount = new_ing_amount.amount;
+					( *ing ).amount_offset = new_ing_amount.amount_offset;
+					if ( !new_text.isEmpty() )
+						ing_item->setAmount( new_ing_amount.amount, new_ing_amount.amount_offset );
+
+					( *ing ).amount = new_ing_amount.amount;
+					( *ing ).amount_offset = new_ing_amount.amount_offset;
+					emit changed();
+				}
 			}
 			else
 			{
 				if ( !new_text.isEmpty() )
-					ing_item->setAmount( prev_mn.toDouble() );
+ 					ing_item->setAmount( ( *ing ).amount, ( *ing ).amount_offset );
 			}
 
-			if ( new_mn != prev_mn )
-			{
-				emit changed();
-			}
 			break;
 		}
 	case 2:  //unit
@@ -1361,7 +1378,7 @@ void RecipeInputDialog::newRecipe( void )
 	instructionsEdit->setText( i18n( "Write the recipe instructions here" ) );
 	instructionsEdit->clearCompletionItems();
 	titleEdit->setText( i18n( "Write the recipe title here" ) );
-	amountEdit->setValue( 0.0 );
+	amountEdit->setValue( 0.0, 0.0 );
 	ingredientList->clear();
 	authorShow->clear();
 	categoryShow->clear();
@@ -1382,26 +1399,12 @@ void RecipeInputDialog::newRecipe( void )
 	titleEdit->selectAll();
 }
 
-#ifndef NDEBUG
-  #define START_TIMER(MSG) \
-   dbg_timer.start(); kdDebug()<<MSG<<endl;
-  #define END_TIMER() \
-   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
-#else
-  #define START_TIMER(MSG)
-  #define END_TIMER()
-#endif
-
 void RecipeInputDialog::reloadCombos( void )  //Reloads lists of units and preparation methods
 {
-	#ifndef NDEBUG
-	QTime dbg_timer;
-	#endif
-
 	//these only needed to be loaded once
 	if ( ingredientBox->count() == 0 ) {
 		START_TIMER("Loading ingredient input auto-completion");
-		ingredientBox->reload();
+		ingredientBox->startLoad();
 		END_TIMER();
 	}
 	if ( headerBox->count() == 0 ) {

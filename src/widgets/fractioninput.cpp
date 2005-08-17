@@ -10,31 +10,72 @@
 
 #include "fractioninput.h"
 
-FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name )
+#include "datablocks/ingredient.h"
+
+FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ),
+	m_allow_range(false)
 {}
 
 FractionInput::~FractionInput()
 {}
 
-void FractionInput::setValue( double d )
+void FractionInput::setValue( double d, double amount_offset )
 {
 	MixedNumber m( d );
-	setText( m.toString( MixedNumber::MixedNumberFormat ) );
+	QString offset_str = MixedNumber(m+amount_offset).toString(MixedNumber::MixedNumberFormat);
+	setText( m.toString( MixedNumber::MixedNumberFormat ) + "-" + offset_str );
 }
 
-void FractionInput::setValue( const MixedNumber &m )
+void FractionInput::setValue( const MixedNumber &m, double amount_offset )
 {
-	setText( m.toString( MixedNumber::MixedNumberFormat ) );
+	QString offset_str = MixedNumber(m+amount_offset).toString(MixedNumber::MixedNumberFormat);
+	setText( m.toString( MixedNumber::MixedNumberFormat ) + "-" + offset_str );
+}
+
+void FractionInput::value( MixedNumber &amount, double &amount_offset ) const
+{
+	Ingredient i; i.setAmount( text() );
+
+	amount = MixedNumber(i.amount);
+	amount_offset = i.amount_offset;
+}
+
+void FractionInput::value( double &amount, double &amount_offset ) const
+{
+	Ingredient i; i.setAmount( text() );
+
+	amount = i.amount;
+	amount_offset = i.amount_offset;
 }
 
 MixedNumber FractionInput::value() const
 {
-	return MixedNumber::fromString( text() );
+	Ingredient i; i.setAmount( text() );
+
+	return MixedNumber(i.amount);
+}
+
+MixedNumber FractionInput::minValue() const
+{
+	Ingredient i; i.setAmount( text() );
+
+	return MixedNumber(i.amount);
+}
+
+MixedNumber FractionInput::maxValue() const
+{
+	Ingredient i; i.setAmount( text() );
+
+	return MixedNumber(i.amount_offset+i.amount);
 }
 
 bool FractionInput::isInputValid() const
 {
+	if ( !m_allow_range && text().contains("-") )
+		return false;
+
 	bool ok;
-	MixedNumber::fromString( text(), &ok );
+	Ingredient i; i.setAmount( text(), &ok );
+
 	return ok;
 }

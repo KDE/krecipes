@@ -15,6 +15,8 @@
 
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kglobal.h>
+#include <kconfig.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
@@ -57,7 +59,7 @@ void IngredientComboBox::loadMore()
 	}
 
 	ElementList ingredientList;
-	database->loadIngredients( &ingredientList, 20000, loading_at );
+	database->loadIngredients( &ingredientList, load_limit, loading_at );
 
 	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++loading_at ) {
 		insertItem((*it).name);
@@ -71,10 +73,18 @@ void IngredientComboBox::startLoad()
 	//don't receive ingredient created/removed events from the database
 	database->disconnect( this );
 
-	loading_at = 0;
-	ing_count = database->ingredientCount();
+	KConfig * config = KGlobal::config(); config->setGroup( "Performance" );
+	load_limit = config->readNumEntry( "Limit", -1 );
+	if ( load_limit == -1 ) {
+		reload();
+		endLoad();
+	}
+	else {
+		loading_at = 0;
+		ing_count = database->ingredientCount();
 
-	load_timer->start( 0, false );
+		load_timer->start( 0, false );
+	}
 }
 
 void IngredientComboBox::endLoad()

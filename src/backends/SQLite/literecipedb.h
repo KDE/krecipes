@@ -185,6 +185,9 @@ private:
 	void loadElementList( ElementList *elList, QSQLiteResult *query );
 	void loadPropertyElementList( ElementList *elList, QSQLiteResult *query );
 	void portOldDatabases( float version );
+
+	void addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index );
+
 	int sqlite_encode_binary( const unsigned char *in, int n, unsigned char *out );
 	int sqlite_decode_binary( const unsigned char *in, unsigned char *out );
 };

@@ -16,6 +16,11 @@
 
 #include "backends/recipedb.h"
 
+//NOTE: The code as-is uses the lower value if an ingredient range exists
+//	However, the shopping list is calculated using the upper value
+//	because the values are already adjusted prior to being passed
+//	to these functions
+
 void calculateShopping( const ElementList &recipeList, IngredientList *ingredientList, RecipeDB *db )
 {
 

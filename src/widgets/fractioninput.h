@@ -15,7 +15,7 @@
 
 #include "mixednumber.h"
 
-/** A KLineEdit widget extended to allow input of decimals and fractions.
+/** A KLineEdit widget extended to allow input of decimals and fractions or ranges of such.
   * Input is returned as a @ref MixedNumber class.
   * @author Jason Kivlighn
   */
@@ -25,11 +25,21 @@ public:
 	FractionInput( QWidget *parent = 0, const char *name = 0 );
 	~FractionInput();
 
-	void setValue( double );
-	void setValue( const MixedNumber & );
+	void setAllowRange( bool b ){ m_allow_range = b; }
 
+	void setValue( double amount, double amount_offset );
+	void setValue( const MixedNumber &, double amount_offset );
+
+	void value( MixedNumber &amount, double &amount_offset ) const;
+	void value( double &amount, double &amount_offset ) const;
+	MixedNumber minValue() const;
+	MixedNumber maxValue() const;
 	MixedNumber value() const;
+
 	bool isInputValid() const;
+
+private:
+	bool m_allow_range;
 };
 
 #endif //FRACTIONINPUT_H

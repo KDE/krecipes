@@ -36,6 +36,9 @@ int main( int argc, char **argv )
 	about.addAuthor( "Unai Garro", 0, "ugarro@users.sourceforge.net" );
 	about.addAuthor( "Jason Kivlighn", 0, "jkivlighn@gmail.com" );
 	about.addAuthor( "Cyril Bosselut", 0, "bosselut@b1project.com" );
+
+	about.addCredit( "Colleen Beamer", I18N_NOOP("Testing, bug reports, suggestions"), "colleen.beamer@gmail.com" );
+
 	about.setTranslator( I18N_NOOP( "INSERT YOUR NAME HERE" ), I18N_NOOP( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );

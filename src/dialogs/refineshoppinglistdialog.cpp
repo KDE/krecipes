@@ -125,6 +125,10 @@ void RefineShoppingListDialog::accept()
 void RefineShoppingListDialog::loadData()
 {
 	for ( IngredientList::iterator it = ingredientList.begin(); it != ingredientList.end(); ++it ) {
+		//from here on, the shopping list will work with the upper value of the range (if exists)
+		(*it).amount = (*it).amount+(*it).amount_offset;
+		(*it).amount_offset = 0;
+
 		QString amount_str;
 		if ( ( *it ).amount > 0 ) {
 			KConfig * config = kapp->config();
