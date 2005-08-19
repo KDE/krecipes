@@ -118,6 +118,11 @@ void QSqlRecipeDB::connect( bool create )
 	dbOK = true;
 }
 
+void QSqlRecipeDB::restore( const QString &file )
+{
+
+}
+
 void QSqlRecipeDB::initializeData( void )
 {
 	// Populate with data

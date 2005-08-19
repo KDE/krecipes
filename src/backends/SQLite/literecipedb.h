@@ -48,6 +48,8 @@ public:
 
 	void connect( bool create );
 
+	void restore( const QString &file );
+
 	void addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
 	void addUnitToIngredient( int ingredientID, int unitID );
@@ -185,6 +187,7 @@ private:
 	void loadElementList( ElementList *elList, QSQLiteResult *query );
 	void loadPropertyElementList( ElementList *elList, QSQLiteResult *query );
 	void portOldDatabases( float version );
+	QStringList backupCommand() const;
 
 	void addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index );
 

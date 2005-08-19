@@ -24,9 +24,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <kprocio.h>
 
 #include <qfile.h>
 #include <qstringlist.h>
+#include <qtextstream.h>
 
 #include <map>
 
@@ -121,6 +123,68 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	}
 
 	return database;
+}
+
+void RecipeDB::backup( const QString &backup_file )
+{
+	kdDebug()<<"Backing up current database to "<<backup_file<<endl;
+
+	KProcIO *p = new KProcIO;
+	//p->setUseShell(true);
+
+	QFile dumpFile(backup_file);
+	if ( !dumpFile.open( IO_WriteOnly ) ) {
+		kdDebug()<<"Couldn't open "<<backup_file<<endl;
+		return;
+	}
+
+
+	dumpStream = new QTextStream( &dumpFile );
+
+	QStringList command = backupCommand();
+	if ( command.count() == 0 ) {
+		kdDebug()<<"Backup now available for this database backend"<<endl;
+		return;
+	}
+	kdDebug()<<"Running '"<<command.join(" ")<<"' to create backup file"<<endl;
+	*p << command /*<< ">" << backup_file*/;
+
+	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processDumpOutput(KProcIO*)) );
+
+	bool success = p->start( KProcess::Block, false );
+	if ( !success ) {
+		kdDebug()<<"Backup failed: Unable to start KProcess"<<endl;
+		return;
+	}
+
+	p->wait();
+
+	delete p;
+	delete dumpStream;
+}
+
+#define OUTPUT(x) (QApplication::connect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
+#define NOOUTPUT(x) (disconnect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
+
+void RecipeDB::processDumpOutput( KProcIO *p )
+{
+	QString buffer;
+	int ret;
+	do {
+		ret = p->readln(buffer,false);
+		if ( ret > 0 )
+			(*dumpStream) << buffer << endl;
+	}
+	while ( ret > 0 );
+
+	if ( ret == -1 ) {
+		NOOUTPUT( processDumpOutput );
+		p->enableReadSignals(true);
+		OUTPUT( processDumpOutput );
+		return;
+	}
+
+	p->ackRead();
 }
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )

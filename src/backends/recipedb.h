@@ -36,6 +36,8 @@
 */
 
 class KProgressDialog;
+class KProcIO;
+class QTextStream;
 
 class CategoryTree;
 
@@ -57,6 +59,9 @@ public:
 	virtual void connect( bool create = true ) = 0;
 
 	void importSamples();
+
+	void backup( const QString &file );
+	virtual void restore( const QString &file ) = 0;
 
 	// Error handling (passive)
 	bool dbOK;
@@ -299,6 +304,7 @@ public:
 
 protected:
 	virtual void portOldDatabases( float version ) = 0;
+	virtual QStringList backupCommand() const = 0;
 
 	QString buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
 		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
@@ -310,6 +316,12 @@ protected:
 
 	double latestDBVersion() const;
 	QString krecipes_version() const;
+
+private:
+	QTextStream *dumpStream;
+
+private slots:
+	void processDumpOutput(KProcIO*);
 };
 
 

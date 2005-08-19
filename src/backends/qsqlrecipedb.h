@@ -40,6 +40,9 @@ class QSqlRecipeDB : public RecipeDB
 protected:
 	virtual QString qsqlDriver() const = 0;
 	virtual void createDB( void ) = 0;
+
+	virtual void restore( const QString &file );
+
 	virtual void portOldDatabases( float version );
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );

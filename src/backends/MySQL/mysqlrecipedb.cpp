@@ -45,6 +45,15 @@ void MySQLRecipeDB::createDB()
 	database->setDatabaseName( real_db_name );
 }
 
+QStringList MySQLRecipeDB::backupCommand() const
+{
+	
+
+	QStringList command;
+	command<<"mysqldump"<<"-q"<<database->databaseName();
+	return command;
+}
+
 void MySQLRecipeDB::createTable( const QString &tableName )
 {
 

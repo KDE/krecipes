@@ -46,6 +46,7 @@ protected:
 
 private:
 	void portOldDatabases( float version );
+	QStringList backupCommand() const;
 };
 
 

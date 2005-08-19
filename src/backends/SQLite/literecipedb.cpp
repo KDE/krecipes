@@ -89,10 +89,27 @@ void LiteRecipeDB::connect( bool create )
 	dbOK = true;
 }
 
+QStringList LiteRecipeDB::backupCommand() const
+{
+	#if HAVE_SQLITE
+	QString binary = "sqlite";
+	#elif HAVE_SQLITE3
+	QString binary = "sqlite3";
+	#endif
+
+	QStringList command;
+	command<<binary<<dbFile<<".dump";
+	return command;
+}
+
+void LiteRecipeDB::restore( const QString &file )
+{
+	
+}
+
 void LiteRecipeDB::createDB()
 {
-
-	// FIXME : create database file?
+	//The file is created by SQLite automatically
 }
 
 void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )

@@ -47,6 +47,13 @@ void PSqlRecipeDB::createDB()
 	database->setDatabaseName( real_db_name );
 }
 
+QStringList PSqlRecipeDB::backupCommand() const
+{
+	QStringList command;
+	command<<"pg_dump"<<database->databaseName();
+	return command;
+}
+
 void PSqlRecipeDB::createTable( const QString &tableName )
 {
 
