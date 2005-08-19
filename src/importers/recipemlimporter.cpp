@@ -1,7 +1,9 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *   Richard Lärkäng                                                       *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -167,7 +169,8 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 	QDomNodeList ingChilds = ing.childNodes();
 
 	QString name, unit, size, prep_method;
-	double quantity = 1; // default quantity assumed by RecipeML DTD
+	Ingredient quantity;
+	quantity.amount = 1;// default quantity assumed by RecipeML DTD
 
 	for ( unsigned j = 0; j < ingChilds.count(); j++ ) {
 		QDomElement ingChild = ingChilds.item( j ).toElement();
@@ -180,7 +183,7 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 				QDomElement amtChild = amtChilds.item( k ).toElement();
 
 				if ( amtChild.tagName() == "qty" )
-					quantity = MixedNumber::fromString( amtChild.text() ).toDouble();
+					readRecipemlQty( amtChild, quantity );
 				else if ( amtChild.tagName() == "size" )
 					size = amtChild.text().stripWhiteSpace();
 				else if ( amtChild.tagName() == "unit" )
@@ -201,7 +204,9 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 	if ( !size.isEmpty() )
 		unit.prepend( size + " " );
 
-	Ingredient new_ing( name, quantity, Unit( unit, quantity ), -1, -1, prep_method );
+	Ingredient new_ing( name, 0, Unit( unit, quantity.amount+quantity.amount_offset ), -1, -1, prep_method );
+	new_ing.amount = quantity.amount;
+	new_ing.amount_offset = quantity.amount_offset;
 	new_ing.group = header;
 	recipe.ingList.append( new_ing );
 }
@@ -310,5 +315,35 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 		}
 		else
 			kdDebug() << "Unknown tag within <preptime>: " << tagName << endl;
+	}
+}
+
+void RecipeMLImporter::readRecipemlQty( const QDomElement &qty, Ingredient &ing )
+{
+	QDomNodeList qtyChilds = qty.childNodes();
+
+	for ( unsigned i = 0; i < qtyChilds.count(); i++ ) {
+		QDomElement qtyChild = qtyChilds.item( i ).toElement();
+		QString tagName = qtyChild.tagName();
+		if ( tagName == "range" ) {
+			QDomNodeList rangeChilds = qtyChild.childNodes();
+			double q1 = 1, q2 = 0; // default quantity assumed by RecipeML DTD
+			for ( unsigned j = 0; j < rangeChilds.count(); j++ ) {
+				QDomElement rangeChild = rangeChilds.item( j ).toElement();
+				QString subTagName = rangeChild.tagName();
+				if ( subTagName == "q1" )
+					q1 = MixedNumber::fromString( rangeChild.text() ).toDouble();
+				else if ( subTagName == "q2" )
+					q2 = MixedNumber::fromString( rangeChild.text() ).toDouble();
+				else
+					kdDebug() << "Unknown tag within <range>: " << subTagName << endl;
+			}
+			ing.amount = q1;
+			ing.amount_offset = q2 - q1;
+		}
+		else if ( tagName.isEmpty() )
+			ing.amount = MixedNumber::fromString( qty.text() ).toDouble();
+		else
+			kdDebug() << "Unknown tag within <qty>: " << tagName << endl;
 	}
 }

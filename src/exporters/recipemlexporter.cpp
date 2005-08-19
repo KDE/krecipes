@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -116,7 +116,20 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 
 				QDomElement qty_tag = doc.createElement( "qty" );
 				amt_tag.appendChild( qty_tag );
-				qty_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount ) ) );
+				if ( (*ing_it).amount_offset < 1e-10 )
+					qty_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount ) ) );
+				else {
+					QDomElement range_tag = doc.createElement( "range" );
+					qty_tag.appendChild(range_tag);
+					
+					QDomElement q1_tag = doc.createElement( "q1" );
+					q1_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount ) ) );
+					QDomElement q2_tag = doc.createElement( "q2" );
+					q2_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount + (*ing_it).amount_offset ) ) );
+
+					range_tag.appendChild(q1_tag);
+					range_tag.appendChild(q2_tag);
+				}
 
 				QDomElement unit_tag = doc.createElement( "unit" );
 				amt_tag.appendChild( unit_tag );

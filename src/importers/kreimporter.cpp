@@ -1,6 +1,8 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -201,7 +203,7 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 					kdDebug() << "Found ingredient: " << new_ing.name << endl;
 				}
 				else if ( ing.tagName() == "amount" ) {
-					new_ing.amount = ( QString( ing.text() ).stripWhiteSpace() ).toDouble();
+					readAmount(ing,new_ing);
 				}
 				else if ( ing.tagName() == "unit" ) {
 					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount );
@@ -219,4 +221,22 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 	}
 }
 
+void KreImporter::readAmount( const QDomElement& amount, Ingredient &ing )
+{
+	QDomNodeList children = amount.childNodes();
 
+	double min = 0,max = 0;
+	for ( unsigned i = 0; i < children.count(); i++ ) {
+		QDomElement child = children.item( i ).toElement();
+		if ( child.tagName() == "min" ) {
+			min = ( QString( child.text() ).stripWhiteSpace() ).toDouble();
+		}
+		else if ( child.tagName() == "max" )
+			max = ( QString( child.text() ).stripWhiteSpace() ).toDouble();
+		else if ( child.tagName().isEmpty() )
+			min = ( QString( amount.text() ).stripWhiteSpace() ).toDouble();
+	}
+
+	ing.amount = min;
+	ing.amount_offset = max-min;
+}

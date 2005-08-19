@@ -1,6 +1,8 @@
 /***************************************************************************
-*   Copyright (C) 2003-2005 by                                            *
+*   Copyright (C) 2003 by                                                 *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *

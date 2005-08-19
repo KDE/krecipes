@@ -1,6 +1,8 @@
 /***************************************************************************
-*   Copyright (C) 2003-2005 by                                            *
+*   Copyright (C) 2003 by                                                 *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -116,9 +118,15 @@ QString KreExporter::createContent( const RecipeList& recipes )
 				xml += "<ingredient>\n";
 				xml += "<name>" + QStyleSheet::escape( ( *ing_it ).name.utf8() ) + "</name>\n";
 				xml += "<amount>";
-				xml += QString::number( ( *ing_it ).amount );
+				if ( ( *ing_it ).amount_offset < 1e-10 ) {
+					xml += QString::number( ( *ing_it ).amount );
+				}
+				else {
+					xml += "<min>"+QString::number( ( *ing_it ).amount )+"</min>";
+					xml += "<max>"+QString::number( ( *ing_it ).amount + ( *ing_it ).amount_offset )+"</max>";
+				}
 				xml += "</amount>\n";
-				QString unit_str = ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name;
+				QString unit_str = ( ( *ing_it ).amount+( *ing_it ).amount_offset > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name;
 				xml += "<unit>" + QStyleSheet::escape( unit_str.utf8() ) + "</unit>\n";
 				if ( !( *ing_it ).prepMethod.isEmpty() )
 					xml += "<prep>" + QStyleSheet::escape( ( *ing_it ).prepMethod.utf8() ) + "</prep>\n";

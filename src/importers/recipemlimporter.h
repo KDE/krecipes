@@ -1,7 +1,9 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *   Richard Lärkäng                                                       *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
+*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -42,6 +44,7 @@ private:
 	void readRecipemlSrcItems( const QDomElement& sources );
 	void readRecipemlRecipe( const QDomElement& recipe );
 	void readRecipemlPreptime( const QDomElement &preptime );
+	void readRecipemlQty( const QDomElement &qty, Ingredient &ing );
 
 	Recipe recipe;
 };
