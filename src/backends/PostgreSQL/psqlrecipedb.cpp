@@ -50,7 +50,7 @@ void PSqlRecipeDB::createDB()
 QStringList PSqlRecipeDB::backupCommand() const
 {
 	QStringList command;
-	command<<"pg_dump"<<database->databaseName();
+	command<<"pg_dump"<<"-d"<<database->databaseName();
 	return command;
 }
 
