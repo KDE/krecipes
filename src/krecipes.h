@@ -89,6 +89,8 @@ private slots:
 	void import();
 	void kreDBImport();
 	void pageSetupSlot();
+	void backupSlot();
+	void restoreSlot();
 
 	/**  This function is called whenever a panel is shown or hidden and then sets
 	  *  actions as enabled as appropriate.

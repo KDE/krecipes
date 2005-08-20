@@ -64,6 +64,7 @@ public:
 	void createNewUnit( const QString &unitName, const QString &unitPlural );
 
 	void emptyData( void );
+	void empty( void );
 
 	int findExistingAuthorByName( const QString& name );
 	int findExistingCategoryByName( const QString& name );
@@ -180,6 +181,9 @@ public:
 	void splitCommands( QString& s, QStringList& sl );
 
 	float databaseVersion( void );
+
+protected:
+	void execSQL( QTextStream &stream );
 
 private:
 	QString dbFile;

@@ -1,6 +1,8 @@
 /***************************************************************************
-*   Copyright (C) 2003-2004 by                                            *
+*   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -25,6 +27,7 @@
 #include "dialogs/ingredientmatcherdialog.h"
 #include "dialogs/dbimportdialog.h"
 #include "dialogs/pagesetupdialog.h"
+#include "dialogs/restoredialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -183,6 +186,14 @@ void Krecipes::setupActions()
 	( void ) new KAction( i18n( "Page Setup..." ), 0,
 	                      this, SLOT( pageSetupSlot() ),
 	                      actionCollection(), "page_setup_action" );
+
+	( void ) new KAction( i18n( "Backup..." ), 0,
+	                      this, SLOT( backupSlot() ),
+	                      actionCollection(), "backup_action" );
+
+	( void ) new KAction( i18n( "Restore..." ), 0,
+	                      this, SLOT( restoreSlot() ),
+	                      actionCollection(), "restore_action" );
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
@@ -370,6 +381,26 @@ void Krecipes::pageSetupSlot()
 	page_setup->exec();
 
 	delete page_setup;
+}
+
+void Krecipes::backupSlot()
+{
+	QString fileName = KFileDialog::getSaveFileName(QString::null,QString::null,this,i18n("Save Backup As..."));
+	m_view->database->backup( fileName );
+}
+
+void Krecipes::restoreSlot()
+{
+	RestoreDialog restore(this);
+	if ( restore.exec() == QDialog::Accepted ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase all data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
+		case KMessageBox::Continue:
+			m_view->database->restore( restore.backupFile() );
+			m_view->reload();
+		case KMessageBox::Cancel:
+		default: break;
+		}
+	}
 }
 
 //return true to close app

@@ -1,8 +1,9 @@
 /***************************************************************************
 *   Copyright (C) 2003                                                    *
-*                                                                         *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+
+*   Copyright (C) 2003-2005                                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -61,7 +62,7 @@ public:
 	void importSamples();
 
 	void backup( const QString &file );
-	virtual void restore( const QString &file ) = 0;
+	void restore( const QString &file );
 
 	// Error handling (passive)
 	bool dbOK;
@@ -126,6 +127,7 @@ public:
 	virtual void createNewUnit( const QString &unitName, const QString &unitPlural ) = 0;
 
 	virtual void emptyData( void ) = 0;
+	virtual void empty( void ) = 0;
 
 	virtual int findExistingAuthorByName( const QString& name ) = 0;
 	virtual int findExistingCategoryByName( const QString& name ) = 0;
@@ -153,7 +155,7 @@ public:
 	virtual bool ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID ) = 0;
 	virtual bool ingredientContainsUnit( int ingredientID, int unitID ) = 0;
 
-	virtual void initializeData( void ) = 0;
+	void initializeData( void );
 
 	virtual int lastInsertID() = 0;
 
@@ -305,6 +307,7 @@ public:
 protected:
 	virtual void portOldDatabases( float version ) = 0;
 	virtual QStringList backupCommand() const = 0;
+	virtual void execSQL( QTextStream &stream ) = 0;
 
 	QString buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
 		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,

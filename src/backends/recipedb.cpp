@@ -1,7 +1,9 @@
 /***************************************************************************
-*   Copyright (C) 2003-2005 by                                            *
+*   Copyright (C) 2003                                                    *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+
+*   Copyright (C) 2003-2005                                               *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -25,6 +27,8 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kprocio.h>
+#include <kfilterdev.h>
+#include <kmessagebox.h>
 
 #include <qfile.h>
 #include <qstringlist.h>
@@ -132,20 +136,23 @@ void RecipeDB::backup( const QString &backup_file )
 	KProcIO *p = new KProcIO;
 	//p->setUseShell(true);
 
-	QFile dumpFile(backup_file);
-	if ( !dumpFile.open( IO_WriteOnly ) ) {
+	QIODevice *dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
+	if ( !dumpFile->open( IO_WriteOnly ) ) {
 		kdDebug()<<"Couldn't open "<<backup_file<<endl;
 		return;
 	}
 
-
-	dumpStream = new QTextStream( &dumpFile );
+	dumpStream = new QTextStream( dumpFile );
 
 	QStringList command = backupCommand();
 	if ( command.count() == 0 ) {
-		kdDebug()<<"Backup now available for this database backend"<<endl;
+		kdDebug()<<"Backup not available for this database backend"<<endl;
 		return;
 	}
+
+	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
+	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
+
 	kdDebug()<<"Running '"<<command.join(" ")<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
 
@@ -161,6 +168,7 @@ void RecipeDB::backup( const QString &backup_file )
 
 	delete p;
 	delete dumpStream;
+	delete dumpFile;
 }
 
 #define OUTPUT(x) (QApplication::connect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
@@ -185,6 +193,52 @@ void RecipeDB::processDumpOutput( KProcIO *p )
 	}
 
 	p->ackRead();
+}
+
+void RecipeDB::initializeData( void )
+{
+	// Populate with data
+
+	// Read the commands form the data file
+	QFile datafile( KGlobal::dirs() ->findResource( "appdata", "data/data.sql" ) );
+	if ( datafile.open( IO_ReadOnly ) ) {
+		QTextStream stream( &datafile );
+		execSQL(stream);
+		datafile.close();
+	}
+}
+
+void RecipeDB::restore( const QString &file )
+{
+	QIODevice *dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
+	if ( dumpFile->open( IO_ReadOnly ) ) {
+
+		QTextStream stream( dumpFile );
+		stream.readLine(); //ignore the first line which is a comment giving the version of Krecipes
+
+		QString dbVersion = stream.readLine().stripWhiteSpace();
+		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 1 );
+		if ( dbVersion.toDouble() <= latestDBVersion() ) {
+			//We have to first wipe the database structure.  Note that if we load a dump
+			//with from a previous version of Krecipes, the difference in structure
+			// wouldn't allow the data to be inserted.  This remains forward-compatibity
+			//by loading the old schema and then porting it to the current version.
+			empty(); //the user had better be warned!
+	
+			execSQL(stream);
+			dumpFile->close();
+	
+			portOldDatabases(latestDBVersion());
+		}
+		else {
+			KMessageBox::sorry( 0, i18n( "This backup was created with a newer version of Krecipes and cannot be restored." ) );
+		}
+	}
+	else {
+
+	}
+
+	delete dumpFile;
 }
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )

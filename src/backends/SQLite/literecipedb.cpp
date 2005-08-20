@@ -102,14 +102,24 @@ QStringList LiteRecipeDB::backupCommand() const
 	return command;
 }
 
-void LiteRecipeDB::restore( const QString &file )
-{
-	
-}
-
 void LiteRecipeDB::createDB()
 {
 	//The file is created by SQLite automatically
+}
+
+void LiteRecipeDB::execSQL( QTextStream &stream )
+{
+	QString line, command;
+	while ( (line = stream.readLine().stripWhiteSpace()) != QString::null ) {
+		command += " "+line;
+		if ( command.startsWith(" --") ) {
+			command = QString::null;
+		}
+		else if ( command.endsWith(";") ) {
+			database->executeQuery( command );
+			command = QString::null;
+		}
+	}
 }
 
 void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )
@@ -775,31 +785,6 @@ void LiteRecipeDB::removeIngredient( int ingredientID )
 	database->executeQuery( command );
 
 	emit ingredientRemoved( ingredientID );
-}
-
-void LiteRecipeDB::initializeData( void )
-{
-
-	// Populate with data
-
-	QString commands;
-	// Read the commands form the data file
-	QFile datafile( locate( "appdata", "data/data.sql" ) );
-	if ( datafile.open( IO_ReadOnly ) ) {
-		QTextStream stream( &datafile );
-		commands = stream.read();
-		datafile.close();
-	}
-
-
-	// Split commands
-	QStringList commandList;
-	splitCommands( commands, commandList );
-
-	// Execute commands
-	for ( QStringList::Iterator it = commandList.begin(); it != commandList.end(); ++it ) {
-		database->executeQuery( ( *it ) + QString( ";" ) ); //Split removes the semicolons
-	}
 }
 
 void LiteRecipeDB::addProperty( const QString &name, const QString &units )
@@ -2536,6 +2521,17 @@ void LiteRecipeDB::emptyData( void )
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
+		database->executeQuery( command );
+	}
+}
+
+void LiteRecipeDB::empty( void )
+{
+	QStringList tables;
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups";
+
+	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
+		QString command = QString( "DROP TABLE %1;" ).arg( *it );
 		database->executeQuery( command );
 	}
 }

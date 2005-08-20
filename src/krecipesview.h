@@ -94,6 +94,7 @@ public:
 	virtual ~KrecipesView();
 
 	virtual DCOPRef currentDatabase() const;
+	RecipeDB *database;
 
 	/**
 	 * Print this view to any medium -- paper or not
@@ -181,7 +182,6 @@ private:
 	QWidget *recipeWidget;
 
 	// Internal variables
-	RecipeDB *database;
 	QString dbType;
 
 	QMap<QWidget*, KrePanel> panelMap;
