@@ -16,6 +16,8 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 MySQLRecipeDB::MySQLRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &DBname ) : QSqlRecipeDB( host, user, pass, DBname )
 {}
@@ -47,10 +49,17 @@ void MySQLRecipeDB::createDB()
 
 QStringList MySQLRecipeDB::backupCommand() const
 {
-	
+	KConfig *config = KGlobal::config();
+	config->setGroup("Server");
 
 	QStringList command;
-	command<<"mysqldump"<<"-q"<<database->databaseName();
+	command<<"mysqldump"<<"-q";
+
+	QString pass = config->readEntry("Password", QString::null);
+	if ( !pass.isEmpty() )
+		command<<"-p"+pass;
+
+	command<<database->databaseName();
 	return command;
 }
 

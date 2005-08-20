@@ -160,11 +160,15 @@ void RecipeDB::backup( const QString &backup_file )
 
 	bool success = p->start( KProcess::Block, false );
 	if ( !success ) {
-		kdDebug()<<"Backup failed: Unable to start KProcess"<<endl;
+		KMessageBox::error(0,QString("Unable to find the program '%1'.  Either it is not installed on your system or it is not in $PATH."));
 		return;
 	}
 
 	p->wait();
+
+	if ( p->exitStatus() != 0 ) {
+		KMessageBox::error(0,QString("Backup failed (Exit code: %1).\nNote: A more informative error will (hopefully) be available soon!").arg(p->exitStatus()));
+	}
 
 	delete p;
 	delete dumpStream;
