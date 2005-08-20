@@ -270,4 +270,18 @@ void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &u
 	permissionsToSet.exec( command );
 }
 
+void PSqlRecipeDB::empty( void )
+{
+	QSqlRecipeDB::empty();
+
+	QStringList tables;
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq";
+
+	QSqlQuery tablesToEmpty( QString::null, database );
+	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
+		QString command = QString( "DELETE FROM %1;" ).arg( *it );
+		tablesToEmpty.exec( command );
+	}
+}
+
 #include "psqlrecipedb.moc"

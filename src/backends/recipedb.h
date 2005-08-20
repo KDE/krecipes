@@ -57,7 +57,7 @@ public:
 	RecipeDB();
 	virtual ~RecipeDB();
 
-	virtual void connect( bool create = true ) = 0;
+	virtual void connect( bool create_db = true, bool create_tables = true ) = 0;
 
 	void importSamples();
 

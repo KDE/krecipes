@@ -76,7 +76,7 @@ public:
 	QSqlRecipeDB( const QString &host, const QString &user = QString::null, const QString &pass = QString::null, const QString &DBName = DEFAULT_DB_NAME );
 	~QSqlRecipeDB( void );
 
-	void connect( bool create );
+	void connect( bool create_db, bool create_tables );
 
 	void addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );

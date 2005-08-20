@@ -46,7 +46,7 @@ public:
 	LiteRecipeDB( const QString &dbFile = QString::null );
 	~LiteRecipeDB( void );
 
-	void connect( bool create );
+	void connect( bool create_db, bool create_tables );
 
 	void restore( const QString &file );
 

@@ -48,7 +48,7 @@ QSqlRecipeDB::~QSqlRecipeDB()
 	--m_refCount;
 }
 
-void QSqlRecipeDB::connect( bool create )
+void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 {
 	kdDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) << endl;
 	kdDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname << endl;
@@ -81,7 +81,7 @@ void QSqlRecipeDB::connect( bool create )
 
 	if ( !database->open() ) {
 		//Try to create the database
-		if ( create ) {
+		if ( create_db ) {
 			kdDebug() << i18n( "Failing to open database. Trying to create it" ) << endl;
 			createDB();
 		}
@@ -107,7 +107,10 @@ void QSqlRecipeDB::connect( bool create )
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
-	if ( !checkIntegrity() ) {
+	// Because checkIntegrity() will create tables if they don't exist,
+	// we don't want to run this when creating the database.  We would be
+	// logged in as another user (usually the superuser and not have ownership of the tables
+	if ( create_tables && !checkIntegrity() ) {
 		kdError() << i18n( "Failed to fix database structure. Exiting.\n" ).latin1();
 		kapp->exit( 1 );
 	}
@@ -2001,12 +2004,18 @@ void QSqlRecipeDB::emptyData( void )
 
 void QSqlRecipeDB::empty( void )
 {
-	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups";
 	QSqlQuery tablesToEmpty( QString::null, database );
-	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
+
+	QStringList list = database->tables();
+	QStringList::const_iterator it = list.begin();
+	while( it != list.end() ) {
 		QString command = QString( "DROP TABLE %1;" ).arg( *it );
 		tablesToEmpty.exec( command );
+
+		if ( !tablesToEmpty.isActive() )
+			kdDebug()<<tablesToEmpty.lastError().text()<<endl;
+
+		++it;
 	}
 }
 

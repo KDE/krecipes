@@ -670,7 +670,7 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 
 	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
 	if ( db ) {
-		db->connect();
+		db->connect(true,false);//create the database, but no tables (do that when connected as the user)
 		if ( db->ok() )
 			db->givePermissions( dbName, newUser, newPass, client ); // give permissions to the user
 		else

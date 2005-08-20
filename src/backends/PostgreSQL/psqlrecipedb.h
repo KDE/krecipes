@@ -49,6 +49,8 @@ protected:
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 
+	virtual void empty( void );
+
 private:
 	void portOldDatabases( float version );
 	QStringList backupCommand() const;

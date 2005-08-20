@@ -43,13 +43,13 @@ LiteRecipeDB::~LiteRecipeDB()
 	delete database;
 }
 
-void LiteRecipeDB::connect( bool create )
+void LiteRecipeDB::connect( bool create_db, bool create_tables )
 {
 	kdDebug() << "Connecting to the SQLite database\n";
 
 	database = new QSQLiteDB();
 
-	if ( !create && !QFile::exists( dbFile ) ) {
+	if ( !create_db && !QFile::exists( dbFile ) ) {
 		dbErr = i18n( "Krecipes could not open the SQLite database. You may not have the necessary permissions.\n" );
 		return ;
 	}
@@ -57,14 +57,10 @@ void LiteRecipeDB::connect( bool create )
 	//if the file didn't exist before, then we need to do this to initialize the database
 	if ( !QFile::exists( dbFile ) || !database->open( dbFile ) ) { //check that the file didn't exist before trying to open the db (opening it creates the file)
 		//Try to create the database
-		if ( !create ) {
+		if ( !create_db ) {
 			dbErr = i18n( "Krecipes could not open the SQLite database. You may not have the necessary permissions.\n" );
 			return ;
 		}
-
-		kdDebug() << "Creating the SQLite database!\n";
-		createDB();
-		kdDebug() << "Retrying to open the db after creation\n";
 
 		//Now Reopen the Database and exit if it fails
 		if ( !database->open( dbFile ) ) {
@@ -81,7 +77,7 @@ void LiteRecipeDB::connect( bool create )
 
 	// Check integrity of the database (tables). If not possible, exit
 	kdDebug() << "I'll check the DB integrity now\n";
-	if ( !checkIntegrity() ) {
+	if ( create_tables && !checkIntegrity() ) {
 		kdError() << i18n( "Failed to fix database structure. Exiting.\n" ).latin1();
 		dbErr = i18n( "Krecipes failed to fix the SQLite database structure. You may not have the necessary permissions, or the database structure may be too corrupted.\n" );
 		return ;
