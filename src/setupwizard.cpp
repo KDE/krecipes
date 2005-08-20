@@ -375,9 +375,9 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Explanation text
 	serverSetupText = new QLabel( this );
-	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings." ) );
+	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings.<br><br><b>Warning: Passwords are stored in plain text and could potentially be compromised.  We recommend that you create a username and password combination solely for use by Krecipes.</b>" ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::AlignJustify ) );
+	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::WordBreak ) );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -474,8 +474,8 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem* bottomSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( bottomSpacer, 8, 1 );
 
-	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-	layout->addItem( spacerRight, 1, 6 );
+	//QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
+	//layout->addItem( spacerRight, 7, 4 );
 
 	// Signals & Slots
 	connect( remoteServerCheckBox, SIGNAL( toggled( bool ) ), serverSettingsGBox, SLOT( setEnabled( bool ) ) );
