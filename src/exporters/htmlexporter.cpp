@@ -17,6 +17,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
+#include <qtextcodec.h>
 #include <dom/dom_element.h>
 
 #include <kconfig.h>
@@ -224,10 +225,13 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometries.setAutoDelete( true );
 	QPtrDict<DivElement> geom_contents;
 
+	KLocale *loc = KGlobal::locale();
+	QTextCodec *codec = loc->codecForEncoding();
+
 	for ( QMap<QString, QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it ) {
 		QString key = it.key();
 
-		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, it.data() );
+		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, codec->fromUnicode(it.data()) );
 
 		if ( key == "photo" ) {
 			temp_photo_geometry.setWidth( ( int ) ( double( temp_photo_geometry.width() ) * 100.0 / m_width ) ); // The size of all objects needs to be saved in percentage format
@@ -302,6 +306,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 {
 	KConfig * config = KGlobal::config();
 	QMap<QString, QString> html_map;
+
 
 	//=======================TITLE======================//
 	html_map.insert( "title", recipe.title );
