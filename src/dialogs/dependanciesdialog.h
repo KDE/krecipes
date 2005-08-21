@@ -2,6 +2,8 @@
 *   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -30,6 +32,10 @@ public:
 	//Methods
 	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* propertiesList = 0 );
 	~DependanciesDialog();
+
+public slots:
+	void accept();
+
 private:
 	//Widgets
 

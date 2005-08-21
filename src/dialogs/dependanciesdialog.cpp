@@ -2,6 +2,8 @@
 *   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
+*                                                                         *
+*   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -18,8 +20,11 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList ) : QDialog( parent, 0, true )
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList ) : QDialog( parent, 0, true ),
+	recipeListView(0), propertiesListView(0)
+	
 {
 	int row = 3, col = 1;
 
@@ -139,5 +144,18 @@ void DependanciesDialog::loadList( KListView* listView, const ElementList *list 
 			id = QString::number( idnum );
 		QListViewItem* it = new QListViewItem( listView, id, ( *el_it ).name );
 		listView->insertItem( it );
+	}
+}
+
+void DependanciesDialog::accept()
+{
+	if ( recipeListView ) {
+		switch ( KMessageBox::warningYesNo(this,
+			i18n("<b>You are about to permanantly delete recipes from your database.</b><br><br>Are you sure you wish to proceed?"),
+			QString::null,KStdGuiItem::yes(),KStdGuiItem::no(),"DeleteRecipe") )
+		{
+		case KMessageBox::Yes: QDialog::accept(); break;
+		case KMessageBox::No: QDialog::reject(); break;
+		}
 	}
 }
