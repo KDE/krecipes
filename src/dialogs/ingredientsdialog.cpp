@@ -283,7 +283,7 @@ void IngredientsDialog::removeUnitFromIngredient( void )
 			database->removeUnitFromIngredient( ingredientID, unitID );
 		else
 		{ // must warn!
-			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &dependingRecipes, 0, &dependingPropertiesInfo );
+			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &dependingRecipes, &dependingPropertiesInfo );
 
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeUnitFromIngredient( ingredientID, unitID );
