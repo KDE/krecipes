@@ -150,8 +150,12 @@ void RecipeDB::backup( const QString &backup_file )
 		return;
 	}
 
+	KConfig * config = kapp->config();
+	config->setGroup( "DBType" );
+
 	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
 	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
+	(*dumpStream) << "-- Krecipes database backend: "<<config->readEntry( "Type" )<<endl;
 
 	kdDebug()<<"Running '"<<command.join(" ")<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
@@ -221,25 +225,37 @@ void RecipeDB::restore( const QString &file )
 		stream.readLine(); //ignore the first line which is a comment giving the version of Krecipes
 
 		QString dbVersion = stream.readLine().stripWhiteSpace();
-		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 1 );
-		if ( dbVersion.toDouble() <= latestDBVersion() ) {
-			//We have to first wipe the database structure.  Note that if we load a dump
-			//with from a previous version of Krecipes, the difference in structure
-			// wouldn't allow the data to be inserted.  This remains forward-compatibity
-			//by loading the old schema and then porting it to the current version.
-			empty(); //the user had better be warned!
-	
-			execSQL(stream);
-			dumpFile->close();
-	
-			portOldDatabases(latestDBVersion());
-		}
-		else {
+		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 2 );
+		if ( dbVersion.toDouble() > latestDBVersion() ) {
 			KMessageBox::sorry( 0, i18n( "This backup was created with a newer version of Krecipes and cannot be restored." ) );
+			delete dumpFile;
+			return;
 		}
+
+		KConfig * config = kapp->config();
+		config->setGroup( "DBType" );
+		QString dbType = stream.readLine().stripWhiteSpace();
+		dbType = dbType.right( dbType.length() - dbType.find(":") - 2 );
+		if ( dbType != config->readEntry("Type",QString::null) ) {
+			KMessageBox::sorry( 0, QString(i18n("This backup was created using the %1 backend.  It can only be restored into a database using this backend." )).arg(dbType) );
+			delete dumpFile;
+			return;
+		}
+
+		
+		//We have to first wipe the database structure.  Note that if we load a dump
+		//with from a previous version of Krecipes, the difference in structure
+		// wouldn't allow the data to be inserted.  This remains forward-compatibity
+		//by loading the old schema and then porting it to the current version.
+		empty(); //the user had better be warned!
+
+		execSQL(stream);
+		dumpFile->close();
+
+		portOldDatabases(latestDBVersion());
 	}
 	else {
-
+		kdDebug()<<"Unable to open the selected backup file"<<endl;
 	}
 
 	delete dumpFile;

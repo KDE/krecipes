@@ -24,8 +24,7 @@ libkrecipesdialogs_la_SOURCES= \
 	createcategorydialog.cpp borderdialog.cpp \
 	refineshoppinglistdialog.cpp pagesetupdialog.cpp \
 	dbimportdialog.cpp createunitdialog.cpp \
-	setupdisplay.cpp krepagelayoutdia.cpp \
-	restoredialog.cpp
+	setupdisplay.cpp krepagelayoutdia.cpp
 
 libkrecipesdialogs_la_METASOURCES=AUTO
 

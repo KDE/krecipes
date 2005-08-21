@@ -27,7 +27,6 @@
 #include "dialogs/ingredientmatcherdialog.h"
 #include "dialogs/dbimportdialog.h"
 #include "dialogs/pagesetupdialog.h"
-#include "dialogs/restoredialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -391,11 +390,11 @@ void Krecipes::backupSlot()
 
 void Krecipes::restoreSlot()
 {
-	RestoreDialog restore(this);
-	if ( restore.exec() == QDialog::Accepted ) {
+	QString filename = KFileDialog::getOpenFileName(QString::null,QString::null,this,i18n("Restore Backup "));
+	if ( !filename.isNull() ) {
 		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase all data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue:
-			m_view->database->restore( restore.backupFile() );
+			m_view->database->restore( filename );
 			m_view->reload();
 		case KMessageBox::Cancel:
 		default: break;
