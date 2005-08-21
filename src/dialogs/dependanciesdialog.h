@@ -28,7 +28,7 @@ class DependanciesDialog: public QDialog
 {
 public:
 	//Methods
-	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* ingredientList = 0, const ElementList* propertiesList = 0 );
+	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* propertiesList = 0 );
 	~DependanciesDialog();
 private:
 	//Widgets

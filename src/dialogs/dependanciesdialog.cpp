@@ -19,7 +19,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* ingredientList, const ElementList* propertiesList ) : QDialog( parent, 0, true )
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList ) : QDialog( parent, 0, true )
 {
 	int row = 3, col = 1;
 
@@ -34,7 +34,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
-	instructionsLabel->setText( i18n( "<b>WARNING:</b> The following elements will have to be removed also, since currently they use the element you have chosen to be removed." ) );
+	instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	layout->addWidget( instructionsLabel, 1, 1 );
 	QSpacerItem *instructions_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( instructions_spacer, 2, 1 );
@@ -56,31 +56,6 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 			layout->addItem( list_spacer, row + 1, col );
 			loadList( recipeListView, recipeList );
-			row += 2;
-			if ( row > 6 ) {
-				row = 3;
-				col += 2;
-			} // Only two listview rows per column
-		}
-	}
-
-
-
-	if ( ingredientList ) {
-		if ( !( ingredientList->isEmpty() ) ) {
-			ingredientBox = new QGroupBox( 1, Qt::Vertical, i18n( "Ingredients" ), this );
-			ingredientListView = new KListView( ingredientBox );
-
-			KConfig * config = KGlobal::config();
-			config->setGroup( "Advanced" );
-			bool show_id = config->readBoolEntry( "ShowID", false );
-			ingredientListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-			ingredientListView->addColumn( i18n( "Ingredient Name" ) );
-			layout->addWidget( ingredientBox, row, col );
-			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-			layout->addItem( list_spacer, row + 1, col );
-			loadList( ingredientListView, ingredientList );
 			row += 2;
 			if ( row > 6 ) {
 				row = 3;

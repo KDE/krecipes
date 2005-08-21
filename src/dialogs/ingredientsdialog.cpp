@@ -394,23 +394,9 @@ void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
 
 	QRect r = propertiesListView->listView() ->header() ->sectionRect( 1 );
 
-
-	//r=propertiesListView->listView()->header()->sectionRect(2); //Set in position reference to qlistview, and with the column size();
-
-	//r.moveBy(propertiesListView->x(),propertiesListView->y()); // Move to the position of the KreListView
-
-	//r.moveBy(propertiesListView->listView()->pos().x(),propertiesListView->listView()->pos().y()); // Move to the position of KListView
-	//r.moveBy(propertiesListView->listView()->header()->x(),propertiesListView->listView()->header()->y()); // Move to the position of the KListView Header
-
-	//r.moveBy(propertiesListView->listView()->viewport()->x(),propertiesListView->listView()->viewport()->y()); // Move to the position of the KListView viewport
-
-	//r.moveBy(propertiesListView->listView()->header()->sectionRect(2).x(),0);
-
 	r.moveBy( 0, propertiesListView->listView() ->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
 
 	r.setHeight( it->height() ); // Set the item's height
-
-
 
 	inputBox->setGeometry( r );
 

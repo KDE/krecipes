@@ -117,7 +117,7 @@ void StdUnitListView::remove()
 		if ( recipeDependancies.isEmpty() && propertyDependancies.isEmpty() )
 			database->removeUnit( unitID );
 		else { // need warning!
-			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &recipeDependancies, 0, &propertyDependancies );
+			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &recipeDependancies, &propertyDependancies );
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeUnit( unitID );
 			delete warnDialog;
