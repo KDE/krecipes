@@ -162,16 +162,35 @@ void RecipeDB::backup( const QString &backup_file )
 
 	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processDumpOutput(KProcIO*)) );
 
-	bool success = p->start( KProcess::Block, false );
+	bool success = p->start( KProcess::Block, true );
 	if ( !success ) {
-		KMessageBox::error(0,QString("Unable to find the program '%1'.  Either it is not installed on your system or it is not in $PATH."));
+		KMessageBox::error(0,QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first()));
+		delete p;
+		delete dumpStream;
+		delete dumpFile;
+		QFile::remove(backup_file);
 		return;
 	}
 
 	p->wait();
 
 	if ( p->exitStatus() != 0 ) {
-		KMessageBox::error(0,QString("Backup failed (Exit code: %1).\nNote: A more informative error will (hopefully) be available soon!").arg(p->exitStatus()));
+		//Since the process failed, dumpStream should have output from the app as to why it did
+		QString appOutput;
+		dumpFile->close();
+		if ( dumpFile->open( IO_ReadOnly ) ) {
+			QTextStream appErrStream( dumpFile );
+
+			//ignore our own versioning output
+			appErrStream.readLine();
+			appErrStream.readLine();
+			appErrStream.readLine();
+
+			appOutput = appErrStream.read();
+		}
+
+		KMessageBox::error(0,QString("%1.\n%2").arg(i18n("Backup failed.")).arg(appOutput));
+		QFile::remove(backup_file);
 	}
 
 	delete p;
