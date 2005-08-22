@@ -253,10 +253,15 @@ void RecipeDB::restore( const QString &file )
 
 		KConfig * config = kapp->config();
 		config->setGroup( "DBType" );
-		QString dbType = stream.readLine().stripWhiteSpace();
-		dbType = dbType.right( dbType.length() - dbType.find(":") - 2 );
-		if ( dbType != config->readEntry("Type",QString::null) ) {
-			KMessageBox::sorry( 0, QString(i18n("This backup was created using the %1 backend.  It can only be restored into a database using this backend." )).arg(dbType) );
+		QString firstLine = stream.readLine().stripWhiteSpace();
+		QString dbType = firstLine.right( firstLine.length() - firstLine.find(":") - 2 );
+		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
+			KMessageBox::sorry( 0, i18n("This file is not a Krecipes backup file or has become corrupt.") );
+			delete dumpFile;
+			return;
+		}
+		else if ( dbType != config->readEntry("Type",QString::null) ) {
+			KMessageBox::sorry( 0, QString(i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." )).arg(dbType) );
 			delete dumpFile;
 			return;
 		}

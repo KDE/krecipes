@@ -385,12 +385,18 @@ void Krecipes::pageSetupSlot()
 void Krecipes::backupSlot()
 {
 	QString fileName = KFileDialog::getSaveFileName(QString::null,QString::null,this,i18n("Save Backup As..."));
-	m_view->database->backup( fileName );
+	int overwrite = KMessageBox::Yes;
+	if ( QFile::exists(fileName) ) {
+		overwrite = KMessageBox::warningYesNo( this, QString( i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" ) ).arg( fileName ), i18n("Restore Backup") );
+	}
+
+	if ( overwrite == KMessageBox::Yes )
+		m_view->database->backup( fileName );
 }
 
 void Krecipes::restoreSlot()
 {
-	QString filename = KFileDialog::getOpenFileName(QString::null,QString::null,this,i18n("Restore Backup "));
+	QString filename = KFileDialog::getOpenFileName(QString::null,QString::null,this,i18n("Restore Backup"));
 	if ( !filename.isNull() ) {
 		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase all data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue:
