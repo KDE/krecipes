@@ -20,7 +20,7 @@ public:
 
 k_dcop:
 	virtual void emptyData() = 0;
-	virtual void backup( const QString &filename ) = 0;
+	virtual bool backup( const QString &filename ) = 0;
 };
 
 #endif // _KRECIPESIFACE_H_

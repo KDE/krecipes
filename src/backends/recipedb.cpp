@@ -129,7 +129,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	return database;
 }
 
-void RecipeDB::backup( const QString &backup_file )
+bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 {
 	kdDebug()<<"Backing up current database to "<<backup_file<<endl;
 
@@ -139,7 +139,7 @@ void RecipeDB::backup( const QString &backup_file )
 	QIODevice *dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
 	if ( !dumpFile->open( IO_WriteOnly ) ) {
 		kdDebug()<<"Couldn't open "<<backup_file<<endl;
-		return;
+		return false;
 	}
 
 	dumpStream = new QTextStream( dumpFile );
@@ -147,7 +147,7 @@ void RecipeDB::backup( const QString &backup_file )
 	QStringList command = backupCommand();
 	if ( command.count() == 0 ) {
 		kdDebug()<<"Backup not available for this database backend"<<endl;
-		return;
+		return false;
 	}
 
 	KConfig * config = kapp->config();
@@ -157,19 +157,19 @@ void RecipeDB::backup( const QString &backup_file )
 	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
 	(*dumpStream) << "-- Krecipes database backend: "<<config->readEntry( "Type" )<<endl;
 
-	kdDebug()<<"Running '"<<command.join(" ")<<"' to create backup file"<<endl;
+	kdDebug()<<"Running '"<<command[0]<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
 
 	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processDumpOutput(KProcIO*)) );
 
 	bool success = p->start( KProcess::Block, true );
 	if ( !success ) {
-		KMessageBox::error(0,QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first()));
+		if ( errMsg ) *errMsg = QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first());
 		delete p;
 		delete dumpStream;
 		delete dumpFile;
 		QFile::remove(backup_file);
-		return;
+		return false;
 	}
 
 	p->wait();
@@ -189,13 +189,18 @@ void RecipeDB::backup( const QString &backup_file )
 			appOutput = appErrStream.read();
 		}
 
-		KMessageBox::error(0,QString("%1.\n%2").arg(i18n("Backup failed.")).arg(appOutput));
+		if ( errMsg ) *errMsg = QString("%1.\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
+		delete p;
+		delete dumpStream;
+		delete dumpFile;
+		return false;
 	}
 
 	delete p;
 	delete dumpStream;
 	delete dumpFile;
+	return true;
 }
 
 #define OUTPUT(x) (QApplication::connect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
@@ -235,7 +240,7 @@ void RecipeDB::initializeData( void )
 	}
 }
 
-void RecipeDB::restore( const QString &file )
+bool RecipeDB::restore( const QString &file, QString *errMsg )
 {
 	QIODevice *dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( dumpFile->open( IO_ReadOnly ) ) {
@@ -246,9 +251,9 @@ void RecipeDB::restore( const QString &file )
 		QString dbVersion = stream.readLine().stripWhiteSpace();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 2 );
 		if ( dbVersion.toDouble() > latestDBVersion() ) {
-			KMessageBox::sorry( 0, i18n( "This backup was created with a newer version of Krecipes and cannot be restored." ) );
+			if ( errMsg ) *errMsg = i18n( "This backup was created with a newer version of Krecipes and cannot be restored." );
 			delete dumpFile;
-			return;
+			return false;
 		}
 
 		KConfig * config = kapp->config();
@@ -256,14 +261,14 @@ void RecipeDB::restore( const QString &file )
 		QString firstLine = stream.readLine().stripWhiteSpace();
 		QString dbType = firstLine.right( firstLine.length() - firstLine.find(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
-			KMessageBox::sorry( 0, i18n("This file is not a Krecipes backup file or has become corrupt.") );
+			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
 			delete dumpFile;
-			return;
+			return false;
 		}
 		else if ( dbType != config->readEntry("Type",QString::null) ) {
-			KMessageBox::sorry( 0, QString(i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." )).arg(dbType) );
+			if ( errMsg ) *errMsg = QString(i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." )).arg(dbType);
 			delete dumpFile;
-			return;
+			return false;
 		}
 
 		
@@ -280,9 +285,11 @@ void RecipeDB::restore( const QString &file )
 	}
 	else {
 		kdDebug()<<"Unable to open the selected backup file"<<endl;
+		return false;
 	}
 
 	delete dumpFile;
+	return true;
 }
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
@@ -324,7 +331,7 @@ void RecipeDB::importSamples()
 	QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
-		kdDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to mizunoami44@users.sf.net.  Then we will have them available to everyone in the very next release." << endl;
+		kdDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." << endl;
 
 		sample_recipes = locate( "appdata", "data/samples-en_US.kreml" ); //default to English
 	}
