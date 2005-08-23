@@ -197,7 +197,7 @@ void KreExporter::writeCategoryStructure( QString &xml, const CategoryTree *cate
 {
 	if ( categoryTree->category.id != -2 ) {
 		if ( categoryTree->category.id != -1 )
-			xml += "<category name=\"" + QStyleSheet::escape( categoryTree->category.name.utf8() ) + "\">\n";
+			xml += "<category name=\"" + QStyleSheet::escape( categoryTree->category.name.utf8() ).replace("\"","&quot;") + "\">\n";
 	
 		for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 			writeCategoryStructure( xml, child_it );

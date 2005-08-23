@@ -17,7 +17,6 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
-#include <qtextcodec.h>
 #include <dom/dom_element.h>
 
 #include <kconfig.h>
@@ -172,7 +171,7 @@ QString HTMLExporter::createFooter()
 	//and now piece it all together
 	QString recipeHTML = "<html>\n<head>\n";
 	recipeHTML += "<meta name=\"lang\" content=\"" + loc->language() + "\">\n";
-	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + encoding.replace( " ", "-" ) + "\" />\n";
+	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 	recipeHTML += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
 	recipeHTML += recipeStyleHTML;
 	recipeHTML += "</head>\n";
@@ -225,13 +224,10 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	geometries.setAutoDelete( true );
 	QPtrDict<DivElement> geom_contents;
 
-	KLocale *loc = KGlobal::locale();
-	QTextCodec *codec = loc->codecForEncoding();
-
 	for ( QMap<QString, QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it ) {
 		QString key = it.key();
 
-		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, codec->fromUnicode(it.data()) );
+		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, it.data().utf8() );
 
 		if ( key == "photo" ) {
 			temp_photo_geometry.setWidth( ( int ) ( double( temp_photo_geometry.width() ) * 100.0 / m_width ) ); // The size of all objects needs to be saved in percentage format

@@ -1986,7 +1986,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 	QString command = QString( "SELECT title FROM recipes WHERE id=%1;" ).arg( recipeID );
 	QSqlQuery recipeToLoad( command, database );
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
-		return ( recipeToLoad.value( 0 ).toString() );
+		return ( unescapeAndDecode(recipeToLoad.value( 0 ).toString()) );
 
 	return ( QString::null );
 }
