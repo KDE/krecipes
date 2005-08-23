@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-krecipes-backup
+Icon=krecipes_file
+Patterns=*.krecbk
+Comment=Krecipes Backup File
