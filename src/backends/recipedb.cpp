@@ -246,8 +246,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 	if ( dumpFile->open( IO_ReadOnly ) ) {
 
 		QTextStream stream( dumpFile );
-		stream.readLine(); //ignore the first line which is a comment giving the version of Krecipes
-
+		QString firstLine = stream.readLine().stripWhiteSpace();
 		QString dbVersion = stream.readLine().stripWhiteSpace();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 2 );
 		if ( dbVersion.toDouble() > latestDBVersion() ) {
@@ -258,8 +257,8 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 		KConfig * config = kapp->config();
 		config->setGroup( "DBType" );
-		QString firstLine = stream.readLine().stripWhiteSpace();
-		QString dbType = firstLine.right( firstLine.length() - firstLine.find(":") - 2 );
+		QString dbType = stream.readLine().stripWhiteSpace();
+		dbType = dbType.right( dbType.length() - dbType.find(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
 			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
 			delete dumpFile;
