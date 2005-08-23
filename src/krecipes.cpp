@@ -390,7 +390,7 @@ void Krecipes::backupSlot()
 		overwrite = KMessageBox::warningYesNo( this, QString( i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" ) ).arg( fileName ) );
 	}
 
-	if ( overwrite == KMessageBox::Yes ) {
+	if ( !fileName.isNull() && overwrite == KMessageBox::Yes ) {
 		QString errMsg;
 		if ( !m_view->database->backup( fileName, &errMsg ) )
 			KMessageBox::error( this, errMsg, i18n("Backup Failed") );
