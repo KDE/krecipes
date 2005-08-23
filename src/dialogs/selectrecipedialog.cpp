@@ -162,7 +162,9 @@ void SelectRecipeDialog::refilter()
 
 void SelectRecipeDialog::ensurePopulated()
 {
+	KApplication::setOverrideCursor( KCursor::waitCursor() );
 	recipeListView->populateAll();
+	KApplication::restoreOverrideCursor();
 }
 
 void SelectRecipeDialog::haveSelectedItems()
