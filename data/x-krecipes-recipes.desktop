@@ -4,4 +4,4 @@ Type=MimeType
 MimeType=application/x-krecipes-recipes
 Icon=krecipes_file
 Patterns=*.kre;*.kreml
-Comment=Krecipes Recipes
+Comment=Krecipes Exported Recipes

@@ -186,7 +186,7 @@ void Krecipes::setupActions()
 	                      this, SLOT( pageSetupSlot() ),
 	                      actionCollection(), "page_setup_action" );
 
-	( void ) new KAction( i18n( "Backup..." ), 0,
+	( void ) new KAction( i18n( "Backup..." ), "krecipes_file", 0,
 	                      this, SLOT( backupSlot() ),
 	                      actionCollection(), "backup_action" );
 
@@ -385,7 +385,7 @@ void Krecipes::pageSetupSlot()
 void Krecipes::backupSlot()
 {
 	QString fileName = KFileDialog::getSaveFileName(QString::null,
-		QString("*.krecbk|%1 (*.krecbk)\n").arg("Krecipes Backup File"),
+		QString("*.krecbk|%1 (*.krecbk)").arg("Krecipes Backup File"),
 		this,i18n("Save Backup As..."));
 
 	int overwrite = KMessageBox::Yes;
@@ -403,15 +403,17 @@ void Krecipes::backupSlot()
 void Krecipes::restoreSlot()
 {
 	QString filename = KFileDialog::getOpenFileName(QString::null,
-		QString("*.krecbk|%1 (*.krecbk)\n").arg("Krecipes Backup File"),
+		QString("*.krecbk|%1 (*.krecbk)").arg("Krecipes Backup File"),
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
 		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase all data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			QString errMsg;
-			if ( m_view->database->restore( filename, &errMsg ) )
+			if ( m_view->database->restore( filename, &errMsg ) ) {
+				KMessageBox::information(this,i18n("Restore successful."));
 				m_view->reload();
+			}
 			else
 				KMessageBox::error( this, errMsg, i18n("Restore Failed") );
 		}
