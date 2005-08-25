@@ -407,7 +407,7 @@ void Krecipes::backupSlot()
 void Krecipes::restoreSlot()
 {
 	QString filename = KFileDialog::getOpenFileName(QString::null,
-		QString("*.krecbk|%1 (*.krecbk)").arg("Krecipes Backup File"),
+		QString("*.krecbk|%1 (*.krecbk)").arg(i18n("Krecipes Backup File")),
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
