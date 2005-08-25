@@ -103,19 +103,9 @@ void LiteRecipeDB::createDB()
 	//The file is created by SQLite automatically
 }
 
-void LiteRecipeDB::execSQL( QTextStream &stream )
+void LiteRecipeDB::execSQL( const QString &command )
 {
-	QString line, command;
-	while ( (line = stream.readLine().stripWhiteSpace()) != QString::null ) {
-		command += " "+line;
-		if ( command.startsWith(" --") ) {
-			command = QString::null;
-		}
-		else if ( command.endsWith(";") ) {
-			database->executeQuery( command );
-			command = QString::null;
-		}
-	}
+	database->executeQuery( command );
 }
 
 void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )

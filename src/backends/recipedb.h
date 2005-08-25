@@ -71,7 +71,14 @@ public:
 
 	enum RecipeItems { None = 0, NamesOnly = 256, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Servings = 64, Title = 128, All = 0xFFFF ^ NamesOnly };
 
+public slots:
+	void cancelOperation(){ haltOperation = true; }
+
 signals:
+	void progressBegin(int,const QString &c=QString::null,const QString &t=QString::null);
+	void progressDone();
+	void progress();
+
 	void authorCreated( const Element & );
 	void authorRemoved( int id );
 
@@ -151,7 +158,7 @@ public:
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title ) = 0;
 	virtual void givePermissions( const QString &dbName, const QString &username, const QString &password = QString::null, const QString &clientHost = "localhost" ) = 0;
 
-	void importUSDADatabase( KProgressDialog *progress_dlg = 0 );
+	void importUSDADatabase();
 
 	virtual bool ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID ) = 0;
 	virtual bool ingredientContainsUnit( int ingredientID, int unitID ) = 0;
@@ -308,7 +315,10 @@ public:
 protected:
 	virtual void portOldDatabases( float version ) = 0;
 	virtual QStringList backupCommand() const = 0;
-	virtual void execSQL( QTextStream &stream ) = 0;
+
+	//Use these with caution: SQL for one backend might not work on another!
+	void execSQL( QTextStream &stream );
+	virtual void execSQL( const QString & ) = 0;
 
 	QString buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
 		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
@@ -323,6 +333,7 @@ protected:
 
 private:
 	QTextStream *dumpStream;
+	bool haltOperation;
 
 private slots:
 	void processDumpOutput(KProcIO*);

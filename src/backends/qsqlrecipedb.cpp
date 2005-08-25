@@ -121,20 +121,9 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	dbOK = true;
 }
 
-void QSqlRecipeDB::execSQL( QTextStream &stream )
+void QSqlRecipeDB::execSQL( const QString &command )
 {
-	QString line, command;
-	while ( (line = stream.readLine().stripWhiteSpace()) != QString::null ) {
-		command += " "+line;
-		if ( command.startsWith(" --") ) {
-			command = QString::null;
-		}
-		else if ( command.endsWith(";") ) {
-			kdDebug()<<"running:"<<command<<endl;
-			database->exec( command );
-			command = QString::null;
-		}
-	}
+	database->exec( command );
 }
 
 void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )

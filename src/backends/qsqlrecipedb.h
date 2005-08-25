@@ -194,7 +194,7 @@ public:
 	float databaseVersion( void );
 
 protected:
-	void execSQL( QTextStream &stream );
+	void execSQL( const QString &command );
 
 private:
 	void loadElementList( ElementList *elList, QSqlQuery *query );

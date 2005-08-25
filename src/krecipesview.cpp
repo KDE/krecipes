@@ -52,6 +52,8 @@
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
 
+#include "backends/progressinterface.h"
+
 #include "profiling.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
@@ -621,8 +623,9 @@ void KrecipesView::wizard( bool force )
 					db->connect();
 
 					if ( db->ok() ) {
-						KProgressDialog progress( this, "progress_dlg", i18n( "Nutrient Import" ), i18n( "Importing USDA nutrient data" ), true );
-						db->importUSDADatabase( &progress );
+						ProgressInterface pi(this);
+						pi.listenOn(db);
+						db->importUSDADatabase();
 					}
 
 					//close the database whether ok() or not

@@ -64,7 +64,7 @@ struct ingredient_nutrient_data
 
 RecipeDB::RecipeDB() : 
 	DCOPObject(),
-	QObject()
+	QObject(), haltOperation(false)
 {
 	dbOK = false;
 	dbErr = "";
@@ -162,6 +162,11 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processDumpOutput(KProcIO*)) );
 
+	emit progressBegin(0,QString::null,
+		QString("<center><b>%1</b></center>%2")
+			.arg(i18n("Creating complete backup"))
+			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
+
 	bool success = p->start( KProcess::Block, true );
 	if ( !success ) {
 		if ( errMsg ) *errMsg = QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first());
@@ -173,6 +178,14 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	}
 
 	p->wait();
+
+	emit progressDone();
+
+	//User cancelled it; we'll still consider the operation successful,
+	//but delete the file we created
+	if ( !p->normalExit() ) {
+		QFile::remove(backup_file);
+	}
 
 	if ( p->exitStatus() != 0 ) {
 		//Since the process failed, dumpStream should have output from the app as to why it did
@@ -209,8 +222,14 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 void RecipeDB::processDumpOutput( KProcIO *p )
 {
 	QString buffer;
-	int ret;
+	int ret, prog = 0;
 	do {
+		if ( haltOperation ) { haltOperation=false; p->kill(); return; }
+		++prog;
+		if ( prog % 50 == 0 ) {
+			emit progress();
+			prog = 0;
+		}
 		ret = p->readln(buffer,false);
 		if ( ret > 0 )
 			(*dumpStream) << buffer << endl;
@@ -278,6 +297,18 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		empty(); //the user had better be warned!
 
 		execSQL(stream);
+
+		//Since we just loaded part of a file, the database won't be in a usable state.
+		//We'll wipe out the database structure and recreate it, leaving no data.
+		if ( haltOperation ) {
+			haltOperation=false;
+			empty();
+			checkIntegrity();
+			delete dumpFile;
+			if ( errMsg ) { *errMsg = i18n("Restore Failed"); }
+			return false;
+		}
+
 		dumpFile->close();
 
 		portOldDatabases(latestDBVersion());
@@ -289,6 +320,35 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 	delete dumpFile;
 	return true;
+}
+
+void RecipeDB::execSQL( QTextStream &stream )
+{
+	emit progressBegin(0,QString::null,
+		QString("<center><b>%1</b></center>%2")
+			.arg(i18n("Restoring backup"))
+			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
+	int prog = 0;
+	QString line, command;
+	while ( (line = stream.readLine().stripWhiteSpace()) != QString::null ) {
+		if ( haltOperation ) { break; }
+		++prog;
+		if ( prog % 50 == 0 ) {
+			emit progress();
+			prog = 0;
+		}
+
+		command += " "+line;
+		if ( command.startsWith(" --") ) {
+			command = QString::null;
+		}
+		else if ( command.endsWith(";") ) {
+			execSQL( command );
+			command = QString::null;
+		}
+	}
+
+	emit progressDone();
 }
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
@@ -478,12 +538,8 @@ int createUnit( const QString &name, RecipeDB* );
 int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*, bool do_checks );
 void create_properties( RecipeDB* );
 
-void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
+void RecipeDB::importUSDADatabase()
 {
-	KProgress * progress = 0;
-	if ( progress_dlg )
-		progress = progress_dlg->progressBar();
-
 	//check if the data file even exists before we do anything
 	QString abbrev_file = locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
@@ -528,9 +584,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 
 	delete ings_and_ids;
 
-	if ( progress ) {
-		progress->setTotalSteps( data->count() );
-	}
+	emit progressBegin( data->count(), i18n( "Nutrient Import" ), i18n( "Importing USDA nutrient data" ) );
 
 	//if there is no data in the database, we can really speed this up with this
 	bool do_checks = true;
@@ -555,13 +609,9 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	for ( it = data->begin(); it != data_end; ++it ) {
 		counter++;
 		kdDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
-		if ( progress ) {
-			progress->advance( 1 );
-			kapp->processEvents();
 
-			if ( progress_dlg->wasCancelled() )
-				break;
-		}
+		if ( haltOperation ) { haltOperation=false; break;}
+		emit progress();
 
 		int assigned_id = createIngredient( ( *it ).name, unit_g_id, unit_mg_id, this, do_checks );
 
@@ -582,6 +632,7 @@ void RecipeDB::importUSDADatabase( KProgressDialog *progress_dlg )
 	delete data;
 
 	kdDebug() << "USDA data import successful" << endl;
+	emit progressDone();
 }
 
 void getIngredientNameAndID( std::multimap<int, QString> *data )

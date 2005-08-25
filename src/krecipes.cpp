@@ -39,6 +39,7 @@
 
 #include "datablocks/recipe.h"
 #include "backends/recipedb.h"
+#include "backends/progressinterface.h"
 
 #include <qdragobject.h>
 #include <kprinter.h>
@@ -394,6 +395,9 @@ void Krecipes::backupSlot()
 	}
 
 	if ( !fileName.isNull() && overwrite == KMessageBox::Yes ) {
+		ProgressInterface pi(this);
+		pi.listenOn(m_view->database);
+
 		QString errMsg;
 		if ( !m_view->database->backup( fileName, &errMsg ) )
 			KMessageBox::error( this, errMsg, i18n("Backup Failed") );
@@ -407,15 +411,18 @@ void Krecipes::restoreSlot()
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
-		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase all data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue: {
+			ProgressInterface pi(this);
+			pi.listenOn(m_view->database);
+
 			QString errMsg;
-			if ( m_view->database->restore( filename, &errMsg ) ) {
+			if ( m_view->database->restore( filename, &errMsg ) )
 				KMessageBox::information(this,i18n("Restore successful."));
-				m_view->reload();
-			}
 			else
 				KMessageBox::error( this, errMsg, i18n("Restore Failed") );
+
+			m_view->reload();
 		}
 		case KMessageBox::Cancel:
 		default: break;
