@@ -53,7 +53,7 @@ QStringList MySQLRecipeDB::backupCommand() const
 	config->setGroup("Server");
 
 	QStringList command;
-	command<<"mysqldump"<<"-q";
+	command<<config->readEntry( "MySQLDumpPath", "mysqldump" )<<"-q";
 
 	QString pass = config->readEntry("Password", QString::null);
 	if ( !pass.isEmpty() )

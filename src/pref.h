@@ -22,6 +22,7 @@ class PerformancePrefs;
 
 class KIntNumInput;
 class KLineEdit;
+class KURLRequester;
 
 class QButtonGroup;
 class QCheckBox;
@@ -53,6 +54,8 @@ public:
 	void saveOptions( void );
 private:
 	// Internal Widgets
+	KURLRequester *dumpPathRequester;
+
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
@@ -67,6 +70,8 @@ public:
 	void saveOptions( void );
 private:
 	// Internal Widgets
+	KURLRequester *dumpPathRequester;
+
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
@@ -82,12 +87,10 @@ public:
 
 	void saveOptions( void );
 
-private slots:
-	void selectFile();
-
 private:
 	// Internal Widgets
-	KLineEdit *fileEdit;
+	KURLRequester *dumpPathRequester;
+	KURLRequester *fileRequester;
 };
 
 

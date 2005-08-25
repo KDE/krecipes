@@ -93,6 +93,10 @@ QStringList LiteRecipeDB::backupCommand() const
 	QString binary = "sqlite3";
 	#endif
 
+	KConfig * config = KGlobal::config();
+	config->setGroup( "Server" );
+	binary = config->readEntry( "SQLitePath", binary );
+
 	QStringList command;
 	command<<binary<<dbFile<<".dump";
 	return command;

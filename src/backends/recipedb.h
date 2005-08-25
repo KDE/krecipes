@@ -36,7 +36,6 @@
 @author Unai Garro
 */
 
-class KProgressDialog;
 class KProcIO;
 class QTextStream;
 

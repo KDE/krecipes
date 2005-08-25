@@ -15,6 +15,10 @@
 
 #include "pref.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qhbox.h>
@@ -34,7 +38,7 @@
 #include <kfiledialog.h>
 #include <knuminput.h>
 #include <klineedit.h>
-
+#include <kurlrequester.h>
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 		: KDialogBase( IconList, i18n( "Krecipes Preferences" ),
@@ -140,8 +144,24 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( dbNameEdit, 7, 2 );
 
+	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+	layout->addItem( spacerRow5, 8, 1 );
+
+	// Backup options
+	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
+	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setColumns( 2 );
+	layout->addMultiCellWidget( backupGBox, 9, 9, 1, 4 );
+
+	QLabel *dumpPathLabel = new QLabel( backupGBox );
+	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysqldump") );
+	dumpPathRequester = new KURLRequester( backupGBox );
+	dumpPathRequester->setURL( "mysqldump" );
+	dumpPathRequester->setFilter( "mysqldump" );
+
+
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow4, 8, 1 );
+	layout->addItem( spacerRow4, 10, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
@@ -162,6 +182,7 @@ void MySQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Username", usernameEdit->text() );
 	config->writeEntry( "Password", passwordEdit->text() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
+	config->writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
 }
 
 
@@ -226,8 +247,24 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( dbNameEdit, 7, 2 );
 
+
+	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+	layout->addItem( spacerRow5, 8, 1 );
+
+	// Backup options
+	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
+	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setColumns( 2 );
+	layout->addMultiCellWidget( backupGBox, 9, 9, 1, 4 );
+
+	QLabel *dumpPathLabel = new QLabel( backupGBox );
+	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("pg_dump") );
+	dumpPathRequester = new KURLRequester( backupGBox );
+	dumpPathRequester->setFilter( "pg_dump" );
+
+
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow4, 8, 1 );
+	layout->addItem( spacerRow4, 10, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
@@ -238,6 +275,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	usernameEdit->setText( config->readEntry( "Username", "" ) );
 	passwordEdit->setText( config->readEntry( "Password", "" ) );
 	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
+	dumpPathRequester->setURL( config->readEntry( "PgDumpPath", "pg_dump" ) );
 }
 
 void PostgreSQLServerPrefs::saveOptions( void )
@@ -248,6 +286,7 @@ void PostgreSQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Username", usernameEdit->text() );
 	config->writeEntry( "Password", passwordEdit->text() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
+	config->writeEntry( "PgDumpPath", dumpPathRequester->url() );
 }
 
 
@@ -259,38 +298,45 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	QHBox *hbox = new QHBox( this );
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 
-	fileEdit = new KLineEdit( hbox );
-	hbox->setStretchFactor( fileEdit, 2 );
-
-	KIconLoader il;
-	QPushButton *file_select = new QPushButton( il.loadIcon( "fileopen", KIcon::NoGroup, 16 ), QString::null, hbox );
-	QToolTip::add
-		( file_select, i18n( "Open file dialog" ) );
-	file_select->setFixedWidth( 25 );
+	fileRequester = new KURLRequester( hbox );
+	hbox->setStretchFactor( fileRequester, 2 );
 
 	Form1Layout->addWidget( hbox );
 
-	connect( file_select, SIGNAL( clicked() ), SLOT( selectFile() ) );
+	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+	Form1Layout->addItem( spacerRow5 );
+
+	QString sqliteBinary;
+	#if HAVE_SQLITE3
+	sqliteBinary = "sqlite3";
+ 	#elif HAVE_SQLITE
+	sqliteBinary = "sqlite";
+	#endif
+
+	// Backup options
+	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
+	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setColumns( 2 );
+	Form1Layout->addWidget( backupGBox );
+
+	QLabel *dumpPathLabel = new QLabel( backupGBox );
+	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg(sqliteBinary) );
+	dumpPathRequester = new KURLRequester( backupGBox );
+	dumpPathRequester->setFilter( sqliteBinary );
 
 	// Load & Save Current Settings
 	KConfig *config = kapp->config();
 	config->setGroup( "Server" );
-	fileEdit->setText( config->readEntry( "DBFile", locateLocal( "appdata", "krecipes.krecdb" ) ) );
+	fileRequester->setURL( config->readEntry( "DBFile", locateLocal( "appdata", "krecipes.krecdb" ) ) );
+	dumpPathRequester->setURL( config->readEntry( "SQLitePath", sqliteBinary ) );
 }
 
 void SQLiteServerPrefs::saveOptions( void )
 {
 	KConfig * config = kapp->config();
 	config->setGroup( "Server" );
-	config->writeEntry( "DBFile", fileEdit->text() );
-}
-
-void SQLiteServerPrefs::selectFile()
-{
-	KFileDialog dialog( QString::null, "*.*|All Files", this, "dialog", true );
-	if ( dialog.exec() == QDialog::Accepted ) {
-		fileEdit->setText( dialog.selectedFile() );
-	}
+	config->writeEntry( "DBFile", fileRequester->url() );
+	config->writeEntry( "SQLitePath", dumpPathRequester->url() );
 }
 
 

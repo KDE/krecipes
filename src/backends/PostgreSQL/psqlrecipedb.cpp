@@ -17,6 +17,7 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include <qvariant.h>
 
@@ -49,8 +50,11 @@ void PSqlRecipeDB::createDB()
 
 QStringList PSqlRecipeDB::backupCommand() const
 {
+	KConfig *config = KGlobal::config();
+	config->setGroup("Server");
+
 	QStringList command;
-	command<<"pg_dump"<<"-d"<<database->databaseName();
+	command<<config->readEntry( "PgDumpPath", "pg_dump" )<<"-d"<<database->databaseName();
 	return command;
 }
 

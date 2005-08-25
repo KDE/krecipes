@@ -174,6 +174,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		delete dumpStream;
 		delete dumpFile;
 		QFile::remove(backup_file);
+		emit progressDone();
 		return false;
 	}
 
@@ -202,7 +203,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 			appOutput = appErrStream.read();
 		}
 
-		if ( errMsg ) *errMsg = QString("%1.\n%2").arg(i18n("Backup failed.")).arg(appOutput);
+		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
 		delete p;
 		delete dumpStream;

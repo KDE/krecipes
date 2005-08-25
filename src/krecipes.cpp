@@ -411,7 +411,7 @@ void Krecipes::restoreSlot()
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
-		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b>.<br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			ProgressInterface pi(this);
 			pi.listenOn(m_view->database);
