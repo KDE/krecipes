@@ -178,8 +178,6 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		return false;
 	}
 
-	p->wait();
-
 	emit progressDone();
 
 	//User cancelled it; we'll still consider the operation successful,
