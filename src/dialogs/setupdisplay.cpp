@@ -75,6 +75,9 @@ SetupDisplay::SetupDisplay( const Recipe &sample, bool show_ruler, QWidget *pare
 
 	drag_area->resize(parentWidget()->size());
 
+	//FIXME: Where is this discrepancy of 4 coming from??
+	drag_area->resize( drag_area->width()-4, drag_area->height() );
+
 	createItem( drag_area, BackgroundColor );
 
 	connect( drag_area, SIGNAL( widgetClicked( QMouseEvent*, QWidget* ) ), SLOT( widgetClicked( QMouseEvent*, QWidget* ) ) );

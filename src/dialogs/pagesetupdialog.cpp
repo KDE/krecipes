@@ -9,7 +9,8 @@
 ***************************************************************************/
 
 #include "pagesetupdialog.h"
-
+#include <unistd.h>
+#include <cstdlib>
 #include <qdir.h>
 #include <qlayout.h>
 #include <qhbox.h>
@@ -41,9 +42,6 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	QVBoxLayout * layout = new QVBoxLayout( this );
 
 	KToolBar *toolbar = new KToolBar( this );
-	active_display = setup_display = new SetupDisplay( sample, false, this );
-	print_setup_display = new SetupDisplay( sample, true, this );
-
 	KActionCollection *actionCollection = new KActionCollection( this );
 
 	KAction *std_open = KStdAction::open( 0, 0, 0 ); //use this to create a custom open action
@@ -71,19 +69,21 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 
 	layout->addWidget( toolbar );
 
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
 
 	QSize default_size( 300, 400 );
 	QSize size = config->readSizeEntry( "WindowSize", &default_size );
 	resize( size );
 
-	initShownItems();
-
 	QTabWidget *tabWidget = new QTabWidget(this);
+	active_display = setup_display = new SetupDisplay( sample, false, this );
+	print_setup_display = new SetupDisplay( sample, true, this );
 	tabWidget->insertTab( setup_display, i18n("Recipe View") );
 	tabWidget->insertTab( print_setup_display, il.loadIconSet( "fileprint", KIcon::Small ), i18n("Print View") );
 	layout->addWidget( tabWidget );
+
+	initShownItems();
 
 	QHBox *buttonsBox = new QHBox( this );
 	QPushButton *okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
@@ -95,6 +95,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	connect( setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
 	connect( print_setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
 	connect( tabWidget, SIGNAL( currentChanged( QWidget* ) ), SLOT( setActiveDisplay( QWidget* ) ) );
+
+	config->setGroup( "Page Setup" ); //SetupDisplay changes the group of the config file
 
 	//let's do everything we can to be sure at least some layout is loaded
 	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
