@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2003 by Jason Kivlighn                                  *
+*   Copyright (C) 2003-2005 by Jason Kivlighn                             *
 *   mizunoami44@users.sourceforge.net                                     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -9,8 +9,7 @@
 ***************************************************************************/
 
 #include "pagesetupdialog.h"
-#include <unistd.h>
-#include <cstdlib>
+
 #include <qdir.h>
 #include <qlayout.h>
 #include <qhbox.h>
