@@ -6,3 +6,4 @@ Icon=krecipes_file
 Patterns=*.krecbk
 Comment=Krecipes Backup File
 Comment[it]=File di copia di sicurezza di Krecipes
+Comment[sv]=Krecept säkerhetskopieringsfil
