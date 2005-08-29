@@ -323,9 +323,15 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 			process->closeWhenDone();
 
+			int prog = 0;
 			while ( process->isRunning() ){
 				if ( haltOperation ) { break; }
 				kapp->processEvents();
+				if ( prog % 100 == 0 ) {
+					emit progress();
+					prog = 0;
+				}
+				++prog;
 			}
 		}
 		else
