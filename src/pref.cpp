@@ -156,13 +156,11 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysqldump") );
 	dumpPathRequester = new KURLRequester( backupGBox );
-	dumpPathRequester->setURL( "mysqldump" );
 	dumpPathRequester->setFilter( "mysqldump" );
 
 	QLabel *mysqlPathLabel = new QLabel( backupGBox );
 	mysqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysql") );
 	mysqlPathRequester = new KURLRequester( backupGBox );
-	mysqlPathRequester->setURL( "mysql" );
 	mysqlPathRequester->setFilter( "mysql" );
 
 
@@ -178,6 +176,8 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	usernameEdit->setText( config->readEntry( "Username", "" ) );
 	passwordEdit->setText( config->readEntry( "Password", "" ) );
 	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
+	dumpPathRequester->setURL( config->readEntry( "MySQLDumpPath", "mysqldump" ) );
+	mysqlPathRequester->setURL( config->readEntry( "MySQLPath", "mysql" ) );
 }
 
 void MySQLServerPrefs::saveOptions( void )
@@ -272,7 +272,6 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	QLabel *psqlPathLabel = new QLabel( backupGBox );
 	psqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("psql") );
 	psqlPathRequester = new KURLRequester( backupGBox );
-	psqlPathRequester->setURL( "psql" );
 	psqlPathRequester->setFilter( "psql" );
 
 
@@ -289,6 +288,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	passwordEdit->setText( config->readEntry( "Password", "" ) );
 	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
 	dumpPathRequester->setURL( config->readEntry( "PgDumpPath", "pg_dump" ) );
+	psqlPathRequester->setURL( config->readEntry( "PsqlPath", "psql" ) );
 }
 
 void PostgreSQLServerPrefs::saveOptions( void )

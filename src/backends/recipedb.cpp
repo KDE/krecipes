@@ -308,14 +308,14 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 					.arg(i18n("Restoring backup"))
 					.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
 
-			QCString line;
 			do {
 				if ( haltOperation ) { break; }
 				emit progress();
 
 				QByteArray array(4096);
-				stream.readRawBytes(array.data(),array.size());
-				
+				int len = dumpFile->readBlock(array.data(),array.size());
+				array.resize(len);
+
 				if ( !process->writeStdin(array) )
 					kdDebug()<<"Yikes! Some input couldn't be written to the process!"<<endl;
 			}
@@ -323,6 +323,9 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 			process->closeWhenDone();
 
+			//Since the process will exit when all stdin has been sent and processed,
+			//just loop until the process is no longer running.  If something goes
+			//wrong, the user can still hit cancel.
 			int prog = 0;
 			while ( process->isRunning() ){
 				if ( haltOperation ) { break; }
