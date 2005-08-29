@@ -295,7 +295,44 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		//by loading the old schema and then porting it to the current version.
 		empty(); //the user had better be warned!
 
-		execSQL(stream);
+		KProcIO *process = new KProcIO;
+
+		QStringList command = restoreCommand();
+		kdDebug()<<"Restoring backup using: "<<command.join(" ")<<endl;
+		*process << command;
+		
+		process->setComm( KProcess::Stdin );
+		if ( process->start( KProcess::NotifyOnExit ) ) {
+			emit progressBegin(0,QString::null,
+				QString("<center><b>%1</b></center>%2")
+					.arg(i18n("Restoring backup"))
+					.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
+
+			QCString line;
+			do {
+				if ( haltOperation ) { break; }
+				emit progress();
+
+				QByteArray array(4096);
+				stream.readRawBytes(array.data(),array.size());
+				
+				if ( !process->writeStdin(array) )
+					kdDebug()<<"Yikes! Some input couldn't be written to the process!"<<endl;
+			}
+			while ( !stream.atEnd() );
+
+			process->closeWhenDone();
+
+			while ( process->isRunning() ){
+				if ( haltOperation ) { break; }
+				kapp->processEvents();
+			}
+		}
+		else
+			kdDebug()<<"Unable to start process"<<endl;
+
+		delete process;
+		emit progressDone();
 
 		//Since we just loaded part of a file, the database won't be in a usable state.
 		//We'll wipe out the database structure and recreate it, leaving no data.
@@ -323,20 +360,8 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 void RecipeDB::execSQL( QTextStream &stream )
 {
-	emit progressBegin(0,QString::null,
-		QString("<center><b>%1</b></center>%2")
-			.arg(i18n("Restoring backup"))
-			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
-	int prog = 0;
 	QString line, command;
-	while ( (line = stream.readLine().stripWhiteSpace()) != QString::null ) {
-		if ( haltOperation ) { break; }
-		++prog;
-		if ( prog % 50 == 0 ) {
-			emit progress();
-			prog = 0;
-		}
-
+	while ( (line = stream.readLine()) != QString::null ) {
 		command += " "+line;
 		if ( command.startsWith(" --") ) {
 			command = QString::null;
@@ -346,8 +371,6 @@ void RecipeDB::execSQL( QTextStream &stream )
 			command = QString::null;
 		}
 	}
-
-	emit progressDone();
 }
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )

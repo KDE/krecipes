@@ -54,6 +54,7 @@ protected:
 private:
 	void portOldDatabases( float version );
 	QStringList backupCommand() const;
+	QStringList restoreCommand() const;
 
 	void addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index );
 

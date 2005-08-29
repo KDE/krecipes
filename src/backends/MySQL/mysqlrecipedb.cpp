@@ -63,6 +63,23 @@ QStringList MySQLRecipeDB::backupCommand() const
 	return command;
 }
 
+QStringList MySQLRecipeDB::restoreCommand() const
+{
+	KConfig *config = KGlobal::config();
+	config->setGroup("Server");
+
+	QStringList command;
+	//command<<config->readEntry( "MySQLDumpPath", "mysqldump" );
+	command<<"mysql";
+
+	QString pass = config->readEntry("Password", QString::null);
+	if ( !pass.isEmpty() )
+		command<<"-p"+pass;
+
+	command<<database->databaseName();
+	return command;
+}
+
 void MySQLRecipeDB::createTable( const QString &tableName )
 {
 

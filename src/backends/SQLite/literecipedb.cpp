@@ -102,6 +102,23 @@ QStringList LiteRecipeDB::backupCommand() const
 	return command;
 }
 
+QStringList LiteRecipeDB::restoreCommand() const
+{
+	#if HAVE_SQLITE
+	QString binary = "sqlite";
+	#elif HAVE_SQLITE3
+	QString binary = "sqlite3";
+	#endif
+
+	KConfig * config = KGlobal::config();
+	config->setGroup( "Server" );
+	binary = config->readEntry( "SQLitePath", binary );
+
+	QStringList command;
+	command<<binary<<dbFile;
+	return command;
+}
+
 void LiteRecipeDB::createDB()
 {
 	//The file is created by SQLite automatically
@@ -2518,7 +2535,7 @@ void LiteRecipeDB::emptyData( void )
 void LiteRecipeDB::empty( void )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "db_info";
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DROP TABLE %1;" ).arg( *it );

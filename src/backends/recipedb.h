@@ -314,6 +314,7 @@ public:
 protected:
 	virtual void portOldDatabases( float version ) = 0;
 	virtual QStringList backupCommand() const = 0;
+	virtual QStringList restoreCommand() const = 0;
 
 	//Use these with caution: SQL for one backend might not work on another!
 	void execSQL( QTextStream &stream );

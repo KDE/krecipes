@@ -58,6 +58,17 @@ QStringList PSqlRecipeDB::backupCommand() const
 	return command;
 }
 
+QStringList PSqlRecipeDB::restoreCommand() const
+{
+	KConfig *config = KGlobal::config();
+	config->setGroup("Server");
+
+	QStringList command;
+	//command<<config->readEntry( "PgDumpPath", "pg_dump" )<<database->databaseName();
+	command<<"psql"<<database->databaseName();
+	return command;
+}
+
 void PSqlRecipeDB::createTable( const QString &tableName )
 {
 
