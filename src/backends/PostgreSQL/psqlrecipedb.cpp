@@ -64,8 +64,7 @@ QStringList PSqlRecipeDB::restoreCommand() const
 	config->setGroup("Server");
 
 	QStringList command;
-	//command<<config->readEntry( "PgDumpPath", "pg_dump" )<<database->databaseName();
-	command<<"psql"<<database->databaseName();
+	command<<config->readEntry( "PsqlPath", "psql" )<<database->databaseName();
 	return command;
 }
 

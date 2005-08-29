@@ -69,8 +69,7 @@ QStringList MySQLRecipeDB::restoreCommand() const
 	config->setGroup("Server");
 
 	QStringList command;
-	//command<<config->readEntry( "MySQLDumpPath", "mysqldump" );
-	command<<"mysql";
+	command<<config->readEntry( "MySQLPath", "mysql" );
 
 	QString pass = config->readEntry("Password", QString::null);
 	if ( !pass.isEmpty() )

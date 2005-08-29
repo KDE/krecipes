@@ -55,6 +55,7 @@ public:
 private:
 	// Internal Widgets
 	KURLRequester *dumpPathRequester;
+	KURLRequester *mysqlPathRequester;
 
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
@@ -71,6 +72,7 @@ public:
 private:
 	// Internal Widgets
 	KURLRequester *dumpPathRequester;
+	KURLRequester *psqlPathRequester;
 
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;

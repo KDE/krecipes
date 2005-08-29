@@ -159,6 +159,12 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	dumpPathRequester->setURL( "mysqldump" );
 	dumpPathRequester->setFilter( "mysqldump" );
 
+	QLabel *mysqlPathLabel = new QLabel( backupGBox );
+	mysqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysql") );
+	mysqlPathRequester = new KURLRequester( backupGBox );
+	mysqlPathRequester->setURL( "mysql" );
+	mysqlPathRequester->setFilter( "mysql" );
+
 
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow4, 10, 1 );
@@ -183,6 +189,7 @@ void MySQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Password", passwordEdit->text() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
 	config->writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
+	config->writeEntry( "MySQLPath", mysqlPathRequester->url() );
 }
 
 
@@ -262,6 +269,12 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	dumpPathRequester = new KURLRequester( backupGBox );
 	dumpPathRequester->setFilter( "pg_dump" );
 
+	QLabel *psqlPathLabel = new QLabel( backupGBox );
+	psqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("psql") );
+	psqlPathRequester = new KURLRequester( backupGBox );
+	psqlPathRequester->setURL( "psql" );
+	psqlPathRequester->setFilter( "psql" );
+
 
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow4, 10, 1 );
@@ -287,6 +300,7 @@ void PostgreSQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Password", passwordEdit->text() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
 	config->writeEntry( "PgDumpPath", dumpPathRequester->url() );
+	config->writeEntry( "PsqlPath", psqlPathRequester->url() );
 }
 
 

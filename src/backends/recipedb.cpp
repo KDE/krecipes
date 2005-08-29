@@ -298,7 +298,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		KProcIO *process = new KProcIO;
 
 		QStringList command = restoreCommand();
-		kdDebug()<<"Restoring backup using: "<<command.join(" ")<<endl;
+		kdDebug()<<"Restoring backup using: "<<command[0]<<endl;
 		*process << command;
 		
 		process->setComm( KProcess::Stdin );
