@@ -294,15 +294,15 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 					.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
 
 			do {
-				if ( haltOperation ) { break; }
-				emit progress();
-
 				QByteArray array(4096);
 				int len = dumpFile->readBlock(array.data(),array.size());
 				array.resize(len);
 
 				if ( !process->writeStdin(array) )
 					kdDebug()<<"Yikes! Some input couldn't be written to the process!"<<endl;
+
+				if ( haltOperation ) { break; }
+				emit progress();
 			}
 			while ( !stream.atEnd() );
 
