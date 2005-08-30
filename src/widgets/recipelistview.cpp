@@ -14,14 +14,15 @@
 #include <qintdict.h>
 #include <qdatastream.h>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kprogress.h>
 
 #include "backends/recipedb.h"
-
 
 class UncategorizedItem : public QListViewItem
 {
@@ -71,7 +72,8 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 
 RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryListView( parent, db ),
 		flat_list( false ),
-		m_uncat_item(0)
+		m_uncat_item(0),
+		m_progress_dlg(0)
 {
 	connect( database, SIGNAL( recipeCreated( const Element &, const ElementList & ) ), SLOT( createRecipe( const Element &, const ElementList & ) ) );
 	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
@@ -144,6 +146,11 @@ void RecipeListView::populate( QListViewItem *item )
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
 
+	if ( m_progress_dlg ){
+		m_progress_dlg->progressBar()->advance(1);
+		kapp->processEvents();
+	}
+
 	StdCategoryListView::populate(item);
 
 	if ( !flat_list ) {
@@ -165,15 +172,30 @@ void RecipeListView::populate( QListViewItem *item )
 
 void RecipeListView::populateAll( QListViewItem *parent )
 {
-	if ( !parent )
+	bool first = false;
+	if ( !parent ) {
+		first = true;
+		m_progress_dlg = new KProgressDialog(this,"populate_all_prog_dlg",QString::null,i18n("Loading recipes"),true);
+		m_progress_dlg->progressBar()->setTotalSteps(0);
+		m_progress_dlg->progressBar()->setPercentageVisible(false);
+
 		parent = firstChild();
+	}
 	else {
 		populate( parent );
 		parent = parent->firstChild();
 	}
 
 	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+		if ( m_progress_dlg && m_progress_dlg->wasCancelled() )
+			break;
+
 		populateAll( item );
+	}
+
+	if ( first ) {
+		delete m_progress_dlg;
+		m_progress_dlg = 0;
 	}
 }
 

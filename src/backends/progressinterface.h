@@ -38,7 +38,7 @@ public:
 protected:
 	friend class ProgressSlotObject;
 
-	virtual void progressBegin(int,const QString &caption,const QString &text);
+	virtual void progressBegin(int,const QString &caption,const QString &text,int rate);
 	virtual void progressDone();
 	virtual void progress();
 
@@ -46,6 +46,9 @@ private:
 	ProgressSlotObject *slot_obj;
 	KProgressDialog *progress_dlg;
 	RecipeDB *database;
+
+	int m_rate;
+	int m_rate_at;
 };
 
 class ProgressSlotObject : public QObject
@@ -56,7 +59,7 @@ public:
 	ProgressSlotObject( QWidget*parent, ProgressInterface *p ) : QObject(parent), pInterface(p){}
 
 public slots:
-	void progressBegin(int i,const QString &caption=QString::null,const QString &text=QString::null){ pInterface->progressBegin(i,caption,text); }
+	void progressBegin(int i,const QString &caption=QString::null,const QString &text=QString::null,int rate=1){ pInterface->progressBegin(i,caption,text,rate); }
 	void progressDone(){ pInterface->progressDone(); }
 	void progress(){ pInterface->progress(); }
 

@@ -20,6 +20,8 @@
 class QDragObject;
 class QDropEvent;
 
+class KProgressDialog;
+
 class RecipeDB;
 
 #define RECIPELISTITEM_RTTI 1000
@@ -150,6 +152,8 @@ private:
 	bool flat_list;
 	QListViewItem *m_uncat_item;
 	QListViewItem *lastElementCurrLevel;
+
+	KProgressDialog *m_progress_dlg;
 };
 
 #endif //RECIPELISTVIEW_H

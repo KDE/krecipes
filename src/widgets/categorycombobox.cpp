@@ -19,6 +19,7 @@
 #include <kglobal.h>
 
 #include "backends/recipedb.h"
+#include "backends/progressinterface.h"
 #include "datablocks/elementlist.h"
 #include "datablocks/categorytree.h"
 
@@ -40,7 +41,10 @@ void CategoryComboBox::reload()
 
 	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
 	int limit = config->readNumEntry( "CategoryLimit", -1 );
-	
+
+	ProgressInterface pi(this);
+	pi.listenOn(database);
+
 	CategoryTree categoryList;
 	database->loadCategories( &categoryList, limit, m_offset, -1 );
 

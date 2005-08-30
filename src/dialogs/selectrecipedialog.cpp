@@ -153,18 +153,14 @@ void SelectRecipeDialog::reload()
 void SelectRecipeDialog::refilter()
 {
 	if ( !searchBox->text().isEmpty() ) {
-		KApplication::setOverrideCursor( KCursor::waitCursor() );
 		ensurePopulated();
 		recipeFilter->filter(searchBox->text());
-		KApplication::restoreOverrideCursor();
 	}
 }
 
 void SelectRecipeDialog::ensurePopulated()
 {
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
 	recipeListView->populateAll();
-	KApplication::restoreOverrideCursor();
 }
 
 void SelectRecipeDialog::haveSelectedItems()

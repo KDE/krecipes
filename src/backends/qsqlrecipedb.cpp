@@ -1429,6 +1429,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 {
 	QString limit_str;
 	if ( parent_id == -1 ) {
+		emit progressBegin(0,QString::null,i18n("Loading category list"));
 		list->clear();
 
 		//only limit the number of top-level categories
@@ -1454,8 +1455,12 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 				loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
 				// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
 			}
+			emit progress();
 		}
 	}
+
+	if ( parent_id == -1 )
+		emit progressDone();
 }
 
 void QSqlRecipeDB::createNewCategory( const QString &categoryName, int parent_id )
