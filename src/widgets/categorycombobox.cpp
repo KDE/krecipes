@@ -42,8 +42,8 @@ void CategoryComboBox::reload()
 	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
 	int limit = config->readNumEntry( "CategoryLimit", -1 );
 
-	ProgressInterface pi(this);
-	pi.listenOn(database);
+	//ProgressInterface pi(this);
+	//pi.listenOn(database);
 
 	CategoryTree categoryList;
 	database->loadCategories( &categoryList, limit, m_offset, -1 );
