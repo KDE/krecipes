@@ -422,6 +422,7 @@ void Krecipes::restoreSlot()
 			else
 				KMessageBox::error( this, errMsg, i18n("Restore Failed") );
 
+			pi.listenOn(0);
 			m_view->reload();
 		}
 		case KMessageBox::Cancel:
