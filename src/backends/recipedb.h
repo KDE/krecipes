@@ -36,7 +36,7 @@
 @author Unai Garro
 */
 
-class KProcIO;
+class KProcess;
 class QTextStream;
 
 class CategoryTree;
@@ -74,7 +74,7 @@ public slots:
 	void cancelOperation(){ haltOperation = true; }
 
 signals:
-	void progressBegin(int,const QString &c=QString::null,const QString &t=QString::null);
+	void progressBegin(int,const QString &c=QString::null,const QString &t=QString::null,int rate=1);
 	void progressDone();
 	void progress();
 
@@ -336,7 +336,7 @@ private:
 	bool haltOperation;
 
 private slots:
-	void processDumpOutput(KProcIO*);
+	void processDumpOutput( KProcess *, char *buffer, int buflen );
 };
 
 

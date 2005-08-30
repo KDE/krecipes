@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <kprocess.h>
 #include <kprocio.h>
 #include <kfilterdev.h>
 #include <kmessagebox.h>
@@ -133,7 +134,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 {
 	kdDebug()<<"Backing up current database to "<<backup_file<<endl;
 
-	KProcIO *p = new KProcIO;
+	KProcess *p = new KProcess;
 	//p->setUseShell(true);
 
 	QIODevice *dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
@@ -160,14 +161,15 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	kdDebug()<<"Running '"<<command[0]<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
 
-	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processDumpOutput(KProcIO*)) );
+	QApplication::connect( p, SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(processDumpOutput(KProcess*,char*,int)) );
+	QApplication::connect( p, SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(processDumpOutput(KProcess*,char*,int)) );
 
 	emit progressBegin(0,QString::null,
 		QString("<center><b>%1</b></center>%2")
 			.arg(i18n("Creating complete backup"))
-			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
+			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
 
-	bool success = p->start( KProcess::Block, true );
+	bool success = p->start( KProcess::Block, KProcess::AllOutput );
 	if ( !success ) {
 		if ( errMsg ) *errMsg = QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first());
 		delete p;
@@ -183,6 +185,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	//User cancelled it; we'll still consider the operation successful,
 	//but delete the file we created
 	if ( !p->normalExit() ) {
+		kdDebug()<<"Process killed, deleting partial backup."<<endl;
 		QFile::remove(backup_file);
 	}
 
@@ -200,6 +203,8 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 			appOutput = appErrStream.read();
 		}
+		else
+			kdDebug()<<"Unable to open file to get error output."<<endl;
 
 		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
@@ -215,34 +220,12 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	return true;
 }
 
-#define OUTPUT(x) (QApplication::connect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
-#define NOOUTPUT(x) (disconnect (p, SIGNAL (readReady(KProcIO *)), this, SLOT (x(KProcIO *))))
-
-void RecipeDB::processDumpOutput( KProcIO *p )
+void RecipeDB::processDumpOutput( KProcess *p, char *buffer, int buflen )
 {
-	QString buffer;
-	int ret, prog = 0;
-	do {
-		if ( haltOperation ) { haltOperation=false; p->kill(); return; }
-		++prog;
-		if ( prog % 50 == 0 ) {
-			emit progress();
-			prog = 0;
-		}
-		ret = p->readln(buffer,false);
-		if ( ret > 0 )
-			(*dumpStream) << buffer << endl;
-	}
-	while ( ret > 0 );
+	if ( haltOperation ) { haltOperation=false; p->kill(); return; }
+	emit progress();
 
-	if ( ret == -1 ) {
-		NOOUTPUT( processDumpOutput );
-		p->enableReadSignals(true);
-		OUTPUT( processDumpOutput );
-		return;
-	}
-
-	p->ackRead();
+	dumpStream->writeRawBytes(buffer,buflen);
 }
 
 void RecipeDB::initializeData( void )
