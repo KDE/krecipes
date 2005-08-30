@@ -222,12 +222,12 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 void RecipeDB::processDumpOutput( KProcess *p, char *buffer, int buflen )
 {
-	if ( haltOperation ) { haltOperation=false; p->kill(); return; }
-	emit progress();
-
 	int written = dumpStream->device()->writeBlock(buffer,buflen);
 	if ( written != buflen )
 		kdDebug()<<"Data lost: written ("<<written<<") != buflen ("<<buflen<<")"<<endl;
+
+	if ( haltOperation ) { haltOperation=false; p->kill(); return; }
+	emit progress();
 }
 
 void RecipeDB::initializeData( void )
