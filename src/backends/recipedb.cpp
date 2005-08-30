@@ -225,7 +225,9 @@ void RecipeDB::processDumpOutput( KProcess *p, char *buffer, int buflen )
 	if ( haltOperation ) { haltOperation=false; p->kill(); return; }
 	emit progress();
 
-	dumpStream->writeRawBytes(buffer,buflen);
+	int written = dumpStream->device()->writeBlock(buffer,buflen);
+	if ( written != buflen )
+		kdDebug()<<"Data lost: written ("<<written<<") != buflen ("<<buflen<<")"<<endl;
 }
 
 void RecipeDB::initializeData( void )

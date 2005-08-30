@@ -1444,6 +1444,8 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
+			emit progress();
+
 			int id = categoryToLoad.value( 0 ).toInt();
 			Element el;
 			el.id = id;
@@ -1455,7 +1457,6 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 				loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
 				// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
 			}
-			emit progress();
 		}
 	}
 

@@ -1905,6 +1905,8 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 	if ( parent_id == -1 ) {
 		list->clear();
 
+		emit progressBegin(0,QString::null,i18n("Loading category list"));
+
 		//only limit the number of top-level categories
 		limit_str = (limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset);
 	}
@@ -1914,6 +1916,8 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 	if ( categoryToLoad.getStatus() != QSQLiteResult::Failure ) {
 		QSQLiteResultRow row = categoryToLoad.first();
 		while ( !categoryToLoad.atEnd() ) {
+			emit progress();
+
 			int id = row.data( 0 ).toInt();
 			Element el;
 			el.id = id;
@@ -1926,6 +1930,9 @@ void LiteRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			row = categoryToLoad.next();
 		}
 	}
+
+	if ( parent_id == -1 )
+		emit progressDone();
 }
 
 void LiteRecipeDB::loadCategories( ElementList *list, int limit, int offset )
