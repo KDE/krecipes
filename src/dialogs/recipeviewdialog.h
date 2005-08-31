@@ -58,6 +58,7 @@ private:
 
 	// Internal Variables
 	KHTMLPart *recipeView;
+	KHTMLPart *printView;
 	RecipeDB *database;
 	bool recipe_loaded;
 	QValueList<int> ids_loaded;
@@ -69,6 +70,7 @@ private:
 
 private slots:
 	void recipeRemoved(int);
+	void readyForPrint();
 
 };
 

@@ -176,8 +176,11 @@ void RecipeListView::populateAll( QListViewItem *parent )
 	if ( !parent ) {
 		first = true;
 		m_progress_dlg = new KProgressDialog(this,"populate_all_prog_dlg",QString::null,i18n("Loading recipes"),true);
+		m_progress_dlg->setAllowCancel(false);
 		m_progress_dlg->progressBar()->setTotalSteps(0);
 		m_progress_dlg->progressBar()->setPercentageVisible(false);
+
+		m_progress_dlg->grabKeyboard(); //don't let the user keep hitting keys
 
 		parent = firstChild();
 	}

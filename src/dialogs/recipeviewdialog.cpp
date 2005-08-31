@@ -31,6 +31,7 @@
 #include "exporters/htmlexporter.h"
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
+	printView(0),
 	database(db)
 {
 	// Initialize UI Elements
@@ -107,8 +108,32 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 
 void RecipeViewDialog::print( void )
 {
+	#if 1
 	if ( recipe_loaded )
 		recipeView->view() ->print();
+	#else
+	if ( recipe_loaded ) {
+		delete printView;
+		KHTMLPart *printView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
+
+		HTMLExporter html_generator( database, tmp_filename + "-print.html", "html" );
+
+		KURL url;
+		url.setPath( tmp_filename + "-print.html" );
+		printView->openURL( url );
+		printView->show();
+		kdDebug() << "Opening URL for printing: " << url.htmlURL() << endl;
+
+		connect( printView, SIGNAL( completed() ), this, SLOT( readyForPrint() ) );
+	}
+	#endif
+}
+
+void RecipeViewDialog::readyForPrint()
+{
+	printView->view()->print();
+	
+	//TODO: Cleanup temporary files
 }
 
 void RecipeViewDialog::reload()
