@@ -108,20 +108,21 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 
 void RecipeViewDialog::print( void )
 {
-	#if 1
+	#if 0
 	if ( recipe_loaded )
 		recipeView->view() ->print();
 	#else
 	if ( recipe_loaded ) {
 		delete printView;
-		KHTMLPart *printView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
+		printView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
 
 		HTMLExporter html_generator( database, tmp_filename + "-print.html", "html" );
+		html_generator.exporter( ids_loaded, database );
 
 		KURL url;
 		url.setPath( tmp_filename + "-print.html" );
 		printView->openURL( url );
-		printView->show();
+
 		kdDebug() << "Opening URL for printing: " << url.htmlURL() << endl;
 
 		connect( printView, SIGNAL( completed() ), this, SLOT( readyForPrint() ) );
@@ -131,8 +132,11 @@ void RecipeViewDialog::print( void )
 
 void RecipeViewDialog::readyForPrint()
 {
-	printView->view()->print();
-	
+	if ( printView ) {
+		printView->view()->layout();
+		printView->view()->print();
+	}
+
 	//TODO: Cleanup temporary files
 }
 
