@@ -133,6 +133,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		QDomElement layout_el = node_list.item( 0 ).toElement();
 		KoPageLayout page_layout; page_layout.loadKreFormat(layout_el);
 		m_width = page_layout.ptWidth;
+		kdDebug()<<"Setting width to "<<m_width<<endl;
 	}
 
 	//put all the recipe photos into this directory
@@ -313,7 +314,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	html_map.insert( "instructions", instr_html );
 
 	//=======================SERVINGS======================//
-	QString servings_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Servings" ) ).arg( recipe.persons );
+	QString servings_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
 	html_map.insert( "servings", servings_html );
 
 	//=======================PREP TIME======================//

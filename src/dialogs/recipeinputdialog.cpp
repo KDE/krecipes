@@ -269,17 +269,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	// Tabs
 	tabWidget = new QTabWidget( this, "tabWidget" );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-	//tabWidget->setAutoMask( TRUE );
 
-
-
-	// Spacers to ingredients and instructions
-	//QSpacerItem* spacer_bottomphoto = new QSpacerItem( 10,10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	//layout->addItem( spacer_bottomphoto,6,1);
-	//QSpacerItem* spacerToIngredients = new QSpacerItem( 10,200, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	//layout->addMultiCell( spacerToIngredients, 1,4,3,3 );
-	//QSpacerItem* spacer_rightGBox = new QSpacerItem( 10,10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
-	//layout->addItem( spacer_rightGBox,7,4 );
 
 	//------- Recipe Tab -----------------
 	// Recipe Photo
@@ -390,18 +380,22 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	addCategoryButton->setFlat( true );
 
 	//Category ->Servings spacer
-	QSpacerItem* category_servings = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	recipeLayout->addItem( category_servings, 5, 4 );
+	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	recipeLayout->addItem( category_yield, 5, 4 );
 
 	QHBox *serv_prep_box = new QHBox( recipeTab );
+	serv_prep_box->setSpacing( 5 );
 
-	QVBox *servingsBox = new QVBox( serv_prep_box );
-	servingsBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-	servingsBox->setSpacing( 5 );
+	// Backup options
+	QGroupBox *yieldGBox = new QGroupBox( serv_prep_box, "yieldGBox" );
+	yieldGBox->setTitle( i18n( "Yield" ) );
+	yieldGBox->setColumns( 2 );
 
-	servingsLabel = new QLabel( i18n( "Servings" ), servingsBox );
-	servingsNumInput = new KIntNumInput( servingsBox );
-	servingsNumInput->setMinValue( 1 );
+	yieldLabel = new QLabel( i18n( "Amount" ), yieldGBox );
+	QLabel *yieldTypeLabel = new QLabel( i18n( "Type" ), yieldGBox );
+	yieldNumInput = new FractionInput( yieldGBox );
+	yieldNumInput->setAllowRange(true);
+	yieldTypeEdit = new KLineEdit( yieldGBox );
 
 	QVBox *prepTimeBox = new QVBox( serv_prep_box );
 	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
@@ -624,7 +618,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
-	connect( servingsNumInput, SIGNAL( valueChanged( int ) ), this, SLOT( recipeChanged() ) );
+	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( prepTimeEdit, SIGNAL( valueChanged( const QTime & ) ), SLOT( recipeChanged() ) );
 	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
@@ -719,7 +713,8 @@ void RecipeInputDialog::reload( void )
 
 	unitComboList->clear();
 	reloadCombos();
-	servingsNumInput->setValue( 1 );
+	yieldNumInput->setValue( 1, 0 );
+	yieldTypeEdit->setText("");
 	amountEdit->clear();
 	ingredientList->clear();
 	ingredientBox->lineEdit()->setText("");
@@ -730,7 +725,8 @@ void RecipeInputDialog::reload( void )
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
 	instructionsEdit->setText( loadedRecipe->instructions );
-	servingsNumInput->setValue( loadedRecipe->persons );
+	yieldNumInput->setValue( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
+	yieldTypeEdit->setText( loadedRecipe->yield.type );
 	prepTimeEdit->setTime( loadedRecipe->prepTime );
 
 	//show ingredient list
@@ -1358,7 +1354,7 @@ void RecipeInputDialog::saveRecipe( void )
 	loadedRecipe->photo = sourcePhoto;
 	loadedRecipe->instructions = instructionsEdit->text();
 	loadedRecipe->title = titleEdit->text();
-	loadedRecipe->persons = servingsNumInput->value();
+	yieldNumInput->value(loadedRecipe->yield.amount,loadedRecipe->yield.amount_offset);
 	loadedRecipe->prepTime = prepTimeEdit->time();
 
 	// Now save()
@@ -1382,7 +1378,8 @@ void RecipeInputDialog::newRecipe( void )
 	ingredientList->clear();
 	authorShow->clear();
 	categoryShow->clear();
-	servingsNumInput->setValue( 1 );
+	yieldNumInput->setValue( 1, 0 );
+	yieldTypeEdit->setText("");
 	prepTimeEdit->setTime( QTime( 0, 0 ) );
 
 	instructionsEdit->selectAll();
@@ -1585,7 +1582,7 @@ void RecipeInputDialog::spellCheck( void )
 
 void RecipeInputDialog::resizeRecipe( void )
 {
-	loadedRecipe->persons = servingsNumInput->value();
+	yieldNumInput->value( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
 	ResizeRecipeDialog dlg( this, loadedRecipe );
 
 	if ( dlg.exec() == QDialog::Accepted )

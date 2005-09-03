@@ -31,7 +31,7 @@ private:
 	void loadInstructions( QStringList::const_iterator &raw_text, Recipe & recipe );
 	void loadReferences( QStringList::const_iterator &raw_text, Recipe & recipe );
 
-	double readRange( const QString & );
+	void readRange( const QString &, double &amount, double &amount_offset );
 	void readRecipe( const QStringList &raw_text );
 
 	QStringList::const_iterator m_end_it;

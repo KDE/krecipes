@@ -45,6 +45,7 @@ private:
 	void readRecipemlRecipe( const QDomElement& recipe );
 	void readRecipemlPreptime( const QDomElement &preptime );
 	void readRecipemlQty( const QDomElement &qty, Ingredient &ing );
+	void readRecipemlRange( const QDomElement& range, double &range, double &range_offset );
 
 	Recipe recipe;
 };

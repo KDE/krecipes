@@ -59,8 +59,8 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 
 		QDomElement head_tag = doc.createElement( "head" );
 		head_tag.setAttribute( "title", ( *recipe_it ).title );
-		head_tag.setAttribute( "servingqty", ( *recipe_it ).persons );
-		head_tag.setAttribute( "servingtype", i18n( "Persons" ) );
+		head_tag.setAttribute( "servingqty", ( *recipe_it ).yield.amount );
+		head_tag.setAttribute( "servingtype", ( *recipe_it ).yield.type );
 		head_tag.setAttribute( "rid", i18n( "" ) ); //FIXME:what's this...recipe ID??
 		recipe_tag.appendChild( head_tag );
 

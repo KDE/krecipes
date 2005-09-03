@@ -85,10 +85,9 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	QString yield_str = ( *text_it ).stripWhiteSpace();
 	yield_str.remove( QRegExp( "^Menge:\\s*" ) );
 	int sep_index = yield_str.find( ' ' );
-	QString amount_part = yield_str.mid( 0, sep_index );
-	//QString type_part = yield_str.mid( sep_index+1, yield_str.length()-sep_index );
-	recipe.persons = int( readRange( amount_part ) );
-	kdDebug() << "Found yield: " << recipe.persons << endl;
+	recipe.yield.type = yield_str.mid( sep_index+1, yield_str.length()-sep_index );
+	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
+	kdDebug() << "Found yield: " << recipe.yield.amount << endl;
 
 	bool last_line_empty = false;
 	text_it++;
@@ -146,7 +145,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 
 	//amount
 	if ( !string.mid( 0, 7 ).stripWhiteSpace().isEmpty() )
-		new_ingredient.amount = readRange( string.mid( 0, 7 ) );
+		readRange( string.mid( 0, 7 ), new_ingredient.amount, new_ingredient.amount_offset );
 
 	//unit
 	QString unit_str = string.mid( 8, 9 ).stripWhiteSpace();
@@ -259,12 +258,11 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 	}
 }
 
-double RezkonvImporter::readRange( const QString &range_str )
+void RezkonvImporter::readRange( const QString &range_str, double &amount, double &amount_offset )
 {
 	QString from = range_str.section( '-', 0, 0 );
+	QString to   = range_str.section( '-', 1, 1 );
 
-	//### Ignore the 'to' part for now since Krecipes doesn't handle ranges
-	//QString to   = range_str.section( '-', 1, 1 );
-
-	return MixedNumber::fromString( from ).toDouble();
+	amount = MixedNumber::fromString( from ).toDouble();
+	amount_offset = MixedNumber::fromString( to ).toDouble() - amount;
 }

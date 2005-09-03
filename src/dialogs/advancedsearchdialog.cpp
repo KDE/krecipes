@@ -392,7 +392,7 @@ void AdvancedSearchDialog::languageChange()
 	textLabel1_2_4->setText( i18n( "By any of:" ) );
 	textLabel1_6->setText( i18n( "By all:" ) );
 	textLabel1_3_4->setText( i18n( "Not by:" ) );
-	servingsButton->setText( QString("%1 >>").arg(i18n("Servings")) );
+	servingsButton->setText( QString("%1 >>").arg(i18n("Yield")) );
 	enableServingsCheckBox->setText( i18n( "Enabled" ) );
 	servingsComboBox->clear();
 	servingsComboBox->insertItem( i18n( "Serves at least:" ) );

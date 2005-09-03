@@ -54,7 +54,7 @@ void calculateProperties( const Recipe& recipe, RecipeDB* database, IngredientPr
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
 		database->loadProperties( &ingredientPropertyList, ( *ing_it ).ingredientID );
-		ingredientPropertyList.divide( recipe.persons ); // calculates properties per person
+		ingredientPropertyList.divide( recipe.yield.amount ); // calculates properties per yield unit
 		addPropertyToList( database, recipePropertyList, ingredientPropertyList, *ing_it, ingredientNo );
 		ingredientNo++;
 	}
@@ -138,7 +138,7 @@ void calculateProperties( const Recipe& recipe, IngredientPropertyList& ipl, Uni
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
 		ipl.filter( ( *ing_it ).ingredientID, &filteredPropertyList ); // Get the properties for the respective ingredient
-		filteredPropertyList.divide( recipe.persons ); // calculates properties per person
+		filteredPropertyList.divide( recipe.yield.amount ); // calculates properties per yield unit
 		addPropertyToList( recipePropertyList, filteredPropertyList, *ing_it, url, ingredientNo );
 		ingredientNo++;
 	}

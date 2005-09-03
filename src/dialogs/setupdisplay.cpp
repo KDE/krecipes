@@ -351,10 +351,10 @@ void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
 	createItem( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 
 	//=======================SERVINGS======================//
-	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Servings" ) ).arg( sample.persons ), canvas, "servings" );
+	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Yield" ) ).arg( sample.yield.amount ), canvas, "servings" );
 	servings_box->setFrameShape( QFrame::Box );
 	QToolTip::add
-		( servings_box, i18n( "Servings" ) );
+		( servings_box, i18n( "Yield" ) );
 
 	createItem( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
 

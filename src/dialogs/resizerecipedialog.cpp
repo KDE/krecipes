@@ -52,34 +52,33 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	buttonGroupLayout = new QVBoxLayout( buttonGroup->layout() );
 	buttonGroupLayout->setAlignment( Qt::AlignTop );
 
-	servingsRadioButton = new QRadioButton( buttonGroup );
-	buttonGroup->insert( servingsRadioButton, SERVINGS_RADIO_BUTTON );
-	buttonGroupLayout->addWidget( servingsRadioButton );
+	yieldRadioButton = new QRadioButton( buttonGroup );
+	buttonGroup->insert( yieldRadioButton, SERVINGS_RADIO_BUTTON );
+	buttonGroupLayout->addWidget( yieldRadioButton );
 
-	servingsFrame = new QFrame( buttonGroup );
-	servingsFrame->setFrameShape( QFrame::Box );
-	servingsFrame->setFrameShadow( QFrame::Sunken );
-	servingsFrame->setLineWidth( 1 );
-	servingsFrameLayout = new QGridLayout( servingsFrame, 1, 1, 11, 6 );
+	yieldFrame = new QFrame( buttonGroup );
+	yieldFrame->setFrameShape( QFrame::Box );
+	yieldFrame->setFrameShadow( QFrame::Sunken );
+	yieldFrame->setLineWidth( 1 );
+	yieldFrameLayout = new QGridLayout( yieldFrame, 1, 1, 11, 6 );
 
-	currentServingsLabel = new QLabel( servingsFrame );
+	currentYieldLabel = new QLabel( yieldFrame );
 
-	servingsFrameLayout->addWidget( currentServingsLabel, 0, 0 );
+	yieldFrameLayout->addWidget( currentYieldLabel, 0, 0 );
 
-	newServingsLabel = new QLabel( servingsFrame );
+	newYieldLabel = new QLabel( yieldFrame );
 
-	servingsFrameLayout->addMultiCellWidget( newServingsLabel, 1, 1, 0, 1 );
+	yieldFrameLayout->addMultiCellWidget( newYieldLabel, 1, 1, 0, 1 );
 
-	currentServingsInput = new KLineEdit( servingsFrame );
-	currentServingsInput->setReadOnly( TRUE );
-	currentServingsInput->setAlignment( Qt::AlignRight );
-	servingsFrameLayout->addMultiCellWidget( currentServingsInput, 0, 0, 1, 2 );
+	currentYieldInput = new KLineEdit( yieldFrame );
+	currentYieldInput->setReadOnly( TRUE );
+	currentYieldInput->setAlignment( Qt::AlignRight );
+	yieldFrameLayout->addMultiCellWidget( currentYieldInput, 0, 0, 1, 2 );
 
-	newServingsInput = new KIntNumInput( servingsFrame );
-	newServingsInput->setMinValue( 1 );
-	servingsFrameLayout->addWidget( newServingsInput, 1, 2 );
+	newYieldInput = new FractionInput( yieldFrame );
+	yieldFrameLayout->addWidget( newYieldInput, 1, 2 );
 
-	buttonGroupLayout->addWidget( servingsFrame );
+	buttonGroupLayout->addWidget( yieldFrame );
 
 	factorRadioButton = new QRadioButton( buttonGroup );
 	buttonGroup->insert( factorRadioButton, FACTOR_RADIO_BUTTON );
@@ -120,11 +119,18 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	adjustSize();
 	clearWState( WState_Polished );
 
-	newServingsInput->setValue( m_recipe->persons );
-	currentServingsInput->setText( QString::number( m_recipe->persons ) );
+	newYieldInput->setValue( m_recipe->yield.amount, 0 ); //Ignore the range info, it doesn't work in this context
+	currentYieldInput->setText( m_recipe->yield.toString() );
 
-	buttonGroup->setButton( SERVINGS_RADIO_BUTTON );
-	activateCurrentOption( SERVINGS_RADIO_BUTTON );
+	if ( recipe->yield.amount_offset > 0 ) {
+		yieldRadioButton->setEnabled(false);
+		buttonGroup->setButton( FACTOR_RADIO_BUTTON );
+		activateCurrentOption( FACTOR_RADIO_BUTTON );
+	}
+	else {
+		buttonGroup->setButton( SERVINGS_RADIO_BUTTON );
+		activateCurrentOption( SERVINGS_RADIO_BUTTON );
+	}
 
 	// signals and slots connections
 	connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
@@ -136,9 +142,9 @@ void ResizeRecipeDialog::languageChange()
 {
 	setCaption( i18n( "Resize Recipe" ) );
 	buttonGroup->setTitle( QString::null );
-	servingsRadioButton->setText( i18n( "Scale by servings" ) );
-	newServingsLabel->setText( i18n( "New servings:" ) );
-	currentServingsLabel->setText( i18n( "Current servings:" ) );
+	yieldRadioButton->setText( i18n( "Scale by yield" ) );
+	newYieldLabel->setText( i18n( "New yield:" ) );
+	currentYieldLabel->setText( i18n( "Current yield:" ) );
 	factorRadioButton->setText( i18n( "Scale by factor" ) );
 	factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple):" ) );
 	buttonOk->setText( i18n( "&OK" ) );
@@ -152,11 +158,11 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 	switch ( button_id ) {
 	case SERVINGS_RADIO_BUTTON:
 		factorFrame->setEnabled( false );
-		servingsFrame->setEnabled( true );
+		yieldFrame->setEnabled( true );
 		break;
 	case FACTOR_RADIO_BUTTON:
 		factorFrame->setEnabled( true );
-		servingsFrame->setEnabled( false );
+		yieldFrame->setEnabled( false );
 		break;
 	default:
 		break;
@@ -165,13 +171,20 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 
 void ResizeRecipeDialog::accept()
 {
-	if ( currentServingsInput->text().toInt() == 0 )
-		KMessageBox::error( this, i18n( "Unable to scale a recipe with zero servings" ) );
-	else if ( buttonGroup->selected() == servingsRadioButton ) {
-		int new_servings = newServingsInput->value();
-		int current_servings = currentServingsInput->text().toInt();
+	if ( currentYieldInput->text().toInt() == 0 )
+		KMessageBox::error( this, i18n( "Unable to scale a recipe with zero yield" ) );
+	else if ( buttonGroup->selected() == yieldRadioButton ) {
+		if ( newYieldInput->isInputValid() ) {
+			double new_yield = newYieldInput->value().toDouble();
+			double current_yield = MixedNumber::fromString(currentYieldInput->text()).toDouble();
 
-		resizeRecipe( static_cast<double>( new_servings ) / static_cast<double>( current_servings ) );
+			resizeRecipe( new_yield / current_yield );
+		}
+		else {
+			KMessageBox::error( this, i18n( "Invalid input" ) );
+			newYieldInput->selectAll();
+			return;
+		}
 	}
 	else {
 		if ( factorInput->isInputValid() && factorInput->value() > 0 )
@@ -186,16 +199,10 @@ void ResizeRecipeDialog::accept()
 	QDialog::accept();
 }
 
+//TODO YIELD: handle ranges
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	int rounded_persons = static_cast<int>( qRound( currentServingsInput->text().toInt() * factor ) );
-
-	//adjust factor if when using this factor, we come out with a fraction of a person
-	kdDebug() << "factor given: " << factor << endl;
-	factor = static_cast<double>( rounded_persons ) / static_cast<double>( currentServingsInput->text().toInt() );
-	kdDebug() << "modified factor: " << factor << endl;
-
-	m_recipe->persons = rounded_persons;
+	m_recipe->yield.amount = MixedNumber::fromString(currentYieldInput->text()).toDouble() * factor;
 
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {
 		( *ing_it ).amount = ( *ing_it ).amount * factor;

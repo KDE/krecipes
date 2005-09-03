@@ -77,7 +77,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.81;
+	return 0.82;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -537,7 +537,7 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 			case 1: op = "< "+QString::number(servings); break;
 			case 2: op = "BETWEEN "+QString::number(servings-5)+" AND "+QString::number(servings+5); break;
 		}
-		conditionList << "r.persons "+op;
+		conditionList << "r.yield_amount "+op;
 	}
 
 	QString wholeQuery = "SELECT r.id FROM recipes r"

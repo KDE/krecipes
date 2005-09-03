@@ -150,8 +150,18 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 			kdDebug() << "Found author: " << el.text() << endl;
 			recipe->authorList.append( Element( el.text() ) );
 		}
-		else if ( el.tagName() == "serving" ) {
-			recipe->persons = el.text().toInt();
+		else if ( el.tagName() == "serving" ) { //### Keep for < 0.9 compatibility
+			recipe->yield.amount = el.text().toInt();
+		}
+		else if ( el.tagName() == "yield" ) {
+			QDomNodeList yield_children = el.childNodes();
+			for ( unsigned j = 0; j < yield_children.count(); j++ ) {
+				QDomElement y = yield_children.item( j ).toElement();
+				if ( y.tagName() == "amount" )
+					readAmount(y,recipe->yield.amount,recipe->yield.amount_offset);
+				else if ( y.tagName() == "type" )
+					recipe->yield.type = y.text();
+			}
 		}
 		else if ( el.tagName() == "preparation-time" ) {
 			recipe->prepTime = QTime::fromString( el.text() );
@@ -203,7 +213,7 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 					kdDebug() << "Found ingredient: " << new_ing.name << endl;
 				}
 				else if ( ing.tagName() == "amount" ) {
-					readAmount(ing,new_ing);
+					readAmount(ing,new_ing.amount,new_ing.amount_offset);
 				}
 				else if ( ing.tagName() == "unit" ) {
 					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount );
@@ -221,9 +231,9 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 	}
 }
 
-void KreImporter::readAmount( const QDomElement& amount, Ingredient &ing )
+void KreImporter::readAmount( const QDomElement& amountEl, double &amount, double &amount_offset )
 {
-	QDomNodeList children = amount.childNodes();
+	QDomNodeList children = amountEl.childNodes();
 
 	double min = 0,max = 0;
 	for ( unsigned i = 0; i < children.count(); i++ ) {
@@ -234,9 +244,9 @@ void KreImporter::readAmount( const QDomElement& amount, Ingredient &ing )
 		else if ( child.tagName() == "max" )
 			max = ( QString( child.text() ).stripWhiteSpace() ).toDouble();
 		else if ( child.tagName().isEmpty() )
-			min = ( QString( amount.text() ).stripWhiteSpace() ).toDouble();
+			min = ( QString( amountEl.text() ).stripWhiteSpace() ).toDouble();
 	}
 
-	ing.amount = min;
-	ing.amount_offset = max-min;
+	amount = min;
+	amount_offset = max-min;
 }

@@ -70,7 +70,20 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 		head_tag.appendChild( categories_tag );
 
 		QDomElement yield_tag = doc.createElement( "yield" );
-		yield_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).persons ) ) );
+		if ( ( *recipe_it ).yield.amount_offset < 1e-10 )
+			yield_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount ) ) );
+		else {
+			QDomElement range_tag = doc.createElement( "range" );
+			yield_tag.appendChild(range_tag);
+			
+			QDomElement q1_tag = doc.createElement( "q1" );
+			q1_tag.appendChild( doc.createTextNode( QString::number(( *recipe_it ).yield.amount ) ) );
+			QDomElement q2_tag = doc.createElement( "q2" );
+			q2_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset ) ) );
+
+			range_tag.appendChild(q1_tag);
+			range_tag.appendChild(q2_tag);
+		}
 		head_tag.appendChild( yield_tag );
 
 		if ( !( *recipe_it ).prepTime.isNull() ) {

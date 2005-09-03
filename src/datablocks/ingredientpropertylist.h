@@ -48,7 +48,7 @@ public:
 	IngredientProperty* at( int pos );
 	void clear( void );
 	int count( void );
-	void divide( int persons );
+	void divide( int units_of_yield_type );
 
 	int find( IngredientProperty* it );
 	int find( int id );

@@ -85,7 +85,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1),persons int(11),instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
+		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id int(11) DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
 
 	else if ( tableName == "ingredients" )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
@@ -130,6 +130,9 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_groups" ) {
 		commands << QString( "CREATE TABLE `ingredient_groups` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( maxIngGroupNameLength() );
 	}
+	else if ( tableName == "yield_types" ) {
+		commands << QString( "CREATE TABLE `yield_types` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( 20 );
+	}
 
 	else
 		return ;
@@ -146,9 +149,12 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	kdDebug() << "Current database version is..." << version << "\n";
 	QString command;
 
+	// Note that version no. means the version in which this DB structure
+	// was introduced.  To work with SVN users, the database will be incrementally
+	// upgraded for each change made between releases (e.g. 0.81, 0.82,... are
+	// what will become 0.9)
+
 	if ( version < 0.3 ) 	// The database was generated with a version older than v 0.3. First update to 0.3 version
-		// ( note that version no. means the version in which this DB structure
-		// was introduced)
 	{
 
 		// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
@@ -285,6 +291,29 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		QSqlQuery tableToAlter( command, database );
 
 		command = "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';";
+		tableToAlter.exec( command );
+	}
+	if ( version < 0.82 ) {
+		QString command = "ALTER TABLE `recipes` ADD COLUMN `yield_amount` FLOAT DEFAULT '0' AFTER persons;";
+		QSqlQuery tableToAlter( command, database );
+
+		command = "ALTER TABLE `recipes` ADD COLUMN `yield_amount_offset` FLOAT DEFAULT '0' AFTER yield_amount;";
+		tableToAlter.exec(command);
+
+		command = "ALTER TABLE `recipes` ADD COLUMN `yield_type_id` INTEGER DEFAULT '-1' AFTER yield_amount_offset;";
+
+		QSqlQuery result( "SELECT id,persons FROM recipes", database );
+		if ( result.isActive() ) {
+			while ( result.next() ) {
+				command = "UPDATE recipes SET yield_amount='" + QString::number( result.value( 1 ).toInt() ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
+				QSqlQuery query( command, database );
+			}
+		}
+
+		command = "ALTER TABLE `recipes` DROP COLUMN `persons`;";
+		tableToAlter.exec( command );
+
+		command = "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';";
 		tableToAlter.exec( command );
 	}
 }

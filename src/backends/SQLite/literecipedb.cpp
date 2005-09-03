@@ -144,7 +144,7 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		ids_str << QString::number(*it);
 	}
 
-	command = "SELECT id,title,instructions,persons,prep_time FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
+	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
 	QSQLiteResult recipeToLoad = database->executeQuery( command );
 
@@ -155,8 +155,22 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 			recipe.recipeID = row.data( 0 ).toInt();
 			recipe.title = unescapeAndDecode( row.data( 1 ) );
 			recipe.instructions = unescapeAndDecode( row.data( 2 ) );
-			recipe.persons = row.data( 3 ).toInt();
-			recipe.prepTime = QTime::fromString( row.data( 4 ) );
+
+			if ( items & RecipeDB::Yield ) {
+				recipe.yield.amount = row.data( 4 ).toDouble();
+				recipe.yield.amount_offset = row.data( 5 ).toDouble();
+				recipe.yield.type_id = row.data( 6 ).toInt();
+				if ( recipe.yield.type_id != -1 ) {
+					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
+					QSQLiteResult yield_query = database->executeQuery(y_command);
+					if ( yield_query.getStatus() != QSQLiteResult::Failure ) {
+						QSQLiteResultRow row = yield_query.first();
+						recipe.yield.type = unescapeAndDecode(row.data( 0 ));
+					}
+				}
+			}
+
+			recipe.prepTime = QTime::fromString( row.data( 3 ) );
 
 			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
 			row = recipeToLoad.next();
@@ -396,16 +410,20 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 	QString command;
 
 	if ( newRecipe ) {
-		command = QString( "INSERT INTO recipes VALUES (NULL,'%1',%2,'%3',NULL,'%4');" )  // Id is autoincremented
+		command = QString( "INSERT INTO recipes VALUES (NULL,'%1',%2,'%3','%4','%5',NULL,'%6');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->persons )
+		          .arg( recipe->yield.amount )
+		          .arg( recipe->yield.amount_offset )
+		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) );
 	}
-	else	{
-		command = QString( "UPDATE recipes SET title='%1',persons=%2,instructions='%3',prep_time='%4' WHERE id=%5;" )
+	else {
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6' WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->persons )
+		          .arg( recipe->yield.amount )
+		          .arg( recipe->yield.amount_offset )
+		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( recipe->recipeID );
@@ -1382,7 +1400,7 @@ bool LiteRecipeDB::checkIntegrity( void )
 
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "prep_methods" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "prep_methods" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "ingredient_groups" << "yield_types";
 
 	QString command = QString( "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table';" ); // Get the table names (equivalent to MySQL's "SHOW TABLES;" Easy to remember, right? ;)
 
@@ -1442,7 +1460,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
+		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
 
 	else if ( tableName == "ingredients" )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
@@ -1492,6 +1510,9 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	}
 	else if ( tableName == "ingredient_groups" ) {
 		commands << QString( "CREATE TABLE ingredient_groups (id INTEGER NOT NULL, name varchar(%1), PRIMARY KEY (id));" ).arg( maxIngGroupNameLength() );
+	}
+	else if ( tableName == "yield_types" ) {
+		commands << QString( "CREATE TABLE yield_types (id INTEGER NOT NULL, name varchar(%1), PRIMARY KEY (id));" ).arg( maxYieldTypeLength() );
 	}
 
 	else
@@ -1822,6 +1843,55 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery("CREATE index iidil_index ON ingredient_list(ingredient_id)");
 
 		database->executeQuery( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
+		database->executeQuery( "COMMIT TRANSACTION;" );
+	}
+
+	if ( version < 0.82 ) {
+		database->executeQuery( "BEGIN TRANSACTION;" );
+
+		//==================add a columns to 'recipes' to allow yield range + yield type
+		database->executeQuery( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		QSQLiteResult copyQuery = database->executeQuery( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
+		if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+			QSQLiteResultRow row = copyQuery.first();
+			while ( !copyQuery.atEnd() ) {
+				command = "INSERT INTO recipes_copy VALUES('"
+				                  + escape( row.data( 0 ) ) //id
+				          + "','" + escape( row.data( 1 ) ) //title
+				          + "','" + escape( row.data( 2 ) ) //persons
+				          + "','" + escape( row.data( 3 ) ) //instructions
+				          + "','" + escape( row.data( 4 ) ) //photo
+				          + "','" + escape( row.data( 5 ) ) //prep_time
+				          + "')";
+				database->executeQuery( command );
+
+				row = copyQuery.next();
+			}
+		}
+		database->executeQuery( "DROP TABLE recipes" );
+		database->executeQuery( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		copyQuery = database->executeQuery( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
+		if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+			QSQLiteResultRow row = copyQuery.first();
+			while ( !copyQuery.atEnd() ) {
+				command = "INSERT INTO recipes VALUES('" 
+				                  + escape( row.data( 0 ) ) //id
+				          + "','" + escape( row.data( 1 ) ) //title
+				          + "','" + escape( row.data( 2 ) ) //persons, now yield_amount
+				          + "','0"                          //yield_amount_offset
+				          + "','-1"                         //yield_type_id
+				          + "','" + escape( row.data( 3 ) ) //instructions
+				          + "','" + escape( row.data( 4 ) ) //photo
+				          + "','" + escape( row.data( 5 ) ) //prep_time
+				          + "')";
+				database->executeQuery( command );
+
+				row = copyQuery.next();
+			}
+		}
+		database->executeQuery( "DROP TABLE recipes_copy" );
+
+		database->executeQuery( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 }
@@ -2531,7 +2601,7 @@ int LiteRecipeDB::lastInsertID()
 void LiteRecipeDB::emptyData( void )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types";
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
@@ -2542,7 +2612,7 @@ void LiteRecipeDB::emptyData( void )
 void LiteRecipeDB::empty( void )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "db_info";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "db_info" << "yield_types";
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DROP TABLE %1;" ).arg( *it );

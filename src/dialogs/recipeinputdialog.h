@@ -92,8 +92,9 @@ private:
 	KLineEdit* titleEdit;
 
 	//Additional recipe data
-	QLabel* servingsLabel;
-	KIntNumInput* servingsNumInput;
+	QLabel* yieldLabel;
+	FractionInput* yieldNumInput;
+	KLineEdit* yieldTypeEdit;
 	QTimeEdit *prepTimeEdit;
 	QLabel* authorLabel;
 	KLineEdit* authorShow;

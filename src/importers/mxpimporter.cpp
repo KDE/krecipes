@@ -98,8 +98,9 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else
 			end_index = current.length();
 
-		recipe.persons = current.mid( current.find( ":" ) + 1, end_index ).stripWhiteSpace().toInt();
-		//kdDebug()<<"Found serving size: "<<recipe.persons<<endl;
+		recipe.yield.amount = current.mid( current.find( ":" ) + 1, end_index ).stripWhiteSpace().toInt();
+		recipe.yield.type = i18n("servings");
+		//kdDebug()<<"Found serving size: "<<recipe.yield.amount<<endl;
 	}
 	else {
 		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
@@ -246,8 +247,9 @@ void MXPImporter::loadInstructions( QTextStream &stream, Recipe &recipe )
 			recipe.instructions += "\n\nInternet address: " + internet;
 		}
 		else if ( current.stripWhiteSpace() == "Yield:" ) {
-			recipe.persons = getNextQuotedString( stream ).stripWhiteSpace().toInt();
-			//kdDebug()<<"Found yield: "<<m_servings<<" (adding as servings)"<<endl;
+			recipe.yield.amount = getNextQuotedString( stream ).stripWhiteSpace().toInt();
+			recipe.yield.type = i18n("servings");
+			//kdDebug()<<"Found yield: "<<recipe.yield.amount<<" (adding as servings)"<<endl;
 		}
 		else if ( current.stripWhiteSpace() == "T(Cook Time):" ) {
 			( void ) getNextQuotedString( stream ); //this would be prep time, but we don't use prep time at the moment

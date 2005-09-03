@@ -18,6 +18,19 @@
 #include "ingredientlist.h"
 #include "datablocks/elementlist.h"
 
+class Yield
+{
+public:
+	Yield() : amount(1), amount_offset(0), type(QString::null), type_id(-1){}
+
+	QString toString() const;
+
+	double amount;
+	double amount_offset;
+	QString type;
+	int type_id;
+};
+
 /**
 @author Unai Garro
 */
@@ -29,7 +42,7 @@ public:
 	// Public variables
 
 	int recipeID;
-	int persons;
+	Yield yield;
 	QString title;
 	QString instructions;
 	QPixmap photo;

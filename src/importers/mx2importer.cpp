@@ -96,8 +96,10 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		QDomElement el = l.item( i ).toElement();
 
 		QString tagName = el.tagName();
-		if ( tagName == "Serv" )
-			recipe->persons = el.attribute( "qty" ).toInt();
+		if ( tagName == "Serv" ) {
+			recipe->yield.amount = el.attribute( "qty" ).toInt();
+			recipe->yield.type = i18n("servings");
+		}
 		else if ( tagName == "PrpT" )
 			recipe->prepTime = QTime::fromString( el.attribute( "elapsed" ) );
 		else if ( tagName == "CatS" ) {

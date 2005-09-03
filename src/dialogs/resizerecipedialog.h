@@ -50,12 +50,12 @@ private:
 	Recipe *m_recipe;
 
 	QButtonGroup* buttonGroup;
-	QRadioButton* servingsRadioButton;
-	QFrame* servingsFrame;
-	QLabel* currentServingsLabel;
-	QLabel* newServingsLabel;
-	KLineEdit* currentServingsInput;
-	KIntNumInput* newServingsInput;
+	QRadioButton* yieldRadioButton;
+	QFrame* yieldFrame;
+	QLabel* currentYieldLabel;
+	QLabel* newYieldLabel;
+	KLineEdit* currentYieldInput;
+	FractionInput* newYieldInput;
 	QRadioButton* factorRadioButton;
 	QFrame* factorFrame;
 	QLabel* factorLabel;
@@ -65,7 +65,7 @@ private:
 
 	QVBoxLayout* resizeRecipeDialogLayout;
 	QVBoxLayout* buttonGroupLayout;
-	QGridLayout* servingsFrameLayout;
+	QGridLayout* yieldFrameLayout;
 	QHBoxLayout* factorFrameLayout;
 	QHBoxLayout* Layout1;
 };

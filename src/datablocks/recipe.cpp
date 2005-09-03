@@ -21,7 +21,11 @@ Recipe::~Recipe()
 void Recipe::empty( void )
 {
 	recipeID = -1;
-	persons = 1;
+
+	yield.amount = 1;
+	yield.amount_offset = 0;
+	yield.type = QString::null;
+
 	title = QString::null;
 	instructions = QString::null;
 	photo.resize( 0, 0 ); //Resizing any dimension to 0, the image becomes a null image
@@ -29,4 +33,14 @@ void Recipe::empty( void )
 	categoryList.clear();
 	authorList.clear();
 	prepTime = QTime( 0, 0 );
+}
+
+
+QString Yield::toString() const
+{
+	QString ret = QString::number(amount);
+	if ( amount_offset > 0 )
+		ret += "-"+QString::number(amount+amount_offset);
+
+	return ret;
 }

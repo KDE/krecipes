@@ -14,7 +14,9 @@
 
 FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ),
 	m_allow_range(false)
-{}
+{
+	setAlignment( Qt::AlignRight );
+}
 
 FractionInput::~FractionInput()
 {}
@@ -22,14 +24,16 @@ FractionInput::~FractionInput()
 void FractionInput::setValue( double d, double amount_offset )
 {
 	MixedNumber m( d );
-	QString offset_str = MixedNumber(m+amount_offset).toString(MixedNumber::MixedNumberFormat);
-	setText( m.toString( MixedNumber::MixedNumberFormat ) + "-" + offset_str );
+	setValue( m, amount_offset );
 }
 
 void FractionInput::setValue( const MixedNumber &m, double amount_offset )
 {
-	QString offset_str = MixedNumber(m+amount_offset).toString(MixedNumber::MixedNumberFormat);
-	setText( m.toString( MixedNumber::MixedNumberFormat ) + "-" + offset_str );
+	QString text = m.toString( MixedNumber::MixedNumberFormat );
+	if ( amount_offset > 0 ) {
+		text += "-" + MixedNumber(m+amount_offset).toString( MixedNumber::MixedNumberFormat );
+	}
+	setText(text);
 }
 
 void FractionInput::value( MixedNumber &amount, double &amount_offset ) const

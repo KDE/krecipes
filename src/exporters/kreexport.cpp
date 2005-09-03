@@ -99,9 +99,18 @@ QString KreExporter::createContent( const RecipeList& recipes )
 			xml += "<cat>" + QStyleSheet::escape( ( *cat_it ).name.utf8() ) + "</cat>\n";
 
 		xml += "</category>\n";
-		xml += "<serving>";
-		xml += QString::number( ( *recipe_it ).persons );
-		xml += "</serving>\n";
+		xml += "<yield>";
+		xml += "<amount>";
+		if ( ( *recipe_it ).yield.amount_offset < 1e-10 ) {
+			xml += QString::number( ( *recipe_it ).yield.amount );
+		}
+		else {
+			xml += "<min>"+QString::number( ( *recipe_it ).yield.amount )+"</min>";
+			xml += "<max>"+QString::number( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset )+"</max>";
+		}
+		xml += "</amount>";
+		xml += "<type>"+( *recipe_it ).yield.type+"</type>";
+		xml += "</yield>\n";
 		xml += "<preparation-time>";
 		xml += ( *recipe_it ).prepTime.toString( "hh:mm" );
 		xml += "</preparation-time>\n";

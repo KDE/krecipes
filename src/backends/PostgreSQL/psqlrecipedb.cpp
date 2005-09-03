@@ -74,7 +74,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING,persons INTEGER,instructions TEXT, photo TEXT, prep_time TIME);";
+		commands << "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME);";
 
 	else if ( tableName == "ingredients" )
 		commands << "CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
@@ -125,6 +125,9 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_groups" ) {
 		commands << "CREATE TABLE ingredient_groups (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 	}
+	else if ( tableName == "yield_types" ) {
+		commands << "CREATE TABLE yield_types (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
+	}
 	else
 		return ;
 
@@ -165,6 +168,18 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( version < 0.82 ) {
+		database->transaction();
+#if 0
+		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
+
+		QSqlQuery query(database);
+		query.exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
+#endif
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
 }
 
@@ -289,7 +304,7 @@ void PSqlRecipeDB::empty( void )
 	QSqlRecipeDB::empty();
 
 	QStringList tables;
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq";
 
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {

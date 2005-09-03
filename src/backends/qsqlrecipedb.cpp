@@ -141,17 +141,29 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		ids_str << QString::number(*it);
 	}
 
-	command = "SELECT id,title,instructions,persons,prep_time FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
+	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes r"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
-	m_query.exec( command );
-	if ( m_query.isActive() ) {
-		while ( m_query.next() ) {
+	QSqlQuery recipeQuery(command,database);
+	if ( recipeQuery.isActive() ) {
+		while ( recipeQuery.next() ) {
 			Recipe recipe;
-			recipe.recipeID = m_query.value( 0 ).toInt();
-			if ( items & RecipeDB::Title ) recipe.title = unescapeAndDecode( m_query.value( 1 ).toString() );
-			if ( items & RecipeDB::Instructions ) recipe.instructions = unescapeAndDecode( m_query.value( 2 ).toString() );
-			if ( items & RecipeDB::Servings ) recipe.persons = m_query.value( 3 ).toInt();
-			if ( items & RecipeDB::PrepTime ) recipe.prepTime = m_query.value( 4 ).toTime();
+			recipe.recipeID = recipeQuery.value( 0 ).toInt();
+			if ( items & RecipeDB::Title ) recipe.title = unescapeAndDecode( recipeQuery.value( 1 ).toString() );
+			if ( items & RecipeDB::Instructions ) recipe.instructions = unescapeAndDecode( recipeQuery.value( 2 ).toString() );
+			if ( items & RecipeDB::Yield ) {
+				recipe.yield.amount = recipeQuery.value( 4 ).toDouble();
+				recipe.yield.amount_offset = recipeQuery.value( 5 ).toDouble();
+				recipe.yield.type_id = recipeQuery.value( 6 ).toInt();
+				if ( recipe.yield.type_id != -1 ) {
+					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
+					QSqlQuery yield_query(y_command,database);
+					if ( yield_query.isActive() && yield_query.first() )
+						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toString());
+					else
+						kdDebug()<<yield_query.lastError().text()<<endl;
+				}
+			}
+			if ( items & RecipeDB::PrepTime ) recipe.prepTime = recipeQuery.value( 3 ).toTime();
 			
 
 			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
@@ -394,17 +406,21 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	QString command;
 
 	if ( newRecipe ) {
-		command = QString( "INSERT INTO recipes VALUES (%5,'%1',%2,'%3',NULL,'%4');" )  // Id is autoincremented
+		command = QString( "INSERT INTO recipes VALUES (%7,'%1',%2,'%3','%4','%5',NULL,'%6');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->persons )
+		          .arg( recipe->yield.amount )
+		          .arg( recipe->yield.amount_offset )
+		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( getNextInsertIDStr( "recipes", "id" ) );
 	}
 	else	{
-		command = QString( "UPDATE recipes SET title='%1',persons=%2,instructions='%3',prep_time='%4' WHERE id=%5;" )
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6' WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->persons )
+		          .arg( recipe->yield.amount )
+		          .arg( recipe->yield.amount_offset )
+		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( recipe->recipeID );
@@ -1352,7 +1368,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types";
 
 	QStringList existingTableList = database->tables();
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
@@ -1989,7 +2005,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 void QSqlRecipeDB::emptyData( void )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types";
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );

@@ -80,10 +80,10 @@ void IngredientPropertyList::append( IngredientProperty *property )
 	list.append ( property );
 }
 
-void IngredientPropertyList::divide( int persons )
+void IngredientPropertyList::divide( int units_of_yield_type )
 {
 	for ( IngredientProperty * ip = getFirst();ip;ip = getNext() )
-		ip->amount /= persons;
+		ip->amount /= units_of_yield_type;
 }
 
 void IngredientPropertyList::filter( int ingredientID, IngredientPropertyList *filteredList )
