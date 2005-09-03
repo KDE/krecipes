@@ -395,9 +395,9 @@ void AdvancedSearchDialog::languageChange()
 	servingsButton->setText( QString("%1 >>").arg(i18n("Yield")) );
 	enableServingsCheckBox->setText( i18n( "Enabled" ) );
 	servingsComboBox->clear();
-	servingsComboBox->insertItem( i18n( "Serves at least:" ) );
-	servingsComboBox->insertItem( i18n( "Serves at most:" ) );
-	servingsComboBox->insertItem( i18n( "Serves about:" ) );
+	servingsComboBox->insertItem( i18n( "Yields at least:" ) );
+	servingsComboBox->insertItem( i18n( "Yields at most:" ) );
+	servingsComboBox->insertItem( i18n( "Yields about:" ) );
 	prepTimeButton->setText( QString("%1 >>").arg(i18n("Preparation Time")) );
 	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
 	prepTimeComboBox->clear();
