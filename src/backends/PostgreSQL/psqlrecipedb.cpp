@@ -172,12 +172,45 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 	if ( version < 0.82 ) {
 		database->transaction();
-#if 0
-		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
 
-		QSqlQuery query(database);
-		query.exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
-#endif
+		//==================add a columns to 'recipes' to allow yield range + yield type
+		database->exec( "CREATE TABLE recipes_copy (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, persons INTEGER, instructions TEXT, photo TEXT, prep_time TIME);" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				QSqlQuery query(database);
+				query.prepare( "INSERT INTO recipes_copy VALUES (?, ?, ?, ?, ?, ?)" );
+				query.addBindValue( copyQuery.value( 0 ) );
+				query.addBindValue( copyQuery.value( 1 ) );
+				query.addBindValue( copyQuery.value( 2 ) );
+				query.addBindValue( copyQuery.value( 3 ) );
+				query.addBindValue( copyQuery.value( 4 ) );
+				query.addBindValue( copyQuery.value( 5 ) );
+				query.exec();
+			}
+		}
+		database->exec( "DROP TABLE recipes" );
+		database->exec( "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME);" );
+		copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				QSqlQuery query(database);
+ 				query.prepare( "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+				query.addBindValue( copyQuery.value( 0 ) ); //id
+				query.addBindValue( copyQuery.value( 1 ) ); //title
+				query.addBindValue( copyQuery.value( 2 ) ); //persons, now yield_amount
+				query.addBindValue( 0 );                    //yield_amount_offset
+				query.addBindValue( -1 );                   //yield_type_id
+				query.addBindValue( copyQuery.value( 3 ) ); //instructions
+				query.addBindValue( copyQuery.value( 4 ) ); //photo
+				query.addBindValue( copyQuery.value( 5 ) ); //prep_time
+				query.exec();
+			}
+		}
+		database->exec( "DROP TABLE recipes_copy" );
+
+		database->exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
+
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
@@ -280,10 +313,10 @@ void PSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &username, const QString &password, const QString & /*clientHost*/ )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "yield_types_id_seq";
 
 	//we also have to grant permissions on the sequences created
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq";
 
 	QString command;
 
