@@ -62,6 +62,7 @@ public:
 	void createNewIngredient( const QString &ingredientName );
 	void createNewPrepMethod( const QString &prepMethodName );
 	void createNewUnit( const QString &unitName, const QString &unitPlural );
+	void createNewYieldType( const QString &type );
 
 	void emptyData( void );
 	void empty( void );
@@ -74,6 +75,7 @@ public:
 	int findExistingRecipeByName( const QString& name );
 	int findExistingUnitByName( const QString& name );
 	int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 );
+	int findExistingYieldTypeByName( const QString& name );
 	void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo );
 	void findIngredientDependancies( int ingredientID, ElementList *recipes );
 	void findPrepMethodDependancies( int prepMethodID, ElementList *recipes );
@@ -108,6 +110,7 @@ public:
 	void loadUncategorizedRecipes( ElementList *list );
 	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList );
+	void loadYieldTypes( ElementList *list, int limit, int offset );
 
 	void mergeAuthors( int id1, int id2 );
 	void mergeCategories( int id1, int id2 );

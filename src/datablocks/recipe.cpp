@@ -36,7 +36,7 @@ void Recipe::empty( void )
 }
 
 
-QString Yield::toString() const
+QString Yield::amountToString() const
 {
 	QString ret = QString::number(amount);
 	if ( amount_offset > 0 )
@@ -44,3 +44,9 @@ QString Yield::toString() const
 
 	return ret;
 }
+
+QString Yield::toString() const
+{
+	return amountToString() + " " + type;
+}
+

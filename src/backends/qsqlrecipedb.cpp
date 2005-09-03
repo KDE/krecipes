@@ -318,6 +318,24 @@ void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 	}
 }
 
+void QSqlRecipeDB::loadYieldTypes( ElementList *list, int limit, int offset )
+{
+	list->clear();
+
+	QString command = "SELECT id,name FROM yield_types ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
+	m_query.exec( command );
+
+	if ( m_query.isActive() ) {
+		while ( m_query.next() ) {
+			Element el;
+			el.id = m_query.value( 0 ).toInt();
+			el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			list->append( el );
+		}
+	}
+}
+
 void QSqlRecipeDB::createNewPrepMethod( const QString &prepMethodName )
 {
 	QString command;
@@ -622,6 +640,17 @@ void QSqlRecipeDB::createNewIngredient( const QString &ingredientName )
 	QSqlQuery ingredientToCreate( command, database );
 
 	emit ingredientCreated( Element( real_name, lastInsertID() ) );
+}
+
+void QSqlRecipeDB::createNewYieldType( const QString &name )
+{
+	QString command;
+	QString real_name = name.left( maxYieldTypeLength() );
+
+	command = QString( "INSERT INTO yield_types VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "yield_types", "id" ) );
+	database->exec(command);
+
+	//emit yieldTypeCreated( Element( real_name, lastInsertID() ) );
 }
 
 void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
@@ -1701,6 +1730,20 @@ int QSqlRecipeDB::findExistingRecipeByName( const QString& name )
 	QCString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM recipes WHERE title='%1';" ).arg( search_str );
+	QSqlQuery elementToLoad( command, database ); // Run the query
+
+	int id = -1;
+	if ( elementToLoad.isActive() && elementToLoad.first() )
+		id = elementToLoad.value( 0 ).toInt();
+
+	return id;
+}
+
+int QSqlRecipeDB::findExistingYieldTypeByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode( name.left( maxYieldTypeLength() ) ); //truncate to the maximum size db holds
+
+	QString command = QString( "SELECT id FROM yield_types WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
 
 	int id = -1;

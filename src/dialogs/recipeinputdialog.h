@@ -140,6 +140,7 @@ private:
 	int createNewUnitIfNecessary( const QString &unit, bool plural, const QString &ingredient, Unit &new_unit );
 	int createNewPrepIfNecessary( const QString &prep );
 	int createNewGroupIfNecessary( const QString &group );
+	int createNewYieldIfNecessary( const QString &yield );
 	void checkIfNewUnits();
 	void saveRecipe( void );
 	void showCategories( void );

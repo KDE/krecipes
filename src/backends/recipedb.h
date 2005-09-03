@@ -132,6 +132,7 @@ public:
 	virtual void createNewIngredient( const QString &ingredientName ) = 0;
 	virtual void createNewPrepMethod( const QString &prepMethodName ) = 0;
 	virtual void createNewUnit( const QString &unitName, const QString &unitPlural ) = 0;
+	virtual void createNewYieldType( const QString &type ) = 0;
 
 	virtual void emptyData( void ) = 0;
 	virtual void empty( void ) = 0;
@@ -144,6 +145,7 @@ public:
 	virtual int findExistingRecipeByName( const QString& name ) = 0;
 	virtual int findExistingUnitByName( const QString& name ) = 0;
 	virtual int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 ) = 0;
+	virtual int findExistingYieldTypeByName( const QString& name ) = 0;
 	virtual void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo ) = 0;
 	virtual void findIngredientDependancies( int ingredientID, ElementList *recipes ) = 0;
 	virtual void findPrepMethodDependancies( int prepMethodID, ElementList *recipes ) = 0;
@@ -181,6 +183,7 @@ public:
 	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
 	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
+	virtual void loadYieldTypes( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 
 	/** Change all instances of authors with id @param id2 to @param id1 */
 	virtual void mergeAuthors( int id1, int id2 ) = 0;

@@ -371,6 +371,26 @@ void LiteRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 	}
 }
 
+void LiteRecipeDB::loadYieldTypes( ElementList *list, int limit, int offset )
+{
+	list->clear();
+
+	QString command = "SELECT id,name FROM yield_types ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
+	QSQLiteResult toLoad = database->executeQuery( command );
+
+	if ( toLoad.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = toLoad.first();
+		while ( !toLoad.atEnd() ) {
+			Element el;
+			el.id = row.data( 0 ).toInt();
+			el.name = unescapeAndDecode( row.data( 1 ) );
+			list->append( el );
+			row = toLoad.next();
+		}
+	}
+}
+
 void LiteRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 {
 	list->clear();
@@ -643,6 +663,17 @@ void LiteRecipeDB::createNewIngredient( const QString &ingredientName )
 	database->executeQuery( command );
 
 	emit ingredientCreated( Element( real_name, lastInsertID() ) );
+}
+
+void LiteRecipeDB::createNewYieldType( const QString &name )
+{
+	QString command;
+	QString real_name = name.left( maxYieldTypeLength() );
+
+	command = QString( "INSERT INTO yield_types VALUES(NULL,'%1');" ).arg( escapeAndEncode( real_name ) );
+	database->executeQuery( command );
+
+	//emit yieldCreated( Element( real_name, lastInsertID() ) );
 }
 
 void LiteRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
@@ -2275,6 +2306,23 @@ int LiteRecipeDB::findExistingRecipeByName( const QString& name )
 		if ( !elementToLoad.atEnd() )
 			id = row.data( 0 ).toInt();
 	}
+	return id;
+}
+
+int LiteRecipeDB::findExistingYieldTypeByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode( name.left( maxYieldTypeLength() ) ); //truncate to the maximum size db holds
+
+	QString command = "SELECT id FROM yield_types WHERE name LIKE '" + search_str + "';";
+	QSQLiteResult elementToLoad = database->executeQuery( command ); // Run the query
+	int id = -1;
+
+	if ( elementToLoad.getStatus() != QSQLiteResult::Failure ) {
+		QSQLiteResultRow row = elementToLoad.first();
+		if ( !elementToLoad.atEnd() )
+			id = row.data( 0 ).toInt();
+	}
+
 	return id;
 }
 

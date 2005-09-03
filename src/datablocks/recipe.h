@@ -23,6 +23,7 @@ class Yield
 public:
 	Yield() : amount(1), amount_offset(0), type(QString::null), type_id(-1){}
 
+	QString amountToString() const;
 	QString toString() const;
 
 	double amount;

@@ -619,6 +619,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
+	connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( prepTimeEdit, SIGNAL( valueChanged( const QTime & ) ), SLOT( recipeChanged() ) );
 	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
@@ -1098,6 +1099,23 @@ int RecipeInputDialog::createNewGroupIfNecessary( const QString &group )
 	return database->lastInsertID();
 }
 
+int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )
+{
+	if ( yield.stripWhiteSpace().isEmpty() )  //no yield
+		return -1;
+	else
+	{
+		int id = database->findExistingYieldTypeByName( yield );
+		if ( id == -1 ) //creating new
+		{
+			database->createNewYieldType( yield );
+			id = database->lastInsertID();
+		}
+
+		return id;
+	}
+}
+
 bool RecipeInputDialog::checkAmountEdit()
 {
 	if ( amountEdit->isInputValid() )
@@ -1355,6 +1373,7 @@ void RecipeInputDialog::saveRecipe( void )
 	loadedRecipe->instructions = instructionsEdit->text();
 	loadedRecipe->title = titleEdit->text();
 	yieldNumInput->value(loadedRecipe->yield.amount,loadedRecipe->yield.amount_offset);
+	loadedRecipe->yield.type_id = createNewYieldIfNecessary(yieldTypeEdit->text());
 	loadedRecipe->prepTime = prepTimeEdit->time();
 
 	// Now save()
