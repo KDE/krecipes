@@ -10,12 +10,20 @@
 
 #include "fractioninput.h"
 
+#include <qtimer.h>
+
+#include <kglobalsettings.h>
+
 #include "datablocks/ingredient.h"
 
 FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ),
-	m_allow_range(false)
+	m_allowRange(false),
+	m_validateTimer(new QTimer(this))
 {
 	setAlignment( Qt::AlignRight );
+
+	connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(slotStartValidateTimer()) );
+	connect( m_validateTimer, SIGNAL(timeout()), this, SLOT(validate()) );
 }
 
 FractionInput::~FractionInput()
@@ -75,7 +83,7 @@ MixedNumber FractionInput::maxValue() const
 
 bool FractionInput::isInputValid() const
 {
-	if ( !m_allow_range && text().contains("-") )
+	if ( !m_allowRange && text().contains("-") )
 		return false;
 
 	bool ok;
@@ -83,3 +91,19 @@ bool FractionInput::isInputValid() const
 
 	return ok;
 }
+
+void FractionInput::slotStartValidateTimer()
+{
+	if ( !m_validateTimer->isActive() )
+		m_validateTimer->start( 1000, true );
+}
+
+void FractionInput::validate()
+{
+	if ( isInputValid() )
+		setPaletteForegroundColor( KGlobalSettings::textColor() );
+	else
+		setPaletteForegroundColor( Qt::red );
+}
+
+#include "fractioninput.moc"

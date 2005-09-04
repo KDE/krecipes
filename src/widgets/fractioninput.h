@@ -15,17 +15,21 @@
 
 #include "mixednumber.h"
 
+class QTimer;
+
 /** A KLineEdit widget extended to allow input of decimals and fractions or ranges of such.
   * Input is returned as a @ref MixedNumber class.
   * @author Jason Kivlighn
   */
 class FractionInput : public KLineEdit
 {
+Q_OBJECT
+
 public:
 	FractionInput( QWidget *parent = 0, const char *name = 0 );
 	~FractionInput();
 
-	void setAllowRange( bool b ){ m_allow_range = b; }
+	void setAllowRange( bool b ){ m_allowRange = b; }
 
 	void setValue( double amount, double amount_offset );
 	void setValue( const MixedNumber &, double amount_offset );
@@ -38,8 +42,15 @@ public:
 
 	bool isInputValid() const;
 
+public slots:
+	void validate();
+
+private slots:
+	void slotStartValidateTimer();
+
 private:
-	bool m_allow_range;
+	bool m_allowRange;
+	QTimer *m_validateTimer;
 };
 
 #endif //FRACTIONINPUT_H
