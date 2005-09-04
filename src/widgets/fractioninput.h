@@ -13,7 +13,7 @@
 
 #include <klineedit.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 
 class QTimer;
 

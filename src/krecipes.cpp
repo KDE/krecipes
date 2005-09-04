@@ -27,6 +27,7 @@
 #include "dialogs/ingredientmatcherdialog.h"
 #include "dialogs/dbimportdialog.h"
 #include "dialogs/pagesetupdialog.h"
+#include "dialogs/recipeimportdialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -324,7 +325,22 @@ void Krecipes::import()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		m_view->import( *importer );
+		KConfig * config = kapp->config();
+		config->setGroup( "Import" );
+		bool direct = config->readBoolEntry( "DirectImport", false );
+		if ( !direct ) {
+			RecipeImportDialog import_dialog( importer->recipeList() );
+	
+			if ( import_dialog.exec() != QDialog::Accepted ) {
+				delete importer;
+				return;
+			}
+			else
+				importer->setRecipeList( import_dialog.getSelectedRecipes() );
+		}
+
+		importer->import(m_view->database);
+		//m_view->database->import( importer ); //TODO TESTS: Do it this way
 
 		if ( !importer->getMessages().isEmpty() ) {
 			KTextEdit * warningEdit = new KTextEdit( this );
@@ -368,7 +384,7 @@ void Krecipes::kreDBImport()
 			KMessageBox::sorry( this, error );
 		}
 		else
-			m_view->import( importer );
+			importer.import(m_view->database);
 	}
 }
 

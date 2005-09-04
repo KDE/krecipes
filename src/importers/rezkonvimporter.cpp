@@ -18,7 +18,7 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 
 RezkonvImporter::RezkonvImporter() : BaseImporter()
 {}

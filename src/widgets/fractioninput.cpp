@@ -27,7 +27,9 @@ FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( p
 }
 
 FractionInput::~FractionInput()
-{}
+{
+	delete m_validateTimer;
+}
 
 void FractionInput::setValue( double d, double amount_offset )
 {

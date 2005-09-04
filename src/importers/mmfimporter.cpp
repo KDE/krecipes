@@ -19,7 +19,7 @@
 #include <qtextstream.h>
 #include <qstringlist.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "datablocks/recipe.h"
 #include "mmdata.h"
 
@@ -209,7 +209,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 			return false;
 		}
 
-		if ( new_ingredient.amount > 1 )
+		if ( int(new_ingredient.amount) > 1 )
 			new_ingredient.units.plural = unit;
 		else
 			new_ingredient.units.name = unit;

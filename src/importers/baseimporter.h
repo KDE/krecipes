@@ -62,6 +62,9 @@ public:
 	  */
 	void import( RecipeDB *db, bool automatic = false );
 
+	RecipeList recipeList() const { return *m_recipe_list; }
+	void setRecipeList( const RecipeList &list ) { *m_recipe_list = list; }
+
 protected:
 	virtual void parseFile( const QString &filename ) = 0;
 	

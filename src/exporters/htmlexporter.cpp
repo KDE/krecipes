@@ -30,7 +30,7 @@
 #include <kurl.h>
 
 #include "propertycalculator.h"
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "dialogs/setupdisplay.h"
 #include "image.h"
 #include "krepagelayout.h"

@@ -11,7 +11,7 @@
 
 #include "conversiontable.h"
 #include "widgets/editbox.h"
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 
 #include <qtooltip.h>
 

@@ -19,7 +19,7 @@
 #include <qstringlist.h>
 #include <qregexp.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "datablocks/recipe.h"
 
 NYCGenericImporter::NYCGenericImporter() : BaseImporter()

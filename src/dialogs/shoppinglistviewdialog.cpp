@@ -12,7 +12,7 @@
 
 #include "shoppinglistviewdialog.h"
 #include "datablocks/ingredientlist.h"
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 
 #include <qpushbutton.h>
 

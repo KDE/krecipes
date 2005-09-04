@@ -30,8 +30,8 @@
 #include <qvaluelist.h>
 #include <qlayout.h>
 
-#include "../image.h"
-#include "../mixednumber.h"
+#include "image.h"
+#include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
 #include "dialogs/krepagelayoutdia.h"
 #include "widgets/kreruler.h"

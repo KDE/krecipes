@@ -19,7 +19,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "datablocks/recipe.h"
 
 MXPImporter::MXPImporter() : BaseImporter()

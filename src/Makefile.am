@@ -39,7 +39,7 @@ krecipes_SOURCES = \
 	krecipesiface.skel krecipesdbiface.skel \
 	propertycalculator.cpp setupwizard.cpp \
 	shoppingcalculator.cpp kstartuplogo.cpp \
-	mixednumber.cpp recipeactionshandler.cpp \
+	recipeactionshandler.cpp \
 	recipefilter.cpp krepagelayout.cpp kreunit.cpp \
 	convert_sqlite3.cpp
 

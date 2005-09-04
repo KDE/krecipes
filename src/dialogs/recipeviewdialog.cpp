@@ -26,7 +26,7 @@
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 #include "exporters/htmlexporter.h"
 

@@ -29,7 +29,7 @@
 #include "widgets/ingredientlistview.h"
 #include "shoppinglistviewdialog.h"
 #include "shoppingcalculator.h"
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 
 RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *db, const ElementList &recipeList )
 		: QDialog( parent, "refinedialog", true ),

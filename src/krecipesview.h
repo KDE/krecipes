@@ -137,11 +137,6 @@ public:
 	void createNewRecipe( void );
 	void createNewElement( void );
 
-	void import( BaseImporter &importer )
-	{
-		importer.import( database );
-	}
-	
 	void exportRecipes( const QValueList<int> &ids );
 
 private:

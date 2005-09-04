@@ -6,6 +6,8 @@
 # set the include path for X, qt and KDE
 INCLUDES         = -I$(srcdir)/.. -I$(srcdir)/../backends $(all_includes)
 
+SUBDIRS = tests
+
 noinst_LTLIBRARIES=libkrecipesimporters.la
 libkrecipesimporters_la_SOURCES = mx2importer.cpp mmfimporter.cpp mxpimporter.cpp nycgenericimporter.cpp recipemlimporter.cpp baseimporter.cpp kreimporter.cpp rezkonvimporter.cpp kredbimporter.cpp
 libkrecipesimporters_la_METASOURCES=AUTO

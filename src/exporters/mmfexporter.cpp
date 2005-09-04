@@ -17,7 +17,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 
-#include "mixednumber.h"
+#include "datablocks/mixednumber.h"
 #include "mmdata.h"
 
 MMFExporter::MMFExporter( const QString& filename, const QString& format ) :

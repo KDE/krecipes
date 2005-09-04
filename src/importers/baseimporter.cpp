@@ -21,7 +21,6 @@
 
 #include "datablocks/recipe.h"
 #include "backends/recipedb.h"
-#include "dialogs/recipeimportdialog.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
 
@@ -110,29 +109,13 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 		if ( m_recipe_list->count() == 0 )
 			return;
 	
-		RecipeList selected_recipes;
-		if ( !automatic ) {
-			RecipeImportDialog import_dialog( *m_recipe_list );
-	
-			if ( import_dialog.exec() != QDialog::Accepted ) {
-				//clear errors and messages so they won't be displayed
-				m_error_msgs.clear();
-				m_warning_msgs.clear();
-				return ;
-			}
-	
-			selected_recipes = import_dialog.getSelectedRecipes();
-		}
-		else
-			selected_recipes = *m_recipe_list;
-	
 		m_recipe_list->empty();
 		//db->blockSignals(true);
 
 		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), 0,
 			i18n( "Importing selected recipes" ), QString::null, true );
 		KProgress *progress = m_progress_dialog->progressBar();
-		progress->setTotalSteps( selected_recipes.count() );
+		progress->setTotalSteps( m_recipe_list->count() );
 		progress->setFormat( i18n( "%v/%m Recipes" ) );
 
 		if ( m_cat_structure ) {
@@ -140,7 +123,7 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 			delete m_cat_structure;
 			m_cat_structure = 0;
 		}
-		importRecipes( selected_recipes, db, m_progress_dialog );
+		importRecipes( *m_recipe_list, db, m_progress_dialog );
 		importUnitRatios( db );
 	
 		//db->blockSignals(false);
