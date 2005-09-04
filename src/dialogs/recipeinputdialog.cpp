@@ -1227,8 +1227,12 @@ void RecipeInputDialog::addIngredient( void )
 		}
 	}
 
+	ingredientBox->lineEdit()->clear();
+	amountEdit->clear();
+	unitBox->lineEdit()->clear();
+	prepMethodBox->lineEdit()->clear();
+
 	ingredientBox->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
-	ingredientBox->lineEdit() ->selectAll();
 }
 
 void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text, int col )
@@ -1420,7 +1424,7 @@ void RecipeInputDialog::reloadCombos( void )  //Reloads lists of units and prepa
 	//these only needed to be loaded once
 	if ( ingredientBox->count() == 0 ) {
 		START_TIMER("Loading ingredient input auto-completion");
-		ingredientBox->startLoad();
+		ingredientBox->reload();
 		END_TIMER();
 	}
 	if ( headerBox->count() == 0 ) {
