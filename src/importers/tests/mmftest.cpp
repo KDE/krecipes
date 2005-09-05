@@ -34,6 +34,7 @@ main(int argc, char *argv[])
 	Recipe recipe;
 	recipe.title = "Title 1";
 	recipe.yield.amount = 2;
+	recipe.yield.type = "servings";
 	recipe.categoryList.append( Element("Category 1") );
 	recipe.categoryList.append( Element("Category 2") );
 	recipe.instructions = 

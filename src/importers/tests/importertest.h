@@ -56,14 +56,16 @@ bool check(const QString &txt, double a, double b)
 void check( const Recipe &recipe, const Recipe &base )
 {
 	check( "Recipe title", recipe.title, base.title );
-	check( "Yield", recipe.yield.amount, base.yield.amount );
+	check( "Yield base", recipe.yield.amount, base.yield.amount );
+	check( "Yield offset", recipe.yield.amount_offset, base.yield.amount_offset );
+	check( "Yield type", recipe.yield.type, base.yield.type );
 	check( "Instructions", recipe.instructions, base.instructions );
 
 	int cat_num = 1;
 	ElementList::const_iterator cat_it = recipe.categoryList.begin();
 	ElementList::const_iterator base_cat_it = base.categoryList.begin();
 	for ( ; cat_it != recipe.categoryList.end() || base_cat_it != base.categoryList.end(); ++cat_it, ++base_cat_it ) {
-		check( QString::number(cat_num)+" Category", (*cat_it).name, (*base_cat_it).name );
+		check( QString::number(cat_num)+": Category", (*cat_it).name, (*base_cat_it).name );
 		++cat_num;
 	}
 	check( "category count", cat_num-1, base.categoryList.count() );
@@ -72,11 +74,12 @@ void check( const Recipe &recipe, const Recipe &base )
 	IngredientList::const_iterator ing_it = recipe.ingList.begin();
 	IngredientList::const_iterator base_ing_it = base.ingList.begin();
 	for ( ; ing_it != recipe.ingList.end() || base_ing_it != base.ingList.end(); ++ing_it, ++base_ing_it ) {
-		check( QString::number(ing_num)+" :Ingredient name", (*ing_it).name, (*base_ing_it).name );
-		check( QString::number(ing_num)+" :Ingredient amount", (*ing_it).amount,(*base_ing_it).amount );
-		check( QString::number(ing_num)+" :Ingredient singular unit", (*ing_it).units.name, (*base_ing_it).units.name );
-		check( QString::number(ing_num)+" :Ingredient plural unit", (*ing_it).units.plural, (*base_ing_it).units.plural );
-		check( QString::number(ing_num)+" :Ingredient prep_method", (*ing_it).prepMethod, (*base_ing_it).prepMethod );
+		check( QString::number(ing_num)+": Ingredient name", (*ing_it).name, (*base_ing_it).name );
+		check( QString::number(ing_num)+": Ingredient amount", (*ing_it).amount,(*base_ing_it).amount );
+		check( QString::number(ing_num)+": Ingredient amount_offset", (*ing_it).amount_offset,(*base_ing_it).amount_offset );
+		check( QString::number(ing_num)+": Ingredient singular unit", (*ing_it).units.name, (*base_ing_it).units.name );
+		check( QString::number(ing_num)+": Ingredient plural unit", (*ing_it).units.plural, (*base_ing_it).units.plural );
+		check( QString::number(ing_num)+": Ingredient prep_method", (*ing_it).prepMethod, (*base_ing_it).prepMethod );
 
 		++ing_num;
 	}
