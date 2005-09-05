@@ -81,10 +81,10 @@ main(int argc, char *argv[])
 	recipe.ingList.append( ing4 );
 
 
-	CategoryTree catTree;
-	CategoryTree *child = catTree.add( Element("Category 1",1) );
+	CategoryTree *catTree = new CategoryTree;
+	CategoryTree *child = catTree->add( Element("Category 1",1) );
 		(void)child->add( Element("Subcategory 1",2) );
-	(void)catTree.add( Element("Category 2",3) );
+	(void)catTree->add( Element("Category 2",3) );
 	
 	check( importer, recipe );
 
@@ -94,7 +94,7 @@ main(int argc, char *argv[])
 	recipeList.append(recipe);
 
 	printf("Creating KreExporter.\n");
-	KreExporter exporter(&catTree,"not needed",".kreml");
+	KreExporter exporter(catTree,"not needed",".kreml");
 	check( exporter, recipeList );
 	printf("Successfully exported recipes to test.txt.\n");
 
