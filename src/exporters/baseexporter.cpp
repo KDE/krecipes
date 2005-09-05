@@ -70,6 +70,13 @@ void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progre
 	exporter( single_recipe_list, database, progress_dlg );
 }
 
+void BaseExporter::writeStream( QTextStream &stream, const RecipeList &recipe_list )
+{
+	stream << createHeader(recipe_list);
+	stream << createContent(recipe_list);
+	stream << createFooter();
+}
+
 bool BaseExporter::createFile()
 {
 	if ( file )

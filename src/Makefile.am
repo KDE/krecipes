@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 bin_PROGRAMS = krecipes
 
-SUBDIRS = backends importers dialogs exporters widgets datablocks
+SUBDIRS = backends importers dialogs exporters widgets datablocks tests
 
 # set the include path for X, qt and KDE
 INCLUDES         = -I$(srcdir) -I$(srcdir)/backends -I$(srcdir)/backends/SQLite $(all_includes)

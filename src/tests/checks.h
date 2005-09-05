@@ -8,6 +8,9 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef CHECKS_H
+#define CHECKS_H
+
 #include <cmath>
 #include <iostream>
 
@@ -16,6 +19,7 @@
 #include <qimage.h>
 
 using std::cout;
+using std::cerr;
 using std::endl;
 
 bool check(const QString &txt, const QString &a, const QString &b)
@@ -111,16 +115,4 @@ void check( const Recipe &recipe, const Recipe &base )
 	check( "ingredient count", ing_num-1, base.ingList.count() );
 }
 
-void check( const BaseImporter &importer, const Recipe &recipe )
-{
-	int recipe_num = 1;
-	RecipeList recipeList = importer.recipeList();
-	for ( RecipeList::const_iterator it = recipeList.begin(); it != recipeList.end(); ++it ) {
-		printf("Recipe %d... ",recipe_num);
-		check( *it, recipe );
-		printf("successful\n");
-		++recipe_num;
-	}
-
-	check( "recipe count", recipe_num-1, 2 );
-}
+#endif

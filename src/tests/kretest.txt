@@ -91,7 +91,7 @@ gAooopgFFFFABRRRQAUUUUrIAooopgFFFFABRRRQAUUUUAFFFFIAooooAKKKKQH/2Q==]]></pic>
 <ingredient>
 <name>ingredient 1</name>
 <amount><min>1</min><max>3</max></amount>
-<unit>teaspoon</unit>
+<unit>teaspoons</unit>
 </ingredient>
 <ingredient>
 <name>ingredient 2</name>
@@ -198,7 +198,7 @@ gAooopgFFFFABRRRQAUUUUrIAooopgFFFFABRRRQAUUUUAFFFFIAooooAKKKKQH/2Q==]]></pic>
 <ingredient>
 <name>ingredient 1</name>
 <amount><min>1</min><max>3</max></amount>
-<unit>teaspoon</unit>
+<unit>teaspoons</unit>
 </ingredient>
 <ingredient>
 <name>ingredient 2</name>

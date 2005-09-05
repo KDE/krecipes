@@ -40,6 +40,8 @@ public:
 	  */
 	QString fileName() const;
 
+	void writeStream( QTextStream &, const RecipeList & );
+
 protected:
 	virtual QString createContent( const RecipeList & ) = 0;
 	virtual QString createFooter(){ return QString(); }
