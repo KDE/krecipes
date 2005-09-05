@@ -57,7 +57,8 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 	if ( ok && *ok == false ) return;
 
 	amount = nm_min.toDouble();
-	amount_offset = nm_max.toDouble() - amount;
+	if ( nm_max > 0 )
+		amount_offset = nm_max.toDouble() - amount;
 }
 
 //compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group
