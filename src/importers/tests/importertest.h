@@ -11,6 +11,10 @@
 #include <cmath>
 #include <iostream>
 
+#include <qstring.h>
+#include <qpixmap.h>
+#include <qimage.h>
+
 using std::cout;
 using std::endl;
 
@@ -53,6 +57,17 @@ bool check(const QString &txt, double a, double b)
 	return true;
 }
 
+bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
+{
+	if ( a.size() != b.size() ) {
+		
+		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
+		exit( 1 );
+	}
+
+	return true;
+}
+
 void check( const Recipe &recipe, const Recipe &base )
 {
 	check( "Recipe title", recipe.title, base.title );
@@ -60,6 +75,7 @@ void check( const Recipe &recipe, const Recipe &base )
 	check( "Yield offset", recipe.yield.amount_offset, base.yield.amount_offset );
 	check( "Yield type", recipe.yield.type, base.yield.type );
 	check( "Instructions", recipe.instructions, base.instructions );
+	check( "Photo", recipe.photo, base.photo );
 
 	int cat_num = 1;
 	ElementList::const_iterator cat_it = recipe.categoryList.begin();
@@ -69,6 +85,15 @@ void check( const Recipe &recipe, const Recipe &base )
 		++cat_num;
 	}
 	check( "category count", cat_num-1, base.categoryList.count() );
+
+	int author_num = 1;
+	ElementList::const_iterator author_it = recipe.authorList.begin();
+	ElementList::const_iterator base_author_it = base.authorList.begin();
+	for ( ; author_it != recipe.authorList.end() || base_author_it != base.authorList.end(); ++author_it, ++base_author_it ) {
+		check( QString::number(author_num)+": Author", (*author_it).name, (*base_author_it).name );
+		++author_num;
+	}
+	check( "author count", author_num-1, base.authorList.count() );
 
 	int ing_num = 1;
 	IngredientList::const_iterator ing_it = recipe.ingList.begin();

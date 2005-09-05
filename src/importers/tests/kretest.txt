@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<krecipes version="SVN_PRE-0.9" lang="en_US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="krecipes.xsd">
+<krecipes-category-structure>
+<category name="Category 1">
+<category name="Subcategory 1">
+</category>
+</category>
+<category name="Category 2">
+</category>
+</krecipes-category-structure>
+<krecipes-recipe>
+<krecipes-description>
+<title>Title 1</title>
+<author>Author 1</author>
+<author>Author 2</author>
+<pictures>
+<pic format="JPEG" id="1"><![CDATA[/9j/4AAQSkZJRgABAQIAAAAAAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACmAN0DASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwOjFF
+Fd9iAxSYpaKVhiYopaKLAJRS0UWASilopWASiloosAlLmpraLzrmKLGd7hf1r0q0sYI4FCwRgAdl
+FZznyjR5dS4r3HwxoVjqOvWkN1ZW88W7c6SRKysBzyCOa6jxH8NvC1/A23SorSTB2yWv7srn2HB/
+EGpVVdUFj5lorpfFfhOfwzdDEvn2kjERyYwQfQj1xXN1qrNXQhKKWinYBKKWinYBMUYpaKLAGKMU
+UUWAKKKKdhC4oxRRV2ATFGKWiiwCUUtFFgEopaKLAJRS0UrAJRS0UWA1PD8Hn61AOy5Y/lXp0MPy
+quK4TwVbebqE0pH3ECg/U/8A1q9Ms4NzjjpXHWfvlI6bwJZ51l5cf6uE/rxXW6qMRmqPgWz+W6kx
+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]]></pic>
+</pictures>
+<category>
+<cat>Subcategory 1</cat>
+<cat>Category 2</cat>
+</category>
+<yield><amount><min>2</min><max>5</max></amount><type>type</type></yield>
+<preparation-time>01:30</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>ingredient 1</name>
+<amount><min>1</min><max>3</max></amount>
+<unit>teaspoon</unit>
+</ingredient>
+<ingredient>
+<name>ingredient 2</name>
+<amount>3.5</amount>
+<unit></unit>
+<prep>prep</prep>
+</ingredient>
+<ingredient>
+<name>ingredient 3</name>
+<amount>3.5</amount>
+<unit>ounces</unit>
+</ingredient>
+<ingredient>
+<name>ingredient 4</name>
+<amount><min>3.5</min><max>4</max></amount>
+<unit>ounces</unit>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Instruction line 1
+Instruction line 2
+Instruction line 3</krecipes-instructions>
+</krecipes-recipe>
+<krecipes-recipe>
+<krecipes-description>
+<title>Title 1</title>
+<author>Author 1</author>
+<author>Author 2</author>
+<pictures>
+<pic format="JPEG" id="1"><![CDATA[/9j/4AAQSkZJRgABAQIAAAAAAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACmAN0DASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwOjFF
+Fd9iAxSYpaKVhiYopaKLAJRS0UWASilopWASiloosAlLmpraLzrmKLGd7hf1r0q0sYI4FCwRgAdl
+FZznyjR5dS4r3HwxoVjqOvWkN1ZW88W7c6SRKysBzyCOa6jxH8NvC1/A23SorSTB2yWv7srn2HB/
+EGpVVdUFj5lorpfFfhOfwzdDEvn2kjERyYwQfQj1xXN1qrNXQhKKWinYBKKWinYBMUYpaKLAGKMU
+UUWAKKKKdhC4oxRRV2ATFGKWiiwCUUtFFgEopaKLAJRS0UrAJRS0UWA1PD8Hn61AOy5Y/lXp0MPy
+quK4TwVbebqE0pH3ECg/U/8A1q9Ms4NzjjpXHWfvlI6bwJZ51l5cf6uE/rxXW6qMRmqPgWz+W6kx
+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]]></pic>
+</pictures>
+<category>
+<cat>Subcategory 1</cat>
+<cat>Category 2</cat>
+</category>
+<yield><amount><min>2</min><max>5</max></amount><type>type</type></yield>
+<preparation-time>01:30</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>ingredient 1</name>
+<amount><min>1</min><max>3</max></amount>
+<unit>teaspoon</unit>
+</ingredient>
+<ingredient>
+<name>ingredient 2</name>
+<amount>3.5</amount>
+<unit></unit>
+<prep>prep</prep>
+</ingredient>
+<ingredient>
+<name>ingredient 3</name>
+<amount>3.5</amount>
+<unit>ounces</unit>
+</ingredient>
+<ingredient>
+<name>ingredient 4</name>
+<amount><min>3.5</min><max>4</max></amount>
+<unit>ounces</unit>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Instruction line 1
+Instruction line 2
+Instruction line 3</krecipes-instructions>
+</krecipes-recipe>
+</krecipes>

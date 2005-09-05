@@ -32,10 +32,8 @@ void KreImporter::parseFile( const QString &filename )
 	bool unlink = false;
 	kdDebug() << "loading file: %s" << filename << endl;
 
-	if ( filename.right( 6 ) == ".kreml" ) {
+	if ( filename.right( 4 ) == ".kre" ) {
 		file = new QFile( filename );
-	}
-	else if ( filename.right( 4 ) == ".kre" ) {
 		kdDebug() << "file is an archive" << endl;
 		KTar* kre = new KTar( filename, "application/x-gzip" );
 		kre->open( IO_ReadOnly );
@@ -59,8 +57,7 @@ void KreImporter::parseFile( const QString &filename )
 		unlink = true; //remove file after import
 	}
 	else {
-		setErrorMsg( i18n( "File extension does not match that of a valid Krecipes file." ) );
-		return ;
+		file = new QFile( filename );
 	}
 
 	if ( file->open( IO_ReadOnly ) ) {
@@ -248,5 +245,6 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 	}
 
 	amount = min;
-	amount_offset = max-min;
+	if ( max != 0 )
+		amount_offset = max-min;
 }
