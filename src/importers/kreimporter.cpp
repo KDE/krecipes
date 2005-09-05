@@ -213,7 +213,7 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 					readAmount(ing,new_ing.amount,new_ing.amount_offset);
 				}
 				else if ( ing.tagName() == "unit" ) {
-					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount );
+					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount+new_ing.amount_offset );
 				}
 				else if ( ing.tagName() == "prep" ) {
 					new_ing.prepMethod = QString( ing.text() ).stripWhiteSpace();
@@ -245,6 +245,6 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 	}
 
 	amount = min;
-	if ( max != 0 )
+	if ( max > 0 )
 		amount_offset = max-min;
 }
