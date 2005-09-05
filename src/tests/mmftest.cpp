@@ -17,7 +17,9 @@ using std::cout;
 using std::endl;
 
 #include "mmfimporter.h"
+#include "mmfexporter.h"
 #include "importertest.h"
+#include "exportertest.h"
 
 int
 main(int argc, char *argv[])
@@ -72,5 +74,24 @@ main(int argc, char *argv[])
 	
 	check( importer, recipe );
 
-	printf("Done.\n");
+	RecipeList recipeList;
+	recipeList.append(recipe);
+	recipeList.append(recipe);
+
+	printf("Creating MMFExporter.\n");
+	MMFExporter exporter("not needed",".mmf");
+	check( exporter, recipeList );
+	printf("Successfully exported recipes to test.txt.\n");
+
+	printf("Creating MMFImporter to test exported recipes.\n");
+	MMFImporter importer2;
+
+	printf("Parsing test.txt.\n");
+	QStringList files2; files2 << "test.txt";
+	importer2.parseFiles(files2);
+	QFile::remove("test.txt");
+	check( importer2, recipe );
+	printf("Recipe export successful.\n");
+
+	printf("*** MM format importer and exporter passed the tests :-) ***\n");
 }

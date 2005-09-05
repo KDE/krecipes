@@ -156,7 +156,10 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 
 void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )
 {
-	content += wrapText( recipe.instructions, 80 ).join( "\n" ) + "\n";
+	QStringList lines = QStringList::split("\n",recipe.instructions,true);
+	for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
+		content += wrapText( *it, 80 ).join( "\n" ) + "\n";
+	}
 }
 
 QStringList MMFExporter::wrapText( const QString& str, int at ) const
