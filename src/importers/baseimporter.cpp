@@ -264,6 +264,15 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			( *cat_it ).id = new_cat_id;
 		}
 
+		if ( !(*recipe_it).yield.type.isEmpty() ) {
+			int new_id = db->findExistingYieldTypeByName((*recipe_it).yield.type);
+			if ( new_id == -1 ) {
+				db->createNewYieldType( (*recipe_it).yield.type );
+				new_id = db->lastInsertID();
+			}
+			(*recipe_it).yield.type_id = new_id;
+		}
+
 		if ( overwrite )  //overwrite existing
 			( *recipe_it ).recipeID = db->findExistingRecipeByName( ( *recipe_it ).title );
 		else //rename
