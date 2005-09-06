@@ -19,7 +19,6 @@
 #include "kreexport.h"
 #include "importertest.h"
 #include "exportertest.h"
-#include "image.h"
 
 int
 main(int argc, char *argv[])
@@ -44,8 +43,11 @@ main(int argc, char *argv[])
 		"Instruction line 1\n"
 		"Instruction line 2\n"
 		"Instruction line 3";
-	recipe.photo = QPixmap(defaultPhoto);
 	recipe.prepTime = QTime(1,30);
+	if ( !recipe.photo.load( "test_photo.jpg", "JPEG" ) ) {
+		printf("Unable to load test_photo.jpg\n");
+		exit(1);
+	}
 
 	recipe.authorList.append( Element("Author 1") );
 	recipe.authorList.append( Element("Author 2") );
@@ -87,6 +89,7 @@ main(int argc, char *argv[])
 	(void)catTree->add( Element("Category 2",3) );
 	
 	check( importer, recipe );
+	check( importer, catTree );
 
 
 	RecipeList recipeList;
@@ -106,6 +109,7 @@ main(int argc, char *argv[])
 	importer2.parseFiles(files2);
 	QFile::remove("test.txt");
 	check( importer2, recipe );
+	check( importer2, catTree );
 	printf("Recipe export successful.\n");
 
 	printf("*** Krecipes importer and exporter passed the tests :-) ***\n");

@@ -18,6 +18,8 @@
 #include <qpixmap.h>
 #include <qimage.h>
 
+#include "datablocks/categorytree.h"
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -113,6 +115,27 @@ void check( const Recipe &recipe, const Recipe &base )
 		++ing_num;
 	}
 	check( "ingredient count", ing_num-1, base.ingList.count() );
+}
+
+bool check( const CategoryTree *catStructure, const CategoryTree *baseCatStructure )
+{
+	CategoryTree * it = catStructure->firstChild();
+	CategoryTree * base_it = baseCatStructure->firstChild();
+	for ( ; it && base_it; it = it->nextSibling(), base_it = base_it->nextSibling() ) {
+		check( it, base_it );
+
+		if ( it->category.name != base_it->category.name ) {
+			printf("FAILED: Category structure differs\n");
+			exit(1);
+		}
+	}
+
+	if ( base_it != it ) { //these should both be NULL
+		printf("FAILED: Category structure differs\n");
+		exit(1);
+	}
+
+	return true;
 }
 
 #endif

@@ -17,11 +17,11 @@
 #include <qstring.h>
 
 #include "checks.h"
+#include "datablocks/categorytree.h"
 
 using std::cout;
 using std::endl;
 
-//TODO TESTS: Check category structure
 void check( const BaseImporter &importer, const Recipe &recipe )
 {
 	int recipe_num = 1;
@@ -34,6 +34,12 @@ void check( const BaseImporter &importer, const Recipe &recipe )
 	}
 
 	check( "recipe count", recipe_num-1, 2 );
+}
+
+void check( const BaseImporter &importer, const CategoryTree *baseCatStructure )
+{
+	printf("Checking category structure.\n");
+	check( importer.categoryStructure(), baseCatStructure );
 }
 
 #endif

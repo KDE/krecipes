@@ -65,6 +65,8 @@ public:
 	RecipeList recipeList() const { return *m_recipe_list; }
 	void setRecipeList( const RecipeList &list ) { *m_recipe_list = list; }
 
+	const CategoryTree *categoryStructure() const { return m_cat_structure; }
+
 protected:
 	virtual void parseFile( const QString &filename ) = 0;
 	
