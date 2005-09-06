@@ -5,6 +5,7 @@ MimeType=application/x-krecipes-backup
 Icon=krecipes_file
 Patterns=*.krecbk
 Comment=Krecipes Backup File
+Comment[ga]=Comhad Cúltaca Krecipes
 Comment[it]=File di copia di sicurezza di Krecipes
 Comment[nl]=KRecipes reservekopiebestand
 Comment[pt]=Cópia de Segurança do Krecipes
