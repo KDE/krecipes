@@ -32,7 +32,8 @@
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
 	printView(0),
-	database(db)
+	database(db),
+	m_isPrinting(false)
 {
 	// Initialize UI Elements
 	recipeView = new KHTMLPart( this );
@@ -132,9 +133,11 @@ void RecipeViewDialog::print( void )
 
 void RecipeViewDialog::readyForPrint()
 {
-	if ( printView ) {
+	if ( printView && !m_isPrinting ) {
+		m_isPrinting = true;
 		printView->view()->layout();
 		printView->view()->print();
+		m_isPrinting = false;
 	}
 
 	//TODO: Cleanup temporary files

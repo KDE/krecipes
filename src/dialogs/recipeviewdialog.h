@@ -61,6 +61,7 @@ private:
 	KHTMLPart *printView;
 	RecipeDB *database;
 	bool recipe_loaded;
+	bool m_isPrinting;
 	QValueList<int> ids_loaded;
 	QString tmp_filename;
 
