@@ -165,18 +165,17 @@ void SelectRecipeDialog::ensurePopulated()
 
 void SelectRecipeDialog::haveSelectedItems()
 {
-	if ( recipeListView->selectedItem() ) {
-		if ( recipeListView->selectedItem() ->rtti() == 1000 || recipeListView->selectedItem() ->rtti() == 1001 )
-			emit recipeSelected( true );
-		else
-			emit recipeSelected( false );
-	}
+	if ( recipeListView->selectedItems().count() > 0 )
+		emit recipeSelected( true );
+	else
+		emit recipeSelected( false );
 }
 
 void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
-	if ( recipeListView->selectedItem() && recipeListView->selectedItem() ->rtti() == 1000 ) {
-		RecipeListItem * recipe_it = ( RecipeListItem* ) recipeListView->selectedItem();
+	QPtrList<QListViewItem> items = recipeListView->selectedItems();
+	if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
+		RecipeListItem * recipe_it = ( RecipeListItem* )items.at(0);
 		database->loadRecipe( recipe, RecipeDB::All, recipe_it->recipeID() );
 	}
 }

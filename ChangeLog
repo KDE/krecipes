@@ -2,6 +2,7 @@ Changes from 0.8 to SVN:
   -New yield property for recipes: rather than storing the number of servings, it now stores a yield amount and type.  The amount may also be a range.
   -Backup/restore of entire database
   -Ingredient amounts can be ranges
+  -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or printing multiple recipes at once
   -PostgreSQL backend now stable
 
 Changes from 0.7 to 0.8:

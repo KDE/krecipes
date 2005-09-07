@@ -60,8 +60,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		catPop->insertItem( i18n( "&Expand All" ), this, SLOT( expandAll() ), CTRL + Key_Plus );
 	if ( actions & CollapseAll )
 		catPop->insertItem( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), CTRL + Key_Minus );
-	if ( actions & CategoryExport )
-		catPop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( categoryExport() ), 0 );
+	if ( actions & Export )
+		catPop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 
 	catPop->polish();
 
@@ -95,14 +95,41 @@ void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const
 	}
 }
 
+QValueList<int> RecipeActionsHandler::recipeIDs( const QPtrList<QListViewItem> &items ) const
+{
+	QValueList<int> ids;
+
+	QPtrListIterator<QListViewItem> it(items);
+	QListViewItem *item;
+	while ( (item = it.current()) != 0 ) {
+		if ( item->rtti() == 1000 ) { //RecipeListItem
+			RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+			if ( ids.find( recipe_it->recipeID() ) == ids.end() )
+				ids << recipe_it->recipeID();
+		}
+		else if ( item->rtti() == 1001 ) {
+			CategoryListItem *cat_it = ( CategoryListItem* ) item;
+			ElementList list;
+			database->loadRecipeList( &list, cat_it->element().id, true );
+	
+			for ( ElementList::const_iterator cat_it = list.begin(); cat_it != list.end(); ++cat_it ) {
+				if ( ids.find( (*cat_it).id ) == ids.end() )
+					ids << (*cat_it).id;
+			}
+		}
+		++it;
+	}
+
+	return ids;
+}
+
 void RecipeActionsHandler::open()
 {
-	QListViewItem * it = parentListView->selectedItem();
-	if ( it ) {
-		if ( it->rtti() == 1000 ) { //RecipeListItem
-			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
-			emit recipeSelected( recipe_it->recipeID(), 0 );
-		}
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QValueList<int> ids = recipeIDs(items);
+		if ( ids.count() > 0 )
+			emit recipesSelected(ids,0);
 		#if 0
 		else if ( it->rtti() == 1001 && it->firstChild() )  //CategoryListItem and not empty
 		{
@@ -139,24 +166,32 @@ void RecipeActionsHandler::open()
 
 void RecipeActionsHandler::edit()
 {
-	QListViewItem * it = parentListView->selectedItem();
-	if ( it && it->rtti() == 1000 ) {
-		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 1 )
+		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one recipe."), i18n("Edit Recipe") );
+	else if ( items.at(0)->rtti() == 1000 ) {
+		RecipeListItem * recipe_it = ( RecipeListItem* ) items.at(0);
 		emit recipeSelected( recipe_it->recipeID(), 1 );
 	}
-	else
+	else //either nothing was selected or a category was selected
 		KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Edit Recipe") );
 }
 
 void RecipeActionsHandler::recipeExport()
 {
-	if ( parentListView->selectedItem() && parentListView->selectedItem()->rtti() >= 1000 ) {
-		if ( parentListView->selectedItem()->rtti() == 1001 )
-			categoryExport();
-		else if ( parentListView->selectedItem() ->rtti() == 1000 ) {
-				RecipeListItem * recipe_it = ( RecipeListItem* ) parentListView->selectedItem();
-				exportRecipe( recipe_it->recipeID(), i18n( "Export Recipe" ), recipe_it->title(), database );
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QValueList<int> ids = recipeIDs( items );
+
+		QString title;
+		if ( items.count() == 1 ) {
+			RecipeListItem * recipe_it = ( RecipeListItem* ) items.at(0);
+			title = recipe_it->title();
 		}
+		else
+			title = i18n( "Recipes" );
+
+		exportRecipes( ids, i18n( "Export Recipe" ), title, database );
 	}
 	else //if nothing selected, export all visible recipes
 	{
@@ -177,34 +212,52 @@ void RecipeActionsHandler::recipeExport()
 
 void RecipeActionsHandler::removeFromCategory()
 {
-	QListViewItem * it = parentListView->selectedItem();
-	if ( it && it->rtti() == 1000 ) {
-		if ( it->parent() != 0 ) {
-			RecipeListItem * recipe_it = ( RecipeListItem* ) it;
-			int recipe_id = recipe_it->recipeID();
-
-			CategoryListItem *cat_it = ( CategoryListItem* ) it->parent();
-			database->removeRecipeFromCategory( recipe_id, cat_it->categoryId() );
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QPtrListIterator<QListViewItem> it(items);
+		QListViewItem *item;
+		while ( (item = it.current()) != 0 ) {
+			if ( item->parent() != 0 ) {
+				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+				int recipe_id = recipe_it->recipeID();
+	
+				CategoryListItem *cat_it = ( CategoryListItem* ) item->parent();
+				database->removeRecipeFromCategory( recipe_id, cat_it->categoryId() );
+			}
+			++it;
 		}
 	}
 }
 
-void RecipeActionsHandler::remove
-	()
+void RecipeActionsHandler::remove()
 {
-	QListViewItem * it = parentListView->selectedItem();
-	if ( it && it->rtti() == 1000 ) {
-		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
-		emit recipeSelected( recipe_it->recipeID(), 2 );
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QPtrListIterator<QListViewItem> it(items);
+		QListViewItem *item;
+		while ( (item = it.current()) != 0 ) {
+			if ( item->parent() != 0 ) {
+				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+				emit recipeSelected( recipe_it->recipeID(), 2 );
+			}
+			++it;
+		}
 	}
 }
 
 void RecipeActionsHandler::addToShoppingList()
 {
-	QListViewItem * it = parentListView->selectedItem();
-	if ( it && it->rtti() == 1000 ) {
-		RecipeListItem * recipe_it = ( RecipeListItem* ) it;
-		emit recipeSelected( recipe_it->recipeID(), 3 );
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QPtrListIterator<QListViewItem> it(items);
+		QListViewItem *item;
+		while ( (item = it.current()) != 0 ) {
+			if ( item->parent() != 0 ) {
+				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+				emit recipeSelected( recipe_it->recipeID(), 3 );
+			}
+			++it;
+		}
 	}
 }
 
@@ -225,22 +278,6 @@ void RecipeActionsHandler::collapseAll()
 		QListViewItem * item = it.current();
 		item->setOpen( false );
 		++it;
-	}
-}
-
-void RecipeActionsHandler::categoryExport()
-{
-	if ( parentListView->selectedItem() ) {
-		CategoryListItem *cat_it = ( CategoryListItem* ) parentListView->selectedItem();
-		ElementList list;
-		database->loadRecipeList( &list, cat_it->element().id, true );
-
-		QValueList<int> ids;
-		for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-			ids << (*it).id;
-		}
-
-		exportRecipes( ids, i18n( "Export Recipes" ), cat_it->element().name, database );
 	}
 }
 

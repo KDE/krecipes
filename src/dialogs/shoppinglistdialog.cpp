@@ -175,8 +175,14 @@ void ShoppingListDialog::reload( void )
 
 void ShoppingListDialog::addRecipe( void )
 {
-	QListViewItem * it = recipeListView->listView() ->selectedItem();
-	addRecipe( it );
+	QPtrList<QListViewItem> items = recipeListView->listView()->selectedItems();
+
+	QPtrListIterator<QListViewItem> it(items);
+	QListViewItem *item;
+	while ( (item = it.current()) != 0 ) {
+		addRecipe( item );
+		++it;
+	}
 }
 
 void ShoppingListDialog::addRecipe( QListViewItem *item )
@@ -189,30 +195,6 @@ void ShoppingListDialog::addRecipe( QListViewItem *item )
 			r.title = recipe_it->title();
 			r.recipeID = recipe_it->recipeID();
 			( void ) new RecipeListItem( shopRecipeListView->listView(), r );
-		}
-		else if ( item->rtti() == 1001 ) { //add everything in the category
-			//do this to only iterate over children of 'item'
-			QListViewItem * pEndItem = NULL;
-			QListViewItem *pStartItem = item;
-			do {
-				if ( pStartItem->nextSibling() )
-					pEndItem = pStartItem->nextSibling();
-				else
-					pStartItem = pStartItem->parent();
-			}
-			while ( pStartItem && !pEndItem );
-
-			QListViewItemIterator list_it = QListViewItemIterator( item );
-			while ( list_it.current() != pEndItem ) {
-				if ( list_it.current() ->rtti() == 1000 && list_it.current() ->isVisible() ) {
-					RecipeListItem * recipe_it = ( RecipeListItem* ) list_it.current();
-					Recipe r;
-					r.title = recipe_it->title();
-					r.recipeID = recipe_it->recipeID();
-					( void ) new RecipeListItem( shopRecipeListView->listView(), r );
-				}
-				list_it++;
-			}
 		}
 	}
 }

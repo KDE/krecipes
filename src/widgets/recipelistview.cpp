@@ -87,11 +87,13 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 
 	KIconLoader il;
 	setPixmap( il.loadIcon( "categories", KIcon::NoGroup, 16 ) );
+
+	setSelectionMode( QListView::Extended );
 }
 
 QDragObject *RecipeListView::dragObject()
 {
-	RecipeListItem * item = dynamic_cast<RecipeListItem*>( selectedItem() );
+	RecipeListItem * item = dynamic_cast<RecipeListItem*>( currentItem() );
 	if ( item != 0 ) {
 		RecipeItemDrag * obj = new RecipeItemDrag( item, this, "Recipe drag item" );
 		/*const QPixmap *pm = item->pixmap(0);

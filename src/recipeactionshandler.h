@@ -15,6 +15,7 @@
 
 #include <qobject.h>
 #include <qvaluelist.h>
+#include <qptrlist.h>
 
 class QListViewItem;
 class KListView;
@@ -44,8 +45,7 @@ public:
 	    Remove = 0x0010,
 	    ExpandAll = 0x0020,
 	    CollapseAll = 0x0040,
-	    CategoryExport = 0x0080,
-	    AddToShoppingList = 0x0100
+	    AddToShoppingList = 0x0080
 	};
 
 	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
@@ -63,7 +63,7 @@ public slots:
 	void exec( ItemType type, const QPoint &p );
 	void showPopup( KListView *, QListViewItem *, const QPoint & );
 
-	/** Signals an open event (via the recipeSelected() signal) for the recipe currently
+	/** Signals an open event (via the recipeSelected() signal) for the recipe(s) currently
 	  * selected in the list view 
 	  */
 	void open();
@@ -73,19 +73,19 @@ public slots:
 	  */
 	void edit();
 
-	/** Saves the recipe currently selected in the list view, prompting with a file
+	/** Saves the recipe(s) currently selected in the list view, prompting with a file
 	         * dialog.
 	  */
 	void recipeExport();
 
-	/** Removes the recipe currently selected in the list view from its current category */
+	/** Removes the recipe(s) currently selected in the list view from its current category */
 	void removeFromCategory();
 
-	/** Removes the recipe currently selected in the list view from the database */
+	/** Removes the recipe(s) currently selected in the list view from the database */
 	void remove
 		();
 
-	/** Add the recipe currently selected in the list view to the shopping list dialog */
+	/** Add the recipe(s) currently selected in the list view to the shopping list dialog */
 	void addToShoppingList();
 
 	/** Expands all items in the list view */
@@ -93,9 +93,6 @@ public slots:
 
 	/** Collapses all items in the list view */
 	void collapseAll();
-
-	/** Saves all recipes in the currently selected category */
-	void categoryExport();
 
 private:
 	KPopupMenu *kpop;
@@ -107,6 +104,7 @@ private:
 	int remove_from_cat_item;
 
 	QValueList<int> getAllVisibleItems();
+	QValueList<int> recipeIDs( const QPtrList<QListViewItem> &items ) const;
 };
 
 #endif //RECIPEACTIONSHANDLER_H

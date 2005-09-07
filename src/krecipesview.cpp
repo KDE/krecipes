@@ -493,7 +493,7 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	case 2:  //Remove
 		{
 			switch ( KMessageBox::questionYesNo( this,
-			                                     QString( i18n( "Are you sure you want to permanently remove the selected recipe?" ) ),
+			                                     QString( i18n( "Are you sure you want to permanently remove the recipe, %1?" ) ).arg(database->recipeTitle(recipeID)),
 			                                     i18n( "Confirm remove" ) ) )
 			{
 			case KMessageBox::Yes:
