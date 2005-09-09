@@ -84,6 +84,12 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 			range_tag.appendChild(q1_tag);
 			range_tag.appendChild(q2_tag);
 		}
+		if ( !( *recipe_it ).yield.type.isEmpty() ) {
+			QDomElement yield_unit_tag = doc.createElement( "unit" );
+			yield_unit_tag.appendChild( doc.createTextNode(( *recipe_it ).yield.type) );
+			yield_tag.appendChild( yield_unit_tag );
+		}
+
 		head_tag.appendChild( yield_tag );
 
 		if ( !( *recipe_it ).prepTime.isNull() ) {

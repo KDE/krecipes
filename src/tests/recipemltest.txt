@@ -12,6 +12,105 @@
    <cat>Cookies &amp; Squares</cat>
   </categories>
   <yield>
+   <unit>dozen</unit>
+   <range>
+    <q1>2</q1>
+    <q2>3</q2>
+   </range>
+  </yield>
+  <preptime type="Total" >
+   <time>
+    <qty>30</qty>
+    <timeunit>minutes</timeunit>
+   </time>
+  </preptime>
+ </head>
+ <ingredients>
+  <ing-div>
+   <title>Dry Ingredients</title>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>brown sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>
+      <range>
+       <q1>0.75</q1>
+       <q2>1</q2>
+      </range>
+     </qty>
+     <unit>c.</unit>
+    </amt>
+    <item>granulated sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>all-purpose flour</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>baking soda</item>
+   </ing>
+  </ing-div>
+  <ing-div>
+   <title>Fat and Liquids</title>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit></unit>
+    </amt>
+    <item>eggs</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>peanut butter</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>vanilla extract</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>shortening</item>
+   </ing>
+  </ing-div>
+ </ingredients>
+ <directions>
+  <step>Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</step>
+ </directions>
+</recipe>
+<recipe>
+ <head>
+  <title>Cookies Test</title>
+  <source>
+   <srcitem>Mona Beamer</srcitem>
+   <srcitem>Colleen Beamer</srcitem>
+  </source>
+  <categories>
+   <cat>Snacks</cat>
+   <cat>Cookies &amp; Squares</cat>
+  </categories>
+  <yield>
+   <unit>dozen</unit>
    <range>
     <q1>2</q1>
     <q2>3</q2>

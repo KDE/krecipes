@@ -177,7 +177,7 @@ QStringList MMFExporter::wrapText( const QString& str, int at ) const
 			line = line.replace( rxp, "" ); // remove last word
 		}
 		copy = copy.remove( 0, line.length() );
-		line = line.simplifyWhiteSpace();
+		line = line.stripWhiteSpace();
 		line.prepend( " " );       // indent line by one char
 		ret << line; // output of current line
 	}
