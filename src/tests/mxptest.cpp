@@ -46,28 +46,24 @@ main(int argc, char *argv[])
 	ing.name = "ingredient 1";
 	ing.amount = 1;
 	ing.units.name = "teaspoon";
-	ing.prepMethod = QString::null;
 	recipe.ingList.append( ing );
 
 	Ingredient ing2;
 	ing2.name = "ingredient 2";
 	ing2.amount = 3.5;
 	ing2.units.plural = QString::null;
-	ing2.prepMethod = QString::null;
 	recipe.ingList.append( ing2 );
 
 	Ingredient ing3;
 	ing3.name = "ingredient 3";
 	ing3.amount = 3.5;
 	ing3.units.plural = "ounces";
-	ing3.prepMethod = QString::null;
 	recipe.ingList.append( ing3 );
 
 	Ingredient ing4;
 	ing4.name = "ingredient 4";
 	ing4.amount = 3.5;
 	ing4.units.plural = "ounces";
-	ing4.prepMethod = QString::null;
 	recipe.ingList.append( ing4 );
 	
 	check( importer, recipe );

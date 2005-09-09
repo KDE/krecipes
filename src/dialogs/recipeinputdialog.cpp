@@ -1320,7 +1320,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		}
 	case 3:  //prep method
 		{
-			QString old_text = ( *ing ).prepMethod;
+			QString old_text = ( *ing ).prepMethodList.join(",");
 
 			QStringList prepMethodList = QStringList::split(",",new_text.stripWhiteSpace());
 

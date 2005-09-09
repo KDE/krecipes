@@ -31,8 +31,6 @@ public:
 	double amount_offset;
 	int unitID;
 	Unit units;
-	QString prepMethod;
-	int prepMethodID;
 	int groupID;
 	QString group;
 

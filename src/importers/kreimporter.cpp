@@ -216,7 +216,7 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount+new_ing.amount_offset );
 				}
 				else if ( ing.tagName() == "prep" ) {
-					new_ing.prepMethod = QString( ing.text() ).stripWhiteSpace();
+					new_ing.prepMethodList = ElementList::split(",",QString( ing.text() ).stripWhiteSpace());
 				}
 			}
 			new_ing.group = header;

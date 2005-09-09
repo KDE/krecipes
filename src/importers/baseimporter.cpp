@@ -211,16 +211,17 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 				kapp->processEvents();
 			}
 
-			int new_prep_id = -1;
 			if ( ( *ing_it ).prepMethodList.count() > 0 ) {
-				new_prep_id = db->findExistingPrepByName(( *ing_it ).prepMethod);
-				if ( new_prep_id == -1 ) {
-					db->createNewPrepMethod( ( *ing_it ).prepMethod );
-					new_prep_id = db->lastInsertID();
+				for ( ElementList::iterator prep_it = ( *ing_it ).prepMethodList.begin(); prep_it != ( *ing_it ).prepMethodList.end(); ++prep_it ) {
+					int new_prep_id = db->findExistingPrepByName((*prep_it).name);
+					if ( new_prep_id == -1 ) {
+						db->createNewPrepMethod((*prep_it).name);
+						new_prep_id = db->lastInsertID();
+					}
+					(*prep_it).id = new_prep_id;
 				}
 			}
 
-			( *ing_it ).prepMethodID = new_prep_id;
 			( *ing_it ).unitID = new_unit_id;
 			( *ing_it ).ingredientID = new_ing_id;
 

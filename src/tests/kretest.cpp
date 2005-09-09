@@ -55,7 +55,6 @@ main(int argc, char *argv[])
 	ing.amount = 1;
 	ing.amount_offset = 0;
 	ing.units.name = "c.";
-	ing.prepMethod = QString::null;
 	ing.groupID = 0; ing.group = "Dry Ingredients";
 	recipe.ingList.append( ing );
 
@@ -64,7 +63,6 @@ main(int argc, char *argv[])
 	ing2.amount = 0.75;
 	ing2.amount_offset = 0.25;
 	ing2.units.name = "c.";
-	ing2.prepMethod = QString::null;
 	ing2.groupID = 0; ing2.group = "Dry Ingredients";
 	recipe.ingList.append( ing2 );
 
@@ -72,7 +70,6 @@ main(int argc, char *argv[])
 	ing3.name = "all-purpose flour";
 	ing3.amount = 2;
 	ing3.units.plural = "c.";
-	ing3.prepMethod = QString::null;
 	ing3.groupID = 0; ing3.group = "Dry Ingredients";
 	recipe.ingList.append( ing3 );
 
@@ -81,7 +78,6 @@ main(int argc, char *argv[])
 	ing4.amount = 1;
 	ing4.amount_offset = 0;
 	ing4.units.name = "tsp.";
-	ing4.prepMethod = QString::null;
 	ing4.groupID = 0; ing4.group = "Dry Ingredients";
 	recipe.ingList.append( ing4 );
 
@@ -90,7 +86,6 @@ main(int argc, char *argv[])
 	ing5.amount = 2;
 	ing5.amount_offset = 0;
 	ing5.units.plural = "";
-	ing5.prepMethod = QString::null;
 	ing5.groupID = 1; ing5.group = "Fat and Liquids";
 	recipe.ingList.append( ing5 );
 
@@ -99,7 +94,6 @@ main(int argc, char *argv[])
 	ing6.amount = 1;
 	ing6.amount_offset = 0;
 	ing6.units.name = "c.";
-	ing6.prepMethod = QString::null;
 	ing6.groupID = 1; ing6.group = "Fat and Liquids";
 	recipe.ingList.append( ing6 );
 
@@ -108,7 +102,6 @@ main(int argc, char *argv[])
 	ing7.amount = 1;
 	ing7.amount_offset = 0;
 	ing7.units.name = "tsp.";
-	ing7.prepMethod = QString::null;
 	ing7.groupID = 1; ing7.group = "Fat and Liquids";
 	recipe.ingList.append( ing7 );
 
@@ -117,7 +110,7 @@ main(int argc, char *argv[])
 	ing8.amount = 1;
 	ing8.amount_offset = 0;
 	ing8.units.name = "c.";
-	ing8.prepMethod = "at room temperature";
+	ing8.prepMethodList.append( Element("at room temperature") );
 	ing8.groupID = 1; ing8.group = "Fat and Liquids";
 	recipe.ingList.append( ing8 );
 
