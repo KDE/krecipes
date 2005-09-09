@@ -19,15 +19,13 @@
 Ingredient::Ingredient() : amount( 0 ), amount_offset( 0 ), groupID( -1 )
 {}
 
-Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID, const QString &_prepMethod, int _prepMethodID ) :
+Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID ) :
 		ingredientID( _ingredientID ),
 		name( _name ),
 		amount( _amount ),
 		amount_offset( 0 ),
 		unitID( _unitID ),
 		units( _units ),
-		prepMethod( _prepMethod ),
-		prepMethodID( _prepMethodID ),
 		groupID( -1 )
 {}
 

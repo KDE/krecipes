@@ -77,7 +77,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.82;
+	return 0.83;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -341,7 +341,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 		dumpFile->close();
 
-		portOldDatabases(latestDBVersion());
+		checkIntegrity();
 	}
 	else {
 		kdDebug()<<"Unable to open the selected backup file"<<endl;

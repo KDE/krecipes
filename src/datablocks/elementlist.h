@@ -33,6 +33,10 @@ public:
 	Element findByName( const QRegExp & ) const;
 
 	Element getElement( int index ) const;
+
+	QString join( const QString &sep ) const;
+
+	static ElementList split( const QString &sep, const QString &str );
 };
 
 

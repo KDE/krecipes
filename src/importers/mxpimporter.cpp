@@ -210,7 +210,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 
 			//prep method
 			if ( dash_index != -1 && dash_index != 24 )  //ignore a dash in the first position (index 24)
-				new_ingredient.prepMethod = current.mid( dash_index + 2, current.length() ).stripWhiteSpace();
+				new_ingredient.prepMethodList.append( Element(current.mid( dash_index + 2, current.length() ).stripWhiteSpace()) );
 
 			recipe.ingList.append( new_ingredient );
 			//kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount

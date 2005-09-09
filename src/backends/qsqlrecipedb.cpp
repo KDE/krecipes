@@ -174,24 +174,24 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			if ( !(items & RecipeDB::NamesOnly) )
-				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,il.prep_method_id,il.group_id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
 			else
 				command = QString( "SELECT il.ingredient_id,i.name FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id;" ).arg( (*recipe_it).recipeID );
 
-			QSqlQuery ingredietQuery( command, database );
-			if ( ingredietQuery.isActive() ) {
+			QSqlQuery ingredientQuery( command, database );
+			if ( ingredientQuery.isActive() ) {
 				RecipeList::Iterator it = recipeIterators[ (*recipe_it).recipeID ];
-				while ( ingredietQuery.next() ) {
+				while ( ingredientQuery.next() ) {
 					Ingredient ing;
-					ing.ingredientID = ingredietQuery.value( 0 ).toInt();
-					ing.name = unescapeAndDecode( ingredietQuery.value( 1 ).toString() );
+					ing.ingredientID = ingredientQuery.value( 0 ).toInt();
+					ing.name = unescapeAndDecode( ingredientQuery.value( 1 ).toString() );
 
 					if ( !(items & RecipeDB::NamesOnly) ) {
-						ing.amount = ingredietQuery.value( 2 ).toDouble();
-						ing.amount_offset = ingredietQuery.value( 3 ).toDouble();
-						ing.unitID = ingredietQuery.value( 4 ).toInt();
-						ing.units.name = unescapeAndDecode( ingredietQuery.value( 5 ).toString() );
-						ing.units.plural = unescapeAndDecode( ingredietQuery.value( 6 ).toString() );
+						ing.amount = ingredientQuery.value( 2 ).toDouble();
+						ing.amount_offset = ingredientQuery.value( 3 ).toDouble();
+						ing.unitID = ingredientQuery.value( 4 ).toInt();
+						ing.units.name = unescapeAndDecode( ingredientQuery.value( 5 ).toString() );
+						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 6 ).toString() );
 	
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -199,18 +199,19 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						else if ( ing.units.plural.isEmpty() )
 							ing.units.plural = ing.units.name;
 			
-						ing.prepMethodID = ingredietQuery.value( 7 ).toInt();
-						if ( ing.prepMethodID != -1 ) {
-							QSqlQuery prepMethodToLoad( QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ing.prepMethodID ), database );
-							if ( prepMethodToLoad.isActive() && prepMethodToLoad.first() )
-								ing.prepMethod = unescapeAndDecode( prepMethodToLoad.value( 0 ).toString() );
-						}
-			
-						ing.groupID = ingredietQuery.value( 8 ).toInt();
+						ing.groupID = ingredientQuery.value( 7 ).toInt();
 						if ( ing.groupID != -1 ) {
 							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 							if ( toLoad.isActive() && toLoad.first() )
 								ing.group = unescapeAndDecode( toLoad.value( 0 ).toString() );
+						}
+
+						command = QString("SELECT pl.prep_method_id,p.name FROM prep_methods p, prep_method_list pl WHERE pl.ingredient_list_id=%1 AND p.id=pl.prep_method_id ORDER BY pl.order_index;").arg(ingredientQuery.value( 8 ).toInt());
+						QSqlQuery ingPrepMethodsQuery( command, database );
+						if ( ingPrepMethodsQuery.isActive() ) {
+							while ( ingPrepMethodsQuery.next() ) {
+								ing.prepMethodList.append( Element(ingPrepMethodsQuery.value(1).toString(),ingPrepMethodsQuery.value(0).toInt()) );
+							}
 						}
 					}
 					(*it).ingList.append( ing );
@@ -470,7 +471,15 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	}
 
 	// Save the ingredient list (first delete if we are updating)
-
+	command = QString( "SELECT id FROM ingredient_list WHERE recipe_id=%1" ).arg(recipeID);
+	recipeToSave.exec( command );
+	if ( recipeToSave.isActive() ) {
+		while ( recipeToSave.next() ) {
+			command = QString("DELETE FROM prep_method_list WHERE ingredient_list_id=%1")
+			  .arg(recipeToSave.value(0).toInt());
+			database->exec(command);
+		}
+	}
 	command = QString( "DELETE FROM ingredient_list WHERE recipe_id=%1;" )
 	          .arg( recipeID );
 	recipeToSave.exec( command );
@@ -478,16 +487,28 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	int order_index = 0;
 	for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		order_index++;
+		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8);" )
+		          .arg( ing_list_id_str )
 		          .arg( recipeID )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
 		          .arg( ( *ing_it ).amount_offset )
 		          .arg( ( *ing_it ).unitID )
-		          .arg( ( *ing_it ).prepMethodID )
 		          .arg( order_index )
 		          .arg( ( *ing_it ).groupID );
 		recipeToSave.exec( command );
+
+		int ing_list_id = lastInsertID();
+		int prep_order_index = 0;
+		for ( ElementList::const_iterator prep_it = (*ing_it).prepMethodList.begin(); prep_it != (*ing_it).prepMethodList.end(); ++prep_it ) {
+			prep_order_index++;
+			command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
+				.arg( ing_list_id )
+				.arg( ( *prep_it ).id )
+				.arg( prep_order_index );
+			recipeToSave.exec( command );
+		}
 	}
 
 	// Save the category list for the recipe (first delete, in case we are updating)
@@ -1397,7 +1418,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list";
 
 	QStringList existingTableList = database->tables();
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {

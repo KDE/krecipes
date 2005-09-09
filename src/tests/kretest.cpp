@@ -33,60 +33,98 @@ main(int argc, char *argv[])
 	importer.parseFiles(files);
 
 	Recipe recipe;
-	recipe.title = "Title 1";
+	recipe.title = "Cookies Test";
 	recipe.yield.amount = 2;
-	recipe.yield.amount_offset = 3;
-	recipe.yield.type = "type";
-	recipe.categoryList.append( Element("Subcategory 1",2) );
-	recipe.categoryList.append( Element("Category 2",3) );
+	recipe.yield.amount_offset = 1;
+	recipe.yield.type = "dozen";
+	recipe.categoryList.append( Element("Snacks",1) );
+	recipe.categoryList.append( Element("Cookies & Squares",2) );
 	recipe.instructions = 
-		"Instruction line 1\n"
-		"Instruction line 2\n"
-		"Instruction line 3";
-	recipe.prepTime = QTime(1,30);
+		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
+	recipe.prepTime = QTime(0,30);
 	if ( !recipe.photo.load( "test_photo.jpg", "JPEG" ) ) {
 		printf("Unable to load test_photo.jpg\n");
 		exit(1);
 	}
 
-	recipe.authorList.append( Element("Author 1") );
-	recipe.authorList.append( Element("Author 2") );
+	recipe.authorList.append( Element("Mona Beamer") );
+	recipe.authorList.append( Element("Colleen Beamer") );
 
 	Ingredient ing;
-	ing.name = "ingredient 1";
+	ing.name = "brown sugar";
 	ing.amount = 1;
-	ing.amount_offset = 2;
-	ing.units.plural = "teaspoons";
+	ing.amount_offset = 0;
+	ing.units.name = "c.";
 	ing.prepMethod = QString::null;
+	ing.groupID = 0; ing.group = "Dry Ingredients";
 	recipe.ingList.append( ing );
 
 	Ingredient ing2;
-	ing2.name = "ingredient 2";
-	ing2.amount = 3.5;
-	ing2.units.plural = "";
-	ing2.prepMethod = "prep";
+	ing2.name = "granulated sugar";
+	ing2.amount = 0.75;
+	ing2.amount_offset = 0.25;
+	ing2.units.name = "c.";
+	ing2.prepMethod = QString::null;
+	ing2.groupID = 0; ing2.group = "Dry Ingredients";
 	recipe.ingList.append( ing2 );
 
 	Ingredient ing3;
-	ing3.name = "ingredient 3";
-	ing3.amount = 3.5;
-	ing3.units.plural = "ounces";
+	ing3.name = "all-purpose flour";
+	ing3.amount = 2;
+	ing3.units.plural = "c.";
 	ing3.prepMethod = QString::null;
+	ing3.groupID = 0; ing3.group = "Dry Ingredients";
 	recipe.ingList.append( ing3 );
 
 	Ingredient ing4;
-	ing4.name = "ingredient 4";
-	ing4.amount = 3.5;
-	ing4.amount_offset = 0.5;
-	ing4.units.plural = "ounces";
+	ing4.name = "baking soda";
+	ing4.amount = 1;
+	ing4.amount_offset = 0;
+	ing4.units.name = "tsp.";
 	ing4.prepMethod = QString::null;
+	ing4.groupID = 0; ing4.group = "Dry Ingredients";
 	recipe.ingList.append( ing4 );
+
+	Ingredient ing5;
+	ing5.name = "eggs";
+	ing5.amount = 2;
+	ing5.amount_offset = 0;
+	ing5.units.plural = "";
+	ing5.prepMethod = QString::null;
+	ing5.groupID = 1; ing5.group = "Fat and Liquids";
+	recipe.ingList.append( ing5 );
+
+	Ingredient ing6;
+	ing6.name = "peanut butter";
+	ing6.amount = 1;
+	ing6.amount_offset = 0;
+	ing6.units.name = "c.";
+	ing6.prepMethod = QString::null;
+	ing6.groupID = 1; ing6.group = "Fat and Liquids";
+	recipe.ingList.append( ing6 );
+
+	Ingredient ing7;
+	ing7.name = "vanilla extract";
+	ing7.amount = 1;
+	ing7.amount_offset = 0;
+	ing7.units.name = "tsp.";
+	ing7.prepMethod = QString::null;
+	ing7.groupID = 1; ing7.group = "Fat and Liquids";
+	recipe.ingList.append( ing7 );
+
+	Ingredient ing8;
+	ing8.name = "shortening";
+	ing8.amount = 1;
+	ing8.amount_offset = 0;
+	ing8.units.name = "c.";
+	ing8.prepMethod = "at room temperature";
+	ing8.groupID = 1; ing8.group = "Fat and Liquids";
+	recipe.ingList.append( ing8 );
 
 
 	CategoryTree *catTree = new CategoryTree;
-	CategoryTree *child = catTree->add( Element("Category 1",1) );
-		(void)child->add( Element("Subcategory 1",2) );
-	(void)catTree->add( Element("Category 2",3) );
+	(void)catTree->add( Element("Cookies & Squares",2) );
+	(void)catTree->add( Element("Snacks",1) );
 	
 	check( importer, recipe );
 	check( importer, catTree );

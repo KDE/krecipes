@@ -66,3 +66,33 @@ bool ElementList::containsSubSet( ElementList &el )
 	return true;
 }
 
+QString ElementList::join( const QString &sep ) const
+{
+	QString ret;
+
+	ElementList::const_iterator it_end = end();
+	ElementList::const_iterator it;
+
+	for ( it = begin(); it != it_end; ++it ) {
+		if ( it != begin() )
+			ret += sep;
+		ret += (*it).name;
+	}
+
+	return ret;
+}
+
+ElementList ElementList::split( const QString &sep, const QString &str )
+{
+	ElementList ret;
+	QStringList list = QStringList::split(sep,str);
+
+	QStringList::const_iterator it_end = list.end();
+	QStringList::const_iterator it;
+
+	for ( it = list.begin(); it != it_end; ++it ) {
+		ret.append( Element((*it).stripWhiteSpace()) );
+	}
+
+	return ret;
+}

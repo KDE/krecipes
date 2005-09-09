@@ -447,8 +447,8 @@ void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
 		tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), ( *ing_it ).name );
 		tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
 		tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), ( *ing_it ).amount > 1 ? ( *ing_it ).units.plural : ( *ing_it ).units.name );
-		tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethod.isEmpty() ) ?
-		                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + ( *ing_it ).prepMethod );
+		tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethodList.count() == 0 ) ?
+		                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + ( *ing_it ).prepMethodList.join(",") );
 
 		ingredients += QString( "<li>%1</li>" ).arg( tmp_format );
 	}

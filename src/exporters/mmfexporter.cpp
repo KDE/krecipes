@@ -142,8 +142,8 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 
 	//columns 12-39
 	QString ing_name( ing.name );
-	if ( ing.prepMethodID != -1 )
-		ing_name += "; " + ing.prepMethod;
+	if ( ing.prepMethodList.count() > 0 )
+		ing_name += "; " + ing.prepMethodList.join(",");
 
 	if ( !found_short_form )
 		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );

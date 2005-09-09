@@ -150,7 +150,7 @@ public:
 
 	void setPrepMethod( const QString &prepMethod )
 	{
-		m_ing.prepMethod = prepMethod;
+		m_ing.prepMethodList = ElementList::split(",",prepMethod);
 	}
 
 	virtual void setText( int column, const QString &text )
@@ -192,7 +192,7 @@ public:
 			return ( m_ing.amount+m_ing.amount_offset > 1 ) ? m_ing.units.plural : m_ing.units.name;
 			break;
 		case 3:
-			return m_ing.prepMethod;
+			return m_ing.prepMethodList.join(",");
 			break;
 		default:
 			return ( QString::null );
@@ -1074,23 +1074,27 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, bool plura
 	}
 }
 
-int RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
+QValueList<int> RecipeInputDialog::createNewPrepIfNecessary( const QString &prep )
 {
-	if ( prep.stripWhiteSpace().isEmpty() )  //no prep method
-		return -1;
-	else if ( !prepMethodBox->contains( prep ) )  //creating new
+	QValueList<int> ids;
+
+	if ( prep.stripWhiteSpace().isEmpty() )  //no prep methods
+		return ids;
+	else
 	{
-		int id = database->findExistingPrepByName( prep );
-		if ( -1 == id )
-		{
-			database->createNewPrepMethod( prep );
-			id = database->lastInsertID();
+		QStringList prepMethods = QStringList::split(",",prep);
+		for ( QStringList::const_iterator it = prepMethods.begin(); it != prepMethods.end(); ++it ) {
+			int id = database->findExistingPrepByName( (*it).stripWhiteSpace() );
+			if ( id == -1 )
+			{
+				database->createNewPrepMethod( (*it).stripWhiteSpace() );
+				id = database->lastInsertID();
+			}
+			ids << id;
 		}
 
-		return id;
+		return ids;
 	}
-	else //already exists
-		return prepMethodBox->id( prep );
 }
 
 int RecipeInputDialog::createNewGroupIfNecessary( const QString &group )
@@ -1145,11 +1149,15 @@ bool RecipeInputDialog::checkBounds()
 		return false;
 	}
 
-	if ( prepMethodBox->currentText().length() > database->maxPrepMethodNameLength() ) {
-		KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
-		prepMethodBox->lineEdit() ->setFocus();
-		prepMethodBox->lineEdit() ->selectAll();
-		return false;
+	QStringList prepMethodList = QStringList::split(",",prepMethodBox->currentText());
+	for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
+		if ( (*it).stripWhiteSpace().length() > database->maxPrepMethodNameLength() )
+		{
+			KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
+			prepMethodBox->lineEdit() ->setFocus();
+			prepMethodBox->lineEdit() ->selectAll();
+			return false;
+		}
 	}
 
 	return true;
@@ -1188,7 +1196,7 @@ void RecipeInputDialog::addIngredient( void )
 		int unitID = createNewUnitIfNecessary( unit_text, ( amountEdit->maxValue() > 1 ) ? true : false, ingredientBox->currentText().stripWhiteSpace(), new_unit );
 		if ( unitID == -1 )  // this will happen if the dialog to create a unit was cancelled
 			return ;
-		int prepID = createNewPrepIfNecessary( prepMethodBox->currentText() );
+		QValueList<int> prepIDs = createNewPrepIfNecessary( prepMethodBox->currentText() );
 
 		//Add it first to the Recipe list then to the ListView
 		if ( ( ingredientBox->count() > 0 ) && ( unitBox->count() > 0 ) )
@@ -1202,8 +1210,12 @@ void RecipeInputDialog::addIngredient( void )
 			ing.unitID = unitID;
 			ing.ingredientID = ingredientBox->id( ingredientBox->currentItem() );
 
-			ing.prepMethod = prepMethodBox->currentText();
-			ing.prepMethodID = prepID;
+			ing.prepMethodList = ElementList::split(",",prepMethodBox->currentText());
+
+			QValueList<int>::const_iterator id_it = prepIDs.begin();
+			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {
+				(*it).id = *id_it;
+			}
 
 			//Append also to the ListView
 			QListViewItem* lastElement = ingredientList->lastItem();
@@ -1310,19 +1322,27 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		{
 			QString old_text = ( *ing ).prepMethod;
 
-			if ( new_text.length() > database->maxPrepMethodNameLength() )
-			{
-				KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
-				ing_item->setPrepMethod( old_text );
-				break;
+			QStringList prepMethodList = QStringList::split(",",new_text.stripWhiteSpace());
+
+			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
+				if ( (*it).stripWhiteSpace().length() > database->maxPrepMethodNameLength() )
+				{
+					KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
+					ing_item->setPrepMethod( old_text );
+					break;
+				}
 			}
 
 			if ( old_text != new_text.stripWhiteSpace() )
 			{
-				int new_id = createNewPrepIfNecessary( new_text.stripWhiteSpace() );
+				QValueList<int> new_ids = createNewPrepIfNecessary( new_text.stripWhiteSpace() );
 
-				( *ing ).prepMethod = new_text;
-				( *ing ).prepMethodID = new_id;
+				(*ing).prepMethodList = ElementList::split(",",new_text.stripWhiteSpace());
+	
+				QValueList<int>::const_iterator id_it = new_ids.begin();
+				for ( ElementList::iterator it = (*ing).prepMethodList.begin(); it != (*ing).prepMethodList.end(); ++it, ++id_it ) {
+					(*it).id = *id_it;
+				}
 
 				emit changed();
 			}

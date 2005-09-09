@@ -214,10 +214,11 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 	if ( !size.isEmpty() )
 		unit.prepend( size + " " );
 
-	Ingredient new_ing( name, 0, Unit( unit, quantity.amount+quantity.amount_offset ), -1, -1, prep_method );
+	Ingredient new_ing( name, 0, Unit( unit, quantity.amount+quantity.amount_offset ), -1 );
 	new_ing.amount = quantity.amount;
 	new_ing.amount_offset = quantity.amount_offset;
 	new_ing.group = header;
+	new_ing.prepMethodList.append( Element(prep_method) );
 	recipe.ingList.append( new_ing );
 }
 

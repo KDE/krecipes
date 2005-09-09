@@ -80,7 +80,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 
 	else if ( tableName == "ingredient_list" ) {
-		commands << "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);";
+		commands << "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);";
 		commands << "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);";
 		commands << "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);";
 	}
@@ -93,7 +93,11 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 
 	else if ( tableName == "prep_methods" )
 		commands << "CREATE TABLE prep_methods (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
-
+	else if ( tableName == "prep_method_list" ) {
+		commands << "CREATE TABLE prep_method_list (ingredient_list_id INTEGER NOT NULL,prep_method_id INTEGER NOT NULL, order_index INTEGER);";
+		commands << "CREATE INDEX iid_index ON prep_method_list USING BTREE (ingredient_list_id);";
+		commands << "CREATE INDEX pid_index ON prep_method_list USING BTREE (prep_method_id);";
+	}
 	else if ( tableName == "ingredient_info" )
 		commands << "CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
@@ -214,6 +218,68 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
+
+	if ( version < 0.83 ) {
+		database->transaction();
+
+		//====add a id columns to 'ingredient_list' to identify it for the prep method list
+		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
+		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				QSqlQuery query(database);
+				query.prepare( "INSERT INTO ingredient_list_copy VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+				query.addBindValue( copyQuery.value( 0 ) );
+				query.addBindValue( copyQuery.value( 1 ) );
+				query.addBindValue( copyQuery.value( 2 ) );
+				query.addBindValue( copyQuery.value( 3 ) );
+				query.addBindValue( copyQuery.value( 4 ) );
+				query.addBindValue( copyQuery.value( 5 ) );
+				query.addBindValue( copyQuery.value( 6 ) );
+				query.addBindValue( copyQuery.value( 7 ) );
+				query.exec();
+			}
+		}
+		database->exec( "DROP TABLE ingredient_list" );
+		database->exec( "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);" );
+
+		copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				int ing_list_id = getNextInsertID("ingredient_list","id");
+
+				QSqlQuery query(database);
+ 				query.prepare( "INSERT INTO ingredient_list VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+				query.addBindValue( ing_list_id );
+				query.addBindValue( copyQuery.value( 0 ) );
+				query.addBindValue( copyQuery.value( 1 ) );
+				query.addBindValue( copyQuery.value( 2 ) );
+				query.addBindValue( copyQuery.value( 3 ) );
+				query.addBindValue( copyQuery.value( 4 ) );
+				query.addBindValue( copyQuery.value( 6 ) );
+				query.addBindValue( copyQuery.value( 7 ) );
+				query.exec();
+
+				int prep_method_id = copyQuery.value( 5 ).toInt();
+				if ( prep_method_id != -1 ) {
+					query.prepare( "INSERT INTO prep_method_list VALUES (?, ?, ?);" );
+					query.addBindValue( ing_list_id );
+					query.addBindValue( prep_method_id );
+					query.addBindValue( 1 );
+					query.exec();
+				}
+			}
+		}
+		database->exec( "DROP TABLE ingredient_list_copy" );
+
+		database->exec( "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);" );
+		database->exec( "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);" );
+
+		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
+
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
@@ -313,10 +379,10 @@ void PSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &username, const QString &password, const QString & /*clientHost*/ )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "yield_types_id_seq";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "yield_types_id_seq" << "ingredient_list_id_seq";
 
 	//we also have to grant permissions on the sequences created
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq";
 
 	QString command;
 
@@ -337,7 +403,7 @@ void PSqlRecipeDB::empty( void )
 	QSqlRecipeDB::empty();
 
 	QStringList tables;
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq";
 
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {

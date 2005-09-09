@@ -13,6 +13,7 @@
 #include <qstring.h>
 
 #include "datablocks/unit.h"
+#include "datablocks/elementlist.h"
 
 /**
 @author Unai Garro
@@ -21,7 +22,7 @@ class Ingredient
 {
 public:
 	Ingredient();
-	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1, const QString &prepMethod = QString::null, int prepMethodID = -1 );
+	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1 );
 	~Ingredient();
 
 	int ingredientID;
@@ -34,6 +35,8 @@ public:
 	int prepMethodID;
 	int groupID;
 	QString group;
+
+	ElementList prepMethodList;
 
 	void setAmount( const QString &range, bool *ok = 0 );
 

@@ -212,7 +212,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			}
 
 			int new_prep_id = -1;
-			if ( !( *ing_it ).prepMethod.isEmpty() ) {
+			if ( ( *ing_it ).prepMethodList.count() > 0 ) {
 				new_prep_id = db->findExistingPrepByName(( *ing_it ).prepMethod);
 				if ( new_prep_id == -1 ) {
 					db->createNewPrepMethod( ( *ing_it ).prepMethod );

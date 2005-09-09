@@ -206,8 +206,9 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	name = name.left( prep_sep_index );
 	prep = name.mid( prep_sep_index, name.length() );
 
-	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ), -1, -1, prep );
+	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ), -1 );
 	new_ingredient.group = current_header;
+	new_ingredient.prepMethodList.append( Element(prep) );
 	m_ingredients.append( new_ingredient );
 
 }

@@ -3,6 +3,7 @@ Changes from 0.8 to SVN:
   -Backup/restore of entire database
   -Ingredient amounts can be ranges
   -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or printing multiple recipes at once
+  -Allows multiple preparation methods
   -PostgreSQL backend now stable
 
 Changes from 0.7 to 0.8:

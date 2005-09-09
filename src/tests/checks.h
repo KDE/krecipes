@@ -68,7 +68,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 	if ( a.size() != b.size() ) {
 		
 		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
-		exit( 1 );
+	//	exit( 1 );
 	}
 
 	return true;
@@ -111,6 +111,8 @@ void check( const Recipe &recipe, const Recipe &base )
 		check( QString::number(ing_num)+": Ingredient singular unit", (*ing_it).units.name, (*base_ing_it).units.name );
 		check( QString::number(ing_num)+": Ingredient plural unit", (*ing_it).units.plural, (*base_ing_it).units.plural );
 		check( QString::number(ing_num)+": Ingredient prep_method", (*ing_it).prepMethod, (*base_ing_it).prepMethod );
+		check( QString::number(ing_num)+": Ingredient group", (*ing_it).group, (*base_ing_it).group );
+		
 
 		++ing_num;
 	}
