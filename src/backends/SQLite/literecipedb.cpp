@@ -1485,7 +1485,7 @@ bool LiteRecipeDB::checkIntegrity( void )
 	kdDebug() << "version found... " << version << " \n";
 
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
-		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>This database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.</b>" ) ) ) {
+		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?  Depending on the number of recipes and amount of data, this could take some time.<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.<br><br>Cancelling this operation may result in corrupting the database.</b>" ) ) ) {
 		case KMessageBox::Yes:
 			portOldDatabases( version );
 			break;
@@ -1987,9 +1987,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 				database->executeQuery( command );
 
 				int prep_method_id = row.data( 5 ).toInt();
+				int ing_list_id = lastInsertID();
 				if ( prep_method_id != -1 ) {
 					command = "INSERT INTO prep_method_list VALUES('" 
-							+ QString::number(lastInsertID())
+							+ QString::number(ing_list_id)
 						+ "','" + QString::number(prep_method_id)
 						+ "','1" //order_index
 						+ "')";

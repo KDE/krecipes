@@ -326,27 +326,10 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database->transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
-		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
-		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list" );
-		if ( copyQuery.isActive() ) {
-			while ( copyQuery.next() ) {
-				QSqlQuery query(database);
-				query.prepare( "INSERT INTO ingredient_list_copy VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-				query.addBindValue( copyQuery.value( 0 ) );
-				query.addBindValue( copyQuery.value( 1 ) );
-				query.addBindValue( copyQuery.value( 2 ) );
-				query.addBindValue( copyQuery.value( 3 ) );
-				query.addBindValue( copyQuery.value( 4 ) );
-				query.addBindValue( copyQuery.value( 5 ) );
-				query.addBindValue( copyQuery.value( 6 ) );
-				query.addBindValue( copyQuery.value( 7 ) );
-				query.exec();
-			}
-		}
-		database->exec( "DROP TABLE ingredient_list" );
+		database->exec( "RENAME TABLE ingredient_list TO ingredient_list_copy;" );
 		database->exec( "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));" );
 
-		copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
+		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query(database);
@@ -361,9 +344,10 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				query.exec();
 
 				int prep_method_id = copyQuery.value( 5 ).toInt();
+				int ing_list_id = lastInsertID();
 				if ( prep_method_id != -1 ) {
 					query.prepare( "INSERT INTO prep_method_list VALUES (?, ?, ?);" );
-					query.addBindValue( lastInsertID() );
+					query.addBindValue( ing_list_id );
 					query.addBindValue( prep_method_id );
 					query.addBindValue( 1 );
 					query.exec();
