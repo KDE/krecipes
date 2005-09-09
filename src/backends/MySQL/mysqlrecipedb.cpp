@@ -301,6 +301,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec(command);
 
 		command = "ALTER TABLE `recipes` ADD COLUMN `yield_type_id` INTEGER DEFAULT '-1' AFTER yield_amount_offset;";
+		tableToAlter.exec(command);
 
 		QSqlQuery result( "SELECT id,persons FROM recipes", database );
 		if ( result.isActive() ) {
