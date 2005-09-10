@@ -121,7 +121,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
 			QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
 			if ( !group.isEmpty() )
-				xml += "<ingredient-group name=\"" + group + "\">\n";
+				xml += "<ingredient-group name=\"" + QStyleSheet::escape(group.utf8()) + "\">\n";
 
 			for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 				xml += "<ingredient>\n";
