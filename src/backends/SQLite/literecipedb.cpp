@@ -1581,7 +1581,7 @@ void LiteRecipeDB::splitCommands( QString& s, QStringList& sl )
 void LiteRecipeDB::portOldDatabases( float version )
 {
 	QString command;
-	if ( version < 0.5 ) {
+	if ( qRound(version*10) < 5 ) {
 		command = QString( "CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxPrepMethodNameLength() );
 		database->executeQuery( command );
 
@@ -1695,7 +1695,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( command );
 	}
 
-	if ( version < 0.6 ) {
+	if ( qRound(version*10) < 6 ) {
 		//==================add a column to 'categories' to allow subcategories
 		database->executeQuery( "CREATE TABLE categories_copy (id INTEGER, name varchar(40));" );
 		QSQLiteResult copyQuery = database->executeQuery( "SELECT * FROM categories;" );
@@ -1733,7 +1733,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( command );
 	}
 
-	if ( version < 0.61 ) {
+	if ( qRound(version*100) < 61 ) {
 		//==================add a column to 'recipes' to allow prep time
 		database->executeQuery( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));" );
 		QSQLiteResult copyQuery = database->executeQuery( "SELECT * FROM recipes;" );
@@ -1778,7 +1778,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( command );
 	}
 
-	if ( version < 0.62 ) {
+	if ( qRound(version*100) < 62 ) {
 		database->executeQuery( "BEGIN TRANSACTION;" );
 
 		//==================add a column to 'ingredient_list' to allow grouping ingredients
@@ -1827,7 +1827,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 
-	if ( version < 0.63 ) {
+	if ( qRound(version*100) < 63 ) {
 		database->executeQuery( "BEGIN TRANSACTION;" );
 
 		//==================add a column to 'units' to allow handling plurals
@@ -1879,11 +1879,11 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 
-	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
+	if ( qRound(version*10) < 7 ) { //simply call 0.63 -> 0.7
 		database->executeQuery( "UPDATE db_info SET ver='0.7';" );
 	}
 
-	if ( version < 0.81 ) {
+	if ( qRound(version*100) < 81 ) {
 		database->executeQuery( "BEGIN TRANSACTION;" );
 		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER)","amount_offset FLOAT","'0'","ingredient_list",3);
 
@@ -1895,7 +1895,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 
-	if ( version < 0.82 ) {
+	if ( qRound(version*100) < 82 ) {
 		database->executeQuery( "BEGIN TRANSACTION;" );
 
 		//==================add a columns to 'recipes' to allow yield range + yield type
@@ -1944,7 +1944,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 
-	if ( version < 0.83 ) {
+	if ( qRound(version*100) < 83 ) {
 		database->executeQuery( "BEGIN TRANSACTION;" );
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
@@ -1987,10 +1987,9 @@ void LiteRecipeDB::portOldDatabases( float version )
 				database->executeQuery( command );
 
 				int prep_method_id = row.data( 5 ).toInt();
-				int ing_list_id = lastInsertID();
 				if ( prep_method_id != -1 ) {
 					command = "INSERT INTO prep_method_list VALUES('" 
-							+ QString::number(ing_list_id)
+							+ QString::number(lastInsertID())
 						+ "','" + QString::number(prep_method_id)
 						+ "','1" //order_index
 						+ "')";
@@ -2885,5 +2884,4 @@ int LiteRecipeDB::sqlite_decode_binary( const unsigned char *in, unsigned char *
 	return i;
 }
 
-//#include "literecipedb.moc"
 #include "literecipedb.moc"

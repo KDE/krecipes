@@ -155,11 +155,11 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	kdDebug() << "Current database version is..." << version << "\n";
 	QString command;
 
-	if ( version < 0.7 ) {
+	if ( qRound(version*10) < 7 ) {
 		//version added
 	}
 
-	if ( version < 0.81 ) {
+	if ( qRound(version*100) < 81 ) {
 		database->transaction();
 
 		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
@@ -174,7 +174,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			kdDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
 	}
 
-	if ( version < 0.82 ) {
+	if ( qRound(version*100) < 82 ) {
 		database->transaction();
 
 		//==================add a columns to 'recipes' to allow yield range + yield type
@@ -219,7 +219,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			kdDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
 
-	if ( version < 0.83 ) {
+	if ( qRound(version*100) < 83 ) {
 		database->transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list

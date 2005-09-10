@@ -157,7 +157,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	// upgraded for each change made between releases (e.g. 0.81, 0.82,... are
 	// what will become 0.9)
 
-	if ( version < 0.3 ) 	// The database was generated with a version older than v 0.3. First update to 0.3 version
+	if ( qRound(version*10) < 3 ) 	// The database was generated with a version older than v 0.3. First update to 0.3 version
 	{
 
 		// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
@@ -172,7 +172,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.4 )   // Upgrade to the current DB version 0.4
+	if ( qRound(version*10) < 4 )   // Upgrade to the current DB version 0.4
 	{
 
 		// Add new columns to existing tables (creating any new tables is not necessary. Integrity check does that before)
@@ -215,7 +215,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.5 ) {
+	if ( qRound(version*10) < 5 ) {
 		command = QString( "CREATE TABLE prep_methods (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxPrepMethodNameLength() );
 		QSqlQuery tableToAlter( command, database );
 
@@ -236,7 +236,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.6 ) {
+	if ( qRound(version*10) < 6 ) {
 		command = "ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL default '-1' AFTER name;";
 		QSqlQuery tableToAlter( command, database );
 
@@ -246,7 +246,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.61 ) {
+	if ( qRound(version*100) < 61 ) {
 		QString command = "ALTER TABLE `recipes` ADD COLUMN `prep_time` TIME DEFAULT NULL";
 		QSqlQuery tableToAlter( command, database );
 
@@ -256,7 +256,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.62 ) {
+	if ( qRound(version*100) < 62 ) {
 		QString command = "ALTER TABLE `ingredient_list` ADD COLUMN `group_id` int(11) default '-1' AFTER order_index;";
 		QSqlQuery tableToAlter( command, database );
 
@@ -266,7 +266,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.63 ) {
+	if ( qRound(version*100) < 63 ) {
 		QString command = "ALTER TABLE `units` ADD COLUMN `plural` varchar(20) DEFAULT NULL AFTER name;";
 		QSqlQuery tableToAlter( command, database );
 
@@ -284,12 +284,12 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.7 ) { //simply call 0.63 -> 0.7
+	if ( qRound(version*10) < 7 ) { //simply call 0.63 -> 0.7
 		QString command = "UPDATE db_info SET ver='0.7';";
 		QSqlQuery query( command, database );
 	}
 
-	if ( version < 0.81 ) {
+	if ( qRound(version*100) < 81 ) {
 		QString command = "ALTER TABLE `ingredient_list` ADD COLUMN `amount_offset` FLOAT DEFAULT '0' AFTER amount;";
 		QSqlQuery tableToAlter( command, database );
 
@@ -297,7 +297,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.82 ) {
+	if ( qRound(version*100) < 82 ) {
 		QString command = "ALTER TABLE `recipes` ADD COLUMN `yield_amount` FLOAT DEFAULT '0' AFTER persons;";
 		QSqlQuery tableToAlter( command, database );
 
@@ -322,7 +322,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		tableToAlter.exec( command );
 	}
 
-	if ( version < 0.83 ) {
+	if ( qRound(version*100) < 83 ) {
 		database->transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
@@ -344,10 +344,9 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				query.exec();
 
 				int prep_method_id = copyQuery.value( 5 ).toInt();
-				int ing_list_id = lastInsertID();
 				if ( prep_method_id != -1 ) {
 					query.prepare( "INSERT INTO prep_method_list VALUES (?, ?, ?);" );
-					query.addBindValue( ing_list_id );
+					query.addBindValue( lastInsertID() );
 					query.addBindValue( prep_method_id );
 					query.addBindValue( 1 );
 					query.exec();
