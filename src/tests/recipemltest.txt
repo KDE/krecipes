@@ -2,21 +2,21 @@
 <!DOCTYPE recipeml PUBLIC "-//FormatData//DTD RecipeML 0.5//EN" 	  "http://www.formatdata.com/recipeml/recipeml.dtd"><recipeml version="0.5" generator="Krecipes vSVN_PRE-0.9">
 <recipe>
  <head>
-  <title>Cookies Test</title>
+  <title>Cookies_Test</title>
   <source>
-   <srcitem>Mona Beamer</srcitem>
    <srcitem>Colleen Beamer</srcitem>
+   <srcitem>Mona Beamer</srcitem>
   </source>
   <categories>
    <cat>Snacks</cat>
    <cat>Cookies &amp; Squares</cat>
   </categories>
   <yield>
-   <unit>dozen</unit>
    <range>
     <q1>2</q1>
     <q2>3</q2>
    </range>
+   <unit>dozen</unit>
   </yield>
   <preptime type="Total" >
    <time>
@@ -30,13 +30,6 @@
    <title>Dry Ingredients</title>
    <ing>
     <amt>
-     <qty>1</qty>
-     <unit>c.</unit>
-    </amt>
-    <item>brown sugar</item>
-   </ing>
-   <ing>
-    <amt>
      <qty>
       <range>
        <q1>0.75</q1>
@@ -46,6 +39,13 @@
      <unit>c.</unit>
     </amt>
     <item>granulated sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>brown sugar</item>
    </ing>
    <ing>
     <amt>
@@ -63,13 +63,13 @@
    </ing>
   </ing-div>
   <ing-div>
-   <title>Fat and Liquids</title>
+   <title>Fat &amp; Liquids</title>
    <ing>
     <amt>
-     <qty>2</qty>
-     <unit></unit>
+     <qty>1</qty>
+     <unit>c.</unit>
     </amt>
-    <item>eggs</item>
+    <item>shortening</item>
    </ing>
    <ing>
     <amt>
@@ -80,17 +80,17 @@
    </ing>
    <ing>
     <amt>
-     <qty>1</qty>
-     <unit>tsp.</unit>
+     <qty>2</qty>
+     <unit></unit>
     </amt>
-    <item>vanilla extract</item>
+    <item>eggs</item>
    </ing>
    <ing>
     <amt>
      <qty>1</qty>
-     <unit>c.</unit>
+     <unit>tsp.</unit>
     </amt>
-    <item>shortening</item>
+    <item>vanilla extract</item>
    </ing>
   </ing-div>
  </ingredients>
@@ -100,21 +100,21 @@
 </recipe>
 <recipe>
  <head>
-  <title>Cookies Test</title>
+  <title>Cookies_Test</title>
   <source>
-   <srcitem>Mona Beamer</srcitem>
    <srcitem>Colleen Beamer</srcitem>
+   <srcitem>Mona Beamer</srcitem>
   </source>
   <categories>
    <cat>Snacks</cat>
    <cat>Cookies &amp; Squares</cat>
   </categories>
   <yield>
-   <unit>dozen</unit>
    <range>
     <q1>2</q1>
     <q2>3</q2>
    </range>
+   <unit>dozen</unit>
   </yield>
   <preptime type="Total" >
    <time>
@@ -128,13 +128,6 @@
    <title>Dry Ingredients</title>
    <ing>
     <amt>
-     <qty>1</qty>
-     <unit>c.</unit>
-    </amt>
-    <item>brown sugar</item>
-   </ing>
-   <ing>
-    <amt>
      <qty>
       <range>
        <q1>0.75</q1>
@@ -144,6 +137,13 @@
      <unit>c.</unit>
     </amt>
     <item>granulated sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>brown sugar</item>
    </ing>
    <ing>
     <amt>
@@ -161,13 +161,13 @@
    </ing>
   </ing-div>
   <ing-div>
-   <title>Fat and Liquids</title>
+   <title>Fat &amp; Liquids</title>
    <ing>
     <amt>
-     <qty>2</qty>
-     <unit></unit>
+     <qty>1</qty>
+     <unit>c.</unit>
     </amt>
-    <item>eggs</item>
+    <item>shortening</item>
    </ing>
    <ing>
     <amt>
@@ -178,17 +178,17 @@
    </ing>
    <ing>
     <amt>
-     <qty>1</qty>
-     <unit>tsp.</unit>
+     <qty>2</qty>
+     <unit></unit>
     </amt>
-    <item>vanilla extract</item>
+    <item>eggs</item>
    </ing>
    <ing>
     <amt>
      <qty>1</qty>
-     <unit>c.</unit>
+     <unit>tsp.</unit>
     </amt>
-    <item>shortening</item>
+    <item>vanilla extract</item>
    </ing>
   </ing-div>
  </ingredients>

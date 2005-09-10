@@ -34,7 +34,7 @@ main(int argc, char *argv[])
 	importer.parseFiles(files);
 
 	Recipe recipe;
-	recipe.title = "Cookies Test";
+	recipe.title = "Cookies_Test";
 	recipe.yield.amount = 2;
 	recipe.yield.type = "servings";
 	recipe.categoryList.append( Element("Snacks",1) );
@@ -43,18 +43,18 @@ main(int argc, char *argv[])
 		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
 	recipe.prepTime = QTime(0,30);
 
+	Ingredient ing2;
+	ing2.name = "c. granulated sugar";
+	ing2.amount = 0.75;
+	ing2.groupID = 0; ing2.group = "Dry Ingredients";
+	recipe.ingList.append( ing2 );
+
 	Ingredient ing;
 	ing.name = "c. brown sugar";
 	ing.amount = 1;
 	ing.amount_offset = 0;
 	ing.groupID = 0; ing.group = "Dry Ingredients";
 	recipe.ingList.append( ing );
-
-	Ingredient ing2;
-	ing2.name = "c. granulated sugar";
-	ing2.amount = 0.75;
-	ing2.groupID = 0; ing2.group = "Dry Ingredients";
-	recipe.ingList.append( ing2 );
 
 	Ingredient ing3;
 	ing3.name = "c. all-purpose flour";
@@ -68,31 +68,33 @@ main(int argc, char *argv[])
 	ing4.groupID = 0; ing4.group = "Dry Ingredients";
 	recipe.ingList.append( ing4 );
 
-	Ingredient ing5;
-	ing5.name = "eggs";
-	ing5.amount = 2;
-	ing5.groupID = 1; ing5.group = "Fat and Liquids";
-	recipe.ingList.append( ing5 );
+	Ingredient ing8;
+	ing8.name = "c. shortening";
+	ing8.amount = 1;
+	ing8.prepMethodList.append( Element("softened") );
+	ing8.prepMethodList.append( Element("at room temperature") );
+	ing8.groupID = 1; ing8.group = "Fat & Liquids";
+	recipe.ingList.append( ing8 );
 
 	Ingredient ing6;
 	ing6.name = "c. peanut butter";
 	ing6.amount = 1;
-	ing6.groupID = 1; ing6.group = "Fat and Liquids";
+	ing6.groupID = 1; ing6.group = "Fat & Liquids";
 	recipe.ingList.append( ing6 );
+
+	Ingredient ing5;
+	ing5.name = "eggs";
+	ing5.amount = 2;
+	ing5.groupID = 1; ing5.group = "Fat & Liquids";
+	recipe.ingList.append( ing5 );
 
 	Ingredient ing7;
 	ing7.name = "tsp. vanilla extract";
 	ing7.amount = 1;
-	ing7.groupID = 1; ing7.group = "Fat and Liquids";
+	ing7.groupID = 1; ing7.group = "Fat & Liquids";
 	recipe.ingList.append( ing7 );
 
-	Ingredient ing8;
-	ing8.name = "c. shortening";
-	ing8.amount = 1;
-	ing8.prepMethodList.append( Element("at room temperature") );
-	ing8.groupID = 1; ing8.group = "Fat and Liquids";
-	recipe.ingList.append( ing8 );
-	
+
 	check( importer, recipe );
 
 	RecipeList recipeList;

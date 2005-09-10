@@ -143,15 +143,25 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	//columns 12-39
 	QString ing_name( ing.name );
 	if ( ing.prepMethodList.count() > 0 )
-		ing_name += "; " + ing.prepMethodList.join(",");
+		ing_name += "; " + ing.prepMethodList.join(", ");
 
 	if ( !found_short_form )
 		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );
-	ing_name.truncate( 28 );
-	content += ing_name + "\n";
 
-	for ( unsigned int i = 0; i < ( ing.name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
-		content += "           -" + ing.name.mid( 28 * ( i + 1 ), 28 ) + "\n";
+	//try and split the ingredient on a word boundry
+	int split_index;
+	if ( ing_name.length() > 28 ) {
+		split_index = ing_name.left(28).findRev(" ")+1;
+		if ( split_index == 0 )
+			split_index = 28;
+	}
+	else
+		split_index = 28;
+
+	content += ing_name.left(split_index) + "\n";
+
+	for ( unsigned int i = 0; i < ( ing_name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
+		content += "           -" + ing_name.mid( 28 * ( i ) + split_index, 28 ) + "\n";
 }
 
 void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )

@@ -34,7 +34,7 @@ main(int argc, char *argv[])
 	importer.parseFiles(files);
 
 	Recipe recipe;
-	recipe.title = "Cookies Test";
+	recipe.title = "Cookies_Test";
 	recipe.yield.amount = 2;
 	recipe.yield.amount_offset = 1;
 	recipe.yield.type = "dozen";
@@ -44,21 +44,21 @@ main(int argc, char *argv[])
 		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
 	recipe.prepTime = QTime(0,30);
 
-	recipe.authorList.append( Element("Mona Beamer") );
 	recipe.authorList.append( Element("Colleen Beamer") );
+	recipe.authorList.append( Element("Mona Beamer") );
 
 	Ingredient ing;
-	ing.name = "brown sugar";
-	ing.amount = 1;
-	ing.amount_offset = 0;
+	ing.name = "granulated sugar";
+	ing.amount = 0.75;
+	ing.amount_offset = 0.25;
 	ing.units.name = "c.";
 	ing.groupID = 0; ing.group = "Dry Ingredients";
 	recipe.ingList.append( ing );
 
 	Ingredient ing2;
-	ing2.name = "granulated sugar";
-	ing2.amount = 0.75;
-	ing2.amount_offset = 0.25;
+	ing2.name = "brown sugar";
+	ing2.amount = 1;
+	ing2.amount_offset = 0;
 	ing2.units.name = "c.";
 	ing2.groupID = 0; ing2.group = "Dry Ingredients";
 	recipe.ingList.append( ing2 );
@@ -78,38 +78,43 @@ main(int argc, char *argv[])
 	ing4.groupID = 0; ing4.group = "Dry Ingredients";
 	recipe.ingList.append( ing4 );
 
-	Ingredient ing5;
-	ing5.name = "eggs";
-	ing5.amount = 2;
-	ing5.amount_offset = 0;
-	ing5.units.plural = "";
-	ing5.groupID = 1; ing5.group = "Fat and Liquids";
-	recipe.ingList.append( ing5 );
+	Ingredient ing8;
+	ing8.name = "shortening";
+	ing8.amount = 1;
+	ing8.amount_offset = 0;
+	ing8.units.name = "c.";
+	ing8.prepMethodList.append( Element("softened") );
+	ing8.prepMethodList.append( Element("at room temperature") );
+	ing8.groupID = 1; ing8.group = "Fat & Liquids";
+	recipe.ingList.append( ing8 );
 
 	Ingredient ing6;
 	ing6.name = "peanut butter";
 	ing6.amount = 1;
 	ing6.amount_offset = 0;
 	ing6.units.name = "c.";
-	ing6.groupID = 1; ing6.group = "Fat and Liquids";
+	ing6.groupID = 1; ing6.group = "Fat & Liquids";
 	recipe.ingList.append( ing6 );
+
+	Ingredient ing5;
+	ing5.name = "eggs";
+	ing5.amount = 2;
+	ing5.amount_offset = 0;
+	ing5.units.plural = "";
+	ing5.groupID = 1; ing5.group = "Fat & Liquids";
+	recipe.ingList.append( ing5 );
 
 	Ingredient ing7;
 	ing7.name = "vanilla extract";
 	ing7.amount = 1;
 	ing7.amount_offset = 0;
 	ing7.units.name = "tsp.";
-	ing7.groupID = 1; ing7.group = "Fat and Liquids";
+	ing7.groupID = 1; ing7.group = "Fat & Liquids";
 	recipe.ingList.append( ing7 );
 
-	Ingredient ing8;
-	ing8.name = "shortening";
-	ing8.amount = 1;
-	ing8.amount_offset = 0;
-	ing8.units.name = "c.";
-	ing8.prepMethodList.append( Element("at room temperature") );
-	ing8.groupID = 1; ing8.group = "Fat and Liquids";
-	recipe.ingList.append( ing8 );
+	CategoryTree *catTree = new CategoryTree;
+	(void)catTree->add( Element("Cookies & Squares",2) );
+	(void)catTree->add( Element("Snacks",1) );
 	
 	check( importer, recipe );
 

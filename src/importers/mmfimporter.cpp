@@ -276,7 +276,7 @@ void MMFImporter::putDataInRecipe()
 		int separator_index = name_and_prep.find( QRegExp( "(;|,)" ) );
 		if ( separator_index != -1 ) {
 			( *ing_it ).name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
-			( *ing_it ).prepMethodList.append( Element(name_and_prep.mid( separator_index + 1, name_and_prep.length() ).stripWhiteSpace() ) );
+			( *ing_it ).prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).stripWhiteSpace() );
 		}
 	}
 

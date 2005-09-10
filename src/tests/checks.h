@@ -113,7 +113,7 @@ void check( const Recipe &recipe, const Recipe &base )
 		check( QString::number(ing_num)+": Ingredient group", (*ing_it).group, (*base_ing_it).group );
 
 		ElementList::const_iterator prep_it = (*ing_it).prepMethodList.begin();
-		ElementList::const_iterator base_prep_it = (*ing_it).prepMethodList.begin();
+		ElementList::const_iterator base_prep_it = (*base_ing_it).prepMethodList.begin();
 		for ( ; prep_it != (*ing_it).prepMethodList.end(); ++prep_it, ++base_prep_it ) {
 			check( QString::number(ing_num)+": Ingredient prep_method", (*prep_it).name, (*base_prep_it).name );
 		}

@@ -1,19 +1,20 @@
 ----- Exported by Krecipes vSVN_PRE-0.9 [Meal-Master Export Format] -----
 
-      Title: Cookies Test
+      Title: Cookies_Test
  Categories: Snacks, Cookies & Squares
    Servings: 2
 
 ------------------------------Dry Ingredients-------------------------------
-      1    c. brown sugar
     3/4    c. granulated sugar
+      1    c. brown sugar
       2    c. all-purpose flour
       1    tsp. baking soda
-------------------------------Fat and Liquids-------------------------------
-      2    eggs
+-------------------------------Fat & Liquids--------------------------------
+      1    c. shortening; softened, at
+           -room temperature
       1    c. peanut butter
+      2    eggs
       1    tsp. vanilla extract
-      1    c. shortening; at room tempe
 
  Drop by spoonful on greased cookie sheet.  Bake in moderate oven.
 
@@ -21,20 +22,21 @@
 
 ----- Exported by Krecipes vSVN_PRE-0.9 [Meal-Master Export Format] -----
 
-      Title: Cookies Test
+      Title: Cookies_Test
  Categories: Snacks, Cookies & Squares
    Servings: 2
 
 ------------------------------Dry Ingredients-------------------------------
-      1    c. brown sugar
     3/4    c. granulated sugar
+      1    c. brown sugar
       2    c. all-purpose flour
       1    tsp. baking soda
-------------------------------Fat and Liquids-------------------------------
-      2    eggs
+-------------------------------Fat & Liquids--------------------------------
+      1    c. shortening; softened, at
+           -room temperature
       1    c. peanut butter
+      2    eggs
       1    tsp. vanilla extract
-      1    c. shortening; at room tempe
 
  Drop by spoonful on greased cookie sheet.  Bake in moderate oven.
 
