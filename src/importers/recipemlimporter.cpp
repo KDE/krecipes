@@ -207,6 +207,9 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 			if ( ing.attribute( "optional", "no" ) == "yes" )
 				prep_method = "(optional)";
 		}
+		else if ( tagName == "prep" ) { //FIXME: this overwrite the optional attribute
+			prep_method = ingChild.text().stripWhiteSpace();
+		}
 		else
 			kdDebug() << "Unknown tag within <ing>: " << ingChild.tagName() << endl;
 	}
@@ -218,7 +221,7 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 	new_ing.amount = quantity.amount;
 	new_ing.amount_offset = quantity.amount_offset;
 	new_ing.group = header;
-	new_ing.prepMethodList.append( Element(prep_method) );
+	new_ing.prepMethodList = ElementList::split(",",prep_method);
 	recipe.ingList.append( new_ing );
 }
 

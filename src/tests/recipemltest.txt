@@ -70,6 +70,7 @@
      <unit>c.</unit>
     </amt>
     <item>shortening</item>
+    <prep>softened,at room temperature</prep>
    </ing>
    <ing>
     <amt>
@@ -168,6 +169,7 @@
      <unit>c.</unit>
     </amt>
     <item>shortening</item>
+    <prep>softened,at room temperature</prep>
    </ing>
    <ing>
     <amt>

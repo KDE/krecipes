@@ -157,6 +157,10 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				QDomElement item_tag = doc.createElement( "item" );
 				item_tag.appendChild( doc.createTextNode( ( *ing_it ).name ) );
 				ing_tag.appendChild( item_tag );
+
+				QDomElement prep_tag = doc.createElement( "prep" );
+				prep_tag.appendChild( doc.createTextNode( ( *ing_it ).prepMethodList.join(",") ) );
+				ing_tag.appendChild( prep_tag );
 			}
 		}
 		recipe_tag.appendChild( ingredients_tag );
