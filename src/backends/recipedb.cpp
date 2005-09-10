@@ -252,7 +252,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		QString firstLine = stream.readLine().stripWhiteSpace();
 		QString dbVersion = stream.readLine().stripWhiteSpace();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 2 );
-		if ( dbVersion.toDouble() > latestDBVersion() ) {
+		if ( qRound(dbVersion.toDouble()*1e5) > qRound(latestDBVersion()*1e5) ) { //correct for float's imprecision
 			if ( errMsg ) *errMsg = i18n( "This backup was created with a newer version of Krecipes and cannot be restored." );
 			delete dumpFile;
 			return false;
