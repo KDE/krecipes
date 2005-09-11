@@ -43,55 +43,55 @@ main(int argc, char *argv[])
 
 	recipe.authorList.append( Element("Colleen Beamer") );
 
-	Ingredient ing2;
-	ing2.name = "c. granulated sugar";
-	ing2.amount = 0.75;
-	ing2.groupID = 0; ing2.group = "Dry Ingredients";
-	recipe.ingList.append( ing2 );
-
 	Ingredient ing;
-	ing.name = "c. brown sugar";
-	ing.amount = 1;
-	ing.amount_offset = 0;
-	ing.groupID = 0; ing.group = "Dry Ingredients";
+	ing.name = "granulated sugar";
+	ing.amount = 0.75;
+	ing.units.name = "c.";
 	recipe.ingList.append( ing );
 
+	Ingredient ing2;
+	ing2.name = "brown sugar";
+	ing2.amount = 1;
+	ing2.units.name = "c.";
+	recipe.ingList.append( ing2 );
+
 	Ingredient ing3;
-	ing3.name = "c. all-purpose flour";
+	ing3.name = "all-purpose flour";
 	ing3.amount = 2;
-	ing3.groupID = 0; ing3.group = "Dry Ingredients";
+	ing3.units.plural = "c.";
 	recipe.ingList.append( ing3 );
 
 	Ingredient ing4;
-	ing4.name = "tsp. baking soda";
+	ing4.name = "baking soda";
 	ing4.amount = 1;
-	ing4.groupID = 0; ing4.group = "Dry Ingredients";
+	ing4.units.name = "tsp.";
 	recipe.ingList.append( ing4 );
 
 	Ingredient ing8;
-	ing8.name = "c. shortening";
+	ing8.name = "shortening";
 	ing8.amount = 1;
+	ing8.units.name = "c.";
 	ing8.prepMethodList.append( Element("softened") );
 	ing8.prepMethodList.append( Element("at room temperature") );
-	ing8.groupID = 1; ing8.group = "Fat & Liquids";
 	recipe.ingList.append( ing8 );
 
 	Ingredient ing6;
-	ing6.name = "c. peanut butter";
+	ing6.name = "peanut butter";
 	ing6.amount = 1;
-	ing6.groupID = 1; ing6.group = "Fat & Liquids";
+	ing6.units.name = "c.";
 	recipe.ingList.append( ing6 );
 
 	Ingredient ing5;
 	ing5.name = "eggs";
 	ing5.amount = 2;
-	ing5.groupID = 1; ing5.group = "Fat & Liquids";
+	ing5.units.plural = "whole";
 	recipe.ingList.append( ing5 );
 
 	Ingredient ing7;
-	ing7.name = "tsp. vanilla extract";
+	ing7.name = "vanilla extract";
 	ing7.amount = 1;
-	ing7.groupID = 1; ing7.group = "Fat & Liquids";
+	ing7.units.name = "tsp.";
+
 	recipe.ingList.append( ing7 );
 
 	check( importer, recipe );

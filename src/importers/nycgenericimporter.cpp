@@ -109,7 +109,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		else if ( current.startsWith( "NYC Nutrilink:" ) ) {
 			//m_recipe.instructions += current + "\n";
 		}
-		else {
+		else if ( !current.stripWhiteSpace().isEmpty() && !current.startsWith("** Exported from Now You're Cooking!") ) {
 			m_recipe.instructions += current + "\n";
 		}
 	}
@@ -180,13 +180,16 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	//now join each separate part of ingredient (name, unit, amount)
 	name = ingredient_line.join( " " );
 
-	int prep_sep_index = name.find( QRegExp( "[,;]" ) );
-	name = name.left( prep_sep_index );
-	prep = name.mid( prep_sep_index, name.length() );
+	int prep_sep_index = name.find( QRegExp( "(--|,;;)" ) );
+	if ( prep_sep_index == -1 )
+		prep_sep_index = name.length();
 
-	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ), -1 );
+	name = name.left( prep_sep_index ).stripWhiteSpace();
+	prep = name.mid( prep_sep_index+1, name.length() ).stripWhiteSpace();
+
+	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ) );
 	new_ingredient.group = current_header;
-	new_ingredient.prepMethodList.append( Element(prep) );
+	new_ingredient.prepMethodList = ElementList::split(",",prep);
 	m_recipe.ingList.append( new_ingredient );
 
 }

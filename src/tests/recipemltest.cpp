@@ -112,10 +112,6 @@ main(int argc, char *argv[])
 	ing7.groupID = 1; ing7.group = "Fat & Liquids";
 	recipe.ingList.append( ing7 );
 
-	CategoryTree *catTree = new CategoryTree;
-	(void)catTree->add( Element("Cookies & Squares",2) );
-	(void)catTree->add( Element("Snacks",1) );
-	
 	check( importer, recipe );
 
 	RecipeList recipeList;
