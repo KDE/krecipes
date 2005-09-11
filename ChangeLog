@@ -3,6 +3,7 @@ Changes from 0.8 to SVN:
   -Backup/restore of entire database
   -Ingredient amounts can be ranges
   -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or printing multiple recipes at once
+  -Dialog to paste ingredients into, which Krecipes then automatically parses and adds to a recipes.
   -Allows multiple preparation methods
   -PostgreSQL backend now stable
 

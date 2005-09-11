@@ -123,6 +123,7 @@ private:
 	KPushButton* downButton;
 	KPushButton* removeButton;
 	KPushButton* addButton;
+	KPushButton* ingParserButton;
 
 	//Function buttons
 	QGroupBox* functionsBox;
@@ -172,6 +173,7 @@ private slots:
 	void prepTitleChanged( const QString &title );
 	void typeButtonClicked( int );
 	void recipeRemoved( int id );
+	void slotIngredientParser();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

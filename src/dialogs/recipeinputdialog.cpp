@@ -37,6 +37,7 @@
 #include "createunitdialog.h"
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
+#include "ingredientparserdialog.h"
 #include "datablocks/recipe.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
@@ -47,6 +48,7 @@
 #include "widgets/ingredientcombobox.h"
 #include "widgets/headercombobox.h"
 #include "widgets/prepmethodcombobox.h"
+#include "widgets/inglistviewitem.h"
 #include "image.h" //Initializes default photo
 
 #include "profiling.h"
@@ -83,130 +85,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	}
 }
 
-#define INGLISTVIEWITEM_RTTI 1004
 #define INGGRPLISTVIEWITEM_RTTI 1003
-
-class IngListViewItem : public QListViewItem
-{
-public:
-	IngListViewItem( QListView* qlv, const Ingredient &i ) : QListViewItem( qlv )
-	{
-		init( i );
-	}
-
-	IngListViewItem( QListView* qlv, QListViewItem *after, const Ingredient &i ) : QListViewItem( qlv, after )
-	{
-		init( i );
-	}
-
-	IngListViewItem( QListViewItem* qli, QListViewItem *after, const Ingredient &i ) : QListViewItem( qli, after )
-	{
-		init( i );
-	}
-
-	int rtti() const
-	{
-		return INGLISTVIEWITEM_RTTI;
-	}
-
-	Ingredient ingredient() const
-	{
-		return m_ing;
-	}
-
-	void setAmount( double amount, double amount_offset )
-	{
-		amount_str = QString::null;
-
-		if ( amount > 0 ) {
-			KConfig * config = kapp->config();
-			config->setGroup( "Formatting" );
-
-			if ( config->readBoolEntry( "Fraction" ) )
-				amount_str = MixedNumber( amount ).toString();
-			else
-				amount_str = beautify( KGlobal::locale() ->formatNumber( amount, 5 ) );
-		}
-		if ( amount_offset > 0 ) {
-			if ( amount < 1e-10 )
-				amount_str += "0";
-			amount_str += "-" + MixedNumber(amount+amount_offset).toString();
-		}
-
-		m_ing.amount = amount;
-		m_ing.amount_offset = amount_offset;
-
-		//FIXME: make sure the right unit is showing after changing this (force a repaint... repaint() doesn't do the job right because it gets caught in a loop)
-	}
-
-	void setUnit( const Unit &unit )
-	{
-		//### This shouldn't be necessary... the db backend should ensure this doesn't happen
-		if ( !unit.name.isEmpty() )
-			m_ing.units.name = unit.name;
-		if ( !unit.plural.isEmpty() )
-			m_ing.units.plural = unit.plural;
-	}
-
-	void setPrepMethod( const QString &prepMethod )
-	{
-		m_ing.prepMethodList = ElementList::split(",",prepMethod);
-	}
-
-	virtual void setText( int column, const QString &text )
-	{
-		switch ( column ) {
-		case 0:
-			break;
-		case 1: {
-			Ingredient i; i.setAmount(text);
-			setAmount( i.amount, i.amount_offset );
-			break;
-		}
-		case 2:
-			setUnit( Unit( text, m_ing.amount+m_ing.amount_offset ) );
-			break;
-		case 3:
-			setPrepMethod( text );
-			break;
-		default:
-			break;
-		}
-	}
-
-protected:
-	Ingredient m_ing;
-	QString amount_str;
-
-public:
-	virtual QString text( int column ) const
-	{
-		switch ( column ) {
-		case 0:
-			return m_ing.name;
-			break;
-		case 1:
-			return amount_str;
-			break;
-		case 2:
-			return ( m_ing.amount+m_ing.amount_offset > 1 ) ? m_ing.units.plural : m_ing.units.name;
-			break;
-		case 3:
-			return m_ing.prepMethodList.join(",");
-			break;
-		default:
-			return ( QString::null );
-		}
-	}
-
-private:
-	void init( const Ingredient &i )
-	{
-		m_ing = i;
-
-		setAmount( i.amount, i.amount_offset );
-	}
-};
 
 class IngGrpListViewItem : public QListViewItem
 {
@@ -520,6 +399,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( removeButton, 7, 5 );
 
+	ingParserButton = new KPushButton( ingredientGBox );
+	ingParserButton->setFixedSize( QSize( 31, 31 ) );
+	ingParserButton->setFlat( true );
+	pm = il->loadIcon( "editpaste", KIcon::NoGroup, 16 );
+	ingParserButton->setPixmap( pm );
+	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
+
 	QToolTip::add
 		( addButton, i18n( "Add ingredient" ) );
 	QToolTip::add
@@ -528,6 +415,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 		( downButton, i18n( "Move ingredient down" ) );
 	QToolTip::add
 		( removeButton, i18n( "Remove ingredient" ) );
+	QToolTip::add
+		( ingParserButton, i18n( "Paste Ingredients" ) );
 
 	// Ingredient List
 	ingredientList = new KListView( ingredientGBox, "ingredientList" );
@@ -544,7 +433,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	ingredientList->setRenameable( 2, true ); //units
 	ingredientList->setRenameable( 3, true ); //prep method
 	ingredientList->setDefaultRenameAction( QListView::Reject );
-	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 8, 1, 3 );
+	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 9, 1, 3 );
 
 	// ------- Recipe Instructions Tab -----------
 
@@ -616,6 +505,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect( downButton, SIGNAL( clicked() ), this, SLOT( moveIngredientDown() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
+	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
 	connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
@@ -782,7 +672,9 @@ void RecipeInputDialog::reload( void )
 		}
 	}
 	else {
-		photoLabel->setPixmap( QPixmap( defaultPhoto ) );
+		QPixmap photo = QPixmap( defaultPhoto );
+		photoLabel->setPixmap( photo );
+		sourcePhoto.resize( 0, 0 );
 	}
 
 
@@ -1668,6 +1560,23 @@ void RecipeInputDialog::typeButtonClicked( int button_id )
 	}
 	else {
 		header_ing_stack->raiseWidget( ingredientBox );
+	}
+}
+
+void RecipeInputDialog::slotIngredientParser()
+{
+	UnitList units;
+	database->loadUnits(&units);
+	IngredientParserDialog dlg(units,this);
+	if ( dlg.exec() == QDialog::Accepted ) {
+		IngredientList ings = dlg.ingredients();
+		for ( IngredientList::const_iterator it = ings.begin(); it != ings.end(); ++it ) {
+			ingredientBox->lineEdit()->setText((*it).name);
+			amountEdit->setValue((*it).amount,(*it).amount_offset);
+			unitBox->lineEdit()->setText((*it).units.name);
+			prepMethodBox->lineEdit()->setText((*it).prepMethodList.join(","));
+			addIngredient();
+		}
 	}
 }
 

@@ -29,7 +29,7 @@ void NYCGenericImporter::parseFile( const QString &file )
 {
 	first = true;
 
-	resetVars();
+	m_recipe.empty();
 
 	QFile input( file );
 	if ( input.open( IO_ReadOnly ) ) {
@@ -60,8 +60,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 
 	//title
 	while ( !( current = stream.readLine() ).isEmpty() && !stream.atEnd() )
-		m_title = current;
-	kdDebug() << "Found title: " << m_title << endl;
+		m_recipe.title = current;
 
 	//categories
 	while ( !( current = stream.readLine() ).isEmpty() && !stream.atEnd() ) {
@@ -78,7 +77,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 			Element new_cat( QString( *it ).stripWhiteSpace() );
 			kdDebug() << "Found category: " << new_cat.name << endl;
-			m_categories.append( new_cat );
+			m_recipe.categoryList.append( new_cat );
 		}
 	}
 
@@ -92,23 +91,30 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		if ( current.startsWith( "Contributor:" ) ) {
 			Element new_author( current.mid( current.find( ':' ) + 1, current.length() ).stripWhiteSpace() );
 			kdDebug() << "Found author: " << new_author.name << endl;
-			m_authors.append( new_author );
+			m_recipe.authorList.append( new_author );
 		}
 		else if ( current.startsWith( "Preparation Time:" ) ) {
-			m_preptime = QTime::fromString( current.mid( current.find( ':' ), current.length() ) );
-			kdDebug() << "Found preptime: " << m_preptime.toString( "hh:mm" ) << endl;
+			m_recipe.prepTime = QTime::fromString( current.mid( current.find( ':' ), current.length() ) );
 		}
 		else if ( current.startsWith( "Yield:" ) ) {
-			m_servings = current.mid( current.find( ':' ), current.length() ).toInt();
-			kdDebug() << "Found servings: " << m_servings << endl;
+			int colon_index = current.find( ':' );
+			int amount_type_sep_index = current.find(" ",colon_index+1);
+
+			m_recipe.yield.amount = current.mid( colon_index+2, amount_type_sep_index-colon_index ).toDouble();
+			m_recipe.yield.type = current.mid( amount_type_sep_index+3, current.length() );
+		}
+		else if ( current.startsWith( "NYC Nutrition Analysis (per serving or yield unit):" ) ) {
+			//m_recipe.instructions += current + "\n";
+		}
+		else if ( current.startsWith( "NYC Nutrilink:" ) ) {
+			//m_recipe.instructions += current + "\n";
 		}
 		else {
-			kdDebug() << "Found instruction line: " << current << endl;
-			m_instructions += current + "\n";
+			m_recipe.instructions += current + "\n";
 		}
 	}
 
-	m_instructions = m_instructions.stripWhiteSpace();
+	m_recipe.instructions = m_recipe.instructions.stripWhiteSpace();
 	putDataInRecipe();
 
 	if ( found_next )
@@ -117,39 +123,11 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 
 void NYCGenericImporter::putDataInRecipe()
 {
-	//create the recipe
-	Recipe new_recipe;
-	new_recipe.yield.amount = m_servings;
-	new_recipe.yield.type = i18n("servings");
-	new_recipe.title = m_title;
-	new_recipe.instructions = m_instructions;
-	new_recipe.ingList = m_ingredients;
-	new_recipe.categoryList = m_categories;
-	new_recipe.authorList = m_authors;
-	new_recipe.prepTime = m_preptime;
-	new_recipe.recipeID = -1;
-
 	//put it in the recipe list
-	add
-		( new_recipe );
+	add( m_recipe );
 
-	//reset for the next recipe to use these variables
-	resetVars();
-}
-
-void NYCGenericImporter::resetVars()
-{
-	m_ingredients.empty();
-	m_authors.clear();
-	m_categories.clear();
-
-	m_servings = 0;
-	m_preptime = QTime( 0, 0 );
-
-	m_title = QString::null;
-	m_instructions = QString::null;
-
-	current_header = QString::null;
+	//reset for the next recipe
+	m_recipe.empty();
 }
 
 void NYCGenericImporter::loadIngredientLine( const QString &line )
@@ -209,7 +187,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ), -1 );
 	new_ingredient.group = current_header;
 	new_ingredient.prepMethodList.append( Element(prep) );
-	m_ingredients.append( new_ingredient );
+	m_recipe.ingList.append( new_ingredient );
 
 }
 

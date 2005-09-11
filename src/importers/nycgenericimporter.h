@@ -32,23 +32,11 @@ protected:
 
 private:
 	void importNYCGeneric( QTextStream &stream );
-
-	void resetVars();
 	void putDataInRecipe();
-
 	void loadIngredientLine( const QString & );
 
-	int m_servings;
-
-	QString m_instructions;
-	QString m_title;
+	Recipe m_recipe;
 	QString current_header;
-
-	ElementList m_authors;
-	ElementList m_categories;
-	IngredientList m_ingredients;
-
-	QTime m_preptime;
 
 	bool first;
 };
