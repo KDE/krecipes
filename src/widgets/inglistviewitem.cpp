@@ -85,6 +85,7 @@ void IngListViewItem::setText( int column, const QString &text )
 {
 	switch ( column ) {
 	case 0:
+		m_ing.name = text;
 		break;
 	case 1: {
 		Ingredient i; i.setAmount(text);
