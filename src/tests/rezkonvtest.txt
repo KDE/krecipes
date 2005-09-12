@@ -1,0 +1,23 @@
+========== REZKONV-Recipe - Krecipes 0.8.1
+
+	Title:  Cookies Test
+   Categories:  Snacks, Cookies & Squares
+	Yield:  2-3 Dozen
+
+	3/4-1 c. granulated sugar
+	1 c. brown sugar                  
+	2 c. all-purpose flour            
+	1 tsp. baking soda
+	1 c. shortening, softened,at room temperature
+	1 c. peanut butter
+	2 eggs
+	1 tsp. vanilla extract
+
+======================= AUTHOR ========================
+	Mona Beamer, Colleen Beamer 
+
+1. Drop by spoonful on greased cookie sheet.
+
+2. Bake in moderate oven.
+
+

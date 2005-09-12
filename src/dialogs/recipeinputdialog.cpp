@@ -1570,11 +1570,16 @@ void RecipeInputDialog::slotIngredientParser()
 	IngredientParserDialog dlg(units,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
 		IngredientList ings = dlg.ingredients();
-		for ( IngredientList::const_iterator it = ings.begin(); it != ings.end(); ++it ) {
-			ingredientBox->lineEdit()->setText((*it).name);
+		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
+			ingredientBox->lineEdit()->setText((*it).name.left( database->maxIngredientNameLength()));
 			amountEdit->setValue((*it).amount,(*it).amount_offset);
-			unitBox->lineEdit()->setText((*it).units.name);
+			unitBox->lineEdit()->setText((*it).units.name.left( database->maxUnitNameLength()));
+
+			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it ) {
+				(*prep_it).name = (*prep_it).name.left(database->maxPrepMethodNameLength());
+			}
 			prepMethodBox->lineEdit()->setText((*it).prepMethodList.join(","));
+
 			addIngredient();
 		}
 	}
