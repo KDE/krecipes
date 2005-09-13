@@ -85,7 +85,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id int(11) DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
+		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL AUTO_INCREMENT,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id int(11) DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP,  PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
 
 	else if ( tableName == "ingredients" )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
@@ -359,6 +359,21 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 84 ) {
+		database->transaction();
+
+		database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP;" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP;" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP;" );
+
+		database->exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
+
+		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
+
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
 	}
 }
 

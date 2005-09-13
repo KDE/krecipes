@@ -1,11 +1,15 @@
 Changes from 0.8 to SVN:
-  -New yield property for recipes: rather than storing the number of servings, it now stores a yield amount and type.  The amount may also be a range.
-  -Backup/restore of entire database
+  -New yield property for recipes: rather than storing the number of servings, it now stores a yield amount
+   and type.  The amount may also be a range.
+  -Backup/restore of entire database.  This is much faster than exporting/importing an database in the
+   Krecipes Format and also includes nutrient info and unit ratios.
   -Ingredient amounts can be ranges
-  -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or printing multiple recipes at once
+  -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or
+   printing multiple recipes at once
   -Dialog to paste ingredients into, which Krecipes then automatically parses and adds to a recipes.
   -Allows multiple preparation methods
   -PostgreSQL backend now stable
+  -Now keeps tracks of when recipes are created, modified, and last accessed.
 
 Changes from 0.7 to 0.8:
   -Redesigned advanced search: search on the "and", "or", and "not" conditions of each search term.  Can now search on nearly any item possible.

@@ -77,7 +77,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.83;
+	return 0.84;
 }
 
 QString RecipeDB::krecipes_version() const

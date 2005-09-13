@@ -138,10 +138,14 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 	QString command;
 
+	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
+
 	// Read title, author and instructions
 	QStringList ids_str;
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
-		ids_str << QString::number(*it);
+		QString number_str = QString::number(*it);
+		ids_str << number_str;
+ 		database->executeQuery( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
 	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
@@ -429,24 +433,29 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 
 	QString command;
 
+	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 	if ( newRecipe ) {
-		command = QString( "INSERT INTO recipes VALUES (NULL,'%1',%2,'%3','%4','%5',NULL,'%6');" )  // Id is autoincremented
-		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->yield.amount )
-		          .arg( recipe->yield.amount_offset )
-		          .arg( recipe->yield.type_id )
-		          .arg( escapeAndEncode( recipe->instructions ) )
-		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) );
-	}
-	else {
-		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6' WHERE id=%7;" )
+		command = QString( "INSERT INTO recipes VALUES (NULL,'%1',%2,'%3','%4','%5',NULL,'%6','%7','%8','%9');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
 		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
-		          .arg( recipe->recipeID );
+		          .arg( current_timestamp )
+		          .arg( current_timestamp )
+		          .arg( current_timestamp );
+	}
+	else {
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8' WHERE id=%7;" )
+		          .arg( escapeAndEncode( recipe->title ) )
+		          .arg( recipe->yield.amount )
+		          .arg( recipe->yield.amount_offset )
+		          .arg( recipe->yield.type_id )
+		          .arg( escapeAndEncode( recipe->instructions ) )
+		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
+		          .arg( recipe->recipeID )
+		          .arg( current_timestamp );
 	}
 
 	int lastID = -1;
@@ -1503,7 +1512,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
+		commands << QString( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(%1), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP,  PRIMARY KEY (id));" ).arg( maxRecipeTitleLength() );
 
 	else if ( tableName == "ingredients" )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
@@ -2005,6 +2014,61 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->executeQuery( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
+		database->executeQuery( "COMMIT TRANSACTION;" );
+	}
+
+	if ( qRound(version*100) < 84 ) {
+		database->executeQuery( "BEGIN TRANSACTION;" );
+
+		//==================add a columns to 'recipes' to allow storing atime, mtime, ctime
+		database->executeQuery( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		QSQLiteResult copyQuery = database->executeQuery( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes;" );
+		if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+			QSQLiteResultRow row = copyQuery.first();
+			while ( !copyQuery.atEnd() ) {
+				command = "INSERT INTO recipes_copy VALUES('"
+				                  + escape( row.data( 0 ) )
+				          + "','" + escape( row.data( 1 ) )
+				          + "','" + escape( row.data( 2 ) )
+				          + "','" + escape( row.data( 3 ) )
+				          + "','" + escape( row.data( 4 ) )
+				          + "','" + escape( row.data( 5 ) )
+				          + "','" + escape( row.data( 6 ) )
+				          + "','" + escape( row.data( 7 ) )
+				          + "')";
+				database->executeQuery( command );
+
+				row = copyQuery.next();
+			}
+		}
+		database->executeQuery( "DROP TABLE recipes" );
+		database->executeQuery( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP,  PRIMARY KEY (id))" );
+		copyQuery = database->executeQuery( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes_copy" );
+		if ( copyQuery.getStatus() != QSQLiteResult::Failure ) {
+			QSQLiteResultRow row = copyQuery.first();
+			QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
+			while ( !copyQuery.atEnd() ) {
+				command = "INSERT INTO recipes VALUES('" 
+				                  + escape( row.data( 0 ) )
+				          + "','" + escape( row.data( 1 ) )
+				          + "','" + escape( row.data( 2 ) )
+				          + "','" + escape( row.data( 3 ) )
+				          + "','" + escape( row.data( 4 ) )
+				          + "','" + escape( row.data( 5 ) )
+				          + "','" + escape( row.data( 6 ) )
+				          + "','" + escape( row.data( 7 ) )
+				          + "','" + escape( current_timestamp ) //ctime
+				          + "','" + escape( current_timestamp ) //mtime
+				          + "','" + escape( current_timestamp ) //atime
+				          + "')";
+				database->executeQuery( command );
+
+				row = copyQuery.next();
+			}
+		}
+		database->executeQuery( "DROP TABLE recipes_copy" );
+
+		database->executeQuery( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
 		database->executeQuery( "COMMIT TRANSACTION;" );
 	}
 }

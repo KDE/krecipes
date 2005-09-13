@@ -74,7 +74,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	QStringList commands;
 
 	if ( tableName == "recipes" )
-		commands << "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME);";
+		commands << "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP );";
 
 	else if ( tableName == "ingredients" )
 		commands << "CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
@@ -261,8 +261,27 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
-		if ( !database->commit() )
+		if ( !database->commit() ) {
 			kdDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
+			return;
+		}
+	}
+
+	if ( qRound(version*100) < 84 ) {
+		database->transaction();
+
+		database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP" );
+
+		database->exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
+
+		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
+
+		if ( !database->commit() ) {
+			kdDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
+			return;
+		}
 	}
 }
 

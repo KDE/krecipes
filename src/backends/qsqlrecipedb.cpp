@@ -138,7 +138,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	// Read title, author, instructions, and prep time
 	QStringList ids_str;
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
-		ids_str << QString::number(*it);
+		QString number_str = QString::number(*it);
+		ids_str << number_str;
+		database->exec( "UPDATE recipes SET atime=CURRENT_TIMESTAMP, ctime=ctime, mtime=mtime WHERE id="+number_str ); //do ctime=ctime so that the database doesn't try to automatically update the timestamp
 	}
 
 	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes r"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
@@ -397,7 +399,7 @@ void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
 	QSqlQuery query( QString::null, database );
 
-	query.prepare( "UPDATE recipes SET photo=? WHERE id=" + QString::number( recipeID ) );
+	query.prepare( "UPDATE recipes SET photo=?, ctime=ctime, atime=atime, mtime=mtime WHERE id=" + QString::number( recipeID ) );
 	query.addBindValue( data ); //this handles the binary encoding
 	query.exec();
 }
@@ -425,7 +427,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	QString command;
 
 	if ( newRecipe ) {
-		command = QString( "INSERT INTO recipes VALUES (%7,'%1',%2,'%3','%4','%5',NULL,'%6');" )  // Id is autoincremented
+		command = QString( "INSERT INTO recipes VALUES (%7,'%1',%2,'%3','%4','%5',NULL,'%6',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
@@ -435,7 +437,8 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( getNextInsertIDStr( "recipes", "id" ) );
 	}
 	else	{
-		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6' WHERE id=%7;" )
+		//do ctime=ctime so that the database doesn't try to automatically update the timestamp
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime=CURRENT_TIMESTAMP,ctime=ctime,atime=atime WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
@@ -467,7 +470,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		storePhoto( recipeID, ba );
 	}
 	else {
-		recipeToSave.exec( "UPDATE recipes SET photo=NULL WHERE id=" + QString::number( recipeID ) );
+		recipeToSave.exec( "UPDATE recipes SET photo=NULL, mtime=mtime, ctime=ctime, atime=atime WHERE id=" + QString::number( recipeID ) );
 	}
 
 	// Save the ingredient list (first delete if we are updating)
