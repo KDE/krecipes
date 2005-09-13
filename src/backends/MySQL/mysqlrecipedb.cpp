@@ -59,6 +59,9 @@ QStringList MySQLRecipeDB::backupCommand() const
 	if ( !pass.isEmpty() )
 		command<<"-p"+pass;
 
+	QString user = config->readEntry("Username", QString::null);
+	command<<"-u"+user;
+
 	command<<database->databaseName();
 	return command;
 }
@@ -74,6 +77,9 @@ QStringList MySQLRecipeDB::restoreCommand() const
 	QString pass = config->readEntry("Password", QString::null);
 	if ( !pass.isEmpty() )
 		command<<"-p"+pass;
+
+	QString user = config->readEntry("Username", QString::null);
+	command<<"-u"+user;
 
 	command<<database->databaseName();
 	return command;
