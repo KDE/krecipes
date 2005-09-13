@@ -70,6 +70,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	buttonOk = new QPushButton( this, "buttonOk" );
 	buttonOk->setAutoDefault( TRUE );
 	buttonOk->setDefault( TRUE );
+	buttonOk->setEnabled( false );
 	Layout5->addWidget( buttonOk );
 	
 	buttonCancel = new QPushButton( this, "buttonCancel" );
@@ -134,16 +135,14 @@ void IngredientParserDialog::accept()
 		m_ingList.append(it->ingredient());
 	}
 
-	if ( m_ingList.count() == 0 ) {
-		KMessageBox::questionYesNo(this,i18n("There are no parsed ingredients.\nContinue anyway?"));
-	}
-
 	QDialog::accept();
 }
 
 void IngredientParserDialog::removeIngredient()
 {
 	delete previewIngView->selectedItem();
+	if ( !previewIngView->firstChild() )
+		buttonOk->setEnabled( false );
 }
 
 void IngredientParserDialog::parseText()
@@ -223,6 +222,7 @@ void IngredientParserDialog::parseText()
 		ing.prepMethodList = ElementList::split(",",(*it).mid(format_at,end-format_at));
 
 		new IngListViewItem(previewIngView,ing);
+		buttonOk->setEnabled( true );
 	}
 }
 
