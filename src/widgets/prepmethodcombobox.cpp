@@ -17,9 +17,45 @@
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
 
+/** Completion object which allows completing completing items
+  * the last item in a comma-separated list
+  */
+class PrepMethodCompletion : public KCompletion
+{
+public:
+	PrepMethodCompletion() : KCompletion()
+	{}
+
+	virtual QString makeCompletion( const QString &string ) {
+		kdDebug()<<"original makeCompletion( "<<string<<" )"<<endl;
+
+		int comma_index = string.findRev(",");
+		QString completion_txt = string;
+		if ( comma_index != -1 )
+			completion_txt = completion_txt.right( completion_txt.length() - comma_index - 1 ).stripWhiteSpace();
+		if ( completion_txt.isEmpty() )
+			return string;
+
+		kdDebug()<<"altered makeCompletion( "<<completion_txt<<" )"<<endl;
+
+		completion_txt = KCompletion::makeCompletion(completion_txt);
+		kdDebug()<<"got: "<<completion_txt<<endl;
+
+		if ( completion_txt.isEmpty() )
+			completion_txt = string;
+		else if ( comma_index != -1 )
+			completion_txt = string.left( comma_index ) + "," + completion_txt;
+
+		kdDebug()<<"returning: "<<completion_txt<<endl;
+		return completion_txt;
+	}
+};
+
 PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db ) : KComboBox( b, parent ),
 		database( db )
 {
+	setAutoDeleteCompletionObject(true);
+	setCompletionObject(new PrepMethodCompletion());
 }
 
 void PrepMethodComboBox::reload()
