@@ -154,6 +154,14 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 	//name and preparation method
 	new_ingredient.name = string.mid( 18, string.length() - 18 ).stripWhiteSpace();
 
+	//separate out the preparation method
+	QString name_and_prep = new_ingredient.name;
+	int separator_index = name_and_prep.find( "," );
+	if ( separator_index != -1 ) {
+		new_ingredient.name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
+		new_ingredient.prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).stripWhiteSpace() );
+	}
+
 	//header (if present)
 	new_ingredient.group = current_header;
 
@@ -165,6 +173,7 @@ void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &recip
 {
 	QString header = string;
 	header.remove( QRegExp( "^=*" ) ).remove( QRegExp( "=*$" ) );
+	header = header.stripWhiteSpace();
 
 	kdDebug() << "found ingredient header: " << header << endl;
 
@@ -264,5 +273,7 @@ void RezkonvImporter::readRange( const QString &range_str, double &amount, doubl
 	QString to   = range_str.section( '-', 1, 1 );
 
 	amount = MixedNumber::fromString( from ).toDouble();
-	amount_offset = MixedNumber::fromString( to ).toDouble() - amount;
+
+	if ( !to.stripWhiteSpace().isEmpty() )
+		amount_offset = MixedNumber::fromString( to ).toDouble() - amount;
 }
