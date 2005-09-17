@@ -314,6 +314,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	AdvancedSearchDialogLayout->addLayout( layout7 );
 	
 	resultsListView = new KListView( this, "resultsListView" );
+	resultsListView->setSelectionMode( QListView::Extended );
 	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
 	AdvancedSearchDialogLayout->addWidget( resultsListView );
 	languageChange();
