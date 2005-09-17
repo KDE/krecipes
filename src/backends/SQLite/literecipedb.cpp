@@ -140,7 +140,6 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-	// Read title, author and instructions
 	QStringList ids_str;
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
@@ -148,7 +147,14 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
  		database->executeQuery( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
-	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
+	// Read title, author, yield, and instructions as specified
+	command = "SELECT id";
+	if ( items & RecipeDB::Title ) command += ",title";
+	if ( items & RecipeDB::Instructions ) command += ",instructions";
+	if ( items & RecipeDB::PrepTime ) command += ",prep_time";
+	if ( items & RecipeDB::Yield ) command += ",yield_amount,yield_amount_offset,yield_type_id";
+	if ( items & RecipeDB::Meta ) command += ",ctime,mtime,atime";
+	command += " FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
 	QSQLiteResult recipeToLoad = database->executeQuery( command );
 
@@ -156,14 +162,18 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		QSQLiteResultRow row = recipeToLoad.first();
 		while ( !recipeToLoad.atEnd() ) {
 			Recipe recipe;
-			recipe.recipeID = row.data( 0 ).toInt();
-			recipe.title = unescapeAndDecode( row.data( 1 ) );
-			recipe.instructions = unescapeAndDecode( row.data( 2 ) );
+			recipe.recipeID = row.data( "id" ).toInt();
+
+			if ( items & RecipeDB::Title )
+				recipe.title = unescapeAndDecode( row.data( "title" ) );
+
+			if ( items & RecipeDB::Instructions )
+				recipe.instructions = unescapeAndDecode( row.data( "instructions" ) );
 
 			if ( items & RecipeDB::Yield ) {
-				recipe.yield.amount = row.data( 4 ).toDouble();
-				recipe.yield.amount_offset = row.data( 5 ).toDouble();
-				recipe.yield.type_id = row.data( 6 ).toInt();
+				recipe.yield.amount = row.data( "yield_amount" ).toDouble();
+				recipe.yield.amount_offset = row.data( "yield_amount_offset" ).toDouble();
+				recipe.yield.type_id = row.data( "yield_type_id" ).toInt();
 				if ( recipe.yield.type_id != -1 ) {
 					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
 					QSQLiteResult yield_query = database->executeQuery(y_command);
@@ -174,7 +184,15 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 				}
 			}
 
-			recipe.prepTime = QTime::fromString( row.data( 3 ) );
+			if ( items & RecipeDB::PrepTime ) {
+				recipe.prepTime = QTime::fromString( row.data( "prep_time" ) );
+			}
+
+			if ( items & RecipeDB::Meta ) {
+				recipe.ctime = QDateTime::fromString( row.data( "ctime" ), Qt::ISODate );
+				recipe.mtime = QDateTime::fromString( row.data( "mtime" ), Qt::ISODate );
+				recipe.atime = QDateTime::fromString( row.data( "atime" ), Qt::ISODate );
+			}
 
 			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
 			row = recipeToLoad.next();
@@ -433,7 +451,8 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 
 	QString command;
 
-	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
+	QDateTime current_datetime = QDateTime::currentDateTime();
+	QString current_timestamp = current_datetime.toString(Qt::ISODate);
 	if ( newRecipe ) {
 		command = QString( "INSERT INTO recipes VALUES (NULL,'%1',%2,'%3','%4','%5',NULL,'%6','%7','%8','%9');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
@@ -445,6 +464,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( current_timestamp )
 		          .arg( current_timestamp )
 		          .arg( current_timestamp );
+		recipe->mtime = recipe->ctime = recipe->atime = current_datetime;
 	}
 	else {
 		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8' WHERE id=%7;" )
@@ -456,6 +476,7 @@ void LiteRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( recipe->recipeID )
 		          .arg( current_timestamp );
+		recipe->mtime = current_datetime;
 	}
 
 	int lastID = -1;

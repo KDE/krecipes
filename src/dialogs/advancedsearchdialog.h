@@ -120,6 +120,7 @@ protected:
 
 signals:
 	void recipeSelected( int, int );
+	void recipesSelected( const QValueList<int> &, int );
 
 private slots:
 	void search();

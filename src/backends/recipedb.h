@@ -68,7 +68,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { None = 0, NamesOnly = 256, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, All = 0xFFFF ^ NamesOnly };
+	enum RecipeItems { None = 0, NamesOnly = 256, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, All = 0xFFFF ^ NamesOnly };
 
 public slots:
 	void cancelOperation(){ haltOperation = true; }

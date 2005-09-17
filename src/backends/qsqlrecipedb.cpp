@@ -143,19 +143,38 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		database->exec( "UPDATE recipes SET atime=CURRENT_TIMESTAMP, ctime=ctime, mtime=mtime WHERE id="+number_str ); //do ctime=ctime so that the database doesn't try to automatically update the timestamp
 	}
 
-	command = "SELECT id,title,instructions,prep_time,yield_amount,yield_amount_offset,yield_type_id FROM recipes r"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
+	// Read title, author, yield, and instructions as specified
+	command = "SELECT id";
+	if ( items & RecipeDB::Title ) command += ",title";
+	if ( items & RecipeDB::Instructions ) command += ",instructions";
+	if ( items & RecipeDB::PrepTime ) command += ",prep_time";
+	if ( items & RecipeDB::Yield ) command += ",yield_amount,yield_amount_offset,yield_type_id";
+	command += " FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
 	QSqlQuery recipeQuery(command,database);
 	if ( recipeQuery.isActive() ) {
 		while ( recipeQuery.next() ) {
+			int row_at = 0;
+
 			Recipe recipe;
-			recipe.recipeID = recipeQuery.value( 0 ).toInt();
-			if ( items & RecipeDB::Title ) recipe.title = unescapeAndDecode( recipeQuery.value( 1 ).toString() );
-			if ( items & RecipeDB::Instructions ) recipe.instructions = unescapeAndDecode( recipeQuery.value( 2 ).toString() );
+			recipe.recipeID = recipeQuery.value( row_at ).toInt(); ++row_at;
+
+			if ( items & RecipeDB::Title ) {
+				 recipe.title = unescapeAndDecode( recipeQuery.value( row_at ).toString() ); ++row_at;
+			}
+
+			if ( items & RecipeDB::Instructions ) {
+				recipe.instructions = unescapeAndDecode( recipeQuery.value( row_at ).toString() ); ++row_at;
+			}
+
+			if ( items & RecipeDB::PrepTime ) {
+				 recipe.prepTime = recipeQuery.value( row_at ).toTime(); ++row_at;
+			}
+
 			if ( items & RecipeDB::Yield ) {
-				recipe.yield.amount = recipeQuery.value( 4 ).toDouble();
-				recipe.yield.amount_offset = recipeQuery.value( 5 ).toDouble();
-				recipe.yield.type_id = recipeQuery.value( 6 ).toInt();
+				recipe.yield.amount = recipeQuery.value( row_at ).toDouble(); ++row_at;
+				recipe.yield.amount_offset = recipeQuery.value( row_at ).toDouble(); ++row_at;
+				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;
 				if ( recipe.yield.type_id != -1 ) {
 					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
 					QSqlQuery yield_query(y_command,database);
@@ -165,8 +184,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						kdDebug()<<yield_query.lastError().text()<<endl;
 				}
 			}
-			if ( items & RecipeDB::PrepTime ) recipe.prepTime = recipeQuery.value( 3 ).toTime();
-			
+
+			if ( items & RecipeDB::Meta )
+				loadRecipeMetadata(&recipe);
 
 			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
 		}
@@ -413,6 +433,18 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 	}
 }
 
+void QSqlRecipeDB::loadRecipeMetadata( Recipe *recipe )
+{
+	QString command = "SELECT ctime,mtime,atime FROM recipes WHERE id="+QString::number(recipe->recipeID);
+
+	QSqlQuery query( command, database );
+	if ( query.isActive() && query.first() ) {
+		recipe->ctime = query.value(0).toDateTime();
+		recipe->mtime = query.value(1).toDateTime();
+		recipe->atime = query.value(2).toDateTime();
+	}
+}
+
 void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 {
 	// Check if it's a new recipe or it exists (supossedly) already.
@@ -456,6 +488,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		recipe->recipeID = recipeID;
 	}
 	recipeID = recipe->recipeID;
+	loadRecipeMetadata(recipe);
 
 	// Let's begin storing the Image!
 	if ( !recipe->photo.isNull() ) {

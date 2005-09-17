@@ -44,6 +44,7 @@ protected:
 	virtual void portOldDatabases( float version );
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
+	void loadRecipeMetadata( Recipe *recipe );
 
 	void search( RecipeList *list, int items,
 			const QStringList &titleKeywords, bool requireAllTitleWords,

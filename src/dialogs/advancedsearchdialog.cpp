@@ -371,6 +371,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsFrame->setShown(false);
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
+	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
 }
 
 AdvancedSearchDialog::~AdvancedSearchDialog()
@@ -422,6 +423,7 @@ void AdvancedSearchDialog::clear()
 	ingredientsWithoutEdit->clear();
 	ingredientsAnyEdit->clear();
 	titleEdit->clear();
+	instructionsEdit->clear();
 
 	servingsSpinBox->setValue( 1 );
 	prepTimeEdit->setTime( QTime(0,0) );

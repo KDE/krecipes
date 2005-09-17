@@ -58,6 +58,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	layout4->addWidget( previewLabel );
 	
 	previewIngView = new KListView( this, "previewIngView" );
+	previewIngView->setSorting(-1);
 	previewIngView->addColumn( i18n( "Ingredient" ) );
 	previewIngView->addColumn( i18n( "Amount" ) );
 	previewIngView->addColumn( i18n( "Unit" ) );
@@ -149,6 +150,8 @@ void IngredientParserDialog::parseText()
 {
 	previewIngView->clear();
 
+	QListViewItem *last_item = 0;
+
 	int line = 0;
 	QStringList ingredients = QStringList::split("\n",ingredientTextEdit->text());
 	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
@@ -221,7 +224,7 @@ void IngredientParserDialog::parseText()
 		int end = (*it).length();
 		ing.prepMethodList = ElementList::split(",",(*it).mid(format_at,end-format_at));
 
-		new IngListViewItem(previewIngView,ing);
+		last_item = new IngListViewItem(previewIngView,last_item,ing);
 		buttonOk->setEnabled( true );
 	}
 }

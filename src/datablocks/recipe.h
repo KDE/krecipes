@@ -52,6 +52,10 @@ public:
 	ElementList authorList; //authors' id+name
 	QTime prepTime;
 
+	QDateTime ctime;
+	QDateTime mtime;
+	QDateTime atime;
+
 	// Public methods
 	void empty( void );
 
