@@ -241,28 +241,30 @@ void IngredientParserDialog::parseText()
 
 	QListViewItem *last_item = 0;
 
-	int line = 0;
+	int line_num = 0;
 	QStringList ingredients = QStringList::split("\n",ingredientTextEdit->text());
 	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
-		++line;
+		QString line = (*it).simplifyWhiteSpace();
+
+		++line_num;
 		int format_at = 0;
 		Ingredient ing;
 
 
 		//======amount======//
-		int first_space = (*it).find( " ", format_at+1 );
+		int first_space = line.find( " ", format_at+1 );
 		if ( first_space == -1 )
-			first_space = (*it).length();
+			first_space = line.length();
 
-		int second_space = (*it).find( " ", first_space+1 );
+		int second_space = line.find( " ", first_space+1 );
 		if ( second_space == -1 )
-			second_space = (*it).length();
+			second_space = line.length();
 
 		Ingredient i;
 		bool ok;
-		i.setAmount((*it).mid(format_at,second_space-format_at),&ok);
+		i.setAmount(line.mid(format_at,second_space-format_at),&ok);
 		if ( !ok ) {
-			i.setAmount((*it).mid(format_at,first_space-format_at),&ok);
+			i.setAmount(line.mid(format_at,first_space-format_at),&ok);
 			if ( ok ) format_at = first_space+1;
 		}
 		else
@@ -273,16 +275,16 @@ void IngredientParserDialog::parseText()
 			ing.amount_offset = i.amount_offset;
 		}
 		else
-			kdDebug()<<"no amount on line "<<line<<endl;
+			kdDebug()<<"no amount on line "<<line_num<<endl;
 
 
 		//======unit======//
-		first_space = (*it).find( " ", format_at+1 );
+		first_space = line.find( " ", format_at+1 );
 		if ( first_space == -1 )
-			first_space = (*it).length();
+			first_space = line.length();
 
 		bool isUnit = false;
-		QString unitCheck = (*it).mid(format_at,first_space-format_at);
+		QString unitCheck = line.mid(format_at,first_space-format_at);
 
 		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
 			if ( (*unit_it).name == unitCheck || (*unit_it).plural == unitCheck ) {
@@ -297,21 +299,21 @@ void IngredientParserDialog::parseText()
 			ing.units.plural = unitCheck;
 		}
 		else
-			kdDebug()<<"no unit on line "<<line<<endl;
+			kdDebug()<<"no unit on line "<<line_num<<endl;
 
 
 		//======ingredient======//
-		int ing_end = (*it).find( QRegExp("(,|;)"), format_at+1 );
+		int ing_end = line.find( QRegExp("(,|;)"), format_at+1 );
 		if ( ing_end == -1 )
-			ing_end = (*it).length();
+			ing_end = line.length();
 
-		ing.name = (*it).mid(format_at,ing_end-format_at);
+		ing.name = line.mid(format_at,ing_end-format_at);
 		format_at = ing_end+2;
 
 
 		//======prep method======//
-		int end = (*it).length();
-		ing.prepMethodList = ElementList::split(",",(*it).mid(format_at,end-format_at));
+		int end = line.length();
+		ing.prepMethodList = ElementList::split(",",line.mid(format_at,end-format_at));
 
 		last_item = new IngListViewItem(previewIngView,last_item,ing);
 		buttonOk->setEnabled( true );
