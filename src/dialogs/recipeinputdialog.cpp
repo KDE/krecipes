@@ -85,53 +85,6 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	}
 }
 
-#define INGGRPLISTVIEWITEM_RTTI 1003
-
-class IngGrpListViewItem : public QListViewItem
-{
-public:
-	IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id ) : QListViewItem( qlv, after )
-	{
-		init( group, id );
-	}
-
-	int rtti() const
-	{
-		return INGGRPLISTVIEWITEM_RTTI;
-	}
-
-	QString group() const
-	{
-		return m_group;
-	}
-	int id() const
-	{
-		return m_id;
-	}
-
-	virtual QString text( int column ) const
-	{
-		switch ( column ) {
-		case 0:
-			return m_group + ":";
-			break;
-		default:
-			return ( QString::null );
-		}
-	}
-
-protected:
-	QString m_group;
-	int m_id;
-
-private:
-	void init( const QString &group, int id )
-	{
-		m_group = group;
-		m_id = id;
-	}
-};
-
 
 RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( parent )
 {
@@ -1572,6 +1525,8 @@ void RecipeInputDialog::typeButtonClicked( int button_id )
 	}
 }
 
+//TODO: This inputs the ingredients by simulating the user's actions that would do this.
+//	Instead, this shouldn't require messing with the UI.
 void RecipeInputDialog::slotIngredientParser()
 {
 	UnitList units;
@@ -1579,7 +1534,15 @@ void RecipeInputDialog::slotIngredientParser()
 	IngredientParserDialog dlg(units,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
 		IngredientList ings = dlg.ingredients();
+		QStringList usedGroups;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
+			if ( !(*it).group.isEmpty() && usedGroups.find((*it).group) == usedGroups.end() ) {
+				typeButtonGrp->setButton( 1 );
+				headerBox->lineEdit()->setText((*it).group);
+				addIngredient(); //adds the header
+				usedGroups << (*it).group;
+			}
+
 			ingredientBox->lineEdit()->setText((*it).name.left( database->maxIngredientNameLength()));
 			amountEdit->setValue((*it).amount,(*it).amount_offset);
 			unitBox->lineEdit()->setText((*it).units.name.left( database->maxUnitNameLength()));
@@ -1590,6 +1553,15 @@ void RecipeInputDialog::slotIngredientParser()
 			prepMethodBox->lineEdit()->setText((*it).prepMethodList.join(","));
 
 			addIngredient();
+
+			if ( usedGroups.count() > 0 && (*it).group.isEmpty() ) {
+				QListViewItem *last_item = ingredientList->lastItem();
+				if ( last_item->parent() ) {
+					last_item->parent()->takeItem( last_item );
+					ingredientList->insertItem( last_item );
+					last_item->moveItem( ingredientList->lastItem()->parent() );
+				}
+			}
 		}
 	}
 }

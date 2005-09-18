@@ -58,9 +58,12 @@ protected slots:
 	void accept();
 	void parseText();
 	void removeIngredient();
+	void convertToHeader();
 	virtual void languageChange();
 
 private:
+	void convertToHeader( const QPtrList<QListViewItem> &items );
+
 	UnitList m_unitList;
 	IngredientList m_ingList;
 };

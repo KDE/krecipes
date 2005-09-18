@@ -94,11 +94,14 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	previewIngView->setRenameable( 2, true );
 	previewIngView->setRenameable( 3, true );
 
+	previewIngView->setSelectionMode( QListView::Extended );
+
 	ingredientTextEdit->setText( QApplication::clipboard()->text() );
 	ingredientTextEdit->selectAll();
 
 	KPopupMenu *kpop = new KPopupMenu( previewIngView );
 	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
+	kpop->insertItem( "" , this, SLOT( convertToHeader() ), Key_H );
  
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
 
@@ -132,8 +135,17 @@ void IngredientParserDialog::languageChange()
 
 void IngredientParserDialog::accept()
 {
-	for ( IngListViewItem * it = (IngListViewItem*)previewIngView->firstChild(); it; it = (IngListViewItem*)it->nextSibling() ) {
-		m_ingList.append(it->ingredient());
+	for ( QListViewItem *it = previewIngView->firstChild(); it; it = it->nextSibling() ) {
+		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
+			QString group = ((IngGrpListViewItem*)it)->group();
+			for ( IngListViewItem *sub_it = (IngListViewItem*)it->firstChild(); sub_it; sub_it = (IngListViewItem*)sub_it->nextSibling() ) {
+				Ingredient ing = sub_it->ingredient();
+				ing.group = group;
+				m_ingList.append(ing);
+			}
+		}
+		else
+			m_ingList.append(((IngListViewItem*)it)->ingredient());
 	}
 
 	QDialog::accept();
@@ -144,6 +156,83 @@ void IngredientParserDialog::removeIngredient()
 	delete previewIngView->selectedItem();
 	if ( !previewIngView->firstChild() )
 		buttonOk->setEnabled( false );
+}
+
+void IngredientParserDialog::convertToHeader()
+{
+	QPtrList<QListViewItem> items = previewIngView->selectedItems();
+	if ( items.count() == 0 )
+		return;
+	else if ( items.count() > 1 )
+		convertToHeader(items);
+	else { //items.count = 1
+		QListViewItem *item = items.first();
+		if ( item->rtti() == INGLISTVIEWITEM_RTTI ) {
+			QListViewItem *new_item = new IngGrpListViewItem(previewIngView,
+			(item->parent())?item->parent():item,
+			((IngListViewItem*)item)->ingredient().name, -1);
+	
+			QListViewItem *next_sibling;
+			QListViewItem *last_item = 0;
+			for ( QListViewItem * it = (item->parent())?item->nextSibling():new_item->nextSibling(); it; it = next_sibling ) {
+				if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI )
+					break;
+	
+				next_sibling = it->nextSibling(); //get the next sibling of this item before we move it
+	
+				if ( it->parent() )
+					it->parent()->takeItem(it);
+				else
+					previewIngView->takeItem( it );
+	
+				new_item->insertItem( it );
+	
+				if ( last_item )
+					it->moveItem( last_item );
+				last_item = it;
+			}
+	
+			new_item->setOpen(true);
+	
+			delete item;
+		}
+	}
+}
+
+void IngredientParserDialog::convertToHeader( const QPtrList<QListViewItem> &items )
+{
+	if ( items.count() > 0 ) {
+		QPtrListIterator<QListViewItem> it(items);
+		QListViewItem *item = it.current();
+
+		QString group = ((IngListViewItem*)item)->ingredient().name;
+		QListViewItem *ingGroupItem = new IngGrpListViewItem(previewIngView,
+		   (item->parent())?item->parent():item, group, -1);
+		delete item; //delete the ingredient header which was detected as an ingredient
+		++it;
+
+		QListViewItem *last_item = 0;
+		while ( (item = it.current()) != 0 ) {
+			//ignore anything that isn't an ingredient (e.g. headers)
+			if ( item->rtti() == INGLISTVIEWITEM_RTTI ) { 
+				if ( item->parent() )
+					item->parent()->takeItem(item);
+				else
+					previewIngView->takeItem( item );
+	
+				ingGroupItem->insertItem( item );
+	
+				if ( last_item )
+					item->moveItem( last_item );
+				last_item = item;
+			}
+
+			++it;
+		}
+
+		ingGroupItem->setOpen(true);
+		previewIngView->clearSelection();
+	}
 }
 
 void IngredientParserDialog::parseText()

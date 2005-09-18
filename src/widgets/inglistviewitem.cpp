@@ -129,3 +129,42 @@ void IngListViewItem::init( const Ingredient &i )
 
 	setAmount( i.amount, i.amount_offset );
 }
+
+
+IngGrpListViewItem::IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id ) : QListViewItem( qlv, after )
+{
+	init( group, id );
+}
+
+int IngGrpListViewItem::rtti() const
+{
+	return INGGRPLISTVIEWITEM_RTTI;
+}
+
+QString IngGrpListViewItem::group() const
+{
+	return m_group;
+}
+
+int IngGrpListViewItem::id() const
+{
+	return m_id;
+}
+
+QString IngGrpListViewItem::text( int column ) const
+{
+	switch ( column ) {
+	case 0:
+		return m_group + ":";
+		break;
+	default:
+		return ( QString::null );
+	}
+}
+
+void IngGrpListViewItem::init( const QString &group, int id )
+{
+	m_group = group;
+	m_id = id;
+}
+

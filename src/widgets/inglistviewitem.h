@@ -15,6 +15,7 @@
 
 #include "datablocks/ingredient.h"
 
+#define INGGRPLISTVIEWITEM_RTTI 1003
 #define INGLISTVIEWITEM_RTTI 1004
 
 class IngListViewItem : public QListViewItem
@@ -43,6 +44,27 @@ public:
 
 private:
 	void init( const Ingredient &i );
+};
+
+
+class IngGrpListViewItem : public QListViewItem
+{
+public:
+	IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id );
+
+	int rtti() const;
+
+	QString group() const;
+	int id() const;
+
+	virtual QString text( int column ) const;
+
+protected:
+	QString m_group;
+	int m_id;
+
+private:
+	void init( const QString &group, int id );
 };
 
 #endif
