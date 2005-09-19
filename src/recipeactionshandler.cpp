@@ -28,6 +28,7 @@
 #include "exporters/kreexport.h"
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
+#include "exporters/plaintextexporter.h"
 
 #include "widgets/recipelistview.h"
 #include "widgets/categorylistview.h"
@@ -294,10 +295,12 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	KFileDialog * fd = new KFileDialog( QString::null,
 	                                    QString( "*.kre|%1 (*.kre)\n"
 	                                             "*.kreml|Krecipes (*.kreml)\n"
+	                                             "*.txt|%3 (*.txt)\n"
 	                                             //"*.cml|CookML (*.cml)\n"
 	                                             "*.html|%2 (*.html)\n"
 	                                             "*.mmf|Meal-Master (*.mmf)\n"
-	                                             "*.xml|RecipeML (*.xml)" ).arg( i18n( "Compressed Krecipes format" ) ).arg( i18n( "Web page" ) ),
+	                                             "*.xml|RecipeML (*.xml)"
+	                                              ).arg( i18n( "Compressed Krecipes format" ) ).arg( i18n( "Web page" ) ).arg( i18n("Plain Text") ),
 	                                    0, "export_dlg", true );
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );
@@ -314,6 +317,8 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new HTMLExporter( database, fileName, fd->currentFilter(), 650 );
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );
+			else if ( fd->currentFilter() == "*.txt" )
+				exporter = new PlainTextExporter( fileName, fd->currentFilter() );
 			else {
 				CategoryTree *cat_structure = new CategoryTree;
 				database->loadCategories( cat_structure );
