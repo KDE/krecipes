@@ -156,14 +156,7 @@ public:
 
 	void saveRecipe( Recipe *recipe );
 	void saveUnitRatio( const UnitRatio *ratio );
-	void search( RecipeList *list, int items,
-		const QStringList &titleKeywords, bool requireAllTitleWords,
-		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-		const QStringList &ingsOr,
-		const QStringList &catsOr,
-		const QStringList &authorsOr,
-		const QTime &time, int prep_param,
-		int servings, int servings_param );
+	void search( RecipeList *list, int items, const RecipeSearchParameters & );
 
 	double unitRatio( int unitID1, int unitID2 );
 

@@ -144,7 +144,9 @@ void LiteRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
- 		database->executeQuery( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
+
+		if ( !(items & RecipeDB::Noatime) )
+ 			database->executeQuery( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
 	// Read title, author, yield, and instructions as specified
@@ -2835,20 +2837,9 @@ void LiteRecipeDB::empty( void )
 	}
 }
 
-void LiteRecipeDB::search( RecipeList *list, int items,
-	const QStringList &titleKeywords, bool requireAllTitleWords,
-	const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-	const QStringList &ingsOr,
-	const QStringList &catsOr,
-	const QStringList &authorsOr,
-	const QTime &time, int prep_param,
-	int servings, int servings_param )
+void LiteRecipeDB::search( RecipeList *list, int items, const RecipeSearchParameters &parameters )
 {
-	QString query = buildSearchQuery(titleKeywords, requireAllTitleWords,
-		instructionsKeywords, requireAllInstructionsWords,
-		ingsOr,catsOr,authorsOr,
-		time,prep_param,
-		servings,servings_param);
+	QString query = buildSearchQuery(parameters);
 	
 	QSQLiteResult recipesToLoad = database->executeQuery( query );
 

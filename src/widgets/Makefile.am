@@ -16,7 +16,7 @@ libkrecipeswidgets_la_SOURCES= \
 	kretextedit.cpp dblistviewbase.cpp editbox.cpp \
 	conversiontable.cpp fractioninput.cpp ingredientcombobox.cpp \
 	headercombobox.cpp prepmethodcombobox.cpp kreruler.cpp \
-	inglistviewitem.cpp
+	inglistviewitem.cpp kdateedit.cpp imagedate.cpp
 
 libkrecipeswidgets_la_METASOURCES=AUTO
 

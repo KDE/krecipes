@@ -30,6 +30,7 @@ class KPushButton;
 class KListView;
 class QListViewItem;
 
+class KDateEdit;
 class RecipeDB;
 
 
@@ -43,6 +44,7 @@ public:
 
 	virtual void languageChange();
 
+protected:
 	QLabel* textLabel1_4;
 	QScrollView* scrollView1;
 	QFrame* parametersFrame;
@@ -91,8 +93,15 @@ public:
 	KListView* resultsListView;
 	QCheckBox *requireAllTitle;
 	QCheckBox *requireAllInstructions;
-	
-protected:
+	KDateEdit *createdStartDateEdit;
+	KDateEdit *createdEndDateEdit;
+	KDateEdit *modifiedStartDateEdit;
+	KDateEdit *modifiedEndDateEdit;
+	KDateEdit *accessedStartDateEdit;
+	KDateEdit *accessedEndDateEdit;
+	QPushButton* metaDataButton;
+	QFrame* metaDataFrame;
+
 	QHBoxLayout* AdvancedSearchDialogLayout;
 	QVBoxLayout* layout7;
 	QHBoxLayout* scrollView1Layout;
@@ -103,6 +112,7 @@ protected:
 	QSpacerItem* spacer3_2_2;
 	QSpacerItem* titleFrameSpacer;
 	QSpacerItem* instructionsFrameSpacer;
+	QSpacerItem* metaDataFrameSpacer;
 	QSpacerItem* spacer15;
 	QVBoxLayout* titleFrameLayout;
 	QGridLayout* ingredientFrameLayout;
@@ -112,6 +122,7 @@ protected:
 	QHBoxLayout* layout5;
 	QVBoxLayout* prepTimeFrameLayout;
 	QVBoxLayout* instructionsFrameLayout;
+	QVBoxLayout* metaDataFrameLayout;
 	QHBoxLayout* layout6;
 	QHBoxLayout* layout9;
 	QSpacerItem* spacer3;

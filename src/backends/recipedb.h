@@ -40,6 +40,7 @@ class KProcess;
 class QTextStream;
 
 class CategoryTree;
+class RecipeSearchParameters;
 
 typedef struct
 {
@@ -68,7 +69,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { None = 0, NamesOnly = 256, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, All = 0xFFFF ^ NamesOnly };
+	enum RecipeItems { None = 0, NamesOnly = 256, Noatime = 1024, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, All = 0xFFFF ^ NamesOnly };
 
 public slots:
 	void cancelOperation(){ haltOperation = true; }
@@ -239,14 +240,7 @@ public:
 
 	virtual void saveRecipe( Recipe *recipe ) = 0;
 	virtual void saveUnitRatio( const UnitRatio *ratio ) = 0;
-	virtual void search( RecipeList *list, int items,
-			const QStringList &titleKeywords, bool requireAllTitleWords,
-			const QStringList &instructionsKeywords, bool requireAllInstructionWords,
-			const QStringList &ingsOr,
-			const QStringList &catsOr,
-			const QStringList &authorsOr,
-			const QTime &time, int prep_param,
-			int servings, int servings_param ) = 0;
+	virtual void search( RecipeList *list, int items, const RecipeSearchParameters &parameters ) = 0;
 
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
@@ -327,13 +321,7 @@ protected:
 	void execSQL( QTextStream &stream );
 	virtual void execSQL( const QString & ) = 0;
 
-	QString buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
-		const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-		const QStringList &ingsOr,
-		const QStringList &catsOr,
-		const QStringList &authorsOr,
-		const QTime &time, int prep_param,
-		int servings, int servings_param ) const;
+	QString buildSearchQuery( const RecipeSearchParameters &parameters ) const;
 
 	double latestDBVersion() const;
 	QString krecipes_version() const;
@@ -345,8 +333,5 @@ private:
 private slots:
 	void processDumpOutput( KProcess *, char *buffer, int buflen );
 };
-
-
-
 
 #endif

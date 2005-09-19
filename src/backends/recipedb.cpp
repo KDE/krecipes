@@ -54,6 +54,8 @@
 #include "datablocks/categorytree.h"
 #include "datablocks/ingredientpropertylist.h"
 
+#include "searchparameters.h"
+
 #include "usda_property_data.h"
 #include "usda_ingredient_data.h"
 
@@ -431,24 +433,18 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 	}
 }
 
-QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requireAllTitleWords,
-	const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-	const QStringList &ingsOr,
-	const QStringList &catsOr,
-	const QStringList &authorsOr,
-	const QTime &time, int prep_param,
-	int servings, int servings_param ) const
+QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 {
 	QStringList queryList, conditionList, tableList;
 
-	if ( ingsOr.count() != 0 ) {
+	if ( p.ingsOr.count() != 0 ) {
 		tableList << "ingredient_list il" << "ingredients i";
 		conditionList << "il.ingredient_id=i.id" << "il.recipe_id=r.id";
 
 		QString condition = "(";
-		for ( QStringList::const_iterator it = ingsOr.begin(); it != ingsOr.end();) {
+		for ( QStringList::const_iterator it = p.ingsOr.begin(); it != p.ingsOr.end();) {
 			condition += "i.name LIKE '%"+escapeAndEncode(*it)+"%' ";
-			if ( ++it != ingsOr.end() ) {
+			if ( ++it != p.ingsOr.end() ) {
 				condition += "OR ";
 			}
 		}
@@ -457,14 +453,14 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 		conditionList << condition;
 	}
 
-	if ( catsOr.count() != 0 ) {
+	if ( p.catsOr.count() != 0 ) {
 		tableList << "category_list cl" << "categories c";
 		conditionList << "cl.category_id=c.id" << "cl.recipe_id=r.id";
 
 		QString condition = "(";
-		for ( QStringList::const_iterator it = catsOr.begin(); it != catsOr.end();) {
+		for ( QStringList::const_iterator it = p.catsOr.begin(); it != p.catsOr.end();) {
 			condition += "c.name LIKE '%"+escapeAndEncode(*it)+"%' ";
-			if ( ++it != catsOr.end() ) {
+			if ( ++it != p.catsOr.end() ) {
 				condition += "OR ";
 			}
 		}
@@ -473,14 +469,14 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 		conditionList << condition;
 	}
 
-	if ( authorsOr.count() != 0 ) {
+	if ( p.authorsOr.count() != 0 ) {
 		tableList << "author_list al" << "authors a";
 		conditionList << "al.author_id=a.id" << "al.recipe_id=r.id";
 
 		QString condition = "(";
-		for ( QStringList::const_iterator it = authorsOr.begin(); it != authorsOr.end();) {
+		for ( QStringList::const_iterator it = p.authorsOr.begin(); it != p.authorsOr.end();) {
 			condition += "a.name LIKE '%"+escapeAndEncode(*it)+"%'";
-			if ( ++it != authorsOr.end() ) {
+			if ( ++it != p.authorsOr.end() ) {
 				condition += "OR ";
 			}
 		}
@@ -489,13 +485,13 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 		conditionList << condition;
 	}
 
-	if ( titleKeywords.count() != 0 ) {
-		QString op = (requireAllTitleWords) ? "AND " : "OR ";
+	if ( p.titleKeywords.count() != 0 ) {
+		QString op = (p.requireAllTitleWords) ? "AND " : "OR ";
 
 		QString condition = "(";
-		for ( QStringList::const_iterator it = titleKeywords.begin(); it != titleKeywords.end();) {
+		for ( QStringList::const_iterator it = p.titleKeywords.begin(); it != p.titleKeywords.end();) {
 			condition += "r.title LIKE '%"+escapeAndEncode(*it)+"%' ";
-			if ( ++it != titleKeywords.end() ) {
+			if ( ++it != p.titleKeywords.end() ) {
 				condition += op;
 			}
 		}
@@ -503,13 +499,13 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 		conditionList << condition;
 	}
 
-	if ( instructionsKeywords.count() != 0 ) {
-		QString op = (requireAllInstructionsWords) ? "AND " : "OR ";
+	if ( p.instructionsKeywords.count() != 0 ) {
+		QString op = (p.requireAllInstructionsWords) ? "AND " : "OR ";
 
 		QString condition = "(";
-		for ( QStringList::const_iterator it = instructionsKeywords.begin(); it != instructionsKeywords.end();) {
+		for ( QStringList::const_iterator it = p.instructionsKeywords.begin(); it != p.instructionsKeywords.end();) {
 			condition += "r.instructions LIKE '%"+escapeAndEncode(*it)+"%' ";
-			if ( ++it != instructionsKeywords.end() ) {
+			if ( ++it != p.instructionsKeywords.end() ) {
 				condition += op;
 			}
 		}
@@ -517,27 +513,75 @@ QString RecipeDB::buildSearchQuery( const QStringList &titleKeywords, bool requi
 		conditionList << condition;
 	}
 
-	if ( !time.isNull() ) {
+	if ( !p.prep_time.isNull() ) {
 		QString op;
-		switch ( prep_param ) {
-			case 0: op = "<= "+time.toString( "'hh:mm:ss'" ); break;
+		switch ( p.prep_param ) {
+			case 0: op = "<= "+p.prep_time.toString( "'hh:mm:ss'" ); break;
 			case 1: //TODO: have a configurable 'about'.  It tests within 15 minutes for now.
-				QTime lower = time; lower.addSecs( 60*15 );
-				QTime upper = time; upper.addSecs( 60*-15 );
+				QTime lower = p.prep_time; lower.addSecs( 60*15 );
+				QTime upper = p.prep_time; upper.addSecs( 60*-15 );
 				op = "BETWEEN "+lower.toString( "'hh:mm:ss'" )+" AND "+upper.toString( "'hh:mm:ss'" );
 				break;
 		}
 		conditionList << "r.prep_time "+op;
 	}
 
-	if ( servings > 0 ) {
+	if ( p.servings > 0 ) {
 		QString op;
-		switch ( servings_param ) {
-			case 0: op = "> "+QString::number(servings); break;
-			case 1: op = "< "+QString::number(servings); break;
-			case 2: op = "BETWEEN "+QString::number(servings-5)+" AND "+QString::number(servings+5); break;
+		switch ( p.servings_param ) {
+			case 0: op = "> "+QString::number(p.servings); break;
+			case 1: op = "< "+QString::number(p.servings); break;
+			case 2: op = "BETWEEN "+QString::number(p.servings-5)+" AND "+QString::number(p.servings+5); break;
 		}
 		conditionList << "r.yield_amount "+op;
+	}
+
+	if ( p.createdDateBegin.isValid() ) {
+		if ( p.createdDateEnd.isValid() ) {
+			conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
+			conditionList << "r.ctime <= '"+p.createdDateEnd.toString(Qt::ISODate)+"'";
+		}
+		else {
+			if ( p.createdDateBegin.time().isNull() ) { //we just want something on a particular date, not time
+				QDateTime end = p.createdDateBegin.addDays(1);
+				conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.ctime <= '"+end.toString(Qt::ISODate)+"'";
+			}
+			else //use the exact time
+				conditionList << "r.ctime = '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
+		}
+	}
+
+	if ( p.modifiedDateBegin.isValid() ) {
+		if ( p.modifiedDateEnd.isValid() ) {
+			conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
+			conditionList << "r.mtime <= '"+p.modifiedDateEnd.toString(Qt::ISODate)+"'";
+		}
+		else {
+			if ( p.modifiedDateBegin.time().isNull() ) { //we just want something on a particular date, not time
+				QDateTime end = p.modifiedDateBegin.addDays(1);
+				conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.mtime <= '"+end.toString(Qt::ISODate)+"'";
+			}
+			else //use the exact time
+				conditionList << "r.mtime = '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
+		}
+	}
+
+	if ( p.accessedDateBegin.isValid() ) {
+		if ( p.accessedDateEnd.isValid() ) {
+			conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
+			conditionList << "r.atime <= '"+p.accessedDateEnd.toString(Qt::ISODate)+"'";
+		}
+		else {
+			if ( p.accessedDateBegin.time().isNull() ) { //we just want something on a particular date, not time
+				QDateTime end = p.accessedDateBegin.addDays(1);
+				conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.atime <= '"+end.toString(Qt::ISODate)+"'";
+			}
+			else //use the exact time
+				conditionList << "r.atime = '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
+		}
 	}
 
 	QString wholeQuery = "SELECT r.id FROM recipes r"

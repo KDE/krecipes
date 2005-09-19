@@ -46,14 +46,7 @@ protected:
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 	void loadRecipeMetadata( Recipe *recipe );
 
-	void search( RecipeList *list, int items,
-			const QStringList &titleKeywords, bool requireAllTitleWords,
-			const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-			const QStringList &ingsOr,
-			const QStringList &catsOr,
-			const QStringList &authorsOr,
-			const QTime &time, int prep_param,
-			int servings, int servings_param );
+	void search( RecipeList *list, int items, const RecipeSearchParameters & );
 
 	/** Return the next id for the given table and column.
 	  * If the database supports getting this afterwards,

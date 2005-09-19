@@ -140,7 +140,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
-		database->exec( "UPDATE recipes SET atime=CURRENT_TIMESTAMP, ctime=ctime, mtime=mtime WHERE id="+number_str ); //do ctime=ctime so that the database doesn't try to automatically update the timestamp
+
+		if ( !(items & RecipeDB::Noatime) )
+			database->exec( "UPDATE recipes SET atime=CURRENT_TIMESTAMP, ctime=ctime, mtime=mtime WHERE id="+number_str ); //do ctime=ctime so that the database doesn't try to automatically update the timestamp
 	}
 
 	// Read title, author, yield, and instructions as specified
@@ -2143,20 +2145,9 @@ QString QSqlRecipeDB::getNextInsertIDStr( const QString &table, const QString &c
 	return id_str;
 }
 
-void QSqlRecipeDB::search( RecipeList *list, int items,
-	const QStringList &titleKeywords, bool requireAllTitleWords,
-	const QStringList &instructionsKeywords, bool requireAllInstructionsWords,
-	const QStringList &ingsOr,
-	const QStringList &catsOr,
-	const QStringList &authorsOr,
-	const QTime &time, int prep_param,
-	int servings, int servings_param )
+void QSqlRecipeDB::search( RecipeList *list, int items, const RecipeSearchParameters &parameters )
 {
-	QString query = buildSearchQuery(titleKeywords, requireAllTitleWords,
-		instructionsKeywords, requireAllInstructionsWords,
-		ingsOr,catsOr,authorsOr,
-		time,prep_param,
-		servings,servings_param);
+	QString query = buildSearchQuery(parameters);
 
 	QValueList<int> ids;
 	QSqlQuery recipeToLoad( query, database );

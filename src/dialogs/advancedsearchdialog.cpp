@@ -41,8 +41,10 @@
 #include <kglobal.h>
 
 #include "backends/recipedb.h"
+#include "backends/searchparameters.h"
 #include "recipeactionshandler.h"
 #include "widgets/recipelistview.h"
+#include "widgets/kdateedit.h"
 
 #include "profiling.h"
 
@@ -292,8 +294,55 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsFrameLayout->addWidget( instructionsHBox );
 
 	parametersFrameLayout->addWidget( instructionsFrame );
-	instructionsFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	instructionsFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( instructionsFrameSpacer );
+
+
+	metaDataButton = new QPushButton( parametersFrame, "metaDataButton" );
+	metaDataButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( metaDataButton );
+	
+	metaDataFrame = new QFrame( parametersFrame, "metaDataFrame" );
+	metaDataFrame->setFrameShape( QFrame::StyledPanel );
+	metaDataFrame->setFrameShadow( QFrame::Raised );
+	metaDataFrameLayout = new QVBoxLayout( metaDataFrame, 5, 3, "metaDataFrameLayout");
+
+	QLabel *createdLabel = new QLabel( i18n("Created:"), metaDataFrame );
+	metaDataFrameLayout->addWidget( createdLabel );
+
+	QHBox *createdHBox = new QHBox(metaDataFrame);
+	createdStartDateEdit = new KDateEdit(true,createdHBox);
+	createdStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	(void)new QLabel(" - ",createdHBox);
+	createdEndDateEdit = new KDateEdit(false,createdHBox);
+	createdEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	metaDataFrameLayout->addWidget( createdHBox );
+
+	QLabel *modifiedLabel = new QLabel( i18n("Modified:"), metaDataFrame );
+	metaDataFrameLayout->addWidget( modifiedLabel );
+
+	QHBox *modifiedHBox = new QHBox(metaDataFrame);
+	modifiedStartDateEdit = new KDateEdit(true,modifiedHBox);
+	modifiedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	(void)new QLabel(" - ",modifiedHBox);
+	modifiedEndDateEdit = new KDateEdit(false,modifiedHBox);
+	modifiedEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	metaDataFrameLayout->addWidget( modifiedHBox );
+
+	QLabel *accessedLabel = new QLabel( i18n("Last Accessed:"), metaDataFrame );
+	metaDataFrameLayout->addWidget( accessedLabel );
+
+	QHBox *accessedHBox = new QHBox(metaDataFrame);
+	accessedStartDateEdit = new KDateEdit(true,accessedHBox);
+	accessedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	(void)new QLabel(" - ",accessedHBox);
+	accessedEndDateEdit = new KDateEdit(false,accessedHBox);
+	accessedEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	metaDataFrameLayout->addWidget( accessedHBox );
+
+	parametersFrameLayout->addWidget( metaDataFrame );
+	metaDataFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	parametersFrameLayout->addItem( metaDataFrameSpacer );
 
 
 	scrollView1->addChild( parametersFrame );
@@ -354,6 +403,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( servingsButton, SIGNAL( toggled( bool ) ), servingsFrame, SLOT( setShown( bool ) ) );
 	connect( prepTimeButton, SIGNAL( toggled( bool ) ), prepTimeFrame, SLOT( setShown( bool ) ) );
 	connect( instructionsButton, SIGNAL( toggled( bool ) ), instructionsFrame, SLOT( setShown( bool ) ) );
+	connect( metaDataButton, SIGNAL( toggled( bool ) ), metaDataFrame, SLOT( setShown( bool ) ) );
 
 	connect( titleButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( ingredientButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
@@ -362,6 +412,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( servingsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( prepTimeButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( instructionsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
+	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 
 	titleFrame->setShown(false);
 	ingredientFrame->setShown(false);
@@ -370,6 +421,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsFrame->setShown(false);
 	prepTimeFrame->setShown(false);
 	instructionsFrame->setShown(false);
+	metaDataFrame->setShown(false);
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
@@ -406,6 +458,7 @@ void AdvancedSearchDialog::languageChange()
 	prepTimeComboBox->insertItem( i18n( "Ready in at most:" ) );
 	prepTimeComboBox->insertItem( i18n( "Ready in about:" ) );
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
+	metaDataButton->setText( QString("%1 >>").arg(i18n("Meta Data")) );
 	clearButton->setText( i18n( "C&lear" ) );
 	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
 	findButton->setText( i18n( "&Search" ) );
@@ -425,6 +478,13 @@ void AdvancedSearchDialog::clear()
 	ingredientsAnyEdit->clear();
 	titleEdit->clear();
 	instructionsEdit->clear();
+
+	createdStartDateEdit->setDate( QDate() );
+	createdEndDateEdit->setDate( QDate() );
+	modifiedStartDateEdit->setDate( QDate() );
+	modifiedEndDateEdit->setDate( QDate() );
+	accessedStartDateEdit->setDate( QDate() );
+	accessedEndDateEdit->setDate( QDate() );
 
 	servingsSpinBox->setValue( 1 );
 	prepTimeEdit->setTime( QTime(0,0) );
@@ -453,7 +513,7 @@ void AdvancedSearchDialog::search()
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	//we need to load more than just the title because we'll be doing further refining of the search
-	int load_items = RecipeDB::Title | RecipeDB::NamesOnly;
+	int load_items = RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Noatime;
 	if ( !authorsAllEdit->text().isEmpty() || !authorsWithoutEdit->text().isEmpty() )
 		load_items |= RecipeDB::Authors;
 	if ( !ingredientsAllEdit->text().isEmpty() || !ingredientsWithoutEdit->text().isEmpty() )
@@ -461,19 +521,44 @@ void AdvancedSearchDialog::search()
 	if ( !categoriesAllEdit->text().isEmpty() || !categoriesNotEdit->text().isEmpty() )
 		load_items |= RecipeDB::Categories;
 
+	RecipeSearchParameters parameters;
+
+	parameters.titleKeywords = split(titleEdit->text(),true);
+	parameters.requireAllTitleWords = requireAllTitle->isChecked();
+
+	parameters.instructionsKeywords = split(instructionsEdit->text(),true);
+	parameters.requireAllInstructionsWords = requireAllInstructions->isChecked();
+
+	parameters.ingsOr = split(ingredientsAnyEdit->text(),true);
+	parameters.catsOr = split(categoriesAnyEdit->text(),true);
+	parameters.authorsOr = split(authorsAnyEdit->text(),true);
+
+	if ( enablePrepTimeCheckBox->isChecked() )
+		parameters.prep_time = prepTimeEdit->time();
+	parameters.prep_param = prepTimeComboBox->currentItem();
+
+	if ( enableServingsCheckBox->isChecked() )
+		parameters.servings = servingsSpinBox->value();
+	parameters.servings_param = servingsComboBox->currentItem();
+
+	parameters.createdDateBegin = createdStartDateEdit->date();
+	parameters.createdDateEnd = createdEndDateEdit->date();
+	if ( parameters.createdDateEnd.date().isValid() )
+		parameters.createdDateEnd = parameters.createdDateEnd.addDays(1); //we want to include the given day in the search
+
+	parameters.modifiedDateBegin = modifiedStartDateEdit->date();
+	parameters.modifiedDateEnd = modifiedEndDateEdit->date();
+	if ( parameters.modifiedDateEnd.date().isValid() )
+		parameters.modifiedDateEnd = parameters.modifiedDateEnd.addDays(1); //we want to include the given day in the search
+
+	parameters.accessedDateBegin = accessedStartDateEdit->date();
+	parameters.accessedDateEnd = accessedEndDateEdit->date();
+	if ( parameters.accessedDateEnd.date().isValid() )
+		parameters.accessedDateEnd = parameters.accessedDateEnd.addDays(1); //we want to include the given day in the search
+
 	START_TIMER("Doing database SQL search");
 	RecipeList allRecipes;
-	database->search( &allRecipes, load_items,
-		split(titleEdit->text(),true), requireAllTitle->isChecked(), //title
-		split(instructionsEdit->text(),true), requireAllInstructions->isChecked(), //instructions
-		split(ingredientsAnyEdit->text(),true),
-		split(categoriesAnyEdit->text(),true),
-		split(authorsAnyEdit->text(),true),
-		enablePrepTimeCheckBox->isChecked()?prepTimeEdit->time():QTime(),
-		prepTimeComboBox->currentItem(), //prep_param
-		enableServingsCheckBox->isChecked()?servingsSpinBox->value():-1, //servings
-		servingsComboBox->currentItem() //servings_param
-	);
+	database->search( &allRecipes, load_items, parameters );
 	END_TIMER();
 
 	/*
