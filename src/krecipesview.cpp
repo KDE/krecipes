@@ -1,3 +1,4 @@
+
 /***************************************************************************
 *   Copyright (C) 2003-2004 by                                            *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
@@ -297,6 +298,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
+	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+
 	// Close Splash Screen
 	delete start_logo;
 
@@ -423,32 +426,25 @@ bool KrecipesView::save( void )
     \fn KrecipesView::exportRecipe()
  */
 void KrecipesView::exportRecipe()
-{ /*
-		if ( !inputPanel->everythingSaved() )
-		{
-			Recipe *recipe;  selectPanel->getCurrentRecipe( recipe );
-			if ( recipe->recipeID == inputPanel->loadedRecipeID() )
-			{
-				switch( KMessageBox::questionYesNoCancel( this,
-				  i18n("This recipe has unsaved changes.\n"
-				  "In order to have these changes saved to a file, this recipe must first be saved to the database.\n"
-				  "Do you want to save this recipe to a file with or without these changes?"),
-				  i18n("Unsaved Changes") ) )
-				{
-				case KMessageBox::Yes: save();
-				case KMessageBox::No: selectPanel->slotExportRecipe();
-				case KMessageBox::Cancel: break;
-				default: break;
-				}
-			}
-		}
-		else*/
+{
 	QWidget * vis_panel = rightPanel->visiblePanel();
 	if ( vis_panel == viewPanel && viewPanel->recipesLoaded() > 0 ) {
 		exportRecipes( viewPanel->currentRecipes() );
 	}
 	else if ( vis_panel == selectPanel ) {
-		selectPanel->slotExportRecipe();
+		selectPanel->getActionsHandler()->recipeExport();
+	}
+}
+
+void KrecipesView::exportToClipboard()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == viewPanel && viewPanel->recipesLoaded() > 0 ) {
+		QValueList<int> ids = viewPanel->currentRecipes();
+		RecipeActionsHandler::recipesToClipboard( ids, database );
+	}
+	else if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->recipesToClipboard();
 	}
 }
 
@@ -966,7 +962,7 @@ void KrecipesView::editRecipe()
 		actionRecipe( viewPanel->currentRecipes() [ 0 ], 1 );
 		break;
 	case SelectP:
-		selectPanel->getActionsHandler() ->edit();
+		selectPanel->getActionsHandler()->edit();
 		break;
 	default:
 		break;

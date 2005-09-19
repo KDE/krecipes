@@ -32,6 +32,7 @@ class QListViewItem;
 
 class KDateEdit;
 class RecipeDB;
+class RecipeActionsHandler;
 
 
 class AdvancedSearchDialog : public QWidget
@@ -43,6 +44,8 @@ public:
 	~AdvancedSearchDialog();
 
 	virtual void languageChange();
+
+	RecipeActionsHandler *actionHandler;
 
 protected:
 	QLabel* textLabel1_4;

@@ -79,6 +79,7 @@ private slots:
 	void fileOpen();
 	void fileSave();
 	void fileExport();
+	void fileToClipboard();
 	void filePrint();
 	void optionsShowToolbar();
 	void optionsShowStatusbar();
@@ -119,6 +120,7 @@ private:
 	KAction *editAction;
 	KAction *printAction;
 	KAction *reloadAction;
+	KAction *copyToClipboardAction;
 
 	KDialog *parsing_file_dlg;
 
@@ -126,6 +128,7 @@ private:
 
 private slots:
 	void enableSaveOption( bool en = true );
+	void recipeSelected( bool );
 };
 
 #endif // _KRECIPES_H_

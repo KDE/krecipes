@@ -101,12 +101,17 @@ Krecipes::Krecipes()
 	         this, SLOT( changeCaption( const QString& ) ) );
 
 	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
+	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
+
+	connect( m_view, SIGNAL( recipeSelected(bool) ), SLOT( recipeSelected(bool) ) );
 
 
 	// Enable/Disable the Save Button (Initialize disabled, and connect signal)
 
 	connect( m_view, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOption( bool ) ) );
+
 	enableSaveOption( false ); // Disables saving initially
+	recipeSelected( false ); //nothing is selected initially
 
 	parsing_file_dlg = new KDialog( this, "parsing_file_dlg", true, Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
@@ -126,6 +131,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			exportAction->setEnabled( show );
 			printAction->setEnabled( show );
 			reloadAction->setEnabled( show );
+			copyToClipboardAction->setEnabled( show );
 
 			//can't edit when there are multiple recipes loaded
 			if ( show && m_view->viewPanel->recipesLoaded() == 1 ) {
@@ -139,6 +145,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 	case SelectP: {
 			exportAction->setEnabled( show );
 			editAction->setEnabled( show );
+			copyToClipboardAction->setEnabled( show );
 			break;
 		}
 	default:
@@ -146,10 +153,14 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 	}
 }
 
+void Krecipes::recipeSelected( bool selected )
+{
+	copyToClipboardAction->setEnabled( selected );
+	editAction->setEnabled( selected );
+}
+
 void Krecipes::setupActions()
 {
-	KIconLoader il;
-
 	printAction = KStdAction::print( this, SLOT( filePrint() ), actionCollection() );
 	reloadAction = new KAction( i18n( "Reloa&d" ), "reload", Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
 
@@ -183,6 +194,11 @@ void Krecipes::setupActions()
 	exportAction = new KAction( i18n( "Export..." ), 0,
 	                            this, SLOT( fileExport() ),
 	                            actionCollection(), "export_action" );
+
+	copyToClipboardAction = new KAction( i18n( "&Copy to Clipboard" ), "editcopy",
+	                            CTRL + Key_C,
+	                            this, SLOT( fileToClipboard() ),
+	                            actionCollection(), "copy_to_clipboard_action" );
 
 	( void ) new KAction( i18n( "Page Setup..." ), 0,
 	                      this, SLOT( pageSetupSlot() ),
@@ -266,6 +282,11 @@ void Krecipes::fileExport()
 {
 	// this slot is called whenever the File->Export menu is selected,
 	m_view->exportRecipe();
+}
+
+void Krecipes::fileToClipboard()
+{
+	m_view->exportToClipboard();
 }
 
 void Krecipes::filePrint()

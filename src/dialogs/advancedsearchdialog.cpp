@@ -386,7 +386,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
+	actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::CopyToClipboard );
 
 	connect( findButton, SIGNAL( clicked() ), SLOT( search() ) );
 	connect( clearButton, SIGNAL( clicked() ), SLOT( clear() ) );

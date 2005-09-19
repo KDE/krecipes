@@ -187,10 +187,12 @@ private:
 
 signals:
 	void enableSaveOption( bool en );
+	void recipeSelected( bool );
 
 public slots:
 	bool save( void );
 	void exportRecipe();
+	void exportToClipboard();
 	void reloadDisplay();
 	virtual void reload();
 

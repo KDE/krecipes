@@ -42,11 +42,11 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	database = db;
 
 	QVBoxLayout *tabLayout = new QVBoxLayout( this );
-	QTabWidget *tabWidget = new QTabWidget( this );
+	tabWidget = new QTabWidget( this );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	QGroupBox *basicSearchTab = new QGroupBox( this );
+	basicSearchTab = new QGroupBox( this );
 	basicSearchTab->setFrameStyle( QFrame::NoFrame );
 	basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
@@ -119,9 +119,9 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( this, SIGNAL( recipeSelected( bool ) ), openButton, SLOT( setEnabled( bool ) ) );
 	connect( editButton, SIGNAL( clicked() ), actionHandler, SLOT( edit() ) );
 	connect( this, SIGNAL( recipeSelected( bool ) ), editButton, SLOT( setEnabled( bool ) ) );
-	connect( removeButton, SIGNAL( clicked() ), actionHandler, SLOT( remove
-		         () ) );
+	connect( removeButton, SIGNAL( clicked() ), actionHandler, SLOT( remove() ) );
 	connect( this, SIGNAL( recipeSelected( bool ) ), removeButton, SLOT( setEnabled( bool ) ) );
+
 	connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
 	connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
 	connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
@@ -212,6 +212,14 @@ void SelectRecipeDialog::filterComboCategory( int row )
 		}
 		
 	}
+}
+
+RecipeActionsHandler* SelectRecipeDialog::getActionsHandler() const
+{
+	if ( tabWidget->currentPage() == basicSearchTab )
+		return actionHandler;
+	else
+		return advancedSearch->actionHandler;
 }
 
 #include "selectrecipedialog.moc"

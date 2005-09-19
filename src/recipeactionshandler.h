@@ -45,7 +45,8 @@ public:
 	    Remove = 0x0010,
 	    ExpandAll = 0x0020,
 	    CollapseAll = 0x0040,
-	    AddToShoppingList = 0x0080
+	    AddToShoppingList = 0x0080,
+	    CopyToClipboard = 0x0100
 	};
 
 	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
@@ -54,6 +55,7 @@ public:
 
 	static void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
 	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
+	static void recipesToClipboard( const QValueList<int> &ids, RecipeDB *db );
 
 signals:
 	void recipeSelected( int id, int action );
@@ -93,6 +95,8 @@ public slots:
 
 	/** Collapses all items in the list view */
 	void collapseAll();
+
+	void recipesToClipboard();
 
 private:
 	KPopupMenu *kpop;

@@ -13,6 +13,7 @@
 #include "recipeactionshandler.h"
 
 #include <qwidget.h>
+#include <qclipboard.h>
 
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -48,12 +49,14 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 	if ( actions & Export )
 		kpop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 	if ( actions & RemoveFromCategory )
-		remove_from_cat_item = kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "Remove From &Category" ), this, SLOT( removeFromCategory() ), CTRL + Key_C );
+		remove_from_cat_item = kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Remove From Category" ), this, SLOT( removeFromCategory() ), CTRL + Key_R );
 	if ( actions & Remove )
 		kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
 	if ( actions & AddToShoppingList )
 		kpop->insertItem( il->loadIcon( "trolley", KIcon::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), CTRL + Key_A );
+	if ( actions & CopyToClipboard )
+		kpop->insertItem( il->loadIcon( "editcopy", KIcon::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), CTRL + Key_C );
 	kpop->polish();
 
 	catPop = new KPopupMenu( parentListView );
@@ -338,6 +341,29 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 		}
 	}
 	delete fd;
+}
+
+void RecipeActionsHandler::recipesToClipboard( const QValueList<int> &ids, RecipeDB *db )
+{
+	QString buffer;
+	QTextStream stream(buffer,IO_WriteOnly);
+
+	PlainTextExporter exporter("",".txt");
+	RecipeList recipeList;
+	db->loadRecipes( &recipeList, RecipeDB::All ^ RecipeDB::Photo, ids );
+	exporter.writeStream(stream,recipeList);
+
+	QApplication::clipboard()->setText(buffer);
+}
+
+void RecipeActionsHandler::recipesToClipboard()
+{
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		QValueList<int> ids = recipeIDs( items );
+
+		recipesToClipboard(ids,database);
+	}
 }
 
 QValueList<int> RecipeActionsHandler::getAllVisibleItems()

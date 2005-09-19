@@ -32,6 +32,7 @@
 #include "recipeactionshandler.h"
 
 class QHBox;
+class QGroupBox;
 
 class RecipeDB;
 class ElementList;
@@ -56,15 +57,14 @@ public:
 	//Public Methods
 	void getCurrentRecipe( Recipe *recipe );
 
-	RecipeActionsHandler * getActionsHandler() const
-	{
-		return actionHandler;
-	}
+	RecipeActionsHandler * getActionsHandler() const;
 
 private:
 
 	// Widgets
 	QGridLayout *layout;
+	QTabWidget *tabWidget;
+	QGroupBox *basicSearchTab;
 	QHBox *searchBar;
 	RecipeListView* recipeListView;
 	QHBox *buttonBar;
@@ -93,10 +93,6 @@ private slots:
 
 public slots:
 	void haveSelectedItems();
-	void slotExportRecipe()
-	{
-		actionHandler->recipeExport();
-	}
 	void reload( void );
 };
 
