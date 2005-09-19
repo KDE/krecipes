@@ -34,6 +34,11 @@ Ingredient::~Ingredient()
 
 void Ingredient::setAmount( const QString &range, bool *ok )
 {
+	if ( range.isEmpty() ) {
+		if ( ok ) *ok = true;
+ 		return;
+	}
+
 	QStringList ranges = QStringList::split('-',range);
 
 	QString amount_min = ranges[0];
