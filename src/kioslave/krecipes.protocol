@@ -1,0 +1,16 @@
+[Protocol]
+exec=kio_krecipes
+protocol=krecipes
+input=none
+output=filesystem
+listing=Name,Type
+reading=true
+writing=false
+makedir=false
+linking=false
+deleting=false
+moving=false
+maxInstances=1
+Description=Krecipes kioslave
+Description[xx]=xxKrecipes kioslavexx
+Class=:local
