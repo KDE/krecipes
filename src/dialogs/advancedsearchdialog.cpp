@@ -311,10 +311,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrameLayout->addWidget( createdLabel );
 
 	QHBox *createdHBox = new QHBox(metaDataFrame);
-	createdStartDateEdit = new KDateEdit(true,createdHBox);
+	createdStartDateEdit = new KDateEdit(createdHBox,"createdStartEdit");
 	createdStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",createdHBox);
-	createdEndDateEdit = new KDateEdit(false,createdHBox);
+	createdEndDateEdit = new KDateEdit(createdHBox,"createdEndEdit");
 	createdEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	metaDataFrameLayout->addWidget( createdHBox );
 
@@ -322,10 +322,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrameLayout->addWidget( modifiedLabel );
 
 	QHBox *modifiedHBox = new QHBox(metaDataFrame);
-	modifiedStartDateEdit = new KDateEdit(true,modifiedHBox);
+	modifiedStartDateEdit = new KDateEdit(modifiedHBox,"modifiedStartEdit");
 	modifiedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",modifiedHBox);
-	modifiedEndDateEdit = new KDateEdit(false,modifiedHBox);
+	modifiedEndDateEdit = new KDateEdit(modifiedHBox,"modifiedEndEdit");
 	modifiedEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	metaDataFrameLayout->addWidget( modifiedHBox );
 
@@ -333,10 +333,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrameLayout->addWidget( accessedLabel );
 
 	QHBox *accessedHBox = new QHBox(metaDataFrame);
-	accessedStartDateEdit = new KDateEdit(true,accessedHBox);
+	accessedStartDateEdit = new KDateEdit(accessedHBox,"accessedStartEdit");
 	accessedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",accessedHBox);
-	accessedEndDateEdit = new KDateEdit(false,accessedHBox);
+	accessedEndDateEdit = new KDateEdit(accessedHBox,"accessedEndEdit");
 	accessedEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	metaDataFrameLayout->addWidget( accessedHBox );
 
@@ -425,6 +425,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
+
+	clear();
 }
 
 AdvancedSearchDialog::~AdvancedSearchDialog()
