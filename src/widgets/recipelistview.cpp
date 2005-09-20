@@ -139,7 +139,7 @@ QString RecipeListView::tooltip(QListViewItem *item, int column) const
 		RecipeListItem *recipe_it = (RecipeListItem*)item;
 
 		Recipe r;
-		database->loadRecipe(&r,RecipeDB::Meta,recipe_it->recipeID() );
+ 		database->loadRecipe(&r,RecipeDB::Meta|RecipeDB::Noatime,recipe_it->recipeID() );
 
 		return QString("<center><b>%7</b></center><center>__________</center>%1 %2<br />%3 %4<br />%5 %6")
 		   .arg(i18n("Created:")).arg(r.ctime.toString())
