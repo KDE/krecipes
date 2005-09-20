@@ -13,6 +13,7 @@
 
 #include <qintdict.h>
 #include <qdatastream.h>
+#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -69,6 +70,27 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 	return true;
 }
 
+class RecipeListToolTip : public QToolTip
+{
+public:
+	RecipeListToolTip( RecipeListView *view ) : QToolTip(view->viewport()), m_view(view)
+	{}
+
+	void maybeTip( const QPoint &point )
+	{
+		QListViewItem *item = m_view->itemAt( point );
+		if ( item ) {
+			QString text = m_view->tooltip(item,0);
+			if ( !text.isEmpty() )
+				tip( m_view->itemRect( item ), text );
+		}
+	}
+
+private:
+	RecipeListView *m_view;
+
+};
+
 
 RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryListView( parent, db ),
 		flat_list( false ),
@@ -89,6 +111,8 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	setPixmap( il.loadIcon( "categories", KIcon::NoGroup, 16 ) );
 
 	setSelectionMode( QListView::Extended );
+
+	(void)new RecipeListToolTip(this);
 }
 
 QDragObject *RecipeListView::dragObject()
@@ -107,6 +131,32 @@ QDragObject *RecipeListView::dragObject()
 bool RecipeListView::acceptDrag( QDropEvent *event ) const
 {
 	return RecipeItemDrag::canDecode( event );
+}
+
+QString RecipeListView::tooltip(QListViewItem *item, int column) const
+{
+	if ( item->rtti() == RECIPELISTITEM_RTTI ) {
+		RecipeListItem *recipe_it = (RecipeListItem*)item;
+
+		Recipe r;
+		database->loadRecipe(&r,RecipeDB::Meta,recipe_it->recipeID() );
+
+		return QString("<center><b>%7</b></center><center>__________</center>%1 %2<br />%3 %4<br />%5 %6")
+		   .arg(i18n("Created:")).arg(r.ctime.toString())
+		   .arg(i18n("Modified:")).arg(r.mtime.toString())
+		   .arg(i18n("Last Accessed:")).arg(r.atime.toString())
+		   .arg(recipe_it->title());
+	}/* Maybe this would be handy
+	else if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
+		CategoryListItem *cat_it = (CategoryListItem*)item;
+
+		return QString("<b>%1</b><hr />%2: %3")
+		   .arg(cat_it->categoryName())
+		   .arg(i18n("Recipes"))
+		   .arg(QString::number(WHATEVER THE CHILD COUNT IS));
+	}*/
+
+	return QString::null;
 }
 
 void RecipeListView::load(int limit, int offset)

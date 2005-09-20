@@ -143,6 +143,9 @@ protected:
 	virtual QDragObject *dragObject();
 	virtual bool acceptDrag( QDropEvent *event ) const;
 	virtual void populate( QListViewItem *item );
+	virtual QString tooltip(QListViewItem *item, int column) const;
+
+	friend class RecipeListToolTip;
 
 	void load(int limit, int offset);
 

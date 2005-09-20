@@ -48,6 +48,7 @@ protected:
 	QPushButton* buttonOk;
 	QPushButton* buttonCancel;
 	QPushButton* buttonHelp;
+	QPushButton* buttonGroup;
 
 	QHBoxLayout* IngredientParserDialogLayout;
 	QVBoxLayout* layout4;

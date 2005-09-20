@@ -83,6 +83,13 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	//Layout5->addWidget( buttonHelp );
 	Spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	Layout5->addItem( Spacer1 );
+
+	buttonGroup = new QPushButton( this, "buttonGroup" );
+	QWhatsThis::add( buttonGroup, 
+			i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.")
+	);
+	Layout5->addWidget( buttonGroup );
+
 	IngredientParserDialogLayout->addLayout( Layout5 );
 	languageChange();
 	resize( QSize(577, 371).expandedTo(minimumSizeHint()) );
@@ -101,9 +108,10 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 
 	KPopupMenu *kpop = new KPopupMenu( previewIngView );
 	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
-	kpop->insertItem( "" , this, SLOT( convertToHeader() ), Key_H );
+	kpop->insertItem( i18n("&Group Ingredients") , this, SLOT( convertToHeader() ) );
  
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
+	connect( buttonGroup, SIGNAL(clicked()), this, SLOT(convertToHeader()) );
 
 	connect( buttonOk, SIGNAL(clicked()), this, SLOT(accept()) );
 	connect( buttonCancel, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -129,6 +137,7 @@ void IngredientParserDialog::languageChange()
 	buttonOk->setAccel( QKeySequence( QString::null ) );
 	buttonCancel->setText( i18n( "&Cancel" ) );
 	buttonCancel->setAccel( QKeySequence( QString::null ) );
+	buttonGroup->setText( i18n("&Group Ingredients") );
 	//buttonHelp->setText( i18n( "&Help" ) );
 	//buttonHelp->setAccel( QKeySequence( i18n( "F1" ) ) );
 }
@@ -204,6 +213,9 @@ void IngredientParserDialog::convertToHeader( const QPtrList<QListViewItem> &ite
 	if ( items.count() > 0 ) {
 		QPtrListIterator<QListViewItem> it(items);
 		QListViewItem *item = it.current();
+
+		if ( item->rtti() != INGLISTVIEWITEM_RTTI )
+			return;
 
 		QString group = ((IngListViewItem*)item)->ingredient().name;
 		QListViewItem *ingGroupItem = new IngGrpListViewItem(previewIngView,
