@@ -37,8 +37,6 @@
 
 #include <map>
 
-#include "importers/kreimporter.h"
-
 #if HAVE_POSTGRESQL
 #include "PostgreSQL/psqlrecipedb.h"
 #endif
@@ -401,28 +399,6 @@ int RecipeDB::prepMethodCount()
 int RecipeDB::unitCount()
 {
 	return getCount("units");
-}
-
-void RecipeDB::importSamples()
-{
-	QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );
-	if ( sample_recipes.isEmpty() ) {
-		//TODO: Make this a KMessageBox??
-		kdDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." << endl;
-
-		sample_recipes = locate( "appdata", "data/samples-en_US.kreml" ); //default to English
-	}
-	if ( !sample_recipes.isEmpty() ) {
-		KreImporter importer;
-
-		QStringList file;
-		file << sample_recipes;
-		importer.parseFiles( file );
-
-		importer.import( this, true );
-	}
-	else
-		kdDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" << endl;
 }
 
 void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )

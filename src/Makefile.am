@@ -4,7 +4,7 @@
 # of the other Makefile.am variables
 bin_PROGRAMS = krecipes
 
-SUBDIRS = backends importers dialogs exporters widgets datablocks tests
+SUBDIRS = backends importers dialogs exporters widgets datablocks tests kioslave
 
 # set the include path for X, qt and KDE
 INCLUDES         = -I$(srcdir) -I$(srcdir)/backends -I$(srcdir)/backends/SQLite $(all_includes)
@@ -36,7 +36,7 @@ krecipes_LDADD = \
 # which sources should be compiled for krecipes
 krecipes_SOURCES = \
 	main.cpp krecipes.cpp krecipesview.cpp pref.cpp \
-	krecipesiface.skel krecipesdbiface.skel \
+	krecipesiface.skel \
 	propertycalculator.cpp setupwizard.cpp \
 	shoppingcalculator.cpp kstartuplogo.cpp \
 	recipeactionshandler.cpp \

@@ -59,8 +59,6 @@ public:
 
 	virtual void connect( bool create_db = true, bool create_tables = true ) = 0;
 
-	void importSamples();
-
 	bool backup( const QString &file ){ return backup(file,0); }
 	bool backup( const QString &file, QString *errMsg = 0 );
 	bool restore( const QString &file, QString *errMsg = 0 );

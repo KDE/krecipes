@@ -32,6 +32,7 @@
 #include <ktrader.h>
 #include <kurl.h>
 #include <kcursor.h>
+#include <kglobal.h>
 
 #include "recipeactionshandler.h"
 #include "setupwizard.h"
@@ -52,6 +53,8 @@
 
 #include "widgets/kremenu.h"
 #include "widgets/paneldeco.h"
+
+#include "importers/kreimporter.h"
 
 #include "backends/progressinterface.h"
 
@@ -636,7 +639,24 @@ void KrecipesView::wizard( bool force )
 					db->connect();
 
 					if ( db->ok() ) {
-						db->importSamples();
+						QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );
+						if ( sample_recipes.isEmpty() ) {
+							//TODO: Make this a KMessageBox??
+							kdDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." << endl;
+					
+							sample_recipes = locate( "appdata", "data/samples-en_US.kreml" ); //default to English
+						}
+						if ( !sample_recipes.isEmpty() ) {
+							KreImporter importer;
+					
+							QStringList file;
+							file << sample_recipes;
+							importer.parseFiles( file );
+					
+							importer.import( db, true );
+						}
+						else
+							kdDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" << endl;
 					}
 
 					//close the database whether ok() or not
