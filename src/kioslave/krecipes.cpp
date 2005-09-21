@@ -16,6 +16,7 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#include <kconfig.h>
 
 #include <kio/global.h>
 
@@ -24,6 +25,9 @@
 #include <qstring.h>
 #include <qdir.h>
 #include <qregexp.h>
+
+#include <qsqldatabase.h>
+#include <qsqlquery.h>
 
 extern "C"
 {
@@ -39,6 +43,8 @@ extern "C"
 #include "krecipes.h"
 
 #include "recipedb.h"
+#include "datablocks/categorytree.h"
+
 
 using namespace KIO;
 
@@ -46,7 +52,20 @@ kio_krecipesProtocol::kio_krecipesProtocol(const QCString &pool_socket,
                                                  const QCString &app_socket)
     : SlaveBase("kio_krecipes", pool_socket, app_socket)
 {
-	m_db = RecipeDB::createDatabase("MySQL","localhost","fungmeista","password","Krecipestest");
+	KConfig config( locate("config", "krecipesrc" ) );
+	config.setGroup( "Server" );
+	QString host = config.readEntry( "Host", "localhost" );
+	QString user = config.readEntry( "Username", QString::null );
+	QString pass = config.readEntry( "Password", QString::null );
+	QString dbname = config.readEntry( "DBName", "Krecipes" );
+	QString dbFile = config.readEntry( "DBFile", QString::null );
+
+	config.setGroup( "DBType" );
+	QString dbType = config.readEntry( "Type", "SQLite" );
+
+	m_db = RecipeDB::createDatabase( dbType, host, user, pass, dbname, dbFile );
+	if ( m_db )
+		m_db->connect(false,false);
 }
 
 kio_krecipesProtocol::~kio_krecipesProtocol()
@@ -58,22 +77,47 @@ void kio_krecipesProtocol::listDir( const KURL & url )
 {
 	kdDebug() << "========= KRECIPES LIST " << url.url() << " =========" << endl;
 
+	Q_ASSERT( m_db && m_db->ok() );
+
 	UDSEntry entry;
 
-	UDSAtom atom;
-	atom.m_uds = KIO::UDS_NAME;
-	atom.m_str = "test";
-	entry.append( atom );
+	int catID;
+	if ( url.path() == "/" )
+		catID = -1;
+	else {
+		QStringList parts = QStringList::split("/",url.path());
+		kdDebug()<<"in category: "<<parts[parts.count()-1]<<endl;
+		catID = m_db->findExistingCategoryByName( parts[parts.count()-1] );
+		if ( catID == -1 ) {
+			kdDebug()<<"Category does not exist: "<<parts[parts.count()-1]<<endl;
+			finished();
+			return;
+		}
+	}
 
-	atom.m_uds = KIO::UDS_FILE_TYPE;
-	atom.m_long = S_IFREG;
-	entry.append( atom );
+	CategoryTree categoryTree;
+	m_db->loadCategories( &categoryTree, -1, 0, catID, false );
 
-	atom.m_uds = KIO::UDS_SIZE;
-	atom.m_long = 0L;
-	entry.append( atom );
+	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		entry.clear();
+		createCategoryEntry(entry, child_it->category );
+		listEntry( entry, false );
+	}
 
-	listEntry( entry, false );
+	if ( catID != -1 ) {
+		ElementList recipeList;
+		m_db->loadRecipeList( &recipeList, catID, false );
+		for ( ElementList::const_iterator it = recipeList.begin(); it != recipeList.end(); ++it ) {
+			entry.clear();
+	
+			Recipe r;
+			r.title = (*it).name;
+			r.recipeID = (*it).id;
+	
+			createRecipeEntry(entry, r );
+			listEntry( entry, false );
+		}
+	}
 
 	listEntry( entry, true ); // ready
 	
@@ -112,6 +156,26 @@ void kio_krecipesProtocol::get( const KURL & url )
 	kdDebug() << "========= KRECIPES GET " << url.url() << " =========" << endl;
 
 	SlaveBase::get(url);
+}
+
+void kio_krecipesProtocol::createRecipeEntry( UDSEntry &entry, const Recipe &recipe )
+{
+	UDSAtom atom;
+	atom.m_uds = KIO::UDS_NAME;
+	atom.m_str = recipe.title;
+	entry.append( atom );
+}
+
+void kio_krecipesProtocol::createCategoryEntry( UDSEntry &entry, const Element &category )
+{
+	UDSAtom atom;
+	atom.m_uds = KIO::UDS_NAME;
+	atom.m_str = category.name;
+	entry.append( atom );
+
+	atom.m_uds = KIO::UDS_FILE_TYPE;
+	atom.m_long = S_IFDIR;
+	entry.append( atom );
 }
 
 /* KIO slave registration */

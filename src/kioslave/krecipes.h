@@ -12,12 +12,16 @@
 #define KRECIPES_H
 
 #include <kio/slavebase.h>
+#include <kio/global.h>
+
 #include <qstring.h>
 
 class KURL;
 class QCString;
 
 class RecipeDB;
+class Recipe;
+class Element;
 
 class kio_krecipesProtocol : public KIO::SlaveBase
 {
@@ -31,6 +35,9 @@ public:
 	virtual void get( const KURL & url );
 
 private:
+	void createRecipeEntry( KIO::UDSEntry &entry, const Recipe &recipe );
+	void createCategoryEntry( KIO::UDSEntry &entry, const Element &category );
+
 	RecipeDB *m_db;
 };
 
