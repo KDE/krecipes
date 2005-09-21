@@ -88,8 +88,6 @@ class KDatePickerPopup: public QPopupMenu
 
     void slotToday();
     void slotYesterday();
-    void slotFriday();
-    void slotSunday();
     void slotLastWeek();
     void slotLastMonth();
     void slotNoDate();

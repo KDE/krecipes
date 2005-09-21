@@ -108,7 +108,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 
 	KPopupMenu *kpop = new KPopupMenu( previewIngView );
 	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
-	kpop->insertItem( i18n("&Group Ingredients") , this, SLOT( convertToHeader() ) );
+	kpop->insertItem( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
  
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
 	connect( buttonGroup, SIGNAL(clicked()), this, SLOT(convertToHeader()) );
@@ -137,7 +137,7 @@ void IngredientParserDialog::languageChange()
 	buttonOk->setAccel( QKeySequence( QString::null ) );
 	buttonCancel->setText( i18n( "&Cancel" ) );
 	buttonCancel->setAccel( QKeySequence( QString::null ) );
-	buttonGroup->setText( i18n("&Group Ingredients") );
+	buttonGroup->setText( i18n("Set &Header") );
 	//buttonHelp->setText( i18n( "&Help" ) );
 	//buttonHelp->setAccel( QKeySequence( i18n( "F1" ) ) );
 }
