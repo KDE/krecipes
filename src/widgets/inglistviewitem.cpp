@@ -162,6 +162,20 @@ QString IngGrpListViewItem::text( int column ) const
 	}
 }
 
+void IngGrpListViewItem::setText( int column, const QString &text )
+{
+	switch ( column ) {
+	case 0:
+		if ( text.right(1) == ":" )
+			m_group = text.left(text.length()-1);
+		else
+			m_group = text;
+		break;
+	default:
+		break;
+	}
+}
+
 void IngGrpListViewItem::init( const QString &group, int id )
 {
 	m_group = group;

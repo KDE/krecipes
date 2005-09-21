@@ -58,6 +58,7 @@ public:
 	int id() const;
 
 	virtual QString text( int column ) const;
+	virtual void setText( int column, const QString &text );
 
 protected:
 	QString m_group;
