@@ -40,14 +40,11 @@ public:
 	void givePermissions( const QString &dbName, const QString &username, const QString &password, const QString &clientHost );
 
 protected:
-	virtual QString qsqlDriver() const
+	virtual QString qsqlDriverPlugin() const
 	{
 		return PSQL_DRIVER;
 	}
 	virtual int getNextInsertID( const QString &table, const QString &column );
-
-	virtual void storePhoto( int recipeID, const QByteArray &data );
-	virtual void loadPhoto( int recipeID, QPixmap &photo );
 
 	virtual void empty( void );
 

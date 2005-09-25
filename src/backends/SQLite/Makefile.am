@@ -10,7 +10,7 @@ SUBDIRS = libqsqlite
 
 # Instructions for building the convenience library
 noinst_LTLIBRARIES=libkrecsqlite.la
-libkrecsqlite_la_SOURCES=literecipedb.cpp
+libkrecsqlite_la_SOURCES=literecipedb.cpp qsql_sqlite.cpp
 libkrecsqlite_la_METASOURCES=AUTO
 
 libkrecsqlite_la_LIBADD=libqsqlite/libkrecqsqlite.la

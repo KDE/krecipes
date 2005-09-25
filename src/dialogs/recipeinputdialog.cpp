@@ -540,17 +540,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	tabWidget->setCurrentPage( 0 );
 
 	// Load specified Recipe ID
-	database->loadRecipe( loadedRecipe, RecipeDB::All, recipeID );
-
-	kdDebug()<<"ctime: "<<loadedRecipe->ctime<<endl;
-	kdDebug()<<"mtime: "<<loadedRecipe->mtime<<endl;
-	kdDebug()<<"atime: "<<loadedRecipe->atime<<endl;
-
 	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta, recipeID );
-
-	kdDebug()<<"ctime: "<<loadedRecipe->ctime<<endl;
-	kdDebug()<<"mtime: "<<loadedRecipe->mtime<<endl;
-	kdDebug()<<"atime: "<<loadedRecipe->atime<<endl;
 
 	reload();
 

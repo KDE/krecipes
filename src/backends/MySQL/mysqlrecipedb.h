@@ -39,7 +39,7 @@ public:
 	void givePermissions( const QString &dbName, const QString &username, const QString &password = QString::null, const QString &clientHost = "localhost" );
 
 protected:
-	QString qsqlDriver() const
+	QString qsqlDriverPlugin() const
 	{
 		return MYSQL_DRIVER;
 	}

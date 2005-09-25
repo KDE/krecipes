@@ -12,7 +12,6 @@
 
 #include "psqlrecipedb.h"
 
-#include <kmdcodec.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
@@ -285,6 +284,17 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			return;
 		}
 	}
+
+	if ( qRound(version*100) < 85 ) { //this change altered the photo format, but this backend already used the newer format
+		database->transaction();
+
+		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
+
+		if ( !database->commit() ) {
+			kdDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
+			return;
+		}
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
@@ -353,38 +363,10 @@ int PSqlRecipeDB::getNextInsertID( const QString &table, const QString &column )
 	return last_insert_id;
 }
 
-void PSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
-{
-	QSqlQuery query( QString::null, database );
-
-	query.prepare( "UPDATE recipes SET photo=? WHERE id=" + QString::number( recipeID ) );
-	query.addBindValue( KCodecs::base64Encode( data ) );
-	query.exec();
-}
-
-void PSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
-{
-	QString command = QString( "SELECT photo FROM recipes WHERE id=%1;" ).arg( recipeID );
-	QSqlQuery query( command, database );
-
-	if ( query.isActive() && query.first() ) {
-		QCString decodedPic;
-		QPixmap pix;
-		KCodecs::base64Decode( QCString( query.value( 0 ).toString().latin1() ), decodedPic );
-		int len = decodedPic.size();
-		QByteArray picData( len );
-		memcpy( picData.data(), decodedPic.data(), len );
-
-		bool ok = pix.loadFromData( picData, "JPEG" );
-		if ( ok )
-			photo = pix;
-	}
-}
-
 void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &username, const QString &password, const QString & /*clientHost*/ )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "yield_types_id_seq" << "ingredient_list_id_seq";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "prep_method_list" << "yield_types";
 
 	//we also have to grant permissions on the sequences created
 	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq";
@@ -408,7 +390,7 @@ void PSqlRecipeDB::empty( void )
 	QSqlRecipeDB::empty();
 
 	QStringList tables;
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq";
 
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {

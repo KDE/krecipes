@@ -23,6 +23,7 @@
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kmdcodec.h>
 
 int QSqlRecipeDB::m_refCount = 0;
 
@@ -53,22 +54,32 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	kdDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) << endl;
 	kdDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname << endl;
 
-	QStringList drivers = QSqlDatabase::drivers();
 	bool driver_found = false;
-	for ( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
-		if ( ( *it ) == qsqlDriver() ) {
-			driver_found = true;
-			break;
+
+	if ( qsqlDriver() ) //we're using a built-in driver
+		driver_found = true;
+	else {
+		QStringList drivers = QSqlDatabase::drivers();
+		for ( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+			if ( ( *it ) == qsqlDriverPlugin() ) {
+				driver_found = true;
+				break;
+			}
 		}
 	}
 
 	if ( !driver_found ) {
-		dbErr = QString( i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." ) ).arg( qsqlDriver() );
+		dbErr = QString( i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." ) ).arg( qsqlDriverPlugin() );
 		return ;
 	}
 
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
-	database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
+	if ( qsqlDriver() )
+		database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
+	else if ( !qsqlDriverPlugin().isEmpty() )
+		database = QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
+	else
+		kdDebug()<<"Fatal internal error!  Backend incorrectly written!"<<endl;
 
 	database->setDatabaseName( DBname );
 	if ( !( DBuser.isNull() ) )
@@ -87,7 +98,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		}
 		else {
 			// Handle the error (passively)
-			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriver() );
+			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriverPlugin() );
 		}
 
 		//Now Reopen the Database and signal & exit if it fails
@@ -96,7 +107,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 			kdDebug() << i18n( "Failing to open database. Exiting\n" ).latin1();
 
 			// Handle the error (passively)
-			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriver() );
+			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriverPlugin() );
 			return ;
 		}
 	}
@@ -135,14 +146,15 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 	QString command;
 
-	// Read title, author, instructions, and prep time
+	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
+
 	QStringList ids_str;
 	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
 
 		if ( !(items & RecipeDB::Noatime) )
-			database->exec( "UPDATE recipes SET atime=CURRENT_TIMESTAMP, ctime=ctime, mtime=mtime WHERE id="+number_str ); //do ctime=ctime so that the database doesn't try to automatically update the timestamp
+ 			database->exec( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
 	// Read title, author, yield, and instructions as specified
@@ -421,17 +433,27 @@ void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
 	QSqlQuery query( QString::null, database );
 
-	query.prepare( "UPDATE recipes SET photo=?, ctime=ctime, atime=atime, mtime=mtime WHERE id=" + QString::number( recipeID ) );
-	query.addBindValue( data ); //this handles the binary encoding
+	query.prepare( "UPDATE recipes SET photo=? WHERE id=" + QString::number( recipeID ) );
+	query.addBindValue( KCodecs::base64Encode( data ) );
 	query.exec();
 }
 
 void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 {
-	QString command = QString( "SELECT photo FROM recipes WHERE id=%1" ).arg( recipeID ); //Be careful: No semicolon here at the end
+	QString command = QString( "SELECT photo FROM recipes WHERE id=%1;" ).arg( recipeID );
 	QSqlQuery query( command, database );
+
 	if ( query.isActive() && query.first() ) {
-		photo.loadFromData( query.value( 0 ).toByteArray() );
+		QCString decodedPic;
+		QPixmap pix;
+		KCodecs::base64Decode( QCString( query.value( 0 ).toString().latin1() ), decodedPic );
+		int len = decodedPic.size();
+		QByteArray picData( len );
+		memcpy( picData.data(), decodedPic.data(), len );
+
+		bool ok = pix.loadFromData( picData, "JPEG" );
+		if ( ok )
+			photo = pix;
 	}
 }
 
@@ -460,26 +482,32 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	QString command;
 
+	QDateTime current_datetime = QDateTime::currentDateTime();
+	QString current_timestamp = current_datetime.toString(Qt::ISODate);
 	if ( newRecipe ) {
-		command = QString( "INSERT INTO recipes VALUES (%7,'%1',%2,'%3','%4','%5',NULL,'%6',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);" )  // Id is autoincremented
+		command = QString( "INSERT INTO recipes VALUES ("+getNextInsertIDStr("recipes","id")+",'%1',%2,'%3','%4','%5',NULL,'%6','%7','%8','%9');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
 		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
-		          .arg( getNextInsertIDStr( "recipes", "id" ) );
+		          .arg( current_timestamp )
+		          .arg( current_timestamp )
+		          .arg( current_timestamp );
+		recipe->mtime = recipe->ctime = recipe->atime = current_datetime;
 	}
-	else	{
-		//do ctime=ctime so that the database doesn't try to automatically update the timestamp
-		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime=CURRENT_TIMESTAMP,ctime=ctime,atime=atime WHERE id=%7;" )
+	else {
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8' WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
 		          .arg( recipe->yield.type_id )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
-		          .arg( recipe->recipeID );
+		          .arg( recipe->recipeID )
+		          .arg( current_timestamp );
+		recipe->mtime = current_datetime;
 	}
 	recipeToSave.exec( command );
 
@@ -1458,7 +1486,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list";
 
-	QStringList existingTableList = database->tables();
+	QStringList existingTableList = database->tables();kdDebug()<<"found tables: "<<database->tables()<<endl;
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		bool found = false;
 

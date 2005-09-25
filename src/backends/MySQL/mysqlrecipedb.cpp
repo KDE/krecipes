@@ -381,6 +381,23 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
 	}
+
+	if ( qRound(version*100) < 85 ) {
+		database->transaction();
+
+		QSqlQuery query( "SELECT id,photo FROM recipes", database );
+	
+		if ( query.isActive() ) {
+			while ( query.next() ) {
+				storePhoto( query.value(0).toInt(), query.value(1).toByteArray() );
+			}
+		}
+
+
+		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
+	}
 }
 
 int MySQLRecipeDB::lastInsertID()

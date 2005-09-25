@@ -47,13 +47,13 @@ public:
 private:
 	static int call_back( void* res, int argc, char** argv, char** columns );
 
-#if HAVE_SQLITE
-
+	#if HAVE_SQLITE
+	static void lastInsertID(sqlite_func*,int,const char**);
 	sqlite *m_db;
-#elif HAVE_SQLITE3
-
+	#elif HAVE_SQLITE3
+	static void lastInsertID(sqlite3_context *context, int argc, sqlite3_value **argv);
 	sqlite3 *m_db;
-#endif
+	#endif
 };
 
 #endif

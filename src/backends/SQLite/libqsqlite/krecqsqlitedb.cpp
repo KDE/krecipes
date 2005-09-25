@@ -26,7 +26,10 @@
 
 #include <kdebug.h>
 
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
+
 #if HAVE_SQLITE
 #include <sqlite.h>
 #elif HAVE_SQLITE3
@@ -56,6 +59,14 @@ bool QSQLiteDB::open( const QString &dbname )
 		free( errmsg );
 		return false;
 	}
+
+	#if HAVE_SQLITE
+	int func_res = sqlite_create_function(m_db,"lastInsertID",0,&lastInsertID,m_db );
+	#elif HAVE_SQLITE3
+	int func_res = sqlite3_create_function(m_db,"lastInsertID",0,SQLITE_ANY,m_db,
+	   &lastInsertID, 0, 0 );
+	#endif
+
 	return true;
 }
 
@@ -128,3 +139,22 @@ int QSQLiteDB::call_back( void* result, int argc, char** argv, char** columns )
 
 	return 0;
 }
+
+#if HAVE_SQLITE
+void QSQLiteDB::lastInsertID(sqlite_func *context,int argc,const char**)
+{
+	Q_ASSERT( argc==0 );
+
+	void *db = sqlite_user_data(context);
+	sqlite_set_result_int(context, sqlite_last_insert_rowid( (sqlite*)db ) );
+}
+#elif HAVE_SQLITE3
+void QSQLiteDB::lastInsertID( sqlite3_context *context, int argc, sqlite3_value ** )
+{
+	Q_ASSERT( argc==0 );
+
+	void *db = sqlite3_user_data(context);
+	sqlite3_result_int(context, sqlite3_last_insert_rowid( (sqlite3*)db ) );
+}
+#endif
+

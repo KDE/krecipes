@@ -38,7 +38,8 @@ class QSqlRecipeDB : public RecipeDB
 	Q_OBJECT
 
 protected:
-	virtual QString qsqlDriver() const = 0;
+	virtual QString qsqlDriverPlugin() const { return QString::null; }
+	virtual QSqlDriver *qsqlDriver() const { return 0; }
 	virtual void createDB( void ) = 0;
 
 	virtual void portOldDatabases( float version );

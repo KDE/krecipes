@@ -59,6 +59,8 @@
 #include "usda_property_data.h"
 #include "usda_ingredient_data.h"
 
+#define DB_FILENAME "krecipes.krecdb"
+
 struct ingredient_nutrient_data
 {
 	QString name;
@@ -79,7 +81,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.84;
+	return 0.85;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -100,7 +102,11 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 	QString pass = config->readEntry( "Password", QString::null );
 	QString dbname = config->readEntry( "DBName", DEFAULT_DB_NAME );
 
-	return createDatabase( dbType, host, user, pass, dbname, file );
+	QString f = file;
+	if ( f.isEmpty() )
+		f = config->readEntry( "DBFile", locateLocal ( "appdata", DB_FILENAME ) );
+
+	return createDatabase( dbType, host, user, pass, dbname, f );
 }
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, const QString &file )
