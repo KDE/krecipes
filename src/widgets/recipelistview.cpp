@@ -141,10 +141,12 @@ QString RecipeListView::tooltip(QListViewItem *item, int column) const
 		Recipe r;
  		database->loadRecipe(&r,RecipeDB::Meta|RecipeDB::Noatime,recipe_it->recipeID() );
 
+		KLocale *locale = KGlobal::locale();
+
 		return QString("<center><b>%7</b></center><center>__________</center>%1 %2<br />%3 %4<br />%5 %6")
-		   .arg(i18n("Created:")).arg(r.ctime.toString())
-		   .arg(i18n("Modified:")).arg(r.mtime.toString())
-		   .arg(i18n("Last Accessed:")).arg(r.atime.toString())
+		   .arg(i18n("Created:")).arg(locale->formatDateTime(r.ctime))
+		   .arg(i18n("Modified:")).arg(locale->formatDateTime(r.mtime))
+		   .arg(i18n("Last Accessed:")).arg(locale->formatDateTime(r.atime))
 		   .arg(recipe_it->title());
 	}/* Maybe this would be handy
 	else if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
