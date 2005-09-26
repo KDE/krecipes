@@ -448,12 +448,15 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 		QPixmap pix;
 		KCodecs::base64Decode( QCString( query.value( 0 ).toString().latin1() ), decodedPic );
 		int len = decodedPic.size();
-		QByteArray picData( len );
-		memcpy( picData.data(), decodedPic.data(), len );
 
-		bool ok = pix.loadFromData( picData, "JPEG" );
-		if ( ok )
-			photo = pix;
+		if ( len > 0 ) {
+			QByteArray picData( len );
+			memcpy( picData.data(), decodedPic.data(), len );
+	
+			bool ok = pix.loadFromData( picData, "JPEG" );
+			if ( ok )
+				photo = pix;
+		}
 	}
 }
 
