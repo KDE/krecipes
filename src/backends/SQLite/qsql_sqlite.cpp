@@ -147,8 +147,9 @@ QSqlRecord KreSQLiteResult::record()
 }
 
 int KreSQLiteResult::size()
-{kdDebug()<<"size: "<<result.size()<<endl;
-	return -1/*result.size()*/;
+{
+kdDebug()<<"size: "<<result.size()<<endl;
+	return result.size();
 }
 
 int KreSQLiteResult::numRowsAffected()
@@ -207,6 +208,7 @@ KreSQLiteDriver::~KreSQLiteDriver()
 bool KreSQLiteDriver::hasFeature(DriverFeature f) const
 {
 	switch (f) {
+	case QuerySize:
 	case Transactions:
 		return TRUE;
 	//   case BLOB:
