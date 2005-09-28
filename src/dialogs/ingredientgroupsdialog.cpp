@@ -31,22 +31,30 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);
 
-	QVBox *buttonBox = new QVBox(this);
-	QPushButton *addHeaderButton = new QPushButton( buttonBox );
+	QVBoxLayout *buttonLayout = new QVBoxLayout(this);
+	QPushButton *addHeaderButton = new QPushButton( this );
 	addHeaderButton->setText( "+" );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	addHeaderButton->setMaximumSize( QSize( 30, 30 ) );
 	addHeaderButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addHeaderButton->setFlat( true );
+	buttonLayout->addWidget(addHeaderButton);
 
-	QPushButton *removeHeaderButton = new QPushButton( buttonBox );
+	QSpacerItem* spacer_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed );
+	buttonLayout->addItem( spacer_buttons );
+
+	QPushButton *removeHeaderButton = new QPushButton( this );
 	removeHeaderButton->setText( "-" );
 	removeHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	removeHeaderButton->setMaximumSize( QSize( 30, 30 ) );
 	removeHeaderButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removeHeaderButton->setFlat( true );
+	buttonLayout->addWidget(removeHeaderButton);
 
-	layout->addWidget(buttonBox);
+	QSpacerItem* spacer_below_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
+	buttonLayout->addItem( spacer_below_buttons );
+
+	layout->addLayout(buttonLayout);
 
 	connect( addHeaderButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
 	connect( removeHeaderButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
