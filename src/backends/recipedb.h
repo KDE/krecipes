@@ -88,6 +88,9 @@ signals:
 	void categoryModified( int id, int parent_id );
 	void categoriesMerged( int id1, int id2 );
 
+	void ingGroupCreated( const Element & );
+	void ingGroupRemoved( int id );
+
 	void ingredientCreated( const Element & );
 	void ingredientRemoved( int id );
 
@@ -140,6 +143,7 @@ public:
 
 	virtual int findExistingAuthorByName( const QString& name ) = 0;
 	virtual int findExistingCategoryByName( const QString& name ) = 0;
+	virtual int findExistingIngredientGroupByName( const QString& name ) = 0;
 	virtual int findExistingIngredientByName( const QString& name ) = 0;
 	virtual int findExistingPrepByName( const QString& name ) = 0;
 	virtual int findExistingPropertyByName( const QString& name ) = 0;
@@ -155,6 +159,8 @@ public:
 	virtual void findUseOfIngInRecipes( ElementList *results, int ingredientID ) = 0;
 	virtual void findUseOf_Unit_InRecipes( ElementList *results, int unitID ) = 0;
 	virtual void findUseOf_Unit_InProperties( ElementList *results, int unitID ) = 0;
+	virtual void findUseOfIngGroupInRecipes( ElementList *results, int groupID ) = 0;
+	virtual void findUseOfCategoryInRecipes( ElementList *results, int catID ) = 0;
 
 	void getIDList( const CategoryTree *categoryTree, QStringList &ids );
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title ) = 0;
@@ -192,6 +198,8 @@ public:
 	/** Change all instances of categories with id @param id2 to @param id1 */
 	virtual void mergeCategories( int id1, int id2 ) = 0;
 
+	virtual void mergeIngredientGroups( int id1, int id2 ) = 0;
+
 	/** Change all instances of ingredients with id @param id2 to @param id1 */
 	virtual void mergeIngredients( int id1, int id2 ) = 0;
 
@@ -203,6 +211,8 @@ public:
 
 	virtual void mergeProperties( int id1, int id2 ) = 0;
 
+
+	virtual void modIngredientGroup( int ingredientID, const QString &newLabel ) = 0;
 	/**
 	* set newLabel for ingredientID
 	*/
@@ -229,6 +239,7 @@ public:
 
 	virtual void removeAuthor( int categoryID ) = 0;
 	virtual void removeCategory( int categoryID ) = 0;
+	virtual void removeIngredientGroup( int ingredientID ) = 0;
 	virtual void removeIngredient( int ingredientID ) = 0;
 	virtual void removePrepMethod( int prepMethodID ) = 0;
 	virtual void removeProperty( int propertyID ) = 0;

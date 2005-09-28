@@ -92,6 +92,7 @@ public:
 
 	int findExistingAuthorByName( const QString& name );
 	int findExistingCategoryByName( const QString& name );
+	int findExistingIngredientGroupByName( const QString& name );
 	int findExistingIngredientByName( const QString& name );
 	int findExistingPrepByName( const QString& name );
 	int findExistingRecipeByName( const QString& name );
@@ -107,6 +108,8 @@ public:
 	void findUseOfIngInRecipes( ElementList *results, int ingredientID );
 	void findUseOf_Unit_InRecipes( ElementList *results, int unitID );
 	void findUseOf_Unit_InProperties( ElementList *results, int unitID );
+	void findUseOfIngGroupInRecipes( ElementList *results, int groupID );
+	void findUseOfCategoryInRecipes( ElementList *results, int catID );
 
 	QString getUniqueRecipeTitle( const QString &recipe_title );
 
@@ -130,11 +133,13 @@ public:
 
 	void mergeAuthors( int id1, int id2 );
 	void mergeCategories( int id1, int id2 );
+	void mergeIngredientGroups( int id1, int id2 );
 	void mergeIngredients( int id1, int id2 );
 	void mergeUnits( int id1, int id2 );
 	void mergePrepMethods( int id1, int id2 );
 	void mergeProperties( int id1, int id2 );
 
+	void modIngredientGroup( int ingredientID, const QString &newLabel );
 	/**
 	* set newLabel for ingredientID
 	*/
@@ -161,6 +166,7 @@ public:
 
 	void removeAuthor( int categoryID );
 	void removeCategory( int categoryID );
+	void removeIngredientGroup( int groupID );
 	void removeIngredient( int ingredientID );
 	void removePrepMethod( int prepMethodID );
 	void removeProperty( int propertyID );

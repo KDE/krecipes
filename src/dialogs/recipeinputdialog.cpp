@@ -943,8 +943,19 @@ QValueList<int> RecipeInputDialog::createNewPrepIfNecessary( const QString &prep
 
 int RecipeInputDialog::createNewGroupIfNecessary( const QString &group )
 {
-	database->createNewIngGroup( group );
-	return database->lastInsertID();
+	if ( group.stripWhiteSpace().isEmpty() )  //no group
+		return -1;
+	else
+	{
+		int id = database->findExistingIngredientGroupByName( group );
+		if ( id == -1 ) //creating new
+		{
+			database->createNewIngGroup( group );
+			id = database->lastInsertID();
+		}
+
+		return id;
+	}
 }
 
 int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )

@@ -30,7 +30,7 @@ class DependanciesDialog: public QDialog
 {
 public:
 	//Methods
-	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* propertiesList = 0 );
+	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* propertiesList = 0, bool deps_are_deleted = true );
 	~DependanciesDialog();
 
 public slots:
@@ -51,6 +51,8 @@ private:
 	KListView *recipeListView;
 	KListView *ingredientListView;
 	KListView *propertiesListView;
+
+	bool m_depsAreDeleted;
 
 	// Methods
 	void loadList( KListView* listView, const ElementList *list );

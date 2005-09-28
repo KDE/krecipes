@@ -84,6 +84,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);";
 		commands << "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);";
 		commands << "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);";
+		commands << "CREATE INDEX gidil_index ON ingredient_list USING BTREE (group_id);";
 	}
 
 	else if ( tableName == "unit_list" )
@@ -192,6 +193,8 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				query.addBindValue( copyQuery.value( 4 ) );
 				query.addBindValue( copyQuery.value( 5 ) );
 				query.exec();
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes" );
@@ -210,6 +213,8 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				query.addBindValue( copyQuery.value( 4 ) ); //photo
 				query.addBindValue( copyQuery.value( 5 ) ); //prep_time
 				query.exec();
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes_copy" );
@@ -253,6 +258,8 @@ void PSqlRecipeDB::portOldDatabases( float version )
 					query.addBindValue( 1 );
 					query.exec();
 				}
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list_copy" );
@@ -295,6 +302,38 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			return;
 		}
 	}
+
+	if ( qRound(version*100) < 86 ) {
+		database->transaction();
+
+		database->exec( "CREATE INDEX gidil_index ON ingredient_list USING BTREE (group_id);" );
+
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+
+		QString last;
+		int lastID;
+		if ( query.isActive() ) {
+			while ( query.next() ) {
+				QString name = query.value(1).toString();
+				int id = query.value(0).toInt();
+				if ( last == name ) {
+					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
+					database->exec(command);
+
+					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
+					database->exec(command);
+				}
+				last = name;
+				lastID = id;
+
+				emit progress();
+			}
+		}
+
+		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
@@ -319,6 +358,8 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
 			kdDebug()<<"calling: "<<command<<endl;
 			QSqlQuery insert_query( command, database );
+
+			emit progress();
 		}
 	}
 	query.exec( "DROP TABLE "+table_name+";" );
@@ -339,6 +380,8 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+");";
 			QSqlQuery insert_query( command, database );
 			kdDebug()<<"calling: "<<command<<endl;
+
+			emit progress();
 		}
 	}
 	query.exec( "DROP TABLE "+table_name+"_copy;" );

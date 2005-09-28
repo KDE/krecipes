@@ -21,6 +21,7 @@
 #include "selectunitdialog.h"
 #include "dependanciesdialog.h"
 #include "widgets/ingredientlistview.h"
+#include "dialogs/ingredientgroupsdialog.h"
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -32,6 +33,7 @@
 
 #include <qheader.h>
 #include <qmessagebox.h>
+#include <qtabwidget.h>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -45,13 +47,19 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	// Design dialog
 
-	layout = new QGridLayout( this, 1, 1, 0, 0 );
+	QHBoxLayout* page_layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+
+	QTabWidget *tabWidget = new QTabWidget( this );
+
+	QWidget *ingredientTab = new QWidget( tabWidget );
+
+	layout = new QGridLayout( ingredientTab, 1, 1, 0, 0 );
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 
-	ingredientListView = new KreListView ( this, i18n( "Ingredient list" ), true, 0 );
+	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	list_view->reload();
 	ingredientListView->setListView( list_view );
@@ -62,7 +70,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	layout->addItem( spacer_rightIngredients, 1, 2 );
 
 
-	addIngredientButton = new QPushButton( this );
+	addIngredientButton = new QPushButton( ingredientTab );
 	addIngredientButton->setText( "+" );
 	layout->addWidget( addIngredientButton, 1, 3 );
 	addIngredientButton->setMinimumSize( QSize( 30, 30 ) );
@@ -70,7 +78,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	addIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addIngredientButton->setFlat( true );
 
-	removeIngredientButton = new QPushButton( this );
+	removeIngredientButton = new QPushButton( ingredientTab );
 	removeIngredientButton->setText( "-" );
 	layout->addWidget( removeIngredientButton, 3, 3 );
 	removeIngredientButton->setMinimumSize( QSize( 30, 30 ) );
@@ -91,7 +99,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	bool show_id = config->readBoolEntry( "ShowID", false );
 
 
-	unitsListView = new KreListView ( this, i18n( "Unit list" ) );
+	unitsListView = new KreListView ( ingredientTab, i18n( "Unit list" ) );
 	unitsListView->listView() ->addColumn( i18n( "Units" ) );
 	unitsListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	unitsListView->listView() ->setSorting( 0 );
@@ -103,7 +111,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_rightUnits = new QSpacerItem( 5, 5, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_rightUnits, 1, 6 );
 
-	addUnitButton = new QPushButton( this );
+	addUnitButton = new QPushButton( ingredientTab );
 	addUnitButton->setText( "+" );
 	layout->addWidget( addUnitButton, 1, 7 );
 	addUnitButton->resize( QSize( 30, 30 ) );
@@ -112,7 +120,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	addUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addUnitButton->setFlat( true );
 
-	removeUnitButton = new QPushButton( this );
+	removeUnitButton = new QPushButton( ingredientTab );
 	removeUnitButton->setText( "-" );
 	layout->addWidget( removeUnitButton, 3, 7 );
 	removeUnitButton->resize( QSize( 30, 30 ) );
@@ -124,7 +132,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	layout->addItem( spacer_Units_Properties, 5, 5 );
 
 
-	propertiesListView = new KreListView ( this, i18n( "Ingredient Properties" ) );
+	propertiesListView = new KreListView ( ingredientTab, i18n( "Ingredient Properties" ) );
 	layout->addMultiCellWidget ( propertiesListView, 6, 9, 5, 5 );
 
 	propertiesListView->listView() ->addColumn( i18n( "Property" ) );
@@ -135,7 +143,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	propertiesListView->listView() ->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	propertiesListView->listView() ->setSorting( -1 ); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
 
-	addPropertyButton = new QPushButton( this );
+	addPropertyButton = new QPushButton( ingredientTab );
 	addPropertyButton->setText( "+" );
 	layout->addWidget( addPropertyButton, 6, 7 );
 	addPropertyButton->resize( QSize( 30, 30 ) );
@@ -144,7 +152,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	addPropertyButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addPropertyButton->setFlat( true );
 
-	removePropertyButton = new QPushButton( this );
+	removePropertyButton = new QPushButton( ingredientTab );
 	removePropertyButton->setText( "-" );
 	layout->addWidget( removePropertyButton, 8, 7 );
 	removePropertyButton->resize( QSize( 30, 30 ) );
@@ -153,7 +161,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removePropertyButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removePropertyButton->setFlat( true );
 
-	QPushButton *loadUsdaButton = new QPushButton( this );
+	QPushButton *loadUsdaButton = new QPushButton( ingredientTab );
 	loadUsdaButton->setText( i18n( "Load USDA data" ) );
 	layout->addMultiCellWidget( loadUsdaButton, 10, 10, 5, 6 );
 	loadUsdaButton->setFlat( true );
@@ -164,6 +172,13 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	inputBox = new EditBox( propertiesListView->listView() ->viewport() );
 	propertiesListView->listView() ->addChild( inputBox );
 	inputBox->hide();
+
+	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
+
+	IngredientGroupsDialog *groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
+	tabWidget->insertTab( groupsDialog, i18n( "Headers" ) );
+
+	page_layout->addWidget( tabWidget );
 
 	// Initialize
 	unitList = new UnitList;

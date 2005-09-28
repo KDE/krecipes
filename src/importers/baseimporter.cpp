@@ -160,8 +160,6 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		progress_dialog->progressBar()->advance( 1 );
 		kapp->processEvents();
 
-		ElementList ingGroupList;
-
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		IngredientList::iterator ing_list_end( ( *recipe_it ).ingList.end() );
 		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
@@ -171,16 +169,13 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			}
 
 			//create ingredient groups
-			Element el = ingGroupList.findByName( ( *ing_it ).group );
-			if ( el.id != -1 )
-				( *ing_it ).groupID = el.id;
-			else if ( !( *ing_it ).group.isEmpty() ) {
-				QString real_group_name = ( *ing_it ).group.left( max_group_length );
+			QString real_group_name = ( *ing_it ).group.left( max_group_length );
+			int new_group_id = db->findExistingIngredientGroupByName(real_group_name);
+			if ( new_group_id == -1 ) {
 				db->createNewIngGroup( real_group_name );
-				( *ing_it ).groupID = db->lastInsertID();
-
-				ingGroupList.append( Element( ( *ing_it ).group, ( *ing_it ).groupID ) );
+				new_group_id = db->lastInsertID();
 			}
+			( *ing_it ).groupID = new_group_id;
 
 			int new_ing_id = db->findExistingIngredientByName((*ing_it).name);
 			if ( new_ing_id == -1 && !(*ing_it).name.isEmpty() )

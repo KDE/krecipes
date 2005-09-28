@@ -267,7 +267,7 @@ bool KreSQLiteDriver::beginTransaction()
 	
 	QSQLiteResult result = db->executeQuery( "BEGIN" );
 	int status = result.getStatus();
-	if (status == SQLITE_OK)
+	if (status == QSQLiteResult::Success)
 		return TRUE;
 	
 	setLastError(QSqlError("Unable to begin transaction", result.getError(), QSqlError::Transaction, status));
@@ -281,7 +281,7 @@ bool KreSQLiteDriver::commitTransaction()
 	
 	QSQLiteResult result = db->executeQuery( "COMMIT" );
 	int status = result.getStatus();
-	if (status == SQLITE_OK)
+	if (status == QSQLiteResult::Success)
 		return TRUE;
 	
 	setLastError(QSqlError("Unable to commit transaction", result.getError(), QSqlError::Transaction, status));

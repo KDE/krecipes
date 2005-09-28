@@ -118,6 +118,8 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 
 	}
 
+	res.setStatus( QSQLiteResult::Success );
+
 	return res;
 }
 

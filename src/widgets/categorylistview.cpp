@@ -22,6 +22,7 @@
 #include "backends/recipedb.h"
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
+#include "dialogs/dependanciesdialog.h"
 
 CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
@@ -344,12 +345,24 @@ void StdCategoryListView::remove
 	QListViewItem * item = currentItem();
 
 	if ( item ) {
-		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this category and all its subcategories?" ) ) ) {
-		case KMessageBox::Continue:
-			database->removeCategory( item->text( 1 ).toInt() );
-			break;
-		default:
-			break;
+		int id = item->text( 1 ).toInt();
+
+		ElementList recipeDependancies;
+		database->findUseOfCategoryInRecipes( &recipeDependancies, id );
+
+		if ( recipeDependancies.isEmpty() ) {
+			switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this category and all its subcategories?" ) ) ) {
+				case KMessageBox::Continue:
+					database->removeCategory( id );
+					break;
+			}
+			return;
+		}
+		else { // need warning!
+			DependanciesDialog *warnDialog = new DependanciesDialog( this, &recipeDependancies, 0, false );
+			if ( warnDialog->exec() == QDialog::Accepted )
+				database->removeCategory( id );
+			delete warnDialog;
 		}
 	}
 }

@@ -22,8 +22,8 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList ) : QDialog( parent, 0, true ),
-	recipeListView(0), propertiesListView(0)
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList, bool deps_are_deleted ) : QDialog( parent, 0, true ),
+	recipeListView(0), propertiesListView(0), m_depsAreDeleted(deps_are_deleted)
 	
 {
 	int row = 3, col = 1;
@@ -39,7 +39,14 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
-	instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
+	
+	if ( m_depsAreDeleted ) {
+		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
+	}
+	else {
+		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following currently use the element you have chosen to be removed." ) );
+	}
+
 	layout->addWidget( instructionsLabel, 1, 1 );
 	QSpacerItem *instructions_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( instructions_spacer, 2, 1 );
@@ -149,7 +156,7 @@ void DependanciesDialog::loadList( KListView* listView, const ElementList *list 
 
 void DependanciesDialog::accept()
 {
-	if ( recipeListView ) {
+	if ( recipeListView && m_depsAreDeleted ) {
 		switch ( KMessageBox::warningYesNo(this,
 			i18n("<b>You are about to permanantly delete recipes from your database.</b><br><br>Are you sure you wish to proceed?"),
 			QString::null,KStdGuiItem::yes(),KStdGuiItem::no(),"DeleteRecipe") )
@@ -158,4 +165,6 @@ void DependanciesDialog::accept()
 		case KMessageBox::No: QDialog::reject(); break;
 		}
 	}
+
+	QDialog::accept();
 }

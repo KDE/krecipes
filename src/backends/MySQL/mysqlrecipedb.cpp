@@ -97,7 +97,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" )
-		commands << "CREATE TABLE ingredient_list (id INTEGER, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));";
+		commands << "CREATE TABLE ingredient_list (id INTEGER, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id), INDEX gidil_index(group_id));";
 
 	else if ( tableName == "unit_list" )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
@@ -210,6 +210,8 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				int recipeId = tableToAlter.value( 0 ).toInt();
 				QString cCommand = QString( "INSERT INTO category_list VALUES (%1,-1);" ).arg( recipeId );
 				categoryToAdd.exec( cCommand );
+
+				emit progress();
 			}
 		}
 
@@ -281,6 +283,8 @@ void MySQLRecipeDB::portOldDatabases( float version )
 			while ( result.next() ) {
 				command = "UPDATE units SET plural='" + result.value( 1 ).toString() + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
 				QSqlQuery query( command, database );
+
+				emit progress();
 			}
 		}
 
@@ -318,6 +322,8 @@ void MySQLRecipeDB::portOldDatabases( float version )
 			while ( result.next() ) {
 				command = "UPDATE recipes SET yield_amount='" + QString::number( result.value( 1 ).toInt() ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
 				QSqlQuery query( command, database );
+
+				emit progress();
 			}
 		}
 
@@ -357,6 +363,8 @@ void MySQLRecipeDB::portOldDatabases( float version )
 					query.addBindValue( 1 );
 					query.exec();
 				}
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list_copy" );
@@ -390,6 +398,8 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		if ( query.isActive() ) {
 			while ( query.next() ) {
 				storePhoto( query.value(0).toInt(), query.value(1).toByteArray() );
+
+				emit progress();
 			}
 		}
 
@@ -397,6 +407,38 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 86 ) {
+		database->transaction();
+
+		database->exec( "ALTER TABLE ingredient_list ADD INDEX (group_id)" );
+
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+
+		QString last;
+		int lastID;
+		if ( query.isActive() ) {
+			while ( query.next() ) {
+				QString name = query.value(1).toString();
+				int id = query.value(0).toInt();
+				if ( last == name ) {
+					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
+					database->exec(command);
+
+					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
+					database->exec(command);
+				}
+				last = name;
+				lastID = id;
+
+				emit progress();
+			}
+		}
+
+		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
 }
 

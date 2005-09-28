@@ -307,13 +307,14 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 {
 	list->clear();
 
-	QString command = "SELECT DISTINCT name FROM ingredient_groups ORDER BY name;";
+	QString command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
 	m_query.exec( command );
 
 	if ( m_query.isActive() ) {
 		while ( m_query.next() ) {
 			Element group;
-			group.name = unescapeAndDecode( m_query.value( 0 ).toString() );
+			group.id = m_query.value( 0 ).toInt();
+			group.name = unescapeAndDecode( m_query.value( 1 ).toString() );
 			list->append( group );
 		}
 	}
@@ -719,6 +720,8 @@ void QSqlRecipeDB::createNewIngGroup( const QString &name )
 
 	command = QString( "INSERT INTO ingredient_groups VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "ingredient_groups", "id" ) );
 	QSqlQuery query( command, database );
+
+	emit ingGroupCreated( Element( real_name, lastInsertID() ) );
 }
 
 void QSqlRecipeDB::createNewIngredient( const QString &ingredientName )
@@ -741,6 +744,17 @@ void QSqlRecipeDB::createNewYieldType( const QString &name )
 	database->exec(command);
 
 	//emit yieldTypeCreated( Element( real_name, lastInsertID() ) );
+}
+
+void QSqlRecipeDB::modIngredientGroup( int groupID, const QString &newLabel )
+{
+	QString command;
+
+	command = QString( "UPDATE ingredient_groups SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( groupID );
+	QSqlQuery ingredientToCreate( command, database );
+
+	emit ingGroupRemoved( groupID );
+	emit ingGroupCreated( Element( newLabel, groupID ) );
 }
 
 void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
@@ -875,6 +889,23 @@ void QSqlRecipeDB::findUseOfIngInRecipes( ElementList *results, int ingredientID
 			results->append( recipe );
 		}
 	}
+}
+
+void QSqlRecipeDB::removeIngredientGroup( int groupID )
+{
+	QString command;
+
+	// First remove the ingredient
+
+	command = QString( "DELETE FROM ingredient_groups WHERE id=%1" ).arg( groupID );
+	QSqlQuery toDelete( command, database );
+
+	// Remove all the unit entries for this ingredient
+
+	command = QString( "UPDATE ingredient_list SET group_id='-1' WHERE group_id=%1" ).arg( groupID );
+	toDelete.exec( command );
+
+	emit ingGroupRemoved( groupID );
 }
 
 void QSqlRecipeDB::removeIngredient( int ingredientID )
@@ -1243,6 +1274,47 @@ void QSqlRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID
 	}
 }
 
+void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID )
+{
+	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.group_id=%1" ).arg( groupID );
+	QSqlQuery query( command, database );
+
+	// Populate data
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			Element recipe;
+			recipe.id = query.value( 0 ).toInt();
+			recipe.name = query.value( 1 ).toString();
+			results->append( recipe );
+		}
+	}
+}
+
+void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
+{
+	QString command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1" ).arg( catID );
+	QSqlQuery query( command, database );
+
+	// Populate data
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			Element recipe;
+			recipe.id = query.value( 0 ).toInt();
+			recipe.name = query.value( 1 ).toString();
+			results->append( recipe );
+		}
+	}
+
+	//recursively find dependenacies in subcategories
+	command = QString( "SELECT id FROM categories WHERE parent_id=%1" ).arg( catID );
+	QSqlQuery findDeps = database->exec( command );
+	if ( findDeps.isActive() ) {
+		while ( findDeps.next() ) {
+			findUseOfCategoryInRecipes(results,findDeps.value( 0 ).toInt() );
+		}
+	}
+}
+
 void QSqlRecipeDB::loadUnitRatios( UnitRatioList *ratioList )
 {
 	ratioList->clear();
@@ -1513,7 +1585,9 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
 		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?  Depending on the number of recipes and amount of data, this could take some time.<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.<br><br>Cancelling this operation may result in corrupting the database.</b>" ) ) ) {
 		case KMessageBox::Yes:
+			emit progressBegin(0,QString::null,i18n("Porting database structure..."),50);
 			portOldDatabases( version );
+			emit progressDone();
 			break;
 		case KMessageBox::No:
 			return false;
@@ -1759,6 +1833,20 @@ int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 	return id;
 }
 
+int QSqlRecipeDB::findExistingIngredientGroupByName( const QString& name )
+{
+	QCString search_str = escapeAndEncode( name.left( maxIngGroupNameLength() ) ); //truncate to the maximum size db holds
+
+	QString command = QString( "SELECT id FROM ingredient_groups WHERE name='%1';" ).arg( search_str );
+	QSqlQuery elementToLoad( command, database ); // Run the query
+	int id = -1;
+
+	if ( elementToLoad.isActive() && elementToLoad.first() )
+		id = elementToLoad.value( 0 ).toInt();
+
+	return id;
+}
+
 int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
@@ -1923,6 +2011,22 @@ void QSqlRecipeDB::mergeCategories( int id1, int id2 )
 	update.exec( command );
 
 	emit categoriesMerged( id1, id2 );
+}
+
+void QSqlRecipeDB::mergeIngredientGroups( int id1, int id2 )
+{
+	QSqlQuery update( QString::null, database );
+
+	//change all instances of 'id2' to 'id1'
+	QString command = QString( "UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2" )
+	                  .arg( id1 )
+	                  .arg( id2 );
+	update.exec( command );
+
+	//remove ingredient with id 'id2'
+	command = QString( "DELETE FROM ingredient_groups WHERE id=%1" ).arg( id2 );
+	update.exec( command );
+	emit ingGroupRemoved( id2 );
 }
 
 void QSqlRecipeDB::mergeIngredients( int id1, int id2 )

@@ -111,7 +111,8 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_list" ) {
 		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id) );"
 		<< "CREATE index ridil_index ON ingredient_list(recipe_id);"
-		<< "CREATE index iidil_index ON ingredient_list(ingredient_id);";
+		<< "CREATE index iidil_index ON ingredient_list(ingredient_id);"
+		<< "CREATE index gidil_index ON ingredient_list(group_id);";
 	}
 
 	else if ( tableName == "unit_list" )
@@ -190,6 +191,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 3 ).toInt() )
 				          .arg( copyQuery.value( 4 ).toInt() );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list" );
@@ -205,6 +208,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( -1 )  //default prep method
 				          .arg( copyQuery.value( 4 ).toInt() );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list_copy" );
@@ -223,6 +228,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE authors" );
@@ -235,6 +242,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE authors_copy" );
@@ -250,6 +259,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE categories" );
@@ -262,6 +273,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE categories_copy" );
@@ -284,6 +297,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE categories" );
@@ -296,6 +311,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE categories_copy" );
@@ -321,6 +338,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( escape( copyQuery.value( 3 ).toString() ) )
 				          .arg( escape( copyQuery.value( 4 ).toString() ) );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes" );
@@ -337,6 +356,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( escape( copyQuery.value( 4 ).toString() ) );
 
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes_copy" );
@@ -365,6 +386,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 5 ).toString() )
 				          + "');";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list" );
@@ -381,6 +404,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 5 ).toString() )
 				          + "',-1)";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list_copy" );
@@ -406,6 +431,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "');";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE units" );
@@ -417,6 +444,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "',NULL)";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE units_copy" );
@@ -426,6 +455,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 			while ( result.next() ) {
 				command = "UPDATE units SET plural='" + escape( result.value( 1 ).toString() ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 
@@ -471,6 +502,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 5 ).toString() ) //prep_time
 				          + "')";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes" );
@@ -490,6 +523,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 5 ).toString() ) //prep_time
 				          + "')";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes_copy" );
@@ -518,6 +553,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list" );
@@ -548,6 +585,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 						+ "')";
 					database->exec( command );
 				}
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE ingredient_list_copy" );
@@ -580,6 +619,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes" );
@@ -603,6 +644,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( current_timestamp ) //atime
 				          + "')";
 				database->exec( command );
+
+				emit progress();
 			}
 		}
 		database->exec( "DROP TABLE recipes_copy" );
@@ -639,12 +682,46 @@ void LiteRecipeDB::portOldDatabases( float version )
 				iio.write();
 				//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 				storePhoto( query.value(0).toInt(), ba );
+
+				emit progress();
 			}
 		}
 
 
 		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
 		database->commit();
+	}
+
+	if ( qRound(version*100) < 86 ) {
+		database->transaction();
+
+		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
+
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+
+		QString last;
+		int lastID;
+		if ( query.isActive() ) {
+			while ( query.next() ) {
+				QString name = query.value(1).toString();
+				int id = query.value(0).toInt();
+				if ( last == name ) {
+					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
+					database->exec(command);
+
+					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
+					database->exec(command);
+				}
+				last = name;
+				lastID = id;
+
+				emit progress();
+			}
+		}
+
+		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
 }
 
@@ -674,6 +751,8 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
 			kdDebug()<<"calling: "<<command<<endl;
 			database->exec( command );
+
+			emit progress();
 		}
 	}
 	database->exec( "DROP TABLE "+table_name );
@@ -697,6 +776,8 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
 			kdDebug()<<"calling: "<<command<<endl;
 			database->exec( command );
+
+			emit progress();
 		}
 	}
 	database->exec( "DROP TABLE "+table_name+"_copy" );
