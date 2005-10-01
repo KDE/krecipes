@@ -59,7 +59,7 @@ private:
 	void initShownItems();
 
 	SetupDisplay *setup_display;
-	SetupDisplay *print_setup_display;
+	//SetupDisplay *print_setup_display;
 	SetupDisplay *active_display;
 
 	QMap<SetupDisplay*, QString> active_filename_map;
