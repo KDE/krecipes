@@ -56,6 +56,7 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 	kdDebug() << "Using layout file: " << layout_filename << endl;
 }
 
+#if 0
 HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format ) :
 		BaseExporter( filename, format ), database( db )
 {
@@ -73,6 +74,7 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 		layout_filename = locate( "appdata", "layouts/default_print.klo" );
 	kdDebug() << "Using layout file: " << layout_filename << endl;
 }
+#endif
 
 
 HTMLExporter::~HTMLExporter()

@@ -109,7 +109,7 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 
 void RecipeViewDialog::print( void )
 {
-	#if 0
+	#if 1
 	if ( recipe_loaded )
 		recipeView->view() ->print();
 	#else

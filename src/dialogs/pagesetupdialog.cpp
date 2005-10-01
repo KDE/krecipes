@@ -75,12 +75,13 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	QSize size = config->readSizeEntry( "WindowSize", &default_size );
 	resize( size );
 
-	QTabWidget *tabWidget = new QTabWidget(this);
+	//QTabWidget *tabWidget = new QTabWidget(this);
 	active_display = setup_display = new SetupDisplay( sample, false, this );
-	print_setup_display = new SetupDisplay( sample, true, this );
-	tabWidget->insertTab( setup_display, i18n("Recipe View") );
-	tabWidget->insertTab( print_setup_display, il.loadIconSet( "fileprint", KIcon::Small ), i18n("Print View") );
-	layout->addWidget( tabWidget );
+	//print_setup_display = new SetupDisplay( sample, true, this );
+	//tabWidget->insertTab( setup_display, i18n("Recipe View") );
+	//tabWidget->insertTab( print_setup_display, il.loadIconSet( "fileprint", KIcon::Small ), i18n("Print View") );
+	//layout->addWidget( tabWidget );
+	layout->addWidget( setup_display );
 
 	initShownItems();
 
@@ -92,8 +93,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	connect( okButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
 	connect( setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
-	connect( print_setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
-	connect( tabWidget, SIGNAL( currentChanged( QWidget* ) ), SLOT( setActiveDisplay( QWidget* ) ) );
+	//connect( print_setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
+	//connect( tabWidget, SIGNAL( currentChanged( QWidget* ) ), SLOT( setActiveDisplay( QWidget* ) ) );
 
 	config->setGroup( "Page Setup" ); //SetupDisplay changes the group of the config file
 
@@ -103,10 +104,12 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 		filename = locate( "appdata", "layouts/default.klo" );
 	loadLayout( filename, setup_display );
 
+	#if 0
 	filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
 	if ( filename.isEmpty() || !QFile::exists( filename ) )
 		filename = locate( "appdata", "layouts/default_print.klo" );
 	loadLayout( filename, print_setup_display );
+	#endif
 
 	resize( size );
 }
