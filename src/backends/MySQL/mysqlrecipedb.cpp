@@ -143,6 +143,15 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE `yield_types` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( 20 );
 	}
 
+	else if ( tableName == "rating" )
+		commands << "CREATE TABLE rating (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id int(11) NOT NULL, comment TEXT, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion" )
+		commands << "CREATE TABLE rating_criterion (id INTEGER NOT NULL AUTO_INCREMENT, name TEXT, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criteria_id INTEGER, stars FLOAT);";
+
 	else
 		return ;
 

@@ -84,6 +84,7 @@ public:
 	void createNewIngGroup( const QString &name );
 	void createNewIngredient( const QString &ingredientName );
 	void createNewPrepMethod( const QString &prepMethodName );
+	void createNewRating( const QString &name );
 	void createNewUnit( const QString &unitName, const QString &unitPlural );
 	void createNewYieldType( const QString &type );
 
@@ -96,6 +97,7 @@ public:
 	int findExistingIngredientByName( const QString& name );
 	int findExistingPrepByName( const QString& name );
 	int findExistingRecipeByName( const QString& name );
+	int findExistingRatingByName( const QString& name );
 	int findExistingUnitByName( const QString& name );
 	int findExistingPropertyByName( const QString& name );
 	int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 );

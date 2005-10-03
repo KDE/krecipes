@@ -69,7 +69,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { None = 0, NamesOnly = 256, Noatime = 1024, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, All = 0xFFFF ^ NamesOnly ^ Noatime };
+	enum RecipeItems { None = 0, NamesOnly = 256, Noatime = 1024, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, Ratings = 2048, All = 0xFFFF ^ NamesOnly ^ Noatime };
 
 public slots:
 	void cancelOperation(){ haltOperation = true; }
@@ -135,6 +135,7 @@ public:
 	virtual void createNewIngGroup( const QString &name ) = 0;
 	virtual void createNewIngredient( const QString &ingredientName ) = 0;
 	virtual void createNewPrepMethod( const QString &prepMethodName ) = 0;
+	virtual void createNewRating( const QString &name ) = 0;
 	virtual void createNewUnit( const QString &unitName, const QString &unitPlural ) = 0;
 	virtual void createNewYieldType( const QString &type ) = 0;
 
@@ -147,6 +148,7 @@ public:
 	virtual int findExistingIngredientByName( const QString& name ) = 0;
 	virtual int findExistingPrepByName( const QString& name ) = 0;
 	virtual int findExistingPropertyByName( const QString& name ) = 0;
+	virtual int findExistingRatingByName( const QString& name ) = 0;
 	virtual int findExistingRecipeByName( const QString& name ) = 0;
 	virtual int findExistingUnitByName( const QString& name ) = 0;
 	virtual int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 ) = 0;

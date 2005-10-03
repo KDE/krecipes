@@ -134,6 +134,8 @@ private:
 
 	QToolButton* spellCheckButton;
 
+	QTextEdit *ratingsText;
+
 	// Internal functions
 	bool checkAmountEdit();
 	bool checkBounds();
@@ -174,6 +176,7 @@ private slots:
 	void typeButtonClicked( int );
 	void recipeRemoved( int id );
 	void slotIngredientParser();
+	void slotAddRating();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

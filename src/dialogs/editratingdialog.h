@@ -1,0 +1,74 @@
+/***************************************************************************
+*   Copyright (C) 2005 by Jason Kivlighn                                  *
+*   jkivlighn@gmail.com                                                   *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
+#ifndef EDITRATINGDIALOG_H
+#define EDITRATINGDIALOG_H
+
+#include <qvariant.h>
+#include <qdialog.h>
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
+class QSpacerItem;
+class QLabel;
+class QComboBox;
+class KDoubleSpinBox;
+class QPushButton;
+class KListView;
+class QListViewItem;
+class QTextEdit;
+class QLineEdit;
+
+class Rating;
+
+class EditRatingDialog : public QDialog
+{
+Q_OBJECT
+	
+public:
+	EditRatingDialog( const Rating &, QWidget* parent = 0, const char* name = 0 );
+	EditRatingDialog( QWidget* parent = 0, const char* name = 0 );
+	~EditRatingDialog();
+	
+	QLabel* criteriaLabel;
+	QComboBox* criteriaComboBox;
+	QLabel* starsLabel;
+	KDoubleSpinBox* starsSpinBox;
+	QPushButton* addButton;
+	KListView* criteriaListView;
+	QLabel* commentsLabel;
+	QTextEdit* commentsEdit;
+	QLabel* raterLabel;
+	QLineEdit* lineEdit1;
+	QPushButton* okButton;
+	QPushButton* cancelButton;
+
+	Rating rating() const;
+	
+protected:
+	QVBoxLayout* EditRatingDialogLayout;
+	QHBoxLayout* layout8;
+	QHBoxLayout* layout2;
+	QHBoxLayout* layout7;
+	QSpacerItem* buttonsSpacer;
+	
+protected slots:
+	virtual void languageChange();
+	void slotAddRatingCriteria();
+
+private:
+	void init();
+
+	void loadRating( const Rating & );
+
+};
+
+#endif // EDITRATINGDIALOG_H

@@ -25,7 +25,8 @@ libkrecipesdialogs_la_SOURCES= \
 	refineshoppinglistdialog.cpp pagesetupdialog.cpp \
 	dbimportdialog.cpp createunitdialog.cpp \
 	setupdisplay.cpp krepagelayoutdia.cpp \
-	ingredientparserdialog.cpp ingredientgroupsdialog.cpp
+	ingredientparserdialog.cpp ingredientgroupsdialog.cpp \
+	editratingdialog.cpp
 
 libkrecipesdialogs_la_METASOURCES=AUTO
 

@@ -38,6 +38,7 @@
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
 #include "ingredientparserdialog.h"
+#include "editratingdialog.h"
 #include "datablocks/recipe.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
@@ -409,9 +410,22 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 
 	// ------- END OF Recipe Instructions Tab -----------
 
+
+	// ------- Recipe Ratings Tab -----------
+
+	QVBox *ratingsTab = new QVBox(recipeTab);
+	QPushButton *addRatingButton = new QPushButton(ratingsTab);
+	ratingsText = new QTextEdit(ratingsTab);
+
+	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
+
+	// ------- END OF Recipe Ratings Tab -----------
+
+
 	tabWidget->insertTab( recipeTab, i18n( "Recipe" ) );
 	tabWidget->insertTab( ingredientGBox, i18n( "Ingredients" ) );
 	tabWidget->insertTab( instructionsTab, i18n( "Instructions" ) );
+	tabWidget->insertTab( ratingsTab, i18n( "Ratings" ) );
 
 
 	// Functions Box
@@ -635,6 +649,18 @@ void RecipeInputDialog::reload( void )
 
 	// Show authors
 	showAuthors();
+
+	// Show ratings
+	QString ratingText;
+	for ( RatingList::const_iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
+		ratingText += "<b>Comments:</b> "+(*rating_it).comment+"<br />";
+		ratingText += "<b>Number of criteria loaded:</b>"+QString::number((*rating_it).ratingCriteriaList.count())+"<br />";
+
+		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			ratingText += "  "+(*rc_it).name+": "+(*rc_it).stars+" stars<br />";
+		}
+	}
+	ratingsText->setText( ratingText );
 }
 
 void RecipeInputDialog::loadUnitListCombo( void )
@@ -1564,6 +1590,25 @@ void RecipeInputDialog::slotIngredientParser()
 				}
 			}
 		}
+	}
+}
+
+void RecipeInputDialog::slotAddRating()
+{
+	EditRatingDialog ratingDlg(this);
+	if ( ratingDlg.exec() == QDialog::Accepted ) {
+		Rating r = ratingDlg.rating();
+
+		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
+			int criteria_id = database->findExistingRatingByName((*rc_it).name);
+			if ( criteria_id == -1 ) {
+				database->createNewRating((*rc_it).name);
+				criteria_id = database->lastInsertID();
+			}
+			(*rc_it).id = criteria_id;
+		}
+
+		loadedRecipe->ratingList.append(r);
 	}
 }
 
