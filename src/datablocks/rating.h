@@ -33,6 +33,7 @@ public:
 
 	int id;
 	QString comment;
+	QString rater;
 
 	RatingCriteriaList ratingCriteriaList;
 };

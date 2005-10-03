@@ -47,7 +47,7 @@ public:
 	QLabel* commentsLabel;
 	QTextEdit* commentsEdit;
 	QLabel* raterLabel;
-	QLineEdit* lineEdit1;
+	QLineEdit* raterEdit;
 	QPushButton* okButton;
 	QPushButton* cancelButton;
 

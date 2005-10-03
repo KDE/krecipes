@@ -308,13 +308,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 			
-			command = QString( "SELECT id,comment FROM rating WHERE recipe_id=%1" ).arg( (*it).recipeID );
-			m_query.exec( command );
-			if ( m_query.isActive() ) {
-				while ( m_query.next() ) {
+			command = QString( "SELECT id,comment,rater FROM rating WHERE recipe_id=%1" ).arg( (*it).recipeID );
+			QSqlQuery query( command, database );
+			if ( query.isActive() ) {
+				while ( query.next() ) {
 					Rating r;
-					r.id = m_query.value( 0 ).toInt();
-					r.comment = unescapeAndDecode( m_query.value( 1 ).toString() );
+					r.id = query.value( 0 ).toInt();
+					r.comment = unescapeAndDecode( query.value( 1 ).toString() );
+					r.rater = unescapeAndDecode( query.value( 2 ).toString() );
 
 					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criterion rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criteria_id=rc.id" ).arg(r.id);
 					QSqlQuery criterionQuery( command, database );
@@ -325,7 +326,6 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toString() );
 							rc.stars = criterionQuery.value( 2 ).toInt();
 							r.append( rc );
-kdDebug()<<"appended: "<<rc.name<<" ("<<rc.id<<")"<<endl;
 						}
 					}
 
@@ -668,7 +668,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	recipeToSave.exec( command );
 
 	for ( RatingList::const_iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
-		command = QString( "INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+(*rating_it).comment+"')" );
+		command = QString( "INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+(*rating_it).comment+"','"+(*rating_it).rater+"')" );
 kdDebug()<<"calling: "<<command<<endl;
 		recipeToSave.exec( command );
 		int rating_id = lastInsertID();

@@ -653,12 +653,16 @@ void RecipeInputDialog::reload( void )
 	// Show ratings
 	QString ratingText;
 	for ( RatingList::const_iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
-		ratingText += "<b>Comments:</b> "+(*rating_it).comment+"<br />";
-		ratingText += "<b>Number of criteria loaded:</b>"+QString::number((*rating_it).ratingCriteriaList.count())+"<br />";
-
+		ratingText += "<ul>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			ratingText += "  "+(*rc_it).name+": "+(*rc_it).stars+" stars<br />";
+			ratingText += "<li>"+(*rc_it).name+": "+QString::number((*rc_it).stars)+" stars</li>";
 		}
+		ratingText += "</ul>";
+
+		ratingText += "<b>Comments:</b> "+(*rating_it).comment+"<br />";
+		ratingText += "<b>Rater:</b> "+(*rating_it).rater+"<br />";
+
+		ratingText += "<hr />";
 	}
 	ratingsText->setText( ratingText );
 }
@@ -1609,6 +1613,7 @@ void RecipeInputDialog::slotAddRating()
 		}
 
 		loadedRecipe->ratingList.append(r);
+		emit( recipeChanged() ); //Indicate that the recipe changed
 	}
 }
 

@@ -92,8 +92,8 @@ void EditRatingDialog::init()
 	raterLabel = new QLabel( this, "raterLabel" );
 	layout2->addWidget( raterLabel );
 	
-	lineEdit1 = new QLineEdit( this, "lineEdit1" );
-	layout2->addWidget( lineEdit1 );
+	raterEdit = new QLineEdit( this, "raterEdit" );
+	layout2->addWidget( raterEdit );
 	EditRatingDialogLayout->addLayout( layout2 );
 	
 	layout7 = new QHBoxLayout( 0, 0, 6, "layout7"); 
@@ -155,13 +155,20 @@ Rating EditRatingDialog::rating() const
 	}
 
 	r.comment = commentsEdit->text();
+	r.rater = raterEdit->text();
 
 	return r;
 }
 
 void EditRatingDialog::loadRating( const Rating &rating )
 {
-	
+	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
+		(void)new QListViewItem(criteriaListView,(*rc_it).name,QString::number((*rc_it).stars));
+	}
+
+
+	raterEdit->setText(rating.rater);
+	commentsEdit->setText(rating.comment);
 }
 
 void EditRatingDialog::slotAddRatingCriteria()
