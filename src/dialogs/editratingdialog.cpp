@@ -27,6 +27,8 @@
 
 #include "datablocks/rating.h"
 
+#include "widgets/ratingwidget.h"
+
 EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const char* name ) : QDialog(parent,name)
 {
 	if ( !name )
@@ -59,17 +61,21 @@ void EditRatingDialog::init()
 	layout8->addWidget( criteriaLabel );
 	
 	criteriaComboBox = new QComboBox( FALSE, this, "criteriaComboBox" );
-	criteriaComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
+	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
 	layout8->addWidget( criteriaComboBox );
 	
 	starsLabel = new QLabel( this, "starsLabel" );
 	layout8->addWidget( starsLabel );
-	
+	/*
 	starsSpinBox = new KDoubleSpinBox( this, "starsSpinBox" );
 	starsSpinBox->setMaxValue( 5 );
 	starsSpinBox->setLineStep( 0.5 );
 	layout8->addWidget( starsSpinBox );
+*/
+	starsWidget = new RatingWidget( 5, this, "starsWidget" );
+	//starsWidget->setMaxValue( 5 );
+	layout8->addWidget( starsWidget );
 	
 	addButton = new QPushButton( this, "addButton" );
 	layout8->addWidget( addButton );
@@ -173,7 +179,7 @@ void EditRatingDialog::loadRating( const Rating &rating )
 
 void EditRatingDialog::slotAddRatingCriteria()
 {
-	(void)new QListViewItem(criteriaListView,criteriaComboBox->lineEdit()->text(),QString::number(starsSpinBox->value()));
+	(void)new QListViewItem(criteriaListView,criteriaComboBox->lineEdit()->text(),starsWidget->text());
 }
 
 #include "editratingdialog.moc"

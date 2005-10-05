@@ -26,6 +26,7 @@ class KListView;
 class QListViewItem;
 class QTextEdit;
 class QLineEdit;
+class RatingWidget;
 
 class Rating;
 
@@ -41,7 +42,7 @@ public:
 	QLabel* criteriaLabel;
 	QComboBox* criteriaComboBox;
 	QLabel* starsLabel;
-	KDoubleSpinBox* starsSpinBox;
+	RatingWidget *starsWidget;
 	QPushButton* addButton;
 	KListView* criteriaListView;
 	QLabel* commentsLabel;

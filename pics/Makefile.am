@@ -1,3 +1,6 @@
 picsdir = $(kde_datadir)/krecipes/pics
-pics_DATA = network.png save.png wizard.png dbpermissions.png recipes.png startlogo.png menubg.png
+pics_DATA = network.png save.png wizard.png dbpermissions.png recipes.png startlogo.png menubg.png \
+	star_on.png \
+	star_off.png \
+	star_half.png
 
