@@ -122,17 +122,17 @@ void RatingWidget::mousePressEvent(QMouseEvent* event_) {
     idx = -1;
   }
 
-//  if(m_currIndex != idx*2) {
+    int oldCurrent = m_currIndex;
+
     m_currIndex = idx*2+1;
 
-  if ( left )
-    m_currIndex--;
+    if ( left )
+      m_currIndex--;
 
-kdDebug()<<m_currIndex<<endl;
-
-    update();
-    emit modified();
-//  }
+    if ( oldCurrent != m_currIndex ) {
+      update();
+      emit modified();
+    }
 }
 
 void RatingWidget::clear() {
@@ -142,7 +142,7 @@ void RatingWidget::clear() {
 
 QString RatingWidget::text() const {
   // index is index of the list, which is zero-based. Add 1!
-  return m_currIndex == -1 ? QString::null : QString::number(double(m_currIndex+1)/2.0);
+  return m_currIndex == -1 ? QString::null : QString::number(double(m_currIndex+1)/2);
 }
 
 void RatingWidget::setText(const QString& text_) {

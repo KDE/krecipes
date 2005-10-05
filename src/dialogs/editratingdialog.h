@@ -64,6 +64,7 @@ protected:
 protected slots:
 	virtual void languageChange();
 	void slotAddRatingCriteria();
+	void slotRemoveRatingCriteria();
 
 private:
 	void init();

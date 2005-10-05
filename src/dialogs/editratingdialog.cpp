@@ -24,6 +24,11 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qpainter.h>
+
+#include <kpopupmenu.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 #include "datablocks/rating.h"
 
@@ -85,6 +90,7 @@ void EditRatingDialog::init()
 	criteriaListView->addColumn( i18n( "Criteria" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
+	criteriaListView->setSorting(-1);
 	EditRatingDialogLayout->addWidget( criteriaListView );
 	
 	commentsLabel = new QLabel( this, "commentsLabel" );
@@ -119,6 +125,10 @@ void EditRatingDialog::init()
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( okButton, SIGNAL(clicked()), this, SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
+
+	KIconLoader il;
+	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
+	kpop->insertItem( il.loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
 }
 
 /*
@@ -179,7 +189,34 @@ void EditRatingDialog::loadRating( const Rating &rating )
 
 void EditRatingDialog::slotAddRatingCriteria()
 {
-	(void)new QListViewItem(criteriaListView,criteriaComboBox->lineEdit()->text(),starsWidget->text());
+	QListViewItem * it = new QListViewItem(criteriaListView,criteriaComboBox->lineEdit()->text());
+
+	int stars = starsWidget->text().toDouble() * 2; //multiply by two to make it easier to work with half-stars
+
+	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
+	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
+	QPixmap generatedPixmap(pixmapWidth,18);
+
+	if ( !generatedPixmap.isNull() ) { //there aren't zero stars
+		generatedPixmap.fill();
+		QPainter painter( &generatedPixmap );
+	
+		int i = 0;
+		for ( ; i < stars; i+= 2 ) {
+			painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
+		}
+		it->setPixmap(1,generatedPixmap);
+	}
+
+	criteriaComboBox->lineEdit()->clear();
+	starsWidget->clear();
+
+	criteriaComboBox->lineEdit()->setFocus();
+}
+
+void EditRatingDialog::slotRemoveRatingCriteria()
+{
+	delete criteriaListView->selectedItem();
 }
 
 #include "editratingdialog.moc"
