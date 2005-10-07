@@ -29,6 +29,7 @@ class QLineEdit;
 class RatingWidget;
 
 class Rating;
+class RatingCriteria;
 
 class EditRatingDialog : public QDialog
 {
@@ -70,7 +71,7 @@ private:
 	void init();
 
 	void loadRating( const Rating & );
-
+	void addRatingCriteria( const RatingCriteria &rc );
 };
 
 #endif // EDITRATINGDIALOG_H

@@ -24,6 +24,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qwidgetstack.h>
+#include <qpainter.h>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
@@ -50,6 +51,8 @@
 #include "widgets/headercombobox.h"
 #include "widgets/prepmethodcombobox.h"
 #include "widgets/inglistviewitem.h"
+#include "widgets/ratingdisplaywidget.h"
+#include "widgets/kwidgetlistbox.h"
 #include "image.h" //Initializes default photo
 
 #include "profiling.h"
@@ -414,8 +417,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	// ------- Recipe Ratings Tab -----------
 
 	QVBox *ratingsTab = new QVBox(recipeTab);
-	QPushButton *addRatingButton = new QPushButton(ratingsTab);
-	ratingsText = new QTextEdit(ratingsTab);
+	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
+	QPushButton *addRatingButton = new QPushButton(i18n("Add Rating..."),ratingsTab);
 
 	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
 
@@ -578,6 +581,7 @@ void RecipeInputDialog::reload( void )
 	prepMethodBox->lineEdit()->setText("");
 	headerBox->lineEdit()->setText("");
 	unitBox->lineEdit()->setText("");
+	ratingListDisplayWidget->clear();
 
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
@@ -651,20 +655,12 @@ void RecipeInputDialog::reload( void )
 	showAuthors();
 
 	// Show ratings
-	QString ratingText;
-	for ( RatingList::const_iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
-		ratingText += "<ul>";
-		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			ratingText += "<li>"+(*rc_it).name+": "+QString::number((*rc_it).stars)+" stars</li>";
-		}
-		ratingText += "</ul>";
-
-		ratingText += "<b>Comments:</b> "+(*rating_it).comment+"<br />";
-		ratingText += "<b>Rater:</b> "+(*rating_it).rater+"<br />";
-
-		ratingText += "<hr />";
+	for ( RatingList::iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
+		RatingDisplayWidget *item = new RatingDisplayWidget;
+		item->rating_it = rating_it;
+		addRating(*rating_it,item);
+		ratingListDisplayWidget->insertItem(item);
 	}
-	ratingsText->setText( ratingText );
 }
 
 void RecipeInputDialog::loadUnitListCombo( void )
@@ -1612,9 +1608,91 @@ void RecipeInputDialog::slotAddRating()
 			(*rc_it).id = criteria_id;
 		}
 
-		loadedRecipe->ratingList.append(r);
+		RatingDisplayWidget *item = new RatingDisplayWidget;
+		item->rating_it = loadedRecipe->ratingList.append(r);
+		addRating(r,item);
+		ratingListDisplayWidget->insertItem(item);
 		emit( recipeChanged() ); //Indicate that the recipe changed
 	}
+}
+
+void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
+{
+	item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
+				KIcon::NoGroup, KIcon::SizeHuge));
+	item->raterName->setText(rating.rater);
+	item->comment->setText(rating.comment);
+
+	item->criteriaListView->clear();
+	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
+		QListViewItem * it = new QListViewItem(item->criteriaListView,(*rc_it).name);
+	
+		int stars = int((*rc_it).stars * 2); //multiply by two to make it easier to work with half-stars
+	
+		QPixmap star = UserIcon(QString::fromLatin1("star_on"));
+		int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
+		QPixmap generatedPixmap(pixmapWidth,18);
+	
+		if ( !generatedPixmap.isNull() ) { //there aren't zero stars
+			generatedPixmap.fill();
+			QPainter painter( &generatedPixmap );
+		
+			int i = 0;
+			for ( ; i < stars; i+= 2 ) {
+				painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
+			}
+			it->setPixmap(1,generatedPixmap);
+		}
+	}
+
+	connect(item->buttonEdit, SIGNAL(clicked()),
+		this, SLOT(slotEditRating()));
+	connect(item->buttonRemove, SIGNAL(clicked()),
+		this, SLOT(slotRemoveRating()));
+}
+
+void RecipeInputDialog::slotEditRating()
+{
+	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+
+	EditRatingDialog ratingDlg(*sender->rating_it,this);
+	if ( ratingDlg.exec() == QDialog::Accepted ) {
+		Rating r = ratingDlg.rating();
+
+		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
+			int criteria_id = database->findExistingRatingByName((*rc_it).name);
+			if ( criteria_id == -1 ) {
+				database->createNewRating((*rc_it).name);
+				criteria_id = database->lastInsertID();
+			}
+			(*rc_it).id = criteria_id;
+		}
+
+		(*sender->rating_it) = r;
+		addRating(r,sender);
+		emit recipeChanged(); //Indicate that the recipe changed
+	}
+}
+
+void RecipeInputDialog::slotRemoveRating()
+{
+	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+	loadedRecipe->ratingList.remove(sender->rating_it);
+
+	//can't just do this... it will invalidate the pointers all the rating items have FIXME: should be able to
+	//ratingListDisplayWidget->removeItem(sender);
+	ratingListDisplayWidget->clear();
+	sender->deleteLater();
+
+	// Show ratings
+	for ( RatingList::iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
+		RatingDisplayWidget *item = new RatingDisplayWidget;
+		item->rating_it = rating_it;
+		addRating(*rating_it,item);
+		ratingListDisplayWidget->insertItem(item);
+	}
+
+	emit recipeChanged(); //Indicate that the recipe changed
 }
 
 #include "recipeinputdialog.moc"

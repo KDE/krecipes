@@ -308,7 +308,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 			
-			command = QString( "SELECT id,comment,rater FROM rating WHERE recipe_id=%1" ).arg( (*it).recipeID );
+			command = QString( "SELECT id,comment,rater FROM rating WHERE recipe_id=%1 ORDER BY created DESC" ).arg( (*it).recipeID );
 			QSqlQuery query( command, database );
 			if ( query.isActive() ) {
 				while ( query.next() ) {
@@ -324,7 +324,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 							RatingCriteria rc;
 							rc.id = criterionQuery.value( 0 ).toInt();
 							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toString() );
-							rc.stars = criterionQuery.value( 2 ).toInt();
+							rc.stars = criterionQuery.value( 2 ).toDouble();
 							r.append( rc );
 						}
 					}
@@ -668,7 +668,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	recipeToSave.exec( command );
 
 	for ( RatingList::const_iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
-		command = QString( "INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+(*rating_it).comment+"','"+(*rating_it).rater+"')" );
+		command = QString( "INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+(*rating_it).comment+"','"+(*rating_it).rater+"','"+current_timestamp+"')" );
 kdDebug()<<"calling: "<<command<<endl;
 		recipeToSave.exec( command );
 		int rating_id = lastInsertID();

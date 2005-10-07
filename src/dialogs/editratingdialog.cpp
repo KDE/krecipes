@@ -166,7 +166,7 @@ Rating EditRatingDialog::rating() const
 	for ( QListViewItem *it = criteriaListView->firstChild(); it; it = it->nextSibling() ) {
 		RatingCriteria rc;
 		rc.name = it->text(0);
-		rc.stars = it->text(1).toDouble();
+		rc.stars = it->text(2).toDouble();
 		r.append( rc );
 	}
 
@@ -179,9 +179,8 @@ Rating EditRatingDialog::rating() const
 void EditRatingDialog::loadRating( const Rating &rating )
 {
 	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
-		(void)new QListViewItem(criteriaListView,(*rc_it).name,QString::number((*rc_it).stars));
+		addRatingCriteria(*rc_it);
 	}
-
 
 	raterEdit->setText(rating.rater);
 	commentsEdit->setText(rating.comment);
@@ -189,9 +188,23 @@ void EditRatingDialog::loadRating( const Rating &rating )
 
 void EditRatingDialog::slotAddRatingCriteria()
 {
-	QListViewItem * it = new QListViewItem(criteriaListView,criteriaComboBox->lineEdit()->text());
+	RatingCriteria r;
+	r.name = criteriaComboBox->lineEdit()->text();
+	r.stars = starsWidget->text().toDouble();
 
-	int stars = starsWidget->text().toDouble() * 2; //multiply by two to make it easier to work with half-stars
+	addRatingCriteria(r);
+
+	criteriaComboBox->lineEdit()->clear();
+	starsWidget->clear();
+
+	criteriaComboBox->lineEdit()->setFocus();
+}
+
+void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
+{
+	QListViewItem * it = new QListViewItem(criteriaListView,rc.name);
+
+	int stars = rc.stars * 2; //multiply by two to make it easier to work with half-stars
 
 	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
 	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
@@ -208,10 +221,7 @@ void EditRatingDialog::slotAddRatingCriteria()
 		it->setPixmap(1,generatedPixmap);
 	}
 
-	criteriaComboBox->lineEdit()->clear();
-	starsWidget->clear();
-
-	criteriaComboBox->lineEdit()->setFocus();
+	it->setText(2,QString::number(rc.stars));
 }
 
 void EditRatingDialog::slotRemoveRatingCriteria()

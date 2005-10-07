@@ -48,6 +48,9 @@ class KreTextEdit;
 class IngredientComboBox;
 class HeaderComboBox;
 class PrepMethodComboBox;
+class KWidgetListbox;
+class Rating;
+class RatingDisplayWidget;
 
 /**
 @author Unai Garro
@@ -134,7 +137,7 @@ private:
 
 	QToolButton* spellCheckButton;
 
-	QTextEdit *ratingsText;
+	KWidgetListbox *ratingListDisplayWidget;
 
 	// Internal functions
 	bool checkAmountEdit();
@@ -149,6 +152,7 @@ private:
 	void showCategories( void );
 	void showAuthors( void );
 	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
+	void addRating( const Rating &rating, RatingDisplayWidget *item );
 
 	// Signals & Slots
 
@@ -177,6 +181,8 @@ private slots:
 	void recipeRemoved( int id );
 	void slotIngredientParser();
 	void slotAddRating();
+	void slotEditRating();
+	void slotRemoveRating();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()
