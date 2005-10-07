@@ -134,6 +134,15 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "yield_types" ) {
 		commands << "CREATE TABLE yield_types (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 	}
+
+	else if ( tableName == "rating" )
+		commands << "CREATE TABLE rating (id SERIAL NOT NULL PRIMARY KEY, recipe_id int(11) NOT NULL, comment CHARACTER VARYING, rater CHARACTER VARYING, created TIMESTAMP);";
+
+	else if ( tableName == "rating_criterion" )
+		commands << "CREATE TABLE rating_criterion (id SERIAL NOT NUL PRIMARY KEYL, name CHARACTER VARYING);";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criteria_id INTEGER, stars FLOAT);";
 	else
 		return ;
 

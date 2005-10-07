@@ -165,6 +165,15 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE yield_types (id INTEGER NOT NULL, name varchar(%1), PRIMARY KEY (id));" ).arg( maxYieldTypeLength() );
 	}
 
+	else if ( tableName == "rating" )
+		commands << "CREATE TABLE rating (id INTEGER NOT NULL, recipe_id int(11) NOT NULL, comment TEXT, rater TEXT, created TIMESTAMP, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion" )
+		commands << "CREATE TABLE rating_criterion (id INTEGER NOT NULL, name TEXT, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criteria_id INTEGER, stars FLOAT);";
+
 	else
 		return ;
 
