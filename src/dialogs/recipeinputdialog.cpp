@@ -1644,6 +1644,8 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 		}
 	}
 
+	item->buttonEdit->disconnect();
+	item->buttonRemove->disconnect();
 	connect(item->buttonEdit, SIGNAL(clicked()),
 		this, SLOT(slotEditRating()));
 	connect(item->buttonRemove, SIGNAL(clicked()),
