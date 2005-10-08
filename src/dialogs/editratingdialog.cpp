@@ -31,15 +31,16 @@
 #include <kiconloader.h>
 
 #include "datablocks/rating.h"
+#include "datablocks/elementlist.h"
 
 #include "widgets/ratingwidget.h"
 
-EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const char* name ) : KDialog(parent,name)
+EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name ) : KDialog(parent,name)
 {
 	if ( !name )
 		setName( "EditRatingDialog" );
 
-	init();
+	init(criteriaList);
 	loadRating(rating);
 }
 
@@ -47,16 +48,16 @@ EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const
  *  Constructs a EditRatingDialog as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-EditRatingDialog::EditRatingDialog( QWidget* parent, const char* name )
+EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
     : KDialog( parent, name )
 {
 	if ( !name )
 		setName( "EditRatingDialog" );
 
-	init();
+	init(criteriaList);
 }
 
-void EditRatingDialog::init()
+void EditRatingDialog::init( const ElementList &criteriaList )
 {
 	EditRatingDialogLayout = new QVBoxLayout( this, 11, 6, "EditRatingDialogLayout"); 
 	
@@ -68,6 +69,7 @@ void EditRatingDialog::init()
 	criteriaComboBox = new QComboBox( FALSE, this, "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
+	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
 	layout8->addWidget( criteriaComboBox );
 	
 	starsLabel = new QLabel( this, "starsLabel" );
@@ -129,6 +131,11 @@ void EditRatingDialog::init()
 	KIconLoader il;
 	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
 	kpop->insertItem( il.loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
+
+	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
+		criteriaComboBox->insertItem( ( *criteria_it ).name );
+		//criteriaComboBox->completionObject()->addItem( ( *criteria_it ).name );
+	}
 }
 
 /*

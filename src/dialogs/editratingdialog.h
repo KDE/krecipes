@@ -30,14 +30,15 @@ class RatingWidget;
 
 class Rating;
 class RatingCriteria;
+class ElementList;
 
 class EditRatingDialog : public KDialog
 {
 Q_OBJECT
 	
 public:
-	EditRatingDialog( const Rating &, QWidget* parent = 0, const char* name = 0 );
-	EditRatingDialog( QWidget* parent = 0, const char* name = 0 );
+	EditRatingDialog( const ElementList &criteriaList, const Rating &, QWidget* parent = 0, const char* name = 0 );
+	EditRatingDialog( const ElementList &criteriaList, QWidget* parent = 0, const char* name = 0 );
 	~EditRatingDialog();
 	
 	QLabel* criteriaLabel;
@@ -68,7 +69,7 @@ protected slots:
 	void slotRemoveRatingCriteria();
 
 private:
-	void init();
+	void init(const ElementList &criteriaList);
 
 	void loadRating( const Rating & );
 	void addRatingCriteria( const RatingCriteria &rc );

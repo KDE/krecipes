@@ -1595,7 +1595,10 @@ void RecipeInputDialog::slotIngredientParser()
 
 void RecipeInputDialog::slotAddRating()
 {
-	EditRatingDialog ratingDlg(this);
+	ElementList criteriaList;
+	database->loadRatingCriterion(&criteriaList);
+
+	EditRatingDialog ratingDlg(criteriaList,this);
 	if ( ratingDlg.exec() == QDialog::Accepted ) {
 		Rating r = ratingDlg.rating();
 
@@ -1656,7 +1659,10 @@ void RecipeInputDialog::slotEditRating()
 {
 	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
 
-	EditRatingDialog ratingDlg(*sender->rating_it,this);
+	ElementList criteriaList;
+	database->loadRatingCriterion(&criteriaList);
+
+	EditRatingDialog ratingDlg(criteriaList,*sender->rating_it,this);
 	if ( ratingDlg.exec() == QDialog::Accepted ) {
 		Rating r = ratingDlg.rating();
 

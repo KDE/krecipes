@@ -1693,7 +1693,7 @@ void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM rating_criteria ORDER BY name"
+	QString command = "SELECT id,name FROM rating_criterion ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() ) {
