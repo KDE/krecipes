@@ -1614,14 +1614,19 @@ void RecipeInputDialog::slotAddRating()
 		RatingDisplayWidget *item = new RatingDisplayWidget;
 		item->rating_it = loadedRecipe->ratingList.append(r);
 		addRating(r,item);
-		ratingListDisplayWidget->insertItem(item);
+		ratingListDisplayWidget->insertItem(item,0);
 		emit( recipeChanged() ); //Indicate that the recipe changed
 	}
 }
 
 void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
 {
-	item->icon->setPixmap( UserIcon(QString("rating%1").arg(qRound(rating.average()))) );
+	int average = qRound(rating.average());
+	if ( average >= 0 )
+		item->icon->setPixmap( UserIcon(QString("rating%1").arg(average) ) );
+	else //no rating criteria, therefore no average (we don't want to automatically assume a zero average)
+		item->icon->clear();
+
 	item->raterName->setText(rating.rater);
 	item->comment->setText(rating.comment);
 

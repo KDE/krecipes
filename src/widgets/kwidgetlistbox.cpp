@@ -56,19 +56,25 @@ void KWidgetListbox::clear()
 
 int KWidgetListbox::insertItem(QWidget* item, int index)
 {
-  int row;
+  int row = index;
 
   if(index == -1)
   {
     row = numRows();
-    setNumRows(row + 1);
   }
-  else
-    return -1;
+  //else
+  //  return -1;
 
+  insertRows(row);
   setRowHeight(row, item->height());
   setCellWidget(row, 0, item);
-  setItemColors(row, even(row));
+
+  for ( int i = row; i < numRows(); ++i ) {
+    setItemColors(i, even(i));
+  }
+
+  ensureCellVisible(row,0);
+
   return row;
 }
 
@@ -152,6 +158,7 @@ void KWidgetListbox::updateColors()
 void KWidgetListbox::setItemColors(int index, bool even)
 {
   QWidget* itm = item(index);
+if ( !itm){ kdDebug()<<"no widget at index "<<index<<endl; return; }
 /*
   if(index == selected())
   {
