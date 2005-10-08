@@ -107,6 +107,23 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 
 		content += "\n\n";
 
+		if ( (*recipe_it).ratingList.count() > 0 )
+			content += "Ratings:\n";
+
+		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
+			if ( !( *rating_it ).rater.isEmpty() )
+				content += "  "+( *rating_it ).rater+"\n";
+			if ( !( *rating_it ).comment.isEmpty() )
+				content += "  "+( *rating_it ).comment+"\n";
+
+			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+				content +=  "  "+(*rc_it).name+": "+QString(i18n("%1 star","%1 stars",(*rc_it).stars)).arg((*rc_it).stars)+"\n";
+			}
+			content += "\n";
+		}
+
+		content += "\n";
+
 		content += "-----\n\n"; //end of recipe indicator
 	}
 

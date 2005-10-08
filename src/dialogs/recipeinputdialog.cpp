@@ -1680,18 +1680,8 @@ void RecipeInputDialog::slotRemoveRating()
 	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
 	loadedRecipe->ratingList.remove(sender->rating_it);
 
-	//can't just do this... it will invalidate the pointers all the rating items have FIXME: should be able to
-	//ratingListDisplayWidget->removeItem(sender);
-	ratingListDisplayWidget->clear();
-	sender->deleteLater();
-
-	// Show ratings
-	for ( RatingList::iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
-		RatingDisplayWidget *item = new RatingDisplayWidget;
-		item->rating_it = rating_it;
-		addRating(*rating_it,item);
-		ratingListDisplayWidget->insertItem(item);
-	}
+	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)
+	ratingListDisplayWidget->removeItem(sender);
 
 	emit recipeChanged(); //Indicate that the recipe changed
 }

@@ -152,6 +152,26 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<krecipes-instructions>\n";
 		xml += QStyleSheet::escape( ( *recipe_it ).instructions.utf8() );
 		xml += "</krecipes-instructions>\n";
+
+		//ratings
+		xml += "<krecipes-ratings>";
+		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
+			xml += "<rating>";
+			xml += "<comment>"+QStyleSheet::escape( ( *rating_it ).comment.utf8() )+"</comment>";
+			xml += "<rater>"+QStyleSheet::escape( ( *rating_it ).rater.utf8() )+"</rater>";
+
+			xml += "<criterion>";
+			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+				xml += "<criteria>";
+				xml += "<name>"+(*rc_it).name+"</name>";
+				xml += "<stars>"+QString::number((*rc_it).stars)+"</stars>";
+				xml += "</criteria>";
+			}
+			xml += "</criterion>";
+			xml += "</rating>";
+		}
+		xml += "</krecipes-ratings>";
+
 		xml += "</krecipes-recipe>\n";
 	}
 

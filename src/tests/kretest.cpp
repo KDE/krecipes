@@ -118,7 +118,32 @@ main(int argc, char *argv[])
 	CategoryTree *catTree = new CategoryTree;
 	(void)catTree->add( Element("Cookies & Squares",2) );
 	(void)catTree->add( Element("Snacks",1) );
-	
+
+	RatingCriteria rc;
+	Rating rating1;
+	rating1.rater = "George McFry";
+	rating1.comment = "Good enough";
+
+	rc.name = "Taste";
+	rc.stars = 5.0;
+	rating1.append(rc);
+
+	Rating rating2;
+	rating2.rater = "Me";
+	rating2.comment = "Yuck, don't eat!";
+
+	rc.name = "Overall";
+	rc.stars = 2.0;
+	rating2.append(rc);
+
+	rc.name = "Taste";
+	rc.stars = 1.5;
+	rating2.append(rc);
+
+	recipe.ratingList.append(rating1);
+	recipe.ratingList.append(rating2);
+
+
 	check( importer, recipe );
 	check( importer, catTree );
 

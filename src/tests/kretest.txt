@@ -162,6 +162,32 @@ iT/nkv50f2xJ/wA8l/Oiijkj2C7F/th/+eS/nR/a7n/lkv50UUKEewXZmtJudjtHJooorexkf//Z]]><
 </krecipes-ingredients>
 <krecipes-instructions>
 Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>
+<krecipes-ratings>
+  <rating>
+    <rater>George McFry</rater>
+    <comment>Good enough</comment>
+    <criterion>
+      <criteria>
+        <name>Taste</name>
+        <stars>5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+  <rating>
+    <rater>Me</rater>
+    <comment>Yuck, don't eat!</comment>
+    <criterion>
+      <criteria>
+        <name>Overall</name>
+        <stars>2</stars>
+      </criteria>
+      <criteria>
+        <name>Taste</name>
+        <stars>1.5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+</krecipes-ratings>
 </krecipes-recipe>
 <krecipes-recipe>
 <krecipes-description>
@@ -319,5 +345,31 @@ iT/nkv50f2xJ/wA8l/Oiijkj2C7F/th/+eS/nR/a7n/lkv50UUKEewXZmtJudjtHJooorexkf//Z]]><
 </krecipes-ingredients>
 <krecipes-instructions>
 Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>
+<krecipes-ratings>
+  <rating>
+    <rater>George McFry</rater>
+    <comment>Good enough</comment>
+    <criterion>
+      <criteria>
+        <name>Taste</name>
+        <stars>5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+  <rating>
+    <rater>Me</rater>
+    <comment>Yuck, don't eat!</comment>
+    <criterion>
+      <criteria>
+        <name>Overall</name>
+        <stars>2</stars>
+      </criteria>
+      <criteria>
+        <name>Taste</name>
+        <stars>1.5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+</krecipes-ratings>
 </krecipes-recipe>
 </krecipes>

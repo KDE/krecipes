@@ -1689,6 +1689,23 @@ float QSqlRecipeDB::databaseVersion( void )
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
 }
 
+void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset )
+{
+	list->clear();
+
+	QString command = "SELECT id,name FROM rating_criteria ORDER BY name"
+	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
+	QSqlQuery toLoad( command, database );
+	if ( toLoad.isActive() ) {
+		while ( toLoad.next() ) {
+			Element el;
+			el.id = toLoad.value( 0 ).toInt();
+			el.name = unescapeAndDecode( toLoad.value( 1 ).toString() );
+			list->append( el );
+		}
+	}
+}
+
 void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 {
 	list->clear();

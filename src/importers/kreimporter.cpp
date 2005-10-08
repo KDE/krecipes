@@ -102,6 +102,9 @@ void KreImporter::parseFile( const QString &filename )
 					if ( el.tagName() == "krecipes-instructions" ) {
 						recipe.instructions = el.text().stripWhiteSpace();
 					}
+					if ( el.tagName() == "krecipes-ratings" ) {
+						readRatings( el.childNodes(), &recipe );
+					}
 				}
 				add
 					( recipe );
@@ -247,4 +250,53 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 	amount = min;
 	if ( max > 0 )
 		amount_offset = max-min;
+}
+
+void KreImporter::readRatings( const QDomNodeList& l, Recipe *recipe )
+{
+	for ( unsigned i = 0; i < l.count(); i++ ) {
+		QDomElement child = l.item( i ).toElement();
+		if ( child.tagName() == "rating" ) {
+			Rating r;
+
+			QDomNodeList ratingChildren = child.childNodes();
+			for ( unsigned j = 0; j < ratingChildren.count(); j++ ) {
+				QDomElement ratingChild = ratingChildren.item( j ).toElement();
+				if ( ratingChild.tagName() == "comment" ) {
+					r.comment = ratingChild.text();
+				}
+				else if ( ratingChild.tagName() == "rater" ) {
+					r.rater = ratingChild.text();
+				}
+				else if ( ratingChild.tagName() == "criterion" ) {
+					readCriterion(ratingChild.childNodes(),r.ratingCriteriaList);
+				}
+			}
+			recipe->ratingList.append(r);
+		}
+	}
+}
+
+void KreImporter::readCriterion( const QDomNodeList& l, RatingCriteriaList &rc_list )
+{
+	for ( unsigned i = 0; i < l.count(); i++ ) {
+		QDomElement child = l.item( i ).toElement();
+
+		if ( child.tagName() == "criteria" ) {
+			RatingCriteria rc;
+
+			QDomNodeList criteriaChildren = child.childNodes();
+			for ( unsigned j = 0; j < criteriaChildren.count(); j++ ) {
+				QDomElement criteriaChild = criteriaChildren.item( j ).toElement();
+		
+				if ( criteriaChild.tagName() == "name" ) {
+					rc.name = criteriaChild.text();
+				}
+				else if ( criteriaChild.tagName() == "stars" ) {
+					rc.stars = criteriaChild.text().toDouble();
+				}
+			}
+			rc_list.append(rc);
+		}
+	}
 }
