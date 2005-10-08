@@ -1618,8 +1618,7 @@ void RecipeInputDialog::slotAddRating()
 
 void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
 {
-	item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
-				KIcon::NoGroup, KIcon::SizeHuge));
+	item->icon->setPixmap( UserIcon(QString("rating%1").arg(qRound(rating.average()))) );
 	item->raterName->setText(rating.rater);
 	item->comment->setText(rating.comment);
 

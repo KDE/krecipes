@@ -31,6 +31,8 @@ class Rating
 public:
 	void append( const RatingCriteria & );
 
+	double average() const;
+
 	int id;
 	QString comment;
 	QString rater;
