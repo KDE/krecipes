@@ -12,7 +12,7 @@
 #define EDITRATINGDIALOG_H
 
 #include <qvariant.h>
-#include <qdialog.h>
+#include <kdialog.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -31,7 +31,7 @@ class RatingWidget;
 class Rating;
 class RatingCriteria;
 
-class EditRatingDialog : public QDialog
+class EditRatingDialog : public KDialog
 {
 Q_OBJECT
 	

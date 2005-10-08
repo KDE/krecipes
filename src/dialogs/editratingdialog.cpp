@@ -34,7 +34,7 @@
 
 #include "widgets/ratingwidget.h"
 
-EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const char* name ) : QDialog(parent,name)
+EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const char* name ) : KDialog(parent,name)
 {
 	if ( !name )
 		setName( "EditRatingDialog" );
@@ -48,7 +48,7 @@ EditRatingDialog::EditRatingDialog( const Rating &rating, QWidget* parent, const
  *  name 'name' and widget flags set to 'f'.
  */
 EditRatingDialog::EditRatingDialog( QWidget* parent, const char* name )
-    : QDialog( parent, name )
+    : KDialog( parent, name )
 {
 	if ( !name )
 		setName( "EditRatingDialog" );
@@ -145,7 +145,7 @@ EditRatingDialog::~EditRatingDialog()
  */
 void EditRatingDialog::languageChange()
 {
-	setCaption( i18n( "EditRatingDialog" ) );
+	setCaption( i18n( "Rating" ) );
 	criteriaLabel->setText( i18n( "Criteria:" ) );
 	starsLabel->setText( i18n( "Stars:" ) );
 	addButton->setText( i18n( "Add" ) );
