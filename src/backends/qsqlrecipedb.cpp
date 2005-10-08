@@ -653,33 +653,50 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		--author_it;
 	}
 
-	// Save the ratings (first delete if we are updating)
+	// Save the ratings (first delete criterion list if we are updating)
 	command = QString( "SELECT id FROM rating WHERE recipe_id=%1" ).arg(recipeID);
 	recipeToSave.exec( command );
 	if ( recipeToSave.isActive() ) {
 		while ( recipeToSave.next() ) {
+			
 			command = QString("DELETE FROM rating_criterion_list WHERE rating_id=%1")
 			  .arg(recipeToSave.value(0).toInt());
 			database->exec(command);
 		}
 	}
-	command = QString( "DELETE FROM rating WHERE recipe_id=%1" )
-	          .arg( recipeID );
-	recipeToSave.exec( command );
 
-	for ( RatingList::const_iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
-		command = QString( "INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+(*rating_it).comment+"','"+(*rating_it).rater+"','"+current_timestamp+"')" );
+	QStringList ids;
+
+	for ( RatingList::iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
+		if ( (*rating_it).id == -1 ) //new rating
+			command ="INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+"','"+current_timestamp+"')";
+		else //existing rating
+			command = "UPDATE rating SET "
+			  "comment='"+QString(escapeAndEncode((*rating_it).comment))+"',"
+			  "rater='"+QString(escapeAndEncode((*rating_it).rater))+"',"+
+			  "created=created "
+			  "WHERE id="+QString::number((*rating_it).id);
+
 kdDebug()<<"calling: "<<command<<endl;
+
 		recipeToSave.exec( command );
-		int rating_id = lastInsertID();
+		
+		if ( (*rating_it).id == -1 )
+			(*rating_it).id = lastInsertID();
 		
 		for ( QValueList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number(rating_id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
+			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
 kdDebug()<<"calling: "<<command<<endl;
 			recipeToSave.exec( command );
 		}
+
+		ids << QString::number((*rating_it).id);
 	}
-	
+
+	// only delete those ratings that don't exist anymore
+	command = QString( "DELETE FROM rating WHERE recipe_id=%1 AND id NOT IN( %2 )" )
+	          .arg( recipeID ).arg( ids.join(",") );
+	recipeToSave.exec( command );
 
 	if ( newRecipe )
 		emit recipeCreated( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );

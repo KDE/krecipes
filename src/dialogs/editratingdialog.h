@@ -73,6 +73,8 @@ private:
 
 	void loadRating( const Rating & );
 	void addRatingCriteria( const RatingCriteria &rc );
+
+	int ratingID;
 };
 
 #endif // EDITRATINGDIALOG_H

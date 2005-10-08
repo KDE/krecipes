@@ -29,6 +29,7 @@ typedef QValueList< RatingCriteria > RatingCriteriaList;
 class Rating
 {
 public:
+	Rating() : id(-1){}
 	void append( const RatingCriteria & );
 
 	double average() const;

@@ -136,6 +136,8 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 		criteriaComboBox->insertItem( ( *criteria_it ).name );
 		//criteriaComboBox->completionObject()->addItem( ( *criteria_it ).name );
 	}
+
+	ratingID = -1;
 }
 
 /*
@@ -180,6 +182,8 @@ Rating EditRatingDialog::rating() const
 	r.comment = commentsEdit->text();
 	r.rater = raterEdit->text();
 
+	r.id = ratingID;
+
 	return r;
 }
 
@@ -191,6 +195,8 @@ void EditRatingDialog::loadRating( const Rating &rating )
 
 	raterEdit->setText(rating.rater);
 	commentsEdit->setText(rating.comment);
+
+	ratingID = rating.id;
 }
 
 void EditRatingDialog::slotAddRatingCriteria()
