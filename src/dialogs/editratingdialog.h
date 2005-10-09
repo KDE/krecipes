@@ -47,6 +47,7 @@ public:
 	QLabel* starsLabel;
 	RatingWidget *starsWidget;
 	QPushButton* addButton;
+	QPushButton* removeButton;
 	RatingCriteriaListView* criteriaListView;
 	QLabel* commentsLabel;
 	QTextEdit* commentsEdit;

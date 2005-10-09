@@ -44,10 +44,10 @@ public:
 
 	void rename( QListViewItem *it, int c )
 	{
-		if ( c == 1 ) {
+		if ( c == 1 )
 			it->setPixmap(c,QPixmap());
-			KListView::rename(it,c);
-		}
+
+		KListView::rename(it,c);
 	}
 };
 
@@ -103,6 +103,10 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	
 	addButton = new QPushButton( this, "addButton" );
 	layout8->addWidget( addButton );
+
+	removeButton = new QPushButton( this, "removeButton" );
+	layout8->addWidget( removeButton );
+
 	EditRatingDialogLayout->addLayout( layout8 );
 	
 	criteriaListView = new RatingCriteriaListView( this, "criteriaListView" );
@@ -111,7 +115,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
 	criteriaListView->setSorting(-1);
 	criteriaListView->setItemsRenameable( true );
-	criteriaListView->setRenameable( 0, false );
+	criteriaListView->setRenameable( 0, true );
 	criteriaListView->setRenameable( 1, true );
 	EditRatingDialogLayout->addWidget( criteriaListView );
 	
@@ -146,6 +150,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	connect( criteriaListView, SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), this, SLOT(itemRenamed(QListViewItem*,const QString &,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
+	connect( removeButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
 	connect( okButton, SIGNAL(clicked()), this, SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
@@ -179,6 +184,7 @@ void EditRatingDialog::languageChange()
 	criteriaLabel->setText( i18n( "Criteria:" ) );
 	starsLabel->setText( i18n( "Stars:" ) );
 	addButton->setText( i18n( "Add" ) );
+	removeButton->setText( i18n( "&Delete" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
 	commentsLabel->setText( i18n( "Comments:" ) );
