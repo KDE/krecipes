@@ -78,6 +78,15 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 {
 	EditRatingDialogLayout = new QVBoxLayout( this, 11, 6, "EditRatingDialogLayout"); 
 	
+	layout2 = new QHBoxLayout( 0, 0, 6, "layout2"); 
+	
+	raterLabel = new QLabel( this, "raterLabel" );
+	layout2->addWidget( raterLabel );
+	
+	raterEdit = new QLineEdit( this, "raterEdit" );
+	layout2->addWidget( raterEdit );
+	EditRatingDialogLayout->addLayout( layout2 );
+	
 	layout8 = new QHBoxLayout( 0, 0, 6, "layout8"); 
 	
 	criteriaLabel = new QLabel( this, "criteriaLabel" );
@@ -124,15 +133,6 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	
 	commentsEdit = new QTextEdit( this, "commentsEdit" );
 	EditRatingDialogLayout->addWidget( commentsEdit );
-	
-	layout2 = new QHBoxLayout( 0, 0, 6, "layout2"); 
-	
-	raterLabel = new QLabel( this, "raterLabel" );
-	layout2->addWidget( raterLabel );
-	
-	raterEdit = new QLineEdit( this, "raterEdit" );
-	layout2->addWidget( raterEdit );
-	EditRatingDialogLayout->addLayout( layout2 );
 	
 	layout7 = new QHBoxLayout( 0, 0, 6, "layout7"); 
 	
