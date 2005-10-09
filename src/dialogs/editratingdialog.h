@@ -67,12 +67,15 @@ protected slots:
 	virtual void languageChange();
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
+	void itemRenamed(QListViewItem* it, const QString &, int c);
 
 private:
 	void init(const ElementList &criteriaList);
 
 	void loadRating( const Rating & );
 	void addRatingCriteria( const RatingCriteria &rc );
+
+	QPixmap starsPixmap( double stars );
 
 	int ratingID;
 };

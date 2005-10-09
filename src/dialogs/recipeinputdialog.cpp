@@ -661,6 +661,7 @@ void RecipeInputDialog::reload( void )
 		addRating(*rating_it,item);
 		ratingListDisplayWidget->insertItem(item);
 	}
+	ratingListDisplayWidget->ensureCellVisible(0,0);
 }
 
 void RecipeInputDialog::loadUnitListCombo( void )

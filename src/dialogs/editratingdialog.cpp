@@ -29,9 +29,11 @@
 #include <kpopupmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
+#include "datablocks/mixednumber.h"
 
 #include "widgets/ratingwidget.h"
 
@@ -93,6 +95,9 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
 	criteriaListView->setSorting(-1);
+	criteriaListView->setItemsRenameable( true );
+	criteriaListView->setRenameable( 0, false );
+	criteriaListView->setRenameable( 1, true );
 	EditRatingDialogLayout->addWidget( criteriaListView );
 	
 	commentsLabel = new QLabel( this, "commentsLabel" );
@@ -124,6 +129,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	resize( QSize(358, 331).expandedTo(minimumSizeHint()) );
 	clearWState( WState_Polished );
 
+	connect( criteriaListView, SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), this, SLOT(itemRenamed(QListViewItem*,const QString &,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( okButton, SIGNAL(clicked()), this, SLOT(accept()) );
 	connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -166,6 +172,21 @@ void EditRatingDialog::languageChange()
 	okButton->setAccel( QKeySequence( i18n( "Alt+O" ) ) );
 	cancelButton->setText( i18n( "&Cancel" ) );
 	cancelButton->setAccel( QKeySequence( i18n( "Alt+C" ) ) );
+}
+
+void EditRatingDialog::itemRenamed(QListViewItem* it, const QString &, int c)
+{
+	if ( c == 1 ) {
+		bool ok = false;
+		MixedNumber stars_mn = MixedNumber::fromString(it->text(c),&ok);
+		if ( ok ) {
+			double stars = QMAX(0,QMIN(stars_mn.toDouble(),5)); //force to between 0 and 5
+			QPixmap starsPic = starsPixmap( stars );
+			it->setPixmap(c,starsPic);
+			it->setText(2,QString::number(stars));
+		}
+		it->setText(c,QString::null);
+	}
 }
 
 Rating EditRatingDialog::rating() const
@@ -217,7 +238,21 @@ void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 {
 	QListViewItem * it = new QListViewItem(criteriaListView,rc.name);
 
-	int stars = rc.stars * 2; //multiply by two to make it easier to work with half-stars
+	QPixmap stars = starsPixmap(rc.stars);
+	if ( !stars.isNull() ) //there aren't zero stars
+		it->setPixmap(1,stars);
+
+	it->setText(2,QString::number(rc.stars));
+}
+
+void EditRatingDialog::slotRemoveRatingCriteria()
+{
+	delete criteriaListView->selectedItem();
+}
+
+QPixmap EditRatingDialog::starsPixmap( double stars_d )
+{
+	int stars = qRound(stars_d * 2); //multiply by two to make it easier to work with half-stars
 
 	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
 	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
@@ -231,15 +266,9 @@ void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 		for ( ; i < stars; i+= 2 ) {
 			painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
 		}
-		it->setPixmap(1,generatedPixmap);
 	}
 
-	it->setText(2,QString::number(rc.stars));
-}
-
-void EditRatingDialog::slotRemoveRatingCriteria()
-{
-	delete criteriaListView->selectedItem();
+	return generatedPixmap;
 }
 
 #include "editratingdialog.moc"
