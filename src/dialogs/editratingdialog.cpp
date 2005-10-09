@@ -37,6 +37,21 @@
 
 #include "widgets/ratingwidget.h"
 
+class RatingCriteriaListView : public KListView
+{
+public:
+	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : KListView(parent,name){}
+
+	void rename( QListViewItem *it, int c )
+	{
+		if ( c == 1 ) {
+			it->setPixmap(c,QPixmap());
+			KListView::rename(it,c);
+		}
+	}
+};
+
+
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name ) : KDialog(parent,name)
 {
 	if ( !name )
@@ -90,7 +105,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	layout8->addWidget( addButton );
 	EditRatingDialogLayout->addLayout( layout8 );
 	
-	criteriaListView = new KListView( this, "criteriaListView" );
+	criteriaListView = new RatingCriteriaListView( this, "criteriaListView" );
 	criteriaListView->addColumn( i18n( "Criteria" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
@@ -179,12 +194,18 @@ void EditRatingDialog::itemRenamed(QListViewItem* it, const QString &, int c)
 	if ( c == 1 ) {
 		bool ok = false;
 		MixedNumber stars_mn = MixedNumber::fromString(it->text(c),&ok);
-		if ( ok ) {
+		if ( ok && !it->text(c).isEmpty() ) {
 			double stars = QMAX(0,QMIN(stars_mn.toDouble(),5)); //force to between 0 and 5
 			QPixmap starsPic = starsPixmap( stars );
 			it->setPixmap(c,starsPic);
 			it->setText(2,QString::number(stars));
 		}
+		else {
+			double stars = it->text(2).toDouble(); //col 2 holds the old value, which we'll set it back to
+			QPixmap starsPic = starsPixmap( stars );
+			it->setPixmap(c,starsPic);
+		}
+
 		it->setText(c,QString::null);
 	}
 }

@@ -31,6 +31,7 @@ class RatingWidget;
 class Rating;
 class RatingCriteria;
 class ElementList;
+class RatingCriteriaListView;
 
 class EditRatingDialog : public KDialog
 {
@@ -46,7 +47,7 @@ public:
 	QLabel* starsLabel;
 	RatingWidget *starsWidget;
 	QPushButton* addButton;
-	KListView* criteriaListView;
+	RatingCriteriaListView* criteriaListView;
 	QLabel* commentsLabel;
 	QTextEdit* commentsEdit;
 	QLabel* raterLabel;
