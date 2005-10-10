@@ -459,7 +459,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "<ul>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			ratings_html +=  "<li>"+(*rc_it).name+": "+QString(i18n("%1 star","%1 stars",(*rc_it).stars)).arg((*rc_it).stars)+"</li>";
+			ratings_html +=  "<li>"+(*rc_it).name+": "+i18n("%n star","%n stars",(*rc_it).stars)+"</li>";
 		}
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "</ul>";
