@@ -443,6 +443,29 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	}
 	html_map.insert( "properties", properties_html );
 
+	//=======================RATINGS======================//
+	QString ratings_html;
+	if ( recipe.ratingList.count() > 0 )
+		ratings_html += QString("<b>%1:</b>").arg("Ratings");
+
+	for ( RatingList::const_iterator rating_it = recipe.ratingList.begin(); rating_it != recipe.ratingList.end(); ++rating_it ) {
+		ratings_html += "<hr />";
+
+		if ( !( *rating_it ).rater.isEmpty() )
+			ratings_html += "<b>"+( *rating_it ).rater+"</b><br />";
+		if ( !( *rating_it ).comment.isEmpty() )
+			ratings_html += "<i>"+( *rating_it ).comment+"</i><br />";
+
+		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+			ratings_html += "<ul>";
+		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			ratings_html +=  "<li>"+(*rc_it).name+": "+QString(i18n("%1 star","%1 stars",(*rc_it).stars)).arg((*rc_it).stars)+"</li>";
+		}
+		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+			ratings_html += "</ul>";
+	}
+	html_map.insert( "ratings", ratings_html );
+
 	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
 
 	return html_map;

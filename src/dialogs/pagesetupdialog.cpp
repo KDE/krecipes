@@ -118,8 +118,8 @@ void PageSetupDialog::accept()
 {
 	if ( setup_display->hasChanges() )
 		saveLayout(setup_display);
-	if ( print_setup_display->hasChanges() )
-		saveLayout(print_setup_display);
+	//if ( print_setup_display->hasChanges() )
+	//	saveLayout(print_setup_display);
 
 	if ( !active_filename_map[setup_display].isEmpty() ) {
 		KConfig * config = kapp->config();
@@ -127,11 +127,13 @@ void PageSetupDialog::accept()
 		config->writeEntry( "Layout", active_filename_map[setup_display] );
 	}
 
+	#if 0
 	if ( !active_filename_map[print_setup_display].isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
 		config->writeEntry( "PrintLayout", active_filename_map[print_setup_display] );
 	}
+	#endif
 
 	KConfig *config = kapp->config();
 	config->setGroup( "Page Setup" );
@@ -155,6 +157,7 @@ void PageSetupDialog::reject()
 		}
 	}
 
+	#if 0
 	if ( print_setup_display->hasChanges() ) {
 		switch ( KMessageBox::questionYesNoCancel( this, i18n( "The print layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
@@ -166,6 +169,7 @@ void PageSetupDialog::reject()
 			return ;
 		}
 	}
+	#endif
 
 	QDialog::reject();
 }

@@ -139,7 +139,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE rating (id SERIAL NOT NULL PRIMARY KEY, recipe_id int(11) NOT NULL, comment CHARACTER VARYING, rater CHARACTER VARYING, created TIMESTAMP);";
 
 	else if ( tableName == "rating_criterion" )
-		commands << "CREATE TABLE rating_criterion (id SERIAL NOT NUL PRIMARY KEYL, name CHARACTER VARYING);";
+		commands << "CREATE TABLE rating_criterion (id SERIAL NOT NUL PRIMARY KEY, name CHARACTER VARYING);";
 
 	else if ( tableName == "rating_criterion_list" )
 		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criteria_id INTEGER, stars FLOAT);";

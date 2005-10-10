@@ -590,6 +590,20 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 		}
 	}
 
+#if 0
+	if ( p.averageRating >= 0 ) {
+		tableList<<"rating";
+		conditionList << "rating.recipe_id=r.id";
+
+		if ( p.averageRatingOffset > 0 ) {
+			conditionList << "rating.average >= '"+QString::number(p.averageRating)+"'";
+			conditionList << "rating.average <= '"+QString::number(p.averageRating+p.averageRatingOffset)+"'";
+		}
+		else
+			conditionList << "rating.average = '"+QString::number(p.averageRating)+"'";
+	}
+#endif
+
 	QString wholeQuery = "SELECT r.id FROM recipes r"
 		+QString(tableList.count()!=0?","+tableList.join(","):"")
 		+QString(conditionList.count()!=0?" WHERE "+conditionList.join(" AND "):"");

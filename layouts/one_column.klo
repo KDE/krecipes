@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE krecipes-layout>
 <krecipes-layout version="0.3" >
- <header>
-  <background-color>#4a76ee</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <geometry width="99.5017" height="2.99003" left="0.498339" top="0" />
-  <alignment>0</alignment>
-  <border width="1" style="none" color="#000000" />
- </header>
- <instructions>
+ <background>
+  <background-color>#ffffff</background-color>
+ </background>
+ <ratings>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <overflow>1</overflow>
   <visible>true</visible>
-  <geometry width="99.5017" height="15.2824" left="0.498339" top="65.4485" />
-  <alignment>0</alignment>
-  <border width="1" style="none" color="#1f8859" />
- </instructions>
- <properties>
-  <background-color>#1e9eb8</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans L,12,-1,5,50,1,0,0,0,0</font>
-  <visible>true</visible>
-  <geometry width="99.5017" height="16.2791" left="0.498339" top="81.0631" />
-  <alignment>0</alignment>
+  <geometry width="98.6667" height="16.3333" left="0.666667" top="81.3333" />
+  <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
- </properties>
+ </ratings>
  <title>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans L,26,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
-  <geometry width="99.5017" height="6.64452" left="0.498339" top="3.32226" />
+  <geometry width="99.6667" height="6.66667" left="0.333333" top="3.33333" />
   <alignment>4</alignment>
   <border width="1" style="none" color="#7f265c" />
  </title>
@@ -42,19 +28,69 @@
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
-  <geometry width="99.5017" height="4.98339" left="0.498339" top="44.6844" />
+  <geometry width="99.6667" height="5" left="0.333333" top="44.6667" />
   <alignment>0</alignment>
   <border width="1" style="none" color="#000000" />
  </servings>
- <background>
+ <properties>
+  <background-color>#1e9eb8</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,1,0,0,0,0</font>
+  <overflow>1</overflow>
+  <visible>true</visible>
+  <geometry width="99.6667" height="15.6667" left="0.333333" top="98.3333" />
+  <alignment>0</alignment>
+  <border width="1" style="none" color="#000000" />
+ </properties>
+ <instructions>
   <background-color>#ffffff</background-color>
- </background>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <overflow>1</overflow>
+  <visible>true</visible>
+  <geometry width="99.6667" height="15.3333" left="0.333333" top="65.3333" />
+  <alignment>0</alignment>
+  <border width="1" style="none" color="#1f8859" />
+ </instructions>
+ <prep_time>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="99.6667" height="4.66667" left="0.333333" top="50" />
+  <alignment>0</alignment>
+  <border width="1" style="none" color="#000000" />
+ </prep_time>
+ <header>
+  <background-color>#4a76ee</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <geometry width="99.6667" height="3" left="0.333333" top="0" />
+  <alignment>0</alignment>
+  <border width="1" style="none" color="#000000" />
+ </header>
+ <ingredients>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <overflow>1</overflow>
+  <visible>true</visible>
+  <geometry width="99.6667" height="9.33333" left="0.333333" top="55.3333" />
+  <alignment>0</alignment>
+  <border width="1" style="none" color="#58268e" />
+ </ingredients>
+ <photo>
+  <visible>true</visible>
+  <geometry width="32.3333" height="24" left="33.3333" top="10" />
+ </photo>
  <categories>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <overflow>1</overflow>
   <visible>true</visible>
-  <geometry width="99.5017" height="4.65116" left="0.498339" top="34.7176" />
+  <geometry width="99.6667" height="4.66667" left="0.333333" top="34.6667" />
   <alignment>0</alignment>
   <border width="1" style="none" color="#1bc8b7" />
  </categories>
@@ -62,31 +98,10 @@
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <overflow>1</overflow>
   <visible>true</visible>
-  <geometry width="99.5017" height="4.65116" left="0.498339" top="39.701" />
+  <geometry width="99.6667" height="4.66667" left="0.333333" top="39.6667" />
   <alignment>0</alignment>
   <border width="1" style="none" color="#000000" />
  </authors>
- <ingredients>
-  <background-color>#ffffff</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <geometry width="99.5017" height="9.30233" left="0.498339" top="55.4817" />
-  <alignment>0</alignment>
-  <border width="1" style="none" color="#58268e" />
- </ingredients>
- <prep_time>
-  <background-color>#ffffff</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <geometry width="99.5017" height="4.65116" left="0.498339" top="50.1661" />
-  <alignment>0</alignment>
-  <border width="1" style="none" color="#000000" />
- </prep_time>
- <photo>
-  <visible>true</visible>
-  <geometry width="32.2259" height="24.0864" left="33.2226" top="9.96678" />
- </photo>
 </krecipes-layout>

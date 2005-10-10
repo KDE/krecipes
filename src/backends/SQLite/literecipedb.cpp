@@ -53,7 +53,7 @@ int LiteRecipeDB::lastInsertID()
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
-	kdDebug()<<"lastInsertID(): "<<lastID<<endl;
+	//kdDebug()<<"lastInsertID(): "<<lastID<<endl;
 
 	return lastID;
 }

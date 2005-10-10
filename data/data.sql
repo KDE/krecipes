@@ -132,4 +132,7 @@ INSERT INTO units_conversion VALUES(24,20,0.0312506);
 INSERT INTO units_conversion VALUES(21,24,127.998);
 INSERT INTO units_conversion VALUES(24,21,0.00781262);
 INSERT INTO units_conversion VALUES(19,24,0.166655);
-INSERT INTO units_conversion VALUES(24,19,6.00042)
+INSERT INTO units_conversion VALUES(24,19,6.00042);
+INSERT INTO rating_criterion VALUES (1,'Overall');
+INSERT INTO rating_criterion VALUES (2,'Taste');
+INSERT INTO rating_criterion VALUES (3,'Looks');

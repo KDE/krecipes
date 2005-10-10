@@ -668,12 +668,14 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	QStringList ids;
 
 	for ( RatingList::iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
+		//double average = (*rating_it).average();
 		if ( (*rating_it).id == -1 ) //new rating
-			command ="INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+"','"+current_timestamp+"')";
+			command ="INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
 		else //existing rating
 			command = "UPDATE rating SET "
 			  "comment='"+QString(escapeAndEncode((*rating_it).comment))+"',"
-			  "rater='"+QString(escapeAndEncode((*rating_it).rater))+"',"+
+			  "rater='"+QString(escapeAndEncode((*rating_it).rater))+"',"
+			  /*"average='"+QString::number(average)+"',"*/
 			  "created=created "
 			  "WHERE id="+QString::number((*rating_it).id);
 

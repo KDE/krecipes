@@ -148,7 +148,7 @@ QSqlRecord KreSQLiteResult::record()
 
 int KreSQLiteResult::size()
 {
-kdDebug()<<"size: "<<result.size()<<endl;
+//kdDebug()<<"size: "<<result.size()<<endl;
 	return result.size();
 }
 

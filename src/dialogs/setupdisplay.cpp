@@ -472,6 +472,14 @@ void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
 		( properties_box, i18n( "Properties" ) );
 
 	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
+
+	//========================RATINGS========================//
+	QLabel *ratings_box = new QLabel( QString("%1:<br /><hr /><b>Jason Kivlighn</b><ul><li>Taste: 5 stars</li><li>Look: 4 stars</li><li>...</li></ul><i>Some type of comment here</i>").arg(i18n("Ratings")), canvas, "ratings" );
+	ratings_box->setFrameShape( QFrame::Box );
+	QToolTip::add
+		( ratings_box, i18n( "Ratings" ) );
+
+	createItem( ratings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
