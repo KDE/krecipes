@@ -153,7 +153,6 @@ void check( const RatingList &rating, const RatingList &base )
 	RatingList::const_iterator rating_it = rating.begin();
 	RatingList::const_iterator base_rating_it = base.begin();
 	for ( ; rating_it != rating.end() || base_rating_it != base.end(); ++rating_it, ++base_rating_it ) {
-printf("here\n");
 		check("checking rater",(*rating_it).rater,(*base_rating_it).rater);
 		check("checking comment",(*rating_it).comment,(*base_rating_it).comment);
 
@@ -163,7 +162,9 @@ printf("here\n");
 			check("checking criteria name",(*rc_it).name,(*base_rc_it).name);
 			check("checking stars",(*rc_it).stars,(*base_rc_it).stars);
 		}
+		check( "criteria count", int((*rating_it).ratingCriteriaList.count()), int((*base_rating_it).ratingCriteriaList.count()) );
 	}
+	check( "rating count", int(rating.count()), int(base.count()) );
 }
 
 #endif

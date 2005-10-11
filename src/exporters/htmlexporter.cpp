@@ -453,8 +453,6 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 
 		if ( !( *rating_it ).rater.isEmpty() )
 			ratings_html += "<b>"+( *rating_it ).rater+"</b><br />";
-		if ( !( *rating_it ).comment.isEmpty() )
-			ratings_html += "<i>"+( *rating_it ).comment+"</i><br />";
 
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "<ul>";
@@ -463,6 +461,9 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		}
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "</ul>";
+
+		if ( !( *rating_it ).comment.isEmpty() )
+			ratings_html += "<i>"+( *rating_it ).comment+"</i>";
 	}
 	html_map.insert( "ratings", ratings_html );
 
