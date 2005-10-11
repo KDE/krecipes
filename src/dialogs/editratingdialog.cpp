@@ -288,11 +288,7 @@ QPixmap EditRatingDialog::starsPixmap( double stars_d )
 	if ( !generatedPixmap.isNull() ) { //there aren't zero stars
 		generatedPixmap.fill();
 		QPainter painter( &generatedPixmap );
-	
-		int i = 0;
-		for ( ; i < stars; i+= 2 ) {
-			painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
-		}
+		painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
 	}
 
 	return generatedPixmap;

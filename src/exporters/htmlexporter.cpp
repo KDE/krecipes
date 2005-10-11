@@ -18,6 +18,7 @@
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
 #include <dom/dom_element.h>
+#include <qpainter.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -28,6 +29,7 @@
 #include <kprogress.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kiconloader.h>
 
 #include "propertycalculator.h"
 #include "datablocks/mixednumber.h"
@@ -301,6 +303,24 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	return height_taken;
 }
 
+QPixmap starsPixmap( double stars_d )
+{
+	int stars = qRound(stars_d * 2); //multiply by two to make it easier to work with half-stars
+
+	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
+	QPixmap star_off = UserIcon(QString::fromLatin1("star_off"));
+
+	QPixmap generatedPixmap(18*5,18);
+	generatedPixmap.fill();
+	QPainter painter( &generatedPixmap );
+
+	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
+	painter.drawTiledPixmap(0,0,18*5,18,star_off); //fill with empty stars
+	painter.drawTiledPixmap(0,0,pixmapWidth,18,star); //write over the empty stars to show the rating
+
+	return generatedPixmap;
+}
+
 QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 {
 	KConfig * config = KGlobal::config();
@@ -452,18 +472,25 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		ratings_html += "<hr />";
 
 		if ( !( *rating_it ).rater.isEmpty() )
-			ratings_html += "<b>"+( *rating_it ).rater+"</b><br />";
+			ratings_html += "<p><b>"+( *rating_it ).rater+"</b></p>";
 
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
-			ratings_html += "<ul>";
+			ratings_html += "<table>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			ratings_html +=  "<li>"+(*rc_it).name+": "+i18n("%n star","%n stars",(*rc_it).stars)+"</li>";
+			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
+			image_url = KURL::encode_string( image_url );
+			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
+			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+				QPixmap starPixmap = starsPixmap((*rc_it).stars);
+				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+			}
+			
 		}
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
-			ratings_html += "</ul>";
+			ratings_html += "</table>";
 
 		if ( !( *rating_it ).comment.isEmpty() )
-			ratings_html += "<i>"+( *rating_it ).comment+"</i>";
+			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
 	html_map.insert( "ratings", ratings_html );
 
@@ -646,6 +673,10 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	//remove photo directory
 	QDir photo_dir;
 	photo_dir.rmdir( filename + "_photos" );
+
+	for ( double d = 0.5; d < 5.5; d += 0.5 ) {
+		if ( QFile::exists(filename+"_photos/"+QString::number(d)+"-stars.png") ) photo.remove(filename+"_photos/"+QString::number(d)+"-stars.png");
+	}
 }
 
 QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute )

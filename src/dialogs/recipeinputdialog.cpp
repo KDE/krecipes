@@ -1644,11 +1644,7 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 		if ( !generatedPixmap.isNull() ) { //there aren't zero stars
 			generatedPixmap.fill();
 			QPainter painter( &generatedPixmap );
-		
-			int i = 0;
-			for ( ; i < stars; i+= 2 ) {
-				painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
-			}
+			painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
 			it->setPixmap(1,generatedPixmap);
 		}
 	}
