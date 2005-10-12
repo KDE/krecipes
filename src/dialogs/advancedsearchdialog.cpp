@@ -583,6 +583,13 @@ void AdvancedSearchDialog::clear()
 
 	requireAllTitle->setChecked(false);
 	requireAllInstructions->setChecked(false);
+
+	ratingAvgRadioButton->setChecked(true);
+	activateRatingOption(0);
+	avgStarsEdit->clear();
+	criteriaListView->clear();
+	criteriaComboBox->lineEdit()->clear();
+	starsWidget->clear();
 }
 
 void AdvancedSearchDialog::activateRatingOption( int button_id )
@@ -618,13 +625,15 @@ void AdvancedSearchDialog::search()
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	//we need to load more than just the title because we'll be doing further refining of the search
-	int load_items = RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Noatime | RecipeDB::Ratings;
+	int load_items = RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Noatime;
 	if ( !authorsAllEdit->text().isEmpty() || !authorsWithoutEdit->text().isEmpty() )
 		load_items |= RecipeDB::Authors;
 	if ( !ingredientsAllEdit->text().isEmpty() || !ingredientsWithoutEdit->text().isEmpty() )
 		load_items |= RecipeDB::Ingredients;
 	if ( !categoriesAllEdit->text().isEmpty() || !categoriesNotEdit->text().isEmpty() )
 		load_items |= RecipeDB::Categories;
+	if ( ratingAvgRadioButton->isChecked() && !avgStarsEdit->isEmpty() )
+		load_items |= RecipeDB::Ratings;
 
 	RecipeSearchParameters parameters;
 
@@ -730,7 +739,7 @@ void AdvancedSearchDialog::search()
 		}
 	}
 
-	if ( ratingAvgRadioButton->isChecked() ) {
+	if ( ratingAvgRadioButton->isChecked() && !avgStarsEdit->isEmpty() ) {
 		for ( RecipeList::iterator recipe_it = allRecipes.begin(); recipe_it != allRecipes.end(); ++recipe_it ) {
 			double sum = 0;
 			int count = 0;

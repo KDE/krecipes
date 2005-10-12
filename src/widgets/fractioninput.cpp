@@ -108,4 +108,9 @@ void FractionInput::validate()
 		setPaletteForegroundColor( Qt::red );
 }
 
+bool FractionInput::isEmpty() const
+{
+	return text().isEmpty();
+}
+
 #include "fractioninput.moc"
