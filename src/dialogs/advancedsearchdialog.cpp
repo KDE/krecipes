@@ -30,6 +30,8 @@
 #include <qlineedit.h>
 #include <qscrollview.h>
 #include <qhbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -45,6 +47,8 @@
 #include "recipeactionshandler.h"
 #include "widgets/recipelistview.h"
 #include "widgets/kdateedit.h"
+#include "widgets/ratingwidget.h"
+#include "widgets/fractioninput.h"
 
 #include "profiling.h"
 
@@ -341,8 +345,77 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrameLayout->addWidget( accessedHBox );
 
 	parametersFrameLayout->addWidget( metaDataFrame );
-	metaDataFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	metaDataFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
 	parametersFrameLayout->addItem( metaDataFrameSpacer );
+
+	//=============RATINGS FRAME===========//
+	ratingsButton = new QPushButton( parametersFrame, "ratingsButton" );
+	ratingsButton->setToggleButton( TRUE );
+	parametersFrameLayout->addWidget( ratingsButton );
+
+	ratingButtonGroup = new QButtonGroup( parametersFrame, "ratingButtonGroup" );
+	ratingButtonGroup->setLineWidth( 0 );
+	ratingButtonGroup->setColumnLayout(0, Qt::Vertical );
+	ratingButtonGroup->layout()->setSpacing( 5 );
+	ratingButtonGroup->layout()->setMargin( 3 );
+	ratingButtonGroupLayout = new QVBoxLayout( ratingButtonGroup->layout() );
+	ratingButtonGroupLayout->setAlignment( Qt::AlignTop );
+	
+	ratingAvgRadioButton = new QRadioButton( ratingButtonGroup, "ratingAvgRadioButton" );
+	ratingAvgRadioButton->setChecked( TRUE );
+	ratingButtonGroupLayout->addWidget( ratingAvgRadioButton );
+	
+	ratingAvgFrame = new QFrame( ratingButtonGroup, "ratingAvgFrame" );
+	ratingAvgFrame->setLineWidth( 0 );
+	ratingAvgFrameLayout = new QHBoxLayout( ratingAvgFrame, 2, 2, "ratingAvgFrameLayout"); 
+	
+	avgStarsEdit = new FractionInput( ratingAvgFrame, "avgStarsEdit" );
+	avgStarsEdit->setAllowRange(true);
+	ratingAvgFrameLayout->addWidget( avgStarsEdit );
+	
+	avgStarsLabel = new QLabel( ratingAvgFrame, "avgStarsLabel" );
+	ratingAvgFrameLayout->addWidget( avgStarsLabel );
+	ratingButtonGroupLayout->addWidget( ratingAvgFrame );
+	
+	criterionRadioButton = new QRadioButton( ratingButtonGroup, "criterionRadioButton" );
+	ratingButtonGroupLayout->addWidget( criterionRadioButton );
+	
+	criterionFrame = new QFrame( ratingButtonGroup, "criterionFrame" );
+	criterionFrame->setEnabled( FALSE );
+	criterionFrame->setLineWidth( 0 );
+	criterionFrameLayout = new QVBoxLayout( criterionFrame, 2, 2, "criterionFrameLayout"); 
+	
+	layout12 = new QHBoxLayout( 0, 0, 6, "layout12"); 
+	
+	criteriaComboBox = new QComboBox( FALSE, criterionFrame, "criteriaComboBox" );
+	criteriaComboBox->setEditable( TRUE );
+	layout12->addWidget( criteriaComboBox );
+	
+	starsWidget = new RatingWidget( 5, criterionFrame, "starsWidget" );
+	layout12->addWidget( starsWidget );
+	
+#if 0
+	addCriteriaButton = new QPushButton( criterionFrame, "addCriteriaButton" );
+	addCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, addCriteriaButton->sizePolicy().hasHeightForWidth() ) );
+	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
+	layout12->addWidget( addCriteriaButton );
+	
+	removeCriteriaButton = new QPushButton( criterionFrame, "removeCriteriaButton" );
+	removeCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, removeCriteriaButton->sizePolicy().hasHeightForWidth() ) );
+	removeCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
+	layout12->addWidget( removeCriteriaButton );
+#endif
+	criterionFrameLayout->addLayout( layout12 );
+	
+	criteriaListView = new KListView( criterionFrame, "criteriaListView" );
+	criteriaListView->addColumn( i18n( "Criteria" ) );
+	criteriaListView->addColumn( i18n( "Stars" ) );
+	criterionFrameLayout->addWidget( criteriaListView );
+	ratingButtonGroupLayout->addWidget( criterionFrame );
+
+	parametersFrameLayout->addWidget( ratingButtonGroup );
+	ratingsFrameSpacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	parametersFrameLayout->addItem( ratingsFrameSpacer );
 
 
 	scrollView1->addChild( parametersFrame );
@@ -404,6 +477,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( prepTimeButton, SIGNAL( toggled( bool ) ), prepTimeFrame, SLOT( setShown( bool ) ) );
 	connect( instructionsButton, SIGNAL( toggled( bool ) ), instructionsFrame, SLOT( setShown( bool ) ) );
 	connect( metaDataButton, SIGNAL( toggled( bool ) ), metaDataFrame, SLOT( setShown( bool ) ) );
+	connect( ratingsButton, SIGNAL( toggled( bool ) ), ratingButtonGroup, SLOT( setShown( bool ) ) );
 
 	connect( titleButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( ingredientButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
@@ -413,6 +487,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( prepTimeButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( instructionsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
+	connect( ratingsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
+
+	connect( ratingButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( activateRatingOption( int ) ) );
 
 	titleFrame->setShown(false);
 	ingredientFrame->setShown(false);
@@ -422,6 +499,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeFrame->setShown(false);
 	instructionsFrame->setShown(false);
 	metaDataFrame->setShown(false);
+	ratingButtonGroup->setShown(false);
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
@@ -464,6 +542,15 @@ void AdvancedSearchDialog::languageChange()
 	clearButton->setText( i18n( "C&lear" ) );
 	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
 	findButton->setText( i18n( "&Search" ) );
+	ratingAvgRadioButton->setText( i18n( "By average:" ) );
+	avgStarsLabel->setText( i18n( "stars" ) );
+	criterionRadioButton->setText( i18n( "By criterion:" ) );
+	starsWidget->setText( i18n( "stars here" ) );
+	//addCriteriaButton->setText( i18n( "+" ) );
+	//removeCriteriaButton->setText( i18n( "-" ) );
+	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
+	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
+	ratingsButton->setText( QString("%1 >>").arg(i18n("Ratings")) );
 }
 
 void AdvancedSearchDialog::clear()
@@ -498,6 +585,22 @@ void AdvancedSearchDialog::clear()
 	requireAllInstructions->setChecked(false);
 }
 
+void AdvancedSearchDialog::activateRatingOption( int button_id )
+{
+	switch ( button_id ) {
+	case 0:
+		criterionFrame->setEnabled( false );
+		ratingAvgFrame->setEnabled( true );
+		break;
+	case 1:
+		criterionFrame->setEnabled( true );
+		ratingAvgFrame->setEnabled( false );
+		break;
+	default:
+		break;
+	}
+}
+
 void AdvancedSearchDialog::buttonSwitched()
 {
 	const QObject *sent = sender();
@@ -515,7 +618,7 @@ void AdvancedSearchDialog::search()
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	//we need to load more than just the title because we'll be doing further refining of the search
-	int load_items = RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Noatime;
+	int load_items = RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Noatime | RecipeDB::Ratings;
 	if ( !authorsAllEdit->text().isEmpty() || !authorsWithoutEdit->text().isEmpty() )
 		load_items |= RecipeDB::Authors;
 	if ( !ingredientsAllEdit->text().isEmpty() || !ingredientsWithoutEdit->text().isEmpty() )
@@ -623,6 +726,31 @@ void AdvancedSearchDialog::search()
 			if ( ( *it ).ingList.findByName( QRegExp(*ing_it,false,true) ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
+			}
+		}
+	}
+
+	if ( ratingAvgRadioButton->isChecked() ) {
+		for ( RecipeList::iterator recipe_it = allRecipes.begin(); recipe_it != allRecipes.end(); ++recipe_it ) {
+			double sum = 0;
+			int count = 0;
+	
+			for ( RatingList::iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
+				sum += (*rating_it).average();
+				++count;
+			}
+	
+			if ( count != 0 ) {
+				double average = sum/count;
+				kdDebug()<<"average for "<<(*recipe_it).title<<" "<<average<<endl;
+				if ( average < avgStarsEdit->minValue().toDouble() - 1e-8 || average > avgStarsEdit->maxValue().toDouble() + 1e-8 ) {
+					recipe_it = allRecipes.remove( recipe_it );
+					recipe_it--;
+				}
+			}
+			else {
+				recipe_it = allRecipes.remove( recipe_it );
+				recipe_it--;
 			}
 		}
 	}
