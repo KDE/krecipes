@@ -41,6 +41,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kpopupmenu.h>
 
 #include "backends/recipedb.h"
 #include "backends/searchparameters.h"
@@ -49,6 +50,7 @@
 #include "widgets/kdateedit.h"
 #include "widgets/ratingwidget.h"
 #include "widgets/fractioninput.h"
+#include "widgets/criteriacombobox.h"
 
 #include "profiling.h"
 
@@ -387,19 +389,20 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout12 = new QHBoxLayout( 0, 0, 6, "layout12"); 
 	
-	criteriaComboBox = new QComboBox( FALSE, criterionFrame, "criteriaComboBox" );
-	criteriaComboBox->setEditable( TRUE );
+	criteriaComboBox = new CriteriaComboBox( FALSE, criterionFrame, database );
+	criteriaComboBox->setEditable( false );
+	criteriaComboBox->reload();
 	layout12->addWidget( criteriaComboBox );
 	
 	starsWidget = new RatingWidget( 5, criterionFrame, "starsWidget" );
 	layout12->addWidget( starsWidget );
 	
-#if 0
+
 	addCriteriaButton = new QPushButton( criterionFrame, "addCriteriaButton" );
 	addCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, addCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
 	layout12->addWidget( addCriteriaButton );
-	
+#if 0
 	removeCriteriaButton = new QPushButton( criterionFrame, "removeCriteriaButton" );
 	removeCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, removeCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	removeCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
@@ -491,6 +494,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( ratingButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( activateRatingOption( int ) ) );
 
+	connect( addCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotAddRatingCriteria() ) );
+
 	titleFrame->setShown(false);
 	ingredientFrame->setShown(false);
 	authorsFrame->setShown(false);
@@ -505,6 +510,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
 
 	clear();
+
+	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
+	kpop->insertItem( i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
 }
 
 AdvancedSearchDialog::~AdvancedSearchDialog()
@@ -546,7 +554,7 @@ void AdvancedSearchDialog::languageChange()
 	avgStarsLabel->setText( i18n( "stars" ) );
 	criterionRadioButton->setText( i18n( "By criterion:" ) );
 	starsWidget->setText( i18n( "stars here" ) );
-	//addCriteriaButton->setText( i18n( "+" ) );
+	addCriteriaButton->setText( i18n( "+" ) );
 	//removeCriteriaButton->setText( i18n( "-" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
@@ -588,7 +596,6 @@ void AdvancedSearchDialog::clear()
 	activateRatingOption(0);
 	avgStarsEdit->clear();
 	criteriaListView->clear();
-	criteriaComboBox->lineEdit()->clear();
 	starsWidget->clear();
 }
 
@@ -632,7 +639,7 @@ void AdvancedSearchDialog::search()
 		load_items |= RecipeDB::Ingredients;
 	if ( !categoriesAllEdit->text().isEmpty() || !categoriesNotEdit->text().isEmpty() )
 		load_items |= RecipeDB::Categories;
-	if ( ratingAvgRadioButton->isChecked() && !avgStarsEdit->isEmpty() )
+	if ( (ratingAvgRadioButton->isChecked() && !avgStarsEdit->isEmpty()) || (criterionRadioButton->isChecked() && criteriaListView->firstChild()) )
 		load_items |= RecipeDB::Ratings;
 
 	RecipeSearchParameters parameters;
@@ -763,6 +770,49 @@ void AdvancedSearchDialog::search()
 			}
 		}
 	}
+
+	//TODO: Clean this up and/or do it more efficiently
+	if ( criterionRadioButton->isChecked() && criteriaListView->firstChild() ) {
+		for ( RecipeList::iterator recipe_it = allRecipes.begin(); recipe_it != allRecipes.end(); ++recipe_it ) {
+			QMap< int, double > idSumMap;
+			QMap< int, int > idCountMap;
+
+			for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
+				for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+					QMap< int, double >::iterator sum_it = idSumMap.find((*rc_it).id);
+					if ( sum_it == idSumMap.end() )
+						sum_it = idSumMap.insert((*rc_it).id,0);
+					(*sum_it) += (*rc_it).stars;
+
+					QMap< int, int >::iterator count_it = idCountMap.find((*rc_it).id);
+					if ( count_it == idCountMap.end() )
+						count_it = idCountMap.insert((*rc_it).id,0);
+					(*count_it)++;
+				}
+			}
+
+			for ( QListViewItem *item = criteriaListView->firstChild(); item; item = item->nextSibling() ) {
+				int id = item->text(3).toInt();
+				double stars = item->text(2).toDouble();
+
+				QMap< int, double >::iterator sum_it = idSumMap.find(id);
+				if ( sum_it != idSumMap.end() ) {
+					QMap< int, int >::iterator count_it = idCountMap.find(id);
+					double average = (*sum_it)/(*count_it);
+					if ( stars < average - 0.5 || stars > average + 0.5 ) {
+						recipe_it = allRecipes.remove( recipe_it );
+						recipe_it--;
+						break;
+					}
+				}
+				else {
+					recipe_it = allRecipes.remove( recipe_it );
+					recipe_it--;
+					break;
+				}
+			}
+		}
+	}
 	END_TIMER();
 
 
@@ -805,6 +855,24 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 	}
 
 	return result;
+}
+
+void AdvancedSearchDialog::slotAddRatingCriteria()
+{
+	QListViewItem * it = new QListViewItem(criteriaListView,criteriaComboBox->currentText());
+
+	double stars = starsWidget->text().toDouble();
+	QPixmap starsPix = Rating::starsPixmap(stars);
+	if ( !starsPix.isNull() ) //there aren't zero stars
+		it->setPixmap(1,starsPix);
+
+	it->setText(2,QString::number(stars));
+	it->setText(3,QString::number(criteriaComboBox->criteriaID(criteriaComboBox->currentItem())));
+}
+
+void AdvancedSearchDialog::slotRemoveRatingCriteria()
+{
+	delete criteriaListView->selectedItem();
 }
 
 #include "advancedsearchdialog.moc"

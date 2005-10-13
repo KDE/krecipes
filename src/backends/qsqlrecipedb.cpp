@@ -823,7 +823,7 @@ void QSqlRecipeDB::createNewRating( const QString &rating )
 	command = QString( "INSERT INTO rating_criterion VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "rating_criterion", "id" ) );
 	QSqlQuery toCreate( command, database );
 
-	//emit ratingCreated( Element( real_name, lastInsertID() ) );
+	emit ratingCriteriaCreated( Element( real_name, lastInsertID() ) );
 }
 
 void QSqlRecipeDB::createNewYieldType( const QString &name )

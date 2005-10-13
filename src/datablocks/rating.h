@@ -14,6 +14,8 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 
+#include <qpixmap.h>
+
 class RatingCriteria
 {
 public:
@@ -30,6 +32,9 @@ class Rating
 {
 public:
 	Rating() : id(-1){}
+
+	static QPixmap starsPixmap( double stars_d, bool include_empty = false );
+
 	void append( const RatingCriteria & );
 
 	double average() const;

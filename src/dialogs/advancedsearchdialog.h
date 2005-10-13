@@ -37,6 +37,7 @@ class RecipeDB;
 class RecipeActionsHandler;
 class RatingWidget;
 class FractionInput;
+class CriteriaComboBox;
 
 
 class AdvancedSearchDialog : public QWidget
@@ -112,7 +113,7 @@ protected:
 	FractionInput* avgStarsEdit;
 	QLabel* avgStarsLabel;
 	QRadioButton* criterionRadioButton;
-	QComboBox* criteriaComboBox;
+	CriteriaComboBox* criteriaComboBox;
 	RatingWidget* starsWidget;
 	QPushButton* addCriteriaButton;
 	QPushButton* removeCriteriaButton;
@@ -165,6 +166,8 @@ private slots:
 	void clear();
 	void buttonSwitched();
 	void activateRatingOption( int button_id );
+	void slotAddRatingCriteria();
+	void slotRemoveRatingCriteria();
 
 private:
 	QStringList split( const QString &text, bool sql_wildcards = false ) const;

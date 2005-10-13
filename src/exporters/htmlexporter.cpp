@@ -303,24 +303,6 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	return height_taken;
 }
 
-QPixmap starsPixmap( double stars_d )
-{
-	int stars = qRound(stars_d * 2); //multiply by two to make it easier to work with half-stars
-
-	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
-	QPixmap star_off = UserIcon(QString::fromLatin1("star_off"));
-
-	QPixmap generatedPixmap(18*5,18);
-	generatedPixmap.fill();
-	QPainter painter( &generatedPixmap );
-
-	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
-	painter.drawTiledPixmap(0,0,18*5,18,star_off); //fill with empty stars
-	painter.drawTiledPixmap(0,0,pixmapWidth,18,star); //write over the empty stars to show the rating
-
-	return generatedPixmap;
-}
-
 QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 {
 	KConfig * config = KGlobal::config();
@@ -481,7 +463,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 			image_url = KURL::encode_string( image_url );
 			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
 			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
-				QPixmap starPixmap = starsPixmap((*rc_it).stars);
+				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
 			}
 			

@@ -77,8 +77,6 @@ private:
 	void loadRating( const Rating & );
 	void addRatingCriteria( const RatingCriteria &rc );
 
-	QPixmap starsPixmap( double stars );
-
 	int ratingID;
 };
 

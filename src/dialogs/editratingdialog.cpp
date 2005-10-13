@@ -202,13 +202,13 @@ void EditRatingDialog::itemRenamed(QListViewItem* it, const QString &, int c)
 		MixedNumber stars_mn = MixedNumber::fromString(it->text(c),&ok);
 		if ( ok && !it->text(c).isEmpty() ) {
 			double stars = QMAX(0,QMIN(stars_mn.toDouble(),5)); //force to between 0 and 5
-			QPixmap starsPic = starsPixmap( stars );
+			QPixmap starsPic = Rating::starsPixmap( stars );
 			it->setPixmap(c,starsPic);
 			it->setText(2,QString::number(stars));
 		}
 		else {
 			double stars = it->text(2).toDouble(); //col 2 holds the old value, which we'll set it back to
-			QPixmap starsPic = starsPixmap( stars );
+			QPixmap starsPic = Rating::starsPixmap( stars );
 			it->setPixmap(c,starsPic);
 		}
 
@@ -265,7 +265,7 @@ void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 {
 	QListViewItem * it = new QListViewItem(criteriaListView,rc.name);
 
-	QPixmap stars = starsPixmap(rc.stars);
+	QPixmap stars = Rating::starsPixmap(rc.stars);
 	if ( !stars.isNull() ) //there aren't zero stars
 		it->setPixmap(1,stars);
 
@@ -275,23 +275,6 @@ void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 void EditRatingDialog::slotRemoveRatingCriteria()
 {
 	delete criteriaListView->selectedItem();
-}
-
-QPixmap EditRatingDialog::starsPixmap( double stars_d )
-{
-	int stars = qRound(stars_d * 2); //multiply by two to make it easier to work with half-stars
-
-	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
-	int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
-	QPixmap generatedPixmap(pixmapWidth,18);
-
-	if ( !generatedPixmap.isNull() ) { //there aren't zero stars
-		generatedPixmap.fill();
-		QPainter painter( &generatedPixmap );
-		painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
-	}
-
-	return generatedPixmap;
 }
 
 #include "editratingdialog.moc"

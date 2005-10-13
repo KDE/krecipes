@@ -103,6 +103,8 @@ signals:
 	void unitCreated( const Unit & );
 	void unitRemoved( int id );
 
+	void ratingCriteriaCreated( const Element & );
+
 	void recipeCreated( const Element &, const ElementList &categories );
 	void recipeRemoved( int id );
 	void recipeRemoved( int id, int cat_id );

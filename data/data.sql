@@ -135,4 +135,6 @@ INSERT INTO units_conversion VALUES(19,24,0.166655);
 INSERT INTO units_conversion VALUES(24,19,6.00042);
 INSERT INTO rating_criterion VALUES (1,'Overall');
 INSERT INTO rating_criterion VALUES (2,'Taste');
-INSERT INTO rating_criterion VALUES (3,'Looks');
+INSERT INTO rating_criterion VALUES (3,'Appearance');
+INSERT INTO rating_criterion VALUES (4,'Originality');
+INSERT INTO rating_criterion VALUES (5,'Ease of Preparation');
