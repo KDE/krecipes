@@ -676,6 +676,8 @@ void SetupWizard::getAdminInfo( bool &enabled, QString &adminUser, QString &admi
 void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass )
 {
 	serverSetupPage->getServerInfo( isRemote, host, client, dbName, user, pass );
+	if ( dbTypeSetupPage->dbType() == SQLite )
+		dbName = sqliteSetupPage->dbFile();
 }
 
 DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
