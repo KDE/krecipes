@@ -394,7 +394,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	criteriaComboBox->reload();
 	layout12->addWidget( criteriaComboBox );
 	
-	starsWidget = new RatingWidget( 5, criterionFrame, "starsWidget" );
+	starsWidget = new FractionInput( criterionFrame, "starsWidget" );
+	starsWidget->setAllowRange(true);
 	layout12->addWidget( starsWidget );
 	
 
@@ -553,7 +554,6 @@ void AdvancedSearchDialog::languageChange()
 	ratingAvgRadioButton->setText( i18n( "By average:" ) );
 	avgStarsLabel->setText( i18n( "stars" ) );
 	criterionRadioButton->setText( i18n( "By criterion:" ) );
-	starsWidget->setText( i18n( "stars here" ) );
 	addCriteriaButton->setText( i18n( "+" ) );
 	//removeCriteriaButton->setText( i18n( "-" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
@@ -792,14 +792,17 @@ void AdvancedSearchDialog::search()
 			}
 
 			for ( QListViewItem *item = criteriaListView->firstChild(); item; item = item->nextSibling() ) {
-				int id = item->text(3).toInt();
-				double stars = item->text(2).toDouble();
+				Ingredient i; i.setAmount( item->text(1) );
+				double stars = i.amount;
+				double stars_offset = i.amount_offset;
+
+				int id = item->text(2).toInt();
 
 				QMap< int, double >::iterator sum_it = idSumMap.find(id);
 				if ( sum_it != idSumMap.end() ) {
 					QMap< int, int >::iterator count_it = idCountMap.find(id);
 					double average = (*sum_it)/(*count_it);
-					if ( stars < average - 0.5 || stars > average + 0.5 ) {
+					if ( average < stars || average > stars + stars_offset ) {
 						recipe_it = allRecipes.remove( recipe_it );
 						recipe_it--;
 						break;
@@ -861,13 +864,17 @@ void AdvancedSearchDialog::slotAddRatingCriteria()
 {
 	QListViewItem * it = new QListViewItem(criteriaListView,criteriaComboBox->currentText());
 
-	double stars = starsWidget->text().toDouble();
-	QPixmap starsPix = Rating::starsPixmap(stars);
-	if ( !starsPix.isNull() ) //there aren't zero stars
-		it->setPixmap(1,starsPix);
+	MixedNumber stars;
+	double stars_offset;
+	starsWidget->value(stars,stars_offset);
+	QString stars_str = stars.toString();
+	if ( stars_offset > 0 )
+		stars_str += "-"+MixedNumber( stars + stars_offset ).toString();
+	else if ( stars.toDouble() <= 1e-10 )
+		stars_str = "";
 
-	it->setText(2,QString::number(stars));
-	it->setText(3,QString::number(criteriaComboBox->criteriaID(criteriaComboBox->currentItem())));
+	it->setText(1,stars_str);
+	it->setText(2,QString::number(criteriaComboBox->criteriaID(criteriaComboBox->currentItem())));
 }
 
 void AdvancedSearchDialog::slotRemoveRatingCriteria()

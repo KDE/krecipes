@@ -35,7 +35,6 @@ class QButtonGroup;
 class KDateEdit;
 class RecipeDB;
 class RecipeActionsHandler;
-class RatingWidget;
 class FractionInput;
 class CriteriaComboBox;
 
@@ -114,7 +113,7 @@ protected:
 	QLabel* avgStarsLabel;
 	QRadioButton* criterionRadioButton;
 	CriteriaComboBox* criteriaComboBox;
-	RatingWidget* starsWidget;
+	FractionInput* starsWidget;
 	QPushButton* addCriteriaButton;
 	QPushButton* removeCriteriaButton;
 	KListView* criteriaListView;
