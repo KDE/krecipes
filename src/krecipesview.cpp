@@ -612,7 +612,7 @@ void KrecipesView::wizard( bool force )
 			if ( doUSDAImport ) {
 				// Open the DB first
 				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass ); //only used if needed by backend
-				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
 
 				// Import the data
 				if ( db ) {
@@ -631,7 +631,7 @@ void KrecipesView::wizard( bool force )
 
 			//we can do a faster usda import if this is done after it
 			if ( initData ) {
-				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
 				if ( db ) {
 					db->connect();
 
@@ -667,7 +667,7 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 	else
 		kdDebug() << "Open db as:" << user << ",*** with password ****\n";
 
-	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
 	if ( db ) {
 		db->connect(true,false);//create the database, but no tables (do that when connected as the user)
 		if ( db->ok() )
@@ -682,7 +682,7 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 
 void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass )
 {
-	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName );
+	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
 	if ( !db ) {
 		kdError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
 		kapp->exit( 1 );
