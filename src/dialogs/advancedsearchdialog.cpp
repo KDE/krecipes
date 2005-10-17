@@ -797,12 +797,19 @@ void AdvancedSearchDialog::search()
 				double stars = i.amount;
 				double stars_offset = i.amount_offset;
 
+				if ( stars_offset < 1e-10 ) { //if an exact amount is given, search for an amount within 0.5 of what is given
+					//we can get negatives here, but it really doesn't matter
+					stars = stars-0.5;
+					stars_offset = 1.0;
+				}
+
 				int id = item->text(2).toInt();
 
 				QMap< int, double >::iterator sum_it = idSumMap.find(id);
 				if ( sum_it != idSumMap.end() ) {
 					QMap< int, int >::iterator count_it = idCountMap.find(id);
 					double average = (*sum_it)/(*count_it);
+
 					if ( average < stars || average > stars + stars_offset ) {
 						recipe_it = allRecipes.remove( recipe_it );
 						recipe_it--;
