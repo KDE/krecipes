@@ -759,8 +759,19 @@ void AdvancedSearchDialog::search()
 	
 			if ( count != 0 ) {
 				double average = sum/count;
+
+				double stars;
+				double stars_offset;
+				avgStarsEdit->value(stars,stars_offset);
+                                if ( stars_offset < 1e-10 ) { //if an exact amount is given, search for an amount within 0.5 of what is given
+                                        //we can get negatives here, but it really doesn't matter
+                                        stars = stars-0.5;
+                                        stars_offset = 1.0;
+                                }
+
+
 				kdDebug()<<"average for "<<(*recipe_it).title<<" "<<average<<endl;
-				if ( average < avgStarsEdit->minValue().toDouble() - 1e-8 || average > avgStarsEdit->maxValue().toDouble() + 1e-8 ) {
+				if ( average < stars || average > stars + stars_offset ) {
 					recipe_it = allRecipes.remove( recipe_it );
 					recipe_it--;
 				}
