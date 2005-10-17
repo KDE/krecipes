@@ -396,6 +396,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	starsWidget = new FractionInput( criterionFrame, "starsWidget" );
 	starsWidget->setAllowRange(true);
+	starsWidget->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Preferred );
 	layout12->addWidget( starsWidget );
 	
 
@@ -412,7 +413,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	criterionFrameLayout->addLayout( layout12 );
 	
 	criteriaListView = new KListView( criterionFrame, "criteriaListView" );
-	criteriaListView->addColumn( i18n( "Criteria" ) );
+	criteriaListView->addColumn( i18n( "Criterion" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criterionFrameLayout->addWidget( criteriaListView );
 	ratingButtonGroupLayout->addWidget( criterionFrame );
@@ -553,7 +554,7 @@ void AdvancedSearchDialog::languageChange()
 	findButton->setText( i18n( "&Search" ) );
 	ratingAvgRadioButton->setText( i18n( "By average:" ) );
 	avgStarsLabel->setText( i18n( "stars" ) );
-	criterionRadioButton->setText( i18n( "By criterion:" ) );
+	criterionRadioButton->setText( i18n( "By criteria:" ) );
 	addCriteriaButton->setText( i18n( "+" ) );
 	//removeCriteriaButton->setText( i18n( "-" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );

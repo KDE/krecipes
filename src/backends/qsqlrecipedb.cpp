@@ -308,7 +308,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 			
-			command = QString( "SELECT id,comment,rater FROM rating WHERE recipe_id=%1 ORDER BY created DESC" ).arg( (*it).recipeID );
+			command = QString( "SELECT id,comment,rater FROM ratings WHERE recipe_id=%1 ORDER BY created DESC" ).arg( (*it).recipeID );
 			QSqlQuery query( command, database );
 			if ( query.isActive() ) {
 				while ( query.next() ) {
@@ -317,7 +317,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					r.comment = unescapeAndDecode( query.value( 1 ).toString() );
 					r.rater = unescapeAndDecode( query.value( 2 ).toString() );
 
-					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criterion rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criteria_id=rc.id" ).arg(r.id);
+					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criteria rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criterion_id=rc.id" ).arg(r.id);
 					QSqlQuery criterionQuery( command, database );
 					if ( criterionQuery.isActive() ) {
 						while ( criterionQuery.next() ) {
@@ -654,7 +654,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	}
 
 	// Save the ratings (first delete criterion list if we are updating)
-	command = QString( "SELECT id FROM rating WHERE recipe_id=%1" ).arg(recipeID);
+	command = QString( "SELECT id FROM ratings WHERE recipe_id=%1" ).arg(recipeID);
 	recipeToSave.exec( command );
 	if ( recipeToSave.isActive() ) {
 		while ( recipeToSave.next() ) {
@@ -670,16 +670,13 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	for ( RatingList::iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
 		//double average = (*rating_it).average();
 		if ( (*rating_it).id == -1 ) //new rating
-			command ="INSERT INTO rating VALUES("+QString(getNextInsertIDStr("rating","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
+			command ="INSERT INTO ratings VALUES("+QString(getNextInsertIDStr("ratings","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
 		else //existing rating
-			command = "UPDATE rating SET "
+			command = "UPDATE ratings SET "
 			  "comment='"+QString(escapeAndEncode((*rating_it).comment))+"',"
 			  "rater='"+QString(escapeAndEncode((*rating_it).rater))+"',"
-			  /*"average='"+QString::number(average)+"',"*/
 			  "created=created "
 			  "WHERE id="+QString::number((*rating_it).id);
-
-kdDebug()<<"calling: "<<command<<endl;
 
 		recipeToSave.exec( command );
 		
@@ -688,7 +685,6 @@ kdDebug()<<"calling: "<<command<<endl;
 		
 		for ( QValueList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
-kdDebug()<<"calling: "<<command<<endl;
 			recipeToSave.exec( command );
 		}
 
@@ -696,7 +692,7 @@ kdDebug()<<"calling: "<<command<<endl;
 	}
 
 	// only delete those ratings that don't exist anymore
-	command = QString( "DELETE FROM rating WHERE recipe_id=%1 AND id NOT IN( %2 )" )
+	command = QString( "DELETE FROM ratings WHERE recipe_id=%1 AND id NOT IN( %2 )" )
 	          .arg( recipeID ).arg( ids.join(",") );
 	recipeToSave.exec( command );
 
@@ -820,7 +816,7 @@ void QSqlRecipeDB::createNewRating( const QString &rating )
 	QString command;
 	QString real_name = rating/*.left( maxIngredientNameLength() )*/;
 
-	command = QString( "INSERT INTO rating_criterion VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "rating_criterion", "id" ) );
+	command = QString( "INSERT INTO rating_criteria VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "rating_criteria", "id" ) );
 	QSqlQuery toCreate( command, database );
 
 	emit ratingCriteriaCreated( Element( real_name, lastInsertID() ) );
@@ -1650,7 +1646,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list" << "rating" << "rating_criterion" << "rating_criterion_list";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list" << "ratings" << "rating_criteria" << "rating_criterion_list";
 
 	QStringList existingTableList = database->tables();kdDebug()<<"found tables: "<<database->tables()<<endl;
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
@@ -1712,7 +1708,7 @@ void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM rating_criterion ORDER BY name"
+	QString command = "SELECT id,name FROM rating_criteria ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() ) {
@@ -2015,7 +2011,7 @@ int QSqlRecipeDB::findExistingRatingByName( const QString& name )
 {
 	QCString search_str = escapeAndEncode( name ); //truncate to the maximum size db holds
 
-	QString command = QString( "SELECT id FROM rating_criterion WHERE name='%1'" ).arg( search_str );
+	QString command = QString( "SELECT id FROM rating_criteria WHERE name='%1'" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
 
 	int id = -1;
@@ -2364,7 +2360,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 void QSqlRecipeDB::emptyData( void )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
