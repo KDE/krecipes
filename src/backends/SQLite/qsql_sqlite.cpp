@@ -83,22 +83,22 @@ kdDebug()<<"fetch_i"<<endl;
 			while ( --x && fetchNext() );
 			return fetchNext();
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 	if ( at() == i )
-		return TRUE;
+		return true;
 
 	row = result.first();
 	for ( int j = 0; j < i; ++j ) {
 		if ( result.atEnd() )
-			return FALSE;
+			return false;
 
 		row = result.next();
 	}
 
 	setAt( i );
-	return TRUE;
+	return true;
 }
 
 bool KreSQLiteResult::fetchNext()
@@ -109,7 +109,7 @@ bool KreSQLiteResult::fetchNext()
 		return false;
 
 	setAt( at() + 1 );
-	return TRUE;
+	return true;
 }
 
 bool KreSQLiteResult::fetchFirst()
@@ -132,13 +132,13 @@ bool KreSQLiteResult::fetchLast()
 	}
 	int numRows = size();
 	if ( !numRows )
-		return FALSE;
+		return false;
 	return fetch( numRows - 1 );
 }
 
 bool KreSQLiteResult::isNull( int i )
 {
-	return FALSE;
+	return false;
 }
 
 QSqlRecord KreSQLiteResult::record()
@@ -164,9 +164,9 @@ bool KreSQLiteResult::reset(const QString& query)
 {
 	// this is where we build a query.
 	if (!driver())
-		return FALSE;
+		return false;
 	if (!driver()-> isOpen() || driver()->isOpenError())
-		return FALSE;
+		return false;
 
 	//cleanup
 	setAt( -1 );
@@ -181,8 +181,8 @@ bool KreSQLiteResult::reset(const QString& query)
 		setLastError(QSqlError("Unable to execute statement", result.getError(), QSqlError::Statement, res));
 	}
 
-	setActive(TRUE);
-	return TRUE;
+	setActive(true);
+	return true;
 }
 
 /////////////////////////////////////////////////////////
@@ -196,8 +196,8 @@ KreSQLiteDriver::KreSQLiteDriver(QSQLiteDB *connection, QObject *parent, const c
     : QSqlDriver(parent, name ? name : QSQLITE_DRIVER_NAME)
 {
 	db = connection;
-	setOpen(TRUE);
-	setOpenError(FALSE);
+	setOpen(true);
+	setOpenError(false);
 }
 
 
@@ -210,10 +210,10 @@ bool KreSQLiteDriver::hasFeature(DriverFeature f) const
 	switch (f) {
 	case QuerySize:
 	case Transactions:
-		return TRUE;
+		return true;
 	//   case BLOB:
 	default:
-		return FALSE;
+		return false;
 	}
 }
 
@@ -227,22 +227,19 @@ bool KreSQLiteDriver::open(const QString & file, const QString &, const QString 
 		close();
 	
 	if (file.isEmpty())
-		return FALSE;
+		return false;
 	
 	db = new QSQLiteDB;
 	if ( !db->open(QFile::encodeName(file)) ) {
 		setLastError(QSqlError("Error to open database", 0, QSqlError::Connection));
 		setOpenError(true);
+		setOpen(false);
 		return false;
 	}
-	
-	if (db) {
-		setOpen(TRUE);
-		setOpenError(FALSE);
-		return TRUE;
-	}
-	setOpenError(TRUE);
-	return FALSE;
+
+	setOpen(true);
+	setOpenError(false);
+	return true;
 }
 
 void KreSQLiteDriver::close()
@@ -250,8 +247,8 @@ void KreSQLiteDriver::close()
     if (isOpen()) {
         db->close();
         delete db; db = 0;
-        setOpen(FALSE);
-        setOpenError(FALSE);
+        setOpen(false);
+        setOpenError(false);
     }
 }
 
@@ -263,43 +260,43 @@ QSqlQuery KreSQLiteDriver::createQuery() const
 bool KreSQLiteDriver::beginTransaction()
 {
 	if (!isOpen() || isOpenError())
-		return FALSE;
+		return false;
 	
 	QSQLiteResult result = db->executeQuery( "BEGIN" );
 	int status = result.getStatus();
 	if (status == QSQLiteResult::Success)
-		return TRUE;
+		return true;
 	
 	setLastError(QSqlError("Unable to begin transaction", result.getError(), QSqlError::Transaction, status));
-	return FALSE;
+	return false;
 }
 
 bool KreSQLiteDriver::commitTransaction()
 {
 	if (!isOpen() || isOpenError())
-		return FALSE;
+		return false;
 	
 	QSQLiteResult result = db->executeQuery( "COMMIT" );
 	int status = result.getStatus();
 	if (status == QSQLiteResult::Success)
-		return TRUE;
+		return true;
 	
 	setLastError(QSqlError("Unable to commit transaction", result.getError(), QSqlError::Transaction, status));
-	return FALSE;
+	return false;
 }
 
 bool KreSQLiteDriver::rollbackTransaction()
 {
 	if (!isOpen() || isOpenError())
-		return FALSE;
+		return false;
 	
 	QSQLiteResult result = db->executeQuery( "ROLLBACK" );
 	int status = result.getStatus();
 	if (status == SQLITE_OK)
-		return TRUE;
+		return true;
 	
 	setLastError(QSqlError("Unable to rollback transaction", result.getError(), QSqlError::Transaction, status));
-	return FALSE;
+	return false;
 }
 
 QStringList KreSQLiteDriver::tables(const QString &typeName) const
@@ -311,7 +308,7 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 	int type = typeName.toInt();
 	
 	QSqlQuery q = createQuery();
-	q.setForwardOnly(TRUE);
+	q.setForwardOnly(true);
 	#if (QT_VERSION-0 >= 0x030000)
 	if ((type & (int)QSql::Tables) && (type & (int)QSql::Views))
 		q.exec("SELECT name FROM sqlite_master WHERE type='table' OR type='view'");
@@ -347,7 +344,7 @@ QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
         return QSqlIndex();
 
     QSqlQuery q = createQuery();
-    q.setForwardOnly(TRUE);
+    q.setForwardOnly(true);
     // finrst find a UNIQUE INDEX
     q.exec("PRAGMA index_list('" + tblname + "');");
     QString indexname;
@@ -380,7 +377,7 @@ QSqlRecordInfo KreSQLiteDriver::recordInfo(const QString &tbl) const
 		return QSqlRecordInfo();
 	
 	QSqlQuery q = createQuery();
-	q.setForwardOnly(TRUE);
+	q.setForwardOnly(true);
 	q.exec("SELECT * FROM " + tbl + " LIMIT 1");
 return QSqlRecordInfo();
 //	return recordInfo(q);

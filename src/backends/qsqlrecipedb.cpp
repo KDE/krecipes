@@ -122,8 +122,8 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	// we don't want to run this when creating the database.  We would be
 	// logged in as another user (usually the superuser and not have ownership of the tables
 	if ( create_tables && !checkIntegrity() ) {
-		kdError() << i18n( "Failed to fix database structure. Exiting.\n" ).latin1();
-		kapp->exit( 1 );
+		dbErr = i18n( "Failed to fix database structure.\nIf you are using SQLite, this is often caused by using an SQLite 2 database with SQLite 3 installed.  If this is the case, make sure both SQLite 2 and 3 are installed, and then run 'krecipes --convert-sqlite3' to update your database to the new structure." );
+		return;
 	}
 
 	// Database was opened correctly
@@ -1574,6 +1574,10 @@ bool QSqlRecipeDB::checkIntegrity( void )
 			createTable( *it );
 		}
 	}
+
+	QStringList newTableList = database->tables();
+	if ( newTableList.isEmpty() )
+		return false;
 
 
 	// Check for older versions, and port
