@@ -84,6 +84,7 @@ public:
 	void createNewIngGroup( const QString &name );
 	void createNewIngredient( const QString &ingredientName );
 	void createNewPrepMethod( const QString &prepMethodName );
+	void createNewRating( const QString &name );
 	void createNewUnit( const QString &unitName, const QString &unitPlural );
 	void createNewYieldType( const QString &type );
 
@@ -96,6 +97,7 @@ public:
 	int findExistingIngredientByName( const QString& name );
 	int findExistingPrepByName( const QString& name );
 	int findExistingRecipeByName( const QString& name );
+	int findExistingRatingByName( const QString& name );
 	int findExistingUnitByName( const QString& name );
 	int findExistingPropertyByName( const QString& name );
 	int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 );
@@ -124,6 +126,7 @@ public:
 	void loadPossibleUnits( int ingredientID, UnitList *list );
 	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
+	void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 );
 	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false );
 	void loadUncategorizedRecipes( ElementList *list );

@@ -127,11 +127,13 @@ void PageSetupDialog::accept()
 		config->writeEntry( "Layout", active_filename_map[setup_display] );
 	}
 
-	//if ( !active_filename_map[print_setup_display].isEmpty() ) {
-	//	KConfig * config = kapp->config();
-	//	config->setGroup( "Page Setup" );
-	//	config->writeEntry( "PrintLayout", active_filename_map[print_setup_display] );
-	//}
+	#if 0
+	if ( !active_filename_map[print_setup_display].isEmpty() ) {
+		KConfig * config = kapp->config();
+		config->setGroup( "Page Setup" );
+		config->writeEntry( "PrintLayout", active_filename_map[print_setup_display] );
+	}
+	#endif
 
 	KConfig *config = kapp->config();
 	config->setGroup( "Page Setup" );

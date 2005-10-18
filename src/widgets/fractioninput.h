@@ -41,6 +41,7 @@ public:
 	MixedNumber value() const;
 
 	bool isInputValid() const;
+	bool isEmpty() const;
 
 public slots:
 	void validate();

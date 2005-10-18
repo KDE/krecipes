@@ -16,6 +16,7 @@
 #include <qdatetime.h>
 
 #include "ingredientlist.h"
+#include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
 
 class Yield
@@ -55,6 +56,8 @@ public:
 	QDateTime ctime;
 	QDateTime mtime;
 	QDateTime atime;
+
+	RatingList ratingList;
 
 	// Public methods
 	void empty( void );

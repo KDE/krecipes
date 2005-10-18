@@ -32,6 +32,7 @@ void Recipe::empty( void )
 	ingList.empty();
 	categoryList.clear();
 	authorList.clear();
+	ratingList.clear();
 	prepTime = QTime( 0, 0 );
 }
 

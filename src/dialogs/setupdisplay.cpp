@@ -472,6 +472,14 @@ void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
 		( properties_box, i18n( "Properties" ) );
 
 	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
+
+	//========================RATINGS========================//
+	QLabel *ratings_box = new QLabel( QString("<b>%1:</b><br /><hr /><b>%2</b><br /><ul><li>%4</li><li>...</li></ul><i>%3</i>").arg(i18n("Ratings")).arg(i18n("Rater")).arg(i18n("Comments")).arg(i18n("Criteria: X stars")), canvas, "ratings" );
+	ratings_box->setFrameShape( QFrame::Box );
+	QToolTip::add
+		( ratings_box, i18n( "Ratings" ) );
+
+	createItem( ratings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
 }
 
 void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )

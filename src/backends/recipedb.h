@@ -69,7 +69,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { None = 0, NamesOnly = 256, Noatime = 1024, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, All = 0xFFFF ^ NamesOnly ^ Noatime };
+	enum RecipeItems { None = 0, NamesOnly = 256, Noatime = 1024, Photo = 1, Instructions = 2, Ingredients = 4, Authors = 8, Categories = 16, PrepTime = 32, Yield = 64, Title = 128, Meta = 512, Ratings = 2048, All = 0xFFFF ^ NamesOnly ^ Noatime };
 
 public slots:
 	void cancelOperation(){ haltOperation = true; }
@@ -103,6 +103,8 @@ signals:
 	void unitCreated( const Unit & );
 	void unitRemoved( int id );
 
+	void ratingCriteriaCreated( const Element & );
+
 	void recipeCreated( const Element &, const ElementList &categories );
 	void recipeRemoved( int id );
 	void recipeRemoved( int id, int cat_id );
@@ -135,6 +137,7 @@ public:
 	virtual void createNewIngGroup( const QString &name ) = 0;
 	virtual void createNewIngredient( const QString &ingredientName ) = 0;
 	virtual void createNewPrepMethod( const QString &prepMethodName ) = 0;
+	virtual void createNewRating( const QString &name ) = 0;
 	virtual void createNewUnit( const QString &unitName, const QString &unitPlural ) = 0;
 	virtual void createNewYieldType( const QString &type ) = 0;
 
@@ -147,6 +150,7 @@ public:
 	virtual int findExistingIngredientByName( const QString& name ) = 0;
 	virtual int findExistingPrepByName( const QString& name ) = 0;
 	virtual int findExistingPropertyByName( const QString& name ) = 0;
+	virtual int findExistingRatingByName( const QString& name ) = 0;
 	virtual int findExistingRecipeByName( const QString& name ) = 0;
 	virtual int findExistingUnitByName( const QString& name ) = 0;
 	virtual int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 ) = 0;
@@ -184,6 +188,8 @@ public:
 	virtual void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRecipe( Recipe *recipe, int items, int id );
+
+	virtual void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
 	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false ) = 0;

@@ -81,7 +81,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.86;
+	return 0.87;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -589,6 +589,20 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 				conditionList << "r.atime = '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
 		}
 	}
+
+#if 0
+	if ( p.averageRating >= 0 ) {
+		tableList<<"rating";
+		conditionList << "rating.recipe_id=r.id";
+
+		if ( p.averageRatingOffset > 0 ) {
+			conditionList << "rating.average >= '"+QString::number(p.averageRating)+"'";
+			conditionList << "rating.average <= '"+QString::number(p.averageRating+p.averageRatingOffset)+"'";
+		}
+		else
+			conditionList << "rating.average = '"+QString::number(p.averageRating)+"'";
+	}
+#endif
 
 	QString wholeQuery = "SELECT r.id FROM recipes r"
 		+QString(tableList.count()!=0?","+tableList.join(","):"")

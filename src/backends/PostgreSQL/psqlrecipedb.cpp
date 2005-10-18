@@ -134,6 +134,15 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "yield_types" ) {
 		commands << "CREATE TABLE yield_types (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 	}
+
+	else if ( tableName == "ratings" )
+		commands << "CREATE TABLE ratings (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER NOT NULL, comment CHARACTER VARYING, rater CHARACTER VARYING, created TIMESTAMP);";
+
+	else if ( tableName == "rating_criteria" )
+		commands << "CREATE TABLE rating_criteria (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criterion_id INTEGER, stars FLOAT);";
 	else
 		return ;
 
@@ -334,6 +343,10 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
+
+	if ( qRound(version*100) < 87 ) {
+		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
@@ -409,10 +422,10 @@ int PSqlRecipeDB::getNextInsertID( const QString &table, const QString &column )
 void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &username, const QString &password, const QString & /*clientHost*/ )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "prep_method_list" << "yield_types";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "prep_method_list" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
 
 	//we also have to grant permissions on the sequences created
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
 
 	QString command;
 
@@ -433,7 +446,7 @@ void PSqlRecipeDB::empty( void )
 	QSqlRecipeDB::empty();
 
 	QStringList tables;
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
 
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {

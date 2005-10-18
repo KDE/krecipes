@@ -53,7 +53,7 @@ int LiteRecipeDB::lastInsertID()
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
-	kdDebug()<<"lastInsertID(): "<<lastID<<endl;
+	//kdDebug()<<"lastInsertID(): "<<lastID<<endl;
 
 	return lastID;
 }
@@ -164,6 +164,15 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "yield_types" ) {
 		commands << QString( "CREATE TABLE yield_types (id INTEGER NOT NULL, name varchar(%1), PRIMARY KEY (id));" ).arg( maxYieldTypeLength() );
 	}
+
+	else if ( tableName == "ratings" )
+		commands << "CREATE TABLE ratings (id INTEGER NOT NULL, recipe_id int(11) NOT NULL, comment TEXT, rater TEXT, created TIMESTAMP, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criteria" )
+		commands << "CREATE TABLE rating_criteria (id INTEGER NOT NULL, name TEXT, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criterion_id INTEGER, stars FLOAT);";
 
 	else
 		return ;
@@ -722,6 +731,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 87 ) {
+		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 }
 

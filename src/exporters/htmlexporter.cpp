@@ -18,6 +18,7 @@
 #include <qdir.h>
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
 #include <dom/dom_element.h>
+#include <qpainter.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -28,6 +29,7 @@
 #include <kprogress.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <kiconloader.h>
 
 #include "propertycalculator.h"
 #include "datablocks/mixednumber.h"
@@ -443,6 +445,37 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	}
 	html_map.insert( "properties", properties_html );
 
+	//=======================RATINGS======================//
+	QString ratings_html;
+	if ( recipe.ratingList.count() > 0 )
+		ratings_html += QString("<b>%1:</b>").arg("Ratings");
+
+	for ( RatingList::const_iterator rating_it = recipe.ratingList.begin(); rating_it != recipe.ratingList.end(); ++rating_it ) {
+		ratings_html += "<hr />";
+
+		if ( !( *rating_it ).rater.isEmpty() )
+			ratings_html += "<p><b>"+( *rating_it ).rater+"</b></p>";
+
+		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+			ratings_html += "<table>";
+		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
+			image_url = KURL::encode_string( image_url );
+			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
+			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
+				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+			}
+			
+		}
+		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+			ratings_html += "</table>";
+
+		if ( !( *rating_it ).comment.isEmpty() )
+			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
+	}
+	html_map.insert( "ratings", ratings_html );
+
 	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
 
 	return html_map;
@@ -622,6 +655,10 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	//remove photo directory
 	QDir photo_dir;
 	photo_dir.rmdir( filename + "_photos" );
+
+	for ( double d = 0.5; d < 5.5; d += 0.5 ) {
+		if ( QFile::exists(filename+"_photos/"+QString::number(d)+"-stars.png") ) photo.remove(filename+"_photos/"+QString::number(d)+"-stars.png");
+	}
 }
 
 QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute )

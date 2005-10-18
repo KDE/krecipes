@@ -18,7 +18,7 @@
 class RecipeSearchParameters
 {
 public:
-	RecipeSearchParameters() : servings(-1)
+	RecipeSearchParameters() : servings(-1)/*, averageRating(-1), averageRatingOffset(0)*/
 	{}
 
 	QStringList titleKeywords;
@@ -53,6 +53,10 @@ public:
 	QDateTime modifiedDateEnd;
 	QDateTime accessedDateBegin;
 	QDateTime accessedDateEnd;
+
+	//RatingCriteriaList criteriaList;
+	//double averageRating;
+	//double averageRatingOffset;
 };
 
 

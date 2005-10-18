@@ -143,6 +143,15 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE `yield_types` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( 20 );
 	}
 
+	else if ( tableName == "ratings" )
+		commands << "CREATE TABLE ratings (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id int(11) NOT NULL, comment TEXT, rater TEXT, created TIMESTAMP, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criteria" )
+		commands << "CREATE TABLE rating_criteria (id INTEGER NOT NULL AUTO_INCREMENT, name TEXT, PRIMARY KEY (id));";
+
+	else if ( tableName == "rating_criterion_list" )
+		commands << "CREATE TABLE rating_criterion_list (rating_id INTEGER NOT NULL, rating_criterion_id INTEGER, stars FLOAT);";
+
 	else
 		return ;
 
@@ -439,6 +448,10 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 87 ) {
+		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 }
 

@@ -19,10 +19,13 @@
 #include <qimage.h>
 
 #include "datablocks/categorytree.h"
+#include "datablocks/rating.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
+
+void check( const RatingList &rating, const RatingList &base );
 
 bool check(const QString &txt, const QString &a, const QString &b)
 {
@@ -83,6 +86,8 @@ void check( const Recipe &recipe, const Recipe &base )
 	check( "Instructions", recipe.instructions, base.instructions );
 	check( "Photo", recipe.photo, base.photo );
 
+	check( recipe.ratingList, base.ratingList );
+
 	int cat_num = 1;
 	ElementList::const_iterator cat_it = recipe.categoryList.begin();
 	ElementList::const_iterator base_cat_it = base.categoryList.begin();
@@ -141,6 +146,25 @@ bool check( const CategoryTree *catStructure, const CategoryTree *baseCatStructu
 	}
 
 	return true;
+}
+
+void check( const RatingList &rating, const RatingList &base )
+{
+	RatingList::const_iterator rating_it = rating.begin();
+	RatingList::const_iterator base_rating_it = base.begin();
+	for ( ; rating_it != rating.end() || base_rating_it != base.end(); ++rating_it, ++base_rating_it ) {
+		check("checking rater",(*rating_it).rater,(*base_rating_it).rater);
+		check("checking comment",(*rating_it).comment,(*base_rating_it).comment);
+
+		RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin();
+		RatingCriteriaList::const_iterator base_rc_it = (*base_rating_it).ratingCriteriaList.begin();
+		for ( ; rc_it != (*rating_it).ratingCriteriaList.end() || base_rc_it != (*base_rating_it).ratingCriteriaList.end(); ++rc_it, ++base_rc_it ) {
+			check("checking criteria name",(*rc_it).name,(*base_rc_it).name);
+			check("checking stars",(*rc_it).stars,(*base_rc_it).stars);
+		}
+		check( "criteria count", int((*rating_it).ratingCriteriaList.count()), int((*base_rating_it).ratingCriteriaList.count()) );
+	}
+	check( "rating count", int(rating.count()), int(base.count()) );
 }
 
 #endif

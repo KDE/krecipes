@@ -269,6 +269,24 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			(*recipe_it).yield.type_id = new_id;
 		}
 
+		RatingList::iterator rating_list_end( ( *recipe_it ).ratingList.end() );
+		for ( RatingList::iterator rating_it = ( *recipe_it ).ratingList.begin(); rating_it != rating_list_end; ++rating_it ) {
+			if ( direct ) {
+				progress_dialog->progressBar()->advance( 1 );
+				kapp->processEvents();
+			}
+
+			for ( RatingCriteriaList::iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+				int new_criteria_id = db->findExistingRatingByName(( *rc_it ).name);
+				if ( new_criteria_id == -1 && !( *rc_it ).name.isEmpty() ) {
+					db->createNewRating( ( *rc_it ).name );
+					new_criteria_id = db->lastInsertID();
+				}
+	
+				( *rc_it ).id = new_criteria_id;
+			}
+		}
+
 		if ( overwrite )  //overwrite existing
 			( *recipe_it ).recipeID = db->findExistingRecipeByName( ( *recipe_it ).title );
 		else //rename

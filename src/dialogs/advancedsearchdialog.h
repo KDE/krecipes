@@ -29,10 +29,14 @@ class QTimeEdit;
 class KPushButton;
 class KListView;
 class QListViewItem;
+class QRadioButton;
+class QButtonGroup;
 
 class KDateEdit;
 class RecipeDB;
 class RecipeActionsHandler;
+class FractionInput;
+class CriteriaComboBox;
 
 
 class AdvancedSearchDialog : public QWidget
@@ -104,6 +108,22 @@ protected:
 	KDateEdit *accessedEndDateEdit;
 	QPushButton* metaDataButton;
 	QFrame* metaDataFrame;
+	QRadioButton* ratingAvgRadioButton;
+	FractionInput* avgStarsEdit;
+	QLabel* avgStarsLabel;
+	QRadioButton* criterionRadioButton;
+	CriteriaComboBox* criteriaComboBox;
+	FractionInput* starsWidget;
+	QPushButton* addCriteriaButton;
+	QPushButton* removeCriteriaButton;
+	KListView* criteriaListView;
+	QPushButton* ratingsButton;
+	QButtonGroup *ratingButtonGroup;
+	QFrame *ratingAvgFrame;
+	QFrame *criterionFrame;
+	QVBoxLayout *criterionFrameLayout;
+	QHBoxLayout *ratingAvgFrameLayout;
+	QVBoxLayout *ratingButtonGroupLayout;
 
 	QHBoxLayout* AdvancedSearchDialogLayout;
 	QVBoxLayout* layout7;
@@ -129,6 +149,10 @@ protected:
 	QHBoxLayout* layout6;
 	QHBoxLayout* layout9;
 	QSpacerItem* spacer3;
+	QVBoxLayout* ratingsFrameLayout;
+	QHBoxLayout* layout11;
+	QHBoxLayout* layout12;
+	QSpacerItem* ratingsFrameSpacer;
 
 	RecipeDB *database;
 
@@ -140,9 +164,13 @@ private slots:
 	void search();
 	void clear();
 	void buttonSwitched();
+	void activateRatingOption( int button_id );
+	void slotAddRatingCriteria();
+	void slotRemoveRatingCriteria();
 
 private:
 	QStringList split( const QString &text, bool sql_wildcards = false ) const;
 };
 
 #endif //ADVANCEDSEARCHDIALOG_H
+
