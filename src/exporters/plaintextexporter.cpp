@@ -123,7 +123,8 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				content += "  "+( *rating_it ).comment+"\n";
 
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-				content +=  "  "+(*rc_it).name+": "+QString(i18n("%1 star","%1 stars",(*rc_it).stars)).arg((*rc_it).stars)+"\n";
+				//FIXME-0.9
+				content +=  "  "+(*rc_it).name+": "+QString(i18n("%n star","%n stars",(*rc_it).stars)).arg((*rc_it).stars)+"\n";
 			}
 			content += "\n";
 		}
