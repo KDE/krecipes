@@ -26,6 +26,8 @@ public:
 	PlainTextExporter( const QString&, const QString& );
 	virtual ~PlainTextExporter();
 
+	virtual int supportedItems() const;
+
 protected:
 	virtual QString createContent( const RecipeList & );
 };

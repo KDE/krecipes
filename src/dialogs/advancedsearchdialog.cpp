@@ -413,6 +413,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	criterionFrameLayout->addLayout( layout12 );
 	
 	criteriaListView = new KListView( criterionFrame, "criteriaListView" );
+	criteriaListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 	criteriaListView->addColumn( i18n( "Criterion" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criterionFrameLayout->addWidget( criteriaListView );

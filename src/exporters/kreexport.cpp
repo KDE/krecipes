@@ -40,6 +40,11 @@ KreExporter::~KreExporter()
 	delete categories;
 }
 
+int KreExporter::supportedItems() const
+{
+	return RecipeDB::All;
+}
+
 int KreExporter::headerFlags() const
 {
 	return RecipeDB::Categories;

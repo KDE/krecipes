@@ -26,8 +26,9 @@ class KreExporter : public BaseExporter
 {
 public:
 	KreExporter( CategoryTree *, const QString&, const QString& );
-
 	virtual ~KreExporter();
+
+	virtual int supportedItems() const;
 
 protected:
 	virtual QString createContent( const RecipeList & );

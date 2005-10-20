@@ -15,6 +15,7 @@
 #include <klocale.h>
 
 #include "datablocks/mixednumber.h"
+#include "backends/recipedb.h"
 
 PlainTextExporter::PlainTextExporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )
@@ -23,6 +24,11 @@ PlainTextExporter::PlainTextExporter( const QString& filename, const QString& fo
 
 PlainTextExporter::~PlainTextExporter()
 {}
+
+int PlainTextExporter::supportedItems() const
+{
+	return RecipeDB::All ^ RecipeDB::Photo;
+}
 
 QString PlainTextExporter::createContent( const RecipeList& recipes )
 {

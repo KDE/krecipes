@@ -84,6 +84,11 @@ HTMLExporter::~HTMLExporter()
 	delete properties;
 }
 
+int HTMLExporter::supportedItems() const
+{
+	return RecipeDB::All;
+}
+
 QString HTMLExporter::createContent( const RecipeList& recipes )
 {
 	RecipeList::const_iterator recipe_it;

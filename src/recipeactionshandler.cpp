@@ -345,13 +345,33 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 
 void RecipeActionsHandler::recipesToClipboard( const QValueList<int> &ids, RecipeDB *db )
 {
+	KConfig *config = KGlobal::config();
+	config->setGroup("Export");
+	QString formatFilter = config->readEntry("ClipboardFormat");
+
+	BaseExporter * exporter;
+	if ( formatFilter == "*.xml" )
+		exporter = new RecipeMLExporter( QString::null, formatFilter );
+	else if ( formatFilter == "*.mmf" )
+		exporter = new MMFExporter( QString::null, formatFilter );
+	else if ( formatFilter == "*.cml" )
+		exporter = new CookMLExporter( QString::null, formatFilter );
+	else if ( formatFilter == "*.kre" || formatFilter == "*.kreml" ) {
+		CategoryTree *cat_structure = new CategoryTree;
+		db->loadCategories( cat_structure );
+		exporter = new KreExporter( cat_structure, QString::null, formatFilter );
+	}
+	else //default to plain text
+		exporter = new PlainTextExporter( QString::null, "*.txt" );
+
+	RecipeList recipeList;
+	db->loadRecipes( &recipeList, exporter->supportedItems(), ids );
+
 	QString buffer;
 	QTextStream stream(buffer,IO_WriteOnly);
+	exporter->writeStream(stream,recipeList);
 
-	PlainTextExporter exporter("",".txt");
-	RecipeList recipeList;
-	db->loadRecipes( &recipeList, RecipeDB::All ^ RecipeDB::Photo, ids );
-	exporter.writeStream(stream,recipeList);
+	delete exporter;
 
 	QApplication::clipboard()->setText(buffer);
 }

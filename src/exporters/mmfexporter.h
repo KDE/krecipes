@@ -34,6 +34,8 @@ public:
 	MMFExporter( const QString&, const QString& );
 	virtual ~MMFExporter();
 
+	virtual int supportedItems() const;
+
 protected:
 	virtual QString createContent( const RecipeList & );
 

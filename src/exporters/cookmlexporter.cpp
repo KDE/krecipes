@@ -24,6 +24,8 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
+#include "backends/recipedb.h"
+
 CookMLExporter::CookMLExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )
 {}
@@ -31,6 +33,11 @@ CookMLExporter::CookMLExporter( const QString& filename, const QString &format )
 
 CookMLExporter::~CookMLExporter()
 {}
+
+int CookMLExporter::supportedItems() const
+{
+	return RecipeDB::All ^ RecipeDB::Ratings;
+}
 
 QString CookMLExporter::createHeader( const RecipeList& )
 {

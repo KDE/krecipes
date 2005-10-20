@@ -13,6 +13,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "backends/recipedb.h"
+
 RecipeMLExporter::RecipeMLExporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )
 {}
@@ -20,6 +22,11 @@ RecipeMLExporter::RecipeMLExporter( const QString& filename, const QString& form
 
 RecipeMLExporter::~RecipeMLExporter()
 {}
+
+int RecipeMLExporter::supportedItems() const
+{
+	return RecipeDB::All ^ RecipeDB::Photo ^ RecipeDB::Ratings;
+}
 
 QString RecipeMLExporter::createHeader( const RecipeList& )
 {

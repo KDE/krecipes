@@ -77,6 +77,8 @@ public:
 	//HTMLExporter( RecipeDB *, const QString&, const QString& );
 	virtual ~HTMLExporter();
 
+	virtual int supportedItems() const;
+
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
 	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 

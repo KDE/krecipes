@@ -29,6 +29,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qframe.h>
+#include <qcombobox.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -65,7 +66,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	m_pageNumbers = new NumbersPrefs( frame );
 	formatting_layout->addWidget( m_pageNumbers );
 
-	frame = addPage( i18n( "Import" ), i18n( "Recipe Import Options" ), il.loadIcon( "down", KIcon::NoGroup, 32 ) );
+	frame = addPage( i18n( "Import/Export" ), i18n( "Recipe Import and Export Options" ), il.loadIcon( "down", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* import_layout = new QHBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
@@ -485,7 +486,7 @@ void NumbersPrefs::languageChange()
 	decimalRadioButton->setText( i18n( "Decimal" ) );
 }
 
-//=============Import Preferences Dialog================//
+//=============Import/Export Preferences Dialog================//
 ImportPrefs::ImportPrefs( QWidget *parent )
 		: QWidget( parent )
 {
@@ -498,16 +499,41 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	Form1Layout = new QVBoxLayout( this, 11, 6 );
 
-	overwriteCheckbox = new QCheckBox( i18n( "Overwrite recipes with same title" ), this );
+	QGroupBox *importGroup = new QGroupBox(2,Qt::Vertical,i18n("Import"), this);
+
+	overwriteCheckbox = new QCheckBox( i18n( "Overwrite recipes with same title" ), importGroup );
 	overwriteCheckbox->setChecked( overwrite );
 	overwriteCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
-	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import" ), this );
+	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import" ), importGroup );
 	directImportCheckbox->setChecked( !direct );
 	directImportCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 
-	Form1Layout->addWidget( overwriteCheckbox );
-	Form1Layout->addWidget( directImportCheckbox );
+	Form1Layout->addWidget(importGroup);
+
+	QGroupBox *exportGroup = new QGroupBox(1,Qt::Vertical,i18n("Export"), this);
+
+	QHBox *clipboardHBox = new QHBox(exportGroup);
+	QLabel *clipboardLabel = new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
+	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
+	clipBoardFormatComboBox->insertItem(QString("%3 (*.txt)").arg(i18n("Plain Text")));
+	clipBoardFormatComboBox->insertItem("Krecipes (*.kreml)");
+	clipBoardFormatComboBox->insertItem("Meal-Master (*.mmf)");
+	clipBoardFormatComboBox->insertItem("RecipeML (*.xml)");
+	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
+
+	config->setGroup( "Export" );
+	QString clipboardFormat = config->readEntry("ClipboardFormat");
+	if ( clipboardFormat == "*.kreml" )
+		clipBoardFormatComboBox->setCurrentItem(1);
+	else if ( clipboardFormat == "*.mmf" )
+		clipBoardFormatComboBox->setCurrentItem(2);
+	else if ( clipboardFormat == "*.xml" )
+		clipBoardFormatComboBox->setCurrentItem(3);
+	else
+		clipBoardFormatComboBox->setCurrentItem(0);
+
+	Form1Layout->addWidget(exportGroup);
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -527,6 +553,10 @@ void ImportPrefs::saveOptions()
 
 	config->writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
 	config->writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
+
+	config->setGroup( "Export" );
+	QString ext = clipBoardFormatComboBox->currentText().mid(clipBoardFormatComboBox->currentText().find("(")+1,clipBoardFormatComboBox->currentText().length()-clipBoardFormatComboBox->currentText().find("(")-2);
+	config->writeEntry( "ClipboardFormat", ext );
 }
 
 

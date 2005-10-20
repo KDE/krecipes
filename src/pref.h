@@ -145,6 +145,8 @@ protected:
 	QVBoxLayout* Form1Layout;
 	QCheckBox* overwriteCheckbox;
 	QCheckBox* directImportCheckbox;
+
+	QComboBox *clipBoardFormatComboBox;
 };
 
 

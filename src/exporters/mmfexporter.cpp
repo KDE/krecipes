@@ -17,6 +17,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 
+#include "backends/recipedb.h"
 #include "datablocks/mixednumber.h"
 #include "mmdata.h"
 
@@ -27,6 +28,11 @@ MMFExporter::MMFExporter( const QString& filename, const QString& format ) :
 
 MMFExporter::~MMFExporter()
 {}
+
+int MMFExporter::supportedItems() const
+{
+	return RecipeDB::All ^ RecipeDB::Photo ^ RecipeDB::Ratings ^ RecipeDB::Authors;
+}
 
 QString MMFExporter::createContent( const RecipeList& recipes )
 {

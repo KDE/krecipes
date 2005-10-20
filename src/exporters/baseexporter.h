@@ -31,6 +31,9 @@ public:
 	BaseExporter( const QString &file, const QString &ext );
 	virtual ~BaseExporter();
 
+	/** Subclasses must report which items it is able to work with. */
+	virtual int supportedItems() const = 0;
+
 	void exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
 	void exporter( int id, RecipeDB *database, KProgressDialog * = 0 );
 

@@ -27,6 +27,8 @@ public:
 	CookMLExporter( const QString&, const QString& );
 	virtual ~CookMLExporter();
 
+	virtual int supportedItems() const;
+
 protected:
 	virtual QString createContent( const RecipeList& );
 	virtual QString createHeader( const RecipeList& );
