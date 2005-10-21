@@ -514,6 +514,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	QGroupBox *exportGroup = new QGroupBox(1,Qt::Vertical,i18n("Export"), this);
 
 	QHBox *clipboardHBox = new QHBox(exportGroup);
+	clipboardHBox->setSpacing(6);
 	QLabel *clipboardLabel = new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
 	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
 	clipBoardFormatComboBox->insertItem(QString("%3 (*.txt)").arg(i18n("Plain Text")));
@@ -521,6 +522,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	clipBoardFormatComboBox->insertItem("Meal-Master (*.mmf)");
 	clipBoardFormatComboBox->insertItem("RecipeML (*.xml)");
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
+	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);
 
 	config->setGroup( "Export" );
 	QString clipboardFormat = config->readEntry("ClipboardFormat");
