@@ -123,8 +123,12 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				content += "  "+( *rating_it ).comment+"\n";
 
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-				//FIXME-0.9
-				content +=  "  "+(*rc_it).name+": "+QString(i18n("%n star","%n stars",(*rc_it).stars)).arg((*rc_it).stars)+"\n";
+				//FIXME: This is an ugly hack, but I don't know how else to be i18n friendly (if this is even that)
+				// and still be able to display the amount as a fraction
+				QString starsTrans = i18n("1 star","%n stars",qRound((*rc_it).stars));
+				starsTrans.replace(QString::number(qRound((*rc_it).stars)),MixedNumber((*rc_it).stars).toString());
+
+				content +=  "  "+(*rc_it).name+": "+starsTrans+"\n";
 			}
 			content += "\n";
 		}
