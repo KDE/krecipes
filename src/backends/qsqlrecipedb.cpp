@@ -40,7 +40,7 @@ QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QStr
 	dbOK = false; //it isn't ok until we've connect()'ed
 	++m_refCount;
 
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("latin1"));  //this is the default, but let's explicitly set this to be sure
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("Latin1"));  //this is the default, but let's explicitly set this to be sure
 }
 
 QSqlRecipeDB::~QSqlRecipeDB()
@@ -1252,7 +1252,7 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 
 	// Remove any recipe using that prep method in the ingredient list (user must have been warned before calling this function!)
 
-	command = QString( "SELECT r.id FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1;" ).arg( prepMethodID );
+	command = QString( "SELECT DISTINCT r.id FROM recipes r,ingredient_list il, prep_method_list pl WHERE r.id=il.recipe_id AND pl.ingredient_list_id=il.id AND pl.prep_method_id=%1;" ).arg( prepMethodID );
 	prepMethodToRemove.exec( command );
 	if ( prepMethodToRemove.isActive() ) {
 		while ( prepMethodToRemove.next() ) {
@@ -1260,10 +1260,6 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 			database->exec( QString( "DELETE FROM recipes WHERE id=%1;" ).arg( prepMethodToRemove.value( 0 ).toInt() ) );
 		}
 	}
-
-	// Remove any ingredient in ingredient_list which has references to this prep method
-	command = QString( "DELETE FROM ingredient_list WHERE prep_method_id=%1;" ).arg( prepMethodID );
-	prepMethodToRemove.exec( command );
 
 	// Clean up ingredient_list which have no recipe that they belong to
 	// MySQL doesn't support subqueries until 4.1, so we'll do this the long way
@@ -1510,8 +1506,19 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 
 void QSqlRecipeDB::findPrepMethodDependancies( int prepMethodID, ElementList *recipes )
 {
-	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.prep_method_id=%1" ).arg( prepMethodID );
+	//get just the ids first so that we can use DISTINCT
+	QString command = QString( "SELECT DISTINCT r.id FROM recipes r,ingredient_list il, prep_method_list pl WHERE r.id=il.recipe_id AND pl.ingredient_list_id=il.id AND pl.prep_method_id=%1;" ).arg( prepMethodID );
 
+	QStringList ids;
+	QSqlQuery query( command, database );
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			ids << QString::number(query.value( 0 ).toInt());
+		}
+	}
+
+	//now get the titles of the ids
+	command = QString( "SELECT r.id, r.title FROM recipes r WHERE r.id IN ("+ids.join(",")+")" );
 	QSqlQuery prepMethodToRemove( command, database );
 	loadElementList( recipes, &prepMethodToRemove );
 }
@@ -2337,11 +2344,10 @@ QString QSqlRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 
 	QString return_title = recipe_title; //If any error is produced, just go for default value (always return something)
 
-	QString command = QString( "SELECT COUNT(DISTINCT title) FROM recipes WHERE title LIKE '%1 (%)';" ).arg( escapeAndEncode( recipe_title ) );
+	QString command = QString( "SELECT COUNT(1) FROM recipes WHERE title LIKE '%1 (%)';" ).arg( escapeAndEncode( recipe_title ) );
 
 	QSqlQuery alikeRecipes( command, database );
 	if ( alikeRecipes.isActive() && alikeRecipes.first() )
-		;
 	{
 		int count = alikeRecipes.value( 0 ).toInt();
 		return_title = QString( "%1 (%2)" ).arg( recipe_title ).arg( count + 2 );
