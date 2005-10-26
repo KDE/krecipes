@@ -223,9 +223,6 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 		text_it++;
 		QRegExp rx_line_begin( "^\\s*-{0,2}\\s*" );
 
-		//###: include this when we can support it
-#if 0
-
 		QRegExp rx_creation_date = QRegExp( "^\\s*-{0,2}\\s*Erfasst \\*RK\\*", false );
 		if ( ( *text_it ).contains( rx_creation_date ) )  // date followed by typist
 		{
@@ -245,15 +242,17 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 			if ( year < 1970 )
 				year += 100; //we'll assume nothing has been created before 1970 (y2k issues :p)
 
+			recipe.ctime = QDate(year,month,day);
+
+			#if 0
 			//typist
 			text_it++;
 			QString typist = = *text_it;
 			typist.remove( rx_line_begin );
+			#endif
 
 		}
 		else //everything else is an author
-#endif
-
 		{
 			if ( ( *text_it ).contains( rx_line_begin ) ) {
 				QString author = *text_it;

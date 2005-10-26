@@ -30,6 +30,7 @@
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
 #include "exporters/plaintextexporter.h"
+#include "exporters/rezkonvexporter.h"
 
 #include "widgets/recipelistview.h"
 #include "widgets/categorylistview.h"
@@ -302,7 +303,8 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	                                             //"*.cml|CookML (*.cml)\n"
 	                                             "*.html|%2 (*.html)\n"
 	                                             "*.mmf|Meal-Master (*.mmf)\n"
-	                                             "*.xml|RecipeML (*.xml)"
+	                                             "*.xml|RecipeML (*.xml)\n"
+	                                             "*.rk|Rezkonv (*.rk)"
 	                                              ).arg( i18n( "Compressed Krecipes format" ) ).arg( i18n( "Web page" ) ).arg( i18n("Plain Text") ),
 	                                    0, "export_dlg", true );
 	fd->setCaption( caption );
@@ -322,6 +324,8 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.txt" )
 				exporter = new PlainTextExporter( fileName, fd->currentFilter() );
+			else if ( fd->currentFilter() == "*.rk" )
+				exporter = new RezkonvExporter( fileName, fd->currentFilter() );
 			else {
 				CategoryTree *cat_structure = new CategoryTree;
 				database->loadCategories( cat_structure );
@@ -356,6 +360,8 @@ void RecipeActionsHandler::recipesToClipboard( const QValueList<int> &ids, Recip
 		exporter = new MMFExporter( QString::null, formatFilter );
 	else if ( formatFilter == "*.cml" )
 		exporter = new CookMLExporter( QString::null, formatFilter );
+	else if ( formatFilter == "*.rk" )
+		exporter = new RezkonvExporter( QString::null, formatFilter );
 	else if ( formatFilter == "*.kre" || formatFilter == "*.kreml" ) {
 		CategoryTree *cat_structure = new CategoryTree;
 		db->loadCategories( cat_structure );

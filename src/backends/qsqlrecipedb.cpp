@@ -17,6 +17,7 @@
 #include "datablocks/rating.h"
 
 #include <qbuffer.h>
+#include <qtextcodec.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -38,6 +39,8 @@ QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QStr
 
 	dbOK = false; //it isn't ok until we've connect()'ed
 	++m_refCount;
+
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("latin1"));  //this is the default, but let's explicitly set this to be sure
 }
 
 QSqlRecipeDB::~QSqlRecipeDB()
@@ -175,11 +178,11 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 			recipe.recipeID = recipeQuery.value( row_at ).toInt(); ++row_at;
 
 			if ( items & RecipeDB::Title ) {
-				 recipe.title = unescapeAndDecode( recipeQuery.value( row_at ).toString() ); ++row_at;
+				 recipe.title = unescapeAndDecode( recipeQuery.value( row_at ).toCString() ); ++row_at;
 			}
 
 			if ( items & RecipeDB::Instructions ) {
-				recipe.instructions = unescapeAndDecode( recipeQuery.value( row_at ).toString() ); ++row_at;
+				recipe.instructions = unescapeAndDecode( recipeQuery.value( row_at ).toCString() ); ++row_at;
 			}
 
 			if ( items & RecipeDB::PrepTime ) {
@@ -194,7 +197,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
 					QSqlQuery yield_query(y_command,database);
 					if ( yield_query.isActive() && yield_query.first() )
-						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toString());
+						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toCString());
 					else
 						kdDebug()<<yield_query.lastError().text()<<endl;
 				}
@@ -221,14 +224,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 				while ( ingredientQuery.next() ) {
 					Ingredient ing;
 					ing.ingredientID = ingredientQuery.value( 0 ).toInt();
-					ing.name = unescapeAndDecode( ingredientQuery.value( 1 ).toString() );
+					ing.name = unescapeAndDecode( ingredientQuery.value( 1 ).toCString() );
 
 					if ( !(items & RecipeDB::NamesOnly) ) {
 						ing.amount = ingredientQuery.value( 2 ).toDouble();
 						ing.amount_offset = ingredientQuery.value( 3 ).toDouble();
 						ing.unitID = ingredientQuery.value( 4 ).toInt();
-						ing.units.name = unescapeAndDecode( ingredientQuery.value( 5 ).toString() );
-						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 6 ).toString() );
+						ing.units.name = unescapeAndDecode( ingredientQuery.value( 5 ).toCString() );
+						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 6 ).toCString() );
 	
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -240,14 +243,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						if ( ing.groupID != -1 ) {
 							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 							if ( toLoad.isActive() && toLoad.first() )
-								ing.group = unescapeAndDecode( toLoad.value( 0 ).toString() );
+								ing.group = unescapeAndDecode( toLoad.value( 0 ).toCString() );
 						}
 
 						command = QString("SELECT pl.prep_method_id,p.name FROM prep_methods p, prep_method_list pl WHERE pl.ingredient_list_id=%1 AND p.id=pl.prep_method_id ORDER BY pl.order_index;").arg(ingredientQuery.value( 8 ).toInt());
 						QSqlQuery ingPrepMethodsQuery( command, database );
 						if ( ingPrepMethodsQuery.isActive() ) {
 							while ( ingPrepMethodsQuery.next() ) {
-								ing.prepMethodList.append( Element(ingPrepMethodsQuery.value(1).toString(),ingPrepMethodsQuery.value(0).toInt()) );
+								ing.prepMethodList.append( Element(ingPrepMethodsQuery.value(1).toCString(),ingPrepMethodsQuery.value(0).toInt()) );
 							}
 						}
 					}
@@ -277,7 +280,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 				while ( m_query.next() ) {
 					Element el;
 					el.id = m_query.value( 0 ).toInt();
-					el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+					el.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 					(*it).categoryList.append( el );
 				}
 			}
@@ -296,7 +299,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 				while ( m_query.next() ) {
 					Element el;
 					el.id = m_query.value( 0 ).toInt();
-					el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+					el.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 					(*it).authorList.append( el );
 				}
 			}
@@ -314,8 +317,8 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 				while ( query.next() ) {
 					Rating r;
 					r.id = query.value( 0 ).toInt();
-					r.comment = unescapeAndDecode( query.value( 1 ).toString() );
-					r.rater = unescapeAndDecode( query.value( 2 ).toString() );
+					r.comment = unescapeAndDecode( query.value( 1 ).toCString() );
+					r.rater = unescapeAndDecode( query.value( 2 ).toCString() );
 
 					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criteria rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criterion_id=rc.id" ).arg(r.id);
 					QSqlQuery criterionQuery( command, database );
@@ -323,7 +326,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						while ( criterionQuery.next() ) {
 							RatingCriteria rc;
 							rc.id = criterionQuery.value( 0 ).toInt();
-							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toString() );
+							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toCString() );
 							rc.stars = criterionQuery.value( 2 ).toDouble();
 							r.append( rc );
 						}
@@ -347,7 +350,7 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 		while ( m_query.next() ) {
 			Element group;
 			group.id = m_query.value( 0 ).toInt();
-			group.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			group.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 			list->append( group );
 		}
 	}
@@ -365,7 +368,7 @@ void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 		while ( m_query.next() ) {
 			Element ing;
 			ing.id = m_query.value( 0 ).toInt();
-			ing.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			ing.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 			list->append( ing );
 		}
 	}
@@ -383,7 +386,7 @@ void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 		while ( m_query.next() ) {
 			Element prep_method;
 			prep_method.id = m_query.value( 0 ).toInt();
-			prep_method.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			prep_method.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 			list->append( prep_method );
 		}
 	}
@@ -401,7 +404,7 @@ void QSqlRecipeDB::loadYieldTypes( ElementList *list, int limit, int offset )
 		while ( m_query.next() ) {
 			Element el;
 			el.id = m_query.value( 0 ).toInt();
-			el.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			el.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 			list->append( el );
 		}
 	}
@@ -454,8 +457,8 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 		while ( unitToLoad.next() ) {
 			Unit unit;
 			unit.id = unitToLoad.value( 0 ).toInt();
-			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toString() );
-			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toString() );
+			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toCString() );
+			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toCString() );
 			list->append( unit );
 		}
 	}
@@ -480,7 +483,7 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 	if ( query.isActive() && query.first() ) {
 		QCString decodedPic;
 		QPixmap pix;
-		KCodecs::base64Decode( QCString( query.value( 0 ).toString().latin1() ), decodedPic );
+		KCodecs::base64Decode( query.value( 0 ).toCString(), decodedPic );
 		int len = decodedPic.size();
 
 		if ( len > 0 ) {
@@ -726,7 +729,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recur
 		while ( recipeToLoad.next() ) {
 			Element recipe;
 			recipe.id = recipeToLoad.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeToLoad.value( 1 ).toString() );
+			recipe.name = unescapeAndDecode( recipeToLoad.value( 1 ).toCString() );
 			list->append( recipe );
 		}
 	}
@@ -743,7 +746,7 @@ void QSqlRecipeDB::loadUncategorizedRecipes( ElementList *list )
 		while ( m_query.next() ) {
 			Element recipe;
 			recipe.id = m_query.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( m_query.value( 1 ).toString() );
+			recipe.name = unescapeAndDecode( m_query.value( 1 ).toCString() );
 			list->append( recipe );
 		}
 	}
@@ -878,8 +881,8 @@ void QSqlRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 		while ( unitToLoad.next() ) {
 			Unit unit;
 			unit.id = unitToLoad.value( 0 ).toInt();
-			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toString() );
-			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toString() );
+			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toCString() );
+			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toCString() );
 			list->append( unit );
 		}
 	}
@@ -956,7 +959,7 @@ void QSqlRecipeDB::findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingre
 		while ( recipeFound.next() ) {
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
+			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
 			results->append( recipe );
 		}
 	}
@@ -972,7 +975,7 @@ void QSqlRecipeDB::findUseOfIngInRecipes( ElementList *results, int ingredientID
 		while ( recipeFound.next() ) {
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
+			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
 			results->append( recipe );
 		}
 	}
@@ -1105,11 +1108,11 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 		while ( propertiesToLoad.next() ) {
 			IngredientProperty prop;
 			prop.id = propertiesToLoad.value( 0 ).toInt();
-			prop.name = unescapeAndDecode( propertiesToLoad.value( 1 ).toString() );
-			prop.units = unescapeAndDecode( propertiesToLoad.value( 2 ).toString() );
+			prop.name = unescapeAndDecode( propertiesToLoad.value( 1 ).toCString() );
+			prop.units = unescapeAndDecode( propertiesToLoad.value( 2 ).toCString() );
 			if ( usePerUnit ) {
 				prop.perUnit.id = propertiesToLoad.value( 3 ).toInt();
-				prop.perUnit.name = unescapeAndDecode( propertiesToLoad.value( 4 ).toString() );
+				prop.perUnit.name = unescapeAndDecode( propertiesToLoad.value( 4 ).toCString() );
 			}
 			else {
 				prop.perUnit.id = -1;
@@ -1339,7 +1342,7 @@ void QSqlRecipeDB::findUseOf_Unit_InRecipes( ElementList *results, int unitID )
 		while ( recipeFound.next() ) {
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toString() );
+			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
 			results->append( recipe );
 		}
 	}
@@ -1355,7 +1358,7 @@ void QSqlRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID
 		while ( recipeFound.next() ) {
 			Element recipe;
 			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = recipeFound.value( 1 ).toString();
+			recipe.name = recipeFound.value( 1 ).toCString();
 			results->append( recipe );
 		}
 	}
@@ -1371,7 +1374,7 @@ void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID
 		while ( query.next() ) {
 			Element recipe;
 			recipe.id = query.value( 0 ).toInt();
-			recipe.name = query.value( 1 ).toString();
+			recipe.name = query.value( 1 ).toCString();
 			results->append( recipe );
 		}
 	}
@@ -1387,7 +1390,7 @@ void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 		while ( query.next() ) {
 			Element recipe;
 			recipe.id = query.value( 0 ).toInt();
-			recipe.name = query.value( 1 ).toString();
+			recipe.name = query.value( 1 ).toCString();
 			results->append( recipe );
 		}
 	}
@@ -1520,7 +1523,7 @@ void QSqlRecipeDB::loadElementList( ElementList *elList, QSqlQuery *query )
 		while ( query->next() ) {
 			Element el;
 			el.id = query->value( 0 ).toInt();
-			el.name = unescapeAndDecode( query->value( 1 ).toString() );
+			el.name = unescapeAndDecode( query->value( 1 ).toCString() );
 			elList->append( el );
 		}
 	}
@@ -1532,10 +1535,10 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 		while ( query->next() ) {
 			Element el;
 			el.id = -1; // There's no ID for the ingredient-property combination
-			QString ingName = query->value( 0 ).toString();
-			QString propName = unescapeAndDecode( query->value( 1 ).toString() );
-			QString propUnits = unescapeAndDecode( query->value( 2 ).toString() );
-			QString propPerUnits = unescapeAndDecode( query->value( 3 ).toString() );
+			QString ingName = query->value( 0 ).toCString();
+			QString propName = unescapeAndDecode( query->value( 1 ).toCString() );
+			QString propUnits = unescapeAndDecode( query->value( 2 ).toCString() );
+			QString propPerUnits = unescapeAndDecode( query->value( 3 ).toCString() );
 
 			el.name = QString( "In ingredient %1: property \"%2\" [%3/%4]" ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
 			elList->append( el );
@@ -1553,9 +1556,11 @@ QCString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 	return ( s_escaped.utf8() );
 }
 
-QString QSqlRecipeDB::unescapeAndDecode( const QString &s ) const
+//the string coming out of the database should be latin1 encoded, which needs
+//to be utf8
+QString QSqlRecipeDB::unescapeAndDecode( const QCString &s ) const
 {
-	QString s_escaped = QString::fromUtf8( s.latin1() );
+	QString s_escaped = QString::fromUtf8( s );
 	s_escaped.replace( "\";@", ";" );
 	return ( s_escaped ); // Use unicode encoding
 }
@@ -1585,7 +1590,7 @@ QString QSqlRecipeDB::categoryName( int ID )
 	QString command = QString( "SELECT name FROM categories WHERE id=%1;" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
-		return ( unescapeAndDecode( toLoad.value( 0 ).toString() ) );
+		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );
 
 	return ( QString::null );
 }
@@ -1595,7 +1600,7 @@ IngredientProperty QSqlRecipeDB::propertyName( int ID )
 	QString command = QString( "SELECT name,units FROM ingredient_properties WHERE id=%1;" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
-		return ( IngredientProperty( unescapeAndDecode( toLoad.value( 0 ).toString() ), unescapeAndDecode( toLoad.value( 1 ).toString() ), ID ) );
+		return ( IngredientProperty( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ), ID ) );
 	}
 
 	return ( IngredientProperty( QString::null, QString::null ) );
@@ -1606,7 +1611,7 @@ Unit QSqlRecipeDB::unitName( int ID )
 	QString command = QString( "SELECT name,plural FROM units WHERE id=%1;" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
-		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toString() ), unescapeAndDecode( toLoad.value( 1 ).toString() ) );
+		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ) );
 
 		//if we don't have both name and plural, use what we have as both
 		if ( unit.name.isEmpty() )
@@ -1719,7 +1724,7 @@ void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset
 		while ( toLoad.next() ) {
 			Element el;
 			el.id = toLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( toLoad.value( 1 ).toString() );
+			el.name = unescapeAndDecode( toLoad.value( 1 ).toCString() );
 			list->append( el );
 		}
 	}
@@ -1736,7 +1741,7 @@ void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 		while ( categoryToLoad.next() ) {
 			Element el;
 			el.id = categoryToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
+			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toCString() );
 			list->append( el );
 		}
 	}
@@ -1766,7 +1771,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			int id = categoryToLoad.value( 0 ).toInt();
 			Element el;
 			el.id = id;
-			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toString() );
+			el.name = unescapeAndDecode( categoryToLoad.value( 1 ).toCString() );
 			CategoryTree *list_child = list->add( el );
 
 			if ( recurse ) {
@@ -1844,7 +1849,7 @@ void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 		while ( authorToLoad.next() ) {
 			Element el;
 			el.id = authorToLoad.value( 0 ).toInt();
-			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toString() );
+			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toCString() );
 			list->append( el );
 		}
 	}
@@ -1904,7 +1909,7 @@ int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 			while ( unitsToLoad.next() ) {
 				Element el;
 				el.id = unitsToLoad.value( 0 ).toInt();
-				el.name = unescapeAndDecode( unitsToLoad.value( 1 ).toString() );
+				el.name = unescapeAndDecode( unitsToLoad.value( 1 ).toCString() );
 				list->append( el );
 			}
 		}
@@ -2356,7 +2361,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 	QString command = QString( "SELECT title FROM recipes WHERE id=%1;" ).arg( recipeID );
 	QSqlQuery recipeToLoad( command, database );
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
-		return ( unescapeAndDecode(recipeToLoad.value( 0 ).toString()) );
+		return ( unescapeAndDecode(recipeToLoad.value( 0 ).toCString()) );
 
 	return ( QString::null );
 }

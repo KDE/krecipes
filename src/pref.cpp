@@ -520,6 +520,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	clipBoardFormatComboBox->insertItem(QString("%3 (*.txt)").arg(i18n("Plain Text")));
 	clipBoardFormatComboBox->insertItem("Krecipes (*.kreml)");
 	clipBoardFormatComboBox->insertItem("Meal-Master (*.mmf)");
+	clipBoardFormatComboBox->insertItem("Rezkonv (*.rk)");
 	clipBoardFormatComboBox->insertItem("RecipeML (*.xml)");
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
 	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);

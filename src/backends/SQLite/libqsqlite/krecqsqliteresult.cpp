@@ -49,7 +49,7 @@ QSQLiteResultRow::TableInt QSQLiteResultRow::tableInt() const
 	return m_int;
 }
 
-QString QSQLiteResultRow::data( const QString& columnName, bool *ok )
+QCString QSQLiteResultRow::data( const QString& columnName, bool *ok )
 {
 	TableString::Iterator it = m_string.find( columnName );
 
@@ -62,12 +62,12 @@ QString QSQLiteResultRow::data( const QString& columnName, bool *ok )
 	else {
 		if ( ok )
 			* ok = false;
-		return QString::null;
+		return QCString(0);
 	}
 
 }
 
-QString QSQLiteResultRow::data( int column, bool *ok )
+QCString QSQLiteResultRow::data( int column, bool *ok )
 {
 	TableInt::Iterator it = m_int.find( column );
 
@@ -80,7 +80,7 @@ QString QSQLiteResultRow::data( int column, bool *ok )
 	else {
 		if ( ok )
 			* ok = false;
-		return QString::null;
+		return QCString(0);
 	}
 }
 

@@ -345,6 +345,13 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	}
 
 	if ( qRound(version*100) < 87 ) {
+		//Load this default data so the user knows what rating criteria is
+		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
+
 		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 }

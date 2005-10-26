@@ -66,12 +66,12 @@ public:
 	 * retrieves the Data from columnName
 	 *
 	 */
-	QString data( const QString& columnName, bool *ok = 0 );
+	QCString data( const QString& columnName, bool *ok = 0 );
 
 	/**
 	 * QString for column number
 	 */
-	QString data( int columnNumber, bool *ok = 0 );
+	QCString data( int columnNumber, bool *ok = 0 );
 
 	/**
 	 * Date conversion from columnName
