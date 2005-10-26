@@ -250,7 +250,10 @@ void EditRatingDialog::loadRating( const Rating &rating )
 void EditRatingDialog::slotAddRatingCriteria()
 {
 	RatingCriteria r;
-	r.name = criteriaComboBox->lineEdit()->text();
+	r.name = criteriaComboBox->lineEdit()->text().stripWhiteSpace();
+	if ( r.name.isEmpty() )
+		return;
+
 	r.stars = starsWidget->text().toDouble();
 
 	addRatingCriteria(r);

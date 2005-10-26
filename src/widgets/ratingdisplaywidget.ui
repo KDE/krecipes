@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>396</width>
-            <height>177</height>
+            <width>533</width>
+            <height>211</height>
         </rect>
     </property>
     <property name="paletteBackgroundColor">
@@ -124,6 +124,14 @@
                     </column>
                     <property name="name">
                         <cstring>criteriaListView</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="selectionMode" stdset="0">
                         <enum>NoSelection</enum>
