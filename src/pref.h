@@ -28,6 +28,7 @@ class QButtonGroup;
 class QCheckBox;
 class QRadioButton;
 class QVBoxLayout;
+class QComboBox;
 
 class KrecipesPreferences : public KDialogBase
 {
