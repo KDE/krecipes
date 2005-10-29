@@ -28,12 +28,29 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout5</cstring>
+                <cstring>layout4</cstring>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>21</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>icon</cstring>
@@ -64,7 +81,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>21</width>
-                            <height>91</height>
+                            <height>80</height>
                         </size>
                     </property>
                 </spacer>
