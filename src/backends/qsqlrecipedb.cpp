@@ -1553,18 +1553,19 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 	}
 }
 
-QCString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
+
+//The string going into the database is utf8 text interpreted as latin1
+QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped = s;
 
 	s_escaped.replace ( "'", "\\'" );
 	s_escaped.replace ( ";", "\";@" ); // Small trick for only for parsing later on
 
-	return ( s_escaped.utf8() );
+	return QString::fromLatin1( s_escaped.utf8() );
 }
 
-//the string coming out of the database should be latin1 encoded, which needs
-//to be utf8
+//The string coming out of the database is utf8 text, interpreted as though latin1.  Calling fromUtf8() on this gives us back the original utf8.
 QString QSqlRecipeDB::unescapeAndDecode( const QCString &s ) const
 {
 	QString s_escaped = QString::fromUtf8( s );
@@ -1927,7 +1928,7 @@ int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 
 int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM authors WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1941,7 +1942,7 @@ int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 
 int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM categories WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1955,7 +1956,7 @@ int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 
 int QSqlRecipeDB::findExistingIngredientGroupByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxIngGroupNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxIngGroupNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_groups WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1969,7 +1970,7 @@ int QSqlRecipeDB::findExistingIngredientGroupByName( const QString& name )
 
 int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredients WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1983,7 +1984,7 @@ int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 
 int QSqlRecipeDB::findExistingPrepByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM prep_methods WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -1997,7 +1998,7 @@ int QSqlRecipeDB::findExistingPrepByName( const QString& name )
 
 int QSqlRecipeDB::findExistingPropertyByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_properties WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -2011,7 +2012,7 @@ int QSqlRecipeDB::findExistingPropertyByName( const QString& name )
 
 int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = "SELECT id FROM units WHERE name='" + search_str + "' OR plural='" + search_str + "';";
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -2025,7 +2026,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 
 int QSqlRecipeDB::findExistingRatingByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM rating_criteria WHERE name='%1'" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -2039,7 +2040,7 @@ int QSqlRecipeDB::findExistingRatingByName( const QString& name )
 
 int QSqlRecipeDB::findExistingRecipeByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM recipes WHERE title='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query
@@ -2053,7 +2054,7 @@ int QSqlRecipeDB::findExistingRecipeByName( const QString& name )
 
 int QSqlRecipeDB::findExistingYieldTypeByName( const QString& name )
 {
-	QCString search_str = escapeAndEncode( name.left( maxYieldTypeLength() ) ); //truncate to the maximum size db holds
+	QString search_str = escapeAndEncode( name.left( maxYieldTypeLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM yield_types WHERE name='%1';" ).arg( search_str );
 	QSqlQuery elementToLoad( command, database ); // Run the query

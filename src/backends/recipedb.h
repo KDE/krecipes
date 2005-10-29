@@ -261,7 +261,7 @@ public:
 
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
-	virtual QCString escapeAndEncode( const QString &s ) const = 0;
+	virtual QString escapeAndEncode( const QString &s ) const = 0;
 	virtual QString unescapeAndDecode( const QCString &s ) const = 0;
 
 	virtual QString categoryName( int ID ) = 0;

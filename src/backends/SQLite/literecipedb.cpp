@@ -804,15 +804,15 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	database->exec( "DROP TABLE "+table_name+"_copy" );
 }
 
-QCString LiteRecipeDB::escapeAndEncode( const QString &s ) const
+QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped;
 
 	// Escape
-	s_escaped = escape( s.utf8() );
+	s_escaped = escape( QString::fromLatin1(s.utf8()) );
 
 	// Return encoded
-	return s_escaped.latin1(); // Note that the text has already been converted into utf8 before escaping.
+	return s_escaped.latin1(); // Note that the text has already been converted before escaping.
 }
 
 /*

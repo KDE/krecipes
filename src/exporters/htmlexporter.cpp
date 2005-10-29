@@ -237,7 +237,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	for ( QMap<QString, QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it ) {
 		QString key = it.key();
 
-		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, it.data().utf8() );
+		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, it.data() );
 
 		if ( key == "photo" ) {
 			temp_photo_geometry.setWidth( ( int ) ( double( temp_photo_geometry.width() ) * 100.0 / m_width ) ); // The size of all objects needs to be saved in percentage format

@@ -44,7 +44,7 @@ protected:
 		return new KreSQLiteDriver();
 	}
 
-	virtual QCString escapeAndEncode( const QString &s ) const;
+	virtual QString escapeAndEncode( const QString &s ) const;
 
 private:
 	virtual void portOldDatabases( float version );
