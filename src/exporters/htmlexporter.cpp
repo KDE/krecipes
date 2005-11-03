@@ -455,7 +455,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	//=======================RATINGS======================//
 	QString ratings_html;
 	if ( recipe.ratingList.count() > 0 )
-		ratings_html += QString("<b>%1:</b>").arg("Ratings");
+		ratings_html += QString("<b>%1:</b>").arg(i18n("Ratings"));
 
 	for ( RatingList::const_iterator rating_it = recipe.ratingList.begin(); rating_it != recipe.ratingList.end(); ++rating_it ) {
 		ratings_html += "<hr />";
