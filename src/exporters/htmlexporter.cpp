@@ -137,6 +137,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		return "<html>"+error_str+"</html>";
 	}
 
+	#if 0
 	QDomNodeList node_list = doc.elementsByTagName( "page-layout-properties" );
 	if ( node_list.count() > 0 ) {
 		QDomElement layout_el = node_list.item( 0 ).toElement();
@@ -144,6 +145,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		m_width = page_layout.ptWidth;
 		kdDebug()<<"Setting width to "<<m_width<<endl;
 	}
+	#endif
 
 	//put all the recipe photos into this directory
 	QDir dir;
