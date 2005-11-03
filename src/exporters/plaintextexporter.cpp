@@ -114,7 +114,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 		content += "\n\n";
 
 		if ( (*recipe_it).ratingList.count() > 0 )
-			content += "Ratings:\n";
+			content += i18n("Ratings")+"\n";
 
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			if ( !( *rating_it ).rater.isEmpty() )
