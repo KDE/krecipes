@@ -114,13 +114,14 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 		content += "\n\n";
 
 		if ( (*recipe_it).ratingList.count() > 0 )
-			content += i18n("Ratings")+"\n";
+			content += "----------"+i18n("Ratings")+"----------\n";
 
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			if ( !( *rating_it ).rater.isEmpty() )
 				content += "  "+( *rating_it ).rater+"\n";
-			if ( !( *rating_it ).comment.isEmpty() )
-				content += "  "+( *rating_it ).comment+"\n";
+
+			if ( (*rating_it).ratingCriteriaList.size() > 0 )
+				content += "\n";
 
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				//FIXME: This is an ugly hack, but I don't know how else to be i18n friendly (if this is even that)
@@ -130,10 +131,18 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 
 				content +=  "  "+(*rc_it).name+": "+starsTrans+"\n";
 			}
+
+			if ( (*rating_it).ratingCriteriaList.size() > 0 )
+				content += "\n";
+
+			if ( !( *rating_it ).comment.isEmpty() )
+				content += "  "+( *rating_it ).comment+"\n";
+
 			content += "\n";
 		}
 
-		content += "\n";
+		if ( (*recipe_it).ratingList.size() > 0 )
+			content += "\n";
 
 		content += "-----\n\n"; //end of recipe indicator
 	}

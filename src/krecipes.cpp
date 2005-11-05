@@ -400,6 +400,19 @@ void Krecipes::kreDBImport()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
+		KConfig * config = KGlobal::config();
+		config->setGroup( "Import" );
+		bool direct = config->readBoolEntry( "DirectImport", false );
+		if ( !direct ) {
+			RecipeImportDialog import_dialog( importer.recipeList() );
+	
+			if ( import_dialog.exec() != QDialog::Accepted ) {
+				return;
+			}
+			else
+				importer.setRecipeList( import_dialog.getSelectedRecipes() );
+		}
+
 		QString error = importer.getErrorMsg();
 		if ( !error.isEmpty() ) {
 			KMessageBox::sorry( this, error );
