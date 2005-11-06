@@ -48,6 +48,9 @@ void BaseImporter::add( const RecipeList &recipe_list )
 	for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it ) {
 		Recipe copy = *it;
 		copy.recipeID = -1; //make sure an importer didn't give this a value
+		for ( RatingList::iterator rating_it = copy.ratingList.begin(); rating_it != copy.ratingList.end(); ++rating_it ) {
+			(*rating_it).id = -1;
+		}
 		m_recipe_list->append( copy );
 	}
 }
