@@ -174,7 +174,7 @@ void RecipeActionsHandler::edit()
 	QPtrList<QListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
 		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one recipe."), i18n("Edit Recipe") );
-	else if ( items.at(0)->rtti() == 1000 ) {
+	else if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* ) items.at(0);
 		emit recipeSelected( recipe_it->recipeID(), 1 );
 	}
