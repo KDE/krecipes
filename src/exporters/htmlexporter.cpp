@@ -303,6 +303,8 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		element->addProperty( QString( "height: %1px;" ).arg( elementHeight ) );
 		if ( font_size > 0 )
 			element->addProperty( QString( "font-size: %1pt;" ).arg( font_size ) );
+		else
+			kdDebug()<<"Warning: Unable to 'Shrink to fit' - Not enough spacing available, so defaulting to the original font size."<<endl;
 
 		height_taken = QMAX( rect->top() + int( elementHeight * 100.0 / m_width ), height_taken );
 	}
