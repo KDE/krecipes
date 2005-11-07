@@ -288,6 +288,9 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 					elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element, font_size );
 				}
 				while ( elementHeight > goal_height && font_size > 0 );
+
+				if ( font_size == 0 )
+					kdDebug()<<"Warning: Unable to 'Shrink to fit' - Not enough spacing available, so defaulting to the original font size."<<endl;
 			}
 			else
 				elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element );
@@ -303,8 +306,6 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 		element->addProperty( QString( "height: %1px;" ).arg( elementHeight ) );
 		if ( font_size > 0 )
 			element->addProperty( QString( "font-size: %1pt;" ).arg( font_size ) );
-		else
-			kdDebug()<<"Warning: Unable to 'Shrink to fit' - Not enough spacing available, so defaulting to the original font size."<<endl;
 
 		height_taken = QMAX( rect->top() + int( elementHeight * 100.0 / m_width ), height_taken );
 	}
@@ -312,29 +313,35 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 	return height_taken;
 }
 
+void HTMLExporter::insertHTMLIfVisible( QMap<QString, QString> &html_map, const QString &name, const QString &html )
+{
+	QDomElement el = getLayoutAttribute( doc, name, "visible" );
+	if ( el.isNull() || el.text() != "false" )
+		html_map.insert(name,html);
+}
+
 QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 {
 	KConfig * config = KGlobal::config();
 	QMap<QString, QString> html_map;
 
-
 	//=======================TITLE======================//
-	html_map.insert( "title", recipe.title );
+	insertHTMLIfVisible( html_map, "title", recipe.title );
 
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = QStyleSheet::escape( recipe.instructions );
 	instr_html.replace( "\n", "<BR>" );
-	html_map.insert( "instructions", instr_html );
+	insertHTMLIfVisible( html_map, "instructions", instr_html );
 
 	//=======================SERVINGS======================//
 	QString servings_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
-	html_map.insert( "servings", servings_html );
+	insertHTMLIfVisible( html_map, "servings", servings_html );
 
 	//=======================PREP TIME======================//
 	QString preptime_html;
 	if ( !recipe.prepTime.isNull() && recipe.prepTime.isValid() )
 		preptime_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Preparation Time" ) ).arg( recipe.prepTime.toString( "h:mm" ) );
-	html_map.insert( "prep_time", preptime_html );
+	insertHTMLIfVisible( html_map, "prep_time", preptime_html );
 
 	//========================PHOTO========================//
 	QString photo_name;
@@ -347,7 +354,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
 	QString photo_html = QString( "<img src=\"%1\">" ).arg( image_url );
-	html_map.insert( "photo", photo_html );
+	insertHTMLIfVisible( html_map, "photo", photo_html );
 
 	//=======================AUTHORS======================//
 	QString authors_html;
@@ -361,7 +368,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	}
 	if ( !authors_html.isEmpty() )
 		authors_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
-	html_map.insert( "authors", authors_html );
+	insertHTMLIfVisible( html_map, "authors", authors_html );
 
 	//=======================CATEGORIES======================//
 	QString categories_html;
@@ -376,11 +383,11 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	if ( !categories_html.isEmpty() )
 		categories_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
-	html_map.insert( "categories", categories_html );
+	insertHTMLIfVisible( html_map, "categories", categories_html );
 
 	//=======================HEADER======================//
 	QString header_html = QString( "<b>%1 #%2</b>" ).arg( i18n( "Recipe" ) ).arg( recipe.recipeID );
-	html_map.insert( "header", header_html );
+	insertHTMLIfVisible( html_map, "header", header_html );
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
@@ -421,7 +428,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		ingredients_html.prepend( "<ul>" );
 		ingredients_html.append( "</ul>" );
 	}
-	html_map.insert( "ingredients", ingredients_html );
+	insertHTMLIfVisible( html_map, "ingredients", ingredients_html );
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
@@ -452,7 +459,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		properties_html.prepend( "<ul>" );
 		properties_html.append( "</ul>" );
 	}
-	html_map.insert( "properties", properties_html );
+	insertHTMLIfVisible( html_map, "properties", properties_html );
 
 	//=======================RATINGS======================//
 	QString ratings_html;
@@ -483,7 +490,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		if ( !( *rating_it ).comment.isEmpty() )
 			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
-	html_map.insert( "ratings", ratings_html );
+	insertHTMLIfVisible( html_map, "ratings", ratings_html );
 
 	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
 
@@ -727,6 +734,9 @@ int HTMLExporter::getHeight( int constrained_width, DivElement *element, int fon
 	// Set the size of the element
 	DOM::Document size_test_doc = sizeCalculator->document();
 	int return_height = size_test_doc.getElementById( element->id() ).getRect().height();
+
+	if ( size_test_doc.getElementById( element->id() ).getRect().width() != constrained_width )
+		kdDebug()<<"Warning: Element expanded past the constrained width"<<endl;
 
 	delete sizeCalculator;
 

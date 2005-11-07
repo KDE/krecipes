@@ -94,6 +94,7 @@ private:
 	int createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset = 0 );
 	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
 	int getHeight( int constrained_width, DivElement *element, int font_size = -1 );
+	void insertHTMLIfVisible( QMap<QString, QString> &html_map, const QString &name, const QString &html );
 
 	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
 	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
