@@ -30,7 +30,7 @@ const QPixmap& RatingWidget::pixmap(const QString& value_) {
     pixmaps.insert(-1, new QPixmap());
   }
   bool ok;
-  int n = value_.toInt();
+  int n = value_.toInt(&ok);
   if(!ok || n < 1 || n > 10) {
     return *pixmaps[-1];
   }
@@ -148,7 +148,7 @@ QString RatingWidget::text() const {
 void RatingWidget::setText(const QString& text_) {
   bool ok;
   // text is value, subtract one to get index
-  m_currIndex =text_.toInt()-1;
+  m_currIndex =text_.toInt(&ok)-1;
   if(ok) {
     if(m_currIndex > m_total-1) {
       m_currIndex = -1;
