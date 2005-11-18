@@ -17,7 +17,9 @@ using std::cout;
 using std::endl;
 
 #include "rezkonvimporter.h"
+#include "rezkonvexporter.h"
 #include "importertest.h"
+#include "exportertest.h"
 
 int
 main(int argc, char *argv[])
@@ -110,6 +112,25 @@ main(int argc, char *argv[])
 	recipe.ingList.append( ing7 );
 	
 	check( importer, recipe );
+
+	RecipeList recipeList;
+	recipeList.append(recipe);
+	recipeList.append(recipe);
+
+	printf("Creating RezkonvExporter.\n");
+	RezkonvExporter exporter("not needed",".rk");
+	check( exporter, recipeList );
+	printf("Successfully exported recipes to test.txt.\n");
+
+	printf("Creating RezkonvImporter to test exported recipes.\n");
+	RezkonvImporter importer2;
+
+	printf("Parsing test.txt.\n");
+	QStringList files2; files2 << "test.txt";
+	importer2.parseFiles(files2);
+	QFile::remove("test.txt");
+	check( importer2, recipe );
+	printf("Recipe export successful.\n");
 
 	printf("Done.\n");
 }

@@ -168,7 +168,6 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 	recipe.ingList.append( new_ingredient );
 }
 
-//for now, make header an ingredient
 void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &recipe )
 {
 	QString header = string;

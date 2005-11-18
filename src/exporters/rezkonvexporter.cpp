@@ -19,7 +19,20 @@
 
 #include "backends/recipedb.h"
 #include "datablocks/mixednumber.h"
-#include "mmdata.h"
+
+struct translate_unit_info
+{
+	const char *english;
+	const char *english_plural;
+	const char *german;
+	const char *german_plural;
+};
+
+static translate_unit_info translate_units[] = {
+                                          {"g", "g", "Gramm", "Gramms" },
+                                          {"", "", "", ""},
+                                          { 0, 0, 0, 0 }
+                                      };
 
 RezkonvExporter::RezkonvExporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )
@@ -47,7 +60,7 @@ QString RezkonvExporter::createContent( const RecipeList& recipes )
 		writeDirections( content, *recipe_it );
 		content += "\n";
 
-		content += "-----\n"; //end of recipe indicator
+		content += "=====\n\n"; //end of recipe indicator
 	}
 
 	return content;
@@ -107,8 +120,8 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		QString group = group_list[ 0 ].group.left( 76 ); //just use the first's name... they're all the same
 		if ( !group.isEmpty() ) {
 			int length = group.length();
-			QString filler_lt = QString().fill( '-', ( 76 - length ) / 2 );
-			QString filler_rt = ( length % 2 ) ? QString().fill( '-', ( 76 - length ) / 2 + 1 ) : filler_lt;
+			QString filler_lt = QString().fill( '=', ( 76 - length ) / 2 );
+			QString filler_rt = ( length % 2 ) ? QString().fill( '=', ( 76 - length ) / 2 + 1 ) : filler_lt;
 			content += filler_lt + group + filler_rt + "\n";
 		}
 
@@ -117,22 +130,18 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		}
 	}
 
-	QString currLine;
+	QString authorLines;
 	if ( recipe.authorList.count() > 0 ) {
 		content += "============================== QUELLE ==============================\n";
-		currLine = "                   "+(*recipe.authorList.begin()).name;
+		authorLines = "                   "+(*recipe.authorList.begin()).name+"\n";
 	}
 	for ( ElementList::const_iterator author_it = ++recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it ) {
-		if ( currLine.length() + (*author_it).name.length() > 80 ) {
-			content += currLine + "\n";
-
-			currLine = "                   -- ";
-			currLine += (*author_it).name;
-		}
-		else
-			currLine += ", "+(*author_it).name;
+		authorLines += "                   -- ";
+		authorLines += (*author_it).name + "\n";
 	}
-	content+= currLine;
+	if ( !authorLines.isEmpty() )
+		authorLines += "\n";
+	content += authorLines;
 }
 
 void RezkonvExporter::writeSingleIngredient( QString &content, const Ingredient &ing )
@@ -142,50 +151,72 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const Ingredient 
 	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	//columns 1-7
-	if ( ing.amount > 0 )
-		content += MixedNumber( ing.amount ).toString( number_format, false ).rightJustify( 7, ' ', true ) + " ";
-	else
-		content += "        ";
+	if ( ing.amount > 1e-8 ) {
+		MixedNumber::Format other_format = (number_format == MixedNumber::DecimalFormat) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	//columns 9-10
-	bool found_short_form = false;
-	for ( int i = 0; unit_info[ i ].short_form; i++ ) {
-		if ( unit_info[ i ].expanded_form == ing.units.name ||
-		        unit_info[ i ].plural_expanded_form == ing.units.plural ||
-		        unit_info[ i ].short_form == ing.units.name ) {
-			found_short_form = true;
-			content += QString( unit_info[ i ].short_form ).leftJustify( 2 ) + " ";
+		QString amount_str = MixedNumber( ing.amount ).toString( other_format, false );
+
+		if ( ing.amount_offset > 0 )
+			amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( other_format, false );
+
+		if ( amount_str.length() > 7 ) { //too long, let's try the other formatting
+			QString new_amount_str = MixedNumber( ing.amount ).toString( other_format, false );
+	
+			if ( ing.amount_offset > 0 )
+				new_amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( other_format, false );
+
+			if (new_amount_str.length() > 7) { //still too long, use original formatting, but truncate it
+				amount_str = amount_str.left(7);
+				kdDebug()<<"Warning: Amount text too long, truncating"<<endl;
+			}
+		}
+		content += amount_str.rightJustify( 7, ' ', true ) + " ";
+	}
+	else
+		content += QString().fill(' ',7+1);
+
+	//columns 9-19
+	bool found_translation = false;
+	for ( int i = 0; translate_units[ i ].english; i++ ) {
+		if ( translate_units[ i ].english == ing.units.name ||  translate_units[ i ].english_plural == ing.units.plural ||  translate_units[ i ].german == ing.units.name ||  translate_units[ i ].german_plural == ing.units.plural ) {
+			found_translation = true;
+			QString unit;
+			if ( ing.amount > 1 )
+				unit += translate_units[i].german;
+			else
+				unit += translate_units[i].german_plural;
+			content += unit.leftJustify( 9 ) + " ";
 			break;
 		}
 	}
-	if ( !found_short_form ) {
-		kdDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name << endl;
+	if ( !found_translation ) {
+		kdDebug() << "Warning: unable to find German translation for: " << ing.units.name << endl;
 		kdDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
-		content += "   ";
+		content += QString().fill(' ',9+1);
 	}
 
-	//columns 12-39
+	//columns 21-70
 	QString ing_name( ing.name );
 	if ( ing.prepMethodList.count() > 0 )
 		ing_name += "; " + ing.prepMethodList.join(", ");
 
-	if ( !found_short_form )
+	if ( !found_translation )
 		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );
 
 	//try and split the ingredient on a word boundry
 	int split_index;
-	if ( ing_name.length() > 28 ) {
-		split_index = ing_name.left(28).findRev(" ")+1;
+	if ( ing_name.length() > 50 ) {
+		split_index = ing_name.left(50).findRev(" ")+1;
 		if ( split_index == 0 )
-			split_index = 28;
+			split_index = 50;
 	}
 	else
-		split_index = 28;
+		split_index = 50;
 
 	content += ing_name.left(split_index) + "\n";
 
-	for ( unsigned int i = 0; i < ( ing_name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
-		content += "           -" + ing_name.mid( 28 * ( i ) + split_index, 28 ) + "\n";
+	for ( unsigned int i = 0; i < ( ing_name.length() - 1 ) / 50; i++ )  //if longer than 50 chars, continue on next line(s)
+		content += QString().fill(' ',(7+1)+(9+1)) + "-" + ing_name.mid( 50 * ( i ) + split_index, 50 ) + "\n";
 }
 
 void RezkonvExporter::writeDirections( QString &content, const Recipe &recipe )

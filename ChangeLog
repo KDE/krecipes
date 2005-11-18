@@ -13,6 +13,7 @@ Changes from 0.8 to 0.9:
   -Now keeps tracks of when recipes are created, modified, and last accessed.
   -'Copy to Clipboard' feature, which allows easily copying a recipe(s) directly to the clipboard in a format that can be configured.  There
    is a new export format, Plain Text, that is used by default.
+  -Rezkonv file format export
 
 Changes from 0.7 to 0.8:
   -Redesigned advanced search: search on the "and", "or", and "not" conditions of each search term.  Can now search on nearly any item possible.
