@@ -254,6 +254,7 @@ public:
 	virtual void removeRecipeFromCategory( int ingredientID, int categoryID ) = 0;
 	virtual void removeUnit( int unitID ) = 0;
 	virtual void removeUnitFromIngredient( int ingredientID, int unitID ) = 0;
+	virtual void removeUnitRatio( int unitID1, int unitID2 ) = 0;
 
 	virtual void saveRecipe( Recipe *recipe ) = 0;
 	virtual void saveUnitRatio( const UnitRatio *ratio ) = 0;

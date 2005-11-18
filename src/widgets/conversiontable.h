@@ -65,14 +65,15 @@ private:
 	void swapCells( int, int, int, int );
 protected:
 	QWidget* beginEdit ( int row, int col, bool replace );
+
 private slots:
-	void acceptValueAndClose( void );
 	void repaintCell( int r, int c );
 
 	void unitRemoved( int );
 	void unitCreated( const Unit& );
 signals:
 	void ratioChanged( int row, int col, double value );
+	void ratioRemoved( int row, int col );
 };
 
 class ConversionTableItem: public QObject, public QTableItem
@@ -91,6 +92,7 @@ public:
 	}
 signals:
 	void ratioChanged( int row, int col, double value );
+	void ratioRemoved( int row, int col );
 	void signalRepaintCell( int r, int c );
 
 };

@@ -178,6 +178,7 @@ public:
 	void removeRecipeFromCategory( int ingredientID, int categoryID );
 	void removeUnit( int unitID );
 	void removeUnitFromIngredient( int ingredientID, int unitID );
+	void removeUnitRatio( int unitID1, int unitID2 );
 
 	void saveRecipe( Recipe *recipe );
 	void saveUnitRatio( const UnitRatio *ratio );

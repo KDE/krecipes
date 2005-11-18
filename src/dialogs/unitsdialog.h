@@ -57,6 +57,7 @@ private:
 private slots:
 	void loadConversionTable( void );
 	void saveRatio( int r, int c, double value );
+	void removeRatio( int r, int c );
 };
 
 #endif

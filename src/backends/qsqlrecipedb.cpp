@@ -1439,6 +1439,11 @@ void QSqlRecipeDB::saveUnitRatio( const UnitRatio *ratio )
 	ratioFound.exec( command ); // Enter the new ratio
 }
 
+void QSqlRecipeDB::removeUnitRatio( int unitID1, int unitID2 )
+{
+	database->exec(QString( "DELETE FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2" ).arg( unitID1 ).arg( unitID2 ));
+}
+
 double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 {
 

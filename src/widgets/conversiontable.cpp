@@ -12,6 +12,7 @@
 #include "conversiontable.h"
 #include "widgets/editbox.h"
 #include "datablocks/mixednumber.h"
+#include "widgets/fractioninput.h"
 
 #include <qtooltip.h>
 
@@ -145,29 +146,27 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 
 QWidget* ConversionTableItem::createEditor() const
 {
-	EditBox * eb = new EditBox( table() ->viewport() );
-	eb->setPrecision( 5 );
-	eb->setRange( 1e-5, 1e4, 1, false );
-	eb->setValue( KGlobal::locale() ->readNumber( text() ) ); // Initialize the box with this value
-	QObject::connect( eb, SIGNAL( valueChanged( double ) ), table(), SLOT( acceptValueAndClose() ) );
-	return eb;
-}
+	FractionInput *editor = new FractionInput( table()->viewport(), MixedNumber::DecimalFormat );
 
-void ConversionTable::acceptValueAndClose()
-{
-	QTable::endEdit( currentRow(), currentColumn(), true, false );
+	if ( text().toDouble() > 1e-6 )
+		editor->setValue( text().toDouble(), 0 );
+
+	return editor;
 }
 
 void ConversionTableItem::setContentFromEditor( QWidget *w )
 {
 	// the user changed the value of the combobox, so synchronize the
 	// value of the item (its text), with the value of the combobox
-	if ( w->inherits( "EditBox" ) ) {
-		EditBox * eb = ( EditBox* ) w;
-		if ( eb->accepted ) {
-			eb->accepted = false;
-			setText( beautify( KGlobal::locale() ->formatNumber( eb->value(), 5 ) ) ); // Only accept value if Ok was pressed before
-			emit ratioChanged( row(), col(), eb->value() ); // Signal to store
+	if ( w->inherits( "FractionInput" ) ) {
+		FractionInput* editor = ( FractionInput* ) w;
+		if ( editor->isInputValid() && !editor->isEmpty() && editor->value().toDouble() > 1e-6 ) {
+			setText( editor->value().toString(MixedNumber::DecimalFormat) );
+			emit ratioChanged( row(), col(), editor->value().toDouble() ); // Signal to store
+		}
+		else {
+			setText( QString::null );
+			emit ratioRemoved( row(), col() );
 		}
 	}
 	else
@@ -203,6 +202,7 @@ void ConversionTable::createNewItem( int r, int c, double amount )
 	setItem( r, c, ci );
 	// connect signal (forward) to know when it's actually changed
 	connect( ci, SIGNAL( ratioChanged( int, int, double ) ), this, SIGNAL( ratioChanged( int, int, double ) ) );
+	connect( ci, SIGNAL( ratioRemoved( int, int ) ), this, SIGNAL( ratioRemoved( int, int ) ) );
 	connect( ci, SIGNAL( signalRepaintCell( int, int ) ), this, SLOT( repaintCell( int, int ) ) );
 }
 

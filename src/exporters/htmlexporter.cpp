@@ -299,6 +299,7 @@ int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, i
 
 		// Move elements around if there's any overlapping
 		pushItemsDownIfNecessary( geometries, rect );
+		//geometries.sort(); //moving around items might have changed the order
 
 		element->addProperty( QString( "top: %1px;" ).arg( static_cast<int>( rect->top() / 100.0 * m_width ) ) );
 		element->addProperty( QString( "left: %1px;" ).arg( static_cast<int>( rect->left() / 100.0 * m_width ) ) );
@@ -637,6 +638,15 @@ void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect 
 		if ( intersection.isValid() ) {
 			height_offset = QABS( intersection.top() - top_geom->bottom() );
 			item->moveBy( 0, height_offset + 5 );
+
+			#if 0
+			QRect *save_pos = item;
+			for ( item = geometries.next(); item; item = geometries.next() ) {
+				item->moveBy( 0, height_offset + 5 );
+			}
+			geometries.findRef( save_pos );
+			#endif
+			//geometries.prev();
 		}
 	}
 

@@ -371,7 +371,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingAvgFrame->setLineWidth( 0 );
 	ratingAvgFrameLayout = new QHBoxLayout( ratingAvgFrame, 2, 2, "ratingAvgFrameLayout"); 
 	
-	avgStarsEdit = new FractionInput( ratingAvgFrame, "avgStarsEdit" );
+	avgStarsEdit = new FractionInput( ratingAvgFrame );
 	avgStarsEdit->setAllowRange(true);
 	ratingAvgFrameLayout->addWidget( avgStarsEdit );
 	
@@ -394,7 +394,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	criteriaComboBox->reload();
 	layout12->addWidget( criteriaComboBox );
 	
-	starsWidget = new FractionInput( criterionFrame, "starsWidget" );
+	starsWidget = new FractionInput( criterionFrame );
 	starsWidget->setAllowRange(true);
 	starsWidget->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Preferred );
 	layout12->addWidget( starsWidget );

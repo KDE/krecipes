@@ -71,6 +71,7 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	connect( removeUnitButton, SIGNAL( clicked() ), unitListView, SLOT( remove
 		         () ) );
 	connect( conversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
+	connect( conversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
 
 	//TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
 	connect( database, SIGNAL( unitCreated( const Unit& ) ), this, SLOT( loadConversionTable() ) );
@@ -157,6 +158,11 @@ void UnitsDialog::saveRatio( int r, int c, double value )
 
 	saveAllRatios( ratioList );
 #endif
+}
+
+void UnitsDialog::removeRatio( int r, int c )
+{
+	database->removeUnitRatio( conversionTable->getUnitID( r ), conversionTable->getUnitID( c ) );
 }
 
 void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )

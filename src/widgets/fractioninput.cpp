@@ -16,9 +16,10 @@
 
 #include "datablocks/ingredient.h"
 
-FractionInput::FractionInput( QWidget *parent, const char *name ) : KLineEdit( parent, name ),
+FractionInput::FractionInput( QWidget *parent, MixedNumber::Format format ) : KLineEdit( parent ),
 	m_allowRange(false),
-	m_validateTimer(new QTimer(this))
+	m_validateTimer(new QTimer(this)),
+	m_format(format)
 {
 	setAlignment( Qt::AlignRight );
 
@@ -39,7 +40,7 @@ void FractionInput::setValue( double d, double amount_offset )
 
 void FractionInput::setValue( const MixedNumber &m, double amount_offset )
 {
-	QString text = m.toString( MixedNumber::MixedNumberFormat );
+	QString text = m.toString( m_format );
 	if ( amount_offset > 0 ) {
 		text += "-" + MixedNumber(m+amount_offset).toString( MixedNumber::MixedNumberFormat );
 	}

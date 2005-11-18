@@ -26,7 +26,7 @@ class FractionInput : public KLineEdit
 Q_OBJECT
 
 public:
-	FractionInput( QWidget *parent = 0, const char *name = 0 );
+	FractionInput( QWidget *parent = 0, MixedNumber::Format = MixedNumber::MixedNumberFormat );
 	~FractionInput();
 
 	void setAllowRange( bool b ){ m_allowRange = b; }
@@ -52,6 +52,7 @@ private slots:
 private:
 	bool m_allowRange;
 	QTimer *m_validateTimer;
+	MixedNumber::Format m_format;
 };
 
 #endif //FRACTIONINPUT_H
