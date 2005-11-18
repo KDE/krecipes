@@ -1,4 +1,4 @@
-Changes from 0.8 to SVN:
+Changes from 0.8 to 0.9:
   -Rating support: multiple people can rate a single recipe, each rating can rate a recipe on multiple criteria (taste, ease of preparation, etc.)
   -New yield property for recipes: rather than storing the number of servings, it now stores a yield amount
    and type.  The amount may also be a range.

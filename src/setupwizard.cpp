@@ -653,7 +653,7 @@ void SetupWizard::save( void )
 
 	config->setGroup( "Wizard" );
 	config->writeEntry( "SystemSetup", true );
-	config->writeEntry( "Version", "0.8" );
+	config->writeEntry( "Version", "0.9" );
 	kdDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;
 }
 

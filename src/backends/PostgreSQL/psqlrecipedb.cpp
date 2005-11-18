@@ -354,6 +354,10 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
+
+	if ( qRound(version*100) < 90 ) {
+		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
