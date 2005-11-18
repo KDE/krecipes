@@ -2090,12 +2090,24 @@ void QSqlRecipeDB::mergeAuthors( int id1, int id2 )
 		while ( update.next() ) {
 			int current_id = update.value( 0 ).toInt();
 			if ( last_id == current_id ) {
-				command = QString( "DELETE FROM author_list WHERE author_id=%1 AND recipe_id=%2 LIMIT 1" )
+				int count = -1;
+				command = QString( "SELECT COUNT(1) FROM author_list WHERE author_id=%1 AND recipe_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove
-					( command, database );
-
+				QSqlQuery remove( command, database);
+				if ( remove.isActive() && remove.first() )
+					count = remove.value(0).toInt();
+				if ( count > 1 ) {
+					command = QString( "DELETE FROM author_list WHERE author_id=%1 AND recipe_id=%2" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+	
+					command = QString( "INSERT INTO author_list VALUES(%1,%2)" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+				}
 			}
 			last_id = current_id;
 		}
@@ -2126,12 +2138,24 @@ void QSqlRecipeDB::mergeCategories( int id1, int id2 )
 		while ( update.next() ) {
 			int current_id = update.value( 0 ).toInt();
 			if ( last_id == current_id ) {
-				command = QString( "DELETE FROM category_list WHERE category_id=%1 AND recipe_id=%2 LIMIT 1" )
+				int count = -1;
+				command = QString( "SELECT COUNT(1) FROM category_list WHERE category_id=%1 AND recipe_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove
-					( command, database );
-
+				QSqlQuery remove( command, database);
+				if ( remove.isActive() && remove.first() )
+					count = remove.value(0).toInt();
+				if ( count > 1 ) {
+					command = QString( "DELETE FROM category_list WHERE category_id=%1 AND recipe_id=%2" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+	
+					command = QString( "INSERT INTO category_list VALUES(%1,%2)" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+				}
 			}
 			last_id = current_id;
 		}
@@ -2199,12 +2223,24 @@ void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 		while ( update.next() ) {
 			int current_id = update.value( 0 ).toInt();
 			if ( last_id == current_id ) {
-				command = QString( "DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2 LIMIT 1" )
+				int count = -1;
+				command = QString( "SELECT COUNT(1) FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove
-					( command, database );
-
+				QSqlQuery remove( command, database);
+				if ( remove.isActive() && remove.first() )
+					count = remove.value(0).toInt();
+				if ( count > 1 ) {
+					command = QString( "DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+	
+					command = QString( "INSERT INTO unit_list VALUES(%1,%2)" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+				}
 			}
 			last_id = current_id;
 		}
@@ -2226,11 +2262,24 @@ void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 		while ( update.next() ) {
 			int current_id = update.value( 0 ).toInt();
 			if ( last_id == current_id ) {
-				command = QString( "DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 LIMIT 1" )
+				int count = -1;
+				command = QString( "SELECT COUNT(1) FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove
-					( command, database );
+				QSqlQuery remove( command, database);
+				if ( remove.isActive() && remove.first() )
+					count = remove.value(0).toInt();
+				if ( count > 1 ) {
+					command = QString( "DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+	
+					command = QString( "INSERT INTO ingredient_info VALUES(%1,%2)" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+				}
 
 			}
 			last_id = current_id;
@@ -2305,12 +2354,24 @@ void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 		while ( update.next() ) {
 			int current_id = update.value( 0 ).toInt();
 			if ( last_id == current_id ) {
-				command = QString( "DELETE FROM unit_list WHERE unit_id=%1 AND ingredient_id=%2 LIMIT 1" )
+				int count = -1;
+				command = QString( "SELECT COUNT(1) FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove
-					( command, database );
-
+				QSqlQuery remove( command, database);
+				if ( remove.isActive() && remove.first() )
+					count = remove.value(0).toInt();
+				if ( count > 1 ) {
+					command = QString( "DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+	
+					command = QString( "INSERT INTO unit_list VALUES(%1,%2)" )
+						.arg( id1 )
+						.arg( last_id );
+					database->exec( command );
+				}
 			}
 			last_id = current_id;
 		}
