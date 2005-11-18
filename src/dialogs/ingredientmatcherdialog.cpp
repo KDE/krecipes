@@ -82,11 +82,12 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	clearButton = new QPushButton( buttonBox );
 	clearButton->setIconSet( il.loadIconSet( "editclear", KIcon::Small ) );
-	clearButton->setText( i18n( "Clear recipe list" ) );
+	clearButton->setText( i18n( "Clear" ) );
 
 	// Connect signals & slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
 	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
+	connect ( clearButton, SIGNAL( clicked() ), this, SLOT( unselectIngredients() ) );
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 
 }
@@ -95,7 +96,11 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 {
 }
 
-
+void IngredientMatcherDialog::unselectIngredients()
+{
+	for ( QCheckListItem *it = (QCheckListItem*)ingredientListView->listView()->firstChild(); it; it = (QCheckListItem*)it->nextSibling() )
+		it->setOn(false);
+}
 
 void IngredientMatcherDialog::findRecipes( void )
 {

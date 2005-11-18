@@ -126,6 +126,7 @@ private:
 
 private slots:
 	void findRecipes( void );
+	void unselectIngredients();
 
 };
 #endif
