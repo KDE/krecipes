@@ -394,9 +394,9 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <listitem><para><emphasis><guilabel>Last accessed:</guilabel></emphasis> &ndash; This is the date that the recipe was last opened or <quote>used</quote>.</para></listitem>
 </itemizedlist>
 
-<para>For each of the <emphasis>Meta Data</emphasis> descriptions, the date may be entered as an exact date if this is known or desired, or as a <quote>date range</quote>.  Dates are read according to the standard for your locale.  For example, you may enter the date directly into the text box in the format of "DD/MM/YY", "MM/DD/YY" or even "March 15, 2005".  You may also use the drop-down arrow beside the box in which you want to enter the date to reveal a calendar.</para>
+<para>For each of the <emphasis>Meta Data</emphasis> descriptions, the date may be entered as an exact date if this is known or desired, or as a <quote>date range</quote>.  Dates are interpreted in the format that has been set within the &kde; environment.  For example, if the date format has been set to display as DD-MM-YYYY, you may enter the date directly into the text box in the format of "DD-MM-YY".  When entering the date, the two initial digits of the year may be entered, but are not absolutely necessary.  However, it is imperative that you use the exact separator <abbrev>i.e.</abbrev> the dash (&ndash;), in the example, as set in the date format in &kde;.  You may also use the drop-down arrow beside the box in which you want to enter the date to reveal a calendar.</para>
 
-<caution><para>If you choose to enter the date directly into the text box and are using a <emphasis>date range</emphasis> as opposed to an exact date, ensure that the dates for the start and end of the range are entered in the same format.  For example, if you enter the starting date for the range in the format of "MM/DD/YY" and the ending date for the range in the format of "DD/MM/YY", no recipes will be found.</para></caution>
+<caution><para>If you choose to enter the date directly into the text box and are using a <emphasis>date range</emphasis> as opposed to an exact date, ensure that the dates for the start and end of the range are entered in the same format.  For example, if you enter the starting date for the range in the format of "DD-MM-YY" and the ending date for the range in the format of "DD/MM/YY", either no recipes will be found or the results returned will include only those recipes that fit the criteria for the starting date, if this date agrees with the format as set in &kde;.</para></caution>
 
 <sect4 id="use-calendar">
 <title>Using the Calendar Interface</title>
@@ -434,14 +434,25 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <sect4 id="avg-rating-srch">
 <title>Searching by Average Rating</title>
-<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><emphasis><guilabel>By average:</guilabel></emphasis></emphasis> label.  Then, enter a numerical value in the text box that precedes the label <emphasis><emphasis><guilabel>stars</guilabel></emphasis></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.</para>
+<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><emphasis><guilabel>By average:</guilabel></emphasis></emphasis> label.  Then, enter a numerical value in the text box that precedes the label <emphasis><emphasis><guilabel>stars</guilabel></emphasis></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.  Fractional amounts are also permitted, for example, 3.5.</para>
 
 <para>Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><emphasis><guilabel>Title</guilabel></emphasis></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
 </sect4>
 
 <sect4 id="rating-criteria-srch">
 <title>Searching by Rating Criteria</title>
-<para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><emphasis><guilabel>By criteria:</guilabel></emphasis></emphasis> label.  First, select the criteria that you want to use for your rating from the drop down menu.  In the text box next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Note that you may enter only whole numbers in this box, but the search will find recipes that have an assigned star rating in a range of &#177;&#189; of the value entered, 3&#189; to 4&#189; stars in the example.</para>
+<para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By criteria:</guilabel></emphasis> label.  First, select the criteria that you want to use for your rating from the drop down menu.  In the text box next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Entry is permitted in the following formats &mdash;</para>
+
+<itemizedlist>
+<listitem><para>whole numbers, e.g. 3</para></listitem>
+<listitem><para>numbers that include fractional amounts, e.g. 3.5</para></listitem>
+<listitem><para>whole number ranges, e.g. 3-4</para></listitem>
+<listitem><para>ranges that include fractional amounts, e.g. 3.5-4</para></listitem>
+</itemizedlist>
+
+<para>Note that, if you enter a fractional amount, for instance, 3.5, it will display in the format that you have chosen for your preferences when transferred to the listbox &ndash; <abbrev>i.e.</abbrev>3.5 will display as 3.5 if you have chosen numbers to display in decimal format, or 3&#189; if you have chosen numbers to display as fractions.  See the section <link linkend="custom-formatting">Customizing Formatting</link> for an explanation of setting formatting preferences.</para>
+
+<para>Additionally, if no range is specified, the search will find recipes that have an assigned star rating in a range of &#177;&#189; of the value entered, 3&#189; to 4&#189; stars in the example.</para>
 
 <para>Once you have chosen the parameters by which you want to search, click the <guibutton>+</guibutton> beside the text box in which you entered the number of stars to have the criteria added to the list.  More than one criteria may be utilized in the search.    Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
 </sect4>
@@ -1174,7 +1185,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
 <para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe XML.</para>
 
-<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>Headers</quote>, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
+<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>headers</quote>, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
 
 <listitem><para>Plain Text &ndash; files of this format will have extentions of .txt</para>
 <para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as e-mail.</para></listitem>
@@ -1190,6 +1201,11 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para>RecipeML &ndash; files of this format will have extensions of .xml</para>
 
 <para>This is a standard recipe XML format, although not yet widely used by most recipe software.  However, you may wish to use this format to have recipes recognized by programs that use it.</para></listitem>
+
+<listitem><para>Rezkonv &ndash; files of this format will have extensions of .rk</para>
+
+<para>This is the format for Rezkonv Suite, a popular German recipe program.   When recipes are exported in this format, the human-readable and section names (Title, Yield, etc.) will be in German.</para></listitem>
+
 </itemizedlist>
 
 <para>To export a single recipe to one of the above formats, first select the recipe that you wish to export.  Then, select <guimenu>File</guimenu> from the <emphasis>&krecipes;</emphasis> menu bar.  From the available choices, select <guimenuitem>Export ...</guimenuitem></para>
@@ -1699,11 +1715,13 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 </screenshot>
 </para>
 
-<para>For instance, down the left side of the spreadsheet, suppose there is a unit of measure labelled <emphasis>lb.</emphasis> (the abbreviation for <emphasis>pound</emphasis>).  Using the <quote>horizontal scroll bar</quote> at the bottom of the window, scroll until the unit <emphasis>ounces</emphasis> is revealed along the top.  Double-click the cell that is beside <emphasis>lb.</emphasis> and below <emphasis>ounces</emphasis>.  This will cause a <quote>spinbox</quote> to appear with a value set to <quote>0.00000</quote> that can be utilized to set the equivalency to <emphasis>16</emphasis> &ndash; <abbrev>i.e.</abbrev> there are 16 ounces in a pound.  Once the value of <emphasis>16</emphasis> has been set, click the <guibutton>OK</guibutton> button.</para>
+<para>For instance, down the left side of the spreadsheet, suppose there is a unit of measure labelled <emphasis>lb.</emphasis> (the abbreviation for <emphasis>pound</emphasis>).  Using the <quote>horizontal scroll bar</quote> at the bottom of the window, scroll until the unit <emphasis>ounces</emphasis> is revealed along the top.  Click on the cell that is beside <emphasis>lb.</emphasis> and below <emphasis>ounces</emphasis> to make it active.  You can now enter 16, which is the equivalent in ounces of 1 lb., in the cell.  You can also use the directional arrows to navigate to the correct position for entering the equivalent if another cell is already active.</para>
 
-<para>In a similar manner, the equivalency between pound and grams could be set by double-clicking on the appropriate cell.  However, in this instance, it is unlikely that you would want to use the spinbox to increment the value to 454.  To allow the manual typing of the value, simply position the cursor by clicking at the beginning of the <quote>0.00000</quote> value and type <userinput>454</userinput>.  Click the <guibutton>OK</guibutton> button, or simply hit the <keycap>Enter</keycap> key to complete.</para>
+<para>For large number equivalents, &krecipes; will automatically format the number with a <emphasis>thousands</emphasis> separator.  For instance, to enter the milligram equivalent of 1 lb, you would enter 454000.  Once you move off the cell, &krecipes; will display the number as 454,000.</para>
 
-<para>Once the <emphasis>&krecipes;</emphasis> program knows the equivalency, it can automatically calculate other equivalencies.  For example, if the program has been informed that there are 16 ounces in a pound, <emphasis>&krecipes;</emphasis> will automatically calculate that 1 ounce is equal to 0.0625 pounds.</para>   
+<para>Once the <emphasis>&krecipes;</emphasis> program knows the equivalency, it can automatically calculate other equivalencies.  For example, if the program has been informed that there are 16 ounces in a pound, <emphasis>&krecipes;</emphasis> will automatically calculate that 1 ounce is equal to 0.0625 pounds.</para>
+
+<para>Should you find that you made a mistake in entering one of the unit equivalents, removing the erroneous entry is as simple as selecting the cell and pressing the <keycap>Enter</keycap> key.</para>
 
 </sect3>
 </sect2>
