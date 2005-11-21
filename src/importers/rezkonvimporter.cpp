@@ -85,7 +85,8 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	QString yield_str = ( *text_it ).stripWhiteSpace();
 	yield_str.remove( QRegExp( "^Menge:\\s*" ) );
 	int sep_index = yield_str.find( ' ' );
-	recipe.yield.type = yield_str.mid( sep_index+1, yield_str.length()-sep_index );
+	if ( sep_index != -1 )
+		recipe.yield.type = yield_str.mid( sep_index+1 );
 	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
 	kdDebug() << "Found yield: " << recipe.yield.amount << endl;
 

@@ -30,6 +30,60 @@ struct translate_unit_info
 
 static translate_unit_info translate_units[] = {
                                           {"g", "g", "Gramm", "Gramms" },
+                                          {"ml", "ml", "ml", "ml"},
+                                          {"l", "l", "Ltr.", "Ltr."},
+                                          {"kg", "kg", "kg", "kg"},
+                                          {"mg", "mg", "mg", "mg"},
+                                          {"teaspoon", "teaspoons", "Teel.", "Teel."},
+                                          {"t.", "t.", "Teel.", "Teel."},
+                                          {"t", "t", "Teel.", "Teel."},
+                                          {"tsp.", "tsp.", "Teel.", "Teel."},
+                                          {"tsp", "tsp", "Teel.", "Teel."},
+                                          {"tablespoon", "tablespoons", "Essl.", "Essl."},
+                                          {"tbsp.", "tbsp.", "Essl.", "Essl."},
+                                          {"tbsp", "tbsp", "Essl.", "Essl."},
+                                          {"T", "T", "Essl.", "Essl."},
+                                          {"T.", "T.", "Essl.", "Essl."},
+                                          {"cup", "cups", "Tasse", "Tassen"},
+                                          {"c.", "c.", "Tasse", "Tassen"},
+                                          {"can", "cans", "Dose", "Dosen"},
+                                          {"drop", "drops", "Tropfen", "Tropfen"},
+                                          {"large", "large", "groß", "groß"},
+                                          {"medium", "medium", "mittl.", "mittl."},
+                                          {"small", "small", "klein.", "klein."},
+                                          {"pinch", "pinches", "Prise", "Prisen"},
+                                          {"package", "packages", "Pack.", "Pack."},
+                                          {"bunch", "bunches", "Bund.", "Bunde"},
+                                          {"stem", "stems", "Strange", "Strangen"},
+                                          {"twig", "twigs", "Zweig", "Zweige"},
+                                          {"tip of a knife", "tips of a knife", "Messersp.", "Messersp."},
+                                          {"sheet", "sheets", "Blatt", "Blätter"},
+                                          {"handful", "handfuls", "Handvoll", "Handvoll"},
+                                          {"head", "heads", "Kopf", "Köpfe"},
+                                          {"slice", "slices", "Scheibe", "Sheiben"},
+                                          {"some", "some", "Einige", "Einige"},
+                                          {"a little", "a little", "Etwas", "Etwas"},
+                                          {"little can", "little cans", "Döschen", "Döschen"},
+                                          {"glass", "glasses", "Glas", "Gläser"},
+                                          {"piece", "pieces", "Stück", "Stück"},
+                                          {"pot", "pots", "Topf", "Topf"},
+                                          {"generous", "generous", "Reichlich", "Reichlich"},
+                                          {"dash", "dashes", "Spritzer", "Spritzer"},
+                                          {"clove", "cloves", "Zehe", "Zehen"},
+                                          {"slice", "slices", "Platte", "Platten"},
+                                          {"shot", "shots", "Schuss", "Schuss"},
+                                          {"peduncle", "peduncles", "Stiel", "Stiele"},
+                                          {"heaping teaspoon", "heaping teaspoons", "geh. TL", "geh. TL"},
+                                          {"heaping tsp.", "heaping tsp.", "geh. TL", "geh. TL"},
+                                          {"heaping tsp.", "heaping tsp.", "geh. TL", "geh. TL"},
+                                          {"heaping tablespoon", "heaping tablespoon", "geh. EL", "geh. EL"},
+                                          {"heaping tbsp.", "heaping tbsp.", "geh. EL", "geh. EL"},
+#if 0
+                                          {"pound", "pounds", "", ""},
+                                          {"lb.", "lbs.", "", ""},
+                                          {"ounce", "ounces", "", ""},
+                                          {"oz.", "oz.", "", ""},
+#endif
                                           {"", "", "", ""},
                                           { 0, 0, 0, 0 }
                                       };
@@ -78,7 +132,7 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 
 	QString title = recipe.title;
 	title.truncate( 60 );
-	content += "      Titel: " + title + "\n";
+	content += QString("Titel: ").rightJustify( 13, ' ', true) + title + "\n";
 
 	int i = 0;
 	QStringList categories;
@@ -89,12 +143,11 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 			break; //maximum of 5 categories
 		categories << ( *cat_it ).name;
 	}
-	QString cat_str = " Kategorien: " + categories.join( ", " );
+	QString cat_str = QString("Kategorien: ").rightJustify( 13, ' ', true) + categories.join( ", " );
 	cat_str.truncate( 67 );
 	content += cat_str + "\n";
 
-	//todo ranges and yield type
-	content += "   Menge: " + recipe.yield.toString() + "\n";
+	content += QString("Menge: ").rightJustify( 13, ' ', true) + recipe.yield.toString() + "\n";
 }
 
 /* Ingredient lines:
@@ -152,14 +205,14 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const Ingredient 
 
 	//columns 1-7
 	if ( ing.amount > 1e-8 ) {
-		MixedNumber::Format other_format = (number_format == MixedNumber::DecimalFormat) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
-		QString amount_str = MixedNumber( ing.amount ).toString( other_format, false );
+		QString amount_str = MixedNumber( ing.amount ).toString( number_format, false );
 
 		if ( ing.amount_offset > 0 )
-			amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( other_format, false );
+			amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format, false );
 
 		if ( amount_str.length() > 7 ) { //too long, let's try the other formatting
+			MixedNumber::Format other_format = (number_format == MixedNumber::DecimalFormat) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+
 			QString new_amount_str = MixedNumber( ing.amount ).toString( other_format, false );
 	
 			if ( ing.amount_offset > 0 )
