@@ -15,7 +15,7 @@ libkrecipeswidgets_la_SOURCES= \
 	authorlistview.cpp recipelistview.cpp categorycombobox.cpp \
 	kretextedit.cpp dblistviewbase.cpp editbox.cpp \
 	conversiontable.cpp fractioninput.cpp ingredientcombobox.cpp \
-	headercombobox.cpp prepmethodcombobox.cpp kreruler.cpp \
+	headercombobox.cpp prepmethodcombobox.cpp \
 	inglistviewitem.cpp kdateedit.cpp kdatepickerpopup.cpp \
 	headerlistview.cpp ratingwidget.cpp kwidgetlistbox.cpp \
 	ratingdisplaywidget.ui criteriacombobox.cpp

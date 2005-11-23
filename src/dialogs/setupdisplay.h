@@ -157,7 +157,7 @@ protected slots:
 	void setAlignment( QAction * );
 
 	void openPageLayoutDia();
-	void updatePageLayout( const KoPageLayout &page_layout, bool set_change=true );
+	//void updatePageLayout( const KoPageLayout &page_layout, bool set_change=true );
 
 private:
 	DragArea *drag_area;
@@ -182,8 +182,8 @@ private:
 	bool has_changes;
 	KPopupMenu *popup;
 
-	KoPageLayout page_layout;
-	KoUnit::Unit unit;
+	//KoPageLayout page_layout;
+	//KoUnit::Unit unit;
 
 	// Methods
 	void createWidgets( const Recipe &sample, DragArea *canvas );

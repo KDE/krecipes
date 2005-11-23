@@ -294,7 +294,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		kdDebug()<<"Restoring backup using: "<<command[0]<<endl;
 		*process << command;
 		
-		process->setComm( KProcess::Stdin );
+		//process->setComm( KProcess::Stdin );
 		if ( process->start( KProcess::NotifyOnExit ) ) {
 			emit progressBegin(0,QString::null,
 				QString("<center><b>%1</b></center>%2")

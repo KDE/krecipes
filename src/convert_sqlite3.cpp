@@ -45,8 +45,6 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 		return;
 	}
 
-	p->wait();
-
 	if ( error )
 		return;
 

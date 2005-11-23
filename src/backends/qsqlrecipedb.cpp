@@ -1666,7 +1666,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list" << "ratings" << "rating_criteria" << "rating_criterion_list";
 
-	QStringList existingTableList = database->tables();kdDebug()<<"found tables: "<<database->tables()<<endl;
+	QStringList existingTableList = database->tables();
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		bool found = false;
 

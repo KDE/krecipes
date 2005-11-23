@@ -33,8 +33,8 @@
 #include "image.h"
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
-#include "dialogs/krepagelayoutdia.h"
-#include "widgets/kreruler.h"
+//#include "dialogs/krepagelayoutdia.h"
+//#include "widgets/kreruler.h"
 
 #include <cmath>
 
@@ -49,6 +49,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, bool show_ruler, QWidget *pare
 	drag_area = new DragArea( this, "background" );
 	drag_area->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
+	#if 0
 	if ( show_ruler ) {
 		page_layout = KoPageLayout::standardLayout();
 	
@@ -71,6 +72,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, bool show_ruler, QWidget *pare
 		connect( vruler, SIGNAL(newPageLayout(const KoPageLayout&)), SLOT(updatePageLayout(const KoPageLayout&)) );
 	}
 	else
+	#endif
 		layout->addWidget(drag_area,0,0);
 
 	drag_area->resize(parentWidget()->size());
@@ -131,8 +133,8 @@ void SetupDisplay::loadLayout( const QString &filename )
 			QDomElement el = l.item( i ).toElement();
 			QString tagName = el.tagName();
 			if ( tagName == "page-layout-properties" ) {
-				page_layout.loadKreFormat( el );
-				updatePageLayout(page_layout,false);
+				//page_layout.loadKreFormat( el );
+				//updatePageLayout(page_layout,false);
 			}
 			else {
 				QMap<QString, KreDisplayItem*>::iterator map_it = widget_map.find( tagName );
@@ -239,8 +241,8 @@ void SetupDisplay::saveLayout( const QString &filename )
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
-	if ( hruler ) //a ruler was created if we are using the page layout
-		layout_tag.appendChild( page_layout.saveKreFormat(doc) );
+	//if ( hruler ) //a ruler was created if we are using the page layout
+	//	layout_tag.appendChild( page_layout.saveKreFormat(doc) );
 
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
 		QDomElement base_tag = doc.createElement( it.key() ->widget->name() );
@@ -734,11 +736,14 @@ void SetupDisplay::changeMade( void )
 
 void SetupDisplay::openPageLayoutDia()
 {
+	#if 0
 	KoHeadFoot hf;
 	KoPageLayoutDia::pageLayout( page_layout, hf, (int)FORMAT_AND_BORDERS, unit, this );
 	updatePageLayout( page_layout );
+	#endif
 }
 
+#if 0
 void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout, bool set_change )
 {
 	if ( hruler && vruler ) {
@@ -757,5 +762,6 @@ void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout, bool s
 			changeMade();
 	}
 }
+#endif
 
 #include "setupdisplay.moc"
