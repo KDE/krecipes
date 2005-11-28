@@ -136,8 +136,8 @@ bool KWidgetListbox::even(int index)
   {
     if(index == i)
       break;
-    if(!isRowHidden(i))
-      ++v;
+    //if(!isRowHidden(i))
+    ++v;
   }
   return (v%2 == 0);
 }
@@ -147,7 +147,7 @@ void KWidgetListbox::updateColors()
   int v = 0;
   for(int i = 0; i < numRows(); ++i)
   {
-    if(!isRowHidden(i))
+    //if(!isRowHidden(i))
     {
       setItemColors(i, (v%2 == 0));
       ++v;

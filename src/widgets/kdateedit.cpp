@@ -26,12 +26,31 @@
 #include <qlistbox.h>
 #include <qvalidator.h>
 
-#include <kcalendarsystem.h>
+//#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include "kdateedit.h"
+
+QRect desktopGeometry(QWidget* w)
+{
+ QDesktopWidget *dw = QApplication::desktop();
+ if (dw->isVirtualDesktop()) {
+     KConfigGroup group(KGlobal::config(), "Windows");
+     if (group.readBoolEntry("XineramaEnabled", true) &&
+         group.readBoolEntry("XineramaPlacementEnabled", true)) {
+         if (w)
+             return dw->screenGeometry(dw->screenNumber(w));
+         else return dw->screenGeometry(-1);
+     } else {
+         return dw->geometry();
+     }
+ } else {
+     return dw->geometry();
+ }
+}
 
 class DateValidator : public QValidator
 {
@@ -133,7 +152,7 @@ void KDateEdit::popup()
   if ( mReadOnly )
     return;
 
-  QRect desk = KGlobalSettings::desktopGeometry( this );
+  QRect desk = desktopGeometry( this );
 
   QPoint popupPoint = mapToGlobal( QPoint( 0,0 ) );
 
@@ -336,11 +355,13 @@ void KDateEdit::setupKeywords()
   mKeywordMap.insert( i18n( "today" ), 0 );
   mKeywordMap.insert( i18n( "yesterday" ), -1 );
 
+  #if 0 //depends on KDE 3.2
   QString dayName;
   for ( int i = 1; i <= 7; ++i ) {
     dayName = KGlobal::locale()->calendar()->weekDayName( i ).lower();
     mKeywordMap.insert( dayName, i + 100 );
   }
+  #endif
 }
 
 bool KDateEdit::assignDate( const QDate& date )

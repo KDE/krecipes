@@ -16,7 +16,7 @@
 
 #include "recipedb.h"
 
-ProgressInterface::ProgressInterface( QWidget *parent ) : progress_dlg(0), m_rate_at(0), database(0)
+ProgressInterface::ProgressInterface( QWidget *parent ) : progress_dlg(0), m_rate(1), m_rate_at(0), database(0)
 {
 	slot_obj = new ProgressSlotObject(parent,this);
 }
