@@ -470,7 +470,7 @@ void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
 	QSqlQuery query( QString::null, database );
 
-	query.prepare( "UPDATE recipes SET photo=? WHERE id=" + QString::number( recipeID ) );
+	query.prepare( "UPDATE recipes SET photo=?,ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
 	query.addBindValue( KCodecs::base64Encode( data ) );
 	query.exec();
 }
