@@ -158,7 +158,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 		ids_str << number_str;
 
 		if ( !(items & RecipeDB::Noatime) )
- 			database->exec( "UPDATE recipes SET atime='"+current_timestamp+"' WHERE id="+number_str );
+ 			database->exec( "UPDATE recipes SET ctime=ctime,mtime=mtime,atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
 	// Read title, author, yield, and instructions as specified
