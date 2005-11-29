@@ -538,7 +538,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		recipe->mtime = recipe->ctime = recipe->atime = current_datetime;
 	}
 	else {
-		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8' WHERE id=%7;" )
+		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8',ctime=ctime,atime=atime WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
 		          .arg( recipe->yield.amount )
 		          .arg( recipe->yield.amount_offset )
