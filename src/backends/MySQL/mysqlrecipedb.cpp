@@ -97,7 +97,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" )
-		commands << "CREATE TABLE ingredient_list (id INTEGER, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id), INDEX gidil_index(group_id));";
+		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id), INDEX gidil_index(group_id));";
 
 	else if ( tableName == "unit_list" )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";

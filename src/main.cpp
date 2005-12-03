@@ -21,7 +21,7 @@
 static const char *description =
     I18N_NOOP( "The KDE Cookbook" );
 
-static const char *version = "0.9";
+static const char *version = "0.9.1";
 
 static KCmdLineOptions options[] =
     {
