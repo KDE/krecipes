@@ -75,3 +75,5 @@ void ProgressInterface::listenOn( RecipeDB *db )
 
 	database = db;
 }
+
+#include "progressinterface.moc"
