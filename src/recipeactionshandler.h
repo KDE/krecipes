@@ -46,7 +46,8 @@ public:
 	    ExpandAll = 0x0020,
 	    CollapseAll = 0x0040,
 	    AddToShoppingList = 0x0080,
-	    CopyToClipboard = 0x0100
+	    CopyToClipboard = 0x0100,
+	    Categorize = 0x0200
 	};
 
 	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
@@ -64,6 +65,8 @@ signals:
 public slots:
 	void exec( ItemType type, const QPoint &p );
 	void showPopup( KListView *, QListViewItem *, const QPoint & );
+
+	void categorize();
 
 	/** Signals an open event (via the recipeSelected() signal) for the recipe(s) currently
 	  * selected in the list view 
@@ -106,6 +109,7 @@ private:
 	RecipeDB *database;
 
 	int remove_from_cat_item;
+	int categorize_item;
 
 	QValueList<int> getAllVisibleItems();
 	QValueList<int> recipeIDs( const QPtrList<QListViewItem> &items ) const;

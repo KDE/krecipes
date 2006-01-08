@@ -24,6 +24,8 @@
 #include <kpopupmenu.h>
 #include <kprogress.h>
 
+#include "dialogs/selectcategoriesdialog.h"
+
 #include "exporters/cookmlexporter.h"
 #include "exporters/htmlexporter.h"
 #include "exporters/kreexport.h"
@@ -34,6 +36,7 @@
 
 #include "widgets/recipelistview.h"
 #include "widgets/categorylistview.h"
+
 #include "backends/recipedb.h"
 
 RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB *db, int actions ) : QObject( _parentListView ),
@@ -58,6 +61,10 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		kpop->insertItem( il->loadIcon( "trolley", KIcon::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), CTRL + Key_A );
 	if ( actions & CopyToClipboard )
 		kpop->insertItem( il->loadIcon( "editcopy", KIcon::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), CTRL + Key_C );
+
+	if ( actions & Categorize )
+		categorize_item = kpop->insertItem( il->loadIcon( "categories", KIcon::NoGroup, 16 ), i18n( "Ca&tegorize" ), this, SLOT(categorize()), CTRL + Key_T );
+
 	kpop->polish();
 
 	catPop = new KPopupMenu( parentListView );
@@ -92,6 +99,7 @@ void RecipeActionsHandler::showPopup( KListView * /*l*/, QListViewItem *i, const
 {
 	if ( i ) { // Check if the QListViewItem actually exists
 		if ( i->rtti() == 1000 ) {
+			kpop->setItemVisible( categorize_item, i->parent() && i->parent()->rtti() == 1006 );
 			kpop->setItemVisible( remove_from_cat_item, i->parent() && i->parent()->rtti() == 1001 );
 			exec( Recipe, p );
 		}
@@ -166,6 +174,33 @@ void RecipeActionsHandler::open()
 			emit recipesSelected( ids, 0 );
 		}
 		#endif
+	}
+}
+
+void RecipeActionsHandler::categorize()
+{
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 0 ) {
+		ElementList categoryList;
+		SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( parentListView, categoryList, database );
+	
+		if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
+			editCategoriesDialog->getSelectedCategories( &categoryList ); // get the category list chosen
+			
+			QPtrListIterator<QListViewItem> it(items);
+			QListViewItem *item;
+			while ( (item = it.current()) != 0 ) {
+				if ( item->parent() != 0 ) {
+					RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+					int recipe_id = recipe_it->recipeID();
+	
+					database->categorizeRecipe( recipe_id, categoryList );
+				}
+				++it;
+			}
+		}
+
+		delete editCategoriesDialog;
 	}
 }
 

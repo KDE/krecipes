@@ -70,9 +70,11 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	QSpacerItem* searchSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( searchSpacer, 1, 2 );
+	
+	#ifdef ENABLE_SLOW
 	categoryBox = new CategoryComboBox( basicSearchTab, database );
 	layout->addWidget( categoryBox, 1, 3 );
-
+	#endif
 
 	QSpacerItem* spacerFromSearchBar = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerFromSearchBar, 2, 1 );
@@ -126,11 +128,13 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
 	connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
 	connect( recipeListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
+	#ifdef ENABLE_SLOW
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), categoryBox, SLOT( loadNextGroup() ) );
 	connect( recipeListView, SIGNAL( prevGroupLoaded() ), categoryBox, SLOT( loadPrevGroup() ) );
+	connect( categoryBox, SIGNAL( activated( int ) ), this, SLOT( filterComboCategory( int ) ) );
+	#endif
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
 	connect( recipeListView, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
-	connect( categoryBox, SIGNAL( activated( int ) ), this, SLOT( filterComboCategory( int ) ) );
 
 	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( advancedSearch, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
@@ -149,8 +153,10 @@ void SelectRecipeDialog::reload()
 {
 	recipeListView->reload();
 
+	#ifdef ENABLE_SLOW
 	categoryBox->reload();
 	filterComboCategory( categoryBox->currentItem() );
+	#endif
 }
 
 void SelectRecipeDialog::refilter()

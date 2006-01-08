@@ -130,6 +130,7 @@ public:
 	virtual void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID ) = 0;
 	virtual void addUnitToIngredient( int ingredientID, int unitID ) = 0;
 
+	virtual void categorizeRecipe( int recipeID, const ElementList &categoryList ) = 0;
 	virtual void changePropertyAmountToIngredient( int ingredientID, int propertyID, double amount, int per_units ) = 0;
 
 	virtual void createNewAuthor( const QString &authorName ) = 0;

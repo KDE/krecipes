@@ -792,6 +792,20 @@ void QSqlRecipeDB::removeRecipeFromCategory( int recipeID, int categoryID )
 	emit recipeRemoved( recipeID, categoryID );
 }
 
+void QSqlRecipeDB::categorizeRecipe( int recipeID, const ElementList &categoryList )
+{
+	QString command;
+
+	//emit recipeRemoved( recipeID, -1 );
+
+	for ( ElementList::const_iterator it = categoryList.begin(); it != categoryList.end(); ++it ) {
+		command = QString( "INSERT INTO category_list VALUES(%1,%2)" ).arg( recipeID ).arg( (*it).id );
+		database->exec( command );
+	}
+
+	emit recipeModified( Element(QString::null,recipeID), categoryList );
+}
+
 void QSqlRecipeDB::createNewIngGroup( const QString &name )
 {
 	QString command;

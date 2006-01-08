@@ -77,6 +77,7 @@ public:
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
 	void addUnitToIngredient( int ingredientID, int unitID );
 
+	void categorizeRecipe( int recipeID, const ElementList &categoryList );
 	void changePropertyAmountToIngredient( int ingredientID, int propertyID, double amount, int per_units );
 
 	void createNewAuthor( const QString &authorName );
