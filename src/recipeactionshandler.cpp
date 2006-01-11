@@ -354,7 +354,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.html" )
-				exporter = new HTMLExporter( database, fileName, fd->currentFilter(), 650 );
+				exporter = new HTMLExporter( database, fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.txt" )

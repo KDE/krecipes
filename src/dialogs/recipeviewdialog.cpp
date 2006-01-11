@@ -86,8 +86,7 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 		progress_dialog->resize( 240, 80 );
 	}
 
-	int sb_width = recipeView->view() ->style().pixelMetric( QStyle::PM_ScrollBarExtent ) + 4;
-	HTMLExporter html_generator( database, tmp_filename + ".html", "html", parentWidget() ->width() - sb_width );
+	HTMLExporter html_generator( database, tmp_filename + ".html", "html" );
 	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {
 		delete progress_dialog;

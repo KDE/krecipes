@@ -19,52 +19,6 @@ class CustomRectList;
 class IngredientPropertyList;
 class RecipeDB;
 class KProgress;
-class QRect;
-
-class DivElement
-{
-public:
-	DivElement( const QString &id, const QString &className, const QString &content );
-
-	void addProperty( const QString &s )
-	{
-		m_properties << s;
-	}
-
-	QString innerHTML() const
-	{
-		return m_content;
-	}
-	QString id() const
-	{
-		return m_id;
-	}
-	QString className() const
-	{
-		return m_class;
-	}
-	QFont font();
-
-	bool fixedHeight()
-	{
-		return m_fixed_height;
-	}
-	void setFixedHeight( bool b )
-	{
-		m_fixed_height = b;
-	}
-
-	QString generateHTML();
-	QString generateCSS( bool noPositioning = false );
-
-private:
-	QString m_id;
-	QString m_class;
-	QString m_content;
-	QStringList m_properties;
-
-	bool m_fixed_height;
-};
 
 /**
   * Exports a given recipe list as HTML
@@ -73,8 +27,7 @@ private:
 class HTMLExporter : public BaseExporter
 {
 public:
-	HTMLExporter( RecipeDB *, const QString&, const QString&, int width );
-	//HTMLExporter( RecipeDB *, const QString&, const QString& );
+	HTMLExporter( RecipeDB *, const QString&, const QString& );
 	virtual ~HTMLExporter();
 
 	virtual int supportedItems() const;
@@ -91,12 +44,9 @@ protected:
 
 private:
 	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
-	int createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset = 0 );
-	void pushItemsDownIfNecessary( QPtrList<QRect> &, QRect *top_geom );
-	int getHeight( int constrained_width, DivElement *element, int font_size = -1 );
-	void insertHTMLIfVisible( QMap<QString, QString> &html_map, const QString &name, const QString &html );
+	void populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content );
+	void replaceIfVisible( QString &content, const QString &name, const QString &html );
 
-	void readGeometry( QRect *geom, const QDomDocument &doc, const QString &object );
 	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
 	QString readBorderProperties( const QDomDocument &doc, const QString &object );
 	QString readBgColorProperties( const QDomDocument &doc, const QString &object );
@@ -105,36 +55,20 @@ private:
 	QString readVisibilityProperties( const QDomDocument &doc, const QString &object );
 
 	QString generateCSSClasses( const QDomDocument &layout );
-	QMap<QString, QString> generateBlocksHTML( const Recipe & );
 	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
 
 	static QString escape( const QString & );
 
-	QPtrList<DivElement> div_elements;
-	QPtrList<QRect> dimensions;
 	IngredientPropertyList *properties;
-	QRect temp_photo_geometry;
 
 	RecipeDB *database;
 
-	int m_width;
-	QString classesCSS;
 	QString layout_filename;
+	QString m_templateContent;
+	QSize temp_photo_size;
 
 	bool m_error;
-	QString recipeStyleHTML;
-	QString recipeBodyHTML;
 	QDomDocument doc;
-	int offset;
-};
-
-class CustomRectList : public QPtrList<QRect>
-{
-public:
-	CustomRectList();
-
-protected:
-	int compareItems( QPtrCollection::Item, QPtrCollection::Item );
 };
 
 #endif //HTMLEXPORTER_H

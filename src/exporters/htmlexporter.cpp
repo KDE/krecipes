@@ -40,16 +40,26 @@
 #include <cmath> //for ceil()
 
 //TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
-HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format, int width ) :
-		BaseExporter( filename, format ), database( db ), m_width( width )
+HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format ) :
+		BaseExporter( filename, format ), database( db )
 {
-	div_elements.setAutoDelete( true );
 	properties = new IngredientPropertyList;
-
-	offset = 0;
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
+
+	//let's do everything we can to be sure at least some layout is loaded
+	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/default.template" ) );
+	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
+		template_filename = locate( "appdata", "layouts/default.template" );
+	kdDebug() << "Using template file: " << template_filename << endl;
+
+	QFile input( template_filename );
+	if ( input.open( IO_ReadOnly ) ) {
+		m_templateContent = QString( input.readAll() );
+	}
+	else
+		kdDebug()<<"couldn't find/open template file"<<endl;
 
 	//let's do everything we can to be sure at least some layout is loaded
 	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
@@ -57,27 +67,6 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 		layout_filename = locate( "appdata", "layouts/default.klo" );
 	kdDebug() << "Using layout file: " << layout_filename << endl;
 }
-
-#if 0
-HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format ) :
-		BaseExporter( filename, format ), database( db )
-{
-	div_elements.setAutoDelete( true );
-	properties = new IngredientPropertyList;
-
-	offset = 0;
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-
-	//let's do everything we can to be sure at least some layout is loaded
-	layout_filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
-	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/default_print.klo" );
-	kdDebug() << "Using layout file: " << layout_filename << endl;
-}
-#endif
-
 
 HTMLExporter::~HTMLExporter()
 {
@@ -91,23 +80,22 @@ int HTMLExporter::supportedItems() const
 
 QString HTMLExporter::createContent( const RecipeList& recipes )
 {
+	QString fileContent;
+
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
+		QString templateCopy = m_templateContent;
 		QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
 		if ( el.isNull() || el.text() == "true" ) // Calculate the property list
 			calculateProperties( *recipe_it, database, properties );
 
 		storePhoto( *recipe_it, doc );
-		offset = createBlocks( *recipe_it, doc, offset ) + 10;
 
-		for ( DivElement * div = div_elements.first(); div; div = div_elements.next() ) {
-			recipeStyleHTML += div->generateCSS();
-			recipeBodyHTML += div->generateHTML();
-		}
+		populateTemplate( *recipe_it, doc, templateCopy );
+		fileContent += templateCopy;
 	}
 
-	//we're going to have to be clever, and end up writing the actual body when writing the footer
-	return QString::null;
+	return fileContent;
 }
 
 QString HTMLExporter::createHeader( const RecipeList & )
@@ -116,7 +104,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 
 	QFile input( layout_filename );
 
-	if ( !input.open( IO_ReadOnly ) ) {
+	if ( m_templateContent.isEmpty() ) {
 		QString errorStr = i18n("<html><body>\n"
 			"<p><b>Error: </b>Unable to find a layout file, which is"
 			" needed to view the recipe.</p>"
@@ -131,21 +119,8 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	int line;
 	int column;
 	if ( !doc.setContent( &input, &error, &line, &column ) ) {
-		QString error_str = QString( i18n( "Error loading layout file: \"%1\" at line %2, column %3.  This may not be a Krecipes layout file or it has become corrupt." ) ).arg( error ).arg( line ).arg( column );
-		kdDebug() << error_str << endl;
-		m_error = true;
-		return "<html>"+error_str+"</html>";
+		kdDebug()<<"Unable to load style information.  Continuing to create HTML..."<<endl;
 	}
-
-	#if 0
-	QDomNodeList node_list = doc.elementsByTagName( "page-layout-properties" );
-	if ( node_list.count() > 0 ) {
-		QDomElement layout_el = node_list.item( 0 ).toElement();
-		KoPageLayout page_layout; page_layout.loadKreFormat(layout_el);
-		m_width = page_layout.ptWidth;
-		kdDebug()<<"Setting width to "<<m_width<<endl;
-	}
-	#endif
 
 	//put all the recipe photos into this directory
 	QDir dir;
@@ -155,18 +130,27 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	RecipeList::const_iterator recipe_it;
 
 	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
-	recipeStyleHTML = "<style type=\"text/css\">\n";
-	recipeStyleHTML += "body\n";
-	recipeStyleHTML += "{\n";
-	recipeStyleHTML += QString( "background-color: %1;\n" ).arg( bg_element.text() );
-	recipeStyleHTML += "}\n";
 
-	classesCSS = generateCSSClasses( doc );
-	recipeStyleHTML += classesCSS;
+	KLocale*loc = KGlobal::locale();
+	QString encoding = loc->encoding();
 
-	recipeBodyHTML = "<body>\n";
+	QString output = "<html>";
+	output += "<head>";
+	output += "<meta name=\"lang\" content=\"" + loc->language() + "\">\n";
+	output += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
+	output += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
 
-	return QString::null;
+	output += "<style type=\"text/css\">\n";
+	output += "body\n";
+	output += "{\n";
+	output += QString( "background-color: %1;\n" ).arg( bg_element.text() );
+	output += "}\n";
+	output += generateCSSClasses( doc );
+	output += "</style>";
+	output += "</head>";
+	output += "<body>";
+
+	return output;
 }
 
 QString HTMLExporter::createFooter()
@@ -174,35 +158,17 @@ QString HTMLExporter::createFooter()
 	if ( m_error )
 		return QString::null;
 
-	recipeStyleHTML += "</style>";
-	recipeBodyHTML += "</body>\n";
-
-	KLocale*loc = KGlobal::locale();
-	QString encoding = loc->encoding();
-
-	//and now piece it all together
-	QString recipeHTML = "<html>\n<head>\n";
-	recipeHTML += "<meta name=\"lang\" content=\"" + loc->language() + "\">\n";
-	recipeHTML += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-	recipeHTML += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
-	recipeHTML += recipeStyleHTML;
-	recipeHTML += "</head>\n";
-	recipeHTML += recipeBodyHTML;
-	recipeHTML += "</html>";
-
-	return recipeHTML;
+	return "</body></html>";
 }
 
 void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 {
 	QDomElement photo_geom_el = getLayoutAttribute( doc, "photo", "geometry" );
-	temp_photo_geometry = QRect( qRound( photo_geom_el.attribute( "left" ).toDouble() ),
-	                             qRound( photo_geom_el.attribute( "top" ).toDouble() ),
-	                             qRound( photo_geom_el.attribute( "width" ).toDouble() ),
+	temp_photo_size = QSize(     qRound( photo_geom_el.attribute( "width" ).toDouble() ),
 	                             qRound( photo_geom_el.attribute( "height" ).toDouble() )
-	                           );
+	                        );
 
-	int phwidth = ( int ) ( temp_photo_geometry.width() / 100.0 * m_width ); // Scale to this dialog
+	int phwidth = temp_photo_size.width();
 
 	QImage image;
 	QString photo_name;
@@ -215,134 +181,47 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 		photo_name = recipe.title;
 	}
 
-	QPixmap pm = image.smoothScale( phwidth, 0, QImage::ScaleMax );
+	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
 	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
-	temp_photo_geometry = QRect( temp_photo_geometry.topLeft(), pm.size() ); //preserve aspect ratio
+	temp_photo_size = QSize( pm.size() ); //preserve aspect ratio
 }
 
-int HTMLExporter::createBlocks( const Recipe &recipe, const QDomDocument &doc, int offset )
+void HTMLExporter::replaceIfVisible( QString &content, const QString &name, const QString &html )
 {
-	const QMap<QString, QString> html_map = generateBlocksHTML( recipe );
-
-	QRect *geometry;
-	DivElement *new_element;
-
-	CustomRectList geometries;
-	geometries.setAutoDelete( true );
-	QPtrDict<DivElement> geom_contents;
-
-	for ( QMap<QString, QString>::const_iterator it = html_map.begin(); it != html_map.end(); ++it ) {
-		QString key = it.key();
-
-		new_element = new DivElement( key + "_" + QString::number( recipe.recipeID ), key, it.data() );
-
-		if ( key == "photo" ) {
-			temp_photo_geometry.setWidth( ( int ) ( double( temp_photo_geometry.width() ) * 100.0 / m_width ) ); // The size of all objects needs to be saved in percentage format
-			temp_photo_geometry.setHeight( ( int ) ( double( temp_photo_geometry.height() ) * 100.0 / m_width ) ); // The size of all objects needs to be saved in percentage format
-
-			geometry = new QRect( temp_photo_geometry );
-			geometry->moveBy( 0, offset );
-			geometries.append( geometry );
-
-			new_element->setFixedHeight( true );
-		}
-		else {
-			geometry = new QRect;
-			readGeometry( geometry, doc, key );
-			geometry->moveBy( 0, offset );
-			geometries.append( geometry );
-		}
-
-		geom_contents.insert( geometry, new_element );
-		div_elements.append( new_element );
-	}
-
-	//this takes expands all items to an appropriate size
-	int height_taken = 0;
-	geometries.sort(); //we'll work with these in order from top to bottom
-	for ( QRect * rect = geometries.first(); rect; rect = geometries.next() ) {
-		DivElement * element = geom_contents.find( rect );
-
-		// For those elements that have no fixed height (lists), calculate the height or shrink it to fit
-		int elementHeight = ( int ) ( rect->height() / 100.0 * m_width ); //Initialize with the current user settings
-		int font_size = -1;
-		if ( !element->fixedHeight() ) {
-			QDomElement el = getLayoutAttribute( doc, element->className(), "overflow" );
-			if ( !el.isNull() && el.text().toInt() == 0 ) {
-				font_size = 12; //default if none is set by the user
-				QDomElement el = getLayoutAttribute( doc, element->className(), "font" );
-				if ( !el.isNull() ) {
-					QFont font;
-					font.fromString( el.text() );
-					font_size = font.pointSize();
-				}
-
-				int goal_height = elementHeight;
-				do {
-					font_size--;
-					elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element, font_size );
-				}
-				while ( elementHeight > goal_height && font_size > 0 );
-
-				if ( font_size == 0 )
-					kdDebug()<<"Warning: Unable to 'Shrink to fit' - Not enough spacing available, so defaulting to the original font size."<<endl;
-			}
-			else
-				elementHeight = getHeight( ( int ) ( rect->width() / 100.0 * m_width ), element );
-		}
-		rect->setHeight( ( int ) ( ceil( elementHeight * 100.0 / m_width ) ) );
-
-		// Move elements around if there's any overlapping
-		pushItemsDownIfNecessary( geometries, rect );
-		//geometries.sort(); //moving around items might have changed the order
-
-		element->addProperty( QString( "top: %1px;" ).arg( static_cast<int>( rect->top() / 100.0 * m_width ) ) );
-		element->addProperty( QString( "left: %1px;" ).arg( static_cast<int>( rect->left() / 100.0 * m_width ) ) );
-		element->addProperty( QString( "width: %1px;" ).arg( static_cast<int>( rect->width() / 100.0 * m_width ) ) );
-		element->addProperty( QString( "height: %1px;" ).arg( elementHeight ) );
-		if ( font_size > 0 )
-			element->addProperty( QString( "font-size: %1pt;" ).arg( font_size ) );
-
-		height_taken = QMAX( rect->top() + int( elementHeight * 100.0 / m_width ), height_taken );
-	}
-
-	return height_taken;
+	//QDomElement el = getLayoutAttribute( doc, name, "visible" );
+	//if ( el.isNull() || el.text() != "false" )
+kdDebug()<<"replacing: "<<"**"+name.upper()+"**"<<endl;
+kdDebug()<<"before: "<<content<<endl;
+		content = content.replace("**"+name.upper()+"**",html);
+kdDebug()<<"after: "<<content<<endl;
 }
 
-void HTMLExporter::insertHTMLIfVisible( QMap<QString, QString> &html_map, const QString &name, const QString &html )
-{
-	QDomElement el = getLayoutAttribute( doc, name, "visible" );
-	if ( el.isNull() || el.text() != "false" )
-		html_map.insert(name,html);
-}
-
-QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
+void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content )
 {
 	KConfig * config = KGlobal::config();
-	QMap<QString, QString> html_map;
 
 	//=======================TITLE======================//
-	insertHTMLIfVisible( html_map, "title", recipe.title );
+	replaceIfVisible( content, "title", recipe.title );
 
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = QStyleSheet::escape( recipe.instructions );
-	instr_html.replace( "\n", "<BR>" );
-	insertHTMLIfVisible( html_map, "instructions", instr_html );
+	instr_html.replace( "\n", "<br />" );
+	replaceIfVisible( content, "instructions", instr_html );
 
 	//=======================SERVINGS======================//
-	QString servings_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
-	insertHTMLIfVisible( html_map, "servings", servings_html );
+	QString yield_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
+	replaceIfVisible( content, "yield", yield_html );
 
 	//=======================PREP TIME======================//
 	QString preptime_html;
 	if ( !recipe.prepTime.isNull() && recipe.prepTime.isValid() )
 		preptime_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Preparation Time" ) ).arg( recipe.prepTime.toString( "h:mm" ) );
-	insertHTMLIfVisible( html_map, "prep_time", preptime_html );
+	replaceIfVisible( content, "prep_time", preptime_html );
 
 	//========================PHOTO========================//
 	QString photo_name;
@@ -354,8 +233,8 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
-	QString photo_html = QString( "<img src=\"%1\">" ).arg( image_url );
-	insertHTMLIfVisible( html_map, "photo", photo_html );
+	QString photo_html = QString( "<img src=\"%1\" />" ).arg( image_url );
+	replaceIfVisible( content, "photo", photo_html );
 
 	//=======================AUTHORS======================//
 	QString authors_html;
@@ -369,7 +248,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	}
 	if ( !authors_html.isEmpty() )
 		authors_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
-	insertHTMLIfVisible( html_map, "authors", authors_html );
+	replaceIfVisible( content, "authors", authors_html );
 
 	//=======================CATEGORIES======================//
 	QString categories_html;
@@ -384,11 +263,11 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 	if ( !categories_html.isEmpty() )
 		categories_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
-	insertHTMLIfVisible( html_map, "categories", categories_html );
+	replaceIfVisible( content, "categories", categories_html );
 
 	//=======================HEADER======================//
 	QString header_html = QString( "<b>%1 #%2</b>" ).arg( i18n( "Recipe" ) ).arg( recipe.recipeID );
-	insertHTMLIfVisible( html_map, "header", header_html );
+	replaceIfVisible( content, "header", header_html );
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
@@ -429,7 +308,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		ingredients_html.prepend( "<ul>" );
 		ingredients_html.append( "</ul>" );
 	}
-	insertHTMLIfVisible( html_map, "ingredients", ingredients_html );
+	replaceIfVisible( content, "ingredients", ingredients_html );
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
@@ -460,7 +339,7 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		properties_html.prepend( "<ul>" );
 		properties_html.append( "</ul>" );
 	}
-	insertHTMLIfVisible( html_map, "properties", properties_html );
+	replaceIfVisible( content, "properties", properties_html );
 
 	//=======================RATINGS======================//
 	QString ratings_html;
@@ -491,18 +370,15 @@ QMap<QString, QString> HTMLExporter::generateBlocksHTML( const Recipe &recipe )
 		if ( !( *rating_it ).comment.isEmpty() )
 			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
-	insertHTMLIfVisible( html_map, "ratings", ratings_html );
+	replaceIfVisible( content, "ratings", ratings_html );
 
 	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
-
-	return html_map;
 }
 
 QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 {
 	QString css;
 
-	css += "DIV { position: absolute; vertical-align: middle;}\n";
 	css += "UL { padding-left: 1.25em; }\n";
 
 	QStringList classes_list;
@@ -522,18 +398,6 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 	}
 
 	return css;
-}
-
-void HTMLExporter::readGeometry( QRect *geom, const QDomDocument &doc, const QString &object )
-{
-	QDomElement geom_el = getLayoutAttribute( doc, object, "geometry" );
-
-	if ( !geom_el.isNull() ) {
-		geom->setLeft( qRound( geom_el.attribute( "left" ).toDouble() ) );
-		geom->setTop( qRound( geom_el.attribute( "top" ).toDouble() ) );
-		geom->setWidth( qRound( geom_el.attribute( "width" ).toDouble() ) );
-		geom->setHeight( qRound( geom_el.attribute( "height" ).toDouble() ) );
-	}
 }
 
 QString HTMLExporter::readAlignmentProperties( const QDomDocument &doc, const QString &object )
@@ -628,31 +492,6 @@ QString HTMLExporter::readVisibilityProperties( const QDomDocument &doc, const Q
 	return QString::null;
 }
 
-void HTMLExporter::pushItemsDownIfNecessary( QPtrList<QRect> &geometries, QRect *top_geom )
-{
-	for ( QRect * item = geometries.next(); item; item = geometries.next() ) {
-		int height_offset = 0;
-
-		QRect intersection = item->intersect( *top_geom );
-
-		if ( intersection.isValid() ) {
-			height_offset = QABS( intersection.top() - top_geom->bottom() );
-			item->moveBy( 0, height_offset + 5 );
-
-			#if 0
-			QRect *save_pos = item;
-			for ( item = geometries.next(); item; item = geometries.next() ) {
-				item->moveBy( 0, height_offset + 5 );
-			}
-			geometries.findRef( save_pos );
-			#endif
-			//geometries.prev();
-		}
-	}
-
-	geometries.findRef( top_geom ); //set it back to where is was
-}
-
 void HTMLExporter::removeHTMLFiles( const QString &filename, const QString &recipe_title )
 {
 	QStringList title;
@@ -713,127 +552,4 @@ QString HTMLExporter::escape( const QString & str )
 {
 	QString tmp( str );
 	return tmp.replace( '/', "_" );
-}
-
-int HTMLExporter::getHeight( int constrained_width, DivElement *element, int font_size )
-{
-	// Generate a test page to calculate the size in khtml
-	QString tempHTML = "<html><head><style type=\"text/css\">";
-	tempHTML += classesCSS;
-	tempHTML += QString( "#%1 {" ).arg( element->id() );
-	tempHTML += QString( "width: %1px;" ).arg( constrained_width );
-	if ( font_size > 0 )
-		tempHTML += QString( "font-size: %1pt;" ).arg( font_size );
-	tempHTML += "} ";
-	tempHTML += "body { margin: 0px; }"; //very important subtlety in determining the exact width
-	tempHTML += "</style></head>";
-	tempHTML += "<body>";
-	tempHTML += element->generateHTML();
-	tempHTML += "</body></html>";
-
-	KHTMLPart *sizeCalculator = new KHTMLPart( ( QWidget* ) 0 );
-	sizeCalculator->view()->setVScrollBarMode ( QScrollView::AlwaysOff );
-	sizeCalculator->view()->setMinimumSize( QSize( constrained_width, 0 ) );
-	sizeCalculator->view()->resize( QSize( constrained_width, 0 ) );
-	sizeCalculator->begin( KURL( locateLocal( "tmp", "/" ) ) );
-	sizeCalculator->write( tempHTML );
-	sizeCalculator->end();
-
-	sizeCalculator->view()->layout(); //force a layout
-
-	// Set the size of the element
-	DOM::Document size_test_doc = sizeCalculator->document();
-	int return_height = size_test_doc.getElementById( element->id() ).getRect().height();
-
-	if ( size_test_doc.getElementById( element->id() ).getRect().width() != constrained_width )
-		kdDebug()<<"Warning: Element expanded past the constrained width"<<endl;
-
-	delete sizeCalculator;
-
-	return return_height;
-}
-
-
-/////////////////////////   CustomRectList   //////////////////////////////////
-
-CustomRectList::CustomRectList() : QPtrList<QRect>()
-{}
-
-int CustomRectList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
-{
-	QRect * geom1 = static_cast<QRect*>( item1 );
-	QRect *geom2 = static_cast<QRect*>( item2 );
-
-	if ( geom1->y() > geom2->y() )
-		return 1;
-	else if ( geom1->y() < geom2->y() )
-		return -1;
-	else
-		return 0;
-}
-
-
-/////////////////////////   DivElement   //////////////////////////////////
-
-DivElement::DivElement( const QString &id, const QString &className, const QString &content ) :
-		m_id( id ),
-		m_class( className ),
-		m_content( content ),
-		m_fixed_height( false )
-{}
-
-QFont DivElement::font()
-{
-	QFont f; //constructs the default font
-
-	for ( QStringList::Iterator it = m_properties.begin(); it != m_properties.end(); ++it ) {
-		if ( ( *it ).contains( "font-family" ) )
-			f.setFamily( ( *it ).mid( ( *it ).find( ':' ) + 1, ( *it ).length() - 1 ).stripWhiteSpace() );
-		else if ( ( *it ).contains( "font-size" ) ) {
-			int colon_index = ( *it ).find( ':' );
-			f.setPointSize( ( *it ).mid( colon_index + 1, ( *it ).find( 'p' ) - colon_index - 1 ).toInt() );
-		}
-		//else if ( (*it).contains("font-weight") )
-		//else if ( (*it).contains("font-style") )
-	}
-
-	return f;
-}
-
-QString DivElement::generateHTML()
-{
-	QString result;
-
-	result += QString( "<DIV id=\"%1\" class=\"%2\">\n" ).arg( m_id ).arg( m_class );
-	result += m_content + "\n";
-	result += "</DIV>\n";
-
-	return result;
-}
-
-QString DivElement::generateCSS( bool noPositioning )
-{
-	QString result;
-
-	result += QString( "#%1\n" ).arg( m_id );
-	result += "{\n";
-
-	for ( QStringList::Iterator it = m_properties.begin(); it != m_properties.end(); ++it )
-		if ( !noPositioning ) {
-			result += *it + "\n";
-		}
-		else // Don't use the element positions
-		{
-			if ( !( ( *it ).contains( "top:" ) || ( ( *it ).contains( "left:" ) ) ) ) {
-				result += *it + "\n";
-			}
-		}
-
-	//don't show empty blocks
-	if ( m_content.isEmpty() )
-		result += "visibility: hidden;\n";
-
-	result += "}\n";
-
-	return result;
 }
