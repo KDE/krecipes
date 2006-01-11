@@ -1,12 +1,12 @@
 <table width="100%">
     <tr>
-      <td align="center" colspan="2" width="100%">
-        <div class="title">**TITLE**</div>
+      <td class="title" colspan="2" width="100%">
+        **TITLE**
       </td>
     </tr>
     <tr>
-      <td align="center" valign="middle" width="20%">
-        <div class="photo">**PHOTO**</div>
+      <td class="photo" width="20%">
+        **PHOTO**
       </td>
       <td>
         <p class="authors">**AUTHORS**</p>
@@ -15,16 +15,17 @@
         <p class="categories">**CATEGORIES**</p>
       </td>
     </tr>
-    <tr><td align="left"></td><td align="left"></td></tr>
-    <tr>
       <td width="100%" colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td valign="top">
-        <div class="ingredients">**INGREDIENTS**</div>
+      <td valign="top" class="ingredients">
+        **INGREDIENTS**
       </td>
-      <td valign="top">
-        <div class="instructions">**INSTRUCTIONS**</div>
+      <td valign="top" class="instructions">
+        **INSTRUCTIONS**
       </td>
+    </tr>
+    </tr>
+      <td width="100%" colspan="2">**RATINGS**</td>
     </tr>
 </table>

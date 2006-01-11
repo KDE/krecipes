@@ -195,10 +195,7 @@ void HTMLExporter::replaceIfVisible( QString &content, const QString &name, cons
 {
 	//QDomElement el = getLayoutAttribute( doc, name, "visible" );
 	//if ( el.isNull() || el.text() != "false" )
-kdDebug()<<"replacing: "<<"**"+name.upper()+"**"<<endl;
-kdDebug()<<"before: "<<content<<endl;
-		content = content.replace("**"+name.upper()+"**",html);
-kdDebug()<<"after: "<<content<<endl;
+	content = content.replace("**"+name.upper()+"**",html);
 }
 
 void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content )
