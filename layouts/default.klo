@@ -12,14 +12,14 @@
   <alignment>2052</alignment>
   <border width="1" style="none" color="#000000" />
  </title>
- <servings>
+ <yield>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
   <alignment>2048</alignment>
   <border width="1" style="none" color="#000000" />
- </servings>
+ </yield>
  <prep_time>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>

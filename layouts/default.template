@@ -14,9 +14,6 @@
         <p class="prep_time">**PREP_TIME**</p>
         <p class="categories">**CATEGORIES**</p>
       </td>
-    </tr>
-      <td width="100%" colspan="2">&nbsp;</td>
-    </tr>
     <tr>
       <td valign="top" class="ingredients">
         **INGREDIENTS**
@@ -26,6 +23,7 @@
       </td>
     </tr>
     </tr>
-      <td width="100%" colspan="2">**RATINGS**</td>
+      <td class="properties">**PROPERTIES**</td>
+      <td class="ratings">**RATINGS**</td>
     </tr>
 </table>
