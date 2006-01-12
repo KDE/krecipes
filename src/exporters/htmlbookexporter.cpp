@@ -36,7 +36,7 @@ HTMLBookExporter::~HTMLBookExporter()
 
 int HTMLBookExporter::headerFlags() const
 {
-	return RecipeDB::Categories;
+	return RecipeDB::Categories | RecipeDB::Title;
 }
 
 QString HTMLBookExporter::createContent( const RecipeList& recipes )
@@ -72,8 +72,9 @@ QString HTMLBookExporter::createHeader( const RecipeList &list )
 
 				catLinks << QString("<a href=\"" + catPageName + "\">" + (*cat_it).name + "</a>");
 
-				fileMap.insert((*cat_it).name,stream);
+				stream_it = fileMap.insert((*cat_it).name,stream);
 			}
+			(**stream_it) << QString("[ <a href=\"#" + (*recipe_it).title + "\">" + (*recipe_it).title + "</a> ]");
 		}
 	}
 

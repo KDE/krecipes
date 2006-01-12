@@ -81,6 +81,9 @@ int HTMLExporter::supportedItems() const
 QString HTMLExporter::createContent( const Recipe& recipe )
 {
 	QString templateCopy = m_templateContent;
+
+	templateCopy.prepend("<a name=\""+recipe.title+"\">");
+
 	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
 	if ( el.isNull() || el.text() == "true" ) // Calculate the property list
 		calculateProperties( recipe, database, properties );
@@ -88,6 +91,10 @@ QString HTMLExporter::createContent( const Recipe& recipe )
 	storePhoto( recipe, doc );
 
 	populateTemplate( recipe, doc, templateCopy );
+
+	templateCopy.append("[ <a href=\"#top\">Top</a> ]");
+	templateCopy.append("[ <a href=\"index.html\">Back</a> ]");
+
 	return templateCopy;
 }
 
