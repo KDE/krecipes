@@ -23,15 +23,6 @@ HTMLBookExporter::HTMLBookExporter( RecipeDB *db, const QString& basedir, const 
 
 HTMLBookExporter::~HTMLBookExporter()
 {
-	QMap<QString,QTextStream*>::const_iterator it;
-	for ( it = fileMap.begin(); it != fileMap.end(); ++it ) {
-		(*it)->device()->close();
-
-		//does it matter the order of deletion here?
-		QIODevice *file = (*it)->device();
-		delete *it;
-		delete file;
-	}
 }
 
 int HTMLBookExporter::headerFlags() const
@@ -86,7 +77,18 @@ QString HTMLBookExporter::createHeader( const RecipeList &list )
 
 QString HTMLBookExporter::createFooter()
 {
-	QString output = HTMLExporter::createFooter();
+	QMap<QString,QTextStream*>::const_iterator it;
+	for ( it = fileMap.begin(); it != fileMap.end(); ++it ) {
+		(**it) << HTMLExporter::createFooter();
 
+		(*it)->device()->close();
+
+		//does it matter the order of deletion here?
+		QIODevice *file = (*it)->device();
+		delete *it;
+		delete file;
+	}
+
+	QString output = HTMLExporter::createFooter();
 	return output;
 }
