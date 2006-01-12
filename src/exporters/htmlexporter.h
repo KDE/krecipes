@@ -15,7 +15,6 @@
 
 #include "baseexporter.h"
 
-class CustomRectList;
 class IngredientPropertyList;
 class RecipeDB;
 class KProgress;
@@ -36,11 +35,16 @@ public:
 	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 
 protected:
+	QString createContent( const Recipe& recipe );
 	virtual QString createContent( const RecipeList & );
 	virtual QString createHeader( const RecipeList & );
 	virtual QString createFooter();
 
 	virtual int progressInterval() const { return 1; }
+
+	static QString escape( const QString & );
+
+	QString m_templateContent;
 
 private:
 	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
@@ -57,14 +61,11 @@ private:
 	QString generateCSSClasses( const QDomDocument &layout );
 	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
 
-	static QString escape( const QString & );
-
 	IngredientPropertyList *properties;
 
 	RecipeDB *database;
 
 	QString layout_filename;
-	QString m_templateContent;
 	QSize temp_photo_size;
 
 	bool m_error;

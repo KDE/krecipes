@@ -28,6 +28,7 @@
 
 #include "exporters/cookmlexporter.h"
 #include "exporters/htmlexporter.h"
+#include "exporters/htmlbookexporter.h"
 #include "exporters/kreexport.h"
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
@@ -336,6 +337,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	                                             "*.kreml|Krecipes (*.kreml)\n"
 	                                             "*.txt|%3 (*.txt)\n"
 	                                             //"*.cml|CookML (*.cml)\n"
+	                                             "*|Web Book\n"
 	                                             "*.html|%2 (*.html)\n"
 	                                             "*.mmf|Meal-Master (*.mmf)\n"
 	                                             "*.xml|RecipeML (*.xml)\n"
@@ -345,6 +347,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );
 	fd->setSelection( selection );
+	fd->setMode( KFile::File | KFile::Directory );
 	if ( fd->exec() == KFileDialog::Accepted ) {
 		QString fileName = fd->selectedFile();
 		if ( !fileName.isNull() ) {
@@ -353,6 +356,8 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
+			else if ( fd->currentFilter() == "*" )
+				exporter = new HTMLBookExporter( database, fd->baseURL().path(), "*.html" );
 			else if ( fd->currentFilter() == "*.html" )
 				exporter = new HTMLExporter( database, fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.cml" )
@@ -448,7 +453,8 @@ QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 				database->loadRecipeList( &list, cat_id, true );
 		
 				for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-					ids << (*it).id;
+					if ( ids.find( (*it).id ) == ids.end() )
+						ids << (*it).id;
 				}
 			}
 		}
