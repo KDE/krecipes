@@ -20,6 +20,7 @@
 class KPopupMenu;
 
 class SetupDisplay;
+class KreDisplayItem;
 
 /**
   * @author Jason Kivlighn
@@ -32,9 +33,6 @@ public:
 	PageSetupDialog( QWidget *parent, const Recipe &sample );
 	~PageSetupDialog()
 	{}
-	QSize minimumSize( void ) const;
-	virtual QSize sizeHint( void ) const;
-
 
 protected:
 	virtual void accept();
@@ -44,28 +42,26 @@ protected:
 private slots:
 	void loadLayout();
 	void loadLayout( int );
-	void loadLayout( const QString &filename, SetupDisplay *display = 0 );
+	void loadLayout( const QString &filename );
 	void reloadLayout();
-	void saveLayout( SetupDisplay *display = 0 );
-	void saveAsLayout( SetupDisplay *display = 0 );
-	void updateItemVisibility( QWidget*, bool );
+	void saveLayout();
+	void saveAsLayout();
+	void updateItemVisibility( KreDisplayItem*, bool );
 	void setItemShown( int id );
-	void setActiveDisplay( QWidget * );
 
 private:
 	QString getIncludedLayoutDir() const;
-	void setActiveFile( const QString &filename, SetupDisplay *display = 0 );
+	void setActiveFile( const QString &filename );
 	bool haveWritePerm( const QString &filename );
 	void initShownItems();
 
-	SetupDisplay *setup_display;
-	//SetupDisplay *print_setup_display;
-	SetupDisplay *active_display;
+	SetupDisplay *m_htmlPart;
 
-	QMap<SetupDisplay*, QString> active_filename_map;
-	QMap<SetupDisplay*, bool> have_write_perm_map;
-	QMap<SetupDisplay*, QMap<int, QWidget*> > popup_widget_map;
-	QMap<SetupDisplay*, QMap<QWidget*, int> > widget_popup_map;
+	QString active_filename;
+	bool have_write_perm;
+
+	QMap<int, KreDisplayItem*> popup_widget_map;
+	QMap<KreDisplayItem*, int> widget_popup_map;
 	QMap<int, QString> included_layouts_map;
 	KPopupMenu *shown_items_popup;
 };

@@ -17,8 +17,12 @@
 #include <kcolordialog.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
-#include <kruler.h>
 #include <kiconloader.h>
+#include <kstandarddirs.h>
+
+#include <khtmlview.h>
+#include <dom/dom_doc.h>
+#include <dom/css_rule.h>
 
 #include <qaction.h>
 #include <qlabel.h>
@@ -33,72 +37,66 @@
 #include "image.h"
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
-//#include "dialogs/krepagelayoutdia.h"
-//#include "widgets/kreruler.h"
+#include "exporters/htmlexporter.h"
 
 #include <cmath>
 
-SetupDisplay::SetupDisplay( const Recipe &sample, bool show_ruler, QWidget *parent ) : QWidget(parent),
-		hruler(0), vruler(0),
+SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(parent),
 		box_properties( new PropertiesMap ),
-		widget_item_map( new QMap<QWidget*, KreDisplayItem*> ),
-		has_changes( false )
+		node_item_map( new QMap<QString, KreDisplayItem*> ),
+		has_changes( false ),
+		popup(0)
 {
-	QGridLayout *layout = new QGridLayout(this);
+	connect( this, SIGNAL( popupMenu(const QString &,const QPoint &) ), SLOT( nodeClicked(const QString &,const QPoint &) ) );
 
-	drag_area = new DragArea( this, "background" );
-	drag_area->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
+	HTMLExporter exporter( 0, tmp_filename + ".html", "html" );
 
-	#if 0
-	if ( show_ruler ) {
-		page_layout = KoPageLayout::standardLayout();
-	
-		hruler = new KoRuler(this,drag_area,Qt::Horizontal,page_layout,0,KoUnit::U_INCH);
-		vruler = new KoRuler(this,drag_area,Qt::Vertical,page_layout,0,KoUnit::U_INCH);
-	
-		layout->addWidget(hruler,0,1);
-		layout->addWidget(vruler,1,0);
+	RecipeList recipeList;
+	recipeList.append(sample);
 
-		QWidget *behind_paper = new QWidget(this);
-		behind_paper->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-
-		drag_area->reparent(behind_paper,QPoint(0,0),true);
-		layout->addWidget(behind_paper,1,1);
-
-		connect( hruler, SIGNAL(doubleClicked()), SLOT(openPageLayoutDia()) );
-		connect( vruler, SIGNAL(doubleClicked()), SLOT(openPageLayoutDia()) );
-
-		connect( hruler, SIGNAL(newPageLayout(const KoPageLayout&)), SLOT(updatePageLayout(const KoPageLayout&)) );
-		connect( vruler, SIGNAL(newPageLayout(const KoPageLayout&)), SLOT(updatePageLayout(const KoPageLayout&)) );
+	QFile file(tmp_filename + ".html");
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream(&file);
+		exporter.writeStream(stream,recipeList);
 	}
-	else
-	#endif
-		layout->addWidget(drag_area,0,0);
+	else {
+		printf("Unable to open file for writing\n");
+	}
+	file.close();
 
-	drag_area->resize(parentWidget()->size());
 
-	//FIXME: Where is this discrepancy of 4 coming from??
-	drag_area->resize( drag_area->width()-4, drag_area->height() );
+	KURL url;
+	url.setPath( tmp_filename + ".html" );
+	openURL( url );
+	show();
+	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
 
-	createItem( drag_area, BackgroundColor );
-
-	connect( drag_area, SIGNAL( widgetClicked( QMouseEvent*, QWidget* ) ), SLOT( widgetClicked( QMouseEvent*, QWidget* ) ) );
-	connect( drag_area, SIGNAL( widgetGeometryChanged() ), SLOT( changeMade() ) );
-
-	createWidgets( sample, drag_area );
+	createItem( "background", BackgroundColor );
+	createItem( "title", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "instructions", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "prep_time", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "photo", Visibility | Border );
+	createItem( "authors", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "categories", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "header", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "ingredients", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "properties", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "ratings", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "yield", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 }
 
 SetupDisplay::~SetupDisplay()
 {
 	delete box_properties;
-	delete widget_item_map;
+	delete node_item_map;
 }
 
-void SetupDisplay::createItem( QWidget *w, unsigned int properties )
+void SetupDisplay::createItem( const QString &node, unsigned int properties )
 {
-	KreDisplayItem * item = new KreDisplayItem( w );
+	KreDisplayItem * item = new KreDisplayItem( node );
 	box_properties->insert( item, properties );
-	widget_item_map->insert( w, item );
+	node_item_map->insert( node, item );
 }
 
 void SetupDisplay::loadLayout( const QString &filename )
@@ -123,109 +121,73 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
-		QMap<QString, KreDisplayItem*> widget_map;
-		QValueList<KreDisplayItem*> widgets = box_properties->keys();
-		for ( QValueList<KreDisplayItem*>::const_iterator it = widgets.begin(); it != widgets.end(); ++it )
-			widget_map.insert( ( *it ) ->widget->name(), *it );
-
 		QDomNodeList l = layout.childNodes();
 		for ( unsigned i = 0 ; i < l.count(); i++ ) {
 			QDomElement el = l.item( i ).toElement();
 			QString tagName = el.tagName();
-			if ( tagName == "page-layout-properties" ) {
-				//page_layout.loadKreFormat( el );
-				//updatePageLayout(page_layout,false);
-			}
-			else {
-				QMap<QString, KreDisplayItem*>::iterator map_it = widget_map.find( tagName );
-				if ( map_it != widget_map.end() ) {
-					QDomNodeList l = el.childNodes();
-					for ( unsigned i = 0 ; i < l.count(); i++ ) {
-						QDomElement el = l.item( i ).toElement();
-						QString subTagName = el.tagName();
-	
-						if ( subTagName == "background-color" )
-							loadBackgroundColor( *map_it, el );
-						else if ( subTagName == "geometry" )
-							loadGeometry( *map_it, el );
-						else if ( subTagName == "font" )
-							loadFont( *map_it, el );
-						else if ( subTagName == "overflow" )
-							loadOverflow( *map_it, el );
-						else if ( subTagName == "text-color" )
-							loadTextColor( *map_it, el );
-						else if ( subTagName == "visible" )
-							loadVisibility( *map_it, el );
-						else if ( subTagName == "alignment" )
-							loadAlignment( *map_it, el );
-						else if ( subTagName == "border" )
-							loadBorder( *map_it, el );
-						else
-							kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
-					}
-				}
-				else
-					kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
-			}
-		}
+			QMap<QString, KreDisplayItem*>::iterator map_it = node_item_map->find( tagName );
+			if ( map_it != node_item_map->end() ) {
+				QDomNodeList l = el.childNodes();
+				for ( unsigned i = 0 ; i < l.count(); i++ ) {
+					QDomElement el = l.item( i ).toElement();
+					QString subTagName = el.tagName();
 
-		drag_area->setWidget( 0 );
+					if ( subTagName == "background-color" )
+						loadBackgroundColor( *map_it, el );
+					else if ( subTagName == "font" )
+						loadFont( *map_it, el );
+					else if ( subTagName == "text-color" )
+						loadTextColor( *map_it, el );
+					else if ( subTagName == "visible" )
+						loadVisibility( *map_it, el );
+					else if ( subTagName == "alignment" )
+						loadAlignment( *map_it, el );
+					else if ( subTagName == "border" )
+						loadBorder( *map_it, el );
+					else
+						kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
+				}
+			}
+			else
+				kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
+		}
 	}
 	else
 		kdDebug() << "Unable to open file: " << filename << endl;
 }
 
+
 void SetupDisplay::loadBackgroundColor( KreDisplayItem *item, const QDomElement &tag )
 {
-	QColor c;
-	c.setNamedColor( tag.text() );
-	item->widget->setPaletteBackgroundColor( c );
+	item->backgroundColor.setNamedColor( tag.text() );
 }
 
 void SetupDisplay::loadFont( KreDisplayItem *item, const QDomElement &tag )
 {
 	QFont f;
 	if ( f.fromString( tag.text() ) )
-		item->widget->setFont( f );
-}
-
-void SetupDisplay::loadOverflow( KreDisplayItem *item, const QDomElement &tag )
-{
-	item->overflow = KreDisplayItem::OverflowType(tag.text().toInt());
-}
-
-void SetupDisplay::loadGeometry( KreDisplayItem *item, const QDomElement &tag )
-{
-	PreciseRect r( tag.attribute( "left" ).toDouble(), tag.attribute( "top" ).toDouble(), tag.attribute( "width" ).toDouble(), tag.attribute( "height" ).toDouble() );
-	toAbsolute( &r );
-	item->widget->setGeometry( r.toQRect() );
+		item->font = f;
 }
 
 void SetupDisplay::loadTextColor( KreDisplayItem *item, const QDomElement &tag )
 {
-	QColor c;
-	c.setNamedColor( tag.text() );
-	item->widget->setPaletteForegroundColor( c );
+	item->textColor.setNamedColor( tag.text() );
 }
 
 void SetupDisplay::loadVisibility( KreDisplayItem *item, const QDomElement &tag )
 {
 	bool visible = ( tag.text() == "false" ) ? false : true;
-	item->widget->setShown( visible );
-	emit itemVisibilityChanged( item->widget, visible );
+	item->show = visible;
+	emit itemVisibilityChanged( item, visible );
 }
 
 void SetupDisplay::loadAlignment( KreDisplayItem *item, const QDomElement &tag )
 {
-	if ( item->widget->inherits( "QLabel" ) )
-		static_cast<QLabel*>( item->widget ) ->setAlignment( tag.text().toInt() );
+	item->alignment = tag.text().toInt();
 }
 
 void SetupDisplay::loadBorder( KreDisplayItem *item, const QDomElement &tag )
 {
-	//	if ( widget->inherits("QFrame") )
-	//		static_cast<QLabel*>(item->widget)->setAlignment( tag.text().toInt() );
-
 	QColor c;
 	c.setNamedColor( tag.attribute( "color" ) );
 	item->border = KreBorder( tag.attribute( "width" ).toInt(), tag.attribute( "style" ), c );
@@ -237,70 +199,50 @@ void SetupDisplay::saveLayout( const QString &filename )
 	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
 
 	QDomElement layout_tag = doc.documentElement();
-	layout_tag.setAttribute( "version", 0.3 );
+	layout_tag.setAttribute( "version", 0.4 );
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
-	//if ( hruler ) //a ruler was created if we are using the page layout
-	//	layout_tag.appendChild( page_layout.saveKreFormat(doc) );
-
-	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
-		QDomElement base_tag = doc.createElement( it.key() ->widget->name() );
+	for ( QMap<QString, KreDisplayItem*>::const_iterator it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
+		QDomElement base_tag = doc.createElement( it.key() );
 		layout_tag.appendChild( base_tag );
 
-		if ( it.data() & BackgroundColor ) {
+		int properties = (*box_properties)[it.data()];
+		if ( properties & BackgroundColor ) {
 			QDomElement backgroundcolor_tag = doc.createElement( "background-color" );
-			backgroundcolor_tag.appendChild( doc.createTextNode( it.key() ->widget->backgroundColor().name() ) );
+			backgroundcolor_tag.appendChild( doc.createTextNode( it.data()->backgroundColor.name() ) );
 			base_tag.appendChild( backgroundcolor_tag );
 		}
 
-		if ( it.data() & TextColor ) {
+		if ( properties & TextColor ) {
 			QDomElement textcolor_tag = doc.createElement( "text-color" );
-			textcolor_tag.appendChild( doc.createTextNode( it.key() ->widget->foregroundColor().name() ) );
+			textcolor_tag.appendChild( doc.createTextNode( it.data()->textColor.name() ) );
 			base_tag.appendChild( textcolor_tag );
 		}
 
-		if ( it.data() & Font ) {
+		if ( properties & Font ) {
 			QDomElement font_tag = doc.createElement( "font" );
-			font_tag.appendChild( doc.createTextNode( static_cast<QLabel*>( it.key() ->widget ) ->font().toString() ) );
+			font_tag.appendChild( doc.createTextNode( it.data()->font.toString() ) );
 			base_tag.appendChild( font_tag );
 		}
 
-		if ( it.data() & Overflow ) {
-			QDomElement font_tag = doc.createElement( "overflow" );
-			font_tag.appendChild( doc.createTextNode( QString::number(it.key()->overflow) ) );
-			base_tag.appendChild( font_tag );
-		}
-
-		if ( it.data() & Visibility ) {
+		if ( properties & Visibility ) {
 			QDomElement visibility_tag = doc.createElement( "visible" );
-			visibility_tag.appendChild( doc.createTextNode( ( it.key() ->widget->isShown() ) ? "true" : "false" ) );
+			visibility_tag.appendChild( doc.createTextNode( (it.data()->show) ? "true" : "false" ) );
 			base_tag.appendChild( visibility_tag );
 		}
 
-		if ( it.data() & Geometry ) {
-			PreciseRect r( it.key() ->widget->geometry() );
-			toPercentage( &r );
-
-			QDomElement geometry_tag = doc.createElement( "geometry" );
-			geometry_tag.setAttribute( "top", r.top() );
-			geometry_tag.setAttribute( "left", r.left() );
-			geometry_tag.setAttribute( "width", r.width() );
-			geometry_tag.setAttribute( "height", r.height() );
-			base_tag.appendChild( geometry_tag );
-		}
-
-		if ( it.data() & Alignment ) {
+		if ( properties & Alignment ) {
 			QDomElement alignment_tag = doc.createElement( "alignment" );
-			alignment_tag.appendChild( doc.createTextNode( QString::number( static_cast<QLabel*>( it.key() ->widget ) ->alignment() ) ) );
+			alignment_tag.appendChild( doc.createTextNode( QString::number( it.data()->alignment ) ) );
 			base_tag.appendChild( alignment_tag );
 		}
 
-		if ( it.data() & Border ) {
+		if ( properties & Border ) {
 			QDomElement border_tag = doc.createElement( "border" );
-			border_tag.setAttribute( "width", it.key() ->border.width );
-			border_tag.setAttribute( "style", it.key() ->border.style );
-			border_tag.setAttribute( "color", it.key() ->border.color.name() );
+			border_tag.setAttribute( "width", it.data()->border.width );
+			border_tag.setAttribute( "style", it.data()->border.style );
+			border_tag.setAttribute( "color", it.data()->border.color.name() );
 			base_tag.appendChild( border_tag );
 		}
 	}
@@ -316,452 +258,229 @@ void SetupDisplay::saveLayout( const QString &filename )
 		kdDebug() << "Error: Unable to write to file " << filename << endl;
 }
 
-void SetupDisplay::createWidgets( const Recipe &sample, DragArea *canvas )
+void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
 {
-	//=========================TITLE=======================//
-	QString title;
-	if ( sample.title.isNull() )
-		title = i18n( "Recipe Title" );
-	else
-		title = sample.title;
+	kdDebug()<<"begin"<<endl;
+	KHTMLPart::begin(url,xOffset,yOffset);
+	kdDebug()<<"end"<<endl;
 
-	title_box = new QLabel( title, canvas, "title" );
-	title_box->setFrameShape( QFrame::Box );
-	title_box->setMinimumSize( 5, 5 );
-	title_box->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-	QToolTip::add
-		( title_box, i18n( "Title" ) );
-
-	createItem( title_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
-
-	//======================INSTRUCTIONS===================//
-	QString instr;
-	if ( sample.instructions.isNull() )
-		instr = i18n( "Instructions" );
-	else
-		instr = sample.instructions;
-
-	instr.replace( "\n", "<BR>" );
-	instr_box = new QLabel( instr, canvas, "instructions" );
-	instr_box->setMinimumSize( 5, 5 );
-	instr_box->setFrameShape( QFrame::Box );
-	instr_box->setAlignment( Qt::AlignTop );
-	instr_box->setTextFormat( Qt::RichText ); //allows for wrapping
-	QToolTip::add
-		( instr_box, i18n( "Instructions" ) );
-
-	createItem( instr_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
-
-	//=======================SERVINGS======================//
-	servings_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Yield" ) ).arg( sample.yield.amount ), canvas, "yield" );
-	servings_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( servings_box, i18n( "Yield" ) );
-
-	createItem( servings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
-
-	//=======================PREP TIME======================//
-	preptime_box = new QLabel( QString( "<b>%1:</b> %2" ).arg( i18n( "Preparation Time" ) ).arg( sample.prepTime.toString( "h:mm" ) ), canvas, "prep_time" );
-	preptime_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( preptime_box, i18n( "Preparation Time" ) );
-
-	createItem( preptime_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
-
-	//========================PHOTO========================//
-	photo_box = new QLabel( canvas, "photo" );
-	photo_box->setFrameShape( QFrame::Box );
-	photo_box->setMinimumSize( 5, 5 );
-	photo_box->setScaledContents( true );
-	if ( !sample.photo.isNull() )
-		photo_box->setPixmap( sample.photo );
-	else
-		photo_box->setPixmap( defaultPhoto );
-	QToolTip::add
-		( photo_box, i18n( "Photo" ) );
-
-	createItem( photo_box, Visibility | Geometry | StaticHeight );
-
-	//========================AUTHORS========================//
-	QString authors;
-	for ( ElementList::const_iterator author_it = sample.authorList.begin(); author_it != sample.authorList.end(); ++author_it ) {
-		if ( !authors.isEmpty() )
-			authors += ",";
-		authors += ( *author_it ).name;
+	DOM::Document doc = document();
+	DOM::DOMImplementation impl = doc.implementation();
+	kdDebug() << "(1) document: " << document().handle() << endl;
+	if ( !impl.isNull() ) {
+		m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
+		doc.addStyleSheet(m_styleSheet);
 	}
-
-	if ( authors.isNull() )
-		authors = i18n( "Author 1, Author 2, ..." );
-	authors.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
-
-	authors_box = new QLabel( authors, canvas, "authors" );
-	authors_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( authors_box, i18n( "Authors" ) );
-
-	createItem( authors_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
-
-	//========================CATEGORIES========================//
-	QString categories;
-	for ( ElementList::const_iterator cat_it = sample.categoryList.begin(); cat_it != sample.categoryList.end(); ++cat_it ) {
-		if ( !categories.isEmpty() )
-			categories += ",";
-		categories += ( *cat_it ).name;
-	}
-
-	if ( categories.isNull() )
-		categories = i18n( "Category 1, Category 2, ..." );
-	categories.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
-
-	categories_box = new QLabel( categories, canvas, "categories" );
-	categories_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( categories_box, i18n( "Categories" ) );
-
-	createItem( categories_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
-
-	//=======================ID======================//
-	id_box = new QLabel( QString( i18n( "Recipe: #%1" ) ).arg( sample.recipeID ), canvas, "header" );
-	id_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( id_box, i18n( "Header" ) );
-
-	createItem( id_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border );
-
-	//========================INGREDIENTS========================//
-	QString ingredients;
-
-	KConfig *config = kapp->config();
-	config->setGroup( "Formatting" );
-
-	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-	QString ingredient_format = config->readEntry( "Ingredient", "%n%p: %a %u" );
-
-	for ( IngredientList::const_iterator ing_it = sample.ingList.begin(); ing_it != sample.ingList.end(); ++ing_it ) {
-		if ( ingredients.isNull() )
-			ingredients += "<ul>";
-
-		QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
-		if ( ( *ing_it ).amount <= 1e-10 )
-			amount_str = "";
-
-		QString tmp_format( ingredient_format );
-		tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), ( *ing_it ).name );
-		tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-		tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), ( *ing_it ).amount > 1 ? ( *ing_it ).units.plural : ( *ing_it ).units.name );
-		tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethodList.count() == 0 ) ?
-		                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + ( *ing_it ).prepMethodList.join(",") );
-
-		ingredients += QString( "<li>%1</li>" ).arg( tmp_format );
-	}
-
-	if ( !ingredients.isNull() )
-		ingredients += "</ul>";
 	else
-		ingredients = i18n( "<ul><li>Ingredient 1</li><li>Ingredient 2</li><li>...</li></ul>" );
-
-	ingredients_box = new QLabel( ingredients, canvas, "ingredients" );
-	ingredients_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( ingredients_box, i18n( "Ingredients" ) );
-
-	createItem( ingredients_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
-
-	//========================PROPERTIES========================//
-	properties_box = new QLabel( i18n( "<ul><li>Property 1</li><li>Property 2</li><li>...</li></ul>" ), canvas, "properties" );
-	properties_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( properties_box, i18n( "Properties" ) );
-
-	createItem( properties_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
-
-	//========================RATINGS========================//
-	QLabel *ratings_box = new QLabel( QString("<b>%1:</b><br /><hr /><b>%2</b><br /><ul><li>%4</li><li>...</li></ul><i>%3</i>").arg(i18n("Ratings")).arg(i18n("Rater")).arg(i18n("Comments")).arg(i18n("Criteria: X stars")), canvas, "ratings" );
-	ratings_box->setFrameShape( QFrame::Box );
-	QToolTip::add
-		( ratings_box, i18n( "Ratings" ) );
-
-	createItem( ratings_box, Font | BackgroundColor | TextColor | Visibility | Geometry | Alignment | Border | Overflow );
+		kdDebug()<<"damn it, why is this null?"<<endl;
 }
 
-void SetupDisplay::widgetClicked( QMouseEvent *e, QWidget *w )
+void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 {
-	if ( e->button() == QMouseEvent::RightButton ) {
-		popup = new KPopupMenu( w ); //parent _must_ be widget acting on
-		popup->insertTitle( ( w == drag_area ) ? i18n( "Background" ) : QToolTip::textFor( w ) );
-
-		unsigned int properties = 0;
-		for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
-			if ( it.key() ->widget == w ) {
-				properties = it.data();
-				break;
-			}
-		}
-
-		KIconLoader il;
-
-		if ( properties & BackgroundColor )
-			popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
-
-		if ( properties & TextColor )
-			popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
-
-		if ( properties & Font )
-			popup->insertItem( il.loadIconSet( "text", KIcon::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
-
-		if ( properties & Overflow ) {
-			QPopupMenu * sub_popup = new QPopupMenu( popup );
-
-			QActionGroup *alignment_actions = new QActionGroup( this );
-			alignment_actions->setExclusive( true );
-
-			QAction *shrink_action = new QAction( i18n( "Shrink to Fit" ), i18n( "Shrink to Fit" ), 0, alignment_actions, 0, true );
-			QAction *grow_action = new QAction( i18n( "Grow" ), i18n( "Grow" ), 0, alignment_actions, 0, true );
-
-			bool shrink = (*widget_item_map->find( w ))->overflow == KreDisplayItem::ShrinkToFit;
-			shrink_action->setOn(shrink);
-			grow_action->setOn(!shrink);
-
-			connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setOverflow( QAction* ) ) );
-
-			popup->insertItem( i18n( "Overflow" ), sub_popup );
-
-			alignment_actions->addTo( sub_popup );
-		}
-
-		if ( properties & Visibility ) {
-			int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
-			popup->setItemChecked( id, w->isShown() );
-		}
-
-		if ( properties & Alignment ) {
-			QPopupMenu * sub_popup = new QPopupMenu( popup );
-
-			QActionGroup *alignment_actions = new QActionGroup( this );
-			alignment_actions->setExclusive( true );
-
-			QAction *c_action = new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
-			QAction *l_action = new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
-			QAction *r_action = new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
-
-			int align = ((QLabel*)w)->alignment();
-			if ( align & Qt::AlignHCenter )
-				c_action->setOn(true);
-			if ( align & Qt::AlignLeft )
-				l_action->setOn(true);
-			if ( align & Qt::AlignRight )
-				r_action->setOn(true);
-
-			connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
-
-			popup->insertItem( i18n( "Alignment" ), sub_popup );
-
-			alignment_actions->addTo( sub_popup );
-		}
-
-		if ( properties & Border )
-			popup->insertItem( i18n( "Border..." ), this, SLOT( setBorder() ) );
-
-		popup->popup( mapToGlobal( e->pos() ) );
-
-		e->accept();
+	DOM::Node node = nodeUnderMouse();
+	DOM::Element element;
+	if ( node.nodeType() != DOM::Node::ELEMENT_NODE ) {
+		kdDebug()<<"not an element"<<endl;
+		element = (DOM::Element)node.parentNode();
 	}
+	else
+		element = (DOM::Element)node;
+
+	while ( !element.parentNode().isNull() ) {
+		if ( element.hasAttribute("id") ) {
+			QString id = element.getAttribute("id").string();
+			if ( node_item_map->keys().contains(id) )
+				break;
+		}
+
+		element = (DOM::Element)element.parentNode();
+	}
+
+	m_currNodeId = element.getAttribute("id").string();
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	
+	delete popup;
+	popup = new KPopupMenu( view() );
+	popup->insertTitle( m_currNodeId );
+
+	unsigned int properties = 0;
+	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
+		if ( it.key()->nodeId == m_currNodeId ) {
+			properties = it.data();
+			break;
+		}
+	}
+
+	KIconLoader il;
+
+	if ( properties & BackgroundColor )
+		popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
+
+	if ( properties & TextColor )
+		popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
+
+	if ( properties & Font )
+		popup->insertItem( il.loadIconSet( "text", KIcon::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
+
+	if ( properties & Visibility ) {
+		int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
+		popup->setItemChecked( id, item->show );
+	}
+
+	if ( properties & Alignment ) {
+		QPopupMenu * sub_popup = new QPopupMenu( popup );
+
+		QActionGroup *alignment_actions = new QActionGroup( this );
+		alignment_actions->setExclusive( true );
+
+		QAction *c_action = new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
+		QAction *l_action = new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
+		QAction *r_action = new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+
+		int align = item->alignment;
+		if ( align & Qt::AlignHCenter )
+			c_action->setOn(true);
+		if ( align & Qt::AlignLeft )
+			l_action->setOn(true);
+		if ( align & Qt::AlignRight )
+			r_action->setOn(true);
+
+		connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
+
+		popup->insertItem( i18n( "Alignment" ), sub_popup );
+
+		alignment_actions->addTo( sub_popup );
+	}
+	if ( properties & Border )
+		popup->insertItem( i18n( "Border..." ), this, SLOT( setBorder() ) );
+
+	popup->popup( point );
+}
+
+void SetupDisplay::applyStylesheet()
+{
+	document().removeStyleSheet(m_styleSheet);
+	document().addStyleSheet(m_styleSheet);
 }
 
 void SetupDisplay::setBackgroundColor()
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QWidget" ) ) {
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	if ( KColorDialog::getColor( item->backgroundColor, view() ) == QDialog::Accepted ) {
+		m_styleSheet.insertRule("#"+m_currNodeId+" { background-color:"+item->backgroundColor.name()+"; }",m_styleSheet.cssRules().length());
+
+		applyStylesheet();
 		has_changes = true;
-
-		QWidget *box = static_cast<QWidget*>( obj );
-
-		QColor new_color = box->backgroundColor();
-		if ( KColorDialog::getColor( new_color, this ) == QDialog::Accepted )
-			box->setPaletteBackgroundColor( new_color );
 	}
 }
 
 void SetupDisplay::setBorder()
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QWidget" ) ) {
-		QWidget * box = static_cast<QWidget*>( obj );
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	BorderDialog borderDialog( item->border, view() );
+	if ( borderDialog.exec() == QDialog::Accepted ) {
+		item->border = borderDialog.border();
 
-		KreDisplayItem *item = *widget_item_map->find( box );
-		BorderDialog borderDialog( item->border, this );
-		if ( borderDialog.exec() == QDialog::Accepted ) {
-			has_changes = true;
+		m_styleSheet.insertRule("#"+m_currNodeId+" { border:"+QString::number(item->border.width)+"px "+item->border.style+" "+item->border.color.name()+"; }",m_styleSheet.cssRules().length());
 
-			item->border = borderDialog.border();
-		}
+		applyStylesheet();
+		has_changes = true;
 	}
 }
 
 void SetupDisplay::setTextColor()
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QWidget" ) ) {
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	if ( KColorDialog::getColor( item->textColor, view() ) == QDialog::Accepted ) {
+		m_styleSheet.insertRule("#"+m_currNodeId+" { color:"+item->textColor.name()+"; }",m_styleSheet.cssRules().length());
+
+		applyStylesheet();
 		has_changes = true;
-
-		QWidget *box = static_cast<QWidget*>( obj );
-
-		QColor new_color = box->foregroundColor();
-		if ( KColorDialog::getColor( new_color, this ) == QDialog::Accepted )
-			box->setPaletteForegroundColor( new_color );
 	}
 }
 
 void SetupDisplay::setFont()
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QLabel" ) ) {
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+
+	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
+		QString text;
+		text += QString( "font-family: %1;\n" ).arg( item->font.family() );
+		text += QString( "font-weight: %1;\n" ).arg( item->font.weight() );
+		text += QString( "font-size: %1pt;\n" ).arg( item->font.pointSize() );
+
+		m_styleSheet.insertRule("#"+m_currNodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+		applyStylesheet();
 		has_changes = true;
-
-		QLabel *box = static_cast<QLabel*>( obj );
-
-		QFont new_font = box->font();
-		if ( KFontDialog::getFont( new_font, false, this ) == QDialog::Accepted )
-			box->setFont( new_font );
 	}
 }
 
 void SetupDisplay::setShown( int id )
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QWidget" ) ) {
-		has_changes = true;
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	item->show = !popup->isItemChecked( id );
 
-		QWidget *box = static_cast<QWidget*>( obj );
-		box->setShown( !popup->isItemChecked( id ) );
-		emit itemVisibilityChanged( box, !popup->isItemChecked( id ) );
+	emit itemVisibilityChanged( item, !popup->isItemChecked( id ) );
 
-		drag_area->setWidget( 0 );
-	}
+	m_styleSheet.insertRule("#"+m_currNodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
+	applyStylesheet();
+	has_changes = true;
 }
 
 void SetupDisplay::setAlignment( QAction *action )
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QLabel" ) ) {
-		has_changes = true;
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 
-		QLabel *box = static_cast<QLabel*>( obj );
+	//TODO: isn't there a simpler way to do this...
+	//preserve non-horizontal alignment flags
+	if ( item->alignment & Qt::AlignRight )
+		item->alignment ^= Qt::AlignRight;
+	if ( item->alignment & Qt::AlignHCenter )
+		item->alignment ^= Qt::AlignHCenter;
+	if ( item->alignment & Qt::AlignLeft )
+		item->alignment ^= Qt::AlignLeft;
 
-		int align = box->alignment();
+	if ( action->text() == i18n( "Center" ) )
+		item->alignment |= Qt::AlignHCenter;
+	else if ( action->text() == i18n( "Left" ) )
+		item->alignment |= Qt::AlignLeft;
+	else if ( action->text() == i18n( "Right" ) )
+		item->alignment |= Qt::AlignRight;
 
-		//TODO: isn't there a simpler way to do this...
-		//preserve non-horizontal alignment flags
-		if ( align & Qt::AlignRight )
-			align ^= Qt::AlignRight;
-		if ( align & Qt::AlignHCenter )
-			align ^= Qt::AlignHCenter;
-		if ( align & Qt::AlignLeft )
-			align ^= Qt::AlignLeft;
+	QString text;
+	if ( item->alignment & Qt::AlignLeft )
+		text += "text-align: left;\n";
+	if ( item->alignment & Qt::AlignRight )
+		text += "text-align: right;\n";
+	if ( item->alignment & Qt::AlignHCenter )
+		text += "text-align: center;\n";
+	if ( item->alignment & Qt::AlignTop )
+		text += "vertical-align: top;\n";
+	if ( item->alignment & Qt::AlignBottom )
+		text += "vertical-align: bottom;\n";
+	if ( item->alignment & Qt::AlignVCenter )
+		text += "vertical-align: middle;\n";
+		
+	m_styleSheet.insertRule("#"+m_currNodeId+" { "+text+" }",m_styleSheet.cssRules().length());
 
-		if ( action->text() == i18n( "Center" ) )
-			align |= Qt::AlignHCenter;
-		else if ( action->text() == i18n( "Left" ) )
-			align |= Qt::AlignLeft;
-		else if ( action->text() == i18n( "Right" ) )
-			align |= Qt::AlignRight;
+	applyStylesheet();
+	has_changes = true;
 
-		box->setAlignment( align );
-	}
 }
 
-void SetupDisplay::setOverflow( QAction *action )
+void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
 {
-	QObject * obj = popup->parent();
-	if ( obj->inherits( "QLabel" ) ) {
-		has_changes = true;
+	item->show = visible;
 
-		QLabel *box = static_cast<QLabel*>( obj );
-		KreDisplayItem *item = *widget_item_map->find( box );
-
-		item->overflow = (action->text() == i18n("Grow"))?KreDisplayItem::Grow : KreDisplayItem::ShrinkToFit;
-	}
-}
-
-void SetupDisplay::setItemShown( QWidget *item, bool visible )
-{
-	item->raise(); //raise it to make sure the user can see it (and doesn't think it didn't work)
-	item->setShown( visible );
-
-	drag_area->setWidget( 0 );
+	m_styleSheet.insertRule("#"+item->nodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
+	applyStylesheet();
 
 	has_changes = true;
-}
-
-/*
-**  Rescales the dimensions according to the page size
-*/
-
-void SetupDisplay::toAbsolute( PreciseRect *r )
-{
-	r->setWidth( r->width() / 100.0 * drag_area->width() );
-	r->setHeight( r->height() / 100.0 * drag_area->width() );
-
-	r->setLeft( r->left() / 100.0 * drag_area->width() );
-	r->setTop( r->top() / 100.0 * drag_area->width() );
-}
-
-/*
-** Set in percentages respect to the width
-*/
-
-void SetupDisplay::toPercentage( PreciseRect *r )
-{
-	r->setWidth( r->width() * 100.0 / drag_area->width() );
-	r->setHeight( r->height() * 100.0 / drag_area->width() );
-
-	r->setLeft( r->left() * 100.0 / drag_area->width() );
-	r->setTop( r->top() * 100.0 / drag_area->width() );
-}
-
-QSize SetupDisplay::minimumSize() const
-{
-	return ( QSize( 300, 400 ) );
-}
-
-QSize SetupDisplay::sizeHint( void ) const
-{
-	return ( minimumSize() );
 }
 
 void SetupDisplay::changeMade( void )
 {
 	has_changes = true;
 }
-
-void SetupDisplay::openPageLayoutDia()
-{
-	#if 0
-	KoHeadFoot hf;
-	KoPageLayoutDia::pageLayout( page_layout, hf, (int)FORMAT_AND_BORDERS, unit, this );
-	updatePageLayout( page_layout );
-	#endif
-}
-
-#if 0
-void SetupDisplay::updatePageLayout( const KoPageLayout &new_page_layout, bool set_change )
-{
-	if ( hruler && vruler ) {
-		page_layout = new_page_layout;
-
-		hruler->setPageLayout( page_layout );
-		vruler->setPageLayout( page_layout );
-
-		//hruler->setFrameStartEnd( 0, page_layout.ptWidth );
-		//vruler->setFrameStartEnd( 0, page_layout.ptHeight );
-	
-		drag_area->setGeometry( QRect( QPoint(page_layout.ptLeft,page_layout.ptTop),
-			QSize(page_layout.ptWidth-page_layout.ptRight,page_layout.ptHeight-page_layout.ptBottom) ) );
-
-		if ( set_change )
-			changeMade();
-	}
-}
-#endif
 
 #include "setupdisplay.moc"

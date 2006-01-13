@@ -83,7 +83,7 @@ QString HTMLExporter::createContent( const Recipe& recipe )
 	QString templateCopy = m_templateContent;
 
 	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
-	if ( el.isNull() || el.text() == "true" ) // Calculate the property list
+	if ( database && el.isNull() || el.text() == "true" ) // Calculate the property list
 		calculateProperties( recipe, database, properties );
 
 	storePhoto( recipe, doc );
@@ -154,7 +154,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	output += generateCSSClasses( doc );
 	output += "</style>";
 	output += "</head>";
-	output += "<body>";
+	output += "<body id=\"background\">";
 
 	return output;
 }
@@ -378,7 +378,7 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 	css += "UL { padding-left: 1.25em; }\n";
 
 	QStringList classes_list;
-	classes_list << "title" << "instructions" << "servings" << "prep_time" << "photo" << "authors" <<
+	classes_list << "title" << "instructions" << "yield" << "prep_time" << "photo" << "authors" <<
 	"categories" << "header" << "ingredients" << "properties";
 
 	for ( QStringList::const_iterator it = classes_list.begin(); it != classes_list.end(); ++it ) {

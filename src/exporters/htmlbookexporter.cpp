@@ -36,7 +36,8 @@ QString HTMLBookExporter::createContent( const RecipeList& recipes )
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
 			QMap<QString,QTextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
-			(**stream_it) << QString("<a name=\""+(*recipe_it).title+"\">");
+			(**stream_it) << QString("[ <a name=\"top\" /> ]");
+			(**stream_it) << QString("<a name=\""+(*recipe_it).title+"\" />");
 			(**stream_it) << HTMLExporter::createContent(*recipe_it);
 			(**stream_it) << QString("[ <a href=\"#top\">Top</a> ]");
 			(**stream_it) << QString("[ <a href=\"index.html\">Back</a> ]");
