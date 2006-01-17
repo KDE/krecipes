@@ -148,7 +148,7 @@ void PageSetupDialog::initShownItems()
 	shown_items_popup->clear();
 	for ( PropertiesMap::const_iterator it = m_htmlPart->properties().begin(); it != m_htmlPart->properties().end(); ++it ) {
 		if ( it.data() & SetupDisplay::Visibility ) {
-			int new_id = shown_items_popup->insertItem ( it.key()->nodeId );
+			int new_id = shown_items_popup->insertItem ( it.key()->name );
 			shown_items_popup->setItemChecked( new_id, it.key()->show );
 			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
 

@@ -41,7 +41,7 @@
 
 #include <cmath>
 
-KreDisplayItem::KreDisplayItem( const QString &n ) : nodeId(n)
+KreDisplayItem::KreDisplayItem( const QString &n, const QString &_name ) : nodeId(n), name(_name)
 {
 	alignment = Qt::AlignHCenter;
 	show = true;
@@ -81,18 +81,18 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 	show();
 	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
 
-	createItem( "background", BackgroundColor );
-	createItem( "title", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "instructions", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "prep_time", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "photo", Visibility | Border );
-	createItem( "authors", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "categories", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "header", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "ingredients", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "properties", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "ratings", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "yield", Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "background", i18n("Background"), BackgroundColor );
+	createItem( "title", i18n("Title"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "instructions", i18n("Instructions"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "prep_time", i18n("Preparation Time"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "photo", i18n("Photo"), Visibility | Border );
+	createItem( "authors", i18n("Authors"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "categories", i18n("Categories"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "header", i18n("Header"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "ingredients", i18n("Ingredients"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "properties", i18n("Properties"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "ratings", i18n("Ratings"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "yield", i18n("Yield"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 }
 
 SetupDisplay::~SetupDisplay()
@@ -101,9 +101,9 @@ SetupDisplay::~SetupDisplay()
 	delete node_item_map;
 }
 
-void SetupDisplay::createItem( const QString &node, unsigned int properties )
+void SetupDisplay::createItem( const QString &node, const QString &name, unsigned int properties )
 {
-	KreDisplayItem * item = new KreDisplayItem( node );
+	KreDisplayItem * item = new KreDisplayItem( node, name );
 	box_properties->insert( item, properties );
 	node_item_map->insert( node, item );
 }
@@ -288,8 +288,6 @@ void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
 		m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
 		doc.addStyleSheet(m_styleSheet);
 	}
-	else
-		kdDebug()<<"damn it, why is this null?"<<endl;
 }
 
 void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
@@ -318,7 +316,7 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 	
 	delete popup;
 	popup = new KPopupMenu( view() );
-	popup->insertTitle( m_currNodeId );
+	popup->insertTitle( item->name );
 
 	unsigned int properties = 0;
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {

@@ -36,9 +36,10 @@ class StyleSheet;
 class KreDisplayItem
 {
 public:
-	KreDisplayItem( const QString &n );
+	KreDisplayItem( const QString &id, const QString &name );
 
 	QString nodeId;
+	QString name;
 	KreBorder border;
 	int alignment;
 	bool show;
@@ -121,7 +122,7 @@ private:
 	void setShown( const QString &nodeId, bool );
 	void setAlignment( const QString &nodeId, int alignment );
 
-	void createItem( const QString &id, unsigned int properties );
+	void createItem( const QString &id, const QString &name, unsigned int properties );
 
 	QString m_currNodeId;
 	KPopupMenu *popup;
