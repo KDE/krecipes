@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE krecipes-layout>
-<krecipes-layout version="0.3" >
- <background>
-  <background-color>#ffffff</background-color>
- </background>
- <title>
-  <background-color>#ffffff</background-color>
-  <text-color>#000000</text-color>
-  <font>New Century Schoolbook,32,-1,5,75,0,0,0,0,0</font>
-  <visible>true</visible>
-  <alignment>2052</alignment>
-  <border width="1" style="none" color="#000000" />
- </title>
- <yield>
+<krecipes-layout version="0.4" >
+ <authors>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
-  <alignment>2048</alignment>
+  <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
- </yield>
- <prep_time>
+ </authors>
+ <background>
+  <background-color>#ffffff</background-color>
+ </background>
+ <categories>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
-  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
-  <alignment>2624</alignment>
+  <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
- </prep_time>
+ </categories>
+ <header>
+  <background-color>#eeda9c</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2050</alignment>
+  <border width="1" style="none" color="#000000" />
+ </header>
+ <ingredients>
+  <background-color>#776d4e</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </ingredients>
  <instructions>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
@@ -38,38 +46,16 @@
  </instructions>
  <photo>
   <visible>true</visible>
+  <border width="1" style="none" color="#000000" />
  </photo>
- <authors>
-  <background-color>#ffffff</background-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <alignment>2049</alignment>
-  <border width="1" style="none" color="#000000" />
- </authors>
- <header>
-  <background-color>#eeda9c</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <alignment>2050</alignment>
-  <border width="1" style="none" color="#000000" />
- </header>
- <categories>
+ <prep_time>
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>
-  <alignment>2049</alignment>
+  <alignment>2624</alignment>
   <border width="1" style="none" color="#000000" />
- </categories>
- <ingredients>
-  <background-color>#776d4e</background-color>
-  <text-color>#000000</text-color>
-  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <visible>true</visible>
-  <alignment>2049</alignment>
-  <border width="1" style="none" color="#000000" />
- </ingredients>
+ </prep_time>
  <properties>
   <background-color>#eeda9c</background-color>
   <text-color>#000000</text-color>
@@ -86,4 +72,20 @@
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
  </ratings>
+ <title>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>New Century Schoolbook,32,-1,5,75,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2052</alignment>
+  <border width="1" style="none" color="#000000" />
+ </title>
+ <yield>
+  <background-color>#ffffff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </yield>
 </krecipes-layout>

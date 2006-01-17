@@ -1,52 +1,34 @@
 <table width="100%">
-    <tr>
-      <td class="title" colspan="3" width="100%">
-        **TITLE**
-      </td>
-    </tr>
-    
-    <tr><td colspan="3" width="100%">&nbsp;</td>
-    </tr>
-    
+    <tr><td class="title" colspan="3" width="100%">**TITLE**</td></tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
       <td class="photo" width="20%">
         **PHOTO**
       </td>
+
       <td width="3%">&nbsp;</td>
+
       <td>
         <p class="categories">**CATEGORIES**</p>
-	<p class="authors">**AUTHORS**</p>
+        <p class="authors">**AUTHORS**</p>
         <p class="yield">**YIELD**</p>
         <p class="prep_time">**PREP_TIME**</p>
-        
       </td>
     </tr>
-    <tr><td colspan="3" width="100%">&nbsp;</td>
-    </tr>
-     
-    <tr><td class="ratings" colspan="3" width="100%">**RATINGS**</td>
-    </tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
 
-    <tr><td colspan="3" width="100%">&nbsp;</td>
-    </tr> 
+    <tr><td class="ratings" colspan="3">**RATINGS**</td></tr>
 
-    <tr><td valign="top" class="ingredients" colspan="3" width="100%">
-        **INGREDIENTS**
-      </td>
-    </tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
 
-    <tr><td colspan="3" width="100%">&nbsp;</td>
-    </tr> 
-    
-    <tr><td valign="top" class="instructions" colspan="3" width="100%">
-         **INSTRUCTIONS**
-      </td>
-    </tr>
+    <tr><td valign="top" class="ingredients" colspan="3">**INGREDIENTS**</td></tr>
 
-    <tr><td colspan="3" width="100%">&nbsp;</td>
-    </tr>
-    <tr>
-      <td class="properties">**PROPERTIES**</td>
-    </tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
+
+    <tr><td valign="top" class="instructions" colspan="3">**INSTRUCTIONS**</td></tr>
+
+    <tr><td colspan="3">&nbsp;</td></tr>
+
+    <tr><td class="properties">**PROPERTIES**</td></tr>
 </table>
 <hr size="3" />

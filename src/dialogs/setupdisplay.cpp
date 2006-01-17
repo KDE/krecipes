@@ -174,6 +174,9 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
+		while ( m_styleSheet.cssRules().length() != 0 )
+			m_styleSheet.deleteRule(0);
+
 		QDomNodeList l = layout.childNodes();
 		for ( unsigned i = 0 ; i < l.count(); i++ ) {
 			QDomElement el = l.item( i ).toElement();

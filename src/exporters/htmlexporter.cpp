@@ -169,13 +169,6 @@ QString HTMLExporter::createFooter()
 
 void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 {
-	QDomElement photo_geom_el = getLayoutAttribute( doc, "photo", "geometry" );
-	temp_photo_size = QSize(     qRound( photo_geom_el.attribute( "width" ).toDouble() ),
-	                             qRound( photo_geom_el.attribute( "height" ).toDouble() )
-	                        );
-
-	int phwidth = temp_photo_size.width();
-
 	QImage image;
 	QString photo_name;
 	if ( recipe.photo.isNull() ) {
@@ -194,7 +187,14 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
-	temp_photo_size = QSize( pm.size() ); //preserve aspect ratio
+}
+
+QString HTMLExporter::HTMLIfVisible( const QString &name, const QString &html )
+{
+        QDomElement el = getLayoutAttribute( doc, name, "visible" );
+        if ( el.isNull() || el.text() != "false" )
+               return html;
+	return QString::null;
 }
 
 void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content )
@@ -202,22 +202,22 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 	KConfig * config = KGlobal::config();
 
 	//=======================TITLE======================//
-	content = content.replace("**TITLE**",recipe.title);
+	content = content.replace("**TITLE**",HTMLIfVisible("title",recipe.title));
 
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = QStyleSheet::escape( recipe.instructions );
 	instr_html.replace( "\n", "<br />" );
-	content = content.replace( "**INSTRUCTIONS**", instr_html );
+	content = content.replace( "**INSTRUCTIONS**", HTMLIfVisible("instructions",instr_html) );
 
 	//=======================SERVINGS======================//
 	QString yield_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
-	content = content.replace( "**YIELD**", yield_html );
+	content = content.replace( "**YIELD**", HTMLIfVisible("yield",yield_html) );
 
 	//=======================PREP TIME======================//
 	QString preptime_html;
 	if ( !recipe.prepTime.isNull() && recipe.prepTime.isValid() )
 		preptime_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Preparation Time" ) ).arg( recipe.prepTime.toString( "h:mm" ) );
-	content = content.replace( "**PREP_TIME**", preptime_html );
+	content = content.replace( "**PREP_TIME**", HTMLIfVisible("prep_time",preptime_html) );
 
 	//========================PHOTO========================//
 	QString photo_name;
@@ -230,7 +230,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
 	QString photo_html = QString( "<img src=\"%1\" />" ).arg( image_url );
-	content = content.replace( "**PHOTO**", photo_html );
+	content = content.replace( "**PHOTO**", HTMLIfVisible("photo",photo_html) );
 
 	//=======================AUTHORS======================//
 	QString authors_html;
@@ -244,7 +244,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 	}
 	if ( !authors_html.isEmpty() )
 		authors_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
-	content = content.replace( "**AUTHORS**", authors_html );
+	content = content.replace( "**AUTHORS**", HTMLIfVisible("authors",authors_html) );
 
 	//=======================CATEGORIES======================//
 	QString categories_html;
@@ -259,11 +259,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 	if ( !categories_html.isEmpty() )
 		categories_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
-	content = content.replace( "**CATEGORIES**", categories_html );
+	content = content.replace( "**CATEGORIES**", HTMLIfVisible("categories",categories_html) );
 
 	//=======================HEADER======================//
 	QString header_html = QString( "<b>%1 #%2</b>" ).arg( i18n( "Recipe" ) ).arg( recipe.recipeID );
-	content = content.replace( "**HEADER**", header_html );
+	content = content.replace( "**HEADER**", HTMLIfVisible("header",header_html) );
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
@@ -304,7 +304,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 		ingredients_html.prepend( "<ul>" );
 		ingredients_html.append( "</ul>" );
 	}
-	content = content.replace( "**INGREDIENTS**", ingredients_html );
+	content = content.replace( "**INGREDIENTS**", HTMLIfVisible("ingredients",ingredients_html) );
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
@@ -335,7 +335,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 		properties_html.prepend( "<ul>" );
 		properties_html.append( "</ul>" );
 	}
-	content = content.replace( "**PROPERTIES**", properties_html );
+	content = content.replace( "**PROPERTIES**", HTMLIfVisible("properties",properties_html) );
 
 	//=======================RATINGS======================//
 	QString ratings_html;
@@ -366,9 +366,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 		if ( !( *rating_it ).comment.isEmpty() )
 			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
-	content = content.replace( "**RATINGS**", ratings_html );
-
-	///////////TODO?: Add an "end of recipe" element here (as a separator between this and the next recipes//////////////
+	content = content.replace( "**RATINGS**", HTMLIfVisible("ratings",ratings_html) );
 }
 
 QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )

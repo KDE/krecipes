@@ -51,6 +51,8 @@ private:
 	void populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content );
 	void replaceIfVisible( QString &content, const QString &name, const QString &html );
 
+	QString HTMLIfVisible( const QString &name, const QString &html );
+
 	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
 	QString readBorderProperties( const QDomDocument &doc, const QString &object );
 	QString readBgColorProperties( const QDomDocument &doc, const QString &object );
@@ -66,7 +68,6 @@ private:
 	RecipeDB *database;
 
 	QString layout_filename;
-	QSize temp_photo_size;
 
 	bool m_error;
 	QDomDocument doc;
