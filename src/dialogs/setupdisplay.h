@@ -36,7 +36,7 @@ class StyleSheet;
 class KreDisplayItem
 {
 public:
-	KreDisplayItem( const QString &n ) : nodeId(n){}
+	KreDisplayItem( const QString &n );
 
 	QString nodeId;
 	KreBorder border;
@@ -113,6 +113,13 @@ private:
 	void loadVisibility( KreDisplayItem *, const QDomElement &tag );
 	void loadAlignment( KreDisplayItem *, const QDomElement &tag );
 	void loadBorder( KreDisplayItem *, const QDomElement &tag );
+
+	void setBackgroundColor( const QString &nodeId, const QColor &color );
+	void setBorder( const QString &nodeId, const KreBorder& );
+	void setTextColor( const QString &nodeId, const QColor &color );
+	void setFont( const QString &nodeId, const QFont & );
+	void setShown( const QString &nodeId, bool );
+	void setAlignment( const QString &nodeId, int alignment );
 
 	void createItem( const QString &id, unsigned int properties );
 

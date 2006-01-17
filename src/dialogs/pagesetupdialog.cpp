@@ -223,6 +223,7 @@ void PageSetupDialog::saveAsLayout()
 	if ( !filename.isEmpty() ) {
 		if ( haveWritePerm( filename ) ) {
 			m_htmlPart->saveLayout( filename );
+			setActiveFile(filename);
 		}
 		else {
 			switch ( KMessageBox::warningYesNo( this, i18n( "You have selected a file that you do not have the permissions to write to.\nWould you like to select another file?" ) ) ) {

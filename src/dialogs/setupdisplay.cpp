@@ -41,6 +41,15 @@
 
 #include <cmath>
 
+KreDisplayItem::KreDisplayItem( const QString &n ) : nodeId(n)
+{
+	alignment = Qt::AlignHCenter;
+	show = true;
+	backgroundColor = QColor(255,255,255);
+	textColor = QColor(0,0,0);
+}
+
+
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(parent),
 		box_properties( new PropertiesMap ),
 		node_item_map( new QMap<QString, KreDisplayItem*> ),
@@ -103,8 +112,6 @@ void SetupDisplay::loadLayout( const QString &filename )
 {
 	QFile input( filename );
 	if ( input.open( IO_ReadOnly ) ) {
-		has_changes = false;
-
 		QDomDocument doc;
 		QString error;
 		int line;
@@ -151,6 +158,8 @@ void SetupDisplay::loadLayout( const QString &filename )
 			else
 				kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
 		}
+		applyStylesheet();
+		has_changes = false;
 	}
 	else
 		kdDebug() << "Unable to open file: " << filename << endl;
@@ -160,18 +169,22 @@ void SetupDisplay::loadLayout( const QString &filename )
 void SetupDisplay::loadBackgroundColor( KreDisplayItem *item, const QDomElement &tag )
 {
 	item->backgroundColor.setNamedColor( tag.text() );
+	setBackgroundColor(item->nodeId,item->backgroundColor);
 }
 
 void SetupDisplay::loadFont( KreDisplayItem *item, const QDomElement &tag )
 {
 	QFont f;
-	if ( f.fromString( tag.text() ) )
+	if ( f.fromString( tag.text() ) ) {
 		item->font = f;
+		setFont(item->nodeId,item->font);
+	}
 }
 
 void SetupDisplay::loadTextColor( KreDisplayItem *item, const QDomElement &tag )
 {
 	item->textColor.setNamedColor( tag.text() );
+	setTextColor(item->nodeId,item->textColor);
 }
 
 void SetupDisplay::loadVisibility( KreDisplayItem *item, const QDomElement &tag )
@@ -179,11 +192,14 @@ void SetupDisplay::loadVisibility( KreDisplayItem *item, const QDomElement &tag 
 	bool visible = ( tag.text() == "false" ) ? false : true;
 	item->show = visible;
 	emit itemVisibilityChanged( item, visible );
+
+	setShown(item->nodeId,item->show);
 }
 
 void SetupDisplay::loadAlignment( KreDisplayItem *item, const QDomElement &tag )
 {
 	item->alignment = tag.text().toInt();
+	setAlignment(item->nodeId,item->alignment);
 }
 
 void SetupDisplay::loadBorder( KreDisplayItem *item, const QDomElement &tag )
@@ -191,6 +207,7 @@ void SetupDisplay::loadBorder( KreDisplayItem *item, const QDomElement &tag )
 	QColor c;
 	c.setNamedColor( tag.attribute( "color" ) );
 	item->border = KreBorder( tag.attribute( "width" ).toInt(), tag.attribute( "style" ), c );
+	setBorder(item->nodeId,item->border);
 }
 
 void SetupDisplay::saveLayout( const QString &filename )
@@ -359,19 +376,26 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 
 void SetupDisplay::applyStylesheet()
 {
-	document().removeStyleSheet(m_styleSheet);
-	document().addStyleSheet(m_styleSheet);
+	if ( !document().isNull() && !m_styleSheet.isNull() ) {
+		document().removeStyleSheet(m_styleSheet);
+		document().addStyleSheet(m_styleSheet);
+	}
 }
 
 void SetupDisplay::setBackgroundColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->backgroundColor, view() ) == QDialog::Accepted ) {
-		m_styleSheet.insertRule("#"+m_currNodeId+" { background-color:"+item->backgroundColor.name()+"; }",m_styleSheet.cssRules().length());
-
+		setBackgroundColor(m_currNodeId,item->backgroundColor);
 		applyStylesheet();
-		has_changes = true;
 	}
+}
+
+void SetupDisplay::setBackgroundColor( const QString &nodeId, const QColor &color )
+{
+	m_styleSheet.insertRule("#"+nodeId+" { background-color:"+color.name()+"; }",m_styleSheet.cssRules().length());
+
+	has_changes = true;
 }
 
 void SetupDisplay::setBorder()
@@ -380,50 +404,65 @@ void SetupDisplay::setBorder()
 	BorderDialog borderDialog( item->border, view() );
 	if ( borderDialog.exec() == QDialog::Accepted ) {
 		item->border = borderDialog.border();
-
-		m_styleSheet.insertRule("#"+m_currNodeId+" { border:"+QString::number(item->border.width)+"px "+item->border.style+" "+item->border.color.name()+"; }",m_styleSheet.cssRules().length());
-
+		setBorder( m_currNodeId, item->border );
 		applyStylesheet();
-		has_changes = true;
 	}
+}
+void SetupDisplay::setBorder( const QString &nodeId, const KreBorder& border )
+{
+	m_styleSheet.insertRule("#"+nodeId+" { border:"+QString::number(border.width)+"px "+border.style+" "+border.color.name()+"; }",m_styleSheet.cssRules().length());
+
+	has_changes = true;
 }
 
 void SetupDisplay::setTextColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->textColor, view() ) == QDialog::Accepted ) {
-		m_styleSheet.insertRule("#"+m_currNodeId+" { color:"+item->textColor.name()+"; }",m_styleSheet.cssRules().length());
-
+		setTextColor(m_currNodeId,item->textColor);
 		applyStylesheet();
-		has_changes = true;
 	}
+}
+
+void SetupDisplay::setTextColor( const QString &nodeId, const QColor &color )
+{
+	m_styleSheet.insertRule("#"+nodeId+" { color:"+color.name()+"; }",m_styleSheet.cssRules().length());
+
+	has_changes = true;
 }
 
 void SetupDisplay::setFont()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-
 	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
-		QString text;
-		text += QString( "font-family: %1;\n" ).arg( item->font.family() );
-		text += QString( "font-weight: %1;\n" ).arg( item->font.weight() );
-		text += QString( "font-size: %1pt;\n" ).arg( item->font.pointSize() );
-
-		m_styleSheet.insertRule("#"+m_currNodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+		setFont(m_currNodeId,item->font);
 		applyStylesheet();
-		has_changes = true;
 	}
+}
+
+void SetupDisplay::setFont( const QString &nodeId, const QFont &font )
+{
+	QString text;
+	text += QString( "font-family: %1;\n" ).arg( font.family() );
+	text += QString( "font-weight: %1;\n" ).arg( font.weight() );
+	text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
+
+	m_styleSheet.insertRule("#"+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+	has_changes = true;
 }
 
 void SetupDisplay::setShown( int id )
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	item->show = !popup->isItemChecked( id );
-
 	emit itemVisibilityChanged( item, !popup->isItemChecked( id ) );
-
-	m_styleSheet.insertRule("#"+m_currNodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
+	setShown(m_currNodeId,item->show);
 	applyStylesheet();
+}
+
+void SetupDisplay::setShown( const QString &nodeId, bool show )
+{
+	m_styleSheet.insertRule("#"+nodeId+" { visibility:"+(show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
 	has_changes = true;
 }
 
@@ -447,25 +486,31 @@ void SetupDisplay::setAlignment( QAction *action )
 	else if ( action->text() == i18n( "Right" ) )
 		item->alignment |= Qt::AlignRight;
 
-	QString text;
-	if ( item->alignment & Qt::AlignLeft )
-		text += "text-align: left;\n";
-	if ( item->alignment & Qt::AlignRight )
-		text += "text-align: right;\n";
-	if ( item->alignment & Qt::AlignHCenter )
-		text += "text-align: center;\n";
-	if ( item->alignment & Qt::AlignTop )
-		text += "vertical-align: top;\n";
-	if ( item->alignment & Qt::AlignBottom )
-		text += "vertical-align: bottom;\n";
-	if ( item->alignment & Qt::AlignVCenter )
-		text += "vertical-align: middle;\n";
-		
-	m_styleSheet.insertRule("#"+m_currNodeId+" { "+text+" }",m_styleSheet.cssRules().length());
-
+	setAlignment(m_currNodeId,item->alignment);
 	applyStylesheet();
-	has_changes = true;
+}
 
+void SetupDisplay::setAlignment( const QString &nodeId, int alignment )
+{
+	QString text;
+	if ( alignment & Qt::AlignLeft )
+		text += "text-align: left;\n";
+	if ( alignment & Qt::AlignRight )
+		text += "text-align: right;\n";
+	if ( alignment & Qt::AlignHCenter )
+		text += "text-align: center;\n";
+	if ( alignment & Qt::AlignTop )
+		text += "vertical-align: top;\n";
+	if ( alignment & Qt::AlignBottom )
+		text += "vertical-align: bottom;\n";
+	if ( alignment & Qt::AlignVCenter )
+		text += "vertical-align: middle;\n";
+
+	if ( !text.isEmpty() ) {
+		m_styleSheet.insertRule("#"+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+
+		has_changes = true;
+	}
 }
 
 void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
