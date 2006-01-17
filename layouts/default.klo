@@ -32,7 +32,6 @@
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
@@ -42,9 +41,7 @@
  </photo>
  <authors>
   <background-color>#ffffff</background-color>
-  <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
@@ -61,7 +58,6 @@
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
@@ -70,7 +66,6 @@
   <background-color>#776d4e</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
@@ -79,7 +74,6 @@
   <background-color>#eeda9c</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans L,12,-1,5,50,1,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
@@ -88,7 +82,6 @@
   <background-color>#ffffff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
-  <overflow>1</overflow>
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />

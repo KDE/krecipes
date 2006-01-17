@@ -83,7 +83,7 @@ QString HTMLExporter::createContent( const Recipe& recipe )
 	QString templateCopy = m_templateContent;
 
 	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
-	if ( database && el.isNull() || el.text() == "true" ) // Calculate the property list
+	if ( database && (el.isNull() || el.text() == "true") ) // Calculate the property list
 		calculateProperties( recipe, database, properties );
 
 	storePhoto( recipe, doc );
