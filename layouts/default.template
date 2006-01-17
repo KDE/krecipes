@@ -1,6 +1,6 @@
 <table width="100%">
     <tr>
-      <td id="title" class="title" colspan="3" width="100%">
+      <td class="title" colspan="3" width="100%">
         **TITLE**
       </td>
     </tr>
@@ -9,28 +9,28 @@
     </tr>
     
     <tr>
-      <td id="photo" class="photo" width="20%">
+      <td class="photo" width="20%">
         **PHOTO**
       </td>
       <td width="3%">&nbsp;</td>
       <td>
-        <p id="categories" class="categories">**CATEGORIES**</p>
-	<p id="authors" class="authors">**AUTHORS**</p>
-        <p id="yield" class="yield">**YIELD**</p>
-        <p id="prep_time" class="prep_time">**PREP_TIME**</p>
+        <p class="categories">**CATEGORIES**</p>
+	<p class="authors">**AUTHORS**</p>
+        <p class="yield">**YIELD**</p>
+        <p class="prep_time">**PREP_TIME**</p>
         
       </td>
     </tr>
     <tr><td colspan="3" width="100%">&nbsp;</td>
     </tr>
      
-    <tr><td id="ratings" class="ratings" colspan="3" width="100%">**RATINGS**</td>
+    <tr><td class="ratings" colspan="3" width="100%">**RATINGS**</td>
     </tr>
 
     <tr><td colspan="3" width="100%">&nbsp;</td>
     </tr> 
 
-    <tr><td id="ingredients" valign="top" class="ingredients" colspan="3" width="100%">
+    <tr><td valign="top" class="ingredients" colspan="3" width="100%">
         **INGREDIENTS**
       </td>
     </tr>
@@ -38,7 +38,7 @@
     <tr><td colspan="3" width="100%">&nbsp;</td>
     </tr> 
     
-    <tr><td id="instructions" valign="top" class="instructions" colspan="3" width="100%">
+    <tr><td valign="top" class="instructions" colspan="3" width="100%">
          **INSTRUCTIONS**
       </td>
     </tr>
@@ -46,7 +46,7 @@
     <tr><td colspan="3" width="100%">&nbsp;</td>
     </tr>
     <tr>
-      <td id="properties" class="properties">**PROPERTIES**</td>
+      <td class="properties">**PROPERTIES**</td>
     </tr>
 </table>
 <hr size="3" />

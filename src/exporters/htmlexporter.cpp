@@ -154,7 +154,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	output += generateCSSClasses( doc );
 	output += "</style>";
 	output += "</head>";
-	output += "<body id=\"background\">";
+	output += "<body class=\"background\">";
 
 	return output;
 }
@@ -379,7 +379,7 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 
 	QStringList classes_list;
 	classes_list << "title" << "instructions" << "yield" << "prep_time" << "photo" << "authors" <<
-	"categories" << "header" << "ingredients" << "properties";
+	"categories" << "header" << "ingredients" << "properties" << "ratings";
 
 	for ( QStringList::const_iterator it = classes_list.begin(); it != classes_list.end(); ++it ) {
 		css += "." + *it + "\n";

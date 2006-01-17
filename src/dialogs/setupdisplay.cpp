@@ -62,7 +62,53 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 	HTMLExporter exporter( 0, tmp_filename + ".html", "html" );
 
 	RecipeList recipeList;
-	recipeList.append(sample);
+
+	if ( sample.recipeID != -1 )
+		recipeList.append(sample);
+	else {
+		Recipe recipe;
+		recipe.title = i18n("Recipe Title");
+ 		recipe.yield.amount = 0;
+		recipe.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
+		recipe.instructions = i18n("Instructions");
+		recipe.prepTime = QTime(0,0);
+	
+		recipe.authorList.append( Element(i18n( "Author 1, Author 2, ..." )) );
+	
+		Ingredient ing;
+		ing.name = i18n("Ingredient 1");
+		recipe.ingList.append( ing );
+	
+		Ingredient ing2;
+		ing2.name = i18n("Ingredient 2");
+		recipe.ingList.append( ing2 );
+	
+		RatingCriteria rc;
+		Rating rating1;
+		rating1.rater = "George McFry";
+		rating1.comment = "Good enough";
+	
+		rc.name = "Taste";
+		rc.stars = 5.0;
+		rating1.append(rc);
+	
+		Rating rating2;
+		rating2.rater = "Me";
+		rating2.comment = "Yuck, don't eat!";
+	
+		rc.name = "Overall";
+		rc.stars = 2.0;
+		rating2.append(rc);
+	
+		rc.name = "Taste";
+		rc.stars = 1.5;
+		rating2.append(rc);
+	
+		recipe.ratingList.append(rating1);
+		recipe.ratingList.append(rating2);
+
+		recipeList.append(recipe);
+	}
 
 	QFile file(tmp_filename + ".html");
 	if ( file.open( IO_WriteOnly ) ) {
@@ -302,8 +348,8 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 		element = (DOM::Element)node;
 
 	while ( !element.parentNode().isNull() ) {
-		if ( element.hasAttribute("id") ) {
-			QString id = element.getAttribute("id").string();
+		if ( element.hasAttribute("class") ) {
+			QString id = element.getAttribute("class").string();
 			if ( node_item_map->keys().contains(id) )
 				break;
 		}
@@ -311,7 +357,12 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 		element = (DOM::Element)element.parentNode();
 	}
 
-	m_currNodeId = element.getAttribute("id").string();
+	m_currNodeId = element.getAttribute("class").string();
+	if ( m_currNodeId.isEmpty() ) {
+		kdDebug()<<"Code error: unable to determine class of selected element"<<endl;
+		return;
+	}
+
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	
 	delete popup;
@@ -391,7 +442,7 @@ void SetupDisplay::setBackgroundColor()
 
 void SetupDisplay::setBackgroundColor( const QString &nodeId, const QColor &color )
 {
-	m_styleSheet.insertRule("#"+nodeId+" { background-color:"+color.name()+"; }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+nodeId+" { background-color:"+color.name()+"; }",m_styleSheet.cssRules().length());
 
 	has_changes = true;
 }
@@ -408,7 +459,7 @@ void SetupDisplay::setBorder()
 }
 void SetupDisplay::setBorder( const QString &nodeId, const KreBorder& border )
 {
-	m_styleSheet.insertRule("#"+nodeId+" { border:"+QString::number(border.width)+"px "+border.style+" "+border.color.name()+"; }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+nodeId+" { border:"+QString::number(border.width)+"px "+border.style+" "+border.color.name()+"; }",m_styleSheet.cssRules().length());
 
 	has_changes = true;
 }
@@ -424,7 +475,7 @@ void SetupDisplay::setTextColor()
 
 void SetupDisplay::setTextColor( const QString &nodeId, const QColor &color )
 {
-	m_styleSheet.insertRule("#"+nodeId+" { color:"+color.name()+"; }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+nodeId+" { color:"+color.name()+"; }",m_styleSheet.cssRules().length());
 
 	has_changes = true;
 }
@@ -445,7 +496,7 @@ void SetupDisplay::setFont( const QString &nodeId, const QFont &font )
 	text += QString( "font-weight: %1;\n" ).arg( font.weight() );
 	text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
 
-	m_styleSheet.insertRule("#"+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
 	has_changes = true;
 }
 
@@ -460,7 +511,7 @@ void SetupDisplay::setShown( int id )
 
 void SetupDisplay::setShown( const QString &nodeId, bool show )
 {
-	m_styleSheet.insertRule("#"+nodeId+" { visibility:"+(show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+nodeId+" { visibility:"+(show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
 	has_changes = true;
 }
 
@@ -505,7 +556,7 @@ void SetupDisplay::setAlignment( const QString &nodeId, int alignment )
 		text += "vertical-align: middle;\n";
 
 	if ( !text.isEmpty() ) {
-		m_styleSheet.insertRule("#"+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
+		m_styleSheet.insertRule("."+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
 
 		has_changes = true;
 	}
@@ -515,7 +566,7 @@ void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
 {
 	item->show = visible;
 
-	m_styleSheet.insertRule("#"+item->nodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
+	m_styleSheet.insertRule("."+item->nodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
 	applyStylesheet();
 
 	has_changes = true;
