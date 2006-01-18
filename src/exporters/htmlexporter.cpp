@@ -49,9 +49,9 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 	config->setGroup( "Page Setup" );
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/default.template" ) );
+	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
-		template_filename = locate( "appdata", "layouts/default.template" );
+		template_filename = locate( "appdata", "layouts/Default.template" );
 	kdDebug() << "Using template file: " << template_filename << endl;
 
 	QFile input( template_filename );
@@ -62,9 +62,9 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 		kdDebug()<<"couldn't find/open template file"<<endl;
 
 	//let's do everything we can to be sure at least some layout is loaded
-	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
 	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/default.klo" );
+		layout_filename = locate( "appdata", "layouts/Default.klo" );
 	kdDebug() << "Using layout file: " << layout_filename << endl;
 }
 

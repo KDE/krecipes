@@ -40,9 +40,10 @@ protected:
 	void save();
 
 private slots:
-	void loadLayout();
+	void loadFile();
 	void loadLayout( int );
 	void loadLayout( const QString &filename );
+	void loadTemplate( int );
 	void reloadLayout();
 	void saveLayout();
 	void saveAsLayout();
@@ -58,6 +59,7 @@ private:
 	SetupDisplay *m_htmlPart;
 
 	QString active_filename;
+	QString original_template;
 	bool have_write_perm;
 
 	QMap<int, KreDisplayItem*> popup_widget_map;

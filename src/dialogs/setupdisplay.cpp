@@ -58,30 +58,24 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 {
 	connect( this, SIGNAL( popupMenu(const QString &,const QPoint &) ), SLOT( nodeClicked(const QString &,const QPoint &) ) );
 
-	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
-	HTMLExporter exporter( 0, tmp_filename + ".html", "html" );
-
-	RecipeList recipeList;
-
 	if ( sample.recipeID != -1 )
-		recipeList.append(sample);
+		m_sample = sample;
 	else {
-		Recipe recipe;
-		recipe.title = i18n("Recipe Title");
- 		recipe.yield.amount = 0;
-		recipe.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
-		recipe.instructions = i18n("Instructions");
-		recipe.prepTime = QTime(0,0);
+		m_sample.title = i18n("Recipe Title");
+ 		m_sample.yield.amount = 0;
+		m_sample.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
+		m_sample.instructions = i18n("Instructions");
+		m_sample.prepTime = QTime(0,0);
 	
-		recipe.authorList.append( Element(i18n( "Author 1, Author 2, ..." )) );
+		m_sample.authorList.append( Element(i18n( "Author 1, Author 2, ..." )) );
 	
 		Ingredient ing;
 		ing.name = i18n("Ingredient 1");
-		recipe.ingList.append( ing );
+		m_sample.ingList.append( ing );
 	
 		Ingredient ing2;
 		ing2.name = i18n("Ingredient 2");
-		recipe.ingList.append( ing2 );
+		m_sample.ingList.append( ing2 );
 	
 		RatingCriteria rc;
 		Rating rating1;
@@ -96,27 +90,11 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		rc.stars = 2.5;
 		rating1.append(rc);
 	
-		recipe.ratingList.append(rating1);
-
-		recipeList.append(recipe);
+		m_sample.ratingList.append(rating1);
 	}
 
-	QFile file(tmp_filename + ".html");
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream(&file);
-		exporter.writeStream(stream,recipeList);
-	}
-	else {
-		printf("Unable to open file for writing\n");
-	}
-	file.close();
-
-
-	KURL url;
-	url.setPath( tmp_filename + ".html" );
-	openURL( url );
+	loadHTMLView();
 	show();
-	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
 
 	createItem( "background", i18n("Background"), BackgroundColor );
 	createItem( "title", i18n("Title"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
@@ -136,6 +114,39 @@ SetupDisplay::~SetupDisplay()
 {
 	delete box_properties;
 	delete node_item_map;
+}
+
+void SetupDisplay::loadHTMLView()
+{
+	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
+	HTMLExporter exporter( 0, tmp_filename + ".html", "html" );
+
+	RecipeList recipeList;
+	recipeList.append(m_sample);
+
+	QFile file(tmp_filename + ".html");
+	if ( file.open( IO_WriteOnly ) ) {
+		QTextStream stream(&file);
+		exporter.writeStream(stream,recipeList);
+	}
+	else {
+		kdDebug()<<"Unable to open file for writing"<<endl;
+	}
+	file.close();
+
+	KURL url;
+	url.setPath( tmp_filename + ".html" );
+	openURL( url );
+	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+}
+
+void SetupDisplay::loadTemplate( const QString &filename )
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "Page Setup" );
+	config->writeEntry( "Template", filename );
+
+	loadHTMLView();
 }
 
 void SetupDisplay::createItem( const QString &node, const QString &name, unsigned int properties )

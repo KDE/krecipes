@@ -1,3 +1,3 @@
 basedir = $(kde_datadir)/krecipes/layouts
-base_DATA = default.klo one_column.klo default_print.klo \
-	    default.template
+base_DATA = Default.klo Blue.klo \
+	    Default.template

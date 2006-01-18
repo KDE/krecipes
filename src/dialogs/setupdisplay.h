@@ -68,6 +68,8 @@ public:
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
+	void loadTemplate( const QString &filename );
+
 	bool hasChanges() const
 	{
 		return has_changes;
@@ -107,6 +109,7 @@ private:
 	// Methods
 	void applyStylesheet();
 	void loadPageLayout( const QDomElement &tag );
+	void loadHTMLView();
 
 	void loadBackgroundColor( KreDisplayItem *, const QDomElement &tag );
 	void loadFont( KreDisplayItem *, const QDomElement &tag );
@@ -127,6 +130,7 @@ private:
 	QString m_currNodeId;
 	KPopupMenu *popup;
 	DOM::CSSStyleSheet m_styleSheet;
+	Recipe m_sample;
 };
 
 #endif //SETUPDISPLAY_H

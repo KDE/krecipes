@@ -46,14 +46,22 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	KActionCollection *actionCollection = new KActionCollection( this );
 
 	KAction *std_open = KStdAction::open( 0, 0, 0 ); //use this to create a custom open action
-	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadLayout() ), actionCollection, "open_popup" );
-	KPopupMenu *open_popup = custom_open->popupMenu();
-	open_popup->insertTitle( i18n( "Included Layouts" ) );
-	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadFile() ), actionCollection, "open_popup" );
 
+	KPopupMenu *open_popup = custom_open->popupMenu();
+
+	open_popup->insertTitle( i18n( "Styles" ) );
+	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( unsigned int i = 0; i < included_layouts.count(); i++ ) {
-		int id = open_popup->insertItem( included_layouts[ i ], this, SLOT( loadLayout( int ) ) );
+		int id = open_popup->insertItem( included_layouts[ i ].left(included_layouts[ i ].find(".")), this, SLOT( loadLayout( int ) ) );
 		included_layouts_map.insert( id, included_layouts[ i ] );
+	}
+
+	open_popup->insertTitle( i18n( "Templates" ) );
+	QDir included_templates( getIncludedLayoutDir(), "*.template", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	for ( unsigned int i = 0; i < included_templates.count(); i++ ) {
+		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")), this, SLOT( loadTemplate( int ) ) );
+		included_layouts_map.insert( id, included_templates[ i ] );
 	}
 
 	custom_open->plug( toolbar );
@@ -90,14 +98,15 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
 	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/default.klo" );
+		filename = locate( "appdata", "layouts/Default.klo" );
 	loadLayout( filename );
 
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/default.template" ) );
+	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
-		template_filename = locate( "appdata", "layouts/default.template" );
+		template_filename = locate( "appdata", "layouts/Default.template" );
+	original_template = template_filename;
 
 	initShownItems();
 }
@@ -134,6 +143,10 @@ void PageSetupDialog::reject()
 		}
 	}
 
+	KConfig * config = kapp->config();
+	config->setGroup( "Page Setup" );
+	config->writeEntry( "Template", original_template );
+
 	QDialog::reject();
 }
 
@@ -164,9 +177,27 @@ void PageSetupDialog::setItemShown( int id )
 	m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
 }
 
-void PageSetupDialog::loadLayout()
+void PageSetupDialog::loadFile()
 {
-	loadLayout( KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), "*.klo|Krecipes Layout (*.klo)", this, i18n( "Select Layout" ) ) );
+	QString file = KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), QString("*.klo *.template|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
+
+	if ( file.endsWith(".klo") )
+		loadLayout( file );
+	else
+		m_htmlPart->loadTemplate( file );
+}
+
+void PageSetupDialog::loadTemplate( int popup_param )
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "Page Setup" );
+	QString saveFilename = config->readEntry("Layout",active_filename);
+	config->writeEntry( "Layout", active_filename );
+
+	m_htmlPart->loadTemplate( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
+
+	config->setGroup( "Page Setup" );
+	config->writeEntry( "Layout", saveFilename );
 }
 
 void PageSetupDialog::loadLayout( int popup_param )
@@ -239,7 +270,7 @@ void PageSetupDialog::saveAsLayout()
 
 QString PageSetupDialog::getIncludedLayoutDir() const
 {
-	QFileInfo file_info( locate( "appdata", "layouts/default.klo" ) );
+	QFileInfo file_info( locate( "appdata", "layouts/Default.klo" ) );
 	return file_info.dirPath( true );
 }
 
