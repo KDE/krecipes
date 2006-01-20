@@ -60,7 +60,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	open_popup->insertTitle( i18n( "Templates" ) );
 	QDir included_templates( getIncludedLayoutDir(), "*.template", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( unsigned int i = 0; i < included_templates.count(); i++ ) {
-		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")), this, SLOT( loadTemplate( int ) ) );
+		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")).replace("_"," "), this, SLOT( loadTemplate( int ) ) );
 		included_layouts_map.insert( id, included_templates[ i ] );
 	}
 
