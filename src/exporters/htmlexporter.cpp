@@ -387,6 +387,7 @@ QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
 	return css;
 }
 
+//TODO Don't duplicate the code to read properties (See setupdispay.cpp)
 QString HTMLExporter::readAlignmentProperties( const QDomDocument &doc, const QString &object )
 {
 	QDomElement el = getLayoutAttribute( doc, object, "alignment" );
@@ -447,6 +448,14 @@ QString HTMLExporter::readFontProperties( const QDomDocument &doc, const QString
 		text += QString( "font-family: %1;\n" ).arg( font.family() );
 		text += QString( "font-weight: %1;\n" ).arg( font.weight() );
 		text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
+		if ( font.underline() )
+			text += "text-decoration: underline;\n";
+		if ( font.strikeOut() )
+			text += "text-decoration: line-through;\n";
+		if ( font.bold() )
+			text += "font-weight: bold;\n";
+		if ( font.italic() )
+			text += "font-style: italic;\n";
 
 		return text;
 	}
