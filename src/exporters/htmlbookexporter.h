@@ -25,7 +25,7 @@ class RecipeDB;
 class HTMLBookExporter : public HTMLExporter
 {
 public:
-	HTMLBookExporter( RecipeDB *, const QString&, const QString& );
+	HTMLBookExporter( const QString&, const QString& );
 	virtual ~HTMLBookExporter();
 
 protected:

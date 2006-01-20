@@ -326,14 +326,14 @@ void IngredientsDialog:: reloadPropertyList( void )
 	if ( it ) { // make sure that the ingredient list is not empty
 
 		database->loadProperties( propertiesList, it->text( 1 ).toInt() ); // load the list for this ingredient
-		for ( IngredientProperty * prop = propertiesList->getFirst(); prop; prop = propertiesList->getNext() ) {
+		for ( IngredientPropertyList::const_iterator prop_it = propertiesList->begin(); prop_it != propertiesList->end(); ++prop_it ) {
 			QListViewItem * lastElement = propertiesListView->listView() ->lastItem();
 			//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-			( void ) new QListViewItem( propertiesListView->listView(), lastElement, prop->name, QString::number( prop->amount ), prop->units + QString( "/" ) + prop->perUnit.name, QString::number( prop->id ) );
+			( void ) new QListViewItem( propertiesListView->listView(), lastElement, (*prop_it).name, QString::number( (*prop_it).amount ), (*prop_it).units + QString( "/" ) + (*prop_it).perUnit.name, QString::number( (*prop_it).id ) );
 			// Store the perUnits with the ID for using later
 			Element perUnitEl;
-			perUnitEl.id = prop->perUnit.id;
-			perUnitEl.name = prop->perUnit.name;
+			perUnitEl.id = (*prop_it).perUnit.id;
+			perUnitEl.name = (*prop_it).perUnit.name;
 			perUnitListBack->append( perUnitEl );
 
 		}

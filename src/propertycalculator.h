@@ -24,7 +24,7 @@ void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPrope
 ** Version with database I/O. DB must be provided
 */
 
-void calculateProperties( const Recipe& recipe, RecipeDB* database, IngredientPropertyList *recipePropertyList );
+void calculateProperties( Recipe& recipe, RecipeDB* database );
 void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipePropertyList, IngredientPropertyList &ingPropertyList, const Ingredient &ing, int ingredientNo );
 
 /*

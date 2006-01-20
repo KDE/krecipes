@@ -7,6 +7,7 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
+
 #include "datablocks/ingredientpropertylist.h"
 
 IngredientPropertyList::IngredientPropertyList()
@@ -17,54 +18,39 @@ IngredientPropertyList::~IngredientPropertyList()
 {}
 
 void IngredientPropertyList::add
-	( IngredientProperty &property )
+	( const IngredientProperty &property )
 {
-	list.append ( new IngredientProperty( property ) );
+	append ( property );
 }
 
-IngredientProperty* IngredientPropertyList::getFirst( void )
-{
-	return ( list.first() );
-}
-
-IngredientProperty* IngredientPropertyList::getNext( void )
-{
-	return ( list.next() );
-}
 
 IngredientProperty* IngredientPropertyList::getElement( int index )
 {
-	return ( list.at( index ) );
-}
-
-void IngredientPropertyList::clear( void )
-{
-	list.clear();
+	return ( at( index ) );
 }
 
 bool IngredientPropertyList::isEmpty( void )
 {
-	return ( list.isEmpty() );
-}
-
-int IngredientPropertyList::find( IngredientProperty* it )
-{
-	return ( list.find( it ) );
+	return ( isEmpty() );
 }
 
 int IngredientPropertyList::find( int id )
 {
 	IngredientProperty ip;
 	ip.id = id;
-	return ( list.find( &ip ) );
+	IngredientPropertyList::const_iterator find_it = QValueList<IngredientProperty>::find( ip );
+	if ( find_it != end() )
+		return (*find_it).id;
+	else
+		return -1;
 }
 
 int IngredientPropertyList::findByName( const QString &name )
 {
-	IngredientProperty * prop;
-	for ( prop = list.first(); prop; prop = list.next() ) {
-		if ( prop->name == name )
-			return prop->id;
+	IngredientPropertyList::const_iterator prop_it;
+	for ( prop_it = begin(); prop_it != end(); ++prop_it ) {
+		if ( (*prop_it).name == name )
+			return (*prop_it).id;
 	}
 
 	return -1;
@@ -72,37 +58,33 @@ int IngredientPropertyList::findByName( const QString &name )
 
 IngredientProperty* IngredientPropertyList::at( int pos )
 {
-	return ( list.at( pos ) );
-}
-
-void IngredientPropertyList::append( IngredientProperty *property )
-{
-	list.append ( property );
+	return ( at( pos ) );
 }
 
 void IngredientPropertyList::divide( int units_of_yield_type )
 {
-	for ( IngredientProperty * ip = getFirst();ip;ip = getNext() )
-		ip->amount /= units_of_yield_type;
+	IngredientPropertyList::iterator prop_it;
+	for ( prop_it = begin(); prop_it != end(); ++prop_it )
+		(*prop_it).amount /= units_of_yield_type;
 }
 
 void IngredientPropertyList::filter( int ingredientID, IngredientPropertyList *filteredList )
 {
 	filteredList->clear();
-	for ( IngredientProperty * ip = getFirst();ip;ip = getNext() )
-		if ( ip->ingredientID == ingredientID )
-			filteredList->add
-			( *ip );
-
+	IngredientPropertyList::const_iterator prop_it;
+	for ( prop_it = begin(); prop_it != end(); ++prop_it ) {
+		if ( (*prop_it).ingredientID == ingredientID )
+			filteredList->add( *prop_it );
+	}
 }
 
 int IngredientPropertyList::count( void )
 {
-	return ( list.count() );
+	return ( count() );
 }
 
 void IngredientPropertyList::remove
 	( IngredientProperty* ip )
 {
-	list.remove( ip );
+	remove( ip );
 }

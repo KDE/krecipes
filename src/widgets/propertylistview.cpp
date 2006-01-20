@@ -67,8 +67,9 @@ void PropertyListView::reload()
 	database->loadProperties( &propertyList );
 
 	//Populate this data into the KListView
-	for ( IngredientProperty * prop = propertyList.getFirst(); prop; prop = propertyList.getNext() )
-		createProperty( *prop );
+	IngredientPropertyList::const_iterator prop_it;
+	for ( prop_it = propertyList.begin(); prop_it != propertyList.end(); ++prop_it )
+		createProperty( *prop_it );
 }
 
 

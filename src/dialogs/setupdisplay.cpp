@@ -89,7 +89,13 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		rc.name = i18n("Criteria 2");
 		rc.stars = 2.5;
 		rating1.append(rc);
-	
+
+		IngredientProperty prop;
+		prop.name = i18n("Property 1");
+		m_sample.properties.append(prop);
+		prop.name = i18n("Property 2");
+		m_sample.properties.append(prop);
+
 		m_sample.ratingList.append(rating1);
 	}
 
@@ -119,7 +125,7 @@ SetupDisplay::~SetupDisplay()
 void SetupDisplay::loadHTMLView()
 {
 	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
-	HTMLExporter exporter( 0, tmp_filename + ".html", "html" );
+	HTMLExporter exporter( tmp_filename + ".html", "html" );
 
 	RecipeList recipeList;
 	recipeList.append(m_sample);

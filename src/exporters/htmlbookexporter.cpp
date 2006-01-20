@@ -16,8 +16,8 @@
 
 #include "backends/recipedb.h"
 
-HTMLBookExporter::HTMLBookExporter( RecipeDB *db, const QString& basedir, const QString &format ) :
-		HTMLExporter( db, basedir+"/index", format ), database( db ), m_basedir(basedir)
+HTMLBookExporter::HTMLBookExporter( const QString& basedir, const QString &format ) :
+		HTMLExporter( basedir+"/index", format ), m_basedir(basedir)
 {
 }
 

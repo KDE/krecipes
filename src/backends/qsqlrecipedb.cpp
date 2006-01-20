@@ -16,6 +16,8 @@
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
 
+#include "propertycalculator.h"
+
 #include <qbuffer.h>
 #include <qtextcodec.h>
 
@@ -335,6 +337,13 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					(*it).ratingList.append( r );
 				}
 			}
+		}
+	}
+
+	if ( items & RecipeDB::Properties ) {
+		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
+			calculateProperties( *it, this );
 		}
 	}
 }

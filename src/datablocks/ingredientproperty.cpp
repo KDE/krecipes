@@ -25,3 +25,8 @@ IngredientProperty::IngredientProperty( const QString &_name, const QString &_un
 IngredientProperty::~IngredientProperty()
 {}
 
+bool IngredientProperty::operator==( const IngredientProperty &prop ) const
+{
+	return ( prop.id == id );
+}
+

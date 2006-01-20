@@ -463,7 +463,7 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
 		new_item->setPixmap( 0, m_folder_icon );
-		createElement(new_item);
+		createElement(new_item);//new QListViewItem(new_item);
 	}
 }
 

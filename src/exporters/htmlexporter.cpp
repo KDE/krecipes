@@ -31,20 +31,17 @@
 #include <kurl.h>
 #include <kiconloader.h>
 
-#include "propertycalculator.h"
 #include "datablocks/mixednumber.h"
+#include "backends/recipedb.h"
 #include "dialogs/setupdisplay.h"
 #include "image.h"
 #include "krepagelayout.h"
 
 #include <cmath> //for ceil()
 
-//TODO: remove dependency on RecipeDB... pass the properties to this class instead of having it calculate them
-HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString &format ) :
-		BaseExporter( filename, format ), database( db )
+HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
+		BaseExporter( filename, format )
 {
-	properties = new IngredientPropertyList;
-
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
 
@@ -54,9 +51,9 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 		template_filename = locate( "appdata", "layouts/Default.template" );
 	kdDebug() << "Using template file: " << template_filename << endl;
 
-	QFile input( template_filename );
-	if ( input.open( IO_ReadOnly ) ) {
-		m_templateContent = QString( input.readAll() );
+	QFile templateFile( template_filename );
+	if ( templateFile.open( IO_ReadOnly ) ) {
+		m_templateContent = QString( templateFile.readAll() );
 	}
 	else
 		kdDebug()<<"couldn't find/open template file"<<endl;
@@ -66,25 +63,32 @@ HTMLExporter::HTMLExporter( RecipeDB *db, const QString& filename, const QString
 	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
 		layout_filename = locate( "appdata", "layouts/Default.klo" );
 	kdDebug() << "Using layout file: " << layout_filename << endl;
+
+	QFile layoutFile( layout_filename );
+	QString error; int line; int column;
+	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
+		kdDebug()<<"Unable to load style information.  Willl create HTML without it..."<<endl;
+	}
 }
 
 HTMLExporter::~HTMLExporter()
 {
-	delete properties;
 }
 
 int HTMLExporter::supportedItems() const
 {
+	int items = RecipeDB::All ^ RecipeDB::Properties;
+
+	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
+	if ( el.isNull() || el.text() == "true" ) // Calculate the property list?
+		items |= RecipeDB::Properties;
+
 	return RecipeDB::All;
 }
 
 QString HTMLExporter::createContent( const Recipe& recipe )
 {
 	QString templateCopy = m_templateContent;
-
-	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
-	if ( database && (el.isNull() || el.text() == "true") ) // Calculate the property list
-		calculateProperties( recipe, database, properties );
 
 	storePhoto( recipe, doc );
 
@@ -108,24 +112,14 @@ QString HTMLExporter::createHeader( const RecipeList & )
 {
 	m_error = false;
 
-	QFile input( layout_filename );
-
 	if ( m_templateContent.isEmpty() ) {
 		QString errorStr = i18n("<html><body>\n"
 			"<p><b>Error: </b>Unable to find a layout file, which is"
 			" needed to view the recipe.</p>"
 			"<p>Krecipes was probably not properly installed.</p>"
 			"</body></html>");
-
 		m_error = true;
 		return errorStr;
-	}
-
-	QString error;
-	int line;
-	int column;
-	if ( !doc.setContent( &input, &error, &line, &column ) ) {
-		kdDebug()<<"Unable to load style information.  Continuing to create HTML..."<<endl;
 	}
 
 	//put all the recipe photos into this directory
@@ -308,14 +302,13 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
-	IngredientProperty * prop;
 
-	for ( prop = properties->getFirst(); prop; prop = properties->getNext() ) {
+	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
 		// if the amount given is <0, it means the property calculator found that the property was undefined for some ingredients, so the amount will be actually bigger
 
 		QString amount_str;
 
-		double prop_amount = prop->amount;
+		double prop_amount = (*prop_it).amount;
 		if ( prop_amount > 0 ) { //TODO: make the precision configuratble
 			prop_amount = double( qRound( prop_amount * 10.0 ) ) / 10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
 			amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
@@ -327,9 +320,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 		}
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
-		                   .arg( QStyleSheet::escape( prop->name ) )
+		                   .arg( QStyleSheet::escape( (*prop_it).name ) )
 		                   .arg( amount_str )
-		                   .arg( QStyleSheet::escape( prop->units ) );
+		                   .arg( QStyleSheet::escape( (*prop_it).units ) );
 	}
 	if ( !properties_html.isEmpty() ) {
 		properties_html.prepend( "<ul>" );
@@ -520,7 +513,7 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	}
 }
 
-QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute )
+QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute ) const
 {
 	QDomNodeList node_list = doc.elementsByTagName( object );
 	if ( node_list.count() == 0 ) {

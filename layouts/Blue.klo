@@ -49,7 +49,7 @@
   <border width="2" style="ridge" color="#279ac7" />
  </photo>
  <prep_time>
-  <background-color>#ffffff</background-color>
+  <background-color>#e1f3ff</background-color>
   <text-color>#000000</text-color>
   <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
   <visible>true</visible>

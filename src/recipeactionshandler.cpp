@@ -356,10 +356,12 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
-			else if ( fd->currentFilter() == "*" )
-				exporter = new HTMLBookExporter( database, fd->baseURL().path(), "*.html" );
-			else if ( fd->currentFilter() == "*.html" )
-				exporter = new HTMLExporter( database, fileName, fd->currentFilter() );
+			else if ( fd->currentFilter() == "*" ) {
+				exporter = new HTMLBookExporter( fd->baseURL().path(), "*.html" );
+			}
+			else if ( fd->currentFilter() == "*.html" ) {
+				exporter = new HTMLExporter( fileName, fd->currentFilter() );
+			}
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.txt" )

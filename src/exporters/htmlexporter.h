@@ -1,6 +1,6 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Copyright (C) 2003-2006 by                                            *
+*   Jason Kivlighn (jkivlighn@gmail.com                                   *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -15,7 +15,6 @@
 
 #include "baseexporter.h"
 
-class IngredientPropertyList;
 class RecipeDB;
 class KProgress;
 
@@ -26,7 +25,7 @@ class KProgress;
 class HTMLExporter : public BaseExporter
 {
 public:
-	HTMLExporter( RecipeDB *, const QString&, const QString& );
+	HTMLExporter( const QString&, const QString& );
 	virtual ~HTMLExporter();
 
 	virtual int supportedItems() const;
@@ -61,11 +60,7 @@ private:
 	QString readVisibilityProperties( const QDomDocument &doc, const QString &object );
 
 	QString generateCSSClasses( const QDomDocument &layout );
-	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute );
-
-	IngredientPropertyList *properties;
-
-	RecipeDB *database;
+	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute ) const;
 
 	QString layout_filename;
 
