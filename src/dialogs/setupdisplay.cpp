@@ -73,9 +73,11 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		ing.name = i18n("Ingredient 1");
 		m_sample.ingList.append( ing );
 	
-		Ingredient ing2;
-		ing2.name = i18n("Ingredient 2");
-		m_sample.ingList.append( ing2 );
+		ing.name = i18n("Ingredient 2");
+		m_sample.ingList.append( ing );
+
+		ing.name = "...";
+		m_sample.ingList.append( ing );
 	
 		RatingCriteria rc;
 		Rating rating1;
@@ -94,6 +96,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		prop.name = i18n("Property 1");
 		m_sample.properties.append(prop);
 		prop.name = i18n("Property 2");
+		m_sample.properties.append(prop);
+		prop.name = "...";
 		m_sample.properties.append(prop);
 
 		m_sample.ratingList.append(rating1);
@@ -506,6 +510,14 @@ void SetupDisplay::setFont( const QString &nodeId, const QFont &font )
 	text += QString( "font-family: %1;\n" ).arg( font.family() );
 	text += QString( "font-weight: %1;\n" ).arg( font.weight() );
 	text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
+	if ( font.underline() )
+		text += "text-decoration: underline;\n";
+	if ( font.strikeOut() )
+		text += "text-decoration: line-through;\n";
+	if ( font.bold() )
+		text += "font-weight: bold;\n";
+	if ( font.italic() )
+		text += "font-style: italic;\n";
 
 	m_styleSheet.insertRule("."+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
 	has_changes = true;

@@ -129,7 +129,7 @@ void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 			}
 
 			RecipeList recipe_list;
-			database->loadRecipes( &recipe_list, RecipeDB::All, sub_list );
+			database->loadRecipes( &recipe_list, supportedItems(), sub_list );
 
 			QString content = createContent( recipe_list );
 			if ( !content.isEmpty() )
