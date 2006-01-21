@@ -784,9 +784,9 @@ bool DietWizardDialog::checkLimits( IngredientPropertyList &properties, Constrai
 {
 	for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
 		if ( ct->enabled ) {
-			IngredientProperty * ip = properties.at( properties.find( ct->id ) );
-			if ( ip ) {
-				if ( ( ip->amount > ct->max ) || ( ip->amount < ct->min ) )
+			IngredientPropertyList::const_iterator ip_it = properties.find( ct->id );
+			if ( ip_it != properties.end() ) {
+				if ( ( (*ip_it).amount > ct->max ) || ( (*ip_it).amount < ct->min ) )
 					return false;
 			}
 			else

@@ -21,17 +21,10 @@ public:
 
 	~IngredientPropertyList();
 
-	void add( const IngredientProperty &element );
-	IngredientProperty* at( int pos );
 	void divide( int units_of_yield_type );
-
-	int find( int id );
+	IngredientPropertyList::const_iterator find( int id );
 	int findByName( const QString & );
 	void filter( int ingredientID, IngredientPropertyList *filteredList );
-	IngredientProperty* getElement( int index );
-	bool isEmpty( void );
-	void remove( IngredientProperty* ip );
-
 };
 
 #endif

@@ -66,19 +66,19 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 	IngredientPropertyList::const_iterator prop_it;
 	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
 		// Find if property was listed before
-		int pos = recipePropertyList->find( (*prop_it).id );
+		int pos = recipePropertyList->findIndex( *prop_it );
 		if ( pos >= 0 )  //Exists. Add to it
 		{
-			IngredientProperty * property = recipePropertyList->at( pos );
+			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			double ratio;
 			ratio = database->unitRatio( ing.unitID, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
-				if ( property->amount >= 0 )
-					property->amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
+				if ( (*rec_property_it).amount >= 0 )
+					(*rec_property_it).amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
 				else
-					property->amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
+					(*rec_property_it).amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
 			}
 			else
 			{ // Could not convert units
@@ -106,8 +106,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 				property.amount = ( (*prop_it).amount ) * ( ing.amount ) * ratio;
 				if ( undefined )
 					property.amount = -( fabs( property.amount ) );
-				recipePropertyList->add
-				( property );
+				recipePropertyList->append( property );
 			}
 			else { // Could not convert units
 				kdDebug() << "\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
@@ -150,19 +149,19 @@ void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPr
 	IngredientPropertyList::const_iterator prop_it;
 	for ( prop_it = newProperties.begin(); prop_it != newProperties.end(); ++prop_it ) {
 		// Find if property was listed before
-		int pos = recipePropertyList->find( (*prop_it).id );
+		int pos = recipePropertyList->findIndex( *prop_it );
 		if ( pos >= 0 )  //The property exists in the list. Add to it
 		{
-			IngredientProperty * property = recipePropertyList->at( pos );
+			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			double ratio;
 			ratio = url.getRatio( ing.unitID, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
 				if ( (*prop_it).amount >= 0 )
-					property->amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
+					(*rec_property_it).amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
 				else
-					property->amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
+					(*rec_property_it).amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
 			}
 			else
 			{ // Could not convert units
@@ -191,11 +190,10 @@ void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPr
 				property.amount = ( (*prop_it).amount ) * ( ing.amount ) * ratio;
 				if ( undefined )
 					property.amount = -( fabs( property.amount ) );
-				recipePropertyList->add
-				( property );
+				recipePropertyList->append( property );
 			}
 			else { // Could not convert units
-				kdDebug() << "\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
+				kdDebug() << endl << "Warning: I could not calculate the full property list, due to impossible unit conversion" << endl;
 			}
 		}
 
@@ -212,7 +210,7 @@ void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPrope
 {
 	IngredientPropertyList::iterator prop_it;
 	for ( prop_it = recipePropertyList->begin(); prop_it != recipePropertyList->end(); ++prop_it ) {
-		int pos = addedPropertyList.find( (*prop_it).id );
+		int pos = addedPropertyList.findIndex( *prop_it );
 		if ( pos < 0 )
 			(*prop_it).amount = -( fabs( (*prop_it).amount ) ); // undefined
 	}

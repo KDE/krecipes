@@ -1150,7 +1150,7 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 			if ( ingredientID >= -1 )
 				prop.ingredientID = propertiesToLoad.value( 6 ).toInt();
 
-			list->add( prop );
+			list->append( prop );
 		}
 	}
 }

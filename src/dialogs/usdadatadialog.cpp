@@ -127,7 +127,7 @@ void USDADataDialog::importSelected()
 
 			double amount = ( *it ).toDouble() / 100.0; //data givin per 100g so divide by 100 to get the amount in 1 gram
 
-			if ( existing_ing_props.find( property_id ) != -1 )  //property already added to ingredient, so just update
+			if ( existing_ing_props.find( property_id ) != existing_ing_props.end() )  //property already added to ingredient, so just update
 				database->changePropertyAmountToIngredient( ingredient.id, property_id, amount, grams_id );
 			else
 				database->addPropertyToIngredient( ingredient.id, property_id, amount, grams_id );
