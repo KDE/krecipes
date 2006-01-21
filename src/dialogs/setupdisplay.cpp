@@ -179,96 +179,73 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
-		QDomElement layout = doc.documentElement();
-
-		if ( layout.tagName() != "krecipes-layout" ) {
-			kdDebug() << "This file does not appear to be a valid Krecipes layout file." << endl;
-			return ;
-		}
-
 		while ( m_styleSheet.cssRules().length() != 0 )
 			m_styleSheet.deleteRule(0);
 
-		QDomNodeList l = layout.childNodes();
-		for ( unsigned i = 0 ; i < l.count(); i++ ) {
-			QDomElement el = l.item( i ).toElement();
-			QString tagName = el.tagName();
-			QMap<QString, KreDisplayItem*>::iterator map_it = node_item_map->find( tagName );
-			if ( map_it != node_item_map->end() ) {
-				QDomNodeList l = el.childNodes();
-				for ( unsigned i = 0 ; i < l.count(); i++ ) {
-					QDomElement el = l.item( i ).toElement();
-					QString subTagName = el.tagName();
-
-					if ( subTagName == "background-color" )
-						loadBackgroundColor( *map_it, el );
-					else if ( subTagName == "font" )
-						loadFont( *map_it, el );
-					else if ( subTagName == "text-color" )
-						loadTextColor( *map_it, el );
-					else if ( subTagName == "visible" )
-						loadVisibility( *map_it, el );
-					else if ( subTagName == "alignment" )
-						loadAlignment( *map_it, el );
-					else if ( subTagName == "border" )
-						loadBorder( *map_it, el );
-					else
-						kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
-				}
-			}
-			else
-				kdDebug() << "Warning: Unknown tag within <krecipes-layout>: " << tagName << endl;
-		}
+		processDocument( doc );
 		applyStylesheet();
 		has_changes = false;
 	}
 	else
 		kdDebug() << "Unable to open file: " << filename << endl;
 }
-
-
-void SetupDisplay::loadBackgroundColor( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::beginObject( const QString &object )
 {
-	item->backgroundColor.setNamedColor( tag.text() );
-	setBackgroundColor(item->nodeId,item->backgroundColor);
+	QMap<QString, KreDisplayItem*>::iterator map_it = node_item_map->find( object );
+	if ( map_it != node_item_map->end() )
+		m_currentItem = map_it.data();
+	else
+		m_currentItem = 0;
 }
 
-void SetupDisplay::loadFont( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::loadBackgroundColor( const QString &object, const QColor &color )
 {
-	QFont f;
-	if ( f.fromString( tag.text() ) ) {
-		item->font = f;
-		setFont(item->nodeId,item->font);
+	if ( m_currentItem ) {
+		m_currentItem->backgroundColor = color;
+		m_styleSheet.insertRule("."+object+" { "+bgColorAsCSS(color)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
-void SetupDisplay::loadTextColor( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::loadFont( const QString &object, const QFont &font )
 {
-	item->textColor.setNamedColor( tag.text() );
-	setTextColor(item->nodeId,item->textColor);
+	if ( m_currentItem ) {
+		m_currentItem->font = font;
+		m_styleSheet.insertRule("."+object+" { "+fontAsCSS(font)+" }",m_styleSheet.cssRules().length());
+	}
 }
 
-void SetupDisplay::loadVisibility( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::loadTextColor( const QString &object, const QColor &color )
 {
-	bool visible = ( tag.text() == "false" ) ? false : true;
-	item->show = visible;
-	emit itemVisibilityChanged( item, visible );
-
-	setShown(item->nodeId,item->show);
+	if ( m_currentItem ) {
+		m_currentItem->textColor = color;
+		m_styleSheet.insertRule("."+object+" { "+textColorAsCSS(color)+" }",m_styleSheet.cssRules().length());
+	}
 }
 
-void SetupDisplay::loadAlignment( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::loadVisibility( const QString &object, bool visible )
 {
-	item->alignment = tag.text().toInt();
-	setAlignment(item->nodeId,item->alignment);
+	if ( m_currentItem ) {
+		m_currentItem->show = visible;
+		emit itemVisibilityChanged( m_currentItem, visible );
+	
+		m_styleSheet.insertRule("."+object+" { "+visibilityAsCSS(visible)+" }",m_styleSheet.cssRules().length());
+	}
 }
 
-void SetupDisplay::loadBorder( KreDisplayItem *item, const QDomElement &tag )
+void SetupDisplay::loadAlignment( const QString &object, int alignment )
 {
-	QColor c;
-	c.setNamedColor( tag.attribute( "color" ) );
-	item->border = KreBorder( tag.attribute( "width" ).toInt(), tag.attribute( "style" ), c );
-	setBorder(item->nodeId,item->border);
+	if ( m_currentItem ) {
+		m_currentItem->alignment = alignment;
+		m_styleSheet.insertRule("."+object+" { "+alignmentAsCSS(alignment)+" }",m_styleSheet.cssRules().length());
+	}
+}
+
+void SetupDisplay::loadBorder( const QString &object, const KreBorder& border )
+{
+	if ( m_currentItem ) {
+		m_currentItem->border = border;
+		m_styleSheet.insertRule("."+object+" { "+borderAsCSS(border)+" }",m_styleSheet.cssRules().length());
+	}
 }
 
 void SetupDisplay::saveLayout( const QString &filename )
@@ -450,16 +427,10 @@ void SetupDisplay::setBackgroundColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->backgroundColor, view() ) == QDialog::Accepted ) {
-		setBackgroundColor(m_currNodeId,item->backgroundColor);
+		loadBackgroundColor(m_currNodeId,item->backgroundColor);
 		applyStylesheet();
+		has_changes = true;
 	}
-}
-
-void SetupDisplay::setBackgroundColor( const QString &nodeId, const QColor &color )
-{
-	m_styleSheet.insertRule("."+nodeId+" { background-color:"+color.name()+"; }",m_styleSheet.cssRules().length());
-
-	has_changes = true;
 }
 
 void SetupDisplay::setBorder()
@@ -468,59 +439,20 @@ void SetupDisplay::setBorder()
 	BorderDialog borderDialog( item->border, view() );
 	if ( borderDialog.exec() == QDialog::Accepted ) {
 		item->border = borderDialog.border();
-		setBorder( m_currNodeId, item->border );
+		loadBorder( m_currNodeId, item->border );
 		applyStylesheet();
+		has_changes = true;
 	}
-}
-void SetupDisplay::setBorder( const QString &nodeId, const KreBorder& border )
-{
-	m_styleSheet.insertRule("."+nodeId+" { border:"+QString::number(border.width)+"px "+border.style+" "+border.color.name()+"; }",m_styleSheet.cssRules().length());
-
-	has_changes = true;
 }
 
 void SetupDisplay::setTextColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->textColor, view() ) == QDialog::Accepted ) {
-		setTextColor(m_currNodeId,item->textColor);
+		loadTextColor(m_currNodeId,item->textColor);
 		applyStylesheet();
+		has_changes = true;
 	}
-}
-
-void SetupDisplay::setTextColor( const QString &nodeId, const QColor &color )
-{
-	m_styleSheet.insertRule("."+nodeId+" { color:"+color.name()+"; }",m_styleSheet.cssRules().length());
-
-	has_changes = true;
-}
-
-void SetupDisplay::setFont()
-{
-	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
-		setFont(m_currNodeId,item->font);
-		applyStylesheet();
-	}
-}
-
-void SetupDisplay::setFont( const QString &nodeId, const QFont &font )
-{
-	QString text;
-	text += QString( "font-family: %1;\n" ).arg( font.family() );
-	text += QString( "font-weight: %1;\n" ).arg( font.weight() );
-	text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
-	if ( font.underline() )
-		text += "text-decoration: underline;\n";
-	if ( font.strikeOut() )
-		text += "text-decoration: line-through;\n";
-	if ( font.bold() )
-		text += "font-weight: bold;\n";
-	if ( font.italic() )
-		text += "font-style: italic;\n";
-
-	m_styleSheet.insertRule("."+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
-	has_changes = true;
 }
 
 void SetupDisplay::setShown( int id )
@@ -528,14 +460,19 @@ void SetupDisplay::setShown( int id )
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	item->show = !popup->isItemChecked( id );
 	emit itemVisibilityChanged( item, !popup->isItemChecked( id ) );
-	setShown(m_currNodeId,item->show);
+	loadVisibility(m_currNodeId,item->show);
 	applyStylesheet();
+	has_changes = true;
 }
 
-void SetupDisplay::setShown( const QString &nodeId, bool show )
+void SetupDisplay::setFont()
 {
-	m_styleSheet.insertRule("."+nodeId+" { visibility:"+(show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
-	has_changes = true;
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
+		loadFont(m_currNodeId,item->font);
+		applyStylesheet();
+		has_changes = true;
+	}
 }
 
 void SetupDisplay::setAlignment( QAction *action )
@@ -558,31 +495,9 @@ void SetupDisplay::setAlignment( QAction *action )
 	else if ( action->text() == i18n( "Right" ) )
 		item->alignment |= Qt::AlignRight;
 
-	setAlignment(m_currNodeId,item->alignment);
+	loadAlignment(m_currNodeId,item->alignment);
 	applyStylesheet();
-}
-
-void SetupDisplay::setAlignment( const QString &nodeId, int alignment )
-{
-	QString text;
-	if ( alignment & Qt::AlignLeft )
-		text += "text-align: left;\n";
-	if ( alignment & Qt::AlignRight )
-		text += "text-align: right;\n";
-	if ( alignment & Qt::AlignHCenter )
-		text += "text-align: center;\n";
-	if ( alignment & Qt::AlignTop )
-		text += "vertical-align: top;\n";
-	if ( alignment & Qt::AlignBottom )
-		text += "vertical-align: bottom;\n";
-	if ( alignment & Qt::AlignVCenter )
-		text += "vertical-align: middle;\n";
-
-	if ( !text.isEmpty() ) {
-		m_styleSheet.insertRule("."+nodeId+" { "+text+" }",m_styleSheet.cssRules().length());
-
-		has_changes = true;
-	}
+	has_changes = true;
 }
 
 void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )

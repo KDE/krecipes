@@ -50,6 +50,10 @@ protected:
 	virtual QString createFooter(){ return QString(); }
 	virtual QString createHeader( const RecipeList & ){ return QString(); }
 
+	/** The number of recipes to load into memory at once.  This many recipes will be
+	  * loaded from the database, processed, and then another batch of this many will be
+	  * processed until all recipes are exported.
+	  */
 	virtual int progressInterval() const { return 50; }
 
 	virtual int headerFlags() const;

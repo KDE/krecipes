@@ -78,11 +78,6 @@ void IngredientPropertyList::filter( int ingredientID, IngredientPropertyList *f
 	}
 }
 
-int IngredientPropertyList::count( void )
-{
-	return ( count() );
-}
-
 void IngredientPropertyList::remove
 	( IngredientProperty* ip )
 {

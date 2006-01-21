@@ -22,6 +22,7 @@
 #include "datablocks/recipe.h"
 #include "widgets/dragarea.h"
 #include "datablocks/kreborder.h"
+#include "klomanager.h"
 
 #include <math.h>
 
@@ -56,7 +57,7 @@ typedef QMap< KreDisplayItem*, unsigned int > PropertiesMap;
   *
   * @author Jason Kivlighn
   */
-class SetupDisplay : public KHTMLPart
+class SetupDisplay : public KHTMLPart, protected KLOManager
 {
 	Q_OBJECT
 
@@ -88,6 +89,15 @@ signals:
 protected:
 	virtual void begin (const KURL &url=KURL(), int xOffset=0, int yOffset=0);
 
+	virtual void loadBackgroundColor( const QString &obj, const QColor& );
+	virtual void loadFont( const QString &obj, const QFont& );
+	virtual void loadTextColor( const QString &obj, const QColor& );
+	virtual void loadVisibility( const QString &obj, bool );
+	virtual void loadAlignment( const QString &obj, int );
+	virtual void loadBorder( const QString &obj, const KreBorder& );
+
+	virtual void beginObject( const QString &obj );
+
 protected slots:
 	void nodeClicked(const QString &url,const QPoint &point);
 	void changeMade();
@@ -111,23 +121,14 @@ private:
 	void loadPageLayout( const QDomElement &tag );
 	void loadHTMLView();
 
-	void loadBackgroundColor( KreDisplayItem *, const QDomElement &tag );
-	void loadFont( KreDisplayItem *, const QDomElement &tag );
-	void loadTextColor( KreDisplayItem *, const QDomElement &tag );
-	void loadVisibility( KreDisplayItem *, const QDomElement &tag );
-	void loadAlignment( KreDisplayItem *, const QDomElement &tag );
-	void loadBorder( KreDisplayItem *, const QDomElement &tag );
-
-	void setBackgroundColor( const QString &nodeId, const QColor &color );
-	void setBorder( const QString &nodeId, const KreBorder& );
-	void setTextColor( const QString &nodeId, const QColor &color );
-	void setFont( const QString &nodeId, const QFont & );
-	void setShown( const QString &nodeId, bool );
-	void setAlignment( const QString &nodeId, int alignment );
-
 	void createItem( const QString &id, const QString &name, unsigned int properties );
 
+	//the name of the element under the mouse on a right-click
 	QString m_currNodeId;
+
+	//the item corresponding to the current point of processing the KLO
+	KreDisplayItem *m_currentItem;
+
 	KPopupMenu *popup;
 	DOM::CSSStyleSheet m_styleSheet;
 	Recipe m_sample;

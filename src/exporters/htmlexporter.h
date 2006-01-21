@@ -12,8 +12,10 @@
 #define HTMLEXPORTER_H
 
 #include <qdom.h>
+#include <qmap.h>
 
 #include "baseexporter.h"
+#include "klomanager.h"
 
 class RecipeDB;
 class KProgress;
@@ -22,7 +24,7 @@ class KProgress;
   * Exports a given recipe list as HTML
   * @author Jason Kivlighn
   */
-class HTMLExporter : public BaseExporter
+class HTMLExporter : public BaseExporter, protected KLOManager
 {
 public:
 	HTMLExporter( const QString&, const QString& );
@@ -41,31 +43,30 @@ protected:
 
 	virtual int progressInterval() const { return 1; }
 
+	virtual void loadBackgroundColor( const QString &obj, const QColor& );
+	virtual void loadFont( const QString &obj, const QFont& );
+	virtual void loadTextColor( const QString &obj, const QColor& );
+	virtual void loadVisibility( const QString &obj, bool );
+	virtual void loadAlignment( const QString &obj, int );
+	virtual void loadBorder( const QString &obj, const KreBorder& );
+
+	virtual void beginObject( const QString &obj );
+	virtual void endObject();
+
 	static QString escape( const QString & );
 
 	QString m_templateContent;
 
 private:
-	void storePhoto( const Recipe &recipe, const QDomDocument &doc );
-	void populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content );
+	void storePhoto( const Recipe &recipe );
+	void populateTemplate( const Recipe &recipe, QString &content );
 	void replaceIfVisible( QString &content, const QString &name, const QString &html );
-
 	QString HTMLIfVisible( const QString &name, const QString &html );
 
-	QString readAlignmentProperties( const QDomDocument &doc, const QString &object );
-	QString readBorderProperties( const QDomDocument &doc, const QString &object );
-	QString readBgColorProperties( const QDomDocument &doc, const QString &object );
-	QString readFontProperties( const QDomDocument &doc, const QString &object );
-	QString readTextColorProperties( const QDomDocument &doc, const QString &object );
-	QString readVisibilityProperties( const QDomDocument &doc, const QString &object );
-
-	QString generateCSSClasses( const QDomDocument &layout );
-	QDomElement getLayoutAttribute( const QDomDocument &, const QString &object, const QString &attribute ) const;
-
 	QString layout_filename;
-
+	QString m_cachedCSS;
+	QMap<QString,bool> m_visibilityMap;
 	bool m_error;
-	QDomDocument doc;
 };
 
 #endif //HTMLEXPORTER_H

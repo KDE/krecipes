@@ -23,7 +23,6 @@ public:
 
 	void add( const IngredientProperty &element );
 	IngredientProperty* at( int pos );
-	int count( void );
 	void divide( int units_of_yield_type );
 
 	int find( int id );

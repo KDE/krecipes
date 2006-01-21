@@ -57,18 +57,6 @@ HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 	}
 	else
 		kdDebug()<<"couldn't find/open template file"<<endl;
-
-	//let's do everything we can to be sure at least some layout is loaded
-	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
-	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/Default.klo" );
-	kdDebug() << "Using layout file: " << layout_filename << endl;
-
-	QFile layoutFile( layout_filename );
-	QString error; int line; int column;
-	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
-		kdDebug()<<"Unable to load style information.  Willl create HTML without it..."<<endl;
-	}
 }
 
 HTMLExporter::~HTMLExporter()
@@ -79,8 +67,8 @@ int HTMLExporter::supportedItems() const
 {
 	int items = RecipeDB::All ^ RecipeDB::Properties;
 
-	QDomElement el = getLayoutAttribute( doc, "properties", "visible" );
-	if ( el.isNull() || el.text() == "true" ) // Calculate the property list?
+	QMap<QString,bool>::const_iterator it = m_visibilityMap.find("properties");
+	if ( it == m_visibilityMap.end() || it.data() == true )
 		items |= RecipeDB::Properties;
 
 	return RecipeDB::All;
@@ -90,9 +78,9 @@ QString HTMLExporter::createContent( const Recipe& recipe )
 {
 	QString templateCopy = m_templateContent;
 
-	storePhoto( recipe, doc );
+	storePhoto( recipe );
 
-	populateTemplate( recipe, doc, templateCopy );
+	populateTemplate( recipe, templateCopy );
 	return templateCopy;
 }
 
@@ -110,6 +98,11 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 QString HTMLExporter::createHeader( const RecipeList & )
 {
+	m_visibilityMap.clear();
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Page Setup" );
+
 	m_error = false;
 
 	if ( m_templateContent.isEmpty() ) {
@@ -122,14 +115,27 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		return errorStr;
 	}
 
+	//let's do everything we can to be sure at least some layout is loaded
+	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
+	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
+		layout_filename = locate( "appdata", "layouts/Default.klo" );
+	kdDebug() << "Using layout file: " << layout_filename << endl;
+
+	QFile layoutFile( layout_filename );
+	QString error; int line; int column;
+	QDomDocument doc;
+	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
+		kdDebug()<<"Unable to load style information.  Will create HTML without it..."<<endl;
+	}
+	else
+		processDocument(doc);
+
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi(fileName());
 	dir.mkdir( fi.dirPath(true) + "/" + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
-
-	QDomElement bg_element = getLayoutAttribute( doc, "background", "background-color" );
 
 	KLocale*loc = KGlobal::locale();
 	QString encoding = loc->encoding();
@@ -141,16 +147,54 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	output += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
 
 	output += "<style type=\"text/css\">\n";
-	output += "body\n";
-	output += "{\n";
-	output += QString( "background-color: %1;\n" ).arg( bg_element.text() );
-	output += "}\n";
-	output += generateCSSClasses( doc );
+	output += m_cachedCSS;
+	m_cachedCSS = QString::null;
 	output += "</style>";
 	output += "</head>";
 	output += "<body class=\"background\">";
 
 	return output;
+}
+
+void HTMLExporter::beginObject( const QString &object )
+{
+	m_cachedCSS += "."+object+" { \n";
+}
+
+void HTMLExporter::endObject()
+{
+	m_cachedCSS += " } \n";
+}
+
+void HTMLExporter::loadBackgroundColor( const QString &/*object*/, const QColor& color )
+{
+	m_cachedCSS += bgColorAsCSS(color);
+}
+
+void HTMLExporter::loadFont( const QString &/*object*/, const QFont& font )
+{
+	m_cachedCSS += fontAsCSS(font);
+}
+
+void HTMLExporter::loadTextColor( const QString &/*object*/, const QColor& color )
+{
+	m_cachedCSS += textColorAsCSS(color);
+}
+
+void HTMLExporter::loadVisibility( const QString &object, bool visible )
+{
+	m_cachedCSS += visibilityAsCSS(visible);
+	m_visibilityMap.insert(object,visible);
+}
+
+void HTMLExporter::loadAlignment( const QString &/*object*/, int alignment )
+{
+	m_cachedCSS += alignmentAsCSS(alignment);
+}
+
+void HTMLExporter::loadBorder( const QString &/*object*/, const KreBorder& border )
+{
+	m_cachedCSS += borderAsCSS(border);
 }
 
 QString HTMLExporter::createFooter()
@@ -161,7 +205,7 @@ QString HTMLExporter::createFooter()
 	return "</body></html>";
 }
 
-void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
+void HTMLExporter::storePhoto( const Recipe &recipe )
 {
 	QImage image;
 	QString photo_name;
@@ -185,13 +229,14 @@ void HTMLExporter::storePhoto( const Recipe &recipe, const QDomDocument &doc )
 
 QString HTMLExporter::HTMLIfVisible( const QString &name, const QString &html )
 {
-        QDomElement el = getLayoutAttribute( doc, name, "visible" );
-        if ( el.isNull() || el.text() != "false" )
-               return html;
-	return QString::null;
+	QMap<QString,bool>::const_iterator it = m_visibilityMap.find(name);
+	if ( it == m_visibilityMap.end() || it.data() == true )
+		return html;
+	else
+		return QString::null;
 }
 
-void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &doc, QString &content )
+void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 {
 	KConfig * config = KGlobal::config();
 
@@ -362,132 +407,6 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, const QDomDocument &d
 	content = content.replace( "**RATINGS**", HTMLIfVisible("ratings",ratings_html) );
 }
 
-QString HTMLExporter::generateCSSClasses( const QDomDocument &doc )
-{
-	QString css;
-
-	css += "UL { padding-left: 1.25em; }\n";
-
-	QStringList classes_list;
-	classes_list << "title" << "instructions" << "yield" << "prep_time" << "photo" << "authors" <<
-	"categories" << "header" << "ingredients" << "properties" << "ratings";
-
-	for ( QStringList::const_iterator it = classes_list.begin(); it != classes_list.end(); ++it ) {
-		css += "." + *it + "\n";
-		css += "{\n";
-		css += readFontProperties( doc, *it );
-		css += readAlignmentProperties( doc, *it );
-		css += readBgColorProperties( doc, *it );
-		css += readTextColorProperties( doc, *it );
-		css += readVisibilityProperties( doc, *it );
-		css += readBorderProperties( doc, *it );
-		css += "}\n\n";
-	}
-
-	return css;
-}
-
-//TODO Don't duplicate the code to read properties (See setupdispay.cpp)
-QString HTMLExporter::readAlignmentProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "alignment" );
-
-	if ( !el.isNull() ) {
-		QString text;
-		unsigned int alignment = el.text().toInt();
-
-		if ( alignment & Qt::AlignLeft )
-			text += "text-align: left;\n";
-		if ( alignment & Qt::AlignRight )
-			text += "text-align: right;\n";
-		if ( alignment & Qt::AlignHCenter )
-			text += "text-align: center;\n";
-		if ( alignment & Qt::AlignTop )
-			text += "vertical-align: top;\n";
-		if ( alignment & Qt::AlignBottom )
-			text += "vertical-align: bottom;\n";
-		if ( alignment & Qt::AlignVCenter )
-			text += "vertical-align: middle;\n";
-
-		return text;
-	}
-
-	return QString::null;
-}
-
-QString HTMLExporter::readBorderProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "border" );
-
-	if ( !el.isNull() ) {
-		return QString( "border: %1px %2 %3;\n" ).arg( el.attribute( "width" ) ).arg( el.attribute( "style" ) ).arg( el.attribute( "color" ) );
-	}
-
-	return QString::null;
-}
-
-QString HTMLExporter::readBgColorProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "background-color" );
-
-	if ( !el.isNull() )
-		return QString( "background-color: %1;\n" ).arg( el.text() );
-
-	return QString::null;
-}
-
-QString HTMLExporter::readFontProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "font" );
-
-	if ( !el.isNull() ) {
-		QString text;
-		QFont font;
-		font.fromString( el.text() );
-
-		text += QString( "font-family: %1;\n" ).arg( font.family() );
-		text += QString( "font-weight: %1;\n" ).arg( font.weight() );
-		text += QString( "font-size: %1pt;\n" ).arg( font.pointSize() );
-		if ( font.underline() )
-			text += "text-decoration: underline;\n";
-		if ( font.strikeOut() )
-			text += "text-decoration: line-through;\n";
-		if ( font.bold() )
-			text += "font-weight: bold;\n";
-		if ( font.italic() )
-			text += "font-style: italic;\n";
-
-		return text;
-	}
-
-	return QString::null;
-}
-
-QString HTMLExporter::readTextColorProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "text-color" );
-
-	if ( !el.isNull() )
-		return QString( "color: %1;\n" ).arg( el.text() );
-
-	return QString::null;
-}
-
-QString HTMLExporter::readVisibilityProperties( const QDomDocument &doc, const QString &object )
-{
-	QDomElement el = getLayoutAttribute( doc, object, "visible" );
-
-	if ( !el.isNull() ) {
-		bool shown = ( el.text() == "false" ) ? false : true;
-		if ( shown )
-			return "visibility: visible;\n";
-		else
-			return "visibility: hidden;\n";
-	}
-
-	return QString::null;
-}
-
 void HTMLExporter::removeHTMLFiles( const QString &filename, const QString &recipe_title )
 {
 	QStringList title;
@@ -520,28 +439,6 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 	for ( double d = 0.5; d < 5.5; d += 0.5 ) {
 		if ( QFile::exists(filename+"_photos/"+QString::number(d)+"-stars.png") ) photo.remove(filename+"_photos/"+QString::number(d)+"-stars.png");
 	}
-}
-
-QDomElement HTMLExporter::getLayoutAttribute( const QDomDocument &doc, const QString &object, const QString &attribute ) const
-{
-	QDomNodeList node_list = doc.elementsByTagName( object );
-	if ( node_list.count() == 0 ) {
-		kdDebug() << "Warning: Requested object \"" << object << "\" not found." << endl;
-		return QDomElement();
-	}
-
-	QDomElement object_element = node_list.item( 0 ).toElement(); //there should only be one, so we'll just take the first
-
-	QDomNodeList l = object_element.childNodes();
-	for ( unsigned i = 0; i < l.count(); i++ ) {
-		QDomElement el = l.item( i ).toElement();
-
-		if ( el.tagName() == attribute )
-			return el;
-	}
-
-	kdDebug() << "Warning: Requested attribute \"" << attribute << "\" not found." << endl;
-	return QDomElement();
 }
 
 QString HTMLExporter::escape( const QString & str )
