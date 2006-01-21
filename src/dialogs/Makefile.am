@@ -18,7 +18,7 @@ libkrecipesdialogs_la_SOURCES= \
 	shoppinglistdialog.cpp shoppinglistviewdialog.cpp \
 	selectcategoriesdialog.cpp categorieseditordialog.cpp \
 	authorsdialog.cpp selectauthorsdialog.cpp \
-	dualprogressdialog.cpp resizerecipedialog.cpp \
+	resizerecipedialog.cpp \
 	dietviewdialog.cpp ingredientmatcherdialog.cpp \
 	usdadatadialog.cpp prepmethodsdialog.cpp \
 	createcategorydialog.cpp borderdialog.cpp \
