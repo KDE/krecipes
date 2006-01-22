@@ -106,7 +106,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
 		template_filename = locate( "appdata", "layouts/Default.template" );
-	original_template = template_filename;
+	active_template = template_filename;
 
 	initShownItems();
 }
@@ -120,6 +120,12 @@ void PageSetupDialog::accept()
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
 		config->writeEntry( "Layout", active_filename );
+	}
+
+	if ( !active_template.isEmpty() ) {
+		KConfig * config = kapp->config();
+		config->setGroup( "Page Setup" );
+		config->writeEntry( "Template", active_template );
 	}
 
 	KConfig *config = kapp->config();
@@ -142,10 +148,6 @@ void PageSetupDialog::reject()
 			return ;
 		}
 	}
-
-	KConfig * config = kapp->config();
-	config->setGroup( "Page Setup" );
-	config->writeEntry( "Template", original_template );
 
 	QDialog::reject();
 }
@@ -189,15 +191,8 @@ void PageSetupDialog::loadFile()
 
 void PageSetupDialog::loadTemplate( int popup_param )
 {
-	KConfig * config = kapp->config();
-	config->setGroup( "Page Setup" );
-	QString saveFilename = config->readEntry("Layout",active_filename);
-	config->writeEntry( "Layout", active_filename );
-
 	m_htmlPart->loadTemplate( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
-
-	config->setGroup( "Page Setup" );
-	config->writeEntry( "Layout", saveFilename );
+	active_template = included_layouts_map[ popup_param ];
 }
 
 void PageSetupDialog::loadLayout( int popup_param )

@@ -35,6 +35,9 @@ public:
 	static void removeHTMLFiles( const QString &filename, const QString &recipe_title );
 	static void removeHTMLFiles( const QString &filename, const QStringList &recipe_titles );
 
+	void setTemplate( const QString &filename );
+	void setStyle( const QString &filename );
+
 protected:
 	QString createContent( const Recipe& recipe );
 	virtual QString createContent( const RecipeList & );
@@ -49,6 +52,7 @@ protected:
 	virtual void loadVisibility( const QString &obj, bool );
 	virtual void loadAlignment( const QString &obj, int );
 	virtual void loadBorder( const QString &obj, const KreBorder& );
+	virtual void loadColumns( const QString & obj, int cols );
 
 	virtual void beginObject( const QString &obj );
 	virtual void endObject();
@@ -66,6 +70,7 @@ private:
 	QString m_layoutFilename;
 	QString m_cachedCSS;
 	QMap<QString,bool> m_visibilityMap;
+	QMap<QString,int> m_columnsMap;
 	bool m_error;
 };
 

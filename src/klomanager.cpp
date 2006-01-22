@@ -63,6 +63,8 @@ void KLOManager::processDocument( const QDomDocument &doc )
 				loadAlignment( tagName, getIntAttribute(el,subTagName) );
 			else if ( subTagName == "border" )
 				loadBorder( tagName, getBorderAttribute(el,subTagName) );
+			else if ( subTagName == "columns" )
+				loadColumns( tagName, getIntAttribute(el,subTagName) );
 			else
 				kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
 		}

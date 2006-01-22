@@ -59,7 +59,7 @@ private:
 	SetupDisplay *m_htmlPart;
 
 	QString active_filename;
-	QString original_template;
+	QString active_template;
 	bool have_write_perm;
 
 	QMap<int, KreDisplayItem*> popup_widget_map;

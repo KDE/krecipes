@@ -51,12 +51,7 @@ HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 		template_filename = locate( "appdata", "layouts/Default.template" );
 	kdDebug() << "Using template file: " << template_filename << endl;
 
-	QFile templateFile( template_filename );
-	if ( templateFile.open( IO_ReadOnly ) ) {
-		m_templateContent = QString( templateFile.readAll() );
-	}
-	else
-		kdDebug()<<"couldn't find/open template file"<<endl;
+	setTemplate( template_filename );
 
 	//let's do everything we can to be sure at least some layout is loaded
 	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
@@ -67,6 +62,21 @@ HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 
 HTMLExporter::~HTMLExporter()
 {
+}
+
+void HTMLExporter::setTemplate( const QString &filename )
+{
+	QFile templateFile( filename );
+	if ( templateFile.open( IO_ReadOnly ) ) {
+		m_templateContent = QString( templateFile.readAll() );
+	}
+	else
+		kdDebug()<<"couldn't find/open template file"<<endl;
+}
+
+void HTMLExporter::setStyle( const QString &filename )
+{
+	m_layoutFilename = filename;
 }
 
 int HTMLExporter::supportedItems() const
@@ -105,6 +115,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 QString HTMLExporter::createHeader( const RecipeList & )
 {
 	m_visibilityMap.clear();
+	m_columnsMap.clear();
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
@@ -195,6 +206,11 @@ void HTMLExporter::loadAlignment( const QString &/*object*/, int alignment )
 void HTMLExporter::loadBorder( const QString &/*object*/, const KreBorder& border )
 {
 	m_cachedCSS += borderAsCSS(border);
+}
+
+void HTMLExporter::loadColumns( const QString & object, int cols )
+{
+	m_columnsMap.insert(object,cols);
 }
 
 QString HTMLExporter::createFooter()
@@ -312,13 +328,31 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	QString ingredient_format = config->readEntry( "Ingredient", "%n%p: %a %u" );
 
+	QMap<QString,int>::const_iterator cols_it = m_columnsMap.find("ingredients");
+	int cols = 1;
+	if ( cols_it != m_columnsMap.end() )
+		cols = cols_it.data();
+	int per_col = recipe.ingList.count() / cols;
+	if ( recipe.ingList.count() % cols != 0 ) //round up if division is not exact
+		per_col++;
+
+	int count = 0;
 	IngredientList list_copy = recipe.ingList; //simple workaround until I fix iterating over the list dealing with groups
 	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
+
 		QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
 		if ( !group.isEmpty() )
 			ingredients_html += "<li>" + group + ":</li><ul>";
 
-		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
+		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it, ++count ) {
+			if ( count != 0 && count % per_col == 0 ) {
+				if ( !group.isEmpty() )
+					ingredients_html += "</ul>";
+				ingredients_html.append("</ul></td><td><ul>");
+				if ( !group.isEmpty() )
+					ingredients_html += "<ul>";
+			}
+
 			QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
 
 			if ( (*ing_it).amount_offset > 0 )
@@ -340,15 +374,27 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ingredients_html += "</ul>";
 	}
 	if ( !ingredients_html.isEmpty() ) {
-		ingredients_html.prepend( "<ul>" );
-		ingredients_html.append( "</ul>" );
+		ingredients_html.prepend( "<table><tr><td><ul>" );
+		ingredients_html.append( "</ul></td></tr></table>" );
 	}
 	content = content.replace( "**INGREDIENTS**", HTMLIfVisible("ingredients",ingredients_html) );
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
 
-	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
+	cols_it = m_columnsMap.find("properties");
+	cols = 1;
+	if ( cols_it != m_columnsMap.end() )
+		cols = cols_it.data();
+	per_col = recipe.properties.count() / cols;
+	if ( recipe.properties.count() % cols != 0 ) //round up if division is not exact
+		per_col++;
+
+	count = 0;
+	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it, ++count ) {
+		if ( count != 0 && count % per_col == 0 )
+			properties_html.append("</ul></td><td><ul>");
+
 		// if the amount given is <0, it means the property calculator found that the property was undefined for some ingredients, so the amount will be actually bigger
 
 		QString amount_str;
@@ -369,9 +415,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		                   .arg( amount_str )
 		                   .arg( QStyleSheet::escape( (*prop_it).units ) );
 	}
+
 	if ( !properties_html.isEmpty() ) {
-		properties_html.prepend( "<ul>" );
-		properties_html.append( "</ul>" );
+		properties_html.prepend( "<table><tr><td><ul>" );
+		properties_html.append( "</ul></td></tr></table>" );
 	}
 	content = content.replace( "**PROPERTIES**", HTMLIfVisible("properties",properties_html) );
 

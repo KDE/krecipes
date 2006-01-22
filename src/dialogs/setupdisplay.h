@@ -43,6 +43,7 @@ public:
 	QString name;
 	KreBorder border;
 	int alignment;
+	int columns;
 	bool show;
 	QColor backgroundColor;
 	QColor textColor;
@@ -65,7 +66,7 @@ public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
 
-	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Alignment = 32, Border = 128 };
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Alignment = 32, Columns = 64, Border = 128 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
@@ -95,6 +96,7 @@ protected:
 	virtual void loadVisibility( const QString &obj, bool );
 	virtual void loadAlignment( const QString &obj, int );
 	virtual void loadBorder( const QString &obj, const KreBorder& );
+	virtual void loadColumns( const QString &obj, int );
 
 	virtual void beginObject( const QString &obj );
 
@@ -105,6 +107,7 @@ protected slots:
 	//slots to set properties of item boxes
 	void setBackgroundColor();
 	void setBorder();
+	void setColumns();
 	void setTextColor();
 	void setFont();
 	void setShown( int id );
@@ -119,7 +122,7 @@ private:
 	// Methods
 	void applyStylesheet();
 	void loadPageLayout( const QDomElement &tag );
-	void loadHTMLView();
+	void loadHTMLView( const QString &templateFile = QString::null, const QString &styleFile = QString::null );
 
 	void createItem( const QString &id, const QString &name, unsigned int properties );
 
@@ -132,6 +135,8 @@ private:
 	KPopupMenu *popup;
 	DOM::CSSStyleSheet m_styleSheet;
 	Recipe m_sample;
+
+	QString m_activeTemplate;
 };
 
 #endif //SETUPDISPLAY_H

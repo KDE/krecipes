@@ -33,6 +33,7 @@ protected:
 	virtual void loadVisibility( const QString &obj, bool ){};
 	virtual void loadAlignment( const QString &obj, int ){};
 	virtual void loadBorder( const QString &obj, const KreBorder& ){};
+	virtual void loadColumns( const QString &obj, int ){};
 
 	virtual void beginObject( const QString &obj ){};
 	virtual void endObject(){};

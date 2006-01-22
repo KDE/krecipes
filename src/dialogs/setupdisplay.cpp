@@ -19,6 +19,8 @@
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
+#include <kinputdialog.h>
+#include <ktempfile.h>
 
 #include <khtmlview.h>
 #include <dom/dom_doc.h>
@@ -47,6 +49,7 @@ KreDisplayItem::KreDisplayItem( const QString &n, const QString &_name ) : nodeI
 	show = true;
 	backgroundColor = QColor(255,255,255);
 	textColor = QColor(0,0,0);
+	columns = 1;
 }
 
 
@@ -114,8 +117,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 	createItem( "authors", i18n("Authors"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "categories", i18n("Categories"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "header", i18n("Header"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "ingredients", i18n("Ingredients"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
-	createItem( "properties", i18n("Properties"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "ingredients", i18n("Ingredients"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border | Columns );
+	createItem( "properties", i18n("Properties"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border | Columns );
 	createItem( "ratings", i18n("Ratings"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "yield", i18n("Yield"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 }
@@ -126,10 +129,14 @@ SetupDisplay::~SetupDisplay()
 	delete node_item_map;
 }
 
-void SetupDisplay::loadHTMLView()
+void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &styleFile )
 {
 	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
 	HTMLExporter exporter( tmp_filename + ".html", "html" );
+	if ( templateFile != QString::null )
+		exporter.setTemplate( templateFile );
+	if ( styleFile != QString::null )
+		exporter.setStyle( styleFile );
 
 	RecipeList recipeList;
 	recipeList.append(m_sample);
@@ -152,11 +159,11 @@ void SetupDisplay::loadHTMLView()
 
 void SetupDisplay::loadTemplate( const QString &filename )
 {
-	KConfig * config = kapp->config();
-	config->setGroup( "Page Setup" );
-	config->writeEntry( "Template", filename );
+	KTempFile tmpFile;
+	saveLayout(tmpFile.name());
+	loadHTMLView( filename, tmpFile.name() );
 
-	loadHTMLView();
+	m_activeTemplate = filename;
 }
 
 void SetupDisplay::createItem( const QString &node, const QString &name, unsigned int properties )
@@ -183,7 +190,9 @@ void SetupDisplay::loadLayout( const QString &filename )
 			m_styleSheet.deleteRule(0);
 
 		processDocument( doc );
-		applyStylesheet();
+
+		loadHTMLView(m_activeTemplate, filename);
+
 		has_changes = false;
 	}
 	else
@@ -248,6 +257,13 @@ void SetupDisplay::loadBorder( const QString &object, const KreBorder& border )
 	}
 }
 
+void SetupDisplay::loadColumns( const QString &/*object*/, int cols )
+{
+	if ( m_currentItem ) {
+		m_currentItem->columns = cols;
+	}
+}
+
 void SetupDisplay::saveLayout( const QString &filename )
 {
 	QDomImplementation dom_imp;
@@ -300,6 +316,12 @@ void SetupDisplay::saveLayout( const QString &filename )
 			border_tag.setAttribute( "color", it.data()->border.color.name() );
 			base_tag.appendChild( border_tag );
 		}
+
+		if ( properties & Columns ) {
+			QDomElement columns_tag = doc.createElement( "columns" );
+			columns_tag.appendChild( doc.createTextNode( QString::number( it.data()->columns ) ) );
+			base_tag.appendChild( columns_tag );
+		}
 	}
 
 	QFile out_file( filename );
@@ -325,6 +347,7 @@ void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
 	if ( !impl.isNull() ) {
 		m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
 		doc.addStyleSheet(m_styleSheet);
+		applyStylesheet();
 	}
 }
 
@@ -409,8 +432,12 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 
 		alignment_actions->addTo( sub_popup );
 	}
+
 	if ( properties & Border )
 		popup->insertItem( i18n( "Border..." ), this, SLOT( setBorder() ) );
+
+	if ( properties & Columns )
+		popup->insertItem( i18n( "Columns..." ), this, SLOT( setColumns() ) );
 
 	popup->popup( point );
 }
@@ -441,6 +468,19 @@ void SetupDisplay::setBorder()
 		item->border = borderDialog.border();
 		loadBorder( m_currNodeId, item->border );
 		applyStylesheet();
+		has_changes = true;
+	}
+}
+
+void SetupDisplay::setColumns()
+{
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+	int cols = KInputDialog::getInteger( QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0, view() );
+	if ( cols > 0 ) {
+		item->columns = cols;
+		loadColumns( m_currNodeId, cols );
+
+		loadTemplate( m_activeTemplate );
 		has_changes = true;
 	}
 }
