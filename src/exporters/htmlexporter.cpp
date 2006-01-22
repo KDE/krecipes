@@ -348,7 +348,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			if ( count != 0 && count % per_col == 0 ) {
 				if ( !group.isEmpty() )
 					ingredients_html += "</ul>";
-				ingredients_html.append("</ul></td><td><ul>");
+				ingredients_html.append("</ul></td><td valign=\"top\"><ul>");
 				if ( !group.isEmpty() )
 					ingredients_html += "<ul>";
 			}
@@ -374,7 +374,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ingredients_html += "</ul>";
 	}
 	if ( !ingredients_html.isEmpty() ) {
-		ingredients_html.prepend( "<table><tr><td><ul>" );
+		ingredients_html.prepend( "<table><tr><td valign=\"top\"><ul>" );
 		ingredients_html.append( "</ul></td></tr></table>" );
 	}
 	content = content.replace( "**INGREDIENTS**", HTMLIfVisible("ingredients",ingredients_html) );
@@ -393,7 +393,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	count = 0;
 	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it, ++count ) {
 		if ( count != 0 && count % per_col == 0 )
-			properties_html.append("</ul></td><td><ul>");
+			properties_html.append("</ul></td><td valign=\"top\"><ul>");
 
 		// if the amount given is <0, it means the property calculator found that the property was undefined for some ingredients, so the amount will be actually bigger
 
@@ -417,7 +417,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	}
 
 	if ( !properties_html.isEmpty() ) {
-		properties_html.prepend( "<table><tr><td><ul>" );
+		properties_html.prepend( "<table><tr><td valign=\"top\"><ul>" );
 		properties_html.append( "</ul></td></tr></table>" );
 	}
 	content = content.replace( "**PROPERTIES**", HTMLIfVisible("properties",properties_html) );
