@@ -191,8 +191,8 @@ void PageSetupDialog::loadFile()
 
 void PageSetupDialog::loadTemplate( int popup_param )
 {
-	m_htmlPart->loadTemplate( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
-	active_template = included_layouts_map[ popup_param ];
+	active_template = getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ];
+	m_htmlPart->loadTemplate( active_template );
 }
 
 void PageSetupDialog::loadLayout( int popup_param )
@@ -223,6 +223,7 @@ void PageSetupDialog::loadLayout( const QString &filename )
 void PageSetupDialog::reloadLayout()
 {
 	loadLayout( active_filename );
+	m_htmlPart->loadTemplate( active_template );
 }
 
 void PageSetupDialog::saveLayout()

@@ -45,13 +45,17 @@
 
 KreDisplayItem::KreDisplayItem( const QString &n, const QString &_name ) : nodeId(n), name(_name)
 {
+	clear();
+}
+
+void KreDisplayItem::clear()
+{
 	alignment = Qt::AlignHCenter;
 	show = true;
 	backgroundColor = QColor(255,255,255);
 	textColor = QColor(0,0,0);
 	columns = 1;
 }
-
 
 SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(parent),
 		box_properties( new PropertiesMap ),
@@ -192,6 +196,10 @@ void SetupDisplay::loadLayout( const QString &filename )
 		while ( m_styleSheet.cssRules().length() != 0 )
 			m_styleSheet.deleteRule(0);
 
+		QMap<QString,KreDisplayItem*>::iterator it;
+		for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
+			it.data()->clear();
+		}
 		processDocument( doc );
 
 		loadHTMLView(m_activeTemplate, filename);
@@ -201,6 +209,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 	else
 		kdDebug() << "Unable to open file: " << filename << endl;
 }
+
 void SetupDisplay::beginObject( const QString &object )
 {
 	QMap<QString, KreDisplayItem*>::iterator map_it = node_item_map->find( object );

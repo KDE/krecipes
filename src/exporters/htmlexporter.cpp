@@ -211,6 +211,7 @@ void HTMLExporter::loadBorder( const QString &/*object*/, const KreBorder& borde
 void HTMLExporter::loadColumns( const QString & object, int cols )
 {
 	m_columnsMap.insert(object,cols);
+kdDebug()<<object<<" has "<<cols<<" columns"<<endl;
 }
 
 QString HTMLExporter::createFooter()

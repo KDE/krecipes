@@ -39,6 +39,8 @@ class KreDisplayItem
 public:
 	KreDisplayItem( const QString &id, const QString &name );
 
+	void clear();
+
 	QString nodeId;
 	QString name;
 	KreBorder border;
