@@ -225,7 +225,7 @@ void RecipeActionsHandler::recipeExport()
 		QValueList<int> ids = recipeIDs( items );
 
 		QString title;
-		if ( items.count() == 1 ) {
+		if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) items.at(0);
 			title = recipe_it->title();
 		}
@@ -357,7 +357,9 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*" ) {
-				exporter = new HTMLBookExporter( fd->baseURL().path(), "*.html" );
+				CategoryTree *cat_structure = new CategoryTree;
+				database->loadCategories( cat_structure );
+				exporter = new HTMLBookExporter( cat_structure, fd->baseURL().path(), "*.html" );
 			}
 			else if ( fd->currentFilter() == "*.html" ) {
 				exporter = new HTMLExporter( fileName, fd->currentFilter() );

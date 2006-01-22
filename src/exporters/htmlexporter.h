@@ -63,7 +63,7 @@ private:
 	void replaceIfVisible( QString &content, const QString &name, const QString &html );
 	QString HTMLIfVisible( const QString &name, const QString &html );
 
-	QString layout_filename;
+	QString m_layoutFilename;
 	QString m_cachedCSS;
 	QMap<QString,bool> m_visibilityMap;
 	bool m_error;

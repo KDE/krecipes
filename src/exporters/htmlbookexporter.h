@@ -12,11 +12,13 @@
 #define HTMLBOOKEXPORTER_H
 
 #include <qmap.h>
+#include <qvaluelist.h>
 
 #include "baseexporter.h"
 #include "htmlexporter.h"
 
 class RecipeDB;
+class CategoryTree;
 
 /**
   * Exports a given recipe list as HTML
@@ -25,7 +27,7 @@ class RecipeDB;
 class HTMLBookExporter : public HTMLExporter
 {
 public:
-	HTMLBookExporter( const QString&, const QString& );
+	HTMLBookExporter( CategoryTree *categories, const QString&, const QString& );
 	virtual ~HTMLBookExporter();
 
 protected:
@@ -36,9 +38,14 @@ protected:
 	virtual int headerFlags() const;
 
 private:
+	void createCategoryStructure( QTextStream &xml, const RecipeList &recipes );
+	bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+	void writeCategoryStructure( QTextStream &xml, const CategoryTree *categoryTree );
+
 	QMap<QString,QTextStream*> fileMap;
 
 	RecipeDB *database;
+	CategoryTree *m_categories;
 	QString m_basedir;
 };
 

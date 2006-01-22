@@ -57,6 +57,12 @@ HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 	}
 	else
 		kdDebug()<<"couldn't find/open template file"<<endl;
+
+	//let's do everything we can to be sure at least some layout is loaded
+	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
+	if ( m_layoutFilename.isEmpty() || !QFile::exists( m_layoutFilename ) )
+		m_layoutFilename = locate( "appdata", "layouts/Default.klo" );
+	kdDebug() << "Using layout file: " << m_layoutFilename << endl;
 }
 
 HTMLExporter::~HTMLExporter()
@@ -115,13 +121,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 		return errorStr;
 	}
 
-	//let's do everything we can to be sure at least some layout is loaded
-	layout_filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
-	if ( layout_filename.isEmpty() || !QFile::exists( layout_filename ) )
-		layout_filename = locate( "appdata", "layouts/Default.klo" );
-	kdDebug() << "Using layout file: " << layout_filename << endl;
-
-	QFile layoutFile( layout_filename );
+	QFile layoutFile( m_layoutFilename );
 	QString error; int line; int column;
 	QDomDocument doc;
 	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
