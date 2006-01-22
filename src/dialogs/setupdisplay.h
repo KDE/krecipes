@@ -99,6 +99,7 @@ protected:
 	virtual void loadColumns( const QString &obj, int );
 
 	virtual void beginObject( const QString &obj );
+	virtual void endObject();
 
 protected slots:
 	void nodeClicked(const QString &url,const QPoint &point);

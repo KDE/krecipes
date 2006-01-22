@@ -159,8 +159,11 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 
 void SetupDisplay::loadTemplate( const QString &filename )
 {
+	bool storeChangedState = has_changes;
 	KTempFile tmpFile;
 	saveLayout(tmpFile.name());
+	has_changes = storeChangedState; //saveLayout() sets changes to false
+	
 	loadHTMLView( filename, tmpFile.name() );
 
 	m_activeTemplate = filename;
@@ -205,6 +208,11 @@ void SetupDisplay::beginObject( const QString &object )
 		m_currentItem = map_it.data();
 	else
 		m_currentItem = 0;
+}
+
+void SetupDisplay::endObject()
+{
+	m_currentItem = 0;
 }
 
 void SetupDisplay::loadBackgroundColor( const QString &object, const QColor &color )
@@ -454,7 +462,10 @@ void SetupDisplay::setBackgroundColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->backgroundColor, view() ) == QDialog::Accepted ) {
+		m_currentItem = item;
 		loadBackgroundColor(m_currNodeId,item->backgroundColor);
+		m_currentItem = 0;
+
 		applyStylesheet();
 		has_changes = true;
 	}
@@ -465,8 +476,10 @@ void SetupDisplay::setBorder()
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	BorderDialog borderDialog( item->border, view() );
 	if ( borderDialog.exec() == QDialog::Accepted ) {
-		item->border = borderDialog.border();
-		loadBorder( m_currNodeId, item->border );
+		m_currentItem = item;
+		loadBorder( m_currNodeId, borderDialog.border() );
+		m_currentItem = 0;
+
 		applyStylesheet();
 		has_changes = true;
 	}
@@ -477,8 +490,9 @@ void SetupDisplay::setColumns()
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	int cols = KInputDialog::getInteger( QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0, view() );
 	if ( cols > 0 ) {
-		item->columns = cols;
+		m_currentItem = item;
 		loadColumns( m_currNodeId, cols );
+		m_currentItem = 0;
 
 		loadTemplate( m_activeTemplate );
 		has_changes = true;
@@ -489,7 +503,10 @@ void SetupDisplay::setTextColor()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KColorDialog::getColor( item->textColor, view() ) == QDialog::Accepted ) {
+		m_currentItem = item;
 		loadTextColor(m_currNodeId,item->textColor);
+		m_currentItem = 0;
+
 		applyStylesheet();
 		has_changes = true;
 	}
@@ -498,9 +515,12 @@ void SetupDisplay::setTextColor()
 void SetupDisplay::setShown( int id )
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	item->show = !popup->isItemChecked( id );
 	emit itemVisibilityChanged( item, !popup->isItemChecked( id ) );
-	loadVisibility(m_currNodeId,item->show);
+
+	m_currentItem = item;
+	loadVisibility(m_currNodeId,!popup->isItemChecked( id ));
+	m_currentItem = 0;
+
 	applyStylesheet();
 	has_changes = true;
 }
@@ -509,7 +529,10 @@ void SetupDisplay::setFont()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
+		m_currentItem = item;
 		loadFont(m_currNodeId,item->font);
+		m_currentItem = 0;
+
 		applyStylesheet();
 		has_changes = true;
 	}
@@ -535,7 +558,10 @@ void SetupDisplay::setAlignment( QAction *action )
 	else if ( action->text() == i18n( "Right" ) )
 		item->alignment |= Qt::AlignRight;
 
+	m_currentItem = item;
 	loadAlignment(m_currNodeId,item->alignment);
+	m_currentItem = 0;
+
 	applyStylesheet();
 	has_changes = true;
 }
