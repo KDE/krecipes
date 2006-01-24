@@ -86,6 +86,8 @@ public:
 		return * box_properties;
 	}
 
+	void reload();
+
 signals:
 	void itemVisibilityChanged( KreDisplayItem *, bool );
 
@@ -140,6 +142,7 @@ private:
 	Recipe m_sample;
 
 	QString m_activeTemplate;
+	QString m_activeStyle;
 };
 
 #endif //SETUPDISPLAY_H

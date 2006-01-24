@@ -2,8 +2,8 @@
     <tr><td class="title" colspan="3" width="100%">**TITLE**</td></tr>
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-      <td class="photo" width="20%">
-        **PHOTO**
+      <td width="20%">
+        <img src="**PHOTO**" class="photo" />
       </td>
 
       <td width="3%">&nbsp;</td>

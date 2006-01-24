@@ -110,6 +110,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample.ratingList.append(rating1);
 	}
 
+	kdDebug()<<"first load"<<endl;
 	loadHTMLView();
 	show();
 
@@ -135,6 +136,7 @@ SetupDisplay::~SetupDisplay()
 
 void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &styleFile )
 {
+	kdDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile<<endl;
 	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
 	HTMLExporter exporter( tmp_filename + ".html", "html" );
 	if ( templateFile != QString::null )
@@ -159,6 +161,11 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	url.setPath( tmp_filename + ".html" );
 	openURL( url );
 	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+}
+
+void SetupDisplay::reload()
+{
+	loadHTMLView( m_activeTemplate, m_activeStyle );
 }
 
 void SetupDisplay::loadTemplate( const QString &filename )
@@ -203,6 +210,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		processDocument( doc );
 
 		loadHTMLView(m_activeTemplate, filename);
+		m_activeStyle = filename;
 
 		has_changes = false;
 	}

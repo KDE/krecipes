@@ -185,8 +185,10 @@ void PageSetupDialog::loadFile()
 
 	if ( file.endsWith(".klo") )
 		loadLayout( file );
-	else
+	else {
+		active_template = file;
 		m_htmlPart->loadTemplate( file );
+	}
 }
 
 void PageSetupDialog::loadTemplate( int popup_param )
@@ -222,8 +224,7 @@ void PageSetupDialog::loadLayout( const QString &filename )
 
 void PageSetupDialog::reloadLayout()
 {
-	loadLayout( active_filename );
-	m_htmlPart->loadTemplate( active_template );
+	m_htmlPart->reload();
 }
 
 void PageSetupDialog::saveLayout()

@@ -68,6 +68,7 @@ private:
 	QString HTMLIfVisible( const QString &name, const QString &html );
 
 	QString m_layoutFilename;
+	QString m_templateFilename;
 	QString m_cachedCSS;
 	QMap<QString,bool> m_visibilityMap;
 	QMap<QString,int> m_columnsMap;

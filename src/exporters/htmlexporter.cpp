@@ -19,6 +19,7 @@
 #include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
 #include <dom/dom_element.h>
 #include <qpainter.h>
+#include <qfileinfo.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -68,6 +69,7 @@ void HTMLExporter::setTemplate( const QString &filename )
 {
 	QFile templateFile( filename );
 	if ( templateFile.open( IO_ReadOnly ) ) {
+		m_templateFilename = filename;
 		m_templateContent = QString( templateFile.readAll() );
 	}
 	else
@@ -158,6 +160,16 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	output += QString( "<title>%1</title>" ).arg( i18n( "Krecipes Recipes" ) );
 
 	output += "<style type=\"text/css\">\n";
+
+	QString cssContent;
+	QFileInfo info(m_templateFilename);
+	QFile cssFile(info.dirPath(true) + "/" + info.baseName() + ".css");
+	kdDebug()<<info.dirPath(true) + "/" + info.baseName() + ".css"<<endl;
+	if ( cssFile.open( IO_ReadOnly ) ) {
+		cssContent = QString( cssFile.readAll() );
+	}
+	output += cssContent;
+
 	output += m_cachedCSS;
 	m_cachedCSS = QString::null;
 	output += "</style>";
@@ -285,8 +297,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
-	QString photo_html = QString( "<img src=\"%1\" />" ).arg( image_url );
-	content = content.replace( "**PHOTO**", HTMLIfVisible("photo",photo_html) );
+	content = content.replace( "**PHOTO**", HTMLIfVisible("photo",image_url) );
 
 	//=======================AUTHORS======================//
 	QString authors_html;
