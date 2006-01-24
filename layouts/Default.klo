@@ -35,6 +35,7 @@
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
+  <columns>1</columns>
  </ingredients>
  <instructions>
   <background-color>#ffffff</background-color>
@@ -63,6 +64,7 @@
   <visible>true</visible>
   <alignment>2049</alignment>
   <border width="1" style="none" color="#000000" />
+  <columns>3</columns>
  </properties>
  <ratings>
   <background-color>#ffffff</background-color>
