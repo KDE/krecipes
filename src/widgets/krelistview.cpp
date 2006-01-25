@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2004-2005 by                                            *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
 *   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *

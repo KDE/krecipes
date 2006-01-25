@@ -1,6 +1,6 @@
 /***************************************************************************
 * Copyright (C) 2000 Trolltech AS.  All rights reserved.                  *
-*               2003 by Jason Kivlighn <mizunoami44@users.sourceforge.net>*
+*               2003 by Jason Kivlighn <jkivlighn@gmail.com>              *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

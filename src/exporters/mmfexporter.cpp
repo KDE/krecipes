@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

@@ -1,7 +1,7 @@
 
 /***************************************************************************
 *   Copyright (C) 2004 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *

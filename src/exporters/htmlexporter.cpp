@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
-*   Jason Kivlighn (mizunoami44@users.sourceforge.net)                    *
+*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *                                                                         *
