@@ -349,13 +349,13 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 
 void MXPImporter::importGeneric( QTextStream & /*stream*/ )
 {
-	setErrorMsg( i18n( "MasterCook's Generic Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format." ) );
+	setErrorMsg( i18n( "MasterCook's Generic Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
 void MXPImporter::importMac( QTextStream & /*stream*/ )
 {
-	setErrorMsg( i18n( "MasterCook Mac's Export format is currently not supported.  Please write to mizunoami44@users.sourceforge.net to request support for this format." ) );
+	setErrorMsg( i18n( "MasterCook Mac's Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
