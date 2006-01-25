@@ -113,8 +113,8 @@ int SelectPropertyDialog::perUnitsID()
 
 void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList )
 {
-	for ( IngredientProperty * property = propertyList->getFirst(); property; property = propertyList->getNext() ) {
-		( void ) new QListViewItem( propertyChooseView, QString::number( property->id ), property->name );
+	for ( IngredientPropertyList::const_iterator prop_it = propertyList->begin(); prop_it != propertyList->end(); ++prop_it ) {
+		( void ) new QListViewItem( propertyChooseView, QString::number( (*prop_it).id ), (*prop_it).name );
 	}
 }
 void SelectPropertyDialog::loadUnits( UnitList *unitList )

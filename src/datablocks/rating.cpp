@@ -11,6 +11,7 @@
 #include "rating.h"
 
 #include <qpainter.h>
+#include <qbitmap.h>
 
 #include <kiconloader.h>
 
@@ -40,6 +41,8 @@ QPixmap Rating::starsPixmap( double stars_d, bool include_empty )
 			painter.drawTiledPixmap(0,0,18*5,18,star_off); //fill with empty stars
 		painter.drawTiledPixmap(0,0,pixmapWidth,18,star); //write over the empty stars to show the rating
 	}
+
+	generatedPixmap.setMask( generatedPixmap.createHeuristicMask() );
 
 	return generatedPixmap;
 }

@@ -18,6 +18,7 @@
 #include "ingredientlist.h"
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
+#include "datablocks/ingredientpropertylist.h"
 
 class Yield
 {
@@ -58,6 +59,7 @@ public:
 	QDateTime atime;
 
 	RatingList ratingList;
+	IngredientPropertyList properties;
 
 	// Public methods
 	void empty( void );

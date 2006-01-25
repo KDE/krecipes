@@ -9,61 +9,22 @@
 ***************************************************************************/
 #ifndef INGREDIENTPROPERTYLIST_H
 #define INGREDIENTPROPERTYLIST_H
-#include <qptrlist.h>
+
+#include <qvaluelist.h>
+
 #include "datablocks/ingredientproperty.h"
 
-/**
-@author Unai Garro
-*/
-
-class PropertyPtrList: public QPtrList <IngredientProperty>
-{
-public:
-	PropertyPtrList()
-	{
-		setAutoDelete( true );
-	};
-	~PropertyPtrList()
-	{}
-	;
-protected:
-	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
-	{
-		return ( ( ( IngredientProperty* ) item1 ) ->id - ( ( IngredientProperty* ) item2 ) ->id );
-	};
-
-};
-
-
-class IngredientPropertyList
+class IngredientPropertyList : public QValueList<IngredientProperty>
 {
 public:
 	IngredientPropertyList();
 
 	~IngredientPropertyList();
 
-	void add
-		( IngredientProperty &element );
-	void append( IngredientProperty *property );
-	IngredientProperty* at( int pos );
-	void clear( void );
-	int count( void );
 	void divide( int units_of_yield_type );
-
-	int find( IngredientProperty* it );
-	int find( int id );
+	IngredientPropertyList::const_iterator find( int id );
 	int findByName( const QString & );
 	void filter( int ingredientID, IngredientPropertyList *filteredList );
-	IngredientProperty* getFirst( void );
-	IngredientProperty* getNext( void );
-	IngredientProperty* getElement( int index );
-	bool isEmpty( void );
-	void remove
-		( IngredientProperty* ip );
-
-private:
-	PropertyPtrList list;
-
 };
 
 #endif

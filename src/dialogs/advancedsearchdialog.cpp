@@ -467,6 +467,19 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::CopyToClipboard );
 
+	connect( titleEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( ingredientsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( ingredientsAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( ingredientsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( authorsAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( authorsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( authorsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( categoriesNotEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( categoriesAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( categoriesAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( ingredientsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( instructionsEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+
 	connect( findButton, SIGNAL( clicked() ), SLOT( search() ) );
 	connect( clearButton, SIGNAL( clicked() ), SLOT( clear() ) );
 

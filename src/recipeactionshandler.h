@@ -101,6 +101,8 @@ public slots:
 
 	void recipesToClipboard();
 
+	void mergeSimilar();
+
 private:
 	KPopupMenu *kpop;
 	KPopupMenu *catPop;

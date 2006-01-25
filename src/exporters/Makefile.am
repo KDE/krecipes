@@ -7,7 +7,7 @@ libkrecipesexporters_la_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 libkrecipesexporters_la_SOURCES =  kreexport.cpp baseexporter.cpp cookmlexporter.cpp \
 	recipemlexporter.cpp mmfexporter.cpp htmlexporter.cpp plaintextexporter.cpp \
-	rezkonvexporter.cpp
+	rezkonvexporter.cpp htmlbookexporter.cpp
 
 noinst_HEADERS =  kreexport.h baseexporter.h cookmlexporter.h \
 	recipemlexporter.h mmfexporter.h htmlexporter.h plaintextexporter.h

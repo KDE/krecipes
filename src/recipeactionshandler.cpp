@@ -28,6 +28,7 @@
 
 #include "exporters/cookmlexporter.h"
 #include "exporters/htmlexporter.h"
+#include "exporters/htmlbookexporter.h"
 #include "exporters/kreexport.h"
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
@@ -63,7 +64,7 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		kpop->insertItem( il->loadIcon( "editcopy", KIcon::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), CTRL + Key_C );
 
 	if ( actions & Categorize )
-		categorize_item = kpop->insertItem( il->loadIcon( "categories", KIcon::NoGroup, 16 ), i18n( "Ca&tegorize" ), this, SLOT(categorize()), CTRL + Key_T );
+		categorize_item = kpop->insertItem( il->loadIcon( "categories", KIcon::NoGroup, 16 ), i18n( "Ca&tegorize..." ), this, SLOT(categorize()), CTRL + Key_T );
 
 	kpop->polish();
 
@@ -74,6 +75,8 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		catPop->insertItem( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), CTRL + Key_Minus );
 	if ( actions & Export )
 		catPop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
+
+	catPop->insertItem( il->loadIcon( "", KIcon::NoGroup, 16 ), i18n( "Merge similar" ), this, SLOT( mergeSimilar() ), 0 );
 
 	catPop->polish();
 
@@ -224,7 +227,7 @@ void RecipeActionsHandler::recipeExport()
 		QValueList<int> ids = recipeIDs( items );
 
 		QString title;
-		if ( items.count() == 1 ) {
+		if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) items.at(0);
 			title = recipe_it->title();
 		}
@@ -336,6 +339,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	                                             "*.kreml|Krecipes (*.kreml)\n"
 	                                             "*.txt|%3 (*.txt)\n"
 	                                             //"*.cml|CookML (*.cml)\n"
+	                                             "*|Web Book\n"
 	                                             "*.html|%2 (*.html)\n"
 	                                             "*.mmf|Meal-Master (*.mmf)\n"
 	                                             "*.xml|RecipeML (*.xml)\n"
@@ -345,6 +349,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );
 	fd->setSelection( selection );
+	fd->setMode( KFile::File | KFile::Directory );
 	if ( fd->exec() == KFileDialog::Accepted ) {
 		QString fileName = fd->selectedFile();
 		if ( !fileName.isNull() ) {
@@ -353,8 +358,14 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
-			else if ( fd->currentFilter() == "*.html" )
-				exporter = new HTMLExporter( database, fileName, fd->currentFilter(), 650 );
+			else if ( fd->currentFilter() == "*" ) {
+				CategoryTree *cat_structure = new CategoryTree;
+				database->loadCategories( cat_structure );
+				exporter = new HTMLBookExporter( cat_structure, fd->baseURL().path(), "*.html" );
+			}
+			else if ( fd->currentFilter() == "*.html" ) {
+				exporter = new HTMLExporter( fileName, fd->currentFilter() );
+			}
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.txt" )
@@ -417,6 +428,145 @@ void RecipeActionsHandler::recipesToClipboard( const QValueList<int> &ids, Recip
 	QApplication::clipboard()->setText(buffer);
 }
 
+/*****************************************************/
+/*Function prototypes and libraries needed to compile*/
+/*****************************************************/
+
+#include <stdlib.h>
+#include <malloc.h>
+#include <string.h>
+int levenshtein_distance(const char *s,const char*t);
+int minimum(int a,int b,int c);
+
+/****************************************/
+/*Implementation of Levenshtein distance*/
+/****************************************/
+
+int levenshtein_distance(const char *s,const char*t)
+/*Compute levenshtein distance between s and t*/
+{
+  //Step 1
+  int k,i,j,n,m,cost,*d,distance;
+  n=strlen(s); 
+  m=strlen(t);
+  if(n!=0&&m!=0)
+  {
+    d=(int*)malloc((sizeof(int))*(m+1)*(n+1));
+    m++;
+    n++;
+    //Step 2	
+    for(k=0;k<n;k++)
+	d[k]=k;
+    for(k=0;k<m;k++)
+      d[k*n]=k;
+    //Step 3 and 4	
+    for(i=1;i<n;i++)
+      for(j=1;j<m;j++)
+	{
+        //Step 5
+        if(s[i-1]==t[j-1])
+          cost=0;
+        else
+          cost=1;
+        //Step 6			 
+        d[j*n+i]=minimum(d[(j-1)*n+i]+1,d[j*n+i-1]+1,d[(j-1)*n+i-1]+cost);
+      }
+    distance=d[n*m-1];
+    free(d);
+    return distance;
+  }
+  else 
+    return -1; //a negative return value means that one or both strings are empty.
+}
+
+int minimum(int a,int b,int c)
+/*Gets the minimum of three values*/
+{
+  int min=a;
+  if(b<min)
+    min=b;
+  if(c<min)
+    min=c;
+  return min;
+}
+
+/** @return an array of adjacent letter pairs contained in the input string */
+QStringList letterPairs(const QString& str) {
+	int numPairs = str.length()-1;
+	QStringList pairs;
+	for (int i=0; i<numPairs; i++) {
+		pairs << str.mid(i,2);
+	}
+	return pairs;
+}
+
+/** @return an ArrayList of 2-character Strings. */
+QValueList<QStringList> wordLetterPairs(const QString &str) {
+	QValueList<QStringList> allPairs;
+	// Tokenize the string and put the tokens/words into an array
+	QStringList words = QStringList::split("\\s",str);
+	// For each word
+	for (int w=0; w < words.count(); w++) {
+		// Find the pairs of characters
+		QStringList pairsInWord = letterPairs(words[w]);
+		for (int p=0; p < pairsInWord.count(); p++) {
+			allPairs.append(pairsInWord[p]);
+		}
+	}
+	return allPairs;
+}
+
+/** @return lexical similarity value in the range [0,1] */
+double compareStrings(const QString &str1, const QString &str2) {
+	QValueList<QStringList> pairs1 = wordLetterPairs(str1.upper());
+	QValueList<QStringList> pairs2 = wordLetterPairs(str2.upper());
+	int intersection = 0;
+	int size_union = pairs1.count() + pairs2.count();
+	for (int i=0; i<pairs1.count(); i++) {
+		QStringList pair1=pairs1[i];
+		for(int j=0; j<pairs2.count(); j++) {
+			QStringList pair2=pairs2[j];
+			if (pair1 == pair2) {
+				intersection++;
+				pairs2.remove( pairs2.at(j) );
+				break;
+			}
+		}
+	}
+	return (2.0*intersection)/size_union;
+}
+
+#include <kdebug.h>
+
+void RecipeActionsHandler::mergeSimilar()
+{
+	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	if ( items.count() > 1 )
+		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one recipe."), QString::null );
+	else if ( items.count() == 1 && items.at(0)->rtti() == 1001 ) {
+		CategoryListItem * cat_it = ( CategoryListItem* ) items.at(0);
+		QString name = cat_it->categoryName();
+		const double max_allowed_distance = 0.60;
+		const int length = name.length();
+		ElementList categories;
+		database->loadCategories( &categories );
+
+		for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+			#if 0
+			if ( levenshtein_distance(name.latin1(),(*it).name.latin1())/double(QMAX(length,(*it).name.length())) >= max_allowed_distance ) {
+			#else
+			if ( compareStrings(name,(*it).name) >= max_allowed_distance ) {
+			#endif
+				kdDebug()<<(*it).name<<" matches"<<endl;
+				if ( cat_it->categoryId() != (*it).id )
+					database->mergeCategories(cat_it->categoryId(),(*it).id);
+			}
+		}
+	}
+	else //either nothing was selected or a recipe was selected
+		KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Edit Recipe") );
+}
+
 void RecipeActionsHandler::recipesToClipboard()
 {
 	QPtrList<QListViewItem> items = parentListView->selectedItems();
@@ -448,7 +598,8 @@ QValueList<int> RecipeActionsHandler::getAllVisibleItems()
 				database->loadRecipeList( &list, cat_id, true );
 		
 				for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-					ids << (*it).id;
+					if ( ids.find( (*it).id ) == ids.end() )
+						ids << (*it).id;
 				}
 			}
 		}

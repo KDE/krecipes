@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE krecipes-layout>
+<krecipes-layout version="0.4" >
+ <authors>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </authors>
+ <background>
+  <background-color>#e1f3ff</background-color>
+ </background>
+ <categories>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </categories>
+ <header>
+  <background-color>#eeda9c</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2050</alignment>
+  <border width="1" style="none" color="#000000" />
+ </header>
+ <ingredients>
+  <background-color>#174667</background-color>
+  <text-color>#c3c3c3</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="2" style="ridge" color="#203fc7" />
+ </ingredients>
+ <instructions>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </instructions>
+ <photo>
+  <visible>true</visible>
+  <border width="2" style="ridge" color="#279ac7" />
+ </photo>
+ <prep_time>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2624</alignment>
+  <border width="1" style="none" color="#000000" />
+ </prep_time>
+ <properties>
+  <background-color>#d9e6ee</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans L,12,-1,5,50,1,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </properties>
+ <ratings>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </ratings>
+ <title>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#174667</text-color>
+  <font>Times,26,-1,5,75,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2052</alignment>
+  <border width="1" style="none" color="#000000" />
+ </title>
+ <yield>
+  <background-color>#e1f3ff</background-color>
+  <text-color>#000000</text-color>
+  <font>Nimbus Sans l,12,-1,5,50,0,0,0,0,0</font>
+  <visible>true</visible>
+  <alignment>2049</alignment>
+  <border width="1" style="none" color="#000000" />
+ </yield>
+</krecipes-layout>

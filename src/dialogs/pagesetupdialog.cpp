@@ -18,7 +18,9 @@
 #include <qpopupmenu.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
+#include <qlabel.h>
 
+#include <khtmlview.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -44,14 +46,22 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	KActionCollection *actionCollection = new KActionCollection( this );
 
 	KAction *std_open = KStdAction::open( 0, 0, 0 ); //use this to create a custom open action
-	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadLayout() ), actionCollection, "open_popup" );
-	KPopupMenu *open_popup = custom_open->popupMenu();
-	open_popup->insertTitle( i18n( "Included Layouts" ) );
-	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadFile() ), actionCollection, "open_popup" );
 
+	KPopupMenu *open_popup = custom_open->popupMenu();
+
+	open_popup->insertTitle( i18n( "Styles" ) );
+	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( unsigned int i = 0; i < included_layouts.count(); i++ ) {
-		int id = open_popup->insertItem( included_layouts[ i ], this, SLOT( loadLayout( int ) ) );
+		int id = open_popup->insertItem( included_layouts[ i ].left(included_layouts[ i ].find(".")), this, SLOT( loadLayout( int ) ) );
 		included_layouts_map.insert( id, included_layouts[ i ] );
+	}
+
+	open_popup->insertTitle( i18n( "Templates" ) );
+	QDir included_templates( getIncludedLayoutDir(), "*.template", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	for ( unsigned int i = 0; i < included_templates.count(); i++ ) {
+		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")).replace("_"," "), this, SLOT( loadTemplate( int ) ) );
+		included_layouts_map.insert( id, included_templates[ i ] );
 	}
 
 	custom_open->plug( toolbar );
@@ -65,79 +75,61 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	shown_items_popup = shown_items->popupMenu();
 	shown_items_popup->insertTitle( i18n( "Show Items" ) );
 	shown_items->plug( toolbar );
-
 	layout->addWidget( toolbar );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
+	QLabel *help = new QLabel(i18n("<i>Usage: Right-click any element to edit the look of that element.</i>"),this);
+	layout->addWidget( help );
 
-	QSize default_size( 300, 400 );
-	QSize size = config->readSizeEntry( "WindowSize", &default_size );
-	resize( size );
-
-	//QTabWidget *tabWidget = new QTabWidget(this);
-	active_display = setup_display = new SetupDisplay( sample, false, this );
-	//print_setup_display = new SetupDisplay( sample, true, this );
-	//tabWidget->insertTab( setup_display, i18n("Recipe View") );
-	//tabWidget->insertTab( print_setup_display, il.loadIconSet( "fileprint", KIcon::Small ), i18n("Print View") );
-	//layout->addWidget( tabWidget );
-	layout->addWidget( setup_display );
-
-	initShownItems();
+	m_htmlPart = new SetupDisplay(sample, this);
+	layout->addWidget( m_htmlPart->view() );
 
 	QHBox *buttonsBox = new QHBox( this );
 	QPushButton *okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
 	QPushButton *cancelButton = new QPushButton( il.loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
 	layout->addWidget( buttonsBox );
 
+	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );
 	connect( okButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
-	connect( setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
-	//connect( print_setup_display, SIGNAL( itemVisibilityChanged( QWidget*, bool ) ), SLOT( updateItemVisibility( QWidget*, bool ) ) );
-	//connect( tabWidget, SIGNAL( currentChanged( QWidget* ) ), SLOT( setActiveDisplay( QWidget* ) ) );
 
-	config->setGroup( "Page Setup" ); //SetupDisplay changes the group of the config file
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Page Setup" );
+	QSize defaultSize(300,400);
+	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/default.klo" ) );
+	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
 	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/default.klo" );
-	loadLayout( filename, setup_display );
+		filename = locate( "appdata", "layouts/Default.klo" );
+	loadLayout( filename );
 
-	#if 0
-	filename = config->readEntry( "PrintLayout", locate( "appdata", "layouts/default_print.klo" ) );
-	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/default_print.klo" );
-	loadLayout( filename, print_setup_display );
-	#endif
+	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
+	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
+		template_filename = locate( "appdata", "layouts/Default.template" );
+	active_template = template_filename;
 
-	resize( size );
+	initShownItems();
 }
 
 void PageSetupDialog::accept()
 {
-	if ( setup_display->hasChanges() )
-		saveLayout(setup_display);
-	//if ( print_setup_display->hasChanges() )
-	//	saveLayout(print_setup_display);
+	if ( m_htmlPart->hasChanges() )
+		saveLayout();
 
-	if ( !active_filename_map[setup_display].isEmpty() ) {
+	if ( !active_filename.isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
-		config->writeEntry( "Layout", active_filename_map[setup_display] );
+		config->writeEntry( "Layout", active_filename );
 	}
 
-	#if 0
-	if ( !active_filename_map[print_setup_display].isEmpty() ) {
+	if ( !active_template.isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
-		config->writeEntry( "PrintLayout", active_filename_map[print_setup_display] );
+		config->writeEntry( "Template", active_template );
 	}
-	#endif
 
 	KConfig *config = kapp->config();
 	config->setGroup( "Page Setup" );
-	config->writeEntry( "Aspect", static_cast<double>( width() ) / static_cast<double>( height() ) );
 	config->writeEntry( "WindowSize", size() );
 
 	QDialog::accept();
@@ -145,10 +137,10 @@ void PageSetupDialog::accept()
 
 void PageSetupDialog::reject()
 {
-	if ( setup_display->hasChanges() ) {
+	if ( m_htmlPart->hasChanges() ) {
 		switch ( KMessageBox::questionYesNoCancel( this, i18n( "The recipe view layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
-			saveLayout(setup_display);
+			saveLayout();
 			break;
 		case KMessageBox::No:
 			break;
@@ -156,51 +148,27 @@ void PageSetupDialog::reject()
 			return ;
 		}
 	}
-
-	#if 0
-	if ( print_setup_display->hasChanges() ) {
-		switch ( KMessageBox::questionYesNoCancel( this, i18n( "The print layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
-		case KMessageBox::Yes:
-			saveLayout(print_setup_display);
-			break;
-		case KMessageBox::No:
-			break;
-		default:
-			return ;
-		}
-	}
-	#endif
 
 	QDialog::reject();
 }
 
-QSize PageSetupDialog::minimumSize() const
+void PageSetupDialog::updateItemVisibility( KreDisplayItem *item, bool visible )
 {
-	return ( QSize( 300, 400 ) );
-}
-
-QSize PageSetupDialog::sizeHint( void ) const
-{
-	return ( minimumSize() );
-}
-
-void PageSetupDialog::updateItemVisibility( QWidget *item, bool visible )
-{
-	shown_items_popup->setItemChecked( widget_popup_map[active_display][ item ], visible );
+	shown_items_popup->setItemChecked( widget_popup_map[ item ], visible );
 }
 
 //TODO: Sort these by alphabetical order
 void PageSetupDialog::initShownItems()
 {
 	shown_items_popup->clear();
-	for ( PropertiesMap::const_iterator it = active_display->properties().begin(); it != active_display->properties().end(); ++it ) {
+	for ( PropertiesMap::const_iterator it = m_htmlPart->properties().begin(); it != m_htmlPart->properties().end(); ++it ) {
 		if ( it.data() & SetupDisplay::Visibility ) {
-			int new_id = shown_items_popup->insertItem( QToolTip::textFor( it.key() ->widget ) );
-			shown_items_popup->setItemChecked( new_id, it.key() ->widget->isShown() );
+			int new_id = shown_items_popup->insertItem ( it.key()->name );
+			shown_items_popup->setItemChecked( new_id, it.key()->show );
 			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
 
-			popup_widget_map[active_display].insert( new_id, it.key() ->widget );
-			widget_popup_map[active_display].insert( it.key() ->widget, new_id );
+			popup_widget_map.insert( new_id, it.key() );
+			widget_popup_map.insert( it.key(), new_id );
 		}
 	}
 }
@@ -208,12 +176,25 @@ void PageSetupDialog::initShownItems()
 void PageSetupDialog::setItemShown( int id )
 {
 	shown_items_popup->setItemChecked( id, !shown_items_popup->isItemChecked( id ) );
-	active_display->setItemShown( popup_widget_map[active_display][ id ], shown_items_popup->isItemChecked( id ) );
+	m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
 }
 
-void PageSetupDialog::loadLayout()
+void PageSetupDialog::loadFile()
 {
-	loadLayout( KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), "*.klo|Krecipes Layout (*.klo)", this, i18n( "Select Layout" ) ) );
+	QString file = KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), QString("*.klo *.template|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
+
+	if ( file.endsWith(".klo") )
+		loadLayout( file );
+	else {
+		active_template = file;
+		m_htmlPart->loadTemplate( file );
+	}
+}
+
+void PageSetupDialog::loadTemplate( int popup_param )
+{
+	active_template = getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ];
+	m_htmlPart->loadTemplate( active_template );
 }
 
 void PageSetupDialog::loadLayout( int popup_param )
@@ -221,14 +202,12 @@ void PageSetupDialog::loadLayout( int popup_param )
 	loadLayout( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
 }
 
-void PageSetupDialog::loadLayout( const QString &filename, SetupDisplay *display )
+void PageSetupDialog::loadLayout( const QString &filename )
 {
-	if ( display == 0 ) display = active_display;
-
-	if ( display->hasChanges() ) {
+	if ( m_htmlPart->hasChanges() ) {
 		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This layout has been modified.\nDo you want to save it?" ), i18n( "Save Layout?" ) ) ) {
 		case KMessageBox::Yes:
-			saveLayout(display);
+			saveLayout();
 			break;
 		case KMessageBox::No:
 			break;
@@ -238,27 +217,25 @@ void PageSetupDialog::loadLayout( const QString &filename, SetupDisplay *display
 	}
 
 	if ( !filename.isEmpty() ) {
-		display->loadLayout( filename );
-		setActiveFile( filename, display );
+		m_htmlPart->loadLayout( filename );
+		setActiveFile( filename );
 	}
 }
 
 void PageSetupDialog::reloadLayout()
 {
-	loadLayout( active_filename_map[active_display] );
+	m_htmlPart->reload();
 }
 
-void PageSetupDialog::saveLayout( SetupDisplay *display )
+void PageSetupDialog::saveLayout()
 {
-	if ( display == 0 ) display = active_display;
-
-	if ( display->hasChanges() ) {
-		if ( have_write_perm_map[display] )
-			display->saveLayout( active_filename_map[display] );
+	if ( m_htmlPart->hasChanges() ) {
+		if ( have_write_perm )
+			m_htmlPart->saveLayout( active_filename );
 		else {
 			switch ( KMessageBox::warningYesNo( this, i18n( "Unable to save the layout because you do not have sufficient permissions to modify this file.\nWould you like to instead save the current layout to a new file?" ) ) ) {
 			case KMessageBox::Yes:
-				saveAsLayout(display);
+				saveAsLayout();
 				break;
 			default:
 				break;
@@ -267,21 +244,19 @@ void PageSetupDialog::saveLayout( SetupDisplay *display )
 	}
 }
 
-void PageSetupDialog::saveAsLayout( SetupDisplay *display )
+void PageSetupDialog::saveAsLayout()
 {
-	if ( display == 0 ) display = active_display;
-
 	QString filename = KFileDialog::getSaveFileName( KGlobal::instance() ->dirs() ->saveLocation( "appdata", "layouts/" ), "*.klo|Krecipes Layout (*.klo)", this, QString::null );
 
 	if ( !filename.isEmpty() ) {
 		if ( haveWritePerm( filename ) ) {
-			display->saveLayout( filename );
-			active_filename_map.insert(display,filename);
+			m_htmlPart->saveLayout( filename );
+			setActiveFile(filename);
 		}
 		else {
 			switch ( KMessageBox::warningYesNo( this, i18n( "You have selected a file that you do not have the permissions to write to.\nWould you like to select another file?" ) ) ) {
 			case KMessageBox::Yes:
-				saveAsLayout(display);
+				saveAsLayout();
 				break;
 			default:
 				break;
@@ -292,26 +267,14 @@ void PageSetupDialog::saveAsLayout( SetupDisplay *display )
 
 QString PageSetupDialog::getIncludedLayoutDir() const
 {
-	QFileInfo file_info( locate( "appdata", "layouts/default.klo" ) );
+	QFileInfo file_info( locate( "appdata", "layouts/Default.klo" ) );
 	return file_info.dirPath( true );
 }
 
-void PageSetupDialog::setActiveFile( const QString &filename, SetupDisplay *display )
+void PageSetupDialog::setActiveFile( const QString &filename )
 {
-	if ( display == 0 ) display = active_display;
-
-	active_filename_map.insert(display,filename);
-	have_write_perm_map.insert(display,haveWritePerm( filename ));
-}
-
-void PageSetupDialog::setActiveDisplay( QWidget *widget )
-{
-	if ( widget == setup_display )
-		active_display = setup_display;
-//	else
-//		active_display = print_setup_display;
-
-	initShownItems();
+	active_filename = filename;
+	have_write_perm = haveWritePerm( filename );
 }
 
 bool PageSetupDialog::haveWritePerm( const QString &filename )

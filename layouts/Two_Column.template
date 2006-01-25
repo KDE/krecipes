@@ -1,0 +1,33 @@
+<table width="100%">
+    <tr><td class="title" colspan="3" width="100%">**TITLE**</td></tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
+    <tr>
+      <td width="20%">
+        <img src="**PHOTO**" class="photo" />
+      </td>
+
+      <td width="3%">&nbsp;</td>
+
+      <td>
+        <p class="categories">**CATEGORIES**</p>
+        <p class="authors">**AUTHORS**</p>
+        <p class="yield">**YIELD**</p>
+        <p class="prep_time">**PREP_TIME**</p>
+      </td>
+    </tr>
+    <tr><td colspan="3">&nbsp;</td></tr>
+
+    <tr>
+        <td valign="top">
+            <div class="ingredients">**INGREDIENTS**</div>
+            <div class="properties">**PROPERTIES**</div>
+        </td>
+        <td width="3%">&nbsp;</td>
+        <td valign="top">
+            <div class="instructions">**INSTRUCTIONS**</div>
+            <br />
+            <div class="ratings">**RATINGS**</div>
+        </td>
+    </tr>
+</table>
+<hr size="3" />

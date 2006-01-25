@@ -29,6 +29,8 @@ public:
 	Element perUnit; // stores the unit ID and Name of the per units.
 	double amount; // Stores the amount, in the case of being attached to an ingredient. If not attached to any, you can set it to -1 preferably. That's the case in which the property is treated as a characteristic any without value (amount).
 
+	/** Compare two elements by their id */
+	bool operator==( const IngredientProperty & ) const;
 };
 
 #endif
