@@ -252,7 +252,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						QSqlQuery ingPrepMethodsQuery( command, database );
 						if ( ingPrepMethodsQuery.isActive() ) {
 							while ( ingPrepMethodsQuery.next() ) {
-								ing.prepMethodList.append( Element(ingPrepMethodsQuery.value(1).toCString(),ingPrepMethodsQuery.value(0).toInt()) );
+								ing.prepMethodList.append( Element( unescapeAndDecode(ingPrepMethodsQuery.value(1).toCString()),ingPrepMethodsQuery.value(0).toInt()) );
 							}
 						}
 					}
