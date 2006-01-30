@@ -53,6 +53,11 @@ void BaseImporter::add( const RecipeList &recipe_list )
 		}
 		m_recipe_list->append( copy );
 	}
+
+	if ( direct ) {
+		if ( !m_progress_dialog->wasCancelled() )
+			importRecipes( *m_recipe_list, m_database, m_progress_dialog );
+	}
 }
 
 void BaseImporter::add( const Recipe &recipe )

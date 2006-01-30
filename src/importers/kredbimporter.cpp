@@ -51,7 +51,7 @@ void KreDBImporter::parseFile( const QString &file )  //this is either a databas
 
 			//now load recipes
 			RecipeList recipes;
-			database->loadRecipes( &recipes );
+			database->loadRecipes( &recipes, RecipeDB::All ^ RecipeDB::Properties );
 
 			//now add these recipes to the importer
 			add( recipes );
