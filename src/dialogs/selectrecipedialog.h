@@ -94,6 +94,7 @@ private slots:
 public slots:
 	void haveSelectedItems();
 	void reload( void );
+	void clearSearch();
 };
 
 #endif

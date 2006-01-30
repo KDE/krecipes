@@ -576,6 +576,9 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 
 	Form1Layout = new QVBoxLayout( this, 11, 6 );
 
+	searchAsYouTypeBox = new QCheckBox( i18n( "Search as you type" ), this );
+	searchAsYouTypeBox->setChecked( config->readBoolEntry( "SearchAsYouType", true ) );
+
 	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
 
@@ -597,6 +600,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	if ( limit > 0 )
 		limitInput->setValue( limit );
 
+	Form1Layout->addWidget( searchAsYouTypeBox );
 	Form1Layout->addWidget( explainationLabel );
 	Form1Layout->addWidget( catLimitHBox );
 	Form1Layout->addWidget( limitHBox );
@@ -616,6 +620,8 @@ void PerformancePrefs::saveOptions()
 
 	int limit = ( limitInput->value() == 0 ) ? -1 : limitInput->value();
 	config->writeEntry( "Limit", limit );
+
+	config->writeEntry( "SearchAsYouType", searchAsYouTypeBox->isChecked() );
 }
 
 #include "pref.moc"

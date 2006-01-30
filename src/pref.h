@@ -162,6 +162,7 @@ public:
 
 protected:
 	QVBoxLayout* Form1Layout;
+	QCheckBox* searchAsYouTypeBox;
 	KIntNumInput* catLimitInput;
 	KIntNumInput* limitInput;
 };

@@ -14,6 +14,7 @@
 
 #include <qsignalmapper.h>
 #include <qtabwidget.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -61,7 +62,12 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	layout->addMultiCell( spacer_top, 0, 0, 1, 4 );
 
 	searchBar = new QHBox( basicSearchTab );
+	searchBar->setSpacing( 7 );
 	layout->addWidget( searchBar, 1, 1 );
+
+	KIconLoader *il = new KIconLoader;
+	QPushButton *clearSearchButton = new QPushButton( searchBar );
+	clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
 
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18n( "Search:" ) );
@@ -79,7 +85,6 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	QSpacerItem* spacerFromSearchBar = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerFromSearchBar, 2, 1 );
 
-	il = new KIconLoader;
 	recipeListView = new RecipeListView( basicSearchTab, database );
 	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	recipeListView->reload();
@@ -110,6 +115,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	advancedSearch = new AdvancedSearchDialog( this, database );
 	tabWidget->insertTab( advancedSearch, i18n( "Advanced" ) );
 
+	QToolTip::add( clearSearchButton, i18n( "Clear search" ) );
+
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );
 
@@ -124,9 +131,20 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( removeButton, SIGNAL( clicked() ), actionHandler, SLOT( remove() ) );
 	connect( this, SIGNAL( recipeSelected( bool ) ), removeButton, SLOT( setEnabled( bool ) ) );
 
-	connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
-	connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
-	connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
+	connect( clearSearchButton, SIGNAL( clicked() ), this, SLOT( clearSearch() ) );
+
+	KConfig * config = kapp->config();
+	config->setGroup( "Performance" );
+	if ( config->readBoolEntry("SearchAsYouType",true) ) {
+		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
+		connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
+		connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
+	}
+	else {
+		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), this, SLOT( ensurePopulated() ) );
+		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
+	}
+
 	connect( recipeListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
 	#ifdef ENABLE_SLOW
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), categoryBox, SLOT( loadNextGroup() ) );
@@ -147,6 +165,12 @@ SelectRecipeDialog::~SelectRecipeDialog()
 {
 	delete il;
 	delete recipeFilter;
+}
+
+void SelectRecipeDialog::clearSearch()
+{
+	searchBox->setText( QString::null );
+	recipeFilter->filter( QString::null );
 }
 
 void SelectRecipeDialog::reload()
