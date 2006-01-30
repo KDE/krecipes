@@ -351,13 +351,24 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	int count = 0;
 	IngredientList list_copy = recipe.ingList; //simple workaround until I fix iterating over the list dealing with groups
 	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
-
 		QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
-		if ( !group.isEmpty() )
-			ingredients_html += "<li>" + group + ":</li><ul>";
+
+		bool loneHeader = false;
+		if ( count != 0 && count % per_col == 0 ) {
+			loneHeader = true;
+			if ( !group.isEmpty() )
+				ingredients_html += "</ul>";
+			ingredients_html.append("</ul></td><td valign=\"top\"><ul>");
+			if ( !group.isEmpty() )
+				ingredients_html += "<li>" + group + ":</li><ul>";
+		}
+		else {
+			if ( !group.isEmpty() )
+				ingredients_html += "<li>" + group + ":</li><ul>";
+		}
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it, ++count ) {
-			if ( count != 0 && count % per_col == 0 ) {
+			if ( count != 0 && count % per_col == 0 && !loneHeader ) {
 				if ( !group.isEmpty() )
 					ingredients_html += "</ul>";
 				ingredients_html.append("</ul></td><td valign=\"top\"><ul>");
