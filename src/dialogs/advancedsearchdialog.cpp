@@ -465,7 +465,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::CopyToClipboard );
+	actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::CopyToClipboard | RecipeActionsHandler::Remove );
 
 	connect( titleEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
 	connect( ingredientsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
@@ -524,6 +524,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
+	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SLOT( recipeSelected( int, int ) ) );
+	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SLOT( recipesSelected( const QValueList<int> &, int ) ) );
+
+	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
 
 	clear();
 
@@ -574,6 +578,19 @@ void AdvancedSearchDialog::languageChange()
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
 	ratingsButton->setText( QString("%1 >>").arg(i18n("Ratings")) );
+}
+
+void AdvancedSearchDialog::removeRecipe( int id )
+{
+	QListViewItemIterator iterator( resultsListView );
+	while ( iterator.current() ) {
+		if ( iterator.current()->rtti() == 1000 ) {
+			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
+			if ( recipe_it->recipeID() == id )
+				delete recipe_it;
+		}
+		++iterator;
+	}
 }
 
 void AdvancedSearchDialog::clear()

@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kcursor.h>
+#include <kiconloader.h>
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
@@ -159,11 +160,12 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
+
+	delete il;
 }
 
 SelectRecipeDialog::~SelectRecipeDialog()
 {
-	delete il;
 	delete recipeFilter;
 }
 

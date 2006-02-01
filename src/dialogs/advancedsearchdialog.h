@@ -168,6 +168,9 @@ private slots:
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
 
+	//called by a signal from the database when a recipe is removed
+	void removeRecipe( int id );
+
 private:
 	QStringList split( const QString &text, bool sql_wildcards = false ) const;
 };

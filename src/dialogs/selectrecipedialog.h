@@ -24,7 +24,6 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <klistview.h>
-#include <kiconloader.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kpopupmenu.h>
@@ -71,7 +70,6 @@ private:
 	QPushButton *openButton;
 	QPushButton *removeButton;
 	QPushButton *editButton;
-	KIconLoader *il;
 	QLabel *searchLabel;
 	KLineEdit *searchBox;
 	CategoryComboBox *categoryBox;
