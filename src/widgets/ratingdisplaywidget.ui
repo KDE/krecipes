@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>RatingDisplayWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -18,9 +18,6 @@
             <green>248</green>
             <blue>241</blue>
         </color>
-    </property>
-    <property name="caption">
-        <string>RatingDisplayWidget</string>
     </property>
     <hbox>
         <property name="name">
