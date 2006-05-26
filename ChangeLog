@@ -2,6 +2,9 @@ Changes from 0.9 to SVN:
   -Completely re-done recipe view, based on HTML templates.  This solves many layout problems and should allow creating layouts for printing to 3x5 or 4x6 cards.  Generated HTML is much cleaner and compatible.
   -"Web Book" exporter - exports a collection of recipes into a series of web pagesÂ, organized by category.
   -Ingredients and properties can be split into a variable number of columns in the Page Setup.
+ Bugs fixed:
+  -Fix displaying photos when special characters are in the title of the recipe
+  -Fix database backup for a non-local host
 
 Changes from 0.8 to 0.9:
   -Rating support: multiple people can rate a single recipe, each rating can rate a recipe on multiple criteria (taste, ease of preparation, etc.)

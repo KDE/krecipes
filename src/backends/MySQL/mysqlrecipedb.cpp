@@ -62,6 +62,8 @@ QStringList MySQLRecipeDB::backupCommand() const
 	QString user = config->readEntry("Username", QString::null);
 	command<<"-u"+user;
 
+        command<<"-h"+config->readEntry("Host", "localhost");
+
 	command<<database->databaseName();
 	return command;
 }

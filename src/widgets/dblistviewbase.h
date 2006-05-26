@@ -38,7 +38,7 @@ protected:
 	virtual void load(int limit, int offset) = 0;
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );
-	void createElement( QListViewItem * );
+	virtual void createElement( QListViewItem * );
 	void removeElement( QListViewItem *, bool delete_item = true );
 
 	bool reloading(){ return bulk_load; }

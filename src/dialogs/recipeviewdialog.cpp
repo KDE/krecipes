@@ -153,11 +153,11 @@ void RecipeViewDialog::removeOldFiles()
 		RecipeList recipe_list;
 		database->loadRecipes( &recipe_list, RecipeDB::Title, ids_loaded );
 
-		QStringList recipe_titles;
+		QValueList<int> recipe_ids;
 		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
-			recipe_titles << ( *it ).title;
+			recipe_ids << ( *it ).recipeID;
 
-		HTMLExporter::removeHTMLFiles( tmp_filename, recipe_titles );
+		HTMLExporter::removeHTMLFiles( tmp_filename, recipe_ids );
 	}
 }
 
@@ -166,7 +166,7 @@ void RecipeViewDialog::recipeRemoved( int id )
 	//if the deleted recipe is loaded, clean the view up
 	if ( ids_loaded.find(id) != ids_loaded.end() ) { 
 		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
-		HTMLExporter::removeHTMLFiles( tmp_filename, recipe.title );
+		HTMLExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
 		ids_loaded.remove(id);
 	}
 }

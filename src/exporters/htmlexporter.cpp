@@ -244,13 +244,13 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	}
 	else {
 		image = recipe.photo.convertToImage();
-		photo_name = recipe.title;
+		photo_name = QString::number(recipe.recipeID);
 	}
 
 	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
-	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
+	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
@@ -292,7 +292,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( recipe.photo.isNull() )
 		photo_name = "default_photo";
 	else
-		photo_name = recipe.title;
+		photo_name = QString::number(recipe.recipeID);
 
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
@@ -477,14 +477,14 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	content = content.replace( "**RATINGS**", HTMLIfVisible("ratings",ratings_html) );
 }
 
-void HTMLExporter::removeHTMLFiles( const QString &filename, const QString &recipe_title )
+void HTMLExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 {
-	QStringList title;
-	title << recipe_title;
-	removeHTMLFiles( filename, title );
+	QValueList<int> id;
+	id << recipe_id;
+	removeHTMLFiles( filename, id );
 }
 
-void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &recipe_titles )
+void HTMLExporter::removeHTMLFiles( const QString &filename, const QValueList<int> &recipe_ids )
 {
 	//remove HTML file
 	QFile old_file( filename + ".html" );
@@ -492,8 +492,8 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QStringList &
 		old_file.remove();
 
 	//remove photos
-	for ( QStringList::const_iterator it = recipe_titles.begin(); it != recipe_titles.end(); ++it ) {
-		QFile photo( filename + "_photos/" + escape( *it ) + ".png" );
+	for ( QValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
+		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it 
 	}

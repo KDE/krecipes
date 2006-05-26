@@ -25,6 +25,10 @@ class RecipeDB;
 class CategoryTree;
 class CategoryCheckListView;
 
+#define CATEGORYCHECKLISTITEM_RTTI 1005
+#define CATEGORYLISTITEM_RTTI 1001
+#define PSEUDOLISTITEM_RTTI 1008
+
 /** Category listitems inherit this class to provide a common interface for accessing this information.
  */
 class CategoryItemInfo
@@ -55,8 +59,6 @@ private:
 	bool populated;
 };
 
-#define CATEGORYCHECKLISTITEM_RTTI 1005
-
 class CategoryCheckListItem : public QCheckListItem, public CategoryItemInfo
 {
 public:
@@ -84,8 +86,6 @@ private:
 	CategoryCheckListView *m_listview;
 };
 
-
-#define CATEGORYLISTITEM_RTTI 1001
 
 class CategoryListItem : public QListViewItem, public CategoryItemInfo
 {
@@ -265,6 +265,17 @@ protected:
 
 private:
 	ElementList m_selections;
+};
+
+
+class PseudoListItem : public QListViewItem
+{
+public:
+	PseudoListItem( QListView* lv ) : QListViewItem(lv){}
+	PseudoListItem( QListViewItem* it ) : QListViewItem(it){}
+
+protected:
+	int rtti() const { return PSEUDOLISTITEM_RTTI; }
 };
 
 #endif //CATEGORYLISTVIEW_H

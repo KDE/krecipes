@@ -139,6 +139,7 @@ protected slots:
 	virtual void removeRecipe( int, int );
 
 protected:
+	virtual void createElement( QListViewItem * );
 	virtual void removeCategory( int id );
 	virtual QDragObject *dragObject();
 	virtual bool acceptDrag( QDropEvent *event ) const;

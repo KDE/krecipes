@@ -200,6 +200,8 @@ void RecipeListView::populate( QListViewItem *item )
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
 
+	delete item->firstChild(); //delete the "pseudo item"
+
 	if ( m_progress_dlg ){
 		m_progress_dlg->progressBar()->advance(1);
 		kapp->processEvents();
@@ -300,6 +302,19 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 			}
 		}
 	}
+}
+
+void RecipeListView::createElement( QListViewItem *item )
+{
+	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
+	if ( !cat_item || cat_item->isPopulated() ) return;
+
+	ElementList list;
+	database->loadRecipeList( &list, cat_item->categoryId() );
+	if ( list.count() > 0 )
+		new PseudoListItem( item );
+
+	CategoryListView::createElement(item);
 }
 
 void RecipeListView::modifyRecipe( const Element &recipe, const ElementList &categories )

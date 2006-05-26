@@ -18,6 +18,7 @@
 #include <kpopupmenu.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/categorytree.h"
@@ -140,9 +141,11 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 	connect( db, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
 	connect( db, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
 
-	connect( this, SIGNAL( spacePressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
-	connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
-	connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	//connect( this, SIGNAL( spacePressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	//connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	//connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+
+	connect( this, SIGNAL( expanded(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
 
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
@@ -164,8 +167,14 @@ void CategoryListView::load( int limit, int offset )
 
 void CategoryListView::populate( QListViewItem *item )
 {
+	kdDebug()<<"called populate..."<<endl;
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
+
+	if ( item->firstChild() && item->firstChild()->rtti() != PSEUDOLISTITEM_RTTI )
+		return;
+kdDebug()<<"conditions are right to proceed"<<endl;
+	delete item->firstChild(); //delete the "pseudo item"
 
 	int id = cat_item->categoryId();
 	cat_item->setPopulated(true);
@@ -179,11 +188,11 @@ void CategoryListView::populate( QListViewItem *item )
 }
 
 void CategoryListView::open( QListViewItem *item )
-{
+{kdDebug()<<"expanded"<<endl;
 	Q_ASSERT( item );
-	if ( childCount() == 0 ) return;
+	if ( !item->firstChild() || item->firstChild()->rtti() != PSEUDOLISTITEM_RTTI ) return;
 
-	if ( !item->firstChild() )
+	//if ( !item->firstChild() )
 		populate(item);
 
 	item->setOpen(true);
@@ -456,7 +465,6 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 
 		if ( parent && parent->isPopulated() ) {
 			new_item = new CategoryListItem( parent, category );
-			createElement(new_item);
 		}
 	}
 
@@ -464,6 +472,11 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		items_map.insert( category.id, new_item );
 		new_item->setPixmap( 0, m_folder_icon );
 		createElement(new_item);//new QListViewItem(new_item);
+
+		CategoryTree list;
+		database->loadCategories( &list, 1, 0, category.id, false );
+		if ( list.firstChild() )
+			new PseudoListItem( new_item );
 	}
 }
 
@@ -550,7 +563,12 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 	if ( new_item ) {
 		items_map.insert( category.id, new_item );
 		createElement(new_item);
-		new_item->setOpen( true );
+
+		CategoryTree list;
+		database->loadCategories( &list, 1, 0, category.id, false );
+		if ( list.firstChild() )
+			new PseudoListItem( new_item );
+		new_item->setOpen( false );
 	}
 }
 

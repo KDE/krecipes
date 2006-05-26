@@ -524,8 +524,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
-	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SLOT( recipeSelected( int, int ) ) );
-	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SLOT( recipesSelected( const QValueList<int> &, int ) ) );
 
 	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
 

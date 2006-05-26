@@ -32,12 +32,6 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
 	categoryListView->reload();
-	QListViewItemIterator it( categoryListView ); //expand all items
-	while ( it.current() ) {
-		QListViewItem * item = it.current();
-		item->setOpen( true );
-		++it;
-	}
 	layout->addWidget( categoryListView );
 
 	//Buttons
