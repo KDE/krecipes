@@ -140,9 +140,10 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-	else if ( tableName == "categories" )
+	else if ( tableName == "categories" ) {
 		commands << QString( "CREATE TABLE categories (id INTEGER NOT NULL, name varchar(%1) default NULL, parent_id INGEGER NOT NULL default -1, PRIMARY KEY (id));" ).arg( maxCategoryNameLength() );
-
+		commands << "CREATE index parent_id_index ON categories(parent_id);";
+	}
 	else if ( tableName == "category_list" ) {
 		commands << "CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);"
 		<< "CREATE index rid_index ON category_list(recipe_id);"
@@ -747,6 +748,11 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 90 ) {
 		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+	}
+
+	if ( qRound(version*100) < 91 ) {
+		database->exec("CREATE index parent_id_index ON categories(parent_id)");
+		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
 }
 

@@ -123,7 +123,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
 	else if ( tableName == "categories" )
-		commands << QString( "CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL, parent_id int(11) NOT NULL default -1, PRIMARY KEY (id));" ).arg( maxCategoryNameLength() );
+		commands << QString( "CREATE TABLE categories (id int(11) NOT NULL auto_increment, name varchar(%1) default NULL, parent_id int(11) NOT NULL default -1, PRIMARY KEY (id), INDEX parent_id_index(parent_id));" ).arg( maxCategoryNameLength() );
 
 	else if ( tableName == "category_list" )
 		commands << "CREATE TABLE category_list (recipe_id int(11) NOT NULL,category_id int(11) NOT NULL, INDEX  rid_index (recipe_id), INDEX cid_index (category_id));";
@@ -465,6 +465,11 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 90 ) {
 		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+	}
+
+	if ( qRound(version*100) < 91 ) {
+		database->exec("CREATE index parent_id_index ON categories(parent_id)");
+		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
 }
 

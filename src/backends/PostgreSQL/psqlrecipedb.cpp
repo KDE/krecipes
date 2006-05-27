@@ -109,9 +109,10 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
-	else if ( tableName == "categories" )
+	else if ( tableName == "categories" ) {
 		commands << "CREATE TABLE categories (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING default NULL, parent_id INTEGER NOT NULL default -1);";
-
+		commands << "CREATE index parent_id_index ON categories USING BTREE(parent_id);";
+	}
 	else if ( tableName == "category_list" ) {
 		commands << "CREATE TABLE category_list (recipe_id INTEGER NOT NULL,category_id INTEGER NOT NULL);";
 		commands << "CREATE INDEX rid_index ON category_list USING BTREE (recipe_id);";
@@ -358,6 +359,12 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*100) < 90 ) {
 		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
 	}
+
+	if ( qRound(version*100) < 91 ) {
+		database->exec("CREATE index parent_id_index ON categories USING BTREE(parent_id)");
+		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
+	}
+
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )

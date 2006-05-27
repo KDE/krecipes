@@ -1596,9 +1596,7 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 //The string coming out of the database is utf8 text, interpreted as though latin1.  Calling fromUtf8() on this gives us back the original utf8.
 QString QSqlRecipeDB::unescapeAndDecode( const QCString &s ) const
 {
-	QString s_escaped = QString::fromUtf8( s );
-	s_escaped.replace( "\";@", ";" );
-	return ( s_escaped ); // Use unicode encoding
+	return QString::fromUtf8( s ).replace( "\";@", ";" ); // Use unicode encoding
 }
 
 bool QSqlRecipeDB::ingredientContainsUnit( int ingredientID, int unitID )
@@ -1663,7 +1661,8 @@ Unit QSqlRecipeDB::unitName( int ID )
 
 int QSqlRecipeDB::getCount( const QString &table_name )
 {
-	QSqlQuery count( "SELECT COUNT(1) FROM "+table_name, database );
+	m_command = "SELECT COUNT(1) FROM "+table_name;
+	QSqlQuery count( m_command, database );
 	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
 		return count.value( 0 ).toInt();
 	}
@@ -1673,7 +1672,8 @@ int QSqlRecipeDB::getCount( const QString &table_name )
 
 int QSqlRecipeDB::categoryTopLevelCount()
 {
-	QSqlQuery count( "SELECT COUNT(1) FROM categories WHERE parent_id='-1'", database );
+	m_command = "SELECT COUNT(1) FROM categories WHERE parent_id='-1'";
+	QSqlQuery count( m_command, database );
 	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
 		return count.value( 0 ).toInt();
 	}
@@ -1770,9 +1770,9 @@ void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 {
 	list->clear();
 
-	QString command = "SELECT id,name FROM categories ORDER BY name"
+	m_command = "SELECT id,name FROM categories ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery categoryToLoad( command, database );
+	QSqlQuery categoryToLoad( m_command, database );
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
 			Element el;
@@ -1794,11 +1794,11 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 		limit_str = (limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset);
 	}
 
-	QString command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
+	m_command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
 
 	QSqlQuery categoryToLoad( QString::null, database );
 	//categoryToLoad.setForwardOnly(true); //FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
-	categoryToLoad.exec(command);
+	categoryToLoad.exec(m_command);
 
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {

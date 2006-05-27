@@ -212,6 +212,7 @@ private:
 
 	QString DBname;
 	const QString connectionName;
+	QString m_command;
 
 	static int m_refCount;
 };

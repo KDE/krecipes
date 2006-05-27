@@ -309,9 +309,11 @@ void RecipeListView::createElement( QListViewItem *item )
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
 
+	#if 0
 	ElementList list;
 	database->loadRecipeList( &list, cat_item->categoryId() );
 	if ( list.count() > 0 )
+	#endif
 		new PseudoListItem( item );
 
 	CategoryListView::createElement(item);
