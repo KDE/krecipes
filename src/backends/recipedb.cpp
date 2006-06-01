@@ -69,7 +69,7 @@ struct ingredient_nutrient_data
 
 RecipeDB::RecipeDB() : 
 	DCOPObject(),
-	QObject(), haltOperation(false)
+	QObject(), haltOperation(false), m_categoryCache(0)
 {
 	dbOK = false;
 	dbErr = "";
@@ -136,6 +136,32 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	}
 
 	return database;
+}
+
+void RecipeDB::updateCategoryCache( int limit )
+{
+	m_categoryCache = new CategoryTree;
+	loadCategories( m_categoryCache, limit, 0, -1, true );
+}
+
+void RecipeDB::clearCategoryCache()
+{
+	delete m_categoryCache;
+	m_categoryCache = 0;
+}
+
+void RecipeDB::loadCachedCategories( CategoryTree **list, int limit, int offset, int parent_id, bool recurse )
+{
+	if ( m_categoryCache ) {
+		if ( parent_id == -1 )
+			*list = m_categoryCache;
+		else
+			*list = m_categoryCache->find(parent_id);
+		kdDebug() << "Loading category tree from the cache" << endl;
+	}
+	else {
+		loadCategories( *list, limit, offset, parent_id, recurse );
+	}
 }
 
 bool RecipeDB::backup( const QString &backup_file, QString *errMsg )

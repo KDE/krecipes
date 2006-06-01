@@ -199,6 +199,9 @@ protected slots:
 	virtual void populate( QListViewItem *item );
 
 	QMap<int, QListViewItem*> items_map;
+
+private:
+	QListViewItem *m_item_to_delete;
 };
 
 

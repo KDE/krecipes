@@ -9,6 +9,7 @@
       <td width="3%">&nbsp;</td>
 
       <td>
+	<p class="overall_ratings">**OVERALL_RATING**</p>
         <p class="categories">**CATEGORIES**</p>
         <p class="authors">**AUTHORS**</p>
         <p class="yield">**YIELD**</p>

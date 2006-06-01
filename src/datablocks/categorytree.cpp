@@ -112,4 +112,18 @@ bool CategoryTree::contains( int id ) const
 	return result;
 }
 
+CategoryTree* CategoryTree::find( int id ) const
+{
+	CategoryTree *result = 0;
+
+	for ( CategoryTree * child_it = firstChild(); child_it; child_it = child_it->nextSibling() ) {
+		if ( child_it->category.id == id )
+			return child_it;
+
+		result = child_it->find( id );
+	}
+
+	return result;
+}
+
 

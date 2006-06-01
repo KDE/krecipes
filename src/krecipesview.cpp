@@ -185,6 +185,10 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextLayout->addMultiCellWidget( contextText, 1, 4, 0, 2 );
 	END_TIMER()
 
+	config->setGroup( "Performance" );
+	int limit = config->readNumEntry( "CategoryLimit", -1 );
+	database->updateCategoryCache(limit);
+
 	// Right Panel Widgets
 	START_TIMER("Creating input dialog")
 	inputPanel = new RecipeInputDialog( rightPanel, database );
@@ -233,6 +237,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
 	END_TIMER()
+
+	database->clearCategoryCache();
 
 	// Use to keep track of the panels
 	panelMap.insert( inputPanel, RecipeEdit );

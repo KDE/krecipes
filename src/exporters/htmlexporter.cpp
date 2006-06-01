@@ -450,6 +450,8 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( recipe.ratingList.count() > 0 )
 		ratings_html += QString("<b>%1:</b>").arg(i18n("Ratings"));
 
+	int rating_total = 0;
+	double rating_sum = 0;
 	for ( RatingList::const_iterator rating_it = recipe.ratingList.begin(); rating_it != recipe.ratingList.end(); ++rating_it ) {
 		ratings_html += "<hr />";
 
@@ -466,7 +468,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
 			}
-			
+
+			rating_total++;
+			rating_sum += (*rc_it).stars;
 		}
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "</table>";
@@ -475,6 +479,19 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
 	content = content.replace( "**RATINGS**", HTMLIfVisible("ratings",ratings_html) );
+
+	if ( rating_total > 0 ) {
+		double average = int(2*rating_sum/rating_total)/2;
+		QString overall_html = QString("<b>%1:</b>").arg(i18n("Overall Rating"));
+		QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
+		image_url = KURL::encode_string( image_url );
+		overall_html +=  "<img src=\""+image_url+"\" />";
+		if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+			QPixmap starPixmap = Rating::starsPixmap(average,true);
+			starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+		}
+		content = content.replace( "**OVERALL_RATING**", HTMLIfVisible("overall_rating",overall_html) );
+	}
 }
 
 void HTMLExporter::removeHTMLFiles( const QString &filename, int recipe_id )

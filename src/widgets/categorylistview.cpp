@@ -133,7 +133,8 @@ void CategoryListItem::setText( int column, const QString &text )
 
 
 
-CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() )
+CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() ),
+	m_item_to_delete(0)
 {
 	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
 	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
@@ -157,23 +158,23 @@ void CategoryListView::load( int limit, int offset )
 {
 	items_map.clear();
 
-	CategoryTree categoryTree;
-	database->loadCategories( &categoryTree, limit, offset, -1, false );
+	CategoryTree list;
+	CategoryTree *p_list = &list;
+	database->loadCachedCategories( &p_list, limit, offset, -1, false );
 
-	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
+	for ( CategoryTree * child_it = p_list->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, -1 );
 	}
 }
 
 void CategoryListView::populate( QListViewItem *item )
 {
-	kdDebug()<<"called populate..."<<endl;
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
 
 	if ( item->firstChild() && item->firstChild()->rtti() != PSEUDOLISTITEM_RTTI )
 		return;
-kdDebug()<<"conditions are right to proceed"<<endl;
+
 	delete item->firstChild(); //delete the "pseudo item"
 
 	int id = cat_item->categoryId();
@@ -188,12 +189,11 @@ kdDebug()<<"conditions are right to proceed"<<endl;
 }
 
 void CategoryListView::open( QListViewItem *item )
-{kdDebug()<<"expanded"<<endl;
+{
 	Q_ASSERT( item );
 	if ( !item->firstChild() || item->firstChild()->rtti() != PSEUDOLISTITEM_RTTI ) return;
 
-	//if ( !item->firstChild() )
-		populate(item);
+	populate(item);
 
 	item->setOpen(true);
 }
@@ -237,9 +237,12 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 				(*parent_item_it)->insertItem( item );
 				createElement(item);
 			}
-			//FIXME: We can't delete the item because this function is called by a slot with 'item' as a parameter
-			//else
-			//	delete item; //removeElement() was already called on this item, so we just delete it
+			else {
+				//removeElement() was already called on this item, so we just delete it
+				//we can't delete it just yet because this function is called by a slot
+				delete m_item_to_delete;
+				m_item_to_delete = item;
+			}
 		}
 	}
 }
@@ -474,8 +477,10 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		createElement(new_item);//new QListViewItem(new_item);
 
 		CategoryTree list;
-		database->loadCategories( &list, 1, 0, category.id, false );
-		if ( list.firstChild() )
+		CategoryTree *p_list = &list;
+		database->loadCachedCategories( &p_list, 1, 0, category.id, false );
+
+		if ( p_list->firstChild() )
 			new PseudoListItem( new_item );
 	}
 }
@@ -565,9 +570,13 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 		createElement(new_item);
 
 		CategoryTree list;
-		database->loadCategories( &list, 1, 0, category.id, false );
-		if ( list.firstChild() )
+		CategoryTree *p_list = &list;
+		database->loadCachedCategories( &p_list, 1, 0, category.id, false );
+
+		if ( p_list->firstChild() )
 			new PseudoListItem( new_item );
+
+
 		new_item->setOpen( false );
 	}
 }

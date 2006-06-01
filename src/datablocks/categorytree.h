@@ -26,6 +26,7 @@ public:
 	void clear();
 
 	bool contains( int id ) const;
+	CategoryTree* find( int id ) const;
 
 	CategoryTree *parent() const
 	{

@@ -1798,6 +1798,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 
 	QSqlQuery categoryToLoad( QString::null, database );
 	//categoryToLoad.setForwardOnly(true); //FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
+
 	categoryToLoad.exec(m_command);
 
 	if ( categoryToLoad.isActive() ) {
