@@ -35,9 +35,19 @@ public:
 		return m_property;
 	}
 
-private:
+protected:
 	IngredientProperty m_property;
 
+};
+
+class HidePropertyCheckListItem : public PropertyCheckListItem
+{
+public:
+	HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property );
+	HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property );
+
+protected:
+	virtual void stateChange( bool on );
 };
 
 
@@ -170,6 +180,20 @@ public:
 protected:
 	virtual void removeProperty( int id );
 	virtual void createProperty( const IngredientProperty &property );
+};
+
+class CheckPropertyListView : public StdPropertyListView
+{
+	Q_OBJECT
+
+public:
+	CheckPropertyListView( QWidget *parent, RecipeDB *, bool editable = false );
+
+protected:
+	virtual void createProperty( const IngredientProperty &property );
+
+private:
+	bool checkBounds( const QString &name );
 };
 
 #endif //PROPERTYLISTVIEW_H

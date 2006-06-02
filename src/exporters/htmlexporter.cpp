@@ -413,8 +413,13 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( recipe.properties.count() % cols != 0 ) //round up if division is not exact
 		per_col++;
 
+	QStringList hiddenList = config->readListEntry("HiddenProperties");
+
 	count = 0;
-	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it, ++count ) {
+	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
+		if ( hiddenList.find((*prop_it).name) != hiddenList.end() )
+			continue;
+
 		if ( count != 0 && count % per_col == 0 )
 			properties_html.append("</ul></td><td valign=\"top\"><ul>");
 
@@ -437,6 +442,8 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		                   .arg( QStyleSheet::escape( (*prop_it).name ) )
 		                   .arg( amount_str )
 		                   .arg( QStyleSheet::escape( (*prop_it).units ) );
+
+		++count;
 	}
 
 	if ( !properties_html.isEmpty() ) {

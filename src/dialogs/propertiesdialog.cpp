@@ -14,6 +14,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
 
 #include "backends/recipedb.h"
 #include "createpropertydialog.h"
@@ -29,8 +30,17 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 
 	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
-	propertyListView = new StdPropertyListView( this, database, true );
+	propertyListView = new CheckPropertyListView( this, database, true );
 	propertyListView->reload();
+
+	KConfig *config = KGlobal::config();
+	config->setGroup("Formatting");
+	QStringList hiddenList = config->readListEntry("HiddenProperties");
+	for ( QCheckListItem *item = (QCheckListItem*)propertyListView->firstChild(); item; item = (QCheckListItem*)item->nextSibling() ) {
+		if ( !hiddenList.contains(item->text(0)) )
+			item->setOn(true);
+	}
+
 	layout->addWidget ( propertyListView );
 
 	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
