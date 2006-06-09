@@ -155,9 +155,9 @@ void RecipeDB::loadCachedCategories( CategoryTree **list, int limit, int offset,
 	if ( m_categoryCache ) {
 		if ( parent_id == -1 )
 			*list = m_categoryCache;
-		else
+		else //FIXME?: how slow is this find() call?  the cache is loaded in sequential order, so should we iterate over the cache?
 			*list = m_categoryCache->find(parent_id);
-		kdDebug() << "Loading category tree from the cache" << endl;
+		//kdDebug() << "Loading category tree from the cache" << endl;
 	}
 	else {
 		loadCategories( *list, limit, offset, parent_id, recurse );

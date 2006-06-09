@@ -194,7 +194,7 @@ void StdPropertyListView::removeProperty( int id )
 
 void StdPropertyListView::createProperty( const IngredientProperty &property )
 {
-	( void ) new QListViewItem( this, QString::number( property.id ), property.name, property.units );
+	( void ) new QListViewItem( this, property.name, property.units, QString::number( property.id ) );
 }
 
 void StdPropertyListView::modProperty( QListViewItem* i )
@@ -209,7 +209,7 @@ void StdPropertyListView::saveProperty( QListViewItem* i )
 		reload(); //reset the changed text
 		return ;
 	}
-
+kdDebug() << "saveProp: " << i->text( 0 ) << endl;
 	int existing_id = database->findExistingPropertyByName( i->text( 0 ) );
 	int prop_id = i->text( 2 ).toInt();
 	if ( existing_id != -1 && existing_id != prop_id )  //category already exists with this label... merge the two
