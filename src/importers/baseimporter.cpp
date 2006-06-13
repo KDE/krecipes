@@ -205,7 +205,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 			int new_unit_id = db->findExistingUnitByName(real_unit.name);
 			if ( new_unit_id == -1 ) {
-				db->createNewUnit( real_unit.name, real_unit.plural );
+				db->createNewUnit( Unit(real_unit.name, real_unit.plural) );
 				new_unit_id = db->lastInsertID();
 			}
 

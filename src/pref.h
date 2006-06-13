@@ -128,6 +128,7 @@ protected:
 	QVBoxLayout* numberButtonGroupLayout;
 
 	KLineEdit *ingredientEdit;
+	QCheckBox *abbrevButton;
 
 protected slots:
 	virtual void languageChange();

@@ -90,7 +90,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				if ( !amount_str.isEmpty() )
 					content += " ";
 
-				QString unit_str = ( ( *ing_it ).amount+( *ing_it ).amount_offset > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name;
+				QString unit_str = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
 
 				content += unit_str;
 				if ( !unit_str.isEmpty() )

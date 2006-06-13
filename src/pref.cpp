@@ -439,7 +439,7 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	numberButtonGroup->insert( fractionRadioButton, 1 );
 
 	//ingredient display format
-	QGroupBox *ingredientGrpBox = new QGroupBox( 2, Qt::Vertical, i18n( "Ingredient" ), this );
+	QGroupBox *ingredientGrpBox = new QGroupBox( 2, Qt::Vertical, i18n( "Ingredients" ), this );
 
 	QHBox *ingredientBox = new QHBox( ingredientGrpBox );
 	( void ) new QLabel( i18n( "Ingredient Format:" ), ingredientBox );
@@ -451,6 +451,13 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	                         ), ingredientGrpBox );
 
 	Form1Layout->addWidget( ingredientGrpBox );
+
+	//unit display format
+	QGroupBox *abbrevGrpBox = new QGroupBox( 1, Qt::Vertical, i18n( "Units" ), this );
+	QHBox *abbrevBox = new QHBox( abbrevGrpBox );
+	abbrevButton = new QCheckBox( i18n( "Use abbreviations" ), abbrevBox );
+	Form1Layout->addWidget( abbrevGrpBox );
+
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -466,6 +473,8 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	numberButtonGroup->setButton( button );
 
 	ingredientEdit->setText( config->readEntry( "Ingredient", "%n%p: %a %u" ) );
+
+	abbrevButton->setChecked( config->readBoolEntry( "AbbreviateUnits", false ) );
 }
 
 void NumbersPrefs::saveOptions()
@@ -477,6 +486,8 @@ void NumbersPrefs::saveOptions()
 	config->writeEntry( "Fraction", fraction );
 
 	config->writeEntry( "Ingredient", ingredientEdit->text() );
+
+	config->writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );
 }
 
 void NumbersPrefs::languageChange()

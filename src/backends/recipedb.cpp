@@ -81,7 +81,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.91;
+	return 0.92;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -773,7 +773,7 @@ int createUnit( const QString &name, RecipeDB *database )
 
 	if ( assigned_id == -1 )  //create unit since it doesn't exist
 	{
-		database->createNewUnit( name, name );
+		database->createNewUnit( Unit(name, name) );
 		assigned_id = database->lastInsertID();
 	}
 

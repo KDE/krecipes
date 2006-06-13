@@ -120,7 +120,8 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), plural VARCHAR(%2), PRIMARY KEY (id));" ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() );
+		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), name_abbrev VARCHAR(%2), plural VARCHAR(%3), plural_abbrev VARCHAR(%4), PRIMARY KEY (id));" )
+		   .arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() );
 
 	else if ( tableName == "prep_methods" )
 		commands << QString( "CREATE TABLE prep_methods (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxPrepMethodNameLength() );
@@ -754,6 +755,49 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->exec("CREATE index parent_id_index ON categories(parent_id)");
 		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
+
+	if ( qRound(version*100) < 92 ) {
+		database->transaction();
+
+		//==================add a columns to 'units' to allow unit abbreviations
+		database->exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20))" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units" );
+		if ( copyQuery.isActive() ) {
+
+			while ( copyQuery.next() ) {
+				command = "INSERT INTO units_copy VALUES('"
+				                  + escape( copyQuery.value( 0 ).toString() ) //id
+				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
+				          + "','" + escape( copyQuery.value( 2 ).toString() ) //plural
+				          + "')";
+				database->exec( command );
+
+				emit progress();
+			}
+		}
+		database->exec( "DROP TABLE units" );
+		database->exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), PRIMARY KEY (id))" );
+		copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				command = "INSERT INTO units VALUES('" 
+				                  + escape( copyQuery.value( 0 ).toString() ) //id
+				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
+				          + "',NULL"                                         //name_abbrev
+				          + ",'" + escape( copyQuery.value( 2 ).toString() ) //plural
+				          + "',NULL"                                         //plural_abbrev
+				          + ")";
+				database->exec( command );
+
+				emit progress();
+			}
+		}
+		database->exec( "DROP TABLE units_copy" );
+
+		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+	}
 }
 
 void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
@@ -770,7 +814,6 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
 			QStringList dataList;
-			bool ok = true;
 			for ( int i = 0 ;; ++i ) {
 				if ( copyQuery.value(i).isNull() )
 					break;
@@ -792,7 +835,6 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
 			QStringList dataList;
-			bool ok = true; 
 			for ( int i = 0 ;; ++i ) {
 				if ( i == col_index )
 					dataList << default_value;

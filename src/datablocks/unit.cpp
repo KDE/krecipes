@@ -28,6 +28,18 @@ Unit::Unit( const QString &_name, double amount )
 		name = _name;
 }
 
+QString Unit::determineName( double amount, bool useAbbrev ) const
+{
+	if ( useAbbrev ) {
+		QString unit = ( amount > 1 ) ? plural_abbrev : name_abbrev;
+		if ( unit.isEmpty() )
+			unit = ( amount > 1 ) ? plural : name;
+		return unit;
+	}
+	else
+		return ( amount > 1 ) ? plural : name;
+}
+
 bool Unit::operator==( const Unit &u ) const
 {
 	//treat QString::null and "" as the same

@@ -108,7 +108,8 @@ void USDADataDialog::importSelected()
 
 		int grams_id = database->findExistingUnitByName( "g" ); //get this id because all data is given per gram
 		if ( grams_id == -1 ) {
-			database->createNewUnit( "g", "g" );
+			//FIXME: take advantage of abbreviations
+			database->createNewUnit( Unit("g", "g") );
 			grams_id = database->lastInsertID();
 		}
 

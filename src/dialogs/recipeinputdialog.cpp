@@ -557,7 +557,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	tabWidget->setCurrentPage( 0 );
 
 	// Load specified Recipe ID
-	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta, recipeID );
+	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta ^ RecipeDB::Properties, recipeID );
 
 	reload();
 
@@ -681,11 +681,21 @@ void RecipeInputDialog::loadUnitListCombo( void )
 		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
 			unitBox->insertItem( ( *unit_it ).name );
 			unitBox->completionObject() ->addItem( ( *unit_it ).name );
-
 			if ( ( *unit_it ).name != (*unit_it ).plural ) {
 				unitBox->insertItem( ( *unit_it ).plural );
 				unitBox->completionObject() ->addItem( ( *unit_it ).plural );
 			}
+
+			if ( !( *unit_it ).name_abbrev.isEmpty() ) {
+				unitBox->insertItem( ( *unit_it ).name_abbrev );
+				unitBox->completionObject() ->addItem( ( *unit_it ).name_abbrev );
+			}
+			if ( !(*unit_it ).plural_abbrev.isEmpty() && 
+			   ( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
+				unitBox->insertItem( ( *unit_it ).plural_abbrev );
+				unitBox->completionObject() ->addItem( ( *unit_it ).plural_abbrev );
+			}
+
 		}
 	}
 	unitBox->lineEdit() ->setText( store_unit );
@@ -919,7 +929,7 @@ int RecipeInputDialog::createNewUnitIfNecessary( const QString &unit, bool plura
 			CreateUnitDialog getUnit( this, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
 			if ( getUnit.exec() == QDialog::Accepted ) {
 				new_unit = getUnit.newUnit();
-				database->createNewUnit( new_unit.name, new_unit.plural );
+				database->createNewUnit( new_unit );
 
 				id = database->lastInsertID();
 			}

@@ -26,9 +26,16 @@ public:
 	bool operator==( const Unit &u ) const;
 	bool operator<( const Unit &u ) const;
 
+	QString determineName( double amount, bool useAbbrev ) const;
+
 	int id;
 	QString name;
 	QString plural;
+
+	QString name_abbrev;
+	QString plural_abbrev;
+
+	static bool m_use_abbrev;
 };
 
 typedef QValueList< Unit > UnitList;

@@ -24,6 +24,39 @@
 #include "dialogs/dependanciesdialog.h"
 #include "datablocks/unit.h"
 
+class UnitListViewItem : public QListViewItem
+{
+public:
+	UnitListViewItem( QListView* qlv, const Unit &u ) : QListViewItem( qlv ), m_unit(u){}
+
+	virtual QString text( int column ) const
+	{
+		switch ( column ) {
+		case 0: return m_unit.name;
+		case 1: return m_unit.name_abbrev;
+		case 2: return m_unit.plural;
+		case 3: return m_unit.plural_abbrev;
+		case 4: return QString::number(m_unit.id);
+		default: return QString::null;
+		}
+	}
+
+	const Unit& unit() const { return m_unit; };
+
+protected:
+	virtual void setText( int column, const QString &text ) {
+		switch ( column ) {
+		case 0: m_unit.name = text; break;
+		case 1: m_unit.name_abbrev = text; break;
+		case 2: m_unit.plural = text; break;
+		case 3: m_unit.plural_abbrev = text; break;
+		}
+	}
+
+private:
+	Unit m_unit;
+};
+
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
 	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( checkCreateUnit( const Unit & ) ) );
@@ -55,7 +88,9 @@ void UnitListView::checkCreateUnit( const Unit &el )
 StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable ) : UnitListView( parent, db )
 {
 	addColumn( i18n( "Unit" ) );
+	addColumn( i18n( "Abbreviation" ) );
 	addColumn( i18n( "Plural" ) );
+	addColumn( i18n( "Abbreviation" ) );
 
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -65,6 +100,8 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 	if ( editable ) {
 		setRenameable( 0, true );
 		setRenameable( 1, true );
+		setRenameable( 2, true );
+		setRenameable( 3, true );
 
 		KIconLoader *il = new KIconLoader;
 
@@ -98,7 +135,7 @@ void StdUnitListView::createNew()
 
 		//check bounds first
 		if ( checkBounds( result ) )
-			database->createNewUnit( result.name, result.plural );
+			database->createNewUnit( Unit(result.name, result.plural) );
 	}
 	delete unitDialog;
 }
@@ -106,10 +143,10 @@ void StdUnitListView::createNew()
 void StdUnitListView::remove()
 {
 	// Find selected unit item
-	QListViewItem * it = currentItem();
+	UnitListViewItem* it = (UnitListViewItem*)currentItem();
 
 	if ( it ) {
-		int unitID = it->text( 2 ).toInt();
+		int unitID = it->unit().id;
 
 		ElementList recipeDependancies, propertyDependancies;
 		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies );
@@ -135,12 +172,12 @@ void StdUnitListView::rename()
 
 void StdUnitListView::createUnit( const Unit &unit )
 {
-	createElement(new QListViewItem( this, unit.name, unit.plural, QString::number( unit.id ) ));
+	createElement(new UnitListViewItem( this, unit ));
 }
 
 void StdUnitListView::removeUnit( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 2 );
+	QListViewItem * item = findItem( QString::number( id ), 4 );
 	removeElement(item);
 }
 
@@ -158,11 +195,14 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 	}
 
 	int existing_id = database->findExistingUnitByName( text );
-	int unit_id = i->text( 2 ).toInt();
+
+	UnitListViewItem *unit_it = (UnitListViewItem*)i;
+	int unit_id = unit_it->unit().id;
 	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
-				database->modUnit( unit_id, i->text( 0 ), i->text( 1 ) );
+				Unit u = unit_it->unit();
+				database->modUnit( unit_id, u.name, u.name_abbrev, u.plural, u.plural_abbrev );
 				database->mergeUnits( unit_id, existing_id );
 				break;
 			}
@@ -172,7 +212,8 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 		}
 	}
 	else {
-		database->modUnit( unit_id, i->text( 0 ), i->text( 1 ) );
+		Unit u = unit_it->unit();
+		database->modUnit( unit_id, u.name, u.name_abbrev, u.plural, u.plural_abbrev );
 	}
 }
 

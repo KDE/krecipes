@@ -216,7 +216,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			if ( !(items & RecipeDB::NamesOnly) )
-				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
 			else
 				command = QString( "SELECT il.ingredient_id,i.name FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id;" ).arg( (*recipe_it).recipeID );
 
@@ -234,6 +234,8 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						ing.unitID = ingredientQuery.value( 4 ).toInt();
 						ing.units.name = unescapeAndDecode( ingredientQuery.value( 5 ).toCString() );
 						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 6 ).toCString() );
+						ing.units.name_abbrev = unescapeAndDecode( ingredientQuery.value( 7 ).toCString() );
+						ing.units.plural_abbrev = unescapeAndDecode( ingredientQuery.value( 8 ).toCString() );
 	
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -241,7 +243,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						else if ( ing.units.plural.isEmpty() )
 							ing.units.plural = ing.units.name;
 			
-						ing.groupID = ingredientQuery.value( 7 ).toInt();
+						ing.groupID = ingredientQuery.value( 9 ).toInt();
 						if ( ing.groupID != -1 ) {
 							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 							if ( toLoad.isActive() && toLoad.first() )
@@ -458,7 +460,7 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 
 	QString command;
 
-	command = QString( "SELECT u.id,u.name,u.plural FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;" ).arg( ingredientID );
+	command = QString( "SELECT u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;" ).arg( ingredientID );
 
 	QSqlQuery unitToLoad( command, database );
 
@@ -468,6 +470,9 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 			unit.id = unitToLoad.value( 0 ).toInt();
 			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toCString() );
 			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toCString() );
+			unit.name_abbrev = unescapeAndDecode( unitToLoad.value( 3 ).toCString() );
+			unit.plural_abbrev = unescapeAndDecode( unitToLoad.value( 4 ).toCString() );
+
 			list->append( unit );
 		}
 	}
@@ -895,7 +900,7 @@ void QSqlRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 
 	QString command;
 
-	command = "SELECT id,name,plural FROM units ORDER BY name"
+	command = "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 
 	QSqlQuery unitToLoad( command, database );
@@ -905,7 +910,9 @@ void QSqlRecipeDB::loadUnits( UnitList *list, int limit, int offset )
 			Unit unit;
 			unit.id = unitToLoad.value( 0 ).toInt();
 			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toCString() );
-			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toCString() );
+			unit.name_abbrev = unescapeAndDecode( unitToLoad.value( 2 ).toCString() );
+			unit.plural = unescapeAndDecode( unitToLoad.value( 3 ).toCString() );
+			unit.plural_abbrev = unescapeAndDecode( unitToLoad.value( 4 ).toCString() );
 			list->append( unit );
 		}
 	}
@@ -1322,33 +1329,59 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 }
 
 
-void QSqlRecipeDB::createNewUnit( const QString &unitName, const QString &unitPlural )
+void QSqlRecipeDB::createNewUnit( const Unit &unit )
 {
-	QString command;
-	QString real_name = unitName.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_plural = unitPlural.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_name = unit.name.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural = unit.plural.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
 
 	if ( real_name.isEmpty() )
 		real_name = real_plural;
 	else if ( real_plural.isEmpty() )
 		real_plural = real_name;
 
-	command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) + ",'" + QString(escapeAndEncode( real_name )) + "','" + QString(escapeAndEncode( real_plural )) + "');";
+	if ( real_name_abbrev.isEmpty() )
+		real_name_abbrev = "NULL";
+	else
+		real_name_abbrev = "'"+real_name_abbrev+"'";
+	if ( real_plural_abbrev.isEmpty() )
+		real_plural_abbrev = "NULL";
+	else
+		real_plural_abbrev = "'"+real_plural_abbrev+"'";
+	
+
+	QString command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) 
+	   + ",'" + escapeAndEncode( real_name )
+	   + "'," + escapeAndEncode( real_name_abbrev )
+	   + ",'" + escapeAndEncode( real_plural )
+	   + "'," + escapeAndEncode( real_plural_abbrev )
+	   + ");";
 	QSqlQuery unitToCreate( command, database );
 
 	emit unitCreated( Unit( real_name, real_plural, lastInsertID() ) );
 }
 
 
-void QSqlRecipeDB::modUnit( int unitID, const QString &newName, const QString &newPlural )
+void QSqlRecipeDB::modUnit( int unitID, const QString &newName, const QString &newNameAbbrev,
+   const QString &newPlural, const QString &newPluralAbbrev )
 {
 	QSqlQuery unitQuery( QString::null, database );
 
-	unitQuery.exec( "UPDATE units SET name='" + QString( escapeAndEncode( newName ) ) + "' WHERE id='" + QString::number( unitID ) + "';" );
-	unitQuery.exec( "UPDATE units SET plural='" + QString( escapeAndEncode( newPlural ) ) + "' WHERE id='" + QString::number( unitID ) + "';" );
+	QString command = QString("UPDATE units SET name='%1',name_abbrev='%2',plural='%3',plural_abbrev='%4' WHERE id='%5'")
+	  .arg(escapeAndEncode(newName))
+	  .arg(escapeAndEncode(newNameAbbrev))
+	  .arg(escapeAndEncode(newPlural))
+	  .arg(escapeAndEncode(newPluralAbbrev))
+	  .arg(unitID);
+	unitQuery.exec( command );
 
 	emit unitRemoved( unitID );
-	emit unitCreated( Unit( newName, newPlural, unitID ) );
+
+	Unit newUnit( newName, newPlural, unitID );
+	newUnit.name_abbrev = newNameAbbrev;
+	newUnit.plural_abbrev = newPluralAbbrev;
+	emit unitCreated( newUnit );
 }
 
 void QSqlRecipeDB::findUseOf_Unit_InRecipes( ElementList *results, int unitID )
@@ -1642,7 +1675,7 @@ IngredientProperty QSqlRecipeDB::propertyName( int ID )
 
 Unit QSqlRecipeDB::unitName( int ID )
 {
-	QString command = QString( "SELECT name,plural FROM units WHERE id=%1;" ).arg( ID );
+	QString command = QString( "SELECT name,plural,name_abbrev,plural_abbrev FROM units WHERE id=%1;" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
 		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ) );
@@ -1652,6 +1685,9 @@ Unit QSqlRecipeDB::unitName( int ID )
 			unit.name = unit.plural;
 		else if ( unit.plural.isEmpty() )
 			unit.plural = unit.name;
+
+		unit.name_abbrev = unescapeAndDecode( toLoad.value( 2 ).toCString() );
+		unit.plural_abbrev = unescapeAndDecode( toLoad.value( 3 ).toCString() );
 
 		return unit;
 	}
@@ -1930,7 +1966,11 @@ int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID
 	QString command;
 	if ( ingredientID < 0 )  // We're looking for units with that name all through the table, no specific ingredient
 	{
-		command = "SELECT id,name FROM units WHERE name='" + search_str + "' OR plural='" + search_str + "';";
+		command = "SELECT id,name FROM units WHERE name='" + search_str 
+		  + "' OR plural='" + search_str 
+		  + "' OR name_abbrev='" + search_str 
+		  + "' OR plural_abbrev='" + search_str 
+		  + "'";
 	}
 	else // Look for units  with that name for the specified ingredient
 	{
@@ -2043,7 +2083,11 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 {
 	QString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
 
-	QString command = "SELECT id FROM units WHERE name='" + search_str + "' OR plural='" + search_str + "';";
+	QString command = "SELECT id FROM units WHERE name='" + search_str 
+		  + "' OR plural='" + search_str 
+		  + "' OR name_abbrev='" + search_str 
+		  + "' OR plural_abbrev='" + search_str 
+		  + "'";
 	QSqlQuery elementToLoad( command, database ); // Run the query
 	int id = -1;
 
@@ -2357,7 +2401,7 @@ void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 {
 	QSqlQuery update( QString::null, database );
 
-	//change all instances of 'id2' to 'id1' in ingredient list
+	//change all instances of 'id2' to 'id1' in unit list
 	QString command = QString( "UPDATE unit_list SET unit_id=%1 WHERE unit_id=%2" )
 	                  .arg( id1 )
 	                  .arg( id2 );

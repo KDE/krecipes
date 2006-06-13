@@ -383,10 +383,12 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			else if ( ( *ing_it ).amount <= 1e-10 )
 				amount_str = "";
 
+			QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
+
 			QString tmp_format( ingredient_format );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *ing_it ).name ) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape( ( ( *ing_it ).amount + ( *ing_it ).amount_offset > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethodList.count() == 0 ) ?
 			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ) );
 

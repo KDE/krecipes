@@ -86,7 +86,7 @@ public:
 	void createNewIngredient( const QString &ingredientName );
 	void createNewPrepMethod( const QString &prepMethodName );
 	void createNewRating( const QString &name );
-	void createNewUnit( const QString &unitName, const QString &unitPlural );
+	void createNewUnit( const Unit &unit );
 	void createNewYieldType( const QString &type );
 
 	void emptyData( void );
@@ -151,7 +151,7 @@ public:
 	/**
 	* set newLabel for unitID
 	*/
-	void modUnit( int unitID, const QString &newName, const QString &newPlural );
+	void modUnit( int unitID, const QString &newName, const QString &newNameAbbrev, const QString &newPlural, const QString &newNamePlural );
 	/**
 	* set newLabel for categoryID
 	*/

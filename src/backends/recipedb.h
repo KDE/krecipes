@@ -139,7 +139,7 @@ public:
 	virtual void createNewIngredient( const QString &ingredientName ) = 0;
 	virtual void createNewPrepMethod( const QString &prepMethodName ) = 0;
 	virtual void createNewRating( const QString &name ) = 0;
-	virtual void createNewUnit( const QString &unitName, const QString &unitPlural ) = 0;
+	virtual void createNewUnit( const Unit &unit ) = 0;
 	virtual void createNewYieldType( const QString &type ) = 0;
 
 	virtual void emptyData( void ) = 0;
@@ -228,7 +228,7 @@ public:
 	/**
 	* set newLabel for unitID
 	*/
-	virtual void modUnit( int unitID, const QString &newName, const QString &newPlural ) = 0;
+	virtual void modUnit( int unitID, const QString &newName, const QString &newNameAbbrev, const QString &newPlural, const QString &newNamePlural ) = 0;
 	/**
 	* set newLabel for categoryID
 	*/

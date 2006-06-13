@@ -91,7 +91,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, plural CHARACTER VARYING );";
+		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING );";
 
 	else if ( tableName == "prep_methods" )
 		commands << "CREATE TABLE prep_methods (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
@@ -249,7 +249,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				int ing_list_id = getNextInsertID("ingredient_list","id");
 
 				QSqlQuery query(database);
- 				query.prepare( "INSERT INTO ingredient_list VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+				query.prepare( "INSERT INTO ingredient_list VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( ing_list_id );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );
@@ -363,6 +363,35 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*100) < 91 ) {
 		database->exec("CREATE index parent_id_index ON categories USING BTREE(parent_id)");
 		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
+	}
+
+	if ( qRound(version*100) < 92 ) {
+		database->transaction();
+
+		//==================add a columns to 'units' to allow unit abbreviations
+		database->exec( "ALTER TABLE units RENAME TO units_copy;" );
+
+		database->exec( "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING )" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
+		if ( copyQuery.isActive() ) {
+			while ( copyQuery.next() ) {
+				QSqlQuery query(database);
+				query.prepare( "INSERT INTO units VALUES(?, ?, ?, ?, ?)" );
+				query.addBindValue( copyQuery.value( 0 ) );
+				query.addBindValue( copyQuery.value( 1 ) );
+				query.addBindValue( QVariant() );
+				query.addBindValue( copyQuery.value( 2 ) );
+				query.addBindValue( QVariant() );
+				query.exec();
+
+				emit progress();
+			}
+		}
+		database->exec( "DROP TABLE units_copy" );
+
+		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
 	}
 
 }
