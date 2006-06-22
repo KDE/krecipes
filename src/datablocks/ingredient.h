@@ -53,7 +53,7 @@ public:
 
 	void setAmount( const QString &range, bool *ok = 0 );
 
-	/** Compare two elements by their id */
+	/** Compare two elements by their id and groupID */
 	bool operator==( const Ingredient & ) const;
 
 	/** This is used for sorting, and so we compare by name */

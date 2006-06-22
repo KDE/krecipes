@@ -103,11 +103,8 @@ IngredientList::iterator IngredientList::find( IngredientList::iterator it, int 
 	return QValueList<Ingredient>::find( it, i );
 }
 
-IngredientData& IngredientList::findSubstitute( int id )  // Search by id (which uses search by item, with comparison defined on header)
+IngredientData& IngredientList::findSubstitute( const Ingredient &i )  // Search by id (which uses search by item, with comparison defined on header)
 {
-	Ingredient i;
-	i.ingredientID = id;
-
 	QValueList<Ingredient>::iterator result = QValueList<Ingredient>::find(i);
 	if ( result == end() ) {
 		for ( IngredientList::iterator it = begin(); it != end(); ++it ) {
@@ -117,6 +114,21 @@ IngredientData& IngredientList::findSubstitute( int id )  // Search by id (which
 		}
 	}
 	return *result;
+}
+
+void IngredientList::removeSubstitute( const Ingredient &i )
+{
+	QValueList<Ingredient>::iterator result = QValueList<Ingredient>::find(i);
+	if ( result == end() ) {
+		for ( IngredientList::iterator it = begin(); it != end(); ++it ) {
+			QValueList<IngredientData>::iterator result = (*it).substitutes.find(i);
+			if ( result != (*it).substitutes.end() ) {
+				(*it).substitutes.remove(result);
+				return;
+			}
+		}
+	}
+	remove(result);
 }
 
 void IngredientList::move( int index1, int index2 )  //moves element in pos index1, to pos after index2

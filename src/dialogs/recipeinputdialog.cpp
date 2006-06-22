@@ -771,17 +771,21 @@ void RecipeInputDialog::moveIngredientDown( void )
 void RecipeInputDialog::removeIngredient( void )
 {
 	QListViewItem * it = ingredientList->selectedItem();
-	if ( it && it->rtti() == INGLISTVIEWITEM_RTTI ) {
+	if ( it && it->rtti() == INGLISTVIEWITEM_RTTI || it->rtti() == INGSUBLISTVIEWITEM_RTTI ) {
 		// Find the one below or above, and save index first
 		QListViewItem * iabove, *ibelow, *iselect = 0;
 		if ( ( ibelow = it->itemBelow() ) )
 			iselect = ibelow;
 		else if ( ( iabove = it->itemAbove() ) )
 			iselect = iabove;
-		int index = ingItemIndex( ingredientList, it );
+
+		IngListViewItem *ing_item = (IngListViewItem*)it; //we can cast IngSubListViewItem to this too, it's a subclass
+
+		IngredientData &ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
+		loadedRecipe->ingList.removeSubstitute( ing );
 
 		//Remove it from the instruction's completion
-		instructionsEdit->removeCompletionItem( it->text( 0 ) );
+		instructionsEdit->removeCompletionItem( ing.name );
 
 		//Now remove the ingredient
 		it->setSelected( false );
@@ -789,20 +793,17 @@ void RecipeInputDialog::removeIngredient( void )
 		if ( iselect )
 			ingredientList->setSelected( iselect, true ); // be careful iselect->setSelected doesn't work this way.
 
-		// Remove it from the recipe also
-		loadedRecipe->ingList.remove( loadedRecipe->ingList.at( index ) ); // Note index=0...n in KListView, same as in QPtrlist
-
 		emit changed();
 	}
 	else if ( it && it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
 		IngGrpListViewItem * header = ( IngGrpListViewItem* ) it;
 
-		int index = ingItemIndex( ingredientList, header->firstChild() ); //use this same index because after an item is deleted, the next to delete is still the same index number
-		for ( QListViewItem * sub_item = header->firstChild(); sub_item; sub_item = sub_item->nextSibling() ) {
-			loadedRecipe->ingList.remove( loadedRecipe->ingList.at( index ) );
+		for ( IngListViewItem * sub_item = (IngListViewItem*)header->firstChild(); sub_item; sub_item = (IngListViewItem*)sub_item->nextSibling() ) {
+			IngredientData &ing = loadedRecipe->ingList.findSubstitute( sub_item->ingredient() );
+			loadedRecipe->ingList.removeSubstitute( ing );
 
 			//Remove it from the instruction's completion
-			instructionsEdit->removeCompletionItem( sub_item->text( 0 ) );
+			instructionsEdit->removeCompletionItem( ing.name );
 		}
 
 		delete header;
@@ -836,7 +837,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 
 	IngListViewItem *ing_item = ( IngListViewItem* ) it;
 
-	IngredientData &new_ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient().ingredientID );
+	IngredientData &new_ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
 
 	switch ( col ) {
 	case 1:  //amount

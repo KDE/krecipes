@@ -44,7 +44,8 @@ public:
 	/** Warning, returns an invalid reference if no ingredient is found.  Must check prior
 	  * to calling this function if the ingredient exists.
 	  */
-	IngredientData& findSubstitute( int id );
+	IngredientData& findSubstitute( const Ingredient & );
+	void removeSubstitute( const Ingredient & );
 
 	IngredientList firstGroup();
 	IngredientList nextGroup();
