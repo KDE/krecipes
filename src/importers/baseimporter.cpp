@@ -225,7 +225,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 				}
 			}
 
-			( *ing_it ).unitID = new_unit_id;
+			( *ing_it ).units.id = new_unit_id;
 			( *ing_it ).ingredientID = new_ing_id;
 
 			ElementList unitsWithIng;

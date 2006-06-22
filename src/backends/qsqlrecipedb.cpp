@@ -4,6 +4,8 @@
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
+*   Copyright (C) 2004-2006 Jason Kivlighn (jkivlighn@gmail.com)          *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -216,9 +218,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
 			if ( !(items & RecipeDB::NamesOnly) )
-				command = QString( "SELECT il.ingredient_id,i.name,il.amount,il.amount_offset,u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index;" ).arg( (*recipe_it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for,il.amount,il.amount_offset,u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index" ).arg( (*recipe_it).recipeID );
 			else
-				command = QString( "SELECT il.ingredient_id,i.name FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id;" ).arg( (*recipe_it).recipeID );
+				command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id" ).arg( (*recipe_it).recipeID );
 
 			QSqlQuery ingredientQuery( command, database );
 			if ( ingredientQuery.isActive() ) {
@@ -229,13 +231,13 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					ing.name = unescapeAndDecode( ingredientQuery.value( 1 ).toCString() );
 
 					if ( !(items & RecipeDB::NamesOnly) ) {
-						ing.amount = ingredientQuery.value( 2 ).toDouble();
-						ing.amount_offset = ingredientQuery.value( 3 ).toDouble();
-						ing.unitID = ingredientQuery.value( 4 ).toInt();
-						ing.units.name = unescapeAndDecode( ingredientQuery.value( 5 ).toCString() );
-						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 6 ).toCString() );
-						ing.units.name_abbrev = unescapeAndDecode( ingredientQuery.value( 7 ).toCString() );
-						ing.units.plural_abbrev = unescapeAndDecode( ingredientQuery.value( 8 ).toCString() );
+						ing.amount = ingredientQuery.value( 3 ).toDouble();
+						ing.amount_offset = ingredientQuery.value( 4 ).toDouble();
+						ing.units.id = ingredientQuery.value( 5 ).toInt();
+						ing.units.name = unescapeAndDecode( ingredientQuery.value( 6 ).toCString() );
+						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 7 ).toCString() );
+						ing.units.name_abbrev = unescapeAndDecode( ingredientQuery.value( 8 ).toCString() );
+						ing.units.plural_abbrev = unescapeAndDecode( ingredientQuery.value( 9 ).toCString() );
 	
 						//if we don't have both name and plural, use what we have as both
 						if ( ing.units.name.isEmpty() )
@@ -243,14 +245,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 						else if ( ing.units.plural.isEmpty() )
 							ing.units.plural = ing.units.name;
 			
-						ing.groupID = ingredientQuery.value( 9 ).toInt();
+						ing.groupID = ingredientQuery.value( 10 ).toInt();
 						if ( ing.groupID != -1 ) {
 							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
 							if ( toLoad.isActive() && toLoad.first() )
 								ing.group = unescapeAndDecode( toLoad.value( 0 ).toCString() );
 						}
 
-						command = QString("SELECT pl.prep_method_id,p.name FROM prep_methods p, prep_method_list pl WHERE pl.ingredient_list_id=%1 AND p.id=pl.prep_method_id ORDER BY pl.order_index;").arg(ingredientQuery.value( 8 ).toInt());
+						command = QString("SELECT pl.prep_method_id,p.name FROM prep_methods p, prep_method_list pl WHERE pl.ingredient_list_id=%1 AND p.id=pl.prep_method_id ORDER BY pl.order_index;").arg(ingredientQuery.value( 11 ).toInt());
 						QSqlQuery ingPrepMethodsQuery( command, database );
 						if ( ingPrepMethodsQuery.isActive() ) {
 							while ( ingPrepMethodsQuery.next() ) {
@@ -258,7 +260,15 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 							}
 						}
 					}
-					(*it).ingList.append( ing );
+
+					if ( ingredientQuery.value( 2 ).toInt() > 0 ) {
+						//given the ordering, we can assume substitute_for is the id of the last
+						//ingredient in the list
+						//int substitute_for = ingredientQuery.value( 2 ).toInt();
+						(*it).ingList.last().substitutes.append( ing );
+					}
+					else
+						(*it).ingList.append( ing );
 				}
 			}
 		}
@@ -608,13 +618,13 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		order_index++;
 		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
-		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8);" )
+		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,NULL);" )
 		          .arg( ing_list_id_str )
 		          .arg( recipeID )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
 		          .arg( ( *ing_it ).amount_offset )
-		          .arg( ( *ing_it ).unitID )
+		          .arg( ( *ing_it ).units.id )
 		          .arg( order_index )
 		          .arg( ( *ing_it ).groupID );
 		recipeToSave.exec( command );
@@ -628,6 +638,33 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 				.arg( ( *prep_it ).id )
 				.arg( prep_order_index );
 			recipeToSave.exec( command );
+		}
+		
+		for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+			order_index++;
+			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
+			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )
+				.arg( ing_list_id_str )
+				.arg( recipeID )
+				.arg( ( *sub_it ).ingredientID )
+				.arg( ( *sub_it ).amount )
+				.arg( ( *sub_it ).amount_offset )
+				.arg( ( *sub_it ).units.id )
+				.arg( order_index )
+				.arg( ( *sub_it ).groupID )
+				.arg( (*ing_it).ingredientID );
+			recipeToSave.exec( command );
+	
+			int ing_list_id = lastInsertID();
+			int prep_order_index = 0;
+			for ( ElementList::const_iterator prep_it = (*sub_it).prepMethodList.begin(); prep_it != (*sub_it).prepMethodList.end(); ++prep_it ) {
+				prep_order_index++;
+				command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
+					.arg( ing_list_id )
+					.arg( ( *prep_it ).id )
+					.arg( prep_order_index );
+				recipeToSave.exec( command );
+			}
 		}
 	}
 

@@ -29,7 +29,7 @@ endif
 # the shared libraries to link against.
 krecipes_LDADD = \
 	backends/libkrecipesdbs.la exporters/libkrecipesexporters.la \
-	importers/libkrecipesimporters.la dialogs/libkrecipesdialogs.la \
+	importers/libkrecipesimporters.la widgets/libkrecipeswidgets.la dialogs/libkrecipesdialogs.la \
 	widgets/libkrecipeswidgets.la datablocks/libdatablocks.la \
 	$(qsqlite_libadds) $(mysql_libadds) $(psql_libadds) $(LIB_KHTML) $(LIB_KSPELL)
 

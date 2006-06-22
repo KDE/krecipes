@@ -17,6 +17,25 @@
 #include "datablocks/unit.h"
 #include "datablocks/mixednumber.h"
 
+IngSubListViewItem::IngSubListViewItem( QListViewItem* qli, const Ingredient &i ) : IngListViewItem( qli, 0, i )
+{
+}
+
+QString IngSubListViewItem::text( int column ) const
+{
+	if ( column == 0 )
+		return "OR "+m_ing.name;
+	else
+		return IngListViewItem::text(column);
+
+}
+
+int IngSubListViewItem::rtti() const
+{
+	return INGSUBLISTVIEWITEM_RTTI;
+}
+
+
 IngListViewItem::IngListViewItem( QListView* qlv, const Ingredient &i ) : QListViewItem( qlv )
 {
 	init( i );

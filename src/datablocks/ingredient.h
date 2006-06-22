@@ -2,6 +2,8 @@
 *   Copyright (C) 2003 by Unai Garro                                      *
 *   ugarro@users.sourceforge.net                                          *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn <jkivlighn@gmail.com>               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -11,30 +13,43 @@
 #define INGREDIENT_H
 
 #include <qstring.h>
+#include <qvaluelist.h>
 
 #include "datablocks/unit.h"
 #include "datablocks/elementlist.h"
 
-/**
-@author Unai Garro
-*/
-class Ingredient
+//###: Is there a better way to get the behavior of a list of Ingredient
+//     objects as a data member of Ingredient?
+class IngredientData
 {
 public:
-	Ingredient();
-	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1 );
-	~Ingredient();
+	IngredientData();
+	IngredientData( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1 );
 
 	int ingredientID;
 	QString name;
 	double amount;
 	double amount_offset;
-	int unitID;
 	Unit units;
 	int groupID;
 	QString group;
-
 	ElementList prepMethodList;
+
+	/** Compare two elements by their id */
+	bool operator==( const IngredientData & ) const;
+};
+
+/**
+@author Unai Garro
+*/
+class Ingredient : public IngredientData
+{
+public:
+	Ingredient();
+	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1 );
+	Ingredient( const IngredientData& );
+
+	QValueList<IngredientData> substitutes;
 
 	void setAmount( const QString &range, bool *ok = 0 );
 

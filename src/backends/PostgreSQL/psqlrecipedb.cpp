@@ -4,6 +4,8 @@
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -81,7 +83,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredients (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
 
 	else if ( tableName == "ingredient_list" ) {
-		commands << "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);";
+		commands << "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, substitute_for INTEGER);";
 		commands << "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);";
 		commands << "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);";
 		commands << "CREATE INDEX gidil_index ON ingredient_list USING BTREE (group_id);";
@@ -369,7 +371,14 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		database->transaction();
 
 		//==================add a columns to 'units' to allow unit abbreviations
-		database->exec( "ALTER TABLE units RENAME TO units_copy;" );
+		database->exec( "ALTER TABLE units RENAME TO units_copy" );
+
+		int nextval = -1;
+		QSqlQuery getID( "SELECT nextval('units_id_seq')", database );
+		if ( getID.isActive() && getID.first() )
+			nextval = getID.value( 0 ).toInt();
+		if ( nextval == -1 )
+			kdDebug() << "Database update failed! Unable to update units sequence." << endl;
 
 		database->exec( "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING )" );
 		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
@@ -389,10 +398,25 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		}
 		database->exec( "DROP TABLE units_copy" );
 
+		database->exec( "ALTER TABLE units_id_seq1 RENAME TO units_id_seq" );
+		database->exec( "ALTER SEQUENCE units_id_seq RESTART WITH "+QString::number(nextval) );
+
 		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
 	}
+
+	if ( qRound(version*100) < 93 ) {
+		database->transaction();
+
+		database->exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER" );
+
+		database->exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)'");
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
+	}
+
+database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP" );
 
 }
 

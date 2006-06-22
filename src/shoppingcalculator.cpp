@@ -70,11 +70,11 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 				lastpos_it = pos_it;
 				// Get current Values
 
-				currentUnit = ( *pos_it ).unitID;
+				currentUnit = ( *pos_it ).units.id;
 				currentAmount = ( *pos_it ).amount;
 
 				// Try to convert
-				converted = autoConvertUnits( db, ( *ing_it ).amount, ( *ing_it ).unitID, currentAmount, currentUnit, newAmount, newUnit );
+				converted = autoConvertUnits( db, ( *ing_it ).amount, ( *ing_it ).units.id, currentAmount, currentUnit, newAmount, newUnit );
 			}
 			while ( ( converted < 0 ) && ( ( ( pos_it = totalIngredientList->find( ++pos_it, ( *ing_it ).ingredientID ) ) ) != totalIngredientList->end() ) );
 
@@ -82,8 +82,8 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 			if ( converted >= 0 )
 			{
 				( *lastpos_it ).amount = newAmount;
-				( *lastpos_it ).unitID = newUnit;
 				( *lastpos_it ).units = db->unitName( newUnit );
+				( *lastpos_it ).units.id = newUnit;
 			}
 			else // Otherwise append this ingredient at the end of the list
 			{

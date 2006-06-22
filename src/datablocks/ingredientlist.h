@@ -41,6 +41,11 @@ public:
 	IngredientList::const_iterator find( IngredientList::const_iterator, int id ) const;
 	IngredientList::iterator find( IngredientList::iterator, int id );
 
+	/** Warning, returns an invalid reference if no ingredient is found.  Must check prior
+	  * to calling this function if the ingredient exists.
+	  */
+	IngredientData& findSubstitute( int id );
+
 	IngredientList firstGroup();
 	IngredientList nextGroup();
 

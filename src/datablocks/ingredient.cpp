@@ -16,20 +16,34 @@
 
 #include "mixednumber.h"
 
-Ingredient::Ingredient() : amount( 0 ), amount_offset( 0 ), groupID( -1 )
+IngredientData::IngredientData() : amount( 0 ), amount_offset( 0 ), groupID( -1 )
 {}
 
-Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID ) :
+IngredientData::IngredientData( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID ) :
 		ingredientID( _ingredientID ),
 		name( _name ),
 		amount( _amount ),
 		amount_offset( 0 ),
-		unitID( _unitID ),
 		units( _units ),
 		groupID( -1 )
+{
+units.id=_unitID;
+}
+
+//compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group
+bool IngredientData::operator==( const IngredientData &ing ) const
+{
+	return ( ( ing.ingredientID == ingredientID ) && ( ing.groupID == groupID ) );
+}
+
+Ingredient::Ingredient() : IngredientData()
 {}
 
-Ingredient::~Ingredient()
+Ingredient::Ingredient( const QString &_name, double _amount, const Unit &_units, int _unitID, int _ingredientID ) :
+	IngredientData(_name,_amount,_units,_unitID,_ingredientID)
+{}
+
+Ingredient::Ingredient( const IngredientData &d ) : IngredientData(d)
 {}
 
 void Ingredient::setAmount( const QString &range, bool *ok )

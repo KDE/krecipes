@@ -2,9 +2,8 @@
 *   Copyright (C) 2003                                                    *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
-
-*   Copyright (C) 2003-2005                                               *
-*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*                                                                         *
+*   Copyright (C) 2003-2006 Jason Kivlighn (jkivlighn@gmail.com)          *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -81,7 +80,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.92;
+	return 0.93;
 }
 
 QString RecipeDB::krecipes_version() const

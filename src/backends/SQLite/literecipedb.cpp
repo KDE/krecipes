@@ -4,6 +4,8 @@
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -110,7 +112,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" ) {
-		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id) );"
+		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, substitute_for INTEGER, PRIMARY KEY(id) );"
 		<< "CREATE index ridil_index ON ingredient_list(recipe_id);"
 		<< "CREATE index iidil_index ON ingredient_list(ingredient_id);"
 		<< "CREATE index gidil_index ON ingredient_list(group_id);";
@@ -797,6 +799,19 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 93 ) {
+		database->transaction();
+
+		addColumn("CREATE TABLE %1 (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, %2 PRIMARY KEY(id) )","substitute_for INTEGER","NULL","ingredient_list",8);
+
+		database->exec( "CREATE index ridil_index ON ingredient_list(recipe_id)" );
+		database->exec( "CREATE index iidil_index ON ingredient_list(ingredient_id)" );
+		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
+
+		database->exec( "UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20050816)';" );
+		database->commit();
 	}
 }
 

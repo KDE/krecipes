@@ -4,6 +4,8 @@
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -99,7 +101,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE ingredients (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxIngredientNameLength() );
 
 	else if ( tableName == "ingredient_list" )
-		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id), INDEX gidil_index(group_id));";
+		commands << "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, substitute_for INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id), INDEX gidil_index(group_id))";
 
 	else if ( tableName == "unit_list" )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
@@ -482,6 +484,16 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 93 ) {
+		database->transaction();
+
+		database->exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER AFTER group_id");
+
+		database->exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060615)'");
+		if ( !database->commit() )
+			kdDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
 	}
 }
 

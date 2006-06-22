@@ -17,6 +17,7 @@
 
 #define INGGRPLISTVIEWITEM_RTTI 1003
 #define INGLISTVIEWITEM_RTTI 1004
+#define INGSUBLISTVIEWITEM_RTTI 1009
 
 class IngListViewItem : public QListViewItem
 {
@@ -44,6 +45,16 @@ public:
 
 private:
 	void init( const Ingredient &i );
+};
+
+
+class IngSubListViewItem : public IngListViewItem
+{
+public:
+	IngSubListViewItem( QListViewItem* qli, const Ingredient &i );
+
+	virtual QString text( int column ) const;
+	virtual int rtti() const;
 };
 
 

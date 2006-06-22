@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2004 by                                                 *
+*   Copyright (C) 2004-2006 by                                            *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -34,8 +34,6 @@ public:
 
 	QString name_abbrev;
 	QString plural_abbrev;
-
-	static bool m_use_abbrev;
 };
 
 typedef QValueList< Unit > UnitList;

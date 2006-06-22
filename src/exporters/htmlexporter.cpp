@@ -4,6 +4,8 @@
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -393,6 +395,26 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ) );
 
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
+
+			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
+	
+				if ( (*ing_it).amount_offset > 0 )
+					amount_str += "-"+MixedNumber( ( *sub_it ).amount + ( *sub_it ).amount_offset ).toString( number_format );
+				else if ( ( *sub_it ).amount <= 1e-10 )
+					amount_str = "";
+	
+				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
+
+				QString tmp_format( ingredient_format );
+				tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( "OR " + ( *sub_it ).name ) );
+				tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
+				tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
+				tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *sub_it ).prepMethodList.count() == 0 ) ?
+						QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ) );
+	
+				ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
+			}
 		}
 
 		if ( !group.isEmpty() )

@@ -18,7 +18,7 @@ libkrecipeswidgets_la_SOURCES= \
 	headercombobox.cpp prepmethodcombobox.cpp \
 	inglistviewitem.cpp kdateedit.cpp kdatepickerpopup.cpp \
 	headerlistview.cpp ratingwidget.cpp kwidgetlistbox.cpp \
-	ratingdisplaywidget.ui criteriacombobox.cpp
+	ratingdisplaywidget.ui criteriacombobox.cpp ingredientinputwidget.cpp
 
 
 libkrecipeswidgets_la_METASOURCES=AUTO

@@ -31,26 +31,25 @@
 #include <qvbox.h>
 
 #include "datablocks/elementlist.h"
-#include "datablocks/unit.h"
 
 class QTabWidget;
-class Recipe;
-class ElementList;
-class RecipeDB;
-class FractionInput;
 class QTimeEdit;
 class QDragEvent;
 class QButtonGroup;
 class QWidgetStack;
 
-class ImageDropLabel;
 class KreTextEdit;
-class IngredientComboBox;
-class HeaderComboBox;
-class PrepMethodComboBox;
 class KWidgetListbox;
+
+class ImageDropLabel;
+class Recipe;
+class ElementList;
+class RecipeDB;
+class FractionInput;
+class Ingredient;
 class Rating;
 class RatingDisplayWidget;
+class IngredientInputWidget;
 
 /**
 @author Unai Garro
@@ -65,7 +64,6 @@ public:
 	void loadRecipe( int recipeID );
 	~RecipeInputDialog();
 	void newRecipe( void );
-	void reloadCombos( void );
 	bool everythingSaved();
 	void reload( void );
 	int loadedRecipeID() const;
@@ -74,7 +72,6 @@ private:
 
 	// Internal Data
 	Recipe *loadedRecipe; //Loaded Recipe
-	UnitList *unitComboList;
 	RecipeDB *database;
 	bool changedSignalEnabled;
 	bool unsavedChanges;
@@ -107,19 +104,9 @@ private:
 	QPushButton* addCategoryButton;
 
 	//Ingredient inputs
-	QButtonGroup *typeButtonGrp;
-	QGroupBox *ingredientGBox;
-	QLabel *amountLabel;
-	FractionInput* amountEdit;
-	QLabel *unitLabel;
-	KComboBox* unitBox;
-	QLabel *prepMethodLabel;
-	PrepMethodComboBox* prepMethodBox;
-	QLabel *ingredientLabel;
-	IngredientComboBox* ingredientBox;
-	HeaderComboBox* headerBox;
 	KListView* ingredientList;
-	QWidgetStack *header_ing_stack;
+	QGroupBox *ingredientGBox;
+	IngredientInputWidget *ingInput;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
@@ -140,14 +127,7 @@ private:
 	KWidgetListbox *ratingListDisplayWidget;
 
 	// Internal functions
-	bool checkAmountEdit();
-	bool checkBounds();
-	void createNewIngredientIfNecessary();
-	int createNewUnitIfNecessary( const QString &unit, bool plural, const QString &ingredient, Unit &new_unit );
-	QValueList<int> createNewPrepIfNecessary( const QString &prep );
-	int createNewGroupIfNecessary( const QString &group );
 	int createNewYieldIfNecessary( const QString &yield );
-	void checkIfNewUnits();
 	void saveRecipe( void );
 	void showCategories( void );
 	void showAuthors( void );
@@ -157,32 +137,28 @@ private:
 	// Signals & Slots
 
 private slots:
-	void loadUnitListCombo( void );
 	void changePhoto( void );
 	void clearPhoto( void );
 	void moveIngredientUp( void );
 	void moveIngredientDown( void );
 	void removeIngredient( void );
-	void addIngredient( void );
 	void syncListView( QListViewItem* it, const QString &new_text, int col );
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );
 	void enableChangedSignal( bool en = true );
 	void addCategory( void );
 	void addAuthor( void );
-	void slotIngredientBoxLostFocus( void );
-	void slotUnitBoxLostFocus( void );
-	void slotPrepMethodBoxLostFocus( void );
 	void enableSaveButton( bool enabled );
 	void closeOptions( void );
 	void showRecipe( void );
 	void prepTitleChanged( const QString &title );
-	void typeButtonClicked( int );
 	void recipeRemoved( int id );
 	void slotIngredientParser();
 	void slotAddRating();
 	void slotEditRating();
 	void slotRemoveRating();
+	void addIngredient( const Ingredient &ing );
+	void addIngredientHeader( const Element &header );
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

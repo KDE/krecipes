@@ -733,7 +733,6 @@ void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 
 void KrecipesView::switchToRecipe( void )
 {
-	inputPanel->reloadCombos(); //### Temporary until the combo boxes are database-aware... I'm holding off until the next release
 	slotSetPanel( RecipeEdit );
 }
 

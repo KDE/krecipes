@@ -71,7 +71,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 		{
 			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			double ratio;
-			ratio = database->unitRatio( ing.unitID, (*prop_it).perUnit.id );
+			ratio = database->unitRatio( ing.units.id, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
@@ -99,7 +99,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			property.units = (*prop_it).units;
 
 			double ratio;
-			ratio = database->unitRatio( ing.unitID, (*prop_it).perUnit.id );
+			ratio = database->unitRatio( ing.units.id, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
@@ -154,7 +154,7 @@ void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPr
 		{
 			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			double ratio;
-			ratio = url.getRatio( ing.unitID, (*prop_it).perUnit.id );
+			ratio = url.getRatio( ing.units.id, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
@@ -183,7 +183,7 @@ void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPr
 			property.units = (*prop_it).units;
 
 			double ratio;
-			ratio = url.getRatio( ing.unitID, (*prop_it).perUnit.id );
+			ratio = url.getRatio( ing.units.id, (*prop_it).perUnit.id );
 
 			if ( ratio > 0.0 )  // Could convert units to perUnit
 			{
