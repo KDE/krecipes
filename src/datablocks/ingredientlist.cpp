@@ -76,6 +76,11 @@ Ingredient IngredientList::findByName( const QString &ing ) const
 	for ( IngredientList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name == ing )
 			return *it;
+
+		for ( QValueList<IngredientData>::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
+			if ( ( *sub_it ).name == ing )
+				return *sub_it;
+		}
 	}
 
 	Ingredient el;
@@ -89,6 +94,11 @@ Ingredient IngredientList::findByName( const QRegExp &rx ) const
 	for ( IngredientList::const_iterator it = begin(); it != it_end; ++it ) {
 		if ( ( *it ).name.find(rx) != -1 )
 			return *it;
+
+		for ( QValueList<IngredientData>::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
+			if ( ( *sub_it ).name.find(rx) != -1 )
+				return *sub_it;
+		}
 	}
 
 	Ingredient el;
