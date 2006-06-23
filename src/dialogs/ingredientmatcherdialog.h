@@ -2,6 +2,8 @@
 *   Copyright (C) 2003 by                                                 *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
 *                                                                         *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -24,6 +26,7 @@
 #include <qvbox.h>
 
 #include <kstringhandler.h>
+#include <klocale.h>
 
 class KreListView;
 class KIntSpinBox;
@@ -40,8 +43,18 @@ public:
 	{
 		ingredientListStored = new QStringList();
 		IngredientList::ConstIterator ili;
-		for ( ili = il.begin();ili != il.end();++ili )
-			ingredientListStored->append( ( *ili ).name );
+		for ( ili = il.begin();ili != il.end();++ili ) {
+			if ( (*ili).substitutes.count() > 0 ) {
+				QStringList subs;
+				subs << ( *ili ).name;
+				for ( QValueList<IngredientData>::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
+ 					subs << (*it).name;
+				}
+				ingredientListStored->append( subs.join(QString(" %1 ").arg(i18n("OR"))) );
+			}
+			else
+				ingredientListStored->append( ( *ili ).name );
+		}
 
 		moveItem( qlv->lastItem() );
 	}
