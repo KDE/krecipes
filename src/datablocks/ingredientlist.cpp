@@ -20,7 +20,14 @@ IngredientList::~IngredientList()
 
 bool IngredientList::contains( const Ingredient &ing ) const
 {
-	return ( find( ing.ingredientID ) != -1 );
+	bool ret = QValueList<Ingredient>::contains(ing);
+	if ( !ret ) {
+		for ( QValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
+			ret = contains(*it);
+			if ( ret ) break;
+		}
+	}
+	return ret;
 }
 
 bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing )
