@@ -46,6 +46,10 @@ public:
 	RatingCriteriaList ratingCriteriaList;
 };
 
-typedef QValueList< Rating > RatingList;
+class RatingList : public QValueList< Rating >
+{
+public:
+	double average();
+};
 
 #endif

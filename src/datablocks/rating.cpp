@@ -66,3 +66,21 @@ double Rating::average() const
 	else
 		return -1;
 }
+
+
+double RatingList::average()
+{
+	int rating_total = 0;
+	double rating_sum = 0;
+	for ( RatingList::const_iterator rating_it = begin(); rating_it != end(); ++rating_it ) {
+		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			rating_total++;
+			rating_sum += (*rc_it).stars;
+		}
+	}
+
+	if ( rating_total > 0 )
+		return rating_sum/rating_total;
+	else
+		return -1;
+}

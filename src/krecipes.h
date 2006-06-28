@@ -92,6 +92,7 @@ private slots:
 	void pageSetupSlot();
 	void backupSlot();
 	void restoreSlot();
+	void mergeSimilarCategories();
 
 	/**  This function is called whenever a panel is shown or hidden and then sets
 	  *  actions as enabled as appropriate.

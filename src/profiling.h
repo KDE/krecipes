@@ -15,6 +15,8 @@
   #include "config.h"
 #endif
 
+#define KRECIPES_PROFILING
+
 #ifdef KRECIPES_PROFILING
   #include <qdatetime.h>
   #include <kdebug.h>

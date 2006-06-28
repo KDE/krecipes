@@ -26,7 +26,7 @@ libkrecipesdialogs_la_SOURCES= \
 	dbimportdialog.cpp createunitdialog.cpp \
 	setupdisplay.cpp \
 	ingredientparserdialog.cpp ingredientgroupsdialog.cpp \
-	editratingdialog.cpp
+	editratingdialog.cpp similarcategoriesdialog.cpp
 
 libkrecipesdialogs_la_METASOURCES=AUTO
 

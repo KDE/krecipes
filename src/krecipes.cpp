@@ -28,6 +28,7 @@
 #include "dialogs/dbimportdialog.h"
 #include "dialogs/pagesetupdialog.h"
 #include "dialogs/recipeimportdialog.h"
+#include "dialogs/similarcategoriesdialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -167,6 +168,10 @@ void Krecipes::setupActions()
 	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", CTRL + Key_E,
 	                          m_view, SLOT( editRecipe() ),
 	                          actionCollection(), "edit_action" );
+
+	( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
+	                          this, SLOT( mergeSimilarCategories() ),
+	                          actionCollection(), "merge_categories_action" );
 
 
 	KAction *action = KStdAction::openNew( this, SLOT( fileNew() ), actionCollection() );
@@ -479,6 +484,12 @@ void Krecipes::restoreSlot()
 		default: break;
 		}
 	}
+}
+
+void Krecipes::mergeSimilarCategories()
+{
+	SimilarCategoriesDialog dlg(m_view->database,this);
+	dlg.exec();
 }
 
 //return true to close app
