@@ -46,10 +46,10 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 	if ( allowHeader ) {
 		typeButtonGrp = new QButtonGroup();
 		QRadioButton *ingredientRadioButton = new QRadioButton( i18n( "Ingredient:" ), typeHBox );
-		typeButtonGrp->insert( ingredientRadioButton );
+		typeButtonGrp->insert( ingredientRadioButton, 0 );
 
 		QRadioButton *headerRadioButton = new QRadioButton( i18n( "Ingredient grouping name", "Header:" ), typeHBox );
-		typeButtonGrp->insert( headerRadioButton );
+		typeButtonGrp->insert( headerRadioButton, 1 );
 
 		typeButtonGrp->setButton( 0 );
 		connect( typeButtonGrp, SIGNAL( clicked( int ) ), SLOT( typeButtonClicked( int ) ) );
@@ -218,9 +218,10 @@ void IngredientInput::enableHeader( bool enable )
 void IngredientInput::signalIngredient()
 {
 	//validate input; if successful, emit signal
-	if ( isHeader() )
+	if ( isHeader() ) {
 		if ( header().isEmpty() )
 			return;
+	}
 	else {
 		if ( !isInputValid() )
 			return;
@@ -321,7 +322,7 @@ void IngredientInput::loadUnitListCombo()
 
 bool IngredientInput::isHeader() const
 {
-	return typeButtonGrp && typeButtonGrp->id( typeButtonGrp->selected() ) == 1;
+	return typeButtonGrp && (typeButtonGrp->id( typeButtonGrp->selected() ) == 1);
 }
 
 Ingredient IngredientInput::ingredient() const
@@ -417,6 +418,9 @@ void IngredientInputWidget::addIngredient()
 {
 	if ( m_ingInputs[0]->isHeader() ) {
 		QString header = m_ingInputs[0]->header();
+		if ( header.isEmpty() )
+			return;
+
 		int group_id = createNewGroupIfNecessary( header );
 		emit headerEntered( Element(header,group_id) );
 	}
