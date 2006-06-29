@@ -771,13 +771,16 @@ void RecipeInputDialog::moveIngredientDown( void )
 void RecipeInputDialog::removeIngredient( void )
 {
 	QListViewItem * it = ingredientList->selectedItem();
-	if ( it && it->rtti() == INGLISTVIEWITEM_RTTI || it->rtti() == INGSUBLISTVIEWITEM_RTTI ) {
-		// Find the one below or above, and save index first
-		QListViewItem * iabove, *ibelow, *iselect = 0;
-		if ( ( ibelow = it->itemBelow() ) )
-			iselect = ibelow;
-		else if ( ( iabove = it->itemAbove() ) )
-			iselect = iabove;
+	if ( it && (it->rtti() == INGLISTVIEWITEM_RTTI || it->rtti() == INGSUBLISTVIEWITEM_RTTI) ) {
+		QListViewItem *iselect = it->itemBelow();
+		while ( iselect && iselect->rtti() == INGSUBLISTVIEWITEM_RTTI )
+			iselect = iselect->itemBelow();
+
+		if ( !iselect ) {
+			iselect = it->itemAbove();
+			while ( iselect && iselect->rtti() == INGSUBLISTVIEWITEM_RTTI )
+				iselect = iselect->itemAbove();
+		}
 
 		IngListViewItem *ing_item = (IngListViewItem*)it; //we can cast IngSubListViewItem to this too, it's a subclass
 
@@ -1332,6 +1335,9 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing )
 {
 	//Append to the ListView
 	QListViewItem* lastElement = ingredientList->lastItem();
+	while ( lastElement && lastElement->rtti() == INGSUBLISTVIEWITEM_RTTI )
+		lastElement = lastElement->itemAbove();
+
 	if ( lastElement &&
 		( lastElement->rtti() == INGGRPLISTVIEWITEM_RTTI || ( lastElement->parent() && lastElement->parent() ->rtti() == INGGRPLISTVIEWITEM_RTTI ) ) )
 	{
@@ -1345,9 +1351,10 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing )
 	else {
 		lastElement = new IngListViewItem( ingredientList, lastElement, ing );
 		for ( QValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
+			kdDebug()<<"making "<<(*it).name<<endl;
 			new IngSubListViewItem( lastElement, *it );
-			lastElement->setOpen(true);
 		}
+		lastElement->setOpen(true);
 	}
 
 	//append to recipe
