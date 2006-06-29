@@ -37,6 +37,8 @@ void HeaderListView::load( int limit, int offset )
 	ElementList headerList;
 	database->loadIngredientGroups( &headerList );
 
+	setTotalItems(headerList.count());
+
 	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
 		createHeader( *it );
 	}
@@ -149,7 +151,7 @@ void StdHeaderListView::modHeader( QListViewItem* i, const QPoint & /*p*/, int c
 void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c )
 {
 	if ( !checkBounds( text ) ) {
-		reload(); //reset the changed text
+		reload(true); //reset the changed text
 		return ;
 	}
 
@@ -163,7 +165,7 @@ void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c
 				break;
 			}
 		default:
-			reload();
+			reload(true);
 			break;
 		}
 	}

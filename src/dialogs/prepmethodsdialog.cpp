@@ -30,7 +30,6 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );
-	prepMethodListView->reload();
 	layout->addWidget( prepMethodListView );
 
 	//Buttons

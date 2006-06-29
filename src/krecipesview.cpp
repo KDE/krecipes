@@ -374,39 +374,48 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	case ShoppingP:
 		rightPanel->setHeader( i18n( "Shopping List" ), "trolley" );
 		rightPanel->raise( shoppingListPanel );
+		shoppingListPanel->reload();
 		break;
 	case DietP:
 		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
 		rightPanel->raise( dietPanel );
+		dietPanel->reload();
 		break;
 	case MatcherP:
 		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "categories" );
 		rightPanel->raise( ingredientMatcherPanel );
+		ingredientMatcherPanel->reload();
 		break;
 
 	case IngredientsP:
 		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
 		rightPanel->raise( ingredientsPanel );
+		ingredientsPanel->reload();
 		break;
 	case PropertiesP:
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
 		rightPanel->raise( propertiesPanel );
+		//propertiesPanel->reload();
 		break;
 	case UnitsP:
 		rightPanel->setHeader( i18n( "Units" ), "units" );
 		rightPanel->raise( unitsPanel );
+		unitsPanel->reload();
 		break;
 	case PrepMethodsP:
 		rightPanel->setHeader( i18n( "Preparation Methods" ), "GIVE ME AN ICON :p" );
 		rightPanel->raise( prepMethodsPanel );
+		prepMethodsPanel->reload();
 		break;
 	case CategoriesP:
 		rightPanel->setHeader( i18n( "Categories" ), "categories" );
 		rightPanel->raise( categoriesPanel );
+		categoriesPanel->reload();
 		break;
 	case AuthorsP:
 		rightPanel->setHeader( i18n( "Authors" ), "personal" );
 		rightPanel->raise( authorsPanel );
+		authorsPanel->reload();
 		break;
 	case ContextHelp:
 		break;

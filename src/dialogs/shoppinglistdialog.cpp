@@ -73,7 +73,6 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	connect( recipeListView, SIGNAL( textChanged(const QString&) ), SLOT( ensurePopulated() ) );
 	connect( listview, SIGNAL( dropped( KListView*, QDropEvent*, QListViewItem* ) ),
 	         this, SLOT( slotDropped( KListView*, QDropEvent*, QListViewItem* ) ) );
-	listview->reload();
 	recipeListView->setListView( listview );
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );

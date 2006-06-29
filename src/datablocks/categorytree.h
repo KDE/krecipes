@@ -44,6 +44,8 @@ public:
 	void takeItem( CategoryTree * );
 	void insertItem( CategoryTree * );
 
+	int count() const { return m_count; }
+
 private:
 	CategoryTree( const CategoryTree & );
 	CategoryTree &operator=( const CategoryTree & );
@@ -52,6 +54,8 @@ private:
 	CategoryTree *m_child;
 	CategoryTree *m_sibling;
 	CategoryTree *m_last;
+
+	int m_count;
 };
 
 #endif

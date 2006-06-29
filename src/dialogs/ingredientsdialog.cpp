@@ -61,7 +61,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
-	list_view->reload();
 	ingredientListView->setListView( list_view );
 	layout->addMultiCellWidget ( ingredientListView, 1, 10, 1, 1 );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );

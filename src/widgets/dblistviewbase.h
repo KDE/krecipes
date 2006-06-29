@@ -19,6 +19,8 @@
 #define PREVLISTITEM_RTTI 1002
 #define NEXTLISTITEM_RTTI 1003
 
+class KProgressDialog;
+
 class RecipeDB;
 
 class DBListViewBase : public KListView
@@ -27,8 +29,9 @@ Q_OBJECT
 
 public:
 	DBListViewBase( QWidget *, RecipeDB *, int total );
+	~DBListViewBase();
 
-	void reload();
+	void reload( bool force=false );
 
 signals:
 	void nextGroupLoaded();
@@ -43,6 +46,7 @@ protected:
 
 	bool reloading(){ return bulk_load; }
 	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
+	void setTotalItems(int);
 
 	RecipeDB *database;
 	int curr_limit;
@@ -65,6 +69,9 @@ private:
 
 	QMap<QListViewItem*,QListViewItem*> lastElementMap;
 	QListViewItem *delete_me_later;
+
+	KProgressDialog *m_progress;
+	int m_totalSteps;
 };
 
 #endif //LISTVIEWHANDLER_H

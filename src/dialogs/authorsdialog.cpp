@@ -29,7 +29,6 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent 
 
 	//Author List
 	authorListView = new StdAuthorListView( this, database, true );
-	authorListView->reload();
 	layout->addWidget( authorListView );
 
 	//Buttons

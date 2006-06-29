@@ -75,8 +75,6 @@ Krecipes::Krecipes()
 		m_view( new KrecipesView( this ) ),
 		m_printer( 0 )
 {
-
-
 	// accept dnd
 	setAcceptDrops( true );
 
@@ -172,6 +170,10 @@ void Krecipes::setupActions()
 	( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
 	                          this, SLOT( mergeSimilarCategories() ),
 	                          actionCollection(), "merge_categories_action" );
+
+	( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", CTRL + Key_M,
+	                          this, SLOT( mergeSimilarIngredients() ),
+	                          actionCollection(), "merge_ingredients_action" );
 
 
 	KAction *action = KStdAction::openNew( this, SLOT( fileNew() ), actionCollection() );
@@ -488,8 +490,46 @@ void Krecipes::restoreSlot()
 
 void Krecipes::mergeSimilarCategories()
 {
-	SimilarCategoriesDialog dlg(m_view->database,this);
-	dlg.exec();
+	ElementList categories;
+	m_view->database->loadCategories(&categories);
+	SimilarCategoriesDialog dlg(categories,this);
+	if ( dlg.exec() == QDialog::Accepted ) {
+		QValueList<int> ids = dlg.matches();
+		QString name = dlg.element();
+
+		int id = m_view->database->findExistingCategoryByName(name);
+		if ( id == -1 ) {
+			m_view->database->createNewCategory(name);
+			id = m_view->database->lastInsertID();
+		}
+
+		for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+			m_view->database->mergeCategories(id, *it);
+		}
+	}
+}
+
+void Krecipes::mergeSimilarIngredients()
+{
+	ElementList ingredients;
+	m_view->database->loadIngredients(&ingredients);
+	SimilarCategoriesDialog dlg(ingredients,this);
+	if ( dlg.exec() == QDialog::Accepted ) {
+		QValueList<int> ids = dlg.matches();
+		QString name = dlg.element();
+
+		if ( ids.isEmpty() || name.isEmpty() ) return;
+
+		int id = m_view->database->findExistingIngredientByName(name);
+		if ( id == -1 ) {
+			m_view->database->createNewIngredient(name);
+			id = m_view->database->lastInsertID();
+		}
+
+		for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+			m_view->database->mergeIngredients(id, *it);
+		}
+	}
 }
 
 //return true to close app

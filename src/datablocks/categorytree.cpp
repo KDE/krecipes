@@ -15,7 +15,7 @@
 #include "element.h"
 
 CategoryTree::CategoryTree( CategoryTree *parent ) :
-		m_parent( 0 ), m_child( 0 ), m_sibling( 0 ), m_last(0)
+		m_parent( 0 ), m_child( 0 ), m_sibling( 0 ), m_last(0), m_count(0)
 {
 	if ( parent )
 		parent->insertItem( this );
@@ -41,6 +41,8 @@ CategoryTree *CategoryTree::add
 {
 	CategoryTree * new_child = new CategoryTree( this );
 	new_child->category = cat;
+
+	m_count++;
 	
 	return new_child;
 }
@@ -54,6 +56,7 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 		m_child = newChild;
 
 	m_child->m_last = newChild;
+	m_count++;
 }
 
 void CategoryTree::takeItem( CategoryTree *tree )
@@ -85,6 +88,7 @@ void CategoryTree::takeItem( CategoryTree *tree )
 		m_child->m_last = lastItem;
 	else //FIXME: unstable behavior if this is the case
 		kdDebug()<<"CategoryTree::takeItem: warning - unstable behavior expected"<<endl;
+	m_count--;
 }
 
 void CategoryTree::clear()

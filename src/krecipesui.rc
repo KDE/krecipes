@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="krecipes" version="7">
+<kpartgui name="krecipes" version="8">
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="reload_action" />
@@ -19,6 +19,7 @@
   <Menu name="tools"><text>&amp;Tools</text>
     <Action name="edit_action" />
     <Action name="merge_categories_action" />
+    <Action name="merge_ingredients_action" />
 </Menu>
 </MenuBar>
 </kpartgui>

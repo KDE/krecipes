@@ -12,6 +12,9 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
+#include <qvaluevector.h>
+
+#include "datablocks/elementlist.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -23,8 +26,8 @@ class QPushButton;
 class QListViewItem;
 
 class KListView;
+class KLineEdit;
 
-class CategoryComboBox;
 class RecipeDB;
 
 class SimilarCategoriesDialog : public QDialog
@@ -32,10 +35,13 @@ class SimilarCategoriesDialog : public QDialog
 Q_OBJECT
 	
 public:
-	SimilarCategoriesDialog( RecipeDB *db, QWidget* parent = 0 );
+	SimilarCategoriesDialog( ElementList &, QWidget* parent = 0 );
 	~SimilarCategoriesDialog();
-	
-	CategoryComboBox* categoriesBox;
+
+	QValueList<int> matches() const;
+	QString element() const;
+
+	KLineEdit* categoriesBox;
 	QSlider* thresholdSlider;
 	QLabel* thresholdLabel;
 	QLabel* categoryLabel;
@@ -71,7 +77,7 @@ protected slots:
 	void removeCategory();
 
 private:
-	RecipeDB *m_database;
+	ElementList m_elementList;
 
 };
 

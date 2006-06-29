@@ -3,17 +3,14 @@ jkivlighn:
 
 MAJOR FEATURES:
 	*Calendar for meal planning
-	*Instead of saving "servings" of a recipe, change it to "yield" and allow a unit ( i.e. 5 servings, 2 dozen )
 	*Command-line interface
 	*Improved printing support: I'd like to allow, for example, printing on recipe cards.
 	*Handle "Cookbooks".  In MySQL/PostgreSQL a cookbook would be a table, and in SQLite it would be a file.
-	*Recipe rating system
+	*Recipe revisions (planned for 1.1)
 
 CONVENIENCES/MINOR FEATURES:
 	*Improved navigation - add a forward and back button
 	*E-mail recipe(s) option (using kapp->invokeMailer())
-	*Show properties in columns
-	*Select which properties to show
 	*Give option to import recipe formats by pasting the recipe text into a widget
 	*Allow saving and loading diet info from a file (or just store it in the database?)
 	*Database maintenance options (Empty database, Remove unused elements, etc.)

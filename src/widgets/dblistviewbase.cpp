@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kprogress.h>
 
 
 //These two classes are used to identify the "Next" and "Prev" items, which are identified through rtti().  This also prevents renaming, even if it is enabled.
@@ -57,7 +58,9 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
   curr_offset(0),
   total(t),
   bulk_load(false),
-  delete_me_later(0)
+  delete_me_later(0),
+  m_progress(0),
+  m_totalSteps(0)
 {
 	setSorting(-1);
 
@@ -69,6 +72,11 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : KListVi
 	connect(this,SIGNAL(executed(QListViewItem*)),SLOT(slotDoubleClicked(QListViewItem*)));
 }
 
+DBListViewBase::~DBListViewBase()
+{
+	delete m_progress;
+}
+
 void DBListViewBase::activatePrev()
 {
 	if ( curr_offset != 0 ) {
@@ -76,7 +84,7 @@ void DBListViewBase::activatePrev()
 		if ( curr_offset < 0 )
 			curr_offset = 0;
 	
-		reload();
+		reload(true);
 		emit prevGroupLoaded();
 	}
 }
@@ -85,7 +93,7 @@ void DBListViewBase::activateNext()
 {
 	curr_offset += curr_limit;
 
-	reload();
+	reload(true);
 	emit nextGroupLoaded();
 }
 
@@ -146,25 +154,44 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 	KListView::keyPressEvent(k);
 }
 
-void DBListViewBase::reload()
+void DBListViewBase::reload( bool force )
 {
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
+	if ( force || !firstChild() ) {
+		KApplication::setOverrideCursor( KCursor::waitCursor() );
 
-	//reset some things
-	clear();
-	lastElementMap.clear();
+		m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
+		m_progress->setAllowCancel(false);
+		//m_progress->progressBar()->setPercentageVisible(false);
+		m_progress->progressBar()->setTotalSteps( m_totalSteps );
+		m_progress->show();
+		kapp->processEvents();
 
-	bulk_load=true;
-	load(curr_limit,curr_offset);
-	bulk_load=false;
+		//reset some things
+		clear();
+		lastElementMap.clear();
+	
+		bulk_load=true;
+		load(curr_limit,curr_offset);
+		bulk_load=false;
+	
+		if ( curr_limit != -1 && curr_offset + curr_limit < total )
+			new NextListViewItem(this,lastElementMap[0]);
+	
+		if ( curr_offset != 0 )
+			new PrevListViewItem(this);
 
-	if ( curr_limit != -1 && curr_offset + curr_limit < total )
-		new NextListViewItem(this,lastElementMap[0]);
+		delete m_progress; m_progress = 0;
+	
+		KApplication::restoreOverrideCursor();
+	}
+}
 
-	if ( curr_offset != 0 )
-		new PrevListViewItem(this);
-
-	KApplication::restoreOverrideCursor();
+void DBListViewBase::setTotalItems(int i)
+{
+	m_totalSteps = i;
+	if ( m_progress ) {
+		m_progress->progressBar()->setTotalSteps( m_totalSteps );
+	}
 }
 
 void DBListViewBase::createElement( QListViewItem *it )
@@ -182,6 +209,7 @@ void DBListViewBase::createElement( QListViewItem *it )
 	if ( bulk_load ) { //this can be much faster if we know the elements are already in order
 		if ( lastElement ) it->moveItem(lastElement);
 		lastElementMap.insert(it->parent(),it);
+		m_progress->progressBar()->advance(1);
 	}
 	else {
 		if ( lastElement == 0 ) {

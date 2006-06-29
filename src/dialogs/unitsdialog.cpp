@@ -43,7 +43,6 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	QHBoxLayout* layout = new QHBoxLayout( unitTab, KDialog::marginHint(), KDialog::spacingHint() );
 
 	unitListView = new StdUnitListView( unitTab, database, true );
-	unitListView->reload(); //load the initial data
 	layout->addWidget( unitListView );
 
 	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );

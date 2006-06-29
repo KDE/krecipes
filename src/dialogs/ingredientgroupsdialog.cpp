@@ -26,7 +26,6 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
-	list_view->reload();
 	headerListView->setListView( list_view );
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);

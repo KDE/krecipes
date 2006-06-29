@@ -45,7 +45,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	ingredientListView = new KreListView( this, i18n( "Ingredients" ), true, 0 );
 	IngredientCheckListView *list_view = new IngredientCheckListView( ingredientListView, database );
 	list_view->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-	list_view->reload();
 	ingredientListView->setListView( list_view );
 	// Box to select allowed number of missing ingredients
 	missingBox = new QHBox( this );

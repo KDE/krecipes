@@ -87,6 +87,8 @@ void IngredientListView::load( int limit, int offset )
 	ElementList ingredientList;
 	database->loadIngredients( &ingredientList, limit, offset );
 
+	setTotalItems(ingredientList.count());
+
 	for ( ElementList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )
 		createIngredient( *ing_it );
 }
@@ -195,7 +197,7 @@ void StdIngredientListView::modIngredient( QListViewItem* i )
 void StdIngredientListView::saveIngredient( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(); //reset the changed text
+		reload(true); //reset the changed text
 		return ;
 	}
 
@@ -210,7 +212,7 @@ void StdIngredientListView::saveIngredient( QListViewItem* i )
 				break;
 			}
 		default:
-			reload();
+			reload(true);
 			break; //we have to reload because the ingredient was renamed, and we need to reset it
 		}
 	}

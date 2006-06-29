@@ -87,8 +87,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	layout->addItem( spacerFromSearchBar, 2, 1 );
 
 	recipeListView = new RecipeListView( basicSearchTab, database );
-	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	recipeListView->reload();
+	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	layout->addMultiCellWidget( recipeListView, 3, 3, 1, 3 );
 
 	buttonBar = new QHBox( basicSearchTab );

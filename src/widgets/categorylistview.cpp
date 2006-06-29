@@ -162,6 +162,8 @@ void CategoryListView::load( int limit, int offset )
 	CategoryTree *p_list = &list;
 	database->loadCachedCategories( &p_list, limit, offset, -1, false );
 
+	setTotalItems(p_list->count());
+
 	for ( CategoryTree * child_it = p_list->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, -1 );
 	}
@@ -496,7 +498,7 @@ void StdCategoryListView::saveCategory( QListViewItem* i )
 	CategoryListItem * cat_it = ( CategoryListItem* ) i;
 
 	if ( !checkBounds( cat_it->categoryName() ) ) {
-		reload(); //reset the changed text
+		reload(true); //reset the changed text
 		return ;
 	}
 
@@ -511,7 +513,7 @@ void StdCategoryListView::saveCategory( QListViewItem* i )
 				break;
 			}
 		default:
-			reload();
+			reload(true);
 			break;
 		}
 	}

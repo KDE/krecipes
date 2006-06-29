@@ -191,7 +191,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
 	(*dumpStream) << "-- Krecipes database backend: "<<config->readEntry( "Type" )<<endl;
 
-	kdDebug()<<"Running '"<<command[0]<<"' to create backup file"<<endl;
+	kdDebug()<<"Running '"<<command.first()<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
 
 	QApplication::connect( p, SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(processDumpOutput(KProcess*,char*,int)) );

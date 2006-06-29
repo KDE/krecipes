@@ -91,10 +91,10 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( par
 	clearButton->setText( i18n( "Clear" ) );
 
 	// Create Tabs
-	newTab( i18n( "Meal 1" ) );
-
-	// Initialize data
-	reload();
+	//don't use newTab, it'll load data and we don't want it to do that at startup
+	mealTab = new MealInput( mealTabs, database );
+	mealTabs->addTab( mealTab,i18n( "Meal 1" ) );
+	mealTabs->setCurrentPage( mealTabs->indexOf( mealTab ) );
 
 	// Signals & Slots
 	connect( mealNumberSelector, SIGNAL( valueChanged( int ) ), this, SLOT( changeMealNumber( int ) ) );
@@ -118,7 +118,7 @@ void DietWizardDialog::clear()
 	mealTab->setDishNo( 3 );
 	mealTab->showDish( 0 );
 
-	for ( int i = 0; i < 3; ++i ) {
+	for ( int i = 0; i < mealTab->dishInputList.count(); ++i ) {
 		DishInput* dishInput = mealTab->dishInputList[ i ]; // Get the dish input
 		dishInput->clear();
 	}
@@ -129,6 +129,10 @@ void DietWizardDialog::reload( void )
 	//Fill in the caches from the database
 	//database->loadUnitRatios( &cachedUnitRatios );
 	//database->loadProperties( &cachedIngredientProperties, -1 );
+	for ( int i = 0; i < mealTabs->count(); ++i ) {
+		MealInput *mealTab = (MealInput*)mealTabs->page(i);
+		mealTab->reload();
+	}
 }
 
 void DietWizardDialog::newTab( const QString &name )
@@ -482,7 +486,6 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	categoriesView = new CategoryCheckListView( categoriesBox, database, false );
 	categoriesView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	categoriesView->setEnabled( false ); // Disable it by default
-	categoriesView->reload();
 
 	//Constraints list
 	constraintsView = new PropertyConstraintListView( listBox, database );
@@ -535,6 +538,7 @@ bool DishInput::isCategoryFilteringEnabled( void ) const
 void DishInput::reload()
 {
 	constraintsView->reload();
+	categoriesView->reload();
 }
 
 void DishInput::insertConstraintsEditBoxes( QListViewItem* it )

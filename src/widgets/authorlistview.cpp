@@ -34,6 +34,8 @@ void AuthorListView::load( int limit, int offset )
 	ElementList authorList;
 	database->loadAuthors( &authorList, limit, offset );
 
+	setTotalItems(authorList.count());
+
 	for ( ElementList::const_iterator ing_it = authorList.begin(); ing_it != authorList.end(); ++ing_it )
 		createAuthor( *ing_it );
 }
@@ -138,7 +140,7 @@ void StdAuthorListView::modAuthor( QListViewItem* i )
 void StdAuthorListView::saveAuthor( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(); //reset the changed text
+		reload(true); //reset the changed text
 		return ;
 	}
 
@@ -153,7 +155,7 @@ void StdAuthorListView::saveAuthor( QListViewItem* i )
 				break;
 			}
 		default:
-			reload();
+			reload(true);
 			break;
 		}
 	}

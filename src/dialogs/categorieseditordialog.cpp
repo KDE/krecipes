@@ -31,7 +31,6 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
-	categoryListView->reload();
 	layout->addWidget( categoryListView );
 
 	//Buttons

@@ -22,13 +22,14 @@
 #include <klistview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 
 #include "widgets/categorycombobox.h"
 #include "backends/recipedb.h"
 
-SimilarCategoriesDialog::SimilarCategoriesDialog( RecipeDB *db, QWidget* parent )
+SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* parent )
    : QDialog( parent, "SimilarCategoriesDialog", true ),
-     m_database(db) 
+     m_elementList(list)
 {
 	SimilarCategoriesDialogLayout = new QVBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout"); 
 	
@@ -36,8 +37,7 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( RecipeDB *db, QWidget* parent 
 	
 	layout4 = new QGridLayout( 0, 1, 1, 0, 6, "layout4"); 
 	
-	categoriesBox = new CategoryComboBox( this, m_database );
-	categoriesBox->reload();
+	categoriesBox = new KLineEdit( this );
 	
 	layout4->addWidget( categoriesBox, 0, 1 );
 	
@@ -307,25 +307,21 @@ void SimilarCategoriesDialog::findMatches()
 	toMergeListView->clear();
 
 	const double threshold = (100 - thresholdSlider->value())/100.0;
-	const QString name = categoriesBox->currentText();
-	const int id = categoriesBox->id(categoriesBox->currentItem());
+	const QString name = categoriesBox->text();
 	const int length = name.length();
 
-	ElementList categories;
-	m_database->loadCategories( &categories );
-
-	for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
-		kdDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;
+	for ( ElementList::const_iterator it = m_elementList.begin(); it != m_elementList.end(); ++it ) {
+		//kdDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;
 		#if 0
 		if ( levenshtein_distance(name.latin1(),(*it).name.latin1())/double(QMAX(length,(*it).name.length())) >= max_allowed_distance ) {
 		#else
 		if ( compareStrings(name,(*it).name) >= threshold ) {
 		#endif
 			kdDebug()<<(*it).name<<" matches"<<endl;
-			if ( id != (*it).id ) {
+			//if ( id != (*it).id ) {
 				(void) new QListViewItem(allListView,(*it).name,QString::number((*it).id));
 				(void) new QListViewItem(toMergeListView,(*it).name,QString::number((*it).id));
-			}
+			//}
 		}
 	}
 }
@@ -337,15 +333,30 @@ void SimilarCategoriesDialog::mergeMatches()
 		return;
 	}
 
-	const int id = categoriesBox->id(categoriesBox->currentItem());
-	for ( QListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
-		m_database->mergeCategories(id,item->text(1).toInt());
-	}
+	//const int id = categoriesBox->id(categoriesBox->currentItem());
+	//for ( QListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
+	//	m_database->mergeCategories(id,item->text(1).toInt());
+	//}
 
 	allListView->clear();
-	toMergeListView->clear();
+	//toMergeListView->clear();
 
 	QDialog::accept();
+}
+
+QValueList<int> SimilarCategoriesDialog::matches() const
+{
+	QValueList<int> ids;
+	for ( QListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
+		ids << item->text(1).toInt();
+	}
+
+	return ids;
+}
+
+QString SimilarCategoriesDialog::element() const
+{
+	return categoriesBox->text();
 }
 
 void SimilarCategoriesDialog::addCategory()
