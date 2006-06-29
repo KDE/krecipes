@@ -200,8 +200,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
-		while ( m_styleSheet.cssRules().length() != 0 )
-			m_styleSheet.deleteRule(0);
+		m_styleSheet = DOM::CSSStyleSheet();
 
 		QMap<QString,KreDisplayItem*>::iterator it;
 		for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
