@@ -35,6 +35,8 @@ void PrepMethodListView::load( int limit, int offset )
 	ElementList prepMethodList;
 	database->loadPrepMethods( &prepMethodList, limit, offset );
 
+	setTotalItems(prepMethodList.count());
+
 	for ( ElementList::const_iterator ing_it = prepMethodList.begin(); ing_it != prepMethodList.end(); ++ing_it )
 		createPrepMethod( *ing_it );
 }
