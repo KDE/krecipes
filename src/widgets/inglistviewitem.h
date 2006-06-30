@@ -34,14 +34,13 @@ public:
 	void setUnit( const Unit &unit );
 	void setPrepMethod( const QString &prepMethod );
 
-	virtual void setText( int column, const QString &text );
-
 protected:
 	Ingredient m_ing;
 	QString amount_str;
 
 public:
 	virtual QString text( int column ) const;
+	virtual void setText( int column, const QString &text );
 
 private:
 	void init( const Ingredient &i );
@@ -54,6 +53,7 @@ public:
 	IngSubListViewItem( QListViewItem* qli, const Ingredient &i );
 
 	virtual QString text( int column ) const;
+	virtual void setText( int column, const QString &text );
 	virtual int rtti() const;
 };
 

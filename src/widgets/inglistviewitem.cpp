@@ -26,12 +26,28 @@ QString IngSubListViewItem::text( int column ) const
 {
 	if ( column == 0 ) {
 		//kdDebug()<<"displaying col 0 for "<<m_ing.name<<endl;
-		//return i18n("OR")+" "+m_ing.name;
-		return m_ing.name;
+		return QString("%1 ").arg(i18n("OR"))+m_ing.name;
+		//return m_ing.name;
 	}
 	else
 		return IngListViewItem::text(column);
 
+}
+
+void IngSubListViewItem::setText( int column, const QString &text )
+{
+	switch ( column ) {
+	case 0: {
+		QString compare = QString("%1 ").arg(i18n("OR"));
+		if ( text.left(compare.length()) == compare )
+			m_ing.name = text.right(text.length()-compare.length());
+		else
+			m_ing.name = text;
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 int IngSubListViewItem::rtti() const
@@ -107,9 +123,10 @@ void IngListViewItem::setPrepMethod( const QString &prepMethod )
 void IngListViewItem::setText( int column, const QString &text )
 {
 	switch ( column ) {
-	case 0:
+	case 0: {
 		m_ing.name = text;
 		break;
+	}
 	case 1: {
 		Ingredient i; i.setAmount(text);
 		setAmount( i.amount, i.amount_offset );
