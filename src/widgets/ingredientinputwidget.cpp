@@ -391,6 +391,7 @@ void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 
 	if ( on ) {
 		IngredientInput *new_input = new IngredientInput(database,this,false);
+		new_input->reloadCombos();
 
 		QWidget::setTabOrder( prev_input, new_input );
 		new_input->updateTabOrder();

@@ -1346,12 +1346,15 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing )
 		Ingredient copy = ing;
 		copy.groupID = header->id();
 
-		( void ) new IngListViewItem( header, lastElement, copy );
+		lastElement = new IngListViewItem( header, lastElement, copy );
+		for ( QValueList<IngredientData>::const_iterator it = copy.substitutes.begin(); it != copy.substitutes.end(); ++it ) {
+			new IngSubListViewItem( lastElement, *it );
+		}
+		lastElement->setOpen(true);
 	}
 	else {
 		lastElement = new IngListViewItem( ingredientList, lastElement, ing );
 		for ( QValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
-			kdDebug()<<"making "<<(*it).name<<endl;
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);
