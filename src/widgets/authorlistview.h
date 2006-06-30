@@ -51,6 +51,9 @@ protected slots:
 	virtual void createAuthor( const Element & ) = 0;
 	virtual void removeAuthor( int ) = 0;
 	virtual void load( int curr_limit, int curr_offset );
+
+protected:
+	virtual void init();
 };
 
 class StdAuthorListView : public AuthorListView

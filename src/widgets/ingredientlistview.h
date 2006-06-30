@@ -58,6 +58,9 @@ protected slots:
 	virtual void removeIngredient( int ) = 0;
 	virtual void load(int limit,int offset);
 
+protected:
+	virtual void init();
+
 private slots:
 	virtual void checkCreateIngredient( const Element & );
 };

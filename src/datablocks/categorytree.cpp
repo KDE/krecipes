@@ -61,7 +61,7 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 
 void CategoryTree::takeItem( CategoryTree *tree )
 {
-	//FIXME: Both these methods seem to be broken... don't use this function!
+	kdError()<< "Both these methods seem to be broken... don't use this function!" << endl;
 
 	CategoryTree *lastItem = m_child->m_last;
 #if 0

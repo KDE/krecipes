@@ -97,11 +97,6 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 		m_uncat_item(0),
 		m_progress_dlg(0)
 {
-	connect( database, SIGNAL( recipeCreated( const Element &, const ElementList & ) ), SLOT( createRecipe( const Element &, const ElementList & ) ) );
-	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
-	connect( database, SIGNAL( recipeRemoved( int, int ) ), SLOT( removeRecipe( int, int ) ) );
-	connect( database, SIGNAL( recipeModified( const Element &, const ElementList & ) ), SLOT( modifyRecipe( const Element &, const ElementList & ) ) );
-
 	setColumnText( 0, i18n( "Recipe" ) );
 
 	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
@@ -113,6 +108,16 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	setSelectionMode( QListView::Extended );
 
 	(void)new RecipeListToolTip(this);
+}
+
+void RecipeListView::init()
+{
+	connect( database, SIGNAL( recipeCreated( const Element &, const ElementList & ) ), SLOT( createRecipe( const Element &, const ElementList & ) ) );
+	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
+	connect( database, SIGNAL( recipeRemoved( int, int ) ), SLOT( removeRecipe( int, int ) ) );
+	connect( database, SIGNAL( recipeModified( const Element &, const ElementList & ) ), SLOT( modifyRecipe( const Element &, const ElementList & ) ) );
+
+	StdCategoryListView::init();
 }
 
 QDragObject *RecipeListView::dragObject()

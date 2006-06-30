@@ -159,6 +159,8 @@ void DBListViewBase::reload( bool force )
 	if ( force || !firstChild() ) {
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
 
+		init();
+
 		m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
 		m_progress->setAllowCancel(false);
 		//m_progress->progressBar()->setPercentageVisible(false);

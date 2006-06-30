@@ -141,6 +141,7 @@ protected slots:
 	virtual void removeRecipe( int, int );
 
 protected:
+	virtual void init();
 	virtual void createElement( QListViewItem * );
 	virtual void removeCategory( int id );
 	virtual QDragObject *dragObject();

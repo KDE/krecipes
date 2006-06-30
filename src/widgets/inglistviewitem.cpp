@@ -13,6 +13,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include "datablocks/unit.h"
 #include "datablocks/mixednumber.h"
@@ -23,8 +24,10 @@ IngSubListViewItem::IngSubListViewItem( QListViewItem* qli, const Ingredient &i 
 
 QString IngSubListViewItem::text( int column ) const
 {
-	if ( column == 0 )
-		return m_ing.name;
+	if ( column == 0 ) {
+		kdDebug()<<"displaying col 0 for "<<m_ing.name<<endl;
+		return i18n("OR")+" "+m_ing.name;
+	}
 	else
 		return IngListViewItem::text(column);
 

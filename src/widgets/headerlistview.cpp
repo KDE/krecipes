@@ -25,11 +25,14 @@
 
 HeaderListView::HeaderListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
-	connect( database, SIGNAL( ingGroupCreated( const Element & ) ), SLOT( checkCreateHeader( const Element & ) ) );
-	connect( database, SIGNAL( ingGroupRemoved( int ) ), SLOT( removeHeader( int ) ) );
-
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
+}
+
+void HeaderListView::init()
+{
+	connect( database, SIGNAL( ingGroupCreated( const Element & ) ), SLOT( checkCreateHeader( const Element & ) ) );
+	connect( database, SIGNAL( ingGroupRemoved( int ) ), SLOT( removeHeader( int ) ) );
 }
 
 void HeaderListView::load( int limit, int offset )

@@ -116,6 +116,8 @@ public slots:
 	void open( QListViewItem *item );
 
 protected:
+	virtual void init();
+
 	virtual void load( int limit, int offset );
 
 	/** so that it allows dropping into

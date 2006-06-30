@@ -23,11 +23,14 @@
 
 PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->prepMethodCount())
 {
-	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( checkCreatePrepMethod( const Element & ) ) );
-	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
-
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
+}
+
+void PrepMethodListView::init()
+{
+	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( checkCreatePrepMethod( const Element & ) ) );
+	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 }
 
 void PrepMethodListView::load( int limit, int offset )

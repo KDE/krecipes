@@ -38,6 +38,12 @@ signals:
 	void prevGroupLoaded();
 
 protected:
+	/**
+	 * Called when the list view is ready to be used, i.e., it has been loaded with data.
+	 * Until the list view has been loaded, we can ignore all database signals regarding changes
+	 * of data.  Therefore, subclasses should connect to these signals during this call.
+	 */
+	virtual void init(){}
 	virtual void load(int limit, int offset) = 0;
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );

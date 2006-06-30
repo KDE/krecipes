@@ -33,6 +33,9 @@ protected slots:
 	virtual void removePrepMethod( int ) = 0;
 
 	void checkCreatePrepMethod( const Element &el );
+
+protected:
+	virtual void init();
 };
 
 

@@ -75,11 +75,14 @@ void IngredientCheckListItem::stateChange( bool on )
 
 IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db, db->ingredientCount() )
 {
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( checkCreateIngredient( const Element & ) ) );
-	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
-
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
+}
+
+void IngredientListView::init()
+{
+	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( checkCreateIngredient( const Element & ) ) );
+	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
 }
 
 void IngredientListView::load( int limit, int offset )

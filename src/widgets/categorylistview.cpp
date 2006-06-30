@@ -136,12 +136,6 @@ void CategoryListItem::setText( int column, const QString &text )
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() ),
 	m_item_to_delete(0)
 {
-	connect( db, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
-	connect( db, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
-	connect( db, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
-	connect( db, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
-	connect( db, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
-
 	//connect( this, SIGNAL( spacePressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
 	//connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
 	//connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
@@ -151,6 +145,15 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
+}
+
+void CategoryListView::init()
+{
+	connect( database, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
+	connect( database, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
+	connect( database, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
+	connect( database, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
+	connect( database, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
 }
 
 // (Re)loads the data from the database
