@@ -407,13 +407,13 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
 
 				QString tmp_format( ingredient_format );
-				tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( "OR " + ( *sub_it ).name ) );
+				tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *sub_it ).name ) );
 				tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
 				tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
 				tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *sub_it ).prepMethodList.count() == 0 ) ?
 						QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ) );
 	
-				ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
+				ingredients_html += QString( "<li>%1 %2</li>" ).arg(i18n("OR")).arg( tmp_format );
 			}
 		}
 
