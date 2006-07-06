@@ -887,7 +887,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 			if ( approp_unit != new_text.stripWhiteSpace() )
 			{
 				Unit new_unit;
-				int new_id = ingInput->createNewUnitIfNecessary( new_text.stripWhiteSpace(), new_ing.amount > 1, ing_item->ingredient().ingredientID, new_unit );
+				int new_id = IngredientInputWidget::createNewUnitIfNecessary( new_text.stripWhiteSpace(), new_ing.amount > 1, ing_item->ingredient().ingredientID, new_unit, database );
 
 				if ( new_id != -1 ) {
 					new_ing.units = new_unit;
@@ -921,7 +921,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 			if ( old_text != new_text.stripWhiteSpace() )
 			{
 				new_ing.prepMethodList = ElementList::split(",",new_text.stripWhiteSpace());
-				QValueList<int> new_ids = ingInput->createNewPrepIfNecessary( new_ing.prepMethodList );
+				QValueList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
 	
 				QValueList<int>::const_iterator id_it = new_ids.begin();
 				for ( ElementList::iterator it = new_ing.prepMethodList.begin(); it != new_ing.prepMethodList.end(); ++it, ++id_it ) {
@@ -1188,11 +1188,8 @@ int RecipeInputDialog::ingItemIndex( QListView *listview, const QListViewItem *i
 	}
 }
 
-//TODO: This inputs the ingredients by simulating the user's actions that would do this.
-//	Instead, this shouldn't require messing with the UI.
 void RecipeInputDialog::slotIngredientParser()
 {
-#if 0
 	UnitList units;
 	database->loadUnits(&units);
 	IngredientParserDialog dlg(units,this);
@@ -1201,22 +1198,20 @@ void RecipeInputDialog::slotIngredientParser()
 		QStringList usedGroups;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
 			if ( !(*it).group.isEmpty() && usedGroups.find((*it).group) == usedGroups.end() ) {
-				typeButtonGrp->setButton( 1 );
-				headerBox->lineEdit()->setText((*it).group);
-				addIngredient(); //adds the header
+				int id = IngredientInputWidget::createNewGroupIfNecessary((*it).group,database);
+				addIngredientHeader( Element((*it).group, id) );
 				usedGroups << (*it).group;
 			}
+			(*it).ingredientID = IngredientInputWidget::createNewIngredientIfNecessary((*it).name,database);
+			(*it).units.id = IngredientInputWidget::createNewUnitIfNecessary((*it).units.name,false,(*it).ingredientID,(*it).units,database);
 
-			ingredientBox->lineEdit()->setText((*it).name.left( database->maxIngredientNameLength()));
-			amountEdit->setValue((*it).amount,(*it).amount_offset);
-			unitBox->lineEdit()->setText((*it).units.name.left( database->maxUnitNameLength()));
-
-			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it ) {
-				(*prep_it).name = (*prep_it).name.left(database->maxPrepMethodNameLength());
+			QValueList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
+			QValueList<int>::const_iterator prep_id_it = prepIDs.begin();
+			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it, ++prep_id_it ) {
+				(*prep_it).id = *prep_id_it;
 			}
-			prepMethodBox->lineEdit()->setText((*it).prepMethodList.join(","));
 
-			addIngredient();
+			addIngredient(*it);
 
 			if ( usedGroups.count() > 0 && (*it).group.isEmpty() ) {
 				QListViewItem *last_item = ingredientList->lastItem();
@@ -1228,7 +1223,6 @@ void RecipeInputDialog::slotIngredientParser()
 			}
 		}
 	}
-	#endif
 }
 
 void RecipeInputDialog::slotAddRating()

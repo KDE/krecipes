@@ -422,7 +422,7 @@ void IngredientInputWidget::addIngredient()
 		if ( header.isEmpty() )
 			return;
 
-		int group_id = createNewGroupIfNecessary( header );
+		int group_id = createNewGroupIfNecessary( header,database );
 		emit headerEntered( Element(header,group_id) );
 	}
 	else {
@@ -434,14 +434,14 @@ void IngredientInputWidget::addIngredient()
 		QValueList<IngredientData> list;
 		for ( QValueList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
 			Ingredient ing = (*it)->ingredient();
-			ing.ingredientID = createNewIngredientIfNecessary(ing.name);
+			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
 
 			bool plural = ing.amount+ing.amount_offset > 1;
-			ing.units.id = createNewUnitIfNecessary( (plural)?ing.units.plural:ing.units.name, plural, ing.ingredientID, ing.units );
+			ing.units.id = createNewUnitIfNecessary( (plural)?ing.units.plural:ing.units.name, plural, ing.ingredientID, ing.units,database );
 			if ( ing.units.id == -1 )  // this will happen if the dialog to create a unit was cancelled
 				return ;
 	
-			QValueList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList );
+			QValueList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
 			QValueList<int>::const_iterator id_it = prepIDs.begin();
 			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {
 				(*it).id = *id_it;
@@ -460,7 +460,7 @@ void IngredientInputWidget::addIngredient()
 	 m_ingInputs[0]->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
 }
 
-int IngredientInputWidget::createNewIngredientIfNecessary( const QString &ing )
+int IngredientInputWidget::createNewIngredientIfNecessary( const QString &ing, RecipeDB *database )
 {
 	int id = -1;
 	if ( ing.isEmpty() )
@@ -474,12 +474,12 @@ int IngredientInputWidget::createNewIngredientIfNecessary( const QString &ing )
 	return id;
 }
 
-int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool plural, int ingredientID, Unit &new_unit )
+int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool plural, int ingredientID, Unit &new_unit, RecipeDB *database )
 {
 	int id = database->findExistingUnitByName( unit );
 	if ( -1 == id )
 	{
-		CreateUnitDialog getUnit( this, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
+		CreateUnitDialog getUnit( 0, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
 		if ( getUnit.exec() == QDialog::Accepted ) {
 			new_unit = getUnit.newUnit();
 			database->createNewUnit( new_unit );
@@ -503,7 +503,7 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 	return id;
 }
 
-QValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods )
+QValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *database )
 {
 	QValueList<int> ids;
 
@@ -525,7 +525,7 @@ QValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementLi
 	}
 }
 
-int IngredientInputWidget::createNewGroupIfNecessary( const QString &group )
+int IngredientInputWidget::createNewGroupIfNecessary( const QString &group, RecipeDB *database )
 {
 	if ( group.stripWhiteSpace().isEmpty() )  //no group
 		return -1;

@@ -50,10 +50,10 @@ public:
 
 	void clear();
 
-	int createNewIngredientIfNecessary( const QString &ing );
-	int createNewUnitIfNecessary( const QString &unit, bool plural, int ingredient_id, Unit &new_unit );
-	QValueList<int> createNewPrepIfNecessary( const ElementList &prepMethods );
-	int createNewGroupIfNecessary( const QString &group );
+	static int createNewIngredientIfNecessary( const QString &ing, RecipeDB *db );
+	static int createNewUnitIfNecessary( const QString &unit, bool plural, int ingredient_id, Unit &new_unit, RecipeDB *db );
+	static QValueList<int> createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *db );
+	static int createNewGroupIfNecessary( const QString &group, RecipeDB *db );
 
 signals:
 	void ingredientEntered( const Ingredient &ing );
