@@ -114,16 +114,18 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 
 				if ( (*ing_it).substitutes.count() > 0 )
 					content += ", "+i18n("or");
+				content += "\n";
 				
 				for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-					content += "  "+generateIngredient(*sub_it,number_format);
+					if ( !group.isEmpty() )
+						content += "  ";
+
+					content += generateIngredient(*sub_it,number_format);
 					sub_it++;
 					if ( sub_it != (*ing_it).substitutes.end() )
 						content += ", "+i18n("or");
 					content += "\n";
 				}
-
-				content += "\n";
 			}
 		}
 
