@@ -92,17 +92,19 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 	passwordLabel = new QLabel( serverPage, "passwordLabel" );
 	layout5->addWidget( passwordLabel, 2, 0 );
 
-	nameEdit = new QLineEdit( serverPage, "nameEdit" );
-	layout5->addWidget( nameEdit, 3, 1 );
-	nameLabel = new QLabel( serverPage, "nameLabel" );
-	layout5->addWidget( nameLabel, 3, 0 );
-
 	portEdit = new KIntNumInput( serverPage, "portEdit" );
 	portEdit->setMinValue(0);
 	portEdit->setValue(0);
-	layout5->addWidget( nameEdit, 4, 1 );
+	layout5->addWidget( portEdit, 3, 1 );
 	portLabel = new QLabel( serverPage, "portLabel" );
-	layout5->addWidget( portLabel, 4, 0 );
+	layout5->addWidget( portLabel, 3, 0 );
+
+	nameEdit = new QLineEdit( serverPage, "nameEdit" );
+	layout5->addWidget( nameEdit, 4, 1 );
+	nameLabel = new QLabel( serverPage, "nameLabel" );
+	layout5->addWidget( nameLabel, 4, 0 );
+
+
 
 	serverPageLayout->addLayout( layout5 );
 	paramStack->addWidget( serverPage, 0 );
