@@ -93,6 +93,8 @@ QStringList MySQLRecipeDB::restoreCommand() const
 	if ( port > 0 )
         	command<<"-P"+QString::number(port);
 
+        command<<"-h"+config->readEntry("Host", "localhost");
+
 	command<<database->databaseName();
 	return command;
 }
