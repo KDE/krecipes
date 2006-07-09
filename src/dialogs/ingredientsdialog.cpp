@@ -174,7 +174,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
 
-	IngredientGroupsDialog *groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
+	groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
 	tabWidget->insertTab( groupsDialog, i18n( "Headers" ) );
 
 	page_layout->addWidget( tabWidget );
@@ -464,6 +464,7 @@ int IngredientsDialog::findPropertyNo( QListViewItem * /*it*/ )
 void IngredientsDialog::reload( void )
 {
 	reloadIngredientList();
+	groupsDialog->reload();
 }
 
 void IngredientsDialog::openUSDADialog( void )

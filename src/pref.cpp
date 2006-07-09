@@ -134,18 +134,33 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow3, 6, 1 );
 
+	QLabel* portText = new QLabel( i18n( "Port:" ), this );
+	portText->setFixedSize( QSize( 100, 20 ) );
+	portText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	layout->addWidget( portText, 7, 1 );
+
+	portEdit = new KIntNumInput( this );
+	portEdit->setMinValue(0);
+	portEdit->setSpecialValueText( i18n("Default") );
+	portEdit->setFixedSize( QSize( 120, 20 ) );
+	portEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	layout->addWidget( portEdit, 7, 2 );
+
+	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerRow4, 8, 1 );
+
 	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), this );
 	dbNameText->setFixedSize( QSize( 100, 20 ) );
 	dbNameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addWidget( dbNameText, 7, 1 );
+	layout->addWidget( dbNameText, 9, 1 );
 
 	dbNameEdit = new KLineEdit( this );
 	dbNameEdit->setFixedSize( QSize( 120, 20 ) );
 	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addWidget( dbNameEdit, 7, 2 );
+	layout->addWidget( dbNameEdit, 9, 2 );
 
 	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow5, 8, 1 );
+	layout->addItem( spacerRow5, 10, 1 );
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
@@ -164,8 +179,8 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	mysqlPathRequester->setFilter( "mysql" );
 
 
-	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow4, 10, 1 );
+	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+	layout->addItem( spacerRow6, 10, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
@@ -175,6 +190,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	serverEdit->setText( config->readEntry( "Host", "localhost" ) );
 	usernameEdit->setText( config->readEntry( "Username", "" ) );
 	passwordEdit->setText( config->readEntry( "Password", "" ) );
+	portEdit->setValue( config->readNumEntry( "Port", 0 ) );
 	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
 	dumpPathRequester->setURL( config->readEntry( "MySQLDumpPath", "mysqldump" ) );
 	mysqlPathRequester->setURL( config->readEntry( "MySQLPath", "mysql" ) );
@@ -187,6 +203,7 @@ void MySQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Host", serverEdit->text() );
 	config->writeEntry( "Username", usernameEdit->text() );
 	config->writeEntry( "Password", passwordEdit->text() );
+	config->writeEntry( "Port", portEdit->value() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
 	config->writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
 	config->writeEntry( "MySQLPath", mysqlPathRequester->url() );
@@ -244,19 +261,33 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow3, 6, 1 );
 
+	QLabel* portText = new QLabel( i18n( "Port:" ), this );
+	portText->setFixedSize( QSize( 100, 20 ) );
+	portText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	layout->addWidget( portText, 7, 1 );
+
+	portEdit = new KIntNumInput( this );
+	portEdit->setMinValue(0);
+	portEdit->setSpecialValueText( i18n("Default") );
+	portEdit->setFixedSize( QSize( 120, 20 ) );
+	portEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	layout->addWidget( portEdit, 7, 2 );
+
+	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	layout->addItem( spacerRow4, 8, 1 );
+
 	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), this );
 	dbNameText->setFixedSize( QSize( 100, 20 ) );
 	dbNameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addWidget( dbNameText, 7, 1 );
+	layout->addWidget( dbNameText, 9, 1 );
 
 	dbNameEdit = new KLineEdit( this );
 	dbNameEdit->setFixedSize( QSize( 120, 20 ) );
 	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addWidget( dbNameEdit, 7, 2 );
-
+	layout->addWidget( dbNameEdit, 9, 2 );
 
 	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow5, 8, 1 );
+	layout->addItem( spacerRow5, 10, 1 );
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
@@ -275,8 +306,8 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	psqlPathRequester->setFilter( "psql" );
 
 
-	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow4, 10, 1 );
+	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
+	layout->addItem( spacerRow6, 10, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
@@ -286,6 +317,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	serverEdit->setText( config->readEntry( "Host", "localhost" ) );
 	usernameEdit->setText( config->readEntry( "Username", "" ) );
 	passwordEdit->setText( config->readEntry( "Password", "" ) );
+	portEdit->setValue( config->readNumEntry( "Port", 0 ) );
 	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
 	dumpPathRequester->setURL( config->readEntry( "PgDumpPath", "pg_dump" ) );
 	psqlPathRequester->setURL( config->readEntry( "PsqlPath", "psql" ) );
@@ -298,6 +330,7 @@ void PostgreSQLServerPrefs::saveOptions( void )
 	config->writeEntry( "Host", serverEdit->text() );
 	config->writeEntry( "Username", usernameEdit->text() );
 	config->writeEntry( "Password", passwordEdit->text() );
+	config->writeEntry( "Port", portEdit->value() );
 	config->writeEntry( "DBName", dbNameEdit->text() );
 	config->writeEntry( "PgDumpPath", dumpPathRequester->url() );
 	config->writeEntry( "PsqlPath", psqlPathRequester->url() );

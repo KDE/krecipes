@@ -25,6 +25,7 @@ class QLabel;
 class QPushButton;
 
 class KURLRequester;
+class KIntNumInput;
 
 /**
 @author Jason Kivlighn
@@ -38,7 +39,7 @@ public:
 	~DBImportDialog();
 
 	QString dbType() const;
-	void serverParams( QString &host, QString &user, QString &pass, QString &table ) const;
+	void serverParams( QString &host, QString &user, QString &pass, int &port, QString &table ) const;
 	QString dbFile() const;
 
 private:
@@ -57,6 +58,8 @@ private:
 	QLabel* userLabel;
 	QLabel* hostLabel;
 	QLabel* nameLabel;
+	QLabel* portLabel;
+	KIntNumInput *portEdit;
 	QWidget* sqlitePage;
 	KURLRequester* sqliteDBRequester;
 	QPushButton* buttonOk;

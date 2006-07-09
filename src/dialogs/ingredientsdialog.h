@@ -30,6 +30,7 @@ class IngredientPropertyList;
 class SelectPropertyDialog;
 class EditBox;
 class UnitsDialog;
+class IngredientGroupsDialog;
 
 /**
 @author Unai Garro
@@ -58,6 +59,7 @@ private:
 	KreListView* propertiesListView;
 	QPushButton* pushButton5;
 	EditBox* inputBox;
+	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods
 	void reloadIngredientList( void );

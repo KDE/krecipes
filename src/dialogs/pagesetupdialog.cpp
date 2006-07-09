@@ -36,7 +36,7 @@
 
 #include "setupdisplay.h"
 
-PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDialog( parent, 0, true )
+PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent, 0, true ), m_configEntry(configEntry)
 {
 	KIconLoader il;
 
@@ -98,15 +98,16 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample ) : KDia
 	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString filename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
-	if ( filename.isEmpty() || !QFile::exists( filename ) )
-		filename = locate( "appdata", "layouts/Default.klo" );
-	loadLayout( filename );
+	QString layoutFile = config->readEntry( m_configEntry+"Layout", locate( "appdata", "layouts/Default.klo" ) );
+	if ( layoutFile.isEmpty() || !QFile::exists( layoutFile ) )
+		layoutFile = locate( "appdata", "layouts/Default.klo" );
 
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
-	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
-		template_filename = locate( "appdata", "layouts/Default.template" );
-	active_template = template_filename;
+	QString tmpl = config->readEntry( m_configEntry+"Template", locate( "appdata", "layouts/Default.template" ) );
+	if ( tmpl.isEmpty() || !QFile::exists( tmpl ) )
+		tmpl = locate( "appdata", "layouts/Default.template" );
+	kdDebug()<<"tmpl: "<<tmpl<<endl;
+	active_template = tmpl;
+	loadLayout( layoutFile );
 
 	initShownItems();
 }
@@ -119,13 +120,13 @@ void PageSetupDialog::accept()
 	if ( !active_filename.isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
-		config->writeEntry( "Layout", active_filename );
+		config->writeEntry( m_configEntry+"Layout", active_filename );
 	}
 
 	if ( !active_template.isEmpty() ) {
 		KConfig * config = kapp->config();
 		config->setGroup( "Page Setup" );
-		config->writeEntry( "Template", active_template );
+		config->writeEntry( m_configEntry+"Template", active_template );
 	}
 
 	KConfig *config = kapp->config();

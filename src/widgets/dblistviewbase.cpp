@@ -165,8 +165,8 @@ void DBListViewBase::reload( bool force )
 		m_progress->setAllowCancel(false);
 		//m_progress->progressBar()->setPercentageVisible(false);
 		m_progress->progressBar()->setTotalSteps( m_totalSteps );
-		m_progress->show();
-		kapp->processEvents();
+		//m_progress->show();
+		//kapp->processEvents();
 
 		//reset some things
 		clear();

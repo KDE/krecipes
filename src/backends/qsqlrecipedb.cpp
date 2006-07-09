@@ -33,13 +33,14 @@
 
 int QSqlRecipeDB::m_refCount = 0;
 
-QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name ) : RecipeDB(),
+QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name, int port ) : RecipeDB(),
 	connectionName("connection" + QString::number( m_refCount+1 ))
 {
 	DBuser = user;
 	DBpass = pass;
 	DBhost = host;
 	DBname = name;
+	DBport = port;
 
 	dbOK = false; //it isn't ok until we've connect()'ed
 	++m_refCount;
@@ -95,6 +96,8 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	if ( !( DBpass.isNull() ) )
 		database->setPassword( DBpass );
 	database->setHostName( DBhost );
+	if ( DBport > 0 )
+        	database->setPort(DBport);
 
 	kdDebug() << i18n( "Parameters set. Calling db->open()" ) << endl;
 

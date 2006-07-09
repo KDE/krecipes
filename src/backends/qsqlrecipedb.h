@@ -68,9 +68,10 @@ protected:
 	QString DBuser;
 	QString DBpass;
 	QString DBhost;
+	int DBport;
 
 public:
-	QSqlRecipeDB( const QString &host, const QString &user = QString::null, const QString &pass = QString::null, const QString &DBName = DEFAULT_DB_NAME );
+	QSqlRecipeDB( const QString &host, const QString &user = QString::null, const QString &pass = QString::null, const QString &DBName = DEFAULT_DB_NAME, int port = 0 );
 	~QSqlRecipeDB( void );
 
 	void connect( bool create_db, bool create_tables );

@@ -18,11 +18,12 @@
 #include "datablocks/categorytree.h"
 #include "backends/recipedb.h"
 
-KreDBImporter::KreDBImporter( const QString &_dbType, const QString &_host, const QString &_user, const QString &_pass ) : BaseImporter(),
+KreDBImporter::KreDBImporter( const QString &_dbType, const QString &_host, const QString &_user, const QString &_pass, int _port ) : BaseImporter(),
 		dbType( _dbType ),
 		host( _host ),
 		user( _user ),
-		pass( _pass )
+		pass( _pass ),
+		port( _port )
 {}
 
 KreDBImporter::~KreDBImporter()
@@ -30,7 +31,7 @@ KreDBImporter::~KreDBImporter()
 
 void KreDBImporter::parseFile( const QString &file )  //this is either a database file or a database table
 {
-	RecipeDB * database = RecipeDB::createDatabase( dbType, host, user, pass, file, file ); //uses 'file' as either table or file name, depending on the database
+	RecipeDB * database = RecipeDB::createDatabase( dbType, host, user, pass, file, port, file ); //uses 'file' as either table or file name, depending on the database
 
 	if ( database ) {
 		database->connect( false ); //don't create the database if it fails to connect

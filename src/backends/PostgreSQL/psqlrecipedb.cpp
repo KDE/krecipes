@@ -23,7 +23,7 @@
 #include <qvariant.h>
 
 //Note: PostgreSQL's database names are always lowercase
-PSqlRecipeDB::PSqlRecipeDB( QString host, QString user, QString pass, QString DBname ) : QSqlRecipeDB( host, user, pass, DBname.lower() )
+PSqlRecipeDB::PSqlRecipeDB( const QString& host, const QString& user, const QString& pass, const QString& DBname, int port ) : QSqlRecipeDB( host, user, pass, DBname.lower(), port )
 {}
 
 PSqlRecipeDB::~PSqlRecipeDB()
@@ -57,6 +57,11 @@ QStringList PSqlRecipeDB::backupCommand() const
 	QStringList command;
 	command<<config->readEntry( "PgDumpPath", "pg_dump" )<<"-d"<<database->databaseName()
 	  <<"-U"<<config->readEntry( "Username" );
+
+	int port = config->readNumEntry( "Port", 0 );
+	if ( port > 0 )
+		command<<"-p"<<QString::number(port);
+
 	return command;
 }
 
@@ -68,6 +73,11 @@ QStringList PSqlRecipeDB::restoreCommand() const
 	QStringList command;
 	command<<config->readEntry( "PsqlPath", "psql" )<<database->databaseName()
 	  <<"-U"<<config->readEntry( "Username" );
+
+	int port = config->readNumEntry( "Port", 0 );
+	if ( port > 0 )
+		command<<"-p"<<QString::number(port);
+
 	return command;
 }
 

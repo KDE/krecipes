@@ -502,7 +502,7 @@ QString ServerSetupPage::dbName( void )
 	return ( dbNameEdit->text() );
 }
 
-void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass )
+void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port )
 {
 	isRemote = remoteServerCheckBox->isChecked();
 	host = serverEdit->text();
@@ -510,6 +510,7 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 	user = usernameEdit->text();
 	pass = passwordEdit->text();
 	dbName = dbNameEdit->text();
+	port = 0;
 }
 
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
@@ -673,9 +674,9 @@ void SetupWizard::getAdminInfo( bool &enabled, QString &adminUser, QString &admi
 		pSqlPermissionsSetupPage->getAdmin( adminUser, adminPass );
 }
 
-void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass )
+void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port )
 {
-	serverSetupPage->getServerInfo( isRemote, host, client, dbName, user, pass );
+	serverSetupPage->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 	if ( dbTypeSetupPage->dbType() == SQLite )
 		dbName = sqliteSetupPage->dbFile();
 }

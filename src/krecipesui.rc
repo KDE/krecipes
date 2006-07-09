@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="krecipes" version="8">
+<kpartgui name="krecipes" version="9">
 <MenuBar>
   <Menu name="file"><text>&amp;File</text>
     <Action name="reload_action" />
@@ -13,6 +13,7 @@
   </Menu>
   <Menu name="edit"><text>&amp;Edit</text>
     <Action name="page_setup_action" />
+    <Action name="print_setup_action" />
     <Separator />
     <Action name="copy_to_clipboard_action" />
 </Menu>

@@ -30,7 +30,7 @@ private:
 	void createDB( void );
 
 public:
-	PSqlRecipeDB( const QString host, const QString user = QString::null, const QString pass = QString::null, const QString DBName = DEFAULT_DB_NAME );
+	PSqlRecipeDB( const QString& host, const QString& user = QString::null, const QString& pass = QString::null, const QString& DBName = DEFAULT_DB_NAME, int port = 0 );
 	~PSqlRecipeDB( void );
 
 	int lastInsertID();

@@ -120,6 +120,7 @@ public:
 	                                 const QString &user,
 	                                 const QString &pass,
 	                                 const QString &DBname,
+	                                 int port,
 	                                 const QString &file = QString::null );
 
 	/** Convenience method.  Calls the above with arguments from KConfig. */

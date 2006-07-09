@@ -211,6 +211,10 @@ void Krecipes::setupActions()
 	                      this, SLOT( pageSetupSlot() ),
 	                      actionCollection(), "page_setup_action" );
 
+	( void ) new KAction( i18n( "Print Setup..." ), 0,
+	                      this, SLOT( printSetupSlot() ),
+	                      actionCollection(), "print_setup_action" );
+
 	( void ) new KAction( i18n( "Backup..." ), "krecipes_file", 0,
 	                      this, SLOT( backupSlot() ),
 	                      actionCollection(), "backup_action" );
@@ -392,9 +396,10 @@ void Krecipes::kreDBImport()
 	if ( importOptions.exec() == QDialog::Accepted ) {
 		//Get all params, even if we don't use them
 		QString host, user, pass, table;
-		importOptions.serverParams( host, user, pass, table );
+		int port;
+		importOptions.serverParams( host, user, pass, port, table );
 
-		KreDBImporter importer( importOptions.dbType(), host, user, pass ); //last 3 params may or may not be even used (depends on dbType)
+		KreDBImporter importer( importOptions.dbType(), host, user, pass, port ); //last 4 params may or may not be even used (depends on dbType)
 
 		parsing_file_dlg->show();
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
@@ -438,6 +443,15 @@ void Krecipes::pageSetupSlot()
 	page_setup->exec();
 
 	delete page_setup;
+}
+
+void Krecipes::printSetupSlot()
+{
+	Recipe recipe;
+	m_view->selectPanel->getCurrentRecipe( &recipe );
+
+	PageSetupDialog pageSetup( this, recipe, "Print" );
+	pageSetup.exec();
 }
 
 void Krecipes::backupSlot()

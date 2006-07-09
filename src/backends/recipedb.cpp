@@ -100,15 +100,16 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 	QString user = config->readEntry( "Username", QString::null );
 	QString pass = config->readEntry( "Password", QString::null );
 	QString dbname = config->readEntry( "DBName", DEFAULT_DB_NAME );
+	int port = config->readNumEntry( "Port", 0 );
 
 	QString f = file;
 	if ( f.isEmpty() )
 		f = config->readEntry( "DBFile", locateLocal ( "appdata", DB_FILENAME ) );
 
-	return createDatabase( dbType, host, user, pass, dbname, f );
+	return createDatabase( dbType, host, user, pass, dbname, port, f );
 }
 
-RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, const QString &file )
+RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, int port, const QString &file )
 {
 	RecipeDB * database = 0;
 
@@ -122,12 +123,12 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 #endif //HAVE_SQLITE || HAVE_SQLITE3
 	#if HAVE_MYSQL
 	else if ( dbType == "MySQL" ) {
-		database = new MySQLRecipeDB( host, user, pass, dbname );
+		database = new MySQLRecipeDB( host, user, pass, dbname, port );
 	}
 #endif //HAVE_MYSQL
 	#if HAVE_POSTGRESQL
 	else if ( dbType == "PostgreSQL" ) {
-		database = new PSqlRecipeDB( host, user, pass, dbname );
+		database = new PSqlRecipeDB( host, user, pass, dbname, port );
 	}
 #endif //HAVE_POSTGRESQL
 	else {

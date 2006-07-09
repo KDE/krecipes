@@ -299,7 +299,7 @@ void IngredientParserDialog::parseText()
 		QString unitCheck = line.mid(format_at,first_space-format_at);
 
 		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
-			if ( (*unit_it).name == unitCheck || (*unit_it).plural == unitCheck ) {
+			if ( (*unit_it).name == unitCheck || (*unit_it).plural == unitCheck || (*unit_it).name_abbrev == unitCheck || (*unit_it).plural_abbrev == unitCheck ) {
 				isUnit = true;
 				format_at = first_space+1;
 				break;

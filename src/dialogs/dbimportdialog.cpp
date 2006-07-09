@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurlrequester.h>
+#include <knuminput.h>
 
 DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, WFlags f ) : QDialog( parent, name, modal, f )
 {
@@ -95,6 +96,13 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 	layout5->addWidget( nameEdit, 3, 1 );
 	nameLabel = new QLabel( serverPage, "nameLabel" );
 	layout5->addWidget( nameLabel, 3, 0 );
+
+	portEdit = new KIntNumInput( serverPage, "portEdit" );
+	portEdit->setMinValue(0);
+	portEdit->setValue(0);
+	layout5->addWidget( nameEdit, 4, 1 );
+	portLabel = new QLabel( serverPage, "portLabel" );
+	layout5->addWidget( portLabel, 4, 0 );
 
 	serverPageLayout->addLayout( layout5 );
 	paramStack->addWidget( serverPage, 0 );
@@ -167,6 +175,8 @@ void DBImportDialog::languageChange()
 	userLabel->setText( i18n( "Username:" ) );
 	passwordLabel->setText( i18n( "Password:" ) );
 	nameLabel->setText( i18n( "Database name:" ) );
+	portLabel->setText( i18n( "Port:" ) );
+	portEdit->setSpecialValueText( i18n("Default") );
 	buttonOk->setText( i18n( "&OK" ) );
 	buttonOk->setAccel( QKeySequence( QString::null ) );
 	buttonCancel->setText( i18n( "&Cancel" ) );
@@ -215,12 +225,13 @@ QString DBImportDialog::dbType() const
 	}
 }
 
-void DBImportDialog::serverParams( QString &host, QString &user, QString &pass, QString &table ) const
+void DBImportDialog::serverParams( QString &host, QString &user, QString &pass, int &port, QString &table ) const
 {
 	host = hostEdit->text();
 	user = userEdit->text();
 	pass = passwordEdit->text();
 	table = nameEdit->text();
+	port = portEdit->value();
 }
 
 QString DBImportDialog::dbFile() const

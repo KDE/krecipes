@@ -64,6 +64,7 @@ private:
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+	KIntNumInput *portEdit;
 };
 
 class PostgreSQLServerPrefs : public QWidget
@@ -81,6 +82,7 @@ private:
 	KLineEdit *usernameEdit;
 	KLineEdit *passwordEdit;
 	KLineEdit *dbNameEdit;
+	KIntNumInput *portEdit;
 };
 
 class SQLiteServerPrefs : public QWidget

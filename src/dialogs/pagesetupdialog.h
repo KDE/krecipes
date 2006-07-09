@@ -30,7 +30,7 @@ class PageSetupDialog : public KDialog
 	Q_OBJECT
 
 public:
-	PageSetupDialog( QWidget *parent, const Recipe &sample );
+	PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry = QString::null );
 	~PageSetupDialog()
 	{}
 
@@ -61,6 +61,7 @@ private:
 	QString active_filename;
 	QString active_template;
 	bool have_write_perm;
+	QString m_configEntry;
 
 	QMap<int, KreDisplayItem*> popup_widget_map;
 	QMap<KreDisplayItem*, int> widget_popup_map;

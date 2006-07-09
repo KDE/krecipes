@@ -6,6 +6,8 @@
 # set the include path for X, qt and KDE
 INCLUDES         = -I$(srcdir)/.. $(all_includes)
 
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 noinst_LTLIBRARIES=libkrecipesdialogs.la
 libkrecipesdialogs_la_SOURCES= \
 	advancedsearchdialog.cpp recipeimportdialog.cpp \

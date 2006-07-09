@@ -578,6 +578,7 @@ void KrecipesView::wizard( bool force )
 
 		bool setupUser, initData, doUSDAImport, adminEnabled;
 		QString adminUser, adminPass, user, pass, host, client, dbName;
+		int port;
 		bool isRemote;
 
 		SetupWizard *setupWizard = new SetupWizard( this );
@@ -597,7 +598,7 @@ void KrecipesView::wizard( bool force )
 			{
 				kdDebug() << "Setting up user\n";
 				setupWizard->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass );
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 
 				if ( !adminEnabled )  // Use root without password
 				{
@@ -615,19 +616,19 @@ void KrecipesView::wizard( bool force )
 					client = "localhost";
 				}
 
-				setupUserPermissions( host, client, dbName, user, pass, adminUser, adminPass );
+				setupUserPermissions( host, client, dbName, user, pass, adminUser, adminPass, port );
 			}
 
 			// Initialize database with data if requested
 			if ( initData ) {
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass );
-				initializeData( host, dbName, user, pass ); // Populate data as normal user
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
+				initializeData( host, dbName, user, pass, port ); // Populate data as normal user
 			}
 
 			if ( doUSDAImport ) {
 				// Open the DB first
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass ); //only used if needed by backend
-				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
+				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port ); //only used if needed by backend
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 
 				// Import the data
 				if ( db ) {
@@ -646,7 +647,7 @@ void KrecipesView::wizard( bool force )
 
 			//we can do a faster usda import if this is done after it
 			if ( initData ) {
-				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
+				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 				if ( db ) {
 					db->connect();
 
@@ -665,7 +666,7 @@ void KrecipesView::wizard( bool force )
 }
 
 
-void KrecipesView::setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser, const QString &adminPass )
+void KrecipesView::setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser, const QString &adminPass, int port )
 {
 	QString user = adminUser;
 	QString pass = adminPass;
@@ -682,7 +683,7 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 	else
 		kdDebug() << "Open db as:" << user << ",*** with password ****\n";
 
-	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
+	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( db ) {
 		db->connect(true,false);//create the database, but no tables (do that when connected as the user)
 		if ( db->ok() )
@@ -695,9 +696,9 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 }
 
 
-void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass )
+void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port )
 {
-	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, dbName );
+	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
 		kdError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
 		kapp->exit( 1 );

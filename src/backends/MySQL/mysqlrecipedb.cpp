@@ -21,7 +21,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 
-MySQLRecipeDB::MySQLRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &DBname ) : QSqlRecipeDB( host, user, pass, DBname )
+MySQLRecipeDB::MySQLRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &DBname, int port ) : QSqlRecipeDB( host, user, pass, DBname, port )
 {}
 
 MySQLRecipeDB::~MySQLRecipeDB()
@@ -66,6 +66,10 @@ QStringList MySQLRecipeDB::backupCommand() const
 
         command<<"-h"+config->readEntry("Host", "localhost");
 
+	int port = config->readNumEntry("Port", 0);
+	if ( port > 0 )
+        	command<<"-P"+QString::number(port);
+
 	command<<database->databaseName();
 	return command;
 }
@@ -84,6 +88,10 @@ QStringList MySQLRecipeDB::restoreCommand() const
 
 	QString user = config->readEntry("Username", QString::null);
 	command<<"-u"+user;
+
+	int port = config->readNumEntry("Port", 0);
+	if ( port > 0 )
+        	command<<"-P"+QString::number(port);
 
 	command<<database->databaseName();
 	return command;

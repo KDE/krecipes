@@ -21,6 +21,8 @@ class IngredientGroupsDialog : public QWidget
 public:
 	IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name );
 
+	void reload();
+
 private:
 	KreListView *headerListView;
 	RecipeDB *database;
