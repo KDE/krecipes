@@ -13,6 +13,10 @@
 
 #include "baseexporter.h"
 
+#include "datablocks/mixednumber.h"
+
+class IngredientData;
+
 /**
   * Export class to export recipes into text format.
   * Recipes exported with this class are not meant to be imported back
@@ -30,6 +34,9 @@ public:
 
 protected:
 	virtual QString createContent( const RecipeList & );
+
+private:
+	QString generateIngredient( const IngredientData &ing, MixedNumber::Format number_format );
 };
 
 #endif //PLAINTEXTEXPORTER_H

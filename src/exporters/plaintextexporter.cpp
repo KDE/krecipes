@@ -14,7 +14,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 
 PlainTextExporter::PlainTextExporter( const QString& filename, const QString& format ) :
@@ -29,6 +28,38 @@ int PlainTextExporter::supportedItems() const
 {
 	return RecipeDB::All ^ RecipeDB::Photo;
 }
+
+QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedNumber::Format number_format )
+{
+	KConfig *config = KGlobal::config();
+
+	QString content;
+
+	QString amount_str = MixedNumber( ing.amount ).toString( number_format );
+
+	if ( ing.amount_offset > 0 )
+		amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format );
+	else if ( ing.amount <= 1e-10 )
+		amount_str = "";
+
+	content += amount_str;
+	if ( !amount_str.isEmpty() )
+		content += " ";
+
+	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readBoolEntry("AbbreviateUnits") );
+
+	content += unit_str;
+	if ( !unit_str.isEmpty() )
+		content += " ";
+
+	content += ing.name;
+
+	if ( ing.prepMethodList.count() > 0 )
+		content += "; "+ing.prepMethodList.join(", ");
+
+	return content;
+}
+
 
 QString PlainTextExporter::createContent( const RecipeList& recipes )
 {
@@ -79,27 +110,17 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				if ( !group.isEmpty() )
 					content += "  ";
 
-				QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
+				content += generateIngredient(*ing_it,number_format);
 
-				if ( (*ing_it).amount_offset > 0 )
-					amount_str += "-"+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( number_format );
-				else if ( ( *ing_it ).amount <= 1e-10 )
-					amount_str = "";
-
-				content += amount_str;
-				if ( !amount_str.isEmpty() )
-					content += " ";
-
-				QString unit_str = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
-
-				content += unit_str;
-				if ( !unit_str.isEmpty() )
-					content += " ";
-
-				content += ( *ing_it ).name;
-
-				if ( ( *ing_it ).prepMethodList.count() > 0 )
-					content += "; "+( *ing_it ).prepMethodList.join(", ");
+				if ( (*ing_it).substitutes.count() > 0 )
+					content += ", "+i18n("or");
+				
+				for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+					content += "  "+generateIngredient(*sub_it,number_format);
+					sub_it++;
+					if ( sub_it != (*ing_it).substitutes.end() )
+						content += ", "+i18n("or");
+				}
 
 				content += "\n";
 			}

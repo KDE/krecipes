@@ -166,7 +166,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
 	backupGBox->setTitle( i18n( "Backup" ) );
 	backupGBox->setColumns( 2 );
-	layout->addMultiCellWidget( backupGBox, 9, 9, 1, 4 );
+	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysqldump") );
@@ -180,7 +180,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow6, 10, 1 );
+	layout->addItem( spacerRow6, 11, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
@@ -293,7 +293,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	QGroupBox *backupGBox = new QGroupBox( this, "backupGBox" );
 	backupGBox->setTitle( i18n( "Backup" ) );
 	backupGBox->setColumns( 2 );
-	layout->addMultiCellWidget( backupGBox, 9, 9, 1, 4 );
+	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("pg_dump") );
@@ -307,7 +307,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow6, 10, 1 );
+	layout->addItem( spacerRow6, 11, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
 
