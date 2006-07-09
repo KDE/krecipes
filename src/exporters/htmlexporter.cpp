@@ -394,9 +394,12 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethodList.count() == 0 ) ?
 			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ) );
 
+			if ( (*ing_it).substitutes.count() > 0 )
+				tmp_format += ", "+i18n("or");
+
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
 				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
 	
 				if ( (*ing_it).amount_offset > 0 )
@@ -412,8 +415,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
 				tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *sub_it ).prepMethodList.count() == 0 ) ?
 						QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ) );
-	
-				ingredients_html += QString( "<li>%1 %2</li>" ).arg(i18n("OR")).arg( tmp_format );
+
+				++sub_it;
+				if ( sub_it != (*ing_it).substitutes.end() )
+					tmp_format += ", "+i18n("or");
+				ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 			}
 		}
 
