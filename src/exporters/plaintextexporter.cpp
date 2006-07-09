@@ -120,6 +120,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 					sub_it++;
 					if ( sub_it != (*ing_it).substitutes.end() )
 						content += ", "+i18n("or");
+					content += "\n";
 				}
 
 				content += "\n";
