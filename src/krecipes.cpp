@@ -167,14 +167,17 @@ void Krecipes::setupActions()
 	                          m_view, SLOT( editRecipe() ),
 	                          actionCollection(), "edit_action" );
 
-	( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
-	                          this, SLOT( mergeSimilarCategories() ),
-	                          actionCollection(), "merge_categories_action" );
-
-	( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", CTRL + Key_M,
-	                          this, SLOT( mergeSimilarIngredients() ),
-	                          actionCollection(), "merge_ingredients_action" );
-
+	KConfig *config = KGlobal::config();
+	config->setGroup("Advanced");
+	if ( config->readBoolEntry("UnhideMergeTools",false) ) {
+		( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
+					this, SLOT( mergeSimilarCategories() ),
+					actionCollection(), "merge_categories_action" );
+	
+		( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", CTRL + Key_M,
+					this, SLOT( mergeSimilarIngredients() ),
+					actionCollection(), "merge_ingredients_action" );
+	}
 
 	KAction *action = KStdAction::openNew( this, SLOT( fileNew() ), actionCollection() );
 	action->setText( i18n( "&New Recipe" ) );
