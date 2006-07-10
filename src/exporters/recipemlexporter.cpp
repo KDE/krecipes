@@ -42,6 +42,41 @@ QString RecipeMLExporter::createFooter()
 	return "</recipeml>";
 }
 
+void RecipeMLExporter::createIngredient( QDomElement &ing_tag, const IngredientData &ing, QDomDocument &doc )
+{
+	QDomElement amt_tag = doc.createElement( "amt" );
+	ing_tag.appendChild( amt_tag );
+
+	QDomElement qty_tag = doc.createElement( "qty" );
+	amt_tag.appendChild( qty_tag );
+	if ( ing.amount_offset < 1e-10 )
+		qty_tag.appendChild( doc.createTextNode( QString::number( ing.amount ) ) );
+	else {
+		QDomElement range_tag = doc.createElement( "range" );
+		qty_tag.appendChild(range_tag);
+		
+		QDomElement q1_tag = doc.createElement( "q1" );
+		q1_tag.appendChild( doc.createTextNode( QString::number( ing.amount ) ) );
+		QDomElement q2_tag = doc.createElement( "q2" );
+		q2_tag.appendChild( doc.createTextNode( QString::number( ing.amount + ing.amount_offset ) ) );
+
+		range_tag.appendChild(q1_tag);
+		range_tag.appendChild(q2_tag);
+	}
+
+	QDomElement unit_tag = doc.createElement( "unit" );
+	amt_tag.appendChild( unit_tag );
+	unit_tag.appendChild( doc.createTextNode( ( ing.amount > 1 ) ? ing.units.plural : ing.units.name ) );
+
+	QDomElement item_tag = doc.createElement( "item" );
+	item_tag.appendChild( doc.createTextNode( ing.name ) );
+	ing_tag.appendChild( item_tag );
+
+	QDomElement prep_tag = doc.createElement( "prep" );
+	prep_tag.appendChild( doc.createTextNode( ing.prepMethodList.join(",") ) );
+	ing_tag.appendChild( prep_tag );
+}
+
 QString RecipeMLExporter::createContent( const RecipeList& recipes )
 {
 	QDomDocument doc;
@@ -137,37 +172,13 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 				QDomElement ing_tag = doc.createElement( "ing" );
 				ing_root.appendChild( ing_tag );
 
-				QDomElement amt_tag = doc.createElement( "amt" );
-				ing_tag.appendChild( amt_tag );
+				createIngredient( ing_tag, *ing_it, doc );
 
-				QDomElement qty_tag = doc.createElement( "qty" );
-				amt_tag.appendChild( qty_tag );
-				if ( (*ing_it).amount_offset < 1e-10 )
-					qty_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount ) ) );
-				else {
-					QDomElement range_tag = doc.createElement( "range" );
-					qty_tag.appendChild(range_tag);
-					
-					QDomElement q1_tag = doc.createElement( "q1" );
-					q1_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount ) ) );
-					QDomElement q2_tag = doc.createElement( "q2" );
-					q2_tag.appendChild( doc.createTextNode( QString::number( ( *ing_it ).amount + (*ing_it).amount_offset ) ) );
-
-					range_tag.appendChild(q1_tag);
-					range_tag.appendChild(q2_tag);
+				for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+					QDomElement alt_ing_tag = doc.createElement( "alt-ing" );
+					ing_tag.appendChild( alt_ing_tag );
+					createIngredient( alt_ing_tag, *sub_it, doc );
 				}
-
-				QDomElement unit_tag = doc.createElement( "unit" );
-				amt_tag.appendChild( unit_tag );
-				unit_tag.appendChild( doc.createTextNode( ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name ) );
-
-				QDomElement item_tag = doc.createElement( "item" );
-				item_tag.appendChild( doc.createTextNode( ( *ing_it ).name ) );
-				ing_tag.appendChild( item_tag );
-
-				QDomElement prep_tag = doc.createElement( "prep" );
-				prep_tag.appendChild( doc.createTextNode( ( *ing_it ).prepMethodList.join(",") ) );
-				ing_tag.appendChild( prep_tag );
 			}
 		}
 		recipe_tag.appendChild( ingredients_tag );

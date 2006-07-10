@@ -11,7 +11,7 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#include "kreexport.h"
+#include "kreexporter.h"
 
 #include <qfile.h>
 #include <qstylesheet.h>
@@ -65,6 +65,28 @@ QString KreExporter::createHeader( const RecipeList& recipes )
 QString KreExporter::createFooter()
 {
 	return "</krecipes>\n";
+}
+
+QString KreExporter::generateIngredient( const IngredientData &ing )
+{
+	QString xml;
+
+	xml += "<name>" + QStyleSheet::escape( ( ing ).name ) + "</name>\n";
+	xml += "<amount>";
+	if ( ing.amount_offset < 1e-10 ) {
+		xml += QString::number( ing.amount );
+	}
+	else {
+		xml += "<min>"+QString::number( ing.amount )+"</min>";
+		xml += "<max>"+QString::number( ing.amount + ing.amount_offset )+"</max>";
+	}
+	xml += "</amount>\n";
+	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
+	xml += "<unit>" + QStyleSheet::escape( unit_str ) + "</unit>\n";
+	if ( ing.prepMethodList.count() > 0 )
+		xml += "<prep>" + QStyleSheet::escape( ing.prepMethodList.join(",") ) + "</prep>\n";
+
+	return xml;
 }
 
 //TODO: use QDOM (see recipemlexporter.cpp)?
@@ -130,20 +152,19 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 			for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 				xml += "<ingredient>\n";
-				xml += "<name>" + QStyleSheet::escape( ( *ing_it ).name ) + "</name>\n";
-				xml += "<amount>";
-				if ( ( *ing_it ).amount_offset < 1e-10 ) {
-					xml += QString::number( ( *ing_it ).amount );
+
+				xml += generateIngredient(*ing_it);
+
+				if ( (*ing_it).substitutes.count() > 0 ) {
+					xml += "<substitutes>\n";
+					for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+						xml += "<ingredient>\n";
+						xml += generateIngredient(*sub_it);
+						xml += "</ingredient>\n";
+					}
+					xml += "</substitutes>\n";
 				}
-				else {
-					xml += "<min>"+QString::number( ( *ing_it ).amount )+"</min>";
-					xml += "<max>"+QString::number( ( *ing_it ).amount + ( *ing_it ).amount_offset )+"</max>";
-				}
-				xml += "</amount>\n";
-				QString unit_str = ( ( *ing_it ).amount+( *ing_it ).amount_offset > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name;
-				xml += "<unit>" + QStyleSheet::escape( unit_str ) + "</unit>\n";
-				if ( ( *ing_it ).prepMethodList.count() > 0 )
-					xml += "<prep>" + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ) + "</prep>\n";
+
 				xml += "</ingredient>\n";
 			}
 

@@ -15,6 +15,8 @@
 
 #include <qdom.h>
 
+class IngredientData;
+
 /**
   * Export class for the RecipeML file format <http://www.formatdata.com/recipeml>
   * @author Jason Kivlighn
@@ -35,6 +37,9 @@ protected:
 	virtual QString createContent( const RecipeList& );
 	virtual QString createHeader( const RecipeList& );
 	virtual QString createFooter();
+
+private:
+	void createIngredient( QDomElement &ing_tag, const IngredientData &, QDomDocument &doc );
 };
 
 #endif //RECIPEMLEXPORTER_H

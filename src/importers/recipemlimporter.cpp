@@ -152,7 +152,6 @@ void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 			readRecipemlIng( el );
 		else if ( tagName == "ing-div" )  //NOTE: this can have the "type" attribute
 		{
-			// TODO Wouldn't this be better as a recursive function?
 			QString header;
 			QDomNodeList ingDiv = el.childNodes();
 			for ( unsigned j = 0; j < ingDiv.count(); j++ )
@@ -160,10 +159,10 @@ void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 				QDomElement cEl = ingDiv.item( j ).toElement();
 				if ( cEl.tagName() == "title" )
 					header = cEl.text().stripWhiteSpace();
-			else if ( cEl.tagName() == "description" ) {} //TODO: what do we do with this?
+				else if ( cEl.tagName() == "description" ) {} //TODO: what do we do with this?
 				else if ( cEl.tagName() == "ing" )
-					readRecipemlIng( cEl, header );
-			else if ( tagName == "note" ) {} //TODO: what do we do with this?
+					readRecipemlIng( cEl, 0, header );
+				else if ( tagName == "note" ) {} //TODO: what do we do with this?
 				else
 					kdDebug() << "Unknown tag within <ing-div>: " << cEl.tagName() << endl;
 			}
@@ -174,8 +173,10 @@ void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 	}
 }
 
-void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &header )
+void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, Ingredient *ing_parent, const QString &header )
 {
+	Ingredient new_ing;
+
 	QDomNodeList ingChilds = ing.childNodes();
 
 	QString name, unit, size, prep_method;
@@ -210,6 +211,8 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 		else if ( tagName == "prep" ) { //FIXME: this overwrite the optional attribute
 			prep_method = ingChild.text().stripWhiteSpace();
 		}
+		else if ( tagName == "alt-ing" )
+			readRecipemlIng( ingChild, &new_ing, header );
 		else
 			kdDebug() << "Unknown tag within <ing>: " << ingChild.tagName() << endl;
 	}
@@ -217,12 +220,17 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, const QString &h
 	if ( !size.isEmpty() )
 		unit.prepend( size + " " );
 
-	Ingredient new_ing( name, 0, Unit( unit, quantity.amount+quantity.amount_offset ), -1 );
+	new_ing.name = name;
+	new_ing.units = Unit( unit, quantity.amount+quantity.amount_offset );
 	new_ing.amount = quantity.amount;
 	new_ing.amount_offset = quantity.amount_offset;
 	new_ing.group = header;
 	new_ing.prepMethodList = ElementList::split(",",prep_method);
-	recipe.ingList.append( new_ing );
+
+	if ( !ing_parent )
+		recipe.ingList.append(new_ing);
+	else
+		ing_parent->substitutes.append( new_ing );
 }
 
 void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )

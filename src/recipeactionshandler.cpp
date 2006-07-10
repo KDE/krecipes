@@ -29,7 +29,7 @@
 #include "exporters/cookmlexporter.h"
 #include "exporters/htmlexporter.h"
 #include "exporters/htmlbookexporter.h"
-#include "exporters/kreexport.h"
+#include "exporters/kreexporter.h"
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
 #include "exporters/plaintextexporter.h"

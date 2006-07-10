@@ -77,6 +77,22 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 	return true;
 }
 
+void check( const IngredientData &ing, const IngredientData &base_ing, int ing_num )
+{
+	check( QString::number(ing_num)+": Ingredient name", ing.name, base_ing.name );
+	check( QString::number(ing_num)+": Ingredient amount", ing.amount,base_ing.amount );
+	check( QString::number(ing_num)+": Ingredient amount_offset", ing.amount_offset,base_ing.amount_offset );
+	check( QString::number(ing_num)+": Ingredient singular unit", ing.units.name, base_ing.units.name );
+	check( QString::number(ing_num)+": Ingredient plural unit", ing.units.plural, base_ing.units.plural );
+	check( QString::number(ing_num)+": Ingredient group", ing.group, base_ing.group );
+
+	ElementList::const_iterator prep_it = ing.prepMethodList.begin();
+	ElementList::const_iterator base_prep_it = base_ing.prepMethodList.begin();
+	for ( ; prep_it != ing.prepMethodList.end(); ++prep_it, ++base_prep_it ) {
+		check( QString::number(ing_num)+": Ingredient prep_method", (*prep_it).name, (*base_prep_it).name );
+	}
+}
+
 void check( const Recipe &recipe, const Recipe &base )
 {
 	check( "Recipe title", recipe.title, base.title );
@@ -110,18 +126,13 @@ void check( const Recipe &recipe, const Recipe &base )
 	IngredientList::const_iterator ing_it = recipe.ingList.begin();
 	IngredientList::const_iterator base_ing_it = base.ingList.begin();
 	for ( ; ing_it != recipe.ingList.end() || base_ing_it != base.ingList.end(); ++ing_it, ++base_ing_it ) {
-		check( QString::number(ing_num)+": Ingredient name", (*ing_it).name, (*base_ing_it).name );
-		check( QString::number(ing_num)+": Ingredient amount", (*ing_it).amount,(*base_ing_it).amount );
-		check( QString::number(ing_num)+": Ingredient amount_offset", (*ing_it).amount_offset,(*base_ing_it).amount_offset );
-		check( QString::number(ing_num)+": Ingredient singular unit", (*ing_it).units.name, (*base_ing_it).units.name );
-		check( QString::number(ing_num)+": Ingredient plural unit", (*ing_it).units.plural, (*base_ing_it).units.plural );
-		check( QString::number(ing_num)+": Ingredient group", (*ing_it).group, (*base_ing_it).group );
+		check( *ing_it, *base_ing_it, ing_num );
 
-		ElementList::const_iterator prep_it = (*ing_it).prepMethodList.begin();
-		ElementList::const_iterator base_prep_it = (*base_ing_it).prepMethodList.begin();
-		for ( ; prep_it != (*ing_it).prepMethodList.end(); ++prep_it, ++base_prep_it ) {
-			check( QString::number(ing_num)+": Ingredient prep_method", (*prep_it).name, (*base_prep_it).name );
+		QValueList<IngredientData>::const_iterator base_sub_it = (*base_ing_it).substitutes.begin();
+		for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it, ++base_sub_it ) {
+			check( *sub_it, *base_sub_it, ing_num+1000 );
 		}
+
 		++ing_num;
 	}
 	check( "ingredient count", ing_num-1, base.ingList.count() );

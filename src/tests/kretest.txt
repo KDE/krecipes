@@ -159,6 +159,23 @@ iT/nkv50f2xJ/wA8l/Oiijkj2C7F/th/+eS/nR/a7n/lkv50UUKEewXZmtJudjtHJooorexkf//Z]]><
 <unit>tsp.</unit>
 </ingredient>
 </ingredient-group>
+<ingredient>
+  <name>a</name>
+  <amount>1</amount>
+  <unit>cup</unit>
+  <substitutes>
+    <ingredient>
+      <name>b</name>
+      <amount>2</amount>
+      <unit>cups</unit>
+    </ingredient>
+    <ingredient>
+      <name>c</name>
+      <amount>3</amount>
+      <unit>cups</unit>
+    </ingredient>
+  </substitutes>
+</ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>
 Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>
@@ -342,6 +359,23 @@ iT/nkv50f2xJ/wA8l/Oiijkj2C7F/th/+eS/nR/a7n/lkv50UUKEewXZmtJudjtHJooorexkf//Z]]><
 <unit>tsp.</unit>
 </ingredient>
 </ingredient-group>
+<ingredient>
+  <name>a</name>
+  <amount>1</amount>
+  <unit>cup</unit>
+  <substitutes>
+    <ingredient>
+      <name>b</name>
+      <amount>2</amount>
+      <unit>cups</unit>
+    </ingredient>
+    <ingredient>
+      <name>c</name>
+      <amount>3</amount>
+      <unit>cups</unit>
+    </ingredient>
+  </substitutes>
+</ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>
 Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>

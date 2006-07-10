@@ -199,7 +199,7 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 	}
 }
 
-void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const QString &header )
+void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const QString &header, Ingredient *ing )
 {
 	for ( unsigned i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
@@ -221,9 +221,16 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 				else if ( ing.tagName() == "prep" ) {
 					new_ing.prepMethodList = ElementList::split(",",QString( ing.text() ).stripWhiteSpace());
 				}
+				else if ( ing.tagName() == "substitutes" ) {
+					readIngredients(ing.childNodes(), recipe, header, &new_ing);
+				}
 			}
 			new_ing.group = header;
-			recipe->ingList.append( new_ing );
+
+			if ( !ing )
+				recipe->ingList.append( new_ing );
+			else
+				ing->substitutes.append( new_ing );
 		}
 		else if ( el.tagName() == "ingredient-group" ) {
 			readIngredients( el.childNodes(), recipe, el.attribute( "name" ) );

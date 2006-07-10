@@ -94,6 +94,30 @@
     <item>vanilla extract</item>
    </ing>
   </ing-div>
+  <ing>
+   <amt>
+    <qty>1</qty>
+    <unit>cup</unit>
+   </amt>
+   <item>a</item>
+   <prep></prep>
+   <alt-ing>
+    <amt>
+     <qty>2</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>b</item>
+    <prep></prep>
+   </alt-ing>
+   <alt-ing>
+    <amt>
+     <qty>3</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>c</item>
+    <prep></prep>
+   </alt-ing>
+  </ing>
  </ingredients>
  <directions>
   <step>Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</step>
@@ -193,6 +217,30 @@
     <item>vanilla extract</item>
    </ing>
   </ing-div>
+  <ing>
+   <amt>
+    <qty>1</qty>
+    <unit>cup</unit>
+   </amt>
+   <item>a</item>
+   <prep></prep>
+   <alt-ing>
+    <amt>
+     <qty>2</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>b</item>
+    <prep></prep>
+   </alt-ing>
+   <alt-ing>
+    <amt>
+     <qty>3</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>c</item>
+    <prep></prep>
+   </alt-ing>
+  </ing>
  </ingredients>
  <directions>
   <step>Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</step>
