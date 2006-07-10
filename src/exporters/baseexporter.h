@@ -31,10 +31,17 @@ public:
 	BaseExporter( const QString &file, const QString &ext );
 	virtual ~BaseExporter();
 
-	/** Subclasses must report which items it is able to work with. */
+	/** Subclasses must report which items it is able to work with.
+	 *  These should be or'ed together items from RecipeDB::RecipeItems
+	 */
 	virtual int supportedItems() const = 0;
 
+	/** Export the recipes with the given ids to the file specified in the constructor.
+	 *  Optionally, a progress dialog may be given to specify the progress made.
+	 */
 	void exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
+
+	/** Convenience function for the above, which exports a single recipe. */
 	void exporter( int id, RecipeDB *database, KProgressDialog * = 0 );
 
 	/** Returns the actual filename that will be written to during the export.
@@ -43,6 +50,9 @@ public:
 	  */
 	QString fileName() const;
 
+	/** Write the given recipe list to a text stream.
+	 *  This can be used to export recipes without use of the database.
+	 */
 	void writeStream( QTextStream &, const RecipeList & );
 
 protected:
@@ -56,8 +66,13 @@ protected:
 	  */
 	virtual int progressInterval() const { return 50; }
 
+	/** Extra RecipeDB::RecipeItems that a subclass requires when creating a file's header.
+	 *  For example, the Krecipes file format requires writing the category hierarchy in the header,
+	 *  so it's exporter adds RecipeDB::Categories.
+	 */
 	virtual int headerFlags() const;
 
+	/** Make generated file a gzipped tarball */
 	void setCompressed( bool );
 
 	/** Attempt to return the version of the application via
