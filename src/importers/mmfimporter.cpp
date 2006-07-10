@@ -121,6 +121,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	//read lines until ending is found
 	//each line is either an ingredient, ingredient header, or instruction
 	bool instruction_found = false;
+	bool is_sub = false;
 
 	( void ) stream.readLine();
 	current = stream.readLine();
@@ -128,9 +129,9 @@ void MMFImporter::importMMF( QTextStream &stream )
 	        current.stripWhiteSpace() != "-----" &&
 	        current.stripWhiteSpace() != "-----------------------------------------------------------------------------" &&
 	        !stream.atEnd() ) {
-		bool col_one_used = loadIngredientLine( current.left( 41 ), m_left_col_ing );
+		bool col_one_used = loadIngredientLine( current.left( 41 ), m_left_col_ing, is_sub );
 		if ( col_one_used )  //only check for second column if there is an ingredient in the first column
-			loadIngredientLine( current.mid( 41, current.length() ), m_right_col_ing );
+			loadIngredientLine( current.mid( 41, current.length() ), m_right_col_ing, is_sub );
 
 		if ( instruction_found && col_one_used ) {
 			addWarningMsg( QString( i18n( "While loading recipe <b>%1</b> "
@@ -155,7 +156,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	putDataInRecipe();
 }
 
-bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &list )
+bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &list, bool &is_sub )
 {
 	//just ignore an empty line
 	if ( string.stripWhiteSpace().isEmpty() )
@@ -164,11 +165,18 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
-	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() )  //continuation of previous ingredient
+	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
 		//kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
-		if ( !list.isEmpty() )  //so it doesn't crash when the first ingredient appears to be a continuation of another
-			( *list.at( list.count() - 1 ) ).name += " " + string.stripWhiteSpace().mid( 1, string.length() );
+		( *list.at( list.count() - 1 ) ).name += " " + string.stripWhiteSpace().mid( 1, string.length() );
+		QString name = ( *list.at( list.count() - 1 ) ).name;
+
+		if ( name.endsWith(", or") ) {
+			( *list.at( list.count() - 1 ) ).name = name.left(name.length()-4);
+			is_sub = true;
+		}
+		else
+			is_sub = false;
 
 		return true;
 	}
@@ -225,9 +233,20 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	//put in the header... it there is no header, current_header will be QString::null
 	new_ingredient.group = current_header;
 
-	//if we made it this far it is an ingredient line
-	list.append( new_ingredient );
+	bool last_is_sub = is_sub;
+	if ( new_ingredient.name.endsWith(", or") ) {
+		new_ingredient.name = new_ingredient.name.left(new_ingredient.name.length()-4);
+		is_sub = true;
+	}
+	else
+		is_sub = false;
 
+	if ( last_is_sub )
+		( *list.at( list.count() - 1 ) ).substitutes.append(new_ingredient);
+	else
+		list.append( new_ingredient );
+
+	//if we made it this far it is an ingredient line
 	return true;
 }
 

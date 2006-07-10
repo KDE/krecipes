@@ -25,6 +25,7 @@
 class Recipe;
 class RecipeDB;
 class CategoryTree;
+class IngredientData;
 
 class KProgressDialog;
 
@@ -100,6 +101,7 @@ protected:
 private:
 	void importCategoryStructure( RecipeDB *, const CategoryTree * );
 	void importUnitRatios( RecipeDB * );
+	void importIngredient( IngredientData &ing, RecipeDB *db, KProgressDialog *progress_dialog );
 
 	void processMessages( const QString &file );
 

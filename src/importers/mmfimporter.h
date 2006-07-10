@@ -36,7 +36,7 @@ private:
 	/** Parses the line and save it if the line is a valid ingredient and return true.
 	  * Returns false if not an ingredient.
 	  */
-	bool loadIngredientLine( const QString &, IngredientList & );
+	bool loadIngredientLine( const QString &, IngredientList &, bool &is_sub );
 
 	/** Parses the line and save it if the line is a valid ingredient header and return true.
 	  * Returns false if not an ingredient header.

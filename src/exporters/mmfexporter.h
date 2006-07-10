@@ -42,7 +42,7 @@ protected:
 private:
 	void writeMMFHeader( QString &content, const Recipe &recipe );
 	void writeMMFIngredients( QString &content, const Recipe &recipe );
-	void writeSingleIngredient( QString &content, const Ingredient &ing );
+	void writeSingleIngredient( QString &content, const Ingredient &ing, bool is_sub = false );
 	void writeMMFDirections( QString &content, const Recipe &recipe );
 
 	QStringList wrapText( const QString& str, int at ) const;

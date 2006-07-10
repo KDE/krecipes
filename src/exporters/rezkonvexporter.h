@@ -42,7 +42,7 @@ protected:
 private:
 	void writeHeader( QString &content, const Recipe &recipe );
 	void writeIngredients( QString &content, const Recipe &recipe );
-	void writeSingleIngredient( QString &content, const Ingredient &ing );
+	void writeSingleIngredient( QString &content, const IngredientData &ing, bool is_sub = false );
 	void writeDirections( QString &content, const Recipe &recipe );
 
 	QStringList wrapText( const QString& str, int at ) const;

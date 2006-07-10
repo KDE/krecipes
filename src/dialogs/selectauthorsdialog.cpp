@@ -173,11 +173,6 @@ void SelectAuthorsDialog::createNewAuthorIfNecessary( void )
 
 		// Select the newly created author
 		authorsCombo->setCurrentItem( newAuthorName );
-		QMessageBox::information( this,
-		                          i18n( "New author created" ),
-		                          QString( i18n( "A new author \"%1\" was successfully added to the list of authors" ) ).arg( newAuthorName ),
-		                          QMessageBox::Ok
-		                        );
 	}
 }
 

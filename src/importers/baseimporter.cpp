@@ -139,16 +139,83 @@ void BaseImporter::import( RecipeDB *db, bool automatic )
 	}
 }
 
+void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgressDialog *progress_dialog )
+{
+	//cache some data we'll need
+	int max_units_length = db->maxUnitNameLength();
+	int max_group_length = db->maxIngGroupNameLength();
+
+	if ( direct ) {
+		progress_dialog->progressBar()->advance( 1 );
+		kapp->processEvents();
+	}
+
+	//create ingredient groups
+	QString real_group_name = ing.group.left( max_group_length );
+	int new_group_id = db->findExistingIngredientGroupByName(real_group_name);
+	if ( new_group_id == -1 ) {
+		db->createNewIngGroup( real_group_name );
+		new_group_id = db->lastInsertID();
+	}
+	ing.groupID = new_group_id;
+
+	int new_ing_id = db->findExistingIngredientByName(ing.name);
+	if ( new_ing_id == -1 && !ing.name.isEmpty() )
+	{
+		db->createNewIngredient( ing.name );
+		new_ing_id = db->lastInsertID();
+	}
+
+	if ( direct ) {
+		progress_dialog->progressBar()->advance( 1 );
+		kapp->processEvents();
+	}
+
+	Unit real_unit( ing.units.name.left( max_units_length ), ing.units.plural.left( max_units_length ) );
+	if ( real_unit.name.isEmpty() )
+		real_unit.name = real_unit.plural;
+	else if ( real_unit.plural.isEmpty() )
+		real_unit.plural = real_unit.name;
+
+	int new_unit_id = db->findExistingUnitByName(real_unit.name);
+	if ( new_unit_id == -1 ) {
+		db->createNewUnit( Unit(real_unit.name, real_unit.plural) );
+		new_unit_id = db->lastInsertID();
+	}
+
+	if ( direct ) {
+		progress_dialog->progressBar()->advance( 1 );
+		kapp->processEvents();
+	}
+
+	if ( ing.prepMethodList.count() > 0 ) {
+		for ( ElementList::iterator prep_it = ing.prepMethodList.begin(); prep_it != ing.prepMethodList.end(); ++prep_it ) {
+			int new_prep_id = db->findExistingPrepByName((*prep_it).name);
+			if ( new_prep_id == -1 ) {
+				db->createNewPrepMethod((*prep_it).name);
+				new_prep_id = db->lastInsertID();
+			}
+			(*prep_it).id = new_prep_id;
+		}
+	}
+
+	ing.units.id = new_unit_id;
+	ing.ingredientID = new_ing_id;
+
+	ElementList unitsWithIng;
+	db->findExistingUnitsByName( ing.units.name, new_ing_id, &unitsWithIng );
+	db->findExistingUnitsByName( ing.units.plural, new_ing_id, &unitsWithIng );
+
+	if ( !unitsWithIng.containsId( new_unit_id ) )
+		db->addUnitToIngredient( new_ing_id, new_unit_id );
+}
+
 void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KProgressDialog *progress_dialog )
 {
 	// Load Current Settings
 	KConfig *config = kapp->config();
 	config->setGroup( "Import" );
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
-
-	//cache some data we'll need
-	int max_units_length = db->maxUnitNameLength();
-	int max_group_length = db->maxIngGroupNameLength();
 
 	RecipeList::iterator recipe_it; RecipeList::iterator recipe_list_end( selected_recipes.end() );
 	RecipeList::iterator recipe_it_old = selected_recipes.end();
@@ -171,69 +238,11 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		//add all recipe items (authors, ingredients, etc. to the database if they aren't already
 		IngredientList::iterator ing_list_end( ( *recipe_it ).ingList.end() );
 		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
-			if ( direct ) {
-				progress_dialog->progressBar()->advance( 1 );
-				kapp->processEvents();
+			importIngredient( *ing_it, db, progress_dialog );
+
+			for ( QValueList<IngredientData>::iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+				importIngredient( *sub_it, db, progress_dialog );
 			}
-
-			//create ingredient groups
-			QString real_group_name = ( *ing_it ).group.left( max_group_length );
-			int new_group_id = db->findExistingIngredientGroupByName(real_group_name);
-			if ( new_group_id == -1 ) {
-				db->createNewIngGroup( real_group_name );
-				new_group_id = db->lastInsertID();
-			}
-			( *ing_it ).groupID = new_group_id;
-
-			int new_ing_id = db->findExistingIngredientByName((*ing_it).name);
-			if ( new_ing_id == -1 && !(*ing_it).name.isEmpty() )
-			{
-				db->createNewIngredient( (*ing_it).name );
-				new_ing_id = db->lastInsertID();
-			}
-
-			if ( direct ) {
-				progress_dialog->progressBar()->advance( 1 );
-				kapp->processEvents();
-			}
-
-			Unit real_unit( ( *ing_it ).units.name.left( max_units_length ), ( *ing_it ).units.plural.left( max_units_length ) );
-			if ( real_unit.name.isEmpty() )
-				real_unit.name = real_unit.plural;
-			else if ( real_unit.plural.isEmpty() )
-				real_unit.plural = real_unit.name;
-
-			int new_unit_id = db->findExistingUnitByName(real_unit.name);
-			if ( new_unit_id == -1 ) {
-				db->createNewUnit( Unit(real_unit.name, real_unit.plural) );
-				new_unit_id = db->lastInsertID();
-			}
-
-			if ( direct ) {
-				progress_dialog->progressBar()->advance( 1 );
-				kapp->processEvents();
-			}
-
-			if ( ( *ing_it ).prepMethodList.count() > 0 ) {
-				for ( ElementList::iterator prep_it = ( *ing_it ).prepMethodList.begin(); prep_it != ( *ing_it ).prepMethodList.end(); ++prep_it ) {
-					int new_prep_id = db->findExistingPrepByName((*prep_it).name);
-					if ( new_prep_id == -1 ) {
-						db->createNewPrepMethod((*prep_it).name);
-						new_prep_id = db->lastInsertID();
-					}
-					(*prep_it).id = new_prep_id;
-				}
-			}
-
-			( *ing_it ).units.id = new_unit_id;
-			( *ing_it ).ingredientID = new_ing_id;
-
-			ElementList unitsWithIng;
-			db->findExistingUnitsByName( ( *ing_it ).units.name, new_ing_id, &unitsWithIng );
-			db->findExistingUnitsByName( ( *ing_it ).units.plural, new_ing_id, &unitsWithIng );
-
-			if ( !unitsWithIng.containsId( new_unit_id ) )
-				db->addUnitToIngredient( new_ing_id, new_unit_id );
 		}
 
 		ElementList::iterator author_list_end( ( *recipe_it ).authorList.end() );

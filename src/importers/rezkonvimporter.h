@@ -26,7 +26,7 @@ protected:
 	void parseFile( const QString &filename );
 
 private:
-	void loadIngredient( const QString &line, Recipe & recipe );
+	void loadIngredient( const QString &line, Recipe & recipe, bool &is_sub );
 	void loadIngredientHeader( const QString &line, Recipe & recipe );
 	void loadInstructions( QStringList::const_iterator &raw_text, Recipe & recipe );
 	void loadReferences( QStringList::const_iterator &raw_text, Recipe & recipe );

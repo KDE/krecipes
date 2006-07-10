@@ -161,8 +161,13 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 {
 	//this format requires ingredients without a group to be written first
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
-		if ( ( *ing_it ).groupID == -1 )
+		if ( ( *ing_it ).groupID == -1 ) {
 			writeSingleIngredient( content, *ing_it );
+
+			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+				writeSingleIngredient( content, *sub_it, true );
+			}
+		}
 	}
 
 	IngredientList list_copy = recipe.ingList;
@@ -180,6 +185,10 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 			writeSingleIngredient( content, *ing_it );
+
+			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+				writeSingleIngredient( content, *sub_it, true );
+			}
 		}
 	}
 
@@ -197,7 +206,7 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 	content += authorLines;
 }
 
-void RezkonvExporter::writeSingleIngredient( QString &content, const Ingredient &ing )
+void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientData &ing, bool is_sub )
 {
 	KConfig * config = kapp->config();
 	config->setGroup( "Formatting" );
@@ -252,6 +261,9 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const Ingredient 
 	QString ing_name( ing.name );
 	if ( ing.prepMethodList.count() > 0 )
 		ing_name += "; " + ing.prepMethodList.join(", ");
+
+	if ( is_sub )
+		ing_name += ", or"; //FIXME: what's 'or' in German?
 
 	if ( !found_translation )
 		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );

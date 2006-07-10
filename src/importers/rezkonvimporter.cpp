@@ -90,6 +90,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
 	kdDebug() << "Found yield: " << recipe.yield.amount << endl;
 
+	bool is_sub = false;
 	bool last_line_empty = false;
 	text_it++;
 	while ( text_it != raw_recipe.end() ) {
@@ -109,12 +110,13 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 			else
 				loadIngredientHeader( *text_it, recipe );
 		}
+
 		//if it has no more than two spaces followed by a non-digit
 		//then we'll assume it is a direction line
 		else if ( last_line_empty && ( *text_it ).contains( QRegExp( "^\\s{0,2}[^\\d\\s=]" ) ) )
 			break;
 		else
-			loadIngredient( *text_it, recipe );
+			loadIngredient( *text_it, recipe, is_sub );
 
 		last_line_empty = false;
 		text_it++;
@@ -128,7 +130,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	current_header = QString::null;
 }
 
-void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
+void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, bool &is_sub )
 {
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
@@ -166,7 +168,18 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe )
 	//header (if present)
 	new_ingredient.group = current_header;
 
-	recipe.ingList.append( new_ingredient );
+	bool last_is_sub = is_sub;
+	if ( new_ingredient.prepMethodList.last().name == "or" ) {
+		new_ingredient.prepMethodList.pop_back();
+		is_sub = true;
+	}
+	else
+		is_sub = false;
+
+	if ( last_is_sub )
+		( *recipe.ingList.at( recipe.ingList.count() - 1 ) ).substitutes.append(new_ingredient);
+	else
+		recipe.ingList.append( new_ingredient );
 }
 
 void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &recipe )

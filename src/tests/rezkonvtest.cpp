@@ -46,6 +46,25 @@ main(int argc, char *argv[])
 	recipe.authorList.append( Element("Mona Beamer") );
 	recipe.authorList.append( Element("Colleen Beamer") );
 
+	Ingredient ing9;
+	ing9.name = "a";
+	ing9.amount = 1;
+	ing9.amount_offset = 0;
+	ing9.units.name = "cup";
+	IngredientData ing9_1;
+	ing9_1.name = "b";
+	ing9_1.amount = 2;
+	ing9_1.amount_offset = 0;
+	ing9_1.units.plural = "cups";
+	IngredientData ing9_2;
+	ing9_2.name = "c";
+	ing9_2.amount = 3;
+	ing9_2.amount_offset = 0;
+	ing9_2.units.plural = "cups";
+	ing9.substitutes.append(ing9_1);
+	ing9.substitutes.append(ing9_2);
+	recipe.ingList.append( ing9 );
+
 	Ingredient ing;
 	ing.name = "granulated sugar";
 	ing.amount = 0.75;
@@ -110,7 +129,7 @@ main(int argc, char *argv[])
 	ing7.units.name = "tsp.";
 	ing7.groupID = 1; ing7.group = "Fat & Liquids";
 	recipe.ingList.append( ing7 );
-	
+
 	check( importer, recipe );
 
 	RecipeList recipeList;
