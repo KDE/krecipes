@@ -61,11 +61,14 @@ private:
 
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
-	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( checkCreateUnit( const Unit & ) ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
-
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( QListView::Reject );
+}
+
+void UnitListView::init()
+{
+	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( checkCreateUnit( const Unit & ) ) );
+	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
 }
 
 void UnitListView::load( int limit, int offset )
@@ -137,7 +140,7 @@ void StdUnitListView::createNew()
 
 		//check bounds first
 		if ( checkBounds( result ) )
-			database->createNewUnit( Unit(result.name, result.plural) );
+			database->createNewUnit( result );
 	}
 	delete unitDialog;
 }

@@ -29,7 +29,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 
 	box->setTitle( i18n( "New Unit" ) );
 
-	QGridLayout *gridLayout = new QGridLayout( 2, 2, 5 );
+	QGridLayout *gridLayout = new QGridLayout( 4, 4, 5 );
 
 	QLabel *nameLabel = new QLabel( i18n( "Singular:" ), this );
 	nameEdit = new KLineEdit( name, this );

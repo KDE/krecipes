@@ -1376,6 +1376,10 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
 	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
 
+	Unit new_unit( real_name, real_plural );
+	new_unit.name_abbrev = real_name_abbrev;
+	new_unit.plural_abbrev = real_plural_abbrev;
+
 	if ( real_name.isEmpty() )
 		real_name = real_plural;
 	else if ( real_plural.isEmpty() )
@@ -1384,22 +1388,24 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	if ( real_name_abbrev.isEmpty() )
 		real_name_abbrev = "NULL";
 	else
-		real_name_abbrev = "'"+real_name_abbrev+"'";
+		real_name_abbrev = "'"+escapeAndEncode(real_name_abbrev)+"'";
 	if ( real_plural_abbrev.isEmpty() )
 		real_plural_abbrev = "NULL";
 	else
-		real_plural_abbrev = "'"+real_plural_abbrev+"'";
+		real_plural_abbrev = "'"+escapeAndEncode(real_plural_abbrev)+"'";
 	
 
 	QString command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" ) 
 	   + ",'" + escapeAndEncode( real_name )
-	   + "'," + escapeAndEncode( real_name_abbrev )
+	   + "'," + real_name_abbrev
 	   + ",'" + escapeAndEncode( real_plural )
-	   + "'," + escapeAndEncode( real_plural_abbrev )
+	   + "'," + real_plural_abbrev
 	   + ");";
+
 	QSqlQuery unitToCreate( command, database );
 
-	emit unitCreated( Unit( real_name, real_plural, lastInsertID() ) );
+	new_unit.id = lastInsertID();
+	emit unitCreated( new_unit );
 }
 
 
