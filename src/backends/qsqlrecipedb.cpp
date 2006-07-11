@@ -1414,19 +1414,33 @@ void QSqlRecipeDB::modUnit( int unitID, const QString &newName, const QString &n
 {
 	QSqlQuery unitQuery( QString::null, database );
 
-	QString command = QString("UPDATE units SET name='%1',name_abbrev='%2',plural='%3',plural_abbrev='%4' WHERE id='%5'")
-	  .arg(escapeAndEncode(newName))
-	  .arg(escapeAndEncode(newNameAbbrev))
-	  .arg(escapeAndEncode(newPlural))
-	  .arg(escapeAndEncode(newPluralAbbrev))
+	QString real_name = newName.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural = newPlural.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_name_abbrev = newNameAbbrev.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_plural_abbrev = newPluralAbbrev.left( maxUnitNameLength() ).stripWhiteSpace();
+
+	Unit newUnit( real_name, real_plural, unitID );
+	newUnit.name_abbrev = real_name_abbrev;
+	newUnit.plural_abbrev = real_plural_abbrev;
+
+	if ( real_name_abbrev.isEmpty() )
+		real_name_abbrev = "NULL";
+	else
+		real_name_abbrev = "'"+escapeAndEncode(real_name_abbrev)+"'";
+	if ( real_plural_abbrev.isEmpty() )
+		real_plural_abbrev = "NULL";
+	else
+		real_plural_abbrev = "'"+escapeAndEncode(real_plural_abbrev)+"'";
+
+	QString command = QString("UPDATE units SET name='%1',name_abbrev=%2,plural='%3',plural_abbrev=%4 WHERE id='%5'")
+	  .arg(escapeAndEncode(real_name))
+	  .arg(real_name_abbrev)
+	  .arg(escapeAndEncode(real_plural))
+	  .arg(real_plural_abbrev)
 	  .arg(unitID);
 	unitQuery.exec( command );
 
 	emit unitRemoved( unitID );
-
-	Unit newUnit( newName, newPlural, unitID );
-	newUnit.name_abbrev = newNameAbbrev;
-	newUnit.plural_abbrev = newPluralAbbrev;
 	emit unitCreated( newUnit );
 }
 

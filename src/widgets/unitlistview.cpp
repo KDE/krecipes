@@ -194,16 +194,19 @@ void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )
 
 void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 {
-	if ( !checkBounds( Unit( text, text ) ) ) {
-		reload(true); //reset the changed text
-		return ;
+	//skip abbreviations
+	if ( c == 0 || c == 2 ) {
+		if ( !checkBounds( Unit( text, text ) ) ) {
+			reload(true); //reset the changed text
+			return ;
+		}
 	}
 
 	int existing_id = database->findExistingUnitByName( text );
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)i;
 	int unit_id = unit_it->unit().id;
-	if ( existing_id != -1 && existing_id != unit_id ) { //category already exists with this label... merge the two
+	if ( existing_id != -1 && existing_id != unit_id && !text.stripWhiteSpace().isEmpty() ) { //category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
 				Unit u = unit_it->unit();
