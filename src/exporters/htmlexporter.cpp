@@ -362,11 +362,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				ingredients_html += "</ul>";
 			ingredients_html.append("</ul></td><td valign=\"top\"><ul>");
 			if ( !group.isEmpty() )
-				ingredients_html += "<li>" + group + ":</li><ul>";
+				ingredients_html += "<li style=\"page-break-after: avoid\">" + group + ":</li><ul>";
 		}
 		else {
 			if ( !group.isEmpty() )
-				ingredients_html += "<li>" + group + ":</li><ul>";
+				ingredients_html += "<li style=\"page-break-after: avoid\">" + group + ":</li><ul>";
 		}
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it, ++count ) {
@@ -435,21 +435,23 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	//=======================PROPERTIES======================//
 	QString properties_html;
 
+	QStringList hiddenList = config->readListEntry("HiddenProperties");
+	IngredientPropertyList visibleProperties;
+	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
+		if ( hiddenList.find((*prop_it).name) == hiddenList.end() )
+			visibleProperties.append( *prop_it );
+	}
+
 	cols_it = m_columnsMap.find("properties");
 	cols = 1;
 	if ( cols_it != m_columnsMap.end() )
 		cols = cols_it.data();
-	per_col = recipe.properties.count() / cols;
-	if ( recipe.properties.count() % cols != 0 ) //round up if division is not exact
+	per_col = visibleProperties.count() / cols;
+	if ( visibleProperties.count() % cols != 0 ) //round up if division is not exact
 		per_col++;
 
-	QStringList hiddenList = config->readListEntry("HiddenProperties");
-
 	count = 0;
-	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
-		if ( hiddenList.find((*prop_it).name) != hiddenList.end() )
-			continue;
-
+	for ( IngredientPropertyList::const_iterator prop_it = visibleProperties.begin(); prop_it != visibleProperties.end(); ++prop_it ) {
 		if ( count != 0 && count % per_col == 0 )
 			properties_html.append("</ul></td><td valign=\"top\"><ul>");
 

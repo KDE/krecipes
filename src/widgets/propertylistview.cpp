@@ -52,29 +52,35 @@ QString PropertyCheckListItem::text( int column ) const
 }
 
 
-HidePropertyCheckListItem::HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property ) : PropertyCheckListItem( klv, property )
+HidePropertyCheckListItem::HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property, bool enable ) : PropertyCheckListItem( klv, property )
 {
-	//setOn( true ); // Set checked by default
+	m_holdSettings = true;
+	setOn( enable ); // Set checked by default
+	m_holdSettings = false;
 }
 
-HidePropertyCheckListItem::HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property ) : PropertyCheckListItem( it, property )
+HidePropertyCheckListItem::HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property, bool enable ) : PropertyCheckListItem( it, property )
 {
-	//setOn( true ); // Set checked by default
+	m_holdSettings = true;
+	setOn( enable ); // Set checked by default
+	m_holdSettings = false;
 }
 
 void HidePropertyCheckListItem::stateChange( bool on )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup("Formatting");
-
-	config->sync();
-	QStringList hiddenList = config->readListEntry("HiddenProperties");
-	if ( on )
-		hiddenList.remove(m_property.name);
-	else if ( !hiddenList.contains(m_property.name) )
-		hiddenList.append(m_property.name);
-
-	config->writeEntry("HiddenProperties",hiddenList);
+	if ( !m_holdSettings ) {
+		KConfig *config = KGlobal::config();
+		config->setGroup("Formatting");
+	
+		config->sync();
+		QStringList hiddenList = config->readListEntry("HiddenProperties");
+		if ( on )
+			hiddenList.remove(m_property.name);
+		else if ( !hiddenList.contains(m_property.name) )
+			hiddenList.append(m_property.name);
+	
+		config->writeEntry("HiddenProperties",hiddenList);
+	}
 }
 
 PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) : KListView( parent ),
@@ -91,6 +97,8 @@ void PropertyListView::reload()
 {
 	clear(); // Clear the view
 
+	m_loading = true;
+
 	IngredientPropertyList propertyList;
 	database->loadProperties( &propertyList );
 
@@ -98,6 +106,8 @@ void PropertyListView::reload()
 	IngredientPropertyList::const_iterator prop_it;
 	for ( prop_it = propertyList.begin(); prop_it != propertyList.end(); ++prop_it )
 		createProperty( *prop_it );
+
+	m_loading = false;
 }
 
 
@@ -273,7 +283,7 @@ CheckPropertyListView::CheckPropertyListView( QWidget *parent, RecipeDB *db, boo
 
 void CheckPropertyListView::createProperty( const IngredientProperty &property )
 {
-	( void ) new HidePropertyCheckListItem( this, property );
+	( void ) new HidePropertyCheckListItem( this, property, (m_loading)?false:true );
 }
 
 #include "propertylistview.moc"

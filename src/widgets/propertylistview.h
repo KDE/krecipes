@@ -43,11 +43,14 @@ protected:
 class HidePropertyCheckListItem : public PropertyCheckListItem
 {
 public:
-	HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property );
-	HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property );
+	HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property, bool enable = false );
+	HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property, bool enable = false );
 
 protected:
 	virtual void stateChange( bool on );
+
+private:
+	bool m_holdSettings;
 };
 
 
@@ -134,6 +137,7 @@ public slots:
 
 protected:
 	RecipeDB *database;
+	bool m_loading;
 
 protected slots:
 	virtual void removeProperty( int id ) = 0;
