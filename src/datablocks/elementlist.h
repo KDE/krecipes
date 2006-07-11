@@ -11,7 +11,6 @@
 #ifndef ELEMENTLIST_H
 #define ELEMENTLIST_H
 
-#include <qptrlist.h>
 #include <qvaluelist.h>
 #include <qregexp.h>
 
@@ -39,23 +38,6 @@ public:
 	static ElementList split( const QString &sep, const QString &str );
 };
 
-
-class IDList: public QPtrList <int>
-{
-public:
-	IDList()
-	{
-		setAutoDelete( true );
-	};
-	~IDList()
-	{}
-	;
-protected:
-	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
-	{
-		return ( *( ( int* ) item1 ) - *( ( int* ) item2 ) );
-	};
-
-};
+typedef QValueList<int> IDList;
 
 #endif

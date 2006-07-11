@@ -22,6 +22,7 @@
 
 #include <qbuffer.h>
 #include <qtextcodec.h>
+#include <qvariant.h>
 
 #include <kapplication.h>
 #include <kdebug.h>

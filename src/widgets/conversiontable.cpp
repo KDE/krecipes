@@ -68,7 +68,7 @@ ConversionTable::~ConversionTable()
 #include <kdebug.h>
 void ConversionTable::unitRemoved( int id )
 {
-	int index = unitIDs.find( &id );
+	int index = *unitIDs.find( id );
 	kdDebug() << "index:" << index << endl;
 	removeRow( index );
 	removeColumn( index );
@@ -79,7 +79,7 @@ void ConversionTable::unitCreated( const Unit &unit )
 {
 	insertColumns( numCols() );
 	insertRows( numRows() );
-	unitIDs.append( new int( unit.id ) );
+	unitIDs.append( unit.id );
 	horizontalHeader() ->setLabel( numRows() - 1, unit.name );
 	verticalHeader() ->setLabel( numCols() - 1, unit.name );
 }
@@ -207,20 +207,18 @@ void ConversionTable::createNewItem( int r, int c, double amount )
 	connect( ci, SIGNAL( signalRepaintCell( int, int ) ), this, SLOT( repaintCell( int, int ) ) );
 }
 
-void ConversionTable::setUnitIDs( IDList &idList )
+void ConversionTable::setUnitIDs( const IDList &idList )
 {
 	unitIDs.clear();
-	for ( int * id = idList.first();id;id = idList.next() ) {
-		int * newId = new int;
-		*newId = *id;
-		unitIDs.append( newId );
+	for ( IDList::const_iterator id_it = idList.begin(); id_it != idList.end(); ++id_it ) {
+		unitIDs.append( *id_it );
 	}
 }
 
 void ConversionTable::setRatio( int ingID1, int ingID2, double ratio )
 {
-	int indexID1 = unitIDs.find( &ingID1 );
-	int indexID2 = unitIDs.find( &ingID2 );
+	int indexID1 = *unitIDs.find( ingID1 );
+	int indexID2 = *unitIDs.find( ingID2 );
 	createNewItem( indexID1, indexID2, ratio );
 }
 
@@ -228,7 +226,6 @@ void ConversionTable::setRatio( int ingID1, int ingID2, double ratio )
 int ConversionTable::getUnitID( int rc )
 {
 	return ( *( unitIDs.at( rc ) ) );
-	return ( 1 );
 }
 
 QWidget * ConversionTable::beginEdit ( int row, int col, bool replace )

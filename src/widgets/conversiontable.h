@@ -31,7 +31,7 @@ public:
 	ConversionTable( QWidget* parent, int maxrows, int maxcols );
 	~ConversionTable();
 	void createNewItem( int r, int c, double amount );
-	void setUnitIDs( IDList &idList );
+	void setUnitIDs( const IDList &idList );
 	void setRatio( int ingID1, int ingID2, double ratio );
 	void setRatio( const UnitRatio &r )
 	{

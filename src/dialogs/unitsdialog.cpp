@@ -113,8 +113,7 @@ void UnitsDialog::loadConversionTable( void )
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
 		if ( !( *unit_it ).name.isEmpty() ) {
 			unitNames.append( ( *unit_it ).name );
-			int *newId = new int( ( *unit_it ).id ); // Create the new int element
-			unitIDs.append( newId ); // append the element
+			unitIDs.append( ( *unit_it ).id ); // append the element
 		}
 	}
 
