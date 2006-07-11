@@ -37,11 +37,23 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( nameLabel, 0, 0 );
 	gridLayout->addWidget( nameEdit, 0, 1 );
 
+	QLabel *nameAbbrevLabel = new QLabel( i18n( "Abbreviation:" ), this );
+	nameAbbrevEdit = new KLineEdit( QString::null, this );
+
+	gridLayout->addWidget( nameAbbrevLabel, 0, 2 );
+	gridLayout->addWidget( nameAbbrevEdit, 0, 3 );
+
 	QLabel *pluralLabel = new QLabel( i18n( "Plural:" ), this );
 	pluralEdit = new KLineEdit( plural, this );
 
 	gridLayout->addWidget( pluralLabel, 1, 0 );
 	gridLayout->addWidget( pluralEdit, 1, 1 );
+
+	QLabel *pluralAbbrevLabel = new QLabel( i18n( "Abbreviation:" ), this );
+	pluralAbbrevEdit = new KLineEdit( QString::null, this );
+
+	gridLayout->addWidget( pluralAbbrevLabel, 1, 2 );
+	gridLayout->addWidget( pluralAbbrevEdit, 1, 3 );
 
 	QHBoxLayout *button_hbox = new QHBoxLayout;
 	okButton = new QPushButton( i18n( "&OK" ), this );
@@ -80,6 +92,10 @@ Unit CreateUnitDialog::newUnit( void )
 	if ( plural.isEmpty() )
 		plural = name;
 
-	return Unit( name, plural );
+	Unit new_unit = Unit( name, plural );
+	new_unit.name_abbrev = nameAbbrevEdit->text();
+	new_unit.plural_abbrev = pluralAbbrevEdit->text();
+
+	return new_unit;
 }
 

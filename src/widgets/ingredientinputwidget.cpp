@@ -126,7 +126,6 @@ void IngredientInput::clear()
 	unitComboList->clear();
 
 	orButton->setChecked(false);
-	enableHeader(true);
 	typeButtonGrp->setButton( 0 ); //put back to ingredient input
 	typeButtonClicked( 0 );
 
@@ -357,7 +356,6 @@ IngredientInputWidget::IngredientInputWidget( RecipeDB *db, QWidget *parent ) : 
 	setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 
 	m_ingInputs.append(new IngredientInput(database,this));
-	//m_ingInputs.append(new IngredientInput(database,this));
 
 	// Connect signals & Slots
 	connect( m_ingInputs[0], SIGNAL(addIngredient()), this, SLOT(addIngredient()) );
@@ -372,15 +370,8 @@ IngredientInputWidget::~IngredientInputWidget()
 
 void IngredientInputWidget::clear()
 {
-	QValueList<IngredientInput*>::iterator curr = m_ingInputs.begin();
-	(*curr)->clear();
-
-	++curr;
-
-	while ( curr != m_ingInputs.end() ) {
-		delete *curr;
-		curr = m_ingInputs.remove(curr);
-	}
+	//clearing the first input deletes all substitute inputs
+	m_ingInputs[0]->clear();
 }
 
 void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
@@ -407,7 +398,7 @@ void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 	}
 	else {
 		while ( curr != m_ingInputs.end() ) {
-			delete *curr;
+			(*curr)->deleteLater();
 			curr = m_ingInputs.remove(curr);
 		}
 		if ( m_ingInputs.count() == 1 )
@@ -457,7 +448,7 @@ void IngredientInputWidget::addIngredient()
 	}
 	clear();
 
-	 m_ingInputs[0]->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
+	m_ingInputs[0]->setFocus(); //put cursor back to the ingredient name so user can begin next ingredient
 }
 
 int IngredientInputWidget::createNewIngredientIfNecessary( const QString &ing, RecipeDB *database )

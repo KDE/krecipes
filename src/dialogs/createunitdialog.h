@@ -39,6 +39,8 @@ private:
 	QVBox *vbox;
 	KLineEdit *nameEdit;
 	KLineEdit *pluralEdit;
+	KLineEdit *nameAbbrevEdit;
+	KLineEdit *pluralAbbrevEdit;
 	QPushButton* okButton;
 	QPushButton* cancelButton;
 
