@@ -78,7 +78,7 @@
 <ingredient>
 <name>mléko</name>
 <amount>0.5</amount>
-<unit>l</unit>
+<unit>L</unit>
 </ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>
@@ -208,7 +208,7 @@ Pozn: Opatrně s přídavky kmínu a skořice. Mají sklon vytvářet hrudky. P�
 <ingredient>
 <name>smetana</name>
 <amount>100</amount>
-<unit>ml</unit>
+<unit>mL</unit>
 </ingredient>
 <ingredient>
 <name>červené víno</name>

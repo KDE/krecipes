@@ -17,6 +17,8 @@
 
 #include "datablocks/unit.h"
 
+class QComboBox;
+
 class RecipeDB;
 class KPopupMenu;
 
@@ -53,10 +55,11 @@ protected:
 
 private slots:
 	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void hideTypeCombo();
+	void updateType( int type );
 
 	void createNew();
-	void remove
-		();
+	void remove();
 	void rename();
 
 	void modUnit( QListViewItem* i, const QPoint &p, int c );
@@ -64,8 +67,10 @@ private slots:
 
 private:
 	bool checkBounds( const Unit &unit );
+	void insertTypeComboBox( QListViewItem* );
 
 	KPopupMenu *kpop;
+	QComboBox *typeComboBox;
 };
 
 #endif //UNITLISTVIEW_H

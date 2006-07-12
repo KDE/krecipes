@@ -78,7 +78,7 @@
 <ingredient>
 <name>milk</name>
 <amount>0.5</amount>
-<unit>l</unit>
+<unit>L</unit>
 </ingredient>
 </krecipes-ingredients>
 <krecipes-instructions>
@@ -208,7 +208,7 @@ Note: Be careful adding the cumin and cinnamon. They tend to clump, and you shou
 <ingredient>
 <name>cream</name>
 <amount>100</amount>
-<unit>ml</unit>
+<unit>mL</unit>
 </ingredient>
 <ingredient>
 <name>red wine</name>

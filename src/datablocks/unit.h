@@ -20,6 +20,8 @@ public:
 	Unit();
 	Unit( const QString &name, const QString &plural, int id = -1 );
 
+	typedef enum { All = -1, Other = 0, Mass, Volume } Type;
+
 	/** Use @param amount to determine whether to use @param name as the plural or singlular form */
 	Unit( const QString &name, double amount );
 
@@ -27,6 +29,8 @@ public:
 	bool operator<( const Unit &u ) const;
 
 	QString determineName( double amount, bool useAbbrev ) const;
+
+	Type type;
 
 	int id;
 	QString name;

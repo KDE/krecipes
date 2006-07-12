@@ -17,6 +17,7 @@
 #include <qpushbutton.h>
 
 #include "datablocks/unitratiolist.h"
+#include "datablocks/unit.h"
 
 class RecipeDB;
 class ConversionTable;
@@ -42,7 +43,8 @@ public slots:
 private:
 	// Widgets
 	StdUnitListView *unitListView;
-	ConversionTable *conversionTable;
+	ConversionTable *massConversionTable;
+	ConversionTable *volumeConversionTable;
 	QPushButton *newUnitButton;
 	QPushButton *removeUnitButton;
 
@@ -55,7 +57,8 @@ private:
 	// Internal Variables
 	RecipeDB *database;
 private slots:
-	void loadConversionTable( void );
+	void loadConversionTables();
+	void loadConversionTable( ConversionTable*, Unit::Type );
 	void saveRatio( int r, int c, double value );
 	void removeRatio( int r, int c );
 };

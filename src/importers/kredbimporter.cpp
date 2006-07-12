@@ -42,6 +42,7 @@ void KreDBImporter::parseFile( const QString &file )  //this is either a databas
 			database->loadCategories( tree );
 			setCategoryStructure( tree );
 
+			#if 0
 			//set unit ratios
 			UnitRatioList ratioList;
 			UnitList unitList;
@@ -49,6 +50,7 @@ void KreDBImporter::parseFile( const QString &file )  //this is either a databas
 			database->loadUnits( &unitList );
 
 			setUnitRatioInfo( ratioList, unitList );
+			#endif
 
 			//now load recipes
 			RecipeList recipes;

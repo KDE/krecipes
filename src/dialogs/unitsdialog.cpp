@@ -60,28 +60,32 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 
 	tabWidget->insertTab( unitTab, i18n( "Units" ) );
 
-	conversionTable = new ConversionTable( tabWidget, 1, 1 );
-	tabWidget->insertTab( conversionTable, i18n( "Unit Conversions" ) );
+	massConversionTable = new ConversionTable( tabWidget, 1, 1 );
+	tabWidget->insertTab( massConversionTable, i18n( "Mass Conversions" ) );
+
+	volumeConversionTable = new ConversionTable( tabWidget, 1, 1 );
+	tabWidget->insertTab( volumeConversionTable, i18n( "Volume Conversions" ) );
 
 	page_layout->addWidget( tabWidget );
 
 	// Connect signals & slots
 	connect( newUnitButton, SIGNAL( clicked() ), unitListView, SLOT( createNew() ) );
-	connect( removeUnitButton, SIGNAL( clicked() ), unitListView, SLOT( remove
-		         () ) );
-	connect( conversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
-	connect( conversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
+	connect( removeUnitButton, SIGNAL( clicked() ), unitListView, SLOT( remove() ) );
+	connect( massConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
+	connect( massConversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
+	connect( volumeConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
+	connect( volumeConversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
 
 	//TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
-	connect( database, SIGNAL( unitCreated( const Unit& ) ), this, SLOT( loadConversionTable() ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), this, SLOT( loadConversionTable() ) );
+	connect( database, SIGNAL( unitCreated( const Unit& ) ), this, SLOT( loadConversionTables() ) );
+	connect( database, SIGNAL( unitRemoved( int ) ), this, SLOT( loadConversionTables() ) );
 
 	//this is for the above TODO, but it still has some bugs to be worked out
 	//connect(database,SIGNAL(unitCreated(const Element&)),conversionTable,SLOT(unitCreated(const Element&)));
 	//connect(database,SIGNAL(unitRemoved(int)),conversionTable,SLOT(unitRemoved(int)));
 
 	//Populate data into the table
-	loadConversionTable();
+	loadConversionTables();
 
 	//FIXME: We've got some sort of build issue... we get undefined references to CreateElementDialog without this dummy code here
 	CreateElementDialog d( this, "" );
@@ -99,48 +103,53 @@ void UnitsDialog::loadUnitsList( void )
 void UnitsDialog::reloadData( void )
 {
 	loadUnitsList();
-	loadConversionTable();
+	loadConversionTables();
 }
 
-void UnitsDialog::loadConversionTable( void )
+void UnitsDialog::loadConversionTables( void )
+{
+	loadConversionTable( massConversionTable, Unit::Mass );
+	loadConversionTable( volumeConversionTable, Unit::Volume );
+}
+
+void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 {
 	UnitList unitList;
-	database->loadUnits( &unitList );
+	database->loadUnits( &unitList, type );
 
 	QStringList unitNames;
 	IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
-	conversionTable->clear();
+	table->clear();
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		if ( !( *unit_it ).name.isEmpty() ) {
-			unitNames.append( ( *unit_it ).name );
-			unitIDs.append( ( *unit_it ).id ); // append the element
-		}
+		unitNames.append( ( *unit_it ).name );
+		unitIDs.append( ( *unit_it ).id ); // append the element
 	}
 
 	// Resize the table
-	conversionTable->resize( unitNames.count(), unitNames.count() );
+	table->resize( unitNames.count(), unitNames.count() );
 
 	// Set the table labels, and id's
-	conversionTable->setRowLabels( unitNames );
-	conversionTable->setColumnLabels( unitNames );
-	conversionTable->setUnitIDs( unitIDs );
+	table->setRowLabels( unitNames );
+	table->setColumnLabels( unitNames );
+	table->setUnitIDs( unitIDs );
 
 
 	// Load and Populate the data into the table
 	UnitRatioList ratioList;
-	database->loadUnitRatios( &ratioList );
+	database->loadUnitRatios( &ratioList, type );
 	for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ++ratio_it ) {
-		conversionTable->setRatio( ( *ratio_it ).uID1, ( *ratio_it ).uID2, ( *ratio_it ).ratio );
+		table->setRatio( ( *ratio_it ).uID1, ( *ratio_it ).uID2, ( *ratio_it ).ratio );
 	}
 }
 
 void UnitsDialog::saveRatio( int r, int c, double value )
 {
+	ConversionTable *conversionTable = (ConversionTable*)sender();
 	UnitRatio ratio;
 
 	ratio.uID1 = conversionTable->getUnitID( r );
 	ratio.uID2 = conversionTable->getUnitID( c );
-	ratio.ratio = value;
+	ratio.ratio = value;kdDebug()<<"id1: "<<ratio.uID1<<endl;kdDebug()<<"id2: "<<ratio.uID2<<endl;kdDebug()<<"r: "<<ratio.ratio<<endl;
 	database->saveUnitRatio( &ratio );
 
 	UnitRatio reverse_ratio;
@@ -160,6 +169,7 @@ void UnitsDialog::saveRatio( int r, int c, double value )
 
 void UnitsDialog::removeRatio( int r, int c )
 {
+	ConversionTable *conversionTable = (ConversionTable*)sender();
 	database->removeUnitRatio( conversionTable->getUnitID( r ), conversionTable->getUnitID( c ) );
 }
 

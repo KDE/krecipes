@@ -14,12 +14,16 @@
 
 #include "unitlistview.h"
 
+#include <qcombobox.h>
+#include <qheader.h>
+
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 #include "backends/recipedb.h"
 #include "dialogs/createunitdialog.h"
@@ -29,7 +33,10 @@
 class UnitListViewItem : public QListViewItem
 {
 public:
-	UnitListViewItem( QListView* qlv, const Unit &u ) : QListViewItem( qlv ), m_unit(u){}
+	UnitListViewItem( QListView* qlv, const Unit &u ) : QListViewItem( qlv ), m_unit(u)
+	{
+		updateType(m_unit.type);
+	}
 
 	virtual QString text( int column ) const
 	{
@@ -38,10 +45,13 @@ public:
 		case 1: return m_unit.name_abbrev;
 		case 2: return m_unit.plural;
 		case 3: return m_unit.plural_abbrev;
-		case 4: return QString::number(m_unit.id);
+		case 4: return m_type;
+		case 5: return QString::number(m_unit.id);
 		default: return QString::null;
 		}
 	}
+
+	void setType( Unit::Type type ){ m_unit.type = type; updateType(type); }
 
 	const Unit& unit() const { return m_unit; };
 
@@ -56,7 +66,17 @@ protected:
 	}
 
 private:
+	void updateType( Unit::Type t ) {
+		switch ( t ) {
+		case Unit::Other: m_type = i18n("Other"); break;
+		case Unit::Mass: m_type = i18n("Mass"); break;
+		case Unit::Volume: m_type = i18n("Volume"); break;
+		default: break;
+		}
+	}
+
 	Unit m_unit;
+	QString m_type;
 };
 
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
@@ -74,7 +94,7 @@ void UnitListView::init()
 void UnitListView::load( int limit, int offset )
 {
 	UnitList unitList;
-	database->loadUnits( &unitList, limit, offset );
+	database->loadUnits( &unitList, Unit::All, limit, offset );
 
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
 		if ( !( *it ).name.isEmpty() || !( *it ).plural.isEmpty() )
@@ -96,6 +116,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 	addColumn( i18n( "Abbreviation" ) );
 	addColumn( i18n( "Plural" ) );
 	addColumn( i18n( "Abbreviation" ) );
+	addColumn( i18n( "Type" ) );
 
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -107,22 +128,62 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		setRenameable( 1, true );
 		setRenameable( 2, true );
 		setRenameable( 3, true );
+		setRenameable( 4, true );
 
-		KIconLoader *il = new KIconLoader;
+		KIconLoader il;
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop->insertItem( il.loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il.loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop->insertItem( il.loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
-		delete il;
+		typeComboBox = new QComboBox( false, viewport() );
+		typeComboBox->insertItem(i18n("Other"));
+		typeComboBox->insertItem(i18n("Mass"));
+		typeComboBox->insertItem(i18n("Volume"));
+		addChild( typeComboBox );
+		typeComboBox->hide();
+
+		connect( typeComboBox, SIGNAL( activated(int) ), SLOT( updateType(int) ) );
+		connect( this, SIGNAL( selectionChanged() ), SLOT( hideTypeCombo() ) );
 
 		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( modUnit( QListViewItem*, const QPoint &, int ) ) );
 		connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), this, SLOT( saveUnit( QListViewItem*, const QString &, int ) ) );
 	}
+}
+
+void StdUnitListView::insertTypeComboBox( QListViewItem* it )
+{
+	QRect r;
+
+	// Constraints Box1
+	r = header() ->sectionRect( 4 ); //start at the section 2 header
+	r.moveBy( 0, itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+
+	r.setHeight( it->height() ); // Set the item's height
+	r.setWidth( header() ->sectionRect( 4 ).width() ); // and width
+	typeComboBox->setGeometry( r );
+
+	UnitListViewItem *unit_it = (UnitListViewItem*)it;
+	typeComboBox->setCurrentItem( unit_it->unit().type );
+
+	typeComboBox->show();
+}
+
+void StdUnitListView::updateType( int type )
+{
+	UnitListViewItem *unit_it = (UnitListViewItem*)currentItem();
+	unit_it->setType((Unit::Type)type);
+
+	database->modUnit( unit_it->unit() );
+}
+
+void StdUnitListView::hideTypeCombo()
+{
+	typeComboBox->hide();
 }
 
 void StdUnitListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
@@ -182,14 +243,19 @@ void StdUnitListView::createUnit( const Unit &unit )
 
 void StdUnitListView::removeUnit( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 4 );
+	QListViewItem * item = findItem( QString::number( id ), 5 );
 	removeElement(item);
 }
 
 void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )
 {
-	if ( i )
-		UnitListView::rename( i, c );
+	if ( i ) {
+		if ( c != 4 )
+			UnitListView::rename( i, c );
+		else {
+			insertTypeComboBox(i);
+		}
+	}
 }
 
 void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
@@ -209,8 +275,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 	if ( existing_id != -1 && existing_id != unit_id && !text.stripWhiteSpace().isEmpty() ) { //category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
-				Unit u = unit_it->unit();
-				database->modUnit( unit_id, u.name, u.name_abbrev, u.plural, u.plural_abbrev );
+				database->modUnit( unit_it->unit() );
 				database->mergeUnits( unit_id, existing_id );
 				break;
 			}
@@ -220,8 +285,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 		}
 	}
 	else {
-		Unit u = unit_it->unit();
-		database->modUnit( unit_id, u.name, u.name_abbrev, u.plural, u.plural_abbrev );
+		database->modUnit( unit_it->unit() );
 	}
 }
 

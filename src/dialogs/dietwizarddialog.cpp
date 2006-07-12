@@ -126,9 +126,6 @@ void DietWizardDialog::clear()
 
 void DietWizardDialog::reload( void )
 {
-	//Fill in the caches from the database
-	//database->loadUnitRatios( &cachedUnitRatios );
-	//database->loadProperties( &cachedIngredientProperties, -1 );
 	for ( int i = 0; i < mealTabs->count(); ++i ) {
 		MealInput *mealTab = (MealInput*)mealTabs->page(i);
 		mealTab->reload();
@@ -185,9 +182,6 @@ void DietWizardDialog::createDiet( void )
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 	START_TIMER("Creating the diet");
-
-	database->loadUnitRatios( &cachedUnitRatios );
-	database->loadProperties( &cachedIngredientProperties, -1 );
 
 	RecipeList rlist;
 	dietRList->clear();
@@ -252,9 +246,6 @@ void DietWizardDialog::createDiet( void )
 		dietDisplay->show();
 	}
 
-	cachedUnitRatios.clear();
-	cachedIngredientProperties.clear();
-
 	END_TIMER();
 
 	KApplication::restoreOverrideCursor();
@@ -286,8 +277,8 @@ int DietWizardDialog::getNecessaryFlags() const
 			if ( !need_ingredients ) {
 				ConstraintList constraints;
 				loadConstraints( meal, dish, &constraints );
-				for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
-					if ( ct->enabled ) {
+				for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+					if ( (*ct_it).enabled ) {
 						need_ingredients = true;
 						break;
 					}
@@ -585,8 +576,7 @@ void DishInput::loadConstraints( ConstraintList *constraints ) const
 		constraint.min = it->minVal();
 		constraint.max = it->maxVal();
 		constraint.enabled = it->isOn();
-		constraints->add
-		( constraint );
+		constraints->append( constraint );
 	}
 }
 
@@ -744,8 +734,8 @@ bool DietWizardDialog::checkConstraints( Recipe &rec, int meal, int dish )
 	loadConstraints( meal, dish, &constraints ); //load the constraints
 
 	bool any_enabled = false;
-	for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
-		if ( ct->enabled ) {
+	for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+		if ( (*ct_it).enabled ) {
 			any_enabled = true;
 			break;
 		}
@@ -754,11 +744,9 @@ bool DietWizardDialog::checkConstraints( Recipe &rec, int meal, int dish )
 		return true;
 
 	// Calculate properties of the recipe
-	IngredientPropertyList properties;
+	calculateProperties( rec, database );
 
-	calculateProperties( rec, cachedIngredientProperties, cachedUnitRatios, &properties );
-
-	bool withinLimits = checkLimits( properties, constraints );
+	bool withinLimits = checkLimits( rec.properties, constraints );
 
 	return ( withinLimits );
 }
@@ -786,11 +774,11 @@ bool DietWizardDialog::categoryFiltering( int meal, int dish ) const
 
 bool DietWizardDialog::checkLimits( IngredientPropertyList &properties, ConstraintList &constraints )
 {
-	for ( Constraint * ct = constraints.getFirst();ct; ct = constraints.getNext() ) {
-		if ( ct->enabled ) {
-			IngredientPropertyList::const_iterator ip_it = properties.find( ct->id );
+	for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+		if ( (*ct_it).enabled ) {
+			IngredientPropertyList::const_iterator ip_it = properties.find( (*ct_it).id );
 			if ( ip_it != properties.end() ) {
-				if ( ( (*ip_it).amount > ct->max ) || ( (*ip_it).amount < ct->min ) )
+				if ( ( (*ip_it).amount > (*ct_it).max ) || ( (*ip_it).amount < (*ct_it).min ) )
 					return false;
 			}
 			else

@@ -72,10 +72,6 @@ private:
 
 	RecipeList *dietRList;
 
-	// Cache data blocks
-	UnitRatioList cachedUnitRatios;
-	IngredientPropertyList cachedIngredientProperties;
-
 	//Widgets
 	QHBox *optionsBox;
 	QVGroupBox *mealsSliderBox;

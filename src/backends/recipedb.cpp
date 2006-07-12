@@ -80,7 +80,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.93;
+	return 0.94;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -161,6 +161,25 @@ void RecipeDB::loadCachedCategories( CategoryTree **list, int limit, int offset,
 	}
 	else {
 		loadCategories( *list, limit, offset, parent_id, recurse );
+	}
+}
+
+bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result )
+{
+	result = from;
+
+	if ( from.units.type == to.type && to.type != Unit::Other ) {
+		result.amount = from.amount * unitRatio( from.units.id, to.id );
+		result.units = to;
+		return true;
+	}
+	else {
+		QMap<Unit::Type,QString> types;
+		types.insert(Unit::Other,"Other");
+		types.insert(Unit::Mass,"Mass");
+		types.insert(Unit::Volume,"Volume");
+		kdDebug()<<"Can't yet handle conversion from "<<types[from.units.type]<<" to "<<types[to.type]<<endl;
+		return false;
 	}
 }
 

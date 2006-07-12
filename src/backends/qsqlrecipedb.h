@@ -134,8 +134,8 @@ public:
 	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false );
 	void loadUncategorizedRecipes( ElementList *list );
-	void loadUnits( UnitList *list, int limit = -1, int offset = 0 );
-	void loadUnitRatios( UnitRatioList *ratioList );
+	void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 );
+	void loadUnitRatios( UnitRatioList *ratioList, Unit::Type );
 	void loadYieldTypes( ElementList *list, int limit, int offset );
 
 	void mergeAuthors( int id1, int id2 );
@@ -154,7 +154,7 @@ public:
 	/**
 	* set newLabel for unitID
 	*/
-	void modUnit( int unitID, const QString &newName, const QString &newNameAbbrev, const QString &newPlural, const QString &newNamePlural );
+	void modUnit( const Unit &unit );
 	/**
 	* set newLabel for categoryID
 	*/

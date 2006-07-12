@@ -209,16 +209,14 @@ void ConversionTable::createNewItem( int r, int c, double amount )
 
 void ConversionTable::setUnitIDs( const IDList &idList )
 {
-	unitIDs.clear();
-	for ( IDList::const_iterator id_it = idList.begin(); id_it != idList.end(); ++id_it ) {
-		unitIDs.append( *id_it );
-	}
+	unitIDs = idList;
 }
 
 void ConversionTable::setRatio( int ingID1, int ingID2, double ratio )
 {
-	int indexID1 = *unitIDs.find( ingID1 );
-	int indexID2 = *unitIDs.find( ingID2 );
+	int indexID1 = unitIDs.findIndex( ingID1 );
+	int indexID2 = unitIDs.findIndex( ingID2 );
+
 	createNewItem( indexID1, indexID2, ratio );
 }
 

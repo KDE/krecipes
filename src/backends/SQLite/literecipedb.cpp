@@ -122,7 +122,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), name_abbrev VARCHAR(%2), plural VARCHAR(%3), plural_abbrev VARCHAR(%4), PRIMARY KEY (id));" )
+		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(%1), name_abbrev VARCHAR(%2), plural VARCHAR(%3), plural_abbrev VARCHAR(%4), type INTEGER NOT NULL,PRIMARY KEY (id));" )
 		   .arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() );
 
 	else if ( tableName == "prep_methods" )
@@ -810,7 +810,67 @@ void LiteRecipeDB::portOldDatabases( float version )
 		database->exec( "CREATE index iidil_index ON ingredient_list(ingredient_id)" );
 		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
 
-		database->exec( "UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20050816)';" );
+		database->exec( "UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)';" );
+		database->commit();
+	}
+
+	if ( qRound(version*100) < 94 ) {
+		database->transaction();
+
+		//==================add a column to 'units' to allow specifying a type
+		database->exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20))" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units" );
+		if ( copyQuery.isActive() ) {
+
+			while ( copyQuery.next() ) {
+				QString name_abbrev = copyQuery.value( 2 ).toString();
+				if ( name_abbrev.isEmpty() )
+					name_abbrev = "NULL";
+				QString plural_abbrev = copyQuery.value( 4 ).toString();
+				if ( plural_abbrev.isEmpty() )
+					plural_abbrev = "NULL";
+
+				command = "INSERT INTO units_copy VALUES('"
+				                  + escape( copyQuery.value( 0 ).toString() ) //id
+				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
+				          + "'," + escape( name_abbrev ) //name_abbrev
+				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
+				          + "'," + escape( plural_abbrev ) //plural_abbrev
+				          + ")";
+				database->exec( command );
+
+				emit progress();
+			}
+		}
+		database->exec( "DROP TABLE units" );
+		database->exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), type INTEGER NOT NULL, PRIMARY KEY (id))" );
+		copyQuery = database->exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units_copy" );
+		if ( copyQuery.isActive() ) {
+
+			while ( copyQuery.next() ) {
+				QString name_abbrev = copyQuery.value( 2 ).toString();
+				if ( name_abbrev.isEmpty() )
+					name_abbrev = "NULL";
+				QString plural_abbrev = copyQuery.value( 4 ).toString();
+				if ( plural_abbrev.isEmpty() )
+					plural_abbrev = "NULL";
+
+				command = "INSERT INTO units VALUES('" 
+				                  + escape( copyQuery.value( 0 ).toString() ) //id
+				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
+				          + "'," + escape( name_abbrev ) //name_abbrev
+				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
+				          + "'," + escape( plural_abbrev ) //plural_abbrev
+				          + ",'0')";
+				database->exec( command );
+
+				emit progress();
+			}
+		}
+		database->exec( "DROP TABLE units_copy" );
+
+
+		database->exec( "UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)';" );
 		database->commit();
 	}
 }

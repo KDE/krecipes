@@ -9,10 +9,10 @@
 ***************************************************************************/
 #ifndef CONSTRAINTLIST_H
 #define CONSTRAINTLIST_H
-#include <qptrlist.h>
+
 #include <qstring.h>
 
-#include "element.h"
+#include "unit.h"
 
 /**
 @author Unai Garro
@@ -23,18 +23,6 @@ class IngredientProperty;
 class Constraint
 {
 public:
-
-	Constraint( Constraint *cnt )
-	{
-		id = cnt->id;
-		name = cnt->name;
-		units = cnt->units;
-		perUnit = cnt->perUnit;
-		max = cnt->max;
-		min = cnt->min;
-		enabled = cnt->enabled;
-	}
-
 	Constraint()
 	{
 		max = 0.0;
@@ -43,59 +31,17 @@ public:
 		enabled = false;
 	}
 
-	~Constraint()
-	{}
-	;
+	~Constraint(){}
+
 	int id;
 	QString name;
 	QString units;
-	Element perUnit; // stores the unit ID and Name
+	Unit perUnit; // stores the unit ID, name, and type
 	double max;
 	double min;
 	bool enabled;
 };
 
-
-class ConstraintPtrList: public QPtrList <Constraint>
-{
-public:
-	ConstraintPtrList()
-	{
-		setAutoDelete( true );
-	};
-	~ConstraintPtrList()
-	{}
-	;
-protected:
-	virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
-	{
-		return ( ( ( Constraint* ) item1 ) ->id - ( ( Constraint* ) item2 ) ->id );
-	};
-
-};
-
-
-class ConstraintList
-{
-public:
-	ConstraintList();
-
-	~ConstraintList();
-
-	Constraint* getFirst( void );
-	Constraint* getNext( void );
-	Constraint* getElement( int index );
-	void clear( void );
-	bool isEmpty( void );
-	void add
-		( Constraint &element );
-	void append( Constraint *constraint );
-	int find( Constraint* it );
-	Constraint* findByPty( IngredientProperty *pty );
-	Constraint* at( int pos );
-private:
-	ConstraintPtrList list;
-
-};
+typedef QValueList< Constraint > ConstraintList;
 
 #endif

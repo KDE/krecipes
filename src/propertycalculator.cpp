@@ -13,11 +13,10 @@
 
 #include <kdebug.h>
 
-int autoConvert( RecipeDB* database, double amount1, int unit1, double amount2, int unit2, double &newAmount, int &newID )
+bool autoConvert( RecipeDB* database, const Ingredient &from, const Unit &to, Ingredient &result )
 {
-
-
-	double ratio = database->unitRatio( unit1, unit2 );
+	return database->convertIngredientUnits( from, to, result );
+/*
 	if ( ratio >= 0 )  // There is a ratio
 	{
 		if ( ratio >= 1 )  // Convert to unit 1, since unit1 is bigger
@@ -37,7 +36,7 @@ int autoConvert( RecipeDB* database, double amount1, int unit1, double amount2, 
 		newID = -1;
 		return ( -1 );
 	}
-
+*/
 }
 
 /*
@@ -70,25 +69,20 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 		if ( pos >= 0 )  //Exists. Add to it
 		{
 			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
-			double ratio;
-			ratio = database->unitRatio( ing.units.id, (*prop_it).perUnit.id );
+			Ingredient result;
 
-			if ( ratio > 0.0 )  // Could convert units to perUnit
+			bool converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+
+			if ( converted )  // Could convert units to perUnit
 			{
 				if ( (*rec_property_it).amount >= 0 )
-					(*rec_property_it).amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
+					(*rec_property_it).amount += ( (*prop_it).amount ) * result.amount;
 				else
-					(*rec_property_it).amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
+					(*rec_property_it).amount -= ( (*prop_it).amount ) * result.amount; //The recipe was marked as undefined previously. Keep it negative
 			}
-			else
-			{ // Could not convert units
-				kdDebug() << "\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
-			}
-
 		}
 		else // Append new property
 		{
-
 			// We are about to add a new property. Were there previous ingredients that didn't have this defined?
 			bool undefined = ( ingredientNo > 1 );  // If 1, it's the first ingredient else, it's the second or more
 			IngredientProperty property;
@@ -98,113 +92,23 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			property.perUnit.name = QString::null; // "
 			property.units = (*prop_it).units;
 
-			double ratio;
-			ratio = database->unitRatio( ing.units.id, (*prop_it).perUnit.id );
+			Ingredient result;
+			bool converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 
-			if ( ratio > 0.0 )  // Could convert units to perUnit
+			if ( converted )  // Could convert units to perUnit
 			{
-				property.amount = ( (*prop_it).amount ) * ( ing.amount ) * ratio;
+				property.amount = ( (*prop_it).amount ) * result.amount;
 				if ( undefined )
 					property.amount = -( fabs( property.amount ) );
 				recipePropertyList->append( property );
 			}
-			else { // Could not convert units
-				kdDebug() << "\nWarning: I could not calculate the full property list, due to impossible unit conversion\n";
-			}
-
-
-
 		}
-
 	}
 
 	// The previous procedure doesn't take into account if an appended ingredient has not defined a property.
 	// Mark with negative sign all those properties in the recipe properties, since they're undefined
 	checkUndefined( recipePropertyList, ingPropertyList );
 }
-
-/*
-** Version with no database I/O. necessary DB data must be provided. Useful for caching data
-*/
-
-
-void calculateProperties( const Recipe& recipe, IngredientPropertyList& ipl, UnitRatioList& url, IngredientPropertyList *recipePropertyList )
-{
-	recipePropertyList->clear();
-
-	IngredientPropertyList filteredPropertyList;
-
-	int ingredientNo = 1;
-
-	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
-		ipl.filter( ( *ing_it ).ingredientID, &filteredPropertyList ); // Get the properties for the respective ingredient
-		filteredPropertyList.divide( recipe.yield.amount ); // calculates properties per yield unit
-		addPropertyToList( recipePropertyList, filteredPropertyList, *ing_it, url, ingredientNo );
-		ingredientNo++;
-	}
-}
-
-void addPropertyToList( IngredientPropertyList *recipePropertyList, IngredientPropertyList &newProperties, const Ingredient &ing, UnitRatioList &url, int ingredientNo )
-{
-	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = newProperties.begin(); prop_it != newProperties.end(); ++prop_it ) {
-		// Find if property was listed before
-		int pos = recipePropertyList->findIndex( *prop_it );
-		if ( pos >= 0 )  //The property exists in the list. Add to it
-		{
-			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
-			double ratio;
-			ratio = url.getRatio( ing.units.id, (*prop_it).perUnit.id );
-
-			if ( ratio > 0.0 )  // Could convert units to perUnit
-			{
-				if ( (*prop_it).amount >= 0 )
-					(*rec_property_it).amount += ( (*prop_it).amount ) * ( ing.amount ) * ratio; //Normal case
-				else
-					(*rec_property_it).amount -= ( (*prop_it).amount ) * ( ing.amount ) * ratio; //The recipe was marked as undefined previously. Keep it negative
-			}
-			else
-			{ // Could not convert units
-				kdDebug() << "\nWarning: I could not calculate the full property list, due to impossible unit conversion";
-			}
-
-		}
-		else // The property doesn't exist in the list. Append new property
-		{
-
-			// We are about to add a new property. Were there previous ingredients that didn't have this defined?
-			bool undefined = ( ingredientNo > 1 );  // If 1, it's the first ingredient else, it's the second or more
-
-			IngredientProperty property;
-			property.id = (*prop_it).id;
-			property.name = (*prop_it).name;
-			property.perUnit.id = -1; // It's not per unit, it's total sum of the recipe
-			property.perUnit.name = QString::null; // "
-			property.units = (*prop_it).units;
-
-			double ratio;
-			ratio = url.getRatio( ing.units.id, (*prop_it).perUnit.id );
-
-			if ( ratio > 0.0 )  // Could convert units to perUnit
-			{
-				property.amount = ( (*prop_it).amount ) * ( ing.amount ) * ratio;
-				if ( undefined )
-					property.amount = -( fabs( property.amount ) );
-				recipePropertyList->append( property );
-			}
-			else { // Could not convert units
-				kdDebug() << endl << "Warning: I could not calculate the full property list, due to impossible unit conversion" << endl;
-			}
-		}
-
-	}
-
-	// The previous procedure doesn't take into account if an appended ingredient has not defined a property.
-	// Mark with negative sign all those properties in the recipe properties, since they're undefined
-	checkUndefined( recipePropertyList, newProperties );
-
-}
-
 
 void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList )
 {
@@ -215,5 +119,3 @@ void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPrope
 			(*prop_it).amount = -( fabs( (*prop_it).amount ) ); // undefined
 	}
 }
-
-

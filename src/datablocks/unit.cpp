@@ -10,17 +10,17 @@
 
 #include "unit.h"
 
-Unit::Unit() :
-		id( -1 )
+Unit::Unit() : id( -1 ), type(Unit::Other)
 {}
 
 Unit::Unit( const QString &_name, const QString &_plural, int _id ) :
 		id( _id ),
 		name( _name ),
-		plural( _plural )
+		plural( _plural ),
+		type(Unit::Other)
 {}
 
-Unit::Unit( const QString &_name, double amount )
+Unit::Unit( const QString &_name, double amount ) : type(Unit::Other)
 {
 	if ( amount > 1 )
 		plural = _name;

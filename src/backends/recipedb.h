@@ -196,8 +196,8 @@ public:
 	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false ) = 0;
 	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
-	virtual void loadUnits( UnitList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadUnitRatios( UnitRatioList *ratioList ) = 0;
+	virtual void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 ) = 0;
+	virtual void loadUnitRatios( UnitRatioList *ratioList, Unit::Type ) = 0;
 	virtual void loadYieldTypes( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 
 	/** Change all instances of authors with id @param id2 to @param id1 */
@@ -228,7 +228,7 @@ public:
 	/**
 	* set newLabel for unitID
 	*/
-	virtual void modUnit( int unitID, const QString &newName, const QString &newNameAbbrev, const QString &newPlural, const QString &newNamePlural ) = 0;
+	virtual void modUnit( const Unit &unit ) = 0;
 	/**
 	* set newLabel for categoryID
 	*/
@@ -262,6 +262,8 @@ public:
 	virtual void saveUnitRatio( const UnitRatio *ratio ) = 0;
 	virtual void search( RecipeList *list, int items, const RecipeSearchParameters &parameters ) = 0;
 
+	/** @returns true on success, false otherwise */
+	bool convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result );
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
 	virtual QString escapeAndEncode( const QString &s ) const = 0;
