@@ -148,7 +148,6 @@ void IngredientMatcherDialog::addIngredient()
 			m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
 			++it;
 		}
-		allIngListView->listView()->clearSelection()
 	}
 }
 
