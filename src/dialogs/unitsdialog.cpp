@@ -17,7 +17,6 @@
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
 #include "backends/recipedb.h"
-#include "widgets/editbox.h"
 #include "widgets/conversiontable.h"
 #include "widgets/unitlistview.h"
 

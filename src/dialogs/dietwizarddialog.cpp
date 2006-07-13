@@ -13,7 +13,6 @@
 #include "dietwizarddialog.h"
 #include "backends/recipedb.h"
 #include "dietviewdialog.h"
-#include "widgets/editbox.h"
 
 #include <qbitmap.h>
 #include <qheader.h>
@@ -27,6 +26,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <knuminput.h>
 #include <kdebug.h>
 
 #include "propertycalculator.h"
@@ -484,16 +484,17 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	constraintsView->reload();
 
 	// KDoubleInput based edit boxes
-	constraintsEditBox1 = new EditBox( constraintsView->viewport() );
+	constraintsEditBox1 = new KDoubleNumInput( constraintsView->viewport() );
 	constraintsView->addChild( constraintsEditBox1 );
 	constraintsEditBox1->hide();
-	constraintsEditBox2 = new EditBox( constraintsView->viewport() );
+	constraintsEditBox2 = new KDoubleNumInput( constraintsView->viewport() );
 	constraintsView->addChild( constraintsEditBox2 );
 	constraintsEditBox2->hide();
 
 
 	// Connect Signals & Slots
 	connect( constraintsView, SIGNAL( executed( QListViewItem* ) ), this, SLOT( insertConstraintsEditBoxes( QListViewItem* ) ) );
+	connect( constraintsView, SIGNAL( selectionChanged() ), this, SLOT( hideConstraintInputs() ) );
 	connect( constraintsEditBox1, SIGNAL( valueChanged( double ) ), this, SLOT( setMinValue( double ) ) );
 	connect( constraintsEditBox2, SIGNAL( valueChanged( double ) ), this, SLOT( setMaxValue( double ) ) );
 	connect( categoriesEnabledBox, SIGNAL( toggled( bool ) ), this, SLOT( enableCategories( bool ) ) );
@@ -534,11 +535,7 @@ void DishInput::reload()
 
 void DishInput::insertConstraintsEditBoxes( QListViewItem* it )
 {
-
 	QRect r;
-
-
-
 
 	// Constraints Box1
 	r = constraintsView->header() ->sectionRect( 2 ); //start at the section 2 header
@@ -561,10 +558,15 @@ void DishInput::insertConstraintsEditBoxes( QListViewItem* it )
 	constraintsEditBox1->setValue( ( ( ConstraintsListItem* ) it ) ->minVal() );
 	constraintsEditBox2->setValue( ( ( ConstraintsListItem* ) it ) ->maxVal() );
 
-
 	// Show Boxes
 	constraintsEditBox1->show();
 	constraintsEditBox2->show();
+}
+
+void DishInput::hideConstraintInputs()
+{
+	constraintsEditBox1->hide();
+	constraintsEditBox2->hide();
 }
 
 void DishInput::loadConstraints( ConstraintList *constraints ) const
@@ -595,8 +597,6 @@ void DishInput::loadEnabledCategories( ElementList* categories )
 
 void DishInput::setMinValue( double minValue )
 {
-	constraintsEditBox1->hide();
-
 	ConstraintsListItem *it = ( ConstraintsListItem* ) ( constraintsView->selectedItem() ); // Find selected property
 
 	if ( it )
@@ -605,9 +605,6 @@ void DishInput::setMinValue( double minValue )
 
 void DishInput::setMaxValue( double maxValue )
 {
-	constraintsEditBox2->hide();
-
-
 	ConstraintsListItem *it = ( ConstraintsListItem* ) ( constraintsView->selectedItem() ); // Find selected property
 
 	if ( it )

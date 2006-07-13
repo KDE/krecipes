@@ -39,7 +39,8 @@
 #include "datablocks/recipe.h"
 #include "datablocks/unitratiolist.h"
 
-class EditBox;
+class KDoubleNumInput;
+
 class DishInput;
 class DishTitle;
 class MealInput;
@@ -187,13 +188,14 @@ private:
 	QCheckBox *categoriesEnabledBox;
 	CategoryCheckListView *categoriesView;
 	PropertyConstraintListView *constraintsView;
-	EditBox *constraintsEditBox1;
-	EditBox *constraintsEditBox2;
+	KDoubleNumInput *constraintsEditBox1;
+	KDoubleNumInput *constraintsEditBox2;
 	RecipeDB *database;
 
 private slots:
 	void enableCategories( bool enable );
 	void insertConstraintsEditBoxes( QListViewItem* it );
+	void hideConstraintInputs();
 	void setMinValue( double minValue );
 	void setMaxValue( double maxValue );
 };

@@ -1,6 +1,8 @@
 /***************************************************************************
 *   Copyright (C) 2003-2004 by                                            *
 *   Unai Garro (ugarro@users.sourceforge.net)                             *
+*                                                                         *
+*   Copyright (C) 2003-2006 by                                            *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -10,7 +12,6 @@
 ***************************************************************************/
 
 #include "conversiontable.h"
-#include "widgets/editbox.h"
 #include "datablocks/mixednumber.h"
 #include "widgets/fractioninput.h"
 

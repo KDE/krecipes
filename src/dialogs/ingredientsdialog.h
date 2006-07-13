@@ -22,13 +22,14 @@
 #include "widgets/krelistview.h"
 #include "datablocks/unit.h"
 
+class KDoubleNumInput;
+
 class RecipeDB;
 class ElementList;
 class SelectUnitDialog;
 class CreateElementDialog;
 class IngredientPropertyList;
 class SelectPropertyDialog;
-class EditBox;
 class UnitsDialog;
 class IngredientGroupsDialog;
 
@@ -58,7 +59,7 @@ private:
 	KreListView* unitsListView;
 	KreListView* propertiesListView;
 	QPushButton* pushButton5;
-	EditBox* inputBox;
+	KDoubleNumInput* inputBox;
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods

@@ -13,7 +13,6 @@
 #include "ingredientsdialog.h"
 #include "backends/recipedb.h"
 #include "createelementdialog.h"
-#include "widgets/editbox.h"
 #include "datablocks/ingredientpropertylist.h"
 #include "unitsdialog.h"
 #include "usdadatadialog.h"
@@ -168,7 +167,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_Prop_Buttons, 7, 7 );
 
-	inputBox = new EditBox( propertiesListView->listView() ->viewport() );
+	inputBox = new KDoubleNumInput( propertiesListView->listView() ->viewport() );
 	propertiesListView->listView() ->addChild( inputBox );
 	inputBox->hide();
 
@@ -405,7 +404,6 @@ void IngredientsDialog::removePropertyFromIngredient( void )
 
 void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
 {
-
 	QRect r = propertiesListView->listView() ->header() ->sectionRect( 1 );
 
 	r.moveBy( 0, propertiesListView->listView() ->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
@@ -420,10 +418,6 @@ void IngredientsDialog::insertPropertyEditBox( QListViewItem* it )
 
 void IngredientsDialog::setPropertyAmount( double amount )
 {
-
-	inputBox->hide();
-
-
 	QListViewItem *ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
 	QListViewItem *prop_it = propertiesListView->listView() ->selectedItem();
 
@@ -435,9 +429,6 @@ void IngredientsDialog::setPropertyAmount( double amount )
 		int per_units = perUnitListBack->getElement( findPropertyNo( prop_it ) ).id ;
 		database->changePropertyAmountToIngredient( ingredientID, propertyID, amount, per_units );
 	}
-
-	reloadPropertyList();
-
 }
 
 int IngredientsDialog::findPropertyNo( QListViewItem * /*it*/ )

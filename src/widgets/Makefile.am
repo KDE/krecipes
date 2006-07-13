@@ -13,7 +13,7 @@ libkrecipeswidgets_la_SOURCES= \
 	paneldeco.cpp ingredientlistview.cpp unitlistview.cpp \
 	propertylistview.cpp prepmethodlistview.cpp categorylistview.cpp \
 	authorlistview.cpp recipelistview.cpp categorycombobox.cpp \
-	kretextedit.cpp dblistviewbase.cpp editbox.cpp \
+	kretextedit.cpp dblistviewbase.cpp \
 	conversiontable.cpp fractioninput.cpp ingredientcombobox.cpp \
 	headercombobox.cpp prepmethodcombobox.cpp \
 	inglistviewitem.cpp kdateedit.cpp kdatepickerpopup.cpp \
