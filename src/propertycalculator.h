@@ -17,7 +17,7 @@
 #include "datablocks/ingredientpropertylist.h"
 #include "datablocks/recipe.h"
 
-bool autoConvert( RecipeDB* database, const Ingredient &from, const Unit &to, Ingredient &result );
+bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result );
 void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList );
 void calculateProperties( Recipe& recipe, RecipeDB* database );
 void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipePropertyList, IngredientPropertyList &ingPropertyList, const Ingredient &ing, int ingredientNo );

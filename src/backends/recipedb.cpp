@@ -169,16 +169,30 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 	result = from;
 
 	if ( from.units.type == to.type && to.type != Unit::Other ) {
-		result.amount = from.amount * unitRatio( from.units.id, to.id );
+		double ratio = unitRatio( from.units.id, to.id );
+		result.amount = from.amount * ratio;
 		result.units = to;
 		return true;
 	}
 	else {
-		QMap<Unit::Type,QString> types;
-		types.insert(Unit::Other,"Other");
-		types.insert(Unit::Mass,"Mass");
-		types.insert(Unit::Volume,"Volume");
-		kdDebug()<<"Can't yet handle conversion from "<<types[from.units.type]<<" to "<<types[to.type]<<endl;
+		#ifndef NDEBUG
+		QString to_str;
+		switch ( to.type ) {
+		case Unit::Other: to_str = "Other"; break;
+		case Unit::Mass: to_str = "Mass"; break;
+		case Unit::Volume: to_str = "Volume"; break;
+		}
+		QString from_str;
+		switch ( from.units.type ) {
+		case Unit::Other: from_str = "Other"; break;
+		case Unit::Mass: from_str = "Mass"; break;
+		case Unit::Volume: from_str = "Volume"; break;
+		}
+		kdDebug()<<"Can't yet handle conversion from "<<from_str<<" to "<<to_str<<endl;
+		#else
+		kdDebug()<<"Can't yet handle conversions between different unit types"<<endl;
+		#endif
+
 		return false;
 	}
 }

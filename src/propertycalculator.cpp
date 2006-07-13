@@ -13,30 +13,26 @@
 
 #include <kdebug.h>
 
-bool autoConvert( RecipeDB* database, const Ingredient &from, const Unit &to, Ingredient &result )
+bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result )
 {
-	return database->convertIngredientUnits( from, to, result );
-/*
-	if ( ratio >= 0 )  // There is a ratio
+	bool converted = database->convertIngredientUnits( from, to.units, result );
+
+	if ( converted )  // There is a ratio
 	{
-		if ( ratio >= 1 )  // Convert to unit 1, since unit1 is bigger
+		double ratio = result.amount / from.amount;
+
+		if ( ratio > 1 )  // Convert to unit 1, since unit1 is bigger
 		{
-			newID = unit1;
-			newAmount = amount1 + amount2 / ratio;
+			result.units = from.units;
+			result.amount = from.amount + to.amount / ratio;
 		}
-		else // Convert to unit2, since unit2 is bigger
-		{
-			newID = unit2;
-			newAmount = amount1 * ratio + amount2;
+		else { //Convert to unit2, since unit2 is bigger (just add, units are now correct)
+			result.amount += to.amount;
 		}
-		return ( 0 );
+		return true;
 	}
-	else {
-		newAmount = -1;
-		newID = -1;
-		return ( -1 );
-	}
-*/
+	else
+		return false;
 }
 
 /*

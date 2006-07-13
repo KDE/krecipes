@@ -56,13 +56,14 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 				lastpos_it = pos_it;
 
 				// Try to convert
-				converted = autoConvert( db, *ing_it, (*pos_it).units, result );
+				converted = autoConvert( db, *ing_it, *pos_it, result );
 			}
 			while ( ( !converted ) && ( ( ( pos_it = totalIngredientList->find( ++pos_it, ( *ing_it ).ingredientID ) ) ) != totalIngredientList->end() ) );
 
 			// If the conversion was succesful, Set the New Values
-			if ( converted >= 0 )
+			if ( converted ) {
 				*lastpos_it = result;
+			}
 			else // Otherwise append this ingredient at the end of the list
 			{
 				// Insert ingredient ID in the list

@@ -149,7 +149,7 @@ void UnitsDialog::saveRatio( int r, int c, double value )
 
 	ratio.uID1 = conversionTable->getUnitID( r );
 	ratio.uID2 = conversionTable->getUnitID( c );
-	ratio.ratio = value;kdDebug()<<"id1: "<<ratio.uID1<<endl;kdDebug()<<"id2: "<<ratio.uID2<<endl;kdDebug()<<"r: "<<ratio.ratio<<endl;
+	ratio.ratio = value;
 	database->saveUnitRatio( &ratio );
 
 	UnitRatio reverse_ratio;
