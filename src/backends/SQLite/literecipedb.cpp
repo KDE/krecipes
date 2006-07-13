@@ -823,14 +823,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
-				QString name_abbrev = copyQuery.value( 2 ).toString();
+				QString name_abbrev = escape( copyQuery.value( 2 ).toString() );
 				if ( name_abbrev.isEmpty() )
 					name_abbrev = "NULL";
 				else {
 					name_abbrev.prepend("'");
 					name_abbrev.append("'");
 				}
-				QString plural_abbrev = copyQuery.value( 4 ).toString();
+				QString plural_abbrev = escape( copyQuery.value( 4 ).toString() );
 				if ( plural_abbrev.isEmpty() )
 					plural_abbrev = "NULL";
 				else {
@@ -841,9 +841,9 @@ void LiteRecipeDB::portOldDatabases( float version )
 				command = "INSERT INTO units_copy VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
-				          + "'," + escape( name_abbrev ) //name_abbrev
+				          + "'," +  name_abbrev //name_abbrev
 				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
-				          + "'," + escape( plural_abbrev ) //plural_abbrev
+				          + "'," + plural_abbrev //plural_abbrev
 				          + ")";
 				database->exec( command );
 
@@ -856,14 +856,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
-				QString name_abbrev = copyQuery.value( 2 ).toString();
+				QString name_abbrev = escape( copyQuery.value( 2 ).toString() );
 				if ( name_abbrev.isEmpty() )
 					name_abbrev = "NULL";
 				else {
 					name_abbrev.prepend("'");
 					name_abbrev.append("'");
 				}
-				QString plural_abbrev = copyQuery.value( 4 ).toString();
+				QString plural_abbrev = escape( copyQuery.value( 4 ).toString() );
 				if ( plural_abbrev.isEmpty() )
 					plural_abbrev = "NULL";
 				else {
@@ -874,9 +874,9 @@ void LiteRecipeDB::portOldDatabases( float version )
 				command = "INSERT INTO units VALUES('" 
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
-				          + "'," + escape( name_abbrev ) //name_abbrev
+				          + "'," + name_abbrev //name_abbrev
 				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
-				          + "'," + escape( plural_abbrev ) //plural_abbrev
+				          + "'," + plural_abbrev //plural_abbrev
 				          + ",'0')";
 				database->exec( command );
 
