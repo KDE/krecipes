@@ -49,6 +49,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	allIngListView = new KreListView( this, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
+	list_view->setSelectionMode( QListView::Multi );
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
@@ -70,7 +71,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( this, QString::null, true );
-	ingListView->listView() ->addColumn( i18n( "Ingredients" ) );
+	ingListView->listView() ->addColumn( i18n( "Ingredient" ) );
 	ingListView->listView() ->addColumn( i18n( "Amount Available" ) );
 	ingListView->listView() ->setItemsRenameable( true );
 	ingListView->listView() ->setRenameable( 0, false );
@@ -134,14 +135,20 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 
 void IngredientMatcherDialog::addIngredient()
 {
-	QListViewItem * item = allIngListView->listView() ->selectedItem();
-	if ( item ) {
-		QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
-		ingListView->listView() ->setSelected( new_item, true );
-		ingListView->listView() ->ensureItemVisible( new_item );
-		allIngListView->listView() ->setSelected( item, false );
-
-		m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+	QPtrList<QListViewItem> items = allIngListView->listView()->selectedItems();
+	if ( items.count() > 0 ) {
+		QPtrListIterator<QListViewItem> it(items);
+		QListViewItem *item;
+		while ( (item = it.current()) != 0 ) {
+			QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
+			ingListView->listView() ->setSelected( new_item, true );
+			ingListView->listView() ->ensureItemVisible( new_item );
+			allIngListView->listView() ->setSelected( item, false );
+	
+			m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+			++it;
+		}
+		allIngListView->listView()->clearSelection()
 	}
 }
 
