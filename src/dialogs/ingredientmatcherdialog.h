@@ -107,7 +107,7 @@ public:
 			return ( QString::null );
 	}
 };
-class IngredientMatcherDialog: public QVBox
+class IngredientMatcherDialog: public QWidget
 {
 
 	Q_OBJECT
@@ -127,7 +127,8 @@ private:
 
 	//Widgets
 
-	KreListView *ingredientListView;
+	KreListView *allIngListView;
+	KreListView *ingListView;
 
 	KreListView *recipeListView;
 	QHBox *missingBox;
@@ -136,10 +137,17 @@ private:
 
 	QPushButton *okButton;
 	QPushButton *clearButton;
+	QPushButton *addButton;
+	QPushButton *removeButton;
+
+	IngredientList m_ingredientList;
+	QMap<QListViewItem*, IngredientList::iterator> m_item_ing_map;
 
 private slots:
 	void findRecipes( void );
 	void unselectIngredients();
-
+	void addIngredient();
+	void removeIngredient();
+	void itemRenamed( QListViewItem*, const QString &new_text, int col );
 };
 #endif

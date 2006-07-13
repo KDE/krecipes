@@ -15,6 +15,7 @@
 #include "datablocks/elementlist.h"
 #include "backends/recipedb.h"
 #include "widgets/krelistview.h"
+#include "datablocks/mixednumber.h"
 #include "recipeactionshandler.h"
 
 #include <qheader.h>
@@ -33,19 +34,50 @@
 
 #include "profiling.h"
 
-IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QVBox( parent )
+IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 {
 	// Initialize internal variables
 	database = db;
 
 	//Design the dialog
-	setSpacing( 10 );
+	//setSpacing( 10 );
+
+	QVBoxLayout *dialogLayout = new QVBoxLayout( this, 11, 6 );
 
 	// Ingredient list
-	ingredientListView = new KreListView( this, i18n( "Ingredients" ), true, 0 );
-	IngredientCheckListView *list_view = new IngredientCheckListView( ingredientListView, database );
-	list_view->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-	ingredientListView->setListView( list_view );
+	QHBoxLayout *layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
+
+	allIngListView = new KreListView( this, QString::null, true, 0 );
+	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
+ 	allIngListView->setListView(list_view);
+	layout2->addWidget( allIngListView );
+
+	QVBoxLayout *layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+
+	KIconLoader il;
+
+	addButton = new QPushButton( this, "addButton" );
+	addButton->setIconSet( il.loadIconSet( "forward", KIcon::Small ) );
+	addButton->setFixedSize( QSize( 32, 32 ) );
+	layout1->addWidget( addButton );
+
+	removeButton = new QPushButton( this, "removeButton" );
+	removeButton->setIconSet( il.loadIconSet( "back", KIcon::Small ) );
+	removeButton->setFixedSize( QSize( 32, 32 ) );
+	layout1->addWidget( removeButton );
+	QSpacerItem *spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	layout1->addItem( spacer1 );
+	layout2->addLayout( layout1 );
+
+	ingListView = new KreListView( this, QString::null, true );
+	ingListView->listView() ->addColumn( i18n( "Ingredients" ) );
+	ingListView->listView() ->addColumn( i18n( "Amount Available" ) );
+	ingListView->listView() ->setItemsRenameable( true );
+	ingListView->listView() ->setRenameable( 0, false );
+	ingListView->listView() ->setRenameable( 1, true );
+	layout2->addWidget( ingListView );
+	dialogLayout->addLayout( layout2 );
+
 	// Box to select allowed number of missing ingredients
 	missingBox = new QHBox( this );
 	missingNumberLabel = new QLabel( missingBox );
@@ -53,12 +85,14 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
 	missingNumberSpinBox->setMinValue( -1 );
 	missingNumberSpinBox->setSpecialValueText( i18n( "Any" ) );
+	dialogLayout->addWidget(missingBox);
 
 	// Found recipe list
 	recipeListView = new KreListView( this, i18n( "Matching Recipes" ), false, 1, missingBox );
 	recipeListView->listView() ->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
 	recipeListView->listView() ->addColumn( i18n( "Title" ) );
+	dialogLayout->addWidget(recipeListView);
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -70,7 +104,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
-	KIconLoader il;
 	QHBox *buttonBox = new QHBox( this );
 
 	okButton = new QPushButton( buttonBox );
@@ -82,12 +115,16 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	clearButton = new QPushButton( buttonBox );
 	clearButton->setIconSet( il.loadIconSet( "editclear", KIcon::Small ) );
 	clearButton->setText( i18n( "Clear" ) );
+	dialogLayout->addWidget(buttonBox);
 
 	// Connect signals & slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
 	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
 	connect ( clearButton, SIGNAL( clicked() ), this, SLOT( unselectIngredients() ) );
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
+	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
+	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
+	connect( ingListView->listView(), SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( itemRenamed( QListViewItem*, const QString &, int ) ) );
 
 }
 
@@ -95,10 +132,72 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 {
 }
 
+void IngredientMatcherDialog::addIngredient()
+{
+	QListViewItem * item = allIngListView->listView() ->selectedItem();
+	if ( item ) {
+		QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
+		ingListView->listView() ->setSelected( new_item, true );
+		ingListView->listView() ->ensureItemVisible( new_item );
+		allIngListView->listView() ->setSelected( item, false );
+
+		m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+	}
+}
+
+void IngredientMatcherDialog::removeIngredient()
+{
+	QListViewItem * item = ingListView->listView() ->selectedItem();
+	if ( item ) {
+		for ( IngredientList::iterator it = m_ingredientList.begin(); it != m_ingredientList.end(); ++it ) {
+			if ( *m_item_ing_map.find( item ) == it ) {
+				m_ingredientList.remove( it );
+				m_item_ing_map.remove( item );
+				break;
+			}
+		}
+		delete item;
+	}
+}
+
+void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QString &new_text, int col )
+{
+	if ( col == 1 ) {
+		IngredientList::iterator found_it = *m_item_ing_map.find( item );
+
+		bool ok;
+		MixedNumber amount = MixedNumber::fromString( new_text, &ok );
+		if ( ok ) {
+			( *found_it ).amount = amount.toDouble();
+		}
+		else { //revert back to the valid amount string
+			QString amount_str;
+			if ( ( *found_it ).amount > 0 ) {
+				KConfig * config = kapp->config();
+				config->setGroup( "Formatting" );
+		
+				if ( config->readBoolEntry( "Fraction" ) )
+					amount_str = MixedNumber( ( *found_it ).amount ).toString();
+				else
+					amount_str = beautify( KGlobal::locale() ->formatNumber( ( *found_it ).amount, 5 ) );
+			}
+
+			item->setText( 1, amount_str );
+		}
+	}
+	else if ( col == 2 ) {
+		IngredientList::iterator found_it = *m_item_ing_map.find( item );
+
+		if ( ( *found_it ).amount > 1 )
+			( *found_it ).units.plural = new_text;
+		else
+			( *found_it ).units.name = new_text;
+	}
+}
+
 void IngredientMatcherDialog::unselectIngredients()
 {
-	for ( QCheckListItem *it = (QCheckListItem*)ingredientListView->listView()->firstChild(); it; it = (QCheckListItem*)it->nextSibling() )
-		it->setOn(false);
+	ingListView->listView()->clear();
 }
 
 void IngredientMatcherDialog::findRecipes( void )
@@ -108,19 +207,7 @@ void IngredientMatcherDialog::findRecipes( void )
 	START_TIMER("Ingredient Matcher: loading database data");
 
 	RecipeList rlist;
-	IngredientList ilist;
 	database->loadRecipes( &rlist, RecipeDB::Ingredients | RecipeDB::NamesOnly | RecipeDB::Title );
-
-	// First make a list of the ingredients that we have
-	{
-	QValueList<Element> selections = ((IngredientCheckListView*)ingredientListView->listView())->selections();
-	for ( QValueList<Element>::const_iterator it = selections.begin(); it != selections.end(); ++it ) {
-		Ingredient ing;
-		ing.name = (*it).name;
-		ing.ingredientID = (*it).id;
-		ilist.append( ing );
-	}
-	}
 
 	END_TIMER();
 	START_TIMER("Ingredient Matcher: analyzing data for matching recipes");
@@ -143,7 +230,7 @@ void IngredientMatcherDialog::findRecipes( void )
 			continue;
 
 		IngredientList missing;
-		if ( ilist.containsSubSet( il, missing ) ) {
+		if ( m_ingredientList.containsSubSet( il, missing ) ) {
 			new CustomRecipeListItem( recipeListView->listView(), *it );
 		}
 		else {
@@ -184,7 +271,7 @@ void IngredientMatcherDialog::findRecipes( void )
 		bool titleShownYet = false;
 
 		for ( it = incompleteRecipes.begin();it != incompleteRecipes.end();++it, ++nit, ++ilit ) {
-			if ( !( *it ).ingList.containsAny( ilist ) )
+			if ( !( *it ).ingList.containsAny( m_ingredientList ) )
 				continue;
 
 			if ( ( *nit ) == missingNo ) {
@@ -203,7 +290,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 void IngredientMatcherDialog::reload( void )
 {
-	( ( StdIngredientListView* ) ingredientListView->listView() ) ->reload();
+	( ( StdIngredientListView* ) allIngListView->listView() ) ->reload();
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int width, int /*align*/ )
