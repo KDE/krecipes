@@ -826,9 +826,17 @@ void LiteRecipeDB::portOldDatabases( float version )
 				QString name_abbrev = copyQuery.value( 2 ).toString();
 				if ( name_abbrev.isEmpty() )
 					name_abbrev = "NULL";
+				else {
+					name_abbrev.prepend("'");
+					name_abbrev.append("'");
+				}
 				QString plural_abbrev = copyQuery.value( 4 ).toString();
 				if ( plural_abbrev.isEmpty() )
 					plural_abbrev = "NULL";
+				else {
+					plural_abbrev.prepend("'");
+					plural_abbrev.append("'");
+				}
 
 				command = "INSERT INTO units_copy VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
@@ -851,9 +859,17 @@ void LiteRecipeDB::portOldDatabases( float version )
 				QString name_abbrev = copyQuery.value( 2 ).toString();
 				if ( name_abbrev.isEmpty() )
 					name_abbrev = "NULL";
+				else {
+					name_abbrev.prepend("'");
+					name_abbrev.append("'");
+				}
 				QString plural_abbrev = copyQuery.value( 4 ).toString();
 				if ( plural_abbrev.isEmpty() )
 					plural_abbrev = "NULL";
+				else {
+					plural_abbrev.prepend("'");
+					plural_abbrev.append("'");
+				}
 
 				command = "INSERT INTO units VALUES('" 
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
