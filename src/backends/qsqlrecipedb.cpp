@@ -1530,7 +1530,7 @@ void QSqlRecipeDB::loadUnitRatios( UnitRatioList *ratioList, Unit::Type type )
 	if ( type == Unit::All )
 		command = "SELECT unit1_id,unit2_id,ratio FROM units_conversion";
 	else
-		command = "SELECT unit1_id,unit2_id,ratio FROM units_conversion,units WHERE unit1_id=units.id AND units.type="+QString::number(type);
+		command = "SELECT unit1_id,unit2_id,ratio FROM units_conversion,units unit1,units unit2 WHERE unit1_id=unit1.id AND unit1.type="+QString::number(type)+" AND unit2_id=unit2.id AND unit2.type="+QString::number(type);
 	QSqlQuery ratiosToLoad( command, database );
 
 	if ( ratiosToLoad.isActive() ) {
@@ -1736,7 +1736,7 @@ IngredientProperty QSqlRecipeDB::propertyName( int ID )
 
 Unit QSqlRecipeDB::unitName( int ID )
 {
-	QString command = QString( "SELECT name,plural,name_abbrev,plural_abbrev FROM units WHERE id=%1;" ).arg( ID );
+	QString command = QString( "SELECT name,plural,name_abbrev,plural_abbrev,type FROM units WHERE id=%1;" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
 		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ) );
@@ -1749,6 +1749,7 @@ Unit QSqlRecipeDB::unitName( int ID )
 
 		unit.name_abbrev = unescapeAndDecode( toLoad.value( 2 ).toCString() );
 		unit.plural_abbrev = unescapeAndDecode( toLoad.value( 3 ).toCString() );
+		unit.type = (Unit::Type) toLoad.value( 4 ).toInt();
 
 		return unit;
 	}
