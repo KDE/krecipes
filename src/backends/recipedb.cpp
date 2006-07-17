@@ -168,11 +168,21 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 {
 	result = from;
 
+	if ( from.units.id == to.id )
+		return true;
+
 	if ( from.units.type == to.type && to.type != Unit::Other ) {
 		double ratio = unitRatio( from.units.id, to.id );
-		result.amount = from.amount * ratio;
-		result.units = to;
-		return true;
+		if ( ratio > 0 ) {
+			result.amount = from.amount * ratio;
+			result.units = to;
+			return true;
+		}
+		else {
+			kdDebug()<<"Unit conversion failed, you should probably update your unit conversion table."<<endl;
+			kdDebug()<<from.units.id<<" to "<<to.id<<endl;
+			return false;
+		}
 	}
 	else {
 		#ifndef NDEBUG
@@ -181,14 +191,16 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 		case Unit::Other: to_str = "Other"; break;
 		case Unit::Mass: to_str = "Mass"; break;
 		case Unit::Volume: to_str = "Volume"; break;
+		case Unit::All: kdDebug()<<"Code error: trying to convert to unit of type 'All'"<<endl; return false;
 		}
 		QString from_str;
 		switch ( from.units.type ) {
 		case Unit::Other: from_str = "Other"; break;
 		case Unit::Mass: from_str = "Mass"; break;
 		case Unit::Volume: from_str = "Volume"; break;
+		case Unit::All: kdDebug()<<"Code error: trying to convert from unit of type 'All'"<<endl; return false;
 		}
-		kdDebug()<<"Can't yet handle conversion from "<<from_str<<" to "<<to_str<<endl;
+		kdDebug()<<"Can't yet handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")"<<endl;
 		#else
 		kdDebug()<<"Can't yet handle conversions between different unit types"<<endl;
 		#endif
@@ -648,20 +660,6 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 				conditionList << "r.atime = '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
 		}
 	}
-
-#if 0
-	if ( p.averageRating >= 0 ) {
-		tableList<<"rating";
-		conditionList << "rating.recipe_id=r.id";
-
-		if ( p.averageRatingOffset > 0 ) {
-			conditionList << "rating.average >= '"+QString::number(p.averageRating)+"'";
-			conditionList << "rating.average <= '"+QString::number(p.averageRating+p.averageRatingOffset)+"'";
-		}
-		else
-			conditionList << "rating.average = '"+QString::number(p.averageRating)+"'";
-	}
-#endif
 
 	QString wholeQuery = "SELECT r.id FROM recipes r"
 		+QString(tableList.count()!=0?","+tableList.join(","):"")

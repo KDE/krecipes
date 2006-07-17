@@ -15,6 +15,8 @@
 #include "datablocks/elementlist.h"
 #include "backends/recipedb.h"
 #include "widgets/krelistview.h"
+#include "widgets/unitcombobox.h"
+#include "widgets/fractioninput.h"
 #include "datablocks/mixednumber.h"
 #include "recipeactionshandler.h"
 
@@ -33,6 +35,53 @@
 #include <kdebug.h>
 
 #include "profiling.h"
+
+AmountUnitInput::AmountUnitInput( QWidget *parent, RecipeDB *database ) : QHBox(parent),
+  m_database(database), m_item(0)
+{
+	amountInput = new FractionInput(this);
+	unitBox = new UnitComboBox(this,database);
+	unitBox->reload();
+
+	connect( amountInput, SIGNAL(valueChanged(const MixedNumber &)), SLOT(emitValueChanged()) );
+	connect( unitBox, SIGNAL(activated(int)), SLOT(emitValueChanged()) );
+	connect( amountInput, SIGNAL(returnPressed()), SIGNAL(doneEditing()) );
+}
+
+void AmountUnitInput::emitValueChanged()
+{
+	emit valueChanged( amount(), unit() );
+}
+
+void AmountUnitInput::setAmount( const MixedNumber &amount )
+{
+	amountInput->disconnect( this );
+	if ( amount.toDouble() < 0 )
+		amountInput->clear();
+	else
+		amountInput->setValue( amount, 0 );
+	connect( amountInput, SIGNAL(valueChanged(const MixedNumber &)), SLOT(emitValueChanged()) );
+}
+
+void AmountUnitInput::setUnit( const Unit &unit )
+{
+	if ( unit.id == -1 )
+		unitBox->setCurrentItem(0);
+	else
+		unitBox->setSelected( unit.id );
+
+}
+
+MixedNumber AmountUnitInput::amount() const
+{
+	return amountInput->value();
+}
+
+Unit AmountUnitInput::unit() const
+{
+	//TODO Potential for optimization here... avoid the database call
+	return m_database->unitName( unitBox->id( unitBox->currentItem() ) );
+}
 
 IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -73,9 +122,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	ingListView = new KreListView( this, QString::null, true );
 	ingListView->listView() ->addColumn( i18n( "Ingredient" ) );
 	ingListView->listView() ->addColumn( i18n( "Amount Available" ) );
-	ingListView->listView() ->setItemsRenameable( true );
-	ingListView->listView() ->setRenameable( 0, false );
-	ingListView->listView() ->setRenameable( 1, true );
 	layout2->addWidget( ingListView );
 	dialogLayout->addLayout( layout2 );
 
@@ -118,6 +164,11 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	clearButton->setText( i18n( "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
+
+	amountEdit = new AmountUnitInput( ingListView->listView(), database );
+	ingListView->listView()->addChild( amountEdit );
+	amountEdit->hide();
+
 	// Connect signals & slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
 	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
@@ -125,12 +176,74 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( itemRenamed( QListViewItem*, const QString &, int ) ) );
-
+	connect( ingListView->listView(), SIGNAL( selectionChanged() ), this, SLOT( hideAmountEdit() ) );
+	connect( ingListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
+	connect( amountEdit, SIGNAL( valueChanged(const MixedNumber &, const Unit &) ), this, SLOT( updateItemAmount(const MixedNumber &, const Unit &) ) );
+	connect( amountEdit, SIGNAL( doneEditing() ), this, SLOT( hideAmountEdit() ) );
 }
 
 IngredientMatcherDialog::~IngredientMatcherDialog()
 {
+}
+
+void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )
+{
+	if ( col == 1 ) {
+		insertAmountEditBoxes(item);
+	}
+}
+
+void IngredientMatcherDialog::insertAmountEditBoxes( QListViewItem *it )
+{
+	amountEdit->setItem( it );
+
+	if ( !it ) {
+		amountEdit->hide();
+		return;
+	}
+
+	QRect r;
+
+	r = ingListView->listView()->header() ->sectionRect( 1 ); //start at the section 2 header
+	r.moveBy( 0, ingListView->listView()->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+
+	r.setHeight( it->height() ); // Set the item's height
+	r.setWidth( ingListView->listView()->header() ->sectionRect( 1 ).width() ); // and width
+	amountEdit->setGeometry( r );
+
+	// Set the values from the item
+	if ( !it->text(1).isEmpty() ) {
+		amountEdit->setAmount( MixedNumber::fromString(it->text(2)) );
+		Unit u;
+		u.id = it->text(3).toInt();
+		amountEdit->setUnit( u );
+	} else {
+		amountEdit->setAmount( -1 );
+		Unit u;
+		u.id = -1;
+		amountEdit->setUnit( u );
+	}
+
+	amountEdit->show();
+}
+
+void IngredientMatcherDialog::hideAmountEdit()
+{
+	amountEdit->hide();
+}
+
+void IngredientMatcherDialog::updateItemAmount( const MixedNumber &amount, const Unit &unit )
+{
+	QListViewItem *it = amountEdit->item();
+	if ( it ) {
+		it->setText(1,amount.toString()+" "+((amount.toDouble()>1)?unit.plural:unit.name));
+
+		it->setText(2,amount.toString());
+		it->setText(3,QString::number(unit.id));
+		IngredientList::iterator ing_it = m_item_ing_map[it];
+		(*ing_it).amount = amount.toDouble();
+		(*ing_it).units = unit;
+	}
 }
 
 void IngredientMatcherDialog::addIngredient()
@@ -166,44 +279,13 @@ void IngredientMatcherDialog::removeIngredient()
 	}
 }
 
-void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QString &new_text, int col )
-{
-	if ( col == 1 ) {
-		IngredientList::iterator found_it = *m_item_ing_map.find( item );
-
-		bool ok;
-		MixedNumber amount = MixedNumber::fromString( new_text, &ok );
-		if ( ok ) {
-			( *found_it ).amount = amount.toDouble();
-		}
-		else { //revert back to the valid amount string
-			QString amount_str;
-			if ( ( *found_it ).amount > 0 ) {
-				KConfig * config = kapp->config();
-				config->setGroup( "Formatting" );
-		
-				if ( config->readBoolEntry( "Fraction" ) )
-					amount_str = MixedNumber( ( *found_it ).amount ).toString();
-				else
-					amount_str = beautify( KGlobal::locale() ->formatNumber( ( *found_it ).amount, 5 ) );
-			}
-
-			item->setText( 1, amount_str );
-		}
-	}
-	else if ( col == 2 ) {
-		IngredientList::iterator found_it = *m_item_ing_map.find( item );
-
-		if ( ( *found_it ).amount > 1 )
-			( *found_it ).units.plural = new_text;
-		else
-			( *found_it ).units.name = new_text;
-	}
-}
-
 void IngredientMatcherDialog::unselectIngredients()
 {
+	amountEdit->setItem(0);
+	amountEdit->hide();
 	ingListView->listView()->clear();
+	for ( QListViewItem *it = allIngListView->listView()->firstChild(); it; it = it->nextSibling() )
+		allIngListView->listView()->setSelected(it,false);
 }
 
 void IngredientMatcherDialog::findRecipes( void )
@@ -213,15 +295,13 @@ void IngredientMatcherDialog::findRecipes( void )
 	START_TIMER("Ingredient Matcher: loading database data");
 
 	RecipeList rlist;
-	database->loadRecipes( &rlist, RecipeDB::Ingredients | RecipeDB::NamesOnly | RecipeDB::Title );
+	database->loadRecipes( &rlist, RecipeDB::Title | RecipeDB::NamesOnly | RecipeDB::Ingredients | RecipeDB::IngredientAmounts );
 
 	END_TIMER();
 	START_TIMER("Ingredient Matcher: analyzing data for matching recipes");
 
 	// Clear the list
 	recipeListView->listView() ->clear();
-	// Add the section header
-	new SectionItem( recipeListView->listView(), i18n( "Possible recipes with the specified ingredients" ) );
 
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
@@ -236,7 +316,7 @@ void IngredientMatcherDialog::findRecipes( void )
 			continue;
 
 		IngredientList missing;
-		if ( m_ingredientList.containsSubSet( il, missing ) ) {
+		if ( m_ingredientList.containsSubSet( il, missing, true, database ) ) {
 			new CustomRecipeListItem( recipeListView->listView(), *it );
 		}
 		else {

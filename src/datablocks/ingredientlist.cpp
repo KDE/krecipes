@@ -12,32 +12,49 @@
 ***************************************************************************/
 #include "ingredientlist.h"
 
+#include "backends/recipedb.h"
+
 IngredientList::IngredientList() : QValueList<Ingredient>()
 {}
 
 IngredientList::~IngredientList()
 {}
 
-bool IngredientList::contains( const Ingredient &ing ) const
+bool IngredientList::contains( const Ingredient &ing, bool compareAmount, RecipeDB *database ) const
 {
-	bool ret = QValueList<Ingredient>::contains(ing);
+	bool ret = false;
+	for ( IngredientList::const_iterator it = begin(); it != end(); ++it ) {
+		if ( (*it).ingredientID == ing.ingredientID ) {
+			//see if we have enough of the ingredient
+			//(only if an amount was specified for both)
+			if ( compareAmount && (*it).amount > 0 && ing.amount > 0 ) {
+				Ingredient convertedIng;
+				if ( database->convertIngredientUnits( ing, (*it).units, convertedIng ) )
+					ret = (*it).amount >= convertedIng.amount;
+				else //we couldn't do the conversion
+					ret = true;
+			}
+			else
+				ret = true;
+		}
+	}
 	if ( !ret ) {
 		for ( QValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
-			ret = contains(*it);
+			ret = contains(*it, compareAmount, database);
 			if ( ret ) break;
 		}
 	}
 	return ret;
 }
 
-bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing )
+bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing, bool compareAmount, RecipeDB *database )
 {
 	missing.empty();
 	bool contained = true;
-	IngredientList::Iterator it;
+	IngredientList::const_iterator it;
 
 	for ( it = il.begin();it != il.end();++it ) {
-		if ( !contains( *it ) ) {
+		if ( !contains( *it, compareAmount, database ) ) {
 			contained = false;
 			missing.append( *it );
 		}
@@ -46,11 +63,11 @@ bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing
 	return contained;
 }
 
-bool IngredientList::containsAny( const IngredientList &list )
+bool IngredientList::containsAny( const IngredientList &list, bool compareAmount, RecipeDB *database )
 {
 	for ( IngredientList::const_iterator this_list_it = begin(); this_list_it != end(); ++this_list_it ) {
 		for ( IngredientList::const_iterator contains_list_it = list.begin(); contains_list_it != list.end(); ++contains_list_it ) {
-			if ( contains( *contains_list_it ) )
+			if ( contains( *contains_list_it, compareAmount, database ) )
 				return true;
 		}
 	}

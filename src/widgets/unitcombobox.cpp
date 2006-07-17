@@ -1,0 +1,137 @@
+/***************************************************************************
+*   Copyright (C) 2006 by                                                 *
+*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+***************************************************************************/
+
+#include "unitcombobox.h"
+
+#include <qlistbox.h>
+
+#include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
+
+#include "backends/recipedb.h"
+#include "datablocks/elementlist.h"
+
+UnitComboBox::UnitComboBox( QWidget *parent, RecipeDB *db ) : KComboBox( parent ),
+		database( db )
+{
+	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
+	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
+}
+
+void UnitComboBox::popup()
+{
+	if ( count() == 1 )
+		reload();
+	KComboBox::popup();
+}
+
+void UnitComboBox::reload()
+{
+	QString remember_filter = currentText();
+
+	UnitList unitList;
+	database->loadUnits( &unitList );
+
+	clear();
+	unitComboRows.clear();
+
+	//Now load the categories
+	loadUnits(unitList);
+
+	if ( listBox()->findItem( remember_filter, Qt::ExactMatch ) ) {
+		setCurrentText( remember_filter );
+	}
+}
+
+void UnitComboBox::loadUnits( const UnitList &unitList )
+{
+	int row = 0;
+	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
+		insertItem( (*it).name );
+		unitComboRows.insert( row, (*it).id ); // store unit id's in the combobox position to obtain the unit id later
+		row++;
+	}
+}
+
+void UnitComboBox::setSelected( int unitID )
+{
+	//do a reverse lookup on the row->id map
+	QMap<int, int>::const_iterator it;
+	for ( it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
+		if ( it.data() == unitID ) {
+			setCurrentItem(it.key());
+			break;
+		}
+	}
+}
+
+int UnitComboBox::id( int row )
+{
+	return unitComboRows[ row ];
+}
+
+void UnitComboBox::createUnit( const Unit &element )
+{
+	int row = findInsertionPoint( element.name );
+
+	insertItem( element.name, row );
+
+	//now update the map by pushing everything after this item down
+	QMap<int, int> new_map;
+	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
+		if ( it.key() >= row ) {
+			new_map.insert( it.key() + 1, it.data() );
+		}
+		else
+			new_map.insert( it.key(), it.data() );
+	}
+	unitComboRows = new_map;
+	unitComboRows.insert( row, element.id );
+}
+
+void UnitComboBox::removeUnit( int id )
+{
+	int row = -1;
+	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
+		if ( it.data() == id ) {
+			row = it.key();
+			removeItem( row );
+			unitComboRows.remove( it );
+			break;
+		}
+	}
+
+	if ( row == -1 )
+		return ;
+
+	//now update the map by pushing everything after this item up
+	QMap<int, int> new_map;
+	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
+		if ( it.key() > row ) {
+			new_map.insert( it.key() - 1, it.data() );
+		}
+		else
+			new_map.insert( it.key(), it.data() );
+	}
+	unitComboRows = new_map;
+}
+
+int UnitComboBox::findInsertionPoint( const QString &name )
+{
+	for ( int i = 1; i < count(); i++ ) {
+		if ( QString::localeAwareCompare( name, text( i ) ) < 0 )
+			return i;
+	}
+
+	return count();
+}
+
+#include "unitcombobox.moc"

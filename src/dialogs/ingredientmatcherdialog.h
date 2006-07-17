@@ -31,6 +31,10 @@
 class KreListView;
 class KIntSpinBox;
 class RecipeDB;
+class AmountUnitInput;
+class MixedNumber;
+class FractionInput;
+class UnitComboBox;
 
 /**
 @author Unai Garro
@@ -140,6 +144,8 @@ private:
 	QPushButton *addButton;
 	QPushButton *removeButton;
 
+	AmountUnitInput *amountEdit;
+
 	IngredientList m_ingredientList;
 	QMap<QListViewItem*, IngredientList::iterator> m_item_ing_map;
 
@@ -148,6 +154,40 @@ private slots:
 	void unselectIngredients();
 	void addIngredient();
 	void removeIngredient();
-	void itemRenamed( QListViewItem*, const QString &new_text, int col );
+	void itemRenamed( QListViewItem*, const QPoint &, int col );
+	void insertAmountEditBoxes( QListViewItem *item );
+	void hideAmountEdit();
+	void updateItemAmount( const MixedNumber &amount, const Unit &unit );
+};
+
+class AmountUnitInput : public QHBox
+{
+Q_OBJECT
+
+public:
+	AmountUnitInput( QWidget *parent, RecipeDB *database );
+
+	void setAmount( const MixedNumber &amount );
+	void setUnit( const Unit &unit );
+
+	MixedNumber amount() const;
+	Unit unit() const;
+	QListViewItem *item() const { return m_item; }
+	void setItem( QListViewItem *it ){ m_item = it; }
+
+public slots:
+	void emitValueChanged();
+
+signals:
+	void valueChanged( const MixedNumber &, const Unit &unit );
+	void doneEditing();
+
+private:
+	FractionInput *amountInput;
+	UnitComboBox *unitBox;
+
+	QListViewItem *m_item;
+
+	RecipeDB *m_database;
 };
 #endif

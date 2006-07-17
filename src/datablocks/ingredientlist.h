@@ -18,6 +18,8 @@
 
 #include "datablocks/ingredient.h"
 
+class RecipeDB;
+
 /**
 @author Unai Garro
 */
@@ -26,9 +28,9 @@ class IngredientList: public QValueList <Ingredient>
 public:
 	IngredientList();
 	~IngredientList();
-	bool contains( const Ingredient &ing ) const;
-	bool containsSubSet( IngredientList &il, IngredientList &missing );
-	bool containsAny( const IngredientList & );
+	bool contains( const Ingredient &ing, bool compareAmount = false, RecipeDB *database = 0 ) const;
+	bool containsSubSet( IngredientList &il, IngredientList &missing, bool compareAmount = false, RecipeDB *database = 0 );
+	bool containsAny( const IngredientList &, bool compareAmount = false, RecipeDB *database = 0 );
 
 	IngredientList groupMembers( int id, IngredientList::const_iterator begin ) const;
 

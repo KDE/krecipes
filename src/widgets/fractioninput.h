@@ -43,6 +43,9 @@ public:
 	bool isInputValid() const;
 	bool isEmpty() const;
 
+signals:
+	void valueChanged( const MixedNumber & );
+
 public slots:
 	void validate();
 

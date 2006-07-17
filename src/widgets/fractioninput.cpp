@@ -99,12 +99,16 @@ void FractionInput::slotStartValidateTimer()
 {
 	if ( !m_validateTimer->isActive() )
 		m_validateTimer->start( 1000, true );
+
+	if ( isInputValid() )
+		emit valueChanged( value() );
 }
 
 void FractionInput::validate()
 {
-	if ( isInputValid() )
+	if ( isInputValid() ) {
 		setPaletteForegroundColor( KGlobalSettings::textColor() );
+	}
 	else
 		setPaletteForegroundColor( Qt::red );
 }
