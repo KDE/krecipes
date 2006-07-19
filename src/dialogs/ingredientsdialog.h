@@ -32,14 +32,12 @@ class IngredientPropertyList;
 class SelectPropertyDialog;
 class UnitsDialog;
 class IngredientGroupsDialog;
+class MixedNumber;
+class AmountUnitInput;
 
-/**
-@author Unai Garro
-*/
 class IngredientsDialog: public QWidget
 {
-
-	Q_OBJECT
+Q_OBJECT
 
 public:
 	IngredientsDialog( QWidget* parent, RecipeDB *db );
@@ -55,18 +53,26 @@ private:
 	QPushButton* removeUnitButton;
 	QPushButton* addPropertyButton;
 	QPushButton* removePropertyButton;
+	QPushButton* addWeightButton;
+	QPushButton* removeWeightButton;
 	KreListView* ingredientListView;
 	KreListView* unitsListView;
 	KreListView* propertiesListView;
+	KreListView* weightsListView;
 	QPushButton* pushButton5;
 	KDoubleNumInput* inputBox;
+	AmountUnitInput* weightInputBox;
+	AmountUnitInput* perAmountInputBox;
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods
 	void reloadIngredientList( void );
 	void reloadUnitList( void );
 	void reloadPropertyList( void );
+	void reloadWeightList( void );
 	int findPropertyNo( QListViewItem *it );
+	void insertIntoListView( QListViewItem *it, int col, AmountUnitInput *amountEdit );
+
 	// Internal Variables
 	RecipeDB *database;
 	UnitList *unitList;
@@ -76,13 +82,16 @@ private:
 private slots:
 	void addUnitToIngredient( void );
 	void removeUnitFromIngredient( void );
+	void addWeight();
+	void removeWeight();
 	void updateLists( void );
 	void addPropertyToIngredient( void );
 	void removePropertyFromIngredient( void );
 	void insertPropertyEditBox( QListViewItem* it );
 	void setPropertyAmount( double amount );
 	void openUSDADialog( void );
-
+	void itemRenamed( QListViewItem*, const QPoint &, int col );
+	void setWeights();
 };
 
 #endif

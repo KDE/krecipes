@@ -62,6 +62,7 @@
 
 struct ingredient_nutrient_data
 {
+	int usda_id;
 	QString name;
 	QValueList<double> data;
 };
@@ -176,6 +177,9 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 		if ( ratio > 0 ) {
 			result.amount = from.amount * ratio;
 			result.units = to;
+
+			kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<" to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<" (ingredient not used in conversion)"<<endl;
+
 			return true;
 		}
 		else {
@@ -183,6 +187,43 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 			kdDebug()<<from.units.id<<" to "<<to.id<<endl;
 			return false;
 		}
+	}
+	else if ( to.type == Unit::Mass || from.units.type == Unit::Mass ) {
+		double fromToWeightRatio, weightToToRatio;
+		int unitID = -1;
+
+		WeightList idList = ingredientWeightUnits( from.ingredientID );
+
+		if ( idList.count() == 0 ) {
+			kdDebug()<<"Unit conversion failed, no ingredient weight found for "<<ingredientName(from.ingredientID)<<endl;
+			return false;
+		}
+
+		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
+			//get conversion order correct (i.e., Mass -> Volume instead of Volume -> Mass, depending on unit type)
+			int first   = (to.type == Unit::Mass)?(*it).perAmountUnitID:(*it).weightUnitID;
+			int second  = (to.type == Unit::Mass)?(*it).weightUnitID:(*it).perAmountUnitID;
+			fromToWeightRatio = unitRatio( from.units.id, first );
+			if ( fromToWeightRatio > 0 ) {
+				weightToToRatio = unitRatio( second, to.id );
+				unitID = first;
+				break;
+			}
+		}
+		if ( unitID == -1 ) {
+			kdDebug()<<"Unit conversion failed, no conversion(s) from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<endl;
+			return false;
+		}
+
+ 		kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<endl;
+
+		Ingredient i;
+		i.ingredientID = from.ingredientID;
+		i.units.id = unitID;
+		i.amount = from.amount * fromToWeightRatio;
+		result.amount = ingredientWeight( i ) * weightToToRatio;
+		result.units = to;
+		return true;
 	}
 	else {
 		#ifndef NDEBUG
@@ -713,6 +754,8 @@ void RecipeDB::importUSDADatabase()
 			for ( int i = 2; i < TOTAL_USDA_PROPERTIES + 2; i++ )  //properties start at the third field (index 2)
 				current_ing.data << fields[ i ].toDouble();
 
+			current_ing.usda_id = id;
+
 			data->append( current_ing );
 
 			ings_and_ids->erase( current_pair );
@@ -739,6 +782,8 @@ void RecipeDB::importUSDADatabase()
 	int unit_g_id = createUnit( "g", this );
 	int unit_mg_id = createUnit( "mg", this );
 
+	std::multimap<int, int> idMap; //map USDA ingredient id to Krecipes ingredient id
+
 	QValueList<ingredient_nutrient_data>::const_iterator it;
 	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
 	const int total = data->count();
@@ -764,11 +809,57 @@ void RecipeDB::importUSDADatabase()
 			for ( property_it = ( *it ).data.begin(); property_it != property_end; ++property_it, ++i )
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
+
+		idMap.insert( std::make_pair( (*it).usda_id, assigned_id ) );
 	}
 
 	delete data;
 
 	kdDebug() << "USDA data import successful" << endl;
+
+	//check if the data file even exists before we do anything
+	QString weight_filename = locate( "appdata", "data/weight.txt" );
+	if ( weight_filename.isEmpty() ) {
+		kdDebug() << "Unable to find weight.txt data file." << endl;
+		return ;
+	}
+
+	QFile weight_file( weight_filename );
+	if ( !weight_file.open( IO_ReadOnly ) ) {
+		kdDebug() << "Unable to open data file: " << weight_filename << endl;
+		return ;
+	}
+
+	stream.setDevice( &weight_file );
+
+	kdDebug() << "Parsing weight.txt" << endl;
+	while ( !stream.atEnd() ) {
+		QStringList fields = QStringList::split( "^", stream.readLine(), true );
+
+		Weight w;
+
+		int usda_id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
+
+		//fields[1] is the sequence id, we don't need that
+
+		w.perAmount = fields[ 2 ].toDouble();
+		QString unit_str = fields[ 3 ].mid( 1, fields[ 3 ].length() - 2 );
+		w.perAmountUnitID = createUnit( unit_str, this );
+
+		w.weight = fields[ 4 ].toDouble();
+		w.weightUnitID = unit_g_id;
+
+		std::multimap<int, int>::iterator current_pair;
+		while ( ( current_pair = idMap.find( usda_id ) ) != idMap.end() )  //there may be more than one ingredient with the same id
+		{
+			w.ingredientID = ( *current_pair ).second;
+			kdDebug() << "Inserting usda_id " << usda_id << " and krecipes_ing_id " << w.ingredientID << " with unit " << unit_str << endl;
+			addIngredientWeight( w );
+			idMap.erase( current_pair );
+		}
+	}
+
+	kdDebug() << "USDA ingredient weight import successful" << endl;
 	emit progressDone();
 }
 

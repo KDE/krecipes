@@ -19,8 +19,8 @@
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
 
-UnitComboBox::UnitComboBox( QWidget *parent, RecipeDB *db ) : KComboBox( parent ),
-		database( db )
+UnitComboBox::UnitComboBox( QWidget *parent, RecipeDB *db, Unit::Type type ) : KComboBox( parent ),
+		database( db ), m_type(type)
 {
 	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
 	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
@@ -38,7 +38,7 @@ void UnitComboBox::reload()
 	QString remember_filter = currentText();
 
 	UnitList unitList;
-	database->loadUnits( &unitList );
+	database->loadUnits( &unitList, m_type );
 
 	clear();
 	unitComboRows.clear();

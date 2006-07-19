@@ -140,6 +140,9 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_properties" )
 		commands << "CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
+	else if ( tableName == "ingredient_weights" )
+		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, PRIMARY KEY (id) );";
+
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 

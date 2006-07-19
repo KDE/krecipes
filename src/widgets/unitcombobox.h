@@ -24,7 +24,7 @@ class UnitComboBox : public KComboBox
 	Q_OBJECT
 
 public:
-	UnitComboBox( QWidget *parent, RecipeDB *db );
+	UnitComboBox( QWidget *parent, RecipeDB *db, Unit::Type type = Unit::All );
 
 	void reload();
 	int id( int row );
@@ -44,6 +44,7 @@ private:
 
 	RecipeDB *database;
 	QMap<int, int> unitComboRows; // Contains the unit id for every given row in the unit combobox
+	Unit::Type m_type;
 };
 
 #endif //UNITCOMBOBOX_H

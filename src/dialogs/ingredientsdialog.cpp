@@ -14,12 +14,14 @@
 #include "backends/recipedb.h"
 #include "createelementdialog.h"
 #include "datablocks/ingredientpropertylist.h"
+#include "datablocks/mixednumber.h"
 #include "unitsdialog.h"
 #include "usdadatadialog.h"
 #include "selectpropertydialog.h"
 #include "selectunitdialog.h"
 #include "dependanciesdialog.h"
 #include "widgets/ingredientlistview.h"
+#include "widgets/amountunitinput.h"
 #include "dialogs/ingredientgroupsdialog.h"
 
 #include <kapplication.h>
@@ -33,6 +35,42 @@
 #include <qheader.h>
 #include <qmessagebox.h>
 #include <qtabwidget.h>
+
+class WeightListItem : public QListViewItem
+{
+public:
+	WeightListItem( QListView *listview, QListViewItem *item, const Weight &w ) : QListViewItem(listview,item), m_weight(w){}
+
+	void setWeight( const Weight &w ) { m_weight = w; }
+	Weight weight() const { return m_weight; }
+
+	void setAmountUnit( double amount, const Unit &unit )
+	{
+		m_weight.perAmount = amount;
+		m_weight.perAmountUnitID = unit.id;
+		m_weight.perAmountUnit = (m_weight.perAmount>1)?unit.plural:unit.name;
+	}
+
+	void setWeightUnit( double weight, const Unit &unit )
+	{
+		m_weight.weight = weight;
+		m_weight.weightUnitID = unit.id;
+		m_weight.weightUnit = (m_weight.weight>1)?unit.plural:unit.name;
+	}
+
+	virtual QString text( int c ) const
+	{
+		if ( c == 0 )
+			return QString::number(m_weight.weight)+" "+m_weight.weightUnit;
+		else if ( c == 1 )
+			return QString::number(m_weight.perAmount)+" "+m_weight.perAmountUnit;
+		else
+			return QString::null;
+	}
+
+private:
+	Weight m_weight;
+};
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -61,7 +99,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientListView->setListView( list_view );
-	layout->addMultiCellWidget ( ingredientListView, 1, 10, 1, 1 );
+	layout->addMultiCellWidget ( ingredientListView, 1, 4, 1, 1 );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 
 	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -96,42 +134,46 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	config->setGroup( "Advanced" );
 	bool show_id = config->readBoolEntry( "ShowID", false );
 
+	QScrollView *scrollView1 = new QScrollView( ingredientTab, "scrollView1" );
+	scrollView1->enableClipper(true);
+	QWidget *rightWidget = new QWidget(scrollView1);
+	QGridLayout *rightLayout = new QGridLayout( rightWidget, 1, 1, 0, 0 );
 
-	unitsListView = new KreListView ( ingredientTab, i18n( "Unit list" ) );
+	unitsListView = new KreListView ( rightWidget, i18n( "Unit list" ) );
 	unitsListView->listView() ->addColumn( i18n( "Units" ) );
 	unitsListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	unitsListView->listView() ->setSorting( 0 );
 	unitsListView->listView() ->setAllColumnsShowFocus( true );
-	layout->addMultiCellWidget ( unitsListView, 1, 4, 5, 5 );
+	rightLayout->addMultiCellWidget ( unitsListView, 1, 4, 0, 0 );
 	unitsListView->listView() ->setMinimumWidth( 150 );
 	unitsListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	QSpacerItem* spacer_rightUnits = new QSpacerItem( 5, 5, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_rightUnits, 1, 6 );
+	rightLayout->addItem( spacer_rightUnits, 1, 1 );
 
-	addUnitButton = new QPushButton( ingredientTab );
+	addUnitButton = new QPushButton( rightWidget );
 	addUnitButton->setText( "+" );
-	layout->addWidget( addUnitButton, 1, 7 );
+	rightLayout->addWidget( addUnitButton, 1, 2 );
 	addUnitButton->resize( QSize( 30, 30 ) );
 	addUnitButton->setMinimumSize( QSize( 30, 30 ) );
 	addUnitButton->setMaximumSize( QSize( 30, 30 ) );
 	addUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addUnitButton->setFlat( true );
 
-	removeUnitButton = new QPushButton( ingredientTab );
+	removeUnitButton = new QPushButton( rightWidget );
 	removeUnitButton->setText( "-" );
-	layout->addWidget( removeUnitButton, 3, 7 );
+	rightLayout->addWidget( removeUnitButton, 3, 2 );
 	removeUnitButton->resize( QSize( 30, 30 ) );
 	removeUnitButton->setMinimumSize( QSize( 30, 30 ) );
 	removeUnitButton->setMaximumSize( QSize( 30, 30 ) );
 	removeUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removeUnitButton->setFlat( true );
 	QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_Units_Properties, 5, 5 );
+ 	rightLayout->addItem( spacer_Units_Properties, 5, 0 );
 
 
-	propertiesListView = new KreListView ( ingredientTab, i18n( "Ingredient Properties" ) );
-	layout->addMultiCellWidget ( propertiesListView, 6, 9, 5, 5 );
+	propertiesListView = new KreListView ( rightWidget, i18n( "Ingredient Properties" ) );
+	rightLayout->addMultiCellWidget ( propertiesListView, 6, 9, 0, 0 );
 
 	propertiesListView->listView() ->addColumn( i18n( "Property" ) );
 	propertiesListView->listView() ->addColumn( i18n( "Amount" ) );
@@ -141,35 +183,82 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	propertiesListView->listView() ->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	propertiesListView->listView() ->setSorting( -1 ); // Disable sorting. For the moment, the order is important to identify the per_units ID corresponding to this row. So the user shouldn't change this order.
 
-	addPropertyButton = new QPushButton( ingredientTab );
+	addPropertyButton = new QPushButton( rightWidget );
 	addPropertyButton->setText( "+" );
-	layout->addWidget( addPropertyButton, 6, 7 );
+	rightLayout->addWidget( addPropertyButton, 6, 2 );
 	addPropertyButton->resize( QSize( 30, 30 ) );
 	addPropertyButton->setMinimumSize( QSize( 30, 30 ) );
 	addPropertyButton->setMaximumSize( QSize( 30, 30 ) );
 	addPropertyButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addPropertyButton->setFlat( true );
 
-	removePropertyButton = new QPushButton( ingredientTab );
+	removePropertyButton = new QPushButton( rightWidget );
 	removePropertyButton->setText( "-" );
-	layout->addWidget( removePropertyButton, 8, 7 );
+	rightLayout->addWidget( removePropertyButton, 8, 2 );
 	removePropertyButton->resize( QSize( 30, 30 ) );
 	removePropertyButton->setMinimumSize( QSize( 30, 30 ) );
 	removePropertyButton->setMaximumSize( QSize( 30, 30 ) );
 	removePropertyButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removePropertyButton->setFlat( true );
 
-	QPushButton *loadUsdaButton = new QPushButton( ingredientTab );
+	QPushButton *loadUsdaButton = new QPushButton( rightWidget );
 	loadUsdaButton->setText( i18n( "Load USDA data" ) );
-	layout->addMultiCellWidget( loadUsdaButton, 10, 10, 5, 6 );
+	rightLayout->addMultiCellWidget( loadUsdaButton, 10, 10, 0, 1 );
 	loadUsdaButton->setFlat( true );
 
 	QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_Prop_Buttons, 7, 7 );
+	rightLayout->addItem( spacer_Prop_Buttons, 7, 2 );
+
+
+	weightsListView = new KreListView ( rightWidget, i18n( "Ingredient Weights" ) );
+	weightsListView->listView() ->addColumn( i18n( "Weight" ) );
+	weightsListView->listView() ->addColumn( i18n( "Per Amount" ) );
+	weightsListView->listView() ->setAllColumnsShowFocus( true );
+	rightLayout->addMultiCellWidget ( weightsListView, 11, 14, 0, 0 );
+	weightsListView->listView() ->setMinimumWidth( 150 );
+	weightsListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+
+	//QSpacerItem* spacer_rightWeights = new QSpacerItem( 5, 5, QSizePolicy::Fixed, QSizePolicy::Minimum );
+	//layout->addItem( spacer_rightWeights, 1, 6 );
+
+	addWeightButton = new QPushButton( rightWidget );
+	addWeightButton->setText( "+" );
+	rightLayout->addWidget( addWeightButton, 11, 2 );
+	addWeightButton->resize( QSize( 30, 30 ) );
+	addWeightButton->setMinimumSize( QSize( 30, 30 ) );
+	addWeightButton->setMaximumSize( QSize( 30, 30 ) );
+	addWeightButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+	addWeightButton->setFlat( true );
+
+	removeWeightButton = new QPushButton( rightWidget );
+	removeWeightButton->setText( "-" );
+	rightLayout->addWidget( removeWeightButton, 13, 2 );
+	removeWeightButton->resize( QSize( 30, 30 ) );
+	removeWeightButton->setMinimumSize( QSize( 30, 30 ) );
+	removeWeightButton->setMaximumSize( QSize( 30, 30 ) );
+	removeWeightButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+	removeWeightButton->setFlat( true );
+	//QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	//layout->addItem( spacer_Units_Properties, 5, 5 );
+
+	scrollView1->addChild(rightWidget);
+	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
+
+	layout->addMultiCellWidget(scrollView1,1,4,5,5);
+
+
 
 	inputBox = new KDoubleNumInput( propertiesListView->listView() ->viewport() );
 	propertiesListView->listView() ->addChild( inputBox );
 	inputBox->hide();
+
+	weightInputBox = new AmountUnitInput( weightsListView->listView()->viewport(), database, Unit::Mass, MixedNumber::DecimalFormat );
+	weightsListView->listView()->addChild( weightInputBox );
+	weightInputBox->hide();
+
+	perAmountInputBox = new AmountUnitInput( weightsListView->listView()->viewport(), database, Unit::All, MixedNumber::DecimalFormat );
+	weightsListView->listView()->addChild( perAmountInputBox );
+	perAmountInputBox->hide();
 
 	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
 
@@ -186,6 +275,8 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	connect( addIngredientButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
 	connect( addUnitButton, SIGNAL( clicked() ), this, SLOT( addUnitToIngredient() ) );
 	connect( removeUnitButton, SIGNAL( clicked() ), this, SLOT( removeUnitFromIngredient() ) );
+	connect( addWeightButton, SIGNAL( clicked() ), this, SLOT( addWeight() ) );
+	connect( removeWeightButton, SIGNAL( clicked() ), this, SLOT( removeWeight() ) );
 	connect( removeIngredientButton, SIGNAL( clicked() ), list_view, SLOT( remove
 		         () ) );
 	connect( addPropertyButton, SIGNAL( clicked() ), this, SLOT( addPropertyToIngredient() ) );
@@ -193,6 +284,10 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	connect( propertiesListView->listView(), SIGNAL( executed( QListViewItem* ) ), this, SLOT( insertPropertyEditBox( QListViewItem* ) ) );
 	connect( propertiesListView->listView(), SIGNAL( selectionChanged() ), inputBox, SLOT( hide() ) );
 	connect( inputBox, SIGNAL( valueChanged( double ) ), this, SLOT( setPropertyAmount( double ) ) );
+
+	connect( weightsListView->listView(), SIGNAL( selectionChanged() ), this, SLOT( setWeights() ) );
+	connect( weightsListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
+
 	connect( loadUsdaButton, SIGNAL( clicked() ), this, SLOT( openUSDADialog() ) );
 }
 
@@ -244,6 +339,87 @@ void IngredientsDialog::reloadUnitList()
 		unitsListView->listView() ->setSelected( unitsListView->listView() ->firstChild(), true );
 
 	}
+}
+
+void IngredientsDialog::addWeight()
+{
+	
+}
+
+void IngredientsDialog::removeWeight()
+{
+	QListViewItem *it = weightsListView->listView() ->selectedItem();
+	if ( it ) {
+		database->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
+		delete it;
+	}
+}
+
+void IngredientsDialog::setWeights()
+{
+	Weight w;
+
+	if ( weightInputBox->isShown() ) {
+		WeightListItem *it = (WeightListItem*)weightInputBox->item();
+		it->setWeightUnit( weightInputBox->amount().toDouble(), weightInputBox->unit() );
+		w = it->weight();
+
+
+		weightInputBox->setShown(false);
+	}
+
+	if ( perAmountInputBox->isShown() ) {
+		WeightListItem *it = (WeightListItem*)perAmountInputBox->item();
+		it->setAmountUnit( perAmountInputBox->amount().toDouble(), perAmountInputBox->unit() );
+		w = it->weight();
+
+		perAmountInputBox->setShown(false);
+	}
+
+	if ( w.id != -1 )
+		database->addIngredientWeight( w );
+}
+
+void IngredientsDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )
+{
+	WeightListItem *weight_it = (WeightListItem*)item;
+	Weight w = weight_it->weight();
+
+	if ( col == 0 ) {
+		insertIntoListView(item,0,weightInputBox);
+		weightInputBox->setAmount( w.weight );
+		Unit u;
+		u.id = w.weightUnitID;
+		weightInputBox->setUnit( u );
+	}
+	else if ( col == 1 ) {
+		insertIntoListView(item,1,perAmountInputBox);
+		perAmountInputBox->setAmount( w.perAmount );
+		Unit u;
+		u.id = w.perAmountUnitID;
+		perAmountInputBox->setUnit( u );
+	}
+}
+
+void IngredientsDialog::insertIntoListView( QListViewItem *it, int col, AmountUnitInput *amountEdit )
+{
+	amountEdit->setItem( it );
+
+	if ( !it ) {
+		amountEdit->setShown(false);
+		return;
+	}
+
+	QRect r;
+
+	r = it->listView()->header() ->sectionRect( col ); //start at the section 2 header
+	r.moveBy( 0, it->listView()->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+
+	r.setHeight( it->height() ); // Set the item's height
+	r.setWidth( it->listView()->header() ->sectionRect( col ).width() ); // and width
+	amountEdit->setGeometry( r );
+
+	amountEdit->setShown(true);
 }
 
 void IngredientsDialog::addUnitToIngredient( void )
@@ -338,10 +514,32 @@ void IngredientsDialog:: reloadPropertyList( void )
 	}
 }
 
+void IngredientsDialog::reloadWeightList( void )
+{
+	weightsListView->listView() ->clear();
+
+	//If none is selected, select first item
+	QListViewItem *it = ingredientListView->listView() ->selectedItem();
+
+	//Populate this data into the KListView
+	if ( it ) { // make sure that the ingredient list is not empty
+		WeightList list = database->ingredientWeightUnits( it->text( 1 ).toInt() ); // load the list for this ingredient
+		for ( WeightList::const_iterator weight_it = list.begin(); weight_it != list.end(); ++weight_it ) {
+			QListViewItem * lastElement = weightsListView->listView() ->lastItem();
+
+			Weight w = *weight_it;
+			WeightListItem *weight_it = new WeightListItem( weightsListView->listView(), lastElement, w );
+			weight_it->setAmountUnit( w.perAmount, database->unitName(w.perAmountUnitID) );
+			weight_it->setWeightUnit( w.weight, database->unitName(w.weightUnitID) );
+		}
+	}
+}
+
 void IngredientsDialog:: updateLists( void )
 {
 	reloadUnitList();
 	reloadPropertyList();
+	reloadWeightList();
 }
 
 void IngredientsDialog::addPropertyToIngredient( void )

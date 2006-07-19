@@ -58,6 +58,8 @@ void calculateProperties( Recipe& recipe, RecipeDB* database )
 
 void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipePropertyList, IngredientPropertyList &ingPropertyList, const Ingredient &ing, int ingredientNo )
 {
+	QMap<int,double> ratioCache; //unit->ratio
+
 	IngredientPropertyList::const_iterator prop_it;
 	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
 		// Find if property was listed before
@@ -67,7 +69,20 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			Ingredient result;
 
-			bool converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+			bool converted;
+			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
+			if ( cache_it == ratioCache.end() ) {
+				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+				if ( converted )
+					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
+				else
+					ratioCache.insert((*prop_it).perUnit.id,-1);
+			}
+			else {
+				result.units = (*prop_it).perUnit;
+				result.amount = ing.amount * (*cache_it);
+				converted = result.amount > 0;
+			}
 
 			if ( converted )  // Could convert units to perUnit
 			{
@@ -89,7 +104,20 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			property.units = (*prop_it).units;
 
 			Ingredient result;
-			bool converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+			bool converted;
+			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
+			if ( cache_it == ratioCache.end() ) {
+				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+				if ( converted )
+					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
+				else
+					ratioCache.insert((*prop_it).perUnit.id,-1);
+			}
+			else {
+				result.units = (*prop_it).perUnit;
+				result.amount = ing.amount * (*cache_it);
+				converted = result.amount > 0;
+			}
 
 			if ( converted )  // Could convert units to perUnit
 			{

@@ -33,8 +33,7 @@ class KIntSpinBox;
 class RecipeDB;
 class AmountUnitInput;
 class MixedNumber;
-class FractionInput;
-class UnitComboBox;
+class AmountUnitInput;
 
 /**
 @author Unai Garro
@@ -155,39 +154,8 @@ private slots:
 	void addIngredient();
 	void removeIngredient();
 	void itemRenamed( QListViewItem*, const QPoint &, int col );
-	void insertAmountEditBoxes( QListViewItem *item );
-	void hideAmountEdit();
 	void updateItemAmount( const MixedNumber &amount, const Unit &unit );
+	void insertIntoListView( QListViewItem *it );
 };
 
-class AmountUnitInput : public QHBox
-{
-Q_OBJECT
-
-public:
-	AmountUnitInput( QWidget *parent, RecipeDB *database );
-
-	void setAmount( const MixedNumber &amount );
-	void setUnit( const Unit &unit );
-
-	MixedNumber amount() const;
-	Unit unit() const;
-	QListViewItem *item() const { return m_item; }
-	void setItem( QListViewItem *it ){ m_item = it; }
-
-public slots:
-	void emitValueChanged();
-
-signals:
-	void valueChanged( const MixedNumber &, const Unit &unit );
-	void doneEditing();
-
-private:
-	FractionInput *amountInput;
-	UnitComboBox *unitBox;
-
-	QListViewItem *m_item;
-
-	RecipeDB *m_database;
-};
 #endif

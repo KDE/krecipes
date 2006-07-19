@@ -41,6 +41,23 @@ class QTextStream;
 class CategoryTree;
 class RecipeSearchParameters;
 
+class Weight
+{
+public:
+	Weight():id(-1){}
+
+	int id;
+	int ingredientID;
+	int perAmountUnitID;
+	QString perAmountUnit;
+	double perAmount;
+	int weightUnitID;
+	double weight;
+	QString weightUnit;
+};
+
+typedef QValueList<Weight> WeightList;
+
 typedef struct
 {
 	QValueList <int> recipeIdList;
@@ -143,6 +160,7 @@ public:
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString::null );
 
+	virtual void addIngredientWeight( const Weight & ) = 0;
 	virtual void addProperty( const QString &name, const QString &units ) = 0;
 	virtual void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID ) = 0;
 	virtual void addUnitToIngredient( int ingredientID, int unitID ) = 0;
@@ -266,6 +284,7 @@ public:
 	virtual void removeCategory( int categoryID ) = 0;
 	virtual void removeIngredientGroup( int ingredientID ) = 0;
 	virtual void removeIngredient( int ingredientID ) = 0;
+	virtual void removeIngredientWeight( int id ) = 0;
 	virtual void removePrepMethod( int prepMethodID ) = 0;
 	virtual void removeProperty( int propertyID ) = 0;
 	virtual void removePropertyFromIngredient( int ingredientID, int propertyID, int perUnitID ) = 0;
@@ -283,10 +302,15 @@ public:
 	bool convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result );
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
+	/** @returns the number of grams in the given amount of the ingredient, or -1 on failure */
+	virtual double ingredientWeight( const Ingredient &ing ) = 0;
+	virtual WeightList ingredientWeightUnits( int ingID ) = 0;
+
 	virtual QString escapeAndEncode( const QString &s ) const = 0;
 	virtual QString unescapeAndDecode( const QCString &s ) const = 0;
 
 	virtual QString categoryName( int ID ) = 0;
+	virtual QString ingredientName( int ID ) = 0;
 	virtual IngredientProperty propertyName( int ID ) = 0;
 	virtual Unit unitName( int ID ) = 0;
 

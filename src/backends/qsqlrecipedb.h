@@ -76,6 +76,7 @@ public:
 
 	void connect( bool create_db, bool create_tables );
 
+	void addIngredientWeight( const Weight & );
 	void addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
 	void addUnitToIngredient( int ingredientID, int unitID );
@@ -175,6 +176,7 @@ public:
 	void removeCategory( int categoryID );
 	void removeIngredientGroup( int groupID );
 	void removeIngredient( int ingredientID );
+	void removeIngredientWeight( int id );
 	void removePrepMethod( int prepMethodID );
 	void removeProperty( int propertyID );
 	void removePropertyFromIngredient( int ingredientID, int propertyID, int perUnitID );
@@ -188,11 +190,14 @@ public:
 	void saveUnitRatio( const UnitRatio *ratio );
 
 	double unitRatio( int unitID1, int unitID2 );
+	double ingredientWeight( const Ingredient &ing );
+	WeightList ingredientWeightUnits( int ingID );
 
 	QString escapeAndEncode( const QString &s ) const;
 	QString unescapeAndDecode( const QCString &s ) const;
 
 	QString categoryName( int ID );
+	QString ingredientName( int ID );
 	IngredientProperty propertyName( int ID );
 	Unit unitName( int ID );
 
