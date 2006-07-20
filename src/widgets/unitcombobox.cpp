@@ -33,6 +33,14 @@ void UnitComboBox::popup()
 	KComboBox::popup();
 }
 
+Unit UnitComboBox::unit() const
+{
+	Unit u;
+	u.name = currentText();
+	u.id = id(currentItem());
+	return u;
+}
+
 void UnitComboBox::reload()
 {
 	QString remember_filter = currentText();
@@ -73,7 +81,7 @@ void UnitComboBox::setSelected( int unitID )
 	}
 }
 
-int UnitComboBox::id( int row )
+int UnitComboBox::id( int row ) const
 {
 	return unitComboRows[ row ];
 }

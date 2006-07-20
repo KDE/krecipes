@@ -104,6 +104,14 @@ public:
 		All = 0xFFFF ^ NamesOnly ^ Noatime
 	};
 
+	typedef enum ConversionStatus { 
+		Success,
+		MissingUnitConversion,
+		MissingIngredientWeight,
+		MissingIngredient,
+		InvalidTypes
+	};
+
 public slots:
 	void cancelOperation(){ haltOperation = true; }
 
@@ -299,7 +307,7 @@ public:
 	virtual void search( RecipeList *list, int items, const RecipeSearchParameters &parameters ) = 0;
 
 	/** @returns true on success, false otherwise */
-	bool convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result );
+	ConversionStatus convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result );
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
 	/** @returns the number of grams in the given amount of the ingredient, or -1 on failure */

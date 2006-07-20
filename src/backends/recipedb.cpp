@@ -165,12 +165,12 @@ void RecipeDB::loadCachedCategories( CategoryTree **list, int limit, int offset,
 	}
 }
 
-bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result )
+RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, Ingredient &result )
 {
 	result = from;
 
 	if ( from.units.id == to.id )
-		return true;
+		return Success;
 
 	if ( from.units.type == to.type && to.type != Unit::Other ) {
 		double ratio = unitRatio( from.units.id, to.id );
@@ -180,15 +180,18 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 
 			kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<" to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<" (ingredient not used in conversion)"<<endl;
 
-			return true;
+			return Success;
 		}
 		else {
 			kdDebug()<<"Unit conversion failed, you should probably update your unit conversion table."<<endl;
 			kdDebug()<<from.units.id<<" to "<<to.id<<endl;
-			return false;
+			return MissingUnitConversion;
 		}
 	}
 	else if ( to.type == Unit::Mass || from.units.type == Unit::Mass ) {
+		if ( from.ingredientID == -1 )
+			return MissingIngredient;
+
 		double fromToWeightRatio, weightToToRatio;
 		int unitID = -1;
 
@@ -196,7 +199,7 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 
 		if ( idList.count() == 0 ) {
 			kdDebug()<<"Unit conversion failed, no ingredient weight found for "<<ingredientName(from.ingredientID)<<endl;
-			return false;
+			return MissingIngredientWeight;
 		}
 
 		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
@@ -212,7 +215,7 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 		}
 		if ( unitID == -1 ) {
 			kdDebug()<<"Unit conversion failed, no conversion(s) from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<endl;
-			return false;
+			return MissingUnitConversion;
 		}
 
  		kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<endl;
@@ -223,30 +226,26 @@ bool RecipeDB::convertIngredientUnits( const Ingredient &from, const Unit &to, I
 		i.amount = from.amount * fromToWeightRatio;
 		result.amount = ingredientWeight( i ) * weightToToRatio;
 		result.units = to;
-		return true;
+		return Success;
 	}
 	else {
-		#ifndef NDEBUG
 		QString to_str;
 		switch ( to.type ) {
 		case Unit::Other: to_str = "Other"; break;
 		case Unit::Mass: to_str = "Mass"; break;
 		case Unit::Volume: to_str = "Volume"; break;
-		case Unit::All: kdDebug()<<"Code error: trying to convert to unit of type 'All'"<<endl; return false;
+		case Unit::All: kdDebug()<<"Code error: trying to convert to unit of type 'All'"<<endl; return InvalidTypes;
 		}
 		QString from_str;
 		switch ( from.units.type ) {
 		case Unit::Other: from_str = "Other"; break;
 		case Unit::Mass: from_str = "Mass"; break;
 		case Unit::Volume: from_str = "Volume"; break;
-		case Unit::All: kdDebug()<<"Code error: trying to convert from unit of type 'All'"<<endl; return false;
+		case Unit::All: kdDebug()<<"Code error: trying to convert from unit of type 'All'"<<endl; return InvalidTypes;
 		}
-		kdDebug()<<"Can't yet handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")"<<endl;
-		#else
-		kdDebug()<<"Can't yet handle conversions between different unit types"<<endl;
-		#endif
+		kdDebug()<<"Can't handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")"<<endl;
 
-		return false;
+		return InvalidTypes;
 	}
 }
 

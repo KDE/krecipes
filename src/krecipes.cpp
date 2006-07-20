@@ -29,6 +29,7 @@
 #include "dialogs/pagesetupdialog.h"
 #include "dialogs/recipeimportdialog.h"
 #include "dialogs/similarcategoriesdialog.h"
+#include "dialogs/conversiondialog.h"
 
 #include "importers/kreimporter.h"
 #include "importers/mmfimporter.h"
@@ -166,6 +167,10 @@ void Krecipes::setupActions()
 	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", CTRL + Key_E,
 	                          m_view, SLOT( editRecipe() ),
 	                          actionCollection(), "edit_action" );
+
+	(void) new KAction( i18n( "&Measurement Converter" ), "", CTRL + Key_M,
+	                          this, SLOT( conversionToolSlot() ),
+	                          actionCollection(), "converter_action" );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup("Advanced");
@@ -455,6 +460,12 @@ void Krecipes::printSetupSlot()
 
 	PageSetupDialog pageSetup( this, recipe, "Print" );
 	pageSetup.exec();
+}
+
+void Krecipes::conversionToolSlot()
+{
+	ConversionDialog converter(this,m_view->database);
+	converter.exec();
 }
 
 void Krecipes::backupSlot()

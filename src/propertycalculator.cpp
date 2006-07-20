@@ -15,7 +15,7 @@
 
 bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result )
 {
-	bool converted = database->convertIngredientUnits( from, to.units, result );
+	bool converted = database->convertIngredientUnits( from, to.units, result ) == RecipeDB::Success;
 
 	if ( converted )  // There is a ratio
 	{
@@ -72,7 +72,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			bool converted;
 			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
 			if ( cache_it == ratioCache.end() ) {
-				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result ) == RecipeDB::Success;
 				if ( converted )
 					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
 				else
@@ -107,7 +107,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			bool converted;
 			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
 			if ( cache_it == ratioCache.end() ) {
-				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+				converted = database->convertIngredientUnits( ing, (*prop_it).perUnit, result ) == RecipeDB::Success;
 				if ( converted )
 					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
 				else

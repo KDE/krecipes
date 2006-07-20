@@ -91,6 +91,7 @@ private slots:
 	void kreDBImport();
 	void pageSetupSlot();
 	void printSetupSlot();
+	void conversionToolSlot();
 	void backupSlot();
 	void restoreSlot();
 	void mergeSimilarCategories();

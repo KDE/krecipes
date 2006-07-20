@@ -27,7 +27,7 @@ class IngredientComboBox : public KComboBox
 	Q_OBJECT
 
 public:
-	IngredientComboBox( bool, QWidget *parent, RecipeDB *db );
+	IngredientComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString::null );
 
 	void reload();
 	int id( int row );
@@ -51,6 +51,7 @@ private:
 	int ing_count;
 	int load_limit;
 	QTimer *load_timer;
+	QString m_specialItem;
 };
 
 #endif //INGREDIENTCOMBOBOX_H

@@ -27,8 +27,9 @@ public:
 	UnitComboBox( QWidget *parent, RecipeDB *db, Unit::Type type = Unit::All );
 
 	void reload();
-	int id( int row );
+	int id( int row ) const;
 	void setSelected( int unitID );
+	Unit unit() const;
 
 protected:
 	virtual void popup();
