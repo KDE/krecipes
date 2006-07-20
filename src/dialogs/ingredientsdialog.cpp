@@ -23,6 +23,7 @@
 #include "widgets/ingredientlistview.h"
 #include "widgets/amountunitinput.h"
 #include "dialogs/ingredientgroupsdialog.h"
+#include "dialogs/createingredientweightdialog.h"
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -343,7 +344,21 @@ void IngredientsDialog::reloadUnitList()
 
 void IngredientsDialog::addWeight()
 {
+	QListViewItem *it = ingredientListView->listView()->selectedItem();
+	if ( it ) {
+		CreateIngredientWeightDialog weightDialog( this, database );
+		if ( weightDialog.exec() == QDialog::Accepted ) {
+			Weight w = weightDialog.weight();
+			w.ingredientID = it->text( 1 ).toInt();
+			database->addIngredientWeight( w );
 	
+			QListViewItem * lastElement = weightsListView->listView()->lastItem();
+	
+			WeightListItem *weight_it = new WeightListItem( weightsListView->listView(), lastElement, w );
+			weight_it->setAmountUnit( w.perAmount, database->unitName(w.perAmountUnitID) );
+			weight_it->setWeightUnit( w.weight, database->unitName(w.weightUnitID) );
+		}
+	}
 }
 
 void IngredientsDialog::removeWeight()
@@ -363,7 +378,6 @@ void IngredientsDialog::setWeights()
 		WeightListItem *it = (WeightListItem*)weightInputBox->item();
 		it->setWeightUnit( weightInputBox->amount().toDouble(), weightInputBox->unit() );
 		w = it->weight();
-
 
 		weightInputBox->setShown(false);
 	}
