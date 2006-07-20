@@ -118,6 +118,9 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_properties" )
 		commands << "CREATE TABLE ingredient_properties (id SERIAL NOT NULL,name CHARACTER VARYING, units CHARACTER VARYING);";
 
+	else if ( tableName == "ingredient_weights" )
+		commands << "CREATE TABLE ingredient_weights (id SERIAL NOT NULL PRIMARY KEY, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER );";
+
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
 
@@ -513,10 +516,10 @@ int PSqlRecipeDB::getNextInsertID( const QString &table, const QString &column )
 void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &username, const QString &password, const QString & /*clientHost*/ )
 {
 	QStringList tables;
-	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "prep_method_list" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
+	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "db_info" << "ingredient_groups" << "ingredient_weights" << "prep_method_list" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
 
 	//we also have to grant permissions on the sequences created
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredient_weights_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
 
 	QString command;
 
@@ -537,7 +540,7 @@ void PSqlRecipeDB::empty( void )
 	QSqlRecipeDB::empty();
 
 	QStringList tables;
-	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
+	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredient_weights_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
 
 	QSqlQuery tablesToEmpty( QString::null, database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
