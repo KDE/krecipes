@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kled.h>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -343,6 +344,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	ingredientList->setDefaultRenameAction( QListView::Reject );
 	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 9, 1, 3 );
 
+	QHBox *propertyStatusBox = new QHBox( ingredientGBox );
+	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), propertyStatusBox );
+	propertyStatusLabel = new QLabel( propertyStatusBox );
+	propertyStatusLed = new KLed( propertyStatusBox );
+	propertyStatusButton = new QPushButton( i18n("Details..."), propertyStatusBox );
+
+	ingredientsLayout->addMultiCellWidget( propertyStatusBox, 10, 10, 1, 4 );
+
 	// ------- Recipe Instructions Tab -----------
 
 	instructionsTab = new QGroupBox( recipeTab );
@@ -504,6 +513,8 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta ^ RecipeDB::Properties, recipeID );
 
 	reload();
+
+	updatePropertyStatus();
 
 	//Enable changed() signals
 	enableChangedSignal();
@@ -786,6 +797,8 @@ void RecipeInputDialog::removeIngredient( void )
 
 		IngredientData &ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
 		loadedRecipe->ingList.removeSubstitute( ing );
+		propertyStatusMap.remove( ing_item->ingredient().ingredientID );
+		showStatusIndicator();
 
 		//Remove it from the instruction's completion
 		instructionsEdit->removeCompletionItem( ing.name );
@@ -804,6 +817,8 @@ void RecipeInputDialog::removeIngredient( void )
 		for ( IngListViewItem * sub_item = (IngListViewItem*)header->firstChild(); sub_item; sub_item = (IngListViewItem*)sub_item->nextSibling() ) {
 			IngredientData &ing = loadedRecipe->ingList.findSubstitute( sub_item->ingredient() );
 			loadedRecipe->ingList.removeSubstitute( ing );
+			propertyStatusMap.remove( sub_item->ingredient().ingredientID );
+			showStatusIndicator();
 
 			//Remove it from the instruction's completion
 			instructionsEdit->removeCompletionItem( ing.name );
@@ -1360,6 +1375,8 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing )
 	//update the completion in the instructions edit
 	instructionsEdit->addCompletionItem( ing.name );
 
+	updatePropertyStatus( ing, true );
+
 	emit changed();
 }
 
@@ -1371,6 +1388,85 @@ void RecipeInputDialog::addIngredientHeader( const Element &header )
 
 	IngGrpListViewItem *ing_header = new IngGrpListViewItem( ingredientList, last_item, header.name, header.id );
 	ing_header->setOpen( true );
+}
+
+void RecipeInputDialog::updatePropertyStatus()
+{
+	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it ) {
+		updatePropertyStatus( *ing_it, false );
+	}
+
+	showStatusIndicator();
+}
+
+void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool updateIndicator )
+{
+	IngredientPropertyList ingPropertyList;
+	database->loadProperties( &ingPropertyList, ing.ingredientID );
+
+	if ( ingPropertyList.count() == 0 ) {
+		propertyStatusMap.insert(ing.ingredientID,QString(i18n("No nutrient information available for %1")).arg(ing.name));
+	}
+
+	QMap<int,bool> ratioCache; //unit->conversion possible
+	IngredientPropertyList::const_iterator prop_it;
+	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
+		Ingredient result;
+
+		QMap<int,bool>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
+		if ( cache_it == ratioCache.end() ) {
+			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
+			ratioCache.insert((*prop_it).perUnit.id,status==RecipeDB::Success);
+
+			switch ( status ) {
+			case RecipeDB::Success: break;
+			case RecipeDB::MissingUnitConversion: {
+				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Unit conversion missing for conversion from '%1' to '%2'"))
+						.arg(ing.units.name)
+						.arg((*prop_it).perUnit.type));
+				} else {
+					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
+					QStringList weightUnitsTo, weightUnitsFrom;
+					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
+						weightUnitsTo << database->unitName((*weight_it).perAmountUnitID).name;
+						weightUnitsFrom << database->unitName((*weight_it).weightUnitID).name;
+					}
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Missing unit conversion.  Can't convert from '%1' to any of (%2), and/or from any of (%3) to '%4'"))
+					.arg(ing.units.name)
+					.arg(weightUnitsTo.join(", "))
+					.arg(weightUnitsFrom.join(", "))
+					.arg((*prop_it).perUnit.name));
+				}
+				break;
+			}
+			case RecipeDB::MissingIngredientWeight:
+				propertyStatusMap.insert(ing.ingredientID,QString(i18n("No ingredient weight for %1")).arg(ing.name));
+				break;
+			default: kdDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
+			}
+		}
+	}
+
+	if ( updateIndicator )
+		showStatusIndicator();
+}
+
+void RecipeInputDialog::showStatusIndicator()
+{
+	if ( propertyStatusMap.count() == 0 ) {
+		propertyStatusLed->setColor( Qt::green );
+		propertyStatusLabel->setText( i18n("Complete") );
+		propertyStatusButton->setEnabled(false);
+	}
+	else {
+		for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
+			kdDebug()<<"NUTRIENT STATUS: "<<it.data()<<endl;
+		}
+		propertyStatusLed->setColor( Qt::red );
+		propertyStatusLabel->setText( i18n("Incomplete") );
+		propertyStatusButton->setEnabled(true);
+	}
 }
 
 #include "recipeinputdialog.moc"

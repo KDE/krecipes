@@ -40,6 +40,7 @@ class QWidgetStack;
 
 class KreTextEdit;
 class KWidgetListbox;
+class KLed;
 
 class ImageDropLabel;
 class Recipe;
@@ -107,6 +108,9 @@ private:
 	KListView* ingredientList;
 	QGroupBox *ingredientGBox;
 	IngredientInputWidget *ingInput;
+	KLed *propertyStatusLed;
+	QLabel *propertyStatusLabel;
+	QPushButton *propertyStatusButton;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
@@ -125,6 +129,8 @@ private:
 	QToolButton* spellCheckButton;
 
 	KWidgetListbox *ratingListDisplayWidget;
+
+	QMap<int,QString> propertyStatusMap;
 
 	// Internal functions
 	int createNewYieldIfNecessary( const QString &yield );
@@ -159,6 +165,9 @@ private slots:
 	void slotRemoveRating();
 	void addIngredient( const Ingredient &ing );
 	void addIngredientHeader( const Element &header );
+	void updatePropertyStatus();
+	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );
+	void showStatusIndicator();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

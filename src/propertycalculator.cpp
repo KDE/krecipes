@@ -85,17 +85,10 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			}
 
 			if ( converted )  // Could convert units to perUnit
-			{
-				if ( (*rec_property_it).amount >= 0 )
-					(*rec_property_it).amount += ( (*prop_it).amount ) * result.amount;
-				else
-					(*rec_property_it).amount -= ( (*prop_it).amount ) * result.amount; //The recipe was marked as undefined previously. Keep it negative
-			}
+				(*rec_property_it).amount += ( (*prop_it).amount ) * result.amount;
 		}
 		else // Append new property
 		{
-			// We are about to add a new property. Were there previous ingredients that didn't have this defined?
-			bool undefined = ( ingredientNo > 1 );  // If 1, it's the first ingredient else, it's the second or more
 			IngredientProperty property;
 			property.id = (*prop_it).id;
 			property.name = (*prop_it).name;
@@ -122,24 +115,8 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			if ( converted )  // Could convert units to perUnit
 			{
 				property.amount = ( (*prop_it).amount ) * result.amount;
-				if ( undefined )
-					property.amount = -( fabs( property.amount ) );
 				recipePropertyList->append( property );
 			}
 		}
-	}
-
-	// The previous procedure doesn't take into account if an appended ingredient has not defined a property.
-	// Mark with negative sign all those properties in the recipe properties, since they're undefined
-	checkUndefined( recipePropertyList, ingPropertyList );
-}
-
-void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList )
-{
-	IngredientPropertyList::iterator prop_it;
-	for ( prop_it = recipePropertyList->begin(); prop_it != recipePropertyList->end(); ++prop_it ) {
-		int pos = addedPropertyList.findIndex( *prop_it );
-		if ( pos < 0 )
-			(*prop_it).amount = -( fabs( (*prop_it).amount ) ); // undefined
 	}
 }
