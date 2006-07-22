@@ -21,6 +21,7 @@
 #include <knuminput.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+#include <kled.h>
 
 #include <qlabel.h>
 #include <qgroupbox.h>
@@ -40,7 +41,6 @@ class QWidgetStack;
 
 class KreTextEdit;
 class KWidgetListbox;
-class KLed;
 
 class ImageDropLabel;
 class Recipe;
@@ -51,6 +51,7 @@ class Ingredient;
 class Rating;
 class RatingDisplayWidget;
 class IngredientInputWidget;
+class ClickableLed;
 
 /**
 @author Unai Garro
@@ -108,7 +109,7 @@ private:
 	KListView* ingredientList;
 	QGroupBox *ingredientGBox;
 	IngredientInputWidget *ingInput;
-	KLed *propertyStatusLed;
+	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
 
@@ -185,6 +186,19 @@ signals:
 
 };
 
+class ClickableLed : public KLed
+{
+Q_OBJECT
+
+public:
+	ClickableLed( QWidget *parent );
+
+protected:
+	virtual void mouseReleaseEvent( QMouseEvent* );
+
+signals:
+	void clicked();
+};
 
 class ImageDropLabel : public QLabel
 {

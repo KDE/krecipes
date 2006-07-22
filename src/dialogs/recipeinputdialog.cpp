@@ -58,6 +58,15 @@
 
 #include "profiling.h"
 
+ClickableLed::ClickableLed( QWidget *parent ) : KLed(parent)
+{
+}
+
+void ClickableLed::mouseReleaseEvent( QMouseEvent* )
+{
+	emit clicked();
+}
+
 ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabel( parent ),
 		sourcePhoto( _sourcePhoto )
 {
@@ -344,13 +353,22 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	ingredientList->setDefaultRenameAction( QListView::Reject );
 	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 9, 1, 3 );
 
-	QHBox *propertyStatusBox = new QHBox( ingredientGBox );
-	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), propertyStatusBox );
-	propertyStatusLabel = new QLabel( propertyStatusBox );
-	propertyStatusLed = new KLed( propertyStatusBox );
-	propertyStatusButton = new QPushButton( i18n("Details..."), propertyStatusBox );
+	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientGBox, 0, 5 );
+	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientGBox );
+	propertyStatusLabel = new QLabel( ingredientGBox );
+	propertyStatusLed = new ClickableLed( ingredientGBox );
+	propertyStatusLed->setFixedSize( QSize(16,16) );
+	propertyStatusButton = new QPushButton( i18n("Details..."), ingredientGBox );
+	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientGBox );
+	propertyStatusLayout->addWidget( propertyLabel );
+	propertyStatusLayout->addWidget( propertyStatusLabel );
+	propertyStatusLayout->addWidget( propertyStatusLed );
+	propertyStatusLayout->addWidget( propertyStatusButton );
+	//propertyStatusLayout->addWidget( propertyUpdateButton );
+	QSpacerItem* propertySpacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	propertyStatusLayout->addItem( propertySpacerRight );
 
-	ingredientsLayout->addMultiCellWidget( propertyStatusBox, 10, 10, 1, 4 );
+	ingredientsLayout->addMultiCellLayout( propertyStatusLayout, 10, 10, 1, 4 );
 
 	// ------- Recipe Instructions Tab -----------
 
@@ -448,6 +466,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 
 	connect ( ingInput, SIGNAL( ingredientEntered(const Ingredient&) ), this, SLOT( addIngredient(const Ingredient&) ) );
 	connect ( ingInput, SIGNAL( headerEntered(const Element&) ), this, SLOT( addIngredientHeader(const Element&) ) );
+
+	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
 
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
@@ -1432,11 +1452,12 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						weightUnitsTo << database->unitName((*weight_it).perAmountUnitID).name;
 						weightUnitsFrom << database->unitName((*weight_it).weightUnitID).name;
 					}
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Missing unit conversion.  Can't convert from '%1' to any of (%2), and/or from any of (%3) to '%4'"))
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Missing unit conversion for %5.  Can't convert from '%1' to any of <'%2'>, and/or from any of <'%3'> to '%4'"))
 					.arg(ing.units.name)
-					.arg(weightUnitsTo.join(", "))
-					.arg(weightUnitsFrom.join(", "))
-					.arg((*prop_it).perUnit.name));
+					.arg(weightUnitsTo.join("', '"))
+					.arg(weightUnitsFrom.join("', '"))
+					.arg((*prop_it).perUnit.name)
+					.arg(ing.name));
 				}
 				break;
 			}

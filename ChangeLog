@@ -1,4 +1,7 @@
 Changes from 0.9 to SVN:
+  -Nutrient status indicator; while editing a recipe, lets you know whether or not nutrient information is complete for a recipe.
+  -Measurement Converter tool
+  -Ingredient weights, used for accurate Volume->Mass unit conversions based on the ingredient
   -Improved unit conversions; there's a separate table for mass and volume conversions and this setup avoids non-sensical conversions (i.e. 1 loaf = ? cups) 
   -Optimized the database for quick loading and faster startup times
   -Ingredient substitutes (i.e. butter or margarine)
