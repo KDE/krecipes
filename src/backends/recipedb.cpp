@@ -811,6 +811,7 @@ void RecipeDB::importUSDADatabase()
 	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
 	const int total = data->count();
 	int counter = 0;
+
 	for ( it = data->begin(); it != data_end; ++it ) {
 		counter++;
 		kdDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
@@ -833,12 +834,24 @@ void RecipeDB::importUSDADatabase()
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
 
+		WeightList existingWeights = ingredientWeightUnits( assigned_id );
 		const WeightList weights = (*it).weights;
 		for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
 			Weight w = *weight_it;
 			w.perAmountUnitID = createUnit( w.perAmountUnit, this );
 			w.weightUnitID = unit_g_id;
 			w.ingredientID = assigned_id;
+
+			bool exists = false;
+			for ( WeightList::const_iterator it = existingWeights.begin(); it != existingWeights.end(); ++it ) {
+				if ( (*it).perAmountUnitID == w.perAmountUnitID ) {
+					exists = true;
+					break;
+				}
+			}
+			if ( exists )
+				continue;
+
 			addIngredientWeight( w );
 		}
 	}

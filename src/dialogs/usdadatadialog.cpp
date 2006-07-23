@@ -134,6 +134,40 @@ void USDADataDialog::importSelected()
 				database->addPropertyToIngredient( ingredient.id, property_id, amount, grams_id );
 		}
 
+		WeightList weights = database->ingredientWeightUnits( ingredient.id );
+		for ( ; i < data.count()-1; ++i ) {
+			Weight w;
+			w.weight = data[i].toDouble();
+
+			i++;
+
+			QString amountAndWeight = data[i].mid( 1, data[i].length() - 2 );
+			if ( !amountAndWeight.isEmpty() ) {
+				int spaceIndex = amountAndWeight.find(" ");
+				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+
+				int unitID = database->findExistingUnitByName( w.perAmountUnit );
+				if ( unitID == -1 )
+					database->createNewUnit( Unit(w.perAmountUnit,w.perAmountUnit) );
+				w.perAmountUnitID = unitID;
+
+				bool exists = false;
+				for ( WeightList::const_iterator it = weights.begin(); it != weights.end(); ++it ) {
+					if ( (*it).perAmountUnitID == w.perAmountUnitID ) {
+						exists = true;
+						break;
+					}
+				}
+				if ( exists )
+					continue;
+
+				w.weightUnitID = grams_id;
+				w.ingredientID = ingredient.id;
+				database->addIngredientWeight( w );
+			}
+		}
+
 		accept();
 	}
 	else

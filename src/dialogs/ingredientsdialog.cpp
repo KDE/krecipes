@@ -202,20 +202,14 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removePropertyButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removePropertyButton->setFlat( true );
 
-	QPushButton *loadUsdaButton = new QPushButton( rightWidget );
-	loadUsdaButton->setText( i18n( "Load USDA data" ) );
-	rightLayout->addMultiCellWidget( loadUsdaButton, 10, 10, 0, 1 );
-	loadUsdaButton->setFlat( true );
-
-	QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	QSpacerItem* spacer_Prop_Buttons = new QSpacerItem( 9, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	rightLayout->addItem( spacer_Prop_Buttons, 7, 2 );
-
 
 	weightsListView = new KreListView ( rightWidget, i18n( "Ingredient Weights" ) );
 	weightsListView->listView() ->addColumn( i18n( "Weight" ) );
 	weightsListView->listView() ->addColumn( i18n( "Per Amount" ) );
 	weightsListView->listView() ->setAllColumnsShowFocus( true );
-	rightLayout->addMultiCellWidget ( weightsListView, 11, 14, 0, 0 );
+	rightLayout->addMultiCellWidget ( weightsListView, 10, 14, 0, 0 );
 	weightsListView->listView() ->setMinimumWidth( 150 );
 	weightsListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
@@ -224,7 +218,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	addWeightButton = new QPushButton( rightWidget );
 	addWeightButton->setText( "+" );
-	rightLayout->addWidget( addWeightButton, 11, 2 );
+	rightLayout->addWidget( addWeightButton, 10, 2 );
 	addWeightButton->resize( QSize( 30, 30 ) );
 	addWeightButton->setMinimumSize( QSize( 30, 30 ) );
 	addWeightButton->setMaximumSize( QSize( 30, 30 ) );
@@ -233,7 +227,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	removeWeightButton = new QPushButton( rightWidget );
 	removeWeightButton->setText( "-" );
-	rightLayout->addWidget( removeWeightButton, 13, 2 );
+	rightLayout->addWidget( removeWeightButton, 12, 2 );
 	removeWeightButton->resize( QSize( 30, 30 ) );
 	removeWeightButton->setMinimumSize( QSize( 30, 30 ) );
 	removeWeightButton->setMaximumSize( QSize( 30, 30 ) );
@@ -241,6 +235,11 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removeWeightButton->setFlat( true );
 	//QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	//layout->addItem( spacer_Units_Properties, 5, 5 );
+
+	QPushButton *loadUsdaButton = new QPushButton( rightWidget );
+	loadUsdaButton->setText( i18n( "Load USDA data" ) );
+	rightLayout->addMultiCellWidget( loadUsdaButton, 15, 15, 0, 1 );
+	loadUsdaButton->setFlat( true );
 
 	scrollView1->addChild(rightWidget);
 	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
@@ -678,8 +677,10 @@ void IngredientsDialog::openUSDADialog( void )
 		USDADataDialog usda_dialog( Element( ing_it->text( 0 ), ing_it->text( 1 ).toInt() ), database, this );
 		KApplication::restoreOverrideCursor();
 
-		if ( usda_dialog.exec() == QDialog::Accepted )
+		if ( usda_dialog.exec() == QDialog::Accepted ) {
 			reloadPropertyList(); //update property list upon success
+			reloadWeightList();
+		}
 	}
 	else
 		QMessageBox::information( this, QString::null, i18n( "No ingredient selected." ) );
