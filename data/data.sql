@@ -29,7 +29,7 @@ INSERT INTO units VALUES (18,'stick',NULL,'sticks',NULL,0);
 INSERT INTO units VALUES (19,'teaspoon','tsp','teaspoons','tsp',2);
 INSERT INTO units VALUES (20,'quart','qt','quarts','qt',2);
 INSERT INTO units VALUES (21,'gallon','gal','gallons','gal',2);
-INSERT INTO units VALUES (22,'ounce','oz','ounces','oz',2);
+INSERT INTO units VALUES (22,'ounce','oz','ounces','oz',1);
 INSERT INTO units VALUES (23,'square','sq','squares','sq',0);
 INSERT INTO units VALUES (24,'bottle',NULL,'bottles',NULL,0);
 INSERT INTO units VALUES (25,'',NULL,'',NULL,0);

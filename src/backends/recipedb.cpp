@@ -65,6 +65,7 @@ struct ingredient_nutrient_data
 	int usda_id;
 	QString name;
 	QValueList<double> data;
+	WeightList weights;
 };
 
 RecipeDB::RecipeDB() : 
@@ -750,8 +751,32 @@ void RecipeDB::importUSDADatabase()
 			ingredient_nutrient_data current_ing;
 			current_ing.name = ( *current_pair ).second.latin1();
 
+			int i = 2;
 			for ( int i = 2; i < TOTAL_USDA_PROPERTIES + 2; i++ )  //properties start at the third field (index 2)
 				current_ing.data << fields[ i ].toDouble();
+
+			Weight w;
+			w.weight = fields[ TOTAL_USDA_PROPERTIES + 2 ].toDouble();
+
+			QString amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 3 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 3 ].length() - 2 );
+			if ( !amountAndWeight.isEmpty() ) {
+				int spaceIndex = amountAndWeight.find(" ");
+				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+	
+				current_ing.weights << w;
+			}
+
+			w = Weight();
+			w.weight = fields[ TOTAL_USDA_PROPERTIES + 4 ].toDouble();
+			amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 5 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 5 ].length() - 2 );
+			if ( !amountAndWeight.isEmpty() ) {
+				int spaceIndex = amountAndWeight.find(" ");
+				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+	
+				current_ing.weights << w;
+			}
 
 			current_ing.usda_id = id;
 
@@ -763,6 +788,7 @@ void RecipeDB::importUSDADatabase()
 
 	delete ings_and_ids;
 
+	//there's 13009 lines in the weight file
 	emit progressBegin( data->count(), i18n( "Nutrient Import" ), i18n( "Importing USDA nutrient data" ) );
 
 	//if there is no data in the database, we can really speed this up with this
@@ -780,8 +806,6 @@ void RecipeDB::importUSDADatabase()
 	//since there are only two units used, lets just create them and store their id for speed
 	int unit_g_id = createUnit( "g", this );
 	int unit_mg_id = createUnit( "mg", this );
-
-	std::multimap<int, int> idMap; //map USDA ingredient id to Krecipes ingredient id
 
 	QValueList<ingredient_nutrient_data>::const_iterator it;
 	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
@@ -809,56 +833,20 @@ void RecipeDB::importUSDADatabase()
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );
 		}
 
-		idMap.insert( std::make_pair( (*it).usda_id, assigned_id ) );
+		const WeightList weights = (*it).weights;
+		for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
+			Weight w = *weight_it;
+			w.perAmountUnitID = createUnit( w.perAmountUnit, this );
+			w.weightUnitID = unit_g_id;
+			w.ingredientID = assigned_id;
+			addIngredientWeight( w );
+		}
 	}
 
 	delete data;
 
 	kdDebug() << "USDA data import successful" << endl;
 
-	//check if the data file even exists before we do anything
-	QString weight_filename = locate( "appdata", "data/weight.txt" );
-	if ( weight_filename.isEmpty() ) {
-		kdDebug() << "Unable to find weight.txt data file." << endl;
-		return ;
-	}
-
-	QFile weight_file( weight_filename );
-	if ( !weight_file.open( IO_ReadOnly ) ) {
-		kdDebug() << "Unable to open data file: " << weight_filename << endl;
-		return ;
-	}
-
-	stream.setDevice( &weight_file );
-
-	kdDebug() << "Parsing weight.txt" << endl;
-	while ( !stream.atEnd() ) {
-		QStringList fields = QStringList::split( "^", stream.readLine(), true );
-
-		Weight w;
-
-		int usda_id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
-
-		//fields[1] is the sequence id, we don't need that
-
-		w.perAmount = fields[ 2 ].toDouble();
-		QString unit_str = fields[ 3 ].mid( 1, fields[ 3 ].length() - 2 );
-		w.perAmountUnitID = createUnit( unit_str, this );
-
-		w.weight = fields[ 4 ].toDouble();
-		w.weightUnitID = unit_g_id;
-
-		std::multimap<int, int>::iterator current_pair;
-		while ( ( current_pair = idMap.find( usda_id ) ) != idMap.end() )  //there may be more than one ingredient with the same id
-		{
-			w.ingredientID = ( *current_pair ).second;
-			kdDebug() << "Inserting usda_id " << usda_id << " and krecipes_ing_id " << w.ingredientID << " with unit " << unit_str << endl;
-			addIngredientWeight( w );
-			idMap.erase( current_pair );
-		}
-	}
-
-	kdDebug() << "USDA ingredient weight import successful" << endl;
 	emit progressDone();
 }
 

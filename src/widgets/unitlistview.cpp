@@ -297,6 +297,10 @@ bool StdUnitListView::checkBounds( const Unit &unit )
 	}
 	else if ( unit.name.stripWhiteSpace().isEmpty() || unit.plural.stripWhiteSpace().isEmpty() )
 		return false;
+	else if ( database->findExistingUnitByName( unit.name ) != -1 )
+		return false;
+	else if ( database->findExistingUnitByName( unit.plural ) != -1 )
+		return false;
 
 	return true;
 }

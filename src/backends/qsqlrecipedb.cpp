@@ -2244,6 +2244,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 		  + "' OR name_abbrev='" + search_str 
 		  + "' OR plural_abbrev='" + search_str 
 		  + "'";
+
 	QSqlQuery elementToLoad( command, database ); // Run the query
 	int id = -1;
 
