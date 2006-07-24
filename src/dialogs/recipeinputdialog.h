@@ -42,6 +42,7 @@ class QTextEdit;
 
 class KreTextEdit;
 class KWidgetListbox;
+class KDialogBase;
 
 class ImageDropLabel;
 class Recipe;
@@ -114,6 +115,7 @@ private:
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
 	QTextEdit *statusTextView;
+	KDialogBase *propertyStatusDialog;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
@@ -142,6 +144,7 @@ private:
 	void showAuthors( void );
 	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
 	void addRating( const Rating &rating, RatingDisplayWidget *item );
+	QString statusMessage() const;
 
 	// Signals & Slots
 
@@ -171,7 +174,6 @@ private slots:
 	void updatePropertyStatus();
 	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );
 	void showStatusIndicator();
-	void showPropertyStatus();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

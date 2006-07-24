@@ -37,6 +37,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kled.h>
+#include <kdialogbase.h>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -369,11 +370,19 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	QSpacerItem* propertySpacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	propertyStatusLayout->addItem( propertySpacerRight );
 
-	#if 0
+	KGuiItem updateGuiItem;
+	updateGuiItem.setText( i18n("Update") );
+	updateGuiItem.setIconSet( il->loadIconSet( "reload", KIcon::NoGroup ) );
+	propertyStatusDialog = new KDialogBase( KDialogBase::Swallow, i18n("Property details"),
+		KDialogBase::Close | KDialogBase::User1,
+		KDialogBase::Close, this, "propertyStatusDialog", false, false,
+		updateGuiItem
+	);
 	statusTextView = new QTextEdit(0);
+	statusTextView->setTextFormat( Qt::RichText );
 	statusTextView->setReadOnly(true);
-	statusTextView->hide();
-	#endif
+	propertyStatusDialog->setMainWidget( statusTextView );
+	propertyStatusDialog->resize( 400, 300 );
 
 	ingredientsLayout->addMultiCellLayout( propertyStatusLayout, 10, 10, 1, 4 );
 
@@ -475,7 +484,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect ( ingInput, SIGNAL( headerEntered(const Element&) ), this, SLOT( addIngredientHeader(const Element&) ) );
 
 	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
-	connect( propertyStatusButton, SIGNAL(clicked()), SLOT(showPropertyStatus()) );
+	connect( propertyStatusDialog, SIGNAL(user1Clicked()), SLOT(updatePropertyStatus()) );
+	connect( propertyStatusButton, SIGNAL(clicked()), propertyStatusDialog, SLOT(show()) );
 
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
@@ -541,6 +551,8 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta ^ RecipeDB::Properties, recipeID );
 
 	reload();
+
+	propertyStatusDialog->hide();
 
 	updatePropertyStatus();
 
@@ -1433,7 +1445,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	database->loadProperties( &ingPropertyList, ing.ingredientID );
 
 	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMap.insert(ing.ingredientID,QString(i18n("No nutrient information available for %1")).arg(ing.name));
+		propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No nutrient information available")).arg(ing.name));
 	}
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
@@ -1450,18 +1462,26 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::Success: break;
 			case RecipeDB::MissingUnitConversion: {
 				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Unit conversion missing for conversion from '%1' to '%2'"))
-						.arg(ing.units.name)
-						.arg((*prop_it).perUnit.type));
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"))
+						.arg(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
+						.arg((*prop_it).perUnit.name)
+						.arg(ing.name));
 				} else {
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
 					QStringList weightUnitsTo, weightUnitsFrom;
 					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
-						weightUnitsTo << database->unitName((*weight_it).perAmountUnitID).name;
-						weightUnitsFrom << database->unitName((*weight_it).weightUnitID).name;
+						QString unit = database->unitName((*weight_it).perAmountUnitID).name;
+						if ( unit.isEmpty() ) unit = i18n("-No unit-");
+						if ( weightUnitsTo.find(unit) == weightUnitsTo.end() )
+							weightUnitsTo << unit;
+
+						unit = database->unitName((*weight_it).weightUnitID).name;
+						if ( unit.isEmpty() ) unit = i18n("-No unit-");
+						if ( weightUnitsFrom.find(unit) == weightUnitsFrom.end() )
+							weightUnitsFrom << unit;
 					}
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("Missing unit conversion for %5.  Can't convert from '%1' to any of <'%2'>, and/or from any of <'%3'> to '%4'"))
-					.arg(ing.units.name)
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%5:</b> Unit conversion missing.  Can't convert from '%1' to any of &lt;'%2'&gt;, and/or from any of &lt;'%3'&gt; to '%4'"))
+					.arg(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
 					.arg(weightUnitsTo.join("', '"))
 					.arg(weightUnitsFrom.join("', '"))
 					.arg((*prop_it).perUnit.name)
@@ -1470,7 +1490,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMap.insert(ing.ingredientID,QString(i18n("No ingredient weight for %1")).arg(ing.name));
+				propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight.")).arg(ing.name));
 				break;
 			default: kdDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
 			}
@@ -1493,25 +1513,27 @@ void RecipeInputDialog::showStatusIndicator()
 		propertyStatusLabel->setText( i18n("Incomplete") );
 		propertyStatusButton->setEnabled(true);
 	}
+
+	if ( propertyStatusMap.count() == 0 )
+		propertyStatusDialog->hide();
+	else
+		statusTextView->setText(statusMessage());
 }
 
-void RecipeInputDialog::showPropertyStatus()
+QString RecipeInputDialog::statusMessage() const
 {
-	//TODO: soon!
-	#if 0
 	QString statusMessage;
-	for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
-		statusMessage.append(it.data());
-		statusMessage.append("\n\n");
-	}
-	statusTextView->setText(statusMessage);
 
-	QRect geometry = propertyStatusButton->geometry();
-	statusTextView->move( propertyStatusButton->mapToGlobal(QPoint(geometry.x(), geometry.y()+geometry.height())) );
-	statusTextView->resize( geometry.size() );
-	//statusTextView->setGeometry( geometry );
-	statusTextView->show();
-	#endif
+	statusMessage.append( i18n("The nutrient information for this recipe is incomplete because the following information is missing:") );
+
+	statusMessage.append("<ul>");
+	for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
+		statusMessage.append("<li>");
+		statusMessage.append(it.data());
+		statusMessage.append("</li>");
+	}
+	statusMessage.append("<ul>");
+	return statusMessage;
 }
 
 #include "recipeinputdialog.moc"
