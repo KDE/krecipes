@@ -17,6 +17,7 @@
 #include "qsqlrecipedb.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
+#include "datablocks/weight.h"
 
 #include "propertycalculator.h"
 

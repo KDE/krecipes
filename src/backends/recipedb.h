@@ -40,23 +40,8 @@ class QTextStream;
 
 class CategoryTree;
 class RecipeSearchParameters;
-
-class Weight
-{
-public:
-	Weight():id(-1){}
-
-	int id;
-	int ingredientID;
-	int perAmountUnitID;
-	QString perAmountUnit;
-	double perAmount;
-	int weightUnitID;
-	double weight;
-	QString weightUnit;
-};
-
-typedef QValueList<Weight> WeightList;
+class Weight;
+class WeightList;
 
 typedef struct
 {

@@ -11,7 +11,8 @@ libdatablocks_la_SOURCES= \
 	recipelist.cpp constraintlist.cpp categorytree.cpp kreborder.cpp \
 	recipe.cpp ingredient.cpp ingredientlist.cpp elementlist.cpp \
 	element.cpp ingredientproperty.cpp ingredientpropertylist.cpp \
-	unit.cpp unitratio.cpp unitratiolist.cpp mixednumber.cpp rating.cpp
+	unit.cpp unitratio.cpp unitratiolist.cpp mixednumber.cpp rating.cpp \
+	weight.cpp
 
 libdatablocks_la_METASOURCES=AUTO
 

@@ -13,6 +13,11 @@
 
 #include <kdebug.h>
 
+#include "backends/recipedb.h"
+#include "datablocks/elementlist.h"
+#include "datablocks/ingredientpropertylist.h"
+#include "datablocks/recipe.h"
+
 bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result )
 {
 	bool converted = database->convertIngredientUnits( from, to.units, result ) == RecipeDB::Success;

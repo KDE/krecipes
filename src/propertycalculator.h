@@ -11,11 +11,10 @@
 #ifndef PROPERTYCALCULATOR_H
 #define PROPERTYCALCULATOR_H
 
-#include <qptrlist.h>
-#include <backends/recipedb.h>
-#include "datablocks/elementlist.h"
-#include "datablocks/ingredientpropertylist.h"
-#include "datablocks/recipe.h"
+class RecipeDB;
+class Ingredient;
+class IngredientPropertyList;
+class Recipe;
 
 bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result );
 void checkUndefined( IngredientPropertyList *recipePropertyList, IngredientPropertyList &addedPropertyList );

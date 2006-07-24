@@ -27,6 +27,7 @@
 #include "backends/recipedb.h"
 #include "backends/usda_property_data.h"
 #include "widgets/krelistview.h"
+#include "datablocks/weight.h"
 
 USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent ) : KDialog( parent, 0, true ),
 		ingredient( ing ),

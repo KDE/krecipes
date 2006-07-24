@@ -15,6 +15,7 @@
 #include "createelementdialog.h"
 #include "datablocks/ingredientpropertylist.h"
 #include "datablocks/mixednumber.h"
+#include "datablocks/weight.h"
 #include "unitsdialog.h"
 #include "usdadatadialog.h"
 #include "selectpropertydialog.h"

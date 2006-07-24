@@ -52,6 +52,7 @@
 
 #include "datablocks/categorytree.h"
 #include "datablocks/ingredientpropertylist.h"
+#include "datablocks/weight.h"
 
 #include "searchparameters.h"
 

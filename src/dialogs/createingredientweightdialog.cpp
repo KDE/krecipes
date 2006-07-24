@@ -23,6 +23,7 @@
 
 #include "widgets/unitcombobox.h"
 #include "widgets/fractioninput.h"
+#include "datablocks/weight.h"
 #include "backends/recipedb.h"
 
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )

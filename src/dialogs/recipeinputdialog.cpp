@@ -46,6 +46,7 @@
 #include "datablocks/recipe.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
+#include "datablocks/weight.h"
 #include "backends/recipedb.h"
 #include "selectcategoriesdialog.h"
 #include "widgets/fractioninput.h"
@@ -368,6 +369,12 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	QSpacerItem* propertySpacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	propertyStatusLayout->addItem( propertySpacerRight );
 
+	#if 0
+	statusTextView = new QTextEdit(0);
+	statusTextView->setReadOnly(true);
+	statusTextView->hide();
+	#endif
+
 	ingredientsLayout->addMultiCellLayout( propertyStatusLayout, 10, 10, 1, 4 );
 
 	// ------- Recipe Instructions Tab -----------
@@ -468,6 +475,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect ( ingInput, SIGNAL( headerEntered(const Element&) ), this, SLOT( addIngredientHeader(const Element&) ) );
 
 	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
+	connect( propertyStatusButton, SIGNAL(clicked()), SLOT(showPropertyStatus()) );
 
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
@@ -1481,13 +1489,29 @@ void RecipeInputDialog::showStatusIndicator()
 		propertyStatusButton->setEnabled(false);
 	}
 	else {
-		for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
-			kdDebug()<<"NUTRIENT STATUS: "<<it.data()<<endl;
-		}
 		propertyStatusLed->setColor( Qt::red );
 		propertyStatusLabel->setText( i18n("Incomplete") );
 		propertyStatusButton->setEnabled(true);
 	}
+}
+
+void RecipeInputDialog::showPropertyStatus()
+{
+	//TODO: soon!
+	#if 0
+	QString statusMessage;
+	for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
+		statusMessage.append(it.data());
+		statusMessage.append("\n\n");
+	}
+	statusTextView->setText(statusMessage);
+
+	QRect geometry = propertyStatusButton->geometry();
+	statusTextView->move( propertyStatusButton->mapToGlobal(QPoint(geometry.x(), geometry.y()+geometry.height())) );
+	statusTextView->resize( geometry.size() );
+	//statusTextView->setGeometry( geometry );
+	statusTextView->show();
+	#endif
 }
 
 #include "recipeinputdialog.moc"

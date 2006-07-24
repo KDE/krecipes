@@ -38,6 +38,7 @@ class QTimeEdit;
 class QDragEvent;
 class QButtonGroup;
 class QWidgetStack;
+class QTextEdit;
 
 class KreTextEdit;
 class KWidgetListbox;
@@ -112,6 +113,7 @@ private:
 	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
+	QTextEdit *statusTextView;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;
@@ -169,6 +171,7 @@ private slots:
 	void updatePropertyStatus();
 	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );
 	void showStatusIndicator();
+	void showPropertyStatus();
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()
