@@ -34,6 +34,7 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList )
 	unitChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	unitChooseView->addColumn( i18n( "Unit" ) );
+	unitChooseView->setSorting(1);
 	unitChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
 	unitChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( unitChooseView );
