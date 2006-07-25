@@ -1469,24 +1469,26 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						.arg(ing.name));
 				} else {
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
-					QStringList weightUnitsTo, weightUnitsFrom;
+					QStringList missingConversions;
 					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
-						QString unit = database->unitName((*weight_it).perAmountUnitID).name;
-						if ( unit.isEmpty() ) unit = i18n("-No unit-");
-						if ( weightUnitsTo.find(unit) == weightUnitsTo.end() )
-							weightUnitsTo << unit;
+						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name;
+						if ( toUnit.isEmpty() ) toUnit = i18n("-No unit-");
 
-						unit = database->unitName((*weight_it).weightUnitID).name;
-						if ( unit.isEmpty() ) unit = i18n("-No unit-");
-						if ( weightUnitsFrom.find(unit) == weightUnitsFrom.end() )
-							weightUnitsFrom << unit;
+						QString fromUnit = database->unitName((*weight_it).weightUnitID).name;
+						if ( fromUnit.isEmpty() ) fromUnit = i18n("-No unit-");
+
+						QString ingUnit = ing.units.name;
+						if ( ingUnit.isEmpty() ) ingUnit = i18n("-No unit-");
+
+						missingConversions << QString( "'%1' =&gt; '%2' =&gt; '%3'" )
+						  .arg(ingUnit)
+						  .arg(toUnit)
+						  .arg(fromUnit);
 					}
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%5:</b> Unit conversion missing.  Can't convert from '%1' to any of &lt;'%2'&gt;, and/or from any of &lt;'%3'&gt; to '%4'"))
-					.arg(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
-					.arg(weightUnitsTo.join("', '"))
-					.arg(weightUnitsFrom.join("', '"))
-					.arg((*prop_it).perUnit.name)
-					.arg(ing.name));
+					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Unit conversion(s) missing.  Krecipes needs conversion information to perform one of the following conversions: %2"))
+					  .arg(ing.name)
+					  .arg("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
+					);
 				}
 				break;
 			}

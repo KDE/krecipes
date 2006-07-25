@@ -21,7 +21,6 @@
 class RecipeDB;
 
 class KListView;
-class KLineEdit;
 
 class USDADataDialog : public KDialogBase
 {
@@ -35,7 +34,6 @@ private:
 	void loadDataFromFile();
 
 	KListView *listView;
-	KLineEdit *search_edit;
 
 	Element ingredient;
 	RecipeDB *database;

@@ -101,7 +101,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientListView->setListView( list_view );
-	layout->addMultiCellWidget ( ingredientListView, 1, 4, 1, 1 );
+	layout->addMultiCellWidget ( ingredientListView, 1, 5, 1, 1 );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 
 	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -236,16 +236,15 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removeWeightButton->setFlat( true );
 	//QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	//layout->addItem( spacer_Units_Properties, 5, 5 );
+	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
+	layout->addMultiCellWidget(scrollView1,1,4,5,5);
 
-	QPushButton *loadUsdaButton = new QPushButton( rightWidget );
+	QPushButton *loadUsdaButton = new QPushButton( ingredientTab );
 	loadUsdaButton->setText( i18n( "Load USDA data" ) );
-	rightLayout->addMultiCellWidget( loadUsdaButton, 15, 15, 0, 1 );
 	loadUsdaButton->setFlat( true );
+	layout->addWidget(loadUsdaButton,5,5);
 
 	scrollView1->addChild(rightWidget);
-	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
-
-	layout->addMultiCellWidget(scrollView1,1,4,5,5);
 
 
 
