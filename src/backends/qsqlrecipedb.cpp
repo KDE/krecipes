@@ -1360,6 +1360,10 @@ void QSqlRecipeDB::removeUnit( int unitID )
 	command = QString( "DELETE FROM units_conversion WHERE unit1_id=%1 OR unit2_id=%2;" ).arg( unitID ).arg( unitID );
 	unitToRemove.exec( command );
 
+	// Remove associated ingredient weights
+	command = QString( "DELETE FROM ingredient_weights WHERE unit_id=%1" ).arg( unitID );
+	unitToRemove.exec( command );
+
 	emit unitRemoved( unitID );
 }
 
