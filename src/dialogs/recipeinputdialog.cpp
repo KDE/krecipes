@@ -374,10 +374,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	updateGuiItem.setText( i18n("Update") );
 	updateGuiItem.setIconSet( il->loadIconSet( "reload", KIcon::NoGroup ) );
 	propertyStatusDialog = new KDialogBase( KDialogBase::Swallow, i18n("Property details"),
-		KDialogBase::Close | KDialogBase::User1,
+		KDialogBase::Close | KDialogBase::User1 | KDialogBase::Help,
 		KDialogBase::Close, this, "propertyStatusDialog", false, false,
 		updateGuiItem
 	);
+	propertyStatusDialog->setHelp("ingredients-tab");
 	statusTextView = new QTextEdit(0);
 	statusTextView->setTextFormat( Qt::RichText );
 	statusTextView->setReadOnly(true);
