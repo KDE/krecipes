@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include "widgets/unitcombobox.h"
+#include "widgets/prepmethodcombobox.h"
 #include "widgets/fractioninput.h"
 #include "datablocks/weight.h"
 #include "backends/recipedb.h"
@@ -50,7 +51,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	weightUnitBox = new UnitComboBox( groupBox1, db, Unit::Mass );
 	weightUnitBox->reload();
 	
-	groupBox1Layout->addWidget( weightUnitBox, 0, 2 );
+	groupBox1Layout->addMultiCellWidget( weightUnitBox, 0, 0, 2, 3 );
 	
 	perAmountLabel = new QLabel( groupBox1, "perAmountLabel" );
 	
@@ -64,6 +65,10 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	perAmountUnitBox->reload();
 	
 	groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
+
+	prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18n("-No Preparation-") );
+	prepMethodBox->reload();
+	groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
 	
 	languageChange();
 	clearWState( WState_Polished );
@@ -108,6 +113,8 @@ Weight CreateIngredientWeightDialog::weight() const
 	w.perAmountUnitID = perAmountUnitBox->id( perAmountUnitBox->currentItem() );
 	w.weight = weightEdit->value().toDouble();
 	w.weightUnitID = weightUnitBox->id( weightUnitBox->currentItem() );
+	w.prepMethodID = prepMethodBox->id( prepMethodBox->currentItem() );
+	w.prepMethod = prepMethodBox->currentText();
 
 	return w;
 }

@@ -25,11 +25,12 @@ class PrepMethodComboBox : public KComboBox
 	Q_OBJECT
 
 public:
-	PrepMethodComboBox( bool, QWidget *parent, RecipeDB *db );
+	PrepMethodComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString::null );
 
 	void reload();
 	int id( int row );
 	int id( const QString &ing );
+	void setSelected( int prepID );
 
 private slots:
 	void createPrepMethod( const Element &element );
@@ -40,6 +41,7 @@ private slots:
 private:
 	RecipeDB *database;
 	QMap<int, int> prepMethodComboRows; // Contains the prep method id for every given row in the combobox
+	QString m_specialItem;
 };
 
 #endif //PREPMETHODCOMBOBOX_H

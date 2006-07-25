@@ -19,7 +19,7 @@ libkrecipeswidgets_la_SOURCES= \
 	inglistviewitem.cpp kdateedit.cpp kdatepickerpopup.cpp \
 	headerlistview.cpp ratingwidget.cpp kwidgetlistbox.cpp \
 	ratingdisplaywidget.ui criteriacombobox.cpp ingredientinputwidget.cpp \
-	unitcombobox.cpp amountunitinput.cpp
+	unitcombobox.cpp amountunitinput.cpp weightinput.cpp
 
 
 libkrecipeswidgets_la_METASOURCES=AUTO

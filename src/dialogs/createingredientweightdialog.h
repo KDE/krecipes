@@ -25,6 +25,7 @@ class QPushButton;
 
 class FractionInput;
 class UnitComboBox;
+class PrepMethodComboBox;
 class RecipeDB;
 class Weight;
 
@@ -53,6 +54,7 @@ private:
 	QLabel* perAmountLabel;
 	QLabel* weightLabel;
 	UnitComboBox* perAmountUnitBox;
+	PrepMethodComboBox* prepMethodBox;
 };
 
 #endif // CREATEINGREDIENTWEIGHTDIALOG_H

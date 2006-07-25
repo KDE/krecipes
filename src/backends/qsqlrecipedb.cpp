@@ -1170,22 +1170,24 @@ void QSqlRecipeDB::addIngredientWeight( const Weight &w )
 {
 	QString command;
 	if ( w.id != -1 ) {
-		command = QString( "UPDATE ingredient_weights SET ingredient_id=%1,amount=%2,unit_id=%3,weight=%4,weight_unit_id=%5 WHERE id=%6" )
+		command = QString( "UPDATE ingredient_weights SET ingredient_id=%1,amount=%2,unit_id=%3,weight=%4,weight_unit_id=%5,prep_method_id=%7 WHERE id=%6" )
 		  .arg(w.ingredientID)
 		  .arg(w.perAmount)
 		  .arg(w.perAmountUnitID)
 		  .arg(w.weight)
 		  .arg(w.weightUnitID)
-		  .arg(w.id);
+		  .arg(w.id)
+		  .arg(w.prepMethodID);
 	}
 	else {
-		command = QString( "INSERT INTO ingredient_weights VALUES(%6,%1,%2,%3,%4,%5)" )
+		command = QString( "INSERT INTO ingredient_weights VALUES(%6,%1,%2,%3,%4,%5,%7)" )
 		  .arg(w.ingredientID)
 		  .arg(w.perAmount)
 		  .arg(w.perAmountUnitID)
 		  .arg(w.weight)
 		  .arg(w.weightUnitID)
-		  .arg(getNextInsertIDStr( "ingredient_weights", "id" ));
+		  .arg(getNextInsertIDStr( "ingredient_weights", "id" ))
+		  .arg(w.prepMethodID);
 	}
 	QSqlQuery query( command, database );
 }
@@ -1634,26 +1636,49 @@ double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 		return ( -1 );
 }
 
-double QSqlRecipeDB::ingredientWeight( const Ingredient &ing )
+double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproximated )
 {
-	QString command = QString( "SELECT amount,weight FROM ingredient_weights WHERE ingredient_id=%1 AND unit_id=%2" )
+	QStringList prepMethods;
+	for ( ElementList::const_iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it ) {
+		prepMethods << QString::number((*it).id);
+	}
+
+	QString command = QString( "SELECT amount,weight,prep_method_id FROM ingredient_weights WHERE ingredient_id=%1 AND unit_id=%2" )
 	   .arg( ing.ingredientID )
 	   .arg( ing.units.id );
 	QSqlQuery query( command, database );
 
-	if ( query.isActive() && query.next() ) {
-		double amount = query.value( 0 ).toDouble();
-		return ing.amount / amount * query.value( 1 ).toDouble();
+	if ( query.isActive() ) {
+		//store the amount for the entry with no prep method.  If no other suitable entry is found, we'll guesstimate
+		//the weight using this entry
+		double convertedAmount = -1;
+		while ( query.next() ) {
+			int prepMethodID = query.value( 2 ).toInt();
+			if ( (ing.prepMethodList.count() == 0 && prepMethodID == -1) || ing.prepMethodList.containsId( prepMethodID ) ) {
+				if ( wasApproximated ) *wasApproximated = false;
+				double amount = query.value( 0 ).toDouble();
+				return ing.amount / amount * query.value( 1 ).toDouble();
+			}
+			if ( prepMethodID == -1 ) {
+				convertedAmount = ing.amount / query.value( 0 ).toDouble() * query.value( 1 ).toDouble();
+			}
+		}
+		//no matching prep method found, use entry without a prep method if there was one
+		if ( convertedAmount > 0 ) {
+			if ( wasApproximated ) *wasApproximated = true;
+			kdDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method."<<endl;
+			return convertedAmount;
+		}
 	}
-	else
-		return -1;
+
+	return -1;
 }
 
 WeightList QSqlRecipeDB::ingredientWeightUnits( int ingID )
 {
 	WeightList list;
 
-	QString command = QString( "SELECT id,amount,unit_id,weight,weight_unit_id FROM ingredient_weights WHERE ingredient_id=%1" ).arg( ingID );
+	QString command = QString( "SELECT id,amount,unit_id,weight,weight_unit_id,prep_method_id FROM ingredient_weights WHERE ingredient_id=%1" ).arg( ingID );
 	QSqlQuery query( command, database );
 	if ( query.isActive() ) {
 		while ( query.next() ) {
@@ -1663,6 +1688,7 @@ WeightList QSqlRecipeDB::ingredientWeightUnits( int ingID )
 			w.perAmountUnitID = query.value(2).toInt();
 			w.weight = query.value(3).toDouble();
 			w.weightUnitID = query.value(4).toInt();
+			w.prepMethodID = query.value(5).toInt();
 			w.ingredientID = ingID;
 			list.append(w);
 		}
@@ -1814,6 +1840,16 @@ QString QSqlRecipeDB::categoryName( int ID )
 QString QSqlRecipeDB::ingredientName( int ID )
 {
 	QString command = QString( "SELECT name FROM ingredients WHERE id=%1" ).arg( ID );
+	QSqlQuery toLoad( command, database );
+	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
+		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );
+
+	return ( QString::null );
+}
+
+QString QSqlRecipeDB::prepMethodName( int ID )
+{
+	QString command = QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ID );
 	QSqlQuery toLoad( command, database );
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );

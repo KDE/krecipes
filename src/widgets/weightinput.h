@@ -7,35 +7,36 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#ifndef WEIGHT_H
-#define WEIGHT_H
+#ifndef WEIGHTINPUT_H
+#define WEIGHTINPUT_H
 
-#include <qstring.h>
-#include <qvaluelist.h>
+#include "widgets/amountunitinput.h"
+#include "datablocks/unit.h"
 
-#include "datablocks/elementlist.h"
+class RecipeDB;
+class PrepMethodComboBox;
+class Element;
+class Weight;
 
-class Weight
+class WeightInput : public AmountUnitInput
 {
+Q_OBJECT
+
 public:
-	Weight();
+	WeightInput( QWidget *parent, RecipeDB *database, Unit::Type type = Unit::All, MixedNumber::Format f = MixedNumber::MixedNumberFormat );
 
-	int id;
-	int ingredientID;
-	int perAmountUnitID;
-	QString perAmountUnit;
-	double perAmount;
-	int weightUnitID;
-	double weight;
-	QString weightUnit;
-	int prepMethodID;
-	QString prepMethod;
+	Element prepMethod() const;
+	void setPrepMethod( const Element & );
+
+public slots:
+	void emitValueChanged();
+
+signals:
+	void valueChanged( const Weight & );
+
+private:
+	PrepMethodComboBox *prepMethodBox;
+
+	RecipeDB *m_database;
 };
-
-class WeightList : public QValueList<Weight>
-{
-public:
-	WeightList() : QValueList<Weight>(){}
-};
-
 #endif

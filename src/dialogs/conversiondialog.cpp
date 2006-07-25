@@ -133,6 +133,10 @@ void ConversionDialog::convert()
 		resultLabel->setText( i18n( "<b>Result:</b>" ) );
 		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
 		break;
+	case RecipeDB::MismatchedPrepMethod:
+		resultLabel->setText( i18n( "<b>Approximated result:</b>" ) );
+		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
+		break;
 	case RecipeDB::MissingUnitConversion:
 		resultLabel->setText( i18n( "<b>Error:</b>" ) );
 		resultText->setText( i18n("Missing unit conversion") );

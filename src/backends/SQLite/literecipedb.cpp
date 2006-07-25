@@ -140,8 +140,14 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_properties" )
 		commands << "CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
-	else if ( tableName == "ingredient_weights" )
-		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, PRIMARY KEY (id) );";
+	else if ( tableName == "ingredient_weights" ) {
+		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER, PRIMARY KEY (id) );"
+
+		<< "CREATE index wid_index ON ingredient_weights(weight_unit_id)"
+		<< "CREATE index pid_index ON ingredient_weights(prep_method_id)"
+		<< "CREATE index uid_index ON ingredient_weights(unit_id)"
+		<< "CREATE index iid_index ON ingredient_weights(ingredient_id)";
+	}
 
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
@@ -891,6 +897,12 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->exec( "UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)';" );
 		database->commit();
+	}
+
+	if ( qRound(version*100) < 95 ) {
+		database->exec( "DROP TABLE ingredient_weights" );
+		createTable( "ingredient_weights" );
+		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
 }
 

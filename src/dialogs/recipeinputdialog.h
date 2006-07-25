@@ -135,7 +135,8 @@ private:
 
 	KWidgetListbox *ratingListDisplayWidget;
 
-	QMap<int,QString> propertyStatusMap;
+	QMap<int,QString> propertyStatusMapRed;
+	QMap<int,QString> propertyStatusMapYellow;
 
 	// Internal functions
 	int createNewYieldIfNecessary( const QString &yield );

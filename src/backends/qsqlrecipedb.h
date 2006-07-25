@@ -190,13 +190,14 @@ public:
 	void saveUnitRatio( const UnitRatio *ratio );
 
 	double unitRatio( int unitID1, int unitID2 );
-	double ingredientWeight( const Ingredient &ing );
+	double ingredientWeight( const Ingredient &ing, bool *wasApproximated = 0 );
 	WeightList ingredientWeightUnits( int ingID );
 
 	QString escapeAndEncode( const QString &s ) const;
 	QString unescapeAndDecode( const QCString &s ) const;
 
 	QString categoryName( int ID );
+	QString prepMethodName( int ID );
 	QString ingredientName( int ID );
 	IngredientProperty propertyName( int ID );
 	Unit unitName( int ID );

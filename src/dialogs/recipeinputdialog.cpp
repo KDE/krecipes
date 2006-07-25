@@ -60,6 +60,8 @@
 
 #include "profiling.h"
 
+typedef enum ColorStatus { GreenStatus, RedStatus, YellowStatus };
+
 ClickableLed::ClickableLed( QWidget *parent ) : KLed(parent)
 {
 }
@@ -553,9 +555,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 
 	reload();
 
-	propertyStatusMap.clear();
 	propertyStatusDialog->hide();
-
 	updatePropertyStatus();
 
 	//Enable changed() signals
@@ -839,7 +839,13 @@ void RecipeInputDialog::removeIngredient( void )
 
 		IngredientData &ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
 		loadedRecipe->ingList.removeSubstitute( ing );
-		propertyStatusMap.remove( ing_item->ingredient().ingredientID );
+
+		int ingID = ing_item->ingredient().ingredientID;
+		QMap<int,QString>::iterator map_it;
+		if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
+			propertyStatusMapRed.remove( map_it );
+		else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
+			propertyStatusMapYellow.remove( map_it );
 		showStatusIndicator();
 
 		//Remove it from the instruction's completion
@@ -859,7 +865,13 @@ void RecipeInputDialog::removeIngredient( void )
 		for ( IngListViewItem * sub_item = (IngListViewItem*)header->firstChild(); sub_item; sub_item = (IngListViewItem*)sub_item->nextSibling() ) {
 			IngredientData &ing = loadedRecipe->ingList.findSubstitute( sub_item->ingredient() );
 			loadedRecipe->ingList.removeSubstitute( ing );
-			propertyStatusMap.remove( sub_item->ingredient().ingredientID );
+
+			int ingID = sub_item->ingredient().ingredientID;
+			QMap<int,QString>::iterator map_it;
+			if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
+				propertyStatusMapRed.remove( map_it );
+			else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
+				propertyStatusMapYellow.remove( map_it );
 			showStatusIndicator();
 
 			//Remove it from the instruction's completion
@@ -1073,6 +1085,11 @@ void RecipeInputDialog::newRecipe( void )
 	//Set focus to the title
 	titleEdit->setFocus();
 	titleEdit->selectAll();
+
+	//clear status info
+	propertyStatusMapRed.clear();
+	propertyStatusMapYellow.clear();
+	showStatusIndicator();
 }
 
 bool RecipeInputDialog::everythingSaved()
@@ -1434,6 +1451,9 @@ void RecipeInputDialog::addIngredientHeader( const Element &header )
 
 void RecipeInputDialog::updatePropertyStatus()
 {
+	propertyStatusMapRed.clear();
+	propertyStatusMapYellow.clear();
+
 	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it ) {
 		updatePropertyStatus( *ing_it, false );
 	}
@@ -1447,7 +1467,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	database->loadProperties( &ingPropertyList, ing.ingredientID );
 
 	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No nutrient information available")).arg(ing.name));
+		propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No nutrient information available")).arg(ing.name));
 	}
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
@@ -1458,13 +1478,13 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 		QMap<int,bool>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
 		if ( cache_it == ratioCache.end() ) {
 			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-			ratioCache.insert((*prop_it).perUnit.id,status==RecipeDB::Success);
+			ratioCache.insert((*prop_it).perUnit.id,status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
 
 			switch ( status ) {
 			case RecipeDB::Success: break;
 			case RecipeDB::MissingUnitConversion: {
 				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"))
+					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"))
 						.arg(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
 						.arg((*prop_it).perUnit.name)
 						.arg(ing.name));
@@ -1490,7 +1510,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						  .arg(fromUnit)
 						  .arg(propUnit);	
 					}
-					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either an appropriate ingredient weight entry is needed, or Krecipes needs conversion information to perform one of the following conversions: %2"))
+					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either an appropriate ingredient weight entry is needed, or Krecipes needs conversion information to perform one of the following conversions: %2"))
 					  .arg(ing.name)
 					  .arg("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
 					);
@@ -1498,7 +1518,10 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight entries")).arg(ing.name));
+				propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight entries")).arg(ing.name));
+				break;
+			case RecipeDB::MismatchedPrepMethod:
+				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %1")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>"));
 				break;
 			default: kdDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
 			}
@@ -1511,10 +1534,17 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 
 void RecipeInputDialog::showStatusIndicator()
 {
-	if ( propertyStatusMap.count() == 0 ) {
-		propertyStatusLed->setColor( Qt::green );
-		propertyStatusLabel->setText( i18n("Complete") );
-		propertyStatusButton->setEnabled(false);
+	if ( propertyStatusMapRed.count() == 0 ) {
+		if ( propertyStatusMapYellow.count() == 0 ) {
+			propertyStatusLed->setColor( Qt::green );
+			propertyStatusLabel->setText( i18n("Complete") );
+			propertyStatusButton->setEnabled(false);
+		}
+		else {
+			propertyStatusLed->setColor( Qt::yellow );
+			propertyStatusLabel->setText( i18n("Complete, but approximations made") );
+			propertyStatusButton->setEnabled(true);
+		}
 	}
 	else {
 		propertyStatusLed->setColor( Qt::red );
@@ -1522,7 +1552,7 @@ void RecipeInputDialog::showStatusIndicator()
 		propertyStatusButton->setEnabled(true);
 	}
 
-	if ( propertyStatusMap.count() == 0 )
+	if ( propertyStatusMapRed.count() == 0 && propertyStatusMapYellow.count() == 0 )
 		propertyStatusDialog->hide();
 	else
 		statusTextView->setText(statusMessage());
@@ -1532,15 +1562,28 @@ QString RecipeInputDialog::statusMessage() const
 {
 	QString statusMessage;
 
-	statusMessage.append( i18n("The nutrient information for this recipe is incomplete because the following information is missing:") );
-
-	statusMessage.append("<ul>");
-	for ( QMap<int,QString>::const_iterator it = propertyStatusMap.begin(); it != propertyStatusMap.end(); ++it ) {
-		statusMessage.append("<li>");
-		statusMessage.append(it.data());
-		statusMessage.append("</li>");
+	if ( propertyStatusMapRed.count() > 0 ) {
+		statusMessage.append( i18n("The nutrient information for this recipe is incomplete because the following information is missing:") );
+		statusMessage.append("<ul>");
+		for ( QMap<int,QString>::const_iterator it = propertyStatusMapRed.begin(); it != propertyStatusMapRed.end(); ++it ) {
+			statusMessage.append("<li>");
+			statusMessage.append(it.data());
+			statusMessage.append("</li>");
+		}
+		statusMessage.append("</ul>");
 	}
-	statusMessage.append("<ul>");
+
+	if ( propertyStatusMapYellow.count() > 0 ) {
+		statusMessage.append( i18n("The following approximations will be made when determining nutrient information:") );
+		statusMessage.append("<ul>");
+		for ( QMap<int,QString>::const_iterator it = propertyStatusMapYellow.begin(); it != propertyStatusMapYellow.end(); ++it ) {
+			statusMessage.append("<li>");
+			statusMessage.append(it.data());
+			statusMessage.append("</li>");
+		}
+		statusMessage.append("</ul>");
+	}
+
 	return statusMessage;
 }
 

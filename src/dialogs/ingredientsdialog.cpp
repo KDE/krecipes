@@ -22,7 +22,7 @@
 #include "selectunitdialog.h"
 #include "dependanciesdialog.h"
 #include "widgets/ingredientlistview.h"
-#include "widgets/amountunitinput.h"
+#include "widgets/weightinput.h"
 #include "dialogs/ingredientgroupsdialog.h"
 #include "dialogs/createingredientweightdialog.h"
 
@@ -46,11 +46,13 @@ public:
 	void setWeight( const Weight &w ) { m_weight = w; }
 	Weight weight() const { return m_weight; }
 
-	void setAmountUnit( double amount, const Unit &unit )
+	void setAmountUnit( double amount, const Unit &unit, const Element &prepMethod )
 	{
 		m_weight.perAmount = amount;
 		m_weight.perAmountUnitID = unit.id;
 		m_weight.perAmountUnit = (m_weight.perAmount>1)?unit.plural:unit.name;
+		m_weight.prepMethodID = prepMethod.id;
+		m_weight.prepMethod = prepMethod.name;
 	}
 
 	void setWeightUnit( double weight, const Unit &unit )
@@ -65,7 +67,9 @@ public:
 		if ( c == 0 )
 			return QString::number(m_weight.weight)+" "+m_weight.weightUnit;
 		else if ( c == 1 )
-			return QString::number(m_weight.perAmount)+" "+m_weight.perAmountUnit;
+			return QString::number(m_weight.perAmount)+" "
+			  +m_weight.perAmountUnit
+			  +((m_weight.prepMethodID!=-1)?", "+m_weight.prepMethod:QString::null);
 		else
 			return QString::null;
 	}
@@ -256,9 +260,12 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	weightsListView->listView()->addChild( weightInputBox );
 	weightInputBox->hide();
 
-	perAmountInputBox = new AmountUnitInput( weightsListView->listView()->viewport(), database, Unit::All, MixedNumber::DecimalFormat );
+	perAmountInputBox = new WeightInput( weightsListView->listView()->viewport(), database, Unit::All, MixedNumber::DecimalFormat );
 	weightsListView->listView()->addChild( perAmountInputBox );
 	perAmountInputBox->hide();
+
+	weightsListView->listView()->setColumnWidth( 0, weightInputBox->width() );
+	weightsListView->listView()->setColumnWidth( 1, perAmountInputBox->width() );
 
 	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
 
@@ -354,7 +361,9 @@ void IngredientsDialog::addWeight()
 			QListViewItem * lastElement = weightsListView->listView()->lastItem();
 	
 			WeightListItem *weight_it = new WeightListItem( weightsListView->listView(), lastElement, w );
-			weight_it->setAmountUnit( w.perAmount, database->unitName(w.perAmountUnitID) );
+			weight_it->setAmountUnit( w.perAmount, database->unitName(w.perAmountUnitID),
+			  Element(w.prepMethod,w.prepMethodID)
+			);
 			weight_it->setWeightUnit( w.weight, database->unitName(w.weightUnitID) );
 		}
 	}
@@ -383,7 +392,7 @@ void IngredientsDialog::setWeights()
 
 	if ( perAmountInputBox->isShown() ) {
 		WeightListItem *it = (WeightListItem*)perAmountInputBox->item();
-		it->setAmountUnit( perAmountInputBox->amount().toDouble(), perAmountInputBox->unit() );
+		it->setAmountUnit( perAmountInputBox->amount().toDouble(), perAmountInputBox->unit(), perAmountInputBox->prepMethod() );
 		w = it->weight();
 
 		perAmountInputBox->setShown(false);
@@ -407,10 +416,14 @@ void IngredientsDialog::itemRenamed( QListViewItem* item, const QPoint &, int co
 	}
 	else if ( col == 1 ) {
 		insertIntoListView(item,1,perAmountInputBox);
+
 		perAmountInputBox->setAmount( w.perAmount );
+
 		Unit u;
 		u.id = w.perAmountUnitID;
 		perAmountInputBox->setUnit( u );
+
+		perAmountInputBox->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
 	}
 }
 
@@ -542,7 +555,10 @@ void IngredientsDialog::reloadWeightList( void )
 
 			Weight w = *weight_it;
 			WeightListItem *weight_it = new WeightListItem( weightsListView->listView(), lastElement, w );
-			weight_it->setAmountUnit( w.perAmount, database->unitName(w.perAmountUnitID) );
+			weight_it->setAmountUnit( w.perAmount,
+			  database->unitName(w.perAmountUnitID),
+			  Element((w.prepMethodID==-1)?QString::null:database->prepMethodName(w.prepMethodID),w.prepMethodID)
+			);
 			weight_it->setWeightUnit( w.weight, database->unitName(w.weightUnitID) );
 		}
 	}

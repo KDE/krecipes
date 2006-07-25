@@ -83,7 +83,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.94;
+	return 0.95;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -220,14 +220,19 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 			return MissingUnitConversion;
 		}
 
- 		kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<endl;
+		bool noPrepMethod;
 
 		Ingredient i;
 		i.ingredientID = from.ingredientID;
 		i.units.id = unitID;
 		i.amount = from.amount * fromToWeightRatio;
-		result.amount = ingredientWeight( i ) * weightToToRatio;
+		i.prepMethodList = from.prepMethodList;
+		result.amount = ingredientWeight( i, &noPrepMethod ) * weightToToRatio;
 		result.units = to;
+
+		if ( noPrepMethod )
+			return MismatchedPrepMethod;
+
 		return Success;
 	}
 	else {

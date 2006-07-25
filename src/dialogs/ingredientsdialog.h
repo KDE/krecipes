@@ -34,6 +34,7 @@ class UnitsDialog;
 class IngredientGroupsDialog;
 class MixedNumber;
 class AmountUnitInput;
+class WeightInput;
 
 class IngredientsDialog: public QWidget
 {
@@ -62,7 +63,7 @@ private:
 	QPushButton* pushButton5;
 	KDoubleNumInput* inputBox;
 	AmountUnitInput* weightInputBox;
-	AmountUnitInput* perAmountInputBox;
+	WeightInput* perAmountInputBox;
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods

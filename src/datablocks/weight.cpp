@@ -9,6 +9,6 @@
 
 #include "weight.h"
 
-Weight::Weight() : id(-1)
+Weight::Weight() : id(-1), prepMethodID(-1)
 {}
 

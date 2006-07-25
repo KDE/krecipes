@@ -94,7 +94,8 @@ public:
 		MissingUnitConversion,
 		MissingIngredientWeight,
 		MissingIngredient,
-		InvalidTypes
+		InvalidTypes,
+		MismatchedPrepMethod
 	};
 
 public slots:
@@ -296,7 +297,7 @@ public:
 	virtual double unitRatio( int unitID1, int unitID2 ) = 0;
 
 	/** @returns the number of grams in the given amount of the ingredient, or -1 on failure */
-	virtual double ingredientWeight( const Ingredient &ing ) = 0;
+	virtual double ingredientWeight( const Ingredient &ing, bool *wasApproximated = 0 ) = 0;
 	virtual WeightList ingredientWeightUnits( int ingID ) = 0;
 
 	virtual QString escapeAndEncode( const QString &s ) const = 0;
@@ -304,6 +305,7 @@ public:
 
 	virtual QString categoryName( int ID ) = 0;
 	virtual QString ingredientName( int ID ) = 0;
+	virtual QString prepMethodName( int ID ) = 0;
 	virtual IngredientProperty propertyName( int ID ) = 0;
 	virtual Unit unitName( int ID ) = 0;
 

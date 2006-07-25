@@ -51,8 +51,9 @@ public:
 	}
 };
 
-PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db ) : KComboBox( b, parent ),
-		database( db )
+PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db, const QString &specialItem ) : 
+  KComboBox( b, parent ),
+  database( db ), m_specialItem(specialItem)
 {
 	setAutoDeleteCompletionObject(true);
 	setCompletionObject(new PrepMethodCompletion());
@@ -60,7 +61,9 @@ PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db ) 
 
 void PrepMethodComboBox::reload()
 {
-	QString remember_text = lineEdit()->text();
+	QString remember_text;
+	if ( editable() )
+		remember_text = lineEdit()->text();
 
 	ElementList prepMethodList;
 	database->loadPrepMethods( &prepMethodList );
@@ -69,13 +72,19 @@ void PrepMethodComboBox::reload()
 	prepMethodComboRows.clear();
 
 	int row = 0;
+	if ( !m_specialItem.isNull() ) {
+		insertItem(m_specialItem);
+		prepMethodComboRows.insert( row, -1 );
+		row++;
+	}
 	for ( ElementList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it, ++row ) {
 		insertItem((*it).name);
 		completionObject()->addItem((*it).name);
 		prepMethodComboRows.insert( row,(*it).id );
 	}
 
-	lineEdit()->setText( remember_text );
+	if ( editable() )
+		lineEdit()->setText( remember_text );
 
 	database->disconnect( this );
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
@@ -157,6 +166,18 @@ int PrepMethodComboBox::findInsertionPoint( const QString &name )
 	}
 
 	return count();
+}
+
+void PrepMethodComboBox::setSelected( int prepID )
+{
+	//do a reverse lookup on the row->id map
+	QMap<int, int>::const_iterator it;
+	for ( it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
+		if ( it.data() == prepID ) {
+			setCurrentItem(it.key());
+			break;
+		}
+	}
 }
 
 #include "prepmethodcombobox.moc"
