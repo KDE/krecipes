@@ -1487,7 +1487,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						  .arg(ingUnit)
 						  .arg(toUnit)
 						  .arg(fromUnit)
-						  .arg(propUnit);
+						  .arg(propUnit);	
 					}
 					propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either an appropriate ingredient weight entry is needed, or Krecipes needs conversion information to perform one of the following conversions: %2"))
 					  .arg(ing.name)
@@ -1497,7 +1497,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight.")).arg(ing.name));
+				propertyStatusMap.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight entries")).arg(ing.name));
 				break;
 			default: kdDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
 			}
