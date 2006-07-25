@@ -18,6 +18,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qvbox.h>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -29,82 +30,71 @@
 #include "widgets/fractioninput.h"
 
 ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl ), m_database(db)
+		: KDialogBase( parent, "createElementDialog", true, i18n( "Measurement Converter" ),
+		    KDialogBase::Close, KDialogBase::Close ),
+		m_database(db)
 {
-	if ( !name )
-		setName( "ConversionDialog" );
 	setSizeGripEnabled( TRUE );
-	ConversionDialogLayout = new QVBoxLayout( this, 11, 6, "ConversionDialogLayout");
+
+	QVBox *page = makeVBoxMainWidget();
 	
-	layout4 = new QGridLayout( 0, 1, 1, 0, 6, "layout4"); 
+	QWidget *gridWidget = new QWidget(page);
+	layout4 = new QGridLayout( gridWidget, 1, 1, 0, 6, "layout4"); 
 	
-	ingredientBox = new IngredientComboBox( FALSE, this, db, i18n( "--Ingredient (optional)--" ) );
+	ingredientBox = new IngredientComboBox( FALSE, gridWidget, db, i18n( "--Ingredient (optional)--" ) );
 	ingredientBox->reload();
 	
 	layout4->addWidget( ingredientBox, 0, 3 );
 	
-	convertLabel = new QLabel( this, "convertLabel" );
+	convertLabel = new QLabel( gridWidget, "convertLabel" );
 	
 	layout4->addWidget( convertLabel, 0, 0 );
 	
-	toUnitBox = new UnitComboBox( this, db );
+	toUnitBox = new UnitComboBox( gridWidget, db );
 	toUnitBox->reload();
 	
 	layout4->addWidget( toUnitBox, 1, 1 );
 	
-	fromUnitBox = new UnitComboBox( this, db );
+	fromUnitBox = new UnitComboBox( gridWidget, db );
 	fromUnitBox->reload();
 	
 	layout4->addWidget( fromUnitBox, 0, 2 );
 	
-	amountEdit = new FractionInput( this );
+	amountEdit = new FractionInput( gridWidget );
 	
 	layout4->addWidget( amountEdit, 0, 1 );
 	
-	toLabel = new QLabel( this, "toLabel" );
+	toLabel = new QLabel( gridWidget, "toLabel" );
 	
 	layout4->addWidget( toLabel, 1, 0 );
-	ConversionDialogLayout->addLayout( layout4 );
-	
-	layout6 = new QHBoxLayout( 0, 0, 6, "layout6"); 
+
+	QWidget *layout6Widget = new QWidget(page);
+	layout6 = new QHBoxLayout( layout6Widget, 0, 6, "layout6"); 
 	Horizontal_Spacing2_2 = new QSpacerItem( 124, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout6->addItem( Horizontal_Spacing2_2 );
 	
-	convertButton = new QPushButton( this, "convertButton" );
+	convertButton = new QPushButton( layout6Widget, "convertButton" );
 	convertButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, convertButton->sizePolicy().hasHeightForWidth() ) );
 	layout6->addWidget( convertButton );
 	Horizontal_Spacing2_3 = new QSpacerItem( 124, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout6->addItem( Horizontal_Spacing2_3 );
-	ConversionDialogLayout->addLayout( layout6 );
 	
-	layout7 = new QHBoxLayout( 0, 0, 6, "layout7"); 
+	QWidget *layout7Widget = new QWidget(page);
+	layout7 = new QHBoxLayout( layout7Widget, 0, 6, "layout7"); 
 	
-	resultLabel = new QLabel( this, "resultLabel" );
+	resultLabel = new QLabel( layout7Widget, "resultLabel" );
 	layout7->addWidget( resultLabel );
 	
-	resultText = new QLabel( this, "resultText" );
+	resultText = new QLabel( layout7Widget, "resultText" );
 	resultText->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, resultText->sizePolicy().hasHeightForWidth() ) );
 	layout7->addWidget( resultText );
-	ConversionDialogLayout->addLayout( layout7 );
-	
-	Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
-	
-	buttonHelp = new QPushButton( this, "buttonHelp" );
-	buttonHelp->setAutoDefault( TRUE );
-	Layout1->addWidget( buttonHelp );
-	Horizontal_Spacing2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	Layout1->addItem( Horizontal_Spacing2 );
-	
-	buttonClose = new QPushButton( this, "buttonClose" );
-	buttonClose->setAutoDefault( TRUE );
-	Layout1->addWidget( buttonClose );
-	ConversionDialogLayout->addLayout( Layout1 );
+
 	languageChange();
-	resize( QSize(412, 163).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
+
+	setInitialSize( QSize(412, 163).expandedTo(minimumSizeHint()) );
 	
 	// signals and slots connections
-	connect( buttonClose, SIGNAL( clicked() ), this, SLOT( accept() ) );
+	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
 	connect( convertButton, SIGNAL( clicked() ), this, SLOT( convert() ) );
 }
 
@@ -122,16 +112,11 @@ ConversionDialog::~ConversionDialog()
  */
 void ConversionDialog::languageChange()
 {
-	setCaption( i18n( "Measurement Converter" ) );
 	convertLabel->setText( i18n( "Convert" ) );
 	toLabel->setText( i18n( "To" ) );
 	convertButton->setText( i18n( "Convert" ) );
 	resultLabel->setText( i18n( "<b>Result:</b>" ) );
 	resultText->setText( QString::null );
-	buttonHelp->setText( i18n( "&Help" ) );
-	buttonHelp->setAccel( QKeySequence( i18n( "F1" ) ) );
-	buttonClose->setText( i18n( "&Close" ) );
-	buttonClose->setAccel( QKeySequence( i18n( "Alt+C" ) ) );
 }
 
 void ConversionDialog::convert()

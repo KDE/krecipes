@@ -13,10 +13,11 @@
 #ifndef SELECTCATEGORIESDIALOG_H
 #define SELECTCATEGORIESDIALOG_H
 
-#include <qdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+
 #include <klistview.h>
+#include <kdialogbase.h>
 
 #include "datablocks/elementlist.h"
 
@@ -28,7 +29,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class SelectCategoriesDialog: public QDialog
+class SelectCategoriesDialog: public KDialogBase
 {
 
 	Q_OBJECT
@@ -42,9 +43,6 @@ private:
 
 	//Widgets
 	CategoryCheckListView *categoryListView;
-	QGridLayout *layout;
-	QPushButton *okButton;
-	QPushButton *cancelButton;
 
 	//Variables
 	RecipeDB *database;

@@ -13,6 +13,8 @@
 #include "selectcategoriesdialog.h"
 #include "createcategorydialog.h"
 
+#include <qvbox.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -22,46 +24,31 @@
 #include "backends/recipedb.h"
 #include "widgets/categorylistview.h"
 
-SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db ) : QDialog( parent, 0, true )
+SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db )
+		: KDialogBase( parent, "SelectCategoriesDialog", true, i18n("Categories"),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		database(db)
 {
-
-	// Store pointer
-	database = db;
+	QVBox *page = makeVBoxMainWidget();
 
 	//Design UI
-	layout = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
 	//Category List
-	categoryListView = new CategoryCheckListView( this, db, true, items_on );
+	categoryListView = new CategoryCheckListView( page, db, true, items_on );
 	categoryListView->reload();
-	layout->addMultiCellWidget( categoryListView, 0, 0, 0, 1 );
 
 	//New category button
-	QPushButton *newCatButton = new QPushButton( this );
+	QPushButton *newCatButton = new QPushButton( page );
 	newCatButton->setText( i18n( "&New Category..." ) );
 	newCatButton->setFlat( true );
-	layout->addMultiCellWidget( newCatButton, 1, 1, 0, 1 );
-
-	//Ok/Cancel buttons
-	okButton = new QPushButton( this );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setFlat( true );
-	okButton->setDefault( true );
-	layout->addWidget( okButton, 2, 0 );
-
-	cancelButton = new QPushButton( this );
-	cancelButton->setText( i18n( "&Cancel" ) );
-	cancelButton->setFlat( true );
-	layout->addWidget( cancelButton, 2, 1 );
 
 	// Load the list
 	loadCategories( items_on );
 
+	setSizeGripEnabled( true );
+
 	// Connect signals & Slots
 	connect ( newCatButton, SIGNAL( clicked() ), SLOT( createNewCategory() ) );
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
-
 }
 
 SelectCategoriesDialog::~SelectCategoriesDialog()

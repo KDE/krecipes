@@ -17,11 +17,12 @@
 #include <klocale.h>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList )
-		: QDialog( parent )
+		: KDialogBase( parent, "SelectUnitDialog", true, i18n( "Choose Unit" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	container = new QVBoxLayout( this, 5, 5 );
+	QVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( this );
+	box = new QGroupBox( page );
 	box->setTitle( i18n( "Choose Unit" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
@@ -39,26 +40,9 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList )
 	unitChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( unitChooseView );
 
-	QHBoxLayout *buttonsLayout = new QHBoxLayout( this, 0, 6 );
-	okButton = new QPushButton( box );
-	okButton->setGeometry( QRect( 5, 300, 100, 20 ) );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setFlat( true );
-	buttonsLayout->addWidget( okButton );
-
-	cancelButton = new QPushButton( box );
-	cancelButton->setGeometry( QRect( 110, 300, 60, 20 ) );
-	cancelButton->setText( i18n( "&Cancel" ) );
-	cancelButton->setFlat( true );
-	buttonsLayout->addWidget( cancelButton );
-
-	boxLayout->addLayout( buttonsLayout );
-	container->addWidget( box );
 	resize( QSize( 200, 350 ) );
 
 	loadUnits( unitList );
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 

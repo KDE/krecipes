@@ -14,19 +14,20 @@
 #define SELECTUNITDIALOG_H
 
 #include <qwidget.h>
-#include <qdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qvbox.h>
+
 #include <klistview.h>
+#include <kdialogbase.h>
 
 #include "datablocks/unit.h"
 
 /**
 @author Unai Garro
 */
-class SelectUnitDialog : public QDialog
+class SelectUnitDialog : public KDialogBase
 {
 public:
 	SelectUnitDialog( QWidget* parent, const UnitList &unitList );
@@ -37,12 +38,9 @@ public:
 
 private:
 	//Widgets
-	QVBoxLayout *container;
 	QGroupBox *box;
-	QVBox *vbox;
 	KListView *unitChooseView;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
+
 	void loadUnits( const UnitList &unitList );
 
 };

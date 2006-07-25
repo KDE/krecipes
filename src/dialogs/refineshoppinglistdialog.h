@@ -12,8 +12,9 @@
 #define REFINESHOPPINGLISTDIALOG_H
 
 #include <qvariant.h>
-#include <qdialog.h>
 #include <qmap.h>
+
+#include <kdialogbase.h>
 
 #include "datablocks/ingredientlist.h"
 
@@ -29,7 +30,7 @@ class RecipeDB;
 class ElementList;
 class KreListView;
 
-class RefineShoppingListDialog : public QDialog
+class RefineShoppingListDialog : public KDialogBase
 {
 	Q_OBJECT
 
@@ -42,15 +43,10 @@ public:
 	QPushButton* addButton;
 	QPushButton* removeButton;
 	KreListView* ingListView;
-	QPushButton* doneButton;
 
 protected:
-	QVBoxLayout* refineShoppingListDialogLayout;
-	QHBoxLayout* layout2;
 	QVBoxLayout* layout1;
 	QSpacerItem* spacer1;
-	QHBoxLayout* layout3;
-	QSpacerItem* spacer2;
 
 protected slots:
 	virtual void languageChange();

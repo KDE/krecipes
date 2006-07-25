@@ -29,38 +29,26 @@
 #include "widgets/krelistview.h"
 #include "datablocks/weight.h"
 
-USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent ) : KDialog( parent, 0, true ),
+USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent )
+		: KDialogBase( parent, "usdaDataDialog", true, 
+		    QString( i18n( "Load ingredient properties for: \"%1\"" ) ).arg( ingredient.name ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		ingredient( ing ),
 		database( db )
 {
-	setCaption( QString( i18n( "Load ingredient properties for: \"%1\"" ) ).arg( ingredient.name ) );
+	QVBox *page = makeVBoxMainWidget();
 
-	QHBoxLayout *hbox_layout = new QHBoxLayout( this, 11, 6 );
+	setButtonText( KDialogBase::Ok, i18n( "&Load" ) );
 
-	QVBox *left_box = new QVBox( this );
-	KreListView *krelistview = new KreListView( left_box, QString::null, true, 0 );
+	KreListView *krelistview = new KreListView( page, QString::null, true, 0 );
 
 	listView = krelistview->listView();
 	listView->addColumn( i18n( "USDA Ingredient" ) );
 	listView->addColumn( i18n( "Id" ) );
 	listView->setAllColumnsShowFocus( true );
 
-	hbox_layout->addWidget( left_box );
-
-	QVBoxLayout *right_layout = new QVBoxLayout( 0, 0, 6 );
-	QPushButton *ok_button = new QPushButton( i18n( "&Load" ), this );
-	right_layout->addWidget( ok_button );
-	QPushButton *cancel_button = new QPushButton( i18n( "&Cancel" ), this );
-	right_layout->addWidget( cancel_button );
-	QSpacerItem* spacer = new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	right_layout->addItem( spacer );
-
-	hbox_layout->addLayout( right_layout );
-
 	loadDataFromFile();
 
-	connect( cancel_button, SIGNAL( clicked() ), SLOT( reject() ) );
-	connect( ok_button, SIGNAL( clicked() ), SLOT( importSelected() ) );
 	connect( listView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( importSelected() ) );
 }
 
@@ -100,7 +88,7 @@ void USDADataDialog::loadDataFromFile()
 	}
 }
 
-void USDADataDialog::importSelected()
+void USDADataDialog::slotOk()
 {
 	QListViewItem * item = listView->selectedItem();
 	if ( item ) {

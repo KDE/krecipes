@@ -12,7 +12,7 @@
 
 #include <qpushbutton.h>
 #include <qgroupbox.h>
-#include <qhbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -28,11 +28,12 @@
 #include "datablocks/kreborder.h"
 
 BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char* name )
-		: QDialog( parent, name, true )
+		: KDialogBase( parent, name, true, QString::null,
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	BorderDialogLayout = new QVBoxLayout( this, 11, 6, "BorderDialogLayout" );
+	QVBox *page = makeVBoxMainWidget();
 
-	borderGroupBox = new QGroupBox( this, "borderGroupBox" );
+	borderGroupBox = new QGroupBox( page, "borderGroupBox" );
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
 	borderGroupBox->layout() ->setSpacing( 6 );
 	borderGroupBox->layout() ->setMargin( 11 );
@@ -85,26 +86,12 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	borderPreview = new KHTMLPart( borderGroupBox );
 	borderPreview->view() ->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 	borderGroupBoxLayout->addWidget( borderPreview->view() );
-	BorderDialogLayout->addWidget( borderGroupBox );
-
-	QHBoxLayout *bottom_layout = new QHBoxLayout( 0, 0, 6 );
-	QSpacerItem* spacer = new QSpacerItem( 20, 40, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	bottom_layout->addItem( spacer );
-	QPushButton *ok_button = new QPushButton( i18n( "&OK" ), this );
-	bottom_layout->addWidget( ok_button );
-	QPushButton *cancel_button = new QPushButton( i18n( "&Cancel" ), this );
-	bottom_layout->addWidget( cancel_button );
-
-	BorderDialogLayout->addLayout( bottom_layout );
 
 	languageChange();
 
 	connect( widthSpinBox, SIGNAL( valueChanged( int ) ), SLOT( updatePreview() ) );
 	connect( widthListBox, SIGNAL( highlighted( int ) ), SLOT( updateSpinBox( int ) ) );
 	connect( styleListBox, SIGNAL( highlighted( int ) ), SLOT( updatePreview() ) );
-
-	connect( ok_button, SIGNAL( clicked() ), SLOT( accept() ) );
-	connect( cancel_button, SIGNAL( clicked() ), SLOT( reject() ) );
 
 	initListBoxs();
 	loadBorder( border );

@@ -13,7 +13,7 @@
 #ifndef RESIZERECIPEDIALOG_H
 #define RESIZERECIPEDIALOG_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class Recipe;
 
@@ -32,7 +32,7 @@ class QPushButton;
 /**
   *@author Jason Kivlighn
   */
-class ResizeRecipeDialog : public QDialog
+class ResizeRecipeDialog : public KDialogBase
 {
 	Q_OBJECT
 
@@ -60,14 +60,10 @@ private:
 	QFrame* factorFrame;
 	QLabel* factorLabel;
 	FractionInput* factorInput;
-	QPushButton* buttonOk;
-	QPushButton* buttonCancel;
 
-	QVBoxLayout* resizeRecipeDialogLayout;
 	QVBoxLayout* buttonGroupLayout;
 	QGridLayout* yieldFrameLayout;
 	QHBoxLayout* factorFrameLayout;
-	QHBoxLayout* Layout1;
 };
 
 #endif //RESIZERECIPEDIALOG_H

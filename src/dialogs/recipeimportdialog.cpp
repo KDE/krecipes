@@ -17,6 +17,7 @@
 #include <klistview.h>
 #include <kdebug.h>
 
+#include <qvbox.h>
 #include <qlayout.h>
 #include <qheader.h>
 #include <qvariant.h>
@@ -24,37 +25,24 @@
 
 #include "datablocks/recipe.h"
 
-RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent ) : QDialog( parent, 0, true ), list_copy( list )
+RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent )
+		: KDialogBase( parent, "RecipeImportDialog", true, i18n( "Import Recipes" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		list_copy( list )
 {
-	Form1Layout = new QHBoxLayout( this, 11, 6 );
+	setButtonBoxOrientation( Vertical );
 
-	kListView = new KListView( this );
+	QVBox *page = makeVBoxMainWidget();
+
+	kListView = new KListView( page );
 	kListView->addColumn( i18n( "Recipes" ) );
 	kListView->setProperty( "selectionMode", "NoSelection" );
 	kListView->setRootIsDecorated( true );
 	kListView->setAllColumnsShowFocus( true );
 
-	Form1Layout->addWidget( kListView );
-
-	layout2 = new QVBoxLayout( 0, 0, 6 );
-
-	okButton = new KPushButton( this );
-	okButton->setDefault( TRUE );
-	layout2->addWidget( okButton );
-
-	cancelButton = new KPushButton( this );
-	layout2->addWidget( cancelButton );
-	QSpacerItem* spacer = new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout2->addItem( spacer );
-	Form1Layout->addLayout( layout2 );
-
 	languageChange();
 
-	resize( QSize( 600, 480 ).expandedTo( minimumSizeHint() ) );
-	clearWState( WState_Polished );
-
-	connect( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+	setInitialSize( QSize( 600, 480 ).expandedTo( minimumSizeHint() ) );
 
 	loadListView();
 }
@@ -66,10 +54,6 @@ RecipeImportDialog::~RecipeImportDialog()
 
 void RecipeImportDialog::languageChange()
 {
-	setCaption( i18n( "Import Recipes" ) );
-
-	okButton->setText( i18n( "&OK" ) );
-	cancelButton->setText( i18n( "&Cancel" ) );
 }
 
 void RecipeImportDialog::loadListView()

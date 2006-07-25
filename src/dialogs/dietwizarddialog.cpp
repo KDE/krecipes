@@ -226,8 +226,10 @@ void DietWizardDialog::createDiet( void )
 		}
 	}
 
-	if ( alert )
+	if ( alert ) {
+		KApplication::restoreOverrideCursor();
 		KMessageBox::sorry( this, i18n( "I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. " ) );
+	}
 
 	else // show the resulting diet
 	{
@@ -240,15 +242,15 @@ void DietWizardDialog::createDiet( void )
 			dishNumbers << dishNo;
 		}
 
+		KApplication::restoreOverrideCursor();
+
 		// display the list
-		DietViewDialog *dietDisplay = new DietViewDialog( 0, *dietRList, dayNumber, mealNumber, dishNumbers );
-		connect( dietDisplay, SIGNAL( signalOk() ), this, SLOT( createShoppingList() ) );
-		dietDisplay->show();
+		DietViewDialog dietDisplay( this, *dietRList, dayNumber, mealNumber, dishNumbers );
+		connect( &dietDisplay, SIGNAL( signalOk() ), this, SLOT( createShoppingList() ) );
+		dietDisplay.exec();
 	}
 
 	END_TIMER();
-
-	KApplication::restoreOverrideCursor();
 }
 
 

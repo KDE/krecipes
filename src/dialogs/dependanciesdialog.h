@@ -15,18 +15,18 @@
 #ifndef DEPENDANCIESDIALOG_H
 #define DEPENDANCIESDIALOG_H
 
-#include <qdialog.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
+
 #include <klistview.h>
+#include <kdialogbase.h>
 
 class ElementList;
 
 /**
 @author Unai Garro
 */
-class DependanciesDialog: public QDialog
+class DependanciesDialog: public KDialogBase
 {
 public:
 	//Methods
@@ -44,10 +44,6 @@ private:
 	QGroupBox *ingredientBox;
 	QGroupBox *propertiesBox;
 
-	QGroupBox *buttonBox;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
-
 	KListView *recipeListView;
 	KListView *ingredientListView;
 	KListView *propertiesListView;
@@ -56,8 +52,6 @@ private:
 
 	// Methods
 	void loadList( KListView* listView, const ElementList *list );
-
-
 };
 
 #endif

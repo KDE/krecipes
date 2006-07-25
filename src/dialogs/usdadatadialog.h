@@ -11,7 +11,7 @@
 #ifndef USDADATADIALOG_H
 #define USDADATADIALOG_H
 
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 #include <qstringlist.h>
 #include <qvaluelist.h>
@@ -23,7 +23,7 @@ class RecipeDB;
 class KListView;
 class KLineEdit;
 
-class USDADataDialog : public KDialog
+class USDADataDialog : public KDialogBase
 {
 	Q_OBJECT
 
@@ -43,7 +43,7 @@ private:
 	QValueList<QStringList> loaded_data;
 
 private slots:
-	void importSelected();
+	void slotOk();
 };
 
 #endif //USDADATADIALOG_H

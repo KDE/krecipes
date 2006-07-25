@@ -15,37 +15,26 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers ) : QWidget( parent )
+DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers )
+		: KDialogBase( parent, "dietViewDialog", true, QString::null,
+		    KDialogBase::User2 | KDialogBase::Close | KDialogBase::User1, KDialogBase::User2 )
 {
+	setButtonGuiItem( KDialogBase::User1, KStdGuiItem::print() );
+	setButtonText( KDialogBase::User2, i18n( "Create &Shopping List" ) );
 
 	// Design the dialog
-
-	// Border spacers
-	layout = new QGridLayout( this, 1, 1, 0, 0 );
-	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_left, 1, 0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_top, 0, 1 );
-	QSpacerItem* spacer_right = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_right, 1, 2 );
-	QSpacerItem* spacer_bottom = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_bottom, 2, 1 );
+	QVBox *page = makeVBoxMainWidget();
 
 	// The html part
-	htmlBox = new QVBox ( this );
-	layout->addWidget( htmlBox, 1, 1 );
-	dietView = new KHTMLPart( htmlBox );
-	// Buttons
-	KIconLoader il;
-	buttonBox = new QHBox( htmlBox );
-	okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Create &Shopping List" ), buttonBox );
-	printButton = new QPushButton( il.loadIconSet( "fileprint", KIcon::Small ), i18n( "&Print" ), buttonBox );
-	cancelButton = new QPushButton( il.loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonBox );
+	dietView = new KHTMLPart( page );
 
+	setInitialSize( QSize(350, 450) );
 
-	connect( okButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-	connect( cancelButton, SIGNAL( clicked() ), this, SLOT( close() ) );
-	connect( printButton, SIGNAL( clicked() ), this, SLOT( print() ) );
+	setSizeGripEnabled( true );
+
+	connect ( this, SIGNAL( user2Clicked() ), this, SLOT( slotOk() ) );
+ 	connect ( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
+	connect ( this, SIGNAL( user1Clicked() ), this, SLOT( print() ) );
 
 	// Show the diet
 	showDiet( recipeList, dayNumber, mealNumber, dishNumbers );

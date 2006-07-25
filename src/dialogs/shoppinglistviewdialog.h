@@ -16,12 +16,14 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qwidget.h>
+
 #include <khtml_part.h>
 #include <khtmlview.h>
+#include <kdialogbase.h>
 
 class IngredientList;
 
-class ShoppingListViewDialog: public QWidget
+class ShoppingListViewDialog: public KDialogBase
 {
 	Q_OBJECT
 
@@ -35,8 +37,6 @@ public slots:
 private:
 
 	// Widgets
-	QGridLayout* layout;
-	QVBox *htmlBox;
 	KHTMLPart *shoppingListView;
 
 	// Internal Methods

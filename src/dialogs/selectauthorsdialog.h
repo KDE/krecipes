@@ -13,9 +13,10 @@
 #ifndef SELECTAUTHORSDIALOG_H
 #define SELECTAUTHORSDIALOG_H
 
-#include <qdialog.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+
+#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klistview.h>
 #include <kcombobox.h>
@@ -27,7 +28,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class SelectAuthorsDialog: public QDialog
+class SelectAuthorsDialog: public KDialogBase
 {
 
 	Q_OBJECT

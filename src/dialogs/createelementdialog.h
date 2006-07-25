@@ -13,17 +13,18 @@
 #ifndef CREATEELEMENTDIALOG_H
 #define CREATEELEMENTDIALOG_H
 
-#include <qdialog.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qvbox.h>
+
 #include <klineedit.h>
+#include <kdialogbase.h>
 
 /**
 @author Unai Garro
 */
-class CreateElementDialog : public QDialog
+class CreateElementDialog : public KDialogBase
 {
 public:
 	CreateElementDialog( QWidget *parent, const QString &text );
@@ -32,13 +33,8 @@ public:
 
 private:
 	//Widgets
-	QVBoxLayout *container;
 	QGroupBox *box;
-	QVBox *vbox;
 	KLineEdit *elementEdit;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
-
 };
 
 #endif

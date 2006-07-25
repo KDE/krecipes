@@ -13,7 +13,7 @@
 #include "selectauthorsdialog.h"
 
 #include <qmessagebox.h>
-#include <qhbox.h>
+#include <qvbox.h>
 
 #include <kconfig.h>
 #include <kdialog.h>
@@ -23,19 +23,17 @@
 
 #include "backends/recipedb.h"
 
-SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db ) : QDialog( parent, 0, true )
+SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db )
+		: KDialogBase( parent, "SelectAuthorsDialog", true, i18n("Authors"),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		database(db)
 {
-
-
-	database = db;
+	QVBox *page = makeVBoxMainWidget();
 
 	//Design UI
 
-	QVBoxLayout *layout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
-
 	// Combo to Pick authors
-
-	QHBox *topBox = new QHBox(this);
+	QHBox *topBox = new QHBox(page);
 	topBox->setSpacing(6);
 
 	authorsCombo = new KComboBox( true, topBox );
@@ -54,12 +52,9 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	pm = il->loadIcon( "up", KIcon::NoGroup, 16 );
 	removeAuthorButton->setIconSet( pm );
 
-	layout->addWidget( topBox );
-
-
 	// Author List
 
-	authorListView = new KListView( this );
+	authorListView = new KListView( page );
 	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	KConfig * config = KGlobal::config();
@@ -68,22 +63,6 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	authorListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	authorListView->addColumn( i18n( "Author" ) );
 	authorListView->setAllColumnsShowFocus( true );
-	layout->addWidget( authorListView );
-
-
-	//Ok/Cancel buttons
-
-	QHBox *okCancelButtonBox = new QHBox( this );
-	okCancelButtonBox->setSpacing( 10 );
-	layout->addWidget( okCancelButtonBox );
-
-	okButton = new QPushButton( okCancelButtonBox );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setFlat( true );
-
-	cancelButton = new QPushButton( okCancelButtonBox );
-	cancelButton->setText( i18n( "&Cancel" ) );
-	cancelButton->setFlat( true );
 
 	// Load the list
 	loadAuthors( currentAuthors );
@@ -92,8 +71,6 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	resize(450, height());
 
 	// Connect signals & Slots
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 	connect ( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
 	connect ( removeAuthorButton, SIGNAL( clicked() ), this, SLOT( removeAuthor() ) );
 }

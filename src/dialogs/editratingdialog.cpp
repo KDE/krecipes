@@ -25,6 +25,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qpainter.h>
+#include <qvbox.h>
 
 #include <kpopupmenu.h>
 #include <klocale.h>
@@ -52,11 +53,10 @@ public:
 };
 
 
-EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name ) : KDialog(parent,name)
+EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name )
+		: KDialogBase( parent, "EditRatingDialog", true, i18n( "Rating" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	if ( !name )
-		setName( "EditRatingDialog" );
-
 	init(criteriaList);
 	loadRating(rating);
 }
@@ -66,59 +66,39 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
  *  name 'name' and widget flags set to 'f'.
  */
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
-    : KDialog( parent, name )
+		: KDialogBase( parent, "EditRatingDialog", true, i18n( "Rating" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	if ( !name )
-		setName( "EditRatingDialog" );
-
 	init(criteriaList);
 }
 
 void EditRatingDialog::init( const ElementList &criteriaList )
 {
-	EditRatingDialogLayout = new QVBoxLayout( this, 11, 6, "EditRatingDialogLayout"); 
+	QVBox *page = makeVBoxMainWidget();
 	
-	layout2 = new QHBoxLayout( 0, 0, 6, "layout2"); 
+	layout2 = new QHBox( page );
 	
-	raterLabel = new QLabel( this, "raterLabel" );
-	layout2->addWidget( raterLabel );
+	raterLabel = new QLabel( layout2, "raterLabel" );
+	raterEdit = new QLineEdit( layout2, "raterEdit" );
 	
-	raterEdit = new QLineEdit( this, "raterEdit" );
-	layout2->addWidget( raterEdit );
-	EditRatingDialogLayout->addLayout( layout2 );
+	layout8 = new QHBox( page );
 	
-	layout8 = new QHBoxLayout( 0, 0, 6, "layout8"); 
+	criteriaLabel = new QLabel( layout8, "criteriaLabel" );
 	
-	criteriaLabel = new QLabel( this, "criteriaLabel" );
-	layout8->addWidget( criteriaLabel );
-	
-	criteriaComboBox = new QComboBox( FALSE, this, "criteriaComboBox" );
+	criteriaComboBox = new QComboBox( FALSE, layout8, "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
-	layout8->addWidget( criteriaComboBox );
 	
-	starsLabel = new QLabel( this, "starsLabel" );
-	layout8->addWidget( starsLabel );
-	/*
-	starsSpinBox = new KDoubleSpinBox( this, "starsSpinBox" );
-	starsSpinBox->setMaxValue( 5 );
-	starsSpinBox->setLineStep( 0.5 );
-	layout8->addWidget( starsSpinBox );
-*/
-	starsWidget = new RatingWidget( 5, this, "starsWidget" );
-	//starsWidget->setMaxValue( 5 );
-	layout8->addWidget( starsWidget );
-	
-	addButton = new QPushButton( this, "addButton" );
-	layout8->addWidget( addButton );
+	starsLabel = new QLabel( layout8, "starsLabel" );
 
-	removeButton = new QPushButton( this, "removeButton" );
-	layout8->addWidget( removeButton );
-
-	EditRatingDialogLayout->addLayout( layout8 );
+	starsWidget = new RatingWidget( 5, layout8, "starsWidget" );
 	
-	criteriaListView = new RatingCriteriaListView( this, "criteriaListView" );
+	addButton = new QPushButton( layout8, "addButton" );
+
+	removeButton = new QPushButton( layout8, "removeButton" );
+
+	criteriaListView = new RatingCriteriaListView( page, "criteriaListView" );
 	criteriaListView->addColumn( i18n( "Criteria" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
@@ -126,24 +106,11 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->setItemsRenameable( true );
 	criteriaListView->setRenameable( 0, true );
 	criteriaListView->setRenameable( 1, true );
-	EditRatingDialogLayout->addWidget( criteriaListView );
 	
-	commentsLabel = new QLabel( this, "commentsLabel" );
-	EditRatingDialogLayout->addWidget( commentsLabel );
+	commentsLabel = new QLabel( page, "commentsLabel" );
 	
-	commentsEdit = new QTextEdit( this, "commentsEdit" );
-	EditRatingDialogLayout->addWidget( commentsEdit );
+	commentsEdit = new QTextEdit( page, "commentsEdit" );
 	
-	layout7 = new QHBoxLayout( 0, 0, 6, "layout7"); 
-	
-	okButton = new QPushButton( this, "okButton" );
-	layout7->addWidget( okButton );
-	
-	cancelButton = new QPushButton( this, "cancelButton" );
-	layout7->addWidget( cancelButton );
-	buttonsSpacer = new QSpacerItem( 240, 21, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout7->addItem( buttonsSpacer );
-	EditRatingDialogLayout->addLayout( layout7 );
 	languageChange();
 	resize( QSize(358, 331).expandedTo(minimumSizeHint()) );
 	clearWState( WState_Polished );
@@ -151,8 +118,6 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	connect( criteriaListView, SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), this, SLOT(itemRenamed(QListViewItem*,const QString &,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( removeButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
-	connect( okButton, SIGNAL(clicked()), this, SLOT(accept()) );
-	connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
 	KIconLoader il;
 	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
@@ -180,7 +145,6 @@ EditRatingDialog::~EditRatingDialog()
  */
 void EditRatingDialog::languageChange()
 {
-	setCaption( i18n( "Rating" ) );
 	criteriaLabel->setText( i18n( "Criteria:" ) );
 	starsLabel->setText( i18n( "Stars:" ) );
 	addButton->setText( i18n( "Add" ) );
@@ -189,10 +153,6 @@ void EditRatingDialog::languageChange()
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
 	commentsLabel->setText( i18n( "Comments:" ) );
 	raterLabel->setText( i18n( "Rater:" ) );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setAccel( QKeySequence( i18n( "Alt+O" ) ) );
-	cancelButton->setText( i18n( "&Cancel" ) );
-	cancelButton->setAccel( QKeySequence( i18n( "Alt+C" ) ) );
 }
 
 void EditRatingDialog::itemRenamed(QListViewItem* it, const QString &, int c)

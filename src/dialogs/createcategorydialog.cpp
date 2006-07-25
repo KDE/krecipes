@@ -16,17 +16,19 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <qvbox.h>
 
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <klocale.h>
 
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
-		: QDialog( parent, 0, true )
+		: KDialogBase( parent, "createCategoryDialog", true, i18n( "New Category" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	container = new QVBoxLayout( this, 5, 5 );
-	box = new QGroupBox( this );
+	QVBox *page = makeVBoxMainWidget();
+
+	box = new QGroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
@@ -43,20 +45,8 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	boxLayout->addWidget( subcatHBox );
 	loadCategories( categories );
 
-	QHBoxLayout *button_hbox = new QHBoxLayout( 5 );
-	okButton = new QPushButton( i18n( "&OK" ), this );
-	cancelButton = new QPushButton( i18n( "&Cancel" ), this );
-	button_hbox->addWidget( okButton );
-	button_hbox->addWidget( cancelButton );
-	boxLayout->addLayout( button_hbox );
-
-	container->addWidget( box );
-
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
-
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 

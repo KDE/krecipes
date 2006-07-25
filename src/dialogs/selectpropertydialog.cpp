@@ -18,16 +18,18 @@
 
 #include "datablocks/ingredientpropertylist.h"
 
-SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList ) : QDialog( parent )
+SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList )
+		: KDialogBase( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 
 	// Initialize internal variables
 	unitListBack = new UnitList;
 
 	// Initialize Widgets
-	QVBoxLayout *layout = new QVBoxLayout( this, 11, 6 );
+	QVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( this );
+	box = new QGroupBox( page );
 	box->setTitle( i18n( "Choose Property" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
@@ -57,30 +59,12 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	layout2->addWidget( perUnitsBox );
 	boxLayout->addLayout( layout2 );
 
-	QHBoxLayout *layout1 = new QHBoxLayout;
-
-	okButton = new QPushButton( box );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setFlat( true );
-	layout1->addWidget( okButton );
-
-	cancelButton = new QPushButton( box );
-	cancelButton->setText( i18n( "&Cancel" ) );
-	cancelButton->setFlat( true );
-	layout1->addWidget( cancelButton );
-	boxLayout->addLayout( layout1 );
-	layout->addWidget( box );
-
 	resize( QSize( 200, 380 ).expandedTo( minimumSizeHint() ) );
 	clearWState( WState_Polished );
 
 	// Load data
 	loadProperties( propertyList );
 	loadUnits( unitList );
-
-	// Connect signals & Slots
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 

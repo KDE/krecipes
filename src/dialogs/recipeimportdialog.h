@@ -13,19 +13,16 @@
 #ifndef RECIPEIMPORTDIALOG_H
 #define RECIPEIMPORTDIALOG_H
 
-#include <qdialog.h>
 #include <qvaluelist.h>
 #include <qmap.h>
 #include <qlistview.h>
 
+#include <kdialogbase.h>
+
 #include "datablocks/recipelist.h"
 
-class KPushButton;
 class KListView;
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
 class QListViewItem;
 
 class Recipe;
@@ -34,7 +31,7 @@ class CustomCheckListItem;
 /**
   * @author Jason Kivlighn
   */
-class RecipeImportDialog : public QDialog
+class RecipeImportDialog : public KDialogBase
 {
 public:
 	RecipeImportDialog( const RecipeList &all_recipes, QWidget *parent = 0 );
@@ -49,11 +46,6 @@ private:
 	void loadListView();
 
 	KListView* kListView;
-	KPushButton* okButton;
-	KPushButton* cancelButton;
-
-	QHBoxLayout* Form1Layout;
-	QVBoxLayout* layout2;
 
 	QMap<CustomCheckListItem*, RecipeList::const_iterator> *recipe_items;
 	const RecipeList list_copy;

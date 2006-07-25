@@ -13,8 +13,9 @@
 #ifndef CREATECATEGORYDIALOG_H
 #define CREATECATEGORYDIALOG_H
 
-#include <qdialog.h>
 #include <qmap.h>
+
+#include <kdialogbase.h>
 
 #include "datablocks/elementlist.h"
 
@@ -28,7 +29,7 @@ class KComboBox;
 /**
 @author Jason Kivlighn
 */
-class CreateCategoryDialog : public QDialog
+class CreateCategoryDialog : public KDialogBase
 {
 public:
 	CreateCategoryDialog( QWidget *parent, const ElementList &categories );
@@ -40,12 +41,8 @@ private:
 	void loadCategories( const ElementList &categories );
 
 	//Widgets
-	QVBoxLayout *container;
 	QGroupBox *box;
-	QVBox *vbox;
 	KLineEdit *elementEdit;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
 	KComboBox* categoryComboBox;
 	QMap<QString, int> idMap;
 

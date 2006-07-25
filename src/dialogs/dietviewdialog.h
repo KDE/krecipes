@@ -15,11 +15,14 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qwidget.h>
+
 #include <khtml_part.h>
 #include <khtmlview.h>
+#include <kdialogbase.h>
+
 #include "datablocks/recipelist.h"
 
-class DietViewDialog: public QWidget
+class DietViewDialog: public KDialogBase
 {
 	Q_OBJECT
 
@@ -28,13 +31,7 @@ public:
 	~DietViewDialog();
 private:
 	// Widgets
-	QGridLayout *layout;
-	QVBox *htmlBox;
 	KHTMLPart *dietView;
-	QHBox *buttonBox;
-	QPushButton *okButton;
-	QPushButton *printButton;
-	QPushButton *cancelButton;
 
 	// Private methods
 	void showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers );

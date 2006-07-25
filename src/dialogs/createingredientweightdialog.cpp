@@ -10,13 +10,13 @@
 
 #include "createingredientweightdialog.h"
 
-#include <qvariant.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qvbox.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -27,12 +27,12 @@
 #include "backends/recipedb.h"
 
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
-    : QDialog( parent )
+		: KDialogBase( parent, "createIngWeightDialog", true, QString::null,
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	setName( "CreateIngredientWeightDialog" );
-	CreateIngredientWeightDialogLayout = new QVBoxLayout( this, 11, 6, "CreateIngredientWeightDialogLayout"); 
+	QVBox *page = makeVBoxMainWidget();
 	
-	groupBox1 = new QGroupBox( this, "groupBox1" );
+	groupBox1 = new QGroupBox( page );
 	groupBox1->setColumnLayout(0, Qt::Vertical );
 	groupBox1->layout()->setSpacing( 6 );
 	groupBox1->layout()->setMargin( 11 );
@@ -64,23 +64,9 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	perAmountUnitBox->reload();
 	
 	groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
-	CreateIngredientWeightDialogLayout->addWidget( groupBox1 );
 	
-	layout1 = new QHBoxLayout( 0, 0, 6, "layout1"); 
-	spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout1->addItem( spacer1 );
-	
-	cancelButton = new QPushButton( this, "cancelButton" );
-	layout1->addWidget( cancelButton );
-	
-	okButton = new QPushButton( this, "okButton" );
-	layout1->addWidget( okButton );
-	CreateIngredientWeightDialogLayout->addLayout( layout1 );
 	languageChange();
 	clearWState( WState_Polished );
-
-	connect( okButton, SIGNAL(clicked()), SLOT(validateAndAccept()) );
-	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
 }
 
 CreateIngredientWeightDialog::~CreateIngredientWeightDialog()
@@ -90,17 +76,12 @@ CreateIngredientWeightDialog::~CreateIngredientWeightDialog()
 
 void CreateIngredientWeightDialog::languageChange()
 {
-	setCaption( tr( "Form2" ) );
-	groupBox1->setTitle( tr( "New Ingredient Weight" ) );
-	perAmountLabel->setText( tr( "Per Amount:" ) );
-	weightLabel->setText( tr( "Weight:" ) );
-	cancelButton->setText( tr( "&Cancel" ) );
-	cancelButton->setAccel( QKeySequence( tr( "Alt+C" ) ) );
-	okButton->setText( tr( "&OK" ) );
-	okButton->setAccel( QKeySequence( tr( "Alt+O" ) ) );
+	groupBox1->setTitle( i18n( "New Ingredient Weight" ) );
+	perAmountLabel->setText( i18n( "Per Amount:" ) );
+	weightLabel->setText( i18n( "Weight:" ) );
 }
 
-void CreateIngredientWeightDialog::validateAndAccept()
+void CreateIngredientWeightDialog::slotOk()
 {
 	if ( !perAmountEdit->isInputValid() ) {
 		KMessageBox::error( this, i18n( "Amount field contains invalid input." ),

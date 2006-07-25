@@ -14,8 +14,8 @@
 
 #include <cmath>
 
+#include <qvbox.h>
 #include <qvariant.h>
-#include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qframe.h>
 #include <qlabel.h>
@@ -38,12 +38,14 @@
 #define FACTOR_RADIO_BUTTON 0
 #define SERVINGS_RADIO_BUTTON 1
 
-ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDialog( parent, 0, true ),
+ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
+		: KDialogBase( parent, "ResizeRecipeDialog", true, i18n( "Resize Recipe" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		m_recipe( recipe )
 {
-	resizeRecipeDialogLayout = new QVBoxLayout( this, 11, 6 );
+	QVBox *page = makeVBoxMainWidget();
 
-	buttonGroup = new QButtonGroup( this );
+	buttonGroup = new QButtonGroup( page );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
 	buttonGroup->setLineWidth( 0 );
 	buttonGroup->setColumnLayout( 0, Qt::Vertical );
@@ -98,26 +100,9 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	factorInput->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, factorInput->sizePolicy().hasHeightForWidth() ) );
 	factorFrameLayout->addWidget( factorInput );
 	buttonGroupLayout->addWidget( factorFrame );
-	resizeRecipeDialogLayout->addWidget( buttonGroup );
-
-	Layout1 = new QHBoxLayout( 0, 0, 6 );
-	QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	Layout1->addItem( spacer );
-
-	buttonOk = new QPushButton( this );
-	buttonOk->setAutoDefault( TRUE );
-	buttonOk->setDefault( TRUE );
-	Layout1->addWidget( buttonOk );
-
-	buttonCancel = new QPushButton( this );
-	buttonCancel->setAutoDefault( TRUE );
-	Layout1->addWidget( buttonCancel );
-	resizeRecipeDialogLayout->addLayout( Layout1 );
 
 	languageChange();
 
-	adjustSize();
-	clearWState( WState_Polished );
 
 	newYieldInput->setValue( m_recipe->yield.amount, 0 ); //Ignore the range info, it doesn't work in this context
 	currentYieldInput->setText( m_recipe->yield.toString() );
@@ -133,24 +118,17 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe ) : QDia
 	}
 
 	// signals and slots connections
-	connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 	connect( buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( activateCurrentOption( int ) ) );
 }
 
 void ResizeRecipeDialog::languageChange()
 {
-	setCaption( i18n( "Resize Recipe" ) );
 	buttonGroup->setTitle( QString::null );
 	yieldRadioButton->setText( i18n( "Scale by yield" ) );
 	newYieldLabel->setText( i18n( "New yield:" ) );
 	currentYieldLabel->setText( i18n( "Current yield:" ) );
 	factorRadioButton->setText( i18n( "Scale by factor" ) );
 	factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple):" ) );
-	buttonOk->setText( i18n( "&OK" ) );
-	buttonOk->setAccel( QKeySequence( QString::null ) );
-	buttonCancel->setText( i18n( "&Cancel" ) );
-	buttonCancel->setAccel( QKeySequence( QString::null ) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )

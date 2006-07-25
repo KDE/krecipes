@@ -13,7 +13,7 @@
 #ifndef CREATEUNITDIALOG_H
 #define CREATEUNITDIALOG_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
@@ -25,7 +25,7 @@
 /**
 @author Unai Garro
 */
-class CreateUnitDialog : public QDialog
+class CreateUnitDialog : public KDialogBase
 {
 public:
 	CreateUnitDialog( QWidget *parent, const QString &name = QString::null, const QString &plural = QString::null );
@@ -34,16 +34,11 @@ public:
 
 private:
 	//Widgets
-	QVBoxLayout *container;
 	QGroupBox *box;
-	QVBox *vbox;
 	KLineEdit *nameEdit;
 	KLineEdit *pluralEdit;
 	KLineEdit *nameAbbrevEdit;
 	KLineEdit *pluralAbbrevEdit;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
-
 };
 
 #endif

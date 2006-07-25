@@ -11,8 +11,7 @@
 #ifndef CREATEINGREDIENTWEIGHTDIALOG_H
 #define CREATEINGREDIENTWEIGHTDIALOG_H
 
-#include <qvariant.h>
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -29,7 +28,7 @@ class UnitComboBox;
 class RecipeDB;
 class Weight;
 
-class CreateIngredientWeightDialog : public QDialog
+class CreateIngredientWeightDialog : public KDialogBase
 {
 Q_OBJECT
 	
@@ -40,14 +39,11 @@ public:
 	Weight weight() const;
 
 protected:
-	QVBoxLayout* CreateIngredientWeightDialogLayout;
 	QGridLayout* groupBox1Layout;
-	QHBoxLayout* layout1;
-	QSpacerItem* spacer1;
 	
 protected slots:
 	virtual void languageChange();
-	void validateAndAccept();
+	void slotOk();
 
 private:
 	QGroupBox* groupBox1;
@@ -57,8 +53,6 @@ private:
 	QLabel* perAmountLabel;
 	QLabel* weightLabel;
 	UnitComboBox* perAmountUnitBox;
-	QPushButton* cancelButton;
-	QPushButton* okButton;
 };
 
 #endif // CREATEINGREDIENTWEIGHTDIALOG_H

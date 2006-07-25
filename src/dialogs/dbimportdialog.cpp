@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <qhbox.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -34,12 +35,15 @@
 #include <kurlrequester.h>
 #include <knuminput.h>
 
-DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, WFlags f ) : QDialog( parent, name, modal, f )
+DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
+		: KDialogBase( parent, name, true, i18n( "Database Import" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 0, 0, 0, sizePolicy().hasHeightForWidth() ) );
-	MyDialogLayout = new QHBoxLayout( this, 11, 6, "MyDialogLayout" );
+	setButtonBoxOrientation( Vertical );
 
-	dbButtonGroup = new QButtonGroup( this, "dbButtonGroup" );
+	QHBox *page = makeHBoxMainWidget();
+
+	dbButtonGroup = new QButtonGroup( page, "dbButtonGroup" );
 	dbButtonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 4, ( QSizePolicy::SizeType ) 5, 0, 0, dbButtonGroup->sizePolicy().hasHeightForWidth() ) );
 	dbButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	dbButtonGroup->layout() ->setSpacing( 6 );
@@ -56,9 +60,8 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 
 	psqlRadioButton = new QRadioButton( dbButtonGroup, "psqlRadioButton" );
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
-	MyDialogLayout->addWidget( dbButtonGroup );
 
-	paramStack = new QWidgetStack( this, "paramStack" );
+	paramStack = new QWidgetStack( page, "paramStack" );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
 	sqlitePage = new QWidget( paramStack, "sqlitePage" );
@@ -69,6 +72,10 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 	sqliteDBRequester = new KURLRequester( sqlitePage, "sqliteDBRequester" );
 	sqliteDBRequester->setShowLocalProtocol( false );
 	serverPageLayout_2->addWidget( sqliteDBRequester );
+
+	QSpacerItem *vSpacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	serverPageLayout_2->addItem(vSpacer);
+
 	paramStack->addWidget( sqlitePage, 1 );
 
 	serverPage = new QWidget( paramStack, "serverPage" );
@@ -104,31 +111,11 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 	nameLabel = new QLabel( serverPage, "nameLabel" );
 	layout5->addWidget( nameLabel, 4, 0 );
 
-
-
 	serverPageLayout->addLayout( layout5 );
 	paramStack->addWidget( serverPage, 0 );
-	MyDialogLayout->addWidget( paramStack );
-
-	Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5" );
-
-	buttonOk = new QPushButton( this, "buttonOk" );
-	buttonOk->setAutoDefault( TRUE );
-	buttonOk->setDefault( TRUE );
-	Layout5->addWidget( buttonOk );
-
-	buttonCancel = new QPushButton( this, "buttonCancel" );
-	buttonCancel->setAutoDefault( TRUE );
-	Layout5->addWidget( buttonCancel );
-	Spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	Layout5->addItem( Spacer1 );
-	MyDialogLayout->addLayout( Layout5 );
 
 	languageChange();
 
-	adjustSize();
-	setFixedHeight( height() );
-	clearWState( WState_Polished );
 
 #if (!HAVE_MYSQL)
 
@@ -158,17 +145,10 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name, bool modal, W
 
 	// signals and slots connections
 	connect( dbButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( switchDBPage( int ) ) );
-
-	connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
-
-DBImportDialog::~DBImportDialog()
-{}
 
 void DBImportDialog::languageChange()
 {
-	setCaption( i18n( "Database Import" ) );
 	dbButtonGroup->setTitle( i18n( "Database" ) );
 	liteRadioButton->setText( "SQLite" );
 	mysqlRadioButton->setText( "MySQL" );
@@ -179,10 +159,6 @@ void DBImportDialog::languageChange()
 	nameLabel->setText( i18n( "Database name:" ) );
 	portLabel->setText( i18n( "Port:" ) );
 	portEdit->setSpecialValueText( i18n("Default") );
-	buttonOk->setText( i18n( "&OK" ) );
-	buttonOk->setAccel( QKeySequence( QString::null ) );
-	buttonCancel->setText( i18n( "&Cancel" ) );
-	buttonCancel->setAccel( QKeySequence( QString::null ) );
 
 	//set defaults
 	hostEdit->setText( "localhost" );

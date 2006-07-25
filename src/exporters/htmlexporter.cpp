@@ -338,6 +338,8 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	QString ingredients_html;
 	config->setGroup( "Formatting" );
 
+	bool useAbbreviations = config->readBoolEntry("AbbreviateUnits");
+
 	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	QString ingredient_format = config->readEntry( "Ingredient", "%n%p: %a %u" );
@@ -385,7 +387,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			else if ( ( *ing_it ).amount <= 1e-10 )
 				amount_str = "";
 
-			QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
+			QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, useAbbreviations );
 
 			QString tmp_format( ingredient_format );
 			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *ing_it ).name ) );

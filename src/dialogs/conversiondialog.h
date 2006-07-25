@@ -11,8 +11,7 @@
 #ifndef CONVERSIONDIALOG_H
 #define CONVERSIONDIALOG_H
 
-#include <qvariant.h>
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -28,7 +27,7 @@ class UnitComboBox;
 class IngredientComboBox;
 class FractionInput;
 
-class ConversionDialog : public QDialog
+class ConversionDialog : public KDialogBase
 {
 Q_OBJECT
 	
@@ -45,11 +44,8 @@ public:
 	QPushButton* convertButton;
 	QLabel* resultLabel;
 	QLabel* resultText;
-	QPushButton* buttonHelp;
-	QPushButton* buttonClose;
 	
 protected:
-	QVBoxLayout* ConversionDialogLayout;
 	QGridLayout* layout4;
 	QHBoxLayout* layout6;
 	QSpacerItem* Horizontal_Spacing2_2;

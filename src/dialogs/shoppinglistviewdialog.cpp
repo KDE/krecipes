@@ -21,31 +21,21 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 
-ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList ) : QWidget( parent, "shoppingview", WDestructiveClose )
+ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
+		: KDialogBase( parent, "shoppingviewdialog", true, QString::null,
+		    KDialogBase::Close | KDialogBase::User1, KDialogBase::Close )
 {
+	setButtonGuiItem( KDialogBase::User1, KStdGuiItem::print() );
+
 	// Design dialog
+	QVBox *page = makeVBoxMainWidget();
 
-	layout = new QGridLayout( this, 1, 1, 0, 0 );
-	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_left, 1, 0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_top, 0, 1 );
-	QSpacerItem* spacer_right = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_right, 1, 5 );
+	shoppingListView = new KHTMLPart( page );
 
+	setInitialSize( QSize(350, 450) );
 
-	htmlBox = new QVBox ( this );
-	shoppingListView = new KHTMLPart( htmlBox );
-
-	KIconLoader *il = new KIconLoader;
-	QHBox *buttonsBox = new QHBox( htmlBox );
-	QPushButton *closeButton = new QPushButton( il->loadIconSet( "fileclose", KIcon::Small ), i18n( "&Close" ), buttonsBox );
-	QPushButton *printButton = new QPushButton( il->loadIconSet( "fileprint", KIcon::Small ), i18n( "&Print" ), buttonsBox );
-
-	connect( closeButton, SIGNAL( clicked() ), SLOT( close() ) );
-	connect( printButton, SIGNAL( clicked() ), SLOT( print() ) );
-
-	layout->addMultiCellWidget( htmlBox, 1, 4, 1, 4 );
+	connect ( this, SIGNAL( user1Clicked() ), this, SLOT( print() ) );
+	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
 
 	//---------- Sort the list --------
 	IngredientList list_copy = ingredientList;
@@ -63,8 +53,6 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 {
 	QString recipeHTML;
 
-
-
 	// Create HTML Code
 
 	// Headers
@@ -72,26 +60,27 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 	recipeHTML += "<center><div STYLE=\"width: 95%\">";
 	recipeHTML += QString( "<center><h1>%1</h1></center>" ).arg( i18n( "Shopping List" ) );
 
-
 	// Ingredient List
 
 	recipeHTML += "<div STYLE=\"border:medium solid blue; width:95%\"><table cellspacing=0px width=100%><tbody>";
-	int counter = 0;
+	bool counter = true;
+
+	KConfig *config = KGlobal::config();
+	config->setGroup( "Formatting" );
+
+	bool useAbbreviations = config->readBoolEntry("AbbreviateUnits");
+	bool useFraction = config->readBoolEntry( "Fraction" );
 
 	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it ) {
-		QString color;
-		if ( counter )
-			color = "#CBCEFF";
-		else
-			color = "#BFC2F0";
-		counter = 1 - counter;
+		QString color = ( counter ) ? "#CBCEFF" : "#BFC2F0";
+		counter = !counter;
 
-		KConfig *config = kapp->config();
-		config->setGroup( "Formatting" );
-		MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		MixedNumber::Format number_format = ( useFraction ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 		QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
 
-		recipeHTML += QString( "<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>" ).arg( color ).arg( ( *ing_it ).name ).arg( amount_str ).arg( ( *ing_it ).amount > 1 ? ( *ing_it ).units.plural : ( *ing_it ).units.name );
+		QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, useAbbreviations );
+
+		recipeHTML += QString( "<tr bgcolor=\"%1\"><td>- %2:</td><td>%3 %4</td></tr>" ).arg( color ).arg( ( *ing_it ).name ).arg( amount_str ).arg( unit );
 	}
 	recipeHTML += "</tbody></table></div>";
 	// Close

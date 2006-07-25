@@ -10,7 +10,7 @@
 #ifndef DBIMPORTDIALOG_H
 #define DBIMPORTDIALOG_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -31,12 +31,11 @@ class KIntNumInput;
 @author Jason Kivlighn
 */
 
-class DBImportDialog: public QDialog
+class DBImportDialog: public KDialogBase
 {
 	Q_OBJECT
 public:
-	DBImportDialog( QWidget *parent = 0, const char *name = 0, bool modal = true, WFlags f = 0 );
-	~DBImportDialog();
+	DBImportDialog( QWidget *parent = 0, const char *name = 0 );
 
 	QString dbType() const;
 	void serverParams( QString &host, QString &user, QString &pass, int &port, QString &table ) const;
@@ -62,16 +61,11 @@ private:
 	KIntNumInput *portEdit;
 	QWidget* sqlitePage;
 	KURLRequester* sqliteDBRequester;
-	QPushButton* buttonOk;
-	QPushButton* buttonCancel;
 
-	QHBoxLayout* MyDialogLayout;
 	QVBoxLayout* dbButtonGroupLayout;
 	QVBoxLayout* serverPageLayout;
 	QGridLayout* layout5;
 	QVBoxLayout* serverPageLayout_2;
-	QVBoxLayout* Layout5;
-	QSpacerItem* Spacer1;
 
 protected slots:
 	void languageChange();

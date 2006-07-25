@@ -32,18 +32,22 @@
 #include "datablocks/mixednumber.h"
 
 RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *db, const ElementList &recipeList )
-		: QDialog( parent, "refinedialog", true ),
+		: KDialogBase( parent, "refinedialog", true, QString::null,
+		    KDialogBase::Ok, KDialogBase::Ok ),
 		database( db )
 {
-	refineShoppingListDialogLayout = new QVBoxLayout( this, 11, 6 );
+	setButtonText( KDialogBase::Ok, i18n( "&Done" ) );
 
-	helpLabel = new QLabel( this, "helpLabel" );
+	QVBox *page = makeVBoxMainWidget();
+
+	helpLabel = new QLabel( page, "helpLabel" );
 	helpLabel->setTextFormat( QLabel::RichText );
-	refineShoppingListDialogLayout->addWidget( helpLabel );
 
-	layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
+	QWidget *layout2Widget = new QWidget(page);
 
-	allIngListView = new KreListView( this, QString::null, true, 0 );
+	QHBoxLayout *layout2 = new QHBoxLayout( layout2Widget, 0, 6, "layout2" );
+
+	allIngListView = new KreListView( layout2Widget, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->reload();
  	allIngListView->setListView(list_view);
@@ -53,12 +57,12 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	KIconLoader il;
 
-	addButton = new QPushButton( this, "addButton" );
+	addButton = new QPushButton( layout2Widget, "addButton" );
 	addButton->setIconSet( il.loadIconSet( "forward", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
-	removeButton = new QPushButton( this, "removeButton" );
+	removeButton = new QPushButton( layout2Widget, "removeButton" );
 	removeButton->setIconSet( il.loadIconSet( "back", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
@@ -66,7 +70,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout1->addItem( spacer1 );
 	layout2->addLayout( layout1 );
 
-	ingListView = new KreListView( this, QString::null, true );
+	ingListView = new KreListView( layout2Widget, QString::null, true );
 	ingListView->listView() ->addColumn( i18n( "Ingredients in Shopping List" ) );
 	ingListView->listView() ->addColumn( i18n( "Amount" ) );
 	ingListView->listView() ->addColumn( i18n( "Unit" ) );
@@ -75,21 +79,11 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	ingListView->listView() ->setRenameable( 1, true );
 	ingListView->listView() ->setRenameable( 2, true );
 	layout2->addWidget( ingListView );
-	refineShoppingListDialogLayout->addLayout( layout2 );
 
-	layout3 = new QHBoxLayout( 0, 0, 6, "layout3" );
-	spacer2 = new QSpacerItem( 391, 31, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout3->addItem( spacer2 );
-
-	doneButton = new QPushButton( this, "doneButton" );
-	doneButton->setDefault( TRUE );
-	layout3->addWidget( doneButton );
-	refineShoppingListDialogLayout->addLayout( layout3 );
 	languageChange();
 
 	clearWState( WState_Polished );
 
-	connect( doneButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( ingListView->listView(), SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( itemRenamed( QListViewItem*, const QString &, int ) ) );
@@ -111,13 +105,14 @@ void RefineShoppingListDialog::languageChange()
 	ingListView->listView() ->header() ->setLabel( 0, i18n( "Ingredients in Shopping List" ) );
 	ingListView->listView() ->header() ->setLabel( 1, i18n( "Amount" ) );
 	ingListView->listView() ->header() ->setLabel( 2, i18n( "Unit" ) );
-	doneButton->setText( i18n( "&Done" ) );
 }
 
 void RefineShoppingListDialog::accept()
 {
-	ShoppingListViewDialog * view = new ShoppingListViewDialog( 0, ingredientList );
-	view->show();
+	hide();
+
+	ShoppingListViewDialog view( this, ingredientList );
+	view.exec();
 
 	QDialog::accept();
 }

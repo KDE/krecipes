@@ -15,27 +15,23 @@
 #include "dependanciesdialog.h"
 #include "datablocks/elementlist.h"
 
-#include <qlayout.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList, bool deps_are_deleted ) : QDialog( parent, 0, true ),
-	recipeListView(0), propertiesListView(0), m_depsAreDeleted(deps_are_deleted)
-	
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList, bool deps_are_deleted )
+		: KDialogBase( parent, "DependanciesDialog", true, QString::null,
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		recipeListView(0), propertiesListView(0), m_depsAreDeleted(deps_are_deleted)
 {
-	int row = 3, col = 1;
+	QVBox *page = makeVBoxMainWidget();
 
 	// Design the dialog
-	QGridLayout *layout = new QGridLayout( this );
-	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_top, 0, 1 );
-	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_left, 1, 0 );
 
-	instructionsLabel = new QLabel( this );
+	instructionsLabel = new QLabel( page );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
@@ -47,14 +43,9 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following currently use the element you have chosen to be removed." ) );
 	}
 
-	layout->addWidget( instructionsLabel, 1, 1 );
-	QSpacerItem *instructions_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( instructions_spacer, 2, 1 );
-
-
 	if ( recipeList ) {
 		if ( !( recipeList->isEmpty() ) ) {
-			recipeBox = new QGroupBox( 1, Qt::Vertical, i18n( "Recipes" ), this );
+			recipeBox = new QGroupBox( 1, Qt::Vertical, i18n( "Recipes" ), page );
 			recipeListView = new KListView( recipeBox );
 
 			KConfig * config = KGlobal::config();
@@ -64,21 +55,13 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 
 			recipeListView->addColumn( i18n( "Recipe Title" ) );
 			recipeListView->setAllColumnsShowFocus( true );
-			layout->addWidget( recipeBox, row, col );
-			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-			layout->addItem( list_spacer, row + 1, col );
 			loadList( recipeListView, recipeList );
-			row += 2;
-			if ( row > 6 ) {
-				row = 3;
-				col += 2;
-			} // Only two listview rows per column
 		}
 	}
 
 	if ( propertiesList ) {
 		if ( !( propertiesList->isEmpty() ) ) {
-			propertiesBox = new QGroupBox( 1, Qt::Vertical, i18n( "Properties" ), this );
+			propertiesBox = new QGroupBox( 1, Qt::Vertical, i18n( "Properties" ), page );
 			propertiesListView = new KListView( propertiesBox );
 
 			KConfig * config = KGlobal::config();
@@ -87,53 +70,11 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 			propertiesListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 			
 			propertiesListView->addColumn( i18n( "Property" ) );
-			layout->addWidget( propertiesBox, row, col );
-			QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-			layout->addItem( list_spacer, row + 1, col );
 			loadList( propertiesListView, propertiesList );
-			row += 2;
-			if ( row > 6 ) {
-				row = 3;
-				col += 2;
-			} // Only two listview rows per column
 		}
 	}
 
-
-	// Put the necessary vertical spacers
-	if ( col > 1 )  // There have been multiple (2) rows, so add vertical spacer
-	{
-		QSpacerItem * list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-		layout->addItem( list_spacer, 4, 1 );
-	}
-
-
-	// Ok/Cancel Buttons
-	buttonBox = new QGroupBox( 2, Qt::Horizontal, this );
-	buttonBox->setFlat( true );
-	okButton = new QPushButton( buttonBox );
-	okButton->setText( i18n( "&OK" ) );
-	okButton->setFlat( true );
-	cancelButton = new QPushButton( buttonBox );
-	cancelButton->setText( i18n( "Cancel" ) );
-	cancelButton->setFlat( true );
-	cancelButton->setDefault( true );
-	QSpacerItem *list_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	if ( col > 1 )  // There are 2 rows
-	{
-		layout->addItem( list_spacer, 6, 1 );
-		layout->addMultiCellWidget( buttonBox, 7, 7, 1, col - 1 );
-	}
-	else // There is a single row (and single column)
-	{
-		layout->addItem( list_spacer, 4, 1 );
-		layout->addWidget( buttonBox, 5, 1 );
-	}
-
-	// Connect signals & slots
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
-	connect ( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
-
+	setSizeGripEnabled( true );
 }
 
 DependanciesDialog::~DependanciesDialog()

@@ -11,8 +11,7 @@
 #ifndef INGREDIENTPARSERDIALOG_H
 #define INGREDIENTPARSERDIALOG_H
 
-#include <qvariant.h>
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 #include "datablocks/ingredientlist.h"
 #include "datablocks/unit.h"
@@ -29,12 +28,12 @@ class KListView;
 class QListViewItem;
 class QPushButton;
 
-class IngredientParserDialog : public QDialog
+class IngredientParserDialog : public KDialogBase
 {
 	Q_OBJECT
 
 public:
-	IngredientParserDialog( const UnitList &units, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	IngredientParserDialog( const UnitList &units, QWidget* parent = 0, const char* name = 0 );
 	~IngredientParserDialog();
 	
 	IngredientList ingredients() const { return m_ingList; }
@@ -45,21 +44,15 @@ protected:
 	QTextEdit* ingredientTextEdit;
 	KPushButton* parseButton;
 	KListView* previewIngView;
-	QPushButton* buttonOk;
-	QPushButton* buttonCancel;
-	QPushButton* buttonHelp;
 	QPushButton* buttonGroup;
 
-	QHBoxLayout* IngredientParserDialogLayout;
-	QVBoxLayout* layout4;
-	QVBoxLayout* Layout5;
-	QSpacerItem* Spacer1;
-
 protected slots:
-	void accept();
+	virtual void accept();
 	void parseText();
 	void removeIngredient();
-	void convertToHeader();
+
+	//Set Header button slot
+	virtual void convertToHeader();
 	virtual void languageChange();
 
 private:

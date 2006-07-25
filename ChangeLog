@@ -9,6 +9,7 @@ Changes from 0.9 to SVN:
   -"Web Book" exporter - exports a collection of recipes into a series of web pagesÂ, organized by category.
   -Ingredients and properties can be split into a variable number of columns in the Page Setup.
  Bugs fixed:
+  -Make dialog windows more KDE standards compliant.
   -Fix displaying photos when special characters are in the title of the recipe
   -Fix database backup for a non-local host
 

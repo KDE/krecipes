@@ -11,8 +11,7 @@
 #ifndef BORDERDIALOG_H
 #define BORDERDIALOG_H
 
-#include <qdialog.h>
-
+#include <kdialogbase.h>
 #include <kcolordialog.h>
 
 class QVBoxLayout;
@@ -28,7 +27,7 @@ class KHTMLPart;
 
 class KreBorder;
 
-class BorderDialog : public QDialog
+class BorderDialog : public KDialogBase
 {
 	Q_OBJECT
 
@@ -50,7 +49,6 @@ public:
 	KHTMLPart* borderPreview;
 
 protected:
-	QVBoxLayout* BorderDialogLayout;
 	QVBoxLayout* borderGroupBoxLayout;
 	QHBoxLayout* layout4;
 	QVBoxLayout* layout3;

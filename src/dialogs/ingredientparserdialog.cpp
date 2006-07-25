@@ -10,7 +10,6 @@
 
 #include "ingredientparserdialog.h"
 
-#include <qvariant.h>
 #include <qpushbutton.h>
 #include <qtextedit.h>
 #include <qlabel.h>
@@ -21,6 +20,7 @@
 #include <qheader.h>
 #include <qapplication.h>
 #include <qclipboard.h>
+#include <qvbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -33,67 +33,35 @@
 #include "datablocks/mixednumber.h"
 #include "widgets/inglistviewitem.h"
 
-IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl ), m_unitList(units)
+IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* parent, const char* name )
+		: KDialogBase( parent, name, true, i18n( "Ingredient Parser" ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		m_unitList(units)
 {
-	if ( !name )
-		setName( "IngredientParserDialog" );
-	IngredientParserDialogLayout = new QHBoxLayout( this, 11, 6, "IngredientParserDialogLayout"); 
-	
-	layout4 = new QVBoxLayout( 0, 0, 6, "layout4"); 
-	
-	textLabel1 = new QLabel( this, "textLabel1" );
-	textLabel1->setTextFormat( QLabel::RichText );
-	layout4->addWidget( textLabel1 );
-	
-	ingredientTextEdit = new QTextEdit( this, "ingredientTextEdit" );
-	ingredientTextEdit->setTextFormat( QTextEdit::PlainText );
-	layout4->addWidget( ingredientTextEdit );
-	
-	parseButton = new KPushButton( this, "parseButton" );
-	layout4->addWidget( parseButton );
+	setButtonBoxOrientation( Vertical );
 
-	previewLabel = new QLabel( this, "previewLabel" );
-	previewLabel->setTextFormat( QLabel::RichText );
-	layout4->addWidget( previewLabel );
+	QVBox *page = makeVBoxMainWidget();
+
+	textLabel1 = new QLabel( page, "textLabel1" );
+	textLabel1->setTextFormat( QLabel::RichText );
 	
-	previewIngView = new KListView( this, "previewIngView" );
+	ingredientTextEdit = new QTextEdit( page, "ingredientTextEdit" );
+	ingredientTextEdit->setTextFormat( QTextEdit::PlainText );
+	
+	parseButton = new KPushButton( page, "parseButton" );
+
+	previewLabel = new QLabel( page, "previewLabel" );
+	previewLabel->setTextFormat( QLabel::RichText );
+	
+	previewIngView = new KListView( page, "previewIngView" );
 	previewIngView->setSorting(-1);
 	previewIngView->addColumn( i18n( "Ingredient" ) );
 	previewIngView->addColumn( i18n( "Amount" ) );
 	previewIngView->addColumn( i18n( "Unit" ) );
 	previewIngView->addColumn( i18n( "Preparation Method" ) );
-	layout4->addWidget( previewIngView );
-	IngredientParserDialogLayout->addLayout( layout4 );
 	
-	Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5"); 
-	
-	buttonOk = new QPushButton( this, "buttonOk" );
-	buttonOk->setAutoDefault( TRUE );
-	buttonOk->setDefault( TRUE );
-	buttonOk->setEnabled( false );
-	Layout5->addWidget( buttonOk );
-	
-	buttonCancel = new QPushButton( this, "buttonCancel" );
-	buttonCancel->setAutoDefault( TRUE );
-	Layout5->addWidget( buttonCancel );
-	
-	//buttonHelp = new QPushButton( this, "buttonHelp" );
-	//buttonHelp->setAutoDefault( TRUE );
-	//Layout5->addWidget( buttonHelp );
-	Spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	Layout5->addItem( Spacer1 );
-
-	buttonGroup = new QPushButton( this, "buttonGroup" );
-	QWhatsThis::add( buttonGroup, 
-			i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.")
-	);
-	Layout5->addWidget( buttonGroup );
-
-	IngredientParserDialogLayout->addLayout( Layout5 );
 	languageChange();
-	resize( QSize(577, 371).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
+	setInitialSize( QSize(577, 371).expandedTo(minimumSizeHint()) );
 
 	previewIngView->setItemsRenameable( true );
 	previewIngView->setRenameable( 0, true );
@@ -106,16 +74,20 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	ingredientTextEdit->setText( QApplication::clipboard()->text() );
 	ingredientTextEdit->selectAll();
 
+	QWidget *buttonWidget = new QWidget( page );
+	QHBoxLayout *buttonBox = new QHBoxLayout(buttonWidget);
+	QSpacerItem *horizontalSpacing = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+	buttonGroup = new QPushButton( i18n("Set &Header"), buttonWidget );
+	QWhatsThis::add( buttonGroup, i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.") );
+	buttonBox->addWidget( buttonGroup );
+	buttonBox->addItem( horizontalSpacing );
+	
 	KPopupMenu *kpop = new KPopupMenu( previewIngView );
 	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
 	kpop->insertItem( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
  
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
 	connect( buttonGroup, SIGNAL(clicked()), this, SLOT(convertToHeader()) );
-
-	connect( buttonOk, SIGNAL(clicked()), this, SLOT(accept()) );
-	connect( buttonCancel, SIGNAL(clicked()), this, SLOT(reject()) );
-	//connect( buttonHelp, SIGNAL(clicked()), this, SLOT(dunno()) );
 }
 
 IngredientParserDialog::~IngredientParserDialog()
@@ -125,7 +97,6 @@ IngredientParserDialog::~IngredientParserDialog()
 
 void IngredientParserDialog::languageChange()
 {
-	setCaption( i18n( "Ingredient Parser" ) );
 	textLabel1->setText( i18n( "To use: Paste a list of ingredient below, click \"Parse Text\", and then you may correct any incorrectly parsed ingredients.<br><b>Caution: Fields will be truncated if longer than the database allows</b>" ) );
 	previewLabel->setText( i18n("Ingredients as understood by Krecipes:") );
 	parseButton->setText( i18n( "Parse Text" ) );
@@ -133,13 +104,6 @@ void IngredientParserDialog::languageChange()
 	previewIngView->header()->setLabel( 1, i18n( "Amount" ) );
 	previewIngView->header()->setLabel( 2, i18n( "Unit" ) );
 	previewIngView->header()->setLabel( 3, i18n( "Preparation Method" ) );
-	buttonOk->setText( i18n( "&OK" ) );
-	buttonOk->setAccel( QKeySequence( QString::null ) );
-	buttonCancel->setText( i18n( "&Cancel" ) );
-	buttonCancel->setAccel( QKeySequence( QString::null ) );
-	buttonGroup->setText( i18n("Set &Header") );
-	//buttonHelp->setText( i18n( "&Help" ) );
-	//buttonHelp->setAccel( QKeySequence( i18n( "F1" ) ) );
 }
 
 void IngredientParserDialog::accept()
@@ -164,7 +128,7 @@ void IngredientParserDialog::removeIngredient()
 {
 	delete previewIngView->selectedItem();
 	if ( !previewIngView->firstChild() )
-		buttonOk->setEnabled( false );
+		enableButtonOK( false );
 }
 
 void IngredientParserDialog::convertToHeader()
@@ -328,7 +292,7 @@ void IngredientParserDialog::parseText()
 		ing.prepMethodList = ElementList::split(",",line.mid(format_at,end-format_at));
 
 		last_item = new IngListViewItem(previewIngView,last_item,ing);
-		buttonOk->setEnabled( true );
+		enableButtonOK( true );
 	}
 }
 

@@ -22,13 +22,14 @@
 #include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qvbox.h>
-#include <qdialog.h>
 #include <qlabel.h>
+
 #include <klineedit.h>
+#include <kdialogbase.h>
 
 #include "datablocks/unit.h"
 
-class CreatePropertyDialog: public QDialog
+class CreatePropertyDialog : public KDialogBase
 {
 public:
 	CreatePropertyDialog( QWidget *parent, UnitList *list );
@@ -39,13 +40,9 @@ public:
 
 private:
 	//Widgets
-	QVBoxLayout *container;
 	QGroupBox *box;
-	QVBox *vbox;
 	KLineEdit *propertyNameEdit;
 	KLineEdit *propertyUnits;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
 	QLabel *nameEditText;
 	QLabel *unitsText;
 

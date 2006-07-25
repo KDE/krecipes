@@ -11,8 +11,7 @@
 #ifndef EDITRATINGDIALOG_H
 #define EDITRATINGDIALOG_H
 
-#include <qvariant.h>
-#include <kdialog.h>
+#include <kdialogbase.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -33,7 +32,7 @@ class RatingCriteria;
 class ElementList;
 class RatingCriteriaListView;
 
-class EditRatingDialog : public KDialog
+class EditRatingDialog : public KDialogBase
 {
 Q_OBJECT
 	
@@ -53,17 +52,12 @@ public:
 	QTextEdit* commentsEdit;
 	QLabel* raterLabel;
 	QLineEdit* raterEdit;
-	QPushButton* okButton;
-	QPushButton* cancelButton;
 
 	Rating rating() const;
 	
 protected:
-	QVBoxLayout* EditRatingDialogLayout;
-	QHBoxLayout* layout8;
-	QHBoxLayout* layout2;
-	QHBoxLayout* layout7;
-	QSpacerItem* buttonsSpacer;
+	QHBox* layout8;
+	QHBox* layout2;
 	
 protected slots:
 	virtual void languageChange();
