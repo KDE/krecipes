@@ -171,5 +171,15 @@ void CustomCheckListItem::stateChange( bool on )
 			item->setLocked( false );
 		}
 	}
+
+	QString thisText = text(0);
+	QListViewItemIterator it( listView() );
+	while ( it.current() ) {
+		if ( it.current()->rtti() == 1 && it.current()->text(0) == thisText ) {
+			CustomCheckListItem * item = static_cast<CustomCheckListItem*>( it.current() );
+			item->setOn( on );
+		}
+		++it;
+	}
 }
 
