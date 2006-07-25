@@ -552,6 +552,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 
 	reload();
 
+	propertyStatusMap.clear();
 	propertyStatusDialog->hide();
 
 	updatePropertyStatus();
