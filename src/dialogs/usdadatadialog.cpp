@@ -30,12 +30,13 @@
 #include "datablocks/weight.h"
 
 USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *parent )
-		: KDialogBase( parent, "usdaDataDialog", true, 
-		    QString( i18n( "Load ingredient properties for: \"%1\"" ) ).arg( ingredient.name ),
+		: KDialogBase( parent, "usdaDataDialog", true, QString::null,
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		ingredient( ing ),
 		database( db )
 {
+	setCaption( QString( i18n( "Load ingredient properties for: \"%1\"" ) ).arg( ingredient.name ) );
+
 	QVBox *page = makeVBoxMainWidget();
 
 	setButtonText( KDialogBase::Ok, i18n( "&Load" ) );
@@ -49,7 +50,7 @@ USDADataDialog::USDADataDialog( const Element &ing, RecipeDB *db, QWidget *paren
 
 	loadDataFromFile();
 
-	connect( listView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( importSelected() ) );
+	connect( listView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( slotOk() ) );
 }
 
 USDADataDialog::~USDADataDialog()
@@ -108,7 +109,7 @@ void USDADataDialog::slotOk()
 		database->loadProperties( &existing_ing_props, ingredient.id );
 
 		int i = 0;
-		for ( QStringList::const_iterator it = data.at( 2 ); !property_data_list[ i ].name.isEmpty(); it++, i++ ) {
+		for ( QStringList::const_iterator it = data.at( 2 ); !property_data_list[ i ].name.isEmpty(); ++it, ++i ) {
 			int property_id = property_list.findByName( property_data_list[ i ].name );
 			if ( property_id == -1 ) {
 				database->addProperty( property_data_list[ i ].name, property_data_list[ i ].unit );
@@ -123,8 +124,11 @@ void USDADataDialog::slotOk()
 				database->addPropertyToIngredient( ingredient.id, property_id, amount, grams_id );
 		}
 
+		i+=2;
+
+		int i_initial = i;
 		WeightList weights = database->ingredientWeightUnits( ingredient.id );
-		for ( ; i < data.count()-1; ++i ) {
+		for ( ; i < i_initial+3; ++i ) {
 			Weight w;
 			w.weight = data[i].toDouble();
 
@@ -137,8 +141,10 @@ void USDADataDialog::slotOk()
 				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
 				int unitID = database->findExistingUnitByName( w.perAmountUnit );
-				if ( unitID == -1 )
+				if ( unitID == -1 ) {
 					database->createNewUnit( Unit(w.perAmountUnit,w.perAmountUnit) );
+					unitID = database->lastInsertID();
+				}
 				w.perAmountUnitID = unitID;
 
 				bool exists = false;
