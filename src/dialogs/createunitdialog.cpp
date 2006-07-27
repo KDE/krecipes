@@ -15,8 +15,8 @@
 #include <klocale.h>
 #include <qlabel.h>
 
-CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural )
-		: KDialogBase( parent, "createElementDialog", true, i18n( "New Unit" ),
+CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
+		: KDialogBase( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	QVBox *page = makeVBoxMainWidget();
@@ -28,7 +28,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	QGridLayout *gridLayout = new QGridLayout( box->layout() );
 	gridLayout->setAlignment( Qt::AlignTop );
 
-	box->setTitle( i18n( "New Unit" ) );
+	box->setTitle( (newUnit)?i18n( "New Unit" ):i18n("Unit") );
 
 	QLabel *nameLabel = new QLabel( i18n( "Singular:" ), box );
 	nameEdit = new KLineEdit( name, box );
@@ -37,7 +37,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( nameEdit, 0, 1 );
 
 	QLabel *nameAbbrevLabel = new QLabel( i18n( "Abbreviation:" ), box );
-	nameAbbrevEdit = new KLineEdit( QString::null, box );
+	nameAbbrevEdit = new KLineEdit( name_abbrev, box );
 
 	gridLayout->addWidget( nameAbbrevLabel, 0, 2 );
 	gridLayout->addWidget( nameAbbrevEdit, 0, 3 );
@@ -49,7 +49,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( pluralEdit, 1, 1 );
 
 	QLabel *pluralAbbrevLabel = new QLabel( i18n( "Abbreviation:" ), box );
-	pluralAbbrevEdit = new KLineEdit( QString::null, box );
+	pluralAbbrevEdit = new KLineEdit( plural_abbrev, box );
 
 	gridLayout->addWidget( pluralAbbrevLabel, 1, 2 );
 	gridLayout->addWidget( pluralAbbrevEdit, 1, 3 );

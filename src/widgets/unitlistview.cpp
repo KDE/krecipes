@@ -53,7 +53,8 @@ public:
 
 	void setType( Unit::Type type ){ m_unit.type = type; updateType(type); }
 
-	const Unit& unit() const { return m_unit; };
+	Unit unit() const { return m_unit; };
+	void setUnit( const Unit &u ) { m_unit = u; }
 
 protected:
 	virtual void setText( int column, const QString &text ) {
@@ -200,8 +201,12 @@ void StdUnitListView::createNew()
 		Unit result = unitDialog->newUnit();
 
 		//check bounds first
-		if ( checkBounds( result ) )
+		if ( checkBounds( result )
+		  && database->findExistingUnitByName( result.name ) == -1
+		  && database->findExistingUnitByName( result.plural ) == -1
+		) {
 			database->createNewUnit( result );
+		}
 	}
 	delete unitDialog;
 }
@@ -232,8 +237,42 @@ void StdUnitListView::rename()
 {
 	QListViewItem * item = currentItem();
 
-	if ( item )
-		UnitListView::rename( item, 0 );
+	if ( item ) {
+		CreateUnitDialog unitDialog( this, item->text(0), item->text(2), item->text(1), item->text(3), false );
+		
+		if ( unitDialog.exec() == QDialog::Accepted ) {
+			UnitListViewItem *unit_item = (UnitListViewItem*)item;
+			Unit origUnit = unit_item->unit();
+			Unit newUnit = unitDialog.newUnit();
+
+			//for each changed entry, save the change individually
+
+			Unit unit = origUnit;
+
+			if ( newUnit.name != origUnit.name ) {
+				unit.name = newUnit.name;
+				unit_item->setUnit( unit );
+				saveUnit( unit_item, newUnit.name, 0 );
+			}
+
+			if ( newUnit.plural != origUnit.plural ) {
+				unit.plural = newUnit.plural;
+				unit_item->setUnit( unit );
+				saveUnit( unit_item, newUnit.plural, 2 );
+			}
+
+			if ( !newUnit.name_abbrev.stripWhiteSpace().isEmpty() && newUnit.name_abbrev != origUnit.name_abbrev ) {
+				unit.name_abbrev = newUnit.name_abbrev;
+				unit_item->setUnit( unit );
+				saveUnit( unit_item, newUnit.name_abbrev, 1 );
+			}
+			if ( !newUnit.plural_abbrev.stripWhiteSpace().isEmpty() && newUnit.plural_abbrev != origUnit.plural_abbrev ) {
+				unit.plural_abbrev = newUnit.plural_abbrev;
+				unit_item->setUnit( unit );
+				saveUnit( unit_item, newUnit.plural_abbrev, 3 );
+			}
+		}
+	}
 }
 
 void StdUnitListView::createUnit( const Unit &unit )
@@ -272,7 +311,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)i;
 	int unit_id = unit_it->unit().id;
-	if ( existing_id != -1 && existing_id != unit_id && !text.stripWhiteSpace().isEmpty() ) { //category already exists with this label... merge the two
+	if ( existing_id != -1 && existing_id != unit_id && !text.stripWhiteSpace().isEmpty() ) { //unit already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
 				database->modUnit( unit_it->unit() );
@@ -296,10 +335,6 @@ bool StdUnitListView::checkBounds( const Unit &unit )
 		return false;
 	}
 	else if ( unit.name.stripWhiteSpace().isEmpty() || unit.plural.stripWhiteSpace().isEmpty() )
-		return false;
-	else if ( database->findExistingUnitByName( unit.name ) != -1 )
-		return false;
-	else if ( database->findExistingUnitByName( unit.plural ) != -1 )
 		return false;
 
 	return true;
