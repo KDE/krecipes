@@ -1504,11 +1504,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						QString propUnit = (*prop_it).perUnit.name;
 						if ( propUnit.isEmpty() ) propUnit = i18n("-No unit-");
 
-						missingConversions << QString( "'%1' =&gt; '%2' =&gt; '%3' =&gt; '%4'" )
-						  .arg(ingUnit)
-						  .arg(toUnit)
-						  .arg(fromUnit)
-						  .arg(propUnit);	
+						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
 					}
 					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either an appropriate ingredient weight entry is needed, or Krecipes needs conversion information to perform one of the following conversions: %2"))
 					  .arg(ing.name)
@@ -1585,6 +1581,18 @@ QString RecipeInputDialog::statusMessage() const
 	}
 
 	return statusMessage;
+}
+
+QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const
+{
+	QString path = "'"+ingUnit+"'";
+	if ( ingUnit != toUnit )
+		path.append(" =&gt; '"+toUnit+"'");
+	if ( toUnit != fromUnit );
+		path.append(" =&gt; '"+fromUnit+"'");
+	if ( fromUnit != propUnit )
+		path.append(" =&gt; '"+propUnit+"'");
+	return path;
 }
 
 #include "recipeinputdialog.moc"

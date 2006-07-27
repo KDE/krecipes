@@ -146,6 +146,7 @@ private:
 	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
 	void addRating( const Rating &rating, RatingDisplayWidget *item );
 	QString statusMessage() const;
+	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
 
 	// Signals & Slots
 
