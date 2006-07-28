@@ -119,6 +119,8 @@ Krecipes::Krecipes()
 	( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
+
+	convertDialog = new ConversionDialog(this,m_view->database);
 }
 
 Krecipes::~Krecipes()
@@ -464,8 +466,7 @@ void Krecipes::printSetupSlot()
 
 void Krecipes::conversionToolSlot()
 {
-	ConversionDialog converter(this,m_view->database);
-	converter.exec();
+	convertDialog->show();
 }
 
 void Krecipes::backupSlot()

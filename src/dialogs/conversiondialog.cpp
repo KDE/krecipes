@@ -27,96 +27,79 @@
 #include "backends/recipedb.h"
 #include "widgets/unitcombobox.h"
 #include "widgets/ingredientcombobox.h"
+#include "widgets/prepmethodcombobox.h"
 #include "widgets/fractioninput.h"
 
-ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name, bool modal, WFlags fl )
-		: KDialogBase( parent, "createElementDialog", true, i18n( "Measurement Converter" ),
-		    KDialogBase::Close, KDialogBase::Close ),
+ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name )
+		: KDialogBase( parent, name, false, i18n( "Measurement Converter" ),
+		    KDialogBase::Close | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Close ),
 		m_database(db)
 {
+	setHelp("measurement-converter");
+	setButtonText( KDialogBase::User1, i18n("Convert") );
+
 	setSizeGripEnabled( TRUE );
 
 	QVBox *page = makeVBoxMainWidget();
 	
-	QWidget *gridWidget = new QWidget(page);
-	layout4 = new QGridLayout( gridWidget, 1, 1, 0, 6, "layout4"); 
-	
-	ingredientBox = new IngredientComboBox( FALSE, gridWidget, db, i18n( "--Ingredient (optional)--" ) );
-	ingredientBox->reload();
-	
-	layout4->addWidget( ingredientBox, 0, 3 );
-	
-	convertLabel = new QLabel( gridWidget, "convertLabel" );
-	
-	layout4->addWidget( convertLabel, 0, 0 );
-	
-	toUnitBox = new UnitComboBox( gridWidget, db );
-	toUnitBox->reload();
-	
-	layout4->addWidget( toUnitBox, 1, 1 );
-	
-	fromUnitBox = new UnitComboBox( gridWidget, db );
-	fromUnitBox->reload();
-	
-	layout4->addWidget( fromUnitBox, 0, 2 );
-	
-	amountEdit = new FractionInput( gridWidget );
-	
-	layout4->addWidget( amountEdit, 0, 1 );
-	
-	toLabel = new QLabel( gridWidget, "toLabel" );
-	
-	layout4->addWidget( toLabel, 1, 0 );
+	QHBox *vbox = new QVBox(page);
 
-	QWidget *layout6Widget = new QWidget(page);
-	layout6 = new QHBoxLayout( layout6Widget, 0, 6, "layout6"); 
-	Horizontal_Spacing2_2 = new QSpacerItem( 124, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout6->addItem( Horizontal_Spacing2_2 );
+	QHBox *fromTopBox = new QHBox(vbox);
+	convertLabel = new QLabel( fromTopBox, "convertLabel" );
+
+	amountEdit = new FractionInput( fromTopBox );
+
+	fromUnitBox = new UnitComboBox( fromTopBox, db );
+	fromUnitBox->reload();
+	fromTopBox->setStretchFactor( fromUnitBox, 2 );
+	fromTopBox->setSpacing(3);
+
+	QHBox *fromBottomBox = new QHBox(vbox);
 	
-	convertButton = new QPushButton( layout6Widget, "convertButton" );
-	convertButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, convertButton->sizePolicy().hasHeightForWidth() ) );
-	layout6->addWidget( convertButton );
-	Horizontal_Spacing2_3 = new QSpacerItem( 124, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-	layout6->addItem( Horizontal_Spacing2_3 );
+	ingredientBox = new IngredientComboBox( FALSE, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
+	ingredientBox->reload();
+
+	prepMethodBox = new PrepMethodComboBox( false, fromBottomBox, db, i18n( "-No Preparation-" ) );
+	prepMethodBox->reload();
+	fromBottomBox->setSpacing(3);
 	
-	QWidget *layout7Widget = new QWidget(page);
-	layout7 = new QHBoxLayout( layout7Widget, 0, 6, "layout7"); 
-	
-	resultLabel = new QLabel( layout7Widget, "resultLabel" );
-	layout7->addWidget( resultLabel );
-	
-	resultText = new QLabel( layout7Widget, "resultText" );
-	resultText->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, resultText->sizePolicy().hasHeightForWidth() ) );
-	layout7->addWidget( resultText );
+	QHBox *toBox = new QHBox(vbox);
+
+	toLabel = new QLabel( toBox, "toLabel" );
+
+	toUnitBox = new UnitComboBox( toBox, db );
+	toUnitBox->reload();
+	toBox->setStretchFactor( toUnitBox, 2 );
+	toBox->setSpacing(8);
+
+	QHBox *resultBox = new QHBox(vbox);
+	resultLabel = new QLabel( resultBox, "resultLabel" );
+	resultText = new QLabel( resultBox, "resultText" );
+	resultBox->setStretchFactor( resultText, 2 );
 
 	languageChange();
 
-	setInitialSize( QSize(412, 163).expandedTo(minimumSizeHint()) );
+	setInitialSize( QSize(300, 200).expandedTo(minimumSizeHint()) );
 	
 	// signals and slots connections
 	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
-	connect( convertButton, SIGNAL( clicked() ), this, SLOT( convert() ) );
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 ConversionDialog::~ConversionDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
 }
 
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
 void ConversionDialog::languageChange()
 {
 	convertLabel->setText( i18n( "Convert" ) );
 	toLabel->setText( i18n( "To" ) );
-	convertButton->setText( i18n( "Convert" ) );
 	resultLabel->setText( i18n( "<b>Result:</b>" ) );
 	resultText->setText( QString::null );
+}
+
+void ConversionDialog::slotUser1()
+{
+	convert();
 }
 
 void ConversionDialog::convert()
@@ -127,6 +110,10 @@ void ConversionDialog::convert()
 	ing.amount = amountEdit->value().toDouble();
 	ing.ingredientID = ingredientBox->id(ingredientBox->currentItem());
 	ing.units = m_database->unitName(fromUnitBox->id(fromUnitBox->currentItem()));
+
+	int prepID = prepMethodBox->id(prepMethodBox->currentItem());
+	if ( prepID != -1 )
+		ing.prepMethodList.append(Element(QString::null,prepID));
 
 	switch ( m_database->convertIngredientUnits( ing, unit, result ) ) {
 	case RecipeDB::Success:

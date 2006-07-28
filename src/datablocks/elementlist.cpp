@@ -49,6 +49,10 @@ Element ElementList::findByName( const QRegExp &rx ) const
 
 bool ElementList::containsId( int id ) const // Search by id (which uses search by item, with comparison defined on header)
 {
+	if ( id == -1 ) {
+		return count() == 0;
+	}
+
 	Element i;
 	i.id = id;
 	return ( find( i ) != end() );

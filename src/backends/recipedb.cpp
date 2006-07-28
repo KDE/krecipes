@@ -196,41 +196,48 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 		double fromToWeightRatio, weightToToRatio;
 		int unitID = -1;
+		int prepID = -2;
 
 		WeightList idList = ingredientWeightUnits( from.ingredientID );
 
-		if ( idList.count() == 0 ) {
-			kdDebug()<<"Unit conversion failed, no ingredient weight found for "<<ingredientName(from.ingredientID)<<endl;
+		if ( idList.count() == 0 )
 			return MissingIngredientWeight;
-		}
 
 		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
 			//get conversion order correct (i.e., Mass -> Volume instead of Volume -> Mass, depending on unit type)
 			int first   = (to.type == Unit::Mass)?(*it).perAmountUnitID:(*it).weightUnitID;
 			int second  = (to.type == Unit::Mass)?(*it).weightUnitID:(*it).perAmountUnitID;
-			fromToWeightRatio = unitRatio( from.units.id, first );
-			if ( fromToWeightRatio > 0 ) {
+			double tryFromToWeightRatio = unitRatio( from.units.id, first );
+			if ( tryFromToWeightRatio > 0 ) {
 				weightToToRatio = unitRatio( second, to.id );
+				fromToWeightRatio = tryFromToWeightRatio;
 				unitID = first;
-				break;
+
+				kdDebug()<<"units work, is it the right prep method..."<<endl;
+				if ( from.prepMethodList.containsId( (*it).prepMethodID ) ) {
+					kdDebug()<<"   yes"<<endl;
+					prepID = (*it).prepMethodID;
+					break;
+				}
+				kdDebug()<<"   no, keep going"<<endl;
 			}
 		}
-		if ( unitID == -1 ) {
-			kdDebug()<<"Unit conversion failed, no conversion(s) from "<<unitName(from.units.id).name<<", to a unit of a weight entry, to "<<unitName(to.id).name<<endl;
+		if ( unitID == -1 )
 			return MissingUnitConversion;
-		}
 
-		bool noPrepMethod;
+		bool wasApproximated;
 
 		Ingredient i;
 		i.ingredientID = from.ingredientID;
 		i.units.id = unitID;
 		i.amount = from.amount * fromToWeightRatio;
 		i.prepMethodList = from.prepMethodList;
-		result.amount = ingredientWeight( i, &noPrepMethod ) * weightToToRatio;
+		result.amount = ingredientWeight( i, &wasApproximated ) * weightToToRatio;
 		result.units = to;
 
-		if ( noPrepMethod )
+		if ( result.amount < 0 )
+			return MissingIngredientWeight;
+		else if ( wasApproximated )
 			return MismatchedPrepMethod;
 
 		return Success;

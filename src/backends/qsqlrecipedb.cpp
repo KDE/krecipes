@@ -1654,13 +1654,15 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 		double convertedAmount = -1;
 		while ( query.next() ) {
 			int prepMethodID = query.value( 2 ).toInt();
-			if ( (ing.prepMethodList.count() == 0 && prepMethodID == -1) || ing.prepMethodList.containsId( prepMethodID ) ) {
+kdDebug()<<"prepID: "<<prepMethodID<<endl;
+			if ( ing.prepMethodList.containsId( prepMethodID ) ) {
 				if ( wasApproximated ) *wasApproximated = false;
 				double amount = query.value( 0 ).toDouble();
 				return ing.amount / amount * query.value( 1 ).toDouble();
 			}
 			if ( prepMethodID == -1 ) {
 				convertedAmount = ing.amount / query.value( 0 ).toDouble() * query.value( 1 ).toDouble();
+				kdDebug()<<"converted: "<<convertedAmount<<endl;
 			}
 		}
 		//no matching prep method found, use entry without a prep method if there was one
@@ -1670,7 +1672,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 			return convertedAmount;
 		}
 	}
-
+kdDebug()<<"nope, nothing"<<endl;
 	return -1;
 }
 

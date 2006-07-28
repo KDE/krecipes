@@ -1490,8 +1490,14 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						.arg(ing.name));
 				} else {
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
+					QValueList< QPair<int,int> > usedIds;
 					QStringList missingConversions;
 					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
+						//skip entries that only differ in how it's prepared
+						QPair<int,int> usedPair((*weight_it).perAmountUnitID,(*weight_it).weightUnitID);
+						if ( usedIds.find(usedPair) != usedIds.end() )
+							continue;
+
 						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name;
 						if ( toUnit.isEmpty() ) toUnit = i18n("-No unit-");
 
@@ -1505,6 +1511,8 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						if ( propUnit.isEmpty() ) propUnit = i18n("-No unit-");
 
 						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
+
+						usedIds << usedPair;
 					}
 					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either an appropriate ingredient weight entry is needed, or Krecipes needs conversion information to perform one of the following conversions: %2"))
 					  .arg(ing.name)

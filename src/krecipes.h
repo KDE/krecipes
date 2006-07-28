@@ -27,6 +27,7 @@ class KPrinter;
 class KToggleAction;
 class KURL;
 class KDialog;
+class ConversionDialog;
 
 /**
  * This class serves as the main window for Krecipes.  It handles the
@@ -127,6 +128,7 @@ private:
 	KAction *copyToClipboardAction;
 
 	KDialog *parsing_file_dlg;
+	ConversionDialog *convertDialog;
 
 	QValueList<KAction*> recipe_actions;
 

@@ -25,6 +25,7 @@ class QPushButton;
 class RecipeDB;
 class UnitComboBox;
 class IngredientComboBox;
+class PrepMethodComboBox;
 class FractionInput;
 
 class ConversionDialog : public KDialogBase
@@ -32,30 +33,23 @@ class ConversionDialog : public KDialogBase
 Q_OBJECT
 	
 public:
-	ConversionDialog( QWidget* parent, RecipeDB *, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	ConversionDialog( QWidget* parent, RecipeDB *, const char* name = 0 );
 	~ConversionDialog();
-	
+
+protected:	
 	IngredientComboBox* ingredientBox;
+	PrepMethodComboBox* prepMethodBox;
 	QLabel* convertLabel;
 	UnitComboBox* toUnitBox;
 	UnitComboBox* fromUnitBox;
 	FractionInput* amountEdit;
 	QLabel* toLabel;
-	QPushButton* convertButton;
 	QLabel* resultLabel;
 	QLabel* resultText;
 	
-protected:
-	QGridLayout* layout4;
-	QHBoxLayout* layout6;
-	QSpacerItem* Horizontal_Spacing2_2;
-	QSpacerItem* Horizontal_Spacing2_3;
-	QHBoxLayout* layout7;
-	QHBoxLayout* Layout1;
-	QSpacerItem* Horizontal_Spacing2;
-	
 protected slots:
 	virtual void languageChange();
+	void slotUser1();
 	void convert();
 
 private:
