@@ -120,7 +120,7 @@ void ConversionDialog::convert()
 		resultLabel->setText( i18n( "<b>Result:</b>" ) );
 		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
 		break;
-	case RecipeDB::MismatchedPrepMethod:
+	case RecipeDB::MismatchedPrepMethodUsingApprox:
 		resultLabel->setText( i18n( "<b>Approximated result:</b>" ) );
 		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
 		break;
@@ -131,6 +131,10 @@ void ConversionDialog::convert()
 	case RecipeDB::MissingIngredientWeight:
 		resultLabel->setText( i18n( "<b>Error:</b>" ) );
 		resultText->setText( i18n("No ingredient weight available") );
+		break;
+	case RecipeDB::MismatchedPrepMethod:
+		resultLabel->setText( i18n( "<b>Error:</b>" ) );
+		resultText->setText( i18n("No ingredient weight available for this method of preparation") );
 		break;
 	case RecipeDB::MissingIngredient:
 		resultLabel->setText( i18n( "<b>Error:</b>" ) );

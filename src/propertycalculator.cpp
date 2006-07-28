@@ -21,7 +21,7 @@
 bool autoConvert( RecipeDB* database, const Ingredient &from, const Ingredient &to, Ingredient &result )
 {
 	RecipeDB::ConversionStatus status = database->convertIngredientUnits( from, to.units, result );
-	bool converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethod;
+	bool converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 
 	if ( converted )  // There is a ratio
 	{
@@ -79,7 +79,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
 			if ( cache_it == ratioCache.end() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethod;
+				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 
 				if ( converted )
 					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
@@ -109,7 +109,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
 			if ( cache_it == ratioCache.end() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethod;
+				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 				if ( converted )
 					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
 				else

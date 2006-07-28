@@ -236,9 +236,9 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 		result.units = to;
 
 		if ( result.amount < 0 )
-			return MissingIngredientWeightNotPrepared;
-		else if ( wasApproximated )
 			return MismatchedPrepMethod;
+		else if ( wasApproximated )
+			return MismatchedPrepMethodUsingApprox;
 
 		return Success;
 	}

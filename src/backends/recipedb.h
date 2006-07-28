@@ -93,10 +93,10 @@ public:
 		Success,
 		MissingUnitConversion,
 		MissingIngredientWeight,
-		MissingIngredientWeightNotPrepared,
 		MissingIngredient,
 		InvalidTypes,
-		MismatchedPrepMethod
+		MismatchedPrepMethod,
+		MismatchedPrepMethodUsingApprox
 	};
 
 public slots:
