@@ -253,18 +253,23 @@ void StdUnitListView::rename()
 				unit.name = newUnit.name;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.name, 0 );
+
+				//saveUnit will call database->modUnit which deletes the list item we were using
+				unit_item = (UnitListViewItem*) findItem( QString::number(unit.id), 5 );
 			}
 
 			if ( newUnit.plural != origUnit.plural ) {
 				unit.plural = newUnit.plural;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.plural, 2 );
+				unit_item = (UnitListViewItem*) findItem( QString::number(unit.id), 5 );
 			}
 
 			if ( !newUnit.name_abbrev.stripWhiteSpace().isEmpty() && newUnit.name_abbrev != origUnit.name_abbrev ) {
 				unit.name_abbrev = newUnit.name_abbrev;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.name_abbrev, 1 );
+				unit_item = (UnitListViewItem*) findItem( QString::number(unit.id), 5 );
 			}
 			if ( !newUnit.plural_abbrev.stripWhiteSpace().isEmpty() && newUnit.plural_abbrev != origUnit.plural_abbrev ) {
 				unit.plural_abbrev = newUnit.plural_abbrev;
