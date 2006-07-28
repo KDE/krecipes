@@ -838,6 +838,10 @@ void RecipeInputDialog::removeIngredient( void )
 		IngListViewItem *ing_item = (IngListViewItem*)it; //we can cast IngSubListViewItem to this too, it's a subclass
 
 		IngredientData &ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
+
+		//Remove it from the instruction's completion
+		instructionsEdit->removeCompletionItem( ing.name );
+
 		loadedRecipe->ingList.removeSubstitute( ing );
 
 		int ingID = ing_item->ingredient().ingredientID;
@@ -847,9 +851,6 @@ void RecipeInputDialog::removeIngredient( void )
 		else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
 			propertyStatusMapYellow.remove( map_it );
 		showStatusIndicator();
-
-		//Remove it from the instruction's completion
-		instructionsEdit->removeCompletionItem( ing.name );
 
 		//Now remove the ingredient
 		it->setSelected( false );
@@ -864,6 +865,10 @@ void RecipeInputDialog::removeIngredient( void )
 
 		for ( IngListViewItem * sub_item = (IngListViewItem*)header->firstChild(); sub_item; sub_item = (IngListViewItem*)sub_item->nextSibling() ) {
 			IngredientData &ing = loadedRecipe->ingList.findSubstitute( sub_item->ingredient() );
+
+			//Remove it from the instruction's completion
+			instructionsEdit->removeCompletionItem( ing.name );
+
 			loadedRecipe->ingList.removeSubstitute( ing );
 
 			int ingID = sub_item->ingredient().ingredientID;
@@ -873,9 +878,6 @@ void RecipeInputDialog::removeIngredient( void )
 			else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
 				propertyStatusMapYellow.remove( map_it );
 			showStatusIndicator();
-
-			//Remove it from the instruction's completion
-			instructionsEdit->removeCompletionItem( ing.name );
 		}
 
 		delete header;
@@ -964,6 +966,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 
 					ing_item->setUnit( new_ing.units );
 
+					updatePropertyStatus();
 					emit changed();
 				}
 				else {
@@ -997,6 +1000,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 					(*it).id = *id_it;
 				}
 
+				updatePropertyStatus();
 				emit changed();
 			}
 			break;
@@ -1594,12 +1598,20 @@ QString RecipeInputDialog::statusMessage() const
 QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const
 {
 	QString path = "'"+ingUnit+"'";
-	if ( ingUnit != toUnit )
+
+	QString lastUnit = ingUnit;
+	if ( lastUnit != toUnit ) {
 		path.append(" =&gt; '"+toUnit+"'");
-	if ( toUnit != fromUnit );
+		lastUnit = toUnit;
+	}
+	if ( lastUnit != fromUnit ) {
 		path.append(" =&gt; '"+fromUnit+"'");
-	if ( fromUnit != propUnit )
+		lastUnit = fromUnit;
+	}
+	if ( lastUnit != propUnit ) {
 		path.append(" =&gt; '"+propUnit+"'");
+		lastUnit = propUnit;
+	}
 	return path;
 }
 
