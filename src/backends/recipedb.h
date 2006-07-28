@@ -93,6 +93,7 @@ public:
 		Success,
 		MissingUnitConversion,
 		MissingIngredientWeight,
+		MissingIngredientWeightNotPrepared,
 		MissingIngredient,
 		InvalidTypes,
 		MismatchedPrepMethod

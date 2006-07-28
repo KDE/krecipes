@@ -1528,8 +1528,11 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::MissingIngredientWeight:
 				propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight entries")).arg(ing.name));
 				break;
+			case RecipeDB::MissingIngredientWeightNotPrepared:
+				propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified")).arg(ing.name));
+				break;
 			case RecipeDB::MismatchedPrepMethod:
-				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %1")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>"));
+				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %2")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>"));
 				break;
 			default: kdDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
 			}
