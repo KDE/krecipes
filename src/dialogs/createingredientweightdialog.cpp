@@ -72,6 +72,8 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	
 	languageChange();
 	clearWState( WState_Polished );
+
+	weightEdit->setFocus();
 }
 
 CreateIngredientWeightDialog::~CreateIngredientWeightDialog()

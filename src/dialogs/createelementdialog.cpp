@@ -33,6 +33,8 @@ CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
 
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
+
+	elementEdit->setFocus();
 }
 
 

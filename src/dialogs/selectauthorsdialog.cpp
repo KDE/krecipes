@@ -73,6 +73,9 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	// Connect signals & Slots
 	connect ( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
 	connect ( removeAuthorButton, SIGNAL( clicked() ), this, SLOT( removeAuthor() ) );
+
+	authorsCombo->setEditText(QString::null);
+	authorsCombo->lineEdit()->setFocus();
 }
 
 SelectAuthorsDialog::~SelectAuthorsDialog()
@@ -112,6 +115,9 @@ void SelectAuthorsDialog::addAuthor( void )
 		authorsCombo->lineEdit() ->selectAll();
 		return ;
 	}
+
+	if ( authorsCombo->lineEdit()->text().isEmpty() )
+		return;
 
 	if ( authorsCombo->contains( authorsCombo->currentText() ) )
 		authorsCombo->setCurrentItem( authorsCombo->currentText() );

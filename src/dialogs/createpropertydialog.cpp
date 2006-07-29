@@ -47,6 +47,8 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 
 	adjustSize();
 	setFixedSize( size() );
+
+	propertyNameEdit->setFocus();
 }
 
 

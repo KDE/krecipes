@@ -47,6 +47,8 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
+
+	elementEdit->setFocus();
 }
 
 
