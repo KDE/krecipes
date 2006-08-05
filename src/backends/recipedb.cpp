@@ -58,6 +58,7 @@
 
 #include "usda_property_data.h"
 #include "usda_ingredient_data.h"
+#include "usda_unit_data.h"
 
 #define DB_FILENAME "krecipes.krecdb"
 
@@ -775,9 +776,11 @@ void RecipeDB::importUSDADatabase()
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.find(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
-				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
-	
-				current_ing.weights << w;
+
+				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+
+				if ( parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+					current_ing.weights << w;
 			}
 
 			w = Weight();
@@ -786,9 +789,10 @@ void RecipeDB::importUSDADatabase()
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.find(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
-				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
-	
-				current_ing.weights << w;
+				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+
+				if ( parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+					current_ing.weights << w;
 			}
 
 			current_ing.usda_id = id;
@@ -855,9 +859,19 @@ void RecipeDB::importUSDADatabase()
 			w.weightUnitID = unit_g_id;
 			w.ingredientID = assigned_id;
 
+			//TODO optimze by creating all prep methods and storing them for faster non-db access
+			if ( !w.prepMethod.isEmpty() ) {
+				int prepID = findExistingPrepByName( w.prepMethod );
+				if ( prepID == -1 ) {
+					createNewPrepMethod( w.prepMethod );
+					prepID = lastInsertID();
+				}
+				w.prepMethodID = prepID;
+			}
+
 			bool exists = false;
 			for ( WeightList::const_iterator it = existingWeights.begin(); it != existingWeights.end(); ++it ) {
-				if ( (*it).perAmountUnitID == w.perAmountUnitID ) {
+				if ( (*it).perAmountUnitID == w.perAmountUnitID && (*it).prepMethodID == w.prepMethodID ) {
 					exists = true;
 					break;
 				}
@@ -928,6 +942,37 @@ void create_properties( RecipeDB *database )
 			property_data_list[ i ].id = database->lastInsertID();
 		}
 	}
+}
+
+bool parseUSDAUnitAndPrep( const QString &string, QString &unit, QString &prep )
+{
+	int commaIndex = string.find(",");
+	QString unitPart = string.left(commaIndex);
+	QString prepPart = string.right(string.length()-commaIndex-2).stripWhiteSpace();
+
+	bool acceptable = false;
+	for ( int i = 0; unit_data_list[ i ].name; ++i ) {
+		if ( unitPart == unit_data_list[ i ].name || unitPart == unit_data_list[ i ].plural )
+			acceptable = true;
+	}
+	if ( !acceptable )
+		return false;
+
+	acceptable = false;
+	if ( prepPart.isEmpty() )
+		acceptable = true;
+	else {
+		for ( int i = 0; prep_data_list[ i ]; ++i ) {
+			if ( prepPart == prep_data_list[ i ] )
+				acceptable = true;
+		}
+	}
+	if ( !acceptable )
+		prepPart = QString::null;
+
+	unit = unitPart;
+	prep = prepPart;
+	return true;
 }
 
 #include "recipedb.moc"

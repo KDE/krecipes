@@ -26,6 +26,7 @@
 
 #include "backends/recipedb.h"
 #include "backends/usda_property_data.h"
+#include "backends/usda_unit_data.h"
 #include "widgets/krelistview.h"
 #include "datablocks/weight.h"
 
@@ -138,18 +139,35 @@ void USDADataDialog::slotOk()
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.find(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
-				w.perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+
+				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
+				if ( !parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+					continue;
 
 				int unitID = database->findExistingUnitByName( w.perAmountUnit );
 				if ( unitID == -1 ) {
-					database->createNewUnit( Unit(w.perAmountUnit,w.perAmountUnit) );
+					for ( int i = 0; unit_data_list[ i ].name; ++i ) {
+						if ( w.perAmountUnit == unit_data_list[ i ].name || w.perAmountUnit == unit_data_list[ i ].plural ) {
+							database->createNewUnit( Unit(unit_data_list[ i ].name,unit_data_list[ i ].plural) );
+						}
+					}
+
 					unitID = database->lastInsertID();
 				}
 				w.perAmountUnitID = unitID;
 
+				if ( !w.prepMethod.isEmpty() ) {
+					int prepID = database->findExistingPrepByName( w.prepMethod );
+					if ( prepID == -1 ) {
+						database->createNewPrepMethod( w.prepMethod );
+						prepID = database->lastInsertID();
+					}
+					w.prepMethodID = prepID;
+				}
+
 				bool exists = false;
 				for ( WeightList::const_iterator it = weights.begin(); it != weights.end(); ++it ) {
-					if ( (*it).perAmountUnitID == w.perAmountUnitID ) {
+					if ( (*it).perAmountUnitID == w.perAmountUnitID && (*it).prepMethodID == w.prepMethodID ) {
 						exists = true;
 						break;
 					}

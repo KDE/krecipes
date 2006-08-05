@@ -143,10 +143,10 @@ void LiteRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_weights" ) {
 		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER, PRIMARY KEY (id) );"
 
-		<< "CREATE index wid_index ON ingredient_weights(weight_unit_id)"
-		<< "CREATE index pid_index ON ingredient_weights(prep_method_id)"
-		<< "CREATE index uid_index ON ingredient_weights(unit_id)"
-		<< "CREATE index iid_index ON ingredient_weights(ingredient_id)";
+		<< "CREATE index weight_wid_index ON ingredient_weights(weight_unit_id)"
+		<< "CREATE index weight_pid_index ON ingredient_weights(prep_method_id)"
+		<< "CREATE index weight_uid_index ON ingredient_weights(unit_id)"
+		<< "CREATE index weight_iid_index ON ingredient_weights(ingredient_id)";
 	}
 
 	else if ( tableName == "units_conversion" )
