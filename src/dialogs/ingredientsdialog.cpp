@@ -106,7 +106,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientListView->setListView( list_view );
 	layout->addMultiCellWidget ( ingredientListView, 1, 5, 1, 1 );
-	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
+	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_rightIngredients, 1, 2 );
@@ -175,7 +175,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removeUnitButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removeUnitButton->setFlat( true );
 	QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
- 	rightLayout->addItem( spacer_Units_Properties, 5, 0 );
+ 	rightLayout->addItem( spacer_Units_Properties, 2, 2 );
 
 
 	propertiesListView = new KreListView ( rightWidget, i18n( "Ingredient Properties" ) );
@@ -238,8 +238,13 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	removeWeightButton->setMaximumSize( QSize( 30, 30 ) );
 	removeWeightButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	removeWeightButton->setFlat( true );
-	//QSpacerItem* spacer_Units_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	//layout->addItem( spacer_Units_Properties, 5, 5 );
+
+	QSpacerItem* spacer_Weight_Properties = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
+	rightLayout->addItem( spacer_Weight_Properties, 11, 2 );
+
+	QSpacerItem* spacerBottom = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Expanding );
+	rightLayout->addItem( spacerBottom, 13, 2 );
+
 	scrollView1->setResizePolicy( QScrollView::AutoOneFit );
 	layout->addMultiCellWidget(scrollView1,1,4,5,5);
 
@@ -249,7 +254,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	layout->addWidget(loadUsdaButton,5,5);
 
 	scrollView1->addChild(rightWidget);
-
+	scrollView1->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Ignored );
 
 
 	inputBox = new KDoubleNumInput( propertiesListView->listView() ->viewport() );

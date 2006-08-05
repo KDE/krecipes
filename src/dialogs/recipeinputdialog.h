@@ -171,7 +171,7 @@ private slots:
 	void slotAddRating();
 	void slotEditRating();
 	void slotRemoveRating();
-	void addIngredient( const Ingredient &ing );
+	void addIngredient( const Ingredient &ing, bool noHeader = false );
 	void addIngredientHeader( const Element &header );
 	void updatePropertyStatus();
 	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );

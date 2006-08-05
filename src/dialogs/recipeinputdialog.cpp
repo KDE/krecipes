@@ -1274,10 +1274,12 @@ void RecipeInputDialog::slotIngredientParser()
 	if ( dlg.exec() == QDialog::Accepted ) {
 		IngredientList ings = dlg.ingredients();
 		QStringList usedGroups;
+		bool haveHeader = false;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
 			if ( !(*it).group.isEmpty() && usedGroups.find((*it).group) == usedGroups.end() ) {
 				int id = IngredientInputWidget::createNewGroupIfNecessary((*it).group,database);
 				addIngredientHeader( Element((*it).group, id) );
+				haveHeader = true;
 				usedGroups << (*it).group;
 			}
 			(*it).ingredientID = IngredientInputWidget::createNewIngredientIfNecessary((*it).name,database);
@@ -1289,7 +1291,7 @@ void RecipeInputDialog::slotIngredientParser()
 				(*prep_it).id = *prep_id_it;
 			}
 
-			addIngredient(*it);
+			addIngredient( *it, !haveHeader );
 
 			if ( usedGroups.count() > 0 && (*it).group.isEmpty() ) {
 				QListViewItem *last_item = ingredientList->lastItem();
@@ -1403,29 +1405,33 @@ void RecipeInputDialog::slotRemoveRating()
 	emit recipeChanged(); //Indicate that the recipe changed
 }
 
-void RecipeInputDialog::addIngredient( const Ingredient &ing )
+void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
 {
+	Ingredient ingCopy = ing;
+
 	//Append to the ListView
 	QListViewItem* lastElement = ingredientList->lastItem();
 	while ( lastElement && lastElement->rtti() == INGSUBLISTVIEWITEM_RTTI )
 		lastElement = lastElement->itemAbove();
 
-	if ( lastElement &&
+	if ( noHeader )
+		lastElement = (lastElement->parent())?lastElement->parent():lastElement;
+
+	if ( !noHeader && lastElement &&
 		( lastElement->rtti() == INGGRPLISTVIEWITEM_RTTI || ( lastElement->parent() && lastElement->parent() ->rtti() == INGGRPLISTVIEWITEM_RTTI ) ) )
 	{
 		IngGrpListViewItem * header = ( lastElement->parent() ) ? ( IngGrpListViewItem* ) lastElement->parent() : ( IngGrpListViewItem* ) lastElement;
 
-		Ingredient copy = ing;
-		copy.groupID = header->id();
+		ingCopy.groupID = header->id();
 
-		lastElement = new IngListViewItem( header, lastElement, copy );
-		for ( QValueList<IngredientData>::const_iterator it = copy.substitutes.begin(); it != copy.substitutes.end(); ++it ) {
+		lastElement = new IngListViewItem( header, lastElement, ingCopy );
+		for ( QValueList<IngredientData>::const_iterator it = ingCopy.substitutes.begin(); it != ingCopy.substitutes.end(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);
 	}
 	else {
-		lastElement = new IngListViewItem( ingredientList, lastElement, ing );
+		lastElement = new IngListViewItem( ingredientList, lastElement, ingCopy );
 		for ( QValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
@@ -1433,12 +1439,12 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing )
 	}
 
 	//append to recipe
-	loadedRecipe->ingList.append( ing );
+	loadedRecipe->ingList.append( ingCopy );
 
 	//update the completion in the instructions edit
-	instructionsEdit->addCompletionItem( ing.name );
+	instructionsEdit->addCompletionItem( ingCopy.name );
 
-	updatePropertyStatus( ing, true );
+	updatePropertyStatus( ingCopy, true );
 
 	emit changed();
 }
