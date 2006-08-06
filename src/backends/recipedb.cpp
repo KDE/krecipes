@@ -726,7 +726,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int, QString> * );
-int createUnit( const QString &name, RecipeDB* );
+int createUnit( const QString &name, Unit::Type, RecipeDB* );
 int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*, bool do_checks );
 void create_properties( RecipeDB* );
 
@@ -821,8 +821,8 @@ void RecipeDB::importUSDADatabase()
 	}
 
 	//since there are only two units used, lets just create them and store their id for speed
-	int unit_g_id = createUnit( "g", this );
-	int unit_mg_id = createUnit( "mg", this );
+	int unit_g_id = createUnit( "g", Unit::Mass, this );
+	int unit_mg_id = createUnit( "mg", Unit::Mass, this );
 
 	QValueList<ingredient_nutrient_data>::const_iterator it;
 	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
@@ -855,7 +855,7 @@ void RecipeDB::importUSDADatabase()
 		const WeightList weights = (*it).weights;
 		for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
 			Weight w = *weight_it;
-			w.perAmountUnitID = createUnit( w.perAmountUnit, this );
+			w.perAmountUnitID = createUnit( w.perAmountUnit, Unit::Other, this );
 			w.weightUnitID = unit_g_id;
 			w.ingredientID = assigned_id;
 
@@ -916,14 +916,23 @@ int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, Recipe
 	return assigned_id;
 }
 
-int createUnit( const QString &name, RecipeDB *database )
+int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 {
 	int assigned_id = database->findExistingUnitByName( name );
 
 	if ( assigned_id == -1 )  //create unit since it doesn't exist
 	{
-		database->createNewUnit( Unit(name, name) );
+		Unit unit(name, name);
+		unit.type = type;
+		database->createNewUnit( unit );
 		assigned_id = database->lastInsertID();
+	}
+	else {
+		Unit unit = database->unitName(assigned_id);
+		if ( unit.type != Unit::Mass ) {
+			unit.type = Unit::Mass;
+			database->modUnit( unit );
+		}
 	}
 
 	return assigned_id;

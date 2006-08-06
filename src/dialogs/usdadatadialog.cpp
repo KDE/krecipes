@@ -100,8 +100,17 @@ void USDADataDialog::slotOk()
 		int grams_id = database->findExistingUnitByName( "g" ); //get this id because all data is given per gram
 		if ( grams_id == -1 ) {
 			//FIXME: take advantage of abbreviations
-			database->createNewUnit( Unit("g", "g") );
+			Unit unit("g","g");
+			unit.type = Unit::Mass;
+			database->createNewUnit( unit );
 			grams_id = database->lastInsertID();
+		}
+		else {
+			Unit unit = database->unitName(grams_id);
+			if ( unit.type != Unit::Mass ) {
+				unit.type = Unit::Mass;
+				database->modUnit( unit );
+			}
 		}
 
 		IngredientPropertyList property_list;
