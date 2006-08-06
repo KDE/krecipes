@@ -103,7 +103,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING, type INTEGER NOT NULL );";
+		commands << "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING, type INTEGER NOT NULL DEFAULT '0' );";
 
 	else if ( tableName == "prep_methods" )
 		commands << "CREATE TABLE prep_methods (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING);";
@@ -437,7 +437,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*100) < 94 ) {
 		database->transaction();
 
-		database->exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL" );
+		database->exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL DEFAULT '0'" );
 
 		database->exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
 		if ( !database->commit() )

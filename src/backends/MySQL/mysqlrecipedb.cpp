@@ -117,7 +117,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE unit_list (ingredient_id INTEGER, unit_id INTEGER);";
 
 	else if ( tableName == "units" )
-		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), name_abbrev VARCHAR(%2), plural VARCHAR(%3), plural_abbrev VARCHAR(%4), type INTEGER NOT NULL, PRIMARY KEY (id));" )
+		commands << QString( "CREATE TABLE units (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), name_abbrev VARCHAR(%2), plural VARCHAR(%3), plural_abbrev VARCHAR(%4), type INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (id));" )
 		   .arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() ).arg( maxUnitNameLength() );
 
 	else if ( tableName == "prep_methods" )
