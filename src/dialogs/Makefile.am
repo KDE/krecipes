@@ -29,7 +29,8 @@ libkrecipesdialogs_la_SOURCES= \
 	setupdisplay.cpp \
 	ingredientparserdialog.cpp ingredientgroupsdialog.cpp \
 	editratingdialog.cpp similarcategoriesdialog.cpp \
-	conversiondialog.cpp createingredientweightdialog.cpp
+	conversiondialog.cpp createingredientweightdialog.cpp \
+	recipeprintpreview.cpp
 
 libkrecipesdialogs_la_METASOURCES=AUTO
 

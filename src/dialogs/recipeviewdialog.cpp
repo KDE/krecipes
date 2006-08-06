@@ -14,6 +14,7 @@
 
 #include <qlayout.h>
 #include <qstyle.h>
+#include <qfile.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -25,15 +26,16 @@
 #include <kprogress.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 #include "exporters/htmlexporter.h"
+#include "recipeprintpreview.h"
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
-	printView(0),
-	database(db),
-	m_isPrinting(false)
+	database(db)
 {
 	// Initialize UI Elements
 	recipeView = new KHTMLPart( this );
@@ -60,7 +62,7 @@ bool RecipeViewDialog::loadRecipe( int recipeID )
 	return loadRecipes( ids );
 }
 
-bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids, const QString &layoutConfig )
 {
 	KApplication::setOverrideCursor( KCursor::waitCursor() );
 
@@ -70,13 +72,13 @@ bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids )
 	ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
 	recipe_loaded = ( ids.count() > 0 && ids[ 0 ] >= 0 );
 
-	bool success = showRecipes( ids );
+	bool success = showRecipes( ids, layoutConfig );
 
 	KApplication::restoreOverrideCursor();
 	return success;
 }
 
-bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
+bool RecipeViewDialog::showRecipes( const QValueList<int> &ids, const QString &layoutConfig )
 {
 	KProgressDialog * progress_dialog = 0;
 
@@ -87,6 +89,18 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 	}
 
 	HTMLExporter html_generator( tmp_filename + ".html", "html" );
+	if ( layoutConfig != QString::null ) {
+		KConfig *config = KGlobal::config();
+		config->setGroup( "Page Setup" );
+		QString styleFile = config->readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/Default.klo" ) );
+		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
+			html_generator.setStyle( styleFile );
+
+		QString templateFile = config->readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.template" ) );
+		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
+			html_generator.setTemplate( templateFile );
+	}
+
 	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {
 		delete progress_dialog;
@@ -106,45 +120,24 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids )
 	return true;
 }
 
-void RecipeViewDialog::print( void )
+void RecipeViewDialog::print()
 {
-	#if 1
-	if ( recipe_loaded )
-		recipeView->view() ->print();
-	#else
 	if ( recipe_loaded ) {
-		delete printView;
-		printView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
-
-		HTMLExporter html_generator( database, tmp_filename + "-print.html", "html" );
-		html_generator.exporter( ids_loaded, database );
-
-		KURL url;
-		url.setPath( tmp_filename + "-print.html" );
-		printView->openURL( url );
-
-		kdDebug() << "Opening URL for printing: " << url.htmlURL() << endl;
-
-		connect( printView, SIGNAL( completed() ), this, SLOT( readyForPrint() ) );
+		RecipePrintPreview preview( this, database, ids_loaded );
+		preview.exec();
 	}
-	#endif
 }
 
-void RecipeViewDialog::readyForPrint()
+void RecipeViewDialog::printNoPreview( void )
 {
-	if ( printView && !m_isPrinting ) {
-		m_isPrinting = true;
-		printView->view()->layout();
-		printView->view()->print();
-		m_isPrinting = false;
+	if ( recipe_loaded ) {
+		recipeView->view() ->print();
 	}
-
-	//TODO: Cleanup temporary files
 }
 
-void RecipeViewDialog::reload()
+void RecipeViewDialog::reload( const QString &layoutConfig )
 {
-	loadRecipes( ids_loaded );
+	loadRecipes( ids_loaded, layoutConfig );
 }
 
 void RecipeViewDialog::removeOldFiles()

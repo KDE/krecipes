@@ -38,7 +38,7 @@ public:
 	bool loadRecipe( int recipeID );
 
 	/** @return Boolean indicating whether or not the recipes were successfully loaded */
-	bool loadRecipes( const QValueList<int> &ids );
+	bool loadRecipes( const QValueList<int> &ids, const QString &layoutConfig = QString::null );
 
 	int recipesLoaded() const
 	{
@@ -49,29 +49,27 @@ public:
 		return ids_loaded;
 	}
 
-	void reload();
+	void reload( const QString &layoutConfig = QString::null );
 
 public slots:
+	void printNoPreview( void );
 	void print( void );
 
 private:
 
 	// Internal Variables
 	KHTMLPart *recipeView;
-	KHTMLPart *printView;
 	RecipeDB *database;
 	bool recipe_loaded;
-	bool m_isPrinting;
 	QValueList<int> ids_loaded;
 	QString tmp_filename;
 
 	// Internal Methods
-	bool showRecipes( const QValueList<int> &ids );
+	bool showRecipes( const QValueList<int> &ids, const QString &layoutConfig );
 	void removeOldFiles();
 
 private slots:
 	void recipeRemoved(int);
-	void readyForPrint();
 
 };
 
