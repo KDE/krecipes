@@ -449,10 +449,8 @@ void Krecipes::pageSetupSlot()
 	Recipe recipe;
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
-	PageSetupDialog *page_setup = new PageSetupDialog( this, recipe );
-	page_setup->exec();
-
-	delete page_setup;
+	PageSetupDialog page_setup( this, recipe );
+	page_setup.exec();
 }
 
 void Krecipes::printSetupSlot()

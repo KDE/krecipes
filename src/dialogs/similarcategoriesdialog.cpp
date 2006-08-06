@@ -380,3 +380,5 @@ void SimilarCategoriesDialog::removeCategory()
 	if ( item )
 		delete item;
 }
+
+#include "similarcategoriesdialog.moc"

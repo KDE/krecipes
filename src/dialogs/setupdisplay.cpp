@@ -260,7 +260,7 @@ void SetupDisplay::loadVisibility( const QString &object, bool visible )
 	if ( m_currentItem ) {
 		m_currentItem->show = visible;
 		emit itemVisibilityChanged( m_currentItem, visible );
-	
+
 		m_styleSheet.insertRule("."+object+" { "+visibilityAsCSS(visible)+" }",m_styleSheet.cssRules().length());
 	}
 }
@@ -368,11 +368,14 @@ void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
 	DOM::Document doc = document();
 	DOM::DOMImplementation impl = doc.implementation();
 	kdDebug() << "(1) document: " << document().handle() << endl;
+	#if 0
 	if ( !impl.isNull() ) {
-		m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
-		doc.addStyleSheet(m_styleSheet);
-		applyStylesheet();
+		//m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
+		//m_styleSheet = DOM::CSSStyleSheet();
+		//doc.addStyleSheet(m_styleSheet);
+		//applyStylesheet();
 	}
+	#endif
 }
 
 void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
@@ -468,6 +471,7 @@ void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
 
 void SetupDisplay::applyStylesheet()
 {
+	loadTemplate( m_activeTemplate );
 	if ( !document().isNull() && !m_styleSheet.isNull() ) {
 		document().removeStyleSheet(m_styleSheet);
 		document().addStyleSheet(m_styleSheet);
