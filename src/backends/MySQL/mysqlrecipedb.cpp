@@ -133,7 +133,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredient_properties (id INTEGER NOT NULL AUTO_INCREMENT,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
 
 	else if ( tableName == "ingredient_weights" )
-		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL AUTO_INCREMENT, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, PRIMARY KEY (id) );";
+		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL AUTO_INCREMENT, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER, PRIMARY KEY (id), INDEX(ingredient_id), INDEX(unit_id), INDEX(weight_unit_id), INDEX(prep_method_id) );";
 
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
@@ -517,6 +517,12 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database->exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
 		if ( !database->commit() )
 			kdDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
+	}
+
+	if ( qRound(version*100) < 95 ) {
+		database->exec( "DROP TABLE ingredient_weights" );
+		createTable( "ingredient_weights" );
+		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
 }
 

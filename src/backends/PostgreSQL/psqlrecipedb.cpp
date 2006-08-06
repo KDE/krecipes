@@ -118,8 +118,13 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else if ( tableName == "ingredient_properties" )
 		commands << "CREATE TABLE ingredient_properties (id SERIAL NOT NULL,name CHARACTER VARYING, units CHARACTER VARYING);";
 
-	else if ( tableName == "ingredient_weights" )
-		commands << "CREATE TABLE ingredient_weights (id SERIAL NOT NULL PRIMARY KEY, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER );";
+	else if ( tableName == "ingredient_weights" ) {
+		commands << "CREATE TABLE ingredient_weights (id SERIAL NOT NULL PRIMARY KEY, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER );"
+		  << "CREATE INDEX weight_wid_index ON ingredient_weights USING BTREE (weight_unit_id)"
+		  << "CREATE INDEX weight_pid_index ON ingredient_weights USING BTREE (prep_method_id)"
+		  << "CREATE INDEX weight_uid_index ON ingredient_weights USING BTREE (unit_id)"
+		  << "CREATE INDEX weight_iid_index ON ingredient_weights USING BTREE (ingredient_id)";
+	}
 
 	else if ( tableName == "units_conversion" )
 		commands << "CREATE TABLE units_conversion (unit1_id INTEGER, unit2_id INTEGER, ratio FLOAT);";
@@ -439,8 +444,11 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			kdDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
 	}
 
-database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP" );
-
+	if ( qRound(version*100) < 95 ) {
+		database->exec( "DROP TABLE ingredient_weights" );
+		createTable( "ingredient_weights" );
+		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )
