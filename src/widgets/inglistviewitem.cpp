@@ -46,6 +46,7 @@ void IngSubListViewItem::setText( int column, const QString &text )
 		break;
 	}
 	default:
+		IngListViewItem::setText(column,text);
 		break;
 	}
 }
