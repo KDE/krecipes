@@ -471,8 +471,13 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	else {
 		CategoryListItem *parent = (CategoryListItem*)items_map[ parent_id ];
 
-		if ( parent && parent->isPopulated() ) {
-			new_item = new CategoryListItem( parent, category );
+		if ( parent ) {
+			if ( parent->isPopulated() )
+				new_item = new CategoryListItem( parent, category );
+			else if ( !parent->firstChild() ) {
+				new PseudoListItem( parent );
+				parent->setOpen(true);
+			}
 		}
 	}
 
