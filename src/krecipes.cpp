@@ -449,6 +449,16 @@ void Krecipes::pageSetupSlot()
 	Recipe recipe;
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
+	KConfig *config = KGlobal::config();
+	config->setGroup("Page Setup");
+	QString layout = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
+	QString printLayout = config->readEntry( "PrintLayout", locate( "appdata", "layouts/Default.klo" ) );
+
+	if ( layout == printLayout ) {
+		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
+		QString::null, "sharedLayoutWarning" );
+	}
+
 	PageSetupDialog page_setup( this, recipe );
 	page_setup.exec();
 }
@@ -457,6 +467,16 @@ void Krecipes::printSetupSlot()
 {
 	Recipe recipe;
 	m_view->selectPanel->getCurrentRecipe( &recipe );
+
+	KConfig *config = KGlobal::config();
+	config->setGroup("Page Setup");
+	QString layout = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
+	QString printLayout = config->readEntry( "PrintLayout", locate( "appdata", "layouts/Default.klo" ) );
+
+	if ( layout == printLayout ) {
+		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
+		QString::null, "sharedLayoutWarning" );
+	}
 
 	PageSetupDialog pageSetup( this, recipe, "Print" );
 	pageSetup.exec();
