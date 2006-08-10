@@ -24,7 +24,7 @@
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList, bool deps_are_deleted )
 		: KDialogBase( parent, "DependanciesDialog", true, QString::null,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
 		recipeListView(0), propertiesListView(0), m_depsAreDeleted(deps_are_deleted)
 {
 	QVBox *page = makeVBoxMainWidget();

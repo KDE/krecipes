@@ -25,6 +25,7 @@ IngredientComboBox::IngredientComboBox( bool b, QWidget *parent, RecipeDB *db, c
 		database( db ), loading_at(0), load_timer(new QTimer(this)), m_specialItem(specialItem)
 {
 	connect( load_timer, SIGNAL(timeout()), SLOT(loadMore()) );
+	completionObject()->setIgnoreCase(true);
 }
 
 void IngredientComboBox::reload()

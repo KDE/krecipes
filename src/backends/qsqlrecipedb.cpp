@@ -1435,6 +1435,7 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	Unit new_unit( real_name, real_plural );
 	new_unit.name_abbrev = real_name_abbrev;
 	new_unit.plural_abbrev = real_plural_abbrev;
+	new_unit.type = unit.type;
 
 	if ( real_name.isEmpty() )
 		real_name = real_plural;

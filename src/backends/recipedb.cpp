@@ -927,10 +927,11 @@ int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 		database->createNewUnit( unit );
 		assigned_id = database->lastInsertID();
 	}
-	else {
+	//keep what the user specified if the type here is Other
+	else if ( type != Unit::Other ) {
 		Unit unit = database->unitName(assigned_id);
-		if ( unit.type != Unit::Mass ) {
-			unit.type = Unit::Mass;
+		if ( unit.type != type ) {
+			unit.type = type;
 			database->modUnit( unit );
 		}
 	}
