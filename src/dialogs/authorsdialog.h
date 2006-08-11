@@ -36,7 +36,7 @@ public:
 
 	AuthorsDialog( QWidget* parent, RecipeDB *db );
 	~AuthorsDialog();
-	void reload( void );
+	void reload( bool force = true );
 private:
 	// Internal data
 	RecipeDB *database;

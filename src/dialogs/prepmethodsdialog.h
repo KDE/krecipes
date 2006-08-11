@@ -36,7 +36,7 @@ public:
 
 	PrepMethodsDialog( QWidget* parent, RecipeDB *db );
 	~PrepMethodsDialog();
-	void reload( void );
+	void reload( bool force = true );
 private:
 	// Internal data
 	RecipeDB *database;

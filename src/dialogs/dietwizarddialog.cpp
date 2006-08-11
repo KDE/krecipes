@@ -124,11 +124,11 @@ void DietWizardDialog::clear()
 	}
 }
 
-void DietWizardDialog::reload( void )
+void DietWizardDialog::reload( bool force )
 {
 	for ( int i = 0; i < mealTabs->count(); ++i ) {
 		MealInput *mealTab = (MealInput*)mealTabs->page(i);
-		mealTab->reload();
+		mealTab->reload(force);
 	}
 }
 
@@ -375,13 +375,13 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 MealInput::~MealInput()
 {}
 
-void MealInput::reload()
+void MealInput::reload( bool force )
 {
 	QValueList<DishInput*>::iterator it;
 	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
 		DishInput *di;
 		di = ( *it );
-		di->reload();
+		di->reload(force);
 	}
 }
 
@@ -529,10 +529,10 @@ bool DishInput::isCategoryFilteringEnabled( void ) const
 	return categoryFiltering;
 }
 
-void DishInput::reload()
+void DishInput::reload( bool force )
 {
 	constraintsView->reload();
-	categoriesView->reload();
+	categoriesView->reload(force);
 }
 
 void DishInput::insertConstraintsEditBoxes( QListViewItem* it )

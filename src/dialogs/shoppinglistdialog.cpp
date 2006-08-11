@@ -162,14 +162,14 @@ void ShoppingListDialog::createShopping( const RecipeList &rlist )
 	}
 }
 
-void ShoppingListDialog::reloadRecipeList( void )
+void ShoppingListDialog::reloadRecipeList( bool force )
 {
-	( ( RecipeListView* ) recipeListView->listView() ) ->reload();
+	( ( RecipeListView* ) recipeListView->listView() ) ->reload( force );
 }
 
-void ShoppingListDialog::reload( void )
+void ShoppingListDialog::reload( bool force )
 {
-	reloadRecipeList (); // Missing: check if there's non-existing recipes in the list now, and if so, delete.
+	reloadRecipeList ( force ); // Missing: check if there's non-existing recipes in the list now, and if so, delete.
 }
 
 void ShoppingListDialog::addRecipe( void )

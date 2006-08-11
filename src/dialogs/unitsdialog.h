@@ -38,7 +38,7 @@ public:
 	}
 
 public slots:
-	void reload ( void );
+	void reload( bool force = true );
 
 private:
 	// Widgets
@@ -49,8 +49,6 @@ private:
 	QPushButton *removeUnitButton;
 
 	// Internal methods
-	void loadUnitsList( void );
-	void reloadData( void );
 	void saveAllRatios( UnitRatioList &ratioList );
 	bool checkBounds( const QString &name );
 

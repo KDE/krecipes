@@ -97,7 +97,7 @@ private:
 
 public:
 	//Methods
-	void reload( void );
+	void reload( bool force = true );
 	RecipeList& dietList( void );
 
 private slots:
@@ -120,7 +120,7 @@ public:
 
 	MealInput( QWidget *parent, RecipeDB *database );
 	~MealInput();
-	void reload();
+	void reload( bool force = true );
 	int dishNo( void )
 	{
 		return dishNumber;
@@ -173,7 +173,7 @@ public:
 	bool isCategoryFilteringEnabled( void ) const;
 	void loadConstraints( ConstraintList *constraints ) const;
 	void loadEnabledCategories( ElementList* categories );
-	void reload();
+	void reload( bool force = true );
 	void setDishTitle( const QString & text );
 	void clear();
 

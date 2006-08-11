@@ -59,9 +59,9 @@ PrepMethodsDialog::~PrepMethodsDialog()
 {}
 
 // (Re)loads the data from the database
-void PrepMethodsDialog::reload( void )
+void PrepMethodsDialog::reload( bool force )
 {
-	prepMethodListView->reload();
+	prepMethodListView->reload( force );
 }
 
 #include "prepmethodsdialog.moc"

@@ -43,7 +43,7 @@ Q_OBJECT
 public:
 	IngredientsDialog( QWidget* parent, RecipeDB *db );
 	~IngredientsDialog();
-	void reload( void );
+	void reload( bool force = true );
 
 private:
 	// Widgets
@@ -67,7 +67,7 @@ private:
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods
-	void reloadIngredientList( void );
+	void reloadIngredientList( bool force = true );
 	void reloadUnitList( void );
 	void reloadPropertyList( void );
 	void reloadWeightList( void );

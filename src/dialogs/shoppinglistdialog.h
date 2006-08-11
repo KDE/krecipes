@@ -36,7 +36,7 @@ public:
 
 	ShoppingListDialog( QWidget *parent, RecipeDB *db );
 	~ShoppingListDialog();
-	void reload( void );
+	void reload( bool force = true );
 	void createShopping( const RecipeList &rlist );
 
 private:
@@ -44,7 +44,7 @@ private:
 	// Internal variables
 	RecipeDB *database;
 	// Internal Methods
-	void reloadRecipeList( void );
+	void reloadRecipeList( bool force );
 	void addRecipe( QListViewItem *item );
 	// Widgets
 	QGridLayout* layout;

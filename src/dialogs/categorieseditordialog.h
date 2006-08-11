@@ -38,7 +38,7 @@ public:
 	CategoriesEditorDialog( QWidget* parent, RecipeDB *db );
 	~CategoriesEditorDialog();
 
-	void reload();
+	void reload( bool force = true );
 
 private:
 	// Internal data

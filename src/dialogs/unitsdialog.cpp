@@ -93,15 +93,9 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 UnitsDialog::~UnitsDialog()
 {}
 
-
-void UnitsDialog::loadUnitsList( void )
+void UnitsDialog::reload( bool force )
 {
-	unitListView->reload();
-}
-
-void UnitsDialog::reloadData( void )
-{
-	loadUnitsList();
+	unitListView->reload( force );
 	loadConversionTables();
 }
 
@@ -210,11 +204,6 @@ void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 		}
 	}
 #endif
-}
-
-void UnitsDialog::reload( void )
-{
-	reloadData();
 }
 
 #include "unitsdialog.moc"

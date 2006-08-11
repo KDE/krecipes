@@ -58,9 +58,9 @@ AuthorsDialog::~AuthorsDialog()
 {}
 
 // (Re)loads the data from the database
-void AuthorsDialog::reload( void )
+void AuthorsDialog::reload( bool force )
 {
-	authorListView->reload();
+	authorListView->reload( force );
 }
 
 #include "authorsdialog.moc"

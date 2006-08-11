@@ -59,9 +59,9 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 CategoriesEditorDialog::~CategoriesEditorDialog()
 {}
 
-void CategoriesEditorDialog::reload()
+void CategoriesEditorDialog::reload( bool force )
 {
-	categoryListView->reload();
+	categoryListView->reload( force );
 }
 
 #include "categorieseditordialog.moc"

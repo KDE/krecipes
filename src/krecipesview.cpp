@@ -374,23 +374,23 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	case ShoppingP:
 		rightPanel->setHeader( i18n( "Shopping List" ), "trolley" );
 		rightPanel->raise( shoppingListPanel );
-		shoppingListPanel->reload();
+		shoppingListPanel->reload(false);
 		break;
 	case DietP:
 		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
 		rightPanel->raise( dietPanel );
-		dietPanel->reload();
+		dietPanel->reload(false);
 		break;
 	case MatcherP:
 		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "categories" );
 		rightPanel->raise( ingredientMatcherPanel );
-		ingredientMatcherPanel->reload();
+		ingredientMatcherPanel->reload(false);
 		break;
 
 	case IngredientsP:
 		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
 		rightPanel->raise( ingredientsPanel );
-		ingredientsPanel->reload();
+		ingredientsPanel->reload(false);
 		break;
 	case PropertiesP:
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
@@ -400,22 +400,22 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	case UnitsP:
 		rightPanel->setHeader( i18n( "Units" ), "units" );
 		rightPanel->raise( unitsPanel );
-		unitsPanel->reload();
+		unitsPanel->reload(false);
 		break;
 	case PrepMethodsP:
 		rightPanel->setHeader( i18n( "Preparation Methods" ), "GIVE ME AN ICON :p" );
 		rightPanel->raise( prepMethodsPanel );
-		prepMethodsPanel->reload();
+		prepMethodsPanel->reload(false);
 		break;
 	case CategoriesP:
 		rightPanel->setHeader( i18n( "Categories" ), "categories" );
 		rightPanel->raise( categoriesPanel );
-		categoriesPanel->reload();
+		categoriesPanel->reload(false);
 		break;
 	case AuthorsP:
 		rightPanel->setHeader( i18n( "Authors" ), "personal" );
 		rightPanel->raise( authorsPanel );
-		authorsPanel->reload();
+		authorsPanel->reload(false);
 		break;
 	case ContextHelp:
 		break;
@@ -996,6 +996,7 @@ void KrecipesView::reload()
 	authorsPanel->reload();
 	categoriesPanel->reload();
 	ingredientMatcherPanel->reload();
+	prepMethodsPanel->reload();
 }
 
 DCOPRef KrecipesView::currentDatabase() const

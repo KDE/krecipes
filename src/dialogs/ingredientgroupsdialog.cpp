@@ -59,7 +59,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	connect( removeHeaderButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
 }
 
-void IngredientGroupsDialog::reload()
+void IngredientGroupsDialog::reload( bool force )
 {
-	( ( StdHeaderListView* ) headerListView->listView() ) ->reload();
+	( ( StdHeaderListView* ) headerListView->listView() ) ->reload(force);
 }
