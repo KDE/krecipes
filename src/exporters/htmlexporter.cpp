@@ -330,10 +330,6 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	content = content.replace( "**CATEGORIES**", HTMLIfVisible("categories",categories_html) );
 
-	//=======================HEADER======================//
-	QString header_html = QString( "<b>%1 #%2</b>" ).arg( i18n( "Recipe" ) ).arg( recipe.recipeID );
-	content = content.replace( "**HEADER**", HTMLIfVisible("header",header_html) );
-
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
 	config->setGroup( "Formatting" );
