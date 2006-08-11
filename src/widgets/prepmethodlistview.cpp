@@ -149,7 +149,7 @@ void StdPrepMethodListView::modPrepMethod( QListViewItem* i )
 void StdPrepMethodListView::savePrepMethod( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(); //reset the changed text
+		reload(ForceReload); //reset the changed text
 		return ;
 	}
 
@@ -164,7 +164,7 @@ void StdPrepMethodListView::savePrepMethod( QListViewItem* i )
 				break;
 			}
 		default:
-			reload();
+			reload(ForceReload);
 			break;
 		}
 	}

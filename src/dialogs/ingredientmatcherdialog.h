@@ -17,6 +17,7 @@
 #include "datablocks/ingredientlist.h"
 #include "datablocks/recipe.h"
 #include "widgets/recipelistview.h"
+#include "widgets/dblistviewbase.h"
 
 #include <qfontmetrics.h>
 #include <qlabel.h>
@@ -119,7 +120,7 @@ public:
 
 	IngredientMatcherDialog( QWidget *parent, RecipeDB* db );
 	~IngredientMatcherDialog();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 
 signals:
 	void recipeSelected( int, int );

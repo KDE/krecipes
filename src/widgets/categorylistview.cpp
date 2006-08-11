@@ -506,7 +506,7 @@ void StdCategoryListView::saveCategory( QListViewItem* i )
 	CategoryListItem * cat_it = ( CategoryListItem* ) i;
 
 	if ( !checkBounds( cat_it->categoryName() ) ) {
-		reload(true); //reset the changed text
+		reload(ForceReload); //reset the changed text
 		return ;
 	}
 
@@ -521,7 +521,7 @@ void StdCategoryListView::saveCategory( QListViewItem* i )
 				break;
 			}
 		default:
-			reload(true);
+			reload(ForceReload);
 			break;
 		}
 	}

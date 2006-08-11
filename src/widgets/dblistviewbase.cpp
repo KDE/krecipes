@@ -84,7 +84,7 @@ void DBListViewBase::activatePrev()
 		if ( curr_offset < 0 )
 			curr_offset = 0;
 	
-		reload(true);
+		reload(ForceReload);
 		emit prevGroupLoaded();
 	}
 }
@@ -93,7 +93,7 @@ void DBListViewBase::activateNext()
 {
 	curr_offset += curr_limit;
 
-	reload(true);
+	reload(ForceReload);
 	emit nextGroupLoaded();
 }
 
@@ -154,9 +154,9 @@ void DBListViewBase::keyPressEvent( QKeyEvent *k )
 	KListView::keyPressEvent(k);
 }
 
-void DBListViewBase::reload( bool force )
+void DBListViewBase::reload( ReloadFlags flag )
 {
-	if ( force || !firstChild() ) {
+	if ( flag == ForceReload || (!firstChild() && flag == Load) || (firstChild() && flag == ReloadIfPopulated) ) {
 		KApplication::setOverrideCursor( KCursor::waitCursor() );
 
 		init();

@@ -18,6 +18,7 @@
 
 #include "datablocks/unitratiolist.h"
 #include "datablocks/unit.h"
+#include "widgets/dblistviewbase.h"
 
 class RecipeDB;
 class ConversionTable;
@@ -38,7 +39,7 @@ public:
 	}
 
 public slots:
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 
 private:
 	// Widgets

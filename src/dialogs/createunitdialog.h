@@ -18,9 +18,11 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qvbox.h>
-#include <klineedit.h>
 
 #include "datablocks/unit.h"
+
+class KComboBox;
+class KLineEdit;
 
 /**
 @author Unai Garro
@@ -39,6 +41,7 @@ private:
 	KLineEdit *pluralEdit;
 	KLineEdit *nameAbbrevEdit;
 	KLineEdit *pluralAbbrevEdit;
+	KComboBox *typeComboBox;
 };
 
 #endif

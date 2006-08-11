@@ -311,9 +311,9 @@ IngredientsDialog::~IngredientsDialog()
 	delete propertiesList;
 }
 
-void IngredientsDialog::reloadIngredientList( bool force )
+void IngredientsDialog::reloadIngredientList( ReloadFlags flag )
 {
-	( ( StdIngredientListView* ) ingredientListView->listView() ) ->reload(force);
+	( ( StdIngredientListView* ) ingredientListView->listView() ) ->reload(flag);
 
 	// Reload Unit List
 	updateLists();
@@ -684,10 +684,10 @@ int IngredientsDialog::findPropertyNo( QListViewItem * /*it*/ )
 	}
 }
 
-void IngredientsDialog::reload( bool force )
+void IngredientsDialog::reload( ReloadFlags flag )
 {
-	reloadIngredientList( force );
-	groupsDialog->reload( force );
+	reloadIngredientList( flag );
+	groupsDialog->reload( flag );
 }
 
 void IngredientsDialog::openUSDADialog( void )

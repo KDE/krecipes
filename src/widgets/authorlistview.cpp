@@ -143,7 +143,7 @@ void StdAuthorListView::modAuthor( QListViewItem* i )
 void StdAuthorListView::saveAuthor( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(true); //reset the changed text
+		reload(ForceReload); //reset the changed text
 		return ;
 	}
 
@@ -158,7 +158,7 @@ void StdAuthorListView::saveAuthor( QListViewItem* i )
 				break;
 			}
 		default:
-			reload(true);
+			reload(ForceReload);
 			break;
 		}
 	}

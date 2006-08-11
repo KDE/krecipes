@@ -39,6 +39,8 @@
 #include "datablocks/recipe.h"
 #include "datablocks/unitratiolist.h"
 
+#include "widgets/dblistviewbase.h"
+
 class KDoubleNumInput;
 
 class DishInput;
@@ -97,7 +99,7 @@ private:
 
 public:
 	//Methods
-	void reload( bool force = true );
+	void reload( ReloadFlags flags = Load );
 	RecipeList& dietList( void );
 
 private slots:
@@ -120,7 +122,7 @@ public:
 
 	MealInput( QWidget *parent, RecipeDB *database );
 	~MealInput();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 	int dishNo( void )
 	{
 		return dishNumber;
@@ -173,7 +175,7 @@ public:
 	bool isCategoryFilteringEnabled( void ) const;
 	void loadConstraints( ConstraintList *constraints ) const;
 	void loadEnabledCategories( ElementList* categories );
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 	void setDishTitle( const QString & text );
 	void clear();
 

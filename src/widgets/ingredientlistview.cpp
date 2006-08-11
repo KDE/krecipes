@@ -200,7 +200,7 @@ void StdIngredientListView::modIngredient( QListViewItem* i )
 void StdIngredientListView::saveIngredient( QListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(true); //reset the changed text
+		reload(ForceReload); //reset the changed text
 		return ;
 	}
 
@@ -215,7 +215,7 @@ void StdIngredientListView::saveIngredient( QListViewItem* i )
 				break;
 			}
 		default:
-			reload(true);
+			reload(ForceReload);
 			break; //we have to reload because the ingredient was renamed, and we need to reset it
 		}
 	}

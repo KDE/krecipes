@@ -154,7 +154,7 @@ void StdHeaderListView::modHeader( QListViewItem* i, const QPoint & /*p*/, int c
 void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c )
 {
 	if ( !checkBounds( text ) ) {
-		reload(true); //reset the changed text
+		reload(ForceReload); //reset the changed text
 		return ;
 	}
 
@@ -168,7 +168,7 @@ void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c
 				break;
 			}
 		default:
-			reload(true);
+			reload(ForceReload);
 			break;
 		}
 	}

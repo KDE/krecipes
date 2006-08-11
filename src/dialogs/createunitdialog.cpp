@@ -12,8 +12,11 @@
 
 #include "createunitdialog.h"
 
-#include <klocale.h>
 #include <qlabel.h>
+
+#include <klocale.h>
+#include <klineedit.h>
+#include <kcombobox.h>
 
 CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
 		: KDialogBase( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
@@ -54,6 +57,15 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( pluralAbbrevLabel, 1, 2 );
 	gridLayout->addWidget( pluralAbbrevEdit, 1, 3 );
 
+	QLabel *typeLabel = new QLabel( i18n( "Type:" ), box );
+	typeComboBox = new KComboBox( false, box );
+	typeComboBox->insertItem(i18n("Other"));
+	typeComboBox->insertItem(i18n("Mass"));
+	typeComboBox->insertItem(i18n("Volume"));
+
+	gridLayout->addWidget( typeLabel, 2, 0 );
+	gridLayout->addMultiCellWidget( typeComboBox, 2, 2, 1, 3 );
+
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
 
@@ -80,6 +92,8 @@ Unit CreateUnitDialog::newUnit( void )
 	Unit new_unit = Unit( name, plural );
 	new_unit.name_abbrev = nameAbbrevEdit->text();
 	new_unit.plural_abbrev = pluralAbbrevEdit->text();
+
+	new_unit.type = (Unit::Type)typeComboBox->currentItem();
 
 	return new_unit;
 }

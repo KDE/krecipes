@@ -374,23 +374,23 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	case ShoppingP:
 		rightPanel->setHeader( i18n( "Shopping List" ), "trolley" );
 		rightPanel->raise( shoppingListPanel );
-		shoppingListPanel->reload(false);
+		shoppingListPanel->reload( Load );
 		break;
 	case DietP:
 		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
 		rightPanel->raise( dietPanel );
-		dietPanel->reload(false);
+		dietPanel->reload( Load );
 		break;
 	case MatcherP:
 		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "categories" );
 		rightPanel->raise( ingredientMatcherPanel );
-		ingredientMatcherPanel->reload(false);
+		ingredientMatcherPanel->reload( Load );
 		break;
 
 	case IngredientsP:
 		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
 		rightPanel->raise( ingredientsPanel );
-		ingredientsPanel->reload(false);
+		ingredientsPanel->reload( Load );
 		break;
 	case PropertiesP:
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
@@ -400,22 +400,22 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	case UnitsP:
 		rightPanel->setHeader( i18n( "Units" ), "units" );
 		rightPanel->raise( unitsPanel );
-		unitsPanel->reload(false);
+		unitsPanel->reload( Load );
 		break;
 	case PrepMethodsP:
 		rightPanel->setHeader( i18n( "Preparation Methods" ), "GIVE ME AN ICON :p" );
 		rightPanel->raise( prepMethodsPanel );
-		prepMethodsPanel->reload(false);
+		prepMethodsPanel->reload( Load );
 		break;
 	case CategoriesP:
 		rightPanel->setHeader( i18n( "Categories" ), "categories" );
 		rightPanel->raise( categoriesPanel );
-		categoriesPanel->reload(false);
+		categoriesPanel->reload( Load );
 		break;
 	case AuthorsP:
 		rightPanel->setHeader( i18n( "Authors" ), "personal" );
 		rightPanel->raise( authorsPanel );
-		authorsPanel->reload(false);
+		authorsPanel->reload( Load );
 		break;
 	case ContextHelp:
 		break;
@@ -987,16 +987,16 @@ void KrecipesView::editRecipe()
 void KrecipesView::reload()
 {
 	viewPanel->reload();
-	selectPanel->reload();
-	shoppingListPanel->reload();
-	ingredientsPanel->reload();
+	selectPanel->reload( ForceReload );
+	shoppingListPanel->reload( ReloadIfPopulated );
+	ingredientsPanel->reload( ReloadIfPopulated );
 	propertiesPanel->reload();
-	unitsPanel->reload();
-	dietPanel->reload();
-	authorsPanel->reload();
-	categoriesPanel->reload();
-	ingredientMatcherPanel->reload();
-	prepMethodsPanel->reload();
+	unitsPanel->reload( ReloadIfPopulated );
+	dietPanel->reload( ReloadIfPopulated );
+	authorsPanel->reload( ReloadIfPopulated );
+	categoriesPanel->reload( ReloadIfPopulated );
+	ingredientMatcherPanel->reload( ReloadIfPopulated );
+	prepMethodsPanel->reload( ReloadIfPopulated );
 }
 
 DCOPRef KrecipesView::currentDatabase() const

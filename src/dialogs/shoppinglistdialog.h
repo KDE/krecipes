@@ -17,7 +17,9 @@
 #include <qlayout.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+
 #include "widgets/krelistview.h"
+#include "widgets/dblistviewbase.h"
 
 class RecipeDB;
 class RecipeList;
@@ -36,7 +38,7 @@ public:
 
 	ShoppingListDialog( QWidget *parent, RecipeDB *db );
 	~ShoppingListDialog();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 	void createShopping( const RecipeList &rlist );
 
 private:
@@ -44,7 +46,7 @@ private:
 	// Internal variables
 	RecipeDB *database;
 	// Internal Methods
-	void reloadRecipeList( bool force );
+	void reloadRecipeList( ReloadFlags flag = Load );
 	void addRecipe( QListViewItem *item );
 	// Widgets
 	QGridLayout* layout;

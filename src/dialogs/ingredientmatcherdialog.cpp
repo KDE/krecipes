@@ -323,9 +323,9 @@ void IngredientMatcherDialog::findRecipes( void )
 	KApplication::restoreOverrideCursor();
 }
 
-void IngredientMatcherDialog::reload( bool force )
+void IngredientMatcherDialog::reload( ReloadFlags flag )
 {
-	( ( StdIngredientListView* ) allIngListView->listView() ) ->reload(force);
+	( ( StdIngredientListView* ) allIngListView->listView() ) ->reload(flag);
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int width, int /*align*/ )

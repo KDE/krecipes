@@ -20,6 +20,8 @@
 #include <kiconloader.h>
 #include <klistview.h>
 
+#include "widgets/dblistviewbase.h"
+
 class RecipeDB;
 class StdPrepMethodListView;
 
@@ -36,7 +38,7 @@ public:
 
 	PrepMethodsDialog( QWidget* parent, RecipeDB *db );
 	~PrepMethodsDialog();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 private:
 	// Internal data
 	RecipeDB *database;

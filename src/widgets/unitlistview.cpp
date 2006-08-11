@@ -307,7 +307,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 	//skip abbreviations
 	if ( c == 0 || c == 2 ) {
 		if ( !checkBounds( Unit( text, text ) ) ) {
-			reload(true); //reset the changed text
+			reload(ForceReload); //reset the changed text
 			return ;
 		}
 	}
@@ -324,7 +324,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 				break;
 			}
 		default:
-			reload(true);
+			reload(ForceReload);
 			break;
 		}
 	}

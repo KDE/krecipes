@@ -20,6 +20,7 @@
 #include <knuminput.h>
 
 #include "widgets/krelistview.h"
+#include "widgets/dblistviewbase.h"
 #include "datablocks/unit.h"
 
 class KDoubleNumInput;
@@ -43,7 +44,7 @@ Q_OBJECT
 public:
 	IngredientsDialog( QWidget* parent, RecipeDB *db );
 	~IngredientsDialog();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 
 private:
 	// Widgets
@@ -67,7 +68,7 @@ private:
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods
-	void reloadIngredientList( bool force = true );
+	void reloadIngredientList( ReloadFlags flag = Load );
 	void reloadUnitList( void );
 	void reloadPropertyList( void );
 	void reloadWeightList( void );

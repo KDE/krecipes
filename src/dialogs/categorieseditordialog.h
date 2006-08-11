@@ -21,6 +21,7 @@
 #include <klistview.h>
 
 #include "datablocks/categorytree.h"
+#include "widgets/dblistviewbase.h"
 
 class RecipeDB;
 class StdCategoryListView;
@@ -38,7 +39,7 @@ public:
 	CategoriesEditorDialog( QWidget* parent, RecipeDB *db );
 	~CategoriesEditorDialog();
 
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 
 private:
 	// Internal data

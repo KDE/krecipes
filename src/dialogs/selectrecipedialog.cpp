@@ -175,9 +175,9 @@ void SelectRecipeDialog::clearSearch()
 	recipeFilter->filter( QString::null );
 }
 
-void SelectRecipeDialog::reload( bool force )
+void SelectRecipeDialog::reload( ReloadFlags flag )
 {
-	recipeListView->reload(force);
+	recipeListView->reload(flag);
 
 	#ifdef ENABLE_SLOW
 	categoryBox->reload();

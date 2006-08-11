@@ -29,6 +29,7 @@
 #include <kpopupmenu.h>
 
 #include "recipeactionshandler.h"
+#include "widgets/dblistviewbase.h"
 
 class QHBox;
 class QGroupBox;
@@ -91,7 +92,7 @@ private slots:
 
 public slots:
 	void haveSelectedItems();
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 	void clearSearch();
 };
 

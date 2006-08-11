@@ -13,6 +13,8 @@
 
 #include <qwidget.h>
 
+#include "widgets/dblistviewbase.h"
+
 class KreListView;
 class RecipeDB;
 
@@ -21,7 +23,7 @@ class IngredientGroupsDialog : public QWidget
 public:
 	IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name );
 
-	void reload( bool force = true );
+	void reload( ReloadFlags flag = Load );
 
 private:
 	KreListView *headerListView;

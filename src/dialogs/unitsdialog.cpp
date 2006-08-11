@@ -93,9 +93,9 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 UnitsDialog::~UnitsDialog()
 {}
 
-void UnitsDialog::reload( bool force )
+void UnitsDialog::reload( ReloadFlags flag )
 {
-	unitListView->reload( force );
+	unitListView->reload( flag );
 	loadConversionTables();
 }
 
