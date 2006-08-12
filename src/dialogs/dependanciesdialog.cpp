@@ -22,10 +22,26 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* recipeList, const ElementList* propertiesList, bool deps_are_deleted )
-		: KDialogBase( parent, "DependanciesDialog", true, QString::null,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
-		recipeListView(0), propertiesListView(0), m_depsAreDeleted(deps_are_deleted)
+DependanciesDialog::DependanciesDialog( QWidget *parent, const QValueList<ListInfo> &lists, bool deps_are_deleted ) : KDialogBase( parent, "DependanciesDialog", true, QString::null,
+	  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
+	  m_depsAreDeleted(deps_are_deleted)
+{
+	init( lists, deps_are_deleted );
+}
+
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialogBase( parent, "DependanciesDialog", true, QString::null,
+	  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
+	  m_depsAreDeleted(deps_are_deleted)
+{
+	QValueList<ListInfo> lists;
+	lists << list;
+	init( lists, deps_are_deleted );
+}
+
+DependanciesDialog::~DependanciesDialog()
+{}	
+
+void DependanciesDialog::init( const QValueList<ListInfo> &lists, bool deps_are_deleted )
 {
 	QVBox *page = makeVBoxMainWidget();
 
@@ -43,69 +59,46 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ElementList* reci
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following currently use the element you have chosen to be removed." ) );
 	}
 
-	if ( recipeList ) {
-		if ( !( recipeList->isEmpty() ) ) {
-			recipeBox = new QGroupBox( 1, Qt::Vertical, i18n( "Recipes" ), page );
-			recipeListView = new KListView( recipeBox );
+	for ( QValueList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
+		if ( !((*list_it).list).isEmpty() ) {
+			QGroupBox *groupBox = new QGroupBox( 1, Qt::Vertical, (*list_it).name, page );
+			KListBox *listBox = new KListBox( groupBox );
 
 			KConfig * config = KGlobal::config();
 			config->setGroup( "Advanced" );
 			bool show_id = config->readBoolEntry( "ShowID", false );
-			recipeListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-
-			recipeListView->addColumn( i18n( "Recipe Title" ) );
-			recipeListView->setAllColumnsShowFocus( true );
-			loadList( recipeListView, recipeList );
-		}
-	}
-
-	if ( propertiesList ) {
-		if ( !( propertiesList->isEmpty() ) ) {
-			propertiesBox = new QGroupBox( 1, Qt::Vertical, i18n( "Properties" ), page );
-			propertiesListView = new KListView( propertiesBox );
-
-			KConfig * config = KGlobal::config();
-			config->setGroup( "Advanced" );
-			bool show_id = config->readBoolEntry( "ShowID", false );
-			propertiesListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
-			
-			propertiesListView->addColumn( i18n( "Property" ) );
-			loadList( propertiesListView, propertiesList );
+			loadList( listBox, (*list_it).list );
 		}
 	}
 
 	setSizeGripEnabled( true );
 }
 
-DependanciesDialog::~DependanciesDialog()
-{}
-
-
-void DependanciesDialog::loadList( KListView* listView, const ElementList *list )
+void DependanciesDialog::loadList( KListBox* listBox, const ElementList &list )
 {
-	for ( ElementList::const_iterator el_it = list->begin(); el_it != list->end(); ++el_it ) {
-		QString id;
-		int idnum = ( *el_it ).id;
-		if ( idnum < 0 )
-			id = "-";
-		else
-			id = QString::number( idnum );
-		QListViewItem* it = new QListViewItem( listView, id, ( *el_it ).name );
-		listView->insertItem( it );
+	KConfig * config = KGlobal::config();
+	config->setGroup( "Advanced" );
+	bool show_id = config->readBoolEntry( "ShowID", false );
+
+	for ( ElementList::const_iterator el_it = list.begin(); el_it != list.end(); ++el_it ) {
+		QString name = ( *el_it ).name;
+		if ( show_id )
+			name += " (" + QString::number(( *el_it ).id) + ")";
+		listBox->insertItem( name );
 	}
 }
 
 void DependanciesDialog::accept()
 {
-	if ( recipeListView && m_depsAreDeleted ) {
+	if ( !m_msg.isEmpty() ) {
 		switch ( KMessageBox::warningYesNo(this,
-			i18n("<b>You are about to permanantly delete recipes from your database.</b><br><br>Are you sure you wish to proceed?"),
-			QString::null,KStdGuiItem::yes(),KStdGuiItem::no(),"DeleteRecipe") )
+			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18n("Are you sure you wish to proceed?")),
+			QString::null,KStdGuiItem::yes(),KStdGuiItem::no(),"doubleCheckDelete") )
 		{
 		case KMessageBox::Yes: QDialog::accept(); break;
 		case KMessageBox::No: QDialog::reject(); break;
 		}
 	}
-
-	QDialog::accept();
+	else
+		QDialog::accept();
 }

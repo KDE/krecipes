@@ -117,11 +117,15 @@ void StdHeaderListView::remove()
 
 		if ( recipeDependancies.isEmpty() )
 			database->removeIngredientGroup( headerID );
-		else { // need warning!
-			DependanciesDialog *warnDialog = new DependanciesDialog( this, &recipeDependancies, 0, false );
-			if ( warnDialog->exec() == QDialog::Accepted )
+		else { // need warning!	
+			ListInfo info;
+			info.list = recipeDependancies;
+			info.name = i18n( "Recipes" );
+
+			DependanciesDialog warnDialog( this, info );
+			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removeIngredientGroup( headerID );
-			delete warnDialog;
 		}
 	}
 }

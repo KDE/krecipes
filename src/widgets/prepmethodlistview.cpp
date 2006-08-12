@@ -113,10 +113,13 @@ void StdPrepMethodListView::remove
 			database->removePrepMethod( prepMethodID );
 		else // Need Warning!
 		{
-			DependanciesDialog *warnDialog = new DependanciesDialog( this, &dependingRecipes );
-			if ( warnDialog->exec() == QDialog::Accepted )
+			ListInfo info;
+			info.list = dependingRecipes;
+			info.name = i18n("Recipes");
+			DependanciesDialog warnDialog( this, info );
+			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removePrepMethod( prepMethodID );
-			delete warnDialog;
 		}
 	}
 }

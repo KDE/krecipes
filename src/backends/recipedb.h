@@ -189,7 +189,7 @@ public:
 	virtual void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo ) = 0;
 	virtual void findIngredientDependancies( int ingredientID, ElementList *recipes ) = 0;
 	virtual void findPrepMethodDependancies( int prepMethodID, ElementList *recipes ) = 0;
-	virtual void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes ) = 0;
+	virtual void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes, ElementList *weights ) = 0;
 	virtual void findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingredientID, int unitID ) = 0;
 	virtual void findUseOfIngInRecipes( ElementList *results, int ingredientID ) = 0;
 	virtual void findUseOf_Unit_InRecipes( ElementList *results, int unitID ) = 0;

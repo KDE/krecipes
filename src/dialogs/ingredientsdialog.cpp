@@ -499,15 +499,30 @@ void IngredientsDialog::removeUnitFromIngredient( void )
 		ElementList dependingRecipes, dependingPropertiesInfo;
 
 		database->findIngredientUnitDependancies( ingredientID, unitID, &dependingRecipes, &dependingPropertiesInfo );
-		if ( dependingRecipes.isEmpty() && dependingPropertiesInfo.isEmpty() )
+
+		QValueList<ListInfo> lists;
+		if ( !dependingRecipes.isEmpty() ) {
+			ListInfo info;
+			info.list = dependingRecipes;
+			info.name = i18n("Recipes");
+			lists << info;
+		}
+		if ( !dependingPropertiesInfo.isEmpty() ) {
+			ListInfo info;
+			info.list = dependingPropertiesInfo;
+			info.name = i18n("Properties");
+			lists << info;
+		}
+
+		if ( lists.isEmpty() )
 			database->removeUnitFromIngredient( ingredientID, unitID );
 		else
 		{ // must warn!
-			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &dependingRecipes, &dependingPropertiesInfo );
-
-			if ( warnDialog->exec() == QDialog::Accepted )
+			DependanciesDialog warnDialog( this, lists );
+			if ( !dependingRecipes.isEmpty() )
+				warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removeUnitFromIngredient( ingredientID, unitID );
-			delete warnDialog;
 		}
 		reloadUnitList(); // Reload the list from database
 		reloadPropertyList(); // Properties could have been removed if a unit is removed, so we need to reload.

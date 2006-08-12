@@ -110,7 +110,7 @@ public:
 	void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo );
 	void findIngredientDependancies( int ingredientID, ElementList *recipes );
 	void findPrepMethodDependancies( int prepMethodID, ElementList *recipes );
-	void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes );
+	void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes, ElementList *weights );
 	void findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingredientID, int unitID );
 	void findUseOfIngInRecipes( ElementList *results, int ingredientID );
 	void findUseOf_Unit_InRecipes( ElementList *results, int unitID );

@@ -161,13 +161,18 @@ void StdIngredientListView::remove
 
 		ElementList dependingRecipes;
 		database->findIngredientDependancies( ingredientID, &dependingRecipes );
+
 		if ( dependingRecipes.isEmpty() )
 			database->removeIngredient( ingredientID );
 		else { // Need Warning!
-			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &dependingRecipes );
-			if ( warnDialog->exec() == QDialog::Accepted )
+			ListInfo list;
+			list.list = dependingRecipes;
+			list.name = i18n( "Recipes" );
+
+			DependanciesDialog warnDialog( this, list );
+			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removeIngredient( ingredientID );
-			delete warnDialog;
 		}
 	}
 }

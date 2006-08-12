@@ -219,16 +219,37 @@ void StdUnitListView::remove()
 	if ( it ) {
 		int unitID = it->unit().id;
 
-		ElementList recipeDependancies, propertyDependancies;
-		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies );
+		ElementList recipeDependancies, propertyDependancies, weightDependancies;
+		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies, &weightDependancies );
 
-		if ( recipeDependancies.isEmpty() && propertyDependancies.isEmpty() )
+		QValueList<ListInfo> lists;
+		if ( !recipeDependancies.isEmpty() ) {
+			ListInfo info;
+			info.list = recipeDependancies;
+			info.name = i18n("Recipes");
+			lists << info;
+		}
+		if ( !propertyDependancies.isEmpty() ) {
+			ListInfo info;
+			info.list = propertyDependancies;
+			info.name = i18n("Properties");
+			lists << info;
+		}
+		if ( !weightDependancies.isEmpty() ) {
+			ListInfo info;
+			info.list = weightDependancies;
+			info.name = i18n("Ingredient Weights");
+			lists << info;
+		}
+
+		if ( lists.isEmpty() )
 			database->removeUnit( unitID );
 		else { // need warning!
-			DependanciesDialog *warnDialog = new DependanciesDialog( 0, &recipeDependancies, &propertyDependancies );
-			if ( warnDialog->exec() == QDialog::Accepted )
+			DependanciesDialog warnDialog( this, lists );
+			if ( !recipeDependancies.isEmpty() )
+				warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removeUnit( unitID );
-			delete warnDialog;
 		}
 	}
 }

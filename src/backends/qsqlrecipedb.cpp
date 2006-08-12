@@ -1727,7 +1727,7 @@ void QSqlRecipeDB::findIngredientDependancies( int ingredientID, ElementList *re
 
 
 //Finds data dependant on the removal of this Unit
-void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes )
+void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes, ElementList *weights )
 {
 
 	// Ingredient-Info (ingredient->property) using this Unit
@@ -1740,6 +1740,34 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 	command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;" ).arg( unitID ); // Without "DISTINCT" we get duplicates since ingredient_list has no unique recipe_id's
 	unitToRemove.exec( command );
 	loadElementList( recipes, &unitToRemove );
+
+	// Weights using this unit
+	command = QString( "SELECT i.name,weight_u.name,per_u.name,w.prep_method_id FROM ingredients i,ingredient_weights w,units weight_u,units per_u WHERE i.id=w.ingredient_id AND w.unit_id=per_u.id AND w.weight_unit_id=weight_u.id AND (weight_u.id=%1 OR per_u.id=%2)" )
+	  .arg( unitID )
+	  .arg( unitID );
+	unitToRemove.exec( command );
+	if ( unitToRemove.isActive() ) {
+		while ( unitToRemove.next() ) {
+			Element el;
+
+			QString ingName = unescapeAndDecode( unitToRemove.value( 0 ).toCString() );
+			QString weightUnit = unescapeAndDecode( unitToRemove.value( 1 ).toCString() );
+			QString perUnit = unescapeAndDecode( unitToRemove.value( 2 ).toCString() );
+
+			int prepID = unitToRemove.value( 3 ).toInt();
+			QString prep;
+			if ( prepID != -1 ) {
+				command = QString( "SELECT p.name FROM prep_methods p, ingredient_weights w WHERE p.id = w.prep_method_id AND w.prep_method_id=%1" )
+					.arg( prepID );
+				QSqlQuery query( command, database );
+				if ( query.isActive() && query.first() )
+					prep = unescapeAndDecode( query.value( 0 ).toCString() );
+			}
+
+			el.name = QString( i18n("In ingredient '%1': weight [%2/%3%4]") ).arg( ingName ).arg( weightUnit ).arg( perUnit ).arg( (prepID == -1)?QString::null:"; "+prep );
+			weights->append( el );
+		}
+	}
 
 }
 
@@ -1781,12 +1809,12 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 		while ( query->next() ) {
 			Element el;
 			el.id = -1; // There's no ID for the ingredient-property combination
-			QString ingName = query->value( 0 ).toCString();
+			QString ingName = unescapeAndDecode( query->value( 0 ).toCString() );
 			QString propName = unescapeAndDecode( query->value( 1 ).toCString() );
 			QString propUnits = unescapeAndDecode( query->value( 2 ).toCString() );
 			QString propPerUnits = unescapeAndDecode( query->value( 3 ).toCString() );
 
-			el.name = QString( "In ingredient %1: property \"%2\" [%3/%4]" ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
+			el.name = QString( i18n("In ingredient '%1': property \"%2\" [%3/%4]") ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
 			elList->append( el );
 		}
 	}

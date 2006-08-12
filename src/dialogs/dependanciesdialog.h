@@ -21,7 +21,12 @@
 #include <klistview.h>
 #include <kdialogbase.h>
 
-class ElementList;
+#include "datablocks/elementlist.h"
+
+typedef struct ListInfo {
+	ElementList list;
+	QString name;
+};
 
 /**
 @author Unai Garro
@@ -30,28 +35,26 @@ class DependanciesDialog: public KDialogBase
 {
 public:
 	//Methods
-	DependanciesDialog( QWidget *parent = 0, const ElementList* recipeList = 0, const ElementList* propertiesList = 0, bool deps_are_deleted = true );
+	DependanciesDialog( QWidget *parent, const QValueList<ListInfo> &lists, bool deps_are_deleted = true );
+	DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted = true );
+
 	~DependanciesDialog();
+
+	void setCustomWarning( const QString &msg ){ m_msg = msg; }
 
 public slots:
 	void accept();
 
 private:
 	//Widgets
-
 	QLabel *instructionsLabel;
-	QGroupBox *recipeBox;
-	QGroupBox *ingredientBox;
-	QGroupBox *propertiesBox;
-
-	KListView *recipeListView;
-	KListView *ingredientListView;
-	KListView *propertiesListView;
 
 	bool m_depsAreDeleted;
+	QString m_msg;
 
 	// Methods
-	void loadList( KListView* listView, const ElementList *list );
+	void init( const QValueList<ListInfo> &lists, bool deps_are_deleted = true );
+	void loadList( KListBox*, const ElementList &list );
 };
 
 #endif
