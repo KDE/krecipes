@@ -111,12 +111,9 @@ public:
 	void findIngredientDependancies( int ingredientID, ElementList *recipes );
 	void findPrepMethodDependancies( int prepMethodID, ElementList *recipes );
 	void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes, ElementList *weights );
-	void findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingredientID, int unitID );
-	void findUseOfIngInRecipes( ElementList *results, int ingredientID );
-	void findUseOf_Unit_InRecipes( ElementList *results, int unitID );
-	void findUseOf_Unit_InProperties( ElementList *results, int unitID );
 	void findUseOfIngGroupInRecipes( ElementList *results, int groupID );
 	void findUseOfCategoryInRecipes( ElementList *results, int catID );
+	void findUseOfAuthorInRecipes( ElementList *results, int authorID );
 
 	QString getUniqueRecipeTitle( const QString &recipe_title );
 

@@ -190,12 +190,9 @@ public:
 	virtual void findIngredientDependancies( int ingredientID, ElementList *recipes ) = 0;
 	virtual void findPrepMethodDependancies( int prepMethodID, ElementList *recipes ) = 0;
 	virtual void findUnitDependancies( int unitID, ElementList *properties, ElementList *recipes, ElementList *weights ) = 0;
-	virtual void findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingredientID, int unitID ) = 0;
-	virtual void findUseOfIngInRecipes( ElementList *results, int ingredientID ) = 0;
-	virtual void findUseOf_Unit_InRecipes( ElementList *results, int unitID ) = 0;
-	virtual void findUseOf_Unit_InProperties( ElementList *results, int unitID ) = 0;
 	virtual void findUseOfIngGroupInRecipes( ElementList *results, int groupID ) = 0;
 	virtual void findUseOfCategoryInRecipes( ElementList *results, int catID ) = 0;
+	virtual void findUseOfAuthorInRecipes( ElementList *results, int authorID ) = 0;
 
 	void getIDList( const CategoryTree *categoryTree, QStringList &ids );
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title ) = 0;

@@ -380,7 +380,7 @@ void StdCategoryListView::remove
 			info.list = recipeDependancies;
 			info.name = i18n("Recipes");
 			DependanciesDialog warnDialog( this, info, false );
-			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+
 			if ( warnDialog.exec() == QDialog::Accepted )
 				database->removeCategory( id );
 		}

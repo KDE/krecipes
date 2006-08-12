@@ -19,6 +19,7 @@
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
+#include "dialogs/dependanciesdialog.h"
 
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->authorCount() )
 {
@@ -105,12 +106,27 @@ void StdAuthorListView::remove
 	QListViewItem * item = currentItem();
 
 	if ( item ) {
-		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this author?" ) ) ) {
-		case KMessageBox::Continue:
-			database->removeAuthor( item->text( 1 ).toInt() );
-			break;
-		default:
-			break;
+		int id = item->text( 1 ).toInt();
+
+		ElementList recipeDependancies;
+		database->findUseOfAuthorInRecipes( &recipeDependancies, id );
+
+		if ( recipeDependancies.isEmpty() ) {
+			switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this author?" ) ) ) {
+				case KMessageBox::Continue:
+					database->removeAuthor( id );
+					break;
+			}
+			return;
+		}
+		else { // need warning!
+			ListInfo info;
+			info.list = recipeDependancies;
+			info.name = i18n("Recipes");
+
+			DependanciesDialog warnDialog( this, info, false );
+			if ( warnDialog.exec() == QDialog::Accepted )
+				database->removeAuthor( id );
 		}
 	}
 }

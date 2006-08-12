@@ -1037,39 +1037,6 @@ void QSqlRecipeDB::removeUnitFromIngredient( int ingredientID, int unitID )
 	unitToRemove.exec( command );
 }
 
-
-void QSqlRecipeDB::findUseOf_Ing_Unit_InRecipes( ElementList *results, int ingredientID, int unitID )
-{
-	QString command = QString( "SELECT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2" ).arg( ingredientID ).arg( unitID );
-	QSqlQuery recipeFound( command, database ); // Find the entries
-
-	// Populate data in the ElementList*
-	if ( recipeFound.isActive() ) {
-		while ( recipeFound.next() ) {
-			Element recipe;
-			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
-			results->append( recipe );
-		}
-	}
-}
-
-void QSqlRecipeDB::findUseOfIngInRecipes( ElementList *results, int ingredientID )
-{
-	QString command = QString( "SELECT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1" ).arg( ingredientID );
-	QSqlQuery recipeFound( command, database ); // Find the entries
-
-	// Populate data in the ElementList*
-	if ( recipeFound.isActive() ) {
-		while ( recipeFound.next() ) {
-			Element recipe;
-			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
-			results->append( recipe );
-		}
-	}
-}
-
 void QSqlRecipeDB::removeIngredientGroup( int groupID )
 {
 	QString command;
@@ -1503,38 +1470,6 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 	emit unitCreated( newUnit );
 }
 
-void QSqlRecipeDB::findUseOf_Unit_InRecipes( ElementList *results, int unitID )
-{
-	QString command = QString( "SELECT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;" ).arg( unitID );
-	QSqlQuery recipeFound( command, database ); // Find the entries
-
-	// Populate data in the ElementList*
-	if ( recipeFound.isActive() ) {
-		while ( recipeFound.next() ) {
-			Element recipe;
-			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = unescapeAndDecode( recipeFound.value( 1 ).toCString() );
-			results->append( recipe );
-		}
-	}
-}
-
-void QSqlRecipeDB::findUseOf_Unit_InProperties( ElementList *results, int unitID )
-{
-	QString command = QString( "SELECT ip.id,ip.name FROM ingredient_info ii, ingredient_properties ip WHERE ii.per_units=%1 AND ip.id=ii.property_id;" ).arg( unitID );
-	QSqlQuery recipeFound( command, database ); // Find the entries
-
-	// Populate data in the ElementList*
-	if ( recipeFound.isActive() ) {
-		while ( recipeFound.next() ) {
-			Element recipe;
-			recipe.id = recipeFound.value( 0 ).toInt();
-			recipe.name = recipeFound.value( 1 ).toCString();
-			results->append( recipe );
-		}
-	}
-}
-
 void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID )
 {
 	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.group_id=%1" ).arg( groupID );
@@ -1545,7 +1480,7 @@ void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID
 		while ( query.next() ) {
 			Element recipe;
 			recipe.id = query.value( 0 ).toInt();
-			recipe.name = query.value( 1 ).toCString();
+			recipe.name = unescapeAndDecode( query.value( 1 ).toCString() );
 			results->append( recipe );
 		}
 	}
@@ -1561,7 +1496,7 @@ void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 		while ( query.next() ) {
 			Element recipe;
 			recipe.id = query.value( 0 ).toInt();
-			recipe.name = query.value( 1 ).toCString();
+			recipe.name = unescapeAndDecode( query.value( 1 ).toCString() );
 			results->append( recipe );
 		}
 	}
@@ -1572,6 +1507,22 @@ void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 	if ( findDeps.isActive() ) {
 		while ( findDeps.next() ) {
 			findUseOfCategoryInRecipes(results,findDeps.value( 0 ).toInt() );
+		}
+	}
+}
+
+void QSqlRecipeDB::findUseOfAuthorInRecipes( ElementList *results, int authorID )
+{
+	QString command = QString( "SELECT r.id,r.title FROM recipes r,author_list al WHERE r.id=al.recipe_id AND al.author_id=%1" ).arg( authorID );
+	QSqlQuery query( command, database );
+
+	// Populate data
+	if ( query.isActive() ) {
+		while ( query.next() ) {
+			Element recipe;
+			recipe.id = query.value( 0 ).toInt();
+			recipe.name = unescapeAndDecode( query.value( 1 ).toCString() );
+			results->append( recipe );
 		}
 	}
 }
