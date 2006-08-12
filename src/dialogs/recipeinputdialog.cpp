@@ -380,7 +380,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 		KDialogBase::Close, this, "propertyStatusDialog", false, false,
 		updateGuiItem
 	);
-	propertyStatusDialog->setHelp("ingredients-tab");
+	propertyStatusDialog->setHelp("property-status");
 	statusTextView = new QTextEdit(0);
 	statusTextView->setTextFormat( Qt::RichText );
 	statusTextView->setReadOnly(true);
