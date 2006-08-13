@@ -35,7 +35,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 		    KDialogBase::Close | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Close ),
 		m_database(db)
 {
-	setHelp("measurement-converter");
+	setHelp("measure-converter");
 	setButtonText( KDialogBase::User1, i18n("Convert") );
 
 	setSizeGripEnabled( TRUE );

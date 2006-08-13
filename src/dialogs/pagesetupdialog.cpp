@@ -158,18 +158,30 @@ void PageSetupDialog::updateItemVisibility( KreDisplayItem *item, bool visible )
 	shown_items_popup->setItemChecked( widget_popup_map[ item ], visible );
 }
 
-//TODO: Sort these by alphabetical order
 void PageSetupDialog::initShownItems()
 {
 	shown_items_popup->clear();
-	for ( PropertiesMap::const_iterator it = m_htmlPart->properties().begin(); it != m_htmlPart->properties().end(); ++it ) {
-		if ( it.data() & SetupDisplay::Visibility ) {
-			int new_id = shown_items_popup->insertItem ( it.key()->name );
-			shown_items_popup->setItemChecked( new_id, it.key()->show );
+
+	PropertiesMap properties = m_htmlPart->properties();
+	
+	QValueList<QString> nameList;
+	QMap<QString,KreDisplayItem*> nameMap;
+
+	for ( PropertiesMap::const_iterator it = properties.begin(); it != properties.end(); ++it ) {
+		nameList << it.key()->name;
+		nameMap.insert( it.key()->name, it.key() );
+	}
+	qHeapSort( nameList );
+
+	for ( QValueList<QString>::const_iterator it = nameList.begin(); it != nameList.end(); ++it ) {
+		KreDisplayItem *item = nameMap[*it];
+		if ( properties[item] & SetupDisplay::Visibility ) {
+			int new_id = shown_items_popup->insertItem ( *it );
+			shown_items_popup->setItemChecked( new_id, item->show );
 			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
 
-			popup_widget_map.insert( new_id, it.key() );
-			widget_popup_map.insert( it.key(), new_id );
+			popup_widget_map.insert( new_id, item );
+			widget_popup_map.insert( item, new_id );
 		}
 	}
 }
