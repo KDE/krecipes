@@ -336,8 +336,15 @@ void RecipeListView::removeRecipe( int id )
 	while ( iterator.current() ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-			if ( recipe_it->recipeID() == id )
+			if ( recipe_it->recipeID() == id ) {
 				removeElement(recipe_it);
+
+				//delete the "Uncategorized" item if we removed the last recipe that was under it
+				if ( m_uncat_item->childCount() == 0 ) {
+					delete m_uncat_item;
+					m_uncat_item = 0;
+				}
+			}
 		}
 		++iterator;
 	}

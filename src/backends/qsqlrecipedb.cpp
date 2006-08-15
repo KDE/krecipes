@@ -873,7 +873,7 @@ void QSqlRecipeDB::categorizeRecipe( int recipeID, const ElementList &categoryLi
 		database->exec( command );
 	}
 
-	emit recipeModified( Element(QString::null,recipeID), categoryList );
+	emit recipeModified( Element(recipeTitle(recipeID),recipeID), categoryList );
 }
 
 void QSqlRecipeDB::createNewIngGroup( const QString &name )
