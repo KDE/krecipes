@@ -75,7 +75,7 @@ typedef QValueList <Menu>::Iterator MenuId;
 
 
 // Some constants
-typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, ContextHelp, RecipeEdit, RecipeView };
+typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, RecipeEdit, RecipeView };
 
 
 // Class KrecipesView
@@ -167,17 +167,14 @@ private:
 	KreMenuButton *button7;
 	KreMenuButton *button8;
 	KreMenuButton *button9;
-	QWidget* contextHelp;
 	QPushButton* contextButton;
-	QPushButton* contextClose;
-	QLabel* contextTitle;
-	KTextBrowser* contextText;
 
 	KreMenuButton *recipeButton;
 	QWidget *recipeWidget;
 
 	// Internal variables
 	QString dbType;
+	KrePanel m_activePanel;
 
 	QMap<QWidget*, KrePanel> panelMap;
 
@@ -195,6 +192,7 @@ public slots:
 	void exportToClipboard();
 	void reloadDisplay();
 	virtual void reload();
+	void activateContextHelp();
 
 private slots:
 	void actionRecipe( int recipeID, int action );
@@ -206,7 +204,6 @@ private slots:
 	void slotSetTitle( const QString& title );
 	void slotSetPanel( KrePanel );
 	void switchToRecipe( void );
-	void setContextHelp( KrePanel );
 	void createShoppingListFromDiet( void );
 	void moveTipButton( int, int );
 	void resizeRightPane( int lpw, int lph );

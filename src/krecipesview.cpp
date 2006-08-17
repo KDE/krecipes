@@ -161,28 +161,6 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );
 	contextButton->setFlat( true );
-
-	contextHelp = new QWidget( leftPanel, "contextHelp" );
-	contextHelp->setPaletteBackgroundColor( contextHelp->paletteBackgroundColor().dark( 120 ) );
-	contextHelp->resize( leftPanel->size() );
-	contextHelp->hide();
-
-	QGridLayout* contextLayout = new QGridLayout( contextHelp, 0, 0, 0, 0 );
-	contextTitle = new QLabel( contextHelp, "contextTitle" );
-	contextTitle->setTextFormat( Qt::RichText );
-	contextLayout->addMultiCellWidget( contextTitle, 0, 0, 0, 2 );
-	contextClose = new QPushButton( contextHelp, "contextClose" );
-	contextClose->setFixedSize( QSize( 16, 16 ) );
-	contextClose->setIconSet( il.loadIconSet( "fileclose", KIcon::Small, 16 ) );
-	contextClose->setPaletteBackgroundColor( contextClose->paletteBackgroundColor().light( 140 ) );
-
-	contextLayout->addWidget( contextClose, 0, 2 );
-	contextText = new KTextBrowser( contextHelp, "contextText" );
-	contextText->setPaletteBackgroundColor( contextText->paletteBackgroundColor().light( 140 ) );
-	contextText->setTextFormat( Qt::RichText );
-	contextText->setReadOnly( true );
-	contextText->setWordWrap( QTextEdit::WidgetWidth );
-	contextLayout->addMultiCellWidget( contextText, 1, 4, 0, 2 );
 	END_TIMER()
 
 	config->setGroup( "Performance" );
@@ -254,6 +232,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	panelMap.insert( prepMethodsPanel, PrepMethodsP );
 	panelMap.insert( ingredientMatcherPanel, MatcherP );
 
+	m_activePanel = RecipeEdit;
+
 	// i18n
 	translate();
 
@@ -265,9 +245,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Connect Signals from Left Panel to slotSetPanel()
 	connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
 
-	connect( contextButton, SIGNAL( clicked() ), contextHelp, SLOT( show() ) );
-	connect( contextButton, SIGNAL( clicked() ), contextHelp, SLOT( raise() ) );
-	connect( contextClose, SIGNAL( clicked() ), contextHelp, SLOT( close() ) );
+	connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
 
 	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
 
@@ -298,9 +276,6 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Place the Tip Button in correct position when the left pane is resized
 	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
-
-	// Resize the Tip Viewer properly
-	connect( leftPanel, SIGNAL( resized( int, int ) ), contextHelp, SLOT( resize( int, int ) ) );
 
 	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
@@ -366,7 +341,9 @@ void KrecipesView::slotSetTitle( const QString& title )
 // Function to switch panels
 void KrecipesView::slotSetPanel( KrePanel p )
 {
-	switch ( p ) {
+	m_activePanel = p;
+
+	switch ( m_activePanel ) {
 	case SelectP:
 		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "filefind" );
 		rightPanel->raise( selectPanel );
@@ -417,8 +394,6 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		rightPanel->raise( authorsPanel );
 		authorsPanel->reload( Load );
 		break;
-	case ContextHelp:
-		break;
 	case RecipeEdit:
 		rightPanel->setHeader( i18n( "Edit Recipe" ), "edit" );
 		rightPanel->raise( inputPanel );
@@ -428,8 +403,6 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		rightPanel->raise( viewPanel );
 		break;
 	}
-
-	setContextHelp( p );
 }
 
 bool KrecipesView::save( void )
@@ -728,9 +701,6 @@ void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 			short_title.append( "..." );
 
 		recipeButton->setTitle( short_title );
-		if ( contextHelp->isShown() ) {
-			contextHelp->hide();
-		}
 
 		buttonsList->append( recipeButton );
 		leftPanel->highlightButton( recipeButton );
@@ -774,94 +744,55 @@ void KrecipesView::showRecipes( const QValueList<int> &recipeIDs )
 		slotSetPanel( RecipeView );
 }
 
-void KrecipesView::setContextHelp( KrePanel p )
+void KrecipesView::activateContextHelp()
 {
-	switch ( p ) {
+	switch ( m_activePanel ) {
 	case RecipeView:
-		contextTitle->setText( i18n( "<b>Recipe view</b>" ) );
-		contextText->setText( "" );
+		//kapp->invokeHelp("");
 		break;
 
 	case SelectP:
-		contextTitle->setText( i18n( "<b>Recipes list</b>" ) );
-		contextText->setText( i18n( "<b>Search</b> for your favourite recipes easily: just type part of its name.<br><br>"
-		                            "Set the <b>category filter</b> to use only the recipes in certain category: <i>desserts, chocolate, salads, vegetarian...</i>.<br><br>"
-		                            "Right-click on a recipe to <b>save in Krecipes format</b> and <b>share your recipes</b> with your friends.<br><br>"
-		                            "Oh, and do not forget you can search in <a href=\"http://www.google.com\">Google</a> for thousands of delicious recipes. Krecipes can import most famous formats on the net: <a href=\"http://www.formatdata.com/recipeml/\">RecipeML</a>, <a href=\"http://www.valu-soft.com/products/mastercook.html\">MasterCook</a>, and <a href=\"http://www.mealmaster.com/\">MealMaster</a>, apart from our excellent Krecipes format obviously.<br><br>"
-		                          ) );
+		kapp->invokeHelp("find-edit");
 		break;
 
 	case ShoppingP:
-		contextTitle->setText( i18n( "<b>Shopping list</b>" ) );
-		contextText->setText( i18n( "Need to do your shopping list? Just <b>add your recipes</b> for the week, and <b>press Ok</b>. Krecipes will generate a shopping list for you.<br><br>"
-		                            "If you are willing to follow an adequate diet, or lazy enough to decide what to eat this week, just use the <b>Diet Helper</b> to autogenerate your diet, and then the shopping list.<br><br>"
-		                          ) );
+		kapp->invokeHelp("shopping-list");
 		break;
 
 	case DietP:
-		contextTitle->setText( i18n( "<b>Diet Helper</b>" ) );
-		contextText->setText( i18n( "This dialog will help you in creating a diet for several weeks/days.<br><br>"
-		                            "Choose how many days the diet will be for, how many meals per day you want, and how many dishes in each meal you want to have.<br><br>"
-		                            "Oh, do not forget to specify the categories for your dishes, unless you want to have pizza for breakfast too....<br><br>"
-		                          ) );
+		kapp->invokeHelp("diet-helper");
 		break;
 
 	case MatcherP:
-		contextTitle->setText( i18n( "<b>Ingredient Matcher</b>" ) );
-		contextText->setText( i18n( "Do you have a bunch a ingredients lying around, but you do not know what to make?  Use this dialog to find out what you can.<br><br>"
-		                            "Enter in the ingredients you have and it will let you know what you can make, or even what you can almost make.  If you are just missing a few ingredients, it will automatically let you know what you are missing."
-		                          ) );
+		kapp->invokeHelp("ingredient-matcher");
 		break;
 
 	case RecipeEdit:
-		contextTitle->setText( i18n( "<b>Edit recipe</b>" ) );
-		contextText->setText( i18n( "Write your succulent recipes here. Set the title, authors and ingredients of your recipe, add a nice photo, and start typing. You can also use the <b>spellchecker</b> to correct your spelling mistakes.<br><br>"
-		                            "If the <b>ingredient or unit</b> you are looking for is <b>missing</b>, do not worry. Just <b>type it</b>, and <b>new ones will be automatically created</b>. Remember to define the properties of your ingredients and fill in the units conversion table later.<br><br>"
-		                            "Do you want your nice recipe to be included on the next release? Just save it in Krecipes format, and send it to us."
-		                          ) );
+		kapp->invokeHelp("enter-edit-recipes");
 		break;
 
-
 	case IngredientsP:
-		contextTitle->setText( i18n( "<b>Ingredients list</b>" ) );
-		contextText->setText( i18n( "Edit your ingredients: add/remove, double click to change their name, define the units used to measure them, and set their properties (<i>Energy, Fat, Calcium, Proteins...</i>)<br><br>"
-		                            "Note that you can add more properties and units to the list from the <i>Properties List</i> menu"
-		                          ) );
+		kapp->invokeHelp("ingredients-component");
 		break;
 
 	case PropertiesP:
-		contextTitle->setText( i18n( "<b>Properties list</b>" ) );
-		contextText->setText( i18n( "What properties do you want to know from your recipes? <i>Fat, Energy, Vitamins, Cost,...</i>?<br><br>"
-		                            "Add those here and later define the characteristics in the ingredients."
-		                          ) );
+		kapp->invokeHelp("properties-component");
 		break;
 
 	case UnitsP:
-		contextTitle->setText( i18n( "<b>Units list</b>" ) );
-		contextText->setText( i18n( "Double click to edit, or Add and Remove <b>new units</b> that you want to use to measure your ingredients. From a <i>gram</i>, to a <i>jar</i>, you can specify all kind of units you want. <br><br>Later, you can define in the <b>unit conversion table</b> how your units can be converted to others, so that Krecipes knows how to add up your ingredients when creating your shopping list, or calculate the properties of your recipes."
-		                          ) );
+		kapp->invokeHelp("units-component");
 		break;
 
 	case PrepMethodsP:
-		contextTitle->setText( i18n( "<b>Preparation Methods list</b>" ) );
-		contextText->setText( i18n( "With the preparation method, you can give extra information about an ingredient. <i>sliced, cooked, optional,...</i> <br><br> Instead of adding this information to the ingredient itself, put this information here so that it is easier, for example, to create a shopping list or calculate nutrient information.<br><br>Just add and edit those here." ) );
+		kapp->invokeHelp("prep-methods");
 		break;
 
 	case CategoriesP:
-		contextTitle->setText( i18n( "<b>Categories list</b>" ) );
-		contextText->setText( i18n( "How do you want to classify your recipes? <i>Desserts, Main Course, Low Fat, Chocolate, Delicious, Vegetarian, ....</i> Just add and edit those here."
-		                          ) );
+		kapp->invokeHelp("categories-component");
 		break;
-
 
 	case AuthorsP:
-		contextTitle->setText( i18n( "<b>Authors list</b>" ) );
-		contextText->setText( i18n( "Keep track of the authors that created the recipes.<br><br>"
-		                            "You can use this dialog to edit the details of the authors or add/remove them."
-		                          ) );
-		break;
-
-	case ContextHelp:
+		kapp->invokeHelp("authors-component");
 		break;
 	}
 }
