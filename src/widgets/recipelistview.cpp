@@ -312,14 +312,18 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 void RecipeListView::createElement( QListViewItem *item )
 {
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
+	if ( cat_item && !cat_item->isPopulated() ) {
+		new PseudoListItem( item );
+	}
+
+	//if ( cat_item && !cat_item->isPopulated() && item->rtti() == RECIPELISTITEM_RTTI )
+	//	return;
 
 	#if 0
 	ElementList list;
 	database->loadRecipeList( &list, cat_item->categoryId() );
 	if ( list.count() > 0 )
 	#endif
-	if ( cat_item )
-		new PseudoListItem( item );
 
 	CategoryListView::createElement(item);
 }
@@ -340,7 +344,7 @@ void RecipeListView::removeRecipe( int id )
 				removeElement(recipe_it);
 
 				//delete the "Uncategorized" item if we removed the last recipe that was under it
-				if ( m_uncat_item->childCount() == 0 ) {
+				if ( m_uncat_item && m_uncat_item->childCount() == 0 ) {
 					delete m_uncat_item;
 					m_uncat_item = 0;
 				}

@@ -112,6 +112,8 @@ class CategoryListView : public DBListViewBase
 public:
 	CategoryListView( QWidget *parent, RecipeDB * );
 
+	void populateAll( QListViewItem *parent = 0 );
+
 public slots:
 	void open( QListViewItem *item );
 

@@ -83,6 +83,9 @@ void CategoryCheckListItem::stateChange( bool on )
 
 void CategoryCheckListItem::setChildrenState( bool on )
 {
+	if ( !isPopulated() )
+		return;
+
 	for ( CategoryCheckListItem * cat_it = ( CategoryCheckListItem* ) firstChild(); cat_it; cat_it = ( CategoryCheckListItem* ) cat_it->nextSibling() ) {
 		cat_it->locked = true;
 		cat_it->setOn( on );
@@ -190,6 +193,18 @@ void CategoryListView::populate( QListViewItem *item )
 	
 	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, id );
+	}
+}
+
+void CategoryListView::populateAll( QListViewItem *parent )
+{
+	if ( !parent )
+		parent = firstChild();
+
+	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+		populate( item );
+		if ( item->firstChild() )
+			populateAll( item->firstChild() );
 	}
 }
 
