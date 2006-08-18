@@ -30,6 +30,7 @@ public:
 	~IngredientList();
 	bool contains( const Ingredient &ing, bool compareAmount = false, RecipeDB *database = 0 ) const;
 	bool containsSubSet( IngredientList &il, IngredientList &missing, bool compareAmount = false, RecipeDB *database = 0 );
+	bool containsSubSet( IngredientList &il ) const;
 	bool containsAny( const IngredientList &, bool compareAmount = false, RecipeDB *database = 0 );
 
 	IngredientList groupMembers( int id, IngredientList::const_iterator begin ) const;

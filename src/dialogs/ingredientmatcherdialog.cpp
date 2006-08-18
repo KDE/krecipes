@@ -74,7 +74,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( this, QString::null, true );
-	ingListView->listView() ->addColumn( i18n( "Ingredient" ) );
+	ingListView->listView() ->addColumn( i18n( "Ingredient (required?)" ) );
 	ingListView->listView() ->addColumn( i18n( "Amount Available" ) );
 	layout2->addWidget( ingListView );
 	dialogLayout->addLayout( layout2 );
@@ -92,8 +92,8 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	recipeListView = new KreListView( this, i18n( "Matching Recipes" ), false, 1, missingBox );
 	recipeListView->listView() ->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
+
 	recipeListView->listView() ->addColumn( i18n( "Title" ) );
-	dialogLayout->addWidget(recipeListView);
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -101,7 +101,9 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	recipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	recipeListView->listView() ->addColumn( i18n( "Missing Ingredients" ) );
+
 	recipeListView->listView() ->setSorting( -1 );
+	dialogLayout->addWidget(recipeListView);
 
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
@@ -202,7 +204,8 @@ void IngredientMatcherDialog::addIngredient()
 		QPtrListIterator<QListViewItem> it(items);
 		QListViewItem *item;
 		while ( (item = it.current()) != 0 ) {
-			QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
+			QListViewItem * new_item = new QCheckListItem( ingListView->listView(), item->text( 0 ), QCheckListItem::CheckBox );
+
 			ingListView->listView() ->setSelected( new_item, true );
 			ingListView->listView() ->ensureItemVisible( new_item );
 			allIngListView->listView() ->setSelected( item, false );
@@ -286,6 +289,13 @@ void IngredientMatcherDialog::findRecipes( void )
 
 
 	START_TIMER("Ingredient Matcher: searching for and displaying partial matches");
+
+	IngredientList requiredIngredients;
+	for ( QListViewItem *it = ingListView->listView()->firstChild(); it; it = it->nextSibling() ) {
+		if ( ((QCheckListItem*)it)->isOn() )
+			requiredIngredients << *m_item_ing_map[it];
+	}
+
 	// Classify recipes with missing ingredients in different lists by ammount
 	QValueList<int>::Iterator nit;
 	QValueList<IngredientList>::Iterator ilit;
@@ -307,6 +317,9 @@ void IngredientMatcherDialog::findRecipes( void )
 
 		for ( it = incompleteRecipes.begin();it != incompleteRecipes.end();++it, ++nit, ++ilit ) {
 			if ( !( *it ).ingList.containsAny( m_ingredientList ) )
+				continue;
+
+			if ( !( *it ).ingList.containsSubSet( requiredIngredients ) )
 				continue;
 
 			if ( ( *nit ) == missingNo ) {

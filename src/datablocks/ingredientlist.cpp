@@ -63,6 +63,19 @@ bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing
 	return contained;
 }
 
+bool IngredientList::containsSubSet( IngredientList &il ) const
+{
+	IngredientList::const_iterator it;
+
+	for ( it = il.begin();it != il.end();++it ) {
+		if ( !contains( *it ) ) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool IngredientList::containsAny( const IngredientList &list, bool compareAmount, RecipeDB *database )
 {
 	for ( IngredientList::const_iterator this_list_it = begin(); this_list_it != end(); ++this_list_it ) {
