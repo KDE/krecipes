@@ -63,3 +63,4 @@ Comment[uk]=Куховарська книга для KDE
 Comment[xx]=xxThe KDE Cooking Bookxx
 Comment[zh_CN]=KDE 食谱
 Terminal=false
+X-DCOP-ServiceType=Unique

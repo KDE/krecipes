@@ -11,7 +11,10 @@
 ***************************************************************************/
 
 #include "krecipes.h"
-#include <kapplication.h>
+
+#include <iostream>
+
+#include <kuniqueapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -42,7 +45,14 @@ int main( int argc, char **argv )
 	about.setTranslator( I18N_NOOP( "INSERT YOUR NAME HERE" ), I18N_NOOP( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );
-	KApplication app;
+	KUniqueApplication::addCmdLineOptions();
+
+	if ( !KUniqueApplication::start() ) {
+		std::cout << "Krecipes is already running!" << std::endl;
+		return 0;
+	}
+
+	KUniqueApplication app;
 
 	// see if we are starting with session management
 	if ( app.isRestored() ) {
