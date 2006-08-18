@@ -898,19 +898,21 @@ void getIngredientNameAndID( std::multimap<int, QString> *data )
 
 int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database, bool do_checks )
 {
+	bool ingredientExisted = true;
 	int assigned_id = -1;
 	if ( do_checks )
 		assigned_id = database->findExistingIngredientByName( name );
 
 	if ( assigned_id == -1 ) {
+		ingredientExisted = false;
 		database->createNewIngredient( name );
 		assigned_id = database->lastInsertID();
 	}
 
-	if ( !do_checks || !database->ingredientContainsUnit( assigned_id, unit_g_id ) )
+	if ( !ingredientExisted || !database->ingredientContainsUnit( assigned_id, unit_g_id ) )
 		database->addUnitToIngredient( assigned_id, unit_g_id );
 
-	if ( !do_checks || !database->ingredientContainsUnit( assigned_id, unit_mg_id ) )
+	if ( !ingredientExisted || !database->ingredientContainsUnit( assigned_id, unit_mg_id ) )
 		database->addUnitToIngredient( assigned_id, unit_mg_id );
 
 	return assigned_id;

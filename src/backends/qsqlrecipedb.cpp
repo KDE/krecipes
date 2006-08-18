@@ -2139,41 +2139,6 @@ void QSqlRecipeDB::removeAuthor( int authorID )
 	emit authorRemoved( authorID );
 }
 
-int QSqlRecipeDB::findExistingUnitsByName( const QString& name, int ingredientID, ElementList *list )
-{
-	QString search_str = escapeAndEncode( name.left( maxUnitNameLength() ) ); //truncate to the maximum size db holds
-	QString command;
-	if ( ingredientID < 0 )  // We're looking for units with that name all through the table, no specific ingredient
-	{
-		command = "SELECT id,name FROM units WHERE name='" + search_str 
-		  + "' OR plural='" + search_str 
-		  + "' OR name_abbrev='" + search_str 
-		  + "' OR plural_abbrev='" + search_str 
-		  + "'";
-	}
-	else // Look for units  with that name for the specified ingredient
-	{
-		command = "SELECT u.id,u.name FROM units u, unit_list ul WHERE u.id=ul.unit_id AND ul.ingredient_id=" + QString::number( ingredientID ) + " AND ( u.name='" + search_str + "' OR u.plural='" + search_str + "' );";
-	}
-
-	QSqlQuery unitsToLoad( command, database ); // Run the query
-
-	if ( list )  //If the pointer exists, then load all the values found into it
-	{
-		if ( unitsToLoad.isActive() )
-		{
-			while ( unitsToLoad.next() ) {
-				Element el;
-				el.id = unitsToLoad.value( 0 ).toInt();
-				el.name = unescapeAndDecode( unitsToLoad.value( 1 ).toCString() );
-				list->append( el );
-			}
-		}
-	}
-
-	return ( unitsToLoad.size() );
-}
-
 int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 {
 	QString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds

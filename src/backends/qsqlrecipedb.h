@@ -105,7 +105,6 @@ public:
 	int findExistingRatingByName( const QString& name );
 	int findExistingUnitByName( const QString& name );
 	int findExistingPropertyByName( const QString& name );
-	int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 );
 	int findExistingYieldTypeByName( const QString& name );
 	void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo );
 	void findIngredientDependancies( int ingredientID, ElementList *recipes );

@@ -184,7 +184,6 @@ public:
 	virtual int findExistingRatingByName( const QString& name ) = 0;
 	virtual int findExistingRecipeByName( const QString& name ) = 0;
 	virtual int findExistingUnitByName( const QString& name ) = 0;
-	virtual int findExistingUnitsByName( const QString& name, int ingredientID = -1, ElementList *list = 0 ) = 0;
 	virtual int findExistingYieldTypeByName( const QString& name ) = 0;
 	virtual void findIngredientUnitDependancies( int ingredientID, int unitID, ElementList *recipes, ElementList *ingredientInfo ) = 0;
 	virtual void findIngredientDependancies( int ingredientID, ElementList *recipes ) = 0;

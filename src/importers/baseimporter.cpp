@@ -202,11 +202,7 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 	ing.units.id = new_unit_id;
 	ing.ingredientID = new_ing_id;
 
-	ElementList unitsWithIng;
-	db->findExistingUnitsByName( ing.units.name, new_ing_id, &unitsWithIng );
-	db->findExistingUnitsByName( ing.units.plural, new_ing_id, &unitsWithIng );
-
-	if ( !unitsWithIng.containsId( new_unit_id ) )
+	if ( !db->ingredientContainsUnit( new_ing_id, new_unit_id ) )
 		db->addUnitToIngredient( new_ing_id, new_unit_id );
 }
 
