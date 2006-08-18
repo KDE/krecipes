@@ -34,8 +34,10 @@ class IngredientPropertyList;
 class SelectPropertyDialog: public KDialogBase
 {
 public:
+	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
+
 	// Methods
-	SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList );
+	SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList, OptionFlag showEmpty = ShowEmptyUnit );
 	~SelectPropertyDialog();
 	int propertyID( void );
 	int perUnitsID( void );
@@ -45,6 +47,7 @@ private:
 	KListView *propertyChooseView;
 	QLabel *perUnitsLabel;
 	KComboBox *perUnitsBox;
+	OptionFlag m_showEmpty;
 
 	void loadProperties( IngredientPropertyList *propertyList );
 	void loadUnits( UnitList *unitList );

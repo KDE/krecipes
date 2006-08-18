@@ -18,9 +18,9 @@
 
 #include "datablocks/ingredientpropertylist.h"
 
-SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList )
+SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList, OptionFlag showEmpty )
 		: KDialogBase( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty)
 {
 
 	// Initialize internal variables
@@ -104,11 +104,20 @@ void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList 
 void SelectPropertyDialog::loadUnits( UnitList *unitList )
 {
 	for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
+		QString unitName = ( *unit_it ).name;
+		if ( unitName.isEmpty() ) {
+			if ( m_showEmpty == ShowEmptyUnit )
+				unitName = " "+i18n("-No unit-");
+			else
+				continue;
+		}
+
 		// Insert in the combobox
-		perUnitsBox->insertItem( ( *unit_it ).name );
+		perUnitsBox->insertItem( unitName );
 
 		// Store with index for using later
 		Unit newUnit( *unit_it );
+		newUnit.name = unitName;
 		unitListBack->append( newUnit );
 	}
 }

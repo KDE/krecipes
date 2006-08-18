@@ -30,7 +30,9 @@
 class SelectUnitDialog : public KDialogBase
 {
 public:
-	SelectUnitDialog( QWidget* parent, const UnitList &unitList );
+	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
+
+	SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag = ShowEmptyUnit );
 
 	~SelectUnitDialog();
 
@@ -40,6 +42,7 @@ private:
 	//Widgets
 	QGroupBox *box;
 	KListView *unitChooseView;
+	OptionFlag m_showEmpty;
 
 	void loadUnits( const UnitList &unitList );
 

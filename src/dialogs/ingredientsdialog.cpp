@@ -467,11 +467,11 @@ void IngredientsDialog::addUnitToIngredient( void )
 		UnitList allUnits;
 		database->loadUnits( &allUnits );
 
-		SelectUnitDialog* unitsDialog = new SelectUnitDialog( 0, allUnits );
+		SelectUnitDialog unitsDialog( this, allUnits, SelectUnitDialog::HideEmptyUnit );
 
-		if ( unitsDialog->exec() == QDialog::Accepted )
+		if ( unitsDialog.exec() == QDialog::Accepted )
 		{
-			int unitID = unitsDialog->unitID();
+			int unitID = unitsDialog.unitID();
 
 			if ( !( database->ingredientContainsUnit( ingredientID, unitID ) ) )
 				database->addUnitToIngredient( ingredientID, unitID ); // Add chosen unit to ingredient in database
@@ -606,13 +606,13 @@ void IngredientsDialog::addPropertyToIngredient( void )
 		database->loadProperties( &allProperties );
 		UnitList unitList;
 		database->loadPossibleUnits( ingredientID, &unitList );
-		SelectPropertyDialog* propertyDialog = new SelectPropertyDialog( 0, &allProperties, &unitList );
+		SelectPropertyDialog propertyDialog( this, &allProperties, &unitList, SelectPropertyDialog::HideEmptyUnit );
 
-		if ( propertyDialog->exec() == QDialog::Accepted )
+		if ( propertyDialog.exec() == QDialog::Accepted )
 		{
 
-			int propertyID = propertyDialog->propertyID();
-			int perUnitsID = propertyDialog->perUnitsID();
+			int propertyID = propertyDialog.propertyID();
+			int perUnitsID = propertyDialog.perUnitsID();
 			if ( !( database->ingredientContainsProperty( ingredientID, propertyID, perUnitsID ) ) ) {
 				if ( ( propertyID >= 0 ) && ( perUnitsID >= 0 ) )  // check if the property is not -1 ... (not selected)
 					database->addPropertyToIngredient( ingredientID, propertyID, 0, perUnitsID ); // Add result chosen property to ingredient in database, with amount 0 by default

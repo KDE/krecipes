@@ -16,9 +16,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList )
+SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
 		: KDialogBase( parent, "SelectUnitDialog", true, i18n( "Choose Unit" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty)
 {
 	QVBox *page = makeVBoxMainWidget();
 
@@ -63,7 +63,15 @@ int SelectUnitDialog::unitID( void )
 void SelectUnitDialog::loadUnits( const UnitList &unitList )
 {
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		( void ) new QListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), ( *unit_it ).name );
+		QString unitName = ( *unit_it ).name;
+		if ( unitName.isEmpty() ) {
+			if ( m_showEmpty == ShowEmptyUnit )
+				unitName = " "+i18n("-No unit-");
+			else
+				continue;
+		}
+
+		( void ) new QListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), unitName );
 	}
 }
 
