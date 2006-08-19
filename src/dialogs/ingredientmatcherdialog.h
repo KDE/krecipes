@@ -32,9 +32,7 @@
 class KreListView;
 class KIntSpinBox;
 class RecipeDB;
-class AmountUnitInput;
 class MixedNumber;
-class AmountUnitInput;
 
 /**
 @author Unai Garro
@@ -144,8 +142,6 @@ private:
 	QPushButton *addButton;
 	QPushButton *removeButton;
 
-	AmountUnitInput *amountEdit;
-
 	IngredientList m_ingredientList;
 	QMap<QListViewItem*, IngredientList::iterator> m_item_ing_map;
 
@@ -155,8 +151,6 @@ private slots:
 	void addIngredient();
 	void removeIngredient();
 	void itemRenamed( QListViewItem*, const QPoint &, int col );
-	void updateItemAmount( const MixedNumber &amount, const Unit &unit );
-	void insertIntoListView( QListViewItem *it );
 };
 
 #endif

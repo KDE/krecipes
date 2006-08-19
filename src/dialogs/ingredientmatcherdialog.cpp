@@ -25,6 +25,7 @@
 #include <qpainter.h>
 #include <qstringlist.h>
 #include <qlayout.h>
+#include <qgroupbox.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -34,6 +35,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 
 #include "profiling.h"
 
@@ -43,7 +45,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	database = db;
 
 	//Design the dialog
-	//setSpacing( 10 );
 
 	QVBoxLayout *dialogLayout = new QVBoxLayout( this, 11, 6 );
 
@@ -120,11 +121,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	clearButton->setText( i18n( "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
-
-	amountEdit = new AmountUnitInput( ingListView->listView(), database );
-	ingListView->listView()->addChild( amountEdit );
-	amountEdit->hide();
-
 	// Connect signals & slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
 	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
@@ -132,10 +128,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( selectionChanged() ), amountEdit, SLOT( hide() ) );
 	connect( ingListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
-	connect( amountEdit, SIGNAL( valueChanged(const MixedNumber &, const Unit &) ), this, SLOT( updateItemAmount(const MixedNumber &, const Unit &) ) );
-	connect( amountEdit, SIGNAL( doneEditing() ), amountEdit, SLOT( hide() ) );
 }
 
 IngredientMatcherDialog::~IngredientMatcherDialog()
@@ -145,55 +138,46 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )
 {
 	if ( col == 1 ) {
-		insertIntoListView(item);
-	}
-}
+		KDialogBase amountEditDialog(this,"IngredientMatcherAmountEdit",
+		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
-void IngredientMatcherDialog::insertIntoListView( QListViewItem *it )
-{
-	amountEdit->setItem( it );
+		QGroupBox *box = new QGroupBox( 1, Horizontal, i18n("Amount"), &amountEditDialog );
+		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
+		// Set the values from the item
+		if ( !item->text(1).isEmpty() ) {
+			amountEdit->setAmount( MixedNumber::fromString(item->text(2)) );
+			Unit u;
+			u.id = item->text(3).toInt();
+			amountEdit->setUnit( u );
+		} else {
+			amountEdit->setAmount( -1 );
+			Unit u;
+			u.id = -1;
+			amountEdit->setUnit( u );
+		}
 
-	if ( !it ) {
-		amountEdit->setShown(false);
-		return;
-	}
+		amountEditDialog.setMainWidget(box);
 
-	QRect r;
+		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+			MixedNumber amount = amountEdit->amount();
+			Unit unit = amountEdit->unit();
 
-	r = it->listView()->header() ->sectionRect( 1 ); //start at the section 2 header
-	r.moveBy( 0, it->listView()->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+			if ( amount.toDouble() <= 1e-5 ) {
+				amount = -1;
+				unit.id = -1;
 
-	r.setHeight( it->height() ); // Set the item's height
-	r.setWidth( it->listView()->header() ->sectionRect( 1 ).width() ); // and width
-	amountEdit->setGeometry( r );
+				item->setText(1,QString::null);
+			} else {
+				item->setText(1,amount.toString()+" "+((amount.toDouble()>1)?unit.plural:unit.name));
+			}
 
-	// Set the values from the item
-	if ( !it->text(1).isEmpty() ) {
-		amountEdit->setAmount( MixedNumber::fromString(it->text(2)) );
-		Unit u;
-		u.id = it->text(3).toInt();
-		amountEdit->setUnit( u );
-	} else {
-		amountEdit->setAmount( -1 );
-		Unit u;
-		u.id = -1;
-		amountEdit->setUnit( u );
-	}
+			item->setText(2,amount.toString());
+			item->setText(3,QString::number(unit.id));
 
-	amountEdit->setShown(true);
-}
-
-void IngredientMatcherDialog::updateItemAmount( const MixedNumber &amount, const Unit &unit )
-{
-	QListViewItem *it = amountEdit->item();
-	if ( it ) {
-		it->setText(1,amount.toString()+" "+((amount.toDouble()>1)?unit.plural:unit.name));
-
-		it->setText(2,amount.toString());
-		it->setText(3,QString::number(unit.id));
-		IngredientList::iterator ing_it = m_item_ing_map[it];
-		(*ing_it).amount = amount.toDouble();
-		(*ing_it).units = unit;
+			IngredientList::iterator ing_it = m_item_ing_map[item];
+			(*ing_it).amount = amount.toDouble();
+			(*ing_it).units = unit;
+		}
 	}
 }
 
@@ -233,8 +217,6 @@ void IngredientMatcherDialog::removeIngredient()
 
 void IngredientMatcherDialog::unselectIngredients()
 {
-	amountEdit->setItem(0);
-	amountEdit->hide();
 	ingListView->listView()->clear();
 	for ( QListViewItem *it = allIngListView->listView()->firstChild(); it; it = it->nextSibling() )
 		allIngListView->listView()->setSelected(it,false);

@@ -34,8 +34,6 @@ class SelectPropertyDialog;
 class UnitsDialog;
 class IngredientGroupsDialog;
 class MixedNumber;
-class AmountUnitInput;
-class WeightInput;
 
 class IngredientsDialog: public QWidget
 {
@@ -63,8 +61,6 @@ private:
 	KreListView* weightsListView;
 	QPushButton* pushButton5;
 	KDoubleNumInput* inputBox;
-	AmountUnitInput* weightInputBox;
-	WeightInput* perAmountInputBox;
 	IngredientGroupsDialog *groupsDialog;
 
 	// Internal Methods
@@ -73,7 +69,6 @@ private:
 	void reloadPropertyList( void );
 	void reloadWeightList( void );
 	int findPropertyNo( QListViewItem *it );
-	void insertIntoListView( QListViewItem *it, int col, AmountUnitInput *amountEdit );
 
 	// Internal Variables
 	RecipeDB *database;
@@ -93,7 +88,6 @@ private slots:
 	void setPropertyAmount( double amount );
 	void openUSDADialog( void );
 	void itemRenamed( QListViewItem*, const QPoint &, int col );
-	void setWeights();
 };
 
 #endif

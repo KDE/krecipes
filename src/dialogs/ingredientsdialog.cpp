@@ -261,17 +261,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	propertiesListView->listView() ->addChild( inputBox );
 	inputBox->hide();
 
-	weightInputBox = new AmountUnitInput( weightsListView->listView()->viewport(), database, Unit::Mass, MixedNumber::DecimalFormat );
-	weightsListView->listView()->addChild( weightInputBox );
-	weightInputBox->hide();
-
-	perAmountInputBox = new WeightInput( weightsListView->listView()->viewport(), database, Unit::All, MixedNumber::DecimalFormat );
-	weightsListView->listView()->addChild( perAmountInputBox );
-	perAmountInputBox->hide();
-
-	weightsListView->listView()->setColumnWidth( 0, weightInputBox->width() );
-	weightsListView->listView()->setColumnWidth( 1, perAmountInputBox->width() );
-
 	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
 
 	groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
@@ -297,7 +286,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	connect( propertiesListView->listView(), SIGNAL( selectionChanged() ), inputBox, SLOT( hide() ) );
 	connect( inputBox, SIGNAL( valueChanged( double ) ), this, SLOT( setPropertyAmount( double ) ) );
 
-	connect( weightsListView->listView(), SIGNAL( selectionChanged() ), this, SLOT( setWeights() ) );
 	connect( weightsListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
 
 	connect( loadUsdaButton, SIGNAL( clicked() ), this, SLOT( openUSDADialog() ) );
@@ -362,7 +350,7 @@ void IngredientsDialog::addWeight()
 			Weight w = weightDialog.weight();
 			w.ingredientID = it->text( 1 ).toInt();
 			database->addIngredientWeight( w );
-	
+
 			QListViewItem * lastElement = weightsListView->listView()->lastItem();
 	
 			WeightListItem *weight_it = new WeightListItem( weightsListView->listView(), lastElement, w );
@@ -383,74 +371,58 @@ void IngredientsDialog::removeWeight()
 	}
 }
 
-void IngredientsDialog::setWeights()
-{
-	Weight w;
-
-	if ( weightInputBox->isShown() ) {
-		WeightListItem *it = (WeightListItem*)weightInputBox->item();
-		it->setWeightUnit( weightInputBox->amount().toDouble(), weightInputBox->unit() );
-		w = it->weight();
-
-		weightInputBox->setShown(false);
-	}
-
-	if ( perAmountInputBox->isShown() ) {
-		WeightListItem *it = (WeightListItem*)perAmountInputBox->item();
-		it->setAmountUnit( perAmountInputBox->amount().toDouble(), perAmountInputBox->unit(), perAmountInputBox->prepMethod() );
-		w = it->weight();
-
-		perAmountInputBox->setShown(false);
-	}
-
-	if ( w.id != -1 )
-		database->addIngredientWeight( w );
-}
-
 void IngredientsDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )
 {
 	WeightListItem *weight_it = (WeightListItem*)item;
 	Weight w = weight_it->weight();
 
 	if ( col == 0 ) {
-		insertIntoListView(item,0,weightInputBox);
-		weightInputBox->setAmount( w.weight );
-		Unit u;
-		u.id = w.weightUnitID;
-		weightInputBox->setUnit( u );
+		KDialogBase amountEditDialog(this,"WeightAmountEdit",
+		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
+
+		QGroupBox *box = new QGroupBox( 1, Horizontal, i18n("Amount"), &amountEditDialog );
+		AmountUnitInput *amountEdit = new AmountUnitInput( box, database, Unit::Mass, MixedNumber::DecimalFormat );
+
+		WeightListItem *it = (WeightListItem*)item;
+		Weight w = it->weight();
+
+		amountEdit->setAmount( w.weight );
+		amountEdit->setUnit( Unit(w.weightUnit,w.weightUnit,w.weightUnitID) );
+
+		amountEditDialog.setMainWidget(box);
+
+		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+			MixedNumber amount = amountEdit->amount();
+			Unit unit = amountEdit->unit();
+
+			it->setWeightUnit( amount.toDouble(), unit );
+			database->addIngredientWeight( it->weight() );
+		}
 	}
 	else if ( col == 1 ) {
-		insertIntoListView(item,1,perAmountInputBox);
+		KDialogBase amountEditDialog(this,"PerAmountEdit",
+		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
-		perAmountInputBox->setAmount( w.perAmount );
+		QGroupBox *box = new QGroupBox( 1, Horizontal, i18n("Amount"), &amountEditDialog );
+		WeightInput *amountEdit = new WeightInput( box, database, Unit::All, MixedNumber::DecimalFormat );
 
-		Unit u;
-		u.id = w.perAmountUnitID;
-		perAmountInputBox->setUnit( u );
+		WeightListItem *it = (WeightListItem*)item;
+		Weight w = it->weight();
 
-		perAmountInputBox->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
+		amountEdit->setAmount( w.perAmount );
+		amountEdit->setUnit( Unit(w.perAmountUnit,w.perAmountUnit,w.perAmountUnitID) );
+		amountEdit->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
+
+		amountEditDialog.setMainWidget(box);
+
+		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+			MixedNumber amount = amountEdit->amount();
+			Unit unit = amountEdit->unit();
+
+			it->setAmountUnit( amount.toDouble(), unit, amountEdit->prepMethod() );
+			database->addIngredientWeight( it->weight() );
+		}
 	}
-}
-
-void IngredientsDialog::insertIntoListView( QListViewItem *it, int col, AmountUnitInput *amountEdit )
-{
-	amountEdit->setItem( it );
-
-	if ( !it ) {
-		amountEdit->setShown(false);
-		return;
-	}
-
-	QRect r;
-
-	r = it->listView()->header() ->sectionRect( col ); //start at the section 2 header
-	r.moveBy( 0, it->listView()->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
-
-	r.setHeight( it->height() ); // Set the item's height
-	r.setWidth( it->listView()->header() ->sectionRect( col ).width() ); // and width
-	amountEdit->setGeometry( r );
-
-	amountEdit->setShown(true);
 }
 
 void IngredientsDialog::addUnitToIngredient( void )
