@@ -39,6 +39,7 @@
 #include <knuminput.h>
 #include <klineedit.h>
 #include <kurlrequester.h>
+#include <kdebug.h>
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 		: KDialogBase( IconList, i18n( "Krecipes Preferences" ),
@@ -59,27 +60,34 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	QHBoxLayout* layout = new QHBoxLayout( frame );
 	m_pageServer = new ServerPrefs( frame );
 	layout->addWidget( m_pageServer );
+	m_helpMap.insert(0,"configure-server-settings");
 
 	frame = addPage( i18n( "Formatting" ), i18n( "Customize Formatting" ), il.loadIcon( "math_frac", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* formatting_layout = new QHBoxLayout( frame );
 	m_pageNumbers = new NumbersPrefs( frame );
 	formatting_layout->addWidget( m_pageNumbers );
+	m_helpMap.insert(1,"custom-formatting");
 
 	frame = addPage( i18n( "Import/Export" ), i18n( "Recipe Import and Export Options" ), il.loadIcon( "down", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* import_layout = new QHBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
+	m_helpMap.insert(2,"import-export-preference");
 
 	frame = addPage( i18n( "Performance" ), i18n( "Performance Options" ), il.loadIcon( "launch", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* performance_layout = new QHBoxLayout( frame );
 	m_pagePerformance = new PerformancePrefs( frame );
 	performance_layout->addWidget( m_pagePerformance );
-
-	//setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+	m_helpMap.insert(3,"configure-performance");
 
 	// Signals & Slots
 	connect ( this, SIGNAL( okClicked() ), this, SLOT( saveSettings() ) );
 
+}
+
+void KrecipesPreferences::slotHelp()
+{
+	kapp->invokeHelp( m_helpMap[activePageIndex()] );
 }
 
 

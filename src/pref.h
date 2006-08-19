@@ -17,6 +17,8 @@
 
 #include <kdialogbase.h>
 
+#include <qmap.h>
+
 class ServerPrefs;
 class NumbersPrefs;
 class ImportPrefs;
@@ -38,11 +40,16 @@ class KrecipesPreferences : public KDialogBase
 public:
 	KrecipesPreferences( QWidget *parent );
 
+protected slots:
+	void slotHelp();
+
 private:
 	ServerPrefs *m_pageServer;
 	NumbersPrefs *m_pageNumbers;
 	ImportPrefs *m_pageImport;
 	PerformancePrefs *m_pagePerformance;
+
+	QMap<int,QString> m_helpMap;
 
 private slots:
 	void saveSettings( void );
