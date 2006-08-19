@@ -636,7 +636,7 @@ void RecipeInputDialog::reload( void )
 	else {
 		QPixmap photo = QPixmap( defaultPhoto );
 		photoLabel->setPixmap( photo );
-		sourcePhoto.resize( 0, 0 );
+		sourcePhoto = QPixmap();
 	}
 
 
@@ -682,7 +682,7 @@ void RecipeInputDialog::changePhoto( void )
 
 void RecipeInputDialog::clearPhoto( void )
 {
-	sourcePhoto.resize( 0, 0 );
+	sourcePhoto = QPixmap();
 	photoLabel->setPixmap( QPixmap( defaultPhoto ) );
 
 	emit changed();
@@ -1069,6 +1069,8 @@ void RecipeInputDialog::newRecipe( void )
 	loadedRecipe->empty();
 	QPixmap image( defaultPhoto );
 	photoLabel->setPixmap( image );
+	sourcePhoto = QPixmap();
+
 	instructionsEdit->setText( i18n( "Write the recipe instructions here" ) );
 	instructionsEdit->clearCompletionItems();
 	titleEdit->setText( i18n( "Write the recipe title here" ) );
