@@ -41,7 +41,7 @@ as Authors, publish date, the abstract, and Keywords -->
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
-<year>2004-2005</year>
+<year>2004-2006</year>
 <holder>Colleen Beamer and Jason Kivlighn</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
@@ -158,15 +158,17 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <quote>Find/Edit Rec
  
 <itemizedlist><listitem><para>A title showing the name of the component selected</para></listitem>
 <listitem><para><emphasis><guilabel>Basic</guilabel></emphasis> (the default) and <emphasis><guilabel>Advanced</guilabel></emphasis> tabs</para></listitem>
-<listitem><para>A textbox to <userinput>enter search criteria</userinput></para></listitem>
-<listitem><para>A drop-down menu for selecting the recipe category to search, or which can be used to select a single category of recipes to display</para></listitem>
+<listitem><para>A textbox to <userinput>enter search criteria</userinput></para>
+<note><para>A cool feature here is that &krecipes; will search for recipes as you type a text string in the <guilabel>Search:</guilabel> box.  For example, if you wanted to find a recipe containing the word <quote>apple</quote>, the recipes that display in the recipe view would show only those recipes that contain the text string and would be filtered more finely as each subsequent letter is typed.</para></note></listitem>
 <listitem><para>A list of all recipe categories</para></listitem>
 <listitem><para>Buttons for <guibutton>Open</guibutton>, <guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing the corresponding action on a recipe</para></listitem>
 </itemizedlist>
 
 <tip><para>For more information on the basic search functionality, click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="krectip.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon in the bottom, right-hand corner of the pane containing the component list.</para></tip>
 
-<para> With the <emphasis><guilabel>Basic</guilabel></emphasis> tab active and the list of recipe categories displayed, when a category is selected, it will automatically expand to show your recipes and/or subcategories if there are any.  From this list, you may select a recipe to open, edit or delete (see the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information).  Additionally, if you <action>hover the mouse pointer</action> over any recipe title, a <interface>dialog box</interface> will appear showing the recipe title and the date that it was <emphasis>created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
+<para>With the <emphasis><guilabel>Basic</guilabel></emphasis> tab active and the list of recipe categories displayed, a category can be expanded by clicking on the <guibutton>+</guibutton> button beside the category name.  The category will automatically expand to show your recipes and/or subcategories if there are any.  From this list, you may select a recipe to open, edit or delete (see the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information).  Additionally, if you <action>hover the mouse pointer</action> over any recipe title, a <interface>dialog box</interface> will appear showing the recipe title and the date that it was <emphasis>created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
+
+<para>Conversely, clicking the <guibutton>-</guibutton> button beside the category name will collapse the category.</para>
 
 <sect2 id="right-click-menu">
 <title>The "Right-Click" Menu</title>
@@ -175,12 +177,14 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <quote>Find/Edit Rec
 
 <itemizedlist>
 <listitem><para>Open &ndash; Opens the selected recipe.</para></listitem>
-<listitem><para>Edit &ndash; Open the selected recipe for editing.</para></listitem>
+<listitem><para>Edit &ndash; Opens the selected recipe for editing.</para></listitem>
 <listitem><para>Export &ndash; Exports the selected recipe.  See the section <link linkend="export-recipe">Exporting Recipes to Other Formats</link> for a complete description of this function.</para></listitem>
 <listitem><para>Remove From Category &ndash; Removes the recipe from its current category and places it in the <emphasis>Uncategorized</emphasis> group.  From the <emphasis>Uncategorized</emphasis> group, the recipe can be selected for editing to re-categorize it.  See the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information.</para></listitem>
 <listitem><para>Delete &ndash; Deletes the recipe from the database.</para></listitem>
 <listitem><para>Add to Shopping List &ndash; Adds the selected recipe to your shopping list.  See the section <link linkend="shopping-list">The Shopping List</link> for information regarding the use of the Shopping List.</para></listitem>
 <listitem><para>Copy to Clipboard &ndash; Makes a copy of the recipe and places in on the clipboard so that it can be pasted into another application for example, an e-mail.  The format of the copy is dependent on what is selected as a preference.  For a complete description of the <quote>Copy to Clipboard</quote> functionality, see the section <link linkend="copy-clipboard">Copying to the Clipboard</link>.</para></listitem>
+<listitem><para>Categorize &ndash; Allows you to select one or more recipes that appear in the <emphasis>Uncategorized</emphasis> group and place them in appropriate categories without having to edit the recipe(s).</para>
+<note><para>This option applies only when there are recipes listed as <emphasis>Uncategorized</emphasis>.  If multiple recipes are selected for categorizing, they must be of the same category.  To select non-adjacent recipes for categorizing, hold the <keycap>Ctrl</keycap> key and select the desired recipes by clicking on them.</para></note></listitem>
 </itemizedlist>
 
 </sect2>
@@ -305,7 +309,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>
 <screenshot>
-<screeninfo>Here's a screenshot of a completed search in <emphasis>&krecipes;</emphasis> specifying a category and and additional criteria.</screeninfo>
+<screeninfo>Here's a screenshot of a completed search in <emphasis>&krecipes;</emphasis> specifying a category and additional criteria.</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="adv-srch-multi.png" format="PNG"/>
@@ -345,7 +349,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para>To enable <emphasis><guilabel>Yield</guilabel></emphasis> as a criteria for your search, click the tick box beside the <emphasis><guilabel>Enabled</guilabel></emphasis> label.  Once you have designated this to be part of your search, you can define the yield by selecting from the drop-down menu as follows &mdash;</para>
 
 <itemizedlist>
-<listitem><para><emphasis><guilabel>Yields at least:</guilabel></emphasis> &ndash; This would be specified if you want the recipe(s) to be able to provide a minimum number of portions.  The recipe(s) returned COULD yield <emphasis>MORE</emphasis> than this number, but it cannot yield less.</para></listitem>
+<listitem><para><emphasis><guilabel>Yields at least:</guilabel></emphasis> &ndash; This would be specified if you want the recipe(s) to be able to provide a minimum number of portions.  The recipe(s) returned COULD yield <emphasis>MORE</emphasis> than this number, but cannot yield less.</para></listitem>
 <listitem><para><emphasis><guilabel>Yields at most:</guilabel></emphasis> &ndash; This would be specified if you want recipe(s) that are returned in the search to yield <emphasis>NO MORE THAN</emphasis> a specified number of portions.</para></listitem>
 <listitem><para><emphasis><guilabel>Yields about:</guilabel></emphasis> &ndash; This would be used to approximate the number of portions you want in the recipe(s). The recipes(s) returned could yield <emphasis>SLIGHTLY MORE</emphasis> or <emphasis>SLIGHTLY LESS</emphasis> than a specified number of portions.</para></listitem>
 </itemizedlist>
@@ -434,9 +438,9 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <sect4 id="avg-rating-srch">
 <title>Searching by Average Rating</title>
-<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><emphasis><guilabel>By average:</guilabel></emphasis></emphasis> label.  Then, enter a numerical value in the text box that precedes the label <emphasis><emphasis><guilabel>stars</guilabel></emphasis></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.  Fractional amounts are also permitted, for example, 3.5.</para>
+<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By average:</guilabel></emphasis> label.  Then, enter a numerical value in the text box that precedes the label <emphasis><guilabel>stars</guilabel></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.  Fractional amounts are also permitted, for example, 3.5.</para>
 
-<para>Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><emphasis><guilabel>Title</guilabel></emphasis></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
+<para>Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
 </sect4>
 
 <sect4 id="rating-criteria-srch">
@@ -542,7 +546,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <tip><itemizedlist><listitem><para>An author's name can be typed directly into the textbox and transferred to the list box as described above.  As you start entering characters, if there are authors that match the text string typed, the menu will display a list of existing choices from which you can choose to transfer the author's name to the list box, as described above.</para>
 
-<para>However, in the situation where the author does not exist in your list, no choices will be listed and when you click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer the author to the listbox, an alert box will appear with the message <quote>A new author "<emphasis>Name of New Author</emphasis>" was  successfully added to the list of authors</quote>.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
+<para>However, in the situation where the author does not exist in your list, no choices will be listed as you type and when you click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer the author to the listbox, the author will automatically be added to your list of authors as well.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
 
 <listitem><para>An author may also be removed from the list by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
 </itemizedlist>
@@ -568,16 +572,16 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <sect3 id="set-yield">
 <title>Setting the The Yield Amount and Type</title>
 
-<para>Setting the the amount that the recipe will yield is performed by entering a value in the textbox beneath the <emphasis><emphasis><guilabel>Amount</guilabel></emphasis></emphasis> label.  It is possible to enter a numerical range for this number, for example, 3-4.  When entering a range, if an incorrect value or format is entered, the entry will turn red indicating that a correction is necessary.</para>
+<para>Setting the the amount that the recipe will yield is performed by entering a value in the textbox beneath the <emphasis><guilabel>Amount</guilabel></emphasis> label.  It is possible to enter a numerical range for this number, for example, 3-4.  When entering a range, if an incorrect value or format is entered, the entry will turn red indicating that a correction is necessary.</para>
 
-<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the text box beneath the <emphasis><emphasis><guilabel>Type</guilabel></emphasis></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.</para>
+<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the text box beneath the <emphasis><guilabel>Type</guilabel></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.</para>
 
 </sect3>
 
 <sect3 id="prep-time">
 <title>Specifying Preparation Time</title>
 
-<para>The time it takes to prepare a recipe is done utilizing a spinbox.</para>
+<para>The time it takes to prepare a recipe is designated by utilizing a spinbox.</para>
 
 <para>However, the time must be specified in two steps &mdash;</para>
 
@@ -642,22 +646,36 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <listitem><para>Amount: &ndash; the amount of the ingredient required, for example, &#189; or 1-2 --> note that <emphasis>&krecipes;</emphasis> will allow the entry of ranges for ingredients</para></listitem>
 
-<listitem><para>Unit: &ndash; the unit of measurement, for example, <emphasis>tsp.</emphasis>  When you enter a unit, if it does not exist in your <emphasis>Units list</emphasis>, it will automatically be added and a dialog box will appear prompting for the entry of a plural for the unit.  Enter the plural in the textbox beside the label <emphasis><guilabel>Plural:</guilabel></emphasis>.  For more information on adding and maintaining units of measure, see <link linkend="units-component">The Units Component</link>.</para></listitem>
+<listitem><para>Unit: &ndash; the unit of measurement, for example, <emphasis>teaspoon</emphasis></para>
+<para>When you enter a unit, if it does not exist in your <emphasis>Units list</emphasis>, it will automatically be added and a dialog box will appear prompting for the entry of a plural for the unit.  Enter the plural in the textbox beside the label <emphasis><guilabel>Plural:</guilabel></emphasis>.  Additionally, you can add an abbreviation for both the singular and plural forms of the unit as shown in the following diagram.</para>
+
+<para><inlinemediaobject><imageobject><imagedata fileref="addunit.png" format="PNG"/></imageobject></inlinemediaobject></para>
+
+<para>A drop-down menu is also available for selecting a <guilabel>Type:</guilabel> for the new unit.  Choices for this are: &nbsp;</para>
+
+<itemizedlist>
+<listitem><para>Mass, for those units that are based on weight, for example, pound</para></listitem>
+<listitem><para>Volume, for those units that are based on a volume measure, for example teaspoon, fluid  ounce, or cup</para></listitem>
+<listitem><para>Other, for those units that are neither a neither mass, nor volume or where a weight might be dependent on the size of the unit, for example <emphasis>bag</emphasis></para></listitem>
+</itemizedlist>
+
+<para>Specifying the unit type is important for the purpose of your unit conversions which, in combination with nutrient weights, help determine the nutrient values in your recipes.  For a more detailed explanation of adding and maintaining units of measure, see <link linkend="units-component"> The Units Component</link>.  For more information about ingredient weights, see <link linkend="ingredients-component">The Ingredients Component</link>.</para></listitem>
 
 <listitem><para>Preparation Method: &ndash; the method of preparing the ingredient, for example, <emphasis>chopped</emphasis></para>
 
-<tip><para>The Preparation Method can also be selected from a drop-down menu.</para></tip></listitem>
+<tip><para>The Preparation Method can also be selected from a drop-down menu.</para>
+<para>&krecipes; will accept multiple preparation mentod in a comma-separated list, for example, <emphasis>peeled,chopped</emphasis></para></tip></listitem>
 
 </itemizedlist>
 
-<para>To add the ingredient to the ingredient list, simply press the <keycap>Enter</keycap> key.</para>
+<para>&krecipes; also permits the entry of alternate ingredients.  To enter an alternate ingredient, simply click on the tick box that appears between the <emphasis>Preparation Method:</emphasis> text box and the <guilabel>OR</guilabel> label.  A row identical to the one that you have just finished will appear for completing the alternative choice.</para>
+
+<para>To add the ingredient(s) to the ingredient list, simply press the <keycap>Enter</keycap> key.</para>
 
 <para>Alternatively, click on the <guibutton>Add Ingredient</guibutton> button on the right-hand side of the ingredient list.</para>
 
 <note><itemizedlist>
-<listitem><para>Once the ingredient has been added, the textboxes will retain the information from the previous ingredient.  The ingredient should be highlighted, in which case it is possible to just start typing.  However, if this is not the case, simply delete the entry and start typing the new ingredient information.</para></listitem>
-
-<listitem><para>If a particular field is not required to describe an ingredient and it has information retained from a previous ingredient, simply delete the information.  <emphasis>A field can be left blank if not required</emphasis>!</para></listitem>
+<listitem><para>If a particular field is not required to describe an ingredient <emphasis>it can be left blank</emphasis>!</para></listitem>
 
 <listitem><para>An ingredient may be removed from the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="no.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to the right of the ingredient list.</para></listitem>
 
@@ -676,71 +694,79 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 	  <textobject>
 	    <phrase>Screenshot</phrase>
 	  </textobject>
-	  <caption><para>Entering Ingredients &ndash; Ranges for the <emphasis>Amount</emphasis> are permitted</para></caption>
+	  <caption><para>Entering Ingredients &ndash; Ranges for the <emphasis>Amount</emphasis> and Alternate Ingredients are permitted</para></caption>
 	</mediaobject>
 </screenshot>
 </para>
 
-<sect3 id="ratings-tab">
-<title>Adding Recipe Ratings</title>
-<para><emphasis>&krecipes;</emphasis> allows you to rate your recipes!  Ratings by multiple people are allowed, so each of your recipe <quote>tasters</quote> can provide their own input.  Additionally, each rating can include multiple rating parameters.  The default parameters against which you can rate your recipe are &mdash;</para>
+<sect3 id="property-status">
+<title>Looking After Nutrients</title>
 
-<itemizedlist>
-<listitem><para>Taste</para></listitem>
-<listitem><para>Appearance</para></listitem>
-<listitem><para>Ease of Preparation</para></listitem>
-<listitem><para>Originality</para></listitem>
-<listitem><para>Overall</para></listitem>
-</itemizedlist>
+<para>Directly beneath the ingredients list, there is a visible means to obtain the status of your recipe nutrients.  Beside the label <guilabel>Property Status:</guilabel>, text and an <emphasis>LED</emphasis> style indicator are used to depict this information.</para>
 
-<para>Initially, in the <emphasis><emphasis><guilabel>Ratings</guilabel></emphasis></emphasis> tab, there is only a blank screen with the <guibutton>Add Rating...</guibutton> button at the bottom.  Clicking this button will start the interface for entering ratings.</para>
+<para>A green status indicator means that your nutrient information is complete.  However, you will note from the above graphic, that the nutrient information for this recipe is <emphasis>Incomplete</emphasis> and the indicator shows as red.  To find out exactly what is needed to complete the nutrient information, click the <guibutton>Details</guibutton> button.  A window will appear explaining what the problems are, for example: &ndash;</para>
 
-<para>The <emphasis>Ratings</emphasis> interface is comprised of the following elements &mdash;</para>
+<para><inlinemediaobject><imageobject><imagedata fileref="property_details.png" format="PNG"/></imageobject></inlinemediaobject></para>
 
-<itemizedlist>
-<listitem><para>Rater: &ndash; this is the name of the person providing their opinion of the recipe</para>
-<para>To complete this element <userinput>enter the rater's name</userinput> in the text box that appears beside the label <emphasis><emphasis><guilabel>Rater:</guilabel></emphasis></emphasis>.</para></listitem>
+<para>This dialog is telling you that, for the ingredient <emphasis>apples</emphasis>, there are two possible reasons for the property or <emphasis>nutrient</emphasis> information being incomplete: &ndash;</para>
 
-<listitem><para>Criteria: &ndash; this is the criteria on which the recipe is rated</para>
-<para>Select the criteria against which you want to rate the recipe from the drop-down menu that appears beside the <emphasis><emphasis><guilabel>Criteria:</guilabel></emphasis></emphasis> label. Five default choices exist for rating criteria, as listed above, but if you have another against which you want to rate your recipe, it can be typed directly into the text box and will automatically be added to your rating criteria list.</para></listitem>
+<para><orderedlist>
+<listitem><para>An ingredient weight has not been provided.</para>
+<para>Ingredient weights are set in the <emphasis>Ingredients</emphasis> component.  See <link linkend="ingredients-component">The Ingredients Component</link> for instructions on all aspects of setting ingredient details.</para>
 
-<listitem><para>Stars: &ndash; this is the number of stars that you wish to assign to the particular criteria that you are rating on</para>
+<para>or,</para></listitem>
 
-<para>Star ratings are completed by clicking on a star.  Clicking on the left-hand side of any star will provide a &#189; star rating.  Clicking on the right-hand side of the star will provide a full star rating.</para>
+<listitem><para>Conversion information is lacking.</para>
+<para>For this example, you are being told that a conversion from "No unit" to "cup" and "cup" to "grams" cannot be done.  Conversion factors for your units are set in the <emphasis>Units</emphasis> component.  For more information on Units and their conversions see <link linkend="units-component">The Units Component</link>.</para></listitem>
 
-<tip><para>It is unnecessary to click on each star individually.  For instance, if you are rating the recipe on the <emphasis>Taste</emphasis> criteria and you want to assign this a 4&#189; star rating, click on the left hand side of the 5th star.</para></tip>
-
-<para>Once you have completed the star rating for the recipe, click the <guibutton>Add</guibutton> button to add the rating to the rating list.  At this point, you can continue to rate the recipe against other criteria in the same manner.</para>
-
-<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the <keycap>Enter</keycap> key, the rating will show the graphical stars.</para>
-
-<para>Should you change your mind and wish to remove any of the rating criteria, select it in your rating list and click the <guibutton>Delete</guibutton> key.</para>
-</listitem>
-
-<listitem><para>Comments: &ndash; this is any added information that you wish to note for the recipe, for example, an enhancement to improve the recipe, or a serving suggestion such as <emphasis>Great served with ice cream</emphasis></para>
-
-<para>To enter a comment, simply position your cursor in the white space beneath the <emphasis><emphasis><guilabel>Comments:</guilabel></emphasis></emphasis> label and begin typing.</para></listitem>
-
-</itemizedlist>
-
-<para>Once you are satisfied with your ratings, click the <guibutton>OK</guibutton> button to complete the addition.  The <quote>smiley</quote> graphic that appears to the left of the rating list is indicative of the overall rating of the recipe, from poor to excellent.  This graphic will not appear in your recipe when it is viewed.</para>
-
-<para>Any rating can be removed from the screen by clicking the <guibutton>Remove</guibutton> button beneath the rating that you wish to remove.  Additionally, you can use the <keycombo action="simul">&Alt;<keycap>M</keycap></keycombo> key combination.  A rating can be edited by clicking on the <guibutton>Edit...</guibutton> button.     When you choose to edit a rating, the same interface that was used to originally enter the rating is opened.  Each rating has its own <guibutton>Delete</guibutton> and <guibutton>Edit...</guibutton> buttons.</para>
-
-<para>
-<screenshot>
-<screeninfo>Here's a screenshot of the completed Ratings tab in the &krecipes; recipe entry interface.</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="ratings.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Screenshot</phrase>
-	  </textobject>
-	  <caption><para>New Recipe Entry &ndash; The Completed Ratings Tab</para></caption>
-	</mediaobject>
-</screenshot>
+</orderedlist>
 </para>
+
+<note><para>An entirely different message would result on clicking the <guibutton>Details</guibutton> button had the unit in the above sceenshot been supplied with no preparation method specified.</para></note>
+
+<para>The message in the above graphic also indicates that an approximation will be made for the ingredient <emphasis>butter</emphasis> because &krecipes; cannot find weight information that is specific to the preparation method <emphasis>melted</emphasis> when associated with this ingredient.</para>
+
+<para>We can use the following table to assist in making a correction for apples.</para>
+
+<informaltable>
+<tgroup cols="6">
+
+<thead><row><entry>Measure</entry><entry>Diameter</entry><entry>Equivalent 1</entry><entry>Equivalent 2</entry><entry>Equivalent 3</entry><entry>Equivalent 4</entry></row></thead>
+
+<tbody>
+<row><entry>1 large apple</entry><entry>3 3/4" (9.5 cm)</entry><entry>2 cups, sliced or chopped</entry><entry>1 1/2 cups, finely chopped</entry><entry>1 1/4 cups, grated</entry><entry>3/4 cups, sauce</entry></row>
+
+<row><entry>1 medium apple</entry><entry>2 3/4" (7 cm)</entry><entry>1 1/3 cups, sliced or chopped</entry><entry>1 cup, finely chopped</entry><entry>3/4 cup, grated</entry><entry>1/2 cup, sauce</entry></row>
+
+<row><entry>1 small apple</entry><entry>2 1/4" (5.7 cm)</entry><entry>3/4 cup, sliced or chopped</entry><entry>3/4 cup, finely chopped</entry><entry>1/2 cup, grated</entry><entry>1/3 cup, sauce</entry></row>
+
+<row><entry>1 pound apples</entry><entry>&nbsp;</entry><entry>2 large apples</entry><entry>3 medium apples</entry><entry>4 small apples</entry><entry>&nbsp;</entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Information for the compilation of the above table can be found at <ulink url="http://www.usapple.org/consumers/appleguide/equivalents.cfm"></ulink>.</para>
+
+<para>Using the above table and assuming that the size of the apples is <emphasis>medium</emphasis>, you might add a weigh entry for medium apples in your ingredient weight table.  See <link linkend="ingredients-component">The Ingredients Component</link> for explicit instructions on doing this.</para>
+
+<para>The above table indicates that 1 pound of apples is eqivalent to 3 medium apples.  However, the weight table in the <emphasis>Ingredients Component</emphasis> requires that the weight be in <emphasis>grams</emphasis>.  If we know that 1 pound equals 454 grams, and that 3 medium apples weigh 454 grams, then 1 apple will equal 151.3 grams.  We will assume that this conversion has been added correctly to your weight table.  Also, if the equivalent has been added to the weight table with no preparation method specifed, you will have to remove the preparation method <emphasis>sliced</emphasis> in order to completely update the status indicator for <emphasis>apples</emphasis>.</para>
+
+<para>To assist you with your conversions, &krecipes; has a nifty tool that can be found by selecting <guimenu>Tools</guimenu> and <guimenuitem>Measurement Converter</guimenuitem>.  This helper will be more fully discussed in <link linkend="measure-converter">Using the Measurement Converter</link>.</para>
+
+<para>After making the adustment for apples, the <emphasis>LED</emphasis> status indicator will turn yellow because nutrient information is complete, but an approximation has been made for the ingredient <emphasis>butter</emphasis>.  The <guilabel>Property Status:</guilabel> of your recipe will show as <emphasis>Complete, but approximations made</emphasis>.  Here, you can choose to do one of the following: &ndash;</para>
+
+<para><orderedlist>
+<listitem><para>Choose to enter a weight for <emphasis>melted butter</emphasis> in your weight table</para></listitem>
+<listitem><para>Accept the approximation, in which case, your status <emphasis>LED</emphasis> will remain yellow</para></listitem>
+<listitem><para>Remove the preparation method from <emphasis>butter</emphasis>, if it will not adversely affect the prepartion of your recipe.</para></listitem>
+</orderedlist>
+</para>
+
+<para>Choosing 1 or 3 above will allow &krecipes; to obtain accurate weight information for the ingredient and your status indicator <emphasis>LED</emphasis> will turn green and the <guilabel>Property Status:</guilabel> will show as <emphasis>Complete</emphasis>.</para>
+
+<tip><para>The <guibutton>Help</guibutton> button will connect you to this section of the &krecipes; Handbook.</para></tip>
+
 </sect3>
 
 <sect3 id="copy-paste">
@@ -782,19 +808,97 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To enter the recipe instructions, click on the <emphasis><guilabel>Instructions</guilabel></emphasis> tab.</para>
 
-<para>Entering the recipe instructions is simple &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
+<para>Entering the recipe instructions is easy &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
 
 <para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! <guiicon><inlinemediaobject><imageobject><imagedata fileref="smiley.png" format="PNG"/></imageobject></inlinemediaobject></guiicon></para>
 
 <tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
 
-<para>In the <quote>Apple Brown Betty</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
+<para>In the <quote>Apple Crisp</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
  
 <para>For example, if you type <quote>b</quote>, the characters <quote>rown sugar</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the <keycap>Enter</keycap> key.</para>
   
 <para>However, suppose that in your instructions, you simply wanted to refer to <quote>brown sugar</quote> as <emphasis>sugar</emphasis> and you enter the character <quote>s</quote>.  <emphasis>&krecipes;</emphasis> will search the ingredients in your recipe and match the first ingredient beginning with <quote>s</quote> that it finds, if there is one.  If there is no ingredient in your recipe ingredient list beginning with <quote>s</quote>, nothing will happen &ndash; you will just continue typing the word <quote>sugar</quote>.</para>
 
 <para>If there is another ingredient beginning with <quote>s</quote> in your recipe ingredient list, for instance, <emphasis>salt</emphasis>, the remaining characters, <abbrev>i.e.</abbrev> the <quote>alt</quote>, will be auto-completed and highlighted.  Simply press the <keycap>Delete</keycap> key on the keyboard to remove the unwanted characters and continue typing.  Alternatively, you can just continue typing the entire word and your instructions will remain as typed.</para></tip>
+
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the completed Instructions tab in the &krecipes; recipe entry interface.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="recipe-instructions-tab.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>New Recipe Entry &ndash; The Completed Instructions Tab</para></caption>
+	</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="ratings-tab">
+<title>Adding Recipe Ratings</title>
+<para><emphasis>&krecipes;</emphasis> allows you to rate your recipes!  Ratings by multiple people are allowed, so each of your recipe <quote>tasters</quote> can provide their own input.  Additionally, each rating can include multiple rating parameters.  The default parameters against which you can rate your recipe are &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Taste</para></listitem>
+<listitem><para>Appearance</para></listitem>
+<listitem><para>Ease of Preparation</para></listitem>
+<listitem><para>Originality</para></listitem>
+<listitem><para>Overall</para></listitem>
+</itemizedlist>
+
+<para>Initially, in the <emphasis><guilabel>Ratings</guilabel></emphasis> tab, there is only a blank screen with the <guibutton>Add Rating...</guibutton> button at the bottom.  Clicking this button will start the interface for entering ratings.</para>
+
+<para>The <emphasis>Ratings</emphasis> interface is comprised of the following elements &mdash;</para>
+
+<itemizedlist>
+<listitem><para>Rater: &ndash; this is the name of the person providing their opinion of the recipe</para>
+<para>To complete this element <userinput>enter the rater's name</userinput> in the text box that appears beside the label <emphasis><guilabel>Rater:</guilabel></emphasis>.</para></listitem>
+
+<listitem><para>Criteria: &ndash; this is the criteria on which the recipe is rated</para>
+<para>Select the criteria against which you want to rate the recipe from the drop-down menu that appears beside the <emphasis><guilabel>Criteria:</guilabel></emphasis> label. Five default choices exist for rating criteria, as listed above, but if you have another against which you want to rate your recipe, it can be typed directly into the text box and will automatically be added to your rating criteria list.</para></listitem>
+
+<listitem><para>Stars: &ndash; this is the number of stars that you wish to assign to the particular criteria that you are rating on</para>
+
+<para>Star ratings are completed by clicking on a star.  Clicking on the left-hand side of any star will provide a &#189; star rating.  Clicking on the right-hand side of the star will provide a full star rating.</para>
+
+<tip><para>It is unnecessary to click on each star individually.  For instance, if you are rating the recipe on the <emphasis>Taste</emphasis> criteria and you want to assign this a 4&#189; star rating, click on the left hand side of the 5th star.</para></tip>
+
+<para>Once you have completed the star rating for the recipe, click the <guibutton>Add</guibutton> button to add the rating to the rating list.  At this point, you can continue to rate the recipe against other criteria in the same manner.</para>
+
+<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the <keycap>Enter</keycap> key, the rating will show the graphical stars.</para>
+
+<para>Should you change your mind and wish to remove any of the rating criteria, select it in your rating list and click the <guibutton>Delete</guibutton> button.</para>
+</listitem>
+
+<listitem><para>Comments: &ndash; this is any added information that you wish to note for the recipe, for example, an enhancement to improve the recipe, or a serving suggestion such as <emphasis>Great served with ice cream</emphasis></para>
+
+<para>To enter a comment, simply position your cursor in the white space beneath the <emphasis><guilabel>Comments:</guilabel></emphasis> label and begin typing.</para></listitem>
+
+</itemizedlist>
+
+<para>Once you are satisfied with your ratings, click the <guibutton>OK</guibutton> button to complete the addition.  The <quote>smiley</quote> graphic that appears to the left of the rating list is indicative of the overall rating of the recipe, from poor to excellent.  This graphic will not appear in your recipe when it is viewed.</para>
+
+<para>Any rating can be removed from the screen by clicking the <guibutton>Remove</guibutton> button beneath the rating that you wish to remove.  Additionally, you can use the <keycombo action="simul">&Alt;<keycap>M</keycap></keycombo> key combination.  A rating can be edited by clicking on the <guibutton>Edit...</guibutton> button.     When you choose to edit a rating, the same interface that was used to originally enter the rating is opened.  Each rating has its own <guibutton>Delete</guibutton> and <guibutton>Edit...</guibutton> buttons.</para>
+
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the completed Ratings tab in the &krecipes; recipe entry interface.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="ratings.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>New Recipe Entry &ndash; The Completed Ratings Tab</para></caption>
+	</mediaobject>
+</screenshot>
+</para>
 
 </sect2>
 
@@ -838,33 +942,21 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <tip><para>The recipe can be resized by either of two methods &mdash;</para>
 
 <orderedlist>
+
 <listitem><para>Scale by yield &ndash;</para>
 
-<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><emphasis><guilabel>Scale by yield label</guilabel></emphasis></emphasis>.  Below this and beside the <emphasis><emphasis><guilabel>Current yield:</guilabel></emphasis></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><emphasis><guilabel>New yield:</guilabel></emphasis></emphasis>, there is a text box in which to <userinput>enter the new yield amount desired</userinput>.</para></listitem>
+<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield label</guilabel></emphasis>.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a text box in which to <userinput>enter the new yield amount desired</userinput>.</para>
+
+<note><para>If you have entered a range for your yield amount, <emphasis>Scale by yield</emphasis> will not be available because &krecipes; cannot determine which portion of the range it is scaling.</para></note></listitem>
 
 <listitem><para>Scale by factor &ndash;</para>
 
-<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the<emphasis><emphasis><guilabel>Scale by factor</guilabel></emphasis></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the text box beside the <emphasis><emphasis><guilabel>Factor (i.e. 1/2 to half 3 to triple):</guilabel></emphasis></emphasis> label.</para></listitem>
+<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the<emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the text box beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
 </orderedlist>
 
 <para>In either of these scenarios, click the <guibutton>OK</guibutton> button to continue.  Your recipe will be reproportioned appropriately.  Alternatively, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para></tip></listitem>
 
 </itemizedlist>
-
-<para>
-<screenshot>
-<screeninfo>Here's a screenshot of the completed Instructions tab in the &krecipes; recipe entry interface.</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="recipe-instructions-tab.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Screenshot</phrase>
-	  </textobject>
-	  <caption><para>New Recipe Entry &ndash; The Completed Instructions Tab</para></caption>
-	</mediaobject>
-</screenshot>
-</para>
 
 </sect2>
 
@@ -915,7 +1007,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <title>Page Setup</title>
 
 <para>
-To access Page Setup, select <guimenu>View</guimenu> and <guimenuitem>Page Setup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.
+To access Page Setup, select <guimenu>Edit</guimenu> and <guimenuitem>Page Setup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.
 </para>
 
 <para>
@@ -933,55 +1025,65 @@ To access Page Setup, select <guimenu>View</guimenu> and <guimenuitem>Page Setup
 </screenshot>
 </para>
 
+<sect2 id="setup-overview">
+<title>An Overview of Page Setup</title>
+
+<para>
+In the <interface>Page Setup</interface> window, the toolbar displays the icons for <guiicon>Open</guiicon>, <guiicon>Save</guiicon>, <guiicon>Save As</guiicon> and <guiicon>Redisplay</guiicon>.  
+</para>
+
+<tip>
+<itemizedlist>
+
+<listitem><para>If you click and hold the <guiicon>Open</guiicon> icon, choices for <emphasis>Styles</emphasis> and <emphasis>Templates</emphasis> will be revealed.  <emphasis>Styles</emphasis> are for selection of a color scheme for your recipes and <emphasis>Templates</emphasis> are choices for the layout of your recipes.</para>
+
+<para><guimenuitem>Default</guimenuitem>, as the name suggests, is the default style.  However, it is easy to change colors and to make other enhancements to the look of your recipes.  To discover how to do this, refer to the section <link linkend="change-attributes">Changing Attributes</link>.</para></listitem>
+
+<listitem><para>With regard to <guiicon>Redisplay</guiicon>, a word of caution is in order.  Clicking on <guiicon>Redisplay</guiicon> after changes have been made in the Page Setup window, will reload the currently active layout file, erasing all changes <emphasis>unless they have been saved</emphasis>.  This represents the prime function for <guiicon>Redisplay</guiicon>.  Should you wish to revert to your previous settings while still in <interface>Page Setup</interface>, clicking <guiicon>Redisplay</guiicon> will allow you to do this provided that you have not saved any changes.
+</para>
+
+<para>
+Beneath the toolbar, the label <guilabel>Usage: Right-click any element to edit the look of that element.</guilabel> clearly states the <interface>Page Setup</interface> method of use.  All attribute changes are dynamic and do not necessitate reloading while in <interface>Page Setup</interface>.    See the section <link linkend="change-attributes">Changing Attributes</link> for details on changing the appearance of your recipe elements.
+</para></listitem>
+
+</itemizedlist>
+</tip>
+
+<para>
+When the <interface>Page Setup</interface> window first appears, you will probably need to resize it in order to view all the recipe elements.  When the window is resized, all recipe elements will be scaled fit within the confines of the window.
+</para>
+
+</sect2>
+
+
 <sect2 id="displayed-items">
 <title>Selecting Items to Display</title>
 
-<para>
-In the Page Setup window, the toolbar displays the icons for <guiicon>Open</guiicon>, <guiicon>Save</guiicon>, <guiicon>Save As</guiicon> and <guiicon>Redisplay</guiicon>.  
-</para>
 
 <para>
-With regard to <guiicon>Redisplay</guiicon>, a word of caution is in order.  Clicking on <guiicon>Redisplay</guiicon> after changes have been made in the Page Setup window, will reload the currently active layout file, erasing all changes <emphasis>unless they have been saved</emphasis>.  However, an alert will be provided prompting to save the changes if desired.
-</para>
-
-<para>
-If the entire Page Setup window is resized, <guiicon>Redisplay</guiicon> will scale the contents to fit within the limits of the window.
-</para>
-
-<para>
-The last icon allows access to a list of items that are available for display in the recipe.  These include &mdash;
+The last icon on the toolbar allows access to a list of items that are available for display in the recipe.  These include &mdash;
 </para>
 
 <itemizedlist>
-<listitem><para><guimenuitem>Properties</guimenuitem> &ndash; The list of nutrients in the recipe</para></listitem>
-<listitem><para><guimenuitem>Authors</guimenuitem> &ndash; The authors or contributors of the recipe</para></listitem>
-<listitem><para><guimenuitem>Ingredients</guimenuitem> &ndash; The list of recipe ingredients</para></listitem>
-<listitem><para><guimenuitem>Preparation Time</guimenuitem> &ndash; The time for preparation</para></listitem>
-<listitem><para><guimenuitem>Yield</guimenuitem> &ndash; The yield amount expected from the recipe</para></listitem>
+<listitem><para><guimenuitem>Photo</guimenuitem> &ndash; This is the recipe database ID</para></listitem>
+<listitem><para><guimenuitem>Authors</guimenuitem> &ndash; This is the recipe database ID</para></listitem>
+<listitem><para><guimenuitem>Title</guimenuitem> &ndash; The yield amount expected from the recipe</para></listitem>
+<listitem><para><guimenuitem>Ratings</guimenuitem> &ndash; The list of nutrients in the recipe</para></listitem>
+<listitem><para><guimenuitem>Yield</guimenuitem> &ndash; The authors or contributors of the recipe</para></listitem>
+<listitem><para><guimenuitem>Properties</guimenuitem> &ndash; The time for preparation</para></listitem>
 <listitem><para><guimenuitem>Instructions</guimenuitem> &ndash; The method of preparation</para></listitem>
-<listitem><para><guimenuitem>Title</guimenuitem> &ndash; The title of the recipe</para></listitem>
-<listitem><para><guimenuitem>Photo</guimenuitem> &ndash; To display a photo in the recipe</para></listitem>
-<listitem><para><guimenuitem>Header</guimenuitem> &ndash; This is the recipe database ID</para></listitem>
+<listitem><para><guimenuitem>Preparation Time</guimenuitem> &ndash; To display a photo in the recipe</para></listitem>
 <listitem><para><guimenuitem>Categories</guimenuitem> &ndash; The category to which the recipe belongs</para></listitem>
+<listitem><para><guimenuitem>Ingredients</guimenuitem> &ndash; The list of recipe ingredients</para></listitem>
 </itemizedlist>
 
 <para>
 By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the checkbox beside it.
 </para>
 
-<note><para>All sections chosen to display in the recipe will also print.  It may be desirable to have a section display, but not print.  In order to avoid having any section print, deselect it prior to printing.</para>
+<note><para>All sections chosen to display in the recipe will also print.  It may be desirable to have a section display, but not print.  In this case, you can define a new print layout.  See the section <link linkend="print-setup">Print Setup</link> for instructions.</para>
 </note>
 
-</sect2>
-
-<sect2 id="change-recipe-display">
-<title>Changing The Recipe Display</title>
-
-<para>Display of the recipe is highly configurable.</para>
-
-<para>Each section can be moved by selecting a it, holding the &LMB; mouse button and dragging to a new position.</para>
- 
-<para>To resize a section, hover the mouse over one of the resizing handles until a <guiicon>&harr;</guiicon> arrow appears, hold the &LMB; mouse button and drag until the desired sized is achieved.</para>
 </sect2>
 
 <sect2 id="change-attributes">
@@ -1009,7 +1111,55 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </itemizedlist>
  
 <para>Finally, at the bottom is a section that allows the preview of the border as it will appear in the recipe.</para>
-<note><para>When <quote>OK</quote> is selected to insert the border, the main Page Setup window appears.  <emphasis>The selected border definition will NOT show in this window, but will appear properly when the recipe is viewed or printed.</emphasis></para></note></listitem>
+</listitem>
+
+<listitem><para>Specify the number of <guimenuitem>Columns...</guimenuitem> that will be used to display your list items, such as <emphasis>Ingredients</emphasis> and <emphasis>Properties</emphasis></para>
+
+<para>When the <guimenuitem>Columns...</guimenuitem> menu item is selected, a dialog box will appear where you can set the number of columns for display using a spinbox or typing the number directly into the text box that appears beneath the label <guilabel>Select the number of columns to use:</guilabel>.</para></listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="print-setup">
+<title>Print Setup</title>
+
+<para>&krecipes; allows you to define different looks for viewing and printing your recipes.  For instance, you might be happy with a unified look for viewing your recipes, but want to color co-ordinate all elements when the recipe is printed.</para>
+
+<para>If you are printing a full page recipe, items selected for printing and the attributes of your various recipe elements are set in the same manner as they were in <link linkend="krecipes-page-setup">Page Setup</link>.  The trick for having a separate definition for printing is to ensure that you have saved your settings with a new file name.</para>
+
+<para>When you select <guimenu>File</guimenu> and <guimenuitem>Print</guimenuitem> from the &krecipes; menu bar, the <interface>Print Preview</interface> screen appears, as depicted in the following screenshot.  However, it should be noted that your recipe must be opened in order for it to be printed.</para>
+
+<sect2 id="print-recipe">
+<title>Printing Your Recipe</title>
+
+<para>
+<screenshot>
+<screeninfo>Here's a screenshot of the Print Preview screen.</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="print-preview.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Screenshot</phrase>
+	  </textobject>
+	  <caption><para>The Print Preview Screen</para></caption>
+	</mediaobject>
+</screenshot>
+</para> 
+
+<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  &krecipes; names its layout files with a .klo extention, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also note that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
+
+<para>From the screenshot, you will note that there are four buttons at the bottom of the screen.  Their usage is as follows: &ndash;</para>
+
+<itemizedlist>
+<listitem><para><guibutton>Help</guibutton> &ndash; clicking on this button will</para></listitem>
+<listitem><para><guibutton>Edit</guibutton> &ndash; is used to access the <interface>Print Setup</interface> interface so that you can make any desired changes to the way your recipe will print</para>
+<note><para>As previously stated, modifications to your print setup are done in exactly the manner as they are done in <link linkend="krecipes-page-setup">Page Setup</link>.</para></note></listitem>
+<listitem><para><guibutton>Print</guibutton> &ndash; will open the print dialog window for whatever print program you are using, for example, kprinter</para></listitem>
+<listitem><para><guibutton>Cancel</guibutton> &ndash; will close the the <interface>Print Preview</interface> window and return you to your open recipe</para></listitem>
 </itemizedlist>
 
 </sect2>
@@ -1482,7 +1632,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>The <quote>Ingredients</quote> component is accessed by first, clicking on the <guibutton>Data</guibutton> button to reveal the additional <emphasis>&krecipes;</emphasis> components, and then, clicking on the <guibutton>Ingredients</guibutton> button.</para>
 
-<para>When the <quote>Ingredients</quote> component opens, the component title will be seen at the top.  Below this, there are 3 sections &mdash;</para>
+<para>When the <quote>Ingredients</quote> component opens, the component title will be seen at the top.  Below this, there are 4 sections &mdash;</para>
 
 <orderedlist>
 <listitem><para>Below the heading <emphasis><guilabel>Ingredient list</guilabel></emphasis>, the list of ingredients contained in the <emphasis>&krecipes;</emphasis> database is shown.  This list includes ingredients that have be provided as defaults in the program and also, ingredients that you have added.</para>
@@ -1502,6 +1652,10 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>Again, a <guibutton>+</guibutton> button, for adding ingredient properties to the list, and a <guibutton>-</guibutton>, for removing properties, appears to the right of the section to allow addition and removal of nutrient values for an ingredient.  See the section on <link linkend="ingredient-properties">Properties in Ingredients</link> for more details.</para>
 </listitem>
+
+<listitem><para>Below the <quote>Properties list</quote> is the <guilabel>Ingredient Weights</guilabel>.  This list in combination with your unit conversions is what helps provide accurate nutrient information for your recipes.</para>
+
+</listitem>
 </orderedlist>
 
 <para>
@@ -1518,6 +1672,28 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 	</mediaobject>
 </screenshot>
 </para>
+
+<sect3 id="headers-tab">
+<title>Ingredient Headers</title>
+
+<para>When the <quote>Ingredients Component</quote> is accessed, you will also notice a <guilabel>Headers</guilabel> tab.  If this tab is accessed, the headers that apply to your recipes may be added, removed or renamed.</para>
+
+<para>Similar to other &krecipes; components, there is a text box beside a <guilabel>Search:</guilabel> label where you can enter the name of the label for which you want to search, should your list be long enough that this would be the best method to access a particular label.</para>
+
+<para>On the right side of the <emphasis>Headers</emphasis> window, there is a <guibutton>+</guibutton> button, which when clicked, will bring up a dialog box which will permit the entry of a new header.  To add the header, simply type in the name that you desire in the text box that appears beneath the <guilabel>Header</guilabel> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition or, the <guibutton>Cancel</guibutton> button to clear the dialog box and return to the main header interface.</para>
+
+<para>To remove a header, select it in the header list and click the <guibutton>-</guibutton> button.  If this header is utilized in any of your recipes, a dialog box will appear stating <quote>Warning:  The following currently use the element you have chosen to be removed.</quote>.  To remove the header, click the <guibutton>OK</guibutton> button.  The header will be removed from the list.  Note, however, that in your recipe(s) that contain the particular header that you have chosen to remove, only the header will be absent.  The ingredients that were part of the removed header will still be intact.  To cancel the removal of the header, click the <guibutton>Cancel</guibutton> button.  The dialog box will disappear and you will be returned to your header list.  Of course, if the header does not exist in any of your recipes, it will be removed with no prompt.</para>
+
+<para>To rename a header, simply select the header that you want to edit.  With the header selected, right clicking will result in the appearance of a menu from which you can select <emphasis>Rename</emphasis>.  A box will outline the selected header and a cursor will appear at the beginning of the header name.  Using the arrow keys, position the cursor at the point where you wish to make your edit, or if you wish to completely rename the header, simply type the new name.  Pressing the <keycap>Enter</keycap> key will complete the renaming process.</para>
+
+<para>When a header is selected and the menu is access by right-clicking, in addition to a menu item for <guimenuitem>Rename</guimenuitem>, there are menu items for <guimenuitem>Create</guimenuitem> and <guimenuitem>Delete</guimenuitem>.  This alternative method can be used to add and remove headers and will react in the same manner as outlined above.  Additionally, each of the menu items has a key or key combination that can be used to carry out the desired action while in the <guilabel>Headers</guilabel> tab.  These are: &mdash;</para>
+
+<itemizedlist>
+<listitem><para><keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> to create a header</para></listitem>
+<listitem><para><keycap>Del</keycap> to delete a header</para></listitem>
+<listitem><para><keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo> to rename a header</para></listitem>
+</itemizedlist>
+</sect3>
 
 <sect3 id="working-ingredients">
 <title>Working with Ingredients</title>
@@ -1723,7 +1899,13 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>Should you find that you made a mistake in entering one of the unit equivalents, removing the erroneous entry is as simple as selecting the cell and pressing the <keycap>Enter</keycap> key.</para>
 
+<sect4 id="measure-converter">
+<title>Using the Measurement Converter</title>
+<para></para>
+</sect4>
+
 </sect3>
+
 </sect2>
 
 <sect2 id="prep-methods">
@@ -2176,7 +2358,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <sect3 id="config-performance-reason">
 <title>Reasons for Configuring Performance Settings</title>
 
-<para>In most instances, the settings to adjust the <emphasis><emphasis><guilabel>Number of categories to display at once:</guilabel></emphasis></emphasis> and/or the <emphasis><emphasis><guilabel>Number of elements to display at once:</guilabel></emphasis></emphasis> will not have to be changed.  The ultimate reason that you might want to do so occurs when you have a very large database of recipes.  Adjusting these settings so that your Categories or list items are loaded in groups will greatly improve the speed of loading for these items.</para>
+<para>In most instances, the settings to adjust the <emphasis><guilabel>Number of categories to display at once:</guilabel></emphasis> and/or the <emphasis><guilabel>Number of elements to display at once:</guilabel></emphasis> will not have to be changed.  The ultimate reason that you might want to do so occurs when you have a very large database of recipes.  Adjusting these settings so that your Categories or list items are loaded in groups will greatly improve the speed of loading for these items.</para>
 </sect3>
 
 </sect2>
@@ -2333,7 +2515,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Print</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Prints the currently loaded recipe</action></para></listitem>
+<listitem><para><action>Prints the currently loaded recipe</action> &ndash; See the section <link linkend="print-recipe">Printing Your Recipe</link> for instructions</para></listitem>
 </varlistentry>
 
 <varlistentry>
