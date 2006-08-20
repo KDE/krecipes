@@ -154,7 +154,7 @@ void UnitsDialog::saveRatio( int r, int c, double value )
 
 #if 0
 	UnitRatioList ratioList;
-	database->loadUnitRatios( &ratioList );
+	database->loadUnitRatios( &ratioList, Unit::Mass );
 
 	saveAllRatios( ratioList );
 #endif
@@ -169,6 +169,8 @@ void UnitsDialog::removeRatio( int r, int c )
 void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
 {
 #if 0
+	ConversionTable *conversionTable = massConversionTable;
+
 	KProgressDialog progress_dialog( this, "progress_dialog", i18n( "Finding Unit Ratios" ), QString::null, true );
 	progress_dialog.progressBar() ->setTotalSteps( ratioList.count() * ratioList.count() );
 
