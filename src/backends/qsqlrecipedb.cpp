@@ -594,6 +594,21 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	}
 	recipeToSave.exec( command );
 
+	if ( !newRecipe ) {
+		// Clean up yield_types which have no recipe that they belong to
+		QStringList ids;
+		command = QString( "SELECT DISTINCT(yield_type_id) FROM recipes" );
+		recipeToSave.exec( command );
+		if ( recipeToSave.isActive() ) {
+			while ( recipeToSave.next() ) {
+				if ( recipeToSave.value( 0 ).toInt() != -1 )
+					ids << QString::number( recipeToSave.value( 0 ).toInt() );
+			}
+		}
+		command = QString( "DELETE FROM yield_types WHERE id NOT IN ( %1 )" ).arg( ( ids.count() == 0 ) ? "-1" : ids.join( "," ) );
+		recipeToSave.exec( command );
+	}
+
 	// If it's a new recipe, identify the ID that was given to the recipe and store in the Recipe itself
 	int recipeID;
 	if ( newRecipe ) {
@@ -850,6 +865,19 @@ void QSqlRecipeDB::removeRecipe( int id )
 		}
 	}
 	command = QString( "DELETE FROM ingredient_groups WHERE id NOT IN ( %1 );" ).arg( ( ids.count() == 0 ) ? "-1" : ids.join( "," ) );
+	recipeToRemove.exec( command );
+
+	// Clean up yield_types which have no recipe that they belong to
+	ids.clear();
+	command = QString( "SELECT DISTINCT(yield_type_id) FROM recipes" );
+	recipeToRemove.exec( command );
+	if ( recipeToRemove.isActive() ) {
+		while ( recipeToRemove.next() ) {
+			if ( recipeToRemove.value( 0 ).toInt() != -1 )
+				ids << QString::number( recipeToRemove.value( 0 ).toInt() );
+		}
+	}
+	command = QString( "DELETE FROM yield_types WHERE id NOT IN ( %1 );" ).arg( ( ids.count() == 0 ) ? "-1" : ids.join( "," ) );
 	recipeToRemove.exec( command );
 }
 

@@ -654,6 +654,15 @@ void RecipeInputDialog::reload( void )
 		ratingListDisplayWidget->insertItem(item);
 	}
 	ratingListDisplayWidget->ensureCellVisible(0,0);
+
+	// Update yield type auto completion
+	KCompletion *completion = yieldTypeEdit->completionObject();
+	completion->clear();
+	ElementList yieldList;
+	database->loadYieldTypes( &yieldList );
+	for ( ElementList::const_iterator it = yieldList.begin(); it != yieldList.end(); ++it ) {
+		completion->addItem( (*it).name );
+	}
 }
 
 void RecipeInputDialog::changePhoto( void )
