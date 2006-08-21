@@ -2538,7 +2538,13 @@ void QSqlRecipeDB::mergePrepMethods( int id1, int id2 )
 	QSqlQuery update( QString::null, database );
 
 	//change all instances of 'id2' to 'id1' in ingredient list
-	QString command = QString( "UPDATE ingredient_list SET prep_method_id=%1 WHERE prep_method_id=%2" )
+	QString command = QString( "UPDATE prep_method_list SET prep_method_id=%1 WHERE prep_method_id=%2" )
+	                  .arg( id1 )
+	                  .arg( id2 );
+	update.exec( command );
+
+	//change all instances of 'id2' to 'id1' in ingredient weights
+	command = QString( "UPDATE ingredient_weights SET prep_method_id=%1 WHERE prep_method_id=%2" )
 	                  .arg( id1 )
 	                  .arg( id2 );
 	update.exec( command );
@@ -2643,6 +2649,17 @@ void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 	          .arg( id1 )
 	          .arg( id2 );
 	update.exec( command );
+	command = QString( "UPDATE ingredient_weights SET weight_unit_id=%1 WHERE weight_unit_id=%2" )
+	          .arg( id1 )
+	          .arg( id2 );
+	update.exec( command );
+
+	//change all instances of 'id2' to 'id1' in ingredient weights
+	command = QString( "UPDATE ingredient_weights SET unit_id=%1 WHERE unit_id=%2" )
+	          .arg( id1 )
+	          .arg( id2 );
+	update.exec( command );
+
 	command = QString( "UPDATE ingredient_weights SET weight_unit_id=%1 WHERE weight_unit_id=%2" )
 	          .arg( id1 )
 	          .arg( id2 );
