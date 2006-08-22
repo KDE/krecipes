@@ -366,8 +366,13 @@ void IngredientsDialog::removeWeight()
 {
 	QListViewItem *it = weightsListView->listView() ->selectedItem();
 	if ( it ) {
-		database->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
-		delete it;
+			switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString::null, KStdGuiItem::cont(), "DeleteIngredientWeight") ) {
+		case KMessageBox::Continue:
+			database->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
+			delete it;
+			break;
+		default: break;
+		}
 	}
 }
 
