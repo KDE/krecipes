@@ -1618,14 +1618,10 @@ double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 
 double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproximated )
 {
-	QStringList prepMethods;
-	for ( ElementList::const_iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it ) {
-		prepMethods << QString::number((*it).id);
-	}
-
-	QString command = QString( "SELECT amount,weight,prep_method_id FROM ingredient_weights WHERE ingredient_id=%1 AND unit_id=%2" )
+	QString command = QString( "SELECT amount,weight,prep_method_id,unit_id FROM ingredient_weights WHERE ingredient_id=%1 AND (unit_id=%2 OR weight_unit_id=%3)" )
 	   .arg( ing.ingredientID )
-	   .arg( ing.units.id );
+	   .arg( ing.units.id ).arg( ing.units.id );
+
 	QSqlQuery query( command, database );
 
 	if ( query.isActive() ) {
@@ -1634,25 +1630,37 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 		double convertedAmount = -1;
 		while ( query.next() ) {
 			int prepMethodID = query.value( 2 ).toInt();
-kdDebug()<<"prepID: "<<prepMethodID<<endl;
+
 			if ( ing.prepMethodList.containsId( prepMethodID ) ) {
 				if ( wasApproximated ) *wasApproximated = false;
 				double amount = query.value( 0 ).toDouble();
-				return ing.amount / amount * query.value( 1 ).toDouble();
+
+				//'per_amount' -> 'weight' conversion
+				if ( query.value( 3 ).toInt() == ing.units.id )
+					convertedAmount = amount * ing.amount / query.value( 1 ).toDouble();
+				//'weight' -> 'per_amount' conversion
+				else
+					convertedAmount = query.value( 1 ).toDouble() * ing.amount / amount;
+
+				return convertedAmount;
 			}
 			if ( prepMethodID == -1 ) {
-				convertedAmount = ing.amount / query.value( 0 ).toDouble() * query.value( 1 ).toDouble();
-				kdDebug()<<"converted: "<<convertedAmount<<endl;
+				//'per_amount' -> 'weight' conversion
+				if ( query.value( 3 ).toInt() == ing.units.id )
+					convertedAmount = query.value( 0 ).toDouble() * ing.amount / query.value( 1 ).toDouble();
+				//'weight' -> 'per_amount' conversion
+				else
+					convertedAmount = query.value( 1 ).toDouble() * ing.amount / query.value( 0 ).toDouble();
 			}
 		}
 		//no matching prep method found, use entry without a prep method if there was one
 		if ( convertedAmount > 0 ) {
 			if ( wasApproximated ) *wasApproximated = true;
 			kdDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method."<<endl;
+
 			return convertedAmount;
 		}
 	}
-kdDebug()<<"nope, nothing"<<endl;
 	return -1;
 }
 
