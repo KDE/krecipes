@@ -14,6 +14,7 @@
 
 #include <qdom.h>
 #include <qfile.h>
+#include <qstringlist.h>
 
 KLOManager::KLOManager()
 {

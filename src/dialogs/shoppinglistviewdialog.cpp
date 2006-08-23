@@ -23,10 +23,9 @@
 
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
 		: KDialogBase( parent, "shoppingviewdialog", true, QString::null,
-		    KDialogBase::Close | KDialogBase::User1, KDialogBase::Close )
+		    KDialogBase::Close | KDialogBase::User1, KDialogBase::Close,
+		    false, KStdGuiItem::print() )
 {
-	setButtonGuiItem( KDialogBase::User1, KStdGuiItem::print() );
-
 	// Design dialog
 	QVBox *page = makeVBoxMainWidget();
 

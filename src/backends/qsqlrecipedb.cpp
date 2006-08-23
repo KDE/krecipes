@@ -208,7 +208,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					if ( yield_query.isActive() && yield_query.first() )
 						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toCString());
 					else
-						kdDebug()<<yield_query.lastError().text()<<endl;
+						kdDebug()<<yield_query.lastError().databaseText()<<endl;
 				}
 			}
 

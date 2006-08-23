@@ -19,13 +19,13 @@
 #include <kpopupmenu.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <kinputdialog.h>
 #include <ktempfile.h>
 
 #include <khtmlview.h>
 #include <dom/dom_doc.h>
 #include <dom/css_rule.h>
 
+#include <qinputdialog.h>
 #include <qaction.h>
 #include <qlabel.h>
 #include <qfile.h>
@@ -472,8 +472,8 @@ void SetupDisplay::applyStylesheet()
 {
 	loadTemplate( m_activeTemplate );
 	if ( !document().isNull() && !m_styleSheet.isNull() ) {
-		document().removeStyleSheet(m_styleSheet);
-		document().addStyleSheet(m_styleSheet);
+		//document().removeStyleSheet(m_styleSheet);
+		//document().addStyleSheet(m_styleSheet);
 	}
 }
 
@@ -507,7 +507,7 @@ void SetupDisplay::setBorder()
 void SetupDisplay::setColumns()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	int cols = KInputDialog::getInteger( QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0, view() );
+	int cols = QInputDialog::getInteger( QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0, view() );
 	if ( cols > 0 ) {
 		m_currentItem = item;
 		loadColumns( m_currNodeId, cols );
