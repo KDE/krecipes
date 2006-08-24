@@ -35,7 +35,7 @@ void HeaderListView::init()
 	connect( database, SIGNAL( ingGroupRemoved( int ) ), SLOT( removeHeader( int ) ) );
 }
 
-void HeaderListView::load( int limit, int offset )
+void HeaderListView::load( int /*limit*/, int /*offset*/ )
 {
 	ElementList headerList;
 	database->loadIngredientGroups( &headerList );
@@ -155,7 +155,7 @@ void StdHeaderListView::modHeader( QListViewItem* i, const QPoint & /*p*/, int c
 		HeaderListView::rename( i, c );
 }
 
-void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c )
+void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int /*c*/ )
 {
 	if ( !checkBounds( text ) ) {
 		reload(ForceReload); //reset the changed text
@@ -183,7 +183,7 @@ void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int c
 
 bool StdHeaderListView::checkBounds( const QString &header )
 {
-	if ( header.length() > database->maxIngGroupNameLength() ) {
+	if ( header.length() > uint(database->maxIngGroupNameLength()) ) {
 		KMessageBox::error( this, QString( i18n( "Header cannot be longer than %1 characters." ) ).arg( database->maxIngGroupNameLength() ) );
 		return false;
 	}

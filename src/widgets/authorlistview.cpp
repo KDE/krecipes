@@ -185,7 +185,7 @@ void StdAuthorListView::saveAuthor( QListViewItem* i )
 
 bool StdAuthorListView::checkBounds( const QString &name )
 {
-	if ( name.length() > database->maxAuthorNameLength() ) {
+	if ( name.length() > uint(database->maxAuthorNameLength()) ) {
 		KMessageBox::error( this, QString( i18n( "Author name cannot be longer than %1 characters." ) ).arg( database->maxAuthorNameLength() ) );
 		return false;
 	}

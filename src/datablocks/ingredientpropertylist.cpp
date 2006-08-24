@@ -35,7 +35,7 @@ int IngredientPropertyList::findByName( const QString &name )
 	return -1;
 }
 
-void IngredientPropertyList::divide( int units_of_yield_type )
+void IngredientPropertyList::divide( double units_of_yield_type )
 {
 	IngredientPropertyList::iterator prop_it;
 	for ( prop_it = begin(); prop_it != end(); ++prop_it )

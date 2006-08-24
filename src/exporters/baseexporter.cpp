@@ -119,7 +119,7 @@ void BaseExporter::saveToFile( const QValueList<int> &ids, RecipeDB *database )
 		stream << createHeader( recipe_list );
 
 		recipe_list.clear();
-		for ( int i = 0; i < ids.count(); i += progressInterval() ) {
+		for ( uint i = 0; i < ids.count(); i += progressInterval() ) {
 			QValueList<int> sub_list;
 			for ( int sub_i = 0; sub_i < progressInterval(); ++sub_i ) {
 				if ( ids_copy.count() == 0 ) break;

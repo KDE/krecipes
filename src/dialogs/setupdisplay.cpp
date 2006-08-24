@@ -36,7 +36,6 @@
 #include <qvaluelist.h>
 #include <qlayout.h>
 
-#include "image.h"
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
 #include "exporters/htmlexporter.h"
@@ -377,7 +376,7 @@ void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
 	#endif
 }
 
-void SetupDisplay::nodeClicked(const QString &url,const QPoint &point)
+void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 {
 	DOM::Node node = nodeUnderMouse();
 	DOM::Element element;

@@ -242,7 +242,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	yieldGBox->setColumns( 2 );
 
 	yieldLabel = new QLabel( i18n( "Amount" ), yieldGBox );
-	QLabel *yieldTypeLabel = new QLabel( i18n( "Type" ), yieldGBox );
+	/*QLabel *yieldTypeLabel = */new QLabel( i18n( "Type" ), yieldGBox );
 	yieldNumInput = new FractionInput( yieldGBox );
 	yieldNumInput->setAllowRange(true);
 	yieldTypeEdit = new KLineEdit( yieldGBox );
@@ -956,7 +956,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 		{
 			Unit old_unit = new_ing.units;
 
-			if ( new_text.length() > database->maxUnitNameLength() )
+			if ( new_text.length() > uint(database->maxUnitNameLength()) )
 			{
 				KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
 				ing_item->setUnit( old_unit );
@@ -991,7 +991,7 @@ void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text
 			QStringList prepMethodList = QStringList::split(",",new_text.stripWhiteSpace());
 
 			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
-				if ( (*it).stripWhiteSpace().length() > database->maxPrepMethodNameLength() )
+				if ( (*it).stripWhiteSpace().length() > uint(database->maxPrepMethodNameLength()) )
 				{
 					KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
 					ing_item->setPrepMethod( old_text );
@@ -1042,7 +1042,7 @@ void RecipeInputDialog::enableChangedSignal( bool en )
 bool RecipeInputDialog::save ( void )
 {
 	//check bounds first
-	if ( titleEdit->text().length() > database->maxRecipeTitleLength() ) {
+	if ( titleEdit->text().length() > uint(database->maxRecipeTitleLength()) ) {
 		KMessageBox::error( this, QString( i18n( "Recipe title cannot be longer than %1 characters." ) ).arg( database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
 		return false;
 	}

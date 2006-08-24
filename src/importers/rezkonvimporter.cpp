@@ -182,7 +182,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 		recipe.ingList.append( new_ingredient );
 }
 
-void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &recipe )
+void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &/*recipe*/ )
 {
 	QString header = string;
 	header.remove( QRegExp( "^=*" ) ).remove( QRegExp( "=*$" ) );

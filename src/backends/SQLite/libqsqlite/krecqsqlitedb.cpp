@@ -60,14 +60,15 @@ bool QSQLiteDB::open( const QString &dbname )
 		return false;
 	}
 
+	int func_res;
 	#if HAVE_SQLITE
-	int func_res = sqlite_create_function(m_db,"lastInsertID",0,&lastInsertID,m_db );
+	func_res = sqlite_create_function(m_db,"lastInsertID",0,&lastInsertID,m_db );
 	#elif HAVE_SQLITE3
-	int func_res = sqlite3_create_function(m_db,"lastInsertID",0,SQLITE_ANY,m_db,
+	func_res = sqlite3_create_function(m_db,"lastInsertID",0,SQLITE_ANY,m_db,
 	   &lastInsertID, 0, 0 );
 	#endif
 
-	return true;
+	return func_res == 0;
 }
 
 void QSQLiteDB::close()

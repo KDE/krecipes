@@ -27,15 +27,15 @@ public:
 protected:
 	void processDocument( const QDomDocument & );
 
-	virtual void loadBackgroundColor( const QString &obj, const QColor& ){};
-	virtual void loadFont( const QString &obj, const QFont& ){};
-	virtual void loadTextColor( const QString &obj, const QColor& ){};
-	virtual void loadVisibility( const QString &obj, bool ){};
-	virtual void loadAlignment( const QString &obj, int ){};
-	virtual void loadBorder( const QString &obj, const KreBorder& ){};
-	virtual void loadColumns( const QString &obj, int ){};
+	virtual void loadBackgroundColor( const QString &/*obj*/, const QColor& ){};
+	virtual void loadFont( const QString &/*obj*/, const QFont& ){};
+	virtual void loadTextColor( const QString &/*obj*/, const QColor& ){};
+	virtual void loadVisibility( const QString &/*obj*/, bool ){};
+	virtual void loadAlignment( const QString &/*obj*/, int ){};
+	virtual void loadBorder( const QString &/*obj*/, const KreBorder& ){};
+	virtual void loadColumns( const QString &/*obj*/, int ){};
 
-	virtual void beginObject( const QString &obj ){};
+	virtual void beginObject( const QString &/*obj*/ ){};
 	virtual void endObject(){};
 
 	bool getBoolAttribute( const QDomElement &obj, const QString &attr, bool defaultValue = true ) const;

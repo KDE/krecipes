@@ -10,14 +10,14 @@
 
 #include "unit.h"
 
-Unit::Unit() : id( -1 ), type(Unit::Other)
+Unit::Unit() : type(Unit::Other), id( -1 )
 {}
 
 Unit::Unit( const QString &_name, const QString &_plural, int _id ) :
+		type(Unit::Other),
 		id( _id ),
 		name( _name ),
-		plural( _plural ),
-		type(Unit::Other)
+		plural( _plural )
 {}
 
 Unit::Unit( const QString &_name, double amount ) : type(Unit::Other)

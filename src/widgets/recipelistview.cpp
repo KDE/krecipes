@@ -138,7 +138,7 @@ bool RecipeListView::acceptDrag( QDropEvent *event ) const
 	return RecipeItemDrag::canDecode( event );
 }
 
-QString RecipeListView::tooltip(QListViewItem *item, int column) const
+QString RecipeListView::tooltip(QListViewItem *item, int /*column*/) const
 {
 	if ( item->rtti() == RECIPELISTITEM_RTTI ) {
 		RecipeListItem *recipe_it = (RecipeListItem*)item;

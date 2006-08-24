@@ -267,7 +267,7 @@ void ConversionTable::clear( void )
 }
 
 //TODO this is incomplete/wrong
-void ConversionTable::swapRows( int row1, int row2, bool swapHeader )
+void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 {
 	//if ( swapHeader )
 	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, FALSE );
@@ -324,7 +324,7 @@ void ConversionTable::swapRows( int row1, int row2, bool swapHeader )
 }
 
 //TODO this is incomplete/wrong
-void ConversionTable::swapColumns( int col1, int col2, bool swapHeader )
+void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 {
 	//if ( swapHeader )
 	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, FALSE );

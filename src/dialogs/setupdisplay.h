@@ -20,7 +20,6 @@
 #include <qmap.h>
 
 #include "datablocks/recipe.h"
-#include "widgets/dragarea.h"
 #include "datablocks/kreborder.h"
 #include "klomanager.h"
 

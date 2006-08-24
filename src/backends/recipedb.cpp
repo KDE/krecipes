@@ -72,7 +72,7 @@ struct ingredient_nutrient_data
 
 RecipeDB::RecipeDB() : 
 	DCOPObject(),
-	QObject(), haltOperation(false), m_categoryCache(0)
+	QObject(), m_categoryCache(0), haltOperation(false)
 {
 	dbOK = false;
 	dbErr = "";
@@ -765,7 +765,6 @@ void RecipeDB::importUSDADatabase()
 			ingredient_nutrient_data current_ing;
 			current_ing.name = ( *current_pair ).second.latin1();
 
-			int i = 2;
 			for ( int i = 2; i < TOTAL_USDA_PROPERTIES + 2; i++ )  //properties start at the third field (index 2)
 				current_ing.data << fields[ i ].toDouble();
 

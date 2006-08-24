@@ -90,7 +90,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	titleFrameLayout->addWidget( requireAllTitle );
 
 	QHBox *titleHBox = new QHBox( titleFrame );
-	QLabel *titleInfoLabel = new QLabel(i18n("Keywords:"),titleHBox);
+	/*QLabel *titleInfoLabel = */new QLabel(i18n("Keywords:"),titleHBox);
 	titleEdit = new QLineEdit( titleHBox, "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
 
@@ -294,7 +294,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsFrameLayout->addWidget( requireAllInstructions );
 
 	QHBox *instructionsHBox = new QHBox(instructionsFrame);
-	QLabel *instructionsInfoLabel = new QLabel(i18n("Keywords:"),instructionsHBox);
+	/*QLabel *instructionsInfoLabel = */new QLabel(i18n("Keywords:"),instructionsHBox);
 
 	instructionsEdit = new QLineEdit( instructionsHBox, "instructionsEdit" );
 	instructionsFrameLayout->addWidget( instructionsHBox );
@@ -888,7 +888,7 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 	// and then split again on the even numbered items
 	
 	QStringList temp = QStringList::split('"',text,true);
-	for ( int i = 0; i < temp.count(); ++i ) {
+	for ( uint i = 0; i < temp.count(); ++i ) {
 		if ( i & 1 ) //odd
 			result += temp[i].stripWhiteSpace();
 		else         //even

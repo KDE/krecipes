@@ -36,7 +36,6 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	KKey key( e );
 
 	KeyBindingMap keys = getKeyBindings();
-	KGlobalSettings::Completion mode = completionMode();
 	KShortcut cut;
 	bool noModifier = ( e->state() == NoButton || e->state() == ShiftButton );
 
@@ -123,7 +122,7 @@ void KreTextEdit::setCompletedText( const QString &txt )
 	completing = true;
 }
 
-void KreTextEdit::setCompletedItems( const QStringList &items )
+void KreTextEdit::setCompletedItems( const QStringList &/*items*/ )
 {}
 
 void KreTextEdit::tryCompletion()

@@ -53,7 +53,7 @@ private:
 	QString m_msg;
 
 	// Methods
-	void init( const QValueList<ListInfo> &lists, bool deps_are_deleted = true );
+	void init( const QValueList<ListInfo> &lists );
 	void loadList( KListBox*, const ElementList &list );
 };
 

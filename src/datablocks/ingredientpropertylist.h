@@ -21,7 +21,7 @@ public:
 
 	~IngredientPropertyList();
 
-	void divide( int units_of_yield_type );
+	void divide( double units_of_yield_type );
 	IngredientPropertyList::const_iterator find( int id );
 	int findByName( const QString & );
 	void filter( int ingredientID, IngredientPropertyList *filteredList );

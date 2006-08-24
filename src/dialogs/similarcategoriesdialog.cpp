@@ -229,10 +229,10 @@ QValueList<QStringList> wordLetterPairs(const QString &str) {
 	// Tokenize the string and put the tokens/words into an array
 	QStringList words = QStringList::split("\\s",str);
 	// For each word
-	for (int w=0; w < words.count(); w++) {
+	for (uint w=0; w < words.count(); w++) {
 		// Find the pairs of characters
 		QStringList pairsInWord = letterPairs(words[w]);
-		for (int p=0; p < pairsInWord.count(); p++) {
+		for (uint p=0; p < pairsInWord.count(); p++) {
 			allPairs.append(pairsInWord[p]);
 		}
 	}
@@ -245,9 +245,9 @@ double compareStrings(const QString &str1, const QString &str2) {
 	QValueList<QStringList> pairs2 = wordLetterPairs(str2.upper());
 	int intersection = 0;
 	int size_union = pairs1.count() + pairs2.count();
-	for (int i=0; i<pairs1.count(); i++) {
+	for (uint i=0; i<pairs1.count(); i++) {
 		QStringList pair1=pairs1[i];
-		for(int j=0; j<pairs2.count(); j++) {
+		for(uint j=0; j<pairs2.count(); j++) {
 			QStringList pair2=pairs2[j];
 			if (pair1 == pair2) {
 				intersection++;
@@ -308,7 +308,6 @@ void SimilarCategoriesDialog::findMatches()
 
 	const double threshold = (100 - thresholdSlider->value())/100.0;
 	const QString name = categoriesBox->text();
-	const int length = name.length();
 
 	for ( ElementList::const_iterator it = m_elementList.begin(); it != m_elementList.end(); ++it ) {
 		//kdDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;

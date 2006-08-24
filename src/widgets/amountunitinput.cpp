@@ -19,7 +19,7 @@
 #include "datablocks/mixednumber.h"
 
 AmountUnitInput::AmountUnitInput( QWidget *parent, RecipeDB *database, Unit::Type type, MixedNumber::Format format ) : QHBox(parent),
-  m_database(database), m_item(0)
+  m_item(0), m_database(database)
 {
 	amountInput = new FractionInput(this,format);
 	unitBox = new UnitComboBox(this,database,type);

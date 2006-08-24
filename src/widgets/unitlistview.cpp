@@ -356,7 +356,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 
 bool StdUnitListView::checkBounds( const Unit &unit )
 {
-	if ( unit.name.length() > database->maxUnitNameLength() || unit.plural.length() > database->maxUnitNameLength() ) {
+	if ( unit.name.length() > uint(database->maxUnitNameLength()) || unit.plural.length() > uint(database->maxUnitNameLength()) ) {
 		KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
 		return false;
 	}

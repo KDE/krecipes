@@ -26,7 +26,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const QValueList<ListIn
 	  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
-	init( lists, deps_are_deleted );
+	init( lists );
 }
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialogBase( parent, "DependanciesDialog", true, QString::null,
@@ -35,13 +35,13 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, b
 {
 	QValueList<ListInfo> lists;
 	lists << list;
-	init( lists, deps_are_deleted );
+	init( lists );
 }
 
 DependanciesDialog::~DependanciesDialog()
 {}	
 
-void DependanciesDialog::init( const QValueList<ListInfo> &lists, bool deps_are_deleted )
+void DependanciesDialog::init( const QValueList<ListInfo> &lists )
 {
 	QVBox *page = makeVBoxMainWidget();
 
@@ -63,10 +63,6 @@ void DependanciesDialog::init( const QValueList<ListInfo> &lists, bool deps_are_
 		if ( !((*list_it).list).isEmpty() ) {
 			QGroupBox *groupBox = new QGroupBox( 1, Qt::Vertical, (*list_it).name, page );
 			KListBox *listBox = new KListBox( groupBox );
-
-			KConfig * config = KGlobal::config();
-			config->setGroup( "Advanced" );
-			bool show_id = config->readBoolEntry( "ShowID", false );
 			loadList( listBox, (*list_it).list );
 		}
 	}
