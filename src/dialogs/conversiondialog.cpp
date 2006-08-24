@@ -97,6 +97,22 @@ void ConversionDialog::languageChange()
 	resultText->setText( QString::null );
 }
 
+void ConversionDialog::show()
+{
+	reset();
+	KDialogBase::show();
+}
+
+void ConversionDialog::reset()
+{
+	resultText->setText( QString::null );
+	ingredientBox->setCurrentItem( 0 );
+	prepMethodBox->setCurrentItem( 0 );
+	toUnitBox->setCurrentItem( 0 );
+	fromUnitBox->setCurrentItem( 0 );
+	amountEdit->clear();
+}
+
 void ConversionDialog::slotUser1()
 {
 	convert();

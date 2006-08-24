@@ -36,6 +36,9 @@ public:
 	ConversionDialog( QWidget* parent, RecipeDB *, const char* name = 0 );
 	~ConversionDialog();
 
+	virtual void show();
+	void reset();
+
 protected:	
 	IngredientComboBox* ingredientBox;
 	PrepMethodComboBox* prepMethodBox;
