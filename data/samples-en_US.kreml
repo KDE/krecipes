@@ -165,7 +165,8 @@ Paint the cake's top part with a bit of whisked egg, and put it in the oven at 1
 <unit>little</unit>
 </ingredient>
 <ingredient>
-<name>crushed black pepper</name>
+<name>black pepper</name>
+<prep>crushed</prep>
 <amount>1</amount>
 <unit>little</unit>
 </ingredient>
