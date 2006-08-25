@@ -2737,7 +2737,7 @@ void QSqlRecipeDB::empty( void )
 		tablesToEmpty.exec( command );
 
 		if ( !tablesToEmpty.isActive() )
-			kdDebug()<<tablesToEmpty.lastError().text()<<endl;
+			kdDebug()<<tablesToEmpty.lastError().databaseText()<<endl;
 
 		++it;
 	}
