@@ -1637,20 +1637,20 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 
 				//'per_amount' -> 'weight' conversion
 				if ( query.value( 3 ).toInt() == ing.units.id )
-					convertedAmount = amount * ing.amount / query.value( 1 ).toDouble();
+					convertedAmount = query.value( 1 ).toDouble() * ing.amount / amount;
 				//'weight' -> 'per_amount' conversion
 				else
-					convertedAmount = query.value( 1 ).toDouble() * ing.amount / amount;
+					convertedAmount = amount * ing.amount / query.value( 1 ).toDouble();
 
 				return convertedAmount;
 			}
 			if ( prepMethodID == -1 ) {
 				//'per_amount' -> 'weight' conversion
 				if ( query.value( 3 ).toInt() == ing.units.id )
-					convertedAmount = query.value( 0 ).toDouble() * ing.amount / query.value( 1 ).toDouble();
+					convertedAmount = query.value( 1 ).toDouble() * ing.amount / query.value( 0 ).toDouble();
 				//'weight' -> 'per_amount' conversion
 				else
-					convertedAmount = query.value( 1 ).toDouble() * ing.amount / query.value( 0 ).toDouble();
+					convertedAmount = query.value( 0 ).toDouble() * ing.amount / query.value( 1 ).toDouble();
 			}
 		}
 		//no matching prep method found, use entry without a prep method if there was one
