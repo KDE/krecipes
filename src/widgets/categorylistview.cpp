@@ -258,6 +258,9 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 				createElement(item);
 			}
 			else {
+				if ( !(*parent_item_it)->firstChild() )
+					new PseudoListItem( *parent_item_it );
+
 				//removeElement() was already called on this item, so we just delete it
 				//we can't delete it just yet because this function is called by a slot
 				delete m_item_to_delete;
