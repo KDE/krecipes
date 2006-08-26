@@ -142,7 +142,9 @@ void RecipeActionsHandler::open()
 	QPtrList<QListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		QValueList<int> ids = recipeIDs(items);
-		if ( ids.count() > 0 )
+		if ( ids.count() == 1 )
+			emit recipeSelected(ids.first(),0);
+		else if ( ids.count() > 0 )
 			emit recipesSelected(ids,0);
 		#if 0
 		else if ( it->rtti() == 1001 && it->firstChild() )  //CategoryListItem and not empty
