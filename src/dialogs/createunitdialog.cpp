@@ -69,6 +69,8 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
 
+	connect( nameAbbrevEdit, SIGNAL(textChanged(const QString&)), SLOT(nameAbbrevTextChanged(const QString &)) );
+
 	if ( name.isEmpty() )
 		nameEdit->setFocus();
 	else if ( plural.isEmpty() )
@@ -97,3 +99,18 @@ Unit CreateUnitDialog::newUnit( void )
 
 	return new_unit;
 }
+
+void CreateUnitDialog::nameAbbrevTextChanged(const QString &newText)
+{
+	//appending
+	if ( newText.left( newText.length()-1 ) == pluralAbbrevEdit->text() ) {
+		pluralAbbrevEdit->setText( newText );
+	}
+
+	//truncating
+	if ( newText.left( newText.length()-1 ) == pluralAbbrevEdit->text().left( newText.length()-1 ) ) {
+		pluralAbbrevEdit->setText( newText );
+	}
+}
+
+#include "createunitdialog.moc"

@@ -29,10 +29,15 @@ class KLineEdit;
 */
 class CreateUnitDialog : public KDialogBase
 {
+Q_OBJECT
+
 public:
 	CreateUnitDialog( QWidget *parent, const QString &name = QString::null, const QString &plural = QString::null, const QString &name_abbrev = QString::null, const QString &plural_abbrev = QString::null, bool newUnit = true );
 	~CreateUnitDialog();
 	Unit newUnit( void );
+
+protected slots:
+	void nameAbbrevTextChanged(const QString &);
 
 private:
 	//Widgets
