@@ -462,11 +462,8 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			prop_amount = double( qRound( prop_amount * 10.0 ) ) / 10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
 			amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
 		}
-		else {
-			prop_amount = double( qRound( -prop_amount * 10.0 ) ) / 10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
-			amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
-			amount_str += "+";
-		}
+		else
+			amount_str = "0";
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
 		                   .arg( QStyleSheet::escape( (*prop_it).name ) )
