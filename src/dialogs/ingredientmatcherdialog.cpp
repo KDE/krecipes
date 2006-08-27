@@ -188,13 +188,23 @@ void IngredientMatcherDialog::addIngredient()
 		QPtrListIterator<QListViewItem> it(items);
 		QListViewItem *item;
 		while ( (item = it.current()) != 0 ) {
-			QListViewItem * new_item = new QCheckListItem( ingListView->listView(), item->text( 0 ), QCheckListItem::CheckBox );
+			bool dup = false;
+			for ( QListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
+				if ( exists_it->text( 0 ) == item->text( 0 ) ) {
+					dup = true;
+					break;
+				}
+			}
 
-			ingListView->listView() ->setSelected( new_item, true );
-			ingListView->listView() ->ensureItemVisible( new_item );
-			allIngListView->listView() ->setSelected( item, false );
+			if ( !dup ) {
+				QListViewItem * new_item = new QCheckListItem( ingListView->listView(), item->text( 0 ), QCheckListItem::CheckBox );
 	
-			m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+				ingListView->listView() ->setSelected( new_item, true );
+				ingListView->listView() ->ensureItemVisible( new_item );
+				allIngListView->listView() ->setSelected( item, false );
+		
+				m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+			}
 			++it;
 		}
 	}
