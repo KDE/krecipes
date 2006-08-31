@@ -56,8 +56,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2005-11-29</date>
-<releaseinfo>0.9</releaseinfo>
+<date>2006-08-31</date>
+<releaseinfo>1.0.beta1</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -166,7 +166,7 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <emphasis>Find/Edit 
 
 <tip><para>You will notice the <guiicon><inlinemediaobject><imageobject><imagedata fileref="krectip.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon in the bottom, right-hand corner of the pane containing the component list.  This icon appears in all &krecipes; components and when clicked, will open the corresponding section of this Handbook if you need extra help at any time.</para></tip>
 
-<para>With the <emphasis><guilabel>Basic</guilabel></emphasis> tab active and the list of recipe categories displayed, a category can be expanded by clicking on the <guibutton>+</guibutton> button beside the category name.  The category will automatically expand to show your recipes and/or subcategories if there are any.  From this list, you may select a recipe to open, edit or delete (see the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information).  Additionally, if you <action>hover the mouse pointer</action> over any recipe title, a <interface>dialog box</interface> will appear showing the recipe title and the date that it was <emphasis>created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
+<para>With the <emphasis><guilabel>Basic</guilabel></emphasis> tab active and the list of recipe categories displayed, a category can be expanded by clicking on the <guibutton>+</guibutton> button beside the category name.  The category will automatically expand to show your recipes and/or subcategories, if there are any.  From this list, you may select a recipe to open, edit or delete (see the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information).  Additionally, if you <action>hover the mouse pointer</action> over any recipe title, a <interface>dialog box</interface> will appear showing the recipe title and the date that it was <emphasis>created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
 
 <para>Conversely, clicking the <guibutton>-</guibutton> button beside the category name will collapse the category.</para>
 
@@ -574,7 +574,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Setting the amount that the recipe will yield is performed by entering a value in the textbox beneath the <emphasis><guilabel>Amount</guilabel></emphasis> label.  It is possible to enter a numerical range for this number, for example, 3-4.  When entering a range, if an incorrect value or format is entered, the entry will turn red indicating that a correction is necessary.</para>
 
-<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the textbox beneath the <emphasis><guilabel>Type</guilabel></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.</para>
+<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the textbox beneath the <emphasis><guilabel>Type</guilabel></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.  As you begin to type the yield type, &krecipes; will match it to any previously entered yield types and if any are found, they will appear in a list from which you can select the appropriate one.</para>
 
 </sect3>
 
@@ -704,11 +704,11 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Directly beneath the ingredients list, there is a visible means to obtain the status of your recipe nutrients.  Beside the label <guilabel>Property Status:</guilabel>, text and an <emphasis>LED</emphasis> style indicator are used to depict this information.</para>
 
-<para>A green status indicator means that your nutrient information is complete.  However, you will note from the above graphic, that the nutrient information for this recipe is <emphasis>Incomplete</emphasis> and the indicator shows as red.  To find out exactly what is needed to complete the nutrient information, click the <guibutton>Details</guibutton> button.  A window will appear explaining what the problems are, for example: &ndash;</para>
+<para>A green status indicator means that your nutrient information is complete.  However, you will note from the above graphic, that the nutrient information for this recipe is <emphasis>Incomplete</emphasis> and the indicator shows as red.  To find out exactly what is needed to complete the nutrient information, click the <guibutton>Details</guibutton> button.  A window will appear explaining what the problems are, for example: &mdash;</para>
 
 <para><inlinemediaobject><imageobject><imagedata fileref="property_details.png" format="PNG"/></imageobject></inlinemediaobject></para>
 
-<para>This dialog is telling you that, for the ingredient <emphasis>apples</emphasis>, there are two possible reasons for the property or <emphasis>nutrient</emphasis> information being incomplete: &ndash;</para>
+<para>This dialog is telling you that, for the ingredient <emphasis>apples</emphasis>, there are two possible reasons for the property or <emphasis>nutrient</emphasis> information being incomplete: &mdash;</para>
 
 <para><orderedlist>
 <listitem><para>An ingredient weight has not been provided.</para>
@@ -756,7 +756,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To assist you with your conversions, <emphasis>&krecipes;</emphasis> has a nifty tool that can be found by selecting <guimenu>Tools</guimenu> and <guimenuitem>Measurement Converter</guimenuitem>.  This helper will be more fully discussed in <link linkend="measure-converter">Using the Measurement Converter</link>.</para>
 
-<para>After making the adustment for apples, the <emphasis>LED</emphasis> status indicator will turn yellow because nutrient information is complete, but an approximation has been made for the ingredient <emphasis>butter</emphasis>.  The <guilabel>Property Status:</guilabel> of your recipe will show as <emphasis>Complete, but approximations made</emphasis>.  Here, you can choose to do one of the following: &ndash;</para>
+<para>After making the adustment for apples, the <emphasis>LED</emphasis> status indicator will turn yellow because nutrient information is complete, but an approximation has been made for the ingredient <emphasis>butter</emphasis>.  The <guilabel>Property Status:</guilabel> of your recipe will show as <emphasis>Complete, but approximations made</emphasis>.  Here, you can choose to do one of the following: &mdash;</para>
 
 <para><orderedlist>
 <listitem><para>Choose to enter a weight for <emphasis>melted butter</emphasis> in your weight table</para></listitem>
@@ -945,13 +945,13 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <orderedlist>
 
-<listitem><para>Scale by yield &ndash;</para>
+<listitem><para>Scale by yield &mdash;</para>
 
 <para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield label</guilabel></emphasis>.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a textbox in which to <userinput>enter the new yield amount desired</userinput>.</para>
 
 <note><para>If you have entered a range for your yield amount, <emphasis>Scale by yield</emphasis> will not be available because <emphasis>&krecipes;</emphasis> cannot determine which portion of the range it is scaling.</para></note></listitem>
 
-<listitem><para>Scale by factor &ndash;</para>
+<listitem><para>Scale by factor &mdash;</para>
 
 <para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the<emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the textbox beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
 </orderedlist>
@@ -1154,7 +1154,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extention, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
 
-<para>From the screenshot, you will see that there are four buttons at the bottom of the screen.  Their usage is as follows: &ndash;</para>
+<para>From the screenshot, you will see that there are four buttons at the bottom of the screen.  Their usage is as follows: &mdash;</para>
 
 <itemizedlist>
 <listitem><para><guibutton>Help</guibutton> &ndash; clicking on this button will refer you to this section of the Handbook</para></listitem>
@@ -1163,6 +1163,39 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para><guibutton>Print</guibutton> &ndash; will open the print dialog window for whatever print program you are using, for example, kprinter</para></listitem>
 <listitem><para><guibutton>Cancel</guibutton> &ndash; will close the <interface>Print Preview</interface> window and return you to your open recipe</para></listitem>
 </itemizedlist>
+
+<para>When the print dialog box opens, there are some selections that you might want to pay particular attention to.  These include: &mdash;</para>
+
+<itemizedlist>
+<listitem><para>The <emphasis><guibutton>Properties</guibutton></emphasis> button &ndash; when you click this button, a dialog will open where you can set paper size.</para></listitem>
+
+<listitem><para>A tickbox beside the label <guilabel>Preview</guilabel>.  You might want to select to preview the recipe from within the print interface to ensure that it prints exactly as you want.  The <emphasis><interface>Print Preview</interface></emphasis> screen in &krecipes; will preview the selections made in the <emphasis><interface>Print Setup</interface></emphasis> interface within &krecipes;.  However, how the recipe actually prints is controlled by settings from within the printer dialog.</para></listitem>
+
+<listitem><para>An <guibutton>Options&gt;&gt;</guibutton> button at the bottom of the printer dialog window. Clicking on this button will expand this particular dialog.</para>
+
+<para>When the <guibutton>Options&gt;&gt;</guibutton> is expanded, two tabs are of particular interest.  These are: &mdash;</para>
+
+<itemizedlist>
+<listitem><para><emphasis><guilabel>Copies</guilabel></emphasis> &ndash; within this tab, you can set the number of copies of your recipe to print, assuming that you might want more than one.</para></listitem>
+
+<listitem><para><emphasis><guilabel>HTML Settings</guilabel></emphasis> &ndash; this tab is particularly important because it is the selections from within this tab that ensure your recipe will print exactly as previewed within &krecipes;.</para>
+<para>There are three tickboxes within this tab: &mdash;</para>
+
+<orderedlist><listitem><para><emphasis><guilabel>Printer friendly mode (black text, no background)</guilabel></emphasis> &ndash; if you want your recipe to print with the backgrounds that you have selected, <emphasis>deselect this tickbox</emphasis>!</para>
+<note><para>This tickbox is the important one!</para></note>
+</listitem>
+<listitem><para><emphasis><guilabel>Print images</guilabel></emphasis> &ndash; deselect this tickbox only if you do not want your recipe printed with the associated photo.</para></listitem>
+<listitem><para><emphasis><guilabel>Print header</guilabel></emphasis> &ndash; selecting this textbox will cause a header to be printed on your page showing the date, the file name and its path and the copy number.</para></listitem>
+</orderedlist>
+
+
+</listitem>
+</itemizedlist>
+
+</listitem>
+</itemizedlist>
+
+<note><para>It is beyond the scope of this document to detail all print settings.  If you should need assistance with this, click the <emphasis><guibutton>Help</guibutton></emphasis> button from within the print dialog interface.</para></note>
 
 </sect2>
 
@@ -1341,14 +1374,33 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
 <para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe XML.</para>
 
-<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>headers</quote>, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
+<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>borders</quote> around certain elements, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
 
 <listitem><para>Plain Text &ndash; files of this format will have extentions of .txt</para>
 <para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as e-mail.</para></listitem>
 
+<listitem><para>Web Book &ndash; files of this format will have extensions of .html</para>
+
+<para>This option allows you to export multiple recipes, for instance, a category.  The cool part about exporting as a Web Book is that you will be allowed to navigate to specific recipes via links that appear under the category name at the top of the page.</para>
+
+<para>You might want to use this feature to export recipes from a single category.  However, you can randomly select recipes from multiple categories to be exported in this format.  To do this, select the first recipe by clicking on it and then, hold the <keycap>Ctrl</keycap> key and select the next and subsequent recipes.  If recipes are selected randomly, the export will create a page named <emphasis>index.html</emphasis> in the location that you specify.  This file will have links to the various categories of recipes that you have exported.</para>
+
+<para>For instance, suppose you have selected to export random recipes from <emphasis>Appetizers</emphasis>, <emphasis>Main Dishes</emphasis>, and <emphasis>Desserts</emphasis>.  The index.html file would show links for <emphasis>Appetizers</emphasis>, <emphasis>Main Dishes</emphasis>, and <emphasis>Desserts</emphasis>.  Clicking any one of those links will open the page for that category and you will then be able to navigate through the recipes within the category by clicking on the recipe name link that appears under the category name at the top of the page.</para>
+
+<note><para>Once exported in Web Book format, you are unable to import these recipes back into <emphasis>&krecipes;</emphasis>.</para></note>
+
+</listitem>
+
 <listitem><para>Web page &ndash; files of this format will have extensions of .html</para>
  
-<para>You might choose to export in this format in order to create a web page that contains your recipes.  However, it should be noted that once exported in Web page format, you are unable to import these recipes back into <emphasis>&krecipes;</emphasis>.</para></listitem>
+<para>You might choose to export in this format in order to create a web page that contains your recipes.  Similar to exporting as a <emphasis>Web Book</emphasis>, you can export recipes from a single category, entire categories or randomly selected recipes from any number of categories.  The difference is that all recipes exported in Web page format will appear on a single webpage with no navigational ability other than scrolling through the page using the scrollbar.</para>
+
+<para>While exporting in Web page format has its purpose, you will obviously note the benefits of exporting as a Web Book if you are exporting many recipes.</para>
+
+<para>However, it should be noted that once exported in Web page format, you are unable to import these recipes back into <emphasis>&krecipes;</emphasis>.</para>
+
+<note><para>Exporting recipes in either <emphasis>Web page</emphasis> or <emphasis>Web Book</emphasis> format will retain all visual settings &ndash; <abbrev>i.e.</abbrev> those set in <emphasis>Page Setup</emphasis>, including the graphic.</para></note>
+</listitem>
 
 <listitem><para>Meal-Master &ndash; files of this format will have extensions of .mmf and you might want to export in this format to be able to import into the Meal-Master program to share will other Meal-Master users</para>
 
@@ -1560,7 +1612,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <orderedlist><listitem><para>Nutrients or <emphasis>properties</emphasis> must be loaded for the ingredients.  See the section <link linkend="ingredient-properties">Properties in Ingredients</link> for further instructions.  If an ingredient does not contain nutrient values, it will be ignored.</para></listitem>
 <listitem><para>Units of measure must be associated with the ingredients. Since most nutrients are measured in <emphasis>g/g</emphasis> or <emphasis>mg/g</emphasis>, ensure that <emphasis>g</emphasis> is one of the units associated with each ingredient.  See the section <link linkend="ingredient-units">Units in Ingredients</link> for additional information.</para></listitem>
-<listitem><para>The equivalencies between the units of measure must be completed in the <emphasis>Units</emphasis> component within the <emphasis><guilabel>Unit Conversions</guilabel></emphasis> tab.  See the section <link linkend="set-equivalents">Setting Equivalencies</link> for instructions.</para></listitem>
+<listitem><para>The equivalencies between the units of measure must be completed in the <emphasis>Units</emphasis> component within the <emphasis><guilabel>Mass Conversions</guilabel></emphasis> and <emphasis><guilabel>Volume  Conversions</guilabel></emphasis> tabs.  See the section <link linkend="set-equivalents">Completing Your Conversion Tables</link> for instructions.</para></listitem>
 </orderedlist>
 
 <para>Once you have ensured that all necessary details have been provided for your ingredients, you are ready to consider nutrients in your menu plan.  Of course, attending to these details should be done prior to the start of creating your menu/diet, since the consideration of nutrient values is a continuation of planning a basic menu.</para>
@@ -1569,7 +1621,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>To the right of the nutrient name, columns labeled <emphasis><guilabel>Min. Value</guilabel></emphasis> and <emphasis><guilabel>Max. Value</guilabel></emphasis> exist.  These are used to set the minimum and maximum values of nutrients so that when the search for appropriate recipes is done, only recipes that have a particular nutrient falling into the specified range will be considered for your menu/diet.</para>
   
-<para>To set the minimum value for the nutrient in question, double-click on the <quote>0</quote> beside the nutrient name and under the <emphasis><guilabel>Min. Value</guilabel></emphasis> heading.  A spinbox will appear that you can utilize to set the value that you want, or you can highlight the <quote>0.00</quote> value and manually type the value that you want to set. Once the desired value has been entered, click the <guibutton>OK</guibutton> button to set it.  Likewise, the maximum value is set in the same way under the <emphasis><guilabel>Max. Value</guilabel></emphasis> heading.  These steps must be completed in each course category for each nutrient that you want to consider.</para>
+<para>To set the ranges for a nutrient that you want to take into consideration, select it (it will be highlighted).  Under the headings for <emphasis><guilabel>Min. Value</guilabel></emphasis> and <emphasis><guilabel>Max. Value</guilabel></emphasis>, the <quote>0</quote> that was under each heading prior to selecting the nutrient will change to <quote>0.00</quote>.  A spinbox will show beside each of these values that you can utilize to set the value that you want.  Alternatively, you can click on the value, position the cursor to where you want to type using the directional arrows and type a value, or you can double-click on the value to highlight it and type over the entire value that exists.  These steps must be completed in each course category for each nutrient that you want to consider.</para>
 
 <para>It should be noted that you may omit providing a minimum value for a nutrient, in which case the minimum value would remain as <quote>0</quote>.  However, if you provide a minimum value, you must provide a maximum because, obviously, a maximum cannot be less than a minimum.</para>
 
@@ -1665,7 +1717,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <para>Again, a <guibutton>+</guibutton> button, for adding ingredient properties to the list, and a <guibutton>-</guibutton>, button for removing properties, appears to the right of the section to allow addition and removal of nutrient values for an ingredient.  See the section on <link linkend="ingredient-properties">Properties in Ingredients</link> for more details.</para>
 </listitem>
 
-<listitem><para>Below the <quote>Properties list</quote> is the <guilabel>Ingredient Weights</guilabel> list.  This list, in combination with your unit conversions, is what helps provide accurate nutrient information for your recipes.  See the section, <link linkend="set-equivalents">Setting Equivalencies</link> for help with doing your unit conversions.</para>
+<listitem><para>Below the <quote>Properties list</quote> is the <guilabel>Ingredient Weights</guilabel> list.  This list, in combination with your unit conversions, is what helps provide accurate nutrient information for your recipes.  See the section, <link linkend="set-equivalents">Completing Your Conversion Tables</link> for help with doing your unit conversions.</para>
 
 <para>In this section, under the heading <guilabel>Weight</guilabel>, the weight of the ingredient is shown.  Under the heading <guilabel>Per Amount</guilabel>, the unit to which the weight applies is shown.  Using the orange juice example, the ingredient weight table shows that the weight of orange juice is 248 grams per cup of orange juice, or 31 grams per fluid ounce of orange juice.</para>
 
@@ -1777,7 +1829,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>The <quote>Choose Property</quote> box will appear, from which you can select the property to be added for the ingredient.  A drop-down menu shows below the property list, from which the unit associated with the property must be selected.  Click the <guibutton>OK</guibutton> button to proceed, or the <guibutton>Cancel</guibutton> button to cancel the addition of the property and close the window.</para>
 
-<para>If you choose to proceed with the addition, the property will be added to the <emphasis>Ingredient Properties</emphasis> list.  However, you will note that it has a <quote>0</quote> value.  This value must by supplied by you.  To add the value, double-click on the property and increment the value using the spin-box that appears, or manually type the value.  Once the value is entered, click the <guibutton>OK</guibutton> button that appears beside the spin-box.</para>
+<para>If you choose to proceed with the addition, the property will be added to the <emphasis>Ingredient Properties</emphasis> list.  However, you will note that it has a <quote>0</quote> value.  This value must by supplied by you.  To add the value, click on the property and increment the value using the spin-box that appears, or manually type the value.  Once the value is entered, click the <guibutton>OK</guibutton> button that appears beside the spin-box.</para>
 
 <note><para>If the USDA data does not show for the ingredient for which the new property has been added, it can be loaded either before adding the new property or after.  If the USDA data is added after adding the new property, the new property will still show in the list.</para>
 
@@ -1831,7 +1883,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <sect4 id="edit-weight">
 <title>Editing Ingredient Weights</title>
-<para>Any portion of the ingredient weight that is listed in the <guilabel>Ingredient Weights</guilabel> list can be edited by double-clicking the part that you want to edit as follows: &ndash;</para>
+<para>Any portion of the ingredient weight that is listed in the <guilabel>Ingredient Weights</guilabel> list can be edited by double-clicking the part that you want to edit as follows: &mdash;</para>
 
 <itemizedlist>
 <listitem><para>If you double-click the portion under the <guilabel>Weight</guilabel> heading, a dialog box will appear.  Under the heading <guilabel>Weight</guilabel>, the existing weight will show in the textbox, but you can delete this and enter a new value.  Beside the <guilabel>Weight</guilabel> textbox, the drop-down menu for the weight measure displays the current setting.  However, this can be changed by selecting another from the menu.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
@@ -1931,9 +1983,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <sect3 id="add-units">
 <title>Adding Units of Measure</title>
-<para>To add a unit of measure, click the <guibutton>Create...</guibutton> button that appears to the right of the <emphasis>Unit</emphasis> list.  The <interface>New Unit</interface> dialog box will appear where the name of the new unit can be added.  Beneath the heading <emphasis><guilabel>New Unit</guilabel></emphasis>, there is a textbox to <userinput>enter the singular form of the unit</userinput> and one to <userinput>enter the plural form of the unit</userinput>.  To the right of each of these textboxes is another pair of textboxes in which to <userinput>enter the abbreviation</userinput> for both singular and plural forms respectively.</para>
+<para>To add a unit of measure, click the <guibutton>Create...</guibutton> button that appears to the right of the <emphasis>Unit</emphasis> list.  The <interface>New Unit</interface> dialog box will appear where the name of the new unit can be added.  Beneath the heading <emphasis><guilabel>New Unit</guilabel></emphasis>, there is a textbox to <userinput>enter the singular form of the unit</userinput> and one to <userinput>enter the plural form of the unit</userinput>.  To the right of each of these textboxes is another pair of textboxes in which to <userinput>enter the abbreviation</userinput> for both singular and plural forms respectively.  However, since both singular and plural abbreviations are most often identical, typing the abbreviation in the singular textbox, will result in the plural abbreviation being automatically completed.  On the rare occasion that the plural abbreviation is different, you can easily edit the entry.</para>
 
-<para>Finally, the unit <emphasis>type</emphasis> is selected from the drop-down menu that appears beside the label <guilabel>Type:</guilabel>.  Choices for unit type are: &ndash;</para>
+<para>Finally, the unit <emphasis>type</emphasis> is selected from the drop-down menu that appears beside the label <guilabel>Type:</guilabel>.  Choices for unit type are: &mdash;</para>
 
 <itemizedlist>
 <listitem><para>Other &ndash; this is the default and hence, this is what displays on the drop-down menu</para>
@@ -2001,7 +2053,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <title>Using the Measurement Converter</title>
 <para>The <interface>Measurement Converter</interface> is accessed by selecting <guimenu>Tools</guimenu> and <guimenuitem>Measurement Converter</guimenuitem> from the &krecipes; menu.  The interface can also be activated by using the  <keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo> key combination.</para>
 
-<para>The <interface>Measurement Converter</interface> works in conjunction with your <emphasis>Ingredient Weights</emphasis> and/or your conversion tables.  If your conversion tables have not been completed or appropriate weights have not been added to your ingredient weights, the <interface>Measurement Converter</interface> <emphasis>will not</emphasis> be able to do its job.</para>
+<para>The <interface>Measurement Converter</interface> works in conjunction with your <emphasis>Ingredient Weights</emphasis> and/or your conversion tables.  If your conversion tables have not been completed, or you have not specified a  unit type in the <guilabel>Units</guilabel> tab of the <emphasis>Units</emphasis> component, for example, mass or volume, the <interface>Measurement Converter</interface> <emphasis>will not</emphasis> be able to do its job.  It will also not provide conversions if the <guilabel>Ingredient Weights</guilabel> have not been completed in the <emphasis>Ingredients</emphasis> component.</para>
 
 <para>
 <screenshot>
@@ -2385,14 +2437,22 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>From this window, there are two formatting preferences that can be customized &mdash;</para>
+<para>From this window, there are three formatting preferences that can be customized &mdash;</para>
 
 <orderedlist><listitem><para><emphasis><guilabel>Number Format</guilabel></emphasis> &ndash; either <emphasis><guilabel>Fraction</guilabel></emphasis> or <emphasis><guilabel>Decimal</guilabel></emphasis> can be selected by clicking on the appropriate radio button and this choice controls how the units of measure will display in your recipes</para></listitem>
 
 <listitem><para><emphasis><guilabel>Ingredient</guilabel></emphasis> format &ndash; this controls how the ingredients are listed in your recipes</para>
-<para>You will notice from the screenshot that each portion of the ingredient has a variable associated with it, <emphasis>%n</emphasis> for <quote>Name</quote>, <emphasis>%p</emphasis> for <quote>Preparation method</quote>, <emphasis>%a</emphasis> for <quote>Amount</quote>, <emphasis>%u</emphasis> for <quote>Unit</quote>.  The chosen order for display of these items appears in the <emphasis><guilabel>Ingredient format:</guilabel></emphasis> textbox and can be changed at will.  For example, as shown in the screenshot, the <emphasis>%a %u %n%p</emphasis> ingredient format will result in an ingredient being displayed as follows &mdash;</para>
+<para>You will notice from the screenshot that each portion of the ingredient has a variable associated with it, <emphasis>%n</emphasis> for <quote>Name</quote>, <emphasis>%p</emphasis> for <quote>Preparation method</quote>, <emphasis>%a</emphasis> for <quote>Amount</quote>, <emphasis>%u</emphasis> for <quote>Unit</quote>.  The chosen order for display of these items appears in the <emphasis><guilabel>Ingredient format:</guilabel></emphasis> textbox and can be changed at will.</para>
+</listitem>
+
+<listitem><para><emphasis><guilabel>Use abbreviations</guilabel></emphasis> &ndash; this feature is turned on by clicking on the tickbox beside the label</para>
+
+<para>If the abbreviations have been completed for your units, the result of selecting to <emphasis>Use abbreviations</emphasis> is that your units of measure will be displayed in their abbreviated form when you are viewing or printing your recipe, and in the printable version of your <emphasis>Shopping List</emphasis>.</para>
+
+<para>For example, if <emphasis>Use abbreviations</emphasis> is selected and the ingredient format is specified as <emphasis>%a %u %n%p</emphasis>, as in the screenshot, this will cause the ingredient to be displayed as follows &mdash;</para>
 <para>2&#0189; lbs. cream cheese; softened</para>
 </listitem>
+
 </orderedlist>
 
 </sect2>
@@ -2899,6 +2959,26 @@ application work. -->
 <para>The purpose of the Ingredient Matcher is to find recipes that you are able to make (or almost make) with ingredients that you select.  That means you have to select every single ingredient used in a recipe (or all but a few, depending on how many ingredients can be missing) to match that recipe.  See the <link linkend="ingredient-matcher">Ingredient Matcher section</link> for details.</para>
 
 <para>If you want to see which recipes use particular ingredients, then you want to use the <link linkend="using-adv-ingredients">The Ingredients Search</link>.</para>
+
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+<para>Where are all the recipes?</para>
+</question>
+<answer>
+<para>While running the &krecipes; wizard will allow you to choose to install sample recipes, the prime function of the program is to allow you to store and manage your own recipe collection.</para> 
+
+<para>If you are looking to augment your personal recipe collection, there are internet sites that host thousands of recipes that are freely available.  Among these are: &mdash;</para>
+
+<para><ulink url="http://www.thehoseys.com/recipes.html"></ulink></para>
+<para><ulink url="http://www.garvick.com/recipes/meal-master.htm"></ulink></para>
+
+<para>All you have to do is download the recipe and then, import it into your database.  See the section <link linkend="file-import">Importing from a File</link> for help with this function.</para>
+
 </answer>
 </qandaentry>
 
@@ -2916,27 +2996,27 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-&krecipes;. Program copyright 2003, 2004, 2005 by the &krecipes; developer team.
+&krecipes;. Program copyright 2003, 2004, 2005, 2006 by the &krecipes; developer team.
 </para>
 
 <variablelist>
 <title>The &krecipes; team:</title>
 <varlistentry>
-<term>Unai Garro <email>ugarro@users.sourceforge.net</email></term>
+<term>Unai Garro <email>ugarro&#064;users.sourceforge.net</email></term>
 <listitem><para>Creator &amp; Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>Jason Kivlighn <email>jkivlighn@gmail.com</email></term>
+<term>Jason Kivlighn <email>jkivlighn&#064;gmail.com</email></term>
 <listitem><para>Project Maintainer &amp; Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>Cyril Bosselut <email>bosselut@b1project.com</email></term>
+<term>Cyril Bosselut <email>bosselut&#064;b1project.com</email></term>
 <listitem><para>Core Developer</para></listitem>
 </varlistentry>
 </variablelist>
 
 <para>
-Documentation copyright 2004-2005 Colleen Beamer <email>colleen.beamer@gmail.com</email> and Jason Kivlighn <email>jkivlighn@gmail.com</email>
+Documentation copyright 2004-2006 Colleen Beamer <email>colleen.beamer&#064;gmail.com</email> and Jason Kivlighn <email>jkivlighn&#064;gmail.com</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
