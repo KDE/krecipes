@@ -379,8 +379,7 @@ void MealInput::reload( ReloadFlags flag )
 {
 	QValueList<DishInput*>::iterator it;
 	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
-		DishInput *di;
-		di = ( *it );
+		DishInput *di = ( *it );
 		di->reload(flag);
 	}
 }

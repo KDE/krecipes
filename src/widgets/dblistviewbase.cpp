@@ -161,10 +161,10 @@ void DBListViewBase::reload( ReloadFlags flag )
 
 		init();
 
-		m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
-		m_progress->setAllowCancel(false);
+		//m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
+		//m_progress->setAllowCancel(false);
 		//m_progress->progressBar()->setPercentageVisible(false);
-		m_progress->progressBar()->setTotalSteps( m_totalSteps );
+		//m_progress->progressBar()->setTotalSteps( m_totalSteps );
 		//m_progress->show();
 		//kapp->processEvents();
 
@@ -182,7 +182,7 @@ void DBListViewBase::reload( ReloadFlags flag )
 		if ( curr_offset != 0 )
 			new PrevListViewItem(this);
 
-		delete m_progress; m_progress = 0;
+		//delete m_progress; m_progress = 0;
 	
 		KApplication::restoreOverrideCursor();
 	}
@@ -211,7 +211,7 @@ void DBListViewBase::createElement( QListViewItem *it )
 	if ( bulk_load ) { //this can be much faster if we know the elements are already in order
 		if ( lastElement ) it->moveItem(lastElement);
 		lastElementMap.insert(it->parent(),it);
-		m_progress->progressBar()->advance(1);
+		if ( m_progress ) { m_progress->progressBar()->advance(1); }
 	}
 	else {
 		if ( lastElement == 0 ) {

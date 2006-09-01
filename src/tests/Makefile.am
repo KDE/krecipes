@@ -8,7 +8,7 @@ noinst_HEADERS = importertest.h exportertest.h
 
 METASOURCES = AUTO
 
-LDADD = ../importers/libkrecipesimporters.la ../exporters/libkrecipesexporters.la ../datablocks/libdatablocks.la $(LIB_QT) $(LIB_KHTML) $(LIB_KSPELL)
+LDADD = ../importers/libkrecipesimporters.la ../exporters/libkrecipesexporters.la ../backends/libkrecipesdbs.la ../datablocks/libdatablocks.la $(LIB_QT) $(LIB_KHTML) $(LIB_KSPELL)
 
 kretest_SOURCES = kretest.cpp
 mmftest_SOURCES = mmftest.cpp
