@@ -1425,7 +1425,7 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
 	while ( lastElement && lastElement->rtti() == INGSUBLISTVIEWITEM_RTTI )
 		lastElement = lastElement->itemAbove();
 
-	if ( noHeader )
+	if ( noHeader && lastElement )
 		lastElement = (lastElement->parent())?lastElement->parent():lastElement;
 
 	if ( !noHeader && lastElement &&
