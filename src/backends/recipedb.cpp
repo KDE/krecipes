@@ -84,7 +84,7 @@ RecipeDB::~RecipeDB()
 
 double RecipeDB::latestDBVersion() const
 {
-	return 0.95;
+	return 0.96;
 }
 
 QString RecipeDB::krecipes_version() const
@@ -727,7 +727,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 //These are helper functions solely for use by the USDA data importer
 void getIngredientNameAndID( std::multimap<int, QString> * );
 int createUnit( const QString &name, Unit::Type, RecipeDB* );
-int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB*, bool do_checks );
+int createIngredient( const QString &name, RecipeDB*, bool do_checks );
 void create_properties( RecipeDB* );
 
 void RecipeDB::importUSDADatabase()
@@ -819,9 +819,8 @@ void RecipeDB::importUSDADatabase()
 		}
 	}
 
-	//since there are only two units used, lets just create them and store their id for speed
-	int unit_g_id = createUnit( "g", Unit::Mass, this );
-	int unit_mg_id = createUnit( "mg", Unit::Mass, this );
+	//since this is the only unit used, lets just create it and store its id for speed
+	int unit_g_id = createUnit( QString::fromLatin1("g"), Unit::Mass, this );
 
 	QValueList<ingredient_nutrient_data>::const_iterator it;
 	QValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
@@ -835,7 +834,7 @@ void RecipeDB::importUSDADatabase()
 		if ( haltOperation ) { haltOperation=false; break;}
 		emit progress();
 
-		int assigned_id = createIngredient( ( *it ).name, unit_g_id, unit_mg_id, this, do_checks );
+		int assigned_id = createIngredient( ( *it ).name, this, do_checks );
 
 		//for now, only check if there is any info on the ingredient to see whether or not we will import this data,
 		//because checking to see that each property exists is quite slow
@@ -895,7 +894,7 @@ void getIngredientNameAndID( std::multimap<int, QString> *data )
 		data->insert( std::make_pair( ingredient_data_list[ i ].usda_id, ingredient_data_list[ i ].name ) );
 }
 
-int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, RecipeDB *database, bool do_checks )
+int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
 {
 	bool ingredientExisted = true;
 	int assigned_id = -1;
@@ -907,12 +906,6 @@ int createIngredient( const QString &name, int unit_g_id, int unit_mg_id, Recipe
 		database->createNewIngredient( name );
 		assigned_id = database->lastInsertID();
 	}
-
-	if ( !ingredientExisted || !database->ingredientContainsUnit( assigned_id, unit_g_id ) )
-		database->addUnitToIngredient( assigned_id, unit_g_id );
-
-	if ( !ingredientExisted || !database->ingredientContainsUnit( assigned_id, unit_mg_id ) )
-		database->addUnitToIngredient( assigned_id, unit_mg_id );
 
 	return assigned_id;
 }
@@ -949,7 +942,7 @@ void create_properties( RecipeDB *database )
 		property_data_list[ i ].id = property_list.findByName( property_data_list[ i ].name );
 		if ( property_data_list[ i ].id == -1 ) //doesn't exist, so insert it and set property_data_list[i].id
 		{
-			database->addProperty( property_data_list[ i ].name, property_data_list[ i ].unit );
+			database->addProperty( property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
 			property_data_list[ i ].id = database->lastInsertID();
 		}
 	}
@@ -984,6 +977,21 @@ bool parseUSDAUnitAndPrep( const QString &string, QString &unit, QString &prep )
 	unit = unitPart;
 	prep = prepPart;
 	return true;
+}
+
+//Fix property units from databases <= 0.95
+void RecipeDB::fixUSDAPropertyUnits()
+{
+	IngredientPropertyList property_list;
+	loadProperties( &property_list );
+
+	for ( int i = 0; !property_data_list[ i ].name.isEmpty(); i++ ) {
+		property_data_list[ i ].id = property_list.findByName( property_data_list[ i ].name );
+		if ( property_data_list[ i ].id != -1 ) //doesn't exist, so insert it and set property_data_list[i].id
+		{
+			modProperty( property_data_list[ i ].id, property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
+		}
+	}
 }
 
 #include "recipedb.moc"

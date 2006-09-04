@@ -449,6 +449,11 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		createTable( "ingredient_weights" );
 		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
+
+	if ( qRound(version*100) < 96 ) {
+		fixUSDAPropertyUnits();
+		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+	}
 }
 
 void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )

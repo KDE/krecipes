@@ -471,11 +471,15 @@ void QSqlRecipeDB::modPrepMethod( int prepMethodID, const QString &newLabel )
 	emit prepMethodCreated( Element( newLabel, prepMethodID ) );
 }
 
-void QSqlRecipeDB::modProperty( int propertyID, const QString &newLabel )
+void QSqlRecipeDB::modProperty( int propertyID, const QString &newLabel, const QString &unit )
 {
 	QString command;
 
-	command = QString( "UPDATE ingredient_properties SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( propertyID );
+	if ( unit.isNull() )
+		command = QString( "UPDATE ingredient_properties SET name='%1' WHERE id=%2" ).arg( escapeAndEncode( newLabel ) ).arg( propertyID );
+	else
+		command = QString( "UPDATE ingredient_properties SET name='%1',units='%2' WHERE id=%3" ).arg( escapeAndEncode( newLabel ) ).arg( escapeAndEncode( unit ) ).arg( propertyID );
+
 	QSqlQuery createQuery( command, database );
 
 	emit propertyRemoved( propertyID );
@@ -1984,9 +1988,6 @@ void QSqlRecipeDB::splitCommands( QString& s, QStringList& sl )
 {
 	sl = QStringList::split( QRegExp( ";{1}(?!@)" ), s );
 }
-
-void QSqlRecipeDB::portOldDatabases( float /* version */ )
-{}
 
 float QSqlRecipeDB::databaseVersion( void )
 {

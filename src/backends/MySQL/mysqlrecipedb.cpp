@@ -524,6 +524,11 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		createTable( "ingredient_weights" );
 		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
+
+	if ( qRound(version*100) < 96 ) {
+		fixUSDAPropertyUnits();
+		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+	}
 }
 
 int MySQLRecipeDB::lastInsertID()
