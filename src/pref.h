@@ -27,6 +27,7 @@ class PerformancePrefs;
 class KIntNumInput;
 class KLineEdit;
 class KURLRequester;
+class KComboBox;
 
 class QButtonGroup;
 class QCheckBox;
@@ -138,11 +139,15 @@ protected:
 	QVBoxLayout* Form1Layout;
 	QVBoxLayout* numberButtonGroupLayout;
 
-	KLineEdit *ingredientEdit;
+	KComboBox *ingredientEdit;
 	QCheckBox *abbrevButton;
+
+	QLabel *exampleLabel;
 
 protected slots:
 	virtual void languageChange();
+	void updateExample( const QString &format );
+
 };
 
 class ImportPrefs : public QWidget
