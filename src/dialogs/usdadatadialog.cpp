@@ -122,7 +122,7 @@ void USDADataDialog::slotOk()
 		for ( QStringList::const_iterator it = data.at( 2 ); !property_data_list[ i ].name.isEmpty(); ++it, ++i ) {
 			int property_id = property_list.findByName( property_data_list[ i ].name );
 			if ( property_id == -1 ) {
-				database->addProperty( property_data_list[ i ].name, property_data_list[ i ].unit );
+				database->addProperty( property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
 				property_id = database->lastInsertID();
 			}
 

@@ -44,7 +44,6 @@ protected:
 	virtual QSqlDriver *qsqlDriver() const { return 0; }
 	virtual void createDB( void ) = 0;
 
-	virtual void portOldDatabases( float version );
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 	void loadRecipeMetadata( Recipe *recipe );
@@ -164,7 +163,7 @@ public:
 
 	void modPrepMethod( int prepMethodID, const QString &newLabel );
 
-	void modProperty( int propertyID, const QString &newLabel );
+	void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString::null );
 
 	QString recipeTitle( int recipeID );
 

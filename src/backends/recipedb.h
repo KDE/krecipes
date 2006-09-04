@@ -267,7 +267,7 @@ public:
 
 	virtual void modPrepMethod( int prepMethodID, const QString &newLabel ) = 0;
 
-	virtual void modProperty( int propertyID, const QString &newLabel ) = 0;
+	virtual void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString::null ) = 0;
 
 	virtual QString recipeTitle( int recipeID ) = 0;
 
@@ -374,6 +374,11 @@ protected:
 	virtual void portOldDatabases( float version ) = 0;
 	virtual QStringList backupCommand() const = 0;
 	virtual QStringList restoreCommand() const = 0;
+
+	/** Fix property units as imported from the USDA prior to Krecipes 1.0.  This will be called once
+	 * when updating from database version 0.95 to 0.96
+	 */
+	void fixUSDAPropertyUnits();
 
 	//Use these with caution: SQL for one backend might not work on another!
 	void execSQL( QTextStream &stream );
