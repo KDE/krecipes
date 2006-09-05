@@ -1504,7 +1504,7 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 
 void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID )
 {
-	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.group_id=%1" ).arg( groupID );
+	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.group_id=%1 ORDER BY r.title" ).arg( groupID );
 	QSqlQuery query( command, database );
 
 	// Populate data
@@ -1520,7 +1520,7 @@ void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID
 
 void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 {
-	QString command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1" ).arg( catID );
+	QString command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1 ORDER BY r.title" ).arg( catID );
 	QSqlQuery query( command, database );
 
 	// Populate data
@@ -1545,7 +1545,7 @@ void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 
 void QSqlRecipeDB::findUseOfAuthorInRecipes( ElementList *results, int authorID )
 {
-	QString command = QString( "SELECT r.id,r.title FROM recipes r,author_list al WHERE r.id=al.recipe_id AND al.author_id=%1" ).arg( authorID );
+	QString command = QString( "SELECT r.id,r.title FROM recipes r,author_list al WHERE r.id=al.recipe_id AND al.author_id=%1 ORDER BY r.title" ).arg( authorID );
 	QSqlQuery query( command, database );
 
 	// Populate data
@@ -1697,11 +1697,11 @@ void QSqlRecipeDB::findIngredientUnitDependancies( int ingredientID, int unitID,
 
 	// Recipes using that combination
 
-	QString command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2;" ).arg( ingredientID ).arg( unitID );
+	QString command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2 ORDER BY r.title" ).arg( ingredientID ).arg( unitID );
 	QSqlQuery unitToRemove( command, database );
 	loadElementList( recipes, &unitToRemove );
 	// Ingredient info using that combination
-	command = QString( "SELECT i.name,ip.name,ip.units,u.name FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.ingredient_id=%1 AND ii.per_units=%2 AND ii.property_id=ip.id AND ii.per_units=u.id;" ).arg( ingredientID ).arg( unitID );
+	command = QString( "SELECT i.name,ip.name,ip.units,u.name FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.ingredient_id=%1 AND ii.per_units=%2 AND ii.property_id=ip.id AND ii.per_units=u.id ORDER BY i.name" ).arg( ingredientID ).arg( unitID );
 
 	unitToRemove.exec( command );
 	loadPropertyElementList( ingredientInfo, &unitToRemove );
@@ -1709,7 +1709,7 @@ void QSqlRecipeDB::findIngredientUnitDependancies( int ingredientID, int unitID,
 
 void QSqlRecipeDB::findIngredientDependancies( int ingredientID, ElementList *recipes )
 {
-	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1" ).arg( ingredientID );
+	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 ORDER BY r.title" ).arg( ingredientID );
 
 	QSqlQuery ingredientToRemove( command, database );
 	loadElementList( recipes, &ingredientToRemove );
@@ -1723,17 +1723,17 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 
 	// Ingredient-Info (ingredient->property) using this Unit
 
-	QString command = QString( "SELECT i.name,ip.name,ip.units,u.name  FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.per_units=%1 AND ii.property_id=ip.id  AND ii.per_units=u.id;" ).arg( unitID );
+	QString command = QString( "SELECT i.name,ip.name,ip.units,u.name  FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.per_units=%1 AND ii.property_id=ip.id  AND ii.per_units=u.id ORDER BY i.name" ).arg( unitID );
 	QSqlQuery unitToRemove( command, database );
 	loadPropertyElementList( properties, &unitToRemove );
 
 	// Recipes using this Unit
-	command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1;" ).arg( unitID ); // Without "DISTINCT" we get duplicates since ingredient_list has no unique recipe_id's
+	command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.unit_id=%1 ORDER BY r.title" ).arg( unitID ); // Without "DISTINCT" we get duplicates since ingredient_list has no unique recipe_id's
 	unitToRemove.exec( command );
 	loadElementList( recipes, &unitToRemove );
 
 	// Weights using this unit
-	command = QString( "SELECT i.name,weight_u.name,per_u.name,w.prep_method_id FROM ingredients i,ingredient_weights w,units weight_u,units per_u WHERE i.id=w.ingredient_id AND w.unit_id=per_u.id AND w.weight_unit_id=weight_u.id AND (weight_u.id=%1 OR per_u.id=%2)" )
+	command = QString( "SELECT i.name,weight_u.name,per_u.name,w.prep_method_id FROM ingredients i,ingredient_weights w,units weight_u,units per_u WHERE i.id=w.ingredient_id AND w.unit_id=per_u.id AND w.weight_unit_id=weight_u.id AND (weight_u.id=%1 OR per_u.id=%2) ORDER BY i.name" )
 	  .arg( unitID )
 	  .arg( unitID );
 	unitToRemove.exec( command );
