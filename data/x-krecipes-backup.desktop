@@ -5,6 +5,7 @@ MimeType=application/x-krecipes-backup
 Icon=krecipes_file
 Patterns=*.krecbk
 Comment=Krecipes Backup File
+Comment[ar]=ملف Krecipes الأحتياطي
 Comment[bg]=Файл с резервно копие на Krecipes
 Comment[br]=Restr gwareziñ Krecipes
 Comment[cs]=Záložní soubor Krecipes
