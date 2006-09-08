@@ -9,6 +9,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#include "setupwizard.h"
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -30,8 +32,9 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 
-#include "setupwizard.h"
+#include "backends/usda_ingredient_data.h"
 
 SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, WFlags f ) : KWizard( parent, name, modal, f )
 {
@@ -76,12 +79,25 @@ SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, WFlags 
 
 	connect( finishButton(), SIGNAL( clicked() ), this, SLOT( save() ) );
 	connect( dbTypeSetupPage, SIGNAL( showPages( DBType ) ), this, SLOT( showPages( DBType ) ) );
-
 }
 
 
 SetupWizard::~SetupWizard()
 {
+}
+
+void SetupWizard::next()
+{
+	if ( dataInitializePage->doUSDAImport() ) {
+		if ( !USDA::localizedIngredientsAvailable() ) {
+			switch ( KMessageBox::warningYesNo( this, i18n("There is currently no localized ingredient data for this locale.\nWould you like to load the English ingredients instead?") ) ) {
+			case KMessageBox::No: dataInitializePage->setUSDAImport(false);
+			default: break;
+			}
+		}
+	}
+
+	KWizard::next();
 }
 
 
@@ -727,7 +743,7 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 
-	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods. (Note: English only.)" ), this, "USDAImportCheckBox" );
+	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods." ), this, "USDAImportCheckBox" );
 	layout->addWidget( USDAImportCheckBox, 7, 3 );
 }
 
@@ -739,6 +755,11 @@ bool DataInitializePage::doInitialization( void )
 bool DataInitializePage::doUSDAImport( void )
 {
 	return ( USDAImportCheckBox->isChecked() );
+}
+
+void DataInitializePage::setUSDAImport( bool import )
+{
+	USDAImportCheckBox->setChecked(import);
 }
 
 DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )

@@ -118,11 +118,16 @@ void USDADataDialog::slotOk()
 		IngredientPropertyList existing_ing_props;
 		database->loadProperties( &existing_ing_props, ingredient.id );
 
-		int i = 0;
-		for ( QStringList::const_iterator it = data.at( 2 ); !property_data_list[ i ].name.isEmpty(); ++it, ++i ) {
-			int property_id = property_list.findByName( property_data_list[ i ].name );
+		QValueList<USDA::PropertyData> property_data_list = USDA::loadProperties();
+		USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
+		USDA::UnitDataList unit_data_list =  USDA::loadUnits();
+
+
+		QValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.begin();
+		for ( QStringList::const_iterator it = data.at( 2 ); propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
+			int property_id = property_list.findByName( (*propertyIt).name );
 			if ( property_id == -1 ) {
-				database->addProperty( property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
+				database->addProperty( (*propertyIt).name, (*propertyIt).unit );
 				property_id = database->lastInsertID();
 			}
 
@@ -134,7 +139,7 @@ void USDADataDialog::slotOk()
 				database->addPropertyToIngredient( ingredient.id, property_id, amount, grams_id );
 		}
 
-		i+=2;
+		int i = 2 + property_data_list.count();
 
 		int i_initial = i;
 		WeightList weights = database->ingredientWeightUnits( ingredient.id );
@@ -150,14 +155,14 @@ void USDADataDialog::slotOk()
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
-				if ( !parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+				if ( !USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
 					continue;
 
 				int unitID = database->findExistingUnitByName( w.perAmountUnit );
 				if ( unitID == -1 ) {
-					for ( int i = 0; unit_data_list[ i ].name; ++i ) {
-						if ( w.perAmountUnit == unit_data_list[ i ].name || w.perAmountUnit == unit_data_list[ i ].plural ) {
-							database->createNewUnit( Unit(unit_data_list[ i ].name,unit_data_list[ i ].plural) );
+					for ( USDA::UnitDataList::const_iterator it = unit_data_list.begin(); it != unit_data_list.end(); ++it ) {
+						if ( w.perAmountUnit == (*it).translation || w.perAmountUnit == (*it).translationPlural ) {
+							database->createNewUnit( Unit((*it).translation,(*it).translationPlural) );
 						}
 					}
 
