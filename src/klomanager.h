@@ -13,6 +13,7 @@
 
 #include <qdom.h>
 #include <qfont.h>
+#include <qsize.h>
 
 #include "datablocks/kreborder.h"
 
@@ -34,6 +35,7 @@ protected:
 	virtual void loadAlignment( const QString &/*obj*/, int ){};
 	virtual void loadBorder( const QString &/*obj*/, const KreBorder& ){};
 	virtual void loadColumns( const QString &/*obj*/, int ){};
+	virtual void loadSize( const QString &/*obj*/, const QSize & ){};
 
 	virtual void beginObject( const QString &/*obj*/ ){};
 	virtual void endObject(){};
@@ -44,11 +46,13 @@ protected:
 	int getIntAttribute( const QDomElement &obj, const QString &attr, int defaultValue = 0 ) const;
 	KreBorder getBorderAttribute( const QDomElement &obj, const QString &attr, const KreBorder &defaultValue = KreBorder() ) const;
 	QFont getFontAttribute( const QDomElement &obj, const QString &attr, const QFont &defaultValue = QFont() ) const;
+	QSize getSizeAttribute( const QDomElement &obj, const QString &attr, const QSize &defaultValue = QSize() ) const;
 
 	QString alignmentAsCSS( int );
 	QString borderAsCSS( const KreBorder & );
 	QString bgColorAsCSS( const QColor & );
 	QString fontAsCSS( const QFont & );
+	QString sizeAsCSS( const QSize & );
 	QString textColorAsCSS( const QColor & );
 	QString visibilityAsCSS( bool );
 

@@ -49,6 +49,7 @@ public:
 	QColor backgroundColor;
 	QColor textColor;
 	QFont font;
+	QSize size;
 };
 
 typedef QMap< KreDisplayItem*, unsigned int > PropertiesMap;
@@ -67,7 +68,7 @@ public:
 	SetupDisplay( const Recipe &, QWidget *parent );
 	~SetupDisplay();
 
-	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Alignment = 32, Columns = 64, Border = 128 };
+	enum Properties { None = 0, BackgroundColor = 1, TextColor = 2, Font = 4, Visibility = 8, Size = 16, Alignment = 32, Columns = 64, Border = 128 };
 
 	void saveLayout( const QString & );
 	void loadLayout( const QString & );
@@ -100,6 +101,7 @@ protected:
 	virtual void loadAlignment( const QString &obj, int );
 	virtual void loadBorder( const QString &obj, const KreBorder& );
 	virtual void loadColumns( const QString &obj, int );
+	virtual void loadSize( const QString &obj, const QSize & );
 
 	virtual void beginObject( const QString &obj );
 	virtual void endObject();
@@ -116,6 +118,7 @@ protected slots:
 	void setFont();
 	void setShown( int id );
 	void setAlignment( QAction * );
+	void setSize();
 
 private:
 	PropertiesMap *box_properties;

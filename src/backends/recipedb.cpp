@@ -369,12 +369,22 @@ void RecipeDB::initializeData( void )
 	// Populate with data
 
 	// Read the commands form the data file
-	QFile datafile( KGlobal::dirs() ->findResource( "appdata", "data/data.sql" ) );
-	if ( datafile.open( IO_ReadOnly ) ) {
-		QTextStream stream( &datafile );
-		execSQL(stream);
-		datafile.close();
+	QString dataFilename = locate( "appdata", "data/data-" + KGlobal::locale() ->language() + ".sql" );
+	if ( dataFilename.isEmpty() ) {
+		kdDebug() << "NOTICE: Sample data (categories, units, etc.) for the language \"" << KGlobal::locale() ->language() << "\" is not available.  However, if you would like samples data for this language included in future releases of Krecipes, we invite you to submit your own. Contact me at jkivlighn@gmail.com for details." << endl;
+
+		dataFilename = locate( "appdata", "data/data-en_US.sql" ); //default to English
 	}
+
+	QFile dataFile( dataFilename );
+	if ( dataFile.open( IO_ReadOnly ) ) {
+		kdDebug() << "Loading: " << dataFilename << endl;
+		QTextStream stream( &dataFile );
+		execSQL(stream);
+		dataFile.close();
+	}
+	else
+		kdDebug() << "Unable to find or open sample data file (data-en_US.sql)" << endl;
 }
 
 bool RecipeDB::restore( const QString &file, QString *errMsg )
@@ -728,7 +738,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 void getIngredientNameAndID( std::multimap<int, QString> * );
 int createUnit( const QString &name, Unit::Type, RecipeDB* );
 int createIngredient( const QString &name, RecipeDB*, bool do_checks );
-void create_properties( RecipeDB* );
+void create_properties( RecipeDB*, QValueList<USDA::PropertyData> & );
 
 void RecipeDB::importUSDADatabase()
 {
@@ -745,7 +755,12 @@ void RecipeDB::importUSDADatabase()
 		return ;
 	}
 
-	create_properties( this );
+	QValueList<USDA::PropertyData> property_data_list = USDA::loadProperties();
+	USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
+	USDA::UnitDataList unit_data_list =  USDA::loadUnits();
+
+
+	create_properties( this, property_data_list );
 
 	std::multimap<int, QString> *ings_and_ids = new std::multimap<int, QString>;
 	getIngredientNameAndID( ings_and_ids );
@@ -762,6 +777,9 @@ void RecipeDB::importUSDADatabase()
 		std::multimap<int, QString>::iterator current_pair;
 		while ( ( current_pair = ings_and_ids->find( id ) ) != ings_and_ids->end() )  //there may be more than one ingredients with the same id
 		{
+			if ( (*current_pair).first == -1 ) continue; 	//there's no USDA id, and thus no nutrient
+									//info to load
+
 			ingredient_nutrient_data current_ing;
 			current_ing.name = ( *current_pair ).second.latin1();
 
@@ -778,7 +796,7 @@ void RecipeDB::importUSDADatabase()
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-				if ( parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+				if ( USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
 					current_ing.weights << w;
 			}
 
@@ -790,7 +808,7 @@ void RecipeDB::importUSDADatabase()
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-				if ( parseUSDAUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod ) )
+				if ( USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
 					current_ing.weights << w;
 			}
 
@@ -890,8 +908,10 @@ void RecipeDB::importUSDADatabase()
 
 void getIngredientNameAndID( std::multimap<int, QString> *data )
 {
-	for ( int i = 0; !ingredient_data_list[ i ].name.isEmpty(); i++ )
-		data->insert( std::make_pair( ingredient_data_list[ i ].usda_id, ingredient_data_list[ i ].name ) );
+	QValueList<USDA::IngredientData> ingredient_data_list = USDA::loadIngredients();
+
+	for ( QValueList<USDA::IngredientData>::const_iterator it = ingredient_data_list.begin(); it != ingredient_data_list.end(); ++it )
+		data->insert( std::make_pair( (*it).usda_id, (*it).name ) );
 }
 
 int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
@@ -933,50 +953,19 @@ int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 	return assigned_id;
 }
 
-void create_properties( RecipeDB *database )
+void create_properties( RecipeDB *database, QValueList<USDA::PropertyData> &property_data_list )
 {
 	IngredientPropertyList property_list;
 	database->loadProperties( &property_list );
 
-	for ( int i = 0; !property_data_list[ i ].name.isEmpty(); i++ ) {
-		property_data_list[ i ].id = property_list.findByName( property_data_list[ i ].name );
-		if ( property_data_list[ i ].id == -1 ) //doesn't exist, so insert it and set property_data_list[i].id
+	for ( QValueList<USDA::PropertyData>::iterator it = property_data_list.begin(); it != property_data_list.end(); ++it ) {
+		(*it).id = property_list.findByName( (*it).name );
+		if ( (*it).id == -1 ) //doesn't exist, so insert it and set property_data_list[i].id
 		{
-			database->addProperty( property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
-			property_data_list[ i ].id = database->lastInsertID();
+			database->addProperty( (*it).name, (*it).unit );
+			(*it).id = database->lastInsertID();
 		}
 	}
-}
-
-bool parseUSDAUnitAndPrep( const QString &string, QString &unit, QString &prep )
-{
-	int commaIndex = string.find(",");
-	QString unitPart = string.left(commaIndex);
-	QString prepPart = string.right(string.length()-commaIndex-2).stripWhiteSpace();
-
-	bool acceptable = false;
-	for ( int i = 0; unit_data_list[ i ].name; ++i ) {
-		if ( unitPart == unit_data_list[ i ].name || unitPart == unit_data_list[ i ].plural )
-			acceptable = true;
-	}
-	if ( !acceptable )
-		return false;
-
-	acceptable = false;
-	if ( prepPart.isEmpty() )
-		acceptable = true;
-	else {
-		for ( int i = 0; prep_data_list[ i ]; ++i ) {
-			if ( prepPart == prep_data_list[ i ] )
-				acceptable = true;
-		}
-	}
-	if ( !acceptable )
-		prepPart = QString::null;
-
-	unit = unitPart;
-	prep = prepPart;
-	return true;
 }
 
 //Fix property units from databases <= 0.95
@@ -985,11 +974,13 @@ void RecipeDB::fixUSDAPropertyUnits()
 	IngredientPropertyList property_list;
 	loadProperties( &property_list );
 
-	for ( int i = 0; !property_data_list[ i ].name.isEmpty(); i++ ) {
-		property_data_list[ i ].id = property_list.findByName( property_data_list[ i ].name );
-		if ( property_data_list[ i ].id != -1 ) //doesn't exist, so insert it and set property_data_list[i].id
+	QValueList<USDA::PropertyData> property_data_list = USDA::loadProperties();
+
+	for ( QValueList<USDA::PropertyData>::const_iterator it = property_data_list.begin(); it != property_data_list.end(); ++it ) {
+		int id = property_list.findByName( (*it).name );
+		if ( id != -1 )
 		{
-			modProperty( property_data_list[ i ].id, property_data_list[ i ].name, QString::fromUtf8(property_data_list[ i ].unit) );
+			modProperty( id, (*it).name, (*it).unit );
 		}
 	}
 }

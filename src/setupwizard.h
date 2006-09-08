@@ -45,6 +45,10 @@ public:
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );
 	void getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port );
+
+protected:
+	virtual void next();
+
 private:
 	// Widgets
 	WelcomePage *welcomePage;
@@ -175,6 +179,7 @@ public:
 	DataInitializePage( QWidget *parent );
 	bool doInitialization( void );
 	bool doUSDAImport( void );
+	void setUSDAImport( bool import );
 
 private:
 	// Widgets

@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
+#include <kdialogbase.h>
 
 #include <khtmlview.h>
 #include <dom/dom_doc.h>
@@ -286,13 +287,20 @@ void SetupDisplay::loadColumns( const QString &/*object*/, int cols )
 	}
 }
 
+void SetupDisplay::loadSize( const QString &/*object*/, const QSize &size )
+{
+	if ( m_currentItem ) {
+		m_currentItem->size = size;
+	}
+}
+
 void SetupDisplay::saveLayout( const QString &filename )
 {
 	QDomImplementation dom_imp;
 	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
 
 	QDomElement layout_tag = doc.documentElement();
-	layout_tag.setAttribute( "version", 0.4 );
+	layout_tag.setAttribute( "version", 0.5 );
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
@@ -343,6 +351,13 @@ void SetupDisplay::saveLayout( const QString &filename )
 			QDomElement columns_tag = doc.createElement( "columns" );
 			columns_tag.appendChild( doc.createTextNode( QString::number( it.data()->columns ) ) );
 			base_tag.appendChild( columns_tag );
+		}
+
+		if ( properties & Size ) {
+			QDomElement size_tag = doc.createElement( "size" );
+			size_tag.setAttribute( "width", it.data()->size.width() );
+			size_tag.setAttribute( "height", it.data()->size.height() );
+			base_tag.appendChild( size_tag );
 		}
 	}
 
@@ -592,6 +607,25 @@ void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
 	applyStylesheet();
 
 	has_changes = true;
+}
+
+void SetupDisplay::setSize()
+{
+	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
+/*
+	KDialogBase dialog(this,"SetupDisplaySizeInput",
+		false, i18n("Enter size"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
+	dialog.setMainWidget(box);
+
+	if ( dialog.exec() == QDialog::Accepted ) {
+		m_currentItem = item;
+		loadSize(m_currNodeId,item->size);
+		m_currentItem = 0;
+
+		applyStylesheet();
+		has_changes = true;
+	}
+*/
 }
 
 void SetupDisplay::changeMade( void )

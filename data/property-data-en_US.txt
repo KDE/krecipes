@@ -1,0 +1,43 @@
+water:g
+energy:kcal
+protein:g
+fat:g
+ash:g
+carbohydrates:g
+dietary fiber:g
+sugar:g
+calcuim:mg
+iron:mg
+magnesium:mg
+phosphorus:mg
+potassium:mg
+sodium:mg
+zinc:mg
+copper:mg
+manganese:mg
+selenium:μg
+vitamin C:mg
+thiamin:mg
+riboflavin:mg
+niacin:mg
+pantothenic acid:mg
+vitamin B:mg
+folate:μg
+folic acid:μg
+food folate:μg
+folate (DFE):μg
+vitamin B12:μg
+vitamin A:IU
+vitamin A (RAE):μg
+retinol:μg
+vitamin E:g
+vitamin K:μg
+alpha-carotene:μg
+beta-carotene:μg
+beta-cryptoxanthin:μg
+lycopene:μg
+lutein+zeazanthin:μg
+saturated fat:g
+monounsaturated fat:g
+polyunsaturated fat:g
+cholesterol:mg

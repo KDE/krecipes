@@ -66,6 +66,8 @@ void KLOManager::processDocument( const QDomDocument &doc )
 				loadBorder( tagName, getBorderAttribute(el,subTagName) );
 			else if ( subTagName == "columns" )
 				loadColumns( tagName, getIntAttribute(el,subTagName) );
+			else if ( subTagName == "size" )
+				loadSize( tagName, getSizeAttribute(el,subTagName) );
 			else
 				kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
 		}
@@ -155,6 +157,17 @@ QFont KLOManager::getFontAttribute( const QDomElement &object, const QString &at
 	}
 }
 
+QSize KLOManager::getSizeAttribute( const QDomElement &object, const QString &attribute, const QSize &defaultValue ) const
+{
+	QDomElement result = getLayoutAttribute( object, attribute );
+	if ( result.isNull() ) {
+		return defaultValue;
+	}
+	else {
+		return QSize( result.attribute("width").toInt(), result.attribute("height").toInt() );
+	}
+}
+
 QString KLOManager::alignmentAsCSS( int alignment )
 {
 	QString text;
@@ -216,3 +229,16 @@ QString KLOManager::visibilityAsCSS( bool visible )
 	else
 		return "visibility: hidden;\n";
 }
+
+QString KLOManager::sizeAsCSS( const QSize &size )
+{
+	QString text;
+
+	if ( size.height() != 0 )
+		text += QString("height: %1;\n").arg(size.height());
+	if ( size.width() != 0 )
+		text += QString("width: %1;\n").arg(size.width());
+
+	return text;
+}
+
