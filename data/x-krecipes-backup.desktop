@@ -5,3 +5,4 @@ MimeType=application/x-krecipes-backup
 Icon=krecipes_file
 Patterns=*.krecbk
 Comment=Krecipes Backup File
+Comment[el]=Αρχείο αντιγράφου ασφαλείας Krecipes
