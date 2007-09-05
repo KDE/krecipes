@@ -130,7 +130,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Submenus
-	dataMenu = leftPanel->createSubMenu( i18n( "Data" ), "2rightarrow" );
+	dataMenu = leftPanel->createSubMenu( i18n( "Data" ), "data" );
 
 	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
 	button2->setIconSet( il.loadIconSet( "ingredients", KIcon::Panel, 32 ) );
@@ -145,7 +145,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	buttonsList->append( button4 );
 
 	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
-	button9->setIconSet( il.loadIconSet( "ICON PLEASE", KIcon::Panel, 32 ) );
+	button9->setIconSet( il.loadIconSet( "methods", KIcon::Panel, 32 ) );
 	buttonsList->append( button9 );
 
 	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
@@ -153,7 +153,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	buttonsList->append( button5 );
 
 	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
-	button6->setIconSet( il.loadIconSet( "personal", KIcon::Panel, 32 ) );
+	button6->setIconSet( il.loadIconSet( "authors", KIcon::Panel, 32 ) );
 	buttonsList->append( button6 );
 
 	contextButton = new QPushButton( leftPanel, "contextButton" );
@@ -380,7 +380,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		unitsPanel->reload( Load );
 		break;
 	case PrepMethodsP:
-		rightPanel->setHeader( i18n( "Preparation Methods" ), "GIVE ME AN ICON :p" );
+		rightPanel->setHeader( i18n( "Preparation Methods" ), "methods" );
 		rightPanel->raise( prepMethodsPanel );
 		prepMethodsPanel->reload( Load );
 		break;
@@ -390,7 +390,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		categoriesPanel->reload( Load );
 		break;
 	case AuthorsP:
-		rightPanel->setHeader( i18n( "Authors" ), "personal" );
+		rightPanel->setHeader( i18n( "Authors" ), "authors" );
 		rightPanel->raise( authorsPanel );
 		authorsPanel->reload( Load );
 		break;

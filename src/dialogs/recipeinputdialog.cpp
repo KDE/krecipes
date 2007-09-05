@@ -288,7 +288,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	addButton = new KPushButton( ingredientGBox );
 	addButton->setFixedSize( QSize( 31, 31 ) );
 	addButton->setFlat( true );
-	QPixmap pm = il->loadIcon( "new", KIcon::NoGroup, 16 );
+	QPixmap pm = il->loadIcon( "add_ingredient", KIcon::NoGroup, 16 );
 	addButton->setPixmap( pm );
 	addButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( addButton, 3, 5 );
