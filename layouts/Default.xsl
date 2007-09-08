@@ -21,6 +21,16 @@
 <xsl:for-each select="krecipes/krecipes-recipe">
 <table width="100%" class="recipes">
   <tr>
+    <td width="1" rowspan="2" valign="middle">
+      <xsl:variable name="photoSrc">
+        <xsl:choose>
+          <xsl:when test="count(krecipes-description/pictures/pic) > 0"><xsl:value-of select="@id"/>.png</xsl:when>
+          <xsl:otherwise>default_photo.png</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <img src="{$photoDir}/{$photoSrc}" class="photo" />
+    </td>
+    <td width="3%"> </td>
     <td valign="top">
       <div class="title"><xsl:value-of select="krecipes-description/title"/></div>
       <xsl:if test="count(krecipes-description/author) > 0">
@@ -32,19 +42,9 @@
       </div>
       </xsl:if>
     </td>
-    <td width="3%"> </td>
-    <td width="20%" rowspan="2" valign="middle">
-      <xsl:variable name="photoSrc">
-        <xsl:choose>
-          <xsl:when test="count(krecipes-description/pictures/pic) > 0"><xsl:value-of select="@id"/>.png</xsl:when>
-          <xsl:otherwise>default_photo.png</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <img src="{$photoDir}/{$photoSrc}" class="photo" />
-    </td>
   </tr>
 
-  <tr><td valign="middle">
+  <tr><td></td><td valign="middle">
       <xsl:if test="count(krecipes-ratings/rating/criterion/criteria/stars) > 0">
         <p class="overall-rating"><span class="header">Overall Rating: </span> 
         <xsl:element name="img">
@@ -72,7 +72,7 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
       <xsl:if test="krecipes-description/preparation-time and krecipes-description/preparation-time/text() != '00:00'">
         <p class="prep-time"><span class="header">Prep: </span><xsl:value-of select="krecipes-description/preparation-time"/></p>
       </xsl:if>
-  </td><td></td></tr>
+  </td></tr>
 
   <xsl:if test="count(krecipes-ingredients/ingredient) > 0">
     <tr><td valign="top" class="ingredients" colspan="3"><h1>Ingredients</h1>
