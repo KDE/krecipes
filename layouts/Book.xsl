@@ -76,11 +76,13 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
       </xsl:if>
   </td><td></td></tr>
 
-  <xsl:if test="count(krecipes-ingredients/ingredient) > 0">
+  <xsl:if test="count(krecipes-ingredients/*) > 0">
     <tr><td valign="top" class="ingredients" colspan="3"><h1>Ingredients</h1>
       <table cellpadding="4">
       <tr><td colspan="2" class="ingredient-amount-header">Amount</td><td class="ingredient-name-header">Ingredient</td><td class="ingredient-prep-method-header">Preparation</td></tr>
-      <xsl:for-each select="krecipes-ingredients/ingredient">
+      <xsl:for-each select="krecipes-ingredients/*">
+        <xsl:choose>
+        <xsl:when test="name() = 'ingredient'">
         <tr>
           <td class="ingredient-amount">
           <xsl:if test="amount/min > 0 or amount > 0">
@@ -101,6 +103,34 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
             </xsl:for-each>
           </td>
         </tr>
+        </xsl:when>
+        <xsl:otherwise>
+          <tr><td colspan="4"><div class="ingredient-group"><xsl:value-of select="@name"/></div></td></tr>
+          <xsl:for-each select="ingredient">
+            <tr>
+              <td class="ingredient-amount">
+              &#187;
+              <xsl:if test="amount/min > 0 or amount > 0">
+              <xsl:choose>
+                <xsl:when test="amount/min">
+                  <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
+                </xsl:when>
+                <xsl:otherwise><xsl:value-of select="amount"/></xsl:otherwise>
+              </xsl:choose>
+              </xsl:if>
+              </td>
+              <td class="ingredient-unit"><xsl:value-of select="unit"/></td>
+              <td class="ingredient-name"><xsl:value-of select="name"/></td>
+              <td>
+                <xsl:for-each select="prep">
+                  <xsl:value-of select="text()"/>
+                  <xsl:if test="position() != last()">, </xsl:if>
+                </xsl:for-each>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
       </table>
     </td></tr>

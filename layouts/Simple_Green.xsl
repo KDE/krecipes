@@ -58,7 +58,9 @@
   <xsl:if test="count(krecipes-ingredients/ingredient) > 0">
     <p class="ingredients"><h1>Ingredients</h1>
       <table>
-      <xsl:for-each select="krecipes-ingredients/ingredient">
+      <xsl:for-each select="krecipes-ingredients/*">
+        <xsl:choose>
+        <xsl:when test="name() = 'ingredient'">
         <tr>
           <td class="ingredient-amount">
           <xsl:if test="amount/min > 0 or amount > 0">
@@ -79,6 +81,34 @@
             </xsl:for-each>
           </td>
         </tr>
+        </xsl:when>
+        <xsl:otherwise>
+          <tr><td colspan="4"><div class="ingredient-group"><xsl:value-of select="@name"/></div></td></tr>
+          <xsl:for-each select="ingredient">
+            <tr>
+              <td class="ingredient-amount">
+              &#187;
+              <xsl:if test="amount/min > 0 or amount > 0">
+              <xsl:choose>
+                <xsl:when test="amount/min">
+                  <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
+                </xsl:when>
+                <xsl:otherwise><xsl:value-of select="amount"/></xsl:otherwise>
+              </xsl:choose>
+              </xsl:if>
+              </td>
+              <td class="ingredient-unit"><xsl:value-of select="unit"/></td>
+              <td class="ingredient-name"><xsl:value-of select="name"/></td>
+              <td>
+                <xsl:for-each select="prep">
+                  <xsl:value-of select="text()"/>
+                  <xsl:if test="position() != last()">, </xsl:if>
+                </xsl:for-each>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
       </table>
     </p>

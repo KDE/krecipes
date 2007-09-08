@@ -8,6 +8,11 @@
   background-color: #CDEBFF;
 }
 
+.ingredient-group
+{
+  font-weight: bold;
+}
+
 .ratings h1
 {
   border-top: 1px dashed black;

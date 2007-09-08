@@ -29,6 +29,12 @@
   font-weight: bold;
 }
 
+.ingredient-group
+{
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 h1
 {
   font-size: 130%;
