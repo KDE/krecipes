@@ -53,6 +53,11 @@ h1
   text-align: center;
 }
 
+.ingredients td
+{
+  border-style: none !important;
+}
+
 .ratings .comments
 {
   font-style: italic;
