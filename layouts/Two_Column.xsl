@@ -95,7 +95,7 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
     </td>
     <td> </td>
     <td valign="top">
-      <p class="instructions"><xsl:value-of select="krecipes-instructions"/></p>
+      <p class="instructions"><xsl:call-template name="br-replace"><xsl:with-param name="word" select="krecipes-instructions"/></xsl:call-template></p>
 
   <xsl:if test="count(krecipes-ratings/rating) > 0">
     <div class="ratings"><h1>Ratings</h1>
@@ -172,6 +172,30 @@ select="$photoDir"/>/<xsl:value-of select="stars"/>-stars.png</xsl:attribute>
      </xsl:for-each>
      </ul>
    </xsl:if>
+</xsl:template>
+
+
+<xsl:template name="br-replace">
+  <xsl:param name="word"><xsl:value-of select="."/></xsl:param>
+  <xsl:param name="recursing"/>
+   <!-- </xsl:text> on next line on purpose to get newline -->
+  <xsl:variable name="cr"><xsl:text>
+</xsl:text></xsl:variable>
+  <xsl:choose>
+  <xsl:when test="contains($word,$cr)">
+     <xsl:if test="substring-before($word,$cr) or $recursing">
+        <xsl:value-of select="substring-before($word,$cr)"/>
+        <br />
+     </xsl:if>
+      <xsl:call-template name="br-replace">
+        <xsl:with-param name="word" select="substring-after($word,$cr)"/>
+        <xsl:with-param name="recursing" select="'1'"/>
+      </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$word"/>
+  </xsl:otherwise>
+ </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
