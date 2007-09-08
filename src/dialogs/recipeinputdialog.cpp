@@ -915,7 +915,7 @@ int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )
 
 void RecipeInputDialog::syncListView( QListViewItem* it, const QString &new_text, int col )
 {
-	if ( it->rtti() != INGLISTVIEWITEM_RTTI )
+	if ( it->rtti() != INGLISTVIEWITEM_RTTI && it->rtti() != INGSUBLISTVIEWITEM_RTTI )
 		return ;
 
 	IngListViewItem *ing_item = ( IngListViewItem* ) it;

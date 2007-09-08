@@ -144,7 +144,7 @@ select="$photoDir"/>/<xsl:value-of select="stars"/>-stars.png</xsl:attribute>
   <xsl:param name="ingSub"></xsl:param>
         <li>
           <xsl:value-of select="$ingSub"/><span class="ingredient-amount">
-          <xsl:if test="amount/min > 0 or amount > 0">
+          <xsl:if test="amount/max > 0 or amount > 0">
           <xsl:choose>
             <xsl:when test="amount/min">
               <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
