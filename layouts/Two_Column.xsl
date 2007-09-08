@@ -79,53 +79,13 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
       <xsl:for-each select="krecipes-ingredients/*">
         <xsl:choose>
         <xsl:when test="name() = 'ingredient'">
-        <li>
-          <span class="ingredient-amount">
-          <xsl:if test="amount/min > 0 or amount > 0">
-          <xsl:choose>
-            <xsl:when test="amount/min">
-              <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
-            </xsl:when>
-            <xsl:otherwise><xsl:value-of select="amount"/></xsl:otherwise>
-          </xsl:choose>
-          </xsl:if>
-          </span><xsl:text> </xsl:text>
-          <span class="ingredient-unit"><xsl:value-of select="unit"/></span><xsl:text> </xsl:text>
-          <span class="ingredient-name"><xsl:value-of select="name"/></span><xsl:text> </xsl:text>
-          <span>
-            <xsl:for-each select="prep">
-              <xsl:if test="position() = 1">; </xsl:if>
-              <xsl:value-of select="text()"/>
-              <xsl:if test="position() != last()">, </xsl:if>
-            </xsl:for-each>
-          </span>
-        </li>
+          <xsl:call-template name="ingredient"/>
         </xsl:when>
         <xsl:otherwise>
           <li class="ingredient-group"><xsl:value-of select="@name"/></li>
           <ul>
         <xsl:for-each select="ingredient">
-        <li>
-          <span class="ingredient-amount">
-          <xsl:if test="amount/min > 0 or amount > 0">
-          <xsl:choose>
-            <xsl:when test="amount/min">
-              <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
-            </xsl:when>
-            <xsl:otherwise><xsl:value-of select="amount"/></xsl:otherwise>
-          </xsl:choose>
-          </xsl:if>
-          </span><xsl:text> </xsl:text>
-          <span class="ingredient-unit"><xsl:value-of select="unit"/></span><xsl:text> </xsl:text>
-          <span class="ingredient-name"><xsl:value-of select="name"/></span><xsl:text> </xsl:text>
-          <span>
-            <xsl:for-each select="prep">
-              <xsl:if test="position() = 1">; </xsl:if>
-              <xsl:value-of select="text()"/>
-              <xsl:if test="position() != last()">, </xsl:if>
-            </xsl:for-each>
-          </span>
-        </li>
+          <xsl:call-template name="ingredient"/>
         </xsl:for-each>
         </ul>
         </xsl:otherwise>
@@ -178,6 +138,40 @@ select="$photoDir"/>/<xsl:value-of select="stars"/>-stars.png</xsl:attribute>
 
 </body>
 </html>
+</xsl:template>
+
+<xsl:template name="ingredient">
+  <xsl:param name="ingSub"></xsl:param>
+        <li>
+          <xsl:value-of select="$ingSub"/><span class="ingredient-amount">
+          <xsl:if test="amount/min > 0 or amount > 0">
+          <xsl:choose>
+            <xsl:when test="amount/min">
+              <xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/>
+            </xsl:when>
+            <xsl:otherwise><xsl:value-of select="amount"/></xsl:otherwise>
+          </xsl:choose>
+          </xsl:if>
+          </span><xsl:text> </xsl:text>
+          <span class="ingredient-unit"><xsl:value-of select="unit"/></span><xsl:text> </xsl:text>
+          <span class="ingredient-name"><xsl:value-of select="name"/></span>
+          <span>
+            <xsl:for-each select="prep">
+              <xsl:if test="position() = 1">; </xsl:if>
+              <xsl:value-of select="text()"/>
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
+          </span>
+        </li>
+   <xsl:if test="count(substitutes/ingredient) > 0">
+     <ul>
+     <xsl:for-each select="substitutes/ingredient">
+     <xsl:call-template name="ingredient">
+       <xsl:with-param name="ingSub">OR </xsl:with-param>
+     </xsl:call-template>
+     </xsl:for-each>
+     </ul>
+   </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
