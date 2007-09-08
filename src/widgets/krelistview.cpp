@@ -16,6 +16,10 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kiconloader.h>
+
+#include <qtooltip.h>
+#include <qpushbutton.h>
 
 #include "widgets/dblistviewbase.h"
 
@@ -43,9 +47,17 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterBox = new QHBox( header );
 		filterBox->setFrameShape( QFrame::Box );
 		filterBox->setMargin( 2 );
+
+		QPushButton *clearSearchButton = new QPushButton( filterBox );
+		KIconLoader il;
+		clearSearchButton->setPixmap( il.loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
+
 		filterLabel = new QLabel( filterBox );
-		filterLabel->setText( i18n( "Search:" ) );
+		filterLabel->setText( " " + i18n( "Search:" ) );
 		filterEdit = new KLineEdit( filterBox );
+
+		QToolTip::add( clearSearchButton, i18n( "Clear search" ) );
+		connect( clearSearchButton, SIGNAL( clicked() ), filterEdit, SLOT( clear() ) );
 	}
 
 
