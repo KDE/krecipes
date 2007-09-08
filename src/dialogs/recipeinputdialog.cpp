@@ -1092,6 +1092,8 @@ void RecipeInputDialog::newRecipe( void )
 
 	instructionsEdit->selectAll();
 
+	ratingListDisplayWidget->clear();
+
 	//Set back to the first page
 	tabWidget->setCurrentPage( 0 );
 
