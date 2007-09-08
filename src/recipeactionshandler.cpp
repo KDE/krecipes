@@ -27,6 +27,7 @@
 #include "dialogs/selectcategoriesdialog.h"
 
 #include "exporters/cookmlexporter.h"
+#include "exporters/xsltexporter.h"
 #include "exporters/htmlexporter.h"
 #include "exporters/htmlbookexporter.h"
 #include "exporters/kreexporter.h"
@@ -364,7 +365,7 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new HTMLBookExporter( cat_structure, fd->baseURL().path(), "*.html" );
 			}
 			else if ( fd->currentFilter() == "*.html" ) {
-				exporter = new HTMLExporter( fileName, fd->currentFilter() );
+				exporter = new XSLTExporter( fileName, fd->currentFilter() );
 			}
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );

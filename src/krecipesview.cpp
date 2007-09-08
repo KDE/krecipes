@@ -130,7 +130,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Submenus
-	dataMenu = leftPanel->createSubMenu( i18n( "Data" ), "data" );
+	dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
 
 	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
 	button2->setIconSet( il.loadIconSet( "ingredients", KIcon::Panel, 32 ) );
@@ -748,7 +748,7 @@ void KrecipesView::activateContextHelp()
 {
 	switch ( m_activePanel ) {
 	case RecipeView:
-		//kapp->invokeHelp("");
+		kapp->invokeHelp();
 		break;
 
 	case SelectP:

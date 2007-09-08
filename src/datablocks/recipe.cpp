@@ -22,7 +22,7 @@ void Recipe::empty( void )
 {
 	recipeID = -1;
 
-	yield.amount = 1;
+	yield.amount = 0;
 	yield.amount_offset = 0;
 	yield.type = QString::null;
 

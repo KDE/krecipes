@@ -1,6 +1,6 @@
 #MIN_CONFIG(3.1)
 
-AM_INIT_AUTOMAKE(krecipes, 0.8)
+AM_INIT_AUTOMAKE(krecipes, 1.0)
 
 #KDE_USE_QT(3.1)
 
@@ -81,6 +81,16 @@ else
   AC_NO_SQLITE
   AC_NO_SQLITE3
 fi
+
+##################################################################
+# check for libxml2
+##################################################################
+
+LIBXML2_REQUIRED=0.6
+
+PKG_CHECK_MODULES(LIBXML2, [libxml-2.0 >= $LIBXML2_REQUIRED])
+AC_SUBST(LIBXML2_CFLAGS)
+AC_SUBST(LIBXML2_LIBS)
 
 dnl ----------- Should I link or should I not link? ---------
 AM_CONDITIONAL(link_lib_MYSQL, test x$have_mysql = xtrue)

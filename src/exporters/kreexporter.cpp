@@ -22,9 +22,11 @@
 #include <klocale.h>
 #include <kmdcodec.h>
 #include <kglobal.h>
+#include <kconfig.h>
 #include <kstandarddirs.h>
 
 #include "backends/recipedb.h"
+#include "datablocks/mixednumber.h"
 
 KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, const QString &format ) :
 		BaseExporter( filename, format ), categories( _categories )
@@ -69,16 +71,19 @@ QString KreExporter::createFooter()
 
 QString KreExporter::generateIngredient( const IngredientData &ing )
 {
+	KGlobal::config()->setGroup("Formatting");
+	MixedNumber::Format number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+
 	QString xml;
 
 	xml += "<name>" + QStyleSheet::escape( ( ing ).name ) + "</name>\n";
 	xml += "<amount>";
 	if ( ing.amount_offset < 1e-10 ) {
-		xml += QString::number( ing.amount );
+		xml += MixedNumber( ing.amount ).toString( number_format );
 	}
 	else {
-		xml += "<min>"+QString::number( ing.amount )+"</min>";
-		xml += "<max>"+QString::number( ing.amount + ing.amount_offset )+"</max>";
+		xml += "<min>"+MixedNumber( ing.amount ).toString( number_format )+"</min>";
+		xml += "<max>"+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format )+"</max>";
 	}
 	xml += "</amount>\n";
 	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
@@ -97,7 +102,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 
-		xml += "<krecipes-recipe>\n";
+		xml += "<krecipes-recipe id=\""+QString::number((*recipe_it).recipeID)+"\">\n";
 		xml += "<krecipes-description>\n";
 		xml += "<title>" + QStyleSheet::escape( ( *recipe_it ).title ) + "</title>\n";
 

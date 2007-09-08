@@ -58,7 +58,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	}
 
 	open_popup->insertTitle( i18n( "Templates" ) );
-	QDir included_templates( getIncludedLayoutDir(), "*.template", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( unsigned int i = 0; i < included_templates.count(); i++ ) {
 		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")).replace("_"," "), this, SLOT( loadTemplate( int ) ) );
 		included_layouts_map.insert( id, included_templates[ i ] );
@@ -98,13 +98,13 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString layoutFile = config->readEntry( m_configEntry+"Layout", locate( "appdata", "layouts/Default.klo" ) );
+	QString layoutFile = config->readEntry( m_configEntry+"Layout", locate( "appdata", "layouts/None.klo" ) );
 	if ( layoutFile.isEmpty() || !QFile::exists( layoutFile ) )
-		layoutFile = locate( "appdata", "layouts/Default.klo" );
+		layoutFile = locate( "appdata", "layouts/None.klo" );
 
-	QString tmpl = config->readEntry( m_configEntry+"Template", locate( "appdata", "layouts/Default.template" ) );
+	QString tmpl = config->readEntry( m_configEntry+"Template", locate( "appdata", "layouts/Default.xsl" ) );
 	if ( tmpl.isEmpty() || !QFile::exists( tmpl ) )
-		tmpl = locate( "appdata", "layouts/Default.template" );
+		tmpl = locate( "appdata", "layouts/Default.xsl" );
 	kdDebug()<<"tmpl: "<<tmpl<<endl;
 	active_template = tmpl;
 	loadLayout( layoutFile );
@@ -194,7 +194,7 @@ void PageSetupDialog::setItemShown( int id )
 
 void PageSetupDialog::loadFile()
 {
-	QString file = KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), QString("*.klo *.template|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
+	QString file = KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), QString("*.klo *.xsl|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
 
 	if ( file.endsWith(".klo") )
 		loadLayout( file );
@@ -280,7 +280,7 @@ void PageSetupDialog::saveAsLayout()
 
 QString PageSetupDialog::getIncludedLayoutDir() const
 {
-	QFileInfo file_info( locate( "appdata", "layouts/Default.klo" ) );
+	QFileInfo file_info( locate( "appdata", "layouts/None.klo" ) );
 	return file_info.dirPath( true );
 }
 

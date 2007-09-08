@@ -31,7 +31,7 @@
 
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
-#include "exporters/htmlexporter.h"
+#include "exporters/xsltexporter.h"
 #include "recipeprintpreview.h"
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
@@ -88,15 +88,15 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids, const QString &l
 		progress_dialog->resize( 240, 80 );
 	}
 
-	HTMLExporter html_generator( tmp_filename + ".html", "html" );
+	XSLTExporter html_generator( tmp_filename + ".html", "html" );
 	if ( layoutConfig != QString::null ) {
 		KConfig *config = KGlobal::config();
 		config->setGroup( "Page Setup" );
-		QString styleFile = config->readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/Default.klo" ) );
+		QString styleFile = config->readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/None.klo" ) );
 		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
 			html_generator.setStyle( styleFile );
 
-		QString templateFile = config->readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.template" ) );
+		QString templateFile = config->readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.xsl" ) );
 		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
 			html_generator.setTemplate( templateFile );
 	}
@@ -150,7 +150,7 @@ void RecipeViewDialog::removeOldFiles()
 		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
 			recipe_ids << ( *it ).recipeID;
 
-		HTMLExporter::removeHTMLFiles( tmp_filename, recipe_ids );
+		XSLTExporter::removeHTMLFiles( tmp_filename, recipe_ids );
 	}
 }
 
@@ -159,7 +159,7 @@ void RecipeViewDialog::recipeRemoved( int id )
 	//if the deleted recipe is loaded, clean the view up
 	if ( ids_loaded.find(id) != ids_loaded.end() ) { 
 		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
-		HTMLExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
+		XSLTExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
 		ids_loaded.remove(id);
 	}
 }

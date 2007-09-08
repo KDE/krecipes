@@ -1,0 +1,66 @@
+.background, .background td
+{
+  font-size: 10pt;
+}
+
+.background
+{
+  background-repeat: repeat-y;
+  margin-left: 80px;
+}
+
+.ingredient-name
+{
+  font-weight: bold;
+}
+
+h1
+{
+  font-size: 130%;
+  border-bottom: 1px dashed red;
+  padding-top: 10px;
+}
+
+li
+{
+  list-style-type: none;
+}
+
+.header
+{
+  font-weight: bold;
+}
+
+.ingredient-amount-header, .ingredient-name-header, .ingredient-prep-method-header
+{
+  color: gray;
+  text-align: center;
+}
+
+.ratings .comments
+{
+  font-style: italic;
+}
+
+.ratings .rater
+{
+  font-weight: bold;
+}
+
+.ratings .criteria-name
+{
+  font-size: small;
+}
+
+.title
+{
+  text-align: center;
+  font-weight: bold;
+  font-size: 150%;
+}
+
+.authors
+{
+  margin-top: 0px;
+  text-align: center;
+}

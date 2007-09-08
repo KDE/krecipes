@@ -92,8 +92,6 @@ signals:
 	void itemVisibilityChanged( KreDisplayItem *, bool );
 
 protected:
-	virtual void begin (const KURL &url=KURL(), int xOffset=0, int yOffset=0);
-
 	virtual void loadBackgroundColor( const QString &obj, const QColor& );
 	virtual void loadFont( const QString &obj, const QFont& );
 	virtual void loadTextColor( const QString &obj, const QColor& );

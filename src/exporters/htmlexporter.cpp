@@ -49,17 +49,17 @@ HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 	config->setGroup( "Page Setup" );
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.template" ) );
+	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.xsl" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
-		template_filename = locate( "appdata", "layouts/Default.template" );
+		template_filename = locate( "appdata", "layouts/Default.xsl" );
 	kdDebug() << "Using template file: " << template_filename << endl;
 
 	setTemplate( template_filename );
 
 	//let's do everything we can to be sure at least some layout is loaded
-	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/Default.klo" ) );
+	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
 	if ( m_layoutFilename.isEmpty() || !QFile::exists( m_layoutFilename ) )
-		m_layoutFilename = locate( "appdata", "layouts/Default.klo" );
+		m_layoutFilename = locate( "appdata", "layouts/None.klo" );
 	kdDebug() << "Using layout file: " << m_layoutFilename << endl;
 }
 
@@ -360,11 +360,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				ingredients_html += "</ul>";
 			ingredients_html.append("</ul></td><td valign=\"top\"><ul>");
 			if ( !group.isEmpty() )
-				ingredients_html += "<li style=\"page-break-after: avoid\">" + group + ":</li><ul>";
+				ingredients_html += "<li class=\"ingredient-group\" style=\"page-break-after: avoid\">" + group + ":</li><ul>";
 		}
 		else {
 			if ( !group.isEmpty() )
-				ingredients_html += "<li style=\"page-break-after: avoid\">" + group + ":</li><ul>";
+				ingredients_html += "<li class=\"ingredient-group\" style=\"page-break-after: avoid\">" + group + ":</li><ul>";
 		}
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it, ++count ) {
@@ -386,11 +386,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, useAbbreviations );
 
 			QString tmp_format( ingredient_format );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *ing_it ).name ) );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *ing_it ).prepMethodList.count() == 0 ) ?
-			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ) );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *ing_it ).name )+"</span>" );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), "<span class=\"ingredient-amount\">"+amount_str+"</span>" );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+"</span>" );
+			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), "<span class=\"ingredient-prep-methods\">"+(( ( *ing_it ).prepMethodList.count() == 0 ) ?
+			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>" );
 
 			if ( (*ing_it).substitutes.count() > 0 )
 				tmp_format += ", "+i18n("or");

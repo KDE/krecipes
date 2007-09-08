@@ -40,6 +40,7 @@
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
 #include "exporters/htmlexporter.h"
+#include "exporters/xsltexporter.h"
 
 #include <cmath>
 
@@ -50,10 +51,10 @@ KreDisplayItem::KreDisplayItem( const QString &n, const QString &_name ) : nodeI
 
 void KreDisplayItem::clear()
 {
-	alignment = Qt::AlignHCenter;
+	alignment = -1;
 	show = true;
-	backgroundColor = QColor(255,255,255);
-	textColor = QColor(0,0,0);
+	backgroundColor = QColor();
+	textColor = QColor();
 	columns = 1;
 }
 
@@ -69,7 +70,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample = sample;
 	else {
 		m_sample.title = i18n("Recipe Title");
- 		m_sample.yield.amount = 0;
+		m_sample.yield.amount = 1;
+		m_sample.yield.type = i18n("serving");
 		m_sample.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
 		m_sample.instructions = i18n("Instructions");
 		m_sample.prepTime = QTime(0,0);
@@ -114,7 +116,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 	loadHTMLView();
 	show();
 
-	createItem( "background", i18n("Background"), BackgroundColor );
+	createItem( "background", i18n("Background"), Font | BackgroundColor | TextColor );
 	createItem( "title", i18n("Title"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "instructions", i18n("Instructions"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "prep_time", i18n("Preparation Time"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
@@ -137,7 +139,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 {
 	kdDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile<<endl;
 	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
-	HTMLExporter exporter( tmp_filename + ".html", "html" );
+	XSLTExporter exporter( tmp_filename + ".html", "html" );
 	if ( templateFile != QString::null )
 		exporter.setTemplate( templateFile );
 	if ( styleFile != QString::null )
@@ -158,8 +160,13 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 
 	KURL url;
 	url.setPath( tmp_filename + ".html" );
-	openURL( url );
 	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+
+	KParts::URLArgs args (browserExtension()->urlArgs());
+	args.reload=true; // Don't use the cache
+	browserExtension()->setURLArgs(args);
+
+	openURL( url );
 }
 
 void SetupDisplay::reload()
@@ -199,8 +206,6 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
-		m_styleSheet = DOM::CSSStyleSheet();
-
 		QMap<QString,KreDisplayItem*>::iterator it;
 		for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
 			it.data()->clear();
@@ -234,7 +239,6 @@ void SetupDisplay::loadBackgroundColor( const QString &object, const QColor &col
 {
 	if ( m_currentItem ) {
 		m_currentItem->backgroundColor = color;
-		m_styleSheet.insertRule("."+object+" { "+bgColorAsCSS(color)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -242,7 +246,6 @@ void SetupDisplay::loadFont( const QString &object, const QFont &font )
 {
 	if ( m_currentItem ) {
 		m_currentItem->font = font;
-		m_styleSheet.insertRule("."+object+" { "+fontAsCSS(font)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -250,7 +253,6 @@ void SetupDisplay::loadTextColor( const QString &object, const QColor &color )
 {
 	if ( m_currentItem ) {
 		m_currentItem->textColor = color;
-		m_styleSheet.insertRule("."+object+" { "+textColorAsCSS(color)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -259,8 +261,6 @@ void SetupDisplay::loadVisibility( const QString &object, bool visible )
 	if ( m_currentItem ) {
 		m_currentItem->show = visible;
 		emit itemVisibilityChanged( m_currentItem, visible );
-
-		m_styleSheet.insertRule("."+object+" { "+visibilityAsCSS(visible)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -268,7 +268,6 @@ void SetupDisplay::loadAlignment( const QString &object, int alignment )
 {
 	if ( m_currentItem ) {
 		m_currentItem->alignment = alignment;
-		m_styleSheet.insertRule("."+object+" { "+alignmentAsCSS(alignment)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -276,7 +275,6 @@ void SetupDisplay::loadBorder( const QString &object, const KreBorder& border )
 {
 	if ( m_currentItem ) {
 		m_currentItem->border = border;
-		m_styleSheet.insertRule("."+object+" { "+borderAsCSS(border)+" }",m_styleSheet.cssRules().length());
 	}
 }
 
@@ -309,19 +307,19 @@ void SetupDisplay::saveLayout( const QString &filename )
 		layout_tag.appendChild( base_tag );
 
 		int properties = (*box_properties)[it.data()];
-		if ( properties & BackgroundColor ) {
+		if ( properties & BackgroundColor && it.data()->backgroundColor.isValid() ) {
 			QDomElement backgroundcolor_tag = doc.createElement( "background-color" );
 			backgroundcolor_tag.appendChild( doc.createTextNode( it.data()->backgroundColor.name() ) );
 			base_tag.appendChild( backgroundcolor_tag );
 		}
 
-		if ( properties & TextColor ) {
+		if ( properties & TextColor && it.data()->textColor.isValid() ) {
 			QDomElement textcolor_tag = doc.createElement( "text-color" );
 			textcolor_tag.appendChild( doc.createTextNode( it.data()->textColor.name() ) );
 			base_tag.appendChild( textcolor_tag );
 		}
 
-		if ( properties & Font ) {
+		if ( properties & Font && it.data()->font != QFont() ) {
 			QDomElement font_tag = doc.createElement( "font" );
 			font_tag.appendChild( doc.createTextNode( it.data()->font.toString() ) );
 			base_tag.appendChild( font_tag );
@@ -333,7 +331,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 			base_tag.appendChild( visibility_tag );
 		}
 
-		if ( properties & Alignment ) {
+		if ( properties & Alignment && it.data()->alignment >= 0 ) {
 			QDomElement alignment_tag = doc.createElement( "alignment" );
 			alignment_tag.appendChild( doc.createTextNode( QString::number( it.data()->alignment ) ) );
 			base_tag.appendChild( alignment_tag );
@@ -372,45 +370,32 @@ void SetupDisplay::saveLayout( const QString &filename )
 		kdDebug() << "Error: Unable to write to file " << filename << endl;
 }
 
-void SetupDisplay::begin(const KURL &url, int xOffset, int yOffset)
-{
-	kdDebug()<<"begin"<<endl;
-	KHTMLPart::begin(url,xOffset,yOffset);
-	kdDebug()<<"end"<<endl;
-
-	DOM::Document doc = document();
-	DOM::DOMImplementation impl = doc.implementation();
-	kdDebug() << "(1) document: " << document().handle() << endl;
-	#if 0
-	if ( !impl.isNull() ) {
-		//m_styleSheet = impl.createCSSStyleSheet("-krecipes","screen");
-		//m_styleSheet = DOM::CSSStyleSheet();
-		//doc.addStyleSheet(m_styleSheet);
-		//applyStylesheet();
-	}
-	#endif
-}
-
 void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 {
 	DOM::Node node = nodeUnderMouse();
-	DOM::Element element;
-	if ( node.nodeType() != DOM::Node::ELEMENT_NODE ) {
-		kdDebug()<<"not an element"<<endl;
-		element = (DOM::Element)node.parentNode();
+	if ( node.isNull() ) {
+		return;
 	}
-	else
-		element = (DOM::Element)node;
 
-	while ( !element.parentNode().isNull() ) {
-		if ( element.hasAttribute("class") ) {
-			QString id = element.getAttribute("class").string();
-			if ( node_item_map->keys().contains(id) )
-				break;
+	while ( !node.isNull() ) {
+		if ( node.nodeType() == DOM::Node::ELEMENT_NODE ) {
+			DOM::Element element = (DOM::Element)node;
+			if ( element.hasAttribute("class") ) {
+				QString id = element.getAttribute("class").string();
+				if ( node_item_map->keys().contains(id) )
+					break;
+			}
 		}
 
-		element = (DOM::Element)element.parentNode();
+		node = node.parentNode();
 	}
+
+	if ( node.isNull() || node.nodeType() != DOM::Node::ELEMENT_NODE ) {
+		kdDebug() << "No relevant node" << endl;
+		return;
+	}
+
+	DOM::Element element = (DOM::Element)node;
 
 	m_currNodeId = element.getAttribute("class").string();
 	if ( m_currNodeId.isEmpty() ) {
@@ -485,10 +470,6 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 void SetupDisplay::applyStylesheet()
 {
 	loadTemplate( m_activeTemplate );
-	if ( !document().isNull() && !m_styleSheet.isNull() ) {
-		//document().removeStyleSheet(m_styleSheet);
-		//document().addStyleSheet(m_styleSheet);
-	}
 }
 
 void SetupDisplay::setBackgroundColor()
@@ -603,7 +584,6 @@ void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
 {
 	item->show = visible;
 
-	m_styleSheet.insertRule("."+item->nodeId+" { visibility:"+(item->show?"visible":"hidden")+" }",m_styleSheet.cssRules().length());
 	applyStylesheet();
 
 	has_changes = true;
