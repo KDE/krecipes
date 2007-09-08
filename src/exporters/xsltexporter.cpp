@@ -244,11 +244,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 void XSLTExporter::beginObject( const QString &object )
 {
-	if (object != "background") {
-		m_cachedCSS += "."+object+", ."+object+" td { \n";
-	} else {
-		m_cachedCSS += "."+object+" { \n";
-	}
+	m_cachedCSS += "."+object+", ."+object+" td { \n";
 }
 
 void XSLTExporter::endObject()

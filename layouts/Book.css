@@ -19,8 +19,9 @@
   padding-top: 10px;
 }
 
-.recipes, .recipes td {
-  background-color: none;
+.background td
+{
+  background-color: inherit !important;
 }
 
 .ingredient-name
@@ -33,11 +34,6 @@ h1
   font-size: 130%;
   border-bottom: 2px solid ridge;
   padding-top: 10px;
-}
-
-li
-{
-  list-style-type: none;
 }
 
 .header

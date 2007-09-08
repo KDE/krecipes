@@ -16,6 +16,7 @@
 </xsl:choose>
 </title>
 <link rel="stylesheet" type="text/css" href="{$cssStyle}" />
+
 </head>
 <body class="background">
 
