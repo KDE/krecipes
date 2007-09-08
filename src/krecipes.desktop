@@ -7,6 +7,7 @@ Name[xx]=xxKrecipesxx
 Exec=krecipes %i %m -caption "%c"
 Icon=krecipes
 Type=Application
+Categories=Qt;KDE;Database;X-KDE-More;
 DocPath=krecipes/krecipes.html
 GenericName=Cooking Book
 GenericName[ar]=كتاب الطبخ
