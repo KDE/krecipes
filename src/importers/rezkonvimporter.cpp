@@ -39,7 +39,7 @@ void RezkonvImporter::parseFile( const QString &filename )
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 
-			if ( line.contains( QRegExp( "^=====.*REZKONV.*" ) ) ) {
+			if ( line.contains( QRegExp( "^=====.*REZKONV.*", false ) ) ) {
 				QStringList raw_recipe;
 				while ( !( line = stream.readLine() ).contains( QRegExp( "^=====\\s*$" ) ) && !stream.atEnd() )
 					raw_recipe << line;
