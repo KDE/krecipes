@@ -88,7 +88,7 @@
             </tr>
             <xsl:if test="count(krecipes-ingredients/*) &gt; 0">
               <tr>
-                <td valign="top" class="ingredients" colspan="3">
+                <td valign="top" colspan="3"><div class="ingredients">
                   <h1>Ingredients</h1>
                   <table cellpadding="4">
                     <tr>
@@ -118,6 +118,7 @@
                       </xsl:choose>
                     </xsl:for-each>
                   </table>
+                  </div>
                 </td>
               </tr>
               <tr>
