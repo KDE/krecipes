@@ -32,7 +32,7 @@ li
 
 .ingredient-amount-header, .ingredient-name-header, .ingredient-prep-method-header
 {
-  color: gray;
+  color: #444;
   text-align: center;
 }
 
