@@ -86,7 +86,7 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
         <xsl:otherwise>
           <tr><td colspan="4"><div class="ingredient-group"><xsl:value-of select="@name"/></div></td></tr>
           <xsl:for-each select="ingredient">
-            <xsl:call-template name="ingredient"><xsl:with-param name="underGroup">&#187; </xsl:with-param></xsl:call-template>
+            <xsl:call-template name="ingredient"><xsl:with-param name="underGroup">&#160;&#160;&#160;&#160;</xsl:with-param></xsl:call-template>
           </xsl:for-each>
         </xsl:otherwise>
         </xsl:choose>
@@ -174,7 +174,7 @@ select="$photoDir"/>/<xsl:value-of select="stars"/>-stars.png</xsl:attribute>
    <xsl:if test="count(substitutes/ingredient) > 0">
      <xsl:for-each select="substitutes/ingredient">
      <xsl:call-template name="ingredient">
-       <xsl:with-param name="ingSub"> OR </xsl:with-param>
+       <xsl:with-param name="ingSub">OR </xsl:with-param>
        <xsl:with-param name="underGroup"><xsl:value-of select="$underGroup"/></xsl:with-param>
      </xsl:call-template>
      </xsl:for-each>
