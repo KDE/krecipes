@@ -43,7 +43,7 @@ private slots:
 	void loadFile();
 	void loadLayout( int );
 	void loadLayout( const QString &filename );
-	void loadTemplate( int );
+	void loadTemplate( const QString &filename );
 	void reloadLayout();
 	void saveLayout();
 	void saveAsLayout();

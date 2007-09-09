@@ -34,6 +34,7 @@
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
 
+#include <widgets/thumbbar.h>
 #include "setupdisplay.h"
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent, 0, true ), m_configEntry(configEntry)
@@ -45,26 +46,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 
-	KAction *std_open = KStdAction::open( 0, 0, 0 ); //use this to create a custom open action
-	KToolBarPopupAction *custom_open = new KToolBarPopupAction( std_open->text(), std_open->icon(), std_open->shortcut(), this, SLOT( loadFile() ), actionCollection, "open_popup" );
-
-	KPopupMenu *open_popup = custom_open->popupMenu();
-
-	open_popup->insertTitle( i18n( "Styles" ) );
-	QDir included_layouts( getIncludedLayoutDir(), "*.klo", QDir::Name | QDir::IgnoreCase, QDir::Files );
-	for ( unsigned int i = 0; i < included_layouts.count(); i++ ) {
-		int id = open_popup->insertItem( included_layouts[ i ].left(included_layouts[ i ].find(".")), this, SLOT( loadLayout( int ) ) );
-		included_layouts_map.insert( id, included_layouts[ i ] );
-	}
-
-	open_popup->insertTitle( i18n( "Templates" ) );
-	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
-	for ( unsigned int i = 0; i < included_templates.count(); i++ ) {
-		int id = open_popup->insertItem( included_templates[ i ].left(included_templates[ i ].find(".")).replace("_"," "), this, SLOT( loadTemplate( int ) ) );
-		included_layouts_map.insert( id, included_templates[ i ] );
-	}
-
-	custom_open->plug( toolbar );
+	KAction *std_open = KStdAction::open( this, SLOT(loadFile()), actionCollection );
+	std_open->plug( toolbar );
 
 	KStdAction::save( this, SLOT( saveLayout() ), actionCollection ) ->plug( toolbar );
 	KStdAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) ->plug( toolbar );
@@ -77,11 +60,19 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	shown_items->plug( toolbar );
 	layout->addWidget( toolbar );
 
-	QLabel *help = new QLabel(i18n("<i>Usage: Right-click any element to edit the look of that element.</i>"),this);
+	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the right, and right-click any element to edit the look of that element.</i>"),this);
 	layout->addWidget( help );
 
+	QHBox *viewBox = new QHBox( this );
+	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Vertical);
+	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
+	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
+	for ( uint i = 0; i < included_templates.count(); i++ ) {
+		new ThumbBarItem(thumbBar,included_templates.path() + "/" +included_templates[ i ]);
+	}
 	m_htmlPart = new SetupDisplay(sample, this);
-	layout->addWidget( m_htmlPart->view() );
+	m_htmlPart->view()->reparent(viewBox,QPoint());
+	layout->addWidget( viewBox );
 
 	QHBox *buttonsBox = new QHBox( this );
 	QPushButton *okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
@@ -204,15 +195,15 @@ void PageSetupDialog::loadFile()
 	}
 }
 
-void PageSetupDialog::loadTemplate( int popup_param )
-{
-	active_template = getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ];
-	m_htmlPart->loadTemplate( active_template );
-}
-
 void PageSetupDialog::loadLayout( int popup_param )
 {
 	loadLayout( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
+}
+
+void PageSetupDialog::loadTemplate( const QString& filename )
+{
+	active_template = filename;
+	m_htmlPart->loadTemplate( active_template );
 }
 
 void PageSetupDialog::loadLayout( const QString &filename )
