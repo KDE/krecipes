@@ -74,7 +74,7 @@ select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/c
       </xsl:if>
   </td></tr>
 
-  <xsl:if test="count(krecipes-ingredients/ingredient) > 0">
+  <xsl:if test="count(krecipes-ingredients/*) > 0">
     <tr><td valign="top" class="ingredients" colspan="3"><h1>Ingredients</h1>
       <table cellpadding="4">
       <tr><td colspan="2" class="ingredient-amount-header">Amount</td><td class="ingredient-name-header">Ingredient</td><td class="ingredient-prep-method-header">Preparation</td></tr>

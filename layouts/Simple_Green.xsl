@@ -55,7 +55,7 @@
       </xsl:if>
     </p>
 
-  <xsl:if test="count(krecipes-ingredients/ingredient) > 0">
+  <xsl:if test="count(krecipes-ingredients/*) > 0">
     <p class="ingredients"><h1>Ingredients</h1>
       <table>
       <xsl:for-each select="krecipes-ingredients/*">

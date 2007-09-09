@@ -6,6 +6,7 @@
 .ingredients
 {
   background-color: #CDEBFF;
+  border: 1px solid black;
 }
 
 .ingredient-group
