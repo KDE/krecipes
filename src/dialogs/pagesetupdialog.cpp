@@ -100,6 +100,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	active_template = tmpl;
 	loadLayout( layoutFile );
 
+	thumbBar->setSelected(thumbBar->findItemByURL(active_template));
+
 	initShownItems();
 }
 

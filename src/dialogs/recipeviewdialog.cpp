@@ -110,6 +110,10 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids, const QString &l
 	delete recipeView;              // Temporary workaround
 	recipeView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
 
+	KParts::URLArgs args (recipeView->browserExtension()->urlArgs());
+	args.reload=true; // Don't use the cache
+	recipeView->browserExtension()->setURLArgs(args);
+
 	KURL url;
 	url.setPath( tmp_filename + ".html" );
 	recipeView->openURL( url );
