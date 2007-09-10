@@ -156,7 +156,7 @@
     <xsl:param name="ingSub"/>
     <xsl:param name="ing"/>
         <xsl:if test="$ingSub"><br /> OR </xsl:if>
-        <xsl:if test="amount/max != 0 or amount != 0">
+        <xsl:if test="$ing/amount/max != 0 or $ing/amount != 0">
           <xsl:choose>
             <xsl:when test="$ing/amount/min"><xsl:value-of select="$ing/amount/min"/>-<xsl:value-of select="$ing/amount/max"/><xsl:text> </xsl:text></xsl:when>
             <xsl:otherwise>
