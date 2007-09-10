@@ -82,27 +82,16 @@
             <xsl:if test="count(krecipes-ingredients/*) &gt; 0">
                   <div class="ingredients">
                     <h1>Ingredients</h1>
-                    <table>
-                      <xsl:for-each select="krecipes-ingredients/*">
-                        <xsl:choose>
-                          <xsl:when test="name() = 'ingredient'">
-                            <xsl:call-template name="ingredient"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <tr>
-                              <td colspan="4">
-                                <div class="ingredient-group">
+                    <table width="100%">
+                      <xsl:for-each select="krecipes-ingredients">
+                            <xsl:call-template name="ingredients"/>
+                      </xsl:for-each>
+
+                      <xsl:for-each select="krecipes-ingredients/ingredient-group">
+                                <tr><td colspan="2"><div class="ingredient-group">
                                   <xsl:value-of select="@name"/>
-                                </div>
-                              </td>
-                            </tr>
-                            <xsl:for-each select="ingredient">
-                              <xsl:call-template name="ingredient">
-                                <xsl:with-param name="underGroup">    </xsl:with-param>
-                              </xsl:call-template>
-                            </xsl:for-each>
-                          </xsl:otherwise>
-                        </xsl:choose>
+                                </div></td></tr>
+                              <xsl:call-template name="ingredients"/>
                       </xsl:for-each>
                     </table>
                   </div>
@@ -165,40 +154,28 @@
   </xsl:template>
   <xsl:template name="ingredient">
     <xsl:param name="ingSub"/>
-    <xsl:param name="underGroup"/>
-    <tr>
-      <td class="ingredient-amount">
-        <xsl:value-of select="$underGroup"/>
-        <xsl:value-of select="$ingSub"/>
+    <xsl:param name="ing"/>
+        <xsl:if test="$ingSub"><br /> OR </xsl:if>
         <xsl:if test="amount/max != 0 or amount != 0">
           <xsl:choose>
-            <xsl:when test="amount/min"><xsl:value-of select="amount/min"/>-<xsl:value-of select="amount/max"/></xsl:when>
+            <xsl:when test="$ing/amount/min"><xsl:value-of select="$ing/amount/min"/>-<xsl:value-of select="$ing/amount/max"/><xsl:text> </xsl:text></xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="amount"/>
+              <xsl:value-of select="$ing/amount"/><xsl:text> </xsl:text>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:if>
-      </td>
-      <td class="ingredient-unit">
-        <xsl:value-of select="unit"/>
-      </td>
-      <td class="ingredient-name">
-        <xsl:value-of select="name"/>
-      </td>
-      <td>
-        <xsl:for-each select="prep">
+        <xsl:value-of select="$ing/unit"/><xsl:text> </xsl:text>
+        <xsl:value-of select="$ing/name"/>
+        <xsl:for-each select="$ing/prep">
+          <xsl:if test="position() = 1">; </xsl:if>
           <xsl:value-of select="text()"/>
           <xsl:if test="position() != last()">, </xsl:if>
         </xsl:for-each>
-      </td>
-    </tr>
-    <xsl:if test="count(substitutes/ingredient) &gt; 0">
-      <xsl:for-each select="substitutes/ingredient">
+    <xsl:if test="count($ing/substitutes/ingredient) &gt; 0">
+      <xsl:for-each select="$ing/substitutes/ingredient">
         <xsl:call-template name="ingredient">
           <xsl:with-param name="ingSub">OR </xsl:with-param>
-          <xsl:with-param name="underGroup">
-            <xsl:value-of select="$underGroup"/>
-          </xsl:with-param>
+          <xsl:with-param name="ing" select="."/>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:if>
@@ -259,5 +236,26 @@
         </tr>
       </xsl:for-each>
     </table>
+  </xsl:template>
+  <xsl:template name="ingredients">
+    <xsl:variable name="visible-properties" select="ingredient"/>
+    <xsl:variable name="t-size" select="count($visible-properties)"/>
+    <xsl:variable name="half" select="ceiling($t-size div 2)"/>
+      <xsl:for-each select="$visible-properties[position() &lt;= $half]">
+        <xsl:variable name="here" select="position()"/>
+        <tr>
+          <td width="50%">
+            <xsl:call-template name="ingredient"><xsl:with-param name="ing" select="."/></xsl:call-template>
+          </td>
+          <td width="50%">
+            <xsl:choose>
+              <xsl:when test="$visible-properties[$here+$half]">
+                <xsl:call-template name="ingredient"><xsl:with-param name="ing" select="$visible-properties[$here+$half]"/></xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise/>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

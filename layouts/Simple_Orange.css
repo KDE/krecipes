@@ -25,6 +25,8 @@
 .ingredient-group
 {
   font-weight: bold;
+  text-align: center;
+  border-top: 1px dashed gray;
 }
 
 h1
@@ -75,3 +77,9 @@ h1, .header, .title
   border-left: 2px solid #DDD !important;
   padding-left: 7px;
 }
+
+.ingredients td, .properties td
+{
+  border-style: none !important;
+}
+

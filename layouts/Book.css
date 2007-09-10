@@ -53,7 +53,7 @@ h1
   text-align: center;
 }
 
-.ingredients td
+.ingredients td, .properties td
 {
   border-style: none !important;
 }

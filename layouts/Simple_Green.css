@@ -96,3 +96,8 @@ body
 {
   background-color: white;
 }
+
+.ingredients td, .properties td
+{
+  border-style: none !important;
+}
