@@ -15,11 +15,13 @@
 {
   float: right;
   height: 70px;
+  padding-bottom: 4px;
 }
 
 .basic-info
 {
-  clear: both;
+  padding-top: 8px;
+  /*clear: both;*/
 }
 
 .ingredient-group
@@ -82,4 +84,5 @@ h1, .header, .title
 {
   border-style: none !important;
 }
+
 

@@ -26,7 +26,9 @@
                     <xsl:otherwise>default_photo.png</xsl:otherwise>
                   </xsl:choose>
                 </xsl:variable>
-                <img src="{$photoDir}/{$photoSrc}" class="photo"/>
+                <xsl:if test="$photoSrc != 'default_photo.png'">
+                  <img src="{$photoDir}/{$photoSrc}" class="photo"/>
+                </xsl:if>
                 <div class="title">
                   <xsl:value-of select="krecipes-description/title"/>
                 </div>
@@ -35,6 +37,10 @@
        <xsl:attribute name="height">12</xsl:attribute></xsl:element>
         (<xsl:value-of select="count(krecipes-ratings/rating)"/> reviews)</p>
                 </xsl:if>
+                <xsl:if test="count(krecipes-description/author) &gt; 0
+                              or count(krecipes-description/category/cat) &gt; 0
+                              or krecipes-description/yield/amount &gt; 0
+                              or krecipes-description/preparation-time/text() != '00:00'">
                 <div class="basic-info">
                 <xsl:if test="count(krecipes-description/author) &gt; 0">
                   <span class="authors">
@@ -79,6 +85,7 @@
                   </span>
                 </xsl:if>
                 </div>
+                </xsl:if>
             <xsl:if test="count(krecipes-ingredients/*) &gt; 0">
                   <div class="ingredients">
                     <h1>Ingredients</h1>
