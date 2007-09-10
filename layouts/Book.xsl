@@ -140,10 +140,12 @@
                 <td colspan="3"> </td>
               </tr>
             </xsl:if>
-            <xsl:if test="krecipes-properties">
+            <xsl:if test="count(krecipes-properties/property[not(@hidden='true')]) > 0">
               <tr>
-                <td valign="top" class="properties" colspan="3">
+                <td valign="top" colspan="3"><div class="properties">
                   <h1>Properties</h1>
+                  <xsl:call-template name="properties"/>
+                </div>
                 </td>
               </tr>
               <tr>
@@ -262,5 +264,36 @@
         <xsl:value-of select="$word"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  <xsl:template name="properties">
+    <xsl:variable name="visible-properties" select="krecipes-properties/property[not(@hidden='true')]"/>
+    <xsl:variable name="t-size" select="count($visible-properties)"/>
+    <xsl:variable name="half" select="ceiling($t-size div 3)"/>
+    <table>
+      <xsl:for-each select="$visible-properties[position() &lt;= $half]">
+        <xsl:variable name="here" select="position()"/>
+        <tr>
+          <td>
+            <li><xsl:value-of select="name"/>: <xsl:value-of select="amount"/><xsl:value-of select="units"/></li>
+          </td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="$visible-properties[$here+$half]">
+                <li><xsl:value-of select="$visible-properties[$here+$half]/name"/>: <xsl:value-of select="$visible-properties[$here+$half]/amount"/><xsl:value-of select="$visible-properties[$here+$half]/units"/></li>
+              </xsl:when>
+              <xsl:otherwise/>
+            </xsl:choose>
+          </td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="$visible-properties[$here+$half+$half]">
+                <li><xsl:value-of select="$visible-properties[$here+$half+$half]/name"/>: <xsl:value-of select="$visible-properties[$here+$half+$half]/amount"/><xsl:value-of select="$visible-properties[$here+$half+$half]/units"/></li>
+              </xsl:when>
+              <xsl:otherwise/>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:for-each>
+    </table>
   </xsl:template>
 </xsl:stylesheet>

@@ -93,7 +93,7 @@
               <td colspan="3"> </td>
             </tr>
             <tr>
-              <td valign="top" class="ingredients">
+              <td valign="top"><div class="ingredients">
                 <ul>
                   <xsl:for-each select="krecipes-ingredients/*">
                     <xsl:choose>
@@ -113,6 +113,16 @@
                     </xsl:choose>
                   </xsl:for-each>
                 </ul>
+              </div>
+              <xsl:if test="count(krecipes-properties/property[not(@hidden='true')]) > 0">
+                <div class="properties">
+                  <ul>
+                    <xsl:for-each select="krecipes-properties/property[not(@hidden='true')]">
+                      <li><xsl:value-of select="name"/>: <xsl:value-of select="amount"/><xsl:value-of select="units"/></li>
+                    </xsl:for-each>
+                  </ul>
+                </div>
+              </xsl:if>
               </td>
               <td> </td>
               <td valign="top">
@@ -157,19 +167,6 @@
                 </xsl:if>
               </td>
             </tr>
-            <tr>
-              <td colspan="3"> </td>
-            </tr>
-            <xsl:if test="krecipes-properties">
-              <tr>
-                <td valign="top" class="properties"><h1>Properties</h1>
-      Properties (TODO)
-    </td>
-              </tr>
-              <tr>
-                <td> </td>
-              </tr>
-            </xsl:if>
           </table>
           <xsl:if test="position() != last()">
             <hr size="3"/>

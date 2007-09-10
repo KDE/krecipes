@@ -87,7 +87,11 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 	}
 	xml += "</amount>\n";
 	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
-	xml += "<unit>" + QStyleSheet::escape( unit_str ) + "</unit>\n";
+
+	bool useAbbreviations = KGlobal::config()->readBoolEntry("AbbreviateUnits");
+	QString unit = ing.units.determineName( ing.amount + ing.amount_offset, useAbbreviations );
+	xml += "<unit>" + QStyleSheet::escape( unit ) + "</unit>\n";
+
 	if ( ing.prepMethodList.count() > 0 )
 		xml += "<prep>" + QStyleSheet::escape( ing.prepMethodList.join(",") ) + "</prep>\n";
 
@@ -176,10 +180,46 @@ QString KreExporter::createContent( const RecipeList& recipes )
 			if ( !group.isEmpty() )
 				xml += "</ingredient-group>\n";
 		}
-
-		/// @todo add ingredient properties
-
+	
 		xml += "</krecipes-ingredients>\n";
+
+		KConfig *config = KGlobal::config();
+		QStringList hiddenList = config->readListEntry("HiddenProperties");
+		if (( *recipe_it ).properties.count() > 0) {
+			xml += "<krecipes-properties>\n";
+			for ( IngredientPropertyList::const_iterator prop_it = ( *recipe_it ).properties.begin(); prop_it != ( *recipe_it ).properties.end(); ++prop_it ) {
+				if ( hiddenList.find((*prop_it).name) == hiddenList.end() ) {
+					xml += "<property>\n";
+				} else {
+					xml += "<property hidden=\"true\">\n";
+				}
+				QString amount_str;
+
+				xml += "<name>";
+				xml += QStyleSheet::escape( (*prop_it).name );
+				xml += "</name>\n";
+
+				double prop_amount = (*prop_it).amount;
+				if ( prop_amount > 0 ) { //TODO: make the precision configuratble
+					prop_amount = double( qRound( prop_amount * 10.0 ) ) / 10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
+					amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
+				}
+				else
+					amount_str = "0";
+
+				xml += "<amount>";
+				xml += amount_str;
+				xml += "</amount>\n";
+
+				xml += "<units>";
+				xml += QStyleSheet::escape( (*prop_it).units );
+				xml += "</units>\n";
+
+				xml += "</property>\n";
+			}
+			xml += "</krecipes-properties>\n";
+		}
+
 		xml += "<krecipes-instructions>\n";
 		xml += QStyleSheet::escape( ( *recipe_it ).instructions );
 		xml += "</krecipes-instructions>\n";
