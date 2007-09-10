@@ -1,45 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE krecipes-layout>
 <krecipes-layout version="0.5" >
- <authors>
-  <visible>false</visible>
-  <border width="1" style="none" color="#000000" />
- </authors>
- <background/>
- <categories>
-  <visible>false</visible>
-  <border width="1" style="none" color="#000000" />
- </categories>
- <ingredients>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </ingredients>
- <instructions>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </instructions>
- <photo>
-  <visible>false</visible>
-  <border width="1" style="none" color="#000000" />
- </photo>
- <prep_time>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </prep_time>
- <properties>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </properties>
- <ratings>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </ratings>
- <title>
-  <visible>true</visible>
-  <border width="1" style="none" color="#000000" />
- </title>
- <yield>
-  <visible>false</visible>
-  <border width="1" style="none" color="#000000" />
- </yield>
 </krecipes-layout>
