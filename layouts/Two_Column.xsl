@@ -93,7 +93,8 @@
               <td colspan="3"> </td>
             </tr>
             <tr>
-              <td valign="top"><div class="ingredients">
+              <td valign="top">
+                <div class="ingredients">
                 <ul>
                   <xsl:for-each select="krecipes-ingredients/*">
                     <xsl:choose>
