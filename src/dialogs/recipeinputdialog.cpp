@@ -1287,7 +1287,7 @@ void RecipeInputDialog::slotIngredientParser()
 	if ( dlg.exec() == QDialog::Accepted ) {
 		IngredientList ings = dlg.ingredients();
 		QStringList usedGroups;
-		bool haveHeader = ingredientList->lastItem()->rtti() == INGGRPLISTVIEWITEM_RTTI;
+		bool haveHeader = ingredientList->lastItem() && ingredientList->lastItem()->rtti() == INGGRPLISTVIEWITEM_RTTI;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
 			if ( !(*it).group.isEmpty() && usedGroups.find((*it).group) == usedGroups.end() ) {
 				int id = IngredientInputWidget::createNewGroupIfNecessary((*it).group,database);
