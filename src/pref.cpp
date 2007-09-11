@@ -56,28 +56,28 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	KConfig *config = KGlobal::config();
 	config->setGroup( "DBType" );
 
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 	frame = addPage( i18n( "Server Settings" ),
 	                 QString( i18n( "Database Server Options (%1)" ) ).arg( config->readEntry( "Type" ) ),
-	                 il.loadIcon( "network_local", KIcon::NoGroup, 32 ) );
+	                 il->loadIcon( "network_local", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* layout = new QHBoxLayout( frame );
 	m_pageServer = new ServerPrefs( frame );
 	layout->addWidget( m_pageServer );
 	m_helpMap.insert(0,"configure-server-settings");
 
-	frame = addPage( i18n( "Formatting" ), i18n( "Customize Formatting" ), il.loadIcon( "math_frac", KIcon::NoGroup, 32 ) );
+	frame = addPage( i18n( "Formatting" ), i18n( "Customize Formatting" ), il->loadIcon( "math_frac", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* formatting_layout = new QHBoxLayout( frame );
 	m_pageNumbers = new NumbersPrefs( frame );
 	formatting_layout->addWidget( m_pageNumbers );
 	m_helpMap.insert(1,"custom-formatting");
 
-	frame = addPage( i18n( "Import/Export" ), i18n( "Recipe Import and Export Options" ), il.loadIcon( "down", KIcon::NoGroup, 32 ) );
+	frame = addPage( i18n( "Import/Export" ), i18n( "Recipe Import and Export Options" ), il->loadIcon( "down", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* import_layout = new QHBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
 	m_helpMap.insert(2,"import-export-preference");
 
-	frame = addPage( i18n( "Performance" ), i18n( "Performance Options" ), il.loadIcon( "launch", KIcon::NoGroup, 32 ) );
+	frame = addPage( i18n( "Performance" ), i18n( "Performance Options" ), il->loadIcon( "launch", KIcon::NoGroup, 32 ) );
 	QHBoxLayout* performance_layout = new QHBoxLayout( frame );
 	m_pagePerformance = new PerformancePrefs( frame );
 	performance_layout->addWidget( m_pagePerformance );

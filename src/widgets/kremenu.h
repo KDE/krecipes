@@ -143,7 +143,7 @@ public slots:
 
 private:
 	// Button parts
-	QPixmap* icon;
+	QPixmap icon;
 	QString text;
 	bool highlighted;
 

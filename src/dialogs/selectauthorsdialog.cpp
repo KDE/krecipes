@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 #include "backends/recipedb.h"
 
@@ -43,7 +44,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	
 	// Add/Remove buttons
 
-	il = new KIconLoader;
+	KIconLoader *il = KGlobal::iconLoader();
 	addAuthorButton = new QPushButton( topBox );
 	QPixmap pm = il->loadIcon( "down", KIcon::NoGroup, 16 );
 	addAuthorButton->setIconSet( pm );

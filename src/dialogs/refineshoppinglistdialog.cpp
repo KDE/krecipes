@@ -55,15 +55,15 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
 
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 
 	addButton = new QPushButton( layout2Widget, "addButton" );
-	addButton->setIconSet( il.loadIconSet( "forward", KIcon::Small ) );
+	addButton->setIconSet( il->loadIconSet( "forward", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( layout2Widget, "removeButton" );
-	removeButton->setIconSet( il.loadIconSet( "back", KIcon::Small ) );
+	removeButton->setIconSet( il->loadIconSet( "back", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );

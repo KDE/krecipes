@@ -39,7 +39,7 @@
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent, 0, true ), m_configEntry(configEntry)
 {
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 
 	QVBoxLayout * layout = new QVBoxLayout( this );
 
@@ -75,8 +75,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	layout->addWidget( viewBox );
 
 	QHBox *buttonsBox = new QHBox( this );
-	QPushButton *okButton = new QPushButton( il.loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
-	QPushButton *cancelButton = new QPushButton( il.loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
+	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
+	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
 	layout->addWidget( buttonsBox );
 
 	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );

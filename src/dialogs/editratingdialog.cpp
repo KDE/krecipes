@@ -119,9 +119,9 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( removeButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
 
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
-	kpop->insertItem( il.loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
+	kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
 
 	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
 		criteriaComboBox->insertItem( ( *criteria_it ).name );

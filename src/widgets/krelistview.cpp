@@ -49,8 +49,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterBox->setMargin( 2 );
 
 		QPushButton *clearSearchButton = new QPushButton( filterBox );
-		KIconLoader il;
-		clearSearchButton->setPixmap( il.loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
+		KIconLoader *il = KGlobal::iconLoader();
+		clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
 
 		filterLabel = new QLabel( filterBox );
 		filterLabel->setText( " " + i18n( "Search:" ) );

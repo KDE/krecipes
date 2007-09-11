@@ -126,18 +126,18 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	MenuId id = menus.append( newMenu );
 
 	// Add a button to the main menu for this submenu
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 	KreMenuButton *newMenuButton = new KreMenuButton( this );
 	newMenuButton->subMenuId = id;
 	newMenuButton->setTitle( title );
-	newMenuButton->setIconSet( il.loadIconSet( icon, KIcon::Panel ) );
+	newMenuButton->setIconSet( il->loadIconSet( icon, KIcon::Panel ) );
 
 	// Add a button to the submenu to go back to the top menu
 	KreMenuButton *newSubMenuButton = new KreMenuButton( this );
 	newSubMenuButton->menuId = id;
 	newSubMenuButton->subMenuId = mainMenuId;
 	newSubMenuButton->setTitle( i18n( "Up..." ) );
-	newSubMenuButton->setIconSet( il.loadIconSet( "1uparrow", KIcon::Panel ) );
+	newSubMenuButton->setIconSet( il->loadIconSet( "1uparrow", KIcon::Panel ) );
 
 	connect( newMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
 	connect( newSubMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
@@ -334,7 +334,6 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const
 #endif
 		panel( _panel )
 {
-	icon = 0;
 	highlighted = false;
 	text = QString::null;
 
@@ -354,7 +353,6 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const
 
 KreMenuButton::~KreMenuButton()
 {
-	delete icon;
 }
 
 void KreMenuButton::setTitle( const QString &s )
@@ -396,8 +394,8 @@ QSize KreMenuButton::minimumSizeHint() const
 {
 	int text_width = QMAX( fontMetrics().width( text.section( '\n', 0, 0 ) ), fontMetrics().width( text.section( '\n', 1, 1 ) ) );
 
-	if ( icon )
-		return QSize( 40 + icon->width() + text_width, 30 );
+	if ( !icon.isNull() )
+		return QSize( 40 + icon.width() + text_width, 30 );
 	else
 		return QSize( 40 + text_width, 30 );
 }
@@ -461,7 +459,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	painter.begin( &kpm );
 	int xPos, yPos;
-	if ( icon ) {
+	if ( !icon.isNull() ) {
 		// Set the icon's desired horizontal position
 
 		xPos = 10;
@@ -471,13 +469,14 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		// Make sure it fits in the area
 		// If not, resize and reposition horizontally to be centered
 
-		QPixmap scaledIcon = *icon;
+		QPixmap scaledIcon;
 
-		if ( ( icon->height() > height() ) || ( icon->width() > width() / 3 ) )  // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
+		if ( ( icon.height() > height() ) || ( icon.width() > width() / 3 ) )  // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
 		{
-			QImage image;
-			image = ( *icon );
+			QImage image = icon.convertToImage();
 			scaledIcon.convertFromImage( image.smoothScale( width() / 3, height(), QImage::ScaleMin ) );
+		} else {
+			scaledIcon = icon;
 		}
 
 		// Calculate the icon's vertical position
@@ -566,9 +565,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 void KreMenuButton::setIconSet( const QIconSet &is )
 {
-	delete icon;
-
-	icon = new QPixmap( is.pixmap( QIconSet::Small, QIconSet::Normal, QIconSet::On ) );
+	icon = is.pixmap( QIconSet::Small, QIconSet::Normal, QIconSet::On );
 
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget() ->minimumWidth() < minimumSizeHint().width() )

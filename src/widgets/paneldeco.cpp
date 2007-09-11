@@ -102,11 +102,9 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 #endif
 {
 	setMinimumHeight( 30 );
-	icon = 0;
 	panelTitle = QString::null;
 	if ( !iconName.isNull() ) {
-		KIconLoader il;
-		icon = new QPixmap( il.loadIcon( iconName, KIcon::NoGroup, 22 ) );
+		icon = KGlobal::iconLoader()->loadIcon( iconName, KIcon::NoGroup, 22 );
 	}
 
 	if ( !title.isNull() ) {
@@ -116,7 +114,6 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 
 TopDeco::~TopDeco()
 {
-	delete icon;
 }
 
 
@@ -138,11 +135,11 @@ void TopDeco::paintEvent( QPaintEvent * )
 
 	// Now Add the icon
 	int xpos = 0, ypos = 0;
-	if ( icon ) {
+	if ( !icon.isNull() ) {
 		xpos = 20;
-		ypos = ( height() - icon->height() ) / 2 - 1;
-		painter.drawPixmap( xpos, ypos, *icon );
-		xpos += icon->width(); // Move it so that later we can easily place the text
+		ypos = ( height() - icon.height() ) / 2 - 1;
+		painter.drawPixmap( xpos, ypos, icon );
+		xpos += icon.width(); // Move it so that later we can easily place the text
 	}
 
 	// Finally, draw the text besides the icon
@@ -166,9 +163,7 @@ void TopDeco::setHeader( const QString &title, const QString &iconName )
 	if ( !title.isNull() )
 		panelTitle = title;
 	if ( !iconName.isNull() ) {
-		KIconLoader il;
-		delete icon;
-		icon = new QPixmap( il.loadIcon( iconName, KIcon::NoGroup, 22 ) );
+		icon = KGlobal::iconLoader()->loadIcon( iconName, KIcon::NoGroup, 22 );
 	}
 	if ( !title.isNull() || !iconName.isNull() )
 		update();

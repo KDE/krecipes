@@ -77,17 +77,17 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : QVBox( par
 	mealTabs->setMargin( 5 );
 
 	// Button bar
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader(); 
 
 	QHBox *bottom_layout = new QHBox( this );
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	okButton = new QPushButton( bottom_layout );
-	okButton->setIconSet( il.loadIconSet( "button_ok", KIcon::Small ) );
+	okButton->setIconSet( il->loadIconSet( "button_ok", KIcon::Small ) );
 	okButton->setText( i18n( "Create the diet" ) );
 
 	QPushButton *clearButton = new QPushButton( bottom_layout );
-	clearButton->setIconSet( il.loadIconSet( "editclear", KIcon::Small ) );
+	clearButton->setIconSet( il->loadIconSet( "editclear", KIcon::Small ) );
 	clearButton->setText( i18n( "Clear" ) );
 
 	// Create Tabs
@@ -335,16 +335,16 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
 
 	// Next dish/ Previous dish buttons
-	KIconLoader il;
+	KIconLoader *il = KGlobal::iconLoader();
 	buttonPrev = new QToolButton( toolBar );
 	buttonPrev->setUsesTextLabel( true );
 	buttonPrev->setTextLabel( i18n( "Previous Dish" ) );
-	buttonPrev->setIconSet( il.loadIconSet( "back", KIcon::Small ) );
+	buttonPrev->setIconSet( il->loadIconSet( "back", KIcon::Small ) );
 	buttonPrev->setTextPosition( QToolButton::Under );
 	buttonNext = new QToolButton( toolBar );
 	buttonNext->setUsesTextLabel( true );
 	buttonNext->setTextLabel( i18n( "Next Dish" ) );
-	buttonNext->setIconSet( il.loadIconSet( "forward", KIcon::Small ) );
+	buttonNext->setIconSet( il->loadIconSet( "forward", KIcon::Small ) );
 	buttonNext->setTextPosition( QToolButton::Under );
 
 

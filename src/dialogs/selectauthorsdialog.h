@@ -17,7 +17,6 @@
 #include <qpushbutton.h>
 
 #include <kdialogbase.h>
-#include <kiconloader.h>
 #include <klistview.h>
 #include <kcombobox.h>
 
@@ -48,7 +47,6 @@ private:
 	QPushButton *cancelButton;
 	QPushButton *addAuthorButton;
 	QPushButton *removeAuthorButton;
-	KIconLoader *il;
 
 	//Variables
 	ElementList authorList;

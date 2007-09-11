@@ -324,8 +324,6 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		kpop->insertItem( il->loadIcon( "editpaste", KIcon::NoGroup, 16 ), i18n( "Paste as Subcategory" ), this, SLOT( pasteAsSub() ), CTRL + SHIFT + Key_V );
 		kpop->polish();
 
-		delete il;
-
 		connect( kpop, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
 		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( modCategory( QListViewItem* ) ) );

@@ -131,13 +131,13 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		setRenameable( 3, true );
 		setRenameable( 4, true );
 
-		KIconLoader il;
+		KIconLoader *il = KGlobal::iconLoader();
 
 		kpop = new KPopupMenu( this );
-		kpop->insertItem( il.loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il.loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
-		kpop->insertItem( il.loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
 		typeComboBox = new QComboBox( false, viewport() );

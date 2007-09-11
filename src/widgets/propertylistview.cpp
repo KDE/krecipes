@@ -127,7 +127,7 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 	if ( editable ) {
 		setRenameable( 0, true );
 
-		KIconLoader *il = new KIconLoader;
+		KIconLoader *il = KGlobal::iconLoader();
 
 		kpop = new KPopupMenu( this );
 		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
@@ -135,8 +135,6 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 			                  () ), Key_Delete );
 		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
-
-		delete il;
 
 		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modProperty( QListViewItem* ) ) );

@@ -102,8 +102,8 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
 
-	KIconLoader il;
-	setPixmap( il.loadIcon( "categories", KIcon::NoGroup, 16 ) );
+	KIconLoader *il = KGlobal::iconLoader();
+	setPixmap( il->loadIcon( "categories", KIcon::NoGroup, 16 ) );
 
 	setSelectionMode( QListView::Extended );
 

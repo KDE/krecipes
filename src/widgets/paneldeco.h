@@ -78,7 +78,7 @@ public slots:
 protected:
 	virtual void paintEvent( QPaintEvent *e );
 private:
-	QPixmap *icon;
+	QPixmap icon;
 	QString panelTitle;
 };
 

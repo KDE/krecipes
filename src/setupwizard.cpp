@@ -572,8 +572,8 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	fileEdit->setText( locateLocal ( "appdata", "krecipes.krecdb" ) );
 	hbox->setStretchFactor( fileEdit, 2 );
 
-	KIconLoader il;
-	QPushButton *file_select = new QPushButton( il.loadIcon( "fileopen", KIcon::NoGroup, 16 ), QString::null, hbox );
+	KIconLoader *il = KGlobal::iconLoader();
+	QPushButton *file_select = new QPushButton( il->loadIcon( "fileopen", KIcon::NoGroup, 16 ), QString::null, hbox );
 	QToolTip::add
 		( file_select, i18n( "Open file dialog" ) );
 	file_select->setFixedWidth( 25 );

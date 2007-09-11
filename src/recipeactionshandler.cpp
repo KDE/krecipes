@@ -45,7 +45,7 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		parentListView( _parentListView ),
 		database( db )
 {
-	KIconLoader * il = new KIconLoader;
+	KIconLoader *il = KGlobal::iconLoader();
 
 	kpop = new KPopupMenu( parentListView );
 	if ( actions & Open )
@@ -78,8 +78,6 @@ RecipeActionsHandler::RecipeActionsHandler( KListView *_parentListView, RecipeDB
 		catPop->insertItem( il->loadIcon( "fileexport", KIcon::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 
 	catPop->polish();
-
-	delete il;
 
 	connect( parentListView, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
 	connect( parentListView, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( open() ) );

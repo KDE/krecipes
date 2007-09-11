@@ -66,7 +66,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	searchBar->setSpacing( 7 );
 	layout->addWidget( searchBar, 1, 1 );
 
-	KIconLoader *il = new KIconLoader;
+	KIconLoader *il = KGlobal::iconLoader();
 	QPushButton *clearSearchButton = new QPushButton( searchBar );
 	clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
 
@@ -160,8 +160,6 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
-
-	delete il;
 }
 
 SelectRecipeDialog::~SelectRecipeDialog()

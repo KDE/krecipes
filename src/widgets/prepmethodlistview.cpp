@@ -73,8 +73,6 @@ StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, boo
 		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
-		delete il;
-
 		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modPrepMethod( QListViewItem* ) ) );
 		connect( this, SIGNAL( itemRenamed( QListViewItem* ) ), this, SLOT( savePrepMethod( QListViewItem* ) ) );

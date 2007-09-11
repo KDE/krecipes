@@ -114,7 +114,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	loadedRecipe->instructions = QString::null;
 	database = db;
 
-	KIconLoader *il = new KIconLoader;
+	KIconLoader *il = KGlobal::iconLoader();
 
 	// Tabs
 	tabWidget = new QTabWidget( this, "tabWidget" );
@@ -499,8 +499,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : QVBox( p
 	connect ( this, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveButton( bool ) ) );
 
 	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
-
-	delete il;
 
 	//FIXME: We've got some sort of build issue... we get undefined references to CreateUnitDialog without this dummy code here
 	CreateUnitDialog d( this, "" );
