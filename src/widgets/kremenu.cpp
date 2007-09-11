@@ -233,6 +233,8 @@ QSize KreMenu::minimumSizeHint() const
 		}
 	}
 
+	delete childElements; //just delete the list, not the children
+
 	return QSize( width, 150 );
 }
 

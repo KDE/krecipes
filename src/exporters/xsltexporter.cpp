@@ -222,11 +222,11 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	m_cachedCSS = QString::null;
 
-	CategoryTree unneededTree;
-	KreExporter *exporter = new KreExporter( &unneededTree, "unused", "*.kreml" );
+	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml" );
 	QString buffer;
 	QTextStream stream(buffer,IO_WriteOnly);
 	exporter->writeStream(stream,recipes);
+	delete exporter;
 
 	QCString content = buffer.utf8();
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
@@ -256,7 +256,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	xmlDocPtr htmlDoc = xsltApplyStylesheet(xslt, kremlDoc, (const char**)params);
 
 	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
-		free(params[2+j+1]);
+		delete[] params[2+j+1];
 	}
 
 	xmlChar *xmlOutput;

@@ -49,7 +49,10 @@ int KreExporter::supportedItems() const
 
 int KreExporter::headerFlags() const
 {
-	return RecipeDB::Categories;
+	if (categories)
+		return RecipeDB::Categories;
+	else
+		return 0;
 }
 
 QString KreExporter::createHeader( const RecipeList& recipes )
@@ -251,6 +254,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recipes )
 {
+	if (!categories) return;
+
 	QValueList<int> categoriesUsed;
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {

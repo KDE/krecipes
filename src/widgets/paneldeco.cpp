@@ -167,6 +167,7 @@ void TopDeco::setHeader( const QString &title, const QString &iconName )
 		panelTitle = title;
 	if ( !iconName.isNull() ) {
 		KIconLoader il;
+		delete icon;
 		icon = new QPixmap( il.loadIcon( iconName, KIcon::NoGroup, 22 ) );
 	}
 	if ( !title.isNull() || !iconName.isNull() )
