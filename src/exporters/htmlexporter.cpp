@@ -45,53 +45,54 @@
 HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-
-	//let's do everything we can to be sure at least some layout is loaded
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.xsl" ) );
-	if ( template_filename.isEmpty() || !QFile::exists( template_filename ) )
-		template_filename = locate( "appdata", "layouts/Default.xsl" );
-	kdDebug() << "Using template file: " << template_filename << endl;
-
-	setTemplate( template_filename );
-
-	//let's do everything we can to be sure at least some layout is loaded
-	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
-	if ( m_layoutFilename.isEmpty() || !QFile::exists( m_layoutFilename ) )
-		m_layoutFilename = locate( "appdata", "layouts/None.klo" );
-	kdDebug() << "Using layout file: " << m_layoutFilename << endl;
+	m_templateContent = "\
+<table width=\"100%\">\
+    <tr><td class=\"title\" colspan=\"3\" width=\"100%\">**TITLE**</td></tr>\
+    <tr><td colspan=\"3\">&nbsp;</td></tr>\
+    <tr>\
+      <td width=\"20%\">\
+        <img src=\"**PHOTO**\" class=\"photo\" />\
+      </td>\
+\
+      <td width=\"3%\">&nbsp;</td>\
+\
+      <td>\
+        <p class=\"overall_rating\">**OVERALL_RATING**</p>\
+        <p class=\"categories\">**CATEGORIES**</p>\
+        <p class=\"authors\">**AUTHORS**</p>\
+        <p class=\"yield\">**YIELD**</p>\
+        <p class=\"prep_time\">**PREP_TIME**</p>\
+      </td>\
+    </tr>\
+\
+    <tr><td colspan=\"3\">&nbsp;</td></tr>\
+\
+    <tr><td valign=\"top\" class=\"ingredients\" colspan=\"3\">**INGREDIENTS**</td></tr>\
+\
+    <tr><td colspan=\"3\">&nbsp;</td></tr>\
+\
+    <tr><td valign=\"top\" class=\"instructions\" colspan=\"3\">**INSTRUCTIONS**</td></tr>\
+\
+    <tr><td colspan=\"3\">&nbsp;</td></tr>\
+\
+    <tr><td valign=\"top\" class=\"properties\" colspan=\"3\">**PROPERTIES**</td></tr>\
+\
+    <tr><td colspan=\"3\">&nbsp;</td></tr>\
+\
+    <tr><td class=\"ratings\" colspan=\"3\">**RATINGS**</td></tr>\
+</table>\
+<hr size=\"3\" />\
+";
 }
 
 HTMLExporter::~HTMLExporter()
 {
 }
 
-void HTMLExporter::setTemplate( const QString &filename )
-{
-	QFile templateFile( filename );
-	if ( templateFile.open( IO_ReadOnly ) ) {
-		m_templateFilename = filename;
-		m_templateContent = QString( templateFile.readAll() );
-	}
-	else
-		kdDebug()<<"couldn't find/open template file"<<endl;
-}
-
-void HTMLExporter::setStyle( const QString &filename )
-{
-	m_layoutFilename = filename;
-}
-
 int HTMLExporter::supportedItems() const
 {
-	int items = RecipeDB::All ^ RecipeDB::Properties;
-
-	QMap<QString,bool>::const_iterator it = m_visibilityMap.find("properties");
-	if ( it == m_visibilityMap.end() || it.data() == true )
-		items |= RecipeDB::Properties;
-
-	return RecipeDB::All;
+	int items = RecipeDB::All;
+	return items;
 }
 
 QString HTMLExporter::createContent( const Recipe& recipe )
@@ -118,32 +119,7 @@ QString HTMLExporter::createContent( const RecipeList& recipes )
 
 QString HTMLExporter::createHeader( const RecipeList & )
 {
-	m_visibilityMap.clear();
-	m_columnsMap.clear();
-
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-
 	m_error = false;
-
-	if ( m_templateContent.isEmpty() ) {
-		QString errorStr = i18n("<html><body>\n"
-			"<p><b>Error: </b>Unable to find a layout file, which is"
-			" needed to view the recipe.</p>"
-			"<p>Krecipes was probably not properly installed.</p>"
-			"</body></html>");
-		m_error = true;
-		return errorStr;
-	}
-
-	QFile layoutFile( m_layoutFilename );
-	QString error; int line; int column;
-	QDomDocument doc;
-	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
-		kdDebug()<<"Unable to load style information.  Will create HTML without it..."<<endl;
-	}
-	else
-		processDocument(doc);
 
 	//put all the recipe photos into this directory
 	QDir dir;
@@ -163,17 +139,20 @@ QString HTMLExporter::createHeader( const RecipeList & )
 
 	output += "<style type=\"text/css\">\n";
 
-	QString cssContent;
-	QFileInfo info(m_templateFilename);
-	QFile cssFile(info.dirPath(true) + "/" + info.baseName() + ".css");
-	kdDebug()<<info.dirPath(true) + "/" + info.baseName() + ".css"<<endl;
-	if ( cssFile.open( IO_ReadOnly ) ) {
-		cssContent = QString( cssFile.readAll() );
-	}
-	output += cssContent;
+	output += "\
+.title {\
+  text-align: center;\
+  font-weight: bold;\
+  font-size: 130%;\
+}\
+\
+.ingredients-header, .properties-header, .ratings-header, .instructions-header {\
+  border-top: 2px solid gray;\
+  padding-top: 5px;\
+  font-size: 120%; \
+";
 
-	output += m_cachedCSS;
-	m_cachedCSS = QString::null;
+
 	output += "</style>";
 	output += "</head>";
 	output += "<body class=\"background\">";
@@ -181,52 +160,6 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	return output;
 }
 
-void HTMLExporter::beginObject( const QString &object )
-{
-	m_cachedCSS += "."+object+" { \n";
-}
-
-void HTMLExporter::endObject()
-{
-	m_cachedCSS += " } \n";
-}
-
-void HTMLExporter::loadBackgroundColor( const QString &/*object*/, const QColor& color )
-{
-	m_cachedCSS += bgColorAsCSS(color);
-}
-
-void HTMLExporter::loadFont( const QString &/*object*/, const QFont& font )
-{
-	m_cachedCSS += fontAsCSS(font);
-}
-
-void HTMLExporter::loadTextColor( const QString &/*object*/, const QColor& color )
-{
-	m_cachedCSS += textColorAsCSS(color);
-}
-
-void HTMLExporter::loadVisibility( const QString &object, bool visible )
-{
-	m_cachedCSS += visibilityAsCSS(visible);
-	m_visibilityMap.insert(object,visible);
-}
-
-void HTMLExporter::loadAlignment( const QString &/*object*/, int alignment )
-{
-	m_cachedCSS += alignmentAsCSS(alignment);
-}
-
-void HTMLExporter::loadBorder( const QString &/*object*/, const KreBorder& border )
-{
-	m_cachedCSS += borderAsCSS(border);
-}
-
-void HTMLExporter::loadColumns( const QString & object, int cols )
-{
-	m_columnsMap.insert(object,cols);
-kdDebug()<<object<<" has "<<cols<<" columns"<<endl;
-}
 
 QString HTMLExporter::createFooter()
 {
@@ -260,11 +193,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 
 QString HTMLExporter::HTMLIfVisible( const QString &name, const QString &html )
 {
-	QMap<QString,bool>::const_iterator it = m_visibilityMap.find(name);
-	if ( it == m_visibilityMap.end() || it.data() == true )
-		return html;
-	else
-		return QString::null;
+	return html;
 }
 
 void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
@@ -277,6 +206,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = QStyleSheet::escape( recipe.instructions );
 	instr_html.replace( "\n", "<br />" );
+	if (!instr_html.isEmpty()) {
+		instr_html.prepend("<h1 class=\"instructions-header\">"+i18n("Instructions")+"</h1>");
+	}
 	content = content.replace( "**INSTRUCTIONS**", HTMLIfVisible("instructions",instr_html) );
 
 	//=======================SERVINGS======================//
@@ -338,12 +270,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-	QString ingredient_format = config->readEntry( "Ingredient", "%n%p: %a %u" );
-
-	QMap<QString,int>::const_iterator cols_it = m_columnsMap.find("ingredients");
-	int cols = 1;
-	if ( cols_it != m_columnsMap.end() )
-		cols = cols_it.data();
+	int cols = 2;
 	int per_col = recipe.ingList.count() / cols;
 	if ( recipe.ingList.count() % cols != 0 ) //round up if division is not exact
 		per_col++;
@@ -385,15 +312,15 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 			QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, useAbbreviations );
 
-			QString tmp_format( ingredient_format );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *ing_it ).name )+"</span>" );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), "<span class=\"ingredient-amount\">"+amount_str+"</span>" );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+"</span>" );
-			tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), "<span class=\"ingredient-prep-methods\">"+(( ( *ing_it ).prepMethodList.count() == 0 ) ?
-			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>" );
+			QString tmp_format;
+			tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
+			tmp_format += "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+" </span>";
+			tmp_format += "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *ing_it ).name )+"</span>";
+			tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *ing_it ).prepMethodList.count() == 0 ) ?
+			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>";
 
 			if ( (*ing_it).substitutes.count() > 0 )
-				tmp_format += ", "+i18n("or");
+				tmp_format += ", "+i18n("OR");
 
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 
@@ -407,16 +334,16 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	
 				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
 
-				QString tmp_format( ingredient_format );
-				tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), QStyleSheet::escape( ( *sub_it ).name ) );
-				tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), amount_str );
-				tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), QStyleSheet::escape(unit) );
-				tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), ( ( *sub_it ).prepMethodList.count() == 0 ) ?
-						QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ) );
+				QString tmp_format;
+				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
+				tmp_format += "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+" </span>";
+				tmp_format += "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *sub_it ).name )+"</span>";
+				tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *sub_it ).prepMethodList.count() == 0 ) ?
+														QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ))+"</span>";
 
 				++sub_it;
 				if ( sub_it != (*ing_it).substitutes.end() )
-					tmp_format += ", "+i18n("or");
+					tmp_format += ", "+i18n("OR");
 				ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 			}
 		}
@@ -427,6 +354,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( !ingredients_html.isEmpty() ) {
 		ingredients_html.prepend( "<table><tr><td valign=\"top\"><ul>" );
 		ingredients_html.append( "</ul></td></tr></table>" );
+		ingredients_html.prepend("<h1 class=\"ingredients-header\">"+i18n("Ingredients")+"</h1>");
 	}
 	content = content.replace( "**INGREDIENTS**", HTMLIfVisible("ingredients",ingredients_html) );
 
@@ -440,10 +368,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			visibleProperties.append( *prop_it );
 	}
 
-	cols_it = m_columnsMap.find("properties");
-	cols = 1;
-	if ( cols_it != m_columnsMap.end() )
-		cols = cols_it.data();
+	cols = 3;
 	per_col = visibleProperties.count() / cols;
 	if ( visibleProperties.count() % cols != 0 ) //round up if division is not exact
 		per_col++;
@@ -476,13 +401,14 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( !properties_html.isEmpty() ) {
 		properties_html.prepend( "<table><tr><td valign=\"top\"><ul>" );
 		properties_html.append( "</ul></td></tr></table>" );
+		properties_html.prepend("<h1 class=\"properties-header\">"+i18n("Properties")+"</h1>");
 	}
 	content = content.replace( "**PROPERTIES**", HTMLIfVisible("properties",properties_html) );
 
 	//=======================RATINGS======================//
 	QString ratings_html;
 	if ( recipe.ratingList.count() > 0 )
-		ratings_html += QString("<b>%1:</b>").arg(i18n("Ratings"));
+		ratings_html += QString("<h1 class=\"ratings-header\">%1</h1>").arg(i18n("Ratings"));
 
 	int rating_total = 0;
 	double rating_sum = 0;
@@ -496,11 +422,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ratings_html += "<table>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-			image_url = KURL::encode_string( image_url );
-			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
+			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+KURL::encode_string( image_url )+"\" /></td></tr>";
 			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+				kdDebug() << "saving: " << fi.dirPath(true) + "/" + image_url << endl;
 			}
 
 			rating_total++;
@@ -519,8 +445,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		double average = int(2*rating_sum/rating_total)/2;
 		overall_html += QString("<b>%1:</b>").arg(i18n("Overall Rating"));
 		QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-		image_url = KURL::encode_string( image_url );
-		overall_html +=  "<img src=\""+image_url+"\" />";
+		overall_html +=  "<img src=\""+KURL::encode_string( image_url )+"\" />";
 		if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
 			QPixmap starPixmap = Rating::starsPixmap(average,true);
 			starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );

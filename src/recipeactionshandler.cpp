@@ -363,7 +363,8 @@ void RecipeActionsHandler::exportRecipes( const QValueList<int> &ids, const QStr
 				exporter = new HTMLBookExporter( cat_structure, fd->baseURL().path(), "*.html" );
 			}
 			else if ( fd->currentFilter() == "*.html" ) {
-				exporter = new XSLTExporter( fileName, fd->currentFilter() );
+				exporter = new HTMLExporter( fileName, fd->currentFilter() );
+				XSLTExporter exporter_junk( fileName, "*.html" ); // AGH, i don't get build systems...
 			}
 			else if ( fd->currentFilter() == "*.cml" )
 				exporter = new CookMLExporter( fileName, fd->currentFilter() );

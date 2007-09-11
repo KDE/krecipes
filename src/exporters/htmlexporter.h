@@ -12,7 +12,6 @@
 #define HTMLEXPORTER_H
 
 #include <qdom.h>
-#include <qmap.h>
 
 #include "baseexporter.h"
 #include "klomanager.h"
@@ -35,9 +34,6 @@ public:
 	static void removeHTMLFiles( const QString &filename, int recipe_id );
 	static void removeHTMLFiles( const QString &filename, const QValueList<int> &recipe_ids );
 
-	void setTemplate( const QString &filename );
-	void setStyle( const QString &filename );
-
 protected:
 	QString createContent( const Recipe& recipe );
 	virtual QString createContent( const RecipeList & );
@@ -45,17 +41,6 @@ protected:
 	virtual QString createFooter();
 
 	virtual int progressInterval() const { return 1; }
-
-	virtual void loadBackgroundColor( const QString &obj, const QColor& );
-	virtual void loadFont( const QString &obj, const QFont& );
-	virtual void loadTextColor( const QString &obj, const QColor& );
-	virtual void loadVisibility( const QString &obj, bool );
-	virtual void loadAlignment( const QString &obj, int );
-	virtual void loadBorder( const QString &obj, const KreBorder& );
-	virtual void loadColumns( const QString & obj, int cols );
-
-	virtual void beginObject( const QString &obj );
-	virtual void endObject();
 
 	static QString escape( const QString & );
 
@@ -67,11 +52,6 @@ private:
 	void replaceIfVisible( QString &content, const QString &name, const QString &html );
 	QString HTMLIfVisible( const QString &name, const QString &html );
 
-	QString m_layoutFilename;
-	QString m_templateFilename;
-	QString m_cachedCSS;
-	QMap<QString,bool> m_visibilityMap;
-	QMap<QString,int> m_columnsMap;
 	bool m_error;
 };
 

@@ -1,4 +1,5 @@
 Changes from 1.0-beta1 to 1.0:
+  -New recipe layouts, thanks to a new XSL-based template system
   -New icons and splash screen (courtesy of Robert Wadley)
 
 Changes from 0.9 to 1.0-beta1:

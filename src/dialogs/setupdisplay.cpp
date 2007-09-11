@@ -183,6 +183,8 @@ void SetupDisplay::loadTemplate( const QString &filename )
 	
 	loadHTMLView( filename, tmpFile.name() );
 
+	tmpFile.unlink();
+
 	m_activeTemplate = filename;
 }
 

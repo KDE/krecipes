@@ -13,7 +13,6 @@
 
 #include <khtml_part.h>
 #include <dom/html_element.h>
-#include <dom/css_stylesheet.h>
 
 #include <qdom.h>
 #include <qwidget.h>

@@ -1,13 +1,13 @@
-Krecipes is a Recipe Book for KDE. It requires KDE 3.1 or greater (and Qt 3.1 or greater)
+Krecipes is a Recipe Book for KDE. It requires KDE 3.1 or greater (and Qt >= 3.1, but < 4)
 
 
 First of all, make sure you have at least one of the three necessary databases installed: SQLite, MySQL, or PostgreSQL. In case you decide to use MySQL or PostgreSQL, make sure also that you have Qt's MySQL or PostgreSQL plugin properly installed. The program won't work without database support.
  
-**  Building The Latest (0.9) Release
+**  Building The Latest (1.0) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-0.9.tar.gz
+ tar -zxf krecipes-1.0.tar.gz
  
  And compile (see ./configure --help for more compile options like '--prefix' and '--with-qt-dir')
  
