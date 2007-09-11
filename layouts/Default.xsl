@@ -271,14 +271,14 @@
     <xsl:variable name="visible-properties" select="krecipes-properties/property[not(@hidden='true')]"/>
     <xsl:variable name="t-size" select="count($visible-properties)"/>
     <xsl:variable name="half" select="ceiling($t-size div 3)"/>
-    <table>
+    <table width="100%">
       <xsl:for-each select="$visible-properties[position() &lt;= $half]">
         <xsl:variable name="here" select="position()"/>
         <tr>
-          <td>
+          <td width="33%">
             <li><xsl:value-of select="name"/>: <xsl:value-of select="amount"/><xsl:value-of select="units"/></li>
           </td>
-          <td>
+          <td width="33%">
             <xsl:choose>
               <xsl:when test="$visible-properties[$here+$half]">
                 <li><xsl:value-of select="$visible-properties[$here+$half]/name"/>: <xsl:value-of select="$visible-properties[$here+$half]/amount"/><xsl:value-of select="$visible-properties[$here+$half]/units"/></li>
@@ -286,7 +286,7 @@
               <xsl:otherwise/>
             </xsl:choose>
           </td>
-          <td>
+          <td width="33%">
             <xsl:choose>
               <xsl:when test="$visible-properties[$here+$half+$half]">
                 <li><xsl:value-of select="$visible-properties[$here+$half+$half]/name"/>: <xsl:value-of select="$visible-properties[$here+$half+$half]/amount"/><xsl:value-of select="$visible-properties[$here+$half+$half]/units"/></li>
