@@ -23,7 +23,6 @@
 
 class KrecipesView;
 
-class KPrinter;
 class KToggleAction;
 class KURL;
 class KDialog;
@@ -32,10 +31,6 @@ class ConversionDialog;
 /**
  * This class serves as the main window for Krecipes.  It handles the
  * menus, toolbars, and status bars.
- *
- * @short Main window class
- * @author $AUTHOR <$EMAIL>
- * @version $APP_VERSION
  */
 class Krecipes : public KMainWindow
 {
@@ -114,7 +109,6 @@ private:
 private:
 	KrecipesView *m_view;
 
-	KPrinter *m_printer;
 	KToggleAction *m_toolbarAction;
 	KToggleAction *m_statusbarAction;
 

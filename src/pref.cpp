@@ -30,7 +30,6 @@
 #include <qwhatsthis.h>
 #include <qframe.h>
 #include <qcombobox.h>
-#include <qregexp.h>
 
 #include <kapplication.h>
 #include <kconfig.h>

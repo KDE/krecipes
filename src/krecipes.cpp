@@ -45,7 +45,6 @@
 #include "backends/progressinterface.h"
 
 #include <qdragobject.h>
-#include <kprinter.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qmessagebox.h>
@@ -59,7 +58,6 @@
 #include <kstatusbar.h>
 #include <kkeydialog.h>
 #include <kaccel.h>
-#include <kio/netaccess.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
 #include <kcursor.h>
@@ -73,8 +71,7 @@
 
 Krecipes::Krecipes()
 		: KMainWindow( 0, "Krecipes" ),
-		m_view( new KrecipesView( this ) ),
-		m_printer( 0 )
+		m_view( new KrecipesView( this ) )
 {
 	// accept dnd
 	setAcceptDrops( true );

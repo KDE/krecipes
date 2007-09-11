@@ -13,25 +13,14 @@
 
 #include "krecipesview.h"
 
-#include <cstdlib>
-
 #include <qlayout.h>
 #include <qimage.h>
-#include <qpainter.h>
-#include <qpalette.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
-#include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprogress.h>
-#include <krun.h>
-#include <ktrader.h>
-#include <kurl.h>
-#include <kcursor.h>
 
 #include "recipeactionshandler.h"
 #include "setupwizard.h"
@@ -83,8 +72,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Read the database setup
 
-	KConfig *config;
-	config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->sync();
 
 
@@ -540,7 +528,7 @@ void KrecipesView::createNewElement( void )
 
 void KrecipesView::wizard( bool force )
 {
-	KConfig * config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup( "Wizard" );
 	bool setupDone = config->readBoolEntry( "SystemSetup", false );
 
@@ -557,8 +545,6 @@ void KrecipesView::wizard( bool force )
 		SetupWizard *setupWizard = new SetupWizard( this );
 		if ( setupWizard->exec() == QDialog::Accepted )
 		{
-			KConfig * config;
-			config = kapp->config();
 			config->sync();
 			config->setGroup( "DBType" );
 			dbType = config->readEntry( "Type", "SQLite" );
