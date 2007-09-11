@@ -139,14 +139,10 @@ protected:
 	QVBoxLayout* Form1Layout;
 	QVBoxLayout* numberButtonGroupLayout;
 
-	KComboBox *ingredientEdit;
 	QCheckBox *abbrevButton;
-
-	QLabel *exampleLabel;
 
 protected slots:
 	virtual void languageChange();
-	void updateExample( const QString &format );
 
 };
 

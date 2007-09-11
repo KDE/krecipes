@@ -45,6 +45,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	propertyChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	propertyChooseView->addColumn( i18n( "Property" ) );
+	propertyChooseView->setSorting(1);
 	propertyChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( propertyChooseView );
 

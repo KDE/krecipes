@@ -481,24 +481,6 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	numberButtonGroup->insert( decimalRadioButton, 0 );
 	numberButtonGroup->insert( fractionRadioButton, 1 );
 
-	//ingredient display format
-	QGroupBox *ingredientGrpBox = new QGroupBox( 1, Qt::Horizontal, i18n( "Ingredients" ), this );
-
-	QHBox *ingredientBox = new QHBox( ingredientGrpBox );
-	( void ) new QLabel( i18n( "Ingredient Format:" ), ingredientBox );
-	ingredientEdit = new KComboBox( true, ingredientBox );
-	( void ) new QLabel( i18n( "%n: Name<br>"
-	                           "%p: Preparation method<br>"
-	                           "%a: Amount<br>"
-	                           "%u: Unit"
-	                         ), ingredientGrpBox );
-
-	QHBox *exampleBox = new QHBox( ingredientGrpBox );
-	( void ) new QLabel( i18n("Example:"), exampleBox );
-	exampleLabel = new QLabel( QString::null, exampleBox );
-
-	Form1Layout->addWidget( ingredientGrpBox );
-
 	//unit display format
 	QGroupBox *abbrevGrpBox = new QGroupBox( 1, Qt::Vertical, i18n( "Units" ), this );
 	QHBox *abbrevBox = new QHBox( abbrevGrpBox );
@@ -519,23 +501,7 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	int button = ( config->readBoolEntry( "Fraction", false ) ) ? 1 : 0;
 	numberButtonGroup->setButton( button );
 
-	QString ingFormat = config->readEntry( "Ingredient", QString::null );
-	if ( !ingFormat.isEmpty() )
-		ingredientEdit->insertItem( ingFormat );
-
-	QStringList predefinedFormats;
-	predefinedFormats << "%n%p: %a %u" << "%a %u %n%p";
-
-	for ( QStringList::const_iterator it = predefinedFormats.begin(); it != predefinedFormats.end(); ++it ) {
-		if ( ingFormat != *it )
-			ingredientEdit->insertItem( *it );
-	}
-
 	abbrevButton->setChecked( config->readBoolEntry( "AbbreviateUnits", false ) );
-
-	connect( ingredientEdit, SIGNAL( textChanged(const QString &) ), SLOT( updateExample(const QString &) ) );
-
-	updateExample( ingredientEdit->lineEdit()->text() );
 }
 
 void NumbersPrefs::saveOptions()
@@ -546,8 +512,6 @@ void NumbersPrefs::saveOptions()
 	bool fraction = !numberButtonGroup->find( 0 ) ->isOn();
 	config->writeEntry( "Fraction", fraction );
 
-	config->writeEntry( "Ingredient", ingredientEdit->lineEdit()->text() );
-
 	config->writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );
 }
 
@@ -556,17 +520,6 @@ void NumbersPrefs::languageChange()
 	numberButtonGroup->setTitle( i18n( "Number Format" ) );
 	fractionRadioButton->setText( i18n( "Fraction" ) );
 	decimalRadioButton->setText( i18n( "Decimal" ) );
-}
-
-void NumbersPrefs::updateExample( const QString &format )
-{
-	QString tmp_format( format );
-	tmp_format.replace( QRegExp( QString::fromLatin1( "%n" ) ), i18n("apples") );
-	tmp_format.replace( QRegExp( QString::fromLatin1( "%a" ) ), "1" );
-	tmp_format.replace( QRegExp( QString::fromLatin1( "%u" ) ), i18n("cup") );
-	tmp_format.replace( QRegExp( QString::fromLatin1( "%p" ) ), i18n("; sliced") );
-
-	exampleLabel->setText( tmp_format );
 }
 
 //=============Import/Export Preferences Dialog================//
@@ -598,7 +551,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	QHBox *clipboardHBox = new QHBox(exportGroup);
 	clipboardHBox->setSpacing(6);
-	QLabel *clipboardLabel = new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
+	/*QLabel *clipboardLabel = */new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
 	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
 	clipBoardFormatComboBox->insertItem(QString("%3 (*.txt)").arg(i18n("Plain Text")));
 	clipBoardFormatComboBox->insertItem("Krecipes (*.kreml)");
