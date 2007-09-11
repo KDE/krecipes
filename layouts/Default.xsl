@@ -8,7 +8,7 @@
       <head>
         <title>
           <xsl:choose>
-            <xsl:when test="count(krecipes-description/title) &gt; 1">Krecipes Recipes</xsl:when>
+            <xsl:when test="count(krecipes-description/title) &gt; 1">Krecipes</xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="krecipes-description/title"/>
             </xsl:otherwise>
@@ -50,12 +50,12 @@
               <td/>
               <td valign="middle">
                 <xsl:if test="count(krecipes-ratings/rating/criterion/criteria/stars) &gt; 0">
-                  <p class="overall-rating"><span class="header">Overall Rating: </span><xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/criterion/criteria/stars) div count(krecipes-ratings/rating/criterion/criteria/stars)) div 2"/>-stars.png</xsl:attribute></xsl:element>
-        (<xsl:value-of select="count(krecipes-ratings/rating)"/> reviews)</p>
+                  <p class="overall-rating"><span class="header"><xsl:value-of select="$I18N_OVERALL_RATING"/>: </span><xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="$photoDir"/>/<xsl:value-of select="round(2*sum(krecipes-ratings/rating/criterion/criteria/stars) div count(krecipes-ratings/rating/criterion/criteria/stars)) div 2"/>-stars.png</xsl:attribute></xsl:element>
+        (<xsl:value-of select="count(krecipes-ratings/rating)"/><xsl:text> </xsl:text><xsl:value-of select="$I18N_REVIEWS"/>)</p>
                 </xsl:if>
                 <xsl:if test="count(krecipes-description/category/cat) &gt; 0">
                   <p class="categories">
-                    <span class="header">Categories: </span>
+                    <span class="header"><xsl:value-of select="$I18N_CATEGORIES"/>: </span>
                     <xsl:for-each select="krecipes-description/category/cat">
                       <span class="category">
                         <xsl:value-of select="text()"/>
@@ -66,7 +66,7 @@
                 </xsl:if>
                 <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount &gt; 0">
                   <p class="yield">
-                    <span class="header">Yield: </span>
+                    <span class="header"><xsl:value-of select="$I18N_YIELD"/>: </span>
                     <span class="amount">
                       <xsl:value-of select="krecipes-description/yield/amount"/>
                       <xsl:text> </xsl:text>
@@ -80,7 +80,7 @@
                 </xsl:if>
                 <xsl:if test="krecipes-description/preparation-time and krecipes-description/preparation-time/text() != '00:00'">
                   <p class="prep-time">
-                    <span class="header">Prep: </span>
+                    <span class="header"><xsl:value-of select="$I18N_PREP"/>: </span>
                     <xsl:value-of select="krecipes-description/preparation-time"/>
                   </p>
                 </xsl:if>
@@ -90,12 +90,12 @@
               <tr>
                 <td valign="top" colspan="3">
                   <div class="ingredients">
-                    <h1>Ingredients</h1>
+                    <h1><xsl:value-of select="$I18N_INGREDIENTS"/></h1>
                     <table cellpadding="4">
                       <tr>
-                        <td colspan="2" class="ingredient-amount-header">Amount</td>
-                        <td class="ingredient-name-header">Ingredient</td>
-                        <td class="ingredient-prep-method-header">Preparation</td>
+                        <td colspan="2" class="ingredient-amount-header"><xsl:value-of select="$I18N_AMOUNT"/></td>
+                        <td class="ingredient-name-header"><xsl:value-of select="$I18N_INGREDIENT"/></td>
+                        <td class="ingredient-prep-method-header"><xsl:value-of select="$I18N_PREPARATION"/></td>
                       </tr>
                       <xsl:for-each select="krecipes-ingredients/*">
                         <xsl:choose>
@@ -129,7 +129,7 @@
             <xsl:if test="krecipes-instructions">
               <tr>
                 <td valign="top" class="instructions" colspan="3">
-                  <h1>Instructions</h1>
+                  <h1><xsl:value-of select="$I18N_INSTRUCTIONS"/></h1>
                   <p>
                     <xsl:call-template name="br-replace">
                       <xsl:with-param name="word" select="krecipes-instructions"/>
@@ -145,7 +145,7 @@
               <tr>
                 <td valign="top" colspan="3">
                   <div class="properties">
-                    <h1>Properties</h1>
+                    <h1><xsl:value-of select="$I18N_PROPERTIES"/></h1>
                     <xsl:call-template name="properties"/>
                   </div>
                 </td>
@@ -157,7 +157,7 @@
             <xsl:if test="count(krecipes-ratings/rating) &gt; 0">
               <tr>
                 <td class="ratings" colspan="3">
-                  <h1>Ratings</h1>
+                  <h1><xsl:value-of select="$I18N_RATINGS"/></h1>
                   <xsl:for-each select="krecipes-ratings/rating">
                     <span class="rater">
                       <xsl:value-of select="rater"/>
@@ -233,7 +233,7 @@
     <xsl:if test="count(substitutes/ingredient) &gt; 0">
       <xsl:for-each select="substitutes/ingredient">
         <xsl:call-template name="ingredient">
-          <xsl:with-param name="ingSub">OR </xsl:with-param>
+          <xsl:with-param name="ingSub"><xsl:value-of select="$I18N_OR"/><xsl:text> </xsl:text></xsl:with-param>
           <xsl:with-param name="underGroup">
             <xsl:value-of select="$underGroup"/>
           </xsl:with-param>

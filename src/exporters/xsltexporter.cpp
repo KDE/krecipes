@@ -45,6 +45,25 @@
 #include "image.h"
 #include "krepagelayout.h"
 
+char* i18n_strings[] = {
+  "I18N_INSTRUCTIONS", I18N_NOOP("Instructions"),
+  "I18N_OVERALL_RATING", I18N_NOOP("Overall Rating"),
+  "I18N_CATEGORIES", I18N_NOOP("Categories"),
+  "I18N_YIELD", I18N_NOOP("Yield"),
+  "I18N_PREP", I18N_NOOP("Prep"),
+  "I18N_AUTHORS", I18N_NOOP("Authors"),
+  "I18N_AMOUNT", I18N_NOOP("Amount"),
+  "I18N_INGREDIENT", I18N_NOOP("Ingredient"),
+  "I18N_INGREDIENTS", I18N_NOOP("Ingredients"),
+  "I18N_PREPARATION", I18N_NOOP("Preparation"),
+  "I18N_PROPERTIES", I18N_NOOP("Properties"),
+  "I18N_RATINGS", I18N_NOOP("Ratings"),
+  "I18N_OR", I18N_NOOP("OR"),
+  "I18N_REVIEWS", I18N_NOOP("reviews"),
+  NULL
+};
+#define NUM_I18N_STRINGS 28
+
 XSLTExporter::XSLTExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )
 {
@@ -221,12 +240,24 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
 
 	QFileInfo imgDirInfo(m_templateFilename);
-	const char *params[3];
-	params[0] = "imgDir";
+	char *params[NUM_I18N_STRINGS+3];
+	int i = 0;
+	params[i++] = "imgDir";
 	QCString imgDir = "'"+imgDirInfo.dirPath(true).utf8()+"'";
-	params[1] = imgDir.data();
-	params[2] = NULL;
-	xmlDocPtr htmlDoc = xsltApplyStylesheet(xslt, kremlDoc, params);
+	params[i++] = imgDir.data();
+
+	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
+		params[i++] = i18n_strings[j];
+
+		QString translatedString = "'"+i18n(i18n_strings[j+1])+"'";
+		params[i++] = qstrdup(translatedString.utf8());
+	}
+	params[i] = NULL;
+	xmlDocPtr htmlDoc = xsltApplyStylesheet(xslt, kremlDoc, (const char**)params);
+
+	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
+		free(params[2+j+1]);
+	}
 
 	xmlChar *xmlOutput;
 	int length;

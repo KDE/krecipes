@@ -85,7 +85,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Page Setup" );
-	QSize defaultSize(300,400);
+	QSize defaultSize(800,600);
 	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
