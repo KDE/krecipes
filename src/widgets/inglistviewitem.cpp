@@ -86,19 +86,15 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 {
 	amount_str = QString::null;
 
-	if ( amount > 0 ) {
+	if ( amount+amount_offset > 0 ) {
 		KConfig * config = KGlobal::config();
 		config->setGroup( "Formatting" );
+	
+		MixedNumber::Format number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-		if ( config->readBoolEntry( "Fraction" ) )
-			amount_str = MixedNumber( amount ).toString();
-		else
-			amount_str = beautify( KGlobal::locale() ->formatNumber( amount, 5 ) );
-	}
-	if ( amount_offset > 0 ) {
-		if ( amount < 1e-10 )
-			amount_str += "0";
-		amount_str += "-" + MixedNumber(amount+amount_offset).toString();
+		amount_str = MixedNumber( amount ).toString(number_format);
+		if ( amount_offset > 0 )
+			amount_str += "-" + MixedNumber(amount+amount_offset).toString(number_format);
 	}
 
 	m_ing.amount = amount;

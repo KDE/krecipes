@@ -42,7 +42,7 @@ void FractionInput::setValue( const MixedNumber &m, double amount_offset )
 {
 	QString text = m.toString( m_format );
 	if ( amount_offset > 0 ) {
-		text += "-" + MixedNumber(m+amount_offset).toString( MixedNumber::MixedNumberFormat );
+		text += "-" + MixedNumber(m+amount_offset).toString( m_format );
 	}
 	setText(text);
 }
