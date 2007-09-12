@@ -39,11 +39,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	groupBox1->layout()->setMargin( 11 );
 	groupBox1Layout = new QGridLayout( groupBox1->layout() );
 	groupBox1Layout->setAlignment( Qt::AlignTop );
-	
-	perAmountEdit = new FractionInput( groupBox1 );
-	
-	groupBox1Layout->addWidget( perAmountEdit, 1, 1 );
-	
+
 	weightEdit = new FractionInput( groupBox1 );
 	
 	groupBox1Layout->addWidget( weightEdit, 0, 1 );
@@ -60,6 +56,10 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	weightLabel = new QLabel( groupBox1, "weightLabel" );
 	
 	groupBox1Layout->addWidget( weightLabel, 0, 0 );
+
+	perAmountEdit = new FractionInput( groupBox1 );
+	
+	groupBox1Layout->addWidget( perAmountEdit, 1, 1 );
 	
 	perAmountUnitBox = new UnitComboBox( groupBox1, db );
 	perAmountUnitBox->reload();
