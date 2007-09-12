@@ -49,6 +49,7 @@ private slots:
 	void saveAsLayout();
 	void updateItemVisibility( KreDisplayItem*, bool );
 	void setItemShown( int id );
+	void selectNoLayout();
 
 private:
 	QString getIncludedLayoutDir() const;

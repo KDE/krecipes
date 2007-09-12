@@ -142,8 +142,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	XSLTExporter exporter( tmp_filename + ".html", "html" );
 	if ( templateFile != QString::null )
 		exporter.setTemplate( templateFile );
-	if ( styleFile != QString::null )
-		exporter.setStyle( styleFile );
+	exporter.setStyle( styleFile );
 
 	RecipeList recipeList;
 	recipeList.append(m_sample);
@@ -197,6 +196,19 @@ void SetupDisplay::createItem( const QString &node, const QString &name, unsigne
 
 void SetupDisplay::loadLayout( const QString &filename )
 {
+	QMap<QString,KreDisplayItem*>::iterator it;
+	for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
+		it.data()->clear();
+	}
+
+	m_activeStyle = filename;
+
+	if ( filename.isEmpty() ) {
+		loadHTMLView(m_activeTemplate, filename);
+		has_changes = false;
+		return;
+	}
+
 	QFile input( filename );
 	if ( input.open( IO_ReadOnly ) ) {
 		QDomDocument doc;
@@ -208,10 +220,6 @@ void SetupDisplay::loadLayout( const QString &filename )
 			return ;
 		}
 
-		QMap<QString,KreDisplayItem*>::iterator it;
-		for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
-			it.data()->clear();
-		}
 		processDocument( doc );
 
 		loadHTMLView(m_activeTemplate, filename);

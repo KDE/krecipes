@@ -27,6 +27,7 @@ beef, brisket:13022
 beer:14003
 bell peppers (red, green, yellow):11333
 black pepper:2030
+blueberries:2154
 boiling water:14429
 bologna:7008
 bourbon:14551
@@ -332,6 +333,7 @@ parsley stalks:11297
 parsnips:11298
 pasta shells:20100
 peach slices in syrup:9240
+peaches:2665
 peanut butter:16098
 pearled barley:20005
 peas, canned:11308

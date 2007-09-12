@@ -46,12 +46,10 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 
-	KAction *std_open = KStdAction::open( this, SLOT(loadFile()), actionCollection );
-	std_open->plug( toolbar );
-
+	KStdAction::open( this, SLOT(loadFile()), actionCollection )->plug( toolbar );
 	KStdAction::save( this, SLOT( saveLayout() ), actionCollection ) ->plug( toolbar );
 	KStdAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) ->plug( toolbar );
-	KStdAction::redisplay( this, SLOT( reloadLayout() ), actionCollection ) ->plug( toolbar );
+	KStdAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) ->plug( toolbar );
 
 	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ), "frame_edit" );
 	shown_items->setDelayed( false );
@@ -110,20 +108,14 @@ void PageSetupDialog::accept()
 	if ( m_htmlPart->hasChanges() )
 		saveLayout();
 
-	if ( !active_filename.isEmpty() ) {
-		KConfig * config = kapp->config();
-		config->setGroup( "Page Setup" );
-		config->writeEntry( m_configEntry+"Layout", active_filename );
-	}
+	KConfig * config = kapp->config();
+	config->setGroup( "Page Setup" );
+	config->writeEntry( m_configEntry+"Layout", active_filename );
 
 	if ( !active_template.isEmpty() ) {
-		KConfig * config = kapp->config();
-		config->setGroup( "Page Setup" );
 		config->writeEntry( m_configEntry+"Template", active_template );
 	}
 
-	KConfig *config = kapp->config();
-	config->setGroup( "Page Setup" );
 	config->writeEntry( "WindowSize", size() );
 
 	QDialog::accept();
@@ -222,10 +214,8 @@ void PageSetupDialog::loadLayout( const QString &filename )
 		}
 	}
 
-	if ( !filename.isEmpty() ) {
-		m_htmlPart->loadLayout( filename );
-		setActiveFile( filename );
-	}
+	m_htmlPart->loadLayout( filename );
+	setActiveFile( filename );
 }
 
 void PageSetupDialog::reloadLayout()
@@ -299,5 +289,10 @@ bool PageSetupDialog::haveWritePerm( const QString &filename )
 	}
 }
 
+void PageSetupDialog::selectNoLayout()
+{
+	m_htmlPart->loadLayout( QString::null );
+	setActiveFile( QString::null );
+}
 
 #include "pagesetupdialog.moc"
