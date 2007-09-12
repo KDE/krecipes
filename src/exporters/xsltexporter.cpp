@@ -232,12 +232,15 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
 	if (kremlDoc == NULL) {
 		kdDebug() << "Failed to parse document" << endl;
-		return "oops";
+		return i18n("<html><b>Error:</b> Problem with KreML exporter.  Please export the recipe you are trying to view as KreML and attach it to a bug report to a Krecipes developer.</html>");
 	}
 
 	//const char *filename = "/home/jason/svn/utils/krecipes/layouts/Default.xsl";
 	QCString filename = m_templateFilename.utf8();
 	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
+	if ( !xslt ) {
+		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>").arg(filename);
+	}
 
 	QFileInfo imgDirInfo(m_templateFilename);
 	char *params[NUM_I18N_STRINGS+3];
