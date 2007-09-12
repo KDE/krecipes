@@ -41,7 +41,10 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	authorsCombo->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	authorsCombo->completionObject() ->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
 	authorsCombo->lineEdit() ->disconnect( authorsCombo ); //so hitting enter doesn't enter the item into the box
-	
+
+	connect( authorsCombo->lineEdit(), SIGNAL( returnPressed() ),
+					 this, SLOT( addAuthor() ) );
+
 	// Add/Remove buttons
 
 	KIconLoader *il = KGlobal::iconLoader();
@@ -129,7 +132,7 @@ void SelectAuthorsDialog::addAuthor( void )
 	Element currentElement = authorList.getElement( currentItem );
 
 	( void ) new QListViewItem( authorListView, QString::number( currentElement.id ), currentElement.name );
-
+	authorsCombo->lineEdit()->clear();
 }
 
 void SelectAuthorsDialog::removeAuthor( void )

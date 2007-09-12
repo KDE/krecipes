@@ -250,6 +250,7 @@ Italian salad dressing:4114
 jalapeno peppers:11979
 juice of 1 lemon:9152
 ketchup:11935
+kiwi:2452
 lasagna noodles (8 noodles):20409
 leaf lettuce:11253
 leeks:11246
@@ -409,6 +410,7 @@ spinach leaf:11457
 sprig fresh thyme:2049
 stew beef:13286
 stock:6413
+strawberries:2996
 sugar:19335
 sweet pickle:11940
 sweet pickle relish:11945
