@@ -571,6 +571,7 @@ void RecipeInputDialog::reload( void )
 
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
+	instructionsEdit->clearCompletionItems();
 	instructionsEdit->setText( loadedRecipe->instructions );
 	yieldNumInput->setValue( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
 	yieldTypeEdit->setText( loadedRecipe->yield.type );

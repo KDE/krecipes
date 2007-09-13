@@ -144,9 +144,9 @@
                         </xsl:for-each>
                       </table>
                     </xsl:if>
-                    <span class="comments">
+                    <div class="comments">
                       <xsl:value-of select="comment"/>
-                    </span>
+                    </div>
                     <xsl:if test="position() != last()">
                       <br /><br />
                     </xsl:if>

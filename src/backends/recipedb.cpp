@@ -181,8 +181,6 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 			result.amount = from.amount * ratio;
 			result.units = to;
 
-			kdDebug()<<"Unit conversion SUCCESSFUL, from "<<unitName(from.units.id).name<<" to "<<unitName(to.id).name<<" for ingredient "<<ingredientName(from.ingredientID)<<" (ingredient not used in conversion)"<<endl;
-
 			return Success;
 		}
 		else {
@@ -214,13 +212,10 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 				fromToWeightRatio = tryFromToWeightRatio;
 				unitID = first;
 
-				kdDebug()<<"units work, is it the right prep method..."<<endl;
 				if ( from.prepMethodList.containsId( (*it).prepMethodID ) ) {
-					kdDebug()<<"   yes"<<endl;
 					prepID = (*it).prepMethodID;
 					break;
 				}
-				kdDebug()<<"   no, keep going"<<endl;
 			}
 		}
 		if ( unitID == -1 )
