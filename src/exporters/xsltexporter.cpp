@@ -222,7 +222,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	m_cachedCSS = QString::null;
 
-	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml" );
+	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml", false );
 	QString buffer;
 	QTextStream stream(buffer,IO_WriteOnly);
 	exporter->writeStream(stream,recipes);

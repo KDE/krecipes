@@ -9,7 +9,7 @@
 ***************************************************************************/
 #include "propertycalculator.h"
 
-#include <math.h> // For fabs()
+#include <cmath> // For fabs()
 
 #include <kdebug.h>
 

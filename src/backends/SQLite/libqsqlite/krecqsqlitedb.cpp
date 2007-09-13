@@ -35,7 +35,6 @@
 #elif HAVE_SQLITE3
 #include <sqlite3.h>
 #endif
-#include <stdlib.h>
 
 QSQLiteDB::QSQLiteDB( QObject *, const char * )
 {}

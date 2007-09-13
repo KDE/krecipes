@@ -12,8 +12,6 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#include <stdlib.h>
-
 #include "qsqlrecipedb.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
@@ -25,10 +23,8 @@
 #include <qtextcodec.h>
 #include <qvariant.h>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmdcodec.h>

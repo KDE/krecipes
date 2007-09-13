@@ -39,7 +39,7 @@
                 </xsl:if>
                 <xsl:if test="count(krecipes-description/author) &gt; 0
                               or count(krecipes-description/category/cat) &gt; 0
-                              or krecipes-description/yield/amount &gt; 0
+                              or krecipes-description/yield/amount != 0
                               or krecipes-description/preparation-time/text() != '00:00'">
                 <div class="basic-info">
                 <xsl:if test="count(krecipes-description/author) &gt; 0">
@@ -64,7 +64,7 @@
                     </xsl:for-each>
                   </span>
                 </xsl:if>
-                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount &gt; 0">
+                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount != 0">
                   <span class="yield">
                     <span class="header"><xsl:value-of select="$I18N_YIELD"/>: </span>
                     <span class="amount">

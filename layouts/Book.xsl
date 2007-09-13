@@ -64,7 +64,7 @@
                     </xsl:for-each>
                   </p>
                 </xsl:if>
-                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount &gt; 0">
+                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount != 0">
                   <p class="yield">
                     <span class="header"><xsl:value-of select="$I18N_YIELD"/>: </span>
                     <span class="amount">

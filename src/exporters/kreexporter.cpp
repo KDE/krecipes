@@ -26,13 +26,21 @@
 #include <kstandarddirs.h>
 
 #include "backends/recipedb.h"
-#include "datablocks/mixednumber.h"
 
-KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, const QString &format ) :
+KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, const QString &format, bool compatibleNumbers ) :
 		BaseExporter( filename, format ), categories( _categories )
 {
 	if ( format == "*.kre" ) {
 		setCompressed(true);
+	}
+	
+	if ( !compatibleNumbers ) {
+		KGlobal::config()->setGroup("Formatting");
+		m_number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		m_locale_aware_numbers = true;
+	} else {
+		m_number_format = MixedNumber::DecimalFormat;
+		m_locale_aware_numbers = false;
 	}
 }
 
@@ -74,19 +82,16 @@ QString KreExporter::createFooter()
 
 QString KreExporter::generateIngredient( const IngredientData &ing )
 {
-	KGlobal::config()->setGroup("Formatting");
-	MixedNumber::Format number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
 	QString xml;
 
 	xml += "<name>" + QStyleSheet::escape( ( ing ).name ) + "</name>\n";
 	xml += "<amount>";
 	if ( ing.amount_offset < 1e-10 ) {
-		xml += MixedNumber( ing.amount ).toString( number_format );
+		xml += MixedNumber( ing.amount ).toString( m_number_format, m_locale_aware_numbers );
 	}
 	else {
-		xml += "<min>"+MixedNumber( ing.amount ).toString( number_format )+"</min>";
-		xml += "<max>"+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format )+"</max>";
+		xml += "<min>"+MixedNumber( ing.amount ).toString( m_number_format, m_locale_aware_numbers )+"</min>";
+		xml += "<max>"+MixedNumber( ing.amount + ing.amount_offset ).toString( m_number_format, m_locale_aware_numbers )+"</max>";
 	}
 	xml += "</amount>\n";
 	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
@@ -141,11 +146,11 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<yield>";
 		xml += "<amount>";
 		if ( ( *recipe_it ).yield.amount_offset < 1e-10 ) {
-			xml += QString::number( ( *recipe_it ).yield.amount );
+			xml += MixedNumber( ( *recipe_it ).yield.amount ).toString( m_number_format, m_locale_aware_numbers );
 		}
 		else {
-			xml += "<min>"+QString::number( ( *recipe_it ).yield.amount )+"</min>";
-			xml += "<max>"+QString::number( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset )+"</max>";
+			xml += "<min>"+MixedNumber( ( *recipe_it ).yield.amount ).toString( m_number_format, m_locale_aware_numbers )+"</min>";
+			xml += "<max>"+MixedNumber( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset ).toString( m_number_format, m_locale_aware_numbers )+"</max>";
 		}
 		xml += "</amount>";
 		xml += "<type>"+( *recipe_it ).yield.type+"</type>";
@@ -205,7 +210,11 @@ QString KreExporter::createContent( const RecipeList& recipes )
 				double prop_amount = (*prop_it).amount;
 				if ( prop_amount > 0 ) { //TODO: make the precision configuratble
 					prop_amount = double( qRound( prop_amount * 10.0 ) ) / 10.0; //not a "chemistry experiment" ;)  Let's only have one decimal place
-					amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
+					if ( m_locale_aware_numbers ) {
+						amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
+					} else {
+						amount_str = beautify( QString::number(prop_amount) );
+					}
 				}
 				else
 					amount_str = "0";

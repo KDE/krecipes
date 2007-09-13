@@ -49,7 +49,7 @@
                   </span>
                   <span class="spacer"> </span>
                 </xsl:if>
-                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount &gt; 0">
+                <xsl:if test="krecipes-description/yield and krecipes-description/yield/amount != 0">
                   <span class="yield header-data">
                     <span class="header"><xsl:value-of select="$I18N_YIELD"/>: </span>
                     <span class="amount">

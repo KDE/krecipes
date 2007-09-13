@@ -16,6 +16,7 @@
 
 #include "baseexporter.h"
 #include "datablocks/categorytree.h"
+#include "datablocks/mixednumber.h"
 
 class IngredientData;
 
@@ -27,7 +28,7 @@ Export class for Krecipes native file format (.kre, .kreml)
 class KreExporter : public BaseExporter
 {
 public:
-	KreExporter( CategoryTree *, const QString&, const QString& );
+	KreExporter( CategoryTree *, const QString&, const QString&, bool compatibleNumbers = true );
 	virtual ~KreExporter();
 
 	virtual int supportedItems() const;
@@ -46,6 +47,9 @@ private:
 	QString generateIngredient( const IngredientData &ing );
 
 	CategoryTree *categories;
+
+	MixedNumber::Format m_number_format;
+	bool m_locale_aware_numbers;
 };
 
 #endif
