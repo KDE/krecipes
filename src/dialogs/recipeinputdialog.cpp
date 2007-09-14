@@ -1540,6 +1540,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate ingredient weight entry</a>, or provide conversion information to perform one of the following conversions: %2"))
 					  .arg(ing.name)
 					  .arg("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
+					  .arg(ing.ingredientID)
 					);
 				}
 				break;
