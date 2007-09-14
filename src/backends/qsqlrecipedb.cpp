@@ -195,8 +195,10 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 			}
 
 			if ( items & RecipeDB::Yield ) {
-				//toString().toDouble() gets around some odd behavior where in certain locales,
-				//fractional parts are lost
+				//### toString().toString().toDouble() gets around that fact that
+				// QCString().toString().toDouble() does a locale-aware
+				// conversion, which isn't what we want.  The real fix is in the SQLite plugin,
+				// but rather than spending time on that, I'll wait and use Qt4's plugins.
 				recipe.yield.amount = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
 				recipe.yield.amount_offset = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
 				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;

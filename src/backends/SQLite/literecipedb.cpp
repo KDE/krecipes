@@ -210,7 +210,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				command = QString( "INSERT INTO ingredient_list_copy VALUES(%1,%2,%3,%4,%5);" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( copyQuery.value( 1 ).toInt() )
-				          .arg( copyQuery.value( 2 ).toDouble() )
+				          .arg( copyQuery.value( 2 ).toString().toDouble() )
 				          .arg( copyQuery.value( 3 ).toInt() )
 				          .arg( copyQuery.value( 4 ).toInt() );
 				database->exec( command );
@@ -226,7 +226,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				command = QString( "INSERT INTO ingredient_list VALUES(%1,%2,%3,%4,%5,%6);" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( copyQuery.value( 1 ).toInt() )
-				          .arg( copyQuery.value( 2 ).toDouble() )
+				          .arg( copyQuery.value( 2 ).toString().toDouble() )
 				          .arg( copyQuery.value( 3 ).toInt() )
 				          .arg( -1 )  //default prep method
 				          .arg( copyQuery.value( 4 ).toInt() );
