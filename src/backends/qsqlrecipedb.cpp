@@ -195,8 +195,8 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 			}
 
 			if ( items & RecipeDB::Yield ) {
-				recipe.yield.amount = recipeQuery.value( row_at ).toDouble(); ++row_at;
-				recipe.yield.amount_offset = recipeQuery.value( row_at ).toDouble(); ++row_at;
+				recipe.yield.amount = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
+				recipe.yield.amount_offset = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
 				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;
 				if ( recipe.yield.type_id != -1 ) {
 					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
@@ -237,15 +237,15 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 
 					if ( items & RecipeDB::NamesOnly ) {
 						if ( items & IngredientAmounts ) {
-							ing.amount = ingredientQuery.value( 3 ).toDouble();
-							ing.amount_offset = ingredientQuery.value( 4 ).toDouble();
+							ing.amount = ingredientQuery.value( 3 ).toString().toDouble();
+							ing.amount_offset = ingredientQuery.value( 4 ).toString().toDouble();
 							ing.units.id = ingredientQuery.value( 5 ).toInt();
 							ing.units.type = (Unit::Type)ingredientQuery.value( 6 ).toInt();
 						}
 					}
 					else  {
 						ing.amount = ingredientQuery.value( 3 ).toDouble();
-						ing.amount_offset = ingredientQuery.value( 4 ).toDouble();
+						ing.amount_offset = ingredientQuery.value( 4 ).toString().toDouble();
 						ing.units.id = ingredientQuery.value( 5 ).toInt();
 						ing.units.name = unescapeAndDecode( ingredientQuery.value( 6 ).toCString() );
 						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 7 ).toCString() );
@@ -355,7 +355,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 							RatingCriteria rc;
 							rc.id = criterionQuery.value( 0 ).toInt();
 							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toCString() );
-							rc.stars = criterionQuery.value( 2 ).toDouble();
+							rc.stars = criterionQuery.value( 2 ).toString().toDouble();
 							r.append( rc );
 						}
 					}
@@ -1237,7 +1237,7 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 			}
 
 			if ( ingredientID >= -1 )
-				prop.amount = propertiesToLoad.value( 6 ).toDouble();
+				prop.amount = propertiesToLoad.value( 6 ).toString().toDouble();
 			else
 				prop.amount = -1; // Property is generic, not attached to an ingredient
 
@@ -1571,7 +1571,7 @@ void QSqlRecipeDB::loadUnitRatios( UnitRatioList *ratioList, Unit::Type type )
 			UnitRatio ratio;
 			ratio.uID1 = ratiosToLoad.value( 0 ).toInt();
 			ratio.uID2 = ratiosToLoad.value( 1 ).toInt();
-			ratio.ratio = ratiosToLoad.value( 2 ).toDouble();
+			ratio.ratio = ratiosToLoad.value( 2 ).toString().toDouble();
 			ratioList->add( ratio );
 		}
 	}
@@ -1611,7 +1611,7 @@ double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 	QSqlQuery ratioToLoad( command, database );
 
 	if ( ratioToLoad.isActive() && ratioToLoad.next() )
-		return ( ratioToLoad.value( 0 ).toDouble() );
+		return ( ratioToLoad.value( 0 ).toString().toDouble() );
 	else
 		return ( -1 );
 }
@@ -1633,24 +1633,24 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 
 			if ( ing.prepMethodList.containsId( prepMethodID ) ) {
 				if ( wasApproximated ) *wasApproximated = false;
-				double amount = query.value( 0 ).toDouble();
+				double amount = query.value( 0 ).toString().toDouble();
 
 				//'per_amount' -> 'weight' conversion
 				if ( query.value( 3 ).toInt() == ing.units.id )
-					convertedAmount = query.value( 1 ).toDouble() * ing.amount / amount;
+					convertedAmount = query.value( 1 ).toString().toDouble() * ing.amount / amount;
 				//'weight' -> 'per_amount' conversion
 				else
-					convertedAmount = amount * ing.amount / query.value( 1 ).toDouble();
+					convertedAmount = amount * ing.amount / query.value( 1 ).toString().toDouble();
 
 				return convertedAmount;
 			}
 			if ( prepMethodID == -1 ) {
 				//'per_amount' -> 'weight' conversion
 				if ( query.value( 3 ).toInt() == ing.units.id )
-					convertedAmount = query.value( 1 ).toDouble() * ing.amount / query.value( 0 ).toDouble();
+					convertedAmount = query.value( 1 ).toString().toDouble() * ing.amount / query.value( 0 ).toString().toDouble();
 				//'weight' -> 'per_amount' conversion
 				else
-					convertedAmount = query.value( 0 ).toDouble() * ing.amount / query.value( 1 ).toDouble();
+					convertedAmount = query.value( 0 ).toString().toDouble() * ing.amount / query.value( 1 ).toString().toDouble();
 			}
 		}
 		//no matching prep method found, use entry without a prep method if there was one
@@ -1674,9 +1674,9 @@ WeightList QSqlRecipeDB::ingredientWeightUnits( int ingID )
 		while ( query.next() ) {
 			Weight w;
 			w.id = query.value(0).toInt();
-			w.perAmount = query.value(1).toDouble();
+			w.perAmount = query.value(1).toString().toDouble();
 			w.perAmountUnitID = query.value(2).toInt();
-			w.weight = query.value(3).toDouble();
+			w.weight = query.value(3).toString().toDouble();
 			w.weightUnitID = query.value(4).toInt();
 			w.prepMethodID = query.value(5).toInt();
 			w.ingredientID = ingID;
@@ -1992,7 +1992,7 @@ float QSqlRecipeDB::databaseVersion( void )
 	QSqlQuery dbVersion( command, database );
 
 	if ( dbVersion.isActive() && dbVersion.next() )
-		return ( dbVersion.value( 0 ).toDouble() ); // There should be only one (or none for old DB) element, so go to first
+		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
 	else
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
 }
