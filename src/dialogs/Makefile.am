@@ -22,7 +22,7 @@ libkrecipesdialogs_la_SOURCES= \
 	authorsdialog.cpp selectauthorsdialog.cpp \
 	resizerecipedialog.cpp \
 	dietviewdialog.cpp ingredientmatcherdialog.cpp \
-	usdadatadialog.cpp prepmethodsdialog.cpp \
+	prepmethodsdialog.cpp \
 	createcategorydialog.cpp borderdialog.cpp \
 	refineshoppinglistdialog.cpp pagesetupdialog.cpp \
 	dbimportdialog.cpp createunitdialog.cpp \
@@ -30,7 +30,8 @@ libkrecipesdialogs_la_SOURCES= \
 	ingredientparserdialog.cpp ingredientgroupsdialog.cpp \
 	editratingdialog.cpp similarcategoriesdialog.cpp \
 	conversiondialog.cpp createingredientweightdialog.cpp \
-	recipeprintpreview.cpp
+	recipeprintpreview.cpp editpropertiesdialog.cpp \
+	createunitconversiondialog.cpp
 
 libkrecipesdialogs_la_METASOURCES=AUTO
 

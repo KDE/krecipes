@@ -31,8 +31,8 @@ public:
 
 	void setAllowRange( bool b ){ m_allowRange = b; }
 
-	void setValue( double amount, double amount_offset );
-	void setValue( const MixedNumber &, double amount_offset );
+	void setValue( double amount, double amount_offset = 0 );
+	void setValue( const MixedNumber &, double amount_offset = 0 );
 
 	void value( MixedNumber &amount, double &amount_offset ) const;
 	void value( double &amount, double &amount_offset ) const;

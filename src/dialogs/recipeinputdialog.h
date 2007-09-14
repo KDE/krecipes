@@ -176,6 +176,7 @@ private slots:
 	void updatePropertyStatus();
 	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );
 	void showStatusIndicator();
+	void statusLinkClicked( const QString &ingID );
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

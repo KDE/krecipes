@@ -17,10 +17,13 @@
 #include <klocale.h>
 
 #include "datablocks/ingredientpropertylist.h"
+#include "dialogs/createunitdialog.h"
+#include "backends/recipedb.h"
 
-SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList, OptionFlag showEmpty )
+SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB *database, OptionFlag showEmpty )
 		: KDialogBase( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty)
+		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty),
+        ingredientID(ingID), db(database)
 {
 
 	// Initialize internal variables
@@ -56,21 +59,28 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, IngredientPropertyL
 	perUnitsLabel->setText( i18n( "Per units:" ) );
 	layout2->addWidget( perUnitsLabel );
 
-	perUnitsBox = new KComboBox( FALSE, box );
+	perUnitsBox = new KComboBox( true, box );
 	layout2->addWidget( perUnitsBox );
 	boxLayout->addLayout( layout2 );
 
 	resize( QSize( 200, 380 ).expandedTo( minimumSizeHint() ) );
 	clearWState( WState_Polished );
 
+	IngredientPropertyList propertyList;
+	db->loadProperties( &propertyList );
+	UnitList unitList;
+	db->loadPossibleUnits( ingredientID, &unitList );
+
 	// Load data
-	loadProperties( propertyList );
-	loadUnits( unitList );
+	loadProperties( &propertyList );
+	loadUnits( &unitList );
 }
 
 
 SelectPropertyDialog::~SelectPropertyDialog()
-{}
+{
+	delete unitListBack;
+}
 
 
 int SelectPropertyDialog::propertyID( void )
@@ -88,12 +98,27 @@ int SelectPropertyDialog::perUnitsID()
 {
 
 	int comboCount = perUnitsBox->count();
-	if ( comboCount > 0 ) { // If not, the list may be empty (no list defined) and crashes while reading as seen before. So check just in case.
-		int comboID = perUnitsBox->currentItem();
-		return ( *unitListBack->at( comboID ) ).id;
+	for (int i = 0; i < comboCount; ++i) {
+		if (perUnitsBox->currentText() == perUnitsBox->text(i))
+			return ( *unitListBack->at( i ) ).id;
 	}
-	else
-		return ( -1 );
+
+	//new unit, add it to the database
+	QString unit = perUnitsBox->currentText();
+	int id = db->findExistingUnitByName( unit );
+	if ( -1 == id )
+	{
+		CreateUnitDialog getUnit( this, unit, QString::null );
+		if ( getUnit.exec() == QDialog::Accepted ) {
+			Unit new_unit = getUnit.newUnit();
+			db->createNewUnit( new_unit );
+
+			id = db->lastInsertID();
+		}
+	}
+	db->addUnitToIngredient( ingredientID, id ); // Add chosen unit to ingredient in database
+
+	return id;
 }
 
 void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList )

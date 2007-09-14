@@ -27,6 +27,7 @@
 #include "datablocks/unit.h"
 
 class IngredientPropertyList;
+class RecipeDB;
 
 /**
 @author Unai Garro
@@ -37,7 +38,7 @@ public:
 	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
 
 	// Methods
-	SelectPropertyDialog( QWidget* parent, IngredientPropertyList *propertyList, UnitList *unitList, OptionFlag showEmpty = ShowEmptyUnit );
+	SelectPropertyDialog( QWidget* parent, int ingredientID, RecipeDB *db, OptionFlag showEmpty = ShowEmptyUnit );
 	~SelectPropertyDialog();
 	int propertyID( void );
 	int perUnitsID( void );
@@ -54,6 +55,8 @@ private:
 
 	//Internal variables
 	UnitList *unitListBack; // To store unit list with ID's for later use
+	int ingredientID;
+	RecipeDB *db;
 
 };
 
