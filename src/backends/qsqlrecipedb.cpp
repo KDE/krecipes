@@ -195,6 +195,8 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 			}
 
 			if ( items & RecipeDB::Yield ) {
+				//toString().toDouble() gets around some odd behavior where in certain locales,
+				//fractional parts are lost
 				recipe.yield.amount = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
 				recipe.yield.amount_offset = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
 				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;
