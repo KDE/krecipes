@@ -27,5 +27,5 @@
 </MenuBar>
 <ToolBar name="mainToolBar">
   <Action name="edit_action" />
-</Toolbar>
+</ToolBar>
 </kpartgui>
