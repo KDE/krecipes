@@ -245,28 +245,28 @@ void SetupDisplay::endObject()
 	m_currentItem = 0;
 }
 
-void SetupDisplay::loadBackgroundColor( const QString &object, const QColor &color )
+void SetupDisplay::loadBackgroundColor( const QString &/*object*/, const QColor &color )
 {
 	if ( m_currentItem ) {
 		m_currentItem->backgroundColor = color;
 	}
 }
 
-void SetupDisplay::loadFont( const QString &object, const QFont &font )
+void SetupDisplay::loadFont( const QString &/*object*/, const QFont &font )
 {
 	if ( m_currentItem ) {
 		m_currentItem->font = font;
 	}
 }
 
-void SetupDisplay::loadTextColor( const QString &object, const QColor &color )
+void SetupDisplay::loadTextColor( const QString &/*object*/, const QColor &color )
 {
 	if ( m_currentItem ) {
 		m_currentItem->textColor = color;
 	}
 }
 
-void SetupDisplay::loadVisibility( const QString &object, bool visible )
+void SetupDisplay::loadVisibility( const QString &/*object*/, bool visible )
 {
 	if ( m_currentItem ) {
 		m_currentItem->show = visible;
@@ -274,14 +274,14 @@ void SetupDisplay::loadVisibility( const QString &object, bool visible )
 	}
 }
 
-void SetupDisplay::loadAlignment( const QString &object, int alignment )
+void SetupDisplay::loadAlignment( const QString &/*object*/, int alignment )
 {
 	if ( m_currentItem ) {
 		m_currentItem->alignment = alignment;
 	}
 }
 
-void SetupDisplay::loadBorder( const QString &object, const KreBorder& border )
+void SetupDisplay::loadBorder( const QString &/*object*/, const KreBorder& border )
 {
 	if ( m_currentItem ) {
 		m_currentItem->border = border;
@@ -597,25 +597,6 @@ void SetupDisplay::setItemShown( KreDisplayItem *item, bool visible )
 	applyStylesheet();
 
 	has_changes = true;
-}
-
-void SetupDisplay::setSize()
-{
-	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-/*
-	KDialogBase dialog(this,"SetupDisplaySizeInput",
-		false, i18n("Enter size"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
-	dialog.setMainWidget(box);
-
-	if ( dialog.exec() == QDialog::Accepted ) {
-		m_currentItem = item;
-		loadSize(m_currNodeId,item->size);
-		m_currentItem = 0;
-
-		applyStylesheet();
-		has_changes = true;
-	}
-*/
 }
 
 void SetupDisplay::changeMade( void )

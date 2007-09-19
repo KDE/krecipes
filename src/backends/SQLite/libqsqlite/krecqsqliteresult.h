@@ -73,19 +73,6 @@ public:
 	 */
 	QCString data( int columnNumber, bool *ok = 0 );
 
-	/**
-	 * Date conversion from columnName
-	 */
-	QDate dataToDate( const QString& columnName, bool *ok = 0 );
-
-	/**
-	 * Date conversion from column-number
-	 */
-	QDate dataToDate( int columnNumber, bool *ok = 0 );
-
-	QDateTime dataToDateTime( const QString& columName );
-	QDateTime dataToDateTime( int columnNumber );
-
 private:
 	TableString m_string;
 	TableInt m_int;

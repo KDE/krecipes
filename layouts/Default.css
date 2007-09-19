@@ -18,7 +18,7 @@ h1
 {
   font-size: 130%;
   border-bottom: 1px dashed red;
-  padding-top: 10px;
+  margin-top: 10px;
 }
 
 .header
@@ -63,4 +63,9 @@ h1
 {
   margin-top: 0px;
   text-align: center;
+}
+
+.photo
+{
+  padding-bottom: 4px;
 }

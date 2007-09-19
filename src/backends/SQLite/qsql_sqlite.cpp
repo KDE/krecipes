@@ -136,7 +136,7 @@ bool KreSQLiteResult::fetchLast()
 	return fetch( numRows - 1 );
 }
 
-bool KreSQLiteResult::isNull( int i )
+bool KreSQLiteResult::isNull( int /*i*/ )
 {
 	return false;
 }

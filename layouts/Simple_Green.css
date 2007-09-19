@@ -97,7 +97,7 @@ body
   background-color: white;
 }
 
-.ingredients td, .properties td
+.ingredients, .properties, .ingredients td, .properties td
 {
   border-style: none !important;
 }

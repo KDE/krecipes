@@ -115,7 +115,6 @@ protected slots:
 	void setFont();
 	void setShown( int id );
 	void setAlignment( QAction * );
-	void setSize();
 
 private:
 	PropertiesMap *box_properties;

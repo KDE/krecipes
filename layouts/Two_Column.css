@@ -6,13 +6,13 @@
 .ingredients
 {
   background-color: #CDEBFF;
-  border: 1px solid black !important;
+  border: 1px solid black;
 }
 
 .properties
 {
   background-color: #ADEBFF;
-  border: 1px solid black !important;
+  border: 1px solid black;
 }
 
 .ingredient-group

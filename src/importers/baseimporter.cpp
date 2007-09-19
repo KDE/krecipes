@@ -90,7 +90,7 @@ void BaseImporter::parseFiles( const QStringList &filenames )
 	}
 }
 
-void BaseImporter::import( RecipeDB *db, bool automatic )
+void BaseImporter::import( RecipeDB *db, bool /*automatic*/ )
 {
 	if ( direct ) {
 		m_database = db;

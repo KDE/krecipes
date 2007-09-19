@@ -84,41 +84,6 @@ QCString QSQLiteResultRow::data( int column, bool *ok )
 	}
 }
 
-/*
- * DateFormat is 'YYYY-MM-DD'
- */
-QDate QSQLiteResultRow::dataToDate( const QString& column, bool *ok )
-{
-	QDate date = QDate::currentDate();
-	QString str = data( column, ok );
-	if ( !str.isEmpty() ) {
-		; // convert
-	}
-	return date;
-}
-
-QDate QSQLiteResultRow::dataToDate( int column, bool *ok )
-{
-	QDate date = QDate::currentDate();
-	QString str = data( column, ok );
-	if ( !str.isEmpty() ) {
-		; // convert
-	}
-	return date;
-}
-
-QDateTime QSQLiteResultRow::dataToDateTime( const QString& column )
-{
-	QDateTime time = QDateTime::currentDateTime();
-	return time;
-}
-
-QDateTime QSQLiteResultRow::dataToDateTime( int column )
-{
-	QDateTime time = QDateTime::currentDateTime();
-	return time;
-}
-
 QSQLiteResult::QSQLiteResult( enum Status status,
                               const QSQLiteResult::Columns& list,
                               const QString &error )

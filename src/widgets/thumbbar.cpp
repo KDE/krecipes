@@ -272,7 +272,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
     }
 }
 
-void ThumbBarView::invalidateThumb(ThumbBarItem* item)
+void ThumbBarView::invalidateThumb(ThumbBarItem* /*item*/)
 {
 }
 
@@ -607,7 +607,7 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
 {
 }
 
-void ThumbBarToolTip::maybeTip(const QPoint& pos)
+void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
 {
 #if 0
     if ( !parentWidget() || !m_view)

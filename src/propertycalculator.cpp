@@ -62,7 +62,7 @@ void calculateProperties( Recipe& recipe, RecipeDB* database )
 }
 
 
-void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipePropertyList, IngredientPropertyList &ingPropertyList, const Ingredient &ing, int ingredientNo )
+void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipePropertyList, IngredientPropertyList &ingPropertyList, const Ingredient &ing, int /*ingredientNo*/ )
 {
 	QMap<int,double> ratioCache; //unit->ratio
 

@@ -166,7 +166,7 @@ void UnitsDialog::removeRatio( int r, int c )
 	database->removeUnitRatio( conversionTable->getUnitID( r ), conversionTable->getUnitID( c ) );
 }
 
-void UnitsDialog::saveAllRatios( UnitRatioList &ratioList )
+void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
 {
 #if 0
 	ConversionTable *conversionTable = massConversionTable;

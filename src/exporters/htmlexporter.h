@@ -49,8 +49,6 @@ protected:
 private:
 	void storePhoto( const Recipe &recipe );
 	void populateTemplate( const Recipe &recipe, QString &content );
-	void replaceIfVisible( QString &content, const QString &name, const QString &html );
-	QString HTMLIfVisible( const QString &name, const QString &html );
 
 	bool m_error;
 };

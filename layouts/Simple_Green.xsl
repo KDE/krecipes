@@ -109,10 +109,10 @@
                 </p>
               </xsl:if>
               <xsl:if test="count(krecipes-properties/property[not(@hidden='true')]) > 0">
-                <div class="properties">
+                <p class="properties">
                   <h1><xsl:value-of select="$I18N_PROPERTIES"/></h1>
                   <xsl:call-template name="properties"/>
-                </div>
+                </p>
               </xsl:if>
               <xsl:if test="count(krecipes-ratings/rating) &gt; 0">
                 <p class="ratings">

@@ -1654,7 +1654,7 @@ void RecipeInputDialog::statusLinkClicked( const QString &link )
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;
 		int lastUnit = -1;
-		for (int i = 1; i < idList.count(); ++i ) {
+		for (uint i = 1; i < idList.count(); ++i ) {
 			int id = idList[i].toInt();
 			if ( id != lastUnit ) {
 				toUnits << Element(database->unitName(id).name,id);

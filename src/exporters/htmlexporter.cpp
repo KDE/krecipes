@@ -191,17 +191,12 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	}
 }
 
-QString HTMLExporter::HTMLIfVisible( const QString &name, const QString &html )
-{
-	return html;
-}
-
 void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 {
 	KConfig * config = KGlobal::config();
 
 	//=======================TITLE======================//
-	content = content.replace("**TITLE**",HTMLIfVisible("title",recipe.title));
+	content = content.replace("**TITLE**",recipe.title);
 
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = QStyleSheet::escape( recipe.instructions );
@@ -209,17 +204,17 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if (!instr_html.isEmpty()) {
 		instr_html.prepend("<h1 class=\"instructions-header\">"+i18n("Instructions")+"</h1>");
 	}
-	content = content.replace( "**INSTRUCTIONS**", HTMLIfVisible("instructions",instr_html) );
+	content = content.replace( "**INSTRUCTIONS**", instr_html );
 
 	//=======================SERVINGS======================//
 	QString yield_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Yield" ) ).arg( recipe.yield.toString() );
-	content = content.replace( "**YIELD**", HTMLIfVisible("yield",yield_html) );
+	content = content.replace( "**YIELD**", yield_html );
 
 	//=======================PREP TIME======================//
 	QString preptime_html;
 	if ( !recipe.prepTime.isNull() && recipe.prepTime.isValid() )
 		preptime_html = QString( "<b>%1: </b>%2" ).arg( i18n( "Preparation Time" ) ).arg( recipe.prepTime.toString( "h:mm" ) );
-	content = content.replace( "**PREP_TIME**", HTMLIfVisible("prep_time",preptime_html) );
+	content = content.replace( "**PREP_TIME**", preptime_html );
 
 	//========================PHOTO========================//
 	QString photo_name;
@@ -231,7 +226,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
 	image_url = KURL::encode_string( image_url );
-	content = content.replace( "**PHOTO**", HTMLIfVisible("photo",image_url) );
+	content = content.replace( "**PHOTO**", image_url );
 
 	//=======================AUTHORS======================//
 	QString authors_html;
@@ -245,7 +240,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	}
 	if ( !authors_html.isEmpty() )
 		authors_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Authors" ) ) );
-	content = content.replace( "**AUTHORS**", HTMLIfVisible("authors",authors_html) );
+	content = content.replace( "**AUTHORS**", authors_html );
 
 	//=======================CATEGORIES======================//
 	QString categories_html;
@@ -260,7 +255,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	if ( !categories_html.isEmpty() )
 		categories_html.prepend( QString( "<b>%1: </b>" ).arg( i18n( "Categories" ) ) );
 
-	content = content.replace( "**CATEGORIES**", HTMLIfVisible("categories",categories_html) );
+	content = content.replace( "**CATEGORIES**", categories_html );
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
@@ -356,7 +351,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		ingredients_html.append( "</ul></td></tr></table>" );
 		ingredients_html.prepend("<h1 class=\"ingredients-header\">"+i18n("Ingredients")+"</h1>");
 	}
-	content = content.replace( "**INGREDIENTS**", HTMLIfVisible("ingredients",ingredients_html) );
+	content = content.replace( "**INGREDIENTS**", ingredients_html );
 
 	//=======================PROPERTIES======================//
 	QString properties_html;
@@ -403,7 +398,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		properties_html.append( "</ul></td></tr></table>" );
 		properties_html.prepend("<h1 class=\"properties-header\">"+i18n("Properties")+"</h1>");
 	}
-	content = content.replace( "**PROPERTIES**", HTMLIfVisible("properties",properties_html) );
+	content = content.replace( "**PROPERTIES**", properties_html );
 
 	//=======================RATINGS======================//
 	QString ratings_html;
@@ -438,7 +433,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		if ( !( *rating_it ).comment.isEmpty() )
 			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
 	}
-	content = content.replace( "**RATINGS**", HTMLIfVisible("ratings",ratings_html) );
+	content = content.replace( "**RATINGS**", ratings_html );
 
 	QString overall_html;
 	if ( rating_total > 0 ) {
@@ -451,7 +446,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
 		}
 	}
-	content = content.replace( "**OVERALL_RATING**", HTMLIfVisible("overall_rating",overall_html) );
+	content = content.replace( "**OVERALL_RATING**", overall_html );
 }
 
 void HTMLExporter::removeHTMLFiles( const QString &filename, int recipe_id )
