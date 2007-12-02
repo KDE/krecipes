@@ -53,7 +53,16 @@
                   <span class="yield header-data">
                     <span class="header"><xsl:value-of select="$I18N_YIELD"/>: </span>
                     <span class="amount">
-                      <xsl:value-of select="krecipes-description/yield/amount"/>
+                      <xsl:choose>
+                        <xsl:when test="krecipes-description/yield/amount/min">
+                          <xsl:value-of select="krecipes-description/yield/amount/min"/>
+                            -
+                          <xsl:value-of select="krecipes-description/yield/amount/max"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="krecipes-description/yield/amount"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       <xsl:text> </xsl:text>
                     </span>
                     <xsl:if test="krecipes-description/yield/type">
