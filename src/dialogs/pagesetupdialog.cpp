@@ -58,7 +58,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	shown_items->plug( toolbar );
 	layout->addWidget( toolbar );
 
-	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the right, and right-click any element to edit the look of that element.</i>"),this);
+	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the left, and right-click any element to edit the look of that element.</i>"),this);
 	layout->addWidget( help );
 
 	QHBox *viewBox = new QHBox( this );
