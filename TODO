@@ -20,6 +20,7 @@ CONVENIENCES/MINOR FEATURES:
 	*Configurable shopping list (Maybe allow the user to select a style sheet or add a section to settings dialog... or both)
 
 BUGS/OTHER:
+	*Concurrent database access
 	*Let user know when no layout file was found
 	*Secure database access passwords??
 	*The icons on the left menu at times will disappear... I can't seem to reproduce this, however
@@ -37,7 +38,7 @@ uga:
 
 planned for 0.8:
 	*Step-by-Step recipe instructions with photos
-	*Check ingredients from existing kitchen resource table? Check amounts in the ingredient matcher?
+	*Check ingredients from existing kitchen resource table?
 	*Add an option to popup for newly created ingredients, and include the USDA nutritional info at the same time
 	
 
