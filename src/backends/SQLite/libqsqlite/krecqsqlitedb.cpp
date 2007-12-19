@@ -29,9 +29,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
 #if HAVE_SQLITE
 #include <sqlite.h>
+#include <cstdlib>
 #elif HAVE_SQLITE3
 #include <sqlite3.h>
 #endif
@@ -41,23 +41,16 @@ QSQLiteDB::QSQLiteDB( QObject *, const char * )
 
 bool QSQLiteDB::open( const QString &dbname )
 {
-	char * errmsg = 0;
-
 #if HAVE_SQLITE
-
-	m_db = sqlite_open( dbname.latin1(), 0, &errmsg );
-#elif HAVE_SQLITE3
-
-	int res = sqlite3_open( dbname.latin1(), &m_db );
-
-	if ( res != SQLITE_OK )
-		return false;
-#endif
-
-	if ( m_db == 0L ) {
+	char * errmsg = 0;
+	if ( (m_db = sqlite_open( dbname.latin1(), 0, &errmsg )) == 0L ) {
 		free( errmsg );
 		return false;
 	}
+#elif HAVE_SQLITE3
+	if ( sqlite3_open( dbname.latin1(), &m_db ) != SQLITE_OK )
+		return false;
+#endif
 
 	int func_res;
 	#if HAVE_SQLITE
