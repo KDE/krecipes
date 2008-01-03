@@ -508,8 +508,10 @@ void DishInput::clear()
 {
 	QListViewItemIterator it( categoriesView );
 	while ( it.current() ) {
-		QCheckListItem * item = ( QCheckListItem* ) it.current();
-		item->setOn( false );
+		if (it.current()->rtti() == CATEGORYCHECKLISTITEM_RTTI) {
+			CategoryCheckListItem * item = ( CategoryCheckListItem* ) it.current();
+			item->setOn( false );
+		}
 		++it;
 	}
 
