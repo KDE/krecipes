@@ -39,6 +39,7 @@
 #include <kdebug.h>
 #include <kled.h>
 #include <kdialogbase.h>
+#include <kio/netaccess.h>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -670,8 +671,19 @@ void RecipeInputDialog::reload( void )
 void RecipeInputDialog::changePhoto( void )
 {
 	// standard filedialog
-	KURL filename = KFileDialog::getOpenURL( QString::null, QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
-	QPixmap pixmap ( filename.path() );
+	KURL url = KFileDialog::getOpenURL( QString::null, QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
+
+	QString filename;
+	if (!url.isLocalFile()) {
+		if (!KIO::NetAccess::download(url,filename,this)) {
+			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
+			return;
+		}
+	} else {
+		filename = url.path();
+	}
+
+	QPixmap pixmap ( filename );
 	if ( !( pixmap.isNull() ) ) {
 		// If photo is bigger than the label, or smaller in width, than photoLabel, scale it
 		sourcePhoto = pixmap;
@@ -688,6 +700,10 @@ void RecipeInputDialog::changePhoto( void )
 			photoLabel->setPixmap( sourcePhoto );
 		}
 		emit changed();
+	}
+
+	if (!url.isLocalFile()) {
+		KIO::NetAccess::removeTempFile( filename );
 	}
 }
 
