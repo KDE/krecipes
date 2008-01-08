@@ -14,12 +14,18 @@
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlabel.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -31,11 +37,11 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
    : QDialog( parent, "SimilarCategoriesDialog", true ),
      m_elementList(list)
 {
-	SimilarCategoriesDialogLayout = new QVBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout"); 
+	SimilarCategoriesDialogLayout = new Q3VBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout"); 
 	
-	layout6 = new QHBoxLayout( 0, 0, 6, "layout6"); 
+	layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6"); 
 	
-	layout4 = new QGridLayout( 0, 1, 1, 0, 6, "layout4"); 
+	layout4 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout4"); 
 	
 	categoriesBox = new KLineEdit( this );
 	
@@ -43,7 +49,7 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	
 	thresholdSlider = new QSlider( this, "thresholdSlider" );
 	thresholdSlider->setValue( 40 );
-	thresholdSlider->setOrientation( QSlider::Horizontal );
+	thresholdSlider->setOrientation( Qt::Horizontal );
 	
 	layout4->addWidget( thresholdSlider, 1, 1 );
 	
@@ -56,7 +62,7 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout4->addWidget( categoryLabel, 0, 0 );
 	layout6->addLayout( layout4 );
 	
-	layout5 = new QVBoxLayout( 0, 0, 6, "layout5"); 
+	layout5 = new Q3VBoxLayout( 0, 0, 6, "layout5"); 
 	
 	searchButton = new QPushButton( this, "searchButton" );
 	layout5->addWidget( searchButton );
@@ -65,19 +71,19 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout6->addLayout( layout5 );
 	SimilarCategoriesDialogLayout->addLayout( layout6 );
 	
-	layout9 = new QHBoxLayout( 0, 0, 6, "layout9"); 
+	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9"); 
 	
-	layout8 = new QVBoxLayout( 0, 0, 6, "layout8"); 
+	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8"); 
 	
 	allLabel = new QLabel( this, "allLabel" );
 	layout8->addWidget( allLabel );
 	
-	allListView = new KListView( this, "allListView" );
+	allListView = new K3ListView( this, "allListView" );
 	allListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, allListView->sizePolicy().hasHeightForWidth() ) );
 	layout8->addWidget( allListView );
 	layout9->addLayout( layout8 );
 	
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1"); 
+	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1"); 
 	
 	removeButton = new QPushButton( this, "removeButton" );
 	layout1->addWidget( removeButton );
@@ -88,18 +94,18 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout1->addItem( spacer1 );
 	layout9->addLayout( layout1 );
 	
-	layout7 = new QVBoxLayout( 0, 0, 6, "layout7"); 
+	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7"); 
 	
 	toMergeLabel = new QLabel( this, "toMergeLabel" );
 	layout7->addWidget( toMergeLabel );
 	
-	toMergeListView = new KListView( this, "toMergeListView" );
+	toMergeListView = new K3ListView( this, "toMergeListView" );
 	toMergeListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, toMergeListView->sizePolicy().hasHeightForWidth() ) );
 	layout7->addWidget( toMergeListView );
 	layout9->addLayout( layout7 );
 	SimilarCategoriesDialogLayout->addLayout( layout9 );
 	
-	layout10 = new QHBoxLayout( 0, 0, 6, "layout10"); 
+	layout10 = new Q3HBoxLayout( 0, 0, 6, "layout10"); 
 	spacer2 = new QSpacerItem( 310, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout10->addItem( spacer2 );
 	
@@ -224,8 +230,8 @@ QStringList letterPairs(const QString& str) {
 }
 
 /** @return an ArrayList of 2-character Strings. */
-QValueList<QStringList> wordLetterPairs(const QString &str) {
-	QValueList<QStringList> allPairs;
+Q3ValueList<QStringList> wordLetterPairs(const QString &str) {
+	Q3ValueList<QStringList> allPairs;
 	// Tokenize the string and put the tokens/words into an array
 	QStringList words = QStringList::split("\\s",str);
 	// For each word
@@ -241,8 +247,8 @@ QValueList<QStringList> wordLetterPairs(const QString &str) {
 
 /** @return lexical similarity value in the range [0,1] */
 double compareStrings(const QString &str1, const QString &str2) {
-	QValueList<QStringList> pairs1 = wordLetterPairs(str1.upper());
-	QValueList<QStringList> pairs2 = wordLetterPairs(str2.upper());
+	Q3ValueList<QStringList> pairs1 = wordLetterPairs(str1.toUpper());
+	Q3ValueList<QStringList> pairs2 = wordLetterPairs(str2.toUpper());
 	int intersection = 0;
 	int size_union = pairs1.count() + pairs2.count();
 	for (uint i=0; i<pairs1.count(); i++) {
@@ -266,7 +272,7 @@ double compareStrings(const QString &str1, const QString &str2) {
 #if 0
 void RecipeActionsHandler::mergeSimilar()
 {
-	QPtrList<QListViewItem> items = parentListView->selectedItems();
+	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
 		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one category."), QString::null );
 	else if ( items.count() == 1 && items.at(0)->rtti() == 1001 ) {
@@ -280,11 +286,11 @@ void RecipeActionsHandler::mergeSimilar()
 		ElementList matches;
 		for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 			#if 0
-			if ( levenshtein_distance(name.latin1(),(*it).name.latin1())/double(QMAX(length,(*it).name.length())) >= max_allowed_distance ) {
+			if ( levenshtein_distance(name.toLatin1(),(*it).name.toLatin1())/double(qMax(length,(*it).name.length())) >= max_allowed_distance ) {
 			#else
 			if ( compareStrings(name,(*it).name) >= max_allowed_distance ) {
 			#endif
-				kdDebug()<<(*it).name<<" matches"<<endl;
+				kDebug()<<(*it).name<<" matches"<<endl;
 				if ( cat_it->categoryId() != (*it).id )
 					matches.append(*it);
 			}
@@ -310,16 +316,16 @@ void SimilarCategoriesDialog::findMatches()
 	const QString name = categoriesBox->text();
 
 	for ( ElementList::const_iterator it = m_elementList.begin(); it != m_elementList.end(); ++it ) {
-		//kdDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;
+		//kDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;
 		#if 0
-		if ( levenshtein_distance(name.latin1(),(*it).name.latin1())/double(QMAX(length,(*it).name.length())) >= max_allowed_distance ) {
+		if ( levenshtein_distance(name.toLatin1(),(*it).name.toLatin1())/double(qMax(length,(*it).name.length())) >= max_allowed_distance ) {
 		#else
 		if ( compareStrings(name,(*it).name) >= threshold ) {
 		#endif
-			kdDebug()<<(*it).name<<" matches"<<endl;
+			kDebug()<<(*it).name<<" matches"<<endl;
 			//if ( id != (*it).id ) {
-				(void) new QListViewItem(allListView,(*it).name,QString::number((*it).id));
-				(void) new QListViewItem(toMergeListView,(*it).name,QString::number((*it).id));
+				(void) new Q3ListViewItem(allListView,(*it).name,QString::number((*it).id));
+				(void) new Q3ListViewItem(toMergeListView,(*it).name,QString::number((*it).id));
 			//}
 		}
 	}
@@ -343,10 +349,10 @@ void SimilarCategoriesDialog::mergeMatches()
 	QDialog::accept();
 }
 
-QValueList<int> SimilarCategoriesDialog::matches() const
+Q3ValueList<int> SimilarCategoriesDialog::matches() const
 {
-	QValueList<int> ids;
-	for ( QListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
+	Q3ValueList<int> ids;
+	for ( Q3ListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
 		ids << item->text(1).toInt();
 	}
 
@@ -360,22 +366,22 @@ QString SimilarCategoriesDialog::element() const
 
 void SimilarCategoriesDialog::addCategory()
 {
-	QListViewItem *item = allListView->selectedItem();
+	Q3ListViewItem *item = allListView->selectedItem();
 	if ( item )
 	{
 		//make sure it isn't already in the list
-		for ( QListViewItem *search_it = toMergeListView->firstChild(); search_it; search_it = search_it->nextSibling() ) {
+		for ( Q3ListViewItem *search_it = toMergeListView->firstChild(); search_it; search_it = search_it->nextSibling() ) {
 			if ( search_it->text(0) == item->text(0) )
 				return;
 		}
 
-		(void) new QListViewItem(toMergeListView,item->text(0),item->text(1));
+		(void) new Q3ListViewItem(toMergeListView,item->text(0),item->text(1));
 	}
 }
 
 void SimilarCategoriesDialog::removeCategory()
 {
-	QListViewItem *item = toMergeListView->selectedItem();
+	Q3ListViewItem *item = toMergeListView->selectedItem();
 	if ( item )
 		delete item;
 }

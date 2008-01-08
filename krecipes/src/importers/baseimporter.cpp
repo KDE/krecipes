@@ -14,10 +14,13 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kmessagebox.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <kglobal.h>
 
 #include "datablocks/recipe.h"
 #include "backends/recipedb.h"
@@ -29,7 +32,7 @@ BaseImporter::BaseImporter() :
 		m_cat_structure( 0 ),
 		file_recipe_count( 0 )
 {
-	KConfig * config = kapp->config();
+	KConfig * config = KGlobal::config();
 	config->setGroup( "Import" );
 
 	direct = config->readBoolEntry( "DirectImport", false );
@@ -209,7 +212,7 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KProgressDialog *progress_dialog )
 {
 	// Load Current Settings
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup( "Import" );
 	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
 
@@ -236,7 +239,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
 			importIngredient( *ing_it, db, progress_dialog );
 
-			for ( QValueList<IngredientData>::iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+			for ( Q3ValueList<IngredientData>::iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 				importIngredient( *sub_it, db, progress_dialog );
 			}
 		}

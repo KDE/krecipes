@@ -12,7 +12,10 @@
 
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -22,7 +25,7 @@
 
 IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent,name), database(db)
 {
-	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
@@ -30,7 +33,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);
 
-	QVBoxLayout *buttonLayout = new QVBoxLayout(this);
+	Q3VBoxLayout *buttonLayout = new Q3VBoxLayout(this);
 	QPushButton *addHeaderButton = new QPushButton( this );
 	addHeaderButton->setText( "+" );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );

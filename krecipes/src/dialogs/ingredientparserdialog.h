@@ -15,17 +15,23 @@
 
 #include "datablocks/ingredientlist.h"
 #include "datablocks/unit.h"
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
 class QLabel;
-class QTextEdit;
+class Q3TextEdit;
 class QLineEdit;
 class KPushButton;
-class KListView;
-class QListViewItem;
+class K3ListView;
+class Q3ListViewItem;
 class QPushButton;
 
 class IngredientParserDialog : public KDialogBase
@@ -41,9 +47,9 @@ public:
 protected:
 	QLabel* textLabel1;
 	QLabel *previewLabel;
-	QTextEdit* ingredientTextEdit;
+	Q3TextEdit* ingredientTextEdit;
 	KPushButton* parseButton;
-	KListView* previewIngView;
+	K3ListView* previewIngView;
 	QPushButton* buttonGroup;
 
 protected slots:
@@ -56,7 +62,7 @@ protected slots:
 	virtual void languageChange();
 
 private:
-	void convertToHeader( const QPtrList<QListViewItem> &items );
+	void convertToHeader( const Q3PtrList<Q3ListViewItem> &items );
 
 	UnitList m_unitList;
 	IngredientList m_ingList;

@@ -13,6 +13,11 @@
 ***************************************************************************/
 
 #include "qsqlrecipedb.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QSqlQuery>
+#include <Q3CString>
+#include <QPixmap>
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
 #include "datablocks/weight.h"
@@ -27,7 +32,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 
 int QSqlRecipeDB::m_refCount = 0;
 
@@ -58,8 +63,8 @@ QSqlRecipeDB::~QSqlRecipeDB()
 
 void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 {
-	kdDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) << endl;
-	kdDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname << endl;
+	kDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) << endl;
+	kDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname << endl;
 
 	bool driver_found = false;
 
@@ -86,7 +91,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	else if ( !qsqlDriverPlugin().isEmpty() )
 		database = QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
 	else
-		kdDebug()<<"Fatal internal error!  Backend incorrectly written!"<<endl;
+		kDebug()<<"Fatal internal error!  Backend incorrectly written!"<<endl;
 
 	database->setDatabaseName( DBname );
 	if ( !( DBuser.isNull() ) )
@@ -97,12 +102,12 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	if ( DBport > 0 )
         	database->setPort(DBport);
 
-	kdDebug() << i18n( "Parameters set. Calling db->open()" ) << endl;
+	kDebug() << i18n( "Parameters set. Calling db->open()" ) << endl;
 
 	if ( !database->open() ) {
 		//Try to create the database
 		if ( create_db ) {
-			kdDebug() << i18n( "Failing to open database. Trying to create it" ) << endl;
+			kDebug() << i18n( "Failing to open database. Trying to create it" ) << endl;
 			createDB();
 		}
 		else {
@@ -113,7 +118,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		//Now Reopen the Database and signal & exit if it fails
 		if ( !database->open() ) {
 			QString error = i18n( "Database message: %1" ).arg( database->lastError().databaseText() );
-			kdDebug() << i18n( "Failing to open database. Exiting\n" ).latin1();
+			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
 
 			// Handle the error (passively)
 			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriverPlugin() );
@@ -146,7 +151,7 @@ void QSqlRecipeDB::execSQL( const QString &command )
 	database->exec( command );
 }
 
-void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> ids )
+void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> ids )
 {
 	// Empty the recipe first
 	rlist->empty();
@@ -158,7 +163,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 
 	QStringList ids_str;
-	for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
 
@@ -208,7 +213,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QValueList<int> id
 					if ( yield_query.isActive() && yield_query.first() )
 						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toCString());
 					else
-						kdDebug()<<yield_query.lastError().databaseText()<<endl;
+						kDebug()<<yield_query.lastError().databaseText()<<endl;
 				}
 			}
 
@@ -528,7 +533,7 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 	QSqlQuery query( command, database );
 
 	if ( query.isActive() && query.first() ) {
-		QCString decodedPic;
+		Q3CString decodedPic;
 		QPixmap pix;
 		KCodecs::base64Decode( query.value( 0 ).toCString(), decodedPic );
 		int len = decodedPic.size();
@@ -626,7 +631,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	if ( !recipe->photo.isNull() ) {
 		QByteArray ba;
 		QBuffer buffer( ba );
-		buffer.open( IO_WriteOnly );
+		buffer.open( QIODevice::WriteOnly );
 		QImageIO iio( &buffer, "JPEG" );
 		iio.setImage( recipe->photo.convertToImage() );
 		iio.write();
@@ -678,7 +683,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			recipeToSave.exec( command );
 		}
 		
-		for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+		for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 			order_index++;
 			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )
@@ -775,7 +780,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		if ( (*rating_it).id == -1 )
 			(*rating_it).id = lastInsertID();
 		
-		for ( QValueList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+		for ( Q3ValueList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
 			recipeToSave.exec( command );
 		}
@@ -1426,10 +1431,10 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 
 void QSqlRecipeDB::createNewUnit( const Unit &unit )
 {
-	QString real_name = unit.name.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_plural = unit.plural.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
+	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
+	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).trimmed();
+	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).trimmed();
 
 	Unit new_unit( real_name, real_plural );
 	new_unit.name_abbrev = real_name_abbrev;
@@ -1470,10 +1475,10 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 {
 	QSqlQuery unitQuery( QString::null, database );
 
-	QString real_name = unit.name.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_plural = unit.plural.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
-	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).stripWhiteSpace();
+	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
+	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
+	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).trimmed();
+	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).trimmed();
 
 	Unit newUnit( real_name, real_plural, unit.id );
 	newUnit.type = unit.type;
@@ -1660,7 +1665,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 		//no matching prep method found, use entry without a prep method if there was one
 		if ( convertedAmount > 0 ) {
 			if ( wasApproximated ) *wasApproximated = true;
-			kdDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method."<<endl;
+			kDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method."<<endl;
 
 			return convertedAmount;
 		}
@@ -1824,7 +1829,7 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 }
 
 //The string coming out of the database is utf8 text, interpreted as though latin1.  Calling fromUtf8() on this gives us back the original utf8.
-QString QSqlRecipeDB::unescapeAndDecode( const QCString &s ) const
+QString QSqlRecipeDB::unescapeAndDecode( const Q3CString &s ) const
 {
 	return QString::fromUtf8( s ).replace( "\";@", ";" ); // Use unicode encoding
 }
@@ -1953,7 +1958,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 		}
 
 		if ( !found ) {
-			kdDebug() << "Recreating missing table: " << *it << "\n";
+			kDebug() << "Recreating missing table: " << *it << "\n";
 			createTable( *it );
 		}
 	}
@@ -1965,10 +1970,10 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 	// Check for older versions, and port
 
-	kdDebug() << "Checking database version...\n";
+	kDebug() << "Checking database version...\n";
 	float version = databaseVersion();
-	kdDebug() << "version found... " << version << " \n";
-	kdDebug() << "latest version... " << latestDBVersion() << endl;
+	kDebug() << "version found... " << version << " \n";
+	kDebug() << "latest version... " << latestDBVersion() << endl;
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
 		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?  Depending on the number of recipes and amount of data, this could take some time.<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.<br><br>Cancelling this operation may result in corrupting the database.</b>" ) ) ) {
 		case KMessageBox::Yes:
@@ -2064,9 +2069,9 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			CategoryTree *list_child = list->add( el );
 
 			if ( recurse ) {
-				//QTime dbg_timer; dbg_timer.start(); kdDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
+				//QTime dbg_timer; dbg_timer.start(); kDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
 				loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
-				// kdDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
+				// kDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
 			}
 		}
 	}
@@ -2738,7 +2743,7 @@ void QSqlRecipeDB::empty( void )
 		tablesToEmpty.exec( command );
 
 		if ( !tablesToEmpty.isActive() )
-			kdDebug()<<tablesToEmpty.lastError().databaseText()<<endl;
+			kDebug()<<tablesToEmpty.lastError().databaseText()<<endl;
 
 		++it;
 	}
@@ -2761,7 +2766,7 @@ void QSqlRecipeDB::search( RecipeList *list, int items, const RecipeSearchParame
 {
 	QString query = buildSearchQuery(parameters);
 
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	QSqlQuery recipeToLoad( query, database );
 	if ( recipeToLoad.isActive() ) {
 		while ( recipeToLoad.next() ) {

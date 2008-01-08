@@ -10,7 +10,9 @@
 
 #include "recipeprintpreview.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -18,7 +20,7 @@
 #include "recipeviewdialog.h"
 #include "pagesetupdialog.h"
 
-RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QValueList<int> &ids )
+RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids )
 		: KDialogBase( parent, "RecipePrintPreview", true, i18n("Print Preview"),
 		    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Ok )
 {
@@ -29,7 +31,7 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QVa
 	setSizeGripEnabled( true );
 
 	// Initialize UI Elements
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	recipeView = new RecipeViewDialog( page, db );
 	recipeView->loadRecipes( ids, "Print" );

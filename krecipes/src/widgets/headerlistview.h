@@ -18,7 +18,7 @@
 #include "datablocks/element.h"
 
 class RecipeDB;
-class KPopupMenu;
+class KMenu;
 
 class HeaderListView : public DBListViewBase
 {
@@ -52,19 +52,19 @@ protected:
 	virtual void removeHeader( int );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove();
 	void rename();
 
-	void modHeader( QListViewItem* i, const QPoint &p, int c );
-	void saveHeader( QListViewItem* i, const QString &text, int c );
+	void modHeader( Q3ListViewItem* i, const QPoint &p, int c );
+	void saveHeader( Q3ListViewItem* i, const QString &text, int c );
 
 private:
 	bool checkBounds( const QString &unit );
 
-	KPopupMenu *kpop;
+	KMenu *kpop;
 };
 
 #endif //HEADERLISTVIEW_H

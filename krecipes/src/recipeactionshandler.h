@@ -14,17 +14,17 @@
 #define RECIPEACTIONSHANDLER_H
 
 #include <qobject.h>
-#include <qvaluelist.h>
-#include <qptrlist.h>
+#include <q3valuelist.h>
+#include <q3ptrlist.h>
 
-class QListViewItem;
-class KListView;
-class KPopupMenu;
+class Q3ListViewItem;
+class K3ListView;
+class KMenu;
 class RecipeDB;
 
 /** @brief A class that centralizes common actions for recipes such as saving and editing.
   * 
-  * It acts upon a given KListView that is assumed to be a list of recipes.  It 
+  * It acts upon a given K3ListView that is assumed to be a list of recipes.  It 
   * automagically enables this list view with a popup menu for user access to 
   * the provided actions.
   *
@@ -50,21 +50,21 @@ public:
 	    Categorize = 0x0200
 	};
 
-	RecipeActionsHandler( KListView *parentListView, RecipeDB *db, int actions = AllActions );
+	RecipeActionsHandler( K3ListView *parentListView, RecipeDB *db, int actions = AllActions );
 	~RecipeActionsHandler()
 	{}
 
-	static void exportRecipes( const QValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
+	static void exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
 	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
-	static void recipesToClipboard( const QValueList<int> &ids, RecipeDB *db );
+	static void recipesToClipboard( const Q3ValueList<int> &ids, RecipeDB *db );
 
 signals:
 	void recipeSelected( int id, int action );
-	void recipesSelected( const QValueList<int> &ids, int action );
+	void recipesSelected( const Q3ValueList<int> &ids, int action );
 
 public slots:
 	void exec( ItemType type, const QPoint &p );
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void categorize();
 
@@ -102,17 +102,17 @@ public slots:
 	void recipesToClipboard();
 
 private:
-	KPopupMenu *kpop;
-	KPopupMenu *catPop;
+	KMenu *kpop;
+	KMenu *catPop;
 
-	KListView *parentListView;
+	K3ListView *parentListView;
 	RecipeDB *database;
 
 	int remove_from_cat_item;
 	int categorize_item;
 
-	QValueList<int> getAllVisibleItems();
-	QValueList<int> recipeIDs( const QPtrList<QListViewItem> &items ) const;
+	Q3ValueList<int> getAllVisibleItems();
+	Q3ValueList<int> recipeIDs( const Q3PtrList<Q3ListViewItem> &items ) const;
 };
 
 #endif //RECIPEACTIONSHANDLER_H

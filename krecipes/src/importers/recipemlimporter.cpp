@@ -28,7 +28,7 @@ RecipeMLImporter::RecipeMLImporter() : BaseImporter()
 void RecipeMLImporter::parseFile( const QString& file )
 {
 	QFile input( file );
-	if ( input.open( IO_ReadOnly ) ) {
+	if ( input.open( QIODevice::ReadOnly ) ) {
 		QDomDocument doc;
 		QString error;
 		int line;
@@ -58,7 +58,7 @@ void RecipeMLImporter::parseFile( const QString& file )
 			else if ( tagName == "menu" )
 				readRecipemlMenu( el );
 			else
-				kdDebug() << "Unknown tag within <recipeml>: " << tagName << endl;
+				kDebug() << "Unknown tag within <recipeml>: " << tagName << endl;
 		}
 	}
 	else
@@ -89,7 +89,7 @@ void RecipeMLImporter::readRecipemlRecipe( const QDomElement& recipe_element )
 		else if ( tagName == "nutrition" ) {} //TODO: what do we do with this?
 		else if ( tagName == "diet-exchanges" ) {} //TODO: what do we do with this?
 		else
-			kdDebug() << "Unknown tag within <recipe>: " << el.tagName() << endl;
+			kDebug() << "Unknown tag within <recipe>: " << el.tagName() << endl;
 	}
 
 	add
@@ -104,9 +104,9 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 		QString tagName = el.tagName();
 
 		if ( tagName == "title" )
-			recipe.title = el.text().stripWhiteSpace();
+			recipe.title = el.text().trimmed();
 		else if ( tagName == "subtitle" )
-			recipe.title += ": " + el.text().stripWhiteSpace();
+			recipe.title += ": " + el.text().trimmed();
 	else if ( tagName == "version" ) {} //TODO: what do we do with this?
 		else if ( tagName == "source" )
 			readRecipemlSrcItems( el );
@@ -120,7 +120,7 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 			}
 		}
 		else if ( tagName == "description" )
-			recipe.instructions += "\n\nDescription: " + el.text().stripWhiteSpace();
+			recipe.instructions += "\n\nDescription: " + el.text().trimmed();
 		else if ( tagName == "preptime" )
 			readRecipemlPreptime( el );
 		else if ( tagName == "yield" ) {
@@ -133,11 +133,11 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 				else if ( tagName == "unit" )
 					recipe.yield.type = y.text();
 				else
-					kdDebug() << "Unknown tag within <yield>: " << y.tagName() << endl;
+					kDebug() << "Unknown tag within <yield>: " << y.tagName() << endl;
 			}
 		}
 		else
-			kdDebug() << "Unknown tag within <head>: " << el.tagName() << endl;
+			kDebug() << "Unknown tag within <head>: " << el.tagName() << endl;
 	}
 }
 
@@ -158,18 +158,18 @@ void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 			{
 				QDomElement cEl = ingDiv.item( j ).toElement();
 				if ( cEl.tagName() == "title" )
-					header = cEl.text().stripWhiteSpace();
+					header = cEl.text().trimmed();
 				else if ( cEl.tagName() == "description" ) {} //TODO: what do we do with this?
 				else if ( cEl.tagName() == "ing" )
 					readRecipemlIng( cEl, 0, header );
 				else if ( tagName == "note" ) {} //TODO: what do we do with this?
 				else
-					kdDebug() << "Unknown tag within <ing-div>: " << cEl.tagName() << endl;
+					kDebug() << "Unknown tag within <ing-div>: " << cEl.tagName() << endl;
 			}
 		}
 	else if ( tagName == "note" ) {} //TODO: what do we do with this?
 		else
-			kdDebug() << "Unknown tag within <ingredients>: " << el.tagName() << endl;
+			kDebug() << "Unknown tag within <ingredients>: " << el.tagName() << endl;
 	}
 }
 
@@ -196,25 +196,25 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, Ingredient *ing_
 				if ( amtChild.tagName() == "qty" )
 					readRecipemlQty( amtChild, quantity );
 				else if ( amtChild.tagName() == "size" )
-					size = amtChild.text().stripWhiteSpace();
+					size = amtChild.text().trimmed();
 				else if ( amtChild.tagName() == "unit" )
-					unit = amtChild.text().stripWhiteSpace();
+					unit = amtChild.text().trimmed();
 				else
-					kdDebug() << "Unknown tag within <amt>: " << amtChild.tagName() << endl;
+					kDebug() << "Unknown tag within <amt>: " << amtChild.tagName() << endl;
 			}
 		}
 		else if ( tagName == "item" ) {
-			name = ingChild.text().stripWhiteSpace();
+			name = ingChild.text().trimmed();
 			if ( ing.attribute( "optional", "no" ) == "yes" )
 				prep_method = "(optional)";
 		}
 		else if ( tagName == "prep" ) { //FIXME: this overwrite the optional attribute
-			prep_method = ingChild.text().stripWhiteSpace();
+			prep_method = ingChild.text().trimmed();
 		}
 		else if ( tagName == "alt-ing" )
 			readRecipemlIng( ingChild, &new_ing, header );
 		else
-			kdDebug() << "Unknown tag within <ing>: " << ingChild.tagName() << endl;
+			kDebug() << "Unknown tag within <ing>: " << ingChild.tagName() << endl;
 	}
 
 	if ( !size.isEmpty() )
@@ -243,9 +243,9 @@ void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )
 		QDomElement el = l.item( i ).toElement();
 
 		if ( el.tagName() == "step" )
-			directions.append( el.text().stripWhiteSpace() );
+			directions.append( el.text().trimmed() );
 		else
-			kdDebug() << "Unknown tag within <directions>: " << el.tagName() << endl;
+			kDebug() << "Unknown tag within <directions>: " << el.tagName() << endl;
 	}
 
 	QString directionsText;
@@ -258,7 +258,7 @@ void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )
 
 			QString sWith = QString( "%1. " ).arg( i );
 			QString text = directions[ i - 1 ];
-			if ( !text.stripWhiteSpace().startsWith( sWith ) )
+			if ( !text.trimmed().startsWith( sWith ) )
 				directionsText += sWith;
 			directionsText += text;
 		}
@@ -282,7 +282,7 @@ void RecipeMLImporter::readRecipemlMenu( const QDomElement& menu_el )
 		else if ( tagName == "recipe" )
 			readRecipemlRecipe( el );
 		else
-			kdDebug() << "Unknown tag within <menu>: " << tagName << endl;
+			kDebug() << "Unknown tag within <menu>: " << tagName << endl;
 	}
 }
 
@@ -294,9 +294,9 @@ void RecipeMLImporter::readRecipemlSrcItems( const QDomElement& sources )
 		QString tagName = srcitem.tagName();
 
 		if ( tagName == "srcitem" )
-			recipe.authorList.append( Element( srcitem.text().stripWhiteSpace() ) );
+			recipe.authorList.append( Element( srcitem.text().trimmed() ) );
 		else
-			kdDebug() << "Unknown tag within <source>: " << tagName << endl;
+			kDebug() << "Unknown tag within <source>: " << tagName << endl;
 	}
 }
 
@@ -321,7 +321,7 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 				else if ( time_tagName == "timeunit" )
 					timeunit = time_el.text();
 				else
-					kdDebug() << "Unknown tag within <time>: " << time_tagName << endl;
+					kDebug() << "Unknown tag within <time>: " << time_tagName << endl;
 			}
 
 			int minutes = 0;
@@ -331,12 +331,12 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 			else if ( timeunit == "hours" )
 				hours = qty;
 			else
-				kdDebug() << "Unknown timeunit: " << timeunit << endl;
+				kDebug() << "Unknown timeunit: " << timeunit << endl;
 
 			recipe.prepTime = QTime( hours + minutes / 60, minutes % 60 );
 		}
 		else
-			kdDebug() << "Unknown tag within <preptime>: " << tagName << endl;
+			kDebug() << "Unknown tag within <preptime>: " << tagName << endl;
 	}
 }
 
@@ -352,7 +352,7 @@ void RecipeMLImporter::readRecipemlQty( const QDomElement &qty, Ingredient &ing 
 		else if ( tagName.isEmpty() )
 			ing.amount = MixedNumber::fromString( qty.text() ).toDouble();
 		else
-			kdDebug() << "Unknown tag within <qty>: " << tagName << endl;
+			kDebug() << "Unknown tag within <qty>: " << tagName << endl;
 	}
 }
 
@@ -368,7 +368,7 @@ void RecipeMLImporter::readRecipemlRange( const QDomElement& range, double &amou
 		else if ( subTagName == "q2" )
 			q2 = MixedNumber::fromString( rangeChild.text() ).toDouble();
 		else
-			kdDebug() << "Unknown tag within <range>: " << subTagName << endl;
+			kDebug() << "Unknown tag within <range>: " << subTagName << endl;
 	}
 
 	amount = q1;

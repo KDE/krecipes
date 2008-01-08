@@ -18,6 +18,8 @@
 #define KSTARTUPLOGO_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kapplication.h>
 #include <kstandarddirs.h>

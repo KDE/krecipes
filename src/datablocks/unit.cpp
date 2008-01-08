@@ -43,19 +43,19 @@ QString Unit::determineName( double amount, bool useAbbrev ) const
 bool Unit::operator==( const Unit &u ) const
 {
 	//treat QString::null and "" as the same
-	QString plural_test1 = u.plural.lower();
+	QString plural_test1 = u.plural.toLower();
 	if ( plural_test1.isNull() )
 		plural_test1 = "";
 
-	QString plural_test2 = plural.lower();
+	QString plural_test2 = plural.toLower();
 	if ( plural_test2.isNull() )
 		plural_test2 = "";
 
-	QString single_test1 = u.name.lower();
+	QString single_test1 = u.name.toLower();
 	if ( single_test1.isNull() )
 		single_test1 = "";
 
-	QString single_test2 = name.lower();
+	QString single_test2 = name.toLower();
 	if ( single_test2.isNull() )
 		single_test2 = "";
 
@@ -71,5 +71,5 @@ bool Unit::operator==( const Unit &u ) const
 
 bool Unit::operator<( const Unit &u ) const
 {
-	return ( QString::localeAwareCompare( name.lower(), u.name.lower() ) < 0 );
+	return ( QString::localeAwareCompare( name.toLower(), u.name.toLower() ) < 0 );
 }

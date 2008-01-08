@@ -20,7 +20,7 @@
 class QComboBox;
 
 class RecipeDB;
-class KPopupMenu;
+class KMenu;
 
 class UnitListView : public DBListViewBase
 {
@@ -54,7 +54,7 @@ protected:
 	virtual void removeUnit( int );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 	void hideTypeCombo();
 	void updateType( int type );
 
@@ -62,14 +62,14 @@ private slots:
 	void remove();
 	void rename();
 
-	void modUnit( QListViewItem* i, const QPoint &p, int c );
-	void saveUnit( QListViewItem* i, const QString &text, int c );
+	void modUnit( Q3ListViewItem* i, const QPoint &p, int c );
+	void saveUnit( Q3ListViewItem* i, const QString &text, int c );
 
 private:
 	bool checkBounds( const Unit &unit );
-	void insertTypeComboBox( QListViewItem* );
+	void insertTypeComboBox( Q3ListViewItem* );
 
-	KPopupMenu *kpop;
+	KMenu *kpop;
 	QComboBox *typeComboBox;
 };
 

@@ -18,6 +18,9 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPixmap>
 #include <kstandarddirs.h>
 
 #include "datablocks/recipe.h"
@@ -30,13 +33,13 @@ void KreImporter::parseFile( const QString &filename )
 {
 	QFile * file = 0;
 	bool unlink = false;
-	kdDebug() << "loading file: %s" << filename << endl;
+	kDebug() << "loading file: %s" << filename << endl;
 
 	if ( filename.right( 4 ) == ".kre" ) {
 		file = new QFile( filename );
-		kdDebug() << "file is an archive" << endl;
+		kDebug() << "file is an archive" << endl;
 		KTar* kre = new KTar( filename, "application/x-gzip" );
-		kre->open( IO_ReadOnly );
+		kre->open( QIODevice::ReadOnly );
 		const KArchiveDirectory* dir = kre->directory();
 		QString name;
 		QStringList fileList = dir->entries();
@@ -46,11 +49,11 @@ void KreImporter::parseFile( const QString &filename )
 			}
 		}
 		if ( name.isEmpty() ) {
-			kdDebug() << "error: Archive doesn't contain a valid Krecipes file" << endl;
+			kDebug() << "error: Archive doesn't contain a valid Krecipes file" << endl;
 			setErrorMsg( i18n( "Archive does not contain a valid Krecipes file" ) );
 			return ;
 		}
-		QString tmp_dir = locateLocal( "tmp", "" );
+		QString tmp_dir = KStandardDirs::locateLocal( "tmp", "" );
 		dir->copyTo( tmp_dir );
 		file = new QFile( tmp_dir + name );
 		kre->close();
@@ -60,14 +63,14 @@ void KreImporter::parseFile( const QString &filename )
 		file = new QFile( filename );
 	}
 
-	if ( file->open( IO_ReadOnly ) ) {
-		kdDebug() << "file opened" << endl;
+	if ( file->open( QIODevice::ReadOnly ) ) {
+		kDebug() << "file opened" << endl;
 		QDomDocument doc;
 		QString error;
 		int line;
 		int column;
 		if ( !doc.setContent( file, &error, &line, &column ) ) {
-			kdDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
+			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
 			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3" ) ).arg( error ).arg( line ).arg( column ) );
 			return ;
 		}
@@ -81,7 +84,7 @@ void KreImporter::parseFile( const QString &filename )
 
 		// TODO Check if there are changes between versions
 		QString kreVersion = kreml.attribute( "version" );
-		kdDebug() << QString( i18n( "KreML version %1" ) ).arg( kreVersion ) << endl;
+		kDebug() << QString( i18n( "KreML version %1" ) ).arg( kreVersion ) << endl;
 
 		QDomNodeList r = kreml.childNodes();
 		QDomElement krecipe;
@@ -100,7 +103,7 @@ void KreImporter::parseFile( const QString &filename )
 						readIngredients( el.childNodes(), &recipe );
 					}
 					if ( el.tagName() == "krecipes-instructions" ) {
-						recipe.instructions = el.text().stripWhiteSpace();
+						recipe.instructions = el.text().trimmed();
 					}
 					if ( el.tagName() == "krecipes-ratings" ) {
 						readRatings( el.childNodes(), &recipe );
@@ -144,10 +147,10 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 		QDomElement el = l.item( i ).toElement();
 		if ( el.tagName() == "title" ) {
 			recipe->title = el.text();
-			kdDebug() << "Found title: " << recipe->title << endl;
+			kDebug() << "Found title: " << recipe->title << endl;
 		}
 		else if ( el.tagName() == "author" ) {
-			kdDebug() << "Found author: " << el.text() << endl;
+			kDebug() << "Found author: " << el.text() << endl;
 			recipe->authorList.append( Element( el.text() ) );
 		}
 		else if ( el.tagName() == "serving" ) { //### Keep for < 0.9 compatibility
@@ -171,8 +174,8 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 			for ( unsigned j = 0; j < categories.count(); j++ ) {
 				QDomElement c = categories.item( j ).toElement();
 				if ( c.tagName() == "cat" ) {
-					kdDebug() << "Found category: " << QString( c.text() ).stripWhiteSpace() << endl;
-					recipe->categoryList.append( Element( QString( c.text() ).stripWhiteSpace() ) );
+					kDebug() << "Found category: " << QString( c.text() ).trimmed() << endl;
+					recipe->categoryList.append( Element( QString( c.text() ).trimmed() ) );
 				}
 			}
 		}
@@ -181,11 +184,11 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 				QDomNodeList pictures = el.childNodes();
 				for ( unsigned j = 0; j < pictures.count(); j++ ) {
 					QDomElement pic = pictures.item( j ).toElement();
-					QCString decodedPic;
+					Q3CString decodedPic;
 					if ( pic.tagName() == "pic" )
-						kdDebug() << "Found photo" << endl;
+						kDebug() << "Found photo" << endl;
 					QPixmap pix;
-					KCodecs::base64Decode( QCString( pic.text().latin1() ), decodedPic );
+					KCodecs::base64Decode( Q3CString( pic.text().toLatin1() ), decodedPic );
 					int len = decodedPic.size();
 					QByteArray picData( len );
 					memcpy( picData.data(), decodedPic.data(), len );
@@ -209,17 +212,17 @@ void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const 
 			for ( unsigned j = 0; j < ingredient.count(); j++ ) {
 				QDomElement ing = ingredient.item( j ).toElement();
 				if ( ing.tagName() == "name" ) {
-					new_ing.name = QString( ing.text() ).stripWhiteSpace();
-					kdDebug() << "Found ingredient: " << new_ing.name << endl;
+					new_ing.name = QString( ing.text() ).trimmed();
+					kDebug() << "Found ingredient: " << new_ing.name << endl;
 				}
 				else if ( ing.tagName() == "amount" ) {
 					readAmount(ing,new_ing.amount,new_ing.amount_offset);
 				}
 				else if ( ing.tagName() == "unit" ) {
-					new_ing.units = Unit( ing.text().stripWhiteSpace(), new_ing.amount+new_ing.amount_offset );
+					new_ing.units = Unit( ing.text().trimmed(), new_ing.amount+new_ing.amount_offset );
 				}
 				else if ( ing.tagName() == "prep" ) {
-					new_ing.prepMethodList = ElementList::split(",",QString( ing.text() ).stripWhiteSpace());
+					new_ing.prepMethodList = ElementList::split(",",QString( ing.text() ).trimmed());
 				}
 				else if ( ing.tagName() == "substitutes" ) {
 					readIngredients(ing.childNodes(), recipe, header, &new_ing);
@@ -246,12 +249,12 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 	for ( unsigned i = 0; i < children.count(); i++ ) {
 		QDomElement child = children.item( i ).toElement();
 		if ( child.tagName() == "min" ) {
-			min = ( QString( child.text() ).stripWhiteSpace() ).toDouble();
+			min = ( QString( child.text() ).trimmed() ).toDouble();
 		}
 		else if ( child.tagName() == "max" )
-			max = ( QString( child.text() ).stripWhiteSpace() ).toDouble();
+			max = ( QString( child.text() ).trimmed() ).toDouble();
 		else if ( child.tagName().isEmpty() )
-			min = ( QString( amountEl.text() ).stripWhiteSpace() ).toDouble();
+			min = ( QString( amountEl.text() ).trimmed() ).toDouble();
 	}
 
 	amount = min;

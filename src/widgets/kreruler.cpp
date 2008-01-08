@@ -30,8 +30,13 @@
 #include <kiconloader.h>
 #include <qcursor.h>
 #include <qpainter.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include "krepagelayout.h"
 
@@ -55,7 +60,7 @@ public:
     KoTabulator currTab;
     // The action we're currently doing - basically only valid between press and release time
     KoRuler::Action action;
-    QPopupMenu *rb_menu;
+    Q3PopupMenu *rb_menu;
     int mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
@@ -67,7 +72,7 @@ public:
 
 // Equality test for tab positions in particular
 static inline bool equals( double a, double b )  {
-    return kAbs( a - b ) < 1E-4;
+    return qAbs( a - b ) < 1E-4;
 }
 
 
@@ -81,13 +86,13 @@ const int KoRuler::F_HELPLINES = 4;
 const int KoRuler::F_NORESIZE = 8;
 
 /*================================================================*/
-KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
+KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Qt::Orientation _orientation,
                  const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit )
-    : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
+    : Q3Frame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
-    setWFlags( WResizeNoErase | WRepaintNoErase );
-    setFrameStyle( MenuBarPanel );
+    setWFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
+    setFrameStyle( QFrame::StyledPanel );
 
     d=new KoRulerPrivate();
 
@@ -205,7 +210,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
-    resize( width(), QMAX( fm.height() + 4, 20 ) );
+    resize( width(), qMax( fm.height() + 4, 20 ) );
 
     // Use a double-buffer pixmap
     QPainter p( &buffer );
@@ -239,7 +244,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
-        maxwidth = QMAX( maxwidth, textwidth );
+        maxwidth = qMax( maxwidth, textwidth );
     }
 
     // Make sure that the ruler stays readable at lower zoom levels
@@ -250,7 +255,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
-        maxwidth = QMAX( maxwidth, textwidth );
+        maxwidth = qMax( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
                     textwidth, height(), AlignLeft | AlignTop, str );
@@ -305,7 +310,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
-    resize( QMAX( fm.height() + 4, 20 ), height() );
+    resize( qMax( fm.height() + 4, 20 ), height() );
 
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
@@ -344,7 +349,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textwidth = fm.width( str );
-            maxheight = QMAX( maxheight, textwidth );
+            maxheight = qMax( maxheight, textwidth );
         }
 
         // Make sure that the ruler stays readable at lower zoom levels
@@ -356,7 +361,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textheight = fm.height();
             int textwidth = fm.width( str );
-            maxheight = QMAX( maxheight, textwidth );
+            maxheight = qMax( maxheight, textwidth );
             p.save();
             p.translate( qRound(( width() - textheight ) * 0.5),
                          qRound(i) - diffy + qRound(textwidth * 0.5) );
@@ -526,7 +531,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         {
             d->tabList.remove(d->currTab);
         }
-        qHeapSort( d->tabList );
+        qSort( d->tabList );
 
         // Delete the new tabulator if it is placed on top of another.
         KoTabulatorList::ConstIterator tmpTab=d->tabList.begin();
@@ -805,7 +810,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 
 void KoRuler::resizeEvent( QResizeEvent *e )
 {
-    QFrame::resizeEvent( e );
+    Q3Frame::resizeEvent( e );
     buffer.resize( size() );
 }
 
@@ -840,7 +845,7 @@ void KoRuler::handleDoubleClick()
 void KoRuler::setTabList( const KoTabulatorList & _tabList )
 {
     d->tabList = _tabList;
-    qHeapSort(d->tabList);   // "Trust no one." as opposed to "In David we trust."
+    qSort(d->tabList);   // "Trust no one." as opposed to "In David we trust."
 
     // Note that d->currTab and d->removeTab could now point to
     // tabs which don't exist in d->tabList
@@ -855,7 +860,7 @@ double KoRuler::makeIntern( double _v )
 
 void KoRuler::setupMenu()
 {
-    d->rb_menu = new QPopupMenu();
+    d->rb_menu = new Q3PopupMenu();
     Q_CHECK_PTR( d->rb_menu );
     for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
     {
@@ -955,7 +960,7 @@ void KoRuler::showMousePos( bool _showMPos )
 
 void KoRuler::setOffset( int _diffx, int _diffy )
 {
-    //kdDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
+    //kDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
     diffx = _diffx;
     diffy = _diffy;
     update();
@@ -1029,8 +1034,8 @@ QSize KoRuler::minimumSizeHint() const
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
 
-    size.setWidth( QMAX( fm.height() + 4, 20 ) );
-    size.setHeight( QMAX( fm.height() + 4, 20 ) );
+    size.setWidth( qMax( fm.height() + 4, 20 ) );
+    size.setHeight( qMax( fm.height() + 4, 20 ) );
 
     return size;
 }

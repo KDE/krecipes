@@ -13,6 +13,8 @@
 #include "createunitdialog.h"
 
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <klineedit.h>
@@ -22,13 +24,13 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 		: KDialogBase( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( page );
+	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	QGridLayout *gridLayout = new QGridLayout( box->layout() );
+	Q3GridLayout *gridLayout = new Q3GridLayout( box->layout() );
 	gridLayout->setAlignment( Qt::AlignTop );
 
 	box->setTitle( (newUnit)?i18n( "New Unit" ):i18n("Unit") );

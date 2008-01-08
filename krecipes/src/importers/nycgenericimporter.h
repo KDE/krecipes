@@ -31,7 +31,7 @@ protected:
 	void parseFile( const QString& filename );
 
 private:
-	void importNYCGeneric( QTextStream &stream );
+	void importNYCGeneric( Q3TextStream &stream );
 	void putDataInRecipe();
 	void loadIngredientLine( const QString & );
 

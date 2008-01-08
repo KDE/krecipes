@@ -17,6 +17,8 @@
 #include "baseexporter.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/mixednumber.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class IngredientData;
 
@@ -41,7 +43,7 @@ protected:
 	virtual int headerFlags() const;
 
 private:
-	bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+	bool removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
 	void createCategoryStructure( QString &xml, const RecipeList &recipes );
 	void writeCategoryStructure( QString &xml, const CategoryTree *categoryTree );
 	QString generateIngredient( const IngredientData &ing );

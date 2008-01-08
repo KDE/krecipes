@@ -11,6 +11,8 @@
 #define CONSTRAINTLIST_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "unit.h"
 
@@ -42,6 +44,6 @@ public:
 	bool enabled;
 };
 
-typedef QValueList< Constraint > ConstraintList;
+typedef Q3ValueList< Constraint > ConstraintList;
 
 #endif

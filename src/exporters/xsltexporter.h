@@ -13,6 +13,8 @@
 
 #include <qdom.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <limits.h>
 
@@ -35,7 +37,7 @@ public:
 	virtual int supportedItems() const;
 
 	static void removeHTMLFiles( const QString &filename, int recipe_id );
-	static void removeHTMLFiles( const QString &filename, const QValueList<int> &recipe_ids );
+	static void removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids );
 
 	void setTemplate( const QString &filename );
 	void setStyle( const QString &filename );

@@ -13,7 +13,7 @@
 #define INGREDIENT_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "datablocks/unit.h"
 #include "datablocks/elementlist.h"
@@ -49,7 +49,7 @@ public:
 	Ingredient( const QString &name, double amount, const Unit &units, int unitID = -1, int ingredientID = -1 );
 	Ingredient( const IngredientData& );
 
-	QValueList<IngredientData> substitutes;
+	Q3ValueList<IngredientData> substitutes;
 
 	void setAmount( const QString &range, bool *ok = 0 );
 

@@ -14,17 +14,19 @@
 
 #include "dblistviewbase.h"
 #include "datablocks/element.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class RecipeDB;
-class KPopupMenu;
+class KMenu;
 
 class AuthorCheckListView;
 
-class AuthorCheckListItem: public QCheckListItem
+class AuthorCheckListItem: public Q3CheckListItem
 {
 public:
 	AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author );
-	AuthorCheckListItem( AuthorCheckListView* qlv, QListViewItem *after, const Element &author );
+	AuthorCheckListItem( AuthorCheckListView* qlv, Q3ListViewItem *after, const Element &author );
 
 	Element author() const;
 
@@ -68,20 +70,20 @@ protected:
 	virtual void removeAuthor( int );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
 		();
 	void rename();
 
-	void modAuthor( QListViewItem* i );
-	void saveAuthor( QListViewItem* i );
+	void modAuthor( Q3ListViewItem* i );
+	void saveAuthor( Q3ListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );
 
-	KPopupMenu *kpop;
+	KMenu *kpop;
 };
 
 
@@ -92,7 +94,7 @@ public:
 
 	virtual void stateChange(AuthorCheckListItem *,bool);
 
-	QValueList<Element> selections() const{ return m_selections; }
+	Q3ValueList<Element> selections() const{ return m_selections; }
 
 protected:
 	virtual void createAuthor( const Element &ing );
@@ -101,7 +103,7 @@ protected:
 	virtual void load( int limit, int offset );
 
 private:
-	QValueList<Element> m_selections;
+	Q3ValueList<Element> m_selections;
 };
 
 #endif //AUTHORLISTVIEW_H

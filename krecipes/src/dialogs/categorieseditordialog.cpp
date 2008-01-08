@@ -20,6 +20,9 @@
 #include "widgets/categorylistview.h"
 #include "createcategorydialog.h"
 #include "backends/recipedb.h"
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -27,14 +30,14 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	// Store pointer to database
 	database = db;
 
-	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
 	layout->addWidget( categoryListView );
 
 	//Buttons
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	Q3VBoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
 
 	newCategoryButton = new QPushButton( this );
 	newCategoryButton->setText( i18n( "Create ..." ) );

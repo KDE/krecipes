@@ -13,10 +13,12 @@
 #include "createcategorydialog.h"
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -26,20 +28,20 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 		: KDialogBase( parent, "createCategoryDialog", true, i18n( "New Category" ),
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( page );
+	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
 	boxLayout->setAlignment( Qt::AlignTop );
 	box->setTitle( i18n( "New Category" ) );
 
 	elementEdit = new KLineEdit( box );
 	boxLayout->addWidget( elementEdit );
 
-	QHBox *subcatHBox = new QHBox( box );
+	Q3HBox *subcatHBox = new Q3HBox( box );
 	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
 	categoryComboBox = new KComboBox( subcatHBox );
 	boxLayout->addWidget( subcatHBox );

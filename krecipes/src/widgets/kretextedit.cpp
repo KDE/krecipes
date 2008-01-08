@@ -10,7 +10,9 @@
 
 #include "kretextedit.h"
 
-#include <qtextstream.h>
+#include <q3textstream.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <kaccel.h>
 #include <kdebug.h>
@@ -42,7 +44,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	if ( noModifier ) {
 		QString keycode = e->text();
 		if ( !keycode.isEmpty() && keycode.unicode() ->isPrint() ) {
-			QTextEdit::keyPressEvent ( e );
+			Q3TextEdit::keyPressEvent ( e );
 			tryCompletion();
 			e->accept();
 			return ;
@@ -51,7 +53,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 	// Handles completion
 	if ( keys[ TextCompletion ].isNull() )
-		cut = KStdAccel::shortcut( KStdAccel::TextCompletion );
+		cut = KStandardShortcut::shortcut( KStandardShortcut::TextCompletion );
 	else
 		cut = keys[ TextCompletion ];
 
@@ -71,7 +73,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 	// Handles previous match
 	if ( keys[ PrevCompletionMatch ].isNull() )
-		cut = KStdAccel::shortcut( KStdAccel::PrevCompletion );
+		cut = KStandardShortcut::shortcut( KStandardShortcut::PrevCompletion );
 	else
 		cut = keys[ PrevCompletionMatch ];
 
@@ -82,7 +84,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 	// Handles next match
 	if ( keys[ NextCompletionMatch ].isNull() )
-		cut = KStdAccel::shortcut( KStdAccel::NextCompletion );
+		cut = KStandardShortcut::shortcut( KStandardShortcut::NextCompletion );
 	else
 		cut = keys[ NextCompletionMatch ];
 

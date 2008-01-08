@@ -15,11 +15,19 @@
 #include <qsignalmapper.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <QLabel>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -43,18 +51,18 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	//Store pointer to Recipe Database
 	database = db;
 
-	QVBoxLayout *tabLayout = new QVBoxLayout( this );
+	Q3VBoxLayout *tabLayout = new Q3VBoxLayout( this );
 	tabWidget = new QTabWidget( this );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	basicSearchTab = new QGroupBox( this );
-	basicSearchTab->setFrameStyle( QFrame::NoFrame );
+	basicSearchTab = new Q3GroupBox( this );
+	basicSearchTab->setFrameStyle( Q3Frame::NoFrame );
 	basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	//Design dialog
 
-	layout = new QGridLayout( basicSearchTab, 1, 1, 0, 0 );
+	layout = new Q3GridLayout( basicSearchTab, 1, 1, 0, 0 );
 
 	// Border Spacers
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -62,13 +70,13 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addMultiCell( spacer_top, 0, 0, 1, 4 );
 
-	searchBar = new QHBox( basicSearchTab );
+	searchBar = new Q3HBox( basicSearchTab );
 	searchBar->setSpacing( 7 );
 	layout->addWidget( searchBar, 1, 1 );
 
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 	QPushButton *clearSearchButton = new QPushButton( searchBar );
-	clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
+	clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) );
 
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18n( "Search:" ) );
@@ -91,24 +99,24 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	layout->addMultiCellWidget( recipeListView, 3, 3, 1, 3 );
 
-	buttonBar = new QHBox( basicSearchTab );
+	buttonBar = new Q3HBox( basicSearchTab );
 	layout->addMultiCellWidget( buttonBar, 4, 4, 1, 3 );
 
 	openButton = new QPushButton( buttonBar );
 	openButton->setText( i18n( "Open Recipe(s)" ) );
 	openButton->setDisabled( true );
-	QPixmap pm = il->loadIcon( "ok", KIcon::NoGroup, 16 );
+	QPixmap pm = il->loadIcon( "ok", KIconLoader::NoGroup, 16 );
 	openButton->setIconSet( pm );
 	editButton = new QPushButton( buttonBar );
 	editButton->setText( i18n( "Edit Recipe" ) );
 	editButton->setDisabled( true );
-	pm = il->loadIcon( "edit", KIcon::NoGroup, 16 );
+	pm = il->loadIcon( "edit", KIconLoader::NoGroup, 16 );
 	editButton->setIconSet( pm );
 	removeButton = new QPushButton( buttonBar );
 	removeButton->setText( i18n( "Delete" ) );
 	removeButton->setDisabled( true );
 	removeButton->setMaximumWidth( 100 );
-	pm = il->loadIcon( "editshred", KIcon::NoGroup, 16 );
+	pm = il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 );
 	removeButton->setIconSet( pm );
 
 	tabWidget->insertTab( basicSearchTab, i18n( "Basic" ) );
@@ -134,7 +142,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	connect( clearSearchButton, SIGNAL( clicked() ), this, SLOT( clearSearch() ) );
 
-	KConfig * config = kapp->config();
+	KConfig * config = KGlobal::config();
 	config->setGroup( "Performance" );
 	if ( config->readBoolEntry("SearchAsYouType",true) ) {
 		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
@@ -156,10 +164,10 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( recipeListView, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
 
 	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( advancedSearch, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
+	connect( advancedSearch, SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ), SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ) );
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( actionHandler, SIGNAL( recipesSelected( const QValueList<int> &, int ) ), SIGNAL( recipesSelected( const QValueList<int> &, int ) ) );
+	connect( actionHandler, SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ), SIGNAL( recipesSelected( const Q3ValueList<int> &, int ) ) );
 }
 
 SelectRecipeDialog::~SelectRecipeDialog()
@@ -206,7 +214,7 @@ void SelectRecipeDialog::haveSelectedItems()
 
 void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
-	QPtrList<QListViewItem> items = recipeListView->selectedItems();
+	Q3PtrList<Q3ListViewItem> items = recipeListView->selectedItems();
 	if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* )items.at(0);
 		database->loadRecipe( recipe, RecipeDB::All, recipe_it->recipeID() );
@@ -217,7 +225,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 {
 	recipeListView->populateAll(); //TODO: this would be faster if we didn't need to load everything first
 
-	kdDebug() << "I got row " << row << "\n";
+	kDebug() << "I got row " << row << "\n";
 
 	//First get the category ID corresponding to this combo row
 	int categoryID = categoryBox->id( row );
@@ -227,9 +235,9 @@ void SelectRecipeDialog::filterComboCategory( int row )
 	recipeFilter->filter( searchBox->text() );
 
 	if ( categoryID != -1 ) {
-	        QListViewItemIterator it( recipeListView );
+	        Q3ListViewItemIterator it( recipeListView );
 		while ( it.current() ) {
-			QListViewItem *item = it.current();
+			Q3ListViewItem *item = it.current();
 			if ( item->isVisible() ) {
 				item->setOpen( true ); 	//will only open if already populated 
 							//(could be the selected category's parent

@@ -11,7 +11,7 @@
 #ifndef ELEMENTLIST_H
 #define ELEMENTLIST_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 
 #include "element.h"
@@ -19,7 +19,7 @@
 /**
 @author Unai Garro
 */
-class ElementList: public QValueList<Element>
+class ElementList: public Q3ValueList<Element>
 {
 public:
 	ElementList();
@@ -38,6 +38,6 @@ public:
 	static ElementList split( const QString &sep, const QString &str );
 };
 
-typedef QValueList<int> IDList;
+typedef Q3ValueList<int> IDList;
 
 #endif

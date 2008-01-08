@@ -15,13 +15,15 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
-IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : QCheckListItem( qlv, QString::null, QCheckListItem::CheckBox ),
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : Q3CheckListItem( qlv, QString::null, Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
 	// Initialize the ingredient data with the the property data
@@ -30,7 +32,7 @@ IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, 
 	ingStored->name = ing.name;
 }
 
-IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, QListViewItem *after, const Element &ing ) : QCheckListItem( qlv, after, QString::null, QCheckListItem::CheckBox ),
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, Q3ListViewItem *after, const Element &ing ) : Q3CheckListItem( qlv, after, QString::null, Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
 	// Initialize the ingredient data with the the property data
@@ -76,7 +78,7 @@ void IngredientCheckListItem::stateChange( bool on )
 IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db, db->ingredientCount() )
 {
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void IngredientListView::init()
@@ -116,22 +118,22 @@ StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, boo
 	if ( editable ) {
 		setRenameable( 0, true );
 
-		KIconLoader *il = KGlobal::iconLoader();
+		KIconLoader *il = KIconLoader::global();
 
-		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop = new KMenu( this );
+		kpop->insertItem( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem* ) ), this, SLOT( modIngredient( QListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed( QListViewItem* ) ), this, SLOT( saveIngredient( QListViewItem* ) ) );
+		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modIngredient( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( itemRenamed( Q3ListViewItem* ) ), this, SLOT( saveIngredient( Q3ListViewItem* ) ) );
 	}
 }
 
-void StdIngredientListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdIngredientListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -152,7 +154,7 @@ void StdIngredientListView::createNew()
 void StdIngredientListView::remove
 	()
 {
-	QListViewItem * it = currentItem();
+	Q3ListViewItem * it = currentItem();
 
 	if ( it ) {
 		int ingredientID = it->text( 1 ).toInt();
@@ -177,7 +179,7 @@ void StdIngredientListView::remove
 
 void StdIngredientListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item )
 		IngredientListView::rename( item, 0 );
@@ -185,22 +187,22 @@ void StdIngredientListView::rename()
 
 void StdIngredientListView::createIngredient( const Element &ing )
 {
-	createElement(new QListViewItem( this, ing.name, QString::number( ing.id ) ));
+	createElement(new Q3ListViewItem( this, ing.name, QString::number( ing.id ) ));
 }
 
 void StdIngredientListView::removeIngredient( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 1 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
-void StdIngredientListView::modIngredient( QListViewItem* i )
+void StdIngredientListView::modIngredient( Q3ListViewItem* i )
 {
 	if ( i )
 		IngredientListView::rename( i, 0);
 }
 
-void StdIngredientListView::saveIngredient( QListViewItem* i )
+void StdIngredientListView::saveIngredient( Q3ListViewItem* i )
 {
 	if ( !checkBounds( i->text( 0 ) ) ) {
 		reload(ForceReload); //reset the changed text
@@ -256,7 +258,7 @@ void IngredientCheckListView::createIngredient( const Element &ing )
 
 void IngredientCheckListView::removeIngredient( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 1 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
@@ -264,8 +266,8 @@ void IngredientCheckListView::load( int limit, int offset )
 {
 	IngredientListView::load(limit,offset);
 
-	for ( QValueList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
-		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*ing_it).id ), 1 );
+	for ( Q3ValueList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
+		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*ing_it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);
 		}

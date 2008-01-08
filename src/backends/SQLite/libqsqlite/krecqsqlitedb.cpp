@@ -22,7 +22,9 @@
 #include "krecqsqlitedb.h"
 #include "krecqsqliteresult.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -43,12 +45,12 @@ bool QSQLiteDB::open( const QString &dbname )
 {
 #if HAVE_SQLITE
 	char * errmsg = 0;
-	if ( (m_db = sqlite_open( dbname.latin1(), 0, &errmsg )) == 0L ) {
+	if ( (m_db = sqlite_open( dbname.toLatin1(), 0, &errmsg )) == 0L ) {
 		free( errmsg );
 		return false;
 	}
 #elif HAVE_SQLITE3
-	if ( sqlite3_open( dbname.latin1(), &m_db ) != SQLITE_OK )
+	if ( sqlite3_open( dbname.toLatin1(), &m_db ) != SQLITE_OK )
 		return false;
 #endif
 
@@ -87,14 +89,14 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 	char *errmsg = 0;
 #if HAVE_SQLITE
 
-	if ( sqlite_exec( m_db, query.latin1(), &call_back, &res, &errmsg ) > 0 )
+	if ( sqlite_exec( m_db, query.toLatin1(), &call_back, &res, &errmsg ) > 0 )
 #elif HAVE_SQLITE3
 
-	if ( sqlite3_exec( m_db, query.latin1(), &call_back, &res, &errmsg ) > 0 )
+	if ( sqlite3_exec( m_db, query.toLatin1(), &call_back, &res, &errmsg ) > 0 )
 #endif
 
 	{
-		kdDebug() << "SQLite error: " << errmsg << endl <<
+		kDebug() << "SQLite error: " << errmsg << endl <<
 		"\t (Query: " << query << ")" << endl;
 		res.setError( QString(errmsg) );
 		res.setStatus( QSQLiteResult::Failure );
@@ -125,8 +127,8 @@ int QSQLiteDB::call_back( void* result, int argc, char** argv, char** columns )
 {
 	QSQLiteResult * res = ( QSQLiteResult* ) result;
 
-	QMap<QString, QCString> tableString;
-	QMap<int, QCString> tableInt;
+	QMap<QString, Q3CString> tableString;
+	QMap<int, Q3CString> tableInt;
 
 	for ( int i = 0; i < argc; i++ ) {
 		tableInt.insert( i, argv[ i ] );

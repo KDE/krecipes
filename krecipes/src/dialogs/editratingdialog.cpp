@@ -16,18 +16,20 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <knuminput.h>
-#include <qheader.h>
-#include <klistview.h>
-#include <qtextedit.h>
+#include <q3header.h>
+#include <k3listview.h>
+#include <q3textedit.h>
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qpainter.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -38,17 +40,17 @@
 
 #include "widgets/ratingwidget.h"
 
-class RatingCriteriaListView : public KListView
+class RatingCriteriaListView : public K3ListView
 {
 public:
-	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : KListView(parent,name){}
+	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : K3ListView(parent,name){}
 
-	void rename( QListViewItem *it, int c )
+	void rename( Q3ListViewItem *it, int c )
 	{
 		if ( c == 1 )
 			it->setPixmap(c,QPixmap());
 
-		KListView::rename(it,c);
+		K3ListView::rename(it,c);
 	}
 };
 
@@ -74,14 +76,14 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* pa
 
 void EditRatingDialog::init( const ElementList &criteriaList )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 	
-	layout2 = new QHBox( page );
+	layout2 = new Q3HBox( page );
 	
 	raterLabel = new QLabel( layout2, "raterLabel" );
 	raterEdit = new QLineEdit( layout2, "raterEdit" );
 	
-	layout8 = new QHBox( page );
+	layout8 = new Q3HBox( page );
 	
 	criteriaLabel = new QLabel( layout8, "criteriaLabel" );
 	
@@ -109,19 +111,19 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	
 	commentsLabel = new QLabel( page, "commentsLabel" );
 	
-	commentsEdit = new QTextEdit( page, "commentsEdit" );
+	commentsEdit = new Q3TextEdit( page, "commentsEdit" );
 	
 	languageChange();
 	resize( QSize(358, 331).expandedTo(minimumSizeHint()) );
 	clearWState( WState_Polished );
 
-	connect( criteriaListView, SIGNAL(itemRenamed(QListViewItem*,const QString &,int)), this, SLOT(itemRenamed(QListViewItem*,const QString &,int)) );
+	connect( criteriaListView, SIGNAL(itemRenamed(Q3ListViewItem*,const QString &,int)), this, SLOT(itemRenamed(Q3ListViewItem*,const QString &,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( removeButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
 
-	KIconLoader *il = KGlobal::iconLoader();
-	KPopupMenu *kpop = new KPopupMenu( criteriaListView );
-	kpop->insertItem( il->loadIcon( "editshred", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
+	KIconLoader *il = KIconLoader::global();
+	KMenu *kpop = new KMenu( criteriaListView );
+	kpop->insertItem( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Key_Delete );
 
 	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
 		criteriaComboBox->insertItem( ( *criteria_it ).name );
@@ -155,13 +157,13 @@ void EditRatingDialog::languageChange()
 	raterLabel->setText( i18n( "Rater:" ) );
 }
 
-void EditRatingDialog::itemRenamed(QListViewItem* it, const QString &, int c)
+void EditRatingDialog::itemRenamed(Q3ListViewItem* it, const QString &, int c)
 {
 	if ( c == 1 ) {
 		bool ok = false;
 		MixedNumber stars_mn = MixedNumber::fromString(it->text(c),&ok);
 		if ( ok && !it->text(c).isEmpty() ) {
-			double stars = QMAX(0,QMIN(stars_mn.toDouble(),5)); //force to between 0 and 5
+			double stars = qMax(0,qMin(stars_mn.toDouble(),5)); //force to between 0 and 5
 			QPixmap starsPic = Rating::starsPixmap( stars );
 			it->setPixmap(c,starsPic);
 			it->setText(2,QString::number(stars));
@@ -180,7 +182,7 @@ Rating EditRatingDialog::rating() const
 {
 	Rating r;
 
-	for ( QListViewItem *it = criteriaListView->firstChild(); it; it = it->nextSibling() ) {
+	for ( Q3ListViewItem *it = criteriaListView->firstChild(); it; it = it->nextSibling() ) {
 		RatingCriteria rc;
 		rc.name = it->text(0);
 		rc.stars = it->text(2).toDouble();
@@ -210,7 +212,7 @@ void EditRatingDialog::loadRating( const Rating &rating )
 void EditRatingDialog::slotAddRatingCriteria()
 {
 	RatingCriteria r;
-	r.name = criteriaComboBox->lineEdit()->text().stripWhiteSpace();
+	r.name = criteriaComboBox->lineEdit()->text().trimmed();
 	if ( r.name.isEmpty() )
 		return;
 
@@ -226,7 +228,7 @@ void EditRatingDialog::slotAddRatingCriteria()
 
 void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 {
-	QListViewItem * it = new QListViewItem(criteriaListView,rc.name);
+	Q3ListViewItem * it = new Q3ListViewItem(criteriaListView,rc.name);
 
 	QPixmap stars = Rating::starsPixmap(rc.stars);
 	if ( !stars.isNull() ) //there aren't zero stars

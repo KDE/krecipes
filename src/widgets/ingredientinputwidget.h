@@ -15,16 +15,19 @@
 #ifndef INGREDIENTINPUTWIDGET_H
 #define INGREDIENTINPUTWIDGET_H
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
 
 #include "datablocks/unit.h"
 
-class QVBox;
-class QHBox;
+class Q3VBox;
+class Q3HBox;
 class QLabel;
-class QButtonGroup;
-class QWidgetStack;
-class QGroupBox;
+class Q3ButtonGroup;
+class Q3WidgetStack;
+class Q3GroupBox;
 class QRadioButton;
 class QCheckBox;
 
@@ -40,7 +43,7 @@ class Element;
 class ElementList;
 class IngredientInput;
 
-class IngredientInputWidget : public QVBox
+class IngredientInputWidget : public Q3VBox
 {
 Q_OBJECT
 
@@ -52,7 +55,7 @@ public:
 
 	static int createNewIngredientIfNecessary( const QString &ing, RecipeDB *db );
 	static int createNewUnitIfNecessary( const QString &unit, bool plural, int ingredient_id, Unit &new_unit, RecipeDB *db );
-	static QValueList<int> createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *db );
+	static Q3ValueList<int> createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *db );
 	static int createNewGroupIfNecessary( const QString &group, RecipeDB *db );
 
 signals:
@@ -74,10 +77,10 @@ private:
 
 	RecipeDB *database;
 
-	QValueList<IngredientInput*> m_ingInputs;
+	Q3ValueList<IngredientInput*> m_ingInputs;
 };
 
-class IngredientInput : public QHBox
+class IngredientInput : public Q3HBox
 {
 Q_OBJECT
 
@@ -117,7 +120,7 @@ private:
 	UnitList *unitComboList;
 
 	QCheckBox *orButton;
-	QGroupBox *ingredientGBox;
+	Q3GroupBox *ingredientGBox;
 	QLabel *amountLabel;
 	FractionInput* amountEdit;
 	QLabel *unitLabel;
@@ -127,8 +130,8 @@ private:
 	QLabel *ingredientLabel;
 	IngredientComboBox* ingredientBox;
 	HeaderComboBox* headerBox;
-	QWidgetStack *header_ing_stack;
-	QButtonGroup *typeButtonGrp;
+	Q3WidgetStack *header_ing_stack;
+	Q3ButtonGroup *typeButtonGrp;
 };
 
 #endif //INGREDIENTINPUTWIDGET_H

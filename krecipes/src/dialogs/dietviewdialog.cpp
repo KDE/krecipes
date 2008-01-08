@@ -14,16 +14,18 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
-DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers )
+DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 		: KDialogBase( parent, "dietViewDialog", true, QString::null,
 		    KDialogBase::User2 | KDialogBase::Close | KDialogBase::User1, KDialogBase::User2,
-		    false, KStdGuiItem::print() )
+		    false, KStandardGuiItem::print() )
 {
 	setButtonText( KDialogBase::User2, i18n( "Create &Shopping List" ) );
 
 	// Design the dialog
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	// The html part
 	dietView = new KHTMLPart( page );
@@ -43,7 +45,7 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 DietViewDialog::~DietViewDialog()
 {}
 
-void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QValueList <int> &dishNumbers )
+void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 {
 
 
@@ -74,7 +76,7 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	htmlCode += QString( "<table><tbody>" );
 
 
-	QValueList <int>::ConstIterator it;
+	Q3ValueList <int>::ConstIterator it;
 	it = dishNumbers.begin();
 	RecipeList::ConstIterator rit;
 	rit = recipeList.begin();
@@ -118,7 +120,7 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	resize( QSize( 600, 400 ) );
 
 	// Display it
-	dietView->begin( KURL( locateLocal( "tmp", "/" ) ) ); // Initialize to tmp dir, where photos and logos can be stored
+	dietView->begin( KUrl( KStandardDirs::locateLocal( "tmp", "/" ) ) ); // Initialize to tmp dir, where photos and logos can be stored
 	dietView->write( htmlCode );
 	dietView->end();
 }

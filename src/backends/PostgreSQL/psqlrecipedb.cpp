@@ -16,14 +16,16 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kconfig.h>
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <QSqlQuery>
 
 //Note: PostgreSQL's database names are always lowercase
-PSqlRecipeDB::PSqlRecipeDB( const QString& host, const QString& user, const QString& pass, const QString& DBname, int port ) : QSqlRecipeDB( host, user, pass, DBname.lower(), port )
+PSqlRecipeDB::PSqlRecipeDB( const QString& host, const QString& user, const QString& pass, const QString& DBname, int port ) : QSqlRecipeDB( host, user, pass, DBname.toLower(), port )
 {}
 
 PSqlRecipeDB::~PSqlRecipeDB()
@@ -39,12 +41,12 @@ void PSqlRecipeDB::createDB()
 	if ( database->open() ) {
 		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
 		if ( !query.isActive() )
-			kdDebug() << "create query failed: " << database->lastError().databaseText() << endl;
+			kDebug() << "create query failed: " << database->lastError().databaseText() << endl;
 
 		database->close();
 	}
 	else
-		kdDebug() << "create open failed: " << database->lastError().databaseText() << endl;
+		kDebug() << "create open failed: " << database->lastError().databaseText() << endl;
 
 	database->setDatabaseName( real_db_name );
 }
@@ -184,7 +186,7 @@ void PSqlRecipeDB::initializeData()
 
 void PSqlRecipeDB::portOldDatabases( float version )
 {
-	kdDebug() << "Current database version is..." << version << "\n";
+	kDebug() << "Current database version is..." << version << "\n";
 	QString command;
 
 	if ( qRound(version*10) < 7 ) {
@@ -203,7 +205,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		query.exec( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
 
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 82 ) {
@@ -252,7 +254,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
 
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 83 ) {
@@ -300,7 +302,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
 		if ( !database->commit() ) {
-			kdDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
@@ -317,7 +319,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
 
 		if ( !database->commit() ) {
-			kdDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
@@ -328,7 +330,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
 
 		if ( !database->commit() ) {
-			kdDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
@@ -362,7 +364,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 87 ) {
@@ -396,7 +398,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		if ( getID.isActive() && getID.first() )
 			nextval = getID.value( 0 ).toInt();
 		if ( nextval == -1 )
-			kdDebug() << "Database update failed! Unable to update units sequence." << endl;
+			kDebug() << "Database update failed! Unable to update units sequence." << endl;
 
 		database->exec( "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING )" );
 		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
@@ -421,7 +423,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 93 ) {
@@ -431,7 +433,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)'");
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 94 ) {
@@ -441,7 +443,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		database->exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 95 ) {
@@ -461,7 +463,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	QString command;
 
 	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
-	kdDebug()<<"calling: "<<command<<endl;
+	kDebug()<<"calling: "<<command<<endl;
 	QSqlQuery query( command, database );
 
 	command = "SELECT * FROM "+table_name+";";
@@ -476,7 +478,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				dataList << "'"+variant.toString()+"'";
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
-			kdDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command<<endl;
 			QSqlQuery insert_query( command, database );
 
 			emit progress();
@@ -499,7 +501,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			}
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+");";
 			QSqlQuery insert_query( command, database );
-			kdDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command<<endl;
 
 			emit progress();
 		}
@@ -536,14 +538,14 @@ void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &u
 
 	QString command;
 
-	kdDebug() << "I'm doing the query to create the new user" << endl;
+	kDebug() << "I'm doing the query to create the new user" << endl;
 	command = "CREATE USER " + username;
 	if ( !password.isEmpty() )
 		command.append( "WITH PASSWORD '" + password + "'" );
 	command.append( ";" );
 	QSqlQuery permissionsToSet( command, database );
 
-	kdDebug() << "I'm doing the query to setup permissions\n";
+	kDebug() << "I'm doing the query to setup permissions\n";
 	command = QString( "GRANT ALL ON %1 TO %2;" ).arg( tables.join( "," ) ).arg( username );
 	permissionsToSet.exec( command );
 }

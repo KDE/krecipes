@@ -11,11 +11,14 @@
 #include "mmfexporter.h"
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/mixednumber.h"
@@ -80,7 +83,7 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 	cat_str.truncate( 67 );
 	content += cat_str + "\n";
 
-	content += "   Servings: " + QString::number( QMIN( 9999, recipe.yield.amount ) ) + "\n"; //some yield info is lost here, but hey, that's the MM format
+	content += "   Servings: " + QString::number( qMin( 9999, recipe.yield.amount ) ) + "\n"; //some yield info is lost here, but hey, that's the MM format
 }
 
 /* Ingredient lines:
@@ -97,8 +100,8 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		if ( ( *ing_it ).groupID == -1 ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0 );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				QValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );
@@ -122,8 +125,8 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0  );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				QValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );
@@ -134,13 +137,13 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 
 void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing, bool is_sub )
 {
-	KConfig * config = kapp->config();
+	KConfig * config = KGlobal::config();
 	config->setGroup( "Formatting" );
 	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	//columns 1-7
 	if ( ing.amount > 0 )
-		content += MixedNumber( ing.amount ).toString( number_format, false ).rightJustify( 7, ' ', true ) + " ";
+		content += MixedNumber( ing.amount ).toString( number_format, false ).rightJustified( 7, ' ', true ) + " ";
 	else
 		content += "        ";
 
@@ -151,13 +154,13 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 		        unit_info[ i ].plural_expanded_form == ing.units.plural ||
 		        unit_info[ i ].short_form == ing.units.name ) {
 			found_short_form = true;
-			content += QString( unit_info[ i ].short_form ).leftJustify( 2 ) + " ";
+			content += QString( unit_info[ i ].short_form ).leftJustified( 2 ) + " ";
 			break;
 		}
 	}
 	if ( !found_short_form ) {
-		kdDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name << endl;
-		kdDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
+		kDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name << endl;
+		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
 		content += "   ";
 	}
 
@@ -211,7 +214,7 @@ QStringList MMFExporter::wrapText( const QString& str, int at ) const
 			line = line.replace( rxp, "" ); // remove last word
 		}
 		copy = copy.remove( 0, line.length() );
-		line = line.stripWhiteSpace();
+		line = line.trimmed();
 		line.prepend( " " );       // indent line by one char
 		ret << line; // output of current line
 	}

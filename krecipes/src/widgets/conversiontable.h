@@ -11,7 +11,7 @@
 #ifndef CONVERSIONTABLE_H
 #define CONVERSIONTABLE_H
 #include <qstring.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qobject.h>
 
 #include "datablocks/unitratio.h"
@@ -23,7 +23,7 @@
 */
 
 
-class ConversionTable: public QTable
+class ConversionTable: public Q3Table
 {
 	Q_OBJECT
 public:
@@ -45,17 +45,17 @@ private:
 
 	//Internal Variables
 	double editBoxValue;
-	QIntDict<QTableItem> items;
-	QIntDict<QWidget> widgets;
+	Q3IntDict<Q3TableItem> items;
+	Q3IntDict<QWidget> widgets;
 	IDList unitIDs; // unit ID list to know the units by ID, not name
 	//Internal Methods
 	void resizeData( int )
 	{}
 	;
-	QTableItem *item( int r, int c ) const;
-	void setItem( int r, int c, QTableItem *i );
+	Q3TableItem *item( int r, int c ) const;
+	void setItem( int r, int c, Q3TableItem *i );
 	void clearCell( int r, int c );
-	void takeItem( QTableItem *item );
+	void takeItem( Q3TableItem *item );
 	void insertWidget( int r, int c, QWidget *w );
 	QWidget *cellWidget( int r, int c ) const;
 	void clearCellWidget( int r, int c );
@@ -76,11 +76,11 @@ signals:
 	void ratioRemoved( int row, int col );
 };
 
-class ConversionTableItem: public QObject, public QTableItem
+class ConversionTableItem: public QObject, public Q3TableItem
 {
 	Q_OBJECT
 public:
-	ConversionTableItem( QTable *t, EditType et );
+	ConversionTableItem( Q3Table *t, EditType et );
 	QWidget *createEditor() const;
 	void setContentFromEditor( QWidget *w );
 	void setText( const QString &s );

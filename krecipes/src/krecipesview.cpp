@@ -15,12 +15,17 @@
 
 #include <qlayout.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <ktoolinvocation.h>
+#include <kglobal.h>
 
 #include "recipeactionshandler.h"
 #include "setupwizard.h"
@@ -47,7 +52,7 @@
 #include "profiling.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: DCOPObject( "KrecipesInterface" ), QVBox( parent )
+		: DCOPObject( "KrecipesInterface" ), Q3VBox( parent )
 {
 	#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
@@ -56,9 +61,9 @@ KrecipesView::KrecipesView( QWidget *parent )
 	kapp->dcopClient()->setDefaultObject( objId() );
 
 	// Init the setup wizard if necessary
-	kdDebug() << "Beginning wizard" << endl;
+	kDebug() << "Beginning wizard" << endl;
 	wizard();
-	kdDebug() << "Wizard finished correctly" << endl;
+	kDebug() << "Wizard finished correctly" << endl;
 
 	// Show Splash Screen
 
@@ -84,36 +89,36 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Design the GUI
-	splitter = new QHBox( this );
+	splitter = new Q3HBox( this );
 
 	// Create Left and Right Panels (splitter)
 
 
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 	leftPanel = new KreMenu( splitter, "leftPanel" );
-	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "filefind" );
+	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
 
 	// Design Left Panel
 
 	START_TIMER("Setting up buttons")
 	// Buttons
-	buttonsList = new QPtrList<KreMenuButton>();
+	buttonsList = new Q3PtrList<KreMenuButton>();
 	buttonsList->setAutoDelete( TRUE );
 
 	button0 = new KreMenuButton( leftPanel, SelectP );
-	button0->setIconSet( il->loadIconSet( "filefind", KIcon::Panel, 32 ) );
+	button0->setIconSet( il->loadIconSet( "system-search", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button0 );
 
 	button1 = new KreMenuButton( leftPanel, ShoppingP );
-	button1->setIconSet( il->loadIconSet( "trolley", KIcon::Panel, 32 ) );
+	button1->setIconSet( il->loadIconSet( "trolley", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button1 );
 
 	button7 = new KreMenuButton( leftPanel, DietP );
-	button7->setIconSet( il->loadIconSet( "diet", KIcon::Panel, 32 ) );
+	button7->setIconSet( il->loadIconSet( "diet", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button7 );
 
 	button8 = new KreMenuButton( leftPanel, MatcherP );
-	button8->setIconSet( il->loadIconSet( "categories", KIcon::Panel, 32 ) );
+	button8->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button8 );
 
 
@@ -121,31 +126,31 @@ KrecipesView::KrecipesView( QWidget *parent )
 	dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
 
 	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
-	button2->setIconSet( il->loadIconSet( "ingredients", KIcon::Panel, 32 ) );
+	button2->setIconSet( il->loadIconSet( "ingredients", KIconLoader::Panel, 32 ) );
 	//buttonsList->append(button2);
 
 	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
-	button3->setIconSet( il->loadIconSet( "properties", KIcon::Panel, 32 ) );
+	button3->setIconSet( il->loadIconSet( "properties", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button3 );
 
 	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
-	button4->setIconSet( il->loadIconSet( "units", KIcon::Panel, 32 ) );
+	button4->setIconSet( il->loadIconSet( "units", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button4 );
 
 	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
-	button9->setIconSet( il->loadIconSet( "methods", KIcon::Panel, 32 ) );
+	button9->setIconSet( il->loadIconSet( "methods", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button9 );
 
 	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
-	button5->setIconSet( il->loadIconSet( "categories", KIcon::Panel, 32 ) );
+	button5->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button5 );
 
 	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
-	button6->setIconSet( il->loadIconSet( "authors", KIcon::Panel, 32 ) );
+	button6->setIconSet( il->loadIconSet( "authors", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button6 );
 
 	contextButton = new QPushButton( leftPanel, "contextButton" );
-	contextButton->setIconSet( il->loadIconSet( "krectip", KIcon::Panel, 32 ) );
+	contextButton->setIconSet( il->loadIconSet( "krectip", KIconLoader::Panel, 32 ) );
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );
 	contextButton->setFlat( true );
@@ -247,7 +252,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Connect Signals from selectPanel (SelectRecipeDialog)
 
 	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-	connect ( selectPanel, SIGNAL( recipesSelected( const QValueList<int>&, int ) ), this, SLOT( actionRecipes( const QValueList<int>&, int ) ) );
+	connect ( selectPanel, SIGNAL( recipesSelected( const Q3ValueList<int>&, int ) ), this, SLOT( actionRecipes( const Q3ValueList<int>&, int ) ) );
 
 	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
@@ -273,7 +278,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	delete start_logo;
 
 	#ifndef NDEBUG
-	kdDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
+	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
 	#endif
 }
 
@@ -293,7 +298,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 	if ( answer == KMessageBox::Yes )
 		wizard( true );
 	else {
-		kdError() << error << ". " << i18n( "Exiting" ) << endl;
+		kError() << error << ". " << i18n( "Exiting" ) << endl;
 		kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 		return false;
 	}
@@ -333,7 +338,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 
 	switch ( m_activePanel ) {
 	case SelectP:
-		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "filefind" );
+		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "system-search" );
 		rightPanel->raise( selectPanel );
 		break;
 	case ShoppingP:
@@ -387,7 +392,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		rightPanel->raise( inputPanel );
 		break;
 	case RecipeView:
-		rightPanel->setHeader( i18n( "View Recipe" ), "filefind" );
+		rightPanel->setHeader( i18n( "View Recipe" ), "system-search" );
 		rightPanel->raise( viewPanel );
 		break;
 	}
@@ -416,7 +421,7 @@ void KrecipesView::exportToClipboard()
 {
 	QWidget * vis_panel = rightPanel->visiblePanel();
 	if ( vis_panel == viewPanel && viewPanel->recipesLoaded() > 0 ) {
-		QValueList<int> ids = viewPanel->currentRecipes();
+		Q3ValueList<int> ids = viewPanel->currentRecipes();
 		RecipeActionsHandler::recipesToClipboard( ids, database );
 	}
 	else if ( vis_panel == selectPanel ) {
@@ -424,7 +429,7 @@ void KrecipesView::exportToClipboard()
 	}
 }
 
-void KrecipesView::exportRecipes( const QValueList<int> &ids )
+void KrecipesView::exportRecipes( const Q3ValueList<int> &ids )
 {
 	if ( ids.count() == 1 )
 		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), database->recipeTitle( ids[ 0 ] ), database );
@@ -484,7 +489,7 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	}
 }
 
-void KrecipesView::actionRecipes( const QValueList<int> &ids, int action )
+void KrecipesView::actionRecipes( const Q3ValueList<int> &ids, int action )
 {
 	if ( action == 0 )  //show
 	{
@@ -549,19 +554,19 @@ void KrecipesView::wizard( bool force )
 			config->setGroup( "DBType" );
 			dbType = config->readEntry( "Type", "SQLite" );
 
-			kdDebug() << "Setting up" << endl;
+			kDebug() << "Setting up" << endl;
 			setupWizard->getOptions( setupUser, initData, doUSDAImport );
 
 			// Setup user if necessary
 			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
 			{
-				kdDebug() << "Setting up user\n";
+				kDebug() << "Setting up user\n";
 				setupWizard->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
 				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 
 				if ( !adminEnabled )  // Use root without password
 				{
-					kdDebug() << "Using default admin\n";
+					kDebug() << "Using default admin\n";
 					if ( dbType == "MySQL" )
 						adminUser = "root";
 					else if ( dbType == "PostgreSQL" )
@@ -570,7 +575,7 @@ void KrecipesView::wizard( bool force )
 				}
 				if ( !isRemote )  // Use localhost
 				{
-					kdDebug() << "Using localhost\n";
+					kDebug() << "Using localhost\n";
 					host = "localhost";
 					client = "localhost";
 				}
@@ -637,10 +642,10 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 		else if ( dbType == "MySQL" )
 			user = "root";
 
-		kdDebug() << "Open db as " << user << ", with no password\n";
+		kDebug() << "Open db as " << user << ", with no password\n";
 	}
 	else
-		kdDebug() << "Open db as:" << user << ",*** with password ****\n";
+		kDebug() << "Open db as:" << user << ",*** with password ****\n";
 
 	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( db ) {
@@ -659,7 +664,7 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 {
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
-		kdError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
+		kError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
 		kapp->exit( 1 );
 	}
 
@@ -676,11 +681,11 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 {
 	recipeWidget = w;
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 	if ( !recipeButton ) {
 		recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
 
-		recipeButton->setIconSet( il->loadIconSet( "filesave", KIcon::Small ) );
+		recipeButton->setIconSet( il->loadIconSet( "document-save", KIcon::Small ) );
 
 		QString short_title = title.left( 20 );
 		if ( title.length() > 20 )
@@ -719,12 +724,12 @@ void KrecipesView::show ( void )
 
 void KrecipesView::showRecipe( int recipeID )
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	ids << recipeID;
 	showRecipes( ids );
 }
 
-void KrecipesView::showRecipes( const QValueList<int> &recipeIDs )
+void KrecipesView::showRecipes( const Q3ValueList<int> &recipeIDs )
 {
 	if ( viewPanel->loadRecipes( recipeIDs ) )
 		slotSetPanel( RecipeView );
@@ -734,51 +739,51 @@ void KrecipesView::activateContextHelp()
 {
 	switch ( m_activePanel ) {
 	case RecipeView:
-		kapp->invokeHelp();
+		KToolInvocation::invokeHelp();
 		break;
 
 	case SelectP:
-		kapp->invokeHelp("find-edit");
+		KToolInvocation::invokeHelp("find-edit");
 		break;
 
 	case ShoppingP:
-		kapp->invokeHelp("shopping-list");
+		KToolInvocation::invokeHelp("shopping-list");
 		break;
 
 	case DietP:
-		kapp->invokeHelp("diet-helper");
+		KToolInvocation::invokeHelp("diet-helper");
 		break;
 
 	case MatcherP:
-		kapp->invokeHelp("ingredient-matcher");
+		KToolInvocation::invokeHelp("ingredient-matcher");
 		break;
 
 	case RecipeEdit:
-		kapp->invokeHelp("enter-edit-recipes");
+		KToolInvocation::invokeHelp("enter-edit-recipes");
 		break;
 
 	case IngredientsP:
-		kapp->invokeHelp("ingredients-component");
+		KToolInvocation::invokeHelp("ingredients-component");
 		break;
 
 	case PropertiesP:
-		kapp->invokeHelp("properties-component");
+		KToolInvocation::invokeHelp("properties-component");
 		break;
 
 	case UnitsP:
-		kapp->invokeHelp("units-component");
+		KToolInvocation::invokeHelp("units-component");
 		break;
 
 	case PrepMethodsP:
-		kapp->invokeHelp("prep-methods");
+		KToolInvocation::invokeHelp("prep-methods");
 		break;
 
 	case CategoriesP:
-		kapp->invokeHelp("categories-component");
+		KToolInvocation::invokeHelp("categories-component");
 		break;
 
 	case AuthorsP:
-		kapp->invokeHelp("authors-component");
+		KToolInvocation::invokeHelp("authors-component");
 		break;
 	}
 }
@@ -829,7 +834,7 @@ void KrecipesView::initDatabase( KConfig *config )
 	if ( !database ) {
 		// No DB type has been enabled(should not happen at all, but just in case)
 
-		kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+		kError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
 		kapp->exit( 1 );
 	}
 
@@ -855,12 +860,12 @@ void KrecipesView::initDatabase( KConfig *config )
 		else {
 			// No DB type has been enabled (should not happen at all, but just in case)
 
-			kdError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+			kError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
 			kapp->exit( 1 );
 			break;
 		}
 	}
-	kdDebug() << i18n( "DB started correctly\n" ).latin1();
+	kDebug() << i18n( "DB started correctly\n" ).toLatin1();
 }
 
 QString KrecipesView::checkCorrectDBType( KConfig *config )
@@ -872,7 +877,7 @@ QString KrecipesView::checkCorrectDBType( KConfig *config )
 
 		// Read the database setup again
 
-		config = kapp->config();
+		config = KGlobal::config();
 		config->sync();
 		config->setGroup( "DBType" );
 		dbType = config->readEntry( "Type", "SQLite" );

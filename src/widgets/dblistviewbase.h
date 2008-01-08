@@ -13,8 +13,10 @@
 
 #include <qobject.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #define PREVLISTITEM_RTTI 1002
 #define NEXTLISTITEM_RTTI 1003
@@ -29,7 +31,7 @@ typedef enum ReloadFlags {
 	ForceReload		/** Load/reload the list regardless of whether or not it's been loaded */
 };
 
-class DBListViewBase : public KListView
+class DBListViewBase : public K3ListView
 {
 Q_OBJECT
 
@@ -53,11 +55,11 @@ protected:
 	virtual void load(int limit, int offset) = 0;
 	virtual void keyPressEvent( QKeyEvent *e );
 	bool handleElement( const QString & );
-	virtual void createElement( QListViewItem * );
-	void removeElement( QListViewItem *, bool delete_item = true );
+	virtual void createElement( Q3ListViewItem * );
+	void removeElement( Q3ListViewItem *, bool delete_item = true );
 
 	bool reloading(){ return bulk_load; }
-	void setSorting(int c){KListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
+	void setSorting(int c){K3ListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
 	void setTotalItems(int);
 
 	RecipeDB *database;
@@ -65,22 +67,22 @@ protected:
 	int curr_offset;
 
 protected slots:
-	void rename( QListViewItem *, int c );
-	void slotDoubleClicked( QListViewItem * );
+	void rename( Q3ListViewItem *, int c );
+	void slotDoubleClicked( Q3ListViewItem * );
 
 private:
 	void activatePrev();
 	void activateNext();
 
 	//make this private because the data should always be synced with the database
-	void clear(){KListView::clear();}
+	void clear(){K3ListView::clear();}
 
 	int total;
 	
 	bool bulk_load;
 
-	QMap<QListViewItem*,QListViewItem*> lastElementMap;
-	QListViewItem *delete_me_later;
+	QMap<Q3ListViewItem*,Q3ListViewItem*> lastElementMap;
+	Q3ListViewItem *delete_me_later;
 
 	KProgressDialog *m_progress;
 	int m_totalSteps;

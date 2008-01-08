@@ -14,12 +14,14 @@
 #ifndef RECIPELISTVIEW_H
 #define RECIPELISTVIEW_H
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include "categorylistview.h"
 #include "datablocks/recipe.h"
 
-class QDragObject;
+class Q3DragObject;
 class QDropEvent;
 
 class KProgressDialog;
@@ -30,30 +32,30 @@ class RecipeDB;
 
 #define RECIPEITEMMIMETYPE "data/x-kde.recipe.item"
 
-class RecipeListItem : public QListViewItem
+class RecipeListItem : public Q3ListViewItem
 {
 public:
-	RecipeListItem( QListView* qlv, const Recipe &r ) : QListViewItem( qlv )
+	RecipeListItem( Q3ListView* qlv, const Recipe &r ) : Q3ListViewItem( qlv )
 	{
 		init( r );
 	}
 
-	RecipeListItem( QListView* qlv, QListViewItem *after, const Recipe &r ) : QListViewItem( qlv, after )
+	RecipeListItem( Q3ListView* qlv, Q3ListViewItem *after, const Recipe &r ) : Q3ListViewItem( qlv, after )
 	{
 		init( r );
 	}
 
-	RecipeListItem( CategoryListItem* it, const Recipe &r ) : QListViewItem( it )
+	RecipeListItem( CategoryListItem* it, const Recipe &r ) : Q3ListViewItem( it )
 	{
 		init( r );
 	}
 
-	RecipeListItem( CategoryListItem* it, QListViewItem *after, const Recipe &r ) : QListViewItem( it, after )
+	RecipeListItem( CategoryListItem* it, Q3ListViewItem *after, const Recipe &r ) : Q3ListViewItem( it, after )
 	{
 		init( r );
 	}
 
-	RecipeListItem( QListViewItem* it, const Recipe &r ) : QListViewItem( it )
+	RecipeListItem( Q3ListViewItem* it, const Recipe &r ) : Q3ListViewItem( it )
 	{
 		init( r );
 	}
@@ -115,7 +117,7 @@ private:
 	}
 };
 
-class RecipeItemDrag : public QStoredDrag
+class RecipeItemDrag : public Q3StoredDrag
 {
 public:
 	RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource = 0, const char *name = 0 );
@@ -131,7 +133,7 @@ public:
 	RecipeListView( QWidget *parent, RecipeDB *db );
 
 public slots:
-	void populateAll( QListViewItem *parent = 0 );
+	void populateAll( Q3ListViewItem *parent = 0 );
 
 protected slots:
 	virtual void createRecipe( const Recipe &, int parent_id );
@@ -142,23 +144,23 @@ protected slots:
 
 protected:
 	virtual void init();
-	virtual void createElement( QListViewItem * );
+	virtual void createElement( Q3ListViewItem * );
 	virtual void removeCategory( int id );
-	virtual QDragObject *dragObject();
+	virtual Q3DragObject *dragObject();
 	virtual bool acceptDrag( QDropEvent *event ) const;
-	virtual void populate( QListViewItem *item );
-	virtual QString tooltip(QListViewItem *item, int column) const;
+	virtual void populate( Q3ListViewItem *item );
+	virtual QString tooltip(Q3ListViewItem *item, int column) const;
 
 	friend class RecipeListToolTip;
 
 	void load(int limit, int offset);
 
 private:
-	void moveChildrenToRoot( QListViewItem * );
+	void moveChildrenToRoot( Q3ListViewItem * );
 
 	bool flat_list;
-	QListViewItem *m_uncat_item;
-	QListViewItem *lastElementCurrLevel;
+	Q3ListViewItem *m_uncat_item;
+	Q3ListViewItem *lastElementCurrLevel;
 
 	KProgressDialog *m_progress_dlg;
 };

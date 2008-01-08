@@ -11,20 +11,25 @@
 #define DBIMPORTDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
-class QButtonGroup;
+class Q3ButtonGroup;
 class QRadioButton;
-class QWidgetStack;
+class Q3WidgetStack;
 class QWidget;
 class QLineEdit;
 class QLabel;
 class QPushButton;
 
-class KURLRequester;
+class KUrlRequester;
 class KIntNumInput;
 
 /**
@@ -43,11 +48,11 @@ public:
 
 private:
 	// Widgets
-	QButtonGroup* dbButtonGroup;
+	Q3ButtonGroup* dbButtonGroup;
 	QRadioButton* liteRadioButton;
 	QRadioButton* mysqlRadioButton;
 	QRadioButton* psqlRadioButton;
-	QWidgetStack* paramStack;
+	Q3WidgetStack* paramStack;
 	QWidget* serverPage;
 	QLineEdit* nameEdit;
 	QLabel* passwordLabel;
@@ -60,12 +65,12 @@ private:
 	QLabel* portLabel;
 	KIntNumInput *portEdit;
 	QWidget* sqlitePage;
-	KURLRequester* sqliteDBRequester;
+	KUrlRequester* sqliteDBRequester;
 
-	QVBoxLayout* dbButtonGroupLayout;
-	QVBoxLayout* serverPageLayout;
-	QGridLayout* layout5;
-	QVBoxLayout* serverPageLayout_2;
+	Q3VBoxLayout* dbButtonGroupLayout;
+	Q3VBoxLayout* serverPageLayout;
+	Q3GridLayout* layout5;
+	Q3VBoxLayout* serverPageLayout_2;
 
 protected slots:
 	void languageChange();

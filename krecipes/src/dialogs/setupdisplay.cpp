@@ -16,10 +16,10 @@
 #include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdialogbase.h>
 
 #include <khtmlview.h>
@@ -31,11 +31,14 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtooltip.h>
-#include <qobjectlist.h>
-#include <qvaluelist.h>
+#include <qobject.h>
+#include <q3valuelist.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3ActionGroup>
 
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
@@ -112,7 +115,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample.ratingList.append(rating1);
 	}
 
-	kdDebug()<<"first load"<<endl;
+	kDebug()<<"first load"<<endl;
 	loadHTMLView();
 	show();
 
@@ -137,8 +140,8 @@ SetupDisplay::~SetupDisplay()
 
 void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &styleFile )
 {
-	kdDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile<<endl;
-	QString tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
+	kDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile<<endl;
+	QString tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
 	XSLTExporter exporter( tmp_filename + ".html", "html" );
 	if ( templateFile != QString::null )
 		exporter.setTemplate( templateFile );
@@ -148,18 +151,18 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	recipeList.append(m_sample);
 
 	QFile file(tmp_filename + ".html");
-	if ( file.open( IO_WriteOnly ) ) {
-		QTextStream stream(&file);
+	if ( file.open( QIODevice::WriteOnly ) ) {
+		Q3TextStream stream(&file);
 		exporter.writeStream(stream,recipeList);
 	}
 	else {
-		kdDebug()<<"Unable to open file for writing"<<endl;
+		kDebug()<<"Unable to open file for writing"<<endl;
 	}
 	file.close();
 
-	KURL url;
+	KUrl url;
 	url.setPath( tmp_filename + ".html" );
-	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+	kDebug() << "Opening URL: " << url.htmlURL() << endl;
 
 	KParts::URLArgs args (browserExtension()->urlArgs());
 	args.reload=true; // Don't use the cache
@@ -176,7 +179,7 @@ void SetupDisplay::reload()
 void SetupDisplay::loadTemplate( const QString &filename )
 {
 	bool storeChangedState = has_changes;
-	KTempFile tmpFile;
+	KTemporaryFile tmpFile;
 	saveLayout(tmpFile.name());
 	has_changes = storeChangedState; //saveLayout() sets changes to false
 	
@@ -210,13 +213,13 @@ void SetupDisplay::loadLayout( const QString &filename )
 	}
 
 	QFile input( filename );
-	if ( input.open( IO_ReadOnly ) ) {
+	if ( input.open( QIODevice::ReadOnly ) ) {
 		QDomDocument doc;
 		QString error;
 		int line;
 		int column;
 		if ( !doc.setContent( &input, &error, &line, &column ) ) {
-			kdDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." ) ).arg( error ).arg( line ).arg( column ) << endl;
+			kDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." ) ).arg( error ).arg( line ).arg( column ) << endl;
 			return ;
 		}
 
@@ -228,7 +231,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		has_changes = false;
 	}
 	else
-		kdDebug() << "Unable to open file: " << filename << endl;
+		kDebug() << "Unable to open file: " << filename << endl;
 }
 
 void SetupDisplay::beginObject( const QString &object )
@@ -370,14 +373,14 @@ void SetupDisplay::saveLayout( const QString &filename )
 	}
 
 	QFile out_file( filename );
-	if ( out_file.open( IO_WriteOnly ) ) {
+	if ( out_file.open( QIODevice::WriteOnly ) ) {
 		has_changes = false;
 
-		QTextStream stream( &out_file );
+		Q3TextStream stream( &out_file );
 		stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" << doc.toString();
 	}
 	else
-		kdDebug() << "Error: Unable to write to file " << filename << endl;
+		kDebug() << "Error: Unable to write to file " << filename << endl;
 }
 
 void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
@@ -401,7 +404,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( node.isNull() || node.nodeType() != DOM::Node::ELEMENT_NODE ) {
-		kdDebug() << "No relevant node" << endl;
+		kDebug() << "No relevant node" << endl;
 		return;
 	}
 
@@ -409,14 +412,14 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 
 	m_currNodeId = element.getAttribute("class").string();
 	if ( m_currNodeId.isEmpty() ) {
-		kdDebug()<<"Code error: unable to determine class of selected element"<<endl;
+		kDebug()<<"Code error: unable to determine class of selected element"<<endl;
 		return;
 	}
 
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
 	
 	delete popup;
-	popup = new KPopupMenu( view() );
+	popup = new KMenu( view() );
 	popup->insertTitle( item->name );
 
 	unsigned int properties = 0;
@@ -427,7 +430,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		}
 	}
 
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 
 	if ( properties & BackgroundColor )
 		popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
@@ -444,9 +447,9 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & Alignment ) {
-		QPopupMenu * sub_popup = new QPopupMenu( popup );
+		Q3PopupMenu * sub_popup = new Q3PopupMenu( popup );
 
-		QActionGroup *alignment_actions = new QActionGroup( this );
+		Q3ActionGroup *alignment_actions = new Q3ActionGroup( this );
 		alignment_actions->setExclusive( true );
 
 		QAction *c_action = new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );

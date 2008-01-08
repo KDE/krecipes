@@ -16,21 +16,23 @@
 #include <stdlib.h> // For RAND_MAX
 
 #include <qcheckbox.h>
-#include <qhbox.h>
-#include <qhgroupbox.h>
+#include <q3hbox.h>
+#include <q3hgroupbox.h>
 #include <qlabel.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
-#include <qvaluelist.h>
-#include <qvbox.h>
-#include <qvgroupbox.h>
-#include <qwidgetstack.h>
+#include <q3valuelist.h>
+#include <q3vbox.h>
+#include <q3vgroupbox.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "datablocks/constraintlist.h"
 #include "datablocks/recipelist.h"
@@ -56,7 +58,7 @@ class PropertyConstraintListView;
 */
 
 
-class DietWizardDialog: public QVBox
+class DietWizardDialog: public Q3VBox
 {
 
 	Q_OBJECT
@@ -76,11 +78,11 @@ private:
 	RecipeList *dietRList;
 
 	//Widgets
-	QHBox *optionsBox;
-	QVGroupBox *mealsSliderBox;
+	Q3HBox *optionsBox;
+	Q3VGroupBox *mealsSliderBox;
 	QLabel *mealNumberLabel;
 	QSlider *mealNumberSelector;
-	QVGroupBox *daysSliderBox;
+	Q3VGroupBox *daysSliderBox;
 	QLabel *dayNumberLabel;
 	QSlider *dayNumberSelector;
 	QTabWidget *mealTabs;
@@ -108,7 +110,7 @@ private slots:
 	void createDiet( void );
 	void clear();
 	void createShoppingList( void );
-	void populateIteratorList( RecipeList &rl, QValueList <RecipeList::Iterator> *il );
+	void populateIteratorList( RecipeList &rl, Q3ValueList <RecipeList::Iterator> *il );
 signals:
 	void dietReady( void );
 };
@@ -131,7 +133,7 @@ public:
 	void showDish( int dn );
 
 	// Public widgets and variables
-	QValueList <DishInput*> dishInputList; // The list of dishes
+	Q3ValueList <DishInput*> dishInputList; // The list of dishes
 
 private:
 	// Widgets
@@ -140,20 +142,20 @@ private:
 	RecipeDB *database;
 
 	// Settings section for the meal
-	QHBox *mealOptions;
+	Q3HBox *mealOptions;
 
 	// Dish number setting
-	QHBox *dishNumberBox;
+	Q3HBox *dishNumberBox;
 	QLabel *dishNumberLabel;
 	QSpinBox *dishNumberInput;
 
 	// Move <-> buttons
-	QHGroupBox *toolBar;
+	Q3HGroupBox *toolBar;
 	QToolButton *buttonNext;
 	QToolButton *buttonPrev;
 
 	// Settings for the dish
-	QWidgetStack *dishStack;
+	Q3WidgetStack *dishStack;
 
 public slots:
 	void nextDish( void );
@@ -184,9 +186,9 @@ private:
 	// Variables
 	bool categoryFiltering;
 	// Widgets
-	QHGroupBox *listBox;
+	Q3HGroupBox *listBox;
 	DishTitle *dishTitle;
-	QVBox *categoriesBox;
+	Q3VBox *categoriesBox;
 	QCheckBox *categoriesEnabledBox;
 	CategoryCheckListView *categoriesView;
 	PropertyConstraintListView *constraintsView;
@@ -196,7 +198,7 @@ private:
 
 private slots:
 	void enableCategories( bool enable );
-	void insertConstraintsEditBoxes( QListViewItem* it );
+	void insertConstraintsEditBoxes( Q3ListViewItem* it );
 	void hideConstraintInputs();
 	void setMinValue( double minValue );
 	void setMaxValue( double maxValue );

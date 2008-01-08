@@ -14,9 +14,9 @@
 #define CREATEELEMENTDIALOG_H
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <klineedit.h>
 #include <kdialogbase.h>
@@ -33,7 +33,7 @@ public:
 
 private:
 	//Widgets
-	QGroupBox *box;
+	Q3GroupBox *box;
 	KLineEdit *elementEdit;
 };
 

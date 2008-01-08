@@ -25,8 +25,11 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -36,13 +39,13 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	// Design dialog
 
-	QHBoxLayout* page_layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	Q3HBoxLayout* page_layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
 	QTabWidget *tabWidget = new QTabWidget( this );
 
 	QWidget *ingredientTab = new QWidget( tabWidget );
 
-	layout = new QGridLayout( ingredientTab, 1, 1, 0, 0 );
+	layout = new Q3GridLayout( ingredientTab, 1, 1, 0, 0 );
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -114,7 +117,7 @@ void IngredientsDialog::reload( ReloadFlags flag )
 
 void IngredientsDialog::showPropertyEdit()
 {
-	QListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
+	Q3ListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
 	if ( ing_it ) {
 		EditPropertiesDialog d(ing_it->text(1).toInt(),ing_it->text(0),database,this);
 		d.exec();

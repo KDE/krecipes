@@ -23,8 +23,12 @@
 
 #include <qapplication.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 //#include <kcalendarsystem.h>
 #include <kglobal.h>
@@ -67,7 +71,7 @@ class DateValidator : public QValidator
       if ( length <= 0 )
         return Intermediate;
 
-      if ( mKeywords.contains( str.lower() ) )
+      if ( mKeywords.contains( str.toLower() ) )
         return Acceptable;
 
       bool ok = false;
@@ -186,7 +190,7 @@ void KDateEdit::popup()
   assignDate( date );
   updateView();
   // Now, simulate an Enter to unpress it
-  QListBox *lb = listBox();
+  Q3ListBox *lb = listBox();
   if (lb) {
     lb->setCurrentItem(0);
     QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, 0, 0);
@@ -238,9 +242,9 @@ QDate KDateEdit::parseDate( bool *replaced ) const
 
   if ( text.isEmpty() )
     result = QDate();
-  else if ( mKeywordMap.contains( text.lower() ) ) {
+  else if ( mKeywordMap.contains( text.toLower() ) ) {
     QDate today = QDate::currentDate();
-    int i = mKeywordMap[ text.lower() ];
+    int i = mKeywordMap[ text.toLower() ];
     if ( i >= 100 ) {
       /* A day name has been entered. Convert to offset from today.
        * This uses some math tricks to figure out the offset in days
@@ -352,13 +356,13 @@ void KDateEdit::setupKeywords()
   // Create the keyword list. This will be used to match against when the user
   // enters information.
   mKeywordMap.insert( i18n( "tomorrow" ), 1 );
-  mKeywordMap.insert( i18n( "today" ), 0 );
+  mKeywordMap.insert( i18n( "calendar-today" ), 0 );
   mKeywordMap.insert( i18n( "yesterday" ), -1 );
 
   #if 0 //depends on KDE 3.2
   QString dayName;
   for ( int i = 1; i <= 7; ++i ) {
-    dayName = KGlobal::locale()->calendar()->weekDayName( i ).lower();
+    dayName = KGlobal::locale()->calendar()->weekDayName( i ).toLower();
     mKeywordMap.insert( dayName, i + 100 );
   }
   #endif

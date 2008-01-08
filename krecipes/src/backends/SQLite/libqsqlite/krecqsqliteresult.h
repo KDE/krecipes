@@ -23,7 +23,9 @@
 
 #include <qdatetime.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 /**
  * ResultRow  represents one row of the resulting answer
@@ -35,13 +37,13 @@ public:
 	 * TableString is used to establish the relations
 	 * between the column name and the real item
 	 */
-	typedef QMap<QString, QCString> TableString;
+	typedef QMap<QString, Q3CString> TableString;
 
 	/**
 	 * TableInt is used to establish a relation between a
 	 * position of a column and the row value
 	 */
-	typedef QMap<int, QCString> TableInt;
+	typedef QMap<int, Q3CString> TableInt;
 
 	/**
 	 * Default c'tor. It has a TableString and a TableInt
@@ -66,12 +68,12 @@ public:
 	 * retrieves the Data from columnName
 	 *
 	 */
-	QCString data( const QString& columnName, bool *ok = 0 );
+	Q3CString data( const QString& columnName, bool *ok = 0 );
 
 	/**
 	 * QString for column number
 	 */
-	QCString data( int columnNumber, bool *ok = 0 );
+	Q3CString data( int columnNumber, bool *ok = 0 );
 
 private:
 	TableString m_string;
@@ -86,7 +88,7 @@ class QSQLiteResult
 {
 
 public:
-	typedef QValueList<QSQLiteResultRow> Columns;
+	typedef Q3ValueList<QSQLiteResultRow> Columns;
 
 	/** The Status of a Result */
 	enum Status{ Success = 0, Failure, Undefined };

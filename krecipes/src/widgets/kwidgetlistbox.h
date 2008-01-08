@@ -23,7 +23,9 @@
 #ifndef KWIDGETLISTBOX_H
 #define KWIDGETLISTBOX_H
 
-#include <qtable.h>
+#include <q3table.h>
+//Added by qt3to4:
+#include <QShowEvent>
 
 /**
 @author See README for the list of authors
@@ -31,7 +33,7 @@
 
 typedef bool (*show_callback) (int index, QWidget* widget, void* data);
 
-class KWidgetListbox : public QTable
+class KWidgetListbox : public Q3Table
 {
     Q_OBJECT
 

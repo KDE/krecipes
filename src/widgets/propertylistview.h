@@ -11,20 +11,20 @@
 #ifndef PROPERTYLISTVIEW_H
 #define PROPERTYLISTVIEW_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "datablocks/element.h"
 #include "datablocks/ingredientproperty.h"
 #include "datablocks/constraintlist.h"
 
 class RecipeDB;
-class KPopupMenu;
+class KMenu;
 
-class PropertyCheckListItem : public QCheckListItem
+class PropertyCheckListItem : public Q3CheckListItem
 {
 public:
-	PropertyCheckListItem( QListView* klv, const IngredientProperty &property );
-	PropertyCheckListItem( QListViewItem* it, const IngredientProperty &property );
+	PropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property );
+	PropertyCheckListItem( Q3ListViewItem* it, const IngredientProperty &property );
 
 	~PropertyCheckListItem( void )
 	{}
@@ -43,8 +43,8 @@ protected:
 class HidePropertyCheckListItem : public PropertyCheckListItem
 {
 public:
-	HidePropertyCheckListItem( QListView* klv, const IngredientProperty &property, bool enable = false );
-	HidePropertyCheckListItem( QListViewItem* it, const IngredientProperty &property, bool enable = false );
+	HidePropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property, bool enable = false );
+	HidePropertyCheckListItem( Q3ListViewItem* it, const IngredientProperty &property, bool enable = false );
 
 protected:
 	virtual void stateChange( bool on );
@@ -54,10 +54,10 @@ private:
 };
 
 
-class ConstraintsListItem: public QCheckListItem
+class ConstraintsListItem: public Q3CheckListItem
 {
 public:
-	ConstraintsListItem( QListView* klv, const IngredientProperty &pty ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox )
+	ConstraintsListItem( Q3ListView* klv, const IngredientProperty &pty ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox )
 	{
 		// Initialize the constraint data with the the property data
 		ctStored = new Constraint();
@@ -125,7 +125,7 @@ public:
 };
 
 
-class PropertyListView : public KListView
+class PropertyListView : public K3ListView
 {
 	Q_OBJECT
 
@@ -158,20 +158,20 @@ protected:
 	virtual void createProperty( const IngredientProperty &property );
 
 private slots:
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
 		();
 	void rename();
 
-	void modProperty( QListViewItem* i );
-	void saveProperty( QListViewItem* i );
+	void modProperty( Q3ListViewItem* i );
+	void saveProperty( Q3ListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );
 
-	KPopupMenu *kpop;
+	KMenu *kpop;
 };
 
 

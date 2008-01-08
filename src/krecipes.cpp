@@ -44,12 +44,18 @@
 #include "backends/recipedb.h"
 #include "backends/progressinterface.h"
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QLabel>
+#include <Q3Frame>
+#include <QDragEnterEvent>
+#include <Q3VBoxLayout>
 
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -65,9 +71,10 @@
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
 #include <kaction.h>
-#include <kstdaction.h> 
+#include <kstandardaction.h> 
 //Settings headers
 #include <kdeversion.h>
+#include <KShortcutsDialog>
 
 Krecipes::Krecipes()
 		: KMainWindow( 0, "Krecipes" ),
@@ -112,8 +119,8 @@ Krecipes::Krecipes()
 
 	parsing_file_dlg = new KDialog( this, "parsing_file_dlg", true, Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
-	parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
-	( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
+	parsing_file_dlg_label->setFrameStyle( Q3Frame::Box | Q3Frame::Raised );
+	( new Q3VBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
 
@@ -160,8 +167,8 @@ void Krecipes::recipeSelected( bool selected )
 
 void Krecipes::setupActions()
 {
-	printAction = KStdAction::print( this, SLOT( filePrint() ), actionCollection() );
-	reloadAction = new KAction( i18n( "Reloa&d" ), "reload", Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
+	printAction = KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
+	reloadAction = new KAction( i18n( "Reloa&d" ), "view-refresh", Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
 
 	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", CTRL + Key_E,
 	                          m_view, SLOT( editRecipe() ),
@@ -183,19 +190,19 @@ void Krecipes::setupActions()
 					actionCollection(), "merge_ingredients_action" );
 	}
 
-	KAction *action = KStdAction::openNew( this, SLOT( fileNew() ), actionCollection() );
+	KAction *action = KStandardAction::openNew( this, SLOT( fileNew() ), actionCollection() );
 	action->setText( i18n( "&New Recipe" ) );
 
-	saveAction = KStdAction::save( this, SLOT( fileSave() ), actionCollection() );
+	saveAction = KStandardAction::save( this, SLOT( fileSave() ), actionCollection() );
 
-	KStdAction::quit( kapp, SLOT( quit() ), actionCollection() );
+	KStandardAction::quit( kapp, SLOT( quit() ), actionCollection() );
 
-	m_toolbarAction = KStdAction::showToolbar( this, SLOT( optionsShowToolbar() ), actionCollection() );
-	m_statusbarAction = KStdAction::showStatusbar( this, SLOT( optionsShowStatusbar() ), actionCollection() );
+	m_toolbarAction = KStandardAction::showToolbar( this, SLOT( optionsShowToolbar() ), actionCollection() );
+	m_statusbarAction = KStandardAction::showStatusbar( this, SLOT( optionsShowStatusbar() ), actionCollection() );
 
-	KStdAction::keyBindings( this, SLOT( optionsConfigureKeys() ), actionCollection() );
-	KStdAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
-	KStdAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
+	KStandardAction::keyBindings( this, SLOT( optionsConfigureKeys() ), actionCollection() );
+	KStandardAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
+	KStandardAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
 
 	( void ) new KAction( i18n( "Import from File..." ), CTRL + Key_I,
 	                      this, SLOT( import() ),
@@ -209,7 +216,7 @@ void Krecipes::setupActions()
 	                            this, SLOT( fileExport() ),
 	                            actionCollection(), "export_action" );
 
-	copyToClipboardAction = new KAction( i18n( "&Copy to Clipboard" ), "editcopy",
+	copyToClipboardAction = new KAction( i18n( "&Copy to Clipboard" ), "edit-copy",
 	                            CTRL + Key_C,
 	                            this, SLOT( fileToClipboard() ),
 	                            actionCollection(), "copy_to_clipboard_action" );
@@ -256,13 +263,13 @@ void Krecipes::readProperties( KConfig * )
 	//QString url = config->readEntry("lastURL");
 
 	//if (!url.isNull())
-	//  m_view->openURL(KURL(url));
+	//  m_view->openURL(KUrl(url));
 }
 
 void Krecipes::dragEnterEvent( QDragEnterEvent *event )
 {
 	// accept uri drops only
-	event->accept( QUriDrag::canDecode( event ) );
+	event->accept( Q3UriDrag::canDecode( event ) );
 }
 
 
@@ -280,10 +287,10 @@ void Krecipes::fileOpen()
 	// button is clicked
 	/*
 	    // this brings up the generic open dialog
-	    KURL url = KURLRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
+	    KUrl url = KUrlRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
 	*/ 
 	// standard filedialog
-	/*KURL url = KFileDialog::getOpenURL(QString::null, QString::null, this, i18n("Open Location"));
+	/*KUrl url = KFileDialog::getOpenUrl(QString::null, QString::null, this, i18n("Open Location"));
 	if (!url.isEmpty())
 	    m_view->openURL(url);*/
 }
@@ -359,12 +366,12 @@ void Krecipes::import()
 		}
 
 		parsing_file_dlg->show();
-		KApplication::setOverrideCursor( KCursor::waitCursor() );
+		KApplication::setOverrideCursor( Qt::WaitCursor );
 		importer->parseFiles( file_dialog.selectedFiles() );
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		KConfig * config = kapp->config();
+		KConfig * config = KGlobal::config();
 		config->setGroup( "Import" );
 		bool direct = config->readBoolEntry( "DirectImport", false );
 		if ( !direct ) {
@@ -409,7 +416,7 @@ void Krecipes::kreDBImport()
 		KreDBImporter importer( importOptions.dbType(), host, user, pass, port ); //last 4 params may or may not be even used (depends on dbType)
 
 		parsing_file_dlg->show();
-		KApplication::setOverrideCursor( KCursor::waitCursor() );
+		KApplication::setOverrideCursor( Qt::WaitCursor );
 		QStringList tables;
 		if ( importOptions.dbType() == "SQLite" )
 			tables << importOptions.dbFile();
@@ -512,7 +519,7 @@ void Krecipes::restoreSlot()
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
-		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStdGuiItem::cont(),"RestoreWarning") ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStandardGuiItem::cont(),"RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			ProgressInterface pi(this);
 			pi.listenOn(m_view->database);
@@ -538,7 +545,7 @@ void Krecipes::mergeSimilarCategories()
 	m_view->database->loadCategories(&categories);
 	SimilarCategoriesDialog dlg(categories,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
-		QValueList<int> ids = dlg.matches();
+		Q3ValueList<int> ids = dlg.matches();
 		QString name = dlg.element();
 
 		int id = m_view->database->findExistingCategoryByName(name);
@@ -547,7 +554,7 @@ void Krecipes::mergeSimilarCategories()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeCategories(id, *it);
 		}
@@ -560,7 +567,7 @@ void Krecipes::mergeSimilarIngredients()
 	m_view->database->loadIngredients(&ingredients);
 	SimilarCategoriesDialog dlg(ingredients,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
-		QValueList<int> ids = dlg.matches();
+		Q3ValueList<int> ids = dlg.matches();
 		QString name = dlg.element();
 
 		if ( ids.isEmpty() || name.isEmpty() ) return;
@@ -571,7 +578,7 @@ void Krecipes::mergeSimilarIngredients()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeIngredients(id, *it);
 		}
@@ -624,7 +631,7 @@ void Krecipes::optionsConfigureKeys()
 {
 #if KDE_IS_VERSION(3,1,92 )
 	// for KDE 3.2: KKeyDialog::configureKeys is deprecated
-	KKeyDialog::configure( actionCollection(), this, true );
+	KShortcutsDialog::configure( actionCollection(), this, true );
 #else
 
 	KKeyDialog::configureKeys( actionCollection(), "krecipesui.rc" );
@@ -647,7 +654,7 @@ void Krecipes::optionsConfigureToolbars()
 	saveMainWindowSettings( KGlobal::config() );
 #endif
 
-	KEditToolbar dlg( actionCollection() );
+	KEditToolBar dlg( actionCollection() );
 	connect( &dlg, SIGNAL( newToolbarConfig() ), this, SLOT( newToolbarConfig() ) );
 	dlg.exec();
 }

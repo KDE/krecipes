@@ -21,10 +21,12 @@
 
 #include <qfontmetrics.h>
 #include <qlabel.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kstringhandler.h>
 #include <klocale.h>
@@ -41,7 +43,7 @@ class MixedNumber;
 class CustomRecipeListItem : public RecipeListItem
 {
 public:
-	CustomRecipeListItem( QListView* qlv, const Recipe &r, const IngredientList &il ) : RecipeListItem( qlv, r )
+	CustomRecipeListItem( Q3ListView* qlv, const Recipe &r, const IngredientList &il ) : RecipeListItem( qlv, r )
 	{
 		ingredientListStored = new QStringList();
 		IngredientList::ConstIterator ili;
@@ -49,7 +51,7 @@ public:
 			if ( (*ili).substitutes.count() > 0 ) {
 				QStringList subs;
 				subs << ( *ili ).name;
-				for ( QValueList<IngredientData>::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
+				for ( Q3ValueList<IngredientData>::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
  					subs << (*it).name;
 				}
 				ingredientListStored->append( subs.join(QString(" %1 ").arg(i18n("OR"))) );
@@ -60,7 +62,7 @@ public:
 
 		moveItem( qlv->lastItem() );
 	}
-	CustomRecipeListItem( QListView* qlv, const Recipe &r ) : RecipeListItem( qlv, r )
+	CustomRecipeListItem( Q3ListView* qlv, const Recipe &r ) : RecipeListItem( qlv, r )
 	{
 		ingredientListStored = 0;
 
@@ -85,10 +87,10 @@ public:
 	}
 };
 
-class SectionItem: public QListViewItem
+class SectionItem: public Q3ListViewItem
 {
 public:
-	SectionItem( QListView* qlv, QString sectionText ) : QListViewItem( qlv, qlv->lastItem() )
+	SectionItem( Q3ListView* qlv, QString sectionText ) : Q3ListViewItem( qlv, qlv->lastItem() )
 	{
 		mText = sectionText;
 	}
@@ -133,7 +135,7 @@ private:
 	KreListView *ingListView;
 
 	KreListView *recipeListView;
-	QHBox *missingBox;
+	Q3HBox *missingBox;
 	QLabel *missingNumberLabel;
 	KIntSpinBox *missingNumberSpinBox;
 
@@ -143,14 +145,14 @@ private:
 	QPushButton *removeButton;
 
 	IngredientList m_ingredientList;
-	QMap<QListViewItem*, IngredientList::iterator> m_item_ing_map;
+	QMap<Q3ListViewItem*, IngredientList::iterator> m_item_ing_map;
 
 private slots:
 	void findRecipes( void );
 	void unselectIngredients();
 	void addIngredient();
 	void removeIngredient();
-	void itemRenamed( QListViewItem*, const QPoint &, int col );
+	void itemRenamed( Q3ListViewItem*, const QPoint &, int col );
 };
 
 #endif

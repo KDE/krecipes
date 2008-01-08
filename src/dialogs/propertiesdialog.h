@@ -15,8 +15,10 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qvbox.h>
-#include <klistview.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <k3listview.h>
 
 class RecipeDB;
 class StdPropertyListView;
@@ -37,7 +39,7 @@ private:
 	RecipeDB *database;
 
 	// Widgets
-	QGridLayout* layout;
+	Q3GridLayout* layout;
 	QPushButton* addPropertyButton;
 	QPushButton* removePropertyButton;
 	StdPropertyListView* propertyListView;

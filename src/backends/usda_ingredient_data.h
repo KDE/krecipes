@@ -15,7 +15,7 @@
 #ifndef USDA_INGREDIENT_DATA_H
 #define USDA_INGREDIENT_DATA_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 namespace USDA {
 	typedef struct IngredientData
@@ -25,7 +25,7 @@ namespace USDA {
 	};
 
 	bool localizedIngredientsAvailable();
-	QValueList<IngredientData> loadIngredients();
+	Q3ValueList<IngredientData> loadIngredients();
 }
 
 #endif //USDA_INGREDIENT_DATA_H

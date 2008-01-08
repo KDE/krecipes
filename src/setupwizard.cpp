@@ -18,12 +18,16 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <qhbox.h>
-#include <qvgroupbox.h>
+#include <q3hbox.h>
+#include <q3vgroupbox.h>
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QLabel>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -33,10 +37,11 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 #include "backends/usda_ingredient_data.h"
 
-SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, WFlags f ) : KWizard( parent, name, modal, f )
+SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : KWizard( parent, name, modal, f )
 {
 	welcomePage = new WelcomePage( this );
 	addPage( welcomePage, i18n( "Welcome to Krecipes" ) );
@@ -128,7 +133,7 @@ void SetupWizard::showPages( DBType type )
 
 WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -154,7 +159,7 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 
 PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -201,7 +206,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// MySQL root/admin info
-	QGroupBox *rootInfoGBox = new QGroupBox( this, "rootInfoGBox" );
+	Q3GroupBox *rootInfoGBox = new Q3GroupBox( this, "rootInfoGBox" );
 	rootInfoGBox->setTitle( i18n( "MySQL Administrator Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	rootInfoGBox->setColumns( 2 );
@@ -262,7 +267,7 @@ void PermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 
 PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -309,7 +314,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// MySQL root/admin info
-	QGroupBox *rootInfoGBox = new QGroupBox( this, "rootInfoGBox" );
+	Q3GroupBox *rootInfoGBox = new Q3GroupBox( this, "rootInfoGBox" );
 	rootInfoGBox->setTitle( i18n( "PostgreSQL Superuser or Privileged Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	rootInfoGBox->setColumns( 2 );
@@ -370,7 +375,7 @@ void PSqlPermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 
 ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -403,8 +408,8 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	QGroupBox *inputGBox = new QGroupBox( this, "inputGBox" );
-	inputGBox->setFrameStyle( QFrame::NoFrame );
+	Q3GroupBox *inputGBox = new Q3GroupBox( this, "inputGBox" );
+	inputGBox->setFrameStyle( Q3Frame::NoFrame );
 	inputGBox->setInsideSpacing( 10 );
 	inputGBox->setColumns( 2 );
 	layout->addWidget( inputGBox, 3, 3 );
@@ -467,7 +472,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerFromCheckBox, 6, 3 );
 
 	// Server & Client Box
-	QGroupBox *serverSettingsGBox = new QGroupBox( this, "serverSettingsGBox" );
+	Q3GroupBox *serverSettingsGBox = new Q3GroupBox( this, "serverSettingsGBox" );
 	serverSettingsGBox->setTitle( i18n( "Server / Client Settings" ) );
 	serverSettingsGBox->setEnabled( false ); // Disable by default
 	serverSettingsGBox->setInsideSpacing( 10 );
@@ -531,7 +536,7 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -564,16 +569,16 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	QHBox *hbox = new QHBox( this );
+	Q3HBox *hbox = new Q3HBox( this );
 
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 
 	fileEdit = new KLineEdit( hbox );
-	fileEdit->setText( locateLocal ( "appdata", "krecipes.krecdb" ) );
+	fileEdit->setText( KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
 	hbox->setStretchFactor( fileEdit, 2 );
 
-	KIconLoader *il = KGlobal::iconLoader();
-	QPushButton *file_select = new QPushButton( il->loadIcon( "fileopen", KIcon::NoGroup, 16 ), QString::null, hbox );
+	KIconLoader *il = KIconLoader::global();
+	QPushButton *file_select = new QPushButton( il->loadIcon( "document-open", KIconLoader::NoGroup, 16 ), QString::null, hbox );
 	QToolTip::add
 		( file_select, i18n( "Open file dialog" ) );
 	file_select->setFixedWidth( 25 );
@@ -604,7 +609,7 @@ void SQLiteSetupPage::selectFile()
 
 SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -631,8 +636,8 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 
 void SetupWizard::save( void )
 {
-	kdDebug() << "Setting parameters in kconfig..." << endl;
-	KConfig *config = kapp->config();
+	kDebug() << "Setting parameters in kconfig..." << endl;
+	KConfig *config = KGlobal::config();
 
 	// Save the database type
 	QString sDBType;
@@ -651,7 +656,7 @@ void SetupWizard::save( void )
 
 	config->setGroup( "DBType" );
 	config->writeEntry( "Type", sDBType );
-	kdDebug() << "DB type set in kconfig was... " << sDBType << endl;
+	kDebug() << "DB type set in kconfig was... " << sDBType << endl;
 	// Save the server data if needed
 	if ( !( dbTypeSetupPage->dbType() == SQLite ) ) {
 		config->setGroup( "Server" );
@@ -659,7 +664,7 @@ void SetupWizard::save( void )
 		config->writeEntry( "Username", serverSetupPage->user() );
 		config->writeEntry( "Password", serverSetupPage->password() );
 		config->writeEntry( "DBName", serverSetupPage->dbName() );
-		kdDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." << endl;
+		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." << endl;
 	}
 	else {
 		config->setGroup( "Server" );
@@ -671,7 +676,7 @@ void SetupWizard::save( void )
 	config->setGroup( "Wizard" );
 	config->writeEntry( "SystemSetup", true );
 	config->writeEntry( "Version", "0.9" );
-	kdDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;
+	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;
 }
 
 void SetupWizard::getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport )
@@ -699,7 +704,7 @@ void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client,
 
 DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -764,7 +769,7 @@ void DataInitializePage::setUSDAImport( bool import )
 
 DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this, 1, 1, 0, 0 );
+	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -798,7 +803,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 
 	// Database type choice
-	bg = new QVButtonGroup( this );
+	bg = new Q3VButtonGroup( this );
 	layout->addWidget( bg, 3, 3 );
 
 	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg, "liteCheckBox" );

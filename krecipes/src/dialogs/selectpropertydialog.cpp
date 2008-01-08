@@ -19,6 +19,10 @@
 #include "datablocks/ingredientpropertylist.h"
 #include "dialogs/createunitdialog.h"
 #include "backends/recipedb.h"
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <QLabel>
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB *database, OptionFlag showEmpty )
 		: KDialogBase( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
@@ -30,17 +34,17 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	unitListBack = new UnitList;
 
 	// Initialize Widgets
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( page );
+	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Property" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
 	boxLayout->setAlignment( Qt::AlignTop );
 
-	propertyChooseView = new KListView( box, "propertyChooseView" );
+	propertyChooseView = new K3ListView( box, "propertyChooseView" );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -52,7 +56,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	propertyChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( propertyChooseView );
 
-	QHBoxLayout *layout2 = new QHBoxLayout;
+	Q3HBoxLayout *layout2 = new Q3HBoxLayout;
 
 	perUnitsLabel = new QLabel( box );
 	perUnitsLabel->setGeometry( QRect( 5, 285, 100, 30 ) );
@@ -86,7 +90,7 @@ SelectPropertyDialog::~SelectPropertyDialog()
 int SelectPropertyDialog::propertyID( void )
 {
 
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	if ( ( it = propertyChooseView->selectedItem() ) ) {
 		return ( it->text( 0 ).toInt() );
 	}
@@ -124,7 +128,7 @@ int SelectPropertyDialog::perUnitsID()
 void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList )
 {
 	for ( IngredientPropertyList::const_iterator prop_it = propertyList->begin(); prop_it != propertyList->end(); ++prop_it ) {
-		( void ) new QListViewItem( propertyChooseView, QString::number( (*prop_it).id ), (*prop_it).name );
+		( void ) new Q3ListViewItem( propertyChooseView, QString::number( (*prop_it).id ), (*prop_it).name );
 	}
 }
 void SelectPropertyDialog::loadUnits( UnitList *unitList )

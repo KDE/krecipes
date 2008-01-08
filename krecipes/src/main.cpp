@@ -56,7 +56,7 @@ int main( int argc, char **argv )
 	KUniqueApplication app;
 
 	// see if we are starting with session management
-	if ( app.isRestored() ) {
+	if ( app.isSessionRestored() ) {
 		RESTORE( Krecipes );
 	}
 	else {

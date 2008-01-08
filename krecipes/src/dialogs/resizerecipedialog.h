@@ -14,15 +14,21 @@
 #define RESIZERECIPEDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
 class Recipe;
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class FractionInput;
-class QButtonGroup;
-class QFrame;
+class Q3ButtonGroup;
+class Q3Frame;
 class QLabel;
 class KIntNumInput;
 class KLineEdit;
@@ -49,21 +55,21 @@ private:
 
 	Recipe *m_recipe;
 
-	QButtonGroup* buttonGroup;
+	Q3ButtonGroup* buttonGroup;
 	QRadioButton* yieldRadioButton;
-	QFrame* yieldFrame;
+	Q3Frame* yieldFrame;
 	QLabel* currentYieldLabel;
 	QLabel* newYieldLabel;
 	KLineEdit* currentYieldInput;
 	FractionInput* newYieldInput;
 	QRadioButton* factorRadioButton;
-	QFrame* factorFrame;
+	Q3Frame* factorFrame;
 	QLabel* factorLabel;
 	FractionInput* factorInput;
 
-	QVBoxLayout* buttonGroupLayout;
-	QGridLayout* yieldFrameLayout;
-	QHBoxLayout* factorFrameLayout;
+	Q3VBoxLayout* buttonGroupLayout;
+	Q3GridLayout* yieldFrameLayout;
+	Q3HBoxLayout* factorFrameLayout;
 };
 
 #endif //RESIZERECIPEDIALOG_H

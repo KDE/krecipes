@@ -13,7 +13,7 @@
 #ifndef UNITSDIALOG_H
 #define UNITSDIALOG_H
 #include <qwidget.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <qpushbutton.h>
 
 #include "datablocks/unitratiolist.h"

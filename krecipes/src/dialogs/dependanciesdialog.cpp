@@ -15,14 +15,17 @@
 #include "dependanciesdialog.h"
 #include "datablocks/elementlist.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const QValueList<ListInfo> &lists, bool deps_are_deleted ) : KDialogBase( parent, "DependanciesDialog", true, QString::null,
+DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted ) : KDialogBase( parent, "DependanciesDialog", true, QString::null,
 	  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
@@ -33,7 +36,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, b
 	  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
-	QValueList<ListInfo> lists;
+	Q3ValueList<ListInfo> lists;
 	lists << list;
 	init( lists );
 }
@@ -41,16 +44,16 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, b
 DependanciesDialog::~DependanciesDialog()
 {}	
 
-void DependanciesDialog::init( const QValueList<ListInfo> &lists )
+void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	// Design the dialog
 
 	instructionsLabel = new QLabel( page );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
-	instructionsLabel->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+	instructionsLabel->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 	
 	if ( m_depsAreDeleted ) {
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
@@ -59,10 +62,10 @@ void DependanciesDialog::init( const QValueList<ListInfo> &lists )
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following currently use the element you have chosen to be removed." ) );
 	}
 
-	for ( QValueList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
+	for ( Q3ValueList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
 		if ( !((*list_it).list).isEmpty() ) {
-			QGroupBox *groupBox = new QGroupBox( 1, Qt::Vertical, (*list_it).name, page );
-			KListBox *listBox = new KListBox( groupBox );
+			Q3GroupBox *groupBox = new Q3GroupBox( 1, Qt::Vertical, (*list_it).name, page );
+			K3ListBox *listBox = new K3ListBox( groupBox );
 			loadList( listBox, (*list_it).list );
 		}
 	}
@@ -70,7 +73,7 @@ void DependanciesDialog::init( const QValueList<ListInfo> &lists )
 	setSizeGripEnabled( true );
 }
 
-void DependanciesDialog::loadList( KListBox* listBox, const ElementList &list )
+void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 {
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -89,7 +92,7 @@ void DependanciesDialog::accept()
 	if ( !m_msg.isEmpty() ) {
 		switch ( KMessageBox::warningYesNo(this,
 			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18n("Are you sure you wish to proceed?")),
-			QString::null,KStdGuiItem::yes(),KStdGuiItem::no(),"doubleCheckDelete") )
+			QString::null,KStandardGuiItem::yes(),KStandardGuiItem::no(),"doubleCheckDelete") )
 		{
 		case KMessageBox::Yes: QDialog::accept(); break;
 		case KMessageBox::No: QDialog::reject(); break;

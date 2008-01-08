@@ -15,19 +15,21 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
 		: KDialogBase( parent, "SelectUnitDialog", true, i18n( "Choose Unit" ),
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty)
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( page );
+	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Unit" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
-	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
 
-	unitChooseView = new KListView( box );
+	unitChooseView = new K3ListView( box );
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
@@ -52,7 +54,7 @@ SelectUnitDialog::~SelectUnitDialog()
 int SelectUnitDialog::unitID( void )
 {
 
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	if ( ( it = unitChooseView->selectedItem() ) ) {
 		return ( it->text( 0 ).toInt() );
 	}
@@ -71,7 +73,7 @@ void SelectUnitDialog::loadUnits( const UnitList &unitList )
 				continue;
 		}
 
-		( void ) new QListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), unitName );
+		( void ) new Q3ListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), unitName );
 	}
 }
 

@@ -19,7 +19,7 @@
 
 #include "datablocks/elementlist.h"
 
-class KPopupMenu;
+class KMenu;
 
 class RecipeDB;
 class CategoryTree;
@@ -59,12 +59,12 @@ private:
 	bool populated;
 };
 
-class CategoryCheckListItem : public QCheckListItem, public CategoryItemInfo
+class CategoryCheckListItem : public Q3CheckListItem, public CategoryItemInfo
 {
 public:
 	CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool exclusive = true );
-	CategoryCheckListItem( QListViewItem* it, const Element &category, bool exclusive = true );
-	CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( Q3ListViewItem* it, const Element &category, bool exclusive = true );
+	CategoryCheckListItem( CategoryCheckListView* klv, Q3ListViewItem* it, const Element &category, bool exclusive = true );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -87,12 +87,12 @@ private:
 };
 
 
-class CategoryListItem : public QListViewItem, public CategoryItemInfo
+class CategoryListItem : public Q3ListViewItem, public CategoryItemInfo
 {
 public:
-	CategoryListItem( QListView* klv, const Element &category );
-	CategoryListItem( QListViewItem* it, const Element &category );
-	CategoryListItem( QListView* klv, QListViewItem* it, const Element &category );
+	CategoryListItem( Q3ListView* klv, const Element &category );
+	CategoryListItem( Q3ListViewItem* it, const Element &category );
+	CategoryListItem( Q3ListView* klv, Q3ListViewItem* it, const Element &category );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -112,10 +112,10 @@ class CategoryListView : public DBListViewBase
 public:
 	CategoryListView( QWidget *parent, RecipeDB * );
 
-	void populateAll( QListViewItem *parent = 0 );
+	void populateAll( Q3ListViewItem *parent = 0 );
 
 public slots:
-	void open( QListViewItem *item );
+	void open( Q3ListViewItem *item );
 
 protected:
 	virtual void init();
@@ -123,17 +123,17 @@ protected:
 	virtual void load( int limit, int offset );
 
 	/** so that it allows dropping into
-	         * subchildren that aren't expandable.  The code is taken from KDE's KListView with
+	         * subchildren that aren't expandable.  The code is taken from KDE's K3ListView with
 	         * one line commented out.
 	  */
-	void findDrop( const QPoint &pos, QListViewItem *&parent, QListViewItem *&after )
+	void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after )
 	{
 		QPoint p ( contentsToViewport( pos ) );
 
 		// Get the position to put it in
-		QListViewItem *atpos = itemAt( p );
+		Q3ListViewItem *atpos = itemAt( p );
 
-		QListViewItem *above;
+		Q3ListViewItem *above;
 		if ( !atpos )  // put it at the end
 			above = lastItem();
 		else {
@@ -170,8 +170,8 @@ protected:
 
 			// Ok, there's one more level of complexity. We may want to become a new
 			// sibling, but of an upper-level group, rather than the "above" item
-			QListViewItem * betterAbove = above->parent();
-			QListViewItem * last = above;
+			Q3ListViewItem * betterAbove = above->parent();
+			Q3ListViewItem * last = above;
 			while ( betterAbove ) {
 				// We are allowed to become a sibling of "betterAbove" only if we are
 				// after its last child
@@ -200,12 +200,12 @@ protected slots:
 	virtual void mergeCategories( int id1, int id2 );
 
 	virtual void checkCreateCategory( const Element &, int parent_id );
-	virtual void populate( QListViewItem *item );
+	virtual void populate( Q3ListViewItem *item );
 
-	QMap<int, QListViewItem*> items_map;
+	QMap<int, Q3ListViewItem*> items_map;
 
 private:
-	QListViewItem *m_item_to_delete;
+	Q3ListViewItem *m_item_to_delete;
 };
 
 
@@ -225,7 +225,7 @@ protected:
 
 private slots:
 	void preparePopup();
-	void showPopup( KListView *, QListViewItem *, const QPoint & );
+	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
 	void remove
@@ -235,17 +235,17 @@ private slots:
 	void paste();
 	void pasteAsSub();
 
-	void changeCategoryParent( QListViewItem *item, QListViewItem * /*afterFirst*/, QListViewItem * /*afterNow*/ );
+	void changeCategoryParent( Q3ListViewItem *item, Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
 
-	void modCategory( QListViewItem* i );
-	void saveCategory( QListViewItem* i );
+	void modCategory( Q3ListViewItem* i );
+	void saveCategory( Q3ListViewItem* i );
 
 private:
 	bool checkBounds( const QString &name );
 
-	KPopupMenu *kpop;
-	QListViewItem *clipboard_item;
-	QListViewItem *clipboard_parent;
+	KMenu *kpop;
+	Q3ListViewItem *clipboard_item;
+	Q3ListViewItem *clipboard_parent;
 	
 	QPixmap m_folder_icon;
 };
@@ -275,11 +275,11 @@ private:
 };
 
 
-class PseudoListItem : public QListViewItem
+class PseudoListItem : public Q3ListViewItem
 {
 public:
-	PseudoListItem( QListView* lv ) : QListViewItem(lv){}
-	PseudoListItem( QListViewItem* it ) : QListViewItem(it){}
+	PseudoListItem( Q3ListView* lv ) : Q3ListViewItem(lv){}
+	PseudoListItem( Q3ListViewItem* it ) : Q3ListViewItem(it){}
 
 protected:
 	int rtti() const { return PSEUDOLISTITEM_RTTI; }

@@ -11,21 +11,19 @@
 #ifndef _KRECIPESIFACE_H_
 #define _KRECIPESIFACE_H_
 
-#include <dcopobject.h>
-#include <dcopref.h>
+#include <qlist.h>
 
-#include <qvaluelist.h>
-
-class KrecipesIface : virtual public DCOPObject
+class KrecipesIface 
 {
-	K_DCOP
+	Q_CLASSINFO("org.kde.krecipes", "Iface")	
 public:
 
-k_dcop:
-	virtual DCOPRef currentDatabase() const = 0;
-	virtual void reload() = 0;
-	
-	virtual void exportRecipes( const QValueList<int> &ids ) = 0;
+Q_SLOTS:
+	virtual Q_SCRIPTABLE QDBusInterface currentDatabase() const = 0;
+ 	virtual Q_SCRIPTABLE void reload() = 0;
+ 	     
+ 	virtual Q_SCRIPTABLE void exportRecipes( const QList<int> &ids ) = 0;
+
 };
 
 #endif // _KRECIPESIFACE_H_

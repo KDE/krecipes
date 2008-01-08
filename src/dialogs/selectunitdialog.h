@@ -16,10 +16,10 @@
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
+#include <q3groupbox.h>
+#include <q3vbox.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdialogbase.h>
 
 #include "datablocks/unit.h"
@@ -40,8 +40,8 @@ public:
 
 private:
 	//Widgets
-	QGroupBox *box;
-	KListView *unitChooseView;
+	Q3GroupBox *box;
+	K3ListView *unitChooseView;
 	OptionFlag m_showEmpty;
 
 	void loadUnits( const UnitList &unitList );

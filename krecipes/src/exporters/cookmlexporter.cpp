@@ -19,8 +19,8 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktempfile.h>
-#include <kmdcodec.h>
+#include <ktemporaryfile.h>
+#include <kcodecs.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
@@ -88,7 +88,7 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 
 		QByteArray data;
 		QBuffer buffer( data );
-		buffer.open( IO_WriteOnly );
+		buffer.open( QIODevice::WriteOnly );
 		QImageIO iio( &buffer, "JPEG" );
 		iio.setImage( ( *recipe_it ).photo.convertToImage() );
 		iio.write();

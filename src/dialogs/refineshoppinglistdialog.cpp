@@ -13,16 +13,20 @@
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kconfig.h>
+#include <kglobal.h>
 
 #include "backends/recipedb.h"
 #include "widgets/krelistview.h"
@@ -38,14 +42,14 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 {
 	setButtonText( KDialogBase::Ok, i18n( "&Done" ) );
 
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	helpLabel = new QLabel( page, "helpLabel" );
 	helpLabel->setTextFormat( QLabel::RichText );
 
 	QWidget *layout2Widget = new QWidget(page);
 
-	QHBoxLayout *layout2 = new QHBoxLayout( layout2Widget, 0, 6, "layout2" );
+	Q3HBoxLayout *layout2 = new Q3HBoxLayout( layout2Widget, 0, 6, "layout2" );
 
 	allIngListView = new KreListView( layout2Widget, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
@@ -53,17 +57,17 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 
 	addButton = new QPushButton( layout2Widget, "addButton" );
-	addButton->setIconSet( il->loadIconSet( "forward", KIcon::Small ) );
+	addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( layout2Widget, "removeButton" );
-	removeButton->setIconSet( il->loadIconSet( "back", KIcon::Small ) );
+	removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -86,9 +90,9 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), SLOT( itemRenamed( QListViewItem*, const QString &, int ) ) );
+	connect( ingListView->listView(), SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QString &, int ) ) );
 
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
+	KApplication::setOverrideCursor( Qt::WaitCursor );
 	calculateShopping( recipeList, &ingredientList, database );
 	KApplication::restoreOverrideCursor();
 
@@ -126,7 +130,7 @@ void RefineShoppingListDialog::loadData()
 
 		QString amount_str;
 		if ( ( *it ).amount > 0 ) {
-			KConfig * config = kapp->config();
+			KConfig * config = KGlobal::config();
 			config->setGroup( "Formatting" );
 	
 			if ( config->readBoolEntry( "Fraction" ) )
@@ -135,16 +139,16 @@ void RefineShoppingListDialog::loadData()
 				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
 		}
 
-		QListViewItem *new_item = new QListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
+		Q3ListViewItem *new_item = new Q3ListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
 		item_ing_map.insert( new_item, it );
 	}
 }
 
 void RefineShoppingListDialog::addIngredient()
 {
-	QListViewItem * item = allIngListView->listView() ->selectedItem();
+	Q3ListViewItem * item = allIngListView->listView() ->selectedItem();
 	if ( item ) {
-		QListViewItem * new_item = new QListViewItem( ingListView->listView(), item->text( 0 ) );
+		Q3ListViewItem * new_item = new Q3ListViewItem( ingListView->listView(), item->text( 0 ) );
 		ingListView->listView() ->setSelected( new_item, true );
 		ingListView->listView() ->ensureItemVisible( new_item );
 		allIngListView->listView() ->setSelected( item, false );
@@ -155,7 +159,7 @@ void RefineShoppingListDialog::addIngredient()
 
 void RefineShoppingListDialog::removeIngredient()
 {
-	QListViewItem * item = ingListView->listView() ->selectedItem();
+	Q3ListViewItem * item = ingListView->listView() ->selectedItem();
 	if ( item ) {
 		for ( IngredientList::iterator it = ingredientList.begin(); it != ingredientList.end(); ++it ) {
 			if ( *item_ing_map.find( item ) == it ) {
@@ -168,7 +172,7 @@ void RefineShoppingListDialog::removeIngredient()
 	}
 }
 
-void RefineShoppingListDialog::itemRenamed( QListViewItem* item, const QString &new_text, int col )
+void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString &new_text, int col )
 {
 	if ( col == 1 ) {
 		IngredientList::iterator found_it = *item_ing_map.find( item );
@@ -181,7 +185,7 @@ void RefineShoppingListDialog::itemRenamed( QListViewItem* item, const QString &
 		else { //revert back to the valid amount string
 			QString amount_str;
 			if ( ( *found_it ).amount > 0 ) {
-				KConfig * config = kapp->config();
+				KConfig * config = KGlobal::config();
 				config->setGroup( "Formatting" );
 		
 				if ( config->readBoolEntry( "Fraction" ) )

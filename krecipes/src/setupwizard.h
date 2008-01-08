@@ -40,7 +40,7 @@ class SetupWizard: public KWizard
 	Q_OBJECT
 public:
 
-	SetupWizard( QWidget *parent = 0, const char *name = 0, bool modal = true, WFlags f = 0 );
+	SetupWizard( QWidget *parent = 0, const char *name = 0, bool modal = true, Qt::WFlags f = 0 );
 	~SetupWizard();
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );
@@ -216,7 +216,7 @@ private:
 	// Widgets
 	QLabel *dbTypeSetupText;
 	QLabel *logo;
-	QVButtonGroup *bg;
+	Q3VButtonGroup *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
 	QRadioButton *psqlCheckBox;

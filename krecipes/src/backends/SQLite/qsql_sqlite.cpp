@@ -14,7 +14,11 @@
 #include <qregexp.h>
 #include <qfile.h>
 
-#include <qptrvector.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3SqlRecordInfo>
+#include <QSqlQuery>
+#include <QSqlError>
 #include <unistd.h>
 
 #include <kdebug.h>
@@ -76,7 +80,7 @@ QVariant KreSQLiteResult::data( int field )
 
 bool KreSQLiteResult::fetch( int i )
 {
-kdDebug()<<"fetch_i"<<endl;
+kDebug()<<"fetch_i"<<endl;
 	if ( isForwardOnly() ) { // fake a forward seek
 		if ( at() < i ) {
 			int x = i - at();
@@ -124,7 +128,7 @@ bool KreSQLiteResult::fetchFirst()
 }
 
 bool KreSQLiteResult::fetchLast() 
-{kdDebug()<<"fetchlast"<<endl;
+{kDebug()<<"fetchlast"<<endl;
 	if ( isForwardOnly() ) { // fake this since MySQL can't seek on forward only queries
 		bool success = fetchNext(); // did we move at all?
 		while ( fetchNext() );
@@ -142,18 +146,18 @@ bool KreSQLiteResult::isNull( int /*i*/ )
 }
 
 QSqlRecord KreSQLiteResult::record()
-{kdDebug()<<"record"<<endl;
+{kDebug()<<"record"<<endl;
 	return QSqlRecord();
 }
 
 int KreSQLiteResult::size()
 {
-//kdDebug()<<"size: "<<result.size()<<endl;
+//kDebug()<<"size: "<<result.size()<<endl;
 	return result.size();
 }
 
 int KreSQLiteResult::numRowsAffected()
-{kdDebug()<<"numrowsaffected"<<endl;
+{kDebug()<<"numrowsaffected"<<endl;
 	return 1;/*sqlite3_changes(db)*/
 }
 
@@ -338,7 +342,7 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 
 QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
 {
-    QSqlRecordInfo rec(recordInfo(tblname)); // expensive :(
+    Q3SqlRecordInfo rec(recordInfo(tblname)); // expensive :(
 
     if (!isOpen())
         return QSqlIndex();
@@ -371,15 +375,15 @@ QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
 }
 
 #if 0
-QSqlRecordInfo KreSQLiteDriver::recordInfo(const QString &tbl) const
+Q3SqlRecordInfo KreSQLiteDriver::recordInfo(const QString &tbl) const
 {
 	if (!isOpen())
-		return QSqlRecordInfo();
+		return Q3SqlRecordInfo();
 	
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
 	q.exec("SELECT * FROM " + tbl + " LIMIT 1");
-return QSqlRecordInfo();
+return Q3SqlRecordInfo();
 //	return recordInfo(q);
 }
 
@@ -400,13 +404,13 @@ QSqlRecord KreSQLiteDriver::record(const QSqlQuery& query) const
     return QSqlRecord();
 }
 
-QSqlRecordInfo KreSQLiteDriver::recordInfo(const QSqlQuery& query) const
+Q3SqlRecordInfo KreSQLiteDriver::recordInfo(const QSqlQuery& query) const
 {
     if (query.isActive() && query.driver() == this) {
         KreSQLiteResult* result = (KreSQLiteResult*)query.result();
         return result->rInf;
     }
-    return QSqlRecordInfo();
+    return Q3SqlRecordInfo();
 }
 
 //this would be used below in formatValue()
@@ -417,9 +421,9 @@ static QString escape( const QString &s )
 	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 		// Escape using SQLite's function
 #if HAVE_SQLITE
-		char * escaped = sqlite_mprintf( "%q", s.latin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #elif HAVE_SQLITE3
-		char * escaped = sqlite3_mprintf( "%q", s.latin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite3_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #endif
 		s_escaped = escaped;
 #if HAVE_SQLITE
@@ -446,7 +450,7 @@ QString KreSQLiteDriver::formatValue( const QSqlField* field, bool trimStrings )
 				// Escape '\' characters
 				r = QSqlDriver::formatValue( field );
 				//r = escape(r);
-				//kdDebug()<<"escaping sqlite string: "<<r<<endl;
+				//kDebug()<<"escaping sqlite string: "<<r<<endl;
 				break;
 			}
 			default:

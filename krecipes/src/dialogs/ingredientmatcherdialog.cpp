@@ -21,11 +21,17 @@
 #include "datablocks/mixednumber.h"
 #include "recipeactionshandler.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qpainter.h>
 #include <qstringlist.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3ValueList>
+#include <QLabel>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -46,28 +52,28 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	//Design the dialog
 
-	QVBoxLayout *dialogLayout = new QVBoxLayout( this, 11, 6 );
+	Q3VBoxLayout *dialogLayout = new Q3VBoxLayout( this, 11, 6 );
 
 	// Ingredient list
-	QHBoxLayout *layout2 = new QHBoxLayout( 0, 0, 6, "layout2" );
+	Q3HBoxLayout *layout2 = new Q3HBoxLayout( 0, 0, 6, "layout2" );
 
 	allIngListView = new KreListView( this, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
-	list_view->setSelectionMode( QListView::Multi );
+	list_view->setSelectionMode( Q3ListView::Multi );
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
-	QVBoxLayout *layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+	Q3VBoxLayout *layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 
 	addButton = new QPushButton( this, "addButton" );
-	addButton->setIconSet( il->loadIconSet( "forward", KIcon::Small ) );
+	addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( this, "removeButton" );
-	removeButton->setIconSet( il->loadIconSet( "back", KIcon::Small ) );
+	removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	QSpacerItem *spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -81,7 +87,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	dialogLayout->addLayout( layout2 );
 
 	// Box to select allowed number of missing ingredients
-	missingBox = new QHBox( this );
+	missingBox = new Q3HBox( this );
 	missingNumberLabel = new QLabel( missingBox );
 	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
@@ -108,16 +114,16 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
-	QHBox *buttonBox = new QHBox( this );
+	Q3HBox *buttonBox = new Q3HBox( this );
 
 	okButton = new QPushButton( buttonBox );
-	okButton->setIconSet( il->loadIconSet( "button_ok", KIcon::Small ) );
+	okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );
 	okButton->setText( i18n( "Find matching recipes" ) );
 
 	//buttonBox->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	clearButton = new QPushButton( buttonBox );
-	clearButton->setIconSet( il->loadIconSet( "editclear", KIcon::Small ) );
+	clearButton->setIconSet( il->loadIconSet( "edit-clear", KIcon::Small ) );
 	clearButton->setText( i18n( "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
@@ -128,20 +134,20 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
+	connect( ingListView->listView(), SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QPoint &, int ) ) );
 }
 
 IngredientMatcherDialog::~IngredientMatcherDialog()
 {
 }
 
-void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )
+void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, int col )
 {
 	if ( col == 1 ) {
 		KDialogBase amountEditDialog(this,"IngredientMatcherAmountEdit",
 		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
-		QGroupBox *box = new QGroupBox( 1, Horizontal, i18n("Amount"), &amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
 		if ( !item->text(1).isEmpty() ) {
@@ -183,13 +189,13 @@ void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QPoint &, 
 
 void IngredientMatcherDialog::addIngredient()
 {
-	QPtrList<QListViewItem> items = allIngListView->listView()->selectedItems();
+	Q3PtrList<Q3ListViewItem> items = allIngListView->listView()->selectedItems();
 	if ( items.count() > 0 ) {
-		QPtrListIterator<QListViewItem> it(items);
-		QListViewItem *item;
+		Q3PtrListIterator<Q3ListViewItem> it(items);
+		Q3ListViewItem *item;
 		while ( (item = it.current()) != 0 ) {
 			bool dup = false;
-			for ( QListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
+			for ( Q3ListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
 				if ( exists_it->text( 0 ) == item->text( 0 ) ) {
 					dup = true;
 					break;
@@ -197,7 +203,7 @@ void IngredientMatcherDialog::addIngredient()
 			}
 
 			if ( !dup ) {
-				QListViewItem * new_item = new QCheckListItem( ingListView->listView(), item->text( 0 ), QCheckListItem::CheckBox );
+				Q3ListViewItem * new_item = new Q3CheckListItem( ingListView->listView(), item->text( 0 ), Q3CheckListItem::CheckBox );
 	
 				ingListView->listView() ->setSelected( new_item, true );
 				ingListView->listView() ->ensureItemVisible( new_item );
@@ -212,7 +218,7 @@ void IngredientMatcherDialog::addIngredient()
 
 void IngredientMatcherDialog::removeIngredient()
 {
-	QListViewItem * item = ingListView->listView() ->selectedItem();
+	Q3ListViewItem * item = ingListView->listView() ->selectedItem();
 	if ( item ) {
 		for ( IngredientList::iterator it = m_ingredientList.begin(); it != m_ingredientList.end(); ++it ) {
 			if ( *m_item_ing_map.find( item ) == it ) {
@@ -228,13 +234,13 @@ void IngredientMatcherDialog::removeIngredient()
 void IngredientMatcherDialog::unselectIngredients()
 {
 	ingListView->listView()->clear();
-	for ( QListViewItem *it = allIngListView->listView()->firstChild(); it; it = it->nextSibling() )
+	for ( Q3ListViewItem *it = allIngListView->listView()->firstChild(); it; it = it->nextSibling() )
 		allIngListView->listView()->setSelected(it,false);
 }
 
 void IngredientMatcherDialog::findRecipes( void )
 {
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
+	KApplication::setOverrideCursor( Qt::WaitCursor );
 
 	START_TIMER("Ingredient Matcher: loading database data");
 
@@ -250,8 +256,8 @@ void IngredientMatcherDialog::findRecipes( void )
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
 	RecipeList incompleteRecipes;
-	QValueList <int> missingNumbers;
-	QValueList <IngredientList> missingIngredients;
+	Q3ValueList <int> missingNumbers;
+	Q3ValueList <IngredientList> missingIngredients;
 
 	RecipeList::Iterator it;
 	for ( it = rlist.begin();it != rlist.end();++it ) {
@@ -283,14 +289,14 @@ void IngredientMatcherDialog::findRecipes( void )
 	START_TIMER("Ingredient Matcher: searching for and displaying partial matches");
 
 	IngredientList requiredIngredients;
-	for ( QListViewItem *it = ingListView->listView()->firstChild(); it; it = it->nextSibling() ) {
-		if ( ((QCheckListItem*)it)->isOn() )
+	for ( Q3ListViewItem *it = ingListView->listView()->firstChild(); it; it = it->nextSibling() ) {
+		if ( ((Q3CheckListItem*)it)->isOn() )
 			requiredIngredients << *m_item_ing_map[it];
 	}
 
 	// Classify recipes with missing ingredients in different lists by ammount
-	QValueList<int>::Iterator nit;
-	QValueList<IngredientList>::Iterator ilit;
+	Q3ValueList<int>::Iterator nit;
+	Q3ValueList<IngredientList>::Iterator ilit;
 	int missingNoAllowed = missingNumberSpinBox->value();
 
 	if ( missingNoAllowed == -1 )  // "Any"

@@ -17,15 +17,19 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <QMouseEvent>
 
 namespace {
   static const int RATING_WIDGET_MAX_STAR_SIZE = 24;
 }
 
 const QPixmap& RatingWidget::pixmap(const QString& value_) {
-  static QIntDict<QPixmap> pixmaps;
+  static Q3IntDict<QPixmap> pixmaps;
   if(pixmaps.isEmpty()) {
     pixmaps.insert(-1, new QPixmap());
   }
@@ -45,15 +49,15 @@ const QPixmap& RatingWidget::pixmap(const QString& value_) {
 }
 
 RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
-    : QHBox(parent_, name_), m_currIndex(-1), m_min(0), m_max(stars*2) {
+    : Q3HBox(parent_, name_), m_currIndex(-1), m_min(0), m_max(stars*2) {
   m_pixOn = UserIcon(QString::fromLatin1("star_on"));
   m_pixOff = UserIcon(QString::fromLatin1("star_off"));
   m_pixHalf = UserIcon(QString::fromLatin1("star_half"));
   setSpacing(0);
 
   // find maximum width and height
-  int w = KMAX(RATING_WIDGET_MAX_STAR_SIZE, KMAX(m_pixOn.width(), m_pixOff.width()));
-  int h = KMAX(RATING_WIDGET_MAX_STAR_SIZE, KMAX(m_pixOn.height(), m_pixOff.height()));
+  int w = qMax(RATING_WIDGET_MAX_STAR_SIZE, qMax(m_pixOn.width(), m_pixOff.width()));
+  int h = qMax(RATING_WIDGET_MAX_STAR_SIZE, qMax(m_pixOn.height(), m_pixOff.height()));
   for(int i = 0; i < stars; ++i) {
     QLabel* l = new QLabel(this);
     l->setFixedSize(w, h);
@@ -61,14 +65,14 @@ RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
   }
   init();
 
-  QBoxLayout* l = dynamic_cast<QBoxLayout*>(layout());
+  Q3BoxLayout* l = dynamic_cast<Q3BoxLayout*>(layout());
   if(l) {
     l->addStretch(1);
   }
 }
 
 void RatingWidget::init() {
-  m_total = KMIN(m_max/2, static_cast<int>(m_widgets.count()));
+  m_total = qMin(m_max/2, static_cast<int>(m_widgets.count()));
   uint i = 0;
   for( ; static_cast<int>(i) < m_total; ++i) {
     m_widgets.at(i)->setPixmap(m_pixOff);
@@ -92,7 +96,7 @@ void RatingWidget::update() {
     m_widgets.at(m_currIndex/2)->setPixmap(m_pixHalf);
   }
 
-  QHBox::update();
+  Q3HBox::update();
 }
 
 void RatingWidget::mousePressEvent(QMouseEvent* event_) {

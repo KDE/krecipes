@@ -15,7 +15,7 @@
 
 #include "widgets/recipelistview.h"
 
-RecipeFilter::RecipeFilter( KListView *klv ) : QObject( klv ),
+RecipeFilter::RecipeFilter( K3ListView *klv ) : QObject( klv ),
 		listview( klv ),
 		currentCategory( 0 )
 {}
@@ -23,9 +23,9 @@ RecipeFilter::RecipeFilter( KListView *klv ) : QObject( klv ),
 void RecipeFilter::filter( const QString &s )
 {
 	//do this to only iterate over children of 'currentCategory'
-	QListViewItem * pEndItem = NULL;
+	Q3ListViewItem * pEndItem = NULL;
 	if ( currentCategory ) {
-		QListViewItem * pStartItem = currentCategory;
+		Q3ListViewItem * pStartItem = currentCategory;
 		do {
 			if ( pStartItem->nextSibling() )
 				pEndItem = pStartItem->nextSibling();
@@ -36,11 +36,11 @@ void RecipeFilter::filter( const QString &s )
 	}
 
 	//Re-show everything
-	QListViewItemIterator list_it;
+	Q3ListViewItemIterator list_it;
 	if ( currentCategory )
-		list_it = QListViewItemIterator( currentCategory );
+		list_it = Q3ListViewItemIterator( currentCategory );
 	else
-		list_it = QListViewItemIterator( listview );
+		list_it = Q3ListViewItemIterator( listview );
 	while ( list_it.current() != pEndItem ) {
 		list_it.current() ->setVisible( true );
 		list_it++;
@@ -48,8 +48,8 @@ void RecipeFilter::filter( const QString &s )
 
 	// Only filter if the filter text isn't empty
 	if ( !s.isEmpty() ) {
-		QListViewItemIterator list_it( listview );
-		while ( QListViewItem * it = list_it.current() ) {
+		Q3ListViewItemIterator list_it( listview );
+		while ( Q3ListViewItem * it = list_it.current() ) {
 			if ( it->rtti() == 1000 )  // Its a recipe
 			{
 				RecipeListItem * recipe_it = ( RecipeListItem* ) it;
@@ -77,13 +77,13 @@ void RecipeFilter::filter( const QString &s )
 
 void RecipeFilter::filterCategory( int categoryID )
 {
-	kdDebug() << "I got category :" << categoryID << "\n";
+	kDebug() << "I got category :" << categoryID << "\n";
 
 	if ( categoryID == -1 )
 		currentCategory = 0;
 	else {
-		QListViewItemIterator list_it( listview );
-		while ( QListViewItem * it = list_it.current() ) {
+		Q3ListViewItemIterator list_it( listview );
+		while ( Q3ListViewItem * it = list_it.current() ) {
 			if ( it->rtti() == 1001 ) {
 				CategoryListItem * cat_it = ( CategoryListItem* ) it;
 				if ( cat_it->categoryId() == categoryID ) {
@@ -96,8 +96,8 @@ void RecipeFilter::filterCategory( int categoryID )
 		}
 	}
 
-	QListViewItemIterator list_it( listview );
-	while ( QListViewItem * it = list_it.current() ) {
+	Q3ListViewItemIterator list_it( listview );
+	while ( Q3ListViewItem * it = list_it.current() ) {
 		if ( categoryID == -1 )
 			it->setVisible( true ); // We're not filtering categories
 		else if ( it == currentCategory || isParentOf( it, currentCategory ) || isParentOf( currentCategory, it ) )
@@ -112,9 +112,9 @@ void RecipeFilter::filterCategory( int categoryID )
 		currentCategory->setOpen( true );
 }
 
-bool RecipeFilter::hideIfEmpty( QListViewItem *parent )
+bool RecipeFilter::hideIfEmpty( Q3ListViewItem *parent )
 {
-	QListViewItem * it;
+	Q3ListViewItem * it;
 	if ( parent == 0 )
 		it = listview->firstChild();
 	else
@@ -140,9 +140,9 @@ bool RecipeFilter::hideIfEmpty( QListViewItem *parent )
 	return parent_should_show;
 }
 
-bool RecipeFilter::isParentOf( QListViewItem *parent, QListViewItem *to_check )
+bool RecipeFilter::isParentOf( Q3ListViewItem *parent, Q3ListViewItem *to_check )
 {
-	for ( QListViewItem * it = to_check->parent(); it; it = it->parent() ) {
+	for ( Q3ListViewItem * it = to_check->parent(); it; it = it->parent() ) {
 		if ( it == parent )
 			return true;
 	}

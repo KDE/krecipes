@@ -12,12 +12,17 @@
 #define CREATEINGREDIENTWEIGHTDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
-class QGroupBox;
+class Q3GroupBox;
 class KLineEdit;
 class KComboBox;
 class QLabel;
@@ -40,14 +45,14 @@ public:
 	Weight weight() const;
 
 protected:
-	QGridLayout* groupBox1Layout;
+	Q3GridLayout* groupBox1Layout;
 	
 protected slots:
 	virtual void languageChange();
 	void slotOk();
 
 private:
-	QGroupBox* groupBox1;
+	Q3GroupBox* groupBox1;
 	FractionInput* perAmountEdit;
 	FractionInput* weightEdit;
 	UnitComboBox* weightUnitBox;

@@ -23,9 +23,9 @@
   static QTime dbg_timer;
 
   #define START_TIMER(MSG) \
-   dbg_timer.start(); kdDebug()<<MSG<<endl;
+   dbg_timer.start(); kDebug()<<MSG<<endl;
   #define END_TIMER() \
-   kdDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
+   kDebug()<<"...took "<<dbg_timer.elapsed()<<" ms"<<endl;
 #else
   #define START_TIMER(MSG)
   #define END_TIMER()

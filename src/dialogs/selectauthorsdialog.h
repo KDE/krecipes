@@ -17,7 +17,7 @@
 #include <qpushbutton.h>
 
 #include <kdialogbase.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kcombobox.h>
 
 #include "datablocks/elementlist.h"
@@ -42,7 +42,7 @@ private:
 
 	//Widgets
 	KComboBox *authorsCombo;
-	KListView *authorListView;
+	K3ListView *authorListView;
 	QPushButton *okButton;
 	QPushButton *cancelButton;
 	QPushButton *addAuthorButton;

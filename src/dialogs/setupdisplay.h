@@ -17,6 +17,8 @@
 #include <qdom.h>
 #include <qwidget.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include "datablocks/recipe.h"
 #include "datablocks/kreborder.h"
@@ -24,7 +26,7 @@
 
 #include <math.h>
 
-class KPopupMenu;
+class KMenu;
 
 class QAction;
 class QLabel;
@@ -135,7 +137,7 @@ private:
 	//the item corresponding to the current point of processing the KLO
 	KreDisplayItem *m_currentItem;
 
-	KPopupMenu *popup;
+	KMenu *popup;
 	DOM::CSSStyleSheet m_styleSheet;
 	Recipe m_sample;
 

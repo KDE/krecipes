@@ -15,7 +15,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
@@ -24,8 +24,11 @@
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 #include "dialogs/dependanciesdialog.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QPixmap>
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : QCheckListItem( klv, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview(klv)
@@ -33,7 +36,7 @@ CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const 
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( it, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( it, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview((CategoryCheckListView*)it->listView())
@@ -41,7 +44,7 @@ CategoryCheckListItem::CategoryCheckListItem( QListViewItem* it, const Element &
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, QListViewItem* it, const Element &category, bool _exclusive ) : QCheckListItem( klv, it, QString::null, QCheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, it, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview(klv)
@@ -108,15 +111,15 @@ void CategoryCheckListItem::setParentsState( bool on )
 
 
 
-CategoryListItem::CategoryListItem( QListView* klv, const Element &category ) : QListViewItem( klv ),
+CategoryListItem::CategoryListItem( Q3ListView* klv, const Element &category ) : Q3ListViewItem( klv ),
 	CategoryItemInfo(category)
 {}
 
-CategoryListItem::CategoryListItem( QListViewItem* it, const Element &category ) : QListViewItem( it ),
+CategoryListItem::CategoryListItem( Q3ListViewItem* it, const Element &category ) : Q3ListViewItem( it ),
 	CategoryItemInfo(category)
 {}
 
-CategoryListItem::CategoryListItem( QListView* klv, QListViewItem* it, const Element &category ) : QListViewItem( klv, it ),
+CategoryListItem::CategoryListItem( Q3ListView* klv, Q3ListViewItem* it, const Element &category ) : Q3ListViewItem( klv, it ),
 	CategoryItemInfo(category)
 {}
 
@@ -143,11 +146,11 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 	//connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
 	//connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
 
-	connect( this, SIGNAL( expanded(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	connect( this, SIGNAL( expanded(Q3ListViewItem*) ), SLOT( open(Q3ListViewItem*) ) );
 
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void CategoryListView::init()
@@ -175,7 +178,7 @@ void CategoryListView::load( int limit, int offset )
 	}
 }
 
-void CategoryListView::populate( QListViewItem *item )
+void CategoryListView::populate( Q3ListViewItem *item )
 {
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
@@ -196,19 +199,19 @@ void CategoryListView::populate( QListViewItem *item )
 	}
 }
 
-void CategoryListView::populateAll( QListViewItem *parent )
+void CategoryListView::populateAll( Q3ListViewItem *parent )
 {
 	if ( !parent )
 		parent = firstChild();
 
-	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+	for ( Q3ListViewItem *item = parent; item; item = item->nextSibling() ) {
 		populate( item );
 		if ( item->firstChild() )
 			populateAll( item->firstChild() );
 	}
 }
 
-void CategoryListView::open( QListViewItem *item )
+void CategoryListView::open( Q3ListViewItem *item )
 {
 	Q_ASSERT( item );
 	if ( !item->firstChild() || item->firstChild()->rtti() != PSEUDOLISTITEM_RTTI ) return;
@@ -227,7 +230,7 @@ void CategoryListView::checkCreateCategory( const Element &el, int parent_id )
 
 void CategoryListView::modifyCategory( const Element &category )
 {
-	QListViewItem * item = items_map[ category.id ];
+	Q3ListViewItem * item = items_map[ category.id ];
 
 	if ( item )
 		item->setText( 0, category.name );
@@ -235,9 +238,9 @@ void CategoryListView::modifyCategory( const Element &category )
 
 void CategoryListView::modifyCategory( int id, int parent_id )
 {
-	QMap<int,QListViewItem*>::iterator item_it = items_map.find(id);
+	QMap<int,Q3ListViewItem*>::iterator item_it = items_map.find(id);
 	if ( item_it != items_map.end() ) {
-		QListViewItem *item = *item_it;
+		Q3ListViewItem *item = *item_it;
 		Q_ASSERT( item );
 
 		removeElement(item,false);
@@ -251,7 +254,7 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 			createElement(item);
 		}
 		else {
-			QMap<int,QListViewItem*>::iterator parent_item_it = items_map.find(parent_id);
+			QMap<int,Q3ListViewItem*>::iterator parent_item_it = items_map.find(parent_id);
 			if ( parent_item_it != items_map.end() &&
  			  dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
 				(*parent_item_it)->insertItem( item );
@@ -272,15 +275,15 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 
 void CategoryListView::mergeCategories( int id1, int id2 )
 {
-	QListViewItem * to_item = items_map[ id1 ];
-	QListViewItem *from_item = items_map[ id2 ];
+	Q3ListViewItem * to_item = items_map[ id1 ];
+	Q3ListViewItem *from_item = items_map[ id2 ];
 
 	CategoryItemInfo *info_item = dynamic_cast<CategoryItemInfo*>(to_item);
 
 	if ( to_item && info_item->isPopulated() && from_item ) {
 		//note that this takes care of any recipes that may be children as well
-		QListViewItem *next_sibling;
-		for ( QListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
+		Q3ListViewItem *next_sibling;
+		for ( Q3ListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
 			next_sibling = it->nextSibling(); //get the sibling before we move the item
 	
 			removeElement(it,false);
@@ -313,22 +316,22 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 
 		KIconLoader *il = new KIconLoader;
 
-		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop = new KMenu( this );
+		kpop->insertItem( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
+		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+			                  () ), Qt::Key_Delete );
+		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
 		kpop->insertSeparator();
-		kpop->insertItem( il->loadIcon( "editcut", KIcon::NoGroup, 16 ), i18n( "Cu&t" ), this, SLOT( cut() ), CTRL + Key_X );
-		kpop->insertItem( il->loadIcon( "editpaste", KIcon::NoGroup, 16 ), i18n( "&Paste" ), this, SLOT( paste() ), CTRL + Key_V );
-		kpop->insertItem( il->loadIcon( "editpaste", KIcon::NoGroup, 16 ), i18n( "Paste as Subcategory" ), this, SLOT( pasteAsSub() ), CTRL + SHIFT + Key_V );
+		kpop->insertItem( il->loadIcon( "edit-cut", KIconLoader::NoGroup, 16 ), i18n( "Cu&t" ), this, SLOT( cut() ), Qt::CTRL + Qt::Key_X );
+		kpop->insertItem( il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "&Paste" ), this, SLOT( paste() ), Qt::CTRL + Qt::Key_V );
+		kpop->insertItem( il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "Paste as Subcategory" ), this, SLOT( pasteAsSub() ), Qt::CTRL + Qt::SHIFT + Qt::Key_V );
 		kpop->polish();
 
 		connect( kpop, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( modCategory( QListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed ( QListViewItem* ) ), SLOT( saveCategory( QListViewItem* ) ) );
-		connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ), SLOT( changeCategoryParent( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( modCategory( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( itemRenamed ( Q3ListViewItem* ) ), SLOT( saveCategory( Q3ListViewItem* ) ) );
+		connect( this, SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ), SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
 	}
 }
 
@@ -349,7 +352,7 @@ void StdCategoryListView::preparePopup()
 	kpop->setItemEnabled( kpop->idAt( 6 ), clipboard_item );
 }
 
-void StdCategoryListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdCategoryListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -375,7 +378,7 @@ void StdCategoryListView::createNew()
 void StdCategoryListView::remove
 	()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item ) {
 		int id = item->text( 1 ).toInt();
@@ -405,7 +408,7 @@ void StdCategoryListView::remove
 
 void StdCategoryListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item )
 		CategoryListView::rename( item, 0 );
@@ -422,7 +425,7 @@ void StdCategoryListView::cut()
 		clipboard_item = 0;
 	}
 
-	QListViewItem *item = currentItem();
+	Q3ListViewItem *item = currentItem();
 
 	if ( item ) {
 		clipboard_item = item;
@@ -437,7 +440,7 @@ void StdCategoryListView::cut()
 
 void StdCategoryListView::paste()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 	if ( item && clipboard_item ) {
 		if ( item->parent() )
 			item->parent() ->insertItem( clipboard_item );
@@ -451,7 +454,7 @@ void StdCategoryListView::paste()
 
 void StdCategoryListView::pasteAsSub()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item && clipboard_item ) {
 		item->insertItem( clipboard_item );
@@ -460,22 +463,22 @@ void StdCategoryListView::pasteAsSub()
 	}
 }
 
-void StdCategoryListView::changeCategoryParent( QListViewItem *item, QListViewItem * /*afterFirst*/, QListViewItem * /*afterNow*/ )
+void StdCategoryListView::changeCategoryParent( Q3ListViewItem *item, Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ )
 {
 	int new_parent_id = -1;
-	if ( QListViewItem * parent = item->parent() )
+	if ( Q3ListViewItem * parent = item->parent() )
 		new_parent_id = parent->text( 1 ).toInt();
 
 	int cat_id = item->text( 1 ).toInt();
 
-	disconnect( SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+	disconnect( SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
 	database->modCategory( cat_id, new_parent_id );
-	connect( this, SIGNAL( moved( QListViewItem *, QListViewItem *, QListViewItem * ) ), SLOT( changeCategoryParent( QListViewItem *, QListViewItem *, QListViewItem * ) ) );
+	connect( this, SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ), SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
 }
 
 void StdCategoryListView::removeCategory( int id )
 {
-	QListViewItem * item = items_map[ id ];
+	Q3ListViewItem * item = items_map[ id ];
 
 	items_map.remove( id );
 	removeElement(item);
@@ -514,13 +517,13 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 	}
 }
 
-void StdCategoryListView::modCategory( QListViewItem* i )
+void StdCategoryListView::modCategory( Q3ListViewItem* i )
 {
 	if ( i )
 		CategoryListView::rename( i, 0 );
 }
 
-void StdCategoryListView::saveCategory( QListViewItem* i )
+void StdCategoryListView::saveCategory( Q3ListViewItem* i )
 {
 	CategoryListItem * cat_it = ( CategoryListItem* ) i;
 
@@ -576,7 +579,7 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, boo
 
 void CategoryCheckListView::removeCategory( int id )
 {
-	QListViewItem * item = items_map[ id ];
+	Q3ListViewItem * item = items_map[ id ];
 
 	items_map.remove( id );
 	removeElement(item);
@@ -589,7 +592,7 @@ void CategoryCheckListView::createCategory( const Element &category, int parent_
 		new_item = new CategoryCheckListItem( this, category, exclusive );
 	}
 	else {
-		QListViewItem *parent = items_map[ parent_id ];
+		Q3ListViewItem *parent = items_map[ parent_id ];
 		if ( parent )
 			new_item = new CategoryCheckListItem( parent, category, exclusive );
 	}
@@ -624,8 +627,8 @@ void CategoryCheckListView::load( int limit, int offset )
 {
 	CategoryListView::load(limit,offset);
 
-	for ( QValueList<Element>::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
-		QCheckListItem * item = ( QCheckListItem* ) findItem( QString::number( (*it).id ), 1 );
+	for ( Q3ValueList<Element>::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
+		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);
 		}

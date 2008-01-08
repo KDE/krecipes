@@ -18,16 +18,19 @@
 #endif
 
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qhbox.h>
+#include <q3whatsthis.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -41,14 +44,14 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 {
 	setButtonBoxOrientation( Vertical );
 
-	QHBox *page = makeHBoxMainWidget();
+	KHBox *page = makeHBoxMainWidget();
 
-	dbButtonGroup = new QButtonGroup( page, "dbButtonGroup" );
+	dbButtonGroup = new Q3ButtonGroup( page, "dbButtonGroup" );
 	dbButtonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 4, ( QSizePolicy::SizeType ) 5, 0, 0, dbButtonGroup->sizePolicy().hasHeightForWidth() ) );
 	dbButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	dbButtonGroup->layout() ->setSpacing( 6 );
 	dbButtonGroup->layout() ->setMargin( 11 );
-	dbButtonGroupLayout = new QVBoxLayout( dbButtonGroup->layout() );
+	dbButtonGroupLayout = new Q3VBoxLayout( dbButtonGroup->layout() );
 	dbButtonGroupLayout->setAlignment( Qt::AlignTop );
 
 	liteRadioButton = new QRadioButton( dbButtonGroup, "liteRadioButton" );
@@ -61,15 +64,15 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	psqlRadioButton = new QRadioButton( dbButtonGroup, "psqlRadioButton" );
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
 
-	paramStack = new QWidgetStack( page, "paramStack" );
+	paramStack = new Q3WidgetStack( page, "paramStack" );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
 	sqlitePage = new QWidget( paramStack, "sqlitePage" );
-	serverPageLayout_2 = new QVBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
+	serverPageLayout_2 = new Q3VBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
-	sqliteDBRequester = new KURLRequester( sqlitePage, "sqliteDBRequester" );
+	sqliteDBRequester = new KUrlRequester( sqlitePage, "sqliteDBRequester" );
 	sqliteDBRequester->setShowLocalProtocol( false );
 	serverPageLayout_2->addWidget( sqliteDBRequester );
 
@@ -79,9 +82,9 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	paramStack->addWidget( sqlitePage, 1 );
 
 	serverPage = new QWidget( paramStack, "serverPage" );
-	serverPageLayout = new QVBoxLayout( serverPage, 11, 6, "serverPageLayout" );
+	serverPageLayout = new Q3VBoxLayout( serverPage, 11, 6, "serverPageLayout" );
 
-	layout5 = new QGridLayout( 0, 1, 1, 0, 6, "layout5" );
+	layout5 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout5" );
 
 	hostEdit = new QLineEdit( serverPage, "hostEdit" );
 	layout5->addWidget( hostEdit, 0, 1 );

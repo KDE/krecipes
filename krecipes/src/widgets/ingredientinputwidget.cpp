@@ -15,13 +15,15 @@
 #include "ingredientinputwidget.h"
 
 #include <qlabel.h>
-#include <qwidgetstack.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qgroupbox.h>
-#include <qbuttongroup.h>
+#include <q3widgetstack.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
+#include <q3groupbox.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -38,13 +40,13 @@
 
 #include "profiling.h"
 
-IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeader ) : QHBox(parent), database(db)
+IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeader ) : Q3HBox(parent), database(db)
 {
-	QVBox *ingredientVBox = new QVBox( this );
-	QHBox *typeHBox = new QHBox( ingredientVBox );
+	Q3VBox *ingredientVBox = new Q3VBox( this );
+	Q3HBox *typeHBox = new Q3HBox( ingredientVBox );
 
 	if ( allowHeader ) {
-		typeButtonGrp = new QButtonGroup();
+		typeButtonGrp = new Q3ButtonGroup();
 		QRadioButton *ingredientRadioButton = new QRadioButton( i18n( "Ingredient:" ), typeHBox );
 		typeButtonGrp->insert( ingredientRadioButton, 0 );
 
@@ -59,7 +61,7 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 		typeButtonGrp = 0;
 	}
 	
-	header_ing_stack = new QWidgetStack(ingredientVBox);
+	header_ing_stack = new Q3WidgetStack(ingredientVBox);
 	ingredientBox = new IngredientComboBox( TRUE, header_ing_stack, database );
 	ingredientBox->setAutoCompletion( TRUE );
 	ingredientBox->lineEdit() ->disconnect( ingredientBox ); //so hitting enter doesn't enter the item into the box
@@ -71,20 +73,20 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 	headerBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 	header_ing_stack->addWidget( headerBox );
 
-	QVBox *amountVBox = new QVBox( this );
+	Q3VBox *amountVBox = new Q3VBox( this );
 	amountLabel = new QLabel( i18n( "Amount:" ), amountVBox );
 	amountEdit = new FractionInput( amountVBox );
 	amountEdit->setAllowRange(true);
 	amountEdit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
-	QVBox *unitVBox = new QVBox( this );
+	Q3VBox *unitVBox = new Q3VBox( this );
 	unitLabel = new QLabel( i18n( "Unit:" ), unitVBox );
 	unitBox = new KComboBox( TRUE, unitVBox );
 	unitBox->setAutoCompletion( TRUE );
 	unitBox->lineEdit() ->disconnect( unitBox ); //so hitting enter doesn't enter the item into the box
 	unitBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 
-	QVBox *prepMethodVBox = new QVBox( this );
+	Q3VBox *prepMethodVBox = new Q3VBox( this );
 	prepMethodLabel = new QLabel( i18n( "Preparation Method:" ), prepMethodVBox );
 	prepMethodBox = new PrepMethodComboBox( TRUE, prepMethodVBox, database );
 	prepMethodBox->setAutoCompletion( TRUE );
@@ -231,7 +233,7 @@ void IngredientInput::signalIngredient()
 
 bool IngredientInput::isInputValid()
 {
-	if ( ingredientBox->currentText().stripWhiteSpace().isEmpty() ) {
+	if ( ingredientBox->currentText().trimmed().isEmpty() ) {
 		KMessageBox::error( this, i18n( "Please enter an ingredient" ), QString::null );
 		ingredientBox->setFocus();
 		return false;
@@ -257,7 +259,7 @@ bool IngredientInput::checkBounds()
 
 	QStringList prepMethodList = QStringList::split(",",prepMethodBox->currentText());
 	for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
-		if ( (*it).stripWhiteSpace().length() > uint(database->maxPrepMethodNameLength()) )
+		if ( (*it).trimmed().length() > uint(database->maxPrepMethodNameLength()) )
 		{
 			KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
 			prepMethodBox->lineEdit() ->setFocus();
@@ -331,7 +333,7 @@ Ingredient IngredientInput::ingredient() const
 	ing.prepMethodList = ElementList::split(",",prepMethodBox->currentText());
 	ing.name = ingredientBox->currentText();
 	amountEdit->value(ing.amount,ing.amount_offset);
-	ing.units = Unit(unitBox->currentText().stripWhiteSpace(),ing.amount+ing.amount_offset);
+	ing.units = Unit(unitBox->currentText().trimmed(),ing.amount+ing.amount_offset);
 	ing.ingredientID = ingredientBox->id( ingredientBox->currentItem() );
 
 	return ing;
@@ -339,7 +341,7 @@ Ingredient IngredientInput::ingredient() const
 
 QString IngredientInput::header() const
 {
-	return headerBox->currentText().stripWhiteSpace();
+	return headerBox->currentText().trimmed();
 }
 
 void IngredientInput::updateTabOrder()
@@ -351,7 +353,7 @@ void IngredientInput::updateTabOrder()
 }
 
 
-IngredientInputWidget::IngredientInputWidget( RecipeDB *db, QWidget *parent ) : QVBox(parent), database(db)
+IngredientInputWidget::IngredientInputWidget( RecipeDB *db, QWidget *parent ) : Q3VBox(parent), database(db)
 {
 	setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 
@@ -376,7 +378,7 @@ void IngredientInputWidget::clear()
 
 void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 {
-	QValueList<IngredientInput*>::iterator curr = m_ingInputs.find(input);
+	Q3ValueList<IngredientInput*>::iterator curr = m_ingInputs.find(input);
 	IngredientInput *prev_input = *curr;
 	++curr;
 
@@ -417,13 +419,13 @@ void IngredientInputWidget::addIngredient()
 		emit headerEntered( Element(header,group_id) );
 	}
 	else {
-		for ( QValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
+		for ( Q3ValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
 			if ( !(*it)->isInputValid() )
 				return;
 		}
 
-		QValueList<IngredientData> list;
-		for ( QValueList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
+		Q3ValueList<IngredientData> list;
+		for ( Q3ValueList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
 			Ingredient ing = (*it)->ingredient();
 			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
 
@@ -432,8 +434,8 @@ void IngredientInputWidget::addIngredient()
 			if ( ing.units.id == -1 )  // this will happen if the dialog to create a unit was cancelled
 				return ;
 	
-			QValueList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
-			QValueList<int>::const_iterator id_it = prepIDs.begin();
+			Q3ValueList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
+			Q3ValueList<int>::const_iterator id_it = prepIDs.begin();
 			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {
 				(*it).id = *id_it;
 			}
@@ -494,19 +496,19 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 	return id;
 }
 
-QValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *database )
+Q3ValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *database )
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 
 	if ( prepMethods.isEmpty() )  //no prep methods
 		return ids;
 	else
 	{
 		for ( ElementList::const_iterator it = prepMethods.begin(); it != prepMethods.end(); ++it ) {
-			int id = database->findExistingPrepByName( (*it).name.stripWhiteSpace() );
+			int id = database->findExistingPrepByName( (*it).name.trimmed() );
 			if ( id == -1 )
 			{
-				database->createNewPrepMethod( (*it).name.stripWhiteSpace() );
+				database->createNewPrepMethod( (*it).name.trimmed() );
 				id = database->lastInsertID();
 			}
 			ids << id;
@@ -518,7 +520,7 @@ QValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementLi
 
 int IngredientInputWidget::createNewGroupIfNecessary( const QString &group, RecipeDB *database )
 {
-	if ( group.stripWhiteSpace().isEmpty() )  //no group
+	if ( group.trimmed().isEmpty() )  //no group
 		return -1;
 	else
 	{
@@ -535,7 +537,7 @@ int IngredientInputWidget::createNewGroupIfNecessary( const QString &group, Reci
 
 void IngredientInputWidget::reloadCombos()
 {
-	for ( QValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it )
+	for ( Q3ValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it )
 		(*it)->reloadCombos();
 }
 

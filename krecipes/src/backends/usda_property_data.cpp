@@ -17,32 +17,34 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <qfile.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace USDA {
 
-QValueList<PropertyData> loadProperties()
+Q3ValueList<PropertyData> loadProperties()
 {
-	QValueList<PropertyData> result;
+	Q3ValueList<PropertyData> result;
 
 	QString dataFilename = locate( "appdata", "data/property-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kdDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
 
 		dataFilename = locate( "appdata", "data/property-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
-	if ( dataFile.open( IO_ReadOnly ) ) {
-		kdDebug() << "Loading: " << dataFilename << endl;
-		QTextStream stream( &dataFile );
+	if ( dataFile.open( QIODevice::ReadOnly ) ) {
+		kDebug() << "Loading: " << dataFilename << endl;
+		Q3TextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {
-			if ( line.stripWhiteSpace().isEmpty() ) continue;
+			if ( line.trimmed().isEmpty() ) continue;
 
 			PropertyData data;
 			int sepIndex = line.find(':');
@@ -55,7 +57,7 @@ QValueList<PropertyData> loadProperties()
 		dataFile.close();
 	}
 	else
-		kdDebug() << "Unable to find or open property data file (property-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open property data file (property-data-en_US.sql)" << endl;
 
 	return result;
 }

@@ -11,18 +11,21 @@
 #include "borderdialog.h"
 
 #include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
+#include <q3groupbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kdebug.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <klocale.h>
 
 #include "datablocks/kreborder.h"
@@ -31,32 +34,32 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 		: KDialogBase( parent, name, true, QString::null,
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	borderGroupBox = new QGroupBox( page, "borderGroupBox" );
+	borderGroupBox = new Q3GroupBox( page, "borderGroupBox" );
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
 	borderGroupBox->layout() ->setSpacing( 6 );
 	borderGroupBox->layout() ->setMargin( 11 );
-	borderGroupBoxLayout = new QVBoxLayout( borderGroupBox->layout() );
+	borderGroupBoxLayout = new Q3VBoxLayout( borderGroupBox->layout() );
 	borderGroupBoxLayout->setAlignment( Qt::AlignTop );
 
-	layout4 = new QHBoxLayout( 0, 0, 6, "layout4" );
+	layout4 = new Q3HBoxLayout( 0, 0, 6, "layout4" );
 
-	layout3 = new QVBoxLayout( 0, 0, 6, "layout3" );
+	layout3 = new Q3VBoxLayout( 0, 0, 6, "layout3" );
 
 	styleLabel = new QLabel( borderGroupBox, "styleLabel" );
 	layout3->addWidget( styleLabel );
 
-	styleListBox = new KListBox( borderGroupBox, "styleListBox" );
+	styleListBox = new K3ListBox( borderGroupBox, "styleListBox" );
 	layout3->addWidget( styleListBox );
 	layout4->addLayout( layout3 );
 
-	layout2 = new QVBoxLayout( 0, 0, 6, "layout2" );
+	layout2 = new Q3VBoxLayout( 0, 0, 6, "layout2" );
 
 	colorLabel = new QLabel( borderGroupBox, "colorLabel" );
 	layout2->addWidget( colorLabel );
 
-	QHBox *color_hbox = new QHBox( borderGroupBox );
+	Q3HBox *color_hbox = new Q3HBox( borderGroupBox );
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	hsSelector = new KHSSelector( color_hbox );
 	hsSelector->setMinimumSize( 140, 70 );
@@ -69,7 +72,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout2->addWidget( color_hbox );
 	layout4->addLayout( layout2 );
 
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
 	widthLabel = new QLabel( borderGroupBox, "widthLabel" );
 	layout1->addWidget( widthLabel );
@@ -78,7 +81,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	widthSpinBox->setMinValue( 1 );
 	layout1->addWidget( widthSpinBox );
 
-	widthListBox = new KListBox( borderGroupBox, "widthListBox" );
+	widthListBox = new K3ListBox( borderGroupBox, "widthListBox" );
 	layout1->addWidget( widthListBox );
 	layout4->addLayout( layout1 );
 	borderGroupBoxLayout->addLayout( layout4 );

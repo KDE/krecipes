@@ -13,18 +13,18 @@
 #ifndef AMOUNTUNITINPUT_H
 #define AMOUNTUNITINPUT_H
 
-#include <qhbox.h>
+#include <q3hbox.h>
 
 #include "datablocks/unit.h"
 #include "datablocks/mixednumber.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 
 class RecipeDB;
 class FractionInput;
 class UnitComboBox;
 
-class AmountUnitInput : public QHBox
+class AmountUnitInput : public Q3HBox
 {
 Q_OBJECT
 
@@ -36,10 +36,10 @@ public:
 
 	MixedNumber amount() const;
 	Unit unit() const;
-	QListViewItem *item() const { return m_item; }
-	void setItem( QListViewItem *it ){ m_item = it; }
+	Q3ListViewItem *item() const { return m_item; }
+	void setItem( Q3ListViewItem *it ){ m_item = it; }
 
-	void insertIntoListview( QListViewItem *it, int col );
+	void insertIntoListview( Q3ListViewItem *it, int col );
 
 public slots:
 	void emitValueChanged();
@@ -52,7 +52,7 @@ private:
 	FractionInput *amountInput;
 	UnitComboBox *unitBox;
 
-	QListViewItem *m_item;
+	Q3ListViewItem *m_item;
 
 	RecipeDB *m_database;
 };

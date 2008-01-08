@@ -10,14 +10,16 @@
 #include "createunitconversiondialog.h"
 
 #include <qvariant.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 
@@ -26,13 +28,13 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 	m_toUnits(toUnits)
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	buttonGroup1 = new QButtonGroup( page, "buttonGroup1" );
+	buttonGroup1 = new Q3ButtonGroup( page, "buttonGroup1" );
 	buttonGroup1->setColumnLayout(0, Qt::Vertical );
 	buttonGroup1->layout()->setSpacing( 6 );
 	buttonGroup1->layout()->setMargin( 11 );
-	buttonGroup1Layout = new QHBoxLayout( buttonGroup1->layout() );
+	buttonGroup1Layout = new Q3HBoxLayout( buttonGroup1->layout() );
 	buttonGroup1Layout->setAlignment( Qt::AlignTop );
 
 	fromUnitEdit = new FractionInput( buttonGroup1 );

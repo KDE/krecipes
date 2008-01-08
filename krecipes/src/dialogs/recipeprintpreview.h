@@ -12,7 +12,7 @@
 #define RECIPEPRINTPREVIEW_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdialogbase.h>
 
@@ -24,7 +24,7 @@ class RecipePrintPreview : public KDialogBase
 Q_OBJECT
 
 public:
-	RecipePrintPreview( QWidget *parent, RecipeDB *db, const QValueList<int> &ids );
+	RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids );
 	~RecipePrintPreview();
 
 	void reload();

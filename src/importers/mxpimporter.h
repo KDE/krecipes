@@ -29,17 +29,17 @@ protected:
 	void parseFile( const QString& filename );
 
 private:
-	void importMXP( QTextStream &stream );
+	void importMXP( Q3TextStream &stream );
 
-	void loadCategories( QTextStream &stream, Recipe &recipe );
-	void loadIngredients( QTextStream &stream, Recipe &recipe );
-	void loadInstructions( QTextStream &stream, Recipe &recipe );
-	void loadOptionalFields( QTextStream &stream, Recipe &recipe );
+	void loadCategories( Q3TextStream &stream, Recipe &recipe );
+	void loadIngredients( Q3TextStream &stream, Recipe &recipe );
+	void loadInstructions( Q3TextStream &stream, Recipe &recipe );
+	void loadOptionalFields( Q3TextStream &stream, Recipe &recipe );
 
-	void importMac( QTextStream &stream );
-	void importGeneric( QTextStream &stream );
+	void importMac( Q3TextStream &stream );
+	void importGeneric( Q3TextStream &stream );
 
-	QString getNextQuotedString( QTextStream &stream );
+	QString getNextQuotedString( Q3TextStream &stream );
 };
 
 #endif //MXPIMPORTER_H

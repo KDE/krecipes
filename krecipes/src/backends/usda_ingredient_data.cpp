@@ -14,12 +14,12 @@
 
 #include "usda_ingredient_data.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qfile.h>
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 namespace USDA {
@@ -29,25 +29,25 @@ namespace USDA {
 		return !locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" ).isEmpty();
 	}
 
-	QValueList<IngredientData> loadIngredients()
+	Q3ValueList<IngredientData> loadIngredients()
 	{
-		QValueList<IngredientData> result;
+		Q3ValueList<IngredientData> result;
 
 		QString dataFilename = locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" );
 		if ( dataFilename.isEmpty() ) {
-			kdDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
+			kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
 	
 			dataFilename = locate( "appdata", "data/ingredient-data-en_US.txt" ); //default to English
 		}
 
 		QFile dataFile( dataFilename );
-		if ( dataFile.open( IO_ReadOnly ) ) {
-			kdDebug() << "Loading: " << dataFilename << endl;
-			QTextStream stream( &dataFile );
+		if ( dataFile.open( QIODevice::ReadOnly ) ) {
+			kDebug() << "Loading: " << dataFilename << endl;
+			Q3TextStream stream( &dataFile );
 
 			QString line;
 			while ( (line = stream.readLine()) != QString::null ) {
-				if ( line.stripWhiteSpace().isEmpty() ) continue;
+				if ( line.trimmed().isEmpty() ) continue;
 
 				IngredientData data;
 
@@ -67,7 +67,7 @@ namespace USDA {
 			dataFile.close();
 		}
 		else
-			kdDebug() << "Unable to find or open property data file (ingredient-data-en_US.sql)" << endl;
+			kDebug() << "Unable to find or open property data file (ingredient-data-en_US.sql)" << endl;
 
 		return result;
 	}

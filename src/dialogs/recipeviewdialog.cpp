@@ -15,6 +15,8 @@
 #include <qlayout.h>
 #include <qstyle.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -23,7 +25,7 @@
 #include <khtml_part.h>
 #include <klocale.h>
 #include <kmainwindow.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kconfig.h>
@@ -34,7 +36,7 @@
 #include "exporters/xsltexporter.h"
 #include "recipeprintpreview.h"
 
-RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : QVBox( parent ),
+RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : Q3VBox( parent ),
 	database(db)
 {
 	// Initialize UI Elements
@@ -42,7 +44,7 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 
 	connect( database, SIGNAL(recipeRemoved(int)), SLOT(recipeRemoved(int)) );
 
-	tmp_filename = locateLocal( "tmp", "krecipes_recipe_view" );
+	tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
 
 	//----------Load  the recipe --------
 	if ( recipeID != -1 )
@@ -57,14 +59,14 @@ RecipeViewDialog::~RecipeViewDialog()
 
 bool RecipeViewDialog::loadRecipe( int recipeID )
 {
-	QValueList<int> ids;
+	Q3ValueList<int> ids;
 	ids.append( recipeID );
 	return loadRecipes( ids );
 }
 
-bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::loadRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig )
 {
-	KApplication::setOverrideCursor( KCursor::waitCursor() );
+	KApplication::setOverrideCursor( Qt::WaitCursor );
 
 	// Remove any files created by the last recipe loaded
 	removeOldFiles();
@@ -78,7 +80,7 @@ bool RecipeViewDialog::loadRecipes( const QValueList<int> &ids, const QString &l
 	return success;
 }
 
-bool RecipeViewDialog::showRecipes( const QValueList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig )
 {
 	KProgressDialog * progress_dialog = 0;
 
@@ -114,11 +116,11 @@ bool RecipeViewDialog::showRecipes( const QValueList<int> &ids, const QString &l
 	args.reload=true; // Don't use the cache
 	recipeView->browserExtension()->setURLArgs(args);
 
-	KURL url;
+	KUrl url;
 	url.setPath( tmp_filename + ".html" );
 	recipeView->openURL( url );
 	recipeView->show();
-	kdDebug() << "Opening URL: " << url.htmlURL() << endl;
+	kDebug() << "Opening URL: " << url.htmlURL() << endl;
 
 	delete progress_dialog;
 	return true;
@@ -150,7 +152,7 @@ void RecipeViewDialog::removeOldFiles()
 		RecipeList recipe_list;
 		database->loadRecipes( &recipe_list, RecipeDB::Title, ids_loaded );
 
-		QValueList<int> recipe_ids;
+		Q3ValueList<int> recipe_ids;
 		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
 			recipe_ids << ( *it ).recipeID;
 

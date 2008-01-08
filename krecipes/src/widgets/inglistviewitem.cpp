@@ -18,14 +18,14 @@
 #include "datablocks/unit.h"
 #include "datablocks/mixednumber.h"
 
-IngSubListViewItem::IngSubListViewItem( QListViewItem* qli, const Ingredient &i ) : IngListViewItem( qli, 0, i )
+IngSubListViewItem::IngSubListViewItem( Q3ListViewItem* qli, const Ingredient &i ) : IngListViewItem( qli, 0, i )
 {
 }
 
 QString IngSubListViewItem::text( int column ) const
 {
 	if ( column == 0 ) {
-		//kdDebug()<<"displaying col 0 for "<<m_ing.name<<endl;
+		//kDebug()<<"displaying col 0 for "<<m_ing.name<<endl;
 		return QString("%1 ").arg(i18n("OR"))+m_ing.name;
 		//return m_ing.name;
 	}
@@ -57,17 +57,17 @@ int IngSubListViewItem::rtti() const
 }
 
 
-IngListViewItem::IngListViewItem( QListView* qlv, const Ingredient &i ) : QListViewItem( qlv )
+IngListViewItem::IngListViewItem( Q3ListView* qlv, const Ingredient &i ) : Q3ListViewItem( qlv )
 {
 	init( i );
 }
 
-IngListViewItem::IngListViewItem( QListView* qlv, QListViewItem *after, const Ingredient &i ) : QListViewItem( qlv, after )
+IngListViewItem::IngListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const Ingredient &i ) : Q3ListViewItem( qlv, after )
 {
 	init( i );
 }
 
-IngListViewItem::IngListViewItem( QListViewItem* qli, QListViewItem *after, const Ingredient &i ) : QListViewItem( qli, after )
+IngListViewItem::IngListViewItem( Q3ListViewItem* qli, Q3ListViewItem *after, const Ingredient &i ) : Q3ListViewItem( qli, after )
 {
 	init( i );
 }
@@ -168,7 +168,7 @@ void IngListViewItem::init( const Ingredient &i )
 }
 
 
-IngGrpListViewItem::IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id ) : QListViewItem( qlv, after )
+IngGrpListViewItem::IngGrpListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const QString &group, int id ) : Q3ListViewItem( qlv, after )
 {
 	init( group, id );
 }

@@ -11,7 +11,7 @@
 #include "mxpimporter.h"
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
 
@@ -29,15 +29,15 @@ void MXPImporter::parseFile( const QString &file )
 {
 	QFile input( file );
 
-	if ( input.open( IO_ReadOnly ) ) {
-		QTextStream stream( &input );
+	if ( input.open( QIODevice::ReadOnly ) ) {
+		Q3TextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		QString line;
 		while ( !stream.atEnd() ) {
-			line = stream.readLine().stripWhiteSpace();
+			line = stream.readLine().trimmed();
 
-			if ( line.simplifyWhiteSpace().contains( "Exported from MasterCook" ) ) {
+			if ( line.simplified().contains( "Exported from MasterCook" ) ) {
 				importMXP( stream );
 			}
 			else if ( line == "{ Exported from MasterCook Mac }" ) {
@@ -60,27 +60,27 @@ void MXPImporter::parseFile( const QString &file )
 MXPImporter::~MXPImporter()
 {}
 
-void MXPImporter::importMXP( QTextStream &stream )
+void MXPImporter::importMXP( Q3TextStream &stream )
 {
 	Recipe recipe;
 
 	kapp->processEvents(); //don't want the user to think its frozen... especially for files with thousands of recipes
 
-	//kdDebug()<<"Found recipe MXP format: * Exported from MasterCook *"<<endl;
+	//kDebug()<<"Found recipe MXP format: * Exported from MasterCook *"<<endl;
 	QString current;
 
 	// title
 	stream.skipWhiteSpace();
-	recipe.title = stream.readLine().stripWhiteSpace();
-	//kdDebug()<<"Found title: "<<m_title<<endl;
+	recipe.title = stream.readLine().trimmed();
+	//kDebug()<<"Found title: "<<m_title<<endl;
 
 	//author
 	stream.skipWhiteSpace();
-	current = stream.readLine().stripWhiteSpace();
-	if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "recipe by" ) {
-		Element new_author( current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace() );
+	current = stream.readLine().trimmed();
+	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "recipe by" ) {
+		Element new_author( current.mid( current.find( ":" ) + 1, current.length() ).trimmed() );
 		recipe.authorList.append( new_author );
-		//kdDebug()<<"Found author: "<<new_author.name<<endl;
+		//kDebug()<<"Found author: "<<new_author.name<<endl;
 	}
 	else {
 		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
@@ -89,8 +89,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 
 	//servings
 	stream.skipWhiteSpace();
-	current = stream.readLine().stripWhiteSpace();
-	if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "serving size" ) {
+	current = stream.readLine().trimmed();
+	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "serving size" ) {
 		//allows serving size to be loaded even if preparation time is missing
 		int end_index;
 		if ( current.contains( "preparation time", FALSE ) )
@@ -98,9 +98,9 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else
 			end_index = current.length();
 
-		recipe.yield.amount = current.mid( current.find( ":" ) + 1, end_index ).stripWhiteSpace().toInt();
+		recipe.yield.amount = current.mid( current.find( ":" ) + 1, end_index ).trimmed().toInt();
 		recipe.yield.type = i18n("servings");
-		//kdDebug()<<"Found serving size: "<<recipe.yield.amount<<endl;
+		//kDebug()<<"Found serving size: "<<recipe.yield.amount<<endl;
 	}
 	else {
 		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
@@ -109,9 +109,9 @@ void MXPImporter::importMXP( QTextStream &stream )
 
 	if ( current.contains( "preparation time", FALSE ) ) {
 		QString prep_time = current.mid( current.find( ":", current.find( "preparation time", 0, FALSE ) ) + 1,
-		                                 current.length() ).stripWhiteSpace();
+		                                 current.length() ).trimmed();
 		recipe.prepTime = QTime( prep_time.section( ':', 0, 0 ).toInt(), prep_time.section( ':', 1, 1 ).toInt() );
-		kdDebug() << "Found preparation time: " << prep_time << endl;
+		kDebug() << "Found preparation time: " << prep_time << endl;
 	}
 	else {
 		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
@@ -132,22 +132,22 @@ void MXPImporter::importMXP( QTextStream &stream )
 	}
 }
 
-void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
+void MXPImporter::loadCategories( Q3TextStream &stream, Recipe &recipe )
 {
 	//====================categories====================//
 	stream.skipWhiteSpace();
-	QString current = stream.readLine().stripWhiteSpace();
-	if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "categories" ) {
-		QString tmp_str = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
+	QString current = stream.readLine().trimmed();
+	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "categories" ) {
+		QString tmp_str = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
 
-		while ( current.stripWhiteSpace() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() ) {
+		while ( current.trimmed() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() ) {
 			if ( !tmp_str.isEmpty() ) {
 				QStringList categories = QStringList::split( "  ", tmp_str );
 				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
-					Element new_cat( ( *it ).stripWhiteSpace() );
+					Element new_cat( ( *it ).trimmed() );
 					recipe.categoryList.append( new_cat );
 
-					//kdDebug()<<"Found category: "<<new_cat.name<<endl;
+					//kDebug()<<"Found category: "<<new_cat.name<<endl;
 				}
 			}
 
@@ -155,19 +155,19 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 			tmp_str = current;
 		}
 		//else
-		//	kdDebug()<<"No categories found."<<endl;
+		//	kDebug()<<"No categories found."<<endl;
 	}
 	else {
 		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
 		                              "the field \"Categories:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
 
 		//the ingredient loaded will expect the last thing to have been read to be this header line
-		while ( current.stripWhiteSpace() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
+		while ( current.trimmed() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
 			current = stream.readLine();
 	}
 }
 
-void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
+void MXPImporter::loadIngredients( Q3TextStream &stream, Recipe &recipe )
 {
 	//============ingredients=================//
 	stream.skipWhiteSpace();
@@ -178,14 +178,14 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 			Ingredient new_ingredient;
 
 			//amount
-			QString amount_str = current.mid( 0, 9 ).simplifyWhiteSpace();
+			QString amount_str = current.mid( 0, 9 ).simplified();
 			if ( !amount_str.isEmpty() )  // case of amount_str.isEmpty() correctly handled by class default
 			{
 				bool ok;
 				MixedNumber amount( MixedNumber::fromString( amount_str, &ok ) );
 				if ( !ok )
 				{
-					addWarningMsg( QString( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" ) ).arg( recipe.title ).arg( amount_str ).arg( current.stripWhiteSpace() ) );
+					addWarningMsg( QString( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" ) ).arg( recipe.title ).arg( amount_str ).arg( current.trimmed() ) );
 					current = stream.readLine();
 					continue;
 				}
@@ -194,7 +194,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 
 			//units
 			QString units( current.mid( 9, 13 ) );
-			new_ingredient.units = Unit( units.simplifyWhiteSpace(), new_ingredient.amount );
+			new_ingredient.units = Unit( units.simplified(), new_ingredient.amount );
 
 			//name
 			int dash_index = current.find( "--" );
@@ -206,14 +206,14 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 				length = dash_index - 22;
 
 			QString ingredient_name( current.mid( 22, length ) );
-			new_ingredient.name = ingredient_name.stripWhiteSpace();
+			new_ingredient.name = ingredient_name.trimmed();
 
 			//prep method
 			if ( dash_index != -1 && dash_index != 24 )  //ignore a dash in the first position (index 24)
-				new_ingredient.prepMethodList.append( Element(current.mid( dash_index + 2, current.length() ).stripWhiteSpace()) );
+				new_ingredient.prepMethodList.append( Element(current.mid( dash_index + 2, current.length() ).trimmed()) );
 
 			recipe.ingList.append( new_ingredient );
-			//kdDebug()<<"Found ingredient: amount="<<new_ingredient.amount
+			//kDebug()<<"Found ingredient: amount="<<new_ingredient.amount
 			//  <<", unit:"<<new_ingredient.units
 			//  <<", name:"<<new_ingredient.name
 			//  <<", prep_method:"<<prep_method<<endl;
@@ -222,108 +222,108 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 		}
 	}
 	//else
-	//	kdDebug()<<"No ingredients found."<<endl;
+	//	kDebug()<<"No ingredients found."<<endl;
 }
 
-void MXPImporter::loadInstructions( QTextStream &stream, Recipe &recipe )
+void MXPImporter::loadInstructions( Q3TextStream &stream, Recipe &recipe )
 {
 	//==========================instructions ( along with other optional fields... mxp format doesn't define end of ingredients and start of other fields )==============//
 	stream.skipWhiteSpace();
-	QString current = stream.readLine().stripWhiteSpace();
+	QString current = stream.readLine().trimmed();
 	while ( !current.contains( "- - - -" ) && !stream.atEnd() ) {
-		if ( current.stripWhiteSpace() == "Source:" ) {
+		if ( current.trimmed() == "Source:" ) {
 			Element new_author( getNextQuotedString( stream ) );
 			recipe.authorList.append( new_author );
-			//kdDebug()<<"Found source: "<<new_author.name<<" (adding as author)"<<endl;
+			//kDebug()<<"Found source: "<<new_author.name<<" (adding as author)"<<endl;
 		}
-		else if ( current.stripWhiteSpace() == "Description:" ) {
+		else if ( current.trimmed() == "Description:" ) {
 			QString description = getNextQuotedString( stream );
-			//kdDebug()<<"Found description: "<<m_description<<" (adding to end of instructions)"<<endl;
+			//kDebug()<<"Found description: "<<m_description<<" (adding to end of instructions)"<<endl;
 			recipe.instructions += "\n\nDescription: " + description;
 		}
-		else if ( current.stripWhiteSpace() == "S(Internet Address):" ) {
+		else if ( current.trimmed() == "S(Internet Address):" ) {
 			QString internet = getNextQuotedString( stream );
-			//kdDebug()<<"Found internet address: "<<m_internet<<" (adding to end of instructions)"<<endl;
+			//kDebug()<<"Found internet address: "<<m_internet<<" (adding to end of instructions)"<<endl;
 			recipe.instructions += "\n\nInternet address: " + internet;
 		}
-		else if ( current.stripWhiteSpace() == "Yield:" ) {
-			recipe.yield.amount = getNextQuotedString( stream ).stripWhiteSpace().toInt();
+		else if ( current.trimmed() == "Yield:" ) {
+			recipe.yield.amount = getNextQuotedString( stream ).trimmed().toInt();
 			recipe.yield.type = i18n("servings");
-			//kdDebug()<<"Found yield: "<<recipe.yield.amount<<" (adding as servings)"<<endl;
+			//kDebug()<<"Found yield: "<<recipe.yield.amount<<" (adding as servings)"<<endl;
 		}
-		else if ( current.stripWhiteSpace() == "T(Cook Time):" ) {
+		else if ( current.trimmed() == "T(Cook Time):" ) {
 			( void ) getNextQuotedString( stream ); //this would be prep time, but we don't use prep time at the moment
-			//kdDebug()<<"Found cook time: "<<m_prep_time<<" (adding as prep time)"<<endl;
+			//kDebug()<<"Found cook time: "<<m_prep_time<<" (adding as prep time)"<<endl;
 		}
-		else if ( current.stripWhiteSpace() == "Cuisine:" ) {
+		else if ( current.trimmed() == "Cuisine:" ) {
 			Element new_cat( getNextQuotedString( stream ) );
 			recipe.categoryList.append( new_cat );
-			//kdDebug()<<"Found cuisine (adding as category): "<<new_cat.name<<endl;
+			//kDebug()<<"Found cuisine (adding as category): "<<new_cat.name<<endl;
 		}
 		else
 			recipe.instructions += current + "\n";
 
-		current = stream.readLine().stripWhiteSpace();
+		current = stream.readLine().trimmed();
 	}
-	recipe.instructions = recipe.instructions.stripWhiteSpace();
-	//kdDebug()<<"Found instructions: "<<m_instructions<<endl;
+	recipe.instructions = recipe.instructions.trimmed();
+	//kDebug()<<"Found instructions: "<<m_instructions<<endl;
 }
 
-void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
+void MXPImporter::loadOptionalFields( Q3TextStream &stream, Recipe &recipe )
 {
 	//=================after here, fields are optional=========================//
 	stream.skipWhiteSpace();
-	QString current = stream.readLine().stripWhiteSpace();
+	QString current = stream.readLine().trimmed();
 
 	QString notes;
 
-	//Note: we simplifyWhiteSpace() because some versions of MasterCook have "Exported from MasterCook" and others have "Exported  from MasterCook".
+	//Note: we simplified() because some versions of MasterCook have "Exported from MasterCook" and others have "Exported  from MasterCook".
 	//      This also could work around a typo or such.
-	while ( !current.simplifyWhiteSpace().contains( "Exported from MasterCook" ) && !stream.atEnd() ) {
+	while ( !current.simplified().contains( "Exported from MasterCook" ) && !stream.atEnd() ) {
 		//suggested wine
-		if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "suggested wine" ) {
-			QString wine = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found suggested wine: "<<m_wine<<" (adding to end of instructions)"<<endl;
+		if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "suggested wine" ) {
+			QString wine = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found suggested wine: "<<m_wine<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nSuggested wine: " + wine;
 		}
 		//Nutr. Assoc.
-		if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "nutr. assoc." ) {
-			QString nutr_assoc = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found nutrient association: "<<nutr_assoc<<" (adding to end of instructions)"<<endl;
+		if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "nutr. assoc." ) {
+			QString nutr_assoc = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found nutrient association: "<<nutr_assoc<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nNutrient Association: " + nutr_assoc;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "per serving (excluding unknown items)" ) { //per serving... maybe we can do something with this info later
-			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found per serving (excluding unknown items): "<<per_serving_info<<" (adding to end of instructions)"<<endl;
+		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "per serving (excluding unknown items)" ) { //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found per serving (excluding unknown items): "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nPer Serving (excluding unknown items): " + per_serving_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "per serving" ) { //per serving... maybe we can do something with this info later
-			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found per serving: "<<per_serving_info<<" (adding to end of instructions)"<<endl;
+		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "per serving" ) { //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found per serving: "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nPer Serving: " + per_serving_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "food exchanges" ) { //food exchanges... maybe we can do something with this info later
-			QString food_exchange_info = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found food exchanges: "<<food_exchange_info<<" (adding to end of instructions)"<<endl;
+		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "food exchanges" ) { //food exchanges... maybe we can do something with this info later
+			QString food_exchange_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found food exchanges: "<<food_exchange_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nFood Exchanges: " + food_exchange_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "serving ideas" ) { //serving ideas
-			QString serving_ideas = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-			//kdDebug()<<"Found serving ideas: "<<m_serving_ideas<<" (adding to end of instructions)"<<endl;
+		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "serving ideas" ) { //serving ideas
+			QString serving_ideas = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+			//kDebug()<<"Found serving ideas: "<<m_serving_ideas<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nServing ideas: " + serving_ideas;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplifyWhiteSpace().lower() == "notes" )  //notes
-			notes = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
+		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "notes" )  //notes
+			notes = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
 		else if ( !current.isEmpty() && current != "_____" )  //if it doesn't belong to any other field, assume it a part of a multi-line notes field
 			notes += "\n" + current;
 
-		current = stream.readLine().stripWhiteSpace();
+		current = stream.readLine().trimmed();
 	}
 
 	/*possible fields to implement later:
@@ -342,27 +342,27 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 
 	*/
 	if ( !notes.isNull() ) {
-		//kdDebug()<<QString("Found notes: %s (adding to end of instructions)").arg(m_notes)<<endl;
-		recipe.instructions += "\n\nNotes: " + notes.stripWhiteSpace();
+		//kDebug()<<QString("Found notes: %s (adding to end of instructions)").arg(m_notes)<<endl;
+		recipe.instructions += "\n\nNotes: " + notes.trimmed();
 	}
 }
 
-void MXPImporter::importGeneric( QTextStream & /*stream*/ )
+void MXPImporter::importGeneric( Q3TextStream & /*stream*/ )
 {
 	setErrorMsg( i18n( "MasterCook's Generic Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
-void MXPImporter::importMac( QTextStream & /*stream*/ )
+void MXPImporter::importMac( Q3TextStream & /*stream*/ )
 {
 	setErrorMsg( i18n( "MasterCook Mac's Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
-QString MXPImporter::getNextQuotedString( QTextStream &stream )
+QString MXPImporter::getNextQuotedString( Q3TextStream &stream )
 {
 	stream.skipWhiteSpace();
-	QString current = stream.readLine().stripWhiteSpace();
+	QString current = stream.readLine().trimmed();
 	QString return_str;
 
 	if ( current.left( 1 ) == "\"" )
@@ -371,12 +371,12 @@ QString MXPImporter::getNextQuotedString( QTextStream &stream )
 		return current;
 
 	while ( current.right( 1 ) != "\"" && !stream.atEnd() ) {
-		current = stream.readLine().stripWhiteSpace();
+		current = stream.readLine().trimmed();
 		return_str += "\n" + current;
 	}
 
 	//take off quote at end
 	return_str = return_str.mid( 0, return_str.length() - 1 );
 
-	return return_str.stripWhiteSpace();
+	return return_str.trimmed();
 }

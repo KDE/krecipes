@@ -11,7 +11,7 @@
 #ifndef INGLISTVIEWITEM_H
 #define INGLISTVIEWITEM_H
 
-#include "qlistview.h"
+#include "q3listview.h"
 
 #include "datablocks/ingredient.h"
 
@@ -19,12 +19,12 @@
 #define INGLISTVIEWITEM_RTTI 1004
 #define INGSUBLISTVIEWITEM_RTTI 1009
 
-class IngListViewItem : public QListViewItem
+class IngListViewItem : public Q3ListViewItem
 {
 public:
-	IngListViewItem( QListView* qlv, const Ingredient &i );
-	IngListViewItem( QListView* qlv, QListViewItem *after, const Ingredient &i );
-	IngListViewItem( QListViewItem* qli, QListViewItem *after, const Ingredient &i );
+	IngListViewItem( Q3ListView* qlv, const Ingredient &i );
+	IngListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const Ingredient &i );
+	IngListViewItem( Q3ListViewItem* qli, Q3ListViewItem *after, const Ingredient &i );
 
 	int rtti() const;
 
@@ -50,7 +50,7 @@ private:
 class IngSubListViewItem : public IngListViewItem
 {
 public:
-	IngSubListViewItem( QListViewItem* qli, const Ingredient &i );
+	IngSubListViewItem( Q3ListViewItem* qli, const Ingredient &i );
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
@@ -58,10 +58,10 @@ public:
 };
 
 
-class IngGrpListViewItem : public QListViewItem
+class IngGrpListViewItem : public Q3ListViewItem
 {
 public:
-	IngGrpListViewItem( QListView* qlv, QListViewItem *after, const QString &group, int id );
+	IngGrpListViewItem( Q3ListView* qlv, Q3ListViewItem *after, const QString &group, int id );
 
 	int rtti() const;
 

@@ -12,27 +12,31 @@
 #include <qpainter.h>
 #include <qpoint.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QChildEvent>
+#include <QPaintEvent>
 
 #include <kiconloader.h>
-#include <kpixmap.h>
-#include <kpixmapeffect.h>
+#include <qpixmap.h>
+
 
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : QVBox( parent, name )
+PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : Q3VBox( parent, name )
 {
 
 	// Top decoration
 	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
 
-	hbox = new QHBox( this );
+	hbox = new Q3HBox( this );
 
 	//Left decoration
 	lDeco = new LeftDeco( hbox, "LeftDecoration" );
 
 	//The widget stack (panels)
-	stack = new QWidgetStack( hbox );
+	stack = new Q3WidgetStack( hbox );
 	stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 }
@@ -104,7 +108,7 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 	setMinimumHeight( 30 );
 	panelTitle = QString::null;
 	if ( !iconName.isNull() ) {
-		icon = KGlobal::iconLoader()->loadIcon( iconName, KIcon::NoGroup, 22 );
+		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
 	}
 
 	if ( !title.isNull() ) {
@@ -163,7 +167,7 @@ void TopDeco::setHeader( const QString &title, const QString &iconName )
 	if ( !title.isNull() )
 		panelTitle = title;
 	if ( !iconName.isNull() ) {
-		icon = KGlobal::iconLoader()->loadIcon( iconName, KIcon::NoGroup, 22 );
+		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
 	}
 	if ( !title.isNull() || !iconName.isNull() )
 		update();

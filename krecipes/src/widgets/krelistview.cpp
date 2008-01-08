@@ -20,23 +20,26 @@
 
 #include <qtooltip.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3Frame>
 
 #include "widgets/dblistviewbase.h"
 
-KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : QVBox( parent )
+KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : Q3VBox( parent )
 {
 
 	filteredColumn = filterCol;
 	QWidget *header = this;
 	if ( filter || embeddedWidget ) {
-		header = new QHBox( this );
-		( ( QHBox* ) header ) ->setSpacing( 15 );
+		header = new Q3HBox( this );
+		( ( Q3HBox* ) header ) ->setSpacing( 15 );
 	}
 
 	if ( !title.isNull() ) {
 		listLabel = new QLabel( header );
-		listLabel->setFrameShape( QFrame::GroupBoxPanel );
-		listLabel->setFrameShadow( QFrame::Sunken );
+		listLabel->setFrameShape( Q3Frame::GroupBoxPanel );
+		listLabel->setFrameShadow( Q3Frame::Sunken );
 		listLabel->setPaletteForegroundColor( KGlobalSettings::highlightedTextColor() );
 		listLabel->setPaletteBackgroundColor( KGlobalSettings::highlightColor().light( 120 ) ); // 120, to match the kremenu settings
 		listLabel->setText( title );
@@ -44,13 +47,13 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 
 	if ( filter ) {
-		filterBox = new QHBox( header );
-		filterBox->setFrameShape( QFrame::Box );
+		filterBox = new Q3HBox( header );
+		filterBox->setFrameShape( Q3Frame::Box );
 		filterBox->setMargin( 2 );
 
 		QPushButton *clearSearchButton = new QPushButton( filterBox );
-		KIconLoader *il = KGlobal::iconLoader();
-		clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIcon::NoGroup, 16 ) );
+		KIconLoader *il = KIconLoader::global();
+		clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) );
 
 		filterLabel = new QLabel( filterBox );
 		filterLabel->setText( " " + i18n( "Search:" ) );
@@ -61,7 +64,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 
 
-	list = new KListView( this );
+	list = new K3ListView( this );
 	list->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	setSpacing( 10 );
@@ -82,7 +85,7 @@ KreListView::~KreListView()
 
 void KreListView::filter( const QString& s )
 {
-	for ( QListViewItem * it = list->firstChild();it;it = it->nextSibling() ) {
+	for ( Q3ListViewItem * it = list->firstChild();it;it = it->nextSibling() ) {
 		if ( it->rtti() == NEXTLISTITEM_RTTI || it->rtti() == PREVLISTITEM_RTTI )
 			continue;
 

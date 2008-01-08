@@ -13,6 +13,9 @@
 #include "createpropertydialog.h"
 
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QLabel>
 
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 		: KDialogBase( parent, "createPropertyDialog", true, i18n( "New Property" ),
@@ -23,13 +26,13 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 	unitList = list; // Store the pointer to the unitList;
 
 	// Initialize widgets
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	box = new QGroupBox( page );
+	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	QGridLayout *gridLayout = new QGridLayout( box->layout() );
+	Q3GridLayout *gridLayout = new Q3GridLayout( box->layout() );
 	gridLayout->setAlignment( Qt::AlignTop );
 	box->setTitle( i18n( "New Property" ) );
 

@@ -14,6 +14,8 @@
 #define CREATECATEGORYDIALOG_H
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kdialogbase.h>
 
@@ -21,9 +23,9 @@
 
 class KLineEdit;
 class QPushButton;
-class QVBoxLayout;
-class QGroupBox;
-class QVBox;
+class Q3VBoxLayout;
+class Q3GroupBox;
+class Q3VBox;
 class KComboBox;
 
 /**
@@ -41,7 +43,7 @@ private:
 	void loadCategories( const ElementList &categories );
 
 	//Widgets
-	QGroupBox *box;
+	Q3GroupBox *box;
 	KLineEdit *elementEdit;
 	KComboBox* categoryComboBox;
 	QMap<QString, int> idMap;

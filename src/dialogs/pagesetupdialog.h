@@ -17,7 +17,7 @@
 
 #include "datablocks/recipe.h"
 
-class KPopupMenu;
+class KMenu;
 
 class SetupDisplay;
 class KreDisplayItem;
@@ -67,7 +67,7 @@ private:
 	QMap<int, KreDisplayItem*> popup_widget_map;
 	QMap<KreDisplayItem*, int> widget_popup_map;
 	QMap<int, QString> included_layouts_map;
-	KPopupMenu *shown_items_popup;
+	KMenu *shown_items_popup;
 };
 
 #endif //PAGESETUPDIALOG_H

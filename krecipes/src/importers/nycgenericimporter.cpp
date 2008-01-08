@@ -15,7 +15,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstringlist.h>
 #include <qregexp.h>
 
@@ -32,8 +32,8 @@ void NYCGenericImporter::parseFile( const QString &file )
 	m_recipe.empty();
 
 	QFile input( file );
-	if ( input.open( IO_ReadOnly ) ) {
-		QTextStream stream( &input );
+	if ( input.open( QIODevice::ReadOnly ) ) {
+		Q3TextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		if ( !stream.atEnd() && stream.readLine().startsWith( "@@@@@" ) )
@@ -50,7 +50,7 @@ void NYCGenericImporter::parseFile( const QString &file )
 NYCGenericImporter::~NYCGenericImporter()
 {}
 
-void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
+void NYCGenericImporter::importNYCGeneric( Q3TextStream &stream )
 {
 	kapp->processEvents(); //don't want the user to think its frozen... especially for files with thousands of recipes
 
@@ -71,12 +71,12 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 
 		QStringList categories = QStringList::split( ',', current );
 
-		if ( categories.count() > 0 && categories[ 0 ].upper() == "none" )  //there are no categories
+		if ( categories.count() > 0 && categories[ 0 ].toUpper() == "none" )  //there are no categories
 			break;
 
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
-			Element new_cat( QString( *it ).stripWhiteSpace() );
-			kdDebug() << "Found category: " << new_cat.name << endl;
+			Element new_cat( QString( *it ).trimmed() );
+			kDebug() << "Found category: " << new_cat.name << endl;
 			m_recipe.categoryList.append( new_cat );
 		}
 	}
@@ -89,8 +89,8 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	bool found_next;
 	while ( !( found_next = ( current = stream.readLine() ).startsWith( "@@@@@" ) ) && !stream.atEnd() ) {
 		if ( current.startsWith( "Contributor:" ) ) {
-			Element new_author( current.mid( current.find( ':' ) + 1, current.length() ).stripWhiteSpace() );
-			kdDebug() << "Found author: " << new_author.name << endl;
+			Element new_author( current.mid( current.find( ':' ) + 1, current.length() ).trimmed() );
+			kDebug() << "Found author: " << new_author.name << endl;
 			m_recipe.authorList.append( new_author );
 		}
 		else if ( current.startsWith( "Preparation Time:" ) ) {
@@ -109,12 +109,12 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		else if ( current.startsWith( "NYC Nutrilink:" ) ) {
 			//m_recipe.instructions += current + "\n";
 		}
-		else if ( !current.stripWhiteSpace().isEmpty() && !current.startsWith("** Exported from Now You're Cooking!") ) {
+		else if ( !current.trimmed().isEmpty() && !current.startsWith("** Exported from Now You're Cooking!") ) {
 			m_recipe.instructions += current + "\n";
 		}
 	}
 
-	m_recipe.instructions = m_recipe.instructions.stripWhiteSpace();
+	m_recipe.instructions = m_recipe.instructions.trimmed();
 	putDataInRecipe();
 
 	if ( found_next )
@@ -135,8 +135,8 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	QString current = line;
 
 	if ( current.contains( "-----" ) ) {
-		current_header = current.stripWhiteSpace();
-		kdDebug() << "Found ingredient header: " << current_header << endl;
+		current_header = current.trimmed();
+		kDebug() << "Found ingredient header: " << current_header << endl;
 		return ;
 	}
 
@@ -184,8 +184,8 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	if ( prep_sep_index == -1 )
 		prep_sep_index = name.length();
 
-	name = name.left( prep_sep_index ).stripWhiteSpace();
-	prep = name.mid( prep_sep_index+1, name.length() ).stripWhiteSpace();
+	name = name.left( prep_sep_index ).trimmed();
+	prep = name.mid( prep_sep_index+1, name.length() ).trimmed();
 
 	Ingredient new_ingredient( name, amount.toDouble(), Unit( unit, amount.toDouble() ) );
 	new_ingredient.group = current_header;

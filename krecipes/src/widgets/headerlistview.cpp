@@ -17,7 +17,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
@@ -26,7 +26,7 @@
 HeaderListView::HeaderListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void HeaderListView::init()
@@ -67,22 +67,22 @@ StdHeaderListView::StdHeaderListView( QWidget *parent, RecipeDB *db, bool editab
 	if ( editable ) {
 		setRenameable( 0, true );
 
-		KIconLoader *il = KGlobal::iconLoader();
+		KIconLoader *il = KIconLoader::global();
 
-		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop = new KMenu( this );
+		kpop->insertItem( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( modHeader( QListViewItem*, const QPoint &, int ) ) );
-		connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), this, SLOT( saveHeader( QListViewItem*, const QString &, int ) ) );
+		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), this, SLOT( modHeader( Q3ListViewItem*, const QPoint &, int ) ) );
+		connect( this, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), this, SLOT( saveHeader( Q3ListViewItem*, const QString &, int ) ) );
 	}
 }
 
-void StdHeaderListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdHeaderListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -105,7 +105,7 @@ void StdHeaderListView::createNew()
 void StdHeaderListView::remove()
 {
 	// Find selected header item
-	QListViewItem * it = selectedItem();
+	Q3ListViewItem * it = selectedItem();
 
 	if ( it ) {
 		int headerID = it->text( 1 ).toInt();
@@ -130,7 +130,7 @@ void StdHeaderListView::remove()
 
 void StdHeaderListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item )
 		HeaderListView::rename( item, 0 );
@@ -138,22 +138,22 @@ void StdHeaderListView::rename()
 
 void StdHeaderListView::createHeader( const Element &header )
 {
-	createElement(new QListViewItem( this, header.name, QString::number( header.id ) ));
+	createElement(new Q3ListViewItem( this, header.name, QString::number( header.id ) ));
 }
 
 void StdHeaderListView::removeHeader( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 1 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 1 );
 	removeElement(item);
 }
 
-void StdHeaderListView::modHeader( QListViewItem* i, const QPoint & /*p*/, int c )
+void StdHeaderListView::modHeader( Q3ListViewItem* i, const QPoint & /*p*/, int c )
 {
 	if ( i )
 		HeaderListView::rename( i, c );
 }
 
-void StdHeaderListView::saveHeader( QListViewItem* i, const QString &text, int /*c*/ )
+void StdHeaderListView::saveHeader( Q3ListViewItem* i, const QString &text, int /*c*/ )
 {
 	if ( !checkBounds( text ) ) {
 		reload(ForceReload); //reset the changed text
@@ -185,7 +185,7 @@ bool StdHeaderListView::checkBounds( const QString &header )
 		KMessageBox::error( this, QString( i18n( "Header cannot be longer than %1 characters." ) ).arg( database->maxIngGroupNameLength() ) );
 		return false;
 	}
-	else if ( header.stripWhiteSpace().isEmpty() )
+	else if ( header.trimmed().isEmpty() )
 		return false;
 
 	return true;

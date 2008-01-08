@@ -12,7 +12,7 @@
 #define HTMLBOOKEXPORTER_H
 
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "baseexporter.h"
 #include "htmlexporter.h"
@@ -38,11 +38,11 @@ protected:
 	virtual int headerFlags() const;
 
 private:
-	void createCategoryStructure( QTextStream &xml, const RecipeList &recipes );
-	bool removeIfUnused( const QValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
-	void writeCategoryStructure( QTextStream &xml, const CategoryTree *categoryTree );
+	void createCategoryStructure( Q3TextStream &xml, const RecipeList &recipes );
+	bool removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+	void writeCategoryStructure( Q3TextStream &xml, const CategoryTree *categoryTree );
 
-	QMap<QString,QTextStream*> fileMap;
+	QMap<QString,Q3TextStream*> fileMap;
 
 	RecipeDB *database;
 	CategoryTree *m_categories;

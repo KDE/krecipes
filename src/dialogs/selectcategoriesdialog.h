@@ -16,7 +16,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdialogbase.h>
 
 #include "datablocks/elementlist.h"

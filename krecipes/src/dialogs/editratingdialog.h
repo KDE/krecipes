@@ -12,18 +12,23 @@
 #define EDITRATINGDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
 class QLabel;
 class QComboBox;
 class KDoubleSpinBox;
 class QPushButton;
-class KListView;
-class QListViewItem;
-class QTextEdit;
+class K3ListView;
+class Q3ListViewItem;
+class Q3TextEdit;
 class QLineEdit;
 class RatingWidget;
 
@@ -49,21 +54,21 @@ public:
 	QPushButton* removeButton;
 	RatingCriteriaListView* criteriaListView;
 	QLabel* commentsLabel;
-	QTextEdit* commentsEdit;
+	Q3TextEdit* commentsEdit;
 	QLabel* raterLabel;
 	QLineEdit* raterEdit;
 
 	Rating rating() const;
 	
 protected:
-	QHBox* layout8;
-	QHBox* layout2;
+	Q3HBox* layout8;
+	Q3HBox* layout2;
 	
 protected slots:
 	virtual void languageChange();
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
-	void itemRenamed(QListViewItem* it, const QString &, int c);
+	void itemRenamed(Q3ListViewItem* it, const QString &, int c);
 
 private:
 	void init(const ElementList &criteriaList);

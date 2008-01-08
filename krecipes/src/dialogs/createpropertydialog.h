@@ -20,8 +20,8 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
+#include <q3groupbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 
 #include <klineedit.h>
@@ -40,7 +40,7 @@ public:
 
 private:
 	//Widgets
-	QGroupBox *box;
+	Q3GroupBox *box;
 	KLineEdit *propertyNameEdit;
 	KLineEdit *propertyUnits;
 	QLabel *nameEditText;

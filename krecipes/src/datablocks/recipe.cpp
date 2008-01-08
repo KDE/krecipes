@@ -9,6 +9,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "datablocks/recipe.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 Recipe::Recipe()
 {

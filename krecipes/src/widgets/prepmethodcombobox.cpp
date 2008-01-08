@@ -10,7 +10,7 @@
 
 #include "prepmethodcombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 #include <kdebug.h>
 
@@ -27,26 +27,26 @@ public:
 	{}
 
 	virtual QString makeCompletion( const QString &string ) {
-		kdDebug()<<"original makeCompletion( "<<string<<" )"<<endl;
+		kDebug()<<"original makeCompletion( "<<string<<" )"<<endl;
 
 		int comma_index = string.findRev(",");
 		QString completion_txt = string;
 		if ( comma_index != -1 )
-			completion_txt = completion_txt.right( completion_txt.length() - comma_index - 1 ).stripWhiteSpace();
+			completion_txt = completion_txt.right( completion_txt.length() - comma_index - 1 ).trimmed();
 		if ( completion_txt.isEmpty() )
 			return string;
 
-		kdDebug()<<"altered makeCompletion( "<<completion_txt<<" )"<<endl;
+		kDebug()<<"altered makeCompletion( "<<completion_txt<<" )"<<endl;
 
 		completion_txt = KCompletion::makeCompletion(completion_txt);
-		kdDebug()<<"got: "<<completion_txt<<endl;
+		kDebug()<<"got: "<<completion_txt<<endl;
 
 		if ( completion_txt.isEmpty() )
 			completion_txt = string;
 		else if ( comma_index != -1 )
 			completion_txt = string.left( comma_index ) + "," + completion_txt;
 
-		kdDebug()<<"returning: "<<completion_txt<<endl;
+		kDebug()<<"returning: "<<completion_txt<<endl;
 		return completion_txt;
 	}
 };
@@ -102,7 +102,7 @@ int PrepMethodComboBox::id( const QString &ing )
 		if ( ing == text( i ) )
 			return id(i);
 	}
-	kdDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
+	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
 	return -1;
 }
 

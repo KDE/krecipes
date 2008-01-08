@@ -113,7 +113,7 @@
                         <string>Rater</string>
                     </property>
                 </widget>
-                <widget class="KListView">
+                <widget class="K3ListView">
                     <column>
                         <property name="text">
                             <string>Criteria</string>

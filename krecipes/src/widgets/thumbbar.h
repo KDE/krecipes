@@ -25,8 +25,11 @@
 
 // Qt includes.
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 // Local includes.
 
@@ -36,7 +39,7 @@ class ThumbBarItem;
 class ThumbBarViewPriv;
 class ThumbBarItemPriv;
 
-class ThumbBarView : public QScrollView
+class ThumbBarView : public Q3ScrollView
 {
     Q_OBJECT
 
@@ -50,7 +53,7 @@ public:
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Vertical);
+    ThumbBarView(QWidget* parent, int orientation=Qt::Vertical);
     ~ThumbBarView();
 
     int  countItems();

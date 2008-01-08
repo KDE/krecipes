@@ -15,10 +15,12 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <kiconloader.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "widgets/dblistviewbase.h"
 
@@ -43,9 +45,9 @@ private:
 	// Internal data
 	RecipeDB *database;
 	//Widgets
-	QGridLayout *layout;
+	Q3GridLayout *layout;
 	StdPrepMethodListView *prepMethodListView;
-	QHBox *buttonBar;
+	Q3HBox *buttonBar;
 	QPushButton *newPrepMethodButton;
 	QPushButton *removePrepMethodButton;
 	KIconLoader *il;

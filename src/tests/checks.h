@@ -17,6 +17,8 @@
 #include <qstring.h>
 #include <qpixmap.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
@@ -30,10 +32,10 @@ void check( const RatingList &rating, const RatingList &base );
 bool check(const QString &txt, const QString &a, const QString &b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
-		cout << "'" << b.latin1() << "' (" << b.length() << " chars)" << endl;
+		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
+		cout << "'" << b.toLatin1() << "' (" << b.length() << " chars)" << endl;
 		cout << "but got" << endl;
-		cout << "'" << a.latin1() << "' (" << a.length() << " chars)" << endl;
+		cout << "'" << a.toLatin1() << "' (" << a.length() << " chars)" << endl;
 		exit( 1 );
 	}
 
@@ -43,7 +45,7 @@ bool check(const QString &txt, const QString &a, const QString &b)
 bool check(const QString &txt, int a, int b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -56,7 +58,7 @@ bool check(const QString &txt, int a, int b)
 bool check(const QString &txt, double a, double b)
 {
 	if ( fabs(a - b) > 1e-10 ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -70,7 +72,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 {
 	if ( a.size() != b.size() ) {
 		
-		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
+		cout << "ERROR: Tested " << txt.toLatin1() << ": photos differ" << endl;
 	//	exit( 1 );
 	}
 
@@ -128,8 +130,8 @@ void check( const Recipe &recipe, const Recipe &base )
 	for ( ; ing_it != recipe.ingList.end() || base_ing_it != base.ingList.end(); ++ing_it, ++base_ing_it ) {
 		check( *ing_it, *base_ing_it, ing_num );
 
-		QValueList<IngredientData>::const_iterator base_sub_it = (*base_ing_it).substitutes.begin();
-		for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it, ++base_sub_it ) {
+		Q3ValueList<IngredientData>::const_iterator base_sub_it = (*base_ing_it).substitutes.begin();
+		for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it, ++base_sub_it ) {
 			check( *sub_it, *base_sub_it, ing_num+1000 );
 		}
 

@@ -11,24 +11,27 @@
 #include "ingredientparserdialog.h"
 
 #include <qpushbutton.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qheader.h>
+#include <q3whatsthis.h>
+#include <q3header.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include "datablocks/mixednumber.h"
 #include "widgets/inglistviewitem.h"
@@ -40,20 +43,20 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 {
 	setButtonBoxOrientation( Vertical );
 
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	textLabel1 = new QLabel( page, "textLabel1" );
 	textLabel1->setTextFormat( QLabel::RichText );
 	
-	ingredientTextEdit = new QTextEdit( page, "ingredientTextEdit" );
-	ingredientTextEdit->setTextFormat( QTextEdit::PlainText );
+	ingredientTextEdit = new Q3TextEdit( page, "ingredientTextEdit" );
+	ingredientTextEdit->setTextFormat( Q3TextEdit::PlainText );
 	
 	parseButton = new KPushButton( page, "parseButton" );
 
 	previewLabel = new QLabel( page, "previewLabel" );
 	previewLabel->setTextFormat( QLabel::RichText );
 	
-	previewIngView = new KListView( page, "previewIngView" );
+	previewIngView = new K3ListView( page, "previewIngView" );
 	previewIngView->setSorting(-1);
 	previewIngView->addColumn( i18n( "Ingredient" ) );
 	previewIngView->addColumn( i18n( "Amount" ) );
@@ -69,20 +72,20 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	previewIngView->setRenameable( 2, true );
 	previewIngView->setRenameable( 3, true );
 
-	previewIngView->setSelectionMode( QListView::Extended );
+	previewIngView->setSelectionMode( Q3ListView::Extended );
 
 	ingredientTextEdit->setText( QApplication::clipboard()->text() );
 	ingredientTextEdit->selectAll();
 
 	QWidget *buttonWidget = new QWidget( page );
-	QHBoxLayout *buttonBox = new QHBoxLayout(buttonWidget);
+	Q3HBoxLayout *buttonBox = new Q3HBoxLayout(buttonWidget);
 	QSpacerItem *horizontalSpacing = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	buttonGroup = new QPushButton( i18n("Set &Header"), buttonWidget );
-	QWhatsThis::add( buttonGroup, i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.") );
+	Q3WhatsThis::add( buttonGroup, i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.") );
 	buttonBox->addWidget( buttonGroup );
 	buttonBox->addItem( horizontalSpacing );
 	
-	KPopupMenu *kpop = new KPopupMenu( previewIngView );
+	KMenu *kpop = new KMenu( previewIngView );
 	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
 	kpop->insertItem( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
  
@@ -108,7 +111,7 @@ void IngredientParserDialog::languageChange()
 
 void IngredientParserDialog::accept()
 {
-	for ( QListViewItem *it = previewIngView->firstChild(); it; it = it->nextSibling() ) {
+	for ( Q3ListViewItem *it = previewIngView->firstChild(); it; it = it->nextSibling() ) {
 		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
 			QString group = ((IngGrpListViewItem*)it)->group();
 			for ( IngListViewItem *sub_it = (IngListViewItem*)it->firstChild(); sub_it; sub_it = (IngListViewItem*)sub_it->nextSibling() ) {
@@ -128,26 +131,26 @@ void IngredientParserDialog::removeIngredient()
 {
 	delete previewIngView->selectedItem();
 	if ( !previewIngView->firstChild() )
-		enableButtonOK( false );
+		enableButtonOk( false );
 }
 
 void IngredientParserDialog::convertToHeader()
 {
-	QPtrList<QListViewItem> items = previewIngView->selectedItems();
+	Q3PtrList<Q3ListViewItem> items = previewIngView->selectedItems();
 	if ( items.count() == 0 )
 		return;
 	else if ( items.count() > 1 )
 		convertToHeader(items);
 	else { //items.count = 1
-		QListViewItem *item = items.first();
+		Q3ListViewItem *item = items.first();
 		if ( item->rtti() == INGLISTVIEWITEM_RTTI ) {
-			QListViewItem *new_item = new IngGrpListViewItem(previewIngView,
+			Q3ListViewItem *new_item = new IngGrpListViewItem(previewIngView,
 			(item->parent())?item->parent():item,
 			((IngListViewItem*)item)->ingredient().name, -1);
 	
-			QListViewItem *next_sibling;
-			QListViewItem *last_item = 0;
-			for ( QListViewItem * it = (item->parent())?item->nextSibling():new_item->nextSibling(); it; it = next_sibling ) {
+			Q3ListViewItem *next_sibling;
+			Q3ListViewItem *last_item = 0;
+			for ( Q3ListViewItem * it = (item->parent())?item->nextSibling():new_item->nextSibling(); it; it = next_sibling ) {
 				if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI )
 					break;
 	
@@ -172,22 +175,22 @@ void IngredientParserDialog::convertToHeader()
 	}
 }
 
-void IngredientParserDialog::convertToHeader( const QPtrList<QListViewItem> &items )
+void IngredientParserDialog::convertToHeader( const Q3PtrList<Q3ListViewItem> &items )
 {
 	if ( items.count() > 0 ) {
-		QPtrListIterator<QListViewItem> it(items);
-		QListViewItem *item = it.current();
+		Q3PtrListIterator<Q3ListViewItem> it(items);
+		Q3ListViewItem *item = it.current();
 
 		if ( item->rtti() != INGLISTVIEWITEM_RTTI )
 			return;
 
 		QString group = ((IngListViewItem*)item)->ingredient().name;
-		QListViewItem *ingGroupItem = new IngGrpListViewItem(previewIngView,
+		Q3ListViewItem *ingGroupItem = new IngGrpListViewItem(previewIngView,
 		   (item->parent())?item->parent():item, group, -1);
 		delete item; //delete the ingredient header which was detected as an ingredient
 		++it;
 
-		QListViewItem *last_item = 0;
+		Q3ListViewItem *last_item = 0;
 		while ( (item = it.current()) != 0 ) {
 			//ignore anything that isn't an ingredient (e.g. headers)
 			if ( item->rtti() == INGLISTVIEWITEM_RTTI ) { 
@@ -215,12 +218,12 @@ void IngredientParserDialog::parseText()
 {
 	previewIngView->clear();
 
-	QListViewItem *last_item = 0;
+	Q3ListViewItem *last_item = 0;
 
 	int line_num = 0;
 	QStringList ingredients = QStringList::split("\n",ingredientTextEdit->text());
 	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
-		QString line = (*it).simplifyWhiteSpace();
+		QString line = (*it).simplified();
 
 		++line_num;
 		int format_at = 0;
@@ -251,7 +254,7 @@ void IngredientParserDialog::parseText()
 			ing.amount_offset = i.amount_offset;
 		}
 		else
-			kdDebug()<<"no amount on line "<<line_num<<endl;
+			kDebug()<<"no amount on line "<<line_num<<endl;
 
 
 		//======unit======//
@@ -275,7 +278,7 @@ void IngredientParserDialog::parseText()
 			ing.units.plural = unitCheck;
 		}
 		else
-			kdDebug()<<"no unit on line "<<line_num<<endl;
+			kDebug()<<"no unit on line "<<line_num<<endl;
 
 
 		//======ingredient======//
@@ -292,7 +295,7 @@ void IngredientParserDialog::parseText()
 		ing.prepMethodList = ElementList::split(",",line.mid(format_at,end-format_at));
 
 		last_item = new IngListViewItem(previewIngView,last_item,ing);
-		enableButtonOK( true );
+		enableButtonOk( true );
 	}
 }
 

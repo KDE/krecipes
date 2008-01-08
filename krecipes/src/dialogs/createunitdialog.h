@@ -15,9 +15,9 @@
 
 #include <kdialogbase.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include "datablocks/unit.h"
 
@@ -41,7 +41,7 @@ protected slots:
 
 private:
 	//Widgets
-	QGroupBox *box;
+	Q3GroupBox *box;
 	KLineEdit *nameEdit;
 	KLineEdit *pluralEdit;
 	KLineEdit *nameAbbrevEdit;

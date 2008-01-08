@@ -61,7 +61,7 @@ void CategoryTree::insertItem( CategoryTree *newChild )
 
 void CategoryTree::takeItem( CategoryTree *tree )
 {
-	kdError()<< "Both these methods seem to be broken... don't use this function!" << endl;
+	kError()<< "Both these methods seem to be broken... don't use this function!" << endl;
 
 	CategoryTree *lastItem = m_child->m_last;
 #if 0
@@ -87,7 +87,7 @@ void CategoryTree::takeItem( CategoryTree *tree )
 	if ( tree != m_last )
 		m_child->m_last = lastItem;
 	else //FIXME: unstable behavior if this is the case
-		kdDebug()<<"CategoryTree::takeItem: warning - unstable behavior expected"<<endl;
+		kDebug()<<"CategoryTree::takeItem: warning - unstable behavior expected"<<endl;
 	m_count--;
 }
 

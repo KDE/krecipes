@@ -15,7 +15,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 namespace USDA {
 
@@ -25,19 +25,19 @@ UnitDataList loadUnits()
 
 	QString dataFilename = locate( "appdata", "data/unit-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kdDebug() << "No localized unit data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized unit data available for " << KGlobal::locale() ->language() << endl;
 
 		dataFilename = locate( "appdata", "data/unit-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
-	if ( dataFile.open( IO_ReadOnly ) ) {
-		kdDebug() << "Loading: " << dataFilename << endl;
-		QTextStream stream( &dataFile );
+	if ( dataFile.open( QIODevice::ReadOnly ) ) {
+		kDebug() << "Loading: " << dataFilename << endl;
+		Q3TextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {
-			if ( line.stripWhiteSpace().isEmpty() ) continue;
+			if ( line.trimmed().isEmpty() ) continue;
 
 			QStringList parts = QStringList::split(':', line, true);
 
@@ -58,7 +58,7 @@ UnitDataList loadUnits()
 		dataFile.close();
 	}
 	else
-		kdDebug() << "Unable to find or open unit data file (unit-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open unit data file (unit-data-en_US.sql)" << endl;
 
 	return result;
 }
@@ -69,19 +69,19 @@ PrepDataList loadPrepMethods()
 
 	QString dataFilename = locate( "appdata", "data/prep-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kdDebug() << "No localized prep data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized prep data available for " << KGlobal::locale() ->language() << endl;
 
 		dataFilename = locate( "appdata", "data/prep-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
-	if ( dataFile.open( IO_ReadOnly ) ) {
-		kdDebug() << "Loading: " << dataFilename << endl;
-		QTextStream stream( &dataFile );
+	if ( dataFile.open( QIODevice::ReadOnly ) ) {
+		kDebug() << "Loading: " << dataFilename << endl;
+		Q3TextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {
-			if ( line.stripWhiteSpace().isEmpty() ) continue;
+			if ( line.trimmed().isEmpty() ) continue;
 
 			PrepData data;
 			int sepIndex = line.find(':');
@@ -96,7 +96,7 @@ PrepDataList loadPrepMethods()
 		dataFile.close();
 	}
 	else
-		kdDebug() << "Unable to find or open prep data file (prep-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open prep data file (prep-data-en_US.sql)" << endl;
 
 	return result;
 }
@@ -105,7 +105,7 @@ bool parseUnitAndPrep( const QString &string, QString &unit, QString &prep, cons
 {
 	int commaIndex = string.find(",");
 	QString unitPart = string.left(commaIndex);
-	QString prepPart = string.right(string.length()-commaIndex-2).stripWhiteSpace();
+	QString prepPart = string.right(string.length()-commaIndex-2).trimmed();
 
 	QString localizedUnit;
 	QString localizedPrep;

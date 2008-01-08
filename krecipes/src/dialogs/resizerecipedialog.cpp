@@ -14,17 +14,21 @@
 
 #include <cmath>
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qvariant.h>
-#include <qbuttongroup.h>
-#include <qframe.h>
+#include <q3buttongroup.h>
+#include <q3frame.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 #include <knuminput.h>
 #include <klineedit.h>
 #include <qradiobutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qimage.h>
 #include <qpixmap.h>
 
@@ -43,26 +47,26 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		m_recipe( recipe )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
-	buttonGroup = new QButtonGroup( page );
+	buttonGroup = new Q3ButtonGroup( page );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
 	buttonGroup->setLineWidth( 0 );
 	buttonGroup->setColumnLayout( 0, Qt::Vertical );
 	buttonGroup->layout() ->setSpacing( 6 );
 	buttonGroup->layout() ->setMargin( 11 );
-	buttonGroupLayout = new QVBoxLayout( buttonGroup->layout() );
+	buttonGroupLayout = new Q3VBoxLayout( buttonGroup->layout() );
 	buttonGroupLayout->setAlignment( Qt::AlignTop );
 
 	yieldRadioButton = new QRadioButton( buttonGroup );
 	buttonGroup->insert( yieldRadioButton, SERVINGS_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( yieldRadioButton );
 
-	yieldFrame = new QFrame( buttonGroup );
-	yieldFrame->setFrameShape( QFrame::Box );
-	yieldFrame->setFrameShadow( QFrame::Sunken );
+	yieldFrame = new Q3Frame( buttonGroup );
+	yieldFrame->setFrameShape( Q3Frame::Box );
+	yieldFrame->setFrameShadow( Q3Frame::Sunken );
 	yieldFrame->setLineWidth( 1 );
-	yieldFrameLayout = new QGridLayout( yieldFrame, 1, 1, 11, 6 );
+	yieldFrameLayout = new Q3GridLayout( yieldFrame, 1, 1, 11, 6 );
 
 	currentYieldLabel = new QLabel( yieldFrame );
 
@@ -86,12 +90,12 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	buttonGroup->insert( factorRadioButton, FACTOR_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( factorRadioButton );
 
-	factorFrame = new QFrame( buttonGroup );
+	factorFrame = new Q3Frame( buttonGroup );
 	factorFrame->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 1, 0, factorFrame->sizePolicy().hasHeightForWidth() ) );
-	factorFrame->setFrameShape( QFrame::Box );
-	factorFrame->setFrameShadow( QFrame::Sunken );
+	factorFrame->setFrameShape( Q3Frame::Box );
+	factorFrame->setFrameShadow( Q3Frame::Sunken );
 	factorFrame->setLineWidth( 1 );
-	factorFrameLayout = new QHBoxLayout( factorFrame, 11, 6 );
+	factorFrameLayout = new Q3HBoxLayout( factorFrame, 11, 6 );
 
 	factorLabel = new QLabel( factorFrame );
 	factorFrameLayout->addWidget( factorLabel );

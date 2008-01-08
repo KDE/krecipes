@@ -15,6 +15,8 @@
 #include <klocale.h>
 
 #include "backends/recipedb.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 PlainTextExporter::PlainTextExporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )
@@ -116,7 +118,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 					content += ", "+i18n("or");
 				content += "\n";
 				
-				for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
 					if ( !group.isEmpty() )
 						content += "  ";
 

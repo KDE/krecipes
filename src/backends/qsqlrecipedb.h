@@ -25,6 +25,11 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <QSqlQuery>
 
 #include "datablocks/recipe.h"
 #include "datablocks/elementlist.h"
@@ -127,7 +132,7 @@ public:
 	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 );
-	void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>() );
+	void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false );
 	void loadUncategorizedRecipes( ElementList *list );
 	void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 );
@@ -189,7 +194,7 @@ public:
 	WeightList ingredientWeightUnits( int ingID );
 
 	QString escapeAndEncode( const QString &s ) const;
-	QString unescapeAndDecode( const QCString &s ) const;
+	QString unescapeAndDecode( const Q3CString &s ) const;
 
 	QString categoryName( int ID );
 	QString prepMethodName( int ID );

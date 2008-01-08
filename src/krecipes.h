@@ -20,11 +20,14 @@
 #include <kmainwindow.h>
 
 #include "krecipesview.h" //for KrePanel
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <Q3ValueList>
 
 class KrecipesView;
 
 class KToggleAction;
-class KURL;
+class KUrl;
 class KDialog;
 class ConversionDialog;
 
@@ -124,7 +127,7 @@ private:
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;
 
-	QValueList<KAction*> recipe_actions;
+	Q3ValueList<KAction*> recipe_actions;
 
 private slots:
 	void enableSaveOption( bool en = true );

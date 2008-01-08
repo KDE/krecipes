@@ -38,7 +38,7 @@ void KLOManager::processDocument( const QDomDocument &doc )
 	QDomElement layout = doc.documentElement();
 
 	if ( layout.tagName() != "krecipes-layout" ) {
-		kdDebug() << "This file does not appear to be a valid Krecipes layout file." << endl;
+		kDebug() << "This file does not appear to be a valid Krecipes layout file." << endl;
 		return ;
 	}
 
@@ -69,7 +69,7 @@ void KLOManager::processDocument( const QDomDocument &doc )
 			else if ( subTagName == "size" )
 				loadSize( tagName, getSizeAttribute(el,subTagName) );
 			else
-				kdDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
+				kDebug() << "Warning: Unknown tag within <" << tagName << ">: " << subTagName << endl;
 		}
 		endObject();
 	}
@@ -85,7 +85,7 @@ QDomElement KLOManager::getLayoutAttribute( const QDomElement &object, const QSt
 			return el;
 	}
 
-	kdDebug() << "Warning: Requested attribute \"" << attribute << "\" not found." << endl;
+	kDebug() << "Warning: Requested attribute \"" << attribute << "\" not found." << endl;
 	return QDomElement();
 }
 

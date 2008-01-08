@@ -17,7 +17,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kprocio.h>
+#include <k3procio.h>
 
 //FIXME: Some messages should be given to the user about success/failure, but that can't be done in the 0.8.x branch due to i18n.
 
@@ -30,18 +30,18 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 		file = config->readEntry("DBFile");
 	}
 
-	KProcIO *p = new KProcIO;
+	K3ProcIO *p = new K3ProcIO;
 	p->setUseShell(true);
 
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
 	*p << "sqlite" << file << ".dump" <<
 	  "|" << "sqlite3" << file+".new";
 
-	QApplication::connect( p, SIGNAL(readReady(KProcIO*)), this, SLOT(processOutput(KProcIO*)) );
+	QApplication::connect( p, SIGNAL(readReady(K3ProcIO*)), this, SLOT(processOutput(K3ProcIO*)) );
 
-	bool success = p->start( KProcess::Block, true );
+	bool success = p->start( K3Process::Block, true );
 	if ( !success ) {
-		kdDebug()<<"Conversion failed... unable to start KProcess"<<endl;
+		kDebug()<<"Conversion failed... unable to start K3Process"<<endl;
 		return;
 	}
 
@@ -57,17 +57,17 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 	}
 
 	if ( !copyFile( file, backup_file ) ) {
-		kdDebug()<<"Unable to backup SQLite 2 database... aborting"<<endl
+		kDebug()<<"Unable to backup SQLite 2 database... aborting"<<endl
 		  <<"A successfully converted SQLite 3 file is available at \""<<file<<".new\"."<<endl;
 	}
 	else {
-		kdDebug()<<"SQLite 2 database backed up to "<<backup_file<<endl;
+		kDebug()<<"SQLite 2 database backed up to "<<backup_file<<endl;
 		if ( !copyFile( file+".new", file ) ) {
-			kdDebug()<<"Unable to copy the new SQLite 3 database to: "<<file<<"."<<endl
+			kDebug()<<"Unable to copy the new SQLite 3 database to: "<<file<<"."<<endl
 			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\""<<endl;
 		}
 		else {
-			kdDebug()<<"Conversion successful!"<<endl;
+			kDebug()<<"Conversion successful!"<<endl;
 			QFile::remove(file+".new");
 		}
 	}
@@ -77,7 +77,7 @@ ConvertSQLite3::~ConvertSQLite3()
 {
 }
 
-void ConvertSQLite3::processOutput( KProcIO* p )
+void ConvertSQLite3::processOutput( K3ProcIO* p )
 {
 	QString error_str, buffer;
 	while ( p->readln(buffer) != -1 ) {
@@ -96,8 +96,8 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 	//load both files
 	QFile oldFile(oldFilePath);
 	QFile newFile(newFilePath);
-	bool openOld = oldFile.open( IO_ReadOnly );
-	bool openNew = newFile.open( IO_WriteOnly );
+	bool openOld = oldFile.open( QIODevice::ReadOnly );
+	bool openNew = newFile.open( QIODevice::WriteOnly );
 	
 	//if either file fails to open bail
 	if(!openOld || !openNew) { return false; }
@@ -107,8 +107,8 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 	char* buffer = new char[BUFFER_SIZE];
 	while(!oldFile.atEnd())
 	{
-		Q_ULONG len = oldFile.readBlock( buffer, BUFFER_SIZE );
-		newFile.writeBlock( buffer, len );
+		Q_ULONG len = oldFile.read( buffer, BUFFER_SIZE );
+		newFile.write( buffer, len );
 	}
 	
 	//deallocate buffer

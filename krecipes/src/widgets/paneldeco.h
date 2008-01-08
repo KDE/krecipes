@@ -12,13 +12,16 @@
 
 
 #include <qevent.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qstring.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpixmap.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QChildEvent>
 
 
 /**
@@ -29,7 +32,7 @@ class PanelDeco;
 class LeftDeco;
 class TopDeco;
 
-class PanelDeco : public QVBox
+class PanelDeco : public Q3VBox
 {
 	Q_OBJECT
 public:
@@ -43,10 +46,10 @@ signals:
 	void panelRaised( QWidget *w, QWidget *old_w );
 
 private:
-	QHBox *hbox;
+	Q3HBox *hbox;
 	LeftDeco *lDeco;
 	TopDeco *tDeco;
-	QWidgetStack *stack;
+	Q3WidgetStack *stack;
 
 public slots:
 	void raise( QWidget *w );

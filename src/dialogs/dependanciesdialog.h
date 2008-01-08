@@ -15,10 +15,12 @@
 #ifndef DEPENDANCIESDIALOG_H
 #define DEPENDANCIESDIALOG_H
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdialogbase.h>
 
 #include "datablocks/elementlist.h"
@@ -35,7 +37,7 @@ class DependanciesDialog: public KDialogBase
 {
 public:
 	//Methods
-	DependanciesDialog( QWidget *parent, const QValueList<ListInfo> &lists, bool deps_are_deleted = true );
+	DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted = true );
 	DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted = true );
 
 	~DependanciesDialog();
@@ -53,8 +55,8 @@ private:
 	QString m_msg;
 
 	// Methods
-	void init( const QValueList<ListInfo> &lists );
-	void loadList( KListBox*, const ElementList &list );
+	void init( const Q3ValueList<ListInfo> &lists );
+	void loadList( K3ListBox*, const ElementList &list );
 };
 
 #endif

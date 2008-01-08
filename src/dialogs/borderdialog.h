@@ -13,15 +13,20 @@
 
 #include <kdialogbase.h>
 #include <kcolordialog.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
-class KListBox;
-class QListBoxItem;
+class K3ListBox;
+class Q3ListBoxItem;
 class QSpinBox;
 class KHTMLPart;
 
@@ -37,23 +42,23 @@ public:
 
 	KreBorder border() const;
 
-	QGroupBox* borderGroupBox;
+	Q3GroupBox* borderGroupBox;
 	QLabel* styleLabel;
-	KListBox* styleListBox;
+	K3ListBox* styleListBox;
 	QLabel* colorLabel;
 	KHSSelector* hsSelector;
 	KValueSelector* valuePal;
 	QLabel* widthLabel;
 	QSpinBox* widthSpinBox;
-	KListBox* widthListBox;
+	K3ListBox* widthListBox;
 	KHTMLPart* borderPreview;
 
 protected:
-	QVBoxLayout* borderGroupBoxLayout;
-	QHBoxLayout* layout4;
-	QVBoxLayout* layout3;
-	QVBoxLayout* layout2;
-	QVBoxLayout* layout1;
+	Q3VBoxLayout* borderGroupBoxLayout;
+	Q3HBoxLayout* layout4;
+	Q3VBoxLayout* layout3;
+	Q3VBoxLayout* layout2;
+	Q3VBoxLayout* layout1;
 
 protected slots:
 	virtual void languageChange();

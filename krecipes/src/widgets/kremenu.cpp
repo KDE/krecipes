@@ -15,10 +15,17 @@
 #include <qcursor.h>
 #include <qfont.h>
 #include <qimage.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qsignalmapper.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QChildEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -27,8 +34,8 @@
 #include <kiconloader.h>
 #include <kimageeffect.h>
 #include <klocale.h>
-#include <kpixmap.h>
-#include <kpixmapeffect.h>
+#include <qpixmap.h>
+
 
 KreMenu::KreMenu( QWidget *parent, const char *name ) :
 #if QT_VERSION >= 0x030200
@@ -126,18 +133,18 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	MenuId id = menus.append( newMenu );
 
 	// Add a button to the main menu for this submenu
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 	KreMenuButton *newMenuButton = new KreMenuButton( this );
 	newMenuButton->subMenuId = id;
 	newMenuButton->setTitle( title );
-	newMenuButton->setIconSet( il->loadIconSet( icon, KIcon::Panel ) );
+	newMenuButton->setIconSet( il->loadIconSet( icon, KIconLoader::Panel ) );
 
 	// Add a button to the submenu to go back to the top menu
 	KreMenuButton *newSubMenuButton = new KreMenuButton( this );
 	newSubMenuButton->menuId = id;
 	newSubMenuButton->subMenuId = mainMenuId;
 	newSubMenuButton->setTitle( i18n( "Up..." ) );
-	newSubMenuButton->setIconSet( il->loadIconSet( "1uparrow", KIcon::Panel ) );
+	newSubMenuButton->setIconSet( il->loadIconSet( "arrow-up", KIconLoader::Panel ) );
 
 	connect( newMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
 	connect( newSubMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
@@ -347,7 +354,7 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const
 	resize( parent->size().width(), 55 );
 	connect ( parent, SIGNAL( resized( int, int ) ), this, SLOT( rescale() ) );
 	connect( this, SIGNAL( clicked() ), this, SLOT( forwardClicks() ) );
-	setCursor( QCursor( KCursor::handCursor() ) );
+	setCursor( QCursor( Qt::PointingHandCursor ) );
 }
 
 
@@ -392,7 +399,7 @@ QSize KreMenuButton::sizeHint() const
 
 QSize KreMenuButton::minimumSizeHint() const
 {
-	int text_width = QMAX( fontMetrics().width( text.section( '\n', 0, 0 ) ), fontMetrics().width( text.section( '\n', 1, 1 ) ) );
+	int text_width = qMax( fontMetrics().width( text.section( '\n', 0, 0 ) ), fontMetrics().width( text.section( '\n', 1, 1 ) ) );
 
 	if ( !icon.isNull() )
 		return QSize( 40 + icon.width() + text_width, 30 );
@@ -563,9 +570,9 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 }
 
-void KreMenuButton::setIconSet( const QIconSet &is )
+void KreMenuButton::setIconSet( const QIcon &is )
 {
-	icon = is.pixmap( QIconSet::Small, QIconSet::Normal, QIconSet::On );
+	icon = is.pixmap( QIcon::Small, QIcon::Normal, QIcon::On );
 
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget() ->minimumWidth() < minimumSizeHint().width() )

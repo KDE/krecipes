@@ -10,11 +10,11 @@
 #ifndef INGREDIENTPROPERTYLIST_H
 #define INGREDIENTPROPERTYLIST_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "datablocks/ingredientproperty.h"
 
-class IngredientPropertyList : public QValueList<IngredientProperty>
+class IngredientPropertyList : public Q3ValueList<IngredientProperty>
 {
 public:
 	IngredientPropertyList();

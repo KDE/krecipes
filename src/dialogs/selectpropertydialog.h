@@ -15,12 +15,12 @@
 
 #include <qwidget.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kcombobox.h>
 #include <kdialogbase.h>
 
@@ -44,8 +44,8 @@ public:
 	int perUnitsID( void );
 private:
 	//Widgets
-	QGroupBox *box;
-	KListView *propertyChooseView;
+	Q3GroupBox *box;
+	K3ListView *propertyChooseView;
 	QLabel *perUnitsLabel;
 	KComboBox *perUnitsBox;
 	OptionFlag m_showEmpty;

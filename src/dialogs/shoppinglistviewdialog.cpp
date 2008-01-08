@@ -24,10 +24,10 @@
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
 		: KDialogBase( parent, "shoppingviewdialog", true, QString::null,
 		    KDialogBase::Close | KDialogBase::User1, KDialogBase::Close,
-		    false, KStdGuiItem::print() )
+		    false, KStandardGuiItem::print() )
 {
 	// Design dialog
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 
 	shoppingListView = new KHTMLPart( page );
 
@@ -38,7 +38,7 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 
 	//---------- Sort the list --------
 	IngredientList list_copy = ingredientList;
-	qHeapSort( list_copy );
+	qSort( list_copy );
 
 	//---------- Load  the list --------
 	display( list_copy );
@@ -87,7 +87,7 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 
 
 	// Display
-	shoppingListView->begin( KURL( "file:/tmp/" ) ); // Initialize to /tmp, where photos and logos are stored
+	shoppingListView->begin( KUrl( "file:/tmp/" ) ); // Initialize to /tmp, where photos and logos are stored
 	shoppingListView->write( recipeHTML );
 	shoppingListView->end();
 

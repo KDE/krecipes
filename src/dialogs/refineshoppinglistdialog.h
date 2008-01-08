@@ -13,17 +13,22 @@
 
 #include <qvariant.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
 #include <kdialogbase.h>
 
 #include "datablocks/ingredientlist.h"
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
 class QLabel;
-class QListViewItem;
+class Q3ListViewItem;
 class QPushButton;
 
 class RecipeDB;
@@ -45,7 +50,7 @@ public:
 	KreListView* ingListView;
 
 protected:
-	QVBoxLayout* layout1;
+	Q3VBoxLayout* layout1;
 	QSpacerItem* spacer1;
 
 protected slots:
@@ -53,14 +58,14 @@ protected slots:
 	virtual void accept();
 	void addIngredient();
 	void removeIngredient();
-	void itemRenamed( QListViewItem*, const QString &, int );
+	void itemRenamed( Q3ListViewItem*, const QString &, int );
 
 private:
 	void loadData();
 
 	RecipeDB *database;
 	IngredientList ingredientList;
-	QMap<QListViewItem*, IngredientList::iterator> item_ing_map;
+	QMap<Q3ListViewItem*, IngredientList::iterator> item_ing_map;
 };
 
 #endif // REFINESHOPPINGLISTDIALOG_H

@@ -13,9 +13,11 @@
 #define BASEEXPORTER_H
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kapplication.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 
 #include "datablocks/recipelist.h"
 
@@ -39,7 +41,7 @@ public:
 	/** Export the recipes with the given ids to the file specified in the constructor.
 	 *  Optionally, a progress dialog may be given to specify the progress made.
 	 */
-	void exporter( const QValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
+	void exporter( const Q3ValueList<int> &ids, RecipeDB *database, KProgressDialog * = 0 );
 
 	/** Convenience function for the above, which exports a single recipe. */
 	void exporter( int id, RecipeDB *database, KProgressDialog * = 0 );
@@ -53,7 +55,7 @@ public:
 	/** Write the given recipe list to a text stream.
 	 *  This can be used to export recipes without use of the database.
 	 */
-	void writeStream( QTextStream &, const RecipeList & );
+	void writeStream( Q3TextStream &, const RecipeList & );
 
 protected:
 	virtual QString createContent( const RecipeList & ) = 0;
@@ -83,7 +85,7 @@ protected:
 
 private:
 	bool createFile();
-	void saveToFile( const QValueList<int> &ids, RecipeDB *database );
+	void saveToFile( const Q3ValueList<int> &ids, RecipeDB *database );
 
 	QFile* file;
 	KTar *tar_file;

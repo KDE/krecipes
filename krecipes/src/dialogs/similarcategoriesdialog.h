@@ -12,20 +12,26 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <Q3HBoxLayout>
+#include <QLabel>
 
 #include "datablocks/elementlist.h"
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
 class QSlider;
 class QLabel;
 class QPushButton;
-class QListViewItem;
+class Q3ListViewItem;
 
-class KListView;
+class K3ListView;
 class KLineEdit;
 
 class RecipeDB;
@@ -38,7 +44,7 @@ public:
 	SimilarCategoriesDialog( ElementList &, QWidget* parent = 0 );
 	~SimilarCategoriesDialog();
 
-	QValueList<int> matches() const;
+	Q3ValueList<int> matches() const;
 	QString element() const;
 
 	KLineEdit* categoriesBox;
@@ -47,26 +53,26 @@ public:
 	QLabel* categoryLabel;
 	QPushButton* searchButton;
 	QLabel* allLabel;
-	KListView* allListView;
+	K3ListView* allListView;
 	QPushButton* removeButton;
 	QPushButton* addButton;
 	QLabel* toMergeLabel;
-	KListView* toMergeListView;
+	K3ListView* toMergeListView;
 	QPushButton* mergeButton;
 	QPushButton* cancelButton;
 	
 protected:
-	QVBoxLayout* SimilarCategoriesDialogLayout;
-	QHBoxLayout* layout6;
-	QGridLayout* layout4;
-	QVBoxLayout* layout5;
+	Q3VBoxLayout* SimilarCategoriesDialogLayout;
+	Q3HBoxLayout* layout6;
+	Q3GridLayout* layout4;
+	Q3VBoxLayout* layout5;
 	QSpacerItem* spacer4;
-	QHBoxLayout* layout9;
-	QVBoxLayout* layout8;
-	QVBoxLayout* layout1;
+	Q3HBoxLayout* layout9;
+	Q3VBoxLayout* layout8;
+	Q3VBoxLayout* layout1;
 	QSpacerItem* spacer1;
-	QVBoxLayout* layout7;
-	QHBoxLayout* layout10;
+	Q3VBoxLayout* layout7;
+	Q3HBoxLayout* layout10;
 	QSpacerItem* spacer2;
 	
 protected slots:

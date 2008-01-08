@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307  USA
 
 #include <qfile.h>
 #include <qstringlist.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qdatetime.h>
 
 #include "datablocks/recipe.h"
@@ -36,13 +36,13 @@ MX2Importer::MX2Importer()
 void MX2Importer::parseFile( const QString& filename )
 {
 	QFile file( filename );
-	kdDebug() << "loading file: " << filename << endl;
-	if ( file.open( IO_ReadOnly ) ) {
-		kdDebug() << "file opened" << endl;
+	kDebug() << "loading file: " << filename << endl;
+	if ( file.open( QIODevice::ReadOnly ) ) {
+		kDebug() << "file opened" << endl;
 		QDomDocument doc;
 
 		//hopefully a temporary hack, since MasterCook creates invalid xml declarations
-		QTextStream stream( &file );
+		Q3TextStream stream( &file );
 		QString all_data = stream.read();
 		if ( all_data.startsWith( "<?xml" ) )
 			all_data.remove( 0, all_data.find( "?>" ) + 2 );
@@ -51,7 +51,7 @@ void MX2Importer::parseFile( const QString& filename )
 		int line;
 		int column;
 		if ( !doc.setContent( all_data, &error, &line, &column ) ) {
-			kdDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
+			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
 			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3.  This may not be a *.mx2 file." ) ).arg( error ).arg( line ).arg( column ) );
 			return ;
 		}
@@ -108,7 +108,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 				QDomElement c = categories.item( j ).toElement();
 				if ( c.tagName() == "CatT" ) {
 					if ( c.text().length() > 0 ) {
-						Element cat( c.text().stripWhiteSpace() );
+						Element cat( c.text().trimmed() );
 						recipe->categoryList.append( cat );
 					}
 				}
@@ -123,7 +123,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 				for ( unsigned j = 0; j < iChilds.count(); j++ ) {
 					QDomElement iChild = iChilds.item( j ).toElement();
 					if ( iChild.tagName() == "IPrp" )
-						new_ing.prepMethodList.append( Element(iChild.text().stripWhiteSpace()) );
+						new_ing.prepMethodList.append( Element(iChild.text().trimmed()) );
 					else if ( iChild.tagName() == "INtI" )
 						; // TODO: What does it mean?... ingredient nutrient info?
 				}
@@ -136,7 +136,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			for ( unsigned j = 0; j < dirs.count(); j++ ) {
 				QDomElement dir = dirs.item( j ).toElement();
 				if ( dir.tagName() == "DirT" )
-					directions.append( dir.text().stripWhiteSpace() );
+					directions.append( dir.text().trimmed() );
 			}
 			QString directionsText;
 
@@ -150,7 +150,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 
 					QString sWith = QString( "%1. " ).arg( i );
 					QString text = directions[ i - 1 ];
-					if ( !text.stripWhiteSpace().startsWith( sWith ) )
+					if ( !text.trimmed().startsWith( sWith ) )
 						directionsText += sWith;
 					directionsText += text;
 				}
@@ -163,18 +163,18 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		else if ( tagName == "SrvI" ) {
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n" + el.text().stripWhiteSpace();
+			recipe->instructions += "\n\n" + el.text().trimmed();
 		}
 		else if ( tagName == "Note" ) {
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n" + el.text().stripWhiteSpace();
+			recipe->instructions += "\n\n" + el.text().trimmed();
 		}
 		else if ( tagName == "Nutr" ) {
 			//example: <Nutr>Per Serving (excluding unknown items): 51 Calories; 6g Fat (99.5% calories from fat); trace Protein; trace Carbohydrate; 0g Dietary Fiber; 16mg Cholesterol; 137mg Sodium.  Exchanges: 1 Fat.</Nutr>
 			// Don't know what to do with it, for now add it to directions
 			// btw lets hope this is read after the directions
-			recipe->instructions += "\n\n" + el.text().stripWhiteSpace();
+			recipe->instructions += "\n\n" + el.text().trimmed();
 		}
 		/* tags to check for (example follows:
 		<Srce>SARA&apos;S SECRETS with Sara Moulton - (Show # SS-1B43) - from the TV FOOD NETWORK</Srce>

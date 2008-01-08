@@ -16,7 +16,7 @@
 
 #include <qfile.h>
 #include <qregexp.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstringlist.h>
 
 #include "datablocks/mixednumber.h"
@@ -37,8 +37,8 @@ void MMFImporter::parseFile( const QString &file )
 
 	QFile input( file );
 
-	if ( input.open( IO_ReadOnly ) ) {
-		QTextStream stream( &input );
+	if ( input.open( QIODevice::ReadOnly ) ) {
+		Q3TextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		QString line;
@@ -73,7 +73,7 @@ void MMFImporter::parseFile( const QString &file )
 		setErrorMsg( i18n( "Unable to open file." ) );
 }
 
-void MMFImporter::importMMF( QTextStream &stream )
+void MMFImporter::importMMF( Q3TextStream &stream )
 {
 	kapp->processEvents(); //don't want the user to think its frozen... especially for files with thousands of recipes
 
@@ -87,34 +87,34 @@ void MMFImporter::importMMF( QTextStream &stream )
 	//title
 	stream.skipWhiteSpace();
 	current = stream.readLine();
-	m_title = current.mid( current.find( ":" ) + 1, current.length() ).stripWhiteSpace();
-	kdDebug() << "Found title: " << m_title << endl;
+	m_title = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+	kDebug() << "Found title: " << m_title << endl;
 
 	//categories
 	stream.skipWhiteSpace();
-	current = stream.readLine().stripWhiteSpace();
+	current = stream.readLine().trimmed();
 	const char separator = ( version == FromDatabase ) ? ' ' : ',';
 	QStringList categories = QStringList::split( separator, current.mid( current.find( ":" ) + 1, current.length() ) );
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
-		new_cat.name = QString( *it ).stripWhiteSpace();
-		kdDebug() << "Found category: " << new_cat.name << endl;
+		new_cat.name = QString( *it ).trimmed();
+		kDebug() << "Found category: " << new_cat.name << endl;
 		m_categories.append( new_cat );
 	}
 
 	//servings
 	stream.skipWhiteSpace();
-	current = stream.readLine().stripWhiteSpace();
+	current = stream.readLine().trimmed();
 	if ( current.startsWith( "Yield:" ) ) {
 		//get the number between the ":" and the next space after it
 		m_servings = current.mid( current.find( ":" ) + 1,
 		                          current.find( " ", current.find( ":" ) + 2 ) - current.find( ":" ) ).toInt();
-		kdDebug() << "Found yield: " << m_servings << endl;
+		kDebug() << "Found yield: " << m_servings << endl;
 	}
 	else if ( current.startsWith( "Servings:" ) )  //from database version
 	{
 		m_servings = current.mid( current.find( ":" ) + 1, current.length() ).toInt();
-		kdDebug() << "Found servings: " << m_servings << endl;
+		kDebug() << "Found servings: " << m_servings << endl;
 	}
 
 	//=======================VARIABLE FORMAT===================//
@@ -125,9 +125,9 @@ void MMFImporter::importMMF( QTextStream &stream )
 
 	( void ) stream.readLine();
 	current = stream.readLine();
-	while ( current.stripWhiteSpace() != "MMMMM" &&
-	        current.stripWhiteSpace() != "-----" &&
-	        current.stripWhiteSpace() != "-----------------------------------------------------------------------------" &&
+	while ( current.trimmed() != "MMMMM" &&
+	        current.trimmed() != "-----" &&
+	        current.trimmed() != "-----------------------------------------------------------------------------" &&
 	        !stream.atEnd() ) {
 		bool col_one_used = loadIngredientLine( current.left( 41 ), m_left_col_ing, is_sub );
 		if ( col_one_used )  //only check for second column if there is an ingredient in the first column
@@ -141,17 +141,17 @@ void MMFImporter::importMMF( QTextStream &stream )
 		}
 
 		if ( !col_one_used &&
-		        !loadIngredientHeader( current.stripWhiteSpace() ) ) {
-			if ( !current.stripWhiteSpace().isEmpty() )
+		        !loadIngredientHeader( current.trimmed() ) ) {
+			if ( !current.trimmed().isEmpty() )
 				instruction_found = true;
-			m_instructions += current.stripWhiteSpace() + "\n";
-			//kdDebug()<<"Found instruction line: "<<current.stripWhiteSpace()<<endl;
+			m_instructions += current.trimmed() + "\n";
+			//kDebug()<<"Found instruction line: "<<current.trimmed()<<endl;
 		}
 
 		current = stream.readLine();
 	}
-	m_instructions = m_instructions.stripWhiteSpace();
-	//kdDebug()<<"Found instructions: "<<m_instructions<<endl;
+	m_instructions = m_instructions.trimmed();
+	//kDebug()<<"Found instructions: "<<m_instructions<<endl;
 
 	putDataInRecipe();
 }
@@ -159,16 +159,16 @@ void MMFImporter::importMMF( QTextStream &stream )
 bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &list, bool &is_sub )
 {
 	//just ignore an empty line
-	if ( string.stripWhiteSpace().isEmpty() )
+	if ( string.trimmed().isEmpty() )
 		return false;
 
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
-	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).stripWhiteSpace().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
+	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
-		//kdDebug()<<"Appending to last ingredient in column: "<<string.stripWhiteSpace().mid(1,string.length())<<endl;
-		( *list.at( list.count() - 1 ) ).name += " " + string.stripWhiteSpace().mid( 1, string.length() );
+		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length())<<endl;
+		( *list.at( list.count() - 1 ) ).name += " " + string.trimmed().mid( 1, string.length() );
 		QString name = ( *list.at( list.count() - 1 ) ).name;
 
 		if ( name.endsWith(", or") ) {
@@ -182,9 +182,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	}
 
 	//amount
-	if ( !string.mid( 0, 7 ).stripWhiteSpace().isEmpty() ) {
+	if ( !string.mid( 0, 7 ).trimmed().isEmpty() ) {
 		bool ok;
-		MixedNumber amount = MixedNumber::fromString( string.mid( 0, 7 ).stripWhiteSpace(), &ok, false );
+		MixedNumber amount = MixedNumber::fromString( string.mid( 0, 7 ).trimmed(), &ok, false );
 		if ( !ok )
 			return false;
 		else
@@ -196,9 +196,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		return false;
 
 	//unit
-	if ( !string.mid( 8, 2 ).stripWhiteSpace().isEmpty() ) {
+	if ( !string.mid( 8, 2 ).trimmed().isEmpty() ) {
 		bool is_unit = false;
-		QString unit( string.mid( 8, 2 ).stripWhiteSpace() );
+		QString unit( string.mid( 8, 2 ).trimmed() );
 		for ( int i = 0; unit_info[ i ].short_form; i++ ) {
 			if ( unit_info[ i ].short_form == unit ) {
 				is_unit = true;
@@ -213,7 +213,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		if ( !is_unit ) { /*This gives too many false warnings...
 						addWarningMsg( QString(i18n("Unit \"%1\" not recognized. "
 						  "Used in the context of \"%2\".  If this shouldn't be an ingredient line (i.e. is part of the instructions), "
-						  "then you can safely ignore this warning, and the recipe will be correctly imported.")).arg(unit).arg(string.stripWhiteSpace()) );*/ 
+						  "then you can safely ignore this warning, and the recipe will be correctly imported.")).arg(unit).arg(string.trimmed()) );*/ 
 			return false;
 		}
 
@@ -228,7 +228,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		return false;
 
 	//name and preparation method
-	new_ingredient.name = string.mid( 11, 41 ).stripWhiteSpace();
+	new_ingredient.name = string.mid( 11, 41 ).trimmed();
 
 	//put in the header... it there is no header, current_header will be QString::null
 	new_ingredient.group = current_header;
@@ -257,13 +257,13 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 	        ( ( string.at( string.length() / 2 ) != "-" ) ||
 	          ( string.at( string.length() / 2 + 1 ) != "-" ) ||
 	          ( string.at( string.length() / 2 - 1 ) != "-" ) ) ) {
-		QString header( string.stripWhiteSpace() );
+		QString header( string.trimmed() );
 
 		//get only the header name
 		header.remove( QRegExp( "^MMMMM" ) );
 		header.remove( QRegExp( "^-*" ) ).remove( QRegExp( "-*$" ) );
 
-		kdDebug() << "found ingredient header: " << header << endl;
+		kDebug() << "found ingredient header: " << header << endl;
 
 		//merge all columns before appending to full ingredient list to maintain the ingredient order
 		for ( IngredientList::iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it ) {
@@ -294,8 +294,8 @@ void MMFImporter::putDataInRecipe()
 		QString name_and_prep = ( *ing_it ).name;
 		int separator_index = name_and_prep.find( QRegExp( "(;|,)" ) );
 		if ( separator_index != -1 ) {
-			( *ing_it ).name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
-			( *ing_it ).prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).stripWhiteSpace() );
+			( *ing_it ).name = name_and_prep.mid( 0, separator_index ).trimmed();
+			( *ing_it ).prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).trimmed() );
 		}
 	}
 

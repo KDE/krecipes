@@ -16,7 +16,7 @@
 
 #include <qfile.h>
 #include <qregexp.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 
 #include "datablocks/mixednumber.h"
 
@@ -30,8 +30,8 @@ void RezkonvImporter::parseFile( const QString &filename )
 {
 	QFile input( filename );
 
-	if ( input.open( IO_ReadOnly ) ) {
-		QTextStream stream( &input );
+	if ( input.open( QIODevice::ReadOnly ) ) {
+		Q3TextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		QString line;
@@ -66,29 +66,29 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 
 	//title (Titel)
 	text_it++;
-	recipe.title = ( *text_it ).mid( ( *text_it ).find( ":" ) + 1, ( *text_it ).length() ).stripWhiteSpace();
-	kdDebug() << "Found title: " << recipe.title << endl;
+	recipe.title = ( *text_it ).mid( ( *text_it ).find( ":" ) + 1, ( *text_it ).length() ).trimmed();
+	kDebug() << "Found title: " << recipe.title << endl;
 
 	//categories (Kategorien):
 	text_it++;
 	QStringList categories = QStringList::split( ',', ( *text_it ).mid( ( *text_it ).find( ":" ) + 1, ( *text_it ).length() ) );
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
-		new_cat.name = QString( *it ).stripWhiteSpace();
-		kdDebug() << "Found category: " << new_cat.name << endl;
+		new_cat.name = QString( *it ).trimmed();
+		kDebug() << "Found category: " << new_cat.name << endl;
 		recipe.categoryList.append( new_cat );
 	}
 
 	//yield (Menge)
 	text_it++;
 	//get the number between the ":" and the next space after it
-	QString yield_str = ( *text_it ).stripWhiteSpace();
+	QString yield_str = ( *text_it ).trimmed();
 	yield_str.remove( QRegExp( "^Menge:\\s*" ) );
 	int sep_index = yield_str.find( ' ' );
 	if ( sep_index != -1 )
 		recipe.yield.type = yield_str.mid( sep_index+1 );
 	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
-	kdDebug() << "Found yield: " << recipe.yield.amount << endl;
+	kDebug() << "Found yield: " << recipe.yield.amount << endl;
 
 	bool is_sub = false;
 	bool last_line_empty = false;
@@ -136,10 +136,10 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
 	QRegExp cont_test( "^-{1,2}" );
-	if ( string.stripWhiteSpace().contains( cont_test ) ) {
-		QString name = string.stripWhiteSpace();
+	if ( string.trimmed().contains( cont_test ) ) {
+		QString name = string.trimmed();
 		name.remove( cont_test );
-		kdDebug() << "Appending to last ingredient: " << name << endl;
+		kDebug() << "Appending to last ingredient: " << name << endl;
 		if ( !recipe.ingList.isEmpty() )  //so it doesn't crash when the first ingredient appears to be a continuation of another
 			( *recipe.ingList.at( recipe.ingList.count() - 1 ) ).name += " " + name;
 
@@ -147,22 +147,22 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 	}
 
 	//amount
-	if ( !string.mid( 0, 7 ).stripWhiteSpace().isEmpty() )
+	if ( !string.mid( 0, 7 ).trimmed().isEmpty() )
 		readRange( string.mid( 0, 7 ), new_ingredient.amount, new_ingredient.amount_offset );
 
 	//unit
-	QString unit_str = string.mid( 8, 9 ).stripWhiteSpace();
+	QString unit_str = string.mid( 8, 9 ).trimmed();
 	new_ingredient.units = Unit( unit_str, new_ingredient.amount );
 
 	//name and preparation method
-	new_ingredient.name = string.mid( 18, string.length() - 18 ).stripWhiteSpace();
+	new_ingredient.name = string.mid( 18, string.length() - 18 ).trimmed();
 
 	//separate out the preparation method
 	QString name_and_prep = new_ingredient.name;
 	int separator_index = name_and_prep.find( "," );
 	if ( separator_index != -1 ) {
-		new_ingredient.name = name_and_prep.mid( 0, separator_index ).stripWhiteSpace();
-		new_ingredient.prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).stripWhiteSpace() );
+		new_ingredient.name = name_and_prep.mid( 0, separator_index ).trimmed();
+		new_ingredient.prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).trimmed() );
 	}
 
 	//header (if present)
@@ -186,9 +186,9 @@ void RezkonvImporter::loadIngredientHeader( const QString &string, Recipe &/*rec
 {
 	QString header = string;
 	header.remove( QRegExp( "^=*" ) ).remove( QRegExp( "=*$" ) );
-	header = header.stripWhiteSpace();
+	header = header.trimmed();
 
-	kdDebug() << "found ingredient header: " << header << endl;
+	kDebug() << "found ingredient header: " << header << endl;
 
 	current_header = header;
 }
@@ -204,7 +204,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 		//titles longer than the line width are rewritten here
 		if ( line.contains( rx_title ) ) {
 			line.remove( rx_title );
-			recipe.title = line.stripWhiteSpace();
+			recipe.title = line.trimmed();
 
 			QRegExp rx_line_cont( ":\\s*>{0,1}\\s*:" );
 			while ( ( line = *text_it ).contains( rx_line_cont ) ) {
@@ -213,7 +213,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 
 				text_it++;
 			}
-			kdDebug() << "Found long title: " << recipe.title << endl;
+			kDebug() << "Found long title: " << recipe.title << endl;
 		}
 		else {
 			if ( line.isEmpty() )
@@ -230,7 +230,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 
 void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Recipe &recipe )
 {
-	kdDebug() << "Found source header" << endl;
+	kDebug() << "Found source header" << endl;
 
 	while ( text_it != m_end_it ) {
 		text_it++;
@@ -286,6 +286,6 @@ void RezkonvImporter::readRange( const QString &range_str, double &amount, doubl
 
 	amount = MixedNumber::fromString( from ).toDouble();
 
-	if ( !to.stripWhiteSpace().isEmpty() )
+	if ( !to.trimmed().isEmpty() )
 		amount_offset = MixedNumber::fromString( to ).toDouble() - amount;
 }

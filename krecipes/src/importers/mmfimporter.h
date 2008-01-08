@@ -31,7 +31,7 @@ private:
 
 	virtual void parseFile( const QString &filename );
 
-	void importMMF( QTextStream &stream );
+	void importMMF( Q3TextStream &stream );
 
 	/** Parses the line and save it if the line is a valid ingredient and return true.
 	  * Returns false if not an ingredient.

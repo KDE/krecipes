@@ -12,8 +12,8 @@
 #define KRELISTVIEW_H
 
 #include <qlabel.h>
-#include <qvbox.h>
-#include <klistview.h>
+#include <q3vbox.h>
+#include <k3listview.h>
 #include <klineedit.h>
 
 class DBListViewBase;
@@ -22,19 +22,19 @@ class DBListViewBase;
 @author Unai Garro
 */
 
-class KreListView: public QVBox
+class KreListView: public Q3VBox
 {
 	Q_OBJECT
 public:
 
 	KreListView( QWidget *parent, const QString &title = QString::null, bool filter = false, int filterCol = 0, QWidget *embeddedWidget = 0 );
 	~KreListView();
-	KListView *listView()
+	K3ListView *listView()
 	{
 		return list;
 	}
 
-	void setListView( KListView *list_view )
+	void setListView( K3ListView *list_view )
 	{
 		delete list;
 		list = list_view;
@@ -51,12 +51,12 @@ signals:
 	void textChanged( const QString & );
 
 private:
-	QHBox *filterBox;
+	Q3HBox *filterBox;
 	QLabel *listLabel;
 	int filteredColumn;
 	QLabel *filterLabel;
 	KLineEdit *filterEdit;
-	KListView *list;
+	K3ListView *list;
 
 private slots:
 	void filter( const QString& s );

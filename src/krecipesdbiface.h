@@ -11,16 +11,18 @@
 #ifndef _KRECIPESDBIFACE_H_
 #define _KRECIPESDBIFACE_H_
 
-#include <dcopobject.h>
+#include <QObject>
 
-class KrecipesDBIface : virtual public DCOPObject
+class KrecipesDBIface  
 {
-	K_DCOP
+	Q_OBJECT
+	Q_CLASSINFO("org.kde.krecipes", "BDIface")
 public:
 
-k_dcop:
-	virtual void emptyData() = 0;
-	virtual bool backup( const QString &filename ) = 0;
+Q_SLOTS:
+ 	virtual Q_SCRIPTABLE void emptydata() = 0;
+ 	virtual Q_SCRIPTABLE bool backup(const QString &filename) = 0;
+
 };
 
 #endif // _KRECIPESIFACE_H_

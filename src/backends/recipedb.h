@@ -16,9 +16,11 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
-#include <dcopclient.h>
+#include <QDBusConnection>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "krecipesdbiface.h"
 
@@ -35,8 +37,8 @@
 @author Unai Garro
 */
 
-class KProcess;
-class QTextStream;
+class K3Process;
+class Q3TextStream;
 
 class CategoryTree;
 class RecipeSearchParameters;
@@ -45,7 +47,7 @@ class WeightList;
 
 typedef struct
 {
-	QValueList <int> recipeIdList;
+	Q3ValueList <int> recipeIdList;
 	IngredientList ilist;
 }
 RecipeIngredientList;
@@ -219,7 +221,7 @@ public:
 
 	virtual void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
-	virtual void loadRecipes( RecipeList *, int items = All, QValueList<int> ids = QValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
+	virtual void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false ) = 0;
 	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
 	virtual void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 ) = 0;
@@ -298,7 +300,7 @@ public:
 	virtual WeightList ingredientWeightUnits( int ingID ) = 0;
 
 	virtual QString escapeAndEncode( const QString &s ) const = 0;
-	virtual QString unescapeAndDecode( const QCString &s ) const = 0;
+	virtual QString unescapeAndDecode( const Q3CString &s ) const = 0;
 
 	virtual QString categoryName( int ID ) = 0;
 	virtual QString ingredientName( int ID ) = 0;
@@ -381,7 +383,7 @@ protected:
 	void fixUSDAPropertyUnits();
 
 	//Use these with caution: SQL for one backend might not work on another!
-	void execSQL( QTextStream &stream );
+	void execSQL( Q3TextStream &stream );
 	virtual void execSQL( const QString & ) = 0;
 
 	QString buildSearchQuery( const RecipeSearchParameters &parameters ) const;
@@ -392,11 +394,11 @@ protected:
 	CategoryTree *m_categoryCache;
 
 private:
-	QTextStream *dumpStream;
+	Q3TextStream *dumpStream;
 	bool haltOperation;
 
 private slots:
-	void processDumpOutput( KProcess *, char *buffer, int buflen );
+	void processDumpOutput( K3Process *, char *buffer, int buflen );
 };
 
 #endif

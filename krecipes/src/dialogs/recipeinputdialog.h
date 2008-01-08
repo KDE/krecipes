@@ -17,28 +17,33 @@
 #include <ktextedit.h>
 #include <klineedit.h>
 #include <kcombobox.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <knuminput.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kled.h>
 
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qmap.h>
 #include <qobject.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
 
 #include "datablocks/elementlist.h"
 
 class QTabWidget;
-class QTimeEdit;
+class Q3TimeEdit;
 class QDragEvent;
-class QButtonGroup;
-class QWidgetStack;
-class QTextEdit;
+class Q3ButtonGroup;
+class Q3WidgetStack;
+class Q3TextEdit;
 
 class KreTextEdit;
 class KWidgetListbox;
@@ -58,7 +63,7 @@ class ClickableLed;
 /**
 @author Unai Garro
 */
-class RecipeInputDialog: public QVBox
+class RecipeInputDialog: public Q3VBox
 {
 	Q_OBJECT
 
@@ -82,8 +87,8 @@ private:
 
 	// Widgets
 	QTabWidget* tabWidget;
-	QGroupBox* recipeTab;
-	QGroupBox* instructionsTab;
+	Q3GroupBox* recipeTab;
+	Q3GroupBox* instructionsTab;
 
 	//Recipe Photo
 	ImageDropLabel *photoLabel;
@@ -99,7 +104,7 @@ private:
 	QLabel* yieldLabel;
 	FractionInput* yieldNumInput;
 	KLineEdit* yieldTypeEdit;
-	QTimeEdit *prepTimeEdit;
+	Q3TimeEdit *prepTimeEdit;
 	QLabel* authorLabel;
 	KLineEdit* authorShow;
 	QPushButton* addAuthorButton;
@@ -108,13 +113,13 @@ private:
 	QPushButton* addCategoryButton;
 
 	//Ingredient inputs
-	KListView* ingredientList;
-	QGroupBox *ingredientGBox;
+	K3ListView* ingredientList;
+	Q3GroupBox *ingredientGBox;
 	IngredientInputWidget *ingInput;
 	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
-	QTextEdit *statusTextView;
+	Q3TextEdit *statusTextView;
 	KDialogBase *propertyStatusDialog;
 
 	// Buttons to move ingredients up & down...
@@ -125,7 +130,7 @@ private:
 	KPushButton* ingParserButton;
 
 	//Function buttons
-	QGroupBox* functionsBox;
+	Q3GroupBox* functionsBox;
 	QToolButton* saveButton;
 	QToolButton* closeButton;
 	QToolButton* showButton;
@@ -143,7 +148,7 @@ private:
 	void saveRecipe( void );
 	void showCategories( void );
 	void showAuthors( void );
-	int ingItemIndex( QListView *listview, const QListViewItem *item ) const;
+	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
 	void addRating( const Rating &rating, RatingDisplayWidget *item );
 	QString statusMessage() const;
 	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
@@ -156,7 +161,7 @@ private slots:
 	void moveIngredientUp( void );
 	void moveIngredientDown( void );
 	void removeIngredient( void );
-	void syncListView( QListViewItem* it, const QString &new_text, int col );
+	void syncListView( Q3ListViewItem* it, const QString &new_text, int col );
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );
 	void enableChangedSignal( bool en = true );

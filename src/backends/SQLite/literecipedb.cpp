@@ -15,6 +15,8 @@
 #include "literecipedb.h"
 
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <QSqlQuery>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -41,7 +43,7 @@ LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString::nu
 	config->setGroup( "Server" );
 
 	if ( dbFile.isNull() )
-		dbFile = config->readEntry( "DBFile", locateLocal ( "appdata", DB_FILENAME ) );
+		dbFile = config->readEntry( "DBFile", KStandardDirs::locateLocal ( "appdata", DB_FILENAME ) );
 */
 }
 
@@ -56,7 +58,7 @@ int LiteRecipeDB::lastInsertID()
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
-	//kdDebug()<<"lastInsertID(): "<<lastID<<endl;
+	//kDebug()<<"lastInsertID(): "<<lastID<<endl;
 
 	return lastID;
 }
@@ -689,7 +691,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 	
 				// Decode the photo
 				uchar *photoArray = new uchar [ photoString.length() + 1 ];
-				memcpy( photoArray, photoString.latin1(), photoString.length() * sizeof( char ) );
+				memcpy( photoArray, photoString.toLatin1(), photoString.length() * sizeof( char ) );
 				sqlite_decode_binary( ( uchar* ) photoArray, ( uchar* ) photoArray );
 
 				photo.loadFromData( photoArray, photoString.length() );
@@ -699,7 +701,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 				QByteArray ba;
 				QBuffer buffer( ba );
-				buffer.open( IO_WriteOnly );
+				buffer.open( QIODevice::WriteOnly );
 				QImageIO iio( &buffer, "JPEG" );
 				iio.setImage( photo );
 				iio.write();
@@ -744,7 +746,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 87 ) {
@@ -807,7 +809,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database->commit() )
-			kdDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 93 ) {
@@ -916,11 +918,11 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	QString command;
 
 	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
-	kdDebug()<<"calling: "<<command<<endl;
+	kDebug()<<"calling: "<<command<<endl;
 	database->exec( command );
 
 	command = "SELECT * FROM "+table_name;
-	kdDebug()<<"calling: "<<command<<endl;
+	kDebug()<<"calling: "<<command<<endl;
 	QSqlQuery copyQuery = database->exec( command );
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
@@ -934,7 +936,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				dataList << "'"+escape(data)+"'";
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
-			kdDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command<<endl;
 			database->exec( command );
 
 			emit progress();
@@ -958,7 +960,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				dataList << "'"+escape(data)+"'";
 			}
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
-			kdDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command<<endl;
 			database->exec( command );
 
 			emit progress();
@@ -975,7 +977,7 @@ QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 	s_escaped = escape( QString::fromLatin1(s.utf8()) );
 
 	// Return encoded
-	return s_escaped.latin1(); // Note that the text has already been converted before escaping.
+	return s_escaped.toLatin1(); // Note that the text has already been converted before escaping.
 }
 
 /*
@@ -1021,9 +1023,9 @@ QString escape( const QString &s )
 	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 		// Escape using SQLite's function
 #if HAVE_SQLITE
-		char * escaped = sqlite_mprintf( "%q", s.latin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #elif HAVE_SQLITE3
-		char * escaped = sqlite3_mprintf( "%q", s.latin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite3_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #endif
 		s_escaped = escaped;
 #if HAVE_SQLITE

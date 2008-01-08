@@ -12,7 +12,7 @@
 
 #include <qapplication.h>
 
-#include <kprogress.h>
+#include <kprogressdialog.h>
 
 #include "recipedb.h"
 

@@ -11,11 +11,14 @@
 #include "rezkonvexporter.h"
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
+#include <kglobal.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/mixednumber.h"
@@ -132,7 +135,7 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 
 	QString title = recipe.title;
 	title.truncate( 60 );
-	content += QString("Titel: ").rightJustify( 13, ' ', true) + title + "\n";
+	content += QString("Titel: ").rightJustified( 13, ' ', true) + title + "\n";
 
 	int i = 0;
 	QStringList categories;
@@ -143,11 +146,11 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 			break; //maximum of 5 categories
 		categories << ( *cat_it ).name;
 	}
-	QString cat_str = QString("Kategorien: ").rightJustify( 13, ' ', true) + categories.join( ", " );
+	QString cat_str = QString("Kategorien: ").rightJustified( 13, ' ', true) + categories.join( ", " );
 	cat_str.truncate( 67 );
 	content += cat_str + "\n";
 
-	content += QString("Menge: ").rightJustify( 13, ' ', true) + recipe.yield.toString() + "\n";
+	content += QString("Menge: ").rightJustified( 13, ' ', true) + recipe.yield.toString() + "\n";
 }
 
 /* Ingredient lines:
@@ -164,8 +167,8 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		if ( ( *ing_it ).groupID == -1 ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0 );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				QValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );
@@ -189,8 +192,8 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0 );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				QValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );
@@ -214,7 +217,7 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 
 void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientData &ing, bool is_sub )
 {
-	KConfig * config = kapp->config();
+	KConfig * config = KGlobal::config();
 	config->setGroup( "Formatting" );
 	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
@@ -235,10 +238,10 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 
 			if (new_amount_str.length() > 7) { //still too long, use original formatting, but truncate it
 				amount_str = amount_str.left(7);
-				kdDebug()<<"Warning: Amount text too long, truncating"<<endl;
+				kDebug()<<"Warning: Amount text too long, truncating"<<endl;
 			}
 		}
-		content += amount_str.rightJustify( 7, ' ', true ) + " ";
+		content += amount_str.rightJustified( 7, ' ', true ) + " ";
 	}
 	else
 		content += QString().fill(' ',7+1);
@@ -253,13 +256,13 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 				unit += translate_units[i].german;
 			else
 				unit += translate_units[i].german_plural;
-			content += unit.leftJustify( 9 ) + " ";
+			content += unit.leftJustified( 9 ) + " ";
 			break;
 		}
 	}
 	if ( !found_translation ) {
-		kdDebug() << "Warning: unable to find German translation for: " << ing.units.name << endl;
-		kdDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
+		kDebug() << "Warning: unable to find German translation for: " << ing.units.name << endl;
+		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
 		content += QString().fill(' ',9+1);
 	}
 
@@ -313,7 +316,7 @@ QStringList RezkonvExporter::wrapText( const QString& str, int at ) const
 			line = line.replace( rxp, "" ); // remove last word
 		}
 		copy = copy.remove( 0, line.length() );
-		line = line.stripWhiteSpace();
+		line = line.trimmed();
 		line.prepend( " " );       // indent line by one char
 		ret << line; // output of current line
 	}

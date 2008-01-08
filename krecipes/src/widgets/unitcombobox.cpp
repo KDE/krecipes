@@ -10,7 +10,7 @@
 
 #include "unitcombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 #include <klocale.h>
 #include <kconfig.h>

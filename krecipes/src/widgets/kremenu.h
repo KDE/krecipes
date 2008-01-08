@@ -12,12 +12,20 @@
 #ifndef KREMENU_H
 #define KREMENU_H
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qevent.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qmap.h>
 #include <qpushbutton.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QChildEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
 
 #include "krecipesview.h" //for KrePanel enum
 
@@ -30,7 +38,7 @@
 class Menu;
 class KreMenu;
 class KreMenuButton;
-typedef QValueList <Menu>::Iterator MenuId;
+typedef Q3ValueList <Menu>::Iterator MenuId;
 
 
 class Menu
@@ -88,7 +96,7 @@ protected:
 
 private:
 	//Variables
-	QValueList <Menu> menus;
+	Q3ValueList <Menu> menus;
 	MenuId mainMenuId;
 	MenuId currentMenuId;
 	Menu *m_currentMenu;
@@ -122,7 +130,7 @@ public:
 	{
 		highlighted = active;
 	}
-	void setIconSet( const QIconSet &is );
+	void setIconSet( const QIcon &is );
 	MenuId menuId;
 	MenuId subMenuId;
 

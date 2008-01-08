@@ -10,13 +10,15 @@
 
 #include "createingredientweightdialog.h"
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qvbox.h>
+#include <q3whatsthis.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -31,13 +33,13 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 		: KDialogBase( parent, "createIngWeightDialog", true, QString::null,
 		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
-	QVBox *page = makeVBoxMainWidget();
+	KVBox *page = makeVBoxMainWidget();
 	
-	groupBox1 = new QGroupBox( page );
+	groupBox1 = new Q3GroupBox( page );
 	groupBox1->setColumnLayout(0, Qt::Vertical );
 	groupBox1->layout()->setSpacing( 6 );
 	groupBox1->layout()->setMargin( 11 );
-	groupBox1Layout = new QGridLayout( groupBox1->layout() );
+	groupBox1Layout = new Q3GridLayout( groupBox1->layout() );
 	groupBox1Layout->setAlignment( Qt::AlignTop );
 
 	weightEdit = new FractionInput( groupBox1 );

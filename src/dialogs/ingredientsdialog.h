@@ -14,9 +14,11 @@
 #define INGREDIENTSDIALOG_H
 
 #include <qpushbutton.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include "widgets/krelistview.h"
 #include "widgets/dblistviewbase.h"
@@ -39,7 +41,7 @@ private slots:
 
 private:
 	// Widgets
-	QGridLayout* layout;
+	Q3GridLayout* layout;
 	QPushButton* addIngredientButton;
 	QPushButton* removeIngredientButton;
 	KreListView* ingredientListView;

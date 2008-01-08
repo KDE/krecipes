@@ -12,13 +12,16 @@
 
 #include <qdir.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qfileinfo.h>
 #include <qpushbutton.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3VBoxLayout>
 
 #include <khtmlview.h>
 #include <kapplication.h>
@@ -30,28 +33,29 @@
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kconfig.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <ktoolbar.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <widgets/thumbbar.h>
+#include <kglobal.h>
 #include "setupdisplay.h"
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent, 0, true ), m_configEntry(configEntry)
 {
-	KIconLoader *il = KGlobal::iconLoader();
+	KIconLoader *il = KIconLoader::global();
 
-	QVBoxLayout * layout = new QVBoxLayout( this );
+	Q3VBoxLayout * layout = new Q3VBoxLayout( this );
 
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 
-	KStdAction::open( this, SLOT(loadFile()), actionCollection )->plug( toolbar );
-	KStdAction::save( this, SLOT( saveLayout() ), actionCollection ) ->plug( toolbar );
-	KStdAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) ->plug( toolbar );
-	KStdAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) ->plug( toolbar );
+	KStandardAction::open( this, SLOT(loadFile()), actionCollection )->plug( toolbar );
+	KStandardAction::save( this, SLOT( saveLayout() ), actionCollection ) ->plug( toolbar );
+	KStandardAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) ->plug( toolbar );
+	KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) ->plug( toolbar );
 
-	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ), "frame_edit" );
+	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ), "frame-edit" );
 	shown_items->setDelayed( false );
 	shown_items_popup = shown_items->popupMenu();
 	shown_items_popup->insertTitle( i18n( "Show Items" ) );
@@ -61,7 +65,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the left, and right-click any element to edit the look of that element.</i>"),this);
 	layout->addWidget( help );
 
-	QHBox *viewBox = new QHBox( this );
+	Q3HBox *viewBox = new Q3HBox( this );
 	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Vertical);
 	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
@@ -72,7 +76,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	m_htmlPart->view()->reparent(viewBox,QPoint());
 	layout->addWidget( viewBox );
 
-	QHBox *buttonsBox = new QHBox( this );
+	Q3HBox *buttonsBox = new Q3HBox( this );
 	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
 	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
 	layout->addWidget( buttonsBox );
@@ -94,7 +98,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	QString tmpl = config->readEntry( m_configEntry+"Template", locate( "appdata", "layouts/Default.xsl" ) );
 	if ( tmpl.isEmpty() || !QFile::exists( tmpl ) )
 		tmpl = locate( "appdata", "layouts/Default.xsl" );
-	kdDebug()<<"tmpl: "<<tmpl<<endl;
+	kDebug()<<"tmpl: "<<tmpl<<endl;
 	active_template = tmpl;
 	loadLayout( layoutFile );
 
@@ -108,7 +112,7 @@ void PageSetupDialog::accept()
 	if ( m_htmlPart->hasChanges() )
 		saveLayout();
 
-	KConfig * config = kapp->config();
+	KConfig * config = KGlobal::config();
 	config->setGroup( "Page Setup" );
 	config->writeEntry( m_configEntry+"Layout", active_filename );
 
@@ -149,16 +153,16 @@ void PageSetupDialog::initShownItems()
 
 	PropertiesMap properties = m_htmlPart->properties();
 	
-	QValueList<QString> nameList;
+	Q3ValueList<QString> nameList;
 	QMap<QString,KreDisplayItem*> nameMap;
 
 	for ( PropertiesMap::const_iterator it = properties.begin(); it != properties.end(); ++it ) {
 		nameList << it.key()->name;
 		nameMap.insert( it.key()->name, it.key() );
 	}
-	qHeapSort( nameList );
+	qSort( nameList );
 
-	for ( QValueList<QString>::const_iterator it = nameList.begin(); it != nameList.end(); ++it ) {
+	for ( Q3ValueList<QString>::const_iterator it = nameList.begin(); it != nameList.end(); ++it ) {
 		KreDisplayItem *item = nameMap[*it];
 		if ( properties[item] & SetupDisplay::Visibility ) {
 			int new_id = shown_items_popup->insertItem ( *it );
@@ -179,7 +183,7 @@ void PageSetupDialog::setItemShown( int id )
 
 void PageSetupDialog::loadFile()
 {
-	QString file = KFileDialog::getOpenFileName( locateLocal( "appdata", "layouts/" ), QString("*.klo *.xsl|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
+	QString file = KFileDialog::getOpenFileName( KStandardDirs::locateLocal( "appdata", "layouts/" ), QString("*.klo *.xsl|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
 
 	if ( file.endsWith(".klo") )
 		loadLayout( file );
@@ -264,7 +268,7 @@ void PageSetupDialog::saveAsLayout()
 QString PageSetupDialog::getIncludedLayoutDir() const
 {
 	QFileInfo file_info( locate( "appdata", "layouts/None.klo" ) );
-	return file_info.dirPath( true );
+	return file_info.absolutePath();
 }
 
 void PageSetupDialog::setActiveFile( const QString &filename )
@@ -284,7 +288,7 @@ bool PageSetupDialog::haveWritePerm( const QString &filename )
 	}
 	else //check that we can write to the directory since the file doesn't exist
 	{
-		QFileInfo dir_info( info.dirPath( true ) );
+		QFileInfo dir_info( info.absolutePath() );
 		return dir_info.isWritable();
 	}
 }

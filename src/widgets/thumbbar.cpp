@@ -1,3 +1,7 @@
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3Frame>
+#include <QMouseEvent>
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
@@ -38,15 +42,15 @@ extern "C"
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qpainter.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qpoint.h>
 #include <qdatetime.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qfileinfo.h>
 
 // KDE includes.
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -88,7 +92,7 @@ public:
 
     ThumbBarToolTip          *tip;
     
-    QDict<ThumbBarItem>       itemDict;
+    Q3Dict<ThumbBarItem>       itemDict;
 };
 
 class ThumbBarItemPriv
@@ -118,7 +122,7 @@ public:
 };
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
-            : QScrollView(parent)
+            : Q3ScrollView(parent)
 {
     d = new ThumbBarViewPriv;
     d->margin      = 5;
@@ -133,17 +137,17 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(true);
-    setFrameStyle(QFrame::NoFrame);
+    setFrameStyle(Q3Frame::NoFrame);
     
     if (d->orientation == Vertical)
     {
-       setHScrollBarMode(QScrollView::AlwaysOff);
+       setHScrollBarMode(Q3ScrollView::AlwaysOff);
        setFixedWidth(d->tileSize + 2*d->margin
                      + verticalScrollBar()->sizeHint().width());
     }
     else
     {
-       setVScrollBarMode(QScrollView::AlwaysOff);
+       setVScrollBarMode(Q3ScrollView::AlwaysOff);
        setFixedHeight(d->tileSize + 2*d->margin
                       + horizontalScrollBar()->sizeHint().height());
     }
@@ -260,7 +264,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
         // We want the complete thumb visible and the next one.
         // find the middle of the image and give a margin of 1,5 image
         // When changed, watch regression for bug 104031
-        if (d->orientation == Vertical)
+        if (d->orientation == Qt::Vertical)
             ensureVisible(0, (int)(item->d->pos+d->margin+d->tileSize*.5),
                           0, (int)(d->tileSize*1.5+3*d->margin));
         else
@@ -545,7 +549,7 @@ ThumbBarItem::ThumbBarItem(ThumbBarView* view, const QString& url)
 	QFileInfo fi(url);
 
 	d->pixmap = new QPixmap();
-	d->pixmap->load(fi.dirPath(true)+"/"+fi.baseName()+".png","PNG");
+	d->pixmap->load(fi.absolutePath()+"/"+fi.baseName()+".png","PNG");
 	repaint();
 }
 
@@ -631,7 +635,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
     tipText += item->url() + cellEnd;
 
     tipText += cellBeg + i18n("Type:") + cellMid;
-    tipText += KMimeType::findByURL(item->url())->comment() + cellEnd;
+    tipText += KMimeType::findByUrl(item->url())->comment() + cellEnd;
 
     KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, item->url());
 

@@ -13,9 +13,9 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <ktar.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <qfile.h>
 #include <qstringlist.h>

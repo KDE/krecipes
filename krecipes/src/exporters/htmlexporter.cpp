@@ -14,11 +14,14 @@
 
 #include "htmlexporter.h"
 
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qstylesheet.h> //for QStyleSheet::escape() to escape for HTML
+#include <q3stylesheet.h> //for QStyleSheet::escape() to escape for HTML
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QPixmap>
 #include <dom/dom_element.h>
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -29,7 +32,7 @@
 #include <kglobal.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kiconloader.h>
@@ -124,7 +127,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi(fileName());
-	dir.mkdir( fi.dirPath(true) + "/" + fi.baseName() + "_photos" );
+	dir.mkdir( fi.absolutePath() + "/" + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
 
@@ -185,7 +188,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
-	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
+	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
@@ -199,7 +202,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	content = content.replace("**TITLE**",recipe.title);
 
 	//=======================INSTRUCTIONS======================//
-	QString instr_html = QStyleSheet::escape( recipe.instructions );
+	QString instr_html = Q3StyleSheet::escape( recipe.instructions );
 	instr_html.replace( "\n", "<br />" );
 	if (!instr_html.isEmpty()) {
 		instr_html.prepend("<h1 class=\"instructions-header\">"+i18n("Instructions")+"</h1>");
@@ -225,7 +228,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
-	image_url = KURL::encode_string( image_url );
+	image_url = KUrl::encode_string( image_url );
 	content = content.replace( "**PHOTO**", image_url );
 
 	//=======================AUTHORS======================//
@@ -235,7 +238,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it ) {
 		if ( counter )
 			authors_html += ", ";
-		authors_html += QStyleSheet::escape( ( *author_it ).name );
+		authors_html += Q3StyleSheet::escape( ( *author_it ).name );
 		counter++;
 	}
 	if ( !authors_html.isEmpty() )
@@ -249,7 +252,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it ) {
 		if ( counter )
 			categories_html += ", ";
-		categories_html += QStyleSheet::escape( ( *cat_it ).name );
+		categories_html += Q3StyleSheet::escape( ( *cat_it ).name );
 		counter++;
 	}
 	if ( !categories_html.isEmpty() )
@@ -309,17 +312,17 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 			QString tmp_format;
 			tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
-			tmp_format += "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+" </span>";
-			tmp_format += "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *ing_it ).name )+"</span>";
+			tmp_format += "<span class=\"ingredient-unit\">"+Q3StyleSheet::escape(unit)+" </span>";
+			tmp_format += "<span class=\"ingredient-name\">"+Q3StyleSheet::escape( ( *ing_it ).name )+"</span>";
 			tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *ing_it ).prepMethodList.count() == 0 ) ?
-			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>";
+			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Q3StyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>";
 
 			if ( (*ing_it).substitutes.count() > 0 )
 				tmp_format += ", "+i18n("OR");
 
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 
-			for ( QValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
 				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
 	
 				if ( (*ing_it).amount_offset > 0 )
@@ -331,10 +334,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 				QString tmp_format;
 				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
-				tmp_format += "<span class=\"ingredient-unit\">"+QStyleSheet::escape(unit)+" </span>";
-				tmp_format += "<span class=\"ingredient-name\">"+QStyleSheet::escape( ( *sub_it ).name )+"</span>";
+				tmp_format += "<span class=\"ingredient-unit\">"+Q3StyleSheet::escape(unit)+" </span>";
+				tmp_format += "<span class=\"ingredient-name\">"+Q3StyleSheet::escape( ( *sub_it ).name )+"</span>";
 				tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *sub_it ).prepMethodList.count() == 0 ) ?
-														QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + QStyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ))+"</span>";
+														QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Q3StyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ))+"</span>";
 
 				++sub_it;
 				if ( sub_it != (*ing_it).substitutes.end() )
@@ -386,9 +389,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			amount_str = "0";
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
-		                   .arg( QStyleSheet::escape( (*prop_it).name ) )
+		                   .arg( Q3StyleSheet::escape( (*prop_it).name ) )
 		                   .arg( amount_str )
-		                   .arg( QStyleSheet::escape( (*prop_it).units ) );
+		                   .arg( Q3StyleSheet::escape( (*prop_it).units ) );
 
 		++count;
 	}
@@ -417,11 +420,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ratings_html += "<table>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+KURL::encode_string( image_url )+"\" /></td></tr>";
-			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+KUrl::encode_string( image_url )+"\" /></td></tr>";
+			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
-				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
-				kdDebug() << "saving: " << fi.dirPath(true) + "/" + image_url << endl;
+				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
+				kDebug() << "saving: " << fi.absolutePath() + "/" + image_url << endl;
 			}
 
 			rating_total++;
@@ -440,10 +443,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		double average = int(2*rating_sum/rating_total)/2;
 		overall_html += QString("<b>%1:</b>").arg(i18n("Overall Rating"));
 		QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-		overall_html +=  "<img src=\""+KURL::encode_string( image_url )+"\" />";
-		if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+		overall_html +=  "<img src=\""+KUrl::encode_string( image_url )+"\" />";
+		if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 			QPixmap starPixmap = Rating::starsPixmap(average,true);
-			starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+			starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
 		}
 	}
 	content = content.replace( "**OVERALL_RATING**", overall_html );
@@ -451,12 +454,12 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 void HTMLExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 {
-	QValueList<int> id;
+	Q3ValueList<int> id;
 	id << recipe_id;
 	removeHTMLFiles( filename, id );
 }
 
-void HTMLExporter::removeHTMLFiles( const QString &filename, const QValueList<int> &recipe_ids )
+void HTMLExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids )
 {
 	//remove HTML file
 	QFile old_file( filename + ".html" );
@@ -464,7 +467,7 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QValueList<in
 		old_file.remove();
 
 	//remove photos
-	for ( QValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
+	for ( Q3ValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
 		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it 

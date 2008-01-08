@@ -55,7 +55,7 @@ private:
 	ConversionTable *table;
 };
 
-ConversionTable::ConversionTable( QWidget* parent, int maxrows, int maxcols ) : QTable( maxrows, maxcols, parent, "table" )
+ConversionTable::ConversionTable( QWidget* parent, int maxrows, int maxcols ) : Q3Table( maxrows, maxcols, parent, "table" )
 {
 	editBoxValue = -1;
 	items.setAutoDelete( true );
@@ -70,10 +70,10 @@ ConversionTable::~ConversionTable()
 void ConversionTable::unitRemoved( int id )
 {
 	int index = *unitIDs.find( id );
-	kdDebug() << "index:" << index << endl;
+	kDebug() << "index:" << index << endl;
 	removeRow( index );
 	removeColumn( index );
-	kdDebug() << "done" << endl;
+	kDebug() << "done" << endl;
 }
 
 void ConversionTable::unitCreated( const Unit &unit )
@@ -85,12 +85,12 @@ void ConversionTable::unitCreated( const Unit &unit )
 	verticalHeader() ->setLabel( numCols() - 1, unit.name );
 }
 
-QTableItem* ConversionTable::item( int r, int c ) const
+Q3TableItem* ConversionTable::item( int r, int c ) const
 {
 	return items.find( indexOf( r, c ) );
 }
 
-void ConversionTable::setItem( int r, int c, QTableItem *i )
+void ConversionTable::setItem( int r, int c, Q3TableItem *i )
 {
 	items.replace( indexOf( r, c ), i );
 	i->setRow( r ); // Otherwise the item
@@ -103,7 +103,7 @@ void ConversionTable::clearCell( int r, int c )
 	items.remove( indexOf( r, c ) );
 }
 
-void ConversionTable::takeItem( QTableItem *item )
+void ConversionTable::takeItem( Q3TableItem *item )
 {
 	items.setAutoDelete( false );
 	items.remove( indexOf( item->row(), item->col() ) );
@@ -128,7 +128,7 @@ void ConversionTable::clearCellWidget( int r, int c )
 }
 
 
-ConversionTableItem::ConversionTableItem( QTable *t, EditType et ) : QTableItem( t, et, QString::null )
+ConversionTableItem::ConversionTableItem( Q3Table *t, EditType et ) : Q3TableItem( t, et, QString::null )
 {
 	// we do not want this item to be replaced
 	setReplaceable( false );
@@ -142,7 +142,7 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 
 	if ( row() == col() )
 		g.setColor( QColorGroup::Base, gray );
-	QTableItem::paint( p, g, cr, selected );
+	Q3TableItem::paint( p, g, cr, selected );
 }
 
 QWidget* ConversionTableItem::createEditor() const
@@ -172,12 +172,12 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 		}
 	}
 	else
-		QTableItem::setContentFromEditor( w );
+		Q3TableItem::setContentFromEditor( w );
 }
 
 void ConversionTableItem::setText( const QString &s )
 {
-	QTableItem::setText( s );
+	Q3TableItem::setText( s );
 }
 QString ConversionTable::text( int r, int c ) const			 // without this function, the usual (text(r,c)) won't work
 {
@@ -199,7 +199,7 @@ void ConversionTable::initTable()
 void ConversionTable::createNewItem( int r, int c, double amount )
 {
 
-	ConversionTableItem * ci = new ConversionTableItem( this, QTableItem::WhenCurrent );
+	ConversionTableItem * ci = new ConversionTableItem( this, Q3TableItem::WhenCurrent );
 	ci->setText( beautify( KGlobal::locale() ->formatNumber( amount, 5 ) ) );
 	setItem( r, c, ci );
 	// connect signal (forward) to know when it's actually changed
@@ -235,7 +235,7 @@ QWidget * ConversionTable::beginEdit ( int row, int col, bool replace )
 	}
 
 	// Then call normal beginEdit
-	return QTable::beginEdit( row, col, replace );
+	return Q3Table::beginEdit( row, col, replace );
 }
 
 void ConversionTableItem::setTextAndSave( const QString &s )
@@ -247,7 +247,7 @@ void ConversionTableItem::setTextAndSave( const QString &s )
 
 void ConversionTable::repaintCell( int r, int c )
 {
-	QTable::updateCell( r, c );
+	Q3Table::updateCell( r, c );
 }
 
 void ConversionTable::resize( int r, int c )
@@ -272,16 +272,16 @@ void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 	//if ( swapHeader )
 	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, FALSE );
 
-	QPtrVector<QTableItem> tmpContents;
+	Q3PtrVector<Q3TableItem> tmpContents;
 	tmpContents.resize( numCols() );
-	QPtrVector<QWidget> tmpWidgets;
+	Q3PtrVector<QWidget> tmpWidgets;
 	tmpWidgets.resize( numCols() );
 	int i;
 
 	items.setAutoDelete( FALSE );
 	widgets.setAutoDelete( FALSE );
 	for ( i = 0; i < numCols(); ++i ) {
-		QTableItem *i1, *i2;
+		Q3TableItem *i1, *i2;
 		i1 = item( row1, i );
 		i2 = item( row2, i );
 		if ( i1 || i2 ) {
@@ -329,16 +329,16 @@ void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 	//if ( swapHeader )
 	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, FALSE );
 
-	QPtrVector<QTableItem> tmpContents;
+	Q3PtrVector<Q3TableItem> tmpContents;
 	tmpContents.resize( numRows() );
-	QPtrVector<QWidget> tmpWidgets;
+	Q3PtrVector<QWidget> tmpWidgets;
 	tmpWidgets.resize( numRows() );
 	int i;
 
 	items.setAutoDelete( FALSE );
 	widgets.setAutoDelete( FALSE );
 	for ( i = 0; i < numRows(); ++i ) {
-		QTableItem *i1, *i2;
+		Q3TableItem *i1, *i2;
 		i1 = item( i, col1 );
 		i2 = item( i, col2 );
 		if ( i1 || i2 ) {
@@ -385,11 +385,11 @@ void ConversionTable::swapCells( int row1, int col1, int row2, int col2 )
 {
 	items.setAutoDelete( FALSE );
 	widgets.setAutoDelete( FALSE );
-	QTableItem *i1, *i2;
+	Q3TableItem *i1, *i2;
 	i1 = item( row1, col1 );
 	i2 = item( row2, col2 );
 	if ( i1 || i2 ) {
-		QTableItem * tmp = i1;
+		Q3TableItem * tmp = i1;
 		items.remove( indexOf( row1, col1 ) );
 		items.insert( indexOf( row1, col1 ), i2 );
 		items.remove( indexOf( row2, col2 ) );

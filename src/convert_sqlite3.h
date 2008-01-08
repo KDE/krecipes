@@ -13,7 +13,7 @@
 
 #include <qobject.h>
 
-class KProcIO;
+class K3ProcIO;
 
 class ConvertSQLite3 : public QObject
 {
@@ -24,7 +24,7 @@ public:
 	~ConvertSQLite3();
 
 public slots:
-	void processOutput( KProcIO* p );
+	void processOutput( K3ProcIO* p );
 
 private:
 	bool copyFile( const QString &oldFilePath, const QString &newFilePath );

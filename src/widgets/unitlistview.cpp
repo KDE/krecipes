@@ -15,14 +15,16 @@
 #include "unitlistview.h"
 
 #include <qcombobox.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 
 #include "backends/recipedb.h"
@@ -30,10 +32,10 @@
 #include "dialogs/dependanciesdialog.h"
 #include "datablocks/unit.h"
 
-class UnitListViewItem : public QListViewItem
+class UnitListViewItem : public Q3ListViewItem
 {
 public:
-	UnitListViewItem( QListView* qlv, const Unit &u ) : QListViewItem( qlv ), m_unit(u)
+	UnitListViewItem( Q3ListView* qlv, const Unit &u ) : Q3ListViewItem( qlv ), m_unit(u)
 	{
 		updateType(m_unit.type);
 	}
@@ -83,7 +85,7 @@ private:
 UnitListView::UnitListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent,db,db->unitCount() )
 {
 	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( QListView::Reject );
+	setDefaultRenameAction( Q3ListView::Reject );
 }
 
 void UnitListView::init()
@@ -131,13 +133,13 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		setRenameable( 3, true );
 		setRenameable( 4, true );
 
-		KIconLoader *il = KGlobal::iconLoader();
+		KIconLoader *il = KIconLoader::global();
 
-		kpop = new KPopupMenu( this );
-		kpop->insertItem( il->loadIcon( "filenew", KIcon::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
-		kpop->insertItem( il->loadIcon( "editdelete", KIcon::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop = new KMenu( this );
+		kpop->insertItem( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), CTRL + Key_C );
+		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Key_Delete );
-		kpop->insertItem( il->loadIcon( "edit", KIcon::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
+		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), CTRL + Key_R );
 		kpop->polish();
 
 		typeComboBox = new QComboBox( false, viewport() );
@@ -150,13 +152,13 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		connect( typeComboBox, SIGNAL( activated(int) ), SLOT( updateType(int) ) );
 		connect( this, SIGNAL( selectionChanged() ), SLOT( hideTypeCombo() ) );
 
-		connect( this, SIGNAL( contextMenu( KListView *, QListViewItem *, const QPoint & ) ), SLOT( showPopup( KListView *, QListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), this, SLOT( modUnit( QListViewItem*, const QPoint &, int ) ) );
-		connect( this, SIGNAL( itemRenamed( QListViewItem*, const QString &, int ) ), this, SLOT( saveUnit( QListViewItem*, const QString &, int ) ) );
+		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
+		connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), this, SLOT( modUnit( Q3ListViewItem*, const QPoint &, int ) ) );
+		connect( this, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), this, SLOT( saveUnit( Q3ListViewItem*, const QString &, int ) ) );
 	}
 }
 
-void StdUnitListView::insertTypeComboBox( QListViewItem* it )
+void StdUnitListView::insertTypeComboBox( Q3ListViewItem* it )
 {
 	QRect r;
 
@@ -187,7 +189,7 @@ void StdUnitListView::hideTypeCombo()
 	typeComboBox->hide();
 }
 
-void StdUnitListView::showPopup( KListView * /*l*/, QListViewItem *i, const QPoint &p )
+void StdUnitListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
 {
 	if ( i )
 		kpop->exec( p );
@@ -222,7 +224,7 @@ void StdUnitListView::remove()
 		ElementList recipeDependancies, propertyDependancies, weightDependancies;
 		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies, &weightDependancies );
 
-		QValueList<ListInfo> lists;
+		Q3ValueList<ListInfo> lists;
 		if ( !recipeDependancies.isEmpty() ) {
 			ListInfo info;
 			info.list = recipeDependancies;
@@ -256,7 +258,7 @@ void StdUnitListView::remove()
 
 void StdUnitListView::rename()
 {
-	QListViewItem * item = currentItem();
+	Q3ListViewItem * item = currentItem();
 
 	if ( item ) {
 		CreateUnitDialog unitDialog( this, item->text(0), item->text(2), item->text(1), item->text(3), false );
@@ -286,13 +288,13 @@ void StdUnitListView::rename()
 				unit_item = (UnitListViewItem*) findItem( QString::number(unit.id), 5 );
 			}
 
-			if ( !newUnit.name_abbrev.stripWhiteSpace().isEmpty() && newUnit.name_abbrev != origUnit.name_abbrev ) {
+			if ( !newUnit.name_abbrev.trimmed().isEmpty() && newUnit.name_abbrev != origUnit.name_abbrev ) {
 				unit.name_abbrev = newUnit.name_abbrev;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.name_abbrev, 1 );
 				unit_item = (UnitListViewItem*) findItem( QString::number(unit.id), 5 );
 			}
-			if ( !newUnit.plural_abbrev.stripWhiteSpace().isEmpty() && newUnit.plural_abbrev != origUnit.plural_abbrev ) {
+			if ( !newUnit.plural_abbrev.trimmed().isEmpty() && newUnit.plural_abbrev != origUnit.plural_abbrev ) {
 				unit.plural_abbrev = newUnit.plural_abbrev;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.plural_abbrev, 3 );
@@ -308,11 +310,11 @@ void StdUnitListView::createUnit( const Unit &unit )
 
 void StdUnitListView::removeUnit( int id )
 {
-	QListViewItem * item = findItem( QString::number( id ), 5 );
+	Q3ListViewItem * item = findItem( QString::number( id ), 5 );
 	removeElement(item);
 }
 
-void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )
+void StdUnitListView::modUnit( Q3ListViewItem* i, const QPoint & /*p*/, int c )
 {
 	if ( i ) {
 		if ( c != 4 )
@@ -323,7 +325,7 @@ void StdUnitListView::modUnit( QListViewItem* i, const QPoint & /*p*/, int c )
 	}
 }
 
-void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
+void StdUnitListView::saveUnit( Q3ListViewItem* i, const QString &text, int c )
 {
 	//skip abbreviations
 	if ( c == 0 || c == 2 ) {
@@ -337,7 +339,7 @@ void StdUnitListView::saveUnit( QListViewItem* i, const QString &text, int c )
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)i;
 	int unit_id = unit_it->unit().id;
-	if ( existing_id != -1 && existing_id != unit_id && !text.stripWhiteSpace().isEmpty() ) { //unit already exists with this label... merge the two
+	if ( existing_id != -1 && existing_id != unit_id && !text.trimmed().isEmpty() ) { //unit already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( this, i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
 		case KMessageBox::Continue: {
 				database->modUnit( unit_it->unit() );
@@ -360,7 +362,7 @@ bool StdUnitListView::checkBounds( const Unit &unit )
 		KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
 		return false;
 	}
-	else if ( unit.name.stripWhiteSpace().isEmpty() || unit.plural.stripWhiteSpace().isEmpty() )
+	else if ( unit.name.trimmed().isEmpty() || unit.plural.trimmed().isEmpty() )
 		return false;
 
 	return true;

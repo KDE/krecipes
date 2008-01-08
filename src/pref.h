@@ -18,6 +18,8 @@
 #include <kdialogbase.h>
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 class ServerPrefs;
 class NumbersPrefs;
@@ -26,13 +28,13 @@ class PerformancePrefs;
 
 class KIntNumInput;
 class KLineEdit;
-class KURLRequester;
+class KUrlRequester;
 class KComboBox;
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QCheckBox;
 class QRadioButton;
-class QVBoxLayout;
+class Q3VBoxLayout;
 class QComboBox;
 
 class KrecipesPreferences : public KDialogBase
@@ -65,8 +67,8 @@ public:
 	void saveOptions( void );
 private:
 	// Internal Widgets
-	KURLRequester *dumpPathRequester;
-	KURLRequester *mysqlPathRequester;
+	KUrlRequester *dumpPathRequester;
+	KUrlRequester *mysqlPathRequester;
 
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
@@ -83,8 +85,8 @@ public:
 	void saveOptions( void );
 private:
 	// Internal Widgets
-	KURLRequester *dumpPathRequester;
-	KURLRequester *psqlPathRequester;
+	KUrlRequester *dumpPathRequester;
+	KUrlRequester *psqlPathRequester;
 
 	KLineEdit *serverEdit;
 	KLineEdit *usernameEdit;
@@ -104,8 +106,8 @@ public:
 
 private:
 	// Internal Widgets
-	KURLRequester *dumpPathRequester;
-	KURLRequester *fileRequester;
+	KUrlRequester *dumpPathRequester;
+	KUrlRequester *fileRequester;
 };
 
 
@@ -132,12 +134,12 @@ public:
 	void saveOptions();
 
 protected:
-	QButtonGroup* numberButtonGroup;
+	Q3ButtonGroup* numberButtonGroup;
 	QRadioButton* fractionRadioButton;
 	QRadioButton* decimalRadioButton;
 
-	QVBoxLayout* Form1Layout;
-	QVBoxLayout* numberButtonGroupLayout;
+	Q3VBoxLayout* Form1Layout;
+	Q3VBoxLayout* numberButtonGroupLayout;
 
 	QCheckBox *abbrevButton;
 
@@ -156,7 +158,7 @@ public:
 	void saveOptions();
 
 protected:
-	QVBoxLayout* Form1Layout;
+	Q3VBoxLayout* Form1Layout;
 	QCheckBox* overwriteCheckbox;
 	QCheckBox* directImportCheckbox;
 
@@ -174,7 +176,7 @@ public:
 	void saveOptions();
 
 protected:
-	QVBoxLayout* Form1Layout;
+	Q3VBoxLayout* Form1Layout;
 	QCheckBox* searchAsYouTypeBox;
 	KIntNumInput* catLimitInput;
 	KIntNumInput* limitInput;

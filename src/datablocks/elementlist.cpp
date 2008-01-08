@@ -9,8 +9,10 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "datablocks/elementlist.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
-ElementList::ElementList() : QValueList <Element>()
+ElementList::ElementList() : Q3ValueList <Element>()
 {}
 
 ElementList::~ElementList()
@@ -95,7 +97,7 @@ ElementList ElementList::split( const QString &sep, const QString &str )
 	QStringList::const_iterator it;
 
 	for ( it = list.begin(); it != it_end; ++it ) {
-		ret.append( Element((*it).stripWhiteSpace()) );
+		ret.append( Element((*it).trimmed()) );
 	}
 
 	return ret;

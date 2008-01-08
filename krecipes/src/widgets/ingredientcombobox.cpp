@@ -10,7 +10,7 @@
 
 #include "ingredientcombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qtimer.h>
 
 #include <kdebug.h>
@@ -116,7 +116,7 @@ int IngredientComboBox::id( const QString &ing )
 		if ( ing == text( i ) )
 			return id(i);
 	}
-	kdDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
+	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
 	return -1;
 }
 

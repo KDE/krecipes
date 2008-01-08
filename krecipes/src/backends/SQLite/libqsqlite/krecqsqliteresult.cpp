@@ -19,6 +19,8 @@
 ***************************************************************************/
 
 #include "krecqsqliteresult.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 QSQLiteResultRow::QSQLiteResultRow( const TableString& string, const TableInt& Int )
 		: m_string( string ), m_int( Int )
@@ -49,7 +51,7 @@ QSQLiteResultRow::TableInt QSQLiteResultRow::tableInt() const
 	return m_int;
 }
 
-QCString QSQLiteResultRow::data( const QString& columnName, bool *ok )
+Q3CString QSQLiteResultRow::data( const QString& columnName, bool *ok )
 {
 	TableString::Iterator it = m_string.find( columnName );
 
@@ -62,12 +64,12 @@ QCString QSQLiteResultRow::data( const QString& columnName, bool *ok )
 	else {
 		if ( ok )
 			* ok = false;
-		return QCString(0);
+		return Q3CString(0);
 	}
 
 }
 
-QCString QSQLiteResultRow::data( int column, bool *ok )
+Q3CString QSQLiteResultRow::data( int column, bool *ok )
 {
 	TableInt::Iterator it = m_int.find( column );
 
@@ -80,7 +82,7 @@ QCString QSQLiteResultRow::data( int column, bool *ok )
 	else {
 		if ( ok )
 			* ok = false;
-		return QCString(0);
+		return Q3CString(0);
 	}
 }
 

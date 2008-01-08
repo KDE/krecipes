@@ -12,18 +12,24 @@
 #define EDITPROPERTIESDIALOG_H
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3ValueList>
 #include <kdialogbase.h>
 
 #include "datablocks/unit.h"
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
 class QLabel;
 class QLineEdit;
-class KListView;
-class QListViewItem;
+class K3ListView;
+class Q3ListViewItem;
 class QPushButton;
 
 class RecipeDB;
@@ -52,19 +58,19 @@ public:
 	QLabel* propertyLabel;
 	QPushButton* propertyAddButton;
 	QPushButton* propertyRemoveButton;
-	KListView* propertyListView;
+	K3ListView* propertyListView;
 	QLabel* weightLabel;
 	QPushButton* weightAddButton;
 	QPushButton* weightRemoveButton;
-	KListView* weightListView;
+	K3ListView* weightListView;
 
 protected:
-	QVBoxLayout* EditPropertiesDialogLayout;
-	QHBoxLayout* layout9;
-	QVBoxLayout* layout8;
-	QVBoxLayout* layout7;
-	QHBoxLayout* layout3;
-	QHBoxLayout* layout3_2;
+	Q3VBoxLayout* EditPropertiesDialogLayout;
+	Q3HBoxLayout* layout9;
+	Q3VBoxLayout* layout8;
+	Q3VBoxLayout* layout7;
+	Q3HBoxLayout* layout3;
+	Q3HBoxLayout* layout3_2;
 
 protected slots:
 	virtual void languageChange();
@@ -75,22 +81,22 @@ private slots:
 	void updateLists( void );
 	void addPropertyToIngredient( void );
 	void removePropertyFromIngredient( void );
-	void insertPropertyEditBox( QListViewItem* it );
+	void insertPropertyEditBox( Q3ListViewItem* it );
 	void setPropertyAmount( double amount );
 	void loadUSDAData( void );
-	void itemRenamed( QListViewItem*, const QPoint &, int col );
+	void itemRenamed( Q3ListViewItem*, const QPoint &, int col );
 	void loadDataFromFile();
 
 private:
 	void reloadPropertyList( void );
 	void reloadWeightList( void );
-	int findPropertyNo( QListViewItem *it );
+	int findPropertyNo( Q3ListViewItem *it );
 
 	KDoubleNumInput* inputBox;
 
 	ElementList *perUnitListBack;
 	RecipeDB *db;
-	QValueList<QStringList> loaded_data;
+	Q3ValueList<QStringList> loaded_data;
 
 	int ingredientID;
 	QString ingredientName;

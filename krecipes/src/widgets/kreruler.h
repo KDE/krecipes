@@ -25,8 +25,12 @@
 #ifndef KRERULER_H
 #define KRERULER_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 #include <kdemacros.h>
 
@@ -88,7 +92,7 @@ struct KoTabulator {
     }
 };
 
-typedef QValueList<KoTabulator> KoTabulatorList;
+typedef Q3ValueList<KoTabulator> KoTabulatorList;
 
 class KoRulerPrivate;
 
@@ -102,7 +106,7 @@ class KoRulerPrivate;
  * It also offers a popupmenu upon right-clicking, for changing the unit,
  * the page layout, or removing a tab.
  */
-class KoRuler : public QFrame
+class KoRuler : public Q3Frame
 {
     Q_OBJECT
     friend class KoRulerPrivate; // for the Action enum
@@ -116,7 +120,7 @@ public:
      * Create a ruler
      * TODO document params
      */
-    KoRuler( QWidget *_parent,  QWidget *_canvas, Orientation _orientation,
+    KoRuler( QWidget *_parent,  QWidget *_canvas, Qt::Orientation _orientation,
              const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit );
     ~KoRuler();
 

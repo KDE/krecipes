@@ -11,9 +11,11 @@
 
 #include "recipelistview.h"
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qdatastream.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -21,23 +23,23 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 
 #include "backends/recipedb.h"
 
-class UncategorizedItem : public QListViewItem
+class UncategorizedItem : public Q3ListViewItem
 {
 public:
-	UncategorizedItem( QListView *lv ) : QListViewItem( lv, i18n("Uncategorized") ){}
+	UncategorizedItem( Q3ListView *lv ) : Q3ListViewItem( lv, i18n("Uncategorized") ){}
 	int rtti() const { return 1006; }
 };
 
 RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource, const char *name )
-		: QStoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
+		: Q3StoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
 {
 	if ( recipeItem ) {
 		QByteArray data;
-		QDataStream out( data, IO_WriteOnly );
+		QDataStream out( data, QIODevice::WriteOnly );
 		out << recipeItem->recipeID();
 		out << recipeItem->title();
 		setEncodedData( data );
@@ -60,7 +62,7 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 
 	QString title;
 	int recipeID;
-	QDataStream in( data, IO_ReadOnly );
+	QDataStream in( data, QIODevice::ReadOnly );
 	in >> recipeID;
 	in >> title;
 
@@ -78,7 +80,7 @@ public:
 
 	void maybeTip( const QPoint &point )
 	{
-		QListViewItem *item = m_view->itemAt( point );
+		Q3ListViewItem *item = m_view->itemAt( point );
 		if ( item ) {
 			QString text = m_view->tooltip(item,0);
 			if ( !text.isEmpty() )
@@ -102,10 +104,10 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
 	curr_limit = config->readNumEntry("CategoryLimit",-1);
 
-	KIconLoader *il = KGlobal::iconLoader();
-	setPixmap( il->loadIcon( "categories", KIcon::NoGroup, 16 ) );
+	KIconLoader *il = KIconLoader::global();
+	setPixmap( il->loadIcon( "categories", KIconLoader::NoGroup, 16 ) );
 
-	setSelectionMode( QListView::Extended );
+	setSelectionMode( Q3ListView::Extended );
 
 	(void)new RecipeListToolTip(this);
 }
@@ -120,7 +122,7 @@ void RecipeListView::init()
 	StdCategoryListView::init();
 }
 
-QDragObject *RecipeListView::dragObject()
+Q3DragObject *RecipeListView::dragObject()
 {
 	RecipeListItem * item = dynamic_cast<RecipeListItem*>( currentItem() );
 	if ( item != 0 ) {
@@ -138,7 +140,7 @@ bool RecipeListView::acceptDrag( QDropEvent *event ) const
 	return RecipeItemDrag::canDecode( event );
 }
 
-QString RecipeListView::tooltip(QListViewItem *item, int /*column*/) const
+QString RecipeListView::tooltip(Q3ListViewItem *item, int /*column*/) const
 {
 	if ( item->rtti() == RECIPELISTITEM_RTTI ) {
 		RecipeListItem *recipe_it = (RecipeListItem*)item;
@@ -200,7 +202,7 @@ void RecipeListView::load(int limit, int offset)
 	}
 }
 
-void RecipeListView::populate( QListViewItem *item )
+void RecipeListView::populate( Q3ListViewItem *item )
 {
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( !cat_item || cat_item->isPopulated() ) return;
@@ -231,7 +233,7 @@ void RecipeListView::populate( QListViewItem *item )
 	}
 }
 
-void RecipeListView::populateAll( QListViewItem *parent )
+void RecipeListView::populateAll( Q3ListViewItem *parent )
 {
 	bool first = false;
 	if ( !parent ) {
@@ -250,7 +252,7 @@ void RecipeListView::populateAll( QListViewItem *parent )
 		parent = parent->firstChild();
 	}
 
-	for ( QListViewItem *item = parent; item; item = item->nextSibling() ) {
+	for ( Q3ListViewItem *item = parent; item; item = item->nextSibling() ) {
 		if ( m_progress_dlg && m_progress_dlg->wasCancelled() )
 			break;
 
@@ -295,7 +297,7 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 		for ( ElementList::const_iterator cat_it = categories.begin(); cat_it != categories.end(); ++cat_it ) {
 			int cur_cat_id = ( *cat_it ).id;
 
-			QListViewItemIterator iterator( this );
+			Q3ListViewItemIterator iterator( this );
 			while ( iterator.current() ) {
 				if ( iterator.current() ->rtti() == 1001 ) {
 					CategoryListItem * cat_item = ( CategoryListItem* ) iterator.current();
@@ -309,7 +311,7 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 	}
 }
 
-void RecipeListView::createElement( QListViewItem *item )
+void RecipeListView::createElement( Q3ListViewItem *item )
 {
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);
 	if ( cat_item && !cat_item->isPopulated() ) {
@@ -336,7 +338,7 @@ void RecipeListView::modifyRecipe( const Element &recipe, const ElementList &cat
 
 void RecipeListView::removeRecipe( int id )
 {
-	QListViewItemIterator iterator( this );
+	Q3ListViewItemIterator iterator( this );
 	while ( iterator.current() ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -356,11 +358,11 @@ void RecipeListView::removeRecipe( int id )
 
 void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 {
-	QListViewItem * item = items_map[ cat_id ];
+	Q3ListViewItem * item = items_map[ cat_id ];
 
 	//find out if this is the only category the recipe belongs to
 	int finds = 0;
-	QListViewItemIterator iterator( this );
+	Q3ListViewItemIterator iterator( this );
 	while ( iterator.current() ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -375,8 +377,8 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 	}
 
 	//do this to only iterate over children of 'item'
-	QListViewItem *pEndItem = NULL;
-	QListViewItem *pStartItem = item;
+	Q3ListViewItem *pEndItem = NULL;
+	Q3ListViewItem *pStartItem = item;
 	do {
 		if ( pStartItem->nextSibling() )
 			pEndItem = pStartItem->nextSibling();
@@ -385,7 +387,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 	}
 	while ( pStartItem && !pEndItem );
 
-	iterator = QListViewItemIterator( item );
+	iterator = Q3ListViewItemIterator( item );
 	while ( iterator.current() != pEndItem ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
@@ -412,7 +414,7 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 
 void RecipeListView::removeCategory( int id )
 {
-	QListViewItem * item = items_map[ id ];
+	Q3ListViewItem * item = items_map[ id ];
 	if ( !item )
 		return ; //this may have been deleted already by its parent being deleted
 
@@ -421,10 +423,10 @@ void RecipeListView::removeCategory( int id )
 	StdCategoryListView::removeCategory( id );
 }
 
-void RecipeListView::moveChildrenToRoot( QListViewItem *item )
+void RecipeListView::moveChildrenToRoot( Q3ListViewItem *item )
 {
-	QListViewItem * next_sibling;
-	for ( QListViewItem * it = item->firstChild(); it; it = next_sibling ) {
+	Q3ListViewItem * next_sibling;
+	for ( Q3ListViewItem * it = item->firstChild(); it; it = next_sibling ) {
 		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
 			RecipeListItem *recipe_it = (RecipeListItem*) it;

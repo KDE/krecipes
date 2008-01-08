@@ -12,13 +12,17 @@
 
 #include "kreexporter.h"
 
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 #include <qimage.h>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qpainter.h>
 #include <qfileinfo.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QPixmap>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -26,7 +30,7 @@
 #include <kglobal.h>
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
 #include <kiconloader.h>
@@ -76,7 +80,7 @@ XSLTExporter::XSLTExporter( const QString& filename, const QString &format ) :
      || template_filename.endsWith(".template") ) //handle the transition to xslt
 		template_filename = locate( "appdata", "layouts/Default.xsl" );
 
-	kdDebug() << "Using template file: " << template_filename << endl;
+	kDebug() << "Using template file: " << template_filename << endl;
 
 	setTemplate( template_filename );
 
@@ -98,11 +102,11 @@ void XSLTExporter::setStyle( const QString &filename )
 void XSLTExporter::setTemplate( const QString &filename )
 {
 	QFile templateFile( filename );
-	if ( templateFile.open( IO_ReadOnly ) ) {
+	if ( templateFile.open( QIODevice::ReadOnly ) ) {
 		m_templateFilename = filename;
 	}
 	else
-		kdDebug()<<"couldn't find/open template file"<<endl;
+		kDebug()<<"couldn't find/open template file"<<endl;
 }
 
 int XSLTExporter::supportedItems() const
@@ -149,12 +153,12 @@ QString XSLTExporter::createFooter()
 
 QString XSLTExporter::createHeader( const RecipeList & )
 {
-	kdDebug() << "Using layout: " << m_layoutFilename << endl;
+	kDebug() << "Using layout: " << m_layoutFilename << endl;
 	QFile layoutFile( m_layoutFilename );
 	QString error; int line; int column;
 	QDomDocument doc;
 	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
-		kdDebug()<<"Unable to load style information.  Will create HTML without it..."<<endl;
+		kDebug()<<"Unable to load style information.  Will create HTML without it..."<<endl;
 	}
 	else
 		processDocument(doc);
@@ -169,7 +173,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi(fileName());
-	dir.mkdir( fi.dirPath(true) + "/" + fi.baseName() + "_photos" );
+	dir.mkdir( fi.absolutePath() + "/" + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
@@ -180,10 +184,10 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-				image_url = KURL::encode_string( image_url );
-				if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+				image_url = KUrl::encode_string( image_url );
+				if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 					QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
-					starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+					starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
 				}
 				rating_total++;
 				rating_sum += (*rc_it).stars;
@@ -193,10 +197,10 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		if ( rating_total > 0 ) {
 			double average = round(2*rating_sum/rating_total)/2;
 			QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-			image_url = KURL::encode_string( image_url );
-			if ( !QFile::exists( fi.dirPath(true) + "/" + image_url ) ) {
+			image_url = KUrl::encode_string( image_url );
+			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap(average,true);
-				starPixmap.save( fi.dirPath(true) + "/" + image_url, "PNG" );
+				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
 			}
 		}
 	}
@@ -206,17 +210,17 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	QString cssContent;
 	QFileInfo info(m_templateFilename);
-	QFile cssFile(info.dirPath(true) + "/" + info.baseName() + ".css");
-	kdDebug()<<info.dirPath(true) + "/" + info.baseName() + ".css"<<endl;
-	if ( cssFile.open( IO_ReadOnly ) ) {
+	QFile cssFile(info.absolutePath() + "/" + info.baseName() + ".css");
+	kDebug()<<info.absolutePath() + "/" + info.baseName() + ".css"<<endl;
+	if ( cssFile.open( QIODevice::ReadOnly ) ) {
 		cssContent = QString( cssFile.readAll() );
 	}
 
 	cssContent += m_cachedCSS;
 
-	QFile linkedCSSFile(fi.dirPath(true) + "/style.css");
-	if (linkedCSSFile.open(IO_WriteOnly)) {
-		QTextStream stream( &linkedCSSFile );
+	QFile linkedCSSFile(fi.absolutePath() + "/style.css");
+	if (linkedCSSFile.open(QIODevice::WriteOnly)) {
+		Q3TextStream stream( &linkedCSSFile );
 		stream << cssContent;
 	}
 
@@ -224,19 +228,19 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml", false );
 	QString buffer;
-	QTextStream stream(buffer,IO_WriteOnly);
+	Q3TextStream stream(buffer,QIODevice::WriteOnly);
 	exporter->writeStream(stream,recipes);
 	delete exporter;
 
-	QCString content = buffer.utf8();
+	Q3CString content = buffer.utf8();
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
 	if (kremlDoc == NULL) {
-		kdDebug() << "Failed to parse document" << endl;
+		kDebug() << "Failed to parse document" << endl;
 		return i18n("<html><b>Error:</b> Problem with KreML exporter.  Please export the recipe you are trying to view as KreML and attach it to a bug report to a Krecipes developer.</html>");
 	}
 
 	//const char *filename = "/home/jason/svn/utils/krecipes/layouts/Default.xsl";
-	QCString filename = m_templateFilename.utf8();
+	Q3CString filename = m_templateFilename.utf8();
 	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
 	if ( !xslt ) {
 		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>").arg(filename);
@@ -246,7 +250,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	char *params[NUM_I18N_STRINGS+3];
 	int i = 0;
 	params[i++] = "imgDir";
-	QCString imgDir = "'"+imgDirInfo.dirPath(true).utf8()+"'";
+	Q3CString imgDir = "'"+imgDirInfo.absolutePath().utf8()+"'";
 	params[i++] = imgDir.data();
 
 	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
@@ -338,30 +342,30 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
-	QString photo_path = fi.dirPath(true) + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
+	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
-		kdDebug() << "photo: " << photo_path << endl;
+		kDebug() << "photo: " << photo_path << endl;
 		pm.save( photo_path, "PNG" );
 	}
 }
 
 void XSLTExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 {
-	QValueList<int> id;
+	Q3ValueList<int> id;
 	id << recipe_id;
 	removeHTMLFiles( filename, id );
 }
 
-void XSLTExporter::removeHTMLFiles( const QString &filename, const QValueList<int> &recipe_ids )
+void XSLTExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids )
 {
-	kdDebug() << "removing html files" << endl;
+	kDebug() << "removing html files" << endl;
 	//remove HTML file
 	QFile old_file( filename + ".html" );
 	if ( old_file.exists() )
 		old_file.remove();
 
 	//remove photos
-	for ( QValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
+	for ( Q3ValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
 		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it 

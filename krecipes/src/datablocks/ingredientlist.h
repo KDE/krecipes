@@ -13,7 +13,7 @@
 #ifndef INGREDIENTLIST_H
 #define INGREDIENTLIST_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qregexp.h>
 
 #include "datablocks/ingredient.h"
@@ -23,7 +23,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class IngredientList: public QValueList <Ingredient>
+class IngredientList: public Q3ValueList <Ingredient>
 {
 public:
 	IngredientList();
@@ -54,8 +54,8 @@ public:
 	IngredientList nextGroup();
 
 private:
-	QValueList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
-	QValueList<IngredientList::const_iterator> usedGroups;
+	Q3ValueList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
+	Q3ValueList<IngredientList::const_iterator> usedGroups;
 };
 
 #endif

@@ -12,25 +12,32 @@
 #define ADVANCEDSEARCHDIALOG_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QLabel>
+#include <Q3VBoxLayout>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
 class QSpacerItem;
-class QScrollView;
+class Q3ScrollView;
 class QPushButton;
-class QFrame;
+class Q3Frame;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
 class QSpinBox;
-class QTimeEdit;
+class Q3TimeEdit;
 class KPushButton;
-class KListView;
-class QListViewItem;
+class K3ListView;
+class Q3ListViewItem;
 class QRadioButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 
 class KDateEdit;
 class RecipeDB;
@@ -53,13 +60,13 @@ public:
 
 protected:
 	QLabel* textLabel1_4;
-	QScrollView* scrollView1;
-	QFrame* parametersFrame;
+	Q3ScrollView* scrollView1;
+	Q3Frame* parametersFrame;
 	QLineEdit* titleEdit;
 	QPushButton* titleButton;
-	QFrame* titleFrame;
+	Q3Frame* titleFrame;
 	QPushButton* ingredientButton;
-	QFrame* ingredientFrame;
+	Q3Frame* ingredientFrame;
 	QLineEdit* ingredientsAllEdit;
 	QLineEdit* ingredientsAnyEdit;
 	QLabel* textLabel1_2;
@@ -67,7 +74,7 @@ protected:
 	QLineEdit* ingredientsWithoutEdit;
 	QLabel* textLabel1_3;
 	QPushButton* categoriesButton;
-	QFrame* categoryFrame;
+	Q3Frame* categoryFrame;
 	QLineEdit* categoriesAllEdit;
 	QLabel* textLabel1_5;
 	QLabel* textLabel1_3_3;
@@ -75,7 +82,7 @@ protected:
 	QLabel* textLabel1_2_3;
 	QLineEdit* categoriesNotEdit;
 	QPushButton* authorsButton;
-	QFrame* authorsFrame;
+	Q3Frame* authorsFrame;
 	QLabel* textLabel1_2_4;
 	QLabel* textLabel1_6;
 	QLabel* textLabel1_3_4;
@@ -83,21 +90,21 @@ protected:
 	QLineEdit* authorsAllEdit;
 	QLineEdit* authorsWithoutEdit;
 	QPushButton* servingsButton;
-	QFrame* servingsFrame;
+	Q3Frame* servingsFrame;
 	QCheckBox* enableServingsCheckBox;
 	QComboBox* servingsComboBox;
 	QSpinBox* servingsSpinBox;
 	QPushButton* prepTimeButton;
-	QFrame* prepTimeFrame;
+	Q3Frame* prepTimeFrame;
 	QCheckBox* enablePrepTimeCheckBox;
 	QComboBox* prepTimeComboBox;
-	QTimeEdit* prepTimeEdit;
+	Q3TimeEdit* prepTimeEdit;
 	QLineEdit* instructionsEdit;
 	QPushButton* instructionsButton;
-	QFrame* instructionsFrame;
+	Q3Frame* instructionsFrame;
 	KPushButton* clearButton;
 	KPushButton* findButton;
-	KListView* resultsListView;
+	K3ListView* resultsListView;
 	QCheckBox *requireAllTitle;
 	QCheckBox *requireAllInstructions;
 	KDateEdit *createdStartDateEdit;
@@ -107,7 +114,7 @@ protected:
 	KDateEdit *accessedStartDateEdit;
 	KDateEdit *accessedEndDateEdit;
 	QPushButton* metaDataButton;
-	QFrame* metaDataFrame;
+	Q3Frame* metaDataFrame;
 	QRadioButton* ratingAvgRadioButton;
 	FractionInput* avgStarsEdit;
 	QLabel* avgStarsLabel;
@@ -116,19 +123,19 @@ protected:
 	FractionInput* starsWidget;
 	QPushButton* addCriteriaButton;
 	QPushButton* removeCriteriaButton;
-	KListView* criteriaListView;
+	K3ListView* criteriaListView;
 	QPushButton* ratingsButton;
-	QButtonGroup *ratingButtonGroup;
-	QFrame *ratingAvgFrame;
-	QFrame *criterionFrame;
-	QVBoxLayout *criterionFrameLayout;
-	QHBoxLayout *ratingAvgFrameLayout;
-	QVBoxLayout *ratingButtonGroupLayout;
+	Q3ButtonGroup *ratingButtonGroup;
+	Q3Frame *ratingAvgFrame;
+	Q3Frame *criterionFrame;
+	Q3VBoxLayout *criterionFrameLayout;
+	Q3HBoxLayout *ratingAvgFrameLayout;
+	Q3VBoxLayout *ratingButtonGroupLayout;
 
-	QHBoxLayout* AdvancedSearchDialogLayout;
-	QVBoxLayout* layout7;
-	QHBoxLayout* scrollView1Layout;
-	QVBoxLayout* parametersFrameLayout;
+	Q3HBoxLayout* AdvancedSearchDialogLayout;
+	Q3VBoxLayout* layout7;
+	Q3HBoxLayout* scrollView1Layout;
+	Q3VBoxLayout* parametersFrameLayout;
 	QSpacerItem* spacer3_2_3_2_2;
 	QSpacerItem* spacer3_2_3_2;
 	QSpacerItem* spacer3_2_3;
@@ -137,28 +144,28 @@ protected:
 	QSpacerItem* instructionsFrameSpacer;
 	QSpacerItem* metaDataFrameSpacer;
 	QSpacerItem* spacer15;
-	QVBoxLayout* titleFrameLayout;
-	QGridLayout* ingredientFrameLayout;
-	QGridLayout* categoryFrameLayout;
-	QGridLayout* authorsFrameLayout;
-	QVBoxLayout* servingsFrameLayout;
-	QHBoxLayout* layout5;
-	QVBoxLayout* prepTimeFrameLayout;
-	QVBoxLayout* instructionsFrameLayout;
-	QVBoxLayout* metaDataFrameLayout;
-	QHBoxLayout* layout6;
-	QHBoxLayout* layout9;
+	Q3VBoxLayout* titleFrameLayout;
+	Q3GridLayout* ingredientFrameLayout;
+	Q3GridLayout* categoryFrameLayout;
+	Q3GridLayout* authorsFrameLayout;
+	Q3VBoxLayout* servingsFrameLayout;
+	Q3HBoxLayout* layout5;
+	Q3VBoxLayout* prepTimeFrameLayout;
+	Q3VBoxLayout* instructionsFrameLayout;
+	Q3VBoxLayout* metaDataFrameLayout;
+	Q3HBoxLayout* layout6;
+	Q3HBoxLayout* layout9;
 	QSpacerItem* spacer3;
-	QVBoxLayout* ratingsFrameLayout;
-	QHBoxLayout* layout11;
-	QHBoxLayout* layout12;
+	Q3VBoxLayout* ratingsFrameLayout;
+	Q3HBoxLayout* layout11;
+	Q3HBoxLayout* layout12;
 	QSpacerItem* ratingsFrameSpacer;
 
 	RecipeDB *database;
 
 signals:
 	void recipeSelected( int, int );
-	void recipesSelected( const QValueList<int> &, int );
+	void recipesSelected( const Q3ValueList<int> &, int );
 
 private slots:
 	void search();

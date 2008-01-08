@@ -15,6 +15,8 @@
 #include <kcompletion.h>
 
 #include "datablocks/elementlist.h"
+//Added by qt3to4:
+#include <QKeyEvent>
 
 /*  @author Jason Kivlighn
  *  @brief An extended KTextEdit that allows for text completion
