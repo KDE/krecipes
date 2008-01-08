@@ -1,0 +1,57 @@
+@@@@@ Exported by Krecipes vSVN_PRE-0.9 [Now You're Cooking! Export Format]
+
+Cookies_Test
+
+Snacks,	Cookies & Squares
+
+3/4 c. granulated sugar
+1 c. brown sugar
+2 c. all-purpose flour
+1 tsp. baking soda
+1 c. shortening -- softened,at room temperature	
+1 c. peanut butter
+2 whole eggs
+1 tsp. vanilla extract
+
+Drop by spoonful on greased cookie sheet.  Bake in moderate oven.
+
+NYC Nutrition Analysis (per serving or yield unit): water=70.33 g; calories=394.5; protein=3.14 g; total fat=18 g; carbohydrate=56.94 g; dietary fiber=3.57 g; ash=1.18 g; calcium=14.36 mg; phosphorus=37.48 mg; iron=1.59 mg; sodium=339.7 mg; potassium=111.7 mg; magnesium=10.26 mg; zinc=0.25 mg; copper=0.08 mg; manganese=0.32 mg; vitamin A=160.3 IU; vitamin E=1.43 mg ATE; thiamin=0.2 mg; riboflavin=0.14 mg; niacin=1.6 mg; pantothenic acid=0.13 mg; vitamin B6=0.04 mg; folate=35.9 ug; vitamin C=4.13 mg; saturated fat=5.77 g; monounsaturated fat=6.83 g; polyunsaturated fat=4.41 g; caffeine=1.16 mg; selenium=10.13 ug; refuse=3.34%; %cal as carb:prot:fat=57:3:40; WW Pts=8.7; (complete analysis)
+
+Contributor: Colleen Beamer
+
+Yield: 2 dozen
+
+NYC Nutrilink: N5504^19335,N193^02021,N182^02010,N197^02025
+NYC Nutrilink: N218^02047,N5662^20081,N3906^14355,N1896^09153
+NYC Nutrilink: N1766^09003,N599^04522,U3^18402 
+
+** Exported from Now You're Cooking! v5.64 ** 
+
+@@@@@ Exported by Krecipes vSVN_PRE-0.9 [Now You're Cooking! Export Format]
+
+Cookies_Test
+
+Snacks,	Cookies & Squares
+
+3/4 c. granulated sugar
+1 c. brown sugar
+2 c. all-purpose flour
+1 tsp. baking soda
+1 c. shortening -- softened,at room temperature	
+1 c. peanut butter
+2 whole eggs
+1 tsp. vanilla extract
+
+Drop by spoonful on greased cookie sheet.  Bake in moderate oven.
+
+NYC Nutrition Analysis (per serving or yield unit): water=70.33 g; calories=394.5; protein=3.14 g; total fat=18 g; carbohydrate=56.94 g; dietary fiber=3.57 g; ash=1.18 g; calcium=14.36 mg; phosphorus=37.48 mg; iron=1.59 mg; sodium=339.7 mg; potassium=111.7 mg; magnesium=10.26 mg; zinc=0.25 mg; copper=0.08 mg; manganese=0.32 mg; vitamin A=160.3 IU; vitamin E=1.43 mg ATE; thiamin=0.2 mg; riboflavin=0.14 mg; niacin=1.6 mg; pantothenic acid=0.13 mg; vitamin B6=0.04 mg; folate=35.9 ug; vitamin C=4.13 mg; saturated fat=5.77 g; monounsaturated fat=6.83 g; polyunsaturated fat=4.41 g; caffeine=1.16 mg; selenium=10.13 ug; refuse=3.34%; %cal as carb:prot:fat=57:3:40; WW Pts=8.7; (complete analysis)
+
+Contributor: Colleen Beamer
+
+Yield: 2 dozen
+
+NYC Nutrilink: N5504^19335,N193^02021,N182^02010,N197^02025
+NYC Nutrilink: N218^02047,N5662^20081,N3906^14355,N1896^09153
+NYC Nutrilink: N1766^09003,N599^04522,U3^18402 
+
+** Exported from Now You're Cooking! v5.64 ** 

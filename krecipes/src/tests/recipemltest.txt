@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE recipeml PUBLIC "-//FormatData//DTD RecipeML 0.5//EN" 	  "http://www.formatdata.com/recipeml/recipeml.dtd"><recipeml version="0.5" generator="Krecipes vSVN_PRE-0.9">
+<recipe>
+ <head>
+  <title>Cookies_Test</title>
+  <source>
+   <srcitem>Colleen Beamer</srcitem>
+   <srcitem>Mona Beamer</srcitem>
+  </source>
+  <categories>
+   <cat>Snacks</cat>
+   <cat>Cookies &amp; Squares</cat>
+  </categories>
+  <yield>
+   <range>
+    <q1>2</q1>
+    <q2>3</q2>
+   </range>
+   <unit>dozen</unit>
+  </yield>
+  <preptime type="Total" >
+   <time>
+    <qty>30</qty>
+    <timeunit>minutes</timeunit>
+   </time>
+  </preptime>
+ </head>
+ <ingredients>
+  <ing-div>
+   <title>Dry Ingredients</title>
+   <ing>
+    <amt>
+     <qty>
+      <range>
+       <q1>0.75</q1>
+       <q2>1</q2>
+      </range>
+     </qty>
+     <unit>c.</unit>
+    </amt>
+    <item>granulated sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>brown sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>all-purpose flour</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>baking soda</item>
+   </ing>
+  </ing-div>
+  <ing-div>
+   <title>Fat &amp; Liquids</title>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>shortening</item>
+    <prep>softened,at room temperature</prep>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>peanut butter</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit></unit>
+    </amt>
+    <item>eggs</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>vanilla extract</item>
+   </ing>
+  </ing-div>
+  <ing>
+   <amt>
+    <qty>1</qty>
+    <unit>cup</unit>
+   </amt>
+   <item>a</item>
+   <prep></prep>
+   <alt-ing>
+    <amt>
+     <qty>2</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>b</item>
+    <prep></prep>
+   </alt-ing>
+   <alt-ing>
+    <amt>
+     <qty>3</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>c</item>
+    <prep></prep>
+   </alt-ing>
+  </ing>
+ </ingredients>
+ <directions>
+  <step>Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</step>
+ </directions>
+</recipe>
+<recipe>
+ <head>
+  <title>Cookies_Test</title>
+  <source>
+   <srcitem>Colleen Beamer</srcitem>
+   <srcitem>Mona Beamer</srcitem>
+  </source>
+  <categories>
+   <cat>Snacks</cat>
+   <cat>Cookies &amp; Squares</cat>
+  </categories>
+  <yield>
+   <range>
+    <q1>2</q1>
+    <q2>3</q2>
+   </range>
+   <unit>dozen</unit>
+  </yield>
+  <preptime type="Total" >
+   <time>
+    <qty>30</qty>
+    <timeunit>minutes</timeunit>
+   </time>
+  </preptime>
+ </head>
+ <ingredients>
+  <ing-div>
+   <title>Dry Ingredients</title>
+   <ing>
+    <amt>
+     <qty>
+      <range>
+       <q1>0.75</q1>
+       <q2>1</q2>
+      </range>
+     </qty>
+     <unit>c.</unit>
+    </amt>
+    <item>granulated sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>brown sugar</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>all-purpose flour</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>baking soda</item>
+   </ing>
+  </ing-div>
+  <ing-div>
+   <title>Fat &amp; Liquids</title>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>shortening</item>
+    <prep>softened,at room temperature</prep>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>c.</unit>
+    </amt>
+    <item>peanut butter</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>2</qty>
+     <unit></unit>
+    </amt>
+    <item>eggs</item>
+   </ing>
+   <ing>
+    <amt>
+     <qty>1</qty>
+     <unit>tsp.</unit>
+    </amt>
+    <item>vanilla extract</item>
+   </ing>
+  </ing-div>
+  <ing>
+   <amt>
+    <qty>1</qty>
+    <unit>cup</unit>
+   </amt>
+   <item>a</item>
+   <prep></prep>
+   <alt-ing>
+    <amt>
+     <qty>2</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>b</item>
+    <prep></prep>
+   </alt-ing>
+   <alt-ing>
+    <amt>
+     <qty>3</qty>
+     <unit>cups</unit>
+    </amt>
+    <item>c</item>
+    <prep></prep>
+   </alt-ing>
+  </ing>
+ </ingredients>
+ <directions>
+  <step>Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</step>
+ </directions>
+</recipe>
+</recipeml>

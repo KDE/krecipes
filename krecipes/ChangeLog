@@ -1,0 +1,120 @@
+Changes from 1.0-beta1 to 1.0:
+  -New recipe layouts, thanks to a new XSL-based template system
+  -New icons and splash screen (courtesy of Robert Wadley)
+
+Changes from 0.9 to 1.0-beta1:
+  -Handbook integration: Removed context help and replaced with links to the Handbook.  Also "Help" buttons have been added to some dialogs that also take users to the Handbook for more info.
+  -Nutrient status indicator; while editing a recipe, lets you know whether or not nutrient information is complete for a recipe.
+  -Measurement Converter tool
+  -Ingredient weights, used for accurate Volume->Mass unit conversions based on the ingredient
+  -Improved unit conversions; there's a separate table for mass and volume conversions and this setup avoids non-sensical conversions (i.e. 1 loaf = ? cups) 
+  -Optimized for quick loading and faster startup times
+  -Ingredient substitutes (i.e. butter or margarine)
+  -Completely re-done recipe view, based on HTML templates.  This solves many layout problems and should allow creating layouts for printing to 3x5 or 4x6 cards.  Generated HTML is much cleaner and compatible.
+  -"Web Book" exporter - exports a collection of recipes into a series of web pagesÂ, organized by category.
+  -Ingredients and properties can be split into a variable number of columns in the Page Setup.
+  -Select which properties to show in the recipe view
+Notable bugs fixed:
+  -Make dialog windows more KDE standards compliant.
+  -Fix displaying photos when special characters are in the title of the recipe
+  -Fix database backup for a non-local host
+
+Changes from 0.8 to 0.9:
+  -Rating support: multiple people can rate a single recipe, each rating can rate a recipe on multiple criteria (taste, ease of preparation, etc.)
+  -New yield property for recipes: rather than storing the number of servings, it now stores a yield amount
+   and type.  The amount may also be a range.
+  -Backup/restore of entire database.  This is much faster than exporting/importing an database in the
+   Krecipes Format and also includes nutrient info and unit ratios.
+  -Ingredient amounts can be ranges
+  -Recipe lists now allow selecting multiple recipes.  For example, this is handy for exporting, viewing, or
+   printing multiple recipes at once
+  -Dialog to paste ingredients into, which Krecipes then automatically parses and adds to a recipes.
+  -Allows multiple preparation methods
+  -PostgreSQL backend now stable
+  -Now keeps tracks of when recipes are created, modified, and last accessed.
+  -'Copy to Clipboard' feature, which allows easily copying a recipe(s) directly to the clipboard in a format that can be configured.  There
+   is a new export format, Plain Text, that is used by default.
+  -Rezkonv file format export
+
+Changes from 0.7 to 0.8:
+  -Redesigned advanced search: search on the "and", "or", and "not" conditions of each search term.  Can now search on nearly any item possible.
+  -Reduce memory requirements for large databases.  Very large databases should now be possible, though work continues to be put into this.  It is being tested on a database with 37,000 recipes and counting.
+  -Improve recipe import speeds, keeping a fairly constant speed no matter what the size of the database.
+
+Changes from 0.6 to 0.7:
+  -BETA support for PostgreSQL database backend
+  -Database to database transfer (Remote or local).
+  -Support for grouping ingredients.  Also imports group information from import formats, such as Meal-Master.
+  -There's a new intermediate interface between displaying the shopping list and selecting recipes for it.  Here you can add, remove, or modify ingredients used in those selected recipes.
+  -Load sample recipes based on locale.  If we don't currently have your locale, please submit some recipes to us!
+  -Border options added to recipe display
+  -Autocomplete ingredients typed in the instructions text edit
+  -Updated USDA data from SR16-1 to SR17 (released September, 2004)
+  -'Configure' options to disable particular backends
+  -Support for drag and drop in the shopping list dialog
+  -Behind the scenes, the internal structure of Krecipes has improved, quickly bringing it closer toward our 1.0 release
+  -Overall, more stability, interface, and useability enhancements
+
+Changes from 0.5 to 0.6:
+  -Support for subcategories
+  -Preparation time field for recipes
+  -Rezkonv import filter
+  -Eliminated the dependence on mysql.h (mysql-devel)
+  -Advanced search which can search by ingredients, categories, authors, servings, and preparation time
+  -Significant speed increases while navigating Krecipes due to the fact that reloading all data when switching dialogs is no longer necessary.
+  -When renaming an element to something that already exists, merge the two into one
+  -Provide popup menus to many listviews for easy access to common functions
+  -Fix display of characters in certain locales (In particular, this fixes the problem many people had displaying umlauts)
+  -Actually hide items in the Page Setup that aren't going to be shown in the recipe view
+  -Allow renaming of unit and prep method once it is entered in the recipe input (from the list view)
+  -Allow an empty or zero amount and an empty unit for ingredients
+  -Set the cursor to change to the wait cursor for operations that could take more than a few seconds -- this makes the app seem more responsive
+  -Fix some escape/encoding issues in the generated HTML
+  -Support for SQLite 3
+  -Add a Reload and Edit action to the menu
+  -Accessibility improvements
+
+
+Most important changes from 0.4 to 0.5:
+
+  -Ingredient matcher - select what ingredients you have, and find out what you can make with them
+  -A new field for ingredients: preparation method
+  -Easier and faster imports
+  -Load nutrient data from the USDA's nutrient database
+  -Layouts can now be saved and loaded from files in the Krecipes layout format.
+  -Improved locale support
+  -Category and author names can now be up to 40 and 50 characters respectively (previously 20)
+  -Complete keyboard navigation now possible
+
+
+Most important new features from 0.3 to 0.4:
+
+* New Krecipes file format for recipe exchange! (.kre compressed, and .kreml
+plain XML)
+* Import Filters for other programs: MasterCook Export (mx2), MasterCook
+Export (mxp) and MealMaster
+* SQLite support as database. Much easier to setup for users.
+* Configureable layouting of the recipe display.
+* A Diet Wizard that helps creating a menu for a chosen period
+* New Tips function
+* New recipe search method
+* Much Improved GUI
+* Lots, tons, of bugfixes, improvements, speed-up, database structure
+improvements...
+
+Most important changes from 0.2 to 0.3:
+
+	
+* Recipes can be classified in categories
+* Number of servings per recipe
+* Authors support
+* New MySQL database autosetup to make setup easier
+* "In-place" creation of new ingredients and units
+* Renaming of units and ingredients
+* Resizing of photos
+* Improved shopping list presentation
+* New smaller and smarter layout for editing recipes
+* i18n: Language support: English, Spanish, French and Euskara
+* UTF support	
+* Thousands of other touches and bugfixes
+* New recipe samples	

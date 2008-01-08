@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<krecipes version="0.6" lang="cs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="krecipes.xsd">
+<krecipes-category-structure>
+<category name="Dezerty">
+</category>
+<category name="Maso">
+</category>
+<category name="Těstoviny">
+</category>
+<category name="Polévky">
+</category>
+<category name="Sladká jídla">
+</category>
+<category name="Zeleninová jídla">
+</category>
+</krecipes-category-structure>
+<krecipes-recipe>
+<krecipes-description>
+<title>Gateau Basque / Pastel Vasco</title>
+<author>Unai Garro</author>
+<pictures>
+</pictures>
+<category>
+<cat>Sladká jídla</cat>
+<cat>Dezerty</cat>
+</category>
+<serving>4</serving>
+<preparation-time>00:00</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>máslo</name>
+<amount>185</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>mouka</name>
+<amount>425</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>cukr</name>
+<amount>250</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>vaječný žloutek</name>
+<amount>7</amount>
+</ingredient>
+<ingredient>
+<name>vejce</name>
+<amount>1</amount>
+</ingredient>
+<ingredient>
+<name>moučkový cukr</name>
+<amount>300</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>skořice</name>
+<amount>1</amount>
+<unit>tyčinka</unit>
+</ingredient>
+<ingredient>
+<name>vanilkové lusky</name>
+<amount>1</amount>
+</ingredient>
+<ingredient>
+<name>mandle</name>
+<amount>100</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>rozinky</name>
+<amount>100</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>mléko</name>
+<amount>0.5</amount>
+<unit>L</unit>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Nejprve si připravte těsto: do mísy dejte 375g mouky a uprostřed udělejte jamku, kam dáte povolené máslo, moučkový cukr (může být i normální), 3 žloutky a vejce. Vše důkladně zpracujte, až se všechno dobře spojí. Nechte odležet v lednici aspoň 30 minut, přikryté mikrotenovou folií.
+
+Mezitím připravte krém. V kastrolu přiveďte k varu mléko, přidejte skořici a vanilkový lusk. V misce smíchejte 150 g cukru, zbytek mouky (50g), a zbývající 4 žloutky. Jakmile se mléko vaří, vyndejte z něj skořici a vanilkový lusk, a připravenou směs vlijte do mléka. Směs stále míchejte dokud nezhoustne. Když se začne vařit, přidejte předem namleté mandle, zbývajících 100 g cukru a rozinky. Připravenou směs nechte v lednici aspoň 30 minut.
+
+Formu na pečení vytřete máslem a vysypte moukou (aby se dort při pečení nepřichytil k formě).
+
+Těstem vyložte formu v tenké vrstvě (slabší než 5mm) po dně a po stranách. Takto vzniklou vanu z těsta vylijte krémem a uzavřete víkem z těsta.
+
+Vršek moučníku potřete trochou ušlehaného vejce, a dejte péct do trouby předehřáté na 190C po dobu 30 min. Voilá! Výborný moučník je připraven k servírování.</krecipes-instructions>
+</krecipes-recipe>
+<krecipes-recipe>
+<krecipes-description>
+<title>Nádivka ze skopového</title>
+<author>Ravikiran Rajagopal</author>
+<pictures>
+</pictures>
+<category>
+<cat>Maso</cat>
+</category>
+<serving>1</serving>
+<preparation-time>00:00</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>mleté skopové</name>
+<amount>800</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>jarní cibulka</name>
+<amount>3</amount>
+<unit>svazek</unit>
+</ingredient>
+<ingredient>
+<name>řezaný listový špenát</name>
+<amount>2</amount>
+<unit>šálek</unit>
+</ingredient>
+<ingredient>
+<name>zelený hrášek</name>
+<amount>0.5</amount>
+<unit>lb</unit>
+</ingredient>
+<ingredient>
+<name>drcený koriandr</name>
+<amount>0.5</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>drcená kůra ze skořice</name>
+<amount>0.25</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>cintronová šťáva</name>
+<amount>1</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>hořčičné semínko</name>
+<amount>5</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>Římská rajčata</name>
+<amount>1</amount>
+</ingredient>
+<ingredient>
+<name>ocet</name>
+<amount>1</amount>
+<unit>podle chuti</unit>
+</ingredient>
+<ingredient>
+<name>olej</name>
+<amount>1</amount>
+<unit>trochu</unit>
+</ingredient>
+<ingredient>
+<name>sůl</name>
+<amount>1</amount>
+<unit>trochu</unit>
+</ingredient>
+<ingredient>
+<name>drcený černý pepř</name>
+<amount>1</amount>
+<unit>trochu</unit>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Nasekejte jarní cibulku (celou od zelených lístků až ke kořeni) na kousky dlouhé 1cm. Pokud použijete rajče, nakrájejte ho na kostky. Na pánev nalijte trochu oleje, nasypte hořčičná semínka a zahřejte. Až semínka začnou praskat, přidejte nasekanou cibulku, rozmražený zelený hrášek a duste asi 2 minuty. Pak přidejte špenát, rajče a drcený koriandr, a duste dál, dokud se neodpaří většina vody. Přidejte rozmražené mleté skopové, šálek vody a míchejte dokud směs není téměř homogenní. Přidejte drcený kmín, skořici a sůl; opět důkladně promíchejte. Zvolna vyvařte většinu vody. Opepřete podle chuti. Přidejte citronovou šťávu (a ocet pro ostřejší chuť) a zamíchejte. Pepř by měl absorbovat všechnu zbývající vodu. Intenzivně míchejte asi 30 sekund a odstavte z varu.
+
+Toto je skvělá nádivka pro pity. Osobně, pokud mám čas, přidám takto připravenou náplň k vlhké rýžové mouce a uvařím. Dostanu tak rýžové placky s příchutí, které je možné jíst jen tak, nebo (obvykle) s chutney z kokosu.
+
+Pozn: Opatrně s přídavky kmínu a skořice. Mají sklon vytvářet hrudky. Předejdete tomu pomalým sypáním při současném míchání směsi.</krecipes-instructions>
+</krecipes-recipe>
+<krecipes-recipe>
+<krecipes-description>
+<title>Kaas, Dille, Eten</title>
+<author>Adriaan de Groot</author>
+<pictures>
+</pictures>
+<category>
+<cat>Těstoviny</cat>
+<cat>Zeleninová jídla</cat>
+</category>
+<serving>2</serving>
+<preparation-time>00:00</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>fusili</name>
+<amount>200</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>cuketa</name>
+<amount>1</amount>
+</ingredient>
+<ingredient>
+<name>žampiony</name>
+<amount>150</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>smetana</name>
+<amount>100</amount>
+<unit>mL</unit>
+</ingredient>
+<ingredient>
+<name>červené víno</name>
+<amount>2</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>kopr</name>
+<amount>1</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>křen</name>
+<amount>1</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>petržel</name>
+<amount>1</amount>
+<unit>špetka</unit>
+</ingredient>
+<ingredient>
+<name>tymián</name>
+<amount>1</amount>
+<unit>špetka</unit>
+</ingredient>
+<ingredient>
+<name>pažitka</name>
+<amount>1</amount>
+<unit>špetka</unit>
+</ingredient>
+<ingredient>
+<name>pepř</name>
+<amount>1</amount>
+<unit>podle chuti</unit>
+</ingredient>
+<ingredient>
+<name>olivový olej</name>
+<amount>1</amount>
+<unit></unit>
+</ingredient>
+<ingredient>
+<name>strouhaný sýr</name>
+<amount>100</amount>
+<unit>g</unit>
+</ingredient>
+<ingredient>
+<name>rajče</name>
+<amount>2</amount>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Přiveďte k varu 1.5 l osolené vody. Cuketu nakrájejte na tenké proužky (asi 3 mm široké). Žampiony nakrájejte nadrobno. Na železné pánvi rozpalte olivový olej, přidejte cuketu a opečte na prudkém ohni asi 3 minuty. Přidejte žampiony a víno, snižte teplotu a nechte zvolna vysmažit do zhnědnutí asi po dobu 5 minut. Mezitím by se už měla vařit voda na těstoviny. Vsypte je do vody a nechte vařit asi 10 minut, aby byly "al dente". Ke směsi cuket a žampionů přidejte smetanu, kopr, křen, koření a pepř, a zvolna vařte než budou hotové těstoviny. Těstoviny sceďte, přidejte je k zelenině a dobře promíchejte.
+Podávejte posypané nastrouhaným sýrem a po obvodu talíře obložené nakrájenými rajčaty.</krecipes-instructions>
+</krecipes-recipe>
+<krecipes-recipe>
+<krecipes-description>
+<title>Mrkvová polévka</title>
+<author>Ian Reinhart Geiser</author>
+<pictures>
+</pictures>
+<category>
+<cat>Polévky</cat>
+</category>
+<serving>2</serving>
+<preparation-time>00:00</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient>
+<name>zeleninový vývar</name>
+<amount>600</amount>
+<unit>ml</unit>
+</ingredient>
+<ingredient>
+<name>zázvor</name>
+<amount>0.25</amount>
+<unit>stroužek</unit>
+</ingredient>
+<ingredient>
+<name>česnek</name>
+<amount>3</amount>
+<unit>stroužek</unit>
+</ingredient>
+<ingredient>
+<name>cibule</name>
+<amount>1</amount>
+</ingredient>
+<ingredient>
+<name>máslo</name>
+<amount>6</amount>
+<unit>čajová lžička</unit>
+</ingredient>
+<ingredient>
+<name>mrkev</name>
+<amount>2</amount>
+<unit>libry</unit>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Nasekejte na co nejjemnější kousky cibuli, česnek a zázvor, a osmahněte na másle. Nenechte ale cibuli zhnědnout, jenom změknout.
+ 
+Oloupejte mrkev a nakrájejte ji na hrubší kousky (asi 2 cm dlouhé).
+ 
+Přidejte zeleninový vývar a kousky mrkve. Zvolna vařte asi 45 minut. Až mrkev změkne, odstavte a nechte vychladnout.
+
+Vývar s kousky mrkve nalijte do mixéru a rozmixujte do jemna. Hotovo, dobrou chuť. Můžete také přidat 2 polévkové lžíce citronové šťávy a/nebo špetku kari pro zvýraznění chuti, ale i bez toho je polévka skvělá.
+
+Polévku je možné podávat horkou i studenou a je vhodná i pro vegany.</krecipes-instructions>
+</krecipes-recipe>
+</krecipes>

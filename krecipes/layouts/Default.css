@@ -1,0 +1,71 @@
+.background, .background td
+{
+  font-size: 10pt;
+  background-color: #FFFBEB;
+}
+
+.ingredient-name
+{
+  font-weight: bold;
+}
+
+.ingredient-group
+{
+  font-weight: bold;
+}
+
+h1
+{
+  font-size: 130%;
+  border-bottom: 1px dashed red;
+  margin-top: 10px;
+}
+
+.header
+{
+  font-weight: bold;
+}
+
+.ingredient-amount-header, .ingredient-name-header, .ingredient-prep-method-header
+{
+  color: #444;
+  text-align: center;
+}
+
+.ingredients td, .properties td
+{
+  border-style: none !important;
+}
+
+.ratings .comments
+{
+  font-style: italic;
+}
+
+.ratings .rater
+{
+  font-weight: bold;
+}
+
+.ratings .criteria-name
+{
+  font-size: small;
+}
+
+.title
+{
+  text-align: center;
+  font-weight: bold;
+  font-size: 150%;
+}
+
+.authors
+{
+  margin-top: 0px;
+  text-align: center;
+}
+
+.photo
+{
+  padding-bottom: 4px;
+}

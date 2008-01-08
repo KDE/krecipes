@@ -1,0 +1,103 @@
+.background, .background td
+{
+  font-size: 8pt;
+}
+
+.ingredients
+{
+  background-color: white;
+}
+
+.ingredient-name
+{
+  font-weight: bold;
+}
+
+.ingredient-group
+{
+  font-weight: bold;
+}
+
+h1
+{
+  font-size: 130%;
+  border-bottom: 1px dashed red;
+  padding-top: 0px;
+}
+
+.header
+{
+  font-weight: bold;
+}
+
+.ingredient-amount-header, .ingredient-name-header, .ingredient-prep-method-header
+{
+  color: gray;
+  text-align: center;
+}
+
+.ratings .comments
+{
+  font-style: italic;
+}
+
+.ratings .rater
+{
+  font-weight: bold;
+}
+
+.ratings .criteria-name
+{
+  font-size: .5em;
+}
+
+.title
+{
+  text-align: center;
+  font-weight: bold;
+  font-size: 140%;
+  color: white;
+}
+
+.header-data
+{
+  margin-right: 7px;
+}
+
+.background
+{
+  width: 600px;
+  margin: 0 0 5px 5px;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-color: #DFFFC3;
+  color: #333;
+}
+
+dt
+{
+  margin: 0 0 10px 0;
+  padding: 10px;
+  font-size: 130%;
+  border-bottom: 1px solid #fff;
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-color: #9c6;
+}
+
+dd
+{
+  margin: 0 0 0 10px;
+  padding: 0 10px 10px 10px;
+}
+
+body
+{
+  background-color: white;
+}
+
+.ingredients, .properties, .ingredients td, .properties td
+{
+  border-style: none !important;
+}

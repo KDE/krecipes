@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<krecipes version="SVN_PRE-0.9" lang="en_US" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="krecipes.xsd">
+<krecipes-category-structure>
+<category name="Cookies &amp; Squares">
+</category>
+<category name="Snacks">
+</category>
+</krecipes-category-structure>
+<krecipes-recipe>
+<krecipes-description>
+<title>Cookies_Test</title>
+<author>Colleen Beamer</author>
+<author>Mona Beamer</author>
+<pictures>
+<pic format="JPEG" id="1"><![CDATA[/9j/4AAQSkZJRgABAQIAAAAAAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACmAIMDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD2iyso
+Z7cO6kscg4NWRpluR0b/AL6o0z/jzH1Nc5PcTCeQCVwNx6MfWtZSlzPUzjGPKdH/AGZb+jfnR/Zl
+v6N+dcx9om/57Sf99Gj7RN/z2k/76NRzz7lcsTp/7Lt/Rvzo/sy39G/OuZ+0zAZ81j7FzWXceKdO
+tJXgn1mGOaM/OHnA2/X0o559w5Yndf2Zb+jfnR/Zlv6N/wB9VyVrqiX1ulzaXvn27EfvUkypGecH
+oam8+cZzNJ9Cx/n/AJ60c8+4csTp/wCzLf0b/vqj+zLf0b865j7RNkjzpAR1G40faJv+e0n/AH0a
+OefcOWJ0/wDZlv6N+dH9mW/o351zH2ib/ntJ/wB9Gj7RN/z2k/76NHPPuHLE6f8Asy39G/Oj+zLf
+0b865j7RN/z2k/76NH2ib/ntJ/30aOefcOWJ050y39G/76pP7Mt/Rv8AvquZ+0Tf89pP++jXSaOz
+Pp6sxLHJ5Jo55dw5FbQx5PLSRlA4BopJ/wDXv/vGiu3UxNzTP+PMfU1zE/8Ax8S/75/nXT6Z/wAe
+g+prmJ/+PiX/AHz/ADrin8bNov3SOjHU5wByaKOvHrxUlGR4pu2svDl7KqCRigjxyMbyF6/jmvL4
+YtqooJzyd3fNd748lmGl28aufLmnCygjrgFh/IVyltBuI46UAdn4EsENhdyyxq24heR781LrCyaX
+vlsJPIfnCfwNnGcj8BzW14TtfK8PhsH5yW/WsTxXJstZSDxtOT/h+VJtIFG+xe0bV7bWtNiureVJ
+DjbIsbZ2uOGHODwQRk9R7Vod/ryPpXkXwc1OVr/WrDZF5Jf7QJMHO4tt9emK9d6KCBgMTyOnH/66
+B8rfQKKP5etGecd6buK3YKKO4HrQDkZoE2ugV0+i/wDINX/eNcxXT6L/AMg1f940gMif/Xyf7xoo
+n/18n+8aK70jlubmmf8AHmPqa5ef/j4l/wB8/wA66jTP+PMfU1y8/wDx8S/75/nXHP42dMfhI6Oc
+cfn6UUf0qSjifGUhk1S0iWXciRsxTPfPGfwNV9PtSyZHek1gR3Hie5aJkcDaj7TyGUbT+oro9N0/
+EMZ28HrQB0Mug3OoeFreCzv5rKdIiVaNiMttxzjtmvGvFia9ocbjUdVNyzAkFJWI445yPevoiJlg
+0zOMBEx+lfP/AMUJvPQkD+F+B9V5/Ssaq0PTy+rLmcXroyr8NBr14ZLrSriztdPS5VbuJ87nHBO0
+AYyRxmvSpfFehw3Rt3v41mztKhGOD7HGPxzXmPgn7XYfDTVrlDJD9pul8t8Ab1OFODj6j/CszTtV
+8PWYmOrWct9cOwKnziqoPQAfrnPQVEpuLsjSjhYVqbq1Nr2PdEuYJLf7QkyNDgsZVYFSB15rIHjH
+QS4i/tJd3UAowz29PevKdEvZ9Y1250jTHK297GxETO21duWCrgjGeAfXJrTtdN0fQ3Fn4k0aWaUy
+PtuvMcBlGOFAI3AU3VldMcMDRtJLVnYeK/FjaStq2mSwXDOGfaG3K6DsG7ZIIrT0PxPY61bQkzwR
+XjIPMtvMyyNjlQTjdj2rifGcWkw+DtNfRURLHZKY9rZOOSRk5PDbsjPXNbfgrwroi6LpGtiyX+0D
+AsjXDStnJXDHBOOc+lOnJuTuZ4iFKNKPKtWdvXT6L/yDV/3jXMkd/mPoT0/Sul0b/kGr/vGt2eVf
+cyZ/9fJ/vGiif/Xyf7xoruRym5pn/HmPqa5ef/j4l/3z/Ouo0z/jzH1NcvP/AMfEv++f51xz+NnT
+H4SOkYlVY7ScjGAM5payvE2oS6V4Z1G9gVDLDAzKHBI/Qg/rUlHDR67pKatcSXF2sBad3aOT7yEs
+cggd88V6I+q2VnoYvVWRrdUBLqhOa+TTM7Tea7szM25mY5JOeTnvXumj+N767FpZ2tvbSaLJa7Zy
+4+ZW6Hv9KTaSuwNe4+M/hqa0aAXUyFgQQYm4rmNb0y98V+HJtX0tPPtlUgclWPToD1qtZfCH+0Yp
+ruS+SNZizxoEzgHp/Stu2uPEHh3RrXRLVraAQO3nmRfvx8YI/X9K4oY6hVn7KL1N6M505c0RPhk0
+Ws+BZtFu7ZTFaTPCQx+9uJfJHUEFuMelR6jHr3gOwk/s9oZdOaVpAVC7lJx1DY5PbbnoarfDG+J8
+Y+I7WKX/AELcZtmBgtuwTntx+FUte1K58T6swMmbKEkQRr8oH+0R612TppvQulip04uKV0ULr4h+
+I9TiSLm3i2kM0JCyOQScgjpxgY7496zZtd1ySJ42uNTuAw5EtwWX8ia7DSvCpnI+TJyOw6V2Vl8P
+YpoxuO0+1S6a6FU8ZODvG1zwy0N1FbyQTbvJmcsY9/AJ4Jx68fpXo3w/8Tapcz22jw2ay2MEYDSu
+yI8KAYBABJYE4B9OK1Nf+Hpsoi8QDKB6V5rey3vhy6TUbCUw3Fs2QcfeB42Edwc9KajYmWLnUjyz
+R9CEdCRyR6jgfQf55rptF/5Bq/7xri9G1BNV0a0vY3RxNErsUHG8j5gPYHI/Cu00X/kGr9TVs5DI
+n/18n+8aKJ/9fJ/vGiu5HMbmmf8AHmPqa5ef/j4l/wB8/wA66jTP+PMfU1y8/wDx8S/75/nXHP42
+dEfhI6p6rp0OraVdWNwrNDNGVYKcEj2q5QM5BGOPWpKPka9tJ7C8ntLmMRz27mOVcg7WU4I9Dz6V
+HFdyw/6uR15zgHFegfGLSVsfFYu0dNt7EH2KmMEYBye5J5rzemgPY/AXxDw8dlfylc4XJ6Gu+8X+
+H4fFWhEw488AtE4PKnHb618xpI0bhkJDDkEdq9X+H/xIa3kGnam6lHwFkbtXzWYZXOlU+tYbdbm0
+ZrZlH4eRXGmSeLF3PBcW+my4ZTgxuucEe/GeK6bw1apcXsEMnO/GPQ+4/wDr81tXehWlr48sNdjl
+RLS8VoZ1Y/I7MhVcjvkkD8ar2el3WjavFHOwLK29JFGA4z/9fpXt4TEKvTUlv1M5KzPRk0+KwcIq
+j5QM4rUt7hEUZNZc92s4WUH7wANQGcgHJwRXSSzR1C5WWN0Azxz7V4L8SUjt7OQ7gN8gC4HU16xq
+epRWlrJNPKI0UfMSccV4B4k1a78aeI4rHTojIGk2Qxr/ABH1/IE0Aex/DL/knek8bRiQgf8AbRua
+9U0X/kGr9TXB+GtGGgeHLLTVZmEMeGLHPzElmA9gSa7zRf8AkGr9TQBkT/6+T/eNFE/+vk/3jRXc
+jmNzTP8AjzH1NcvP/wAfEv8Avn+ddRpn/HmPqa5ef/j4l/3z/OuOfxs3j8JHR05xnHOPWjoM8cet
+Z+s6xZ6Fpsl9eSBI06A8lj6D1PtUlHlXxtvoDPp1isUBmVS5kUgugP8ABjsvOfwFeZJo8rWS3O4B
+Sam1jVL3xJrkl/dsJLmdxwgwFHQKB6DgV7b4A+GUN3pVvc6wHZWOVg6A/WgDwy/0prO1jnMgYPg8
+e9O0SwGqaxZ2HnxxCaUAvK21F/HtX11ceANAubL7LJpcAj242qpJH45rxDx58Lx4fkXU9EDvFE+5
+4H5Ckc5yMce1AHpNp4eOnpHBa3zmyjeN4oHjDlNuDjc3PJH4ZrVvLKC9t/ImB2ZypDfMvuD2/wD1
+1n+F9bTxD4cstSUAPLGBKApAVxwwAJPGQcVqyyLDE8jZwiljj0AzWdOnCm24Kw27nJX+pX+gjUHL
+rcwwlViChvNJIBC9OTzwQT271zep/EHxDbySQReFrxJ0O0Exs6g98MAc1s6A03iLUxdTFns4JmuU
+Zx94k/IMjABUbT0Nd1WgjxC78NfEHxjcL9viW2tpE3J5sqhFGMgYUk5/Cu78HfDrTfDCw3cyi51R
+UKmUnKoT12encZ4yCa7SigAwMnGCcD5sYz7V0+i/8g1fqa5iun0X/kGr9TQBkT/6+T/eNFE/+vk/
+3jRXcjmNzTP+PMfU1y8//HxL/vn+ddRpn/HmPqa5e4/4+ZMf3z/OuOfxs3j8JGOXAHTnP5ZrxL4w
+eJftV/HoltKTDbDdOoJAMp7FehwNpz/tGvWPEurx6B4evNTcY8lPlGMgsTheOO5GfbNfLN7dzX15
+Ncztuklcux9z9ako6f4c6SNW8UQGXlITvbP+fevrmLy7LSo1XGMAYFfMfwr2wzyzHGS2K9wl1hpY
+EXfxQB2MV/AYgTgH0rk/EU8dwzggMCMHjtVM6kyrw1Zl5eljkkE4PNAHAWPiFPAHiy4sp0P9jahI
+JWdFyYmPG73A7+3SvQdcubHU9HltYriGWKaPzGKncPLHO788fr6V5P8AEZVls45QOUbt6VJZzHwt
+8N0uZt0lzqEgXY7Y/dDnA9KAPUvBlh9j0FJmiaOa5kaZvnDArn5CCDxlAvFdDVHRpobrQbKe2iVI
+Ht4zGgfOwbRxnuR0/Cr1ABRRRQAV0+i/8g1fqa5iun0X/kGr9TQBkT/6+T/eNFE/+vk/3jRXcjmN
+zTP+PMfU1y8//HxLn+8T+tdRpn/HmPqa5LUruCyS6uriRY4YQ7SOx2gAe9cc/jZvH4Tyv41ahZtp
+VlpvnobtbjzWjxyF2sOT9SP514k3KjGce9dd4ih1rxHDfeLprWQWDzbA552rnC9hlRwufUiuRkzn
+kYNSUdt4Dv8AypXQtjnNeqW+oZjBLDFeBaNfGw1COUfdJwa9Q0/VFkiB3DBoA7Jrvg81SuLvPesr
+7eCvUVTur8KnXr3oAq6rZNrl3b6ep4mmRWPouRn9K574kaql5rUNjbsDb2ibFC9AaivfFU9lczra
+riRlZBKf4cjGa5uxs7rWNWgtoRJLPcOFBA3H3OPzoA+h/hlHLF8PdLWZGVwsrbHB3YaRiDj0IOfx
+zXXVU0u0+waTZ2RcP9mhWJm6btowD7dOmTVugAooooAK6fRf+Qav1NcxXT6L/wAg1fqaAMif/Xyf
+7xoon/18n+8aK7kcxt6Z/wAeY+p4rzTxvpGo6/HHpNo5hs7iZjdziTBjQfwhc87vy4r0zTP+PMfU
+1y8//HxL/vn+dcc/jZvH4TIn0Cxm8OHRPL/0EQCBRIN+wAYU4PXBwR7gV83+K/C2oeFdTa0vEJjb
+JhnH3ZF9vQ+oPNfUfAPt39qy9e0vSdU09k1m2ilt0+YeZnIPqCCKhtRV2Uj5OGQcit/TdaaFFRmI
+ArZ1DwDdLPO9hvkt97eSJR8xQHjJ9cda5jUtJutLkVLiMqXGV96zhXpVHyqWo7HULr8ZXmSqV3rq
+Mv38iuetrdp3CAhcn7zHH4D1rqLPwcktuxnuCZOPuD7v+NFWrCkryYJXE1zXdKufDVlZ2KD7SBi5
+d48MT9cV6n8NfAjeG4Tql7ldTuE2hFbIhjODt9ycD6Y964Lwz4Pht/FunNf3Aax84MMYBZgcopyD
+wWAH4176ORn26g8H8KqnVhNaMT0F4z069j/D6GkoxRVgFFFFABXT6L/yDV+prmK6fRf+Qav1NAGR
+P/r5P940UT/6+T/eNFdyOY3NM/48x9TXLz/8fEv++f510+mf8eY+prJl0W7eV2Hl4LEj5q45/Gze
+PwmV3rm/Gekalq2kImmyBpIn8w27EATEdPmPAI7ZIHNdt/YV5/0z/wC+qX+xLz/pn9N3Ws5RTVmV
+c8igsvF9uqINCkkGMYe5g5H4vxTL/wAH6v4tmt4tRsk0y2hYFmLqzyKc7tuwnGMDrjrXr/8AYd5n
+P7vPTlu1B0O87bM+u7oPTpXLTwdKnPnitR82hxtv4J8PW2j/ANlJpsLW2S2XG5gxyNwY87gDgHqO
+1Yq/DaK2uXey1m6ghPCRMgkCD05r03+wrvsI8f71J/Yd5jGI/wDvqumUIz+JXEmzi7LwVpVpc290
+4muLiHBDSysV3gYLbc4BzzXRkkkkk89a0f7CvB/zz/76o/sK8/6Z/wDfVOMVH4UBm0Vpf2Fef9M/
+++qP7CvP+mf/AH1VXAzaK0v7CvP+mf8A31R/YV5/0z/76ouBm10+i/8AINX6msr+w7z/AKZ/99Vt
+abbva2YikxuBJ4NAGHP/AK+T/eNFE/8Ar35H3jRXcjmLlveSW8YiCKcE8kmpf7XcceUv50UVEoRv
+sXFsP7Yf/nkv50n9sP8A88l/OiilyR7Duw/tiT/nkv50f2xJ/wA8l/Oiijkj2C7D+2JP+eS/nR/b
+En/PJfzooo5I9guw/tiT/nkv50f2xJ/zyX86KKOSPYLsP7Yk/wCeS/nR/bEn/PJfzooo5I9guw/t
+iT/nkv50f2xJ/wA8l/Oiijkj2C7F/th/+eS/nR/a7n/lkv50UUKEewXZmtJudjtHJooorexkf//Z]]></pic>
+</pictures>
+<category>
+<cat>Snacks</cat>
+<cat>Cookies &amp; Squares</cat>
+</category>
+<yield><amount><min>2</min><max>3</max></amount><type>dozen</type></yield>
+<preparation-time>00:30</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient-group name="Dry Ingredients">
+<ingredient>
+<name>granulated sugar</name>
+<amount><min>0.75</min><max>1</max></amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>brown sugar</name>
+<amount>1</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>all-purpose flour</name>
+<amount>2</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>baking soda</name>
+<amount>1</amount>
+<unit>tsp.</unit>
+</ingredient>
+</ingredient-group>
+<ingredient-group name="Fat &amp; Liquids">
+<ingredient>
+<name>shortening</name>
+<amount>1</amount>
+<unit>c.</unit>
+<prep>softened,at room temperature</prep>
+</ingredient>
+<ingredient>
+<name>peanut butter</name>
+<amount>1</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>eggs</name>
+<amount>2</amount>
+<unit></unit>
+</ingredient>
+<ingredient>
+<name>vanilla extract</name>
+<amount>1</amount>
+<unit>tsp.</unit>
+</ingredient>
+</ingredient-group>
+<ingredient>
+  <name>a</name>
+  <amount>1</amount>
+  <unit>cup</unit>
+  <substitutes>
+    <ingredient>
+      <name>b</name>
+      <amount>2</amount>
+      <unit>cups</unit>
+    </ingredient>
+    <ingredient>
+      <name>c</name>
+      <amount>3</amount>
+      <unit>cups</unit>
+    </ingredient>
+  </substitutes>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>
+<krecipes-ratings>
+  <rating>
+    <rater>George McFry</rater>
+    <comment>Good enough</comment>
+    <criterion>
+      <criteria>
+        <name>Taste</name>
+        <stars>5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+  <rating>
+    <rater>Me</rater>
+    <comment>Yuck, don't eat!</comment>
+    <criterion>
+      <criteria>
+        <name>Overall</name>
+        <stars>2</stars>
+      </criteria>
+      <criteria>
+        <name>Taste</name>
+        <stars>1.5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+</krecipes-ratings>
+</krecipes-recipe>
+<krecipes-recipe>
+<krecipes-description>
+<title>Cookies_Test</title>
+<author>Colleen Beamer</author>
+<author>Mona Beamer</author>
+<pictures>
+<pic format="JPEG" id="1"><![CDATA[/9j/4AAQSkZJRgABAQIAAAAAAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0a
+HBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIy
+MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCACmAIMDASIA
+AhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQA
+AAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3
+ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWm
+p6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEA
+AwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSEx
+BhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElK
+U1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3
+uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD2iyso
+Z7cO6kscg4NWRpluR0b/AL6o0z/jzH1Nc5PcTCeQCVwNx6MfWtZSlzPUzjGPKdH/AGZb+jfnR/Zl
+v6N+dcx9om/57Sf99Gj7RN/z2k/76NRzz7lcsTp/7Lt/Rvzo/sy39G/OuZ+0zAZ81j7FzWXceKdO
+tJXgn1mGOaM/OHnA2/X0o559w5Yndf2Zb+jfnR/Zlv6N/wB9VyVrqiX1ulzaXvn27EfvUkypGecH
+oam8+cZzNJ9Cx/n/AJ60c8+4csTp/wCzLf0b/vqj+zLf0b865j7RNkjzpAR1G40faJv+e0n/AH0a
+OefcOWJ0/wDZlv6N+dH9mW/o351zH2ib/ntJ/wB9Gj7RN/z2k/76NHPPuHLE6f8Asy39G/Oj+zLf
+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]]></pic>
+</pictures>
+<category>
+<cat>Snacks</cat>
+<cat>Cookies &amp; Squares</cat>
+</category>
+<yield><amount><min>2</min><max>3</max></amount><type>dozen</type></yield>
+<preparation-time>00:30</preparation-time>
+</krecipes-description>
+<krecipes-ingredients>
+<ingredient-group name="Dry Ingredients">
+<ingredient>
+<name>granulated sugar</name>
+<amount><min>0.75</min><max>1</max></amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>brown sugar</name>
+<amount>1</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>all-purpose flour</name>
+<amount>2</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>baking soda</name>
+<amount>1</amount>
+<unit>tsp.</unit>
+</ingredient>
+</ingredient-group>
+<ingredient-group name="Fat &amp; Liquids">
+<ingredient>
+<name>shortening</name>
+<amount>1</amount>
+<unit>c.</unit>
+<prep>softened,at room temperature</prep>
+</ingredient>
+<ingredient>
+<name>peanut butter</name>
+<amount>1</amount>
+<unit>c.</unit>
+</ingredient>
+<ingredient>
+<name>eggs</name>
+<amount>2</amount>
+<unit></unit>
+</ingredient>
+<ingredient>
+<name>vanilla extract</name>
+<amount>1</amount>
+<unit>tsp.</unit>
+</ingredient>
+</ingredient-group>
+<ingredient>
+  <name>a</name>
+  <amount>1</amount>
+  <unit>cup</unit>
+  <substitutes>
+    <ingredient>
+      <name>b</name>
+      <amount>2</amount>
+      <unit>cups</unit>
+    </ingredient>
+    <ingredient>
+      <name>c</name>
+      <amount>3</amount>
+      <unit>cups</unit>
+    </ingredient>
+  </substitutes>
+</ingredient>
+</krecipes-ingredients>
+<krecipes-instructions>
+Drop by spoonful on greased cookie sheet.  Bake in moderate oven.</krecipes-instructions>
+<krecipes-ratings>
+  <rating>
+    <rater>George McFry</rater>
+    <comment>Good enough</comment>
+    <criterion>
+      <criteria>
+        <name>Taste</name>
+        <stars>5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+  <rating>
+    <rater>Me</rater>
+    <comment>Yuck, don't eat!</comment>
+    <criterion>
+      <criteria>
+        <name>Overall</name>
+        <stars>2</stars>
+      </criteria>
+      <criteria>
+        <name>Taste</name>
+        <stars>1.5</stars>
+      </criteria>
+    </criterion>
+  </rating>
+</krecipes-ratings>
+</krecipes-recipe>
+</krecipes>

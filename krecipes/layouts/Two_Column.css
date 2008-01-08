@@ -1,0 +1,70 @@
+.background, .background td
+{
+  font-size: 10pt;
+}
+
+.ingredients
+{
+  background-color: #CDEBFF;
+  border: 1px solid black;
+}
+
+.properties
+{
+  background-color: #ADEBFF;
+  border: 1px solid black;
+}
+
+.ingredient-group
+{
+  font-weight: bold;
+}
+
+.ingredients td
+{
+  border-style: none !important;
+}
+
+.ratings h1
+{
+  border-top: 1px dashed black;
+  padding-top: 3px;
+  text-align: center;
+}
+
+ul
+{
+  padding-left: 1.5em;
+}
+
+h1
+{
+  font-size: 130%;
+}
+
+.header
+{
+  font-weight: bold;
+}
+
+.ratings .comments
+{
+  font-style: italic;
+}
+
+.ratings .rater
+{
+  font-weight: bold;
+}
+
+.ratings .criteria-name
+{
+  font-size: small;
+}
+
+.title
+{
+  text-align: center;
+  font-weight: bold;
+  font-size: 200%;
+}

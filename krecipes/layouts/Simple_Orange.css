@@ -1,0 +1,88 @@
+.background, .background td
+{
+  background-color: #FFFDED;
+  font-size: 7pt;
+}
+
+.background
+{
+  border: 2px dotted #FF3D12;
+  padding: 8px;
+  width: 500px;
+}
+
+.photo
+{
+  float: right;
+  height: 70px;
+  padding-bottom: 4px;
+}
+
+.basic-info
+{
+  padding-top: 8px;
+  /*clear: both;*/
+}
+
+.ingredient-group
+{
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px dashed gray;
+}
+
+h1
+{
+  font-size: 130%;
+  border-top: 1px solid #DDD;
+  padding-top: 7px;
+}
+
+.header
+{
+  font-weight: bold;
+}
+
+.ratings .comments
+{
+  font-style: italic;
+}
+
+.ratings .rater
+{
+  font-weight: bold;
+}
+
+.ratings .criteria-name
+{
+  font-size: 80%;
+}
+
+.title
+{
+  font-weight: bold;
+  font-size: 140%;
+}
+
+h1, .header, .title
+{
+  color: #FF3D12;
+}
+
+.authors, .categories, .yield, .prep-time
+{
+  padding-right: 7px;
+}
+
+.categories, .yield, .prep-time
+{
+  border-left: 2px solid #DDD !important;
+  padding-left: 7px;
+}
+
+.ingredients td, .properties td
+{
+  border-style: none !important;
+}
+
+

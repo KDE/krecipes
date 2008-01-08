@@ -1,0 +1,462 @@
+active baker's yeast:18375
+all-purpose flour:20081
+allspice:2001
+almond extract:12071
+almonds:12061
+apple juice:9016
+apple slices:9008
+apples:9003
+applesauce:9402
+applesauce, unsweetened:9019
+apricot jam:19719
+bacon:10123
+baking potato:11362
+baking powder:18369
+baking soda:18372
+bananas:9040
+barley:20004
+basil:2003
+bay leaf:2004
+bean sprouts:11248
+beans, black:16014
+beef bottom round:13399
+beef bouillon:6075
+beef broth:6008
+beef stock:6476
+beef, brisket:13022
+beer:14003
+bell peppers (red, green, yellow):11333
+black pepper:2030
+blueberries:2154
+boiling water:14429
+bologna:7008
+bourbon:14551
+bran flakes:8153
+bread:18069
+bread crumbs:18079
+bread cubes:18079
+broccoli:11090
+broccoli (frozen-thawed):11092
+broccoli spears, frozen:11094
+broccoli, frozen:11092
+brown rice:20040
+brown sugar:19334
+bulgur:20012
+butter:1145
+butter (1/2 stick):1145
+butter or margarine:1145
+buttermilk:1088
+cabbage:11109
+canned apple slices:19312
+canned beans:16006
+canned beef:13934
+canned black beans:16018
+canned carrot slices:11128
+canned cooked squid:15175
+canned corn:11174
+canned crushed tomatoes:11693
+canned green beans:11056
+canned green peas:11308
+canned jalapeno pepper:11632
+canned kidney beans:16029
+canned pinto beans:16044
+canned potato:11376
+canned red pepper:2031
+canned red tart cherries in water:9065
+canned sweet potatoes:11514
+canned tomatoes:11693
+canned wax beans:16029
+canned white beans:16051
+canned whole kernel corn:11771
+carrot:11124
+carrot slices, canned:11128
+carrots:11124
+carrots, frozen:11130
+carrots, peeled and chopped:11124
+catsup:11935
+cauliflower, frozen:11137
+cayenne:2031
+celery:11143
+celery leaf:11143
+celery salt:2007
+celery seed:2007
+cheddar cheese:1009
+cheese:1009
+cherry pie filling:19314
+chicken:5011
+chicken (1-2 lb):5011
+chicken bouillon:6081
+chicken breast:5062
+chicken broth:6013
+chicken pieces:5008
+chicken stock:6413
+chicken thigh:5080
+chicken, cooked:5011
+chickens, whole:5123
+chili:16059
+chili powder:2009
+chinese turnip:11564
+chives:11615
+chocolate chip:19139
+chocolate pudding mix (instant):19123
+chopped capers:2054
+chopped carrot:11124
+chopped celery:11143
+chopped chives:11156
+chopped green chilies:11980
+chopped onion:11282
+chopped onions:11282
+chopped onions, frozen:11287
+chopped parsley:11297
+chopped pimientos:11943
+chopped walnuts:12154
+cider vinegar:2048
+cilantro:11971
+cinnamon:2010
+clear honey:19296
+cloves:2011
+cloves garlic:11215
+cloves or allspice:2011
+cocoa:19165
+coconut:12104
+coconut milk (canned):12118
+cold butter:1145
+cold water:14429
+condensed milk (sweetened):1095
+cooked chicken:5124
+cooked chicken breast:5065
+cooked ham:10151
+cooked turkey:5182
+cooked wild rice:20089
+cookie crust (chocolate - 8-9 in):18398
+Cool Whip:1054
+corn chips:19003
+corn meal:20020
+corn oil:4518
+corn starch:20027
+corn syrup:19350
+cornmeal:20022
+cornstarch:20027
+cottage cheese:1015
+cream (heavy):1053
+cream cheese:1017
+cream of celery soup:6479
+cream of chicken soup:6483
+cream of chicken soup, condensed:6016
+cream of mushroom soup:6443
+cream of mushroom soup, condensed:6043
+croutons to serve:18243
+crushed pineapple in juice:9268
+cucumber:11205
+cucumber, whole:11206
+cucumbers:11206
+cucumbers, whole:11206
+cumin:2014
+currants:9084
+dehydrated onion flakes:11284
+diced chicken:5039
+dried basil:2044
+dried onion:11284
+dried oregano:2027
+dried parsley:2029
+dried porcini mushrooms:11268
+dried red pepper:2031
+dried sage:2038
+dry bread crumbs:18079
+dry mustard:2024
+dry nonfat milk powder:1091
+egg:1123
+egg noodles (medium):20409
+egg substitute:1144
+eggplant:11209
+eggplant (baby):11209
+eggs:1134
+eggs, hard cooked:1129
+eggs, hard-boiled:1129
+egg whites:1124
+egg yolk:1125
+egg yolks:1125
+elbow macaroni:20099
+flaked almonds:12061
+flat anchovies:15001
+flour:20081
+flour tortillas:18364
+flour, all-purpose:20081
+flour, white:20581
+flour, whole-grain wheat:20080
+fresh spinach:11457
+freshly chopped coriander:11165
+freshly chopped parsley:11297
+frozen broccoli:11092
+frozen broccoli spears:11094
+frozen cauliflower:11137
+frozen corn:11179
+frozen egg whites:1172
+frozen fish:15027
+frozen green beans:11060
+frozen orange juice concentrate:9214
+frozen peas:11814
+frozen whole egg:1171
+garlic:11215
+garlic clove:11215
+garlic cloves:11215
+garlic powder:2020
+garlic salt:2020
+gelatin:19173
+gelatin (peach-flavored):14397
+ginger:2021
+ginger, fresh:2021
+graham cracker crust (8 or 9 in):18173
+granny Smith apple:9003
+granulated garlic:16125
+grapefruit:9112
+gravy:6116
+green beans (fresh):11052
+green chile:11980
+green chiles:11670
+green chili pepper:11670
+green onion:11282
+green pepper:11333
+green peppers:11333
+ground almonds:12061
+ground beef:13309
+ground chuck:13302
+ground cinnamon:2010
+ground clove:2011
+ground cloves:2011
+ground cumin:2014
+ground ginger:2021
+ground nutmeg:2025
+ground oregano:2027
+ground pepper:2030
+ground thyme:2042
+ham:7027
+hamburger:13309
+hamburger bun:18641
+hamburger buns:18641
+hamburger rolls:18641
+hazelnuts:12120
+heavy cream:1053
+herb stuffing:18082
+honey:19296
+horseradish:2055
+hot pepper flakes:2031
+hot pepper sauce:6168
+hot sauce:6164
+hot water:14429
+instant dry milk:1155
+instant rice:20048
+Italian salad dressing:4114
+jalapeno peppers:11979
+juice of 1 lemon:9152
+ketchup:11935
+kiwi:2452
+lasagna noodles (8 noodles):20409
+leaf lettuce:11253
+leeks:11246
+lemon:9150
+lemon juice:9152
+lemon juice, bottled:9153
+lemon juice, frozen:9154
+lemon peel:9156
+lemon, sliced:9151
+lentil:16069
+lettuce:11253
+lime juice:9160
+long-grain white rice:20044
+low sodium beef broth:6475
+low sodium chicken broth:6413
+lowfat 1% milk:1084
+lowfat cheddar cheese:1168
+lowfat cottage cheese:1016
+lowfat mayonnaise:4018
+lowfat mozzarella cheese:1028
+lowfat yogurt:1117
+low-sodium chicken broth:6413
+low-sodium soy sauce:16125
+low-sodium vegetable stock:6468
+margarine:4071
+margarine, soft:4092
+marjoram:2023
+marjoram leaves:2023
+mayonnaise:4025
+medium-size egg:1123
+milk:1081
+mint leaves:2064
+mixed fruit in syrup:9099
+mixed vegetables:11318
+mixed vegetables, frozen:11583
+molasses:19304
+molasses, dark:19305
+monterey jack cheese:1025
+mozzarella cheese:1028
+mung beans:11626
+mushroom:11260
+mushrooms:11260
+mustard:2046
+mustard seeds:2024
+navy beans, cooked:16338
+no data
+nonfat dry milk:1092
+nonfat milk:1085
+noodles:20409
+noodles (lasagne):20409
+noodles (lasagne) (6-8 bunches):20409
+noodles, egg (medium):20409
+nutmeg:2025
+nuts, chopped:16087
+oil:4518
+oil, peanut:4042
+oil, sesame:4058
+olive oil:4053
+onion:11282
+onion, medium:11282
+onion powder:2026
+onion salt:2026
+onion soup:6445
+onion, chopped:11282
+onion, large:11282
+onions:11284
+onions, chopped:11282
+orange juice:9206
+orange juice, from frozen concentra:9215
+orange rind:9216
+orange zest:9216
+oranges:9200
+oregano:2027
+Oreo Cookies:18166
+paprika:2028
+paprika pepper:2028
+parmesan cheese:1032
+parsley:2029
+parsley flakes:2029
+parsley stalks:11297
+parsnips:11298
+pasta shells:20100
+peach slices in syrup:9240
+peaches:2665
+peanut butter:16098
+pearled barley:20005
+peas, canned:11308
+peas, frozen:11312
+pecans:12142
+pepper:2030
+Pepperidge Farm stuffing:18082
+pickle relish:11945
+pickles:11937
+pimento:11943
+pine kernels:12149
+pineapple chunks in juice:9268
+pineapple juice:9273
+pinto beans:16042
+pinto beans, canned:16044
+plain flour:20081
+plain low-fat yogurt:1117
+plain yogurt:1117
+pork roast:10083
+potato:11352
+potato flakes:11379
+potato Granules:11380
+potato, canned:11376
+potatoes:11352
+potatoes (red-skinned):11352
+poultry seasoning:2034
+powdered sugar:19335
+processed American cheese:1149
+provolone cheese:1035
+prunes:9291
+pumpkin:11422
+radishes:11429
+raisins:9298
+red burgundy wine:14096
+red onion:11282
+red pepper:2031
+red snapper fillets:15101
+red wine:14096
+reduced calorie mayonnaise:4013
+relish:11945
+rice:20045
+ricotta cheese:1037
+ripe dessert pears:9252
+rolled oats:20038
+rosemary:2063
+rum flavoring or vanilla:2050
+sage:2038
+salad dressing (Miracle Whip):4025
+salad onions:11282
+salsa:6164
+salt:2047
+sandwich rolls:18349
+sausage:7063
+scallions:11291
+self-raising flour:20082
+sesame oil:4058
+shallots:11677
+shortening:4547
+shredded carrots:11124
+shredded lettuce:11252
+shrimp (raw, medium-size):15149
+skim milk:1085
+skinless boneless chicken breast:5062
+sliced carrots:11124
+small mushrooms:11260
+small onions or shallots:11282
+smoked bacon:10124
+soft bread crumbs:18079
+sour cream:1056
+soy sauce:16125
+spaghetti:20120
+spinach leaf:11457
+sprig fresh thyme:2049
+stew beef:13286
+stock:6413
+strawberries:2996
+sugar:19335
+sweet pickle:11940
+sweet pickle relish:11945
+sweet potato:11647
+sweet potato, canned:11645
+swiss cheese:1040
+taco sauce:6168
+taco seasoning mix:2034
+taco shells:18360
+taco spice:2034
+thyme:2042
+tomato juice:11540
+tomato paste:11887
+tomato sauce:11549
+tomatoes:11529
+tomatoes, canned:11533
+tomatoes, stewed:11693
+tortilla chips:19056
+tostada shell:18363
+tuna:15126
+tuna in water, canned:15126
+turkey:7079
+turkey ham:7264
+turmeric:2043
+turnip:11564
+unflavored gelatin:19173
+vanilla:2050
+vanilla extract:2050
+vanilla pudding mix (instant):19202
+veal shank:17278
+vegetable oil:4518
+vegetable stock:6468
+Velveeta:1149
+vinegar:2048
+walnuts:12154
+warm water:14429
+water:14429
+whipped topping:1054
+white flour:20481
+white pepper:2032
+white rice:20050
+white turnips:11564
+white vinegar:2048
+white wine:14106
+whole wheat flour:20080
+yeast:18375
+yellow squash:11641
+zucchini:11477
+zucchini slices:11953
