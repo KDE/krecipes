@@ -17,6 +17,7 @@
 #endif
 
 #include <kapplication.h>
+#include <kaction.h>
 #include <kmainwindow.h>
 
 #include "krecipesview.h" //for KrePanel
@@ -61,14 +62,14 @@ protected:
 	 * This function is called when it is time for the app to save its
 	 * properties for session management purposes.
 	 */
-	void saveProperties( KConfigGroup * );
+	void saveProperties( KConfigGroup& );
 
 	/**
 	 * This function is called when this app is restored.  The KConfig
 	 * object points to the session management config file that was saved
 	 * with @ref saveProperties
 	 */
-	void readProperties( KConfigGroup * );
+	void readProperties(const KConfigGroup& );
 
 	virtual bool queryClose();
 

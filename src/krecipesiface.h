@@ -15,14 +15,14 @@
 
 class KrecipesIface 
 {
-	Q_CLASSINFO("org.kde.krecipes", "Iface")	
+	Q_CLASSINFO("D-Bus Interface", "org.kde.krecipes")
 public:
-
-Q_SLOTS:
+	virtual ~KrecipesIface();
+public Q_SLOTS:
 	virtual Q_SCRIPTABLE QDBusInterface currentDatabase() const = 0;
  	virtual Q_SCRIPTABLE void reload() = 0;
  	     
- 	virtual Q_SCRIPTABLE void exportRecipes( const QList<int> &ids ) = 0;
+ 	virtual Q_SCRIPTABLE void exportRecipes( const Q3ValueList<int> &ids ) = 0;
 
 };
 
