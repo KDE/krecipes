@@ -36,11 +36,11 @@
 #include "datablocks/mixednumber.h"
 
 RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *db, const ElementList &recipeList )
-		: KDialogBase( parent, "refinedialog", true, QString::null,
-		    KDialogBase::Ok, KDialogBase::Ok ),
+		: KDialog( parent, "refinedialog", true, QString::null,
+		    KDialog::Ok, KDialogBase::Ok ),
 		database( db )
 {
-	setButtonText( KDialogBase::Ok, i18n( "&Done" ) );
+	setButtonText( KDialog::Ok, i18n( "&Done" ) );
 
 	KVBox *page = makeVBoxMainWidget();
 

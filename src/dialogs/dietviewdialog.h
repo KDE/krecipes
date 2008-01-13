@@ -20,11 +20,11 @@
 
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/recipelist.h"
 
-class DietViewDialog: public KDialogBase
+class DietViewDialog: public KDialog
 {
 	Q_OBJECT
 

@@ -25,8 +25,8 @@
 #include "widgets/categorylistview.h"
 
 SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db )
-		: KDialogBase( parent, "SelectCategoriesDialog", true, i18n("Categories"),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, "SelectCategoriesDialog", true, i18n("Categories"),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		database(db)
 {
 	KVBox *page = makeVBoxMainWidget();

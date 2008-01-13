@@ -25,8 +25,8 @@
 #include <klocale.h>
 
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
-		: KDialogBase( parent, "createCategoryDialog", true, i18n( "New Category" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, "createCategoryDialog", true, i18n( "New Category" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

@@ -17,7 +17,7 @@
 #include <Q3HBoxLayout>
 #include <QLabel>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/elementlist.h"
 #include "widgets/fractioninput.h"
@@ -31,7 +31,7 @@ class QLineEdit;
 class QLabel;
 class QComboBox;
 
-class CreateUnitConversionDialog : public KDialogBase
+class CreateUnitConversionDialog : public KDialog
 {
 	Q_OBJECT
 

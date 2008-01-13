@@ -22,8 +22,8 @@
 #include <kiconloader.h>
 
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
-		: KDialogBase( parent, "shoppingviewdialog", true, QString::null,
-		    KDialogBase::Close | KDialogBase::User1, KDialogBase::Close,
+		: KDialog( parent, "shoppingviewdialog", true, QString::null,
+		    KDialog::Close | KDialogBase::User1, KDialogBase::Close,
 		    false, KStandardGuiItem::print() )
 {
 	// Design dialog

@@ -20,7 +20,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <khtmlview.h>
 #include <dom/dom_doc.h>

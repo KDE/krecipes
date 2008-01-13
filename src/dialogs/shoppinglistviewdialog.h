@@ -19,11 +19,11 @@
 
 #include <khtml_part.h>
 #include <khtmlview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class IngredientList;
 
-class ShoppingListViewDialog: public KDialogBase
+class ShoppingListViewDialog: public KDialog
 {
 	Q_OBJECT
 

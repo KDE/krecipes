@@ -17,7 +17,7 @@
 #include <qmap.h>
 #include <q3listview.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/recipelist.h"
 
@@ -31,7 +31,7 @@ class CustomCheckListItem;
 /**
   * @author Jason Kivlighn
   */
-class RecipeImportDialog : public KDialogBase
+class RecipeImportDialog : public KDialog
 {
 public:
 	RecipeImportDialog( const RecipeList &all_recipes, QWidget *parent = 0 );

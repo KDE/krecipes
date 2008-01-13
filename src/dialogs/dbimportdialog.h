@@ -10,7 +10,7 @@
 #ifndef DBIMPORTDIALOG_H
 #define DBIMPORTDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
@@ -36,7 +36,7 @@ class KIntNumInput;
 @author Jason Kivlighn
 */
 
-class DBImportDialog: public KDialogBase
+class DBImportDialog: public KDialog
 {
 	Q_OBJECT
 public:

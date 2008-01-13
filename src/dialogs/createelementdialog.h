@@ -19,12 +19,12 @@
 #include <q3vbox.h>
 
 #include <klineedit.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 /**
 @author Unai Garro
 */
-class CreateElementDialog : public KDialogBase
+class CreateElementDialog : public KDialog
 {
 public:
 	CreateElementDialog( QWidget *parent, const QString &text );

@@ -59,7 +59,7 @@ protected:
 	void removeElement( Q3ListViewItem *, bool delete_item = true );
 
 	bool reloading(){ return bulk_load; }
-	void setSorting(int c){K3ListView::setSorting(c);} //don't do sorting, the database comes sorted from the database anyways
+	void setSorting(int c,bool order=true){K3ListView::setSorting(c,order);} //don't do sorting, the database comes sorted from the database anyways
 	void setTotalItems(int);
 
 	RecipeDB *database;

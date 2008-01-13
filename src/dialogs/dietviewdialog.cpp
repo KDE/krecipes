@@ -18,11 +18,11 @@
 #include <Q3ValueList>
 
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
-		: KDialogBase( parent, "dietViewDialog", true, QString::null,
-		    KDialogBase::User2 | KDialogBase::Close | KDialogBase::User1, KDialogBase::User2,
+		: KDialog( parent, "dietViewDialog", true, QString::null,
+		    KDialog::User2 | KDialogBase::Close | KDialogBase::User1, KDialogBase::User2,
 		    false, KStandardGuiItem::print() )
 {
-	setButtonText( KDialogBase::User2, i18n( "Create &Shopping List" ) );
+	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
 
 	// Design the dialog
 	KVBox *page = makeVBoxMainWidget();

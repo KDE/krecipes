@@ -11,7 +11,7 @@
 #ifndef BORDERDIALOG_H
 #define BORDERDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kcolordialog.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -32,7 +32,7 @@ class KHTMLPart;
 
 class KreBorder;
 
-class BorderDialog : public KDialogBase
+class BorderDialog : public KDialog
 {
 	Q_OBJECT
 

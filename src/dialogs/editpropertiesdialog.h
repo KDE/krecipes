@@ -18,7 +18,7 @@
 #include <Q3VBoxLayout>
 #include <QLabel>
 #include <Q3ValueList>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/unit.h"
 
@@ -44,7 +44,7 @@ class IngredientGroupsDialog;
 class MixedNumber;
 class KreListView;
 
-class EditPropertiesDialog : public KDialogBase
+class EditPropertiesDialog : public KDialog
 {
 	Q_OBJECT
 

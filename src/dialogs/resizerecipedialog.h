@@ -13,7 +13,7 @@
 #ifndef RESIZERECIPEDIALOG_H
 #define RESIZERECIPEDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3Frame>
@@ -38,7 +38,7 @@ class QPushButton;
 /**
   *@author Jason Kivlighn
   */
-class ResizeRecipeDialog : public KDialogBase
+class ResizeRecipeDialog : public KDialog
 {
 	Q_OBJECT
 

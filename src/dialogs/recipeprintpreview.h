@@ -14,12 +14,12 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class RecipeDB;
 class RecipeViewDialog;
 
-class RecipePrintPreview : public KDialogBase
+class RecipePrintPreview : public KDialog
 {
 Q_OBJECT
 

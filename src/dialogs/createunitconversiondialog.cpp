@@ -24,8 +24,8 @@
 #include <klocale.h>
 
 CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit, const ElementList &toUnits, QWidget* parent )
-		: KDialogBase( parent, "CreateUnitConversionDialog", true, QString::null,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, "CreateUnitConversionDialog", true, QString::null,
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 	m_toUnits(toUnits)
 {
 	KVBox *page = makeVBoxMainWidget();

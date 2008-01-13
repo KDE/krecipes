@@ -11,7 +11,7 @@
 #ifndef CREATEINGREDIENTWEIGHTDIALOG_H
 #define CREATEINGREDIENTWEIGHTDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
@@ -34,7 +34,7 @@ class PrepMethodComboBox;
 class RecipeDB;
 class Weight;
 
-class CreateIngredientWeightDialog : public KDialogBase
+class CreateIngredientWeightDialog : public KDialog
 {
 Q_OBJECT
 	

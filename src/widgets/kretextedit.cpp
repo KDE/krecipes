@@ -14,7 +14,7 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 
-#include <kaccel.h>
+#include <kaction.h>
 #include <kdebug.h>
 
 KreTextEdit::KreTextEdit( QWidget *parent ) : KTextEdit( parent ), KCompletionBase()

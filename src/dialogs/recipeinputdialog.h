@@ -47,7 +47,7 @@ class Q3TextEdit;
 
 class KreTextEdit;
 class KWidgetListbox;
-class KDialogBase;
+class KDialog;
 
 class ImageDropLabel;
 class Recipe;
@@ -120,7 +120,7 @@ private:
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
 	Q3TextEdit *statusTextView;
-	KDialogBase *propertyStatusDialog;
+	KDialog *propertyStatusDialog;
 
 	// Buttons to move ingredients up & down...
 	KPushButton* upButton;

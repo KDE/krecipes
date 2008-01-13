@@ -62,24 +62,28 @@
 #include <kiconloader.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
-#include <kkeydialog.h>
-#include <kaccel.h>
+#include <kshortcutsdialog.h>
+#include <kaction.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
 #include <kcursor.h>
 
+#include <ktoolbar.h>
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
-#include <kaction.h>
+#include <ktoggleaction.h>
 #include <kstandardaction.h> 
+#include <kactioncollection.h>
 //Settings headers
 #include <kdeversion.h>
 #include <KShortcutsDialog>
 
+
 Krecipes::Krecipes()
-		: KMainWindow( 0, "Krecipes" ),
+		: KMainWindow( 0 ),
 		m_view( new KrecipesView( this ) )
 {
+	this->setObjectName( "Krecipes" );
 	// accept dnd
 	setAcceptDrops( true );
 
@@ -117,7 +121,10 @@ Krecipes::Krecipes()
 	enableSaveOption( false ); // Disables saving initially
 	recipeSelected( false ); //nothing is selected initially
 
-	parsing_file_dlg = new KDialog( this, "parsing_file_dlg", true, Qt::WX11BypassWM );
+	parsing_file_dlg = new KDialog( this );
+	parsing_file_dlg->setObjectName( "parsing_file_dlg" );
+	parsing_file_dlg->setModal( true );
+	parsing_file_dlg->setWindowFlags ( Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
 	parsing_file_dlg_label->setFrameStyle( Q3Frame::Box | Q3Frame::Raised );
 	( new Q3VBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
@@ -178,8 +185,7 @@ void Krecipes::setupActions()
 	                          this, SLOT( conversionToolSlot() ),
 	                          actionCollection(), "converter_action" );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup("Advanced");
+	KConfigGroup *config = KGlobal::config()->setGroup("Advanced");
 	if ( config->readBoolEntry("UnhideMergeTools",false) ) {
 		( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
 					this, SLOT( mergeSimilarCategories() ),
@@ -243,7 +249,7 @@ void Krecipes::setupActions()
 	createGUI();
 }
 
-void Krecipes::saveProperties( KConfig * )
+void Krecipes::saveProperties( KConfigGroup& )
 {
 	// the 'config' object points to the session managed
 	// config file.  anything you write here will be available
@@ -253,7 +259,7 @@ void Krecipes::saveProperties( KConfig * )
 	//  config->writeEntry("lastURL", m_view->currentURL());
 }
 
-void Krecipes::readProperties( KConfig * )
+void Krecipes::readProperties( KConfigGroup& )
 {
 	// the 'config' object points to the session managed
 	// config file.  this function is automatically called whenever
@@ -330,9 +336,9 @@ void Krecipes::import()
 	                         "*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
 	                         "*.rk *.txt|Rezkonv (*.rk, *.txt)",
 	                         this,
-	                         "file_dialog",
 	                         true
 	                       );
+	file_dialog.setObjectName( "file_dialog" );
 	file_dialog.setMode( KFile::Files );
 
 	if ( file_dialog.exec() == KFileDialog::Accepted ) {
@@ -371,9 +377,8 @@ void Krecipes::import()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		KConfig * config = KGlobal::config();
-		config->setGroup( "Import" );
-		bool direct = config->readBoolEntry( "DirectImport", false );
+		KConfigGroup * config = KGlobal::config()->setGroup( "Import" );
+		bool direct = config->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer->recipeList() );
 	
@@ -394,8 +399,8 @@ void Krecipes::import()
 			warningEdit->setText( QString( i18n( "NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>" ) ) + importer->getMessages() );
 			warningEdit->setReadOnly( true );
 
-			KDialogBase showWarningsDlg( KDialogBase::Swallow, i18n( "Import Warnings" ), KDialogBase::Ok, KDialogBase::Default, this );
-			showWarningsDlg.setMainWidget( warningEdit ); //KDialogBase will delete warningEdit for us
+			KDialog showWarningsDlg( KDialog::Swallow, i18n( "Import Warnings" ), KDialog::Ok, KDialog::Default, this );
+			showWarningsDlg.setMainWidget( warningEdit ); //KDialog will delete warningEdit for us
 			showWarningsDlg.resize( QSize( 550, 250 ) );
 			showWarningsDlg.exec();
 		}
@@ -426,9 +431,8 @@ void Krecipes::kreDBImport()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		KConfig * config = KGlobal::config();
-		config->setGroup( "Import" );
-		bool direct = config->readBoolEntry( "DirectImport", false );
+		KConfigGroup * config = KGlobal::config()->setGroup( "Import" );
+		bool direct = config->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer.recipeList() );
 	
@@ -519,7 +523,7 @@ void Krecipes::restoreSlot()
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
-		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStandardGuiItem::cont(),"RestoreWarning") ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database!</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			ProgressInterface pi(this);
 			pi.listenOn(m_view->database);

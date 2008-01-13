@@ -21,8 +21,8 @@
 #include <kcombobox.h>
 
 CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
-		: KDialogBase( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

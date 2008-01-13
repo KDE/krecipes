@@ -50,7 +50,7 @@
 #include <kglobal.h>
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
-		: KDialogBase( IconList, i18n( "Krecipes Preferences" ),
+		: KDialog( IconList, i18n( "Krecipes Preferences" ),
 		               Help | Ok | Cancel, Ok, parent )
 {
 	// this is the base class for your preferences dialog.  it is now

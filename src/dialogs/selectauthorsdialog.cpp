@@ -27,8 +27,8 @@
 #include "backends/recipedb.h"
 
 SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db )
-		: KDialogBase( parent, "SelectAuthorsDialog", true, i18n("Authors"),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, "SelectAuthorsDialog", true, i18n("Authors"),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		database(db)
 {
 	KVBox *page = makeVBoxMainWidget();

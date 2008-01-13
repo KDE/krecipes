@@ -17,7 +17,7 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/elementlist.h"
 
@@ -31,7 +31,7 @@ class KComboBox;
 /**
 @author Jason Kivlighn
 */
-class CreateCategoryDialog : public KDialogBase
+class CreateCategoryDialog : public KDialog
 {
 public:
 	CreateCategoryDialog( QWidget *parent, const ElementList &categories );

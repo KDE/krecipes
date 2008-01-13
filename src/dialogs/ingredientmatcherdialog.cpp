@@ -41,7 +41,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "profiling.h"
 
@@ -144,8 +144,8 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, int col )
 {
 	if ( col == 1 ) {
-		KDialogBase amountEditDialog(this,"IngredientMatcherAmountEdit",
-		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
+		KDialog amountEditDialog(this,"IngredientMatcherAmountEdit",
+		  false, i18n("Enter amount"), KDialog::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );

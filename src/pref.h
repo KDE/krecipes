@@ -15,7 +15,7 @@
 #ifndef _KRECIPESPREF_H_
 #define _KRECIPESPREF_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <qmap.h>
 //Added by qt3to4:
@@ -37,7 +37,7 @@ class QRadioButton;
 class Q3VBoxLayout;
 class QComboBox;
 
-class KrecipesPreferences : public KDialogBase
+class KrecipesPreferences : public KDialog
 {
 	Q_OBJECT
 public:

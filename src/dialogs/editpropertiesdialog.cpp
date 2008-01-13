@@ -94,8 +94,8 @@ private:
 
 
 EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, RecipeDB *database, QWidget* parent )
-		: KDialogBase( parent, "EditPropertiesDialog", true, QString::null,
-		    KDialogBase::Ok, KDialogBase::Ok ),
+		: KDialog( parent, "EditPropertiesDialog", true, QString::null,
+		    KDialog::Ok, KDialogBase::Ok ),
   ingredientID(ingID), ingredientName(ingName)
 {
 	// Initialize internal variables
@@ -257,8 +257,8 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 	Weight w = weight_it->weight();
 
 	if ( col == 0 ) {
-		KDialogBase amountEditDialog(this,"WeightAmountEdit",
-		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
+		KDialog amountEditDialog(this,"WeightAmountEdit",
+		  false, i18n("Enter amount"), KDialog::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, db, Unit::Mass, MixedNumber::DecimalFormat );
@@ -280,8 +280,8 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		}
 	}
 	else if ( col == 1 ) {
-		KDialogBase amountEditDialog(this,"PerAmountEdit",
-		  false, i18n("Enter amount"), KDialogBase::Cancel | KDialogBase::Ok, KDialogBase::Ok);
+		KDialog amountEditDialog(this,"PerAmountEdit",
+		  false, i18n("Enter amount"), KDialog::Cancel | KDialogBase::Ok, KDialogBase::Ok);
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		WeightInput *amountEdit = new WeightInput( box, db, Unit::All, MixedNumber::DecimalFormat );

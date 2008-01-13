@@ -25,11 +25,11 @@
 #include <qlabel.h>
 
 #include <klineedit.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/unit.h"
 
-class CreatePropertyDialog : public KDialogBase
+class CreatePropertyDialog : public KDialog
 {
 public:
 	CreatePropertyDialog( QWidget *parent, UnitList *list );

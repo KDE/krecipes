@@ -31,12 +31,12 @@
 #include "widgets/fractioninput.h"
 
 ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name )
-		: KDialogBase( parent, name, false, i18n( "Measurement Converter" ),
-		    KDialogBase::Close | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Close ),
+		: KDialog( parent, name, false, i18n( "Measurement Converter" ),
+		    KDialog::Close | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Close ),
 		m_database(db)
 {
 	setHelp("measure-converter");
-	setButtonText( KDialogBase::User1, i18n("Convert") );
+	setButtonText( KDialog::User1, i18n("Convert") );
 
 	setSizeGripEnabled( TRUE );
 
@@ -100,7 +100,7 @@ void ConversionDialog::languageChange()
 void ConversionDialog::show()
 {
 	reset();
-	KDialogBase::show();
+	KDialog::show();
 }
 
 void ConversionDialog::reset()

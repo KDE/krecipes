@@ -10,6 +10,12 @@ add_subdirectory( datablocks )
 add_subdirectory( tests )
 
 
+
+########### QT3Support ###############
+
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+
 ########### next target ###############
 
 set(krecipes_SRCS 

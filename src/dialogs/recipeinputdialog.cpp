@@ -49,7 +49,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kled.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kio/netaccess.h>
 
 #include "selectauthorsdialog.h"
@@ -390,9 +390,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
 	updateGuiItem.setIconSet( il->loadIconSet( "view-refresh", KIconLoader::NoGroup ) );
-	propertyStatusDialog = new KDialogBase( KDialogBase::Swallow, i18n("Property details"),
-		KDialogBase::Close | KDialogBase::User1 | KDialogBase::Help,
-		KDialogBase::Close, this, "propertyStatusDialog", false, false,
+	propertyStatusDialog = new KDialog( KDialogBase::Swallow, i18n("Property details"),
+		KDialog::Close | KDialogBase::User1 | KDialogBase::Help,
+		KDialog::Close, this, "propertyStatusDialog", false, false,
 		updateGuiItem
 	);
 	propertyStatusDialog->setHelp("property-status");

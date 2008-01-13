@@ -13,7 +13,7 @@
 #ifndef CREATEUNITDIALOG_H
 #define CREATEUNITDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qpushbutton.h>
 #include <q3groupbox.h>
 #include <qlayout.h>
@@ -27,7 +27,7 @@ class KLineEdit;
 /**
 @author Unai Garro
 */
-class CreateUnitDialog : public KDialogBase
+class CreateUnitDialog : public KDialog
 {
 Q_OBJECT
 

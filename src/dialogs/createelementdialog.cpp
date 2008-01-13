@@ -17,8 +17,8 @@
 #include <Q3VBoxLayout>
 
 CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
-		: KDialogBase( parent, "createElementDialog", true, text,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, "createElementDialog", true, text,
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

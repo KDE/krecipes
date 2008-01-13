@@ -17,7 +17,7 @@
 #include <qpushbutton.h>
 
 #include <k3listview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/elementlist.h"
 
@@ -29,7 +29,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class SelectCategoriesDialog: public KDialogBase
+class SelectCategoriesDialog: public KDialog
 {
 
 	Q_OBJECT

@@ -16,7 +16,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <k3listview.h>
 #include <kcombobox.h>
 
@@ -27,7 +27,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class SelectAuthorsDialog: public KDialogBase
+class SelectAuthorsDialog: public KDialog
 {
 
 	Q_OBJECT

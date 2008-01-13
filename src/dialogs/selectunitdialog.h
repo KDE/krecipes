@@ -20,14 +20,14 @@
 #include <q3vbox.h>
 
 #include <k3listview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/unit.h"
 
 /**
 @author Unai Garro
 */
-class SelectUnitDialog : public KDialogBase
+class SelectUnitDialog : public KDialog
 {
 public:
 	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;

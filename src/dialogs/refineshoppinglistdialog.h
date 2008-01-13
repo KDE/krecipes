@@ -19,7 +19,7 @@
 #include <Q3HBoxLayout>
 #include <QLabel>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/ingredientlist.h"
 
@@ -35,7 +35,7 @@ class RecipeDB;
 class ElementList;
 class KreListView;
 
-class RefineShoppingListDialog : public KDialogBase
+class RefineShoppingListDialog : public KDialog
 {
 	Q_OBJECT
 

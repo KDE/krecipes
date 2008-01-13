@@ -18,8 +18,8 @@
 #include <QLabel>
 
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
-		: KDialogBase( parent, "createPropertyDialog", true, i18n( "New Property" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, "createPropertyDialog", true, i18n( "New Property" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 
 	// Initialize Internal Variables

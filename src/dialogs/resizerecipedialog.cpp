@@ -43,8 +43,8 @@
 #define SERVINGS_RADIO_BUTTON 1
 
 ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
-		: KDialogBase( parent, "ResizeRecipeDialog", true, i18n( "Resize Recipe" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, "ResizeRecipeDialog", true, i18n( "Resize Recipe" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		m_recipe( recipe )
 {
 	KVBox *page = makeVBoxMainWidget();

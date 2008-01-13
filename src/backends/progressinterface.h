@@ -31,7 +31,7 @@ class ProgressInterface
 {
 public:
 	ProgressInterface( QWidget *parent );
-	~ProgressInterface();
+	virtual ~ProgressInterface();
 
 	void listenOn( RecipeDB* );
 

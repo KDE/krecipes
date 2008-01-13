@@ -63,7 +63,7 @@ int main( int argc, char **argv )
 		// no session.. just start up normally
 		KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-		QApplication::flushX();
+		QApplication::flush();
 
 		if ( args->isSet("convert-sqlite3") ) {
 			ConvertSQLite3();
@@ -71,7 +71,7 @@ int main( int argc, char **argv )
 		}
 
 		Krecipes * widget = new Krecipes;
-		app.setMainWidget( widget );
+		app.setTopWidget( widget );
 		widget->show();
 
 		args->clear();

@@ -31,8 +31,8 @@
 #include "datablocks/kreborder.h"
 
 BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char* name )
-		: KDialogBase( parent, name, true, QString::null,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, name, true, QString::null,
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

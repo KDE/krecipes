@@ -25,8 +25,8 @@
 #include <QLabel>
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB *database, OptionFlag showEmpty )
-		: KDialogBase( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty),
+		: KDialog( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty),
         ingredientID(ingID), db(database)
 {
 

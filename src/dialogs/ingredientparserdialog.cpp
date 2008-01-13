@@ -37,8 +37,8 @@
 #include "widgets/inglistviewitem.h"
 
 IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* parent, const char* name )
-		: KDialogBase( parent, name, true, i18n( "Ingredient Parser" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, name, true, i18n( "Ingredient Parser" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		m_unitList(units)
 {
 	setButtonBoxOrientation( Vertical );

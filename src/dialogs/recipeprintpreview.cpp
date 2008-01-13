@@ -21,12 +21,12 @@
 #include "pagesetupdialog.h"
 
 RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids )
-		: KDialogBase( parent, "RecipePrintPreview", true, i18n("Print Preview"),
-		    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Ok )
+		: KDialog( parent, "RecipePrintPreview", true, i18n("Print Preview"),
+		    KDialog::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Ok )
 {
 	setHelp("print-recipe");
-	setButtonText( KDialogBase::User1, i18n("&Edit") );
-	setButtonText( KDialogBase::Ok, i18n("&Print") );
+	setButtonText( KDialog::User1, i18n("&Edit") );
+	setButtonText( KDialog::Ok, i18n("&Print") );
 
 	setSizeGripEnabled( true );
 

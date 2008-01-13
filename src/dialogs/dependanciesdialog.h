@@ -21,7 +21,7 @@
 #include <Q3ValueList>
 
 #include <k3listview.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/elementlist.h"
 
@@ -33,7 +33,7 @@ typedef struct ListInfo {
 /**
 @author Unai Garro
 */
-class DependanciesDialog: public KDialogBase
+class DependanciesDialog: public KDialog
 {
 public:
 	//Methods

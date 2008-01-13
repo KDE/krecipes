@@ -30,8 +30,8 @@
 #include "backends/recipedb.h"
 
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
-		: KDialogBase( parent, "createIngWeightDialog", true, QString::null,
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		: KDialog( parent, "createIngWeightDialog", true, QString::null,
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 	

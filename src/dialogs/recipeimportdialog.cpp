@@ -28,8 +28,8 @@
 #include "datablocks/recipe.h"
 
 RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent )
-		: KDialogBase( parent, "RecipeImportDialog", true, i18n( "Import Recipes" ),
-		    KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent, "RecipeImportDialog", true, i18n( "Import Recipes" ),
+		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
 		list_copy( list )
 {
 	setButtonBoxOrientation( Qt::Vertical );

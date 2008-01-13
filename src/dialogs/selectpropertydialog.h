@@ -22,7 +22,7 @@
 
 #include <k3listview.h>
 #include <kcombobox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "datablocks/unit.h"
 
@@ -32,7 +32,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class SelectPropertyDialog: public KDialogBase
+class SelectPropertyDialog: public KDialog
 {
 public:
 	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
