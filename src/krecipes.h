@@ -124,6 +124,7 @@ private:
 	KAction *printAction;
 	KAction *reloadAction;
 	KAction *copyToClipboardAction;
+	KConfigGroup *groupConfig;
 
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;

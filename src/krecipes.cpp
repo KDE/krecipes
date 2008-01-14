@@ -175,23 +175,24 @@ void Krecipes::recipeSelected( bool selected )
 void Krecipes::setupActions()
 {
 	printAction = KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
-	reloadAction = new KAction( i18n( "Reloa&d" ), "view-refresh", Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
+	reloadAction = new KAction( i18n( "Reloa&d" ), "view-refresh", Qt::Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
 
-	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", CTRL + Key_E,
+	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", Qt::CTRL + Qt::Key_E,
 	                          m_view, SLOT( editRecipe() ),
 	                          actionCollection(), "edit_action" );
 
-	(void) new KAction( i18n( "&Measurement Converter" ), "", CTRL + Key_M,
+	(void) new KAction( i18n( "&Measurement Converter" ), "", Qt::CTRL + Qt::Key_M,
 	                          this, SLOT( conversionToolSlot() ),
 	                          actionCollection(), "converter_action" );
 
-	KConfigGroup *config = KGlobal::config()->setGroup("Advanced");
-	if ( config->readBoolEntry("UnhideMergeTools",false) ) {
-		( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", CTRL + Key_M,
+	groupConfig = new KConfigGroup(KGlobal::config(),"Advanced");
+	
+	if ( groupConfig->readEntry("UnhideMergeTools",false) ) {
+		( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", Qt::CTRL + Qt::Key_M,
 					this, SLOT( mergeSimilarCategories() ),
 					actionCollection(), "merge_categories_action" );
 	
-		( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", CTRL + Key_M,
+		( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", Qt::CTRL + Qt::Key_M,
 					this, SLOT( mergeSimilarIngredients() ),
 					actionCollection(), "merge_ingredients_action" );
 	}
@@ -210,7 +211,7 @@ void Krecipes::setupActions()
 	KStandardAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
 	KStandardAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
 
-	( void ) new KAction( i18n( "Import from File..." ), CTRL + Key_I,
+	( void ) new KAction( i18n( "Import from File..." ), Qt::CTRL + Qt::Key_I,
 	                      this, SLOT( import() ),
 	                      actionCollection(), "import_action" );
 
@@ -223,7 +224,7 @@ void Krecipes::setupActions()
 	                            actionCollection(), "export_action" );
 
 	copyToClipboardAction = new KAction( i18n( "&Copy to Clipboard" ), "edit-copy",
-	                            CTRL + Key_C,
+	                            Qt::CTRL + Qt::Key_C,
 	                            this, SLOT( fileToClipboard() ),
 	                            actionCollection(), "copy_to_clipboard_action" );
 
@@ -431,8 +432,8 @@ void Krecipes::kreDBImport()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		KConfigGroup * config = KGlobal::config()->setGroup( "Import" );
-		bool direct = config->readEntry( "DirectImport", false );
+		groupConfig = new KConfigGroup(KGlobal::config(),"Import");
+		bool direct = groupConfig->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer.recipeList() );
 	
@@ -457,10 +458,9 @@ void Krecipes::pageSetupSlot()
 	Recipe recipe;
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup("Page Setup");
-	QString layout = config->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = config->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
+	groupConfig = new KConfigGroup(KGlobal::config(),"Page Setup");
+	QString layout = groupConfig->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
+	QString printLayout = groupConfig->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
@@ -476,10 +476,9 @@ void Krecipes::printSetupSlot()
 	Recipe recipe;
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup("Page Setup");
-	QString layout = config->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = config->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
+	groupConfig = new KConfigGroup(KGlobal::config(),"Page Setup");
+	QString layout = groupConfig->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
+	QString printLayout = groupConfig->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
