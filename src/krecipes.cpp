@@ -66,6 +66,7 @@
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 #include <kcursor.h>
 
 #include <ktoolbar.h>
@@ -260,7 +261,7 @@ void Krecipes::saveProperties( KConfigGroup& )
 	//  config->writeEntry("lastURL", m_view->currentURL());
 }
 
-void Krecipes::readProperties( KConfigGroup& )
+void Krecipes::readProperties( const KConfigGroup& )
 {
 	// the 'config' object points to the session managed
 	// config file.  this function is automatically called whenever
@@ -328,7 +329,7 @@ void Krecipes::filePrint()
 
 void Krecipes::import()
 {
-	KFileDialog file_dialog( QString::null,
+	KFileDialog file_dialog( KUrl(),
 	                         "*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
 	                         "*.mx2|MasterCook (*.mx2)\n"
 	                         "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
@@ -337,7 +338,7 @@ void Krecipes::import()
 	                         "*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
 	                         "*.rk *.txt|Rezkonv (*.rk, *.txt)",
 	                         this,
-	                         true
+	                        0
 	                       );
 	file_dialog.setObjectName( "file_dialog" );
 	file_dialog.setMode( KFile::Files );
@@ -378,8 +379,8 @@ void Krecipes::import()
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
-		KConfigGroup * config = KGlobal::config()->setGroup( "Import" );
-		bool direct = config->readEntry( "DirectImport", false );
+		groupConfig = new KConfigGroup(KGlobal::config(),"Import");
+		bool direct = groupConfig->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer->recipeList() );
 	
@@ -400,7 +401,11 @@ void Krecipes::import()
 			warningEdit->setText( QString( i18n( "NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>" ) ) + importer->getMessages() );
 			warningEdit->setReadOnly( true );
 
-			KDialog showWarningsDlg( KDialog::Swallow, i18n( "Import Warnings" ), KDialog::Ok, KDialog::Default, this );
+			//sauve :: KDialog showWarningsDlg( KDialog::Swallow, i18n( "Import Warnings" ), KDialog::Ok, KDialog::Default, this );
+			KDialog showWarningsDlg( this );
+			showWarningsDlg.setCaption( "Import Warnings" );
+			showWarningsDlg.setButtons( KDialog::Ok | KDialog::Default ) ;
+
 			showWarningsDlg.setMainWidget( warningEdit ); //KDialog will delete warningEdit for us
 			showWarningsDlg.resize( QSize( 550, 250 ) );
 			showWarningsDlg.exec();
@@ -459,8 +464,8 @@ void Krecipes::pageSetupSlot()
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
 	groupConfig = new KConfigGroup(KGlobal::config(),"Page Setup");
-	QString layout = groupConfig->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = groupConfig->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
+	QString layout = groupConfig->readEntry( "Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+	QString printLayout = groupConfig->readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
@@ -477,8 +482,8 @@ void Krecipes::printSetupSlot()
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
 	groupConfig = new KConfigGroup(KGlobal::config(),"Page Setup");
-	QString layout = groupConfig->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = groupConfig->readEntry( "PrintLayout", locate( "appdata", "layouts/None.klo" ) );
+	QString layout = groupConfig->readEntry( "Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+	QString printLayout = groupConfig->readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
@@ -496,9 +501,9 @@ void Krecipes::conversionToolSlot()
 
 void Krecipes::backupSlot()
 {
-	QString fileName = KFileDialog::getSaveFileName(QString::null,
+	QString fileName = KFileDialog::getSaveFileName(KUrl(),
 		QString("*.krecbk|%1 (*.krecbk)").arg("Krecipes Backup File"),
-		this,i18n("Save Backup As..."));
+		this, i18n("Save Backup As..."));
 
 	int overwrite = KMessageBox::Yes;
 	if ( QFile::exists(fileName) ) {
@@ -517,7 +522,7 @@ void Krecipes::backupSlot()
 
 void Krecipes::restoreSlot()
 {
-	QString filename = KFileDialog::getOpenFileName(QString::null,
+	QString filename = KFileDialog::getOpenFileName(KUrl(),
 		QString("*.krecbk|%1 (*.krecbk)").arg(i18n("Krecipes Backup File")),
 		this,i18n("Restore Backup"));
 
@@ -647,7 +652,7 @@ void Krecipes::optionsConfigureToolbars()
 	// use the standard toolbar editor
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-	saveMainWindowSettings( KGlobal::config(), autoSaveGroup() );
+	saveMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
 # else
 
 	saveMainWindowSettings( KGlobal::config() );
@@ -671,7 +676,7 @@ void Krecipes::newToolbarConfig()
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 
-	applyMainWindowSettings( KGlobal::config(), autoSaveGroup() );
+	applyMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
 # else
 
 	applyMainWindowSettings( KGlobal::config() );

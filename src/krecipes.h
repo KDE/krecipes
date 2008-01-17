@@ -48,7 +48,7 @@ public:
 	/**
 	 * Default Destructor
 	 */
-	virtual ~Krecipes();
+	~Krecipes();
 
 
 protected:
