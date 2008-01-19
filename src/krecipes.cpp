@@ -81,7 +81,7 @@
 
 
 Krecipes::Krecipes()
-		: KMainWindow( 0 ),
+		: KXmlGuiWindow( 0 ),
 		m_view( new KrecipesView( this ) )
 {
 	this->setObjectName( "Krecipes" );
@@ -175,27 +175,40 @@ void Krecipes::recipeSelected( bool selected )
 
 void Krecipes::setupActions()
 {
-	printAction = KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
-	reloadAction = new KAction( i18n( "Reloa&d" ), "view-refresh", Qt::Key_F5, m_view, SLOT( reloadDisplay() ), actionCollection(), "reload_action" );
 
-	editAction = new KAction( i18n( "&Edit Recipe" ), "edit", Qt::CTRL + Qt::Key_E,
-	                          m_view, SLOT( editRecipe() ),
-	                          actionCollection(), "edit_action" );
+	printAction =  KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
 
-	(void) new KAction( i18n( "&Measurement Converter" ), "", Qt::CTRL + Qt::Key_M,
-	                          this, SLOT( conversionToolSlot() ),
-	                          actionCollection(), "converter_action" );
+	reloadAction = new KAction( this );
+	reloadAction->setText( i18n( "Reloa&d" ) );
+	reloadAction->setIcon( KIcon( "view-refresh" ) );
+	reloadAction->setShortcut( Qt::Key_F5 );
+	actionCollection()->addAction( "reload_action" , reloadAction );
+	connect( reloadAction, SIGNAL(triggered(bool)), m_view, SLOT( reloadDisplay() ) );
+
+	editAction = new KAction( this );
+	editAction->setText( i18n( "&Edit Recipes" ) );
+	editAction->setIcon( KIcon( "edit" ) );
+	editAction->setShortcut( Qt::CTRL + Qt::Key_E );
+	actionCollection()->addAction( "edit_action" , editAction );
+	connect( editAction, SIGNAL(triggered(bool)), m_view, SLOT( editRecipe() ) );
+
+	converterAction = new KAction( this );
+	converterAction->setText( i18n( "&Measurement Converter" ) );
+	converterAction->setShortcut( Qt::CTRL + Qt::Key_M );
+	actionCollection()->addAction( "converter_action" , converterAction );
+	connect( converterAction, SIGNAL(triggered(bool)), m_view, SLOT( conversionToolSlot() ) );
 
 	groupConfig = new KConfigGroup(KGlobal::config(),"Advanced");
 	
 	if ( groupConfig->readEntry("UnhideMergeTools",false) ) {
-		( void ) new KAction( i18n( "&Merge Similar Categories..." ), "categories", Qt::CTRL + Qt::Key_M,
-					this, SLOT( mergeSimilarCategories() ),
-					actionCollection(), "merge_categories_action" );
 	
-		( void ) new KAction( i18n( "&Merge Similar Ingredients..." ), "ingredients", Qt::CTRL + Qt::Key_M,
-					this, SLOT( mergeSimilarIngredients() ),
-					actionCollection(), "merge_ingredients_action" );
+		mergeCategoriesAction = new KAction( this );
+		mergeCategoriesAction->setIcon( KIcon( "edit" ) );
+		mergeCategoriesAction->setText( i18n( "&Measurement Converter" ) );
+		mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
+		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );
+		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarCategories() ) );
+		
 	}
 
 	KAction *action = KStandardAction::openNew( this, SLOT( fileNew() ), actionCollection() );
@@ -212,38 +225,49 @@ void Krecipes::setupActions()
 	KStandardAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
 	KStandardAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
 
-	( void ) new KAction( i18n( "Import from File..." ), Qt::CTRL + Qt::Key_I,
-	                      this, SLOT( import() ),
-	                      actionCollection(), "import_action" );
+	importAction = new KAction( this );
+	importAction->setText( i18n( "Import from File..." ) );
+	importAction->setShortcut( Qt::CTRL + Qt::Key_I );
+	actionCollection()->addAction( "import_action" , importAction );
+	connect( importAction, SIGNAL(triggered(bool)), m_view, SLOT( import() ) );
 
-	( void ) new KAction( i18n( "Import from Database..." ), 0,
-	                      this, SLOT( kreDBImport() ),
-	                      actionCollection(), "import_db_action" );
+	importDBAction= new KAction( this );
+	importDBAction->setText( i18n( "Import from Database..." ) );
+	actionCollection()->addAction( "import_db_action" , importDBAction );
+	connect( importDBAction, SIGNAL(triggered(bool)), m_view, SLOT( KreDBImport() ) );
 
-	exportAction = new KAction( i18n( "Export..." ), 0,
-	                            this, SLOT( fileExport() ),
-	                            actionCollection(), "export_action" );
+	exportAction = new KAction( this );
+	exportAction->setText( i18n( "Export..." ) );
+	actionCollection()->addAction( "export_action" , exportAction );
+	connect( exportAction, SIGNAL(triggered(bool)), m_view, SLOT( fileExport() ) );
 
-	copyToClipboardAction = new KAction( i18n( "&Copy to Clipboard" ), "edit-copy",
-	                            Qt::CTRL + Qt::Key_C,
-	                            this, SLOT( fileToClipboard() ),
-	                            actionCollection(), "copy_to_clipboard_action" );
+	copyToClipboardAction = new KAction( this );
+	copyToClipboardAction->setText( i18n( "&Copy to Clipboard" ) );
+	copyToClipboardAction->setIcon( KIcon( "edit-copy" ) );
+	copyToClipboardAction->setShortcut( Qt::CTRL + Qt::Key_C );
+	actionCollection()->addAction( "copy_to_clipboard_action" , copyToClipboardAction );
+	connect( copyToClipboardAction, SIGNAL(triggered(bool)), m_view, SLOT( () ) );
 
-	( void ) new KAction( i18n( "Page Setup..." ), 0,
-	                      this, SLOT( pageSetupSlot() ),
-	                      actionCollection(), "page_setup_action" );
+	
+        pageSetupAction = new KAction( this );
+        pageSetupAction->setText( i18n( "Page Setup..." ) );
+        actionCollection()->addAction( "page_setup_action" , pageSetupAction );
+        connect( pageSetupAction, SIGNAL(triggered(bool)), m_view, SLOT( pageSetupSlot() ) );
 
-	( void ) new KAction( i18n( "Print Setup..." ), 0,
-	                      this, SLOT( printSetupSlot() ),
-	                      actionCollection(), "print_setup_action" );
+        printSetupAction = new KAction( this );
+        printSetupAction->setText( i18n( "Print Setup..." ) );
+        actionCollection()->addAction( "print_setup_action" , printSetupAction );
+        connect( printSetupAction, SIGNAL(triggered(bool)), m_view, SLOT( printSetupSlot() ) );
 
-	( void ) new KAction( i18n( "Backup..." ), "krecipes_file", 0,
-	                      this, SLOT( backupSlot() ),
-	                      actionCollection(), "backup_action" );
+        backupAction = new KAction( this );
+        backupAction->setText( i18n( "Backup..." ) );
+        actionCollection()->addAction( "backup_action" , backupAction );
+        connect( backupAction, SIGNAL(triggered(bool)), m_view, SLOT( backupSlot() ) );
 
-	( void ) new KAction( i18n( "Restore..." ), 0,
-	                      this, SLOT( restoreSlot() ),
-	                      actionCollection(), "restore_action" );
+        restoreAction = new KAction( this );
+        restoreAction->setText( i18n( "Restore..." ) );
+        actionCollection()->addAction( "restore_action" , restoreAction );
+        connect( restoreAction, SIGNAL(triggered(bool)), m_view, SLOT( restoreSlot() ) );
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
@@ -639,7 +663,7 @@ void Krecipes::optionsConfigureKeys()
 {
 #if KDE_IS_VERSION(3,1,92 )
 	// for KDE 3.2: KKeyDialog::configureKeys is deprecated
-	KShortcutsDialog::configure( actionCollection(), this, true );
+	KShortcutsDialog::configure( actionCollection(), Qt::Key_K, this, true );
 #else
 
 	KKeyDialog::configureKeys( actionCollection(), "krecipesui.rc" );

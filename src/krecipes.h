@@ -18,12 +18,12 @@
 
 #include <kapplication.h>
 #include <kaction.h>
-#include <kmainwindow.h>
 
 #include "krecipesview.h" //for KrePanel
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <Q3ValueList>
+#include <KXmlGuiWindow>
 
 class KrecipesView;
 
@@ -36,7 +36,7 @@ class ConversionDialog;
  * This class serves as the main window for Krecipes.  It handles the
  * menus, toolbars, and status bars.
  */
-class Krecipes : public KMainWindow
+class Krecipes : public KXmlGuiWindow
 {
 	Q_OBJECT
 public:
@@ -124,6 +124,15 @@ private:
 	KAction *printAction;
 	KAction *reloadAction;
 	KAction *copyToClipboardAction;
+	KAction *converterAction;
+	KAction *mergeCategoriesAction;
+	KAction *importAction;
+	KAction *importDBAction;
+	KAction *pageSetupAction;
+	KAction *printSetupAction;
+	KAction *backupAction;
+	KAction *restoreAction;
+	
 	KConfigGroup *groupConfig;
 
 	KDialog *parsing_file_dlg;
