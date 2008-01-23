@@ -115,7 +115,7 @@ class KreMenuButton: public QWidget
 {
 	Q_OBJECT
 public:
-	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = 0, const char *name = 0 );
+	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = MenuId(), const char *name = 0 );
 
 	~KreMenuButton();
 
@@ -162,7 +162,7 @@ private slots:
 	void forwardClicks( void )
 	{
 		emit clicked( this );
-		if ( subMenuId != 0 )
+		if ( subMenuId != MenuId() )
 			emit clicked( subMenuId );
 	}
 

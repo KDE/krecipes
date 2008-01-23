@@ -14,6 +14,7 @@
 #define RECIPEACTIONSHANDLER_H
 
 #include <qobject.h>
+#include <qpoint.h>
 #include <q3valuelist.h>
 #include <q3ptrlist.h>
 

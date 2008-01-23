@@ -15,17 +15,18 @@
 
 #include "kstartuplogo.h"
 
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
+#include <QDesktopWidget>
 
 KStartupLogo::KStartupLogo( QWidget * parent, const char *name ) : QWidget( parent, name, Qt::WStyle_NoBorder | Qt::WStyle_Customize | Qt::WDestructiveClose ), m_bReadyToHide( false )
 {
-	QString dataDir = locate( "data", "krecipes/pics/startlogo.png" );
+	QString dataDir = KStandardDirs::locate( "data", "krecipes/pics/startlogo.png" );
 	QPixmap pm( dataDir );
 	setBackgroundPixmap( pm );
 
@@ -54,9 +55,9 @@ QRect KStartupLogo::splashScreenDesktopGeometry() const
 	QDesktopWidget *dw = QApplication::desktop();
 	
 	if (dw->isVirtualDesktop()) {
-		KConfigGroup group(KGlobal::config(), "Windows");
-		int scr = group.readNumEntry("Unmanaged", -3);
-		if (group.readBoolEntry("XineramaEnabled", true) && scr != -2) {
+		KConfigGroup group = KGlobal::config()->group( "Windows" );
+		int scr = group.readEntry("Unmanaged", -3);
+		if (group.readEntry("XineramaEnabled", true) && scr != -2) {
 			if (scr == -3)
 				scr = dw->screenNumber(QCursor::pos());
 			return dw->screenGeometry(scr);

@@ -52,13 +52,14 @@
 #include "profiling.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: DCOPObject( "KrecipesInterface" ), Q3VBox( parent )
+		: Q3VBox( parent )
 {
 	#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
 	#endif
-
-	kapp->dcopClient()->setDefaultObject( objId() );
+	
+	// DBus ?
+	//kapp->dcopClient()->setDefaultObject( objId() );
 
 	// Init the setup wizard if necessary
 	kDebug() << "Beginning wizard" << endl;
@@ -77,8 +78,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Read the database setup
 
-	KConfig *config = KGlobal::config();
-	config->sync();
+	KConfigGroup config;
+	config.sync();
 
 
 	// Check if the database type is among those supported
@@ -156,8 +157,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextButton->setFlat( true );
 	END_TIMER()
 
-	config->setGroup( "Performance" );
-	int limit = config->readNumEntry( "CategoryLimit", -1 );
+	config.group( "Performance" );
+	int limit = config.readEntry( "CategoryLimit", -1 );
 	database->updateCategoryCache(limit);
 
 	// Right Panel Widgets
@@ -533,11 +534,10 @@ void KrecipesView::createNewElement( void )
 
 void KrecipesView::wizard( bool force )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Wizard" );
-	bool setupDone = config->readBoolEntry( "SystemSetup", false );
+	KConfigGroup config = KGlobal::config()->group( "Wizard" );
+	bool setupDone = config.readEntry( "SystemSetup", false );
 
-	QString setupVersion = config->readEntry( "Version", "0.3" );  // By default assume it's 0.3. This parameter didn't exist in that version yet.
+	QString setupVersion = config.readEntry( "Version", "0.3" );  // By default assume it's 0.3. This parameter didn't exist in that version yet.
 
 	if ( !setupDone || ( setupVersion.toDouble() < 0.5 ) || force )  // The config structure changed in version 0.4 to have DBType and Config Structure version
 	{
@@ -550,9 +550,9 @@ void KrecipesView::wizard( bool force )
 		SetupWizard *setupWizard = new SetupWizard( this );
 		if ( setupWizard->exec() == QDialog::Accepted )
 		{
-			config->sync();
-			config->setGroup( "DBType" );
-			dbType = config->readEntry( "Type", "SQLite" );
+			config.sync();
+			config.group( "DBType" );
+			dbType = config.readEntry( "Type", "SQLite" );
 
 			kDebug() << "Setting up" << endl;
 			setupWizard->getOptions( setupUser, initData, doUSDAImport );
@@ -685,7 +685,7 @@ void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 	if ( !recipeButton ) {
 		recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
 
-		recipeButton->setIconSet( il->loadIconSet( "document-save", KIcon::Small ) );
+		recipeButton->setIconSet( il->loadIconSet( "document-save",KIconLoader::Panel, KIcon::Small ) );
 
 		QString short_title = title.left( 20 );
 		if ( title.length() > 20 )
@@ -819,12 +819,12 @@ void KrecipesView::resizeRightPane( int lpw, int )
 
 
 
-void KrecipesView::initDatabase( KConfig *config )
+void KrecipesView::initDatabase( KConfigGroup config )
 {
 
 	// Read the database type
-	config->sync();
-	config->setGroup( "DBType" );
+	config.sync();
+	config.group( "DBType" );
 	dbType = checkCorrectDBType( config );
 
 
@@ -849,8 +849,8 @@ void KrecipesView::initDatabase( KConfig *config )
 		// Reread the configuration file.
 		// The user may have changed the data and/or DB type
 
-		config->sync();
-		config->setGroup( "DBType" );
+		config.sync();
+		config.group( "DBType" );
 		dbType = checkCorrectDBType( config );
 
 		delete database;
@@ -868,19 +868,18 @@ void KrecipesView::initDatabase( KConfig *config )
 	kDebug() << i18n( "DB started correctly\n" ).toLatin1();
 }
 
-QString KrecipesView::checkCorrectDBType( KConfig *config )
+QString KrecipesView::checkCorrectDBType( KConfigGroup config )
 {
-	dbType = config->readEntry( "Type", "SQLite" );
+	dbType = config.readEntry( "Type", "SQLite" );
 
 	while ( ( dbType != "SQLite" ) && ( dbType != "MySQL" ) && ( dbType != "PostgreSQL" ) ) {
 		questionRerunWizard( i18n( "The configured database type (%1) is unsupported." ).arg( dbType ), i18n( "Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL." ) );
 
 		// Read the database setup again
 
-		config = KGlobal::config();
-		config->sync();
-		config->setGroup( "DBType" );
-		dbType = config->readEntry( "Type", "SQLite" );
+		config = KGlobal::config()->group( "DBType" );
+		config.sync();
+		dbType = config.readEntry( "Type", "SQLite" );
 	}
 	return ( dbType );
 }
@@ -921,9 +920,10 @@ void KrecipesView::reload()
 	prepMethodsPanel->reload( ReloadIfPopulated );
 }
 
-DCOPRef KrecipesView::currentDatabase() const
+QString KrecipesView::currentDatabase() const
 {
-	return DCOPRef(database);
+	// QDbus to be done
+	//return DCOPRef(database);
 }
 
 

@@ -8,7 +8,6 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
-
 #include "setupwizard.h"
 
 #ifdef HAVE_CONFIG_H
@@ -38,11 +37,13 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
+#include <K3Wizard>
 
 #include "backends/usda_ingredient_data.h"
 
-SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : KWizard( parent, name, modal, f )
+SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : K3Wizard( parent, name, modal, f )
 {
+
 	welcomePage = new WelcomePage( this );
 	addPage( welcomePage, i18n( "Welcome to Krecipes" ) );
 
@@ -102,7 +103,7 @@ void SetupWizard::next()
 		}
 	}
 
-	KWizard::next();
+	K3Wizard::next();
 }
 
 
@@ -138,7 +139,7 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
-	QPixmap logoPixmap ( locate( "data", "krecipes/pics/wizard.png" ) );
+	QPixmap logoPixmap ( KStandardDirs::locate( "data", "krecipes/pics/wizard.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( logoPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -152,7 +153,7 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 	welcomeText->setMinimumWidth( 200 );
 	welcomeText->setMaximumWidth( 10000 );
 	welcomeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	welcomeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+	welcomeText->setAlignment( int( Qt::WordBreak | Qt::AlignTop ) );
 	layout->addWidget( welcomeText, 1, 3 );
 
 }
@@ -167,7 +168,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 
 	// Logo
-	QPixmap permissionsSetupPixmap ( locate( "data", "krecipes/pics/dbpermissions.png" ) );
+	QPixmap permissionsSetupPixmap ( KStandardDirs::locate( "data", "krecipes/pics/dbpermissions.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( permissionsSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -183,7 +184,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	permissionsText->setText( i18n( "This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]" ) );
 
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+	permissionsText->setAlignment( int( Qt::WordBreak | Qt::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -275,7 +276,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 
 	// Logo
-	QPixmap permissionsSetupPixmap ( locate( "data", "krecipes/pics/dbpermissions.png" ) );
+	QPixmap permissionsSetupPixmap ( KStandardDirs::locate( "data", "krecipes/pics/dbpermissions.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( permissionsSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -291,7 +292,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	permissionsText->setText( i18n( "This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account." ) );
 
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+	permissionsText->setAlignment( int( Qt::WordBreak | Qt::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -384,7 +385,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Image
 
-	QPixmap serverSetupPixmap ( locate( "data", "krecipes/pics/network.png" ) );
+	QPixmap serverSetupPixmap ( KStandardDirs::locate( "data", "krecipes/pics/network.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -398,7 +399,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings.<br><br><b>Warning: Passwords are stored in plain text and could potentially be compromised.  We recommend that you create a username and password combination solely for use by Krecipes.</b>" ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::WordBreak ) );
+	serverSetupText->setAlignment( int( Qt::AlignTop | Qt::WordBreak ) );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -545,7 +546,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Image
 
-	QPixmap serverSetupPixmap ( locate( "data", "krecipes/pics/network.png" ) );
+	QPixmap serverSetupPixmap ( KStandardDirs::locate( "data", "krecipes/pics/network.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -559,7 +560,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust SQLite settings." ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( int( QLabel::AlignTop | QLabel::AlignJustify ) );
+	serverSetupText->setAlignment( int( Qt::AlignTop | Qt::AlignJustify ) );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -600,7 +601,9 @@ QString SQLiteSetupPage::dbFile( void ) const
 
 void SQLiteSetupPage::selectFile()
 {
-	KFileDialog dialog( QString::null, "*.*|All Files", this, "dialog", true );
+	KFileDialog dialog( KUrl(), "*.*|All Files", this );
+	dialog.setObjectName( "dialog" );
+	dialog.setModal( true );
 	if ( dialog.exec() == QDialog::Accepted ) {
 		fileEdit->setText( dialog.selectedFile() );
 	}
@@ -615,7 +618,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
 
-	QPixmap logoPixmap ( locate( "data", "krecipes/pics/save.png" ) );
+	QPixmap logoPixmap ( KStandardDirs::locate( "data", "krecipes/pics/save.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( logoPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -628,7 +631,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 	saveText->setText( i18n( "Congratulations; all the necessary configuration setup is done. Press 'Finish' to continue, and enjoy cooking!" ) );
 	saveText->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
-	saveText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+	saveText->setAlignment( int( Qt::WordBreak | Qt::AlignVCenter ) );
 	layout->addWidget( saveText, 1, 3 );
 
 
@@ -637,7 +640,6 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 void SetupWizard::save( void )
 {
 	kDebug() << "Setting parameters in kconfig..." << endl;
-	KConfig *config = KGlobal::config();
 
 	// Save the database type
 	QString sDBType;
@@ -653,29 +655,29 @@ void SetupWizard::save( void )
 		sDBType = "SQLite";
 		break;
 	}
-
-	config->setGroup( "DBType" );
-	config->writeEntry( "Type", sDBType );
+	
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
+	config.writeEntry( "Type", sDBType );
 	kDebug() << "DB type set in kconfig was... " << sDBType << endl;
 	// Save the server data if needed
 	if ( !( dbTypeSetupPage->dbType() == SQLite ) ) {
-		config->setGroup( "Server" );
-		config->writeEntry( "Host", serverSetupPage->server() );
-		config->writeEntry( "Username", serverSetupPage->user() );
-		config->writeEntry( "Password", serverSetupPage->password() );
-		config->writeEntry( "DBName", serverSetupPage->dbName() );
+		config.group( "Server" );
+		config.writeEntry( "Host", serverSetupPage->server() );
+		config.writeEntry( "Username", serverSetupPage->user() );
+		config.writeEntry( "Password", serverSetupPage->password() );
+		config.writeEntry( "DBName", serverSetupPage->dbName() );
 		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." << endl;
 	}
 	else {
-		config->setGroup( "Server" );
-		config->writeEntry( "DBFile", sqliteSetupPage->dbFile() );
+		config.group( "Server" );
+		config.writeEntry( "DBFile", sqliteSetupPage->dbFile() );
 	}
 
 	// Indicate that settings were already made
 
-	config->setGroup( "Wizard" );
-	config->writeEntry( "SystemSetup", true );
-	config->writeEntry( "Version", "0.9" );
+	config.group( "Wizard" );
+	config.writeEntry( "SystemSetup", true );
+	config.writeEntry( "Version", "0.9" );
 	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;
 }
 
@@ -720,11 +722,11 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	initializeText->setText( i18n( "Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. " ) );
 
 	initializeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	initializeText->setAlignment( int( QLabel::WordBreak | QLabel::AlignTop ) );
+	initializeText->setAlignment( int( Qt::WordBreak | Qt::AlignTop ) );
 	layout->addWidget( initializeText, 1, 3 );
 
 	// Logo
-	QPixmap dataInitializePixmap ( locate( "data", "krecipes/pics/recipes.png" ) );
+	QPixmap dataInitializePixmap ( KStandardDirs::locate( "data", "krecipes/pics/recipes.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( dataInitializePixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -778,7 +780,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Image
 
-	QPixmap serverSetupPixmap ( locate( "data", "krecipes/pics/network.png" ) );
+	QPixmap serverSetupPixmap ( KStandardDirs::locate( "data", "krecipes/pics/network.png" ) );
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -792,7 +794,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	dbTypeSetupText = new QLabel( this );
 	dbTypeSetupText->setText( i18n( "Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL or PostgreSQL database." ) );
 	dbTypeSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	dbTypeSetupText->setAlignment( int( QLabel::AlignTop | QLabel::WordBreak ) );
+	dbTypeSetupText->setAlignment( int( Qt::AlignTop | Qt::WordBreak ) );
 	layout->addWidget( dbTypeSetupText, 1, 3 );
 
 	// Text spacer

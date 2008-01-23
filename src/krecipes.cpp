@@ -203,11 +203,18 @@ void Krecipes::setupActions()
 	if ( groupConfig->readEntry("UnhideMergeTools",false) ) {
 	
 		mergeCategoriesAction = new KAction( this );
-		mergeCategoriesAction->setIcon( KIcon( "edit" ) );
-		mergeCategoriesAction->setText( i18n( "&Measurement Converter" ) );
+		mergeCategoriesAction->setIcon( KIcon( "categories" ) );
+		mergeCategoriesAction->setText( i18n( "&Merge Similar Categories..." ) );
 		mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );
 		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarCategories() ) );
+		
+		mergeIngredientsAction = new KAction( this );
+		mergeIngredientsAction->setIcon( KIcon( "ingredients" ) );
+		mergeIngredientsAction->setText( i18n( "&Merge Similar Ingredients..." ) );
+		mergeIngredientsAction->setShortcut( Qt::CTRL + Qt::Key_M );
+		actionCollection()->addAction( "merge_ingredients_action", mergeIngredientsAction );
+		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarIngredients() ) );
 		
 	}
 
@@ -218,7 +225,6 @@ void Krecipes::setupActions()
 
 	KStandardAction::quit( kapp, SLOT( quit() ), actionCollection() );
 
-	m_toolbarAction = KStandardAction::showToolbar( this, SLOT( optionsShowToolbar() ), actionCollection() );
 	m_statusbarAction = KStandardAction::showStatusbar( this, SLOT( optionsShowStatusbar() ), actionCollection() );
 
 	KStandardAction::keyBindings( this, SLOT( optionsConfigureKeys() ), actionCollection() );
@@ -639,16 +645,6 @@ bool Krecipes::queryClose()
 		return true;
 }
 
-void Krecipes::optionsShowToolbar()
-{
-	// this is all very cut and paste code for showing/hiding the
-	// toolbar
-	if ( m_toolbarAction->isChecked() )
-		toolBar() ->show();
-	else
-		toolBar() ->hide();
-}
-
 void Krecipes::optionsShowStatusbar()
 {
 	// this is all very cut and paste code for showing/hiding the
@@ -663,7 +659,7 @@ void Krecipes::optionsConfigureKeys()
 {
 #if KDE_IS_VERSION(3,1,92 )
 	// for KDE 3.2: KKeyDialog::configureKeys is deprecated
-	KShortcutsDialog::configure( actionCollection(), Qt::Key_K, this, true );
+	KShortcutsDialog::configure( actionCollection(), KShortcutsEditor::LetterShortcutsAllowed , this, true );
 #else
 
 	KKeyDialog::configureKeys( actionCollection(), "krecipesui.rc" );

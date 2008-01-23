@@ -126,6 +126,7 @@ private:
 	KAction *copyToClipboardAction;
 	KAction *converterAction;
 	KAction *mergeCategoriesAction;
+	KAction *mergeIngredientsAction;
 	KAction *importAction;
 	KAction *importDBAction;
 	KAction *pageSetupAction;

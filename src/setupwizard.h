@@ -11,11 +11,12 @@
 #ifndef SETUPWIZARD_H
 #define SETUPWIZARD_H
 
-#include <qvbuttongroup.h>
+#include <Q3VButtonGroup>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
-#include <kwizard.h>
+#include <kassistantdialog.h>
+#include <K3Wizard>
 #include <klineedit.h>
 #include <ktextedit.h>
 
@@ -35,7 +36,7 @@ class SQLiteSetupPage;
 
 enum DBType {SQLite, MySQL, PostgreSQL};
 
-class SetupWizard: public KWizard
+class SetupWizard: public K3Wizard 
 {
 	Q_OBJECT
 public:

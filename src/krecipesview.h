@@ -94,7 +94,7 @@ public:
 	 */
 	virtual ~KrecipesView();
 
-	virtual QDBusInterface currentDatabase() const;
+	virtual QString currentDatabase() const;
 	RecipeDB *database;
 
 	/**
@@ -143,9 +143,9 @@ public:
 private:
 
 	// Internal methods
-	QString checkCorrectDBType( KConfig *config );
+	QString checkCorrectDBType( KConfigGroup config );
 	void initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port );
-	void initDatabase( KConfig *config );
+	void initDatabase( KConfigGroup config );
 	bool questionRerunWizard( const QString &message, const QString &error = "" );
 	void setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser = QString::null, const QString &adminPass = QString::null, int port = 0 );
 	void wizard( bool force = false );

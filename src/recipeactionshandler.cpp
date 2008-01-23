@@ -111,7 +111,7 @@ void RecipeActionsHandler::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, con
 	}
 }
 
-Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem> &items ) const
+Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem> items ) const
 {
 	Q3ValueList<int> ids;
 
@@ -141,7 +141,7 @@ Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem
 
 void RecipeActionsHandler::open()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	Q3PtrList<Q3ListViewItem*> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		Q3ValueList<int> ids = recipeIDs(items);
 		if ( ids.count() == 1 )
@@ -336,7 +336,7 @@ void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const 
 
 void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
-	KFileDialog * fd = new KFileDialog( QString::null,
+	KFileDialog * fd = new KFileDialog( KUrl(),
 	                                    QString( "*.kre|%1 (*.kre)\n"
 	                                             "*.kreml|Krecipes (*.kreml)\n"
 	                                             "*.txt|%3 (*.txt)\n"
@@ -347,7 +347,9 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 	                                             "*.xml|RecipeML (*.xml)\n"
 	                                             "*.rk|Rezkonv (*.rk)"
 	                                              ).arg( i18n( "Compressed Krecipes format" ) ).arg( i18n( "Web page" ) ).arg( i18n("Plain Text") ),
-	                                    0, "export_dlg", true );
+	                                    0 );
+	fd->setObjectName( "export_dlg" );
+	fd->setModal( true );
 	fd->setCaption( caption );
 	fd->setOperationMode( KFileDialog::Saving );
 	fd->setSelection( selection );
@@ -363,7 +365,7 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 			else if ( fd->currentFilter() == "*" ) {
 				CategoryTree *cat_structure = new CategoryTree;
 				database->loadCategories( cat_structure );
-				exporter = new HTMLBookExporter( cat_structure, fd->baseURL().path(), "*.html" );
+				exporter = new HTMLBookExporter( cat_structure, fd->baseUrl().path(), "*.html" );
 			}
 			else if ( fd->currentFilter() == "*.html" ) {
 				exporter = new HTMLExporter( fileName, fd->currentFilter() );
@@ -387,7 +389,8 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 			}
 
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 ) {
-				KProgressDialog progress_dialog( 0, "export_progress_dialog", QString::null, i18n( "Saving recipes..." ) );
+				KProgressDialog progress_dialog( 0, QString::null, i18n( "Saving recipes..." ) );
+				progress_dialog.setObjectName("export_progress_dialog");
 				exporter->exporter( ids, database, &progress_dialog );
 			}
 			delete exporter;
@@ -398,9 +401,8 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 
 void RecipeActionsHandler::recipesToClipboard( const Q3ValueList<int> &ids, RecipeDB *db )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup("Export");
-	QString formatFilter = config->readEntry("ClipboardFormat");
+	KConfigGroup config = KGlobal::config()->group("Export");
+	QString formatFilter = config.readEntry("ClipboardFormat");
 
 	BaseExporter * exporter;
 	if ( formatFilter == "*.xml" )

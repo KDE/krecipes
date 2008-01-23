@@ -19,7 +19,7 @@ class KrecipesIface
 public:
 	virtual ~KrecipesIface();
 public Q_SLOTS:
-	virtual Q_SCRIPTABLE QDBusInterface currentDatabase() const = 0;
+	virtual Q_SCRIPTABLE QString currentDatabase() const = 0;
  	virtual Q_SCRIPTABLE void reload() = 0;
  	     
  	virtual Q_SCRIPTABLE void exportRecipes( const Q3ValueList<int> &ids ) = 0;

@@ -36,7 +36,7 @@
 #include <Q3VBoxLayout>
 
 #include <kapplication.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -50,39 +50,62 @@
 #include <kglobal.h>
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
-		: KDialog( IconList, i18n( "Krecipes Preferences" ),
-		               Help | Ok | Cancel, Ok, parent )
+		: KPageDialog( parent )
 {
+	setFaceType( List );
+	setObjectName( i18n( "Krecipes Preferences" ) );
+	setButtons( Help | Ok | Cancel );
+	setDefaultButton( Ok );
+
 	// this is the base class for your preferences dialog.  it is now
 	// a TreeList dialog.. but there are a number of other
 	// possibilities (including Tab, Swallow, and just Plain)
 	Q3Frame * frame;
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DBType" );
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
 	KIconLoader *il = KIconLoader::global();
-	frame = addPage( i18n( "Server Settings" ),
-	                 QString( i18n( "Database Server Options (%1)" ) ).arg( config->readEntry( "Type" ) ),
-	                 il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 ) );
+	
+	KPageWidgetItem * page = new KPageWidgetItem( frame , i18n( "Server Settings" ) );
+	page->setHeader( QString( i18n( "Database Server Options (%1)" ) ).arg( config.readEntry( "Type" ) ) );
+	il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
+	addPage(page);
+
 	Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
 	m_pageServer = new ServerPrefs( frame );
 	layout->addWidget( m_pageServer );
 	m_helpMap.insert(0,"configure-server-settings");
 
-	frame = addPage( i18n( "Formatting" ), i18n( "Customize Formatting" ), il->loadIcon( "math_frac", KIconLoader::NoGroup, 32 ) );
+
+	page = new KPageWidgetItem( frame , i18n( "Formatting" ) );
+	page->setHeader( i18n( "Customize Formatting" ) );
+	il->loadIcon( "math_frac", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "math_frac", il ) );
+	addPage(page);
+
 	Q3HBoxLayout* formatting_layout = new Q3HBoxLayout( frame );
 	m_pageNumbers = new NumbersPrefs( frame );
 	formatting_layout->addWidget( m_pageNumbers );
 	m_helpMap.insert(1,"custom-formatting");
 
-	frame = addPage( i18n( "Import/Export" ), i18n( "Recipe Import and Export Options" ), il->loadIcon( "go-down", KIconLoader::NoGroup, 32 ) );
+	page = new KPageWidgetItem( frame , "Import/Export" );
+	page->setHeader( i18n( "Recipe Import and Export Options" ) );
+	il->loadIcon( "go-down", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "go-down", il ) );
+	addPage(page);
+	
 	Q3HBoxLayout* import_layout = new Q3HBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
 	m_helpMap.insert(2,"import-export-preference");
 
-	frame = addPage( i18n( "Performance" ), i18n( "Performance Options" ), il->loadIcon( "launch", KIconLoader::NoGroup, 32 ) );
+	page = new KPageWidgetItem( frame , "performance" );
+	page->setHeader( i18n( "Performance Options" ) );
+	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "launch", il ) );
+	addPage(page);
+	
 	Q3HBoxLayout* performance_layout = new Q3HBoxLayout( frame );
 	m_pagePerformance = new PerformancePrefs( frame );
 	performance_layout->addWidget( m_pagePerformance );
@@ -95,7 +118,8 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 
 void KrecipesPreferences::slotHelp()
 {
-	KToolInvocation::invokeHelp( m_helpMap[activePageIndex()] );
+	// KDE4 port to be done
+	//KToolInvocation::invokeHelp( m_helpMap[currentPage()->name()] );
 }
 
 
@@ -156,7 +180,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addWidget( portText, 7, 1 );
 
 	portEdit = new KIntNumInput( this );
-	portEdit->setMinValue(0);
+	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18n("Default") );
 	portEdit->setFixedSize( QSize( 120, 20 ) );
 	portEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -186,14 +210,9 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysqldump") );
-	dumpPathRequester = new KUrlRequester( backupGBox );
-	dumpPathRequester->setFilter( "mysqldump" );
 
 	QLabel *mysqlPathLabel = new QLabel( backupGBox );
 	mysqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysql") );
-	mysqlPathRequester = new KUrlRequester( backupGBox );
-	mysqlPathRequester->setFilter( "mysql" );
-
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
@@ -201,28 +220,28 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerRight, 1, 4 );
 
 	// Load & Save Current Settings
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Server" );
-	serverEdit->setText( config->readEntry( "Host", "localhost" ) );
-	usernameEdit->setText( config->readEntry( "Username", "" ) );
-	passwordEdit->setText( config->readEntry( "Password", "" ) );
-	portEdit->setValue( config->readNumEntry( "Port", 0 ) );
-	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
-	dumpPathRequester->setURL( config->readEntry( "MySQLDumpPath", "mysqldump" ) );
-	mysqlPathRequester->setURL( config->readEntry( "MySQLPath", "mysql" ) );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	serverEdit->setText( config.readEntry( "Host", "localhost" ) );
+	usernameEdit->setText( config.readEntry( "Username", "" ) );
+	passwordEdit->setText( config.readEntry( "Password", "" ) );
+	portEdit->setValue( config.readEntry( "Port", 0 ) );
+	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
+	dumpPathRequester = new KUrlRequester( config.readEntry( "MySQLDumpPath", "mysqldump" ), backupGBox );
+	dumpPathRequester->setFilter( "mysqldump" );
+	mysqlPathRequester = new KUrlRequester( config.readEntry( "MySQLPath", "mysql" ), backupGBox );
+	mysqlPathRequester->setFilter( "mysql" );
 }
 
 void MySQLServerPrefs::saveOptions( void )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	config->writeEntry( "Host", serverEdit->text() );
-	config->writeEntry( "Username", usernameEdit->text() );
-	config->writeEntry( "Password", passwordEdit->text() );
-	config->writeEntry( "Port", portEdit->value() );
-	config->writeEntry( "DBName", dbNameEdit->text() );
-	config->writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
-	config->writeEntry( "MySQLPath", mysqlPathRequester->url() );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	config.writeEntry( "Host", serverEdit->text() );
+	config.writeEntry( "Username", usernameEdit->text() );
+	config.writeEntry( "Password", passwordEdit->text() );
+	config.writeEntry( "Port", portEdit->value() );
+	config.writeEntry( "DBName", dbNameEdit->text() );
+	config.writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
+	config.writeEntry( "MySQLPath", mysqlPathRequester->url() );
 }
 
 
@@ -283,7 +302,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	layout->addWidget( portText, 7, 1 );
 
 	portEdit = new KIntNumInput( this );
-	portEdit->setMinValue(0);
+	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18n("Default") );
 	portEdit->setFixedSize( QSize( 120, 20 ) );
 	portEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -313,14 +332,9 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("pg_dump") );
-	dumpPathRequester = new KUrlRequester( backupGBox );
-	dumpPathRequester->setFilter( "pg_dump" );
 
 	QLabel *psqlPathLabel = new QLabel( backupGBox );
 	psqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("psql") );
-	psqlPathRequester = new KUrlRequester( backupGBox );
-	psqlPathRequester->setFilter( "psql" );
-
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
@@ -328,28 +342,28 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	layout->addItem( spacerRight, 1, 4 );
 
 	// Load & Save Current Settings
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Server" );
-	serverEdit->setText( config->readEntry( "Host", "localhost" ) );
-	usernameEdit->setText( config->readEntry( "Username", "" ) );
-	passwordEdit->setText( config->readEntry( "Password", "" ) );
-	portEdit->setValue( config->readNumEntry( "Port", 0 ) );
-	dbNameEdit->setText( config->readEntry( "DBName", "Krecipes" ) );
-	dumpPathRequester->setURL( config->readEntry( "PgDumpPath", "pg_dump" ) );
-	psqlPathRequester->setURL( config->readEntry( "PsqlPath", "psql" ) );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	serverEdit->setText( config.readEntry( "Host", "localhost" ) );
+	usernameEdit->setText( config.readEntry( "Username", "" ) );
+	passwordEdit->setText( config.readEntry( "Password", "" ) );
+	portEdit->setValue( config.readEntry( "Port", 0 ) );
+	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
+	dumpPathRequester = new KUrlRequester( config.readEntry( "PgDumpPath", "pg_dump" ), backupGBox );
+	dumpPathRequester->setFilter( "pg_dump" );
+	psqlPathRequester = new KUrlRequester( config.readEntry( "PsqlPath", "psql" ), backupGBox );
+	psqlPathRequester->setFilter( "psql" );
 }
 
 void PostgreSQLServerPrefs::saveOptions( void )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	config->writeEntry( "Host", serverEdit->text() );
-	config->writeEntry( "Username", usernameEdit->text() );
-	config->writeEntry( "Password", passwordEdit->text() );
-	config->writeEntry( "Port", portEdit->value() );
-	config->writeEntry( "DBName", dbNameEdit->text() );
-	config->writeEntry( "PgDumpPath", dumpPathRequester->url() );
-	config->writeEntry( "PsqlPath", psqlPathRequester->url() );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	config.writeEntry( "Host", serverEdit->text() );
+	config.writeEntry( "Username", usernameEdit->text() );
+	config.writeEntry( "Password", passwordEdit->text() );
+	config.writeEntry( "Port", portEdit->value() );
+	config.writeEntry( "DBName", dbNameEdit->text() );
+	config.writeEntry( "PgDumpPath", dumpPathRequester->url() );
+	config.writeEntry( "PsqlPath", psqlPathRequester->url() );
 }
 
 
@@ -360,9 +374,6 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	Q3HBox *hbox = new Q3HBox( this );
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
-
-	fileRequester = new KUrlRequester( hbox );
-	hbox->setStretchFactor( fileRequester, 2 );
 
 	Form1Layout->addWidget( hbox );
 
@@ -384,22 +395,20 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg(sqliteBinary) );
-	dumpPathRequester = new KUrlRequester( backupGBox );
-	dumpPathRequester->setFilter( sqliteBinary );
 
 	// Load & Save Current Settings
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Server" );
-	fileRequester->setURL( config->readEntry( "DBFile", KStandardDirs::locateLocal( "appdata", "krecipes.krecdb" ) ) );
-	dumpPathRequester->setURL( config->readEntry( "SQLitePath", sqliteBinary ) );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	fileRequester = new KUrlRequester( config.readEntry( "DBFile", KStandardDirs::locateLocal( "appdata", "krecipes.krecdb" ) ), hbox );
+	hbox->setStretchFactor( fileRequester, 2 );
+	dumpPathRequester = new KUrlRequester( config.readEntry( "SQLitePath", sqliteBinary ), backupGBox );
+	dumpPathRequester->setFilter( sqliteBinary );
 }
 
 void SQLiteServerPrefs::saveOptions( void )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	config->writeEntry( "DBFile", fileRequester->url() );
-	config->writeEntry( "SQLitePath", dumpPathRequester->url() );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	config.writeEntry( "DBFile", fileRequester->url() );
+	config.writeEntry( "SQLitePath", dumpPathRequester->url() );
 }
 
 
@@ -409,9 +418,8 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 {
 	Q3VBoxLayout * Form1Layout = new Q3VBoxLayout( this, 11, 6 );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "DBType" );
-	QString DBtype = config->readEntry( "Type" );
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
+	QString DBtype = config.readEntry( "Type" );
 	if ( DBtype == "MySQL" )
 		serverWidget = new MySQLServerPrefs( this );
 	else if ( DBtype == "PostgreSQL" )
@@ -446,9 +454,8 @@ void KrecipesPreferences::saveSettings( void )
 // Save Server settings
 void ServerPrefs::saveOptions( void )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "DBType" );
-	QString DBtype = config->readEntry( "Type" );
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
+	QString DBtype = config.readEntry( "Type" );
 	if ( DBtype == "MySQL" )
 		( ( MySQLServerPrefs* ) serverWidget ) ->saveOptions();
 	else if ( DBtype == "PostgreSQL" )
@@ -457,8 +464,8 @@ void ServerPrefs::saveOptions( void )
 		( ( SQLiteServerPrefs* ) serverWidget ) ->saveOptions();
 
 	if ( wizard_button->isChecked() ) {
-		config->setGroup( "Wizard" );
-		config->writeEntry( "SystemSetup", false );
+		config.group( "Wizard" );
+		config.writeEntry( "SystemSetup", false );
 	}
 }
 
@@ -500,24 +507,22 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	languageChange();
 
 	// Load Current Settings
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Formatting" );
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	int button = ( config->readBoolEntry( "Fraction", false ) ) ? 1 : 0;
+	int button = ( config.readEntry( "Fraction", false ) ) ? 1 : 0;
 	numberButtonGroup->setButton( button );
 
-	abbrevButton->setChecked( config->readBoolEntry( "AbbreviateUnits", false ) );
+	abbrevButton->setChecked( config.readEntry( "AbbreviateUnits", false ) );
 }
 
 void NumbersPrefs::saveOptions()
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Formatting" );
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
 	bool fraction = !numberButtonGroup->find( 0 ) ->isOn();
-	config->writeEntry( "Fraction", fraction );
+	config.writeEntry( "Fraction", fraction );
 
-	config->writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );
+	config.writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );
 }
 
 void NumbersPrefs::languageChange()
@@ -532,11 +537,10 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 		: QWidget( parent )
 {
 	// Load Current Settings
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Import" );
+	KConfigGroup config = KGlobal::config()->group( "Import" );
 
-	bool overwrite = config->readBoolEntry( "OverwriteExisting", false );
-	bool direct = config->readBoolEntry( "DirectImport", false );
+	bool overwrite = config.readEntry( "OverwriteExisting", false );
+	bool direct = config.readEntry( "DirectImport", false );
 
 	Form1Layout = new Q3VBoxLayout( this, 11, 6 );
 
@@ -566,8 +570,8 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
 	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);
 
-	config->setGroup( "Export" );
-	QString clipboardFormat = config->readEntry("ClipboardFormat");
+	config.group( "Export" );
+	QString clipboardFormat = config.readEntry("ClipboardFormat");
 	if ( clipboardFormat == "*.kreml" )
 		clipBoardFormatComboBox->setCurrentItem(1);
 	else if ( clipboardFormat == "*.mmf" )
@@ -592,15 +596,14 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 void ImportPrefs::saveOptions()
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Import" );
+	KConfigGroup config = KGlobal::config()->group( "Import" );
 
-	config->writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
-	config->writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
+	config.writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
+	config.writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
 
-	config->setGroup( "Export" );
+	config.group( "Export" );
 	QString ext = clipBoardFormatComboBox->currentText().mid(clipBoardFormatComboBox->currentText().find("(")+1,clipBoardFormatComboBox->currentText().length()-clipBoardFormatComboBox->currentText().find("(")-2);
-	config->writeEntry( "ClipboardFormat", ext );
+	config.writeEntry( "ClipboardFormat", ext );
 }
 
 
@@ -609,16 +612,15 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 		: QWidget( parent )
 {
 	// Load Current Settings
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Performance" );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
 
-	int cat_limit = config->readNumEntry( "CategoryLimit", -1 );
-	int limit = config->readNumEntry( "Limit", -1 );
+	int cat_limit = config.readEntry( "CategoryLimit", -1 );
+	int limit = config.readEntry( "Limit", -1 );
 
 	Form1Layout = new Q3VBoxLayout( this, 11, 6 );
 
 	searchAsYouTypeBox = new QCheckBox( i18n( "Search as you type" ), this );
-	searchAsYouTypeBox->setChecked( config->readBoolEntry( "SearchAsYouType", true ) );
+	searchAsYouTypeBox->setChecked( config.readEntry( "SearchAsYouType", true ) );
 
 	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
@@ -653,16 +655,15 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 
 void PerformancePrefs::saveOptions()
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Performance" );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
 
 	int catLimit = ( catLimitInput->value() == 0 ) ? -1 : catLimitInput->value();
-	config->writeEntry( "CategoryLimit", catLimit );
+	config.writeEntry( "CategoryLimit", catLimit );
 
 	int limit = ( limitInput->value() == 0 ) ? -1 : limitInput->value();
-	config->writeEntry( "Limit", limit );
+	config.writeEntry( "Limit", limit );
 
-	config->writeEntry( "SearchAsYouType", searchAsYouTypeBox->isChecked() );
+	config.writeEntry( "SearchAsYouType", searchAsYouTypeBox->isChecked() );
 }
 
 #include "pref.moc"
