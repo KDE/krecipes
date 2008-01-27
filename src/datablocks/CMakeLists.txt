@@ -1,6 +1,26 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../  )
 
+set(datablocks_SRCS
+   recipelist.cpp
+   constraintlist.cpp
+   categorytree.cpp
+   kreborder.cpp
+   recipe.cpp
+   ingredient.cpp
+   ingredientlist.cpp
+   elementlist.cpp
+   element.cpp
+   ingredientproperty.cpp
+   ingredientpropertylist.cpp
+   unit.cpp
+   unitratio.cpp
+   unitratiolist.cpp
+   mixednumber.cpp
+   rating.cpp
+   weight.cpp)
+
+add_library(datablocks SHARED ${datablocks_SRCS})
 
 ########### next target ###############
 

@@ -1,11 +1,27 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(sqlite_subdirs)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_subdirs)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(psql_subdirs)")
+if ( link_lib_SQLITE )
+   add_subdirectory( SQLite )
+endif ( link_lib_SQLITE )
 
-########### next target ###############
+if ( link_lib_MYSQL )
+   add_subdirectory( MySQL )
+endif ( link_lib_MYSQL )
+
+if ( link_lib_POSTGRESQL ) 
+   add_subdirectory( PostgreSQL )
+endif ( link_lib_POSTGRESQL )
+
+set(krecipesdbs_SRCS
+   recipedb.cpp
+   qsqlrecipedb.cpp
+   progressinterface.cpp
+   usda_property_data.cpp
+   usda_ingredient_data.cpp
+   usda_unit_data.cpp)
+
+add_library(krecipesdbs SHARED ${krecipesdbs_SRCS})
 
 
 ########### install files ###############

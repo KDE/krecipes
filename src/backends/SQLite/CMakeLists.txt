@@ -1,12 +1,17 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
-set(libqsqliterecipedb_SRCS
-   krecqsqlitedb.cpp
-   krecqsqliteresult.cpp)
+add_subdirectory( libqsqlite )
 
-add_library(libqsqliterecipedb SHARED ${literecipedb_SRCS})
-target_link_libraries( libqsqliterecipedb )
+set(literecipedb_SRCS
+   literecipedb.cpp
+   qsql_sqlite.cpp)
+
+add_library(literecipedb SHARED ${literecipedb_SRCS})
+target_link_libraries( literecipedb )
+
+
+
 
 ########### next target ###############
 

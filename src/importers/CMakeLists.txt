@@ -1,6 +1,19 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
+set(krecipesimporters_SRCS
+   mx2importer.cpp
+   mmfimporter.cpp
+   mxpimporter.cpp
+   nycgenericimporter.cpp
+   recipemlimporter.cpp
+   baseimporter.cpp
+   kreimporter.cpp
+   rezkonvimporter.cpp
+   kredbimporter.cpp)
+
+add_library(krecipesimporters SHARED ${krecipesimporters_SRCS})
+
 
 ########### next target ###############
 

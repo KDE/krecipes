@@ -1,6 +1,8 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../../  )
 
+add_library(mysqlrecipedb SHARED mysqlrecipedb.cpp)
+target_link_libraries( mysqlrecipedb )
 
 ########### next target ###############
 

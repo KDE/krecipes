@@ -39,7 +39,7 @@ set(krecipes_SRCS
 
 kde4_add_executable(krecipes ${krecipes_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} krecipesdbs krecipesexporters krecipesimporters krecipeswidgets krecipesdialogs krecipeswidgets datablocks ${KDE4_KHTML_LIBS} )
+target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} krecipesdbs krecipesexporters krecipesimporters krecipeswidgets krecipesdialogs krecipeswidgets datablocks ${KDE4_KHTML_LIBS} )
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 

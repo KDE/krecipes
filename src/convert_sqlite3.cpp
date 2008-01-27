@@ -16,8 +16,11 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <k3procio.h>
+
+#include <kglobalsettings.h>
 
 //FIXME: Some messages should be given to the user about success/failure, but that can't be done in the 0.8.x branch due to i18n.
 
@@ -25,9 +28,8 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 {
 	QString file = db_file;
 	if ( file.isEmpty() ) {
-		KConfig *config = KGlobal::config();
-		config->setGroup("Server");
-		file = config->readEntry("DBFile");
+		KConfigGroup config = KGlobal::config()->group("Server");
+		file = config.readEntry("DBFile");
 	}
 
 	K3ProcIO *p = new K3ProcIO;

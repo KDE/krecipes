@@ -1,6 +1,8 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
+add_library(psqlrecipedb SHARED psqlrecipedb.cpp)
+target_link_libraries( psqlrecipedb )
 
 ########### next target ###############
 

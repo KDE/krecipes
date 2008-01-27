@@ -111,13 +111,14 @@ void RecipeActionsHandler::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, con
 	}
 }
 
-Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem> items ) const
+Q3ValueList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items ) const
 {
 	Q3ValueList<int> ids;
 
-	Q3PtrListIterator<Q3ListViewItem> it(items);
-	Q3ListViewItem *item;
-	while ( (item = it.current()) != 0 ) {
+	QListIterator<Q3ListViewItem *> it(items);
+	const Q3ListViewItem *item;
+	while ( it.hasNext() ) {
+		item = it.next();
 		if ( item->rtti() == 1000 ) { //RecipeListItem
 			RecipeListItem * recipe_it = ( RecipeListItem* ) item;
 			if ( ids.find( recipe_it->recipeID() ) == ids.end() )
@@ -133,7 +134,6 @@ Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem
 					ids << (*cat_it).id;
 			}
 		}
-		++it;
 	}
 
 	return ids;
@@ -141,7 +141,7 @@ Q3ValueList<int> RecipeActionsHandler::recipeIDs( const Q3PtrList<Q3ListViewItem
 
 void RecipeActionsHandler::open()
 {
-	Q3PtrList<Q3ListViewItem*> items = parentListView->selectedItems();
+	const QList<Q3ListViewItem*> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		Q3ValueList<int> ids = recipeIDs(items);
 		if ( ids.count() == 1 )
@@ -184,7 +184,7 @@ void RecipeActionsHandler::open()
 
 void RecipeActionsHandler::categorize()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem*> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		ElementList categoryList;
 		SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( parentListView, categoryList, database );
@@ -192,16 +192,16 @@ void RecipeActionsHandler::categorize()
 		if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
 			editCategoriesDialog->getSelectedCategories( &categoryList ); // get the category list chosen
 			
-			Q3PtrListIterator<Q3ListViewItem> it(items);
+			QListIterator<Q3ListViewItem *> it(items);
 			Q3ListViewItem *item;
-			while ( (item = it.current()) != 0 ) {
+			while ( it.hasNext() ) {
+				item = it.next();
 				if ( item->parent() != 0 ) {
 					RecipeListItem * recipe_it = ( RecipeListItem* ) item;
 					int recipe_id = recipe_it->recipeID();
 	
 					database->categorizeRecipe( recipe_id, categoryList );
 				}
-				++it;
 			}
 		}
 
@@ -211,7 +211,7 @@ void RecipeActionsHandler::categorize()
 
 void RecipeActionsHandler::edit()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
 		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one recipe."), i18n("Edit Recipe") );
 	else if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
@@ -224,7 +224,7 @@ void RecipeActionsHandler::edit()
 
 void RecipeActionsHandler::recipeExport()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		Q3ValueList<int> ids = recipeIDs( items );
 
@@ -257,11 +257,12 @@ void RecipeActionsHandler::recipeExport()
 
 void RecipeActionsHandler::removeFromCategory()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3PtrListIterator<Q3ListViewItem> it(items);
+		QListIterator<Q3ListViewItem *> it(items);
 		Q3ListViewItem *item;
-		while ( (item = it.current()) != 0 ) {
+		while ( it.hasNext() ) {
+			item = it.next();
 			if ( item->parent() != 0 ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
 				int recipe_id = recipe_it->recipeID();
@@ -269,39 +270,38 @@ void RecipeActionsHandler::removeFromCategory()
 				CategoryListItem *cat_it = ( CategoryListItem* ) item->parent();
 				database->removeRecipeFromCategory( recipe_id, cat_it->categoryId() );
 			}
-			++it;
 		}
 	}
 }
 
 void RecipeActionsHandler::remove()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3PtrListIterator<Q3ListViewItem> it(items);
+		QListIterator<Q3ListViewItem*> it(items);
 		Q3ListViewItem *item;
-		while ( (item = it.current()) != 0 ) {
+		while ( it.hasNext() ) {
+			item = it.next();
 			if ( item->rtti() == RECIPELISTITEM_RTTI ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
 				emit recipeSelected( recipe_it->recipeID(), 2 );
 			}
-			++it;
 		}
 	}
 }
 
 void RecipeActionsHandler::addToShoppingList()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3PtrListIterator<Q3ListViewItem> it(items);
+		QListIterator<Q3ListViewItem *> it(items);
 		Q3ListViewItem *item;
-		while ( (item = it.current()) != 0 ) {
+		while ( it.hasNext() ) {
+			item = it.next();
 			if ( item->parent() != 0 ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
 				emit recipeSelected( recipe_it->recipeID(), 3 );
 			}
-			++it;
 		}
 	}
 }
@@ -435,7 +435,7 @@ void RecipeActionsHandler::recipesToClipboard( const Q3ValueList<int> &ids, Reci
 
 void RecipeActionsHandler::recipesToClipboard()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		Q3ValueList<int> ids = recipeIDs( items );
 

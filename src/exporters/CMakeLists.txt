@@ -1,6 +1,19 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
+set (krecipesexporters_SRCS 
+   kreexporter.cpp
+   baseexporter.cpp
+   cookmlexporter.cpp
+   recipemlexporter.cpp
+   mmfexporter.cpp
+   htmlexporter.cpp
+   plaintextexporter.cpp
+   rezkonvexporter.cpp
+   htmlbookexporter.cpp
+   xsltexporter.cpp)
+
+add_library(krecipesexporters SHARED ${krecipesexporters_SRCS})
 
 ########### next target ###############
 

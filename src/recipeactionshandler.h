@@ -113,7 +113,7 @@ private:
 	int categorize_item;
 
 	Q3ValueList<int> getAllVisibleItems();
-	Q3ValueList<int> recipeIDs( const Q3PtrList<Q3ListViewItem> &items ) const;
+	Q3ValueList<int> recipeIDs( const QList<Q3ListViewItem *> &items ) const;
 };
 
 #endif //RECIPEACTIONSHANDLER_H

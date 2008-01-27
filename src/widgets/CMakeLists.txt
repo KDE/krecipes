@@ -2,6 +2,41 @@
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
+set(krecipeswidgets_SRCS
+   krelistview.cpp
+   kremenu.cpp
+   paneldeco.cpp
+   ingredientlistview.cpp
+   unitlistview.cpp
+   propertylistview.cpp
+   prepmethodlistview.cpp
+   categorylistview.cpp
+   authorlistview.cpp
+   recipelistview.cpp
+   categorycombobox.cpp
+   kretextedit.cpp
+   dblistviewbase.cpp
+   conversiontable.cpp
+   fractioninput.cpp
+   ingredientcombobox.cpp
+   headercombobox.cpp
+   prepmethodcombobox.cpp
+   inglistviewitem.cpp
+   kdateedit.cpp
+   kdatepickerpopup.cpp
+   headerlistview.cpp
+   ratingwidget.cpp
+   kwidgetlistbox.cpp
+   ratingdisplaywidget.ui
+   criteriacombobox.cpp
+   ingredientinputwidget.cpp
+   unitcombobox.cpp
+   amountunitinput.cpp
+   weightinput.cpp
+   thumbbar.cpp)
+
+add_library(krecipeswidgets SHARED ${krecipeswidgets_SRCS})
+
 ########### next target ###############
 
 
