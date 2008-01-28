@@ -1,5 +1,5 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 add_subdirectory( libqsqlite )
 
@@ -7,7 +7,7 @@ set(literecipedb_SRCS
    literecipedb.cpp
    qsql_sqlite.cpp)
 
-add_library(literecipedb SHARED ${literecipedb_SRCS})
+kde4_add_library(literecipedb SHARED ${literecipedb_SRCS})
 target_link_libraries( literecipedb )
 
 

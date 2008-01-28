@@ -12,6 +12,7 @@
 
 #include <qstringlist.h>
 #include <qfile.h>
+#include <Q3TextStream>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -23,11 +24,11 @@ UnitDataList loadUnits()
 {
 	UnitDataList result;
 
-	QString dataFilename = locate( "appdata", "data/unit-data-" + KGlobal::locale() ->language() + ".txt" );
+	QString dataFilename = KStandardDirs::locate( "appdata", "data/unit-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
 		kDebug() << "No localized unit data available for " << KGlobal::locale() ->language() << endl;
 
-		dataFilename = locate( "appdata", "data/unit-data-en_US.txt" ); //default to English
+		dataFilename = KStandardDirs::locate( "appdata", "data/unit-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
@@ -67,11 +68,11 @@ PrepDataList loadPrepMethods()
 {
 	PrepDataList result;
 
-	QString dataFilename = locate( "appdata", "data/prep-data-" + KGlobal::locale() ->language() + ".txt" );
+	QString dataFilename = KStandardDirs::locate( "appdata", "data/prep-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
 		kDebug() << "No localized prep data available for " << KGlobal::locale() ->language() << endl;
 
-		dataFilename = locate( "appdata", "data/prep-data-en_US.txt" ); //default to English
+		dataFilename = KStandardDirs::locate( "appdata", "data/prep-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );

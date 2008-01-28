@@ -11,6 +11,8 @@
 #include "datablocks/elementlist.h"
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <qstringlist.h>
+
 
 ElementList::ElementList() : Q3ValueList <Element>()
 {}

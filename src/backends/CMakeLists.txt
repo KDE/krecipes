@@ -1,5 +1,11 @@
+########### QT3Support ###############
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+######################################
+
+
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 if ( link_lib_SQLITE )
    add_subdirectory( SQLite )
@@ -21,7 +27,9 @@ set(krecipesdbs_SRCS
    usda_ingredient_data.cpp
    usda_unit_data.cpp)
 
-add_library(krecipesdbs SHARED ${krecipesdbs_SRCS})
+kde4_add_library(krecipesdbs SHARED ${krecipesdbs_SRCS})
+
+target_link_libraries(krecipesdbs ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} )
 
 
 ########### install files ###############

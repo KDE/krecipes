@@ -31,11 +31,10 @@ void ProgressInterface::progressBegin( int steps, const QString &caption, const 
 {
 	m_rate = rate;
 
-	progress_dlg = new KProgressDialog((QWidget*)slot_obj->parent(),0,caption,text,true);
+	progress_dlg = new KProgressDialog((QWidget*)slot_obj->parent(),caption,text,Qt::Dialog);
+	progress_dlg->setModal( true );
 
-	if ( steps == 0 )
-		progress_dlg->progressBar()->setPercentageVisible(false);
-	progress_dlg->progressBar()->setTotalSteps( steps );
+	progress_dlg->progressBar()->setRange( 0, steps );
 }
 
 void ProgressInterface::progressDone()
@@ -55,7 +54,7 @@ void ProgressInterface::progress()
 		++m_rate_at;
 
 		if ( m_rate_at % m_rate == 0 ) {
-			progress_dlg->progressBar()->advance(1);
+			progress_dlg->progressBar()->setValue(progress_dlg->progressBar()->value()+1);
 			m_rate_at = 0;
 		}
 		qApp->processEvents();

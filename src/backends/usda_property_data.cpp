@@ -23,6 +23,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <Q3TextStream>
 
 namespace USDA {
 
@@ -30,11 +31,11 @@ Q3ValueList<PropertyData> loadProperties()
 {
 	Q3ValueList<PropertyData> result;
 
-	QString dataFilename = locate( "appdata", "data/property-data-" + KGlobal::locale() ->language() + ".txt" );
+	QString dataFilename = KStandardDirs::locate( "appdata", "data/property-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
 		kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
 
-		dataFilename = locate( "appdata", "data/property-data-en_US.txt" ); //default to English
+		dataFilename = KStandardDirs::locate( "appdata", "data/property-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );

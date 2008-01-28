@@ -21,23 +21,24 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <Q3TextStream>
 
 namespace USDA {
 
 	bool localizedIngredientsAvailable()
 	{
-		return !locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" ).isEmpty();
+		return !KStandardDirs::locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" ).isEmpty();
 	}
 
 	Q3ValueList<IngredientData> loadIngredients()
 	{
 		Q3ValueList<IngredientData> result;
 
-		QString dataFilename = locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" );
+		QString dataFilename = KStandardDirs::locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" );
 		if ( dataFilename.isEmpty() ) {
 			kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
 	
-			dataFilename = locate( "appdata", "data/ingredient-data-en_US.txt" ); //default to English
+			dataFilename = KStandardDirs::locate( "appdata", "data/ingredient-data-en_US.txt" ); //default to English
 		}
 
 		QFile dataFile( dataFilename );

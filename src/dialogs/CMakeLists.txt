@@ -1,5 +1,5 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 set(krecipesdialogs_SRCS
    advancedsearchdialog.cpp
@@ -43,7 +43,7 @@ set(krecipesdialogs_SRCS
    editpropertiesdialog.cpp
    createunitconversiondialog.cpp)
 
-add_library(krecipesdialogs SHARED ${krecipesdialogs_SRCS})
+kde4_add_library(krecipesdialogs SHARED ${krecipesdialogs_SRCS})
 
 ########### next target ###############
 

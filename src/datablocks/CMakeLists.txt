@@ -1,3 +1,8 @@
+########### QT3Support ###############
+
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+######################################
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../  )
 
@@ -20,7 +25,9 @@ set(datablocks_SRCS
    rating.cpp
    weight.cpp)
 
-add_library(datablocks SHARED ${datablocks_SRCS})
+kde4_add_library(datablocks SHARED ${datablocks_SRCS})
+
+target_link_libraries(datablocks ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} )
 
 ########### next target ###############
 

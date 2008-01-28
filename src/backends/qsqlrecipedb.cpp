@@ -16,7 +16,9 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <Q3CString>
+#include <QImageWriter>
 #include <QPixmap>
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
@@ -87,9 +89,9 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
 	if ( qsqlDriver() )
-		database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
+		database = &QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
 	else if ( !qsqlDriverPlugin().isEmpty() )
-		database = QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
+		database = &QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
 	else
 		kDebug()<<"Fatal internal error!  Backend incorrectly written!"<<endl;
 
@@ -141,7 +143,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	}
 
 	// Database was opened correctly
-	m_query = QSqlQuery( QString::null, database );
+	m_query = QSqlQuery( QString(), *database );
 	m_query.setForwardOnly(true);
 	dbOK = true;
 }
@@ -179,7 +181,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 	if ( items & RecipeDB::Yield ) command += ",yield_amount,yield_amount_offset,yield_type_id";
 	command += " FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
 
-	QSqlQuery recipeQuery(command,database);
+	QSqlQuery recipeQuery(command,*database);
 	if ( recipeQuery.isActive() ) {
 		while ( recipeQuery.next() ) {
 			int row_at = 0;
@@ -209,7 +211,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;
 				if ( recipe.yield.type_id != -1 ) {
 					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
-					QSqlQuery yield_query(y_command,database);
+					QSqlQuery yield_query(y_command,*database);
 					if ( yield_query.isActive() && yield_query.first() )
 						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toCString());
 					else
@@ -236,7 +238,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 			else
 				command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for,il.amount,il.amount_offset,u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,u.type,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index" ).arg( (*recipe_it).recipeID );
 
-			QSqlQuery ingredientQuery( command, database );
+			QSqlQuery ingredientQuery( command, *database );
 			if ( ingredientQuery.isActive() ) {
 				RecipeList::Iterator it = recipeIterators[ (*recipe_it).recipeID ];
 				while ( ingredientQuery.next() ) {
@@ -270,13 +272,13 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 			
 						ing.groupID = ingredientQuery.value( 11 ).toInt();
 						if ( ing.groupID != -1 ) {
-							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), database );
+							QSqlQuery toLoad( QString( "SELECT name FROM ingredient_groups WHERE id=%1" ).arg( ing.groupID ), *database );
 							if ( toLoad.isActive() && toLoad.first() )
 								ing.group = unescapeAndDecode( toLoad.value( 0 ).toCString() );
 						}
 
 						command = QString("SELECT pl.prep_method_id,p.name FROM prep_methods p, prep_method_list pl WHERE pl.ingredient_list_id=%1 AND p.id=pl.prep_method_id ORDER BY pl.order_index;").arg(ingredientQuery.value( 12 ).toInt());
-						QSqlQuery ingPrepMethodsQuery( command, database );
+						QSqlQuery ingPrepMethodsQuery( command, *database );
 						if ( ingPrepMethodsQuery.isActive() ) {
 							while ( ingPrepMethodsQuery.next() ) {
 								ing.prepMethodList.append( Element( unescapeAndDecode(ingPrepMethodsQuery.value(1).toCString()),ingPrepMethodsQuery.value(0).toInt()) );
@@ -349,7 +351,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 			RecipeList::iterator it = recipeIterators[ (*recipe_it).recipeID ];
 			
 			command = QString( "SELECT id,comment,rater FROM ratings WHERE recipe_id=%1 ORDER BY created DESC" ).arg( (*it).recipeID );
-			QSqlQuery query( command, database );
+			QSqlQuery query( command, *database );
 			if ( query.isActive() ) {
 				while ( query.next() ) {
 					Rating r;
@@ -358,7 +360,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 					r.rater = unescapeAndDecode( query.value( 2 ).toCString() );
 
 					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criteria rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criterion_id=rc.id" ).arg(r.id);
-					QSqlQuery criterionQuery( command, database );
+					QSqlQuery criterionQuery( command, *database );
 					if ( criterionQuery.isActive() ) {
 						while ( criterionQuery.next() ) {
 							RatingCriteria rc;
@@ -460,7 +462,7 @@ void QSqlRecipeDB::createNewPrepMethod( const QString &prepMethodName )
 	QString real_name = prepMethodName.left( maxPrepMethodNameLength() );
 
 	command = QString( "INSERT INTO prep_methods VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "prep_methods", "id" ) );
-	QSqlQuery prepMethodToCreate( command, database );
+	QSqlQuery prepMethodToCreate( command, *database );
 
 	emit prepMethodCreated( Element( real_name, lastInsertID() ) );
 }
@@ -470,7 +472,7 @@ void QSqlRecipeDB::modPrepMethod( int prepMethodID, const QString &newLabel )
 	QString command;
 
 	command = QString( "UPDATE prep_methods SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( prepMethodID );
-	QSqlQuery prepMethodToCreate( command, database );
+	QSqlQuery prepMethodToCreate( command, *database );
 
 	emit prepMethodRemoved( prepMethodID );
 	emit prepMethodCreated( Element( newLabel, prepMethodID ) );
@@ -485,7 +487,7 @@ void QSqlRecipeDB::modProperty( int propertyID, const QString &newLabel, const Q
 	else
 		command = QString( "UPDATE ingredient_properties SET name='%1',units='%2' WHERE id=%3" ).arg( escapeAndEncode( newLabel ) ).arg( escapeAndEncode( unit ) ).arg( propertyID );
 
-	QSqlQuery createQuery( command, database );
+	QSqlQuery createQuery( command, *database );
 
 	emit propertyRemoved( propertyID );
 	emit propertyCreated( propertyName( propertyID ) );
@@ -499,7 +501,7 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 
 	command = QString( "SELECT u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,u.type FROM unit_list ul, units u WHERE ul.ingredient_id=%1 AND ul.unit_id=u.id;" ).arg( ingredientID );
 
-	QSqlQuery unitToLoad( command, database );
+	QSqlQuery unitToLoad( command, *database );
 
 	if ( unitToLoad.isActive() ) {
 		while ( unitToLoad.next() ) {
@@ -520,7 +522,7 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 
 void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
-	QSqlQuery query( QString::null, database );
+	QSqlQuery query( QString::null, *database );
 
 	query.prepare( "UPDATE recipes SET photo=?,ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
 	query.addBindValue( KCodecs::base64Encode( data ) );
@@ -530,7 +532,7 @@ void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 {
 	QString command = QString( "SELECT photo FROM recipes WHERE id=%1;" ).arg( recipeID );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	if ( query.isActive() && query.first() ) {
 		Q3CString decodedPic;
@@ -553,7 +555,7 @@ void QSqlRecipeDB::loadRecipeMetadata( Recipe *recipe )
 {
 	QString command = "SELECT ctime,mtime,atime FROM recipes WHERE id="+QString::number(recipe->recipeID);
 
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 	if ( query.isActive() && query.first() ) {
 		recipe->ctime = query.value(0).toDateTime();
 		recipe->mtime = query.value(1).toDateTime();
@@ -570,7 +572,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	// First check if the recipe ID is set, if so, update (not create)
 	// Be carefull, first check if the recipe hasn't been deleted while changing.
 
-	QSqlQuery recipeToSave( QString::null, database );
+	QSqlQuery recipeToSave( QString::null,*database );
 
 	QString command;
 
@@ -630,11 +632,10 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	// Let's begin storing the Image!
 	if ( !recipe->photo.isNull() ) {
 		QByteArray ba;
-		QBuffer buffer( ba );
+		QBuffer buffer( &ba );
 		buffer.open( QIODevice::WriteOnly );
-		QImageIO iio( &buffer, "JPEG" );
-		iio.setImage( recipe->photo.convertToImage() );
-		iio.write();
+		QImageWriter iio( &buffer, "JPEG" );
+		iio.write( recipe->photo.convertToImage() );
 		//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		storePhoto( recipeID, ba );
@@ -809,7 +810,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recur
 		command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1 ORDER BY r.title" ).arg( categoryID );
 
 	if ( recursive ) {
-		QSqlQuery subcategories( QString("SELECT id FROM categories WHERE parent_id='%1'").arg(categoryID), database );
+		QSqlQuery subcategories( QString("SELECT id FROM categories WHERE parent_id='%1'").arg(categoryID), *database );
 		if ( subcategories.isActive() ) {
 			while ( subcategories.next() ) {
 				loadRecipeList(list,subcategories.value( 0 ).toInt(),true);
@@ -817,7 +818,7 @@ void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recur
 		}
 	}
 
-	QSqlQuery recipeToLoad( command, database );
+	QSqlQuery recipeToLoad( command, *database );
 
 	if ( recipeToLoad.isActive() ) {
 		while ( recipeToLoad.next() ) {
@@ -855,7 +856,7 @@ void QSqlRecipeDB::removeRecipe( int id )
 	QString command;
 
 	command = QString( "DELETE FROM recipes WHERE id=%1;" ).arg( id );
-	QSqlQuery recipeToRemove( command, database );
+	QSqlQuery recipeToRemove( command, *database );
 	command = QString( "DELETE FROM ingredient_list WHERE recipe_id=%1;" ).arg( id );
 	recipeToRemove.exec( command );
 	command = QString( "DELETE FROM category_list WHERE recipe_id=%1;" ).arg( id );
@@ -894,7 +895,7 @@ void QSqlRecipeDB::removeRecipeFromCategory( int recipeID, int categoryID )
 {
 	QString command;
 	command = QString( "DELETE FROM category_list WHERE recipe_id=%1 AND category_id=%2;" ).arg( recipeID ).arg( categoryID );
-	QSqlQuery recipeToRemove( command, database );
+	QSqlQuery recipeToRemove( command, *database );
 
 	emit recipeRemoved( recipeID, categoryID );
 }
@@ -919,7 +920,7 @@ void QSqlRecipeDB::createNewIngGroup( const QString &name )
 	QString real_name = name.left( maxIngGroupNameLength() );
 
 	command = QString( "INSERT INTO ingredient_groups VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "ingredient_groups", "id" ) );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	emit ingGroupCreated( Element( real_name, lastInsertID() ) );
 }
@@ -930,7 +931,7 @@ void QSqlRecipeDB::createNewIngredient( const QString &ingredientName )
 	QString real_name = ingredientName.left( maxIngredientNameLength() );
 
 	command = QString( "INSERT INTO ingredients VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "ingredients", "id" ) );
-	QSqlQuery ingredientToCreate( command, database );
+	QSqlQuery ingredientToCreate( command, *database );
 
 	emit ingredientCreated( Element( real_name, lastInsertID() ) );
 }
@@ -941,7 +942,7 @@ void QSqlRecipeDB::createNewRating( const QString &rating )
 	QString real_name = rating/*.left( maxIngredientNameLength() )*/;
 
 	command = QString( "INSERT INTO rating_criteria VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "rating_criteria", "id" ) );
-	QSqlQuery toCreate( command, database );
+	QSqlQuery toCreate( command, *database );
 
 	emit ratingCriteriaCreated( Element( real_name, lastInsertID() ) );
 }
@@ -962,7 +963,7 @@ void QSqlRecipeDB::modIngredientGroup( int groupID, const QString &newLabel )
 	QString command;
 
 	command = QString( "UPDATE ingredient_groups SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( groupID );
-	QSqlQuery ingredientToCreate( command, database );
+	QSqlQuery ingredientToCreate( command, *database );
 
 	emit ingGroupRemoved( groupID );
 	emit ingGroupCreated( Element( newLabel, groupID ) );
@@ -973,7 +974,7 @@ void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
 	QString command;
 
 	command = QString( "UPDATE ingredients SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( ingredientID );
-	QSqlQuery ingredientToCreate( command, database );
+	QSqlQuery ingredientToCreate( command, *database );
 
 	emit ingredientRemoved( ingredientID );
 	emit ingredientCreated( Element( newLabel, ingredientID ) );
@@ -984,7 +985,7 @@ void QSqlRecipeDB::addUnitToIngredient( int ingredientID, int unitID )
 	QString command;
 
 	command = QString( "INSERT INTO unit_list VALUES(%1,%2);" ).arg( ingredientID ).arg( unitID );
-	QSqlQuery ingredientToCreate( command, database );
+	QSqlQuery ingredientToCreate( command, *database );
 }
 
 void QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int offset )
@@ -998,7 +999,7 @@ void QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int of
 	  +" ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 
-	QSqlQuery unitToLoad( command, database );
+	QSqlQuery unitToLoad( command, *database );
 
 	if ( unitToLoad.isActive() ) {
 		while ( unitToLoad.next() ) {
@@ -1019,7 +1020,7 @@ void QSqlRecipeDB::removeUnitFromIngredient( int ingredientID, int unitID )
 	QString command;
 
 	command = QString( "DELETE FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2;" ).arg( ingredientID ).arg( unitID );
-	QSqlQuery unitToRemove( command, database );
+	QSqlQuery unitToRemove( command, *database );
 
 	// Remove any recipe using that combination of ingredients also (user must have been warned before calling this function!)
 
@@ -1081,7 +1082,7 @@ void QSqlRecipeDB::removeIngredientGroup( int groupID )
 	// First remove the ingredient
 
 	command = QString( "DELETE FROM ingredient_groups WHERE id=%1" ).arg( groupID );
-	QSqlQuery toDelete( command, database );
+	QSqlQuery toDelete( command, *database );
 
 	// Remove all the unit entries for this ingredient
 
@@ -1098,7 +1099,7 @@ void QSqlRecipeDB::removeIngredient( int ingredientID )
 	// First remove the ingredient
 
 	command = QString( "DELETE FROM ingredients WHERE id=%1;" ).arg( ingredientID );
-	QSqlQuery ingredientToDelete( command, database );
+	QSqlQuery ingredientToDelete( command, *database );
 
 	// Remove all the unit entries for this ingredient
 
@@ -1167,7 +1168,7 @@ void QSqlRecipeDB::removeIngredientWeight( int id )
 	// First remove the ingredient
 
 	command = QString( "DELETE FROM ingredient_weights WHERE id=%1" ).arg( id );
-	QSqlQuery toDelete( command, database );
+	QSqlQuery toDelete( command, *database );
 }
 
 void QSqlRecipeDB::addIngredientWeight( const Weight &w )
@@ -1193,7 +1194,7 @@ void QSqlRecipeDB::addIngredientWeight( const Weight &w )
 		  .arg(getNextInsertIDStr( "ingredient_weights", "id" ))
 		  .arg(w.prepMethodID);
 	}
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 }
 
 void QSqlRecipeDB::addProperty( const QString &name, const QString &units )
@@ -1205,7 +1206,7 @@ void QSqlRecipeDB::addProperty( const QString &name, const QString &units )
 	          .arg( escapeAndEncode( real_name ) )
 	          .arg( escapeAndEncode( units ) )
 	          .arg( getNextInsertIDStr( "ingredient_properties", "id" ) );
-	QSqlQuery propertyToAdd( command, database );
+	QSqlQuery propertyToAdd( command, *database );
 
 	emit propertyCreated( IngredientProperty( real_name, units, lastInsertID() ) );
 }
@@ -1231,7 +1232,7 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 		command = QString( "SELECT  id,name,units FROM ingredient_properties;" );
 	}
 
-	QSqlQuery propertiesToLoad ( command, database );
+	QSqlQuery propertiesToLoad ( command, *database );
 	// Load the results into the list
 	if ( propertiesToLoad.isActive() ) {
 		while ( propertiesToLoad.next() ) {
@@ -1262,7 +1263,7 @@ void QSqlRecipeDB::changePropertyAmountToIngredient( int ingredientID, int prope
 {
 	QString command;
 	command = QString( "UPDATE ingredient_info SET amount=%1 WHERE ingredient_id=%2 AND property_id=%3 AND per_units=%4;" ).arg( amount ).arg( ingredientID ).arg( propertyID ).arg( per_units );
-	QSqlQuery infoToChange( command, database );
+	QSqlQuery infoToChange( command, *database );
 }
 
 void QSqlRecipeDB::addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID )
@@ -1270,7 +1271,7 @@ void QSqlRecipeDB::addPropertyToIngredient( int ingredientID, int propertyID, do
 	QString command;
 
 	command = QString( "INSERT INTO ingredient_info VALUES(%1,%2,%3,%4);" ).arg( ingredientID ).arg( propertyID ).arg( amount ).arg( perUnitsID );
-	QSqlQuery propertyToAdd( command, database );
+	QSqlQuery propertyToAdd( command, *database );
 }
 
 
@@ -1279,7 +1280,7 @@ void QSqlRecipeDB::removePropertyFromIngredient( int ingredientID, int propertyI
 	QString command;
 	// remove property from ingredient info. Note that there could be duplicates with different units (per_units). Remove just the one especified.
 	command = QString( "DELETE FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 AND per_units=%3;" ).arg( ingredientID ).arg( propertyID ).arg( perUnitID );
-	QSqlQuery propertyToRemove( command, database );
+	QSqlQuery propertyToRemove( command, *database );
 }
 
 void QSqlRecipeDB::removeProperty( int propertyID )
@@ -1288,7 +1289,7 @@ void QSqlRecipeDB::removeProperty( int propertyID )
 
 	// Remove property from the ingredient_properties
 	command = QString( "DELETE FROM ingredient_properties WHERE id=%1;" ).arg( propertyID );
-	QSqlQuery propertyToRemove( command, database );
+	QSqlQuery propertyToRemove( command, *database );
 
 	// Remove any ingredient info that uses this property
 	command = QString( "DELETE FROM ingredient_info WHERE property_id=%1;" ).arg( propertyID );
@@ -1302,7 +1303,7 @@ void QSqlRecipeDB::removeUnit( int unitID )
 	QString command;
 	// Remove the unit first
 	command = QString( "DELETE FROM units WHERE id=%1;" ).arg( unitID );
-	QSqlQuery unitToRemove( command, database );
+	QSqlQuery unitToRemove( command, *database );
 
 	//Remove the unit from ingredients using it
 
@@ -1378,7 +1379,7 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 	QString command;
 	// Remove the prep method first
 	command = QString( "DELETE FROM prep_methods WHERE id=%1;" ).arg( prepMethodID );
-	QSqlQuery prepMethodToRemove( command, database );
+	QSqlQuery prepMethodToRemove( command, *database );
 
 	// Remove any recipe using that prep method in the ingredient list (user must have been warned before calling this function!)
 
@@ -1464,7 +1465,7 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	   + "," + QString::number(unit.type)
 	   + ");";
 
-	QSqlQuery unitToCreate( command, database );
+	QSqlQuery unitToCreate( command, *database );
 
 	new_unit.id = lastInsertID();
 	emit unitCreated( new_unit );
@@ -1473,7 +1474,7 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 
 void QSqlRecipeDB::modUnit( const Unit &unit )
 {
-	QSqlQuery unitQuery( QString::null, database );
+	QSqlQuery unitQuery( QString::null, *database );
 
 	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
 	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
@@ -1510,7 +1511,7 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID )
 {
 	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.group_id=%1 ORDER BY r.title" ).arg( groupID );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	// Populate data
 	if ( query.isActive() ) {
@@ -1526,7 +1527,7 @@ void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID
 void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 {
 	QString command = QString( "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id AND cl.category_id=%1 ORDER BY r.title" ).arg( catID );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	// Populate data
 	if ( query.isActive() ) {
@@ -1551,7 +1552,7 @@ void QSqlRecipeDB::findUseOfCategoryInRecipes( ElementList *results, int catID )
 void QSqlRecipeDB::findUseOfAuthorInRecipes( ElementList *results, int authorID )
 {
 	QString command = QString( "SELECT r.id,r.title FROM recipes r,author_list al WHERE r.id=al.recipe_id AND al.author_id=%1 ORDER BY r.title" ).arg( authorID );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	// Populate data
 	if ( query.isActive() ) {
@@ -1573,7 +1574,7 @@ void QSqlRecipeDB::loadUnitRatios( UnitRatioList *ratioList, Unit::Type type )
 		command = "SELECT unit1_id,unit2_id,ratio FROM units_conversion";
 	else
 		command = "SELECT unit1_id,unit2_id,ratio FROM units_conversion,units unit1,units unit2 WHERE unit1_id=unit1.id AND unit1.type="+QString::number(type)+" AND unit2_id=unit2.id AND unit2.type="+QString::number(type);
-	QSqlQuery ratiosToLoad( command, database );
+	QSqlQuery ratiosToLoad( command, *database );
 
 	if ( ratiosToLoad.isActive() ) {
 		while ( ratiosToLoad.next() ) {
@@ -1593,7 +1594,7 @@ void QSqlRecipeDB::saveUnitRatio( const UnitRatio *ratio )
 	// Check if it's a new ratio or it exists already.
 	command = QString( "SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2" ).arg( ratio->uID1 ).arg( ratio->uID2 ); // Find ratio between units
 
-	QSqlQuery ratioFound( command, database ); // Find the entries
+	QSqlQuery ratioFound( command, *database ); // Find the entries
 	bool newRatio = ( ratioFound.size() == 0 );
 
 	if ( newRatio )
@@ -1617,7 +1618,7 @@ double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 	QString command;
 
 	command = QString( "SELECT ratio FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2;" ).arg( unitID1 ).arg( unitID2 );
-	QSqlQuery ratioToLoad( command, database );
+	QSqlQuery ratioToLoad( command, *database );
 
 	if ( ratioToLoad.isActive() && ratioToLoad.next() )
 		return ( ratioToLoad.value( 0 ).toString().toDouble() );
@@ -1631,7 +1632,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 	   .arg( ing.ingredientID )
 	   .arg( ing.units.id ).arg( ing.units.id );
 
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 
 	if ( query.isActive() ) {
 		//store the amount for the entry with no prep method.  If no other suitable entry is found, we'll guesstimate
@@ -1678,7 +1679,7 @@ WeightList QSqlRecipeDB::ingredientWeightUnits( int ingID )
 	WeightList list;
 
 	QString command = QString( "SELECT id,amount,unit_id,weight,weight_unit_id,prep_method_id FROM ingredient_weights WHERE ingredient_id=%1" ).arg( ingID );
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 	if ( query.isActive() ) {
 		while ( query.next() ) {
 			Weight w;
@@ -1703,7 +1704,7 @@ void QSqlRecipeDB::findIngredientUnitDependancies( int ingredientID, int unitID,
 	// Recipes using that combination
 
 	QString command = QString( "SELECT DISTINCT r.id,r.title  FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 AND il.unit_id=%2 ORDER BY r.title" ).arg( ingredientID ).arg( unitID );
-	QSqlQuery unitToRemove( command, database );
+	QSqlQuery unitToRemove( command, *database );
 	loadElementList( recipes, &unitToRemove );
 	// Ingredient info using that combination
 	command = QString( "SELECT i.name,ip.name,ip.units,u.name FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.ingredient_id=%1 AND ii.per_units=%2 AND ii.property_id=ip.id AND ii.per_units=u.id ORDER BY i.name" ).arg( ingredientID ).arg( unitID );
@@ -1716,7 +1717,7 @@ void QSqlRecipeDB::findIngredientDependancies( int ingredientID, ElementList *re
 {
 	QString command = QString( "SELECT DISTINCT r.id,r.title FROM recipes r,ingredient_list il WHERE r.id=il.recipe_id AND il.ingredient_id=%1 ORDER BY r.title" ).arg( ingredientID );
 
-	QSqlQuery ingredientToRemove( command, database );
+	QSqlQuery ingredientToRemove( command,*database );
 	loadElementList( recipes, &ingredientToRemove );
 }
 
@@ -1729,7 +1730,7 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 	// Ingredient-Info (ingredient->property) using this Unit
 
 	QString command = QString( "SELECT i.name,ip.name,ip.units,u.name  FROM ingredients i, ingredient_info ii, ingredient_properties ip, units u WHERE i.id=ii.ingredient_id AND ii.per_units=%1 AND ii.property_id=ip.id  AND ii.per_units=u.id ORDER BY i.name" ).arg( unitID );
-	QSqlQuery unitToRemove( command, database );
+	QSqlQuery unitToRemove( command, *database );
 	loadPropertyElementList( properties, &unitToRemove );
 
 	// Recipes using this Unit
@@ -1755,7 +1756,7 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 			if ( prepID != -1 ) {
 				command = QString( "SELECT p.name FROM prep_methods p, ingredient_weights w WHERE p.id = w.prep_method_id AND w.prep_method_id=%1" )
 					.arg( prepID );
-				QSqlQuery query( command, database );
+				QSqlQuery query( command, *database );
 				if ( query.isActive() && query.first() )
 					prep = unescapeAndDecode( query.value( 0 ).toCString() );
 			}
@@ -1773,7 +1774,7 @@ void QSqlRecipeDB::findPrepMethodDependancies( int prepMethodID, ElementList *re
 	QString command = QString( "SELECT DISTINCT r.id FROM recipes r,ingredient_list il, prep_method_list pl WHERE r.id=il.recipe_id AND pl.ingredient_list_id=il.id AND pl.prep_method_id=%1;" ).arg( prepMethodID );
 
 	QStringList ids;
-	QSqlQuery query( command, database );
+	QSqlQuery query( command, *database );
 	if ( query.isActive() ) {
 		while ( query.next() ) {
 			ids << QString::number(query.value( 0 ).toInt());
@@ -1782,7 +1783,7 @@ void QSqlRecipeDB::findPrepMethodDependancies( int prepMethodID, ElementList *re
 
 	//now get the titles of the ids
 	command = QString( "SELECT r.id, r.title FROM recipes r WHERE r.id IN ("+ids.join(",")+")" );
-	QSqlQuery prepMethodToRemove( command, database );
+	QSqlQuery prepMethodToRemove( command, *database );
 	loadElementList( recipes, &prepMethodToRemove );
 }
 
@@ -1837,7 +1838,7 @@ QString QSqlRecipeDB::unescapeAndDecode( const Q3CString &s ) const
 bool QSqlRecipeDB::ingredientContainsUnit( int ingredientID, int unitID )
 {
 	QString command = QString( "SELECT *  FROM unit_list WHERE ingredient_id= %1 AND unit_id=%2;" ).arg( ingredientID ).arg( unitID );
-	QSqlQuery recipeToLoad( command, database );
+	QSqlQuery recipeToLoad( command, *database );
 	if ( recipeToLoad.isActive() ) {
 		return ( recipeToLoad.size() > 0 );
 	}
@@ -1847,7 +1848,7 @@ bool QSqlRecipeDB::ingredientContainsUnit( int ingredientID, int unitID )
 bool QSqlRecipeDB::ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID )
 {
 	QString command = QString( "SELECT *  FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2 AND per_units=%3;" ).arg( ingredientID ).arg( propertyID ).arg( perUnitsID );
-	QSqlQuery recipeToLoad( command, database );
+	QSqlQuery recipeToLoad( command, *database );
 	if ( recipeToLoad.isActive() ) {
 		return ( recipeToLoad.size() > 0 );
 	}
@@ -1857,7 +1858,7 @@ bool QSqlRecipeDB::ingredientContainsProperty( int ingredientID, int propertyID,
 QString QSqlRecipeDB::categoryName( int ID )
 {
 	QString command = QString( "SELECT name FROM categories WHERE id=%1;" ).arg( ID );
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );
 
@@ -1867,7 +1868,7 @@ QString QSqlRecipeDB::categoryName( int ID )
 QString QSqlRecipeDB::ingredientName( int ID )
 {
 	QString command = QString( "SELECT name FROM ingredients WHERE id=%1" ).arg( ID );
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );
 
@@ -1877,7 +1878,7 @@ QString QSqlRecipeDB::ingredientName( int ID )
 QString QSqlRecipeDB::prepMethodName( int ID )
 {
 	QString command = QString( "SELECT name FROM prep_methods WHERE id=%1" ).arg( ID );
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toCString() ) );
 
@@ -1887,7 +1888,7 @@ QString QSqlRecipeDB::prepMethodName( int ID )
 IngredientProperty QSqlRecipeDB::propertyName( int ID )
 {
 	QString command = QString( "SELECT name,units FROM ingredient_properties WHERE id=%1;" ).arg( ID );
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
 		return ( IngredientProperty( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ), ID ) );
 	}
@@ -1898,7 +1899,7 @@ IngredientProperty QSqlRecipeDB::propertyName( int ID )
 Unit QSqlRecipeDB::unitName( int ID )
 {
 	QString command = QString( "SELECT name,plural,name_abbrev,plural_abbrev,type FROM units WHERE id=%1" ).arg( ID );
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() && toLoad.next() ) { // Go to the first record (there should be only one anyway.
 		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toCString() ), unescapeAndDecode( toLoad.value( 1 ).toCString() ) );
 
@@ -1922,7 +1923,7 @@ Unit QSqlRecipeDB::unitName( int ID )
 int QSqlRecipeDB::getCount( const QString &table_name )
 {
 	m_command = "SELECT COUNT(1) FROM "+table_name;
-	QSqlQuery count( m_command, database );
+	QSqlQuery count( m_command, *database );
 	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
 		return count.value( 0 ).toInt();
 	}
@@ -1933,7 +1934,7 @@ int QSqlRecipeDB::getCount( const QString &table_name )
 int QSqlRecipeDB::categoryTopLevelCount()
 {
 	m_command = "SELECT COUNT(1) FROM categories WHERE parent_id='-1'";
-	QSqlQuery count( m_command, database );
+	QSqlQuery count( m_command, *database );
 	if ( count.isActive() && count.next() ) { // Go to the first record (there should be only one anyway.
 		return count.value( 0 ).toInt();
 	}
@@ -1998,7 +1999,7 @@ float QSqlRecipeDB::databaseVersion( void )
 {
 
 	QString command = "SELECT ver FROM db_info";
-	QSqlQuery dbVersion( command, database );
+	QSqlQuery dbVersion( command, *database );
 
 	if ( dbVersion.isActive() && dbVersion.next() )
 		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
@@ -2012,7 +2013,7 @@ void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset
 
 	QString command = "SELECT id,name FROM rating_criteria ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery toLoad( command, database );
+	QSqlQuery toLoad( command, *database );
 	if ( toLoad.isActive() ) {
 		while ( toLoad.next() ) {
 			Element el;
@@ -2029,7 +2030,7 @@ void QSqlRecipeDB::loadCategories( ElementList *list, int limit, int offset )
 
 	m_command = "SELECT id,name FROM categories ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery categoryToLoad( m_command, database );
+	QSqlQuery categoryToLoad( m_command, *database );
 	if ( categoryToLoad.isActive() ) {
 		while ( categoryToLoad.next() ) {
 			Element el;
@@ -2053,7 +2054,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 
 	m_command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
 
-	QSqlQuery categoryToLoad( QString::null, database );
+	QSqlQuery categoryToLoad( QString::null, *database );
 	//categoryToLoad.setForwardOnly(true); //FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
 
 	categoryToLoad.exec(m_command);
@@ -2089,7 +2090,7 @@ void QSqlRecipeDB::createNewCategory( const QString &categoryName, int parent_id
 	          .arg( escapeAndEncode( real_name ) )
 	          .arg( parent_id )
 	          .arg( getNextInsertIDStr( "categories", "id" ) );
-	QSqlQuery categoryToCreate( command, database );
+	QSqlQuery categoryToCreate( command, *database );
 
 	emit categoryCreated( Element( real_name, lastInsertID() ), parent_id );
 }
@@ -2097,7 +2098,7 @@ void QSqlRecipeDB::createNewCategory( const QString &categoryName, int parent_id
 void QSqlRecipeDB::modCategory( int categoryID, const QString &newLabel )
 {
 	QString command = QString( "UPDATE categories SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( categoryID );
-	QSqlQuery categoryToUpdate( command, database );
+	QSqlQuery categoryToUpdate( command, *database );
 
 	emit categoryModified( Element( newLabel, categoryID ) );
 }
@@ -2105,7 +2106,7 @@ void QSqlRecipeDB::modCategory( int categoryID, const QString &newLabel )
 void QSqlRecipeDB::modCategory( int categoryID, int new_parent_id )
 {
 	QString command = QString( "UPDATE categories SET parent_id=%1 WHERE id=%2;" ).arg( new_parent_id ).arg( categoryID );
-	QSqlQuery categoryToUpdate( command, database );
+	QSqlQuery categoryToUpdate( command, *database );
 
 	emit categoryModified( categoryID, new_parent_id );
 }
@@ -2115,7 +2116,7 @@ void QSqlRecipeDB::removeCategory( int categoryID )
 	QString command;
 
 	command = QString( "DELETE FROM categories WHERE id=%1;" ).arg( categoryID );
-	QSqlQuery categoryToRemove( command, database );
+	QSqlQuery categoryToRemove( command, *database );
 
 	command = QString( "DELETE FROM category_list WHERE category_id=%1;" ).arg( categoryID );
 	categoryToRemove.exec( command );
@@ -2138,7 +2139,7 @@ void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 	list->clear();
 	QString command = "SELECT id,name FROM authors ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
-	QSqlQuery authorToLoad( command, database );
+	QSqlQuery authorToLoad( command, *database );
 	if ( authorToLoad.isActive() ) {
 		while ( authorToLoad.next() ) {
 			Element el;
@@ -2155,7 +2156,7 @@ void QSqlRecipeDB::createNewAuthor( const QString &authorName )
 	QString real_name = authorName.left( maxAuthorNameLength() );
 
 	command = QString( "INSERT INTO authors VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "authors", "id" ) );
-	QSqlQuery authorToCreate( command, database );
+	QSqlQuery authorToCreate( command, *database );
 
 	emit authorCreated( Element( real_name, lastInsertID() ) );
 }
@@ -2165,7 +2166,7 @@ void QSqlRecipeDB::modAuthor( int authorID, const QString &newLabel )
 	QString command;
 
 	command = QString( "UPDATE authors SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( authorID );
-	QSqlQuery authorToCreate( command, database );
+	QSqlQuery authorToCreate( command, *database );
 
 	emit authorRemoved( authorID );
 	emit authorCreated( Element( newLabel, authorID ) );
@@ -2176,7 +2177,7 @@ void QSqlRecipeDB::removeAuthor( int authorID )
 	QString command;
 
 	command = QString( "DELETE FROM authors WHERE id=%1;" ).arg( authorID );
-	QSqlQuery authorToRemove( command, database );
+	QSqlQuery authorToRemove( command, *database );
 
 	emit authorRemoved( authorID );
 }
@@ -2186,7 +2187,7 @@ int QSqlRecipeDB::findExistingAuthorByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxAuthorNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM authors WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2200,7 +2201,7 @@ int QSqlRecipeDB::findExistingCategoryByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxCategoryNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM categories WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2214,7 +2215,7 @@ int QSqlRecipeDB::findExistingIngredientGroupByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxIngGroupNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_groups WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2228,7 +2229,7 @@ int QSqlRecipeDB::findExistingIngredientByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxIngredientNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredients WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2242,7 +2243,7 @@ int QSqlRecipeDB::findExistingPrepByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxPrepMethodNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM prep_methods WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2256,7 +2257,7 @@ int QSqlRecipeDB::findExistingPropertyByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxPropertyNameLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM ingredient_properties WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2275,7 +2276,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 		  + "' OR plural_abbrev LIKE '" + search_str 
 		  + "'";
 
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 	int id = -1;
 
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2289,7 +2290,7 @@ int QSqlRecipeDB::findExistingRatingByName( const QString& name )
 	QString search_str = escapeAndEncode( name ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM rating_criteria WHERE name LIKE '%1'" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 
 	int id = -1;
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2303,7 +2304,7 @@ int QSqlRecipeDB::findExistingRecipeByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxRecipeTitleLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM recipes WHERE title LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 
 	int id = -1;
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2317,7 +2318,7 @@ int QSqlRecipeDB::findExistingYieldTypeByName( const QString& name )
 	QString search_str = escapeAndEncode( name.left( maxYieldTypeLength() ) ); //truncate to the maximum size db holds
 
 	QString command = QString( "SELECT id FROM yield_types WHERE name LIKE '%1';" ).arg( search_str );
-	QSqlQuery elementToLoad( command, database ); // Run the query
+	QSqlQuery elementToLoad( command, *database ); // Run the query
 
 	int id = -1;
 	if ( elementToLoad.isActive() && elementToLoad.first() )
@@ -2328,7 +2329,7 @@ int QSqlRecipeDB::findExistingYieldTypeByName( const QString& name )
 
 void QSqlRecipeDB::mergeAuthors( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString::null, *database );
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE author_list SET author_id=%1 WHERE author_id=%2" )
@@ -2349,7 +2350,7 @@ void QSqlRecipeDB::mergeAuthors( int id1, int id2 )
 				command = QString( "SELECT COUNT(1) FROM author_list WHERE author_id=%1 AND recipe_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove( command, database);
+				QSqlQuery remove( command, *database);
 				if ( remove.isActive() && remove.first() )
 					count = remove.value(0).toInt();
 				if ( count > 1 ) {
@@ -2376,7 +2377,7 @@ void QSqlRecipeDB::mergeAuthors( int id1, int id2 )
 
 void QSqlRecipeDB::mergeCategories( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString(), *database );
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE category_list SET category_id=%1 WHERE category_id=%2" )
@@ -2397,7 +2398,7 @@ void QSqlRecipeDB::mergeCategories( int id1, int id2 )
 				command = QString( "SELECT COUNT(1) FROM category_list WHERE category_id=%1 AND recipe_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove( command, database);
+				QSqlQuery remove( command, *database);
 				if ( remove.isActive() && remove.first() )
 					count = remove.value(0).toInt();
 				if ( count > 1 ) {
@@ -2434,7 +2435,7 @@ void QSqlRecipeDB::mergeCategories( int id1, int id2 )
 
 void QSqlRecipeDB::mergeIngredientGroups( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString(), *database );
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2" )
@@ -2450,7 +2451,7 @@ void QSqlRecipeDB::mergeIngredientGroups( int id1, int id2 )
 
 void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString::null, *database );
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE ingredient_list SET ingredient_id=%1 WHERE ingredient_id=%2" )
@@ -2482,7 +2483,7 @@ void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 				command = QString( "SELECT COUNT(1) FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove( command, database);
+				QSqlQuery remove( command, *database);
 				if ( remove.isActive() && remove.first() )
 					count = remove.value(0).toInt();
 				if ( count > 1 ) {
@@ -2521,7 +2522,7 @@ void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 				command = QString( "SELECT COUNT(1) FROM ingredient_info WHERE ingredient_id=%1 AND property_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove( command, database);
+				QSqlQuery remove( command, *database);
 				if ( remove.isActive() && remove.first() )
 					count = remove.value(0).toInt();
 				if ( count > 1 ) {
@@ -2549,7 +2550,7 @@ void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 
 void QSqlRecipeDB::mergePrepMethods( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString(), *database );
 
 	//change all instances of 'id2' to 'id1' in ingredient list
 	QString command = QString( "UPDATE prep_method_list SET prep_method_id=%1 WHERE prep_method_id=%2" )
@@ -2571,7 +2572,7 @@ void QSqlRecipeDB::mergePrepMethods( int id1, int id2 )
 
 void QSqlRecipeDB::mergeProperties( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString::null, *database );
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE ingredient_properties SET id=%1 WHERE id=%2" )
@@ -2592,7 +2593,7 @@ void QSqlRecipeDB::mergeProperties( int id1, int id2 )
 
 void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, database );
+	QSqlQuery update( QString::null, *database );
 
 	//change all instances of 'id2' to 'id1' in unit list
 	QString command = QString( "UPDATE unit_list SET unit_id=%1 WHERE unit_id=%2" )
@@ -2619,7 +2620,7 @@ void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 				command = QString( "SELECT COUNT(1) FROM unit_list WHERE ingredient_id=%1 AND unit_id=%2" )
 				          .arg( id1 )
 				          .arg( last_id );
-				QSqlQuery remove( command, database);
+				QSqlQuery remove( command, *database);
 				if ( remove.isActive() && remove.first() )
 					count = remove.value(0).toInt();
 				if ( count > 1 ) {
@@ -2695,7 +2696,7 @@ QString QSqlRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 
 	QString command = QString( "SELECT COUNT(1) FROM recipes WHERE title LIKE '%1 (%)';" ).arg( escapeAndEncode( recipe_title ) );
 
-	QSqlQuery alikeRecipes( command, database );
+	QSqlQuery alikeRecipes( command, *database );
 	if ( alikeRecipes.isActive() && alikeRecipes.first() )
 	{
 		int count = alikeRecipes.value( 0 ).toInt();
@@ -2714,7 +2715,7 @@ QString QSqlRecipeDB::getUniqueRecipeTitle( const QString &recipe_title )
 QString QSqlRecipeDB::recipeTitle( int recipeID )
 {
 	QString command = QString( "SELECT title FROM recipes WHERE id=%1;" ).arg( recipeID );
-	QSqlQuery recipeToLoad( command, database );
+	QSqlQuery recipeToLoad( command, *database );
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode(recipeToLoad.value( 0 ).toCString()) );
 
@@ -2725,7 +2726,7 @@ void QSqlRecipeDB::emptyData( void )
 {
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
-	QSqlQuery tablesToEmpty( QString::null, database );
+	QSqlQuery tablesToEmpty( QString::null, *database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
 		tablesToEmpty.exec( command );
@@ -2734,7 +2735,7 @@ void QSqlRecipeDB::emptyData( void )
 
 void QSqlRecipeDB::empty( void )
 {
-	QSqlQuery tablesToEmpty( QString::null, database );
+	QSqlQuery tablesToEmpty( QString::null, *database );
 
 	QStringList list = database->tables();
 	QStringList::const_iterator it = list.begin();
@@ -2767,7 +2768,7 @@ void QSqlRecipeDB::search( RecipeList *list, int items, const RecipeSearchParame
 	QString query = buildSearchQuery(parameters);
 
 	Q3ValueList<int> ids;
-	QSqlQuery recipeToLoad( query, database );
+	QSqlQuery recipeToLoad( query, *database );
 	if ( recipeToLoad.isActive() ) {
 		while ( recipeToLoad.next() ) {
 			ids << recipeToLoad.value( 0 ).toInt();

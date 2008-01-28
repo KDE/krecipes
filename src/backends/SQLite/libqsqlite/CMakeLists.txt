@@ -1,11 +1,16 @@
+########### QT3Support ###############
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+######################################
+
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 set(libqsqliterecipedb_SRCS
    krecqsqlitedb.cpp
    krecqsqliteresult.cpp)
 
-add_library(libqsqliterecipedb SHARED ${literecipedb_SRCS})
+kde4_add_library(libqsqliterecipedb SHARED ${literecipedb_SRCS})
 target_link_libraries( libqsqliterecipedb )
 
 ########### next target ###############

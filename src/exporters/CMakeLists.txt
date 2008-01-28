@@ -1,5 +1,10 @@
+########### QT3Support ###############
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
+######################################
+
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 set (krecipesexporters_SRCS 
    kreexporter.cpp
@@ -13,7 +18,7 @@ set (krecipesexporters_SRCS
    htmlbookexporter.cpp
    xsltexporter.cpp)
 
-add_library(krecipesexporters SHARED ${krecipesexporters_SRCS})
+kde4_add_library(krecipesexporters SHARED ${krecipesexporters_SRCS})
 
 ########### next target ###############
 

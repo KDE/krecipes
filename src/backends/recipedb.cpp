@@ -18,7 +18,7 @@
 #endif
 
 #include <kapplication.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kprogressdialog.h>
@@ -33,6 +33,7 @@
 #include <qfile.h>
 #include <qstringlist.h>
 #include <q3textstream.h>
+#include <KStandardDirs>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -73,7 +74,6 @@ struct ingredient_nutrient_data
 };
 
 RecipeDB::RecipeDB() : 
-	DCOPObject(),
 	QObject(), m_categoryCache(0), haltOperation(false)
 {
 	dbOK = false;
@@ -91,7 +91,7 @@ double RecipeDB::latestDBVersion() const
 
 QString RecipeDB::krecipes_version() const
 {
-	KInstance * this_instance = KGlobal::instance();
+	const KComponentData * this_instance = &KGlobal::mainComponent();
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData() ->version();
 
@@ -100,17 +100,16 @@ QString RecipeDB::krecipes_version() const
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	QString host = config->readEntry( "Host", "localhost" );
-	QString user = config->readEntry( "Username", QString::null );
-	QString pass = config->readEntry( "Password", QString::null );
-	QString dbname = config->readEntry( "DBName", DEFAULT_DB_NAME );
-	int port = config->readNumEntry( "Port", 0 );
+	KConfigGroup config = KGlobal::config()->group( "Server" );
+	QString host = config.readEntry( "Host", "localhost" );
+	QString user = config.readEntry( "Username", QString() );
+	QString pass = config.readEntry( "Password", QString() );
+	QString dbname = config.readEntry( "DBName", DEFAULT_DB_NAME );
+	int port = config.readEntry( "Port", 0 );
 
 	QString f = file;
 	if ( f.isEmpty() )
-		f = config->readEntry( "DBFile", KStandardDirs::locateLocal ( "appdata", DB_FILENAME ) );
+		f = config.readEntry( "DBFile", KStandardDirs::locateLocal ( "appdata", DB_FILENAME ) );
 
 	return createDatabase( dbType, host, user, pass, dbname, port, f );
 }
@@ -282,12 +281,11 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		return false;
 	}
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "DBType" );
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
 	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
 	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
-	(*dumpStream) << "-- Krecipes database backend: "<<config->readEntry( "Type" )<<endl;
+	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" )<<endl;
 
 	kDebug()<<"Running '"<<command.first()<<"' to create backup file"<<endl;
 	*p << command /*<< ">" << backup_file*/;
@@ -366,11 +364,11 @@ void RecipeDB::initializeData( void )
 	// Populate with data
 
 	// Read the commands form the data file
-	QString dataFilename = locate( "appdata", "data/data-" + KGlobal::locale() ->language() + ".sql" );
+	QString dataFilename =  KStandardDirs::locate( "appdata", "data/data-" + KGlobal::locale() ->language() + ".sql" );
 	if ( dataFilename.isEmpty() ) {
 		kDebug() << "NOTICE: Sample data (categories, units, etc.) for the language \"" << KGlobal::locale() ->language() << "\" is not available.  However, if you would like samples data for this language included in future releases of Krecipes, we invite you to submit your own. Contact me at jkivlighn@gmail.com for details." << endl;
 
-		dataFilename = locate( "appdata", "data/data-en_US.sql" ); //default to English
+		dataFilename =  KStandardDirs::locate( "appdata", "data/data-en_US.sql" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
@@ -399,8 +397,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			return false;
 		}
 
-		KConfig * config = KGlobal::config();
-		config->setGroup( "DBType" );
+		KConfigGroup config = KGlobal::config()->group( "DBType" );
 		QString dbType = stream.readLine().trimmed();
 		dbType = dbType.right( dbType.length() - dbType.find(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
@@ -408,7 +405,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			delete dumpFile;
 			return false;
 		}
-		else if ( dbType != config->readEntry("Type",QString::null) ) {
+		else if ( dbType != config.readEntry("Type",QString()) ) {
 			if ( errMsg ) *errMsg = QString(i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." )).arg(dbType);
 			delete dumpFile;
 			return false;
@@ -544,12 +541,12 @@ int RecipeDB::unitCount()
 
 void RecipeDB::importSamples()
 {
-	QString sample_recipes = locate( "appdata", "data/samples-" + KGlobal::locale() ->language() + ".kreml" );
+	QString sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-" +  KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
 		kDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." << endl;
 
-		sample_recipes = locate( "appdata", "data/samples-en_US.kreml" ); //default to English
+		sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-en_US.kreml" ); //default to English
 	}
 	if ( !sample_recipes.isEmpty() ) {
 		KreImporter importer;
@@ -740,7 +737,7 @@ void create_properties( RecipeDB*, Q3ValueList<USDA::PropertyData> & );
 void RecipeDB::importUSDADatabase()
 {
 	//check if the data file even exists before we do anything
-	QString abbrev_file = locate( "appdata", "data/abbrev.txt" );
+	QString abbrev_file =  KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
 		kDebug() << "Unable to find abbrev.txt data file." << endl;
 		return ;

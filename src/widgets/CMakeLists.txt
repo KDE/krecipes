@@ -1,5 +1,5 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
 
 set(krecipeswidgets_SRCS
@@ -35,7 +35,7 @@ set(krecipeswidgets_SRCS
    weightinput.cpp
    thumbbar.cpp)
 
-add_library(krecipeswidgets SHARED ${krecipeswidgets_SRCS})
+kde4_add_library(krecipeswidgets SHARED ${krecipeswidgets_SRCS})
 
 ########### next target ###############
 
