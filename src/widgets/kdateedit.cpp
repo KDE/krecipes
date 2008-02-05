@@ -36,6 +36,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <KConfigGroup>
 
 #include "kdateedit.h"
 
@@ -44,8 +45,8 @@ QRect desktopGeometry(QWidget* w)
  QDesktopWidget *dw = QApplication::desktop();
  if (dw->isVirtualDesktop()) {
      KConfigGroup group(KGlobal::config(), "Windows");
-     if (group.readBoolEntry("XineramaEnabled", true) &&
-         group.readBoolEntry("XineramaPlacementEnabled", true)) {
+     if (group.readEntry("XineramaEnabled", true) &&
+         group.readEntry("XineramaPlacementEnabled", true)) {
          if (w)
              return dw->screenGeometry(dw->screenNumber(w));
          else return dw->screenGeometry(-1);

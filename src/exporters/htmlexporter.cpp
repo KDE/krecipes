@@ -264,9 +264,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	QString ingredients_html;
 	config->setGroup( "Formatting" );
 
-	bool useAbbreviations = config->readBoolEntry("AbbreviateUnits");
+	bool useAbbreviations = config->readEntry("AbbreviateUnits");
 
-	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	int cols = 2;
 	int per_col = recipe.ingList.count() / cols;
@@ -330,7 +330,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				else if ( ( *sub_it ).amount <= 1e-10 )
 					amount_str = "";
 	
-				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readBoolEntry("AbbreviateUnits") );
+				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readEntry("AbbreviateUnits") );
 
 				QString tmp_format;
 				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";

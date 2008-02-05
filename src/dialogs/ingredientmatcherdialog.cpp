@@ -104,7 +104,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	bool show_id = config->readEntry( "ShowID", false );
 	recipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	recipeListView->listView() ->addColumn( i18n( "Missing Ingredients" ) );

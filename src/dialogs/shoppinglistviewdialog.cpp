@@ -67,8 +67,8 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Formatting" );
 
-	bool useAbbreviations = config->readBoolEntry("AbbreviateUnits");
-	bool useFraction = config->readBoolEntry( "Fraction" );
+	bool useAbbreviations = config->readEntry("AbbreviateUnits");
+	bool useFraction = config->readEntry( "Fraction" );
 
 	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it ) {
 		QString color = ( counter ) ? "#CBCEFF" : "#BFC2F0";

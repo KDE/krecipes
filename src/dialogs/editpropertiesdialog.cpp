@@ -149,7 +149,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->addColumn( i18n( "Unit" ) );
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	bool show_id = config->readEntry( "ShowID", false );
 	propertyListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 

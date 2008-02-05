@@ -219,7 +219,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 {
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Formatting" );
-	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	//columns 1-7
 	if ( ing.amount > 1e-8 ) {

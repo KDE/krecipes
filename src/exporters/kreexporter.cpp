@@ -38,7 +38,7 @@ KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, co
 	
 	if ( !compatibleNumbers ) {
 		KGlobal::config()->setGroup("Formatting");
-		m_number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		m_number_format = ( KGlobal::config()->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 		m_locale_aware_numbers = true;
 	} else {
 		m_number_format = MixedNumber::DecimalFormat;
@@ -98,7 +98,7 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 	xml += "</amount>\n";
 	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
 
-	bool useAbbreviations = KGlobal::config()->readBoolEntry("AbbreviateUnits");
+	bool useAbbreviations = KGlobal::config()->readEntry("AbbreviateUnits");
 	QString unit = ing.units.determineName( ing.amount + ing.amount_offset, useAbbreviations );
 	xml += "<unit>" + Q3StyleSheet::escape( unit ) + "</unit>\n";
 

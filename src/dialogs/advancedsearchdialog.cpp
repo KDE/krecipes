@@ -466,7 +466,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	bool show_id = config->readEntry( "ShowID", false );
 	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 

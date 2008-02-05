@@ -77,7 +77,7 @@ void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 {
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	bool show_id = config->readEntry( "ShowID", false );
 
 	for ( ElementList::const_iterator el_it = list.begin(); el_it != list.end(); ++el_it ) {
 		QString name = ( *el_it ).name;

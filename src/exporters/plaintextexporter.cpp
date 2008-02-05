@@ -48,7 +48,7 @@ QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedN
 	if ( !amount_str.isEmpty() )
 		content += " ";
 
-	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readBoolEntry("AbbreviateUnits") );
+	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readEntry("AbbreviateUnits") );
 
 	content += unit_str;
 	if ( !unit_str.isEmpty() )
@@ -68,7 +68,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 	KConfig *config = KGlobal::config();
 	config->setGroup( "Formatting" );
 
-	MixedNumber::Format number_format = ( config->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	QString content;
 

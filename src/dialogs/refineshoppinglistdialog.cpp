@@ -133,7 +133,7 @@ void RefineShoppingListDialog::loadData()
 			KConfig * config = KGlobal::config();
 			config->setGroup( "Formatting" );
 	
-			if ( config->readBoolEntry( "Fraction" ) )
+			if ( config->readEntry( "Fraction" ) )
 				amount_str = MixedNumber( ( *it ).amount ).toString();
 			else
 				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
@@ -188,7 +188,7 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 				KConfig * config = KGlobal::config();
 				config->setGroup( "Formatting" );
 		
-				if ( config->readBoolEntry( "Fraction" ) )
+				if ( config->readEntry( "Fraction" ) )
 					amount_str = MixedNumber( ( *found_it ).amount ).toString();
 				else
 					amount_str = beautify( KGlobal::locale() ->formatNumber( ( *found_it ).amount, 5 ) );

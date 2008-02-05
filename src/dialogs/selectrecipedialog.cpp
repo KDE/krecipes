@@ -144,7 +144,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	KConfig * config = KGlobal::config();
 	config->setGroup( "Performance" );
-	if ( config->readBoolEntry("SearchAsYouType",true) ) {
+	if ( config->readEntry("SearchAsYouType",true) ) {
 		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
 		connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
 		connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
