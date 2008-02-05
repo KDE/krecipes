@@ -89,7 +89,7 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 	if ( amount+amount_offset > 0 ) {
 		KConfigGroup config = KGlobal::config()->group( "Formatting" );
 	
-		MixedNumber::Format number_format = ( config.readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		MixedNumber::Format number_format = ( config.readEntry( "Fraction" ).isEmpty() ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 		
 		// KDE4 port MixedNumber::Format number_format = ( KGlobal::config().readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 

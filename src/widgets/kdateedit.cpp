@@ -29,6 +29,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QDesktopWidget>
 
 //#include <kcalendarsystem.h>
 #include <kglobal.h>
