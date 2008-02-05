@@ -34,7 +34,7 @@ void HeaderComboBox::reload()
 		completionObject()->addItem((*it).name);
 	}
 
-	if ( listBox()->findItem( remember_text, Qt::ExactMatch ) ) {
+	if ( findText( remember_text, Qt::MatchExactly ) ) {
 		setCurrentText( remember_text );
 	}
 }

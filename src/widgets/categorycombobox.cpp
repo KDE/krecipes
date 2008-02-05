@@ -13,9 +13,11 @@
 #include "categorycombobox.h"
 
 #include <q3listbox.h>
+#include <QAbstractItemView>
+#include <QListWidget>
 
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 
 #include "backends/recipedb.h"
@@ -48,8 +50,8 @@ void CategoryComboBox::reload()
 {
 	QString remember_cat_filter = currentText();
 
-	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
-	int limit = config->readNumEntry( "CategoryLimit", -1 );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	int limit = config.readEntry( "CategoryLimit", -1 );
 
 	//ProgressInterface pi(this);
 	//pi.listenOn(database);
@@ -67,7 +69,7 @@ void CategoryComboBox::reload()
 	int row = 1;
 	loadCategories(&categoryList,row);
 
-	if ( listBox() ->findItem( remember_cat_filter, Qt::ExactMatch ) ) {
+	if ( findText( remember_cat_filter, Qt::MatchExactly ) ) {
 		setCurrentText( remember_cat_filter );
 	}
 }
@@ -84,8 +86,8 @@ void CategoryComboBox::loadCategories( CategoryTree *categoryTree, int &row )
 
 void CategoryComboBox::loadNextGroup()
 {
-	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
-	int limit = config->readNumEntry( "CategoryLimit", -1 );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	int limit = config.readEntry( "CategoryLimit", -1 );
 
 	m_offset += limit;
 
@@ -94,8 +96,8 @@ void CategoryComboBox::loadNextGroup()
 
 void CategoryComboBox::loadPrevGroup()
 {
-	KConfig * config = KGlobal::config();config->setGroup( "Performance" );
-	int limit = config->readNumEntry( "CategoryLimit", -1 );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	int limit = config.readEntry( "CategoryLimit", -1 );
 
 	m_offset -= limit;
 

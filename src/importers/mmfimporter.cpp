@@ -165,7 +165,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	Ingredient new_ingredient;
 	new_ingredient.amount = 0; //amount not required, so give default of 0
 
-	if ( string.at( 11 ) == "-" && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
+	if ( string.at( 11 ) == '-' && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
 		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length())<<endl;
 		( *list.at( list.count() - 1 ) ).name += " " + string.trimmed().mid( 1, string.length() );
@@ -254,9 +254,9 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 {
 	if ( ( string.startsWith( "-----" ) || string.startsWith( "MMMMM" ) ) &&
 	        string.length() >= 40 &&
-	        ( ( string.at( string.length() / 2 ) != "-" ) ||
-	          ( string.at( string.length() / 2 + 1 ) != "-" ) ||
-	          ( string.at( string.length() / 2 - 1 ) != "-" ) ) ) {
+	        ( ( string.at( string.length() / 2 ) != '-' ) ||
+	          ( string.at( string.length() / 2 + 1 ) != '-' ) ||
+	          ( string.at( string.length() / 2 - 1 ) != '-' ) ) ) {
 		QString header( string.trimmed() );
 
 		//get only the header name

@@ -255,7 +255,7 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 			if ( year < 1970 )
 				year += 100; //we'll assume nothing has been created before 1970 (y2k issues :p)
 
-			recipe.ctime = QDate(year,month,day);
+			recipe.ctime = QDateTime(QDate(year,month,day));
 
 			#if 0
 			//typist

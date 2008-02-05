@@ -67,8 +67,8 @@ DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : K3ListV
 	setSorting(-1);
 
 	if ( curr_limit == -1 ) { //only use the default limit if a subclass hasn't given curr_limit its own value
-		KConfig * config = KGlobal::config();config->setGroup( "Performance" );
-		curr_limit = config->readNumEntry( "Limit", -1 );
+		KConfigGroup config = KGlobal::config()->group( "Performance" );
+		curr_limit = config.readEntry( "Limit", -1 );
 	}
 
 	connect(this,SIGNAL(executed(Q3ListViewItem*)),SLOT(slotDoubleClicked(Q3ListViewItem*)));
@@ -194,7 +194,7 @@ void DBListViewBase::setTotalItems(int i)
 {
 	m_totalSteps = i;
 	if ( m_progress ) {
-		m_progress->progressBar()->setTotalSteps( m_totalSteps );
+		m_progress->progressBar()->setMaximum( m_totalSteps );
 	}
 }
 
@@ -213,7 +213,7 @@ void DBListViewBase::createElement( Q3ListViewItem *it )
 	if ( bulk_load ) { //this can be much faster if we know the elements are already in order
 		if ( lastElement ) it->moveItem(lastElement);
 		lastElementMap.insert(it->parent(),it);
-		if ( m_progress ) { m_progress->progressBar()->advance(1); }
+		if ( m_progress ) { m_progress->progressBar()->setValue(m_progress->progressBar()->value() +1); }
 	}
 	else {
 		if ( lastElement == 0 ) {

@@ -128,9 +128,11 @@ void TopDeco::paintEvent( QPaintEvent * )
 	QColor c2 = paletteBackgroundColor();
 
 	// Draw the gradient
-	KPixmap kpm;
+	QPixmap kpm;
 	kpm.resize( size() );
-	KPixmapEffect::unbalancedGradient ( kpm, c1, c2, KPixmapEffect::VerticalGradient, 150, 150 );
+	
+	// to be done KDE4 port
+	//KPixmapEffect::unbalancedGradient ( kpm, c1, c2, KPixmapEffect::VerticalGradient, 150, 150 );
 
 	// Add a line on top
 	QPainter painter( &kpm );

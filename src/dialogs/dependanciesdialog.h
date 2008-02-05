@@ -21,6 +21,7 @@
 #include <Q3ValueList>
 
 #include <k3listview.h>
+#include <K3ListBox>
 #include <kdialog.h>
 
 #include "datablocks/elementlist.h"

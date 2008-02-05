@@ -304,9 +304,8 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 {
 	addColumn( i18n( "Category" ) );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	if ( editable ) {
@@ -568,9 +567,8 @@ CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, boo
 {
 	addColumn( i18n( "Category" ) );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )

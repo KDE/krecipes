@@ -12,6 +12,7 @@
 #define MXPIMPORTER_H
 
 #include <qstring.h>
+#include <Q3TextStream>
 
 #include "baseimporter.h"
 

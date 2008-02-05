@@ -11,6 +11,7 @@
 #include "prepmethodcombobox.h"
 
 #include <q3listbox.h>
+#include <QLineEdit>
 
 #include <kdebug.h>
 
@@ -177,7 +178,7 @@ void PrepMethodComboBox::setSelected( int prepID )
 	QMap<int, int>::const_iterator it;
 	for ( it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
 		if ( it.data() == prepID ) {
-			setCurrentItem(it.key());
+			setCurrentIndex(it.key());
 			break;
 		}
 	}

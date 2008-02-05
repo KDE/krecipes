@@ -11,6 +11,7 @@
 #ifndef KRETEXTEDIT_H
 #define KRETEXTEDIT_H
 
+#include <Q3TextEdit>
 #include <ktextedit.h>
 #include <kcompletion.h>
 
@@ -21,7 +22,7 @@
 /*  @author Jason Kivlighn
  *  @brief An extended KTextEdit that allows for text completion
  */
-class KreTextEdit : public KTextEdit, KCompletionBase
+class KreTextEdit : public Q3TextEdit, KCompletionBase
 {
 	Q_OBJECT
 

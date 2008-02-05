@@ -40,8 +40,10 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		listLabel = new QLabel( header );
 		listLabel->setFrameShape( Q3Frame::GroupBoxPanel );
 		listLabel->setFrameShadow( Q3Frame::Sunken );
-		listLabel->setPaletteForegroundColor( KGlobalSettings::highlightedTextColor() );
-		listLabel->setPaletteBackgroundColor( KGlobalSettings::highlightColor().light( 120 ) ); // 120, to match the kremenu settings
+		listLabel->setPaletteForegroundColor( QPalette::HighlightedText );
+		listLabel->setPaletteBackgroundColor( QPalette::Highlight );
+		// KDE4 port
+		//listLabel->setPaletteBackgroundColor( KGlobalSettings::highlightColor().light( 120 ) ); // 120, to match the kremenu settings
 		listLabel->setText( title );
 
 	}

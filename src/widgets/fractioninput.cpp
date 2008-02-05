@@ -107,7 +107,8 @@ void FractionInput::slotStartValidateTimer()
 void FractionInput::validate()
 {
 	if ( isInputValid() ) {
-		setPaletteForegroundColor( KGlobalSettings::textColor() );
+		//KDE4 port setPaletteForegroundColor( KGlobalSettings::textColor() );
+		setPaletteForegroundColor( Qt::black );
 	}
 	else
 		setPaletteForegroundColor( Qt::red );

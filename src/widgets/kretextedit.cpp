@@ -13,11 +13,13 @@
 #include <q3textstream.h>
 //Added by qt3to4:
 #include <QKeyEvent>
+#include <Q3TextEdit>
+#include <KStandardShortcut>
 
 #include <kaction.h>
 #include <kdebug.h>
 
-KreTextEdit::KreTextEdit( QWidget *parent ) : KTextEdit( parent ), KCompletionBase()
+KreTextEdit::KreTextEdit( QWidget *parent ) : Q3TextEdit( parent ), KCompletionBase()
 {
 	KCompletion * comp = completionObject(); //creates the completion object
 	comp->setIgnoreCase( true );
@@ -35,11 +37,10 @@ void KreTextEdit::haltCompletion()
 void KreTextEdit::keyPressEvent( QKeyEvent *e )
 {
 	// Filter key-events if completion mode is not set to CompletionNone
-	KKey key( e );
 
 	KeyBindingMap keys = getKeyBindings();
 	KShortcut cut;
-	bool noModifier = ( e->state() == NoButton || e->state() == ShiftButton );
+	bool noModifier = ( e->modifiers() == Qt::NoModifier || e->modifiers() == Qt::ShiftModifier );
 
 	if ( noModifier ) {
 		QString keycode = e->text();
@@ -52,13 +53,13 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	}
 
 	// Handles completion
-	if ( keys[ TextCompletion ].isNull() )
+	if ( keys[ TextCompletion ].isEmpty() )
 		cut = KStandardShortcut::shortcut( KStandardShortcut::TextCompletion );
 	else
 		cut = keys[ TextCompletion ];
 
 	//using just the standard Ctrl+E isn't user-friendly enough for Grandma...
-	if ( completing && ( cut.contains( key ) || e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) ) {
+	if ( completing && ( cut.contains( e->key() ) || e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) ) {
 		int paraFrom, indexFrom, paraTo, indexTo;
 		getSelection ( &paraFrom, &indexFrom, &paraTo, &indexTo );
 
@@ -72,23 +73,23 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	// handle rotation
 
 	// Handles previous match
-	if ( keys[ PrevCompletionMatch ].isNull() )
+	if ( keys[ PrevCompletionMatch ].isEmpty() )
 		cut = KStandardShortcut::shortcut( KStandardShortcut::PrevCompletion );
 	else
 		cut = keys[ PrevCompletionMatch ];
 
-	if ( cut.contains( key ) ) {
+	if ( cut.contains( e->key() ) ) {
 		rotateText( KCompletionBase::PrevCompletionMatch );
 		return ;
 	}
 
 	// Handles next match
-	if ( keys[ NextCompletionMatch ].isNull() )
+	if ( keys[ NextCompletionMatch ].isEmpty() )
 		cut = KStandardShortcut::shortcut( KStandardShortcut::NextCompletion );
 	else
 		cut = keys[ NextCompletionMatch ];
 
-	if ( cut.contains( key ) ) {
+	if ( cut.contains( e->key() ) ) {
 		rotateText( KCompletionBase::NextCompletionMatch );
 		return ;
 	}
@@ -106,7 +107,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	}
 
 	// Let KTextEdit handle any other keys events.
-	KTextEdit::keyPressEvent ( e );
+	Q3TextEdit::keyPressEvent ( e );
 }
 
 void KreTextEdit::setCompletedText( const QString &txt )

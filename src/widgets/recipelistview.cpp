@@ -38,11 +38,11 @@ RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource,
 		: Q3StoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
 {
 	if ( recipeItem ) {
-		QByteArray data;
+		QByteArray* data;
 		QDataStream out( data, QIODevice::WriteOnly );
 		out << recipeItem->recipeID();
 		out << recipeItem->title();
-		setEncodedData( data );
+		setEncodedData( *data );
 	}
 }
 
@@ -62,7 +62,7 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 
 	QString title;
 	int recipeID;
-	QDataStream in( data, QIODevice::ReadOnly );
+	QDataStream in( &data, QIODevice::ReadOnly );
 	in >> recipeID;
 	in >> title;
 
@@ -72,10 +72,10 @@ bool RecipeItemDrag::decode( const QMimeSource* e, RecipeListItem& item )
 	return true;
 }
 
-class RecipeListToolTip : public QToolTip
+class RecipeListToolTip 
 {
 public:
-	RecipeListToolTip( RecipeListView *view ) : QToolTip(view->viewport()), m_view(view)
+	RecipeListToolTip( RecipeListView *view ) : m_view(view)
 	{}
 
 	void maybeTip( const QPoint &point )
@@ -84,7 +84,7 @@ public:
 		if ( item ) {
 			QString text = m_view->tooltip(item,0);
 			if ( !text.isEmpty() )
-				tip( m_view->itemRect( item ), text );
+				QToolTip::showText( point, text, m_view->viewport(), m_view->itemRect( item ) );
 		}
 	}
 
@@ -101,8 +101,8 @@ RecipeListView::RecipeListView( QWidget *parent, RecipeDB *db ) : StdCategoryLis
 {
 	setColumnText( 0, i18n( "Recipe" ) );
 
-	KConfig *config = KGlobal::config(); config->setGroup( "Performance" );
-	curr_limit = config->readNumEntry("CategoryLimit",-1);
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	curr_limit = config.readEntry("CategoryLimit",-1);
 
 	KIconLoader *il = KIconLoader::global();
 	setPixmap( il->loadIcon( "categories", KIconLoader::NoGroup, 16 ) );
@@ -210,7 +210,7 @@ void RecipeListView::populate( Q3ListViewItem *item )
 	delete item->firstChild(); //delete the "pseudo item"
 
 	if ( m_progress_dlg ){
-		m_progress_dlg->progressBar()->advance(1);
+		m_progress_dlg->progressBar()->setValue(m_progress_dlg->progressBar()->value() + 1);
 		kapp->processEvents();
 	}
 
@@ -238,10 +238,11 @@ void RecipeListView::populateAll( Q3ListViewItem *parent )
 	bool first = false;
 	if ( !parent ) {
 		first = true;
-		m_progress_dlg = new KProgressDialog(this,"populate_all_prog_dlg",QString::null,i18n("Loading recipes"),true);
+		m_progress_dlg = new KProgressDialog(this,QString::null,i18n("Loading recipes"));
+		m_progress_dlg->setObjectName( "populate_all_prog_dlg" );
+		m_progress_dlg->setModal( true );
 		m_progress_dlg->setAllowCancel(false);
-		m_progress_dlg->progressBar()->setTotalSteps(0);
-		m_progress_dlg->progressBar()->setPercentageVisible(false);
+		m_progress_dlg->progressBar()->setRange(0,0);
 
 		m_progress_dlg->grabKeyboard(); //don't let the user keep hitting keys
 

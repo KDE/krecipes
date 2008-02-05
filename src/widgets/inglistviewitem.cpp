@@ -11,7 +11,7 @@
 #include "inglistviewitem.h"
 
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
@@ -87,10 +87,11 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 	amount_str = QString::null;
 
 	if ( amount+amount_offset > 0 ) {
-		KConfig * config = KGlobal::config();
-		config->setGroup( "Formatting" );
+		KConfigGroup config = KGlobal::config()->group( "Formatting" );
 	
-		MixedNumber::Format number_format = ( KGlobal::config()->readBoolEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		MixedNumber::Format number_format = ( config.readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		
+		// KDE4 port MixedNumber::Format number_format = ( KGlobal::config().readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 		amount_str = MixedNumber( amount ).toString(number_format);
 		if ( amount_offset > 0 )

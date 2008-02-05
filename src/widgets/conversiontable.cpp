@@ -20,11 +20,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-class ConversionTableToolTip : public QToolTip
+class ConversionTableToolTip 
 {
 public:
-	ConversionTableToolTip( ConversionTable *t ) : QToolTip( t->viewport() ),
-			table( t )
+	ConversionTableToolTip( ConversionTable *t ) : table( t )
 	{}
 
 	void maybeTip( const QPoint &pos )
@@ -48,7 +47,7 @@ public:
 
 		QRect cr = table->cellGeometry( row, col );
 		cr.moveTopLeft( table->contentsToViewport( cr.topLeft() ) );
-		tip( cr, QString( "1 %1 = %2 %3" ).arg( row_unit ).arg( text ).arg( col_unit ) );
+		QToolTip::showText( pos, QString( "1 %1 = %2 %3" ).arg( row_unit ).arg( text ).arg( col_unit ), table->viewport(), cr );		
 	}
 
 private:
@@ -141,7 +140,7 @@ void ConversionTableItem::paint( QPainter *p, const QColorGroup &cg, const QRect
 	// Draw in gray all those cells which are not editable
 
 	if ( row() == col() )
-		g.setColor( QColorGroup::Base, gray );
+		g.setColor( QColorGroup::Base, Qt::gray );
 	Q3TableItem::paint( p, g, cr, selected );
 }
 

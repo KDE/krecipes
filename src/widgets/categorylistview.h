@@ -118,6 +118,8 @@ public slots:
 	void open( Q3ListViewItem *item );
 
 protected:
+	QMap<int, Q3ListViewItem*> items_map;
+
 	virtual void init();
 
 	virtual void load( int limit, int offset );
@@ -202,7 +204,6 @@ protected slots:
 	virtual void checkCreateCategory( const Element &, int parent_id );
 	virtual void populate( Q3ListViewItem *item );
 
-	QMap<int, Q3ListViewItem*> items_map;
 
 private:
 	Q3ListViewItem *m_item_to_delete;
@@ -230,7 +231,7 @@ private slots:
 	void createNew();
 	void remove
 		();
-	void rename(Q3ListViewItem *, int c);
+	void rename();
 	void cut();
 	void paste();
 	void pasteAsSub();

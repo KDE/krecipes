@@ -13,6 +13,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
+#include <Q3TextStream>
 
 #include "baseimporter.h"
 #include "datablocks/ingredientlist.h"

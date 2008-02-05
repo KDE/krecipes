@@ -12,11 +12,12 @@
 
 #include <q3listbox.h>
 #include <qtimer.h>
+#include <QLineEdit>
 
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kglobal.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
@@ -82,8 +83,8 @@ void IngredientComboBox::startLoad()
 	//don't receive ingredient created/removed events from the database
 	database->disconnect( this );
 
-	KConfig * config = KGlobal::config(); config->setGroup( "Performance" );
-	load_limit = config->readNumEntry( "Limit", -1 );
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	load_limit = config.readEntry( "Limit", -1 );
 	if ( load_limit == -1 ) {
 		reload();
 		endLoad();

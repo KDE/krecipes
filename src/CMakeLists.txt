@@ -1,22 +1,172 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
-add_subdirectory( backends )
-add_subdirectory( importers )
-add_subdirectory( widgets )
-add_subdirectory( dialogs )
-add_subdirectory( exporters )
-add_subdirectory( datablocks )
-add_subdirectory( tests )
-
-
-
 ########### QT3Support ###############
 
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
+############# backends ###############
 
-########### next target ###############
+
+if ( link_lib_SQLITE )
+   add_subdirectory( backends/SQLite )
+endif ( link_lib_SQLITE )
+
+if ( link_lib_MYSQL )
+   add_subdirectory( backends/MySQL )
+endif ( link_lib_MYSQL )
+
+if ( link_lib_POSTGRESQL ) 
+   add_subdirectory( backends/PostgreSQL )
+endif ( link_lib_POSTGRESQL )
+
+set(krecipesdbs_SRCS
+   backends/recipedb.cpp
+   backends/qsqlrecipedb.cpp
+   backends/progressinterface.cpp
+   backends/usda_property_data.cpp
+   backends/usda_ingredient_data.cpp
+   backends/usda_unit_data.cpp)
+
+
+############ importers ###############
+
+set(krecipesimporters_SRCS
+   importers/mx2importer.cpp
+   importers/mmfimporter.cpp
+   importers/mxpimporter.cpp
+   importers/nycgenericimporter.cpp
+   importers/recipemlimporter.cpp
+   importers/baseimporter.cpp
+   importers/kreimporter.cpp
+   importers/rezkonvimporter.cpp
+   importers/kredbimporter.cpp)
+
+
+############### widgets ##############
+
+set(krecipeswidgets_SRCS
+   widgets/krelistview.cpp
+   widgets/kremenu.cpp
+   widgets/paneldeco.cpp
+   widgets/ingredientlistview.cpp
+   widgets/unitlistview.cpp
+   widgets/propertylistview.cpp
+   widgets/prepmethodlistview.cpp
+   widgets/categorylistview.cpp
+   widgets/authorlistview.cpp
+   widgets/recipelistview.cpp
+   widgets/categorycombobox.cpp
+   widgets/kretextedit.cpp
+   widgets/dblistviewbase.cpp
+   widgets/conversiontable.cpp
+   widgets/fractioninput.cpp
+   widgets/ingredientcombobox.cpp
+   widgets/headercombobox.cpp
+   widgets/prepmethodcombobox.cpp
+   widgets/inglistviewitem.cpp
+   widgets/kdateedit.cpp
+   widgets/kdatepickerpopup.cpp
+   widgets/headerlistview.cpp
+   widgets/ratingwidget.cpp
+   widgets/kwidgetlistbox.cpp
+   widgets/ratingdisplaywidget.ui
+   widgets/criteriacombobox.cpp
+   widgets/ingredientinputwidget.cpp
+   widgets/unitcombobox.cpp
+   widgets/amountunitinput.cpp
+   widgets/weightinput.cpp
+   widgets/thumbbar.cpp)
+
+
+############## dialogs ###############
+
+set(krecipesdialogs_SRCS
+   dialogs/advancedsearchdialog.cpp
+   dialogs/recipeimportdialog.cpp
+   dialogs/dietwizarddialog.cpp
+   dialogs/recipeinputdialog.cpp
+   dialogs/recipeviewdialog.cpp
+   dialogs/selectrecipedialog.cpp
+   dialogs/ingredientsdialog.cpp
+   dialogs/selectunitdialog.cpp
+   dialogs/createelementdialog.cpp
+   dialogs/propertiesdialog.cpp
+   dialogs/createpropertydialog.cpp
+   dialogs/selectpropertydialog.cpp
+   dialogs/unitsdialog.cpp
+   dialogs/dependanciesdialog.cpp
+   dialogs/shoppinglistdialog.cpp
+   dialogs/shoppinglistviewdialog.cpp
+   dialogs/selectcategoriesdialog.cpp
+   dialogs/categorieseditordialog.cpp
+   dialogs/authorsdialog.cpp
+   dialogs/selectauthorsdialog.cpp
+   dialogs/resizerecipedialog.cpp
+   dialogs/dietviewdialog.cpp
+   dialogs/ingredientmatcherdialog.cpp
+   dialogs/prepmethodsdialog.cpp
+   dialogs/createcategorydialog.cpp
+   dialogs/borderdialog.cpp
+   dialogs/refineshoppinglistdialog.cpp
+   dialogs/pagesetupdialog.cpp
+   dialogs/dbimportdialog.cpp
+   dialogs/createunitdialog.cpp
+   dialogs/setupdisplay.cpp
+   dialogs/ingredientparserdialog.cpp
+   dialogs/ingredientgroupsdialog.cpp
+   dialogs/editratingdialog.cpp
+   dialogs/similarcategoriesdialog.cpp
+   dialogs/conversiondialog.cpp
+   dialogs/createingredientweightdialog.cpp
+   dialogs/recipeprintpreview.cpp
+   dialogs/editpropertiesdialog.cpp
+   dialogs/createunitconversiondialog.cpp)
+
+
+############# exporters ##############
+
+set (krecipesexporters_SRCS 
+   exporters/kreexporter.cpp
+   exporters/baseexporter.cpp
+   exporters/cookmlexporter.cpp
+   exporters/recipemlexporter.cpp
+   exporters/mmfexporter.cpp
+   exporters/htmlexporter.cpp
+   exporters/plaintextexporter.cpp
+   exporters/rezkonvexporter.cpp
+   exporters/htmlbookexporter.cpp
+   exporters/xsltexporter.cpp)
+
+
+############ datablocks ##############
+
+set(datablocks_SRCS
+   datablocks/recipelist.cpp
+   datablocks/constraintlist.cpp
+   datablocks/categorytree.cpp
+   datablocks/kreborder.cpp
+   datablocks/recipe.cpp
+   datablocks/ingredient.cpp
+   datablocks/ingredientlist.cpp
+   datablocks/elementlist.cpp
+   datablocks/element.cpp
+   datablocks/ingredientproperty.cpp
+   datablocks/ingredientpropertylist.cpp
+   datablocks/unit.cpp
+   datablocks/unitratio.cpp
+   datablocks/unitratiolist.cpp
+   datablocks/mixednumber.cpp
+   datablocks/rating.cpp
+   datablocks/weight.cpp)
+
+
+############### tests ################
+
+add_subdirectory( tests )
+
+
+############# Main  #################
 
 set(krecipes_SRCS 
    main.cpp 
@@ -37,9 +187,14 @@ set(krecipes_SRCS
 ##########KDE4 PORT
 ##########krecipesiface.h krecipesdbiface.h )
 
-kde4_add_executable(krecipes ${krecipes_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} krecipesdbs krecipesexporters krecipesimporters krecipeswidgets krecipesdialogs krecipeswidgets datablocks ${KDE4_KHTML_LIBS} )
+
+
+
+
+kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}  ${krecipesdialogs_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS})
+
+target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} ${KDE4_KHTML_LIBS} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 

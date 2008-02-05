@@ -69,17 +69,16 @@ HidePropertyCheckListItem::HidePropertyCheckListItem( Q3ListViewItem* it, const 
 void HidePropertyCheckListItem::stateChange( bool on )
 {
 	if ( !m_holdSettings ) {
-		KConfig *config = KGlobal::config();
-		config->setGroup("Formatting");
+		KConfigGroup config = KGlobal::config()->group("Formatting");
 	
-		config->sync();
-		QStringList hiddenList = config->readListEntry("HiddenProperties");
+		config.sync();
+		QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 		if ( on )
 			hiddenList.remove(m_property.name);
 		else if ( !hiddenList.contains(m_property.name) )
 			hiddenList.append(m_property.name);
 	
-		config->writeEntry("HiddenProperties",hiddenList);
+		config.writeEntry("HiddenProperties",hiddenList);
 	}
 }
 
@@ -117,9 +116,8 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 	addColumn( i18n( "Property" ) );
 	addColumn( i18n( "Units" ) );
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readBoolEntry( "ShowID", false );
+	KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	addColumn( i18n( "Id" ), show_id ? -1 : 2 );
 
 	setSorting( 0 );

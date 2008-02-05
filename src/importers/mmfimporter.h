@@ -12,6 +12,7 @@
 #define MMFIMPORTER_H
 
 #include <qstring.h>
+#include <Q3TextStream>
 
 #include "baseimporter.h"
 #include "datablocks/ingredientlist.h"
