@@ -1,7 +1,7 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
-add_library(psqlrecipedb SHARED psqlrecipedb.cpp)
+kde4_add_library(psqlrecipedb SHARED psqlrecipedb.cpp)
 target_link_libraries( psqlrecipedb )
 
 ########### next target ###############
