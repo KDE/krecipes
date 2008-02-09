@@ -33,7 +33,7 @@ int PlainTextExporter::supportedItems() const
 
 QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedNumber::Format number_format )
 {
-	KConfig *config = KGlobal::config();
+	KConfigGroup * config = new KConfigGroup();
 
 	QString content;
 
@@ -48,7 +48,7 @@ QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedN
 	if ( !amount_str.isEmpty() )
 		content += " ";
 
-	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readEntry("AbbreviateUnits") );
+	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readEntry("AbbreviateUnits", false) );
 
 	content += unit_str;
 	if ( !unit_str.isEmpty() )
@@ -65,10 +65,9 @@ QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedN
 
 QString PlainTextExporter::createContent( const RecipeList& recipes )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Formatting" );
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config.readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	QString content;
 
@@ -152,7 +151,8 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				//FIXME: This is an ugly hack, but I don't know how else to be i18n friendly (if this is even that)
 				// and still be able to display the amount as a fraction
-				QString starsTrans = i18n("1 star","%n stars",qRound((*rc_it).stars));
+				//KDE$ port
+				QString starsTrans = i18np("1 star","%n stars",qRound((*rc_it).stars));
 				starsTrans.replace(QString::number(qRound((*rc_it).stars)),MixedNumber((*rc_it).stars).toString());
 
 				content +=  "  "+(*rc_it).name+": "+starsTrans+"\n";

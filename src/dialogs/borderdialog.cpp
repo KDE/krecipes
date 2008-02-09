@@ -27,14 +27,20 @@
 #include <khtmlview.h>
 #include <k3listbox.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 #include "datablocks/kreborder.h"
 
 BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char* name )
-		: KDialog( parent, name, true, QString::null,
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
-	KVBox *page = makeVBoxMainWidget();
+	this->setObjectName( name );
+	this->setModal( true );
+	this->setButtons( KDialog::Ok | KDialog::Cancel );
+	this->setDefaultButton( KDialog::Ok );
+
+	KVBox *page = new KVBox( this ); 
+	setMainWidget( page );
 
 	borderGroupBox = new Q3GroupBox( page, "borderGroupBox" );
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
@@ -61,11 +67,11 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	Q3HBox *color_hbox = new Q3HBox( borderGroupBox );
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
-	hsSelector = new KHSSelector( color_hbox );
+	hsSelector = new KHueSaturationSelector( color_hbox );
 	hsSelector->setMinimumSize( 140, 70 );
 	connect( hsSelector, SIGNAL( valueChanged( int, int ) ), SLOT( slotHSChanged( int, int ) ) );
 
-	valuePal = new KValueSelector( color_hbox );
+	valuePal = new KColorValueSelector( color_hbox );
 	valuePal->setMinimumSize( 26, 70 );
 	connect( valuePal, SIGNAL( valueChanged( int ) ), SLOT( slotVChanged( int ) ) );
 
@@ -99,7 +105,8 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	initListBoxs();
 	loadBorder( border );
 
-	clearWState( WState_Polished );
+	//KDE4 port
+	//clearWState( WState_Polished );
 }
 
 BorderDialog::~BorderDialog()
@@ -183,14 +190,14 @@ void BorderDialog::loadBorder( const KreBorder &border )
 void BorderDialog::initListBoxs()
 {
 	styleListBox->insertItem( i18n( "None" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dotted" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dashed" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Solid" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Double" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Groove" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Ridge" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Inset" ) );
-	styleListBox->insertItem( i18n( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Outset" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dotted" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dashed" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Solid" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Double" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Groove" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Ridge" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Inset" ) );
+	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Outset" ) );
 
 	widthListBox->insertItem( "1" );
 	widthListBox->insertItem( "2" );
@@ -225,7 +232,7 @@ void BorderDialog::slotHSChanged( int h, int s )
 	if ( v < 1 )
 		v = 1;
 
-	KColor col;
+	QColor col;
 	col.setHsv( h, s, v );
 
 	setColor( col );
@@ -237,14 +244,14 @@ void BorderDialog::slotVChanged( int v )
 	int h, s, _v;
 	selColor.hsv( &h, &s, &_v );
 
-	KColor col;
+	QColor col;
 	col.setHsv( h, s, v );
 
 	setColor( col );
 	updatePreview();
 }
 
-void BorderDialog::setColor( const KColor &color )
+void BorderDialog::setColor( const QColor &color )
 {
 	if ( color == selColor )
 		return ;

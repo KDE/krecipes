@@ -186,7 +186,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 		photo_name = QString::number(recipe.recipeID);
 	}
 
-	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
+	QPixmap pm = QPixmap::fromImage( image );//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
 	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
@@ -197,7 +197,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 
 void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 {
-	KConfig * config = KGlobal::config();
+	KConfigGroup * config = new KConfigGroup();
 
 	//=======================TITLE======================//
 	content = content.replace("**TITLE**",recipe.title);
@@ -263,11 +263,11 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
-	config->setGroup( "Formatting" );
+	config->group( "Formatting" );
 
-	bool useAbbreviations = config->readEntry("AbbreviateUnits");
+	bool useAbbreviations = config->readEntry("AbbreviateUnits", false);
 
-	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config->readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	int cols = 2;
 	int per_col = recipe.ingList.count() / cols;
@@ -331,7 +331,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				else if ( ( *sub_it ).amount <= 1e-10 )
 					amount_str = "";
 	
-				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readEntry("AbbreviateUnits") );
+				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readEntry("AbbreviateUnits", false) );
 
 				QString tmp_format;
 				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
@@ -360,7 +360,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	//=======================PROPERTIES======================//
 	QString properties_html;
 
-	QStringList hiddenList = config->readListEntry("HiddenProperties");
+	QStringList hiddenList = config->readEntry("HiddenProperties", QStringList());
 	IngredientPropertyList visibleProperties;
 	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
 		if ( hiddenList.find((*prop_it).name) == hiddenList.end() )

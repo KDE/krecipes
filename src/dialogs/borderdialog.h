@@ -13,6 +13,10 @@
 
 #include <kdialog.h>
 #include <kcolordialog.h>
+#include <khuesaturationselect.h>
+#include <kcolorvalueselector.h>
+
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
@@ -46,8 +50,8 @@ public:
 	QLabel* styleLabel;
 	K3ListBox* styleListBox;
 	QLabel* colorLabel;
-	KHSSelector* hsSelector;
-	KValueSelector* valuePal;
+	KHueSaturationSelector* hsSelector;
+	KColorValueSelector* valuePal;
 	QLabel* widthLabel;
 	QSpinBox* widthSpinBox;
 	K3ListBox* widthListBox;
@@ -67,13 +71,13 @@ protected slots:
 
 	void slotHSChanged( int h, int s );
 	void slotVChanged( int v );
-	void setColor( const KColor &color );
+	void setColor( const QColor &color );
 
 private:
 	void loadBorder( const KreBorder &border );
 	void initListBoxs();
 
-	KColor selColor;
+	QColor selColor;
 
 };
 

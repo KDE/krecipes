@@ -20,14 +20,23 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kiconloader.h>
+#include <kvbox.h>
+#include <KStandardGuiItem>
+
 
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
-		: KDialog( parent, "shoppingviewdialog", true, QString::null,
-		    KDialog::Close | KDialog::User1, KDialog::Close,
-		    false, KStandardGuiItem::print() )
+		: KDialog( parent )
 {
+	this->setObjectName( "shoppingviewdialog" );
+	this->setModal( true );
+	this->setButtons( KDialog::Close | KDialog::User1 );
+	this->setButtonGuiItem( KDialog::User1 , KStandardGuiItem::print() );
+	this->setDefaultButton( KDialog::Close );
+	this->showButtonSeparator( false );
+	
 	// Design dialog
-	KVBox *page = makeVBoxMainWidget();
+	KVBox *page = new KVBox ( this );
+	setMainWidget( page );
 
 	shoppingListView = new KHTMLPart( page );
 
@@ -64,11 +73,10 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 	recipeHTML += "<div STYLE=\"border:medium solid blue; width:95%\"><table cellspacing=0px width=100%><tbody>";
 	bool counter = true;
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Formatting" );
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	bool useAbbreviations = config->readEntry("AbbreviateUnits");
-	bool useFraction = config->readEntry( "Fraction" );
+	bool useAbbreviations = config.readEntry("AbbreviateUnits", false );
+	bool useFraction = config.readEntry( "Fraction", false );
 
 	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it ) {
 		QString color = ( counter ) ? "#CBCEFF" : "#BFC2F0";

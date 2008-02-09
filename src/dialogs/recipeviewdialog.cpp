@@ -86,18 +86,20 @@ bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &
 
 	if ( ids.count() > 1 )  //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
 	{
-		progress_dialog = new KProgressDialog( this, "open_progress_dialog", QString::null, i18n( "Opening recipes, please wait..." ), true );
+		progress_dialog = new KProgressDialog( this, QString::null, i18n( "Opening recipes, please wait..." ) );
+		progress_dialog->setObjectName( "open_progress_dialog" );
+		progress_dialog->setModal( true );
 		progress_dialog->resize( 240, 80 );
 	}
 
 	XSLTExporter html_generator( tmp_filename + ".html", "html" );
 	if ( layoutConfig != QString::null ) {
             KConfigGroup config(KGlobal::config(), "Page Setup" );
-		QString styleFile = config.readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/None.klo" ) );
+		QString styleFile = config.readEntry( layoutConfig+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
 			html_generator.setStyle( styleFile );
 
-		QString templateFile = config.readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.xsl" ) );
+		QString templateFile = config.readEntry( layoutConfig+"Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
 			html_generator.setTemplate( templateFile );
 	}
@@ -111,7 +113,7 @@ bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &
 	delete recipeView;              // Temporary workaround
 	recipeView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
 
-	KParts::URLArgs args (recipeView->browserExtension()->urlArgs());
+	KParts::OpenUrlArguments args (recipeView->browserExtension()->urlArgs());
 	args.reload=true; // Don't use the cache
 	recipeView->browserExtension()->setURLArgs(args);
 

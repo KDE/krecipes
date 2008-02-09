@@ -107,7 +107,7 @@ set(krecipesdialogs_SRCS
    dialogs/ingredientmatcherdialog.cpp
    dialogs/prepmethodsdialog.cpp
    dialogs/createcategorydialog.cpp
-   #dialogs/borderdialog.cpp
+   dialogs/borderdialog.cpp
    dialogs/refineshoppinglistdialog.cpp
    #dialogs/pagesetupdialog.cpp
    #dialogs/dbimportdialog.cpp
@@ -127,13 +127,13 @@ set(krecipesdialogs_SRCS
 ############# exporters ##############
 
 set (krecipesexporters_SRCS 
-   #exporters/kreexporter.cpp
+   exporters/kreexporter.cpp
    #exporters/baseexporter.cpp
    #exporters/cookmlexporter.cpp
    exporters/recipemlexporter.cpp
    exporters/mmfexporter.cpp
-   #exporters/htmlexporter.cpp
-   #exporters/plaintextexporter.cpp
+   exporters/htmlexporter.cpp
+   exporters/plaintextexporter.cpp
    exporters/rezkonvexporter.cpp
    exporters/htmlbookexporter.cpp
    #exporters/xsltexporter.cpp

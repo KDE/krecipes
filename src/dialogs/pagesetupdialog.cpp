@@ -35,7 +35,9 @@
 #include <kconfig.h>
 #include <kstandardaction.h>
 #include <ktoolbar.h>
+#include <ktoolbarpopupaction.h>
 #include <kmenu.h>
+#include <KActionCollection>
 
 #include <widgets/thumbbar.h>
 #include <kglobal.h>
@@ -49,23 +51,25 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 
-	KStandardAction::open( this, SLOT(loadFile()), actionCollection )->plug( toolbar );
-	KStandardAction::save( this, SLOT( saveLayout() ), actionCollection ) ->plug( toolbar );
-	KStandardAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) ->plug( toolbar );
-	KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) ->plug( toolbar );
+	toolbar->addAction( KStandardAction::open( this, SLOT(loadFile()), actionCollection ) );
+	toolbar->addAction( KStandardAction::save( this, SLOT( saveLayout() ), actionCollection ) );
+	toolbar->addAction( KStandardAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) );
+	toolbar->addAction( KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) );
+
 
 	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ), "frame-edit" );
 	shown_items->setDelayed( false );
 	shown_items_popup = shown_items->popupMenu();
 	shown_items_popup->insertTitle( i18n( "Show Items" ) );
-	shown_items->plug( toolbar );
+	toolbar->addAction( shown_items );
+
 	layout->addWidget( toolbar );
 
 	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the left, and right-click any element to edit the look of that element.</i>"),this);
 	layout->addWidget( help );
 
 	Q3HBox *viewBox = new Q3HBox( this );
-	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Vertical);
+	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Qt::Vertical);
 	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( uint i = 0; i < included_templates.count(); i++ ) {
@@ -84,19 +88,18 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	connect( okButton, SIGNAL( clicked() ), SLOT( accept() ) );
 	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
+	KConfigGroup config = KGlobal::config()->group( "Page Setup" );
 	QSize defaultSize(800,600);
-	resize(config->readSizeEntry( "WindowSize", &defaultSize ));
+	resize(config.readEntry( "WindowSize", defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString layoutFile = config->readEntry( m_configEntry+"Layout", locate( "appdata", "layouts/None.klo" ) );
+	QString layoutFile = config.readEntry( m_configEntry+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 	if ( layoutFile.isEmpty() || !QFile::exists( layoutFile ) )
-		layoutFile = locate( "appdata", "layouts/None.klo" );
+		layoutFile = KStandardDirs::locate( "appdata", "layouts/None.klo" );
 
-	QString tmpl = config->readEntry( m_configEntry+"Template", locate( "appdata", "layouts/Default.xsl" ) );
+	QString tmpl = config.readEntry( m_configEntry+"Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 	if ( tmpl.isEmpty() || !QFile::exists( tmpl ) )
-		tmpl = locate( "appdata", "layouts/Default.xsl" );
+		tmpl = KStandardDirs::locate( "appdata", "layouts/Default.xsl" );
 	kDebug()<<"tmpl: "<<tmpl<<endl;
 	active_template = tmpl;
 	loadLayout( layoutFile );
@@ -115,7 +118,7 @@ void PageSetupDialog::accept()
 	config.writeEntry( m_configEntry+"Layout", active_filename );
 
 	if ( !active_template.isEmpty() ) {
-		config->writeEntry( m_configEntry+"Template", active_template );
+		config.writeEntry( m_configEntry+"Template", active_template );
 	}
 
 	config.writeEntry( "WindowSize", size() );
@@ -244,7 +247,7 @@ void PageSetupDialog::saveLayout()
 
 void PageSetupDialog::saveAsLayout()
 {
-	QString filename = KFileDialog::getSaveFileName( KGlobal::instance() ->dirs() ->saveLocation( "appdata", "layouts/" ), "*.klo|Krecipes Layout (*.klo)", this, QString::null );
+	QString filename = KFileDialog::getSaveFileName( KGlobal::mainComponent().dirs() ->saveLocation( "appdata", "layouts/" ), "*.klo|Krecipes Layout (*.klo)", this, QString::null );
 
 	if ( !filename.isEmpty() ) {
 		if ( haveWritePerm( filename ) ) {
@@ -265,7 +268,7 @@ void PageSetupDialog::saveAsLayout()
 
 QString PageSetupDialog::getIncludedLayoutDir() const
 {
-	QFileInfo file_info( locate( "appdata", "layouts/None.klo" ) );
+	QFileInfo file_info( KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 	return file_info.absolutePath();
 }
 

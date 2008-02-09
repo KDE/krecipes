@@ -19,6 +19,7 @@
 #include <Q3HBoxLayout>
 #include <Q3ValueList>
 #include <Q3VBoxLayout>
+#include <Q3TextStream>
 #include <k3listview.h>
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -36,6 +37,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kvbox.h>
 
 #include "widgets/weightinput.h"
 #include "widgets/krelistview.h"
@@ -94,15 +96,20 @@ private:
 
 
 EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, RecipeDB *database, QWidget* parent )
-		: KDialog( parent, "EditPropertiesDialog", true, QString::null,
-		    KDialog::Ok, KDialog::Ok ),
+		: KDialog( parent ),
   ingredientID(ingID), ingredientName(ingName)
 {
+	this->setObjectName( "EditPropertiesDialog" );
+	this->setModal( true );
+	this-setButtons( KDialog::Ok );
+	this->setDefaultButton( KDialog::Ok );
+
 	// Initialize internal variables
 	perUnitListBack = new ElementList;
 	db = database;
 
-	KVBox *wholePage = makeVBoxMainWidget();
+	KVBox *wholePage = new KVBox( this ); 
+	setMainWidget( wholePage );
 	QWidget *page = new QWidget(wholePage);
 
 	EditPropertiesDialogLayout = new Q3VBoxLayout( page, 11, 6, "EditPropertiesDialogLayout"); 
@@ -141,15 +148,15 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout3->addWidget( propertyRemoveButton );
 	layout7->addLayout( layout3 );
 
-	propertyListView = new K3ListView( page, "propertyListView" );
+	propertyListView = new K3ListView( page );
+	propertyListView->setObjectName( "propertyListView" );
 	propertyListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	propertyListView->setAllColumnsShowFocus( true );
 	propertyListView->addColumn( i18n( "Property" ) );
 	propertyListView->addColumn( i18n( "Amount" ) );
 	propertyListView->addColumn( i18n( "Unit" ) );
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	propertyListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 
@@ -165,7 +172,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout3_2->addWidget( weightRemoveButton );
 	layout7->addLayout( layout3_2 );
 
-	weightListView = new K3ListView( page, "weightListView" );
+	weightListView = new K3ListView( page );
+	weightListView->setObjectName( "weightListView" );
 	weightListView->addColumn( i18n( "Weight" ) );
 	weightListView->addColumn( i18n( "Per Amount" ) );
 	layout7->addWidget( weightListView );
@@ -173,7 +181,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	EditPropertiesDialogLayout->addLayout( layout9 );
 	languageChange();
 	//adjustSize();
-	clearWState( WState_Polished );
+	//KDE4 port
+	//clearWState( WState_Polished );
 
 	inputBox = new KDoubleNumInput( propertyListView ->viewport() );
 	propertyListView ->addChild( inputBox );
@@ -239,7 +248,7 @@ void EditPropertiesDialog::addWeight()
 
 void EditPropertiesDialog::removeWeight()
 {
-	Q3ListViewItem *it = weightListView ->selectedItem();
+	Q3ListViewItem *it = weightListView->selectedItem();
 	if ( it ) {
 			switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString::null, KStandardGuiItem::cont(), "DeleteIngredientWeight") ) {
 		case KMessageBox::Continue:
@@ -257,8 +266,12 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 	Weight w = weight_it->weight();
 
 	if ( col == 0 ) {
-		KDialog amountEditDialog(this,"WeightAmountEdit",
-		  false, i18n("Enter amount"), KDialog::Cancel | KDialog::Ok, KDialog::Ok);
+		KDialog amountEditDialog( this );
+		amountEditDialog.setObjectName( "WeightAmountEdit" );
+		amountEditDialog.setModal( false );
+		amountEditDialog.setCaption( i18n("Enter amount") );
+		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok ); 
+		amountEditDialog.setDefaultButton( KDialog::Ok );
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, db, Unit::Mass, MixedNumber::DecimalFormat );
@@ -280,8 +293,12 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		}
 	}
 	else if ( col == 1 ) {
-		KDialog amountEditDialog(this,"PerAmountEdit",
-		  false, i18n("Enter amount"), KDialog::Cancel | KDialog::Ok, KDialog::Ok);
+		KDialog amountEditDialog( this );
+		amountEditDialog.setObjectName( "PerAmountEdit" );
+		amountEditDialog.setModal( false );
+		amountEditDialog.setCaption( i18n("Enter amount") );
+		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok ); 
+		amountEditDialog.setDefaultButton( KDialog::Ok );
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		WeightInput *amountEdit = new WeightInput( box, db, Unit::All, MixedNumber::DecimalFormat );
@@ -442,7 +459,7 @@ int EditPropertiesDialog::findPropertyNo( Q3ListViewItem * /*it*/ )
 
 void EditPropertiesDialog::loadDataFromFile()
 {
-	QString abbrev_file = locate( "appdata", "data/abbrev.txt" );
+	QString abbrev_file = KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
 		kDebug() << "Unable to find abbrev.txt data file." << endl;
 		return ;
