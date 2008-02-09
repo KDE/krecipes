@@ -127,7 +127,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class ThumbBarToolTip : public QToolTip
+class ThumbBarToolTip 
 {
 public:
 

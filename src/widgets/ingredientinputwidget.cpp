@@ -50,7 +50,8 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 		QRadioButton *ingredientRadioButton = new QRadioButton( i18n( "Ingredient:" ), typeHBox );
 		typeButtonGrp->insert( ingredientRadioButton, 0 );
 
-		QRadioButton *headerRadioButton = new QRadioButton( i18n( "Ingredient grouping name", "Header:" ), typeHBox );
+		//KDE4 i18n => i18nc
+		QRadioButton *headerRadioButton = new QRadioButton( i18nc( "Ingredient grouping name", "Header:" ), typeHBox );
 		typeButtonGrp->insert( headerRadioButton, 1 );
 
 		typeButtonGrp->setButton( 0 );

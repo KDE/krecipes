@@ -29,13 +29,15 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
+
 #include <QDesktopWidget>
+#include <QAbstractItemView>
 
 //#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <KConfigGroup>
 
 #include "kdateedit.h"
@@ -97,7 +99,7 @@ KDateEdit::KDateEdit( QWidget *parent, const char *name )
   setMaxCount( 1 );
 
   mDate = QDate::currentDate();
-  QString today = KGlobal::locale()->formatDate( mDate, true );
+  QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
 
   insertItem( today );
   setCurrentItem( 0 );
@@ -192,9 +194,11 @@ void KDateEdit::popup()
   assignDate( date );
   updateView();
   // Now, simulate an Enter to unpress it
-  Q3ListBox *lb = listBox();
+  //
+  // KDE4 port  to be verified...
+  QAbstractItemView *lb = view();
   if (lb) {
-    lb->setCurrentItem(0);
+    lb->setCurrentIndex(lb->rootIndex());
     QKeyEvent* keyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, 0, 0);
     QApplication::postEvent(lb, keyEvent);
   }
@@ -381,7 +385,7 @@ void KDateEdit::updateView()
 {
   QString dateString;
   if ( mDate.isValid() )
-    dateString = KGlobal::locale()->formatDate( mDate, true );
+    dateString = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
 
   // We do not want to generate a signal here,
   // since we explicitly setting the date

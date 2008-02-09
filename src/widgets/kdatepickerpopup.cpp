@@ -51,7 +51,9 @@ void KDatePickerPopup::buildMenu()
   clear();
 
   if ( mItems & DatePicker ) {
-    insertItem( mDatePicker );
+
+    // KDE4 need to be done
+    //insertItem( mDatePicker );
 
     if ( ( mItems & NoDate ) || ( mItems & Words ) )
       insertSeparator();

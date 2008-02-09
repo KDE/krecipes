@@ -54,7 +54,7 @@ void UnitComboBox::reload()
 	//Now load the categories
 	loadUnits(unitList);
 
-	if ( listBox()->findItem( remember_filter, Qt::ExactMatch ) ) {
+	if ( findText( remember_filter, Qt::MatchExactly ) ) {
 		setCurrentText( remember_filter );
 	}
 }
@@ -75,7 +75,8 @@ void UnitComboBox::setSelected( int unitID )
 	QMap<int, int>::const_iterator it;
 	for ( it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
 		if ( it.data() == unitID ) {
-			setCurrentItem(it.key());
+			//KDE4 port  setCurrentItem(it.key());
+			setCurrentIndex(it.key());
 			break;
 		}
 	}

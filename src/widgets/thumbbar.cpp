@@ -607,7 +607,7 @@ void ThumbBarItem::repaint()
 // -------------------------------------------------------------------------
 
 ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
-               : QToolTip(parent->viewport()), m_view(parent)
+               : m_view(parent)
 {
 }
 

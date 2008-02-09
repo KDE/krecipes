@@ -90,8 +90,6 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 		KConfigGroup config = KGlobal::config()->group( "Formatting" );
 	
 		MixedNumber::Format number_format = ( config.readEntry( "Fraction" ).isEmpty() ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-		
-		// KDE4 port MixedNumber::Format number_format = ( KGlobal::config().readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 		amount_str = MixedNumber( amount ).toString(number_format);
 		if ( amount_offset > 0 )

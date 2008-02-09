@@ -41,8 +41,8 @@
 #include <QDropEvent>
 
 #include <kapplication.h>
-#include <k3completionbox.h>
-#include <kspell.h>
+#include <kcompletionbox.h>
+#include <sonnet/speller.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -68,7 +68,7 @@
 #include "widgets/fractioninput.h"
 #include "widgets/kretextedit.h"
 #include "widgets/inglistviewitem.h"
-#include "../widgets/ratingdisplaywidget.h"
+#include "widgets/ratingdisplaywidget.h"
 #include "widgets/kwidgetlistbox.h"
 #include "widgets/ingredientinputwidget.h"
 #include "image.h" //Initializes default photo
@@ -104,7 +104,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	if ( Q3ImageDrag::decode( event, image ) ) {
 		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( image.smoothScale( width(), height(), QImage::ScaleMin ) );
+			pm_scaled.convertFromImage( image.smoothScale( width(), height(), Qt::KeepAspectRatio ) );
 			setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -638,7 +638,7 @@ void RecipeInputDialog::reload( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.convertToImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), QImage::ScaleMin ) );
+			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -701,7 +701,7 @@ void RecipeInputDialog::changePhoto( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.convertToImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), QImage::ScaleMin ) );
+			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on

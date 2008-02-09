@@ -91,11 +91,11 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	okButton = new QPushButton( bottom_layout );
-	okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );
+	okButton->setIconSet( il->loadIconSet( "dialog-ok", KIconLoader::Small ) );
 	okButton->setText( i18n( "Create the diet" ) );
 
 	QPushButton *clearButton = new QPushButton( bottom_layout );
-	clearButton->setIconSet( il->loadIconSet( "edit-clear", KIcon::Small ) );
+	clearButton->setIconSet( il->loadIconSet( "edit-clear", KIconLoader::Small ) );
 	clearButton->setText( i18n( "Clear" ) );
 
 	// Create Tabs
@@ -347,12 +347,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	buttonPrev = new QToolButton( toolBar );
 	buttonPrev->setUsesTextLabel( true );
 	buttonPrev->setTextLabel( i18n( "Previous Dish" ) );
-	buttonPrev->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	buttonPrev->setIconSet( il->loadIconSet( "go-previous", KIconLoader::Small ) );
 	buttonPrev->setTextPosition( QToolButton::BelowIcon );
 	buttonNext = new QToolButton( toolBar );
 	buttonNext->setUsesTextLabel( true );
 	buttonNext->setTextLabel( i18n( "Next Dish" ) );
-	buttonNext->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	buttonNext->setIconSet( il->loadIconSet( "go-next", KIconLoader::Small ) );
 	buttonNext->setTextPosition( QToolButton::BelowIcon );
 
 
@@ -655,9 +655,9 @@ void DishTitle::paintEvent( QPaintEvent * )
 		painter.setFont( titleFont );
 		painter.rotate( -90 );
 		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
-		painter.drawText( 0, 0, -height(), 30, AlignCenter, titleText );
+		painter.drawText( 0, 0, -height(), 30, Qt::AlignCenter, titleText );
 		painter.setPen( QColor( 0xFF, 0xFF, 0xFF ) );
-		painter.drawText( -1, -1, -height() - 1, 29, AlignCenter, titleText );
+		painter.drawText( -1, -1, -height() - 1, 29, Qt::AlignCenter, titleText );
 		painter.end();
 	}
 	else {
@@ -680,9 +680,9 @@ void DishTitle::paintEvent( QPaintEvent * )
 		titleFont.setPointSize( 15 );
 		painter.setFont( titleFont );
 		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
-		painter.drawText( 0, 0, height(), 30, AlignCenter, titleText );
+		painter.drawText( 0, 0, height(), 30, Qt::AlignCenter, titleText );
 		painter.setPen( QColor( 0xFF, 0xFF, 0xFF ) );
-		painter.drawText( -1, -1, height() - 1, 29, AlignCenter, titleText );
+		painter.drawText( -1, -1, height() - 1, 29, Qt::AlignCenter, titleText );
 		painter.end();
 
 		//Set the border transparent using a mask

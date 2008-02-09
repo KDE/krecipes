@@ -23,6 +23,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QMouseEvent>
+#include <Q3BoxLayout>
 
 namespace {
   static const int RATING_WIDGET_MAX_STAR_SIZE = 24;

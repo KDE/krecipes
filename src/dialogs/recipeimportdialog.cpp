@@ -16,6 +16,7 @@
 #include <kpushbutton.h>
 #include <k3listview.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
 #include <q3vbox.h>
 #include <qlayout.h>
@@ -28,13 +29,19 @@
 #include "datablocks/recipe.h"
 
 RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent )
-		: KDialog( parent, "RecipeImportDialog", true, i18n( "Import Recipes" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		: KDialog( parent ),
 		list_copy( list )
 {
-	setButtonBoxOrientation( Qt::Vertical );
+	this->setObjectName( "RecipeImportDialog" );
+	this->setModal( true );
+	this->setCaption( i18n( "Import Recipes" ) );
+	this->setButtons( KDialog::Ok | KDialog::Cancel );
+	this->setDefaultButton( KDialog::Ok );
+	setButtonsOrientation( Qt::Vertical );
 
-	KVBox *page = makeVBoxMainWidget();
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
+	
 
 	kListView = new K3ListView( page );
 	kListView->addColumn( i18n( "Recipes" ) );
@@ -69,7 +76,7 @@ void RecipeImportDialog::loadListView()
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = list_copy.begin(); recipe_it != list_copy.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			if ( categoryList.contains( ( *cat_it ).name ) < 1 )
+			if ( categoryList.contains( ( *cat_it ).name ) == false )
 				categoryList << ( *cat_it ).name;
 		}
 	}

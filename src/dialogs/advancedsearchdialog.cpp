@@ -44,7 +44,7 @@
 #include <kiconloader.h>
 #include <k3listview.h>
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kmenu.h>
 
@@ -417,7 +417,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 #endif
 	criterionFrameLayout->addLayout( layout12 );
 	
-	criteriaListView = new K3ListView( criterionFrame, "criteriaListView" );
+	criteriaListView = new K3ListView( criterionFrame );
+	criteriaListView->setObjectName( "criteriaListView" );
 	criteriaListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 	criteriaListView->addColumn( i18n( "Criterion" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
@@ -434,24 +435,28 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout9 = new Q3HBoxLayout( 0, 0, 3, "layout9"); 
 	
-	clearButton = new KPushButton( this, "clearButton" );
+	clearButton = new KPushButton( this );
+	clearButton->setObjectName( "clearButton" );
 	clearButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, clearButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( clearButton );
 	spacer3 = new QSpacerItem( 110, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout9->addItem( spacer3 );
 	
-	findButton = new KPushButton( this, "findButton" );
+	findButton = new KPushButton( this );
+	findButton->setObjectName( "findButton" );
 	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( findButton );
 	layout7->addLayout( layout9 );
 	AdvancedSearchDialogLayout->addLayout( layout7 );
 	
-	resultsListView = new K3ListView( this, "resultsListView" );
+	resultsListView = new K3ListView( this); 
+	resultsListView->setObjectName( "resultsListView" );
 	resultsListView->setSelectionMode( Q3ListView::Extended );
 	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
 	AdvancedSearchDialogLayout->addWidget( resultsListView );
 	languageChange();
-	clearWState( WState_Polished );
+	//KDE4 port
+	//QWidget::setWindowState( WState_Polished );
 	///
 	///END OF AUTOMATICALLY GENERATED GUI CODE///
 	///
@@ -464,9 +469,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	scrollView1->setHScrollBarMode( Q3ScrollView::AlwaysOff );
 	scrollView1->setResizePolicy( Q3ScrollView::AutoOneFit );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
+	
 	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
@@ -657,7 +662,8 @@ void AdvancedSearchDialog::buttonSwitched()
 	if ( sent->inherits("QPushButton") ) {
 		QPushButton *pushed = (QPushButton*) sent;
 
-		QString suffix = ( pushed->state() == QButton::On ) ? " <<" : " >>";
+		//KDE4 port
+		QString suffix = ( pushed->isChecked() ) ? " <<" : " >>";
 		pushed->setText( pushed->text().left( pushed->text().length() - 3 ) + suffix );
 	}
 }
@@ -697,18 +703,18 @@ void AdvancedSearchDialog::search()
 		parameters.servings = servingsSpinBox->value();
 	parameters.servings_param = servingsComboBox->currentItem();
 
-	parameters.createdDateBegin = createdStartDateEdit->date();
-	parameters.createdDateEnd = createdEndDateEdit->date();
+	parameters.createdDateBegin = QDateTime(createdStartDateEdit->date());
+	parameters.createdDateEnd = QDateTime(createdEndDateEdit->date());
 	if ( parameters.createdDateEnd.date().isValid() )
 		parameters.createdDateEnd = parameters.createdDateEnd.addDays(1); //we want to include the given day in the search
 
-	parameters.modifiedDateBegin = modifiedStartDateEdit->date();
-	parameters.modifiedDateEnd = modifiedEndDateEdit->date();
+	parameters.modifiedDateBegin = QDateTime(modifiedStartDateEdit->date());
+	parameters.modifiedDateEnd = QDateTime(modifiedEndDateEdit->date());
 	if ( parameters.modifiedDateEnd.date().isValid() )
 		parameters.modifiedDateEnd = parameters.modifiedDateEnd.addDays(1); //we want to include the given day in the search
 
-	parameters.accessedDateBegin = accessedStartDateEdit->date();
-	parameters.accessedDateEnd = accessedEndDateEdit->date();
+	parameters.accessedDateBegin = QDateTime(accessedStartDateEdit->date());
+	parameters.accessedDateEnd = QDateTime(accessedEndDateEdit->date());
 	if ( parameters.accessedDateEnd.date().isValid() )
 		parameters.accessedDateEnd = parameters.accessedDateEnd.addDays(1); //we want to include the given day in the search
 
