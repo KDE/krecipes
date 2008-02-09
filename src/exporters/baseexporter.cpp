@@ -108,7 +108,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 {
 	if ( file->open( QIODevice::WriteOnly ) ) {
 		if ( m_progress_dlg )
-			m_progress_dlg->progressBar()->setTotalSteps( ids.count()/progressInterval() );
+			m_progress_dlg->progressBar()->setMaximum( ids.count()/progressInterval() );
 
 		Q3ValueList<int> ids_copy = ids;
 		Q3TextStream stream( file );
