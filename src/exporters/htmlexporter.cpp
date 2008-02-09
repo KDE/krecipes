@@ -44,6 +44,7 @@
 #include "krepagelayout.h"
 
 #include <cmath> //for ceil()
+#include <QTextDocument>
 
 HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )
@@ -202,7 +203,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	content = content.replace("**TITLE**",recipe.title);
 
 	//=======================INSTRUCTIONS======================//
-	QString instr_html = Q3StyleSheet::escape( recipe.instructions );
+	QString instr_html = Qt::escape( recipe.instructions );
 	instr_html.replace( "\n", "<br />" );
 	if (!instr_html.isEmpty()) {
 		instr_html.prepend("<h1 class=\"instructions-header\">"+i18n("Instructions")+"</h1>");
@@ -238,7 +239,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	for ( ElementList::const_iterator author_it = recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it ) {
 		if ( counter )
 			authors_html += ", ";
-		authors_html += Q3StyleSheet::escape( ( *author_it ).name );
+		authors_html += Qt::escape( ( *author_it ).name );
 		counter++;
 	}
 	if ( !authors_html.isEmpty() )
@@ -252,7 +253,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	for ( ElementList::const_iterator cat_it = recipe.categoryList.begin(); cat_it != recipe.categoryList.end(); ++cat_it ) {
 		if ( counter )
 			categories_html += ", ";
-		categories_html += Q3StyleSheet::escape( ( *cat_it ).name );
+		categories_html += Qt::escape( ( *cat_it ).name );
 		counter++;
 	}
 	if ( !categories_html.isEmpty() )
@@ -312,10 +313,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 			QString tmp_format;
 			tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
-			tmp_format += "<span class=\"ingredient-unit\">"+Q3StyleSheet::escape(unit)+" </span>";
-			tmp_format += "<span class=\"ingredient-name\">"+Q3StyleSheet::escape( ( *ing_it ).name )+"</span>";
+			tmp_format += "<span class=\"ingredient-unit\">"+Qt::escape(unit)+" </span>";
+			tmp_format += "<span class=\"ingredient-name\">"+Qt::escape( ( *ing_it ).name )+"</span>";
 			tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *ing_it ).prepMethodList.count() == 0 ) ?
-			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Q3StyleSheet::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>";
+			                    QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Qt::escape( ( *ing_it ).prepMethodList.join(",") ))+"</span>";
 
 			if ( (*ing_it).substitutes.count() > 0 )
 				tmp_format += ", "+i18n("OR");
@@ -334,10 +335,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 				QString tmp_format;
 				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
-				tmp_format += "<span class=\"ingredient-unit\">"+Q3StyleSheet::escape(unit)+" </span>";
-				tmp_format += "<span class=\"ingredient-name\">"+Q3StyleSheet::escape( ( *sub_it ).name )+"</span>";
+				tmp_format += "<span class=\"ingredient-unit\">"+Qt::escape(unit)+" </span>";
+				tmp_format += "<span class=\"ingredient-name\">"+Qt::escape( ( *sub_it ).name )+"</span>";
 				tmp_format += "<span class=\"ingredient-prep-methods\">"+(( ( *sub_it ).prepMethodList.count() == 0 ) ?
-														QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Q3StyleSheet::escape( ( *sub_it ).prepMethodList.join(",") ))+"</span>";
+														QString::fromLatin1( "" ) : QString::fromLatin1( "; " ) + Qt::escape( ( *sub_it ).prepMethodList.join(",") ))+"</span>";
 
 				++sub_it;
 				if ( sub_it != (*ing_it).substitutes.end() )
@@ -389,9 +390,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			amount_str = "0";
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
-		                   .arg( Q3StyleSheet::escape( (*prop_it).name ) )
+		                   .arg( Qt::escape( (*prop_it).name ) )
 		                   .arg( amount_str )
-		                   .arg( Q3StyleSheet::escape( (*prop_it).units ) );
+		                   .arg( Qt::escape( (*prop_it).units ) );
 
 		++count;
 	}

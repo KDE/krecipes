@@ -49,7 +49,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	textLabel1->setTextFormat( QLabel::RichText );
 	
 	ingredientTextEdit = new Q3TextEdit( page, "ingredientTextEdit" );
-	ingredientTextEdit->setTextFormat( Q3TextEdit::PlainText );
+	ingredientTextEdit->setTextFormat( Qt::PlainText );
 	
 	parseButton = new KPushButton( page, "parseButton" );
 
@@ -86,7 +86,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	buttonBox->addItem( horizontalSpacing );
 	
 	KMenu *kpop = new KMenu( previewIngView );
-	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Key_Delete );
+	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Qt::Key_Delete );
 	kpop->insertItem( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
  
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );

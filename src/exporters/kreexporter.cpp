@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <QTextDocument>
 
 #include "backends/recipedb.h"
 
@@ -86,7 +87,7 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 {
 	QString xml;
 
-	xml += "<name>" + Q3StyleSheet::escape( ( ing ).name ) + "</name>\n";
+	xml += "<name>" + Qt::escape( ( ing ).name ) + "</name>\n";
 	xml += "<amount>";
 	if ( ing.amount_offset < 1e-10 ) {
 		xml += MixedNumber( ing.amount ).toString( m_number_format, m_locale_aware_numbers );
@@ -100,10 +101,10 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 
 	bool useAbbreviations = KGlobal::config()->readEntry("AbbreviateUnits");
 	QString unit = ing.units.determineName( ing.amount + ing.amount_offset, useAbbreviations );
-	xml += "<unit>" + Q3StyleSheet::escape( unit ) + "</unit>\n";
+	xml += "<unit>" + Qt::escape( unit ) + "</unit>\n";
 
 	if ( ing.prepMethodList.count() > 0 )
-		xml += "<prep>" + Q3StyleSheet::escape( ing.prepMethodList.join(",") ) + "</prep>\n";
+		xml += "<prep>" + Qt::escape( ing.prepMethodList.join(",") ) + "</prep>\n";
 
 	return xml;
 }
@@ -118,10 +119,10 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 		xml += "<krecipes-recipe id=\""+QString::number((*recipe_it).recipeID)+"\">\n";
 		xml += "<krecipes-description>\n";
-		xml += "<title>" + Q3StyleSheet::escape( ( *recipe_it ).title ) + "</title>\n";
+		xml += "<title>" + Qt::escape( ( *recipe_it ).title ) + "</title>\n";
 
 		for ( ElementList::const_iterator author_it = ( *recipe_it ).authorList.begin(); author_it != ( *recipe_it ).authorList.end(); ++author_it )
-			xml += "<author>" + Q3StyleSheet::escape( ( *author_it ).name ) + "</author>\n";
+			xml += "<author>" + Qt::escape( ( *author_it ).name ) + "</author>\n";
 
 		xml += "<pictures>\n";
 		if ( !( *recipe_it ).photo.isNull() ) {
@@ -142,7 +143,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<category>\n";
 
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it )
-			xml += "<cat>" + Q3StyleSheet::escape( ( *cat_it ).name ) + "</cat>\n";
+			xml += "<cat>" + Qt::escape( ( *cat_it ).name ) + "</cat>\n";
 
 		xml += "</category>\n";
 		xml += "<yield>";
@@ -167,7 +168,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
 			QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
 			if ( !group.isEmpty() )
-				xml += "<ingredient-group name=\"" + Q3StyleSheet::escape(group) + "\">\n";
+				xml += "<ingredient-group name=\"" + Qt::escape(group) + "\">\n";
 
 			for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 				xml += "<ingredient>\n";
@@ -206,7 +207,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 				QString amount_str;
 
 				xml += "<name>";
-				xml += Q3StyleSheet::escape( (*prop_it).name );
+				xml += Qt::escape( (*prop_it).name );
 				xml += "</name>\n";
 
 				double prop_amount = (*prop_it).amount;
@@ -226,7 +227,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 				xml += "</amount>\n";
 
 				xml += "<units>";
-				xml += Q3StyleSheet::escape( (*prop_it).units );
+				xml += Qt::escape( (*prop_it).units );
 				xml += "</units>\n";
 
 				xml += "</property>\n";
@@ -235,15 +236,15 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		}
 
 		xml += "<krecipes-instructions>\n";
-		xml += Q3StyleSheet::escape( ( *recipe_it ).instructions );
+		xml += Qt::escape( ( *recipe_it ).instructions );
 		xml += "</krecipes-instructions>\n";
 
 		//ratings
 		xml += "<krecipes-ratings>";
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			xml += "<rating>";
-			xml += "<comment>"+Q3StyleSheet::escape( ( *rating_it ).comment )+"</comment>";
-			xml += "<rater>"+Q3StyleSheet::escape( ( *rating_it ).rater )+"</rater>";
+			xml += "<comment>"+Qt::escape( ( *rating_it ).comment )+"</comment>";
+			xml += "<rater>"+Qt::escape( ( *rating_it ).rater )+"</rater>";
 
 			xml += "<criterion>";
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
@@ -313,7 +314,7 @@ void KreExporter::writeCategoryStructure( QString &xml, const CategoryTree *cate
 {
 	if ( categoryTree->category.id != -2 ) {
 		if ( categoryTree->category.id != -1 )
-			xml += "<category name=\"" + Q3StyleSheet::escape( categoryTree->category.name ).replace("\"","&quot;") + "\">\n";
+			xml += "<category name=\"" + Qt::escape( categoryTree->category.name ).replace("\"","&quot;") + "\">\n";
 	
 		for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 			writeCategoryStructure( xml, child_it );

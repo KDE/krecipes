@@ -65,7 +65,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	dayNumberSelector->setOrientation( Qt::Horizontal );
 	dayNumberSelector->setRange( 1, 10 );
 	dayNumberSelector->setSteps( 1, 1 );
-	dayNumberSelector->setTickmarks( QSlider::Below );
+	dayNumberSelector->setTickmarks( QSlider::TicksBelow );
 	dayNumberSelector->setFixedWidth( 100 );
 
 	mealsSliderBox = new Q3VGroupBox( i18n( "Meals per Day" ), optionsBox );
@@ -77,7 +77,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	mealNumberSelector->setOrientation( Qt::Horizontal );
 	mealNumberSelector->setRange( 1, 10 );
 	mealNumberSelector->setSteps( 1, 1 );
-	mealNumberSelector->setTickmarks( QSlider::Below );
+	mealNumberSelector->setTickmarks( QSlider::TicksBelow );
 	mealNumberSelector->setFixedWidth( 100 );
 
 	// Tabs

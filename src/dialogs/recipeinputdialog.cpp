@@ -41,7 +41,7 @@
 #include <QDropEvent>
 
 #include <kapplication.h>
-#include <kcompletionbox.h>
+#include <k3completionbox.h>
 #include <sonnet/speller.h>
 #include <kurl.h>
 #include <kfiledialog.h>

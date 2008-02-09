@@ -16,6 +16,7 @@
 #include <Q3ValueList>
 
 #include <kdebug.h>
+#include <QTextDocument>
 
 #include "backends/recipedb.h"
 #include "datablocks/categorytree.h"
@@ -143,9 +144,9 @@ void HTMLBookExporter::writeCategoryStructure( Q3TextStream &xml, const Category
 {
 	if ( categoryTree->category.id != -2 ) {
 		if ( categoryTree->category.id != -1 ) {
-			QString catPageName = Q3StyleSheet::escape(categoryTree->category.name)+".html";
+			QString catPageName = Qt::escape(categoryTree->category.name)+".html";
 
-			xml << "\t<li>\n\t\t<a href=\""+catPageName+"\">"+Q3StyleSheet::escape( categoryTree->category.name ).replace("\"","&quot;") + "</a>\n";
+			xml << "\t<li>\n\t\t<a href=\""+catPageName+"\">"+Qt::escape( categoryTree->category.name ).replace("\"","&quot;") + "</a>\n";
 		}
 	
 		for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {

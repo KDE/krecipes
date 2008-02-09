@@ -258,7 +258,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         maxwidth = qMax( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
-                    textwidth, height(), AlignLeft | AlignTop, str );
+                    textwidth, height(), Qt::AlignLeft | Qt::AlignTop, str );
     }
 
     // Draw the medium-sized lines
@@ -366,7 +366,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             p.translate( qRound(( width() - textheight ) * 0.5),
                          qRound(i) - diffy + qRound(textwidth * 0.5) );
             p.rotate( -90 );
-            p.drawText( 0, 0, textwidth + 1, textheight, AlignLeft | AlignTop, str );
+            p.drawText( 0, 0, textwidth + 1, textheight, Qt::AlignLeft | Qt::AlignTop, str );
             p.restore();
         }
 
@@ -422,7 +422,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     d->removeTab.type = T_INVALID;
 
     switch ( e->button() ) {
-    case RightButton:
+    case Qt::RightButton:
         if(d->currTab.type == T_INVALID || !(d->flags & F_TABS))
             d->rb_menu->setItemEnabled(d->mRemoveTab, false);
         else
@@ -435,7 +435,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         // MMB shall do like double-click (it opens a dialog).
         handleDoubleClick();
         return;
-    case LeftButton:
+    case Qt::LeftButton:
         if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
             if ( d->action == A_BR_RIGHT )
                 d->whileMovingBorderRight = true;
@@ -469,7 +469,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         else if ( d->flags & F_HELPLINES )
         {
 	    setCursor( orientation == Qt::Horizontal ?
-		       Qt::sizeVerCursor : Qt::sizeHorCursor );
+		       Qt::SizeVerCursor : Qt::SizeHorCursor );
             d->action = A_HELPLINES;
         }
     default:
@@ -600,10 +600,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 if ( !m_bFrameStartSet )
                 {
                     if ( mx > left - 5 && mx < left + 5 ) {
-                        setCursor( Qt::sizeHorCursor );
+                        setCursor( Qt::SizeHorCursor );
                         d->action = A_BR_LEFT;
                     } else if ( mx > right - 5 && mx < right + 5 ) {
-                        setCursor( Qt::sizeHorCursor );
+                        setCursor( Qt::SizeHorCursor );
                         d->action = A_BR_RIGHT;
                     }
                 }
@@ -612,7 +612,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             } else {
                 // Calculate the new value.
                 int newPos=mx;
-                if( newPos!=right && gridSize!=0.0 && (e->state() & ShiftButton)==0) { // apply grid.
+                if( newPos!=right && gridSize!=0.0 && (e->state() & Qt::ShiftModifier)==0) { // apply grid.
                     double grid=zoomIt(gridSize * 16);
                     newPos=qRound( ((newPos * 16 / grid) * grid) / 16 );
                 }
@@ -755,11 +755,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     break;
                 if ( my > top - 5 && my < top + 5 ) {
                     QToolTip::add( this, i18n("Top margin") );
-                    setCursor( Qt::sizeVerCursor );
+                    setCursor( Qt::SizeVerCursor );
                     d->action = A_BR_TOP;
                 } else if ( my > bottom - 5 && my < bottom + 5 ) {
                     QToolTip::add( this, i18n("Bottom margin") );
-                    setCursor( Qt::sizeVerCursor );
+                    setCursor( Qt::SizeVerCursor );
                     d->action = A_BR_BOTTOM;
                 }
             } else {
@@ -931,7 +931,7 @@ void KoRuler::searchTab(int mx) {
     for ( ; it != d->tabList.end() ; ++it ) {
         pos = qRound(applyRtlAndZoom((*it).ptPos)) - diffx + frameStart;
         if ( mx > pos - 5 && mx < pos + 5 ) {
-            setCursor( Qt::sizeHorCursor );
+            setCursor( Qt::SizeHorCursor );
             d->action = A_TAB;
             d->currTab = *it;
             break;
