@@ -41,9 +41,8 @@
 #include <kglobal.h>
 #include "setupdisplay.h"
 
-PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent, 0, true ), m_configEntry(configEntry)
+PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent ), m_configEntry(configEntry)
 {
-	KIconLoader *il = KIconLoader::global();
 
 	Q3VBoxLayout * layout = new Q3VBoxLayout( this );
 
@@ -112,15 +111,14 @@ void PageSetupDialog::accept()
 	if ( m_htmlPart->hasChanges() )
 		saveLayout();
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Page Setup" );
-	config->writeEntry( m_configEntry+"Layout", active_filename );
+	KConfigGroup config( KGlobal::config(), "Page Setup" );
+	config.writeEntry( m_configEntry+"Layout", active_filename );
 
 	if ( !active_template.isEmpty() ) {
 		config->writeEntry( m_configEntry+"Template", active_template );
 	}
 
-	config->writeEntry( "WindowSize", size() );
+	config.writeEntry( "WindowSize", size() );
 
 	QDialog::accept();
 }
@@ -152,7 +150,7 @@ void PageSetupDialog::initShownItems()
 	shown_items_popup->clear();
 
 	PropertiesMap properties = m_htmlPart->properties();
-	
+
 	Q3ValueList<QString> nameList;
 	QMap<QString,KreDisplayItem*> nameMap;
 

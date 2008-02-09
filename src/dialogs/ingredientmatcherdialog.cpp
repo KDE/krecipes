@@ -65,15 +65,15 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	Q3VBoxLayout *layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
-	KIconLoader *il = KIconLoader::global();
+	//KIconLoader *il = KIconLoader::global();
 
 	addButton = new QPushButton( this, "addButton" );
-	addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( this, "removeButton" );
-	removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	QSpacerItem *spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -102,9 +102,8 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	recipeListView->listView() ->addColumn( i18n( "Title" ) );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config( KGlobal::config(), "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	recipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	recipeListView->listView() ->addColumn( i18n( "Missing Ingredients" ) );
@@ -117,13 +116,13 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	Q3HBox *buttonBox = new Q3HBox( this );
 
 	okButton = new QPushButton( buttonBox );
-	okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );
+	//okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );
 	okButton->setText( i18n( "Find matching recipes" ) );
 
 	//buttonBox->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	clearButton = new QPushButton( buttonBox );
-	clearButton->setIconSet( il->loadIconSet( "edit-clear", KIcon::Small ) );
+	//clearButton->setIconSet( il->loadIconSet( "edit-clear", KIcon::Small ) );
 	clearButton->setText( i18n( "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
@@ -144,9 +143,11 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, int col )
 {
 	if ( col == 1 ) {
-		KDialog amountEditDialog(this,"IngredientMatcherAmountEdit",
-		  false, i18n("Enter amount"), KDialog::Cancel | KDialog::Ok, KDialog::Ok);
-
+		KDialog amountEditDialog(this);
+                amountEditDialog.setCaption(i18n("Enter amount"));
+                amountEditDialog.setButtons(KDialog::Cancel | KDialog::Ok);
+                amountEditDialog.setDefaultButton(KDialog::Ok);
+                amountEditDialog.setModal( false );
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
@@ -189,11 +190,10 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 
 void IngredientMatcherDialog::addIngredient()
 {
-	Q3PtrList<Q3ListViewItem> items = allIngListView->listView()->selectedItems();
-	if ( items.count() > 0 ) {
-		Q3PtrListIterator<Q3ListViewItem> it(items);
-		Q3ListViewItem *item;
-		while ( (item = it.current()) != 0 ) {
+    /*
+	QList<Q3ListViewItem> items = allIngListView->listView()->selectedItems();
+	if ( !items.isEmpty() ) {
+                for (int i = 0; i < items.size(); ++i) {
 			bool dup = false;
 			for ( Q3ListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
 				if ( exists_it->text( 0 ) == item->text( 0 ) ) {
@@ -204,20 +204,22 @@ void IngredientMatcherDialog::addIngredient()
 
 			if ( !dup ) {
 				Q3ListViewItem * new_item = new Q3CheckListItem( ingListView->listView(), item->text( 0 ), Q3CheckListItem::CheckBox );
-	
+
 				ingListView->listView() ->setSelected( new_item, true );
 				ingListView->listView() ->ensureItemVisible( new_item );
 				allIngListView->listView() ->setSelected( item, false );
-		
+
 				m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
 			}
 			++it;
 		}
 	}
+    */
 }
 
 void IngredientMatcherDialog::removeIngredient()
 {
+    /*
 	Q3ListViewItem * item = ingListView->listView() ->selectedItem();
 	if ( item ) {
 		for ( IngredientList::iterator it = m_ingredientList.begin(); it != m_ingredientList.end(); ++it ) {
@@ -229,6 +231,7 @@ void IngredientMatcherDialog::removeIngredient()
 		}
 		delete item;
 	}
+    */
 }
 
 void IngredientMatcherDialog::unselectIngredients()
@@ -322,7 +325,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 			if ( ( *nit ) == missingNo ) {
 				if ( !titleShownYet ) {
-					new SectionItem( recipeListView->listView(), i18n( "You are missing 1 ingredient for:", "You are missing %n ingredients for:", missingNo ) );
+					new SectionItem( recipeListView->listView(), i18np( "You are missing 1 ingredient for:", "You are missing %n ingredients for:", missingNo ) );
 					titleShownYet = true;
 				}
 				new CustomRecipeListItem( recipeListView->listView(), *it, *ilit );

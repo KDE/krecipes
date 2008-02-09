@@ -41,7 +41,7 @@ class IngredientParserDialog : public KDialog
 public:
 	IngredientParserDialog( const UnitList &units, QWidget* parent = 0, const char* name = 0 );
 	~IngredientParserDialog();
-	
+
 	IngredientList ingredients() const { return m_ingList; }
 
 protected:
@@ -62,7 +62,7 @@ protected slots:
 	virtual void languageChange();
 
 private:
-	void convertToHeader( const Q3PtrList<Q3ListViewItem> &items );
+	void convertToHeader( const QList<Q3ListViewItem*> &items );
 
 	UnitList m_unitList;
 	IngredientList m_ingList;

@@ -28,7 +28,7 @@
 #include <q3whatsthis.h>
 #include <qpainter.h>
 #include <q3vbox.h>
-
+#include <KVBox>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -43,7 +43,7 @@
 class RatingCriteriaListView : public K3ListView
 {
 public:
-	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : K3ListView(parent,name){}
+	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : K3ListView(parent){}
 
 	void rename( Q3ListViewItem *it, int c )
 	{
@@ -56,9 +56,9 @@ public:
 
 
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name )
-		: KDialog( parent, name, true, i18n( "Rating" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
+    setCaption( i18n( "Rating" ) );
 	init(criteriaList);
 	loadRating(rating);
 }
@@ -68,34 +68,37 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
  *  name 'name' and widget flags set to 'f'.
  */
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
-		: KDialog( parent, name, true, i18n( "Rating" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
 	init(criteriaList);
 }
 
 void EditRatingDialog::init( const ElementList &criteriaList )
 {
-	KVBox *page = makeVBoxMainWidget();
-	
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+
+    KVBox *page = new KVBox( this );
+
 	layout2 = new Q3HBox( page );
-	
+
 	raterLabel = new QLabel( layout2, "raterLabel" );
 	raterEdit = new QLineEdit( layout2, "raterEdit" );
-	
+
 	layout8 = new Q3HBox( page );
-	
+
 	criteriaLabel = new QLabel( layout8, "criteriaLabel" );
-	
+
 	criteriaComboBox = new QComboBox( FALSE, layout8, "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
-	
+
 	starsLabel = new QLabel( layout8, "starsLabel" );
 
 	starsWidget = new RatingWidget( 5, layout8, "starsWidget" );
-	
+
 	addButton = new QPushButton( layout8, "addButton" );
 
 	removeButton = new QPushButton( layout8, "removeButton" );
@@ -108,14 +111,14 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->setItemsRenameable( true );
 	criteriaListView->setRenameable( 0, true );
 	criteriaListView->setRenameable( 1, true );
-	
+
 	commentsLabel = new QLabel( page, "commentsLabel" );
-	
+
 	commentsEdit = new Q3TextEdit( page, "commentsEdit" );
-	
+
 	languageChange();
 	resize( QSize(358, 331).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
+	//clearWState( WState_Polished );
 
 	connect( criteriaListView, SIGNAL(itemRenamed(Q3ListViewItem*,const QString &,int)), this, SLOT(itemRenamed(Q3ListViewItem*,const QString &,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
@@ -163,7 +166,7 @@ void EditRatingDialog::itemRenamed(Q3ListViewItem* it, const QString &, int c)
 		bool ok = false;
 		MixedNumber stars_mn = MixedNumber::fromString(it->text(c),&ok);
 		if ( ok && !it->text(c).isEmpty() ) {
-			double stars = qMax(0,qMin(stars_mn.toDouble(),5)); //force to between 0 and 5
+			double stars = qMax(0.0,qMin(stars_mn.toDouble(),5.0)); //force to between 0 and 5
 			QPixmap starsPic = Rating::starsPixmap( stars );
 			it->setPixmap(c,starsPic);
 			it->setText(2,QString::number(stars));

@@ -17,7 +17,7 @@
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
 #include <QLabel>
-
+class Q3HBox;
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
@@ -40,12 +40,12 @@ class RatingCriteriaListView;
 class EditRatingDialog : public KDialog
 {
 Q_OBJECT
-	
+
 public:
 	EditRatingDialog( const ElementList &criteriaList, const Rating &, QWidget* parent = 0, const char* name = 0 );
 	EditRatingDialog( const ElementList &criteriaList, QWidget* parent = 0, const char* name = 0 );
 	~EditRatingDialog();
-	
+
 	QLabel* criteriaLabel;
 	QComboBox* criteriaComboBox;
 	QLabel* starsLabel;
@@ -59,11 +59,11 @@ public:
 	QLineEdit* raterEdit;
 
 	Rating rating() const;
-	
+
 protected:
 	Q3HBox* layout8;
 	Q3HBox* layout2;
-	
+
 protected slots:
 	virtual void languageChange();
 	void slotAddRatingCriteria();

@@ -13,7 +13,7 @@
 #include "selectcategoriesdialog.h"
 #include "createcategorydialog.h"
 
-#include <q3vbox.h>
+#include <kvbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -25,12 +25,15 @@
 #include "widgets/categorylistview.h"
 
 SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db )
-		: KDialog( parent, "SelectCategoriesDialog", true, i18n("Categories"),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
+		: KDialog( parent ),
 		database(db)
 {
-	KVBox *page = makeVBoxMainWidget();
-
+    setCaption(i18n("Categories" ));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 	//Design UI
 
 	//Category List

@@ -20,7 +20,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
-
+#include <KVBox>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -36,16 +36,21 @@
 #include "datablocks/mixednumber.h"
 
 RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *db, const ElementList &recipeList )
-		: KDialog( parent, "refinedialog", true, QString::null,
-		    KDialog::Ok, KDialog::Ok ),
+		: KDialog( parent),
 		database( db )
 {
+    setButtons(KDialog::Ok);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
+
 	setButtonText( KDialog::Ok, i18n( "&Done" ) );
 
-	KVBox *page = makeVBoxMainWidget();
 
 	helpLabel = new QLabel( page, "helpLabel" );
-	helpLabel->setTextFormat( QLabel::RichText );
+	helpLabel->setTextFormat( Qt::RichText );
 
 	QWidget *layout2Widget = new QWidget(page);
 
@@ -59,15 +64,15 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
-	KIconLoader *il = KIconLoader::global();
+	//KIconLoader *il = KIconLoader::global();
 
 	addButton = new QPushButton( layout2Widget, "addButton" );
-	addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( layout2Widget, "removeButton" );
-	removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -86,7 +91,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	languageChange();
 
-	clearWState( WState_Polished );
+	//clearWState( WState_Polished );
 
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
@@ -130,10 +135,9 @@ void RefineShoppingListDialog::loadData()
 
 		QString amount_str;
 		if ( ( *it ).amount > 0 ) {
-			KConfig * config = KGlobal::config();
-			config->setGroup( "Formatting" );
-	
-			if ( config->readEntry( "Fraction" ) )
+                    KConfigGroup config( KGlobal::config(), "Formatting" );
+
+			if ( !config.readEntry( "Fraction" ).isEmpty() )
 				amount_str = MixedNumber( ( *it ).amount ).toString();
 			else
 				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
@@ -185,10 +189,9 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 		else { //revert back to the valid amount string
 			QString amount_str;
 			if ( ( *found_it ).amount > 0 ) {
-				KConfig * config = KGlobal::config();
-				config->setGroup( "Formatting" );
-		
-				if ( config->readEntry( "Fraction" ) )
+                            KConfigGroup config( KGlobal::config(), "Formatting" );
+
+				if ( !config.readEntry( "Fraction" ).isEmpty() )
 					amount_str = MixedNumber( ( *found_it ).amount ).toString();
 				else
 					amount_str = beautify( KGlobal::locale() ->formatNumber( ( *found_it ).amount, 5 ) );

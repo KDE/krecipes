@@ -17,6 +17,7 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <q3vbox.h>
+#include <KVBox>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -30,11 +31,14 @@
 #include "backends/recipedb.h"
 
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
-		: KDialog( parent, "createIngWeightDialog", true, QString::null,
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
-	KVBox *page = makeVBoxMainWidget();
-	
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
+
+
 	groupBox1 = new Q3GroupBox( page );
 	groupBox1->setColumnLayout(0, Qt::Vertical );
 	groupBox1->layout()->setSpacing( 6 );
@@ -43,37 +47,37 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	groupBox1Layout->setAlignment( Qt::AlignTop );
 
 	weightEdit = new FractionInput( groupBox1 );
-	
+
 	groupBox1Layout->addWidget( weightEdit, 0, 1 );
-	
+
 	weightUnitBox = new UnitComboBox( groupBox1, db, Unit::Mass );
 	weightUnitBox->reload();
-	
+
 	groupBox1Layout->addMultiCellWidget( weightUnitBox, 0, 0, 2, 3 );
-	
+
 	perAmountLabel = new QLabel( groupBox1, "perAmountLabel" );
-	
+
 	groupBox1Layout->addWidget( perAmountLabel, 1, 0 );
-	
+
 	weightLabel = new QLabel( groupBox1, "weightLabel" );
-	
+
 	groupBox1Layout->addWidget( weightLabel, 0, 0 );
 
 	perAmountEdit = new FractionInput( groupBox1 );
-	
+
 	groupBox1Layout->addWidget( perAmountEdit, 1, 1 );
-	
+
 	perAmountUnitBox = new UnitComboBox( groupBox1, db );
 	perAmountUnitBox->reload();
-	
+
 	groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
 
 	prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18n("-No Preparation-") );
 	prepMethodBox->reload();
 	groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
-	
+
 	languageChange();
-	clearWState( WState_Polished );
+	//clearWState( WState_Polished );
 
 	weightEdit->setFocus();
 }

@@ -13,7 +13,7 @@
 #include "selectauthorsdialog.h"
 
 #include <qmessagebox.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -23,20 +23,24 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <QLineEdit>
 
 #include "backends/recipedb.h"
 
 SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db )
-		: KDialog( parent, "SelectAuthorsDialog", true, i18n("Authors"),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
+		: KDialog(parent ),
 		database(db)
 {
-	KVBox *page = makeVBoxMainWidget();
+    setCaption(i18n("Authors" ));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
 
 	//Design UI
 
 	// Combo to Pick authors
-	Q3HBox *topBox = new Q3HBox(page);
+	KHBox *topBox = new KHBox(page);
 	topBox->setSpacing(6);
 
 	authorsCombo = new KComboBox( true, topBox );
@@ -63,9 +67,8 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	authorListView = new K3ListView( page );
 	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config( KGlobal::config(), "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	authorListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	authorListView->addColumn( i18n( "Author" ) );
 	authorListView->setAllColumnsShowFocus( true );

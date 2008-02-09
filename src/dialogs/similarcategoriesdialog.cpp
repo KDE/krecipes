@@ -37,87 +37,87 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
    : QDialog( parent, "SimilarCategoriesDialog", true ),
      m_elementList(list)
 {
-	SimilarCategoriesDialogLayout = new Q3VBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout"); 
-	
-	layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6"); 
-	
-	layout4 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout4"); 
-	
+	SimilarCategoriesDialogLayout = new Q3VBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout");
+
+	layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6");
+
+	layout4 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout4");
+
 	categoriesBox = new KLineEdit( this );
-	
+
 	layout4->addWidget( categoriesBox, 0, 1 );
-	
+
 	thresholdSlider = new QSlider( this, "thresholdSlider" );
 	thresholdSlider->setValue( 40 );
 	thresholdSlider->setOrientation( Qt::Horizontal );
-	
+
 	layout4->addWidget( thresholdSlider, 1, 1 );
-	
+
 	thresholdLabel = new QLabel( this, "thresholdLabel" );
-	
+
 	layout4->addWidget( thresholdLabel, 1, 0 );
-	
+
 	categoryLabel = new QLabel( this, "categoryLabel" );
-	
+
 	layout4->addWidget( categoryLabel, 0, 0 );
 	layout6->addLayout( layout4 );
-	
-	layout5 = new Q3VBoxLayout( 0, 0, 6, "layout5"); 
-	
+
+	layout5 = new Q3VBoxLayout( 0, 0, 6, "layout5");
+
 	searchButton = new QPushButton( this, "searchButton" );
 	layout5->addWidget( searchButton );
 	spacer4 = new QSpacerItem( 20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout5->addItem( spacer4 );
 	layout6->addLayout( layout5 );
 	SimilarCategoriesDialogLayout->addLayout( layout6 );
-	
-	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9"); 
-	
-	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8"); 
-	
+
+	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9");
+
+	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8");
+
 	allLabel = new QLabel( this, "allLabel" );
 	layout8->addWidget( allLabel );
-	
-	allListView = new K3ListView( this, "allListView" );
+
+	allListView = new K3ListView( this );
 	allListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, allListView->sizePolicy().hasHeightForWidth() ) );
 	layout8->addWidget( allListView );
 	layout9->addLayout( layout8 );
-	
-	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1"); 
-	
+
+	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1");
+
 	removeButton = new QPushButton( this, "removeButton" );
 	layout1->addWidget( removeButton );
-	
+
 	addButton = new QPushButton( this, "addButton" );
 	layout1->addWidget( addButton );
 	spacer1 = new QSpacerItem( 20, 61, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout1->addItem( spacer1 );
 	layout9->addLayout( layout1 );
-	
-	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7"); 
-	
+
+	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7");
+
 	toMergeLabel = new QLabel( this, "toMergeLabel" );
 	layout7->addWidget( toMergeLabel );
-	
-	toMergeListView = new K3ListView( this, "toMergeListView" );
+
+	toMergeListView = new K3ListView( this );
 	toMergeListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, toMergeListView->sizePolicy().hasHeightForWidth() ) );
 	layout7->addWidget( toMergeListView );
 	layout9->addLayout( layout7 );
 	SimilarCategoriesDialogLayout->addLayout( layout9 );
-	
-	layout10 = new Q3HBoxLayout( 0, 0, 6, "layout10"); 
+
+	layout10 = new Q3HBoxLayout( 0, 0, 6, "layout10");
 	spacer2 = new QSpacerItem( 310, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout10->addItem( spacer2 );
-	
+
 	mergeButton = new QPushButton( this, "mergeButton" );
 	layout10->addWidget( mergeButton );
-	
+
 	cancelButton = new QPushButton( this, "cancelButton" );
 	layout10->addWidget( cancelButton );
 	SimilarCategoriesDialogLayout->addLayout( layout10 );
 	languageChange();
 	resize( QSize(573, 429).expandedTo(minimumSizeHint()) );
-	clearWState( WState_Polished );
+	//clearWState( WState_Polished );
 
 	connect( searchButton, SIGNAL(clicked()), this, SLOT(findMatches()) );
 	connect( mergeButton, SIGNAL(clicked()), this, SLOT(mergeMatches()) );
@@ -176,19 +176,19 @@ int levenshtein_distance(const char *s,const char*t)
 {
   //Step 1
   int k,i,j,n,m,cost,*d,distance;
-  n=strlen(s); 
+  n=strlen(s);
   m=strlen(t);
   if(n!=0&&m!=0)
   {
     d=(int*)malloc((sizeof(int))*(m+1)*(n+1));
     m++;
     n++;
-    //Step 2	
+    //Step 2
     for(k=0;k<n;k++)
 	d[k]=k;
     for(k=0;k<m;k++)
       d[k*n]=k;
-    //Step 3 and 4	
+    //Step 3 and 4
     for(i=1;i<n;i++)
       for(j=1;j<m;j++)
 	{
@@ -197,14 +197,14 @@ int levenshtein_distance(const char *s,const char*t)
           cost=0;
         else
           cost=1;
-        //Step 6			 
+        //Step 6
         d[j*n+i]=minimum(d[(j-1)*n+i]+1,d[j*n+i-1]+1,d[(j-1)*n+i-1]+cost);
       }
     distance=d[n*m-1];
     free(d);
     return distance;
   }
-  else 
+  else
     return -1; //a negative return value means that one or both strings are empty.
 }
 
@@ -239,7 +239,7 @@ Q3ValueList<QStringList> wordLetterPairs(const QString &str) {
 		// Find the pairs of characters
 		QStringList pairsInWord = letterPairs(words[w]);
 		for (uint p=0; p < pairsInWord.count(); p++) {
-			allPairs.append(pairsInWord[p]);
+                    allPairs.append( QStringList()<<pairsInWord[p] );
 		}
 	}
 	return allPairs;
@@ -296,7 +296,7 @@ void RecipeActionsHandler::mergeSimilar()
 			}
 		}
 
-		
+
 		for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 			database->mergeCategories(cat_it->categoryId(),(*it).id);
 		}

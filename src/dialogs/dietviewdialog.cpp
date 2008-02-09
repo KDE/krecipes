@@ -14,18 +14,21 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <KStandardGuiItem>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <KVBox>
 
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
-		: KDialog( parent, "dietViewDialog", true, QString::null,
-		    KDialog::User2 | KDialog::Close | KDialog::User1, KDialog::User2,
-		    false, KStandardGuiItem::print() )
+		: KDialog( parent )
 {
-	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
+    setButtons(KDialog::User2 | KDialog::Close | KDialog::User1);
+    setDefaultButton(KDialog::User2);
+    setModal( false );
+    KVBox *page = new KVBox( this );
+    setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
 
-	// Design the dialog
-	KVBox *page = makeVBoxMainWidget();
+	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
 
 	// The html part
 	dietView = new KHTMLPart( page );

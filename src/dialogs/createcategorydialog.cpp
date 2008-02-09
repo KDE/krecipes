@@ -16,7 +16,7 @@
 #include <q3groupbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
@@ -25,10 +25,15 @@
 #include <klocale.h>
 
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
-		: KDialog( parent, "createCategoryDialog", true, i18n( "New Category" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent)
 {
-	KVBox *page = makeVBoxMainWidget();
+    setCaption(i18n("New Category" ));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
 	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
@@ -41,7 +46,7 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	elementEdit = new KLineEdit( box );
 	boxLayout->addWidget( elementEdit );
 
-	Q3HBox *subcatHBox = new Q3HBox( box );
+	KHBox *subcatHBox = new KHBox( box );
 	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
 	categoryComboBox = new KComboBox( subcatHBox );
 	boxLayout->addWidget( subcatHBox );

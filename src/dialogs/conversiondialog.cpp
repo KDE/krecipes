@@ -19,6 +19,7 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <q3vbox.h>
+#include <KVBox>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -31,17 +32,24 @@
 #include "widgets/fractioninput.h"
 
 ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name )
-		: KDialog( parent, name, false, i18n( "Measurement Converter" ),
-		    KDialog::Close | KDialog::User1 | KDialog::Help, KDialog::Close ),
+		: KDialog( parent ),
 		m_database(db)
 {
-	setHelp("measure-converter");
-	setButtonText( KDialog::User1, i18n("Convert") );
+
+    setCaption(i18n( "Measurement Converter" ));
+    setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
+    setDefaultButton(KDialog::Close);
+    setHelp("measure-converter");
+    setButtonText( KDialog::User1, i18n("Convert") );
+
+    setModal( false );
+
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
 	setSizeGripEnabled( TRUE );
 
-	KVBox *page = makeVBoxMainWidget();
-	
+
 	Q3HBox *vbox = new Q3VBox(page);
 
 	Q3HBox *fromTopBox = new Q3HBox(vbox);
@@ -55,14 +63,14 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	fromTopBox->setSpacing(3);
 
 	Q3HBox *fromBottomBox = new Q3HBox(vbox);
-	
+
 	ingredientBox = new IngredientComboBox( FALSE, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
 	ingredientBox->reload();
 
 	prepMethodBox = new PrepMethodComboBox( false, fromBottomBox, db, i18n( "-No Preparation-" ) );
 	prepMethodBox->reload();
 	fromBottomBox->setSpacing(3);
-	
+
 	Q3HBox *toBox = new Q3HBox(vbox);
 
 	toLabel = new QLabel( toBox, "toLabel" );
@@ -80,7 +88,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	languageChange();
 
 	setInitialSize( QSize(300, 200).expandedTo(minimumSizeHint()) );
-	
+
 	// signals and slots connections
 	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
 }

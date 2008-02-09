@@ -19,12 +19,18 @@
 #include <klocale.h>
 #include <klineedit.h>
 #include <kcombobox.h>
+#include <KVBox>
 
 CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
-		: KDialog( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
-	KVBox *page = makeVBoxMainWidget();
+    setCaption(newUnit?i18n( "New Unit" ):i18n("Unit"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
 	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );

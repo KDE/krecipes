@@ -97,7 +97,7 @@ set(krecipesdialogs_SRCS
    dialogs/unitsdialog.cpp
    dialogs/dependanciesdialog.cpp
    dialogs/shoppinglistdialog.cpp
-   dialogs/shoppinglistviewdialog.cpp
+   #dialogs/shoppinglistviewdialog.cpp
    dialogs/selectcategoriesdialog.cpp
    dialogs/categorieseditordialog.cpp
    dialogs/authorsdialog.cpp
@@ -107,12 +107,12 @@ set(krecipesdialogs_SRCS
    dialogs/ingredientmatcherdialog.cpp
    dialogs/prepmethodsdialog.cpp
    dialogs/createcategorydialog.cpp
-   dialogs/borderdialog.cpp
+   #dialogs/borderdialog.cpp
    dialogs/refineshoppinglistdialog.cpp
-   dialogs/pagesetupdialog.cpp
-   dialogs/dbimportdialog.cpp
+   #dialogs/pagesetupdialog.cpp
+   #dialogs/dbimportdialog.cpp
    dialogs/createunitdialog.cpp
-   dialogs/setupdisplay.cpp
+   #dialogs/setupdisplay.cpp
    dialogs/ingredientparserdialog.cpp
    dialogs/ingredientgroupsdialog.cpp
    dialogs/editratingdialog.cpp

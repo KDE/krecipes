@@ -10,7 +10,7 @@
 
 #include "recipeprintpreview.h"
 
-#include <q3vbox.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -21,22 +21,25 @@
 #include "pagesetupdialog.h"
 
 RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids )
-		: KDialog( parent, "RecipePrintPreview", true, i18n("Print Preview"),
-		    KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::Help, KDialog::Ok )
+		: KDialog( parent )
 {
+    setCaption( i18n("Print Preview") );
+    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::Help);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
+
 	setHelp("print-recipe");
 	setButtonText( KDialog::User1, i18n("&Edit") );
 	setButtonText( KDialog::Ok, i18n("&Print") );
 
 	setSizeGripEnabled( true );
 
-	// Initialize UI Elements
-	KVBox *page = makeVBoxMainWidget();
 
 	recipeView = new RecipeViewDialog( page, db );
 	recipeView->loadRecipes( ids, "Print" );
 
-	setInitialSize( QSize(450,500), false );
+	//setInitialSize( QSize(450,500), false );
 }
 
 RecipePrintPreview::~RecipePrintPreview()

@@ -14,7 +14,7 @@
 
 #include <cmath>
 
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <qvariant.h>
 #include <q3buttongroup.h>
 #include <q3frame.h>
@@ -43,11 +43,14 @@
 #define SERVINGS_RADIO_BUTTON 1
 
 ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
-		: KDialog( parent, "ResizeRecipeDialog", true, i18n( "Resize Recipe" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
+		: KDialog( parent ),
 		m_recipe( recipe )
 {
-	KVBox *page = makeVBoxMainWidget();
+    setCaption(i18n("Resize Recipe" ));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
 
 	buttonGroup = new Q3ButtonGroup( page );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
