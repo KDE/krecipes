@@ -12,7 +12,7 @@ set(krecipesimporters_SRCS
    rezkonvimporter.cpp
    kredbimporter.cpp)
 
-add_library(krecipesimporters SHARED ${krecipesimporters_SRCS})
+kde4_add_library(krecipesimporters SHARED ${krecipesimporters_SRCS})
 
 
 ########### next target ###############
