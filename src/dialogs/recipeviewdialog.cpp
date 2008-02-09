@@ -92,13 +92,12 @@ bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &
 
 	XSLTExporter html_generator( tmp_filename + ".html", "html" );
 	if ( layoutConfig != QString::null ) {
-		KConfig *config = KGlobal::config();
-		config->setGroup( "Page Setup" );
-		QString styleFile = config->readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/None.klo" ) );
+            KConfigGroup config(KGlobal::config(), "Page Setup" );
+		QString styleFile = config.readEntry( layoutConfig+"Layout", locate( "appdata", "layouts/None.klo" ) );
 		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
 			html_generator.setStyle( styleFile );
 
-		QString templateFile = config->readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.xsl" ) );
+		QString templateFile = config.readEntry( layoutConfig+"Template", locate( "appdata", "layouts/Default.xsl" ) );
 		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
 			html_generator.setTemplate( templateFile );
 	}
@@ -163,7 +162,7 @@ void RecipeViewDialog::removeOldFiles()
 void RecipeViewDialog::recipeRemoved( int id )
 {
 	//if the deleted recipe is loaded, clean the view up
-	if ( ids_loaded.find(id) != ids_loaded.end() ) { 
+	if ( ids_loaded.find(id) != ids_loaded.end() ) {
 		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
 		XSLTExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
 		ids_loaded.remove(id);

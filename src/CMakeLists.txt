@@ -120,7 +120,7 @@ set(krecipesdialogs_SRCS
    dialogs/conversiondialog.cpp
    dialogs/createingredientweightdialog.cpp
    dialogs/recipeprintpreview.cpp
-   dialogs/editpropertiesdialog.cpp
+   #dialogs/editpropertiesdialog.cpp
    dialogs/createunitconversiondialog.cpp)
 
 
@@ -195,7 +195,7 @@ set(krecipes_SRCS
 
 kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} )
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 

@@ -356,7 +356,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 		( ingParserButton, i18n( "Paste Ingredients" ) );
 
 	// Ingredient List
-	ingredientList = new K3ListView( ingredientGBox, "ingredientList" );
+	ingredientList = new K3ListView( ingredientGBox);
 	ingredientList->addColumn( i18n( "Ingredient" ) );
 	ingredientList->addColumn( i18n( "Amount" ) );
 	ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
@@ -955,7 +955,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 	case 1:  //amount
 		{
 			bool ok;
-			
+
 			Ingredient new_ing_amount;
 			new_ing_amount.setAmount(new_text,&ok);
 
@@ -1032,7 +1032,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			{
 				new_ing.prepMethodList = ElementList::split(",",new_text.trimmed());
 				Q3ValueList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
-	
+
 				Q3ValueList<int>::const_iterator id_it = new_ids.begin();
 				for ( ElementList::iterator it = new_ing.prepMethodList.begin(); it != new_ing.prepMethodList.end(); ++it, ++id_it ) {
 					(*it).id = *id_it;
@@ -1387,13 +1387,13 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 	item->criteriaListView->clear();
 	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
 		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,(*rc_it).name);
-	
+
 		int stars = int((*rc_it).stars * 2); //multiply by two to make it easier to work with half-stars
-	
+
 		QPixmap star = UserIcon(QString::fromLatin1("star_on"));
 		int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
 		QPixmap generatedPixmap(pixmapWidth,18);
-	
+
 		if ( !generatedPixmap.isNull() ) { //there aren't zero stars
 			generatedPixmap.fill();
 			QPainter painter( &generatedPixmap );

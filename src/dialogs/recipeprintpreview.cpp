@@ -28,7 +28,7 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3V
     setDefaultButton(KDialog::Ok);
     setModal( true );
     KVBox *page = new KVBox( this );
-
+    setMainWidget( page );
 	setHelp("print-recipe");
 	setButtonText( KDialog::User1, i18n("&Edit") );
 	setButtonText( KDialog::Ok, i18n("&Print") );

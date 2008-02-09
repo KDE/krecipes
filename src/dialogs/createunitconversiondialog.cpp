@@ -17,18 +17,21 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
 #include <klocale.h>
 
 CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit, const ElementList &toUnits, QWidget* parent )
-		: KDialog( parent, "CreateUnitConversionDialog", true, QString::null,
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
+		: KDialog( parent ),
 	m_toUnits(toUnits)
 {
-	KVBox *page = makeVBoxMainWidget();
+    setButtons(KDialog::Ok | KDialog::Cancel );
+    setDefaultButton(KDialog::Ok);
+    setModal( true );
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
 	buttonGroup1 = new Q3ButtonGroup( page, "buttonGroup1" );
 	buttonGroup1->setColumnLayout(0, Qt::Vertical );
@@ -54,7 +57,7 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 
 	languageChange();
 
-	clearWState( WState_Polished );
+	//clearWState( WState_Polished );
 
 	for ( ElementList::const_iterator it = m_toUnits.begin(); it != m_toUnits.end(); ++it ) {
 		toUnitComboBox->insertItem((*it).name);

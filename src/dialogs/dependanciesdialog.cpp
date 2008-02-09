@@ -29,23 +29,12 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListI
     : KDialog( parent ),
       m_depsAreDeleted(deps_are_deleted)
 {
-    /*
-    setModal(true);
-    setDefaultButton(KDialog::Ok | KDialog::Cancel);
-    setButtons(KDialog::Cancel);
-    */
 	init( lists );
 }
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
-    /*
-
-    setModal(true);
-    setDefaultButton(KDialog::Ok | KDialog::Cancel);
-    setButtons(KDialog::Cancel);
-    */
 	Q3ValueList<ListInfo> lists;
 	lists << list;
 	init( lists );
@@ -56,6 +45,10 @@ DependanciesDialog::~DependanciesDialog()
 
 void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 {
+    setModal(true);
+    setDefaultButton(KDialog::Cancel);
+    setButtons(KDialog::Ok | KDialog::Cancel);
+
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 	// Design the dialog
