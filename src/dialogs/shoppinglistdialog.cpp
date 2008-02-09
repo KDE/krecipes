@@ -52,7 +52,7 @@ protected:
 			RecipeItemDrag * obj = new RecipeItemDrag( item, this, "Recipe drag item" );
 			/*const QPixmap *pm = item->pixmap(0);
 			if( pm )
-				obj->setPixmap( *pm );*/ 
+				obj->setPixmap( *pm );*/
 			return obj;
 		}
 		return 0;
@@ -85,13 +85,13 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	Q3BoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
 	KIconLoader *il = KIconLoader::global();
 	addRecipeButton = new QPushButton( this );
-	addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	addRecipeButton->setFlat( true );
 	vboxl->addWidget( addRecipeButton );
 
 	removeRecipeButton = new QPushButton( this );
-	removeRecipeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	//removeRecipeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	removeRecipeButton->setFlat( true );
 	vboxl->addWidget( removeRecipeButton );
@@ -112,9 +112,8 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	shopRecipeListView->listView() ->addColumn( i18n( "Recipe Title" ) );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config( KGlobal::config(), "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	shopRecipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	shopRecipeListView->listView() ->setSorting( -1 );
@@ -177,14 +176,13 @@ void ShoppingListDialog::reload( ReloadFlags flag )
 
 void ShoppingListDialog::addRecipe( void )
 {
-	Q3PtrList<Q3ListViewItem> items = recipeListView->listView()->selectedItems();
+	QList<Q3ListViewItem*> items = recipeListView->listView()->selectedItems();
 
-	Q3PtrListIterator<Q3ListViewItem> it(items);
-	Q3ListViewItem *item;
-	while ( (item = it.current()) != 0 ) {
-		addRecipe( item );
-		++it;
-	}
+        for ( int i = 0;i <items.count();i++ )
+        {
+            addRecipe( items.at( i ) );
+
+        }
 }
 
 void ShoppingListDialog::addRecipe( Q3ListViewItem *item )

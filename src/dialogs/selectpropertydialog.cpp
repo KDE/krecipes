@@ -23,19 +23,23 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <QLabel>
+#include <KVBox>
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB *database, OptionFlag showEmpty )
-		: KDialog( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ), m_showEmpty(showEmpty),
+		: KDialog( parent), m_showEmpty(showEmpty),
         ingredientID(ingID), db(database)
 {
+    setModal( true );
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton( KDialog::Ok);
+    setCaption(i18n( "Choose Property" ));
 
 	// Initialize internal variables
 	unitListBack = new UnitList;
 
 	// Initialize Widgets
-	KVBox *page = makeVBoxMainWidget();
-
+	KVBox *page = new KVBox( this );
+        setMainWidget( page );
 	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Property" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
@@ -44,11 +48,10 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
 	boxLayout->setAlignment( Qt::AlignTop );
 
-	propertyChooseView = new K3ListView( box, "propertyChooseView" );
+	propertyChooseView = new K3ListView( box );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config( KGlobal::config(),  "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	propertyChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	propertyChooseView->addColumn( i18n( "Property" ) );
@@ -68,7 +71,8 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	boxLayout->addLayout( layout2 );
 
 	resize( QSize( 200, 380 ).expandedTo( minimumSizeHint() ) );
-	clearWState( WState_Polished );
+        //TODO port kde4
+        //clearWState( WState_Polished );
 
 	IngredientPropertyList propertyList;
 	db->loadProperties( &propertyList );

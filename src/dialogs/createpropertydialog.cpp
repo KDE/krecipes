@@ -16,18 +16,21 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QLabel>
+#include <KVBox>
 
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
-		: KDialog( parent, "createPropertyDialog", true, i18n( "New Property" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
-
+    setCaption( i18n( "New Property" ) );
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setDefaultButton( KDialog::Ok);
+    setModal( true );
 	// Initialize Internal Variables
 	unitList = list; // Store the pointer to the unitList;
 
 	// Initialize widgets
-	KVBox *page = makeVBoxMainWidget();
-
+	KVBox *page = new KVBox( this );
+        setMainWidget( page );
 	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );

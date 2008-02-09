@@ -11,17 +11,21 @@
 ***************************************************************************/
 
 #include "createelementdialog.h"
-
+#include <kvbox.h>
 #include <klocale.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
 CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
-		: KDialog( parent, "createElementDialog", true, text,
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent)
 {
-	KVBox *page = makeVBoxMainWidget();
+    setCaption( text );
+    setModal( true );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
 
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );

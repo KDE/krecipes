@@ -15,14 +15,20 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
-		: KDialog( parent, "SelectUnitDialog", true, i18n( "Choose Unit" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ), m_showEmpty(showEmpty)
+		: KDialog( parent)
+                , m_showEmpty(showEmpty)
 {
-	KVBox *page = makeVBoxMainWidget();
+    setButtons(  KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( KDialog::Ok );
+    setCaption(i18n( "Choose Unit" ) );
+    setModal( true );
+    KVBox *page = new KVBox(this );
+    setMainWidget( page );
 
 	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Unit" ) );
@@ -31,9 +37,8 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, O
 
 	unitChooseView = new K3ListView( box );
 
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+	KConfigGroup config( KGlobal::config(), "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 	unitChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
 	unitChooseView->addColumn( i18n( "Unit" ) );

@@ -15,7 +15,7 @@
 #include "dependanciesdialog.h"
 #include "datablocks/elementlist.h"
 
-#include <q3vbox.h>
+#include <kvbox.h>
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3ValueList>
@@ -25,36 +25,46 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted ) : KDialog( parent, "DependanciesDialog", true, QString::null,
-	  KDialog::Ok | KDialog::Cancel, KDialog::Cancel ),
-	  m_depsAreDeleted(deps_are_deleted)
+DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted )
+    : KDialog( parent ),
+      m_depsAreDeleted(deps_are_deleted)
 {
+    /*
+    setModal(true);
+    setDefaultButton(KDialog::Ok | KDialog::Cancel);
+    setButtons(KDialog::Cancel);
+    */
 	init( lists );
 }
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent, "DependanciesDialog", true, QString::null,
-	  KDialog::Ok | KDialog::Cancel, KDialog::Cancel ),
+DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
+    /*
+
+    setModal(true);
+    setDefaultButton(KDialog::Ok | KDialog::Cancel);
+    setButtons(KDialog::Cancel);
+    */
 	Q3ValueList<ListInfo> lists;
 	lists << list;
 	init( lists );
 }
 
 DependanciesDialog::~DependanciesDialog()
-{}	
+{}
 
 void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 {
-	KVBox *page = makeVBoxMainWidget();
-
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 	// Design the dialog
 
 	instructionsLabel = new QLabel( page );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
-	
+
 	if ( m_depsAreDeleted ) {
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	}
@@ -75,9 +85,8 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 
 void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Advanced" );
-	bool show_id = config->readEntry( "ShowID", false );
+    KConfigGroup config( KGlobal::config(), "Advanced" );
+	bool show_id = config.readEntry( "ShowID", false );
 
 	for ( ElementList::const_iterator el_it = list.begin(); el_it != list.end(); ++el_it ) {
 		QString name = ( *el_it ).name;

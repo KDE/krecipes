@@ -36,9 +36,8 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	propertyListView = new CheckPropertyListView( this, database, true );
 	propertyListView->reload();
 
-	KConfig *config = KGlobal::config();
-	config->setGroup("Formatting");
-	QStringList hiddenList = config->readListEntry("HiddenProperties");
+	KConfigGroup config( KGlobal::config(), "Formatting");
+	QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 	for ( Q3CheckListItem *item = (Q3CheckListItem*)propertyListView->firstChild(); item; item = (Q3CheckListItem*)item->nextSibling() ) {
 		if ( !hiddenList.contains(item->text(0)) )
 			item->setOn(true);

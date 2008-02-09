@@ -136,7 +136,8 @@ set (krecipesexporters_SRCS
    #exporters/plaintextexporter.cpp
    exporters/rezkonvexporter.cpp
    exporters/htmlbookexporter.cpp
-   exporters/xsltexporter.cpp)
+   #exporters/xsltexporter.cpp
+   )
 
 
 ############ datablocks ##############
@@ -192,9 +193,9 @@ set(krecipes_SRCS
 
 
 
-kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS})
+kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} ${KDE4_KHTML_LIBS} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY})
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 
@@ -202,7 +203,7 @@ install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krecipesui.rc DESTINATION ${DATA_INSTALL_DIR}/krecipes )
-install( FILES  krecipes.desktop DESTINATION ${APPLNK_INSTALL_DIR}/Utilities )
+install( FILES  krecipes.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR} )
 
