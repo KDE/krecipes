@@ -22,7 +22,7 @@
 
 RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids )
 		: KDialog( parent, "RecipePrintPreview", true, i18n("Print Preview"),
-		    KDialog::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::Help, KDialog::Ok )
 {
 	setHelp("print-recipe");
 	setButtonText( KDialog::User1, i18n("&Edit") );

@@ -390,8 +390,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
 	updateGuiItem.setIconSet( il->loadIconSet( "view-refresh", KIconLoader::NoGroup ) );
-	propertyStatusDialog = new KDialog( KDialogBase::Swallow, i18n("Property details"),
-		KDialog::Close | KDialogBase::User1 | KDialogBase::Help,
+	propertyStatusDialog = new KDialog( KDialog::Swallow, i18n("Property details"),
+		KDialog::Close | KDialog::User1 | KDialog::Help,
 		KDialog::Close, this, "propertyStatusDialog", false, false,
 		updateGuiItem
 	);

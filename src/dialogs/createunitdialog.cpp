@@ -22,7 +22,7 @@
 
 CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
 		: KDialog( parent, "createElementDialog", true, (newUnit)?i18n( "New Unit" ):i18n("Unit"),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

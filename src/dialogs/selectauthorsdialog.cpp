@@ -28,7 +28,7 @@
 
 SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &currentAuthors, RecipeDB *db )
 		: KDialog( parent, "SelectAuthorsDialog", true, i18n("Authors"),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
 		database(db)
 {
 	KVBox *page = makeVBoxMainWidget();

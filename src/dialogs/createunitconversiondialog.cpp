@@ -25,7 +25,7 @@
 
 CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit, const ElementList &toUnits, QWidget* parent )
 		: KDialog( parent, "CreateUnitConversionDialog", true, QString::null,
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
 	m_toUnits(toUnits)
 {
 	KVBox *page = makeVBoxMainWidget();

@@ -37,7 +37,7 @@
 
 RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *db, const ElementList &recipeList )
 		: KDialog( parent, "refinedialog", true, QString::null,
-		    KDialog::Ok, KDialogBase::Ok ),
+		    KDialog::Ok, KDialog::Ok ),
 		database( db )
 {
 	setButtonText( KDialog::Ok, i18n( "&Done" ) );

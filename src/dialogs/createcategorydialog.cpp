@@ -26,7 +26,7 @@
 
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
 		: KDialog( parent, "createCategoryDialog", true, i18n( "New Category" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

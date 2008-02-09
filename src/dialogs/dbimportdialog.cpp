@@ -40,7 +40,7 @@
 
 DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 		: KDialog( parent, name, true, i18n( "Database Import" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	setButtonBoxOrientation( Vertical );
 

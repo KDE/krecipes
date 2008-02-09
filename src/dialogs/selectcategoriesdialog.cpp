@@ -26,7 +26,7 @@
 
 SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementList &items_on, RecipeDB *db )
 		: KDialog( parent, "SelectCategoriesDialog", true, i18n("Categories"),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
 		database(db)
 {
 	KVBox *page = makeVBoxMainWidget();

@@ -38,7 +38,7 @@
 
 IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* parent, const char* name )
 		: KDialog( parent, name, true, i18n( "Ingredient Parser" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
 		m_unitList(units)
 {
 	setButtonBoxOrientation( Vertical );

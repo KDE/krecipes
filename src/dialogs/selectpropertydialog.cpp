@@ -26,7 +26,7 @@
 
 SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB *database, OptionFlag showEmpty )
 		: KDialog( parent, "SelectPropertyDialog", true, i18n( "Choose Property" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ), m_showEmpty(showEmpty),
         ingredientID(ingID), db(database)
 {
 

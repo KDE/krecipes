@@ -19,7 +19,7 @@
 
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 		: KDialog( parent, "dietViewDialog", true, QString::null,
-		    KDialog::User2 | KDialogBase::Close | KDialogBase::User1, KDialogBase::User2,
+		    KDialog::User2 | KDialog::Close | KDialog::User1, KDialog::User2,
 		    false, KStandardGuiItem::print() )
 {
 	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );

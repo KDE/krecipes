@@ -18,7 +18,7 @@
 
 CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
 		: KDialog( parent, "createElementDialog", true, text,
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

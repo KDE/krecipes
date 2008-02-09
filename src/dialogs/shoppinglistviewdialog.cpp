@@ -23,7 +23,7 @@
 
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
 		: KDialog( parent, "shoppingviewdialog", true, QString::null,
-		    KDialog::Close | KDialogBase::User1, KDialogBase::Close,
+		    KDialog::Close | KDialog::User1, KDialog::Close,
 		    false, KStandardGuiItem::print() )
 {
 	// Design dialog

@@ -32,7 +32,7 @@
 
 BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char* name )
 		: KDialog( parent, name, true, QString::null,
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	KVBox *page = makeVBoxMainWidget();
 

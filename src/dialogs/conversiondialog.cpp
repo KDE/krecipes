@@ -32,7 +32,7 @@
 
 ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* name )
 		: KDialog( parent, name, false, i18n( "Measurement Converter" ),
-		    KDialog::Close | KDialogBase::User1 | KDialogBase::Help, KDialogBase::Close ),
+		    KDialog::Close | KDialog::User1 | KDialog::Help, KDialog::Close ),
 		m_database(db)
 {
 	setHelp("measure-converter");

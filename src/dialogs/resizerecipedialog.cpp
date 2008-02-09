@@ -44,7 +44,7 @@
 
 ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 		: KDialog( parent, "ResizeRecipeDialog", true, i18n( "Resize Recipe" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ),
 		m_recipe( recipe )
 {
 	KVBox *page = makeVBoxMainWidget();

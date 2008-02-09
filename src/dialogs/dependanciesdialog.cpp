@@ -26,14 +26,14 @@
 #include <kmessagebox.h>
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted ) : KDialog( parent, "DependanciesDialog", true, QString::null,
-	  KDialog::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
+	  KDialog::Ok | KDialog::Cancel, KDialog::Cancel ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
 	init( lists );
 }
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent, "DependanciesDialog", true, QString::null,
-	  KDialog::Ok | KDialogBase::Cancel, KDialogBase::Cancel ),
+	  KDialog::Ok | KDialog::Cancel, KDialog::Cancel ),
 	  m_depsAreDeleted(deps_are_deleted)
 {
 	Q3ValueList<ListInfo> lists;

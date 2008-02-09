@@ -20,7 +20,7 @@
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
 		: KDialog( parent, "SelectUnitDialog", true, i18n( "Choose Unit" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_showEmpty(showEmpty)
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok ), m_showEmpty(showEmpty)
 {
 	KVBox *page = makeVBoxMainWidget();
 

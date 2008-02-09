@@ -57,7 +57,7 @@ public:
 
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name )
 		: KDialog( parent, name, true, i18n( "Rating" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	init(criteriaList);
 	loadRating(rating);
@@ -69,7 +69,7 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
  */
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
 		: KDialog( parent, name, true, i18n( "Rating" ),
-		    KDialog::Ok | KDialogBase::Cancel, KDialogBase::Ok )
+		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
 {
 	init(criteriaList);
 }
