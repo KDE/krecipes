@@ -217,9 +217,8 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 
 void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientData &ing, bool is_sub )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Formatting" );
-	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	KConfigGroup  config(KGlobal::config() , "Formatting" );
+	MixedNumber::Format number_format = config.readEntry( "Fraction" ).isEmpty() ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	//columns 1-7
 	if ( ing.amount > 1e-8 ) {

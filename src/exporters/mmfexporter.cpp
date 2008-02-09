@@ -83,7 +83,7 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 	cat_str.truncate( 67 );
 	content += cat_str + "\n";
 
-	content += "   Servings: " + QString::number( qMin( 9999, recipe.yield.amount ) ) + "\n"; //some yield info is lost here, but hey, that's the MM format
+	content += "   Servings: " + QString::number( qMin( 9999.0, recipe.yield.amount ) ) + "\n"; //some yield info is lost here, but hey, that's the MM format
 }
 
 /* Ingredient lines:
@@ -137,9 +137,8 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 
 void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing, bool is_sub )
 {
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Formatting" );
-	MixedNumber::Format number_format = ( config->readEntry( "Fraction" ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	KConfigGroup  config = KConfigGroup(KGlobal::config(), "Formatting" );
+	MixedNumber::Format number_format = ( config.readEntry( "Fraction" ) ).isEmpty() ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	//columns 1-7
 	if ( ing.amount > 0 )

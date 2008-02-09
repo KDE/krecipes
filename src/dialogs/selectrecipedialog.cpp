@@ -142,9 +142,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	connect( clearSearchButton, SIGNAL( clicked() ), this, SLOT( clearSearch() ) );
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Performance" );
-	if ( config->readEntry("SearchAsYouType",true) ) {
+	KConfigGroup config (KGlobal::config(), "Performance" );
+	if ( config.readEntry("SearchAsYouType",true) ) {
 		connect( searchBox, SIGNAL( returnPressed( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
 		connect( searchBox, SIGNAL( textChanged( const QString& ) ), this, SLOT( ensurePopulated() ) );
 		connect( searchBox, SIGNAL( textChanged( const QString& ) ), recipeFilter, SLOT( filter( const QString& ) ) );
@@ -214,7 +213,7 @@ void SelectRecipeDialog::haveSelectedItems()
 
 void SelectRecipeDialog::getCurrentRecipe( Recipe *recipe )
 {
-	Q3PtrList<Q3ListViewItem> items = recipeListView->selectedItems();
+	QList<Q3ListViewItem*> items = recipeListView->selectedItems();
 	if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
 		RecipeListItem * recipe_it = ( RecipeListItem* )items.at(0);
 		database->loadRecipe( recipe, RecipeDB::All, recipe_it->recipeID() );

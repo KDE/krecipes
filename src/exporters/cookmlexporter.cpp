@@ -87,7 +87,7 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		picbin_tag.setAttribute( "format", "JPG" );
 
 		QByteArray data;
-		QBuffer buffer( data );
+		QBuffer buffer( &data );
 		buffer.open( QIODevice::WriteOnly );
 		QImageIO iio( &buffer, "JPEG" );
 		iio.setImage( ( *recipe_it ).photo.convertToImage() );

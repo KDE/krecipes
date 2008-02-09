@@ -128,7 +128,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		if ( !( *recipe_it ).photo.isNull() ) {
 			xml += "<pic format=\"JPEG\" id=\"1\"><![CDATA["; //fixed id until we implement multiple photos ability
 			QByteArray data;
-			QBuffer buffer( data );
+			QBuffer buffer( &data );
 			buffer.open( QIODevice::WriteOnly );
 			QImageIO iio( &buffer, "JPEG" );
 			iio.setImage( ( *recipe_it ).photo.convertToImage() );

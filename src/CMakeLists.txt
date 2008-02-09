@@ -85,8 +85,8 @@ set(krecipesdialogs_SRCS
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
    dialogs/dietwizarddialog.cpp
-   dialogs/recipeinputdialog.cpp
-   dialogs/recipeviewdialog.cpp
+   #dialogs/recipeinputdialog.cpp
+   #dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
    dialogs/ingredientsdialog.cpp
    dialogs/selectunitdialog.cpp
@@ -127,13 +127,13 @@ set(krecipesdialogs_SRCS
 ############# exporters ##############
 
 set (krecipesexporters_SRCS 
-   exporters/kreexporter.cpp
-   exporters/baseexporter.cpp
-   exporters/cookmlexporter.cpp
+   #exporters/kreexporter.cpp
+   #exporters/baseexporter.cpp
+   #exporters/cookmlexporter.cpp
    exporters/recipemlexporter.cpp
    exporters/mmfexporter.cpp
-   exporters/htmlexporter.cpp
-   exporters/plaintextexporter.cpp
+   #exporters/htmlexporter.cpp
+   #exporters/plaintextexporter.cpp
    exporters/rezkonvexporter.cpp
    exporters/htmlbookexporter.cpp
    exporters/xsltexporter.cpp)
@@ -192,7 +192,7 @@ set(krecipes_SRCS
 
 
 
-kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}  ${krecipesdialogs_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS})
+kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS})
 
 target_link_libraries(krecipes  ${KDE4_KDECORE_LIBS} ${KDE4_KHTML_LIBS} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY})
 
