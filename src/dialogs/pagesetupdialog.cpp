@@ -57,10 +57,10 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	toolbar->addAction( KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) );
 
 
-	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ), "frame-edit" );
+	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ) );
 	shown_items->setDelayed( false );
 	shown_items_popup = shown_items->popupMenu();
-	shown_items_popup->insertTitle( i18n( "Show Items" ) );
+	shown_items_popup->addTitle( i18n( "Show Items" ) );
 	toolbar->addAction( shown_items );
 
 	layout->addWidget( toolbar );

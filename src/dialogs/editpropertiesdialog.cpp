@@ -101,25 +101,25 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 {
 	this->setObjectName( "EditPropertiesDialog" );
 	this->setModal( true );
-	this-setButtons( KDialog::Ok );
+	this->setButtons( KDialog::Ok );
 	this->setDefaultButton( KDialog::Ok );
 
 	// Initialize internal variables
 	perUnitListBack = new ElementList;
 	db = database;
 
-	KVBox *wholePage = new KVBox( this ); 
+	KVBox *wholePage = new KVBox( this );
 	setMainWidget( wholePage );
 	QWidget *page = new QWidget(wholePage);
 
-	EditPropertiesDialogLayout = new Q3VBoxLayout( page, 11, 6, "EditPropertiesDialogLayout"); 
+	EditPropertiesDialogLayout = new Q3VBoxLayout( page, 11, 6, "EditPropertiesDialogLayout");
 
 	infoLabel = new QLabel( page, "infoLabel" );
 	EditPropertiesDialogLayout->addWidget( infoLabel );
 
-	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9"); 
+	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9");
 
-	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8"); 
+	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8");
 
 	usdaListView = new KreListView( page, QString::null, page, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
@@ -127,16 +127,16 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	usdaListView->listView()->addColumn( i18n( "Id" ) );
 	usdaListView->listView()->setAllColumnsShowFocus( true );
 	loadDataFromFile();
-	
+
 	layout8->addWidget( usdaListView );
 	layout9->addLayout( layout8 );
 
 	loadButton = new QPushButton( page, "loadButton" );
 	layout9->addWidget( loadButton );
 
-	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7"); 
+	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7");
 
-	layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3"); 
+	layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
 
 	propertyLabel = new QLabel( page, "propertyLabel" );
 	layout3->addWidget( propertyLabel );
@@ -160,7 +160,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 
-	layout3_2 = new Q3HBoxLayout( 0, 0, 6, "layout3_2"); 
+	layout3_2 = new Q3HBoxLayout( 0, 0, 6, "layout3_2");
 
 	weightLabel = new QLabel( page, "weightLabel" );
 	layout3_2->addWidget( weightLabel );
@@ -250,7 +250,7 @@ void EditPropertiesDialog::removeWeight()
 {
 	Q3ListViewItem *it = weightListView->selectedItem();
 	if ( it ) {
-			switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString::null, KStandardGuiItem::cont(), "DeleteIngredientWeight") ) {
+            switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
 		case KMessageBox::Continue:
 			db->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
 			delete it;
@@ -270,7 +270,7 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEditDialog.setObjectName( "WeightAmountEdit" );
 		amountEditDialog.setModal( false );
 		amountEditDialog.setCaption( i18n("Enter amount") );
-		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok ); 
+		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok );
 		amountEditDialog.setDefaultButton( KDialog::Ok );
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
@@ -297,7 +297,7 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEditDialog.setObjectName( "PerAmountEdit" );
 		amountEditDialog.setModal( false );
 		amountEditDialog.setCaption( i18n("Enter amount") );
-		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok ); 
+		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok );
 		amountEditDialog.setDefaultButton( KDialog::Ok );
 
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
@@ -522,9 +522,10 @@ void EditPropertiesDialog::loadUSDAData()
 		USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
 		USDA::UnitDataList unit_data_list =  USDA::loadUnits();
 
-
+                //PORT to KDE4
+                /*
 		Q3ValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.begin();
-		for ( QStringList::const_iterator it = data.at( 2 ); propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
+		for ( QList<QString>::const_iterator it = data[ 2 ]; propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
 			int property_id = property_list.findByName( (*propertyIt).name );
 			if ( property_id == -1 ) {
 				db->addProperty( (*propertyIt).name, (*propertyIt).unit );
@@ -538,7 +539,7 @@ void EditPropertiesDialog::loadUSDAData()
 			else
 				db->addPropertyToIngredient( ingredientID, property_id, amount, grams_id );
 		}
-
+                */
 		int i = 2 + property_data_list.count();
 
 		int i_initial = i;
