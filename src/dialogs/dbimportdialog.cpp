@@ -39,12 +39,18 @@
 #include <knuminput.h>
 
 DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
-		: KDialog( parent, name, true, i18n( "Database Import" ),
-		    KDialog::Ok | KDialog::Cancel, KDialog::Ok )
+		: KDialog( parent )
 {
-	setButtonBoxOrientation( Vertical );
+	this->setObjectName( name );
+	this->setModal( true );
+	this->setButtons( KDialog::Ok | KDialog::Cancel );
+	this->setDefaultButton( KDialog::Ok  );
+	this->setCaption( i18n( "Database Import" ) );
 
-	KHBox *page = makeHBoxMainWidget();
+	setButtonBoxOrientation( Qt::Vertical );
+
+	KHBox *page = new KHBox( this );
+	setMainWidget( page ); 
 
 	dbButtonGroup = new Q3ButtonGroup( page, "dbButtonGroup" );
 	dbButtonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 4, ( QSizePolicy::SizeType ) 5, 0, 0, dbButtonGroup->sizePolicy().hasHeightForWidth() ) );
@@ -72,8 +78,8 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
-	sqliteDBRequester = new KUrlRequester( sqlitePage, "sqliteDBRequester" );
-	sqliteDBRequester->setShowLocalProtocol( false );
+	sqliteDBRequester = new KUrlRequester( sqlitePage );
+	sqliteDBRequester->setObjectName( "sqliteDBRequester" );
 	serverPageLayout_2->addWidget( sqliteDBRequester );
 
 	QSpacerItem *vSpacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -102,8 +108,9 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	passwordLabel = new QLabel( serverPage, "passwordLabel" );
 	layout5->addWidget( passwordLabel, 2, 0 );
 
-	portEdit = new KIntNumInput( serverPage, "portEdit" );
-	portEdit->setMinValue(0);
+	portEdit = new KIntNumInput( serverPage );
+	portEdit->setObjectName( "portEdit" );
+	portEdit->setMinimum(0);
 	portEdit->setValue(0);
 	layout5->addWidget( portEdit, 3, 1 );
 	portLabel = new QLabel( serverPage, "portLabel" );

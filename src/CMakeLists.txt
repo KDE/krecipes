@@ -129,7 +129,7 @@ set(krecipesdialogs_SRCS
 set (krecipesexporters_SRCS 
    exporters/kreexporter.cpp
    #exporters/baseexporter.cpp
-   #exporters/cookmlexporter.cpp
+   exporters/cookmlexporter.cpp
    exporters/recipemlexporter.cpp
    exporters/mmfexporter.cpp
    exporters/htmlexporter.cpp
