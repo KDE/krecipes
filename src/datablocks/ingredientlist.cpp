@@ -51,7 +51,7 @@ bool IngredientList::contains( const Ingredient &ing, bool compareAmount, Recipe
 
 bool IngredientList::containsSubSet( IngredientList &il, IngredientList &missing, bool compareAmount, RecipeDB *database )
 {
-	missing.empty();
+	missing.clear();
 	bool contained = true;
 	IngredientList::const_iterator it;
 
@@ -88,11 +88,6 @@ bool IngredientList::containsAny( const IngredientList &list, bool compareAmount
 	}
 
 	return false;
-}
-
-void IngredientList::empty( void )
-{
-	clear();
 }
 
 int IngredientList::find( int id ) const // Search by id (which uses search by item, with comparison defined on header)

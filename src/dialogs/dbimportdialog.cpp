@@ -47,7 +47,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	this->setDefaultButton( KDialog::Ok  );
 	this->setCaption( i18n( "Database Import" ) );
 
-	setButtonBoxOrientation( Qt::Vertical );
+	setButtonsOrientation( Qt::Vertical );
 
 	KHBox *page = new KHBox( this );
 	setMainWidget( page ); 
@@ -224,7 +224,7 @@ void DBImportDialog::serverParams( QString &host, QString &user, QString &pass, 
 
 QString DBImportDialog::dbFile() const
 {
-	return sqliteDBRequester->url();
+	return sqliteDBRequester->url().path();
 }
 
 #include "dbimportdialog.moc"

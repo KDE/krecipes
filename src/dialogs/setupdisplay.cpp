@@ -420,7 +420,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	
 	delete popup;
 	popup = new KMenu( view() );
-	popup->insertTitle( item->name );
+	popup->addTitle( item->name );
 
 	unsigned int properties = 0;
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {

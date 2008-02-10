@@ -115,13 +115,13 @@ bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &
 
 	KParts::OpenUrlArguments args (recipeView->browserExtension()->urlArgs());
 	args.reload=true; // Don't use the cache
-	recipeView->browserExtension()->setURLArgs(args);
+	recipeView->browserExtension()->setUrlArgs(args);
 
 	KUrl url;
 	url.setPath( tmp_filename + ".html" );
-	recipeView->openURL( url );
+	recipeView->openUrl( url );
 	recipeView->show();
-	kDebug() << "Opening URL: " << url.htmlURL() << endl;
+	kDebug() << "Opening URL: " << url.htmlUrl() << endl;
 
 	delete progress_dialog;
 	return true;

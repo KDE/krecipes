@@ -22,7 +22,7 @@
 #include <kiconloader.h>
 #include <kvbox.h>
 #include <KStandardGuiItem>
-
+#include <q3tl.h>
 
 ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const IngredientList &ingredientList )
 		: KDialog( parent )
@@ -47,7 +47,7 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 
 	//---------- Sort the list --------
 	IngredientList list_copy = ingredientList;
-	qSort( list_copy );
+	qHeapSort( list_copy );
 
 	//---------- Load  the list --------
 	display( list_copy );

@@ -37,7 +37,6 @@ public:
 
 	void move( int index1, int index2 );
 	void move( int index1, int count, int index2 );
-	void empty( void );
 	int find( int id ) const;
 	Ingredient findByName( const QString & ) const;
 	Ingredient findByName( const QRegExp & ) const;
