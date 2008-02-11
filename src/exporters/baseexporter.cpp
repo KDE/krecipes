@@ -23,6 +23,7 @@
 #include <kmessagebox.h>
 #include <ktar.h>
 #include <kstandarddirs.h>
+#include <KComponentData>
 
 #include "backends/recipedb.h"
 
@@ -141,7 +142,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 				break;
 
 			if ( m_progress_dlg ) {
-				m_progress_dlg->progressBar()->advance( progressInterval() );
+				m_progress_dlg->progressBar()->setValue(m_progress_dlg->progressBar()->value() + progressInterval() );
 				kapp->processEvents();
 			}
 		}
@@ -165,7 +166,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 QString BaseExporter::krecipes_version() const
 {
-	KInstance * this_instance = KGlobal::instance();
+	KComponentData * this_instance = KGlobal::mainComponent();
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData() ->version();
 

@@ -22,6 +22,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3VBoxLayout>
+#include <q3tl.h>
 
 #include <khtmlview.h>
 #include <kapplication.h>
@@ -45,6 +46,7 @@
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent ), m_configEntry(configEntry)
 {
+	KIconLoader *il = KIconLoader::global(); 
 
 	Q3VBoxLayout * layout = new Q3VBoxLayout( this );
 
@@ -80,8 +82,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	layout->addWidget( viewBox );
 
 	Q3HBox *buttonsBox = new Q3HBox( this );
-	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIcon::Small ), i18n( "Save and Close" ), buttonsBox );
-	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIcon::Small ), i18n( "&Cancel" ), buttonsBox );
+	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIconLoader::Small ), i18n( "Save and Close" ), buttonsBox );
+	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIconLoader::Small ), i18n( "&Cancel" ), buttonsBox );
 	layout->addWidget( buttonsBox );
 
 	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );
@@ -161,7 +163,7 @@ void PageSetupDialog::initShownItems()
 		nameList << it.key()->name;
 		nameMap.insert( it.key()->name, it.key() );
 	}
-	qSort( nameList );
+	qHeapSort( nameList );
 
 	for ( Q3ValueList<QString>::const_iterator it = nameList.begin(); it != nameList.end(); ++it ) {
 		KreDisplayItem *item = nameMap[*it];
