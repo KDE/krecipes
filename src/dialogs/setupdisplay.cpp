@@ -39,6 +39,8 @@
 //Added by qt3to4:
 #include <Q3PopupMenu>
 #include <Q3ActionGroup>
+#include <Q3Action>
+#include <QTextDocument>
 
 #include "datablocks/mixednumber.h"
 #include "dialogs/borderdialog.h"
@@ -162,13 +164,17 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 
 	KUrl url;
 	url.setPath( tmp_filename + ".html" );
-	kDebug() << "Opening URL: " << url.htmlURL() << endl;
+	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) << endl;
 
-	KParts::URLArgs args (browserExtension()->urlArgs());
-	args.reload=true; // Don't use the cache
-	browserExtension()->setURLArgs(args);
+	//KDE4 port
+	KParts::OpenUrlArguments argsUrl ( arguments() ); 
+	argsUrl.setReload( true ); // Don't use the cache
+	setArguments( argsUrl );
+	
+	KParts::BrowserArguments args;
+	browserExtension()->setBrowserArguments(args);
 
-	openURL( url );
+	openUrl( url );
 }
 
 void SetupDisplay::reload()
@@ -184,8 +190,9 @@ void SetupDisplay::loadTemplate( const QString &filename )
 	has_changes = storeChangedState; //saveLayout() sets changes to false
 	
 	loadHTMLView( filename, tmpFile.name() );
-
-	tmpFile.unlink();
+	
+	//KDE4 port
+	//tmpFile.unlink();
 
 	m_activeTemplate = filename;
 }
@@ -439,7 +446,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
 
 	if ( properties & Font )
-		popup->insertItem( il->loadIconSet( "text", KIcon::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
+		popup->insertItem( il->loadIconSet( "text", KIconLoader::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
 
 	if ( properties & Visibility ) {
 		int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
@@ -452,9 +459,9 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		Q3ActionGroup *alignment_actions = new Q3ActionGroup( this );
 		alignment_actions->setExclusive( true );
 
-		QAction *c_action = new QAction( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
-		QAction *l_action = new QAction( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
-		QAction *r_action = new QAction( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+		Q3Action *c_action = new Q3Action( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
+		Q3Action *l_action = new Q3Action( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
+		Q3Action *r_action = new Q3Action( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
 
 		int align = item->alignment;
 		if ( align & Qt::AlignHCenter )

@@ -17,6 +17,7 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QTextDocument>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -113,15 +114,19 @@ bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &
 	delete recipeView;              // Temporary workaround
 	recipeView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
 
-	KParts::OpenUrlArguments args (recipeView->browserExtension()->urlArgs());
-	args.reload=true; // Don't use the cache
-	recipeView->browserExtension()->setUrlArgs(args);
+	//KDE4 port
+	KParts::OpenUrlArguments argsUrl (recipeView->arguments());
+	argsUrl.setReload( true ); // Don't use the cache
+	recipeView->setArguments( argsUrl );
+	
+	KParts::BrowserArguments args;
+	recipeView->browserExtension()->setBrowserArguments(args);
 
 	KUrl url;
 	url.setPath( tmp_filename + ".html" );
 	recipeView->openUrl( url );
 	recipeView->show();
-	kDebug() << "Opening URL: " << url.htmlUrl() << endl;
+	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) << endl;
 
 	delete progress_dialog;
 	return true;

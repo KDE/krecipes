@@ -86,7 +86,7 @@ set(krecipesdialogs_SRCS
    dialogs/recipeimportdialog.cpp
    dialogs/dietwizarddialog.cpp
    #dialogs/recipeinputdialog.cpp
-   #dialogs/recipeviewdialog.cpp
+   dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
    dialogs/ingredientsdialog.cpp
    dialogs/selectunitdialog.cpp
@@ -112,7 +112,7 @@ set(krecipesdialogs_SRCS
    #dialogs/pagesetupdialog.cpp
    dialogs/dbimportdialog.cpp
    dialogs/createunitdialog.cpp
-   #dialogs/setupdisplay.cpp
+   dialogs/setupdisplay.cpp
    dialogs/ingredientparserdialog.cpp
    dialogs/ingredientgroupsdialog.cpp
    dialogs/editratingdialog.cpp

@@ -110,7 +110,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 			sourcePhoto = pm_scaled; // to save scaled later on
 		}
 		else {
-			setPixmap( image );
+			setPixmap( QPixmap::fromImage( image ) );
 			sourcePhoto = image;
 		}
 
@@ -390,12 +390,17 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
 	updateGuiItem.setIconSet( il->loadIconSet( "view-refresh", KIconLoader::NoGroup ) );
-	propertyStatusDialog = new KDialog( KDialog::Swallow, i18n("Property details"),
-		KDialog::Close | KDialog::User1 | KDialog::Help,
-		KDialog::Close, this, "propertyStatusDialog", false, false,
-		updateGuiItem
-	);
+	
+	propertyStatusDialog = new KDialog( this ); 
+	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
+	propertyStatusDialog->setModal( false );
+	propertyStatusDialog->showButtonSeparator( false );
+	propertyStatusDialog->setCaption( i18n("Property details") );
+	propertyStatusDialog->setButtons( KDialog::Close | KDialog::User1 | KDialog::Help );
+	propertyStatusDialog->setDefaultButton( KDialog::Close );
+	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
 	propertyStatusDialog->setHelp("property-status");
+	
 	statusTextView = new Q3TextBrowser(0);
 	statusTextView->setReadOnly(true);
 	propertyStatusDialog->setMainWidget( statusTextView );
@@ -417,7 +422,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	instructionsLayout->addWidget( instructionsEdit );
 
 	spellCheckButton = new QToolButton( instructionsTab );
-	spellCheckButton->setIconSet( il->loadIconSet( "tools-check-spelling", KIcon::Small ) );
+	spellCheckButton->setIconSet( il->loadIconSet( "tools-check-spelling", KIconLoader::Small ) );
 	QToolTip::add
 		( spellCheckButton, i18n( "Check spelling" ) );
 	instructionsLayout->addWidget( spellCheckButton );
@@ -449,14 +454,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	functionsBox->setFrameStyle( Q3Frame::NoFrame );
 
 	saveButton = new QToolButton( functionsBox );
-	saveButton->setIconSet( il->loadIconSet( "document-save", KIcon::Small ) );
+	saveButton->setIconSet( il->loadIconSet( "document-save", KIconLoader::Small ) );
 	saveButton->setEnabled( false );
 	showButton = new QToolButton( functionsBox );
-	showButton->setIconSet( il->loadIconSet( "zoom-original", KIcon::Small ) );
+	showButton->setIconSet( il->loadIconSet( "zoom-original", KIconLoader::Small ) );
 	closeButton = new QToolButton( functionsBox );
-	closeButton->setIconSet( il->loadIconSet( "window-close", KIcon::Small ) );
+	closeButton->setIconSet( il->loadIconSet( "window-close", KIconLoader::Small ) );
 	resizeButton = new QToolButton( functionsBox );
-	resizeButton->setIconSet( il->loadIconSet( "arrow-up-double", KIcon::Small ) ); //TODO: give me an icon :)
+	resizeButton->setIconSet( il->loadIconSet( "arrow-up-double", KIconLoader::Small ) ); //TODO: give me an icon :)
 
 	saveButton->setTextLabel( i18n( "Save recipe" ), true );
 	saveButton->setUsesTextLabel( true );
@@ -471,7 +476,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 	// Dialog design
 	tabWidget->resize( size().expandedTo( minimumSizeHint() ) );
-	clearWState( WState_Polished );
+	//KDE4 port
+	//clearWState( WState_Polished );
 
 	// Initialize internal data
 	unsavedChanges = false; // Indicates if there's something not saved yet.
@@ -682,7 +688,7 @@ void RecipeInputDialog::reload( void )
 void RecipeInputDialog::changePhoto( void )
 {
 	// standard filedialog
-	KUrl url = KFileDialog::getOpenUrl( QString::null, QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
+	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
 
 	QString filename;
 	if (!url.isLocalFile()) {
