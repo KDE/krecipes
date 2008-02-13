@@ -59,7 +59,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	toolbar->addAction( KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) );
 
 
-	KToolBarPopupAction *shown_items = new KToolBarPopupAction( i18n( "Items Shown" ) );
+	//KDE4 port do the last arguments of the KToolBarPopupAction and line 67 duplicate information ? 
+	KToolBarPopupAction *shown_items = new KToolBarPopupAction( KIcon(), i18n( "Items Shown" ), toolbar);
 	shown_items->setDelayed( false );
 	shown_items_popup = shown_items->popupMenu();
 	shown_items_popup->addTitle( i18n( "Show Items" ) );

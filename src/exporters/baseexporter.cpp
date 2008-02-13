@@ -156,7 +156,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 			QFileInfo fi( file->name() );
 			QByteArray data = file->readAll();
-			tar_file->writeFile( fi.fileName(), fi.owner(), fi.group(), data.size(), data );
+			tar_file->writeFile( fi.fileName(), fi.owner(), fi.group(), data, data.size() );
 			tar_file->close();
 		}
 
@@ -166,7 +166,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 QString BaseExporter::krecipes_version() const
 {
-	KComponentData * this_instance = KGlobal::mainComponent();
+	const KComponentData * this_instance = &KGlobal::mainComponent();
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData() ->version();
 

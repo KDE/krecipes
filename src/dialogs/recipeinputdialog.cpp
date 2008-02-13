@@ -41,7 +41,7 @@
 #include <QDropEvent>
 
 #include <kapplication.h>
-#include <k3completionbox.h>
+#include <kcompletionbox.h>
 #include <sonnet/speller.h>
 #include <kurl.h>
 #include <kfiledialog.h>
@@ -68,7 +68,7 @@
 #include "widgets/fractioninput.h"
 #include "widgets/kretextedit.h"
 #include "widgets/inglistviewitem.h"
-#include "widgets/ratingdisplaywidget.h"
+#include "widgets/ui_ratingdisplaywidget.h"
 #include "widgets/kwidgetlistbox.h"
 #include "widgets/ingredientinputwidget.h"
 #include "image.h" //Initializes default photo
@@ -389,7 +389,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
-	updateGuiItem.setIconSet( il->loadIconSet( "view-refresh", KIconLoader::NoGroup ) );
+	updateGuiItem.setIcon( KIcon(il->loadIconSet( "view-refresh", KIconLoader::NoGroup )) );
 	
 	propertyStatusDialog = new KDialog( this ); 
 	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
@@ -668,7 +668,7 @@ void RecipeInputDialog::reload( void )
 
 	// Show ratings
 	for ( RatingList::iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
-		RatingDisplayWidget *item = new RatingDisplayWidget;
+		Ui_RatingDisplayWidget *item = new Ui_RatingDisplayWidget;
 		item->rating_it = rating_it;
 		addRating(*rating_it,item);
 		ratingListDisplayWidget->insertItem(item);
@@ -1371,7 +1371,7 @@ void RecipeInputDialog::slotAddRating()
 			(*rc_it).id = criteria_id;
 		}
 
-		RatingDisplayWidget *item = new RatingDisplayWidget;
+		Ui_RatingDisplayWidget *item = new Ui_RatingDisplayWidget;
 		item->rating_it = loadedRecipe->ratingList.append(r);
 		addRating(r,item);
 		ratingListDisplayWidget->insertItem(item,0);
@@ -1379,7 +1379,7 @@ void RecipeInputDialog::slotAddRating()
 	}
 }
 
-void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
+void RecipeInputDialog::addRating( const Rating &rating, Ui_RatingDisplayWidget *item )
 {
 	int average = qRound(rating.average());
 	if ( average >= 0 )
@@ -1418,7 +1418,7 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 
 void RecipeInputDialog::slotEditRating()
 {
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+	Ui_RatingDisplayWidget *sender = (Ui_RatingDisplayWidget*)(QObject::sender()->parent());
 
 	ElementList criteriaList;
 	database->loadRatingCriterion(&criteriaList);
@@ -1444,7 +1444,7 @@ void RecipeInputDialog::slotEditRating()
 
 void RecipeInputDialog::slotRemoveRating()
 {
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+	Ui_RatingDisplayWidget *sender = (Ui_RatingDisplayWidget*)(QObject::sender()->parent());
 	loadedRecipe->ratingList.remove(sender->rating_it);
 
 	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)

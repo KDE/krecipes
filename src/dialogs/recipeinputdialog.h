@@ -56,7 +56,7 @@ class RecipeDB;
 class FractionInput;
 class Ingredient;
 class Rating;
-class RatingDisplayWidget;
+class Ui_RatingDisplayWidget;
 class IngredientInputWidget;
 class ClickableLed;
 
@@ -149,7 +149,7 @@ private:
 	void showCategories( void );
 	void showAuthors( void );
 	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
-	void addRating( const Rating &rating, RatingDisplayWidget *item );
+	void addRating( const Rating &rating, Ui_RatingDisplayWidget *item );
 	QString statusMessage() const;
 	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
 

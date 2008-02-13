@@ -1,5 +1,7 @@
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include(FindLibXml2)
+
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR})
 
 ########### QT3Support ###############
 
@@ -109,7 +111,7 @@ set(krecipesdialogs_SRCS
    dialogs/createcategorydialog.cpp
    dialogs/borderdialog.cpp
    dialogs/refineshoppinglistdialog.cpp
-   #dialogs/pagesetupdialog.cpp
+   dialogs/pagesetupdialog.cpp
    dialogs/dbimportdialog.cpp
    dialogs/createunitdialog.cpp
    dialogs/setupdisplay.cpp
@@ -128,7 +130,7 @@ set(krecipesdialogs_SRCS
 
 set (krecipesexporters_SRCS 
    exporters/kreexporter.cpp
-   #exporters/baseexporter.cpp
+   exporters/baseexporter.cpp
    exporters/cookmlexporter.cpp
    exporters/recipemlexporter.cpp
    exporters/mmfexporter.cpp
@@ -136,7 +138,7 @@ set (krecipesexporters_SRCS
    exporters/plaintextexporter.cpp
    exporters/rezkonvexporter.cpp
    exporters/htmlbookexporter.cpp
-   #exporters/xsltexporter.cpp
+   exporters/xsltexporter.cpp
    )
 
 

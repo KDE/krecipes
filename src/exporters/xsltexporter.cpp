@@ -71,23 +71,22 @@ char* i18n_strings[] = {
 XSLTExporter::XSLTExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup( "Page Setup" );
+	KConfigGroup config = KGlobal::config()->group( "Page Setup" );
 
 	//let's do everything we can to be sure at least some layout is loaded
-	QString template_filename = config->readEntry( "Template", locate( "appdata", "layouts/Default.xsl" ) );
+	QString template_filename = config.readEntry( "Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename )
      || template_filename.endsWith(".template") ) //handle the transition to xslt
-		template_filename = locate( "appdata", "layouts/Default.xsl" );
+		template_filename = KStandardDirs::locate( "appdata", "layouts/Default.xsl" );
 
 	kDebug() << "Using template file: " << template_filename << endl;
 
 	setTemplate( template_filename );
 
 	//let's do everything we can to be sure at least some layout is loaded
-	m_layoutFilename = config->readEntry( "Layout", locate( "appdata", "layouts/None.klo" ) );
+	m_layoutFilename = config.readEntry( "Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 	if ( m_layoutFilename.isEmpty() || !QFile::exists( m_layoutFilename ) )
-		m_layoutFilename = locate( "appdata", "layouts/None.klo" );
+		m_layoutFilename = KStandardDirs::locate( "appdata", "layouts/None.klo" );
 }
 
 XSLTExporter::~XSLTExporter()
@@ -240,7 +239,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	}
 
 	//const char *filename = "/home/jason/svn/utils/krecipes/layouts/Default.xsl";
-	Q3CString filename = m_templateFilename.utf8();
+	QString filename = m_templateFilename.utf8();
 	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
 	if ( !xslt ) {
 		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>").arg(filename);
@@ -339,7 +338,7 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 		photo_name = QString::number(recipe.recipeID);
 	}
 
-	QPixmap pm = image;//image.smoothScale( phwidth, 0, QImage::ScaleMax );
+	QPixmap pm = QPixmap::fromImage( image );//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
 	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
