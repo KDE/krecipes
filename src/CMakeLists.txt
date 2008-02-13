@@ -21,15 +21,16 @@ MESSAGE(STATUS "MYSQL_FOUND :${MYSQL_FOUND}")
 MESSAGE(STATUS "POSTGRESQL_FOUND :${POSTGRESQL_FOUND}")
 
 if ( SQLITE_FOUND )
-   #set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
+   include_directories(${SQLITE_INCLUDE_DIR})
+   set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
 endif ( SQLITE_FOUND )
 
 if ( MYSQL_FOUND )
-   #set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)
+   set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)
 endif ( MYSQL_FOUND )
 
 if ( POSTGRESQL_FOUND )
-   #set(postgresql_SRCS backends/PostgreSQL/psqlrecipedb.cpp )
+   set(postgresql_SRCS backends/PostgreSQL/psqlrecipedb.cpp )
 endif ( POSTGRESQL_FOUND )
 
 set(krecipesdbs_SRCS

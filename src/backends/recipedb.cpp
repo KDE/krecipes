@@ -39,11 +39,11 @@
 
 #include "importers/kreimporter.h"
 
-#if HAVE_POSTGRESQL
+#ifdef HAVE_POSTGRESQL
 #include "PostgreSQL/psqlrecipedb.h"
 #endif
 
-#if HAVE_MYSQL
+#ifdef HAVE_MYSQL
 #include "MySQL/mysqlrecipedb.h"
 #endif
 
@@ -124,12 +124,12 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 		database = new LiteRecipeDB( file );
 	}
 #endif //HAVE_SQLITE || HAVE_SQLITE3
-	#if HAVE_MYSQL
+	#ifdef HAVE_MYSQL
 	else if ( dbType == "MySQL" ) {
 		database = new MySQLRecipeDB( host, user, pass, dbname, port );
 	}
 #endif //HAVE_MYSQL
-	#if HAVE_POSTGRESQL
+	#ifdef HAVE_POSTGRESQL
 	else if ( dbType == "PostgreSQL" ) {
 		database = new PSqlRecipeDB( host, user, pass, dbname, port );
 	}
