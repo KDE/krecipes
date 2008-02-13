@@ -10,9 +10,7 @@
 ***************************************************************************/
 #include "setupwizard.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "config-krecipes.h"
 
 #include <unistd.h>
 #include <pwd.h>

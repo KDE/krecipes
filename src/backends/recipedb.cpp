@@ -13,9 +13,7 @@
 
 #include "backends/recipedb.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "config-krecipes.h"
 
 #include <kapplication.h>
 #include <kconfiggroup.h>

@@ -1,4 +1,5 @@
 
+
 include(FindLibXml2)
 find_package(Sqlite)
 find_package(PostgreSQL)
@@ -10,6 +11,8 @@ include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXM
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ############# backends ###############
+
+configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
 
 
 if ( SQLITE_FOUND )

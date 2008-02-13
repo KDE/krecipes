@@ -13,9 +13,7 @@
 #include <unistd.h> //for getuid()
 #include <pwd.h> //getpwuid()
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "config-krecipes.h"
 
 #include <qpushbutton.h>
 #include <q3buttongroup.h>

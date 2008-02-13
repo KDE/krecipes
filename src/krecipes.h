@@ -12,9 +12,7 @@
 #ifndef _KRECIPES_H_
 #define _KRECIPES_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <config-krecipes.h>
 
 #include <kapplication.h>
 #include <kaction.h>

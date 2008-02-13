@@ -11,9 +11,7 @@
 #ifndef PROFILING_H
 #define PROFILING_H
 
-#ifdef HAVE_CONFIG_H
-  #include "config.h"
-#endif
+#include "config-krecipes.h"
 
 #define KRECIPES_PROFILING
 

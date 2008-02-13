@@ -28,9 +28,7 @@
 
 #include <kdebug.h>
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "config-krecipes.h"
 #if HAVE_SQLITE
 #include <sqlite.h>
 #include <cstdlib>

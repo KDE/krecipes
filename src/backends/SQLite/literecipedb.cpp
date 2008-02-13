@@ -23,9 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "config-krecipes.h"
 
 #if HAVE_SQLITE3
 #include <sqlite3.h>
