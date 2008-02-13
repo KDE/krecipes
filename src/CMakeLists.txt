@@ -1,8 +1,9 @@
 
 include(FindLibXml2)
 find_package(Sqlite)
-
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR})
+find_package(PostgreSQL)
+find_package(MySQL)
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/)
 
 ########### QT3Support ###############
 
@@ -15,13 +16,13 @@ if ( SQLITE_FOUND )
    #set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
 endif ( SQLITE_FOUND )
 
-if ( link_lib_MYSQL )
-   add_subdirectory( backends/MySQL )
-endif ( link_lib_MYSQL )
+if ( MYSQL_FOUND )
+   #set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)
+endif ( MYSQL_FOUND )
 
-if ( link_lib_POSTGRESQL ) 
-   add_subdirectory( backends/PostgreSQL )
-endif ( link_lib_POSTGRESQL )
+if ( POSTGRESQL_FOUND )
+   #set(postgresql_SRCS backends/PostgreSQL/psqlrecipedb.cpp )
+endif ( POSTGRESQL_FOUND )
 
 set(krecipesdbs_SRCS
    backends/recipedb.cpp
@@ -196,7 +197,7 @@ set(krecipes_SRCS
 
 
 
-kde4_add_executable(krecipes ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
+kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
 
 target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} )
 
