@@ -1,6 +1,9 @@
 
 
 include(FindLibXml2)
+
+include(ConfigureChecks.cmake)
+
 find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
