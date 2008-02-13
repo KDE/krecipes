@@ -52,7 +52,7 @@ LiteRecipeDB::~LiteRecipeDB()
 int LiteRecipeDB::lastInsertID()
 {
 	int lastID = -1;
-	QSqlQuery query("SELECT lastInsertID()",database);
+	QSqlQuery query("SELECT lastInsertID()",*database);
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
@@ -69,9 +69,8 @@ QStringList LiteRecipeDB::backupCommand() const
 	QString binary = "sqlite3";
 	#endif
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	binary = config->readEntry( "SQLitePath", binary );
+	KConfigGroup config( KGlobal::config(), "Server" );
+	binary = config.readEntry( "SQLitePath", binary );
 
 	QStringList command;
 	command<<binary<<database->databaseName()<<".dump";
@@ -86,9 +85,8 @@ QStringList LiteRecipeDB::restoreCommand() const
 	QString binary = "sqlite3";
 	#endif
 
-	KConfig * config = KGlobal::config();
-	config->setGroup( "Server" );
-	binary = config->readEntry( "SQLitePath", binary );
+	KConfigGroup config( KGlobal::config(), "Server" );
+	binary = config.readEntry( "SQLitePath", binary );
 
 	QStringList command;
 	command<<binary<<database->databaseName();
@@ -204,7 +202,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		//===========add prep_method_id to ingredient_list table
 		//There's no ALTER command in SQLite, so we have to copy all data to a new table and then recreate the table with the prep_method_id
 		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);" );
-		QSqlQuery copyQuery( "SELECT recipe_id,ingredient_id,amount,unit_id,order_index FROM ingredient_list;", database );
+		QSqlQuery copyQuery( "SELECT recipe_id,ingredient_id,amount,unit_id,order_index FROM ingredient_list;", *database );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO ingredient_list_copy VALUES(%1,%2,%3,%4,%5);" )
@@ -535,7 +533,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
-				command = "INSERT INTO recipes VALUES('" 
+				command = "INSERT INTO recipes VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //title
 				          + "','" + escape( copyQuery.value( 2 ).toString() ) //persons, now yield_amount
@@ -565,7 +563,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
-				command = "INSERT INTO ingredient_list_copy VALUES('" 
+				command = "INSERT INTO ingredient_list_copy VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "','" + escape( copyQuery.value( 2 ).toString() )
@@ -587,7 +585,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
-				command = "INSERT INTO ingredient_list VALUES(" 
+				command = "INSERT INTO ingredient_list VALUES("
 				                  + QString("NULL")
 				          + ",'" + escape( copyQuery.value( 0 ).toString() )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
@@ -601,7 +599,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 				int prep_method_id = copyQuery.value( 5 ).toInt();
 				if ( prep_method_id != -1 ) {
-					command = "INSERT INTO prep_method_list VALUES('" 
+					command = "INSERT INTO prep_method_list VALUES('"
 							+ QString::number(lastInsertID())
 						+ "','" + QString::number(prep_method_id)
 						+ "','1" //order_index
@@ -653,7 +651,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 			QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 			while ( copyQuery.next() ) {
-				command = "INSERT INTO recipes VALUES('" 
+				command = "INSERT INTO recipes VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "','" + escape( copyQuery.value( 2 ).toString() )
@@ -680,13 +678,13 @@ void LiteRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*100) < 85 ) {
 		database->transaction();
 
-		QSqlQuery query( "SELECT id,photo FROM recipes", database );
-	
+		QSqlQuery query( "SELECT id,photo FROM recipes", *database );
+
 		if ( query.isActive() ) {
 			while ( query.next() ) {
 				QImage photo;
 				QString photoString = query.value(1).toString();
-	
+
 				// Decode the photo
 				uchar *photoArray = new uchar [ photoString.length() + 1 ];
 				memcpy( photoArray, photoString.toLatin1(), photoString.length() * sizeof( char ) );
@@ -720,7 +718,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
 
-		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", *database );
 
 		QString last;
 		int lastID;
@@ -791,7 +789,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				command = "INSERT INTO units VALUES('" 
+				command = "INSERT INTO units VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
 				          + "',NULL"                                         //name_abbrev
@@ -880,7 +878,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 					plural_abbrev.append("'");
 				}
 
-				command = "INSERT INTO units VALUES('" 
+				command = "INSERT INTO units VALUES('"
 				                  + escape( copyQuery.value( 0 ).toString() ) //id
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
 				          + "'," + name_abbrev //name_abbrev
