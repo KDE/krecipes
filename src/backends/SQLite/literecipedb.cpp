@@ -22,10 +22,11 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
-
+#include <KConfigGroup>
 #include "config-krecipes.h"
+#include <QImageWriter>
 
-#if HAVE_SQLITE3
+#ifdef HAVE_SQLITE3
 #include <sqlite3.h>
 #elif HAVE_SQLITE
 #include <sqlite.h>
@@ -63,7 +64,7 @@ int LiteRecipeDB::lastInsertID()
 
 QStringList LiteRecipeDB::backupCommand() const
 {
-	#if HAVE_SQLITE
+	#ifdef HAVE_SQLITE
 	QString binary = "sqlite";
 	#elif HAVE_SQLITE3
 	QString binary = "sqlite3";
@@ -79,7 +80,7 @@ QStringList LiteRecipeDB::backupCommand() const
 
 QStringList LiteRecipeDB::restoreCommand() const
 {
-	#if HAVE_SQLITE
+	#ifdef HAVE_SQLITE
 	QString binary = "sqlite";
 	#elif HAVE_SQLITE3
 	QString binary = "sqlite3";
@@ -696,11 +697,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 				delete[] photoArray;
 
 				QByteArray ba;
-				QBuffer buffer( ba );
+				QBuffer buffer( &ba );
 				buffer.open( QIODevice::WriteOnly );
-				QImageIO iio( &buffer, "JPEG" );
-				iio.setImage( photo );
-				iio.write();
+				QImageWriter iio( &buffer, "JPEG" );
+                                iio.write( photo );
 				//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 				storePhoto( query.value(0).toInt(), ba );
 
@@ -1018,13 +1018,13 @@ QString escape( const QString &s )
 
 	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 		// Escape using SQLite's function
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		char * escaped = sqlite_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #elif HAVE_SQLITE3
 		char * escaped = sqlite3_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #endif
 		s_escaped = escaped;
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		sqlite_freemem( escaped ); // free allocated memory
 #elif HAVE_SQLITE3
 		sqlite3_free( escaped ); // free allocated memory

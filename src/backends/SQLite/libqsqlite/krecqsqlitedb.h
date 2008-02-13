@@ -8,7 +8,7 @@
 *                                                                         *
 *    This code was originally developed by the opie project, on which     *
 *                    Martin Imobersteg based his work.                    *
-* This file is adds a small extension, necessary to perform some minimum  * 
+* This file is adds a small extension, necessary to perform some minimum  *
 * SQL actions                                                             *
 *                                                                         *
 *         (this project is different from that in qsqlite.sf.net)         *
@@ -26,7 +26,7 @@
 #include <qobject.h>
 
 #include "config-krecipes.h"
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 #include <sqlite.h>
 #elif HAVE_SQLITE3
 #include <sqlite3.h>
@@ -47,7 +47,7 @@ public:
 private:
 	static int call_back( void* res, int argc, char** argv, char** columns );
 
-	#if HAVE_SQLITE
+	#ifdef HAVE_SQLITE
 	static void lastInsertID(sqlite_func*,int,const char**);
 	sqlite *m_db;
 	#elif HAVE_SQLITE3

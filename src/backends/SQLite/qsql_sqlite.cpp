@@ -72,7 +72,7 @@ QVariant KreSQLiteResult::data( int field )
 		qWarning( "KreSQLiteResult::data: not a select statement" );
 		return QVariant();
 	}
-	
+
 	return QVariant(row.data(field));
 }
 
@@ -125,7 +125,7 @@ bool KreSQLiteResult::fetchFirst()
 	return true;
 }
 
-bool KreSQLiteResult::fetchLast() 
+bool KreSQLiteResult::fetchLast()
 {kDebug()<<"fetchlast"<<endl;
 	if ( isForwardOnly() ) { // fake this since MySQL can't seek on forward only queries
 		bool success = fetchNext(); // did we move at all?
@@ -190,13 +190,15 @@ bool KreSQLiteResult::reset(const QString& query)
 /////////////////////////////////////////////////////////
 
 KreSQLiteDriver::KreSQLiteDriver(QObject * parent, const char * name)
-    : QSqlDriver(parent, name ? name : QSQLITE_DRIVER_NAME)
+    : QSqlDriver(parent)
 {
+    setObjectName( name ? name : QSQLITE_DRIVER_NAME);
 }
 
 KreSQLiteDriver::KreSQLiteDriver(QSQLiteDB *connection, QObject *parent, const char *name)
-    : QSqlDriver(parent, name ? name : QSQLITE_DRIVER_NAME)
+    : QSqlDriver(parent)
 {
+    setObjectName(  name ? name : QSQLITE_DRIVER_NAME);
 	db = connection;
 	setOpen(true);
 	setOpenError(false);
@@ -227,10 +229,10 @@ bool KreSQLiteDriver::open(const QString & file, const QString &, const QString 
 {
 	if (isOpen())
 		close();
-	
+
 	if (file.isEmpty())
 		return false;
-	
+
 	db = new QSQLiteDB;
 	if ( !db->open(QFile::encodeName(file)) ) {
 		setLastError(QSqlError("Error to open database", 0, QSqlError::Connection));
@@ -263,12 +265,12 @@ bool KreSQLiteDriver::beginTransaction()
 {
 	if (!isOpen() || isOpenError())
 		return false;
-	
+
 	QSQLiteResult result = db->executeQuery( "BEGIN" );
 	int status = result.getStatus();
 	if (status == QSQLiteResult::Success)
 		return true;
-	
+
 	setLastError(QSqlError("Unable to begin transaction", result.getError(), QSqlError::Transaction, status));
 	return false;
 }
@@ -277,12 +279,12 @@ bool KreSQLiteDriver::commitTransaction()
 {
 	if (!isOpen() || isOpenError())
 		return false;
-	
+
 	QSQLiteResult result = db->executeQuery( "COMMIT" );
 	int status = result.getStatus();
 	if (status == QSQLiteResult::Success)
 		return true;
-	
+
 	setLastError(QSqlError("Unable to commit transaction", result.getError(), QSqlError::Transaction, status));
 	return false;
 }
@@ -291,12 +293,12 @@ bool KreSQLiteDriver::rollbackTransaction()
 {
 	if (!isOpen() || isOpenError())
 		return false;
-	
+
 	QSQLiteResult result = db->executeQuery( "ROLLBACK" );
 	int status = result.getStatus();
 	if (status == SQLITE_OK)
 		return true;
-	
+
 	setLastError(QSqlError("Unable to rollback transaction", result.getError(), QSqlError::Transaction, status));
 	return false;
 }
@@ -308,7 +310,7 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 		return res;
 
 	int type = typeName.toInt();
-	
+
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
 	#if (QT_VERSION-0 >= 0x030200)
@@ -321,20 +323,20 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 	#else
 		q.exec("SELECT name FROM sqlite_master WHERE type='table' OR type='view'");
 	#endif
-	
+
 	if (q.isActive()) {
 		while(q.next()) {
 			res.append(q.value(0).toString());
 		}
 	}
-	
+
 	#if (QT_VERSION-0 >= 0x030200)
 	if (type & (int)QSql::SystemTables) {
 		// there are no internal tables beside this one:
 		res.append("sqlite_master");
 	}
 	#endif
-	
+
 	return res;
 }
 
@@ -377,7 +379,7 @@ Q3SqlRecordInfo KreSQLiteDriver::recordInfo(const QString &tbl) const
 {
 	if (!isOpen())
 		return Q3SqlRecordInfo();
-	
+
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
 	q.exec("SELECT * FROM " + tbl + " LIMIT 1");
