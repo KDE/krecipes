@@ -1,5 +1,6 @@
 
 include(FindLibXml2)
+find_package(Sqlite)
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR})
 
@@ -10,9 +11,9 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 ############# backends ###############
 
 
-if ( link_lib_SQLITE )
-   add_subdirectory( backends/SQLite )
-endif ( link_lib_SQLITE )
+if ( SQLITE_FOUND )
+   #set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
+endif ( SQLITE_FOUND )
 
 if ( link_lib_MYSQL )
    add_subdirectory( backends/MySQL )
@@ -195,9 +196,10 @@ set(krecipes_SRCS
 
 
 
-kde4_add_executable(krecipes ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
+kde4_add_executable(krecipes ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
 
 target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} )
+
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 
