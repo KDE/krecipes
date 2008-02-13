@@ -2,8 +2,6 @@
 
 include(FindLibXml2)
 
-include(ConfigureChecks.cmake)
-
 find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
@@ -15,8 +13,12 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ############# backends ###############
 
-configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
 
+include(ConfigureChecks.cmake)
+configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
+MESSAGE(STATUS "SQLITE_FOUND :${SQLITE_FOUND}")
+MESSAGE(STATUS "MYSQL_FOUND :${MYSQL_FOUND}")
+MESSAGE(STATUS "POSTGRESQL_FOUND :${POSTGRESQL_FOUND}")
 
 if ( SQLITE_FOUND )
    #set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
