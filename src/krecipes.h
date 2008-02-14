@@ -79,7 +79,7 @@ private slots:
 	void fileExport();
 	void fileToClipboard();
 	void filePrint();
-	void optionsShowToolbar();
+	//void optionsShowToolbar();
 	void optionsShowStatusbar();
 	void optionsConfigureKeys();
 	void optionsConfigureToolbars();

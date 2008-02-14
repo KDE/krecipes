@@ -94,7 +94,7 @@ set(krecipesdialogs_SRCS
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
    dialogs/dietwizarddialog.cpp
-   #dialogs/recipeinputdialog.cpp
+   dialogs/recipeinputdialog.cpp
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
    dialogs/ingredientsdialog.cpp

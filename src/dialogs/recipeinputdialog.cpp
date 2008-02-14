@@ -51,6 +51,8 @@
 #include <kled.h>
 #include <kdialog.h>
 #include <kio/netaccess.h>
+#include <K3Spell>
+#include <K3SpellConfig>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -1273,8 +1275,8 @@ void RecipeInputDialog::showRecipe( void )
 void RecipeInputDialog::spellCheck( void )
 {
 	QString text = instructionsEdit->text();
-	KSpellConfig default_cfg( this );
-	KSpell::modalCheck( text, &default_cfg );
+	K3SpellConfig default_cfg( this );
+	K3Spell::modalCheck( text, &default_cfg );
 	KMessageBox::information( this, i18n( "Spell check complete." ) );
 
 	if ( text != instructionsEdit->text() )  //check if there were changes
