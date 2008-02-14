@@ -1,9 +1,10 @@
 include(FindLibXml2)
+include(FindLibXslt)
 
 find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/)
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/)
 
 ########### QT3Support ###############
 
@@ -203,7 +204,7 @@ set(krecipes_SRCS
 
 kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} )
+target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} )
 
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})

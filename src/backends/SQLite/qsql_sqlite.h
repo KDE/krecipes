@@ -34,15 +34,18 @@ public:
 			const QString&,
 			const QString&,
 			const QString&,
-			int );
+			int, 
+			const QString&);
 	void    close();
 	QSqlQuery createQuery() const;
+	QSqlResult* createResult () const;
 
 	bool beginTransaction();
 	bool commitTransaction();
 	bool rollbackTransaction();
 	QStringList tables(const QString &typeName) const;
 	QSqlIndex primaryIndex(const QString &tblname) const;
+	
 	//QSqlRecordInfo recordInfo(const QString &tbl) const;
 	//QSqlRecord record(const QString &tblname) const;
 	//QString formatValue( const QSqlField* field, bool trimStrings ) const;

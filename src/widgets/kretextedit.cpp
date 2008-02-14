@@ -125,7 +125,7 @@ void KreTextEdit::setCompletedText( const QString &txt )
 	completing = true;
 }
 
-void KreTextEdit::setCompletedItems( const QStringList &/*items*/ )
+void KreTextEdit::setCompletedItems( const QStringList &/*items*/ , bool)
 {}
 
 void KreTextEdit::tryCompletion()

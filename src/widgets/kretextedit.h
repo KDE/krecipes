@@ -30,7 +30,7 @@ public:
 	KreTextEdit( QWidget *parent );
 
 	virtual void setCompletedText( const QString &text );
-	virtual void setCompletedItems( const QStringList &items );
+	virtual void setCompletedItems( const QStringList &items , bool);
 
 public slots:
 	void addCompletionItem( const QString & );

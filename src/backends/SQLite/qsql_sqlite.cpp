@@ -225,7 +225,7 @@ bool KreSQLiteDriver::hasFeature(DriverFeature f) const
    SQLite dbs have no user name, passwords, hosts or ports.
    just file names.
 */
-bool KreSQLiteDriver::open(const QString & file, const QString &, const QString &, const QString &, int)
+bool KreSQLiteDriver::open(const QString & file, const QString &, const QString &, const QString &, int, const QString&) 
 {
 	if (isOpen())
 		close();
@@ -260,6 +260,12 @@ QSqlQuery KreSQLiteDriver::createQuery() const
 {
     return QSqlQuery(new KreSQLiteResult(this));
 }
+
+QSqlResult* KreSQLiteDriver::createResult() const
+{
+    return new KreSQLiteResult(this);
+}
+
 
 bool KreSQLiteDriver::beginTransaction()
 {
