@@ -38,10 +38,8 @@ class Q3HBox;
 class Q3GroupBox;
 
 class RecipeDB;
-class ElementList;
 class Recipe;
 class AdvancedSearchDialog;
-class CategoryTree;
 class RecipeFilter;
 class RecipeListView;
 class CategoryComboBox;

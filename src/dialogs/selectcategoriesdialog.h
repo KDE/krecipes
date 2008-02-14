@@ -21,8 +21,6 @@
 
 #include "datablocks/elementlist.h"
 
-class CategoryTree;
-class CategoryCheckListItem;
 class CategoryCheckListView;
 class RecipeDB;
 

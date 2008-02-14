@@ -18,7 +18,6 @@
 #include "datablocks/element.h"
 
 class RecipeDB;
-class ElementList;
 
 class PrepMethodComboBox : public KComboBox
 {

@@ -20,7 +20,6 @@
 class QTimer;
 
 class RecipeDB;
-class ElementList;
 
 class IngredientComboBox : public KComboBox
 {

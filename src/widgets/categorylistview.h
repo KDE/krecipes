@@ -22,7 +22,6 @@
 class KMenu;
 
 class RecipeDB;
-class CategoryTree;
 class CategoryCheckListView;
 
 #define CATEGORYCHECKLISTITEM_RTTI 1005

@@ -22,7 +22,6 @@
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
-class QPushButton;
 class Q3VBoxLayout;
 class Q3GroupBox;
 class Q3VBox;

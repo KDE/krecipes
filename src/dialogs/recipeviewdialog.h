@@ -21,7 +21,6 @@
 class RecipeDB;
 class Recipe;
 class KHTMLPart;
-class QPushButton;
 
 /**
 @author Unai Garro

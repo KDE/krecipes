@@ -26,7 +26,6 @@
 class KrecipesView;
 
 class KToggleAction;
-class KUrl;
 class KDialog;
 class ConversionDialog;
 

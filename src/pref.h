@@ -29,7 +29,6 @@ class PerformancePrefs;
 class KIntNumInput;
 class KLineEdit;
 class KUrlRequester;
-class KComboBox;
 
 class Q3ButtonGroup;
 class QCheckBox;

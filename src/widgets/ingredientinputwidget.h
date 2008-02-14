@@ -28,7 +28,6 @@ class QLabel;
 class Q3ButtonGroup;
 class Q3WidgetStack;
 class Q3GroupBox;
-class QRadioButton;
 class QCheckBox;
 
 class KComboBox;

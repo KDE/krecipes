@@ -23,7 +23,6 @@
 
 class K3ListView;
 
-class Q3ListViewItem;
 
 class Recipe;
 class CustomCheckListItem;

@@ -40,9 +40,6 @@
 
 class QTabWidget;
 class Q3TimeEdit;
-class QDragEvent;
-class Q3ButtonGroup;
-class Q3WidgetStack;
 class Q3TextEdit;
 
 class KreTextEdit;
@@ -51,7 +48,6 @@ class KDialog;
 
 class ImageDropLabel;
 class Recipe;
-class ElementList;
 class RecipeDB;
 class FractionInput;
 class Ingredient;

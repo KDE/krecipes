@@ -24,7 +24,6 @@
 #include "widgets/dblistviewbase.h"
 
 class RecipeDB;
-class CreateElementDialog;
 class IngredientGroupsDialog;
 
 class IngredientsDialog: public QWidget

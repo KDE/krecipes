@@ -21,8 +21,6 @@
 #include "baseexporter.h"
 #include "klomanager.h"
 
-class RecipeDB;
-class KProgress;
 
 /**
   * Exports a given recipe list as HTML using a given XSL

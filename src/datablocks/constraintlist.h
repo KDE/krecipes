@@ -20,7 +20,6 @@
 @author Unai Garro
 */
 
-class IngredientProperty;
 
 class Constraint
 {

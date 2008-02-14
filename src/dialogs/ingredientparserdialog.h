@@ -25,10 +25,8 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class QSpacerItem;
 class QLabel;
 class Q3TextEdit;
-class QLineEdit;
 class KPushButton;
 class K3ListView;
 class Q3ListViewItem;

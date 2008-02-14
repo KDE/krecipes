@@ -26,11 +26,9 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class QSpacerItem;
 class Q3GroupBox;
 class QLabel;
 class K3ListBox;
-class Q3ListBoxItem;
 class QSpinBox;
 class KHTMLPart;
 

@@ -35,7 +35,6 @@ class QSpinBox;
 class Q3TimeEdit;
 class KPushButton;
 class K3ListView;
-class Q3ListViewItem;
 class QRadioButton;
 class Q3ButtonGroup;
 

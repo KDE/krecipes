@@ -34,7 +34,6 @@
 class KreListView;
 class KIntSpinBox;
 class RecipeDB;
-class MixedNumber;
 
 /**
 @author Unai Garro

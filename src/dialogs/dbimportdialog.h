@@ -20,14 +20,12 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class QSpacerItem;
 class Q3ButtonGroup;
 class QRadioButton;
 class Q3WidgetStack;
 class QWidget;
 class QLineEdit;
 class QLabel;
-class QPushButton;
 
 class KUrlRequester;
 class KIntNumInput;

@@ -33,7 +33,6 @@
 
 // Local includes.
 
-class KFileItem;
 
 class ThumbBarItem;
 class ThumbBarViewPriv;

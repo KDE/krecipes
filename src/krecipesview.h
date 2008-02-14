@@ -49,7 +49,6 @@ class KreMenuButton;
 class IngredientMatcherDialog;
 class PanelDeco;
 class PropertiesDialog;
-class QPainter;
 class RecipeInputDialog;
 class RecipeViewDialog;
 class SelectRecipeDialog;

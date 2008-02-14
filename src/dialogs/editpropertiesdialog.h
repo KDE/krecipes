@@ -25,9 +25,7 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class QSpacerItem;
 class QLabel;
-class QLineEdit;
 class K3ListView;
 class Q3ListViewItem;
 class QPushButton;
@@ -35,13 +33,6 @@ class QPushButton;
 class RecipeDB;
 class KDoubleNumInput;
 class ElementList;
-class SelectUnitDialog;
-class CreateElementDialog;
-class IngredientPropertyList;
-class SelectPropertyDialog;
-class UnitsDialog;
-class IngredientGroupsDialog;
-class MixedNumber;
 class KreListView;
 
 class EditPropertiesDialog : public KDialog

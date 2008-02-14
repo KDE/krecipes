@@ -30,10 +30,8 @@ class FractionInput;
 class Q3ButtonGroup;
 class Q3Frame;
 class QLabel;
-class KIntNumInput;
 class KLineEdit;
 class QRadioButton;
-class QPushButton;
 
 /**
   *@author Jason Kivlighn

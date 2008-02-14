@@ -21,11 +21,7 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class QSpacerItem;
-class KComboBox;
 class QLabel;
-class KLineEdit;
-class QPushButton;
 
 class RecipeDB;
 class UnitComboBox;

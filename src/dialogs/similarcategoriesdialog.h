@@ -29,12 +29,10 @@ class QSpacerItem;
 class QSlider;
 class QLabel;
 class QPushButton;
-class Q3ListViewItem;
 
 class K3ListView;
 class KLineEdit;
 
-class RecipeDB;
 
 class SimilarCategoriesDialog : public QDialog
 {
