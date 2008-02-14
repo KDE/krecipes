@@ -206,6 +206,18 @@ kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${k
 
 target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} )
 
+if ( SQLITE_FOUND )
+   target_link_libraries(krecipes ${SQLITE_LIBRARIES})
+endif ( SQLITE_FOUND )
+
+if ( MYSQL_FOUND )
+   target_link_libraries(krecipes ${MYSQL_LIBRARIES})
+endif ( MYSQL_FOUND )
+
+if ( POSTGRESQL_FOUND )
+   target_link_libraries(krecipes ${POSTGRESQL_LIBRARIES})
+endif ( POSTGRESQL_FOUND )
+
 
 install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
 
