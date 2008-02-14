@@ -36,7 +36,7 @@
 
 #include "importers/baseimporter.h"
 #include "backends/recipedb.h"
-#include "krecipesiface.h"
+//#include "krecipesiface.h"
 
 class AuthorsDialog;
 class PrepMethodsDialog;
@@ -80,7 +80,8 @@ typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, Pr
 
 
 // Class KrecipesView
-class KrecipesView : public Q3VBox, virtual public KrecipesIface
+class KrecipesView : public Q3VBox
+//, virtual public KrecipesIface
 {
 	Q_OBJECT
 public:

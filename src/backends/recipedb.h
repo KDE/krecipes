@@ -22,7 +22,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-#include "krecipesdbiface.h"
+//#include "krecipesdbiface.h"
 
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
@@ -52,7 +52,8 @@ typedef struct
 }
 RecipeIngredientList;
 
-class RecipeDB: public QObject, virtual public KrecipesDBIface
+class RecipeDB: public QObject
+//, virtual public KrecipesDBIface
 {
 	Q_OBJECT
 
