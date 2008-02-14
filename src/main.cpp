@@ -28,13 +28,13 @@ static KCmdLineOptions options;
 int main( int argc, char **argv )
 {
 	options.add("convert-sqlite3", ki18n("Convert the current SQLite 2.x database to SQLite 3 and exit") , 0 );
-	options.add( 0, ki18n(""), 0 );    
+	options.add( 0, KLocalizedString(), 0 );    
 
 
-	KAboutData about( "krecipes", 0, ki18n( "Krecipes" ), version, ki18n( "The KDE Cookbook" ), KAboutData::License_GPL, ki18n( "(C) 2003 Unai Garro\n(C) 2004-2006 Jason Kivlighn\n\n___________\n\n\nThis product is RecipeML compatible.\n You can get more information about this file format in:\n http://www.formatdata.com/recipeml" ), ki18n(""), "http://krecipes.sourceforge.net/", "jkivlighn@gmail.com" );
-	about.addAuthor( ki18n("Unai Garro"), ki18n(""), "ugarro@users.sourceforge.net", 0 );
-	about.addAuthor( ki18n("Jason Kivlighn"), ki18n(""), "jkivlighn@gmail.com", 0 );
-	about.addAuthor( ki18n("Cyril Bosselut"), ki18n(""), "bosselut@b1project.com", "http://b1project.com" );
+	KAboutData about( "krecipes", 0, ki18n( "Krecipes" ), version, ki18n( "The KDE Cookbook" ), KAboutData::License_GPL, ki18n( "(C) 2003 Unai Garro\n(C) 2004-2006 Jason Kivlighn"), ki18n("This product is RecipeML compatible.\nYou can get more information about this file format in:\nhttp://www.formatdata.com/recipeml" ), "http://krecipes.sourceforge.net/", "jkivlighn@gmail.com" );
+	about.addAuthor( ki18n("Unai Garro"), KLocalizedString(), "ugarro@users.sourceforge.net", 0 );
+	about.addAuthor( ki18n("Jason Kivlighn"), KLocalizedString(), "jkivlighn@gmail.com", 0 );
+	about.addAuthor( ki18n("Cyril Bosselut"), KLocalizedString(), "bosselut@b1project.com", "http://b1project.com" );
 
 	about.addCredit( ki18n("Colleen Beamer"), ki18n("Testing, bug reports, suggestions"), "colleen.beamer@gmail.com", 0 );
 	about.addCredit( ki18n("Robert Wadley"), ki18n("Icons and artwork"), "rob@robntina.fastmail.us", 0 );
