@@ -151,7 +151,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextButton->setFlat( true );
 	END_TIMER()
 
-            KConfigGroup config(KGlobal::config(), "Performance" );
+       	KConfigGroup config(KGlobal::config(), "Performance" );
 	int limit = config.readEntry( "CategoryLimit", -1 );
 	database->updateCategoryCache(limit);
 
@@ -545,7 +545,7 @@ void KrecipesView::wizard( bool force )
 		if ( setupWizard->exec() == QDialog::Accepted )
 		{
                     config.sync();
-			config.group( "DBType" );
+			config = KGlobal::config()->group( "DBType" );
 			dbType = config.readEntry( "Type", "SQLite" );
 
 			kDebug() << "Setting up" << endl;

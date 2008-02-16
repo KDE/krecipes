@@ -658,7 +658,7 @@ void SetupWizard::save( void )
 	kDebug() << "DB type set in kconfig was... " << sDBType << endl;
 	// Save the server data if needed
 	if ( !( dbTypeSetupPage->dbType() == SQLite ) ) {
-		config.group( "Server" );
+		config = KGlobal::config()->group( "Server" ); 
 		config.writeEntry( "Host", serverSetupPage->server() );
 		config.writeEntry( "Username", serverSetupPage->user() );
 		config.writeEntry( "Password", serverSetupPage->password() );
@@ -666,13 +666,13 @@ void SetupWizard::save( void )
 		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." << endl;
 	}
 	else {
-		config.group( "Server" );
+		config = KGlobal::config()->group( "Server" ); 
 		config.writeEntry( "DBFile", sqliteSetupPage->dbFile() );
 	}
 
 	// Indicate that settings were already made
 
-	config.group( "Wizard" );
+	config = KGlobal::config()->group( "Wizard" );
 	config.writeEntry( "SystemSetup", true );
 	config.writeEntry( "Version", "0.9" );
 	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;

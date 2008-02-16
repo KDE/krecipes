@@ -462,7 +462,7 @@ void ServerPrefs::saveOptions( void )
 		( ( SQLiteServerPrefs* ) serverWidget ) ->saveOptions();
 
 	if ( wizard_button->isChecked() ) {
-		config.group( "Wizard" );
+		config = KGlobal::config()->group( "Wizard" );	
 		config.writeEntry( "SystemSetup", false );
 	}
 }
@@ -568,7 +568,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
 	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);
 
-	config.group( "Export" );
+	config = KGlobal::config()->group( "Export" );
 	QString clipboardFormat = config.readEntry("ClipboardFormat");
 	if ( clipboardFormat == "*.kreml" )
 		clipBoardFormatComboBox->setCurrentItem(1);
@@ -599,7 +599,7 @@ void ImportPrefs::saveOptions()
 	config.writeEntry( "OverwriteExisting", overwriteCheckbox->isChecked() );
 	config.writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
 
-	config.group( "Export" );
+	config = KGlobal::config()->group( "Export" );
 	QString ext = clipBoardFormatComboBox->currentText().mid(clipBoardFormatComboBox->currentText().find("(")+1,clipBoardFormatComboBox->currentText().length()-clipBoardFormatComboBox->currentText().find("(")-2);
 	config.writeEntry( "ClipboardFormat", ext );
 }

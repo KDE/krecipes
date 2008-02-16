@@ -197,8 +197,6 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 
 void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 {
-	KConfigGroup * config = new KConfigGroup();
-
 	//=======================TITLE======================//
 	content = content.replace("**TITLE**",recipe.title);
 
@@ -263,11 +261,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	//=======================INGREDIENTS======================//
 	QString ingredients_html;
-	config->group( "Formatting" );
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
+	bool useAbbreviations = config.readEntry("AbbreviateUnits", false);
 
-	bool useAbbreviations = config->readEntry("AbbreviateUnits", false);
-
-	MixedNumber::Format number_format = ( config->readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = ( config.readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
 	int cols = 2;
 	int per_col = recipe.ingList.count() / cols;
@@ -331,7 +328,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				else if ( ( *sub_it ).amount <= 1e-10 )
 					amount_str = "";
 	
-				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config->readEntry("AbbreviateUnits", false) );
+				QString unit = ( *sub_it ).units.determineName( ( *sub_it ).amount + ( *sub_it ).amount_offset, config.readEntry("AbbreviateUnits", false) );
 
 				QString tmp_format;
 				tmp_format += "<span class=\"ingredient-amount\">"+amount_str+" </span>";
@@ -360,7 +357,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	//=======================PROPERTIES======================//
 	QString properties_html;
 
-	QStringList hiddenList = config->readEntry("HiddenProperties", QStringList());
+	QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 	IngredientPropertyList visibleProperties;
 	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
 		if ( hiddenList.find((*prop_it).name) == hiddenList.end() )
