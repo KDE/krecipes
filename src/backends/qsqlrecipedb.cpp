@@ -2001,7 +2001,7 @@ float QSqlRecipeDB::databaseVersion( void )
 	QString command = "SELECT ver FROM db_info";
 	QSqlQuery dbVersion( command, *database );
 
-	if ( dbVersion.isActive() && dbVersion.next() )
+	if ( dbVersion.isActive() && dbVersion.isValid() )
 		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
 	else
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port

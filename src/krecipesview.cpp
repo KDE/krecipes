@@ -78,7 +78,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Read the database setup
 
-	KConfigGroup config;
+	KConfigGroup config = KGlobal::config()->group( QString() );
 	config.sync();
 
 
