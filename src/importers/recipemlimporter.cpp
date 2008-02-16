@@ -34,7 +34,7 @@ void RecipeMLImporter::parseFile( const QString& file )
 		int line;
 		int column;
 		if ( !doc.setContent( &input, &error, &line, &column ) ) {
-			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3.  This may not be a RecipeML file." ) ).arg( error ).arg( line ).arg( column ) );
+			setErrorMsg( i18n( "\"%1\" at line %2, column %3.  This may not be a RecipeML file." , error , line , column ));
 			return ;
 		}
 

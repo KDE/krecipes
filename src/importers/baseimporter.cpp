@@ -225,7 +225,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		if ( recipe_it_old != selected_recipes.end() )
 			selected_recipes.remove( recipe_it_old );
 
-		progress_dialog->setLabelText( QString( i18n( "Importing recipe: %1" ) ).arg( ( *recipe_it ).title ) );
+		progress_dialog->setLabelText( i18n( "Importing recipe: %1" ,( *recipe_it ).title ));
 		progress_dialog->progressBar()->setValue(progress_dialog->progressBar()->value()+1);
 		kapp->processEvents();
 
@@ -383,15 +383,16 @@ void BaseImporter::processMessages( const QString &file )
 {
 	if ( m_error_msgs.count() > 0 ) {
 		//<!doc> ensures it is detected as RichText
-		m_master_error += QString( i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" ) ).arg( file );
+		m_master_error += i18n( "<!doc>Import of recipes from the file <b>\"%1\"</b> <b>failed</b> due to the following error(s):" , file );
 		m_master_error += "<ul><li>" + m_error_msgs.join( "</li><li>" ) + "</li></ul>";
 
 		m_error_msgs.clear();
 	}
 	else if ( m_warning_msgs.count() > 0 ) {
-		m_master_warning += QString( i18n( "The file <b>%1</b> generated the following warning(s):" ) ).arg( file );
+		m_master_warning += i18n( "The file <b>%1</b> generated the following warning(s):" ,file );
 		m_master_warning += "<ul><li>" + m_warning_msgs.join( "</li><li>" ) + "</li></ul>";
 
 		m_warning_msgs.clear();
 	}
 }
+

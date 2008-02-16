@@ -553,7 +553,7 @@ void StdCategoryListView::saveCategory( Q3ListViewItem* i )
 bool StdCategoryListView::checkBounds( const QString &name )
 {
 	if ( name.length() > uint(database->maxCategoryNameLength()) ) {
-		KMessageBox::error( this, QString( i18n( "Category name cannot be longer than %1 characters." ) ).arg( database->maxCategoryNameLength() ) );
+		KMessageBox::error( this, i18n( "Category name cannot be longer than %1 characters." , database->maxCategoryNameLength() ));
 		return false;
 	}
 

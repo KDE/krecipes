@@ -150,7 +150,7 @@ void DietWizardDialog::newTab( const QString &name )
 
 void DietWizardDialog::changeMealNumber( int mn )
 {
-	mealNumberLabel->setText( QString( i18n( "- %1 -" ) ).arg( mn ) );
+	mealNumberLabel->setText( i18n( "- %1 -" , mn ) );
 	if ( mn > mealNumber ) {
 
 		while ( mealNumber != mn ) {
@@ -173,7 +173,7 @@ void DietWizardDialog::changeDayNumber( int dn )
 
 	if ( dn < 7 ) {
 		dayNumber = dn;
-		dayNumberLabel->setText( QString( i18n( "- %1 -" ) ).arg( dn ) );
+		dayNumberLabel->setText( i18n( "- %1 -" , dn ) );
 	}
 	else if ( dn == 7 ) {
 		dayNumber = 7;
@@ -181,7 +181,7 @@ void DietWizardDialog::changeDayNumber( int dn )
 	}
 	else {
 		dayNumber = ( dn - 6 ) * 7;
-		dayNumberLabel->setText( QString( i18n( "- %1 weeks -" ) ).arg( dn - 6 ) );
+		dayNumberLabel->setText( i18n( "- %1 weeks -" ,QString::number( dn - 6 ) ));
 	}
 }
 
@@ -401,7 +401,7 @@ void MealInput::changeDishNumber( int dn )
 {
 	if ( dn > dishNumber ) {
 		while ( dishNumber != dn ) {
-			DishInput * newDish = new DishInput( this, database, QString( i18n( "Dish %1" ) ).arg( dishNumber + 1 ) );
+			DishInput * newDish = new DishInput( this, database, i18n( "Dish %1" ,QString::number( dishNumber + 1 ) ));
 			newDish->reload();
 			dishStack->addWidget( newDish );
 			dishInputList.append( newDish );

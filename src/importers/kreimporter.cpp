@@ -84,7 +84,7 @@ void KreImporter::parseFile( const QString &filename )
 
 		// TODO Check if there are changes between versions
 		QString kreVersion = kreml.attribute( "version" );
-		kDebug() << QString( i18n( "KreML version %1" ) ).arg( kreVersion ) << endl;
+		kDebug() << i18n( "KreML version %1" ,QString( kreVersion )) << endl;
 
 		QDomNodeList r = kreml.childNodes();
 		QDomElement krecipe;
