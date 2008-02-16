@@ -143,9 +143,9 @@ public:
 private:
 
 	// Internal methods
-	QString checkCorrectDBType( KConfigGroup config );
+	QString checkCorrectDBType( KConfigGroup &config );
 	void initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port );
-	void initDatabase( KConfigGroup config );
+	void initDatabase(  );
 	bool questionRerunWizard( const QString &message, const QString &error = "" );
 	void setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser = QString::null, const QString &adminPass = QString::null, int port = 0 );
 	void wizard( bool force = false );

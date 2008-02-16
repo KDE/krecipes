@@ -57,7 +57,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
 	#endif
-	
+
 	// DBus ?
 	//kapp->dcopClient()->setDefaultObject( objId() );
 
@@ -76,16 +76,10 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Initialize Database
 
-	// Read the database setup
-
-	KConfigGroup config = KGlobal::config()->group( QString() );
-	config.sync();
-
-
 	// Check if the database type is among those supported
 	// and initialize the database in each case
 	START_TIMER("Initializing database")
-	initDatabase( config );
+	initDatabase();
 	END_TIMER()
 
 
@@ -157,7 +151,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextButton->setFlat( true );
 	END_TIMER()
 
-	config.group( "Performance" );
+            KConfigGroup config(KGlobal::config(), "Performance" );
 	int limit = config.readEntry( "CategoryLimit", -1 );
 	database->updateCategoryCache(limit);
 
@@ -550,7 +544,7 @@ void KrecipesView::wizard( bool force )
 		SetupWizard *setupWizard = new SetupWizard( this );
 		if ( setupWizard->exec() == QDialog::Accepted )
 		{
-			config.sync();
+                    config.sync();
 			config.group( "DBType" );
 			dbType = config.readEntry( "Type", "SQLite" );
 
@@ -819,12 +813,10 @@ void KrecipesView::resizeRightPane( int lpw, int )
 
 
 
-void KrecipesView::initDatabase( KConfigGroup config )
+void KrecipesView::initDatabase()
 {
 
-	// Read the database type
-	config.sync();
-	config.group( "DBType" );
+	KConfigGroup config(KGlobal::config(), "DBType" );
 	dbType = checkCorrectDBType( config );
 
 
@@ -849,9 +841,8 @@ void KrecipesView::initDatabase( KConfigGroup config )
 		// Reread the configuration file.
 		// The user may have changed the data and/or DB type
 
-		config.sync();
-		config.group( "DBType" );
-		dbType = checkCorrectDBType( config );
+		KConfigGroup grp = config.group( "DBType" );
+		dbType = checkCorrectDBType( grp );
 
 		delete database;
 		database = RecipeDB::createDatabase( dbType );
@@ -868,7 +859,7 @@ void KrecipesView::initDatabase( KConfigGroup config )
 	kDebug() << i18n( "DB started correctly\n" ).toLatin1();
 }
 
-QString KrecipesView::checkCorrectDBType( KConfigGroup config )
+QString KrecipesView::checkCorrectDBType( KConfigGroup &config )
 {
 	dbType = config.readEntry( "Type", "SQLite" );
 
@@ -922,6 +913,7 @@ void KrecipesView::reload()
 
 QString KrecipesView::currentDatabase() const
 {
+    return "";
 	// QDbus to be done
 	//return DCOPRef(database);
 }
