@@ -385,7 +385,7 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 
 			int overwrite = -1;
 			if ( QFile::exists( exporter->fileName() ) ) {
-				overwrite = KMessageBox::warningYesNo( 0, QString( i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" ) ).arg( exporter->fileName() ), i18n( "Saving recipe" ) );
+				overwrite = KMessageBox::warningYesNo( 0, i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" , exporter->fileName()), i18n( "Saving recipe" ) );
 			}
 
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 ) {

@@ -465,7 +465,7 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	case 2:  //Remove
 		{
 			switch ( KMessageBox::questionYesNo( this,
-			                                     QString( i18n( "Are you sure you want to permanently remove the recipe, %1?" ) ).arg(database->recipeTitle(recipeID)),
+			                                     i18n( "Are you sure you want to permanently remove the recipe, %1?"  ,database->recipeTitle(recipeID)),
 			                                     i18n( "Confirm remove" ) ) )
 			{
 			case KMessageBox::Yes:
@@ -864,7 +864,7 @@ QString KrecipesView::checkCorrectDBType( KConfigGroup &config )
 	dbType = config.readEntry( "Type", "SQLite" );
 
 	while ( ( dbType != "SQLite" ) && ( dbType != "MySQL" ) && ( dbType != "PostgreSQL" ) ) {
-		questionRerunWizard( i18n( "The configured database type (%1) is unsupported." ).arg( dbType ), i18n( "Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL." ) );
+		questionRerunWizard( i18n( "The configured database type (%1) is unsupported." , dbType ), i18n( "Unsupported database type. Database must be either MySQL, SQLite, or PostgreSQL." ) );
 
 		// Read the database setup again
 

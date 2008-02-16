@@ -395,8 +395,8 @@ void Krecipes::import()
 			importer = new RezkonvImporter();
 		else {
 			KMessageBox::sorry( this,
-			                    QString( i18n( "Filter \"%1\" not recognized.\n"
-			                                   "Please select one of the provided filters." ) ).arg( selected_filter ),
+			                    i18n( "Filter \"%1\" not recognized.\n"
+			                                   "Please select one of the provided filters."  , selected_filter ),
 			                    i18n( "Unrecognized Filter" )
 			                  );
 			import(); //let's try again :)
@@ -537,7 +537,7 @@ void Krecipes::backupSlot()
 
 	int overwrite = KMessageBox::Yes;
 	if ( QFile::exists(fileName) ) {
-		overwrite = KMessageBox::warningYesNo( this, QString( i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" ) ).arg( fileName ) );
+		overwrite = KMessageBox::warningYesNo( this, i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" , fileName ) );
 	}
 
 	if ( !fileName.isNull() && overwrite == KMessageBox::Yes ) {

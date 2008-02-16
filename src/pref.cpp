@@ -65,7 +65,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	KIconLoader *il = KIconLoader::global();
 	
 	KPageWidgetItem * page = new KPageWidgetItem( frame , i18n( "Server Settings" ) );
-	page->setHeader( QString( i18n( "Database Server Options (%1)" ) ).arg( config.readEntry( "Type" ) ) );
+	page->setHeader( i18n( "Database Server Options (%1)" , config.readEntry( "Type" )));
 	il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
 	addPage(page);
@@ -207,10 +207,10 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
-	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysqldump") );
+	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("mysqldump") ));
 
 	QLabel *mysqlPathLabel = new QLabel( backupGBox );
-	mysqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("mysql") );
+	mysqlPathLabel->setText( i18n( "Path to '%1':" ,QString("mysql") ));
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
@@ -329,7 +329,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
-	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("pg_dump") );
+	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("pg_dump") ));
 
 	QLabel *psqlPathLabel = new QLabel( backupGBox );
 	psqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("psql") );
@@ -392,7 +392,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	Form1Layout->addWidget( backupGBox );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
-	dumpPathLabel->setText( QString(i18n( "Path to '%1':" )).arg(sqliteBinary) );
+	dumpPathLabel->setText( i18n( "Path to '%1':" ,sqliteBinary));
 
 	// Load & Save Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
