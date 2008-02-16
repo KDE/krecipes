@@ -148,10 +148,8 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 
 	welcomeText = new QLabel( this );
 	welcomeText->setText( i18n( "<b><font size=\"+1\">Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome, and enjoy cooking!" ) );
-	welcomeText->setMinimumWidth( 200 );
-	welcomeText->setMaximumWidth( 10000 );
-	welcomeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	welcomeText->setAlignment( int( Qt::TextWordWrap | Qt::AlignTop ) );
+        welcomeText->setWordWrap(true);
+	welcomeText->setAlignment( Qt::AlignTop );
 	layout->addWidget( welcomeText, 1, 3 );
 
 }
@@ -180,9 +178,9 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	// Explanation Text
 	permissionsText = new QLabel( this );
 	permissionsText->setText( i18n( "This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]" ) );
-
+        permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( Qt::TextWordWrap | Qt::AlignTop ) );
+	permissionsText->setAlignment( int( Qt::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -288,9 +286,9 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	// Explanation Text
 	permissionsText = new QLabel( this );
 	permissionsText->setText( i18n( "This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account." ) );
-
+        permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( Qt::TextWordWrap | Qt::AlignTop ) );
+	permissionsText->setAlignment( int( Qt::AlignTop ) );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -398,6 +396,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings.<br><br><b>Warning: Passwords are stored in plain text and could potentially be compromised.  We recommend that you create a username and password combination solely for use by Krecipes.</b>" ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	serverSetupText->setAlignment( int( Qt::AlignTop | Qt::TextWordWrap ) );
+        serverSetupText->setWordWrap(true);
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -719,8 +718,8 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	initializeText = new QLabel( this );
 	initializeText->setText( i18n( "Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. " ) );
 
-	initializeText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	initializeText->setAlignment( int( Qt::TextWordWrap | Qt::AlignTop ) );
+	initializeText->setAlignment( Qt::AlignTop  );
+        initializeText->setWordWrap(true);
 	layout->addWidget( initializeText, 1, 3 );
 
 	// Logo
@@ -743,8 +742,9 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( textInfoSpacer, 4, 3 );
 
 	USDAImportText = new QLabel( i18n( "Krecipes can import nutrient data from the USDA's nutrient database for over 400 foods.  A total of 43 food properties are included for each food, such as energy, fat, vitamin C, etc.<br><br>Would you like to import this data now?  Note that this operation is safe to use on an existing database, and no data loss will occur.  This operation may take several minutes." ), this );
+        USDAImportText->setWordWrap(true);
 	layout->addWidget( USDAImportText, 5, 3 );
-
+     
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 
@@ -791,8 +791,8 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	// Explanation text
 	dbTypeSetupText = new QLabel( this );
 	dbTypeSetupText->setText( i18n( "Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL or PostgreSQL database." ) );
-	dbTypeSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	dbTypeSetupText->setAlignment( int( Qt::AlignTop | Qt::TextWordWrap ) );
+        dbTypeSetupText->setWordWrap(true);
+	dbTypeSetupText->setAlignment( Qt::AlignTop  );
 	layout->addWidget( dbTypeSetupText, 1, 3 );
 
 	// Text spacer
