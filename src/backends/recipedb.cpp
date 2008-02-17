@@ -298,7 +298,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	bool success = p->start( K3Process::Block, K3Process::AllOutput );
 	if ( !success ) {
-		if ( errMsg ) *errMsg = QString(i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.")).arg(command.first());
+		if ( errMsg ) *errMsg = i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.",command.first());
 		delete p;
 		delete dumpStream;
 		delete dumpFile;
@@ -404,7 +404,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			return false;
 		}
 		else if ( dbType != config.readEntry("Type",QString()) ) {
-			if ( errMsg ) *errMsg = QString(i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." )).arg(dbType);
+			if ( errMsg ) *errMsg = i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." ,dbType);
 			delete dumpFile;
 			return false;
 		}

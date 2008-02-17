@@ -83,7 +83,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	}
 
 	if ( !driver_found ) {
-		dbErr = QString( i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." ) ).arg( qsqlDriverPlugin() );
+		dbErr = i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." , qsqlDriverPlugin() );
 		return ;
 	}
 
@@ -114,7 +114,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		}
 		else {
 			// Handle the error (passively)
-			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriverPlugin() );
+			dbErr = i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." , DBuser , qsqlDriverPlugin() );
 		}
 
 		//Now Reopen the Database and signal & exit if it fails
@@ -123,7 +123,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
 
 			// Handle the error (passively)
-			dbErr = QString( i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." ) ).arg( DBuser ).arg( qsqlDriverPlugin() );
+			dbErr = i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.", DBuser , qsqlDriverPlugin() );
 			return ;
 		}
 	}
@@ -1761,7 +1761,7 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 					prep = unescapeAndDecode( query.value( 0 ).toCString() );
 			}
 
-			el.name = QString( i18n("In ingredient '%1': weight [%2/%3%4]") ).arg( ingName ).arg( weightUnit ).arg( perUnit ).arg( (prepID == -1)?QString::null:"; "+prep );
+			el.name = i18n("In ingredient '%1': weight [%2/%3%4]", ingName , weightUnit , perUnit, (prepID == -1)?QString::null:"; "+prep );
 			weights->append( el );
 		}
 	}
@@ -1811,7 +1811,7 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 			QString propUnits = unescapeAndDecode( query->value( 2 ).toCString() );
 			QString propPerUnits = unescapeAndDecode( query->value( 3 ).toCString() );
 
-			el.name = QString( i18n("In ingredient '%1': property \"%2\" [%3/%4]") ).arg( ingName ).arg( propName ).arg( propUnits ).arg( propPerUnits );
+			el.name = i18n("In ingredient '%1': property \"%2\" [%3/%4]" , ingName, propName, propUnits, propPerUnits );
 			elList->append( el );
 		}
 	}
