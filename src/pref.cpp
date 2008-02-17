@@ -332,7 +332,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("pg_dump") ));
 
 	QLabel *psqlPathLabel = new QLabel( backupGBox );
-	psqlPathLabel->setText( QString(i18n( "Path to '%1':" )).arg("psql") );
+	psqlPathLabel->setText( i18n( "Path to '%1':" ,QString("psql") ));
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
