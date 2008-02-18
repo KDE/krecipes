@@ -16,7 +16,7 @@
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <q3header.h>
 #include <qapplication.h>
 #include <qclipboard.h>
@@ -88,7 +88,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	Q3HBoxLayout *buttonBox = new Q3HBoxLayout(buttonWidget);
 	QSpacerItem *horizontalSpacing = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	buttonGroup = new QPushButton( i18n("Set &Header"), buttonWidget );
-	Q3WhatsThis::add( buttonGroup, i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.") );
+	buttonGroup->setWhatsThis( i18n("If an ingredient header is detected as an ingredient, select it and click this button so that Krecipes will recognize it as a header.  All the ingredients below the header will be included within that group.\n\nAlternatively, if you select multiple ingredients and click this button, those ingredients will be grouped together.") );
 	buttonBox->addWidget( buttonGroup );
 	buttonBox->addItem( horizontalSpacing );
 

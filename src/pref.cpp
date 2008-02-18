@@ -25,7 +25,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <q3frame.h>
 #include <qcombobox.h>
 //Added by qt3to4:
@@ -584,7 +584,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-	Q3WhatsThis::add( directImportCheckbox, 
+	directImportCheckbox->setWhatsThis( 
 		i18n("When this is enabled, the importer will show every recipe in the file(s) and allow you to select which recipes you want imported.\n \
 							\
 		Disable this to always import every recipe, which allows for faster and less memory-intensive imports.")
