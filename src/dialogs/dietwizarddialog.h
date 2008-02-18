@@ -16,7 +16,7 @@
 #include <stdlib.h> // For RAND_MAX
 
 #include <qcheckbox.h>
-#include <q3hbox.h>
+
 #include <q3hgroupbox.h>
 #include <qlabel.h>
 #include <q3ptrlist.h>
@@ -26,13 +26,14 @@
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <q3valuelist.h>
-#include <q3vbox.h>
+
 #include <q3vgroupbox.h>
 #include <q3widgetstack.h>
 //Added by qt3to4:
 #include <QPaintEvent>
 
 #include <k3listview.h>
+#include <kvbox.h>
 
 #include "datablocks/constraintlist.h"
 #include "datablocks/recipelist.h"
@@ -58,7 +59,7 @@ class PropertyConstraintListView;
 */
 
 
-class DietWizardDialog: public Q3VBox
+class DietWizardDialog: public KVBox
 {
 
 	Q_OBJECT
@@ -78,7 +79,7 @@ private:
 	RecipeList *dietRList;
 
 	//Widgets
-	Q3HBox *optionsBox;
+	KHBox *optionsBox;
 	Q3VGroupBox *mealsSliderBox;
 	QLabel *mealNumberLabel;
 	QSlider *mealNumberSelector;
@@ -142,10 +143,10 @@ private:
 	RecipeDB *database;
 
 	// Settings section for the meal
-	Q3HBox *mealOptions;
+	KHBox *mealOptions;
 
 	// Dish number setting
-	Q3HBox *dishNumberBox;
+	KHBox *dishNumberBox;
 	QLabel *dishNumberLabel;
 	QSpinBox *dishNumberInput;
 
@@ -188,7 +189,7 @@ private:
 	// Widgets
 	Q3HGroupBox *listBox;
 	DishTitle *dishTitle;
-	Q3VBox *categoriesBox;
+	KVBox *categoriesBox;
 	QCheckBox *categoriesEnabledBox;
 	CategoryCheckListView *categoriesView;
 	PropertyConstraintListView *constraintsView;

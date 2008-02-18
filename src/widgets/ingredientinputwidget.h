@@ -15,15 +15,16 @@
 #ifndef INGREDIENTINPUTWIDGET_H
 #define INGREDIENTINPUTWIDGET_H
 
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3ValueList>
+#include <kvbox.h>
 
 #include "datablocks/unit.h"
 
-class Q3VBox;
-class Q3HBox;
+class KVBox;
+class KHBox;
 class QLabel;
 class Q3ButtonGroup;
 class Q3WidgetStack;
@@ -42,7 +43,7 @@ class Element;
 class ElementList;
 class IngredientInput;
 
-class IngredientInputWidget : public Q3VBox
+class IngredientInputWidget : public KVBox
 {
 Q_OBJECT
 
@@ -79,7 +80,7 @@ private:
 	Q3ValueList<IngredientInput*> m_ingInputs;
 };
 
-class IngredientInput : public Q3HBox
+class IngredientInput : public KHBox
 {
 Q_OBJECT
 

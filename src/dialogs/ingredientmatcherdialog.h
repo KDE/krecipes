@@ -23,13 +23,14 @@
 #include <qlabel.h>
 #include <q3listview.h>
 #include <qpushbutton.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 //Added by qt3to4:
 #include <Q3ValueList>
 
 #include <kstringhandler.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 class KreListView;
 class KIntSpinBox;
@@ -134,7 +135,7 @@ private:
 	KreListView *ingListView;
 
 	KreListView *recipeListView;
-	Q3HBox *missingBox;
+	KHBox *missingBox;
 	QLabel *missingNumberLabel;
 	KIntSpinBox *missingNumberSpinBox;
 

@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <Q3BoxLayout>
+#include <kvbox.h>
 
 namespace {
   static const int RATING_WIDGET_MAX_STAR_SIZE = 24;
@@ -50,7 +51,7 @@ const QPixmap& RatingWidget::pixmap(const QString& value_) {
 }
 
 RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
-    : Q3HBox(parent_, name_), m_currIndex(-1), m_min(0), m_max(stars*2) {
+    : KHBox(parent_), m_currIndex(-1), m_min(0), m_max(stars*2) {
   m_pixOn = UserIcon(QString::fromLatin1("star_on"));
   m_pixOff = UserIcon(QString::fromLatin1("star_off"));
   m_pixHalf = UserIcon(QString::fromLatin1("star_half"));
@@ -97,7 +98,7 @@ void RatingWidget::update() {
     m_widgets.at(m_currIndex/2)->setPixmap(m_pixHalf);
   }
 
-  Q3HBox::update();
+  KHBox::update();
 }
 
 void RatingWidget::mousePressEvent(QMouseEvent* event_) {

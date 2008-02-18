@@ -18,7 +18,7 @@
 #include <kdebug.h>
 #include <kvbox.h>
 
-#include <q3vbox.h>
+
 #include <qlayout.h>
 #include <q3header.h>
 #include <qvariant.h>

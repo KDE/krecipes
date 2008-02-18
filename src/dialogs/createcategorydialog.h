@@ -18,13 +18,14 @@
 #include <Q3VBoxLayout>
 
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
 class Q3VBoxLayout;
 class Q3GroupBox;
-class Q3VBox;
+class KVBox;
 class KComboBox;
 
 /**

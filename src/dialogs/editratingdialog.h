@@ -17,7 +17,8 @@
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
 #include <QLabel>
-class Q3HBox;
+#include <kvbox.h>
+class KHBox;
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
@@ -58,8 +59,8 @@ public:
 	Rating rating() const;
 
 protected:
-	Q3HBox* layout8;
-	Q3HBox* layout2;
+	KHBox* layout8;
+	KHBox* layout2;
 
 protected slots:
 	virtual void languageChange();

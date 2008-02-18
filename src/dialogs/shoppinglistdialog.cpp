@@ -29,6 +29,7 @@
 #include <QDropEvent>
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
+#include <kvbox.h>
 
 /** A simple listview to accept dropping a RecipeItemDrag */
 class ShoppingListView : public K3ListView
@@ -119,7 +120,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	shopRecipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	shopRecipeListView->listView() ->setAllColumnsShowFocus( true );
 
-	buttonBar = new Q3HBox( this, "buttonBar" );
+	buttonBar = new KHBox( this );
 	layout->addMultiCellWidget( buttonBar, 1, 1, 0, 2 );
 
 	layout->setColStretch( 0, 1 );

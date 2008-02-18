@@ -14,18 +14,19 @@
 #ifndef RATINGWIDGET_H
 #define RATINGWIDGET_H
 
-#include <q3hbox.h>
+
 #include <q3ptrlist.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QMouseEvent>
+#include <kvbox.h>
 
 /**
  * @author Robby Stephenson
  */
-class RatingWidget : public Q3HBox {
+class RatingWidget : public KHBox {
 Q_OBJECT
 
 typedef Q3PtrList<QLabel> LabelList;

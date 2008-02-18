@@ -32,6 +32,7 @@
 #include <kconfig.h>
 #include <kcursor.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
@@ -69,7 +70,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addMultiCell( spacer_top, 0, 0, 1, 4 );
 
-	searchBar = new Q3HBox( basicSearchTab );
+	searchBar = new KHBox( basicSearchTab );
 	searchBar->setSpacing( 7 );
 	layout->addWidget( searchBar, 1, 1 );
 
@@ -98,7 +99,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
 	layout->addMultiCellWidget( recipeListView, 3, 3, 1, 3 );
 
-	buttonBar = new Q3HBox( basicSearchTab );
+	buttonBar = new KHBox( basicSearchTab );
 	layout->addMultiCellWidget( buttonBar, 4, 4, 1, 3 );
 
 	openButton = new QPushButton( buttonBar );

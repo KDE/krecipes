@@ -25,7 +25,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 		: KDialog( parent )

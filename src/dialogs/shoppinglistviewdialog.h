@@ -14,12 +14,13 @@
 #define SHOPPINGLISTVIEWDIALOG_H
 
 #include <qlayout.h>
-#include <q3vbox.h>
+
 #include <qwidget.h>
 
 #include <khtml_part.h>
 #include <khtmlview.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 class IngredientList;
 

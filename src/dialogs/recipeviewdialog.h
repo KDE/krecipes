@@ -13,10 +13,11 @@
 #ifndef RECIPEVIEWDIALOG_H
 #define RECIPEVIEWDIALOG_H
 
-#include <q3vbox.h>
+
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <kvbox.h>
 
 class RecipeDB;
 class Recipe;
@@ -26,7 +27,7 @@ class KHTMLPart;
 @author Unai Garro
 */
 
-class RecipeViewDialog : public Q3VBox
+class RecipeViewDialog : public KVBox
 {
 	Q_OBJECT
 

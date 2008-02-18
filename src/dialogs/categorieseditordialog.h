@@ -15,12 +15,13 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include <q3hbox.h>
+
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <kiconloader.h>
 #include <k3listview.h>
+#include <kvbox.h>
 
 #include "datablocks/categorytree.h"
 #include "widgets/dblistviewbase.h"
@@ -49,7 +50,7 @@ private:
 	//Widgets
 	Q3GridLayout *layout;
 	StdCategoryListView *categoryListView;
-	Q3HBox *buttonBar;
+	KHBox *buttonBar;
 	QPushButton *newCategoryButton;
 	QPushButton *removeCategoryButton;
 	KIconLoader *il;

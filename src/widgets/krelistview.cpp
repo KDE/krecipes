@@ -23,17 +23,18 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3Frame>
+#include <kvbox.h>
 
 #include "widgets/dblistviewbase.h"
 
-KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : Q3VBox( parent )
+KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ) : KVBox( parent )
 {
 
 	filteredColumn = filterCol;
 	QWidget *header = this;
 	if ( filter || embeddedWidget ) {
-		header = new Q3HBox( this );
-		( ( Q3HBox* ) header ) ->setSpacing( 15 );
+		header = new KHBox( this );
+		( ( KHBox* ) header ) ->setSpacing( 15 );
 	}
 
 	if ( !title.isNull() ) {
@@ -49,7 +50,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 
 	if ( filter ) {
-		filterBox = new Q3HBox( header );
+		filterBox = new KHBox( header );
 		filterBox->setFrameShape( Q3Frame::Box );
 		filterBox->setMargin( 2 );
 

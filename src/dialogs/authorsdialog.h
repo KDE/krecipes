@@ -15,10 +15,11 @@
 
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include <q3hbox.h>
+
 #include <qlayout.h>
 #include <kiconloader.h>
 #include <k3listview.h>
+#include <kvbox.h>
 
 #include "widgets/dblistviewbase.h"
 

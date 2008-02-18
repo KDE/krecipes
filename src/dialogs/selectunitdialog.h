@@ -17,10 +17,11 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <q3groupbox.h>
-#include <q3vbox.h>
+
 
 #include <k3listview.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "datablocks/unit.h"
 

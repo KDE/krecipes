@@ -27,12 +27,13 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <qpainter.h>
-#include <q3vbox.h>
+
 #include <KVBox>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
@@ -81,12 +82,12 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
     KVBox *page = new KVBox( this );
 
-	layout2 = new Q3HBox( page );
+	layout2 = new KHBox( page );
 
 	raterLabel = new QLabel( layout2, "raterLabel" );
 	raterEdit = new QLineEdit( layout2, "raterEdit" );
 
-	layout8 = new Q3HBox( page );
+	layout8 = new KHBox( page );
 
 	criteriaLabel = new QLabel( layout8, "criteriaLabel" );
 

@@ -14,11 +14,12 @@
 #define INGREDIENTSDIALOG_H
 
 #include <qpushbutton.h>
-#include <q3vbox.h>
+
 #include <qlayout.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
+#include <kvbox.h>
 
 #include "widgets/krelistview.h"
 #include "widgets/dblistviewbase.h"

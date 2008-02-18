@@ -16,8 +16,8 @@
 
 #include <qstring.h>
 #include <qlayout.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
@@ -53,6 +53,7 @@
 #include <kio/netaccess.h>
 #include <K3Spell>
 #include <K3SpellConfig>
+#include <kvbox.h>
 
 #include "selectauthorsdialog.h"
 #include "resizerecipedialog.h"
@@ -121,7 +122,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 }
 
 
-RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( parent )
+RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( parent )
 {
 
 	// Adjust internal parameters
@@ -169,7 +170,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	photoLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
 	recipeLayout->addMultiCellWidget( photoLabel, 3, 7, 1, 1 );
 
-	Q3VBox *photoButtonsBox = new Q3VBox( recipeTab );
+	KVBox *photoButtonsBox = new KVBox( recipeTab );
 
 	changePhotoButton = new QPushButton( photoButtonsBox );
 	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
@@ -191,7 +192,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 
 	// Title
-	Q3VBox *titleBox = new Q3VBox( recipeTab );
+	KVBox *titleBox = new KVBox( recipeTab );
 	titleBox->setSpacing( 5 );
 	titleLabel = new QLabel( i18n( "Recipe Name" ), titleBox );
 	titleEdit = new KLineEdit( titleBox );
@@ -206,11 +207,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	recipeLayout->addItem( title_spacer, 2, 1 );
 
 	// Author(s) & Categories
-	Q3VBox *authorBox = new Q3VBox( recipeTab ); // contains label and authorInput (input widgets)
+	KVBox *authorBox = new KVBox( recipeTab ); // contains label and authorInput (input widgets)
 	authorBox->setSpacing( 5 );
 	recipeLayout->addWidget( authorBox, 3, 4 );
 	authorLabel = new QLabel( i18n( "Authors" ), authorBox );
-	Q3HBox *authorInput = new Q3HBox( authorBox ); // Contains input + button
+	KHBox *authorInput = new KHBox( authorBox ); // Contains input + button
 
 
 	authorShow = new KLineEdit( authorInput );
@@ -229,10 +230,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	QSpacerItem* author_category = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	recipeLayout->addItem( author_category, 3, 5 );
 
-	Q3VBox *categoryBox = new Q3VBox( recipeTab ); // Contains the label and categoryInput (input widgets)
+	KVBox *categoryBox = new KVBox( recipeTab ); // Contains the label and categoryInput (input widgets)
 	categoryBox->setSpacing( 5 );
 	categoryLabel = new QLabel( i18n( "Categories" ), categoryBox );
-	Q3HBox *categoryInput = new Q3HBox( categoryBox ); // Contains the input widgets
+	KHBox *categoryInput = new KHBox( categoryBox ); // Contains the input widgets
 
 	categoryShow = new KLineEdit( categoryInput );
 	categoryShow->setReadOnly( true );
@@ -250,7 +251,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	recipeLayout->addItem( category_yield, 5, 4 );
 
-	Q3HBox *serv_prep_box = new Q3HBox( recipeTab );
+	KHBox *serv_prep_box = new KHBox( recipeTab );
 	serv_prep_box->setSpacing( 5 );
 
 	// Backup options
@@ -264,7 +265,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 	yieldNumInput->setAllowRange(true);
 	yieldTypeEdit = new KLineEdit( yieldGBox );
 
-	Q3VBox *prepTimeBox = new Q3VBox( serv_prep_box );
+	KVBox *prepTimeBox = new KVBox( serv_prep_box );
 	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	prepTimeBox->setSpacing( 5 );
 
@@ -434,7 +435,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 	// ------- Recipe Ratings Tab -----------
 
-	Q3VBox *ratingsTab = new Q3VBox(recipeTab);
+	KVBox *ratingsTab = new KVBox(recipeTab);
 	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
 	QPushButton *addRatingButton = new QPushButton(i18n("Add Rating..."),ratingsTab);
 
@@ -450,7 +451,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : Q3VBox( 
 
 
 	// Functions Box
-	Q3HBox* functionsLayout = new Q3HBox( this );
+	KHBox* functionsLayout = new KHBox( this );
 
 	functionsBox = new Q3GroupBox( 1, Qt::Vertical, functionsLayout );
 	functionsBox->setFrameStyle( Q3Frame::NoFrame );

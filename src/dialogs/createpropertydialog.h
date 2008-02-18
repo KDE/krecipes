@@ -21,11 +21,12 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <q3groupbox.h>
-#include <q3vbox.h>
+
 #include <qlabel.h>
 
 #include <klineedit.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "datablocks/unit.h"
 

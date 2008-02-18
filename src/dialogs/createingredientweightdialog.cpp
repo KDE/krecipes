@@ -16,13 +16,14 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3vbox.h>
+
 #include <KVBox>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 #include "widgets/unitcombobox.h"
 #include "widgets/prepmethodcombobox.h"

@@ -19,18 +19,19 @@
 
 #include <kiconloader.h>
 #include <qpixmap.h>
+#include <kvbox.h>
 
 
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : Q3VBox( parent, name )
+PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : KVBox( parent )
 {
 
 	// Top decoration
 	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
 
-	hbox = new Q3HBox( this );
+	hbox = new KHBox( this );
 
 	//Left decoration
 	lDeco = new LeftDeco( hbox, "LeftDecoration" );

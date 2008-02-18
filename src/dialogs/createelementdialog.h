@@ -16,10 +16,11 @@
 #include <qpushbutton.h>
 #include <q3groupbox.h>
 #include <qlayout.h>
-#include <q3vbox.h>
+
 
 #include <klineedit.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 /**
 @author Unai Garro

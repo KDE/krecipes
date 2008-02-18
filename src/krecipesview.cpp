@@ -26,6 +26,7 @@
 #include <kmessagebox.h>
 #include <ktoolinvocation.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 #include "recipeactionshandler.h"
 #include "setupwizard.h"
@@ -52,7 +53,7 @@
 #include "profiling.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: Q3VBox( parent )
+		: KVBox( parent )
 {
 	#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
@@ -84,7 +85,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Design the GUI
-	splitter = new Q3HBox( this );
+	splitter = new KHBox( this );
 
 	// Create Left and Right Panels (splitter)
 

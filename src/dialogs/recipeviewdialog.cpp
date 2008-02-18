@@ -31,13 +31,14 @@
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 #include "exporters/xsltexporter.h"
 #include "recipeprintpreview.h"
 
-RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : Q3VBox( parent ),
+RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : KVBox( parent ),
 	database(db)
 {
 	// Initialize UI Elements

@@ -19,9 +19,9 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3hbox.h>
+
 #include <q3valuelist.h>
-#include <q3vbox.h>
+
 #include <qwidget.h>
 #include <q3widgetstack.h>
 //Added by qt3to4:
@@ -33,6 +33,7 @@
 #include <kparts/part.h>
 #include <kstyle.h>
 #include <ktextbrowser.h>
+#include <kvbox.h>
 
 #include "importers/baseimporter.h"
 #include "backends/recipedb.h"
@@ -79,7 +80,7 @@ typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, Pr
 
 
 // Class KrecipesView
-class KrecipesView : public Q3VBox
+class KrecipesView : public KVBox
 //, virtual public KrecipesIface
 {
 	Q_OBJECT
@@ -153,7 +154,7 @@ private:
 
 
 	// Widgets
-	Q3HBox *splitter;
+	KHBox *splitter;
 	KreMenu *leftPanel;
 	MenuId dataMenu;
 	PanelDeco *rightPanel;

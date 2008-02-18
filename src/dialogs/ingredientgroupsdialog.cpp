@@ -12,13 +12,14 @@
 
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "widgets/krelistview.h"
 #include "widgets/headerlistview.h"

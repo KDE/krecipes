@@ -41,6 +41,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "profiling.h"
 
@@ -86,7 +87,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	dialogLayout->addLayout( layout2 );
 
 	// Box to select allowed number of missing ingredients
-	missingBox = new Q3HBox( this );
+	missingBox = new KHBox( this );
 	missingNumberLabel = new QLabel( missingBox );
 	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
@@ -112,7 +113,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
-	Q3HBox *buttonBox = new Q3HBox( this );
+	KHBox *buttonBox = new KHBox( this );
 
 	okButton = new QPushButton( buttonBox );
 	//okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );

@@ -18,12 +18,13 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3vbox.h>
+
 #include <KVBox>
 
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 #include "backends/recipedb.h"
 #include "widgets/unitcombobox.h"
@@ -50,9 +51,9 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	setSizeGripEnabled( TRUE );
 
 
-	Q3HBox *vbox = new Q3VBox(page);
+	KHBox *vbox = new KVBox(page);
 
-	Q3HBox *fromTopBox = new Q3HBox(vbox);
+	KHBox *fromTopBox = new KHBox(vbox);
 	convertLabel = new QLabel( fromTopBox, "convertLabel" );
 
 	amountEdit = new FractionInput( fromTopBox );
@@ -62,7 +63,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	fromTopBox->setStretchFactor( fromUnitBox, 2 );
 	fromTopBox->setSpacing(3);
 
-	Q3HBox *fromBottomBox = new Q3HBox(vbox);
+	KHBox *fromBottomBox = new KHBox(vbox);
 
 	ingredientBox = new IngredientComboBox( FALSE, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
 	ingredientBox->reload();
@@ -71,7 +72,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	prepMethodBox->reload();
 	fromBottomBox->setSpacing(3);
 
-	Q3HBox *toBox = new Q3HBox(vbox);
+	KHBox *toBox = new KHBox(vbox);
 
 	toLabel = new QLabel( toBox, "toLabel" );
 
@@ -80,7 +81,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	toBox->setStretchFactor( toUnitBox, 2 );
 	toBox->setSpacing(8);
 
-	Q3HBox *resultBox = new Q3HBox(vbox);
+	KHBox *resultBox = new KHBox(vbox);
 	resultLabel = new QLabel( resultBox, "resultLabel" );
 	resultText = new QLabel( resultBox, "resultText" );
 	resultBox->setStretchFactor( resultText, 2 );

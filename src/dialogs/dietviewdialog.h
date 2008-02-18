@@ -13,7 +13,7 @@
 
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3vbox.h>
+
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -21,6 +21,7 @@
 #include <khtml_part.h>
 #include <khtmlview.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "datablocks/recipelist.h"
 

@@ -18,8 +18,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
@@ -46,6 +46,7 @@
 #include <kdebug.h>
 #include <ktoolinvocation.h>
 #include <kglobal.h>
+#include <kvbox.h>
 
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 		: KPageDialog( parent )
@@ -370,7 +371,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 {
 	Q3VBoxLayout * Form1Layout = new Q3VBoxLayout( this );
 
-	Q3HBox *hbox = new Q3HBox( this );
+	KHBox *hbox = new KHBox( this );
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 
 	Form1Layout->addWidget( hbox );
@@ -493,7 +494,7 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 
 	//unit display format
 	Q3GroupBox *abbrevGrpBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Units" ), this );
-	Q3HBox *abbrevBox = new Q3HBox( abbrevGrpBox );
+	KHBox *abbrevBox = new KHBox( abbrevGrpBox );
 	abbrevButton = new QCheckBox( i18n( "Use abbreviations" ), abbrevBox );
 	Form1Layout->addWidget( abbrevGrpBox );
 
@@ -556,7 +557,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	Q3GroupBox *exportGroup = new Q3GroupBox(1,Qt::Vertical,i18n("Export"), this);
 
-	Q3HBox *clipboardHBox = new Q3HBox(exportGroup);
+	KHBox *clipboardHBox = new KHBox(exportGroup);
 	clipboardHBox->setSpacing(6);
 	/*QLabel *clipboardLabel = */new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
 	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
@@ -623,7 +624,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
 
-	Q3HBox *catLimitHBox = new Q3HBox( this );
+	KHBox *catLimitHBox = new KHBox( this );
 	catLimitInput = new KIntNumInput(catLimitHBox);
 	catLimitInput->setLabel( i18n( "Number of categories to display at once:" ) );
 	catLimitInput->setRange(0,5000,20,true);
@@ -632,7 +633,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	if ( cat_limit > 0 )
 		catLimitInput->setValue( cat_limit );
 
-	Q3HBox *limitHBox = new Q3HBox( this );
+	KHBox *limitHBox = new KHBox( this );
 	limitInput = new KIntNumInput(limitHBox);
 	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
 	limitInput->setRange(0,100000,1000,true);

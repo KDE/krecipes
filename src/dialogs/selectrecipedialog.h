@@ -30,11 +30,12 @@
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kmenu.h>
+#include <kvbox.h>
 
 #include "recipeactionshandler.h"
 #include "widgets/dblistviewbase.h"
 
-class Q3HBox;
+class KHBox;
 class Q3GroupBox;
 
 class RecipeDB;
@@ -66,9 +67,9 @@ private:
 	Q3GridLayout *layout;
 	QTabWidget *tabWidget;
 	Q3GroupBox *basicSearchTab;
-	Q3HBox *searchBar;
+	KHBox *searchBar;
 	RecipeListView* recipeListView;
-	Q3HBox *buttonBar;
+	KHBox *buttonBar;
 	QPushButton *openButton;
 	QPushButton *removeButton;
 	QPushButton *editButton;

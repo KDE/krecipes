@@ -13,13 +13,14 @@
 #ifndef SHOPPINGLISTDIALOG_H
 #define SHOPPINGLISTDIALOG_H
 
-#include <q3hbox.h>
+
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QDropEvent>
 #include <kpushbutton.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 #include "widgets/krelistview.h"
 #include "widgets/dblistviewbase.h"
@@ -57,7 +58,7 @@ private:
 	QPushButton* removeRecipeButton;
 	KreListView* recipeListView;
 	KreListView* shopRecipeListView;
-	Q3HBox *buttonBar;
+	KHBox *buttonBar;
 	QPushButton* okButton;
 	QPushButton* clearButton;
 	ShoppingListViewDialog *shoppingListDisplay;

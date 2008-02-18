@@ -16,8 +16,8 @@
 
 #include <qlabel.h>
 #include <q3widgetstack.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <q3groupbox.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kvbox.h>
 
 #include "backends/recipedb.h"
 #include "datablocks/unit.h"
@@ -40,10 +41,10 @@
 
 #include "profiling.h"
 
-IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeader ) : Q3HBox(parent), database(db)
+IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeader ) : KHBox(parent), database(db)
 {
-	Q3VBox *ingredientVBox = new Q3VBox( this );
-	Q3HBox *typeHBox = new Q3HBox( ingredientVBox );
+	KVBox *ingredientVBox = new KVBox( this );
+	KHBox *typeHBox = new KHBox( ingredientVBox );
 
 	if ( allowHeader ) {
 		typeButtonGrp = new Q3ButtonGroup();
@@ -74,20 +75,20 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 	headerBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 	header_ing_stack->addWidget( headerBox );
 
-	Q3VBox *amountVBox = new Q3VBox( this );
+	KVBox *amountVBox = new KVBox( this );
 	amountLabel = new QLabel( i18n( "Amount:" ), amountVBox );
 	amountEdit = new FractionInput( amountVBox );
 	amountEdit->setAllowRange(true);
 	amountEdit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
-	Q3VBox *unitVBox = new Q3VBox( this );
+	KVBox *unitVBox = new KVBox( this );
 	unitLabel = new QLabel( i18n( "Unit:" ), unitVBox );
 	unitBox = new KComboBox( TRUE, unitVBox );
 	unitBox->setAutoCompletion( TRUE );
 	unitBox->lineEdit() ->disconnect( unitBox ); //so hitting enter doesn't enter the item into the box
 	unitBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 
-	Q3VBox *prepMethodVBox = new Q3VBox( this );
+	KVBox *prepMethodVBox = new KVBox( this );
 	prepMethodLabel = new QLabel( i18n( "Preparation Method:" ), prepMethodVBox );
 	prepMethodBox = new PrepMethodComboBox( TRUE, prepMethodVBox, database );
 	prepMethodBox->setAutoCompletion( TRUE );
@@ -354,7 +355,7 @@ void IngredientInput::updateTabOrder()
 }
 
 
-IngredientInputWidget::IngredientInputWidget( RecipeDB *db, QWidget *parent ) : Q3VBox(parent), database(db)
+IngredientInputWidget::IngredientInputWidget( RecipeDB *db, QWidget *parent ) : KVBox(parent), database(db)
 {
 	setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 

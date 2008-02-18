@@ -34,7 +34,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <q3scrollview.h>
-#include <q3hbox.h>
+
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 
@@ -47,6 +47,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 #include <kmenu.h>
+#include <kvbox.h>
 
 #include "backends/recipedb.h"
 #include "backends/searchparameters.h"
@@ -94,7 +95,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	requireAllTitle = new QCheckBox( i18n("Require All Words"), titleFrame );
 	titleFrameLayout->addWidget( requireAllTitle );
 
-	Q3HBox *titleHBox = new Q3HBox( titleFrame );
+	KHBox *titleHBox = new KHBox( titleFrame );
 	/*QLabel *titleInfoLabel = */new QLabel(i18n("Keywords:"),titleHBox);
 	titleEdit = new QLineEdit( titleHBox, "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
@@ -298,7 +299,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	requireAllInstructions = new QCheckBox( i18n("Require All Words"), instructionsFrame );
 	instructionsFrameLayout->addWidget( requireAllInstructions );
 
-	Q3HBox *instructionsHBox = new Q3HBox(instructionsFrame);
+	KHBox *instructionsHBox = new KHBox(instructionsFrame);
 	/*QLabel *instructionsInfoLabel = */new QLabel(i18n("Keywords:"),instructionsHBox);
 
 	instructionsEdit = new QLineEdit( instructionsHBox, "instructionsEdit" );
@@ -321,7 +322,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	QLabel *createdLabel = new QLabel( i18n("Created:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( createdLabel );
 
-	Q3HBox *createdHBox = new Q3HBox(metaDataFrame);
+	KHBox *createdHBox = new KHBox(metaDataFrame);
 	createdStartDateEdit = new KDateEdit(createdHBox,"createdStartEdit");
 	createdStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",createdHBox);
@@ -332,7 +333,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	QLabel *modifiedLabel = new QLabel( i18n("Modified:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( modifiedLabel );
 
-	Q3HBox *modifiedHBox = new Q3HBox(metaDataFrame);
+	KHBox *modifiedHBox = new KHBox(metaDataFrame);
 	modifiedStartDateEdit = new KDateEdit(modifiedHBox,"modifiedStartEdit");
 	modifiedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",modifiedHBox);
@@ -343,7 +344,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	QLabel *accessedLabel = new QLabel( i18n("Last Accessed:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( accessedLabel );
 
-	Q3HBox *accessedHBox = new Q3HBox(metaDataFrame);
+	KHBox *accessedHBox = new KHBox(metaDataFrame);
 	accessedStartDateEdit = new KDateEdit(accessedHBox,"accessedStartEdit");
 	accessedStartDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	(void)new QLabel(" - ",accessedHBox);

@@ -12,7 +12,7 @@
 
 #include <qpushbutton.h>
 #include <q3groupbox.h>
-#include <q3vbox.h>
+
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -65,7 +65,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	colorLabel = new QLabel( borderGroupBox, "colorLabel" );
 	layout2->addWidget( colorLabel );
 
-	Q3HBox *color_hbox = new Q3HBox( borderGroupBox );
+	KHBox *color_hbox = new KHBox( borderGroupBox );
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	hsSelector = new KHueSaturationSelector( color_hbox );
 	hsSelector->setMinimumSize( 140, 70 );

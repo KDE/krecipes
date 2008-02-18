@@ -36,6 +36,7 @@
 #include <knuminput.h>
 #include <kdebug.h>
 #include <krandom.h>
+#include <kvbox.h>
 
 #include "propertycalculator.h"
 #include "widgets/propertylistview.h"
@@ -43,7 +44,7 @@
 
 #include "profiling.h"
 
-DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( parent )
+DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( parent )
 {
 	// Initialize internal variables
 	database = db;
@@ -54,7 +55,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	//Design the dialog
 	setSpacing( 5 );
 	// Options Box
-	optionsBox = new Q3HBox( this );
+	optionsBox = new KHBox( this );
 
 	daysSliderBox = new Q3VGroupBox( i18n( "Number of Days" ), optionsBox );
 	dayNumberLabel = new QLabel( daysSliderBox );
@@ -87,7 +88,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : Q3VBox( pa
 	// Button bar
 	KIconLoader *il = KIconLoader::global(); 
 
-	Q3HBox *bottom_layout = new Q3HBox( this );
+	KHBox *bottom_layout = new KHBox( this );
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	okButton = new QPushButton( bottom_layout );
@@ -323,12 +324,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 
 	// Options box
 
-	mealOptions = new Q3HBox( this );
+	mealOptions = new KHBox( this );
 	mealOptions->setSpacing( 10 );
 	layout->addWidget( mealOptions );
 
 	// Number of dishes input
-	dishNumberBox = new Q3HBox( mealOptions );
+	dishNumberBox = new KHBox( mealOptions );
 	dishNumberBox->setSpacing( 10 );
 	dishNumberLabel = new QLabel( i18n( "No. of dishes: " ), dishNumberBox );
 	dishNumberInput = new QSpinBox( dishNumberBox );
@@ -479,7 +480,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	dishTitle = new DishTitle( listBox, title );
 
 	//Categories list
-	categoriesBox = new Q3VBox( listBox );
+	categoriesBox = new KVBox( listBox );
 	categoriesEnabledBox = new QCheckBox( categoriesBox );
 	categoriesEnabledBox->setText( i18n( "Enable Category Filtering" ) );
 

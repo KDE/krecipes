@@ -29,12 +29,13 @@
 #include <qobject.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
+#include <kvbox.h>
 
 #include "datablocks/elementlist.h"
 
@@ -59,7 +60,7 @@ class ClickableLed;
 /**
 @author Unai Garro
 */
-class RecipeInputDialog: public Q3VBox
+class RecipeInputDialog: public KVBox
 {
 	Q_OBJECT
 

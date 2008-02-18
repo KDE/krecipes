@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <q3hbox.h>
+
 #include <q3vgroupbox.h>
 #include <qlayout.h>
 #include <qpixmap.h>
@@ -36,6 +36,7 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <K3Wizard>
+#include <kvbox.h>
 
 #include "backends/usda_ingredient_data.h"
 
@@ -567,7 +568,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	Q3HBox *hbox = new Q3HBox( this );
+	KHBox *hbox = new KHBox( this );
 
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
 

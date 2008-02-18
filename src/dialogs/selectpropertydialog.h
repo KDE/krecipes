@@ -18,11 +18,12 @@
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3vbox.h>
+
 
 #include <k3listview.h>
 #include <kcombobox.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "datablocks/unit.h"
 

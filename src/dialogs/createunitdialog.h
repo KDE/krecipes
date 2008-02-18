@@ -17,7 +17,8 @@
 #include <qpushbutton.h>
 #include <q3groupbox.h>
 #include <qlayout.h>
-#include <q3vbox.h>
+#include <kvbox.h>
+
 
 #include "datablocks/unit.h"
 

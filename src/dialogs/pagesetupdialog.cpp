@@ -12,7 +12,7 @@
 
 #include <qdir.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+
 #include <qfileinfo.h>
 #include <qpushbutton.h>
 #include <q3popupmenu.h>
@@ -42,6 +42,7 @@
 
 #include <widgets/thumbbar.h>
 #include <kglobal.h>
+#include <kvbox.h>
 #include "setupdisplay.h"
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent ), m_configEntry(configEntry)
@@ -71,7 +72,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the left, and right-click any element to edit the look of that element.</i>"),this);
 	layout->addWidget( help );
 
-	Q3HBox *viewBox = new Q3HBox( this );
+	KHBox *viewBox = new KHBox( this );
 	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Qt::Vertical);
 	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
@@ -82,7 +83,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	m_htmlPart->view()->reparent(viewBox,QPoint());
 	layout->addWidget( viewBox );
 
-	Q3HBox *buttonsBox = new Q3HBox( this );
+	KHBox *buttonsBox = new KHBox( this );
 	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIconLoader::Small ), i18n( "Save and Close" ), buttonsBox );
 	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIconLoader::Small ), i18n( "&Cancel" ), buttonsBox );
 	layout->addWidget( buttonsBox );
