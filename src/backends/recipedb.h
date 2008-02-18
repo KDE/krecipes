@@ -18,7 +18,6 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 
-#include <QDBusConnection>
 //Added by qt3to4:
 #include <Q3CString>
 

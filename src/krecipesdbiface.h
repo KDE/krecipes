@@ -11,7 +11,6 @@
 #ifndef _KRECIPESDBIFACE_H_
 #define _KRECIPESDBIFACE_H_
 
-#include <QObject>
 
 class KrecipesDBIface  
 {

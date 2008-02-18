@@ -13,8 +13,6 @@
 #include "categorycombobox.h"
 
 #include <q3listbox.h>
-#include <QAbstractItemView>
-#include <QListWidget>
 
 #include <klocale.h>
 #include <kconfiggroup.h>

@@ -30,7 +30,6 @@
 #include <Q3HBoxLayout>
 #include <Q3ValueList>
 #include <QLabel>
-#include <Q3PtrList>
 #include <Q3VBoxLayout>
 
 #include <kapplication.h>

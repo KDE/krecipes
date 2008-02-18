@@ -21,7 +21,6 @@
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QLabel>
-#include <Q3PtrList>
 #include <Q3VBoxLayout>
 
 #include <klocale.h>

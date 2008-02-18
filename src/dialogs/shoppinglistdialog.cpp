@@ -28,7 +28,6 @@
 //Added by qt3to4:
 #include <QDropEvent>
 #include <Q3GridLayout>
-#include <Q3PtrList>
 #include <Q3VBoxLayout>
 
 /** A simple listview to accept dropping a RecipeItemDrag */
