@@ -9,7 +9,8 @@
 ***************************************************************************/
 
 #include <kapplication.h>
-
+#include <KCmdLineArgs>
+#include <KAboutData>
 #include <qstring.h>
 #include <qfile.h>
 
@@ -23,8 +24,9 @@
 int
 main(int argc, char *argv[])
 {
-	KApplication a(argc, argv, "kretest");
-
+        KAboutData about("kretest", 0, ki18n("Kretest"), "1");
+        KCmdLineArgs::init(argc, argv, &about);
+        KApplication app;
 	printf("Creating KreImporter.\n");
 	KreImporter importer;
 

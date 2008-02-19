@@ -1,6 +1,6 @@
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ../ ../importers/ ../exporters/  )
-
+if(TEST_PORTED)
 
 ########### next target ###############
 
@@ -88,7 +88,7 @@ endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 
-
+endif(TEST_PORTED)
 
 
 #original Makefile.am contents follow:

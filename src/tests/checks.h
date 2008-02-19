@@ -32,10 +32,10 @@ void check( const RatingList &rating, const RatingList &base );
 bool check(const QString &txt, const QString &a, const QString &b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
-		cout << "'" << b.toLatin1() << "' (" << b.length() << " chars)" << endl;
+		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
+		cout << "'" << b.latin1() << "' (" << b.length() << " chars)" << endl;
 		cout << "but got" << endl;
-		cout << "'" << a.toLatin1() << "' (" << a.length() << " chars)" << endl;
+		cout << "'" << a.latin1() << "' (" << a.length() << " chars)" << endl;
 		exit( 1 );
 	}
 
@@ -45,7 +45,7 @@ bool check(const QString &txt, const QString &a, const QString &b)
 bool check(const QString &txt, int a, int b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -58,7 +58,7 @@ bool check(const QString &txt, int a, int b)
 bool check(const QString &txt, double a, double b)
 {
 	if ( fabs(a - b) > 1e-10 ) {
-		cout << "ERROR: Tested " << txt.toLatin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -72,7 +72,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 {
 	if ( a.size() != b.size() ) {
 		
-		cout << "ERROR: Tested " << txt.toLatin1() << ": photos differ" << endl;
+		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
 	//	exit( 1 );
 	}
 
