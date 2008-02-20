@@ -119,7 +119,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 		//Now Reopen the Database and signal & exit if it fails
 		if ( !database->open() ) {
-			QString error = i18n( "Database message: %1" ).arg( database->lastError().databaseText() );
+			QString error = i18n( "Database message: %1" , database->lastError().databaseText() );
 			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
 
 			// Handle the error (passively)

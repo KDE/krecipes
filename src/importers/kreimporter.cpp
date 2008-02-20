@@ -71,7 +71,7 @@ void KreImporter::parseFile( const QString &filename )
 		int column;
 		if ( !doc.setContent( file, &error, &line, &column ) ) {
 			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
-			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3" ) ).arg( error ).arg( line ).arg( column ) );
+			setErrorMsg( i18n( "\"%1\" at line %2, column %3" , error , line, column ) );
 			return ;
 		}
 
