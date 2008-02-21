@@ -970,7 +970,7 @@ QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 	QString s_escaped;
 
 	// Escape
-	s_escaped = escape( QString::fromLatin1(s.utf8()) );
+	s_escaped = escape( QString::fromLatin1(s.toUtf8()) );
 
 	// Return encoded
 	return s_escaped.toLatin1(); // Note that the text has already been converted before escaping.
@@ -1019,9 +1019,9 @@ QString escape( const QString &s )
 	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 		// Escape using SQLite's function
 #ifdef HAVE_SQLITE
-		char * escaped = sqlite_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite_mprintf( "%q", s.toLatin1().data() ); // Escape the string(allocates memory)
 #elif HAVE_SQLITE3
-		char * escaped = sqlite3_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
+		char * escaped = sqlite3_mprintf( "%q", s.toLatin1().data() ); // Escape the string(allocates memory)
 #endif
 		s_escaped = escaped;
 #ifdef HAVE_SQLITE
