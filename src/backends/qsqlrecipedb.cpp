@@ -2001,7 +2001,7 @@ float QSqlRecipeDB::databaseVersion( void )
 	QString command = "SELECT ver FROM db_info";
 	QSqlQuery dbVersion( command, *database );
 
-	if ( dbVersion.isActive() && dbVersion.isValid() )
+	if ( dbVersion.isActive() && dbVersion.next() )
 		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
 	else
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
@@ -2045,7 +2045,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 {
 	QString limit_str;
 	if ( parent_id == -1 ) {
-		emit progressBegin(0,QString::null,i18n("Loading category list"));
+		emit progressBegin(0,QString(),i18n("Loading category list"));
 		list->clear();
 
 		//only limit the number of top-level categories
@@ -2054,7 +2054,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 
 	m_command = "SELECT id,name,parent_id FROM categories WHERE parent_id='"+QString::number(parent_id)+"' ORDER BY name "+limit_str;
 
-	QSqlQuery categoryToLoad( QString::null, *database );
+	QSqlQuery categoryToLoad( QString(), *database );
 	//categoryToLoad.setForwardOnly(true); //FIXME? Subcategories aren't loaded if this is enabled, even though we only go forward
 
 	categoryToLoad.exec(m_command);

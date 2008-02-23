@@ -817,7 +817,7 @@ void KrecipesView::resizeRightPane( int lpw, int )
 void KrecipesView::initDatabase()
 {
 
-	KConfigGroup config(KGlobal::config(), "DBType" );
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
 	dbType = checkCorrectDBType( config );
 
 
@@ -842,7 +842,7 @@ void KrecipesView::initDatabase()
 		// Reread the configuration file.
 		// The user may have changed the data and/or DB type
 
-		KConfigGroup grp = config.group( "DBType" );
+		KConfigGroup grp = KGlobal::config()->group( "DBType" );
 		dbType = checkCorrectDBType( grp );
 
 		delete database;

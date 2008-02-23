@@ -152,10 +152,10 @@ public:
 	                                 const QString &pass,
 	                                 const QString &DBname,
 	                                 int port,
-	                                 const QString &file = QString::null );
+	                                 const QString &file = QString() );
 
 	/** Convenience method.  Calls the above with arguments from KConfig. */
-	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString::null );
+	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString() );
 
 	virtual void addIngredientWeight( const Weight & ) = 0;
 	virtual void addProperty( const QString &name, const QString &units ) = 0;
