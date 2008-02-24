@@ -18,11 +18,12 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include <qvariant.h>
 //Added by qt3to4:
 #include <QSqlQuery>
+#include <QSqlError>
 
 //Note: PostgreSQL's database names are always lowercase
 PSqlRecipeDB::PSqlRecipeDB( const QString& host, const QString& user, const QString& pass, const QString& DBname, int port ) : QSqlRecipeDB( host, user, pass, DBname.toLower(), port )
@@ -33,34 +34,33 @@ PSqlRecipeDB::~PSqlRecipeDB()
 
 void PSqlRecipeDB::createDB()
 {
-	QString real_db_name = database->databaseName();
+	QString real_db_name = database.databaseName();
 
 	//we have to be connected to some database in order to create the Krecipes database
 	//so long as the permissions given are allowed access to "template1', this works
-	database->setDatabaseName( "template1" );
-	if ( database->open() ) {
+	database.setDatabaseName( "template1" );
+	if ( database.open() ) {
 		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
 		if ( !query.isActive() )
-			kDebug() << "create query failed: " << database->lastError().databaseText() << endl;
+			kDebug() << "create query failed: " << database.lastError().databaseText() << endl;
 
-		database->close();
+		database.close();
 	}
 	else
-		kDebug() << "create open failed: " << database->lastError().databaseText() << endl;
+		kDebug() << "create open failed: " << database.lastError().databaseText() << endl;
 
-	database->setDatabaseName( real_db_name );
+	database.setDatabaseName( real_db_name );
 }
 
 QStringList PSqlRecipeDB::backupCommand() const
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup("Server");
+	KConfigGroup config = KGlobal::config()->group("Server");
 
 	QStringList command;
-	command<<config->readEntry( "PgDumpPath", "pg_dump" )<<"-d"<<database->databaseName()
-	  <<"-U"<<config->readEntry( "Username" );
+	command<<config.readEntry( "PgDumpPath", "pg_dump" )<<"-d"<<database.databaseName()
+	  <<"-U"<<config.readEntry( "Username" );
 
-	int port = config->readNumEntry( "Port", 0 );
+	int port = config.readEntry( "Port", 0 );
 	if ( port > 0 )
 		command<<"-p"<<QString::number(port);
 
@@ -69,14 +69,13 @@ QStringList PSqlRecipeDB::backupCommand() const
 
 QStringList PSqlRecipeDB::restoreCommand() const
 {
-	KConfig *config = KGlobal::config();
-	config->setGroup("Server");
+	KConfigGroup config = KGlobal::config()->group("Server");
 
 	QStringList command;
-	command<<config->readEntry( "PsqlPath", "psql" )<<database->databaseName()
-	  <<"-U"<<config->readEntry( "Username" );
+	command<<config.readEntry( "PsqlPath", "psql" )<<database.databaseName()
+	  <<"-U"<<config.readEntry( "Username" );
 
-	int port = config->readNumEntry( "Port", 0 );
+	int port = config.readEntry( "Port", 0 );
 	if ( port > 0 )
 		command<<"-p"<<QString::number(port);
 
@@ -169,7 +168,7 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 	else
 		return ;
 
-	QSqlQuery databaseToCreate( QString::null, database );
+	QSqlQuery databaseToCreate( QString(), database );
 
 	// execute the queries
 	for ( QStringList::const_iterator it = commands.begin(); it != commands.end(); ++it )
@@ -194,7 +193,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 	}
 
 	if ( qRound(version*100) < 81 ) {
-		database->transaction();
+		database.transaction();
 
 		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
 
@@ -204,16 +203,16 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		query.exec( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
 
-		if ( !database->commit() )
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.81 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 82 ) {
-		database->transaction();
+		database.transaction();
 
 		//==================add a columns to 'recipes' to allow yield range + yield type
-		database->exec( "CREATE TABLE recipes_copy (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, persons INTEGER, instructions TEXT, photo TEXT, prep_time TIME);" );
-		QSqlQuery copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
+		database.exec( "CREATE TABLE recipes_copy (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, persons INTEGER, instructions TEXT, photo TEXT, prep_time TIME);" );
+		QSqlQuery copyQuery = database.exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query(QString::null,database);
@@ -229,9 +228,9 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				emit progress();
 			}
 		}
-		database->exec( "DROP TABLE recipes" );
-		database->exec( "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME);" );
-		copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
+		database.exec( "DROP TABLE recipes" );
+		database.exec( "CREATE TABLE recipes (id SERIAL NOT NULL PRIMARY KEY,title CHARACTER VARYING, yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo TEXT, prep_time TIME);" );
+		copyQuery = database.exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query(QString::null,database);
@@ -249,23 +248,23 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				emit progress();
 			}
 		}
-		database->exec( "DROP TABLE recipes_copy" );
+		database.exec( "DROP TABLE recipes_copy" );
 
-		database->exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
+		database.exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
 
-		if ( !database->commit() )
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.82 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 83 ) {
-		database->transaction();
+		database.transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
-		database->exec( "ALTER TABLE ingredient_list RENAME TO ingredient_list_copy;" );
+		database.exec( "ALTER TABLE ingredient_list RENAME TO ingredient_list_copy;" );
 
-		database->exec( "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);" );
+		database.exec( "CREATE TABLE ingredient_list (id SERIAL NOT NULL PRIMARY KEY, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER);" );
 
-		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
+		QSqlQuery copyQuery = database.exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				int ing_list_id = getNextInsertID("ingredient_list","id");
@@ -294,51 +293,51 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				emit progress();
 			}
 		}
-		database->exec( "DROP TABLE ingredient_list_copy" );
+		database.exec( "DROP TABLE ingredient_list_copy" );
 
-		database->exec( "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);" );
-		database->exec( "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);" );
+		database.exec( "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);" );
+		database.exec( "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);" );
 
-		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
+		database.exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
-		if ( !database->commit() ) {
+		if ( !database.commit() ) {
 			kDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
 
 	if ( qRound(version*100) < 84 ) {
-		database->transaction();
+		database.transaction();
 
-		database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP" );
-		database->exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP" );
-		database->exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP" );
+		database.exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP" );
+		database.exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP" );
+		database.exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP" );
 
-		database->exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
+		database.exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
 
-		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
+		database.exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
 
-		if ( !database->commit() ) {
+		if ( !database.commit() ) {
 			kDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
 
 	if ( qRound(version*100) < 85 ) { //this change altered the photo format, but this backend already used the newer format
-		database->transaction();
+		database.transaction();
 
-		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
+		database.exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
 
-		if ( !database->commit() ) {
+		if ( !database.commit() ) {
 			kDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
 			return;
 		}
 	}
 
 	if ( qRound(version*100) < 86 ) {
-		database->transaction();
+		database.transaction();
 
-		database->exec( "CREATE INDEX gidil_index ON ingredient_list USING BTREE (group_id);" );
+		database.exec( "CREATE INDEX gidil_index ON ingredient_list USING BTREE (group_id);" );
 
 		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
 
@@ -350,10 +349,10 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				int id = query.value(0).toInt();
 				if ( last == name ) {
 					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
-					database->exec(command);
+					database.exec(command);
 
 					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
-					database->exec(command);
+					database.exec(command);
 				}
 				last = name;
 				lastID = id;
@@ -362,36 +361,36 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			}
 		}
 
-		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
-		if ( !database->commit() )
+		database.exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 87 ) {
 		//Load this default data so the user knows what rating criteria is
-		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
-		database->exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
-		database->exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
-		database->exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
-		database->exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
+		database.exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
+		database.exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
+		database.exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
+		database.exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
+		database.exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
 
-		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
+		database.exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 
 	if ( qRound(version*100) < 90 ) {
-		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+		database.exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
 	}
 
 	if ( qRound(version*100) < 91 ) {
-		database->exec("CREATE index parent_id_index ON categories USING BTREE(parent_id)");
-		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
+		database.exec("CREATE index parent_id_index ON categories USING BTREE(parent_id)");
+		database.exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
 
 	if ( qRound(version*100) < 92 ) {
-		database->transaction();
+		database.transaction();
 
 		//==================add a columns to 'units' to allow unit abbreviations
-		database->exec( "ALTER TABLE units RENAME TO units_copy" );
+		database.exec( "ALTER TABLE units RENAME TO units_copy" );
 
 		int nextval = -1;
 		QSqlQuery getID( "SELECT nextval('units_id_seq')", database );
@@ -400,8 +399,8 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		if ( nextval == -1 )
 			kDebug() << "Database update failed! Unable to update units sequence." << endl;
 
-		database->exec( "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING )" );
-		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
+		database.exec( "CREATE TABLE units (id SERIAL NOT NULL PRIMARY KEY, name CHARACTER VARYING, name_abbrev CHARACTER VARYING, plural CHARACTER VARYING, plural_abbrev CHARACTER VARYING )" );
+		QSqlQuery copyQuery = database.exec( "SELECT id,name,plural FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query(QString::null,database);
@@ -416,45 +415,45 @@ void PSqlRecipeDB::portOldDatabases( float version )
 				emit progress();
 			}
 		}
-		database->exec( "DROP TABLE units_copy" );
+		database.exec( "DROP TABLE units_copy" );
 
-		database->exec( "ALTER TABLE units_id_seq1 RENAME TO units_id_seq" );
-		database->exec( "ALTER SEQUENCE units_id_seq RESTART WITH "+QString::number(nextval) );
+		database.exec( "ALTER TABLE units_id_seq1 RENAME TO units_id_seq" );
+		database.exec( "ALTER SEQUENCE units_id_seq RESTART WITH "+QString::number(nextval) );
 
-		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
-		if ( !database->commit() )
+		database.exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 93 ) {
-		database->transaction();
+		database.transaction();
 
-		database->exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER" );
+		database.exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER" );
 
-		database->exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)'");
-		if ( !database->commit() )
+		database.exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)'");
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 94 ) {
-		database->transaction();
+		database.transaction();
 
-		database->exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL DEFAULT '0'" );
+		database.exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL DEFAULT '0'" );
 
-		database->exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
-		if ( !database->commit() )
+		database.exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
+		if ( !database.commit() )
 			kDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
 	}
 
 	if ( qRound(version*100) < 95 ) {
-		database->exec( "DROP TABLE ingredient_weights" );
+		database.exec( "DROP TABLE ingredient_weights" );
 		createTable( "ingredient_weights" );
-		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
+		database.exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
 
 	if ( qRound(version*100) < 96 ) {
 		fixUSDAPropertyUnits();
-		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+		database.exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
 	}
 }
 

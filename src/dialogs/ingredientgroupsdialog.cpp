@@ -15,7 +15,7 @@
 
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -26,7 +26,9 @@
 
 IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent,name), database(db)
 {
-	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	//KDE$ port
+	//QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout();
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
@@ -34,7 +36,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);
 
-	Q3VBoxLayout *buttonLayout = new Q3VBoxLayout(this);
+	QVBoxLayout *buttonLayout = new QVBoxLayout();
 	QPushButton *addHeaderButton = new QPushButton( this );
 	addHeaderButton->setText( "+" );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );
@@ -58,6 +60,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	buttonLayout->addItem( spacer_below_buttons );
 
 	layout->addLayout(buttonLayout);
+	setLayout( layout );
 
 	connect( addHeaderButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
 	connect( removeHeaderButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
