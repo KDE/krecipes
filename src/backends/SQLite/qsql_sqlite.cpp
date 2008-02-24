@@ -30,7 +30,7 @@
 
 #include "config-krecipes.h"
 
-#if HAVE_SQLITE3
+#ifdef HAVE_SQLITE3
 #include <sqlite3.h>
 #define sqlite_free sqlite3_free
 #elif HAVE_SQLITE
@@ -426,13 +426,13 @@ static QString escape( const QString &s )
 
 	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
 		// Escape using SQLite's function
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		char * escaped = sqlite_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #elif HAVE_SQLITE3
 		char * escaped = sqlite3_mprintf( "%q", s.toLatin1() ); // Escape the string(allocates memory)
 #endif
 		s_escaped = escaped;
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		sqlite_freemem( escaped ); // free allocated memory
 #elif HAVE_SQLITE3
 		sqlite3_free( escaped ); // free allocated memory

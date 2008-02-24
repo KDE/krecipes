@@ -56,8 +56,8 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	instructionsLabel = new QLabel( page );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
-	instructionsLabel->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
-
+	instructionsLabel->setAlignment( Qt::AlignVCenter );
+        instructionsLabel->setWordWrap(true);
 	if ( m_depsAreDeleted ) {
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	}

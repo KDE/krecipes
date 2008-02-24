@@ -396,7 +396,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings.<br><br><b>Warning: Passwords are stored in plain text and could potentially be compromised.  We recommend that you create a username and password combination solely for use by Krecipes.</b>" ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( int( Qt::AlignTop | Qt::TextWordWrap ) );
+	serverSetupText->setAlignment( Qt::AlignTop  );
         serverSetupText->setWordWrap(true);
 	layout->addWidget( serverSetupText, 1, 3 );
 
@@ -628,8 +628,8 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 	saveText = new QLabel( this );
 	saveText->setText( i18n( "Congratulations; all the necessary configuration setup is done. Press 'Finish' to continue, and enjoy cooking!" ) );
 	saveText->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-
-	saveText->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
+        saveText->setWordWrap(true);
+	saveText->setAlignment( Qt::AlignVCenter );
 	layout->addWidget( saveText, 1, 3 );
 
 

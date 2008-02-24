@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 #include "config-krecipes.h"
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 #include <sqlite.h>
 #include <cstdlib>
 #elif HAVE_SQLITE3
@@ -41,7 +41,7 @@ QSQLiteDB::QSQLiteDB( QObject *, const char * )
 
 bool QSQLiteDB::open( const QString &dbname )
 {
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 	char * errmsg = 0;
 	if ( (m_db = sqlite_open( dbname.toLatin1(), 0, &errmsg )) == 0L ) {
 		free( errmsg );
@@ -66,7 +66,7 @@ bool QSQLiteDB::open( const QString &dbname )
 void QSQLiteDB::close()
 {
 	if ( m_db ) {
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		sqlite_close( m_db );
 #elif HAVE_SQLITE3
 
@@ -85,7 +85,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 	}
 
 	char *errmsg = 0;
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 
 	if ( sqlite_exec( m_db, query.toLatin1(), &call_back, &res, &errmsg ) > 0 )
 #elif HAVE_SQLITE3
@@ -107,7 +107,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 	}
 
 	if ( lastID ) {
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		* lastID = sqlite_last_insert_rowid( m_db );
 #elif HAVE_SQLITE3
 
@@ -140,7 +140,7 @@ int QSQLiteDB::call_back( void* result, int argc, char** argv, char** columns )
 	return 0;
 }
 
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 void QSQLiteDB::lastInsertID(sqlite_func *context,int argc,const char**)
 {
 	Q_ASSERT( argc==0 );
