@@ -81,9 +81,9 @@
 
 
 Krecipes::Krecipes()
-		: KXmlGuiWindow( 0 ),
-		m_view( new KrecipesView( this ) )
+		: KXmlGuiWindow( 0 ) 
 {
+   m_view = new KrecipesView( this ); 
 	this->setObjectName( "Krecipes" );
 	// accept dnd
 	setAcceptDrops( true );
@@ -196,7 +196,7 @@ void Krecipes::setupActions()
 	converterAction->setText( i18n( "&Measurement Converter" ) );
 	converterAction->setShortcut( Qt::CTRL + Qt::Key_M );
 	actionCollection()->addAction( "converter_action" , converterAction );
-	connect( converterAction, SIGNAL(triggered(bool)), m_view, SLOT( conversionToolSlot() ) );
+	connect( converterAction, SIGNAL(triggered(bool)), this , SLOT( conversionToolSlot() ) );
 
 	groupConfig = new KConfigGroup(KGlobal::config(),"Advanced");
 	
@@ -235,45 +235,45 @@ void Krecipes::setupActions()
 	importAction->setText( i18n( "Import from File..." ) );
 	importAction->setShortcut( Qt::CTRL + Qt::Key_I );
 	actionCollection()->addAction( "import_action" , importAction );
-	connect( importAction, SIGNAL(triggered(bool)), m_view, SLOT( import() ) );
+	connect( importAction, SIGNAL(triggered(bool)), this, SLOT( import() ) );
 
 	importDBAction= new KAction( this );
 	importDBAction->setText( i18n( "Import from Database..." ) );
 	actionCollection()->addAction( "import_db_action" , importDBAction );
-	connect( importDBAction, SIGNAL(triggered(bool)), m_view, SLOT( KreDBImport() ) );
+	connect( importDBAction, SIGNAL(triggered(bool)), this, SLOT( kreDBImport() ) );
 
 	exportAction = new KAction( this );
 	exportAction->setText( i18n( "Export..." ) );
 	actionCollection()->addAction( "export_action" , exportAction );
-	connect( exportAction, SIGNAL(triggered(bool)), m_view, SLOT( fileExport() ) );
+	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT( fileExport() ) );
 
 	copyToClipboardAction = new KAction( this );
 	copyToClipboardAction->setText( i18n( "&Copy to Clipboard" ) );
 	copyToClipboardAction->setIcon( KIcon( "edit-copy" ) );
 	copyToClipboardAction->setShortcut( Qt::CTRL + Qt::Key_C );
 	actionCollection()->addAction( "copy_to_clipboard_action" , copyToClipboardAction );
-	connect( copyToClipboardAction, SIGNAL(triggered(bool)), m_view, SLOT( () ) );
+	connect( copyToClipboardAction, SIGNAL(triggered(bool)), this, SLOT( fileToClipboard()  ) );
 
 	
         pageSetupAction = new KAction( this );
         pageSetupAction->setText( i18n( "Page Setup..." ) );
         actionCollection()->addAction( "page_setup_action" , pageSetupAction );
-        connect( pageSetupAction, SIGNAL(triggered(bool)), m_view, SLOT( pageSetupSlot() ) );
+        connect( pageSetupAction, SIGNAL(triggered(bool)), this, SLOT( pageSetupSlot() ) );
 
         printSetupAction = new KAction( this );
         printSetupAction->setText( i18n( "Print Setup..." ) );
         actionCollection()->addAction( "print_setup_action" , printSetupAction );
-        connect( printSetupAction, SIGNAL(triggered(bool)), m_view, SLOT( printSetupSlot() ) );
+        connect( printSetupAction, SIGNAL(triggered(bool)), this, SLOT( printSetupSlot() ) );
 
         backupAction = new KAction( this );
         backupAction->setText( i18n( "Backup..." ) );
         actionCollection()->addAction( "backup_action" , backupAction );
-        connect( backupAction, SIGNAL(triggered(bool)), m_view, SLOT( backupSlot() ) );
+        connect( backupAction, SIGNAL(triggered(bool)), this, SLOT( backupSlot() ) );
 
         restoreAction = new KAction( this );
         restoreAction->setText( i18n( "Restore..." ) );
         actionCollection()->addAction( "restore_action" , restoreAction );
-        connect( restoreAction, SIGNAL(triggered(bool)), m_view, SLOT( restoreSlot() ) );
+        connect( restoreAction, SIGNAL(triggered(bool)), this, SLOT( restoreSlot() ) );
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
