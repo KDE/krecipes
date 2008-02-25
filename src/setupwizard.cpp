@@ -35,7 +35,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <K3Wizard>
 #include <kvbox.h>
 
 #include "backends/usda_ingredient_data.h"
@@ -71,10 +70,10 @@ SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFl
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
 	#if (!(HAVE_SQLITE || HAVE_SQLITE3))
-		#if (HAVE_MYSQL)
+		#ifdef (HAVE_MYSQL)
 			showPages( MySQL );
 		#else
-		#if (HAVE_POSTGRESQL)
+		#ifdef (HAVE_POSTGRESQL)
 			showPages( PostgreSQL );
 		#endif
 		#endif
@@ -819,21 +818,21 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	psqlCheckBox = new QRadioButton( i18n( "Local or Remote PostgreSQL Database" ), bg, "psqlCheckBox" );
 	bg->setButton( 0 ); // By default, SQLite
 
-#if (!HAVE_MYSQL)
+#ifndef HAVE_MYSQL
 	mysqlCheckBox->setEnabled( false );
 #endif
 
-#if (!HAVE_POSTGRESQL)
+#ifndef HAVE_POSTGRESQL
 	psqlCheckBox->setEnabled( false );
 #endif
 
 #if (!(HAVE_SQLITE || HAVE_SQLITE3))
 	liteCheckBox->setEnabled( false );
-#if (HAVE_MYSQL)
+#ifdef (HAVE_MYSQL)
 
 	bg->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
 #else
-	#if (HAVE_POSTGRESQL)
+	#ifdef (HAVE_POSTGRESQL)
 
 	bg->setButton( 2 );
 #endif

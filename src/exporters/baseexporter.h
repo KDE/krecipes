@@ -14,9 +14,8 @@
 
 #include <qstringlist.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <Q3TextStream>
-
+#include <QList>
 
 #include <kapplication.h>
 #include <kprogressdialog.h>
