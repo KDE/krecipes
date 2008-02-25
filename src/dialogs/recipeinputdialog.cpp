@@ -1040,9 +1040,9 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			if ( old_text != new_text.trimmed() )
 			{
 				new_ing.prepMethodList = ElementList::split(",",new_text.trimmed());
-				Q3ValueList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
+				QList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
 
-				Q3ValueList<int>::const_iterator id_it = new_ids.begin();
+				QList<int>::const_iterator id_it = new_ids.begin();
 				for ( ElementList::iterator it = new_ing.prepMethodList.begin(); it != new_ing.prepMethodList.end(); ++it, ++id_it ) {
 					(*it).id = *id_it;
 				}
@@ -1336,8 +1336,8 @@ void RecipeInputDialog::slotIngredientParser()
 			(*it).ingredientID = IngredientInputWidget::createNewIngredientIfNecessary((*it).name,database);
 			(*it).units.id = IngredientInputWidget::createNewUnitIfNecessary((*it).units.name,false,(*it).ingredientID,(*it).units,database);
 
-			Q3ValueList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
-			Q3ValueList<int>::const_iterator prep_id_it = prepIDs.begin();
+			QList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
+			QList<int>::const_iterator prep_id_it = prepIDs.begin();
 			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it, ++prep_id_it ) {
 				(*prep_it).id = *prep_id_it;
 			}

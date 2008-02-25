@@ -350,12 +350,12 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 
 void XSLTExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 {
-	Q3ValueList<int> id;
+	QList<int> id;
 	id << recipe_id;
 	removeHTMLFiles( filename, id );
 }
 
-void XSLTExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids )
+void XSLTExporter::removeHTMLFiles( const QString &filename, const QList<int> &recipe_ids )
 {
 	kDebug() << "removing html files" << endl;
 	//remove HTML file
@@ -364,7 +364,7 @@ void XSLTExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<i
 		old_file.remove();
 
 	//remove photos
-	for ( Q3ValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
+	for ( QList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
 		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it 

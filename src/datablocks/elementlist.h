@@ -38,6 +38,6 @@ public:
 	static ElementList split( const QString &sep, const QString &str );
 };
 
-typedef Q3ValueList<int> IDList;
+typedef QList<int> IDList;
 
 #endif

@@ -261,7 +261,7 @@ void IngredientMatcherDialog::findRecipes( void )
 	// Now show the recipes with ingredients that are contained in the previous set
 	// of ingredients
 	RecipeList incompleteRecipes;
-	Q3ValueList <int> missingNumbers;
+	QList <int> missingNumbers;
 	Q3ValueList <IngredientList> missingIngredients;
 
 	RecipeList::Iterator it;
@@ -300,7 +300,7 @@ void IngredientMatcherDialog::findRecipes( void )
 	}
 
 	// Classify recipes with missing ingredients in different lists by ammount
-	Q3ValueList<int>::Iterator nit;
+	QList<int>::Iterator nit;
 	Q3ValueList<IngredientList>::Iterator ilit;
 	int missingNoAllowed = missingNumberSpinBox->value();
 

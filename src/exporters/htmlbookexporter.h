@@ -39,7 +39,7 @@ protected:
 
 private:
 	void createCategoryStructure( Q3TextStream &xml, const RecipeList &recipes );
-	bool removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
+	bool removeIfUnused( const QList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
 	void writeCategoryStructure( Q3TextStream &xml, const CategoryTree *categoryTree );
 
 	QMap<QString,Q3TextStream*> fileMap;

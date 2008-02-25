@@ -84,7 +84,7 @@ QString HTMLBookExporter::createFooter()
 
 void HTMLBookExporter::createCategoryStructure( Q3TextStream &xml, const RecipeList &recipes )
 {
-	Q3ValueList<int> categoriesUsed;
+	QList<int> categoriesUsed;
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
 			QMap<QString,Q3TextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
@@ -116,7 +116,7 @@ void HTMLBookExporter::createCategoryStructure( Q3TextStream &xml, const RecipeL
 	}
 }
 
-bool HTMLBookExporter::removeIfUnused( const Q3ValueList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
+bool HTMLBookExporter::removeIfUnused( const QList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
 {
 	for ( CategoryTree * it = parent->firstChild(); it; it = it->nextSibling() ) {
 		if ( cat_ids.find( it->category.id ) != cat_ids.end() ) {

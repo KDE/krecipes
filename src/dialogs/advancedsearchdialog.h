@@ -164,7 +164,7 @@ protected:
 
 signals:
 	void recipeSelected( int, int );
-	void recipesSelected( const Q3ValueList<int> &, int );
+	void recipesSelected( const QList<int> &, int );
 
 private slots:
 	void search();

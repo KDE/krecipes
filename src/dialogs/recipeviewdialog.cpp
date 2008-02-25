@@ -16,7 +16,6 @@
 #include <qstyle.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextDocument>
 
 #include <kapplication.h>
@@ -61,12 +60,12 @@ RecipeViewDialog::~RecipeViewDialog()
 
 bool RecipeViewDialog::loadRecipe( int recipeID )
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	ids.append( recipeID );
 	return loadRecipes( ids );
 }
 
-bool RecipeViewDialog::loadRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::loadRecipes( const QList<int> &ids, const QString &layoutConfig )
 {
 	KApplication::setOverrideCursor( Qt::WaitCursor );
 
@@ -82,7 +81,7 @@ bool RecipeViewDialog::loadRecipes( const Q3ValueList<int> &ids, const QString &
 	return success;
 }
 
-bool RecipeViewDialog::showRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layoutConfig )
 {
 	KProgressDialog * progress_dialog = 0;
 
@@ -159,7 +158,7 @@ void RecipeViewDialog::removeOldFiles()
 		RecipeList recipe_list;
 		database->loadRecipes( &recipe_list, RecipeDB::Title, ids_loaded );
 
-		Q3ValueList<int> recipe_ids;
+		QList<int> recipe_ids;
 		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
 			recipe_ids << ( *it ).recipeID;
 

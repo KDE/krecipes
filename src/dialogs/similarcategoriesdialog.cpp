@@ -358,9 +358,9 @@ void SimilarCategoriesDialog::mergeMatches()
 	QDialog::accept();
 }
 
-Q3ValueList<int> SimilarCategoriesDialog::matches() const
+QList<int> SimilarCategoriesDialog::matches() const
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	for ( Q3ListViewItem *item = toMergeListView->firstChild(); item; item = item->nextSibling() ) {
 		ids << item->text(1).toInt();
 	}

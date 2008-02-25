@@ -35,7 +35,7 @@ public:
 	virtual int supportedItems() const;
 
 	static void removeHTMLFiles( const QString &filename, int recipe_id );
-	static void removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids );
+	static void removeHTMLFiles( const QString &filename, const QList<int> &recipe_ids );
 
 	void setTemplate( const QString &filename );
 	void setStyle( const QString &filename );

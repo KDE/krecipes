@@ -436,8 +436,8 @@ void IngredientInputWidget::addIngredient()
 			if ( ing.units.id == -1 )  // this will happen if the dialog to create a unit was cancelled
 				return ;
 	
-			Q3ValueList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
-			Q3ValueList<int>::const_iterator id_it = prepIDs.begin();
+			QList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
+			QList<int>::const_iterator id_it = prepIDs.begin();
 			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {
 				(*it).id = *id_it;
 			}
@@ -498,9 +498,9 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 	return id;
 }
 
-Q3ValueList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *database )
+QList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *database )
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 
 	if ( prepMethods.isEmpty() )  //no prep methods
 		return ids;

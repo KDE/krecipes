@@ -452,12 +452,12 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 void HTMLExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 {
-	Q3ValueList<int> id;
+	QList<int> id;
 	id << recipe_id;
 	removeHTMLFiles( filename, id );
 }
 
-void HTMLExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<int> &recipe_ids )
+void HTMLExporter::removeHTMLFiles( const QString &filename, const QList<int> &recipe_ids )
 {
 	//remove HTML file
 	QFile old_file( filename + ".html" );
@@ -465,7 +465,7 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const Q3ValueList<i
 		old_file.remove();
 
 	//remove photos
-	for ( Q3ValueList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
+	for ( QList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
 		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
 			photo.remove(); //remove photos in directory before removing it 

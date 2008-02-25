@@ -506,7 +506,7 @@ void RecipeDB::execSQL( Q3TextStream &stream )
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
 {
 	RecipeList rlist;
-	Q3ValueList<int> ids; ids << id;
+	QList<int> ids; ids << id;
 	loadRecipes( &rlist, items, ids );
 
 	*recipe = *rlist.begin();

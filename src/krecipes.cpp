@@ -51,7 +51,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
 #include <QDragEnterEvent>
 #include <Q3VBoxLayout>
 
@@ -127,7 +127,7 @@ Krecipes::Krecipes()
 	parsing_file_dlg->setModal( true );
 	parsing_file_dlg->setWindowFlags ( Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
-	parsing_file_dlg_label->setFrameStyle( Q3Frame::Box | Q3Frame::Raised );
+	parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
 	( new Q3VBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
@@ -583,7 +583,7 @@ void Krecipes::mergeSimilarCategories()
 	m_view->database->loadCategories(&categories);
 	SimilarCategoriesDialog dlg(categories,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
-		Q3ValueList<int> ids = dlg.matches();
+		QList<int> ids = dlg.matches();
 		QString name = dlg.element();
 
 		int id = m_view->database->findExistingCategoryByName(name);
@@ -592,7 +592,7 @@ void Krecipes::mergeSimilarCategories()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeCategories(id, *it);
 		}
@@ -605,7 +605,7 @@ void Krecipes::mergeSimilarIngredients()
 	m_view->database->loadIngredients(&ingredients);
 	SimilarCategoriesDialog dlg(ingredients,this);
 	if ( dlg.exec() == QDialog::Accepted ) {
-		Q3ValueList<int> ids = dlg.matches();
+		QList<int> ids = dlg.matches();
 		QString name = dlg.element();
 
 		if ( ids.isEmpty() || name.isEmpty() ) return;
@@ -616,7 +616,7 @@ void Krecipes::mergeSimilarIngredients()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeIngredients(id, *it);
 		}

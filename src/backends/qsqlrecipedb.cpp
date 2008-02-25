@@ -153,7 +153,7 @@ void QSqlRecipeDB::execSQL( const QString &command )
 	database.exec( command );
 }
 
-void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> ids )
+void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 {
 	// Empty the recipe first
 	rlist->empty();
@@ -165,7 +165,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, Q3ValueList<int> i
 	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 
 	QStringList ids_str;
-	for ( Q3ValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
 
@@ -2766,7 +2766,7 @@ void QSqlRecipeDB::search( RecipeList *list, int items, const RecipeSearchParame
 {
 	QString query = buildSearchQuery(parameters);
 
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	QSqlQuery recipeToLoad( query, database );
 	if ( recipeToLoad.isActive() ) {
 		while ( recipeToLoad.next() ) {

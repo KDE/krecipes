@@ -22,7 +22,7 @@ public Q_SLOTS:
 	virtual Q_SCRIPTABLE QString currentDatabase() const = 0;
  	virtual Q_SCRIPTABLE void reload() = 0;
  	     
- 	virtual Q_SCRIPTABLE void exportRecipes( const Q3ValueList<int> &ids ) = 0;
+ 	virtual Q_SCRIPTABLE void exportRecipes( const QList<int> &ids ) = 0;
 
 };
 

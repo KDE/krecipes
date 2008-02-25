@@ -15,10 +15,8 @@
 
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <kvbox.h>
-
+#include <QList>
 class RecipeDB;
 class Recipe;
 class KHTMLPart;
@@ -40,13 +38,13 @@ public:
 	bool loadRecipe( int recipeID );
 
 	/** @return Boolean indicating whether or not the recipes were successfully loaded */
-	bool loadRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig = QString::null );
+	bool loadRecipes( const QList<int> &ids, const QString &layoutConfig = QString::null );
 
 	int recipesLoaded() const
 	{
 		return ids_loaded.count();
 	}
-	const Q3ValueList<int> currentRecipes() const
+	const QList<int> currentRecipes() const
 	{
 		return ids_loaded;
 	}
@@ -63,11 +61,11 @@ private:
 	KHTMLPart *recipeView;
 	RecipeDB *database;
 	bool recipe_loaded;
-	Q3ValueList<int> ids_loaded;
+	QList<int> ids_loaded;
 	QString tmp_filename;
 
 	// Internal Methods
-	bool showRecipes( const Q3ValueList<int> &ids, const QString &layoutConfig );
+	bool showRecipes( const QList<int> &ids, const QString &layoutConfig );
 	void removeOldFiles();
 
 private slots:

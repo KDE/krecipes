@@ -223,7 +223,7 @@ void ConversionTable::setRatio( int ingID1, int ingID2, double ratio )
 
 int ConversionTable::getUnitID( int rc )
 {
-	return ( *( unitIDs.at( rc ) ) );
+	return unitIDs.at( rc );
 }
 
 QWidget * ConversionTable::beginEdit ( int row, int col, bool replace )

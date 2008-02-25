@@ -55,7 +55,7 @@ public:
 
 	static int createNewIngredientIfNecessary( const QString &ing, RecipeDB *db );
 	static int createNewUnitIfNecessary( const QString &unit, bool plural, int ingredient_id, Unit &new_unit, RecipeDB *db );
-	static Q3ValueList<int> createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *db );
+	static QList<int> createNewPrepIfNecessary( const ElementList &prepMethods, RecipeDB *db );
 	static int createNewGroupIfNecessary( const QString &group, RecipeDB *db );
 
 signals:

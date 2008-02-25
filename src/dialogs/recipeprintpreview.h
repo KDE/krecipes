@@ -24,7 +24,7 @@ class RecipePrintPreview : public KDialog
 Q_OBJECT
 
 public:
-	RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids );
+	RecipePrintPreview( QWidget *parent, RecipeDB *db, const QList<int> &ids );
 	~RecipePrintPreview();
 
 	void reload();

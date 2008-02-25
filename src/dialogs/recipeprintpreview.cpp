@@ -20,7 +20,7 @@
 #include "recipeviewdialog.h"
 #include "pagesetupdialog.h"
 
-RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const Q3ValueList<int> &ids )
+RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QList<int> &ids )
 		: KDialog( parent )
 {
     setCaption( i18n("Print Preview") );

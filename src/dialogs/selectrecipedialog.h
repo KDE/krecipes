@@ -84,7 +84,7 @@ private:
 
 signals:
 	void recipeSelected( int id, int action );
-	void recipesSelected( const Q3ValueList<int> &ids, int action );
+	void recipesSelected( const QList<int> &ids, int action );
 	void recipeSelected( bool );
 
 private slots:

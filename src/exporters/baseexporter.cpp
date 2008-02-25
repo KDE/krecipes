@@ -56,7 +56,7 @@ void BaseExporter::setCompressed( bool b )
 	compress = b;
 }
 
-void BaseExporter::exporter( const Q3ValueList<int> &ids, RecipeDB *database, KProgressDialog *progress_dlg )
+void BaseExporter::exporter( const QList<int> &ids, RecipeDB *database, KProgressDialog *progress_dlg )
 {
 	m_progress_dlg = progress_dlg;
 
@@ -68,7 +68,7 @@ void BaseExporter::exporter( const Q3ValueList<int> &ids, RecipeDB *database, KP
 
 void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progress_dlg )
 {
-	Q3ValueList<int> single_recipe_list;
+	QList<int> single_recipe_list;
 	single_recipe_list << id ;
 	exporter( single_recipe_list, database, progress_dlg );
 }
@@ -105,13 +105,13 @@ QString BaseExporter::fileName() const
 	return filename;
 }
 
-void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
+void BaseExporter::saveToFile( const QList<int> &ids, RecipeDB *database )
 {
 	if ( file->open( QIODevice::WriteOnly ) ) {
 		if ( m_progress_dlg )
 			m_progress_dlg->progressBar()->setMaximum( ids.count()/progressInterval() );
 
-		Q3ValueList<int> ids_copy = ids;
+		QList<int> ids_copy = ids;
 		Q3TextStream stream( file );
 		stream.setEncoding( Q3TextStream::UnicodeUTF8 );
 
@@ -123,7 +123,7 @@ void BaseExporter::saveToFile( const Q3ValueList<int> &ids, RecipeDB *database )
 
 		recipe_list.clear();
 		for ( uint i = 0; i < ids.count(); i += progressInterval() ) {
-			Q3ValueList<int> sub_list;
+			QList<int> sub_list;
 			for ( int sub_i = 0; sub_i < progressInterval(); ++sub_i ) {
 				if ( ids_copy.count() == 0 ) break;
 

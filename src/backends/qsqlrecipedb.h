@@ -132,7 +132,7 @@ public:
 	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ); // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
 	void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 );
-	void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>() );
+	void loadRecipes( RecipeList *, int items = All, QList<int> ids = QList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false );
 	void loadUncategorizedRecipes( ElementList *list );
 	void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 );

@@ -42,7 +42,7 @@ public:
 	SimilarCategoriesDialog( ElementList &, QWidget* parent = 0 );
 	~SimilarCategoriesDialog();
 
-	Q3ValueList<int> matches() const;
+	QList<int> matches() const;
 	QString element() const;
 
 	KLineEdit* categoriesBox;

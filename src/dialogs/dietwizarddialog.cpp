@@ -244,7 +244,7 @@ void DietWizardDialog::createDiet( void )
 	{
 
 		// make a list of dishnumbers
-		Q3ValueList<int> dishNumbers;
+		QList<int> dishNumbers;
 
 		for ( int meal = 0;meal < mealNumber;meal++ ) {
 			int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();

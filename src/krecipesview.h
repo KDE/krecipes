@@ -139,7 +139,7 @@ public:
 	void createNewRecipe( void );
 	void createNewElement( void );
 
-	void exportRecipes( const Q3ValueList<int> &ids );
+	void exportRecipes( const QList<int> &ids );
 
 private:
 
@@ -198,11 +198,11 @@ public slots:
 
 private slots:
 	void actionRecipe( int recipeID, int action );
-	void actionRecipes( const Q3ValueList<int> &ids, int action );
+	void actionRecipes( const QList<int> &ids, int action );
 	void addRecipeButton( QWidget *w, const QString &title );
 	void closeRecipe( void );
 	void showRecipe( int recipeID );
-	void showRecipes( const Q3ValueList<int> &recipeIDs );
+	void showRecipes( const QList<int> &recipeIDs );
 	void slotSetTitle( const QString& title );
 	void slotSetPanel( KrePanel );
 	void switchToRecipe( void );

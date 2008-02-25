@@ -221,7 +221,7 @@ public:
 
 	virtual void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	/** Load all recipes with the ids in @param ids into the @ref RecipeList @param recipes */
-	virtual void loadRecipes( RecipeList *, int items = All, Q3ValueList<int> ids = Q3ValueList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
+	virtual void loadRecipes( RecipeList *, int items = All, QList<int> ids = QList<int>()/*, KProgressDialog *progress_dlg = 0*/ ) = 0;
 	virtual void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false ) = 0;
 	virtual void loadUncategorizedRecipes( ElementList *list ) = 0;
 	virtual void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 ) = 0;

@@ -249,7 +249,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Connect Signals from selectPanel (SelectRecipeDialog)
 
 	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-	connect ( selectPanel, SIGNAL( recipesSelected( const Q3ValueList<int>&, int ) ), this, SLOT( actionRecipes( const Q3ValueList<int>&, int ) ) );
+	connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
 
 	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
@@ -418,7 +418,7 @@ void KrecipesView::exportToClipboard()
 {
 	QWidget * vis_panel = rightPanel->visiblePanel();
 	if ( vis_panel == viewPanel && viewPanel->recipesLoaded() > 0 ) {
-		Q3ValueList<int> ids = viewPanel->currentRecipes();
+		QList<int> ids = viewPanel->currentRecipes();
 		RecipeActionsHandler::recipesToClipboard( ids, database );
 	}
 	else if ( vis_panel == selectPanel ) {
@@ -426,7 +426,7 @@ void KrecipesView::exportToClipboard()
 	}
 }
 
-void KrecipesView::exportRecipes( const Q3ValueList<int> &ids )
+void KrecipesView::exportRecipes( const QList<int> &ids )
 {
 	if ( ids.count() == 1 )
 		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), database->recipeTitle( ids[ 0 ] ), database );
@@ -486,7 +486,7 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	}
 }
 
-void KrecipesView::actionRecipes( const Q3ValueList<int> &ids, int action )
+void KrecipesView::actionRecipes( const QList<int> &ids, int action )
 {
 	if ( action == 0 )  //show
 	{
@@ -720,12 +720,12 @@ void KrecipesView::show ( void )
 
 void KrecipesView::showRecipe( int recipeID )
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	ids << recipeID;
 	showRecipes( ids );
 }
 
-void KrecipesView::showRecipes( const Q3ValueList<int> &recipeIDs )
+void KrecipesView::showRecipes( const QList<int> &recipeIDs )
 {
 	if ( viewPanel->loadRecipes( recipeIDs ) )
 		slotSetPanel( RecipeView );

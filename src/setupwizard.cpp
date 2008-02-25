@@ -23,7 +23,7 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 
 #include <kconfig.h>
@@ -412,7 +412,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	// Input Boxes
 
 	Q3GroupBox *inputGBox = new Q3GroupBox( this, "inputGBox" );
-	inputGBox->setFrameStyle( Q3Frame::NoFrame );
+	inputGBox->setFrameStyle( QFrame::NoFrame );
 	inputGBox->setInsideSpacing( 10 );
 	inputGBox->setColumns( 2 );
 	layout->addWidget( inputGBox, 3, 3 );
