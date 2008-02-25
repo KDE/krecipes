@@ -55,13 +55,13 @@ public:
 	~RecipeActionsHandler()
 	{}
 
-	static void exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
+	static void exportRecipes( const QList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
 	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
-	static void recipesToClipboard( const Q3ValueList<int> &ids, RecipeDB *db );
+	static void recipesToClipboard( const QList<int> &ids, RecipeDB *db );
 
 signals:
 	void recipeSelected( int id, int action );
-	void recipesSelected( const Q3ValueList<int> &ids, int action );
+	void recipesSelected( const QList<int> &ids, int action );
 
 public slots:
 	void exec( ItemType type, const QPoint &p );
@@ -112,8 +112,8 @@ private:
 	int remove_from_cat_item;
 	int categorize_item;
 
-	Q3ValueList<int> getAllVisibleItems();
-	Q3ValueList<int> recipeIDs( const QList<Q3ListViewItem *> &items ) const;
+	QList<int> getAllVisibleItems();
+	QList<int> recipeIDs( const QList<Q3ListViewItem *> &items ) const;
 };
 
 #endif //RECIPEACTIONSHANDLER_H

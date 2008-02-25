@@ -15,7 +15,7 @@
 #include <qwidget.h>
 #include <qclipboard.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -110,9 +110,9 @@ void RecipeActionsHandler::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, con
 	}
 }
 
-Q3ValueList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items ) const
+QList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items ) const
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 
 	QListIterator<Q3ListViewItem *> it(items);
 	const Q3ListViewItem *item;
@@ -142,7 +142,7 @@ void RecipeActionsHandler::open()
 {
 	const QList<Q3ListViewItem*> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3ValueList<int> ids = recipeIDs(items);
+		QList<int> ids = recipeIDs(items);
 		if ( ids.count() == 1 )
 			emit recipeSelected(ids.first(),0);
 		else if ( ids.count() > 0 )
@@ -150,7 +150,7 @@ void RecipeActionsHandler::open()
 		#if 0
 		else if ( it->rtti() == 1001 && it->firstChild() )  //CategoryListItem and not empty
 		{
-			Q3ValueList<int> ids;
+			QList<int> ids;
 
 			//do this to only iterate over children of 'it'
 			Q3ListViewItem *pEndItem = NULL;
@@ -225,7 +225,7 @@ void RecipeActionsHandler::recipeExport()
 {
 	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3ValueList<int> ids = recipeIDs( items );
+		QList<int> ids = recipeIDs( items );
 
 		QString title;
 		if ( items.count() == 1 && items.at(0)->rtti() == 1000 ) {
@@ -239,7 +239,7 @@ void RecipeActionsHandler::recipeExport()
 	}
 	else //if nothing selected, export all visible recipes
 	{
-		Q3ValueList<int> ids = getAllVisibleItems();
+		QList<int> ids = getAllVisibleItems();
 		if ( ids.count() > 0 ) {
 			switch ( KMessageBox::questionYesNo( kapp->mainWidget(), i18n("No recipes are currently selected.\nWould you like to export all recipes in the current view?")) )
 			{
@@ -327,13 +327,13 @@ void RecipeActionsHandler::collapseAll()
 
 void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db )
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 	ids.append( id );
 
 	exportRecipes( ids, caption, selection, db );
 }
 
-void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
+void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog * fd = new KFileDialog( KUrl(),
 	                                    QString( "*.kre|%1 (*.kre)\n"
@@ -398,7 +398,7 @@ void RecipeActionsHandler::exportRecipes( const Q3ValueList<int> &ids, const QSt
 	delete fd;
 }
 
-void RecipeActionsHandler::recipesToClipboard( const Q3ValueList<int> &ids, RecipeDB *db )
+void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *db )
 {
 	KConfigGroup config = KGlobal::config()->group("Export");
 	QString formatFilter = config.readEntry("ClipboardFormat");
@@ -436,15 +436,15 @@ void RecipeActionsHandler::recipesToClipboard()
 {
 	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
-		Q3ValueList<int> ids = recipeIDs( items );
+		QList<int> ids = recipeIDs( items );
 
 		recipesToClipboard(ids,database);
 	}
 }
 
-Q3ValueList<int> RecipeActionsHandler::getAllVisibleItems()
+QList<int> RecipeActionsHandler::getAllVisibleItems()
 {
-	Q3ValueList<int> ids;
+	QList<int> ids;
 
 	Q3ListViewItemIterator iterator( parentListView );
 	while ( iterator.current() ) {
