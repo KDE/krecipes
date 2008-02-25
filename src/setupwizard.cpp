@@ -190,14 +190,16 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 
 	// "The user already has permissions" checkbox
-	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this, "noSetupCheckBox" );
+	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
+   noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	layout->addWidget( noSetupCheckBox, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( checkBoxSpacer, 4, 3 );
 
 	// root checkbox
-	rootCheckBox = new QCheckBox( i18n( "I have already set a MySQL root/admin account" ), this, "rootCheckBox" );
+	rootCheckBox = new QCheckBox( i18n( "I have already set a MySQL root/admin account" ), this );
+   rootCheckBox->setObjectName( "rootCheckBox" );
 	layout->addWidget( rootCheckBox, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -298,14 +300,16 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 
 	// "The user already has permissions" checkbox
-	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this, "noSetupCheckBox" );
+	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
+   noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	layout->addWidget( noSetupCheckBox, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( checkBoxSpacer, 4, 3 );
 
 	// root checkbox
-	rootCheckBox = new QCheckBox( i18n( "I have already set a superuser or privileged account" ), this, "rootCheckBox" );
+	rootCheckBox = new QCheckBox( i18n( "I have already set a superuser or privileged account" ), this );
+   rootCheckBox->setObjectName( "rootCheckBox" ); 
 	layout->addWidget( rootCheckBox, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -463,7 +467,8 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Remote server checkbox
 
-	remoteServerCheckBox = new QCheckBox( i18n( "The server is remote" ), this, "remoteServerCheckBox" );
+	remoteServerCheckBox = new QCheckBox( i18n( "The server is remote" ), this );
+   remoteServerCheckBox->setObjectName( "remoteServerCheckBox" );
 	layout->addWidget( remoteServerCheckBox, 5, 3 );
 
 	// Spacer from CheckBox
@@ -736,7 +741,8 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 
 	// Initialize data checkbox
 
-	initializeCheckBox = new QCheckBox( i18n( "Yes please, initialize the database with the examples" ), this, "initializeCheckBox" );
+	initializeCheckBox = new QCheckBox( i18n( "Yes please, initialize the database with the examples" ), this );
+   initializeCheckBox->setObjectName( "initializeCheckBox" );
 	layout->addWidget( initializeCheckBox, 3, 3 );
 
 	QSpacerItem *textInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -749,7 +755,8 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 
-	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods." ), this, "USDAImportCheckBox" );
+	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods." ), this );
+   USDAImportCheckBox->setObjectName( "USDAImportCheckBox" );
 	layout->addWidget( USDAImportCheckBox, 7, 3 );
 }
 

@@ -251,7 +251,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsFrame->setFrameShadow( Q3Frame::Raised );
 	servingsFrameLayout = new Q3VBoxLayout( servingsFrame, 3, 3, "servingsFrameLayout"); 
 	
-	enableServingsCheckBox = new QCheckBox( servingsFrame, "enableServingsCheckBox" );
+	enableServingsCheckBox = new QCheckBox( servingsFrame );
+   enableServingsCheckBox->setObjectName( "enableServingsCheckBox" );
 	servingsFrameLayout->addWidget( enableServingsCheckBox );
 	
 	layout5 = new Q3HBoxLayout( 0, 0, 3, "layout5"); 
@@ -282,7 +283,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeFrame->setFrameShadow( Q3Frame::Raised );
 	prepTimeFrameLayout = new Q3VBoxLayout( prepTimeFrame, 3, 3, "prepTimeFrameLayout"); 
 	
-	enablePrepTimeCheckBox = new QCheckBox( prepTimeFrame, "enablePrepTimeCheckBox" );
+	enablePrepTimeCheckBox = new QCheckBox( prepTimeFrame );
+   enablePrepTimeCheckBox->setObjectName( "enablePrepTimeCheckBox" );
 	prepTimeFrameLayout->addWidget( enablePrepTimeCheckBox );
 	
 	layout6 = new Q3HBoxLayout( 0, 0, 3, "layout6"); 
