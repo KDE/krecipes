@@ -1826,7 +1826,7 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 	s_escaped.replace ( "'", "\\'" );
 	s_escaped.replace ( ";", "\";@" ); // Small trick for only for parsing later on
 
-	return QString::fromLatin1( s_escaped.utf8() );
+	return QString::fromLatin1( s_escaped.toUtf8() );
 }
 
 //The string coming out of the database is utf8 text, interpreted as though latin1.  Calling fromUtf8() on this gives us back the original utf8.
@@ -1944,8 +1944,6 @@ int QSqlRecipeDB::categoryTopLevelCount()
 
 bool QSqlRecipeDB::checkIntegrity( void )
 {
-
-	kDebug() << database.drivers().join(" ")  <<" DS\n";
 
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;

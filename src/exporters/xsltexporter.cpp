@@ -231,7 +231,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	exporter->writeStream(stream,recipes);
 	delete exporter;
 
-	Q3CString content = buffer.utf8();
+	Q3CString content = buffer.toUtf8();
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
 	if (kremlDoc == NULL) {
 		kDebug() << "Failed to parse document" << endl;
@@ -239,7 +239,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	}
 
 	//const char *filename = "/home/jason/svn/utils/krecipes/layouts/Default.xsl";
-	QString filename = m_templateFilename.utf8();
+	QString filename = m_templateFilename.toUtf8();
 	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
 	if ( !xslt ) {
 		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>",filename);
@@ -249,14 +249,14 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	char *params[NUM_I18N_STRINGS+3];
 	int i = 0;
 	params[i++] = "imgDir";
-	Q3CString imgDir = "'"+imgDirInfo.absolutePath().utf8()+"'";
+	Q3CString imgDir = "'"+imgDirInfo.absolutePath().toUtf8()+"'";
 	params[i++] = imgDir.data();
 
 	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
 		params[i++] = i18n_strings[j];
 
 		QString translatedString = "'"+i18n(i18n_strings[j+1])+"'";
-		params[i++] = qstrdup(translatedString.utf8());
+		params[i++] = qstrdup(translatedString.toUtf8());
 	}
 	params[i] = NULL;
 	xmlDocPtr htmlDoc = xsltApplyStylesheet(xslt, kremlDoc, (const char**)params);
