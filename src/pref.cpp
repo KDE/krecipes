@@ -26,7 +26,7 @@
 #include <qpushbutton.h>
 #include <qtooltip.h>
 
-#include <q3frame.h>
+#include <qframe.h>
 #include <qcombobox.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -59,7 +59,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	// this is the base class for your preferences dialog.  it is now
 	// a TreeList dialog.. but there are a number of other
 	// possibilities (including Tab, Swallow, and just Plain)
-	Q3Frame * frame;
+	QFrame * frame = new QFrame(this);
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
