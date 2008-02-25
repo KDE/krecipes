@@ -56,11 +56,13 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 
 	groupBox1Layout->addMultiCellWidget( weightUnitBox, 0, 0, 2, 3 );
 
-	perAmountLabel = new QLabel( groupBox1, "perAmountLabel" );
+	perAmountLabel = new QLabel( groupBox1 );
+   perAmountLabel->setObjectName( "perAmountLabel" );
 
 	groupBox1Layout->addWidget( perAmountLabel, 1, 0 );
 
-	weightLabel = new QLabel( groupBox1, "weightLabel" );
+	weightLabel = new QLabel( groupBox1 );
+   weightLabel->setObjectName( "weightLabel" );
 
 	groupBox1Layout->addWidget( weightLabel, 0, 0 );
 

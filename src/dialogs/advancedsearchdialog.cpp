@@ -70,7 +70,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout7 = new Q3VBoxLayout( 0, 0, 3, "layout7"); 
 	
-	textLabel1_4 = new QLabel( this, "textLabel1_4" );
+	textLabel1_4 = new QLabel( this );
+   textLabel1_4->setObjectName( "textLabel1_4" );
 	layout7->addWidget( textLabel1_4 );
 	
 	scrollView1 = new Q3ScrollView( this, "scrollView1" );
@@ -105,7 +106,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( titleFrameSpacer );
 
 
-	ingredientButton = new QPushButton( parametersFrame, "ingredientButton" );
+	ingredientButton = new QPushButton( parametersFrame );
+   ingredientButton->setObjectName( "ingredientButton" );
 	ingredientButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( ingredientButton );
 	
@@ -126,11 +128,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	ingredientFrameLayout->addWidget( ingredientsAnyEdit, 2, 1 );
 	
-	textLabel1_2 = new QLabel( ingredientFrame, "textLabel1_2" );
+	textLabel1_2 = new QLabel( ingredientFrame );
+   textLabel1_2->setObjectName( "textLabel1_2" );
 	
 	ingredientFrameLayout->addWidget( textLabel1_2, 2, 0 );
 	
-	textLabel1 = new QLabel( ingredientFrame, "textLabel1" );
+	textLabel1 = new QLabel( ingredientFrame );
+   textLabel1->setObjectName( "textLabel1" );
 	
 	ingredientFrameLayout->addWidget( textLabel1, 1, 0 );
 	
@@ -138,7 +142,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	ingredientFrameLayout->addWidget( ingredientsWithoutEdit, 3, 1 );
 	
-	textLabel1_3 = new QLabel( ingredientFrame, "textLabel1_3" );
+	textLabel1_3 = new QLabel( ingredientFrame );
+   textLabel1_3->setObjectName( "textLabel1_3" );
 	
 	ingredientFrameLayout->addWidget( textLabel1_3, 3, 0 );
 	parametersFrameLayout->addWidget( ingredientFrame );
@@ -146,7 +151,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3_2_2 );
 
 
-	categoriesButton = new QPushButton( parametersFrame, "categoriesButton" );
+	categoriesButton = new QPushButton( parametersFrame );
+   categoriesButton->setObjectName( "categoriesButton" );
 	categoriesButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( categoriesButton );
 	
@@ -163,11 +169,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( categoriesAllEdit, 1, 1 );
 	
-	textLabel1_5 = new QLabel( categoryFrame, "textLabel1_5" );
+	textLabel1_5 = new QLabel( categoryFrame );
+   textLabel1_5->setObjectName( "textLabel1_5" );
 	
 	categoryFrameLayout->addWidget( textLabel1_5, 1, 0 );
 	
-	textLabel1_3_3 = new QLabel( categoryFrame, "textLabel1_3_3" );
+	textLabel1_3_3 = new QLabel( categoryFrame );
+   textLabel1_3_3->setObjectName( "textLabel1_3_3" );
 	
 	categoryFrameLayout->addWidget( textLabel1_3_3, 3, 0 );
 	
@@ -175,7 +183,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( categoriesAnyEdit, 2, 1 );
 	
-	textLabel1_2_3 = new QLabel( categoryFrame, "textLabel1_2_3" );
+	textLabel1_2_3 = new QLabel( categoryFrame );
+   textLabel1_2_3->setObjectName( "textLabel1_2_3" );
 	
 	categoryFrameLayout->addWidget( textLabel1_2_3, 2, 0 );
 	
@@ -187,7 +196,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3_2 );
 
 
-	authorsButton = new QPushButton( parametersFrame, "authorsButton" );
+	authorsButton = new QPushButton( parametersFrame );
+   authorsButton->setObjectName( "authorsButton" );
 	authorsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( authorsButton );
 	
@@ -200,15 +210,18 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsInfoLabel->setTextFormat( Qt::RichText );
 	authorsFrameLayout->addMultiCellWidget( authorsInfoLabel, 0, 0, 0, 1 );
 
-	textLabel1_2_4 = new QLabel( authorsFrame, "textLabel1_2_4" );
+	textLabel1_2_4 = new QLabel( authorsFrame );
+   textLabel1_2_4->setObjectName( "textLabel1_2_4" );
 	
 	authorsFrameLayout->addWidget( textLabel1_2_4, 1, 0 );
 	
-	textLabel1_6 = new QLabel( authorsFrame, "textLabel1_6" );
+	textLabel1_6 = new QLabel( authorsFrame );
+   textLabel1_6->setObjectName( "textLabel1_6" );
 	
 	authorsFrameLayout->addWidget( textLabel1_6, 2, 0 );
 	
-	textLabel1_3_4 = new QLabel( authorsFrame, "textLabel1_3_4" );
+	textLabel1_3_4 = new QLabel( authorsFrame );
+   textLabel1_3_4->setObjectName( "textLabel1_3_4" );
 	
 	authorsFrameLayout->addWidget( textLabel1_3_4, 3, 0 );
 	
@@ -228,7 +241,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3 );
 
 
-	servingsButton = new QPushButton( parametersFrame, "servingsButton" );
+	servingsButton = new QPushButton( parametersFrame );
+   servingsButton->setObjectName( "servingsButton" );
 	servingsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( servingsButton );
 	
@@ -258,7 +272,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_2 );
 
 
-	prepTimeButton = new QPushButton( parametersFrame, "prepTimeButton" );
+	prepTimeButton = new QPushButton( parametersFrame );
+   prepTimeButton->setObjectName( "prepTimeButton" );
 	prepTimeButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( prepTimeButton );
 	
@@ -287,7 +302,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer15 );
 
 
-	instructionsButton = new QPushButton( parametersFrame, "instructionsButton" );
+	instructionsButton = new QPushButton( parametersFrame );
+   instructionsButton->setObjectName( "instructionsButton" );
 	instructionsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( instructionsButton );
 	
@@ -310,7 +326,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( instructionsFrameSpacer );
 
 
-	metaDataButton = new QPushButton( parametersFrame, "metaDataButton" );
+	metaDataButton = new QPushButton( parametersFrame );
+   metaDataButton->setObjectName( "metaDataButton" );
 	metaDataButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( metaDataButton );
 	
@@ -357,7 +374,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( metaDataFrameSpacer );
 
 	//=============RATINGS FRAME===========//
-	ratingsButton = new QPushButton( parametersFrame, "ratingsButton" );
+	ratingsButton = new QPushButton( parametersFrame );
+   ratingsButton->setObjectName( "ratingsButton" );
 	ratingsButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( ratingsButton );
 
@@ -381,7 +399,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	avgStarsEdit->setAllowRange(true);
 	ratingAvgFrameLayout->addWidget( avgStarsEdit );
 	
-	avgStarsLabel = new QLabel( ratingAvgFrame, "avgStarsLabel" );
+	avgStarsLabel = new QLabel( ratingAvgFrame );
+   avgStarsLabel->setObjectName( "avgStarsLabel" );
 	ratingAvgFrameLayout->addWidget( avgStarsLabel );
 	ratingButtonGroupLayout->addWidget( ratingAvgFrame );
 	
@@ -406,7 +425,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout12->addWidget( starsWidget );
 	
 
-	addCriteriaButton = new QPushButton( criterionFrame, "addCriteriaButton" );
+	addCriteriaButton = new QPushButton( criterionFrame );
+   addCriteriaButton->setObjectName( "addCriteriaButton" );
 	addCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, addCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
 	layout12->addWidget( addCriteriaButton );

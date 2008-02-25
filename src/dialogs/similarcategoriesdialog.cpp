@@ -53,18 +53,21 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 
 	layout4->addWidget( thresholdSlider, 1, 1 );
 
-	thresholdLabel = new QLabel( this, "thresholdLabel" );
+	thresholdLabel = new QLabel( this );
+   thresholdLabel->setObjectName( "thresholdLabel" );
 
 	layout4->addWidget( thresholdLabel, 1, 0 );
 
-	categoryLabel = new QLabel( this, "categoryLabel" );
+	categoryLabel = new QLabel( this );
+   categoryLabel->setObjectName( "categoryLabel" );
 
 	layout4->addWidget( categoryLabel, 0, 0 );
 	layout6->addLayout( layout4 );
 
 	layout5 = new Q3VBoxLayout( 0, 0, 6, "layout5");
 
-	searchButton = new QPushButton( this, "searchButton" );
+	searchButton = new QPushButton( this );
+   searchButton->setObjectName( "searchButton" );
 	layout5->addWidget( searchButton );
 	spacer4 = new QSpacerItem( 20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout5->addItem( spacer4 );
@@ -75,7 +78,8 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 
 	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8");
 
-	allLabel = new QLabel( this, "allLabel" );
+	allLabel = new QLabel( this );
+   allLabel->setObjectName( "allLabel" );
 	layout8->addWidget( allLabel );
 
 	allListView = new K3ListView( this );
@@ -85,10 +89,12 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 
 	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1");
 
-	removeButton = new QPushButton( this, "removeButton" );
+	removeButton = new QPushButton( this );
+   removeButton->setObjectName( "removeButton" );
 	layout1->addWidget( removeButton );
 
-	addButton = new QPushButton( this, "addButton" );
+	addButton = new QPushButton( this );
+   addButton->setObjectName( "addButton" );
 	layout1->addWidget( addButton );
 	spacer1 = new QSpacerItem( 20, 61, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout1->addItem( spacer1 );
@@ -96,7 +102,8 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 
 	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7");
 
-	toMergeLabel = new QLabel( this, "toMergeLabel" );
+	toMergeLabel = new QLabel( this );
+   toMergeLabel->setObjectName( "toMergeLabel" );
 	layout7->addWidget( toMergeLabel );
 
 	toMergeListView = new K3ListView( this );
@@ -109,10 +116,12 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	spacer2 = new QSpacerItem( 310, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout10->addItem( spacer2 );
 
-	mergeButton = new QPushButton( this, "mergeButton" );
+	mergeButton = new QPushButton( this );
+   mergeButton->setObjectName( "mergeButton" );
 	layout10->addWidget( mergeButton );
 
-	cancelButton = new QPushButton( this, "cancelButton" );
+	cancelButton = new QPushButton( this );
+   cancelButton->setObjectName( "cancelButton" );
 	layout10->addWidget( cancelButton );
 	SimilarCategoriesDialogLayout->addLayout( layout10 );
 	languageChange();

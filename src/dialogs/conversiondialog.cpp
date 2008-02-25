@@ -54,7 +54,8 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	KHBox *vbox = new KVBox(page);
 
 	KHBox *fromTopBox = new KHBox(vbox);
-	convertLabel = new QLabel( fromTopBox, "convertLabel" );
+	convertLabel = new QLabel( fromTopBox );
+   convertLabel->setObjectName( "convertLabel" );
 
 	amountEdit = new FractionInput( fromTopBox );
 
@@ -74,7 +75,8 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	KHBox *toBox = new KHBox(vbox);
 
-	toLabel = new QLabel( toBox, "toLabel" );
+	toLabel = new QLabel( toBox );
+   toLabel->setObjectName( "toLabel" );
 
 	toUnitBox = new UnitComboBox( toBox, db );
 	toUnitBox->reload();
@@ -82,8 +84,10 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	toBox->setSpacing(8);
 
 	KHBox *resultBox = new KHBox(vbox);
-	resultLabel = new QLabel( resultBox, "resultLabel" );
-	resultText = new QLabel( resultBox, "resultText" );
+	resultLabel = new QLabel( resultBox );
+   resultLabel->setObjectName( "resultLabel" );
+	resultText = new QLabel( resultBox );
+   resultText->setObjectName( "resultText" );
 	resultBox->setStretchFactor( resultText, 2 );
 
 	languageChange();

@@ -114,7 +114,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	EditPropertiesDialogLayout = new Q3VBoxLayout( page, 11, 6, "EditPropertiesDialogLayout");
 
-	infoLabel = new QLabel( page, "infoLabel" );
+	infoLabel = new QLabel( page );
+   infoLabel->setObjectName( "infoLabel" );
 	EditPropertiesDialogLayout->addWidget( infoLabel );
 
 	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9");
@@ -131,20 +132,24 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout8->addWidget( usdaListView );
 	layout9->addLayout( layout8 );
 
-	loadButton = new QPushButton( page, "loadButton" );
+	loadButton = new QPushButton( page );
+   loadButton->setObjectName( "loadButton" );
 	layout9->addWidget( loadButton );
 
 	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7");
 
 	layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
 
-	propertyLabel = new QLabel( page, "propertyLabel" );
+	propertyLabel = new QLabel( page );
+   propertyLabel->setObjectName( "propertyLabel" );
 	layout3->addWidget( propertyLabel );
 
-	propertyAddButton = new QPushButton( page, "propertyAddButton" );
+	propertyAddButton = new QPushButton( page );
+   propertyAddButton->setObjectName( "propertyAddButton" );
 	layout3->addWidget( propertyAddButton );
 
-	propertyRemoveButton = new QPushButton( page, "propertyRemoveButton" );
+	propertyRemoveButton = new QPushButton( page );
+   loadButton->setObjectName( "propertyRemoveButton" );
 	layout3->addWidget( propertyRemoveButton );
 	layout7->addLayout( layout3 );
 
@@ -162,13 +167,16 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	layout3_2 = new Q3HBoxLayout( 0, 0, 6, "layout3_2");
 
-	weightLabel = new QLabel( page, "weightLabel" );
-	layout3_2->addWidget( weightLabel );
+	weightLabel = new QLabel( page );
+	weightLabel->setObjectName( "weightLabel" );
+   layout3_2->addWidget( weightLabel );
 
-	weightAddButton = new QPushButton( page, "weightAddButton" );
+	weightAddButton = new QPushButton( page );
+   weightAddButton->setObjectName( "weightAddButton" );
 	layout3_2->addWidget( weightAddButton );
 
-	weightRemoveButton = new QPushButton( page, "weightRemoveButton" );
+	weightRemoveButton = new QPushButton( page );
+   weightRemoveButton->setObjectName( "weightRemoveButton" );
 	layout3_2->addWidget( weightRemoveButton );
 	layout7->addLayout( layout3_2 );
 

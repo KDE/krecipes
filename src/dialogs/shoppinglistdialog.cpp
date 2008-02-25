@@ -127,13 +127,15 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	layout->setColStretch( 1, 0 );
 	layout->setColStretch( 2, 1 );
 
-	okButton = new QPushButton( buttonBar, "okButton" );
+	okButton = new QPushButton( buttonBar );
+   okButton->setObjectName( "okButton" );
 	okButton->setText( i18n( "&OK" ) );
 	okButton->setIconSet( il->loadIcon( "ok", KIconLoader::NoGroup, 16 ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
-	clearButton = new QPushButton( buttonBar, "clearButton" );
+	clearButton = new QPushButton( buttonBar );
+   clearButton->setObjectName( "clearButton" );
 	clearButton->setText( i18n( "Clear" ) );
 	clearButton->setIconSet( il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ) );
 

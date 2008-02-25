@@ -145,7 +145,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	button6->setIconSet( il->loadIconSet( "authors", KIconLoader::Panel, 32 ) );
 	buttonsList->append( button6 );
 
-	contextButton = new QPushButton( leftPanel, "contextButton" );
+	contextButton = new QPushButton( leftPanel );
+   contextButton->setObjectName( "contextButton" );
 	contextButton->setIconSet( il->loadIconSet( "krectip", KIconLoader::Panel, 32 ) );
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );

@@ -84,25 +84,30 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	layout2 = new KHBox( page );
 
-	raterLabel = new QLabel( layout2, "raterLabel" );
+	raterLabel = new QLabel( layout2 );
+   raterLabel->setObjectName( "raterLabel" );
 	raterEdit = new QLineEdit( layout2, "raterEdit" );
 
 	layout8 = new KHBox( page );
 
-	criteriaLabel = new QLabel( layout8, "criteriaLabel" );
+	criteriaLabel = new QLabel( layout8 );
+   criteriaLabel->setObjectName( "criteriaLabel" );
 
 	criteriaComboBox = new QComboBox( FALSE, layout8, "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
 
-	starsLabel = new QLabel( layout8, "starsLabel" );
+	starsLabel = new QLabel( layout8 );
+   starsLabel->setObjectName( "starsLabel" );
 
 	starsWidget = new RatingWidget( 5, layout8, "starsWidget" );
 
-	addButton = new QPushButton( layout8, "addButton" );
+	addButton = new QPushButton( layout8 );
+   addButton->setObjectName( "addButton" );
 
-	removeButton = new QPushButton( layout8, "removeButton" );
+	removeButton = new QPushButton( layout8 );
+   removeButton->setObjectName( "removeButton" );
 
 	criteriaListView = new RatingCriteriaListView( page, "criteriaListView" );
 	criteriaListView->addColumn( i18n( "Criteria" ) );
@@ -113,7 +118,8 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->setRenameable( 0, true );
 	criteriaListView->setRenameable( 1, true );
 
-	commentsLabel = new QLabel( page, "commentsLabel" );
+	commentsLabel = new QLabel( page );
+   commentsLabel->setObjectName( "commentsLabel" );
 
 	commentsEdit = new Q3TextEdit( page, "commentsEdit" );
 

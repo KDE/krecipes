@@ -67,12 +67,14 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	//KIconLoader *il = KIconLoader::global();
 
-	addButton = new QPushButton( this, "addButton" );
+	addButton = new QPushButton( this );
+   addButton->setObjectName( "addButton" );
 	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
-	removeButton = new QPushButton( this, "removeButton" );
+	removeButton = new QPushButton( this );
+   removeButton->setObjectName( "removeButton" );
 	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );

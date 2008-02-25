@@ -52,7 +52,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 
-	textLabel1 = new QLabel( page, "textLabel1" );
+	textLabel1 = new QLabel( page );
+   textLabel1->setObjectName( "textLabel1" );
 	textLabel1->setTextFormat( Qt::RichText );
 
 	ingredientTextEdit = new Q3TextEdit( page, "ingredientTextEdit" );
@@ -60,7 +61,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 
 	parseButton = new KPushButton( page );
 
-	previewLabel = new QLabel( page, "previewLabel" );
+	previewLabel = new QLabel( page );
+   previewLabel->setObjectName( "previewLabel" );
 	previewLabel->setTextFormat( Qt::RichText );
 
 	previewIngView = new K3ListView( page );

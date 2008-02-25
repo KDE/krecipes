@@ -43,10 +43,12 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 	fromUnitEdit = new FractionInput( buttonGroup1 );
 	buttonGroup1Layout->addWidget( fromUnitEdit );
 
-	fromUnitLabel = new QLabel( buttonGroup1, "fromUnitLabel" );
+	fromUnitLabel = new QLabel( buttonGroup1 );
+   fromUnitLabel->setObjectName( "fromUnitLabel" );
 	buttonGroup1Layout->addWidget( fromUnitLabel );
 
-	textLabel4 = new QLabel( buttonGroup1, "textLabel4" );
+	textLabel4 = new QLabel( buttonGroup1 );
+   textLabel4->setObjectName( "textLabel4" );
 	buttonGroup1Layout->addWidget( textLabel4 );
 
 	toUnitEdit = new FractionInput( buttonGroup1 );

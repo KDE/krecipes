@@ -49,7 +49,8 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	setButtonText( KDialog::Ok, i18n( "&Done" ) );
 
 
-	helpLabel = new QLabel( page, "helpLabel" );
+	helpLabel = new QLabel( page );
+   helpLabel->setObjectName( "helpLabel" );
 	helpLabel->setTextFormat( Qt::RichText );
 
 	QWidget *layout2Widget = new QWidget(page);
@@ -66,12 +67,14 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	//KIconLoader *il = KIconLoader::global();
 
-	addButton = new QPushButton( layout2Widget, "addButton" );
+	addButton = new QPushButton( layout2Widget );
+   addButton->setObjectName( "addButton" );
 	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
-	removeButton = new QPushButton( layout2Widget, "removeButton" );
+	removeButton = new QPushButton( layout2Widget );
+   removeButton->setObjectName( "removeButton" );
 	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );

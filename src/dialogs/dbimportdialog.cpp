@@ -93,18 +93,21 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	hostEdit = new QLineEdit( serverPage, "hostEdit" );
 	layout5->addWidget( hostEdit, 0, 1 );
-	hostLabel = new QLabel( serverPage, "hostLabel" );
+	hostLabel = new QLabel( serverPage );
+   hostLabel->setObjectName( "hostLabel" );
 	layout5->addWidget( hostLabel, 0, 0 );
 
 	userEdit = new QLineEdit( serverPage, "userEdit" );
 	layout5->addWidget( userEdit, 1, 1 );
-	userLabel = new QLabel( serverPage, "userLabel" );
+	userLabel = new QLabel( serverPage );
+   userLabel->setObjectName( "userLabel" );
 	layout5->addWidget( userLabel, 1, 0 );
 
 	passwordEdit = new QLineEdit( serverPage, "passwordEdit" );
 	passwordEdit->setEchoMode( QLineEdit::Password );
 	layout5->addWidget( passwordEdit, 2, 1 );
-	passwordLabel = new QLabel( serverPage, "passwordLabel" );
+	passwordLabel = new QLabel( serverPage );
+   passwordLabel->setObjectName( "passwordLabel" );
 	layout5->addWidget( passwordLabel, 2, 0 );
 
 	portEdit = new KIntNumInput( serverPage );
@@ -112,12 +115,14 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	portEdit->setMinimum(0);
 	portEdit->setValue(0);
 	layout5->addWidget( portEdit, 3, 1 );
-	portLabel = new QLabel( serverPage, "portLabel" );
+	portLabel = new QLabel( serverPage );
+   portLabel->setObjectName( "portLabel" );
 	layout5->addWidget( portLabel, 3, 0 );
 
 	nameEdit = new QLineEdit( serverPage, "nameEdit" );
 	layout5->addWidget( nameEdit, 4, 1 );
-	nameLabel = new QLabel( serverPage, "nameLabel" );
+	nameLabel = new QLabel( serverPage );
+   nameLabel->setObjectName( "nameLabel" );
 	layout5->addWidget( nameLabel, 4, 0 );
 
 	serverPageLayout->addLayout( layout5 );

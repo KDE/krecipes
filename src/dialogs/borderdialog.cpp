@@ -53,7 +53,8 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	layout3 = new Q3VBoxLayout( 0, 0, 6, "layout3" );
 
-	styleLabel = new QLabel( borderGroupBox, "styleLabel" );
+	styleLabel = new QLabel( borderGroupBox );
+   styleLabel->setObjectName( "styleLabel" );
 	layout3->addWidget( styleLabel );
 
 	styleListBox = new K3ListBox( borderGroupBox, "styleListBox" );
@@ -62,7 +63,8 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	layout2 = new Q3VBoxLayout( 0, 0, 6, "layout2" );
 
-	colorLabel = new QLabel( borderGroupBox, "colorLabel" );
+	colorLabel = new QLabel( borderGroupBox );
+   colorLabel->setObjectName( "colorLabel" );
 	layout2->addWidget( colorLabel );
 
 	KHBox *color_hbox = new KHBox( borderGroupBox );
@@ -80,7 +82,8 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
 
-	widthLabel = new QLabel( borderGroupBox, "widthLabel" );
+	widthLabel = new QLabel( borderGroupBox );
+   widthLabel->setObjectName( "widthLabel" );
 	layout1->addWidget( widthLabel );
 
 	widthSpinBox = new QSpinBox( borderGroupBox, "widthSpinBox" );
