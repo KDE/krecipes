@@ -1,28 +1,28 @@
 //Added by qt3to4:
 #include <QPaintEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2004-11-22
  * Description : a bar widget to display image thumbnails
- * 
+ *
  * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
  * Copyrigth 2005-2006 by Tom Albers <tomalbers@kde.nl>
  * Copyright 2006 by Gilles Caulier
- * 
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C Ansi includes.
@@ -36,7 +36,7 @@ extern "C"
 
 #include <cmath>
 
-// Qt includes. 
+// Qt includes.
 
 #include <qdir.h>
 #include <qpixmap.h>
@@ -76,14 +76,14 @@ public:
         count      = 0;
         itemDict.setAutoDelete(false);
     }
-    
+
     bool                      clearing;
 
     int                       count;
     int                       margin;
     int                       tileSize;
     int                       orientation;
-    
+
     QTimer                   *timer;
 
     ThumbBarItem             *firstItem;
@@ -91,7 +91,7 @@ public:
     ThumbBarItem             *currItem;
 
     ThumbBarToolTip          *tip;
-    
+
     Q3Dict<ThumbBarItem>       itemDict;
 };
 
@@ -107,18 +107,18 @@ public:
         prev   = 0;
         view   = 0;
     }
-    
+
     int           pos;
-        
+
     QPixmap      *pixmap;
 
     QString          url;
-    
+
     ThumbBarItem *next;
     ThumbBarItem *prev;
-    
+
     ThumbBarView *view;
-  
+
 };
 
 ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
@@ -131,14 +131,14 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
 
     d->tip   = new ThumbBarToolTip(this);
     d->timer = new QTimer(this);
-    
+
     connect(d->timer, SIGNAL(timeout()),
             this, SLOT(slotUpdate()));
 
     viewport()->setBackgroundMode(Qt::NoBackground);
     viewport()->setMouseTracking(true);
-    setFrameStyle(Q3Frame::NoFrame);
-    
+    setFrameStyle(QFrame::NoFrame);
+
     if (d->orientation == Vertical)
     {
        setHScrollBarMode(Q3ScrollView::AlwaysOff);
@@ -156,7 +156,7 @@ ThumbBarView::ThumbBarView(QWidget* parent, int orientation)
 ThumbBarView::~ThumbBarView()
 {
     clear(false);
-        
+
     delete d->timer;
     delete d->tip;
     delete d;
@@ -183,7 +183,7 @@ void ThumbBarView::clear(bool updateView)
     d->lastItem  = 0;
     d->count     = 0;
     d->currItem  = 0;
-    
+
     if (updateView)
         slotUpdate();
 
@@ -192,17 +192,17 @@ void ThumbBarView::clear(bool updateView)
 
 void ThumbBarView::triggerUpdate()
 {
-    d->timer->start(0, true);    
+    d->timer->start(0, true);
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const
 {
-    return d->currItem;    
+    return d->currItem;
 }
 
 ThumbBarItem* ThumbBarView::firstItem() const
 {
-    return d->firstItem;    
+    return d->firstItem;
 }
 
 ThumbBarItem* ThumbBarView::lastItem() const
@@ -213,12 +213,12 @@ ThumbBarItem* ThumbBarView::lastItem() const
 ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
 {
     int itemPos;
-    
+
     if (d->orientation == Vertical)
         itemPos = pos.y();
     else
         itemPos = pos.x();
-    
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (itemPos >= item->d->pos && itemPos <= (item->d->pos+d->tileSize+2*d->margin))
@@ -226,7 +226,7 @@ ThumbBarItem* ThumbBarView::findItem(const QPoint& pos) const
             return item;
         }
     }
-    
+
     return 0;
 }
 
@@ -247,7 +247,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
 {
     if (!item)
         return;
-        
+
     if (d->currItem == item)
         return;
 
@@ -270,7 +270,7 @@ void ThumbBarView::setSelected(ThumbBarItem* item)
         else
             ensureVisible((int)(item->d->pos+d->margin+d->tileSize*.5), 0,
                           (int)(d->tileSize*1.5+3*d->margin), 0);
-          
+
         item->repaint();
         emit signalURLSelected(item->url());
     }
@@ -285,34 +285,34 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     int cy, cx, ts, y1, y2, x1, x2;
     QPixmap bgPix, tile;
     QRect er(e->rect());
-    
+
     if (d->orientation == Vertical)
     {
        cy = viewportToContents(er.topLeft()).y();
-        
+
        bgPix.resize(contentsRect().width(), er.height());
-    
+
        ts = d->tileSize + 2*d->margin;
        tile.resize(visibleWidth(), ts);
-    
+
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
     }
     else
     {
        cx = viewportToContents(er.topLeft()).x();
-        
+
        bgPix.resize(er.width(), contentsRect().height());
-    
+
        ts = d->tileSize + 2*d->margin;
        tile.resize(ts, visibleHeight());
-    
+
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
-    
+
     bgPix.fill(colorGroup().background());
-    
+
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
         if (d->orientation == Vertical)
@@ -323,19 +323,19 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     tile.fill(colorGroup().highlight());
                 else
                     tile.fill(colorGroup().background());
-    
+
                 QPainter p(&tile);
                 p.setPen(Qt::white);
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
-                
+
                 if (item->d->pixmap)
                 {
                     int x = (tile.width() -item->d->pixmap->width())/2;
                     int y = (tile.height()-item->d->pixmap->height())/2;
                     bitBlt(&tile, x, y, item->d->pixmap);
                 }
-                
+
                 bitBlt(&bgPix, 0, item->d->pos - cy, &tile);
             }
         }
@@ -347,19 +347,19 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
                     tile.fill(colorGroup().highlight());
                 else
                     tile.fill(colorGroup().background());
-    
+
                 QPainter p(&tile);
                 p.setPen(Qt::white);
                 p.drawRect(0, 0, tile.width(), tile.height());
                 p.end();
-                
+
                 if (item->d->pixmap)
                 {
                     int x = (tile.width() -item->d->pixmap->width())/2;
                     int y = (tile.height()-item->d->pixmap->height())/2;
                     bitBlt(&tile, x, y, item->d->pixmap);
                 }
-                
+
                 bitBlt(&bgPix, item->d->pos - cx, 0, &tile);
             }
         }
@@ -374,11 +374,11 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 {
     ThumbBarItem* barItem = 0;
-    
+
     if (d->orientation == Vertical)
     {
        int y = e->pos().y();
-       
+
        for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
        {
            if (y >= item->d->pos &&
@@ -392,7 +392,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
     else
     {
        int x = e->pos().x();
-       
+
        for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
        {
            if (x >= item->d->pos &&
@@ -416,7 +416,7 @@ void ThumbBarView::contentsMousePressEvent(QMouseEvent* e)
 
     d->currItem = barItem;
     barItem->repaint();
-    
+
     emit signalURLSelected(barItem->url());
 }
 
@@ -439,9 +439,9 @@ void ThumbBarView::insertItem(ThumbBarItem* item)
         d->lastItem = item;
 
     }
-    
+
     d->itemDict.insert(item->url(), item);
-    
+
     d->count++;
     triggerUpdate();
     emit signalItemAdded();
@@ -486,7 +486,7 @@ void ThumbBarView::removeItem(ThumbBarItem* item)
     }
 
     d->itemDict.remove(item->url());
-    
+
     if (!d->clearing)
     {
         triggerUpdate();
@@ -499,7 +499,7 @@ void ThumbBarView::rearrangeItems()
 
     int pos = 0;
     ThumbBarItem *item = d->firstItem;
-    
+
     while (item)
     {
         item->d->pos = pos;
@@ -511,7 +511,7 @@ void ThumbBarView::rearrangeItems()
 
     if (d->orientation == Vertical)
        resizeContents(width(), d->count*(d->tileSize+2*d->margin));
-    else    
+    else
        resizeContents(d->count*(d->tileSize+2*d->margin), height());
 }
 
@@ -541,11 +541,11 @@ ThumbBarItem::ThumbBarItem(ThumbBarView* view, const QString& url)
 	d->view = view;
         d->pos = view->countItems();
 	d->view->insertItem(this);
-	
+
 	QSize s( 200, 150 );
 
 	//load the given url
-	
+
 	QFileInfo fi(url);
 
 	d->pixmap = new QPixmap();
@@ -601,7 +601,7 @@ QRect ThumbBarItem::rect() const
 
 void ThumbBarItem::repaint()
 {
-    d->view->repaintItem(this);   
+    d->view->repaintItem(this);
 }
 
 // -------------------------------------------------------------------------
@@ -628,7 +628,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
     QString cellMid(QString::fromLatin1("</font></nobr></td>"
                     "<td><nobr><font size=-1>"));
     QString cellEnd(QString::fromLatin1("</font></nobr></td></tr>"));
-    
+
     QString tipText;
     tipText  = QString::fromLatin1("<table cellspacing=0 cellpadding=0>");
     tipText += cellBeg + i18n("Name:") + cellMid;
@@ -652,7 +652,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
                + cellEnd;
 
     tipText += QString::fromLatin1("</table>");
-    
+
     tip(r, tipText);
 #endif
 }

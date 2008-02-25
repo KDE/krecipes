@@ -37,7 +37,7 @@
 #include <QDragEnterEvent>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <QDropEvent>
 
 #include <kapplication.h>
@@ -143,7 +143,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// Recipe Photo
 
 	recipeTab = new Q3GroupBox( tabWidget );
-	recipeTab->setFrameStyle( Q3Frame::NoFrame );
+	recipeTab->setFrameStyle( QFrame::NoFrame );
 	recipeTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 
@@ -281,7 +281,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	//------- Ingredients Tab -----------------
 
 	ingredientGBox = new Q3GroupBox( recipeTab );
-	ingredientGBox->setFrameStyle( Q3Frame::NoFrame );
+	ingredientGBox->setFrameStyle( QFrame::NoFrame );
 	ingredientGBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	Q3GridLayout* ingredientsLayout = new Q3GridLayout( ingredientGBox );
 
@@ -393,8 +393,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
 	updateGuiItem.setIcon( KIcon(il->loadIconSet( "view-refresh", KIconLoader::NoGroup )) );
-	
-	propertyStatusDialog = new KDialog( this ); 
+
+	propertyStatusDialog = new KDialog( this );
 	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
 	propertyStatusDialog->setModal( false );
 	propertyStatusDialog->showButtonSeparator( false );
@@ -403,7 +403,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setDefaultButton( KDialog::Close );
 	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
 	propertyStatusDialog->setHelp("property-status");
-	
+
 	statusTextView = new Q3TextBrowser(0);
 	statusTextView->setReadOnly(true);
 	propertyStatusDialog->setMainWidget( statusTextView );
@@ -414,7 +414,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// ------- Recipe Instructions Tab -----------
 
 	instructionsTab = new Q3GroupBox( recipeTab );
-	instructionsTab->setFrameStyle( Q3Frame::NoFrame );
+	instructionsTab->setFrameStyle( QFrame::NoFrame );
 	instructionsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	Q3VBoxLayout *instructionsLayout = new Q3VBoxLayout( instructionsTab );
@@ -454,7 +454,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	KHBox* functionsLayout = new KHBox( this );
 
 	functionsBox = new Q3GroupBox( 1, Qt::Vertical, functionsLayout );
-	functionsBox->setFrameStyle( Q3Frame::NoFrame );
+	functionsBox->setFrameStyle( QFrame::NoFrame );
 
 	saveButton = new QToolButton( functionsBox );
 	saveButton->setIconSet( il->loadIconSet( "document-save", KIconLoader::Small ) );

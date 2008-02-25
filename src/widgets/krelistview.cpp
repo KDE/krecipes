@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
 *   Copyright (C) 2004-2005 by                                            *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
@@ -22,7 +22,7 @@
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
 #include <kvbox.h>
 
 #include "widgets/dblistviewbase.h"
@@ -39,8 +39,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 
 	if ( !title.isNull() ) {
 		listLabel = new QLabel( header );
-		listLabel->setFrameShape( Q3Frame::GroupBoxPanel );
-		listLabel->setFrameShadow( Q3Frame::Sunken );
+		listLabel->setFrameShape( QFrame::GroupBoxPanel );
+		listLabel->setFrameShadow( QFrame::Sunken );
 		listLabel->setPaletteForegroundColor( QPalette::HighlightedText );
 		listLabel->setPaletteBackgroundColor( QPalette::Highlight );
 		// KDE4 port
@@ -51,7 +51,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 
 	if ( filter ) {
 		filterBox = new KHBox( header );
-		filterBox->setFrameShape( Q3Frame::Box );
+		filterBox->setFrameShape( QFrame::Box );
 		filterBox->setMargin( 2 );
 
 		QPushButton *clearSearchButton = new QPushButton( filterBox );

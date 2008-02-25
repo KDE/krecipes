@@ -17,7 +17,7 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QLabel>
@@ -57,7 +57,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	tabLayout->addWidget( tabWidget );
 
 	basicSearchTab = new Q3GroupBox( this );
-	basicSearchTab->setFrameStyle( Q3Frame::NoFrame );
+	basicSearchTab->setFrameStyle( QFrame::NoFrame );
 	basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	//Design dialog
@@ -85,7 +85,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	QSpacerItem* searchSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( searchSpacer, 1, 2 );
-	
+
 	#ifdef ENABLE_SLOW
 	categoryBox = new CategoryComboBox( basicSearchTab, database );
 	layout->addWidget( categoryBox, 1, 3 );
@@ -238,7 +238,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 		while ( it.current() ) {
 			Q3ListViewItem *item = it.current();
 			if ( item->isVisible() ) {
-				item->setOpen( true ); 	//will only open if already populated 
+				item->setOpen( true ); 	//will only open if already populated
 							//(could be the selected category's parent
 				if ( !item->firstChild() ) {
 					recipeListView->open( item ); //populates and opens the selected category
@@ -247,7 +247,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 			}
 			++it;
 		}
-		
+
 	}
 }
 
