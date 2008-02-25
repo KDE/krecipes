@@ -38,11 +38,11 @@ RecipeItemDrag::RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource,
 		: Q3StoredDrag( RECIPEITEMMIMETYPE, dragSource, name )
 {
 	if ( recipeItem ) {
-		QByteArray* data;
-		QDataStream out( data, QIODevice::WriteOnly );
+		QByteArray data;
+		QDataStream out( &data, QIODevice::WriteOnly );
 		out << recipeItem->recipeID();
 		out << recipeItem->title();
-		setEncodedData( *data );
+		setEncodedData( data );
 	}
 }
 
