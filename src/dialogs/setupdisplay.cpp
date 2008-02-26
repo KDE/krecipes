@@ -208,7 +208,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 {
 	QMap<QString,KreDisplayItem*>::iterator it;
 	for ( it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
-		it.data()->clear();
+		it.value()->clear();
 	}
 
 	m_activeStyle = filename;
@@ -245,7 +245,7 @@ void SetupDisplay::beginObject( const QString &object )
 {
 	QMap<QString, KreDisplayItem*>::iterator map_it = node_item_map->find( object );
 	if ( map_it != node_item_map->end() )
-		m_currentItem = map_it.data();
+		m_currentItem = map_it.value();
 	else
 		m_currentItem = 0;
 }
@@ -326,55 +326,55 @@ void SetupDisplay::saveLayout( const QString &filename )
 		QDomElement base_tag = doc.createElement( it.key() );
 		layout_tag.appendChild( base_tag );
 
-		int properties = (*box_properties)[it.data()];
-		if ( properties & BackgroundColor && it.data()->backgroundColor.isValid() ) {
+		int properties = (*box_properties)[it.value()];
+		if ( properties & BackgroundColor && it.value()->backgroundColor.isValid() ) {
 			QDomElement backgroundcolor_tag = doc.createElement( "background-color" );
-			backgroundcolor_tag.appendChild( doc.createTextNode( it.data()->backgroundColor.name() ) );
+			backgroundcolor_tag.appendChild( doc.createTextNode( it.value()->backgroundColor.name() ) );
 			base_tag.appendChild( backgroundcolor_tag );
 		}
 
-		if ( properties & TextColor && it.data()->textColor.isValid() ) {
+		if ( properties & TextColor && it.value()->textColor.isValid() ) {
 			QDomElement textcolor_tag = doc.createElement( "text-color" );
-			textcolor_tag.appendChild( doc.createTextNode( it.data()->textColor.name() ) );
+			textcolor_tag.appendChild( doc.createTextNode( it.value()->textColor.name() ) );
 			base_tag.appendChild( textcolor_tag );
 		}
 
-		if ( properties & Font && it.data()->font != QFont() ) {
+		if ( properties & Font && it.value()->font != QFont() ) {
 			QDomElement font_tag = doc.createElement( "font" );
-			font_tag.appendChild( doc.createTextNode( it.data()->font.toString() ) );
+			font_tag.appendChild( doc.createTextNode( it.value()->font.toString() ) );
 			base_tag.appendChild( font_tag );
 		}
 
 		if ( properties & Visibility ) {
 			QDomElement visibility_tag = doc.createElement( "visible" );
-			visibility_tag.appendChild( doc.createTextNode( (it.data()->show) ? "true" : "false" ) );
+			visibility_tag.appendChild( doc.createTextNode( (it.value()->show) ? "true" : "false" ) );
 			base_tag.appendChild( visibility_tag );
 		}
 
-		if ( properties & Alignment && it.data()->alignment >= 0 ) {
+		if ( properties & Alignment && it.value()->alignment >= 0 ) {
 			QDomElement alignment_tag = doc.createElement( "alignment" );
-			alignment_tag.appendChild( doc.createTextNode( QString::number( it.data()->alignment ) ) );
+			alignment_tag.appendChild( doc.createTextNode( QString::number( it.value()->alignment ) ) );
 			base_tag.appendChild( alignment_tag );
 		}
 
 		if ( properties & Border ) {
 			QDomElement border_tag = doc.createElement( "border" );
-			border_tag.setAttribute( "width", it.data()->border.width );
-			border_tag.setAttribute( "style", it.data()->border.style );
-			border_tag.setAttribute( "color", it.data()->border.color.name() );
+			border_tag.setAttribute( "width", it.value()->border.width );
+			border_tag.setAttribute( "style", it.value()->border.style );
+			border_tag.setAttribute( "color", it.value()->border.color.name() );
 			base_tag.appendChild( border_tag );
 		}
 
 		if ( properties & Columns ) {
 			QDomElement columns_tag = doc.createElement( "columns" );
-			columns_tag.appendChild( doc.createTextNode( QString::number( it.data()->columns ) ) );
+			columns_tag.appendChild( doc.createTextNode( QString::number( it.value()->columns ) ) );
 			base_tag.appendChild( columns_tag );
 		}
 
 		if ( properties & Size ) {
 			QDomElement size_tag = doc.createElement( "size" );
-			size_tag.setAttribute( "width", it.data()->size.width() );
-			size_tag.setAttribute( "height", it.data()->size.height() );
+			size_tag.setAttribute( "width", it.value()->size.width() );
+			size_tag.setAttribute( "height", it.value()->size.height() );
 			base_tag.appendChild( size_tag );
 		}
 	}
@@ -432,7 +432,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	unsigned int properties = 0;
 	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
 		if ( it.key()->nodeId == m_currNodeId ) {
-			properties = it.data();
+			properties = it.value();
 			break;
 		}
 	}

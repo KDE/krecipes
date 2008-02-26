@@ -627,7 +627,7 @@ void Menu::copyMap( QMap <int, KreMenuButton*> &destMap, const QMap <int, KreMen
 	QMap<int, KreMenuButton*>::ConstIterator it;
 	destMap.clear();
 	for ( it = origMap.begin(); it != origMap.end(); ++it ) {
-		destMap[ it.key() ] = it.data();
+		destMap[ it.key() ] = it.value();
 	}
 }
 
@@ -636,7 +636,7 @@ void Menu::copyMap( QMap <KreMenuButton*, int> &destMap, const QMap <KreMenuButt
 	QMap<KreMenuButton*, int>::ConstIterator it;
 	destMap.clear();
 	for ( it = origMap.begin(); it != origMap.end(); ++it ) {
-		destMap[ it.key() ] = it.data();
+		destMap[ it.key() ] = it.value();
 	}
 }
 

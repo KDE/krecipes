@@ -74,7 +74,7 @@ void UnitComboBox::setSelected( int unitID )
 	//do a reverse lookup on the row->id map
 	QMap<int, int>::const_iterator it;
 	for ( it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
-		if ( it.data() == unitID ) {
+		if ( it.value() == unitID ) {
 			//KDE4 port  setCurrentItem(it.key());
 			setCurrentIndex(it.key());
 			break;
@@ -97,10 +97,10 @@ void UnitComboBox::createUnit( const Unit &element )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
 		if ( it.key() >= row ) {
-			new_map.insert( it.key() + 1, it.data() );
+			new_map.insert( it.key() + 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	unitComboRows = new_map;
 	unitComboRows.insert( row, element.id );
@@ -110,7 +110,7 @@ void UnitComboBox::removeUnit( int id )
 {
 	int row = -1;
 	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
-		if ( it.data() == id ) {
+		if ( it.value() == id ) {
 			row = it.key();
 			removeItem( row );
 			unitComboRows.remove( it );
@@ -125,10 +125,10 @@ void UnitComboBox::removeUnit( int id )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
 		if ( it.key() > row ) {
-			new_map.insert( it.key() - 1, it.data() );
+			new_map.insert( it.key() - 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	unitComboRows = new_map;
 }

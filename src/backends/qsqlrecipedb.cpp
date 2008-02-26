@@ -541,7 +541,8 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 		int len = decodedPic.size();
 
 		if ( len > 0 ) {
-			QByteArray picData( len );
+			QByteArray picData;
+         picData.resize( len );
 			memcpy( picData.data(), decodedPic.data(), len );
 	
 			bool ok = pix.loadFromData( picData, "JPEG" );

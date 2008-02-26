@@ -47,7 +47,8 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 
 	layout4->addWidget( categoriesBox, 0, 1 );
 
-	thresholdSlider = new QSlider( this, "thresholdSlider" );
+	thresholdSlider = new QSlider( this );
+   thresholdSlider->setObjectName( "thresholdSlider" );
 	thresholdSlider->setValue( 40 );
 	thresholdSlider->setOrientation( Qt::Horizontal );
 

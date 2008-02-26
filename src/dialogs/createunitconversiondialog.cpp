@@ -54,7 +54,8 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 	toUnitEdit = new FractionInput( buttonGroup1 );
 	buttonGroup1Layout->addWidget( toUnitEdit );
 
-	toUnitComboBox = new QComboBox( FALSE, buttonGroup1, "toUnitComboBox" );
+	toUnitComboBox = new QComboBox( FALSE, buttonGroup1 );
+   toUnitComboBox->setObjectName( "toUnitComboBox" );
 	buttonGroup1Layout->addWidget( toUnitComboBox );
 
 	languageChange();

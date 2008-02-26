@@ -141,10 +141,10 @@ RecipeList RecipeImportDialog::getSelectedRecipes()
 	QMap<CustomCheckListItem*, RecipeList::const_iterator>::const_iterator it;
 	for ( it = recipe_items->begin(); it != recipe_items->end(); ++it ) {
 		if ( static_cast<CustomCheckListItem*>( it.key() ) ->isOn() &&
-		        ( already_included_recipes.contains( it.data() ) == 0 ) )  //make sure it isn't already in the list
+		        ( already_included_recipes.contains( it.value() ) == 0 ) )  //make sure it isn't already in the list
 		{
-			already_included_recipes.prepend( it.data() );
-			selected_recipes.prepend( *it.data() );
+			already_included_recipes.prepend( it.value() );
+			selected_recipes.prepend( *it.value() );
 		}
 	}
 

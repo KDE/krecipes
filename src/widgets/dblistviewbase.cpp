@@ -205,7 +205,7 @@ void DBListViewBase::createElement( Q3ListViewItem *it )
 	Q3ListViewItem *lastElement;
 	QMap<Q3ListViewItem*,Q3ListViewItem*>::iterator map_it = lastElementMap.find(it->parent());
 	if ( map_it != lastElementMap.end() ) {
-		lastElement = map_it.data();
+		lastElement = map_it.value();
 	}
 	else
 		lastElement = 0;

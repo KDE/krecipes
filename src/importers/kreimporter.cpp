@@ -190,7 +190,8 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 					QPixmap pix;
 					KCodecs::base64Decode( Q3CString( pic.text().toLatin1() ), decodedPic );
 					int len = decodedPic.size();
-					QByteArray picData( len );
+					QByteArray picData;
+               picData.resize( len );
 					memcpy( picData.data(), decodedPic.data(), len );
 					bool ok = pix.loadFromData( picData, "JPEG" );
 					if ( ok ) {

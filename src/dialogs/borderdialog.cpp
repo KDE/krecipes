@@ -86,8 +86,9 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
    widthLabel->setObjectName( "widthLabel" );
 	layout1->addWidget( widthLabel );
 
-	widthSpinBox = new QSpinBox( borderGroupBox, "widthSpinBox" );
-	widthSpinBox->setMinValue( 1 );
+	widthSpinBox = new QSpinBox( borderGroupBox );
+   widthSpinBox->setObjectName( "widthSpinBox" );
+	widthSpinBox->setMinimum( 1 );
 	layout1->addWidget( widthSpinBox );
 
 	widthListBox = new K3ListBox( borderGroupBox, "widthListBox" );

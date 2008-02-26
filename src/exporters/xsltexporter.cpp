@@ -114,7 +114,7 @@ int XSLTExporter::supportedItems() const
 
 	QMap<QString,bool>::const_iterator it;
 	for ( it = m_visibilityMap.begin(); it != m_visibilityMap.end(); ++it ) {
-		if (it.data() == false) {
+		if (it.value() == false) {
 			if (it.key() == "authors") {
 				items ^= RecipeDB::Authors;
 			} else if (it.key() == "categories") {

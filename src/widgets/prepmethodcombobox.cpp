@@ -125,10 +125,10 @@ void PrepMethodComboBox::createPrepMethod( const Element &element )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
 		if ( it.key() >= row ) {
-			new_map.insert( it.key() + 1, it.data() );
+			new_map.insert( it.key() + 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	prepMethodComboRows = new_map;
 	prepMethodComboRows.insert( row, element.id );
@@ -138,7 +138,7 @@ void PrepMethodComboBox::removePrepMethod( int id )
 {
 	int row = -1;
 	for ( QMap<int, int>::iterator it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
-		if ( it.data() == id ) {
+		if ( it.value() == id ) {
 			row = it.key();
 			completionObject()->removeItem( text(row) );
 			removeItem( row );
@@ -154,10 +154,10 @@ void PrepMethodComboBox::removePrepMethod( int id )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
 		if ( it.key() > row ) {
-			new_map.insert( it.key() - 1, it.data() );
+			new_map.insert( it.key() - 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	prepMethodComboRows = new_map;
 }
@@ -177,7 +177,7 @@ void PrepMethodComboBox::setSelected( int prepID )
 	//do a reverse lookup on the row->id map
 	QMap<int, int>::const_iterator it;
 	for ( it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
-		if ( it.data() == prepID ) {
+		if ( it.value() == prepID ) {
 			setCurrentIndex(it.key());
 			break;
 		}

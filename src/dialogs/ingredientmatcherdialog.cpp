@@ -93,7 +93,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	missingNumberLabel = new QLabel( missingBox );
 	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
-	missingNumberSpinBox->setMinValue( -1 );
+	missingNumberSpinBox->setMinimum( -1 );
 	missingNumberSpinBox->setSpecialValueText( i18n( "Any" ) );
 	dialogLayout->addWidget(missingBox);
 

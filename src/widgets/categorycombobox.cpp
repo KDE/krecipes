@@ -120,10 +120,10 @@ void CategoryComboBox::createCategory( const Element &element, int /*parent_id*/
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
 		if ( it.key() >= row ) {
-			new_map.insert( it.key() + 1, it.data() );
+			new_map.insert( it.key() + 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	categoryComboRows = new_map;
 	categoryComboRows.insert( row, element.id );
@@ -133,7 +133,7 @@ void CategoryComboBox::removeCategory( int id )
 {
 	int row = -1;
 	for ( QMap<int, int>::iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
-		if ( it.data() == id ) {
+		if ( it.value() == id ) {
 			row = it.key();
 			removeItem( row );
 			categoryComboRows.remove( it );
@@ -148,10 +148,10 @@ void CategoryComboBox::removeCategory( int id )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
 		if ( it.key() > row ) {
-			new_map.insert( it.key() - 1, it.data() );
+			new_map.insert( it.key() - 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	categoryComboRows = new_map;
 }
@@ -159,7 +159,7 @@ void CategoryComboBox::removeCategory( int id )
 void CategoryComboBox::modifyCategory( const Element &element )
 {
 	for ( QMap<int, int>::const_iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
-		if ( it.data() == element.id )
+		if ( it.value() == element.id )
 			changeItem( element.name, it.key() );
 	}
 }

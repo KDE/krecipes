@@ -813,9 +813,12 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	bg = new Q3VButtonGroup( this );
 	layout->addWidget( bg, 3, 3 );
 
-	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg, "liteCheckBox" );
-	mysqlCheckBox = new QRadioButton( i18n( "Local or Remote MySQL Database" ), bg, "liteCheckBox" );
-	psqlCheckBox = new QRadioButton( i18n( "Local or Remote PostgreSQL Database" ), bg, "psqlCheckBox" );
+	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg );
+   liteCheckBox->setObjectName( "liteCheckBox" );
+	mysqlCheckBox = new QRadioButton( i18n( "Local or Remote MySQL Database" ), bg );
+   mysqlCheckBox->setObjectName( "mysqlCheckBox" );
+	psqlCheckBox = new QRadioButton( i18n( "Local or Remote PostgreSQL Database" ), bg );
+   psqlCheckBox->setObjectName( "psqlCheckBox" );
 	bg->setButton( 0 ); // By default, SQLite
 
 #ifndef HAVE_MYSQL

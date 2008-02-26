@@ -139,10 +139,10 @@ void IngredientComboBox::createIngredient( const Element &element )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = ingredientComboRows.begin(); it != ingredientComboRows.end(); ++it ) {
 		if ( it.key() >= row ) {
-			new_map.insert( it.key() + 1, it.data() );
+			new_map.insert( it.key() + 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	ingredientComboRows = new_map;
 	ingredientComboRows.insert( row, element.id );
@@ -152,7 +152,7 @@ void IngredientComboBox::removeIngredient( int id )
 {
 	int row = -1;
 	for ( QMap<int, int>::iterator it = ingredientComboRows.begin(); it != ingredientComboRows.end(); ++it ) {
-		if ( it.data() == id ) {
+		if ( it.value() == id ) {
 			row = it.key();
 			completionObject()->removeItem( text(row) );
 			removeItem( row );
@@ -168,10 +168,10 @@ void IngredientComboBox::removeIngredient( int id )
 	QMap<int, int> new_map;
 	for ( QMap<int, int>::iterator it = ingredientComboRows.begin(); it != ingredientComboRows.end(); ++it ) {
 		if ( it.key() > row ) {
-			new_map.insert( it.key() - 1, it.data() );
+			new_map.insert( it.key() - 1, it.value() );
 		}
 		else
-			new_map.insert( it.key(), it.data() );
+			new_map.insert( it.key(), it.value() );
 	}
 	ingredientComboRows = new_map;
 }

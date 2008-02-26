@@ -91,10 +91,11 @@ class DateValidator : public QValidator
 };
 
 KDateEdit::KDateEdit( QWidget *parent, const char *name )
-  : QComboBox( true, parent, name ),
+  : QComboBox( true, parent ),
     mReadOnly( false ),
     mDiscardNextMousePress( false )
 {
+  setObjectName( name );
   // need at least one entry for popup to work
   setMaxCount( 1 );
 

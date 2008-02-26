@@ -66,7 +66,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	dayNumberSelector->setOrientation( Qt::Horizontal );
 	dayNumberSelector->setRange( 1, 10 );
 	dayNumberSelector->setSteps( 1, 1 );
-	dayNumberSelector->setTickmarks( QSlider::TicksBelow );
+	dayNumberSelector->setTickPosition( QSlider::TicksBelow );
 	dayNumberSelector->setFixedWidth( 100 );
 
 	mealsSliderBox = new Q3VGroupBox( i18n( "Meals per Day" ), optionsBox );
@@ -78,7 +78,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	mealNumberSelector->setOrientation( Qt::Horizontal );
 	mealNumberSelector->setRange( 1, 10 );
 	mealNumberSelector->setSteps( 1, 1 );
-	mealNumberSelector->setTickmarks( QSlider::TicksBelow );
+	mealNumberSelector->setTickPosition( QSlider::TicksBelow );
 	mealNumberSelector->setFixedWidth( 100 );
 
 	// Tabs
@@ -333,8 +333,8 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	dishNumberBox->setSpacing( 10 );
 	dishNumberLabel = new QLabel( i18n( "No. of dishes: " ), dishNumberBox );
 	dishNumberInput = new QSpinBox( dishNumberBox );
-	dishNumberInput->setMinValue( 1 );
-	dishNumberInput->setMaxValue( 10 );
+	dishNumberInput->setMinimum( 1 );
+	dishNumberInput->setMaximum( 10 );
 	dishNumberBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 
 	// Toolbar

@@ -1637,7 +1637,7 @@ QString RecipeInputDialog::statusMessage() const
 		statusMessage.append("<ul>");
 		for ( QMap<int,QString>::const_iterator it = propertyStatusMapRed.begin(); it != propertyStatusMapRed.end(); ++it ) {
 			statusMessage.append("<li>");
-			statusMessage.append(it.data());
+			statusMessage.append(it.value());
 			statusMessage.append("</li>");
 		}
 		statusMessage.append("</ul>");
@@ -1648,7 +1648,7 @@ QString RecipeInputDialog::statusMessage() const
 		statusMessage.append("<ul>");
 		for ( QMap<int,QString>::const_iterator it = propertyStatusMapYellow.begin(); it != propertyStatusMapYellow.end(); ++it ) {
 			statusMessage.append("<li>");
-			statusMessage.append(it.data());
+			statusMessage.append(it.value());
 			statusMessage.append("</li>");
 		}
 		statusMessage.append("</ul>");

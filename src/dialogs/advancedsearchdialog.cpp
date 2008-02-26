@@ -84,7 +84,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrame->setLineWidth( 0 );
 	parametersFrameLayout = new Q3VBoxLayout( parametersFrame, 0, 0, "parametersFrameLayout"); 
 
-	titleButton = new QPushButton( parametersFrame, "titleButton" );
+	titleButton = new QPushButton( parametersFrame );
+   titleButton->setObjectName( "titleButton" );
 	titleButton->setToggleButton( TRUE );
 	parametersFrameLayout->addWidget( titleButton );
 	
@@ -98,7 +99,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	KHBox *titleHBox = new KHBox( titleFrame );
 	/*QLabel *titleInfoLabel = */new QLabel(i18n("Keywords:"),titleHBox);
-	titleEdit = new QLineEdit( titleHBox, "titleEdit" );
+	titleEdit = new QLineEdit( titleHBox );
+   titleEdit->setObjectName( "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
 
 	parametersFrameLayout->addWidget( titleFrame );
@@ -120,11 +122,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addMultiCellWidget( ingredientInfoLabel, 0, 0, 0, 1 );
 
-	ingredientsAllEdit = new QLineEdit( ingredientFrame, "ingredientsAllEdit" );
+	ingredientsAllEdit = new QLineEdit( ingredientFrame );
+   ingredientsAllEdit->setObjectName( "ingredientsAllEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsAllEdit, 1, 1 );
 	
-	ingredientsAnyEdit = new QLineEdit( ingredientFrame, "ingredientsAnyEdit" );
+	ingredientsAnyEdit = new QLineEdit( ingredientFrame );
+   ingredientsAnyEdit->setObjectName( "ingredientsAnyEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsAnyEdit, 2, 1 );
 	
@@ -138,7 +142,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	ingredientFrameLayout->addWidget( textLabel1, 1, 0 );
 	
-	ingredientsWithoutEdit = new QLineEdit( ingredientFrame, "ingredientsWithoutEdit" );
+	ingredientsWithoutEdit = new QLineEdit( ingredientFrame );
+   ingredientsWithoutEdit->setObjectName( "ingredientsWithoutEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsWithoutEdit, 3, 1 );
 	
@@ -165,7 +170,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addMultiCellWidget( categoryInfoLabel, 0, 0, 0, 1 );
 	
-	categoriesAllEdit = new QLineEdit( categoryFrame, "categoriesAllEdit" );
+	categoriesAllEdit = new QLineEdit( categoryFrame );
+   categoriesAllEdit->setObjectName( "categoriesAllEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesAllEdit, 1, 1 );
 	
@@ -179,7 +185,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( textLabel1_3_3, 3, 0 );
 	
-	categoriesAnyEdit = new QLineEdit( categoryFrame, "categoriesAnyEdit" );
+	categoriesAnyEdit = new QLineEdit( categoryFrame );
+   categoriesAnyEdit->setObjectName( "categoriesAnyEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesAnyEdit, 2, 1 );
 	
@@ -188,7 +195,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( textLabel1_2_3, 2, 0 );
 	
-	categoriesNotEdit = new QLineEdit( categoryFrame, "categoriesNotEdit" );
+	categoriesNotEdit = new QLineEdit( categoryFrame );
+   categoriesNotEdit->setObjectName( "categoriesNotEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesNotEdit, 3, 1 );
 	parametersFrameLayout->addWidget( categoryFrame );
@@ -225,15 +233,18 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	authorsFrameLayout->addWidget( textLabel1_3_4, 3, 0 );
 	
-	authorsAnyEdit = new QLineEdit( authorsFrame, "authorsAnyEdit" );
+	authorsAnyEdit = new QLineEdit( authorsFrame );
+   authorsAnyEdit->setObjectName( "authorsAnyEdit" );
 	
 	authorsFrameLayout->addWidget( authorsAnyEdit, 1, 1 );
 	
-	authorsAllEdit = new QLineEdit( authorsFrame, "authorsAllEdit" );
+	authorsAllEdit = new QLineEdit( authorsFrame );
+   authorsAllEdit->setObjectName( "authorsAllEdit" );
 	
 	authorsFrameLayout->addWidget( authorsAllEdit, 2, 1 );
 	
-	authorsWithoutEdit = new QLineEdit( authorsFrame, "authorsWithoutEdit" );
+	authorsWithoutEdit = new QLineEdit( authorsFrame );
+   authorsWithoutEdit->setObjectName( "authorsWithoutEdit" );
 	
 	authorsFrameLayout->addWidget( authorsWithoutEdit, 3, 1 );
 	parametersFrameLayout->addWidget( authorsFrame );
@@ -257,15 +268,17 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout5 = new Q3HBoxLayout( 0, 0, 3, "layout5"); 
 	
-	servingsComboBox = new QComboBox( FALSE, servingsFrame, "servingsComboBox" );
+	servingsComboBox = new QComboBox( FALSE, servingsFrame );
+   servingsComboBox->setObjectName( "servingsComboBox" );
 	servingsComboBox->setEnabled( FALSE );
 	servingsComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, servingsComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout5->addWidget( servingsComboBox );
 	
-	servingsSpinBox = new QSpinBox( servingsFrame, "servingsSpinBox" );
+	servingsSpinBox = new QSpinBox( servingsFrame );
+   servingsSpinBox->setObjectName( "servingsSpinBox" );
 	servingsSpinBox->setEnabled( FALSE );
-	servingsSpinBox->setMinValue( 1 );
-	servingsSpinBox->setMaxValue( 9999 );
+	servingsSpinBox->setMinimum( 1 );
+	servingsSpinBox->setMaximum( 9999 );
 	layout5->addWidget( servingsSpinBox );
 	servingsFrameLayout->addLayout( layout5 );
 	parametersFrameLayout->addWidget( servingsFrame );
@@ -289,7 +302,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout6 = new Q3HBoxLayout( 0, 0, 3, "layout6"); 
 	
-	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame, "prepTimeComboBox" );
+	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame );
+   prepTimeComboBox->setObjectName( "prepTimeComboBox" );
 	prepTimeComboBox->setEnabled( FALSE );
 	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout6->addWidget( prepTimeComboBox );
@@ -320,7 +334,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	KHBox *instructionsHBox = new KHBox(instructionsFrame);
 	/*QLabel *instructionsInfoLabel = */new QLabel(i18n("Keywords:"),instructionsHBox);
 
-	instructionsEdit = new QLineEdit( instructionsHBox, "instructionsEdit" );
+	instructionsEdit = new QLineEdit( instructionsHBox );
+   instructionsEdit->setObjectName( "instructionsEdit" );
 	instructionsFrameLayout->addWidget( instructionsHBox );
 
 	parametersFrameLayout->addWidget( instructionsFrame );
@@ -389,7 +404,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingButtonGroupLayout = new Q3VBoxLayout( ratingButtonGroup->layout() );
 	ratingButtonGroupLayout->setAlignment( Qt::AlignTop );
 	
-	ratingAvgRadioButton = new QRadioButton( ratingButtonGroup, "ratingAvgRadioButton" );
+	ratingAvgRadioButton = new QRadioButton( ratingButtonGroup );
+   ratingAvgRadioButton->setObjectName( "ratingAvgRadioButton" );
 	ratingAvgRadioButton->setChecked( TRUE );
 	ratingButtonGroupLayout->addWidget( ratingAvgRadioButton );
 	
@@ -406,7 +422,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingAvgFrameLayout->addWidget( avgStarsLabel );
 	ratingButtonGroupLayout->addWidget( ratingAvgFrame );
 	
-	criterionRadioButton = new QRadioButton( ratingButtonGroup, "criterionRadioButton" );
+	criterionRadioButton = new QRadioButton( ratingButtonGroup );
+   criterionRadioButton->setObjectName( "criterionRadioButton" );
 	ratingButtonGroupLayout->addWidget( criterionRadioButton );
 	
 	criterionFrame = new Q3Frame( ratingButtonGroup, "criterionFrame" );

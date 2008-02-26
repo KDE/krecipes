@@ -59,7 +59,7 @@ Q3CString QSQLiteResultRow::data( const QString& columnName, bool *ok )
 	if ( it != m_string.end() ) {
 		if ( ok )
 			* ok = true;
-		return it.data();
+		return it.value();
 	}
 	else {
 		if ( ok )
@@ -77,7 +77,7 @@ Q3CString QSQLiteResultRow::data( int column, bool *ok )
 	if ( it != m_int.end() ) {
 		if ( ok )
 			* ok = true;
-		return it.data();
+		return it.value();
 	}
 	else {
 		if ( ok )

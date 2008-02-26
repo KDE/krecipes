@@ -86,14 +86,16 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	raterLabel = new QLabel( layout2 );
    raterLabel->setObjectName( "raterLabel" );
-	raterEdit = new QLineEdit( layout2, "raterEdit" );
+	raterEdit = new QLineEdit( layout2 );
+   raterEdit->setObjectName( "raterEdit" );
 
 	layout8 = new KHBox( page );
 
 	criteriaLabel = new QLabel( layout8 );
    criteriaLabel->setObjectName( "criteriaLabel" );
 
-	criteriaComboBox = new QComboBox( FALSE, layout8, "criteriaComboBox" );
+	criteriaComboBox = new QComboBox( FALSE, layout8 );
+   criteriaComboBox->setObjectName( "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box

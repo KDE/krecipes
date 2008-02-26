@@ -59,14 +59,17 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	dbButtonGroupLayout = new Q3VBoxLayout( dbButtonGroup->layout() );
 	dbButtonGroupLayout->setAlignment( Qt::AlignTop );
 
-	liteRadioButton = new QRadioButton( dbButtonGroup, "liteRadioButton" );
+	liteRadioButton = new QRadioButton( dbButtonGroup );
+   liteRadioButton->setObjectName( "liteRadioButton" );
 	liteRadioButton->setChecked( TRUE );
 	dbButtonGroupLayout->addWidget( liteRadioButton );
 
-	mysqlRadioButton = new QRadioButton( dbButtonGroup, "mysqlRadioButton" );
+	mysqlRadioButton = new QRadioButton( dbButtonGroup );
+   mysqlRadioButton->setObjectName( "mysqlRadioButton" );
 	dbButtonGroupLayout->addWidget( mysqlRadioButton );
 
-	psqlRadioButton = new QRadioButton( dbButtonGroup, "psqlRadioButton" );
+	psqlRadioButton = new QRadioButton( dbButtonGroup );
+   psqlRadioButton->setObjectName( "psqlRadioButton" );
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
 
 	paramStack = new Q3WidgetStack( page, "paramStack" );
@@ -91,19 +94,22 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	layout5 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout5" );
 
-	hostEdit = new QLineEdit( serverPage, "hostEdit" );
+	hostEdit = new QLineEdit( serverPage );
+   hostEdit->setObjectName( "hostEdit" );
 	layout5->addWidget( hostEdit, 0, 1 );
 	hostLabel = new QLabel( serverPage );
    hostLabel->setObjectName( "hostLabel" );
 	layout5->addWidget( hostLabel, 0, 0 );
 
-	userEdit = new QLineEdit( serverPage, "userEdit" );
+	userEdit = new QLineEdit( serverPage );
+   userEdit->setObjectName( "userEdit" );
 	layout5->addWidget( userEdit, 1, 1 );
 	userLabel = new QLabel( serverPage );
    userLabel->setObjectName( "userLabel" );
 	layout5->addWidget( userLabel, 1, 0 );
 
-	passwordEdit = new QLineEdit( serverPage, "passwordEdit" );
+	passwordEdit = new QLineEdit( serverPage );
+   passwordEdit->setObjectName( "passwordEdit" );
 	passwordEdit->setEchoMode( QLineEdit::Password );
 	layout5->addWidget( passwordEdit, 2, 1 );
 	passwordLabel = new QLabel( serverPage );
@@ -119,7 +125,8 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
    portLabel->setObjectName( "portLabel" );
 	layout5->addWidget( portLabel, 3, 0 );
 
-	nameEdit = new QLineEdit( serverPage, "nameEdit" );
+	nameEdit = new QLineEdit( serverPage );
+   nameEdit->setObjectName( "nameEdit" );
 	layout5->addWidget( nameEdit, 4, 1 );
 	nameLabel = new QLabel( serverPage );
    nameLabel->setObjectName( "nameLabel" );

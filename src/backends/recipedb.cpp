@@ -430,8 +430,8 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 					.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")));
 
 			do {
-				QByteArray array(4096);
-				int len = dumpFile->read(array.data(),array.size());
+				QByteArray array;
+				int len = dumpFile->read(array.data(),4096);
 				array.resize(len);
 
 				if ( !process->writeStdin(array) )
