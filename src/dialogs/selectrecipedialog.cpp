@@ -124,7 +124,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	advancedSearch = new AdvancedSearchDialog( this, database );
 	tabWidget->insertTab( advancedSearch, i18n( "Advanced" ) );
 
-	QToolTip::add( clearSearchButton, i18n( "Clear search" ) );
+	clearSearchButton->setToolTip( i18n( "Clear search" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );
@@ -186,7 +186,7 @@ void SelectRecipeDialog::reload( ReloadFlags flag )
 
 	#ifdef ENABLE_SLOW
 	categoryBox->reload();
-	filterComboCategory( categoryBox->currentItem() );
+	filterComboCategory( categoryBox->currentIndex() );
 	#endif
 }
 

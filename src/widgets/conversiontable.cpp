@@ -214,8 +214,8 @@ void ConversionTable::setUnitIDs( const IDList &idList )
 
 void ConversionTable::setRatio( int ingID1, int ingID2, double ratio )
 {
-	int indexID1 = unitIDs.findIndex( ingID1 );
-	int indexID2 = unitIDs.findIndex( ingID2 );
+	int indexID1 = unitIDs.indexOf( ingID1 );
+	int indexID2 = unitIDs.indexOf( ingID2 );
 
 	createNewItem( indexID1, indexID2, ratio );
 }

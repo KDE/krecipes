@@ -45,7 +45,7 @@ void MX2Importer::parseFile( const QString& filename )
 		Q3TextStream stream( &file );
 		QString all_data = stream.read();
 		if ( all_data.startsWith( "<?xml" ) )
-			all_data.remove( 0, all_data.find( "?>" ) + 2 );
+			all_data.remove( 0, all_data.indexOf( "?>" ) + 2 );
 
 		QString error;
 		int line;

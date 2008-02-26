@@ -123,8 +123,8 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_a
 	int numerator;
 	int denominator;
 
-	int space_index = input.find( " " );
-	int slash_index = input.find( "/" );
+	int space_index = input.indexOf( " " );
+	int slash_index = input.indexOf( "/" );
 
 	if ( space_index == -1 ) {
 		if ( slash_index == -1 )  //input contains no fractional part

@@ -52,7 +52,7 @@ namespace USDA {
 
 				IngredientData data;
 
-				int sepIndex = line.find(':');
+				int sepIndex = line.indexOf(':');
 				if ( sepIndex != -1 ) {
 					data.name = line.left(sepIndex);
 					data.usda_id = line.right(line.length()-sepIndex-1).toInt();

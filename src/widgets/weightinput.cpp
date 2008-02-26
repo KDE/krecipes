@@ -54,7 +54,7 @@ void WeightInput::setPrepMethod( const Element &prep )
 Element WeightInput::prepMethod() const
 {
 	Element prep;
-	prep.id = prepMethodBox->id( prepMethodBox->currentItem() );
+	prep.id = prepMethodBox->id( prepMethodBox->currentIndex() );
 	if ( prep.id != -1 )
 		prep.name = prepMethodBox->currentText();
 	return prep;

@@ -560,7 +560,7 @@ void EditPropertiesDialog::loadUSDAData()
 
 			QString amountAndWeight = data[i].mid( 1, data[i].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
-				int spaceIndex = amountAndWeight.find(" ");
+				int spaceIndex = amountAndWeight.indexOf(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);

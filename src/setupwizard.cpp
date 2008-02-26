@@ -582,8 +582,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 
 	KIconLoader *il = KIconLoader::global();
 	QPushButton *file_select = new QPushButton( il->loadIcon( "document-open", KIconLoader::NoGroup, 16 ), QString::null, hbox );
-	QToolTip::add
-		( file_select, i18n( "Open file dialog" ) );
+	file_select->setToolTip( i18n( "Open file dialog" ) );
 	file_select->setFixedWidth( 25 );
 
 	layout->addWidget( hbox, 3, 3 );

@@ -62,7 +62,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterLabel->setText( " " + i18n( "Search:" ) );
 		filterEdit = new KLineEdit( filterBox );
 
-		QToolTip::add( clearSearchButton, i18n( "Clear search" ) );
+		clearSearchButton->setToolTip( i18n( "Clear search" ) );
 		connect( clearSearchButton, SIGNAL( clicked() ), filterEdit, SLOT( clear() ) );
 	}
 

@@ -232,7 +232,7 @@ void BorderDialog::updateSpinBox( int index )
 void BorderDialog::slotHSChanged( int h, int s )
 {
 	int _h, _s, v;
-	selColor.hsv( &_h, &_s, &v );
+	selColor.getHsv( &_h, &_s, &v );
 	if ( v < 1 )
 		v = 1;
 
@@ -246,7 +246,7 @@ void BorderDialog::slotHSChanged( int h, int s )
 void BorderDialog::slotVChanged( int v )
 {
 	int h, s, _v;
-	selColor.hsv( &h, &s, &_v );
+	selColor.getHsv( &h, &s, &_v );
 
 	QColor col;
 	col.setHsv( h, s, v );
@@ -263,7 +263,7 @@ void BorderDialog::setColor( const QColor &color )
 	selColor = color;
 
 	int h, s, v;
-	color.hsv( &h, &s, &v );
+	color.getHsv( &h, &s, &v );
 	hsSelector->setValues( h, s );
 	valuePal->setHue( h );
 	valuePal->setSaturation( s );

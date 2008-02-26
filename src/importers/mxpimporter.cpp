@@ -77,8 +77,8 @@ void MXPImporter::importMXP( Q3TextStream &stream )
 	//author
 	stream.skipWhiteSpace();
 	current = stream.readLine().trimmed();
-	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "recipe by" ) {
-		Element new_author( current.mid( current.find( ":" ) + 1, current.length() ).trimmed() );
+	if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "recipe by" ) {
+		Element new_author( current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed() );
 		recipe.authorList.append( new_author );
 		//kDebug()<<"Found author: "<<new_author.name<<endl;
 	}
@@ -90,15 +90,15 @@ void MXPImporter::importMXP( Q3TextStream &stream )
 	//servings
 	stream.skipWhiteSpace();
 	current = stream.readLine().trimmed();
-	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "serving size" ) {
+	if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "serving size" ) {
 		//allows serving size to be loaded even if preparation time is missing
 		int end_index;
 		if ( current.contains( "preparation time", FALSE ) )
-			end_index = current.find( "preparation time", 0, FALSE ) - 15;
+			end_index = current.indexOf( "preparation time", 0, Qt::CaseInsensitive ) - 15;
 		else
 			end_index = current.length();
 
-		recipe.yield.amount = current.mid( current.find( ":" ) + 1, end_index ).trimmed().toInt();
+		recipe.yield.amount = current.mid( current.indexOf( ":" ) + 1, end_index ).trimmed().toInt();
 		recipe.yield.type = i18n("servings");
 		//kDebug()<<"Found serving size: "<<recipe.yield.amount<<endl;
 	}
@@ -108,7 +108,7 @@ void MXPImporter::importMXP( Q3TextStream &stream )
 	}
 
 	if ( current.contains( "preparation time", FALSE ) ) {
-		QString prep_time = current.mid( current.find( ":", current.find( "preparation time", 0, FALSE ) ) + 1,
+		QString prep_time = current.mid( current.indexOf( ":", current.indexOf( "preparation time", 0, Qt::CaseInsensitive ) ) + 1,
 		                                 current.length() ).trimmed();
 		recipe.prepTime = QTime( prep_time.section( ':', 0, 0 ).toInt(), prep_time.section( ':', 1, 1 ).toInt() );
 		kDebug() << "Found preparation time: " << prep_time << endl;
@@ -137,8 +137,8 @@ void MXPImporter::loadCategories( Q3TextStream &stream, Recipe &recipe )
 	//====================categories====================//
 	stream.skipWhiteSpace();
 	QString current = stream.readLine().trimmed();
-	if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "categories" ) {
-		QString tmp_str = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+	if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "categories" ) {
+		QString tmp_str = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 
 		while ( current.trimmed() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() ) {
 			if ( !tmp_str.isEmpty() ) {
@@ -197,7 +197,7 @@ void MXPImporter::loadIngredients( Q3TextStream &stream, Recipe &recipe )
 			new_ingredient.units = Unit( units.simplified(), new_ingredient.amount );
 
 			//name
-			int dash_index = current.find( "--" );
+			int dash_index = current.indexOf( "--" );
 
 			int length;
 			if ( dash_index == -1 || dash_index == 24 )  //ignore a dash in the first position (index 24)
@@ -281,45 +281,45 @@ void MXPImporter::loadOptionalFields( Q3TextStream &stream, Recipe &recipe )
 	//      This also could work around a typo or such.
 	while ( !current.simplified().contains( "Exported from MasterCook" ) && !stream.atEnd() ) {
 		//suggested wine
-		if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "suggested wine" ) {
-			QString wine = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "suggested wine" ) {
+			QString wine = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found suggested wine: "<<m_wine<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nSuggested wine: " + wine;
 		}
 		//Nutr. Assoc.
-		if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "nutr. assoc." ) {
-			QString nutr_assoc = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "nutr. assoc." ) {
+			QString nutr_assoc = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found nutrient association: "<<nutr_assoc<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nNutrient Association: " + nutr_assoc;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "per serving (excluding unknown items)" ) { //per serving... maybe we can do something with this info later
-			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "per serving (excluding unknown items)" ) { //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found per serving (excluding unknown items): "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nPer Serving (excluding unknown items): " + per_serving_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "per serving" ) { //per serving... maybe we can do something with this info later
-			QString per_serving_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "per serving" ) { //per serving... maybe we can do something with this info later
+			QString per_serving_info = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found per serving: "<<per_serving_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nPer Serving: " + per_serving_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "food exchanges" ) { //food exchanges... maybe we can do something with this info later
-			QString food_exchange_info = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "food exchanges" ) { //food exchanges... maybe we can do something with this info later
+			QString food_exchange_info = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found food exchanges: "<<food_exchange_info<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nFood Exchanges: " + food_exchange_info;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "serving ideas" ) { //serving ideas
-			QString serving_ideas = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "serving ideas" ) { //serving ideas
+			QString serving_ideas = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 			//kDebug()<<"Found serving ideas: "<<m_serving_ideas<<" (adding to end of instructions)"<<endl;
 
 			recipe.instructions += "\n\nServing ideas: " + serving_ideas;
 		}
-		else if ( current.mid( 0, current.find( ":" ) ).simplified().toLower() == "notes" )  //notes
-			notes = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "notes" )  //notes
+			notes = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 		else if ( !current.isEmpty() && current != "_____" )  //if it doesn't belong to any other field, assume it a part of a multi-line notes field
 			notes += "\n" + current;
 

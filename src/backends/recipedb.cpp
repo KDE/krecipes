@@ -388,7 +388,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		Q3TextStream stream( dumpFile );
 		QString firstLine = stream.readLine().trimmed();
 		QString dbVersion = stream.readLine().trimmed();
-		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.find(":") - 2 );
+		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.indexOf(":") - 2 );
 		if ( qRound(dbVersion.toDouble()*1e5) > qRound(latestDBVersion()*1e5) ) { //correct for float's imprecision
 			if ( errMsg ) *errMsg = i18n( "This backup was created with a newer version of Krecipes and cannot be restored." );
 			delete dumpFile;
@@ -397,7 +397,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 		KConfigGroup config = KGlobal::config()->group( "DBType" );
 		QString dbType = stream.readLine().trimmed();
-		dbType = dbType.right( dbType.length() - dbType.find(":") - 2 );
+		dbType = dbType.right( dbType.length() - dbType.indexOf(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
 			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
 			delete dumpFile;
@@ -783,7 +783,7 @@ void RecipeDB::importUSDADatabase()
 
 			QString amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 3 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 3 ].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
-				int spaceIndex = amountAndWeight.find(" ");
+				int spaceIndex = amountAndWeight.indexOf(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
@@ -796,7 +796,7 @@ void RecipeDB::importUSDADatabase()
 			w.weight = fields[ TOTAL_USDA_PROPERTIES + 4 ].toDouble();
 			amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 5 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 5 ].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
-				int spaceIndex = amountAndWeight.find(" ");
+				int spaceIndex = amountAndWeight.indexOf(" ");
 				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 

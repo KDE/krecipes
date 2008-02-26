@@ -292,7 +292,7 @@ void IngredientInput::loadUnitListCombo()
 	unitBox->clear(); // Empty the combo first
 	unitBox->completionObject() ->clear();
 
-	int comboIndex = ingredientBox->currentItem();
+	int comboIndex = ingredientBox->currentIndex();
 	int comboCount = ingredientBox->count();
 
 	if ( comboCount > 0 ) { // If not, the list may be empty (no ingredient list defined) and crashes while reading
@@ -336,7 +336,7 @@ Ingredient IngredientInput::ingredient() const
 	ing.name = ingredientBox->currentText();
 	amountEdit->value(ing.amount,ing.amount_offset);
 	ing.units = Unit(unitBox->currentText().trimmed(),ing.amount+ing.amount_offset);
-	ing.ingredientID = ingredientBox->id( ingredientBox->currentItem() );
+	ing.ingredientID = ingredientBox->id( ingredientBox->currentIndex() );
 
 	return ing;
 }

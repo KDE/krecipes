@@ -64,8 +64,10 @@ class DateValidator : public QValidator
 {
   public:
     DateValidator( const QStringList &keywords, QWidget* parent, const char* name = 0 )
-      : QValidator( parent, name ), mKeywords( keywords )
-    {}
+      : QValidator( parent ), mKeywords( keywords )
+    {
+    setObjectName( name );
+    }
 
     virtual State validate( QString &str, int& ) const
     {
@@ -91,11 +93,12 @@ class DateValidator : public QValidator
 };
 
 KDateEdit::KDateEdit( QWidget *parent, const char *name )
-  : QComboBox( true, parent ),
+  : QComboBox( parent ),
     mReadOnly( false ),
     mDiscardNextMousePress( false )
 {
   setObjectName( name );
+  setEditable( true );
   // need at least one entry for popup to work
   setMaxCount( 1 );
 

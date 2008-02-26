@@ -30,7 +30,7 @@ public:
 	virtual QString makeCompletion( const QString &string ) {
 		kDebug()<<"original makeCompletion( "<<string<<" )"<<endl;
 
-		int comma_index = string.findRev(",");
+		int comma_index = string.lastIndexOf(",");
 		QString completion_txt = string;
 		if ( comma_index != -1 )
 			completion_txt = completion_txt.right( completion_txt.length() - comma_index - 1 ).trimmed();

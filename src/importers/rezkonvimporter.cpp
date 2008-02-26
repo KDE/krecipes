@@ -39,7 +39,7 @@ void RezkonvImporter::parseFile( const QString &filename )
 		while ( !stream.atEnd() ) {
 			line = stream.readLine();
 
-			if ( line.contains( QRegExp( "^=====.*REZKONV.*", false ) ) ) {
+			if ( line.contains( QRegExp( "^=====.*REZKONV.*", Qt::CaseInsensitive ) ) ) {
 				QStringList raw_recipe;
 				while ( !( line = stream.readLine() ).contains( QRegExp( "^=====\\s*$" ) ) && !stream.atEnd() )
 					raw_recipe << line;
@@ -66,12 +66,12 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 
 	//title (Titel)
 	text_it++;
-	recipe.title = ( *text_it ).mid( ( *text_it ).find( ":" ) + 1, ( *text_it ).length() ).trimmed();
+	recipe.title = ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).trimmed();
 	kDebug() << "Found title: " << recipe.title << endl;
 
 	//categories (Kategorien):
 	text_it++;
-	QStringList categories = QStringList::split( ',', ( *text_it ).mid( ( *text_it ).find( ":" ) + 1, ( *text_it ).length() ) );
+	QStringList categories = QStringList::split( ',', ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ) );
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();
@@ -84,7 +84,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	//get the number between the ":" and the next space after it
 	QString yield_str = ( *text_it ).trimmed();
 	yield_str.remove( QRegExp( "^Menge:\\s*" ) );
-	int sep_index = yield_str.find( ' ' );
+	int sep_index = yield_str.indexOf( ' ' );
 	if ( sep_index != -1 )
 		recipe.yield.type = yield_str.mid( sep_index+1 );
 	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
@@ -159,7 +159,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 
 	//separate out the preparation method
 	QString name_and_prep = new_ingredient.name;
-	int separator_index = name_and_prep.find( "," );
+	int separator_index = name_and_prep.indexOf( "," );
 	if ( separator_index != -1 ) {
 		new_ingredient.name = name_and_prep.mid( 0, separator_index ).trimmed();
 		new_ingredient.prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).trimmed() );
@@ -236,7 +236,7 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 		text_it++;
 		QRegExp rx_line_begin( "^\\s*-{0,2}\\s*" );
 
-		QRegExp rx_creation_date = QRegExp( "^\\s*-{0,2}\\s*Erfasst \\*RK\\*", false );
+		QRegExp rx_creation_date = QRegExp( "^\\s*-{0,2}\\s*Erfasst \\*RK\\*", Qt::CaseInsensitive );
 		if ( ( *text_it ).contains( rx_creation_date ) )  // date followed by typist
 		{
 			QString date = *text_it;

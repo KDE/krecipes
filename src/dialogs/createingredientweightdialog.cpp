@@ -121,10 +121,10 @@ Weight CreateIngredientWeightDialog::weight() const
 {
 	Weight w;
 	w.perAmount = perAmountEdit->value().toDouble();
-	w.perAmountUnitID = perAmountUnitBox->id( perAmountUnitBox->currentItem() );
+	w.perAmountUnitID = perAmountUnitBox->id( perAmountUnitBox->currentIndex() );
 	w.weight = weightEdit->value().toDouble();
-	w.weightUnitID = weightUnitBox->id( weightUnitBox->currentItem() );
-	w.prepMethodID = prepMethodBox->id( prepMethodBox->currentItem() );
+	w.weightUnitID = weightUnitBox->id( weightUnitBox->currentIndex() );
+	w.prepMethodID = prepMethodBox->id( prepMethodBox->currentIndex() );
 	w.prepMethod = prepMethodBox->currentText();
 
 	return w;

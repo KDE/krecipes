@@ -85,7 +85,7 @@ PrepDataList loadPrepMethods()
 			if ( line.trimmed().isEmpty() ) continue;
 
 			PrepData data;
-			int sepIndex = line.find(':');
+			int sepIndex = line.indexOf(':');
 			data.name = line.left(sepIndex);
 			data.translation = line.right(line.length()-sepIndex-1);
 			if ( data.translation.isEmpty() )
@@ -104,7 +104,7 @@ PrepDataList loadPrepMethods()
 
 bool parseUnitAndPrep( const QString &string, QString &unit, QString &prep, const UnitDataList &unit_data_list, const PrepDataList &prep_data_list )
 {
-	int commaIndex = string.find(",");
+	int commaIndex = string.indexOf(",");
 	QString unitPart = string.left(commaIndex);
 	QString prepPart = string.right(string.length()-commaIndex-2).trimmed();
 

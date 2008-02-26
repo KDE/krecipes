@@ -279,7 +279,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 	//try and split the ingredient on a word boundry
 	int split_index;
 	if ( ing_name.length() > 50 ) {
-		split_index = ing_name.left(50).findRev(" ")+1;
+		split_index = ing_name.left(50).lastIndexOf(" ")+1;
 		if ( split_index == 0 )
 			split_index = 50;
 	}
@@ -310,7 +310,7 @@ QStringList RezkonvExporter::wrapText( const QString& str, int at ) const
 		if ( line.length() >= copy.length() )
 			stop = true;
 		else {
-			QRegExp rxp( "(\\s\\S*)$", false ); // last word in the new line
+			QRegExp rxp( "(\\s\\S*)$", Qt::CaseInsensitive ); // last word in the new line
 			rxp.setMinimal( true );    // one word, only one word, please
 			line = line.replace( rxp, "" ); // remove last word
 		}

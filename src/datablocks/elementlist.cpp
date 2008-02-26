@@ -42,7 +42,7 @@ Element ElementList::findByName( const QRegExp &rx ) const
 {
 	ElementList::const_iterator it_end = end();
 	for ( ElementList::const_iterator it = begin(); it != it_end; ++it ) {
-		if ( ( *it ).name.find(rx) != -1 )
+		if ( ( *it ).name.indexOf(rx) != -1 )
 			return * it;
 	}
 

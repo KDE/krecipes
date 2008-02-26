@@ -172,7 +172,7 @@ void RecipeViewDialog::recipeRemoved( int id )
 	if ( ids_loaded.find(id) != ids_loaded.end() ) {
 		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
 		XSLTExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
-		ids_loaded.remove(id);
+		ids_loaded.removeAll(id);
 	}
 }
 

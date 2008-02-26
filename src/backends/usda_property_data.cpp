@@ -48,7 +48,7 @@ Q3ValueList<PropertyData> loadProperties()
 			if ( line.trimmed().isEmpty() ) continue;
 
 			PropertyData data;
-			int sepIndex = line.find(':');
+			int sepIndex = line.indexOf(':');
 			data.name = line.left(sepIndex);
 			data.unit = line.right(line.length()-sepIndex-1);
 

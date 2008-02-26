@@ -175,13 +175,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton = new QPushButton( photoButtonsBox );
 	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
 	changePhotoButton->setText( "..." );
-	QToolTip::add
-		( changePhotoButton, i18n( "Select photo" ) );
+	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
 	QPushButton *clearPhotoButton = new QPushButton( photoButtonsBox );
 	clearPhotoButton->setPixmap( il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ) );
-	QToolTip::add
-		( clearPhotoButton, i18n( "Clear photo" ) );
+	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
 
 	recipeLayout->addMultiCellWidget( photoButtonsBox, 3, 7, 2, 2 );
 
@@ -347,16 +345,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
-	QToolTip::add
-		( addButton, i18n( "Add ingredient" ) );
-	QToolTip::add
-		( upButton, i18n( "Move ingredient up" ) );
-	QToolTip::add
-		( downButton, i18n( "Move ingredient down" ) );
-	QToolTip::add
-		( removeButton, i18n( "Remove ingredient" ) );
-	QToolTip::add
-		( ingParserButton, i18n( "Paste Ingredients" ) );
+		addButton->setToolTip( i18n( "Add ingredient" ) );
+		upButton->setToolTip( i18n( "Move ingredient up" ) );
+		downButton->setToolTip( i18n( "Move ingredient down" ) );
+		removeButton->setToolTip( i18n( "Remove ingredient" ) );
+		ingParserButton->setToolTip( i18n( "Paste Ingredients" ) );
 
 	// Ingredient List
 	ingredientList = new K3ListView( ingredientGBox);
@@ -426,8 +419,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	spellCheckButton = new QToolButton( instructionsTab );
 	spellCheckButton->setIconSet( il->loadIconSet( "tools-check-spelling", KIconLoader::Small ) );
-	QToolTip::add
-		( spellCheckButton, i18n( "Check spelling" ) );
+	spellCheckButton->setToolTip( i18n( "Check spelling" ) );
 	instructionsLayout->addWidget( spellCheckButton );
 
 	// ------- END OF Recipe Instructions Tab -----------
@@ -1680,12 +1672,12 @@ QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString
 void RecipeInputDialog::statusLinkClicked( const QString &link )
 {
 	if (link.startsWith("ingredient#")) {
-		int ingID = link.mid(link.find("#")+1).toInt();
+		int ingID = link.mid(link.indexOf("#")+1).toInt();
 		QString ingName = database->ingredientName(ingID);
 		EditPropertiesDialog d(ingID,ingName,database,this);
 		d.exec();
 	} else if (link.startsWith("unit#")) {
-		QString unitIDs = link.mid(link.find("#")+1);
+		QString unitIDs = link.mid(link.indexOf("#")+1);
 		QStringList idList = QStringList::split(",",unitIDs);
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;

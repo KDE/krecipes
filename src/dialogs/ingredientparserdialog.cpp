@@ -243,11 +243,11 @@ void IngredientParserDialog::parseText()
 
 
 		//======amount======//
-		int first_space = line.find( " ", format_at+1 );
+		int first_space = line.indexOf( " ", format_at+1 );
 		if ( first_space == -1 )
 			first_space = line.length();
 
-		int second_space = line.find( " ", first_space+1 );
+		int second_space = line.indexOf( " ", first_space+1 );
 		if ( second_space == -1 )
 			second_space = line.length();
 
@@ -270,7 +270,7 @@ void IngredientParserDialog::parseText()
 
 
 		//======unit======//
-		first_space = line.find( " ", format_at+1 );
+		first_space = line.indexOf( " ", format_at+1 );
 		if ( first_space == -1 )
 			first_space = line.length();
 
@@ -294,7 +294,7 @@ void IngredientParserDialog::parseText()
 
 
 		//======ingredient======//
-		int ing_end = line.find( QRegExp("(,|;)"), format_at+1 );
+		int ing_end = line.indexOf( QRegExp("(,|;)"), format_at+1 );
 		if ( ing_end == -1 )
 			ing_end = line.length();
 

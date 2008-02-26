@@ -37,7 +37,7 @@ Unit UnitComboBox::unit() const
 {
 	Unit u;
 	u.name = currentText();
-	u.id = id(currentItem());
+	u.id = id(currentIndex());
 	return u;
 }
 

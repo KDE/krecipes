@@ -87,14 +87,14 @@ void MMFImporter::importMMF( Q3TextStream &stream )
 	//title
 	stream.skipWhiteSpace();
 	current = stream.readLine();
-	m_title = current.mid( current.find( ":" ) + 1, current.length() ).trimmed();
+	m_title = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 	kDebug() << "Found title: " << m_title << endl;
 
 	//categories
 	stream.skipWhiteSpace();
 	current = stream.readLine().trimmed();
 	const char separator = ( version == FromDatabase ) ? ' ' : ',';
-	QStringList categories = QStringList::split( separator, current.mid( current.find( ":" ) + 1, current.length() ) );
+	QStringList categories = QStringList::split( separator, current.mid( current.indexOf( ":" ) + 1, current.length() ) );
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();
@@ -107,8 +107,8 @@ void MMFImporter::importMMF( Q3TextStream &stream )
 	current = stream.readLine().trimmed();
 	if ( current.startsWith( "Yield:" ) ) {
 		//get the number between the ":" and the next space after it
-		m_servings = current.mid( current.find( ":" ) + 1,
-		                          current.find( " ", current.find( ":" ) + 2 ) - current.find( ":" ) ).toInt();
+		m_servings = current.mid( current.indexOf( ":" ) + 1,
+		                          current.indexOf( " ", current.indexOf( ":" ) + 2 ) - current.indexOf( ":" ) ).toInt();
 		kDebug() << "Found yield: " << m_servings << endl;
 	}
 	else if ( current.startsWith( "Servings:" ) )  //from database version
@@ -292,7 +292,7 @@ void MMFImporter::putDataInRecipe()
 
 	for ( IngredientList::iterator ing_it = m_all_ing.begin(); ing_it != m_all_ing.end(); ++ing_it ) {
 		QString name_and_prep = ( *ing_it ).name;
-		int separator_index = name_and_prep.find( QRegExp( "(;|,)" ) );
+		int separator_index = name_and_prep.indexOf( QRegExp( "(;|,)" ) );
 		if ( separator_index != -1 ) {
 			( *ing_it ).name = name_and_prep.mid( 0, separator_index ).trimmed();
 			( *ing_it ).prepMethodList = ElementList::split(",",name_and_prep.mid( separator_index + 1, name_and_prep.length() ).trimmed() );

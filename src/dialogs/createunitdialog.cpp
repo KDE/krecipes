@@ -103,7 +103,7 @@ Unit CreateUnitDialog::newUnit( void )
 	new_unit.name_abbrev = nameAbbrevEdit->text();
 	new_unit.plural_abbrev = pluralAbbrevEdit->text();
 
-	new_unit.type = (Unit::Type)typeComboBox->currentItem();
+	new_unit.type = (Unit::Type)typeComboBox->currentIndex();
 
 	return new_unit;
 }

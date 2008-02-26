@@ -136,7 +136,7 @@ void KreTextEdit::tryCompletion()
 	QString para_text = text( para );
 	if ( para_text.at( index ).isSpace() || completing ) {
 		if ( !completing )
-			completion_begin = para_text.findRev( ' ', index - 1 ) + 1;
+			completion_begin = para_text.lastIndexOf( ' ', index - 1 ) + 1;
 
 		QString completing_word = para_text.mid( completion_begin, index - completion_begin );
 

@@ -74,7 +74,7 @@ void HidePropertyCheckListItem::stateChange( bool on )
 		config.sync();
 		QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 		if ( on )
-			hiddenList.remove(m_property.name);
+			hiddenList.removeAll(m_property.name);
 		else if ( !hiddenList.contains(m_property.name) )
 			hiddenList.append(m_property.name);
 	

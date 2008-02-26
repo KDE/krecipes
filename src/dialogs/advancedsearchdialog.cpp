@@ -86,7 +86,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	titleButton = new QPushButton( parametersFrame );
    titleButton->setObjectName( "titleButton" );
-	titleButton->setToggleButton( TRUE );
+	titleButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( titleButton );
 	
 	titleFrame = new Q3Frame( parametersFrame, "titleFrame" );
@@ -110,7 +110,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	ingredientButton = new QPushButton( parametersFrame );
    ingredientButton->setObjectName( "ingredientButton" );
-	ingredientButton->setToggleButton( TRUE );
+	ingredientButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( ingredientButton );
 	
 	ingredientFrame = new Q3Frame( parametersFrame, "ingredientFrame" );
@@ -158,7 +158,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	categoriesButton = new QPushButton( parametersFrame );
    categoriesButton->setObjectName( "categoriesButton" );
-	categoriesButton->setToggleButton( TRUE );
+	categoriesButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( categoriesButton );
 	
 	categoryFrame = new Q3Frame( parametersFrame, "categoryFrame" );
@@ -206,7 +206,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	authorsButton = new QPushButton( parametersFrame );
    authorsButton->setObjectName( "authorsButton" );
-	authorsButton->setToggleButton( TRUE );
+	authorsButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( authorsButton );
 	
 	authorsFrame = new Q3Frame( parametersFrame, "authorsFrame" );
@@ -254,7 +254,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	servingsButton = new QPushButton( parametersFrame );
    servingsButton->setObjectName( "servingsButton" );
-	servingsButton->setToggleButton( TRUE );
+	servingsButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( servingsButton );
 	
 	servingsFrame = new Q3Frame( parametersFrame, "servingsFrame" );
@@ -268,8 +268,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout5 = new Q3HBoxLayout( 0, 0, 3, "layout5"); 
 	
-	servingsComboBox = new QComboBox( FALSE, servingsFrame );
+	servingsComboBox = new QComboBox( servingsFrame );
    servingsComboBox->setObjectName( "servingsComboBox" );
+   servingsComboBox->setEditable( FALSE );
 	servingsComboBox->setEnabled( FALSE );
 	servingsComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, servingsComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout5->addWidget( servingsComboBox );
@@ -288,7 +289,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	prepTimeButton = new QPushButton( parametersFrame );
    prepTimeButton->setObjectName( "prepTimeButton" );
-	prepTimeButton->setToggleButton( TRUE );
+	prepTimeButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( prepTimeButton );
 	
 	prepTimeFrame = new Q3Frame( parametersFrame, "prepTimeFrame" );
@@ -302,7 +303,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	layout6 = new Q3HBoxLayout( 0, 0, 3, "layout6"); 
 	
-	prepTimeComboBox = new QComboBox( FALSE, prepTimeFrame );
+	prepTimeComboBox = new QComboBox( prepTimeFrame );
+   prepTimeComboBox->setEditable( FALSE );
    prepTimeComboBox->setObjectName( "prepTimeComboBox" );
 	prepTimeComboBox->setEnabled( FALSE );
 	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
@@ -320,7 +322,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	instructionsButton = new QPushButton( parametersFrame );
    instructionsButton->setObjectName( "instructionsButton" );
-	instructionsButton->setToggleButton( TRUE );
+	instructionsButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( instructionsButton );
 	
 	instructionsFrame = new Q3Frame( parametersFrame, "instructionsFrame" );
@@ -345,7 +347,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	metaDataButton = new QPushButton( parametersFrame );
    metaDataButton->setObjectName( "metaDataButton" );
-	metaDataButton->setToggleButton( TRUE );
+	metaDataButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( metaDataButton );
 	
 	metaDataFrame = new Q3Frame( parametersFrame, "metaDataFrame" );
@@ -393,7 +395,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	//=============RATINGS FRAME===========//
 	ratingsButton = new QPushButton( parametersFrame );
    ratingsButton->setObjectName( "ratingsButton" );
-	ratingsButton->setToggleButton( TRUE );
+	ratingsButton->setCheckable( TRUE );
 	parametersFrameLayout->addWidget( ratingsButton );
 
 	ratingButtonGroup = new Q3ButtonGroup( parametersFrame, "ratingButtonGroup" );
@@ -562,15 +564,15 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	connect( addCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotAddRatingCriteria() ) );
 
-	titleFrame->setShown(false);
-	ingredientFrame->setShown(false);
-	authorsFrame->setShown(false);
-	categoryFrame->setShown(false);
-	servingsFrame->setShown(false);
-	prepTimeFrame->setShown(false);
-	instructionsFrame->setShown(false);
-	metaDataFrame->setShown(false);
-	ratingButtonGroup->setShown(false);
+	titleFrame->setVisible(false);
+	ingredientFrame->setVisible(false);
+	authorsFrame->setVisible(false);
+	categoryFrame->setVisible(false);
+	servingsFrame->setVisible(false);
+	prepTimeFrame->setVisible(false);
+	instructionsFrame->setVisible(false);
+	metaDataFrame->setVisible(false);
+	ratingButtonGroup->setVisible(false);
 
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
@@ -737,11 +739,11 @@ void AdvancedSearchDialog::search()
 
 	if ( enablePrepTimeCheckBox->isChecked() )
 		parameters.prep_time = prepTimeEdit->time();
-	parameters.prep_param = prepTimeComboBox->currentItem();
+	parameters.prep_param = prepTimeComboBox->currentIndex();
 
 	if ( enableServingsCheckBox->isChecked() )
 		parameters.servings = servingsSpinBox->value();
-	parameters.servings_param = servingsComboBox->currentItem();
+	parameters.servings_param = servingsComboBox->currentIndex();
 
 	parameters.createdDateBegin = QDateTime(createdStartDateEdit->date());
 	parameters.createdDateEnd = QDateTime(createdEndDateEdit->date());
@@ -771,7 +773,7 @@ void AdvancedSearchDialog::search()
 	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( QRegExp(*author_it,false, true) ).id == -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -780,7 +782,7 @@ void AdvancedSearchDialog::search()
 	items = split(authorsWithoutEdit->text());
 	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( QRegExp(*author_it,false,true) ).id != -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -791,7 +793,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesAllEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it,false,true) ).id == -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -800,7 +802,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesNotEdit->text());
 	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it,false,true) ).id != -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -811,7 +813,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsAllEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( QRegExp(*ing_it,false,true) ).ingredientID == -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -820,7 +822,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsWithoutEdit->text());
 	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( QRegExp(*ing_it,false,true) ).ingredientID != -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -973,7 +975,7 @@ void AdvancedSearchDialog::slotAddRatingCriteria()
 		stars_str = "";
 
 	it->setText(1,stars_str);
-	it->setText(2,QString::number(criteriaComboBox->criteriaID(criteriaComboBox->currentItem())));
+	it->setText(2,QString::number(criteriaComboBox->criteriaID(criteriaComboBox->currentIndex())));
 }
 
 void AdvancedSearchDialog::slotRemoveRatingCriteria()

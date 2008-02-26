@@ -62,7 +62,7 @@ MixedNumber AmountUnitInput::amount() const
 Unit AmountUnitInput::unit() const
 {
 	//TODO Potential for optimization here... avoid the database call
-	return m_database->unitName( unitBox->id( unitBox->currentItem() ) );
+	return m_database->unitName( unitBox->id( unitBox->currentIndex() ) );
 }
 
 #include "amountunitinput.moc"

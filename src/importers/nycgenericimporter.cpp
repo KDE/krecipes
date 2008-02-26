@@ -89,16 +89,16 @@ void NYCGenericImporter::importNYCGeneric( Q3TextStream &stream )
 	bool found_next;
 	while ( !( found_next = ( current = stream.readLine() ).startsWith( "@@@@@" ) ) && !stream.atEnd() ) {
 		if ( current.startsWith( "Contributor:" ) ) {
-			Element new_author( current.mid( current.find( ':' ) + 1, current.length() ).trimmed() );
+			Element new_author( current.mid( current.indexOf( ':' ) + 1, current.length() ).trimmed() );
 			kDebug() << "Found author: " << new_author.name << endl;
 			m_recipe.authorList.append( new_author );
 		}
 		else if ( current.startsWith( "Preparation Time:" ) ) {
-			m_recipe.prepTime = QTime::fromString( current.mid( current.find( ':' ), current.length() ) );
+			m_recipe.prepTime = QTime::fromString( current.mid( current.indexOf( ':' ), current.length() ) );
 		}
 		else if ( current.startsWith( "Yield:" ) ) {
-			int colon_index = current.find( ':' );
-			int amount_type_sep_index = current.find(" ",colon_index+1);
+			int colon_index = current.indexOf( ':' );
+			int amount_type_sep_index = current.indexOf(" ",colon_index+1);
 
 			m_recipe.yield.amount = current.mid( colon_index+2, amount_type_sep_index-colon_index ).toDouble();
 			m_recipe.yield.type = current.mid( amount_type_sep_index+3, current.length() );
@@ -180,7 +180,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	//now join each separate part of ingredient (name, unit, amount)
 	name = ingredient_line.join( " " );
 
-	int prep_sep_index = name.find( QRegExp( "(--|,;;)" ) );
+	int prep_sep_index = name.indexOf( QRegExp( "(--|,;;)" ) );
 	if ( prep_sep_index == -1 )
 		prep_sep_index = name.length();
 

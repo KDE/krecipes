@@ -94,7 +94,8 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaLabel = new QLabel( layout8 );
    criteriaLabel->setObjectName( "criteriaLabel" );
 
-	criteriaComboBox = new QComboBox( FALSE, layout8 );
+	criteriaComboBox = new QComboBox( layout8 );
+   criteriaComboBox->setEditable( FALSE );
    criteriaComboBox->setObjectName( "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( TRUE );

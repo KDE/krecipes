@@ -34,9 +34,12 @@
 #include "backends/recipedb.h"
 
 SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* parent )
-   : QDialog( parent, "SimilarCategoriesDialog", true ),
+   : QDialog( parent ),
      m_elementList(list)
 {
+   setObjectName( "SimilarCategoriesDialog" );
+   setModal( true );
+
 	SimilarCategoriesDialogLayout = new Q3VBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout");
 
 	layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6");
@@ -150,7 +153,7 @@ SimilarCategoriesDialog::~SimilarCategoriesDialog()
  */
 void SimilarCategoriesDialog::languageChange()
 {
-	setCaption( i18n( "Similar Categories" ) );
+	setWindowTitle( i18n( "Similar Categories" ) );
 	thresholdLabel->setText( i18n( "Threshold:" ) );
 	categoryLabel->setText( i18n( "Category:" ) );
 	searchButton->setText( i18n( "Search" ) );

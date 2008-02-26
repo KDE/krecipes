@@ -601,7 +601,7 @@ void ImportPrefs::saveOptions()
 	config.writeEntry( "DirectImport", !directImportCheckbox->isChecked() );
 
 	config = KGlobal::config()->group( "Export" );
-	QString ext = clipBoardFormatComboBox->currentText().mid(clipBoardFormatComboBox->currentText().find("(")+1,clipBoardFormatComboBox->currentText().length()-clipBoardFormatComboBox->currentText().find("(")-2);
+	QString ext = clipBoardFormatComboBox->currentText().mid(clipBoardFormatComboBox->currentText().indexOf("(")+1,clipBoardFormatComboBox->currentText().length()-clipBoardFormatComboBox->currentText().indexOf("(")-2);
 	config.writeEntry( "ClipboardFormat", ext );
 }
 

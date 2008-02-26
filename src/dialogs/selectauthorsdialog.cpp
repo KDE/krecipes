@@ -133,7 +133,7 @@ void SelectAuthorsDialog::addAuthor( void )
 
 	createNewAuthorIfNecessary();
 
-	int currentItem = authorsCombo->currentItem();
+	int currentItem = authorsCombo->currentIndex();
 	Element currentElement = authorList.getElement( currentItem );
 
 	( void ) new Q3ListViewItem( authorListView, QString::number( currentElement.id ), currentElement.name );

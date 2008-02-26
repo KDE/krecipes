@@ -134,13 +134,13 @@ void ConversionDialog::slotUser1()
 void ConversionDialog::convert()
 {
 	Ingredient result, ing;
-	Unit unit = m_database->unitName(toUnitBox->id(toUnitBox->currentItem()));
+	Unit unit = m_database->unitName(toUnitBox->id(toUnitBox->currentIndex()));
 
 	ing.amount = amountEdit->value().toDouble();
-	ing.ingredientID = ingredientBox->id(ingredientBox->currentItem());
-	ing.units = m_database->unitName(fromUnitBox->id(fromUnitBox->currentItem()));
+	ing.ingredientID = ingredientBox->id(ingredientBox->currentIndex());
+	ing.units = m_database->unitName(fromUnitBox->id(fromUnitBox->currentIndex()));
 
-	int prepID = prepMethodBox->id(prepMethodBox->currentItem());
+	int prepID = prepMethodBox->id(prepMethodBox->currentIndex());
 	if ( prepID != -1 )
 		ing.prepMethodList.append(Element(QString::null,prepID));
 

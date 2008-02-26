@@ -78,7 +78,7 @@ QString CreateCategoryDialog::newCategoryName( void )
 
 int CreateCategoryDialog::subcategory( void )
 {
-	if ( categoryComboBox->currentItem() == 0 ) {
+	if ( categoryComboBox->currentIndex() == 0 ) {
 		return -1;
 	}
 	else {

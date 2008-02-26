@@ -75,7 +75,8 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	paramStack = new Q3WidgetStack( page, "paramStack" );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
-	sqlitePage = new QWidget( paramStack, "sqlitePage" );
+	sqlitePage = new QWidget( paramStack );
+   sqlitePage->setObjectName( "sqlitePage" );
 	serverPageLayout_2 = new Q3VBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
@@ -89,7 +90,8 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	paramStack->addWidget( sqlitePage, 1 );
 
-	serverPage = new QWidget( paramStack, "serverPage" );
+	serverPage = new QWidget( paramStack );
+   serverPage->setObjectName( "serverPage" );
 	serverPageLayout = new Q3VBoxLayout( serverPage, 11, 6, "serverPageLayout" );
 
 	layout5 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout5" );
