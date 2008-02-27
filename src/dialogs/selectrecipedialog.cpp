@@ -76,7 +76,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	KIconLoader *il = KIconLoader::global();
 	QPushButton *clearSearchButton = new QPushButton( searchBar );
-	clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) );
+   clearSearchButton->setIcon( QIcon( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) ) );
+   clearSearchButton->setIconSize(  il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ).size()  );
 
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18n( "Search:" ) );

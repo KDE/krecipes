@@ -156,7 +156,7 @@ void IngredientComboBox::removeIngredient( int id )
 			row = it.key();
 			completionObject()->removeItem( text(row) );
 			removeItem( row );
-			ingredientComboRows.remove( it );
+			ingredientComboRows.erase( it );
 			break;
 		}
 	}

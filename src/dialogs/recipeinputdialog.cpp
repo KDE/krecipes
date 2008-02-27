@@ -178,7 +178,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
 	QPushButton *clearPhotoButton = new QPushButton( photoButtonsBox );
-	clearPhotoButton->setPixmap( il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ) );
+	clearPhotoButton->setIcon( QIcon( il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ) ) );
+	clearPhotoButton->setIconSize(  il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ).size() );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
 
 	recipeLayout->addMultiCellWidget( photoButtonsBox, 3, 7, 2, 2 );
@@ -305,7 +306,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	addButton->setFixedSize( QSize( 31, 31 ) );
 	addButton->setFlat( true );
 	QPixmap pm = il->loadIcon( "add_ingredient", KIconLoader::NoGroup, 16 );
-	addButton->setPixmap( pm );
+	addButton->setIcon(QIcon( pm ) );
+	addButton->setIconSize( pm.size() );
 	addButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( addButton, 3, 5 );
 
@@ -317,7 +319,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	upButton->setFixedSize( QSize( 31, 31 ) );
 	upButton->setFlat( true );
 	pm = il->loadIcon( "go-up", KIconLoader::NoGroup, 16 );
-	upButton->setPixmap( pm );
+	upButton->setIcon( QIcon( pm ) );
+	upButton->setIconSize(  pm.size() );
 	upButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( upButton, 5, 5 );
 
@@ -325,7 +328,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	downButton->setFixedSize( QSize( 31, 31 ) );
 	downButton->setFlat( true );
 	pm = il->loadIcon( "go-down", KIconLoader::NoGroup, 16 );
-	downButton->setPixmap( pm );
+	downButton->setIcon( QIcon( pm ) );
+	downButton->setIconSize(  pm.size() );
 	downButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( downButton, 6, 5 );
 
@@ -333,7 +337,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	removeButton->setFixedSize( QSize( 31, 31 ) );
 	removeButton->setFlat( true );
 	pm = il->loadIcon( "list-remove", KIconLoader::NoGroup, 16 );
-	removeButton->setPixmap( pm );
+	removeButton->setIcon( QIcon( pm ) );
+	removeButton->setIconSize(  pm.size() );
 	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( removeButton, 7, 5 );
 
@@ -341,7 +346,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingParserButton->setFixedSize( QSize( 31, 31 ) );
 	ingParserButton->setFlat( true );
 	pm = il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 );
-	ingParserButton->setPixmap( pm );
+	ingParserButton->setIcon( QIcon( pm ) );
+	ingParserButton->setIconSize( pm.size() );
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
@@ -458,13 +464,17 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	resizeButton = new QToolButton( functionsBox );
 	resizeButton->setIconSet( il->loadIconSet( "arrow-up-double", KIconLoader::Small ) ); //TODO: give me an icon :)
 
-	saveButton->setTextLabel( i18n( "Save recipe" ), true );
+	saveButton->setText( i18n( "Save recipe" ) );
+	saveButton->setToolTip( i18n( "Save recipe" ) );
 	saveButton->setUsesTextLabel( true );
-	showButton->setTextLabel( i18n( "Show recipe" ), true );
+	showButton->setText( i18n( "Show recipe" ) );
+	showButton->setToolTip( i18n( "Show recipe" ) );
 	showButton->setUsesTextLabel( true );
-	closeButton->setTextLabel( i18n( "Close" ), true );
+	closeButton->setText( i18n( "Close" ) );
+	closeButton->setToolTip( i18n( "Close" ) );
 	closeButton->setUsesTextLabel( true );
-	resizeButton->setTextLabel( i18n( "Resize recipe" ), true );
+	resizeButton->setText( i18n( "Resize recipe" ) );
+	resizeButton->setToolTip( i18n( "Resize recipe" ) );
 	resizeButton->setUsesTextLabel( true );
 
 	functionsLayout->layout() ->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
@@ -886,9 +896,9 @@ void RecipeInputDialog::removeIngredient( void )
 		int ingID = ing_item->ingredient().ingredientID;
 		QMap<int,QString>::iterator map_it;
 		if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
-			propertyStatusMapRed.remove( map_it );
+			propertyStatusMapRed.erase( map_it );
 		else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
-			propertyStatusMapYellow.remove( map_it );
+			propertyStatusMapYellow.erase( map_it );
 		showStatusIndicator();
 
 		//Now remove the ingredient
@@ -913,9 +923,9 @@ void RecipeInputDialog::removeIngredient( void )
 			int ingID = sub_item->ingredient().ingredientID;
 			QMap<int,QString>::iterator map_it;
 			if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
-				propertyStatusMapRed.remove( map_it );
+				propertyStatusMapRed.erase( map_it );
 			else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
-				propertyStatusMapYellow.remove( map_it );
+				propertyStatusMapYellow.erase( map_it );
 			showStatusIndicator();
 		}
 

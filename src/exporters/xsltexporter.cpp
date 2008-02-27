@@ -49,7 +49,7 @@
 #include "image.h"
 #include "krepagelayout.h"
 
-char* i18n_strings[] = {
+const char* i18n_strings[] = {
   "I18N_INSTRUCTIONS", I18N_NOOP("Instructions"),
   "I18N_OVERALL_RATING", I18N_NOOP("Overall Rating"),
   "I18N_CATEGORIES", I18N_NOOP("Categories"),
@@ -246,7 +246,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	}
 
 	QFileInfo imgDirInfo(m_templateFilename);
-	char *params[NUM_I18N_STRINGS+3];
+	const char *params[NUM_I18N_STRINGS+3];
 	int i = 0;
 	params[i++] = "imgDir";
 	Q3CString imgDir = "'"+imgDirInfo.absolutePath().toUtf8()+"'";

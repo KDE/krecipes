@@ -128,7 +128,7 @@ void BaseExporter::saveToFile( const QList<int> &ids, RecipeDB *database )
 				if ( ids_copy.count() == 0 ) break;
 
 				sub_list << *ids_copy.begin();
-				ids_copy.remove( ids_copy.begin() );
+				ids_copy.erase( ids_copy.begin() );
 			}
 
 			RecipeList recipe_list;
@@ -154,7 +154,7 @@ void BaseExporter::saveToFile( const QList<int> &ids, RecipeDB *database )
 			file->close();
 			file->open( QIODevice::ReadOnly );
 
-			QFileInfo fi( file->name() );
+			QFileInfo fi( file->fileName() );
 			QByteArray data = file->readAll();
 			tar_file->writeFile( fi.fileName(), fi.owner(), fi.group(), data, data.size() );
 			tar_file->close();

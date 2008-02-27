@@ -123,7 +123,7 @@ void DietWizardDialog::clear()
 	mealNumberSelector->setValue( 1 );
 	dayNumberSelector->setValue( 1 );
 
-	MealInput* mealTab = ( MealInput* ) ( mealTabs->page( 0 ) ); // Get the meal
+	MealInput* mealTab = ( MealInput* ) ( mealTabs->widget( 0 ) ); // Get the meal
 	mealTab->setDishNo( 3 );
 	mealTab->showDish( 0 );
 
@@ -136,7 +136,7 @@ void DietWizardDialog::clear()
 void DietWizardDialog::reload( ReloadFlags flag )
 {
 	for ( int i = 0; i < mealTabs->count(); ++i ) {
-		MealInput *mealTab = (MealInput*)mealTabs->page(i);
+		MealInput *mealTab = (MealInput*)mealTabs->widget(i);
 		mealTab->reload(flag);
 	}
 }
@@ -164,7 +164,7 @@ void DietWizardDialog::changeMealNumber( int mn )
 
 		while ( mealNumber != mn ) {
 			mealNumber--;
-			delete mealTabs->page( mealTabs->count() - 1 );
+			delete mealTabs->widget( mealTabs->count() - 1 );
 		}
 	}
 }
@@ -210,7 +210,7 @@ void DietWizardDialog::createDiet( void )
 		populateIteratorList( rlist, &tempRList ); // temporal iterator list so elements can be removed without reloading them again from the DB
 		for ( int meal = 0;meal < mealNumber;meal++ )
 		{
-			int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
+			int dishNo = ( ( MealInput* ) ( mealTabs->widget( meal ) ) ) ->dishNo();
 
 			for ( int dish = 0;dish < dishNo;dish++ ) {
 				bool found = false;
@@ -247,7 +247,7 @@ void DietWizardDialog::createDiet( void )
 		QList<int> dishNumbers;
 
 		for ( int meal = 0;meal < mealNumber;meal++ ) {
-			int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
+			int dishNo = ( ( MealInput* ) ( mealTabs->widget( meal ) ) ) ->dishNo();
 			dishNumbers << dishNo;
 		}
 
@@ -277,7 +277,7 @@ int DietWizardDialog::getNecessaryFlags() const
 	bool need_ingredients = false;
 	bool need_categories = false;
 	for ( int meal = 0;meal < mealNumber;meal++ ) {
-		int dishNo = ( ( MealInput* ) ( mealTabs->page( meal ) ) ) ->dishNo();
+		int dishNo = ( ( MealInput* ) ( mealTabs->widget( meal ) ) ) ->dishNo();
 		for ( int dish = 0;dish < dishNo;dish++ ) {
 			if ( !need_categories ) {
 				if ( categoryFiltering( meal, dish ) ) {
@@ -347,12 +347,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	KIconLoader *il = KIconLoader::global();
 	buttonPrev = new QToolButton( toolBar );
 	buttonPrev->setUsesTextLabel( true );
-	buttonPrev->setTextLabel( i18n( "Previous Dish" ) );
+	buttonPrev->setText( i18n( "Previous Dish" ) );
 	buttonPrev->setIconSet( il->loadIconSet( "go-previous", KIconLoader::Small ) );
 	buttonPrev->setTextPosition( QToolButton::BelowIcon );
 	buttonNext = new QToolButton( toolBar );
 	buttonNext->setUsesTextLabel( true );
-	buttonNext->setTextLabel( i18n( "Next Dish" ) );
+	buttonNext->setText( i18n( "Next Dish" ) );
 	buttonNext->setIconSet( il->loadIconSet( "go-next", KIconLoader::Small ) );
 	buttonNext->setTextPosition( QToolButton::BelowIcon );
 
@@ -551,7 +551,7 @@ void DishInput::insertConstraintsEditBoxes( Q3ListViewItem* it )
 
 	// Constraints Box1
 	r = constraintsView->header() ->sectionRect( 2 ); //start at the section 2 header
-	r.moveBy( 0, constraintsView->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+	r.translate( 0, constraintsView->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
 
 	r.setHeight( it->height() ); // Set the item's height
 	r.setWidth( constraintsView->header() ->sectionRect( 2 ).width() ); // and width
@@ -560,7 +560,7 @@ void DishInput::insertConstraintsEditBoxes( Q3ListViewItem* it )
 
 	//Constraints Box2
 	r = constraintsView->header() ->sectionRect( 3 ); //start at the section 3 header
-	r.moveBy( 0, constraintsView->itemRect( it ).y() ); //Move down to the item
+	r.translate( 0, constraintsView->itemRect( it ).y() ); //Move down to the item
 
 	r.setHeight( it->height() ); // Set the item's height
 	r.setWidth( constraintsView->header() ->sectionRect( 3 ).width() ); // and width
@@ -762,21 +762,21 @@ bool DietWizardDialog::checkConstraints( Recipe &rec, int meal, int dish )
 
 void DietWizardDialog::loadConstraints( int meal, int dish, ConstraintList *constraints ) const
 {
-	MealInput * mealTab = ( MealInput* ) ( mealTabs->page( meal ) ); // Get the meal
+	MealInput * mealTab = ( MealInput* ) ( mealTabs->widget( meal ) ); // Get the meal
 	DishInput* dishInput = mealTab->dishInputList[ dish ]; // Get the dish input
 	dishInput->loadConstraints( constraints ); //Load the constraints form the K3ListView
 }
 
 void DietWizardDialog::loadEnabledCategories( int meal, int dish, ElementList *categories )
 {
-	MealInput * mealTab = ( MealInput* ) ( mealTabs->page( meal ) ); // Get the meal
+	MealInput * mealTab = ( MealInput* ) ( mealTabs->widget( meal ) ); // Get the meal
 	DishInput* dishInput = mealTab->dishInputList[ dish ]; // Get the dish input
 	dishInput->loadEnabledCategories( categories ); //Load the categories that have been checked in the K3ListView
 }
 
 bool DietWizardDialog::categoryFiltering( int meal, int dish ) const
 {
-	MealInput * mealTab = ( MealInput* ) ( mealTabs->page( meal ) ); // Get the meal
+	MealInput * mealTab = ( MealInput* ) ( mealTabs->widget( meal ) ); // Get the meal
 	DishInput* dishInput = mealTab->dishInputList[ dish ]; // Get the dish input
 	return ( dishInput->isCategoryFilteringEnabled() ); //Load the categories that have been checked in the K3ListView
 }

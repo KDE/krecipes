@@ -113,7 +113,7 @@ void UnitComboBox::removeUnit( int id )
 		if ( it.value() == id ) {
 			row = it.key();
 			removeItem( row );
-			unitComboRows.remove( it );
+			unitComboRows.erase( it );
 			break;
 		}
 	}

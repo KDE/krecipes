@@ -163,7 +163,7 @@ void StdUnitListView::insertTypeComboBox( Q3ListViewItem* it )
 
 	// Constraints Box1
 	r = header() ->sectionRect( 4 ); //start at the section 2 header
-	r.moveBy( 0, itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+	r.translate( 0, itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
 
 	r.setHeight( it->height() ); // Set the item's height
 	r.setWidth( header() ->sectionRect( 4 ).width() ); // and width

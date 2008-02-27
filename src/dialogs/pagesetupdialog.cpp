@@ -80,8 +80,11 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 		new ThumbBarItem(thumbBar,included_templates.path() + "/" +included_templates[ i ]);
 	}
 	m_htmlPart = new SetupDisplay(sample, this);
-	m_htmlPart->view()->reparent(viewBox,QPoint());
-	layout->addWidget( viewBox );
+   m_htmlPart->view()->setParent( viewBox, windowFlags() & ~Qt::WindowType_Mask);
+   m_htmlPart->view()->setGeometry( 0, 0 ,m_htmlPart->view()->width(),m_htmlPart->view()->height());
+	
+   
+   layout->addWidget( viewBox );
 
 	KHBox *buttonsBox = new KHBox( this );
 	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIconLoader::Small ), i18n( "Save and Close" ), buttonsBox );

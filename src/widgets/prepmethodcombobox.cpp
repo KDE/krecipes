@@ -142,7 +142,7 @@ void PrepMethodComboBox::removePrepMethod( int id )
 			row = it.key();
 			completionObject()->removeItem( text(row) );
 			removeItem( row );
-			prepMethodComboRows.remove( it );
+			prepMethodComboRows.erase( it );
 			break;
 		}
 	}

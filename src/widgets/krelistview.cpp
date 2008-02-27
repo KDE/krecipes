@@ -56,7 +56,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 
 		QPushButton *clearSearchButton = new QPushButton( filterBox );
 		KIconLoader *il = KIconLoader::global();
-		clearSearchButton->setPixmap( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) );
+      clearSearchButton->setIcon( QIcon(il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 )) );
+      clearSearchButton->setIconSize( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ).size() );
 
 		filterLabel = new QLabel( filterBox );
 		filterLabel->setText( " " + i18n( "Search:" ) );
@@ -74,8 +75,10 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 
 
 	// If the user provides a widget, embed it into the header
-	if ( embeddedWidget )
-		embeddedWidget->reparent( header, QPoint( 0, 0 ) );
+	if ( embeddedWidget ){
+      embeddedWidget->setParent( header, windowFlags() & ~Qt::WindowType_Mask);
+      embeddedWidget->setGeometry( 0, 0 ,embeddedWidget->width(),embeddedWidget->height());
+      }
 	//Connect Signals & Slots
 	if ( filter ) {
 		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( textChanged(const QString&) ) );

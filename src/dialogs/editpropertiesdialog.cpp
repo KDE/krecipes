@@ -422,7 +422,7 @@ void EditPropertiesDialog::insertPropertyEditBox( Q3ListViewItem* it )
 {
 	QRect r = propertyListView ->header() ->sectionRect( 1 );
 
-	r.moveBy( 0, propertyListView ->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
+	r.translate( 0, propertyListView ->itemRect( it ).y() ); //Move down to the item, note that its height is same as header's right now.
 
 	r.setHeight( it->height() ); // Set the item's height
 

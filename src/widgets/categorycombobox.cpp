@@ -136,7 +136,7 @@ void CategoryComboBox::removeCategory( int id )
 		if ( it.value() == id ) {
 			row = it.key();
 			removeItem( row );
-			categoryComboRows.remove( it );
+			categoryComboRows.erase( it );
 			break;
 		}
 	}

@@ -53,7 +53,8 @@ void PanelDeco::childEvent( QChildEvent *e )
 		if ( obj->inherits( "QWidget" ) ) {
 			QWidget * w = ( QWidget* ) obj;
 			if ( w != hbox && w != tDeco )
-				w->reparent( stack, QPoint( 0, 0 ) );
+            w->setParent( stack, windowFlags() & ~Qt::WindowType_Mask);
+            w->setGeometry( 0, 0 ,w->width(),w->height());
 		}
 	}
 }

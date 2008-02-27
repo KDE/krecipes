@@ -186,10 +186,10 @@ void SetupDisplay::loadTemplate( const QString &filename )
 {
 	bool storeChangedState = has_changes;
 	KTemporaryFile tmpFile;
-	saveLayout(tmpFile.name());
+	saveLayout(tmpFile.fileName());
 	has_changes = storeChangedState; //saveLayout() sets changes to false
 	
-	loadHTMLView( filename, tmpFile.name() );
+	loadHTMLView( filename, tmpFile.fileName() );
 	
 	//KDE4 port
 	//tmpFile.unlink();
