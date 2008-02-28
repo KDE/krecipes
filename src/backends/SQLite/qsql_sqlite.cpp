@@ -319,16 +319,12 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
-	#if (QT_VERSION-0 >= 0x030200)
 	if ((type & (int)QSql::Tables) && (type & (int)QSql::Views))
 		q.exec("SELECT name FROM sqlite_master WHERE type='table' OR type='view'");
 	else if (typeName.isEmpty() || (type & (int)QSql::Tables))
 		q.exec("SELECT name FROM sqlite_master WHERE type='table'");
 	else if (type & (int)QSql::Views)
 		q.exec("SELECT name FROM sqlite_master WHERE type='view'");
-	#else
-		q.exec("SELECT name FROM sqlite_master WHERE type='table' OR type='view'");
-	#endif
 
 	if (q.isActive()) {
 		while(q.next()) {
@@ -336,12 +332,10 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 		}
 	}
 
-	#if (QT_VERSION-0 >= 0x030200)
 	if (type & (int)QSql::SystemTables) {
 		// there are no internal tables beside this one:
 		res.append("sqlite_master");
 	}
-	#endif
 
 	return res;
 }

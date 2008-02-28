@@ -134,11 +134,11 @@ class ServerSetupPage: public QWidget
 public:
 	// Methods
 	ServerSetupPage( QWidget *parent );
-	QString user( void );
-	QString password( void );
-	QString dbName( void );
-	QString server( void );
-	QString client( void );
+	QString user( void ) const ;
+	QString password( void ) const;
+	QString dbName( void ) const;
+	QString server( void ) const;
+	QString client( void ) const;
 	void getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port );
 private:
 	// Widgets

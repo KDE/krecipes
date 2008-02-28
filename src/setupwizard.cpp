@@ -506,22 +506,22 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 }
 
-QString ServerSetupPage::server( void )
+QString ServerSetupPage::server( void ) const
 {
 	return ( serverEdit->text() );
 }
 
-QString ServerSetupPage::user( void )
+QString ServerSetupPage::user( void ) const
 {
 	return ( usernameEdit->text() );
 }
 
-QString ServerSetupPage::password( void )
+QString ServerSetupPage::password( void ) const
 {
 	return ( passwordEdit->text() );
 }
 
-QString ServerSetupPage::dbName( void )
+QString ServerSetupPage::dbName( void ) const
 {
 	return ( dbNameEdit->text() );
 }
