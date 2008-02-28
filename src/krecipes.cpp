@@ -655,30 +655,14 @@ void Krecipes::optionsShowStatusbar()
 
 void Krecipes::optionsConfigureKeys()
 {
-#if KDE_IS_VERSION(3,1,92 )
-	// for KDE 3.2: KKeyDialog::configureKeys is deprecated
 	KShortcutsDialog::configure( actionCollection(), KShortcutsEditor::LetterShortcutsAllowed , this, true );
-#else
-
-	KKeyDialog::configureKeys( actionCollection(), "krecipesui.rc" );
-#endif
 
 }
 
 void Krecipes::optionsConfigureToolbars()
 {
 	// use the standard toolbar editor
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
 	saveMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
-# else
-
-	saveMainWindowSettings( KGlobal::config() );
-# endif
-#else
-
-	saveMainWindowSettings( KGlobal::config() );
-#endif
 
 	KEditToolBar dlg( actionCollection() );
 	connect( &dlg, SIGNAL( newToolbarConfig() ), this, SLOT( newToolbarConfig() ) );
@@ -691,18 +675,7 @@ void Krecipes::newToolbarConfig()
 	// recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
 	createGUI();
 
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-
 	applyMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
-# else
-
-	applyMainWindowSettings( KGlobal::config() );
-# endif
-#else
-
-	applyMainWindowSettings( KGlobal::config() );
-#endif
 }
 
 void Krecipes::optionsPreferences()
