@@ -20,8 +20,8 @@
 #include "createpropertydialog.h"
 #include "widgets/propertylistview.h"
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -31,7 +31,7 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 
 	// Design dialog
 
-	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
 	propertyListView = new CheckPropertyListView( this, database, true );
 	propertyListView->reload();
@@ -45,7 +45,7 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 
 	layout->addWidget ( propertyListView );
 
-	Q3VBoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 	addPropertyButton = new QPushButton( this );
 	addPropertyButton->setText( i18n( "Create ..." ) );
 	addPropertyButton->setFlat( true );

@@ -19,8 +19,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -28,14 +28,16 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent 
 	// Store pointer to database
 	database = db;
 
-	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout( this );
+   layout->setMargin( KDialog::marginHint() );
+   layout->setSpacing( KDialog::spacingHint() );
 
 	//Author List
 	authorListView = new StdAuthorListView( this, database, true );
 	layout->addWidget( authorListView );
 
 	//Buttons
-	Q3VBoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 
 	newAuthorButton = new QPushButton( this );
 	newAuthorButton->setText( i18n( "Create ..." ) );

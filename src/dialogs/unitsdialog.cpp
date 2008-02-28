@@ -12,9 +12,8 @@
 
 #include <qlayout.h>
 #include <qtabwidget.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "unitsdialog.h"
 #include "createelementdialog.h"
@@ -37,17 +36,21 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	database = db;
 
 	// Design dialog
-	Q3HBoxLayout* page_layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* page_layout = new QHBoxLayout( this );
+   page_layout->setMargin( KDialog::marginHint() );
+   page_layout->setSpacing( KDialog::spacingHint() );
 
 	QTabWidget *tabWidget = new QTabWidget( this );
 
 	QWidget *unitTab = new QWidget( tabWidget );
-	Q3HBoxLayout* layout = new Q3HBoxLayout( unitTab, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout( unitTab );
+   layout->setMargin( KDialog::marginHint() );
+   layout->setSpacing( KDialog::spacingHint() );
 
 	unitListView = new StdUnitListView( unitTab, database, true );
 	layout->addWidget( unitListView );
 
-	Q3VBoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 	newUnitButton = new QPushButton( unitTab );
 	newUnitButton->setText( i18n( "Create ..." ) );
 	newUnitButton->setFlat( true );

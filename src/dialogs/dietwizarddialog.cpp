@@ -23,7 +23,7 @@
 #include <Q3ValueList>
 #include <QLabel>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3VBoxLayout>
 #include <QPaintEvent>
 
@@ -340,7 +340,7 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	// Toolbar
 
 	toolBar = new Q3HGroupBox( mealOptions );
-	toolBar->setFrameStyle ( Q3Frame::Panel | Q3Frame::Sunken );
+	toolBar->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
 	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
 
 	// Next dish/ Previous dish buttons

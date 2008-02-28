@@ -20,8 +20,8 @@
 #include "dialogs/createunitdialog.h"
 #include "backends/recipedb.h"
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <KVBox>
 
@@ -45,7 +45,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
+	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 	boxLayout->setAlignment( Qt::AlignTop );
 
 	propertyChooseView = new K3ListView( box );
@@ -59,7 +59,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	propertyChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( propertyChooseView );
 
-	Q3HBoxLayout *layout2 = new Q3HBoxLayout;
+	QHBoxLayout *layout2 = new QHBoxLayout;
 
 	perUnitsLabel = new QLabel( box );
 	perUnitsLabel->setGeometry( QRect( 5, 285, 100, 30 ) );

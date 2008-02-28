@@ -35,8 +35,8 @@
 #include <Q3GridLayout>
 #include <Q3ValueList>
 #include <QDragEnterEvent>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QFrame>
 #include <QDropEvent>
 
@@ -374,7 +374,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
 	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 9, 1, 3 );
 
-	Q3HBoxLayout *propertyStatusLayout = new Q3HBoxLayout( ingredientGBox, 0, 5 );
+	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientGBox );
+   propertyStatusLayout->setMargin( 0 );
+   propertyStatusLayout->setSpacing( 5 );
+
 	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientGBox );
 	propertyStatusLabel = new QLabel( ingredientGBox );
 	propertyStatusLed = new ClickableLed( ingredientGBox );
@@ -416,7 +419,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	instructionsTab->setFrameStyle( QFrame::NoFrame );
 	instructionsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
-	Q3VBoxLayout *instructionsLayout = new Q3VBoxLayout( instructionsTab );
+	QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
 
 	instructionsEdit = new KreTextEdit( instructionsTab );
 	instructionsEdit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );

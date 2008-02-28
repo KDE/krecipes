@@ -28,7 +28,7 @@
 
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -56,7 +56,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	dbButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	dbButtonGroup->layout() ->setSpacing( 6 );
 	dbButtonGroup->layout() ->setMargin( 11 );
-	dbButtonGroupLayout = new Q3VBoxLayout( dbButtonGroup->layout() );
+	dbButtonGroupLayout = new QVBoxLayout( dbButtonGroup->layout() );
 	dbButtonGroupLayout->setAlignment( Qt::AlignTop );
 
 	liteRadioButton = new QRadioButton( dbButtonGroup );
@@ -77,7 +77,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	sqlitePage = new QWidget( paramStack );
    sqlitePage->setObjectName( "sqlitePage" );
-	serverPageLayout_2 = new Q3VBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
+	serverPageLayout_2 = new QVBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
@@ -92,7 +92,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	serverPage = new QWidget( paramStack );
    serverPage->setObjectName( "serverPage" );
-	serverPageLayout = new Q3VBoxLayout( serverPage, 11, 6, "serverPageLayout" );
+	serverPageLayout = new QVBoxLayout( serverPage, 11, 6, "serverPageLayout" );
 
 	layout5 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout5" );
 

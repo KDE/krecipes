@@ -19,8 +19,8 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdebug.h>
 #include <khtml_part.h>
@@ -46,12 +46,12 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
 	borderGroupBox->layout() ->setSpacing( 6 );
 	borderGroupBox->layout() ->setMargin( 11 );
-	borderGroupBoxLayout = new Q3VBoxLayout( borderGroupBox->layout() );
+	borderGroupBoxLayout = new QVBoxLayout( borderGroupBox->layout() );
 	borderGroupBoxLayout->setAlignment( Qt::AlignTop );
 
-	layout4 = new Q3HBoxLayout( 0, 0, 6, "layout4" );
+	layout4 = new QHBoxLayout( 0, 0, 6, "layout4" );
 
-	layout3 = new Q3VBoxLayout( 0, 0, 6, "layout3" );
+	layout3 = new QVBoxLayout( 0, 0, 6, "layout3" );
 
 	styleLabel = new QLabel( borderGroupBox );
    styleLabel->setObjectName( "styleLabel" );
@@ -61,7 +61,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout3->addWidget( styleListBox );
 	layout4->addLayout( layout3 );
 
-	layout2 = new Q3VBoxLayout( 0, 0, 6, "layout2" );
+	layout2 = new QVBoxLayout( 0, 0, 6, "layout2" );
 
 	colorLabel = new QLabel( borderGroupBox );
    colorLabel->setObjectName( "colorLabel" );
@@ -80,7 +80,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout2->addWidget( color_hbox );
 	layout4->addLayout( layout2 );
 
-	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
+	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
 
 	widthLabel = new QLabel( borderGroupBox );
    widthLabel->setObjectName( "widthLabel" );

@@ -29,9 +29,9 @@
 #include <qframe.h>
 #include <qcombobox.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kconfiggroup.h>
@@ -71,7 +71,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
 	addPage(page);
 
-	Q3HBoxLayout* layout = new Q3HBoxLayout( frame );
+	QHBoxLayout* layout = new QHBoxLayout( frame );
 	m_pageServer = new ServerPrefs( frame );
 	layout->addWidget( m_pageServer );
 	m_helpMap.insert(0,"configure-server-settings");
@@ -83,7 +83,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	page->setIcon( KIcon::KIcon( "math_frac", il ) );
 	addPage(page);
 
-	Q3HBoxLayout* formatting_layout = new Q3HBoxLayout( frame );
+	QHBoxLayout* formatting_layout = new QHBoxLayout( frame );
 	m_pageNumbers = new NumbersPrefs( frame );
 	formatting_layout->addWidget( m_pageNumbers );
 	m_helpMap.insert(1,"custom-formatting");
@@ -94,7 +94,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	page->setIcon( KIcon::KIcon( "go-down", il ) );
 	addPage(page);
 	
-	Q3HBoxLayout* import_layout = new Q3HBoxLayout( frame );
+	QHBoxLayout* import_layout = new QHBoxLayout( frame );
 	m_pageImport = new ImportPrefs( frame );
 	import_layout->addWidget( m_pageImport );
 	m_helpMap.insert(2,"import-export-preference");
@@ -105,7 +105,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	page->setIcon( KIcon::KIcon( "launch", il ) );
 	addPage(page);
 	
-	Q3HBoxLayout* performance_layout = new Q3HBoxLayout( frame );
+	QHBoxLayout* performance_layout = new QHBoxLayout( frame );
 	m_pagePerformance = new PerformancePrefs( frame );
 	performance_layout->addWidget( m_pagePerformance );
 	m_helpMap.insert(3,"configure-performance");
@@ -369,7 +369,7 @@ void PostgreSQLServerPrefs::saveOptions( void )
 
 SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 {
-	Q3VBoxLayout * Form1Layout = new Q3VBoxLayout( this );
+	QVBoxLayout * Form1Layout = new QVBoxLayout( this );
 
 	KHBox *hbox = new KHBox( this );
 	( void ) new QLabel( i18n( "Database file:" ), hbox );
@@ -415,7 +415,9 @@ void SQLiteServerPrefs::saveOptions( void )
 ServerPrefs::ServerPrefs( QWidget *parent )
 		: QWidget( parent )
 {
-	Q3VBoxLayout * Form1Layout = new Q3VBoxLayout( this, 11, 6 );
+	QVBoxLayout * Form1Layout = new QVBoxLayout( this );
+   Form1Layout->setMargin( 11 );
+   Form1Layout->setSpacing( 6 );
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 	QString DBtype = config.readEntry( "Type" );
@@ -472,14 +474,16 @@ void ServerPrefs::saveOptions( void )
 NumbersPrefs::NumbersPrefs( QWidget *parent )
 		: QWidget( parent )
 {
-	Form1Layout = new Q3VBoxLayout( this, 11, 6 );
+	Form1Layout = new QVBoxLayout( this );
+   Form1Layout->setMargin( 11 );
+   Form1Layout->setSpacing( 6 );
 
 	numberButtonGroup = new Q3ButtonGroup( this );
 	numberButtonGroup->setColumnLayout( 0, Qt::Vertical );
 	numberButtonGroup->layout() ->setSpacing( 6 );
 	numberButtonGroup->layout() ->setMargin( 11 );
 	numberButtonGroup->resize( QSize() );
-	numberButtonGroupLayout = new Q3VBoxLayout( numberButtonGroup->layout() );
+	numberButtonGroupLayout = new QVBoxLayout( numberButtonGroup->layout() );
 	numberButtonGroupLayout->setAlignment( Qt::AlignTop );
 
 	fractionRadioButton = new QRadioButton( numberButtonGroup );
@@ -541,7 +545,9 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	bool overwrite = config.readEntry( "OverwriteExisting", false );
 	bool direct = config.readEntry( "DirectImport", false );
 
-	Form1Layout = new Q3VBoxLayout( this, 11, 6 );
+	Form1Layout = new QVBoxLayout( this );
+   Form1Layout->setMargin( 11 );
+   Form1Layout->setSpacing( 6 );
 
 	Q3GroupBox *importGroup = new Q3GroupBox(2,Qt::Vertical,i18n("Import"), this);
 
@@ -616,7 +622,9 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	int cat_limit = config.readEntry( "CategoryLimit", -1 );
 	int limit = config.readEntry( "Limit", -1 );
 
-	Form1Layout = new Q3VBoxLayout( this, 11, 6 );
+	Form1Layout = new QVBoxLayout( this );
+   Form1Layout->setMargin( 11 );
+   Form1Layout->setSpacing( 6 );
 
 	searchAsYouTypeBox = new QCheckBox( i18n( "Search as you type" ), this );
 	searchAsYouTypeBox->setChecked( config.readEntry( "SearchAsYouType", true ) );

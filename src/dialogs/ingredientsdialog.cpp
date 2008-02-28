@@ -29,7 +29,7 @@
 #include <qtabwidget.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -39,7 +39,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	// Design dialog
 
-	Q3HBoxLayout* page_layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* page_layout = new QHBoxLayout( this );
+   page_layout->setMargin( KDialog::marginHint() );
+   page_layout->setSpacing( KDialog::spacingHint() );
 
 	QTabWidget *tabWidget = new QTabWidget( this );
 

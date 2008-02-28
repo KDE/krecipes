@@ -14,16 +14,16 @@
 #include <qvariant.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <Q3ValueList>
 #include <kdialog.h>
 
 #include "datablocks/unit.h"
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class QLabel;
 class K3ListView;
@@ -56,12 +56,12 @@ public:
 	K3ListView* weightListView;
 
 protected:
-	Q3VBoxLayout* EditPropertiesDialogLayout;
-	Q3HBoxLayout* layout9;
-	Q3VBoxLayout* layout8;
-	Q3VBoxLayout* layout7;
-	Q3HBoxLayout* layout3;
-	Q3HBoxLayout* layout3_2;
+	QVBoxLayout* EditPropertiesDialogLayout;
+	QHBoxLayout* layout9;
+	QVBoxLayout* layout8;
+	QVBoxLayout* layout7;
+	QHBoxLayout* layout3;
+	QHBoxLayout* layout3_2;
 
 protected slots:
 	virtual void languageChange();

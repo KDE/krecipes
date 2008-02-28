@@ -14,17 +14,17 @@
 #include <qvariant.h>
 #include <qmap.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
 #include <kdialog.h>
 
 #include "datablocks/ingredientlist.h"
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class QSpacerItem;
 class QLabel;
@@ -50,7 +50,7 @@ public:
 	KreListView* ingListView;
 
 protected:
-	Q3VBoxLayout* layout1;
+	QVBoxLayout* layout1;
 	QSpacerItem* spacer1;
 
 protected slots:

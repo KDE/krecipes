@@ -14,16 +14,16 @@
 #include <qdialog.h>
 #include <q3valuevector.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
 #include <Q3ValueList>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
 #include "datablocks/elementlist.h"
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class QSpacerItem;
 class QSlider;
@@ -60,17 +60,17 @@ public:
 	QPushButton* cancelButton;
 	
 protected:
-	Q3VBoxLayout* SimilarCategoriesDialogLayout;
-	Q3HBoxLayout* layout6;
+	QVBoxLayout* SimilarCategoriesDialogLayout;
+	QHBoxLayout* layout6;
 	Q3GridLayout* layout4;
-	Q3VBoxLayout* layout5;
+	QVBoxLayout* layout5;
 	QSpacerItem* spacer4;
-	Q3HBoxLayout* layout9;
-	Q3VBoxLayout* layout8;
-	Q3VBoxLayout* layout1;
+	QHBoxLayout* layout9;
+	QVBoxLayout* layout8;
+	QVBoxLayout* layout1;
 	QSpacerItem* spacer1;
-	Q3VBoxLayout* layout7;
-	Q3HBoxLayout* layout10;
+	QVBoxLayout* layout7;
+	QHBoxLayout* layout10;
 	QSpacerItem* spacer2;
 	
 protected slots:

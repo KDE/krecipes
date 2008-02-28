@@ -34,7 +34,7 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
 
@@ -88,7 +88,7 @@ const int KoRuler::F_NORESIZE = 8;
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Qt::Orientation _orientation,
                  const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit )
-    : Q3Frame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
+    : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
     setWFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
@@ -810,7 +810,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 
 void KoRuler::resizeEvent( QResizeEvent *e )
 {
-    Q3Frame::resizeEvent( e );
+    QFrame::resizeEvent( e );
     buffer.resize( size() );
 }
 

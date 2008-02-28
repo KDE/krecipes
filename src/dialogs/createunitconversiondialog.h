@@ -11,10 +11,9 @@
 #define CREATEUNITCONVERSIONDIALOG_H
 
 #include <qvariant.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
 #include <kdialog.h>
@@ -22,8 +21,8 @@
 #include "datablocks/elementlist.h"
 #include "widgets/fractioninput.h"
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class Q3ButtonGroup;
 class QLabel;
@@ -41,7 +40,7 @@ public:
 	double ratio() const;
 
 protected:
-	Q3HBoxLayout* buttonGroup1Layout;
+	QHBoxLayout* buttonGroup1Layout;
 
 	Q3ButtonGroup* buttonGroup1;
 	FractionInput* fromUnitEdit;

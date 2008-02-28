@@ -18,8 +18,7 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <kvbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <klocale.h>
 
@@ -37,7 +36,7 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 	buttonGroup1->setColumnLayout(0, Qt::Vertical );
 	buttonGroup1->layout()->setSpacing( 6 );
 	buttonGroup1->layout()->setMargin( 11 );
-	buttonGroup1Layout = new Q3HBoxLayout( buttonGroup1->layout() );
+	buttonGroup1Layout = new QHBoxLayout( buttonGroup1->layout() );
 	buttonGroup1Layout->setAlignment( Qt::AlignTop );
 
 	fromUnitEdit = new FractionInput( buttonGroup1 );

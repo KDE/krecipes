@@ -18,8 +18,8 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <KVBox>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -55,7 +55,10 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	QWidget *layout2Widget = new QWidget(page);
 
-	Q3HBoxLayout *layout2 = new Q3HBoxLayout( layout2Widget, 0, 6, "layout2" );
+	QHBoxLayout *layout2 = new QHBoxLayout( layout2Widget );
+   layout2->setObjectName( "layout2" );
+   layout2->setMargin( 0 );
+   layout2->setSpacing( 6 );
 
 	allIngListView = new KreListView( layout2Widget, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
@@ -63,7 +66,10 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
-	layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
+	layout1 = new QVBoxLayout( );
+   layout1->setObjectName( "layout1" );
+   layout1->setMargin( 0 );
+   layout1->setSpacing( 6 );
 
 	//KIconLoader *il = KIconLoader::global();
 

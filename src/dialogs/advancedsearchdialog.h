@@ -13,20 +13,20 @@
 
 #include <qwidget.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QLabel>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class QSpacerItem;
 class Q3ScrollView;
 class QPushButton;
-class Q3Frame;
+class QFrame;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
@@ -60,12 +60,12 @@ public:
 protected:
 	QLabel* textLabel1_4;
 	Q3ScrollView* scrollView1;
-	Q3Frame* parametersFrame;
+	QFrame* parametersFrame;
 	QLineEdit* titleEdit;
 	QPushButton* titleButton;
-	Q3Frame* titleFrame;
+	QFrame* titleFrame;
 	QPushButton* ingredientButton;
-	Q3Frame* ingredientFrame;
+	QFrame* ingredientFrame;
 	QLineEdit* ingredientsAllEdit;
 	QLineEdit* ingredientsAnyEdit;
 	QLabel* textLabel1_2;
@@ -73,7 +73,7 @@ protected:
 	QLineEdit* ingredientsWithoutEdit;
 	QLabel* textLabel1_3;
 	QPushButton* categoriesButton;
-	Q3Frame* categoryFrame;
+	QFrame* categoryFrame;
 	QLineEdit* categoriesAllEdit;
 	QLabel* textLabel1_5;
 	QLabel* textLabel1_3_3;
@@ -81,7 +81,7 @@ protected:
 	QLabel* textLabel1_2_3;
 	QLineEdit* categoriesNotEdit;
 	QPushButton* authorsButton;
-	Q3Frame* authorsFrame;
+	QFrame* authorsFrame;
 	QLabel* textLabel1_2_4;
 	QLabel* textLabel1_6;
 	QLabel* textLabel1_3_4;
@@ -89,18 +89,18 @@ protected:
 	QLineEdit* authorsAllEdit;
 	QLineEdit* authorsWithoutEdit;
 	QPushButton* servingsButton;
-	Q3Frame* servingsFrame;
+	QFrame* servingsFrame;
 	QCheckBox* enableServingsCheckBox;
 	QComboBox* servingsComboBox;
 	QSpinBox* servingsSpinBox;
 	QPushButton* prepTimeButton;
-	Q3Frame* prepTimeFrame;
+	QFrame* prepTimeFrame;
 	QCheckBox* enablePrepTimeCheckBox;
 	QComboBox* prepTimeComboBox;
 	Q3TimeEdit* prepTimeEdit;
 	QLineEdit* instructionsEdit;
 	QPushButton* instructionsButton;
-	Q3Frame* instructionsFrame;
+	QFrame* instructionsFrame;
 	KPushButton* clearButton;
 	KPushButton* findButton;
 	K3ListView* resultsListView;
@@ -113,7 +113,7 @@ protected:
 	KDateEdit *accessedStartDateEdit;
 	KDateEdit *accessedEndDateEdit;
 	QPushButton* metaDataButton;
-	Q3Frame* metaDataFrame;
+	QFrame* metaDataFrame;
 	QRadioButton* ratingAvgRadioButton;
 	FractionInput* avgStarsEdit;
 	QLabel* avgStarsLabel;
@@ -125,16 +125,16 @@ protected:
 	K3ListView* criteriaListView;
 	QPushButton* ratingsButton;
 	Q3ButtonGroup *ratingButtonGroup;
-	Q3Frame *ratingAvgFrame;
-	Q3Frame *criterionFrame;
-	Q3VBoxLayout *criterionFrameLayout;
-	Q3HBoxLayout *ratingAvgFrameLayout;
-	Q3VBoxLayout *ratingButtonGroupLayout;
+	QFrame *ratingAvgFrame;
+	QFrame *criterionFrame;
+	QVBoxLayout *criterionFrameLayout;
+	QHBoxLayout *ratingAvgFrameLayout;
+	QVBoxLayout *ratingButtonGroupLayout;
 
-	Q3HBoxLayout* AdvancedSearchDialogLayout;
-	Q3VBoxLayout* layout7;
-	Q3HBoxLayout* scrollView1Layout;
-	Q3VBoxLayout* parametersFrameLayout;
+	QHBoxLayout* AdvancedSearchDialogLayout;
+	QVBoxLayout* layout7;
+	QHBoxLayout* scrollView1Layout;
+	QVBoxLayout* parametersFrameLayout;
 	QSpacerItem* spacer3_2_3_2_2;
 	QSpacerItem* spacer3_2_3_2;
 	QSpacerItem* spacer3_2_3;
@@ -143,21 +143,21 @@ protected:
 	QSpacerItem* instructionsFrameSpacer;
 	QSpacerItem* metaDataFrameSpacer;
 	QSpacerItem* spacer15;
-	Q3VBoxLayout* titleFrameLayout;
+	QVBoxLayout* titleFrameLayout;
 	Q3GridLayout* ingredientFrameLayout;
 	Q3GridLayout* categoryFrameLayout;
 	Q3GridLayout* authorsFrameLayout;
-	Q3VBoxLayout* servingsFrameLayout;
-	Q3HBoxLayout* layout5;
-	Q3VBoxLayout* prepTimeFrameLayout;
-	Q3VBoxLayout* instructionsFrameLayout;
-	Q3VBoxLayout* metaDataFrameLayout;
-	Q3HBoxLayout* layout6;
-	Q3HBoxLayout* layout9;
+	QVBoxLayout* servingsFrameLayout;
+	QHBoxLayout* layout5;
+	QVBoxLayout* prepTimeFrameLayout;
+	QVBoxLayout* instructionsFrameLayout;
+	QVBoxLayout* metaDataFrameLayout;
+	QHBoxLayout* layout6;
+	QHBoxLayout* layout9;
 	QSpacerItem* spacer3;
-	Q3VBoxLayout* ratingsFrameLayout;
-	Q3HBoxLayout* layout11;
-	Q3HBoxLayout* layout12;
+	QVBoxLayout* ratingsFrameLayout;
+	QHBoxLayout* layout11;
+	QHBoxLayout* layout12;
 	QSpacerItem* ratingsFrameSpacer;
 
 	RecipeDB *database;

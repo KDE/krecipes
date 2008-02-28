@@ -19,7 +19,7 @@
 
 #include <qmap.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 class ServerPrefs;
 class NumbersPrefs;
@@ -33,7 +33,7 @@ class KUrlRequester;
 class Q3ButtonGroup;
 class QCheckBox;
 class QRadioButton;
-class Q3VBoxLayout;
+class QVBoxLayout;
 class QComboBox;
 
 class KrecipesPreferences : public KPageDialog
@@ -137,8 +137,8 @@ protected:
 	QRadioButton* fractionRadioButton;
 	QRadioButton* decimalRadioButton;
 
-	Q3VBoxLayout* Form1Layout;
-	Q3VBoxLayout* numberButtonGroupLayout;
+	QVBoxLayout* Form1Layout;
+	QVBoxLayout* numberButtonGroupLayout;
 
 	QCheckBox *abbrevButton;
 
@@ -157,7 +157,7 @@ public:
 	void saveOptions();
 
 protected:
-	Q3VBoxLayout* Form1Layout;
+	QVBoxLayout* Form1Layout;
 	QCheckBox* overwriteCheckbox;
 	QCheckBox* directImportCheckbox;
 
@@ -175,7 +175,7 @@ public:
 	void saveOptions();
 
 protected:
-	Q3VBoxLayout* Form1Layout;
+	QVBoxLayout* Form1Layout;
 	QCheckBox* searchAsYouTypeBox;
 	KIntNumInput* catLimitInput;
 	KIntNumInput* limitInput;

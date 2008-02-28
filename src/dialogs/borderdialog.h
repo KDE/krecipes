@@ -18,13 +18,13 @@
 
 
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class Q3GroupBox;
 class QLabel;
@@ -56,11 +56,11 @@ public:
 	KHTMLPart* borderPreview;
 
 protected:
-	Q3VBoxLayout* borderGroupBoxLayout;
-	Q3HBoxLayout* layout4;
-	Q3VBoxLayout* layout3;
-	Q3VBoxLayout* layout2;
-	Q3VBoxLayout* layout1;
+	QVBoxLayout* borderGroupBoxLayout;
+	QHBoxLayout* layout4;
+	QVBoxLayout* layout3;
+	QVBoxLayout* layout2;
+	QVBoxLayout* layout1;
 
 protected slots:
 	virtual void languageChange();

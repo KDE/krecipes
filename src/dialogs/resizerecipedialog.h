@@ -15,20 +15,20 @@
 
 #include <kdialog.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QVBoxLayout>
+#include <QFrame>
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
 class Recipe;
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class FractionInput;
 class Q3ButtonGroup;
-class Q3Frame;
+class QFrame;
 class QLabel;
 class KLineEdit;
 class QRadioButton;
@@ -55,19 +55,19 @@ private:
 
 	Q3ButtonGroup* buttonGroup;
 	QRadioButton* yieldRadioButton;
-	Q3Frame* yieldFrame;
+	QFrame* yieldFrame;
 	QLabel* currentYieldLabel;
 	QLabel* newYieldLabel;
 	KLineEdit* currentYieldInput;
 	FractionInput* newYieldInput;
 	QRadioButton* factorRadioButton;
-	Q3Frame* factorFrame;
+	QFrame* factorFrame;
 	QLabel* factorLabel;
 	FractionInput* factorInput;
 
-	Q3VBoxLayout* buttonGroupLayout;
+	QVBoxLayout* buttonGroupLayout;
 	Q3GridLayout* yieldFrameLayout;
-	Q3HBoxLayout* factorFrameLayout;
+	QHBoxLayout* factorFrameLayout;
 };
 
 #endif //RESIZERECIPEDIALOG_H

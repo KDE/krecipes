@@ -53,7 +53,6 @@
 #include <QLabel>
 #include <QFrame>
 #include <QDragEnterEvent>
-#include <Q3VBoxLayout>
 
 #include <kprogressdialog.h>
 #include <kmessagebox.h>
@@ -128,10 +127,9 @@ Krecipes::Krecipes()
 	parsing_file_dlg->setWindowFlags ( Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
 	parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
-	( new Q3VBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
+	( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
-
 	convertDialog = new ConversionDialog(this,m_view->database);
 }
 

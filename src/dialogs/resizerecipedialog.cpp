@@ -17,12 +17,12 @@
 #include <kvbox.h>
 #include <qvariant.h>
 #include <q3buttongroup.h>
-#include <q3frame.h>
+#include <qframe.h>
 #include <qlabel.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <knuminput.h>
 #include <klineedit.h>
 #include <qradiobutton.h>
@@ -58,16 +58,16 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	buttonGroup->setColumnLayout( 0, Qt::Vertical );
 	buttonGroup->layout() ->setSpacing( 6 );
 	buttonGroup->layout() ->setMargin( 11 );
-	buttonGroupLayout = new Q3VBoxLayout( buttonGroup->layout() );
+	buttonGroupLayout = new QVBoxLayout( buttonGroup->layout() );
 	buttonGroupLayout->setAlignment( Qt::AlignTop );
 
 	yieldRadioButton = new QRadioButton( buttonGroup );
 	buttonGroup->insert( yieldRadioButton, SERVINGS_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( yieldRadioButton );
 
-	yieldFrame = new Q3Frame( buttonGroup );
-	yieldFrame->setFrameShape( Q3Frame::Box );
-	yieldFrame->setFrameShadow( Q3Frame::Sunken );
+	yieldFrame = new QFrame( buttonGroup );
+	yieldFrame->setFrameShape( QFrame::Box );
+	yieldFrame->setFrameShadow( QFrame::Sunken );
 	yieldFrame->setLineWidth( 1 );
 	yieldFrameLayout = new Q3GridLayout( yieldFrame, 1, 1, 11, 6 );
 
@@ -93,12 +93,14 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	buttonGroup->insert( factorRadioButton, FACTOR_RADIO_BUTTON );
 	buttonGroupLayout->addWidget( factorRadioButton );
 
-	factorFrame = new Q3Frame( buttonGroup );
+	factorFrame = new QFrame( buttonGroup );
 	factorFrame->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 1, 0, factorFrame->sizePolicy().hasHeightForWidth() ) );
-	factorFrame->setFrameShape( Q3Frame::Box );
-	factorFrame->setFrameShadow( Q3Frame::Sunken );
+	factorFrame->setFrameShape( QFrame::Box );
+	factorFrame->setFrameShadow( QFrame::Sunken );
 	factorFrame->setLineWidth( 1 );
-	factorFrameLayout = new Q3HBoxLayout( factorFrame, 11, 6 );
+	factorFrameLayout = new QHBoxLayout( factorFrame );
+   factorFrameLayout->setMargin( 11 );
+   factorFrameLayout->setSpacing( 6 );
 
 	factorLabel = new QLabel( factorFrame );
 	factorFrameLayout->addWidget( factorLabel );

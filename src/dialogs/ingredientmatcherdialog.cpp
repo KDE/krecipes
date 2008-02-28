@@ -27,10 +27,10 @@
 #include <qlayout.h>
 #include <q3groupbox.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <Q3ValueList>
 #include <QLabel>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -52,10 +52,13 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	//Design the dialog
 
-	Q3VBoxLayout *dialogLayout = new Q3VBoxLayout( this, 11, 6 );
+	QVBoxLayout *dialogLayout = new QVBoxLayout( this, 11, 6 );
 
 	// Ingredient list
-	Q3HBoxLayout *layout2 = new Q3HBoxLayout( 0, 0, 6, "layout2" );
+	QHBoxLayout *layout2 = new QHBoxLayout( 0 );
+   layout2->setObjectName( "layout2" );
+   layout2->setMargin( 0 );
+   layout2->setSpacing( 6 );
 
 	allIngListView = new KreListView( this, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
@@ -63,7 +66,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
-	Q3VBoxLayout *layout1 = new Q3VBoxLayout( 0, 0, 6, "layout1" );
+	QVBoxLayout *layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
 
 	//KIconLoader *il = KIconLoader::global();
 

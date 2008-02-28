@@ -25,7 +25,7 @@
 #ifndef KRERULER_H
 #define KRERULER_H
 
-#include <q3frame.h>
+#include <qframe.h>
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -106,7 +106,7 @@ class KoRulerPrivate;
  * It also offers a popupmenu upon right-clicking, for changing the unit,
  * the page layout, or removing a tab.
  */
-class KoRuler : public Q3Frame
+class KoRuler : public QFrame
 {
     Q_OBJECT
     friend class KoRulerPrivate; // for the Action enum

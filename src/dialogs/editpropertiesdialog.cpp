@@ -16,9 +16,9 @@
 #include <qlineedit.h>
 #include <q3header.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <Q3ValueList>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3TextStream>
 #include <k3listview.h>
 #include <qlayout.h>
@@ -112,15 +112,24 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	setMainWidget( wholePage );
 	QWidget *page = new QWidget(wholePage);
 
-	EditPropertiesDialogLayout = new Q3VBoxLayout( page, 11, 6, "EditPropertiesDialogLayout");
+	EditPropertiesDialogLayout = new QVBoxLayout( page );
+   EditPropertiesDialogLayout->setObjectName( "EditPropertiesDialogLayout" );
+   EditPropertiesDialogLayout->setMargin( 11 );
+   EditPropertiesDialogLayout->setSpacing( 6 );
 
 	infoLabel = new QLabel( page );
    infoLabel->setObjectName( "infoLabel" );
 	EditPropertiesDialogLayout->addWidget( infoLabel );
 
-	layout9 = new Q3HBoxLayout( 0, 0, 6, "layout9");
+	layout9 = new QHBoxLayout( );
+   layout9->setObjectName( "layout9" );
+   layout9->setMargin( 0 );
+   layout9->setSpacing( 6 );
 
-	layout8 = new Q3VBoxLayout( 0, 0, 6, "layout8");
+	layout8 = new QVBoxLayout( );
+   layout8->setObjectName( "layout8" );
+   layout8->setMargin( 0 );
+   layout8->setSpacing( 6 );
 
 	usdaListView = new KreListView( page, QString::null, page, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
@@ -136,9 +145,15 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
    loadButton->setObjectName( "loadButton" );
 	layout9->addWidget( loadButton );
 
-	layout7 = new Q3VBoxLayout( 0, 0, 6, "layout7");
+	layout7 = new QVBoxLayout();
+   layout7->setObjectName( "layout7" );
+   layout7->setMargin( 0 );
+   layout7->setSpacing( 6 );
 
-	layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
+	layout3 = new QHBoxLayout();
+   layout3->setObjectName( "layout3" );
+   layout3->setMargin( 0 );
+   layout3->setSpacing( 6 );
 
 	propertyLabel = new QLabel( page );
    propertyLabel->setObjectName( "propertyLabel" );
@@ -165,7 +180,10 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 
-	layout3_2 = new Q3HBoxLayout( 0, 0, 6, "layout3_2");
+	layout3_2 = new QHBoxLayout();
+   layout3_2->setObjectName( "layout3_2" );
+   layout3_2->setMargin( 0 );
+   layout3_2->setSpacing( 6 );
 
 	weightLabel = new QLabel( page );
 	weightLabel->setObjectName( "weightLabel" );

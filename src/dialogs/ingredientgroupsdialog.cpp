@@ -13,8 +13,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #include <klocale.h>
@@ -24,10 +23,9 @@
 #include "widgets/krelistview.h"
 #include "widgets/headerlistview.h"
 
-IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent,name), database(db)
+IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent), database(db)
 {
-	//KDE$ port
-	//QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+   setObjectName( name );
 	QHBoxLayout* layout = new QHBoxLayout();
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );

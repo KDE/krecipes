@@ -16,13 +16,13 @@
 #include "datablocks/ingredientlist.h"
 #include "datablocks/unit.h"
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class QLabel;
 class Q3TextEdit;
