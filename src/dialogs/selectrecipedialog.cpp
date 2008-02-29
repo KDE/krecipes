@@ -16,12 +16,12 @@
 #include <qtabwidget.h>
 #include <qtooltip.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QFrame>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QLabel>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -51,7 +51,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	//Store pointer to Recipe Database
 	database = db;
 
-	Q3VBoxLayout *tabLayout = new Q3VBoxLayout( this );
+	QVBoxLayout *tabLayout = new QVBoxLayout( this );
 	tabWidget = new QTabWidget( this );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
@@ -62,7 +62,10 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	//Design dialog
 
-	layout = new Q3GridLayout( basicSearchTab, 1, 1, 0, 0 );
+	layout = new QGridLayout( basicSearchTab );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 
 	// Border Spacers
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );

@@ -27,8 +27,7 @@
 
 #include <q3header.h>
 #include <qtabwidget.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
@@ -47,7 +46,11 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	QWidget *ingredientTab = new QWidget( tabWidget );
 
-	layout = new Q3GridLayout( ingredientTab, 1, 1, 0, 0 );
+	layout = new QGridLayout( ingredientTab );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
+
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );

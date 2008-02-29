@@ -44,14 +44,20 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	borderGroupBox = new Q3GroupBox( page, "borderGroupBox" );
 	borderGroupBox->setColumnLayout( 0, Qt::Vertical );
-	borderGroupBox->layout() ->setSpacing( 6 );
-	borderGroupBox->layout() ->setMargin( 11 );
+	borderGroupBox->layout()->setSpacing( 6 );
+	borderGroupBox->layout()->setMargin( 11 );
 	borderGroupBoxLayout = new QVBoxLayout( borderGroupBox->layout() );
 	borderGroupBoxLayout->setAlignment( Qt::AlignTop );
 
-	layout4 = new QHBoxLayout( 0, 0, 6, "layout4" );
+	layout4 = new QHBoxLayout();
+   layout4->setMargin( 0 );
+   layout4->setSpacing( 6 );
+   layout4->setObjectName( "layout4" );
 
-	layout3 = new QVBoxLayout( 0, 0, 6, "layout3" );
+	layout3 = new QVBoxLayout();
+   layout3->setMargin( 0 );
+   layout3->setSpacing( 6 );
+   layout3->setObjectName( "layout3" );
 
 	styleLabel = new QLabel( borderGroupBox );
    styleLabel->setObjectName( "styleLabel" );
@@ -61,7 +67,10 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout3->addWidget( styleListBox );
 	layout4->addLayout( layout3 );
 
-	layout2 = new QVBoxLayout( 0, 0, 6, "layout2" );
+	layout2 = new QVBoxLayout();
+   layout2->setMargin( 0 );
+   layout2->setSpacing( 6 );
+   layout2->setObjectName( "layout2" );
 
 	colorLabel = new QLabel( borderGroupBox );
    colorLabel->setObjectName( "colorLabel" );
@@ -80,7 +89,10 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout2->addWidget( color_hbox );
 	layout4->addLayout( layout2 );
 
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+	layout1 = new QVBoxLayout();
+   layout1->setMargin( 0 );
+   layout1->setSpacing( 6 );
+   layout1->setObjectName( "layout1" );
 
 	widthLabel = new QLabel( borderGroupBox );
    widthLabel->setObjectName( "widthLabel" );

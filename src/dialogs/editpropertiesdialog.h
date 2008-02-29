@@ -13,7 +13,7 @@
 
 #include <qvariant.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -24,7 +24,7 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class QLabel;
 class K3ListView;
 class Q3ListViewItem;

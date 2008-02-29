@@ -20,7 +20,7 @@
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 #include <Q3PtrList>
 #include <QVBoxLayout>
@@ -40,11 +40,21 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
    setObjectName( "SimilarCategoriesDialog" );
    setModal( true );
 
-	SimilarCategoriesDialogLayout = new QVBoxLayout( this, 11, 6, "SimilarCategoriesDialogLayout");
+	SimilarCategoriesDialogLayout = new QVBoxLayout( this );
+   SimilarCategoriesDialogLayout->setMargin( 11 );
+   SimilarCategoriesDialogLayout->setSpacing( 6 );
+   SimilarCategoriesDialogLayout->setObjectName( "SimilarCategoriesDialogLayout" );
 
-	layout6 = new QHBoxLayout( 0, 0, 6, "layout6");
+	layout6 = new QHBoxLayout();
+   layout6->setMargin( 0 );
+   layout6->setSpacing( 6 );
+   layout6->setObjectName( "layout6" );
 
-	layout4 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout4");
+	layout4 = new QGridLayout();
+   layout4->cellRect( 1, 1 );
+   layout4->setMargin( 0 );
+   layout4->setSpacing( 6 );
+   layout4->setObjectName( "layout4" );
 
 	categoriesBox = new KLineEdit( this );
 
@@ -68,7 +78,10 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout4->addWidget( categoryLabel, 0, 0 );
 	layout6->addLayout( layout4 );
 
-	layout5 = new QVBoxLayout( 0, 0, 6, "layout5");
+	layout5 = new QVBoxLayout();
+   layout5->setMargin( 0 );
+   layout5->setSpacing( 6 );
+   layout5->setObjectName( "layout5" );
 
 	searchButton = new QPushButton( this );
    searchButton->setObjectName( "searchButton" );
@@ -78,9 +91,15 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout6->addLayout( layout5 );
 	SimilarCategoriesDialogLayout->addLayout( layout6 );
 
-	layout9 = new QHBoxLayout( 0, 0, 6, "layout9");
+	layout9 = new QHBoxLayout();
+   layout9->setMargin( 0 );
+   layout9->setSpacing( 6 );
+   layout9->setObjectName( "layout9" );
 
-	layout8 = new QVBoxLayout( 0, 0, 6, "layout8");
+	layout8 = new QVBoxLayout();
+   layout8->setMargin( 0 );
+   layout8->setSpacing( 6 );
+   layout8->setObjectName( "layout8" );
 
 	allLabel = new QLabel( this );
    allLabel->setObjectName( "allLabel" );
@@ -91,7 +110,10 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout8->addWidget( allListView );
 	layout9->addLayout( layout8 );
 
-	layout1 = new QVBoxLayout( 0, 0, 6, "layout1");
+	layout1 = new QVBoxLayout();
+   layout1->setMargin( 0 );
+   layout1->setSpacing( 6 );
+   layout1->setObjectName( "layout1" );
 
 	removeButton = new QPushButton( this );
    removeButton->setObjectName( "removeButton" );
@@ -104,7 +126,10 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout1->addItem( spacer1 );
 	layout9->addLayout( layout1 );
 
-	layout7 = new QVBoxLayout( 0, 0, 6, "layout7");
+	layout7 = new QVBoxLayout();
+   layout7->setMargin( 0 );
+   layout7->setSpacing( 6 );
+   layout7->setObjectName( "layout7" );
 
 	toMergeLabel = new QLabel( this );
    toMergeLabel->setObjectName( "toMergeLabel" );
@@ -116,7 +141,11 @@ SimilarCategoriesDialog::SimilarCategoriesDialog( ElementList &list, QWidget* pa
 	layout9->addLayout( layout7 );
 	SimilarCategoriesDialogLayout->addLayout( layout9 );
 
-	layout10 = new QHBoxLayout( 0, 0, 6, "layout10");
+	layout10 = new QHBoxLayout();
+   layout10->setMargin( 0 );
+   layout10->setSpacing( 6 );
+   layout10->setObjectName( "layout10" );
+
 	spacer2 = new QSpacerItem( 310, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout10->addItem( spacer2 );
 

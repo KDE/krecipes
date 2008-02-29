@@ -16,7 +16,7 @@
 
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QDropEvent>
 #include <kpushbutton.h>
 #include <kiconloader.h>
@@ -53,7 +53,7 @@ private:
 	void reloadRecipeList( ReloadFlags flag = Load );
 	void addRecipe( Q3ListViewItem *item );
 	// Widgets
-	Q3GridLayout* layout;
+	QGridLayout* layout;
 	QPushButton* addRecipeButton;
 	QPushButton* removeRecipeButton;
 	KreListView* recipeListView;

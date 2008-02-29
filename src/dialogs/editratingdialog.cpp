@@ -44,7 +44,7 @@
 class RatingCriteriaListView : public K3ListView
 {
 public:
-	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : K3ListView(parent){}
+	RatingCriteriaListView( QWidget *parent = 0, const char *name = 0 ) : K3ListView(parent){ setObjectName( name ); }
 
 	void rename( Q3ListViewItem *it, int c )
 	{
@@ -59,7 +59,8 @@ public:
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name )
 		: KDialog( parent )
 {
-    setCaption( i18n( "Rating" ) );
+   setObjectName( name );
+   setCaption( i18n( "Rating" ) );
 	init(criteriaList);
 	loadRating(rating);
 }
@@ -71,6 +72,7 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
 		: KDialog( parent )
 {
+   setObjectName( name );
 	init(criteriaList);
 }
 

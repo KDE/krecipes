@@ -17,8 +17,7 @@
 
 #include <qlayout.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <kvbox.h>
 
 #include "widgets/krelistview.h"
@@ -41,7 +40,7 @@ private slots:
 
 private:
 	// Widgets
-	Q3GridLayout* layout;
+	QGridLayout* layout;
 	QPushButton* addIngredientButton;
 	QPushButton* removeIngredientButton;
 	KreListView* ingredientListView;

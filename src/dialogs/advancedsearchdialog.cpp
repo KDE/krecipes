@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <Q3ValueList>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <kpushbutton.h>
 #include <qlayout.h>
@@ -131,7 +131,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    ingredientFrame->setObjectName( "ingredientFrame" ); 
 	ingredientFrame->setFrameShape( QFrame::StyledPanel );
 	ingredientFrame->setFrameShadow( QFrame::Raised );
-	ingredientFrameLayout = new Q3GridLayout( ingredientFrame, 1, 1, 3, 3, "ingredientFrameLayout"); 
+	ingredientFrameLayout = new QGridLayout( ingredientFrame ); 
+   ingredientFrameLayout->cellRect( 1, 1 );
+   ingredientFrameLayout->setMargin( 3 );
+   ingredientFrameLayout->setSpacing( 3 );
+   ingredientFrameLayout->setObjectName( "ingredientFrameLayout" );
 
 	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
 	ingredientInfoLabel->setTextFormat( Qt::RichText );
@@ -180,7 +184,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    categoryFrame->setObjectName( "categoryFrame" ); 
 	categoryFrame->setFrameShape( QFrame::StyledPanel );
 	categoryFrame->setFrameShadow( QFrame::Raised );
-	categoryFrameLayout = new Q3GridLayout( categoryFrame, 1, 1, 3, 3, "categoryFrameLayout");
+	categoryFrameLayout = new QGridLayout( categoryFrame );
+   categoryFrameLayout->cellRect( 1, 1 );
+   categoryFrameLayout->setMargin( 3 );
+   categoryFrameLayout->setSpacing( 3 );
+   categoryFrameLayout->setObjectName( "ingredientFrameLayout" );
+   
 
 	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
 	categoryInfoLabel->setTextFormat( Qt::RichText );
@@ -229,7 +238,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    authorsFrame->setObjectName( "authorsFrame" ); 
 	authorsFrame->setFrameShape( QFrame::StyledPanel );
 	authorsFrame->setFrameShadow( QFrame::Raised );
-	authorsFrameLayout = new Q3GridLayout( authorsFrame, 1, 1, 3, 3, "authorsFrameLayout"); 
+	authorsFrameLayout = new QGridLayout( authorsFrame ); 
+   authorsFrameLayout->cellRect( 1, 1 );
+   authorsFrameLayout->setMargin( 3 );
+   authorsFrameLayout->setSpacing( 3 );
+   authorsFrameLayout->setObjectName( "ingredientFrameLayout" );
 
 	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
 	authorsInfoLabel->setTextFormat( Qt::RichText );

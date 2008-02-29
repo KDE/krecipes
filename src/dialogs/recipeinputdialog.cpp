@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 #include <QDragEnterEvent>
 #include <QHBoxLayout>
@@ -148,7 +148,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	// Design the Dialog
-	Q3GridLayout* recipeLayout = new Q3GridLayout( recipeTab, 1, 1, 0, 0 );
+	QGridLayout* recipeLayout = new QGridLayout( recipeTab );
+   recipeLayout->cellRect( 1, 1 );
+   recipeLayout->setMargin( 0 );
+   recipeLayout->setSpacing( 0 ); 
 
 	// Border
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -282,7 +285,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientGBox = new Q3GroupBox( recipeTab );
 	ingredientGBox->setFrameStyle( QFrame::NoFrame );
 	ingredientGBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-	Q3GridLayout* ingredientsLayout = new Q3GridLayout( ingredientGBox );
+	QGridLayout* ingredientsLayout = new QGridLayout( ingredientGBox );
 
 	// Border
 	QSpacerItem* spacerBoxLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );

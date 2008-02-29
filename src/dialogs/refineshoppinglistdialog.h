@@ -15,7 +15,7 @@
 #include <qmap.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -25,7 +25,7 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class QSpacerItem;
 class QLabel;
 class Q3ListViewItem;

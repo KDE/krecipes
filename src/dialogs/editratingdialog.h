@@ -12,16 +12,16 @@
 #define EDITRATINGDIALOG_H
 
 #include <kdialog.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <kvbox.h>
+
 class KHBox;
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class QLabel;
 class QComboBox;
 class QPushButton;

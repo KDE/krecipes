@@ -14,7 +14,7 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QFrame>
 #include <Q3ValueList>
 #include <QLabel>
@@ -22,7 +22,7 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class QSpacerItem;
 class Q3ScrollView;
 class QPushButton;
@@ -144,9 +144,9 @@ protected:
 	QSpacerItem* metaDataFrameSpacer;
 	QSpacerItem* spacer15;
 	QVBoxLayout* titleFrameLayout;
-	Q3GridLayout* ingredientFrameLayout;
-	Q3GridLayout* categoryFrameLayout;
-	Q3GridLayout* authorsFrameLayout;
+	QGridLayout* ingredientFrameLayout;
+	QGridLayout* categoryFrameLayout;
+	QGridLayout* authorsFrameLayout;
 	QVBoxLayout* servingsFrameLayout;
 	QHBoxLayout* layout5;
 	QVBoxLayout* prepTimeFrameLayout;

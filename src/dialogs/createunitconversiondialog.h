@@ -12,7 +12,7 @@
 
 #include <qvariant.h>
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -23,7 +23,7 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class Q3ButtonGroup;
 class QLabel;
 class QComboBox;

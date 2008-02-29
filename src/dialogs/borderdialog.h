@@ -17,15 +17,14 @@
 #include <kcolorvalueselector.h>
 
 
-//Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class Q3GroupBox;
 class QLabel;
 class K3ListBox;

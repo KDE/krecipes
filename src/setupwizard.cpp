@@ -21,8 +21,7 @@
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QFrame>
 #include <QLabel>
 
@@ -132,7 +131,10 @@ void SetupWizard::showPages( DBType type )
 
 WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -156,7 +158,10 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 
 PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -266,7 +271,10 @@ void PermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 
 PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -376,7 +384,10 @@ void PSqlPermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 
 ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -539,7 +550,10 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -613,7 +627,10 @@ void SQLiteSetupPage::selectFile()
 
 SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -707,7 +724,10 @@ void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client,
 
 DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -775,7 +795,10 @@ void DataInitializePage::setUSDAImport( bool import )
 
 DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1, 1 );
+   layout->setMargin( 0 );
+   layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );

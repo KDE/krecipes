@@ -15,7 +15,7 @@
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -24,7 +24,7 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class QSpacerItem;
 class QSlider;
 class QLabel;
@@ -62,7 +62,7 @@ public:
 protected:
 	QVBoxLayout* SimilarCategoriesDialogLayout;
 	QHBoxLayout* layout6;
-	Q3GridLayout* layout4;
+	QGridLayout* layout4;
 	QVBoxLayout* layout5;
 	QSpacerItem* spacer4;
 	QHBoxLayout* layout9;

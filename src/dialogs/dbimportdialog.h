@@ -11,15 +11,14 @@
 #define DBIMPORTDIALOG_H
 
 #include <kdialog.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class Q3ButtonGroup;
 class QRadioButton;
 class Q3WidgetStack;
@@ -67,7 +66,7 @@ private:
 
 	QVBoxLayout* dbButtonGroupLayout;
 	QVBoxLayout* serverPageLayout;
-	Q3GridLayout* layout5;
+	QGridLayout* layout5;
 	QVBoxLayout* serverPageLayout_2;
 
 protected slots:

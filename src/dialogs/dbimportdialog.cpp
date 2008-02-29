@@ -26,8 +26,7 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QVBoxLayout>
 
 #include <kconfig.h>
@@ -77,7 +76,10 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	sqlitePage = new QWidget( paramStack );
    sqlitePage->setObjectName( "sqlitePage" );
-	serverPageLayout_2 = new QVBoxLayout( sqlitePage, 11, 6, "serverPageLayout_2" );
+	serverPageLayout_2 = new QVBoxLayout( sqlitePage );
+   serverPageLayout_2->setMargin( 11 );
+   serverPageLayout_2->setSpacing( 6 );
+   serverPageLayout_2->setObjectName( "serverPageLayout_2" );
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
@@ -92,9 +94,16 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	serverPage = new QWidget( paramStack );
    serverPage->setObjectName( "serverPage" );
-	serverPageLayout = new QVBoxLayout( serverPage, 11, 6, "serverPageLayout" );
+	serverPageLayout = new QVBoxLayout( serverPage );
+   serverPageLayout->setMargin( 11 );
+   serverPageLayout->setSpacing( 6 );
+   serverPageLayout->setObjectName( "serverPageLayout" );
 
-	layout5 = new Q3GridLayout( 0, 1, 1, 0, 6, "layout5" );
+	layout5 = new QGridLayout();
+   layout5->cellRect( 1, 1 );
+   layout5->setMargin( 0 );
+   layout5->setSpacing( 6 );
+   layout5->setObjectName( "layout5" );
 
 	hostEdit = new QLineEdit( serverPage );
    hostEdit->setObjectName( "hostEdit" );

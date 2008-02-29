@@ -21,7 +21,7 @@
 #include <qcursor.h>
 #include <q3intdict.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 
 #include <kcombobox.h>
@@ -64,7 +64,7 @@ public:
 private:
 
 	// Widgets
-	Q3GridLayout *layout;
+	QGridLayout *layout;
 	QTabWidget *tabWidget;
 	Q3GroupBox *basicSearchTab;
 	KHBox *searchBar;

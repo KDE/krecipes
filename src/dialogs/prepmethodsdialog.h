@@ -17,8 +17,7 @@
 #include <qpushbutton.h>
 
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <kiconloader.h>
 #include <k3listview.h>
 #include <kvbox.h>
@@ -46,7 +45,7 @@ private:
 	// Internal data
 	RecipeDB *database;
 	//Widgets
-	Q3GridLayout *layout;
+	QGridLayout *layout;
 	StdPrepMethodListView *prepMethodListView;
 	KHBox *buttonBar;
 	QPushButton *newPrepMethodButton;

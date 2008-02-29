@@ -18,8 +18,7 @@
 #include <q3whatsthis.h>
 
 #include <KVBox>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -44,7 +43,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	groupBox1->setColumnLayout(0, Qt::Vertical );
 	groupBox1->layout()->setSpacing( 6 );
 	groupBox1->layout()->setMargin( 11 );
-	groupBox1Layout = new Q3GridLayout( groupBox1->layout() );
+	groupBox1Layout = new QGridLayout( groupBox1->layout() );
 	groupBox1Layout->setAlignment( Qt::AlignTop );
 
 	weightEdit = new FractionInput( groupBox1 );

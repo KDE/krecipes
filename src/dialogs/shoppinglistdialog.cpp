@@ -25,10 +25,9 @@
 #include "widgets/recipelistview.h"
 #include "recipefilter.h"
 #include "recipeactionshandler.h"
-//Added by qt3to4:
 #include <QDropEvent>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 #include <kvbox.h>
 
 /** A simple listview to accept dropping a RecipeItemDrag */
@@ -66,7 +65,10 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	database = db;
 
 	// Design dialog
-	layout = new Q3GridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+	layout = new QGridLayout( this );
+   layout->cellRect( 2, 2 );
+   layout->setMargin( KDialog::marginHint() );
+   layout->setSpacing( KDialog::spacingHint() );
 
 	recipeListView = new KreListView ( this, i18n( "Full recipe list" ), true, 1 );
 	layout->addWidget( recipeListView, 0, 0 );
@@ -82,7 +84,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
-	Q3BoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 	KIconLoader *il = KIconLoader::global();
 	addRecipeButton = new QPushButton( this );
 	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );

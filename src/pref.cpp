@@ -28,9 +28,8 @@
 
 #include <qframe.h>
 #include <qcombobox.h>
-//Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QVBoxLayout>
 
 #include <kapplication.h>
@@ -124,7 +123,8 @@ void KrecipesPreferences::slotHelp()
 
 MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1,1 );
 	layout->setSpacing( KDialog::spacingHint() );
 	layout->setMargin( 0 );
 
@@ -246,7 +246,8 @@ void MySQLServerPrefs::saveOptions( void )
 
 PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
-	Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, 0, 0 );
+	QGridLayout * layout = new QGridLayout( this );
+   layout->cellRect( 1,1 );
 	layout->setSpacing( KDialog::spacingHint() );
 	layout->setMargin( 0 );
 

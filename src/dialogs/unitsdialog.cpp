@@ -50,7 +50,9 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	unitListView = new StdUnitListView( unitTab, database, true );
 	layout->addWidget( unitListView );
 
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout();
+   vboxl->setSpacing( KDialog::spacingHint() );
+
 	newUnitButton = new QPushButton( unitTab );
 	newUnitButton->setText( i18n( "Create ..." ) );
 	newUnitButton->setFlat( true );

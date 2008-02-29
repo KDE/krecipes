@@ -17,7 +17,7 @@
 #include <qpushbutton.h>
 
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <k3listview.h>
 #include <kvbox.h>
 
@@ -40,7 +40,7 @@ private:
 	RecipeDB *database;
 
 	// Widgets
-	Q3GridLayout* layout;
+	QGridLayout* layout;
 	QPushButton* addPropertyButton;
 	QPushButton* removePropertyButton;
 	StdPropertyListView* propertyListView;

@@ -19,8 +19,7 @@
 #include <q3buttongroup.h>
 #include <qframe.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <knuminput.h>
@@ -69,7 +68,10 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	yieldFrame->setFrameShape( QFrame::Box );
 	yieldFrame->setFrameShadow( QFrame::Sunken );
 	yieldFrame->setLineWidth( 1 );
-	yieldFrameLayout = new Q3GridLayout( yieldFrame, 1, 1, 11, 6 );
+	yieldFrameLayout = new QGridLayout( yieldFrame );
+   yieldFrameLayout->cellRect( 1, 1 );
+   yieldFrameLayout->setMargin( 11 );
+   yieldFrameLayout->setSpacing( 6 );
 
 	currentYieldLabel = new QLabel( yieldFrame );
 
