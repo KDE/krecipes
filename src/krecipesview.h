@@ -25,7 +25,7 @@
 #include <qwidget.h>
 #include <q3widgetstack.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include <kiconloader.h>
 #include <qpixmap.h>
@@ -158,7 +158,7 @@ private:
 	KreMenu *leftPanel;
 	MenuId dataMenu;
 	PanelDeco *rightPanel;
-	Q3PtrList<KreMenuButton> *buttonsList;
+	QList<KreMenuButton*> buttonsList;
 	KreMenuButton *button0;
 	KreMenuButton *button1;
 	KreMenuButton *button2;

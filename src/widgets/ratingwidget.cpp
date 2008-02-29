@@ -116,7 +116,7 @@ void RatingWidget::mousePressEvent(QMouseEvent* event_) {
     if ( child_geom_left_half.contains(event_->pos()) )
       left = true;
 
-    idx = m_widgets.findRef(static_cast<QLabel*>(child));
+    idx = m_widgets.indexOf(static_cast<QLabel*>(child));
     // if the widget is clicked beyond the maximum value, clear it
     // remember total and min are values, but index is zero-based!
     if(idx > m_total-1) {

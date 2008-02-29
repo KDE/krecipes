@@ -17,7 +17,6 @@
 #include <qimage.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -98,24 +97,22 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	START_TIMER("Setting up buttons")
 	// Buttons
-	buttonsList = new Q3PtrList<KreMenuButton>();
-	buttonsList->setAutoDelete( TRUE );
 
 	button0 = new KreMenuButton( leftPanel, SelectP );
 	button0->setIconSet( il->loadIconSet( "system-search", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button0 );
+	buttonsList.append( button0 );
 
 	button1 = new KreMenuButton( leftPanel, ShoppingP );
 	button1->setIconSet( il->loadIconSet( "trolley", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button1 );
+	buttonsList.append( button1 );
 
 	button7 = new KreMenuButton( leftPanel, DietP );
 	button7->setIconSet( il->loadIconSet( "diet", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button7 );
+	buttonsList.append( button7 );
 
 	button8 = new KreMenuButton( leftPanel, MatcherP );
 	button8->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button8 );
+	buttonsList.append( button8 );
 
 
 	// Submenus
@@ -123,27 +120,27 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
 	button2->setIconSet( il->loadIconSet( "ingredients", KIconLoader::Panel, 32 ) );
-	//buttonsList->append(button2);
+	//buttonsList.append(button2);
 
 	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
 	button3->setIconSet( il->loadIconSet( "properties", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button3 );
+	buttonsList.append( button3 );
 
 	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
 	button4->setIconSet( il->loadIconSet( "units", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button4 );
+	buttonsList.append( button4 );
 
 	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
 	button9->setIconSet( il->loadIconSet( "methods", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button9 );
+	buttonsList.append( button9 );
 
 	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
 	button5->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button5 );
+	buttonsList.append( button5 );
 
 	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
 	button6->setIconSet( il->loadIconSet( "authors", KIconLoader::Panel, 32 ) );
-	buttonsList->append( button6 );
+	buttonsList.append( button6 );
 
 	contextButton = new QPushButton( leftPanel );
    contextButton->setObjectName( "contextButton" );
@@ -281,7 +278,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 KrecipesView::~KrecipesView()
 {
-	delete buttonsList;
+    qDeleteAll(buttonsList);
 	delete viewPanel; //manually delete viewPanel because we need to be sure it is deleted
 	//before the database is because its destructor uses 'database'
 	delete database;
@@ -689,7 +686,7 @@ void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 
 		recipeButton->setTitle( short_title );
 
-		buttonsList->append( recipeButton );
+		buttonsList.append( recipeButton );
 		leftPanel->highlightButton( recipeButton );
 
 		connect( recipeButton, SIGNAL( clicked() ), this, SLOT( switchToRecipe() ) );
@@ -706,7 +703,7 @@ void KrecipesView::switchToRecipe( void )
 void KrecipesView::closeRecipe( void )
 {
 	slotSetPanel( SelectP );
-	buttonsList->removeLast();
+	buttonsList.removeLast();
 	recipeButton = 0;
 }
 

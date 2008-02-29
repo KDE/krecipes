@@ -15,7 +15,7 @@
 #define RATINGWIDGET_H
 
 
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
@@ -29,7 +29,7 @@
 class RatingWidget : public KHBox {
 Q_OBJECT
 
-typedef Q3PtrList<QLabel> LabelList;
+typedef QList<QLabel *> LabelList;
 
 public:
   RatingWidget(int stars, QWidget* parent, const char* name = 0);
