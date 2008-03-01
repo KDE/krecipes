@@ -21,7 +21,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 namespace USDA {
 
@@ -44,7 +44,7 @@ namespace USDA {
 		QFile dataFile( dataFilename );
 		if ( dataFile.open( QIODevice::ReadOnly ) ) {
 			kDebug() << "Loading: " << dataFilename << endl;
-			Q3TextStream stream( &dataFile );
+			QTextStream stream( &dataFile );
 
 			QString line;
 			while ( (line = stream.readLine()) != QString::null ) {

@@ -12,7 +12,7 @@
 
 #include <qstringlist.h>
 #include <qfile.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -34,7 +34,7 @@ UnitDataList loadUnits()
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
 		kDebug() << "Loading: " << dataFilename << endl;
-		Q3TextStream stream( &dataFile );
+		QTextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {
@@ -78,7 +78,7 @@ PrepDataList loadPrepMethods()
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
 		kDebug() << "Loading: " << dataFilename << endl;
-		Q3TextStream stream( &dataFile );
+		QTextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {

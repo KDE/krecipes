@@ -37,7 +37,7 @@
 */
 
 class K3Process;
-class Q3TextStream;
+class QTextStream;
 
 class CategoryTree;
 class RecipeSearchParameters;
@@ -383,7 +383,7 @@ protected:
 	void fixUSDAPropertyUnits();
 
 	//Use these with caution: SQL for one backend might not work on another!
-	void execSQL( Q3TextStream &stream );
+	void execSQL( QTextStream &stream );
 	virtual void execSQL( const QString & ) = 0;
 
 	QString buildSearchQuery( const RecipeSearchParameters &parameters ) const;
@@ -394,7 +394,7 @@ protected:
 	CategoryTree *m_categoryCache;
 
 private:
-	Q3TextStream *dumpStream;
+	QTextStream *dumpStream;
 	bool haltOperation;
 
 private slots:

@@ -16,12 +16,11 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <QList>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 AuthorListView::AuthorListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->authorCount() )
 {
@@ -252,7 +251,7 @@ void AuthorCheckListView::load( int limit, int offset )
 {
 	AuthorListView::load(limit,offset);
 
-	for ( Q3ValueList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
+	for ( QList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
 		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);

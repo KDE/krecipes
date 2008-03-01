@@ -40,7 +40,7 @@ QString HTMLBookExporter::createContent( const RecipeList& recipes )
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			QMap<QString,Q3TextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
+			QMap<QString,QTextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
 			(**stream_it) << "<br /><br />";
 			(**stream_it) << QString("<a name=\""+(*recipe_it).title+"\" />");
 			(**stream_it) << HTMLExporter::createContent(*recipe_it);
@@ -58,7 +58,7 @@ QString HTMLBookExporter::createHeader( const RecipeList &list )
 	QString output = HTMLExporter::createHeader(list);
 
 	QString catLinks;
-	Q3TextStream catLinksStream(&catLinks,QIODevice::WriteOnly);
+	QTextStream catLinksStream(&catLinks,QIODevice::WriteOnly);
 	createCategoryStructure(catLinksStream,list);
 
 	return output+"<h1>Krecipes Recipes</h1><div>"+catLinks+"</li></ul></div>";
@@ -66,7 +66,7 @@ QString HTMLBookExporter::createHeader( const RecipeList &list )
 
 QString HTMLBookExporter::createFooter()
 {
-	QMap<QString,Q3TextStream*>::const_iterator it;
+	QMap<QString,QTextStream*>::const_iterator it;
 	for ( it = fileMap.begin(); it != fileMap.end(); ++it ) {
 		(**it) << HTMLExporter::createFooter();
 
@@ -82,20 +82,20 @@ QString HTMLBookExporter::createFooter()
 	return output;
 }
 
-void HTMLBookExporter::createCategoryStructure( Q3TextStream &xml, const RecipeList &recipes )
+void HTMLBookExporter::createCategoryStructure( QTextStream &xml, const RecipeList &recipes )
 {
 	QList<int> categoriesUsed;
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			QMap<QString,Q3TextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
+			QMap<QString,QTextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
 			if ( categoriesUsed.find( ( *cat_it ).id ) == categoriesUsed.end() ) {
 				categoriesUsed << ( *cat_it ).id;
 
 				QString catPageName = m_basedir+"/"+escape((*cat_it).name)+".html";
 				QFile *catPage = new QFile( catPageName );
 				catPage->open( QIODevice::WriteOnly );
-				Q3TextStream *stream = new Q3TextStream( catPage );
-				stream->setEncoding( Q3TextStream::UnicodeUTF8 );
+				QTextStream *stream = new QTextStream( catPage );
+				stream->setEncoding( QTextStream::UnicodeUTF8 );
 				(*stream) << HTMLExporter::createHeader(recipes);
 				(*stream) << QString("<a name=\"top\" />");
 				(*stream) << "<h1>"<<(*cat_it).name<<"</h1>";
@@ -140,7 +140,7 @@ bool HTMLBookExporter::removeIfUnused( const QList<int> &cat_ids, CategoryTree *
 	return parent_should_show;
 }
 
-void HTMLBookExporter::writeCategoryStructure( Q3TextStream &xml, const CategoryTree *categoryTree )
+void HTMLBookExporter::writeCategoryStructure( QTextStream &xml, const CategoryTree *categoryTree )
 {
 	if ( categoryTree->category.id != -2 ) {
 		if ( categoryTree->category.id != -1 ) {

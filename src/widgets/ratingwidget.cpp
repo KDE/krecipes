@@ -19,11 +19,10 @@
 
 #include <q3intdict.h>
 #include <qlayout.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QLabel>
 #include <QMouseEvent>
-#include <Q3BoxLayout>
+#include <QBoxLayout>
 #include <kvbox.h>
 
 namespace {
@@ -67,7 +66,7 @@ RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
   }
   init();
 
-  Q3BoxLayout* l = dynamic_cast<Q3BoxLayout*>(layout());
+  QBoxLayout* l = dynamic_cast<QBoxLayout*>(layout());
   if(l) {
     l->addStretch(1);
   }

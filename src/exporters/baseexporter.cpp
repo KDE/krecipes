@@ -73,7 +73,7 @@ void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progre
 	exporter( single_recipe_list, database, progress_dlg );
 }
 
-void BaseExporter::writeStream( Q3TextStream &stream, const RecipeList &recipe_list )
+void BaseExporter::writeStream( QTextStream &stream, const RecipeList &recipe_list )
 {
 	stream << createHeader(recipe_list);
 	stream << createContent(recipe_list);
@@ -112,8 +112,8 @@ void BaseExporter::saveToFile( const QList<int> &ids, RecipeDB *database )
 			m_progress_dlg->progressBar()->setMaximum( ids.count()/progressInterval() );
 
 		QList<int> ids_copy = ids;
-		Q3TextStream stream( file );
-		stream.setEncoding( Q3TextStream::UnicodeUTF8 );
+		QTextStream stream( file );
+		stream.setEncoding( QTextStream::UnicodeUTF8 );
 
 		RecipeList recipe_list;
 		if ( headerFlags() != RecipeDB::None ) {

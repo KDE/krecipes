@@ -64,9 +64,9 @@ CreateCategoryDialog::~CreateCategoryDialog()
 
 void CreateCategoryDialog::loadCategories( const ElementList& categories )
 {
-	categoryComboBox->insertItem( i18n( "**NONE**" ) );
+	categoryComboBox->insertItem( categoryComboBox->count(), i18n( "**NONE**" ) );
 	for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
-		categoryComboBox->insertItem( ( *it ).name );
+		categoryComboBox->insertItem( categoryComboBox->count(), ( *it ).name );
 		idMap.insert( ( *it ).name, ( *it ).id );
 	}
 }

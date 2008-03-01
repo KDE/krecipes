@@ -63,7 +63,7 @@ PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db, c
 void PrepMethodComboBox::reload()
 {
 	QString remember_text;
-	if ( editable() )
+	if ( isEditable() )
 		remember_text = lineEdit()->text();
 
 	ElementList prepMethodList;
@@ -74,17 +74,17 @@ void PrepMethodComboBox::reload()
 
 	int row = 0;
 	if ( !m_specialItem.isNull() ) {
-		insertItem(m_specialItem);
+		insertItem( count(), m_specialItem );
 		prepMethodComboRows.insert( row, -1 );
 		row++;
 	}
 	for ( ElementList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it, ++row ) {
-		insertItem((*it).name);
+		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		prepMethodComboRows.insert( row,(*it).id );
 	}
 
-	if ( editable() )
+	if ( isEditable() )
 		lineEdit()->setText( remember_text );
 
 	database->disconnect( this );
@@ -100,7 +100,7 @@ int PrepMethodComboBox::id( int row )
 int PrepMethodComboBox::id( const QString &ing )
 {
 	for ( int i = 0; i < count(); i++ ) {
-		if ( ing == text( i ) )
+		if ( ing == itemText( i ) )
 			return id(i);
 	}
 	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
@@ -112,13 +112,13 @@ void PrepMethodComboBox::createPrepMethod( const Element &element )
 	int row = findInsertionPoint( element.name );
 
 	QString remember_text;
-	if ( editable() )
+	if ( isEditable() )
 		remember_text = lineEdit()->text();
 
-	insertItem( element.name, row );
+	insertItem( row, element.name );
 	completionObject()->addItem(element.name);
 
-	if ( editable() )
+	if ( isEditable() )
 		lineEdit()->setText( remember_text );
 
 	//now update the map by pushing everything after this item down
@@ -140,7 +140,7 @@ void PrepMethodComboBox::removePrepMethod( int id )
 	for ( QMap<int, int>::iterator it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
 		if ( it.value() == id ) {
 			row = it.key();
-			completionObject()->removeItem( text(row) );
+			completionObject()->removeItem( itemText(row) );
 			removeItem( row );
 			prepMethodComboRows.erase( it );
 			break;
@@ -165,7 +165,7 @@ void PrepMethodComboBox::removePrepMethod( int id )
 int PrepMethodComboBox::findInsertionPoint( const QString &name )
 {
 	for ( int i = 0; i < count(); i++ ) {
-		if ( QString::localeAwareCompare( name, text( i ) ) < 0 )
+		if ( QString::localeAwareCompare( name, itemText( i ) ) < 0 )
 			return i;
 	}
 

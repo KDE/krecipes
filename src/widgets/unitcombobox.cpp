@@ -30,7 +30,7 @@ void UnitComboBox::popup()
 {
 	if ( count() == 1 )
 		reload();
-	KComboBox::popup();
+	KComboBox::showPopup();
 }
 
 Unit UnitComboBox::unit() const
@@ -55,7 +55,7 @@ void UnitComboBox::reload()
 	loadUnits(unitList);
 
 	if ( findText( remember_filter, Qt::MatchExactly ) ) {
-		setCurrentText( remember_filter );
+		setEditText( remember_filter );
 	}
 }
 
@@ -63,7 +63,7 @@ void UnitComboBox::loadUnits( const UnitList &unitList )
 {
 	int row = 0;
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
-		insertItem( (*it).name );
+		insertItem( count(), (*it).name );
 		unitComboRows.insert( row, (*it).id ); // store unit id's in the combobox position to obtain the unit id later
 		row++;
 	}
@@ -91,7 +91,7 @@ void UnitComboBox::createUnit( const Unit &element )
 {
 	int row = findInsertionPoint( element.name );
 
-	insertItem( element.name, row );
+	insertItem( row, element.name );
 
 	//now update the map by pushing everything after this item down
 	QMap<int, int> new_map;
@@ -136,7 +136,7 @@ void UnitComboBox::removeUnit( int id )
 int UnitComboBox::findInsertionPoint( const QString &name )
 {
 	for ( int i = 1; i < count(); i++ ) {
-		if ( QString::localeAwareCompare( name, text( i ) ) < 0 )
+		if ( QString::localeAwareCompare( name, itemText( i ) ) < 0 )
 			return i;
 	}
 

@@ -21,9 +21,8 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 
-//Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3PtrList>
+#include <QList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -189,7 +188,7 @@ void IngredientParserDialog::convertToHeader( const QList<Q3ListViewItem*> &item
     //Port to kde4
     /*
 	if ( items.isEmpty() > 0 ) {
-		Q3PtrListIterator<Q3ListViewItem> it(items);
+		QListIterator<Q3ListViewItem> it(items);
 		Q3ListViewItem *item = it.current();
 
 		if ( item->rtti() != INGLISTVIEWITEM_RTTI )

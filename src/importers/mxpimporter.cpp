@@ -11,9 +11,9 @@
 #include "mxpimporter.h"
 
 #include <qfile.h>
-#include <q3textstream.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+#include <QTextStream>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -30,7 +30,7 @@ void MXPImporter::parseFile( const QString &file )
 	QFile input( file );
 
 	if ( input.open( QIODevice::ReadOnly ) ) {
-		Q3TextStream stream( &input );
+		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		QString line;
@@ -60,7 +60,7 @@ void MXPImporter::parseFile( const QString &file )
 MXPImporter::~MXPImporter()
 {}
 
-void MXPImporter::importMXP( Q3TextStream &stream )
+void MXPImporter::importMXP( QTextStream &stream )
 {
 	Recipe recipe;
 
@@ -132,7 +132,7 @@ void MXPImporter::importMXP( Q3TextStream &stream )
 	}
 }
 
-void MXPImporter::loadCategories( Q3TextStream &stream, Recipe &recipe )
+void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 {
 	//====================categories====================//
 	stream.skipWhiteSpace();
@@ -167,7 +167,7 @@ void MXPImporter::loadCategories( Q3TextStream &stream, Recipe &recipe )
 	}
 }
 
-void MXPImporter::loadIngredients( Q3TextStream &stream, Recipe &recipe )
+void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 {
 	//============ingredients=================//
 	stream.skipWhiteSpace();
@@ -225,7 +225,7 @@ void MXPImporter::loadIngredients( Q3TextStream &stream, Recipe &recipe )
 	//	kDebug()<<"No ingredients found."<<endl;
 }
 
-void MXPImporter::loadInstructions( Q3TextStream &stream, Recipe &recipe )
+void MXPImporter::loadInstructions( QTextStream &stream, Recipe &recipe )
 {
 	//==========================instructions ( along with other optional fields... mxp format doesn't define end of ingredients and start of other fields )==============//
 	stream.skipWhiteSpace();
@@ -269,7 +269,7 @@ void MXPImporter::loadInstructions( Q3TextStream &stream, Recipe &recipe )
 	//kDebug()<<"Found instructions: "<<m_instructions<<endl;
 }
 
-void MXPImporter::loadOptionalFields( Q3TextStream &stream, Recipe &recipe )
+void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 {
 	//=================after here, fields are optional=========================//
 	stream.skipWhiteSpace();
@@ -347,19 +347,19 @@ void MXPImporter::loadOptionalFields( Q3TextStream &stream, Recipe &recipe )
 	}
 }
 
-void MXPImporter::importGeneric( Q3TextStream & /*stream*/ )
+void MXPImporter::importGeneric( QTextStream & /*stream*/ )
 {
 	setErrorMsg( i18n( "MasterCook's Generic Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
-void MXPImporter::importMac( Q3TextStream & /*stream*/ )
+void MXPImporter::importMac( QTextStream & /*stream*/ )
 {
 	setErrorMsg( i18n( "MasterCook Mac's Export format is currently not supported.  Please write to jkivlighn@gmail.com to request support for this format." ) );
 	//not even sure it this is worth writing... its rather obsolete
 }
 
-QString MXPImporter::getNextQuotedString( Q3TextStream &stream )
+QString MXPImporter::getNextQuotedString( QTextStream &stream )
 {
 	stream.skipWhiteSpace();
 	QString current = stream.readLine().trimmed();

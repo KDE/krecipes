@@ -38,11 +38,11 @@ protected:
 	virtual int headerFlags() const;
 
 private:
-	void createCategoryStructure( Q3TextStream &xml, const RecipeList &recipes );
+	void createCategoryStructure( QTextStream &xml, const RecipeList &recipes );
 	bool removeIfUnused( const QList<int> &cat_ids, CategoryTree *parent, bool parent_should_show = false );
-	void writeCategoryStructure( Q3TextStream &xml, const CategoryTree *categoryTree );
+	void writeCategoryStructure( QTextStream &xml, const CategoryTree *categoryTree );
 
-	QMap<QString,Q3TextStream*> fileMap;
+	QMap<QString,QTextStream*> fileMap;
 
 	RecipeDB *database;
 	CategoryTree *m_categories;

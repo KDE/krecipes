@@ -18,7 +18,7 @@
 
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
 #include <kvbox.h>
 
 #include "datablocks/unit.h"
@@ -77,7 +77,7 @@ private:
 
 	RecipeDB *database;
 
-	Q3ValueList<IngredientInput*> m_ingInputs;
+	QList<IngredientInput*> m_ingInputs;
 };
 
 class IngredientInput : public KHBox

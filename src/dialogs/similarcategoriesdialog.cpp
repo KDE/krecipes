@@ -22,7 +22,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 #include <QVBoxLayout>
 
 #include <k3listview.h>
@@ -314,7 +314,7 @@ double compareStrings(const QString &str1, const QString &str2) {
 #if 0
 void RecipeActionsHandler::mergeSimilar()
 {
-	Q3PtrList<Q3ListViewItem> items = parentListView->selectedItems();
+	QList<Q3ListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
 		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one category."), QString::null );
 	else if ( items.count() == 1 && items.at(0)->rtti() == 1001 ) {

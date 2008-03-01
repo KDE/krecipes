@@ -66,9 +66,9 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 
 	QLabel *typeLabel = new QLabel( i18n( "Type:" ), box );
 	typeComboBox = new KComboBox( false, box );
-	typeComboBox->insertItem(i18n("Other"));
-	typeComboBox->insertItem(i18n("Mass"));
-	typeComboBox->insertItem(i18n("Volume"));
+	typeComboBox->insertItem( typeComboBox->count(), i18n("Other") );
+	typeComboBox->insertItem( typeComboBox->count(), i18n("Mass") );
+	typeComboBox->insertItem( typeComboBox->count(), i18n("Volume") );
 
 	gridLayout->addWidget( typeLabel, 2, 0 );
 	gridLayout->addMultiCellWidget( typeComboBox, 2, 2, 1, 3 );

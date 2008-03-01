@@ -23,7 +23,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -301,20 +301,20 @@ void IngredientInput::loadUnitListCombo()
 
 		//Populate this data into the ComboBox
 		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
-			unitBox->insertItem( ( *unit_it ).name );
+			unitBox->insertItem( unitBox->count(), ( *unit_it ).name );
 			unitBox->completionObject() ->addItem( ( *unit_it ).name );
 			if ( ( *unit_it ).name != (*unit_it ).plural ) {
-				unitBox->insertItem( ( *unit_it ).plural );
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural );
 				unitBox->completionObject() ->addItem( ( *unit_it ).plural );
 			}
 
 			if ( !( *unit_it ).name_abbrev.isEmpty() ) {
-				unitBox->insertItem( ( *unit_it ).name_abbrev );
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).name_abbrev );
 				unitBox->completionObject() ->addItem( ( *unit_it ).name_abbrev );
 			}
 			if ( !(*unit_it ).plural_abbrev.isEmpty() && 
 			   ( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
-				unitBox->insertItem( ( *unit_it ).plural_abbrev );
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural_abbrev );
 				unitBox->completionObject() ->addItem( ( *unit_it ).plural_abbrev );
 			}
 
@@ -380,7 +380,7 @@ void IngredientInputWidget::clear()
 
 void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 {
-	Q3ValueList<IngredientInput*>::iterator curr = m_ingInputs.find(input);
+	QList<IngredientInput*>::iterator curr = m_ingInputs.find(input);
 	IngredientInput *prev_input = *curr;
 	++curr;
 
@@ -421,13 +421,13 @@ void IngredientInputWidget::addIngredient()
 		emit headerEntered( Element(header,group_id) );
 	}
 	else {
-		for ( Q3ValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
+		for ( QList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
 			if ( !(*it)->isInputValid() )
 				return;
 		}
 
-		Q3ValueList<IngredientData> list;
-		for ( Q3ValueList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
+		QList<IngredientData> list;
+		for ( QList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
 			Ingredient ing = (*it)->ingredient();
 			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
 
@@ -539,7 +539,7 @@ int IngredientInputWidget::createNewGroupIfNecessary( const QString &group, Reci
 
 void IngredientInputWidget::reloadCombos()
 {
-	for ( Q3ValueList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it )
+	for ( QList<IngredientInput*>::iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it )
 		(*it)->reloadCombos();
 }
 

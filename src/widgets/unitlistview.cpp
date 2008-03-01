@@ -17,7 +17,7 @@
 #include <qcombobox.h>
 #include <q3header.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <kmessagebox.h>
 #include <kconfig.h>
@@ -142,9 +142,9 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		kpop->polish();
 
 		typeComboBox = new QComboBox( viewport() );
-		typeComboBox->insertItem(i18n("Other"));
-		typeComboBox->insertItem(i18n("Mass"));
-		typeComboBox->insertItem(i18n("Volume"));
+		typeComboBox->insertItem( typeComboBox->count(), i18n("Other"));
+		typeComboBox->insertItem( typeComboBox->count(), i18n("Mass"));
+		typeComboBox->insertItem( typeComboBox->count(), i18n("Volume"));
 		addChild( typeComboBox );
 		typeComboBox->hide();
 
@@ -170,7 +170,7 @@ void StdUnitListView::insertTypeComboBox( Q3ListViewItem* it )
 	typeComboBox->setGeometry( r );
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)it;
-	typeComboBox->setCurrentItem( unit_it->unit().type );
+	typeComboBox->setCurrentIndex( unit_it->unit().type );
 
 	typeComboBox->show();
 }
@@ -223,7 +223,7 @@ void StdUnitListView::remove()
 		ElementList recipeDependancies, propertyDependancies, weightDependancies;
 		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies, &weightDependancies );
 
-		Q3ValueList<ListInfo> lists;
+		QList<ListInfo> lists;
 		if ( !recipeDependancies.isEmpty() ) {
 			ListInfo info;
 			info.list = recipeDependancies;

@@ -15,9 +15,9 @@
 #include <kdebug.h>
 
 #include <qfile.h>
-#include <q3textstream.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+#include <QTextStream>
 
 #include "datablocks/mixednumber.h"
 #include "datablocks/recipe.h"
@@ -33,7 +33,7 @@ void NYCGenericImporter::parseFile( const QString &file )
 
 	QFile input( file );
 	if ( input.open( QIODevice::ReadOnly ) ) {
-		Q3TextStream stream( &input );
+		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		if ( !stream.atEnd() && stream.readLine().startsWith( "@@@@@" ) )
@@ -50,7 +50,7 @@ void NYCGenericImporter::parseFile( const QString &file )
 NYCGenericImporter::~NYCGenericImporter()
 {}
 
-void NYCGenericImporter::importNYCGeneric( Q3TextStream &stream )
+void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 {
 	kapp->processEvents(); //don't want the user to think its frozen... especially for files with thousands of recipes
 

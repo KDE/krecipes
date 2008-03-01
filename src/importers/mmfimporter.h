@@ -12,7 +12,7 @@
 #define MMFIMPORTER_H
 
 #include <qstring.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "baseimporter.h"
 #include "datablocks/ingredientlist.h"
@@ -32,7 +32,7 @@ private:
 
 	virtual void parseFile( const QString &filename );
 
-	void importMMF( Q3TextStream &stream );
+	void importMMF( QTextStream &stream );
 
 	/** Parses the line and save it if the line is a valid ingredient and return true.
 	  * Returns false if not an ingredient.

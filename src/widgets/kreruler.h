@@ -29,7 +29,7 @@
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QMouseEvent>
 
 #include <kdemacros.h>
@@ -92,7 +92,7 @@ struct KoTabulator {
     }
 };
 
-typedef Q3ValueList<KoTabulator> KoTabulatorList;
+typedef QList<KoTabulator> KoTabulatorList;
 
 class KoRulerPrivate;
 

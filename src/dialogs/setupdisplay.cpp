@@ -154,7 +154,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 
 	QFile file(tmp_filename + ".html");
 	if ( file.open( QIODevice::WriteOnly ) ) {
-		Q3TextStream stream(&file);
+		QTextStream stream(&file);
 		exporter.writeStream(stream,recipeList);
 	}
 	else {
@@ -383,7 +383,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 	if ( out_file.open( QIODevice::WriteOnly ) ) {
 		has_changes = false;
 
-		Q3TextStream stream( &out_file );
+		QTextStream stream( &out_file );
 		stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" << doc.toString();
 	}
 	else

@@ -16,7 +16,7 @@
 
 #include <qfile.h>
 #include <qregexp.h>
-#include <q3textstream.h>
+#include <QTextStream>
 
 #include "datablocks/mixednumber.h"
 
@@ -31,7 +31,7 @@ void RezkonvImporter::parseFile( const QString &filename )
 	QFile input( filename );
 
 	if ( input.open( QIODevice::ReadOnly ) ) {
-		Q3TextStream stream( &input );
+		QTextStream stream( &input );
 		stream.skipWhiteSpace();
 
 		QString line;

@@ -12,7 +12,7 @@
 #define MXPIMPORTER_H
 
 #include <qstring.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "baseimporter.h"
 
@@ -30,17 +30,17 @@ protected:
 	void parseFile( const QString& filename );
 
 private:
-	void importMXP( Q3TextStream &stream );
+	void importMXP( QTextStream &stream );
 
-	void loadCategories( Q3TextStream &stream, Recipe &recipe );
-	void loadIngredients( Q3TextStream &stream, Recipe &recipe );
-	void loadInstructions( Q3TextStream &stream, Recipe &recipe );
-	void loadOptionalFields( Q3TextStream &stream, Recipe &recipe );
+	void loadCategories( QTextStream &stream, Recipe &recipe );
+	void loadIngredients( QTextStream &stream, Recipe &recipe );
+	void loadInstructions( QTextStream &stream, Recipe &recipe );
+	void loadOptionalFields( QTextStream &stream, Recipe &recipe );
 
-	void importMac( Q3TextStream &stream );
-	void importGeneric( Q3TextStream &stream );
+	void importMac( QTextStream &stream );
+	void importGeneric( QTextStream &stream );
 
-	QString getNextQuotedString( Q3TextStream &stream );
+	QString getNextQuotedString( QTextStream &stream );
 };
 
 #endif //MXPIMPORTER_H

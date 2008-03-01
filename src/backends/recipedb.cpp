@@ -30,10 +30,10 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
-#include <q3textstream.h>
 #include <KStandardDirs>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QTextStream>
 
 #include <map>
 
@@ -271,7 +271,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		return false;
 	}
 
-	dumpStream = new Q3TextStream( dumpFile );
+	dumpStream = new QTextStream( dumpFile );
 
 	QStringList command = backupCommand();
 	if ( command.count() == 0 ) {
@@ -321,7 +321,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		QString appOutput;
 		dumpFile->close();
 		if ( dumpFile->open( QIODevice::ReadOnly ) ) {
-			Q3TextStream appErrStream( dumpFile );
+			QTextStream appErrStream( dumpFile );
 
 			//ignore our own versioning output
 			appErrStream.readLine();
@@ -372,7 +372,7 @@ void RecipeDB::initializeData( void )
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
 		kDebug() << "Loading: " << dataFilename << endl;
-		Q3TextStream stream( &dataFile );
+		QTextStream stream( &dataFile );
 		execSQL(stream);
 		dataFile.close();
 	}
@@ -385,7 +385,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 	QIODevice *dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( dumpFile->open( QIODevice::ReadOnly ) ) {
 
-		Q3TextStream stream( dumpFile );
+		QTextStream stream( dumpFile );
 		QString firstLine = stream.readLine().trimmed();
 		QString dbVersion = stream.readLine().trimmed();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.indexOf(":") - 2 );
@@ -488,7 +488,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 	return true;
 }
 
-void RecipeDB::execSQL( Q3TextStream &stream )
+void RecipeDB::execSQL( QTextStream &stream )
 {
 	QString line, command;
 	while ( (line = stream.readLine()) != QString::null ) {
@@ -757,7 +757,7 @@ void RecipeDB::importUSDADatabase()
 	std::multimap<int, QString> *ings_and_ids = new std::multimap<int, QString>;
 	getIngredientNameAndID( ings_and_ids );
 
-	Q3TextStream stream( &file );
+	QTextStream stream( &file );
 	Q3ValueList<ingredient_nutrient_data> *data = new Q3ValueList<ingredient_nutrient_data>;
 
 	kDebug() << "Parsing abbrev.txt" << endl;

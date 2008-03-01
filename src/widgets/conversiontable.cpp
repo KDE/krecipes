@@ -271,9 +271,9 @@ void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 	//if ( swapHeader )
 	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, FALSE );
 
-	Q3PtrVector<Q3TableItem> tmpContents;
+	QVector<Q3TableItem*> tmpContents;
 	tmpContents.resize( numCols() );
-	Q3PtrVector<QWidget> tmpWidgets;
+	QVector<QWidget*> tmpWidgets;
 	tmpWidgets.resize( numCols() );
 	int i;
 
@@ -328,9 +328,9 @@ void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 	//if ( swapHeader )
 	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, FALSE );
 
-	Q3PtrVector<Q3TableItem> tmpContents;
+	QVector<Q3TableItem*> tmpContents;
 	tmpContents.resize( numRows() );
-	Q3PtrVector<QWidget> tmpWidgets;
+	QVector<QWidget*> tmpWidgets;
 	tmpWidgets.resize( numRows() );
 	int i;
 

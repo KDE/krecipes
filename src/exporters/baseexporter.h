@@ -13,8 +13,7 @@
 #define BASEEXPORTER_H
 
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QList>
 
 #include <kapplication.h>
@@ -56,7 +55,7 @@ public:
 	/** Write the given recipe list to a text stream.
 	 *  This can be used to export recipes without use of the database.
 	 */
-	void writeStream( Q3TextStream &, const RecipeList & );
+	void writeStream( QTextStream &, const RecipeList & );
 
 protected:
 	virtual QString createContent( const RecipeList & ) = 0;

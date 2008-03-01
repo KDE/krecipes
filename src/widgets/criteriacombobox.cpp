@@ -25,7 +25,7 @@ void CriteriaComboBox::addCriteria( const Element &criteria )
 {
 	idMap.insert(count(),criteria.id);
 
-	insertItem(criteria.name);
+	insertItem( count(), criteria.name );
 	completionObject()->addItem(criteria.name);
 }
 

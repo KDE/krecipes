@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02111-1307  USA
 
 #include <qfile.h>
 #include <qstringlist.h>
-#include <q3textstream.h>
 #include <qdatetime.h>
+#include <QTextStream>
 
 #include "datablocks/recipe.h"
 
@@ -42,7 +42,7 @@ void MX2Importer::parseFile( const QString& filename )
 		QDomDocument doc;
 
 		//hopefully a temporary hack, since MasterCook creates invalid xml declarations
-		Q3TextStream stream( &file );
+		QTextStream stream( &file );
 		QString all_data = stream.read();
 		if ( all_data.startsWith( "<?xml" ) )
 			all_data.remove( 0, all_data.indexOf( "?>" ) + 2 );

@@ -25,7 +25,6 @@
 #include <qlineedit.h>
 #include <q3listbox.h>
 #include <qvalidator.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
@@ -105,9 +104,9 @@ KDateEdit::KDateEdit( QWidget *parent, const char *name )
   mDate = QDate::currentDate();
   QString today = KGlobal::locale()->formatDate( mDate, KLocale::ShortDate );
 
-  insertItem( today );
-  setCurrentItem( 0 );
-  changeItem( today, 0 );
+  insertItem( count(), today );
+  setCurrentIndex( 0 );
+  setItemText( 0, today );
   setMinimumSize( sizeHint() );
 
   connect( lineEdit(), SIGNAL( returnPressed() ),
@@ -395,7 +394,7 @@ void KDateEdit::updateView()
   // since we explicitly setting the date
   bool blocked = signalsBlocked();
   blockSignals( true );
-  changeItem( dateString, 0 );
+  setItemText( 0, dateString );
   blockSignals( blocked );
 }
 

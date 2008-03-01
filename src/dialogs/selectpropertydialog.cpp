@@ -107,7 +107,7 @@ int SelectPropertyDialog::perUnitsID()
 
 	int comboCount = perUnitsBox->count();
 	for (int i = 0; i < comboCount; ++i) {
-		if (perUnitsBox->currentText() == perUnitsBox->text(i))
+		if (perUnitsBox->currentText() == perUnitsBox->itemText(i))
 			return ( *unitListBack->at( i ) ).id;
 	}
 
@@ -147,7 +147,7 @@ void SelectPropertyDialog::loadUnits( UnitList *unitList )
 		}
 
 		// Insert in the combobox
-		perUnitsBox->insertItem( unitName );
+		perUnitsBox->insertItem( perUnitsBox->count(), unitName );
 
 		// Store with index for using later
 		Unit newUnit( *unit_it );

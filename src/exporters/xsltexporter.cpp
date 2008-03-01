@@ -219,7 +219,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	QFile linkedCSSFile(fi.absolutePath() + "/style.css");
 	if (linkedCSSFile.open(QIODevice::WriteOnly)) {
-		Q3TextStream stream( &linkedCSSFile );
+		QTextStream stream( &linkedCSSFile );
 		stream << cssContent;
 	}
 
@@ -227,7 +227,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml", false );
 	QString buffer;
-	Q3TextStream stream(buffer,QIODevice::WriteOnly);
+	QTextStream stream(&buffer,QIODevice::WriteOnly);
 	exporter->writeStream(stream,recipes);
 	delete exporter;
 

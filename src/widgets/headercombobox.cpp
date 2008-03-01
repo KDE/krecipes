@@ -30,12 +30,12 @@ void HeaderComboBox::reload()
 	clear();
 
 	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
-		insertItem((*it).name);
+		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 	}
 
-	if ( findText( remember_text, Qt::MatchExactly ) ) {
-		setCurrentText( remember_text );
+	if ( findText( remember_text, Qt::MatchExactly ) && isEditable()) {
+		setEditText( remember_text );
 	}
 }
 

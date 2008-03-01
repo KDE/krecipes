@@ -23,7 +23,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 
 namespace USDA {
 
@@ -41,7 +41,7 @@ Q3ValueList<PropertyData> loadProperties()
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
 		kDebug() << "Loading: " << dataFilename << endl;
-		Q3TextStream stream( &dataFile );
+		QTextStream stream( &dataFile );
 
 		QString line;
 		while ( (line = stream.readLine()) != QString::null ) {

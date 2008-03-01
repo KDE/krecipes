@@ -14,7 +14,7 @@
 
 #include <qwidget.h>
 #include <qclipboard.h>
-//Added by qt3to4:
+#include <QTextStream>
 #include <QList>
 
 #include <kapplication.h>
@@ -424,7 +424,7 @@ void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *
 	db->loadRecipes( &recipeList, exporter->supportedItems(), ids );
 
 	QString buffer;
-	Q3TextStream stream(buffer,QIODevice::WriteOnly);
+	QTextStream stream(&buffer,QIODevice::WriteOnly);
 	exporter->writeStream(stream,recipeList);
 
 	delete exporter;

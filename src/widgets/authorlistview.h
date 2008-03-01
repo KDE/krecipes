@@ -14,8 +14,7 @@
 
 #include "dblistviewbase.h"
 #include "datablocks/element.h"
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 class RecipeDB;
 class KMenu;
@@ -94,7 +93,7 @@ public:
 
 	virtual void stateChange(AuthorCheckListItem *,bool);
 
-	Q3ValueList<Element> selections() const{ return m_selections; }
+	QList<Element> selections() const{ return m_selections; }
 
 protected:
 	virtual void createAuthor( const Element &ing );
@@ -103,7 +102,7 @@ protected:
 	virtual void load( int limit, int offset );
 
 private:
-	Q3ValueList<Element> m_selections;
+	QList<Element> m_selections;
 };
 
 #endif //AUTHORLISTVIEW_H

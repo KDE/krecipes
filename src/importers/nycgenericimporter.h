@@ -13,7 +13,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "baseimporter.h"
 #include "datablocks/ingredientlist.h"
@@ -32,7 +32,7 @@ protected:
 	void parseFile( const QString& filename );
 
 private:
-	void importNYCGeneric( Q3TextStream &stream );
+	void importNYCGeneric( QTextStream &stream );
 	void putDataInRecipe();
 	void loadIngredientLine( const QString & );
 

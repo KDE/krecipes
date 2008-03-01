@@ -21,7 +21,7 @@
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : Q3CheckListItem( qlv, QString::null, Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
@@ -264,7 +264,7 @@ void IngredientCheckListView::load( int limit, int offset )
 {
 	IngredientListView::load(limit,offset);
 
-	for ( Q3ValueList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
+	for ( QList<Element>::const_iterator ing_it = m_selections.begin(); ing_it != m_selections.end(); ++ing_it ) {
 		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*ing_it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);

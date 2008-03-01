@@ -34,14 +34,14 @@ CategoryComboBox::CategoryComboBox( QWidget *parent, RecipeDB *db ) : KComboBox(
 
     // Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
     // the rest of the items are loaded when needed in order to significantly speed up startup
-    insertItem( i18n( "All Categories" ) );
+    insertItem( count(), i18n( "All Categories" ) );
 }
 
 void CategoryComboBox::popup()
 {
 	if ( count() == 1 )
 		reload();
-	KComboBox::popup();
+	KComboBox::showPopup();
 }
 
 void CategoryComboBox::reload()
@@ -61,21 +61,21 @@ void CategoryComboBox::reload()
 	categoryComboRows.clear();
 
 	// Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
-	insertItem( i18n( "All Categories" ) );
+	insertItem( count(), i18n( "All Categories" ) );
 
 	//Now load the categories
 	int row = 1;
 	loadCategories(&categoryList,row);
 
-	if ( findText( remember_cat_filter, Qt::MatchExactly ) ) {
-		setCurrentText( remember_cat_filter );
+	if ( findText( remember_cat_filter, Qt::MatchExactly ) && isEditable() ) {
+		setEditText( remember_cat_filter );
 	}
 }
 
 void CategoryComboBox::loadCategories( CategoryTree *categoryTree, int &row )
 {
 	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
-		insertItem( child_it->category.name );
+		insertItem( count(), child_it->category.name );
 		categoryComboRows.insert( row, child_it->category.id ); // store category id's in the combobox position to obtain the category id later
 		row++;
 		loadCategories( child_it, row );
@@ -114,7 +114,7 @@ void CategoryComboBox::createCategory( const Element &element, int /*parent_id*/
 {
 	int row = findInsertionPoint( element.name );
 
-	insertItem( element.name, row );
+	insertItem( row, element.name );
 
 	//now update the map by pushing everything after this item down
 	QMap<int, int> new_map;
@@ -160,7 +160,7 @@ void CategoryComboBox::modifyCategory( const Element &element )
 {
 	for ( QMap<int, int>::const_iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
 		if ( it.value() == element.id )
-			changeItem( element.name, it.key() );
+			setItemText( it.key(), element.name );
 	}
 }
 
@@ -172,7 +172,7 @@ void CategoryComboBox::mergeCategories( int /*to_id*/, int from_id )
 int CategoryComboBox::findInsertionPoint( const QString &name )
 {
 	for ( int i = 1; i < count(); i++ ) {
-		if ( QString::localeAwareCompare( name, text( i ) ) < 0 )
+		if ( QString::localeAwareCompare( name, itemText( i ) ) < 0 )
 			return i;
 	}
 

@@ -568,24 +568,24 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	clipboardHBox->setSpacing(6);
 	/*QLabel *clipboardLabel = */new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
 	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
-	clipBoardFormatComboBox->insertItem(QString("%3 (*.txt)").arg(i18n("Plain Text")));
-	clipBoardFormatComboBox->insertItem("Krecipes (*.kreml)");
-	clipBoardFormatComboBox->insertItem("Meal-Master (*.mmf)");
-	clipBoardFormatComboBox->insertItem("Rezkonv (*.rk)");
-	clipBoardFormatComboBox->insertItem("RecipeML (*.xml)");
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), QString("%3 (*.txt)").arg(i18n("Plain Text")));
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Krecipes (*.kreml)");
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Meal-Master (*.mmf)");
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Rezkonv (*.rk)");
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "RecipeML (*.xml)");
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
 	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);
 
 	config = KGlobal::config()->group( "Export" );
 	QString clipboardFormat = config.readEntry("ClipboardFormat");
 	if ( clipboardFormat == "*.kreml" )
-		clipBoardFormatComboBox->setCurrentItem(1);
+		clipBoardFormatComboBox->setCurrentIndex(1);
 	else if ( clipboardFormat == "*.mmf" )
-		clipBoardFormatComboBox->setCurrentItem(2);
+		clipBoardFormatComboBox->setCurrentIndex(2);
 	else if ( clipboardFormat == "*.xml" )
-		clipBoardFormatComboBox->setCurrentItem(3);
+		clipBoardFormatComboBox->setCurrentIndex(3);
 	else
-		clipBoardFormatComboBox->setCurrentItem(0);
+		clipBoardFormatComboBox->setCurrentIndex(0);
 
 	Form1Layout->addWidget(exportGroup);
 

@@ -16,7 +16,7 @@
 
 #include <qstring.h>
 #include <qfile.h>
-#include <q3textstream.h>
+#include <QTextStream>
 
 #include "checks.h"
 
@@ -28,7 +28,7 @@ void check( BaseExporter &exporter, const RecipeList &recipeList )
 {
 	QFile file("test.txt");
 	if ( file.open( QIODevice::WriteOnly ) ) {
-		Q3TextStream stream(&file);
+		QTextStream stream(&file);
 		exporter.writeStream(stream,recipeList);
 	}
 	else {

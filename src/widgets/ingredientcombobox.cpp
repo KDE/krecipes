@@ -32,7 +32,7 @@ IngredientComboBox::IngredientComboBox( bool b, QWidget *parent, RecipeDB *db, c
 void IngredientComboBox::reload()
 {
 	QString remember_text;
-	if ( editable() )
+	if ( isEditable() )
 		remember_text = lineEdit()->text();
 
 	ElementList ingredientList;
@@ -43,17 +43,17 @@ void IngredientComboBox::reload()
 
 	int row = 0;
 	if ( !m_specialItem.isNull() ) {
-		insertItem(m_specialItem);
+		insertItem( count(), m_specialItem );
 		ingredientComboRows.insert( row, -1 );
 		row++;
 	}
 	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++row ) {
-		insertItem((*it).name);
+		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		ingredientComboRows.insert( row, (*it).id );
 	}
 
-	if ( editable() )
+	if ( isEditable() )
 		setEditText( remember_text );
 
 	database->disconnect( this );
@@ -72,7 +72,7 @@ void IngredientComboBox::loadMore()
 	database->loadIngredients( &ingredientList, load_limit, loading_at );
 
 	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++loading_at ) {
-		insertItem((*it).name);
+		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		ingredientComboRows.insert( loading_at, (*it).id );
 	}
@@ -93,7 +93,7 @@ void IngredientComboBox::startLoad()
 		loading_at = 0;
 		ing_count = database->ingredientCount();
 
-		load_timer->start( 0, false );
+		load_timer->start( 0 );
 	}
 }
 
@@ -114,7 +114,7 @@ int IngredientComboBox::id( int row )
 int IngredientComboBox::id( const QString &ing )
 {
 	for ( int i = 0; i < count(); i++ ) {
-		if ( ing == text( i ) )
+		if ( ing == itemText( i ) )
 			return id(i);
 	}
 	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
@@ -126,13 +126,13 @@ void IngredientComboBox::createIngredient( const Element &element )
 	int row = findInsertionPoint( element.name );
 
 	QString remember_text;
-	if ( editable() )
+	if ( isEditable() )
 		remember_text = lineEdit()->text();
 
-	insertItem( element.name, row );
+	insertItem( row, element.name );
 	completionObject()->addItem(element.name);
 
-	if ( editable() )
+	if ( isEditable() )
 		lineEdit()->setText( remember_text );
 
 	//now update the map by pushing everything after this item down
@@ -154,7 +154,7 @@ void IngredientComboBox::removeIngredient( int id )
 	for ( QMap<int, int>::iterator it = ingredientComboRows.begin(); it != ingredientComboRows.end(); ++it ) {
 		if ( it.value() == id ) {
 			row = it.key();
-			completionObject()->removeItem( text(row) );
+			completionObject()->removeItem( itemText(row) );
 			removeItem( row );
 			ingredientComboRows.erase( it );
 			break;
@@ -179,7 +179,7 @@ void IngredientComboBox::removeIngredient( int id )
 int IngredientComboBox::findInsertionPoint( const QString &name )
 {
 	for ( int i = 0; i < count(); i++ ) {
-		if ( QString::localeAwareCompare( name, text( i ) ) < 0 )
+		if ( QString::localeAwareCompare( name, itemText( i ) ) < 0 )
 			return i;
 	}
 

@@ -19,7 +19,7 @@
 #include <QHBoxLayout>
 #include <Q3ValueList>
 #include <QVBoxLayout>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <k3listview.h>
 #include <qlayout.h>
 #include <qtooltip.h>
@@ -498,7 +498,7 @@ void EditPropertiesDialog::loadDataFromFile()
 	}
 
 	int index = 0;
-	Q3TextStream stream( &file );
+	QTextStream stream( &file );
 	while ( !stream.atEnd() ) {
 		QString line = stream.readLine();
 		if ( line.isEmpty() ) {
