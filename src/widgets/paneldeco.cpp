@@ -37,7 +37,7 @@ PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, c
 	lDeco = new LeftDeco( hbox, "LeftDecoration" );
 
 	//The widget stack (panels)
-	stack = new Q3WidgetStack( hbox );
+	stack = new QStackedWidget( hbox );
 	stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 }
@@ -62,14 +62,14 @@ void PanelDeco::childEvent( QChildEvent *e )
 
 int PanelDeco::id( QWidget* w )
 {
-	return ( stack->id( w ) );
+	return ( stack->indexOf( w ) );
 }
 
 void PanelDeco::raise( QWidget *w )
 {
 	QWidget * old_w = visiblePanel();
 
-	stack->raiseWidget( w );
+	stack->setCurrentWidget( w );
 
 	if ( old_w != w )
 		emit panelRaised( w, old_w );
@@ -77,7 +77,7 @@ void PanelDeco::raise( QWidget *w )
 
 QWidget* PanelDeco::visiblePanel( void )
 {
-	return ( stack->visibleWidget() );
+	return ( stack->currentWidget() );
 }
 
 void PanelDeco::setHeader( const QString &title, const QString &icon )
@@ -125,7 +125,7 @@ void TopDeco::paintEvent( QPaintEvent * )
 	// Draw the gradient
 	QPixmap kpm;
 	kpm.resize( size() );
-	
+
 	// to be done KDE4 port
 	//KPixmapEffect::unbalancedGradient ( kpm, c1, c2, KPixmapEffect::VerticalGradient, 150, 150 );
 

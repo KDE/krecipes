@@ -15,7 +15,7 @@
 #include "ingredientinputwidget.h"
 
 #include <qlabel.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 
 #include <q3groupbox.h>
@@ -62,8 +62,8 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 		(void) new QLabel( i18n( "Ingredient:" ), typeHBox );
 		typeButtonGrp = 0;
 	}
-	
-	header_ing_stack = new Q3WidgetStack(ingredientVBox);
+
+	header_ing_stack = new QStackedWidget(ingredientVBox);
 	ingredientBox = new IngredientComboBox( TRUE, header_ing_stack, database );
 	ingredientBox->setAutoCompletion( TRUE );
 	ingredientBox->lineEdit() ->disconnect( ingredientBox ); //so hitting enter doesn't enter the item into the box
@@ -202,10 +202,10 @@ void IngredientInput::typeButtonClicked( int button_id )
 	prepMethodBox->setEnabled( !bool( button_id ) );
 
 	if ( button_id == 1 ) { //Header
-		header_ing_stack->raiseWidget( headerBox );
+            header_ing_stack->setCurrentWidget( headerBox );
 	}
 	else {
-		header_ing_stack->raiseWidget( ingredientBox );
+		header_ing_stack->setCurrentWidget( ingredientBox );
 	}
 }
 
@@ -312,7 +312,7 @@ void IngredientInput::loadUnitListCombo()
 				unitBox->insertItem( unitBox->count(), ( *unit_it ).name_abbrev );
 				unitBox->completionObject() ->addItem( ( *unit_it ).name_abbrev );
 			}
-			if ( !(*unit_it ).plural_abbrev.isEmpty() && 
+			if ( !(*unit_it ).plural_abbrev.isEmpty() &&
 			   ( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
 				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural_abbrev );
 				unitBox->completionObject() ->addItem( ( *unit_it ).plural_abbrev );
@@ -393,12 +393,12 @@ void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 
 		connect( new_input, SIGNAL(addIngredient()), this, SLOT(addIngredient()) );
 		connect( new_input, SIGNAL(orToggled(bool,IngredientInput*)), this, SLOT(updateInputs(bool,IngredientInput*)) );
-		
+
 		new_input->show();
 		m_ingInputs.insert(curr,new_input);
 
 		m_ingInputs[0]->enableHeader(false);
-		
+
 	}
 	else {
 		while ( curr != m_ingInputs.end() ) {
@@ -435,7 +435,7 @@ void IngredientInputWidget::addIngredient()
 			ing.units.id = createNewUnitIfNecessary( (plural)?ing.units.plural:ing.units.name, plural, ing.ingredientID, ing.units,database );
 			if ( ing.units.id == -1 )  // this will happen if the dialog to create a unit was cancelled
 				return ;
-	
+
 			QList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
 			QList<int>::const_iterator id_it = prepIDs.begin();
 			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {

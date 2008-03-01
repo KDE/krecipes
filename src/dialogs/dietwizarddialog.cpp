@@ -86,7 +86,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	mealTabs->setMargin( 5 );
 
 	// Button bar
-	KIconLoader *il = KIconLoader::global(); 
+	KIconLoader *il = KIconLoader::global();
 
 	KHBox *bottom_layout = new KHBox( this );
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
@@ -201,7 +201,7 @@ void DietWizardDialog::createDiet( void )
 
 	// temporal iterator list so elements can be removed without reloading them again from the DB
 	// this list prevents the same meal from showing up in the same day twice
-	Q3ValueList <RecipeList::Iterator> tempRList; 
+	Q3ValueList <RecipeList::Iterator> tempRList;
 
 	bool alert = false;
 
@@ -358,7 +358,7 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 
 
 	// Dish widgets
-	dishStack = new Q3WidgetStack( this );
+	dishStack = new  QStackedWidget( this );
 	layout->addWidget( dishStack );
 	dishStack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	// Add default dishes
@@ -406,7 +406,7 @@ void MealInput::changeDishNumber( int dn )
 			newDish->reload();
 			dishStack->addWidget( newDish );
 			dishInputList.append( newDish );
-			dishStack->raiseWidget( newDish );
+			dishStack->setCurrentWidget( newDish );
 			dishNumber++;
 		}
 	}
@@ -417,9 +417,9 @@ void MealInput::changeDishNumber( int dn )
 			DishInput *lastDish = ( *it );
 			dishInputList.remove( it );
 
-			if ( ( *it ) == ( DishInput* ) dishStack->visibleWidget() ) {
+			if ( ( *it ) == ( DishInput* ) dishStack->currentWidget() ) {
 				it--;
-				dishStack->raiseWidget( *it );
+				dishStack->setCurrentWidget( *it );
 			}
 			delete lastDish;
 			dishNumber--;
@@ -431,12 +431,12 @@ void MealInput::changeDishNumber( int dn )
 void MealInput::nextDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
+	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->currentWidget() ) );
 
 	//Show the next dish if it exists
 	it++;
 	if ( it != dishInputList.end() ) {
-		dishStack->raiseWidget( *it );
+		dishStack->setCurrentWidget( *it );
 	}
 
 }
@@ -444,12 +444,12 @@ void MealInput::nextDish( void )
 void MealInput::prevDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->visibleWidget() ) );
+	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->currentWidget() ) );
 
 	//Show the previous dish if it exists
 	it--;
 	if ( it != dishInputList.end() ) {
-		dishStack->raiseWidget( *it );
+		dishStack->setCurrentWidget( *it );
 	}
 }
 
@@ -457,7 +457,7 @@ void MealInput::showDish( int dn )
 {
 	Q3ValueList <DishInput*>::iterator it = dishInputList.at( dn );
 	if ( it != dishInputList.end() )
-		dishStack->raiseWidget( *it );
+		dishStack->setCurrentWidget( *it );
 }
 
 DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QWidget( parent ),

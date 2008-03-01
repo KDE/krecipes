@@ -18,7 +18,7 @@
 #include <qpushbutton.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
@@ -48,7 +48,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	setButtonsOrientation( Qt::Vertical );
 
 	KHBox *page = new KHBox( this );
-	setMainWidget( page ); 
+	setMainWidget( page );
 
 	dbButtonGroup = new Q3ButtonGroup( page, "dbButtonGroup" );
 	dbButtonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 4, ( QSizePolicy::SizeType ) 5, 0, 0, dbButtonGroup->sizePolicy().hasHeightForWidth() ) );
@@ -71,7 +71,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
    psqlRadioButton->setObjectName( "psqlRadioButton" );
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
 
-	paramStack = new Q3WidgetStack( page, "paramStack" );
+	paramStack = new QStackedWidget( page );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
 	sqlitePage = new QWidget( paramStack );
@@ -90,7 +90,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	QSpacerItem *vSpacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	serverPageLayout_2->addItem(vSpacer);
 
-	paramStack->addWidget( sqlitePage, 1 );
+	paramStack->insertWidget( 1, sqlitePage );
 
 	serverPage = new QWidget( paramStack );
    serverPage->setObjectName( "serverPage" );
@@ -144,7 +144,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	layout5->addWidget( nameLabel, 4, 0 );
 
 	serverPageLayout->addLayout( layout5 );
-	paramStack->addWidget( serverPage, 0 );
+	paramStack->insertWidget(0, serverPage );
 
 	languageChange();
 
@@ -210,11 +210,11 @@ void DBImportDialog::switchDBPage( int id )
 {
 	switch ( id ) {
 	case 0:  //SQLite
-		paramStack->raiseWidget( sqlitePage );
+		paramStack->setCurrentWidget( sqlitePage );
 		break;
 	case 1:  //MySQL
 	case 2:  //PostgreSQL
-		paramStack->raiseWidget( serverPage );
+		paramStack->setCurrentWidget( serverPage );
 		break;
 	}
 }

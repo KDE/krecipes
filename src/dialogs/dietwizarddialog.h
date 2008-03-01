@@ -28,7 +28,7 @@
 #include <q3valuelist.h>
 
 #include <q3vgroupbox.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
 
@@ -156,7 +156,7 @@ private:
 	QToolButton *buttonPrev;
 
 	// Settings for the dish
-	Q3WidgetStack *dishStack;
+        QStackedWidget *dishStack;
 
 public slots:
 	void nextDish( void );

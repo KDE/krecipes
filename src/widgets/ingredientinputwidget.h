@@ -27,7 +27,7 @@ class KVBox;
 class KHBox;
 class QLabel;
 class Q3ButtonGroup;
-class Q3WidgetStack;
+class QStackedWidget;
 class Q3GroupBox;
 class QCheckBox;
 
@@ -130,7 +130,7 @@ private:
 	QLabel *ingredientLabel;
 	IngredientComboBox* ingredientBox;
 	HeaderComboBox* headerBox;
-	Q3WidgetStack *header_ing_stack;
+	QStackedWidget *header_ing_stack;
 	Q3ButtonGroup *typeButtonGrp;
 };
 

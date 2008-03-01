@@ -18,7 +18,7 @@
 #include <qpixmap.h>
 
 #include <qwidget.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QChildEvent>
@@ -50,7 +50,7 @@ private:
 	KHBox *hbox;
 	LeftDeco *lDeco;
 	TopDeco *tDeco;
-	Q3WidgetStack *stack;
+	QStackedWidget *stack;
 
 public slots:
 	void raise( QWidget *w );

@@ -21,7 +21,7 @@ class QHBoxLayout;
 class QGridLayout;
 class Q3ButtonGroup;
 class QRadioButton;
-class Q3WidgetStack;
+class QStackedWidget;
 class QWidget;
 class QLineEdit;
 class QLabel;
@@ -49,7 +49,7 @@ private:
 	QRadioButton* liteRadioButton;
 	QRadioButton* mysqlRadioButton;
 	QRadioButton* psqlRadioButton;
-	Q3WidgetStack* paramStack;
+	QStackedWidget* paramStack;
 	QWidget* serverPage;
 	QLineEdit* nameEdit;
 	QLabel* passwordLabel;
