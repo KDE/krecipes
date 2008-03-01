@@ -64,11 +64,11 @@ int LiteRecipeDB::lastInsertID()
 
 QStringList LiteRecipeDB::backupCommand() const
 {
-	#ifdef HAVE_SQLITE
+#ifdef HAVE_SQLITE
 	QString binary = "sqlite";
-	#elif HAVE_SQLITE3
+#elif HAVE_SQLITE3
 	QString binary = "sqlite3";
-	#endif
+#endif
 
 	KConfigGroup config( KGlobal::config(), "Server" );
 	binary = config.readEntry( "SQLitePath", binary );
@@ -80,11 +80,11 @@ QStringList LiteRecipeDB::backupCommand() const
 
 QStringList LiteRecipeDB::restoreCommand() const
 {
-	#ifdef HAVE_SQLITE
+#ifdef HAVE_SQLITE
 	QString binary = "sqlite";
-	#elif HAVE_SQLITE3
+#elif HAVE_SQLITE3
 	QString binary = "sqlite3";
-	#endif
+#endif
 
 	KConfigGroup config( KGlobal::config(), "Server" );
 	binary = config.readEntry( "SQLitePath", binary );

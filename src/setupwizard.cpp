@@ -874,7 +874,6 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 int DBTypeSetupPage::dbType( void )
 {
-	//int id=bg->selectedId(); //QT 3.2
 	int id = bg->id( bg->selected() ); //QT 3.1
 
 	switch ( id ) {

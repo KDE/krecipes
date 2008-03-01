@@ -8,7 +8,7 @@
 *                                                                         *
 *    This code was originally developed by the opie project, on which     *
 *                    Martin Imobersteg based his work.                    *
-* This file is adds a small extension, necessary to perform some minimum  * 
+* This file is adds a small extension, necessary to perform some minimum  *
 * SQL actions                                                             *
 *                                                                         *
 *         (this project is different from that in qsqlite.sf.net)         *
@@ -99,13 +99,12 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 		res.setError( QString(errmsg) );
 		res.setStatus( QSQLiteResult::Failure );
 
-		#if HAVE_SQLITE
+#if HAVE_SQLITE
 		free( errmsg );
-		#elif HAVE_SQLITE3
+#elif HAVE_SQLITE3
 		sqlite3_free( errmsg );
-		#endif
+#endif
 	}
-
 	if ( lastID ) {
 #ifdef HAVE_SQLITE
 		* lastID = sqlite_last_insert_rowid( m_db );
@@ -115,9 +114,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 #endif
 
 	}
-
 	res.setStatus( QSQLiteResult::Success );
-
 	return res;
 }
 
