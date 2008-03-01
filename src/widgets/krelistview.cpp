@@ -102,7 +102,7 @@ void KreListView::filter( const QString& s )
 		else
 		{
 
-			if ( it->text( filteredColumn ).contains( s, false ) )
+			if ( it->text( filteredColumn ).contains( s, Qt::CaseInsensitive ) )
 				it->setVisible( true );
 			else
 				it->setVisible( false );

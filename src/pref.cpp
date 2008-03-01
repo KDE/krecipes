@@ -205,7 +205,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	Q3GroupBox *backupGBox = new Q3GroupBox( this, "backupGBox" );
 	backupGBox->setTitle( i18n( "Backup" ) );
 	backupGBox->setColumns( 2 );
-	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
+	layout->addWidget( backupGBox, 10, 1, 1, 4, 0 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("mysqldump") ));
@@ -328,7 +328,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	Q3GroupBox *backupGBox = new Q3GroupBox( this, "backupGBox" );
 	backupGBox->setTitle( i18n( "Backup" ) );
 	backupGBox->setColumns( 2 );
-	layout->addMultiCellWidget( backupGBox, 10, 10, 1, 4 );
+	layout->addWidget( backupGBox, 10, 1, 1, 4, 0 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("pg_dump") ));
@@ -523,7 +523,7 @@ void NumbersPrefs::saveOptions()
 {
 	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	bool fraction = !numberButtonGroup->find( 0 ) ->isOn();
+	bool fraction = !numberButtonGroup->find( 0 )->isChecked();
 	config.writeEntry( "Fraction", fraction );
 
 	config.writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );
@@ -636,7 +636,8 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	KHBox *catLimitHBox = new KHBox( this );
 	catLimitInput = new KIntNumInput(catLimitHBox);
 	catLimitInput->setLabel( i18n( "Number of categories to display at once:" ) );
-	catLimitInput->setRange(0,5000,20,true);
+	catLimitInput->setRange(0,5000,20);
+   catLimitInput->setSliderEnabled( true );
 	catLimitInput->setSpecialValueText( i18n("Unlimited") );
 
 	if ( cat_limit > 0 )
@@ -645,7 +646,8 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	KHBox *limitHBox = new KHBox( this );
 	limitInput = new KIntNumInput(limitHBox);
 	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
-	limitInput->setRange(0,100000,1000,true);
+	limitInput->setRange(0,100000,1000);
+   limitInput->setSliderEnabled( true );
 	limitInput->setSpecialValueText( i18n("Unlimited") );
 
 	if ( limit > 0 )

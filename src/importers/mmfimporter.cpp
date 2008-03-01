@@ -114,7 +114,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	}
 	else if ( current.startsWith( "Servings:" ) )  //from database version
 	{
-		m_servings = current.mid( current.find( ":" ) + 1, current.length() ).toInt();
+		m_servings = current.mid( current.indexOf( ":" , 0, Qt::CaseSensitive ) + 1, current.length() ).toInt();
 		kDebug() << "Found servings: " << m_servings << endl;
 	}
 

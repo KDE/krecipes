@@ -690,7 +690,7 @@ void Krecipes::optionsPreferences()
 void Krecipes::changeStatusbar( const QString& text )
 {
 	// display the text on the statusbar
-	statusBar() ->message( text );
+	statusBar()->showMessage( text );
 }
 
 void Krecipes::changeCaption( const QString& text )

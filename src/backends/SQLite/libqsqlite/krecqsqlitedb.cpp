@@ -24,7 +24,7 @@
 
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 
@@ -122,8 +122,8 @@ int QSQLiteDB::call_back( void* result, int argc, char** argv, char** columns )
 {
 	QSQLiteResult * res = ( QSQLiteResult* ) result;
 
-	QMap<QString, Q3CString> tableString;
-	QMap<int, Q3CString> tableInt;
+	QMap<QString, QByteArray> tableString;
+	QMap<int, QByteArray> tableInt;
 
 	for ( int i = 0; i < argc; i++ ) {
 		tableInt.insert( i, argv[ i ] );

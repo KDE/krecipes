@@ -18,8 +18,6 @@
 
 #include <qfile.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QPixmap>
 #include <kstandarddirs.h>
 
@@ -184,11 +182,11 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 				QDomNodeList pictures = el.childNodes();
 				for ( int j = 0; j < pictures.count(); j++ ) {
 					QDomElement pic = pictures.item( j ).toElement();
-					Q3CString decodedPic;
+					QByteArray decodedPic;
 					if ( pic.tagName() == "pic" )
 						kDebug() << "Found photo" << endl;
 					QPixmap pix;
-					KCodecs::base64Decode( Q3CString( pic.text().toLatin1() ), decodedPic );
+					KCodecs::base64Decode( QByteArray( pic.text().toLatin1() ), decodedPic );
 					int len = decodedPic.size();
 					QByteArray picData;
                picData.resize( len );

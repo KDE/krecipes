@@ -173,7 +173,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	logo = new QLabel( this );
 	logo->setPixmap( permissionsSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 8, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 8, 1, Qt::AlignTop );
 
 	// Spacer to separate the logo
 	QSpacerItem *logoSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -185,7 +185,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	permissionsText->setText( i18n( "This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]" ) );
         permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( Qt::AlignTop ) );
+	permissionsText->setAlignment( Qt::AlignTop );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -286,7 +286,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	logo = new QLabel( this );
 	logo->setPixmap( permissionsSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 8, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 8, 1, Qt::AlignTop );
 
 	// Spacer to separate the logo
 	QSpacerItem *logoSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -298,7 +298,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	permissionsText->setText( i18n( "This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account." ) );
         permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	permissionsText->setAlignment( int( Qt::AlignTop ) );
+	permissionsText->setAlignment( Qt::AlignTop );
 	layout->addWidget( permissionsText, 1, 3 );
 
 	// Text spacer
@@ -400,7 +400,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 8, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 8, 1, Qt::AlignTop );
 
 	QSpacerItem *spacer_from_image = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_from_image, 1, 2 );
@@ -566,7 +566,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 4, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 4, 1, Qt::AlignTop );
 
 	QSpacerItem *spacer_from_image = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_from_image, 1, 2 );
@@ -576,7 +576,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText = new QLabel( this );
 	serverSetupText->setText( i18n( "In this dialog you can adjust SQLite settings." ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	serverSetupText->setAlignment( int( Qt::AlignTop | Qt::AlignJustify ) );
+	serverSetupText->setAlignment( Qt::AlignTop | Qt::AlignJustify );
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -751,7 +751,7 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	logo = new QLabel( this );
 	logo->setPixmap( dataInitializePixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 8, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 8, 1, Qt::AlignTop );
 
 	// Spacer to separate the logo
 	QSpacerItem *logoSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -811,7 +811,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	logo = new QLabel( this );
 	logo->setPixmap( serverSetupPixmap );
 	logo->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	layout->addMultiCellWidget( logo, 1, 4, 1, 1, Qt::AlignTop );
+	layout->addWidget( logo, 1, 1, 4, 1, Qt::AlignTop );
 
 	QSpacerItem *spacer_from_image = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_from_image, 1, 2 );

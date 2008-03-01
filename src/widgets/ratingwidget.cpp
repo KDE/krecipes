@@ -51,6 +51,7 @@ const QPixmap& RatingWidget::pixmap(const QString& value_) {
 
 RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
     : KHBox(parent_), m_currIndex(-1), m_min(0), m_max(stars*2) {
+  setObjectName( name_ );
   m_pixOn = UserIcon(QString::fromLatin1("star_on"));
   m_pixOff = UserIcon(QString::fromLatin1("star_off"));
   m_pixHalf = UserIcon(QString::fromLatin1("star_half"));

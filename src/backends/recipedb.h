@@ -18,9 +18,6 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 
-//Added by qt3to4:
-#include <Q3CString>
-
 //#include "krecipesdbiface.h"
 
 #include "datablocks/recipe.h"
@@ -300,7 +297,7 @@ public:
 	virtual WeightList ingredientWeightUnits( int ingID ) = 0;
 
 	virtual QString escapeAndEncode( const QString &s ) const = 0;
-	virtual QString unescapeAndDecode( const Q3CString &s ) const = 0;
+	virtual QString unescapeAndDecode( const QByteArray &s ) const = 0;
 
 	virtual QString categoryName( int ID ) = 0;
 	virtual QString ingredientName( int ID ) = 0;

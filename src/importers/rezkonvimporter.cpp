@@ -102,7 +102,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 
 		if ( ( *text_it ).contains( QRegExp( "^=====.*=$" ) ) )  //is a header
 		{
-			if ( ( *text_it ).contains( "quelle", false ) )
+			if ( ( *text_it ).contains( "quelle", Qt::CaseInsensitive ) )
 			{
 				loadReferences( text_it, recipe );
 				break; //reference lines are the last before the instructions

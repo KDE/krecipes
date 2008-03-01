@@ -111,7 +111,7 @@ void BaseExporter::saveToFile( const QList<int> &ids, RecipeDB *database )
 
 		QList<int> ids_copy = ids;
 		QTextStream stream( file );
-		stream.setEncoding( QTextStream::UnicodeUTF8 );
+		stream.setCodec( "UTF-8" );
 
 		RecipeList recipe_list;
 		if ( headerFlags() != RecipeDB::None ) {

@@ -107,7 +107,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	if ( Q3ImageDrag::decode( event, image ) ) {
 		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( image.smoothScale( width(), height(), Qt::KeepAspectRatio ) );
+			pm_scaled.fromImage( image.scaled( QSize( width(), height()), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -135,7 +135,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	KIconLoader *il = KIconLoader::global();
 
 	// Tabs
-	tabWidget = new QTabWidget( this, "tabWidget" );
+	tabWidget = new QTabWidget( this );
+   setObjectName( "tabWidget" );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 
@@ -171,7 +172,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	photoLabel->setFixedSize( QSize( 221, 166 ) );
 	photoLabel->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	photoLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-	recipeLayout->addMultiCellWidget( photoLabel, 3, 7, 1, 1 );
+	recipeLayout->addWidget( photoLabel, 3, 1, 5, 1, 0 );
 
 	KVBox *photoButtonsBox = new KVBox( recipeTab );
 
@@ -185,7 +186,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	clearPhotoButton->setIconSize(  il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ).size() );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
 
-	recipeLayout->addMultiCellWidget( photoButtonsBox, 3, 7, 2, 2 );
+	recipeLayout->addWidget( photoButtonsBox, 3, 2, 5, 1, 0 );
 
 
 	//Title->photo spacer
@@ -201,7 +202,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	titleEdit->setMinimumSize( QSize( 360, 30 ) );
 	titleEdit->setMaximumSize( QSize( 10000, 30 ) );
 	titleEdit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
-	recipeLayout->addMultiCellWidget( titleBox, 1, 1, 1, 7 );
+	recipeLayout->addWidget( titleBox, 1, 1, 1, 7, 0 );
 
 
 	// Photo ->author spacer
@@ -295,7 +296,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	//Input Widgets
 	ingInput = new IngredientInputWidget( database, ingredientGBox );
-	ingredientsLayout->addMultiCellWidget( ingInput, 1, 1, 1, 5 );
+	ingredientsLayout->addWidget( ingInput, 1, 1, 1, 5, 0 );
 
 	// Spacers to list and buttons
 	QSpacerItem* spacerToList = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -375,7 +376,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientList->setRenameable( 2, true ); //units
 	ingredientList->setRenameable( 3, true ); //prep method
 	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
-	ingredientsLayout->addMultiCellWidget( ingredientList, 3, 9, 1, 3 );
+	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 3, 0 );
 
 	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientGBox );
    propertyStatusLayout->setMargin( 0 );
@@ -414,7 +415,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setMainWidget( statusTextView );
 	propertyStatusDialog->resize( 400, 300 );
 
-	ingredientsLayout->addMultiCellLayout( propertyStatusLayout, 10, 10, 1, 4 );
+	ingredientsLayout->addLayout( propertyStatusLayout, 10, 1, 1, 4, 0 );
 
 	// ------- Recipe Instructions Tab -----------
 
@@ -448,10 +449,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// ------- END OF Recipe Ratings Tab -----------
 
 
-	tabWidget->insertTab( recipeTab, i18n( "Recipe" ) );
-	tabWidget->insertTab( ingredientGBox, i18n( "Ingredients" ) );
-	tabWidget->insertTab( instructionsTab, i18n( "Instructions" ) );
-	tabWidget->insertTab( ratingsTab, i18n( "Ratings" ) );
+	tabWidget->insertTab( -1, recipeTab, i18n( "Recipe" ) );
+	tabWidget->insertTab( -1, ingredientGBox, i18n( "Ingredients" ) );
+	tabWidget->insertTab( -1, instructionsTab, i18n( "Instructions" ) );
+	tabWidget->insertTab( -1, ratingsTab, i18n( "Ratings" ) );
 
 
 	// Functions Box
@@ -578,7 +579,7 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	loadedRecipe->empty();
 
 	//Set back to the first page
-	tabWidget->setCurrentPage( 0 );
+	tabWidget->setCurrentIndex( 0 );
 
 	// Load specified Recipe ID
 	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta ^ RecipeDB::Properties, recipeID );
@@ -655,7 +656,7 @@ void RecipeInputDialog::reload( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.toImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
+			pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -718,7 +719,7 @@ void RecipeInputDialog::changePhoto( void )
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
 			QImage pm = sourcePhoto.toImage();
 			QPixmap pm_scaled;
-			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
+			pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
@@ -1141,7 +1142,7 @@ void RecipeInputDialog::newRecipe( void )
 	ratingListDisplayWidget->clear();
 
 	//Set back to the first page
-	tabWidget->setCurrentPage( 0 );
+	tabWidget->setCurrentIndex( 0 );
 
 	ingInput->clear();
 

@@ -139,7 +139,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
 	ingredientInfoLabel->setTextFormat( Qt::RichText );
-	ingredientFrameLayout->addMultiCellWidget( ingredientInfoLabel, 0, 0, 0, 1 );
+	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 0, 1 , 0);
 
 	ingredientsAllEdit = new QLineEdit( ingredientFrame );
    ingredientsAllEdit->setObjectName( "ingredientsAllEdit" );
@@ -193,7 +193,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
 	categoryInfoLabel->setTextFormat( Qt::RichText );
-	categoryFrameLayout->addMultiCellWidget( categoryInfoLabel, 0, 0, 0, 1 );
+	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 0, 1, 0 );
 	
 	categoriesAllEdit = new QLineEdit( categoryFrame );
    categoriesAllEdit->setObjectName( "categoriesAllEdit" );
@@ -246,7 +246,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
 	authorsInfoLabel->setTextFormat( Qt::RichText );
-	authorsFrameLayout->addMultiCellWidget( authorsInfoLabel, 0, 0, 0, 1 );
+	authorsFrameLayout->addWidget( authorsInfoLabel, 0, 0, 0, 1, 0 );
 
 	textLabel1_2_4 = new QLabel( authorsFrame );
    textLabel1_2_4->setObjectName( "textLabel1_2_4" );
@@ -684,7 +684,7 @@ void AdvancedSearchDialog::languageChange()
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
 	metaDataButton->setText( QString("%1 >>").arg(i18n("Meta Data")) );
 	clearButton->setText( i18n( "C&lear" ) );
-	clearButton->setAccel( QKeySequence( i18n( "Alt+L" ) ) );
+	clearButton->setShortcut( QKeySequence( i18n( "Alt+L" ) ) );
 	findButton->setText( i18n( "&Search" ) );
 	ratingAvgRadioButton->setText( i18n( "By average:" ) );
 	avgStarsLabel->setText( i18n( "stars" ) );

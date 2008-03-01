@@ -43,7 +43,7 @@ void MX2Importer::parseFile( const QString& filename )
 
 		//hopefully a temporary hack, since MasterCook creates invalid xml declarations
 		QTextStream stream( &file );
-		QString all_data = stream.read();
+		QString all_data = stream.readAll();
 		if ( all_data.startsWith( "<?xml" ) )
 			all_data.remove( 0, all_data.indexOf( "?>" ) + 2 );
 

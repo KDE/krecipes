@@ -123,11 +123,11 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	shopRecipeListView->listView() ->setAllColumnsShowFocus( true );
 
 	buttonBar = new KHBox( this );
-	layout->addMultiCellWidget( buttonBar, 1, 1, 0, 2 );
+	layout->addWidget( buttonBar, 1, 1, 1, 2, 0 );
 
-	layout->setColStretch( 0, 1 );
-	layout->setColStretch( 1, 0 );
-	layout->setColStretch( 2, 1 );
+	layout->setColumnStretch( 0, 1 );
+	layout->setColumnStretch( 1, 0 );
+	layout->setColumnStretch( 2, 1 );
 
 	okButton = new QPushButton( buttonBar );
    okButton->setObjectName( "okButton" );

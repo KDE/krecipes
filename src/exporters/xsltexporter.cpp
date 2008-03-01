@@ -19,8 +19,6 @@
 #include <qpainter.h>
 #include <qfileinfo.h>
 #include <q3stylesheet.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QList>
 #include <QPixmap>
 
@@ -231,7 +229,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	exporter->writeStream(stream,recipes);
 	delete exporter;
 
-	Q3CString content = buffer.toUtf8();
+	QByteArray content = buffer.toUtf8();
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
 	if (kremlDoc == NULL) {
 		kDebug() << "Failed to parse document" << endl;
@@ -249,7 +247,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	const char *params[NUM_I18N_STRINGS+3];
 	int i = 0;
 	params[i++] = "imgDir";
-	Q3CString imgDir = "'"+imgDirInfo.absolutePath().toUtf8()+"'";
+	QByteArray imgDir = "'"+imgDirInfo.absolutePath().toUtf8()+"'";
 	params[i++] = imgDir.data();
 
 	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {

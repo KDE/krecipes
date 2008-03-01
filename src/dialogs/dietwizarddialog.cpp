@@ -65,7 +65,8 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	dayNumberSelector->setOrientation( Qt::Horizontal );
 	dayNumberSelector->setRange( 1, 10 );
-	dayNumberSelector->setSteps( 1, 1 );
+	dayNumberSelector->setSingleStep( 1 );
+	dayNumberSelector->setPageStep( 1 );
 	dayNumberSelector->setTickPosition( QSlider::TicksBelow );
 	dayNumberSelector->setFixedWidth( 100 );
 
@@ -77,13 +78,14 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	mealNumberSelector->setOrientation( Qt::Horizontal );
 	mealNumberSelector->setRange( 1, 10 );
-	mealNumberSelector->setSteps( 1, 1 );
+	mealNumberSelector->setSingleStep( 1 );
+	mealNumberSelector->setPageStep( 1 );
 	mealNumberSelector->setTickPosition( QSlider::TicksBelow );
 	mealNumberSelector->setFixedWidth( 100 );
 
 	// Tabs
 	mealTabs = new QTabWidget( this );
-	mealTabs->setMargin( 5 );
+	mealTabs->setContentsMargins( 5 , 5, 5, 5 );
 
 	// Button bar
 	KIconLoader *il = KIconLoader::global();
@@ -103,7 +105,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	//don't use newTab, it'll load data and we don't want it to do that at startup
 	mealTab = new MealInput( mealTabs, database );
 	mealTabs->addTab( mealTab,i18n( "Meal 1" ) );
-	mealTabs->setCurrentPage( mealTabs->indexOf( mealTab ) );
+	mealTabs->setCurrentIndex( mealTabs->indexOf( mealTab ) );
 
 	// Signals & Slots
 	connect( mealNumberSelector, SIGNAL( valueChanged( int ) ), this, SLOT( changeMealNumber( int ) ) );
@@ -146,7 +148,7 @@ void DietWizardDialog::newTab( const QString &name )
 	mealTab = new MealInput( mealTabs, database );
 	mealTab->reload();
 	mealTabs->addTab( mealTab, name );
-	mealTabs->setCurrentPage( mealTabs->indexOf( mealTab ) );
+	mealTabs->setCurrentIndex( mealTabs->indexOf( mealTab ) );
 }
 
 void DietWizardDialog::changeMealNumber( int mn )

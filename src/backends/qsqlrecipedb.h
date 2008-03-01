@@ -26,7 +26,6 @@
 #include <qregexp.h>
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QSqlQuery>
@@ -194,7 +193,7 @@ public:
 	WeightList ingredientWeightUnits( int ingID );
 
 	QString escapeAndEncode( const QString &s ) const;
-	QString unescapeAndDecode( const Q3CString &s ) const;
+	QString unescapeAndDecode( const QByteArray &s ) const;
 
 	QString categoryName( int ID );
 	QString prepMethodName( int ID );

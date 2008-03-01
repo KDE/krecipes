@@ -59,7 +59,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientListView->setListView( list_view );
-	layout->addMultiCellWidget ( ingredientListView, 1, 5, 1, 1 );
+	layout->addWidget ( ingredientListView, 1, 1, 5, 1, 0 );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -88,10 +88,10 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QPushButton *propertyButton = new QPushButton( i18n("Property Information"), ingredientTab );
 	layout->addWidget( propertyButton, 6, 1 );
 
-	tabWidget->insertTab( ingredientTab, i18n( "Ingredients" ) );
+	tabWidget->insertTab( -1, ingredientTab, i18n( "Ingredients" ) );
 
 	groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
-	tabWidget->insertTab( groupsDialog, i18n( "Headers" ) );
+	tabWidget->insertTab( -1, groupsDialog, i18n( "Headers" ) );
 
 	page_layout->addWidget( tabWidget );
 

@@ -93,7 +93,7 @@ void HTMLBookExporter::createCategoryStructure( QTextStream &xml, const RecipeLi
 				QFile *catPage = new QFile( catPageName );
 				catPage->open( QIODevice::WriteOnly );
 				QTextStream *stream = new QTextStream( catPage );
-				stream->setEncoding( QTextStream::UnicodeUTF8 );
+				stream->setCodec( "UTF-8" );
 				(*stream) << HTMLExporter::createHeader(recipes);
 				(*stream) << QString("<a name=\"top\" />");
 				(*stream) << "<h1>"<<(*cat_it).name<<"</h1>";

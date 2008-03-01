@@ -93,7 +93,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 	if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "serving size" ) {
 		//allows serving size to be loaded even if preparation time is missing
 		int end_index;
-		if ( current.contains( "preparation time", FALSE ) )
+		if ( current.contains( "preparation time", Qt::CaseInsensitive ) )
 			end_index = current.indexOf( "preparation time", 0, Qt::CaseInsensitive ) - 15;
 		else
 			end_index = current.length();
@@ -107,7 +107,7 @@ void MXPImporter::importMXP( QTextStream &stream )
 		                              "the field \"Serving Size:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
 	}
 
-	if ( current.contains( "preparation time", FALSE ) ) {
+	if ( current.contains( "preparation time", Qt::CaseInsensitive ) ) {
 		QString prep_time = current.mid( current.indexOf( ":", current.indexOf( "preparation time", 0, Qt::CaseInsensitive ) ) + 1,
 		                                 current.length() ).trimmed();
 		recipe.prepTime = QTime( prep_time.section( ':', 0, 0 ).toInt(), prep_time.section( ':', 1, 1 ).toInt() );

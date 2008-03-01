@@ -54,7 +54,7 @@ void RecipeFilter::filter( const QString &s )
 			{
 				RecipeListItem * recipe_it = ( RecipeListItem* ) it;
 
-				if ( recipe_it->title().contains( s, false ) )
+				if ( recipe_it->title().contains( s, Qt::CaseInsensitive ) )
 				{
 					if ( currentCategory ) {
 						if ( isParentOf( currentCategory, recipe_it ) )

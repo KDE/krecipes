@@ -522,7 +522,7 @@ void SetupDisplay::setBorder()
 void SetupDisplay::setColumns()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	int cols = QInputDialog::getInteger( QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0, view() );
+	int cols = QInputDialog::getInteger( view(), QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0 );
 	if ( cols > 0 ) {
 		m_currentItem = item;
 		loadColumns( m_currNodeId, cols );

@@ -477,7 +477,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		if ( ( icon.height() > height() ) || ( icon.width() > width() / 3 ) )  // Nice effect, make sure you take less than half in width and fit in height (try making the menu very short in width)
 		{
 			QImage image = icon.toImage();
-			scaledIcon.convertFromImage( image.smoothScale( width() / 3, height(), Qt::KeepAspectRatio) );
+			scaledIcon.fromImage( image.scaled( QSize( width() / 3, height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 		} else {
 			scaledIcon = icon;
 		}

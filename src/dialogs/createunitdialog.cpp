@@ -71,7 +71,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	typeComboBox->insertItem( typeComboBox->count(), i18n("Volume") );
 
 	gridLayout->addWidget( typeLabel, 2, 0 );
-	gridLayout->addMultiCellWidget( typeComboBox, 2, 2, 1, 3 );
+	gridLayout->addWidget( typeComboBox, 2, 1, 1, 3, 0 );
 
 	adjustSize();
 	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size

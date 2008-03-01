@@ -16,7 +16,8 @@
 
 #include <q3ptrvector.h>
 //Added by qt3to4:
-#include <Q3SqlRecordInfo>
+#include <QSqlField>
+#include <QSqlRecord>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <unistd.h>
@@ -342,7 +343,7 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 
 QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
 {
-    Q3SqlRecordInfo rec(recordInfo(tblname)); // expensive :(
+    QSqlRecord rec(record(tblname)); // expensive :(
 
     if (!isOpen())
         return QSqlIndex();
@@ -368,22 +369,22 @@ QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
 	QString name = q.value(2).toString();
 	QSqlVariant::Type type = QSqlVariant::Invalid;
 	if (rec.contains(name))
-	    type = rec.find(name).type();
+	    type = rec.value(name).type();
 	index.append(QSqlField(name, type));
     }
     return index;
 }
 
 #if 0
-Q3SqlRecordInfo KreSQLiteDriver::recordInfo(const QString &tbl) const
+QSqlRecord KreSQLiteDriver::recordInfo(const QString &tbl) const
 {
 	if (!isOpen())
-		return Q3SqlRecordInfo();
+		return QSqlRecord();
 
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
 	q.exec("SELECT * FROM " + tbl + " LIMIT 1");
-return Q3SqlRecordInfo();
+return QSqlRecord();
 //	return recordInfo(q);
 }
 
@@ -404,13 +405,13 @@ QSqlRecord KreSQLiteDriver::record(const QSqlQuery& query) const
     return QSqlRecord();
 }
 
-Q3SqlRecordInfo KreSQLiteDriver::recordInfo(const QSqlQuery& query) const
+QSqlRecord KreSQLiteDriver::recordInfo(const QSqlQuery& query) const
 {
     if (query.isActive() && query.driver() == this) {
         KreSQLiteResult* result = (KreSQLiteResult*)query.result();
         return result->rInf;
     }
-    return Q3SqlRecordInfo();
+    return QSqlRecord();
 }
 
 //this would be used below in formatValue()

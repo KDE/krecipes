@@ -65,13 +65,13 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	vboxl->addStretch();
 	layout->addLayout( vboxl );
 
-	tabWidget->insertTab( unitTab, i18n( "Units" ) );
+	tabWidget->insertTab( -1, unitTab, i18n( "Units" ) );
 
 	massConversionTable = new ConversionTable( tabWidget, 1, 1 );
-	tabWidget->insertTab( massConversionTable, i18n( "Mass Conversions" ) );
+	tabWidget->insertTab( -1, massConversionTable, i18n( "Mass Conversions" ) );
 
 	volumeConversionTable = new ConversionTable( tabWidget, 1, 1 );
-	tabWidget->insertTab( volumeConversionTable, i18n( "Volume Conversions" ) );
+	tabWidget->insertTab( -1, volumeConversionTable, i18n( "Volume Conversions" ) );
 
 	page_layout->addWidget( tabWidget );
 

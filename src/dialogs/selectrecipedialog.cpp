@@ -69,9 +69,9 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	// Border Spacers
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addMultiCell( spacer_left, 1, 4, 0, 0 );
+	layout->addItem( spacer_left, 1, 0, 4, 0, 0 );
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addMultiCell( spacer_top, 0, 0, 1, 4 );
+	layout->addItem( spacer_top, 0, 1, 1, 4, 0 );
 
 	searchBar = new KHBox( basicSearchTab );
 	searchBar->setSpacing( 7 );
@@ -101,10 +101,10 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	recipeListView = new RecipeListView( basicSearchTab, database );
 	recipeListView->reload();
 	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
-	layout->addMultiCellWidget( recipeListView, 3, 3, 1, 3 );
+	layout->addWidget( recipeListView, 3, 1, 1, 3, 0 );
 
 	buttonBar = new KHBox( basicSearchTab );
-	layout->addMultiCellWidget( buttonBar, 4, 4, 1, 3 );
+	layout->addWidget( buttonBar, 4, 1, 1, 3, 0 );
 
 	openButton = new QPushButton( buttonBar );
 	openButton->setText( i18n( "Open Recipe(s)" ) );
@@ -123,10 +123,10 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	pm = il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 );
 	removeButton->setIconSet( pm );
 
-	tabWidget->insertTab( basicSearchTab, i18n( "Basic" ) );
+	tabWidget->insertTab( -1, basicSearchTab, i18n( "Basic" ) );
 
 	advancedSearch = new AdvancedSearchDialog( this, database );
-	tabWidget->insertTab( advancedSearch, i18n( "Advanced" ) );
+	tabWidget->insertTab( -1, advancedSearch, i18n( "Advanced" ) );
 
 	clearSearchButton->setToolTip( i18n( "Clear search" ) );
 
@@ -257,7 +257,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 
 RecipeActionsHandler* SelectRecipeDialog::getActionsHandler() const
 {
-	if ( tabWidget->currentPage() == basicSearchTab )
+	if ( tabWidget->currentWidget() == basicSearchTab )
 		return actionHandler;
 	else
 		return advancedSearch->actionHandler;

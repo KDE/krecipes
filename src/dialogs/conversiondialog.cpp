@@ -36,7 +36,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 		: KDialog( parent ),
 		m_database(db)
 {
-
+    setObjectName( name );
     setCaption(i18n( "Measurement Converter" ));
     setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
     setDefaultButton(KDialog::Close);

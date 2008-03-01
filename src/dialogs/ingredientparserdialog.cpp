@@ -42,8 +42,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 		m_unitList(units)
 {
     //setButtonBoxOrientation( Qt::Vertical );
-
-        setCaption(i18n( "Ingredient Parser" ));
+    setObjectName( name );
+    setCaption(i18n( "Ingredient Parser" ));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     setModal( true );
@@ -94,8 +94,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	buttonBox->addItem( horizontalSpacing );
 
 	KMenu *kpop = new KMenu( previewIngView );
-	kpop->insertItem( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Qt::Key_Delete );
-	kpop->insertItem( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
+	kpop->addAction( i18n( "&Delete" ), this, SLOT( removeIngredient() ), Qt::Key_Delete );
+	kpop->addAction( i18n("Set &Header") , this, SLOT( convertToHeader() ) );
 
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
 	connect( buttonGroup, SIGNAL(clicked()), this, SLOT(convertToHeader()) );

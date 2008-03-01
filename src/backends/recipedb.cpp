@@ -328,7 +328,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 			appErrStream.readLine();
 			appErrStream.readLine();
 
-			appOutput = appErrStream.read();
+			appOutput = appErrStream.readAll();
 		}
 		else
 			kDebug()<<"Unable to open file to get error output."<<endl;
