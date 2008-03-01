@@ -311,7 +311,7 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
 
-    bgPix.fill(colorGroup().background());
+    bgPix.fill(QColorGroup( QPalette() ).background());
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -320,9 +320,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(QColorGroup( QPalette() ).highlight());
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(QColorGroup( QPalette() ).background());
 
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -344,9 +344,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
-                    tile.fill(colorGroup().highlight());
+                    tile.fill(QColorGroup( QPalette() ).highlight());
                 else
-                    tile.fill(colorGroup().background());
+                    tile.fill(QColorGroup( QPalette() ).background());
 
                 QPainter p(&tile);
                 p.setPen(Qt::white);

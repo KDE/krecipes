@@ -17,8 +17,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <kvbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -39,7 +38,7 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
-	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
+	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 	boxLayout->setAlignment( Qt::AlignTop );
 	box->setTitle( i18n( "New Category" ) );
 

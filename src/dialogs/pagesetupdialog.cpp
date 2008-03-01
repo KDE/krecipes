@@ -21,7 +21,7 @@
 #include <qlabel.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <q3tl.h>
 
 #include <khtmlview.h>
@@ -49,7 +49,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 {
 	KIconLoader *il = KIconLoader::global(); 
 
-	Q3VBoxLayout * layout = new Q3VBoxLayout( this );
+	QVBoxLayout * layout = new QVBoxLayout( this );
 
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );

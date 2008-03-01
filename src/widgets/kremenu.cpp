@@ -36,8 +36,9 @@
 #include <qpixmap.h>
 
 
-KreMenu::KreMenu( QWidget *parent, const char *name ) : QWidget( parent, name, Qt::WNoAutoErase )
+KreMenu::KreMenu( QWidget *parent, const char *name ) : QWidget( parent, Qt::WNoAutoErase )
 {
+   setObjectName( name );
 	Menu newMenu;
 
 	mainMenuId = menus.append( newMenu );
@@ -245,7 +246,7 @@ void KreMenu::paintEvent( QPaintEvent * )
 	//if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
 
 	// Get gradient colors
-	QColor c = colorGroup().button();
+	QColor c = QColorGroup( QPalette() ).button();
 	QColor c1 = c.dark( 130 );
 	QColor c2 = c.light( 120 );
 
@@ -328,8 +329,9 @@ void KreMenu::showMenu( MenuId id )
 
 
 
-KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const char *name ) : QWidget( parent, name, Qt::WNoAutoErase ), panel( _panel )
+KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const char *name ) : QWidget( parent, Qt::WNoAutoErase ), panel( _panel )
 {
+   setObjectName( name );
 	highlighted = false;
 	text = QString::null;
 
@@ -407,8 +409,8 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	// Set the gradient colors
 
-	c1 = colorGroup().button().dark( darken );
-	c2 = colorGroup().button().light( lighten );
+	c1 = QColorGroup( QPalette() ).button().dark( darken );
+	c2 = QColorGroup( QPalette() ).button().light( lighten );
 
 	if ( highlighted ) {
 		darken -= 10;
@@ -449,9 +451,9 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	// Draw the line
 	painter.begin( &kpm );
-	painter.setPen( colorGroup().button().dark( darken ) );
+	painter.setPen( QColorGroup( QPalette() ).button().dark( darken ) );
 	painter.drawLine( width() / 5, height() - 2, width() - 1, height() - 2 );
-	painter.setPen( colorGroup().button().light( lighten ) );
+	painter.setPen( QColorGroup( QPalette() ).button().light( lighten ) );
 	painter.drawLine( width() / 5, height() - 1, width() - 1, height() - 1 );
 	painter.end();
 

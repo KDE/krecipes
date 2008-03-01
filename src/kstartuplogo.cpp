@@ -19,16 +19,18 @@
 #include <kglobal.h>
 
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QDesktopWidget>
 
-KStartupLogo::KStartupLogo( QWidget * parent, const char *name ) : QWidget( parent, name, Qt::WStyle_NoBorder | Qt::WStyle_Customize | Qt::WDestructiveClose ), m_bReadyToHide( false )
+KStartupLogo::KStartupLogo( QWidget * parent, const char *name ) : QWidget( parent, Qt::WStyle_NoBorder | Qt::WStyle_Customize | Qt::WDestructiveClose ), m_bReadyToHide( false )
 {
+   setObjectName( name );
 	QString dataDir = KStandardDirs::locate( "data", "krecipes/pics/startlogo.png" );
 	QPixmap pm( dataDir );
-	setBackgroundPixmap( pm );
+   QPalette p = palette();
+   p.setBrush(backgroundRole(), QBrush(pm));
+   setPalette(p);	
 
 	resize(pm.size());
 	QRect desk = splashScreenDesktopGeometry();

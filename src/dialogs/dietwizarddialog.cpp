@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QFrame>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPaintEvent>
 
 #include <kapplication.h>
@@ -319,7 +319,7 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 		database( db )
 {
 	// Design the dialog
-	Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->setSpacing( 10 );
 
 	// Options box
@@ -469,7 +469,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 
 	// Design the widget
 
-	Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+	QVBoxLayout *layout = new QVBoxLayout( this );
 	layout->setSpacing( 10 );
 
 	//Horizontal Box to hold the K3ListView's

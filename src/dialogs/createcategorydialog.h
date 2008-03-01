@@ -14,8 +14,7 @@
 #define CREATECATEGORYDIALOG_H
 
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdialog.h>
 #include <kvbox.h>
@@ -23,7 +22,7 @@
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
-class Q3VBoxLayout;
+class QVBoxLayout;
 class Q3GroupBox;
 class KVBox;
 class KComboBox;

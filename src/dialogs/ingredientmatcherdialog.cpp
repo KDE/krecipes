@@ -52,10 +52,12 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	//Design the dialog
 
-	QVBoxLayout *dialogLayout = new QVBoxLayout( this, 11, 6 );
+	QVBoxLayout *dialogLayout = new QVBoxLayout( this );
+   dialogLayout->setMargin( 11 );
+   dialogLayout->setSpacing( 6 );
 
 	// Ingredient list
-	QHBoxLayout *layout2 = new QHBoxLayout( 0 );
+	QHBoxLayout *layout2 = new QHBoxLayout();
    layout2->setObjectName( "layout2" );
    layout2->setMargin( 0 );
    layout2->setSpacing( 6 );
@@ -66,7 +68,10 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
  	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
-	QVBoxLayout *layout1 = new QVBoxLayout( 0, 0, 6, "layout1" );
+	QVBoxLayout *layout1 = new QVBoxLayout();
+   layout1->setMargin( 0 );
+   layout1->setSpacing( 6 );
+   layout1->setObjectName( "layout1" );
 
 	//KIconLoader *il = KIconLoader::global();
 

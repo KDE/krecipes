@@ -27,7 +27,7 @@
 
 PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : KVBox( parent )
 {
-
+   setObjectName( name );
 	// Top decoration
 	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
 
@@ -88,8 +88,8 @@ void PanelDeco::setHeader( const QString &title, const QString &icon )
 // Left part of the decoration
 
 LeftDeco::LeftDeco( QWidget *parent, const char *name ) :
-		QWidget( parent, name, Qt::WNoAutoErase )
-{}
+		QWidget( parent, Qt::WNoAutoErase )
+{setObjectName( name );}
 
 LeftDeco::~LeftDeco()
 {}
@@ -97,8 +97,9 @@ LeftDeco::~LeftDeco()
 // Top part of the decoration
 
 TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) :
-		QWidget( parent, name, Qt::WNoAutoErase )
+		QWidget( parent, Qt::WNoAutoErase )
 {
+   setObjectName( name );
 	setMinimumHeight( 30 );
 	panelTitle = QString::null;
 	if ( !iconName.isNull() ) {
@@ -118,8 +119,8 @@ TopDeco::~TopDeco()
 void TopDeco::paintEvent( QPaintEvent * )
 {
 	// Get gradient colors
-	QColor c1 = colorGroup().button().light( 120 );
-	QColor c2 = paletteBackgroundColor();
+	QColor c1 = QColorGroup( QPalette() ).button().light( 120 );
+	QColor c2 = palette().color(backgroundRole());
 
 	// Draw the gradient
 	QPixmap kpm;
@@ -130,7 +131,7 @@ void TopDeco::paintEvent( QPaintEvent * )
 
 	// Add a line on top
 	QPainter painter( &kpm );
-	painter.setPen( colorGroup().button().dark( 130 ) );
+	painter.setPen( QColorGroup( QPalette() ).button().dark( 130 ) );
 	painter.drawLine( 0, 0, width(), 0 );
 
 	// Now Add the icon

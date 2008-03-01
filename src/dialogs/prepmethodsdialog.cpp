@@ -19,9 +19,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -29,14 +28,14 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	// Store pointer to database
 	database = db;
 
-	Q3HBoxLayout* layout = new Q3HBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );
 	layout->addWidget( prepMethodListView );
 
 	//Buttons
-	Q3VBoxLayout* vboxl = new Q3VBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
 
 	newPrepMethodButton = new QPushButton( this );
 	newPrepMethodButton->setText( i18n( "Create ..." ) );

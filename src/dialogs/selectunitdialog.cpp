@@ -16,8 +16,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kvbox.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
 		: KDialog( parent)
@@ -33,7 +32,7 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, O
 	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Unit" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
-	Q3VBoxLayout *boxLayout = new Q3VBoxLayout( box->layout() );
+	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 
 	unitChooseView = new K3ListView( box );
 
