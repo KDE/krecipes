@@ -89,12 +89,12 @@ void KreImporter::parseFile( const QString &filename )
 		QDomNodeList r = kreml.childNodes();
 		QDomElement krecipe;
 
-		for ( unsigned z = 0; z < r.count(); z++ ) {
+		for ( int z = 0; z < r.count(); z++ ) {
 			krecipe = r.item( z ).toElement();
 			QDomNodeList l = krecipe.childNodes();
 			if ( krecipe.tagName() == "krecipes-recipe" ) {
 				Recipe recipe;
-				for ( unsigned i = 0; i < l.count(); i++ ) {
+				for ( int i = 0; i < l.count(); i++ ) {
 					QDomElement el = l.item( i ).toElement();
 					if ( el.tagName() == "krecipes-description" ) {
 						readDescription( el.childNodes(), &recipe );
@@ -131,7 +131,7 @@ KreImporter::~KreImporter()
 
 void KreImporter::readCategoryStructure( const QDomNodeList& l, CategoryTree *tree )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 
 		QString category = el.attribute( "name" );
@@ -143,7 +143,7 @@ void KreImporter::readCategoryStructure( const QDomNodeList& l, CategoryTree *tr
 
 void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		if ( el.tagName() == "title" ) {
 			recipe->title = el.text();
@@ -158,7 +158,7 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 		}
 		else if ( el.tagName() == "yield" ) {
 			QDomNodeList yield_children = el.childNodes();
-			for ( unsigned j = 0; j < yield_children.count(); j++ ) {
+			for ( int j = 0; j < yield_children.count(); j++ ) {
 				QDomElement y = yield_children.item( j ).toElement();
 				if ( y.tagName() == "amount" )
 					readAmount(y,recipe->yield.amount,recipe->yield.amount_offset);
@@ -171,7 +171,7 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 		}
 		else if ( el.tagName() == "category" ) {
 			QDomNodeList categories = el.childNodes();
-			for ( unsigned j = 0; j < categories.count(); j++ ) {
+			for ( int j = 0; j < categories.count(); j++ ) {
 				QDomElement c = categories.item( j ).toElement();
 				if ( c.tagName() == "cat" ) {
 					kDebug() << "Found category: " << QString( c.text() ).trimmed() << endl;
@@ -182,7 +182,7 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 		else if ( el.tagName() == "pictures" ) {
 			if ( el.hasChildNodes() ) {
 				QDomNodeList pictures = el.childNodes();
-				for ( unsigned j = 0; j < pictures.count(); j++ ) {
+				for ( int j = 0; j < pictures.count(); j++ ) {
 					QDomElement pic = pictures.item( j ).toElement();
 					Q3CString decodedPic;
 					if ( pic.tagName() == "pic" )
@@ -205,12 +205,12 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 
 void KreImporter::readIngredients( const QDomNodeList& l, Recipe *recipe, const QString &header, Ingredient *ing )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		if ( el.tagName() == "ingredient" ) {
 			QDomNodeList ingredient = el.childNodes();
 			Ingredient new_ing;
-			for ( unsigned j = 0; j < ingredient.count(); j++ ) {
+			for ( int j = 0; j < ingredient.count(); j++ ) {
 				QDomElement ing = ingredient.item( j ).toElement();
 				if ( ing.tagName() == "name" ) {
 					new_ing.name = QString( ing.text() ).trimmed();
@@ -247,7 +247,7 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 	QDomNodeList children = amountEl.childNodes();
 
 	double min = 0,max = 0;
-	for ( unsigned i = 0; i < children.count(); i++ ) {
+	for ( int i = 0; i < children.count(); i++ ) {
 		QDomElement child = children.item( i ).toElement();
 		if ( child.tagName() == "min" ) {
 			min = ( QString( child.text() ).trimmed() ).toDouble();
@@ -265,13 +265,13 @@ void KreImporter::readAmount( const QDomElement& amountEl, double &amount, doubl
 
 void KreImporter::readRatings( const QDomNodeList& l, Recipe *recipe )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement child = l.item( i ).toElement();
 		if ( child.tagName() == "rating" ) {
 			Rating r;
 
 			QDomNodeList ratingChildren = child.childNodes();
-			for ( unsigned j = 0; j < ratingChildren.count(); j++ ) {
+			for ( int j = 0; j < ratingChildren.count(); j++ ) {
 				QDomElement ratingChild = ratingChildren.item( j ).toElement();
 				if ( ratingChild.tagName() == "comment" ) {
 					r.comment = ratingChild.text();
@@ -290,14 +290,14 @@ void KreImporter::readRatings( const QDomNodeList& l, Recipe *recipe )
 
 void KreImporter::readCriterion( const QDomNodeList& l, RatingCriteriaList &rc_list )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement child = l.item( i ).toElement();
 
 		if ( child.tagName() == "criteria" ) {
 			RatingCriteria rc;
 
 			QDomNodeList criteriaChildren = child.childNodes();
-			for ( unsigned j = 0; j < criteriaChildren.count(); j++ ) {
+			for ( int j = 0; j < criteriaChildren.count(); j++ ) {
 				QDomElement criteriaChild = criteriaChildren.item( j ).toElement();
 		
 				if ( criteriaChild.tagName() == "name" ) {

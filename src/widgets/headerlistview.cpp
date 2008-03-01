@@ -181,7 +181,7 @@ void StdHeaderListView::saveHeader( Q3ListViewItem* i, const QString &text, int 
 
 bool StdHeaderListView::checkBounds( const QString &header )
 {
-	if ( header.length() > uint(database->maxIngGroupNameLength()) ) {
+	if ( header.length() > int(database->maxIngGroupNameLength()) ) {
 		KMessageBox::error( this, i18n( "Header cannot be longer than %1 characters." ,database->maxIngGroupNameLength() ) );
 		return false;
 	}

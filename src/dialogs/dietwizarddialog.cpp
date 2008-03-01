@@ -127,7 +127,7 @@ void DietWizardDialog::clear()
 	mealTab->setDishNo( 3 );
 	mealTab->showDish( 0 );
 
-	for ( uint i = 0; i < mealTab->dishInputList.count(); ++i ) {
+	for ( int i = 0; i < mealTab->dishInputList.count(); ++i ) {
 		DishInput* dishInput = mealTab->dishInputList[ i ]; // Get the dish input
 		dishInput->clear();
 	}
@@ -346,12 +346,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	// Next dish/ Previous dish buttons
 	KIconLoader *il = KIconLoader::global();
 	buttonPrev = new QToolButton( toolBar );
-	buttonPrev->setUsesTextLabel( true );
+	buttonPrev->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	buttonPrev->setText( i18n( "Previous Dish" ) );
 	buttonPrev->setIconSet( il->loadIconSet( "go-previous", KIconLoader::Small ) );
 	buttonPrev->setTextPosition( QToolButton::BelowIcon );
 	buttonNext = new QToolButton( toolBar );
-	buttonNext->setUsesTextLabel( true );
+	buttonNext->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	buttonNext->setText( i18n( "Next Dish" ) );
 	buttonNext->setIconSet( il->loadIconSet( "go-next", KIconLoader::Small ) );
 	buttonNext->setTextPosition( QToolButton::BelowIcon );

@@ -47,7 +47,7 @@ void RecipeMLImporter::parseFile( const QString& file )
 
 		QDomNodeList l = recipeml.childNodes();
 
-		for ( unsigned i = 0 ; i < l.count(); i++ ) {
+		for ( int i = 0 ; i < l.count(); i++ ) {
 			QDomElement el = l.item( i ).toElement();
 			QString tagName = el.tagName();
 
@@ -74,7 +74,7 @@ void RecipeMLImporter::readRecipemlRecipe( const QDomElement& recipe_element )
 
 	QDomNodeList l = recipe_element.childNodes();
 
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 
@@ -99,7 +99,7 @@ void RecipeMLImporter::readRecipemlRecipe( const QDomElement& recipe_element )
 void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 {
 	QDomNodeList l = head.childNodes();
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 
@@ -112,7 +112,7 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 			readRecipemlSrcItems( el );
 		else if ( tagName == "categories" ) {
 			QDomNodeList categories = el.childNodes();
-			for ( unsigned j = 0; j < categories.count(); j++ ) {
+			for ( int j = 0; j < categories.count(); j++ ) {
 				QDomElement c = categories.item( j ).toElement();
 				if ( c.tagName() == "cat" ) {
 					recipe.categoryList.append( Element( c.text() ) );
@@ -125,7 +125,7 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 			readRecipemlPreptime( el );
 		else if ( tagName == "yield" ) {
 			QDomNodeList yieldChildren = el.childNodes();
-			for ( unsigned j = 0; j < yieldChildren.count(); j++ ) {
+			for ( int j = 0; j < yieldChildren.count(); j++ ) {
 				QDomElement y = yieldChildren.item( j ).toElement();
 				QString tagName = y.tagName();
 				if ( tagName == "range" )
@@ -144,7 +144,7 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 {
 	QDomNodeList l = ings.childNodes();
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 
@@ -154,7 +154,7 @@ void RecipeMLImporter::readRecipemlIngs( const QDomElement& ings )
 		{
 			QString header;
 			QDomNodeList ingDiv = el.childNodes();
-			for ( unsigned j = 0; j < ingDiv.count(); j++ )
+			for ( int j = 0; j < ingDiv.count(); j++ )
 			{
 				QDomElement cEl = ingDiv.item( j ).toElement();
 				if ( cEl.tagName() == "title" )
@@ -183,14 +183,14 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, Ingredient *ing_
 	Ingredient quantity;
 	quantity.amount = 1;// default quantity assumed by RecipeML DTD
 
-	for ( unsigned j = 0; j < ingChilds.count(); j++ ) {
+	for ( int j = 0; j < ingChilds.count(); j++ ) {
 		QDomElement ingChild = ingChilds.item( j ).toElement();
 		QString tagName = ingChild.tagName();
 
 		if ( tagName == "amt" ) {
 			QDomNodeList amtChilds = ingChild.childNodes();
 
-			for ( unsigned k = 0; k < amtChilds.count(); k++ ) {
+			for ( int k = 0; k < amtChilds.count(); k++ ) {
 				QDomElement amtChild = amtChilds.item( k ).toElement();
 
 				if ( amtChild.tagName() == "qty" )
@@ -239,7 +239,7 @@ void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )
 
 	QStringList directions;
 
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 
 		if ( el.tagName() == "step" )
@@ -251,7 +251,7 @@ void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )
 	QString directionsText;
 
 	if ( directions.count() > 1 ) {
-		for ( unsigned i = 1; i <= directions.count(); i++ ) {
+		for ( int i = 1; i <= directions.count(); i++ ) {
 			if ( i != 1 ) {
 				directionsText += "\n\n";
 			}
@@ -272,7 +272,7 @@ void RecipeMLImporter::readRecipemlDirections( const QDomElement& dirs )
 void RecipeMLImporter::readRecipemlMenu( const QDomElement& menu_el )
 {
 	QDomNodeList l = menu_el.childNodes();
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 
@@ -289,7 +289,7 @@ void RecipeMLImporter::readRecipemlMenu( const QDomElement& menu_el )
 void RecipeMLImporter::readRecipemlSrcItems( const QDomElement& sources )
 {
 	QDomNodeList l = sources.childNodes();
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement srcitem = l.item( i ).toElement();
 		QString tagName = srcitem.tagName();
 
@@ -303,7 +303,7 @@ void RecipeMLImporter::readRecipemlSrcItems( const QDomElement& sources )
 void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 {
 	QDomNodeList l = preptime.childNodes();
-	for ( unsigned i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 
@@ -312,7 +312,7 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 			QString timeunit;
 
 			QDomNodeList time_l = el.childNodes();
-			for ( unsigned i = 0 ; i < time_l.count(); i++ ) {
+			for ( int i = 0 ; i < time_l.count(); i++ ) {
 				QDomElement time_el = time_l.item( i ).toElement();
 				QString time_tagName = time_el.tagName();
 
@@ -344,7 +344,7 @@ void RecipeMLImporter::readRecipemlQty( const QDomElement &qty, Ingredient &ing 
 {
 	QDomNodeList qtyChilds = qty.childNodes();
 
-	for ( unsigned i = 0; i < qtyChilds.count(); i++ ) {
+	for ( int i = 0; i < qtyChilds.count(); i++ ) {
 		QDomElement qtyChild = qtyChilds.item( i ).toElement();
 		QString tagName = qtyChild.tagName();
 		if ( tagName == "range" )
@@ -360,7 +360,7 @@ void RecipeMLImporter::readRecipemlRange( const QDomElement& range, double &amou
 {
 	QDomNodeList rangeChilds = range.childNodes();
 	double q1 = 1, q2 = 0; // default quantity assumed by RecipeML DTD
-	for ( unsigned j = 0; j < rangeChilds.count(); j++ ) {
+	for ( int j = 0; j < rangeChilds.count(); j++ ) {
 		QDomElement rangeChild = rangeChilds.item( j ).toElement();
 		QString subTagName = rangeChild.tagName();
 		if ( subTagName == "q1" )

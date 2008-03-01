@@ -288,7 +288,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 
 	content += ing_name.left(split_index) + "\n";
 
-	for ( unsigned int i = 0; i < ( ing_name.length() - 1 ) / 50; i++ )  //if longer than 50 chars, continue on next line(s)
+	for ( int i = 0; i < ( ing_name.length() - 1 ) / 50; i++ )  //if longer than 50 chars, continue on next line(s)
 		content += QString().fill(' ',(7+1)+(9+1)) + "-" + ing_name.mid( 50 * ( i ) + split_index, 50 ) + "\n";
 }
 

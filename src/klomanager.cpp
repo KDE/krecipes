@@ -43,12 +43,12 @@ void KLOManager::processDocument( const QDomDocument &doc )
 	}
 
 	QDomNodeList l = layout.childNodes();
-	for ( unsigned int i = 0 ; i < l.count(); i++ ) {
+	for ( int i = 0 ; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 		QString tagName = el.tagName();
 		QDomNodeList subList = el.childNodes();
 		/*if ( !*/beginObject( tagName )/* ) {*/; //###: just a thought....
-		for ( unsigned int j = 0 ; j < subList.count(); j++ ) {
+		for ( int j = 0 ; j < subList.count(); j++ ) {
 			QDomElement subEl = subList.item( j ).toElement();
 			QString subTagName = subEl.tagName();
 
@@ -78,7 +78,7 @@ void KLOManager::processDocument( const QDomDocument &doc )
 QDomElement KLOManager::getLayoutAttribute( const QDomElement &object, const QString &attribute ) const
 {
 	QDomNodeList l = object.childNodes();
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 
 		if ( el.tagName() == attribute )

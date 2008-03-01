@@ -1007,7 +1007,7 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 	// and then split again on the even numbered items
 	
 	QStringList temp = QStringList::split('"',text,true);
-	for ( uint i = 0; i < temp.count(); ++i ) {
+	for ( int i = 0; i < temp.count(); ++i ) {
 		if ( i & 1 ) //odd
 			result += temp[i].trimmed();
 		else         //even

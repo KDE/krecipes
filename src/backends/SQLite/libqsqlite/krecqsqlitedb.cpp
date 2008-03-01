@@ -53,7 +53,7 @@ bool QSQLiteDB::open( const QString &dbname )
 #endif
 
 	int func_res;
-	#if HAVE_SQLITE
+	#ifdef HAVE_SQLITE
 	func_res = sqlite_create_function(m_db,"lastInsertID",0,&lastInsertID,m_db );
 	#elif HAVE_SQLITE3
 	func_res = sqlite3_create_function(m_db,"lastInsertID",0,SQLITE_ANY,m_db,
@@ -99,7 +99,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 		res.setError( QString(errmsg) );
 		res.setStatus( QSQLiteResult::Failure );
 
-#if HAVE_SQLITE
+#ifdef HAVE_SQLITE
 		free( errmsg );
 #elif HAVE_SQLITE3
 		sqlite3_free( errmsg );

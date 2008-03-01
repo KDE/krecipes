@@ -636,7 +636,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		QBuffer buffer( &ba );
 		buffer.open( QIODevice::WriteOnly );
 		QImageWriter iio( &buffer, "JPEG" );
-		iio.write( recipe->photo.convertToImage() );
+		iio.write( recipe->photo.toImage() );
 		//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		storePhoto( recipeID, ba );
@@ -720,7 +720,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	--cat_it;
-	for ( unsigned int i = 0; i < recipe->categoryList.count(); i++ ) {
+	for ( int i = 0; i < recipe->categoryList.count(); i++ ) {
 		command = QString( "INSERT INTO category_list VALUES (%1,%2);" )
 		          .arg( recipeID )
 		          .arg( ( *cat_it ).id );
@@ -743,7 +743,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	--author_it;
-	for ( unsigned int i = 0; i < recipe->authorList.count(); i++ ) {
+	for ( int i = 0; i < recipe->authorList.count(); i++ ) {
 		command = QString( "INSERT INTO author_list VALUES (%1,%2);" )
 		          .arg( recipeID )
 		          .arg( ( *author_it ).id );

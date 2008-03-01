@@ -230,7 +230,7 @@ void StdIngredientListView::saveIngredient( Q3ListViewItem* i )
 
 bool StdIngredientListView::checkBounds( const QString &name )
 {
-	if ( name.length() > uint(database->maxIngredientNameLength()) ) {
+	if ( name.length() > int(database->maxIngredientNameLength()) ) {
 		KMessageBox::error( this,i18n( "Ingredient name cannot be longer than %1 characters." ,  database->maxIngredientNameLength() ) );
 		return false;
 	}

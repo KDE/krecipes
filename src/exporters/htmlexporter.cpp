@@ -182,7 +182,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 		photo_name = "default_photo";
 	}
 	else {
-		image = recipe.photo.convertToImage();
+		image = recipe.photo.toImage();
 		photo_name = QString::number(recipe.recipeID);
 	}
 

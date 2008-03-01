@@ -74,7 +74,7 @@ RatingWidget::RatingWidget(int stars, QWidget* parent_, const char* name_/*=0*/)
 
 void RatingWidget::init() {
   m_total = qMin(m_max/2, static_cast<int>(m_widgets.count()));
-  uint i = 0;
+  int i = 0;
   for( ; static_cast<int>(i) < m_total; ++i) {
     m_widgets.at(i)->setPixmap(m_pixOff);
   }

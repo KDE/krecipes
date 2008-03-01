@@ -186,7 +186,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 
 	content += ing_name.left(split_index) + "\n";
 
-	for ( unsigned int i = 0; i < ( ing_name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
+	for ( int i = 0; i < ( ing_name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
 		content += "           -" + ing_name.mid( 28 * ( i ) + split_index, 28 ) + "\n";
 }
 

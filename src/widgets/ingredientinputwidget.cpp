@@ -245,14 +245,14 @@ bool IngredientInput::isInputValid()
 
 bool IngredientInput::checkBounds()
 {
-	if ( ingredientBox->currentText().length() > uint(database->maxIngredientNameLength()) ) {
+	if ( ingredientBox->currentText().length() > int(database->maxIngredientNameLength()) ) {
 		KMessageBox::error( this, i18n( "Ingredient name cannot be longer than %1 characters." , database->maxIngredientNameLength() ) );
 		ingredientBox->lineEdit() ->setFocus();
 		ingredientBox->lineEdit() ->selectAll();
 		return false;
 	}
 
-	if ( unitBox->currentText().length() > uint(database->maxUnitNameLength()) ) {
+	if ( unitBox->currentText().length() > int(database->maxUnitNameLength()) ) {
 		KMessageBox::error( this, i18n( "Unit name cannot be longer than %1 characters." , database->maxUnitNameLength() ) );
 		unitBox->lineEdit() ->setFocus();
 		unitBox->lineEdit() ->selectAll();
@@ -261,7 +261,7 @@ bool IngredientInput::checkBounds()
 
 	QStringList prepMethodList = QStringList::split(",",prepMethodBox->currentText());
 	for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
-		if ( (*it).trimmed().length() > uint(database->maxPrepMethodNameLength()) )
+		if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 		{
 			KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
 			prepMethodBox->lineEdit() ->setFocus();

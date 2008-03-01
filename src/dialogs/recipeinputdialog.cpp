@@ -472,16 +472,16 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	saveButton->setText( i18n( "Save recipe" ) );
 	saveButton->setToolTip( i18n( "Save recipe" ) );
-	saveButton->setUsesTextLabel( true );
+	saveButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	showButton->setText( i18n( "Show recipe" ) );
 	showButton->setToolTip( i18n( "Show recipe" ) );
-	showButton->setUsesTextLabel( true );
+	showButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	closeButton->setText( i18n( "Close" ) );
 	closeButton->setToolTip( i18n( "Close" ) );
-	closeButton->setUsesTextLabel( true );
+	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	resizeButton->setText( i18n( "Resize recipe" ) );
 	resizeButton->setToolTip( i18n( "Resize recipe" ) );
-	resizeButton->setUsesTextLabel( true );
+	resizeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
 	functionsLayout->layout() ->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
@@ -653,7 +653,7 @@ void RecipeInputDialog::reload( void )
 		sourcePhoto = loadedRecipe->photo;
 
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
-			QImage pm = sourcePhoto.convertToImage();
+			QImage pm = sourcePhoto.toImage();
 			QPixmap pm_scaled;
 			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
 			photoLabel->setPixmap( pm_scaled );
@@ -716,7 +716,7 @@ void RecipeInputDialog::changePhoto( void )
 		// If photo is bigger than the label, or smaller in width, than photoLabel, scale it
 		sourcePhoto = pixmap;
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
-			QImage pm = sourcePhoto.convertToImage();
+			QImage pm = sourcePhoto.toImage();
 			QPixmap pm_scaled;
 			pm_scaled.convertFromImage( pm.smoothScale( photoLabel->width(), photoLabel->height(), Qt::KeepAspectRatio ) );
 			photoLabel->setPixmap( pm_scaled );
@@ -1002,7 +1002,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 		{
 			Unit old_unit = new_ing.units;
 
-			if ( new_text.length() > uint(database->maxUnitNameLength()) )
+			if ( new_text.length() > int(database->maxUnitNameLength()) )
 			{
 				KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
 				ing_item->setUnit( old_unit );
@@ -1037,7 +1037,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			QStringList prepMethodList = QStringList::split(",",new_text.trimmed());
 
 			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
-				if ( (*it).trimmed().length() > uint(database->maxPrepMethodNameLength()) )
+				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 				{
 					KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
 					ing_item->setPrepMethod( old_text );
@@ -1088,7 +1088,7 @@ void RecipeInputDialog::enableChangedSignal( bool en )
 bool RecipeInputDialog::save ( void )
 {
 	//check bounds first
-	if ( titleEdit->text().length() > uint(database->maxRecipeTitleLength()) ) {
+	if ( titleEdit->text().length() > int(database->maxRecipeTitleLength()) ) {
 		KMessageBox::error( this, QString( i18n( "Recipe title cannot be longer than %1 characters." ) ).arg( database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
 		return false;
 	}
@@ -1310,7 +1310,7 @@ int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem 
 		return 0;
 	else {
 		Q3ListViewItemIterator it( listview->firstChild() );
-		uint j = 0;
+		int j = 0;
 		for ( ; it.current() && it.current() != item; ++it ) {
 			if ( it.current() ->rtti() == INGLISTVIEWITEM_RTTI ) {
 				if ( !it.current()->parent() || it.current()->parent()->rtti() == INGGRPLISTVIEWITEM_RTTI )
@@ -1698,7 +1698,7 @@ void RecipeInputDialog::statusLinkClicked( const QString &link )
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;
 		int lastUnit = -1;
-		for (uint i = 1; i < idList.count(); ++i ) {
+		for (int i = 1; i < idList.count(); ++i ) {
 			int id = idList[i].toInt();
 			if ( id != lastUnit ) {
 				toUnits << Element(database->unitName(id).name,id);

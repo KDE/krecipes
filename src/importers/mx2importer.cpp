@@ -66,7 +66,7 @@ void MX2Importer::parseFile( const QString& filename )
 
 		QDomNodeList l = mx2.childNodes();
 
-		for ( unsigned i = 0; i < l.count(); i++ ) {
+		for ( int i = 0; i < l.count(); i++ ) {
 			QDomElement el = l.item( i ).toElement();
 
 			if ( el.tagName() == "RcpE" ) {
@@ -92,7 +92,7 @@ MX2Importer::~MX2Importer()
 
 void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 {
-	for ( unsigned i = 0; i < l.count(); i++ ) {
+	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement el = l.item( i ).toElement();
 
 		QString tagName = el.tagName();
@@ -104,7 +104,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			recipe->prepTime = QTime::fromString( el.attribute( "elapsed" ) );
 		else if ( tagName == "CatS" ) {
 			QDomNodeList categories = el.childNodes();
-			for ( unsigned j = 0; j < categories.count(); j++ ) {
+			for ( int j = 0; j < categories.count(); j++ ) {
 				QDomElement c = categories.item( j ).toElement();
 				if ( c.tagName() == "CatT" ) {
 					if ( c.text().length() > 0 ) {
@@ -120,7 +120,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			                    Unit( el.attribute( "unit" ), el.attribute( "qty" ).toDouble() ) );
 			if ( el.hasChildNodes() ) {
 				QDomNodeList iChilds = el.childNodes();
-				for ( unsigned j = 0; j < iChilds.count(); j++ ) {
+				for ( int j = 0; j < iChilds.count(); j++ ) {
 					QDomElement iChild = iChilds.item( j ).toElement();
 					if ( iChild.tagName() == "IPrp" )
 						new_ing.prepMethodList.append( Element(iChild.text().trimmed()) );
@@ -133,7 +133,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		else if ( tagName == "DirS" ) {
 			QStringList directions;
 			QDomNodeList dirs = el.childNodes();
-			for ( unsigned j = 0; j < dirs.count(); j++ ) {
+			for ( int j = 0; j < dirs.count(); j++ ) {
 				QDomElement dir = dirs.item( j ).toElement();
 				if ( dir.tagName() == "DirT" )
 					directions.append( dir.text().trimmed() );
@@ -143,7 +143,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			// TODO This is copied from RecipeML, maybe a QStringList
 			//	for directions in Recipe instead?
 			if ( directions.count() > 1 ) {
-				for ( unsigned i = 1; i <= directions.count(); i++ ) {
+				for ( int i = 1; i <= directions.count(); i++ ) {
 					if ( i != 1 ) {
 						directionsText += "\n\n";
 					}

@@ -91,7 +91,7 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		QBuffer buffer( &data );
 		buffer.open( QIODevice::WriteOnly );
 		QImageWriter iio( &buffer, "JPEG" );
-		iio.write( ( *recipe_it ).photo.convertToImage() );
+		iio.write( ( *recipe_it ).photo.toImage() );
 		//( *recipe_it ).photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 
 		picbin_tag.appendChild( doc.createTextNode( KCodecs::base64Encode( data, true ) ) );
