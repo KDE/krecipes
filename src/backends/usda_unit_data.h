@@ -39,6 +39,6 @@ PrepDataList loadPrepMethods();
 
 bool parseUnitAndPrep( const QString &string, QString &unit, QString &prep, const UnitDataList &, const PrepDataList & );
 
-};
+}
 
 #endif //USDA_UNIT_DATA_H
