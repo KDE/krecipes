@@ -37,7 +37,7 @@
 #include <q3valuelist.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <Q3ActionGroup>
 #include <Q3Action>
 #include <QTextDocument>
@@ -80,28 +80,28 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
 		m_sample.instructions = i18n("Instructions");
 		m_sample.prepTime = QTime(0,0);
-	
+
 		m_sample.authorList.append( Element(i18n( "Author 1, Author 2, ..." )) );
-	
+
 		Ingredient ing;
 		ing.name = i18n("Ingredient 1");
 		m_sample.ingList.append( ing );
-	
+
 		ing.name = i18n("Ingredient 2");
 		m_sample.ingList.append( ing );
 
 		ing.name = "...";
 		m_sample.ingList.append( ing );
-	
+
 		RatingCriteria rc;
 		Rating rating1;
 		rating1.rater = i18n("Rater");
 		rating1.comment = i18n("Comment");
-	
+
 		rc.name = i18n("Criteria 1");
 		rc.stars = 5.0;
 		rating1.append(rc);
-	
+
 		rc.name = i18n("Criteria 2");
 		rc.stars = 2.5;
 		rating1.append(rc);
@@ -167,10 +167,10 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) << endl;
 
 	//KDE4 port
-	KParts::OpenUrlArguments argsUrl ( arguments() ); 
+	KParts::OpenUrlArguments argsUrl ( arguments() );
 	argsUrl.setReload( true ); // Don't use the cache
 	setArguments( argsUrl );
-	
+
 	KParts::BrowserArguments args;
 	browserExtension()->setBrowserArguments(args);
 
@@ -188,9 +188,9 @@ void SetupDisplay::loadTemplate( const QString &filename )
 	KTemporaryFile tmpFile;
 	saveLayout(tmpFile.fileName());
 	has_changes = storeChangedState; //saveLayout() sets changes to false
-	
+
 	loadHTMLView( filename, tmpFile.fileName() );
-	
+
 	//KDE4 port
 	//tmpFile.unlink();
 
@@ -424,7 +424,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	
+
 	delete popup;
 	popup = new KMenu( view() );
 	popup->addTitle( item->name );
@@ -454,7 +454,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & Alignment ) {
-		Q3PopupMenu * sub_popup = new Q3PopupMenu( popup );
+		QMenu * sub_popup = new QMenu( popup );
 
 		Q3ActionGroup *alignment_actions = new Q3ActionGroup( this );
 		alignment_actions->setExclusive( true );

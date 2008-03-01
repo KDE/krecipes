@@ -30,7 +30,7 @@
 #include <kiconloader.h>
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -60,7 +60,7 @@ public:
     KoTabulator currTab;
     // The action we're currently doing - basically only valid between press and release time
     KoRuler::Action action;
-    Q3PopupMenu *rb_menu;
+    QMenu *rb_menu;
     int mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
@@ -860,7 +860,7 @@ double KoRuler::makeIntern( double _v )
 
 void KoRuler::setupMenu()
 {
-    d->rb_menu = new Q3PopupMenu();
+    d->rb_menu = new QMenu();
     Q_CHECK_PTR( d->rb_menu );
     for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
     {

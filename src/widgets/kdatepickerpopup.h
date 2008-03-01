@@ -15,14 +15,14 @@
 
   You should have received a copy of the GNU Library General Public License
   along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor, 
+  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
   Boston, MA  02110-1301  USA
 */
 #ifndef KDATEPICKERPOPUP_H
 #define KDATEPICKERPOPUP_H
 
 #include <qdatetime.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 
 #include <kdatepicker.h>
 
@@ -41,7 +41,7 @@
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
-class KDatePickerPopup: public Q3PopupMenu
+class KDatePickerPopup: public QMenu
 {
     Q_OBJECT
   public:
@@ -56,7 +56,7 @@ class KDatePickerPopup: public Q3PopupMenu
        @param name The object's name.
     */
     KDatePickerPopup( int items = 2, const QDate &date = QDate::currentDate(),
-                      QWidget *parent = 0, const char *name = 0 );
+                      QWidget *parent = 0 );
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of

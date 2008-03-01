@@ -15,7 +15,7 @@
 
   You should have received a copy of the GNU Library General Public License
   along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor, 
+  the Free Software Foundation, Inc., 51 Franklin Steet, Fifth Floor,
   Boston, MA  02110-1301  USA
 */
 
@@ -26,9 +26,8 @@
 
 #include "kdatepickerpopup.h"
 
-KDatePickerPopup::KDatePickerPopup( int items, const QDate &date, QWidget *parent,
-                                    const char *name )
-  : Q3PopupMenu( parent, name )
+KDatePickerPopup::KDatePickerPopup( int items, const QDate &date, QWidget *parent )
+  : QMenu( parent )
 {
   mItems = items;
 
