@@ -97,7 +97,7 @@ ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabe
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
 {
-	event->accept( Q3ImageDrag::canDecode( event ) );
+	event->setAccepted( Q3ImageDrag::canDecode( event ) );
 }
 
 void ImageDropLabel::dropEvent( QDropEvent* event )
@@ -309,9 +309,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	addButton = new KPushButton( ingredientGBox );
 	addButton->setFixedSize( QSize( 31, 31 ) );
 	addButton->setFlat( true );
-	QPixmap pm = il->loadIcon( "add_ingredient", KIconLoader::NoGroup, 16 );
-	addButton->setIcon(QIcon( pm ) );
-	addButton->setIconSize( pm.size() );
+	addButton->setIcon(KIcon( "add_ingredient" ) );
+	addButton->setIconSize( QSize( 16, 16 ) );
 	addButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( addButton, 3, 5 );
 
@@ -322,36 +321,32 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	upButton = new KPushButton( ingredientGBox );
 	upButton->setFixedSize( QSize( 31, 31 ) );
 	upButton->setFlat( true );
-	pm = il->loadIcon( "go-up", KIconLoader::NoGroup, 16 );
-	upButton->setIcon( QIcon( pm ) );
-	upButton->setIconSize(  pm.size() );
+	upButton->setIcon( KIcon( "go-up" ) );
+	upButton->setIconSize( QSize( 16, 16 ) );
 	upButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( upButton, 5, 5 );
 
 	downButton = new KPushButton( ingredientGBox );
 	downButton->setFixedSize( QSize( 31, 31 ) );
 	downButton->setFlat( true );
-	pm = il->loadIcon( "go-down", KIconLoader::NoGroup, 16 );
-	downButton->setIcon( QIcon( pm ) );
-	downButton->setIconSize(  pm.size() );
+	downButton->setIcon( KIcon( "go-down" ) );
+	downButton->setIconSize(  QSize( 16, 16 ) );
 	downButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( downButton, 6, 5 );
 
 	removeButton = new KPushButton( ingredientGBox );
 	removeButton->setFixedSize( QSize( 31, 31 ) );
 	removeButton->setFlat( true );
-	pm = il->loadIcon( "list-remove", KIconLoader::NoGroup, 16 );
-	removeButton->setIcon( QIcon( pm ) );
-	removeButton->setIconSize(  pm.size() );
+	removeButton->setIcon( KIcon( "list-remove" ) );
+	removeButton->setIconSize( QSize( 16, 16 )  );
 	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( removeButton, 7, 5 );
 
 	ingParserButton = new KPushButton( ingredientGBox );
 	ingParserButton->setFixedSize( QSize( 31, 31 ) );
 	ingParserButton->setFlat( true );
-	pm = il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 );
-	ingParserButton->setIcon( QIcon( pm ) );
-	ingParserButton->setIconSize( pm.size() );
+	ingParserButton->setIcon( KIcon( "edit-paste" ) );
+	ingParserButton->setIconSize( QSize( 16, 16 ) );
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
@@ -398,7 +393,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	KGuiItem updateGuiItem;
 	updateGuiItem.setText( i18n("Update") );
-	updateGuiItem.setIcon( KIcon(il->loadIconSet( "view-refresh", KIconLoader::NoGroup )) );
+	updateGuiItem.setIcon( KIcon( "view-refresh" ) );
 
 	propertyStatusDialog = new KDialog( this );
 	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
@@ -431,7 +426,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	instructionsLayout->addWidget( instructionsEdit );
 
 	spellCheckButton = new QToolButton( instructionsTab );
-	spellCheckButton->setIconSet( il->loadIconSet( "tools-check-spelling", KIconLoader::Small ) );
+	spellCheckButton->setIcon( KIcon( "tools-check-spelling" ) );
 	spellCheckButton->setToolTip( i18n( "Check spelling" ) );
 	instructionsLayout->addWidget( spellCheckButton );
 
@@ -462,14 +457,14 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	functionsBox->setFrameStyle( QFrame::NoFrame );
 
 	saveButton = new QToolButton( functionsBox );
-	saveButton->setIconSet( il->loadIconSet( "document-save", KIconLoader::Small ) );
+	saveButton->setIcon( KIcon( "document-save" ) );
 	saveButton->setEnabled( false );
 	showButton = new QToolButton( functionsBox );
-	showButton->setIconSet( il->loadIconSet( "zoom-original", KIconLoader::Small ) );
+	showButton->setIcon( KIcon( "zoom-original" ) );
 	closeButton = new QToolButton( functionsBox );
-	closeButton->setIconSet( il->loadIconSet( "window-close", KIconLoader::Small ) );
+	closeButton->setIcon( KIcon( "window-close" ) );
 	resizeButton = new QToolButton( functionsBox );
-	resizeButton->setIconSet( il->loadIconSet( "arrow-up-double", KIconLoader::Small ) ); //TODO: give me an icon :)
+	resizeButton->setIcon( KIcon( "arrow-up-double" ) ); //TODO: give me an icon :)
 
 	saveButton->setText( i18n( "Save recipe" ) );
 	saveButton->setToolTip( i18n( "Save recipe" ) );

@@ -53,14 +53,11 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	// Add/Remove buttons
 
-	KIconLoader *il = KIconLoader::global();
 	addAuthorButton = new QPushButton( topBox );
-	QPixmap pm = il->loadIcon( "go-down", KIconLoader::NoGroup, 16 );
-	addAuthorButton->setIconSet( pm );
+	addAuthorButton->setIcon( KIcon( "go-down" ) );
 
 	removeAuthorButton = new QPushButton( topBox );
-	pm = il->loadIcon( "go-up", KIconLoader::NoGroup, 16 );
-	removeAuthorButton->setIconSet( pm );
+	removeAuthorButton->setIcon( KIcon( "go-up" ) );
 
 	// Author List
 

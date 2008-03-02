@@ -109,19 +109,16 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	openButton = new QPushButton( buttonBar );
 	openButton->setText( i18n( "Open Recipe(s)" ) );
 	openButton->setDisabled( true );
-	QPixmap pm = il->loadIcon( "ok", KIconLoader::NoGroup, 16 );
-	openButton->setIconSet( pm );
+	openButton->setIcon( KIcon("ok") );
 	editButton = new QPushButton( buttonBar );
 	editButton->setText( i18n( "Edit Recipe" ) );
 	editButton->setDisabled( true );
-	pm = il->loadIcon( "edit", KIconLoader::NoGroup, 16 );
-	editButton->setIconSet( pm );
+	editButton->setIcon( KIcon("edit") );
 	removeButton = new QPushButton( buttonBar );
 	removeButton->setText( i18n( "Delete" ) );
 	removeButton->setDisabled( true );
 	removeButton->setMaximumWidth( 100 );
-	pm = il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 );
-	removeButton->setIconSet( pm );
+	removeButton->setIcon( KIcon("edit-delete-shred" ) );
 
 	tabWidget->insertTab( -1, basicSearchTab, i18n( "Basic" ) );
 

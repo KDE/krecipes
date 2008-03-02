@@ -31,7 +31,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <qpixmap.h>
 
@@ -132,14 +132,14 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	KreMenuButton *newMenuButton = new KreMenuButton( this );
 	newMenuButton->subMenuId = id;
 	newMenuButton->setTitle( title );
-	newMenuButton->setIconSet( il->loadIconSet( icon, KIconLoader::Panel ) );
+	newMenuButton->setIconSet( KIcon( icon ) );
 
 	// Add a button to the submenu to go back to the top menu
 	KreMenuButton *newSubMenuButton = new KreMenuButton( this );
 	newSubMenuButton->menuId = id;
 	newSubMenuButton->subMenuId = mainMenuId;
 	newSubMenuButton->setTitle( i18n( "Up..." ) );
-	newSubMenuButton->setIconSet( il->loadIconSet( "arrow-up", KIconLoader::Panel ) );
+	newSubMenuButton->setIconSet( KIcon( "arrow-up" ) );
 
 	connect( newMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
 	connect( newSubMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
@@ -246,7 +246,7 @@ void KreMenu::paintEvent( QPaintEvent * )
 	//if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
 
 	// Get gradient colors
-	QColor c = QColorGroup( QPalette() ).button();
+	QColor c = QColorGroup( QPalette() ).color(QPalette::Button);
 	QColor c1 = c.dark( 130 );
 	QColor c2 = c.light( 120 );
 
@@ -409,8 +409,8 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	// Set the gradient colors
 
-	c1 = QColorGroup( QPalette() ).button().dark( darken );
-	c2 = QColorGroup( QPalette() ).button().light( lighten );
+	c1 = QColorGroup( QPalette() ).color(QPalette::Button).dark( darken );
+	c2 = QColorGroup( QPalette() ).color(QPalette::Button).light( lighten );
 
 	if ( highlighted ) {
 		darken -= 10;
@@ -451,9 +451,9 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	// Draw the line
 	painter.begin( &kpm );
-	painter.setPen( QColorGroup( QPalette() ).button().dark( darken ) );
+	painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).dark( darken ) );
 	painter.drawLine( width() / 5, height() - 2, width() - 1, height() - 2 );
-	painter.setPen( QColorGroup( QPalette() ).button().light( lighten ) );
+	painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).light( lighten ) );
 	painter.drawLine( width() / 5, height() - 1, width() - 1, height() - 1 );
 	painter.end();
 

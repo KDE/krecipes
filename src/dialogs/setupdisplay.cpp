@@ -437,8 +437,6 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		}
 	}
 
-	KIconLoader *il = KIconLoader::global();
-
 	if ( properties & BackgroundColor )
 		popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
 
@@ -446,7 +444,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
 
 	if ( properties & Font )
-		popup->insertItem( il->loadIconSet( "text", KIconLoader::Small, 16 ), i18n( "Font..." ), this, SLOT( setFont() ) );
+		popup->insertItem( KIcon( "text" ), i18n( "Font..." ), this, SLOT( setFont() ) );
 
 	if ( properties & Visibility ) {
 		int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );

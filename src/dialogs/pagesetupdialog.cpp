@@ -87,8 +87,10 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
    layout->addWidget( viewBox );
 
 	KHBox *buttonsBox = new KHBox( this );
-	QPushButton *okButton = new QPushButton( il->loadIconSet( "ok", KIconLoader::Small ), i18n( "Save and Close" ), buttonsBox );
-	QPushButton *cancelButton = new QPushButton( il->loadIconSet( "cancel", KIconLoader::Small ), i18n( "&Cancel" ), buttonsBox );
+	QPushButton *okButton = new QPushButton( i18n( "Save and Close" ), buttonsBox );
+   okButton->setIcon( KIcon( "ok" ) );
+	QPushButton *cancelButton = new QPushButton( i18n( "&Cancel" ), buttonsBox );
+   cancelButton->setIcon( KIcon( "cancel") );
 	layout->addWidget( buttonsBox );
 
 	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );

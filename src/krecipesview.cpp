@@ -88,8 +88,6 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 	// Create Left and Right Panels (splitter)
 
-
-	KIconLoader *il = KIconLoader::global();
 	leftPanel = new KreMenu( splitter, "leftPanel" );
 	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
 
@@ -99,19 +97,19 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Buttons
 
 	button0 = new KreMenuButton( leftPanel, SelectP );
-	button0->setIconSet( il->loadIconSet( "system-search", KIconLoader::Panel, 32 ) );
+	button0->setIconSet( KIcon( "system-search" ) );
 	buttonsList.append( button0 );
 
 	button1 = new KreMenuButton( leftPanel, ShoppingP );
-	button1->setIconSet( il->loadIconSet( "trolley", KIconLoader::Panel, 32 ) );
+	button1->setIconSet( KIcon( "trolley" ) );
 	buttonsList.append( button1 );
 
 	button7 = new KreMenuButton( leftPanel, DietP );
-	button7->setIconSet( il->loadIconSet( "diet", KIconLoader::Panel, 32 ) );
+	button7->setIconSet( KIcon( "diet" ) );
 	buttonsList.append( button7 );
 
 	button8 = new KreMenuButton( leftPanel, MatcherP );
-	button8->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
+	button8->setIconSet( KIcon( "categories" ) );
 	buttonsList.append( button8 );
 
 
@@ -119,32 +117,32 @@ KrecipesView::KrecipesView( QWidget *parent )
 	dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
 
 	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
-	button2->setIconSet( il->loadIconSet( "ingredients", KIconLoader::Panel, 32 ) );
+	button2->setIconSet( KIcon( "ingredients" ) );
 	//buttonsList.append(button2);
 
 	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
-	button3->setIconSet( il->loadIconSet( "properties", KIconLoader::Panel, 32 ) );
+	button3->setIconSet( KIcon( "properties" ) );
 	buttonsList.append( button3 );
 
 	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
-	button4->setIconSet( il->loadIconSet( "units", KIconLoader::Panel, 32 ) );
+	button4->setIconSet( KIcon( "units" ) );
 	buttonsList.append( button4 );
 
 	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
-	button9->setIconSet( il->loadIconSet( "methods", KIconLoader::Panel, 32 ) );
+	button9->setIconSet( KIcon( "methods" ) );
 	buttonsList.append( button9 );
 
 	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
-	button5->setIconSet( il->loadIconSet( "categories", KIconLoader::Panel, 32 ) );
+	button5->setIconSet( KIcon( "categories" ) );
 	buttonsList.append( button5 );
 
 	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
-	button6->setIconSet( il->loadIconSet( "authors", KIconLoader::Panel, 32 ) );
+	button6->setIconSet( KIcon( "authors" ) );
 	buttonsList.append( button6 );
 
 	contextButton = new QPushButton( leftPanel );
    contextButton->setObjectName( "contextButton" );
-	contextButton->setIconSet( il->loadIconSet( "krectip", KIconLoader::Panel, 32 ) );
+	contextButton->setIcon( KIcon( "krectip" ) );
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );
 	contextButton->setFlat( true );
@@ -674,11 +672,10 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 {
 	recipeWidget = w;
-	KIconLoader *il = KIconLoader::global();
 	if ( !recipeButton ) {
 		recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
 
-		recipeButton->setIconSet( il->loadIconSet( "document-save",KIconLoader::Panel, KIcon::Small ) );
+		recipeButton->setIconSet( KIcon( "document-save" ) );
 
 		QString short_title = title.left( 20 );
 		if ( title.length() > 20 )

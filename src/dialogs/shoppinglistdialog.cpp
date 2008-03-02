@@ -85,7 +85,6 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
 	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
-	KIconLoader *il = KIconLoader::global();
 	addRecipeButton = new QPushButton( this );
 	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
@@ -132,14 +131,14 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	okButton = new QPushButton( buttonBar );
    okButton->setObjectName( "okButton" );
 	okButton->setText( i18n( "&OK" ) );
-	okButton->setIconSet( il->loadIcon( "ok", KIconLoader::NoGroup, 16 ) );
+	okButton->setIcon( KIcon( "ok" ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	clearButton = new QPushButton( buttonBar );
    clearButton->setObjectName( "clearButton" );
 	clearButton->setText( i18n( "Clear" ) );
-	clearButton->setIconSet( il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ) );
+	clearButton->setIcon( KIcon( "edit-clear" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::ExpandAll | RecipeActionsHandler::CollapseAll );
