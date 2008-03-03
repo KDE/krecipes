@@ -48,8 +48,6 @@
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QLabel>
 #include <QFrame>
 #include <QDragEnterEvent>
@@ -305,7 +303,7 @@ void Krecipes::readProperties( const KConfigGroup& )
 void Krecipes::dragEnterEvent( QDragEnterEvent *event )
 {
 	// accept uri drops only
-	event->accept( Q3UriDrag::canDecode( event ) );
+	event->setAccepted( Q3UriDrag::canDecode( event ) );
 }
 
 

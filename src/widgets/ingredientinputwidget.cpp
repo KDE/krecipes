@@ -403,7 +403,7 @@ void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 	else {
 		while ( curr != m_ingInputs.end() ) {
 			(*curr)->deleteLater();
-			curr = m_ingInputs.remove(curr);
+			curr = m_ingInputs.erase(curr);
 		}
 		if ( m_ingInputs.count() == 1 )
 			m_ingInputs[0]->enableHeader(true);

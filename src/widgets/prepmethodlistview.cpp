@@ -70,7 +70,7 @@ StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, boo
 		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
 		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
-		kpop->polish();
+		kpop->ensurePolished();
 
 		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modPrepMethod( Q3ListViewItem* ) ) );
@@ -121,7 +121,7 @@ void StdPrepMethodListView::remove
 	}
 }
 
-void StdPrepMethodListView::rename()
+void StdPrepMethodListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 {
 	Q3ListViewItem * item = currentItem();
 
@@ -175,7 +175,7 @@ void StdPrepMethodListView::savePrepMethod( Q3ListViewItem* i )
 
 bool StdPrepMethodListView::checkBounds( const QString &name )
 {
-	if ( name.length() > uint(database->maxPrepMethodNameLength()) ) {
+	if ( name.length() > int(database->maxPrepMethodNameLength()) ) {
 		KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
 		return false;
 	}

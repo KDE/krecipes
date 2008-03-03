@@ -139,7 +139,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
 		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
-		kpop->polish();
+		kpop->ensurePolished();
 
 		typeComboBox = new QComboBox( viewport() );
 		typeComboBox->insertItem( typeComboBox->count(), i18n("Other"));
@@ -255,7 +255,7 @@ void StdUnitListView::remove()
 	}
 }
 
-void StdUnitListView::rename()
+void StdUnitListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 {
 	Q3ListViewItem * item = currentItem();
 

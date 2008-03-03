@@ -71,7 +71,7 @@ StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editab
 		kpop->insertItem( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
 		kpop->insertItem( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
-		kpop->polish();
+		kpop->ensurePolished();
 
 		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
 		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modAuthor( Q3ListViewItem* ) ) );
@@ -129,7 +129,7 @@ void StdAuthorListView::remove
 	}
 }
 
-void StdAuthorListView::rename()
+void StdAuthorListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 {
 	Q3ListViewItem * item = currentItem();
 
@@ -265,7 +265,7 @@ void AuthorCheckListView::stateChange(AuthorCheckListItem *it,bool on)
 		if ( on )
 			m_selections.append(it->author());
 		else
-			m_selections.remove(it->author());
+			m_selections.removeAll(it->author());
 	}
 }
 

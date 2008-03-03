@@ -163,7 +163,7 @@ private slots:
 	void createNew();
 	void remove
 		();
-	void rename();
+	void rename(Q3ListViewItem* /* item */, int /*c*/);
 
 	void modProperty( Q3ListViewItem* i );
 	void saveProperty( Q3ListViewItem* i );

@@ -69,7 +69,7 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	if ( actions & Categorize )
 		categorize_item = kpop->insertItem( il->loadIcon( "categories", KIconLoader::NoGroup, 16 ), i18n( "Ca&tegorize..." ), this, SLOT(categorize()), Qt::CTRL + Qt::Key_T );
 
-	kpop->polish();
+	kpop->ensurePolished();
 
 	catPop = new KMenu( parentListView );
 	if ( actions & ExpandAll )
@@ -79,7 +79,7 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	if ( actions & Export )
 		catPop->insertItem( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 
-	catPop->polish();
+	catPop->ensurePolished();
 
 	connect( parentListView, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
 	connect( parentListView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( open() ) );

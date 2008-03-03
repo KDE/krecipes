@@ -324,7 +324,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		kpop->insertItem( il->loadIcon( "edit-cut", KIconLoader::NoGroup, 16 ), i18n( "Cu&t" ), this, SLOT( cut() ), Qt::CTRL + Qt::Key_X );
 		kpop->insertItem( il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "&Paste" ), this, SLOT( paste() ), Qt::CTRL + Qt::Key_V );
 		kpop->insertItem( il->loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "Paste as Subcategory" ), this, SLOT( pasteAsSub() ), Qt::CTRL + Qt::SHIFT + Qt::Key_V );
-		kpop->polish();
+		kpop->ensurePolished();
 
 		connect( kpop, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
 		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
@@ -405,7 +405,7 @@ void StdCategoryListView::remove
 	}
 }
 
-void StdCategoryListView::rename()
+void StdCategoryListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 {
 	Q3ListViewItem * item = currentItem();
 

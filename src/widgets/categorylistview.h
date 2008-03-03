@@ -230,7 +230,7 @@ private slots:
 	void createNew();
 	void remove
 		();
-	void rename();
+	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
 	void cut();
 	void paste();
 	void pasteAsSub();

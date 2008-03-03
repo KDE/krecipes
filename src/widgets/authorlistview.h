@@ -74,7 +74,7 @@ private slots:
 	void createNew();
 	void remove
 		();
-	void rename();
+	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
 
 	void modAuthor( Q3ListViewItem* i );
 	void saveAuthor( Q3ListViewItem* i );
