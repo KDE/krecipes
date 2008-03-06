@@ -144,7 +144,9 @@ KrecipesView::KrecipesView( QWidget *parent )
    contextButton->setObjectName( "contextButton" );
 	contextButton->setIcon( KIcon( "krectip" ) );
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
-	contextButton->setPaletteBackgroundColor( contextButton->paletteBackgroundColor().light( 140 ) );
+   QPalette p = palette(); 
+   p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) ); 
+   contextButton->setPalette(p);
 	contextButton->setFlat( true );
 	END_TIMER()
 

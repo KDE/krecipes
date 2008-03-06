@@ -360,7 +360,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 	IngredientPropertyList visibleProperties;
 	for ( IngredientPropertyList::const_iterator prop_it = recipe.properties.begin(); prop_it != recipe.properties.end(); ++prop_it ) {
-		if ( hiddenList.find((*prop_it).name) == hiddenList.end() )
+		if ( hiddenList.indexOf((*prop_it).name) == -1 ) 
 			visibleProperties.append( *prop_it );
 	}
 

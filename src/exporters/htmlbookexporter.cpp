@@ -86,7 +86,7 @@ void HTMLBookExporter::createCategoryStructure( QTextStream &xml, const RecipeLi
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
 			QMap<QString,QTextStream*>::iterator stream_it = fileMap.find( (*cat_it).name );
-			if ( categoriesUsed.find( ( *cat_it ).id ) == categoriesUsed.end() ) {
+			if ( categoriesUsed.indexOf( ( *cat_it ).id ) == -1 ) {
 				categoriesUsed << ( *cat_it ).id;
 
 				QString catPageName = m_basedir+"/"+escape((*cat_it).name)+".html";
@@ -117,7 +117,7 @@ void HTMLBookExporter::createCategoryStructure( QTextStream &xml, const RecipeLi
 bool HTMLBookExporter::removeIfUnused( const QList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
 {
 	for ( CategoryTree * it = parent->firstChild(); it; it = it->nextSibling() ) {
-		if ( cat_ids.find( it->category.id ) != cat_ids.end() ) {
+		if ( cat_ids.indexOf( it->category.id ) != -1 ) {
 			parent_should_show = true;
 			removeIfUnused( cat_ids, it, true ); //still recurse, but doesn't affect 'parent'
 		}

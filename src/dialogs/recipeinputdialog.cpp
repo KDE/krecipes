@@ -1331,7 +1331,7 @@ void RecipeInputDialog::slotIngredientParser()
 		QStringList usedGroups;
 		bool haveHeader = ingredientList->lastItem() && ingredientList->lastItem()->rtti() == INGGRPLISTVIEWITEM_RTTI;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
-			if ( !(*it).group.isEmpty() && usedGroups.find((*it).group) == usedGroups.end() ) {
+			if ( !(*it).group.isEmpty() && usedGroups.indexOf((*it).group) == -1 ) {
 				int id = IngredientInputWidget::createNewGroupIfNecessary((*it).group,database);
 				addIngredientHeader( Element((*it).group, id) );
 				haveHeader = true;

@@ -169,7 +169,7 @@ void RecipeViewDialog::removeOldFiles()
 void RecipeViewDialog::recipeRemoved( int id )
 {
 	//if the deleted recipe is loaded, clean the view up
-	if ( ids_loaded.find(id) != ids_loaded.end() ) {
+	if ( ids_loaded.indexOf(id) != -1 ) {
 		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
 		XSLTExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
 		ids_loaded.removeAll(id);

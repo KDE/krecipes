@@ -18,8 +18,6 @@
 #include <qbuffer.h>
 #include <qimage.h>
  #include <QImageWriter>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -179,7 +177,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 				if ( (*ing_it).substitutes.count() > 0 ) {
 					xml += "<substitutes>\n";
-					for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+					for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 						xml += "<ingredient>\n";
 						xml += generateIngredient(*sub_it);
 						xml += "</ingredient>\n";
@@ -201,7 +199,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		if (( *recipe_it ).properties.count() > 0) {
 			xml += "<krecipes-properties>\n";
 			for ( IngredientPropertyList::const_iterator prop_it = ( *recipe_it ).properties.begin(); prop_it != ( *recipe_it ).properties.end(); ++prop_it ) {
-				if ( hiddenList.find((*prop_it).name) == hiddenList.end() ) {
+            if ( hiddenList.indexOf((*prop_it).name) == -1 ) {
 					xml += "<property>\n";
 				} else {
 					xml += "<property hidden=\"true\">\n";
@@ -273,7 +271,7 @@ void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recip
 	QList<int> categoriesUsed;
 	for ( RecipeList::const_iterator recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		for ( ElementList::const_iterator cat_it = ( *recipe_it ).categoryList.begin(); cat_it != ( *recipe_it ).categoryList.end(); ++cat_it ) {
-			if ( categoriesUsed.find( ( *cat_it ).id ) == categoriesUsed.end() )
+			if ( categoriesUsed.indexOf( ( *cat_it ).id ) == -1 )
 				categoriesUsed << ( *cat_it ).id;
 		}
 	}
@@ -291,7 +289,7 @@ void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recip
 bool KreExporter::removeIfUnused( const QList<int> &cat_ids, CategoryTree *parent, bool parent_should_show )
 {
 	for ( CategoryTree * it = parent->firstChild(); it; it = it->nextSibling() ) {
-		if ( cat_ids.find( it->category.id ) != cat_ids.end() ) {
+		if ( cat_ids.indexOf( it->category.id ) != -1 ) {
 			parent_should_show = true;
 			removeIfUnused( cat_ids, it, true ); //still recurse, but doesn't affect 'parent'
 		}

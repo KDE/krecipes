@@ -67,7 +67,7 @@ private:
 	QMap<int, KreDisplayItem*> popup_widget_map;
 	QMap<KreDisplayItem*, int> widget_popup_map;
 	QMap<int, QString> included_layouts_map;
-	KMenu *shown_items_popup;
+	QMenu *shown_items_popup;
 };
 
 #endif //PAGESETUPDIALOG_H

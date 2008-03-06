@@ -13,8 +13,6 @@
 
 #include "datablocks/recipe.h"
 
-#include <q3valuelist.h>
-
 /**
 @author Unai Garro
 */

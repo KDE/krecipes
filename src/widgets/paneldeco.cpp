@@ -119,7 +119,7 @@ TopDeco::~TopDeco()
 void TopDeco::paintEvent( QPaintEvent * )
 {
 	// Get gradient colors
-	QColor c1 = QColorGroup( QPalette() ).button().light( 120 );
+	QColor c1 = QColorGroup( QPalette() ).color( QPalette::Button ).light( 120 );
 	QColor c2 = palette().color(backgroundRole());
 
 	// Draw the gradient
@@ -131,7 +131,7 @@ void TopDeco::paintEvent( QPaintEvent * )
 
 	// Add a line on top
 	QPainter painter( &kpm );
-	painter.setPen( QColorGroup( QPalette() ).button().dark( 130 ) );
+	painter.setPen( QColorGroup( QPalette() ).color( QPalette::Button ).dark( 130 ) );
 	painter.drawLine( 0, 0, width(), 0 );
 
 	// Now Add the icon
@@ -170,7 +170,7 @@ void TopDeco::setHeader( const QString &title, const QString &iconName )
 		update();
 }
 
-QSize TopDeco::sizeHint( void )
+QSize TopDeco::sizeHint( void ) const
 {
 	return ( QSize( parentWidget() ->width(), 30 ) );
 }

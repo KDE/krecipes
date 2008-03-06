@@ -76,7 +76,7 @@ class TopDeco: public QWidget
 public:
 	TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString::null, const QString &iconName = QString::null );
 	~TopDeco();
-	virtual QSize sizeHint( void );
+	virtual QSize sizeHint( void ) const;
 public slots:
 	void setHeader( const QString &title = QString::null, const QString &iconName = QString::null );
 protected:

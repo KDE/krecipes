@@ -120,7 +120,7 @@ QList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items
 		item = it.next();
 		if ( item->rtti() == 1000 ) { //RecipeListItem
 			RecipeListItem * recipe_it = ( RecipeListItem* ) item;
-			if ( ids.find( recipe_it->recipeID() ) == ids.end() )
+			if ( ids.indexOf( recipe_it->recipeID() ) == -1 )
 				ids << recipe_it->recipeID();
 		}
 		else if ( item->rtti() == 1001 ) {
@@ -129,7 +129,7 @@ QList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items
 			database->loadRecipeList( &list, cat_it->element().id, true );
 	
 			for ( ElementList::const_iterator cat_it = list.begin(); cat_it != list.end(); ++cat_it ) {
-				if ( ids.find( (*cat_it).id ) == ids.end() )
+				if ( ids.indexOf( (*cat_it).id ) == -1 )
 					ids << (*cat_it).id;
 			}
 		}
@@ -169,7 +169,7 @@ void RecipeActionsHandler::open()
 			{
 				if ( iterator.current() ->rtti() == 1000 ) {
 					RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-					if ( ids.find( recipe_it->recipeID() ) == ids.end() ) {
+					if ( ids.indexOf( recipe_it->recipeID() ) == -1 ) {
 						ids.append( recipe_it->recipeID() );
 					}
 				}
@@ -453,7 +453,7 @@ QList<int> RecipeActionsHandler::getAllVisibleItems()
 				RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
 				int recipe_id = recipe_it->recipeID();
 	
-				if ( ids.find( recipe_id ) == ids.end() )
+				if ( ids.indexOf( recipe_id ) == -1 )
 					ids.append( recipe_id );
 			}
 			//it is a category item and isn't populated, so get the unpopulated data from the database
@@ -463,7 +463,7 @@ QList<int> RecipeActionsHandler::getAllVisibleItems()
 				database->loadRecipeList( &list, cat_id, true );
 		
 				for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
-					if ( ids.find( (*it).id ) == ids.end() )
+					if ( ids.indexOf( (*it).id ) == -1 )
 						ids << (*it).id;
 				}
 			}

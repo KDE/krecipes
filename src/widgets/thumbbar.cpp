@@ -192,7 +192,8 @@ void ThumbBarView::clear(bool updateView)
 
 void ThumbBarView::triggerUpdate()
 {
-    d->timer->start(0, true);
+    d->timer->setSingleShot( true );
+    d->timer->start( 0 );
 }
 
 ThumbBarItem* ThumbBarView::currentItem() const

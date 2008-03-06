@@ -68,7 +68,7 @@ ConversionTable::~ConversionTable()
 #include <kdebug.h>
 void ConversionTable::unitRemoved( int id )
 {
-	int index = *unitIDs.find( id );
+	int index = unitIDs.indexOf( id );
 	kDebug() << "index:" << index << endl;
 	removeRow( index );
 	removeColumn( index );

@@ -22,7 +22,6 @@
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
 #include <QList>
 
 #include <kcombobox.h>
@@ -380,7 +379,12 @@ void IngredientInputWidget::clear()
 
 void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 {
-	QList<IngredientInput*>::iterator curr = m_ingInputs.find(input);
+   QList<IngredientInput*>::iterator curr;
+   if (m_ingInputs.indexOf(input) == -1)
+      curr = m_ingInputs.end();
+   else
+      curr = m_ingInputs.begin()+m_ingInputs.indexOf(input);
+
 	IngredientInput *prev_input = *curr;
 	++curr;
 

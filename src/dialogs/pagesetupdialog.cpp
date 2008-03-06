@@ -47,8 +47,6 @@
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent ), m_configEntry(configEntry)
 {
-	KIconLoader *il = KIconLoader::global(); 
-
 	QVBoxLayout * layout = new QVBoxLayout( this );
 
 	KToolBar *toolbar = new KToolBar( this );
@@ -63,8 +61,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	//KDE4 port do the last arguments of the KToolBarPopupAction and line 67 duplicate information ? 
 	KToolBarPopupAction *shown_items = new KToolBarPopupAction( KIcon(), i18n( "Items Shown" ), toolbar);
 	shown_items->setDelayed( false );
-	shown_items_popup = shown_items->popupMenu();
-	shown_items_popup->addTitle( i18n( "Show Items" ) );
+	shown_items_popup = shown_items->menu();
+	shown_items_popup->setTitle( i18n( "Show Items" ) );
 	toolbar->addAction( shown_items );
 
 	layout->addWidget( toolbar );

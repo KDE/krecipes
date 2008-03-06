@@ -161,7 +161,7 @@ void KWidgetListbox::setItemColors(int index, bool even)
 {
   QWidget* itm = item(index);
   // KDE4 add
-  QPalette* palette;
+  QPalette p = palette();
 if ( !itm){ kDebug()<<"no widget at index "<<index<<endl; return; }
 /*
   if(index == selected())
@@ -170,16 +170,12 @@ if ( !itm){ kDebug()<<"no widget at index "<<index<<endl; return; }
     itm->setPaletteForegroundColor(KGlobalSettings::highlightedTextColor());
   }*/
   if(even)
-  {
-    itm->setPaletteBackgroundColor(palette->base());
-    itm->setPaletteForegroundColor(palette->text());
-  }
+   p.setColor(backgroundRole(), p.base().color() );
   else
-  {
-    itm->setPaletteBackgroundColor(
-        palette->alternateBase());
-    itm->setPaletteForegroundColor(palette->text());
-  }
+   p.setColor(backgroundRole(), p.alternateBase().color() );
+  
+  p.setColor(foregroundRole(), p.text().color() );
+  itm->setPalette(p); 
 }
 
 void KWidgetListbox::showItems(show_callback func, void* data)
