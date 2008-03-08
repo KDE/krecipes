@@ -1006,12 +1006,17 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 	// To keep quoted words together, first split on quotes,
 	// and then split again on the even numbered items
 	
-	QStringList temp = QStringList::split('"',text,true);
+	QStringList temp;
+   if ( text.isEmpty() )
+       temp = QStringList();
+   else
+      temp = text.split( '"', QString::KeepEmptyParts );
+
 	for ( int i = 0; i < temp.count(); ++i ) {
 		if ( i & 1 ) //odd
 			result += temp[i].trimmed();
 		else         //even
-			result += QStringList::split(' ',temp[i]);
+			result += temp[i].split(' ',QString::SkipEmptyParts);
 	}
 
 	if ( sql_wildcards ) {

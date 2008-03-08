@@ -93,7 +93,11 @@ QString ElementList::join( const QString &sep ) const
 ElementList ElementList::split( const QString &sep, const QString &str )
 {
 	ElementList ret;
-	QStringList list = QStringList::split(sep,str);
+	QStringList list;
+   if (str.isEmpty())
+      list = QStringList();
+   else
+      list = str.split( sep, QString::SkipEmptyParts);
 
 	QStringList::const_iterator it_end = list.end();
 	QStringList::const_iterator it;

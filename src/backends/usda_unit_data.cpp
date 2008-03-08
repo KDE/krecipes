@@ -40,7 +40,7 @@ UnitDataList loadUnits()
 		while ( (line = stream.readLine()) != QString::null ) {
 			if ( line.trimmed().isEmpty() ) continue;
 
-			QStringList parts = QStringList::split(':', line, true);
+			QStringList parts = line.split(':' , QString::KeepEmptyParts);
 
 			UnitData data;
 			data.name = parts[0];

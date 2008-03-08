@@ -232,7 +232,12 @@ void IngredientParserDialog::parseText()
 	Q3ListViewItem *last_item = 0;
 
 	int line_num = 0;
-	QStringList ingredients = QStringList::split("\n",ingredientTextEdit->text());
+	QStringList ingredients;
+    if (ingredientTextEdit->text().isEmpty())
+        ingredients = QStringList();
+    else
+       ingredients = ingredientTextEdit->text().split( "\n", QString::SkipEmptyParts);
+
 	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
 		QString line = (*it).simplified();
 

@@ -69,7 +69,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 			break;
 		} //oops, this is really an ingredient line (there was no category line)
 
-		QStringList categories = QStringList::split( ',', current );
+		QStringList categories = current.split( ',', QString::SkipEmptyParts );
 
 		if ( categories.count() > 0 && categories[ 0 ].toUpper() == "none" )  //there are no categories
 			break;
@@ -145,7 +145,11 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	QString name;
 	QString prep;
 
-	QStringList ingredient_line = QStringList::split( ' ', current );
+	QStringList ingredient_line;
+   if (current.isEmpty())
+      ingredient_line = QStringList();
+   else
+      ingredient_line = current.split( ' ', QString::SkipEmptyParts);
 
 	bool found_amount = false;
 

@@ -128,7 +128,6 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	MenuId id = menus.append( newMenu );
 
 	// Add a button to the main menu for this submenu
-	KIconLoader *il = KIconLoader::global();
 	KreMenuButton *newMenuButton = new KreMenuButton( this );
 	newMenuButton->subMenuId = id;
 	newMenuButton->setTitle( title );

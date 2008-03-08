@@ -294,7 +294,13 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 
 void RezkonvExporter::writeDirections( QString &content, const Recipe &recipe )
 {
-	QStringList lines = QStringList::split("\n",recipe.instructions,true);
+	QStringList lines;
+    if (recipe.instructions.isEmpty())
+        lines = QStringList();
+    else
+       lines = recipe.instructions.split( "\n", QString::KeepEmptyParts);
+   
+
 	for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
 		content += wrapText( *it, 80 ).join( "\n" ) + "\n";
 	}

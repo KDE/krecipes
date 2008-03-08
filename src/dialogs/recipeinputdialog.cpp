@@ -1030,7 +1030,11 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 		{
 			QString old_text = new_ing.prepMethodList.join(",");
 
-			QStringList prepMethodList = QStringList::split(",",new_text.trimmed());
+			QStringList prepMethodList;
+         if (new_text.isEmpty())
+            prepMethodList = QStringList();
+         else
+            prepMethodList = new_text.split( ",", QString::SkipEmptyParts);
 
 			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
@@ -1690,7 +1694,7 @@ void RecipeInputDialog::statusLinkClicked( const QString &link )
 		d.exec();
 	} else if (link.startsWith("unit#")) {
 		QString unitIDs = link.mid(link.indexOf("#")+1);
-		QStringList idList = QStringList::split(",",unitIDs);
+		QStringList idList = unitIDs.split(",", QString::SkipEmptyParts );
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;
 		int lastUnit = -1;

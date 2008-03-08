@@ -505,7 +505,7 @@ void EditPropertiesDialog::loadDataFromFile()
 			continue;
 		}
 
-		QStringList fields = QStringList::split( "^", line, true );
+		QStringList fields = line.split( "^", QString::KeepEmptyParts );
 		loaded_data << fields;
 
 		QString ing_id = fields[ 0 ].mid( 1, fields[ 1 ].length() - 2 );

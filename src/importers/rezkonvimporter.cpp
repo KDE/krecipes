@@ -71,7 +71,12 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 
 	//categories (Kategorien):
 	text_it++;
-	QStringList categories = QStringList::split( ',', ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ) );
+	QStringList categories;
+   if ( ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).isEmpty() )
+      categories = QStringList();
+   else
+      categories = ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).split( ',', QString::SkipEmptyParts );
+
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();

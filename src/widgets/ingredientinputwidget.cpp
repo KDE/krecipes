@@ -258,7 +258,12 @@ bool IngredientInput::checkBounds()
 		return false;
 	}
 
-	QStringList prepMethodList = QStringList::split(",",prepMethodBox->currentText());
+	QStringList prepMethodList;
+   if (prepMethodBox->currentText().isEmpty())
+      prepMethodList = QStringList();
+   else
+      prepMethodList = prepMethodBox->currentText().split( ",", QString::SkipEmptyParts);
+   
 	for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
 		if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 		{

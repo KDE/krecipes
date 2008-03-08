@@ -762,7 +762,7 @@ void RecipeDB::importUSDADatabase()
 
 	kDebug() << "Parsing abbrev.txt" << endl;
 	while ( !stream.atEnd() ) {
-		QStringList fields = QStringList::split( "^", stream.readLine(), true );
+		QStringList fields = stream.readLine().split( "^", QString::KeepEmptyParts); 
 
 		int id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
 

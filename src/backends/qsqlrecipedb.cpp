@@ -1992,7 +1992,10 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 void QSqlRecipeDB::splitCommands( QString& s, QStringList& sl )
 {
-	sl = QStringList::split( QRegExp( ";{1}(?!@)" ), s );
+   if (s.isEmpty())
+       sl = QStringList();
+   else
+      sl = s.split( QRegExp( ";{1}(?!@)" ), QString::SkipEmptyParts);
 }
 
 float QSqlRecipeDB::databaseVersion( void )
