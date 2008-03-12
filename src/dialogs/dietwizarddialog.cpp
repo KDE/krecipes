@@ -178,7 +178,7 @@ void DietWizardDialog::changeDayNumber( int dn )
 	}
 	else if ( dn == 7 ) {
 		dayNumber = 7;
-		dayNumberLabel->setText( QString( i18n( "- 1 week -" ) ) );
+		dayNumberLabel->setText( i18n( "- 1 week -" )  );
 	}
 	else {
 		dayNumber = ( dn - 6 ) * 7;

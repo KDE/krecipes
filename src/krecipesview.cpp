@@ -144,8 +144,8 @@ KrecipesView::KrecipesView( QWidget *parent )
    contextButton->setObjectName( "contextButton" );
 	contextButton->setIcon( KIcon( "krectip" ) );
 	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
-   QPalette p = palette(); 
-   p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) ); 
+   QPalette p = palette();
+   p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) );
    contextButton->setPalette(p);
 	contextButton->setFlat( true );
 	END_TIMER()
@@ -444,8 +444,8 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 			if ( !inputPanel->everythingSaved() )
 			{
 				switch ( KMessageBox::questionYesNoCancel( this,
-				         QString( i18n( "A recipe contains unsaved changes.\n"
-				                        "Do you want to save changes made to this recipe before editing another recipe?" ) ),
+				         i18n( "A recipe contains unsaved changes.\n"
+				                        "Do you want to save changes made to this recipe before editing another recipe?" ),
 				         i18n( "Unsaved changes" ) ) ) {
 				case KMessageBox::Yes:
 					inputPanel->save();
@@ -496,8 +496,8 @@ void KrecipesView::createNewRecipe( void )
 {
 	if ( !inputPanel->everythingSaved() ) {
 		switch ( KMessageBox::questionYesNoCancel( this,
-		         QString( i18n( "A recipe contains unsaved changes.\n"
-		                        "Do you want to save changes made to this recipe before creating a new recipe?" ) ),
+		         i18n( "A recipe contains unsaved changes.\n"
+		                        "Do you want to save changes made to this recipe before creating a new recipe?" ),
 		         i18n( "Unsaved changes" ) ) ) {
 		case KMessageBox::Yes:
 			inputPanel->save();

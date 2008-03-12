@@ -17,8 +17,6 @@
 #include "baseexporter.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/mixednumber.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 class IngredientData;
 

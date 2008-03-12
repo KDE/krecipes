@@ -99,7 +99,7 @@ void MMFImporter::importMMF( QTextStream &stream )
    if ( current.mid( current.indexOf( ":" ) + 1, current.length() ).isEmpty() )
 	   categories = QStringList();
    else
-      categories = current.mid( current.indexOf( ":" ) + 1, current.length() ).split( separator, QString::SkipEmptyParts); 
+      categories = current.mid( current.indexOf( ":" ) + 1, current.length() ).split( separator, QString::SkipEmptyParts);
 
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
@@ -140,10 +140,10 @@ void MMFImporter::importMMF( QTextStream &stream )
 			loadIngredientLine( current.mid( 41, current.length() ), m_right_col_ing, is_sub );
 
 		if ( instruction_found && col_one_used ) {
-			addWarningMsg( QString( i18n( "While loading recipe <b>%1</b> "
+			addWarningMsg( i18n( "While loading recipe <b>%1</b> "
 			                              "an ingredient line was found after the directions. "
 			                              "While this is valid, it most commonly indicates an incorrectly "
-			                              "formatted recipe." ) ).arg( m_title ) );
+			                              "formatted recipe.", m_title ) );
 		}
 
 		if ( !col_one_used &&
@@ -219,7 +219,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		if ( !is_unit ) { /*This gives too many false warnings...
 						addWarningMsg( QString(i18n("Unit \"%1\" not recognized. "
 						  "Used in the context of \"%2\".  If this shouldn't be an ingredient line (i.e. is part of the instructions), "
-						  "then you can safely ignore this warning, and the recipe will be correctly imported.")).arg(unit).arg(string.trimmed()) );*/ 
+						  "then you can safely ignore this warning, and the recipe will be correctly imported.")).arg(unit).arg(string.trimmed()) );*/
 			return false;
 		}
 

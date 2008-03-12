@@ -152,7 +152,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QGridLayout* recipeLayout = new QGridLayout( recipeTab );
    recipeLayout->cellRect( 1, 1 );
    recipeLayout->setMargin( 0 );
-   recipeLayout->setSpacing( 0 ); 
+   recipeLayout->setSpacing( 0 );
 
 	// Border
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -1000,7 +1000,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 
 			if ( new_text.length() > int(database->maxUnitNameLength()) )
 			{
-				KMessageBox::error( this, QString( i18n( "Unit name cannot be longer than %1 characters." ) ).arg( database->maxUnitNameLength() ) );
+				KMessageBox::error( this, i18n( "Unit name cannot be longer than %1 characters." , database->maxUnitNameLength() ) );
 				ing_item->setUnit( old_unit );
 				break;
 			}
@@ -1039,7 +1039,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 				{
-					KMessageBox::error( this, QString( i18n( "Preparation method cannot be longer than %1 characters." ) ).arg( database->maxPrepMethodNameLength() ) );
+					KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
 					ing_item->setPrepMethod( old_text );
 					break;
 				}
@@ -1089,7 +1089,7 @@ bool RecipeInputDialog::save ( void )
 {
 	//check bounds first
 	if ( titleEdit->text().length() > int(database->maxRecipeTitleLength()) ) {
-		KMessageBox::error( this, QString( i18n( "Recipe title cannot be longer than %1 characters." ) ).arg( database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
+		KMessageBox::error( this, i18n( "Recipe title cannot be longer than %1 characters." , database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
 		return false;
 	}
 
