@@ -226,7 +226,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		int line;
 		int column;
 		if ( !doc.setContent( &input, &error, &line, &column ) ) {
-			kDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." ) ).arg( error ).arg( line ).arg( column ) ;
+                    kDebug() << i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." , error , line, column ) ;
 			return ;
 		}
 

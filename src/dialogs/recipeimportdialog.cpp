@@ -41,7 +41,7 @@ RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent 
 
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
-	
+
 
 	kListView = new K3ListView( page );
 	kListView->addColumn( i18n( "Recipes" ) );
@@ -67,7 +67,7 @@ void RecipeImportDialog::languageChange()
 
 void RecipeImportDialog::loadListView()
 {
-	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, QString( i18n( "All (%1)" ) ).arg( list_copy.count() ), Q3CheckListItem::CheckBox );
+	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, i18n( "All (%1)", list_copy.count() ), Q3CheckListItem::CheckBox );
 	head_item->setOpen( true );
 
 	//get all categories

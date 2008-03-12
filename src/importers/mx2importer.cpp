@@ -52,7 +52,7 @@ void MX2Importer::parseFile( const QString& filename )
 		int column;
 		if ( !doc.setContent( all_data, &error, &line, &column ) ) {
 			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) ;
-			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3.  This may not be a *.mx2 file." ) ).arg( error ).arg( line ).arg( column ) );
+			setErrorMsg( i18n( "\"%1\" at line %2, column %3.  This may not be a *.mx2 file.", error, line, column ) );
 			return ;
 		}
 
@@ -179,7 +179,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		/* tags to check for (example follows:
 		<Srce>SARA&apos;S SECRETS with Sara Moulton - (Show # SS-1B43) - from the TV FOOD NETWORK</Srce>
 		<AltS label="Formatted for MC7" source="07-11-2003  by Joe Comiskey - Mad&apos;s Recipe Emporium"/>
-		*/ 
+		*/
 		// TODO Have i missed some tag?
 	}
 }

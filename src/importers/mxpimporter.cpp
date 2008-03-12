@@ -83,8 +83,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 		//kDebug()<<"Found author: "<<new_author.name;
 	}
 	else {
-		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
-		                              "the field \"Recipe By:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
+		addWarningMsg( i18n( "While loading recipe \"%1\" "
+		                              "the field \"Recipe By:\" is either missing or could not be detected.", recipe.title ) );
 	}
 
 	//servings
@@ -103,8 +103,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 		//kDebug()<<"Found serving size: "<<recipe.yield.amount;
 	}
 	else {
-		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
-		                              "the field \"Serving Size:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
+		addWarningMsg( i18n( "While loading recipe \"%1\" "
+		                              "the field \"Serving Size:\" is either missing or could not be detected." , recipe.title ) );
 	}
 
 	if ( current.contains( "preparation time", Qt::CaseInsensitive ) ) {
@@ -114,8 +114,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 		kDebug() << "Found preparation time: " << prep_time ;
 	}
 	else {
-		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
-		                              "the field \"Preparation Time:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
+		addWarningMsg( i18n( "While loading recipe \"%1\" "
+                                     "the field \"Preparation Time:\" is either missing or could not be detected." , recipe.title ) );
 	}
 
 	loadCategories( stream, recipe );
@@ -158,8 +158,8 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 		//	kDebug()<<"No categories found.";
 	}
 	else {
-		addWarningMsg( QString( i18n( "While loading recipe \"%1\" "
-		                              "the field \"Categories:\" is either missing or could not be detected." ) ).arg( recipe.title ) );
+		addWarningMsg(i18n( "While loading recipe \"%1\" "
+                                    "the field \"Categories:\" is either missing or could not be detected.", recipe.title ) );
 
 		//the ingredient loaded will expect the last thing to have been read to be this header line
 		while ( current.trimmed() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() )
@@ -185,7 +185,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 				MixedNumber amount( MixedNumber::fromString( amount_str, &ok ) );
 				if ( !ok )
 				{
-					addWarningMsg( QString( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" ) ).arg( recipe.title ).arg( amount_str ).arg( current.trimmed() ) );
+					addWarningMsg( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" , recipe.title, amount_str , current.trimmed() ) );
 					current = stream.readLine();
 					continue;
 				}

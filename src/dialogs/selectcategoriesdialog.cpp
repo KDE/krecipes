@@ -87,7 +87,7 @@ void SelectCategoriesDialog::createNewCategory( void )
 
 		//check bounds first
 		if ( result.length() > int(database->maxCategoryNameLength()) ) {
-			KMessageBox::error( this, QString( i18n( "Category name cannot be longer than %1 characters." ) ).arg( database->maxCategoryNameLength() ) );
+			KMessageBox::error( this, i18n( "Category name cannot be longer than %1 characters.", database->maxCategoryNameLength() ) );
 			return ;
 		}
 
