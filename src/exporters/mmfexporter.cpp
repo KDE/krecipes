@@ -158,8 +158,8 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 		}
 	}
 	if ( !found_short_form ) {
-		kDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name << endl;
-		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
+		kDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name ;
+		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" ;
 		content += "   ";
 	}
 

@@ -162,7 +162,7 @@ void KWidgetListbox::setItemColors(int index, bool even)
   QWidget* itm = item(index);
   // KDE4 add
   QPalette p = palette();
-if ( !itm){ kDebug()<<"no widget at index "<<index<<endl; return; }
+if ( !itm){ kDebug()<<"no widget at index "<<index; return; }
 /*
   if(index == selected())
   {
@@ -197,14 +197,14 @@ void KWidgetListbox::showItems(show_callback func, void* data)
 
 void KWidgetListbox::showEvent(QShowEvent*)
 {
-  //kDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo ;
   repaintContents(false);
 }
 
 void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
                                bool, const QColorGroup&)
 {
-  //kDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo ;
 }
 
 #include "kwidgetlistbox.moc"

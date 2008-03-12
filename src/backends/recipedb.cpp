@@ -135,7 +135,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	}
 #endif //HAVE_POSTGRESQL
 	else {
-		kDebug() << "No database support included (or available) for the " << dbType << " database." << endl;
+		kDebug() << "No database support included (or available) for the " << dbType << " database." ;
 	}
 
 	return database;
@@ -160,7 +160,7 @@ void RecipeDB::loadCachedCategories( CategoryTree **list, int limit, int offset,
 			*list = m_categoryCache;
 		else //FIXME?: how slow is this find() call?  the cache is loaded in sequential order, so should we iterate over the cache?
 			*list = m_categoryCache->find(parent_id);
-		//kDebug() << "Loading category tree from the cache" << endl;
+		//kDebug() << "Loading category tree from the cache" ;
 	}
 	else {
 		loadCategories( *list, limit, offset, parent_id, recurse );
@@ -183,8 +183,8 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 			return Success;
 		}
 		else {
-			kDebug()<<"Unit conversion failed, you should probably update your unit conversion table."<<endl;
-			kDebug()<<from.units.id<<" to "<<to.id<<endl;
+			kDebug()<<"Unit conversion failed, you should probably update your unit conversion table.";
+			kDebug()<<from.units.id<<" to "<<to.id;
 			return MissingUnitConversion;
 		}
 	}
@@ -243,16 +243,16 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 		case Unit::Other: to_str = "Other"; break;
 		case Unit::Mass: to_str = "Mass"; break;
 		case Unit::Volume: to_str = "Volume"; break;
-		case Unit::All: kDebug()<<"Code error: trying to convert to unit of type 'All'"<<endl; return InvalidTypes;
+		case Unit::All: kDebug()<<"Code error: trying to convert to unit of type 'All'"; return InvalidTypes;
 		}
 		QString from_str;
 		switch ( from.units.type ) {
 		case Unit::Other: from_str = "Other"; break;
 		case Unit::Mass: from_str = "Mass"; break;
 		case Unit::Volume: from_str = "Volume"; break;
-		case Unit::All: kDebug()<<"Code error: trying to convert from unit of type 'All'"<<endl; return InvalidTypes;
+		case Unit::All: kDebug()<<"Code error: trying to convert from unit of type 'All'"; return InvalidTypes;
 		}
-		kDebug()<<"Can't handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")"<<endl;
+		kDebug()<<"Can't handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")";
 
 		return InvalidTypes;
 	}
@@ -260,14 +260,14 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 {
-	kDebug()<<"Backing up current database to "<<backup_file<<endl;
+	kDebug()<<"Backing up current database to "<<backup_file;
 
 	K3Process *p = new K3Process;
 	//p->setUseShell(true);
 
 	QIODevice *dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
 	if ( !dumpFile->open( QIODevice::WriteOnly ) ) {
-		kDebug()<<"Couldn't open "<<backup_file<<endl;
+		kDebug()<<"Couldn't open "<<backup_file;
 		return false;
 	}
 
@@ -275,17 +275,17 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	QStringList command = backupCommand();
 	if ( command.count() == 0 ) {
-		kDebug()<<"Backup not available for this database backend"<<endl;
+		kDebug()<<"Backup not available for this database backend";
 		return false;
 	}
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
-	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
-	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
-	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" )<<endl;
+	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version();
+	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion();
+	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" );
 
-	kDebug()<<"Running '"<<command.first()<<"' to create backup file"<<endl;
+	kDebug()<<"Running '"<<command.first()<<"' to create backup file";
 	*p << command /*<< ">" << backup_file*/;
 
 	QApplication::connect( p, SIGNAL(receivedStdout(K3Process*,char*,int)), this, SLOT(processDumpOutput(K3Process*,char*,int)) );
@@ -312,7 +312,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	//User cancelled it; we'll still consider the operation successful,
 	//but delete the file we created
 	if ( !p->normalExit() ) {
-		kDebug()<<"Process killed, deleting partial backup."<<endl;
+		kDebug()<<"Process killed, deleting partial backup.";
 		QFile::remove(backup_file);
 	}
 
@@ -331,7 +331,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 			appOutput = appErrStream.readAll();
 		}
 		else
-			kDebug()<<"Unable to open file to get error output."<<endl;
+			kDebug()<<"Unable to open file to get error output.";
 
 		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
@@ -351,7 +351,7 @@ void RecipeDB::processDumpOutput( K3Process *p, char *buffer, int buflen )
 {
 	int written = dumpStream->device()->write(buffer,buflen);
 	if ( written != buflen )
-		kDebug()<<"Data lost: written ("<<written<<") != buflen ("<<buflen<<")"<<endl;
+		kDebug()<<"Data lost: written ("<<written<<") != buflen ("<<buflen<<")";
 
 	if ( haltOperation ) { haltOperation=false; p->kill(); return; }
 	emit progress();
@@ -364,20 +364,20 @@ void RecipeDB::initializeData( void )
 	// Read the commands form the data file
 	QString dataFilename =  KStandardDirs::locate( "appdata", "data/data-" + KGlobal::locale() ->language() + ".sql" );
 	if ( dataFilename.isEmpty() ) {
-		kDebug() << "NOTICE: Sample data (categories, units, etc.) for the language \"" << KGlobal::locale() ->language() << "\" is not available.  However, if you would like samples data for this language included in future releases of Krecipes, we invite you to submit your own. Contact me at jkivlighn@gmail.com for details." << endl;
+		kDebug() << "NOTICE: Sample data (categories, units, etc.) for the language \"" << KGlobal::locale() ->language() << "\" is not available.  However, if you would like samples data for this language included in future releases of Krecipes, we invite you to submit your own. Contact me at jkivlighn@gmail.com for details." ;
 
 		dataFilename =  KStandardDirs::locate( "appdata", "data/data-en_US.sql" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Loading: " << dataFilename << endl;
+		kDebug() << "Loading: " << dataFilename ;
 		QTextStream stream( &dataFile );
 		execSQL(stream);
 		dataFile.close();
 	}
 	else
-		kDebug() << "Unable to find or open sample data file (data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open sample data file (data-en_US.sql)" ;
 }
 
 bool RecipeDB::restore( const QString &file, QString *errMsg )
@@ -419,7 +419,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		K3ProcIO *process = new K3ProcIO;
 
 		QStringList command = restoreCommand();
-		kDebug()<<"Restoring backup using: "<<command[0]<<endl;
+		kDebug()<<"Restoring backup using: "<<command[0];
 		*process << command;
 		
 		//process->setComm( K3Process::Stdin );
@@ -435,7 +435,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 				array.resize(len);
 
 				if ( !process->writeStdin(array) )
-					kDebug()<<"Yikes! Some input couldn't be written to the process!"<<endl;
+					kDebug()<<"Yikes! Some input couldn't be written to the process!";
 
 				if ( haltOperation ) { break; }
 				emit progress();
@@ -459,7 +459,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			}
 		}
 		else
-			kDebug()<<"Unable to start process"<<endl;
+			kDebug()<<"Unable to start process";
 
 		delete process;
 		emit progressDone();
@@ -480,7 +480,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		checkIntegrity();
 	}
 	else {
-		kDebug()<<"Unable to open the selected backup file"<<endl;
+		kDebug()<<"Unable to open the selected backup file";
 		return false;
 	}
 
@@ -542,7 +542,7 @@ void RecipeDB::importSamples()
 	QString sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-" +  KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
-		kDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." << endl;
+		kDebug() << "NOTICE: Samples recipes for the language \"" << KGlobal::locale() ->language() << "\" are not available.  However, if you would like samples recipes for this language included in future releases of Krecipes, we invite you to submit your own.  Just save your favorite recipes in the kreml format and e-mail them to jkivlighn@gmail.com." ;
 
 		sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-en_US.kreml" ); //default to English
 	}
@@ -556,7 +556,7 @@ void RecipeDB::importSamples()
 		importer.import( this, true );
 	}
 	else
-		kDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" << endl;
+		kDebug() << "Unable to find samples recipe file (samples-en_US.kreml)" ;
 }
 
 void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
@@ -722,7 +722,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 		+QString(tableList.count()!=0?","+tableList.join(","):"")
 		+QString(conditionList.count()!=0?" WHERE "+conditionList.join(" AND "):"");
 
-	kDebug()<<"calling: "<<wholeQuery<<endl;
+	kDebug()<<"calling: "<<wholeQuery;
 	return wholeQuery+";";
 }
 
@@ -737,13 +737,13 @@ void RecipeDB::importUSDADatabase()
 	//check if the data file even exists before we do anything
 	QString abbrev_file =  KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
-		kDebug() << "Unable to find abbrev.txt data file." << endl;
+		kDebug() << "Unable to find abbrev.txt data file." ;
 		return ;
 	}
 
 	QFile file( abbrev_file );
 	if ( !file.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Unable to open data file: " << abbrev_file << endl;
+		kDebug() << "Unable to open data file: " << abbrev_file ;
 		return ;
 	}
 
@@ -760,7 +760,7 @@ void RecipeDB::importUSDADatabase()
 	QTextStream stream( &file );
 	Q3ValueList<ingredient_nutrient_data> *data = new Q3ValueList<ingredient_nutrient_data>;
 
-	kDebug() << "Parsing abbrev.txt" << endl;
+	kDebug() << "Parsing abbrev.txt" ;
 	while ( !stream.atEnd() ) {
 		QStringList fields = stream.readLine().split( "^", QString::KeepEmptyParts); 
 
@@ -824,7 +824,7 @@ void RecipeDB::importUSDADatabase()
 		loadIngredients( &ing_list );
 
 		if ( ing_list.count() == 0 ) {
-			kDebug()<<"Found an empty database... enabling fast nutrient import"<<endl;
+			kDebug()<<"Found an empty database... enabling fast nutrient import";
 			do_checks = false;
 		}
 	}
@@ -839,7 +839,7 @@ void RecipeDB::importUSDADatabase()
 
 	for ( it = data->begin(); it != data_end; ++it ) {
 		counter++;
-		kDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name << endl;
+		kDebug() << "Inserting (" << counter << " of " << total << "): " << ( *it ).name ;
 
 		if ( haltOperation ) { haltOperation=false; break;}
 		emit progress();
@@ -893,7 +893,7 @@ void RecipeDB::importUSDADatabase()
 
 	delete data;
 
-	kDebug() << "USDA data import successful" << endl;
+	kDebug() << "USDA data import successful" ;
 
 	emit progressDone();
 }

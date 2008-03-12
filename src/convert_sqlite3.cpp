@@ -73,7 +73,7 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\"";
 		}
 		else {
-			kDebug()<<"Conversion successful!"<<endl;
+			kDebug()<<"Conversion successful!";
 			QFile::remove(file+".new");
 		}
 	}

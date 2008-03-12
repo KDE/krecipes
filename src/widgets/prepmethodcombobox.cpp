@@ -28,7 +28,7 @@ public:
 	{}
 
 	virtual QString makeCompletion( const QString &string ) {
-		kDebug()<<"original makeCompletion( "<<string<<" )"<<endl;
+		kDebug()<<"original makeCompletion( "<<string<<" )";
 
 		int comma_index = string.lastIndexOf(",");
 		QString completion_txt = string;
@@ -37,17 +37,17 @@ public:
 		if ( completion_txt.isEmpty() )
 			return string;
 
-		kDebug()<<"altered makeCompletion( "<<completion_txt<<" )"<<endl;
+		kDebug()<<"altered makeCompletion( "<<completion_txt<<" )";
 
 		completion_txt = KCompletion::makeCompletion(completion_txt);
-		kDebug()<<"got: "<<completion_txt<<endl;
+		kDebug()<<"got: "<<completion_txt;
 
 		if ( completion_txt.isEmpty() )
 			completion_txt = string;
 		else if ( comma_index != -1 )
 			completion_txt = string.left( comma_index ) + "," + completion_txt;
 
-		kDebug()<<"returning: "<<completion_txt<<endl;
+		kDebug()<<"returning: "<<completion_txt;
 		return completion_txt;
 	}
 };
@@ -103,7 +103,7 @@ int PrepMethodComboBox::id( const QString &ing )
 		if ( ing == itemText( i ) )
 			return id(i);
 	}
-	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
+	kDebug()<<"Warning: couldn't find the ID for "<<ing;
 	return -1;
 }
 

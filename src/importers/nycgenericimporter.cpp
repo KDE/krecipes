@@ -76,7 +76,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 
 		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 			Element new_cat( QString( *it ).trimmed() );
-			kDebug() << "Found category: " << new_cat.name << endl;
+			kDebug() << "Found category: " << new_cat.name ;
 			m_recipe.categoryList.append( new_cat );
 		}
 	}
@@ -90,7 +90,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 	while ( !( found_next = ( current = stream.readLine() ).startsWith( "@@@@@" ) ) && !stream.atEnd() ) {
 		if ( current.startsWith( "Contributor:" ) ) {
 			Element new_author( current.mid( current.indexOf( ':' ) + 1, current.length() ).trimmed() );
-			kDebug() << "Found author: " << new_author.name << endl;
+			kDebug() << "Found author: " << new_author.name ;
 			m_recipe.authorList.append( new_author );
 		}
 		else if ( current.startsWith( "Preparation Time:" ) ) {
@@ -136,7 +136,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 
 	if ( current.contains( "-----" ) ) {
 		current_header = current.trimmed();
-		kDebug() << "Found ingredient header: " << current_header << endl;
+		kDebug() << "Found ingredient header: " << current_header ;
 		return ;
 	}
 

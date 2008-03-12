@@ -65,8 +65,8 @@ QSqlRecipeDB::~QSqlRecipeDB()
 
 void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 {
-	kDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) << endl;
-	kDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname << endl;
+	kDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) ;
+	kDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname ;
 
 	bool driver_found = false;
 
@@ -93,7 +93,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	else if ( !qsqlDriverPlugin().isEmpty() )
 		database = QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
 	else
-		kDebug()<<"Fatal internal error!  Backend incorrectly written!"<<endl;
+		kDebug()<<"Fatal internal error!  Backend incorrectly written!";
 
 	database.setDatabaseName( DBname );
 	if ( !( DBuser.isNull() ) )
@@ -104,12 +104,12 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	if ( DBport > 0 )
         	database.setPort(DBport);
 
-	kDebug() << i18n( "Parameters set. Calling db->open()" ) << endl;
+	kDebug() << i18n( "Parameters set. Calling db->open()" ) ;
 
 	if ( !database.open() ) {
 		//Try to create the database
 		if ( create_db ) {
-			kDebug() << i18n( "Failing to open database. Trying to create it" ) << endl;
+			kDebug() << i18n( "Failing to open database. Trying to create it" ) ;
 			createDB();
 		}
 		else {
@@ -215,7 +215,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 					if ( yield_query.isActive() && yield_query.first() )
 						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toByteArray());
 					else
-						kDebug()<<yield_query.lastError().databaseText()<<endl;
+						kDebug()<<yield_query.lastError().databaseText();
 				}
 			}
 
@@ -1667,7 +1667,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 		//no matching prep method found, use entry without a prep method if there was one
 		if ( convertedAmount > 0 ) {
 			if ( wasApproximated ) *wasApproximated = true;
-			kDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method."<<endl;
+			kDebug()<<"Prep method given, but no weight entry found that uses that prep method.  I'm fudging the weight with an entry without a prep method.";
 
 			return convertedAmount;
 		}
@@ -1974,7 +1974,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	kDebug() << "Checking database version...\n";
 	float version = databaseVersion();
 	kDebug() << "version found... " << version << " \n";
-	kDebug() << "latest version... " << latestDBVersion() << endl;
+	kDebug() << "latest version... " << latestDBVersion() ;
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
 		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?  Depending on the number of recipes and amount of data, this could take some time.<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.<br><br>Cancelling this operation may result in corrupting the database.</b>" ) ) ) {
 		case KMessageBox::Yes:
@@ -2073,9 +2073,9 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 			CategoryTree *list_child = list->add( el );
 
 			if ( recurse ) {
-				//QTime dbg_timer; dbg_timer.start(); kDebug()<<"   calling QSqlRecipeDB::loadCategories"<<endl;
+				//QTime dbg_timer; dbg_timer.start(); kDebug()<<"   calling QSqlRecipeDB::loadCategories";
 				loadCategories( list_child, -1, -1, id ); //limit and offset won't be used
-				// kDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms"<<endl;
+				// kDebug()<<"   done in "<<dbg_timer.elapsed()<<" ms";
 			}
 		}
 	}
@@ -2747,7 +2747,7 @@ void QSqlRecipeDB::empty( void )
 		tablesToEmpty.exec( command );
 
 		if ( !tablesToEmpty.isActive() )
-			kDebug()<<tablesToEmpty.lastError().databaseText()<<endl;
+			kDebug()<<tablesToEmpty.lastError().databaseText();
 
 		++it;
 	}

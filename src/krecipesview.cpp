@@ -62,9 +62,9 @@ KrecipesView::KrecipesView( QWidget *parent )
 	//kapp->dcopClient()->setDefaultObject( objId() );
 
 	// Init the setup wizard if necessary
-	kDebug() << "Beginning wizard" << endl;
+	kDebug() << "Beginning wizard" ;
 	wizard();
-	kDebug() << "Wizard finished correctly" << endl;
+	kDebug() << "Wizard finished correctly" ;
 
 	// Show Splash Screen
 
@@ -272,7 +272,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	delete start_logo;
 
 	#ifndef NDEBUG
-	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec"<<endl;
+	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
 	#endif
 }
 
@@ -292,7 +292,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 	if ( answer == KMessageBox::Yes )
 		wizard( true );
 	else {
-		kError() << error << ". " << i18n( "Exiting" ) << endl;
+		kError() << error << ". " << i18n( "Exiting" ) ;
 		kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 		return false;
 	}
@@ -547,7 +547,7 @@ void KrecipesView::wizard( bool force )
 			config = KGlobal::config()->group( "DBType" );
 			dbType = config.readEntry( "Type", "SQLite" );
 
-			kDebug() << "Setting up" << endl;
+			kDebug() << "Setting up" ;
 			setupWizard->getOptions( setupUser, initData, doUSDAImport );
 
 			// Setup user if necessary
@@ -657,7 +657,7 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 {
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
-		kError() << i18n( "Code error. No DB support has been included. Exiting" ) << endl;
+		kError() << i18n( "Code error. No DB support has been included. Exiting" ) ;
 		kapp->exit( 1 );
 	}
 
@@ -824,7 +824,7 @@ void KrecipesView::initDatabase()
 	if ( !database ) {
 		// No DB type has been enabled(should not happen at all, but just in case)
 
-		kError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+		kError() << i18n( "Code error. No DB support was built in. Exiting" ) ;
 		kapp->exit( 1 );
 	}
 
@@ -849,7 +849,7 @@ void KrecipesView::initDatabase()
 		else {
 			// No DB type has been enabled (should not happen at all, but just in case)
 
-			kError() << i18n( "Code error. No DB support was built in. Exiting" ) << endl;
+			kError() << i18n( "Code error. No DB support was built in. Exiting" ) ;
 			kapp->exit( 1 );
 			break;
 		}

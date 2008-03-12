@@ -55,7 +55,7 @@ QDomElement KoPageLayout::saveKreFormat( QDomDocument &doc ) const
     style.setAttribute("margin-right", ptRight);
     style.setAttribute("margin-top", ptTop);
     style.setAttribute("margin-bottom", ptBottom);
-    style.setAttribute("print-orientation", (orientation == PG_LANDSCAPE ? "landscape" : "portrait"));kDebug()<<"margin-left: "<<ptLeft<<endl;
+    style.setAttribute("print-orientation", (orientation == PG_LANDSCAPE ? "landscape" : "portrait"));kDebug()<<"margin-left: "<<ptLeft;
     return style;
 }
 
@@ -149,12 +149,12 @@ int KoPageFormat::printerPageSize( KoFormat format )
 {
     if ( format == PG_SCREEN )
     {
-            kWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
+            kWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." ;
             return KPrinter::A4;
     }
     else if ( format == PG_CUSTOM )
     {
-            kWarning() << "The used page layout (CUSTOM) is not supported by KPrinter. Printing in A4." << endl;
+            kWarning() << "The used page layout (CUSTOM) is not supported by KPrinter. Printing in A4." ;
             return KPrinter::A4;
     }
     else if ( format <= PG_LAST_FORMAT )

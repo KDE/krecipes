@@ -36,14 +36,14 @@ namespace USDA {
 
 		QString dataFilename = KStandardDirs::locate( "appdata", "data/ingredient-data-" + KGlobal::locale() ->language() + ".txt" );
 		if ( dataFilename.isEmpty() ) {
-			kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
+			kDebug() << "No localized property data available for " << KGlobal::locale() ->language() ;
 	
 			dataFilename = KStandardDirs::locate( "appdata", "data/ingredient-data-en_US.txt" ); //default to English
 		}
 
 		QFile dataFile( dataFilename );
 		if ( dataFile.open( QIODevice::ReadOnly ) ) {
-			kDebug() << "Loading: " << dataFilename << endl;
+			kDebug() << "Loading: " << dataFilename ;
 			QTextStream stream( &dataFile );
 
 			QString line;
@@ -68,7 +68,7 @@ namespace USDA {
 			dataFile.close();
 		}
 		else
-			kDebug() << "Unable to find or open property data file (ingredient-data-en_US.sql)" << endl;
+			kDebug() << "Unable to find or open property data file (ingredient-data-en_US.sql)" ;
 
 		return result;
 	}

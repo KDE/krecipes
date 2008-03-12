@@ -215,7 +215,7 @@ void StdPropertyListView::saveProperty( Q3ListViewItem* i )
 		reload(); //reset the changed text
 		return ;
 	}
-kDebug() << "saveProp: " << i->text( 0 ) << endl;
+kDebug() << "saveProp: " << i->text( 0 ) ;
 	int existing_id = database->findExistingPropertyByName( i->text( 0 ) );
 	int prop_id = i->text( 2 ).toInt();
 	if ( existing_id != -1 && existing_id != prop_id )  //category already exists with this label... merge the two

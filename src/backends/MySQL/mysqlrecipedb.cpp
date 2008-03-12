@@ -42,12 +42,12 @@ void MySQLRecipeDB::createDB()
 		//FIXME: I've noticed certain characters cause this to fail (such as '-').  Somehow let the user know.
 		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
 		if ( !query.isActive() )
-			kDebug() << "create query failed: " << database.lastError().databaseText() << endl;
+			kDebug() << "create query failed: " << database.lastError().databaseText() ;
 
 		database.close();
 	}
 	else
-		kDebug() << "create open failed: " << database.lastError().databaseText() << endl;
+		kDebug() << "create open failed: " << database.lastError().databaseText() ;
 
 	database.setDatabaseName( real_db_name );
 }
@@ -400,7 +400,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database.exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.83 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.83 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 84 ) {
@@ -415,7 +415,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		database.exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
 
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.84 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.84 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 85 ) {
@@ -434,7 +434,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		database.exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.85 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.85 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 86 ) {
@@ -466,7 +466,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		database.exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.86 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 87 ) {
@@ -497,7 +497,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		database.exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.92 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 93 ) {
@@ -507,7 +507,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		database.exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060615)'");
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.93 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.93 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 94 ) {
@@ -517,7 +517,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		database.exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.94 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.94 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 95 ) {

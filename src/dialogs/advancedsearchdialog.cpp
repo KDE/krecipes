@@ -918,7 +918,7 @@ void AdvancedSearchDialog::search()
                                 }
 
 
-				kDebug()<<"average for "<<(*recipe_it).title<<" "<<average<<endl;
+				kDebug()<<"average for "<<(*recipe_it).title<<" "<<average;
 				if ( average < stars || average > stars + stars_offset ) {
 					recipe_it = allRecipes.remove( recipe_it );
 					recipe_it--;

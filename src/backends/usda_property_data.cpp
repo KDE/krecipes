@@ -33,14 +33,14 @@ Q3ValueList<PropertyData> loadProperties()
 
 	QString dataFilename = KStandardDirs::locate( "appdata", "data/property-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kDebug() << "No localized property data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized property data available for " << KGlobal::locale() ->language() ;
 
 		dataFilename = KStandardDirs::locate( "appdata", "data/property-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Loading: " << dataFilename << endl;
+		kDebug() << "Loading: " << dataFilename ;
 		QTextStream stream( &dataFile );
 
 		QString line;
@@ -58,7 +58,7 @@ Q3ValueList<PropertyData> loadProperties()
 		dataFile.close();
 	}
 	else
-		kDebug() << "Unable to find or open property data file (property-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open property data file (property-data-en_US.sql)" ;
 
 	return result;
 }

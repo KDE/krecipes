@@ -61,7 +61,7 @@ void BaseExporter::exporter( const QList<int> &ids, RecipeDB *database, KProgres
 	if ( createFile() )
 		saveToFile( ids, database );
 	else
-		kDebug() << "no output file has been selected for export." << endl;
+		kDebug() << "no output file has been selected for export." ;
 }
 
 void BaseExporter::exporter( int id, RecipeDB *database, KProgressDialog *progress_dlg )

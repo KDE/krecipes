@@ -69,10 +69,10 @@ ConversionTable::~ConversionTable()
 void ConversionTable::unitRemoved( int id )
 {
 	int index = unitIDs.indexOf( id );
-	kDebug() << "index:" << index << endl;
+	kDebug() << "index:" << index ;
 	removeRow( index );
 	removeColumn( index );
-	kDebug() << "done" << endl;
+	kDebug() << "done" ;
 }
 
 void ConversionTable::unitCreated( const Unit &unit )

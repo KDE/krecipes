@@ -126,7 +126,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 	url.setPath( tmp_filename + ".html" );
 	recipeView->openUrl( url );
 	recipeView->show();
-	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) << endl;
+	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) ;
 
 	delete progress_dialog;
 	return true;

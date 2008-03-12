@@ -89,7 +89,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	stream.skipWhiteSpace();
 	current = stream.readLine();
 	m_title = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
-	kDebug() << "Found title: " << m_title << endl;
+	kDebug() << "Found title: " << m_title ;
 
 	//categories
 	stream.skipWhiteSpace();
@@ -104,7 +104,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();
-		kDebug() << "Found category: " << new_cat.name << endl;
+		kDebug() << "Found category: " << new_cat.name ;
 		m_categories.append( new_cat );
 	}
 
@@ -115,12 +115,12 @@ void MMFImporter::importMMF( QTextStream &stream )
 		//get the number between the ":" and the next space after it
 		m_servings = current.mid( current.indexOf( ":" ) + 1,
 		                          current.indexOf( " ", current.indexOf( ":" ) + 2 ) - current.indexOf( ":" ) ).toInt();
-		kDebug() << "Found yield: " << m_servings << endl;
+		kDebug() << "Found yield: " << m_servings ;
 	}
 	else if ( current.startsWith( "Servings:" ) )  //from database version
 	{
 		m_servings = current.mid( current.indexOf( ":" , 0, Qt::CaseSensitive ) + 1, current.length() ).toInt();
-		kDebug() << "Found servings: " << m_servings << endl;
+		kDebug() << "Found servings: " << m_servings ;
 	}
 
 	//=======================VARIABLE FORMAT===================//
@@ -151,13 +151,13 @@ void MMFImporter::importMMF( QTextStream &stream )
 			if ( !current.trimmed().isEmpty() )
 				instruction_found = true;
 			m_instructions += current.trimmed() + "\n";
-			//kDebug()<<"Found instruction line: "<<current.trimmed()<<endl;
+			//kDebug()<<"Found instruction line: "<<current.trimmed();
 		}
 
 		current = stream.readLine();
 	}
 	m_instructions = m_instructions.trimmed();
-	//kDebug()<<"Found instructions: "<<m_instructions<<endl;
+	//kDebug()<<"Found instructions: "<<m_instructions;
 
 	putDataInRecipe();
 }
@@ -173,7 +173,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 
 	if ( string.at( 11 ) == '-' && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
-		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length())<<endl;
+		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length());
 		( *list.at( list.count() - 1 ) ).name += " " + string.trimmed().mid( 1, string.length() );
 		QString name = ( *list.at( list.count() - 1 ) ).name;
 
@@ -269,7 +269,7 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		header.remove( QRegExp( "^MMMMM" ) );
 		header.remove( QRegExp( "^-*" ) ).remove( QRegExp( "-*$" ) );
 
-		kDebug() << "found ingredient header: " << header << endl;
+		kDebug() << "found ingredient header: " << header ;
 
 		//merge all columns before appending to full ingredient list to maintain the ingredient order
 		for ( IngredientList::iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it ) {

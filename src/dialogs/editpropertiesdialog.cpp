@@ -487,13 +487,13 @@ void EditPropertiesDialog::loadDataFromFile()
 {
 	QString abbrev_file = KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
-		kDebug() << "Unable to find abbrev.txt data file." << endl;
+		kDebug() << "Unable to find abbrev.txt data file." ;
 		return ;
 	}
 
 	QFile file( abbrev_file );
 	if ( !file.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Unable to open data file: " << abbrev_file << endl;
+		kDebug() << "Unable to open data file: " << abbrev_file ;
 		return ;
 	}
 

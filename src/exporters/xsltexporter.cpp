@@ -77,7 +77,7 @@ XSLTExporter::XSLTExporter( const QString& filename, const QString &format ) :
      || template_filename.endsWith(".template") ) //handle the transition to xslt
 		template_filename = KStandardDirs::locate( "appdata", "layouts/Default.xsl" );
 
-	kDebug() << "Using template file: " << template_filename << endl;
+	kDebug() << "Using template file: " << template_filename ;
 
 	setTemplate( template_filename );
 
@@ -103,7 +103,7 @@ void XSLTExporter::setTemplate( const QString &filename )
 		m_templateFilename = filename;
 	}
 	else
-		kDebug()<<"couldn't find/open template file"<<endl;
+		kDebug()<<"couldn't find/open template file";
 }
 
 int XSLTExporter::supportedItems() const
@@ -150,12 +150,12 @@ QString XSLTExporter::createFooter()
 
 QString XSLTExporter::createHeader( const RecipeList & )
 {
-	kDebug() << "Using layout: " << m_layoutFilename << endl;
+	kDebug() << "Using layout: " << m_layoutFilename ;
 	QFile layoutFile( m_layoutFilename );
 	QString error; int line; int column;
 	QDomDocument doc;
 	if ( !doc.setContent( &layoutFile, &error, &line, &column ) ) {
-		kDebug()<<"Unable to load style information.  Will create HTML without it..."<<endl;
+		kDebug()<<"Unable to load style information.  Will create HTML without it...";
 	}
 	else
 		processDocument(doc);
@@ -208,7 +208,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	QString cssContent;
 	QFileInfo info(m_templateFilename);
 	QFile cssFile(info.absolutePath() + "/" + info.baseName() + ".css");
-	kDebug()<<info.absolutePath() + "/" + info.baseName() + ".css"<<endl;
+	kDebug()<<info.absolutePath() + "/" + info.baseName() + ".css";
 	if ( cssFile.open( QIODevice::ReadOnly ) ) {
 		cssContent = QString( cssFile.readAll() );
 	}
@@ -232,7 +232,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	QByteArray content = buffer.toUtf8();
 	xmlDocPtr kremlDoc = xmlReadMemory(content, content.length(), "noname.xml", "utf-8", 0);
 	if (kremlDoc == NULL) {
-		kDebug() << "Failed to parse document" << endl;
+		kDebug() << "Failed to parse document" ;
 		return i18n("<html><b>Error:</b> Problem with KreML exporter.  Please export the recipe you are trying to view as KreML and attach it to a bug report to a Krecipes developer.</html>");
 	}
 
@@ -341,7 +341,7 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 	QFileInfo fi(fileName());
 	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
-		kDebug() << "photo: " << photo_path << endl;
+		kDebug() << "photo: " << photo_path ;
 		pm.save( photo_path, "PNG" );
 	}
 }
@@ -355,7 +355,7 @@ void XSLTExporter::removeHTMLFiles( const QString &filename, int recipe_id )
 
 void XSLTExporter::removeHTMLFiles( const QString &filename, const QList<int> &recipe_ids )
 {
-	kDebug() << "removing html files" << endl;
+	kDebug() << "removing html files" ;
 	//remove HTML file
 	QFile old_file( filename + ".html" );
 	if ( old_file.exists() )

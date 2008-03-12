@@ -960,7 +960,7 @@ void KoRuler::showMousePos( bool _showMPos )
 
 void KoRuler::setOffset( int _diffx, int _diffy )
 {
-    //kDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
+    //kDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy ;
     diffx = _diffx;
     diffy = _diffy;
     update();

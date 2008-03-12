@@ -304,8 +304,8 @@ int DietWizardDialog::getNecessaryFlags() const
 			break;
 	}
 
-	kDebug()<<"Do we need to load ingredients: "<<need_ingredients<<endl;
-	kDebug()<<"Do we need to load categories: "<<need_categories<<endl;
+	kDebug()<<"Do we need to load ingredients: "<<need_ingredients;
+	kDebug()<<"Do we need to load categories: "<<need_categories;
 
 	int flags = 0;
 	if ( need_ingredients ) flags |= RecipeDB::Ingredients;

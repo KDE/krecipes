@@ -57,7 +57,7 @@ int LiteRecipeDB::lastInsertID()
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
-	//kDebug()<<"lastInsertID(): "<<lastID<<endl;
+	//kDebug()<<"lastInsertID(): "<<lastID;
 
 	return lastID;
 }
@@ -742,7 +742,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database.exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.86 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.86 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 87 ) {
@@ -805,7 +805,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 
 		database.exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
 		if ( !database.commit() )
-			kDebug()<<"Update to 0.92 failed.  Maybe you should try again."<<endl;
+			kDebug()<<"Update to 0.92 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 93 ) {
@@ -914,11 +914,11 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	QString command;
 
 	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
-	kDebug()<<"calling: "<<command<<endl;
+	kDebug()<<"calling: "<<command;
 	database.exec( command );
 
 	command = "SELECT * FROM "+table_name;
-	kDebug()<<"calling: "<<command<<endl;
+	kDebug()<<"calling: "<<command;
 	QSqlQuery copyQuery = database.exec( command );
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
@@ -932,7 +932,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				dataList << "'"+escape(data)+"'";
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
-			kDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command;
 			database.exec( command );
 
 			emit progress();
@@ -956,7 +956,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				dataList << "'"+escape(data)+"'";
 			}
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
-			kDebug()<<"calling: "<<command<<endl;
+			kDebug()<<"calling: "<<command;
 			database.exec( command );
 
 			emit progress();

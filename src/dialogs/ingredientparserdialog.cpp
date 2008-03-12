@@ -270,7 +270,7 @@ void IngredientParserDialog::parseText()
 			ing.amount_offset = i.amount_offset;
 		}
 		else
-			kDebug()<<"no amount on line "<<line_num<<endl;
+			kDebug()<<"no amount on line "<<line_num;
 
 
 		//======unit======//
@@ -294,7 +294,7 @@ void IngredientParserDialog::parseText()
 			ing.units.plural = unitCheck;
 		}
 		else
-			kDebug()<<"no unit on line "<<line_num<<endl;
+			kDebug()<<"no unit on line "<<line_num;
 
 
 		//======ingredient======//

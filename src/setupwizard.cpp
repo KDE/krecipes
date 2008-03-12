@@ -657,7 +657,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 
 void SetupWizard::save( void )
 {
-	kDebug() << "Setting parameters in kconfig..." << endl;
+	kDebug() << "Setting parameters in kconfig..." ;
 
 	// Save the database type
 	QString sDBType;
@@ -676,7 +676,7 @@ void SetupWizard::save( void )
 	
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 	config.writeEntry( "Type", sDBType );
-	kDebug() << "DB type set in kconfig was... " << sDBType << endl;
+	kDebug() << "DB type set in kconfig was... " << sDBType ;
 	// Save the server data if needed
 	if ( !( dbTypeSetupPage->dbType() == SQLite ) ) {
 		config = KGlobal::config()->group( "Server" ); 
@@ -684,7 +684,7 @@ void SetupWizard::save( void )
 		config.writeEntry( "Username", serverSetupPage->user() );
 		config.writeEntry( "Password", serverSetupPage->password() );
 		config.writeEntry( "DBName", serverSetupPage->dbName() );
-		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." << endl;
+		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." ;
 	}
 	else {
 		config = KGlobal::config()->group( "Server" ); 
@@ -696,7 +696,7 @@ void SetupWizard::save( void )
 	config = KGlobal::config()->group( "Wizard" );
 	config.writeEntry( "SystemSetup", true );
 	config.writeEntry( "Version", "0.9" );
-	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType << endl;
+	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType ;
 }
 
 void SetupWizard::getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport )

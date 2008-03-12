@@ -107,7 +107,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	QString tmpl = config.readEntry( m_configEntry+"Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 	if ( tmpl.isEmpty() || !QFile::exists( tmpl ) )
 		tmpl = KStandardDirs::locate( "appdata", "layouts/Default.xsl" );
-	kDebug()<<"tmpl: "<<tmpl<<endl;
+	kDebug()<<"tmpl: "<<tmpl;
 	active_template = tmpl;
 	loadLayout( layoutFile );
 

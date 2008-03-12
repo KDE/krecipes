@@ -36,9 +36,9 @@ MX2Importer::MX2Importer()
 void MX2Importer::parseFile( const QString& filename )
 {
 	QFile file( filename );
-	kDebug() << "loading file: " << filename << endl;
+	kDebug() << "loading file: " << filename ;
 	if ( file.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "file opened" << endl;
+		kDebug() << "file opened" ;
 		QDomDocument doc;
 
 		//hopefully a temporary hack, since MasterCook creates invalid xml declarations
@@ -51,7 +51,7 @@ void MX2Importer::parseFile( const QString& filename )
 		int line;
 		int column;
 		if ( !doc.setContent( all_data, &error, &line, &column ) ) {
-			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) << endl;
+			kDebug() << QString( "error: \"%1\" at line %2, column %3" ).arg( error ).arg( line ).arg( column ) ;
 			setErrorMsg( QString( i18n( "\"%1\" at line %2, column %3.  This may not be a *.mx2 file." ) ).arg( error ).arg( line ).arg( column ) );
 			return ;
 		}

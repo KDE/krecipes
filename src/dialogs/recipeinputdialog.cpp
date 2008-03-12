@@ -1113,7 +1113,7 @@ void RecipeInputDialog::saveRecipe( void )
 	loadedRecipe->prepTime = prepTimeEdit->time();
 
 	// Now save()
-	kDebug() << "Saving..." << endl;
+	kDebug() << "Saving..." ;
 	database->saveRecipe( loadedRecipe );
 
 
@@ -1601,7 +1601,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::MismatchedPrepMethodUsingApprox:
 				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(ing.ingredientID));
 				break;
-			default: kDebug()<<"Code error: Unhandled conversion status code "<<status<<endl; break;
+			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
 			}
 		}
 	}

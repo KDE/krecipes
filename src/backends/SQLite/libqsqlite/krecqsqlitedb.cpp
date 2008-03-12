@@ -95,7 +95,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 
 	{
 		kDebug() << "SQLite error: " << errmsg << endl <<
-		"\t (Query: " << query << ")" << endl;
+		"\t (Query: " << query << ")" ;
 		res.setError( QString(errmsg) );
 		res.setStatus( QSQLiteResult::Failure );
 

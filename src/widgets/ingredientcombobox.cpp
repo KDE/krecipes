@@ -117,7 +117,7 @@ int IngredientComboBox::id( const QString &ing )
 		if ( ing == itemText( i ) )
 			return id(i);
 	}
-	kDebug()<<"Warning: couldn't find the ID for "<<ing<<endl;
+	kDebug()<<"Warning: couldn't find the ID for "<<ing;
 	return -1;
 }
 

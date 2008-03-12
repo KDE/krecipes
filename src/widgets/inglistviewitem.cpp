@@ -25,7 +25,7 @@ IngSubListViewItem::IngSubListViewItem( Q3ListViewItem* qli, const Ingredient &i
 QString IngSubListViewItem::text( int column ) const
 {
 	if ( column == 0 ) {
-		//kDebug()<<"displaying col 0 for "<<m_ing.name<<endl;
+		//kDebug()<<"displaying col 0 for "<<m_ing.name;
 		return QString("%1 ").arg(i18n("OR"))+m_ing.name;
 		//return m_ing.name;
 	}

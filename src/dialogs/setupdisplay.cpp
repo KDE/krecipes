@@ -117,7 +117,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample.ratingList.append(rating1);
 	}
 
-	kDebug()<<"first load"<<endl;
+	kDebug()<<"first load";
 	loadHTMLView();
 	show();
 
@@ -142,7 +142,7 @@ SetupDisplay::~SetupDisplay()
 
 void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &styleFile )
 {
-	kDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile<<endl;
+	kDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile;
 	QString tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
 	XSLTExporter exporter( tmp_filename + ".html", "html" );
 	if ( templateFile != QString::null )
@@ -158,13 +158,13 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 		exporter.writeStream(stream,recipeList);
 	}
 	else {
-		kDebug()<<"Unable to open file for writing"<<endl;
+		kDebug()<<"Unable to open file for writing";
 	}
 	file.close();
 
 	KUrl url;
 	url.setPath( tmp_filename + ".html" );
-	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) << endl;
+	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) ;
 
 	//KDE4 port
 	KParts::OpenUrlArguments argsUrl ( arguments() );
@@ -226,7 +226,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		int line;
 		int column;
 		if ( !doc.setContent( &input, &error, &line, &column ) ) {
-			kDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." ) ).arg( error ).arg( line ).arg( column ) << endl;
+			kDebug() << QString( i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." ) ).arg( error ).arg( line ).arg( column ) ;
 			return ;
 		}
 
@@ -238,7 +238,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		has_changes = false;
 	}
 	else
-		kDebug() << "Unable to open file: " << filename << endl;
+		kDebug() << "Unable to open file: " << filename ;
 }
 
 void SetupDisplay::beginObject( const QString &object )
@@ -387,7 +387,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 		stream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" << doc.toString();
 	}
 	else
-		kDebug() << "Error: Unable to write to file " << filename << endl;
+		kDebug() << "Error: Unable to write to file " << filename ;
 }
 
 void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
@@ -411,7 +411,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( node.isNull() || node.nodeType() != DOM::Node::ELEMENT_NODE ) {
-		kDebug() << "No relevant node" << endl;
+		kDebug() << "No relevant node" ;
 		return;
 	}
 
@@ -419,7 +419,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 
 	m_currNodeId = element.getAttribute("class").string();
 	if ( m_currNodeId.isEmpty() ) {
-		kDebug()<<"Code error: unable to determine class of selected element"<<endl;
+		kDebug()<<"Code error: unable to determine class of selected element";
 		return;
 	}
 

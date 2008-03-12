@@ -422,7 +422,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
-				kDebug() << "saving: " << fi.absolutePath() + "/" + image_url << endl;
+				kDebug() << "saving: " << fi.absolutePath() + "/" + image_url ;
 			}
 
 			rating_total++;

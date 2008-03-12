@@ -26,14 +26,14 @@ UnitDataList loadUnits()
 
 	QString dataFilename = KStandardDirs::locate( "appdata", "data/unit-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kDebug() << "No localized unit data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized unit data available for " << KGlobal::locale() ->language() ;
 
 		dataFilename = KStandardDirs::locate( "appdata", "data/unit-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Loading: " << dataFilename << endl;
+		kDebug() << "Loading: " << dataFilename ;
 		QTextStream stream( &dataFile );
 
 		QString line;
@@ -59,7 +59,7 @@ UnitDataList loadUnits()
 		dataFile.close();
 	}
 	else
-		kDebug() << "Unable to find or open unit data file (unit-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open unit data file (unit-data-en_US.sql)" ;
 
 	return result;
 }
@@ -70,14 +70,14 @@ PrepDataList loadPrepMethods()
 
 	QString dataFilename = KStandardDirs::locate( "appdata", "data/prep-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {
-		kDebug() << "No localized prep data available for " << KGlobal::locale() ->language() << endl;
+		kDebug() << "No localized prep data available for " << KGlobal::locale() ->language() ;
 
 		dataFilename = KStandardDirs::locate( "appdata", "data/prep-data-en_US.txt" ); //default to English
 	}
 
 	QFile dataFile( dataFilename );
 	if ( dataFile.open( QIODevice::ReadOnly ) ) {
-		kDebug() << "Loading: " << dataFilename << endl;
+		kDebug() << "Loading: " << dataFilename ;
 		QTextStream stream( &dataFile );
 
 		QString line;
@@ -97,7 +97,7 @@ PrepDataList loadPrepMethods()
 		dataFile.close();
 	}
 	else
-		kDebug() << "Unable to find or open prep data file (prep-data-en_US.sql)" << endl;
+		kDebug() << "Unable to find or open prep data file (prep-data-en_US.sql)" ;
 
 	return result;
 }

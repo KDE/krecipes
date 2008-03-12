@@ -237,7 +237,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 
 			if (new_amount_str.length() > 7) { //still too long, use original formatting, but truncate it
 				amount_str = amount_str.left(7);
-				kDebug()<<"Warning: Amount text too long, truncating"<<endl;
+				kDebug()<<"Warning: Amount text too long, truncating";
 			}
 		}
 		content += amount_str.rightJustified( 7, ' ', true ) + " ";
@@ -260,8 +260,8 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 		}
 	}
 	if ( !found_translation ) {
-		kDebug() << "Warning: unable to find German translation for: " << ing.units.name << endl;
-		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" << endl;
+		kDebug() << "Warning: unable to find German translation for: " << ing.units.name ;
+		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" ;
 		content += QString().fill(' ',9+1);
 	}
 

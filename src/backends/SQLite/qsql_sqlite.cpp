@@ -79,7 +79,7 @@ QVariant KreSQLiteResult::data( int field )
 
 bool KreSQLiteResult::fetch( int i )
 {
-kDebug()<<"fetch_i"<<endl;
+kDebug()<<"fetch_i";
 	if ( isForwardOnly() ) { // fake a forward seek
 		if ( at() < i ) {
 			int x = i - at();
@@ -127,7 +127,7 @@ bool KreSQLiteResult::fetchFirst()
 }
 
 bool KreSQLiteResult::fetchLast()
-{kDebug()<<"fetchlast"<<endl;
+{kDebug()<<"fetchlast";
 	if ( isForwardOnly() ) { // fake this since MySQL can't seek on forward only queries
 		bool success = fetchNext(); // did we move at all?
 		while ( fetchNext() );
@@ -145,18 +145,18 @@ bool KreSQLiteResult::isNull( int /*i*/ )
 }
 
 QSqlRecord KreSQLiteResult::record()
-{kDebug()<<"record"<<endl;
+{kDebug()<<"record";
 	return QSqlRecord();
 }
 
 int KreSQLiteResult::size()
 {
-//kDebug()<<"size: "<<result.size()<<endl;
+//kDebug()<<"size: "<<result.size();
 	return result.size();
 }
 
 int KreSQLiteResult::numRowsAffected()
-{kDebug()<<"numrowsaffected"<<endl;
+{kDebug()<<"numrowsaffected";
 	return 1;/*sqlite3_changes(db)*/
 }
 
@@ -451,7 +451,7 @@ QString KreSQLiteDriver::formatValue( const QSqlField* field, bool trimStrings )
 				// Escape '\' characters
 				r = QSqlDriver::formatValue( field );
 				//r = escape(r);
-				//kDebug()<<"escaping sqlite string: "<<r<<endl;
+				//kDebug()<<"escaping sqlite string: "<<r;
 				break;
 			}
 			default:

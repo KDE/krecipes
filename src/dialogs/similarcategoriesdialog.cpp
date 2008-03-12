@@ -332,7 +332,7 @@ void RecipeActionsHandler::mergeSimilar()
 			#else
 			if ( compareStrings(name,(*it).name) >= max_allowed_distance ) {
 			#endif
-				kDebug()<<(*it).name<<" matches"<<endl;
+				kDebug()<<(*it).name<<" matches";
 				if ( cat_it->categoryId() != (*it).id )
 					matches.append(*it);
 			}
@@ -358,13 +358,13 @@ void SimilarCategoriesDialog::findMatches()
 	const QString name = categoriesBox->text();
 
 	for ( ElementList::const_iterator it = m_elementList.begin(); it != m_elementList.end(); ++it ) {
-		//kDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold<<endl;
+		//kDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold;
 		#if 0
 		if ( levenshtein_distance(name.toLatin1(),(*it).name.toLatin1())/double(qMax(length,(*it).name.length())) >= max_allowed_distance ) {
 		#else
 		if ( compareStrings(name,(*it).name) >= threshold ) {
 		#endif
-			kDebug()<<(*it).name<<" matches"<<endl;
+			kDebug()<<(*it).name<<" matches";
 			//if ( id != (*it).id ) {
 				(void) new Q3ListViewItem(allListView,(*it).name,QString::number((*it).id));
 				(void) new Q3ListViewItem(toMergeListView,(*it).name,QString::number((*it).id));
