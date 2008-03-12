@@ -43,12 +43,16 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 
 	bool success = p->start( K3Process::Block, true );
 	if ( !success ) {
-		kDebug()<<"Conversion failed... unable to start K3Process"<<endl;
+		kDebug()<<"Conversion failed... unable to start KProcess";
+                delete p;
 		return;
 	}
 
 	if ( error )
-		return;
+        {
+            delete p;
+            return;
+        }
 
 
 	QString backup_file = file+".sqlite2";
@@ -60,13 +64,13 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 
 	if ( !copyFile( file, backup_file ) ) {
 		kDebug()<<"Unable to backup SQLite 2 database... aborting"<<endl
-		  <<"A successfully converted SQLite 3 file is available at \""<<file<<".new\"."<<endl;
+		  <<"A successfully converted SQLite 3 file is available at \""<<file<<".new\".";
 	}
 	else {
-		kDebug()<<"SQLite 2 database backed up to "<<backup_file<<endl;
+		kDebug()<<"SQLite 2 database backed up to "<<backup_file;
 		if ( !copyFile( file+".new", file ) ) {
 			kDebug()<<"Unable to copy the new SQLite 3 database to: "<<file<<"."<<endl
-			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\""<<endl;
+			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\"";
 		}
 		else {
 			kDebug()<<"Conversion successful!"<<endl;
@@ -100,10 +104,10 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 	QFile newFile(newFilePath);
 	bool openOld = oldFile.open( QIODevice::ReadOnly );
 	bool openNew = newFile.open( QIODevice::WriteOnly );
-	
+
 	//if either file fails to open bail
 	if(!openOld || !openNew) { return false; }
-	
+
 	//copy contents
 	uint BUFFER_SIZE = 16000;
 	char* buffer = new char[BUFFER_SIZE];
@@ -112,7 +116,7 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 		Q_ULONG len = oldFile.read( buffer, BUFFER_SIZE );
 		newFile.write( buffer, len );
 	}
-	
+
 	//deallocate buffer
 	delete[] buffer;
 	buffer = NULL;
