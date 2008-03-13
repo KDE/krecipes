@@ -54,7 +54,7 @@ protected:
 	bool        fetchNext();
 	bool        fetchLast();
 	bool        isNull( int );
-	QSqlRecord  record();
+	QSqlRecord  record() const;
 	int         size();
 	int         numRowsAffected();
 
@@ -144,7 +144,7 @@ bool KreSQLiteResult::isNull( int /*i*/ )
 	return false;
 }
 
-QSqlRecord KreSQLiteResult::record()
+QSqlRecord KreSQLiteResult::record() const
 {kDebug()<<"record";
 	return QSqlRecord();
 }
@@ -226,7 +226,7 @@ bool KreSQLiteDriver::hasFeature(DriverFeature f) const
    SQLite dbs have no user name, passwords, hosts or ports.
    just file names.
 */
-bool KreSQLiteDriver::open(const QString & file, const QString &, const QString &, const QString &, int, const QString&) 
+bool KreSQLiteDriver::open(const QString & file, const QString &, const QString &, const QString &, int, const QString&)
 {
 	if (isOpen())
 		close();
@@ -249,6 +249,7 @@ bool KreSQLiteDriver::open(const QString & file, const QString &, const QString 
 
 void KreSQLiteDriver::close()
 {
+    qDebug()<<" CLOSE !!!!!!!!!!!!!!!!!!!!!!!!!!!";
     if (isOpen()) {
         db->close();
         delete db; db = 0;
@@ -310,21 +311,20 @@ bool KreSQLiteDriver::rollbackTransaction()
 	return false;
 }
 
-QStringList KreSQLiteDriver::tables(const QString &typeName) const
+QStringList KreSQLiteDriver::tables(QSql::TableType typeTable) const
 {
 	QStringList res;
 	if (!isOpen())
 		return res;
 
-	int type = typeName.toInt();
 
 	QSqlQuery q = createQuery();
 	q.setForwardOnly(true);
-	if ((type & (int)QSql::Tables) && (type & (int)QSql::Views))
+	if ((typeTable & QSql::Tables) && (typeTable & QSql::Views))
 		q.exec("SELECT name FROM sqlite_master WHERE type='table' OR type='view'");
-	else if (typeName.isEmpty() || (type & (int)QSql::Tables))
+	else if ((typeTable & QSql::Tables))
 		q.exec("SELECT name FROM sqlite_master WHERE type='table'");
-	else if (type & (int)QSql::Views)
+	else if (typeTable & QSql::Views)
 		q.exec("SELECT name FROM sqlite_master WHERE type='view'");
 
 	if (q.isActive()) {
@@ -333,7 +333,7 @@ QStringList KreSQLiteDriver::tables(const QString &typeName) const
 		}
 	}
 
-	if (type & (int)QSql::SystemTables) {
+	if (typeTable & QSql::SystemTables) {
 		// there are no internal tables beside this one:
 		res.append("sqlite_master");
 	}

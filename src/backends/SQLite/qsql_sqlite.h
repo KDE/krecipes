@@ -25,7 +25,7 @@ class QSQLiteDB;
 class KreSQLiteDriver : public QSqlDriver
 {
 public:
-	KreSQLiteDriver(QObject * parent = 0, const char * name = 0);	
+	KreSQLiteDriver(QObject * parent = 0, const char * name = 0);
 	KreSQLiteDriver(QSQLiteDB *connection, QObject *parent = 0, const char *name = 0);
 	~KreSQLiteDriver();
 
@@ -34,7 +34,7 @@ public:
 			const QString&,
 			const QString&,
 			const QString&,
-			int, 
+			int,
 			const QString&);
 	void    close();
 	QSqlQuery createQuery() const;
@@ -43,9 +43,9 @@ public:
 	bool beginTransaction();
 	bool commitTransaction();
 	bool rollbackTransaction();
-	QStringList tables(const QString &typeName) const;
+	QStringList tables(QSql::TableType) const;
 	QSqlIndex primaryIndex(const QString &tblname) const;
-	
+
 	//QSqlRecordInfo recordInfo(const QString &tbl) const;
 	//QSqlRecord record(const QString &tblname) const;
 	//QString formatValue( const QSqlField* field, bool trimStrings ) const;
