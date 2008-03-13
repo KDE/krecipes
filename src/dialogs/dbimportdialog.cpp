@@ -162,12 +162,12 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 #if (!(HAVE_SQLITE || HAVE_SQLITE3))
 
 	liteRadioButton->setEnabled( false );
-#if (HAVE_MYSQL)
+#ifdef (HAVE_MYSQL)
 
 	dbButtonGroup->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
 	switchDBPage(1);
 #else
-	#if (HAVE_POSTGRESQL)
+	#ifdef (HAVE_POSTGRESQL)
 
 	dbButtonGroup->setButton( 2 );
 	switchDBPage(2);
