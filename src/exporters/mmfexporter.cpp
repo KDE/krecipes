@@ -192,7 +192,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 
 void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )
 {
-	QStringList lines = QStringList::split("\n",recipe.instructions,true);
+	QStringList lines;
    if (recipe.instructions.isEmpty())
        lines = QStringList();
    else

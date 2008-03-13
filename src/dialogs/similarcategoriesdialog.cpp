@@ -275,7 +275,12 @@ QStringList letterPairs(const QString& str) {
 Q3ValueList<QStringList> wordLetterPairs(const QString &str) {
 	Q3ValueList<QStringList> allPairs;
 	// Tokenize the string and put the tokens/words into an array
-	QStringList words = QStringList::split("\\s",str);
+	QStringList words;
+   if(str.isEmpty())
+      words = QStringList();
+   else
+      words = str.split( "\\s", QString::SkipEmptyParts );
+
 	// For each word
 	for (int w=0; w < words.count(); w++) {
 		// Find the pairs of characters

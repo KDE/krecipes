@@ -281,7 +281,7 @@ void BorderDialog::setColor( const QColor &color )
 	valuePal->setSaturation( s );
 	valuePal->setValue( v );
 	valuePal->updateContents();
-	valuePal->repaint( FALSE );
+	valuePal->repaint();
 }
 
 #include "borderdialog.moc"
