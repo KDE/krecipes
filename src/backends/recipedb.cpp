@@ -67,11 +67,11 @@ struct ingredient_nutrient_data
 {
 	int usda_id;
 	QString name;
-	Q3ValueList<double> data;
+	QList<double> data;
 	WeightList weights;
 };
 
-RecipeDB::RecipeDB() : 
+RecipeDB::RecipeDB() :
 	QObject(), m_categoryCache(0), haltOperation(false)
 {
 	dbOK = false;
@@ -409,7 +409,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			return false;
 		}
 
-		
+
 		//We have to first wipe the database structure.  Note that if we load a dump
 		//with from a previous version of Krecipes, the difference in structure
 		// wouldn't allow the data to be inserted.  This remains forward-compatibity
@@ -421,7 +421,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		QStringList command = restoreCommand();
 		kDebug()<<"Restoring backup using: "<<command[0];
 		*process << command;
-		
+
 		//process->setComm( K3Process::Stdin );
 		if ( process->start( K3Process::NotifyOnExit ) ) {
 			emit progressBegin(0,QString::null,
@@ -762,7 +762,7 @@ void RecipeDB::importUSDADatabase()
 
 	kDebug() << "Parsing abbrev.txt" ;
 	while ( !stream.atEnd() ) {
-		QStringList fields = stream.readLine().split( "^", QString::KeepEmptyParts); 
+		QStringList fields = stream.readLine().split( "^", QString::KeepEmptyParts);
 
 		int id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
 
@@ -852,8 +852,8 @@ void RecipeDB::importUSDADatabase()
 		if ( do_checks ) loadProperties( &ing_properties, assigned_id );
 		if ( ing_properties.count() == 0 )  //ingredient doesn't already have any properties
 		{
-			Q3ValueList<double>::const_iterator property_it;
-			Q3ValueList<double>::const_iterator property_end = ( *it ).data.end();
+			QList<double>::const_iterator property_it;
+			QList<double>::const_iterator property_end = ( *it ).data.end();
 			int i = 0;
 			for ( property_it = ( *it ).data.begin(); property_it != property_end; ++property_it, ++i )
 				addPropertyToIngredient( assigned_id, property_data_list[ i ].id, ( *property_it ) / 100.0, unit_g_id );

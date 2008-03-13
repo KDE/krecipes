@@ -12,8 +12,6 @@
 #define HTMLEXPORTER_H
 
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "baseexporter.h"
 #include "klomanager.h"

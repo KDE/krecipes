@@ -138,7 +138,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	KIconLoader *il = KIconLoader::global();
 	KMenu *kpop = new KMenu( criteriaListView );
-	kpop->insertItem( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
+	kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
 
 	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
 		criteriaComboBox->insertItem( criteriaComboBox->count(), ( *criteria_it ).name );

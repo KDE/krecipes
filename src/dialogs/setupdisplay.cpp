@@ -438,10 +438,10 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & BackgroundColor )
-		popup->insertItem( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
+		popup->addAction( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
 
 	if ( properties & TextColor )
-		popup->insertItem( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
+		popup->addAction( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
 
 	if ( properties & Font )
 		popup->insertItem( KIcon( "text" ), i18n( "Font..." ), this, SLOT( setFont() ) );
@@ -477,10 +477,10 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & Border )
-		popup->insertItem( i18n( "Border..." ), this, SLOT( setBorder() ) );
+		popup->addAction( i18n( "Border..." ), this, SLOT( setBorder() ) );
 
 	if ( properties & Columns )
-		popup->insertItem( i18n( "Columns..." ), this, SLOT( setColumns() ) );
+		popup->addAction( i18n( "Columns..." ), this, SLOT( setColumns() ) );
 
 	popup->popup( point );
 }
