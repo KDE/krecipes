@@ -60,7 +60,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	liteRadioButton = new QRadioButton( dbButtonGroup );
    liteRadioButton->setObjectName( "liteRadioButton" );
-	liteRadioButton->setChecked( TRUE );
+	liteRadioButton->setChecked( true );
 	dbButtonGroupLayout->addWidget( liteRadioButton );
 
 	mysqlRadioButton = new QRadioButton( dbButtonGroup );

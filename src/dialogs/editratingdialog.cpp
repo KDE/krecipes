@@ -97,10 +97,10 @@ void EditRatingDialog::init( const ElementList &criteriaList )
    criteriaLabel->setObjectName( "criteriaLabel" );
 
 	criteriaComboBox = new QComboBox( layout8 );
-   criteriaComboBox->setEditable( FALSE );
+   criteriaComboBox->setEditable( false );
    criteriaComboBox->setObjectName( "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
-	criteriaComboBox->setEditable( TRUE );
+	criteriaComboBox->setEditable( true );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
 
 	starsLabel = new QLabel( layout8 );

@@ -48,7 +48,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 
-	setSizeGripEnabled( TRUE );
+	setSizeGripEnabled( true );
 
 
 	KHBox *vbox = new KVBox(page);
@@ -66,7 +66,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	KHBox *fromBottomBox = new KHBox(vbox);
 
-	ingredientBox = new IngredientComboBox( FALSE, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
+	ingredientBox = new IngredientComboBox( false, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
 	ingredientBox->reload();
 
 	prepMethodBox = new PrepMethodComboBox( false, fromBottomBox, db, i18n( "-No Preparation-" ) );

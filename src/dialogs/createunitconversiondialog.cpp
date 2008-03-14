@@ -54,7 +54,7 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 	buttonGroup1Layout->addWidget( toUnitEdit );
 
 	toUnitComboBox = new QComboBox( buttonGroup1 );
-   toUnitComboBox->setEditable( FALSE );
+   toUnitComboBox->setEditable( false );
    toUnitComboBox->setObjectName( "toUnitComboBox" );
 	buttonGroup1Layout->addWidget( toUnitComboBox );
 

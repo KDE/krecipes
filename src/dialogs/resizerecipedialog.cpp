@@ -82,7 +82,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	yieldFrameLayout->addWidget( newYieldLabel, 1, 1, 1, 2, 0 );
 
 	currentYieldInput = new KLineEdit( yieldFrame );
-	currentYieldInput->setReadOnly( TRUE );
+	currentYieldInput->setReadOnly( true );
 	currentYieldInput->setAlignment( Qt::AlignRight );
 	yieldFrameLayout->addWidget( currentYieldInput, 0, 1, 1, 2, 0 );
 

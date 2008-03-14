@@ -156,7 +156,7 @@ void DietWizardDialog::changeMealNumber( int mn )
 
 		while ( mealNumber != mn ) {
 			mealNumber++;
-			newTab( i18n( "Meal %1" ).arg( mealNumber ) );
+			newTab( i18n( "Meal %1" , mealNumber ) );
 
 		}
 	}

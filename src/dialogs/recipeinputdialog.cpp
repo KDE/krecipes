@@ -92,7 +92,7 @@ void ClickableLed::mouseReleaseEvent( QMouseEvent* )
 ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabel( parent ),
 		sourcePhoto( _sourcePhoto )
 {
-	setAcceptDrops( TRUE );
+	setAcceptDrops( true );
 }
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
@@ -1553,10 +1553,10 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::Success: break;
 			case RecipeDB::MissingUnitConversion: {
 				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"))
-						.arg(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
-						.arg((*prop_it).perUnit.name)
-						.arg(ing.name));
+					propertyStatusMapRed.insert(ing.ingredientID,i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
+						,(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
+						,((*prop_it).perUnit.name)
+						,ing.name));
 				} else {
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
 					Q3ValueList< QPair<int,int> > usedIds;
@@ -1581,10 +1581,10 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 
 						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
 					}
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate ingredient weight entry</a>, or provide conversion information to perform one of the following conversions: %2"))
-					  .arg(ing.name)
-					  .arg("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
-					  .arg(ing.ingredientID)
+					propertyStatusMapRed.insert(ing.ingredientID,i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate ingredient weight entry</a>, or provide conversion information to perform one of the following conversions: %2",
+					  ing.name
+					  ,("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
+					  ,ing.ingredientID)
 					);
 				}
 				break;

@@ -1,10 +1,9 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Krecipes
 Name[sv]=Krecept
 Name[ta]=கிளிக்கர்
 Name[xx]=xxKrecipesxx
-Exec=krecipes %i %m -caption "%c"
+Exec=krecipes %i -caption "%c"
 Icon=krecipes
 Type=Application
 Categories=Qt;KDE;Database;X-KDE-More;
