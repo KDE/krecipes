@@ -37,7 +37,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent 
 	layout->addWidget( authorListView );
 
 	//Buttons
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout();
+   vboxl->setSpacing( KDialog::spacingHint() );
 
 	newAuthorButton = new QPushButton( this );
 	newAuthorButton->setText( i18n( "Create ..." ) );

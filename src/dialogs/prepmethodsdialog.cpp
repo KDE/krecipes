@@ -28,14 +28,17 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	// Store pointer to database
 	database = db;
 
-	QHBoxLayout* layout = new QHBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+	QHBoxLayout* layout = new QHBoxLayout( this );
+   layout->setSpacing( KDialog::spacingHint() );
+   layout->setMargin( KDialog::marginHint() );
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );
 	layout->addWidget( prepMethodListView );
 
 	//Buttons
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout(); 
+   vboxl->setSpacing ( KDialog::spacingHint() );
 
 	newPrepMethodButton = new QPushButton( this );
 	newPrepMethodButton->setText( i18n( "Create ..." ) );

@@ -84,7 +84,8 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
+	QVBoxLayout* vboxl = new QVBoxLayout();
+   vboxl->setSpacing( KDialog::spacingHint() );
 	addRecipeButton = new QPushButton( this );
 	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );

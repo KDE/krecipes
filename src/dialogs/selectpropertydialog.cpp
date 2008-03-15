@@ -19,7 +19,6 @@
 #include "datablocks/ingredientpropertylist.h"
 #include "dialogs/createunitdialog.h"
 #include "backends/recipedb.h"
-//Added by qt3to4:
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
