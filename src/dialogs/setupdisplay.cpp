@@ -444,7 +444,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		popup->addAction( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
 
 	if ( properties & Font )
-		popup->insertItem( KIcon( "text" ), i18n( "Font..." ), this, SLOT( setFont() ) );
+		popup->addAction( KIcon( "text" ), i18n( "Font..." ), this, SLOT( setFont() ) );
 
 	if ( properties & Visibility ) {
 		int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
@@ -454,20 +454,22 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	if ( properties & Alignment ) {
 		QMenu * sub_popup = new QMenu( popup );
 
-		Q3ActionGroup *alignment_actions = new Q3ActionGroup( this );
-		alignment_actions->setExclusive( true );
+		QActionGroup *alignment_actions = new QActionGroup( this );
 
-		Q3Action *c_action = new Q3Action( i18n( "Center" ), i18n( "Center" ), 0, alignment_actions, 0, true );
-		Q3Action *l_action = new Q3Action( i18n( "Left" ), i18n( "Left" ), 0, alignment_actions, 0, true );
-		Q3Action *r_action = new Q3Action( i18n( "Right" ), i18n( "Right" ), 0, alignment_actions, 0, true );
+		QAction *c_action = new QAction( i18n( "Center" ), this );
+                alignment_actions->addAction( c_action );
+		QAction *l_action = new QAction( i18n( "Left" ),this );
+                alignment_actions->addAction( l_action );
+		QAction *r_action = new QAction( i18n( "Right" ), this );
+                alignment_actions->addAction( r_action );
 
 		int align = item->alignment;
 		if ( align & Qt::AlignHCenter )
-			c_action->setOn(true);
+			c_action->setChecked(true);
 		if ( align & Qt::AlignLeft )
-			l_action->setOn(true);
+			l_action->setChecked(true);
 		if ( align & Qt::AlignRight )
-			r_action->setOn(true);
+			r_action->setChecked(true);
 
 		connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
 
