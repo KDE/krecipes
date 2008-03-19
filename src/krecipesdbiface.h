@@ -19,10 +19,8 @@ class KrecipesDBIface
 public:
 	virtual ~KrecipesDBIface(){};
 public Q_SLOTS:
-	//KDE4 port
-	//Q_SCRIPTABLE virtual void emptydata() = 0;
-	Q_SCRIPTABLE void emptydata();
- 	Q_SCRIPTABLE virtual bool backup(const QString &filename)=0;
+	Q_SCRIPTABLE virtual void emptyData() = 0;
+ 	Q_SCRIPTABLE virtual bool backup(const QString &filename) = 0;
 
 };
 

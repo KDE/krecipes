@@ -30,7 +30,7 @@
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
 
-//Added by qt3to4:
+#include <QDateTimeEdit>
 #include <QDropEvent>
 #include <QPixmap>
 #include <QMouseEvent>
@@ -40,7 +40,7 @@
 #include "datablocks/elementlist.h"
 
 class QTabWidget;
-class Q3TimeEdit;
+class QDateTimeEdit;
 class Q3TextEdit;
 
 class KreTextEdit;
@@ -101,7 +101,7 @@ private:
 	QLabel* yieldLabel;
 	FractionInput* yieldNumInput;
 	KLineEdit* yieldTypeEdit;
-	Q3TimeEdit *prepTimeEdit;
+	QDateTimeEdit *prepTimeEdit;
 	QLabel* authorLabel;
 	KLineEdit* authorShow;
 	QPushButton* addAuthorButton;

@@ -49,7 +49,7 @@ typedef struct
 RecipeIngredientList;
 
 class RecipeDB: public QObject
-//, virtual public KrecipesDBIface
+//, public KrecipesDBIface
 {
 	Q_OBJECT
 

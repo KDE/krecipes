@@ -38,8 +38,8 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	layout->addWidget( categoryListView );
 
 	//Buttons
-	QVBoxLayout* vboxl = new QVBoxLayout( KDialog::spacingHint() );
-
+	QVBoxLayout* vboxl = new QVBoxLayout();
+   vboxl->setSpacing( KDialog::spacingHint() );
 	newCategoryButton = new QPushButton( this );
 	newCategoryButton->setText( i18n( "Create ..." ) );
 	newCategoryButton->setFlat( true );

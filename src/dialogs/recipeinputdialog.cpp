@@ -21,7 +21,7 @@
 #include <qimage.h>
 #include <qmessagebox.h>
 #include <qtooltip.h>
-#include <q3datetimeedit.h>
+#include <qdatetimeedit.h>
 #include <q3dragobject.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
@@ -97,14 +97,15 @@ ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabe
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
 {
-	event->setAccepted( Q3ImageDrag::canDecode( event ) );
+   if ( event->mimeData()->hasImage() )
+        event->acceptProposedAction();
 }
 
 void ImageDropLabel::dropEvent( QDropEvent* event )
 {
 	QImage image;
 
-	if ( Q3ImageDrag::decode( event, image ) ) {
+	if ( event->mimeData()->hasImage() ) {
 		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
 			QPixmap pm_scaled;
 			pm_scaled.fromImage( image.scaled( QSize( width(), height()), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
@@ -114,7 +115,7 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 		}
 		else {
 			setPixmap( QPixmap::fromImage( image ) );
-			sourcePhoto = image;
+			sourcePhoto = QPixmap::fromImage( image );
 		}
 
 		emit changed();
@@ -273,9 +274,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	prepTimeBox->setSpacing( 5 );
 
 	( void ) new QLabel( i18n( "Preparation Time" ), prepTimeBox );
-	prepTimeEdit = new Q3TimeEdit( prepTimeBox );
-	prepTimeEdit->setMinValue( QTime( 0, 0 ) );
-	prepTimeEdit->setDisplay( Q3TimeEdit::Hours | Q3TimeEdit::Minutes );
+	prepTimeEdit = new QDateTimeEdit( prepTimeBox );
+	prepTimeEdit->setMinimumTime( QTime( 0, 0 ) );
+   prepTimeEdit->setDisplayFormat( "hh:mm");
 
 	recipeLayout->addWidget( serv_prep_box, 6, 4 );
 

@@ -13,8 +13,6 @@
 ***************************************************************************/
 
 #include "qsqlrecipedb.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QByteArray>
@@ -685,7 +683,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			recipeToSave.exec( command );
 		}
 		
-		for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+		for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 			order_index++;
 			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )
@@ -782,7 +780,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		if ( (*rating_it).id == -1 )
 			(*rating_it).id = lastInsertID();
 		
-		for ( Q3ValueList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+		for ( QLinkedList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
 			recipeToSave.exec( command );
 		}

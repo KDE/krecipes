@@ -21,7 +21,6 @@
 #include <kconfiggroup.h>
 
 #include <qvariant.h>
-//Added by qt3to4:
 #include <QSqlQuery>
 #include <QSqlError>
 

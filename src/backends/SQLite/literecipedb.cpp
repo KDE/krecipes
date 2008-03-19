@@ -721,7 +721,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
 
 		QString last;
-		int lastID;
+		int lastID=-1;
 		if ( query.isActive() ) {
 			while ( query.next() ) {
 				QString name = query.value(1).toString();
