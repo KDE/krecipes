@@ -192,14 +192,9 @@ set(krecipes_SRCS
    convert_sqlite3.cpp 
    klomanager.cpp )
 
-#kde4_add_dcop_skels(krecipes_SRCS );
-#MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
-##########KDE4 PORT
+qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
+
 ##########krecipesiface.h krecipesdbiface.h )
-
-
-
-
 
 
 kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})

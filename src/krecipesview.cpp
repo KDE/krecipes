@@ -50,10 +50,14 @@
 #include "backends/progressinterface.h"
 
 #include "profiling.h"
+#include "krecipesadaptor.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
 		: KVBox( parent )
 {
+    new KrecipesAdaptor(this );
+    QDBusConnection::sessionBus().registerObject("/Krecipes", this);
+
 	#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
 	#endif
