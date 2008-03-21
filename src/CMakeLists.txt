@@ -37,6 +37,8 @@ set(krecipesdbs_SRCS
    backends/usda_ingredient_data.cpp
    backends/usda_unit_data.cpp)
 
+qt4_add_dbus_adaptor(krecipesdbs_SRCS backends/org.kde.krecipesdb.xml recipedb.h RecipeDB)
+
 
 ############ importers ###############
 
@@ -193,8 +195,6 @@ set(krecipes_SRCS
    klomanager.cpp )
 
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
-
-##########krecipesiface.h krecipesdbiface.h )
 
 
 kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})

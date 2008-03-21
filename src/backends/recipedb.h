@@ -61,7 +61,7 @@ public:
 
 	void importSamples();
 
-	bool backup( const QString &file ){ return backup(file,0); }
+	bool backupdb( const QString &file ){ return backup(file,0); }
 	bool backup( const QString &file, QString *errMsg = 0 );
 	bool restore( const QString &file, QString *errMsg = 0 );
 

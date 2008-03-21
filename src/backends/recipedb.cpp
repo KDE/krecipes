@@ -60,6 +60,7 @@
 #include "usda_property_data.h"
 #include "usda_ingredient_data.h"
 #include "usda_unit_data.h"
+#include "krecipesdbadaptor.h"
 
 #define DB_FILENAME "krecipes.krecdb"
 
@@ -74,6 +75,8 @@ struct ingredient_nutrient_data
 RecipeDB::RecipeDB() :
 	QObject(), m_categoryCache(0), haltOperation(false)
 {
+    new KrecipesdbAdaptor( this );
+    QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);
 	dbOK = false;
 	dbErr = "";
 }
