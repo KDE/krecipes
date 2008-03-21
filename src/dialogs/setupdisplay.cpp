@@ -38,8 +38,6 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <QMenu>
-#include <Q3ActionGroup>
-#include <Q3Action>
 #include <QTextDocument>
 
 #include "datablocks/mixednumber.h"

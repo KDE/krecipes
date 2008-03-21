@@ -17,7 +17,6 @@
 
 #include "datablocks/recipe.h"
 
-class KMenu;
 
 class SetupDisplay;
 class KreDisplayItem;

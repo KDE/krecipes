@@ -24,7 +24,6 @@
 class KLineEdit;
 class QVBoxLayout;
 class Q3GroupBox;
-class KVBox;
 class KComboBox;
 
 /**
