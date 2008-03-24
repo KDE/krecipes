@@ -18,8 +18,6 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 
-//#include "krecipesdbiface.h"
-
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
 #include "datablocks/elementlist.h"
@@ -49,7 +47,6 @@ typedef struct
 RecipeIngredientList;
 
 class RecipeDB: public QObject
-//, public KrecipesDBIface
 {
 	Q_OBJECT
 
@@ -69,7 +66,7 @@ public:
 	bool dbOK;
 	QString dbErr;
 
-	enum RecipeItems { 
+	enum RecipeItems {
 		None = 0,
 		NamesOnly = 256,
 		Noatime = 1024,
@@ -88,7 +85,7 @@ public:
 		All = 0xFFFF ^ NamesOnly ^ Noatime
 	};
 
-	typedef enum ConversionStatus { 
+	typedef enum ConversionStatus {
 		Success,
 		MissingUnitConversion,
 		MissingIngredientWeight,

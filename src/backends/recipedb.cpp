@@ -284,9 +284,9 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
-	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version();
-	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion();
-	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" );
+	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
+	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
+	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" )<<endl;
 
 	kDebug()<<"Running '"<<command.first()<<"' to create backup file";
 	*p << command /*<< ">" << backup_file*/;
