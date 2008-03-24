@@ -105,6 +105,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	kDebug() << i18n( "Parameters set. Calling db->open()" ) ;
 
 	if ( !database.open() ) {
+                kDebug()<<" database.open false : create_db ? :"<<create_db;
 		//Try to create the database
 		if ( create_db ) {
 			kDebug() << i18n( "Failing to open database. Trying to create it" ) ;

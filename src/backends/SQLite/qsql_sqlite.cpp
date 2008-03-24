@@ -228,12 +228,14 @@ bool KreSQLiteDriver::hasFeature(DriverFeature f) const
 */
 bool KreSQLiteDriver::open(const QString & file, const QString &, const QString &, const QString &, int, const QString&)
 {
+    kDebug()<<"  KreSQLiteDriver::open file : "<<file;
 	if (isOpen())
 		close();
 
 	if (file.isEmpty())
 		return false;
 
+        kDebug()<<" create new database";
 	db = new QSQLiteDB;
 	if ( !db->open(QFile::encodeName(file)) ) {
 		setLastError(QSqlError("Error to open database", 0, QSqlError::Connection));
@@ -241,15 +243,15 @@ bool KreSQLiteDriver::open(const QString & file, const QString &, const QString 
 		setOpen(false);
 		return false;
 	}
-
 	setOpen(true);
 	setOpenError(false);
+        kDebug()<<"KreSQLiteDriver::open 'true' ";
 	return true;
 }
 
 void KreSQLiteDriver::close()
 {
-    qDebug()<<" CLOSE !!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    kDebug()<<" CLOSE !!!!!!!!!!!!!!!!!!!!!!!!!!!";
     if (isOpen()) {
         db->close();
         delete db; db = 0;
@@ -271,6 +273,7 @@ QSqlResult* KreSQLiteDriver::createResult() const
 
 bool KreSQLiteDriver::beginTransaction()
 {
+    kDebug();
 	if (!isOpen() || isOpenError())
 		return false;
 
@@ -285,6 +288,7 @@ bool KreSQLiteDriver::beginTransaction()
 
 bool KreSQLiteDriver::commitTransaction()
 {
+    kDebug();
 	if (!isOpen() || isOpenError())
 		return false;
 
@@ -299,6 +303,7 @@ bool KreSQLiteDriver::commitTransaction()
 
 bool KreSQLiteDriver::rollbackTransaction()
 {
+    kDebug();
 	if (!isOpen() || isOpenError())
 		return false;
 
@@ -313,6 +318,7 @@ bool KreSQLiteDriver::rollbackTransaction()
 
 QStringList KreSQLiteDriver::tables(QSql::TableType typeTable) const
 {
+    kDebug();
 	QStringList res;
 	if (!isOpen())
 		return res;
@@ -343,6 +349,7 @@ QStringList KreSQLiteDriver::tables(QSql::TableType typeTable) const
 
 QSqlIndex KreSQLiteDriver::primaryIndex(const QString &tblname) const
 {
+    kDebug();
     QSqlRecord rec(record(tblname)); // expensive :(
 
     if (!isOpen())
