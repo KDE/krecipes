@@ -101,6 +101,7 @@ QString RecipeDB::krecipes_version() const
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 {
+    kDebug()<<" type :"<<dbType<<" file :"<<file;
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	QString host = config.readEntry( "Host", "localhost" );
 	QString user = config.readEntry( "Username", QString() );
@@ -111,7 +112,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 	QString f = file;
 	if ( f.isEmpty() )
 		f = config.readEntry( "DBFile", KStandardDirs::locateLocal ( "appdata", DB_FILENAME ) );
-
+        kDebug()<<" f :"<<f;
 	return createDatabase( dbType, host, user, pass, dbname, port, f );
 }
 
@@ -128,12 +129,12 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 		database = new LiteRecipeDB( file );
 	}
 #endif //HAVE_SQLITE || HAVE_SQLITE3
-	#ifdef HAVE_MYSQL
+#ifdef HAVE_MYSQL
 	else if ( dbType == "MySQL" ) {
 		database = new MySQLRecipeDB( host, user, pass, dbname, port );
 	}
 #endif //HAVE_MYSQL
-	#ifdef HAVE_POSTGRESQL
+#ifdef HAVE_POSTGRESQL
 	else if ( dbType == "PostgreSQL" ) {
 		database = new PSqlRecipeDB( host, user, pass, dbname, port );
 	}
@@ -353,6 +354,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 void RecipeDB::processDumpOutput( K3Process *p, char *buffer, int buflen )
 {
+    kDebug();
 	int written = dumpStream->device()->write(buffer,buflen);
 	if ( written != buflen )
 		kDebug()<<"Data lost: written ("<<written<<") != buflen ("<<buflen<<")";
@@ -974,6 +976,7 @@ void create_properties( RecipeDB *database, Q3ValueList<USDA::PropertyData> &pro
 //Fix property units from databases <= 0.95
 void RecipeDB::fixUSDAPropertyUnits()
 {
+    kDebug();
 	IngredientPropertyList property_list;
 	loadProperties( &property_list );
 

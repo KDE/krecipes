@@ -16,7 +16,7 @@
 #include "backends/qsqlrecipedb.h"
 
 #include <qstring.h>
-
+#include <KDebug>
 #include "qsql_sqlite.h"
 
 #define SQLITE_DRIVER "KRESQLITE"
@@ -41,6 +41,7 @@ public:
 protected:
 	virtual QSqlDriver *qsqlDriver() const
 	{
+            kDebug();
 		return new KreSQLiteDriver();
 	}
 
