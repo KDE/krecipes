@@ -871,10 +871,10 @@ void KoRuler::setupMenu()
     }
     connect( d->rb_menu, SIGNAL( activated( int ) ), SLOT( slotMenuActivated( int ) ) );
 
-    d->rb_menu->insertSeparator();
+    d->rb_menu->addSeparator();
     d->mPageLayout=d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
 #if 0
-    d->rb_menu->insertSeparator();
+    d->rb_menu->addSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
     d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 #endif

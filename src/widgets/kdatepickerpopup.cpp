@@ -55,7 +55,7 @@ void KDatePickerPopup::buildMenu()
     //insertItem( mDatePicker );
 
     if ( ( mItems & NoDate ) || ( mItems & Words ) )
-      insertSeparator();
+      addSeparator();
   }
 
   if ( mItems & Words ) {
@@ -65,7 +65,7 @@ void KDatePickerPopup::buildMenu()
     insertItem( i18n("Last M&onth"), this, SLOT( slotLastMonth() ) );
 
     if ( mItems & NoDate )
-      insertSeparator();
+      addSeparator();
   }
 
   if ( mItems & NoDate )
