@@ -117,6 +117,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, int port, const QString &file )
 {
+    kDebug();
 	RecipeDB * database = 0;
 
 	if ( 0 )
@@ -140,7 +141,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	else {
 		kDebug() << "No database support included (or available) for the " << dbType << " database." ;
 	}
-
+        kDebug()<<" database :"<<database;
 	return database;
 }
 
@@ -362,6 +363,7 @@ void RecipeDB::processDumpOutput( K3Process *p, char *buffer, int buflen )
 
 void RecipeDB::initializeData( void )
 {
+    kDebug();
 	// Populate with data
 
 	// Read the commands form the data file
@@ -385,6 +387,7 @@ void RecipeDB::initializeData( void )
 
 bool RecipeDB::restore( const QString &file, QString *errMsg )
 {
+    kDebug();
 	QIODevice *dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( dumpFile->open( QIODevice::ReadOnly ) ) {
 
@@ -493,6 +496,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 void RecipeDB::execSQL( QTextStream &stream )
 {
+    kDebug();
 	QString line, command;
 	while ( (line = stream.readLine()) != QString::null ) {
 		command += " "+line;
@@ -508,7 +512,8 @@ void RecipeDB::execSQL( QTextStream &stream )
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
 {
-	RecipeList rlist;
+    kDebug();
+    	RecipeList rlist;
 	QList<int> ids; ids << id;
 	loadRecipes( &rlist, items, ids );
 
@@ -542,6 +547,7 @@ int RecipeDB::unitCount()
 
 void RecipeDB::importSamples()
 {
+    kDebug();
 	QString sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-" +  KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
@@ -572,6 +578,7 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 
 QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 {
+    kDebug();
 	QStringList queryList, conditionList, tableList;
 
 	if ( p.ingsOr.count() != 0 ) {
@@ -737,6 +744,7 @@ void create_properties( RecipeDB*, Q3ValueList<USDA::PropertyData> & );
 
 void RecipeDB::importUSDADatabase()
 {
+    kDebug();
 	//check if the data file even exists before we do anything
 	QString abbrev_file =  KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {

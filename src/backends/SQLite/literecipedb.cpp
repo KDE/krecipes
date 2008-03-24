@@ -38,6 +38,7 @@ QString escape( const QString &s );
 
 LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString::null, QString::null, QString::null, _dbFile )
 {
+    kDebug();
 /*	KConfig * config = KGlobal::config();
 	config->setGroup( "Server" );
 
@@ -52,6 +53,7 @@ LiteRecipeDB::~LiteRecipeDB()
 
 int LiteRecipeDB::lastInsertID()
 {
+    kDebug();
 	int lastID = -1;
 	QSqlQuery query("SELECT lastInsertID()",database);
 	if ( query.isActive() && query.first() )
@@ -85,7 +87,7 @@ QStringList LiteRecipeDB::restoreCommand() const
 #elif HAVE_SQLITE3
 	QString binary = "sqlite3";
 #endif
-
+        kDebug()<<" binary: "<<binary;
 	KConfigGroup config( KGlobal::config(), "Server" );
 	binary = config.readEntry( "SQLitePath", binary );
 
@@ -101,7 +103,7 @@ void LiteRecipeDB::createDB()
 
 void LiteRecipeDB::createTable( const QString &tableName )
 {
-
+    kDebug()<<" tableName :"<<tableName;
 	QStringList commands;
 
 	if ( tableName == "recipes" )

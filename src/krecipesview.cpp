@@ -587,12 +587,15 @@ void KrecipesView::wizard( bool force )
 			}
 
 			if ( doUSDAImport ) {
+                            kDebug()<<" import USDA";
 				// Open the DB first
 				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port ); //only used if needed by backend
+                                kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
 				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
-
+                                kDebug()<<" database created :"<<db;
 				// Import the data
 				if ( db ) {
+                                    kDebug()<<" try to connect";
 					db->connect();
 
 					if ( db->ok() ) {
@@ -600,7 +603,7 @@ void KrecipesView::wizard( bool force )
 						pi.listenOn(db);
 						db->importUSDADatabase();
 					}
-
+                                        kDebug()<<" close";
 					//close the database whether ok() or not
 					delete db;
 				}
@@ -608,15 +611,19 @@ void KrecipesView::wizard( bool force )
 
 			//we can do a faster usda import if this is done after it
 			if ( initData ) {
+                            kDebug()<<" initData :"<<initData;
 				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 				if ( db ) {
+                                    kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
 					db->connect();
 
 					if ( db->ok() ) {
+                                            kDebug()<<" import sample";
 						db->importSamples();
 					}
 
 					//close the database whether ok() or not
+                                        kDebug()<<" close db";
 					delete db;
 				}
 			}
