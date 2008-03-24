@@ -316,7 +316,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// root checkbox
 	rootCheckBox = new QCheckBox( i18n( "I have already set a superuser or privileged account" ), this );
-   rootCheckBox->setObjectName( "rootCheckBox" ); 
+   rootCheckBox->setObjectName( "rootCheckBox" );
 	layout->addWidget( rootCheckBox, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -673,13 +673,13 @@ void SetupWizard::save( void )
 		sDBType = "SQLite";
 		break;
 	}
-	
+
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 	config.writeEntry( "Type", sDBType );
 	kDebug() << "DB type set in kconfig was... " << sDBType ;
 	// Save the server data if needed
 	if ( !( dbTypeSetupPage->dbType() == SQLite ) ) {
-		config = KGlobal::config()->group( "Server" ); 
+		config = KGlobal::config()->group( "Server" );
 		config.writeEntry( "Host", serverSetupPage->server() );
 		config.writeEntry( "Username", serverSetupPage->user() );
 		config.writeEntry( "Password", serverSetupPage->password() );
@@ -687,7 +687,7 @@ void SetupWizard::save( void )
 		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." ;
 	}
 	else {
-		config = KGlobal::config()->group( "Server" ); 
+		config = KGlobal::config()->group( "Server" );
 		config.writeEntry( "DBFile", sqliteSetupPage->dbFile() );
 	}
 
@@ -769,7 +769,7 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	USDAImportText = new QLabel( i18n( "Krecipes can import nutrient data from the USDA's nutrient database for over 400 foods.  A total of 43 food properties are included for each food, such as energy, fat, vitamin C, etc.<br><br>Would you like to import this data now?  Note that this operation is safe to use on an existing database, and no data loss will occur.  This operation may take several minutes." ), this );
         USDAImportText->setWordWrap(true);
 	layout->addWidget( USDAImportText, 5, 3 );
-     
+
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 

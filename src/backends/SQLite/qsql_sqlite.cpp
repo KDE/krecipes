@@ -68,6 +68,7 @@ private:
 
 QVariant KreSQLiteResult::data( int field )
 {
+    kDebug()<<" field :"<<field;
 	if ( !isSelect() ) {
 		//qWarning( "KreSQLiteResult::data: column %d out of range", field );
 		qWarning( "KreSQLiteResult::data: not a select statement" );
@@ -127,7 +128,8 @@ bool KreSQLiteResult::fetchFirst()
 }
 
 bool KreSQLiteResult::fetchLast()
-{kDebug()<<"fetchlast";
+{
+    kDebug()<<"fetchlast";
 	if ( isForwardOnly() ) { // fake this since MySQL can't seek on forward only queries
 		bool success = fetchNext(); // did we move at all?
 		while ( fetchNext() );
@@ -145,7 +147,8 @@ bool KreSQLiteResult::isNull( int /*i*/ )
 }
 
 QSqlRecord KreSQLiteResult::record() const
-{kDebug()<<"record";
+{
+    kDebug()<<"record";
 	return QSqlRecord();
 }
 
@@ -156,7 +159,8 @@ int KreSQLiteResult::size()
 }
 
 int KreSQLiteResult::numRowsAffected()
-{kDebug()<<"numrowsaffected";
+{
+    kDebug()<<"numrowsaffected";
 	return 1;/*sqlite3_changes(db)*/
 }
 
@@ -165,12 +169,14 @@ int KreSQLiteResult::numRowsAffected()
 */
 bool KreSQLiteResult::reset(const QString& query)
 {
+    kDebug()<<" query :"<<query;
 	// this is where we build a query.
 	if (!driver())
 		return false;
+        kDebug()<<" driver";
 	if (!driver()-> isOpen() || driver()->isOpenError())
 		return false;
-
+        kDebug()<<" after";
 	//cleanup
 	setAt( -1 );
 
@@ -178,13 +184,15 @@ bool KreSQLiteResult::reset(const QString& query)
 
 
 	result = db->executeQuery( query );
+        kDebug()<<" after executeQuery";
 	int res = result.getStatus();
 
 	if (res != SQLITE_OK ) {
 		setLastError(QSqlError("Unable to execute statement", result.getError(), QSqlError::Statement, res));
 	}
-
+        kDebug()<<" active";
 	setActive(true);
+        kDebug()<<" after active db";
 	return true;
 }
 
@@ -237,6 +245,7 @@ bool KreSQLiteDriver::open(const QString & file, const QString &, const QString 
 
         kDebug()<<" create new database";
 	db = new QSQLiteDB;
+        kDebug()<<" db :"<<db;
 	if ( !db->open(QFile::encodeName(file)) ) {
 		setLastError(QSqlError("Error to open database", 0, QSqlError::Connection));
 		setOpenError(true);
@@ -262,11 +271,13 @@ void KreSQLiteDriver::close()
 
 QSqlQuery KreSQLiteDriver::createQuery() const
 {
+    kDebug();
     return QSqlQuery(new KreSQLiteResult(this));
 }
 
 QSqlResult* KreSQLiteDriver::createResult() const
 {
+    kDebug();
     return new KreSQLiteResult(this);
 }
 

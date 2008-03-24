@@ -553,7 +553,7 @@ void KrecipesView::wizard( bool force )
 
 			kDebug() << "Setting up" ;
 			setupWizard->getOptions( setupUser, initData, doUSDAImport );
-
+                        kDebug()<<" setupUser :"<<setupUser<<" initData :"<<initData<<" doUSDAImport :"<<doUSDAImport;
 			// Setup user if necessary
 			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
 			{
@@ -582,6 +582,7 @@ void KrecipesView::wizard( bool force )
 
 			// Initialize database with data if requested
 			if ( initData ) {
+                            kDebug();
 				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 				initializeData( host, dbName, user, pass, port ); // Populate data as normal user
 			}
@@ -666,17 +667,21 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 
 void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port )
 {
+    kDebug();
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
 		kError() << i18n( "Code error. No DB support has been included. Exiting" ) ;
 		kapp->exit( 1 );
 	}
-
+        kDebug()<<" connect it";
 	db->connect();
-
+        kDebug()<<" connected ok";
 	if ( db->ok() ) {
+            kDebug()<<" ok";
 		db->emptyData();
+                kDebug()<<" db empty data";
 		db->initializeData();
+                kDebug()<<" initializeData";
 	}
 
 	delete db;
