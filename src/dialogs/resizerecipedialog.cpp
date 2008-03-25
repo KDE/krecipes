@@ -50,7 +50,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
     setDefaultButton(KDialog::Ok);
     setModal( true );
     KVBox *page = new KVBox( this );
-
+    setMainWidget( page );
 	buttonGroup = new Q3ButtonGroup( page );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
 	buttonGroup->setLineWidth( 0 );

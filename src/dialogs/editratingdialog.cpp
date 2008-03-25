@@ -83,7 +83,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
     setModal( true );
 
     KVBox *page = new KVBox( this );
-
+    setMainWidget( page );
 	layout2 = new KHBox( page );
 
 	raterLabel = new QLabel( layout2 );
