@@ -697,7 +697,8 @@ void RecipeInputDialog::changePhoto( void )
 {
 	// standard filedialog
 	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
-
+        if ( url.isEmpty() )
+            return;
 	QString filename;
 	if (!url.isLocalFile()) {
 		if (!KIO::NetAccess::download(url,filename,this)) {
