@@ -19,6 +19,7 @@
 ***************************************************************************/
 
 #include "krecqsqliteresult.h"
+#include <KDebug>
 
 QSQLiteResultRow::QSQLiteResultRow( const TableString& string, const TableInt& Int )
 		: m_string( string ), m_int( Int )
@@ -130,13 +131,21 @@ void QSQLiteResult::setError( const QString &error )
 
 QSQLiteResultRow QSQLiteResult::first()
 {
+        if(m_list.isEmpty())
+           return QSQLiteResultRow();
 	it = m_list.begin();
 	return ( *it );
 }
 
 QSQLiteResultRow QSQLiteResult::next()
 {
+        kDebug();
 	++it;
+        kDebug()<<" before return";
+        
+        kDebug()<<" value :"<<atEnd();
+        if(atEnd())
+          return QSQLiteResultRow();
 	return ( *it );
 }
 

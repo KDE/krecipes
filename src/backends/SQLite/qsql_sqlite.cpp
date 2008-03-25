@@ -74,7 +74,7 @@ QVariant KreSQLiteResult::data( int field )
 		qWarning( "KreSQLiteResult::data: not a select statement" );
 		return QVariant();
 	}
-
+        kDebug()<<" QVariant(row.data(field) :"<<QVariant(row.data(field) );
 	return QVariant(row.data(field));
 }
 
@@ -107,8 +107,10 @@ kDebug()<<"fetch_i";
 
 bool KreSQLiteResult::fetchNext()
 {
+        kDebug();
 	row = result.next();
-
+        kDebug()<<" before";
+        kDebug()<< "result.atEnd() :"<<result.atEnd();
 	if ( result.atEnd() )
 		return false;
 
@@ -202,12 +204,14 @@ KreSQLiteDriver::KreSQLiteDriver(QObject * parent, const char * name)
     : QSqlDriver(parent)
 {
     setObjectName( name ? name : QSQLITE_DRIVER_NAME);
+    kDebug()<<" objectName :"<<objectName();
 }
 
 KreSQLiteDriver::KreSQLiteDriver(QSQLiteDB *connection, QObject *parent, const char *name)
     : QSqlDriver(parent)
 {
     setObjectName(  name ? name : QSQLITE_DRIVER_NAME);
+    kDebug()<<" objectName "<<objectName();
 	db = connection;
 	setOpen(true);
 	setOpenError(false);
