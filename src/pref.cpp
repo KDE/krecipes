@@ -55,58 +55,41 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	setButtons( Help | Ok | Cancel );
 	setDefaultButton( Ok );
 
-	// this is the base class for your preferences dialog.  it is now
-	// a TreeList dialog.. but there are a number of other
-	// possibilities (including Tab, Swallow, and just Plain)
-	QFrame * frame = new QFrame(this);
-
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
 	KIconLoader *il = KIconLoader::global();
-	
-	KPageWidgetItem * page = new KPageWidgetItem( frame , i18n( "Server Settings" ) );
+
+        m_pageServer = new ServerPrefs( this );
+        KPageWidgetItem * page = new KPageWidgetItem( m_pageServer , i18n( "Server Settings" ) );
 	page->setHeader( i18n( "Database Server Options (%1)" , config.readEntry( "Type" )));
 	il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
-	addPage(page);
+        m_helpMap.insert(0,"configure-server-settings");
+        addPage( page );
 
-	QHBoxLayout* layout = new QHBoxLayout( frame );
-	m_pageServer = new ServerPrefs( frame );
-	layout->addWidget( m_pageServer );
-	m_helpMap.insert(0,"configure-server-settings");
-
-
-	page = new KPageWidgetItem( frame , i18n( "Formatting" ) );
+        m_pageNumbers = new NumbersPrefs( this );
+	page = new KPageWidgetItem(m_pageNumbers , i18n( "Formatting" ) );
 	page->setHeader( i18n( "Customize Formatting" ) );
 	il->loadIcon( "math_frac", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "math_frac", il ) );
 	addPage(page);
-
-	QHBoxLayout* formatting_layout = new QHBoxLayout( frame );
-	m_pageNumbers = new NumbersPrefs( frame );
-	formatting_layout->addWidget( m_pageNumbers );
 	m_helpMap.insert(1,"custom-formatting");
 
-	page = new KPageWidgetItem( frame , "Import/Export" );
+	m_pageImport = new ImportPrefs( this );
+        page = new KPageWidgetItem( m_pageImport , "Import/Export" );
 	page->setHeader( i18n( "Recipe Import and Export Options" ) );
 	il->loadIcon( "go-down", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "go-down", il ) );
 	addPage(page);
-	
-	QHBoxLayout* import_layout = new QHBoxLayout( frame );
-	m_pageImport = new ImportPrefs( frame );
-	import_layout->addWidget( m_pageImport );
 	m_helpMap.insert(2,"import-export-preference");
 
-	page = new KPageWidgetItem( frame , "performance" );
+
+	m_pagePerformance = new PerformancePrefs( this );
+        page = new KPageWidgetItem( m_pagePerformance , "performance" );
 	page->setHeader( i18n( "Performance Options" ) );
 	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "launch", il ) );
 	addPage(page);
-	
-	QHBoxLayout* performance_layout = new QHBoxLayout( frame );
-	m_pagePerformance = new PerformancePrefs( frame );
-	performance_layout->addWidget( m_pagePerformance );
 	m_helpMap.insert(3,"configure-performance");
 
 	// Signals & Slots
@@ -466,7 +449,7 @@ void ServerPrefs::saveOptions( void )
 		( ( SQLiteServerPrefs* ) serverWidget ) ->saveOptions();
 
 	if ( wizard_button->isChecked() ) {
-		config = KGlobal::config()->group( "Wizard" );	
+		config = KGlobal::config()->group( "Wizard" );
 		config.writeEntry( "SystemSetup", false );
 	}
 }
@@ -591,7 +574,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-	directImportCheckbox->setWhatsThis( 
+	directImportCheckbox->setWhatsThis(
 		i18n("When this is enabled, the importer will show every recipe in the file(s) and allow you to select which recipes you want imported.\n \
 							\
 		Disable this to always import every recipe, which allows for faster and less memory-intensive imports.")
@@ -632,6 +615,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 
 	QLabel *explainationLabel = new QLabel( i18n("In most instances these options do not need to be changed.  However, limiting the amount of items displayed at once will <b>allow Krecipes to better perform when the database is loaded with many thousands of recipes</b>."), this );
 	explainationLabel->setTextFormat( Qt::RichText );
+        explainationLabel->setWordWrap( true );
 
 	KHBox *catLimitHBox = new KHBox( this );
 	catLimitInput = new KIntNumInput(catLimitHBox);
