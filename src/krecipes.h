@@ -129,8 +129,6 @@ private:
 	KAction *backupAction;
 	KAction *restoreAction;
 	
-	KConfigGroup *groupConfig;
-
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;
 

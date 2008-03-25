@@ -33,7 +33,7 @@ int PlainTextExporter::supportedItems() const
 
 QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedNumber::Format number_format )
 {
-	KConfigGroup * config = new KConfigGroup();
+	KConfigGroup config(KGlobal::config(),"Formatting");
 
 	QString content;
 
@@ -48,7 +48,7 @@ QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedN
 	if ( !amount_str.isEmpty() )
 		content += " ";
 
-	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config->readEntry("AbbreviateUnits", false) );
+	QString unit_str = ing.units.determineName( ing.amount + ing.amount_offset, config.readEntry("AbbreviateUnits", false) );
 
 	content += unit_str;
 	if ( !unit_str.isEmpty() )

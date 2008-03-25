@@ -45,10 +45,14 @@
 #include <kvbox.h>
 #include "setupdisplay.h"
 
-PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry ) : KDialog( parent ), m_configEntry(configEntry)
+PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry )
+    : KDialog( parent ), m_configEntry(configEntry)
 {
+    QWidget *w = new QWidget;
 	QVBoxLayout * layout = new QVBoxLayout( this );
-
+        w->setLayout( layout );
+        setButtons( KDialog::None );
+        setMainWidget( w );
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 
@@ -58,7 +62,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	toolbar->addAction( KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) );
 
 
-	//KDE4 port do the last arguments of the KToolBarPopupAction and line 67 duplicate information ? 
+	//KDE4 port do the last arguments of the KToolBarPopupAction and line 67 duplicate information ?
 	KToolBarPopupAction *shown_items = new KToolBarPopupAction( KIcon(), i18n( "Items Shown" ), toolbar);
 	shown_items->setDelayed( false );
 	shown_items_popup = shown_items->menu();
@@ -80,8 +84,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	m_htmlPart = new SetupDisplay(sample, this);
    m_htmlPart->view()->setParent( viewBox, windowFlags() & ~Qt::WindowType_Mask);
    m_htmlPart->view()->setGeometry( 0, 0 ,m_htmlPart->view()->width(),m_htmlPart->view()->height());
-	
-   
+
+
    layout->addWidget( viewBox );
 
 	KHBox *buttonsBox = new KHBox( this );

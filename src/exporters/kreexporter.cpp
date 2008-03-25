@@ -98,8 +98,9 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 	xml += "</amount>\n";
 	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
 
-	KConfigGroup *config = new KConfigGroup(); 
-	bool useAbbreviations = config->readEntry("AbbreviateUnits" , false );
+	KConfigGroup config(KGlobal::config(),"Formatting");
+
+	bool useAbbreviations = config.readEntry("AbbreviateUnits" , false );
 	QString unit = ing.units.determineName( ing.amount + ing.amount_offset, useAbbreviations );
 	xml += "<unit>" + Qt::escape( unit ) + "</unit>\n";
 
@@ -194,8 +195,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
 	
 		xml += "</krecipes-ingredients>\n";
 
-		KConfigGroup *config = new KConfigGroup();
-		QStringList hiddenList = config->readEntry("HiddenProperties" , QStringList() );
+		KConfigGroup config(KGlobal::config(),"Formatting"); 
+		QStringList hiddenList = config.readEntry("HiddenProperties" , QStringList() );
 		if (( *recipe_it ).properties.count() > 0) {
 			xml += "<krecipes-properties>\n";
 			for ( IngredientPropertyList::const_iterator prop_it = ( *recipe_it ).properties.begin(); prop_it != ( *recipe_it ).properties.end(); ++prop_it ) {
