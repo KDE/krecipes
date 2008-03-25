@@ -238,30 +238,23 @@ void KreMenu::paintEvent( QPaintEvent * )
 	QColor c1 = c.dark( 130 );
 	QColor c2 = c.light( 120 );
 
-	// Draw the gradient
-	// Need to be done KDE4 port
-	QPixmap kpm;
-	//kpm.resize( size() );
-	//KPixmapEffect::unbalancedGradient ( kpm, c2, c1, KPixmapEffect::HorizontalGradient, -150, -150 );
-
 	// Draw the handle
-	QPainter painter( &kpm );
+        QPainter painter(this );
 	painter.setPen( c1 );
 	painter.drawLine( width() - 5, 20, width() - 5, height() - 20 );
-	painter.end();
 
-	//Set the border transparent using a mask
-	QBitmap mask( kpm.size() );
-	mask.fill( Qt::color0 );
-	painter.begin( &mask );
+
+
+        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
+        linearGrad.setColorAt(0, c1);
+        linearGrad.setColorAt(1, c2);
+        QBrush brush( linearGrad );
+        painter.fillRect( QRect( 0, 0, width(), height() ),brush );
+
 	painter.setPen( Qt::color1 );
 	painter.setBrush( Qt::color1 );
 	painter.drawRoundRect( 0, 0, width(), height(), ( int ) ( 2.0 / width() * height() ), 2 );
-	painter.end();
-	kpm.setMask( mask );
 
-	//Draw the border line
-	painter.begin( &kpm );
 	painter.setPen( c1 );
 	painter.drawRoundRect( 0, 0, width(), height(), ( int ) ( 2.0 / width() * height() ), 2 );
 
@@ -274,11 +267,6 @@ void KreMenu::paintEvent( QPaintEvent * )
 		painter.setPen( c2 );
 		painter.drawLine( w / 5, 9, w - 1, 9 );
 	}
-
-	painter.end();
-
-	// Copy the pixmap to the widget
-	bitBlt( this, 0, 0, &kpm );
 }
 
 void KreMenu::resizeEvent( QResizeEvent* e )
