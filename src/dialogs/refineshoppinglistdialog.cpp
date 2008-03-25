@@ -52,7 +52,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	helpLabel = new QLabel( page );
    helpLabel->setObjectName( "helpLabel" );
 	helpLabel->setTextFormat( Qt::RichText );
-
+        helpLabel->setWordWrap(true);
 	QWidget *layout2Widget = new QWidget(page);
 
 	QHBoxLayout *layout2 = new QHBoxLayout( layout2Widget );
