@@ -115,7 +115,7 @@ class KreMenuButton: public QWidget
 {
 	Q_OBJECT
 public:
-	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = MenuId(), const char *name = 0 );
+	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = MenuId() );
 
 	~KreMenuButton();
 

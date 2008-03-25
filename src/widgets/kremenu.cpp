@@ -46,7 +46,6 @@ KreMenu::KreMenu( QWidget *parent, const char *name )
 
    currentMenuId = mainMenuId;
    m_currentMenu = &( *currentMenuId );
-
    setMouseTracking( true );
    setFocusPolicy( Qt::StrongFocus );
    setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
@@ -59,22 +58,16 @@ KreMenu::~KreMenu()
 
 void KreMenu::childEvent ( QChildEvent *e )
 {
-    if ( e->type() == QChildEvent::ChildAdded ) {
-
+    if ( e->type() == QChildEvent::ChildInserted ) {
         QObject * child = e->child();
         if ( child->inherits( "KreMenuButton" ) ) {
-            KreMenuButton * button = ( KreMenuButton* ) child;
-
+            KreMenuButton * button = static_cast<KreMenuButton*>( child );
             Menu *buttonMenu = &( *( button->menuId ) );
-
-            //FIXME kde4
-//#if 0
             if ( !( buttonMenu->activeButton ) )   // Highlight the button if it's the first in the menu
             {
                 button->setActive( true );
                 buttonMenu->activeButton = button;
             }
-//#endif
             buttonMenu->addButton( button );
 
             if ( buttonMenu != m_currentMenu )
@@ -87,7 +80,7 @@ void KreMenu::childEvent ( QChildEvent *e )
     }
     else if ( e->type() == QChildEvent::ChildRemoved ) {
         QObject * child = e->child();
-
+        kDebug()<<" remove child"<<child;
         KreMenuButton *button = ( KreMenuButton* ) child;
         if ( m_currentMenu->positionList.find( button ) != m_currentMenu->positionList.end() )  // Ensure that what was removed was a button
         {
@@ -108,6 +101,7 @@ void KreMenu::childEvent ( QChildEvent *e )
         }
 
     }
+    kDebug()<<"sdd";
     QWidget::childEvent( e );
 }
 
@@ -169,46 +163,46 @@ void KreMenu::highlightButton( KreMenuButton *button )
 
 void KreMenu::keyPressEvent( QKeyEvent *e )
 {
-	switch ( e->key() ) {
-	case Qt::Key_Up: {
-			int current_index = m_currentMenu->positionList[ m_currentMenu->activeButton ];
-			if ( current_index > 0 ) {
-				highlightButton( m_currentMenu->widgetList[ current_index - 1 ] );
+    switch ( e->key() ) {
+    case Qt::Key_Up: {
+        int current_index = m_currentMenu->positionList[ m_currentMenu->activeButton ];
+        if ( current_index > 0 ) {
+            highlightButton( m_currentMenu->widgetList[ current_index - 1 ] );
 
-				//simulate a mouse click
-				QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
-				KApplication::sendEvent( m_currentMenu->activeButton, &me );
+            //simulate a mouse click
+            QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+            KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
-				e->accept();
-			}
-			break;
-		}
-	case Qt::Key_Down: {
-			int current_index = m_currentMenu->positionList[ m_currentMenu->activeButton ];
-			if ( current_index < int( m_currentMenu->positionList.count() ) - 1 ) {
-				highlightButton( m_currentMenu->widgetList[ current_index + 1 ] );
+            e->accept();
+        }
+        break;
+    }
+    case Qt::Key_Down: {
+        int current_index = m_currentMenu->positionList[ m_currentMenu->activeButton ];
+        if ( current_index < int( m_currentMenu->positionList.count() ) - 1 ) {
+            highlightButton( m_currentMenu->widgetList[ current_index + 1 ] );
 
-				//simulate a mouse click
-				QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
-				KApplication::sendEvent( m_currentMenu->activeButton, &me );
+            //simulate a mouse click
+            QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+            KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
-				e->accept();
-			}
-			break;
-		}
-	case Qt::Key_Enter:
-	case Qt::Key_Return:
-	case Qt::Key_Space: {
-			//simulate a mouse click
-			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
-			KApplication::sendEvent( m_currentMenu->activeButton, &me );
+            e->accept();
+        }
+        break;
+    }
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+    case Qt::Key_Space: {
+        //simulate a mouse click
+        QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+        KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
-			e->accept();
-			break;
-		}
-	default:
-		e->ignore();
-	}
+        e->accept();
+        break;
+    }
+    default:
+        e->ignore();
+    }
 }
 
 QSize KreMenu::sizeHint() const
@@ -298,18 +292,15 @@ void KreMenu::showMenu( MenuId id )
 	// and show the ones in the new menu
 
 	const QList<QObject *> childElements = queryList();
-	QListIterator<QObject *> it( childElements );
-
-	QObject *obj;
-	while ( it.hasNext() ) {
-		obj = it.next();
-		if ( obj->inherits( "KreMenuButton" ) ) {
-			KreMenuButton * button = ( KreMenuButton* ) obj;
-			if ( button->menuId == currentMenuId )
-				button->hide();
-			else if ( button->menuId == id )
-				button->show();
-		}
+        foreach ( QObject *obj, childElements )
+        {
+            if ( obj->inherits( "KreMenuButton" ) ) {
+                KreMenuButton * button = static_cast<KreMenuButton*>( obj );
+                if ( button->menuId == currentMenuId )
+                    button->hide();
+                else if ( button->menuId == id )
+                    button->show();
+            }
 	}
 
 
@@ -322,14 +313,16 @@ void KreMenu::showMenu( MenuId id )
 
 
 
-KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id, const char *name ) : QWidget( parent, Qt::WNoAutoErase ), panel( _panel )
+KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id )
+    : QWidget( parent, Qt::WNoAutoErase ), panel( _panel )
 {
-   setObjectName( name );
 	highlighted = false;
 	text = QString::null;
 
-	if ( &id == 0 ) // KDE4 port to be check
+	if ( id ==  Q3ValueList <Menu>::Iterator() ) // KDE4 port to be check
+        {
 		menuId = parent->mainMenu();
+        }
 	else
 		menuId = id;
 
@@ -609,15 +602,12 @@ Menu& Menu::operator=( const Menu &m )
 
 void Menu::addButton( KreMenuButton* button )
 {
-    //FIXME kde4
-//#if 0
 	button->move( 0, childPos );
 	button->rescale();
 	childPos += button->height();
 	positionList[ button ] = widgetNumber; // Store index for this widget, and increment number
 	widgetList[ widgetNumber ] = button; // Store the button in the list (the inverse mapping of the previous one)
 	widgetNumber++;
-//#endif
 }
 
 

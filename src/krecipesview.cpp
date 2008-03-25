@@ -59,243 +59,244 @@ KrecipesView::KrecipesView( QWidget *parent )
     QDBusConnection::sessionBus().registerObject("/Krecipes", this);
 
 #ifndef NDEBUG
-	QTime dbg_total_timer; dbg_total_timer.start();
+    QTime dbg_total_timer; dbg_total_timer.start();
 #endif
-	// Init the setup wizard if necessary
-	kDebug() << "Beginning wizard" ;
-	wizard();
-	kDebug() << "Wizard finished correctly" ;
+    // Init the setup wizard if necessary
+    kDebug() << "Beginning wizard" ;
+    wizard();
+    kDebug() << "Wizard finished correctly" ;
 
-	// Show Splash Screen
+    // Show Splash Screen
 
-	KStartupLogo* start_logo = 0L;
-	start_logo = new KStartupLogo();
-	start_logo -> setHideEnabled( true );
-	start_logo->show();
-	start_logo->raise();
+    KStartupLogo* start_logo = 0L;
+    start_logo = new KStartupLogo();
+    start_logo -> setHideEnabled( true );
+    start_logo->show();
+    start_logo->raise();
 
-	// Initialize Database
+    // Initialize Database
 
-	// Check if the database type is among those supported
-	// and initialize the database in each case
-	START_TIMER("Initializing database")
+    // Check if the database type is among those supported
+    // and initialize the database in each case
+    START_TIMER("Initializing database")
 	initDatabase();
-	END_TIMER()
+    END_TIMER()
 
 	// Design the GUI
-            QHBoxLayout *layout = new QHBoxLayout;
-        setLayout( layout );
-	splitter = new KHBox( this );
-        layout->addWidget( splitter );
-	// Create Left and Right Panels (splitter)
+        QHBoxLayout *layout = new QHBoxLayout;
+    setLayout( layout );
+    splitter = new KHBox( this );
+    layout->addWidget( splitter );
+    // Create Left and Right Panels (splitter)
 
-	leftPanel = new KreMenu( splitter, "leftPanel" );
-	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
+    leftPanel = new KreMenu( splitter, "leftPanel" );
+    rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
 
-	// Design Left Panel
+    // Design Left Panel
 
-	START_TIMER("Setting up buttons")
+    START_TIMER("Setting up buttons")
 	// Buttons
 
-	button0 = new KreMenuButton( leftPanel, SelectP );
-	button0->setIconSet( KIcon( "system-search" ) );
-	buttonsList.append( button0 );
+    button0 = new KreMenuButton( leftPanel, SelectP );
+    button0->setIconSet( KIcon( "system-search" ) );
+    buttonsList.append( button0 );
 
-	button1 = new KreMenuButton( leftPanel, ShoppingP );
-	button1->setIconSet( KIcon( "trolley" ) );
-	buttonsList.append( button1 );
+    button1 = new KreMenuButton( leftPanel, ShoppingP );
+    button1->setIconSet( KIcon( "trolley" ) );
+    buttonsList.append( button1 );
 
-	button7 = new KreMenuButton( leftPanel, DietP );
-	button7->setIconSet( KIcon( "diet" ) );
-	buttonsList.append( button7 );
+    button7 = new KreMenuButton( leftPanel, DietP );
+    button7->setIconSet( KIcon( "diet" ) );
+    buttonsList.append( button7 );
 
-	button8 = new KreMenuButton( leftPanel, MatcherP );
-	button8->setIconSet( KIcon( "categories" ) );
-	buttonsList.append( button8 );
+    button8 = new KreMenuButton( leftPanel, MatcherP );
+    button8->setIconSet( KIcon( "categories" ) );
+    buttonsList.append( button8 );
 
 
-	// Submenus
-	dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
+    // Submenus
+    dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
 
-	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
-	button2->setIconSet( KIcon( "ingredients" ) );
-	//buttonsList.append(button2);
+    button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
+    button2->setIconSet( KIcon( "ingredients" ) );
+    //buttonsList.append(button2);
 
-	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
-	button3->setIconSet( KIcon( "properties" ) );
-	buttonsList.append( button3 );
+    button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
+    button3->setIconSet( KIcon( "properties" ) );
+    buttonsList.append( button3 );
 
-	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
-	button4->setIconSet( KIcon( "units" ) );
-	buttonsList.append( button4 );
+    button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
+    button4->setIconSet( KIcon( "units" ) );
+    buttonsList.append( button4 );
 
-	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
-	button9->setIconSet( KIcon( "methods" ) );
-	buttonsList.append( button9 );
+    button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
+    button9->setIconSet( KIcon( "methods" ) );
+    buttonsList.append( button9 );
 
-	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
-	button5->setIconSet( KIcon( "categories" ) );
-	buttonsList.append( button5 );
+    button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
+    button5->setIconSet( KIcon( "categories" ) );
+    buttonsList.append( button5 );
 
-	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
-	button6->setIconSet( KIcon( "authors" ) );
-	buttonsList.append( button6 );
+    button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
+    button6->setIconSet( KIcon( "authors" ) );
+    buttonsList.append( button6 );
 
-	contextButton = new QPushButton( leftPanel );
-   contextButton->setObjectName( "contextButton" );
-	contextButton->setIcon( KIcon( "krectip" ) );
-	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
-   QPalette p = palette();
-   p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) );
-   contextButton->setPalette(p);
-	contextButton->setFlat( true );
-	END_TIMER()
+    contextButton = new QPushButton( leftPanel );
+    contextButton->setObjectName( "contextButton" );
+    contextButton->setIcon( KIcon( "krectip" ) );
+    contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 
-       	KConfigGroup config(KGlobal::config(), "Performance" );
-	int limit = config.readEntry( "CategoryLimit", -1 );
-	database->updateCategoryCache(limit);
+    QPalette p = palette();
+    p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) );
+    contextButton->setPalette(p);
+    contextButton->setFlat( true );
+    END_TIMER()
 
-	// Right Panel Widgets
-	START_TIMER("Creating input dialog")
+    KConfigGroup config(KGlobal::config(), "Performance" );
+    int limit = config.readEntry( "CategoryLimit", -1 );
+    database->updateCategoryCache(limit);
+
+    // Right Panel Widgets
+    START_TIMER("Creating input dialog")
 	inputPanel = new RecipeInputDialog( rightPanel, database );
-        rightPanel->addStackWidget( inputPanel );
-	END_TIMER()
+    rightPanel->addStackWidget( inputPanel );
+    END_TIMER()
 
 	START_TIMER("Creating recipe view")
 	viewPanel = new RecipeViewDialog( rightPanel, database );
-        rightPanel->addStackWidget( viewPanel );
-	END_TIMER()
+    rightPanel->addStackWidget( viewPanel );
+    END_TIMER()
 
 	START_TIMER("Creating recipe selection dialog")
 	selectPanel = new SelectRecipeDialog( rightPanel, database );
-        rightPanel->addStackWidget( selectPanel );
+    rightPanel->addStackWidget( selectPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating ingredients component")
 	ingredientsPanel = new IngredientsDialog( rightPanel, database );
-        rightPanel->addStackWidget( ingredientsPanel );
-	END_TIMER()
+    rightPanel->addStackWidget( ingredientsPanel );
+    END_TIMER()
 
 	START_TIMER("Creating properties component")
 	propertiesPanel = new PropertiesDialog( rightPanel, database );
-        rightPanel->addStackWidget( propertiesPanel );
+    rightPanel->addStackWidget( propertiesPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating units component")
 	unitsPanel = new UnitsDialog( rightPanel, database );
-        rightPanel->addStackWidget( unitsPanel );
+    rightPanel->addStackWidget( unitsPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating shopping list dialog")
 	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
-        rightPanel->addStackWidget( shoppingListPanel );
+    rightPanel->addStackWidget( shoppingListPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating diet wizard dialog")
 	dietPanel = new DietWizardDialog( rightPanel, database );
-        rightPanel->addStackWidget( dietPanel );
+    rightPanel->addStackWidget( dietPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating categories component")
 	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
-        rightPanel->addStackWidget( categoriesPanel );
+    rightPanel->addStackWidget( categoriesPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating authors component")
 	authorsPanel = new AuthorsDialog( rightPanel, database );
-        rightPanel->addStackWidget( authorsPanel );
+    rightPanel->addStackWidget( authorsPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating prep methods component")
 	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
-        rightPanel->addStackWidget( prepMethodsPanel );
+    rightPanel->addStackWidget( prepMethodsPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
-        rightPanel->addStackWidget( ingredientMatcherPanel );
+    rightPanel->addStackWidget( ingredientMatcherPanel );
 
-	END_TIMER()
+    END_TIMER()
 
 	database->clearCategoryCache();
 
-	// Use to keep track of the panels
-	panelMap.insert( inputPanel, RecipeEdit );
-	panelMap.insert( viewPanel, RecipeView );
-	panelMap.insert( selectPanel, SelectP );
-	panelMap.insert( ingredientsPanel, IngredientsP );
-	panelMap.insert( propertiesPanel, PropertiesP );
-	panelMap.insert( unitsPanel, UnitsP );
-	panelMap.insert( shoppingListPanel, ShoppingP );
-	panelMap.insert( dietPanel, DietP );
-	panelMap.insert( categoriesPanel, CategoriesP );
-	panelMap.insert( authorsPanel, AuthorsP );
-	panelMap.insert( prepMethodsPanel, PrepMethodsP );
-	panelMap.insert( ingredientMatcherPanel, MatcherP );
+    // Use to keep track of the panels
+    panelMap.insert( inputPanel, RecipeEdit );
+    panelMap.insert( viewPanel, RecipeView );
+    panelMap.insert( selectPanel, SelectP );
+    panelMap.insert( ingredientsPanel, IngredientsP );
+    panelMap.insert( propertiesPanel, PropertiesP );
+    panelMap.insert( unitsPanel, UnitsP );
+    panelMap.insert( shoppingListPanel, ShoppingP );
+    panelMap.insert( dietPanel, DietP );
+    panelMap.insert( categoriesPanel, CategoriesP );
+    panelMap.insert( authorsPanel, AuthorsP );
+    panelMap.insert( prepMethodsPanel, PrepMethodsP );
+    panelMap.insert( ingredientMatcherPanel, MatcherP );
 
-	m_activePanel = RecipeEdit;
+    m_activePanel = RecipeEdit;
 
-	// i18n
-	translate();
+    // i18n
+    translate();
 
-	// Initialize Variables
-	recipeButton = 0;
-
-
-
-	// Connect Signals from Left Panel to slotSetPanel()
-	connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
-
-	connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
-
-	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
+    // Initialize Variables
+    recipeButton = 0;
 
 
-	// Retransmit signal to parent to Enable/Disable the Save Button
-	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
 
-	// Create a new button when a recipe is unsaved
-	connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
+    // Connect Signals from Left Panel to slotSetPanel()
+    connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
 
-	// Connect Signals from selectPanel (SelectRecipeDialog)
+    connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
 
-	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-	connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
+    connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
 
-	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
-	connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
+    // Retransmit signal to parent to Enable/Disable the Save Button
+    connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
 
-	// Close a recipe when requested (just switch panels)
-	connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
+    // Create a new button when a recipe is unsaved
+    connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
 
-	// Show a recipe when requested (just switch panels)
-	connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
+    // Connect Signals from selectPanel (SelectRecipeDialog)
 
-	// Create a new shopping list when a new diet is generated and accepted
-	connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
+    connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
+    connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
 
-	// Place the Tip Button in correct position when the left pane is resized
-	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
+    // Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
-	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
+    connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
 
-	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+    // Close a recipe when requested (just switch panels)
+    connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
 
-	// Close Splash Screen
-	delete start_logo;
+    // Show a recipe when requested (just switch panels)
+    connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
 
-	#ifndef NDEBUG
-	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
-	#endif
+    // Create a new shopping list when a new diet is generated and accepted
+    connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
+
+    // Place the Tip Button in correct position when the left pane is resized
+    connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
+
+    connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
+
+    connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+
+    // Close Splash Screen
+    delete start_logo;
+
+#ifndef NDEBUG
+    kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
+#endif
 }
 
 KrecipesView::~KrecipesView()
