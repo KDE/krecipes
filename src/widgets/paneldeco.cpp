@@ -104,19 +104,19 @@ void TopDeco::paintEvent( QPaintEvent * )
 	QColor c1 = QColorGroup( QPalette() ).color( QPalette::Button ).light( 120 );
 	QColor c2 = palette().color(backgroundRole());
 
-	// Draw the gradient
-	QPixmap kpm;
-	kpm.resize( size() );
-
-	// to be done KDE4 port
-	//KPixmapEffect::unbalancedGradient ( kpm, c1, c2, KPixmapEffect::VerticalGradient, 150, 150 );
-
 	// Add a line on top
-	QPainter painter( &kpm );
+	QPainter painter(this );
 	painter.setPen( QColorGroup( QPalette() ).color( QPalette::Button ).dark( 130 ) );
 	painter.drawLine( 0, 0, width(), 0 );
 
-	// Now Add the icon
+        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
+        linearGrad.setColorAt(0, c1);
+        linearGrad.setColorAt(1, c2);
+        QBrush brush( linearGrad );
+        painter.fillRect( QRect( 0, 0, width(), height() ),brush );
+
+
+        // Now Add the iconName
 	int xpos = 0, ypos = 0;
 	if ( !icon.isNull() ) {
 		xpos = 20;
@@ -137,8 +137,6 @@ void TopDeco::paintEvent( QPaintEvent * )
 		painter.drawText( r, Qt::AlignVCenter, panelTitle );
 	}
 	painter.end();
-	// Copy the pixmap to the widget
-	bitBlt( this, 0, 0, &kpm );
 }
 
 void TopDeco::setHeader( const QString &title, const QString &iconName )
