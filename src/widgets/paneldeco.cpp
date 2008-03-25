@@ -29,11 +29,13 @@ PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, c
     : QWidget( parent )
 {
     QVBoxLayout * lay = new QVBoxLayout;
-// Top decoration
+
     tDeco = new TopDeco( this, "TopDecoration", title, iconName );
     lay->addWidget( tDeco );
+
     stack = new QStackedWidget;
     lay->addWidget( stack );
+
     stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
     setLayout( lay );
 }
@@ -51,17 +53,17 @@ void PanelDeco::addStackWidget( QWidget *w )
 
 int PanelDeco::id( QWidget* w )
 {
-	return ( stack->indexOf( w ) );
+    return ( stack->indexOf( w ) );
 }
 
 void PanelDeco::raise( QWidget *w )
 {
-	QWidget * old_w = visiblePanel();
+    QWidget * old_w = visiblePanel();
 
-	stack->setCurrentWidget( w );
+    stack->setCurrentWidget( w );
 
-	if ( old_w != w )
-		emit panelRaised( w, old_w );
+    if ( old_w != w )
+        emit panelRaised( w, old_w );
 }
 
 QWidget* PanelDeco::visiblePanel( void )
@@ -77,18 +79,18 @@ void PanelDeco::setHeader( const QString &title, const QString &icon )
 // Top part of the decoration
 
 TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) :
-		QWidget( parent, Qt::WNoAutoErase )
+    QWidget( parent, Qt::WNoAutoErase )
 {
-   setObjectName( name );
-	setMinimumHeight( 30 );
-	panelTitle = QString::null;
-	if ( !iconName.isNull() ) {
-		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
-	}
+    setObjectName( name );
+    setMinimumHeight( 30 );
+    panelTitle = QString::null;
+    if ( !iconName.isNull() ) {
+        icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
+    }
 
-	if ( !title.isNull() ) {
-		panelTitle = title;
-	}
+    if ( !title.isNull() ) {
+        panelTitle = title;
+    }
 }
 
 TopDeco::~TopDeco()
