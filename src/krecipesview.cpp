@@ -53,18 +53,14 @@
 #include "krecipesadaptor.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-		: KVBox( parent )
+    : QWidget( parent )
 {
     new KrecipesAdaptor(this );
     QDBusConnection::sessionBus().registerObject("/Krecipes", this);
 
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	QTime dbg_total_timer; dbg_total_timer.start();
-	#endif
-
-	// DBus ?
-	//kapp->dcopClient()->setDefaultObject( objId() );
-
+#endif
 	// Init the setup wizard if necessary
 	kDebug() << "Beginning wizard" ;
 	wizard();
@@ -86,10 +82,11 @@ KrecipesView::KrecipesView( QWidget *parent )
 	initDatabase();
 	END_TIMER()
 
-
 	// Design the GUI
+            QHBoxLayout *layout = new QHBoxLayout;
+        setLayout( layout );
 	splitter = new KHBox( this );
-
+        layout->addWidget( splitter );
 	// Create Left and Right Panels (splitter)
 
 	leftPanel = new KreMenu( splitter, "leftPanel" );
@@ -161,50 +158,71 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Right Panel Widgets
 	START_TIMER("Creating input dialog")
 	inputPanel = new RecipeInputDialog( rightPanel, database );
+        rightPanel->addStackWidget( inputPanel );
 	END_TIMER()
 
 	START_TIMER("Creating recipe view")
 	viewPanel = new RecipeViewDialog( rightPanel, database );
+        rightPanel->addStackWidget( viewPanel );
 	END_TIMER()
 
 	START_TIMER("Creating recipe selection dialog")
 	selectPanel = new SelectRecipeDialog( rightPanel, database );
+        rightPanel->addStackWidget( selectPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating ingredients component")
 	ingredientsPanel = new IngredientsDialog( rightPanel, database );
+        rightPanel->addStackWidget( ingredientsPanel );
 	END_TIMER()
 
 	START_TIMER("Creating properties component")
 	propertiesPanel = new PropertiesDialog( rightPanel, database );
+        rightPanel->addStackWidget( propertiesPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating units component")
 	unitsPanel = new UnitsDialog( rightPanel, database );
+        rightPanel->addStackWidget( unitsPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating shopping list dialog")
 	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
+        rightPanel->addStackWidget( shoppingListPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating diet wizard dialog")
 	dietPanel = new DietWizardDialog( rightPanel, database );
+        rightPanel->addStackWidget( dietPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating categories component")
 	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
+        rightPanel->addStackWidget( categoriesPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating authors component")
 	authorsPanel = new AuthorsDialog( rightPanel, database );
+        rightPanel->addStackWidget( authorsPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating prep methods component")
 	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
+        rightPanel->addStackWidget( prepMethodsPanel );
+
 	END_TIMER()
 
 	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
+        rightPanel->addStackWidget( ingredientMatcherPanel );
+
 	END_TIMER()
 
 	database->clearCategoryCache();

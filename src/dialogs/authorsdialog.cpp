@@ -22,7 +22,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
+AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
+    : QWidget( parent )
 {
 
 	// Store pointer to database
@@ -56,8 +57,7 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent 
 	//Connect Signals & Slots
 
 	connect ( newAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( createNew() ) );
-	connect ( removeAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( remove
-		          () ) );
+	connect ( removeAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( remove() ) );
 }
 
 AuthorsDialog::~AuthorsDialog()

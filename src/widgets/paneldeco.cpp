@@ -21,7 +21,7 @@
 #include <qpixmap.h>
 #include <kvbox.h>
 #include <QHBoxLayout>
-
+#include <QTextEdit>
 
 // Panel decoration
 
@@ -32,35 +32,22 @@ PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, c
 // Top decoration
     tDeco = new TopDeco( this, "TopDecoration", title, iconName );
     lay->addWidget( tDeco );
-
-    hbox = new KHBox( this );
-    lay->addWidget( hbox );
-    //Left decoration
-    lDeco = new LeftDeco( hbox, "LeftDecoration" );
-
-    //The widget stack (panels)
-    stack = new QStackedWidget( hbox );
+    stack = new QStackedWidget;
+    lay->addWidget( stack );
     stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
     setLayout( lay );
 }
 
 
 PanelDeco::~PanelDeco()
-{}
-
-void PanelDeco::childEvent( QChildEvent *e )
 {
-    if ( e->type() == QEvent::ChildInserted ) {
-        QObject * obj = e->child();
-        if ( obj->inherits( "QWidget" ) ) {
-            QWidget * w = ( QWidget* ) obj;
-            if ( w != hbox && w != tDeco )
-                w->setParent( stack, windowFlags() & ~Qt::WindowType_Mask);
-            w->setGeometry( 0, 0 ,w->width(),w->height());
-        }
-    }
 }
 
+
+void PanelDeco::addStackWidget( QWidget *w )
+{
+    stack->addWidget( w );
+}
 
 int PanelDeco::id( QWidget* w )
 {
@@ -86,15 +73,6 @@ void PanelDeco::setHeader( const QString &title, const QString &icon )
 {
 	tDeco->setHeader( title, icon );
 }
-
-// Left part of the decoration
-
-LeftDeco::LeftDeco( QWidget *parent, const char *name ) :
-		QWidget( parent, Qt::WNoAutoErase )
-{setObjectName( name );}
-
-LeftDeco::~LeftDeco()
-{}
 
 // Top part of the decoration
 

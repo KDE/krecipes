@@ -80,8 +80,7 @@ typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, Pr
 
 
 // Class KrecipesView
-class KrecipesView : public KVBox
-//, virtual public KrecipesIface
+class KrecipesView : public QWidget
 {
 	Q_OBJECT
 public:

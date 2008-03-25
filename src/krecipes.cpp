@@ -70,7 +70,7 @@
 #include <kedittoolbar.h>
 #include <kstdaccel.h>
 #include <ktoggleaction.h>
-#include <kstandardaction.h> 
+#include <kstandardaction.h>
 #include <kactioncollection.h>
 //Settings headers
 #include <kdeversion.h>
@@ -78,10 +78,10 @@
 
 
 Krecipes::Krecipes()
-		: KXmlGuiWindow( 0 ) 
+    : KXmlGuiWindow( 0 )
 {
-   m_view = new KrecipesView( this ); 
-	this->setObjectName( "Krecipes" );
+    m_view = new KrecipesView( this );
+	setObjectName( "Krecipes" );
 	// accept dnd
 	setAcceptDrops( true );
 
@@ -122,10 +122,11 @@ Krecipes::Krecipes()
 	parsing_file_dlg = new KDialog( this );
 	parsing_file_dlg->setObjectName( "parsing_file_dlg" );
 	parsing_file_dlg->setModal( true );
-	parsing_file_dlg->setWindowFlags ( Qt::WX11BypassWM );
+	//parsing_file_dlg->setWindowFlags ( Qt::WX11BypassWM );
 	QLabel *parsing_file_dlg_label = new QLabel( i18n( "Gathering recipe data from file.\nPlease wait..." ), parsing_file_dlg );
 	parsing_file_dlg_label->setFrameStyle( QFrame::Box | QFrame::Raised );
-	( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
+	//( new QVBoxLayout( parsing_file_dlg ) ) ->addWidget( parsing_file_dlg_label );
+        parsing_file_dlg->setMainWidget( parsing_file_dlg_label );
 	parsing_file_dlg->adjustSize();
 	//parsing_file_dlg->setFixedSize(parsing_file_dlg->size());
 	convertDialog = new ConversionDialog(this,m_view->database);
@@ -195,23 +196,23 @@ void Krecipes::setupActions()
 	connect( converterAction, SIGNAL(triggered(bool)), this , SLOT( conversionToolSlot() ) );
 
 	groupConfig = new KConfigGroup(KGlobal::config(),"Advanced");
-	
+
 	if ( groupConfig->readEntry("UnhideMergeTools",false) ) {
-	
+
 		mergeCategoriesAction = new KAction( this );
 		mergeCategoriesAction->setIcon( KIcon( "categories" ) );
 		mergeCategoriesAction->setText( i18n( "&Merge Similar Categories..." ) );
 		mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );
 		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarCategories() ) );
-		
+
 		mergeIngredientsAction = new KAction( this );
 		mergeIngredientsAction->setIcon( KIcon( "ingredients" ) );
 		mergeIngredientsAction->setText( i18n( "&Merge Similar Ingredients..." ) );
 		mergeIngredientsAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_ingredients_action", mergeIngredientsAction );
 		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarIngredients() ) );
-		
+
 	}
 
 	KAction *action = KStandardAction::openNew( this, SLOT( fileNew() ), actionCollection() );
@@ -250,7 +251,7 @@ void Krecipes::setupActions()
 	actionCollection()->addAction( "copy_to_clipboard_action" , copyToClipboardAction );
 	connect( copyToClipboardAction, SIGNAL(triggered(bool)), this, SLOT( fileToClipboard()  ) );
 
-	
+
         pageSetupAction = new KAction( this );
         pageSetupAction->setText( i18n( "Page Setup..." ) );
         actionCollection()->addAction( "page_setup_action" , pageSetupAction );
@@ -322,7 +323,7 @@ void Krecipes::fileOpen()
 	/*
 	    // this brings up the generic open dialog
 	    KUrl url = KUrlRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
-	*/ 
+	*/
 	// standard filedialog
 	/*KUrl url = KFileDialog::getOpenUrl(QString::null, QString::null, this, i18n("Open Location"));
 	if (!url.isEmpty())
@@ -409,7 +410,7 @@ void Krecipes::import()
 		bool direct = groupConfig->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer->recipeList() );
-	
+
 			if ( import_dialog.exec() != QDialog::Accepted ) {
 				delete importer;
 				return;
@@ -465,7 +466,7 @@ void Krecipes::kreDBImport()
 		bool direct = groupConfig->readEntry( "DirectImport", false );
 		if ( !direct ) {
 			RecipeImportDialog import_dialog( importer.recipeList() );
-	
+
 			if ( import_dialog.exec() != QDialog::Accepted ) {
 				return;
 			}
