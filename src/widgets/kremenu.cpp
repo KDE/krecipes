@@ -229,6 +229,7 @@ QSize KreMenu::minimumSizeHint() const
 
 void KreMenu::paintEvent( QPaintEvent * )
 {
+
 	// Make sure the size is bigger than the minimum necessary
 	//if (minimumWidth() <45) setMinimumWidth(45); // FIXME: can somehow setMinimumWidth be restricted? This may not be the best place to do this
 
@@ -388,7 +389,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 {
 	if ( !isShown() )
 		return ;
-	// First draw the gradient
+        // First draw the gradient
 	int darken = 130, lighten = 120;
 	QColor c1, c2, c1h, c2h; //non-highlighted and highlighted versions
 	QPalette palette;
@@ -407,7 +408,6 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	}
 
 	// draw the gradient now
-
 	QPainter painter;
 	QPixmap kpm;
 	kpm.resize( ( ( QWidget * ) parent() ) ->size() ); // use parent's same size to obtain the same gradient
@@ -442,7 +442,6 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).light( lighten ) );
 	painter.drawLine( width() / 5, height() - 1, width() - 1, height() - 1 );
 	painter.end();
-
 
 	// Now Add the icon
 
@@ -481,7 +480,6 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	}
 
 	painter.end();
-
 	// If it's highlighted, draw a rounded area around the text
 
 	// Calculate the rounded area
@@ -553,7 +551,6 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 	// Copy the offscreen button to the widget
 	bitBlt( this, 0, 0, &kpm, 0, 0, width(), height() ); // Copy the image with correct button size (button is already smaller than parent in width to leave space for the handle, so no need to use -10)
-
 }
 
 void KreMenuButton::setIconSet( const QIcon &is )
