@@ -20,26 +20,28 @@
 #include <kiconloader.h>
 #include <qpixmap.h>
 #include <kvbox.h>
-
+#include <QHBoxLayout>
 
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) : KVBox( parent )
+PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName )
+    : QWidget( parent )
 {
-   setObjectName( name );
-	// Top decoration
-	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
+    QVBoxLayout * lay = new QVBoxLayout;
+// Top decoration
+    tDeco = new TopDeco( this, "TopDecoration", title, iconName );
+    lay->addWidget( tDeco );
 
-	hbox = new KHBox( this );
+    hbox = new KHBox( this );
+    lay->addWidget( hbox );
+    //Left decoration
+    lDeco = new LeftDeco( hbox, "LeftDecoration" );
 
-	//Left decoration
-	lDeco = new LeftDeco( hbox, "LeftDecoration" );
-
-	//The widget stack (panels)
-	stack = new QStackedWidget( hbox );
-	stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-
+    //The widget stack (panels)
+    stack = new QStackedWidget( hbox );
+    stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+    setLayout( lay );
 }
 
 
@@ -48,15 +50,15 @@ PanelDeco::~PanelDeco()
 
 void PanelDeco::childEvent( QChildEvent *e )
 {
-	if ( e->type() == QEvent::ChildInserted ) {
-		QObject * obj = e->child();
-		if ( obj->inherits( "QWidget" ) ) {
-			QWidget * w = ( QWidget* ) obj;
-			if ( w != hbox && w != tDeco )
-            w->setParent( stack, windowFlags() & ~Qt::WindowType_Mask);
+    if ( e->type() == QEvent::ChildInserted ) {
+        QObject * obj = e->child();
+        if ( obj->inherits( "QWidget" ) ) {
+            QWidget * w = ( QWidget* ) obj;
+            if ( w != hbox && w != tDeco )
+                w->setParent( stack, windowFlags() & ~Qt::WindowType_Mask);
             w->setGeometry( 0, 0 ,w->width(),w->height());
-		}
-	}
+        }
+    }
 }
 
 

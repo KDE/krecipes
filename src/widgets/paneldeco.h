@@ -33,7 +33,7 @@ class PanelDeco;
 class LeftDeco;
 class TopDeco;
 
-class PanelDeco : public KVBox
+class PanelDeco : public QWidget
 {
 	Q_OBJECT
 public:
