@@ -13,28 +13,24 @@
 #ifndef CREATEELEMENTDIALOG_H
 #define CREATEELEMENTDIALOG_H
 
-#include <qpushbutton.h>
-#include <q3groupbox.h>
-#include <qlayout.h>
-
-
-#include <klineedit.h>
 #include <kdialog.h>
-#include <kvbox.h>
+
+class KLineEdit;
 
 /**
 @author Unai Garro
 */
 class CreateElementDialog : public KDialog
 {
+    Q_OBJECT
 public:
 	CreateElementDialog( QWidget *parent, const QString &text );
 	~CreateElementDialog();
-	QString newElementName( void );
+	QString newElementName() const;
+protected slots:
+    void slotTextChanged( const QString& text );
 
 private:
-	//Widgets
-	Q3GroupBox *box;
 	KLineEdit *elementEdit;
 };
 
