@@ -81,7 +81,6 @@ set(krecipeswidgets_SRCS
    widgets/headerlistview.cpp
    widgets/ratingwidget.cpp
    widgets/kwidgetlistbox.cpp
-   widgets/ratingdisplaywidget.ui
    widgets/criteriacombobox.cpp
    widgets/ingredientinputwidget.cpp
    widgets/unitcombobox.cpp
@@ -193,6 +192,9 @@ set(krecipes_SRCS
    recipefilter.cpp 
    convert_sqlite3.cpp 
    klomanager.cpp )
+
+
+kde4_add_ui_files(krecipes_SRCS widgets/ratingdisplaywidget.ui)
 
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 

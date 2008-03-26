@@ -32,7 +32,7 @@
             </spacer>
           </item>
           <item>
-            <widget class="QLabel" name="icon" >
+            <widget class="QLabel" name="iconLabel" >
               <property name="minimumSize" >
                 <size>
                   <width>76</width>
@@ -207,7 +207,7 @@
   </customwidgets>
   <includes>
     <include location="local" >datablocks/rating.h</include>
-    <include location="local" >klistview.h</include>
+    <include location="local" >k3listview.h</include>
     <include location="local" >kpushbutton.h</include>
     <include location="local" >kpushbutton.h</include>
   </includes>

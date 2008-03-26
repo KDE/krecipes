@@ -237,7 +237,7 @@ EditPropertiesDialog::~EditPropertiesDialog()
 void EditPropertiesDialog::languageChange()
 {
 	setCaption( i18n( "Property Information" ) );
-	infoLabel->setText( i18n( "Property Information for <b>%1</b>" ).arg(ingredientName) );
+	infoLabel->setText( i18n( "Property Information for <b>%1</b>" , ingredientName) );
 	usdaListView->listView()->header()->setLabel( 0, i18n( "USDA Ingredient" ) );
 	usdaListView->listView()->header()->setLabel( 1, i18n( "Id" ) );
 	loadButton->setText( i18n( "Load ->" ) );

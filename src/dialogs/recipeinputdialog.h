@@ -38,7 +38,7 @@
 #include <kvbox.h>
 
 #include "datablocks/elementlist.h"
-
+#include "datablocks/rating.h"
 class QTabWidget;
 class QDateTimeEdit;
 class Q3TextEdit;
@@ -53,9 +53,20 @@ class RecipeDB;
 class FractionInput;
 class Ingredient;
 class Rating;
-class Ui_RatingDisplayWidget;
 class IngredientInputWidget;
 class ClickableLed;
+
+#include "ui_ratingdisplaywidget.h"
+
+class RatingDisplayWidget : public QWidget, public Ui::RatingDisplayWidget
+{
+public:
+  RatingDisplayWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+RatingList::iterator rating_it;
+};
+
 
 /**
 @author Unai Garro
@@ -146,7 +157,7 @@ private:
 	void showCategories( void );
 	void showAuthors( void );
 	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
-	void addRating( const Rating &rating, Ui_RatingDisplayWidget *item );
+	void addRating( const Rating &rating, RatingDisplayWidget *item );
 	QString statusMessage() const;
 	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
 
