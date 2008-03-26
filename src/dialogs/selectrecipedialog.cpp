@@ -77,15 +77,13 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	searchBar->setSpacing( 7 );
 	layout->addWidget( searchBar, 1, 1 );
 
-	KIconLoader *il = KIconLoader::global();
-	QPushButton *clearSearchButton = new QPushButton( searchBar );
-   clearSearchButton->setIcon( QIcon( il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ) ) );
-   clearSearchButton->setIconSize(  il->loadIcon( "locationbar_erase", KIconLoader::NoGroup, 16 ).size()  );
 
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18n( "Search:" ) );
 	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18n( "Search:" ) ) + 5 );
 	searchBox = new KLineEdit( searchBar );
+        searchBox->setClearButtonShown( true );
+        connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
 
 	QSpacerItem* searchSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( searchSpacer, 1, 2 );
@@ -125,8 +123,6 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	advancedSearch = new AdvancedSearchDialog( this, database );
 	tabWidget->insertTab( -1, advancedSearch, i18n( "Advanced" ) );
 
-	clearSearchButton->setToolTip( i18n( "Clear search" ) );
-
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );
 
@@ -140,8 +136,6 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( this, SIGNAL( recipeSelected( bool ) ), editButton, SLOT( setEnabled( bool ) ) );
 	connect( removeButton, SIGNAL( clicked() ), actionHandler, SLOT( remove() ) );
 	connect( this, SIGNAL( recipeSelected( bool ) ), removeButton, SLOT( setEnabled( bool ) ) );
-
-	connect( clearSearchButton, SIGNAL( clicked() ), this, SLOT( clearSearch() ) );
 
 	KConfigGroup config (KGlobal::config(), "Performance" );
 	if ( config.readEntry("SearchAsYouType",true) ) {
