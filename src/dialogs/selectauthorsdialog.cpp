@@ -36,7 +36,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
     setDefaultButton(KDialog::Ok);
     setModal( true );
     KVBox *page = new KVBox( this );
-
+    setMainWidget( page );
 	//Design UI
 
 	// Combo to Pick authors

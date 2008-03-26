@@ -4,6 +4,8 @@
 *   Cyril Bosselut (bosselut@b1project.com)                               *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
+*   Copyright (C) 2008 by Montel Laurent <montel@kde.org                  *
+*                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -28,7 +30,6 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	// Store pointer to database
 	database = db;
-
 	QHBoxLayout* layout = new QHBoxLayout( this );
    layout->setMargin( KDialog::marginHint() );
    layout->setSpacing( KDialog::spacingHint() );
