@@ -132,7 +132,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	okButton = new QPushButton( buttonBar );
    okButton->setObjectName( "okButton" );
 	okButton->setText( i18n( "&OK" ) );
-	okButton->setIcon( KIcon( "ok" ) );
+	okButton->setIcon( KIcon( "dialog-ok" ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
