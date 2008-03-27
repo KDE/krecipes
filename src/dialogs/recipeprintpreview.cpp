@@ -19,7 +19,7 @@
 #include "pagesetupdialog.h"
 
 RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QList<int> &ids )
-		: KDialog( parent )
+    : KDialog( parent )
 {
     setCaption( i18n("Print Preview") );
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::Help);
@@ -27,17 +27,19 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QLi
     setModal( true );
     KVBox *page = new KVBox( this );
     setMainWidget( page );
-	setHelp("print-recipe");
-	setButtonText( KDialog::User1, i18n("&Edit") );
-	setButtonText( KDialog::Ok, i18n("&Print") );
+    setHelp("print-recipe");
+    setButtonText( KDialog::User1, i18n("&Edit") );
+    setButtonText( KDialog::Ok, i18n("&Print") );
 
-	setSizeGripEnabled( true );
+    setSizeGripEnabled( true );
 
 
-	recipeView = new RecipeViewDialog( page, db );
-	recipeView->loadRecipes( ids, "Print" );
+    recipeView = new RecipeViewDialog( page, db );
+    recipeView->loadRecipes( ids, "Print" );
 
-	//setInitialSize( QSize(450,500), false );
+    //setInitialSize( QSize(450,500), false );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
 }
 
 RecipePrintPreview::~RecipePrintPreview()

@@ -31,7 +31,7 @@
 #include "backends/recipedb.h"
 
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
-		: KDialog( parent )
+    : KDialog( parent )
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
@@ -39,49 +39,50 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 
-	groupBox1 = new Q3GroupBox( page );
-	groupBox1->setColumnLayout(0, Qt::Vertical );
-	groupBox1->layout()->setSpacing( 6 );
-	groupBox1->layout()->setMargin( 11 );
-	groupBox1Layout = new QGridLayout( groupBox1->layout() );
-	groupBox1Layout->setAlignment( Qt::AlignTop );
+    groupBox1 = new Q3GroupBox( page );
+    groupBox1->setColumnLayout(0, Qt::Vertical );
+    groupBox1->layout()->setSpacing( 6 );
+    groupBox1->layout()->setMargin( 11 );
+    groupBox1Layout = new QGridLayout( groupBox1->layout() );
+    groupBox1Layout->setAlignment( Qt::AlignTop );
 
-	weightEdit = new FractionInput( groupBox1 );
+    weightEdit = new FractionInput( groupBox1 );
 
-	groupBox1Layout->addWidget( weightEdit, 0, 1 );
+    groupBox1Layout->addWidget( weightEdit, 0, 1 );
 
-	weightUnitBox = new UnitComboBox( groupBox1, db, Unit::Mass );
-	weightUnitBox->reload();
+    weightUnitBox = new UnitComboBox( groupBox1, db, Unit::Mass );
+    weightUnitBox->reload();
 
-	groupBox1Layout->addWidget( weightUnitBox, 0, 2, 1, 2, 0 );
+    groupBox1Layout->addWidget( weightUnitBox, 0, 2, 1, 2, 0 );
 
-	perAmountLabel = new QLabel( groupBox1 );
-   perAmountLabel->setObjectName( "perAmountLabel" );
+    perAmountLabel = new QLabel( groupBox1 );
+    perAmountLabel->setObjectName( "perAmountLabel" );
 
-	groupBox1Layout->addWidget( perAmountLabel, 1, 0 );
+    groupBox1Layout->addWidget( perAmountLabel, 1, 0 );
 
-	weightLabel = new QLabel( groupBox1 );
-   weightLabel->setObjectName( "weightLabel" );
+    weightLabel = new QLabel( groupBox1 );
+    weightLabel->setObjectName( "weightLabel" );
 
-	groupBox1Layout->addWidget( weightLabel, 0, 0 );
+    groupBox1Layout->addWidget( weightLabel, 0, 0 );
 
-	perAmountEdit = new FractionInput( groupBox1 );
+    perAmountEdit = new FractionInput( groupBox1 );
 
-	groupBox1Layout->addWidget( perAmountEdit, 1, 1 );
+    groupBox1Layout->addWidget( perAmountEdit, 1, 1 );
 
-	perAmountUnitBox = new UnitComboBox( groupBox1, db );
-	perAmountUnitBox->reload();
+    perAmountUnitBox = new UnitComboBox( groupBox1, db );
+    perAmountUnitBox->reload();
 
-	groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
+    groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
 
-	prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18n("-No Preparation-") );
-	prepMethodBox->reload();
-	groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
+    prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18n("-No Preparation-") );
+    prepMethodBox->reload();
+    groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
 
-	languageChange();
-	//clearWState( WState_Polished );
+    languageChange();
+    //clearWState( WState_Polished );
 
-	weightEdit->setFocus();
+    weightEdit->setFocus();
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 CreateIngredientWeightDialog::~CreateIngredientWeightDialog()
