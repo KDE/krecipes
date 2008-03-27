@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
-		: KDialog( parent)
+    : KDialog( parent)
 {
     setCaption(i18n("New Category" ));
     setButtons(KDialog::Ok | KDialog::Cancel);
@@ -34,27 +34,25 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 
-	box = new Q3GroupBox( page );
-	box->setColumnLayout( 0, Qt::Vertical );
-	box->layout() ->setSpacing( 6 );
-	box->layout() ->setMargin( 11 );
-	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
-	boxLayout->setAlignment( Qt::AlignTop );
-	box->setTitle( i18n( "New Category" ) );
+    box = new QGroupBox( page );
+    QVBoxLayout *boxLayout = new QVBoxLayout;
+    box->setLayout( boxLayout );
+    boxLayout->setAlignment( Qt::AlignTop );
+    box->setTitle( i18n( "New Category" ) );
 
-	elementEdit = new KLineEdit( box );
-	boxLayout->addWidget( elementEdit );
+    elementEdit = new KLineEdit( box );
+    boxLayout->addWidget( elementEdit );
 
-	KHBox *subcatHBox = new KHBox( box );
-	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
-	categoryComboBox = new KComboBox( subcatHBox );
-	boxLayout->addWidget( subcatHBox );
-	loadCategories( categories );
+    KHBox *subcatHBox = new KHBox( box );
+    ( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
+    categoryComboBox = new KComboBox( subcatHBox );
+    boxLayout->addWidget( subcatHBox );
+    loadCategories( categories );
 
-	adjustSize();
-	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
+    adjustSize();
+    setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
 
-	elementEdit->setFocus();
+    elementEdit->setFocus();
 }
 
 
@@ -70,12 +68,12 @@ void CreateCategoryDialog::loadCategories( const ElementList& categories )
 	}
 }
 
-QString CreateCategoryDialog::newCategoryName( void )
+QString CreateCategoryDialog::newCategoryName() const
 {
-	return ( elementEdit->text() );
+	return elementEdit->text();
 }
 
-int CreateCategoryDialog::subcategory( void )
+int CreateCategoryDialog::subcategory()
 {
 	if ( categoryComboBox->currentIndex() == 0 ) {
 		return -1;

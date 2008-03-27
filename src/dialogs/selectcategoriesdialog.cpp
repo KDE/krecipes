@@ -48,8 +48,6 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 	// Load the list
 	loadCategories( items_on );
 
-	setSizeGripEnabled( true );
-
 	// Connect signals & Slots
 	connect ( newCatButton, SIGNAL( clicked() ), SLOT( createNewCategory() ) );
 }

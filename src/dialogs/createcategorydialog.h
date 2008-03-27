@@ -14,16 +14,12 @@
 #define CREATECATEGORYDIALOG_H
 
 #include <qmap.h>
-#include <QVBoxLayout>
-
 #include <kdialog.h>
-#include <kvbox.h>
-
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
 class QVBoxLayout;
-class Q3GroupBox;
+class QGroupBox;
 class KComboBox;
 
 /**
@@ -34,14 +30,14 @@ class CreateCategoryDialog : public KDialog
 public:
 	CreateCategoryDialog( QWidget *parent, const ElementList &categories );
 	~CreateCategoryDialog();
-	QString newCategoryName( void );
+	QString newCategoryName( ) const;
 	int subcategory( void );
 
 private:
 	void loadCategories( const ElementList &categories );
 
 	//Widgets
-	Q3GroupBox *box;
+	QGroupBox *box;
 	KLineEdit *elementEdit;
 	KComboBox* categoryComboBox;
 	QMap<QString, int> idMap;
