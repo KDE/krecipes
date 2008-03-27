@@ -79,15 +79,15 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 
 	newYieldLabel = new QLabel( yieldFrame );
 
-	yieldFrameLayout->addWidget( newYieldLabel, 1, 1, 1, 2, 0 );
+	yieldFrameLayout->addWidget( newYieldLabel, 1, 0);
 
 	currentYieldInput = new KLineEdit( yieldFrame );
 	currentYieldInput->setReadOnly( true );
 	currentYieldInput->setAlignment( Qt::AlignRight );
-	yieldFrameLayout->addWidget( currentYieldInput, 0, 1, 1, 2, 0 );
+	yieldFrameLayout->addWidget( currentYieldInput, 0,1 );
 
 	newYieldInput = new FractionInput( yieldFrame );
-	yieldFrameLayout->addWidget( newYieldInput, 1, 2 );
+	yieldFrameLayout->addWidget( newYieldInput, 1, 1 );
 
 	buttonGroupLayout->addWidget( yieldFrame );
 
