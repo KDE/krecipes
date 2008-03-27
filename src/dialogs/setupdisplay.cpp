@@ -548,10 +548,13 @@ void SetupDisplay::setTextColor()
 void SetupDisplay::setShown( int id )
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	emit itemVisibilityChanged( item, !popup->isItemChecked( id ) );
+        kDebug()<<" item :"<<item;
+        kDebug()<<" !popup->isItemChecked( id ) :"<<popup->isItemChecked( id );
+        bool visibility = popup->isItemChecked( id );
+	emit itemVisibilityChanged( item, visibility );
 
 	m_currentItem = item;
-	loadVisibility(m_currNodeId,!popup->isItemChecked( id ));
+	loadVisibility(m_currNodeId,visibility);
 	m_currentItem = 0;
 
 	applyStylesheet();

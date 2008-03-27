@@ -189,8 +189,7 @@ void PageSetupDialog::initShownItems()
 
 void PageSetupDialog::setItemShown( int id )
 {
-	shown_items_popup->setItemChecked( id, !shown_items_popup->isItemChecked( id ) );
-	m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
+    m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
 }
 
 void PageSetupDialog::loadFile()

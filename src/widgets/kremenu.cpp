@@ -80,7 +80,6 @@ void KreMenu::childEvent ( QChildEvent *e )
     }
     else if ( e->type() == QChildEvent::ChildRemoved ) {
         QObject * child = e->child();
-        kDebug()<<" remove child"<<child;
         KreMenuButton *button = ( KreMenuButton* ) child;
         if ( m_currentMenu->positionList.find( button ) != m_currentMenu->positionList.end() )  // Ensure that what was removed was a button
         {
@@ -101,7 +100,6 @@ void KreMenu::childEvent ( QChildEvent *e )
         }
 
     }
-    kDebug()<<"sdd";
     QWidget::childEvent( e );
 }
 
