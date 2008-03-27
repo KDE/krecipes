@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2007 by                                                 *
-*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*   Jalons Kivlighn (jkivlighn@gmail.com)                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -150,7 +150,6 @@ QString XSLTExporter::createFooter()
 
 QString XSLTExporter::createHeader( const RecipeList & )
 {
-	kDebug() << "Using layout: " << m_layoutFilename ;
 	QFile layoutFile( m_layoutFilename );
 	QString error; int line; int column;
 	QDomDocument doc;
@@ -237,10 +236,10 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	}
 
 	//const char *filename = "/home/jason/svn/utils/krecipes/layouts/Default.xsl";
-	QString filename = m_templateFilename.toUtf8();
-	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.data());
+	QByteArray filename = m_templateFilename.toUtf8();
+	xsltStylesheetPtr xslt = xsltParseStylesheetFile((const xmlChar*)filename.constData());
 	if ( !xslt ) {
-		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>",filename);
+		return i18n("<html><b>Error:</b> Bad template: %1.  Use \"Edit->Page Setup...\" to select a new template.</html>",QString( filename ));
 	}
 
 	QFileInfo imgDirInfo(m_templateFilename);
@@ -365,7 +364,7 @@ void XSLTExporter::removeHTMLFiles( const QString &filename, const QList<int> &r
 	for ( QList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
 		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
 		if ( photo.exists() )
-			photo.remove(); //remove photos in directory before removing it 
+			photo.remove(); //remove photos in directory before removing it
 	}
 
 	//take care of the default photo
