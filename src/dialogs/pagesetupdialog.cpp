@@ -75,7 +75,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	layout->addWidget( help );
 
 	KHBox *viewBox = new KHBox( this );
-	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Qt::Vertical);
+	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Qt::Horizontal);
 	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( uint i = 0; i < included_templates.count(); i++ ) {
