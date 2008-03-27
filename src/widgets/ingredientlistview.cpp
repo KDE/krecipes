@@ -1,6 +1,7 @@
 /***************************************************************************
 *   Copyright (C) 2004 by                                                 *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*   Copyright (C) 2008 by Montel Laurent <montel@kde.org                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -70,7 +71,7 @@ QString IngredientCheckListItem::text( int column ) const
 	}
 }
 
-void IngredientCheckListItem::stateChange( bool on )
+ void IngredientCheckListItem::stateChange( bool on )
 {
 	m_listview->stateChange(this,on);
 }
@@ -123,7 +124,7 @@ StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, boo
 		kpop->addAction( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
-		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
 		kpop->ensurePolished();
 
 		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
@@ -138,6 +139,11 @@ void StdIngredientListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, co
 		kpop->exec( p );
 }
 
+void StdIngredientListView::slotRename()
+{
+    rename( 0, 0);
+}
+
 void StdIngredientListView::createNew()
 {
 	CreateElementDialog * elementDialog = new CreateElementDialog( this, i18n( "New Ingredient" ) );
@@ -148,6 +154,7 @@ void StdIngredientListView::createNew()
 		if ( checkBounds( result ) )
 			database->createNewIngredient( result ); // Create the new author in the database
 	}
+        delete elementDialog;
 }
 
 void StdIngredientListView::remove

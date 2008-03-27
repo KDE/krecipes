@@ -90,6 +90,7 @@ private slots:
 
 	void modIngredient( Q3ListViewItem* i );
 	void saveIngredient( Q3ListViewItem* i );
+    void slotRename();
 
 private:
 	bool checkBounds( const QString &name );
