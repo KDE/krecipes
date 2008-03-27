@@ -48,14 +48,10 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
     KVBox *page = new KVBox( this );
     setMainWidget( page );
 
-	setSizeGripEnabled( true );
-
-
 	KHBox *vbox = new KVBox(page);
 
 	KHBox *fromTopBox = new KHBox(vbox);
 	convertLabel = new QLabel( fromTopBox );
-   convertLabel->setObjectName( "convertLabel" );
 
 	amountEdit = new FractionInput( fromTopBox );
 
@@ -76,7 +72,6 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	KHBox *toBox = new KHBox(vbox);
 
 	toLabel = new QLabel( toBox );
-   toLabel->setObjectName( "toLabel" );
 
 	toUnitBox = new UnitComboBox( toBox, db );
 	toUnitBox->reload();
@@ -96,6 +91,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	// signals and slots connections
 	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
+        connect( this, SIGNAL( user1Clicked() ), this, SLOT( convert() ) );
 }
 
 ConversionDialog::~ConversionDialog()
@@ -124,11 +120,6 @@ void ConversionDialog::reset()
 	toUnitBox->setCurrentItem( 0 );
 	fromUnitBox->setCurrentItem( 0 );
 	amountEdit->clear();
-}
-
-void ConversionDialog::slotUser1()
-{
-	convert();
 }
 
 void ConversionDialog::convert()

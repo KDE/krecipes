@@ -31,7 +31,7 @@ class FractionInput;
 class ConversionDialog : public KDialog
 {
 Q_OBJECT
-	
+
 public:
 	ConversionDialog( QWidget* parent, RecipeDB *, const char* name = 0 );
 	~ConversionDialog();
@@ -39,7 +39,7 @@ public:
 	virtual void show();
 	void reset();
 
-protected:	
+protected:
 	IngredientComboBox* ingredientBox;
 	PrepMethodComboBox* prepMethodBox;
 	QLabel* convertLabel;
@@ -49,10 +49,9 @@ protected:
 	QLabel* toLabel;
 	QLabel* resultLabel;
 	QLabel* resultText;
-	
+
 protected slots:
 	virtual void languageChange();
-	void slotUser1();
 	void convert();
 
 private:
