@@ -680,7 +680,7 @@ void Krecipes::optionsPreferences()
 
 	// popup some sort of preference dialog, here
 	KrecipesPreferences dlg( this );
-	if ( dlg.exec() ) {}
+	dlg.exec();
 
 }
 

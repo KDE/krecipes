@@ -37,7 +37,6 @@
 
 #include "importers/baseimporter.h"
 #include "backends/recipedb.h"
-//#include "krecipesiface.h"
 
 class AuthorsDialog;
 class PrepMethodsDialog;
