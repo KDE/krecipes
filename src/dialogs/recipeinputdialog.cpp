@@ -42,7 +42,6 @@
 
 #include <kapplication.h>
 #include <kcompletionbox.h>
-#include <sonnet/speller.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -51,8 +50,6 @@
 #include <kled.h>
 #include <kdialog.h>
 #include <kio/netaccess.h>
-#include <K3Spell>
-#include <K3SpellConfig>
 #include <kvbox.h>
 
 #include "selectauthorsdialog.h"
@@ -425,11 +422,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	instructionsEdit->setTabChangesFocus ( true );
 	instructionsLayout->addWidget( instructionsEdit );
 
-	spellCheckButton = new QToolButton( instructionsTab );
-	spellCheckButton->setIcon( KIcon( "tools-check-spelling" ) );
-	spellCheckButton->setToolTip( i18n( "Check spelling" ) );
-	instructionsLayout->addWidget( spellCheckButton );
-
 	// ------- END OF Recipe Instructions Tab -----------
 
 
@@ -523,7 +515,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( closeOptions() ) );
 	connect ( showButton, SIGNAL( clicked() ), this, SLOT( showRecipe() ) );
 	connect ( resizeButton, SIGNAL( clicked() ), this, SLOT( resizeRecipe() ) );
-	connect ( spellCheckButton, SIGNAL( clicked() ), this, SLOT( spellCheck() ) );
 	connect ( this, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveButton( bool ) ) );
 
 	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
@@ -1282,16 +1273,6 @@ void RecipeInputDialog::showRecipe( void )
 	emit showRecipe( loadedRecipe->recipeID );
 }
 
-void RecipeInputDialog::spellCheck( void )
-{
-	QString text = instructionsEdit->text();
-	K3SpellConfig default_cfg( this );
-	K3Spell::modalCheck( text, &default_cfg );
-	KMessageBox::information( this, i18n( "Spell check complete." ) );
-
-	if ( text != instructionsEdit->text() )  //check if there were changes
-		instructionsEdit->setText( text );
-}
 
 void RecipeInputDialog::resizeRecipe( void )
 {

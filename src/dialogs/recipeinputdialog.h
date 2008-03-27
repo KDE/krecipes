@@ -144,7 +144,6 @@ private:
 	QToolButton* showButton;
 	QToolButton* resizeButton;
 
-	QToolButton* spellCheckButton;
 
 	KWidgetListbox *ratingListDisplayWidget;
 
@@ -193,7 +192,6 @@ private slots:
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()
-	void spellCheck( void );
 	void resizeRecipe( void );
 
 signals:
