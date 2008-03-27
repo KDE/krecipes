@@ -22,7 +22,6 @@
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <QGridLayout>
-#include <Q3ValueList>
 
 #include <kcombobox.h>
 #include <klineedit.h>

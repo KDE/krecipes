@@ -37,7 +37,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
     setDefaultButton(KDialog::Ok);
     setModal( true );
     KVBox *page = new KVBox( this );
-
+    setMainWidget( page );
 
 	groupBox1 = new Q3GroupBox( page );
 	groupBox1->setColumnLayout(0, Qt::Vertical );
