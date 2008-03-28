@@ -18,7 +18,6 @@
 
 #include <qlayout.h>
 #include <QGridLayout>
-#include <kiconloader.h>
 #include <k3listview.h>
 #include <kvbox.h>
 
@@ -50,6 +49,5 @@ private:
 	KHBox *buttonBar;
 	QPushButton *newPrepMethodButton;
 	QPushButton *removePrepMethodButton;
-	KIconLoader *il;
 };
 #endif

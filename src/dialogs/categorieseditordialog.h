@@ -19,7 +19,6 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <QGridLayout>
-#include <kiconloader.h>
 #include <k3listview.h>
 #include <kvbox.h>
 
@@ -53,7 +52,6 @@ private:
 	KHBox *buttonBar;
 	QPushButton *newCategoryButton;
 	QPushButton *removeCategoryButton;
-	KIconLoader *il;
 };
 
 #endif

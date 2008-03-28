@@ -47,6 +47,5 @@ private:
 	StdAuthorListView *authorListView;
 	QPushButton *newAuthorButton;
 	QPushButton *removeAuthorButton;
-	KIconLoader *il;
 };
 #endif
