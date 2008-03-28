@@ -13,7 +13,7 @@
 #ifndef AMOUNTUNITINPUT_H
 #define AMOUNTUNITINPUT_H
 
-#include <q3hbox.h>
+#include <khbox.h>
 
 #include "datablocks/unit.h"
 #include "datablocks/mixednumber.h"
@@ -24,7 +24,7 @@ class RecipeDB;
 class FractionInput;
 class UnitComboBox;
 
-class AmountUnitInput : public Q3HBox
+class AmountUnitInput : public KHBox
 {
 Q_OBJECT
 
