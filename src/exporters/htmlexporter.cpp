@@ -227,7 +227,6 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	QFileInfo fi(fileName());
 	QString image_url = fi.baseName() + "_photos/" + escape( photo_name ) + ".png";
-	image_url =  QLatin1String( QUrl::toPercentEncoding( image_url ));
 	content = content.replace( "**PHOTO**", image_url );
 
 	//=======================AUTHORS======================//
@@ -418,7 +417,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ratings_html += "<table>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+QLatin1String( QUrl::toPercentEncoding( image_url ))+"\" /></td></tr>";
+			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
 			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
@@ -441,7 +440,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		double average = int(2*rating_sum/rating_total)/2;
 		overall_html += QString("<b>%1:</b>").arg(i18n("Overall Rating"));
 		QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-		overall_html +=  "<img src=\""+QLatin1String( QUrl::toPercentEncoding( image_url ))+"\" />";
+		overall_html +=  "<img src=\""+ image_url+"\" />";
 		if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 			QPixmap starPixmap = Rating::starsPixmap(average,true);
 			starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );

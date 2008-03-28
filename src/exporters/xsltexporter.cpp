@@ -180,7 +180,6 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-				image_url = QLatin1String( QUrl::toPercentEncoding( image_url ));
 				if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 					QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars,true);
 					starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
@@ -193,7 +192,6 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		if ( rating_total > 0 ) {
 			double average = round(2*rating_sum/rating_total)/2;
 			QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-			image_url = QLatin1String( QUrl::toPercentEncoding( image_url ));
 			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap(average,true);
 				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
