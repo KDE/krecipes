@@ -41,7 +41,7 @@
 #include "datablocks/rating.h"
 class QTabWidget;
 class QDateTimeEdit;
-class Q3TextEdit;
+class QTextEdit;
 
 class KreTextEdit;
 class KWidgetListbox;
@@ -127,7 +127,7 @@ private:
 	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	QPushButton *propertyStatusButton;
-	Q3TextEdit *statusTextView;
+	QTextEdit *statusTextView;
 	KDialog *propertyStatusDialog;
 
 	// Buttons to move ingredients up & down...

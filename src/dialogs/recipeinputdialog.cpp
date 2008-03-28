@@ -402,7 +402,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
 	propertyStatusDialog->setHelp("property-status");
 
-	statusTextView = new Q3TextBrowser(0);
+	statusTextView = new QTextEdit(0);
 	statusTextView->setReadOnly(true);
 	propertyStatusDialog->setMainWidget( statusTextView );
 	propertyStatusDialog->resize( 400, 300 );
