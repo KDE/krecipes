@@ -18,21 +18,21 @@
 #include <kaction.h>
 #include <kdebug.h>
 
-KreTextEdit::KreTextEdit( QWidget *parent ) : Q3TextEdit( parent ), KCompletionBase()
+KreTextEdit::KreTextEdit( QWidget *parent )
+    : KTextEdit( parent )//, KCompletionBase()
 {
-	KCompletion * comp = completionObject(); //creates the completion object
-	comp->setIgnoreCase( true );
+    KCompletion * comp = completionObject(); //creates the completion object
+    comp->setIgnoreCase( true );
 
-	completing = false;
+    completing = false;
 
-	connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
+    connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
 }
 
 void KreTextEdit::haltCompletion()
 {
 	completing = false;
 }
-
 void KreTextEdit::keyPressEvent( QKeyEvent *e )
 {
 	// Filter key-events if completion mode is not set to CompletionNone
@@ -44,7 +44,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	if ( noModifier ) {
 		QString keycode = e->text();
 		if ( !keycode.isEmpty() && keycode.unicode() ->isPrint() ) {
-			Q3TextEdit::keyPressEvent ( e );
+			KTextEdit::keyPressEvent ( e );
 			tryCompletion();
 			e->accept();
 			return ;
@@ -59,7 +59,8 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 	//using just the standard Ctrl+E isn't user-friendly enough for Grandma...
 	if ( completing && ( cut.contains( e->key() ) || e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) ) {
-		int paraFrom, indexFrom, paraTo, indexTo;
+#if 0
+            int paraFrom, indexFrom, paraTo, indexTo;
 		getSelection ( &paraFrom, &indexFrom, &paraTo, &indexTo );
 
 		removeSelection();
@@ -67,6 +68,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 		completing = false;
 		return ;
+#endif
 	}
 
 	// handle rotation
@@ -106,11 +108,12 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	}
 
 	// Let KTextEdit handle any other keys events.
-	Q3TextEdit::keyPressEvent ( e );
+	KTextEdit::keyPressEvent ( e );
 }
 
 void KreTextEdit::setCompletedText( const QString &txt )
 {
+#if 0
 	int para, index;
 	getCursorPosition( &para, &index );
 
@@ -122,6 +125,7 @@ void KreTextEdit::setCompletedText( const QString &txt )
 	setCursorPosition( para, index );
 
 	completing = true;
+#endif
 }
 
 void KreTextEdit::setCompletedItems( const QStringList &/*items*/ , bool)
@@ -129,6 +133,7 @@ void KreTextEdit::setCompletedItems( const QStringList &/*items*/ , bool)
 
 void KreTextEdit::tryCompletion()
 {
+#if 0
 	int para, index;
 	getCursorPosition( &para, &index );
 
@@ -146,6 +151,7 @@ void KreTextEdit::tryCompletion()
 		else
 			completing = false;
 	}
+#endif
 }
 
 void KreTextEdit::rotateText( KCompletionBase::KeyBindingType type )
@@ -154,6 +160,7 @@ void KreTextEdit::rotateText( KCompletionBase::KeyBindingType type )
 	if ( comp && completing &&
 	        ( type == KCompletionBase::PrevCompletionMatch ||
 	          type == KCompletionBase::NextCompletionMatch ) ) {
+#if 0
 		QString input = ( type == KCompletionBase::PrevCompletionMatch ) ? comp->previousMatch() : comp->nextMatch();
 
 		// Skip rotation if previous/next match is null or the same text
@@ -164,6 +171,7 @@ void KreTextEdit::rotateText( KCompletionBase::KeyBindingType type )
 		if ( input.isNull() || input == complete_word )
 			return ;
 		setCompletedText( input );
+#endif
 	}
 }
 

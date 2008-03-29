@@ -11,7 +11,7 @@
 #ifndef KRETEXTEDIT_H
 #define KRETEXTEDIT_H
 
-#include <Q3TextEdit>
+#include <KTextEdit>
 #include <ktextedit.h>
 #include <kcompletion.h>
 
@@ -22,15 +22,15 @@
 /*  @author Jason Kivlighn
  *  @brief An extended KTextEdit that allows for text completion
  */
-class KreTextEdit : public Q3TextEdit, KCompletionBase
+class KreTextEdit : public KTextEdit, KCompletionBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KreTextEdit( QWidget *parent );
+    KreTextEdit( QWidget *parent );
 
-	virtual void setCompletedText( const QString &text );
-	virtual void setCompletedItems( const QStringList &items , bool);
+    virtual void setCompletedText( const QString &text );
+    virtual void setCompletedItems( const QStringList &items , bool);
 
 public slots:
 	void addCompletionItem( const QString & );
@@ -46,7 +46,6 @@ private slots:
 private:
 	void tryCompletion();
 	void rotateText( KCompletionBase::KeyBindingType type );
-
 	bool completing;
 	int completion_begin;
 
