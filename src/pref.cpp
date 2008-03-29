@@ -47,6 +47,8 @@
 #include <kglobal.h>
 #include <kvbox.h>
 
+#include <sonnet/configwidget.h>
+
 KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 		: KPageDialog( parent )
 {
@@ -92,10 +94,30 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	addPage(page);
 	m_helpMap.insert(3,"configure-performance");
 
+
+	m_pageSpellChecking = new SpellCheckingPrefs( this );
+        page = new KPageWidgetItem( m_pageSpellChecking , "spell" );
+	page->setHeader( i18n( "Spell checking Options" ) );
+	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "launch", il ) );
+	addPage(page);
+	m_helpMap.insert(4,"configure-spell");
+
+
 	// Signals & Slots
 	connect ( this, SIGNAL( okClicked() ), this, SLOT( saveSettings() ) );
 
 }
+
+void KrecipesPreferences::saveSettings( void )
+{
+	m_pageServer->saveOptions();
+	m_pageNumbers->saveOptions();
+	m_pageImport->saveOptions();
+	m_pagePerformance->saveOptions();
+        m_pageSpellChecking->saveOptions();
+}
+
 
 void KrecipesPreferences::slotHelp()
 {
@@ -427,15 +449,6 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 	adjustSize();
 }
 
-
-void KrecipesPreferences::saveSettings( void )
-{
-	m_pageServer->saveOptions();
-	m_pageNumbers->saveOptions();
-	m_pageImport->saveOptions();
-	m_pagePerformance->saveOptions();
-}
-
 // Save Server settings
 void ServerPrefs::saveOptions( void )
 {
@@ -658,6 +671,21 @@ void PerformancePrefs::saveOptions()
 	config.writeEntry( "Limit", limit );
 
 	config.writeEntry( "SearchAsYouType", searchAsYouTypeBox->isChecked() );
+}
+
+//=============Sonnet Options Dialog================//
+SpellCheckingPrefs::SpellCheckingPrefs( QWidget *parent )
+    : QWidget( parent )
+{
+    QHBoxLayout *lay = new QHBoxLayout( this );
+    m_confPage = new Sonnet::ConfigWidget(&( *KGlobal::config() ), this );
+    lay->addWidget( m_confPage );
+    setLayout( lay );
+}
+
+void SpellCheckingPrefs::saveOptions()
+{
+    m_confPage->save();
 }
 
 #include "pref.moc"

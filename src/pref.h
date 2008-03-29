@@ -21,10 +21,15 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 
+namespace Sonnet {
+    class ConfigWidget;
+}
+
 class ServerPrefs;
 class NumbersPrefs;
 class ImportPrefs;
 class PerformancePrefs;
+class SpellCheckingPrefs;
 
 class KIntNumInput;
 class KLineEdit;
@@ -50,6 +55,7 @@ private:
 	NumbersPrefs *m_pageNumbers;
 	ImportPrefs *m_pageImport;
 	PerformancePrefs *m_pagePerformance;
+    SpellCheckingPrefs *m_pageSpellChecking;
 
 	QMap<int,QString> m_helpMap;
 
@@ -179,6 +185,17 @@ protected:
 	QCheckBox* searchAsYouTypeBox;
 	KIntNumInput* catLimitInput;
 	KIntNumInput* limitInput;
+};
+
+class SpellCheckingPrefs : public QWidget
+{
+	Q_OBJECT
+public:
+	SpellCheckingPrefs( QWidget *parent = 0 );
+
+	void saveOptions();
+protected:
+    Sonnet::ConfigWidget *m_confPage;
 };
 
 #endif // _KRECIPESPREF_H_

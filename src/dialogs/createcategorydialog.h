@@ -18,7 +18,6 @@
 #include "datablocks/elementlist.h"
 
 class KLineEdit;
-class QVBoxLayout;
 class QGroupBox;
 class KComboBox;
 
