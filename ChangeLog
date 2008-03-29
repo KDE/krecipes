@@ -1,3 +1,7 @@
+Changes from 1.0 to 1.1
+  -Port to kde4/qt4
+  -Use sonnet
+
 Changes from 1.0-beta1 to 1.0:
   -New recipe layouts, thanks to a new XSL-based template system
   -New icons and splash screen (courtesy of Robert Wadley)
