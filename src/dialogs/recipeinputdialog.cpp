@@ -704,9 +704,10 @@ void RecipeInputDialog::changePhoto( void )
 		// If photo is bigger than the label, or smaller in width, than photoLabel, scale it
 		sourcePhoto = pixmap;
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
+
 			QImage pm = sourcePhoto.toImage();
 			QPixmap pm_scaled;
-			pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+			pm_scaled = pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			photoLabel->setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
