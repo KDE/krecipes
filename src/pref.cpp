@@ -63,50 +63,55 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 
         m_pageServer = new ServerPrefs( this );
         KPageWidgetItem * page = new KPageWidgetItem( m_pageServer , i18n( "Server Settings" ) );
+        page->setObjectName("server" );
 	page->setHeader( i18n( "Database Server Options (%1)" , config.readEntry( "Type" )));
 	il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
-        m_helpMap.insert(0,"configure-server-settings");
+        m_helpMap.insert(page->objectName(),"configure-server-settings");
         addPage( page );
 
         m_pageNumbers = new NumbersPrefs( this );
 	page = new KPageWidgetItem(m_pageNumbers , i18n( "Formatting" ) );
+        page->setObjectName( "formating" );
 	page->setHeader( i18n( "Customize Formatting" ) );
 	il->loadIcon( "math_frac", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "math_frac", il ) );
 	addPage(page);
-	m_helpMap.insert(1,"custom-formatting");
+	m_helpMap.insert(page->objectName(),"custom-formatting");
 
 	m_pageImport = new ImportPrefs( this );
-        page = new KPageWidgetItem( m_pageImport , "Import/Export" );
+        page = new KPageWidgetItem( m_pageImport , i18n( "Import/Export" ) );
+        page->setObjectName( "import" );
 	page->setHeader( i18n( "Recipe Import and Export Options" ) );
 	il->loadIcon( "go-down", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "go-down", il ) );
 	addPage(page);
-	m_helpMap.insert(2,"import-export-preference");
+	m_helpMap.insert(page->objectName(),"import-export-preference");
 
 
 	m_pagePerformance = new PerformancePrefs( this );
-        page = new KPageWidgetItem( m_pagePerformance , "performance" );
+        page = new KPageWidgetItem( m_pagePerformance , i18n( "performance" ) );
 	page->setHeader( i18n( "Performance Options" ) );
+        page->setObjectName( "performance" );
 	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "launch", il ) );
 	addPage(page);
-	m_helpMap.insert(3,"configure-performance");
+	m_helpMap.insert(page->objectName(),"configure-performance");
 
 
 	m_pageSpellChecking = new SpellCheckingPrefs( this );
-        page = new KPageWidgetItem( m_pageSpellChecking , "spell" );
+        page = new KPageWidgetItem( m_pageSpellChecking , i18n( "spell" ) );
 	page->setHeader( i18n( "Spell checking Options" ) );
+        page->setObjectName( "spellchecking" );
 	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
 	page->setIcon( KIcon::KIcon( "launch", il ) );
 	addPage(page);
-	m_helpMap.insert(4,"configure-spell");
+	m_helpMap.insert(page->objectName() ,"configure-spell");
 
 
 	// Signals & Slots
 	connect ( this, SIGNAL( okClicked() ), this, SLOT( saveSettings() ) );
-
+        connect ( this, SIGNAL( helpClicked() ), this, SLOT( slotHelp() ) );
 }
 
 void KrecipesPreferences::saveSettings( void )
@@ -121,8 +126,7 @@ void KrecipesPreferences::saveSettings( void )
 
 void KrecipesPreferences::slotHelp()
 {
-	// KDE4 port to be done
-	//KToolInvocation::invokeHelp( m_helpMap[currentPage()->name()] );
+    KToolInvocation::invokeHelp( m_helpMap.value( currentPage()->name() ) );
 }
 
 

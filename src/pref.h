@@ -57,7 +57,7 @@ private:
 	PerformancePrefs *m_pagePerformance;
     SpellCheckingPrefs *m_pageSpellChecking;
 
-	QMap<int,QString> m_helpMap;
+	QMap<QString,QString> m_helpMap;
 
 private slots:
 	void saveSettings( void );
