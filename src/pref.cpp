@@ -100,11 +100,11 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 
 
 	m_pageSpellChecking = new SpellCheckingPrefs( this );
-        page = new KPageWidgetItem( m_pageSpellChecking , i18n( "spell" ) );
+        page = new KPageWidgetItem( m_pageSpellChecking , i18n( "Spell checking" ) );
 	page->setHeader( i18n( "Spell checking Options" ) );
         page->setObjectName( "spellchecking" );
-	il->loadIcon( "launch", KIconLoader::NoGroup, 32 );
-	page->setIcon( KIcon::KIcon( "launch", il ) );
+	il->loadIcon( "tools-check-spelling", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "tools-check-spelling", il ) );
 	addPage(page);
 	m_helpMap.insert(page->objectName() ,"configure-spell");
 
