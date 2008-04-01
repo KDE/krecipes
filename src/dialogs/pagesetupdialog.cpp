@@ -306,8 +306,13 @@ bool PageSetupDialog::haveWritePerm( const QString &filename )
 
 void PageSetupDialog::selectNoLayout()
 {
-	m_htmlPart->loadLayout( QString::null );
-	setActiveFile( QString::null );
+    m_htmlPart->loadLayout( QString::null );
+    setActiveFile( QString::null );
+//    QMap<int, KreDisplayItem*> popup_widget_map;
+    QList<int> lst = popup_widget_map.uniqueKeys ();
+    for (int i = 0; i < lst.size(); ++i)
+    {
+        shown_items_popup->setItemChecked(lst[i], true );
+    }
 }
-
 #include "pagesetupdialog.moc"
