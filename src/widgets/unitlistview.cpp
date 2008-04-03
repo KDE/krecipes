@@ -138,7 +138,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		kpop->addAction( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
-		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
 		kpop->ensurePolished();
 
 		typeComboBox = new QComboBox( viewport() );
@@ -255,13 +255,18 @@ void StdUnitListView::remove()
 	}
 }
 
+void StdUnitListView::slotRename()
+{
+    rename( 0, 0 );
+}
+
 void StdUnitListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 {
 	Q3ListViewItem * item = currentItem();
 
 	if ( item ) {
 		CreateUnitDialog unitDialog( this, item->text(0), item->text(2), item->text(1), item->text(3), false );
-		
+
 		if ( unitDialog.exec() == QDialog::Accepted ) {
 			UnitListViewItem *unit_item = (UnitListViewItem*)item;
 			Unit origUnit = unit_item->unit();

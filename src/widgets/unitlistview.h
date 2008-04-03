@@ -61,6 +61,7 @@ private slots:
 	void createNew();
 	void remove();
 	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
+    void slotRename();
 
 	void modUnit( Q3ListViewItem* i, const QPoint &p, int c );
 	void saveUnit( Q3ListViewItem* i, const QString &text, int c );

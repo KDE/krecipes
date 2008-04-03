@@ -70,14 +70,14 @@ void HidePropertyCheckListItem::stateChange( bool on )
 {
 	if ( !m_holdSettings ) {
 		KConfigGroup config = KGlobal::config()->group("Formatting");
-	
+
 		config.sync();
 		QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
 		if ( on )
 			hiddenList.removeAll(m_property.name);
 		else if ( !hiddenList.contains(m_property.name) )
 			hiddenList.append(m_property.name);
-	
+
 		config.writeEntry("HiddenProperties",hiddenList);
 	}
 }
@@ -88,7 +88,7 @@ PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) : K3ListView
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
 
-	connect( db, SIGNAL( propertyCreated( const IngredientProperty & ) ), SLOT( createProperty( const IngredientProperty & ) ) );	
+	connect( db, SIGNAL( propertyCreated( const IngredientProperty & ) ), SLOT( createProperty( const IngredientProperty & ) ) );
 	connect( db, SIGNAL( propertyRemoved( int ) ), SLOT( removeProperty( int ) ) );
 }
 
@@ -131,7 +131,7 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 		kpop->addAction( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
-		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
 		kpop->ensurePolished();
 
 		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
@@ -179,6 +179,11 @@ void StdPropertyListView::remove
 			break;
 		}
 	}
+}
+
+void StdPropertyListView::slotRename()
+{
+    rename( 0, 0 );
 }
 
 void StdPropertyListView::rename( Q3ListViewItem* /*item*/,int /*c*/)

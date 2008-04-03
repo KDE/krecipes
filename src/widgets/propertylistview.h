@@ -161,10 +161,9 @@ private slots:
 	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 
 	void createNew();
-	void remove
-		();
+	void remove();
 	void rename(Q3ListViewItem* /* item */, int /*c*/);
-
+    void slotRename();
 	void modProperty( Q3ListViewItem* i );
 	void saveProperty( Q3ListViewItem* i );
 

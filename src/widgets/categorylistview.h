@@ -95,7 +95,7 @@ public:
 
 	virtual QString text( int column ) const;
 	virtual void setText( int column, const QString &text );
-	
+
 	int rtti() const
 	{
 		return CATEGORYLISTITEM_RTTI;
@@ -231,6 +231,7 @@ private slots:
 	void remove
 		();
 	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
+    void slotRename();
 	void cut();
 	void paste();
 	void pasteAsSub();
@@ -246,7 +247,7 @@ private:
 	KMenu *kpop;
 	Q3ListViewItem *clipboard_item;
 	Q3ListViewItem *clipboard_parent;
-	
+
 	QPixmap m_folder_icon;
 };
 

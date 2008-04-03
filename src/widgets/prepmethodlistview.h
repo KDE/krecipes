@@ -60,7 +60,7 @@ private slots:
 
 	void modPrepMethod( Q3ListViewItem* i );
 	void savePrepMethod( Q3ListViewItem* i );
-
+    void slotRename();
 private:
 	bool checkBounds( const QString &name );
 

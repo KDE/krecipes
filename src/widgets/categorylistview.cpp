@@ -193,7 +193,7 @@ void CategoryListView::populate( Q3ListViewItem *item )
 
 	CategoryTree categoryTree;
 	database->loadCategories( &categoryTree, -1, 0, id, false );
-	
+
 	for ( CategoryTree * child_it = categoryTree.firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		createCategory( child_it->category, id );
 	}
@@ -248,7 +248,7 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 			takeItem( item );
 		else
 			item->parent() ->takeItem( item );
-	
+
 		if ( parent_id == -1 ) {
 			insertItem(item);
 			createElement(item);
@@ -285,7 +285,7 @@ void CategoryListView::mergeCategories( int id1, int id2 )
 		Q3ListViewItem *next_sibling;
 		for ( Q3ListViewItem * it = from_item->firstChild(); it; it = next_sibling ) {
 			next_sibling = it->nextSibling(); //get the sibling before we move the item
-	
+
 			removeElement(it,false);
 			from_item->takeItem( it );
 
@@ -319,7 +319,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		kpop->addAction( il.loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
 		kpop->addAction( il.loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
-		kpop->addAction( il.loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( rename() ), Qt::CTRL + Qt::Key_R );
+		kpop->addAction( il.loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
 		kpop->addSeparator();
 		kpop->addAction( il.loadIcon( "edit-cut", KIconLoader::NoGroup, 16 ), i18n( "Cu&t" ), this, SLOT( cut() ), Qt::CTRL + Qt::Key_X );
 		kpop->addAction( il.loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "&Paste" ), this, SLOT( paste() ), Qt::CTRL + Qt::Key_V );
@@ -403,6 +403,11 @@ void StdCategoryListView::remove
 				database->removeCategory( id );
 		}
 	}
+}
+
+void StdCategoryListView::slotRename()
+{
+    rename( 0, 0 );
 }
 
 void StdCategoryListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
