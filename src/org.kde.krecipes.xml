@@ -6,5 +6,9 @@
       <arg type="s" direction="out"/>
     </method>
     <method name="reload"/>
+    <method name="exportRecipes">
+      <arg type="ai" direction="in" name="list"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QList&lt;int>"/>
+    </method>
   </interface>
 </node>
