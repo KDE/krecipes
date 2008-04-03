@@ -494,7 +494,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
-	connect( prepTimeEdit, SIGNAL( valueChanged( const QTime & ) ), SLOT( recipeChanged() ) );
+	connect( prepTimeEdit, SIGNAL(dateTimeChanged(const QDateTime &) ), SLOT( recipeChanged() ) );
 	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( addCategoryButton, SIGNAL( clicked() ), this, SLOT( addCategory() ) );
