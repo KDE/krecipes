@@ -179,8 +179,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
 	QPushButton *clearPhotoButton = new QPushButton( photoButtonsBox );
-	clearPhotoButton->setIcon( QIcon( il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ) ) );
-	clearPhotoButton->setIconSize(  il->loadIcon( "clear_left", KIconLoader::NoGroup, 16 ).size() );
+	clearPhotoButton->setIcon( QIcon( il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ) ) );
+	clearPhotoButton->setIconSize(  il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ).size() );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
 
 	recipeLayout->addWidget( photoButtonsBox, 3, 2, 5, 1, 0 );
