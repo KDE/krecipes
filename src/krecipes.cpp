@@ -278,27 +278,27 @@ void Krecipes::setupActions()
 	createGUI();
 }
 
-void Krecipes::saveProperties( KConfigGroup& )
+void Krecipes::saveProperties( KConfigGroup& group )
 {
 	// the 'config' object points to the session managed
 	// config file.  anything you write here will be available
 	// later when this app is restored
 
-	//if (!m_view->currentURL().isNull())
-	//  config->writeEntry("lastURL", m_view->currentURL());
+	//if (!m_view->currentUrl().isNull())
+    //group.writeEntry("lastURL", m_view->currentUrl());
 }
 
-void Krecipes::readProperties( const KConfigGroup& )
+void Krecipes::readProperties( const KConfigGroup& group )
 {
 	// the 'config' object points to the session managed
 	// config file.  this function is automatically called whenever
 	// the app is being restored.  read in here whatever you wrote
 	// in 'saveProperties'
 
-	//QString url = config->readEntry("lastURL");
+	//QString url = group.readEntry("lastURL");
 
 	//if (!url.isNull())
-	//  m_view->openURL(KUrl(url));
+    //m_view->openURL(KUrl(url));
 }
 
 void Krecipes::dragEnterEvent( QDragEnterEvent *event )
