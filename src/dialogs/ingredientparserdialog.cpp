@@ -11,7 +11,7 @@
 #include "ingredientparserdialog.h"
 
 #include <qpushbutton.h>
-#include <q3textedit.h>
+#include <qtextedit.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -55,8 +55,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
    textLabel1->setObjectName( "textLabel1" );
 	textLabel1->setTextFormat( Qt::RichText );
 
-	ingredientTextEdit = new Q3TextEdit( page, "ingredientTextEdit" );
-	ingredientTextEdit->setTextFormat( Qt::PlainText );
+	ingredientTextEdit = new QTextEdit( page, "ingredientTextEdit" );
+	ingredientTextEdit->setAcceptRichText( false );
 
 	parseButton = new KPushButton( page );
 
@@ -234,10 +234,10 @@ void IngredientParserDialog::parseText()
 
 	int line_num = 0;
 	QStringList ingredients;
-    if (ingredientTextEdit->text().isEmpty())
+    if (ingredientTextEdit->document()->isEmpty())
         ingredients = QStringList();
     else
-       ingredients = ingredientTextEdit->text().split( "\n", QString::SkipEmptyParts);
+       ingredients = ingredientTextEdit->toPlainText().split( "\n", QString::SkipEmptyParts);
 
 	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
 		QString line = (*it).simplified();
