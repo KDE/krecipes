@@ -1519,7 +1519,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	database->loadProperties( &ingPropertyList, ing.ingredientID );
 
 	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No nutrient information available.  <a href=\"ingredient#%3\">Provide nutrient information.</a>")).arg(ing.name).arg(ing.ingredientID));
+		propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No nutrient information available.  <a href=\"ingredient#%2\">Provide nutrient information.</a>", ing.name, ing.ingredientID)));
 	}
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
@@ -1573,11 +1573,11 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg(ing.ingredientID));
+				propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, ing.ingredientID)));
 				break;
 			case RecipeDB::MismatchedPrepMethod:
 				if ( ing.prepMethodList.count() == 0 )
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified. <a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg(ing.ingredientID));
+					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, ing.ingredientID)));
 				else
 					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners: %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(ing.ingredientID));
 				break;
