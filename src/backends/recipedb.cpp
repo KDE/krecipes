@@ -772,9 +772,6 @@ void RecipeDB::importUSDADatabase()
 		std::multimap<int, QString>::iterator current_pair;
 		while ( ( current_pair = ings_and_ids->find( id ) ) != ings_and_ids->end() )  //there may be more than one ingredients with the same id
 		{
-			if ( (*current_pair).first == -1 ) continue; 	//there's no USDA id, and thus no nutrient
-									//info to load
-
 			ingredient_nutrient_data current_ing;
 			current_ing.name = ( *current_pair ).second.latin1();
 
@@ -814,6 +811,18 @@ void RecipeDB::importUSDADatabase()
 			ings_and_ids->erase( current_pair );
 		}
 	}
+
+	std::multimap<int, QString>::iterator current_pair;
+	while ( ( current_pair = ings_and_ids->find( -1 ) ) != ings_and_ids->end() )
+	{
+		ingredient_nutrient_data current_ing;
+		current_ing.name = ( *current_pair ).second.latin1();
+
+		data->append( current_ing );
+
+		ings_and_ids->erase( current_pair );
+	}
+
 
 	delete ings_and_ids;
 
