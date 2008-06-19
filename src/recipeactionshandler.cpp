@@ -275,15 +275,17 @@ void RecipeActionsHandler::remove()
 {
 	QPtrList<QListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
+		QValueList<int> recipe_ids;
 		QPtrListIterator<QListViewItem> it(items);
 		QListViewItem *item;
 		while ( (item = it.current()) != 0 ) {
 			if ( item->rtti() == RECIPELISTITEM_RTTI ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
-				emit recipeSelected( recipe_it->recipeID(), 2 );
+				recipe_ids.append(recipe_it->recipeID());
 			}
 			++it;
 		}
+		emit recipesSelected( recipe_ids, 2 );
 	}
 }
 

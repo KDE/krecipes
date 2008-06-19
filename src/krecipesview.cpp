@@ -486,9 +486,21 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 
 void KrecipesView::actionRecipes( const QValueList<int> &ids, int action )
 {
-	if ( action == 0 )  //show
-	{
+	if ( action == 0 ) { //show
 		showRecipes( ids );
+	} else if ( action == 2 ) {
+		switch ( KMessageBox::questionYesNo( this,
+						      i18n( "Are you sure you want to permanently remove the selected recipes?" ),
+						      i18n( "Confirm remove" ) ) )
+		{
+		case KMessageBox::Yes:
+			for ( QValueList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+			  database->removeRecipe( *it );
+			}
+			break;
+		case KMessageBox::No:
+			break;
+		}
 	}
 }
 
