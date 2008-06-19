@@ -106,7 +106,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	recipeListView->listView() ->setSorting( -1 );
 	dialogLayout->addWidget(recipeListView);
 
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
+	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::Remove );
 
 	QHBox *buttonBox = new QHBox( this );
 
@@ -129,10 +129,27 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( ingListView->listView(), SIGNAL( doubleClicked( QListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( QListViewItem*, const QPoint &, int ) ) );
+	connect( db, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
 }
 
 IngredientMatcherDialog::~IngredientMatcherDialog()
 {
+}
+
+void IngredientMatcherDialog::removeRecipe( int id )
+{
+	QListViewItemIterator it( recipeListView->listView() );
+	QListViewItem *item;
+	while ( (item = it.current()) != 0 ) {
+		if ( item->rtti() == 1000 ) { //RecipeListItem
+			RecipeListItem * recipe_it = ( RecipeListItem* ) item;
+			if ( recipe_it->recipeID() == id ) {
+				delete item;
+				break;
+			}
+		}
+		++it;
+	}
 }
 
 void IngredientMatcherDialog::itemRenamed( QListViewItem* item, const QPoint &, int col )

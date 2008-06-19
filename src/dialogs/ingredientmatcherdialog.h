@@ -150,6 +150,7 @@ private slots:
 	void unselectIngredients();
 	void addIngredient();
 	void removeIngredient();
+	void removeRecipe( int id );
 	void itemRenamed( QListViewItem*, const QPoint &, int col );
 };
 
