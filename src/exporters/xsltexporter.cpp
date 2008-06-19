@@ -268,6 +268,10 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	QString output = QString::fromUtf8((char*)xmlOutput);
 
+	//a little post-processing for making clickable links
+	QRegExp regex("(http://\\S*)",false);
+	output.replace(regex,"<a href=\"\\1\">\\1</a>");
+
 	xsltFreeStylesheet(xslt);
 
 	xmlFreeDoc(kremlDoc);
