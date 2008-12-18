@@ -76,8 +76,8 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			Ingredient result;
 
 			bool converted;
-			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
-			if ( cache_it == ratioCache.end() ) {
+			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+			if ( cache_it == ratioCache.constEnd() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 
@@ -106,8 +106,8 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 
 			Ingredient result;
 			bool converted;
-			QMap<int,double>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
-			if ( cache_it == ratioCache.end() ) {
+			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+			if ( cache_it == ratioCache.constEnd() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 				if ( converted )

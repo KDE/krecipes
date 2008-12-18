@@ -77,7 +77,7 @@ void RecipeFilter::filter( const QString &s )
 
 void RecipeFilter::filterCategory( int categoryID )
 {
-	kDebug() << "I got category :" << categoryID << "\n";
+	kDebug() << "I got category :" << categoryID ;
 
 	if ( categoryID == -1 )
 		currentCategory = 0;
