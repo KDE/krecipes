@@ -142,8 +142,8 @@ void MXPImporter::loadCategories( QTextStream &stream, Recipe &recipe )
 
 		while ( current.trimmed() != "Amount  Measure       Ingredient -- Preparation Method" && !stream.atEnd() ) {
 			if ( !tmp_str.isEmpty() ) {
-				QStringList categories = tmp_str.split( "  ", QString::SkipEmptyParts );
-				for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+				const QStringList categories = tmp_str.split( "  ", QString::SkipEmptyParts );
+				for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 					Element new_cat( ( *it ).trimmed() );
 					recipe.categoryList.append( new_cat );
 

@@ -158,7 +158,7 @@ void CategoryComboBox::removeCategory( int id )
 
 void CategoryComboBox::modifyCategory( const Element &element )
 {
-	for ( QMap<int, int>::const_iterator it = categoryComboRows.begin(); it != categoryComboRows.end(); ++it ) {
+	for ( QMap<int, int>::const_iterator it = categoryComboRows.constBegin(); it != categoryComboRows.constEnd(); ++it ) {
 		if ( it.value() == element.id )
 			setItemText( it.key(), element.name );
 	}

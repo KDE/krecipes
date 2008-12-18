@@ -99,10 +99,10 @@ ElementList ElementList::split( const QString &sep, const QString &str )
    else
       list = str.split( sep, QString::SkipEmptyParts);
 
-	QStringList::const_iterator it_end = list.end();
+	QStringList::const_iterator it_end = list.constEnd();
 	QStringList::const_iterator it;
 
-	for ( it = list.begin(); it != it_end; ++it ) {
+	for ( it = list.constBegin(); it != it_end; ++it ) {
 		ret.append( Element((*it).trimmed()) );
 	}
 

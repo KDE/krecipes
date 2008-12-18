@@ -587,7 +587,7 @@ void Krecipes::mergeSimilarCategories()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( QList<int>::const_iterator it = ids.constBegin(); it != ids.constEnd(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeCategories(id, *it);
 		}
@@ -611,7 +611,7 @@ void Krecipes::mergeSimilarIngredients()
 			id = m_view->database->lastInsertID();
 		}
 
-		for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+		for ( QList<int>::const_iterator it = ids.constBegin(); it != ids.constEnd(); ++it ) {
 			if ( id != *it )
 				m_view->database->mergeIngredients(id, *it);
 		}

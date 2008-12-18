@@ -257,7 +257,7 @@ void AuthorCheckListView::load( int limit, int offset )
 {
 	AuthorListView::load(limit,offset);
 
-	for ( QList<Element>::const_iterator author_it = m_selections.begin(); author_it != m_selections.end(); ++author_it ) {
+	for ( QList<Element>::const_iterator author_it = m_selections.constBegin(); author_it != m_selections.constEnd(); ++author_it ) {
 		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*author_it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);

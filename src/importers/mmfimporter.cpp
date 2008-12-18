@@ -101,7 +101,7 @@ void MMFImporter::importMMF( QTextStream &stream )
    else
       categories = current.mid( current.indexOf( ":" ) + 1, current.length() ).split( separator, QString::SkipEmptyParts);
 
-	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+	for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();
 		kDebug() << "Found category: " << new_cat.name ;

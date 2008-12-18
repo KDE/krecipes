@@ -301,7 +301,7 @@ void RezkonvExporter::writeDirections( QString &content, const Recipe &recipe )
        lines = recipe.instructions.split( "\n", QString::KeepEmptyParts);
    
 
-	for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
+	for ( QStringList::const_iterator it = lines.constBegin(); it != lines.constEnd(); ++it ) {
 		content += wrapText( *it, 80 ).join( "\n" ) + "\n";
 	}
 }

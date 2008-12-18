@@ -176,7 +176,7 @@ void PrepMethodComboBox::setSelected( int prepID )
 {
 	//do a reverse lookup on the row->id map
 	QMap<int, int>::const_iterator it;
-	for ( it = prepMethodComboRows.begin(); it != prepMethodComboRows.end(); ++it ) {
+	for ( it = prepMethodComboRows.constBegin(); it != prepMethodComboRows.constEnd(); ++it ) {
 		if ( it.value() == prepID ) {
 			setCurrentIndex(it.key());
 			break;

@@ -264,7 +264,7 @@ bool IngredientInput::checkBounds()
    else
       prepMethodList = prepMethodBox->currentText().split( ",", QString::SkipEmptyParts);
    
-	for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
+	for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 		if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 		{
 			KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
@@ -436,7 +436,7 @@ void IngredientInputWidget::addIngredient()
 		}
 
 		QList<IngredientData> list;
-		for ( QList<IngredientInput*>::const_iterator it = m_ingInputs.begin(); it != m_ingInputs.end(); ++it ) {
+		for ( QList<IngredientInput*>::const_iterator it = m_ingInputs.constBegin(); it != m_ingInputs.constEnd(); ++it ) {
 			Ingredient ing = (*it)->ingredient();
 			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
 
@@ -446,7 +446,7 @@ void IngredientInputWidget::addIngredient()
 				return ;
 
 			QList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );
-			QList<int>::const_iterator id_it = prepIDs.begin();
+			QList<int>::const_iterator id_it = prepIDs.constBegin();
 			for ( ElementList::iterator it = ing.prepMethodList.begin(); it != ing.prepMethodList.end(); ++it, ++id_it ) {
 				(*it).id = *id_it;
 			}

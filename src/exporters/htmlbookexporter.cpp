@@ -65,7 +65,7 @@ QString HTMLBookExporter::createHeader( const RecipeList &list )
 QString HTMLBookExporter::createFooter()
 {
 	QMap<QString,QTextStream*>::const_iterator it;
-	for ( it = fileMap.begin(); it != fileMap.end(); ++it ) {
+	for ( it = fileMap.constBegin(); it != fileMap.constEnd(); ++it ) {
 		(**it) << HTMLExporter::createFooter();
 
 		(*it)->device()->close();

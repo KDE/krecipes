@@ -74,7 +74,7 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 		if ( categories.count() > 0 && categories[ 0 ].toUpper() == "none" )  //there are no categories
 			break;
 
-		for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+		for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 			Element new_cat( QString( *it ).trimmed() );
 			kDebug() << "Found category: " << new_cat.name ;
 			m_recipe.categoryList.append( new_cat );

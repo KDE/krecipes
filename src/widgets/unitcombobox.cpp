@@ -73,7 +73,7 @@ void UnitComboBox::setSelected( int unitID )
 {
 	//do a reverse lookup on the row->id map
 	QMap<int, int>::const_iterator it;
-	for ( it = unitComboRows.begin(); it != unitComboRows.end(); ++it ) {
+	for ( it = unitComboRows.constBegin(); it != unitComboRows.constEnd(); ++it ) {
 		if ( it.value() == unitID ) {
 			//KDE4 port  setCurrentItem(it.key());
 			setCurrentIndex(it.key());

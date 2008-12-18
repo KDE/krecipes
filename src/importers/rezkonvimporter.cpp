@@ -77,7 +77,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
    else
       categories = ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).split( ',', QString::SkipEmptyParts );
 
-	for ( QStringList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
+	for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 		Element new_cat;
 		new_cat.name = QString( *it ).trimmed();
 		kDebug() << "Found category: " << new_cat.name ;

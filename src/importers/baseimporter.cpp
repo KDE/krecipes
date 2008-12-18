@@ -101,7 +101,7 @@ void BaseImporter::import( RecipeDB *db, bool /*automatic*/ )
 		m_progress_dialog->setModal( true );
 		m_progress_dialog->progressBar()->setRange( 0, 0 );
 	
-		for ( QStringList::const_iterator file_it = m_filenames.begin(); file_it != m_filenames.end(); ++file_it ) {
+		for ( QStringList::const_iterator file_it = m_filenames.constBegin(); file_it != m_filenames.constEnd(); ++file_it ) {
 			file_recipe_count = 0;
 			parseFile( *file_it );
 			processMessages( *file_it );
