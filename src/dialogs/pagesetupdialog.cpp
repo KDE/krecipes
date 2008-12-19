@@ -168,13 +168,13 @@ void PageSetupDialog::initShownItems()
 	Q3ValueList<QString> nameList;
 	QMap<QString,KreDisplayItem*> nameMap;
 
-	for ( PropertiesMap::const_iterator it = properties.begin(); it != properties.end(); ++it ) {
+	for ( PropertiesMap::const_iterator it = properties.constBegin(); it != properties.constEnd(); ++it ) {
 		nameList << it.key()->name;
 		nameMap.insert( it.key()->name, it.key() );
 	}
 	qHeapSort( nameList );
 
-	for ( Q3ValueList<QString>::const_iterator it = nameList.begin(); it != nameList.end(); ++it ) {
+	for ( Q3ValueList<QString>::const_iterator it = nameList.constBegin(); it != nameList.constEnd(); ++it ) {
 		KreDisplayItem *item = nameMap[*it];
 		if ( properties[item] & SetupDisplay::Visibility ) {
 			int new_id = shown_items_popup->insertItem ( *it );

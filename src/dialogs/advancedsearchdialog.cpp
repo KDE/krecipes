@@ -837,7 +837,7 @@ void AdvancedSearchDialog::search()
 
 	START_TIMER("Further narrowing the search (no SQL)");
 	QStringList items = split(authorsAllEdit->text());
-	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
+	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
 				it = allRecipes.remove( it );
@@ -846,7 +846,7 @@ void AdvancedSearchDialog::search()
 		}
 	}
 	items = split(authorsWithoutEdit->text());
-	for ( QStringList::const_iterator author_it = items.begin(); author_it != items.end(); ++author_it ) {
+	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
 				it = allRecipes.remove( it );
@@ -857,7 +857,7 @@ void AdvancedSearchDialog::search()
 
 	//narrow down by categories
 	items = split(categoriesAllEdit->text());
-	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
+	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
 				it = allRecipes.remove( it );
@@ -866,7 +866,7 @@ void AdvancedSearchDialog::search()
 		}
 	}
 	items = split(categoriesNotEdit->text());
-	for ( QStringList::const_iterator cat_it = items.begin(); cat_it != items.end(); ++cat_it ) {
+	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
 				it = allRecipes.remove( it );
@@ -877,7 +877,7 @@ void AdvancedSearchDialog::search()
 
 	//narrow down by ingredients
 	items = split(ingredientsAllEdit->text());
-	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
+	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID == -1 ) {
 				it = allRecipes.remove( it );
@@ -886,7 +886,7 @@ void AdvancedSearchDialog::search()
 		}
 	}
 	items = split(ingredientsWithoutEdit->text());
-	for ( QStringList::const_iterator ing_it = items.begin(); ing_it != items.end(); ++ing_it ) {
+	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
@@ -937,8 +937,8 @@ void AdvancedSearchDialog::search()
 			QMap< int, double > idSumMap;
 			QMap< int, int > idCountMap;
 
-			for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
-				for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.constBegin(); rating_it != (*recipe_it).ratingList.constEnd(); ++rating_it ) {
+				for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
 					QMap< int, double >::iterator sum_it = idSumMap.find((*rc_it).id);
 					if ( sum_it == idSumMap.end() )
 						sum_it = idSumMap.insert((*rc_it).id,0);
@@ -988,7 +988,7 @@ void AdvancedSearchDialog::search()
 
 	//now display the recipes left
 	resultsListView->clear();
-	for ( RecipeList::const_iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
+	for ( RecipeList::const_iterator it = allRecipes.constBegin(); it != allRecipes.constEnd(); ++it ) {
 		( void ) new RecipeListItem( resultsListView, *it );
 	}
 

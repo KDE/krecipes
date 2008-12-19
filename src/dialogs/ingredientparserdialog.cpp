@@ -239,7 +239,7 @@ void IngredientParserDialog::parseText()
     else
        ingredients = ingredientTextEdit->toPlainText().split( "\n", QString::SkipEmptyParts);
 
-	for ( QStringList::const_iterator it = ingredients.begin(); it != ingredients.end(); ++it ) {
+	for ( QStringList::const_iterator it = ingredients.constBegin(); it != ingredients.constEnd(); ++it ) {
 		QString line = (*it).simplified();
 
 		++line_num;

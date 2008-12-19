@@ -319,7 +319,7 @@ void SetupDisplay::saveLayout( const QString &filename )
 	//layout_tag.setAttribute( "generator", QString("Krecipes v%1").arg(krecipes_version()) );
 	doc.appendChild( layout_tag );
 
-	for ( QMap<QString, KreDisplayItem*>::const_iterator it = node_item_map->begin(); it != node_item_map->end(); ++it ) {
+	for ( QMap<QString, KreDisplayItem*>::const_iterator it = node_item_map->constBegin(); it != node_item_map->constEnd(); ++it ) {
 		QDomElement base_tag = doc.createElement( it.key() );
 		layout_tag.appendChild( base_tag );
 
@@ -427,7 +427,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	popup->addTitle( item->name );
 
 	unsigned int properties = 0;
-	for ( PropertiesMap::const_iterator it = box_properties->begin(); it != box_properties->end(); ++it ) {
+	for ( PropertiesMap::const_iterator it = box_properties->constBegin(); it != box_properties->constEnd(); ++it ) {
 		if ( it.key()->nodeId == m_currNodeId ) {
 			properties = it.value();
 			break;

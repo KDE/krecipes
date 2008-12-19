@@ -1029,7 +1029,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
          else
             prepMethodList = new_text.split( ",", QString::SkipEmptyParts);
 
-			for ( QStringList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it ) {
+			for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 				{
 					KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
@@ -1043,7 +1043,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 				new_ing.prepMethodList = ElementList::split(",",new_text.trimmed());
 				QList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
 
-				QList<int>::const_iterator id_it = new_ids.begin();
+				QList<int>::const_iterator id_it = new_ids.constBegin();
 				for ( ElementList::iterator it = new_ing.prepMethodList.begin(); it != new_ing.prepMethodList.end(); ++it, ++id_it ) {
 					(*it).id = *id_it;
 				}
@@ -1328,7 +1328,7 @@ void RecipeInputDialog::slotIngredientParser()
 			(*it).units.id = IngredientInputWidget::createNewUnitIfNecessary((*it).units.name,false,(*it).ingredientID,(*it).units,database);
 
 			QList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
-			QList<int>::const_iterator prep_id_it = prepIDs.begin();
+			QList<int>::const_iterator prep_id_it = prepIDs.constBegin();
 			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it, ++prep_id_it ) {
 				(*prep_it).id = *prep_id_it;
 			}
@@ -1527,8 +1527,8 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
 		Ingredient result;
 
-		QMap<int,bool>::const_iterator cache_it = ratioCache.find((*prop_it).perUnit.id);
-		if ( cache_it == ratioCache.end() ) {
+		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+		if ( cache_it == ratioCache.constEnd() ) {
 			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 			ratioCache.insert((*prop_it).perUnit.id,status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
 

@@ -139,7 +139,7 @@ RecipeList RecipeImportDialog::getSelectedRecipes()
 	Q3ValueList<RecipeList::const_iterator> already_included_recipes;
 
 	QMap<CustomCheckListItem*, RecipeList::const_iterator>::const_iterator it;
-	for ( it = recipe_items->begin(); it != recipe_items->end(); ++it ) {
+	for ( it = recipe_items->constBegin(); it != recipe_items->constEnd(); ++it ) {
 		if ( static_cast<CustomCheckListItem*>( it.key() ) ->isOn() &&
 		        ( already_included_recipes.contains( it.value() ) == 0 ) )  //make sure it isn't already in the list
 		{
