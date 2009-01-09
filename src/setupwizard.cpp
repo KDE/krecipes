@@ -851,7 +851,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	psqlCheckBox->setEnabled( false );
 #endif
 
-#if (! defined(HAVE_SQLITE) || defined(HAVE_SQLITE3))
+#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
 	liteCheckBox->setEnabled( false );
 #ifdef HAVE_MYSQL
 
