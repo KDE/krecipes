@@ -117,7 +117,7 @@ void SelectAuthorsDialog::addAuthor( void )
 {
 	//check bounds first
 	if ( authorsCombo->currentText().length() > int(database->maxAuthorNameLength()) ) {
-		KMessageBox::error( this, i18n( "Author name cannot be longer than %1 characters." , database->maxAuthorNameLength() ) );
+		KMessageBox::error( this, i18np( "Author name cannot be longer than 1 character.", "Author name cannot be longer than %1 characters." , database->maxAuthorNameLength() ) );
 		authorsCombo->lineEdit() ->selectAll();
 		return ;
 	}

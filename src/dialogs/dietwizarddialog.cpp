@@ -233,7 +233,7 @@ void DietWizardDialog::createDiet( void )
 
 	if ( alert ) {
 		KApplication::restoreOverrideCursor();
-		KMessageBox::sorry( this, i18n( "I could not create a full diet list given the constraints. Either the recipe list is too short or the constraints are too demanding. " ) );
+		KMessageBox::sorry( this, i18n( "Given the constraints, a full diet list could not be constructed. Either the recipe list is too short or the constraints are too demanding. " ) );
 	}
 
 	else // show the resulting diet

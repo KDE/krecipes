@@ -181,7 +181,7 @@ void StdPrepMethodListView::savePrepMethod( Q3ListViewItem* i )
 bool StdPrepMethodListView::checkBounds( const QString &name )
 {
 	if ( name.length() > int(database->maxPrepMethodNameLength()) ) {
-		KMessageBox::error( this, i18n( "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
+		KMessageBox::error( this, i18np( "Preparation method cannot be longer than 1 character.", "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
 		return false;
 	}
 

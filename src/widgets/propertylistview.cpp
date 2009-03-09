@@ -243,7 +243,7 @@ kDebug() << "saveProp: " << i->text( 0 ) ;
 bool StdPropertyListView::checkBounds( const QString &name )
 {
 	if ( name.length() > (int)database->maxPropertyNameLength() ) {
-		KMessageBox::error( this, i18n( "Property name cannot be longer than %1 characters." , database->maxPropertyNameLength() ) );
+		KMessageBox::error( this, i18np( "Property name cannot be longer than 1 character.", "Property name cannot be longer than %1 characters." , database->maxPropertyNameLength() ) );
 		return false;
 	}
 
