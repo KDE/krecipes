@@ -234,7 +234,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>When the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is selected, the components will be collapsed and show &gt;&gt; beside the label of the component.  To expand a section, simply click on the label of the component.  Conversely, with the component expanded,  &lt;&lt; will show beside the label and clicking on the label will collapse the section.</para>
 
-<note><para>A section can be collaped simply to get it out of the way when it is not needed for a search.  However, if you enter search criteria in any one of the search components, you can close the component and the search criteria will still be considered in the search.</para></note>
+<note><para>A section can be collapsed simply to get it out of the way when it is not needed for a search.  However, if you enter search criteria in any one of the search components, you can close the component and the search criteria will still be considered in the search.</para></note>
 
 
 <para>For all search components in the <emphasis><guilabel>Advanced</guilabel></emphasis> tab, click the <guibutton>Search</guibutton> button to initiate the search once all desired search criteria have been selected.  Clicking the <guibutton>Clear</guibutton> button will clear the search selections and the search results.</para>
@@ -664,7 +664,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <listitem><para>Preparation Method: &ndash; the method of preparing the ingredient, for example, <emphasis>chopped</emphasis></para>
 
 <tip><para>The Preparation Method can also be selected from a drop-down menu.</para>
-<para><emphasis>&krecipes;</emphasis> will accept multiple preparation mentod in a comma-separated list, for example, <emphasis>peeled,chopped</emphasis></para></tip></listitem>
+<para><emphasis>&krecipes;</emphasis> will accept multiple preparation methods in a comma-separated list, for example, <emphasis>peeled,chopped</emphasis></para></tip></listitem>
 
 </itemizedlist>
 
@@ -761,7 +761,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para><orderedlist>
 <listitem><para>Choose to enter a weight for <emphasis>melted butter</emphasis> in your weight table</para></listitem>
 <listitem><para>Accept the approximation, in which case, your status <emphasis>LED</emphasis> will remain yellow</para></listitem>
-<listitem><para>Remove the preparation method from <emphasis>butter</emphasis>, if it will not adversely affect the prepartion of your recipe.</para></listitem>
+<listitem><para>Remove the preparation method from <emphasis>butter</emphasis>, if it will not adversely affect the preparation of your recipe.</para></listitem>
 </orderedlist>
 </para>
 
@@ -818,7 +818,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>In the <quote>Apple Crisp</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
  
-<para>For example, if you type <quote>b</quote>, the characters <quote>rown sugar</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the <keycap>Enter</keycap> key.</para>
+<para>For example, if you type <quote>b</quote>, the characters <quote>brown sugar</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the <keycap>Enter</keycap> key.</para>
   
 <para>However, suppose that in your instructions, you simply wanted to refer to <quote>brown sugar</quote> as <emphasis>sugar</emphasis> and you enter the character <quote>s</quote>.  <emphasis>&krecipes;</emphasis> will search the ingredients in your recipe and match the first ingredient beginning with <quote>s</quote> that it finds, if there is one.  If there is no ingredient in your recipe ingredient list beginning with <quote>s</quote>, nothing will happen &ndash; you will just continue typing the word <quote>sugar</quote>.</para>
 
@@ -1152,7 +1152,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </screenshot>
 </para> 
 
-<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extention, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
+<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extension, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
 
 <para>From the screenshot, you will see that there are four buttons at the bottom of the screen.  Their usage is as follows: &mdash;</para>
 
@@ -1376,7 +1376,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>borders</quote> around certain elements, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
 
-<listitem><para>Plain Text &ndash; files of this format will have extentions of .txt</para>
+<listitem><para>Plain Text &ndash; files of this format will have extensions of .txt</para>
 <para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as e-mail.</para></listitem>
 
 <listitem><para>Web Book &ndash; files of this format will have extensions of .html</para>
@@ -1452,7 +1452,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>The <emphasis><guilabel>Filter:</guilabel></emphasis> textbox shows the type of file that you are creating.  In the situation where you are backing up your <emphasis>&krecipes;</emphasis> database file, there is only one type of file available &ndash; a &krecipes; Backup File (*.krecbk), and that shows as the default selection.</para>
 
-<para>The final item in this window is a tick box beside the label <emphasis><guilabel>Automatically select filename extension (.krecbk)</guilabel></emphasis>.  With this option active, <abbrev>i.e.</abbrev> there is an x in the tick box, you can provide a filename, but do not have to supply an extention.  The extension .krecbk will be attached to your filename automatically.  However, you do not have to use the extension .krecdb.  Simply clear the tick box and then, when you supply the filename for your backup, include the extension that you choose.  For example, you might choose to name your database backup file <emphasis>myrecipes.krback</emphasis>.</para>
+<para>The final item in this window is a tick box beside the label <emphasis><guilabel>Automatically select filename extension (.krecbk)</guilabel></emphasis>.  With this option active, <abbrev>i.e.</abbrev> there is an x in the tick box, you can provide a filename, but do not have to supply an extension.  The extension .krecbk will be attached to your filename automatically.  However, you do not have to use the extension .krecdb.  Simply clear the tick box and then, when you supply the filename for your backup, include the extension that you choose.  For example, you might choose to name your database backup file <emphasis>myrecipes.krback</emphasis>.</para>
 
 <para>When you have chosen the name for your backup and the location where you want to store it, click the <guibutton>Save</guibutton> button to complete the backup process, or the <guibutton>Cancel</guibutton> button to close the interface and return to the main <emphasis>&krecipes;</emphasis> window.</para>
 </sect2>
@@ -2641,7 +2641,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>From the screenshot, you will notice that there is an icon at the top of the page and beside this your username that you use to log onto your system.  This icon can be changed by clicking on it.</para>
 
-<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explantory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An SMTP server is the server used for sending e-mail.  This could be the one housed by your internet service provider, or one that is on your local area network.</para>
+<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explanatory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An SMTP server is the server used for sending e-mail.  This could be the one housed by your internet service provider, or one that is on your local area network.</para>
 
 <para>The last item shown in the <emphasis><guilabel>User Information</guilabel></emphasis> section is for the <emphasis><guilabel>User ID</guilabel></emphasis>.  In the screenshot, nothing shows beside this label, but it would normally default to your numerical User ID as set up on the system.</para>
 
