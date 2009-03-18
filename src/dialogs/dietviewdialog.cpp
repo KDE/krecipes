@@ -26,6 +26,7 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
     setDefaultButton(KDialog::User2);
     setModal( false );
     KVBox *page = new KVBox( this );
+    setMainWidget(page);
     setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
 
 	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
