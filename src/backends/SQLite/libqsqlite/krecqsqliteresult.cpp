@@ -151,7 +151,7 @@ QSQLiteResultRow QSQLiteResult::next()
 
 bool QSQLiteResult::atEnd()
 {
-	if ( it == m_list.end() ) {
+	if ( (m_list.isEmpty()) || (it == m_list.end()) ) {
 		return true;
 	}
 
