@@ -34,6 +34,7 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <qpixmap.h>
+#include <qimageblitz.h>
 
 
 KreMenu::KreMenu( QWidget *parent, const char *name )
@@ -396,26 +397,27 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	// draw the gradient now
 	QPainter painter;
 	QPixmap kpm;
-	kpm.resize( ( ( QWidget * ) parent() ) ->size() ); // use parent's same size to obtain the same gradient
+	QImage tmpimage;
+	QSize parentsize = ((QWidget*) parent())->size();
 
 	if ( !highlighted ) {
 
 		// first the gradient
-		// to be done KDE4 port
-		//KPixmapEffect::unbalancedGradient ( kpm, c2, c1, KPixmapEffect::HorizontalGradient, -150, -150 );
+		tmpimage = Blitz::gradient(parentsize,c2,c1,Blitz::HorizontalGradient);
+		kpm = QPixmap::fromImage(tmpimage);
 
 	}
 	else {
 
 		// top gradient (highlighted)
 		kpm.resize( width(), height() );
-		//to be done KDE4 port
-		//KPixmapEffect::unbalancedGradient ( kpm, c2h, c1h, KPixmapEffect::HorizontalGradient, -150, -150 );
 		// low gradient besides the line (not hightlighted)
+		tmpimage = Blitz::gradient(parentsize,c2h,c1h,Blitz::HorizontalGradient);
+		kpm = QPixmap::fromImage(tmpimage);
 		QPixmap kpmb;
-		kpmb.resize( width(), 2 );
-		//to be done KDE4 port
-		//KPixmapEffect::unbalancedGradient ( kpmb, c2, c1, KPixmapEffect::HorizontalGradient, -150, -150 );
+		QImage tmpimage2;
+		tmpimage2 = Blitz::gradient(QSize(width(),2),c2,c1,Blitz::HorizontalGradient);
+		kpmb = QPixmap::fromImage(tmpimage2);
 		// mix the two
 		bitBlt( &kpm, 0, height() - 2, &kpmb );
 
@@ -494,8 +496,8 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		QPixmap area;
 		area.resize( areaw, areah );
 
-		//KDE4 port
-		//KPixmapEffect::gradient( area, c2h.light( 150 ), c1h.light( 150 ), KPixmapEffect::VerticalGradient );
+		QImage tmpimage = Blitz::gradient(QSize(areaw,areah),c2h.light(150),c1h.light(150),Blitz::VerticalGradient);
+		area = QPixmap::fromImage(tmpimage);
 
 		QLinearGradient linearGrad(QPointF(xPos, xPos + width()), QPointF(yPos, yPos + height()));
 		linearGrad.setColorAt(0, c2h.light( 150 ) );
