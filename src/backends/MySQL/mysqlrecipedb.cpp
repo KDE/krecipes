@@ -177,7 +177,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	QSqlQuery databaseToCreate( QString::null, database );
 
 	// execute the queries
-	for ( QStringList::const_iterator it = commands.begin(); it != commands.end(); ++it )
+	for ( QStringList::const_iterator it = commands.constBegin(); it != commands.constEnd(); ++it )
 		databaseToCreate.exec( ( *it ) );
 }
 

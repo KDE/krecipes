@@ -193,7 +193,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		return ;
 
 	// execute the queries
-	for ( QStringList::const_iterator it = commands.begin(); it != commands.end(); ++it )
+	for ( QStringList::const_iterator it = commands.constBegin(); it != commands.constEnd(); ++it )
 		database.exec( *it );
 
 }
