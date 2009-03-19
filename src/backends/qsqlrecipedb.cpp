@@ -74,8 +74,8 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	if ( qsqlDriver() ) //we're using a built-in driver
 		driver_found = true;
 	else {
-		QStringList drivers = QSqlDatabase::drivers();
-		for ( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+		const QStringList drivers = QSqlDatabase::drivers();
+		for ( QStringList::const_iterator it = drivers.constBegin(); it != drivers.constEnd(); ++it ) {
 			if ( ( *it ) == qsqlDriverPlugin() ) {
 				driver_found = true;
 				break;
@@ -177,7 +177,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 	QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
 
 	QStringList ids_str;
-	for ( QList<int>::const_iterator it = ids.begin(); it != ids.end(); ++it ) {
+	for ( QList<int>::const_iterator it = ids.constBegin(); it != ids.constEnd(); ++it ) {
 		QString number_str = QString::number(*it);
 		ids_str << number_str;
 
@@ -672,7 +672,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	recipeToSave.exec( command );
 
 	int order_index = 0;
-	for ( IngredientList::const_iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
+	for ( IngredientList::const_iterator ing_it = recipe->ingList.constBegin(); ing_it != recipe->ingList.constEnd(); ++ing_it ) {
 		order_index++;
 		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,NULL);" )
@@ -688,7 +688,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 		int ing_list_id = lastInsertID();
 		int prep_order_index = 0;
-		for ( ElementList::const_iterator prep_it = (*ing_it).prepMethodList.begin(); prep_it != (*ing_it).prepMethodList.end(); ++prep_it ) {
+		for ( ElementList::const_iterator prep_it = (*ing_it).prepMethodList.constBegin(); prep_it != (*ing_it).prepMethodList.constEnd(); ++prep_it ) {
 			prep_order_index++;
 			command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
 				.arg( ing_list_id )
@@ -697,7 +697,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			recipeToSave.exec( command );
 		}
 
-		for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+		for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.constBegin(); sub_it != (*ing_it).substitutes.constEnd(); ++sub_it ) {
 			order_index++;
 			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )
@@ -714,7 +714,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 			int ing_list_id = lastInsertID();
 			int prep_order_index = 0;
-			for ( ElementList::const_iterator prep_it = (*sub_it).prepMethodList.begin(); prep_it != (*sub_it).prepMethodList.end(); ++prep_it ) {
+			for ( ElementList::const_iterator prep_it = (*sub_it).prepMethodList.constBegin(); prep_it != (*sub_it).prepMethodList.constEnd(); ++prep_it ) {
 				prep_order_index++;
 				command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
 					.arg( ing_list_id )
@@ -730,7 +730,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	          .arg( recipeID );
 	recipeToSave.exec( command );
 
-	ElementList::const_iterator cat_it = recipe->categoryList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+	ElementList::const_iterator cat_it = recipe->categoryList.constEnd(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	--cat_it;
 	for ( int i = 0; i < recipe->categoryList.count(); i++ ) {
 		command = QString( "INSERT INTO category_list VALUES (%1,%2);" )
@@ -753,7 +753,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	          .arg( recipeID );
 	recipeToSave.exec( command );
 
-	ElementList::const_iterator author_it = recipe->authorList.end(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
+	ElementList::const_iterator author_it = recipe->authorList.constEnd(); // Start from last, mysql seems to work in lifo format... so it's read first the latest inserted one (newest)
 	--author_it;
 	for ( int i = 0; i < recipe->authorList.count(); i++ ) {
 		command = QString( "INSERT INTO author_list VALUES (%1,%2);" )
@@ -794,7 +794,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		if ( (*rating_it).id == -1 )
 			(*rating_it).id = lastInsertID();
 
-		for ( QLinkedList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+		for ( QLinkedList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
 			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
 			recipeToSave.exec( command );
 		}
@@ -919,7 +919,7 @@ void QSqlRecipeDB::categorizeRecipe( int recipeID, const ElementList &categoryLi
 
 	//emit recipeRemoved( recipeID, -1 );
 
-	for ( ElementList::const_iterator it = categoryList.begin(); it != categoryList.end(); ++it ) {
+	for ( ElementList::const_iterator it = categoryList.constBegin(); it != categoryList.constEnd(); ++it ) {
 		command = QString( "INSERT INTO category_list VALUES(%1,%2)" ).arg( recipeID ).arg( (*it).id );
 		database.exec( command );
 	}
@@ -2762,8 +2762,8 @@ void QSqlRecipeDB::empty( void )
 	QSqlQuery tablesToEmpty( QString::null, database );
 
 	QStringList list = database.tables();
-	QStringList::const_iterator it = list.begin();
-	while( it != list.end() ) {
+	QStringList::const_iterator it = list.constBegin();
+	while( it != list.constEnd() ) {
 		QString command = QString( "DROP TABLE %1;" ).arg( *it );
 		tablesToEmpty.exec( command );
 
