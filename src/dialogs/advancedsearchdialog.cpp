@@ -22,6 +22,7 @@
 #include <q3groupbox.h>
 #include <qspinbox.h>
 #include <q3datetimeedit.h>
+#include <QScrollArea>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <Q3ValueList>
@@ -33,7 +34,6 @@
 #include <q3whatsthis.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <q3scrollview.h>
 
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
@@ -80,10 +80,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    textLabel1_4->setObjectName( "textLabel1_4" );
 	layout7->addWidget( textLabel1_4 );
 	
-	scrollView1 = new Q3ScrollView( this, "scrollView1" );
-	scrollView1->enableClipper(true);
+	scrollArea1 = new QScrollArea( this );
 	
-	parametersFrame = new QFrame( scrollView1 );
+	parametersFrame = new QFrame( scrollArea1 );
    parametersFrame->setObjectName( "parametersFrame" ); 
 	parametersFrame->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, parametersFrame->sizePolicy().hasHeightForWidth() ) );
 	parametersFrame->setFrameShape( QFrame::NoFrame );
@@ -138,8 +137,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    ingredientFrameLayout->setObjectName( "ingredientFrameLayout" );
 
 	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
-	ingredientInfoLabel->setTextFormat( Qt::RichText );
-	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 0, 1 , 0);
+	//ingredientInfoLabel->setTextFormat( Qt::RichText );
+	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 1, 2, 0 );
 
 	ingredientsAllEdit = new QLineEdit( ingredientFrame );
    ingredientsAllEdit->setObjectName( "ingredientsAllEdit" );
@@ -193,7 +192,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
 	categoryInfoLabel->setTextFormat( Qt::RichText );
-	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 0, 1, 0 );
+	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 1, 2, 0 );
 	
 	categoriesAllEdit = new QLineEdit( categoryFrame );
    categoriesAllEdit->setObjectName( "categoriesAllEdit" );
@@ -246,7 +245,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
 	authorsInfoLabel->setTextFormat( Qt::RichText );
-	authorsFrameLayout->addWidget( authorsInfoLabel, 0, 0, 0, 1, 0 );
+	authorsFrameLayout->addWidget( authorsInfoLabel, 0, 0, 1, 2, 0 );
 
 	textLabel1_2_4 = new QLabel( authorsFrame );
    textLabel1_2_4->setObjectName( "textLabel1_2_4" );
@@ -535,8 +534,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( ratingsFrameSpacer );
 
 
-	scrollView1->addChild( parametersFrame );
-	layout7->addWidget( scrollView1 );
+	scrollArea1->setWidget( parametersFrame );
+	layout7->addWidget( scrollArea1 );
 	
 	layout9 = new QHBoxLayout(); 
    layout9->setObjectName( "layout9" );
@@ -570,12 +569,9 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	///
 
 	resultsListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
-	scrollView1->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
+	scrollArea1->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 
 	AdvancedSearchDialogLayout->setStretchFactor( resultsListView, 2 );
-
-	scrollView1->setHScrollBarMode( Q3ScrollView::AlwaysOff );
-	scrollView1->setResizePolicy( Q3ScrollView::AutoOneFit );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );

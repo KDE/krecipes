@@ -24,7 +24,7 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class Q3ScrollView;
+class QScrollArea;
 class QPushButton;
 class QFrame;
 class QLineEdit;
@@ -59,7 +59,7 @@ public:
 
 protected:
 	QLabel* textLabel1_4;
-	Q3ScrollView* scrollView1;
+	QScrollArea* scrollArea1;
 	QFrame* parametersFrame;
 	QLineEdit* titleEdit;
 	QPushButton* titleButton;
