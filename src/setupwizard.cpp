@@ -15,8 +15,8 @@
 #include <unistd.h>
 #include <pwd.h>
 
-
-#include <q3vgroupbox.h>
+#include <Q3VButtonGroup>
+#include <QGroupBox>
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
@@ -832,16 +832,24 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 
 	// Database type choice
-	bg = new Q3VButtonGroup( this );
+	bg = new QGroupBox( this );
+	QVBoxLayout * vbox = new QVBoxLayout();
 	layout->addWidget( bg, 3, 3 );
 
 	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg );
    liteCheckBox->setObjectName( "liteCheckBox" );
+	vbox->addWidget( liteCheckBox );
 	mysqlCheckBox = new QRadioButton( i18n( "Local or Remote MySQL Database" ), bg );
    mysqlCheckBox->setObjectName( "mysqlCheckBox" );
+	vbox->addWidget( mysqlCheckBox );
 	psqlCheckBox = new QRadioButton( i18n( "Local or Remote PostgreSQL Database" ), bg );
    psqlCheckBox->setObjectName( "psqlCheckBox" );
-	bg->setButton( 0 ); // By default, SQLite
+	vbox->addWidget( psqlCheckBox );
+	
+	// By default, SQLite
+	liteCheckBox->click();
+	
+	bg->setLayout(vbox);
 
 #ifndef HAVE_MYSQL
 	mysqlCheckBox->setEnabled( false );
@@ -855,11 +863,11 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	liteCheckBox->setEnabled( false );
 #ifdef HAVE_MYSQL
 
-	bg->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
+	liteCheckBox->setChecked( true ); // Otherwise by default liteCheckBox is checked even if it's disabled
 #else
 	#ifdef HAVE_POSTGRESQL
 
-	bg->setButton( 2 );
+	psqlCheckBox->setChecked( true ); 
 #endif
 	#endif
 #endif
@@ -868,41 +876,36 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *spacer_bottom = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacer_bottom, 4, 3 );
 
-	connect( bg, SIGNAL( clicked( int ) ), this, SLOT( setPages( int ) ) );
+	connect( liteCheckBox, SIGNAL( clicked() ), this, SLOT( setSQLitePages() ) );
+	connect( mysqlCheckBox, SIGNAL( clicked() ), this, SLOT( setMySQLPages() ) );
+	connect( psqlCheckBox, SIGNAL( clicked() ), this, SLOT( setPostgreSQLPages() ) );
 
 }
 
 int DBTypeSetupPage::dbType( void )
 {
-	int id = bg->id( bg->selected() ); //QT 3.1
-
-	switch ( id ) {
-	case 1:
+	if (mysqlCheckBox->isChecked()) {
 		return ( MySQL ); // MySQL (note index=0,1....)
-	case 2:
+	} else if (psqlCheckBox->isChecked()) {
 		return ( PostgreSQL );
-	default:
+	} else { //liteCheckBox->isChecked()
 		return ( SQLite );
 	}
 }
 
-/*
-** hides/shows pages given the radio button state
-*/
-
-void DBTypeSetupPage::setPages( int rb )
+void DBTypeSetupPage::setSQLitePages()
 {
-	switch ( rb ) {
-	case 1:
-		emit showPages( MySQL );
-		break;
-	case 2:
-		emit showPages( PostgreSQL );
-		break;
-	default:
-		emit showPages( SQLite );
-		break;
-	}
+	emit showPages( SQLite );
+}
+
+void DBTypeSetupPage::setMySQLPages()
+{
+	emit showPages( MySQL );
+}
+
+void DBTypeSetupPage::setPostgreSQLPages()
+{
+	emit showPages( PostgreSQL );
 }
 
 #include "setupwizard.moc"

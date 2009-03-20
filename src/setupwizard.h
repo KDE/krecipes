@@ -12,6 +12,7 @@
 #define SETUPWIZARD_H
 
 #include <Q3VButtonGroup>
+#include <QGroupBox>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qlabel.h>
@@ -217,12 +218,14 @@ private:
 	// Widgets
 	QLabel *dbTypeSetupText;
 	QLabel *logo;
-	Q3VButtonGroup *bg;
+	QGroupBox *bg;
 	QRadioButton *liteCheckBox;
 	QRadioButton *mysqlCheckBox;
 	QRadioButton *psqlCheckBox;
 private slots:
-	void setPages( int rb ); // hides/shows pages given the radio button state
+	void setSQLitePages();
+	void setMySQLPages();
+	void setPostgreSQLPages();
 signals:
 	void showPages( DBType );
 };
