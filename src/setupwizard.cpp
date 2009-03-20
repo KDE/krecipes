@@ -68,7 +68,7 @@ SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFl
 	setFinishEnabled( savePage, true ); // Enable finish button
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
-	#if (! defined(HAVE_SQLITE) || defined(HAVE_SQLITE3))
+	#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
 		#ifdef HAVE_MYSQL
 			showPages( MySQL );
 		#else
