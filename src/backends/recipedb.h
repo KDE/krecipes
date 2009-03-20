@@ -85,7 +85,7 @@ public:
 		All = 0xFFFF ^ NamesOnly ^ Noatime
 	};
 
-	typedef enum ConversionStatus {
+	enum ConversionStatus {
 		Success,
 		MissingUnitConversion,
 		MissingIngredientWeight,

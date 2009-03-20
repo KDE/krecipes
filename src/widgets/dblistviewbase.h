@@ -25,7 +25,7 @@ class KProgressDialog;
 
 class RecipeDB;
 
-typedef enum ReloadFlags { 
+enum ReloadFlags { 
 	Load, 			/** Only performs the reload if the list hasn't already been loaded */
 	ReloadIfPopulated,	/** Only performs the reload if the list has been loaded */
 	ForceReload		/** Load/reload the list regardless of whether or not it's been loaded */

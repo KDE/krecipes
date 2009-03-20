@@ -19,14 +19,14 @@
 
 namespace USDA {
 
-typedef struct UnitData {
+struct UnitData {
 	QString name;
 	QString plural;
 	QString translation;
 	QString translationPlural;
 };
 
-typedef struct PrepData {
+struct PrepData {
 	QString name;
 	QString translation;
 };

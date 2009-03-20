@@ -75,7 +75,7 @@ typedef Q3ValueList <Menu>::Iterator MenuId;
 
 
 // Some constants
-typedef enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, RecipeEdit, RecipeView };
+enum KrePanel {SelectP = 0, ShoppingP, DietP, MatcherP, IngredientsP, PropertiesP, UnitsP, PrepMethodsP, CategoriesP, AuthorsP, RecipeEdit, RecipeView };
 
 
 // Class KrecipesView

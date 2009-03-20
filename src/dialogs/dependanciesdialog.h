@@ -26,7 +26,7 @@
 
 #include "datablocks/elementlist.h"
 
-typedef struct ListInfo {
+struct ListInfo {
 	ElementList list;
 	QString name;
 };

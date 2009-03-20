@@ -36,8 +36,8 @@ class RecipeActionsHandler : public QObject
 	Q_OBJECT
 
 public:
-	typedef enum ItemType { Category, Recipe };
-	typedef enum RecipeActions {
+	enum ItemType { Category, Recipe };
+	enum RecipeActions {
 	    AllActions = 0xffff,
 	    Open = 0x0001,
 	    Edit = 0x0002,

@@ -31,7 +31,7 @@
 class SelectUnitDialog : public KDialog
 {
 public:
-	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
+	enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
 
 	SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag = ShowEmptyUnit );
 

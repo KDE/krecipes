@@ -20,7 +20,7 @@
 #define TOTAL_USDA_PROPERTIES 43
 
 namespace USDA {
-	typedef struct PropertyData
+	struct PropertyData
 	{
 		int id;
 		QString name;

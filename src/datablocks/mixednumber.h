@@ -46,7 +46,7 @@ public:
 		return ( toDouble() > d );
 	}
 
-	typedef enum Format { DecimalFormat, MixedNumberFormat };
+	enum Format { DecimalFormat, MixedNumberFormat };
 
 	/** The input as a decimal. */
 	double toDouble() const;

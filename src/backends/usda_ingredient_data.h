@@ -18,7 +18,7 @@
 #include <q3valuelist.h>
 
 namespace USDA {
-	typedef struct IngredientData
+	struct IngredientData
 	{
 		QString name;
 		int usda_id;

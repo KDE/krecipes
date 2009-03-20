@@ -36,7 +36,7 @@ class RecipeDB;
 class SelectPropertyDialog: public KDialog
 {
 public:
-	typedef enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
+	enum OptionFlag { ShowEmptyUnit, HideEmptyUnit } ;
 
 	// Methods
 	SelectPropertyDialog( QWidget* parent, int ingredientID, RecipeDB *db, OptionFlag showEmpty = ShowEmptyUnit );
