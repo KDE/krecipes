@@ -170,7 +170,6 @@ private slots:
 	void search();
 	void clear();
 	void buttonSwitched();
-	//void activateRatingOption( int button_id );
 	void activateRatingOptionAvg();
 	void activateRatingOptionCriterion();
 	void slotAddRatingCriteria();
