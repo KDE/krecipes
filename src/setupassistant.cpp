@@ -15,7 +15,6 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#include <Q3VButtonGroup>
 #include <QGroupBox>
 #include <qlayout.h>
 #include <qpixmap.h>
@@ -433,21 +432,18 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Input Boxes
 
-	Q3GroupBox *inputGBox = new Q3GroupBox( this, "inputGBox" );
-	inputGBox->setFrameStyle( QFrame::NoFrame );
-	inputGBox->setInsideSpacing( 10 );
-	inputGBox->setColumns( 2 );
+	QGroupBox *inputGBox = new QGroupBox( this );
+	QGridLayout *inputLayout = new QGridLayout();
+	inputGBox->setLayout( inputLayout );
 	layout->addWidget( inputGBox, 3, 3 );
 
 	// Username Input
 
 	QLabel* usernameText = new QLabel( i18n( "Username:" ), inputGBox );
-	usernameText->setFixedSize( QSize( 100, 20 ) );
-	usernameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	inputLayout->addWidget( usernameText, 0, 0 );
 
 	usernameEdit = new KLineEdit( inputGBox );
-	usernameEdit->setFixedSize( QSize( 120, 20 ) );
-	usernameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	inputLayout->addWidget( usernameEdit, 0, 1 );
 	// get username
 	uid_t userID;
 	QString username;
@@ -462,24 +458,20 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	// Password
 
 	QLabel* passwordText = new QLabel( i18n( "Password:" ), inputGBox );
-	passwordText->setFixedSize( QSize( 100, 20 ) );
-	passwordText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	inputLayout->addWidget( passwordText, 1, 0 );
 
 	passwordEdit = new KLineEdit( inputGBox );
 	passwordEdit->setEchoMode( QLineEdit::Password );
-	passwordEdit->setFixedSize( QSize( 120, 20 ) );
-	passwordEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	inputLayout->addWidget( passwordEdit, 1, 1 );
 
 	// DB Name
 
 	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), inputGBox );
-	dbNameText->setFixedSize( QSize( 100, 20 ) );
-	dbNameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	inputLayout->addWidget( dbNameText, 2, 0 );
 
 	dbNameEdit = new KLineEdit( inputGBox );
-	dbNameEdit->setFixedSize( QSize( 120, 20 ) );
-	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	dbNameEdit->setText( "Krecipes" );
+	inputLayout->addWidget( dbNameEdit, 2, 1 );
 
 
 	// Spacer from box
@@ -498,23 +490,27 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerFromCheckBox, 6, 3 );
 
 	// Server & Client Box
-	Q3GroupBox *serverSettingsGBox = new Q3GroupBox( this, "serverSettingsGBox" );
+	QGroupBox *serverSettingsGBox = new QGroupBox( this );
+	QGridLayout *serverSettingsLayout = new QGridLayout();
+	serverSettingsGBox->setLayout( serverSettingsLayout );
 	serverSettingsGBox->setTitle( i18n( "Server / Client Settings" ) );
 	serverSettingsGBox->setEnabled( false ); // Disable by default
-	serverSettingsGBox->setInsideSpacing( 10 );
-	serverSettingsGBox->setColumns( 2 );
 	layout->addWidget( serverSettingsGBox, 7, 3 );
 
 
 	// Server
-	( void ) new QLabel( i18n( "Server:" ), serverSettingsGBox );
+	QLabel *serverText = new QLabel( i18n( "Server:" ), serverSettingsGBox );
+	serverSettingsLayout->addWidget( serverText, 0, 0 );
 	serverEdit = new KLineEdit( serverSettingsGBox );
 	serverEdit->setText( "localhost" );
+	serverSettingsLayout->addWidget( serverEdit, 0, 1);
 
 	// Client
-	( void ) new QLabel( i18n( "Client:" ), serverSettingsGBox );
+	QLabel *clientText = new QLabel( i18n( "Client:" ), serverSettingsGBox );
+	serverSettingsLayout->addWidget( clientText, 1, 0 );
 	clientEdit = new KLineEdit( serverSettingsGBox );
 	clientEdit->setText( "localhost" );
+	serverSettingsLayout->addWidget( clientEdit, 1, 1 );
 
 	// Bottom Spacers
 
