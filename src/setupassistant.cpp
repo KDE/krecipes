@@ -333,7 +333,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// PostgreSQL root/admin info
-	QGroupBox *rootInfoGBox = new Q3GroupBox( this );
+	QGroupBox *rootInfoGBox = new QGroupBox( this );
 	QGridLayout *rootInfoLayout = new QGridLayout();
 	rootInfoGBox->setTitle( i18n( "PostgreSQL Superuser or Privileged Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
