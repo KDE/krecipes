@@ -8,7 +8,7 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
-#include "setupwizard.h"
+#include "setupassistant.h"
 
 #include "config-krecipes.h"
 
@@ -916,4 +916,4 @@ void DBTypeSetupPage::setPostgreSQLPages()
 	emit showPages( PostgreSQL );
 }
 
-#include "setupwizard.moc"
+#include "setupassistant.moc"

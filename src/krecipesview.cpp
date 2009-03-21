@@ -28,7 +28,7 @@
 #include <kvbox.h>
 
 #include "recipeactionshandler.h"
-#include "setupwizard.h"
+#include "setupassistant.h"
 #include "kstartuplogo.h"
 
 #include "dialogs/recipeinputdialog.h"

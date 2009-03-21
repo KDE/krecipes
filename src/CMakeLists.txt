@@ -187,7 +187,7 @@ set(krecipes_SRCS
    krecipesview.cpp 
    pref.cpp 
    propertycalculator.cpp 
-   setupwizard.cpp 
+   setupassistant.cpp 
    shoppingcalculator.cpp 
    kstartuplogo.cpp 
    recipeactionshandler.cpp 
