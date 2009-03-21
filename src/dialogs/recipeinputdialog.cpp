@@ -27,7 +27,8 @@
 #include <qradiobutton.h>
 #include <q3widgetstack.h>
 #include <qpainter.h>
-#include <q3textbrowser.h>
+//#include <q3textbrowser.h>
+#include <QTextBrowser>
 //Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
@@ -402,8 +403,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
 	propertyStatusDialog->setHelp("property-status");
 
-	statusTextView = new QTextEdit(0);
-	statusTextView->setReadOnly(true);
+	statusTextView = new QTextBrowser(0);
+	statusTextView->setOpenLinks( false );
 	propertyStatusDialog->setMainWidget( statusTextView );
 	propertyStatusDialog->resize( 400, 300 );
 
@@ -508,7 +509,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
 	connect( propertyStatusDialog, SIGNAL(user1Clicked()), SLOT(updatePropertyStatus()) );
 	connect( propertyStatusButton, SIGNAL(clicked()), propertyStatusDialog, SLOT(show()) );
-	connect( statusTextView, SIGNAL(linkClicked(const QString&)), this, SLOT( statusLinkClicked(const QString &) ) );
+	connect( statusTextView, SIGNAL(anchorClicked(const QUrl&)), this, SLOT( statusLinkClicked(const QUrl &) ) );
 
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
@@ -1519,7 +1520,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	database->loadProperties( &ingPropertyList, ing.ingredientID );
 
 	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No nutrient information available.  <a href=\"ingredient#%2\">Provide nutrient information.</a>", ing.name, ing.ingredientID)));
+		propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No nutrient information available.  <a href=\"ingredient#%2\">Provide nutrient information.</a>", ing.name, QString::number(ing.ingredientID))));
 	}
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
@@ -1567,22 +1568,22 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 					propertyStatusMapRed.insert(ing.ingredientID,i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate ingredient weight entry</a>, or provide conversion information to perform one of the following conversions: %2",
 					  ing.name
 					  ,("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
-					  ,ing.ingredientID)
+					  ,QString::number(ing.ingredientID))
 					);
 				}
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, ing.ingredientID)));
+				propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, QString::number(ing.ingredientID))));
 				break;
 			case RecipeDB::MismatchedPrepMethod:
 				if ( ing.prepMethodList.count() == 0 )
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, ing.ingredientID)));
+					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, QString::number(ing.ingredientID))));
 				else
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners: %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(ing.ingredientID));
+					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners: %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(QString::number(ing.ingredientID)));
 				break;
 			case RecipeDB::MismatchedPrepMethodUsingApprox:
-				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(ing.ingredientID));
+				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(QString::number(ing.ingredientID)));
 				break;
 			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
 			}
@@ -1668,15 +1669,16 @@ QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString
 	return path;
 }
 
-void RecipeInputDialog::statusLinkClicked( const QString &link )
+void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 {
-	if (link.startsWith("ingredient#")) {
-		int ingID = link.mid(link.indexOf("#")+1).toInt();
+	QString linkString = link.toString();
+	if (linkString.startsWith("ingredient#")) {
+		int ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
 		QString ingName = database->ingredientName(ingID);
 		EditPropertiesDialog d(ingID,ingName,database,this);
 		d.exec();
-	} else if (link.startsWith("unit#")) {
-		QString unitIDs = link.mid(link.indexOf("#")+1);
+	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
+		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
 		QStringList idList = unitIDs.split(",", QString::SkipEmptyParts );
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;
