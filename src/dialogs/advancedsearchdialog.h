@@ -36,7 +36,7 @@ class Q3TimeEdit;
 class KPushButton;
 class K3ListView;
 class QRadioButton;
-class Q3ButtonGroup;
+class QGroupBox;
 
 class KDateEdit;
 class RecipeDB;
@@ -124,7 +124,7 @@ protected:
 	QPushButton* removeCriteriaButton;
 	K3ListView* criteriaListView;
 	QPushButton* ratingsButton;
-	Q3ButtonGroup *ratingButtonGroup;
+	QGroupBox *ratingButtonGroup;
 	QFrame *ratingAvgFrame;
 	QFrame *criterionFrame;
 	QVBoxLayout *criterionFrameLayout;
@@ -170,7 +170,9 @@ private slots:
 	void search();
 	void clear();
 	void buttonSwitched();
-	void activateRatingOption( int button_id );
+	//void activateRatingOption( int button_id );
+	void activateRatingOptionAvg();
+	void activateRatingOptionCriterion();
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
 

@@ -19,7 +19,6 @@
 #include <qcombobox.h>
 #include <q3header.h>
 #include <q3listview.h>
-#include <q3groupbox.h>
 #include <qspinbox.h>
 #include <q3datetimeedit.h>
 #include <QScrollArea>
@@ -35,8 +34,8 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 
+#include <QGroupBox>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -450,13 +449,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( ratingsButton );
 
-	ratingButtonGroup = new Q3ButtonGroup( parametersFrame, "ratingButtonGroup" );
-	ratingButtonGroup->setLineWidth( 0 );
-	ratingButtonGroup->setColumnLayout(0, Qt::Vertical );
-	ratingButtonGroup->layout()->setSpacing( 5 );
-	ratingButtonGroup->layout()->setMargin( 3 );
-	ratingButtonGroupLayout = new QVBoxLayout( ratingButtonGroup->layout() );
+	ratingButtonGroup = new QGroupBox();
+	ratingButtonGroupLayout = new QVBoxLayout( parametersFrame );
 	ratingButtonGroupLayout->setAlignment( Qt::AlignTop );
+	ratingButtonGroup->setLayout( ratingButtonGroupLayout );
 	
 	ratingAvgRadioButton = new QRadioButton( ratingButtonGroup );
    ratingAvgRadioButton->setObjectName( "ratingAvgRadioButton" );
@@ -623,7 +619,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 	connect( ratingsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
 
-	connect( ratingButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( activateRatingOption( int ) ) );
+	connect( ratingAvgRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionAvg() ) );
+	connect( criterionRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionCriterion() ) );
 
 	connect( addCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotAddRatingCriteria() ) );
 
@@ -738,26 +735,22 @@ void AdvancedSearchDialog::clear()
 	requireAllInstructions->setChecked(false);
 
 	ratingAvgRadioButton->setChecked(true);
-	activateRatingOption(0);
+	activateRatingOptionAvg();
 	avgStarsEdit->clear();
 	criteriaListView->clear();
 	starsWidget->clear();
 }
 
-void AdvancedSearchDialog::activateRatingOption( int button_id )
+void AdvancedSearchDialog::activateRatingOptionAvg()
 {
-	switch ( button_id ) {
-	case 0:
-		criterionFrame->setEnabled( false );
-		ratingAvgFrame->setEnabled( true );
-		break;
-	case 1:
-		criterionFrame->setEnabled( true );
-		ratingAvgFrame->setEnabled( false );
-		break;
-	default:
-		break;
-	}
+	criterionFrame->setEnabled( false );
+	ratingAvgFrame->setEnabled( true );
+}
+
+void AdvancedSearchDialog::activateRatingOptionCriterion()
+{
+	criterionFrame->setEnabled( true );
+	ratingAvgFrame->setEnabled( false );
 }
 
 void AdvancedSearchDialog::buttonSwitched()
