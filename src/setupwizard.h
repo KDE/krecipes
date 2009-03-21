@@ -17,7 +17,6 @@
 #include <qradiobutton.h>
 #include <qlabel.h>
 #include <kassistantdialog.h>
-#include <K3Wizard>
 #include <klineedit.h>
 #include <ktextedit.h>
 
@@ -37,12 +36,12 @@ class SQLiteSetupPage;
 
 enum DBType {SQLite, MySQL, PostgreSQL};
 
-class SetupWizard: public K3Wizard 
+class SetupWizard: public KAssistantDialog 
 {
 	Q_OBJECT
 public:
 
-	SetupWizard( QWidget *parent = 0, const char *name = 0, bool modal = true, Qt::WFlags f = 0 );
+	SetupWizard( QWidget *parent = 0, Qt::WFlags f = 0 );
 	~SetupWizard();
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );
@@ -61,6 +60,15 @@ private:
 	DataInitializePage *dataInitializePage;
 	SQLiteSetupPage *sqliteSetupPage;
 	SavePage *savePage;
+	// KPageWidgetItem's
+	KPageWidgetItem *welcomePageItem;
+	KPageWidgetItem *dbTypeSetupPageItem;
+	KPageWidgetItem *permissionsSetupPageItem;
+	KPageWidgetItem *pSqlPermissionsSetupPageItem;
+	KPageWidgetItem *serverSetupPageItem;
+	KPageWidgetItem *dataInitializePageItem;
+	KPageWidgetItem *sqliteSetupPageItem;
+	KPageWidgetItem *savePageItem;
 
 private slots:
 	void save( void );

@@ -38,34 +38,42 @@
 
 #include "backends/usda_ingredient_data.h"
 
-SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFlags f ) : K3Wizard( parent, name, modal, f )
+SetupWizard::SetupWizard( QWidget *parent, Qt::WFlags f ) : KAssistantDialog(parent, f )
 {
 
 	welcomePage = new WelcomePage( this );
-	addPage( welcomePage, i18n( "Welcome to Krecipes" ) );
+	welcomePageItem = new KPageWidgetItem( welcomePage, i18n( "Welcome to Krecipes" ) );
+	addPage( welcomePageItem );
 
 	dbTypeSetupPage = new DBTypeSetupPage( this );
-	addPage( dbTypeSetupPage, i18n( "Database Type" ) );
+	dbTypeSetupPageItem = new KPageWidgetItem( dbTypeSetupPage, i18n( "Database Type" ) );
+	addPage( dbTypeSetupPageItem );
 
 	sqliteSetupPage = new SQLiteSetupPage( this );
-	addPage( sqliteSetupPage, i18n( "Server Settings" ) );
+	sqliteSetupPageItem = new KPageWidgetItem( sqliteSetupPage, i18n( "Server Settings" ) );
+	addPage( sqliteSetupPageItem );
 
 	permissionsSetupPage = new PermissionsSetupPage( this );
-	addPage( permissionsSetupPage, i18n( "Database Permissions" ) );
+	permissionsSetupPageItem = new KPageWidgetItem( permissionsSetupPage, i18n( "Database Permissions" ) );
+	addPage( permissionsSetupPageItem );
 
 	pSqlPermissionsSetupPage = new PSqlPermissionsSetupPage( this );
-	addPage( pSqlPermissionsSetupPage, i18n( "Database Permissions" ) );
+	pSqlPermissionsSetupPageItem = new KPageWidgetItem( pSqlPermissionsSetupPage, i18n( "Database Permissions" ) );
+	addPage( pSqlPermissionsSetupPageItem );
 
 	serverSetupPage = new ServerSetupPage( this );
-	addPage( serverSetupPage, i18n( "Server Settings" ) );
+	serverSetupPageItem = new KPageWidgetItem( serverSetupPage, i18n( "Server Settings" ) );
+	addPage( serverSetupPageItem );
 
 	dataInitializePage = new DataInitializePage( this );
-	addPage( dataInitializePage, i18n( "Initialize Database" ) );
+	dataInitializePageItem = new KPageWidgetItem( dataInitializePage, i18n( "Initialize Database" ) );
+	addPage( dataInitializePageItem );
 
 	savePage = new SavePage( this );
-	addPage( savePage, i18n( "Finish & Save Settings" ) );
+	savePageItem = new KPageWidgetItem( savePage, i18n( "Finish & Save Settings" ) );
+	addPage( savePageItem );
 
-	setFinishEnabled( savePage, true ); // Enable finish button
+	//setFinishEnabled( savePage, true ); // Enable finish button
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
 	#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
@@ -80,7 +88,7 @@ SetupWizard::SetupWizard( QWidget *parent, const char *name, bool modal, Qt::WFl
 		showPages( SQLite );
 	#endif
 
-	connect( finishButton(), SIGNAL( clicked() ), this, SLOT( save() ) );
+	//connect( finishButton(), SIGNAL( clicked() ), this, SLOT( save() ) );
 	connect( dbTypeSetupPage, SIGNAL( showPages( DBType ) ), this, SLOT( showPages( DBType ) ) );
 }
 
@@ -100,7 +108,7 @@ void SetupWizard::next()
 		}
 	}
 
-	K3Wizard::next();
+	KAssistantDialog::next();
 }
 
 
@@ -108,22 +116,22 @@ void SetupWizard::showPages( DBType type )
 {
 	switch ( type ) {
 	case MySQL:
-		setAppropriate( serverSetupPage, true );
-		setAppropriate( permissionsSetupPage, true );
-		setAppropriate( pSqlPermissionsSetupPage, false );
-		setAppropriate( sqliteSetupPage, false );
+		setAppropriate( serverSetupPageItem, true );
+		setAppropriate( permissionsSetupPageItem, true );
+		setAppropriate( pSqlPermissionsSetupPageItem, false );
+		setAppropriate( sqliteSetupPageItem, false );
 		break;
 	case PostgreSQL:
-		setAppropriate( serverSetupPage, true );
-		setAppropriate( pSqlPermissionsSetupPage, true );
-		setAppropriate( permissionsSetupPage, false );
-		setAppropriate( sqliteSetupPage, false );
+		setAppropriate( serverSetupPageItem, true );
+		setAppropriate( pSqlPermissionsSetupPageItem, true );
+		setAppropriate( permissionsSetupPageItem, false );
+		setAppropriate( sqliteSetupPageItem, false );
 		break;
 	case SQLite:
-		setAppropriate( serverSetupPage, false );
-		setAppropriate( permissionsSetupPage, false );
-		setAppropriate( pSqlPermissionsSetupPage, false );
-		setAppropriate( sqliteSetupPage, true );
+		setAppropriate( serverSetupPageItem, false );
+		setAppropriate( permissionsSetupPageItem, false );
+		setAppropriate( pSqlPermissionsSetupPageItem, false );
+		setAppropriate( sqliteSetupPageItem, true );
 		break;
 	}
 }
