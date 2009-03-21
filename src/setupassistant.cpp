@@ -218,24 +218,26 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	layout->addItem( rootInfoSpacer, 6, 3 );
 
 	// MySQL root/admin info
-	Q3GroupBox *rootInfoGBox = new Q3GroupBox( this, "rootInfoGBox" );
+	QGroupBox *rootInfoGBox = new QGroupBox( this );
+	QGridLayout *rootInfoLayout = new QGridLayout();
 	rootInfoGBox->setTitle( i18n( "MySQL Administrator Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
-	rootInfoGBox->setColumns( 2 );
-	rootInfoGBox->setInsideSpacing( 10 );
-	layout->addWidget( rootInfoGBox, 7, 3 );
-
 	// User Entry
 	QLabel *userLabel = new QLabel( rootInfoGBox );
 	userLabel->setText( i18n( "Username:" ) );
+	rootInfoLayout->addWidget( userLabel, 0, 0 );
 	userEdit = new KLineEdit( rootInfoGBox );
 	userEdit->setText( "root" );
-
+	rootInfoLayout->addWidget( userEdit, 0, 1 );
 	// Password Entry
 	QLabel *passLabel = new QLabel( rootInfoGBox );
 	passLabel->setText( i18n( "Password:" ) );
+	rootInfoLayout->addWidget( passLabel, 1, 0 );
 	passEdit = new KLineEdit( rootInfoGBox );
 	passEdit->setEchoMode( QLineEdit::Password );
+	rootInfoLayout->addWidget( passEdit, 1, 1 );
+	rootInfoGBox->setLayout(rootInfoLayout);
+	layout->addWidget( rootInfoGBox, 7, 3 );
 
 	// Bottom spacer
 	QSpacerItem *bottomSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );

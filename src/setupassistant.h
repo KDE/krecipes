@@ -11,7 +11,6 @@
 #ifndef SETUPASSISTANT_H
 #define SETUPASSISTANT_H
 
-#include <Q3VButtonGroup>
 #include <QGroupBox>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
