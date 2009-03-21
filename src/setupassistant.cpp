@@ -72,7 +72,6 @@ SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDial
 	savePageItem = new KPageWidgetItem( savePage, i18n( "Finish & Save Settings" ) );
 	addPage( savePageItem );
 
-	//setFinishEnabled( savePage, true ); // Enable finish button
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
 	#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
@@ -87,7 +86,6 @@ SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDial
 		showPages( SQLite );
 	#endif
 
-	//connect( finishButton(), SIGNAL( clicked() ), this, SLOT( save() ) );
 	connect( dbTypeSetupPage, SIGNAL( showPages( DBType ) ), this, SLOT( showPages( DBType ) ) );
 }
 
@@ -663,7 +661,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 
 }
 
-void SetupAssistant::save( void )
+void SetupAssistant::accept( void )
 {
 	kDebug() << "Setting parameters in kconfig..." ;
 
@@ -705,6 +703,8 @@ void SetupAssistant::save( void )
 	config.writeEntry( "SystemSetup", true );
 	config.writeEntry( "Version", "0.9" );
 	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType ;
+
+	done(QDialog::Accepted);
 }
 
 void SetupAssistant::getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport )

@@ -48,6 +48,7 @@ public:
 
 protected:
 	virtual void next();
+	virtual void accept( void );
 
 private:
 	// Widgets
@@ -70,7 +71,6 @@ private:
 	KPageWidgetItem *savePageItem;
 
 private slots:
-	void save( void );
 	void showPages( DBType );
 
 };
