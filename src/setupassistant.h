@@ -8,8 +8,8 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
-#ifndef SETUPWIZARD_H
-#define SETUPWIZARD_H
+#ifndef SETUPASSISTANT_H
+#define SETUPASSISTANT_H
 
 #include <Q3VButtonGroup>
 #include <QGroupBox>
@@ -36,13 +36,13 @@ class SQLiteSetupPage;
 
 enum DBType {SQLite, MySQL, PostgreSQL};
 
-class SetupWizard: public KAssistantDialog 
+class SetupAssistant: public KAssistantDialog 
 {
 	Q_OBJECT
 public:
 
-	SetupWizard( QWidget *parent = 0, Qt::WFlags f = 0 );
-	~SetupWizard();
+	SetupAssistant( QWidget *parent = 0, Qt::WFlags f = 0 );
+	~SetupAssistant();
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );
 	void getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port );

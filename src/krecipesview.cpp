@@ -563,22 +563,22 @@ void KrecipesView::wizard( bool force )
 		int port;
 		bool isRemote;
 
-		SetupWizard *setupWizard = new SetupWizard( this );
-		if ( setupWizard->exec() == QDialog::Accepted )
+		SetupAssistant *setupAssistant = new SetupAssistant( this );
+		if ( setupAssistant->exec() == QDialog::Accepted )
 		{
                     config.sync();
 			config = KGlobal::config()->group( "DBType" );
 			dbType = config.readEntry( "Type", "SQLite" );
 
 			kDebug() << "Setting up" ;
-			setupWizard->getOptions( setupUser, initData, doUSDAImport );
+			setupAssistant->getOptions( setupUser, initData, doUSDAImport );
                         kDebug()<<" setupUser :"<<setupUser<<" initData :"<<initData<<" doUSDAImport :"<<doUSDAImport;
 			// Setup user if necessary
 			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
 			{
 				kDebug() << "Setting up user\n";
-				setupWizard->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
+				setupAssistant->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
+				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 
 				if ( !adminEnabled )  // Use root without password
 				{
@@ -602,14 +602,14 @@ void KrecipesView::wizard( bool force )
 			// Initialize database with data if requested
 			if ( initData ) {
                             kDebug();
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port );
+				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 				initializeData( host, dbName, user, pass, port ); // Populate data as normal user
 			}
 
 			if ( doUSDAImport ) {
                             kDebug()<<" import USDA";
 				// Open the DB first
-				setupWizard->getServerInfo( isRemote, host, client, dbName, user, pass, port ); //only used if needed by backend
+				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port ); //only used if needed by backend
                                 kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
 				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
                                 kDebug()<<" database created :"<<db;
@@ -649,7 +649,7 @@ void KrecipesView::wizard( bool force )
 			}
 
 		}
-		delete setupWizard;
+		delete setupAssistant;
 	}
 }
 

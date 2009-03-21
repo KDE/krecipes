@@ -38,7 +38,7 @@
 
 #include "backends/usda_ingredient_data.h"
 
-SetupWizard::SetupWizard( QWidget *parent, Qt::WFlags f ) : KAssistantDialog(parent, f )
+SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDialog(parent, f )
 {
 
 	welcomePage = new WelcomePage( this );
@@ -93,11 +93,11 @@ SetupWizard::SetupWizard( QWidget *parent, Qt::WFlags f ) : KAssistantDialog(par
 }
 
 
-SetupWizard::~SetupWizard()
+SetupAssistant::~SetupAssistant()
 {
 }
 
-void SetupWizard::next()
+void SetupAssistant::next()
 {
 	if ( dataInitializePage->doUSDAImport() ) {
 		if ( !USDA::localizedIngredientsAvailable() ) {
@@ -112,7 +112,7 @@ void SetupWizard::next()
 }
 
 
-void SetupWizard::showPages( DBType type )
+void SetupAssistant::showPages( DBType type )
 {
 	switch ( type ) {
 	case MySQL:
@@ -663,7 +663,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 
 }
 
-void SetupWizard::save( void )
+void SetupAssistant::save( void )
 {
 	kDebug() << "Setting parameters in kconfig..." ;
 
@@ -707,14 +707,14 @@ void SetupWizard::save( void )
 	kDebug() << "Setting in kconfig the lines to disable wizard startup..." << sDBType ;
 }
 
-void SetupWizard::getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport )
+void SetupAssistant::getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport )
 {
 	setupUser = permissionsSetupPage->doUserSetup() && pSqlPermissionsSetupPage->doUserSetup();
 	initializeData = dataInitializePage->doInitialization();
 	doUSDAImport = dataInitializePage->doUSDAImport();
 }
 
-void SetupWizard::getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType )
+void SetupAssistant::getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType )
 {
 	enabled = permissionsSetupPage->useAdmin() || pSqlPermissionsSetupPage->useAdmin();
 	if ( dbType == "MySQL" )
@@ -723,7 +723,7 @@ void SetupWizard::getAdminInfo( bool &enabled, QString &adminUser, QString &admi
 		pSqlPermissionsSetupPage->getAdmin( adminUser, adminPass );
 }
 
-void SetupWizard::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port )
+void SetupAssistant::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port )
 {
 	serverSetupPage->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 	if ( dbTypeSetupPage->dbType() == SQLite )
