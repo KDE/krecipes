@@ -78,6 +78,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	textLabel1_4 = new QLabel( this );
    textLabel1_4->setObjectName( "textLabel1_4" );
+	textLabel1_4->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout7->addWidget( textLabel1_4 );
 	
 	scrollArea1 = new QScrollArea( this );
