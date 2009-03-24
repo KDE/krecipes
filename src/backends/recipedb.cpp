@@ -462,7 +462,14 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 		while (!m_processStarted && !m_processError) {
 			QCoreApplication::processEvents();
-			if ( haltOperation ) { haltOperation=false; process->kill(); return false; }
+			if ( haltOperation ) { 
+				haltOperation=false; 
+				process->kill();
+				delete process;
+				delete dumpFile;
+				emit progressDone();
+				return false;
+			}
 			emit progress();
 		}
 		
@@ -471,6 +478,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 				command.first());
 			delete process;
 			delete dumpFile;
+			emit progressDone();
 			return false;
 		}
 	
