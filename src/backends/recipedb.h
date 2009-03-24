@@ -31,7 +31,7 @@
 @author Unai Garro
 */
 
-class K3Process;
+#include <KProcess>
 class QTextStream;
 
 class CategoryTree;
@@ -390,9 +390,20 @@ protected:
 private:
 	QTextStream *dumpStream;
 	bool haltOperation;
+	bool m_operationHalted;
+	KProcess * process;
+	bool m_processStarted;
+	bool m_processFinished;
+	bool m_processError;
+	int m_exitCode;
+	QProcess::ExitStatus m_exitStatus;
 
 private slots:
-	void processDumpOutput( K3Process *, char *buffer, int buflen );
+	void processDumpOutput();
+	void processStarted();
+	void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	void processError(QProcess::ProcessError);
+
 };
 
 #endif
