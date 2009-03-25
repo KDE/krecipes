@@ -388,7 +388,7 @@ protected:
 	CategoryTree *m_categoryCache;
 
 private:
-	QTextStream *dumpStream;
+	QIODevice * m_dumpFile;
 	bool haltOperation;
 	bool m_operationHalted;
 	KProcess * process;

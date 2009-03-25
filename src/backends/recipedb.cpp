@@ -268,13 +268,13 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	process = new KProcess;
 
-	QIODevice *dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
-	if ( !dumpFile->open( QIODevice::WriteOnly ) ) {
+	m_dumpFile = KFilterDev::deviceForFile(backup_file,"application/x-gzip");
+	if ( !m_dumpFile->open( QIODevice::WriteOnly ) ) {
 		kDebug()<<"Couldn't open "<<backup_file;
 		return false;
 	}
 
-	dumpStream = new QTextStream( dumpFile );
+	m_dumpFile->setTextModeEnabled( true );
 
 	QStringList command = backupCommand();
 	if ( command.count() == 0 ) {
@@ -284,9 +284,13 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 
-	(*dumpStream) << "-- Generated for Krecipes v"<<krecipes_version()<<endl;
-	(*dumpStream) << "-- Krecipes database schema: "<<latestDBVersion()<<endl;
-	(*dumpStream) << "-- Krecipes database backend: "<<config.readEntry( "Type" )<<endl;
+	QString dbVersionString = QString::number(latestDBVersion());
+	m_dumpFile->write(QByteArray("-- Generated for Krecipes v")); 
+		m_dumpFile->write(krecipes_version().toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
+	m_dumpFile->write(QByteArray("-- Krecipes database schema: "));
+		m_dumpFile->write(dbVersionString.toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
+	m_dumpFile->write(QByteArray("-- Krecipes database backend: "));
+		m_dumpFile->write(config.readEntry( "Type" ).toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
 
 	kDebug()<<"Running '"<<command.first()<<"' to create backup file";
 	*process << command /*<< ">" << backup_file*/;
@@ -323,17 +327,16 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		if ( errMsg ) *errMsg = i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.",command.first());
 		QFile::remove(backup_file);
 		delete process;
-		delete dumpStream;
-		delete dumpFile;
+		delete m_dumpFile;
 		emit progressDone();
 		return false;
 	} else if ((m_exitCode != 0) || (m_exitStatus != QProcess::NormalExit)) {
 		kDebug()<<"Process failed.";
 		//Since the process failed, dumpStream should have output from the app as to why it did
 		QString appOutput;
-		dumpFile->close();
-		if ( dumpFile->open( QIODevice::ReadOnly ) ) {
-			QTextStream appErrStream( dumpFile );
+		m_dumpFile->close();
+		if ( m_dumpFile->open( QIODevice::ReadOnly ) ) {
+			QTextStream appErrStream( m_dumpFile );
 
 			//ignore our own versioning output
 			appErrStream.readLine();
@@ -348,18 +351,15 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
 		delete process;
-		delete dumpStream;
-		delete dumpFile;
+		delete m_dumpFile;
 		emit progressDone();
 		return false;
 	}
 
-	dumpStream->flush();
 	kDebug()<<"Backup finished.";
 
 	delete process;
-	delete dumpStream;
-	delete dumpFile;
+	delete m_dumpFile;
 	emit progressDone();
 	return true;
 }
@@ -367,7 +367,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 void RecipeDB::processDumpOutput()
 {
 	kDebug();
-	(*dumpStream) << QString::fromLocal8Bit(process->readAll());
+	m_dumpFile->write(process->readAll());
 }
 
 void RecipeDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -411,16 +411,16 @@ void RecipeDB::initializeData( void )
 bool RecipeDB::restore( const QString &file, QString *errMsg )
 {
     kDebug();
-	QIODevice *dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
-	if ( dumpFile->open( QIODevice::ReadOnly ) ) {
+	m_dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
+	if ( m_dumpFile->open( QIODevice::ReadOnly ) ) {
 
-		QTextStream stream( dumpFile );
+		QTextStream stream( m_dumpFile );
 		QString firstLine = stream.readLine().trimmed();
 		QString dbVersion = stream.readLine().trimmed();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.indexOf(":") - 2 );
 		if ( qRound(dbVersion.toDouble()*1e5) > qRound(latestDBVersion()*1e5) ) { //correct for float's imprecision
 			if ( errMsg ) *errMsg = i18n( "This backup was created with a newer version of Krecipes and cannot be restored." );
-			delete dumpFile;
+			delete m_dumpFile;
 			return false;
 		}
 
@@ -429,12 +429,12 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		dbType = dbType.right( dbType.length() - dbType.indexOf(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
 			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
-			delete dumpFile;
+			delete m_dumpFile;
 			return false;
 		}
 		else if ( dbType != config.readEntry("Type",QString()) ) {
 			if ( errMsg ) *errMsg = i18n("This backup was created using the \"%1\" backend.  It can only be restored into a database using this backend." ,dbType);
-			delete dumpFile;
+			delete m_dumpFile;
 			return false;
 		}
 
@@ -466,7 +466,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 				haltOperation=false; 
 				process->kill();
 				delete process;
-				delete dumpFile;
+				delete m_dumpFile;
 				emit progressDone();
 				return false;
 			}
@@ -477,7 +477,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			if ( errMsg ) *errMsg = i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.",
 				command.first());
 			delete process;
-			delete dumpFile;
+			delete m_dumpFile;
 			emit progressDone();
 			return false;
 		}
@@ -525,12 +525,12 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 			haltOperation=false;
 			empty();
 			checkIntegrity();
-			delete dumpFile;
+			delete m_dumpFile;
 			if ( errMsg ) { *errMsg = i18n("Restore Failed"); }
 			return false;
 		}
 
-		dumpFile->close();
+		m_dumpFile->close();
 
 		checkIntegrity();
 	}
@@ -539,7 +539,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		return false;
 	}
 
-	delete dumpFile;
+	delete m_dumpFile;
 	return true;
 }
 
