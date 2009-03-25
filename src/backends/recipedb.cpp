@@ -286,9 +286,9 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 
 	QString dbVersionString = QString::number(latestDBVersion());
 	m_dumpFile->write(QByteArray("-- Generated for Krecipes v")); 
-		m_dumpFile->write(krecipes_version().toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
+		m_dumpFile->write(krecipes_version().toUtf8()); m_dumpFile->write(QByteArray("\n"));
 	m_dumpFile->write(QByteArray("-- Krecipes database schema: "));
-		m_dumpFile->write(dbVersionString.toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
+		m_dumpFile->write(dbVersionString.toUtf8()); m_dumpFile->write(QByteArray("\n"));
 	m_dumpFile->write(QByteArray("-- Krecipes database backend: "));
 		m_dumpFile->write(config.readEntry( "Type" ).toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
 
@@ -414,9 +414,11 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 	m_dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( m_dumpFile->open( QIODevice::ReadOnly ) ) {
 
-		QTextStream stream( m_dumpFile );
-		QString firstLine = stream.readLine().trimmed();
-		QString dbVersion = stream.readLine().trimmed();
+		QTextStream stream( m_dumpFile ); //We only need this stream to check atEnd()
+
+		m_dumpFile->setTextModeEnabled( true );
+		QString firstLine = QString::fromUtf8(m_dumpFile->readLine()).trimmed();
+		QString dbVersion = QString::fromUtf8(m_dumpFile->readLine()).trimmed();
 		dbVersion = dbVersion.right( dbVersion.length() - dbVersion.indexOf(":") - 2 );
 		if ( qRound(dbVersion.toDouble()*1e5) > qRound(latestDBVersion()*1e5) ) { //correct for float's imprecision
 			if ( errMsg ) *errMsg = i18n( "This backup was created with a newer version of Krecipes and cannot be restored." );
@@ -425,7 +427,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		}
 
 		KConfigGroup config = KGlobal::config()->group( "DBType" );
-		QString dbType = stream.readLine().trimmed();
+		QString dbType = QString::fromUtf8(m_dumpFile->readLine()).trimmed();
 		dbType = dbType.right( dbType.length() - dbType.indexOf(":") - 2 );
 		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
 			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
@@ -489,17 +491,16 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		kDebug()<<"Wiping database...";
 		empty(); //the user had better be warned!
 		kDebug()<<"Database wiped.";
-			
+	
+		QByteArray array;
 		do {
-			QString line = stream.readLine();
-			
-			process->write(line.toLocal8Bit());
-			process->write("\r\n");
+			kDebug()<<"Feeding file dump in the process...";
 			QCoreApplication::processEvents();
 			if ( haltOperation ) { break; }
+			array = m_dumpFile->readAll();
+			process->write(array);
 			emit progress();
-		}
-		while ( !stream.atEnd() );
+		} while ( !array.isEmpty() );
 
 		//Since the process will exit when all stdin has been sent and processed,
 		//just loop until the process is no longer running.  If something goes
