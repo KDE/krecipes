@@ -24,6 +24,8 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <KProcess>
+#include <QEventLoop>
+#include <QTimer>
 #include <kfilterdev.h>
 #include <kmessagebox.h>
 
@@ -72,7 +74,7 @@ struct ingredient_nutrient_data
 };
 
 RecipeDB::RecipeDB() :
-	QObject(), m_categoryCache(0), haltOperation(false)
+	QObject(), m_categoryCache(0), haltOperation(false), process(NULL)
 {
     new KrecipesdbAdaptor( this );
     QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);
@@ -96,6 +98,14 @@ QString RecipeDB::krecipes_version() const
 		return this_instance->aboutData() ->version();
 
 	return QString::null; //Oh, well.  We couldn't get the version (shouldn't happen).
+}
+
+void RecipeDB::cancelOperation()
+{
+	kDebug()<<"Operation cancelled.";
+	haltOperation = true;
+	if (process != NULL)
+		process->kill();
 }
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
@@ -290,7 +300,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	m_dumpFile->write(QByteArray("-- Krecipes database schema: "));
 		m_dumpFile->write(dbVersionString.toUtf8()); m_dumpFile->write(QByteArray("\n"));
 	m_dumpFile->write(QByteArray("-- Krecipes database backend: "));
-		m_dumpFile->write(config.readEntry( "Type" ).toLocal8Bit()); m_dumpFile->write(QByteArray("\n"));
+		m_dumpFile->write(config.readEntry( "Type" ).toUtf8()); m_dumpFile->write(QByteArray("\n"));
 
 	kDebug()<<"Running '"<<command.first()<<"' to create backup file";
 	*process << command /*<< ">" << backup_file*/;
@@ -310,13 +320,18 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 			.arg(i18n("Creating complete backup"))
 			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
 
+	m_localEventLoop = new QEventLoop;
+
+	//This timer is to let the GUI kill the process even if it's hanged,
+	//i.e. we will not receive readyRead() signals anymore for any reason.
+	m_timer = new QTimer;
+	QApplication::connect( m_timer, SIGNAL(timeout()), this, SLOT(cancelWatcher()) );
+	m_timer->start(1000);
+
 	process->start();
-	
-	while (!m_processFinished && !m_processError) {
-		QCoreApplication::processEvents();
-		if ( haltOperation ) { haltOperation=false; m_operationHalted = true; process->kill(); }
-		emit progress();
-	}
+	m_localEventLoop->exec();
+	delete m_timer;
+	delete m_localEventLoop;
 	
 	if ( m_operationHalted ) {
 		//User cancelled it; we'll still consider the operation successful,
@@ -327,6 +342,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		if ( errMsg ) *errMsg = i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.",command.first());
 		QFile::remove(backup_file);
 		delete process;
+		process = NULL;
 		delete m_dumpFile;
 		emit progressDone();
 		return false;
@@ -351,6 +367,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
 		QFile::remove(backup_file);
 		delete process;
+		process = NULL;
 		delete m_dumpFile;
 		emit progressDone();
 		return false;
@@ -359,6 +376,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	kDebug()<<"Backup finished.";
 
 	delete process;
+	process = NULL;
 	delete m_dumpFile;
 	emit progressDone();
 	return true;
@@ -368,6 +386,20 @@ void RecipeDB::processDumpOutput()
 {
 	kDebug();
 	m_dumpFile->write(process->readAll());
+	if ( haltOperation ) {
+		haltOperation=false;
+		m_operationHalted = true;
+	}
+	emit progress();
+}
+
+void RecipeDB::cancelWatcher()
+{
+	if ( haltOperation ) {
+		haltOperation=false;
+		m_operationHalted = true;
+	}
+	emit progress();
 }
 
 void RecipeDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -376,12 +408,14 @@ void RecipeDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 	m_exitCode = exitCode;
 	m_exitStatus = exitStatus;
 	m_processFinished = true;
+	m_localEventLoop->exit();
 }
 
 void RecipeDB::processError(QProcess::ProcessError)
 {
 	kDebug();
 	m_processError = true;
+	m_localEventLoop->exit();
 }
 
 void RecipeDB::initializeData( void )
@@ -413,8 +447,6 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
     kDebug();
 	m_dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( m_dumpFile->open( QIODevice::ReadOnly ) ) {
-
-		QTextStream stream( m_dumpFile ); //We only need this stream to check atEnd()
 
 		m_dumpFile->setTextModeEnabled( true );
 		QString firstLine = QString::fromUtf8(m_dumpFile->readLine()).trimmed();
@@ -453,32 +485,23 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		m_processStarted = false;
 		m_processFinished = false;
 		m_processError = false;
-		haltOperation = false;
 		m_operationHalted = false;
 
 		emit progressBegin(0,QString::null,
 			QString("<center><b>%1</b></center>%2")
 				.arg(i18n("Restoring backup"))
 				.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
-		process->start();
 
-		while (!m_processStarted && !m_processError) {
-			QCoreApplication::processEvents();
-			if ( haltOperation ) { 
-				haltOperation=false; 
-				process->kill();
-				delete process;
-				delete m_dumpFile;
-				emit progressDone();
-				return false;
-			}
-			emit progress();
-		}
-		
+		process->start();
+		m_localEventLoop = new QEventLoop;
+		m_localEventLoop->exec();
+
 		if ( m_processError && !m_processStarted ) {
 			if ( errMsg ) *errMsg = i18n("Unable to find or run the program '%1'.  Either it is not installed on your system or it is not in $PATH.",
 				command.first());
+			delete m_localEventLoop;
 			delete process;
+			process = NULL;
 			delete m_dumpFile;
 			emit progressDone();
 			return false;
@@ -492,32 +515,26 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		empty(); //the user had better be warned!
 		kDebug()<<"Database wiped.";
 	
-		QByteArray array;
-		do {
-			kDebug()<<"Feeding file dump in the process...";
-			QCoreApplication::processEvents();
-			if ( haltOperation ) { break; }
-			array = m_dumpFile->readAll();
-			process->write(array);
-			emit progress();
-		} while ( !array.isEmpty() );
+		kDebug()<<"Reading backup file...";
+		m_timer = new QTimer;
+		QApplication::connect( m_timer, SIGNAL(timeout()), this, SLOT(processReadDump()) );
+		m_timer->start();
+		m_localEventLoop->exec();
+		delete m_timer;
+		kDebug()<<"Done.";
 
 		//Since the process will exit when all stdin has been sent and processed,
 		//just loop until the process is no longer running.  If something goes
 		//wrong, the user can still hit cancel.
 		process->closeWriteChannel();
-		int prog = 0;
-		while ( process->state() == QProcess::Running ){
-			QCoreApplication::processEvents();
-			if ( haltOperation ) { break; }
-			if ( prog % 100 == 0 ) {
-				emit progress();
-				prog = 0;
-			}
-			++prog;
+		if (!m_processFinished && !m_processError) {
+			kDebug()<<"Waiting for process exit...";
+			m_localEventLoop->exec();
 		}
 
+		delete m_localEventLoop;
 		delete process;
+		process = NULL;
 		emit progressDone();
 
 		//Since we just loaded part of a file, the database won't be in a usable state.
@@ -548,6 +565,23 @@ void RecipeDB::processStarted()
 {
 	kDebug();
 	m_processStarted = true;
+	m_localEventLoop->exit();
+}
+
+void RecipeDB::processReadDump()
+{
+	emit progress();
+	QByteArray array;
+	array = m_dumpFile->readAll();
+	if ( !array.isEmpty() ) {
+		kDebug()<<"Feeding dump file in the process...";
+		process->write(array);
+	}
+	else {
+		kDebug()<<"Done.";
+		m_timer->stop();
+		m_localEventLoop->exit();
+	}
 }
 
 void RecipeDB::execSQL( QTextStream &stream )

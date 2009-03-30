@@ -18,6 +18,9 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 
+class QEventLoop;
+class QTimer;
+
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
 #include "datablocks/elementlist.h"
@@ -96,7 +99,7 @@ public:
 	};
 
 public slots:
-	void cancelOperation(){ haltOperation = true; }
+	void cancelOperation();
 
 signals:
 	void progressBegin(int,const QString &c=QString::null,const QString &t=QString::null,int rate=1);
@@ -397,9 +400,13 @@ private:
 	bool m_processError;
 	int m_exitCode;
 	QProcess::ExitStatus m_exitStatus;
+	QEventLoop * m_localEventLoop;
+	QTimer * m_timer;
 
 private slots:
 	void processDumpOutput();
+	void cancelWatcher();
+	void processReadDump();
 	void processStarted();
 	void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
 	void processError(QProcess::ProcessError);
