@@ -143,68 +143,48 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerLeft, 1, 0 );
 
 	QLabel* serverText = new QLabel( i18n( "Server:" ), this );
-	serverText->setFixedSize( QSize( 100, 20 ) );
-	serverText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( serverText, 1, 1 );
 
 	serverEdit = new KLineEdit( this );
-	serverEdit->setFixedSize( QSize( 120, 20 ) );
-	serverEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( serverEdit, 1, 2 );
 
 	QSpacerItem* spacerRow1 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow1, 2, 1 );
 
 	QLabel* usernameText = new QLabel( i18n( "Username:" ), this );
-	usernameText->setFixedSize( QSize( 100, 20 ) );
-	usernameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( usernameText, 3, 1 );
 
 	usernameEdit = new KLineEdit( this );
-	usernameEdit->setFixedSize( QSize( 120, 20 ) );
-	usernameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( usernameEdit, 3, 2 );
 
 	QSpacerItem* spacerRow2 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow2, 4, 1 );
 
 	QLabel* passwordText = new QLabel( i18n( "Password:" ), this );
-	passwordText->setFixedSize( QSize( 100, 20 ) );
-	passwordText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( passwordText, 5, 1 );
 
 	passwordEdit = new KLineEdit( this );
-	passwordEdit->setFixedSize( QSize( 120, 20 ) );
 	passwordEdit->setEchoMode( QLineEdit::Password );
-	passwordEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( passwordEdit, 5, 2 );
 
 	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow3, 6, 1 );
 
 	QLabel* portText = new QLabel( i18n( "Port:" ), this );
-	portText->setFixedSize( QSize( 100, 20 ) );
-	portText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( portText, 7, 1 );
 
 	portEdit = new KIntNumInput( this );
 	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18n("Default") );
-	portEdit->setFixedSize( QSize( 120, 20 ) );
-	portEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( portEdit, 7, 2 );
 
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow4, 8, 1 );
 
 	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), this );
-	dbNameText->setFixedSize( QSize( 100, 20 ) );
-	dbNameText->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( dbNameText, 9, 1 );
 
 	dbNameEdit = new KLineEdit( this );
-	dbNameEdit->setFixedSize( QSize( 120, 20 ) );
-	dbNameEdit->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 	layout->addWidget( dbNameEdit, 9, 2 );
 
 	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
