@@ -1483,7 +1483,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 	  <textobject>
 	    <phrase>Screenshot</phrase>
 	  </textobject>
-	  <caption><para>Restoring You Database &ndash; Erase Warning</para></caption>
+	  <caption><para>Restoring Your Database &ndash; Erase Warning</para></caption>
 	</mediaobject>
 </screenshot>
 </para>
@@ -1730,7 +1730,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>
 <screenshot>
-<screeninfo>Here's a screenshot of the &krecipes;Ingredients component.</screeninfo>
+<screeninfo>Here's a screenshot of the &krecipes; Ingredients component.</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="ingredients.png" format="PNG"/>
