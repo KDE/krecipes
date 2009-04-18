@@ -465,13 +465,9 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
    Form1Layout->setMargin( 11 );
    Form1Layout->setSpacing( 6 );
 
-	numberButtonGroup = new Q3ButtonGroup( this );
-	numberButtonGroup->setColumnLayout( 0, Qt::Vertical );
-	numberButtonGroup->layout() ->setSpacing( 6 );
-	numberButtonGroup->layout() ->setMargin( 11 );
-	numberButtonGroup->resize( QSize() );
-	numberButtonGroupLayout = new QVBoxLayout( numberButtonGroup->layout() );
-	numberButtonGroupLayout->setAlignment( Qt::AlignTop );
+	numberButtonGroup = new QGroupBox( this );
+	numberButtonGroupLayout = new QVBoxLayout;
+	numberButtonGroup->setLayout( numberButtonGroupLayout );
 
 	fractionRadioButton = new QRadioButton( numberButtonGroup );
 	numberButtonGroupLayout->addWidget( fractionRadioButton );
@@ -479,9 +475,6 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	decimalRadioButton = new QRadioButton( numberButtonGroup );
 	numberButtonGroupLayout->addWidget( decimalRadioButton );
 	Form1Layout->addWidget( numberButtonGroup );
-
-	numberButtonGroup->insert( decimalRadioButton, 0 );
-	numberButtonGroup->insert( fractionRadioButton, 1 );
 
 	//unit display format
 	QGroupBox *abbrevGrpBox = new QGroupBox;
@@ -502,8 +495,10 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	// Load Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	int button = ( config.readEntry( "Fraction", false ) ) ? 1 : 0;
-	numberButtonGroup->setButton( button );
+	if ( config.readEntry( "Fraction", true ) )
+		fractionRadioButton->click();
+	else
+		decimalRadioButton->click();
 
 	abbrevButton->setChecked( config.readEntry( "AbbreviateUnits", false ) );
 }
@@ -512,7 +507,7 @@ void NumbersPrefs::saveOptions()
 {
 	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
-	bool fraction = !numberButtonGroup->find( 0 )->isChecked();
+	bool fraction = fractionRadioButton->isChecked();
 	config.writeEntry( "Fraction", fraction );
 
 	config.writeEntry( "AbbreviateUnits", abbrevButton->isChecked() );

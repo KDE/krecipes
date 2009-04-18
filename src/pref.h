@@ -35,7 +35,7 @@ class KIntNumInput;
 class KLineEdit;
 class KUrlRequester;
 
-class Q3ButtonGroup;
+class QGroupBox;
 class QCheckBox;
 class QRadioButton;
 class QVBoxLayout;
@@ -139,7 +139,7 @@ public:
 	void saveOptions();
 
 protected:
-	Q3ButtonGroup* numberButtonGroup;
+	QGroupBox* numberButtonGroup;
 	QRadioButton* fractionRadioButton;
 	QRadioButton* decimalRadioButton;
 
