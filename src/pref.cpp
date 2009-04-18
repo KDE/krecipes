@@ -21,6 +21,7 @@
 
 
 #include <q3buttongroup.h>
+#include <QGroupBox>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
@@ -191,37 +192,47 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addItem( spacerRow5, 10, 1 );
 
 	// Backup options
-	Q3GroupBox *backupGBox = new Q3GroupBox( this, "backupGBox" );
+	QGroupBox *backupGBox = new QGroupBox( this );
 	backupGBox->setTitle( i18n( "Backup" ) );
-	backupGBox->setColumns( 2 );
-	layout->addWidget( backupGBox, 10, 1, 1, 4, 0 );
 
-	QLabel *dumpPathLabel = new QLabel( backupGBox );
+	QLabel *dumpPathLabel = new QLabel;
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("mysqldump") ));
 
-	QLabel *mysqlPathLabel = new QLabel( backupGBox );
+	QLabel *mysqlPathLabel = new QLabel;
 	mysqlPathLabel->setText( i18n( "Path to '%1':" ,QString("mysql") ));
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
 	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 	layout->addItem( spacerRight, 1, 4 );
+	
+	dumpPathRequester = new KUrlRequester;
+	mysqlPathRequester = new KUrlRequester;
 
-	// Load & Save Current Settings
+	QGridLayout *backupGBoxLayout = new QGridLayout;
+	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
+	backupGBoxLayout->addWidget( mysqlPathLabel, 0, 1 );
+	backupGBoxLayout->addWidget( dumpPathRequester, 1, 0 );
+	backupGBoxLayout->addWidget( mysqlPathRequester, 1, 1 );
+	backupGBox->setLayout(backupGBoxLayout);
+	layout->addWidget( backupGBox, 10, 1, 1, 4 );
+
+	// Load Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	serverEdit->setText( config.readEntry( "Host", "localhost" ) );
 	usernameEdit->setText( config.readEntry( "Username", "" ) );
 	passwordEdit->setText( config.readEntry( "Password", "" ) );
 	portEdit->setValue( config.readEntry( "Port", 0 ) );
 	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
-	dumpPathRequester = new KUrlRequester( config.readEntry( "MySQLDumpPath", "mysqldump" ), backupGBox );
+	dumpPathRequester->setUrl( config.readEntry( "MySQLDumpPath", "mysqldump" ) );
 	dumpPathRequester->setFilter( "mysqldump" );
-	mysqlPathRequester = new KUrlRequester( config.readEntry( "MySQLPath", "mysql" ), backupGBox );
+	mysqlPathRequester->setUrl( config.readEntry( "MySQLPath", "mysql" ) );
 	mysqlPathRequester->setFilter( "mysql" );
 }
 
 void MySQLServerPrefs::saveOptions( void )
 {
+	// Save Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	config.writeEntry( "Host", serverEdit->text() );
 	config.writeEntry( "Username", usernameEdit->text() );
