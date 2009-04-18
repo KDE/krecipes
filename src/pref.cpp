@@ -305,16 +305,25 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	layout->addItem( spacerRow5, 10, 1 );
 
 	// Backup options
-	Q3GroupBox *backupGBox = new Q3GroupBox( this, "backupGBox" );
+	QGroupBox *backupGBox = new QGroupBox( this );
+	QGridLayout *backupGBoxLayout = new QGridLayout;
 	backupGBox->setTitle( i18n( "Backup" ) );
-	backupGBox->setColumns( 2 );
-	layout->addWidget( backupGBox, 10, 1, 1, 4, 0 );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("pg_dump") ));
 
 	QLabel *psqlPathLabel = new QLabel( backupGBox );
 	psqlPathLabel->setText( i18n( "Path to '%1':" ,QString("psql") ));
+
+	dumpPathRequester = new KUrlRequester;
+	psqlPathRequester = new KUrlRequester;
+	
+	backupGBox->setLayout( backupGBoxLayout );
+	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
+	backupGBoxLayout->addWidget( psqlPathLabel, 0, 1 ); 
+	backupGBoxLayout->addWidget( dumpPathRequester, 1, 0 );
+	backupGBoxLayout->addWidget( psqlPathRequester, 1, 1 );
+	layout->addWidget( backupGBox, 10, 1, 1, 4 );
 
 	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacerRow6, 11, 1 );
@@ -328,9 +337,9 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	passwordEdit->setText( config.readEntry( "Password", "" ) );
 	portEdit->setValue( config.readEntry( "Port", 0 ) );
 	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
-	dumpPathRequester = new KUrlRequester( config.readEntry( "PgDumpPath", "pg_dump" ), backupGBox );
+	dumpPathRequester->setUrl( config.readEntry( "PgDumpPath", "pg_dump" ) );
 	dumpPathRequester->setFilter( "pg_dump" );
-	psqlPathRequester = new KUrlRequester( config.readEntry( "PsqlPath", "psql" ), backupGBox );
+	psqlPathRequester->setUrl( config.readEntry( "PsqlPath", "psql" ) );
 	psqlPathRequester->setFilter( "psql" );
 }
 
