@@ -218,7 +218,7 @@ if ( POSTGRESQL_FOUND )
 endif ( POSTGRESQL_FOUND )
 
 
-install(TARGETS krecipes DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS krecipes ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
