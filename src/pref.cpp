@@ -484,9 +484,12 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 	numberButtonGroup->insert( fractionRadioButton, 1 );
 
 	//unit display format
-	Q3GroupBox *abbrevGrpBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Units" ), this );
-	KHBox *abbrevBox = new KHBox( abbrevGrpBox );
-	abbrevButton = new QCheckBox( i18n( "Use abbreviations" ), abbrevBox );
+	QGroupBox *abbrevGrpBox = new QGroupBox;
+	abbrevGrpBox->setTitle( i18n( "Units" ) );
+	abbrevButton = new QCheckBox( i18n( "Use abbreviations" ) );
+	QGridLayout *abbrevLayout = new QGridLayout;
+	abbrevLayout->addWidget( abbrevButton );
+	abbrevGrpBox->setLayout( abbrevLayout );
 	Form1Layout->addWidget( abbrevGrpBox );
 
 
