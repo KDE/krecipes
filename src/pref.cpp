@@ -368,19 +368,25 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	#endif
 
 	// Backup options
-	Q3GroupBox *backupGBox = new Q3GroupBox( this, "backupGBox" );
+	QGroupBox *backupGBox = new QGroupBox( this );
 	backupGBox->setTitle( i18n( "Backup" ) );
-	backupGBox->setColumns( 2 );
-	Form1Layout->addWidget( backupGBox );
 
 	QLabel *dumpPathLabel = new QLabel( backupGBox );
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,sqliteBinary));
+	
+	dumpPathRequester = new KUrlRequester;
+	
+	QGridLayout *backupGBoxLayout = new QGridLayout;
+	backupGBox->setLayout( backupGBoxLayout );
+	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
+	backupGBoxLayout->addWidget( dumpPathRequester, 0, 1 );
+	Form1Layout->addWidget( backupGBox );
 
 	// Load & Save Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	fileRequester = new KUrlRequester( config.readEntry( "DBFile", KStandardDirs::locateLocal( "appdata", "krecipes.krecdb" ) ), hbox );
 	hbox->setStretchFactor( fileRequester, 2 );
-	dumpPathRequester = new KUrlRequester( config.readEntry( "SQLitePath", sqliteBinary ), backupGBox );
+	dumpPathRequester->setUrl( config.readEntry( "SQLitePath", sqliteBinary ) );
 	dumpPathRequester->setFilter( sqliteBinary );
 }
 
