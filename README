@@ -27,7 +27,7 @@ Please notice that this application is beta, meaning everything is expected to w
  
  To download the package, do:
  
-svn co svn://anonsvn.kde.org/home/kde/trunk/extragear/utils krecipes-svn
+svn co svn://anonsvn.kde.org/home/kde/trunk/extragear/utils/krecipes
 
  To update the package, do:
 
