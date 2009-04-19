@@ -41,6 +41,7 @@ int main( int argc, char **argv )
 	about.addCredit( ki18n("Daniel Sauvé"), ki18n("Porting to KDE4"), "megametres@gmail.com", "http://metres.homelinux.com" );
 
         about.addCredit( ki18n("Laurent Montel"), ki18n("Porting to KDE4"), "montel@kde.org", 0 );
+        about.addCredit( ki18n("José Manuel Santamaría Lema"), ki18n("Porting to KDE4"), "panfaust@gmail.com", 0 );
 
 	about.setTranslator( ki18n( "INSERT YOUR NAME HERE" ), ki18n( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
