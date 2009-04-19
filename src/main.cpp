@@ -21,7 +21,7 @@
 
 #include "convert_sqlite3.h"
 
-static const char *version = "1.1-svn";
+static const char *version = "2.0-svn";
 
 static KCmdLineOptions options;
 
