@@ -38,14 +38,14 @@ protected:
 private:
 	void readRecipemlDirections( const QDomElement& dirs );
 	void readRecipemlHead( const QDomElement& head );
-	void readRecipemlIng( const QDomElement& ing, Ingredient *ing = 0, const QString &header = QString::null );
+	void readRecipemlIng( const QDomElement& ing1, Ingredient *ing2 = 0, const QString &header = QString::null );
 	void readRecipemlIngs( const QDomElement& ings );
 	void readRecipemlMenu( const QDomElement& menu );
 	void readRecipemlSrcItems( const QDomElement& sources );
 	void readRecipemlRecipe( const QDomElement& recipe );
 	void readRecipemlPreptime( const QDomElement &preptime );
 	void readRecipemlQty( const QDomElement &qty, Ingredient &ing );
-	void readRecipemlRange( const QDomElement& range, double &range, double &range_offset );
+	void readRecipemlRange( const QDomElement& range1, double &range2, double &range_offset );
 
 	Recipe recipe;
 };

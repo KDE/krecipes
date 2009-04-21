@@ -46,7 +46,7 @@ private:
 	void readCategoryStructure( const QDomNodeList& l, CategoryTree *tree );
 	void readDescription( const QDomNodeList& l, Recipe* );
 	void readIngredients( const QDomNodeList& l, Recipe*, const QString &header = QString::null, Ingredient *ing = 0 );
-	void readAmount( const QDomElement& amount, double &amount, double &amount_offset );
+	void readAmount( const QDomElement& amount1, double &amount2, double &amount_offset );
 	void readRatings( const QDomNodeList&, Recipe * );
 	void readCriterion( const QDomNodeList&, RatingCriteriaList &r );
 };
