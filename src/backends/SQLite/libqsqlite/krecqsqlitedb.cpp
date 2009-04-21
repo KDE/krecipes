@@ -106,7 +106,11 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 		"\t (Query: " << query << ")" << endl;
 		res.setError( errmsg );
 		res.setStatus( QSQLiteResult::Failure );
-		free( errmsg );
+#if HAVE_SQLITE
+		sqlite_freemem( errmsg );
+#elif HAVE_SQLITE3
+		sqlite3_free( errmsg );
+#endif
 	}
 
 	if ( lastID ) {
