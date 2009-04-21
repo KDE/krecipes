@@ -1,3 +1,8 @@
+Changes from 1.0-beta1 to 1.0-beta2:
+  -Fix crash with sqlite backend.
+  -Fix FTBFS with GCC 4.3.
+  -Add categories to desktop file.
+
 Changes from 0.9 to 1.0-beta1:
   -Handbook integration: Removed context help and replaced with links to the Handbook.  Also "Help" buttons have been added to some dialogs that also take users to the Handbook for more info.
   -Nutrient status indicator; while editing a recipe, lets you know whether or not nutrient information is complete for a recipe.
