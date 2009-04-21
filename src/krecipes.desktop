@@ -63,4 +63,4 @@ Comment[xx]=xxThe KDE Cooking Bookxx
 Comment[zh_CN]=KDE 食谱
 Terminal=false
 X-DCOP-ServiceType=Unique
-Categories=Utility;Database;KDE
+Categories=Utility;Database;Qt;KDE;
