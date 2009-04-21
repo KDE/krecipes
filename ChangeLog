@@ -1,4 +1,4 @@
-Changes from 1.0 to 2.0
+Changes from 1.0 to 2.0-beta1:
   -General port to kde4/qt4.
   -Use sonnet.
   -Port of backup/restore functions to kde4/qt4.
@@ -7,7 +7,7 @@ Changes from 1.0 to 2.0
   -Port of sqlite migration code to kde4/qt4. (work in progress)
   -Updated splash screen with the proper version number. (TODO)
 
-Changes from 1.0-beta2 to 1.0:
+Changes from 1.0-beta2 to 1.0 (not released):
   -New recipe layouts, thanks to a new XSL-based template system.
   -New icons and splash screen (courtesy of Robert Wadley).
 
