@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Krecipes
 Name[sv]=Krecept
 Name[ta]=கிளிக்கர்
@@ -64,3 +63,4 @@ Comment[xx]=xxThe KDE Cooking Bookxx
 Comment[zh_CN]=KDE 食谱
 Terminal=false
 X-DCOP-ServiceType=Unique
+Categories=Utility;Database;KDE
