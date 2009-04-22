@@ -18,18 +18,28 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 include(ConfigureChecks.cmake)
 configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
 
+set (ANY_DATABASE_SUPPORT_FOUND FALSE )
+
 if ( SQLITE_FOUND )
+   set (ANY_DATABASE_SUPPORT_FOUND TRUE )
    include_directories(${SQLITE_INCLUDE_DIR})
    set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
 endif ( SQLITE_FOUND )
 
 if ( MYSQL_FOUND )
+   set (ANY_DATABASE_SUPPORT_FOUND TRUE )
    set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)
 endif ( MYSQL_FOUND )
 
 if ( POSTGRESQL_FOUND )
+   set (ANY_DATABASE_SUPPORT_FOUND TRUE )
    set(postgresql_SRCS backends/PostgreSQL/psqlrecipedb.cpp )
 endif ( POSTGRESQL_FOUND )
+
+#This check will prevent some bogus report crashes from users.
+if (NOT ANY_DATABASE_SUPPORT_FOUND)
+   message ( FATAL_ERROR "Krecipes will not work without database support. Please install development libraries for SQLite, MySQL or PostgreSQL." )
+endif (NOT ANY_DATABASE_SUPPORT_FOUND)
 
 set(krecipesdbs_SRCS
    backends/recipedb.cpp
