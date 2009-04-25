@@ -184,7 +184,7 @@ void Krecipes::setupActions()
 
 	editAction = new KAction( this );
 	editAction->setText( i18n( "&Edit Recipes" ) );
-	editAction->setIcon( KIcon( "edit" ) );
+	editAction->setIcon( KIcon( "document-edit" ) );
 	editAction->setShortcut( Qt::CTRL + Qt::Key_E );
 	actionCollection()->addAction( "edit_action" , editAction );
 	connect( editAction, SIGNAL(triggered(bool)), m_view, SLOT( editRecipe() ) );
