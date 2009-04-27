@@ -73,17 +73,19 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
    layout1->setSpacing( 6 );
    layout1->setObjectName( "layout1" );
 
-	//KIconLoader *il = KIconLoader::global();
+	KIconLoader *il = KIconLoader::global();
 
 	addButton = new KPushButton( this );
    addButton->setObjectName( "addButton" );
-	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	il->loadIcon( "go-next", KIconLoader::Small );
+	addButton->setIcon( KIcon( "go-next", il ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new KPushButton( this );
    removeButton->setObjectName( "removeButton" );
-	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	il->loadIcon( "go-previous", KIconLoader::Small );
+	removeButton->setIcon( KIcon( "go-previous", il ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	QSpacerItem *spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -126,13 +128,15 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	KHBox *buttonBox = new KHBox( this );
 
 	okButton = new KPushButton( buttonBox );
-	//okButton->setIconSet( il->loadIconSet( "dialog-ok", KIcon::Small ) );
+	il->loadIcon( "dialog-ok", KIconLoader::Small );
+	okButton->setIcon( KIcon( "dialog-ok", il ) );
 	okButton->setText( i18n( "Find matching recipes" ) );
 
 	//buttonBox->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	clearButton = new KPushButton( buttonBox );
-	//clearButton->setIconSet( il->loadIconSet( "edit-clear", KIcon::Small ) );
+	il->loadIcon( "edit-clear", KIconLoader::Small );
+	clearButton->setIcon( KIcon( "edit-clear", il ) );
 	clearButton->setText( i18n( "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
