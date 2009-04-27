@@ -86,16 +86,14 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
    vboxl->setSpacing( KDialog::spacingHint() );
-	addRecipeButton = new QPushButton( this );
+	addRecipeButton = new KPushButton( this );
 	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
-	addRecipeButton->setFlat( true );
 	vboxl->addWidget( addRecipeButton );
 
-	removeRecipeButton = new QPushButton( this );
+	removeRecipeButton = new KPushButton( this );
 	//removeRecipeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
 	removeRecipeButton->setFixedSize( QSize( 32, 32 ) );
-	removeRecipeButton->setFlat( true );
 	vboxl->addWidget( removeRecipeButton );
 	vboxl->addStretch();
 
@@ -129,14 +127,14 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	layout->setColumnStretch( 1, 0 );
 	layout->setColumnStretch( 2, 1 );
 
-	okButton = new QPushButton( buttonBar );
+	okButton = new KPushButton( buttonBar );
    okButton->setObjectName( "okButton" );
 	okButton->setText( i18n( "&OK" ) );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
-	clearButton = new QPushButton( buttonBar );
+	clearButton = new KPushButton( buttonBar );
    clearButton->setObjectName( "clearButton" );
 	clearButton->setText( i18n( "Clear" ) );
 	clearButton->setIcon( KIcon( "edit-clear" ) );

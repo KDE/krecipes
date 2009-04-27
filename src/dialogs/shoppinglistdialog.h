@@ -54,13 +54,13 @@ private:
 	void addRecipe( Q3ListViewItem *item );
 	// Widgets
 	QGridLayout* layout;
-	QPushButton* addRecipeButton;
-	QPushButton* removeRecipeButton;
+	KPushButton* addRecipeButton;
+	KPushButton* removeRecipeButton;
 	KreListView* recipeListView;
 	KreListView* shopRecipeListView;
 	KHBox *buttonBar;
-	QPushButton* okButton;
-	QPushButton* clearButton;
+	KPushButton* okButton;
+	KPushButton* clearButton;
 	ShoppingListViewDialog *shoppingListDisplay;
 	RecipeActionsHandler *actionHandler;
 	RecipeListView *listview;
