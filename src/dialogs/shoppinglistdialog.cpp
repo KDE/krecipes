@@ -87,12 +87,13 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	QVBoxLayout* vboxl = new QVBoxLayout();
    vboxl->setSpacing( KDialog::spacingHint() );
 	addRecipeButton = new KPushButton( this );
-	//addRecipeButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	addRecipeButton->setIcon( KIcon( "go-next" ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	vboxl->addWidget( addRecipeButton );
 
 	removeRecipeButton = new KPushButton( this );
-	//removeRecipeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	removeRecipeButton->setIcon( KIcon( "go-previous" ) );
+	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	removeRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	vboxl->addWidget( removeRecipeButton );
 	vboxl->addStretch();
