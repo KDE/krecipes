@@ -30,7 +30,6 @@
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>

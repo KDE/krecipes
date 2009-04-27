@@ -34,7 +34,6 @@
 
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kconfig.h>
