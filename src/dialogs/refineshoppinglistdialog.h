@@ -29,7 +29,7 @@ class QGridLayout;
 class QSpacerItem;
 class QLabel;
 class Q3ListViewItem;
-class QPushButton;
+class KPushButton;
 
 class RecipeDB;
 class ElementList;
@@ -45,8 +45,8 @@ public:
 
 	QLabel* helpLabel;
 	KreListView* allIngListView;
-	QPushButton* addButton;
-	QPushButton* removeButton;
+	KPushButton* addButton;
+	KPushButton* removeButton;
 	KreListView* ingListView;
 
 protected:

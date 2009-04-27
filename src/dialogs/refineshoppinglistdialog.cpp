@@ -11,7 +11,7 @@
 #include "refineshoppinglistdialog.h"
 
 #include <qvariant.h>
-#include <qpushbutton.h>
+#include <KPushButton>
 #include <qlabel.h>
 #include <q3header.h>
 #include <qlayout.h>
@@ -69,13 +69,13 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
    layout1->setSpacing( 6 );
 
 
-	addButton = new QPushButton( layout2Widget );
+	addButton = new KPushButton( layout2Widget );
    addButton->setObjectName( "addButton" );
 	addButton->setIcon( KIcon( "go-next" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
-	removeButton = new QPushButton( layout2Widget );
+	removeButton = new KPushButton( layout2Widget );
    removeButton->setObjectName( "removeButton" );
 	removeButton->setIcon( KIcon( "go-previous" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
