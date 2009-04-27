@@ -22,7 +22,6 @@
 #include <QVBoxLayout>
 #include <KVBox>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 #include <kcursor.h>
 #include <kconfig.h>
@@ -71,17 +70,16 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
    layout1->setMargin( 0 );
    layout1->setSpacing( 6 );
 
-	//KIconLoader *il = KIconLoader::global();
 
 	addButton = new QPushButton( layout2Widget );
    addButton->setObjectName( "addButton" );
-	//addButton->setIconSet( il->loadIconSet( "go-next", KIcon::Small ) );
+	addButton->setIcon( KIcon( "go-next" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new QPushButton( layout2Widget );
    removeButton->setObjectName( "removeButton" );
-	//removeButton->setIconSet( il->loadIconSet( "go-previous", KIcon::Small ) );
+	removeButton->setIcon( KIcon( "go-previous" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
 	spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
