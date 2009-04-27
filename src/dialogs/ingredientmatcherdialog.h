@@ -22,7 +22,7 @@
 #include <qfontmetrics.h>
 #include <qlabel.h>
 #include <q3listview.h>
-#include <qpushbutton.h>
+#include <KPushButton>
 
 
 //Added by qt3to4:
@@ -139,10 +139,10 @@ private:
 	QLabel *missingNumberLabel;
 	KIntSpinBox *missingNumberSpinBox;
 
-	QPushButton *okButton;
-	QPushButton *clearButton;
-	QPushButton *addButton;
-	QPushButton *removeButton;
+	KPushButton *okButton;
+	KPushButton *clearButton;
+	KPushButton *addButton;
+	KPushButton *removeButton;
 
 	IngredientList m_ingredientList;
 	QMap<Q3ListViewItem*, IngredientList::iterator> m_item_ing_map;
