@@ -23,6 +23,7 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <KPushButton>
 
 AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
     : QWidget( parent )
@@ -42,12 +43,12 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	QVBoxLayout* vboxl = new QVBoxLayout();
    vboxl->setSpacing( KDialog::spacingHint() );
 
-	newAuthorButton = new QPushButton( this );
+	newAuthorButton = new KPushButton( this );
 	newAuthorButton->setText( i18n( "Create ..." ) );
 	newAuthorButton->setFlat( true );
 	vboxl->addWidget( newAuthorButton );
 
-	removeAuthorButton = new QPushButton( this );
+	removeAuthorButton = new KPushButton( this );
 	removeAuthorButton->setText( i18n( "Delete" ) );
 	removeAuthorButton->setFlat( true );
 	vboxl->addWidget( removeAuthorButton );

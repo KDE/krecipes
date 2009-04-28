@@ -14,7 +14,6 @@
 #define AUTHORSDIALOG_H
 
 #include <qwidget.h>
-#include <qpushbutton.h>
 
 #include <qlayout.h>
 #include <kiconloader.h>
@@ -25,6 +24,7 @@
 
 class RecipeDB;
 class StdAuthorListView;
+class KPushButton;
 
 /**
 @author Unai Garro
@@ -45,7 +45,7 @@ private:
 	RecipeDB *database;
 	//Widgets
 	StdAuthorListView *authorListView;
-	QPushButton *newAuthorButton;
-	QPushButton *removeAuthorButton;
+	KPushButton *newAuthorButton;
+	KPushButton *removeAuthorButton;
 };
 #endif
