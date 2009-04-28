@@ -29,6 +29,7 @@
 #include <qtabwidget.h>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <KPushButton>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -66,7 +67,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	layout->addItem( spacer_rightIngredients, 1, 2 );
 
 
-	addIngredientButton = new QPushButton( ingredientTab );
+	addIngredientButton = new KPushButton( ingredientTab );
 	addIngredientButton->setText( "+" );
 	layout->addWidget( addIngredientButton, 1, 3 );
 	addIngredientButton->setMinimumSize( QSize( 30, 30 ) );
@@ -74,7 +75,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	addIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	addIngredientButton->setFlat( true );
 
-	removeIngredientButton = new QPushButton( ingredientTab );
+	removeIngredientButton = new KPushButton( ingredientTab );
 	removeIngredientButton->setText( "-" );
 	layout->addWidget( removeIngredientButton, 3, 3 );
 	removeIngredientButton->setMinimumSize( QSize( 30, 30 ) );
@@ -85,7 +86,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_Ing_Buttons, 2, 3 );
 
-	QPushButton *propertyButton = new QPushButton( i18n("Property Information"), ingredientTab );
+	QPushButton *propertyButton = new KPushButton( i18n("Property Information"), ingredientTab );
 	layout->addWidget( propertyButton, 6, 1 );
 
 	tabWidget->insertTab( -1, ingredientTab, i18n( "Ingredients" ) );

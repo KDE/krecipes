@@ -13,8 +13,6 @@
 #ifndef INGREDIENTSDIALOG_H
 #define INGREDIENTSDIALOG_H
 
-#include <qpushbutton.h>
-
 #include <qlayout.h>
 #include <qwidget.h>
 #include <QGridLayout>
@@ -25,6 +23,7 @@
 
 class RecipeDB;
 class IngredientGroupsDialog;
+class KPushButton;
 
 class IngredientsDialog: public QWidget
 {
@@ -41,8 +40,8 @@ private slots:
 private:
 	// Widgets
 	QGridLayout* layout;
-	QPushButton* addIngredientButton;
-	QPushButton* removeIngredientButton;
+	KPushButton* addIngredientButton;
+	KPushButton* removeIngredientButton;
 	KreListView* ingredientListView;
 	IngredientGroupsDialog *groupsDialog;
 
