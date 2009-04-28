@@ -30,7 +30,6 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kcursor.h>
-#include <kiconloader.h>
 #include <kvbox.h>
 #include <KPushButton>
 
