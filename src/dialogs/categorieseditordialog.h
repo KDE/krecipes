@@ -14,7 +14,6 @@
 #define CATEGORIESEDITORDIALOG_H
 
 #include <qwidget.h>
-#include <qpushbutton.h>
 
 #include <qlayout.h>
 //Added by qt3to4:
@@ -27,6 +26,7 @@
 
 class RecipeDB;
 class StdCategoryListView;
+class KPushButton;
 
 /**
 @author Unai Garro
@@ -50,8 +50,8 @@ private:
 	QGridLayout *layout;
 	StdCategoryListView *categoryListView;
 	KHBox *buttonBar;
-	QPushButton *newCategoryButton;
-	QPushButton *removeCategoryButton;
+	KPushButton *newCategoryButton;
+	KPushButton *removeCategoryButton;
 };
 
 #endif

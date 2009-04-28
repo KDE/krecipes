@@ -22,6 +22,7 @@
 #include "backends/recipedb.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <KPushButton>
 
 CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -40,12 +41,12 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	//Buttons
 	QVBoxLayout* vboxl = new QVBoxLayout();
    vboxl->setSpacing( KDialog::spacingHint() );
-	newCategoryButton = new QPushButton( this );
+	newCategoryButton = new KPushButton( this );
 	newCategoryButton->setText( i18n( "Create ..." ) );
 	newCategoryButton->setFlat( true );
 	vboxl->addWidget( newCategoryButton );
 
-	removeCategoryButton = new QPushButton( this );
+	removeCategoryButton = new KPushButton( this );
 	removeCategoryButton->setText( i18n( "Delete" ) );
 	removeCategoryButton->setFlat( true );
 	vboxl->addWidget( removeCategoryButton );
