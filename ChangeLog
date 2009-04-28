@@ -3,7 +3,7 @@ Changes from 1.0 to 2.0-beta1:
   -Use sonnet.
   -Port of backup/restore functions to kde4/qt4.
   -Port of setup assistant to kde4/qt4.
-  -Port of preferences dialog to kde4/qt4. (work still in progress)
+  -Port of preferences dialog to kde4/qt4.
   -Port of sqlite migration code to kde4/qt4. (work in progress)
   -Updated splash screen with the proper version number. (TODO)
 
