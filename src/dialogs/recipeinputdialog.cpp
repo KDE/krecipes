@@ -174,12 +174,12 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	KVBox *photoButtonsBox = new KVBox( recipeTab );
 
-	changePhotoButton = new QPushButton( photoButtonsBox );
+	changePhotoButton = new KPushButton( photoButtonsBox );
 	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
 	changePhotoButton->setText( "..." );
 	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
-	QPushButton *clearPhotoButton = new QPushButton( photoButtonsBox );
+	KPushButton *clearPhotoButton = new KPushButton( photoButtonsBox );
 	clearPhotoButton->setIcon( QIcon( il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ) ) );
 	clearPhotoButton->setIconSize(  il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ).size() );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
@@ -222,7 +222,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	authorShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 
-	addAuthorButton = new QPushButton( authorInput );
+	addAuthorButton = new KPushButton( authorInput );
 	addAuthorButton->setText( "+" );
 	addAuthorButton->setFixedSize( QSize( 20, 20 ) );
 	addAuthorButton->setFlat( true );
@@ -243,7 +243,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	categoryShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 	recipeLayout->addWidget( categoryBox, 4, 4 );
 
-	addCategoryButton = new QPushButton( categoryInput );
+	addCategoryButton = new KPushButton( categoryInput );
 	addCategoryButton->setText( "+" );
 	addCategoryButton->setFixedSize( QSize( 20, 20 ) );
 	addCategoryButton->setFlat( true );
@@ -379,7 +379,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusLabel = new QLabel( ingredientGBox );
 	propertyStatusLed = new ClickableLed( ingredientGBox );
 	propertyStatusLed->setFixedSize( QSize(16,16) );
-	propertyStatusButton = new QPushButton( i18n("Details..."), ingredientGBox );
+	propertyStatusButton = new KPushButton( i18n("Details..."), ingredientGBox );
 	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientGBox );
 	propertyStatusLayout->addWidget( propertyLabel );
 	propertyStatusLayout->addWidget( propertyStatusLabel );
@@ -430,7 +430,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	KVBox *ratingsTab = new KVBox(recipeTab);
 	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
-	QPushButton *addRatingButton = new QPushButton(i18n("Add Rating..."),ratingsTab);
+	KPushButton *addRatingButton = new KPushButton(i18n("Add Rating..."),ratingsTab);
 
 	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
 

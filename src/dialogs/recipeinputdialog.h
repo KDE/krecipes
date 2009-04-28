@@ -47,6 +47,7 @@ class QTextBrowser;
 class KreTextEdit;
 class KWidgetListbox;
 class KDialog;
+class KPushButton;
 
 class ImageDropLabel;
 class Recipe;
@@ -102,7 +103,7 @@ private:
 	//Recipe Photo
 	ImageDropLabel *photoLabel;
 	QPixmap sourcePhoto;
-	QPushButton *changePhotoButton;
+	KPushButton *changePhotoButton;
 
 	//Recipe Body
 	KreTextEdit* instructionsEdit;
@@ -116,10 +117,10 @@ private:
 	QDateTimeEdit *prepTimeEdit;
 	QLabel* authorLabel;
 	KLineEdit* authorShow;
-	QPushButton* addAuthorButton;
+	KPushButton* addAuthorButton;
 	QLabel* categoryLabel;
 	KLineEdit* categoryShow;
-	QPushButton* addCategoryButton;
+	KPushButton* addCategoryButton;
 
 	//Ingredient inputs
 	K3ListView* ingredientList;
@@ -127,7 +128,7 @@ private:
 	IngredientInputWidget *ingInput;
 	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
-	QPushButton *propertyStatusButton;
+	KPushButton *propertyStatusButton;
 	//QTextEdit *statusTextView;
 	QTextBrowser *statusTextView;
 	KDialog *propertyStatusDialog;
