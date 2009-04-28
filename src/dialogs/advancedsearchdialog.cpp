@@ -683,7 +683,7 @@ void AdvancedSearchDialog::languageChange()
 	ratingAvgRadioButton->setText( i18n( "By average:" ) );
 	avgStarsLabel->setText( i18n( "stars" ) );
 	criterionRadioButton->setText( i18n( "By criteria:" ) );
-	addCriteriaButton->setText( i18n( "+" ) );
+	addCriteriaButton->setIcon( KIcon( "list-add" ) );
 	//removeCriteriaButton->setText( i18n( "-" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
