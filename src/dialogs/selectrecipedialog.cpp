@@ -106,11 +106,11 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	openButton = new QPushButton( buttonBar );
 	openButton->setText( i18n( "Open Recipe(s)" ) );
 	openButton->setDisabled( true );
-	openButton->setIcon( KIcon("ok") );
+	openButton->setIcon( KIcon( "dialog-ok" ) );
 	editButton = new QPushButton( buttonBar );
 	editButton->setText( i18n( "Edit Recipe" ) );
 	editButton->setDisabled( true );
-	editButton->setIcon( KIcon("edit") );
+	editButton->setIcon( KIcon( "document-edit" ) );
 	removeButton = new QPushButton( buttonBar );
 	removeButton->setText( i18n( "Delete" ) );
 	removeButton->setDisabled( true );
