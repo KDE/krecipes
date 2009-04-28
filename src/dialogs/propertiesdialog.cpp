@@ -52,11 +52,11 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
    vboxl->setSpacing( KDialog::spacingHint() );
 	addPropertyButton = new KPushButton( this );
 	addPropertyButton->setText( i18n( "Create ..." ) );
-	addPropertyButton->setFlat( true );
+	addPropertyButton->setIcon( KIcon( "list-add" ) );
 	vboxl->addWidget( addPropertyButton );
 	removePropertyButton = new KPushButton( this );
 	removePropertyButton->setText( i18n( "Delete" ) );
-	removePropertyButton->setFlat( true );
+	removePropertyButton->setIcon( KIcon( "list-remove" ) );
 	vboxl->addWidget( removePropertyButton );
 	vboxl->addStretch();
 	layout->addLayout( vboxl );
