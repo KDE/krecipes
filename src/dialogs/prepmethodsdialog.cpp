@@ -21,6 +21,7 @@
 #include <kmessagebox.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <KPushButton>
 
 PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -40,12 +41,12 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QVBoxLayout* vboxl = new QVBoxLayout(); 
    vboxl->setSpacing ( KDialog::spacingHint() );
 
-	newPrepMethodButton = new QPushButton( this );
+	newPrepMethodButton = new KPushButton( this );
 	newPrepMethodButton->setText( i18n( "Create ..." ) );
 	newPrepMethodButton->setFlat( true );
 	vboxl->addWidget( newPrepMethodButton );
 
-	removePrepMethodButton = new QPushButton( this );
+	removePrepMethodButton = new KPushButton( this );
 	removePrepMethodButton->setText( i18n( "Delete" ) );
 	removePrepMethodButton->setFlat( true );
 	vboxl->addWidget( removePrepMethodButton );

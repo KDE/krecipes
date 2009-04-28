@@ -14,7 +14,6 @@
 #define PREPMETHODSDIALOG_H
 
 #include <qwidget.h>
-#include <qpushbutton.h>
 
 #include <qlayout.h>
 #include <QGridLayout>
@@ -25,6 +24,7 @@
 
 class RecipeDB;
 class StdPrepMethodListView;
+class KPushButton;
 
 /**
 @author Unai Garro
@@ -47,7 +47,7 @@ private:
 	QGridLayout *layout;
 	StdPrepMethodListView *prepMethodListView;
 	KHBox *buttonBar;
-	QPushButton *newPrepMethodButton;
-	QPushButton *removePrepMethodButton;
+	KPushButton *newPrepMethodButton;
+	KPushButton *removePrepMethodButton;
 };
 #endif
