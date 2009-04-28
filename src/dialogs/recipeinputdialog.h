@@ -20,7 +20,6 @@
 #include <k3listview.h>
 #include <knuminput.h>
 #include <kpushbutton.h>
-#include <kiconloader.h>
 #include <kled.h>
 
 #include <qlabel.h>

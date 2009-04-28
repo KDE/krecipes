@@ -130,8 +130,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	loadedRecipe->instructions = QString::null;
 	database = db;
 
-	KIconLoader *il = KIconLoader::global();
-
 	// Tabs
 	tabWidget = new QTabWidget( this );
    setObjectName( "tabWidget" );
