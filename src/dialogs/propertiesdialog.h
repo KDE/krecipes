@@ -14,13 +14,13 @@
 #define PROPERTIESDIALOG_H
 
 #include <qlayout.h>
-#include <qpushbutton.h>
 
 //Added by qt3to4:
 #include <QGridLayout>
 #include <k3listview.h>
 #include <kvbox.h>
 
+class KPushButton;
 class RecipeDB;
 class StdPropertyListView;
 
@@ -41,8 +41,8 @@ private:
 
 	// Widgets
 	QGridLayout* layout;
-	QPushButton* addPropertyButton;
-	QPushButton* removePropertyButton;
+	KPushButton* addPropertyButton;
+	KPushButton* removePropertyButton;
 	StdPropertyListView* propertyListView;
 
 };
