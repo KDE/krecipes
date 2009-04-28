@@ -36,22 +36,20 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 
 	QVBoxLayout *buttonLayout = new QVBoxLayout();
 	KPushButton *addHeaderButton = new KPushButton( this );
-	addHeaderButton->setText( "+" );
+	addHeaderButton->setIcon( KIcon( "list-add" ) );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	addHeaderButton->setMaximumSize( QSize( 30, 30 ) );
 	addHeaderButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	addHeaderButton->setFlat( true );
 	buttonLayout->addWidget(addHeaderButton);
 
 	QSpacerItem* spacer_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed );
 	buttonLayout->addItem( spacer_buttons );
 
 	KPushButton *removeHeaderButton = new KPushButton( this );
-	removeHeaderButton->setText( "-" );
+	removeHeaderButton->setIcon( KIcon ( "list-remove" ) );
 	removeHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	removeHeaderButton->setMaximumSize( QSize( 30, 30 ) );
 	removeHeaderButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	removeHeaderButton->setFlat( true );
 	buttonLayout->addWidget(removeHeaderButton);
 
 	QSpacerItem* spacer_below_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
