@@ -16,7 +16,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <qtooltip.h>
 //Added by qt3to4:
