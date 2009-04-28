@@ -14,7 +14,6 @@
 #define UNITSDIALOG_H
 #include <qwidget.h>
 #include <k3listview.h>
-#include <qpushbutton.h>
 
 #include "datablocks/unitratiolist.h"
 #include "datablocks/unit.h"
@@ -23,6 +22,7 @@
 class RecipeDB;
 class ConversionTable;
 class StdUnitListView;
+class KPushButton;
 
 /**
 @author Unai Garro
@@ -46,8 +46,8 @@ private:
 	StdUnitListView *unitListView;
 	ConversionTable *massConversionTable;
 	ConversionTable *volumeConversionTable;
-	QPushButton *newUnitButton;
-	QPushButton *removeUnitButton;
+	KPushButton *newUnitButton;
+	KPushButton *removeUnitButton;
 
 	// Internal methods
 	void saveAllRatios( UnitRatioList &ratioList );
