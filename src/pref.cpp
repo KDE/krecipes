@@ -534,31 +534,38 @@ ImportPrefs::ImportPrefs( QWidget *parent )
    Form1Layout->setMargin( 11 );
    Form1Layout->setSpacing( 6 );
 
-	Q3GroupBox *importGroup = new Q3GroupBox(2,Qt::Vertical,i18n("Import"), this);
+	QGroupBox *importGroup = new QGroupBox;
+	QVBoxLayout *importGroupLayout = new QVBoxLayout;
+	importGroup->setLayout( importGroupLayout );
+	importGroup->setTitle( i18n( "Import" ) );
 
 	overwriteCheckbox = new QCheckBox( i18n( "Overwrite recipes with same title" ), importGroup );
 	overwriteCheckbox->setChecked( overwrite );
 	overwriteCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	importGroupLayout->addWidget( overwriteCheckbox );
 
 	directImportCheckbox = new QCheckBox( i18n( "Ask which recipes to import" ), importGroup );
 	directImportCheckbox->setChecked( !direct );
 	directImportCheckbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	importGroupLayout->addWidget( directImportCheckbox );
 
 	Form1Layout->addWidget(importGroup);
 
-	Q3GroupBox *exportGroup = new Q3GroupBox(1,Qt::Vertical,i18n("Export"), this);
+	QGroupBox *exportGroup = new QGroupBox;
+	QGridLayout *exportGroupLayout = new QGridLayout;
+	exportGroup->setLayout( exportGroupLayout );
+	exportGroup->setTitle( i18n( "Export" ) );
 
-	KHBox *clipboardHBox = new KHBox(exportGroup);
-	clipboardHBox->setSpacing(6);
-	/*QLabel *clipboardLabel = */new QLabel(i18n("'Copy to Clipboard' format:"),clipboardHBox);
-	clipBoardFormatComboBox = new QComboBox( clipboardHBox );
+	QLabel *clipboardLabel = new QLabel(i18n("'Copy to Clipboard' format:") );
+	exportGroupLayout->addWidget( clipboardLabel, 0, 0 );
+	clipBoardFormatComboBox = new QComboBox;
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), QString("%3 (*.txt)").arg(i18n("Plain Text")));
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Krecipes (*.kreml)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Meal-Master (*.mmf)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Rezkonv (*.rk)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "RecipeML (*.xml)");
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
-	clipboardHBox->setStretchFactor(clipBoardFormatComboBox,1);
+	exportGroupLayout->addWidget( clipBoardFormatComboBox, 0, 1 ); 
 
 	config = KGlobal::config()->group( "Export" );
 	QString clipboardFormat = config.readEntry("ClipboardFormat");
