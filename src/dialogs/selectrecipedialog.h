@@ -34,7 +34,7 @@
 #include "widgets/dblistviewbase.h"
 
 class KHBox;
-class Q3GroupBox;
+class QGroupBox;
 class KPushButton;
 
 class RecipeDB;
@@ -65,7 +65,7 @@ private:
 	// Widgets
 	QGridLayout *layout;
 	QTabWidget *tabWidget;
-	Q3GroupBox *basicSearchTab;
+	QGroupBox *basicSearchTab;
 	KHBox *searchBar;
 	RecipeListView* recipeListView;
 	KHBox *buttonBar;

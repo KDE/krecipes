@@ -55,13 +55,14 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	basicSearchTab = new Q3GroupBox( this );
-	basicSearchTab->setFrameStyle( QFrame::NoFrame );
-	basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	basicSearchTab = new QGroupBox( this );
+	//basicSearchTab->setFrameStyle( QFrame::NoFrame );
+	//basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	//Design dialog
 
-	layout = new QGridLayout( basicSearchTab );
+	layout = new QGridLayout;
+	basicSearchTab->setLayout( layout );
    layout->cellRect( 1, 1 );
    layout->setMargin( 0 );
    layout->setSpacing( 0 );
