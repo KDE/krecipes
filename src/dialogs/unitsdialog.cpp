@@ -56,12 +56,12 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 
 	newUnitButton = new KPushButton( unitTab );
 	newUnitButton->setText( i18n( "Create ..." ) );
-	newUnitButton->setFlat( true );
+	newUnitButton->setIcon( KIcon ( "list-add" ) );
 	vboxl->addWidget( newUnitButton );
 
 	removeUnitButton = new KPushButton( unitTab );
 	removeUnitButton->setText( i18n( "Delete" ) );
-	removeUnitButton->setFlat( true );
+	removeUnitButton->setIcon( KIcon ( "list-remove" ) );
 	vboxl->addWidget( removeUnitButton );
 	vboxl->addStretch();
 	layout->addLayout( vboxl );
