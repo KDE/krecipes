@@ -23,7 +23,6 @@
 #include <qtooltip.h>
 #include <qdatetimeedit.h>
 #include <q3dragobject.h>
-#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <q3widgetstack.h>
 #include <qpainter.h>
