@@ -43,12 +43,12 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
    vboxl->setSpacing( KDialog::spacingHint() );
 	newCategoryButton = new KPushButton( this );
 	newCategoryButton->setText( i18n( "Create ..." ) );
-	newCategoryButton->setFlat( true );
+	newCategoryButton->setIcon( KIcon( "list-add" ) );
 	vboxl->addWidget( newCategoryButton );
 
 	removeCategoryButton = new KPushButton( this );
 	removeCategoryButton->setText( i18n( "Delete" ) );
-	removeCategoryButton->setFlat( true );
+	removeCategoryButton->setIcon( KIcon( "list-remove" ) );
 	vboxl->addWidget( removeCategoryButton );
 	vboxl->addStretch();
 
