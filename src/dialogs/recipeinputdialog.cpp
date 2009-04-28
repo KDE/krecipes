@@ -138,7 +138,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	//------- Recipe Tab -----------------
 	// Recipe Photo
 
-	recipeTab = new Q3GroupBox( tabWidget );
+	recipeTab = new QFrame( this );
 	recipeTab->setFrameStyle( QFrame::NoFrame );
 	recipeTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
@@ -148,6 +148,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
    recipeLayout->cellRect( 1, 1 );
    recipeLayout->setMargin( 0 );
    recipeLayout->setSpacing( 0 );
+	recipeTab->setLayout( recipeLayout );
 
 	// Border
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -275,10 +276,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	//------- Ingredients Tab -----------------
 
-	ingredientGBox = new Q3GroupBox( recipeTab );
-	ingredientGBox->setFrameStyle( QFrame::NoFrame );
-	ingredientGBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-	QGridLayout* ingredientsLayout = new QGridLayout( ingredientGBox );
+	ingredientsTab = new QFrame( this );
+	ingredientsTab->setFrameStyle( QFrame::NoFrame );
+	ingredientsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	QGridLayout* ingredientsLayout = new QGridLayout( ingredientsTab );
 
 	// Border
 	QSpacerItem* spacerBoxLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -287,7 +288,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientsLayout->addItem( spacerBoxTop, 0, 1 );
 
 	//Input Widgets
-	ingInput = new IngredientInputWidget( database, ingredientGBox );
+	ingInput = new IngredientInputWidget( database, ingredientsTab );
 	ingredientsLayout->addWidget( ingInput, 1, 1, 1, 5, 0 );
 
 	// Spacers to list and buttons
@@ -298,7 +299,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Add, Up,down,... buttons
 
-	addButton = new KPushButton( ingredientGBox );
+	addButton = new KPushButton( ingredientsTab );
 	addButton->setFixedSize( QSize( 31, 31 ) );
 	addButton->setIcon(KIcon( "add_ingredient" ) );
 	addButton->setIconSize( QSize( 16, 16 ) );
@@ -309,28 +310,28 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	ingredientsLayout->addItem( spacerToOtherButtons, 4, 5 );
 
-	upButton = new KPushButton( ingredientGBox );
+	upButton = new KPushButton( ingredientsTab );
 	upButton->setFixedSize( QSize( 31, 31 ) );
 	upButton->setIcon( KIcon( "go-up" ) );
 	upButton->setIconSize( QSize( 16, 16 ) );
 	upButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( upButton, 5, 5 );
 
-	downButton = new KPushButton( ingredientGBox );
+	downButton = new KPushButton( ingredientsTab );
 	downButton->setFixedSize( QSize( 31, 31 ) );
 	downButton->setIcon( KIcon( "go-down" ) );
 	downButton->setIconSize(  QSize( 16, 16 ) );
 	downButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( downButton, 6, 5 );
 
-	removeButton = new KPushButton( ingredientGBox );
+	removeButton = new KPushButton( ingredientsTab );
 	removeButton->setFixedSize( QSize( 31, 31 ) );
 	removeButton->setIcon( KIcon( "list-remove" ) );
 	removeButton->setIconSize( QSize( 16, 16 )  );
 	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( removeButton, 7, 5 );
 
-	ingParserButton = new KPushButton( ingredientGBox );
+	ingParserButton = new KPushButton( ingredientsTab );
 	ingParserButton->setFixedSize( QSize( 31, 31 ) );
 	ingParserButton->setIcon( KIcon( "edit-paste" ) );
 	ingParserButton->setIconSize( QSize( 16, 16 ) );
@@ -344,7 +345,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 		ingParserButton->setToolTip( i18n( "Paste Ingredients" ) );
 
 	// Ingredient List
-	ingredientList = new K3ListView( ingredientGBox);
+	ingredientList = new K3ListView( ingredientsTab );
 	ingredientList->addColumn( i18n( "Ingredient" ) );
 	ingredientList->addColumn( i18n( "Amount" ) );
 	ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
@@ -360,16 +361,16 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
 	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 3, 0 );
 
-	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientGBox );
+	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientsTab );
    propertyStatusLayout->setMargin( 0 );
    propertyStatusLayout->setSpacing( 5 );
 
-	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientGBox );
-	propertyStatusLabel = new QLabel( ingredientGBox );
-	propertyStatusLed = new ClickableLed( ingredientGBox );
+	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientsTab );
+	propertyStatusLabel = new QLabel( ingredientsTab );
+	propertyStatusLed = new ClickableLed( ingredientsTab );
 	propertyStatusLed->setFixedSize( QSize(16,16) );
-	propertyStatusButton = new KPushButton( i18n("Details..."), ingredientGBox );
-	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientGBox );
+	propertyStatusButton = new KPushButton( i18n("Details..."), ingredientsTab );
+	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientsTab );
 	propertyStatusLayout->addWidget( propertyLabel );
 	propertyStatusLayout->addWidget( propertyStatusLabel );
 	propertyStatusLayout->addWidget( propertyStatusLed );
@@ -401,11 +402,12 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// ------- Recipe Instructions Tab -----------
 
-	instructionsTab = new Q3GroupBox( recipeTab );
+	instructionsTab = new QFrame( this );
 	instructionsTab->setFrameStyle( QFrame::NoFrame );
 	instructionsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	QVBoxLayout *instructionsLayout = new QVBoxLayout( instructionsTab );
+	instructionsTab->setLayout( instructionsLayout );
 
 	instructionsEdit = new KreTextEdit( instructionsTab );
 	instructionsEdit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
@@ -417,7 +419,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// ------- Recipe Ratings Tab -----------
 
-	KVBox *ratingsTab = new KVBox(recipeTab);
+	KVBox *ratingsTab = new KVBox( this );
 	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
 	KPushButton *addRatingButton = new KPushButton(i18n("Add Rating..."),ratingsTab);
 
@@ -427,7 +429,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	tabWidget->insertTab( -1, recipeTab, i18n( "Recipe" ) );
-	tabWidget->insertTab( -1, ingredientGBox, i18n( "Ingredients" ) );
+	tabWidget->insertTab( -1, ingredientsTab, i18n( "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18n( "Instructions" ) );
 	tabWidget->insertTab( -1, ratingsTab, i18n( "Ratings" ) );
 

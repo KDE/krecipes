@@ -96,8 +96,8 @@ private:
 
 	// Widgets
 	QTabWidget* tabWidget;
-	Q3GroupBox* recipeTab;
-	Q3GroupBox* instructionsTab;
+	QFrame* recipeTab;
+	QFrame* instructionsTab;
 
 	//Recipe Photo
 	ImageDropLabel *photoLabel;
@@ -123,7 +123,7 @@ private:
 
 	//Ingredient inputs
 	K3ListView* ingredientList;
-	Q3GroupBox *ingredientGBox;
+	QFrame *ingredientsTab;
 	IngredientInputWidget *ingInput;
 	ClickableLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
