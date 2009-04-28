@@ -180,8 +180,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
 	KPushButton *clearPhotoButton = new KPushButton( photoButtonsBox );
-	clearPhotoButton->setIcon( QIcon( il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ) ) );
-	clearPhotoButton->setIconSize(  il->loadIcon( "edit-clear", KIconLoader::NoGroup, 16 ).size() );
+	clearPhotoButton->setIcon( KIcon( "edit-clear" ) );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
 
 	recipeLayout->addWidget( photoButtonsBox, 3, 2, 5, 1, 0 );
@@ -223,9 +222,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	addAuthorButton = new KPushButton( authorInput );
-	addAuthorButton->setText( "+" );
+	addAuthorButton->setIcon( KIcon( "list-add" ) );
 	addAuthorButton->setFixedSize( QSize( 20, 20 ) );
-	addAuthorButton->setFlat( true );
 
 
 	QSpacerItem* author_category = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -244,9 +242,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	recipeLayout->addWidget( categoryBox, 4, 4 );
 
 	addCategoryButton = new KPushButton( categoryInput );
-	addCategoryButton->setText( "+" );
+	addCategoryButton->setIcon( KIcon( "list-add" ) );
 	addCategoryButton->setFixedSize( QSize( 20, 20 ) );
-	addCategoryButton->setFlat( true );
 
 	//Category ->Servings spacer
 	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -306,7 +303,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	addButton = new KPushButton( ingredientGBox );
 	addButton->setFixedSize( QSize( 31, 31 ) );
-	addButton->setFlat( true );
 	addButton->setIcon(KIcon( "add_ingredient" ) );
 	addButton->setIconSize( QSize( 16, 16 ) );
 	addButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
@@ -318,7 +314,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	upButton = new KPushButton( ingredientGBox );
 	upButton->setFixedSize( QSize( 31, 31 ) );
-	upButton->setFlat( true );
 	upButton->setIcon( KIcon( "go-up" ) );
 	upButton->setIconSize( QSize( 16, 16 ) );
 	upButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
@@ -326,7 +321,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	downButton = new KPushButton( ingredientGBox );
 	downButton->setFixedSize( QSize( 31, 31 ) );
-	downButton->setFlat( true );
 	downButton->setIcon( KIcon( "go-down" ) );
 	downButton->setIconSize(  QSize( 16, 16 ) );
 	downButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
@@ -334,7 +328,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	removeButton = new KPushButton( ingredientGBox );
 	removeButton->setFixedSize( QSize( 31, 31 ) );
-	removeButton->setFlat( true );
 	removeButton->setIcon( KIcon( "list-remove" ) );
 	removeButton->setIconSize( QSize( 16, 16 )  );
 	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
@@ -342,7 +335,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	ingParserButton = new KPushButton( ingredientGBox );
 	ingParserButton->setFixedSize( QSize( 31, 31 ) );
-	ingParserButton->setFlat( true );
 	ingParserButton->setIcon( KIcon( "edit-paste" ) );
 	ingParserButton->setIconSize( QSize( 16, 16 ) );
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
