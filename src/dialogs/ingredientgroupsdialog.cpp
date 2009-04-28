@@ -10,7 +10,7 @@
 
 #include "ingredientgroupsdialog.h"
 
-#include <qpushbutton.h>
+#include <KPushButton>
 #include <qlayout.h>
 
 #include <QVBoxLayout>
@@ -35,7 +35,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	layout->addWidget(headerListView);
 
 	QVBoxLayout *buttonLayout = new QVBoxLayout();
-	QPushButton *addHeaderButton = new QPushButton( this );
+	KPushButton *addHeaderButton = new KPushButton( this );
 	addHeaderButton->setText( "+" );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	addHeaderButton->setMaximumSize( QSize( 30, 30 ) );
@@ -46,7 +46,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	QSpacerItem* spacer_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed );
 	buttonLayout->addItem( spacer_buttons );
 
-	QPushButton *removeHeaderButton = new QPushButton( this );
+	KPushButton *removeHeaderButton = new KPushButton( this );
 	removeHeaderButton->setText( "-" );
 	removeHeaderButton->setMinimumSize( QSize( 30, 30 ) );
 	removeHeaderButton->setMaximumSize( QSize( 30, 30 ) );
