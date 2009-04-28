@@ -68,25 +68,24 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 
 	addIngredientButton = new KPushButton( ingredientTab );
-	addIngredientButton->setText( "+" );
+	addIngredientButton->setIcon( KIcon( "list-add") );
 	layout->addWidget( addIngredientButton, 1, 3 );
 	addIngredientButton->setMinimumSize( QSize( 30, 30 ) );
 	addIngredientButton->setMaximumSize( QSize( 30, 30 ) );
 	addIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	addIngredientButton->setFlat( true );
 
 	removeIngredientButton = new KPushButton( ingredientTab );
-	removeIngredientButton->setText( "-" );
+	removeIngredientButton->setIcon( KIcon( "list-remove" ) );
 	layout->addWidget( removeIngredientButton, 3, 3 );
 	removeIngredientButton->setMinimumSize( QSize( 30, 30 ) );
 	removeIngredientButton->setMaximumSize( QSize( 30, 30 ) );
 	removeIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	removeIngredientButton->setFlat( true );
 
 	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_Ing_Buttons, 2, 3 );
 
 	QPushButton *propertyButton = new KPushButton( i18n("Property Information"), ingredientTab );
+	propertyButton->setIcon( KIcon( "document-properties") );
 	layout->addWidget( propertyButton, 6, 1 );
 
 	tabWidget->insertTab( -1, ingredientTab, i18n( "Ingredients" ) );
