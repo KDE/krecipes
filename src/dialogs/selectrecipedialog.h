@@ -15,7 +15,6 @@
 
 
 #include <qwidget.h>
-#include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qcursor.h>
@@ -36,6 +35,7 @@
 
 class KHBox;
 class Q3GroupBox;
+class KPushButton;
 
 class RecipeDB;
 class Recipe;
@@ -69,9 +69,9 @@ private:
 	KHBox *searchBar;
 	RecipeListView* recipeListView;
 	KHBox *buttonBar;
-	QPushButton *openButton;
-	QPushButton *removeButton;
-	QPushButton *editButton;
+	KPushButton *openButton;
+	KPushButton *removeButton;
+	KPushButton *editButton;
 	QLabel *searchLabel;
 	KLineEdit *searchBox;
 	CategoryComboBox *categoryBox;

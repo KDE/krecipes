@@ -32,6 +32,7 @@
 #include <kcursor.h>
 #include <kiconloader.h>
 #include <kvbox.h>
+#include <KPushButton>
 
 #include "advancedsearchdialog.h"
 #include "datablocks/categorytree.h"
@@ -103,15 +104,15 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	buttonBar = new KHBox( basicSearchTab );
 	layout->addWidget( buttonBar, 4, 1, 1, 3, 0 );
 
-	openButton = new QPushButton( buttonBar );
+	openButton = new KPushButton( buttonBar );
 	openButton->setText( i18n( "Open Recipe(s)" ) );
 	openButton->setDisabled( true );
 	openButton->setIcon( KIcon( "dialog-ok" ) );
-	editButton = new QPushButton( buttonBar );
+	editButton = new KPushButton( buttonBar );
 	editButton->setText( i18n( "Edit Recipe" ) );
 	editButton->setDisabled( true );
 	editButton->setIcon( KIcon( "document-edit" ) );
-	removeButton = new QPushButton( buttonBar );
+	removeButton = new KPushButton( buttonBar );
 	removeButton->setText( i18n( "Delete" ) );
 	removeButton->setDisabled( true );
 	removeButton->setMaximumWidth( 100 );
