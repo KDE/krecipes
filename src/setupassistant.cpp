@@ -854,30 +854,24 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
    psqlCheckBox->setObjectName( "psqlCheckBox" );
 	vbox->addWidget( psqlCheckBox );
 	
-	// By default, SQLite
-	liteCheckBox->click();
-	
 	bg->setLayout(vbox);
-
-#ifndef HAVE_MYSQL
-	mysqlCheckBox->setEnabled( false );
-#endif
 
 #ifndef HAVE_POSTGRESQL
 	psqlCheckBox->setEnabled( false );
+#else
+	psqlCheckBox->click();
+#endif
+
+#ifndef HAVE_MYSQL
+	mysqlCheckBox->setEnabled( false );
+#else
+	mysqlCheckBox->click();
 #endif
 
 #if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
 	liteCheckBox->setEnabled( false );
-#ifdef HAVE_MYSQL
-
-	liteCheckBox->setChecked( true ); // Otherwise by default liteCheckBox is checked even if it's disabled
 #else
-	#ifdef HAVE_POSTGRESQL
-
-	psqlCheckBox->setChecked( true ); 
-#endif
-	#endif
+	liteCheckBox->click();
 #endif
 
 
