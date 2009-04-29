@@ -14,13 +14,14 @@
 #define SELECTAUTHORSDIALOG_H
 
 #include <qlayout.h>
-#include <qpushbutton.h>
 
 #include <kdialog.h>
 #include <k3listview.h>
 #include <kcombobox.h>
 
 #include "datablocks/elementlist.h"
+
+class KPushButton;
 
 class RecipeDB;
 
@@ -43,10 +44,8 @@ private:
 	//Widgets
 	KComboBox *authorsCombo;
 	K3ListView *authorListView;
-	QPushButton *okButton;
-	QPushButton *cancelButton;
-	QPushButton *addAuthorButton;
-	QPushButton *removeAuthorButton;
+	KPushButton *addAuthorButton;
+	KPushButton *removeAuthorButton;
 
 	//Variables
 	ElementList authorList;

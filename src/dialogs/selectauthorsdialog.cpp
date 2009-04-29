@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <QLineEdit>
+#include <KPushButton>
 
 #include "backends/recipedb.h"
 
@@ -53,10 +54,10 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	// Add/Remove buttons
 
-	addAuthorButton = new QPushButton( topBox );
+	addAuthorButton = new KPushButton( topBox );
 	addAuthorButton->setIcon( KIcon( "go-down" ) );
 
-	removeAuthorButton = new QPushButton( topBox );
+	removeAuthorButton = new KPushButton( topBox );
 	removeAuthorButton->setIcon( KIcon( "go-up" ) );
 
 	// Author List
