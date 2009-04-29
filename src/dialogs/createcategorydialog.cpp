@@ -13,7 +13,7 @@
 #include "createcategorydialog.h"
 
 #include <qpushbutton.h>
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <kvbox.h>
