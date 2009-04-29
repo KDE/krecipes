@@ -214,14 +214,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	authorShow = new KLineEdit( authorInput );
 	authorShow->setReadOnly( true );
-	authorShow->setMinimumSize( QSize( 100, 20 ) );
-	authorShow->setMaximumSize( QSize( 10000, 20 ) );
 	authorShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 
 	addAuthorButton = new KPushButton( authorInput );
 	addAuthorButton->setIcon( KIcon( "list-add" ) );
-	addAuthorButton->setFixedSize( QSize( 20, 20 ) );
 
 
 	QSpacerItem* author_category = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -234,14 +231,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	categoryShow = new KLineEdit( categoryInput );
 	categoryShow->setReadOnly( true );
-	categoryShow->setMinimumSize( QSize( 100, 20 ) );
-	categoryShow->setMaximumSize( QSize( 10000, 20 ) );
 	categoryShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 	recipeLayout->addWidget( categoryBox, 4, 4 );
 
 	addCategoryButton = new KPushButton( categoryInput );
 	addCategoryButton->setIcon( KIcon( "list-add" ) );
-	addCategoryButton->setFixedSize( QSize( 20, 20 ) );
 
 	//Category ->Servings spacer
 	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
