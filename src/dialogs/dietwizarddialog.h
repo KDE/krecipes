@@ -17,7 +17,6 @@
 
 #include <qcheckbox.h>
 
-#include <q3hgroupbox.h>
 #include <qlabel.h>
 #include <q3ptrlist.h>
 #include <qslider.h>
@@ -46,6 +45,7 @@
 class KDoubleNumInput;
 class QFrame;
 class KPushButton;
+class QGroupBox;
 
 class DishInput;
 class DishTitle;
@@ -188,7 +188,7 @@ private:
 	// Variables
 	bool categoryFiltering;
 	// Widgets
-	Q3HGroupBox *listBox;
+	QGroupBox *listBox;
 	DishTitle *dishTitle;
 	KVBox *categoriesBox;
 	QCheckBox *categoriesEnabledBox;

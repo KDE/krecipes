@@ -37,6 +37,7 @@
 #include <krandom.h>
 #include <kvbox.h>
 #include <KPushButton>
+#include <QGroupBox>
 
 #include "propertycalculator.h"
 #include "widgets/propertylistview.h"
@@ -472,14 +473,18 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	layout->setSpacing( 10 );
 
 	//Horizontal Box to hold the K3ListView's
-	listBox = new Q3HGroupBox( i18n( "Dish Characteristics" ), this );
+	listBox = new QGroupBox;
+	QHBoxLayout *listBoxLayout = new QHBoxLayout;
+	listBox->setTitle( i18n( "Dish Characteristics" ) );
+	listBox->setLayout( listBoxLayout );
 	layout->addWidget( listBox );
 
 	// Dish id
 	dishTitle = new DishTitle( listBox, title );
+	listBoxLayout->addWidget( dishTitle );
 
 	//Categories list
-	categoriesBox = new KVBox( listBox );
+	categoriesBox = new KVBox;
 	categoriesEnabledBox = new QCheckBox( categoriesBox );
 	categoriesEnabledBox->setText( i18n( "Enable Category Filtering" ) );
 
@@ -487,10 +492,13 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	categoriesView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	categoriesView->setEnabled( false ); // Disable it by default
 
+	listBoxLayout->addWidget( categoriesBox );
+
 	//Constraints list
 	constraintsView = new PropertyConstraintListView( listBox, database );
 	constraintsView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	constraintsView->reload();
+	listBoxLayout->addWidget( constraintsView );
 
 	// KDoubleInput based edit boxes
 	constraintsEditBox1 = new KDoubleNumInput( constraintsView->viewport() );
