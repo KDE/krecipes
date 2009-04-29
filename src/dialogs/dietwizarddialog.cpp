@@ -334,20 +334,26 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 
 	// Toolbar
 
-	toolBar = new Q3HGroupBox( mealOptions );
+	toolBar = new QFrame( mealOptions );
 	toolBar->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
-	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
+	QHBoxLayout *toolBarLayout = new QHBoxLayout;
+	toolBar->setLayout( toolBarLayout );
 
 	// Next dish/ Previous dish buttons
-	buttonPrev = new QToolButton( toolBar );
+	buttonPrev = new QToolButton;
+	toolBarLayout->addWidget( buttonPrev );
 	buttonPrev->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	buttonPrev->setText( i18n( "Previous Dish" ) );
 	buttonPrev->setIcon( KIcon( "go-previous" ) );
-	buttonNext = new QToolButton( toolBar );
+	buttonNext = new QToolButton;
+	toolBarLayout->addWidget( buttonNext );
 	buttonNext->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 	buttonNext->setText( i18n( "Next Dish" ) );
 	buttonNext->setIcon( KIcon( "go-next" ) );
 
+	buttonPrev->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
+	buttonNext->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
+	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
 
 	// Dish widgets
 	dishStack = new  QStackedWidget( this );

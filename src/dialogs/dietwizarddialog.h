@@ -45,6 +45,7 @@
 #include "widgets/dblistviewbase.h"
 
 class KDoubleNumInput;
+class QFrame;
 
 class DishInput;
 class DishTitle;
@@ -151,7 +152,7 @@ private:
 	QSpinBox *dishNumberInput;
 
 	// Move <-> buttons
-	Q3HGroupBox *toolBar;
+	QFrame *toolBar;
 	QToolButton *buttonNext;
 	QToolButton *buttonPrev;
 
