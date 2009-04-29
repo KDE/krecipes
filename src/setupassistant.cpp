@@ -216,7 +216,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 	// MySQL root/admin info
 	QGroupBox *rootInfoGBox = new QGroupBox( this );
-	QGridLayout *rootInfoLayout = new QGridLayout();
+	QGridLayout *rootInfoLayout = new QGridLayout;
 	rootInfoGBox->setTitle( i18n( "MySQL Administrator Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	// User Entry
@@ -331,7 +331,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// PostgreSQL root/admin info
 	QGroupBox *rootInfoGBox = new QGroupBox( this );
-	QGridLayout *rootInfoLayout = new QGridLayout();
+	QGridLayout *rootInfoLayout = new QGridLayout;
 	rootInfoGBox->setTitle( i18n( "PostgreSQL Superuser or Privileged Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	// User Entry
@@ -431,7 +431,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	// Input Boxes
 
 	QGroupBox *inputGBox = new QGroupBox( this );
-	QGridLayout *inputLayout = new QGridLayout();
+	QGridLayout *inputLayout = new QGridLayout;
 	inputGBox->setLayout( inputLayout );
 	layout->addWidget( inputGBox, 3, 3 );
 
@@ -489,7 +489,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Server & Client Box
 	QGroupBox *serverSettingsGBox = new QGroupBox( this );
-	QGridLayout *serverSettingsLayout = new QGridLayout();
+	QGridLayout *serverSettingsLayout = new QGridLayout;
 	serverSettingsGBox->setLayout( serverSettingsLayout );
 	serverSettingsGBox->setTitle( i18n( "Server / Client Settings" ) );
 	serverSettingsGBox->setEnabled( false ); // Disable by default
@@ -841,7 +841,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Database type choice
 	bg = new QGroupBox( this );
-	QVBoxLayout * vbox = new QVBoxLayout();
+	QVBoxLayout * vbox = new QVBoxLayout;
 	layout->addWidget( bg, 3, 3 );
 
 	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg );
