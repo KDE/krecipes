@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <krandom.h>
 #include <kvbox.h>
+#include <KPushButton>
 
 #include "propertycalculator.h"
 #include "widgets/propertylistview.h"
@@ -90,11 +91,11 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	KHBox *bottom_layout = new KHBox( this );
 	//bottom_layout->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
-	okButton = new QPushButton( bottom_layout );
+	okButton = new KPushButton( bottom_layout );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
 	okButton->setText( i18n( "Create the diet" ) );
 
-	QPushButton *clearButton = new QPushButton( bottom_layout );
+	KPushButton *clearButton = new KPushButton( bottom_layout );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 	clearButton->setText( i18n( "Clear" ) );
 

@@ -20,7 +20,6 @@
 #include <q3hgroupbox.h>
 #include <qlabel.h>
 #include <q3ptrlist.h>
-#include <qpushbutton.h>
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qtabwidget.h>
@@ -46,6 +45,7 @@
 
 class KDoubleNumInput;
 class QFrame;
+class KPushButton;
 
 class DishInput;
 class DishTitle;
@@ -89,7 +89,7 @@ private:
 	QSlider *dayNumberSelector;
 	QTabWidget *mealTabs;
 	MealInput *mealTab; // points to the current tab
-	QPushButton *okButton;
+	KPushButton *okButton;
 
 	//Methods
 	bool checkCategories( Recipe &rec, int meal, int dish );
