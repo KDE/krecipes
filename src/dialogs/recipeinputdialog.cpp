@@ -251,15 +251,20 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	serv_prep_box->setSpacing( 5 );
 
 	// Backup options
-	Q3GroupBox *yieldGBox = new Q3GroupBox( serv_prep_box, "yieldGBox" );
+	QGroupBox *yieldGBox = new QGroupBox( serv_prep_box );
 	yieldGBox->setTitle( i18n( "Yield" ) );
-	yieldGBox->setColumns( 2 );
+	QGridLayout *yieldGBoxLayout = new QGridLayout;
+	yieldGBox->setLayout( yieldGBoxLayout );
 
-	yieldLabel = new QLabel( i18n( "Amount" ), yieldGBox );
-	/*QLabel *yieldTypeLabel = */new QLabel( i18n( "Type" ), yieldGBox );
-	yieldNumInput = new FractionInput( yieldGBox );
+	yieldLabel = new QLabel( i18n( "Amount" ) );
+	yieldGBoxLayout->addWidget( yieldLabel, 0, 0 );
+	QLabel *yieldTypeLabel = new QLabel( i18n( "Type" ) );
+	yieldGBoxLayout->addWidget( yieldTypeLabel, 0, 1 );
+	yieldNumInput = new FractionInput;
+	yieldGBoxLayout->addWidget( yieldNumInput, 1, 0 );
 	yieldNumInput->setAllowRange(true);
-	yieldTypeEdit = new KLineEdit( yieldGBox );
+	yieldTypeEdit = new KLineEdit;
+	yieldGBoxLayout->addWidget( yieldTypeEdit, 1, 1 );
 
 	KVBox *prepTimeBox = new KVBox( serv_prep_box );
 	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
