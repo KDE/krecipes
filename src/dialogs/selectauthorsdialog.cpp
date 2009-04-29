@@ -22,7 +22,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <QLineEdit>
 #include <KPushButton>
 
