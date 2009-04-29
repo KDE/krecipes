@@ -19,6 +19,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <KPushButton>
 
 #include "datablocks/categorytree.h"
 #include "backends/recipedb.h"
@@ -41,7 +42,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 	categoryListView->reload();
 
 	//New category button
-	QPushButton *newCatButton = new QPushButton( page );
+	KPushButton *newCatButton = new KPushButton( page );
 	newCatButton->setText( i18n( "&New Category..." ) );
 	newCatButton->setFlat( true );
 

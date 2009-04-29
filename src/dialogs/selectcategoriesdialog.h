@@ -14,7 +14,6 @@
 #define SELECTCATEGORIESDIALOG_H
 
 #include <qlayout.h>
-#include <qpushbutton.h>
 
 #include <k3listview.h>
 #include <kdialog.h>
