@@ -70,7 +70,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    AdvancedSearchDialogLayout ->setMargin( 5 );
    AdvancedSearchDialogLayout ->setSpacing( 3 );
 	
-	layout7 = new QVBoxLayout(); 
+	layout7 = new QVBoxLayout; 
    layout7->setObjectName( "layout7" );
    layout7->setMargin( 0 );
    layout7->setSpacing( 3 );
@@ -299,7 +299,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    enableServingsCheckBox->setObjectName( "enableServingsCheckBox" );
 	servingsFrameLayout->addWidget( enableServingsCheckBox );
 	
-	layout5 = new QHBoxLayout(); 
+	layout5 = new QHBoxLayout; 
    layout5->setObjectName( "layout5" );
    layout5->setMargin( 0 );
    layout5->setSpacing( 3 );
@@ -341,7 +341,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    enablePrepTimeCheckBox->setObjectName( "enablePrepTimeCheckBox" );
 	prepTimeFrameLayout->addWidget( enablePrepTimeCheckBox );
 	
-	layout6 = new QHBoxLayout(); 
+	layout6 = new QHBoxLayout; 
    layout6 ->setObjectName( "layout6" );
    layout6 ->setMargin( 0 );
    layout6 ->setSpacing( 3 );
@@ -449,7 +449,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( ratingsButton );
 
-	ratingButtonGroup = new QGroupBox();
+	ratingButtonGroup = new QGroupBox( parametersFrame );
 	ratingButtonGroupLayout = new QVBoxLayout( parametersFrame );
 	ratingButtonGroupLayout->setAlignment( Qt::AlignTop );
 	ratingButtonGroup->setLayout( ratingButtonGroupLayout );
@@ -489,7 +489,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    criterionFrameLayout ->setMargin( 2 );
    criterionFrameLayout ->setSpacing( 2 );
 	
-	layout12 = new QHBoxLayout(); 
+	layout12 = new QHBoxLayout; 
    layout12->setObjectName( "layout12" );
    layout12->setMargin( 0 );
    layout12->setSpacing( 3 );
@@ -534,7 +534,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	scrollArea1->setWidget( parametersFrame );
 	layout7->addWidget( scrollArea1 );
 	
-	layout9 = new QHBoxLayout(); 
+	layout9 = new QHBoxLayout; 
    layout9->setObjectName( "layout9" );
    layout9->setMargin( 0 );
    layout9->setSpacing( 3 );
