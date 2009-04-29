@@ -405,7 +405,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		authorsPanel->reload( Load );
 		break;
 	case RecipeEdit:
-		rightPanel->setHeader( i18n( "Edit Recipe" ), "edit" );
+		rightPanel->setHeader( i18n( "Edit Recipe" ), "document-edit" );
 		rightPanel->raise( inputPanel );
 		break;
 	case RecipeView:
