@@ -23,7 +23,6 @@
 #include <kled.h>
 
 #include <qlabel.h>
-#include <q3groupbox.h>
 #include <qmap.h>
 #include <qobject.h>
 #include <qtabwidget.h>
@@ -140,7 +139,7 @@ private:
 	KPushButton* ingParserButton;
 
 	//Function buttons
-	Q3GroupBox* functionsBox;
+	QFrame* functionsBox;
 	QToolButton* saveButton;
 	QToolButton* closeButton;
 	QToolButton* showButton;

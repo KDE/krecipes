@@ -435,19 +435,20 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	// Functions Box
-	KHBox* functionsLayout = new KHBox( this );
+	QHBoxLayout* functionsLayout = new QHBoxLayout;
 
-	functionsBox = new Q3GroupBox( 1, Qt::Vertical, functionsLayout );
-	functionsBox->setFrameStyle( QFrame::NoFrame );
+	functionsBox = new QFrame( this );
+	//functionsBox->setFrameStyle( QFrame::NoFrame );
+	functionsBox->setLayout( functionsLayout );
 
-	saveButton = new QToolButton( functionsBox );
+	saveButton = new QToolButton;
 	saveButton->setIcon( KIcon( "document-save" ) );
 	saveButton->setEnabled( false );
-	showButton = new QToolButton( functionsBox );
+	showButton = new QToolButton;
 	showButton->setIcon( KIcon( "zoom-original" ) );
-	closeButton = new QToolButton( functionsBox );
+	closeButton = new QToolButton;
 	closeButton->setIcon( KIcon( "window-close" ) );
-	resizeButton = new QToolButton( functionsBox );
+	resizeButton = new QToolButton;
 	resizeButton->setIcon( KIcon( "arrow-up-double" ) ); //TODO: give me an icon :)
 
 	saveButton->setText( i18n( "Save recipe" ) );
@@ -463,7 +464,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	resizeButton->setToolTip( i18n( "Resize recipe" ) );
 	resizeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
-	functionsLayout->layout() ->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
+	functionsLayout->addWidget( saveButton );
+	functionsLayout->addWidget( showButton );
+	functionsLayout->addWidget( closeButton );
+	functionsLayout->addWidget( resizeButton );
+	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	// Dialog design
 	tabWidget->resize( size().expandedTo( minimumSizeHint() ) );
