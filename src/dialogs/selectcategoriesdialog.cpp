@@ -44,7 +44,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 	//New category button
 	KPushButton *newCatButton = new KPushButton( page );
 	newCatButton->setText( i18n( "&New Category..." ) );
-	newCatButton->setFlat( true );
+	newCatButton->setIcon( KIcon( "list-add" ) );
 
 	// Load the list
 	loadCategories( items_on );
