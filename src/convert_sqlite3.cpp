@@ -18,7 +18,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <k3procio.h>
+#include <KProcess>
 
 #include <kglobalsettings.h>
 
@@ -32,28 +32,22 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 		file = config.readEntry("DBFile");
 	}
 
-	K3ProcIO *p = new K3ProcIO;
-	p->setUseShell(true);
+	KProcess *p = new KProcess;
 
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
-	*p << "sqlite" << file << ".dump" <<
-	  "|" << "sqlite3" << file+".new";
+	QString cmd;
+	cmd = "sqlite " + file + " .dump" +
+	  "|" + "sqlite3 " + file+".new";
+	kDebug()<<"SQLite 3 migration command: "<<cmd;
 
-	QApplication::connect( p, SIGNAL(readReady(K3ProcIO*)), this, SLOT(processOutput(K3ProcIO*)) );
+	p->setShellCommand(cmd);
+	int retvalue = p->execute();
 
-	bool success = p->start( K3Process::Block, true );
-	if ( !success ) {
-		kDebug()<<"Conversion failed... unable to start KProcess";
+	if ( retvalue != 0 ) {
+		kDebug()<<"Conversion process failed...";
                 delete p;
 		return;
 	}
-
-	if ( error )
-        {
-            delete p;
-            return;
-        }
-
 
 	QString backup_file = file+".sqlite2";
 	int i = 1;
@@ -83,7 +77,7 @@ ConvertSQLite3::~ConvertSQLite3()
 {
 }
 
-void ConvertSQLite3::processOutput( K3ProcIO* p )
+/*void ConvertSQLite3::processOutput( K3ProcIO* p )
 {
 	QString error_str, buffer;
 	while ( p->readln(buffer) != -1 ) {
@@ -95,7 +89,7 @@ void ConvertSQLite3::processOutput( K3ProcIO* p )
 	error = true;
 
 	p->ackRead();
-}
+}*/
 
 bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFilePath )
 {
