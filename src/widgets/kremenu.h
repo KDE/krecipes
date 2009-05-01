@@ -12,11 +12,9 @@
 #ifndef KREMENU_H
 #define KREMENU_H
 
-#include <q3buttongroup.h>
 #include <qevent.h>
 #include <qicon.h>
 #include <qmap.h>
-#include <qpushbutton.h>
 #include <qstring.h>
 //Added by qt3to4:
 #include <QPixmap>
