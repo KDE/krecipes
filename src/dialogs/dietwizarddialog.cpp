@@ -58,11 +58,17 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	// Options Box
 	optionsBox = new KHBox( this );
 
-	daysSliderBox = new Q3VGroupBox( i18n( "Number of Days" ), optionsBox );
-	dayNumberLabel = new QLabel( daysSliderBox );
+	daysSliderBox = new QGroupBox( optionsBox );
+	daysSliderBox->setTitle( i18n( "Number of Days" ) );
+	QVBoxLayout *daysSliderBoxLayout = new QVBoxLayout;
+	daysSliderBox->setLayout( daysSliderBoxLayout );
+	dayNumberLabel = new QLabel;
 	dayNumberLabel->setText( "- 1 -" );
+	dayNumberLabel->setFixedWidth( 100 );
 	dayNumberLabel->setAlignment( Qt::AlignHCenter );
-	dayNumberSelector = new QSlider( daysSliderBox );
+	daysSliderBoxLayout->addWidget( dayNumberLabel );
+	dayNumberSelector = new QSlider;
+	daysSliderBoxLayout->addWidget( dayNumberSelector );
 
 	dayNumberSelector->setOrientation( Qt::Horizontal );
 	dayNumberSelector->setRange( 1, 10 );
@@ -71,11 +77,17 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	dayNumberSelector->setTickPosition( QSlider::TicksBelow );
 	dayNumberSelector->setFixedWidth( 100 );
 
-	mealsSliderBox = new Q3VGroupBox( i18n( "Meals per Day" ), optionsBox );
-	mealNumberLabel = new QLabel( mealsSliderBox );
+	mealsSliderBox = new QGroupBox( optionsBox );
+	mealsSliderBox->setTitle( i18n( "Meals per Day" ) );
+	QVBoxLayout *mealsSliderBoxLayout = new QVBoxLayout;
+	mealsSliderBox->setLayout( mealsSliderBoxLayout );
+	mealNumberLabel = new QLabel;
 	mealNumberLabel->setText( "- 1 -" );
+	mealNumberLabel->setFixedWidth( 100 );
 	mealNumberLabel->setAlignment( Qt::AlignHCenter );
-	mealNumberSelector = new QSlider( mealsSliderBox );
+	mealsSliderBoxLayout->addWidget( mealNumberLabel );
+	mealNumberSelector = new QSlider;
+	mealsSliderBoxLayout->addWidget( mealNumberSelector );
 
 	mealNumberSelector->setOrientation( Qt::Horizontal );
 	mealNumberSelector->setRange( 1, 10 );

@@ -25,7 +25,6 @@
 #include <qtoolbutton.h>
 #include <q3valuelist.h>
 
-#include <q3vgroupbox.h>
 #include <QStackedWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
@@ -81,10 +80,10 @@ private:
 
 	//Widgets
 	KHBox *optionsBox;
-	Q3VGroupBox *mealsSliderBox;
+	QGroupBox *mealsSliderBox;
 	QLabel *mealNumberLabel;
 	QSlider *mealNumberSelector;
-	Q3VGroupBox *daysSliderBox;
+	QGroupBox *daysSliderBox;
 	QLabel *dayNumberLabel;
 	QSlider *dayNumberSelector;
 	QTabWidget *mealTabs;
