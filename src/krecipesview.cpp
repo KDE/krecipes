@@ -242,7 +242,7 @@ KrecipesView::KrecipesView( QWidget *parent )
     panelMap.insert( prepMethodsPanel, PrepMethodsP );
     panelMap.insert( ingredientMatcherPanel, MatcherP );
 
-    m_activePanel = RecipeEdit;
+	slotSetPanel( SelectP );
 
     // i18n
     translate();
