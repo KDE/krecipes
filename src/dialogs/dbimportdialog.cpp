@@ -159,7 +159,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	psqlRadioButton->setEnabled( false );
 #endif
 
-#if (! defined(HAVE_SQLITE) || defined(HAVE_SQLITE3))
+#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
 
 	liteRadioButton->setEnabled( false );
 #ifdef HAVE_MYSQL
