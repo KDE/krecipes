@@ -403,7 +403,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	if ( !highlighted ) {
 
 		// first the gradient
-		tmpimage = Blitz::gradient(parentsize,c2,c1,Blitz::HorizontalGradient);
+		tmpimage = Blitz::gradient(parentsize,c1,c2,Blitz::HorizontalGradient);
 		kpm = QPixmap::fromImage(tmpimage);
 
 	}
@@ -412,11 +412,11 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		// top gradient (highlighted)
 		kpm.resize( width(), height() );
 		// low gradient besides the line (not hightlighted)
-		tmpimage = Blitz::gradient(parentsize,c2h,c1h,Blitz::HorizontalGradient);
+		tmpimage = Blitz::gradient(parentsize,c1h,c2h,Blitz::HorizontalGradient);
 		kpm = QPixmap::fromImage(tmpimage);
 		QPixmap kpmb;
 		QImage tmpimage2;
-		tmpimage2 = Blitz::gradient(QSize(width(),2),c2,c1,Blitz::HorizontalGradient);
+		tmpimage2 = Blitz::gradient(QSize(width(),2),c1,c2,Blitz::HorizontalGradient);
 		kpmb = QPixmap::fromImage(tmpimage2);
 		// mix the two
 		bitBlt( &kpm, 0, height() - 2, &kpmb );
@@ -496,7 +496,7 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		QPixmap area;
 		area.resize( areaw, areah );
 
-		QImage tmpimage = Blitz::gradient(QSize(areaw,areah),c2h.light(150),c1h.light(150),Blitz::VerticalGradient);
+		QImage tmpimage = Blitz::gradient(QSize(areaw,areah),c1h.light(150),c2h.light(150),Blitz::VerticalGradient);
 		area = QPixmap::fromImage(tmpimage);
 
 		QLinearGradient linearGrad(QPointF(xPos, xPos + width()), QPointF(yPos, yPos + height()));
