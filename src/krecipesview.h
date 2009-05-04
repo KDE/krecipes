@@ -53,6 +53,7 @@ class RecipeViewDialog;
 class SelectRecipeDialog;
 class ShoppingListDialog;
 class UnitsDialog;
+class QFrame;
 typedef Q3ValueList <Menu>::Iterator MenuId;
 
 
@@ -152,6 +153,7 @@ private:
 
 	// Widgets
 	KHBox *splitter;
+	QFrame *leftPanelFrame;
 	KreMenu *leftPanel;
 	MenuId dataMenu;
 	PanelDeco *rightPanel;

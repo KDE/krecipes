@@ -26,6 +26,7 @@
 #include <ktoolinvocation.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <QFrame>
 
 #include "recipeactionshandler.h"
 #include "setupassistant.h"
@@ -89,7 +90,14 @@ KrecipesView::KrecipesView( QWidget *parent )
     layout->addWidget( splitter );
     // Create Left and Right Panels (splitter)
 
-    leftPanel = new KreMenu( splitter, "leftPanel" );
+	leftPanelFrame = new QFrame( splitter );
+    leftPanel = new KreMenu;
+	QHBoxLayout *leftPanelFrameLayout = new QHBoxLayout;
+	leftPanelFrame->setLayout( leftPanelFrameLayout );
+	leftPanelFrameLayout->addWidget( leftPanel );
+	leftPanelFrameLayout->setMargin( 0 );
+	leftPanelFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
+	leftPanelFrame->setFrameRect( QRect( 0, 0, 0, 0 ) );
     rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
 
     // Design Left Panel
