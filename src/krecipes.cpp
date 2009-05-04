@@ -229,17 +229,20 @@ void Krecipes::setupActions()
 
 	importAction = new KAction( this );
 	importAction->setText( i18n( "Import from File..." ) );
+	importAction->setIcon( KIcon( "document-import" ) );
 	importAction->setShortcut( Qt::CTRL + Qt::Key_I );
 	actionCollection()->addAction( "import_action" , importAction );
 	connect( importAction, SIGNAL(triggered(bool)), this, SLOT( import() ) );
 
 	importDBAction= new KAction( this );
 	importDBAction->setText( i18n( "Import from Database..." ) );
+	importDBAction->setIcon( KIcon( "document-import" ) );
 	actionCollection()->addAction( "import_db_action" , importDBAction );
 	connect( importDBAction, SIGNAL(triggered(bool)), this, SLOT( kreDBImport() ) );
 
 	exportAction = new KAction( this );
 	exportAction->setText( i18n( "Export..." ) );
+	exportAction->setIcon( KIcon( "document-export" ) );
 	actionCollection()->addAction( "export_action" , exportAction );
 	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT( fileExport() ) );
 
@@ -253,21 +256,25 @@ void Krecipes::setupActions()
 
         pageSetupAction = new KAction( this );
         pageSetupAction->setText( i18n( "Page Setup..." ) );
+	pageSetupAction->setIcon( KIcon( "configure" ) );
         actionCollection()->addAction( "page_setup_action" , pageSetupAction );
         connect( pageSetupAction, SIGNAL(triggered(bool)), this, SLOT( pageSetupSlot() ) );
 
         printSetupAction = new KAction( this );
         printSetupAction->setText( i18n( "Print Setup..." ) );
+	printSetupAction->setIcon( KIcon( "configure" ) );
         actionCollection()->addAction( "print_setup_action" , printSetupAction );
         connect( printSetupAction, SIGNAL(triggered(bool)), this, SLOT( printSetupSlot() ) );
 
         backupAction = new KAction( this );
         backupAction->setText( i18n( "Backup..." ) );
+	backupAction->setIcon( KIcon( "document-save-all" ) );
         actionCollection()->addAction( "backup_action" , backupAction );
         connect( backupAction, SIGNAL(triggered(bool)), this, SLOT( backupSlot() ) );
 
         restoreAction = new KAction( this );
         restoreAction->setText( i18n( "Restore..." ) );
+	restoreAction->setIcon( KIcon( "document-revert" ) );
         actionCollection()->addAction( "restore_action" , restoreAction );
         connect( restoreAction, SIGNAL(triggered(bool)), this, SLOT( restoreSlot() ) );
 
