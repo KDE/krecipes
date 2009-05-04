@@ -56,7 +56,6 @@
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmenubar.h>
 #include <kstatusbar.h>
 #include <kshortcutsdialog.h>
