@@ -244,18 +244,18 @@ void KreMenu::paintEvent( QPaintEvent * )
 
 
 
-        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
+        QLinearGradient linearGrad(QPointF(0, 0), QPointF(width(), 0) );
         linearGrad.setColorAt(0, c1);
         linearGrad.setColorAt(1, c2);
         QBrush brush( linearGrad );
         painter.fillRect( QRect( 0, 0, width(), height() ),brush );
 
-	painter.setPen( Qt::color1 );
+	/*painter.setPen( Qt::color1 );
 	painter.setBrush( Qt::color1 );
 	painter.drawRoundRect( 0, 0, width(), height(), ( int ) ( 2.0 / width() * height() ), 2 );
 
 	painter.setPen( c1 );
-	painter.drawRoundRect( 0, 0, width(), height(), ( int ) ( 2.0 / width() * height() ), 2 );
+	painter.drawRoundRect( 0, 0, width(), height(), ( int ) ( 2.0 / width() * height() ), 2 );*/
 
 	//Draw the top line bordering with the first button
 	if ( m_currentMenu->activeButton )  // draw only if there's a button
