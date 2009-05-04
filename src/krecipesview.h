@@ -14,7 +14,6 @@
 #define KRECIPESVIEW_H
 
 #include <qbitmap.h>
-#include <q3buttongroup.h>
 #include <qevent.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
