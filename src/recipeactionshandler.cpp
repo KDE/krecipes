@@ -51,9 +51,9 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 
 	kpop = new KMenu( parentListView );
 	if ( actions & Open )
-		kpop->addAction( il->loadIcon( "ok", KIconLoader::NoGroup, 16 ), i18n( "&Open" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
+		kpop->addAction( il->loadIcon( "system-search", KIconLoader::NoGroup, 16 ), i18n( "&Open" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
 	if ( actions & Edit )
-		kpop->addAction( il->loadIcon( "edit", KIconLoader::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
+		kpop->addAction( il->loadIcon( "document-edit", KIconLoader::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
 	if ( actions & Export )
 		kpop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
 	if ( actions & RemoveFromCategory )
