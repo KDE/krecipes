@@ -52,7 +52,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 
     if ( filter ) {
         filterBox = new KHBox( header );
-        filterBox->setFrameShape( QFrame::Box );
+        //filterBox->setFrameShape( QFrame::Box );
         filterBox->setMargin( 2 );
 
         filterLabel = new QLabel( filterBox );
