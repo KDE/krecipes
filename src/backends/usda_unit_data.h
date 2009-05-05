@@ -1,7 +1,5 @@
 /***************************************************************************
-*   Copyright (C) 2006                                                    *
-*                                                                         *
-*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
