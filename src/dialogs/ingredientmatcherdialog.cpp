@@ -83,7 +83,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	removeButton->setIcon( KIcon( "go-previous" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
-	QSpacerItem *spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
+	QSpacerItem *spacer1 = new QSpacerItem( 32, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
 	layout1->addItem( spacer1 );
 	layout2->addLayout( layout1 );
 
