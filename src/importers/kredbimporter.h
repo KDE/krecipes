@@ -16,7 +16,7 @@
 #include "baseimporter.h"
 
 /** Class to import recipes from any other Krecipes database backend.
-  * Note: Though independant of database type, the two databases must have the same structure (i.e. be the same version)
+  * Note: Though independent of database type, the two databases must have the same structure (i.e. be the same version)
   * @author Jason Kivlighn
   */
 class KreDBImporter : public BaseImporter

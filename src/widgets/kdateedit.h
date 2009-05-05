@@ -41,7 +41,7 @@ class QEvent;
 
   This widget also supports advanced features like allowing the user
   to type in the day name to get the date. The following keywords
-  are supported (in the native language): tomorrow, yesturday, today,
+  are supported (in the native language): tomorrow, yesterday, today,
   monday, tuesday, wednesday, thursday, friday, saturday, sunday.
 
   @image html kdateedit.png "This is how it looks"

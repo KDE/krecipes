@@ -60,7 +60,7 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 			}
 			while ( ( !converted ) && ( ( ( pos_it = totalIngredientList->find( ++pos_it, ( *ing_it ).ingredientID ) ) ) != totalIngredientList->end() ) );
 
-			// If the conversion was succesful, Set the New Values
+			// If the conversion was succesfull, Set the New Values
 			if ( converted ) {
 				*lastpos_it = result;
 			}

@@ -276,7 +276,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 	if ( !found_translation )
 		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );
 
-	//try and split the ingredient on a word boundry
+	//try and split the ingredient on a word boundary
 	int split_index;
 	if ( ing_name.length() > 50 ) {
 		split_index = ing_name.left(50).lastIndexOf(" ")+1;

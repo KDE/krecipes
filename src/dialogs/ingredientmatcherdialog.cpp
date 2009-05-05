@@ -298,7 +298,7 @@ void IngredientMatcherDialog::findRecipes( void )
 			requiredIngredients << *m_item_ing_map[it];
 	}
 
-	// Classify recipes with missing ingredients in different lists by ammount
+	// Classify recipes with missing ingredients in different lists by amount
 	QList<int>::Iterator nit;
 	Q3ValueList<IngredientList>::Iterator ilit;
 	int missingNoAllowed = missingNumberSpinBox->value();
