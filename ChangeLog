@@ -1,10 +1,13 @@
 Changes from 1.0 to 2.0-beta1:
   -General port to kde4/qt4, several dialogs and left panel. (work in progress)
+  -Preferences dialog allow the removal of gradients in the left panel. (work in progress)
   -Use sonnet.
   -Port of backup/restore functions to kde4/qt4.
   -Port of setup assistant to kde4/qt4.
   -Port of preferences dialog to kde4/qt4.
+  -Restored options about formatting in in preferences dialog. (work in progress)
   -Port of sqlite migration code to kde4/qt4.
+  -Improved sqlite migration code. (work in progress)
   -Updated splash screen with the proper version number. (TODO)
 
 Changes from 1.0-beta2 to 1.0 (not released):
