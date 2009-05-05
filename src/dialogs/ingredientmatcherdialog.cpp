@@ -100,11 +100,9 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
 	missingNumberSpinBox->setMinimum( -1 );
 	missingNumberSpinBox->setSpecialValueText( i18n( "Any" ) );
-	dialogLayout->addWidget(missingBox);
 
 	// Found recipe list
 	recipeListView = new KreListView( this, i18n( "Matching Recipes" ), false, 1, missingBox );
-	recipeListView->listView() ->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
 
 	recipeListView->listView() ->addColumn( i18n( "Title" ) );
