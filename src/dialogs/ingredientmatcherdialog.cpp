@@ -197,36 +197,33 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 
 void IngredientMatcherDialog::addIngredient()
 {
-    /*
-	QList<Q3ListViewItem> items = allIngListView->listView()->selectedItems();
+	QList<Q3ListViewItem *> items = allIngListView->listView()->selectedItems();
 	if ( !items.isEmpty() ) {
                 for (int i = 0; i < items.size(); ++i) {
 			bool dup = false;
 			for ( Q3ListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
-				if ( exists_it->text( 0 ) == item->text( 0 ) ) {
+				if ( exists_it->text( 0 ) == items[i]->text( 0 ) ) {
 					dup = true;
 					break;
 				}
 			}
 
 			if ( !dup ) {
-				Q3ListViewItem * new_item = new Q3CheckListItem( ingListView->listView(), item->text( 0 ), Q3CheckListItem::CheckBox );
+				Q3ListViewItem * new_item = new Q3CheckListItem( ingListView->listView(), items[i]->text( 0 ), Q3CheckListItem::CheckBox );
 
 				ingListView->listView() ->setSelected( new_item, true );
 				ingListView->listView() ->ensureItemVisible( new_item );
-				allIngListView->listView() ->setSelected( item, false );
+				allIngListView->listView() ->setSelected( items[i], false );
 
-				m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( item->text( 0 ), 0, Unit(), -1, item->text( 1 ).toInt() ) ) );
+				m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( items[i]->text( 0 ), 0, Unit(), -1, items[i]->text( 1 ).toInt() ) ) );
 			}
-			++it;
+			++i;
 		}
 	}
-    */
 }
 
 void IngredientMatcherDialog::removeIngredient()
 {
-    /*
 	Q3ListViewItem * item = ingListView->listView() ->selectedItem();
 	if ( item ) {
 		for ( IngredientList::iterator it = m_ingredientList.begin(); it != m_ingredientList.end(); ++it ) {
@@ -238,7 +235,6 @@ void IngredientMatcherDialog::removeIngredient()
 		}
 		delete item;
 	}
-    */
 }
 
 void IngredientMatcherDialog::unselectIngredients()
