@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+
+	<mime-type type="application/x-krecipes-backup">
+		<glob pattern="*.krecbk" />
+		<sub-class-of type="application/x-gzip"/>
+		<comment>Krecipes Backup file</comment>
+	</mime-type>
+
+	<mime-type type="application/x-krecipes-recipes">
+		<glob pattern="*.kreml" />
+		<sub-class-of type="text/xml" />
+		<comment>Krecipes Exported Recipes</comment>
+	</mime-type>
+
+	<mime-type type="application/x-krecipes-recipes-compressed">
+		<glob pattern="*.kre" />
+		<sub-class-of type="application/x-tarz"/>
+		<comment>Krecipes Exported Recipes (compressed data)</comment>
+	</mime-type>
+
+</mime-info>
