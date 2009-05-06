@@ -39,7 +39,7 @@ class QGroupBox;
 class QCheckBox;
 class QRadioButton;
 class QVBoxLayout;
-class QComboBox;
+class KComboBox;
 
 class KrecipesPreferences : public KPageDialog
 {
@@ -167,7 +167,7 @@ protected:
 	QCheckBox* overwriteCheckbox;
 	QCheckBox* directImportCheckbox;
 
-	QComboBox *clipBoardFormatComboBox;
+	KComboBox *clipBoardFormatComboBox;
 };
 
 

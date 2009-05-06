@@ -28,7 +28,7 @@
 #include <qtooltip.h>
 
 #include <qframe.h>
-#include <qcombobox.h>
+#include <KComboBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -558,7 +558,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 
 	QLabel *clipboardLabel = new QLabel(i18n("'Copy to Clipboard' format:") );
 	exportGroupLayout->addWidget( clipboardLabel, 0, 0 );
-	clipBoardFormatComboBox = new QComboBox;
+	clipBoardFormatComboBox = new KComboBox;
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), QString("%3 (*.txt)").arg(i18n("Plain Text")));
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Krecipes (*.kreml)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Meal-Master (*.mmf)");
