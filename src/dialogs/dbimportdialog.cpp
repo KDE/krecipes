@@ -15,7 +15,6 @@
 
 #include "config-krecipes.h"
 
-#include <qpushbutton.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <QStackedWidget>
