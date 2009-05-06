@@ -134,7 +134,7 @@ void PageSetupDialog::accept()
 
 	config.writeEntry( "WindowSize", size() );
 
-	QDialog::accept();
+	KDialog::accept();
 }
 
 void PageSetupDialog::reject()
@@ -151,7 +151,7 @@ void PageSetupDialog::reject()
 		}
 	}
 
-	QDialog::reject();
+	KDialog::reject();
 }
 
 void PageSetupDialog::updateItemVisibility( KreDisplayItem *item, bool visible )
