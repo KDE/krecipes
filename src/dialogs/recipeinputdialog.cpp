@@ -125,8 +125,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// Adjust internal parameters
 	loadedRecipe = new Recipe();
 	loadedRecipe->recipeID = -1; // No loaded recipe initially
-	loadedRecipe->title = QString::null;
-	loadedRecipe->instructions = QString::null;
+	loadedRecipe->title.clear();
+	loadedRecipe->instructions.clear();
 	database = db;
 
 	// Tabs
