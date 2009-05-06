@@ -104,8 +104,8 @@ private:
 	QLabel *permissionsText;
 	QCheckBox *noSetupCheckBox;
 	QCheckBox *rootCheckBox;
-	QLineEdit *userEdit;
-	QLineEdit *passEdit;
+	KLineEdit *userEdit;
+	KLineEdit *passEdit;
 
 private slots:
 	void rootCheckBoxChanged( bool on );
@@ -128,8 +128,8 @@ private:
 	QLabel *permissionsText;
 	QCheckBox *noSetupCheckBox;
 	QCheckBox *rootCheckBox;
-	QLineEdit *userEdit;
-	QLineEdit *passEdit;
+	KLineEdit *userEdit;
+	KLineEdit *passEdit;
 
 private slots:
 	void rootCheckBoxChanged( bool on );

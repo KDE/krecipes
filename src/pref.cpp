@@ -165,7 +165,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	layout->addWidget( passwordText, 5, 1 );
 
 	passwordEdit = new KLineEdit( this );
-	passwordEdit->setEchoMode( QLineEdit::Password );
+	passwordEdit->setEchoMode( KLineEdit::Password );
 	layout->addWidget( passwordEdit, 5, 2 );
 
 	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -278,7 +278,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	layout->addWidget( passwordText, 5, 1 );
 
 	passwordEdit = new KLineEdit( this );
-	passwordEdit->setEchoMode( QLineEdit::Password );
+	passwordEdit->setEchoMode( KLineEdit::Password );
 	layout->addWidget( passwordEdit, 5, 2 );
 
 	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
