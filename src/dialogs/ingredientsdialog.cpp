@@ -29,6 +29,7 @@
 #include <qtabwidget.h>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <KPushButton>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
@@ -49,7 +50,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	layout = new QGridLayout( ingredientTab );
    layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
    layout->setSpacing( 0 );
 
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -66,23 +66,26 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_rightIngredients, 1, 2 );
 
+	QVBoxLayout *buttonLayout = new QVBoxLayout();
 
 	addIngredientButton = new KPushButton( ingredientTab );
 	addIngredientButton->setIcon( KIcon( "list-add") );
-	layout->addWidget( addIngredientButton, 1, 3 );
 	addIngredientButton->setMinimumSize( QSize( 30, 30 ) );
 	addIngredientButton->setMaximumSize( QSize( 30, 30 ) );
 	addIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+	buttonLayout->addWidget( addIngredientButton );
+
+	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Maximum );
+	buttonLayout->addItem( spacer_Ing_Buttons );
 
 	removeIngredientButton = new KPushButton( ingredientTab );
 	removeIngredientButton->setIcon( KIcon( "list-remove" ) );
-	layout->addWidget( removeIngredientButton, 3, 3 );
 	removeIngredientButton->setMinimumSize( QSize( 30, 30 ) );
 	removeIngredientButton->setMaximumSize( QSize( 30, 30 ) );
 	removeIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-
-	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_Ing_Buttons, 2, 3 );
+	buttonLayout->addWidget( removeIngredientButton );
+	
+	layout->addItem( buttonLayout, 1, 3 );
 
 	QPushButton *propertyButton = new KPushButton( i18n("Property Information"), ingredientTab );
 	propertyButton->setIcon( KIcon( "document-properties") );
