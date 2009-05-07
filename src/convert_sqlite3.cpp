@@ -37,7 +37,7 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
 	QString cmd;
 	cmd = "sqlite " + file + " .dump" +
-	  "|" + "sqlite3 " + file+".new";
+	  '|' + "sqlite3 " + file+".new";
 	kDebug()<<"SQLite 3 migration command: "<<cmd;
 
 	p->setShellCommand(cmd);
@@ -52,7 +52,7 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 	QString backup_file = file+".sqlite2";
 	int i = 1;
 	while ( QFile::exists(backup_file) ) {
-		backup_file = backup_file.left(file.length()+8)+"."+QString::number(i);
+		backup_file = backup_file.left(file.length()+8)+'.'+QString::number(i);
 		++i;
 	}
 
