@@ -26,7 +26,7 @@
 IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent), database(db)
 {
    setObjectName( name );
-	QHBoxLayout* layout = new QHBoxLayout();
+	QHBoxLayout* layout = new QHBoxLayout;
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
@@ -34,7 +34,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);
 
-	QVBoxLayout *buttonLayout = new QVBoxLayout();
+	QVBoxLayout *buttonLayout = new QVBoxLayout;
 	KPushButton *addHeaderButton = new KPushButton( this );
 	addHeaderButton->setIcon( KIcon( "list-add" ) );
 	addHeaderButton->setMinimumSize( QSize( 30, 30 ) );
