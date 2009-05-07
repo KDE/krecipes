@@ -91,7 +91,7 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 
 
 	m_pagePerformance = new PerformancePrefs( this );
-        page = new KPageWidgetItem( m_pagePerformance , i18n( "performance" ) );
+        page = new KPageWidgetItem( m_pagePerformance , i18n( "Performance" ) );
 	page->setHeader( i18n( "Performance Options" ) );
         page->setObjectName( "performance" );
 	il->loadIcon( "preferences-system-performance", KIconLoader::NoGroup, 32 );
