@@ -781,7 +781,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Once your ingredients are formatted to your liking, click the <guibutton>Parse Text</guibutton> button.  The ingredient list will be transferred to the lower portion of the window beneath the label <emphasis><guilabel>Ingredients as understood by &krecipes;:</guilabel></emphasis>.  From this portion of the screen, you can set any <emphasis>Headers</emphasis> by clicking on the <guibutton>Set Header</guibutton> button to the right.</para>
 
-<para>Click the <guibutton>OK</guibutton> button that appears in the top right-hand corner of window to transfer you ingredients to your recipe.  You can also choose not to proceed with the addition of the ingredients by clicking on the <guibutton>Cancel</guibutton> button which will close the window.</para>
+<para>Click the <guibutton>OK</guibutton> button that appears in the top right-hand corner of window to transfer your ingredients to your recipe.  You can also choose not to proceed with the addition of the ingredients by clicking on the <guibutton>Cancel</guibutton> button which will close the window.</para>
 
 <para>Once the ingredients have been transferred into the ingredient list for your new recipe, they can be moved or removed as describe in the section <link linkend="ingredients-tab">Entering Recipe Ingredients</link> above.  In addition the amount, unit or preparation methods can be edited, also as described above.</para>
 
@@ -947,13 +947,13 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <listitem><para>Scale by yield &mdash;</para>
 
-<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield label</guilabel></emphasis>.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a textbox in which to <userinput>enter the new yield amount desired</userinput>.</para>
+<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield</guilabel></emphasis> label.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a textbox in which to <userinput>enter the new yield amount desired</userinput>.</para>
 
 <note><para>If you have entered a range for your yield amount, <emphasis>Scale by yield</emphasis> will not be available because <emphasis>&krecipes;</emphasis> cannot determine which portion of the range it is scaling.</para></note></listitem>
 
 <listitem><para>Scale by factor &mdash;</para>
 
-<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the<emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the textbox beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
+<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the textbox beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
 </orderedlist>
 
 <para>In either of these scenarios, click the <guibutton>OK</guibutton> button to continue.  Your recipe will be reproportioned appropriately.  Alternatively, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para></tip></listitem>
@@ -1229,7 +1229,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once you have navigated to the location of the recipe file that you want to import and have selected the correct format, all the recipes saved in the selected format will appear in the file list.  If  import of only one recipe is desired, select the file that you wish to import and its name will appear in the <emphasis><guilabel>Location:</guilabel></emphasis> box.  Press the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> button to close the file selection window and return to the previous screen.</para>
 
-<para>If you have selected the <quote><emphasis>Ask which recipes to import</emphasis></quote> tickbox in the <quote>Configure <emphasis>&krecipes;</emphasis>, Import</quote> interface, when you click on the <guibutton>OK</guibutton> button, the <emphasis>&krecipes;</emphasis> <interface>Import Recipes</interface> window will appear from which you can select the recipes that you want to import. For instructions on how to select this choice see the section <link linkend="import-export-preference">Choosing Import/Export Preferences</link>.  If this selection is not made, your recipes will be imported silently with no prompt.</para>
+<para>If you have selected the <quote><emphasis>Ask which recipes to import</emphasis></quote> tickbox in the <quote>Configure <emphasis>&krecipes;</emphasis>, Import/Export</quote> interface, when you click on the <guibutton>OK</guibutton> button, the <emphasis>&krecipes;</emphasis> <interface>Import Recipes</interface> window will appear from which you can select the recipes that you want to import. For instructions on how to select this choice see the section <link linkend="import-export-preference">Choosing Import/Export Preferences</link>.  If this selection is not made, your recipes will be imported silently with no prompt.</para>
 
 <para>
 <screenshot>
@@ -1327,7 +1327,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 </itemizedlist>
 
-<para>Once this information has been supplied, click the <guibutton>OK</guibutton> button to proceed with the import steps that are <link linkend="common-import">common</link> to all.  At this point, you may also click the <guibutton>Cancel</guibutton> button the cancel the import and return to the previous screen.</para>
+<para>Once this information has been supplied, click the <guibutton>OK</guibutton> button to proceed with the import steps that are <link linkend="common-import">common</link> to all.  At this point, you may also click the <guibutton>Cancel</guibutton> button to cancel the import and return to the previous screen.</para>
 
 </sect3>
 
@@ -1369,7 +1369,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <itemizedlist>
 <listitem><para>Compressed Krecipes format &ndash; files of this format will have extensions of .kre</para>
-<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the Internet easier.  This format also provides an means of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your Krecipes Database</link> for further information.</para></listitem>
+<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the Internet easier.  This format also provides a mean of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your Krecipes Database</link> for further information.</para></listitem>
 
 <listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
 <para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe XML.</para>
