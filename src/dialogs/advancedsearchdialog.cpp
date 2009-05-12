@@ -32,7 +32,7 @@
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <qlabel.h>
-#include <qlineedit.h>
+#include <KLineEdit>
 
 #include <QGroupBox>
 #include <qradiobutton.h>
@@ -112,7 +112,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	KHBox *titleHBox = new KHBox( titleFrame );
 	/*QLabel *titleInfoLabel = */new QLabel(i18n("Keywords:"),titleHBox);
-	titleEdit = new QLineEdit( titleHBox );
+	titleEdit = new KLineEdit( titleHBox );
    titleEdit->setObjectName( "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
 
@@ -140,12 +140,12 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	//ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 1, 2, 0 );
 
-	ingredientsAllEdit = new QLineEdit( ingredientFrame );
+	ingredientsAllEdit = new KLineEdit( ingredientFrame );
    ingredientsAllEdit->setObjectName( "ingredientsAllEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsAllEdit, 1, 1 );
 	
-	ingredientsAnyEdit = new QLineEdit( ingredientFrame );
+	ingredientsAnyEdit = new KLineEdit( ingredientFrame );
    ingredientsAnyEdit->setObjectName( "ingredientsAnyEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsAnyEdit, 2, 1 );
@@ -160,7 +160,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	ingredientFrameLayout->addWidget( textLabel1, 1, 0 );
 	
-	ingredientsWithoutEdit = new QLineEdit( ingredientFrame );
+	ingredientsWithoutEdit = new KLineEdit( ingredientFrame );
    ingredientsWithoutEdit->setObjectName( "ingredientsWithoutEdit" );
 	
 	ingredientFrameLayout->addWidget( ingredientsWithoutEdit, 3, 1 );
@@ -194,7 +194,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 1, 2, 0 );
 	
-	categoriesAllEdit = new QLineEdit( categoryFrame );
+	categoriesAllEdit = new KLineEdit( categoryFrame );
    categoriesAllEdit->setObjectName( "categoriesAllEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesAllEdit, 1, 1 );
@@ -209,7 +209,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( textLabel1_3_3, 3, 0 );
 	
-	categoriesAnyEdit = new QLineEdit( categoryFrame );
+	categoriesAnyEdit = new KLineEdit( categoryFrame );
    categoriesAnyEdit->setObjectName( "categoriesAnyEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesAnyEdit, 2, 1 );
@@ -219,7 +219,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	categoryFrameLayout->addWidget( textLabel1_2_3, 2, 0 );
 	
-	categoriesNotEdit = new QLineEdit( categoryFrame );
+	categoriesNotEdit = new KLineEdit( categoryFrame );
    categoriesNotEdit->setObjectName( "categoriesNotEdit" );
 	
 	categoryFrameLayout->addWidget( categoriesNotEdit, 3, 1 );
@@ -262,17 +262,17 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	authorsFrameLayout->addWidget( textLabel1_3_4, 3, 0 );
 	
-	authorsAnyEdit = new QLineEdit( authorsFrame );
+	authorsAnyEdit = new KLineEdit( authorsFrame );
    authorsAnyEdit->setObjectName( "authorsAnyEdit" );
 	
 	authorsFrameLayout->addWidget( authorsAnyEdit, 1, 1 );
 	
-	authorsAllEdit = new QLineEdit( authorsFrame );
+	authorsAllEdit = new KLineEdit( authorsFrame );
    authorsAllEdit->setObjectName( "authorsAllEdit" );
 	
 	authorsFrameLayout->addWidget( authorsAllEdit, 2, 1 );
 	
-	authorsWithoutEdit = new QLineEdit( authorsFrame );
+	authorsWithoutEdit = new KLineEdit( authorsFrame );
    authorsWithoutEdit->setObjectName( "authorsWithoutEdit" );
 	
 	authorsFrameLayout->addWidget( authorsWithoutEdit, 3, 1 );
@@ -383,7 +383,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	KHBox *instructionsHBox = new KHBox(instructionsFrame);
 	/*QLabel *instructionsInfoLabel = */new QLabel(i18n("Keywords:"),instructionsHBox);
 
-	instructionsEdit = new QLineEdit( instructionsHBox );
+	instructionsEdit = new KLineEdit( instructionsHBox );
    instructionsEdit->setObjectName( "instructionsEdit" );
 	instructionsFrameLayout->addWidget( instructionsHBox );
 
