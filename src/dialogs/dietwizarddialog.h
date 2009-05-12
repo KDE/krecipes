@@ -21,7 +21,6 @@
 #include <q3ptrlist.h>
 #include <qslider.h>
 #include <qspinbox.h>
-#include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <q3valuelist.h>
 
@@ -45,6 +44,7 @@ class KDoubleNumInput;
 class QFrame;
 class KPushButton;
 class QGroupBox;
+class KTabWidget;
 
 class DishInput;
 class DishTitle;
@@ -86,7 +86,7 @@ private:
 	QGroupBox *daysSliderBox;
 	QLabel *dayNumberLabel;
 	QSlider *dayNumberSelector;
-	QTabWidget *mealTabs;
+	KTabWidget *mealTabs;
 	MealInput *mealTab; // points to the current tab
 	KPushButton *okButton;
 
