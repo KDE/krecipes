@@ -55,8 +55,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	basicSearchTab = new QGroupBox( this );
-	//basicSearchTab->setFrameStyle( QFrame::NoFrame );
+	basicSearchTab = new QFrame( this );
+	basicSearchTab->setFrameStyle( QFrame::NoFrame );
 	//basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 	//Design dialog
