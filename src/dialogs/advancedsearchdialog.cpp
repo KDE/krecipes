@@ -11,7 +11,7 @@
 #include "advancedsearchdialog.h"
 
 #include <qvariant.h>
-#include <qpushbutton.h>
+#include <KPushButton>
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qcheckbox.h>
@@ -93,7 +93,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
    parametersFrameLayout->setMargin( 0 );
    parametersFrameLayout->setSpacing( 0 );
    
-	titleButton = new QPushButton( parametersFrame );
+	titleButton = new KPushButton( parametersFrame );
    titleButton->setObjectName( "titleButton" );
 	titleButton->setCheckable( true );
 	parametersFrameLayout->addWidget( titleButton );
@@ -121,7 +121,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( titleFrameSpacer );
 
 
-	ingredientButton = new QPushButton( parametersFrame );
+	ingredientButton = new KPushButton( parametersFrame );
    ingredientButton->setObjectName( "ingredientButton" );
 	ingredientButton->setCheckable( true );
 	parametersFrameLayout->addWidget( ingredientButton );
@@ -174,7 +174,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3_2_2 );
 
 
-	categoriesButton = new QPushButton( parametersFrame );
+	categoriesButton = new KPushButton( parametersFrame );
    categoriesButton->setObjectName( "categoriesButton" );
 	categoriesButton->setCheckable( true );
 	parametersFrameLayout->addWidget( categoriesButton );
@@ -228,7 +228,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3_2 );
 
 
-	authorsButton = new QPushButton( parametersFrame );
+	authorsButton = new KPushButton( parametersFrame );
    authorsButton->setObjectName( "authorsButton" );
 	authorsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( authorsButton );
@@ -281,7 +281,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_3 );
 
 
-	servingsButton = new QPushButton( parametersFrame );
+	servingsButton = new KPushButton( parametersFrame );
    servingsButton->setObjectName( "servingsButton" );
 	servingsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( servingsButton );
@@ -323,7 +323,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer3_2_2 );
 
 
-	prepTimeButton = new QPushButton( parametersFrame );
+	prepTimeButton = new KPushButton( parametersFrame );
    prepTimeButton->setObjectName( "prepTimeButton" );
 	prepTimeButton->setCheckable( true );
 	parametersFrameLayout->addWidget( prepTimeButton );
@@ -363,7 +363,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( spacer15 );
 
 
-	instructionsButton = new QPushButton( parametersFrame );
+	instructionsButton = new KPushButton( parametersFrame );
    instructionsButton->setObjectName( "instructionsButton" );
 	instructionsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( instructionsButton );
@@ -392,7 +392,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( instructionsFrameSpacer );
 
 
-	metaDataButton = new QPushButton( parametersFrame );
+	metaDataButton = new KPushButton( parametersFrame );
    metaDataButton->setObjectName( "metaDataButton" );
 	metaDataButton->setCheckable( true );
 	parametersFrameLayout->addWidget( metaDataButton );
@@ -444,7 +444,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	parametersFrameLayout->addItem( metaDataFrameSpacer );
 
 	//=============RATINGS FRAME===========//
-	ratingsButton = new QPushButton( parametersFrame );
+	ratingsButton = new KPushButton( parametersFrame );
    ratingsButton->setObjectName( "ratingsButton" );
 	ratingsButton->setCheckable( true );
 	parametersFrameLayout->addWidget( ratingsButton );
@@ -505,7 +505,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout12->addWidget( starsWidget );
 	
 
-	addCriteriaButton = new QPushButton( criterionFrame );
+	addCriteriaButton = new KPushButton( criterionFrame );
    addCriteriaButton->setObjectName( "addCriteriaButton" );
 	addCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, addCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
@@ -757,8 +757,8 @@ void AdvancedSearchDialog::buttonSwitched()
 {
 	const QObject *sent = sender();
 
-	if ( sent->inherits("QPushButton") ) {
-		QPushButton *pushed = (QPushButton*) sent;
+	if ( sent->inherits("KPushButton") ) {
+		KPushButton *pushed = (KPushButton*) sent;
 
 		//KDE4 port
 		QString suffix = ( pushed->isChecked() ) ? " <<" : " >>";
