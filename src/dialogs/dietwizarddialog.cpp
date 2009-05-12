@@ -494,6 +494,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 
 	// Dish id
 	dishTitle = new DishTitle( listBox, title );
+	dishTitle->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
 	listBoxLayout->addWidget( dishTitle );
 
 	//Categories list
