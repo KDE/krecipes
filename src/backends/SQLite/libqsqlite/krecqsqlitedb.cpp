@@ -100,7 +100,7 @@ QSQLiteResult QSQLiteDB::executeQuery( const QString &query, int *lastID )
 		res.setStatus( QSQLiteResult::Failure );
 
 #ifdef HAVE_SQLITE
-		sqlite_freemsg( errmsg );
+		sqlite_freemem( errmsg );
 #elif HAVE_SQLITE3
 		sqlite3_free( errmsg );
 #endif

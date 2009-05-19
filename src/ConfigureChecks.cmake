@@ -1,6 +1,8 @@
 
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE3)
 
+macro_bool_to_01(SQLITE2_FOUND HAVE_SQLITE)
+
 macro_bool_to_01(MYSQL_FOUND HAVE_MYSQL)
 
 macro_bool_to_01(POSTGRESQL_FOUND HAVE_POSTGRESQL)

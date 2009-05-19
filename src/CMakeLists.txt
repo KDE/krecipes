@@ -2,6 +2,7 @@ include(FindLibXml2)
 include(FindLibXslt)
 include(FindQImageBlitz)
 
+find_package(Sqlite2)
 find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
@@ -20,11 +21,16 @@ configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecip
 
 set (ANY_DATABASE_SUPPORT_FOUND FALSE )
 
+# In case of having both sqlite 2.x and 3.x series we want to compile against 3.x
 if ( SQLITE_FOUND )
    set (ANY_DATABASE_SUPPORT_FOUND TRUE )
    include_directories(${SQLITE_INCLUDE_DIR})
    set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
-endif ( SQLITE_FOUND )
+elseif ( SQLITE2_FOUND )
+   set (ANY_DATABASE_SUPPORT_FOUND TRUE )
+   include_directories(${SQLITE2_INCLUDE_DIR})
+   set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
+endif ( SQLITE_FOUND )   
 
 if ( MYSQL_FOUND )
    set (ANY_DATABASE_SUPPORT_FOUND TRUE )
@@ -217,6 +223,8 @@ target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})
+elseif ( SQLITE2_FOUND )
+   target_link_libraries(krecipes ${SQLITE2_LIBRARIES})
 endif ( SQLITE_FOUND )
 
 if ( MYSQL_FOUND )
