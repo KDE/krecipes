@@ -7,3 +7,6 @@ macro_bool_to_01(MYSQL_FOUND HAVE_MYSQL)
 
 macro_bool_to_01(POSTGRESQL_FOUND HAVE_POSTGRESQL)
 
+if (SQLITE_FOUND)
+   macro_bool_to_01(FALSE HAVE_SQLITE)
+endif (SQLITE_FOUND)
