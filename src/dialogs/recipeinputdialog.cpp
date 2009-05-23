@@ -27,7 +27,7 @@
 #include <q3widgetstack.h>
 #include <qpainter.h>
 //#include <q3textbrowser.h>
-#include <QTextBrowser>
+#include <KTextBrowser>
 //Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
@@ -392,7 +392,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
 	propertyStatusDialog->setHelp("property-status");
 
-	statusTextView = new QTextBrowser(0);
+	statusTextView = new KTextBrowser(0);
 	statusTextView->setOpenLinks( false );
 	propertyStatusDialog->setMainWidget( statusTextView );
 	propertyStatusDialog->resize( 400, 300 );

@@ -40,7 +40,7 @@
 class QTabWidget;
 class QDateTimeEdit;
 class QTextEdit;
-class QTextBrowser;
+class KTextBrowser;
 
 class KreTextEdit;
 class KWidgetListbox;
@@ -128,7 +128,7 @@ private:
 	QLabel *propertyStatusLabel;
 	KPushButton *propertyStatusButton;
 	//QTextEdit *statusTextView;
-	QTextBrowser *statusTextView;
+	KTextBrowser *statusTextView;
 	KDialog *propertyStatusDialog;
 
 	// Buttons to move ingredients up & down...
