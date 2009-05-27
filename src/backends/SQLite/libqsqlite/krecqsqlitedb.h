@@ -25,7 +25,7 @@
 #include <qstringlist.h>
 #include <qobject.h>
 
-#include "config-krecipes.h"
+#include <config-krecipes.h>
 #ifdef HAVE_SQLITE
 #include <sqlite.h>
 #elif HAVE_SQLITE3

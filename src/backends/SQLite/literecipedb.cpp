@@ -23,7 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <KConfigGroup>
-#include "config-krecipes.h"
+#include <config-krecipes.h>
 #include <QImageWriter>
 
 #ifdef HAVE_SQLITE3

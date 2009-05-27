@@ -13,7 +13,7 @@
 #include <unistd.h> //for getuid()
 #include <pwd.h> //getpwuid()
 
-#include "config-krecipes.h"
+#include <config-krecipes.h>
 
 #include <q3buttongroup.h>
 #include <qradiobutton.h>

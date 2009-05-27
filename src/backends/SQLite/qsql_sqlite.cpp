@@ -29,7 +29,7 @@
 
 #define QSQLITE_DRIVER_NAME "KRE_QSQLITE"
 
-#include "config-krecipes.h"
+#include <config-krecipes.h>
 
 #ifdef HAVE_SQLITE3
 #include <sqlite3.h>
