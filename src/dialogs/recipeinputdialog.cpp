@@ -26,6 +26,7 @@
 #include <qradiobutton.h>
 #include <q3widgetstack.h>
 #include <qpainter.h>
+#include <QPointer>
 //#include <q3textbrowser.h>
 #include <KTextBrowser>
 //Added by qt3to4:
@@ -1151,7 +1152,7 @@ bool RecipeInputDialog::everythingSaved()
 
 void RecipeInputDialog::addCategory( void )
 {
-	SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
+	QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
 
 	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
 		loadedRecipe->categoryList.clear();
@@ -1181,7 +1182,7 @@ void RecipeInputDialog::showCategories( void )
 
 void RecipeInputDialog::addAuthor( void )
 {
-	SelectAuthorsDialog * editAuthorsDialog = new SelectAuthorsDialog( this, loadedRecipe->authorList, database );
+	QPointer<SelectAuthorsDialog> editAuthorsDialog = new SelectAuthorsDialog( this, loadedRecipe->authorList, database );
 
 
 	if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
@@ -1274,10 +1275,12 @@ void RecipeInputDialog::showRecipe( void )
 void RecipeInputDialog::resizeRecipe( void )
 {
 	yieldNumInput->value( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
-	ResizeRecipeDialog dlg( this, loadedRecipe );
+	QPointer<ResizeRecipeDialog> dlg = new ResizeRecipeDialog( this, loadedRecipe );
 
-	if ( dlg.exec() == QDialog::Accepted )
+	if ( dlg->exec() == QDialog::Accepted )
 		reload();
+	
+	delete dlg;
 }
 
 int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const
@@ -1308,9 +1311,9 @@ void RecipeInputDialog::slotIngredientParser()
 {
 	UnitList units;
 	database->loadUnits(&units);
-	IngredientParserDialog dlg(units,this);
-	if ( dlg.exec() == QDialog::Accepted ) {
-		IngredientList ings = dlg.ingredients();
+	QPointer<IngredientParserDialog> dlg = new IngredientParserDialog(units,this);
+	if ( dlg->exec() == QDialog::Accepted ) {
+		IngredientList ings = dlg->ingredients();
 		QStringList usedGroups;
 		bool haveHeader = ingredientList->lastItem() && ingredientList->lastItem()->rtti() == INGGRPLISTVIEWITEM_RTTI;
 		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
@@ -1341,6 +1344,7 @@ void RecipeInputDialog::slotIngredientParser()
 			}
 		}
 	}
+	delete dlg;
 }
 
 void RecipeInputDialog::slotAddRating()
@@ -1348,9 +1352,9 @@ void RecipeInputDialog::slotAddRating()
 	ElementList criteriaList;
 	database->loadRatingCriterion(&criteriaList);
 
-	EditRatingDialog ratingDlg(criteriaList,this);
-	if ( ratingDlg.exec() == QDialog::Accepted ) {
-		Rating r = ratingDlg.rating();
+	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog( criteriaList, this );
+	if ( ratingDlg->exec() == QDialog::Accepted ) {
+		Rating r = ratingDlg->rating();
 
 		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
 			int criteria_id = database->findExistingRatingByName((*rc_it).name);
@@ -1367,6 +1371,8 @@ void RecipeInputDialog::slotAddRating()
 		ratingListDisplayWidget->insertItem(item,0);
 		emit( recipeChanged() ); //Indicate that the recipe changed
 	}
+
+	delete ratingDlg;
 }
 
 void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
@@ -1413,9 +1419,9 @@ void RecipeInputDialog::slotEditRating()
 	ElementList criteriaList;
 	database->loadRatingCriterion(&criteriaList);
 
-	EditRatingDialog ratingDlg(criteriaList,*sender->rating_it,this);
-	if ( ratingDlg.exec() == QDialog::Accepted ) {
-		Rating r = ratingDlg.rating();
+	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog (criteriaList,*sender->rating_it,this);
+	if ( ratingDlg->exec() == QDialog::Accepted ) {
+		Rating r = ratingDlg->rating();
 
 		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
 			int criteria_id = database->findExistingRatingByName((*rc_it).name);
@@ -1430,6 +1436,8 @@ void RecipeInputDialog::slotEditRating()
 		addRating(r,sender);
 		emit recipeChanged(); //Indicate that the recipe changed
 	}
+
+	delete ratingDlg;
 }
 
 void RecipeInputDialog::slotRemoveRating()
@@ -1670,8 +1678,9 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 	if (linkString.startsWith("ingredient#")) {
 		int ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
 		QString ingName = database->ingredientName(ingID);
-		EditPropertiesDialog d(ingID,ingName,database,this);
-		d.exec();
+		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, database, this );
+		d->exec();
+		delete d;
 	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
 		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
 		QStringList idList = unitIDs.split(",", QString::SkipEmptyParts );
@@ -1685,16 +1694,17 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 				lastUnit = id;
 			}
 		}
-		CreateUnitConversionDialog dlg(database->unitName(unitFrom).name,toUnits,this);
-		if ( dlg.exec() == QDialog::Accepted ) {
+		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( database->unitName(unitFrom).name, toUnits, this );
+		if ( dlg->exec() == QDialog::Accepted ) {
 			UnitRatio ratio;
-			ratio.uID1 = dlg.toUnitID();
+			ratio.uID1 = dlg->toUnitID();
 			ratio.uID2 = unitFrom;
-			ratio.ratio = dlg.ratio();
+			ratio.ratio = dlg->ratio();
 			if (ratio.ratio >= 0 ) {
 				database->saveUnitRatio(&ratio);
 			}
 		}
+		delete dlg;
 	}
 	updatePropertyStatus();
 }
