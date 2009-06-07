@@ -622,12 +622,13 @@ QString SQLiteSetupPage::dbFile( void ) const
 
 void SQLiteSetupPage::selectFile()
 {
-	KFileDialog dialog( KUrl(), "*.*|All Files", this );
-	dialog.setObjectName( "dialog" );
-	dialog.setModal( true );
-	if ( dialog.exec() == QDialog::Accepted ) {
-		fileEdit->setText( dialog.selectedFile() );
+	QPointer<KFileDialog> dialog = new KFileDialog( KUrl(), "*.*|All Files", this );
+	dialog->setObjectName( "dialog" );
+	dialog->setModal( true );
+	if ( dialog->exec() == QDialog::Accepted ) {
+		fileEdit->setText( dialog->selectedFile() );
 	}
+	delete dialog;
 }
 
 
