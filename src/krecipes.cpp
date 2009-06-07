@@ -196,21 +196,21 @@ void Krecipes::setupActions()
 
 	KConfigGroup grp(KGlobal::config(),"Advanced");
 
-	if ( grp.readEntry("UnhideMergeTools",false) ) {
+	if ( grp.readEntry("UnhideMergeTools",false) ) { //FIXME: Please review it, not used yet
 
 		mergeCategoriesAction = new KAction( this );
 		mergeCategoriesAction->setIcon( KIcon( "categories" ) );
 		mergeCategoriesAction->setText( i18n( "&Merge Similar Categories..." ) );
 		mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );
-		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarCategories() ) );
+		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), this, SLOT( mergeSimilarCategories() ) );
 
 		mergeIngredientsAction = new KAction( this );
 		mergeIngredientsAction->setIcon( KIcon( "ingredients" ) );
 		mergeIngredientsAction->setText( i18n( "&Merge Similar Ingredients..." ) );
 		mergeIngredientsAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_ingredients_action", mergeIngredientsAction );
-		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), m_view, SLOT( mergeSimilarIngredients() ) );
+		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), this, SLOT( mergeSimilarIngredients() ) );
 
 	}
 
