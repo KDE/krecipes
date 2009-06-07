@@ -73,6 +73,7 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* pa
 		: KDialog( parent )
 {
    setObjectName( name );
+   	setCaption( i18n( "Rating" ) );
 	init(criteriaList);
 }
 
