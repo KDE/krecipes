@@ -624,6 +624,7 @@ void SQLiteSetupPage::selectFile()
 {
 	QPointer<KFileDialog> dialog = new KFileDialog( KUrl(), "*.*|All Files", this );
 	dialog->setObjectName( "dialog" );
+	dialog->setCaption( i18n( "Select SQLite database file") );
 	dialog->setModal( true );
 	if ( dialog->exec() == QDialog::Accepted ) {
 		fileEdit->setText( dialog->selectedFile() );
