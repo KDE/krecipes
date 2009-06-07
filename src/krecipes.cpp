@@ -587,10 +587,10 @@ void Krecipes::mergeSimilarCategories()
 {
 	ElementList categories;
 	m_view->database->loadCategories(&categories);
-	SimilarCategoriesDialog dlg(categories,this);
-	if ( dlg.exec() == QDialog::Accepted ) {
-		QList<int> ids = dlg.matches();
-		QString name = dlg.element();
+	QPointer<SimilarCategoriesDialog> dlg = new SimilarCategoriesDialog( categories, this );
+	if ( dlg->exec() == QDialog::Accepted ) {
+		QList<int> ids = dlg->matches();
+		QString name = dlg->element();
 
 		int id = m_view->database->findExistingCategoryByName(name);
 		if ( id == -1 ) {
@@ -603,16 +603,17 @@ void Krecipes::mergeSimilarCategories()
 				m_view->database->mergeCategories(id, *it);
 		}
 	}
+	delete dlg;
 }
 
 void Krecipes::mergeSimilarIngredients()
 {
 	ElementList ingredients;
 	m_view->database->loadIngredients(&ingredients);
-	SimilarCategoriesDialog dlg(ingredients,this);
-	if ( dlg.exec() == QDialog::Accepted ) {
-		QList<int> ids = dlg.matches();
-		QString name = dlg.element();
+	QPointer<SimilarCategoriesDialog> dlg = new SimilarCategoriesDialog( ingredients, this );
+	if ( dlg->exec() == QDialog::Accepted ) {
+		QList<int> ids = dlg->matches();
+		QString name = dlg->element();
 
 		if ( ids.isEmpty() || name.isEmpty() ) return;
 
@@ -627,6 +628,7 @@ void Krecipes::mergeSimilarIngredients()
 				m_view->database->mergeIngredients(id, *it);
 		}
 	}
+	delete dlg;
 }
 
 //return true to close app
