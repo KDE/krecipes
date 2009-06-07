@@ -571,7 +571,7 @@ void KrecipesView::wizard( bool force )
 		int port;
 		bool isRemote;
 
-		SetupAssistant *setupAssistant = new SetupAssistant( this );
+		QPointer<SetupAssistant> setupAssistant = new SetupAssistant( this );
 		if ( setupAssistant->exec() == QDialog::Accepted )
 		{
                     config.sync();
