@@ -526,6 +526,7 @@ void Krecipes::printSetupSlot()
 	}
 
 	QPointer<PageSetupDialog> pageSetup = new PageSetupDialog( this, recipe, "Print" );
+	pageSetup->setCaption( i18n("Print Setup") );
 	pageSetup->exec();
 	delete pageSetup;
 }

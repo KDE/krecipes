@@ -55,6 +55,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
         setMainWidget( w );
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
+	setCaption( i18n("Page Setup") );
 
 	toolbar->addAction( KStandardAction::open( this, SLOT(loadFile()), actionCollection ) );
 	toolbar->addAction( KStandardAction::save( this, SLOT( saveLayout() ), actionCollection ) );
