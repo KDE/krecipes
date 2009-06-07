@@ -362,7 +362,7 @@ void Krecipes::filePrint()
 
 void Krecipes::import()
 {
-	KFileDialog file_dialog( KUrl(),
+	QPointer<KFileDialog> file_dialog = new KFileDialog( KUrl(),
 	                         "*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
 	                         "*.mx2|MasterCook (*.mx2)\n"
 	                         "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
@@ -373,13 +373,13 @@ void Krecipes::import()
 	                         this,
 	                        0
 	                       );
-	file_dialog.setObjectName( "file_dialog" );
-	file_dialog.setMode( KFile::Files );
+	file_dialog->setObjectName( "file_dialog" );
+	file_dialog->setMode( KFile::Files );
 
-	if ( file_dialog.exec() == KFileDialog::Accepted ) {
+	if ( file_dialog->exec() == KFileDialog::Accepted ) {
 		QStringList warnings_list;
 
-		QString selected_filter = file_dialog.currentFilter();
+		QString selected_filter = file_dialog->currentFilter();
 
 		BaseImporter *importer;
 		if ( selected_filter == "*.mxp *.txt" )
@@ -408,7 +408,7 @@ void Krecipes::import()
 
 		parsing_file_dlg->show();
 		KApplication::setOverrideCursor( Qt::WaitCursor );
-		importer->parseFiles( file_dialog.selectedFiles() );
+		importer->parseFiles( file_dialog->selectedFiles() );
 		parsing_file_dlg->hide();
 		KApplication::restoreOverrideCursor();
 
@@ -444,24 +444,26 @@ void Krecipes::import()
 
 		delete importer;
 	}
+
+	delete file_dialog;
 }
 
 void Krecipes::kreDBImport()
 {
-	DBImportDialog importOptions;
-	if ( importOptions.exec() == QDialog::Accepted ) {
+	QPointer<DBImportDialog> importOptions = new DBImportDialog;
+	if ( importOptions->exec() == QDialog::Accepted ) {
 		//Get all params, even if we don't use them
 		QString host, user, pass, table;
 		int port;
-		importOptions.serverParams( host, user, pass, port, table );
+		importOptions->serverParams( host, user, pass, port, table );
 
-		KreDBImporter importer( importOptions.dbType(), host, user, pass, port ); //last 4 params may or may not be even used (depends on dbType)
+		KreDBImporter importer( importOptions->dbType(), host, user, pass, port ); //last 4 params may or may not be even used (depends on dbType)
 
 		parsing_file_dlg->show();
 		KApplication::setOverrideCursor( Qt::WaitCursor );
 		QStringList tables;
-		if ( importOptions.dbType() == "SQLite" )
-			tables << importOptions.dbFile();
+		if ( importOptions->dbType() == "SQLite" )
+			tables << importOptions->dbFile();
 		else //MySQL or PostgreSQL
 			tables << table;
 		importer.parseFiles( tables );
@@ -487,6 +489,7 @@ void Krecipes::kreDBImport()
 		else
 			importer.import(m_view->database);
 	}
+	delete importOptions;
 }
 
 void Krecipes::pageSetupSlot()
@@ -503,8 +506,9 @@ void Krecipes::pageSetupSlot()
 		QString::null, "sharedLayoutWarning" );
 	}
 
-	PageSetupDialog page_setup( this, recipe );
-	page_setup.exec();
+	QPointer<PageSetupDialog> page_setup = new PageSetupDialog( this, recipe );
+	page_setup->exec();
+	delete page_setup;
 }
 
 void Krecipes::printSetupSlot()
@@ -521,8 +525,9 @@ void Krecipes::printSetupSlot()
 		QString::null, "sharedLayoutWarning" );
 	}
 
-	PageSetupDialog pageSetup( this, recipe, "Print" );
-	pageSetup.exec();
+	QPointer<PageSetupDialog> pageSetup = new PageSetupDialog( this, recipe, "Print" );
+	pageSetup->exec();
+	delete pageSetup;
 }
 
 void Krecipes::conversionToolSlot()
@@ -667,9 +672,10 @@ void Krecipes::optionsConfigureToolbars()
 	// use the standard toolbar editor
 	saveMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
 
-	KEditToolBar dlg( actionCollection() );
-	connect( &dlg, SIGNAL( newToolbarConfig() ), this, SLOT( newToolbarConfig() ) );
-	dlg.exec();
+	QPointer<KEditToolBar> dlg = new KEditToolBar( actionCollection() );
+	connect( dlg, SIGNAL( newToolbarConfig() ), this, SLOT( newToolbarConfig() ) );
+	dlg->exec();
+	delete dlg;
 }
 
 void Krecipes::newToolbarConfig()
@@ -685,8 +691,9 @@ void Krecipes::optionsPreferences()
 {
 
 	// popup some sort of preference dialog, here
-	KrecipesPreferences dlg( this );
-	dlg.exec();
+	QPointer<KrecipesPreferences> dlg = new KrecipesPreferences( this );
+	dlg->exec();
+	delete dlg;
 
 }
 
