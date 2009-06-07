@@ -374,6 +374,7 @@ void Krecipes::import()
 	                        0
 	                       );
 	file_dialog->setObjectName( "file_dialog" );
+	file_dialog->setCaption( i18n( "Import from file" ) );
 	file_dialog->setMode( KFile::Files );
 
 	if ( file_dialog->exec() == KFileDialog::Accepted ) {
