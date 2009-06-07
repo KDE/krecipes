@@ -54,7 +54,8 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 		: KPageDialog( parent )
 {
 	setFaceType( List );
-	setObjectName( i18n( "Krecipes Preferences" ) );
+	setObjectName( "KrecipesPreferences" );
+	setCaption( i18n( "Configure" ) );
 	setButtons( Help | Ok | Cancel );
 	setDefaultButton( Ok );
 
