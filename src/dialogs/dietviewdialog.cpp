@@ -22,12 +22,12 @@
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 		: KDialog( parent )
 {
-    setButtons(KDialog::User2 | KDialog::Close | KDialog::User1);
-    setDefaultButton(KDialog::User2);
-    setModal( false );
-    KVBox *page = new KVBox( this );
-    setMainWidget(page);
-    setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
+	setButtons(KDialog::User2 | KDialog::Close | KDialog::User1);
+	setDefaultButton(KDialog::User2);
+	setModal( false );
+	KVBox *page = new KVBox( this );
+	setMainWidget(page);
+	setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
 
 	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
 

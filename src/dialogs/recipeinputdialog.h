@@ -61,9 +61,9 @@ class ClickableLed;
 class RatingDisplayWidget : public QWidget, public Ui::RatingDisplayWidget
 {
 public:
-  RatingDisplayWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+	RatingDisplayWidget( QWidget *parent ) : QWidget( parent ) {
+		setupUi( this );
+	}
 RatingList::iterator rating_it;
 };
 

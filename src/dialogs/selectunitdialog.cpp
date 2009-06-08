@@ -19,15 +19,14 @@
 #include <QVBoxLayout>
 
 SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, OptionFlag showEmpty )
-		: KDialog( parent)
-                , m_showEmpty(showEmpty)
+		: KDialog( parent), m_showEmpty(showEmpty)
 {
-    setButtons(  KDialog::Ok | KDialog::Cancel );
-    setDefaultButton( KDialog::Ok );
-    setCaption(i18n( "Choose Unit" ) );
-    setModal( true );
-    KVBox *page = new KVBox(this );
-    setMainWidget( page );
+	setButtons(  KDialog::Ok | KDialog::Cancel );
+	setDefaultButton( KDialog::Ok );
+	setCaption(i18n( "Choose Unit" ) );
+	setModal( true );
+	KVBox *page = new KVBox(this );
+	setMainWidget( page );
 
 	box = new Q3GroupBox( page );
 	box->setTitle( i18n( "Choose Unit" ) );

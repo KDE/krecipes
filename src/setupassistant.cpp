@@ -137,9 +137,9 @@ void SetupAssistant::showPages( DBType type )
 WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -155,7 +155,7 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 
 	welcomeText = new QLabel( this );
 	welcomeText->setText( i18n( "<b><font size=\"+1\">Thank you very much for choosing Krecipes.</font></b><br>It looks like this is the first time you are using it. This wizard will help you with the initial setup so that you can start using it quickly.<br><br>Welcome, and enjoy cooking!" ) );
-        welcomeText->setWordWrap(true);
+	welcomeText->setWordWrap(true);
 	welcomeText->setAlignment( Qt::AlignTop );
 	layout->addWidget( welcomeText, 1, 3 );
 
@@ -164,9 +164,9 @@ WelcomePage::WelcomePage( QWidget *parent ) : QWidget( parent )
 PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -188,7 +188,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	// Explanation Text
 	permissionsText = new QLabel( this );
 	permissionsText->setText( i18n( "This dialog will allow you to specify a MySQL account that has the necessary permissions to access the Krecipes MySQL database.<br><br><b><font size=\"+1\">Most users that use Krecipes and MySQL for the first time can just leave the default parameters and press \'Next\'.</font></b> <br><br>If you set a MySQL root password before, or you have already permissions as normal user, click on the appropriate option. Otherwise the account 'root' will be used, with no password.<br><br>[For security reasons, we strongly encourage you to setup a MySQL root password if you have not done so yet. Just type as root: mysqladmin password <i>your_password</i>]" ) );
-        permissionsText->setWordWrap(true);
+	permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	permissionsText->setAlignment( Qt::AlignTop );
 	layout->addWidget( permissionsText, 1, 3 );
@@ -200,7 +200,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 	// "The user already has permissions" checkbox
 	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
-   noSetupCheckBox->setObjectName( "noSetupCheckBox" );
+	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	layout->addWidget( noSetupCheckBox, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -208,7 +208,7 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 	// root checkbox
 	rootCheckBox = new QCheckBox( i18n( "I have already set a MySQL root/admin account" ), this );
-   rootCheckBox->setObjectName( "rootCheckBox" );
+	rootCheckBox->setObjectName( "rootCheckBox" );
 	layout->addWidget( rootCheckBox, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -279,9 +279,9 @@ void PermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -303,7 +303,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	// Explanation Text
 	permissionsText = new QLabel( this );
 	permissionsText->setText( i18n( "This dialog will allow you to specify a PostgreSQL account that has the necessary permissions to access the Krecipes PostgreSQL database.  This account may either be a <b>PostgreSQL superuser</b> or have the ability to both <b>create new PostgreSQL users and databases</b>.<br><br>If no superuser or privileged account is given, the account 'postgres' will be attempted, with no password.  If this is insufficient for your PostgreSQL setup, you <b>must</b> select the appropriate option below to enter the information of a privileged PostgreSQL account." ) );
-        permissionsText->setWordWrap(true);
+	permissionsText->setWordWrap(true);
 	permissionsText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	permissionsText->setAlignment( Qt::AlignTop );
 	layout->addWidget( permissionsText, 1, 3 );
@@ -315,7 +315,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// "The user already has permissions" checkbox
 	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
-   noSetupCheckBox->setObjectName( "noSetupCheckBox" );
+	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	layout->addWidget( noSetupCheckBox, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -323,7 +323,7 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// root checkbox
 	rootCheckBox = new QCheckBox( i18n( "I have already set a superuser or privileged account" ), this );
-   rootCheckBox->setObjectName( "rootCheckBox" );
+	rootCheckBox->setObjectName( "rootCheckBox" );
 	layout->addWidget( rootCheckBox, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -394,9 +394,9 @@ void PSqlPermissionsSetupPage::noSetupCheckBoxChanged( bool on )
 ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -420,7 +420,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	serverSetupText->setText( i18n( "In this dialog you can adjust the database server settings.<br><br><b>Warning: Passwords are stored in plain text and could potentially be compromised.  We recommend that you create a username and password combination solely for use by Krecipes.</b>" ) );
 	serverSetupText->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
 	serverSetupText->setAlignment( Qt::AlignTop  );
-        serverSetupText->setWordWrap(true);
+	serverSetupText->setWordWrap(true);
 	layout->addWidget( serverSetupText, 1, 3 );
 
 	// Text spacer
@@ -480,7 +480,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	// Remote server checkbox
 
 	remoteServerCheckBox = new QCheckBox( i18n( "The server is remote" ), this );
-   remoteServerCheckBox->setObjectName( "remoteServerCheckBox" );
+	remoteServerCheckBox->setObjectName( "remoteServerCheckBox" );
 	layout->addWidget( remoteServerCheckBox, 5, 3 );
 
 	// Spacer from CheckBox
@@ -557,9 +557,9 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -636,9 +636,9 @@ void SQLiteSetupPage::selectFile()
 SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -656,7 +656,7 @@ SavePage::SavePage( QWidget *parent ) : QWidget( parent )
 	saveText = new QLabel( this );
 	saveText->setText( i18n( "Congratulations; all the necessary configuration setup is done. Press 'Finish' to continue, and enjoy cooking!" ) );
 	saveText->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-        saveText->setWordWrap(true);
+	saveText->setWordWrap(true);
 	saveText->setAlignment( Qt::AlignVCenter );
 	layout->addWidget( saveText, 1, 3 );
 
@@ -735,9 +735,9 @@ void SetupAssistant::getServerInfo( bool &isRemote, QString &host, QString &clie
 DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -753,7 +753,7 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	initializeText->setText( i18n( "Krecipes comes with some delicious default recipes and useful data. <br><br>Would you like to initialize your database with those? Note that this will erase all your previous recipes if you have any. " ) );
 
 	initializeText->setAlignment( Qt::AlignTop  );
-        initializeText->setWordWrap(true);
+	initializeText->setWordWrap(true);
 	layout->addWidget( initializeText, 1, 3 );
 
 	// Logo
@@ -770,21 +770,21 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	// Initialize data checkbox
 
 	initializeCheckBox = new QCheckBox( i18n( "Yes please, initialize the database with the examples" ), this );
-   initializeCheckBox->setObjectName( "initializeCheckBox" );
+	initializeCheckBox->setObjectName( "initializeCheckBox" );
 	layout->addWidget( initializeCheckBox, 3, 3 );
 
 	QSpacerItem *textInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( textInfoSpacer, 4, 3 );
 
 	USDAImportText = new QLabel( i18n( "Krecipes can import nutrient data from the USDA's nutrient database for over 400 foods.  A total of 43 food properties are included for each food, such as energy, fat, vitamin C, etc.<br><br>Would you like to import this data now?  Note that this operation is safe to use on an existing database, and no data loss will occur.  This operation may take several minutes." ), this );
-        USDAImportText->setWordWrap(true);
+	USDAImportText->setWordWrap(true);
 	layout->addWidget( USDAImportText, 5, 3 );
 
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 
 	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods." ), this );
-   USDAImportCheckBox->setObjectName( "USDAImportCheckBox" );
+	USDAImportCheckBox->setObjectName( "USDAImportCheckBox" );
 	layout->addWidget( USDAImportCheckBox, 7, 3 );
 }
 
@@ -806,9 +806,9 @@ void DataInitializePage::setUSDAImport( bool import )
 DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 	QSpacerItem *spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 	QSpacerItem *spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -830,7 +830,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	// Explanation text
 	dbTypeSetupText = new QLabel( this );
 	dbTypeSetupText->setText( i18n( "Choose the type of database that you want to use. Most users will want to choose a simple local database here. However, you can also use remote servers by means of a MySQL or PostgreSQL database." ) );
-        dbTypeSetupText->setWordWrap(true);
+	dbTypeSetupText->setWordWrap(true);
 	dbTypeSetupText->setAlignment( Qt::AlignTop  );
 	layout->addWidget( dbTypeSetupText, 1, 3 );
 
@@ -847,13 +847,13 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	layout->addWidget( bg, 3, 3 );
 
 	liteCheckBox = new QRadioButton( i18n( "Simple Local File (SQLite)" ), bg );
-   liteCheckBox->setObjectName( "liteCheckBox" );
+	liteCheckBox->setObjectName( "liteCheckBox" );
 	vbox->addWidget( liteCheckBox );
 	mysqlCheckBox = new QRadioButton( i18n( "Local or Remote MySQL Database" ), bg );
-   mysqlCheckBox->setObjectName( "mysqlCheckBox" );
+	mysqlCheckBox->setObjectName( "mysqlCheckBox" );
 	vbox->addWidget( mysqlCheckBox );
 	psqlCheckBox = new QRadioButton( i18n( "Local or Remote PostgreSQL Database" ), bg );
-   psqlCheckBox->setObjectName( "psqlCheckBox" );
+	psqlCheckBox->setObjectName( "psqlCheckBox" );
 	vbox->addWidget( psqlCheckBox );
 	
 	bg->setLayout(vbox);

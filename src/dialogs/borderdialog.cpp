@@ -50,17 +50,17 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	borderGroupBoxLayout->setAlignment( Qt::AlignTop );
 
 	layout4 = new QHBoxLayout();
-   layout4->setMargin( 0 );
-   layout4->setSpacing( 6 );
-   layout4->setObjectName( "layout4" );
+	layout4->setMargin( 0 );
+	layout4->setSpacing( 6 );
+	layout4->setObjectName( "layout4" );
 
 	layout3 = new QVBoxLayout();
-   layout3->setMargin( 0 );
-   layout3->setSpacing( 6 );
-   layout3->setObjectName( "layout3" );
+	layout3->setMargin( 0 );
+	layout3->setSpacing( 6 );
+	layout3->setObjectName( "layout3" );
 
 	styleLabel = new QLabel( borderGroupBox );
-   styleLabel->setObjectName( "styleLabel" );
+	styleLabel->setObjectName( "styleLabel" );
 	layout3->addWidget( styleLabel );
 
 	styleListBox = new K3ListBox( borderGroupBox, "styleListBox" );
@@ -68,12 +68,12 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout4->addLayout( layout3 );
 
 	layout2 = new QVBoxLayout();
-   layout2->setMargin( 0 );
-   layout2->setSpacing( 6 );
-   layout2->setObjectName( "layout2" );
+	layout2->setMargin( 0 );
+	layout2->setSpacing( 6 );
+	layout2->setObjectName( "layout2" );
 
 	colorLabel = new QLabel( borderGroupBox );
-   colorLabel->setObjectName( "colorLabel" );
+	colorLabel->setObjectName( "colorLabel" );
 	layout2->addWidget( colorLabel );
 
 	KHBox *color_hbox = new KHBox( borderGroupBox );
@@ -90,16 +90,16 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	layout4->addLayout( layout2 );
 
 	layout1 = new QVBoxLayout();
-   layout1->setMargin( 0 );
-   layout1->setSpacing( 6 );
-   layout1->setObjectName( "layout1" );
+	layout1->setMargin( 0 );
+	layout1->setSpacing( 6 );
+	layout1->setObjectName( "layout1" );
 
 	widthLabel = new QLabel( borderGroupBox );
-   widthLabel->setObjectName( "widthLabel" );
+	widthLabel->setObjectName( "widthLabel" );
 	layout1->addWidget( widthLabel );
 
 	widthSpinBox = new QSpinBox( borderGroupBox );
-   widthSpinBox->setObjectName( "widthSpinBox" );
+	widthSpinBox->setObjectName( "widthSpinBox" );
 	widthSpinBox->setMinimum( 1 );
 	layout1->addWidget( widthSpinBox );
 

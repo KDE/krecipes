@@ -22,7 +22,7 @@
 #include <QVBoxLayout>
 
 namespace Sonnet {
-    class ConfigWidget;
+	class ConfigWidget;
 }
 
 class ServerPrefs;
@@ -55,7 +55,7 @@ private:
 	NumbersPrefs *m_pageNumbers;
 	ImportPrefs *m_pageImport;
 	PerformancePrefs *m_pagePerformance;
-    SpellCheckingPrefs *m_pageSpellChecking;
+	SpellCheckingPrefs *m_pageSpellChecking;
 
 	QMap<QString,QString> m_helpMap;
 
@@ -195,7 +195,7 @@ public:
 
 	void saveOptions();
 protected:
-    Sonnet::ConfigWidget *m_confPage;
+	Sonnet::ConfigWidget *m_confPage;
 };
 
 #endif // _KRECIPESPREF_H_

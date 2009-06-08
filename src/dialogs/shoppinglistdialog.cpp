@@ -66,9 +66,9 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	// Design dialog
 	layout = new QGridLayout( this );
-   layout->cellRect( 2, 2 );
-   layout->setMargin( KDialog::marginHint() );
-   layout->setSpacing( KDialog::spacingHint() );
+	layout->cellRect( 2, 2 );
+	layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
 
 	recipeListView = new KreListView ( this, i18n( "Full recipe list" ), true, 1 );
 	layout->addWidget( recipeListView, 0, 0 );
@@ -79,13 +79,13 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	listview->setDropVisualizer( false );
 	connect( recipeListView, SIGNAL( textChanged(const QString&) ), SLOT( ensurePopulated() ) );
 	connect( listview, SIGNAL( dropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ),
-	         this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
+		      this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
 	recipeListView->setListView( listview );
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
-   vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->setSpacing( KDialog::spacingHint() );
 	addRecipeButton = new KPushButton( this );
 	addRecipeButton->setIcon( KIcon( "go-next" ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
@@ -107,7 +107,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	slistview->setAcceptDrops( true );
 	slistview->setDropVisualizer( false );
 	connect( slistview, SIGNAL( dropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ),
-	         this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
+		      this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
 	shopRecipeListView->setListView( slistview );
 	layout->addWidget( shopRecipeListView, 0, 2 );
 
@@ -129,14 +129,14 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	layout->setColumnStretch( 2, 1 );
 
 	okButton = new KPushButton( buttonBar );
-   okButton->setObjectName( "okButton" );
+	okButton->setObjectName( "okButton" );
 	okButton->setText( i18n( "&OK" ) );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	clearButton = new KPushButton( buttonBar );
-   clearButton->setObjectName( "clearButton" );
+	clearButton->setObjectName( "clearButton" );
 	clearButton->setText( i18n( "Clear" ) );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 
@@ -181,11 +181,11 @@ void ShoppingListDialog::addRecipe( void )
 {
 	QList<Q3ListViewItem*> items = recipeListView->listView()->selectedItems();
 
-        for ( int i = 0;i <items.count();i++ )
-        {
-            addRecipe( items.at( i ) );
+	     for ( int i = 0;i <items.count();i++ )
+	     {
+	         addRecipe( items.at( i ) );
 
-        }
+	     }
 }
 
 void ShoppingListDialog::addRecipe( Q3ListViewItem *item )

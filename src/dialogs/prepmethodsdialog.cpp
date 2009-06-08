@@ -30,8 +30,8 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	database = db;
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-   layout->setSpacing( KDialog::spacingHint() );
-   layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );
@@ -39,7 +39,7 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	//Buttons
 	QVBoxLayout* vboxl = new QVBoxLayout(); 
-   vboxl->setSpacing ( KDialog::spacingHint() );
+	vboxl->setSpacing ( KDialog::spacingHint() );
 
 	newPrepMethodButton = new KPushButton( this );
 	newPrepMethodButton->setText( i18n( "Create ..." ) );
@@ -58,7 +58,7 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	connect ( newPrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( createNew() ) );
 	connect ( removePrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( remove
-		          () ) );
+				   () ) );
 }
 
 PrepMethodsDialog::~PrepMethodsDialog()

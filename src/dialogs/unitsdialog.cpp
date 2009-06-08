@@ -38,21 +38,21 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 
 	// Design dialog
 	QHBoxLayout* page_layout = new QHBoxLayout( this );
-   page_layout->setMargin( KDialog::marginHint() );
-   page_layout->setSpacing( KDialog::spacingHint() );
+	page_layout->setMargin( KDialog::marginHint() );
+	page_layout->setSpacing( KDialog::spacingHint() );
 
 	QTabWidget *tabWidget = new QTabWidget( this );
 
 	QWidget *unitTab = new QWidget( tabWidget );
 	QHBoxLayout* layout = new QHBoxLayout( unitTab );
-   layout->setMargin( KDialog::marginHint() );
-   layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
 
 	unitListView = new StdUnitListView( unitTab, database, true );
 	layout->addWidget( unitListView );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
-   vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newUnitButton = new KPushButton( unitTab );
 	newUnitButton->setText( i18n( "Create ..." ) );

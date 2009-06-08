@@ -45,12 +45,12 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 		: KDialog( parent ),
 		m_recipe( recipe )
 {
-    setCaption(i18n("Resize Recipe" ));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	setCaption(i18n("Resize Recipe" ));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 	buttonGroup = new Q3ButtonGroup( page );
 	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
 	buttonGroup->setLineWidth( 0 );
@@ -69,9 +69,9 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	yieldFrame->setFrameShadow( QFrame::Sunken );
 	yieldFrame->setLineWidth( 1 );
 	yieldFrameLayout = new QGridLayout( yieldFrame );
-   yieldFrameLayout->cellRect( 1, 1 );
-   yieldFrameLayout->setMargin( 11 );
-   yieldFrameLayout->setSpacing( 6 );
+	yieldFrameLayout->cellRect( 1, 1 );
+	yieldFrameLayout->setMargin( 11 );
+	yieldFrameLayout->setSpacing( 6 );
 
 	currentYieldLabel = new QLabel( yieldFrame );
 
@@ -101,8 +101,8 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	factorFrame->setFrameShadow( QFrame::Sunken );
 	factorFrame->setLineWidth( 1 );
 	factorFrameLayout = new QHBoxLayout( factorFrame );
-   factorFrameLayout->setMargin( 11 );
-   factorFrameLayout->setSpacing( 6 );
+	factorFrameLayout->setMargin( 11 );
+	factorFrameLayout->setSpacing( 6 );
 
 	factorLabel = new QLabel( factorFrame );
 	factorFrameLayout->addWidget( factorLabel );

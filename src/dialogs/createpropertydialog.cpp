@@ -20,16 +20,16 @@
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 		: KDialog( parent )
 {
-    setCaption( i18n( "New Property" ) );
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton( KDialog::Ok);
-    setModal( true );
+	setCaption( i18n( "New Property" ) );
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton( KDialog::Ok);
+	setModal( true );
 	// Initialize Internal Variables
 	unitList = list; // Store the pointer to the unitList;
 
 	// Initialize widgets
 	KVBox *page = new KVBox( this );
-        setMainWidget( page );
+	setMainWidget( page );
 	box = new Q3GroupBox( page );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
@@ -70,5 +70,4 @@ QString CreatePropertyDialog::newUnitsName( void )
 {
 	return ( propertyUnits->text() );
 }
-
 

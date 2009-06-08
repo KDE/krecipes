@@ -58,27 +58,27 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	dbButtonGroupLayout->setAlignment( Qt::AlignTop );
 
 	liteRadioButton = new QRadioButton( dbButtonGroup );
-   liteRadioButton->setObjectName( "liteRadioButton" );
+	liteRadioButton->setObjectName( "liteRadioButton" );
 	liteRadioButton->setChecked( true );
 	dbButtonGroupLayout->addWidget( liteRadioButton );
 
 	mysqlRadioButton = new QRadioButton( dbButtonGroup );
-   mysqlRadioButton->setObjectName( "mysqlRadioButton" );
+	mysqlRadioButton->setObjectName( "mysqlRadioButton" );
 	dbButtonGroupLayout->addWidget( mysqlRadioButton );
 
 	psqlRadioButton = new QRadioButton( dbButtonGroup );
-   psqlRadioButton->setObjectName( "psqlRadioButton" );
+	psqlRadioButton->setObjectName( "psqlRadioButton" );
 	dbButtonGroupLayout->addWidget( psqlRadioButton );
 
 	paramStack = new QStackedWidget( page );
 	paramStack->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, paramStack->sizePolicy().hasHeightForWidth() ) );
 
 	sqlitePage = new QWidget( paramStack );
-   sqlitePage->setObjectName( "sqlitePage" );
+	sqlitePage->setObjectName( "sqlitePage" );
 	serverPageLayout_2 = new QVBoxLayout( sqlitePage );
-   serverPageLayout_2->setMargin( 11 );
-   serverPageLayout_2->setSpacing( 6 );
-   serverPageLayout_2->setObjectName( "serverPageLayout_2" );
+	serverPageLayout_2->setMargin( 11 );
+	serverPageLayout_2->setSpacing( 6 );
+	serverPageLayout_2->setObjectName( "serverPageLayout_2" );
 
 	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
@@ -92,38 +92,38 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	paramStack->insertWidget( 1, sqlitePage );
 
 	serverPage = new QWidget( paramStack );
-   serverPage->setObjectName( "serverPage" );
+	serverPage->setObjectName( "serverPage" );
 	serverPageLayout = new QVBoxLayout( serverPage );
-   serverPageLayout->setMargin( 11 );
-   serverPageLayout->setSpacing( 6 );
-   serverPageLayout->setObjectName( "serverPageLayout" );
+	serverPageLayout->setMargin( 11 );
+	serverPageLayout->setSpacing( 6 );
+	serverPageLayout->setObjectName( "serverPageLayout" );
 
 	layout5 = new QGridLayout();
-   layout5->cellRect( 1, 1 );
-   layout5->setMargin( 0 );
-   layout5->setSpacing( 6 );
-   layout5->setObjectName( "layout5" );
+	layout5->cellRect( 1, 1 );
+	layout5->setMargin( 0 );
+	layout5->setSpacing( 6 );
+	layout5->setObjectName( "layout5" );
 
 	hostEdit = new KLineEdit( serverPage );
-   hostEdit->setObjectName( "hostEdit" );
+	hostEdit->setObjectName( "hostEdit" );
 	layout5->addWidget( hostEdit, 0, 1 );
 	hostLabel = new QLabel( serverPage );
-   hostLabel->setObjectName( "hostLabel" );
+	hostLabel->setObjectName( "hostLabel" );
 	layout5->addWidget( hostLabel, 0, 0 );
 
 	userEdit = new KLineEdit( serverPage );
-   userEdit->setObjectName( "userEdit" );
+	userEdit->setObjectName( "userEdit" );
 	layout5->addWidget( userEdit, 1, 1 );
 	userLabel = new QLabel( serverPage );
-   userLabel->setObjectName( "userLabel" );
+	userLabel->setObjectName( "userLabel" );
 	layout5->addWidget( userLabel, 1, 0 );
 
 	passwordEdit = new KLineEdit( serverPage );
-   passwordEdit->setObjectName( "passwordEdit" );
+	passwordEdit->setObjectName( "passwordEdit" );
 	passwordEdit->setEchoMode( KLineEdit::Password );
 	layout5->addWidget( passwordEdit, 2, 1 );
 	passwordLabel = new QLabel( serverPage );
-   passwordLabel->setObjectName( "passwordLabel" );
+	passwordLabel->setObjectName( "passwordLabel" );
 	layout5->addWidget( passwordLabel, 2, 0 );
 
 	portEdit = new KIntNumInput( serverPage );
@@ -132,14 +132,14 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	portEdit->setValue(0);
 	layout5->addWidget( portEdit, 3, 1 );
 	portLabel = new QLabel( serverPage );
-   portLabel->setObjectName( "portLabel" );
+	portLabel->setObjectName( "portLabel" );
 	layout5->addWidget( portLabel, 3, 0 );
 
 	nameEdit = new KLineEdit( serverPage );
-   nameEdit->setObjectName( "nameEdit" );
+	nameEdit->setObjectName( "nameEdit" );
 	layout5->addWidget( nameEdit, 4, 1 );
 	nameLabel = new QLabel( serverPage );
-   nameLabel->setObjectName( "nameLabel" );
+	nameLabel->setObjectName( "nameLabel" );
 	layout5->addWidget( nameLabel, 4, 0 );
 
 	serverPageLayout->addLayout( layout5 );

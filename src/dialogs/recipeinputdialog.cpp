@@ -94,8 +94,8 @@ ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabe
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
 {
-   if ( event->mimeData()->hasImage() )
-        event->acceptProposedAction();
+	if ( event->mimeData()->hasImage() )
+		 event->acceptProposedAction();
 }
 
 void ImageDropLabel::dropEvent( QDropEvent* event )
@@ -132,7 +132,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Tabs
 	tabWidget = new QTabWidget( this );
-   setObjectName( "tabWidget" );
+	setObjectName( "tabWidget" );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
 
@@ -146,9 +146,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Design the Dialog
 	QGridLayout* recipeLayout = new QGridLayout( recipeTab );
-   recipeLayout->cellRect( 1, 1 );
-   recipeLayout->setMargin( 0 );
-   recipeLayout->setSpacing( 0 );
+	recipeLayout->cellRect( 1, 1 );
+	recipeLayout->setMargin( 0 );
+	recipeLayout->setSpacing( 0 );
 	recipeTab->setLayout( recipeLayout );
 
 	// Border
@@ -268,7 +268,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	( void ) new QLabel( i18n( "Preparation Time" ), prepTimeBox );
 	prepTimeEdit = new QDateTimeEdit( prepTimeBox );
 	prepTimeEdit->setMinimumTime( QTime( 0, 0 ) );
-   prepTimeEdit->setDisplayFormat( "hh:mm");
+	prepTimeEdit->setDisplayFormat( "hh:mm");
 
 	recipeLayout->addWidget( serv_prep_box, 6, 4 );
 
@@ -362,8 +362,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 3, 0 );
 
 	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientsTab );
-   propertyStatusLayout->setMargin( 0 );
-   propertyStatusLayout->setSpacing( 5 );
+	propertyStatusLayout->setMargin( 0 );
+	propertyStatusLayout->setSpacing( 5 );
 
 	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientsTab );
 	propertyStatusLabel = new QLabel( ingredientsTab );
@@ -633,7 +633,7 @@ void RecipeInputDialog::reload( void )
 	//show photo
 	if ( !loadedRecipe->photo.isNull() ) {
 
-		//     		//get the photo
+		//	 		//get the photo
 		sourcePhoto = loadedRecipe->photo;
 
 		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
@@ -684,8 +684,8 @@ void RecipeInputDialog::changePhoto( void )
 {
 	// standard filedialog
 	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
-        if ( url.isEmpty() )
-            return;
+	if ( url.isEmpty() )
+		return;
 	QString filename;
 	if (!url.isLocalFile()) {
 		if (!KIO::NetAccess::download(url,filename,this)) {
@@ -965,7 +965,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			if ( ok )
 			{
 				if ( new_ing.amount != new_ing_amount.amount ||
-				     new_ing.amount_offset != new_ing_amount.amount_offset ) {
+					 new_ing.amount_offset != new_ing_amount.amount_offset ) {
 					new_ing.amount = new_ing_amount.amount;
 					new_ing.amount_offset = new_ing_amount.amount_offset;
 					if ( !new_text.isEmpty() )
@@ -1021,10 +1021,10 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			QString old_text = new_ing.prepMethodList.join(",");
 
 			QStringList prepMethodList;
-         if (new_text.isEmpty())
-            prepMethodList = QStringList();
-         else
-            prepMethodList = new_text.split( ",", QString::SkipEmptyParts);
+			if (new_text.isEmpty())
+				prepMethodList = QStringList();
+			else
+				prepMethodList = new_text.split( ",", QString::SkipEmptyParts);
 
 			for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )

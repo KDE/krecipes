@@ -22,13 +22,13 @@ class KLineEdit;
 */
 class CreateElementDialog : public KDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
 	CreateElementDialog( QWidget *parent, const QString &text );
 	~CreateElementDialog();
 	QString newElementName() const;
 protected slots:
-    void slotTextChanged( const QString& text );
+	void slotTextChanged( const QString& text );
 
 private:
 	KLineEdit *elementEdit;

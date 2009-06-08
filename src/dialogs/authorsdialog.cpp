@@ -26,14 +26,14 @@
 #include <KPushButton>
 
 AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
-    : QWidget( parent )
+	 : QWidget( parent )
 {
 
 	// Store pointer to database
 	database = db;
 	QHBoxLayout* layout = new QHBoxLayout( this );
-   layout->setMargin( KDialog::marginHint() );
-   layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
 
 	//Author List
 	authorListView = new StdAuthorListView( this, database, true );
@@ -41,7 +41,7 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Buttons
 	QVBoxLayout* vboxl = new QVBoxLayout();
-   vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newAuthorButton = new KPushButton( this );
 	newAuthorButton->setText( i18n( "Create ..." ) );

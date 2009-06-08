@@ -36,17 +36,17 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 		: KDialog( parent ),
 		m_database(db)
 {
-    setObjectName( name );
-    setCaption(i18n( "Measurement Converter" ));
-    setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
-    setDefaultButton(KDialog::Close);
-    setHelp("measure-converter");
-    setButtonText( KDialog::User1, i18n("Convert") );
+	 setObjectName( name );
+	 setCaption(i18n( "Measurement Converter" ));
+	 setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
+	 setDefaultButton(KDialog::Close);
+	 setHelp("measure-converter");
+	 setButtonText( KDialog::User1, i18n("Convert") );
 
-    setModal( false );
+	 setModal( false );
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	 KVBox *page = new KVBox( this );
+	 setMainWidget( page );
 
 	KHBox *vbox = new KVBox(page);
 
@@ -80,9 +80,9 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	KHBox *resultBox = new KHBox(vbox);
 	resultLabel = new QLabel( resultBox );
-   resultLabel->setObjectName( "resultLabel" );
+	resultLabel->setObjectName( "resultLabel" );
 	resultText = new QLabel( resultBox );
-   resultText->setObjectName( "resultText" );
+	resultText->setObjectName( "resultText" );
 	resultBox->setStretchFactor( resultText, 2 );
 
 	languageChange();
@@ -91,7 +91,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	// signals and slots connections
 	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
-        connect( this, SIGNAL( user1Clicked() ), this, SLOT( convert() ) );
+	connect( this, SIGNAL( user1Clicked() ), this, SLOT( convert() ) );
 }
 
 ConversionDialog::~ConversionDialog()

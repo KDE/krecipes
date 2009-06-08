@@ -31,8 +31,8 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	database = db;
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-   layout->setMargin( KDialog::marginHint() );
-   layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
@@ -40,7 +40,7 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 
 	//Buttons
 	QVBoxLayout* vboxl = new QVBoxLayout();
-   vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->setSpacing( KDialog::spacingHint() );
 	newCategoryButton = new KPushButton( this );
 	newCategoryButton->setText( i18n( "Create ..." ) );
 	newCategoryButton->setIcon( KIcon( "list-add" ) );
@@ -57,8 +57,7 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	//Connect Signals & Slots
 
 	connect ( newCategoryButton, SIGNAL( clicked() ), categoryListView, SLOT( createNew() ) );
-	connect ( removeCategoryButton, SIGNAL( clicked() ), categoryListView, SLOT( remove
-		          () ) );
+	connect ( removeCategoryButton, SIGNAL( clicked() ), categoryListView, SLOT( remove() ) );
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()

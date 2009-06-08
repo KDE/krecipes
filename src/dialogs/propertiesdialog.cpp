@@ -33,8 +33,8 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	// Design dialog
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-   layout->setMargin( KDialog::marginHint() );
-   layout->setSpacing( KDialog::spacingHint() );
+	layout->setMargin( KDialog::marginHint() );
+	layout->setSpacing( KDialog::spacingHint() );
 
 	propertyListView = new CheckPropertyListView( this, database, true );
 	propertyListView->reload();
@@ -49,7 +49,7 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	layout->addWidget ( propertyListView );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
-   vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->setSpacing( KDialog::spacingHint() );
 	addPropertyButton = new KPushButton( this );
 	addPropertyButton->setText( i18n( "Create ..." ) );
 	addPropertyButton->setIcon( KIcon( "list-add" ) );

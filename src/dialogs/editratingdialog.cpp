@@ -59,8 +59,8 @@ public:
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Rating &rating, QWidget* parent, const char* name )
 		: KDialog( parent )
 {
-   setObjectName( name );
-   setCaption( i18n( "Rating" ) );
+	setObjectName( name );
+	setCaption( i18n( "Rating" ) );
 	init(criteriaList);
 	loadRating(rating);
 }
@@ -72,48 +72,48 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
 EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* parent, const char* name )
 		: KDialog( parent )
 {
-   setObjectName( name );
-   	setCaption( i18n( "Rating" ) );
+	setObjectName( name );
+	setCaption( i18n( "Rating" ) );
 	init(criteriaList);
 }
 
 void EditRatingDialog::init( const ElementList &criteriaList )
 {
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 	layout2 = new KHBox( page );
 
 	raterLabel = new QLabel( layout2 );
-   raterLabel->setObjectName( "raterLabel" );
+	raterLabel->setObjectName( "raterLabel" );
 	raterEdit = new QLineEdit( layout2 );
-   raterEdit->setObjectName( "raterEdit" );
+	raterEdit->setObjectName( "raterEdit" );
 
 	layout8 = new KHBox( page );
 
 	criteriaLabel = new QLabel( layout8 );
-   criteriaLabel->setObjectName( "criteriaLabel" );
+	criteriaLabel->setObjectName( "criteriaLabel" );
 
 	criteriaComboBox = new QComboBox( layout8 );
-   criteriaComboBox->setEditable( false );
-   criteriaComboBox->setObjectName( "criteriaComboBox" );
+	criteriaComboBox->setEditable( false );
+	criteriaComboBox->setObjectName( "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );
 	criteriaComboBox->setEditable( true );
 	criteriaComboBox->lineEdit()->disconnect( criteriaComboBox ); //so hitting enter doesn't enter the item into the box
 
 	starsLabel = new QLabel( layout8 );
-   starsLabel->setObjectName( "starsLabel" );
+	starsLabel->setObjectName( "starsLabel" );
 
 	starsWidget = new RatingWidget( 5, layout8, "starsWidget" );
 
 	addButton = new QPushButton( layout8 );
-   addButton->setObjectName( "addButton" );
+	addButton->setObjectName( "addButton" );
 
 	removeButton = new QPushButton( layout8 );
-   removeButton->setObjectName( "removeButton" );
+	removeButton->setObjectName( "removeButton" );
 
 	criteriaListView = new RatingCriteriaListView( page, "criteriaListView" );
 	criteriaListView->addColumn( i18n( "Criteria" ) );
@@ -125,7 +125,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaListView->setRenameable( 1, true );
 
 	commentsLabel = new QLabel( page );
-   commentsLabel->setObjectName( "commentsLabel" );
+	commentsLabel->setObjectName( "commentsLabel" );
 
 	commentsEdit = new Q3TextEdit( page, "commentsEdit" );
 
@@ -154,7 +154,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
  */
 EditRatingDialog::~EditRatingDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+	// no need to delete child widgets, Qt does it all for us
 }
 
 /*

@@ -31,12 +31,12 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 		: KDialog(parent ),
 		database(db)
 {
-    setCaption(i18n("Authors" ));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	setCaption(i18n("Authors" ));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 	//Design UI
 
 	// Combo to Pick authors
@@ -153,7 +153,7 @@ void SelectAuthorsDialog::createNewAuthorIfNecessary( void )
 {
 
 	if ( !authorsCombo->contains( authorsCombo->currentText() ) &&
-	        !( authorsCombo->currentText().trimmed() ).isEmpty() )  // author is not in the list and is not empty
+		!( authorsCombo->currentText().trimmed() ).isEmpty() )  // author is not in the list and is not empty
 	{ // Create new author
 		QString newAuthorName = authorsCombo->currentText();
 		database->createNewAuthor( newAuthorName );

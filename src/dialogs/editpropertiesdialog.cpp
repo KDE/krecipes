@@ -113,23 +113,23 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	QWidget *page = new QWidget(wholePage);
 
 	EditPropertiesDialogLayout = new QVBoxLayout( page );
-   EditPropertiesDialogLayout->setObjectName( "EditPropertiesDialogLayout" );
-   EditPropertiesDialogLayout->setMargin( 11 );
-   EditPropertiesDialogLayout->setSpacing( 6 );
+	EditPropertiesDialogLayout->setObjectName( "EditPropertiesDialogLayout" );
+	EditPropertiesDialogLayout->setMargin( 11 );
+	EditPropertiesDialogLayout->setSpacing( 6 );
 
 	infoLabel = new QLabel( page );
-   infoLabel->setObjectName( "infoLabel" );
+	infoLabel->setObjectName( "infoLabel" );
 	EditPropertiesDialogLayout->addWidget( infoLabel );
 
 	layout9 = new QHBoxLayout( );
-   layout9->setObjectName( "layout9" );
-   layout9->setMargin( 0 );
-   layout9->setSpacing( 6 );
+	layout9->setObjectName( "layout9" );
+	layout9->setMargin( 0 );
+	layout9->setSpacing( 6 );
 
 	layout8 = new QVBoxLayout( );
-   layout8->setObjectName( "layout8" );
-   layout8->setMargin( 0 );
-   layout8->setSpacing( 6 );
+	layout8->setObjectName( "layout8" );
+	layout8->setMargin( 0 );
+	layout8->setSpacing( 6 );
 
 	usdaListView = new KreListView( page, QString::null, page, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
@@ -142,29 +142,29 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout9->addLayout( layout8 );
 
 	loadButton = new QPushButton( page );
-   loadButton->setObjectName( "loadButton" );
+	loadButton->setObjectName( "loadButton" );
 	layout9->addWidget( loadButton );
 
 	layout7 = new QVBoxLayout();
-   layout7->setObjectName( "layout7" );
-   layout7->setMargin( 0 );
-   layout7->setSpacing( 6 );
+	layout7->setObjectName( "layout7" );
+	layout7->setMargin( 0 );
+	layout7->setSpacing( 6 );
 
 	layout3 = new QHBoxLayout();
-   layout3->setObjectName( "layout3" );
-   layout3->setMargin( 0 );
-   layout3->setSpacing( 6 );
+	layout3->setObjectName( "layout3" );
+	layout3->setMargin( 0 );
+	layout3->setSpacing( 6 );
 
 	propertyLabel = new QLabel( page );
-   propertyLabel->setObjectName( "propertyLabel" );
+	propertyLabel->setObjectName( "propertyLabel" );
 	layout3->addWidget( propertyLabel );
 
 	propertyAddButton = new QPushButton( page );
-   propertyAddButton->setObjectName( "propertyAddButton" );
+	propertyAddButton->setObjectName( "propertyAddButton" );
 	layout3->addWidget( propertyAddButton );
 
 	propertyRemoveButton = new QPushButton( page );
-   loadButton->setObjectName( "propertyRemoveButton" );
+	loadButton->setObjectName( "propertyRemoveButton" );
 	layout3->addWidget( propertyRemoveButton );
 	layout7->addLayout( layout3 );
 
@@ -181,20 +181,20 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout7->addWidget( propertyListView );
 
 	layout3_2 = new QHBoxLayout();
-   layout3_2->setObjectName( "layout3_2" );
-   layout3_2->setMargin( 0 );
-   layout3_2->setSpacing( 6 );
+	layout3_2->setObjectName( "layout3_2" );
+	layout3_2->setMargin( 0 );
+	layout3_2->setSpacing( 6 );
 
 	weightLabel = new QLabel( page );
 	weightLabel->setObjectName( "weightLabel" );
-   layout3_2->addWidget( weightLabel );
+	layout3_2->addWidget( weightLabel );
 
 	weightAddButton = new QPushButton( page );
-   weightAddButton->setObjectName( "weightAddButton" );
+	weightAddButton->setObjectName( "weightAddButton" );
 	layout3_2->addWidget( weightAddButton );
 
 	weightRemoveButton = new QPushButton( page );
-   weightRemoveButton->setObjectName( "weightRemoveButton" );
+	weightRemoveButton->setObjectName( "weightRemoveButton" );
 	layout3_2->addWidget( weightRemoveButton );
 	layout7->addLayout( layout3_2 );
 
@@ -276,7 +276,7 @@ void EditPropertiesDialog::removeWeight()
 {
 	Q3ListViewItem *it = weightListView->selectedItem();
 	if ( it ) {
-            switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
+		     switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
 		case KMessageBox::Continue:
 			db->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
 			delete it;
@@ -548,8 +548,8 @@ void EditPropertiesDialog::loadUSDAData()
 		USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
 		USDA::UnitDataList unit_data_list =  USDA::loadUnits();
 
-                //PORT to KDE4
-                /*
+		         //PORT to KDE4
+		         /*
 		Q3ValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.begin();
 		for ( QList<QString>::const_iterator it = data[ 2 ]; propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
 			int property_id = property_list.findByName( (*propertyIt).name );
@@ -565,7 +565,7 @@ void EditPropertiesDialog::loadUSDAData()
 			else
 				db->addPropertyToIngredient( ingredientID, property_id, amount, grams_id );
 		}
-                */
+		         */
 		int i = 2 + property_data_list.count();
 
 		int i_initial = i;

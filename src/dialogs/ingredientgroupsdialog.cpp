@@ -25,7 +25,7 @@
 
 IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent), database(db)
 {
-   setObjectName( name );
+	setObjectName( name );
 	QHBoxLayout* layout = new QHBoxLayout;
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );

@@ -29,12 +29,12 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 		: KDialog( parent ),
 		database(db)
 {
-    setCaption(i18n("Categories" ));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	setCaption(i18n("Categories" ));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 	//Design UI
 
 	//Category List
@@ -66,7 +66,7 @@ void SelectCategoriesDialog::loadCategories( const ElementList &items_on )
 	categoryListView->populateAll();
 
 	ElementList::const_iterator it;
-        for ( it = items_on.begin(); it != items_on.end(); ++it ) {
+	for ( it = items_on.begin(); it != items_on.end(); ++it ) {
 		CategoryCheckListItem *new_item = (CategoryCheckListItem*)categoryListView->findItem(QString::number((*it).id),1);
 		if ( new_item ) {
 			new_item->setOn(true);

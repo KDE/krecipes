@@ -41,18 +41,18 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 		: KDialog( parent ),
 		m_unitList(units)
 {
-    //setButtonBoxOrientation( Qt::Vertical );
-    setObjectName( name );
-    setCaption(i18n( "Ingredient Parser" ));
-    setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
+	//setButtonBoxOrientation( Qt::Vertical );
+	setObjectName( name );
+	setCaption(i18n( "Ingredient Parser" ));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 
 	textLabel1 = new QLabel( page );
-   textLabel1->setObjectName( "textLabel1" );
+	textLabel1->setObjectName( "textLabel1" );
 	textLabel1->setTextFormat( Qt::RichText );
 
 	ingredientTextEdit = new QTextEdit( page, "ingredientTextEdit" );
@@ -61,7 +61,7 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	parseButton = new KPushButton( page );
 
 	previewLabel = new QLabel( page );
-   previewLabel->setObjectName( "previewLabel" );
+	previewLabel->setObjectName( "previewLabel" );
 	previewLabel->setTextFormat( Qt::RichText );
 
 	previewIngView = new K3ListView( page );
@@ -103,14 +103,14 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 
 IngredientParserDialog::~IngredientParserDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+	// no need to delete child widgets, Qt does it all for us
 }
 
 void IngredientParserDialog::languageChange()
 {
 	textLabel1->setText( i18n( "To use: Paste a list of ingredient below, click \"Parse Text\", and then you may correct any incorrectly parsed ingredients.<br><b>Caution: Fields will be truncated if longer than the database allows</b>" ) );
 	previewLabel->setText( i18n("Ingredients as understood by Krecipes:") );
-        textLabel1->setWordWrap(true);
+		 textLabel1->setWordWrap(true);
 	parseButton->setText( i18n( "Parse Text" ) );
 	previewIngView->header()->setLabel( 0, i18n( "Ingredient" ) );
 	previewIngView->header()->setLabel( 1, i18n( "Amount" ) );
@@ -186,8 +186,8 @@ void IngredientParserDialog::convertToHeader()
 
 void IngredientParserDialog::convertToHeader( const QList<Q3ListViewItem*> &items )
 {
-    //Port to kde4
-    /*
+	//Port to kde4
+	/*
 	if ( items.isEmpty() > 0 ) {
 		QListIterator<Q3ListViewItem> it(items);
 		Q3ListViewItem *item = it.current();
@@ -197,7 +197,7 @@ void IngredientParserDialog::convertToHeader( const QList<Q3ListViewItem*> &item
 
 		QString group = ((IngListViewItem*)item)->ingredient().name;
 		Q3ListViewItem *ingGroupItem = new IngGrpListViewItem(previewIngView,
-		   (item->parent())?item->parent():item, group, -1);
+			(item->parent())?item->parent():item, group, -1);
 		delete item; //delete the ingredient header which was detected as an ingredient
 		++it;
 
@@ -223,7 +223,7 @@ void IngredientParserDialog::convertToHeader( const QList<Q3ListViewItem*> &item
 		ingGroupItem->setOpen(true);
 		previewIngView->clearSelection();
 	}
-    */
+	*/
 }
 
 void IngredientParserDialog::parseText()
@@ -234,10 +234,10 @@ void IngredientParserDialog::parseText()
 
 	int line_num = 0;
 	QStringList ingredients;
-    if (ingredientTextEdit->document()->isEmpty())
-        ingredients = QStringList();
-    else
-       ingredients = ingredientTextEdit->toPlainText().split( "\n", QString::SkipEmptyParts);
+	if (ingredientTextEdit->document()->isEmpty())
+		ingredients = QStringList();
+	else
+		ingredients = ingredientTextEdit->toPlainText().split( "\n", QString::SkipEmptyParts);
 
 	for ( QStringList::const_iterator it = ingredients.constBegin(); it != ingredients.constEnd(); ++it ) {
 		QString line = (*it).simplified();

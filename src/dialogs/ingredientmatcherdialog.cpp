@@ -52,14 +52,14 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	//Design the dialog
 
 	QVBoxLayout *dialogLayout = new QVBoxLayout( this );
-   dialogLayout->setMargin( 11 );
-   dialogLayout->setSpacing( 6 );
+	dialogLayout->setMargin( 11 );
+	dialogLayout->setSpacing( 6 );
 
 	// Ingredient list
 	QHBoxLayout *layout2 = new QHBoxLayout();
-   layout2->setObjectName( "layout2" );
-   layout2->setMargin( 0 );
-   layout2->setSpacing( 6 );
+	layout2->setObjectName( "layout2" );
+	layout2->setMargin( 0 );
+	layout2->setSpacing( 6 );
 
 	allIngListView = new KreListView( this, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
@@ -68,18 +68,18 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->addWidget( allIngListView );
 
 	QVBoxLayout *layout1 = new QVBoxLayout();
-   layout1->setMargin( 0 );
-   layout1->setSpacing( 6 );
-   layout1->setObjectName( "layout1" );
+	layout1->setMargin( 0 );
+	layout1->setSpacing( 6 );
+	layout1->setObjectName( "layout1" );
 
 	addButton = new KPushButton( this );
-   addButton->setObjectName( "addButton" );
+	addButton->setObjectName( "addButton" );
 	addButton->setIcon( KIcon( "go-next" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new KPushButton( this );
-   removeButton->setObjectName( "removeButton" );
+	removeButton->setObjectName( "removeButton" );
 	removeButton->setIcon( KIcon( "go-previous" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
@@ -149,10 +149,10 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 {
 	if ( col == 1 ) {
 		KDialog amountEditDialog(this);
-                amountEditDialog.setCaption(i18n("Enter amount"));
-                amountEditDialog.setButtons(KDialog::Cancel | KDialog::Ok);
-                amountEditDialog.setDefaultButton(KDialog::Ok);
-                amountEditDialog.setModal( false );
+		         amountEditDialog.setCaption(i18n("Enter amount"));
+		         amountEditDialog.setButtons(KDialog::Cancel | KDialog::Ok);
+		         amountEditDialog.setDefaultButton(KDialog::Ok);
+		         amountEditDialog.setModal( false );
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
@@ -197,7 +197,7 @@ void IngredientMatcherDialog::addIngredient()
 {
 	QList<Q3ListViewItem *> items = allIngListView->listView()->selectedItems();
 	if ( !items.isEmpty() ) {
-                for (int i = 0; i < items.size(); ++i) {
+		for (int i = 0; i < items.size(); ++i) {
 			bool dup = false;
 			for ( Q3ListViewItem *exists_it = ingListView->listView()->firstChild(); exists_it; exists_it = exists_it->nextSibling() ) {
 				if ( exists_it->text( 0 ) == items[i]->text( 0 ) ) {

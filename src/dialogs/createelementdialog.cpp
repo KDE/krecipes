@@ -19,32 +19,32 @@
 #include <Q3GroupBox>
 
 CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
-    : KDialog( parent)
+	 : KDialog( parent)
 {
-    setCaption( text );
-    setModal( true );
-    setButtons( KDialog::Ok|KDialog::Cancel );
-    setDefaultButton( KDialog::Ok );
+	 setCaption( text );
+	 setModal( true );
+	 setButtons( KDialog::Ok|KDialog::Cancel );
+	 setDefaultButton( KDialog::Ok );
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
-    Q3GroupBox *box = new Q3GroupBox( page );
-    box->setColumnLayout( 0, Qt::Vertical );
-    box->layout() ->setSpacing( 6 );
-    box->layout() ->setMargin( 11 );
-    QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
-    boxLayout->setAlignment( Qt::AlignTop );
-    box->setTitle( text );
+	 KVBox *page = new KVBox( this );
+	 setMainWidget( page );
+	 Q3GroupBox *box = new Q3GroupBox( page );
+	 box->setColumnLayout( 0, Qt::Vertical );
+	 box->layout() ->setSpacing( 6 );
+	 box->layout() ->setMargin( 11 );
+	 QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
+	 boxLayout->setAlignment( Qt::AlignTop );
+	 box->setTitle( text );
 
-    elementEdit = new KLineEdit( box );
-    boxLayout->addWidget( elementEdit );
+	 elementEdit = new KLineEdit( box );
+	 boxLayout->addWidget( elementEdit );
 
-    adjustSize();
-    setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
+	 adjustSize();
+	 setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
 
-    elementEdit->setFocus();
-    connect( elementEdit, SIGNAL( textChanged(const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
-    enableButtonOk( false );
+	 elementEdit->setFocus();
+	 connect( elementEdit, SIGNAL( textChanged(const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
+	 enableButtonOk( false );
 }
 
 
@@ -58,5 +58,5 @@ QString CreateElementDialog::newElementName() const
 
 void CreateElementDialog::slotTextChanged( const QString& text )
 {
-    enableButtonOk( !text.isEmpty() );
+	enableButtonOk( !text.isEmpty() );
 }

@@ -1,13 +1,13 @@
 /***************************************************************************
-*   Copyright (C) 2003 by                                                 *
-*   Unai Garro (ugarro@users.sourceforge.net)                             *
-*   Cyril Bosselut (bosselut@b1project.com)                               *
-*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
+*	Copyright (C) 2003 by                                                 *
+*	Unai Garro (ugarro@users.sourceforge.net)                             *
+*	Cyril Bosselut (bosselut@b1project.com)                               *
+*	Jason Kivlighn (jkivlighn@gmail.com)                                  *
+*	                                                                      *
+*	This program is free software; you can redistribute it and/or modify  *
+*	it under the terms of the GNU General Public License as published by  *
+*	the Free Software Foundation; either version 2 of the License, or     *
+*	(at your option) any later version.                                   *
 ***************************************************************************/
 
 #include "selectrecipedialog.h"
@@ -63,9 +63,9 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	layout = new QGridLayout;
 	basicSearchTab->setLayout( layout );
-   layout->cellRect( 1, 1 );
-   layout->setMargin( 0 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 
 	// Border Spacers
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
@@ -82,8 +82,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	searchLabel->setText( i18n( "Search:" ) );
 	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18n( "Search:" ) ) + 5 );
 	searchBox = new KLineEdit( searchBar );
-        searchBox->setClearButtonShown( true );
-        connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
+	searchBox->setClearButtonShown( true );
+	connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
 
 	QSpacerItem* searchSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( searchSpacer, 1, 2 );
@@ -229,7 +229,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 	recipeFilter->filter( searchBox->text() );
 
 	if ( categoryID != -1 ) {
-	        Q3ListViewItemIterator it( recipeListView );
+		Q3ListViewItemIterator it( recipeListView );
 		while ( it.current() ) {
 			Q3ListViewItem *item = it.current();
 			if ( item->isVisible() ) {

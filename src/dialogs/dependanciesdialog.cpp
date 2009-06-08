@@ -26,14 +26,13 @@
 #include <kmessagebox.h>
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted )
-    : KDialog( parent ),
-      m_depsAreDeleted(deps_are_deleted)
+	: KDialog( parent ), m_depsAreDeleted(deps_are_deleted)
 {
 	init( lists );
 }
 
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent ),
-	  m_depsAreDeleted(deps_are_deleted)
+	m_depsAreDeleted(deps_are_deleted)
 {
 	Q3ValueList<ListInfo> lists;
 	lists << list;
@@ -45,19 +44,19 @@ DependanciesDialog::~DependanciesDialog()
 
 void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 {
-    setModal(true);
-    setDefaultButton(KDialog::Cancel);
-    setButtons(KDialog::Ok | KDialog::Cancel);
+	setModal(true);
+	setDefaultButton(KDialog::Cancel);
+	setButtons(KDialog::Ok | KDialog::Cancel);
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 	// Design the dialog
 
 	instructionsLabel = new QLabel( page );
 	instructionsLabel->setMinimumSize( QSize( 100, 30 ) );
 	instructionsLabel->setMaximumSize( QSize( 10000, 10000 ) );
 	instructionsLabel->setAlignment( Qt::AlignVCenter );
-        instructionsLabel->setWordWrap(true);
+	instructionsLabel->setWordWrap(true);
 	if ( m_depsAreDeleted ) {
 		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
 	}
@@ -78,7 +77,7 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 
 void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 {
-    KConfigGroup config( KGlobal::config(), "Advanced" );
+	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 
 	for ( ElementList::const_iterator el_it = list.begin(); el_it != list.end(); ++el_it ) {

@@ -41,16 +41,16 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	// Design dialog
 
 	QHBoxLayout* page_layout = new QHBoxLayout( this );
-   page_layout->setMargin( KDialog::marginHint() );
-   page_layout->setSpacing( KDialog::spacingHint() );
+	page_layout->setMargin( KDialog::marginHint() );
+	page_layout->setSpacing( KDialog::spacingHint() );
 
 	QTabWidget *tabWidget = new QTabWidget( this );
 
 	QWidget *ingredientTab = new QWidget( tabWidget );
 
 	layout = new QGridLayout( ingredientTab );
-   layout->cellRect( 1, 1 );
-   layout->setSpacing( 0 );
+	layout->cellRect( 1, 1 );
+	layout->setSpacing( 0 );
 
 	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	layout->addItem( spacer_left, 1, 0 );
@@ -100,8 +100,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	// Signals & Slots
 	connect( addIngredientButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
-	connect( removeIngredientButton, SIGNAL( clicked() ), list_view, SLOT( remove
-		         () ) );
+	connect( removeIngredientButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
 	connect( propertyButton, SIGNAL( clicked() ), this, SLOT( showPropertyEdit() ) );
 
 	DependanciesDialog d( this, ListInfo() );

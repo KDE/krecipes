@@ -36,26 +36,26 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 		: KDialog( parent),
 		database( db )
 {
-    setButtons(KDialog::Ok);
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
+	setButtons(KDialog::Ok);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
 
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 
 	setButtonText( KDialog::Ok, i18n( "&Done" ) );
 
 
 	helpLabel = new QLabel( page );
-   helpLabel->setObjectName( "helpLabel" );
+	helpLabel->setObjectName( "helpLabel" );
 	helpLabel->setTextFormat( Qt::RichText );
-        helpLabel->setWordWrap(true);
+	helpLabel->setWordWrap(true);
 	QWidget *layout2Widget = new QWidget(page);
 
 	QHBoxLayout *layout2 = new QHBoxLayout( layout2Widget );
-   layout2->setObjectName( "layout2" );
-   layout2->setMargin( 0 );
-   layout2->setSpacing( 6 );
+	layout2->setObjectName( "layout2" );
+	layout2->setMargin( 0 );
+	layout2->setSpacing( 6 );
 
 	allIngListView = new KreListView( layout2Widget, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
@@ -64,19 +64,19 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout2->addWidget( allIngListView );
 
 	layout1 = new QVBoxLayout( );
-   layout1->setObjectName( "layout1" );
-   layout1->setMargin( 0 );
-   layout1->setSpacing( 6 );
+	layout1->setObjectName( "layout1" );
+	layout1->setMargin( 0 );
+	layout1->setSpacing( 6 );
 
 
 	addButton = new KPushButton( layout2Widget );
-   addButton->setObjectName( "addButton" );
+	addButton->setObjectName( "addButton" );
 	addButton->setIcon( KIcon( "go-next" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new KPushButton( layout2Widget );
-   removeButton->setObjectName( "removeButton" );
+	removeButton->setObjectName( "removeButton" );
 	removeButton->setIcon( KIcon( "go-previous" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
@@ -140,7 +140,7 @@ void RefineShoppingListDialog::loadData()
 
 		QString amount_str;
 		if ( ( *it ).amount > 0 ) {
-                    KConfigGroup config( KGlobal::config(), "Formatting" );
+		             KConfigGroup config( KGlobal::config(), "Formatting" );
 
 			if ( !config.readEntry( "Fraction" ).isEmpty() )
 				amount_str = MixedNumber( ( *it ).amount ).toString();
@@ -194,7 +194,7 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 		else { //revert back to the valid amount string
 			QString amount_str;
 			if ( ( *found_it ).amount > 0 ) {
-                            KConfigGroup config( KGlobal::config(), "Formatting" );
+		                     KConfigGroup config( KGlobal::config(), "Formatting" );
 
 				if ( !config.readEntry( "Fraction" ).isEmpty() )
 					amount_str = MixedNumber( ( *found_it ).amount ).toString();

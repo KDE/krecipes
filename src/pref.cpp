@@ -135,7 +135,7 @@ void KrecipesPreferences::slotHelp()
 MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1,1 );
+	layout->cellRect( 1,1 );
 	layout->setSpacing( KDialog::spacingHint() );
 	layout->setMargin( 0 );
 
@@ -248,7 +248,7 @@ void MySQLServerPrefs::saveOptions( void )
 PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
 	QGridLayout * layout = new QGridLayout( this );
-   layout->cellRect( 1,1 );
+	layout->cellRect( 1,1 );
 	layout->setSpacing( KDialog::spacingHint() );
 	layout->setMargin( 0 );
 
@@ -413,8 +413,8 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 		: QWidget( parent )
 {
 	QVBoxLayout * Form1Layout = new QVBoxLayout( this );
-   Form1Layout->setMargin( 11 );
-   Form1Layout->setSpacing( 6 );
+	Form1Layout->setMargin( 11 );
+	Form1Layout->setSpacing( 6 );
 
 	KConfigGroup config = KGlobal::config()->group( "DBType" );
 	QString DBtype = config.readEntry( "Type" );
@@ -463,8 +463,8 @@ NumbersPrefs::NumbersPrefs( QWidget *parent )
 		: QWidget( parent )
 {
 	Form1Layout = new QVBoxLayout( this );
-   Form1Layout->setMargin( 11 );
-   Form1Layout->setSpacing( 6 );
+	Form1Layout->setMargin( 11 );
+	Form1Layout->setSpacing( 6 );
 
 	numberButtonGroup = new QGroupBox( this );
 	numberButtonGroupLayout = new QVBoxLayout;
@@ -532,8 +532,8 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	bool direct = config.readEntry( "DirectImport", false );
 
 	Form1Layout = new QVBoxLayout( this );
-   Form1Layout->setMargin( 11 );
-   Form1Layout->setSpacing( 6 );
+	Form1Layout->setMargin( 11 );
+	Form1Layout->setSpacing( 6 );
 
 	QGroupBox *importGroup = new QGroupBox;
 	QVBoxLayout *importGroupLayout = new QVBoxLayout;
@@ -616,8 +616,8 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	int limit = config.readEntry( "Limit", -1 );
 
 	Form1Layout = new QVBoxLayout( this );
-   Form1Layout->setMargin( 11 );
-   Form1Layout->setSpacing( 6 );
+	Form1Layout->setMargin( 11 );
+	Form1Layout->setSpacing( 6 );
 
 	searchAsYouTypeBox = new QCheckBox( i18n( "Search as you type" ), this );
 	searchAsYouTypeBox->setChecked( config.readEntry( "SearchAsYouType", true ) );
@@ -630,7 +630,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	catLimitInput = new KIntNumInput(catLimitHBox);
 	catLimitInput->setLabel( i18n( "Number of categories to display at once:" ) );
 	catLimitInput->setRange(0,5000,20);
-   catLimitInput->setSliderEnabled( true );
+	catLimitInput->setSliderEnabled( true );
 	catLimitInput->setSpecialValueText( i18n("Unlimited") );
 
 	if ( cat_limit > 0 )
@@ -640,7 +640,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	limitInput = new KIntNumInput(limitHBox);
 	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
 	limitInput->setRange(0,100000,1000);
-   limitInput->setSliderEnabled( true );
+	limitInput->setSliderEnabled( true );
 	limitInput->setSpecialValueText( i18n("Unlimited") );
 
 	if ( limit > 0 )

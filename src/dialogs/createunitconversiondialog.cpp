@@ -23,14 +23,13 @@
 #include <klocale.h>
 
 CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit, const ElementList &toUnits, QWidget* parent )
-		: KDialog( parent ),
-	m_toUnits(toUnits)
+	: KDialog( parent ), m_toUnits(toUnits)
 {
-    setButtons(KDialog::Ok | KDialog::Cancel );
-    setDefaultButton(KDialog::Ok);
-    setModal( true );
-    KVBox *page = new KVBox( this );
-    setMainWidget( page );
+	setButtons(KDialog::Ok | KDialog::Cancel );
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 
 	buttonGroup1 = new Q3ButtonGroup( page, "buttonGroup1" );
 	buttonGroup1->setColumnLayout(0, Qt::Vertical );
@@ -43,19 +42,19 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 	buttonGroup1Layout->addWidget( fromUnitEdit );
 
 	fromUnitLabel = new QLabel( buttonGroup1 );
-   fromUnitLabel->setObjectName( "fromUnitLabel" );
+	fromUnitLabel->setObjectName( "fromUnitLabel" );
 	buttonGroup1Layout->addWidget( fromUnitLabel );
 
 	textLabel4 = new QLabel( buttonGroup1 );
-   textLabel4->setObjectName( "textLabel4" );
+	textLabel4->setObjectName( "textLabel4" );
 	buttonGroup1Layout->addWidget( textLabel4 );
 
 	toUnitEdit = new FractionInput( buttonGroup1 );
 	buttonGroup1Layout->addWidget( toUnitEdit );
 
 	toUnitComboBox = new QComboBox( buttonGroup1 );
-   toUnitComboBox->setEditable( false );
-   toUnitComboBox->setObjectName( "toUnitComboBox" );
+	toUnitComboBox->setEditable( false );
+	toUnitComboBox->setObjectName( "toUnitComboBox" );
 	buttonGroup1Layout->addWidget( toUnitComboBox );
 
 	languageChange();
@@ -72,7 +71,7 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 
 CreateUnitConversionDialog::~CreateUnitConversionDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+	// no need to delete child widgets, Qt does it all for us
 }
 
 void CreateUnitConversionDialog::languageChange()
@@ -91,7 +90,7 @@ int CreateUnitConversionDialog::toUnitID() const
 double CreateUnitConversionDialog::ratio() const
 {
 	if (toUnitEdit->isInputValid() && fromUnitEdit->isInputValid() &&
-	    fromUnitEdit->value() > 0 ) {
+		fromUnitEdit->value() > 0 ) {
 		return toUnitEdit->value().toDouble() / fromUnitEdit->value().toDouble();
 	}
 	return -1;

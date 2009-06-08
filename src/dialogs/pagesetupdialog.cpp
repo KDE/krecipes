@@ -46,13 +46,13 @@
 #include "setupdisplay.h"
 
 PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry )
-    : KDialog( parent ), m_configEntry(configEntry)
+	: KDialog( parent ), m_configEntry(configEntry)
 {
-    QWidget *w = new QWidget;
+	QWidget *w = new QWidget;
 	QVBoxLayout * layout = new QVBoxLayout( this );
-        w->setLayout( layout );
-        setButtons( KDialog::None );
-        setMainWidget( w );
+	w->setLayout( layout );
+	setButtons( KDialog::None );
+	setMainWidget( w );
 	KToolBar *toolbar = new KToolBar( this );
 	KActionCollection *actionCollection = new KActionCollection( this );
 	setCaption( i18n("Page Setup") );
@@ -83,17 +83,17 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 		new ThumbBarItem(thumbBar,included_templates.path() + "/" +included_templates[ i ]);
 	}
 	m_htmlPart = new SetupDisplay(sample, this);
-   m_htmlPart->view()->setParent( viewBox, windowFlags() & ~Qt::WindowType_Mask);
-   m_htmlPart->view()->setGeometry( 0, 0 ,m_htmlPart->view()->width(),m_htmlPart->view()->height());
+	m_htmlPart->view()->setParent( viewBox, windowFlags() & ~Qt::WindowType_Mask);
+	m_htmlPart->view()->setGeometry( 0, 0 ,m_htmlPart->view()->width(),m_htmlPart->view()->height());
 
 
-   layout->addWidget( viewBox );
+	layout->addWidget( viewBox );
 
 	KHBox *buttonsBox = new KHBox( this );
 	QPushButton *okButton = new QPushButton( i18n( "Save and Close" ), buttonsBox );
-   okButton->setIcon( KIcon( "dialog-ok" ) );
+	okButton->setIcon( KIcon( "dialog-ok" ) );
 	QPushButton *cancelButton = new QPushButton( i18n( "&Cancel" ), buttonsBox );
-   cancelButton->setIcon( KIcon( "dialog-cancel") );
+	cancelButton->setIcon( KIcon( "dialog-cancel") );
 	layout->addWidget( buttonsBox );
 
 	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );
@@ -190,7 +190,7 @@ void PageSetupDialog::initShownItems()
 
 void PageSetupDialog::setItemShown( int id )
 {
-    m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
+	m_htmlPart->setItemShown( popup_widget_map[ id ], shown_items_popup->isItemChecked( id ) );
 }
 
 void PageSetupDialog::loadFile()
@@ -307,13 +307,13 @@ bool PageSetupDialog::haveWritePerm( const QString &filename )
 
 void PageSetupDialog::selectNoLayout()
 {
-    m_htmlPart->loadLayout( QString::null );
-    setActiveFile( QString::null );
-//    QMap<int, KreDisplayItem*> popup_widget_map;
-    QList<int> lst = popup_widget_map.uniqueKeys ();
-    for (int i = 0; i < lst.size(); ++i)
-    {
-        shown_items_popup->setItemChecked(lst[i], true );
-    }
+	m_htmlPart->loadLayout( QString::null );
+	setActiveFile( QString::null );
+//	QMap<int, KreDisplayItem*> popup_widget_map;
+	QList<int> lst = popup_widget_map.uniqueKeys ();
+	for (int i = 0; i < lst.size(); ++i)
+	{
+		shown_items_popup->setItemChecked(lst[i], true );
+	}
 }
 #include "pagesetupdialog.moc"
