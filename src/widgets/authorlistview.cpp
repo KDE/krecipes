@@ -17,6 +17,7 @@
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <QList>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
@@ -87,7 +88,7 @@ void StdAuthorListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const 
 
 void StdAuthorListView::createNew()
 {
-	CreateElementDialog * elementDialog = new CreateElementDialog( this, i18n( "New Author" ) );
+	QPointer<CreateElementDialog> elementDialog = new CreateElementDialog( this, i18n( "New Author" ) );
 
 	if ( elementDialog->exec() == QDialog::Accepted ) {
 		QString result = elementDialog->newElementName();
@@ -123,9 +124,11 @@ void StdAuthorListView::remove
 			info.list = recipeDependancies;
 			info.name = i18n("Recipes");
 
-			DependanciesDialog warnDialog( this, info, false );
-			if ( warnDialog.exec() == QDialog::Accepted )
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, info, false );
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeAuthor( id );
+
+			delete warnDialog;
 		}
 	}
 }
