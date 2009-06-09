@@ -395,6 +395,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	// Load & Save Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	fileRequester = new KUrlRequester( config.readEntry( "DBFile", KStandardDirs::locateLocal( "appdata", "krecipes.krecdb" ) ), hbox );
+	fileRequester->fileDialog()->setCaption( i18n( "Select SQLite database file" ) );
 	hbox->setStretchFactor( fileRequester, 2 );
 	dumpPathRequester->setUrl( config.readEntry( "SQLitePath", sqliteBinary ) );
 	dumpPathRequester->setFilter( sqliteBinary );
