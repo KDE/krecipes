@@ -48,6 +48,8 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	setDefaultButton(KDialog::Cancel);
 	setButtons(KDialog::Ok | KDialog::Cancel);
 
+	setCaption( i18n( "Element with Dependencies" ) );
+
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 	// Design the dialog
