@@ -26,6 +26,7 @@
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kdebug.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createunitdialog.h"
@@ -196,7 +197,7 @@ void StdUnitListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QP
 
 void StdUnitListView::createNew()
 {
-	CreateUnitDialog * unitDialog = new CreateUnitDialog( this );
+	QPointer<CreateUnitDialog> unitDialog = new CreateUnitDialog( this );
 
 	if ( unitDialog->exec() == QDialog::Accepted ) {
 		Unit result = unitDialog->newUnit();
@@ -246,11 +247,12 @@ void StdUnitListView::remove()
 		if ( lists.isEmpty() )
 			database->removeUnit( unitID );
 		else { // need warning!
-			DependanciesDialog warnDialog( this, lists );
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, lists );
 			if ( !recipeDependancies.isEmpty() )
-				warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
-			if ( warnDialog.exec() == QDialog::Accepted )
+				warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeUnit( unitID );
+			delete warnDialog;
 		}
 	}
 }
@@ -265,12 +267,13 @@ void StdUnitListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 	Q3ListViewItem * item = currentItem();
 
 	if ( item ) {
-		CreateUnitDialog unitDialog( this, item->text(0), item->text(2), item->text(1), item->text(3), false );
+		QPointer<CreateUnitDialog> unitDialog = new CreateUnitDialog( 
+			this, item->text(0), item->text(2), item->text(1), item->text(3), false );
 
-		if ( unitDialog.exec() == QDialog::Accepted ) {
+		if ( unitDialog->exec() == QDialog::Accepted ) {
 			UnitListViewItem *unit_item = (UnitListViewItem*)item;
 			Unit origUnit = unit_item->unit();
-			Unit newUnit = unitDialog.newUnit();
+			Unit newUnit = unitDialog->newUnit();
 
 			//for each changed entry, save the change individually
 
@@ -304,6 +307,7 @@ void StdUnitListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 				saveUnit( unit_item, newUnit.plural_abbrev, 3 );
 			}
 		}
+		delete unitDialog;
 	}
 }
 
