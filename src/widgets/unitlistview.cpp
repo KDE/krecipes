@@ -269,6 +269,7 @@ void StdUnitListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
 	if ( item ) {
 		QPointer<CreateUnitDialog> unitDialog = new CreateUnitDialog( 
 			this, item->text(0), item->text(2), item->text(1), item->text(3), false );
+		unitDialog->setCaption( i18n("Rename Unit") );
 
 		if ( unitDialog->exec() == QDialog::Accepted ) {
 			UnitListViewItem *unit_item = (UnitListViewItem*)item;
