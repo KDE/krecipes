@@ -21,6 +21,8 @@
   Boston, MA 02110-1301, USA.
 */
 
+//krazy:excludeall=qclasses as we want to subclass from QComboBox, not KComboBox
+
 #ifndef KDEPIM_KDATEEDIT_H
 #define KDEPIM_KDATEEDIT_H
 
