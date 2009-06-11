@@ -97,10 +97,10 @@ void DependanciesDialog::accept()
 			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18n("Are you sure you wish to proceed?")),
 			QString::null,KStandardGuiItem::yes(),KStandardGuiItem::no(),"doubleCheckDelete") )
 		{
-		case KMessageBox::Yes: QDialog::accept(); break;
-		case KMessageBox::No: QDialog::reject(); break;
+		case KMessageBox::Yes: KDialog::accept(); break;
+		case KMessageBox::No: KDialog::reject(); break;
 		}
 	}
 	else
-		QDialog::accept();
+		KDialog::accept();
 }
