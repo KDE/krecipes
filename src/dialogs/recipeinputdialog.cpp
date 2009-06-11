@@ -19,16 +19,10 @@
 
 
 #include <qimage.h>
-#include <qmessagebox.h>
-#include <qtooltip.h>
 #include <qdatetimeedit.h>
-#include <q3dragobject.h>
-#include <qradiobutton.h>
-#include <q3widgetstack.h>
 #include <qpainter.h>
 #include <QPointer>
 #include <KTabWidget>
-//#include <q3textbrowser.h>
 #include <KTextBrowser>
 //Added by qt3to4:
 #include <QLabel>
