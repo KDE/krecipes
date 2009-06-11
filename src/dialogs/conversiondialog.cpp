@@ -12,7 +12,6 @@
 
 #include <qvariant.h>
 #include <qpushbutton.h>
-#include <kcombobox.h>
 #include <qlabel.h>
 #include <klineedit.h>
 #include <qlayout.h>
