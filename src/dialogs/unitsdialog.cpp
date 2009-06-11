@@ -10,12 +10,13 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#include "unitsdialog.h"
+
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include "unitsdialog.h"
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
 #include "backends/recipedb.h"
