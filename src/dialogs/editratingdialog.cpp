@@ -30,7 +30,6 @@
 
 #include <KVBox>
 #include <kmenu.h>
-#include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kvbox.h>
