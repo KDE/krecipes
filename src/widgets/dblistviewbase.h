@@ -8,8 +8,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#ifndef LISTVIEWHANDLER_H
-#define LISTVIEWHANDLER_H
+#ifndef DBLISTVIEWBASE_H
+#define DBLISTVIEWBASE_H
 
 #include <qobject.h>
 #include <qmap.h>
@@ -88,4 +88,4 @@ private:
 	int m_totalSteps;
 };
 
-#endif //LISTVIEWHANDLER_H
+#endif //LISTVIEWBASE_H
