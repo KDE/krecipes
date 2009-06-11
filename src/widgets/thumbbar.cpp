@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QFrame>
-#include <QMouseEvent>
 /* ============================================================
  * Authors: Renchi Raju <renchi@pooh.tam.uiuc.edu>
  *          Gilles Caulier <caulier dot gilles at kdemail dot net>
@@ -24,6 +20,15 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
+// Local includes.
+
+#include "thumbbar.h"
+
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QFrame>
+#include <QMouseEvent>
 
 // C Ansi includes.
 
@@ -59,9 +64,6 @@ extern "C"
 #include <kfileitem.h>
 #include <kglobal.h>
 
-// Local includes.
-
-#include "thumbbar.h"
 
 class ThumbBarViewPriv
 {
