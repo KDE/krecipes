@@ -11,8 +11,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#include "pref.h"
 #include "krecipes.h"
+#include "pref.h"
 #include "krecipesview.h"
 
 #include "dialogs/recipeviewdialog.h"
