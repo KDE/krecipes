@@ -17,7 +17,6 @@
 #include <qimage.h>
 #include <qobject.h>
 #include <qpainter.h>
-#include <qpixmap.h>
 #include <qsignalmapper.h>
 //Added by qt3to4:
 #include <QPaintEvent>
