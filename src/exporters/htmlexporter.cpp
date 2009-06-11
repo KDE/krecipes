@@ -24,7 +24,6 @@
 #include <QPixmap>
 #include <dom/dom_element.h>
 #include <qpainter.h>
-#include <qfileinfo.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
