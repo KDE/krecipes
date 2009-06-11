@@ -51,7 +51,6 @@ extern "C"
 // KDE includes.
 
 #include <kcodecs.h>
-#include <kfileitem.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kio/previewjob.h>
