@@ -20,7 +20,6 @@
 #include <Q3ValueList>
 #include <QVBoxLayout>
 #include <QTextStream>
-#include <k3listview.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
