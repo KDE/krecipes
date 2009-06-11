@@ -13,7 +13,7 @@
 #include "selectrecipedialog.h"
 
 #include <qsignalmapper.h>
-#include <qtabwidget.h>
+#include <KTabWidget>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QGridLayout>
@@ -51,7 +51,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	database = db;
 
 	QVBoxLayout *tabLayout = new QVBoxLayout( this );
-	tabWidget = new QTabWidget( this );
+	tabWidget = new KTabWidget( this );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 

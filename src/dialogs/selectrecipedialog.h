@@ -36,6 +36,7 @@
 class KHBox;
 class QFrame;
 class KPushButton;
+class KTabWidget;
 
 class RecipeDB;
 class Recipe;
@@ -64,7 +65,7 @@ private:
 
 	// Widgets
 	QGridLayout *layout;
-	QTabWidget *tabWidget;
+	KTabWidget *tabWidget;
 	QFrame *basicSearchTab;
 	KHBox *searchBar;
 	RecipeListView* recipeListView;
