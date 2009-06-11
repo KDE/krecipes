@@ -88,7 +88,8 @@ KDateEdit::KDateEdit( QWidget *parent, const char *name )
 
   addItem( today );
   setCurrentIndex( 0 );
-  setSizeAdjustPolicy( AdjustToContents );
+  //setSizeAdjustPolicy( AdjustToContents );
+  setMinimumSize( sizeHint() );
 
   connect( lineEdit(), SIGNAL( returnPressed() ),
            this, SLOT( lineEnterPressed() ) );
