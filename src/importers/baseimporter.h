@@ -15,8 +15,8 @@
 
 #include <klocale.h>
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 #include "datablocks/recipelist.h"
 #include "datablocks/elementlist.h"

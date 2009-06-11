@@ -11,7 +11,7 @@
 #ifndef REZKONVIMPORTER_H
 #define REZKONVIMPORTER_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "baseimporter.h"
 #include "datablocks/recipe.h"

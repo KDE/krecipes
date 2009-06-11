@@ -11,7 +11,7 @@
 #ifndef MXPIMPORTER_H
 #define MXPIMPORTER_H
 
-#include <qstring.h>
+#include <QString>
 #include <QTextStream>
 
 #include "baseimporter.h"

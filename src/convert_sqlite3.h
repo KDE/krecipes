@@ -11,7 +11,7 @@
 #ifndef CONVERT_SQLITE3_H
 #define CONVERT_SQLITE3_H
 
-#include <qobject.h>
+#include <QObject>
 
 class KProcess;
 

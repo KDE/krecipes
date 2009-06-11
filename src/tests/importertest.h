@@ -14,7 +14,7 @@
 #include <cmath>
 #include <iostream>
 
-#include <qstring.h>
+#include <QString>
 
 #include "checks.h"
 #include "datablocks/categorytree.h"

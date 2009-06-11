@@ -14,7 +14,7 @@
 
 #include "unitlistview.h"
 
-#include <qcombobox.h>
+#include <QComboBox>
 #include <q3header.h>
 //Added by qt3to4:
 #include <QList>

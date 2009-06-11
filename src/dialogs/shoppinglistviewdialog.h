@@ -13,7 +13,7 @@
 #ifndef SHOPPINGLISTVIEWDIALOG_H
 #define SHOPPINGLISTVIEWDIALOG_H
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <qwidget.h>
 

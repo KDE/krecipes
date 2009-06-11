@@ -11,8 +11,8 @@
 #ifndef NYCGENERICIMPORTER_H
 #define NYCGENERICIMPORTER_H
 
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QDateTime>
 #include <QTextStream>
 
 #include "baseimporter.h"

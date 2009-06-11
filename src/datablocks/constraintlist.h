@@ -10,7 +10,7 @@
 #ifndef CONSTRAINTLIST_H
 #define CONSTRAINTLIST_H
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3ValueList>
 

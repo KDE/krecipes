@@ -10,7 +10,7 @@
 #ifndef INGREDIENTPROPERTY_H
 #define INGREDIENTPROPERTY_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "unit.h"
 

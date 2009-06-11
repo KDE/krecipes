@@ -22,9 +22,9 @@
 #include "recipeactionshandler.h"
 
 #include <q3header.h>
-#include <qpainter.h>
-#include <qstringlist.h>
-#include <qlayout.h>
+#include <QPainter>
+#include <QStringList>
+#include <QLayout>
 #include <q3groupbox.h>
 //Added by qt3to4:
 #include <QHBoxLayout>

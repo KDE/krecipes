@@ -14,10 +14,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <q3textstream.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QTextStream>
 
 #include "datablocks/mixednumber.h"

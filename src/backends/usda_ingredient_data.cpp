@@ -15,7 +15,7 @@
 #include "usda_ingredient_data.h"
 
 #include <q3valuelist.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <klocale.h>
 #include <kglobal.h>

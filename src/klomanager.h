@@ -13,7 +13,7 @@
 
 #include <qdom.h>
 #include <qfont.h>
-#include <qsize.h>
+#include <QSize>
 
 #include "datablocks/kreborder.h"
 

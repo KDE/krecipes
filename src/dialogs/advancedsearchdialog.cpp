@@ -10,13 +10,13 @@
 
 #include "advancedsearchdialog.h"
 
-#include <qvariant.h>
+#include <QVariant>
 #include <KPushButton>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <qwidget.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qframe.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <q3header.h>
 #include <q3listview.h>
 #include <qspinbox.h>
@@ -28,14 +28,14 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <kpushbutton.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <KLineEdit>
 
 #include <QGroupBox>
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <kapplication.h>
 #include <kcursor.h>

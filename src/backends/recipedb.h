@@ -14,8 +14,8 @@
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <q3valuelist.h>
 
 class QEventLoop;

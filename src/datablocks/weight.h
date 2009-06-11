@@ -10,7 +10,7 @@
 #ifndef WEIGHT_H
 #define WEIGHT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 
 #include "datablocks/elementlist.h"

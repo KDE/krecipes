@@ -11,7 +11,7 @@
 #ifndef RECIPEPRINTPREVIEW_H
 #define RECIPEPRINTPREVIEW_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 
 #include <kdialog.h>

@@ -12,8 +12,8 @@
 
 #include "unitsdialog.h"
 
-#include <qlayout.h>
-#include <qtabwidget.h>
+#include <QLayout>
+#include <QTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 

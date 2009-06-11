@@ -10,16 +10,16 @@
 
 #include "ingredientparserdialog.h"
 
-#include <qpushbutton.h>
-#include <qtextedit.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QLabel>
+#include <QLineEdit>
+#include <QLayout>
+#include <QToolTip>
 
 #include <q3header.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QClipboard>
 
 #include <QHBoxLayout>
 #include <QList>

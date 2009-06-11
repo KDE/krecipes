@@ -17,8 +17,8 @@
 #include <ktar.h>
 #include <ktemporaryfile.h>
 
-#include <qfile.h>
-#include <qstringlist.h>
+#include <QFile>
+#include <QStringList>
 #include <qdom.h>
 
 #include "baseimporter.h"

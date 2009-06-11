@@ -10,7 +10,7 @@
 
 #include "fractioninput.h"
 
-#include <qtimer.h>
+#include <QTimer>
 
 #include <kglobalsettings.h>
 

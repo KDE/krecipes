@@ -12,10 +12,10 @@
 #ifndef KREMENU_H
 #define KREMENU_H
 
-#include <qevent.h>
-#include <qicon.h>
+#include <QEvent>
+#include <QIcon>
 #include <qmap.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QResizeEvent>

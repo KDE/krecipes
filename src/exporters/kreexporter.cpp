@@ -13,10 +13,10 @@
 
 #include "kreexporter.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <q3stylesheet.h>
-#include <qbuffer.h>
-#include <qimage.h>
+#include <QBuffer>
+#include <QImage>
  #include <QImageWriter>
 
 #include <kdebug.h>

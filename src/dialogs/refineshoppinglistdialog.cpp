@@ -10,11 +10,11 @@
 
 #include "refineshoppinglistdialog.h"
 
-#include <qvariant.h>
+#include <QVariant>
 #include <KPushButton>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3header.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QVBoxLayout>

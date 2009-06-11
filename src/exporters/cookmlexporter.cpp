@@ -10,12 +10,12 @@
 
 #include "cookmlexporter.h"
 
-#include <qbuffer.h>
+#include <QBuffer>
 #include <qdom.h>
-#include <qimage.h>
+#include <QImage>
 #include <qimagewriter.h>
-#include <qpixmap.h>
-#include <qfile.h>
+#include <QPixmap>
+#include <QFile>
 
 #include <kconfig.h>
 #include <kdebug.h>

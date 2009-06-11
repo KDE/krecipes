@@ -43,15 +43,15 @@ extern "C"
 
 // Qt includes.
 
-#include <qdir.h>
-#include <qpixmap.h>
-#include <qtimer.h>
-#include <qpainter.h>
+#include <QDir>
+#include <QPixmap>
+#include <QTimer>
+#include <QPainter>
 #include <q3dict.h>
 #include <qpoint.h>
-#include <qdatetime.h>
-#include <qpointer.h>
-#include <qfileinfo.h>
+#include <QDateTime>
+#include <QPointer>
+#include <QFileInfo>
 
 // KDE includes.
 

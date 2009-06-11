@@ -11,11 +11,11 @@
 #define PANELDECO_H
 
 
-#include <qevent.h>
-#include <qicon.h>
-#include <qstring.h>
+#include <QEvent>
+#include <QIcon>
+#include <QString>
 
-#include <qpixmap.h>
+#include <QPixmap>
 
 #include <qwidget.h>
 #include <QStackedWidget>

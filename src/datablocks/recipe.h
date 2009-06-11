@@ -11,9 +11,9 @@
 #ifndef RECIPE_H
 #define RECIPE_H
 
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QPixmap>
+#include <QDateTime>
 
 #include "ingredientlist.h"
 #include "datablocks/rating.h"

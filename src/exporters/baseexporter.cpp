@@ -11,8 +11,8 @@
 
 #include "baseexporter.h"
 
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QFile>
+#include <QFileInfo>
 
 #include <kaboutdata.h>
 #include <kdebug.h>

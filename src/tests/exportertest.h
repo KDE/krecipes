@@ -14,8 +14,8 @@
 #include <cmath>
 #include <iostream>
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 #include <QTextStream>
 
 #include "checks.h"

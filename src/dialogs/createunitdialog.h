@@ -14,9 +14,9 @@
 #define CREATEUNITDIALOG_H
 
 #include <kdialog.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3groupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <kvbox.h>
 
 

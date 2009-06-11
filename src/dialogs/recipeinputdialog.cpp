@@ -14,13 +14,13 @@
 
 #include "recipeinputdialog.h"
 
-#include <qstring.h>
-#include <qlayout.h>
+#include <QString>
+#include <QLayout>
 
 
-#include <qimage.h>
+#include <QImage>
 #include <qdatetimeedit.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QPointer>
 #include <KTabWidget>
 #include <KTextBrowser>

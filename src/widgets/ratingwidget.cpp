@@ -18,7 +18,7 @@
 #include <kdebug.h>
 
 #include <q3intdict.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QPixmap>
 #include <QLabel>
 #include <QMouseEvent>

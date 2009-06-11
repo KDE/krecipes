@@ -16,8 +16,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qfile.h>
-#include <qstringlist.h>
+#include <QFile>
+#include <QStringList>
 #include <QPixmap>
 #include <kstandarddirs.h>
 

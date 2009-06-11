@@ -19,12 +19,12 @@
 #include "backends/recipedb.h"
 
 #include <qglobal.h>
-#include <qobject.h>
+#include <QObject>
 #include <qsqldatabase.h>
-#include <qimage.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <QImage>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
 #include <QPixmap>
 #include <QSqlQuery>
 

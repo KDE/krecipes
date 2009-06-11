@@ -10,8 +10,8 @@
 #ifndef SIMILARCATEGORIESDIALOG_H
 #define SIMILARCATEGORIESDIALOG_H
 
-#include <qvariant.h>
-#include <qdialog.h>
+#include <QVariant>
+#include <QDialog>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <QVBoxLayout>

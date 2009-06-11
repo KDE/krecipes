@@ -11,7 +11,7 @@
 #ifndef KREDBIMPORTER_H
 #define KREDBIMPORTER_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "baseimporter.h"
 

@@ -12,7 +12,7 @@
 
 #ifndef ELEMENT_H
 #define ELEMENT_H
-#include <qstring.h> 
+#include <QString> 
 /**
 @author Unai Garro
 */

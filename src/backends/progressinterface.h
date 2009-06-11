@@ -11,7 +11,7 @@
 #ifndef PROGRESSINTERFACE_H
 #define PROGRESSINTERFACE_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qwidget.h>
 
 class KProgressDialog;

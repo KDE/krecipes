@@ -10,7 +10,7 @@
 
 #include <kapplication.h>
 
-#include <qstring.h>
+#include <QString>
 
 #include <iostream>
 using std::cout;

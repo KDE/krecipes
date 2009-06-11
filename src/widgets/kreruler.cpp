@@ -26,10 +26,10 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <qcursor.h>
-#include <qpainter.h>
-#include <qmenu.h>
-#include <qtooltip.h>
+#include <QCursor>
+#include <QPainter>
+#include <QMenu>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QFrame>

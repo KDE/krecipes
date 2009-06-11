@@ -14,9 +14,9 @@
 #include <cmath>
 #include <iostream>
 
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qimage.h>
+#include <QString>
+#include <QPixmap>
+#include <QImage>
 //Added by qt3to4:
 #include <Q3ValueList>
 

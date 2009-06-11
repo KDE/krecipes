@@ -17,7 +17,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
-#include <qcursor.h>
+#include <QCursor>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QDesktopWidget>

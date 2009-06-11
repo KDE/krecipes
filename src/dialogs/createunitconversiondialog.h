@@ -10,7 +10,7 @@
 #ifndef CREATEUNITCONVERSIONDIALOG_H
 #define CREATEUNITCONVERSIONDIALOG_H
 
-#include <qvariant.h>
+#include <QVariant>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QHBoxLayout>

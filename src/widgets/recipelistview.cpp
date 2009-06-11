@@ -13,7 +13,7 @@
 
 #include <q3intdict.h>
 #include <qdatastream.h>
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QDropEvent>
 

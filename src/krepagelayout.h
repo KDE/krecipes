@@ -21,7 +21,7 @@
 #ifndef KREPAGELAYOUT_H
 #define KREPAGELAYOUT_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 class QDomElement;
 class QDomDocument;

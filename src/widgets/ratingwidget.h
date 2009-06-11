@@ -15,10 +15,10 @@
 #define RATINGWIDGET_H
 
 
-#include <qlist.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qstringlist.h>
+#include <QList>
+#include <QLabel>
+#include <QPixmap>
+#include <QStringList>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <kvbox.h>

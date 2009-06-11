@@ -9,7 +9,7 @@
 ***************************************************************************/
 #include "mixednumber.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <kglobal.h>
 #include <klocale.h>

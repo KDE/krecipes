@@ -10,9 +10,9 @@
 ***************************************************************************/
 #ifndef CONVERSIONTABLE_H
 #define CONVERSIONTABLE_H
-#include <qstring.h>
+#include <QString>
 #include <q3table.h>
-#include <qobject.h>
+#include <QObject>
 
 #include "datablocks/unitratio.h"
 #include "datablocks/elementlist.h"

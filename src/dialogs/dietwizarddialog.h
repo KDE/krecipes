@@ -15,13 +15,13 @@
 
 #include <stdlib.h> // For RAND_MAX
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <q3ptrlist.h>
-#include <qslider.h>
+#include <QSlider>
 #include <qspinbox.h>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <q3valuelist.h>
 
 #include <QStackedWidget>

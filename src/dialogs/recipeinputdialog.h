@@ -22,11 +22,11 @@
 #include <kpushbutton.h>
 #include <kled.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qmap.h>
-#include <qobject.h>
-#include <qtabwidget.h>
-#include <qtoolbutton.h>
+#include <QObject>
+#include <QTabWidget>
+#include <QToolButton>
 
 #include <QDateTimeEdit>
 #include <QDropEvent>

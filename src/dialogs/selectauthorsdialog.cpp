@@ -12,7 +12,7 @@
 
 #include "selectauthorsdialog.h"
 
-#include <qmessagebox.h>
+#include <QMessageBox>
 #include <kvbox.h>
 //Added by qt3to4:
 #include <QPixmap>

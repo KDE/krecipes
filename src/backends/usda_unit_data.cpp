@@ -10,8 +10,8 @@
 
 #include "usda_unit_data.h"
 
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QStringList>
+#include <QFile>
 #include <QTextStream>
 
 #include <kdebug.h>

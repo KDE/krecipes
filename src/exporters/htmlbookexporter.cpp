@@ -10,7 +10,7 @@
 
 #include "htmlbookexporter.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <q3stylesheet.h>
 
 #include <kdebug.h>

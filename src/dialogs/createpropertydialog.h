@@ -17,12 +17,12 @@
 #ifndef CREATEPROPERTYDIALOG_H
 #define CREATEPROPERTYDIALOG_H
 
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QComboBox>
+#include <QLayout>
+#include <QPushButton>
 #include <q3groupbox.h>
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klineedit.h>
 #include <kdialog.h>

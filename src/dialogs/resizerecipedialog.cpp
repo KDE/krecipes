@@ -15,21 +15,21 @@
 #include <cmath>
 
 #include <kvbox.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <q3buttongroup.h>
 #include <qframe.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <knuminput.h>
 #include <klineedit.h>
-#include <qradiobutton.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QRadioButton>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QImage>
+#include <QPixmap>
 
 #include <klocale.h>
 #include <kmessagebox.h>

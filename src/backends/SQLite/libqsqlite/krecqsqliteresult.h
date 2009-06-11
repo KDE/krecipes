@@ -21,7 +21,7 @@
 #ifndef QSQLITERESULT_H
 #define QSQLITERESULT_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <qmap.h>
 #include <q3valuelist.h>
 

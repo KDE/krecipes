@@ -13,10 +13,10 @@
 #include "kreexporter.h"
 
 #include <q3ptrdict.h>
-#include <qimage.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QFileInfo>
+#include <QDir>
+#include <QPainter>
 #include <q3stylesheet.h>
 #include <QList>
 #include <QPixmap>

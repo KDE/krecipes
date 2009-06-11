@@ -14,9 +14,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QStringList>
+#include <QRegExp>
 #include <QTextStream>
 
 #include "datablocks/mixednumber.h"

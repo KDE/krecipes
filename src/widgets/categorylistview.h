@@ -13,7 +13,7 @@
 #define CATEGORYLISTVIEW_H
 
 #include <qmap.h>
-#include <qpixmap.h>
+#include <QPixmap>
 
 #include "dblistviewbase.h"
 

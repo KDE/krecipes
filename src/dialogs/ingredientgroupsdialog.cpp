@@ -11,7 +11,7 @@
 #include "ingredientgroupsdialog.h"
 
 #include <KPushButton>
-#include <qlayout.h>
+#include <QLayout>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

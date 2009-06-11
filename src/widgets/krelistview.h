@@ -11,7 +11,7 @@
 #ifndef KRELISTVIEW_H
 #define KRELISTVIEW_H
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <k3listview.h>
 #include <klineedit.h>

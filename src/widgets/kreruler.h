@@ -24,7 +24,7 @@
 #define KRERULER_H
 
 #include <qframe.h>
-#include <qpixmap.h>
+#include <QPixmap>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QList>

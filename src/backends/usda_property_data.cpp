@@ -19,8 +19,8 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QTextStream>

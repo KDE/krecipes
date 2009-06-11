@@ -11,7 +11,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 
 class Unit

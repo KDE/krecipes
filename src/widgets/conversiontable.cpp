@@ -15,7 +15,7 @@
 #include "datablocks/mixednumber.h"
 #include "widgets/fractioninput.h"
 
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <kglobal.h>
 #include <klocale.h>

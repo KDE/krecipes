@@ -10,8 +10,8 @@
 
 #include "rating.h"
 
-#include <qpainter.h>
-#include <qbitmap.h>
+#include <QPainter>
+#include <QBitmap>
 #include <QPixmap>
 
 #include <kiconloader.h>

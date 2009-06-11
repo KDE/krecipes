@@ -12,9 +12,9 @@
 #define RATING_H
 
 #include <q3valuelist.h>
-#include <qstring.h>
+#include <QString>
 
-#include <qpixmap.h>
+#include <QPixmap>
 
 class RatingCriteria
 {

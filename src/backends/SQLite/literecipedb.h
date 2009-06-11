@@ -15,7 +15,7 @@
 
 #include "backends/qsqlrecipedb.h"
 
-#include <qstring.h>
+#include <QString>
 #include <KDebug>
 #include "qsql_sqlite.h"
 

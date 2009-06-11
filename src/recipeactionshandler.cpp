@@ -13,7 +13,7 @@
 #include "recipeactionshandler.h"
 
 #include <qwidget.h>
-#include <qclipboard.h>
+#include <QClipboard>
 #include <QTextStream>
 #include <QList>
 

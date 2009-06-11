@@ -13,7 +13,7 @@
 #ifndef INGREDIENTSDIALOG_H
 #define INGREDIENTSDIALOG_H
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qwidget.h>
 #include <QGridLayout>
 #include <kvbox.h>

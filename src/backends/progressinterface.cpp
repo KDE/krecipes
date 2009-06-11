@@ -10,7 +10,7 @@
 
 #include "progressinterface.h"
 
-#include <qapplication.h>
+#include <QApplication>
 
 #include <kprogressdialog.h>
 

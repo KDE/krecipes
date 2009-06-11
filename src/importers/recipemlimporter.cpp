@@ -13,8 +13,8 @@
 
 #include "recipemlimporter.h"
 
-#include <qfile.h>
-#include <qdatetime.h>
+#include <QFile>
+#include <QDateTime>
 
 #include <klocale.h>
 #include <kdebug.h>

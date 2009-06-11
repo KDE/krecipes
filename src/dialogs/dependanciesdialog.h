@@ -16,7 +16,7 @@
 #define DEPENDANCIESDIALOG_H
 
 #include <q3groupbox.h>
-#include <qlabel.h>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3ValueList>
 

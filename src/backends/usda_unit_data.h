@@ -12,7 +12,7 @@
 
 #include <klocale.h>
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 
 namespace USDA {

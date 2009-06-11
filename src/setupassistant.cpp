@@ -16,10 +16,10 @@
 #include <pwd.h>
 
 #include <QGroupBox>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QPixmap>
+#include <QPushButton>
+#include <QToolTip>
 #include <QGridLayout>
 #include <QFrame>
 #include <QLabel>

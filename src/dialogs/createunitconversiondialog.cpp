@@ -9,13 +9,13 @@
 
 #include "createunitconversiondialog.h"
 
-#include <qvariant.h>
+#include <QVariant>
 #include <q3buttongroup.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLineEdit>
+#include <QLabel>
+#include <QComboBox>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 #include <kvbox.h>
 #include <QHBoxLayout>

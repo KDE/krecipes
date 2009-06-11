@@ -27,15 +27,15 @@
 #include <dom/css_rule.h>
 
 #include <qinputdialog.h>
-#include <qaction.h>
-#include <qlabel.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QAction>
+#include <QLabel>
+#include <QFile>
+#include <QRegExp>
 #include <q3textedit.h>
-#include <qtooltip.h>
-#include <qobject.h>
+#include <QToolTip>
+#include <QObject>
 #include <q3valuelist.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QMenu>
 #include <QTextDocument>

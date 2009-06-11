@@ -14,7 +14,7 @@
 #include "datablocks/ingredientlist.h"
 #include "datablocks/mixednumber.h"
 
-#include <qpushbutton.h>
+#include <QPushButton>
 
 #include <klocale.h>
 #include <kapplication.h>

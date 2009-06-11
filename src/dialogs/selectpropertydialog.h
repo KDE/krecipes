@@ -14,10 +14,10 @@
 #define SELECTPROPERTYDIALOG_H
 
 #include <qwidget.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3groupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QPushButton>
 
 
 #include <k3listview.h>

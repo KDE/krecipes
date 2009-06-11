@@ -12,9 +12,9 @@
 
 #include "recipeviewdialog.h"
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qfile.h>
+#include <QLayout>
+#include <QStyle>
+#include <QFile>
 //Added by qt3to4:
 #include <QTextDocument>
 

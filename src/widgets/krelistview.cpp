@@ -17,7 +17,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qtooltip.h>
+#include <QToolTip>
 //Added by qt3to4:
 #include <QLabel>
 #include <QFrame>

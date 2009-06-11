@@ -12,21 +12,21 @@
 
 #include <klocale.h>
 
-#include <qvariant.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QVariant>
+#include <QPushButton>
+#include <QLabel>
+#include <QComboBox>
 //Added by qt3to4:
 #include <QPixmap>
 #include <knuminput.h>
 #include <q3header.h>
 #include <k3listview.h>
 #include <q3textedit.h>
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLineEdit>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qpainter.h>
+#include <QPainter>
 
 #include <KVBox>
 #include <kmenu.h>

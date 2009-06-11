@@ -10,21 +10,21 @@
 
 #include "dialogs/editpropertiesdialog.h"
 
-#include <qvariant.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QVariant>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3header.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <Q3ValueList>
 #include <QVBoxLayout>
 #include <QTextStream>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qmessagebox.h>
-#include <qfile.h>
+#include <QMessageBox>
+#include <QFile>
 
 #include <k3listview.h>
 #include <klocale.h>

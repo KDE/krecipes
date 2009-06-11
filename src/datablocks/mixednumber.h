@@ -11,7 +11,7 @@
 #ifndef MIXEDNUMBER_H
 #define MIXEDNUMBER_H
 
-#include <qstring.h>
+#include <QString>
 
 /** remove any extra zeros on the end of the string and the decimal if a whole number */
 QString beautify( const QString &num );

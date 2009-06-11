@@ -12,7 +12,7 @@
 #ifndef BASEEXPORTER_H
 #define BASEEXPORTER_H
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <QTextStream>
 #include <QList>
 

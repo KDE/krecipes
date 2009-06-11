@@ -14,11 +14,11 @@
 #include "backends/recipedb.h"
 #include "dietviewdialog.h"
 
-#include <qbitmap.h>
+#include <QBitmap>
 #include <q3header.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qmatrix.h>
+#include <QLayout>
+#include <QPainter>
+#include <QMatrix>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QLabel>

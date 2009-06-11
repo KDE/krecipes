@@ -13,7 +13,7 @@
 #ifndef RECIPEACTIONSHANDLER_H
 #define RECIPEACTIONSHANDLER_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qpoint.h>
 #include <q3valuelist.h>
 #include <q3ptrlist.h>

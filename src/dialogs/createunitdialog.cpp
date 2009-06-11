@@ -12,7 +12,7 @@
 
 #include "createunitdialog.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <QGridLayout>
 
 #include <klocale.h>

@@ -14,7 +14,7 @@
 #define RECIPEVIEWDIALOG_H
 
 
-#include <qstring.h>
+#include <QString>
 #include <kvbox.h>
 #include <QList>
 class RecipeDB;

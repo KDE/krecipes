@@ -16,16 +16,16 @@
 
 #include <config-krecipes.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 
 
 #include <q3buttongroup.h>
 #include <QGroupBox>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QToolTip>
 
 #include <qframe.h>
 #include <KComboBox>

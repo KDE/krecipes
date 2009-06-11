@@ -11,7 +11,7 @@
 #include "ingredientcombobox.h"
 
 #include <q3listbox.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <QLineEdit>
 
 #include <kdebug.h>

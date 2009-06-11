@@ -12,10 +12,10 @@
 
 #include "createcategorydialog.h"
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <QGroupBox>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <kvbox.h>
 #include <QVBoxLayout>
 

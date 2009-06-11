@@ -15,7 +15,7 @@
 
 #include <qwidget.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <QGridLayout>
 #include <k3listview.h>
 #include <kvbox.h>

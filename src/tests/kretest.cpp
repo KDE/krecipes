@@ -11,8 +11,8 @@
 #include <kapplication.h>
 #include <KCmdLineArgs>
 #include <KAboutData>
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 
 #include <iostream>
 

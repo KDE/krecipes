@@ -15,15 +15,15 @@
 #include "htmlexporter.h"
 
 #include <q3ptrdict.h>
-#include <qimage.h>
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QImage>
+#include <QFileInfo>
+#include <QDir>
 #include <q3stylesheet.h> //for QStyleSheet::escape() to escape for HTML
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QPixmap>
 #include <dom/dom_element.h>
-#include <qpainter.h>
+#include <QPainter>
 
 #include <kconfig.h>
 #include <kdebug.h>

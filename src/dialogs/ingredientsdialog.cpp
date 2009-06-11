@@ -26,7 +26,7 @@
 #include <kconfig.h>
 
 #include <q3header.h>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

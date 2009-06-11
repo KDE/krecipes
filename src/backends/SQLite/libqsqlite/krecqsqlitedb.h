@@ -22,8 +22,8 @@
 #define QSQLITEDB_H
 
 #include <q3valuelist.h>
-#include <qstringlist.h>
-#include <qobject.h>
+#include <QStringList>
+#include <QObject>
 
 #include <config-krecipes.h>
 #ifdef HAVE_SQLITE

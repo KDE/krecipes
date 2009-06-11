@@ -10,13 +10,13 @@
 
 #include "borderdialog.h"
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3groupbox.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qspinbox.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QHBoxLayout>

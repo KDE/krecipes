@@ -9,16 +9,16 @@
 ***************************************************************************/
 #include "paneldeco.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <qpoint.h>
-#include <qrect.h>
+#include <QRect>
 //Added by qt3to4:
 #include <QEvent>
 #include <QChildEvent>
 #include <QPaintEvent>
 
 #include <kiconloader.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <kvbox.h>
 #include <QHBoxLayout>
 #include <QTextEdit>

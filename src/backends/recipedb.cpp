@@ -29,8 +29,8 @@
 #include <kfilterdev.h>
 #include <kmessagebox.h>
 
-#include <qfile.h>
-#include <qstringlist.h>
+#include <QFile>
+#include <QStringList>
 #include <KStandardDirs>
 //Added by qt3to4:
 #include <Q3ValueList>

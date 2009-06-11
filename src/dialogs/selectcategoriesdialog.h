@@ -13,7 +13,7 @@
 #ifndef SELECTCATEGORIESDIALOG_H
 #define SELECTCATEGORIESDIALOG_H
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <k3listview.h>
 #include <kdialog.h>

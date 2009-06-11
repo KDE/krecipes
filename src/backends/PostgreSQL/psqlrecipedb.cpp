@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 
-#include <qvariant.h>
+#include <QVariant>
 #include <QSqlQuery>
 #include <QSqlError>
 

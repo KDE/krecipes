@@ -11,8 +11,8 @@
 #ifndef KREBORDER_H
 #define KREBORDER_H
 
-#include <qcolor.h>
-#include <qstring.h>
+#include <QColor>
+#include <QString>
 
 //typedef enum KreBorderStyle { None = 0, Dotted, Dashed, Solid, Double, Groove, Ridge, Inset, Outset };
 

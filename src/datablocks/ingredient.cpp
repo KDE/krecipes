@@ -12,7 +12,7 @@
 
 #include "datablocks/ingredient.h"
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "mixednumber.h"
 

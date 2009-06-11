@@ -12,7 +12,7 @@
 #define ELEMENTLIST_H
 
 #include <q3valuelist.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include "element.h"
 

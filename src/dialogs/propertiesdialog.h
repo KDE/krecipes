@@ -13,7 +13,7 @@
 #ifndef PROPERTIESDIALOG_H
 #define PROPERTIESDIALOG_H
 
-#include <qlayout.h>
+#include <QLayout>
 
 //Added by qt3to4:
 #include <QGridLayout>

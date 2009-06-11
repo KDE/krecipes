@@ -11,9 +11,9 @@
 #ifndef SEARCHPARAMETERS_H
 #define SEARCHPARAMETERS_H
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QStringList>
+#include <QDateTime>
 
 class RecipeSearchParameters
 {

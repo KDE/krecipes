@@ -16,13 +16,13 @@
 #include <config-krecipes.h>
 
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QStackedWidget>
 #include <qwidget.h>
 #include <KLineEdit>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 
 #include <QGridLayout>

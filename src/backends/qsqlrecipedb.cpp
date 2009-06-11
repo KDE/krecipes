@@ -24,9 +24,9 @@
 
 #include "propertycalculator.h"
 
-#include <qbuffer.h>
-#include <qtextcodec.h>
-#include <qvariant.h>
+#include <QBuffer>
+#include <QTextCodec>
+#include <QVariant>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>

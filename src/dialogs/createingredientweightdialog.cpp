@@ -11,10 +11,10 @@
 #include "createingredientweightdialog.h"
 
 #include <q3groupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QPushButton>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 
 #include <KVBox>

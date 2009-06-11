@@ -12,9 +12,9 @@
 #define SETUPASSISTANT_H
 
 #include <QGroupBox>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QLabel>
 #include <kassistantdialog.h>
 #include <klineedit.h>
 #include <ktextedit.h>

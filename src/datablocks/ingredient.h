@@ -12,7 +12,7 @@
 #ifndef INGREDIENT_H
 #define INGREDIENT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 
 #include "datablocks/unit.h"

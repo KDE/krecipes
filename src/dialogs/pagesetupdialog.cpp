@@ -10,15 +10,15 @@
 
 #include "pagesetupdialog.h"
 
-#include <qdir.h>
-#include <qlayout.h>
+#include <QDir>
+#include <QLayout>
 
-#include <qfileinfo.h>
-#include <qpushbutton.h>
+#include <QFileInfo>
+#include <QPushButton>
 #include <q3popupmenu.h>
-#include <qtooltip.h>
-#include <qtabwidget.h>
-#include <qlabel.h>
+#include <QToolTip>
+#include <QTabWidget>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QVBoxLayout>

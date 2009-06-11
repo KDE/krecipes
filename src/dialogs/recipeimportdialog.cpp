@@ -19,9 +19,9 @@
 #include <kvbox.h>
 
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3header.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <q3dict.h>
 //Added by qt3to4:
 #include <Q3ValueList>

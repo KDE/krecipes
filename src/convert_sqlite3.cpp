@@ -10,8 +10,8 @@
 
 #include "convert_sqlite3.h"
 
-#include <qapplication.h>
-#include <qfile.h>
+#include <QApplication>
+#include <QFile>
 
 #include <kdebug.h>
 #include <kglobal.h>

@@ -14,14 +14,14 @@
 
 #include "ingredientinputwidget.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <QStackedWidget>
 
 
 #include <q3groupbox.h>
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QRadioButton>
+#include <QCheckBox>
 #include <QList>
 
 #include <kcombobox.h>

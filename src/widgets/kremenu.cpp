@@ -11,13 +11,13 @@
 ***************************************************************************/
 #include "kremenu.h"
 
-#include <qbitmap.h>
-#include <qcursor.h>
+#include <QBitmap>
+#include <QCursor>
 #include <qfont.h>
-#include <qimage.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qsignalmapper.h>
+#include <QImage>
+#include <QObject>
+#include <QPainter>
+#include <QSignalMapper>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -32,7 +32,7 @@
 #include <kglobalsettings.h>
 #include <kicon.h>
 #include <klocale.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <qimageblitz.h>
 
 

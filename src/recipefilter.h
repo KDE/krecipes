@@ -12,7 +12,7 @@
 #ifndef RECIPEFILTER_H
 #define RECIPEFILTER_H
 
-#include <qobject.h>
+#include <QObject>
 
 class K3ListView;
 class Q3ListViewItem;

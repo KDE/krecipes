@@ -45,9 +45,9 @@
 #include "backends/progressinterface.h"
 
 #include <q3dragobject.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <q3paintdevicemetrics.h>
-#include <qmessagebox.h>
+#include <QMessageBox>
 #include <QLabel>
 #include <QFrame>
 #include <QDragEnterEvent>

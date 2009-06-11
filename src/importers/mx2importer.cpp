@@ -21,9 +21,9 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
+#include <QFile>
+#include <QStringList>
+#include <QDateTime>
 #include <QTextStream>
 
 #include "datablocks/recipe.h"
