@@ -12,9 +12,7 @@
 
 #include "selectrecipedialog.h"
 
-#include <qsignalmapper.h>
 #include <KTabWidget>
-#include <qtooltip.h>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QFrame>
@@ -25,11 +23,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <kprogressdialog.h>
-#include <kmessagebox.h>
-#include <kglobal.h>
 #include <kconfig.h>
-#include <kcursor.h>
 #include <kvbox.h>
 #include <KPushButton>
 
