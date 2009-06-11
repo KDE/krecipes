@@ -1,36 +1,41 @@
 /*
-    This file is part of libkdepim.
+  This file is part of libkdepim.
 
-    Copyright (c) 2002 Cornelius Schumacher <schumacher@kde.org>
-    Copyright (c) 2004 Tobias Koenig <tokoe@kde.org>
+  Copyright (c) 2002 Cornelius Schumacher <schumacher@kde.org>
+  Copyright (c) 2002 David Jarvie <software@astrojar.org.uk>
+  Copyright (c) 2004 Tobias Koenig <tokoe@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDATEEDIT_H
-#define KDATEEDIT_H
+#ifndef KDEPIM_KDATEEDIT_H
+#define KDEPIM_KDATEEDIT_H
 
-#include <qcombobox.h>
-#include <qdatetime.h>
-#include <qmap.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QEvent>
-
+//#include "kdepim_export.h"
 #include "kdatepickerpopup.h"
 
+#include <QComboBox>
+#include <QDateTime>
+#include <QEvent>
+#include <QMap>
+#include <QMouseEvent>
+
 class QEvent;
+
+//namespace KPIM {
 
 /**
   A date editing widget that consists of an editable combo box.
@@ -49,12 +54,13 @@ class QEvent;
   @author David Jarvie <software@astrojar.org.uk>
   @author Tobias Koenig <tokoe@kde.org>
 */
+//class KDEPIM_EXPORT KDateEdit : public QComboBox
 class KDateEdit : public QComboBox
 {
   Q_OBJECT
 
   public:
-    KDateEdit( QWidget *parent = 0, const char *name = 0 );
+    explicit KDateEdit( QWidget *parent = 0, const char *name = 0 );
     virtual ~KDateEdit();
 
     /**
@@ -64,8 +70,8 @@ class KDateEdit : public QComboBox
     QDate date() const;
 
     /**
-      Sets whether the widget is read-only for the user. If read-only,
-      the date picker pop-up is inactive, and the displayed date cannot be edited.
+      Sets whether the widget is read-only for the user. If read-only, the
+      date pop-up is inactive, and the displayed date cannot be edited.
 
       @param readOnly True to set the widget read-only, false to set it read-write.
      */
@@ -76,16 +82,24 @@ class KDateEdit : public QComboBox
      */
     bool isReadOnly() const;
 
-    virtual void popup();
+    virtual void showPopup();
 
-  signals:
+  Q_SIGNALS:
+    /**
+      This signal is emitted whenever the user has entered a new date.
+      When the user changes the date by editing the line edit field,
+      the signal is not emitted until focus leaves the line edit field.
+      The passed date can be invalid.
+     */
+    void dateEntered( const QDate &date );
+
     /**
       This signal is emitted whenever the user modifies the date.
       The passed date can be invalid.
      */
     void dateChanged( const QDate &date );
 
-  public slots:
+  public Q_SLOTS:
     /**
       Sets the date.
 
@@ -94,22 +108,23 @@ class KDateEdit : public QComboBox
      */
     void setDate( const QDate &date );
 
-  protected slots:
+  protected Q_SLOTS:
     void lineEnterPressed();
-    void slotTextChanged( const QString& );
-    void dateEntered( QDate );
-    void dateSelected( QDate );
+    void slotTextChanged( const QString & );
+    void dateSelected( const QDate & );
 
   protected:
-    virtual bool eventFilter( QObject*, QEvent* );
-    virtual void mousePressEvent( QMouseEvent* );
+    virtual bool eventFilter( QObject *, QEvent * );
+    virtual void mousePressEvent( QMouseEvent * );
+    virtual void focusOutEvent( QFocusEvent * );
+    virtual void keyPressEvent( QKeyEvent * );
 
     /**
       Sets the date, without altering the display.
       This method is used internally to set the widget's date value.
-      As a virtual method, it allows derived classes to perform additional validation
-      on the date value before it is set. Derived classes should return true if
-      QDate::isValid(@p date) returns false.
+      As a virtual method, it allows derived classes to perform additional
+      validation on the date value before it is set. Derived classes should
+      return true if QDate::isValid(@p date) returns false.
 
       @param date The new date to set.
       @return True if the date was set, false if it was considered invalid and
@@ -118,13 +133,12 @@ class KDateEdit : public QComboBox
     virtual bool assignDate( const QDate &date );
 
     /**
-      Fills the keyword map. Reimplement it if you want additional
-      keywords.
+      Fills the keyword map. Reimplement it if you want additional keywords.
      */
     void setupKeywords();
 
   private:
-    QDate parseDate( bool* = 0 ) const;
+    QDate parseDate( bool *replaced = 0 ) const;
     void updateView();
 
     KDatePickerPopup *mPopup;
@@ -136,5 +150,7 @@ class KDateEdit : public QComboBox
 
     QMap<QString, int> mKeywordMap;
 };
+
+//}
 
 #endif

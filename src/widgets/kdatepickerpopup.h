@@ -13,25 +13,33 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Library General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
-  License along with this library.  If not, see <http://www.gnu.org/licenses/>
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301, USA.
 */
-#ifndef KDATEPICKERPOPUP_H
-#define KDATEPICKERPOPUP_H
+#ifndef KDEPIM_KDATEPICKERPOPUP_H
+#define KDEPIM_KDATEPICKERPOPUP_H
 
-#include <qdatetime.h>
-#include <qmenu.h>
+//#include "kdepim_export.h"
 
-#include <kdatepicker.h>
+#include <QDateTime>
+#include <QMenu>
+
+class KDatePicker;
+
+//namespace KPIM {
 
 /**
    @short This menu helps the user to select a date quickly.
 
-   This menu helps the user to select a date quicly. It offers various ways of selecting, e.g. with a KDatePicker or with words like "Tomorrow".
+   This menu helps the user to select a date quicly. It offers various
+   ways of selecting, e.g. with a KDatePicker or with words like "Tomorrow".
 
    The available items are:
 
-   @li NoDate: A menu-item with "No Date". If chosen, the datepicker will emit a null QDate.
+   @li NoDate: A menu-item with "No Date". If chosen, the datepicker will emit
+       a null QDate.
    @li DatePicker: Show a KDatePicker-widget.
    @li Words: Show items like "Today", "Tomorrow" or "Next Week".
 
@@ -39,11 +47,19 @@
 
    @author Bram Schoenmakers <bram_s@softhome.net>
 */
+//class KDEPIM_EXPORT KDatePickerPopup: public QMenu
 class KDatePickerPopup: public QMenu
 {
-    Q_OBJECT
+  Q_OBJECT
+
   public:
-    enum { NoDate = 1, DatePicker = 2, Words = 4 };
+    enum ItemFlag {
+      NoDate = 1,
+      DatePicker = 2,
+      Words = 4
+    };
+
+    Q_DECLARE_FLAGS( Items, ItemFlag )
 
     /**
        A constructor for the KDatePickerPopup.
@@ -53,8 +69,9 @@ class KDatePickerPopup: public QMenu
        @param parent The object's parent.
        @param name The object's name.
     */
-    KDatePickerPopup( int items = 2, const QDate &date = QDate::currentDate(),
-                      QWidget *parent = 0 );
+    explicit KDatePickerPopup( Items items = DatePicker,
+                               const QDate &date = QDate::currentDate(),
+                               QWidget *parent = 0 );
 
     /**
        @return A pointer to the private variable mDatePicker, an instance of
@@ -65,36 +82,41 @@ class KDatePickerPopup: public QMenu
     void setDate( const QDate &date );
 
 #if 0
-    /** Set items which should be shown and rebuilds the menu afterwards. Only if the menu is not visible.
-    @param items List of all desirable items, separated with a bitwise OR.
+    /** Set items which should be shown and rebuilds the menu afterwards.
+        Only if the menu is not visible.
+        @param items List of all desirable items, separated with a bitwise OR.
     */
     void setItems( int items = 1 );
 #endif
     /** @return Returns the bitwise result of the active items in the popup. */
     int items() const { return mItems; }
 
-  signals:
+  Q_SIGNALS:
 
     /**
       This signal emits the new date (selected with datepicker or other
       menu-items).
     */
-    void dateChanged ( QDate );
+    void dateChanged ( const QDate &date );
 
-  protected slots:
-    void slotDateChanged ( QDate );
+  protected Q_SLOTS:
+    void slotDateChanged ( const QDate &date );
 
     void slotToday();
-    void slotYesterday();
-    void slotLastWeek();
-    void slotLastMonth();
+    void slotTomorrow();
+    void slotNextWeek();
+    void slotNextMonth();
     void slotNoDate();
 
   private:
     void buildMenu();
 
     KDatePicker *mDatePicker;
-    int mItems;
+    Items mItems;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( KDatePickerPopup::Items )
+
+//}
 
 #endif
