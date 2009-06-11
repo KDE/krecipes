@@ -37,7 +37,7 @@
 
 #include "datablocks/elementlist.h"
 #include "datablocks/rating.h"
-class QTabWidget;
+class KTabWidget;
 class QDateTimeEdit;
 class QTextEdit;
 class KTextBrowser;

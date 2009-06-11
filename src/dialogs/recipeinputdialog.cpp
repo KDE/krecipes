@@ -27,6 +27,7 @@
 #include <q3widgetstack.h>
 #include <qpainter.h>
 #include <QPointer>
+#include <KTabWidget>
 //#include <q3textbrowser.h>
 #include <KTextBrowser>
 //Added by qt3to4:
@@ -131,7 +132,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	database = db;
 
 	// Tabs
-	tabWidget = new QTabWidget( this );
+	tabWidget = new KTabWidget( this );
 	setObjectName( "tabWidget" );
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
