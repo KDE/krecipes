@@ -13,7 +13,6 @@
 #include <qvariant.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <klineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
