@@ -94,7 +94,7 @@ private:
 	bool unsavedChanges;
 
 	// Widgets
-	QTabWidget* tabWidget;
+	KTabWidget* tabWidget;
 	QFrame* recipeTab;
 	QFrame* instructionsTab;
 
