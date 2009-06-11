@@ -12,8 +12,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#ifndef _KRECIPESPREF_H_
-#define _KRECIPESPREF_H_
+#ifndef KRECIPESPREF_H
+#define KRECIPESPREF_H
 
 #include <kpagedialog.h>
 
@@ -198,4 +198,4 @@ protected:
 	Sonnet::ConfigWidget *m_confPage;
 };
 
-#endif // _KRECIPESPREF_H_
+#endif // KRECIPESPREF_H

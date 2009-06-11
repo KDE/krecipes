@@ -9,8 +9,8 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#ifndef _KRECIPES_H_
-#define _KRECIPES_H_
+#ifndef KRECIPES_H
+#define KRECIPES_H
 
 #include <config-krecipes.h>
 
@@ -139,4 +139,4 @@ private slots:
 	void recipeSelected( bool );
 };
 
-#endif // _KRECIPES_H_
+#endif // KRECIPES_H
