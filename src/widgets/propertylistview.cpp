@@ -17,6 +17,7 @@
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kdebug.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createpropertydialog.h"
@@ -150,7 +151,7 @@ void StdPropertyListView::createNew()
 {
 	UnitList list;
 	database->loadUnits( &list );
-	CreatePropertyDialog* propertyDialog = new CreatePropertyDialog( this, &list );
+	QPointer<CreatePropertyDialog> propertyDialog = new CreatePropertyDialog( this, &list );
 
 	if ( propertyDialog->exec() == QDialog::Accepted ) {
 		QString name = propertyDialog->newPropertyName();
