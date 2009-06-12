@@ -23,7 +23,7 @@
 #include <QLayout>
 #include <QToolTip>
 #include <q3whatsthis.h>
-#include <QMessageBox>
+#include <KMessageBox>
 #include <QFile>
 
 #include <k3listview.h>
@@ -407,7 +407,7 @@ void EditPropertiesDialog::addPropertyToIngredient( void )
 				db->addPropertyToIngredient( ingredientID, propertyID, 0, perUnitsID ); // Add result chosen property to ingredient in database, with amount 0 by default
 		}
 		else {
-			QMessageBox::information( this, i18n( "Property Exists" ), i18n( "The property you tried to add already exists in the ingredient with the same per units." ) );
+			KMessageBox::information( this, i18n( "Property Exists" ), i18n( "The property you tried to add already exists in the ingredient with the same per units." ) );
 		}
 		reloadPropertyList(); // Reload the list from database
 	}
