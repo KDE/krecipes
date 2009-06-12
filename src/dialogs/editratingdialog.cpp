@@ -15,14 +15,14 @@
 #include <QVariant>
 #include <QPushButton>
 #include <QLabel>
-#include <QComboBox>
+#include <KComboBox>
 //Added by qt3to4:
 #include <QPixmap>
 #include <knuminput.h>
 #include <q3header.h>
 #include <k3listview.h>
 #include <q3textedit.h>
-#include <QLineEdit>
+#include <KLineEdit>
 #include <QLayout>
 #include <QToolTip>
 #include <q3whatsthis.h>
@@ -88,7 +88,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	raterLabel = new QLabel( layout2 );
 	raterLabel->setObjectName( "raterLabel" );
-	raterEdit = new QLineEdit( layout2 );
+	raterEdit = new KLineEdit( layout2 );
 	raterEdit->setObjectName( "raterEdit" );
 
 	layout8 = new KHBox( page );
@@ -96,7 +96,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	criteriaLabel = new QLabel( layout8 );
 	criteriaLabel->setObjectName( "criteriaLabel" );
 
-	criteriaComboBox = new QComboBox( layout8 );
+	criteriaComboBox = new KComboBox( layout8 );
 	criteriaComboBox->setEditable( false );
 	criteriaComboBox->setObjectName( "criteriaComboBox" );
 	criteriaComboBox->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, (QSizePolicy::SizeType)0, 0, 0, criteriaComboBox->sizePolicy().hasHeightForWidth() ) );

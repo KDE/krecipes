@@ -17,7 +17,7 @@
 
 #include "datablocks/unit.h"
 
-class QComboBox;
+class KComboBox;
 
 class RecipeDB;
 class KMenu;
@@ -71,7 +71,7 @@ private:
 	void insertTypeComboBox( Q3ListViewItem* );
 
 	KMenu *kpop;
-	QComboBox *typeComboBox;
+	KComboBox *typeComboBox;
 };
 
 #endif //UNITLISTVIEW_H

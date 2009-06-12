@@ -13,7 +13,7 @@
 #include "unitsdialog.h"
 
 #include <QLayout>
-#include <QTabWidget>
+#include <KTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
@@ -42,7 +42,7 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	page_layout->setMargin( KDialog::marginHint() );
 	page_layout->setSpacing( KDialog::spacingHint() );
 
-	QTabWidget *tabWidget = new QTabWidget( this );
+	KTabWidget *tabWidget = new KTabWidget( this );
 
 	QWidget *unitTab = new QWidget( tabWidget );
 	QHBoxLayout* layout = new QHBoxLayout( unitTab );

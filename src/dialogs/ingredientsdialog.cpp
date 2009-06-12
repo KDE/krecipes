@@ -26,7 +26,7 @@
 #include <kconfig.h>
 
 #include <q3header.h>
-#include <QTabWidget>
+#include <KTabWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -44,7 +44,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	page_layout->setMargin( KDialog::marginHint() );
 	page_layout->setSpacing( KDialog::spacingHint() );
 
-	QTabWidget *tabWidget = new QTabWidget( this );
+	KTabWidget *tabWidget = new KTabWidget( this );
 
 	QWidget *ingredientTab = new QWidget( tabWidget );
 
@@ -130,7 +130,7 @@ void IngredientsDialog::showPropertyEdit()
 		d.exec();
 	}
 	else
-		QMessageBox::information( this, QString::null, i18n( "No ingredient selected." ) );
+		KMessageBox::information( this, i18n( "No ingredient selected." ), QString::null );
 }
 
 #include "ingredientsdialog.moc"

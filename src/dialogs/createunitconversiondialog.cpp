@@ -11,9 +11,8 @@
 
 #include <QVariant>
 #include <q3buttongroup.h>
-#include <QLineEdit>
 #include <QLabel>
-#include <QComboBox>
+#include <KComboBox>
 #include <QLayout>
 #include <QToolTip>
 #include <q3whatsthis.h>

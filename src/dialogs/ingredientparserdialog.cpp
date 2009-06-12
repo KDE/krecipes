@@ -11,7 +11,7 @@
 #include "ingredientparserdialog.h"
 
 #include <QPushButton>
-#include <QTextEdit>
+#include <KTextEdit>
 #include <QLabel>
 #include <QLineEdit>
 #include <QLayout>
@@ -55,7 +55,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	textLabel1->setObjectName( "textLabel1" );
 	textLabel1->setTextFormat( Qt::RichText );
 
-	ingredientTextEdit = new QTextEdit( page, "ingredientTextEdit" );
+	ingredientTextEdit = new KTextEdit( page );
+	ingredientTextEdit->setObjectName( "ingredientTextEdit" );
 	ingredientTextEdit->setAcceptRichText( false );
 
 	parseButton = new KPushButton( page );

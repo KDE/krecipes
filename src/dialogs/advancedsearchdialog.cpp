@@ -16,7 +16,7 @@
 #include <qwidget.h>
 #include <QCheckBox>
 #include <qframe.h>
-#include <QComboBox>
+#include <KComboBox>
 #include <q3header.h>
 #include <q3listview.h>
 #include <qspinbox.h>
@@ -304,7 +304,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout5->setMargin( 0 );
 	layout5->setSpacing( 3 );
 	
-	servingsComboBox = new QComboBox( servingsFrame );
+	servingsComboBox = new KComboBox( servingsFrame );
 	servingsComboBox->setObjectName( "servingsComboBox" );
 	servingsComboBox->setEditable( false );
 	servingsComboBox->setEnabled( false );
@@ -346,7 +346,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	layout6 ->setMargin( 0 );
 	layout6 ->setSpacing( 3 );
 	
-	prepTimeComboBox = new QComboBox( prepTimeFrame );
+	prepTimeComboBox = new KComboBox( prepTimeFrame );
 	prepTimeComboBox->setEditable( false );
 	prepTimeComboBox->setObjectName( "prepTimeComboBox" );
 	prepTimeComboBox->setEnabled( false );

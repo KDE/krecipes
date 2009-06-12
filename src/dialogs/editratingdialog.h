@@ -23,11 +23,11 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QLabel;
-class QComboBox;
+class KComboBox;
 class QPushButton;
 class Q3ListViewItem;
 class Q3TextEdit;
-class QLineEdit;
+class KLineEdit;
 class RatingWidget;
 
 class Rating;
@@ -45,7 +45,7 @@ public:
 	~EditRatingDialog();
 
 	QLabel* criteriaLabel;
-	QComboBox* criteriaComboBox;
+	KComboBox* criteriaComboBox;
 	QLabel* starsLabel;
 	RatingWidget *starsWidget;
 	QPushButton* addButton;
@@ -54,7 +54,7 @@ public:
 	QLabel* commentsLabel;
 	Q3TextEdit* commentsEdit;
 	QLabel* raterLabel;
-	QLineEdit* raterEdit;
+	KLineEdit* raterEdit;
 
 	Rating rating() const;
 

@@ -14,7 +14,7 @@
 
 #include "unitlistview.h"
 
-#include <QComboBox>
+#include <KComboBox>
 #include <q3header.h>
 //Added by qt3to4:
 #include <QList>
@@ -142,7 +142,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		kpop->addAction( il->loadIcon( "edit-rename", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
 		kpop->ensurePolished();
 
-		typeComboBox = new QComboBox( viewport() );
+		typeComboBox = new KComboBox( viewport() );
 		typeComboBox->insertItem( typeComboBox->count(), i18n("Other"));
 		typeComboBox->insertItem( typeComboBox->count(), i18n("Mass"));
 		typeComboBox->insertItem( typeComboBox->count(), i18n("Volume"));
