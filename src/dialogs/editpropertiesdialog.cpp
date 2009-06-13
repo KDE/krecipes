@@ -15,6 +15,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <q3header.h>
+#include <QPointer>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <Q3ValueList>
@@ -255,9 +256,9 @@ void EditPropertiesDialog::languageChange()
 
 void EditPropertiesDialog::addWeight()
 {
-	CreateIngredientWeightDialog weightDialog( this, db );
-	if ( weightDialog.exec() == QDialog::Accepted ) {
-		Weight w = weightDialog.weight();
+	QPointer<CreateIngredientWeightDialog> weightDialog = new CreateIngredientWeightDialog( this, db );
+	if ( weightDialog->exec() == QDialog::Accepted ) {
+		Weight w = weightDialog->weight();
 		w.ingredientID = ingredientID;
 		db->addIngredientWeight( w );
 
@@ -269,6 +270,7 @@ void EditPropertiesDialog::addWeight()
 		);
 		weight_it->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
 	}
+	delete weightDialog;
 }
 
 void EditPropertiesDialog::removeWeight()
@@ -291,14 +293,14 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 	Weight w = weight_it->weight();
 
 	if ( col == 0 ) {
-		KDialog amountEditDialog( this );
-		amountEditDialog.setObjectName( "WeightAmountEdit" );
-		amountEditDialog.setModal( false );
-		amountEditDialog.setCaption( i18n("Enter amount") );
-		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok );
-		amountEditDialog.setDefaultButton( KDialog::Ok );
+		QPointer<KDialog> amountEditDialog = new KDialog( this );
+		amountEditDialog->setObjectName( "WeightAmountEdit" );
+		amountEditDialog->setModal( false );
+		amountEditDialog->setCaption( i18n("Enter amount") );
+		amountEditDialog->setButtons( KDialog::Cancel | KDialog::Ok );
+		amountEditDialog->setDefaultButton( KDialog::Ok );
 
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, db, Unit::Mass, MixedNumber::DecimalFormat );
 
 		WeightListItem *it = (WeightListItem*)item;
@@ -307,25 +309,26 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEdit->setAmount( w.weight );
 		amountEdit->setUnit( Unit(w.weightUnit,w.weightUnit,w.weightUnitID) );
 
-		amountEditDialog.setMainWidget(box);
+		amountEditDialog->setMainWidget(box);
 
-		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+		if ( amountEditDialog->exec() == QDialog::Accepted ) {
 			MixedNumber amount = amountEdit->amount();
 			Unit unit = amountEdit->unit();
 
 			it->setWeightUnit( amount.toDouble(), unit );
 			db->addIngredientWeight( it->weight() );
 		}
+		delete amountEditDialog;
 	}
 	else if ( col == 1 ) {
-		KDialog amountEditDialog( this );
-		amountEditDialog.setObjectName( "PerAmountEdit" );
-		amountEditDialog.setModal( false );
-		amountEditDialog.setCaption( i18n("Enter amount") );
-		amountEditDialog.setButtons( KDialog::Cancel | KDialog::Ok );
-		amountEditDialog.setDefaultButton( KDialog::Ok );
+		QPointer<KDialog> amountEditDialog = new KDialog( this );
+		amountEditDialog->setObjectName( "PerAmountEdit" );
+		amountEditDialog->setModal( false );
+		amountEditDialog->setCaption( i18n("Enter amount") );
+		amountEditDialog->setButtons( KDialog::Cancel | KDialog::Ok );
+		amountEditDialog->setDefaultButton( KDialog::Ok );
 
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
 		WeightInput *amountEdit = new WeightInput( box, db, Unit::All, MixedNumber::DecimalFormat );
 
 		WeightListItem *it = (WeightListItem*)item;
@@ -335,15 +338,16 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEdit->setUnit( Unit(w.perAmountUnit,w.perAmountUnit,w.perAmountUnitID) );
 		amountEdit->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
 
-		amountEditDialog.setMainWidget(box);
+		amountEditDialog->setMainWidget(box);
 
-		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+		if ( amountEditDialog->exec() == QDialog::Accepted ) {
 			MixedNumber amount = amountEdit->amount();
 			Unit unit = amountEdit->unit();
 
 			it->setAmountUnit( amount.toDouble(), unit, amountEdit->prepMethod() );
 			db->addIngredientWeight( it->weight() );
 		}
+		delete amountEditDialog;
 	}
 }
 
@@ -395,13 +399,14 @@ void EditPropertiesDialog:: updateLists( void )
 
 void EditPropertiesDialog::addPropertyToIngredient( void )
 {
-	SelectPropertyDialog propertyDialog( this, ingredientID, db, SelectPropertyDialog::HideEmptyUnit );
+	QPointer<SelectPropertyDialog> propertyDialog = 
+		new SelectPropertyDialog( this, ingredientID, db, SelectPropertyDialog::HideEmptyUnit );
 
-	if ( propertyDialog.exec() == QDialog::Accepted )
+	if ( propertyDialog->exec() == QDialog::Accepted )
 	{
 
-		int propertyID = propertyDialog.propertyID();
-		int perUnitsID = propertyDialog.perUnitsID();
+		int propertyID = propertyDialog->propertyID();
+		int perUnitsID = propertyDialog->perUnitsID();
 		if ( !( db->ingredientContainsProperty( ingredientID, propertyID, perUnitsID ) ) ) {
 			if ( ( propertyID >= 0 ) && ( perUnitsID >= 0 ) )  // check if the property is not -1 ... (not selected)
 				db->addPropertyToIngredient( ingredientID, propertyID, 0, perUnitsID ); // Add result chosen property to ingredient in database, with amount 0 by default
@@ -411,6 +416,8 @@ void EditPropertiesDialog::addPropertyToIngredient( void )
 		}
 		reloadPropertyList(); // Reload the list from database
 	}
+
+	delete propertyDialog;
 }
 
 void EditPropertiesDialog::removePropertyFromIngredient( void )

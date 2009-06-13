@@ -15,6 +15,7 @@
 #include <QLayout>
 #include <QStyle>
 #include <QFile>
+#include <QPointer>
 //Added by qt3to4:
 #include <QTextDocument>
 
@@ -135,8 +136,9 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 void RecipeViewDialog::print()
 {
 	if ( recipe_loaded ) {
-		RecipePrintPreview preview( this, database, ids_loaded );
-		preview.exec();
+		QPointer<RecipePrintPreview> preview = new RecipePrintPreview( this, database, ids_loaded );
+		preview->exec();
+		delete preview;
 	}
 }
 

@@ -44,6 +44,8 @@
 #include "backends/recipedb.h"
 #include "backends/progressinterface.h"
 
+#include <QPointer>
+
 #include <q3dragobject.h>
 #include <QPainter>
 #include <q3paintdevicemetrics.h>
@@ -416,14 +418,16 @@ void Krecipes::import()
 		KConfigGroup grp(KGlobal::config(),"Import");
 		bool direct = grp.readEntry( "DirectImport", false );
 		if ( !direct ) {
-			RecipeImportDialog import_dialog( importer->recipeList() );
+			QPointer<RecipeImportDialog> import_dialog = new RecipeImportDialog( importer->recipeList() );
 
-			if ( import_dialog.exec() != QDialog::Accepted ) {
+			if ( import_dialog->exec() != QDialog::Accepted ) {
 				delete importer;
 				return;
 			}
 			else
-				importer->setRecipeList( import_dialog.getSelectedRecipes() );
+				importer->setRecipeList( import_dialog->getSelectedRecipes() );
+
+			delete import_dialog;
 		}
 
 		importer->import(m_view->database);
@@ -434,13 +438,15 @@ void Krecipes::import()
 			warningEdit->setText( i18n( "NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>" ) + importer->getMessages() );
 			warningEdit->setReadOnly( true );
 
-			KDialog showWarningsDlg( this );
-			showWarningsDlg.setCaption( i18n("Import Warnings") );
-			showWarningsDlg.setButtons( KDialog::Ok | KDialog::Default ) ;
+			//FIXME: This dialog should allow cancel the import.
+			QPointer<KDialog> showWarningsDlg = new KDialog( this );
+			showWarningsDlg->setCaption( i18n("Import Warnings") );
+			showWarningsDlg->setButtons( KDialog::Ok | KDialog::Default ) ;
 
-			showWarningsDlg.setMainWidget( warningEdit ); //KDialog will delete warningEdit for us
-			showWarningsDlg.resize( QSize( 550, 250 ) );
-			showWarningsDlg.exec();
+			showWarningsDlg->setMainWidget( warningEdit ); //KDialog will delete warningEdit for us
+			showWarningsDlg->resize( QSize( 550, 250 ) );
+			showWarningsDlg->exec();
+			delete showWarningsDlg;
 		}
 
 		delete importer;
@@ -474,13 +480,17 @@ void Krecipes::kreDBImport()
 		KConfigGroup grp(KGlobal::config(),"Import");
 		bool direct = grp.readEntry( "DirectImport", false );
 		if ( !direct ) {
-			RecipeImportDialog import_dialog( importer.recipeList() );
+			QPointer<RecipeImportDialog> import_dialog = new RecipeImportDialog( importer.recipeList() );
 
-			if ( import_dialog.exec() != QDialog::Accepted ) {
+			if ( import_dialog->exec() != QDialog::Accepted ) {
+				delete import_dialog;
 				return;
 			}
 			else
-				importer.setRecipeList( import_dialog.getSelectedRecipes() );
+				importer.setRecipeList( import_dialog->getSelectedRecipes() );
+
+			delete import_dialog;
+
 		}
 
 		QString error = importer.getErrorMsg();

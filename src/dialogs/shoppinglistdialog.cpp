@@ -222,8 +222,9 @@ void ShoppingListDialog::showShoppingList( void )
 		recipeList.append( newEl );
 	}
 
-	RefineShoppingListDialog refineDialog( this, database, recipeList );
-	refineDialog.exec();
+	QPointer<RefineShoppingListDialog> refineDialog = new RefineShoppingListDialog( this, database, recipeList );
+	refineDialog->exec();
+	delete refineDialog;
 }
 
 void ShoppingListDialog::addRecipeToShoppingList( int recipeID )

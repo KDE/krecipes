@@ -16,6 +16,7 @@
 #include <QClipboard>
 #include <QTextStream>
 #include <QList>
+#include <QPointer>
 
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -186,7 +187,7 @@ void RecipeActionsHandler::categorize()
 	QList<Q3ListViewItem*> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
 		ElementList categoryList;
-		SelectCategoriesDialog *editCategoriesDialog = new SelectCategoriesDialog( parentListView, categoryList, database );
+		QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( parentListView, categoryList, database );
 	
 		if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
 			editCategoriesDialog->getSelectedCategories( &categoryList ); // get the category list chosen

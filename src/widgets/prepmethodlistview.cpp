@@ -16,6 +16,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
@@ -86,7 +87,7 @@ void StdPrepMethodListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, co
 
 void StdPrepMethodListView::createNew()
 {
-	CreateElementDialog * elementDialog = new CreateElementDialog( this, i18n( "New Preparation Method" ) );
+	QPointer<CreateElementDialog> elementDialog = new CreateElementDialog( this, i18n( "New Preparation Method" ) );
 
 	if ( elementDialog->exec() == QDialog::Accepted ) {
 		QString result = elementDialog->newElementName();
@@ -95,6 +96,8 @@ void StdPrepMethodListView::createNew()
 		if ( checkBounds( result ) )
 			database->createNewPrepMethod( result ); // Create the new prepMethod in the database
 	}
+
+	delete elementDialog;
 }
 
 void StdPrepMethodListView::remove
@@ -113,10 +116,11 @@ void StdPrepMethodListView::remove
 			ListInfo info;
 			info.list = dependingRecipes;
 			info.name = i18n("Recipes");
-			DependanciesDialog warnDialog( this, info );
-			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
-			if ( warnDialog.exec() == QDialog::Accepted )
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, info );
+			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removePrepMethod( prepMethodID );
+			delete warnDialog;
 		}
 	}
 }

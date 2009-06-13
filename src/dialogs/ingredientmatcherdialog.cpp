@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QLayout>
 #include <q3groupbox.h>
+#include <QPointer>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <Q3ValueList>
@@ -148,12 +149,12 @@ IngredientMatcherDialog::~IngredientMatcherDialog()
 void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, int col )
 {
 	if ( col == 1 ) {
-		KDialog amountEditDialog(this);
-		         amountEditDialog.setCaption(i18n("Enter amount"));
-		         amountEditDialog.setButtons(KDialog::Cancel | KDialog::Ok);
-		         amountEditDialog.setDefaultButton(KDialog::Ok);
-		         amountEditDialog.setModal( false );
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), &amountEditDialog );
+		QPointer<KDialog> amountEditDialog = new KDialog(this);
+		         amountEditDialog->setCaption(i18n("Enter amount"));
+		         amountEditDialog->setButtons(KDialog::Cancel | KDialog::Ok);
+		         amountEditDialog->setDefaultButton(KDialog::Ok);
+		         amountEditDialog->setModal( false );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
 		if ( !item->text(1).isEmpty() ) {
@@ -168,9 +169,9 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 			amountEdit->setUnit( u );
 		}
 
-		amountEditDialog.setMainWidget(box);
+		amountEditDialog->setMainWidget(box);
 
-		if ( amountEditDialog.exec() == QDialog::Accepted ) {
+		if ( amountEditDialog->exec() == QDialog::Accepted ) {
 			MixedNumber amount = amountEdit->amount();
 			Unit unit = amountEdit->unit();
 
@@ -190,6 +191,8 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 			(*ing_it).amount = amount.toDouble();
 			(*ing_it).units = unit;
 		}
+
+		delete amountEditDialog;
 	}
 }
 

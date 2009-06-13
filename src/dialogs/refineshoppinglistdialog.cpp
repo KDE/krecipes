@@ -15,6 +15,7 @@
 #include <QLabel>
 #include <q3header.h>
 #include <QLayout>
+#include <QPointer>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -125,8 +126,9 @@ void RefineShoppingListDialog::accept()
 {
 	hide();
 
-	ShoppingListViewDialog view( this, ingredientList );
-	view.exec();
+	QPointer<ShoppingListViewDialog> view = new ShoppingListViewDialog( this, ingredientList );
+	view->exec();
+	delete view;
 
 	QDialog::accept();
 }

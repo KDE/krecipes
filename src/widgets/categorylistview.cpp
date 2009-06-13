@@ -19,6 +19,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "datablocks/categorytree.h"
@@ -361,7 +362,7 @@ void StdCategoryListView::createNew()
 {
 	ElementList categories;
 	database->loadCategories( &categories );
-	CreateCategoryDialog* categoryDialog = new CreateCategoryDialog( this, categories );
+	QPointer<CreateCategoryDialog> categoryDialog = new CreateCategoryDialog( this, categories );
 
 	if ( categoryDialog->exec() == QDialog::Accepted ) {
 		QString result = categoryDialog->newCategoryName();
@@ -397,10 +398,12 @@ void StdCategoryListView::remove
 			ListInfo info;
 			info.list = recipeDependancies;
 			info.name = i18n("Recipes");
-			DependanciesDialog warnDialog( this, info, false );
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, info, false );
 
-			if ( warnDialog.exec() == QDialog::Accepted )
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeCategory( id );
+
+			delete warnDialog;
 		}
 	}
 }

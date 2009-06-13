@@ -17,6 +17,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
@@ -146,7 +147,7 @@ void StdIngredientListView::slotRename()
 
 void StdIngredientListView::createNew()
 {
-	CreateElementDialog * elementDialog = new CreateElementDialog( this, i18n( "New Ingredient" ) );
+	QPointer<CreateElementDialog> elementDialog = new CreateElementDialog( this, i18n( "New Ingredient" ) );
 
 	if ( elementDialog->exec() == QDialog::Accepted ) {
 		QString result = elementDialog->newElementName();
@@ -175,10 +176,11 @@ void StdIngredientListView::remove
 			list.list = dependingRecipes;
 			list.name = i18n( "Recipes" );
 
-			DependanciesDialog warnDialog( this, list );
-			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
-			if ( warnDialog.exec() == QDialog::Accepted )
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, list );
+			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeIngredient( ingredientID );
+			delete warnDialog;
 		}
 	}
 }

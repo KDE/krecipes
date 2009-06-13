@@ -10,6 +10,8 @@
 
 #include "recipeprintpreview.h"
 
+#include <QPointer>
+
 #include <kvbox.h>
 
 #include <kdebug.h>
@@ -54,9 +56,11 @@ void RecipePrintPreview::slotOk()
 
 void RecipePrintPreview::slotUser1( void )
 {
-	PageSetupDialog pageSetup( this, Recipe(), "Print" );
-	if ( pageSetup.exec() == QDialog::Accepted )
+	QPointer<PageSetupDialog> pageSetup = new PageSetupDialog( this, Recipe(), "Print" );
+	pageSetup->setCaption( i18n("Print Setup") );
+	if ( pageSetup->exec() == QDialog::Accepted )
 		reload();
+	delete pageSetup;
 }
 
 void RecipePrintPreview::reload()

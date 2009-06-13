@@ -20,6 +20,7 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <KPushButton>
+#include <QPointer>
 
 #include "datablocks/categorytree.h"
 #include "backends/recipedb.h"
@@ -78,7 +79,7 @@ void SelectCategoriesDialog::createNewCategory( void )
 {
 	ElementList categories;
 	database->loadCategories( &categories );
-	CreateCategoryDialog* categoryDialog = new CreateCategoryDialog( this, categories );
+	QPointer<CreateCategoryDialog> categoryDialog = new CreateCategoryDialog( this, categories );
 
 	if ( categoryDialog->exec() == QDialog::Accepted ) {
 		QString result = categoryDialog->newCategoryName();

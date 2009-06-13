@@ -15,6 +15,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <QPointer>
 
 #include "datablocks/ingredientpropertylist.h"
 #include "dialogs/createunitdialog.h"
@@ -115,13 +116,14 @@ int SelectPropertyDialog::perUnitsID()
 	int id = db->findExistingUnitByName( unit );
 	if ( -1 == id )
 	{
-		CreateUnitDialog getUnit( this, unit, QString::null );
-		if ( getUnit.exec() == QDialog::Accepted ) {
-			Unit new_unit = getUnit.newUnit();
+		QPointer<CreateUnitDialog> getUnit = new CreateUnitDialog( this, unit, QString::null );
+		if ( getUnit->exec() == QDialog::Accepted ) {
+			Unit new_unit = getUnit->newUnit();
 			db->createNewUnit( new_unit );
 
 			id = db->lastInsertID();
 		}
+		delete getUnit;
 	}
 	db->addUnitToIngredient( ingredientID, id ); // Add chosen unit to ingredient in database
 

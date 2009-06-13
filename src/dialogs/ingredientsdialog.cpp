@@ -31,6 +31,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <KPushButton>
+#include <QPointer>
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
@@ -126,8 +127,9 @@ void IngredientsDialog::showPropertyEdit()
 {
 	Q3ListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
 	if ( ing_it ) {
-		EditPropertiesDialog d(ing_it->text(1).toInt(),ing_it->text(0),database,this);
-		d.exec();
+		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ing_it->text(1).toInt(),ing_it->text(0),database,this );
+		d->exec();
+		delete d;
 	}
 	else
 		KMessageBox::information( this, i18n( "No ingredient selected." ), QString::null );

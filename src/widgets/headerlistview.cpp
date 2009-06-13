@@ -18,6 +18,7 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <QPointer>
 
 #include "backends/recipedb.h"
 #include "dialogs/createelementdialog.h"
@@ -90,7 +91,7 @@ void StdHeaderListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const 
 
 void StdHeaderListView::createNew()
 {
-	CreateElementDialog * headerDialog = new CreateElementDialog( this, i18n("Header") );
+	QPointer<CreateElementDialog> headerDialog = new CreateElementDialog( this, i18n("Header") );
 
 	if ( headerDialog->exec() == QDialog::Accepted ) {
 		QString result = headerDialog->newElementName();
@@ -120,10 +121,11 @@ void StdHeaderListView::remove()
 			info.list = recipeDependancies;
 			info.name = i18n( "Recipes" );
 
-			DependanciesDialog warnDialog( this, info );
-			warnDialog.setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
-			if ( warnDialog.exec() == QDialog::Accepted )
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, info );
+			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeIngredientGroup( headerID );
+			delete warnDialog;
 		}
 	}
 }

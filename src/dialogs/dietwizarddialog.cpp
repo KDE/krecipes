@@ -19,6 +19,7 @@
 #include <QLayout>
 #include <QPainter>
 #include <QMatrix>
+#include <QPointer>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QLabel>
@@ -264,9 +265,10 @@ void DietWizardDialog::createDiet( void )
 		KApplication::restoreOverrideCursor();
 
 		// display the list
-		DietViewDialog dietDisplay( this, *dietRList, dayNumber, mealNumber, dishNumbers );
-		connect( &dietDisplay, SIGNAL( signalOk() ), this, SLOT( createShoppingList() ) );
-		dietDisplay.exec();
+		QPointer<DietViewDialog> dietDisplay = new DietViewDialog( this, *dietRList, dayNumber, mealNumber, dishNumbers );
+		connect( dietDisplay, SIGNAL( signalOk() ), this, SLOT( createShoppingList() ) );
+		dietDisplay->exec();
+		delete dietDisplay;
 	}
 
 	END_TIMER();

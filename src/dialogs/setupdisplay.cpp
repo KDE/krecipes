@@ -21,6 +21,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kdialog.h>
+#include <QPointer>
 
 #include <khtmlview.h>
 #include <dom/dom_doc.h>
@@ -505,15 +506,16 @@ void SetupDisplay::setBackgroundColor()
 void SetupDisplay::setBorder()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	BorderDialog borderDialog( item->border, view() );
-	if ( borderDialog.exec() == QDialog::Accepted ) {
+	QPointer<BorderDialog> borderDialog = new BorderDialog( item->border, view() );
+	if ( borderDialog->exec() == QDialog::Accepted ) {
 		m_currentItem = item;
-		loadBorder( m_currNodeId, borderDialog.border() );
+		loadBorder( m_currNodeId, borderDialog->border() );
 		m_currentItem = 0;
 
 		applyStylesheet();
 		has_changes = true;
 	}
+	delete borderDialog;
 }
 
 void SetupDisplay::setColumns()

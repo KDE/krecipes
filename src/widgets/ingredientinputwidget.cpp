@@ -23,6 +23,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 #include <QList>
+#include <QPointer>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -483,13 +484,15 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 	int id = database->findExistingUnitByName( unit );
 	if ( -1 == id )
 	{
-		CreateUnitDialog getUnit( 0, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
-		if ( getUnit.exec() == QDialog::Accepted ) {
-			new_unit = getUnit.newUnit();
+		QPointer<CreateUnitDialog> getUnit =
+			new CreateUnitDialog( 0, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
+		if ( getUnit->exec() == QDialog::Accepted ) {
+			new_unit = getUnit->newUnit();
 			database->createNewUnit( new_unit );
 
 			id = database->lastInsertID();
 		}
+		delete getUnit;
 	}
 
 	if ( !database->ingredientContainsUnit(
