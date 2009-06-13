@@ -33,6 +33,7 @@
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
 	: KDialog( parent )
 {
+	setCaption( i18n( "Add Ingredient Weight" ) );
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );

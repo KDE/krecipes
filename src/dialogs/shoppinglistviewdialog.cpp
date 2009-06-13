@@ -28,6 +28,7 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 		: KDialog( parent )
 {
 	this->setObjectName( "shoppingviewdialog" );
+	this->setCaption( i18n( "Shopping List" ) );
 	this->setModal( true );
 	this->setButtons( KDialog::Close | KDialog::User1 );
 	this->setButtonGuiItem( KDialog::User1 , KStandardGuiItem::print() );

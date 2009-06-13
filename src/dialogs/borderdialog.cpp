@@ -35,6 +35,7 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 		: KDialog( parent )
 {
 	this->setObjectName( name );
+	this->setCaption( i18n( "Choose Border" ) );
 	this->setModal( true );
 	this->setButtons( KDialog::Ok | KDialog::Cancel );
 	this->setDefaultButton( KDialog::Ok );

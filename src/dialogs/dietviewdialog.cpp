@@ -22,6 +22,7 @@
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 		: KDialog( parent )
 {
+	setCaption( i18n( "View Diet" ) );
 	setButtons(KDialog::User2 | KDialog::Close | KDialog::User1);
 	setDefaultButton(KDialog::User2);
 	setModal( false );

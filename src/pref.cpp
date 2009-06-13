@@ -209,6 +209,8 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	
 	dumpPathRequester = new KUrlRequester;
 	mysqlPathRequester = new KUrlRequester;
+	dumpPathRequester->fileDialog()->setCaption( i18n( "Select MySQL dump command" ) );
+	mysqlPathRequester->fileDialog()->setCaption( i18n( "Select MySQL command" ) );
 
 	QGridLayout *backupGBoxLayout = new QGridLayout;
 	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
@@ -318,6 +320,8 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 
 	dumpPathRequester = new KUrlRequester;
 	psqlPathRequester = new KUrlRequester;
+	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL dump command" ) );
+	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL command" ) );
 	
 	backupGBox->setLayout( backupGBoxLayout );
 	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
@@ -385,6 +389,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	dumpPathLabel->setText( i18n( "Path to '%1':" ,sqliteBinary));
 	
 	dumpPathRequester = new KUrlRequester;
+	dumpPathRequester->fileDialog()->setCaption( i18n( "Select SQLite command" ) );
 	
 	QGridLayout *backupGBoxLayout = new QGridLayout;
 	backupGBox->setLayout( backupGBoxLayout );
