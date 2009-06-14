@@ -55,7 +55,7 @@ int LiteRecipeDB::lastInsertID()
 {
     kDebug();
 	int lastID = -1;
-	QSqlQuery query("SELECT lastInsertID()",database);
+	QSqlQuery query( "SELECT lastInsertID()", *database );
 	if ( query.isActive() && query.first() )
 		lastID = query.value(0).toInt();
 
@@ -76,7 +76,7 @@ QStringList LiteRecipeDB::backupCommand() const
 	binary = config.readEntry( "SQLitePath", binary );
 
 	QStringList command;
-	command<<binary<<database.databaseName()<<".dump";
+	command<<binary<<database->databaseName()<<".dump";
 	return command;
 }
 
@@ -92,7 +92,7 @@ QStringList LiteRecipeDB::restoreCommand() const
 	binary = config.readEntry( "SQLitePath", binary );
 
 	QStringList command;
-	command<<binary<<database.databaseName();
+	command<<binary<<database->databaseName();
 	return command;
 }
 
@@ -194,7 +194,7 @@ void LiteRecipeDB::createTable( const QString &tableName )
 
 	// execute the queries
 	for ( QStringList::const_iterator it = commands.constBegin(); it != commands.constEnd(); ++it )
-		database.exec( *it );
+		database->exec( *it );
 
 }
 
@@ -204,8 +204,8 @@ void LiteRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*10) < 5 ) {
 		//===========add prep_method_id to ingredient_list table
 		//There's no ALTER command in SQLite, so we have to copy all data to a new table and then recreate the table with the prep_method_id
-		database.exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);" );
-		QSqlQuery copyQuery( "SELECT recipe_id,ingredient_id,amount,unit_id,order_index FROM ingredient_list;", database );
+		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, order_index INTEGER);" );
+		QSqlQuery copyQuery( "SELECT recipe_id,ingredient_id,amount,unit_id,order_index FROM ingredient_list;", *database );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO ingredient_list_copy VALUES(%1,%2,%3,%4,%5);" )
@@ -214,14 +214,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 2 ).toString().toDouble() )
 				          .arg( copyQuery.value( 3 ).toInt() )
 				          .arg( copyQuery.value( 4 ).toInt() );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list" );
-		database.exec( "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);" );
-		copyQuery = database.exec( "SELECT * FROM ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list" );
+		database->exec( "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);" );
+		copyQuery = database->exec( "SELECT * FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO ingredient_list VALUES(%1,%2,%3,%4,%5,%6);" )
@@ -231,127 +231,127 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( copyQuery.value( 3 ).toInt() )
 				          .arg( -1 )  //default prep method
 				          .arg( copyQuery.value( 4 ).toInt() );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list_copy" );
 
-		database.exec( "CREATE index ridil_index ON ingredient_list(recipe_id);" );
-		database.exec( "CREATE index iidil_index ON ingredient_list(ingredient_id);" );
+		database->exec( "CREATE index ridil_index ON ingredient_list(recipe_id);" );
+		database->exec( "CREATE index iidil_index ON ingredient_list(ingredient_id);" );
 
 
 		//==============expand length of author name to 50 characters
-		database.exec( "CREATE TABLE authors_copy (id INTEGER, name varchar(20));" );
-		copyQuery = database.exec( "SELECT * FROM authors;" );
+		database->exec( "CREATE TABLE authors_copy (id INTEGER, name varchar(20));" );
+		copyQuery = database->exec( "SELECT * FROM authors;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO authors_copy VALUES(%1,'%2');" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE authors" );
-		database.exec( "CREATE TABLE authors (id INTEGER NOT NULL, name varchar(50) default NULL,PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT * FROM authors_copy" );
+		database->exec( "DROP TABLE authors" );
+		database->exec( "CREATE TABLE authors (id INTEGER NOT NULL, name varchar(50) default NULL,PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT * FROM authors_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO authors VALUES(%1,'%2');" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE authors_copy" );
+		database->exec( "DROP TABLE authors_copy" );
 
 
 		//==================expand length of category name to 40 characters
-		database.exec( "CREATE TABLE categories_copy (id INTEGER, name varchar(20));" );
-		copyQuery = database.exec( "SELECT * FROM categories;" );
+		database->exec( "CREATE TABLE categories_copy (id INTEGER, name varchar(20));" );
+		copyQuery = database->exec( "SELECT * FROM categories;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO categories_copy VALUES(%1,'%2');" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE categories" );
-		database.exec( "CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL,PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT * FROM categories_copy" );
+		database->exec( "DROP TABLE categories" );
+		database->exec( "CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL,PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT * FROM categories_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO categories VALUES(%1,'%2');" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE categories_copy" );
+		database->exec( "DROP TABLE categories_copy" );
 
 		//================Set the version to the new one (0.5)
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
-		database.exec( command );
+		database->exec( command );
 		command = "INSERT INTO db_info VALUES(0.5,'Krecipes 0.5');";
-		database.exec( command );
+		database->exec( command );
 	}
 
 	if ( qRound(version*10) < 6 ) {
 		//==================add a column to 'categories' to allow subcategories
-		database.exec( "CREATE TABLE categories_copy (id INTEGER, name varchar(40));" );
-		QSqlQuery copyQuery = database.exec( "SELECT * FROM categories;" );
+		database->exec( "CREATE TABLE categories_copy (id INTEGER, name varchar(40));" );
+		QSqlQuery copyQuery = database->exec( "SELECT * FROM categories;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO categories_copy VALUES(%1,'%2');" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE categories" );
-		database.exec( "CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL, parent_id INTEGER NOT NULL, PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT * FROM categories_copy" );
+		database->exec( "DROP TABLE categories" );
+		database->exec( "CREATE TABLE categories (id INTEGER NOT NULL, name varchar(40) default NULL, parent_id INTEGER NOT NULL, PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT * FROM categories_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = QString( "INSERT INTO categories VALUES(%1,'%2',-1);" )
 				          .arg( copyQuery.value( 0 ).toInt() )
 				          .arg( escape( copyQuery.value( 1 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE categories_copy" );
+		database->exec( "DROP TABLE categories_copy" );
 
 		//================Set the version to the new one (0.6)
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
-		database.exec( command );
+		database->exec( command );
 		command = "INSERT INTO db_info VALUES(0.6,'Krecipes 0.6');";
-		database.exec( command );
+		database->exec( command );
 	}
 
 	if ( qRound(version*100) < 61 ) {
 		//==================add a column to 'recipes' to allow prep time
-		database.exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));" );
-		QSqlQuery copyQuery = database.exec( "SELECT * FROM recipes;" );
+		database->exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB,   PRIMARY KEY (id));" );
+		QSqlQuery copyQuery = database->exec( "SELECT * FROM recipes;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -361,14 +361,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( escape( copyQuery.value( 2 ).toString() ) )
 				          .arg( escape( copyQuery.value( 3 ).toString() ) )
 				          .arg( escape( copyQuery.value( 4 ).toString() ) );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes" );
-		database.exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT * FROM recipes_copy" );
+		database->exec( "DROP TABLE recipes" );
+		database->exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME,   PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT * FROM recipes_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -379,26 +379,26 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          .arg( escape( copyQuery.value( 3 ).toString() ) )
 				          .arg( escape( copyQuery.value( 4 ).toString() ) );
 
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes_copy" );
+		database->exec( "DROP TABLE recipes_copy" );
 
 		//================Set the version to the new one (0.61)
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
-		database.exec( command );
+		database->exec( command );
 		command = "INSERT INTO db_info VALUES(0.61,'Krecipes 0.6');";
-		database.exec( command );
+		database->exec( command );
 	}
 
 	if ( qRound(version*100) < 62 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a column to 'ingredient_list' to allow grouping ingredients
-		database.exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);" );
-		QSqlQuery copyQuery = database.exec( "SELECT * FROM ingredient_list;" );
+		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER);" );
+		QSqlQuery copyQuery = database->exec( "SELECT * FROM ingredient_list;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -409,14 +409,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 4 ).toString() )
 				          + "','" + escape( copyQuery.value( 5 ).toString() )
 				          + "');";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list" );
-		database.exec( "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
-		copyQuery = database.exec( "SELECT * FROM ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list" );
+		database->exec( "CREATE TABLE ingredient_list (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
+		copyQuery = database->exec( "SELECT * FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -427,93 +427,93 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 4 ).toString() )
 				          + "','" + escape( copyQuery.value( 5 ).toString() )
 				          + "',-1)";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list_copy" );
 
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
-		database.exec( command );
+		database->exec( command );
 		command = "INSERT INTO db_info VALUES(0.62,'Krecipes 0.7');";
-		database.exec( command );
+		database->exec( command );
 
-		database.commit();
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 63 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a column to 'units' to allow handling plurals
-		database.exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));" );
-		QSqlQuery copyQuery = database.exec( "SELECT id,name FROM units;" );
+		database->exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), PRIMARY KEY (id));" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name FROM units;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
 				command = "INSERT INTO units_copy VALUES('" + escape( copyQuery.value( 0 ).toString() )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "');";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units" );
-		database.exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20), PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT id,name FROM units_copy" );
+		database->exec( "DROP TABLE units" );
+		database->exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20), PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT id,name FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				command = "INSERT INTO units VALUES('" + escape( copyQuery.value( 0 ).toString() )
 				          + "','" + escape( copyQuery.value( 1 ).toString() )
 				          + "',NULL)";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units_copy" );
+		database->exec( "DROP TABLE units_copy" );
 
-		QSqlQuery result = database.exec( "SELECT id,name FROM units WHERE plural ISNULL;" );
+		QSqlQuery result = database->exec( "SELECT id,name FROM units WHERE plural ISNULL;" );
 		if ( result.isActive() ) {
 			while ( result.next() ) {
 				command = "UPDATE units SET plural='" + escape( result.value( 1 ).toString() ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
 
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
-		database.exec( command );
+		database->exec( command );
 		command = "INSERT INTO db_info VALUES(0.63,'Krecipes 0.7');";
-		database.exec( command );
+		database->exec( command );
 
-		database.commit();
+		database->commit();
 	}
 
 	if ( qRound(version*10) < 7 ) { //simply call 0.63 -> 0.7
-		database.exec( "UPDATE db_info SET ver='0.7';" );
+		database->exec( "UPDATE db_info SET ver='0.7';" );
 	}
 
 	if ( qRound(version*100) < 81 ) {
-		database.transaction();
+		database->transaction();
 		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER)","amount_offset FLOAT","'0'","ingredient_list",3);
 
 		//addColumn() doesn't preserve indexes
-		database.exec("CREATE index ridil_index ON ingredient_list(recipe_id)");
-		database.exec("CREATE index iidil_index ON ingredient_list(ingredient_id)");
+		database->exec("CREATE index ridil_index ON ingredient_list(recipe_id)");
+		database->exec("CREATE index iidil_index ON ingredient_list(ingredient_id)");
 
-		database.exec( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 82 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a columns to 'recipes' to allow yield range + yield type
-		database.exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
-		QSqlQuery copyQuery = database.exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
+		database->exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200),persons INTEGER,instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -525,14 +525,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 4 ).toString() ) //photo
 				          + "','" + escape( copyQuery.value( 5 ).toString() ) //prep_time
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes" );
-		database.exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
-		copyQuery = database.exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
+		database->exec( "DROP TABLE recipes" );
+		database->exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -546,23 +546,23 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 4 ).toString() ) //photo
 				          + "','" + escape( copyQuery.value( 5 ).toString() ) //prep_time
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes_copy" );
+		database->exec( "DROP TABLE recipes_copy" );
 
-		database.exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.82',generated_by='Krecipes SVN (20050902)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 83 ) {
-		database.transaction();
+		database->transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
-		database.exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
-		QSqlQuery copyQuery = database.exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list" );
+		database->exec( "CREATE TABLE ingredient_list_copy (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);" );
+		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -576,15 +576,15 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 6 ).toString() )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list" );
-		database.exec( "CREATE TABLE ingredient_list (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id) );" );
+		database->exec( "DROP TABLE ingredient_list" );
+		database->exec( "CREATE TABLE ingredient_list (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id) );" );
 
-		copyQuery = database.exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
+		copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -598,7 +598,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 6 ).toString() )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				int prep_method_id = copyQuery.value( 5 ).toInt();
 				if ( prep_method_id != -1 ) {
@@ -607,28 +607,28 @@ void LiteRecipeDB::portOldDatabases( float version )
 						+ "','" + QString::number(prep_method_id)
 						+ "','1" //order_index
 						+ "')";
-					database.exec( command );
+					database->exec( command );
 				}
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list_copy" );
 
-		database.exec( "CREATE INDEX ridil_index ON ingredient_list(recipe_id);" );
-		database.exec( "CREATE INDEX iidil_index ON ingredient_list(ingredient_id);" );
+		database->exec( "CREATE INDEX ridil_index ON ingredient_list(recipe_id);" );
+		database->exec( "CREATE INDEX iidil_index ON ingredient_list(ingredient_id);" );
 
-		database.exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
+		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
-		database.commit();
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 84 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a columns to 'recipes' to allow storing atime, mtime, ctime
-		database.exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
-		QSqlQuery copyQuery = database.exec( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes;" );
+		database->exec( "CREATE TABLE recipes_copy (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER, instructions TEXT, photo BLOB, prep_time TIME, PRIMARY KEY (id));" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes;" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -642,14 +642,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 6 ).toString() )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes" );
-		database.exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP,  PRIMARY KEY (id))" );
-		copyQuery = database.exec( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes_copy" );
+		database->exec( "DROP TABLE recipes" );
+		database->exec( "CREATE TABLE recipes (id INTEGER NOT NULL,title VARCHAR(200), yield_amount FLOAT, yield_amount_offset FLOAT, yield_type_id INTEGER DEFAULT '-1', instructions TEXT, photo BLOB, prep_time TIME, ctime TIMESTAMP, mtime TIMESTAMP, atime TIMESTAMP,  PRIMARY KEY (id))" );
+		copyQuery = database->exec( "SELECT id,title,yield_amount,yield_amount_offset,yield_type_id,instructions,photo,prep_time FROM recipes_copy" );
 		if ( copyQuery.isActive() ) {
 
 			QString current_timestamp = QDateTime::currentDateTime().toString(Qt::ISODate);
@@ -667,21 +667,21 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( current_timestamp ) //mtime
 				          + "','" + escape( current_timestamp ) //atime
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE recipes_copy" );
+		database->exec( "DROP TABLE recipes_copy" );
 
-		database.exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 85 ) {
-		database.transaction();
+		database->transaction();
 
-		QSqlQuery query( "SELECT id,photo FROM recipes", database );
+		QSqlQuery query( "SELECT id,photo FROM recipes", *database );
 
 		if ( query.isActive() ) {
 			while ( query.next() ) {
@@ -711,16 +711,16 @@ void LiteRecipeDB::portOldDatabases( float version )
 		}
 
 
-		database.exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 86 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
+		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
 
-		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", *database );
 
 		QString last;
 		int lastID=-1;
@@ -730,10 +730,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 				int id = query.value(0).toInt();
 				if ( last == name ) {
 					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
-					database.exec(command);
+					database->exec(command);
 
 					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
-					database.exec(command);
+					database->exec(command);
 				}
 				last = name;
 				lastID = id;
@@ -742,37 +742,37 @@ void LiteRecipeDB::portOldDatabases( float version )
 			}
 		}
 
-		database.exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
-		if ( !database.commit() )
+		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)'" );
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.86 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 87 ) {
 		//Load this default data so the user knows what rating criteria is
-		database.exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
 
-		database.exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
+		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 
 	if ( qRound(version*100) < 90 ) {
-		database.exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
 	}
 
 	if ( qRound(version*100) < 91 ) {
-		database.exec("CREATE index parent_id_index ON categories(parent_id)");
-		database.exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
+		database->exec("CREATE index parent_id_index ON categories(parent_id)");
+		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
 
 	if ( qRound(version*100) < 92 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a columns to 'units' to allow unit abbreviations
-		database.exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20))" );
-		QSqlQuery copyQuery = database.exec( "SELECT id,name,plural FROM units" );
+		database->exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), plural VARCHAR(20))" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -781,14 +781,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 1 ).toString() ) //name
 				          + "','" + escape( copyQuery.value( 2 ).toString() ) //plural
 				          + "')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units" );
-		database.exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), PRIMARY KEY (id))" );
-		copyQuery = database.exec( "SELECT id,name,plural FROM units_copy" );
+		database->exec( "DROP TABLE units" );
+		database->exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), PRIMARY KEY (id))" );
+		copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				command = "INSERT INTO units VALUES('"
@@ -798,37 +798,37 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + ",'" + escape( copyQuery.value( 2 ).toString() ) //plural
 				          + "',NULL"                                         //plural_abbrev
 				          + ")";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units_copy" );
+		database->exec( "DROP TABLE units_copy" );
 
-		database.exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
-		if ( !database.commit() )
+		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.92 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 93 ) {
-		database.transaction();
+		database->transaction();
 
 		addColumn("CREATE TABLE %1 (id INTEGER NOT NULL, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, %2 PRIMARY KEY(id) )","substitute_for INTEGER","NULL","ingredient_list",8);
 
-		database.exec( "CREATE index ridil_index ON ingredient_list(recipe_id)" );
-		database.exec( "CREATE index iidil_index ON ingredient_list(ingredient_id)" );
-		database.exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
+		database->exec( "CREATE index ridil_index ON ingredient_list(recipe_id)" );
+		database->exec( "CREATE index iidil_index ON ingredient_list(ingredient_id)" );
+		database->exec( "CREATE index gidil_index ON ingredient_list(group_id)" );
 
-		database.exec( "UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060616)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 94 ) {
-		database.transaction();
+		database->transaction();
 
 		//==================add a column to 'units' to allow specifying a type
-		database.exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20))" );
-		QSqlQuery copyQuery = database.exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units" );
+		database->exec( "CREATE TABLE units_copy (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20))" );
+		QSqlQuery copyQuery = database->exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -854,14 +854,14 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
 				          + "'," + plural_abbrev //plural_abbrev
 				          + ")";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units" );
-		database.exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), type INTEGER NOT NULL, PRIMARY KEY (id))" );
-		copyQuery = database.exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units_copy" );
+		database->exec( "DROP TABLE units" );
+		database->exec( "CREATE TABLE units (id INTEGER NOT NULL, name VARCHAR(20), name_abbrev VARCHAR(20), plural VARCHAR(20), plural_abbrev VARCHAR(20), type INTEGER NOT NULL, PRIMARY KEY (id))" );
+		copyQuery = database->exec( "SELECT id,name,name_abbrev,plural,plural_abbrev FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 
 			while ( copyQuery.next() ) {
@@ -887,27 +887,27 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
 				          + "'," + plural_abbrev //plural_abbrev
 				          + ",'0')";
-				database.exec( command );
+				database->exec( command );
 
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE units_copy" );
+		database->exec( "DROP TABLE units_copy" );
 
 
-		database.exec( "UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)';" );
-		database.commit();
+		database->exec( "UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)';" );
+		database->commit();
 	}
 
 	if ( qRound(version*100) < 95 ) {
-		database.exec( "DROP TABLE ingredient_weights" );
+		database->exec( "DROP TABLE ingredient_weights" );
 		createTable( "ingredient_weights" );
-		database.exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
+		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
 
 	if ( qRound(version*100) < 96 ) {
 		fixUSDAPropertyUnits();
-		database.exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
 	}
 }
 
@@ -917,11 +917,11 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 
 	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
 	kDebug()<<"calling: "<<command;
-	database.exec( command );
+	database->exec( command );
 
 	command = "SELECT * FROM "+table_name;
 	kDebug()<<"calling: "<<command;
-	QSqlQuery copyQuery = database.exec( command );
+	QSqlQuery copyQuery = database->exec( command );
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
 			QStringList dataList;
@@ -935,14 +935,14 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
 			kDebug()<<"calling: "<<command;
-			database.exec( command );
+			database->exec( command );
 
 			emit progress();
 		}
 	}
-	database.exec( "DROP TABLE "+table_name );
-	database.exec( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
-	copyQuery = database.exec( "SELECT * FROM "+table_name+"_copy" );
+	database->exec( "DROP TABLE "+table_name );
+	database->exec( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
+	copyQuery = database->exec( "SELECT * FROM "+table_name+"_copy" );
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
 			QStringList dataList;
@@ -959,12 +959,12 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			}
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
 			kDebug()<<"calling: "<<command;
-			database.exec( command );
+			database->exec( command );
 
 			emit progress();
 		}
 	}
-	database.exec( "DROP TABLE "+table_name+"_copy" );
+	database->exec( "DROP TABLE "+table_name+"_copy" );
 }
 
 QString LiteRecipeDB::escapeAndEncode( const QString &s ) const

@@ -32,24 +32,24 @@ MySQLRecipeDB::~MySQLRecipeDB()
 
 void MySQLRecipeDB::createDB()
 {
-	QString real_db_name = database.databaseName();
+	QString real_db_name = database->databaseName();
 
 	//we have to be connected to some database in order to create the Krecipes database
 	//so long as the permissions given are allowed access to "mysql', this works
-	database.setDatabaseName( "mysql" );
-	if ( database.open() ) {
+	database->setDatabaseName( "mysql" );
+	if ( database->open() ) {
 		// Create the Database (Note: needs permissions)
 		//FIXME: I've noticed certain characters cause this to fail (such as '-').  Somehow let the user know.
-		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), database );
+		QSqlQuery query( QString( "CREATE DATABASE %1" ).arg( real_db_name ), *database );
 		if ( !query.isActive() )
-			kDebug() << "create query failed: " << database.lastError().databaseText() ;
+			kDebug() << "create query failed: " << database->lastError().databaseText() ;
 
-		database.close();
+		database->close();
 	}
 	else
-		kDebug() << "create open failed: " << database.lastError().databaseText() ;
+		kDebug() << "create open failed: " << database->lastError().databaseText() ;
 
-	database.setDatabaseName( real_db_name );
+	database->setDatabaseName( real_db_name );
 }
 
 QStringList MySQLRecipeDB::backupCommand() const
@@ -72,7 +72,7 @@ QStringList MySQLRecipeDB::backupCommand() const
 	if ( port > 0 )
         	command<<"-P"+QString::number(port);
 
-	command<<database.databaseName();
+	command<<database->databaseName();
 	return command;
 }
 
@@ -96,7 +96,7 @@ QStringList MySQLRecipeDB::restoreCommand() const
 
         command<<"-h"+config.readEntry("Host", "localhost");
 
-	command<<database.databaseName();
+	command<<database->databaseName();
 	return command;
 }
 
@@ -174,7 +174,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	else
 		return ;
 
-	QSqlQuery databaseToCreate( QString::null, database );
+	QSqlQuery databaseToCreate( QString::null, *database );
 
 	// execute the queries
 	for ( QStringList::const_iterator it = commands.constBegin(); it != commands.constEnd(); ++it )
@@ -196,7 +196,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		// Add new columns to existing tables (creating new tables is not necessary. Integrity check does that before)
 		command = "ALTER TABLE recipes ADD COLUMN persons int(11) AFTER title;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		// Set the version to the new one (0.3)
 
@@ -211,7 +211,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		// Add new columns to existing tables (creating any new tables is not necessary. Integrity check does that before)
 		command = "ALTER TABLE ingredient_list ADD COLUMN order_index int(11) AFTER unit_id;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		// Missing indexes in the previous versions
 		command = "CREATE index rid_index ON category_list(recipe_id)";
@@ -230,7 +230,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		//*1:: Recipes have always category -1 to speed up searches (no JOINs needed)
 		command = "SELECT r.id FROM recipes r;"; // Find all recipes
-		QSqlQuery categoryToAdd( QString::null, database );
+		QSqlQuery categoryToAdd( QString::null, *database );
 		tableToAlter.exec( command );
 		if ( tableToAlter.isActive() )
 		{
@@ -253,7 +253,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*10) < 5 ) {
 		command = QString( "CREATE TABLE prep_methods (id INTEGER NOT NULL AUTO_INCREMENT, name VARCHAR(%1), PRIMARY KEY (id));" ).arg( maxPrepMethodNameLength() );
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "ALTER TABLE ingredient_list ADD COLUMN prep_method_id int(11) AFTER unit_id;";
 		tableToAlter.exec( command );
@@ -274,7 +274,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*10) < 6 ) {
 		command = "ALTER TABLE categories ADD COLUMN parent_id int(11) NOT NULL default '-1' AFTER name;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec( command );
@@ -284,7 +284,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 61 ) {
 		QString command = "ALTER TABLE `recipes` ADD COLUMN `prep_time` TIME DEFAULT NULL";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec( command );
@@ -294,7 +294,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 62 ) {
 		QString command = "ALTER TABLE `ingredient_list` ADD COLUMN `group_id` int(11) default '-1' AFTER order_index;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "DELETE FROM db_info;"; // Remove previous version records if they exist
 		tableToAlter.exec( command );
@@ -304,13 +304,13 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 63 ) {
 		QString command = "ALTER TABLE `units` ADD COLUMN `plural` varchar(20) DEFAULT NULL AFTER name;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
-		QSqlQuery result( "SELECT id,name FROM units WHERE plural IS NULL", database );
+		QSqlQuery result( "SELECT id,name FROM units WHERE plural IS NULL", *database );
 		if ( result.isActive() ) {
 			while ( result.next() ) {
 				command = "UPDATE units SET plural='" + result.value( 1 ).toString() + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
-				QSqlQuery query( command, database );
+				QSqlQuery query( command, *database );
 
 				emit progress();
 			}
@@ -324,12 +324,12 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*10) < 7 ) { //simply call 0.63 -> 0.7
 		QString command = "UPDATE db_info SET ver='0.7';";
-		QSqlQuery query( command, database );
+		QSqlQuery query( command, *database );
 	}
 
 	if ( qRound(version*100) < 81 ) {
 		QString command = "ALTER TABLE `ingredient_list` ADD COLUMN `amount_offset` FLOAT DEFAULT '0' AFTER amount;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "UPDATE db_info SET ver='0.81',generated_by='Krecipes SVN (20050816)';";
 		tableToAlter.exec( command );
@@ -337,7 +337,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 82 ) {
 		QString command = "ALTER TABLE `recipes` ADD COLUMN `yield_amount` FLOAT DEFAULT '0' AFTER persons;";
-		QSqlQuery tableToAlter( command, database );
+		QSqlQuery tableToAlter( command, *database );
 
 		command = "ALTER TABLE `recipes` ADD COLUMN `yield_amount_offset` FLOAT DEFAULT '0' AFTER yield_amount;";
 		tableToAlter.exec(command);
@@ -345,11 +345,11 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		command = "ALTER TABLE `recipes` ADD COLUMN `yield_type_id` INTEGER DEFAULT '-1' AFTER yield_amount_offset;";
 		tableToAlter.exec(command);
 
-		QSqlQuery result( "SELECT id,persons FROM recipes", database );
+		QSqlQuery result( "SELECT id,persons FROM recipes", *database );
 		if ( result.isActive() ) {
 			while ( result.next() ) {
 				command = "UPDATE recipes SET yield_amount='" + QString::number( result.value( 1 ).toInt() ) + "' WHERE id=" + QString::number( result.value( 0 ).toInt() );
-				QSqlQuery query( command, database );
+				QSqlQuery query( command, *database );
 
 				emit progress();
 			}
@@ -363,16 +363,16 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	}
 
 	if ( qRound(version*100) < 83 ) {
-		database.transaction();
+		database->transaction();
 
 		//====add a id columns to 'ingredient_list' to identify it for the prep method list
-		database.exec( "RENAME TABLE ingredient_list TO ingredient_list_copy;" );
-		database.exec( "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));" );
+		database->exec( "RENAME TABLE ingredient_list TO ingredient_list_copy;" );
+		database->exec( "CREATE TABLE ingredient_list (id INTEGER NOT NULL AUTO_INCREMENT, recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, amount_offset FLOAT, unit_id INTEGER, order_index INTEGER, group_id INTEGER, PRIMARY KEY(id), INDEX ridil_index(recipe_id), INDEX iidil_index(ingredient_id));" );
 
-		QSqlQuery copyQuery = database.exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
+		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				QSqlQuery query(QString::null,database);
+				QSqlQuery query(QString::null,*database);
  				query.prepare( "INSERT INTO ingredient_list VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );
@@ -395,33 +395,33 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				emit progress();
 			}
 		}
-		database.exec( "DROP TABLE ingredient_list_copy" );
+		database->exec( "DROP TABLE ingredient_list_copy" );
 
-		database.exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
+		database->exec( "UPDATE db_info SET ver='0.83',generated_by='Krecipes SVN (20050909)';" );
 
-		if ( !database.commit() )
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.83 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 84 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP;" );
-		database.exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP;" );
-		database.exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP;" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN ctime TIMESTAMP;" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN mtime TIMESTAMP;" );
+		database->exec( "ALTER TABLE recipes ADD COLUMN atime TIMESTAMP;" );
 
-		database.exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
+		database->exec( "UPDATE recipes SET ctime=CURRENT_TIMESTAMP, mtime=CURRENT_TIMESTAMP, atime=CURRENT_TIMESTAMP;" );
 
-		database.exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
+		database->exec( "UPDATE db_info SET ver='0.84',generated_by='Krecipes SVN (20050913)';" );
 
-		if ( !database.commit() )
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.84 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 85 ) {
-		database.transaction();
+		database->transaction();
 
-		QSqlQuery query( "SELECT id,photo FROM recipes", database );
+		QSqlQuery query( "SELECT id,photo FROM recipes", *database );
 
 		if ( query.isActive() ) {
 			while ( query.next() ) {
@@ -432,17 +432,17 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		}
 
 
-		database.exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
-		if ( !database.commit() )
+		database->exec( "UPDATE db_info SET ver='0.85',generated_by='Krecipes SVN (20050926)';" );
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.85 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 86 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "ALTER TABLE ingredient_list ADD INDEX (group_id)" );
+		database->exec( "ALTER TABLE ingredient_list ADD INDEX (group_id)" );
 
-		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", database );
+		QSqlQuery query( "SELECT id,name FROM ingredient_groups ORDER BY name", *database );
 
 		QString last;
 		int lastID=-1;
@@ -452,10 +452,10 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				int id = query.value(0).toInt();
 				if ( last == name ) {
 					QString command = QString("UPDATE ingredient_list SET group_id=%1 WHERE group_id=%2").arg(lastID).arg(id);
-					database.exec(command);
+					database->exec(command);
 
 					command = QString("DELETE FROM ingredient_groups WHERE id=%1").arg(id);
-					database.exec(command);
+					database->exec(command);
 				}
 				last = name;
 				lastID = id;
@@ -464,77 +464,77 @@ void MySQLRecipeDB::portOldDatabases( float version )
 			}
 		}
 
-		database.exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
-		if ( !database.commit() )
+		database->exec( "UPDATE db_info SET ver='0.86',generated_by='Krecipes SVN (20050928)';" );
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.86 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 87 ) {
 		//Load this default data so the user knows what rating criteria is
-		database.exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
-		database.exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (5,'%1')").arg(i18n("Ease of Preparation") ) );
 
-		database.exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
+		database->exec( "UPDATE db_info SET ver='0.87',generated_by='Krecipes SVN (20051014)'" );
 	}
 
 	if ( qRound(version*100) < 90 ) {
-		database.exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
+		database->exec("UPDATE db_info SET ver='0.9',generated_by='Krecipes 0.9'");
 	}
 
 	if ( qRound(version*100) < 91 ) {
-		database.exec("CREATE index parent_id_index ON categories(parent_id)");
-		database.exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
+		database->exec("CREATE index parent_id_index ON categories(parent_id)");
+		database->exec("UPDATE db_info SET ver='0.91',generated_by='Krecipes SVN (20060526)'");
 	}
 
 	if ( qRound(version*100) < 92 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "ALTER TABLE units ADD COLUMN name_abbrev VARCHAR(20) AFTER name");
-		database.exec( "ALTER TABLE units ADD COLUMN plural_abbrev VARCHAR(20) AFTER plural");
+		database->exec( "ALTER TABLE units ADD COLUMN name_abbrev VARCHAR(20) AFTER name");
+		database->exec( "ALTER TABLE units ADD COLUMN plural_abbrev VARCHAR(20) AFTER plural");
 
-		database.exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
-		if ( !database.commit() )
+		database->exec("UPDATE db_info SET ver='0.92',generated_by='Krecipes SVN (20060609)'");
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.92 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 93 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER AFTER group_id");
+		database->exec( "ALTER TABLE ingredient_list ADD COLUMN substitute_for INTEGER AFTER group_id");
 
-		database.exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060615)'");
-		if ( !database.commit() )
+		database->exec("UPDATE db_info SET ver='0.93',generated_by='Krecipes SVN (20060615)'");
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.93 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 94 ) {
-		database.transaction();
+		database->transaction();
 
-		database.exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL DEFAULT 0 AFTER plural_abbrev");
+		database->exec( "ALTER TABLE units ADD COLUMN type INTEGER NOT NULL DEFAULT 0 AFTER plural_abbrev");
 
-		database.exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
-		if ( !database.commit() )
+		database->exec("UPDATE db_info SET ver='0.94',generated_by='Krecipes SVN (20060712)'");
+		if ( !database->commit() )
 			kDebug()<<"Update to 0.94 failed.  Maybe you should try again.";
 	}
 
 	if ( qRound(version*100) < 95 ) {
-		database.exec( "DROP TABLE ingredient_weights" );
+		database->exec( "DROP TABLE ingredient_weights" );
 		createTable( "ingredient_weights" );
-		database.exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
+		database->exec( "UPDATE db_info SET ver='0.95',generated_by='Krecipes SVN (20060726)'" );
 	}
 
 	if ( qRound(version*100) < 96 ) {
 		fixUSDAPropertyUnits();
-		database.exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
 	}
 }
 
 int MySQLRecipeDB::lastInsertID()
 {
-	QSqlQuery lastInsertID( "SELECT LAST_INSERT_ID();", database );
+	QSqlQuery lastInsertID( "SELECT LAST_INSERT_ID();", *database );
 
 	int id = -1;
 	if ( lastInsertID.isActive() && lastInsertID.next() )
@@ -554,7 +554,7 @@ void MySQLRecipeDB::givePermissions( const QString &dbName, const QString &usern
 
 	kDebug() << "I'm doing the query to setup permissions\n";
 
-	QSqlQuery permissionsToSet( command, database );
+	QSqlQuery permissionsToSet( command, *database );
 }
 
 #include "mysqlrecipedb.moc"

@@ -64,8 +64,8 @@ protected:
 		return -1;
 	}
 
-	QSqlDatabase database;
-	QSqlQuery m_query;
+	QSqlDatabase * database;
+	QSqlQuery * m_query;
 	QString DBuser;
 	QString DBpass;
 	QString DBhost;
