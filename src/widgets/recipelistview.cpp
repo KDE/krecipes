@@ -291,7 +291,7 @@ void RecipeListView::createRecipe( const Element &recipe_el, const ElementList &
 	recipe.recipeID = recipe_el.id;
 	recipe.title = recipe_el.name;
 
-	if ( categories.count() == 0 ) {
+	if ( categories.isEmpty() ) {
 		createRecipe( recipe, -1 );
 	}
 	else {
