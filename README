@@ -1,17 +1,27 @@
-Krecipes is a Recipe Book for KDE. It requires KDE 4.2 or greater (and Qt 4)
+Krecipes is a Recipe Book for KDE. It requires KDE 4.2 or greater (and Qt 4).
+Tested on Debian GNU/Linux sid (KDE 4.2.2 and Qt 4.5.1).
 
 
-First of all, make sure you have at least one of the three necessary databases installed: SQLite, MySQL, or PostgreSQL. In case you decide to use MySQL or PostgreSQL, make sure also that you have Qt's MySQL or PostgreSQL plugin properly installed. The program won't work without database support.
+First of all, make sure you have at least one of the three necessary databases
+installed: SQLite, MySQL, or PostgreSQL. In case you decide to use MySQL or
+PostgreSQL, make sure also that you have Qt's MySQL or PostgreSQL plugin
+properly installed. The program won't work without database support.
+
+** Build Dependencies
+
+ If you're using a Debian-like GNU/Linux distribution you may want to install
+ the following packages: 
+ libqimageblitz-dev libsqlite0-dev libsqlite3-dev libmysqlclient-dev libpq-dev
  
-**  Building The Latest (2.0) Release
+** Building The Latest (2.0-alpha1) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0.tar.gz
+ tar -zxf krecipes-2.0-alpha1.tar.gz
  
  And compile:
  
- cd krecipes-2.0
+ cd krecipes
  cmake .
  make
  make install
@@ -21,32 +31,28 @@ First of all, make sure you have at least one of the three necessary databases i
  
  The project is now being developed under extragear/utils in KDE's servers. 
 
-Please notice that this application is beta, meaning everything is expected to work, but the possibility is there that some things might not.  Note that the more our users tells us about bugs, the faster we can find them and fix them.
+ Please notice that this application is alpha, note that the more our users
+ tells us about bugs, the faster we can find them and fix them.
 
-
- 
  To download the package, do:
  
-svn co svn://anonsvn.kde.org/home/kde/trunk/extragear/utils/krecipes
+ svn co svn://anonsvn.kde.org/home/kde/trunk/extragear/utils/krecipes
 
  To update the package, do:
 
-cd krecipes
-svn update
+ cd krecipes
+ svn update
 
  To compile it:
 
-cmake .
-make
+ cmake .
+ make
 
  To install it:
 
-make install
+ make install
 
  To uninstall it:
 
-make uninstall
+ make uninstall
 
- For documentation and translations:
-
-TODO

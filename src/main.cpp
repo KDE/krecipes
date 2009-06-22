@@ -21,7 +21,7 @@
 
 #include "convert_sqlite3.h"
 
-static const char *version = "2.0-svn";
+static const char *version = "2.0-alpha1";
 
 static KCmdLineOptions options;
 
@@ -31,17 +31,17 @@ int main( int argc, char **argv )
 	options.add( 0, KLocalizedString(), 0 );    
 
 
-	KAboutData about( "krecipes", 0, ki18n( "Krecipes" ), version, ki18n( "The KDE Cookbook" ), KAboutData::License_GPL, ki18n( "(C) 2003 Unai Garro\n(C) 2004-2006 Jason Kivlighn"), ki18n("This product is RecipeML compatible.\nYou can get more information about this file format in:\nhttp://www.formatdata.com/recipeml" ), "http://krecipes.sourceforge.net/", "jkivlighn@gmail.com" );
+	KAboutData about( "krecipes", 0, ki18n( "Krecipes" ), version, ki18n( "The KDE Cookbook" ), KAboutData::License_GPL, ki18n( "(C) 2003 Unai Garro\n(C) 2004-2006 Jason Kivlighn"), ki18n("This product is RecipeML compatible.\nYou can get more information about this file format in:\nhttp://www.formatdata.com/recipeml" ), "http://krecipes.sourceforge.net/", "panfaust@gmail.com" );
 	about.addAuthor( ki18n("Unai Garro"), KLocalizedString(), "ugarro@users.sourceforge.net", 0 );
 	about.addAuthor( ki18n("Jason Kivlighn"), KLocalizedString(), "jkivlighn@gmail.com", 0 );
 	about.addAuthor( ki18n("Cyril Bosselut"), KLocalizedString(), "bosselut@b1project.com", "http://b1project.com" );
 
 	about.addCredit( ki18n("Colleen Beamer"), ki18n("Testing, bug reports, suggestions"), "colleen.beamer@gmail.com", 0 );
 	about.addCredit( ki18n("Robert Wadley"), ki18n("Icons and artwork"), "rob@robntina.fastmail.us", 0 );
-	about.addCredit( ki18n("Daniel Sauvé"), ki18n("Porting to KDE4"), "megametres@gmail.com", "http://metres.homelinux.com" );
+	about.addAuthor( ki18n("Daniel Sauvé"), ki18n("Porting to KDE4"), "megametres@gmail.com", "http://metres.homelinux.com" );
 
-        about.addCredit( ki18n("Laurent Montel"), ki18n("Porting to KDE4"), "montel@kde.org", 0 );
-        about.addCredit( ki18n("José Manuel Santamaría Lema"), ki18n("Porting to KDE4"), "panfaust@gmail.com", 0 );
+        about.addAuthor( ki18n("Laurent Montel"), ki18n("Porting to KDE4"), "montel@kde.org", 0 );
+        about.addAuthor( ki18n("José Manuel Santamaría Lema"), ki18n("Porting to KDE4, current maintainer"), "panfaust@gmail.com", 0 );
 
 	about.setTranslator( ki18n( "INSERT YOUR NAME HERE" ), ki18n( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
