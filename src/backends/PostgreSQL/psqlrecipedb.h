@@ -38,6 +38,8 @@ public:
 
 	void createTable( const QString &tableName );
 	void givePermissions( const QString &dbName, const QString &username, const QString &password, const QString &clientHost );
+	
+	float databaseVersion( void );	
 
 protected:
 	virtual QString qsqlDriverPlugin() const

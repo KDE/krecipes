@@ -182,6 +182,29 @@ void PSqlRecipeDB::initializeData()
 	updateSeq.exec( "SELECT setval('categories_id_seq',(SELECT COUNT(1) FROM categories))" );
 }
 
+float PSqlRecipeDB::databaseVersion( void )
+{
+	/* We're overriding this method to workaround a bug in the PostgreSQL
+	driver in Qt 4.5.1; for some reason "select ver from db_info" returns
+	zero but typing the same query on the psql prompt returns the proper
+	float number.*/
+	kDebug();
+	QString command = "SELECT cast(ver as varchar) FROM db_info";
+	QSqlQuery dbVersion( command, *database);
+        kDebug()<<"  dbVersion.isActive() :"<< dbVersion.isActive()<<" database :"<<database;
+        kDebug()<<" dbVersion.isSelect() :"<<dbVersion.isSelect();
+	if ( dbVersion.isActive() && dbVersion.isSelect() && dbVersion.next() )
+        {
+            kDebug()<<" dbVersion.value( 0 ).toString().toDouble( :"<<dbVersion.value( 0 ).toString().toDouble();
+		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
+        }
+        else
+        {
+            kDebug()<<" old version";
+		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
+        }
+}
+
 void PSqlRecipeDB::portOldDatabases( float version )
 {
 	kDebug() << "Current database version is..." << version << "\n";

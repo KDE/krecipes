@@ -206,7 +206,7 @@ public:
 
 	void splitCommands( QString& s, QStringList& sl );
 
-	float databaseVersion( void );
+	virtual float databaseVersion( void );
 
 protected:
 	void execSQL( const QString &command );
