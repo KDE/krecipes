@@ -106,7 +106,8 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	starsLabel = new QLabel( layout8 );
 	starsLabel->setObjectName( "starsLabel" );
 
-	starsWidget = new RatingWidget( 5, layout8, "starsWidget" );
+	starsWidget = new RatingWidget( 5, layout8 );
+	starsWidget->setObjectName( "starsWidget" );
 
 	addButton = new QPushButton( layout8 );
 	addButton->setObjectName( "addButton" );
