@@ -12,6 +12,8 @@ Changes from 1.0 to 2.0-alpha1:
   * Refreshed KDateEdit and KDatePickerPopup (using source from KDE 4.2.4).
   * Using QPointers when showing modal dialogs (it fixes issues reported by
     krazy).
+  * Refreshed RatingWidget, which now is licensed under GPL2 + GPL3 + e.v.
+    exception, thanks to Robby Stephenson.
   * Stop using some Qt classes that should not be used (it fixes issues
     reported by krazy).
 
