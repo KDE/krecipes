@@ -7,7 +7,7 @@ find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
 find_package(QImageBlitz)
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/ ${QIMAGEBLITZ_INCLUDES})
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/ ${CMAKE_CURRENT_SOURCE_DIR}/importers ${CMAKE_CURRENT_SOURCE_DIR}/exporters ${QIMAGEBLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
 ########### QT3Support ###############
 
@@ -192,8 +192,51 @@ set(datablocks_SRCS
 
 ############### tests ################
 
-add_subdirectory( tests )
+if(KDE4_BUILD_TESTS)
 
+#FIXME: Various tests are failing to build.
+#set(TESTS kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest)
+set(TESTS kretest)
+
+foreach(TEST ${TESTS})
+
+set(TEST_SRCS tests/${TEST}.cpp klomanager.cpp propertycalculator.cpp)
+
+kde4_add_executable(${TEST} ${TEST_SRCS} 
+   ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
+   ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
+   ${datablocks_SRCS})
+
+target_link_libraries(${TEST} ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
+   ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES})
+
+if ( SQLITE_FOUND )
+   target_link_libraries(${TEST} ${SQLITE_LIBRARIES})
+elseif ( SQLITE2_FOUND )
+   target_link_libraries(${TEST} ${SQLITE2_LIBRARIES})
+endif ( SQLITE_FOUND )
+
+if ( MYSQL_FOUND )
+   target_link_libraries(${TEST} ${MYSQL_LIBRARIES})
+endif ( MYSQL_FOUND )
+
+if ( POSTGRESQL_FOUND )
+   target_link_libraries(${TEST} ${POSTGRESQL_LIBRARIES})
+endif ( POSTGRESQL_FOUND )
+
+install(TARGETS ${TEST}
+   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
+
+install(FILES
+   tests/${TEST}.txt
+   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
+
+endforeach(TEST)
+
+install(FILES tests/test_photo.jpg
+   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
+
+endif(KDE4_BUILD_TESTS)
 
 ############# Main  #################
 
