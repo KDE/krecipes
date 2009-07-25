@@ -25,6 +25,7 @@
 #include <KConfigGroup>
 #include <config-krecipes.h>
 #include <QImageWriter>
+#include <KCodecs>
 
 #ifdef HAVE_SQLITE3
 #include <sqlite3.h>
@@ -1036,4 +1037,12 @@ QString escape( const QString &s )
 	return ( s_escaped );
 }
 
+void LiteRecipeDB::storePhoto( int recipeID, const QByteArray &data )
+{
+	QSqlQuery query( QString::null, *database);
+
+	query.prepare( "UPDATE recipes SET photo=\"?\",ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
+	query.addBindValue( KCodecs::base64Encode( data ) );
+	query.exec();
+}
 #include "literecipedb.moc"
