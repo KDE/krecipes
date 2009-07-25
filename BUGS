@@ -25,3 +25,5 @@
 * On the edit rating dialog, add a rating, then click on the stars in the list
   view, enter some number to edit the number of stars. It only works with
   integer numbers. The same on the advanced search tab.
+
+* All importer/exporter tests are failing or giving warnings.

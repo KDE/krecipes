@@ -1,3 +1,8 @@
+Changes from 2.0-alpha1 to svn:
+  * The import/export tests are able to build again.
+  * Fixed bugs:
+    + SQLite backend stores the recipes' photos.
+
 Changes from 1.0 to 2.0-alpha1:
   * General port to kde4/qt4, several dialogs and left panel.
   * Use sonnet.
