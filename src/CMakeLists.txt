@@ -194,9 +194,7 @@ set(datablocks_SRCS
 
 if(KDE4_BUILD_TESTS)
 
-#FIXME: Various tests are failing to build.
-#set(TESTS kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest)
-set(TESTS kretest)
+set(TESTS kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest)
 
 foreach(TEST ${TESTS})
 

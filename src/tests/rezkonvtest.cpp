@@ -9,6 +9,8 @@
 ***************************************************************************/
 
 #include <kapplication.h>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <QString>
 
@@ -24,7 +26,9 @@ using std::endl;
 int
 main(int argc, char *argv[])
 {
-	KApplication a(argc, argv, "rezkonvtest");
+	KAboutData about("rezkonvtest", 0, ki18n("Rezkonvtest"), "1");
+	KCmdLineArgs::init(argc, argv, &about);
+	KApplication app;
 
 	printf("Creating RezkonvImporter.\n");
 	RezkonvImporter importer;

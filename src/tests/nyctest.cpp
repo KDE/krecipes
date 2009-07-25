@@ -9,6 +9,8 @@
 ***************************************************************************/
 
 #include <kapplication.h>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <QString>
 
@@ -22,7 +24,9 @@ using std::endl;
 int
 main(int argc, char *argv[])
 {
-	KApplication a(argc, argv, "nyctest");
+	KAboutData about("nyctest", 0, ki18n("Nyctest"), "1");
+	KCmdLineArgs::init(argc, argv, &about);
+	KApplication app;
 
 	printf("Creating NYCGenericImporter.\n");
 	NYCGenericImporter importer;

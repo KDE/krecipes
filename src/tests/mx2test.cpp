@@ -9,6 +9,8 @@
 ***************************************************************************/
 
 #include <kapplication.h>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <QString>
 
@@ -22,7 +24,9 @@ using std::endl;
 int
 main(int argc, char *argv[])
 {
-	KApplication a(argc, argv, "mx2test");
+	KAboutData about("mx2test", 0, ki18n("Mx2test"), "1");
+	KCmdLineArgs::init(argc, argv, &about);
+	KApplication app;
 
 	printf("Creating MX2Importer.\n");
 	MX2Importer importer;
