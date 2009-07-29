@@ -17,6 +17,7 @@
 #include <QString>
 #include <QPixmap>
 #include <QImage>
+#include <QTime> 
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -79,6 +80,19 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 	return true;
 }
 
+bool check(const QString &txt, const QTime &a, const QTime &b)
+{
+	if ( a != b ) {
+		cout << "ERROR: Tested " << txt.latin1() << ", expected "
+			<< "'" << b.toString("HH:mm").toLocal8Bit().data() << "'"
+			<< " but got "
+			<< "'" << a.toString("HH:mm").toLocal8Bit().data() << "'" << endl;
+		exit( 1 );
+	}
+
+	return true;
+}
+
 void check( const IngredientData &ing, const IngredientData &base_ing, int ing_num )
 {
 	check( QString::number(ing_num)+": Ingredient name", ing.name, base_ing.name );
@@ -103,6 +117,7 @@ void check( const Recipe &recipe, const Recipe &base )
 	check( "Yield type", recipe.yield.type, base.yield.type );
 	check( "Instructions", recipe.instructions, base.instructions );
 	check( "Photo", recipe.photo, base.photo );
+	check( "Preparation time", recipe.prepTime, base.prepTime );
 
 	check( recipe.ratingList, base.ratingList );
 
