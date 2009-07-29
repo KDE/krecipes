@@ -74,7 +74,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 	if ( a.size() != b.size() ) {
 		
 		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
-	//	exit( 1 );
+		exit( 1 );
 	}
 
 	return true;
