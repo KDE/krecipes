@@ -165,7 +165,8 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 			}
 		}
 		else if ( el.tagName() == "preparation-time" ) {
-			recipe->prepTime = QTime::fromString( el.text() );
+			kDebug() << "Found preparation time: " << el.text();
+			recipe->prepTime = QTime::fromString( el.text(), "hh:mm" );
 		}
 		else if ( el.tagName() == "category" ) {
 			QDomNodeList categories = el.childNodes();
