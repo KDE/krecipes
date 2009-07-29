@@ -161,10 +161,12 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	propertyAddButton = new QPushButton( page );
 	propertyAddButton->setObjectName( "propertyAddButton" );
+	propertyAddButton->setIcon( KIcon( "list-add" ) );
 	layout3->addWidget( propertyAddButton );
 
 	propertyRemoveButton = new QPushButton( page );
 	loadButton->setObjectName( "propertyRemoveButton" );
+	propertyRemoveButton->setIcon( KIcon( "list-remove" ) );
 	layout3->addWidget( propertyRemoveButton );
 	layout7->addLayout( layout3 );
 
@@ -191,10 +193,12 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	weightAddButton = new QPushButton( page );
 	weightAddButton->setObjectName( "weightAddButton" );
+	weightAddButton->setIcon( KIcon( "list-add" ) );
 	layout3_2->addWidget( weightAddButton );
 
 	weightRemoveButton = new QPushButton( page );
 	weightRemoveButton->setObjectName( "weightRemoveButton" );
+	weightRemoveButton->setIcon( KIcon( "list-remove" ) );
 	layout3_2->addWidget( weightRemoveButton );
 	layout7->addLayout( layout3_2 );
 

@@ -201,7 +201,7 @@ void Krecipes::setupActions()
 	if ( grp.readEntry("UnhideMergeTools",false) ) { //FIXME: Please review it, not used yet
 
 		mergeCategoriesAction = new KAction( this );
-		mergeCategoriesAction->setIcon( KIcon( "categories" ) );
+		mergeCategoriesAction->setIcon( KIcon( "folder-yellow" ) );
 		mergeCategoriesAction->setText( i18n( "&Merge Similar Categories..." ) );
 		//mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );

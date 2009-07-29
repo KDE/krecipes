@@ -541,6 +541,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	clearButton = new KPushButton( this );
 	clearButton->setObjectName( "clearButton" );
+	clearButton->setIcon( KIcon( "edit-clear" ) );
 	clearButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, clearButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( clearButton );
 	spacer3 = new QSpacerItem( 110, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -548,6 +549,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	findButton = new KPushButton( this );
 	findButton->setObjectName( "findButton" );
+	findButton->setIcon( KIcon( "edit-find" ) );
 	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( findButton );
 	layout7->addLayout( layout9 );

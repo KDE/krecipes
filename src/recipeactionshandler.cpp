@@ -63,12 +63,12 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 		kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
 	if ( actions & AddToShoppingList )
-		kpop->addAction( il->loadIcon( "trolley", KIconLoader::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_A );
+		kpop->addAction( il->loadIcon( "view-pim-tasks", KIconLoader::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_A );
 	if ( actions & CopyToClipboard )
 		kpop->addAction( il->loadIcon( "edit-copy", KIconLoader::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), Qt::CTRL + Qt::Key_C );
 
 	if ( actions & Categorize )
-		categorize_item = kpop->insertItem( il->loadIcon( "categories", KIconLoader::NoGroup, 16 ), i18n( "Ca&tegorize..." ), this, SLOT(categorize()), Qt::CTRL + Qt::Key_T );
+		categorize_item = kpop->insertItem( il->loadIcon( "folder-yellow", KIconLoader::NoGroup, 16 ), i18n( "Ca&tegorize..." ), this, SLOT(categorize()), Qt::CTRL + Qt::Key_T );
 
 	kpop->ensurePolished();
 

@@ -67,8 +67,8 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
         KPageWidgetItem * page = new KPageWidgetItem( m_pageServer , i18n( "Server Settings" ) );
         page->setObjectName("server" );
 	page->setHeader( i18n( "Database Server Options (%1)" , config.readEntry( "Type" )));
-	il->loadIcon( "network-workgroup", KIconLoader::NoGroup, 32 );
-	page->setIcon( KIcon::KIcon( "network-workgroup", il ) );
+	il->loadIcon( "network-server", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "network-server", il ) );
         m_helpMap.insert(page->objectName(),"configure-server-settings");
         addPage( page );
 
@@ -76,8 +76,8 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	page = new KPageWidgetItem(m_pageNumbers , i18n( "Formatting" ) );
         page->setObjectName( "formating" );
 	page->setHeader( i18n( "Customize Formatting" ) );
-	il->loadIcon( "math_frac", KIconLoader::NoGroup, 32 );
-	page->setIcon( KIcon::KIcon( "math_frac", il ) );
+	il->loadIcon( "format-indent-more", KIconLoader::NoGroup, 32 );
+	page->setIcon( KIcon::KIcon( "format-indent-more", il ) );
 	addPage(page);
 	m_helpMap.insert(page->objectName(),"custom-formatting");
 

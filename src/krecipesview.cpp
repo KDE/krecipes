@@ -110,7 +110,7 @@ KrecipesView::KrecipesView( QWidget *parent )
     buttonsList.append( button0 );
 
     button1 = new KreMenuButton( leftPanel, ShoppingP );
-    button1->setIconSet( KIcon( "trolley" ) );
+    button1->setIconSet( KIcon( "view-pim-tasks" ) );
     buttonsList.append( button1 );
 
     button7 = new KreMenuButton( leftPanel, DietP );
@@ -118,12 +118,12 @@ KrecipesView::KrecipesView( QWidget *parent )
     buttonsList.append( button7 );
 
     button8 = new KreMenuButton( leftPanel, MatcherP );
-    button8->setIconSet( KIcon( "categories" ) );
+    button8->setIconSet( KIcon( "view-filter" ) );
     buttonsList.append( button8 );
 
 
     // Submenus
-    dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "data" );
+    dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "server-database" );
 
     button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
     button2->setIconSet( KIcon( "ingredients" ) );
@@ -142,7 +142,7 @@ KrecipesView::KrecipesView( QWidget *parent )
     buttonsList.append( button9 );
 
     button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
-    button5->setIconSet( KIcon( "categories" ) );
+    button5->setIconSet( KIcon( "folder-yellow" ) );
     buttonsList.append( button5 );
 
     button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
@@ -151,7 +151,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
     contextButton = new QPushButton( leftPanel );
     contextButton->setObjectName( "contextButton" );
-    contextButton->setIcon( KIcon( "krectip" ) );
+    contextButton->setIcon( KIcon( "system-help" ) );
     contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 
     QPalette p = palette();
@@ -367,7 +367,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		rightPanel->raise( selectPanel );
 		break;
 	case ShoppingP:
-		rightPanel->setHeader( i18n( "Shopping List" ), "trolley" );
+		rightPanel->setHeader( i18n( "Shopping List" ), "view-pim-tasks" );
 		rightPanel->raise( shoppingListPanel );
 		shoppingListPanel->reload( Load );
 		break;
@@ -377,7 +377,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		dietPanel->reload( Load );
 		break;
 	case MatcherP:
-		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "categories" );
+		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "view-filter" );
 		rightPanel->raise( ingredientMatcherPanel );
 		ingredientMatcherPanel->reload( Load );
 		break;
@@ -403,7 +403,7 @@ void KrecipesView::slotSetPanel( KrePanel p )
 		prepMethodsPanel->reload( Load );
 		break;
 	case CategoriesP:
-		rightPanel->setHeader( i18n( "Categories" ), "categories" );
+		rightPanel->setHeader( i18n( "Categories" ), "folder-yellow" );
 		rightPanel->raise( categoriesPanel );
 		categoriesPanel->reload( Load );
 		break;
