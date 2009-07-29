@@ -164,7 +164,7 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <emphasis>Find/Edit 
 <listitem><para>Buttons for <guibutton>Open</guibutton>, <guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing the corresponding action on a recipe</para></listitem>
 </itemizedlist>
 
-<tip><para>You will notice the <guiicon><inlinemediaobject><imageobject><imagedata fileref="krectip.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon in the bottom, right-hand corner of the pane containing the component list.  This icon appears in all &krecipes; components and when clicked, will open the corresponding section of this Handbook if you need extra help at any time.</para></tip>
+<tip><para>You will notice the <guiicon><inlinemediaobject><imageobject><imagedata fileref="system-help.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon in the bottom, right-hand corner of the pane containing the component list.  This icon appears in all &krecipes; components and when clicked, will open the corresponding section of this Handbook if you need extra help at any time.</para></tip>
 
 <para>With the <emphasis><guilabel>Basic</guilabel></emphasis> tab active and the list of recipe categories displayed, a category can be expanded by clicking on the <guibutton>+</guibutton> button beside the category name.  The category will automatically expand to show your recipes and/or subcategories, if there are any.  From this list, you may select a recipe to open, edit or delete (see the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information).  Additionally, if you <action>hover the mouse pointer</action> over any recipe title, a <interface>dialog box</interface> will appear showing the recipe title and the date that it was <emphasis>created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
 
@@ -420,9 +420,9 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <listitem><para>Click on the year displayed &ndash; This is reveal a textbox that displays the current year, but in which another year can be entered.</para></listitem>
 </itemizedlist>
 
-<para>To the left and right of the month and year heading on the calendar, there are arrows that can be used to navigate through various months and years.  Clicking on the <guiicon><inlinemediaobject><imageobject><imagedata  fileref="1leftarrow.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will reveal the previous month's calendar.  Conversely, clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="1rightarrow.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will advance the calendar to the next month.</para>
+<para>To the left and right of the month and year heading on the calendar, there are arrows that can be used to navigate through various months and years.  Clicking on the <guiicon><inlinemediaobject><imageobject><imagedata  fileref="arrow-left.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will reveal the previous month's calendar.  Conversely, clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will advance the calendar to the next month.</para>
 
-<para>Navigating between years is done in the same manner, but the <guiicon><inlinemediaobject><imageobject><imagedata fileref="2leftarrow.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to previous years and the <guiicon><inlinemediaobject><imageobject><imagedata fileref="2rightarrow.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to following years.  In each case, once a date is selected, it will be transferred to the textbox at the point where the calendar was selected.</para>
+<para>Navigating between years is done in the same manner, but the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-left-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to previous years and the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-right-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to following years.  In each case, once a date is selected, it will be transferred to the textbox at the point where the calendar was selected.</para>
 
 </sect4>
 </sect3>
@@ -497,7 +497,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <sect2 id="add-recipe">
 <title>Adding a New Recipe</title>
 
-<para>To add a new recipe, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="filenew.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon that appears in the first position on the <emphasis>&krecipes;</emphasis> toolbar.  The <quote>Edit Recipe</quote> screen will display.
+<para>To add a new recipe, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="document-new.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon that appears in the first position on the <emphasis>&krecipes;</emphasis> toolbar.  The <quote>Edit Recipe</quote> screen will display.
 </para>
 
 <para>The <quote>Edit Recipe</quote> screen has four tabs.  Each permits entry of a different aspect of the recipe.  These tabs are &mdash;</para>
@@ -542,11 +542,11 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To enter an author for the recipe, click on the <guibutton>+</guibutton> that appears to the right of the <quote>Authors</quote> box.</para>
 
-<para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box below by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears to the right of the drop-down menu.</para>
+<para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box below by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears to the right of the drop-down menu.</para>
 
 <tip><itemizedlist><listitem><para>An author's name can be typed directly into the textbox and transferred to the list box as described above.  As you start entering characters, if there are authors that match the text string typed, the menu will display a list of existing choices from which you can choose to transfer the author's name to the list box, as described above.</para>
 
-<para>However, in the situation where the author does not exist in your list, no choices will be listed as you type and when you click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer the author to the listbox, the author will automatically be added to your list of authors as well.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
+<para>However, in the situation where the author does not exist in your list, no choices will be listed as you type and when you click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer the author to the listbox, the author will automatically be added to your list of authors as well.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
 
 <listitem><para>An author may also be removed from the list by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
 </itemizedlist>
@@ -600,7 +600,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <note><para>The change in the graphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
 
-<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_left.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
+<tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="edit-clear.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
 <listitem><para>To display NO photo in the recipe, refer to the section <link linkend="displayed-items">Selecting Items to Display</link> for further instructions.</para></listitem>
 </itemizedlist>
 </tip>
@@ -630,7 +630,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <emphasis><guilabel>Header:</guilabel></emphasis> radio button is selected. Enter the desired name for the header in the textbox then, press the <keycap>Enter</keycap> key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <emphasis><guilabel>Ingredient:</guilabel></emphasis> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
 
-<note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to position the ingredient until it appears indented below the appropriate header.</para></note>
+<note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to position the ingredient until it appears indented below the appropriate header.</para></note>
 
 <para> Ingredients are entered by filling in the appropriate textbox under the headings &mdash;</para>
 
@@ -677,9 +677,9 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <note><itemizedlist>
 <listitem><para>If a particular field is not required to describe an ingredient <emphasis>it can be left blank</emphasis>!</para></listitem>
 
-<listitem><para>An ingredient may be removed from the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="no.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to the right of the ingredient list.</para></listitem>
+<listitem><para>An ingredient may be removed from the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="list-remove.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to the right of the ingredient list.</para></listitem>
 
-<listitem><para>An ingredient may also be repositioned in the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or the <guiicon><inlinemediaobject><imageobject><imagedata fileref="down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appear on the right of the ingredient list.</para></listitem>
+<listitem><para>An ingredient may also be repositioned in the list by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appear on the right of the ingredient list.</para></listitem>
 
 <listitem><para>Once an ingredient has been transferred to the ingredient list, the <quote>Amount</quote>, <quote>Units</quote> and <quote>Preparation Method</quote> fields may be edited by double-clicking on the particular component that needs to be changed.</para>  </listitem> 
 </itemizedlist></note>
@@ -775,7 +775,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <title>Copying Recipes from Other Sources</title>
 <para>Do you need an easy method of getting recipe ingredients into <emphasis>&krecipes;</emphasis>?  You can do that with the <emphasis>Copy/Paste</emphasis> functionality!</para>
 
-<para>Find the recipe that you wish to enter into <emphasis>&krecipes;</emphasis>.  Start the interface for entering a new recipe and enter the appropriate parameters in the <emphasis><guilabel>Recipe</guilabel></emphasis> tab.  Move to the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  Copy the recipe ingredients from your chosen source and initiate the Copy/Paste interface by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> which appears as the last item in the group of icons to the right of the ingredient list.  The recipe ingredients will appear in the upper portion of the <interface>Ingredient Parser</interface> window.</para>
+<para>Find the recipe that you wish to enter into <emphasis>&krecipes;</emphasis>.  Start the interface for entering a new recipe and enter the appropriate parameters in the <emphasis><guilabel>Recipe</guilabel></emphasis> tab.  Move to the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  Copy the recipe ingredients from your chosen source and initiate the Copy/Paste interface by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="edit-paste.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> which appears as the last item in the group of icons to the right of the ingredient list.  The recipe ingredients will appear in the upper portion of the <interface>Ingredient Parser</interface> window.</para>
 
 <para>Make any edits that you wish in this portion of the screen.  For example, if the recipe lists an ingredient as <emphasis>sugar</emphasis> and you know that the corresponding item in your ingredient list is <emphasis>granulated sugar</emphasis>, you may want to change this.  For any ingredient or unit that you do not alter in this portion of the screen, the ingredient and/or unit will be added to your ingredient and/or units list if it does not exist.</para>
 
@@ -812,7 +812,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Entering the recipe instructions is easy &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
 
-<para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! <guiicon><inlinemediaobject><imageobject><imagedata fileref="smiley.png" format="PNG"/></imageobject></inlinemediaobject></guiicon></para>
+<para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! <guiicon><inlinemediaobject><imageobject><imagedata fileref="face-smile.png" format="PNG"/></imageobject></inlinemediaobject></guiicon></para>
 
 <tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
 
@@ -983,7 +983,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <itemizedlist>
 <listitem><para>the Recipe Name, Authors, Categories, Yield Amount, Yield Type, Preparation Time and/or graphic from the <emphasis><guilabel>Recipe</guilabel></emphasis> tab</para></listitem>
 <listitem><para>the Amount, Units, and/or Preparation method for each of the listed ingredients in the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab</para>
-<note><para>Also in this tab, an ingredient can be added by clicking on the <guibutton>New Ingredient</guibutton> button that appears on the top, right-hand side of the ingredient list, or deleted by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="no.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button</para></note></listitem>
+<note><para>Also in this tab, an ingredient can be added by clicking on the <guibutton>New Ingredient</guibutton> button that appears on the top, right-hand side of the ingredient list, or deleted by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="list-remove.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button</para></note></listitem>
 <listitem><para>the preparation directions from the <emphasis><guilabel>Instructions</guilabel></emphasis> tab</para></listitem>
 </itemizedlist>
 
@@ -1522,11 +1522,11 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>When selected, the component title appears at the top in the right pane of the window.</para>
   
-<para>Below this is a textbox to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <emphasis><guilabel>Shopping List</guilabel></emphasis> by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>  button between the two portions of the screen.</para>
+<para>Below this is a textbox to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <emphasis><guilabel>Shopping List</guilabel></emphasis> by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>  button between the two portions of the screen.</para>
 
 <para>Once the desired recipes have been transferred to the shopping list side of the screen, click the <guibutton>OK</guibutton> button.</para>
 
-<tip><itemizedlist><listitem><para>Recipe names can also be transferred out of the shopping list side of the screen by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
+<tip><itemizedlist><listitem><para>Recipe names can also be transferred out of the shopping list side of the screen by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para></listitem>
 
 <listitem><para>The entire list of recipes that has been selected for producing the shopping list can be cleared by clicking the <guibutton>Clear</guibutton> button.</para></listitem>
 
@@ -1535,7 +1535,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>When the <guibutton>OK</guibutton> button is clicked, a window will appear that lists all ingredients contained in the <emphasis>&krecipes;</emphasis> database on the left and the ingredients required for the selected recipe(s) on the right.  Above each of these is a <emphasis><guilabel>Search:</guilabel></emphasis> textbox to <userinput>enter the name of an ingredient</userinput> to search for within each of the lists.</para>
 
-<para>Ingredients can be transferred to and from either side by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears between the lists, as needed.</para>
+<para>Ingredients can be transferred to and from either side by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears between the lists, as needed.</para>
 
 <para>In the recipe ingredient list on the right, the <quote>Amount</quote> and the <quote>Unit</quote> of each ingredient can be edited by double-clicking on the appropriate value.  For example, if the recipe requires 4 eggs and a purchase of eggs is required to make the recipe, it is unlikely that you would buy 4 eggs.  In this case, the eggs ingredient could be selected, the <quote>Amount</quote> changed to 1 and the <quote>Unit</quote> changed to doz. or dozen.</para>
 
@@ -1663,7 +1663,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>It is likely that the ingredients that you want to select will <emphasis>not</emphasis> be adjacent to each other, but this is not a problem.  Simply click on the first ingredient that you want to use and then, hold down the &Ctrl; key and click on the next ingredient.  This will work even if you are using the <guilabel>Search:</guilabel> box to look for ingredients.  Just remember that after finding and selecting the first ingredient and then, using the search box to locate the next (and any subsequent) ingredient,  you must hold down the &Ctrl; key before clicking on the ingredient name.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
 
-<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the checkbox beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
+<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the checkbox beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
 
 <para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the textbox below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> textbox.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
 
