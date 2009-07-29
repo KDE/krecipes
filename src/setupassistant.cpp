@@ -510,6 +510,14 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	clientEdit->setText( "localhost" );
 	serverSettingsLayout->addWidget( clientEdit, 1, 1 );
 
+	//Port
+	QLabel* portText = new QLabel( i18n( "Port:" ), serverSettingsGBox );
+	serverSettingsLayout->addWidget( portText, 2, 0 );
+	portEdit = new KIntNumInput( serverSettingsGBox );
+	portEdit->setMinimum(0);
+	portEdit->setSpecialValueText( i18n("Default") );
+	serverSettingsLayout->addWidget( portEdit, 2, 1 );
+
 	// Bottom Spacers
 
 	QSpacerItem* bottomSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
@@ -551,7 +559,7 @@ void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &cli
 	user = usernameEdit->text();
 	pass = passwordEdit->text();
 	dbName = dbNameEdit->text();
-	port = 0;
+	port = portEdit->value();
 }
 
 SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )

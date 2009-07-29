@@ -18,6 +18,7 @@
 #include <kassistantdialog.h>
 #include <klineedit.h>
 #include <ktextedit.h>
+#include <KIntNumInput>
 
 
 /**
@@ -147,6 +148,7 @@ public:
 	QString dbName( void ) const;
 	QString server( void ) const;
 	QString client( void ) const;
+	int port( void ) const;
 	void getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port );
 private:
 	// Widgets
@@ -158,6 +160,7 @@ private:
 	QCheckBox *remoteServerCheckBox;
 	KLineEdit *serverEdit;
 	KLineEdit *clientEdit;
+	KIntNumInput *portEdit;
 };
 
 
