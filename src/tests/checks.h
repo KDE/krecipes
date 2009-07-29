@@ -33,10 +33,10 @@ void check( const RatingList &rating, const RatingList &base );
 bool check(const QString &txt, const QString &a, const QString &b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
-		cout << "'" << b.latin1() << "' (" << b.length() << " chars)" << endl;
+		cout << "ERROR: Tested " << txt.toLocal8Bit().data() << ", expected" << endl;
+		cout << "'" << b.toLocal8Bit().data() << "' (" << b.length() << " chars)" << endl;
 		cout << "but got" << endl;
-		cout << "'" << a.latin1() << "' (" << a.length() << " chars)" << endl;
+		cout << "'" << a.toLocal8Bit().data() << "' (" << a.length() << " chars)" << endl;
 		exit( 1 );
 	}
 
@@ -46,7 +46,7 @@ bool check(const QString &txt, const QString &a, const QString &b)
 bool check(const QString &txt, int a, int b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.toLocal8Bit().data() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -59,7 +59,7 @@ bool check(const QString &txt, int a, int b)
 bool check(const QString &txt, double a, double b)
 {
 	if ( fabs(a - b) > 1e-10 ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected" << endl;
+		cout << "ERROR: Tested " << txt.toLocal8Bit().data() << ", expected" << endl;
 		cout << "'" << b << "'" << endl;
 		cout << "but got" << endl;
 		cout << "'" << a << "'" << endl;
@@ -73,7 +73,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 {
 	if ( a.size() != b.size() ) {
 		
-		cout << "ERROR: Tested " << txt.latin1() << ": photos differ" << endl;
+		cout << "ERROR: Tested " << txt.toLocal8Bit().data() << ": photos differ" << endl;
 		exit( 1 );
 	}
 
@@ -83,7 +83,7 @@ bool check(const QString &txt, const QPixmap &a, const QPixmap &b)
 bool check(const QString &txt, const QTime &a, const QTime &b)
 {
 	if ( a != b ) {
-		cout << "ERROR: Tested " << txt.latin1() << ", expected "
+		cout << "ERROR: Tested " << txt.toLocal8Bit().data() << ", expected "
 			<< "'" << b.toString("HH:mm").toLocal8Bit().data() << "'"
 			<< " but got "
 			<< "'" << a.toString("HH:mm").toLocal8Bit().data() << "'" << endl;
