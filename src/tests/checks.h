@@ -24,6 +24,8 @@
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
 
+#include <stdio.h>
+
 using std::cout;
 using std::cerr;
 using std::endl;

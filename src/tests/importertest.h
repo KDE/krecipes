@@ -19,6 +19,8 @@
 #include "checks.h"
 #include "datablocks/categorytree.h"
 
+#include <stdio.h>
+
 using std::cout;
 using std::endl;
 
