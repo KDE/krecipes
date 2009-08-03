@@ -20,6 +20,8 @@
 class RecipeDB;
 class Recipe;
 class KHTMLPart;
+class QFrame;
+class QToolButton;
 
 /**
 @author Unai Garro
@@ -54,11 +56,18 @@ public:
 public slots:
 	void printNoPreview( void );
 	void print( void );
+	void close( void );
+
+signals:
+	void closeRecipeView( void );
 
 private:
 
 	// Internal Variables
+	KVBox *khtmlpartBox;
 	KHTMLPart *recipeView;
+	QFrame *functionsBox;
+	QToolButton *closeButton;
 	RecipeDB *database;
 	bool recipe_loaded;
 	QList<int> ids_loaded;

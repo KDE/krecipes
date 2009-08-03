@@ -289,6 +289,9 @@ KrecipesView::KrecipesView( QWidget *parent )
     // Show a recipe when requested (just switch panels)
     connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
 
+    // Close the recipe view when requested (just switch panels)
+    connect( viewPanel, SIGNAL( closeRecipeView() ), this, SLOT( closeRecipe() ) );
+
     // Create a new shopping list when a new diet is generated and accepted
     connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
 

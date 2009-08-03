@@ -32,6 +32,10 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <QFrame>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
@@ -42,12 +46,33 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 	database(db)
 {
 	// Initialize UI Elements
-	recipeView = new KHTMLPart( this );
+	khtmlpartBox = new KVBox( this );
+	recipeView = new KHTMLPart( khtmlpartBox );
 
 	connect( database, SIGNAL(recipeRemoved(int)), SLOT(recipeRemoved(int)) );
 
 	tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
 
+	// Functions Box
+	QHBoxLayout* functionsLayout = new QHBoxLayout;
+
+	functionsBox = new QFrame ( this );
+	//functionsBox->setFrameStyle( QFrame::NoFrame );
+	functionsBox->setLayout( functionsLayout );
+
+	closeButton = new QToolButton;
+	closeButton->setIcon( KIcon( "window-close" ) );
+
+	closeButton->setText( i18n( "Close" ) );
+	closeButton->setToolTip( i18n( "Close" ) );
+	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+
+	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
+	functionsLayout->addWidget( closeButton );
+
+	//Connect the signals.
+	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+	
 	//----------Load  the recipe --------
 	if ( recipeID != -1 )
 		loadRecipe( recipeID );
@@ -113,7 +138,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 	}
 
 	delete recipeView;              // Temporary workaround
-	recipeView = new KHTMLPart( this ); // to avoid the problem of caching images of KHTMLPart
+	recipeView = new KHTMLPart( khtmlpartBox ); // to avoid the problem of caching images of KHTMLPart
 
 	//KDE4 port
 	KParts::OpenUrlArguments argsUrl (recipeView->arguments());
@@ -148,6 +173,13 @@ void RecipeViewDialog::printNoPreview( void )
 		recipeView->view() ->print();
 	}
 }
+
+
+void RecipeViewDialog::close( void )
+{
+	emit closeRecipeView();
+}
+
 
 void RecipeViewDialog::reload( const QString &layoutConfig )
 {
