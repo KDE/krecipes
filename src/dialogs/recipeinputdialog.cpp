@@ -459,11 +459,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	resizeButton->setToolTip( i18n( "Resize recipe" ) );
 	resizeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
+	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 	functionsLayout->addWidget( saveButton );
 	functionsLayout->addWidget( showButton );
 	functionsLayout->addWidget( closeButton );
 	functionsLayout->addWidget( resizeButton );
-	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 	// Dialog design
 	tabWidget->resize( size().expandedTo( minimumSizeHint() ) );
