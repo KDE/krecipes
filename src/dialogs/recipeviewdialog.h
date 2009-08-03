@@ -53,6 +53,9 @@ public:
 
 	void reload( const QString &layoutConfig = QString::null );
 
+	void showButtons();
+	void hideButtons();
+
 public slots:
 	void printNoPreview( void );
 	void print( void );

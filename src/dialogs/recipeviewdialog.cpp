@@ -186,6 +186,16 @@ void RecipeViewDialog::reload( const QString &layoutConfig )
 	loadRecipes( ids_loaded, layoutConfig );
 }
 
+void RecipeViewDialog::showButtons()
+{
+	functionsBox->setVisible( true );
+}
+
+void RecipeViewDialog::hideButtons()
+{
+	functionsBox->setVisible( false );
+}
+
 void RecipeViewDialog::removeOldFiles()
 {
 	if ( ids_loaded.count() > 0 ) {

@@ -37,6 +37,7 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QLi
 
 
 	recipeView = new RecipeViewDialog( page, db );
+	recipeView->hideButtons();
 	recipeView->loadRecipes( ids, "Print" );
 
 	//setInitialSize( QSize(450,500), false );
