@@ -99,9 +99,9 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	layout->addWidget( buttonBar, 4, 1, 1, 3, 0 );
 
 	openButton = new KPushButton( buttonBar );
-	openButton->setText( i18n( "Open Recipe(s)" ) );
+	openButton->setText( i18n( "Show Recipe(s)" ) );
 	openButton->setDisabled( true );
-	openButton->setIcon( KIcon( "dialog-ok" ) );
+	openButton->setIcon( KIcon( "system-search" ) );
 	editButton = new KPushButton( buttonBar );
 	editButton->setText( i18n( "Edit Recipe" ) );
 	editButton->setDisabled( true );

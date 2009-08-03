@@ -52,7 +52,7 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 
 	kpop = new KMenu( parentListView );
 	if ( actions & Open )
-		kpop->addAction( il->loadIcon( "system-search", KIconLoader::NoGroup, 16 ), i18n( "&Open" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
+		kpop->addAction( il->loadIcon( "system-search", KIconLoader::NoGroup, 16 ), i18n( "Sh&ow recipe(s)" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
 	if ( actions & Edit )
 		kpop->addAction( il->loadIcon( "document-edit", KIconLoader::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
 	if ( actions & Export )
