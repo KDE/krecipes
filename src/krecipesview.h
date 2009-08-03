@@ -176,6 +176,7 @@ private:
 	// Internal variables
 	QString dbType;
 	KrePanel m_activePanel;
+	KrePanel m_previousActivePanel;
 
 	QMap<QWidget*, KrePanel> panelMap;
 

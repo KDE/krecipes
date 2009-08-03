@@ -250,6 +250,8 @@ KrecipesView::KrecipesView( QWidget *parent )
     panelMap.insert( prepMethodsPanel, PrepMethodsP );
     panelMap.insert( ingredientMatcherPanel, MatcherP );
 
+	m_activePanel = SelectP;
+	m_previousActivePanel = SelectP;
 	slotSetPanel( SelectP );
 
     // i18n
@@ -364,9 +366,14 @@ void KrecipesView::slotSetTitle( const QString& title )
 // Function to switch panels
 void KrecipesView::slotSetPanel( KrePanel p )
 {
-	m_activePanel = p;
+	if (p != -1) {
+		if ( (m_activePanel != RecipeEdit) && (m_activePanel != RecipeView) )
+			m_previousActivePanel = m_activePanel;
+		m_activePanel = p;
+	}
+	kDebug() << "current:" << m_activePanel << "previous" << m_previousActivePanel;
 
-	switch ( m_activePanel ) {
+	switch ( p ) {
 	case SelectP:
 		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "system-search" );
 		rightPanel->raise( selectPanel );
@@ -816,7 +823,7 @@ void KrecipesView::switchToRecipe( void )
 
 void KrecipesView::closeRecipe( void )
 {
-	slotSetPanel( SelectP );
+	slotSetPanel( m_previousActivePanel );
 	buttonsList.removeLast();
 	recipeButton = 0;
 }
