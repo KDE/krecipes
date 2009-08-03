@@ -731,15 +731,15 @@ void RecipeInputDialog::savePhotoAs( void )
 
 	if ( url.isEmpty() )
 		return;
-	QString filename;
-	if (!url.isLocalFile()) {
-		if (!KIO::NetAccess::download(url,filename,this)) {
-			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
-			return;
-		}
-	} else {
-		filename = url.path();
-	}
+	QString filename = url.path();
+       	QFile outputFile (filename);
+        if (outputFile.exists()) {
+               	int r = KMessageBox::warningYesNo(this,
+       	                i18n("The file already exists, do you want to overwrite it?")
+                );
+               	if (r == KMessageBox::No)
+       	                return;
+        }
 
 	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
 		KMessageBox::error(this, i18n("The photo cannot be saved in %1").arg(filename) );
