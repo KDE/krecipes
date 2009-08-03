@@ -209,7 +209,14 @@ private slots:
 	void moveTipButton( int, int );
 	void resizeRightPane( int lpw, int lph );
 	void panelRaised( QWidget *w, QWidget *old_w );
+	void showCurrentRecipes();
 	void editRecipe();
+	void addToShoppingList();
+	void categorizeCurrentRecipe();
+	void removeFromCategory();
+	void deleteCurrentElements();
+	void expandAll();
+	void collapseAll();
 };
 
 

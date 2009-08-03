@@ -35,6 +35,7 @@
 class KreListView;
 class KIntSpinBox;
 class RecipeDB;
+class RecipeActionsHandler;
 
 /**
 @author Unai Garro
@@ -121,13 +122,16 @@ public:
 	IngredientMatcherDialog( QWidget *parent, RecipeDB* db );
 	~IngredientMatcherDialog();
 	void reload( ReloadFlags flag = Load );
+	RecipeActionsHandler* getActionsHandler() const;
 
 signals:
 	void recipeSelected( int, int );
+	void recipeSelected( bool );
 
 private:
 	//Private variables
 	RecipeDB *database;
+	RecipeActionsHandler * actionHandler;
 
 	//Widgets
 
@@ -153,6 +157,9 @@ private slots:
 	void addIngredient();
 	void removeIngredient();
 	void itemRenamed( Q3ListViewItem*, const QPoint &, int col );
+
+public slots:
+	void haveSelectedItems();
 };
 
 #endif

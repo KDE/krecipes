@@ -301,6 +301,8 @@ KrecipesView::KrecipesView( QWidget *parent )
     connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
     connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+    
+    connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
 
     // Close Splash Screen
     delete start_logo;
@@ -426,6 +428,20 @@ void KrecipesView::slotSetPanel( KrePanel p )
 	}
 }
 
+void KrecipesView::showCurrentRecipes()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->open();
+	}
+	else if (vis_panel == inputPanel ) {
+		inputPanel->showRecipe();
+	}
+	else if ( vis_panel == ingredientMatcherPanel ) {
+		ingredientMatcherPanel->getActionsHandler()->open();
+	}
+}
+
 bool KrecipesView::save( void )
 {
 	return inputPanel->save();
@@ -443,6 +459,9 @@ void KrecipesView::exportRecipe()
 	else if ( vis_panel == selectPanel ) {
 		selectPanel->getActionsHandler()->recipeExport();
 	}
+	else if ( vis_panel == ingredientMatcherPanel ) {
+		ingredientMatcherPanel->getActionsHandler()->recipeExport();
+	}
 }
 
 void KrecipesView::exportToClipboard()
@@ -454,6 +473,57 @@ void KrecipesView::exportToClipboard()
 	}
 	else if ( vis_panel == selectPanel ) {
 		selectPanel->getActionsHandler()->recipesToClipboard();
+	}
+}
+
+void KrecipesView::addToShoppingList()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->addToShoppingList();
+	}
+}
+
+void KrecipesView::categorizeCurrentRecipe()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->categorize();
+	}
+	else if (vis_panel == inputPanel ) {
+		inputPanel->addCategory();
+	}
+}
+
+void KrecipesView::removeFromCategory()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->removeFromCategory();
+	}
+}
+
+void KrecipesView::deleteCurrentElements()
+{	
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->remove();
+	}
+}
+
+void KrecipesView::expandAll()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->expandAll();
+	}
+}
+
+void KrecipesView::collapseAll()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->collapseAll();
 	}
 }
 
@@ -549,7 +619,6 @@ void KrecipesView::createNewRecipe( void )
 
 void KrecipesView::createNewElement( void )
 {
-	//this is inconstant as the program stands...
 	/*if (rightPanel->visiblePanel())==4) //Properties Panel is the active one
 	{
 	propertiesPanel->createNewProperty();
@@ -935,6 +1004,8 @@ void KrecipesView::editRecipe()
 	case SelectP:
 		selectPanel->getActionsHandler()->edit();
 		break;
+	case MatcherP:
+		ingredientMatcherPanel->getActionsHandler()->edit();
 	default:
 		break;
 	}

@@ -117,7 +117,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	recipeListView->listView() ->setSorting( -1 );
 	dialogLayout->addWidget(recipeListView);
 
-	RecipeActionsHandler *actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
+	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
 
 	KHBox *buttonBox = new KHBox( this );
 
@@ -136,6 +136,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
 	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
 	connect ( clearButton, SIGNAL( clicked() ), this, SLOT( unselectIngredients() ) );
+	connect( recipeListView->listView(), SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
 	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
@@ -344,6 +345,20 @@ void IngredientMatcherDialog::findRecipes( void )
 void IngredientMatcherDialog::reload( ReloadFlags flag )
 {
 	( ( StdIngredientListView* ) allIngListView->listView() ) ->reload(flag);
+}
+
+RecipeActionsHandler* IngredientMatcherDialog::getActionsHandler() const
+{
+	return actionHandler;
+}
+
+void IngredientMatcherDialog::haveSelectedItems()
+{
+	QList<int> list = actionHandler->recipeIDs();
+	if ( list.isEmpty() )
+		emit recipeSelected( false );
+	else
+		emit recipeSelected( true );
 }
 
 void SectionItem::paintCell ( QPainter * p, const QColorGroup & /*cg*/, int column, int width, int /*align*/ )

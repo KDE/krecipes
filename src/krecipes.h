@@ -128,6 +128,15 @@ private:
 	KAction *printSetupAction;
 	KAction *backupAction;
 	KAction *restoreAction;
+	KAction *addToShoppingListAction;
+	KAction *removeFromCategoryAction;
+	KAction *deleteAction;
+	KAction *showRecipeAction;
+	KAction *categorizeAction;
+	KAction *expandAllAction;
+	KAction *collapseAllAction;
+	KAction *createNewElementAction;
+	KAction *renameAction;
 	
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;

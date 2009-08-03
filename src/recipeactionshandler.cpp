@@ -51,19 +51,23 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	KIconLoader *il = KIconLoader::global();
 
 	kpop = new KMenu( parentListView );
+	//FIXME: This code is so redundant, we already added the actions in Krecipes class,
+	// please code something like RecipeActionsHandler::addAction(...). Also, currently
+	// if you configure other shortcuts, you can't see the correct shortcuts in contextual
+	// menus.
 	if ( actions & Open )
 		kpop->addAction( il->loadIcon( "system-search", KIconLoader::NoGroup, 16 ), i18n( "Sh&ow recipe(s)" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
 	if ( actions & Edit )
 		kpop->addAction( il->loadIcon( "document-edit", KIconLoader::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
 	if ( actions & Export )
-		kpop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
+		kpop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), Qt::CTRL + Qt::Key_P );
 	if ( actions & RemoveFromCategory )
-		remove_from_cat_item = kpop->insertItem( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Remove From Category" ), this, SLOT( removeFromCategory() ), Qt::CTRL + Qt::Key_R );
+		remove_from_cat_item = kpop->insertItem( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Remove From Category" ), this, SLOT( removeFromCategory() ), Qt::ALT + Qt::Key_Delete );
 	if ( actions & Remove )
-		kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
+		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
 			                  () ), Qt::Key_Delete );
 	if ( actions & AddToShoppingList )
-		kpop->addAction( il->loadIcon( "view-pim-tasks", KIconLoader::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_A );
+		kpop->addAction( il->loadIcon( "view-pim-tasks", KIconLoader::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_S );
 	if ( actions & CopyToClipboard )
 		kpop->addAction( il->loadIcon( "edit-copy", KIconLoader::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), Qt::CTRL + Qt::Key_C );
 
@@ -78,7 +82,7 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	if ( actions & CollapseAll )
 		catPop->addAction( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), Qt::CTRL + Qt::Key_Minus );
 	if ( actions & Export )
-		catPop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), 0 );
+		catPop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), Qt::CTRL + Qt::Key_P );
 
 	catPop->ensurePolished();
 
@@ -473,6 +477,13 @@ QList<int> RecipeActionsHandler::getAllVisibleItems()
 		++iterator;
 	}
 
+	return ids;
+}
+
+QList<int> RecipeActionsHandler::recipeIDs() const
+{
+	const QList<Q3ListViewItem*> items = parentListView->selectedItems();
+	QList<int> ids = recipeIDs(items);
 	return ids;
 }
 

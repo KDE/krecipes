@@ -174,11 +174,9 @@ private slots:
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );
 	void enableChangedSignal( bool en = true );
-	void addCategory( void );
 	void addAuthor( void );
 	void enableSaveButton( bool enabled );
 	void closeOptions( void );
-	void showRecipe( void );
 	void prepTitleChanged( const QString &title );
 	void recipeRemoved( int id );
 	void slotIngredientParser();
@@ -195,6 +193,8 @@ private slots:
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()
 	void resizeRecipe( void );
+	void addCategory( void );
+	void showRecipe( void );
 
 signals:
 	void changed( void );

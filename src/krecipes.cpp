@@ -108,7 +108,6 @@ Krecipes::Krecipes()
 	         this, SLOT( changeCaption( const QString& ) ) );
 
 	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
-	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
 
 	connect( m_view, SIGNAL( recipeSelected(bool) ), SLOT( recipeSelected(bool) ) );
 
@@ -144,6 +143,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			printAction->setEnabled( show );
 			reloadAction->setEnabled( show );
 			copyToClipboardAction->setEnabled( show );
+			showRecipeAction->setEnabled( false );
 
 			//can't edit when there are multiple recipes loaded
 			if ( show && m_view->viewPanel->recipesLoaded() == 1 ) {
@@ -154,10 +154,22 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 
 			break;
 		}
+	case RecipeEdit: {
+			showRecipeAction->setEnabled( show );
+			break;
+		}
 	case SelectP: {
-			exportAction->setEnabled( show );
-			editAction->setEnabled( show );
-			copyToClipboardAction->setEnabled( show );
+			if (show)
+				m_view->selectPanel->haveSelectedItems();
+			else
+				recipeSelected( false );
+			break;
+		}
+	case MatcherP: {
+			if (show) 
+				m_view->ingredientMatcherPanel->haveSelectedItems();
+			else
+				recipeSelected( false );
 			break;
 		}
 	default:
@@ -168,6 +180,8 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 void Krecipes::recipeSelected( bool selected )
 {
 	copyToClipboardAction->setEnabled( selected );
+	exportAction->setEnabled( selected );
+	showRecipeAction->setEnabled( selected );
 	editAction->setEnabled( selected );
 }
 
@@ -244,6 +258,7 @@ void Krecipes::setupActions()
 
 	exportAction = new KAction( this );
 	exportAction->setText( i18n( "Export..." ) );
+	exportAction->setShortcut( Qt::CTRL + Qt::Key_P );
 	exportAction->setIcon( KIcon( "document-export" ) );
 	actionCollection()->addAction( "export_action" , exportAction );
 	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT( fileExport() ) );
@@ -279,6 +294,53 @@ void Krecipes::setupActions()
 	restoreAction->setIcon( KIcon( "document-revert" ) );
         actionCollection()->addAction( "restore_action" , restoreAction );
         connect( restoreAction, SIGNAL(triggered(bool)), this, SLOT( restoreSlot() ) );
+
+	addToShoppingListAction = new KAction( this );
+	addToShoppingListAction->setText( i18n( "Add to Shopping List" ) ); 
+	addToShoppingListAction->setIcon( KIcon( "view-pim-tasks" ) );
+	addToShoppingListAction->setShortcut( Qt::CTRL + Qt::Key_S );
+	actionCollection()->addAction( "add_to_shopping_list_action", addToShoppingListAction );
+	connect( addToShoppingListAction, SIGNAL(triggered(bool)), m_view, SLOT( addToShoppingList() ) );
+
+	removeFromCategoryAction = new KAction( this );
+	removeFromCategoryAction->setText( i18n( "Remove From Category" ) );
+	removeFromCategoryAction->setIcon( KIcon( "edit-delete-shred" ) );
+	removeFromCategoryAction->setShortcut( Qt::ALT + Qt::Key_Delete );
+	actionCollection()->addAction( "remove_from_category_action", removeFromCategoryAction );
+	connect( removeFromCategoryAction, SIGNAL(triggered(bool)), m_view, SLOT( removeFromCategory() ) );
+
+	deleteAction = new KAction( this );
+	deleteAction->setText( i18n( "Delete" ) );
+	deleteAction->setIcon( KIcon( "edit-delete" ) );
+	deleteAction->setShortcut( Qt::Key_Delete );
+	actionCollection()->addAction( "delete_action", deleteAction );
+	connect( deleteAction, SIGNAL(triggered(bool)), m_view, SLOT( deleteCurrentElements() ) );
+
+	showRecipeAction = new KAction( this );
+	showRecipeAction->setText( i18n( "Show Recipe(s)" ) );
+	showRecipeAction->setIcon( KIcon( "system-search" ) );
+	showRecipeAction->setShortcut( Qt::CTRL + Qt::Key_L );
+	actionCollection()->addAction( "show_recipe_action", showRecipeAction );
+	connect( showRecipeAction, SIGNAL(triggered(bool)), m_view, SLOT( showCurrentRecipes() ) );
+
+	categorizeAction = new KAction( this );
+	categorizeAction->setText( i18n( "Categorize" ) );
+	categorizeAction->setIcon( KIcon( "folder-yellow" ) );
+	categorizeAction->setShortcut( Qt::CTRL + Qt::Key_T );
+	actionCollection()->addAction( "categorize_action", categorizeAction );
+	connect( categorizeAction, SIGNAL(triggered(bool)), m_view, SLOT( categorizeCurrentRecipe() ) );
+
+	expandAllAction = new KAction( this );
+	expandAllAction->setText( i18n( "Expand All" ) );
+	expandAllAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
+	actionCollection()->addAction( "expand_all_action", expandAllAction );
+	connect( expandAllAction, SIGNAL(triggered(bool)), m_view, SLOT( expandAll() ) );
+
+	collapseAllAction = new KAction( this );
+	collapseAllAction->setText( i18n ( "Collapse All") );
+	collapseAllAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
+	actionCollection()->addAction( "collapse_all_action", collapseAllAction );
+	connect( collapseAllAction, SIGNAL(triggered(bool)), m_view, SLOT( collapseAll() ) );
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );

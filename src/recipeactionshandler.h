@@ -101,6 +101,8 @@ public slots:
 	void collapseAll();
 
 	void recipesToClipboard();
+	
+	QList<int> recipeIDs() const;
 
 private:
 	KMenu *kpop;
