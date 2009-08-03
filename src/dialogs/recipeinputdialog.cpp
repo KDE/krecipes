@@ -173,6 +173,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton->setText( "..." );
 	changePhotoButton->setToolTip( i18n( "Select photo" ) );
 
+	KPushButton *savePhotoAsButton = new KPushButton( photoButtonsBox );
+	savePhotoAsButton->setIcon( KIcon( "document-save" ) );
+	savePhotoAsButton->setToolTip( i18n( "Save photo as..." ) );
+
 	KPushButton *clearPhotoButton = new KPushButton( photoButtonsBox );
 	clearPhotoButton->setIcon( KIcon( "edit-clear" ) );
 	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
@@ -476,6 +480,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Connect signals & Slots
 	connect( changePhotoButton, SIGNAL( clicked() ), this, SLOT( changePhoto() ) );
+	connect( savePhotoAsButton, SIGNAL( clicked() ), this, SLOT( savePhotoAs() ) );
 	connect( clearPhotoButton, SIGNAL( clicked() ), SLOT( clearPhoto() ) );
 	connect( upButton, SIGNAL( clicked() ), this, SLOT( moveIngredientUp() ) );
 	connect( downButton, SIGNAL( clicked() ), this, SLOT( moveIngredientDown() ) );
@@ -714,6 +719,30 @@ void RecipeInputDialog::changePhoto( void )
 	if (!url.isLocalFile()) {
 		KIO::NetAccess::removeTempFile( filename );
 	}
+}
+
+void RecipeInputDialog::savePhotoAs( void )
+{
+
+	KUrl url = KFileDialog::getSaveUrl( KUrl(),
+		QString( "*.jpg *.jpeg |%1 (*.jpg *.jpeg)" ).arg( i18n( "Images" ) ),
+		this,
+		i18n("Save photo as..."));
+
+	if ( url.isEmpty() )
+		return;
+	QString filename;
+	if (!url.isLocalFile()) {
+		if (!KIO::NetAccess::download(url,filename,this)) {
+			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
+			return;
+		}
+	} else {
+		filename = url.path();
+	}
+
+	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
+		KMessageBox::error(this, i18n("The photo cannot be saved in %1").arg(filename) );
 }
 
 void RecipeInputDialog::clearPhoto( void )

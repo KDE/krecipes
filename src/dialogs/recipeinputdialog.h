@@ -165,6 +165,7 @@ private:
 
 private slots:
 	void changePhoto( void );
+	void savePhotoAs( void );
 	void clearPhoto( void );
 	void moveIngredientUp( void );
 	void moveIngredientDown( void );
