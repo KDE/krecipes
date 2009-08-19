@@ -67,22 +67,6 @@ public:
 protected:
 	virtual void createAuthor( const Element & );
 	virtual void removeAuthor( int );
-
-private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-    void slotRename();
-
-	void modAuthor( Q3ListViewItem* i );
-	void saveAuthor( Q3ListViewItem* i );
-
-private:
-	bool checkBounds( const QString &name );
-
-	KMenu *kpop;
 };
 
 

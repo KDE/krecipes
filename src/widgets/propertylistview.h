@@ -11,7 +11,7 @@
 #ifndef PROPERTYLISTVIEW_H
 #define PROPERTYLISTVIEW_H
 
-#include <k3listview.h>
+#include "widgets/dblistviewbase.h"
 
 #include "datablocks/element.h"
 #include "datablocks/ingredientproperty.h"
@@ -125,7 +125,7 @@ public:
 };
 
 
-class PropertyListView : public K3ListView
+class PropertyListView : public DBListViewBase
 {
 	Q_OBJECT
 
@@ -134,9 +134,9 @@ public:
 
 public slots:
 	void reload( void );
+	void load(int, int);
 
 protected:
-	RecipeDB *database;
 	bool m_loading;
 
 protected slots:
@@ -156,21 +156,6 @@ public:
 protected:
 	virtual void removeProperty( int id );
 	virtual void createProperty( const IngredientProperty &property );
-
-private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove();
-	void rename(Q3ListViewItem* /* item */, int /*c*/);
-    void slotRename();
-	void modProperty( Q3ListViewItem* i );
-	void saveProperty( Q3ListViewItem* i );
-
-private:
-	bool checkBounds( const QString &name );
-
-	KMenu *kpop;
 };
 
 

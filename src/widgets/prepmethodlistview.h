@@ -49,22 +49,6 @@ public:
 protected:
 	virtual void createPrepMethod( const Element & );
 	virtual void removePrepMethod( int );
-
-private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove
-		();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-
-	void modPrepMethod( Q3ListViewItem* i );
-	void savePrepMethod( Q3ListViewItem* i );
-    void slotRename();
-private:
-	bool checkBounds( const QString &name );
-
-	KMenu *kpop;
 };
 
 #endif //PREPMETHODLISTVIEW_H

@@ -20,6 +20,7 @@
 #include "widgets/categorylistview.h"
 #include "createcategorydialog.h"
 #include "backends/recipedb.h"
+#include "actionshandlers/categoryactionshandler.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <KPushButton>
@@ -36,6 +37,7 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );
+	categoryActionsHandler = new CategoryActionsHandler( categoryListView, database );
 	layout->addWidget( categoryListView );
 
 	//Buttons
@@ -56,8 +58,8 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 
 	//Connect Signals & Slots
 
-	connect ( newCategoryButton, SIGNAL( clicked() ), categoryListView, SLOT( createNew() ) );
-	connect ( removeCategoryButton, SIGNAL( clicked() ), categoryListView, SLOT( remove() ) );
+	connect ( newCategoryButton, SIGNAL( clicked() ), categoryActionsHandler, SLOT( createNew() ) );
+	connect ( removeCategoryButton, SIGNAL( clicked() ), categoryActionsHandler, SLOT( remove() ) );
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()

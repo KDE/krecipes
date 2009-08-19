@@ -20,6 +20,8 @@
 #include "backends/recipedb.h"
 #include "createpropertydialog.h"
 #include "widgets/propertylistview.h"
+#include "actionshandlers/propertyactionshandler.h"
+
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -37,6 +39,7 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	layout->setSpacing( KDialog::spacingHint() );
 
 	propertyListView = new CheckPropertyListView( this, database, true );
+	propertyActionsHandler = new PropertyActionsHandler( propertyListView, database );
 	propertyListView->reload();
 
 	KConfigGroup config( KGlobal::config(), "Formatting");
@@ -62,9 +65,8 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	layout->addLayout( vboxl );
 
 	// Connect signals & slots
-	connect( addPropertyButton, SIGNAL( clicked() ), propertyListView, SLOT( createNew() ) );
-	connect( removePropertyButton, SIGNAL( clicked() ), propertyListView, SLOT( remove
-		         () ) );
+	connect( addPropertyButton, SIGNAL( clicked() ), propertyActionsHandler, SLOT( createNew() ) );
+	connect( removePropertyButton, SIGNAL( clicked() ), propertyActionsHandler, SLOT( remove() ) );
 
 	//FIXME: We've got some sort of build issue... we get undefined references to CreatePropertyDialog without this dummy code here
 	UnitList list;

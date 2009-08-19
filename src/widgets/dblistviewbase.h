@@ -66,16 +66,18 @@ protected:
 	int curr_limit;
 	int curr_offset;
 
-protected slots:
+	//make this protected because the data should always be synced with the database
+	void clear(){K3ListView::clear();}
+
+public slots:
 	void rename( Q3ListViewItem *, int c );
+
+protected slots:
 	void slotDoubleClicked( Q3ListViewItem * );
 
 private:
 	void activatePrev();
 	void activateNext();
-
-	//make this private because the data should always be synced with the database
-	void clear(){K3ListView::clear();}
 
 	int total;
 	

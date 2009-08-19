@@ -14,7 +14,6 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <QPointer>
@@ -83,8 +82,8 @@ void HidePropertyCheckListItem::stateChange( bool on )
 	}
 }
 
-PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) : K3ListView( parent ),
-		database( db )
+PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) :
+	DBListViewBase( parent, db, 0)
 {
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
@@ -110,6 +109,10 @@ void PropertyListView::reload()
 	m_loading = false;
 }
 
+void PropertyListView::load(int, int)
+{
+	reload();
+}
 
 
 StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool editable ) : PropertyListView( parent, db )
@@ -125,74 +128,8 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 
 	if ( editable ) {
 		setRenameable( 0, true );
-
-		KIconLoader *il = KIconLoader::global();
-
-		kpop = new KMenu( this );
-		kpop->addAction( il->loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
-		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Qt::Key_Delete );
-		kpop->addAction( il->loadIcon( "edit-rename", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
-		kpop->ensurePolished();
-
-		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( Q3ListViewItem* ) ), this, SLOT( modProperty( Q3ListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed( Q3ListViewItem* ) ), this, SLOT( saveProperty( Q3ListViewItem* ) ) );
+		setRenameable( 1, true );
 	}
-}
-
-void StdPropertyListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
-{
-	if ( i )
-		kpop->exec( p );
-}
-
-void StdPropertyListView::createNew()
-{
-	UnitList list;
-	database->loadUnits( &list );
-	QPointer<CreatePropertyDialog> propertyDialog = new CreatePropertyDialog( this, &list );
-
-	if ( propertyDialog->exec() == QDialog::Accepted ) {
-		QString name = propertyDialog->newPropertyName();
-		QString units = propertyDialog->newUnitsName();
-		if ( !( ( name.isEmpty() ) || ( units.isEmpty() ) ) )  // Make sure none of the fields are empty
-		{
-			//check bounds first
-			if ( checkBounds( name ) )
-				database->addProperty( name, units );
-		}
-	}
-	delete propertyDialog;
-}
-
-void StdPropertyListView::remove
-	()
-{
-	Q3ListViewItem * item = currentItem();
-
-	if ( item ) {
-		switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this property?" ) ) ) {
-		case KMessageBox::Continue:
-			database->removeProperty( item->text( 2 ).toInt() );
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-void StdPropertyListView::slotRename()
-{
-    rename( 0, 0 );
-}
-
-void StdPropertyListView::rename( Q3ListViewItem* /*item*/,int /*c*/)
-{
-	Q3ListViewItem * item = currentItem();
-
-	if ( item )
-		PropertyListView::rename( item, 0 );
 }
 
 void StdPropertyListView::removeProperty( int id )
@@ -209,48 +146,6 @@ void StdPropertyListView::createProperty( const IngredientProperty &property )
 	( void ) new Q3ListViewItem( this, property.name, property.units, QString::number( property.id ) );
 }
 
-void StdPropertyListView::modProperty( Q3ListViewItem* i )
-{
-	if ( i )
-		PropertyListView::rename( i, 0 );
-}
-
-void StdPropertyListView::saveProperty( Q3ListViewItem* i )
-{
-	if ( !checkBounds( i->text( 0 ) ) ) {
-		reload(); //reset the changed text
-		return ;
-	}
-kDebug() << "saveProp: " << i->text( 0 ) ;
-	int existing_id = database->findExistingPropertyByName( i->text( 0 ) );
-	int prop_id = i->text( 2 ).toInt();
-	if ( existing_id != -1 && existing_id != prop_id )  //category already exists with this label... merge the two
-	{
-		switch ( KMessageBox::warningContinueCancel( this, i18n( "This property already exists.  Continuing will merge these two properties into one.  Are you sure?" ) ) )
-		{
-		case KMessageBox::Continue: {
-				database->mergeProperties( existing_id, prop_id );
-				break;
-			}
-		default:
-			reload();
-			break;
-		}
-	}
-	else
-		database->modProperty( prop_id, i->text( 0 ) );
-}
-
-bool StdPropertyListView::checkBounds( const QString &name )
-{
-	if ( name.length() > (int)database->maxPropertyNameLength() ) {
-		KMessageBox::error( this, i18np( "Property name cannot be longer than 1 character.", "Property name cannot be longer than %1 characters." , database->maxPropertyNameLength() ) );
-		return false;
-	}
-
-	return true;
-}
-
 
 
 PropertyConstraintListView::PropertyConstraintListView( QWidget *parent, RecipeDB *db ) : PropertyListView( parent, db )
@@ -262,6 +157,7 @@ PropertyConstraintListView::PropertyConstraintListView( QWidget *parent, RecipeD
 	addColumn( "Id", 0 ); //hidden, only for internal purposes
 
 	setRenameable( 0, true );
+	setRenameable( 1, true );
 }
 
 void PropertyConstraintListView::removeProperty( int id )

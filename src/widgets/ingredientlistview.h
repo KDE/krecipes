@@ -79,23 +79,6 @@ public:
 protected:
 	virtual void createIngredient( const Element & );
 	virtual void removeIngredient( int );
-
-private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove
-		();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-
-	void modIngredient( Q3ListViewItem* i );
-	void saveIngredient( Q3ListViewItem* i );
-    void slotRename();
-
-private:
-	bool checkBounds( const QString &name );
-
-	KMenu *kpop;
 };
 
 

@@ -23,6 +23,7 @@
 class KPushButton;
 class RecipeDB;
 class StdPropertyListView;
+class PropertyActionsHandler;
 
 /**
 @author Unai Garro
@@ -44,6 +45,7 @@ private:
 	KPushButton* addPropertyButton;
 	KPushButton* removePropertyButton;
 	StdPropertyListView* propertyListView;
+	PropertyActionsHandler *propertyActionsHandler;
 
 };
 

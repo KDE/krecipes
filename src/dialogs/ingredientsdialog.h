@@ -24,6 +24,7 @@
 class RecipeDB;
 class IngredientGroupsDialog;
 class KPushButton;
+class IngredientActionsHandler;
 
 class IngredientsDialog: public QWidget
 {
@@ -44,6 +45,7 @@ private:
 	KPushButton* removeIngredientButton;
 	KreListView* ingredientListView;
 	IngredientGroupsDialog *groupsDialog;
+	IngredientActionsHandler *ingredientActionsHandler;
 
 	// Internal Methods
 	void reloadIngredientList( ReloadFlags flag = Load );

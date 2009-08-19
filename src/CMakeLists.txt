@@ -82,6 +82,14 @@ set(krecipesimporters_SRCS
 
 set(krecipesactionshandlers_SRCS
    actionshandlers/recipeactionshandler.cpp
+   actionshandlers/actionshandlerbase.cpp
+   actionshandlers/ingredientactionshandler.cpp
+   actionshandlers/headeractionshandler.cpp
+   actionshandlers/propertyactionshandler.cpp
+   actionshandlers/unitactionshandler.cpp
+   actionshandlers/prepmethodactionshandler.cpp
+   actionshandlers/categoryactionshandler.cpp
+   actionshandlers/authoractionshandler.cpp
 )
 
 ############### widgets ##############

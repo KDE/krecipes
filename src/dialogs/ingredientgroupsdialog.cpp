@@ -20,6 +20,8 @@
 #include <kdialog.h>
 #include <kvbox.h>
 
+#include "actionshandlers/headeractionshandler.h"
+
 #include "widgets/krelistview.h"
 #include "widgets/headerlistview.h"
 
@@ -30,6 +32,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 
 	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
+	headerActionsHandler = new HeaderActionsHandler( list_view, database );
 	headerListView->setListView( list_view );
 	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
 	layout->addWidget(headerListView);
@@ -58,8 +61,8 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	layout->addLayout(buttonLayout);
 	setLayout( layout );
 
-	connect( addHeaderButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
-	connect( removeHeaderButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
+	connect( addHeaderButton, SIGNAL( clicked() ), headerActionsHandler, SLOT( createNew() ) );
+	connect( removeHeaderButton, SIGNAL( clicked() ), headerActionsHandler, SLOT( remove() ) );
 }
 
 void IngredientGroupsDialog::reload( ReloadFlags flag )

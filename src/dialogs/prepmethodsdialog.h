@@ -23,6 +23,7 @@
 #include "widgets/dblistviewbase.h"
 
 class RecipeDB;
+class PrepMethodActionsHandler;
 class StdPrepMethodListView;
 class KPushButton;
 
@@ -46,6 +47,7 @@ private:
 	//Widgets
 	QGridLayout *layout;
 	StdPrepMethodListView *prepMethodListView;
+	PrepMethodActionsHandler *prepMethodActionsHandler;
 	KHBox *buttonBar;
 	KPushButton *newPrepMethodButton;
 	KPushButton *removePrepMethodButton;

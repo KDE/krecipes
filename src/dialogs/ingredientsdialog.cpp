@@ -18,6 +18,7 @@
 #include "widgets/ingredientlistview.h"
 #include "dialogs/ingredientgroupsdialog.h"
 #include "dialogs/editpropertiesdialog.h"
+#include "actionshandlers/ingredientactionshandler.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -60,6 +61,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
+	ingredientActionsHandler = new IngredientActionsHandler( list_view, database );
 	ingredientListView->setListView( list_view );
 	layout->addWidget ( ingredientListView, 1, 1, 5, 1, 0 );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
@@ -100,8 +102,8 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	page_layout->addWidget( tabWidget );
 
 	// Signals & Slots
-	connect( addIngredientButton, SIGNAL( clicked() ), list_view, SLOT( createNew() ) );
-	connect( removeIngredientButton, SIGNAL( clicked() ), list_view, SLOT( remove() ) );
+	connect( addIngredientButton, SIGNAL( clicked() ), ingredientActionsHandler, SLOT( createNew() ) );
+	connect( removeIngredientButton, SIGNAL( clicked() ), ingredientActionsHandler, SLOT( remove() ) );
 	connect( propertyButton, SIGNAL( clicked() ), this, SLOT( showPropertyEdit() ) );
 
 	DependanciesDialog d( this, ListInfo() );

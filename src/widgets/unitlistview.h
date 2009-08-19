@@ -13,6 +13,8 @@
 #ifndef UNITLISTVIEW_H
 #define UNITLISTVIEW_H
 
+#include <KLocale>
+
 #include "dblistviewbase.h"
 
 #include "datablocks/unit.h"
@@ -49,29 +51,68 @@ class StdUnitListView : public UnitListView
 public:
 	StdUnitListView( QWidget *parent, RecipeDB *db, bool editable = false );
 
+	void insertTypeComboBox( Q3ListViewItem* );
+
 protected:
 	virtual void createUnit( const Unit & );
 	virtual void removeUnit( int );
 
 private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
 	void hideTypeCombo();
 	void updateType( int type );
 
-	void createNew();
-	void remove();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-    void slotRename();
+private:
+	KComboBox *typeComboBox;
+};
 
-	void modUnit( Q3ListViewItem* i, const QPoint &p, int c );
-	void saveUnit( Q3ListViewItem* i, const QString &text, int c );
+class UnitListViewItem : public Q3ListViewItem
+{
+public:
+	UnitListViewItem( Q3ListView* qlv, const Unit &u ) : Q3ListViewItem( qlv ), m_unit(u)
+	{
+		updateType(m_unit.type);
+	}
+
+	virtual QString text( int column ) const
+	{
+		switch ( column ) {
+		case 0: return m_unit.name;
+		case 1: return m_unit.name_abbrev;
+		case 2: return m_unit.plural;
+		case 3: return m_unit.plural_abbrev;
+		case 4: return m_type;
+		case 5: return QString::number(m_unit.id);
+		default: return QString::null;
+		}
+	}
+
+	void setType( Unit::Type type ){ m_unit.type = type; updateType(type); }
+
+	Unit unit() const { return m_unit; };
+	void setUnit( const Unit &u ) { m_unit = u; }
+
+protected:
+	virtual void setText( int column, const QString &text ) {
+		switch ( column ) {
+		case 0: m_unit.name = text; break;
+		case 1: m_unit.name_abbrev = text; break;
+		case 2: m_unit.plural = text; break;
+		case 3: m_unit.plural_abbrev = text; break;
+		}
+	}
 
 private:
-	bool checkBounds( const Unit &unit );
-	void insertTypeComboBox( Q3ListViewItem* );
+	void updateType( Unit::Type t ) {
+		switch ( t ) {
+		case Unit::Other: m_type = i18n("Other"); break;
+		case Unit::Mass: m_type = i18n("Mass"); break;
+		case Unit::Volume: m_type = i18n("Volume"); break;
+		default: break;
+		}
+	}
 
-	KMenu *kpop;
-	KComboBox *typeComboBox;
+	Unit m_unit;
+	QString m_type;
 };
 
 #endif //UNITLISTVIEW_H

@@ -22,6 +22,7 @@
 class RecipeDB;
 class ConversionTable;
 class StdUnitListView;
+class UnitActionsHandler;
 class KPushButton;
 
 /**
@@ -44,6 +45,7 @@ public slots:
 private:
 	// Widgets
 	StdUnitListView *unitListView;
+	UnitActionsHandler *unitActionsHandler;
 	ConversionTable *massConversionTable;
 	ConversionTable *volumeConversionTable;
 	KPushButton *newUnitButton;

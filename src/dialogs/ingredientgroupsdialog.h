@@ -16,6 +16,7 @@
 #include "widgets/dblistviewbase.h"
 
 class KreListView;
+class HeaderActionsHandler;
 class RecipeDB;
 
 class IngredientGroupsDialog : public QWidget
@@ -27,6 +28,7 @@ public:
 
 private:
 	KreListView *headerListView;
+	HeaderActionsHandler *headerActionsHandler;
 	RecipeDB *database;
 };
 

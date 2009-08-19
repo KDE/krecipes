@@ -22,6 +22,7 @@
 #include "backends/recipedb.h"
 #include "widgets/conversiontable.h"
 #include "widgets/unitlistview.h"
+#include "actionshandlers/unitactionshandler.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -50,6 +51,7 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	layout->setSpacing( KDialog::spacingHint() );
 
 	unitListView = new StdUnitListView( unitTab, database, true );
+	unitActionsHandler = new UnitActionsHandler( unitListView, database );
 	layout->addWidget( unitListView );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
@@ -78,8 +80,8 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	page_layout->addWidget( tabWidget );
 
 	// Connect signals & slots
-	connect( newUnitButton, SIGNAL( clicked() ), unitListView, SLOT( createNew() ) );
-	connect( removeUnitButton, SIGNAL( clicked() ), unitListView, SLOT( remove() ) );
+	connect( newUnitButton, SIGNAL( clicked() ), unitActionsHandler, SLOT( createNew() ) );
+	connect( removeUnitButton, SIGNAL( clicked() ), unitActionsHandler, SLOT( remove() ) );
 	connect( massConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
 	connect( massConversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
 	connect( volumeConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );

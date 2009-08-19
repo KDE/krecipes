@@ -15,6 +15,7 @@
 #include "dependanciesdialog.h"
 #include "backends/recipedb.h"
 #include "widgets/prepmethodlistview.h"
+#include "actionshandlers/prepmethodactionshandler.h"
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -35,6 +36,7 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );
+	prepMethodActionsHandler = new PrepMethodActionsHandler( prepMethodListView, database );
 	layout->addWidget( prepMethodListView );
 
 	//Buttons
@@ -56,9 +58,10 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	//Connect Signals & Slots
 
-	connect ( newPrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( createNew() ) );
-	connect ( removePrepMethodButton, SIGNAL( clicked() ), prepMethodListView, SLOT( remove
-				   () ) );
+	connect ( newPrepMethodButton, SIGNAL( clicked() ),
+		prepMethodActionsHandler, SLOT( createNew() ) );
+	connect ( removePrepMethodButton, SIGNAL( clicked() ),
+		prepMethodActionsHandler, SLOT( remove() ) );
 }
 
 PrepMethodsDialog::~PrepMethodsDialog()

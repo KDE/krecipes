@@ -299,9 +299,8 @@ void CategoryListView::mergeCategories( int id1, int id2 )
 }
 
 
-StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) : CategoryListView( parent, db ),
-		clipboard_item( 0 ),
-		clipboard_parent( 0 )
+StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) :
+	CategoryListView( parent, db )
 {
 	addColumn( i18n( "Category" ) );
 
@@ -313,174 +312,12 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 		setRenameable( 0, true );
 		setDragEnabled( true );
 		setAcceptDrops( true );
-
-		KIconLoader il;
-
-		kpop = new KMenu( this );
-		kpop->addAction( il.loadIcon( "document-new", KIconLoader::NoGroup, 16 ), i18n( "&Create" ), this, SLOT( createNew() ), Qt::CTRL + Qt::Key_C );
-		kpop->addAction( il.loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Qt::Key_Delete );
-		kpop->addAction( il.loadIcon( "edit-rename", KIconLoader::NoGroup, 16 ), i18n( "&Rename" ), this, SLOT( slotRename() ), Qt::CTRL + Qt::Key_R );
-		kpop->addSeparator();
-		kpop->addAction( il.loadIcon( "edit-cut", KIconLoader::NoGroup, 16 ), i18n( "Cu&t" ), this, SLOT( cut() ), Qt::CTRL + Qt::Key_X );
-		kpop->addAction( il.loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "&Paste" ), this, SLOT( paste() ), Qt::CTRL + Qt::Key_V );
-		kpop->addAction( il.loadIcon( "edit-paste", KIconLoader::NoGroup, 16 ), i18n( "Paste as Subcategory" ), this, SLOT( pasteAsSub() ), Qt::CTRL + Qt::SHIFT + Qt::Key_V );
-		kpop->ensurePolished();
-
-		connect( kpop, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
-		connect( this, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
-		connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( modCategory( Q3ListViewItem* ) ) );
-		connect( this, SIGNAL( itemRenamed ( Q3ListViewItem* ) ), SLOT( saveCategory( Q3ListViewItem* ) ) );
-		connect( this, SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ), SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
 	}
-}
-
-StdCategoryListView::~StdCategoryListView()
-{
-	delete clipboard_item;
 }
 
 void StdCategoryListView::setPixmap( const QPixmap &icon )
 {
 	m_folder_icon = icon;
-}
-
-void StdCategoryListView::preparePopup()
-{
-	//only enable the paste items if clipboard_item isn't null
-	kpop->setItemEnabled( kpop->idAt( 5 ), clipboard_item );
-	kpop->setItemEnabled( kpop->idAt( 6 ), clipboard_item );
-}
-
-void StdCategoryListView::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, const QPoint &p )
-{
-	if ( i )
-		kpop->exec( p );
-}
-
-void StdCategoryListView::createNew()
-{
-	ElementList categories;
-	database->loadCategories( &categories );
-	QPointer<CreateCategoryDialog> categoryDialog = new CreateCategoryDialog( this, categories );
-
-	if ( categoryDialog->exec() == QDialog::Accepted ) {
-		QString result = categoryDialog->newCategoryName();
-		int subcategory = categoryDialog->subcategory();
-
-		//check bounds first
-		if ( checkBounds( result ) )
-			database->createNewCategory( result, subcategory ); // Create the new category in the database
-	}
-	delete categoryDialog;
-}
-
-void StdCategoryListView::remove
-	()
-{
-	Q3ListViewItem * item = currentItem();
-
-	if ( item ) {
-		int id = item->text( 1 ).toInt();
-
-		ElementList recipeDependancies;
-		database->findUseOfCategoryInRecipes( &recipeDependancies, id );
-
-		if ( recipeDependancies.isEmpty() ) {
-			switch ( KMessageBox::warningContinueCancel( this, i18n( "Are you sure you want to delete this category and all its subcategories?" ) ) ) {
-				case KMessageBox::Continue:
-					database->removeCategory( id );
-					break;
-			}
-			return;
-		}
-		else { // need warning!
-			ListInfo info;
-			info.list = recipeDependancies;
-			info.name = i18n("Recipes");
-			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( this, info, false );
-
-			if ( warnDialog->exec() == QDialog::Accepted )
-				database->removeCategory( id );
-
-			delete warnDialog;
-		}
-	}
-}
-
-void StdCategoryListView::slotRename()
-{
-    rename( 0, 0 );
-}
-
-void StdCategoryListView::rename( Q3ListViewItem* /*item*/,int /*c*/ )
-{
-	Q3ListViewItem * item = currentItem();
-
-	if ( item )
-		CategoryListView::rename( item, 0 );
-}
-
-void StdCategoryListView::cut()
-{
-	//restore a never used cut
-	if ( clipboard_item ) {
-		if ( clipboard_parent )
-			clipboard_parent->insertItem( clipboard_item );
-		else
-			insertItem( clipboard_item );
-		clipboard_item = 0;
-	}
-
-	Q3ListViewItem *item = currentItem();
-
-	if ( item ) {
-		clipboard_item = item;
-		clipboard_parent = item->parent();
-
-		if ( item->parent() )
-			item->parent() ->takeItem( item );
-		else
-			takeItem( item );
-	}
-}
-
-void StdCategoryListView::paste()
-{
-	Q3ListViewItem * item = currentItem();
-	if ( item && clipboard_item ) {
-		if ( item->parent() )
-			item->parent() ->insertItem( clipboard_item );
-		else
-			insertItem( clipboard_item );
-
-		database->modCategory( clipboard_item->text( 1 ).toInt(), item->parent() ? item->parent() ->text( 1 ).toInt() : -1 );
-		clipboard_item = 0;
-	}
-}
-
-void StdCategoryListView::pasteAsSub()
-{
-	Q3ListViewItem * item = currentItem();
-
-	if ( item && clipboard_item ) {
-		item->insertItem( clipboard_item );
-		database->modCategory( clipboard_item->text( 1 ).toInt(), item->text( 1 ).toInt() );
-		clipboard_item = 0;
-	}
-}
-
-void StdCategoryListView::changeCategoryParent( Q3ListViewItem *item, Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ )
-{
-	int new_parent_id = -1;
-	if ( Q3ListViewItem * parent = item->parent() )
-		new_parent_id = parent->text( 1 ).toInt();
-
-	int cat_id = item->text( 1 ).toInt();
-
-	disconnect( SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
-	database->modCategory( cat_id, new_parent_id );
-	connect( this, SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ), SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
 }
 
 void StdCategoryListView::removeCategory( int id )
@@ -522,50 +359,6 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 		if ( p_list->firstChild() )
 			new PseudoListItem( new_item );
 	}
-}
-
-void StdCategoryListView::modCategory( Q3ListViewItem* i )
-{
-	if ( i )
-		CategoryListView::rename( i, 0 );
-}
-
-void StdCategoryListView::saveCategory( Q3ListViewItem* i )
-{
-	CategoryListItem * cat_it = ( CategoryListItem* ) i;
-
-	if ( !checkBounds( cat_it->categoryName() ) ) {
-		reload(ForceReload); //reset the changed text
-		return ;
-	}
-
-	int existing_id = database->findExistingCategoryByName( cat_it->categoryName() );
-	int cat_id = cat_it->categoryId();
-	if ( existing_id != -1 && existing_id != cat_id )  //category already exists with this label... merge the two
-	{
-		switch ( KMessageBox::warningContinueCancel( this, i18n( "This category already exists.  Continuing will merge these two categories into one.  Are you sure?" ) ) )
-		{
-		case KMessageBox::Continue: {
-				database->mergeCategories( existing_id, cat_id );
-				break;
-			}
-		default:
-			reload(ForceReload);
-			break;
-		}
-	}
-	else
-		database->modCategory( cat_id, cat_it->categoryName() );
-}
-
-bool StdCategoryListView::checkBounds( const QString &name )
-{
-	if ( name.length() > int(database->maxCategoryNameLength()) ) {
-		KMessageBox::error( this, i18np( "Category name cannot be longer than 1 character.", "Category name cannot be longer than %1 characters." , database->maxCategoryNameLength() ));
-		return false;
-	}
-
-	return true;
 }
 
 

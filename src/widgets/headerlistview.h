@@ -50,22 +50,6 @@ public:
 protected:
 	virtual void createHeader( const Element & );
 	virtual void removeHeader( int );
-
-private slots:
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-        void slotRename();
-
-	void modHeader( Q3ListViewItem* i, const QPoint &p, int c );
-	void saveHeader( Q3ListViewItem* i, const QString &text, int c );
-
-private:
-	bool checkBounds( const QString &unit );
-
-	KMenu *kpop;
 };
 
 #endif //HEADERLISTVIEW_H

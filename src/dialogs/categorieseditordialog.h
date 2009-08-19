@@ -26,6 +26,7 @@
 
 class RecipeDB;
 class StdCategoryListView;
+class CategoryActionsHandler;
 class KPushButton;
 
 /**
@@ -49,6 +50,7 @@ private:
 	//Widgets
 	QGridLayout *layout;
 	StdCategoryListView *categoryListView;
+	CategoryActionsHandler *categoryActionsHandler;
 	KHBox *buttonBar;
 	KPushButton *newCategoryButton;
 	KPushButton *removeCategoryButton;

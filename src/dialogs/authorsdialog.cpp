@@ -16,6 +16,7 @@
 #include "createelementdialog.h"
 #include "backends/recipedb.h"
 #include "widgets/authorlistview.h"
+#include "actionshandlers/authoractionshandler.h"
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -37,6 +38,7 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Author List
 	authorListView = new StdAuthorListView( this, database, true );
+	authorActionsHandler = new AuthorActionsHandler( authorListView, database );
 	layout->addWidget( authorListView );
 
 	//Buttons
@@ -58,8 +60,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Connect Signals & Slots
 
-	connect ( newAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( createNew() ) );
-	connect ( removeAuthorButton, SIGNAL( clicked() ), authorListView, SLOT( remove() ) );
+	connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
+	connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
 }
 
 AuthorsDialog::~AuthorsDialog()

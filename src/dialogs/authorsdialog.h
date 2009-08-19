@@ -24,6 +24,7 @@
 
 class RecipeDB;
 class StdAuthorListView;
+class AuthorActionsHandler;
 class KPushButton;
 
 /**
@@ -45,6 +46,7 @@ private:
 	RecipeDB *database;
 	//Widgets
 	StdAuthorListView *authorListView;
+	AuthorActionsHandler *authorActionsHandler;
 	KPushButton *newAuthorButton;
 	KPushButton *removeAuthorButton;
 };

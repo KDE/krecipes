@@ -110,6 +110,7 @@ class CategoryListView : public DBListViewBase
 
 public:
 	CategoryListView( QWidget *parent, RecipeDB * );
+	~CategoryListView(){}
 
 	void populateAll( Q3ListViewItem *parent = 0 );
 
@@ -215,7 +216,7 @@ class StdCategoryListView : public CategoryListView
 
 public:
 	StdCategoryListView( QWidget *parent, RecipeDB *, bool editable = false );
-	~StdCategoryListView();
+	~StdCategoryListView(){}
 
 protected:
 	virtual void removeCategory( int id );
@@ -223,31 +224,7 @@ protected:
 
 	void setPixmap( const QPixmap &pixmap );
 
-private slots:
-	void preparePopup();
-	void showPopup( K3ListView *, Q3ListViewItem *, const QPoint & );
-
-	void createNew();
-	void remove
-		();
-	void rename( Q3ListViewItem* /*item*/,int /*c*/ );
-    void slotRename();
-	void cut();
-	void paste();
-	void pasteAsSub();
-
-	void changeCategoryParent( Q3ListViewItem *item, Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
-
-	void modCategory( Q3ListViewItem* i );
-	void saveCategory( Q3ListViewItem* i );
-
 private:
-	bool checkBounds( const QString &name );
-
-	KMenu *kpop;
-	Q3ListViewItem *clipboard_item;
-	Q3ListViewItem *clipboard_parent;
-
 	QPixmap m_folder_icon;
 };
 
