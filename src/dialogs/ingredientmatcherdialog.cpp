@@ -19,7 +19,7 @@
 #include "widgets/fractioninput.h"
 #include "widgets/amountunitinput.h"
 #include "datablocks/mixednumber.h"
-#include "recipeactionshandler.h"
+#include "actionshandlers/recipeactionshandler.h"
 
 #include <q3header.h>
 #include <QPainter>

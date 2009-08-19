@@ -24,7 +24,7 @@
 #include "datablocks/recipelist.h"
 #include "widgets/recipelistview.h"
 #include "recipefilter.h"
-#include "recipeactionshandler.h"
+#include "actionshandlers/recipeactionshandler.h"
 #include <QDropEvent>
 #include <QGridLayout>
 #include <QVBoxLayout>

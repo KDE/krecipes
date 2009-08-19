@@ -50,7 +50,7 @@
 
 #include "backends/recipedb.h"
 #include "backends/searchparameters.h"
-#include "recipeactionshandler.h"
+#include "actionshandlers/recipeactionshandler.h"
 #include "widgets/recipelistview.h"
 #include "widgets/kdateedit.h"
 #include "widgets/ratingwidget.h"

@@ -7,7 +7,14 @@ find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
 find_package(QImageBlitz)
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends/ ${CMAKE_CURRENT_SOURCE_DIR}/importers ${CMAKE_CURRENT_SOURCE_DIR}/exporters ${QIMAGEBLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
+   ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
+   ${CMAKE_CURRENT_SOURCE_DIR}/backends/
+   ${CMAKE_CURRENT_SOURCE_DIR}/importers
+   ${CMAKE_CURRENT_SOURCE_DIR}/exporters
+   ${CMAKE_CURRENT_SOURCE_DIR}/actionshandlers
+   ${CMAKE_CURRENT_SOURCE_DIR}/tests
+)
 
 ########### QT3Support ###############
 
@@ -71,6 +78,11 @@ set(krecipesimporters_SRCS
    importers/rezkonvimporter.cpp
    importers/kredbimporter.cpp)
 
+######### Actions Handlers ###########
+
+set(krecipesactionshandlers_SRCS
+   actionshandlers/recipeactionshandler.cpp
+)
 
 ############### widgets ##############
 
@@ -247,7 +259,6 @@ set(krecipes_SRCS
    setupassistant.cpp 
    shoppingcalculator.cpp 
    kstartuplogo.cpp 
-   recipeactionshandler.cpp 
    recipefilter.cpp 
    convert_sqlite3.cpp 
    klomanager.cpp )
@@ -258,7 +269,10 @@ kde4_add_ui_files(krecipes_SRCS widgets/ratingdisplaywidget.ui)
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 
 
-kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS} ${krecipeswidgets_SRCS}   ${krecipesexporters_SRCS} ${datablocks_SRCS} ${krecipesdialogs_SRCS})
+kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS}
+   ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS}
+   ${krecipeswidgets_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS}
+   ${krecipesdialogs_SRCS} ${krecipesactionshandlers_SRCS})
 
 target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES})
 

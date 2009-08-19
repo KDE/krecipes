@@ -30,7 +30,7 @@
 #include <kmenu.h>
 #include <kvbox.h>
 
-#include "recipeactionshandler.h"
+#include "actionshandlers/recipeactionshandler.h"
 #include "widgets/dblistviewbase.h"
 
 class KHBox;
