@@ -12,18 +12,17 @@
 
 #include "selectauthorsdialog.h"
 
-#include <QMessageBox>
 #include <kvbox.h>
 //Added by qt3to4:
-#include <QPixmap>
 
 #include <kconfig.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <QLineEdit>
 #include <KPushButton>
+
+#include <QLineEdit>
 
 #include "backends/recipedb.h"
 

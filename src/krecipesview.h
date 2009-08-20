@@ -13,11 +13,7 @@
 #ifndef KRECIPESVIEW_H
 #define KRECIPESVIEW_H
 
-#include <QBitmap>
-#include <QEvent>
-#include <QLabel>
 #include <QPushButton>
-#include <QToolTip>
 
 #include <q3valuelist.h>
 
@@ -27,7 +23,6 @@
 #include <QList>
 
 #include <kiconloader.h>
-#include <QPixmap>
 
 #include <kparts/part.h>
 #include <kstyle.h>

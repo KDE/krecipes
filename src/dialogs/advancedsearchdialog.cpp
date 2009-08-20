@@ -10,9 +10,7 @@
 
 #include "advancedsearchdialog.h"
 
-#include <QVariant>
 #include <KPushButton>
-#include <QTabWidget>
 #include <qwidget.h>
 #include <QCheckBox>
 #include <qframe.h>
@@ -24,12 +22,9 @@
 #include <QScrollArea>
 //Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3ValueList>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <kpushbutton.h>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 #include <QLabel>
 #include <KLineEdit>

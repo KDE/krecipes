@@ -11,7 +11,6 @@
 #ifndef EDITPROPERTIESDIALOG_H
 #define EDITPROPERTIESDIALOG_H
 
-#include <QVariant>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QHBoxLayout>

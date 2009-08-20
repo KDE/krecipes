@@ -13,11 +13,11 @@
 
 #include "kreexporter.h"
 
-#include <QFile>
 #include <q3stylesheet.h>
 #include <QBuffer>
 #include <QImage>
- #include <QImageWriter>
+#include <QImageWriter>
+#include <QTextDocument>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -25,7 +25,6 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <QTextDocument>
 
 #include "backends/recipedb.h"
 

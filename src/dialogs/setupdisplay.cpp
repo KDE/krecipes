@@ -29,14 +29,9 @@
 
 #include <qinputdialog.h>
 #include <QAction>
-#include <QLabel>
 #include <QFile>
-#include <QRegExp>
 #include <q3textedit.h>
-#include <QToolTip>
-#include <QObject>
 #include <q3valuelist.h>
-#include <QLayout>
 //Added by qt3to4:
 #include <QMenu>
 #include <QTextDocument>

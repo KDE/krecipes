@@ -12,12 +12,9 @@
 
 #include "recipeviewdialog.h"
 
-#include <QLayout>
-#include <QStyle>
 #include <QFile>
 #include <QPointer>
 //Added by qt3to4:
-#include <QTextDocument>
 
 #include <kapplication.h>
 #include <kcursor.h>
@@ -35,7 +32,7 @@
 #include <QFrame>
 #include <QToolButton>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QTextDocument>
 
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"

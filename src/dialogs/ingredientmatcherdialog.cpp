@@ -23,8 +23,6 @@
 
 #include <q3header.h>
 #include <QPainter>
-#include <QStringList>
-#include <QLayout>
 #include <q3groupbox.h>
 #include <QPointer>
 //Added by qt3to4:

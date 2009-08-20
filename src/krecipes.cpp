@@ -47,9 +47,7 @@
 #include <QPointer>
 
 #include <q3dragobject.h>
-#include <QPainter>
 #include <q3paintdevicemetrics.h>
-#include <QMessageBox>
 #include <QLabel>
 #include <QFrame>
 #include <QDragEnterEvent>

@@ -16,12 +16,9 @@
 #include <pwd.h>
 
 #include <QGroupBox>
-#include <QLayout>
 #include <QPixmap>
 #include <QPushButton>
-#include <QToolTip>
 #include <QGridLayout>
-#include <QFrame>
 #include <QLabel>
 
 #include <kconfig.h>

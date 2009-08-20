@@ -26,7 +26,6 @@
 
 #include <QBuffer>
 #include <QTextCodec>
-#include <QVariant>
 
 #include <kdebug.h>
 #include <kstandarddirs.h>

@@ -15,7 +15,6 @@
 
 #include <qwidget.h>
 
-#include <QLayout>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <k3listview.h>

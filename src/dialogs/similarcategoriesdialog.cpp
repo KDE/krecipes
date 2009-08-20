@@ -9,14 +9,10 @@
 
 #include "similarcategoriesdialog.h"
 
-#include <QVariant>
 #include <QPushButton>
-#include <QComboBox>
 #include <QSlider>
 #include <QLabel>
 #include <q3header.h>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QHBoxLayout>

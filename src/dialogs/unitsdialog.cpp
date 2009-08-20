@@ -12,7 +12,6 @@
 
 #include "unitsdialog.h"
 
-#include <QLayout>
 #include <KTabWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

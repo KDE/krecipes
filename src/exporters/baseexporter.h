@@ -12,7 +12,6 @@
 #ifndef BASEEXPORTER_H
 #define BASEEXPORTER_H
 
-#include <QStringList>
 #include <QTextStream>
 #include <QList>
 

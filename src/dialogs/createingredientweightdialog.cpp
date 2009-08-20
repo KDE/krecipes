@@ -13,8 +13,6 @@
 #include <q3groupbox.h>
 #include <QLabel>
 #include <QPushButton>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 
 #include <KVBox>

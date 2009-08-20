@@ -11,7 +11,6 @@
 #ifndef REFINESHOPPINGLISTDIALOG_H
 #define REFINESHOPPINGLISTDIALOG_H
 
-#include <QVariant>
 #include <qmap.h>
 //Added by qt3to4:
 #include <QVBoxLayout>

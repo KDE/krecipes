@@ -17,7 +17,6 @@
 #include <QImage>
 #include <QObject>
 #include <QPainter>
-#include <QSignalMapper>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QResizeEvent>

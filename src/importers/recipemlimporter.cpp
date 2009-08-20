@@ -14,7 +14,6 @@
 #include "recipemlimporter.h"
 
 #include <QFile>
-#include <QDateTime>
 
 #include <klocale.h>
 #include <kdebug.h>

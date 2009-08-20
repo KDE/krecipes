@@ -10,8 +10,6 @@
 
 #include "qsql_sqlite.h"
 
-#include <QDateTime>
-#include <QRegExp>
 #include <QFile>
 
 #include <q3ptrvector.h>

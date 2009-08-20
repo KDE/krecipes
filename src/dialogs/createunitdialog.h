@@ -16,7 +16,6 @@
 #include <kdialog.h>
 #include <QPushButton>
 #include <q3groupbox.h>
-#include <QLayout>
 #include <kvbox.h>
 
 

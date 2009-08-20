@@ -24,8 +24,6 @@
 
 #include <QLabel>
 #include <qmap.h>
-#include <QObject>
-#include <QTabWidget>
 #include <QToolButton>
 
 #include <QDateTimeEdit>

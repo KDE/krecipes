@@ -12,7 +12,6 @@
 
 #include <klocale.h>
 
-#include <QVariant>
 #include <QPushButton>
 #include <QLabel>
 #include <KComboBox>
@@ -23,10 +22,7 @@
 #include <k3listview.h>
 #include <q3textedit.h>
 #include <KLineEdit>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
-#include <QPainter>
 
 #include <KVBox>
 #include <kmenu.h>

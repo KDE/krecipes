@@ -15,7 +15,6 @@
 #include "recipeinputdialog.h"
 
 #include <QString>
-#include <QLayout>
 
 
 #include <QImage>

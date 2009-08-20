@@ -16,7 +16,6 @@
 
 #include <config-krecipes.h>
 
-#include <QLayout>
 #include <QLabel>
 
 
@@ -25,7 +24,6 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QPushButton>
-#include <QToolTip>
 
 #include <qframe.h>
 #include <KComboBox>

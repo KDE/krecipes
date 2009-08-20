@@ -15,8 +15,6 @@
 
 #include <QLabel>
 #include <qspinbox.h>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QHBoxLayout>

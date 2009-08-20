@@ -17,8 +17,6 @@
 #ifndef CREATEPROPERTYDIALOG_H
 #define CREATEPROPERTYDIALOG_H
 
-#include <QComboBox>
-#include <QLayout>
 #include <QPushButton>
 #include <q3groupbox.h>
 

@@ -21,8 +21,6 @@
 #include <qwidget.h>
 #include <KLineEdit>
 #include <QLabel>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 
 #include <QGridLayout>

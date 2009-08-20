@@ -14,7 +14,6 @@
 #define SHOPPINGLISTDIALOG_H
 
 
-#include <QLayout>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QDropEvent>

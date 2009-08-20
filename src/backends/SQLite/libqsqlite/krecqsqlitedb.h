@@ -22,7 +22,6 @@
 #define QSQLITEDB_H
 
 #include <q3valuelist.h>
-#include <QStringList>
 #include <QObject>
 
 #include <config-krecipes.h>

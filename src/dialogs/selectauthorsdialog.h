@@ -13,7 +13,6 @@
 #ifndef SELECTAUTHORSDIALOG_H
 #define SELECTAUTHORSDIALOG_H
 
-#include <QLayout>
 
 #include <kdialog.h>
 #include <k3listview.h>

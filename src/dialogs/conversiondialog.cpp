@@ -10,11 +10,8 @@
 
 #include "conversiondialog.h"
 
-#include <QVariant>
 #include <QPushButton>
 #include <QLabel>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 
 #include <KVBox>

@@ -12,7 +12,6 @@
 #ifndef KREMENU_H
 #define KREMENU_H
 
-#include <QEvent>
 #include <QIcon>
 #include <qmap.h>
 #include <QString>

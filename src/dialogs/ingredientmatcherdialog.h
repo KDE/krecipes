@@ -19,7 +19,6 @@
 #include "widgets/recipelistview.h"
 #include "widgets/dblistviewbase.h"
 
-#include <QFontMetrics>
 #include <QLabel>
 #include <q3listview.h>
 #include <KPushButton>

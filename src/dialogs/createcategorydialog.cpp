@@ -14,7 +14,6 @@
 
 #include <QPushButton>
 #include <QGroupBox>
-#include <QLayout>
 #include <QLabel>
 #include <kvbox.h>
 #include <QVBoxLayout>

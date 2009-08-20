@@ -13,15 +13,12 @@
 #include <qpoint.h>
 #include <QRect>
 //Added by qt3to4:
-#include <QEvent>
 #include <QChildEvent>
 #include <QPaintEvent>
+#include <QVBoxLayout>
 
 #include <kiconloader.h>
-#include <QPixmap>
 #include <kvbox.h>
-#include <QHBoxLayout>
-#include <QTextEdit>
 
 // Panel decoration
 

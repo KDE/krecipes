@@ -16,7 +16,6 @@
 
 #include <QString>
 #include <QPixmap>
-#include <QImage>
 #include <QTime> 
 //Added by qt3to4:
 #include <Q3ValueList>

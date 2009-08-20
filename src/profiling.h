@@ -16,8 +16,7 @@
 #define KRECIPES_PROFILING
 
 #ifdef KRECIPES_PROFILING
-  #include <QDateTime>
-  #include <kdebug.h>
+    #include <kdebug.h>
   static QTime dbg_timer;
 
   #define START_TIMER(MSG) \

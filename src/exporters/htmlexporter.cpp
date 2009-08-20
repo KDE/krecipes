@@ -22,8 +22,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QPixmap>
+#include <QTextDocument>
 #include <dom/dom_element.h>
-#include <QPainter>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -43,7 +43,6 @@
 #include "krepagelayout.h"
 
 #include <cmath> //for ceil()
-#include <QTextDocument>
 
 HTMLExporter::HTMLExporter( const QString& filename, const QString &format ) :
 		BaseExporter( filename, format )

@@ -11,8 +11,6 @@
 #define PANELDECO_H
 
 
-#include <QEvent>
-#include <QIcon>
 #include <QString>
 
 #include <QPixmap>

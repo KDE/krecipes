@@ -26,7 +26,6 @@
 // Qt includes.
 
 #include <q3scrollview.h>
-#include <QToolTip>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>

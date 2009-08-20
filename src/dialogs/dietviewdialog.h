@@ -12,7 +12,6 @@
 #define DIETVIEWDIALOG_H
 
 #include <QPushButton>
-#include <QLayout>
 
 #include <qwidget.h>
 //Added by qt3to4:

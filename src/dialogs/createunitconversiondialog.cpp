@@ -9,15 +9,12 @@
 
 #include "createunitconversiondialog.h"
 
-#include <QVariant>
 #include <q3buttongroup.h>
 #include <QLabel>
-#include <KComboBox>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 #include <kvbox.h>
 #include <QHBoxLayout>
+#include <QComboBox>
 
 #include <klocale.h>
 

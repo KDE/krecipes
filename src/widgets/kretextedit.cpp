@@ -12,7 +12,6 @@
 
 //Added by qt3to4:
 #include <QKeyEvent>
-#include <Q3TextEdit>
 #include <KStandardShortcut>
 
 #include <kaction.h>

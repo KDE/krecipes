@@ -14,8 +14,6 @@
 #include <qdom.h>
 #include <QImage>
 #include <qimagewriter.h>
-#include <QPixmap>
-#include <QFile>
 
 #include <kconfig.h>
 #include <kdebug.h>

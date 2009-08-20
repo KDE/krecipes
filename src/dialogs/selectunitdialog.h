@@ -14,7 +14,6 @@
 #define SELECTUNITDIALOG_H
 
 #include <qwidget.h>
-#include <QLayout>
 #include <QPushButton>
 #include <q3groupbox.h>
 

@@ -11,7 +11,6 @@
 #ifndef DBLISTVIEWBASE_H
 #define DBLISTVIEWBASE_H
 
-#include <QObject>
 #include <qmap.h>
 //Added by qt3to4:
 #include <QKeyEvent>

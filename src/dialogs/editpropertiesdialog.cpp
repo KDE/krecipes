@@ -10,10 +10,8 @@
 
 #include "dialogs/editpropertiesdialog.h"
 
-#include <QVariant>
 #include <QPushButton>
 #include <QLabel>
-#include <QLineEdit>
 #include <q3header.h>
 #include <QPointer>
 //Added by qt3to4:
@@ -21,8 +19,6 @@
 #include <Q3ValueList>
 #include <QVBoxLayout>
 #include <QTextStream>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 #include <KMessageBox>
 #include <QFile>

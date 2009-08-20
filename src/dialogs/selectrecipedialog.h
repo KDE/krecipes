@@ -16,8 +16,6 @@
 
 #include <qwidget.h>
 #include <QLabel>
-#include <QLayout>
-#include <QCursor>
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <QGridLayout>

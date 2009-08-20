@@ -16,7 +16,6 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QFrame>
-#include <Q3ValueList>
 #include <QLabel>
 #include <QVBoxLayout>
 

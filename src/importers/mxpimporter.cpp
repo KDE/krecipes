@@ -12,7 +12,6 @@
 
 #include <QFile>
 #include <QStringList>
-#include <QDateTime>
 #include <QTextStream>
 
 #include <kapplication.h>

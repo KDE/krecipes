@@ -15,7 +15,6 @@
 #include <cmath>
 
 #include <kvbox.h>
-#include <QVariant>
 #include <q3buttongroup.h>
 #include <qframe.h>
 #include <QLabel>
@@ -25,11 +24,7 @@
 #include <knuminput.h>
 #include <klineedit.h>
 #include <QRadioButton>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
-#include <QImage>
-#include <QPixmap>
 
 #include <klocale.h>
 #include <kmessagebox.h>

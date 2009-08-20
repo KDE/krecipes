@@ -23,7 +23,6 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>
 
 #include <QFile>
 #include <QStringList>
-#include <QDateTime>
 #include <QTextStream>
 
 #include "datablocks/recipe.h"

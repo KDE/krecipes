@@ -13,10 +13,7 @@
 
 #include "krecipesview.h"
 
-#include <QLayout>
-#include <QImage>
 //Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kconfig.h>

@@ -14,7 +14,6 @@
 #include <cmath>
 #include <iostream>
 
-#include <QString>
 #include <QFile>
 #include <QTextStream>
 

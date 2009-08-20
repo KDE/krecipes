@@ -13,9 +13,6 @@
 #include <QPushButton>
 #include <KTextEdit>
 #include <QLabel>
-#include <QLineEdit>
-#include <QLayout>
-#include <QToolTip>
 
 #include <q3header.h>
 #include <QApplication>

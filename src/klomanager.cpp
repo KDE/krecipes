@@ -13,7 +13,6 @@
 #include <kdebug.h>
 
 #include <qdom.h>
-#include <QFile>
 #include <QStringList>
 
 KLOManager::KLOManager()
