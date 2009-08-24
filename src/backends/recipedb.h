@@ -201,7 +201,7 @@ public:
 	virtual bool ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID ) = 0;
 	virtual bool ingredientContainsUnit( int ingredientID, int unitID ) = 0;
 
-	void initializeData( void );
+	virtual void initializeData( void );
 
 	virtual int lastInsertID() = 0;
 
