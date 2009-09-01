@@ -64,13 +64,13 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 	}
 
 	header_ing_stack = new QStackedWidget(ingredientVBox);
-	ingredientBox = new IngredientComboBox( TRUE, header_ing_stack, database );
-	ingredientBox->setAutoCompletion( TRUE );
+	ingredientBox = new IngredientComboBox( true, header_ing_stack, database );
+	ingredientBox->setAutoCompletion( true );
 	ingredientBox->lineEdit() ->disconnect( ingredientBox ); //so hitting enter doesn't enter the item into the box
 	ingredientBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 	header_ing_stack->addWidget( ingredientBox );
-	headerBox = new HeaderComboBox( TRUE, header_ing_stack, database );
-	headerBox->setAutoCompletion( TRUE );
+	headerBox = new HeaderComboBox( true, header_ing_stack, database );
+	headerBox->setAutoCompletion( true );
 	headerBox->lineEdit() ->disconnect( ingredientBox ); //so hitting enter doesn't enter the item into the box
 	headerBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 	header_ing_stack->addWidget( headerBox );
@@ -83,15 +83,15 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 
 	KVBox *unitVBox = new KVBox( this );
 	unitLabel = new QLabel( i18n( "Unit:" ), unitVBox );
-	unitBox = new KComboBox( TRUE, unitVBox );
-	unitBox->setAutoCompletion( TRUE );
+	unitBox = new KComboBox( true, unitVBox );
+	unitBox->setAutoCompletion( true );
 	unitBox->lineEdit() ->disconnect( unitBox ); //so hitting enter doesn't enter the item into the box
 	unitBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 
 	KVBox *prepMethodVBox = new KVBox( this );
 	prepMethodLabel = new QLabel( i18n( "Preparation Method:" ), prepMethodVBox );
-	prepMethodBox = new PrepMethodComboBox( TRUE, prepMethodVBox, database );
-	prepMethodBox->setAutoCompletion( TRUE );
+	prepMethodBox = new PrepMethodComboBox( true, prepMethodVBox, database );
+	prepMethodBox->setAutoCompletion( true );
 	prepMethodBox->lineEdit() ->disconnect( prepMethodBox ); //so hitting enter doesn't enter the item into the box
 	prepMethodBox->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed ) );
 

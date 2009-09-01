@@ -269,7 +269,7 @@ void ConversionTable::clear( void )
 void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 {
 	//if ( swapHeader )
-	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, FALSE );
+	//((QTableHeader*)verticalHeader())->swapSections( row1, row2, false );
 
 	QVector<Q3TableItem*> tmpContents;
 	tmpContents.resize( numCols() );
@@ -277,8 +277,8 @@ void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 	tmpWidgets.resize( numCols() );
 	int i;
 
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( FALSE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( false );
 	for ( i = 0; i < numCols(); ++i ) {
 		Q3TableItem *i1, *i2;
 		i1 = item( row1, i );
@@ -306,8 +306,8 @@ void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 			widgets.insert( indexOf( row2, i ), tmpWidgets[ i ] );
 		}
 	}
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( TRUE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( true );
 
 	//updateRowWidgets( row1 );
 	//updateRowWidgets( row2 );
@@ -326,7 +326,7 @@ void ConversionTable::swapRows( int row1, int row2, bool /*swapHeader*/ )
 void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 {
 	//if ( swapHeader )
-	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, FALSE );
+	//((QTableHeader*)horizontalHeader())->swapSections( col1, col2, false );
 
 	QVector<Q3TableItem*> tmpContents;
 	tmpContents.resize( numRows() );
@@ -334,8 +334,8 @@ void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 	tmpWidgets.resize( numRows() );
 	int i;
 
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( FALSE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( false );
 	for ( i = 0; i < numRows(); ++i ) {
 		Q3TableItem *i1, *i2;
 		i1 = item( i, col1 );
@@ -363,8 +363,8 @@ void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 			widgets.insert( indexOf( i, col2 ), tmpWidgets[ i ] );
 		}
 	}
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( TRUE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( true );
 
 	columnWidthChanged( col1 );
 	columnWidthChanged( col2 );
@@ -382,8 +382,8 @@ void ConversionTable::swapColumns( int col1, int col2, bool /*swapHeader*/ )
 //TODO this is incomplete/wrong
 void ConversionTable::swapCells( int row1, int col1, int row2, int col2 )
 {
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( FALSE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( false );
 	Q3TableItem *i1, *i2;
 	i1 = item( row1, col1 );
 	i2 = item( row2, col2 );
@@ -418,8 +418,8 @@ void ConversionTable::swapCells( int row1, int col1, int row2, int col2 )
 	//updateRowWidgets( row2 );
 	//updateColWidgets( col1 );
 	//updateColWidgets( col2 );
-	items.setAutoDelete( FALSE );
-	widgets.setAutoDelete( TRUE );
+	items.setAutoDelete( false );
+	widgets.setAutoDelete( true );
 }
 
 #include "conversiontable.moc"
