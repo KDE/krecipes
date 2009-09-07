@@ -60,7 +60,7 @@ void HeaderActionsHandler::remove()
 		database->findUseOfIngGroupInRecipes( &dependingRecipes, id);
 
 		if ( dependingRecipes.isEmpty() )
-			database->removeIngredient( id );
+			database->removeIngredientGroup( id );
 		else { // Need Warning!
 			ListInfo list;
 			list.list = dependingRecipes;
@@ -69,7 +69,7 @@ void HeaderActionsHandler::remove()
 			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, list );
 			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
 			if ( warnDialog->exec() == QDialog::Accepted )
-				database->removeIngredient( id );
+				database->removeIngredientGroup( id );
 			delete warnDialog;
 		}
 	}
