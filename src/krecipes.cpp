@@ -339,6 +339,21 @@ void Krecipes::setupActions()
 	collapseAllAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
 	actionCollection()->addAction( "collapse_all_action", collapseAllAction );
 	connect( collapseAllAction, SIGNAL(triggered(bool)), m_view, SLOT( collapseAll() ) );
+	
+	//Note that createAction is intended to create anything except a new recipe.
+	createAction = new KAction( this );
+	createAction->setText( i18n( "Create New" ) );
+	createAction->setIcon( KIcon( "document-new" ) );
+	createAction->setShortcut( Qt::CTRL + Qt::ALT + Qt::Key_N );
+	actionCollection()->addAction( "create_new_action", createAction );
+	connect( createAction, SIGNAL(triggered(bool)), m_view, SLOT( createNewElement() ) );
+
+	renameAction = new KAction( this );
+	renameAction->setText( i18n( "Rename" ) );
+	renameAction->setIcon( KIcon( "edit-rename" ) );
+	renameAction->setShortcut( Qt::CTRL + Qt::Key_R );
+	actionCollection()->addAction( "rename_action", renameAction );
+	connect( renameAction, SIGNAL(triggered(bool)), m_view, SLOT( renameCurrentElement() ) );
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
@@ -379,8 +394,8 @@ void Krecipes::dragEnterEvent( QDragEnterEvent *event )
 void Krecipes::fileNew()
 {
 
-	// Create a new element (Element depends on active panel. New recipe by default)
-	m_view->createNewElement();
+	// Create a new recipe.
+	m_view->createNewRecipe();
 }
 
 void Krecipes::fileOpen()

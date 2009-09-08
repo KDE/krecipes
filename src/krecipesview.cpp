@@ -25,7 +25,8 @@
 #include <kvbox.h>
 #include <QFrame>
 
-#include "recipeactionshandler.h"
+#include "actionshandlers/recipeactionshandler.h"
+#include "actionshandlers/unitactionshandler.h"
 #include "setupassistant.h"
 #include "kstartuplogo.h"
 
@@ -507,12 +508,63 @@ void KrecipesView::removeFromCategory()
 	}
 }
 
+void KrecipesView::createNewElement()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == ingredientsPanel ) {
+		ingredientsPanel->getActionsHandler()->createNew();
+	} else if ( vis_panel == propertiesPanel ) {
+		propertiesPanel->getActionsHandler()->createNew();
+	} else if ( vis_panel == unitsPanel ) {
+		if ( unitsPanel->getActionsHandler() )
+			unitsPanel->getActionsHandler()->createNew();
+	} else if ( vis_panel == prepMethodsPanel ) {
+		prepMethodsPanel->getActionsHandler()->createNew();
+	} else if ( vis_panel == categoriesPanel) {
+		categoriesPanel->getActionsHandler()->createNew();
+	} else if ( vis_panel == authorsPanel ) {
+		authorsPanel->getActionsHandler()->createNew();
+	}	
+}
+
+void KrecipesView::renameCurrentElement()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == ingredientsPanel ) {
+		ingredientsPanel->getActionsHandler()->rename();
+	} else if ( vis_panel == propertiesPanel ) {
+		propertiesPanel->getActionsHandler()->rename();
+	} else if ( vis_panel == unitsPanel ) {
+		if ( unitsPanel->getActionsHandler() )
+			unitsPanel->getActionsHandler()->rename();
+	} else if ( vis_panel == prepMethodsPanel ) {
+		prepMethodsPanel->getActionsHandler()->rename();
+	} else if ( vis_panel == categoriesPanel) {
+		categoriesPanel->getActionsHandler()->rename();
+	} else if ( vis_panel == authorsPanel ) {
+		authorsPanel->getActionsHandler()->rename();
+	}	
+}
+
 void KrecipesView::deleteCurrentElements()
 {	
 	QWidget * vis_panel = rightPanel->visiblePanel();
 	if ( vis_panel == selectPanel ) {
 		selectPanel->getActionsHandler()->remove();
-	}
+	} else if ( vis_panel == ingredientsPanel ) {
+		ingredientsPanel->getActionsHandler()->remove();
+	} else if ( vis_panel == propertiesPanel ) {
+		propertiesPanel->getActionsHandler()->remove();
+	} else if ( vis_panel == unitsPanel ) {
+		if ( unitsPanel->getActionsHandler() )
+			unitsPanel->getActionsHandler()->remove();
+	} else if ( vis_panel == prepMethodsPanel ) {
+		prepMethodsPanel->getActionsHandler()->remove();
+	} else if ( vis_panel == categoriesPanel) {
+		categoriesPanel->getActionsHandler()->remove();
+	} else if ( vis_panel == authorsPanel ) {
+		authorsPanel->getActionsHandler()->remove();
+	}	
 }
 
 void KrecipesView::expandAll()
@@ -619,17 +671,6 @@ void KrecipesView::createNewRecipe( void )
 
 	inputPanel->newRecipe();
 	slotSetPanel( RecipeEdit );
-}
-
-void KrecipesView::createNewElement( void )
-{
-	/*if (rightPanel->visiblePanel())==4) //Properties Panel is the active one
-	{
-	propertiesPanel->createNewProperty();
-	}
-	else*/{
-		createNewRecipe();
-	}
 }
 
 void KrecipesView::wizard( bool force )

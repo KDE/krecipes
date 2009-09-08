@@ -135,7 +135,7 @@ private:
 	KAction *categorizeAction;
 	KAction *expandAllAction;
 	KAction *collapseAllAction;
-	KAction *createNewElementAction;
+	KAction *createAction;
 	KAction *renameAction;
 	
 	KDialog *parsing_file_dlg;

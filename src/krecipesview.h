@@ -130,7 +130,6 @@ public:
 
 	// public methods
 	void createNewRecipe( void );
-	void createNewElement( void );
 
 	void exportRecipes( const QList<int> &ids );
 
@@ -210,6 +209,8 @@ private slots:
 	void addToShoppingList();
 	void categorizeCurrentRecipe();
 	void removeFromCategory();
+	void createNewElement();
+	void renameCurrentElement();
 	void deleteCurrentElements();
 	void expandAll();
 	void collapseAll();

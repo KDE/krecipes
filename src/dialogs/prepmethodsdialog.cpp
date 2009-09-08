@@ -73,4 +73,9 @@ void PrepMethodsDialog::reload( ReloadFlags flag )
 	prepMethodListView->reload( flag );
 }
 
+ActionsHandlerBase* PrepMethodsDialog::getActionsHandler() const
+{
+	return prepMethodActionsHandler;
+}
+
 #include "prepmethodsdialog.moc"

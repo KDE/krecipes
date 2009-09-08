@@ -23,6 +23,7 @@
 
 class RecipeDB;
 class StdAuthorListView;
+class ActionsHandlerBase;
 class AuthorActionsHandler;
 class KPushButton;
 
@@ -40,6 +41,9 @@ public:
 	AuthorsDialog( QWidget* parent, RecipeDB *db );
 	~AuthorsDialog();
 	void reload( ReloadFlags flag = Load );
+
+	ActionsHandlerBase* getActionsHandler() const;
+
 private:
 	// Internal data
 	RecipeDB *database;

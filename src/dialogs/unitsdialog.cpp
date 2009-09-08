@@ -42,9 +42,9 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	page_layout->setMargin( KDialog::marginHint() );
 	page_layout->setSpacing( KDialog::spacingHint() );
 
-	KTabWidget *tabWidget = new KTabWidget( this );
+	tabWidget = new KTabWidget( this );
 
-	QWidget *unitTab = new QWidget( tabWidget );
+	unitTab = new QWidget( tabWidget );
 	QHBoxLayout* layout = new QHBoxLayout( unitTab );
 	layout->setMargin( KDialog::marginHint() );
 	layout->setSpacing( KDialog::spacingHint() );
@@ -108,6 +108,14 @@ void UnitsDialog::reload( ReloadFlags flag )
 {
 	unitListView->reload( flag );
 	loadConversionTables();
+}
+
+UnitActionsHandler* UnitsDialog::getActionsHandler() const
+{
+	if ( tabWidget->currentWidget() == unitTab )
+		return unitActionsHandler;
+	else
+		return 0;
 }
 
 void UnitsDialog::loadConversionTables( void )

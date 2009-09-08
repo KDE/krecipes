@@ -70,4 +70,9 @@ void CategoriesEditorDialog::reload( ReloadFlags flag )
 	categoryListView->reload( flag );
 }
 
+ActionsHandlerBase* CategoriesEditorDialog::getActionsHandler () const
+{
+	return categoryActionsHandler;
+}
+
 #include "categorieseditordialog.moc"

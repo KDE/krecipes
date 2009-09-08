@@ -73,4 +73,9 @@ void AuthorsDialog::reload( ReloadFlags flag )
 	authorListView->reload( flag );
 }
 
+ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
+{
+	return authorActionsHandler;
+}
+
 #include "authorsdialog.moc"

@@ -68,3 +68,8 @@ void IngredientGroupsDialog::reload( ReloadFlags flag )
 {
 	( ( StdHeaderListView* ) headerListView->listView() ) ->reload(flag);
 }
+
+ActionsHandlerBase* IngredientGroupsDialog::getActionsHandler() const
+{
+	return headerActionsHandler;
+}

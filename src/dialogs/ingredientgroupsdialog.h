@@ -16,6 +16,7 @@
 #include "widgets/dblistviewbase.h"
 
 class KreListView;
+class ActionsHandlerBase;
 class HeaderActionsHandler;
 class RecipeDB;
 
@@ -25,6 +26,8 @@ public:
 	IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name );
 
 	void reload( ReloadFlags flag = Load );
+
+	ActionsHandlerBase* getActionsHandler() const;
 
 private:
 	KreListView *headerListView;

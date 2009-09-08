@@ -22,6 +22,7 @@
 #include "widgets/dblistviewbase.h"
 
 class RecipeDB;
+class ActionsHandlerBase;
 class PrepMethodActionsHandler;
 class StdPrepMethodListView;
 class KPushButton;
@@ -40,6 +41,7 @@ public:
 	PrepMethodsDialog( QWidget* parent, RecipeDB *db );
 	~PrepMethodsDialog();
 	void reload( ReloadFlags flag = Load );
+	ActionsHandlerBase *getActionsHandler() const;
 private:
 	// Internal data
 	RecipeDB *database;

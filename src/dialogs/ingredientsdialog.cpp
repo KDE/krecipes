@@ -46,9 +46,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	page_layout->setMargin( KDialog::marginHint() );
 	page_layout->setSpacing( KDialog::spacingHint() );
 
-	KTabWidget *tabWidget = new KTabWidget( this );
+	tabWidget = new KTabWidget( this );
 
-	QWidget *ingredientTab = new QWidget( tabWidget );
+	ingredientTab = new QWidget( tabWidget );
 
 	layout = new QGridLayout( ingredientTab );
 	layout->cellRect( 1, 1 );
@@ -123,6 +123,14 @@ void IngredientsDialog::reload( ReloadFlags flag )
 {
 	reloadIngredientList( flag );
 	groupsDialog->reload( flag );
+}
+
+ActionsHandlerBase * IngredientsDialog::getActionsHandler() const
+{
+	if ( tabWidget->currentWidget() == ingredientTab )
+		return ingredientActionsHandler;
+	else //if ( tabWidget->currentWidget() == groupsDialog )
+		return groupsDialog->getActionsHandler();
 }
 
 void IngredientsDialog::showPropertyEdit()

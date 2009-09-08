@@ -23,7 +23,9 @@
 class RecipeDB;
 class IngredientGroupsDialog;
 class KPushButton;
+class ActionsHandlerBase;
 class IngredientActionsHandler;
+class KTabWidget;
 
 class IngredientsDialog: public QWidget
 {
@@ -33,6 +35,7 @@ public:
 	IngredientsDialog( QWidget* parent, RecipeDB *db );
 	~IngredientsDialog();
 	void reload( ReloadFlags flag = Load );
+	ActionsHandlerBase *getActionsHandler() const;
 
 private slots:
 	void showPropertyEdit();
@@ -45,6 +48,8 @@ private:
 	KreListView* ingredientListView;
 	IngredientGroupsDialog *groupsDialog;
 	IngredientActionsHandler *ingredientActionsHandler;
+	KTabWidget* tabWidget;
+	QWidget* ingredientTab;
 
 	// Internal Methods
 	void reloadIngredientList( ReloadFlags flag = Load );

@@ -82,4 +82,9 @@ void PropertiesDialog::reload( void )
 	propertyListView->reload();
 }
 
+ActionsHandlerBase* PropertiesDialog::getActionsHandler() const
+{
+	return propertyActionsHandler;
+}
+
 #include "propertiesdialog.moc"

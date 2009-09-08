@@ -25,6 +25,7 @@
 
 class RecipeDB;
 class StdCategoryListView;
+class ActionsHandlerBase;
 class CategoryActionsHandler;
 class KPushButton;
 
@@ -42,6 +43,8 @@ public:
 	~CategoriesEditorDialog();
 
 	void reload( ReloadFlags flag = Load );
+
+	ActionsHandlerBase* getActionsHandler() const;
 
 private:
 	// Internal data

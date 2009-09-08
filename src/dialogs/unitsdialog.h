@@ -24,6 +24,7 @@ class ConversionTable;
 class StdUnitListView;
 class UnitActionsHandler;
 class KPushButton;
+class KTabWidget;
 
 /**
 @author Unai Garro
@@ -38,6 +39,7 @@ public:
 	{
 		return QSize( 300, 200 );
 	}
+	UnitActionsHandler* getActionsHandler() const;
 
 public slots:
 	void reload( ReloadFlags flag = Load );
@@ -50,6 +52,7 @@ private:
 	ConversionTable *volumeConversionTable;
 	KPushButton *newUnitButton;
 	KPushButton *removeUnitButton;
+	QWidget *unitTab;
 
 	// Internal methods
 	void saveAllRatios( UnitRatioList &ratioList );
@@ -57,6 +60,8 @@ private:
 
 	// Internal Variables
 	RecipeDB *database;
+	KTabWidget *tabWidget;
+
 private slots:
 	void loadConversionTables();
 	void loadConversionTable( ConversionTable*, Unit::Type );

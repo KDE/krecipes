@@ -22,6 +22,7 @@
 class KPushButton;
 class RecipeDB;
 class StdPropertyListView;
+class ActionsHandlerBase;
 class PropertyActionsHandler;
 
 /**
@@ -34,6 +35,7 @@ public:
 	PropertiesDialog( QWidget *parent, RecipeDB *db );
 	~PropertiesDialog();
 	void reload( void );
+	ActionsHandlerBase* getActionsHandler() const;
 
 private:
 	// Variables
