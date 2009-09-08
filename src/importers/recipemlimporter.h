@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2003 by                                                 *
-*   Richard L‰rk‰ng                                                       *
+*   Richard L√§rk√§ng                                                       *
 *                                                                         *
 *   Copyright (C) 2003-2005 by                                            *
 *   Jason Kivlighn (jkivlighn@gmail.com)                                  *

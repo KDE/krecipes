@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri DamstÃ©n <petri.damsten@iki.fi>
  *
  * Note: This file is now part of Krecipes, which is a slightly modified version of the
  *       original used in SuperKaramba

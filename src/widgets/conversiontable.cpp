@@ -129,7 +129,7 @@ void ConversionTable::clearCellWidget( int r, int c )
 
 ConversionTableItem::ConversionTableItem( Q3Table *t, EditType et ) : Q3TableItem( t, et, QString::null )
 {
-	// we do not want this item to be replaced
+	//Â weÂ doÂ notÂ wantÂ thisÂ itemÂ toÂ beÂ replaced
 	setReplaceable( false );
 }
 
@@ -157,7 +157,7 @@ QWidget* ConversionTableItem::createEditor() const
 
 void ConversionTableItem::setContentFromEditor( QWidget *w )
 {
-	// the user changed the value of the combobox, so synchronize the
+	// theÂ user changed the value of the combobox, so synchronize the
 	// value of the item (its text), with the value of the combobox
 	if ( w->inherits( "FractionInput" ) ) {
 		FractionInput* editor = ( FractionInput* ) w;

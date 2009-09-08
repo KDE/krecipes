@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2003 Richard L‰rk‰ng
+Copyright (C) 2003 Richard L√§rk√§ng
 Copyright (C) 2003 Jason Kivlighn
 
 This program is free software; you can redistribute it and/or modify
