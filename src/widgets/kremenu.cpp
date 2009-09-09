@@ -69,7 +69,7 @@ void KreMenu::childEvent ( QChildEvent *e )
             }
             buttonMenu->addButton( button );
 
-            if ( buttonMenu != m_currentMenu )
+            if ( (buttonMenu != m_currentMenu) || !(button->isEnabled()) )
                 button->hide();
             else
                 button->show();
@@ -284,7 +284,7 @@ void KreMenu::showMenu( MenuId id )
                 KreMenuButton * button = static_cast<KreMenuButton*>( obj );
                 if ( button->menuId == currentMenuId )
                     button->hide();
-                else if ( button->menuId == id )
+                else if ( (button->menuId == id) && (button->isEnabled()) )
                     button->show();
             }
 	}

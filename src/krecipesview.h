@@ -198,7 +198,7 @@ private slots:
 	void showRecipe( int recipeID );
 	void showRecipes( const QList<int> &recipeIDs );
 	void slotSetTitle( const QString& title );
-	void slotSetPanel( KrePanel );
+	void slotSetPanel( KrePanel, bool highlightLeftButton=false );
 	void switchToRecipe( void );
 	void createShoppingListFromDiet( void );
 	void moveTipButton( int, int );

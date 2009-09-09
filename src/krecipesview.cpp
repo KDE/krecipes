@@ -122,10 +122,16 @@ KrecipesView::KrecipesView( QWidget *parent )
 
     // Submenus
     dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "server-database" );
+	
+	recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
+	recipeButton->setIconSet( KIcon( "document-save" ) );
+	buttonsList.append( recipeButton );
+	recipeButton->setEnabled( false );
+	recipeButton->hide();
 
     button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
     button2->setIconSet( KIcon( "ingredients" ) );
-    //buttonsList.append(button2);
+    buttonsList.append(button2);
 
     button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
     button3->setIconSet( KIcon( "properties" ) );
@@ -145,7 +151,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
     button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
     button6->setIconSet( KIcon( "authors" ) );
-    buttonsList.append( button6 );
+    buttonsList.append( button6 );	
 
     contextButton = new QPushButton( leftPanel );
     contextButton->setObjectName( "contextButton" );
@@ -255,10 +261,6 @@ KrecipesView::KrecipesView( QWidget *parent )
     // i18n
     translate();
 
-    // Initialize Variables
-    recipeButton = 0;
-
-
 
     // Connect Signals from Left Panel to slotSetPanel()
     connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
@@ -362,7 +364,7 @@ void KrecipesView::slotSetTitle( const QString& title )
 }
 
 // Function to switch panels
-void KrecipesView::slotSetPanel( KrePanel p )
+void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 {
 	if (p != -1) {
 		if ( (m_activePanel != RecipeEdit) && (m_activePanel != RecipeView) )
@@ -373,51 +375,71 @@ void KrecipesView::slotSetPanel( KrePanel p )
 
 	switch ( p ) {
 	case SelectP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button0 );
 		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "system-search" );
 		rightPanel->raise( selectPanel );
 		break;
 	case ShoppingP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button1 );
 		rightPanel->setHeader( i18n( "Shopping List" ), "view-pim-tasks" );
 		rightPanel->raise( shoppingListPanel );
 		shoppingListPanel->reload( Load );
 		break;
 	case DietP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button7 );
 		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
 		rightPanel->raise( dietPanel );
 		dietPanel->reload( Load );
 		break;
 	case MatcherP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button8 );
 		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "view-filter" );
 		rightPanel->raise( ingredientMatcherPanel );
 		ingredientMatcherPanel->reload( Load );
 		break;
 
 	case IngredientsP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button2 );
 		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
 		rightPanel->raise( ingredientsPanel );
 		ingredientsPanel->reload( Load );
 		break;
 	case PropertiesP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button3 );
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
 		rightPanel->raise( propertiesPanel );
 		//propertiesPanel->reload();
 		break;
 	case UnitsP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button4 );
 		rightPanel->setHeader( i18n( "Units" ), "units" );
 		rightPanel->raise( unitsPanel );
 		unitsPanel->reload( Load );
 		break;
 	case PrepMethodsP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button9 );
 		rightPanel->setHeader( i18n( "Preparation Methods" ), "methods" );
 		rightPanel->raise( prepMethodsPanel );
 		prepMethodsPanel->reload( Load );
 		break;
 	case CategoriesP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button5 );
 		rightPanel->setHeader( i18n( "Categories" ), "folder-yellow" );
 		rightPanel->raise( categoriesPanel );
 		categoriesPanel->reload( Load );
 		break;
 	case AuthorsP:
+		if ( highlightLeftButton )
+			leftPanel->highlightButton( button6 );
 		rightPanel->setHeader( i18n( "Authors" ), "authors" );
 		rightPanel->raise( authorsPanel );
 		authorsPanel->reload( Load );
@@ -834,23 +856,19 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 {
 	recipeWidget = w;
-	if ( !recipeButton ) {
-		recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
+	recipeButton->setEnabled( true );
+	recipeButton->show();
 
-		recipeButton->setIconSet( KIcon( "document-save" ) );
+	QString short_title = title.left( 20 );
+	if ( title.length() > 20 )
+		short_title.append( "..." );
 
-		QString short_title = title.left( 20 );
-		if ( title.length() > 20 )
-			short_title.append( "..." );
+	recipeButton->setTitle( short_title );
 
-		recipeButton->setTitle( short_title );
+	leftPanel->highlightButton( recipeButton );
 
-		buttonsList.append( recipeButton );
-		leftPanel->highlightButton( recipeButton );
-
-		connect( recipeButton, SIGNAL( clicked() ), this, SLOT( switchToRecipe() ) );
-		connect( ( RecipeInputDialog * ) w, SIGNAL( titleChanged( const QString& ) ), recipeButton, SLOT( setTitle( const QString& ) ) );
-	}
+	connect( recipeButton, SIGNAL( clicked() ), this, SLOT( switchToRecipe() ) );
+	connect( ( RecipeInputDialog * ) w, SIGNAL( titleChanged( const QString& ) ), recipeButton, SLOT( setTitle( const QString& ) ) );
 
 }
 
@@ -861,9 +879,9 @@ void KrecipesView::switchToRecipe( void )
 
 void KrecipesView::closeRecipe( void )
 {
-	slotSetPanel( m_previousActivePanel );
-	buttonsList.removeLast();
-	recipeButton = 0;
+	recipeButton->setEnabled( false );
+	recipeButton->hide();
+	slotSetPanel( m_previousActivePanel, true );
 }
 
 //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
