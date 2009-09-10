@@ -1,9 +1,30 @@
 Changes from 2.0-alpha1 to svn:
   * The import/export tests are able to build again.
-  * Fixed bugs:
+  * The setup assistant allows selecting the port for remote servers.
+  * Added button to save recipes' photos as JPEG files.
+  * Added a close button in "View Recipe" dialog.
+  * Refreshed some icons and artwork. (TODO: stars for rating widget)
+  * Updated handbook. (work in progress)
+  * Fixes for issues reported by krazy:
+    + Stop using TRUE and FALSE macros.
+  * Fixes for bugs:
     + SQLite backend stores the recipes' photos.
+    + Importer for *.kreml and .kre files reads properly the recipes'
+      preparation time.
+    + Reading float numbers when importing recipeml files is not locale aware.
+    + The ratings tab in the recipe editor is not corruptly displayed anymore.
+    + The shortcuts work.
+    + When you select the PostgreSQL backend and you choose to include the
+      sample data, categories_id_seq is updated properly. Closes the
+      sourceforge bug number 2364987.
+    + When you create a new recipe, a new entry is raised in the left panel
+      containing a "save icon" and the title for the recipe, however in
+      2.0-alpha1 if you close the recipe whitout saving, a dialog asks you if
+      you want to save the changes or not and if you select "no" the entry with
+      the title of the recipe located in the left panel will not be hidden.
+      This bug is fixed in this version.
 
-Changes from 1.0 to 2.0-alpha1:
+Changes from 1.1 to 2.0-alpha1:
   * General port to kde4/qt4, several dialogs and left panel.
   * Use sonnet.
   * Port of backup/restore functions to kde4/qt4.

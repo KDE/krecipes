@@ -1,29 +1,24 @@
 * The criteria box in the advanced search tab does not have properly size in
   the scroll area, might be fixed using a QSplitter.
 
-* "Format" has no icon in the preferences dialog. Furthermore, some icons in
-  the left panel doesn't match the oxygen style.
-
 * Importing recipes from *.kreml files does not work with PostgreSQL backend,
   loading the examples from the setup assistant does not work for the same
   reason.
 
+* If you create an uncategorized recipe in PostgreSQL backend, you can't see
+  it.
+
 * Click Ingredient Matcher on left panel, select several random ingredients and
   click on the right arrow; some ingredients might be missing in the right
   list.
-
-* Closing a recipe without saving does not remove the item in the left panel.
 
 * We have lost formatting options in the preferences dialog.
 
 * On my debian system, if I don't provide a password for PostgreSQL, krecipes
   silently fails.
 
-* When you re-run the setup assistant, it does not remember your previous
-  configuration.
-
 * On the edit rating dialog, add a rating, then click on the stars in the list
   view, enter some number to edit the number of stars. It only works with
   integer numbers. The same on the advanced search tab.
 
-* All importer/exporter tests are failing or giving warnings.
+* All importer/exporter tests are failing or giving warnings except kretest.

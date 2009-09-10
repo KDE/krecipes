@@ -4,7 +4,7 @@ Planned for the next release in 2.0 branch:
  * Using a QSplitter on the ingredient matcher dialog.
  * Preferences dialog allow the removal of gradients in the left panel.
  * Improved sqlite migration code.
- * Restored options about formatting in in preferences dialog.
+ * Restored options about formatting in preferences dialog.
  * Solve the issues reported by krazy.
  * Check files taken from other projects and explain in a comment where those
    files came from.
@@ -14,9 +14,11 @@ Planned for the next release in 2.0 branch:
    krazy.
 
  [Brainstorming]
+ * Seek and remove the anti-pattern "if ( myList.count() > 0 ) ...".
  * Fix the hidden features: merge similar (categories|ingredients).
  * Make configurable the length of VARCHAR(%n) fields, for instance, the
    preparation method name.
+ * Update the USDA data.
  * Some set-up to make the sample recipes translatable by kde i18n teams,
    something like krecipesdata2pot and po2krecipesdata... (ask Pino or someone
    from i18n team before coding these programs)
@@ -34,11 +36,15 @@ Planned for the 2.1 branch:
  * Test with large databases.
  * Concurrent database access.
  * Support for unit names in languages with various plural forms.
+ * When you re-run the setup assistant, it does not remember your previous
+   configuration.
 
 Planned for 2.2 branch:
 
  [Brainstorming]
  * Secure database access passwords?
+ * Calendar for meal planning, also you could export the data to iCalendar
+   using the KDE PIM libs, making it work with KOrganizer.
  * Use qt designer?
  * Add comments to preparation methods and ingredients in a recipe? (see the
    Bill's usecase).
@@ -49,6 +55,7 @@ Planned for 2.2 branch:
  * Trash folder to store removed recipes?
  * Something to manage money cost in shopping list.
  * Step-by-Step recipe instructions with photos?
+ * There is something called eurofir out there.
 _______________________________________________________________________________
 Old stuff from previous maintainers:
 
@@ -59,7 +66,6 @@ Old stuff from previous maintainers:
 jkivlighn:
 
 MAJOR FEATURES:
-	*Calendar for meal planning
 	*Command-line interface
 	*Improved printing support: I'd like to allow, for example, printing on recipe cards.
 	*Handle "Cookbooks".  In MySQL/PostgreSQL a cookbook would be a table, and in SQLite it would be a file.
