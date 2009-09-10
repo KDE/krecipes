@@ -78,4 +78,9 @@ ActionsHandlerBase* PrepMethodsDialog::getActionsHandler() const
 	return prepMethodActionsHandler;
 }
 
+void PrepMethodsDialog::addAction( KAction * action )
+{
+	prepMethodActionsHandler->addAction( action );
+}
+
 #include "prepmethodsdialog.moc"

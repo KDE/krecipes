@@ -16,6 +16,7 @@
 
 class StdCategoryListView;
 class Q3ListViewItem;
+class KAction;
 
 class CategoryActionsHandler : public ActionsHandlerBase
 {
@@ -24,6 +25,9 @@ class CategoryActionsHandler : public ActionsHandlerBase
 public:
 	CategoryActionsHandler( StdCategoryListView *_parentListView, RecipeDB *db );
 	~CategoryActionsHandler();
+
+	void setCategoryPasteAction( KAction * action );
+	void setPasteAsSubcategoryAction( KAction * action );
 
 public slots:
 	void createNew();
@@ -37,7 +41,9 @@ public slots:
 private:
 	Q3ListViewItem *clipboard_item;
 	Q3ListViewItem *clipboard_parent;
-	bool checkBounds( const QString &name );
+	KAction *pasteAction;
+	KAction *pasteAsSubAction;
+	bool checkBounds( const QString &name );	
 
 private slots:
 	void preparePopup();

@@ -36,6 +36,7 @@ class KPushButton;
 class K3ListView;
 class QRadioButton;
 class QGroupBox;
+class KAction;
 
 class KDateEdit;
 class RecipeDB;
@@ -55,6 +56,7 @@ public:
 	virtual void languageChange();
 
 	RecipeActionsHandler *actionHandler;
+	void addAction( KAction * action );
 
 protected:
 	QLabel* textLabel1_4;

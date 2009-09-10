@@ -23,6 +23,7 @@ class RecipeDB;
 class ConversionTable;
 class StdUnitListView;
 class UnitActionsHandler;
+class KAction;
 class KPushButton;
 class KTabWidget;
 
@@ -40,6 +41,7 @@ public:
 		return QSize( 300, 200 );
 	}
 	UnitActionsHandler* getActionsHandler() const;
+	void addAction( KAction * action );
 
 public slots:
 	void reload( ReloadFlags flag = Load );

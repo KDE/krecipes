@@ -70,9 +70,24 @@ void CategoriesEditorDialog::reload( ReloadFlags flag )
 	categoryListView->reload( flag );
 }
 
-ActionsHandlerBase* CategoriesEditorDialog::getActionsHandler () const
+CategoryActionsHandler* CategoriesEditorDialog::getActionsHandler () const
 {
 	return categoryActionsHandler;
+}
+
+void CategoriesEditorDialog::addAction( KAction * action )
+{
+	categoryActionsHandler->addAction( action );
+}
+
+void CategoriesEditorDialog::setCategoryPasteAction( KAction * action )
+{
+	categoryActionsHandler->setCategoryPasteAction( action );
+}
+
+void CategoriesEditorDialog::setPasteAsSubcategoryAction( KAction * action )
+{
+	categoryActionsHandler->setPasteAsSubcategoryAction( action );
 }
 
 #include "categorieseditordialog.moc"

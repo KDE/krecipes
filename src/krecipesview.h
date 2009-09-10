@@ -49,6 +49,7 @@ class SelectRecipeDialog;
 class ShoppingListDialog;
 class UnitsDialog;
 class QFrame;
+class KAction;
 typedef Q3ValueList <Menu>::Iterator MenuId;
 
 
@@ -130,8 +131,19 @@ public:
 
 	// public methods
 	void createNewRecipe( void );
-
 	void exportRecipes( const QList<int> &ids );
+
+	// actions
+	void addSelectRecipeAction( KAction * action );
+	void addFindRecipeAction( KAction * action );
+	void addCategoryAction( KAction * action );
+	void addIngredientMatcherAction( KAction * action );
+	void setCategorizeAction( KAction * action );
+	void setRemoveFromCategoryAction( KAction * action );
+	void addElementAction( KAction * action ); /* Element is anything except a recipe */
+	void addCategoriesPanelAction( KAction * action );
+	void setCategoryPasteAction( KAction * action );
+	void setPasteAsSubcategoryAction( KAction * action );
 
 private:
 
@@ -167,6 +179,9 @@ private:
 	KreMenuButton *recipeButton;
 	QWidget *recipeWidget;
 
+	// Actions
+	KAction * showRecipeAction;
+
 	// Internal variables
 	QString dbType;
 	KrePanel m_activePanel;
@@ -189,6 +204,9 @@ public slots:
 	void reloadDisplay();
 	virtual void reload();
 	void activateContextHelp();
+	void cut();
+	void paste();
+	void pasteAsSubcategory();
 
 private slots:
 	void actionRecipe( int recipeID, int action );

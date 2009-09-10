@@ -17,6 +17,7 @@
 
 class KreListView;
 class ActionsHandlerBase;
+class KAction;
 class HeaderActionsHandler;
 class RecipeDB;
 
@@ -28,6 +29,8 @@ public:
 	void reload( ReloadFlags flag = Load );
 
 	ActionsHandlerBase* getActionsHandler() const;
+
+	void addAction( KAction * action );
 
 private:
 	KreListView *headerListView;

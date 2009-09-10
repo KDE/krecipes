@@ -15,6 +15,7 @@
 class DBListViewBase;
 class K3ListView;
 class KMenu;
+class KAction;
 class RecipeDB;
 class Q3ListViewItem;
 class QPoint;
@@ -30,6 +31,7 @@ public slots:
 	virtual void createNew() = 0;
 	virtual void rename();
 	virtual void remove() = 0;
+	void addAction( KAction * action );
 
 protected:
 	KMenu *kpop;

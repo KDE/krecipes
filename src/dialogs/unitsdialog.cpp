@@ -118,6 +118,11 @@ UnitActionsHandler* UnitsDialog::getActionsHandler() const
 		return 0;
 }
 
+void UnitsDialog::addAction( KAction * action )
+{
+	unitActionsHandler->addAction( action );
+}
+
 void UnitsDialog::loadConversionTables( void )
 {
 	loadConversionTable( massConversionTable, Unit::Mass );

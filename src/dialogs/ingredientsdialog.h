@@ -26,6 +26,7 @@ class KPushButton;
 class ActionsHandlerBase;
 class IngredientActionsHandler;
 class KTabWidget;
+class KAction;
 
 class IngredientsDialog: public QWidget
 {
@@ -36,6 +37,7 @@ public:
 	~IngredientsDialog();
 	void reload( ReloadFlags flag = Load );
 	ActionsHandlerBase *getActionsHandler() const;
+	void addAction( KAction * action );
 
 private slots:
 	void showPropertyEdit();

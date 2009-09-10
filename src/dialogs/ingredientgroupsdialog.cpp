@@ -73,3 +73,8 @@ ActionsHandlerBase* IngredientGroupsDialog::getActionsHandler() const
 {
 	return headerActionsHandler;
 }
+
+void IngredientGroupsDialog::addAction( KAction * action )
+{
+	headerActionsHandler->addAction( action );
+}

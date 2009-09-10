@@ -22,6 +22,7 @@ class Q3ListViewItem;
 class K3ListView;
 class KMenu;
 class RecipeDB;
+class KAction;
 
 /** @brief A class that centralizes common actions for recipes such as saving and editing.
   * 
@@ -37,23 +38,15 @@ class RecipeActionsHandler : public QObject
 
 public:
 	enum ItemType { Category, Recipe };
-	enum RecipeActions {
-	    AllActions = 0xffff,
-	    Open = 0x0001,
-	    Edit = 0x0002,
-	    Export = 0x0004,
-	    RemoveFromCategory = 0x0008,
-	    Remove = 0x0010,
-	    ExpandAll = 0x0020,
-	    CollapseAll = 0x0040,
-	    AddToShoppingList = 0x0080,
-	    CopyToClipboard = 0x0100,
-	    Categorize = 0x0200
-	};
 
-	RecipeActionsHandler( K3ListView *parentListView, RecipeDB *db, int actions = AllActions );
+	RecipeActionsHandler( K3ListView *parentListView, RecipeDB *db );
 	~RecipeActionsHandler()
 	{}
+
+	void addRecipeAction( KAction * action );
+	void addCategoryAction( KAction * action );
+	void setCategorizeAction( KAction * action );
+	void setRemoveFromCategoryAction( KAction * action );
 
 	static void exportRecipes( const QList<int> &ids, const QString & caption, const QString &selection, RecipeDB *db );
 	static void exportRecipe( int id, const QString & caption, const QString &selection, RecipeDB *db );
@@ -111,8 +104,8 @@ private:
 	K3ListView *parentListView;
 	RecipeDB *database;
 
-	int remove_from_cat_item;
-	int categorize_item;
+	KAction * categorizeAction;
+	KAction * removeFromCategoryAction;
 
 	QList<int> getAllVisibleItems();
 	QList<int> recipeIDs( const QList<Q3ListViewItem *> &items ) const;

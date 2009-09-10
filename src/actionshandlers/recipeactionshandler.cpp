@@ -20,11 +20,11 @@
 
 #include <kapplication.h>
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmenu.h>
+#include <KAction>
 #include <kprogressdialog.h>
 
 #include "dialogs/selectcategoriesdialog.h"
@@ -44,50 +44,46 @@
 
 #include "backends/recipedb.h"
 
-RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeDB *db, int actions ) : QObject( _parentListView ),
+RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeDB *db ) :
+		QObject( _parentListView ),
 		parentListView( _parentListView ),
-		database( db )
+		database( db ),
+		categorizeAction( 0 ),
+		removeFromCategoryAction( 0 )
 {
-	KIconLoader *il = KIconLoader::global();
-
 	kpop = new KMenu( parentListView );
-	//FIXME: This code is so redundant, we already added the actions in Krecipes class,
-	// please code something like RecipeActionsHandler::addAction(...). Also, currently
-	// if you configure other shortcuts, you can't see the correct shortcuts in contextual
-	// menus.
-	if ( actions & Open )
-		kpop->addAction( il->loadIcon( "system-search", KIconLoader::NoGroup, 16 ), i18n( "Sh&ow recipe(s)" ), this, SLOT( open() ), Qt::CTRL + Qt::Key_L );
-	if ( actions & Edit )
-		kpop->addAction( il->loadIcon( "document-edit", KIconLoader::NoGroup, 16 ), i18n( "&Edit" ), this, SLOT( edit() ), Qt::CTRL + Qt::Key_E );
-	if ( actions & Export )
-		kpop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), Qt::CTRL + Qt::Key_P );
-	if ( actions & RemoveFromCategory )
-		remove_from_cat_item = kpop->insertItem( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Remove From Category" ), this, SLOT( removeFromCategory() ), Qt::ALT + Qt::Key_Delete );
-	if ( actions & Remove )
-		kpop->addAction( il->loadIcon( "edit-delete", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( remove
-			                  () ), Qt::Key_Delete );
-	if ( actions & AddToShoppingList )
-		kpop->addAction( il->loadIcon( "view-pim-tasks", KIconLoader::NoGroup, 16 ), i18n( "&Add to Shopping List" ), this, SLOT( addToShoppingList() ), Qt::CTRL + Qt::Key_S );
-	if ( actions & CopyToClipboard )
-		kpop->addAction( il->loadIcon( "edit-copy", KIconLoader::NoGroup, 16 ), i18n( "&Copy to Clipboard" ), this, SLOT( recipesToClipboard() ), Qt::CTRL + Qt::Key_C );
-
-	if ( actions & Categorize )
-		categorize_item = kpop->insertItem( il->loadIcon( "folder-yellow", KIconLoader::NoGroup, 16 ), i18n( "Ca&tegorize..." ), this, SLOT(categorize()), Qt::CTRL + Qt::Key_T );
-
-	kpop->ensurePolished();
-
 	catPop = new KMenu( parentListView );
-	if ( actions & ExpandAll )
-		catPop->addAction( i18n( "&Expand All" ), this, SLOT( expandAll() ), Qt::CTRL + Qt::Key_Plus );
-	if ( actions & CollapseAll )
-		catPop->addAction( i18n( "&Collapse All" ), this, SLOT( collapseAll() ), Qt::CTRL + Qt::Key_Minus );
-	if ( actions & Export )
-		catPop->addAction( il->loadIcon( "document-export", KIconLoader::NoGroup, 16 ), i18n( "E&xport" ), this, SLOT( recipeExport() ), Qt::CTRL + Qt::Key_P );
 
-	catPop->ensurePolished();
+	connect( parentListView,
+		SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ),
+		SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) )
+	);
+	connect( parentListView,
+		SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ),
+		SLOT( open() )
+	);
+}
 
-	connect( parentListView, SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ), SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) ) );
-	connect( parentListView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( open() ) );
+void RecipeActionsHandler::addRecipeAction( KAction * action )
+{
+	kpop->addAction( action );
+}
+
+void RecipeActionsHandler::addCategoryAction( KAction * action )
+{
+	catPop->addAction( action );
+}
+
+void RecipeActionsHandler::setCategorizeAction( KAction * action )
+{
+	categorizeAction = action;
+	kpop->addAction( action );
+}
+
+void RecipeActionsHandler::setRemoveFromCategoryAction( KAction * action )
+{
+	removeFromCategoryAction = action;
+	kpop->addAction( action );
 }
 
 void RecipeActionsHandler::exec( ItemType type, const QPoint &p )
@@ -106,8 +102,10 @@ void RecipeActionsHandler::showPopup( K3ListView * /*l*/, Q3ListViewItem *i, con
 {
 	if ( i ) { // Check if the QListViewItem actually exists
 		if ( i->rtti() == 1000 ) {
-			kpop->setItemVisible( categorize_item, i->parent() && i->parent()->rtti() == 1006 );
-			kpop->setItemVisible( remove_from_cat_item, i->parent() && i->parent()->rtti() == 1001 );
+			if ( categorizeAction )
+				categorizeAction->setVisible( i->parent() && i->parent()->rtti() == 1006 );
+			if ( removeFromCategoryAction )
+				removeFromCategoryAction->setVisible( i->parent() && i->parent()->rtti() == 1001 );
 			exec( Recipe, p );
 		}
 		else if ( i->rtti() == 1001 )  //is a category... don't pop-up for an empty category though

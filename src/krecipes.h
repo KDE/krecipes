@@ -137,6 +137,9 @@ private:
 	KAction *collapseAllAction;
 	KAction *createAction;
 	KAction *renameAction;
+	KAction *cutAction;
+	KAction *pasteAction;
+	KAction *pasteAsSubcategoryAction;
 	
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;

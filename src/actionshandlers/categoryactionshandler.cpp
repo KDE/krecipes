@@ -14,6 +14,7 @@
 #include <KLocale>
 #include <K3ListView>
 #include <KMenu>
+#include <KAction>
 #include <KIcon>
 #include <QPointer>
 #include <KMessageBox>
@@ -30,22 +31,28 @@ class Q3ListViewItem;
 
 
 CategoryActionsHandler::CategoryActionsHandler( StdCategoryListView *_parentListView, RecipeDB *db ):
-	ActionsHandlerBase( _parentListView, db ), clipboard_item(0)
+	ActionsHandlerBase( _parentListView, db ),
+	clipboard_item( 0 ),
+	pasteAction( 0 ),
+	pasteAsSubAction( 0 )
 {
-	kpop->addSeparator();
-	kpop->addAction( KIcon( "edit-cut" ), i18n( "Cu&t" ),
-		this, SLOT( cut() ), Qt::CTRL + Qt::Key_X );
-	kpop->addAction( KIcon( "edit-paste" ), i18n( "&Paste" ),
-		this, SLOT( paste() ), Qt::CTRL + Qt::Key_V );
-	kpop->addAction( KIcon( "edit-paste" ), i18n( "Paste as Subcategory" ),
-		this, SLOT( pasteAsSub() ), Qt::CTRL + Qt::SHIFT + Qt::Key_V );
-	kpop->ensurePolished();
-
 	connect( kpop, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
 	connect( parentListView,
 		SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ),
 		SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) )
 	);
+}
+
+void CategoryActionsHandler::setCategoryPasteAction( KAction * action )
+{
+	kpop->addAction( action );
+	pasteAction = action;
+}
+
+void CategoryActionsHandler::setPasteAsSubcategoryAction( KAction * action )
+{
+	kpop->addAction( action );
+	pasteAsSubAction = action;
 }
 
 void CategoryActionsHandler::createNew()
@@ -180,9 +187,9 @@ bool CategoryActionsHandler::checkBounds( const QString &name )
 
 void CategoryActionsHandler::preparePopup()
 {
-	//only enable the paste items if clipboard_item isn't null
-	kpop->setItemEnabled( kpop->idAt( 5 ), clipboard_item );
-	kpop->setItemEnabled( kpop->idAt( 6 ), clipboard_item );
+	//only enable the paste actions if clipboard_item isn't null
+	pasteAction->setEnabled( clipboard_item );
+	pasteAsSubAction->setEnabled( clipboard_item );
 }
 
 void CategoryActionsHandler::saveElement( Q3ListViewItem* i )

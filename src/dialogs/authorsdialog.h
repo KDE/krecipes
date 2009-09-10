@@ -25,6 +25,7 @@ class RecipeDB;
 class StdAuthorListView;
 class ActionsHandlerBase;
 class AuthorActionsHandler;
+class KAction;
 class KPushButton;
 
 /**
@@ -43,6 +44,7 @@ public:
 	void reload( ReloadFlags flag = Load );
 
 	ActionsHandlerBase* getActionsHandler() const;
+	void addAction( KAction * action );
 
 private:
 	// Internal data

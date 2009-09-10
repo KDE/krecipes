@@ -87,4 +87,9 @@ ActionsHandlerBase* PropertiesDialog::getActionsHandler() const
 	return propertyActionsHandler;
 }
 
+void PropertiesDialog::addAction( KAction * action )
+{
+	propertyActionsHandler->addAction( action );
+}
+
 #include "propertiesdialog.moc"

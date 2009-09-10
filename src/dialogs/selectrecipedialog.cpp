@@ -247,4 +247,29 @@ RecipeActionsHandler* SelectRecipeDialog::getActionsHandler() const
 		return advancedSearch->actionHandler;
 }
 
+void SelectRecipeDialog::addSelectRecipeAction( KAction * action )
+{
+	actionHandler->addRecipeAction( action );
+}
+
+void SelectRecipeDialog::addFindRecipeAction( KAction * action )
+{
+	advancedSearch->addAction( action );
+}
+
+void SelectRecipeDialog::addCategoryAction( KAction * action )
+{
+	actionHandler->addCategoryAction( action );
+}
+
+void SelectRecipeDialog::setCategorizeAction( KAction * action )
+{
+	actionHandler->setCategorizeAction( action );
+}
+
+void SelectRecipeDialog::setRemoveFromCategoryAction( KAction * action )
+{
+	actionHandler->setRemoveFromCategoryAction( action );
+}
+
 #include "selectrecipedialog.moc"

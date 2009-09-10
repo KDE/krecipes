@@ -573,7 +573,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->addColumn( i18n( "Title" ) );
 	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
 
-	actionHandler = new RecipeActionsHandler( resultsListView, database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export | RecipeActionsHandler::CopyToClipboard | RecipeActionsHandler::Remove );
+	actionHandler = new RecipeActionsHandler( resultsListView, database );
 
 	connect( titleEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
 	connect( ingredientsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
@@ -685,6 +685,11 @@ void AdvancedSearchDialog::languageChange()
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
 	ratingsButton->setText( QString("%1 >>").arg(i18n("Ratings")) );
+}
+
+void AdvancedSearchDialog::addAction( KAction * action )
+{
+	actionHandler->addRecipeAction( action );
 }
 
 void AdvancedSearchDialog::removeRecipe( int id )

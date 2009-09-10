@@ -26,6 +26,7 @@
 class RecipeDB;
 class StdCategoryListView;
 class ActionsHandlerBase;
+class KAction;
 class CategoryActionsHandler;
 class KPushButton;
 
@@ -44,7 +45,10 @@ public:
 
 	void reload( ReloadFlags flag = Load );
 
-	ActionsHandlerBase* getActionsHandler() const;
+	CategoryActionsHandler* getActionsHandler() const;
+	void addAction( KAction * action );
+	void setCategoryPasteAction( KAction * action );
+	void setPasteAsSubcategoryAction( KAction * action );
 
 private:
 	// Internal data

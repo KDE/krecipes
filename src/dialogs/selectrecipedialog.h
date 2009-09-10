@@ -35,6 +35,7 @@ class KHBox;
 class QFrame;
 class KPushButton;
 class KTabWidget;
+class KAction;
 
 class RecipeDB;
 class Recipe;
@@ -58,6 +59,11 @@ public:
 	void getCurrentRecipe( Recipe *recipe );
 
 	RecipeActionsHandler * getActionsHandler() const;
+	void addSelectRecipeAction( KAction * action );
+	void addFindRecipeAction( KAction * action );
+	void addCategoryAction( KAction * action );
+	void setCategorizeAction( KAction * action );
+	void setRemoveFromCategoryAction( KAction * action );
 
 private:
 

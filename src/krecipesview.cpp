@@ -27,6 +27,7 @@
 
 #include "actionshandlers/recipeactionshandler.h"
 #include "actionshandlers/unitactionshandler.h"
+#include "actionshandlers/categoryactionshandler.h"
 #include "setupassistant.h"
 #include "kstartuplogo.h"
 
@@ -357,6 +358,26 @@ void KrecipesView::print()
 	viewPanel->print();
 }
 
+void KrecipesView::cut()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == categoriesPanel)
+		categoriesPanel->getActionsHandler()->cut();
+}
+
+void KrecipesView::paste()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == categoriesPanel)
+		categoriesPanel->getActionsHandler()->paste();
+}
+
+void KrecipesView::pasteAsSubcategory()
+{
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == categoriesPanel)
+		categoriesPanel->getActionsHandler()->pasteAsSub();
+}
 
 void KrecipesView::slotSetTitle( const QString& title )
 {
@@ -611,6 +632,61 @@ void KrecipesView::exportRecipes( const QList<int> &ids )
 		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), database->recipeTitle( ids[ 0 ] ), database );
 	else
 		RecipeActionsHandler::exportRecipes( ids, i18n( "Export Recipe" ), i18n( "Recipes" ), database );
+}
+
+void KrecipesView::addSelectRecipeAction( KAction * action )
+{
+	selectPanel->addSelectRecipeAction( action );
+}
+
+void KrecipesView::addFindRecipeAction( KAction * action )
+{
+	selectPanel->addFindRecipeAction( action );
+}
+
+void KrecipesView::addCategoryAction( KAction * action )
+{
+	selectPanel->addCategoryAction( action );
+}
+
+void KrecipesView::addIngredientMatcherAction( KAction * action )
+{
+	ingredientMatcherPanel->addAction( action );
+}
+
+void KrecipesView::setCategorizeAction( KAction * action )
+{
+	selectPanel->setCategorizeAction( action );
+}
+
+void KrecipesView::setRemoveFromCategoryAction( KAction * action )
+{
+	selectPanel->setRemoveFromCategoryAction( action );
+}
+
+void KrecipesView::addElementAction( KAction * action )
+{
+	ingredientsPanel->addAction( action );
+	propertiesPanel->addAction( action );
+	unitsPanel->addAction( action );
+	prepMethodsPanel->addAction( action );
+	categoriesPanel->addAction( action );
+	authorsPanel->addAction( action ); 
+}
+
+void KrecipesView::addCategoriesPanelAction( KAction * action )
+{
+	categoriesPanel->addAction( action );
+}
+
+void KrecipesView::setCategoryPasteAction( KAction * action )
+{
+	categoriesPanel->setCategoryPasteAction( action );
+}
+
+void KrecipesView::setPasteAsSubcategoryAction( KAction * action )
+{
+	categoriesPanel->setPasteAsSubcategoryAction( action );
 }
 
 void KrecipesView::actionRecipe( int recipeID, int action )

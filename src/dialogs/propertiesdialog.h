@@ -23,6 +23,7 @@ class KPushButton;
 class RecipeDB;
 class StdPropertyListView;
 class ActionsHandlerBase;
+class KAction;
 class PropertyActionsHandler;
 
 /**
@@ -36,6 +37,7 @@ public:
 	~PropertiesDialog();
 	void reload( void );
 	ActionsHandlerBase* getActionsHandler() const;
+	void addAction( KAction * action );
 
 private:
 	// Variables

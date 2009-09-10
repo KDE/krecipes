@@ -115,7 +115,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	recipeListView->listView() ->setSorting( -1 );
 	dialogLayout->addWidget(recipeListView);
 
-	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::Open | RecipeActionsHandler::Edit | RecipeActionsHandler::Export );
+	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database );
 
 	KHBox *buttonBox = new KHBox( this );
 
@@ -348,6 +348,11 @@ void IngredientMatcherDialog::reload( ReloadFlags flag )
 RecipeActionsHandler* IngredientMatcherDialog::getActionsHandler() const
 {
 	return actionHandler;
+}
+
+void IngredientMatcherDialog::addAction( KAction * action )
+{
+	actionHandler->addRecipeAction( action );
 }
 
 void IngredientMatcherDialog::haveSelectedItems()

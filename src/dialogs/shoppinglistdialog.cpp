@@ -141,7 +141,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
-	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database, RecipeActionsHandler::ExpandAll | RecipeActionsHandler::CollapseAll );
+	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database );
 
 	// Connect signals & slots
 	connect( addRecipeButton, SIGNAL( clicked() ), this, SLOT( addRecipe() ) );

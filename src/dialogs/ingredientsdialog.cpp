@@ -133,6 +133,12 @@ ActionsHandlerBase * IngredientsDialog::getActionsHandler() const
 		return groupsDialog->getActionsHandler();
 }
 
+void IngredientsDialog::addAction( KAction * action )
+{
+	ingredientActionsHandler->addAction( action );
+	groupsDialog->addAction( action );
+}
+
 void IngredientsDialog::showPropertyEdit()
 {
 	Q3ListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient

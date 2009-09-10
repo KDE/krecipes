@@ -355,6 +355,59 @@ void Krecipes::setupActions()
 	actionCollection()->addAction( "rename_action", renameAction );
 	connect( renameAction, SIGNAL(triggered(bool)), m_view, SLOT( renameCurrentElement() ) );
 
+	//Not using an standard action because I don't want it in toolbar nor in menus.
+	cutAction = new KAction( this );
+	cutAction->setText( i18n( "Cut" ) );
+	cutAction->setIcon( KIcon( "edit-cut" ) );
+	cutAction->setShortcut( Qt::CTRL + Qt::Key_X );
+	actionCollection()->addAction( "cut_action", cutAction );
+	connect( cutAction, SIGNAL(triggered(bool)), m_view, SLOT( cut() ) );
+
+	//Not using an standard action because I don't want it in toolbar nor in menus.
+	pasteAction = new KAction( this );
+	pasteAction->setText( i18n( "Paste" ) );
+	pasteAction->setIcon( KIcon( "edit-paste" ) );
+	pasteAction->setShortcut( Qt::CTRL + Qt::Key_V );
+	actionCollection()->addAction( "paste_action", pasteAction );
+	connect( pasteAction, SIGNAL(triggered(bool)), m_view, SLOT( paste() ) );
+
+	pasteAsSubcategoryAction = new KAction( this );
+	pasteAsSubcategoryAction->setText( i18n( "Paste as Subcategory" ) );
+	pasteAsSubcategoryAction->setIcon( KIcon( "edit-paste" ) );
+	pasteAsSubcategoryAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
+	actionCollection()->addAction( "paste_as_subcategory_action", pasteAsSubcategoryAction );
+	connect( pasteAsSubcategoryAction, SIGNAL(triggered(bool)), m_view, SLOT( pasteAsSubcategory() ) );
+	
+	// Add actions to the context menus in the "select recipe" dialog
+	m_view->addSelectRecipeAction( showRecipeAction );
+	m_view->addSelectRecipeAction( editAction );
+	m_view->addSelectRecipeAction( exportAction );
+	m_view->addSelectRecipeAction( addToShoppingListAction );
+	m_view->addSelectRecipeAction( copyToClipboardAction );
+	m_view->setCategorizeAction( categorizeAction );
+	m_view->setRemoveFromCategoryAction( removeFromCategoryAction );
+	m_view->addSelectRecipeAction( deleteAction );
+	m_view->addCategoryAction( expandAllAction );
+	m_view->addCategoryAction( collapseAllAction );
+	m_view->addCategoryAction( exportAction );
+	// Add actions to the context menus in the "advanced search" dialog
+	m_view->addFindRecipeAction( showRecipeAction );
+	m_view->addFindRecipeAction( editAction );
+	m_view->addFindRecipeAction( exportAction );
+	m_view->addFindRecipeAction( copyToClipboardAction );
+	m_view->addFindRecipeAction( deleteAction );
+	// Add actions to the context menus in the "ingredient matcher" dialog
+	m_view->addIngredientMatcherAction( showRecipeAction ); 
+	m_view->addIngredientMatcherAction( editAction ); 
+	m_view->addIngredientMatcherAction( exportAction );
+	// Add actions to the dialogs in the "data" submenu
+	m_view->addElementAction( createAction );
+	m_view->addElementAction( renameAction );
+	m_view->addCategoriesPanelAction( cutAction );
+	m_view->setCategoryPasteAction( pasteAction );
+	m_view->setPasteAsSubcategoryAction( pasteAsSubcategoryAction );
+	m_view->addElementAction( deleteAction );
+
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
 

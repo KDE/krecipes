@@ -35,6 +35,7 @@ class KreListView;
 class KIntSpinBox;
 class RecipeDB;
 class RecipeActionsHandler;
+class KAction;
 
 /**
 @author Unai Garro
@@ -122,6 +123,7 @@ public:
 	~IngredientMatcherDialog();
 	void reload( ReloadFlags flag = Load );
 	RecipeActionsHandler* getActionsHandler() const;
+	void addAction( KAction * action );
 
 signals:
 	void recipeSelected( int, int );

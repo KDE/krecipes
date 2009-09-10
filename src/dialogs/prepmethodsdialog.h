@@ -23,6 +23,7 @@
 
 class RecipeDB;
 class ActionsHandlerBase;
+class KAction;
 class PrepMethodActionsHandler;
 class StdPrepMethodListView;
 class KPushButton;
@@ -42,6 +43,8 @@ public:
 	~PrepMethodsDialog();
 	void reload( ReloadFlags flag = Load );
 	ActionsHandlerBase *getActionsHandler() const;
+	void addAction( KAction * action );
+
 private:
 	// Internal data
 	RecipeDB *database;

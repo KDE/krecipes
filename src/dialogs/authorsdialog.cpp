@@ -78,4 +78,9 @@ ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
 	return authorActionsHandler;
 }
 
+void AuthorsDialog::addAction( KAction * action )
+{
+	authorActionsHandler->addAction( action );
+}
+
 #include "authorsdialog.moc"
