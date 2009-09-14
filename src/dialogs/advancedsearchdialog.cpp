@@ -20,6 +20,7 @@
 #include <qspinbox.h>
 #include <q3datetimeedit.h>
 #include <QScrollArea>
+#include <QSplitter>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -74,12 +75,19 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	textLabel1_4->setObjectName( "textLabel1_4" );
 	textLabel1_4->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout7->addWidget( textLabel1_4 );
+
+	QSplitter *splitter = new QSplitter( this );
+	QFrame *leftFrame = new QFrame;
+	leftFrame->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+	leftFrame->resize( 1, 1 );
 	
 	scrollArea1 = new QScrollArea( this );
+	scrollArea1->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 	
 	parametersFrame = new QFrame( scrollArea1 );
 	parametersFrame->setObjectName( "parametersFrame" ); 
-	parametersFrame->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3, (QSizePolicy::SizeType)3, 0, 0, parametersFrame->sizePolicy().hasHeightForWidth() ) );
+	parametersFrame->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+	parametersFrame->resize( 1, 1 );
 	parametersFrame->setFrameShape( QFrame::NoFrame );
 	parametersFrame->setFrameShadow( QFrame::Plain );
 	parametersFrame->setLineWidth( 0 );
@@ -132,6 +140,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientFrameLayout->setObjectName( "ingredientFrameLayout" );
 
 	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
+	ingredientInfoLabel->setWordWrap( true );
 	//ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 1, 2, 0 );
 
@@ -186,6 +195,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 
 	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
+	categoryInfoLabel->setWordWrap( true );
 	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 1, 2, 0 );
 	
@@ -239,6 +249,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrameLayout->setObjectName( "ingredientFrameLayout" );
 
 	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
+	authorsInfoLabel->setWordWrap( true );
 	authorsInfoLabel->setTextFormat( Qt::RichText );
 	authorsFrameLayout->addWidget( authorsInfoLabel, 0, 0, 1, 2, 0 );
 
@@ -303,7 +314,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsComboBox->setObjectName( "servingsComboBox" );
 	servingsComboBox->setEditable( false );
 	servingsComboBox->setEnabled( false );
-	servingsComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, servingsComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout5->addWidget( servingsComboBox );
 	
 	servingsSpinBox = new QSpinBox( servingsFrame );
@@ -345,7 +355,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeComboBox->setEditable( false );
 	prepTimeComboBox->setObjectName( "prepTimeComboBox" );
 	prepTimeComboBox->setEnabled( false );
-	prepTimeComboBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 1, 0, prepTimeComboBox->sizePolicy().hasHeightForWidth() ) );
 	layout6->addWidget( prepTimeComboBox );
 	
 	prepTimeEdit = new Q3TimeEdit( prepTimeFrame, "prepTimeEdit" );
@@ -502,7 +511,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	addCriteriaButton = new KPushButton( criterionFrame );
 	addCriteriaButton->setObjectName( "addCriteriaButton" );
-	addCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, addCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
 	layout12->addWidget( addCriteriaButton );
 #if 0
@@ -515,7 +523,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	
 	criteriaListView = new K3ListView( criterionFrame );
 	criteriaListView->setObjectName( "criteriaListView" );
-	criteriaListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
+	criteriaListView->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 	criteriaListView->addColumn( i18n( "Criterion" ) );
 	criteriaListView->addColumn( i18n( "Stars" ) );
 	criterionFrameLayout->addWidget( criteriaListView );
@@ -527,6 +535,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 
 	scrollArea1->setWidget( parametersFrame );
+	scrollArea1->setWidgetResizable( true );
 	layout7->addWidget( scrollArea1 );
 	
 	layout9 = new QHBoxLayout; 
@@ -537,7 +546,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	clearButton = new KPushButton( this );
 	clearButton->setObjectName( "clearButton" );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
-	clearButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, clearButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( clearButton );
 	spacer3 = new QSpacerItem( 110, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout9->addItem( spacer3 );
@@ -545,16 +553,16 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	findButton = new KPushButton( this );
 	findButton->setObjectName( "findButton" );
 	findButton->setIcon( KIcon( "edit-find" ) );
-	findButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, findButton->sizePolicy().hasHeightForWidth() ) );
 	layout9->addWidget( findButton );
 	layout7->addLayout( layout9 );
-	AdvancedSearchDialogLayout->addLayout( layout7 );
+	leftFrame->setLayout( layout7 );
+	splitter->addWidget( leftFrame );
 	
 	resultsListView = new K3ListView( this); 
 	resultsListView->setObjectName( "resultsListView" );
 	resultsListView->setSelectionMode( Q3ListView::Extended );
-	resultsListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 1, resultsListView->sizePolicy().hasHeightForWidth() ) );
-	AdvancedSearchDialogLayout->addWidget( resultsListView );
+	splitter->addWidget( resultsListView );
+	AdvancedSearchDialogLayout->addWidget( splitter );
 	languageChange();
 	//KDE4 port
 	//QWidget::setWindowState( WState_Polished );
@@ -565,7 +573,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	scrollArea1->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 
-	AdvancedSearchDialogLayout->setStretchFactor( resultsListView, 2 );
+	splitter->setStretchFactor( 1, 2 );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );

@@ -5,6 +5,7 @@ Changes from 2.0-alpha1 to svn:
   * Added a close button in "View Recipe" dialog.
   * Refreshed some icons and artwork. (TODO: stars for rating widget)
   * Updated handbook. (work in progress)
+  * Using a QSplitter on the advanced search tab.
   * Fixes for issues reported by krazy:
     + Stop using TRUE and FALSE macros.
   * Fixes for bugs:
