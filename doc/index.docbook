@@ -628,7 +628,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To enter the recipe ingredients, click on the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  By default, the radio button beside the label <emphasis><guilabel>Ingredient:</guilabel></emphasis> is selected.  However, <emphasis>&krecipes;</emphasis> also allows the entry of a <emphasis><guilabel>Header:</guilabel></emphasis> by selecting the radio button beside this label.</para>
 
-<para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <emphasis><guilabel>Header:</guilabel></emphasis> radio button is selected. Enter the desired name for the header in the textbox then, press the <keycap>Enter</keycap> key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <emphasis><guilabel>Ingredient:</guilabel></emphasis> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
+<para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <emphasis><guilabel>Header:</guilabel></emphasis> radio button is selected. Enter the desired name for the header in the textbox then, press the &Enter; key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <emphasis><guilabel>Ingredient:</guilabel></emphasis> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
 
 <note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to position the ingredient until it appears indented below the appropriate header.</para></note>
 
@@ -670,7 +670,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para><emphasis>&krecipes;</emphasis> also permits the entry of alternate ingredients.  To enter an alternate ingredient, simply click on the tick box that appears between the <emphasis>Preparation Method:</emphasis> textbox and the <guilabel>OR</guilabel> label.  A row identical to the one that you have just finished will appear for completing the alternative choice.</para>
 
-<para>To add the ingredient(s) to the ingredient list, simply press the <keycap>Enter</keycap> key.</para>
+<para>To add the ingredient(s) to the ingredient list, simply press the &Enter; key.</para>
 
 <para>Alternatively, click on the <guibutton>Add Ingredient</guibutton> button on the right-hand side of the ingredient list.</para>
 
@@ -818,7 +818,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>In the <quote>Apple Crisp</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
  
-<para>For example, if you type <quote>b</quote>, the characters <quote>brown sugar</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the <keycap>Enter</keycap> key.</para>
+<para>For example, if you type <quote>b</quote>, the characters <quote>brown sugar</quote> are the ones that will be auto-completed and inserted into the instructions.  The auto-completed characters will appear highlighted and you can choose to accept the suggested ingredient by pressing the &Enter; key.</para>
   
 <para>However, suppose that in your instructions, you simply wanted to refer to <quote>brown sugar</quote> as <emphasis>sugar</emphasis> and you enter the character <quote>s</quote>.  <emphasis>&krecipes;</emphasis> will search the ingredients in your recipe and match the first ingredient beginning with <quote>s</quote> that it finds, if there is one.  If there is no ingredient in your recipe ingredient list beginning with <quote>s</quote>, nothing will happen &ndash; you will just continue typing the word <quote>sugar</quote>.</para>
 
@@ -872,7 +872,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Once you have completed the star rating for the recipe, click the <guibutton>Add</guibutton> button to add the rating to the rating list.  At this point, you can continue to rate the recipe against other criteria in the same manner.</para>
 
-<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the <keycap>Enter</keycap> key, the rating will show the graphical stars.</para>
+<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the &Enter; key, the rating will show the graphical stars.</para>
 
 <para>Should you change your mind and wish to remove any of the rating criteria, select it in your rating list and click the <guibutton>Delete</guibutton> button.</para>
 </listitem>
@@ -1754,7 +1754,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>To remove a header, select it in the header list and click the <guibutton>-</guibutton> button.  If this header is utilized in any of your recipes, a dialog box will appear stating <quote>Warning:  The following will have to be removed also, since currently they use the element you have chosen to be removed.</quote>.  To remove the header, click the <guibutton>OK</guibutton> button.  The header will be removed from the list.  Note, however, that in your recipe(s) that contain the particular header that you have chosen to remove, only the header will be absent.  The ingredients that were part of the removed header will still be intact.  To cancel the removal of the header, click the <guibutton>Cancel</guibutton> button.  The dialog box will disappear and you will be returned to your header list.  Of course, if the header does not exist in any of your recipes, it will be removed with no prompt.</para>
 
-<para>To rename a header, simply select the header that you want to edit.  With the header selected, right clicking will result in the appearance of a menu from which you can select <emphasis>Rename</emphasis>.  A box will outline the selected header and a cursor will appear at the beginning of the header name.  Using the arrow keys, position the cursor at the point where you wish to make your edit, or if you wish to completely rename the header, simply type the new name.  Pressing the <keycap>Enter</keycap> key will complete the renaming process.</para>
+<para>To rename a header, simply select the header that you want to edit.  With the header selected, right clicking will result in the appearance of a menu from which you can select <emphasis>Rename</emphasis>.  A box will outline the selected header and a cursor will appear at the beginning of the header name.  Using the arrow keys, position the cursor at the point where you wish to make your edit, or if you wish to completely rename the header, simply type the new name.  Pressing the &Enter; key will complete the renaming process.</para>
 
 <para>When a header is selected and the menu is access by right-clicking, in addition to a menu item for <guimenuitem>Rename</guimenuitem>, there are menu items for <guimenuitem>Create</guimenuitem> and <guimenuitem>Delete</guimenuitem>.  This alternative method can be used to add and remove headers and will react in the same manner as outlined above.  Additionally, each of the menu items has a key or key combination that can be used to carry out the desired action while in the <guilabel>Headers</guilabel> tab.  These are: &mdash;</para>
 
@@ -2131,7 +2131,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <title>Editing Preparation Methods</title>
 <para>Preparation methods can also be edited simply by double-clicking on the desired method.</para>
 
-<para>For example, to change the method <emphasis>Slightly beaten</emphasis> to <emphasis>Slightly Beaten</emphasis>, double-click on the method in the list.  A box will appear around the method, the method will be highlighted and an insertion point will appear.  Use the <keycap>&#8592;</keycap> or the <keycap>&#8594;</keycap> directional arrow keys as required to position the cursor in the appropriate position to change the lowercase b in <quote>beaten</quote> to uppercase.  Press the <keycap>Enter</keycap> key to complete the change.</para>
+<para>For example, to change the method <emphasis>Slightly beaten</emphasis> to <emphasis>Slightly Beaten</emphasis>, double-click on the method in the list.  A box will appear around the method, the method will be highlighted and an insertion point will appear.  Use the <keycap>&#8592;</keycap> or the <keycap>&#8594;</keycap> directional arrow keys as required to position the cursor in the appropriate position to change the lowercase b in <quote>beaten</quote> to uppercase.  Press the &Enter; key to complete the change.</para>
 </sect3>
 
 </sect2>
@@ -2329,7 +2329,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <para>Now the fun begins!  Anywhere in the program, as long as your cursor is not focused on text, for example, in a textbox or in a recipe edit input area, press the <keycap>A</keycap> key on your keyboard.  In the top, left-hand corner of your screen, using the example outlined, a small menu will appear, as follows &mdash;</para>
 
 <para><inlinemediaobject><imageobject><imagedata fileref="menu.png" format="PNG"/></imageobject></inlinemediaobject></para>
-<para>You can press the <keycap>A</keycap> or <keycap>B</keycap> key on the keyboard to select your choice, or you can use the directional arrows on the keyboard to highlight your selection and then, press the <keycap>Enter</keycap> key.</para>
+<para>You can press the <keycap>A</keycap> or <keycap>B</keycap> key on the keyboard to select your choice, or you can use the directional arrows on the keyboard to highlight your selection and then, press the &Enter; key.</para>
 
 <para>Although we have used <quote>About KDE</quote> and <quote>About Krecipes</quote> in our example, this functionality could be applied to other choices.  For example, you could choose to use the <emphasis>Multi-key mode</emphasis> for your import shortcuts, defining <quote>Import from Database</quote> as <emphasis>I,D</emphasis> and <quote>Import from File</quote> as <emphasis>I,F</emphasis>.  Then, pressing the <keycap>I</keycap> key on your keyboard will bring up the import choices menu.  Note here that for the <quote>Import from File</quote> choice, there is already a shortcut attached by default.  However, <emphasis>&krecipes;</emphasis> is so configurable that you will be able to change this.</para> 
 
