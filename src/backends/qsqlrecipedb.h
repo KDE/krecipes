@@ -1,10 +1,7 @@
 /***************************************************************************
-*   Copyright (C) 2004 by                                                 *
-*   Unai Garro (ugarro@users.sourceforge.net)                             *
-*   Cyril Bosselut (bosselut@b1project.com)                               *
-*   Jason Kivlighn (jkivlighn@gmail.com)                                  *
-*                                                                         *
-*   Copyright (C) 2006 Jason Kivlighn (jkivlighn@gmail.com)               *
+*   Copyright © 2004 Unai Garro <ugarro@users.sourceforge.net>            *
+*   Copyright © 2004 Cyril Bosselut <bosselut@b1project.com>              *
+*   Copyright © 2004, 2006 Jason Kivlighn <jkivlighn@gmail.com>           *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *

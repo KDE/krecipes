@@ -4,9 +4,9 @@
  * Date   : 2004-11-22
  * Description : a bar widget to display image thumbnails
  *
- * Copyright 2004-2005 by Renchi Raju and Gilles Caulier
- * Copyrigth 2005-2006 by Tom Albers <tomalbers@kde.nl>
- * Copyright 2006 by Gilles Caulier
+ * Copyright © 2004-2005 Renchi Raju <renchi@pooh.tam.uiuc.edu>
+ * Copyright © 2005-2006 Tom Albers <tomalbers@kde.nl>
+ * Copyright © 2004-2006 Gilles Caulier <caulier dot gilles at kdemail dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

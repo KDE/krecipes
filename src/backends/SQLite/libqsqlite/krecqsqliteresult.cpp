@@ -1,9 +1,8 @@
 /***************************************************************************
 *                                                                         *
-*                           Copyright (C) 2003                            *
-*                by Unai Garro (ugarro@users.sourceforge.net)             *
-*                       Martin Imobersteg <imm@gmx.ch>                    *
-*                          and opie project                               *
+* Copyright © 2003 Unai Garro <ugarro@users.sourceforge.net>              *
+* Copyright © 2003 Martin Imobersteg <imm@gmx.ch>                         *
+* Copyright © 2003 Opie Project <opie-devel@handhelds.org>                *
 *                                                                         *
 *                                                                         *
 *    This code was originally developed by the opie project, on which     *

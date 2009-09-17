@@ -1,6 +1,6 @@
 /*
-Copyright (C) 2003 Richard Lärkäng
-Copyright (C) 2003 Jason Kivlighn
+Copyright © 2003 Richard Lärkäng
+Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
