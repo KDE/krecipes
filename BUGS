@@ -1,6 +1,3 @@
-* The criteria box in the advanced search tab does not have properly size in
-  the scroll area, might be fixed using a QSplitter.
-
 * Importing recipes from *.kreml files does not work with PostgreSQL backend,
   loading the examples from the setup assistant does not work for the same
   reason.

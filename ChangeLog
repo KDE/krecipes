@@ -1,10 +1,11 @@
-Changes from 2.0-alpha1 to svn:
+Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.
   * The setup assistant allows selecting the port for remote servers.
   * Added button to save recipes' photos as JPEG files.
   * Added a close button in "View Recipe" dialog.
   * Refreshed some icons and artwork. (TODO: stars for rating widget)
-  * Updated handbook. (work in progress)
+  * Updated icons in handbook. Note that the user manual is currently a work in
+    progress.
   * Using a QSplitter on the advanced search tab.
   * Fixes for issues reported by krazy:
     + Stop using TRUE and FALSE macros.
