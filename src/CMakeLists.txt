@@ -226,7 +226,7 @@ kde4_add_executable(${TEST} ${TEST_SRCS}
    ${datablocks_SRCS})
 
 target_link_libraries(${TEST} ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-   ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES})
+   ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
 
 if ( SQLITE_FOUND )
    target_link_libraries(${TEST} ${SQLITE_LIBRARIES})
@@ -282,7 +282,7 @@ kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS}
    ${krecipeswidgets_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS}
    ${krecipesdialogs_SRCS} ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES})
+target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})
