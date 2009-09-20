@@ -381,12 +381,12 @@ void EditPropertiesDialog::reloadWeightList( void )
 		Q3ListViewItem * lastElement = weightListView ->lastItem();
 
 		Weight w = *weight_it;
-		WeightListItem *weight_it = new WeightListItem( weightListView, lastElement, w );
-		weight_it->setAmountUnit( w.perAmount,
+		WeightListItem *weight = new WeightListItem( weightListView, lastElement, w );
+		weight->setAmountUnit( w.perAmount,
 			db->unitName(w.perAmountUnitID),
 			Element((w.prepMethodID==-1)?QString::null:db->prepMethodName(w.prepMethodID),w.prepMethodID)
 		);
-		weight_it->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
+		weight->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
 	}
 }
 
