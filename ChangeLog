@@ -1,3 +1,8 @@
+Changes from 2.0-alpha2 to svn:
+  * Fixes for bugs:
+    + The program can be built on Windows, thanks to Patrick Spendrin
+      (SaroEngels).
+
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.
   * The setup assistant allows selecting the port for remote servers.
