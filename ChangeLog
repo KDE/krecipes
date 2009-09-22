@@ -2,6 +2,13 @@ Changes from 2.0-alpha2 to svn:
   * Fixes for bugs:
     + The program can be built on Windows, thanks to Patrick Spendrin
       (SaroEngels).
+    + The preferences dialog saves paths instead of KUrl's. You can reproduce
+      the bug in previous versions, among other ways, using sqlite backend and
+      choosing a different sqlite database file, if you check what prefereces
+      dialog saved in krecipesrc, you will find something like
+      file://path/to/file instead of /path/to/file and if you execute the
+      program again, you will get an error message noticing that the database
+      cannot be opened.
 
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.

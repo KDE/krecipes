@@ -237,8 +237,8 @@ void MySQLServerPrefs::saveOptions( void )
 	config.writeEntry( "Password", passwordEdit->text() );
 	config.writeEntry( "Port", portEdit->value() );
 	config.writeEntry( "DBName", dbNameEdit->text() );
-	config.writeEntry( "MySQLDumpPath", dumpPathRequester->url() );
-	config.writeEntry( "MySQLPath", mysqlPathRequester->url() );
+	config.writeEntry( "MySQLDumpPath", dumpPathRequester->text() );
+	config.writeEntry( "MySQLPath", mysqlPathRequester->text() );
 }
 
 
@@ -351,8 +351,8 @@ void PostgreSQLServerPrefs::saveOptions( void )
 	config.writeEntry( "Password", passwordEdit->text() );
 	config.writeEntry( "Port", portEdit->value() );
 	config.writeEntry( "DBName", dbNameEdit->text() );
-	config.writeEntry( "PgDumpPath", dumpPathRequester->url() );
-	config.writeEntry( "PsqlPath", psqlPathRequester->url() );
+	config.writeEntry( "PgDumpPath", dumpPathRequester->text() );
+	config.writeEntry( "PsqlPath", psqlPathRequester->text() );
 }
 
 
@@ -404,8 +404,8 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 void SQLiteServerPrefs::saveOptions( void )
 {
 	KConfigGroup config = KGlobal::config()->group( "Server" );
-	config.writeEntry( "DBFile", fileRequester->url() );
-	config.writeEntry( "SQLitePath", dumpPathRequester->url() );
+	config.writeEntry( "DBFile", fileRequester->text() );
+	config.writeEntry( "SQLitePath", dumpPathRequester->text() );
 }
 
 
