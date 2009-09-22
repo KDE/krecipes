@@ -57,7 +57,8 @@ QSqlRecipeDB::~QSqlRecipeDB()
 	}
 	
 	delete database;
-	delete m_query;
+	if ( dbOK )
+		delete m_query;
 	QSqlDatabase::removeDatabase( connectionName );
 	--m_refCount;
 }

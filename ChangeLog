@@ -9,6 +9,8 @@ Changes from 2.0-alpha2 to svn:
       file://path/to/file instead of /path/to/file and if you execute the
       program again, you will get an error message noticing that the database
       cannot be opened.
+    + The program doesn't crash if you select a wrong database (i.e. that will 
+      fail on connect) in the setup assistant.
 
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.
