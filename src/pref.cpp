@@ -433,6 +433,8 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 
 	wizard_button = new QCheckBox( i18n( "Re-run wizard on next startup" ), this );
 	wizard_button->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	config = KGlobal::config()->group( "Wizard" );
+	wizard_button->setChecked( !config.readEntry( "SystemSetup", false ) );
 	Form1Layout->addWidget( wizard_button );
 
 	QLabel *note = new QLabel( i18n( "Note: Krecipes must be restarted for most server preferences to take effect." ), this );
@@ -453,10 +455,8 @@ void ServerPrefs::saveOptions( void )
 	else
 		( ( SQLiteServerPrefs* ) serverWidget ) ->saveOptions();
 
-	if ( wizard_button->isChecked() ) {
-		config = KGlobal::config()->group( "Wizard" );
-		config.writeEntry( "SystemSetup", false );
-	}
+	config = KGlobal::config()->group( "Wizard" );
+	config.writeEntry( "SystemSetup", !(wizard_button->isChecked()) );
 }
 
 //=============Numbers Preferences Dialog================//

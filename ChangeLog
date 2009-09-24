@@ -14,6 +14,10 @@ Changes from 2.0-alpha2 to svn:
       cannot be opened.
     + The program doesn't crash if you select a wrong database (i.e. that will 
       fail on connect) in the setup assistant.
+    + In the preferences dialog, the checkbox titled "Re-run wizard on next
+      startup" now reads the value stored in configuration file. Not doing this
+      was a problem because, for instance, you could choose to re-run the
+      assistant, and if you changed your mind, you couldn't amend this setting.
 
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.
