@@ -32,7 +32,7 @@ class Rating
 public:
 	Rating() : id(-1){}
 
-	static QPixmap starsPixmap( double stars_d, bool include_empty = false );
+	static QPixmap starsPixmap( double stars_d );
 
 	void append( const RatingCriteria & );
 

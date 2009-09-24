@@ -27,7 +27,7 @@ class QPushButton;
 class Q3ListViewItem;
 class Q3TextEdit;
 class KLineEdit;
-class RatingWidget;
+class KRatingWidget;
 
 class Rating;
 class RatingCriteria;
@@ -46,7 +46,7 @@ public:
 	QLabel* criteriaLabel;
 	KComboBox* criteriaComboBox;
 	QLabel* starsLabel;
-	RatingWidget *starsWidget;
+	KRatingWidget *starsWidget;
 	QPushButton* addButton;
 	QPushButton* removeButton;
 	RatingCriteriaListView* criteriaListView;

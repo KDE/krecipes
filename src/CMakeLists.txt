@@ -7,6 +7,7 @@ find_package(Sqlite)
 find_package(PostgreSQL)
 find_package(MySQL)
 find_package(QImageBlitz)
+find_package(Nepomuk)
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
    ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/backends/
@@ -117,7 +118,6 @@ set(krecipeswidgets_SRCS
    widgets/kdateedit.cpp
    widgets/kdatepickerpopup.cpp
    widgets/headerlistview.cpp
-   widgets/ratingwidget.cpp
    widgets/kwidgetlistbox.cpp
    widgets/criteriacombobox.cpp
    widgets/ingredientinputwidget.cpp
@@ -226,7 +226,8 @@ kde4_add_executable(${TEST} ${TEST_SRCS}
    ${datablocks_SRCS})
 
 target_link_libraries(${TEST} ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-   ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
+   ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
+   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
 
 if ( SQLITE_FOUND )
    target_link_libraries(${TEST} ${SQLITE_LIBRARIES})
@@ -282,7 +283,7 @@ kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS}
    ${krecipeswidgets_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS}
    ${krecipesdialogs_SRCS} ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES})
+target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})

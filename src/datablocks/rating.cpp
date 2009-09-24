@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2009 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -14,35 +15,23 @@
 #include <QPixmap>
 
 #include <kiconloader.h>
+#include <nepomuk/kratingpainter.h>
 
-QPixmap Rating::starsPixmap( double stars_d, bool include_empty )
+QPixmap Rating::starsPixmap( double stars_d )
 {
 	int stars = qRound(stars_d * 2); //multiply by two to make it easier to work with half-stars
 
-	QPixmap star = UserIcon(QString::fromLatin1("star_on"));
-	QPixmap star_off;
-	if ( include_empty )
-		star_off = UserIcon(QString::fromLatin1("star_off"));
+	QPixmap generatedPixmap(90,18);
+	generatedPixmap.fill( Qt::white );
 
-	int pixmapWidth;
-	if ( include_empty )
-		pixmapWidth = 18*5;
-	else
-		pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
+	QRect rect(0,0,90,18);
 
-	QPixmap generatedPixmap(pixmapWidth,18);
+	QPainter painter( &generatedPixmap );
+	KRatingPainter ratingPainter;
 
-	if ( !generatedPixmap.isNull() ) { //there aren't zero stars
-		generatedPixmap.fill();
-		QPainter painter( &generatedPixmap );
-
-		int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
-		if ( include_empty )
-			painter.drawTiledPixmap(0,0,18*5,18,star_off); //fill with empty stars
-		painter.drawTiledPixmap(0,0,pixmapWidth,18,star); //write over the empty stars to show the rating
-	}
-
-	generatedPixmap.setMask( generatedPixmap.createHeuristicMask() );
+	ratingPainter.paint( &painter, rect, stars );
+	painter.end();
+	generatedPixmap.setMask( generatedPixmap.createMaskFromColor( Qt::white ) );
 
 	return generatedPixmap;
 }

@@ -1,4 +1,7 @@
 Changes from 2.0-alpha2 to svn:
+  * Using KRatingWidget and KRatingPanter from nepomuk; as side effects we are
+    avoiding some crashes when clicking on the old RatingWidget and we have
+    refreshed artwork.
   * Fixes for bugs:
     + The program can be built on Windows, thanks to Patrick Spendrin
       (SaroEngels).

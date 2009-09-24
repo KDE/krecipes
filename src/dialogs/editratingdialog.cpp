@@ -33,7 +33,7 @@
 #include "datablocks/elementlist.h"
 #include "datablocks/mixednumber.h"
 
-#include "widgets/ratingwidget.h"
+#include <nepomuk/kratingwidget.h>
 
 class RatingCriteriaListView : public K3ListView
 {
@@ -101,8 +101,10 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	starsLabel = new QLabel( layout8 );
 	starsLabel->setObjectName( "starsLabel" );
 
-	starsWidget = new RatingWidget( 5, layout8 );
+	starsWidget = new KRatingWidget( layout8 );
+	starsWidget->setMaxRating( 10 );
 	starsWidget->setObjectName( "starsWidget" );
+	starsWidget->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 
 	addButton = new QPushButton( layout8 );
 	addButton->setObjectName( "addButton" );
@@ -229,12 +231,12 @@ void EditRatingDialog::slotAddRatingCriteria()
 	if ( r.name.isEmpty() )
 		return;
 
-	r.stars = starsWidget->text().toDouble();
+	r.stars = starsWidget->rating() / 2;
 
 	addRatingCriteria(r);
 
 	criteriaComboBox->lineEdit()->clear();
-	starsWidget->clear();
+	starsWidget->setRating( 0 );
 
 	criteriaComboBox->lineEdit()->setFocus();
 }

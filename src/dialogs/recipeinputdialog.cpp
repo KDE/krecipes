@@ -50,6 +50,7 @@
 #include "editratingdialog.h"
 #include "createunitdialog.h"
 #include "datablocks/recipe.h"
+#include "datablocks/rating.h"
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
 #include "datablocks/weight.h"
@@ -1409,19 +1410,7 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 	item->criteriaListView->clear();
 	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
 		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,(*rc_it).name);
-
-		int stars = int((*rc_it).stars * 2); //multiply by two to make it easier to work with half-stars
-
-		QPixmap star = UserIcon(QString::fromLatin1("star_on"));
-		int pixmapWidth = 18*(stars/2)+((stars%2==1)?9:0);
-		QPixmap generatedPixmap(pixmapWidth,18);
-
-		if ( !generatedPixmap.isNull() ) { //there aren't zero stars
-			generatedPixmap.fill();
-			QPainter painter( &generatedPixmap );
-			painter.drawTiledPixmap(0,0,pixmapWidth,18,star);
-			it->setPixmap(1,generatedPixmap);
-		}
+		it->setPixmap( 1, Rating::starsPixmap( (*rc_it).stars ) );
 	}
 
 	item->buttonEdit->disconnect();
