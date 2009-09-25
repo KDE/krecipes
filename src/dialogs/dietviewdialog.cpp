@@ -28,8 +28,10 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 	KVBox *page = new KVBox( this );
 	setMainWidget(page);
 	setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
+	setButtonIcon( KDialog::User1, KIcon( "document-print" ) );
 
 	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
+	setButtonIcon( KDialog::User2, KIcon( "view-pim-tasks" ) );
 
 	// The html part
 	dietView = new KHTMLPart( page );

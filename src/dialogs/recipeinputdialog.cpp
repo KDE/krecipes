@@ -418,6 +418,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	KVBox *ratingsTab = new KVBox( this );
 	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
 	KPushButton *addRatingButton = new KPushButton(i18n("Add Rating..."),ratingsTab);
+	addRatingButton->setIcon( KIcon( "list-add" ) );
 
 	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
 
