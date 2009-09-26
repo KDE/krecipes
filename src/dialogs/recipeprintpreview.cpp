@@ -29,7 +29,8 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QLi
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 	setHelp("print-recipe");
-	setButtonText( KDialog::User1, i18n("&Edit") );
+	setButtonText( KDialog::User1, i18n("Print Setup") );
+	setButtonIcon( KDialog::User1, KIcon( "configure" ) );
 	setButtonText( KDialog::Ok, i18n("&Print") );
 
 	setSizeGripEnabled( true );
