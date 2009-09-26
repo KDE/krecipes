@@ -151,7 +151,7 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 		         amountEditDialog->setCaption(i18n("Enter amount"));
 		         amountEditDialog->setButtons(KDialog::Cancel | KDialog::Ok);
 		         amountEditDialog->setDefaultButton(KDialog::Ok);
-		         amountEditDialog->setModal( false );
+		         amountEditDialog->setModal( false );	
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
@@ -168,6 +168,9 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 		}
 
 		amountEditDialog->setMainWidget(box);
+		amountEditDialog->adjustSize();
+		amountEditDialog->resize( 400, amountEditDialog->size().height() );
+		amountEditDialog->setFixedHeight( amountEditDialog->size().height() );
 
 		if ( amountEditDialog->exec() == QDialog::Accepted ) {
 			MixedNumber amount = amountEdit->amount();

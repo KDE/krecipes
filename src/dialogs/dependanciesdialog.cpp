@@ -72,6 +72,7 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	}
 
 	setSizeGripEnabled( true );
+	resize( QSize(500, 350) );
 }
 
 void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )

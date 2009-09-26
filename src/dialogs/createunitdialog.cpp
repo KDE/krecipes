@@ -73,7 +73,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	gridLayout->addWidget( typeComboBox, 2, 1, 1, 3, 0 );
 
 	adjustSize();
-	setFixedSize( size() ); //we've got all the widgets put in, now let's keep it this size
+	setFixedHeight( size().height() );
 
 	connect( nameAbbrevEdit, SIGNAL(textChanged(const QString&)), SLOT(nameAbbrevTextChanged(const QString &)) );
 

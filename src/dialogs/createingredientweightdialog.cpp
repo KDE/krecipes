@@ -77,6 +77,8 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
 
 	languageChange();
+	adjustSize();
+	setFixedHeight( size().height() );
 	//clearWState( WState_Polished );
 
 	weightEdit->setFocus();

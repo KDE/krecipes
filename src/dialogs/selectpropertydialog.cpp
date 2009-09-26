@@ -69,7 +69,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	layout2->addWidget( perUnitsBox );
 	boxLayout->addLayout( layout2 );
 
-	resize( QSize( 200, 380 ).expandedTo( minimumSizeHint() ) );
+	resize( QSize( 400, 400 ).expandedTo( minimumSizeHint() ) );
 	//TODO port kde4
 	//clearWState( WState_Polished );
 

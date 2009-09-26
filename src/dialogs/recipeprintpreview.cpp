@@ -39,7 +39,7 @@ RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QLi
 	recipeView->hideButtons();
 	recipeView->loadRecipes( ids, "Print" );
 
-	//setInitialSize( QSize(450,500), false );
+	setInitialSize( QSize(450,500) );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 	connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
 }

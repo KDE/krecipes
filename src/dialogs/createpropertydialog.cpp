@@ -50,7 +50,7 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 	gridLayout->addWidget( propertyUnits, 1, 1 );
 
 	adjustSize();
-	//setFixedSize( size() );
+	resize( 400, size().height() );
 	setFixedHeight( size().height() );
 
 	propertyNameEdit->setFocus();
