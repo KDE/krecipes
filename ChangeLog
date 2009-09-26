@@ -18,6 +18,8 @@ Changes from 2.0-alpha2 to svn:
       startup" now reads the value stored in configuration file. Not doing this
       was a problem because, for instance, you could choose to re-run the
       assistant, and if you changed your mind, you couldn't amend this setting.
+    + The setup assistant now stores the value that you choose for remote
+      databases' port.
 
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.

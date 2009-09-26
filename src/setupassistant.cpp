@@ -547,6 +547,11 @@ QString ServerSetupPage::dbName( void ) const
 	return ( dbNameEdit->text() );
 }
 
+int ServerSetupPage::port( void ) const
+{
+	return ( portEdit->value() );
+}
+
 void ServerSetupPage::getServerInfo( bool &isRemote, QString &host, QString &client, QString &dbName, QString &user, QString &pass, int &port )
 {
 	isRemote = remoteServerCheckBox->isChecked();
@@ -696,6 +701,7 @@ void SetupAssistant::accept( void )
 		config.writeEntry( "Username", serverSetupPage->user() );
 		config.writeEntry( "Password", serverSetupPage->password() );
 		config.writeEntry( "DBName", serverSetupPage->dbName() );
+		config.writeEntry( "Port", serverSetupPage->port() );
 		kDebug() << "Finished setting the database parameters for MySQL or PostgreSQL (non SQLite)..." ;
 	}
 	else {
