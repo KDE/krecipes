@@ -849,7 +849,13 @@ void QSqlRecipeDB::loadUncategorizedRecipes( ElementList *list )
 {
 	list->clear();
 
-	QString command = "SELECT r.id,r.title FROM recipes r,category_list cl WHERE r.id=cl.recipe_id GROUP BY id HAVING COUNT(*)=1 ORDER BY r.title DESC";
+	QString command =
+	"SELECT recipe_id,title FROM \
+		(select recipe_id FROM category_list \
+		GROUP BY (recipe_id) HAVING COUNT(recipe_id)=1) t \
+			JOIN recipes on t.recipe_id = recipes.id \
+	ORDER BY title DESC";
+
 	m_query->exec( command );
 	if ( m_query->isActive() ) {
 		while ( m_query->next() ) {

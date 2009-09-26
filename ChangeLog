@@ -20,6 +20,7 @@ Changes from 2.0-alpha2 to svn:
       assistant, and if you changed your mind, you couldn't amend this setting.
     + The setup assistant now stores the value that you choose for remote
       databases' port.
+    + The PostgreSQL backend now displays properly the uncategorized recipes.
 
 Changes from 2.0-alpha1 to 2.0-alpha2:
   * The import/export tests are able to build again.

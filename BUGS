@@ -2,9 +2,6 @@
   loading the examples from the setup assistant does not work for the same
   reason.
 
-* If you create an uncategorized recipe in PostgreSQL backend, you can't see
-  it.
-
 * Click Ingredient Matcher on left panel, select several random ingredients and
   click on the right arrow; some ingredients might be missing in the right
   list.
