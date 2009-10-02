@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2009 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -9,6 +10,7 @@
 
 #include "convert_sqlite3.h"
 
+#include <QApplication>
 #include <QFile>
 
 #include <kdebug.h>
@@ -17,33 +19,54 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <KProcess>
+#include <QEventLoop>
+#include <KLocale>
 
 #include <kglobalsettings.h>
 
-//FIXME: Some messages should be given to the user about success/failure, but that can't be done in the 0.8.x branch due to i18n.
 
 ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(false)
 {
+	this->db_file = db_file;
+	m_localEventLoop = new QEventLoop;
+}
+
+void ConvertSQLite3::convert()
+{
+	kDebug() << "converting";
 	QString file = db_file;
 	if ( file.isEmpty() ) {
 		KConfigGroup config = KGlobal::config()->group("Server");
 		file = config.readEntry("DBFile");
 	}
 
-	KProcess *p = new KProcess;
+	KProcess *p1 = new KProcess;
+	KProcess *p2 = new KProcess;
 
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
-	QString cmd;
-	cmd = "sqlite " + file + " .dump" +
-	  '|' + "sqlite3 " + file+".new";
-	kDebug()<<"SQLite 3 migration command: "<<cmd;
+	QStringList cmd1, cmd2;
+	cmd1 << "sqlite" << file << ".dump";
+	cmd2 << "sqlite3" << (file + ".new");
 
-	p->setShellCommand(cmd);
-	int retvalue = p->execute();
+	*p1 << cmd1;
+	*p2 << cmd2;
 
-	if ( retvalue != 0 ) {
-		kDebug()<<"Conversion process failed...";
-                delete p;
+	p1->setOutputChannelMode( KProcess::MergedChannels );
+	p1->setStandardOutputProcess( p2 );
+
+	QApplication::connect( p1, SIGNAL(finished(int,QProcess::ExitStatus)), this,
+		SLOT(process1Finished(int,QProcess::ExitStatus)) );
+	QApplication::connect( p2, SIGNAL(finished(int,QProcess::ExitStatus)), this,
+		SLOT(process2Finished(int,QProcess::ExitStatus)) );
+
+	p2->start();
+	p1->start();
+	m_localEventLoop->exec();
+
+	if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
+		(m_exitCode2 != 0) || (m_exitStatus2 != QProcess::NormalExit)) {
+		KMessageBox::error( 0, i18n("Conversion process failed. "
+			"Probably the file %1 is not an SQLite 2 database.").arg(file) );
 		return;
 	}
 
@@ -65,7 +88,8 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\"";
 		}
 		else {
-			kDebug()<<"Conversion successful!";
+			KMessageBox::information( 0, i18n("Conversion successful! "
+				"SQLite 2 database backed up to %1").arg(backup_file) );
 			QFile::remove(file+".new");
 		}
 	}
@@ -74,20 +98,6 @@ ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(fals
 ConvertSQLite3::~ConvertSQLite3()
 {
 }
-
-/*void ConvertSQLite3::processOutput( K3ProcIO* p )
-{
-	QString error_str, buffer;
-	while ( p->readln(buffer) != -1 ) {
-		error_str += buffer;
-	}
-
-	KMessageBox::error( 0, error_str );
-
-	error = true;
-
-	p->ackRead();
-}*/
 
 bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFilePath )
 {
@@ -113,6 +123,19 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 	delete[] buffer;
 	buffer = NULL;
 	return true;
+}
+
+void ConvertSQLite3::process1Finished( int exitCode, QProcess::ExitStatus exitStatus )
+{
+	m_exitCode1 = exitCode;
+	m_exitStatus1 = exitStatus;
+}
+
+void ConvertSQLite3::process2Finished( int exitCode, QProcess::ExitStatus exitStatus )
+{
+	m_exitCode2 = exitCode;
+	m_exitStatus2 = exitStatus;
+	m_localEventLoop->exit();
 }
 
 #include "convert_sqlite3.moc"

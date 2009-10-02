@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2009 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -11,8 +12,11 @@
 #define CONVERT_SQLITE3_H
 
 #include <QObject>
+#include <QProcess>
 
 class KProcess;
+class QString;
+class QEventLoop;
 
 class ConvertSQLite3 : public QObject
 {
@@ -20,15 +24,24 @@ Q_OBJECT
 
 public:
 	ConvertSQLite3( const QString &db_file = QString::null );
+	void convert();
 	~ConvertSQLite3();
-
-/*public slots:
-	void processOutput( K3ProcIO* p );*/
 
 private:
 	bool copyFile( const QString &oldFilePath, const QString &newFilePath );
 
 	bool error;
+	QString db_file;
+	int m_exitCode1;
+	QProcess::ExitStatus m_exitStatus1;
+	int m_exitCode2;
+	QProcess::ExitStatus m_exitStatus2;
+	QEventLoop *m_localEventLoop;
+
+private slots:
+	void process1Finished( int exitCode, QProcess::ExitStatus exitStatus );
+	void process2Finished( int exitCode, QProcess::ExitStatus exitStatus );
+
 };
 
 #endif //CONVERT_SQLITE3_H

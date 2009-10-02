@@ -64,7 +64,8 @@ int main( int argc, char **argv )
 		QApplication::flush();
 
 		if ( args->isSet("convert-sqlite3") ) {
-			ConvertSQLite3();
+			ConvertSQLite3 sqliteConverter;
+			sqliteConverter.convert();
 			return 0;
 		}
 
