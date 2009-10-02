@@ -392,13 +392,40 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	backupGBoxLayout->addWidget( dumpPathRequester, 0, 1 );
 	Form1Layout->addWidget( backupGBox );
 
-	// Load & Save Current Settings
+	// SQLite converter options
+	QGroupBox *converterGBox = new QGroupBox( this );
+	converterGBox->setTitle( i18n( "SQLite converter" ) );
+
+	QLabel *oldLabel = new QLabel( backupGBox );
+	oldLabel->setText( i18n( "Path to SQLite old version command:" ));
+	
+	oldPathRequester = new KUrlRequester;
+	oldPathRequester->fileDialog()->setCaption( i18n( "Select old SQLite version command" ) );
+
+	QLabel *newLabel = new QLabel( backupGBox );
+	newLabel->setText( i18n( "Path to SQLite new version command:" ));
+	
+	newPathRequester = new KUrlRequester;
+	newPathRequester->fileDialog()->setCaption( i18n( "Select new SQLite version command" ) );
+	
+	QGridLayout *converterGBoxLayout = new QGridLayout;
+	converterGBox->setLayout( converterGBoxLayout );
+	converterGBoxLayout->addWidget( oldLabel, 0, 0 );
+	converterGBoxLayout->addWidget( oldPathRequester, 0, 1 );
+	converterGBoxLayout->addWidget( newLabel, 1, 0 );
+	converterGBoxLayout->addWidget( newPathRequester, 1, 1 );
+	Form1Layout->addWidget( converterGBox );
+
+
+	// Load Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	fileRequester = new KUrlRequester( config.readEntry( "DBFile", KStandardDirs::locateLocal( "appdata", "krecipes.krecdb" ) ), hbox );
 	fileRequester->fileDialog()->setCaption( i18n( "Select SQLite database file" ) );
 	hbox->setStretchFactor( fileRequester, 2 );
 	dumpPathRequester->setUrl( config.readEntry( "SQLitePath", sqliteBinary ) );
 	dumpPathRequester->setFilter( sqliteBinary );
+	oldPathRequester->setUrl( config.readEntry( "SQLiteOldVersionPath", "sqlite" ) );
+	newPathRequester->setUrl( config.readEntry( "SQLiteNewVersionPath", "sqlite3" ) );
 }
 
 void SQLiteServerPrefs::saveOptions( void )
@@ -406,6 +433,8 @@ void SQLiteServerPrefs::saveOptions( void )
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	config.writeEntry( "DBFile", fileRequester->text() );
 	config.writeEntry( "SQLitePath", dumpPathRequester->text() );
+	config.writeEntry( "SQLiteOldVersionPath", oldPathRequester->text() );
+	config.writeEntry( "SQLiteNewVersionPath", newPathRequester->text() );
 }
 
 

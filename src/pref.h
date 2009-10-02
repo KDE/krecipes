@@ -109,6 +109,8 @@ public:
 private:
 	// Internal Widgets
 	KUrlRequester *dumpPathRequester;
+	KUrlRequester *oldPathRequester;
+	KUrlRequester *newPathRequester;
 	KUrlRequester *fileRequester;
 };
 

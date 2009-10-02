@@ -1,4 +1,8 @@
 Changes from 2.0-alpha2 to svn:
+  * krecipes --convert-sqlite3 now gives messages to the user about the success
+    or failure of the operation.
+  * You can configure the path for the commands executed by the sqlite
+    converter.
   * Using KRatingWidget and KRatingPanter from nepomuk; as side effects we are
     avoiding some crashes when clicking on the old RatingWidget and we have
     refreshed artwork.

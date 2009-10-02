@@ -21,9 +21,11 @@
 #include <KProcess>
 #include <QEventLoop>
 #include <KLocale>
+#include <QPointer>
 
 #include <kglobalsettings.h>
 
+#include "pref.h"
 
 ConvertSQLite3::ConvertSQLite3( const QString &db_file ):
 	QObject(), error(false),
@@ -38,18 +40,20 @@ void ConvertSQLite3::convert()
 {
 	kDebug() << "converting";
 	QString file = db_file;
+	KConfigGroup config = KGlobal::config()->group("Server");
 	if ( file.isEmpty() ) {
-		KConfigGroup config = KGlobal::config()->group("Server");
 		file = config.readEntry("DBFile");
 	}
+	QStringList cmd1, cmd2;
+	cmd1 << config.readEntry("SQLiteOldVersionPath", "sqlite");
+	cmd2 << config.readEntry("SQLiteNewVersionPath", "sqlite3");
 
 	KProcess *p1 = new KProcess;
 	KProcess *p2 = new KProcess;
 
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
-	QStringList cmd1, cmd2;
-	cmd1 << "sqlite" << file << ".dump";
-	cmd2 << "sqlite3" << (file + ".new");
+	cmd1 << file << ".dump";
+	cmd2 << (file + ".new");
 
 	*p1 << cmd1;
 	*p2 << cmd2;
@@ -64,22 +68,57 @@ void ConvertSQLite3::convert()
 	QApplication::connect( p2, SIGNAL(finished(int,QProcess::ExitStatus)), this,
 		SLOT(process2Finished(int,QProcess::ExitStatus)) );
 
-	p2->start();
-	p1->start();
-	m_localEventLoop->exec();
+	bool retry;
 
-	if ( m_process1Error && !m_process1Finished ) {
-		KMessageBox::error( 0, i18n( "Unable to find or run the program '%1'.  "
-			"Either it is not installed on your system or it is not in $PATH." ).arg( cmd1.first() ) );
-	} else if ( m_process2Error && !m_process2Finished ) {
-		KMessageBox::error( 0, i18n( "Unable to find or run the program '%1'.  "
-			"Either it is not installed on your system or it is not in $PATH." ).arg( cmd2.first() ) );
-	} else if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
-		(m_exitCode2 != 0) || (m_exitStatus2 != QProcess::NormalExit)) {
-		KMessageBox::error( 0, i18n("Conversion process failed. "
-			"Probably the file %1 is not an SQLite 2 database.").arg(file) );
-		return;
-	}
+	do {
+		retry = false;
+		m_process1Error = m_process2Error = false;
+		m_process1Finished = m_process2Finished = false;
+
+		p2->start();
+		p1->start();
+		m_localEventLoop->exec();
+
+		if ( m_process1Error && !m_process1Finished ) {
+			if ( KMessageBox::questionYesNo( 0, i18n( "Unable to find or run the program '%1'.  "
+			"Either it is not installed on your system or it is not in $PATH. "
+			"Do you want to configure other path for this command?"
+			).arg( cmd1.first() ) ) == KMessageBox::Yes )
+				retry = true;
+			else
+				return;
+		} else if ( m_process2Error && !m_process2Finished ) {
+			if ( KMessageBox::questionYesNo( 0, i18n( "Unable to find or run the program '%1'.  "
+			"Either it is not installed on your system or it is not in $PATH. " 
+			"Do you want to configure other path for this command?"
+			).arg( cmd2.first() ) ) == KMessageBox::Yes ) 
+				retry = true;
+			else
+				return;
+		} else if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
+			(m_exitCode2 != 0) || (m_exitStatus2 != QProcess::NormalExit)) {
+			KMessageBox::error( 0, i18n("Conversion process failed. "
+				"Probably the file %1 is not an SQLite 2 database.").arg(file) );
+			return;
+		}
+		
+		if ( retry ) {
+			QPointer<KrecipesPreferences> prefDialog = new KrecipesPreferences( 0 );
+			if ( prefDialog->exec() == QDialog::Rejected ) {
+				delete prefDialog;
+				return;
+			}
+			delete prefDialog;
+			p1->kill();
+			p2->kill();
+			cmd1[0] = config.readEntry("SQLiteOldVersionPath", "sqlite");
+			cmd2[0] = config.readEntry("SQLiteNewVersionPath", "sqlite3");
+			p1->clearProgram();
+			p2->clearProgram();
+			*p1 << cmd1;
+			*p2 << cmd2;
+		}
+	} while ( retry );
 
 	QString backup_file = file+".sqlite2";
 	int i = 1;
