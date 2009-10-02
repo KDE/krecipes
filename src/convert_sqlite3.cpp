@@ -25,7 +25,10 @@
 #include <kglobalsettings.h>
 
 
-ConvertSQLite3::ConvertSQLite3( const QString &db_file ) : QObject(), error(false)
+ConvertSQLite3::ConvertSQLite3( const QString &db_file ):
+	QObject(), error(false),
+	m_process1Error(false), m_process2Error(false),
+	m_process1Finished(false), m_process2Finished(false)
 {
 	this->db_file = db_file;
 	m_localEventLoop = new QEventLoop;
@@ -54,6 +57,8 @@ void ConvertSQLite3::convert()
 	p1->setOutputChannelMode( KProcess::MergedChannels );
 	p1->setStandardOutputProcess( p2 );
 
+	QApplication::connect( p1, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process1Error()) );
+	QApplication::connect( p2, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process2Error()) );
 	QApplication::connect( p1, SIGNAL(finished(int,QProcess::ExitStatus)), this,
 		SLOT(process1Finished(int,QProcess::ExitStatus)) );
 	QApplication::connect( p2, SIGNAL(finished(int,QProcess::ExitStatus)), this,
@@ -63,7 +68,13 @@ void ConvertSQLite3::convert()
 	p1->start();
 	m_localEventLoop->exec();
 
-	if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
+	if ( m_process1Error && !m_process1Finished ) {
+		KMessageBox::error( 0, i18n( "Unable to find or run the program '%1'.  "
+			"Either it is not installed on your system or it is not in $PATH." ).arg( cmd1.first() ) );
+	} else if ( m_process2Error && !m_process2Finished ) {
+		KMessageBox::error( 0, i18n( "Unable to find or run the program '%1'.  "
+			"Either it is not installed on your system or it is not in $PATH." ).arg( cmd2.first() ) );
+	} else if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
 		(m_exitCode2 != 0) || (m_exitStatus2 != QProcess::NormalExit)) {
 		KMessageBox::error( 0, i18n("Conversion process failed. "
 			"Probably the file %1 is not an SQLite 2 database.").arg(file) );
@@ -125,16 +136,28 @@ bool ConvertSQLite3::copyFile( const QString &oldFilePath, const QString &newFil
 	return true;
 }
 
+void ConvertSQLite3::process1Error()
+{
+	m_process1Error = true;
+}
+
+void ConvertSQLite3::process2Error()
+{
+	m_process2Error = true;
+}
+
 void ConvertSQLite3::process1Finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
 	m_exitCode1 = exitCode;
 	m_exitStatus1 = exitStatus;
+	m_process1Finished = true;
 }
 
 void ConvertSQLite3::process2Finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
 	m_exitCode2 = exitCode;
 	m_exitStatus2 = exitStatus;
+	m_process2Finished = true;
 	m_localEventLoop->exit();
 }
 
