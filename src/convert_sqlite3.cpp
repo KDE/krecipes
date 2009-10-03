@@ -128,14 +128,14 @@ void ConvertSQLite3::convert()
 	}
 
 	if ( !copyFile( file, backup_file ) ) {
-		kDebug()<<"Unable to backup SQLite 2 database... aborting"<<endl
-		  <<"A successfully converted SQLite 3 file is available at \""<<file<<".new\".";
+		KMessageBox::error( 0, i18n("Unable to backup SQLite 2 database, aborting. "
+		"A successfully converted SQLite 3 file is available at %1.new.").arg(file) );
 	}
 	else {
 		kDebug()<<"SQLite 2 database backed up to "<<backup_file;
 		if ( !copyFile( file+".new", file ) ) {
-			kDebug()<<"Unable to copy the new SQLite 3 database to: "<<file<<"."<<endl
-			  <<"You may manually move \""<<file<<".new\" to \""<<file<<"\"";
+			KMessageBox::error( 0, i18n("Unable to copy the new SQLite 3 database to %1."
+			"You may manually move %1.new to %1").arg(file) );
 		}
 		else {
 			KMessageBox::information( 0, i18n("Conversion successful! "
