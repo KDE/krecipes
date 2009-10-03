@@ -47,7 +47,7 @@ int main( int argc, char **argv )
 	KUniqueApplication::addCmdLineOptions();
 
 	if ( !KUniqueApplication::start() ) {
-		std::cout << "Krecipes is already running!" << std::endl;
+		std::cerr << "Krecipes is already running!" << std::endl;
 		return 0;
 	}
 
