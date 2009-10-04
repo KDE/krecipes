@@ -63,7 +63,7 @@ QSqlRecipeDB::~QSqlRecipeDB()
 	--m_refCount;
 }
 
-void QSqlRecipeDB::connect( bool create_db, bool create_tables )
+RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 {
 	kDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) ;
 	kDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname ;
@@ -84,7 +84,7 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 	if ( !driver_found ) {
 		dbErr = i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." , qsqlDriverPlugin() );
-		return ;
+		return NoDriverFound;
 	}
 
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
@@ -136,13 +136,13 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 			// Handle the error (passively)
 			dbErr = i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.", DBuser , qsqlDriverPlugin() );
-			return ;
+			return RefusedByServer;
 		}
 	}
 
 	if ( int( qRound( databaseVersion() * 1e5 ) ) > int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
 		dbErr = i18n( "This database was created with a newer version of Krecipes and cannot be opened." );
-		return ;
+		return NewerDbVersion;
 	}
 
 	// Check integrity of the database (tables). If not possible, exit
@@ -150,8 +150,8 @@ void QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	// we don't want to run this when creating the database.  We would be
 	// logged in as another user (usually the superuser and not have ownership of the tables
 	if ( create_tables && !checkIntegrity() ) {
-		dbErr = i18n( "Failed to fix database structure.\nIf you are using SQLite, this is often caused by using an SQLite 2 database with SQLite 3 installed.  If this is the case, make sure both SQLite 2 and 3 are installed, and then run 'krecipes --convert-sqlite3' to update your database to the new structure." );
-		return;
+		dbErr = i18n( "Failed to fix database structure." );
+		return FixDbFailed;
 	}
 
 	// Database was opened correctly

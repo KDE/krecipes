@@ -1,6 +1,9 @@
 Changes from 2.0-alpha2 to svn:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
     or failure of the operation.
+  * If the program fails to fix the db structure with SQLite, you can execute
+    the sqlite converter clicking a button; you don't need to type commands in
+    the shell.
   * You can configure the path for the commands executed by the sqlite
     converter.
   * Using KRatingWidget and KRatingPanter from nepomuk; as side effects we are

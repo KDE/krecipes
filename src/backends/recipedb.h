@@ -52,10 +52,12 @@ class RecipeDB: public QObject
 	Q_OBJECT
 
 public:
+	enum Error {NoError = 0, NoDriverFound, RefusedByServer, NewerDbVersion, FixDbFailed};
+
 	RecipeDB();
 	virtual ~RecipeDB();
 
-	virtual void connect( bool create_db = true, bool create_tables = true ) = 0;
+	virtual RecipeDB::Error connect( bool create_db = true, bool create_tables = true ) = 0;
 
 	void importSamples();
 

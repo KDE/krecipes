@@ -27,6 +27,7 @@
 #include "actionshandlers/unitactionshandler.h"
 #include "actionshandlers/categoryactionshandler.h"
 #include "setupassistant.h"
+#include "convert_sqlite3.h"
 #include "kstartuplogo.h"
 
 #include "dialogs/recipeinputdialog.h"
@@ -321,20 +322,48 @@ KrecipesView::~KrecipesView()
 	delete database;
 }
 
-bool KrecipesView::questionRerunWizard( const QString &message, const QString &error )
+bool KrecipesView::questionRerunWizard( const QString &message, const QString &errormsg,
+	RecipeDB::Error error )
 {
-	QString yesNoMessage = message + " " + i18n( "\nWould you like to run the setup wizard again? Otherwise, the application will be closed." );
-	int answer = KMessageBox::questionYesNo( this, yesNoMessage );
+	if ( (error == RecipeDB::FixDbFailed) && (dbType == "SQLite") ) {
+		QString finalMessage = message + " " +
+		i18n( "\nYou are using SQLite; this error is often caused by using an SQLite 2 "
+		"database with Krecipes supporting SQLite 3, if this is the case you could run "
+		"the SQLite converter.\n"
+		"What do you want to do?" );
+		int answer = KMessageBox::questionYesNoCancel( this, finalMessage, "",
+			KGuiItem( i18n("Run the setup assistant"), KIcon("plasmagik") ),
+			KGuiItem( i18n("Run the SQLite converter"), KIcon("document-revert") ),
+			KStandardGuiItem::quit()
+		);
+		if ( answer == KMessageBox::Yes ) {
+			wizard( true );
+		} else if ( answer == KMessageBox::No ) {
+			ConvertSQLite3 converter;
+			converter.convert();
+		} else {
+			kError() << errormsg << ". " << i18n( "Exiting" ) ;
+			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
+			return false;
+		}
+		return true;
+	} else {
+		QString finalMessage = message + " " +
+		i18n( "\nWould you like to run the setup wizard again? "
+		"Otherwise, the application will be closed." );
 
-	if ( answer == KMessageBox::Yes )
-		wizard( true );
-	else {
-		kError() << error << ". " << i18n( "Exiting" ) ;
-		kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
-		return false;
+		int answer = KMessageBox::questionYesNo( this, finalMessage );
+
+		if ( answer == KMessageBox::Yes )
+			wizard( true );
+		else {
+			kError() << errormsg << ". " << i18n( "Exiting" ) ;
+			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
+			return false;
+		}
+
+		return true;
 	}
-
-	return true;
 }
 
 void KrecipesView::translate()
@@ -1080,11 +1109,12 @@ void KrecipesView::initDatabase()
 		kapp->exit( 1 );
 	}
 
-	database->connect();
+	RecipeDB::Error connectError = database->connect();
 
 	while ( !database->ok() ) {
 		// Ask the user if he wants to rerun the wizard
-		bool rerun = questionRerunWizard( database->err(), i18n( "Unable to open database" ) );
+		bool rerun = questionRerunWizard( database->err(),
+			i18n( "Unable to open database" ), connectError);
 		if ( !rerun )
 			break;
 
@@ -1097,7 +1127,7 @@ void KrecipesView::initDatabase()
 		delete database;
 		database = RecipeDB::createDatabase( dbType );
 		if ( database )
-			database->connect();
+			connectError = database->connect();
 		else {
 			// No DB type has been enabled (should not happen at all, but just in case)
 
