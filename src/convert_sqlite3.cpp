@@ -48,24 +48,24 @@ void ConvertSQLite3::convert()
 	cmd1 << config.readEntry("SQLiteOldVersionPath", "sqlite");
 	cmd2 << config.readEntry("SQLiteNewVersionPath", "sqlite3");
 
-	KProcess *p1 = new KProcess;
-	KProcess *p2 = new KProcess;
+	KProcess p1;
+	KProcess p2;
 
 	//sqlite OLD.DB .dump | sqlite3 NEW.DB
 	cmd1 << file << ".dump";
 	cmd2 << (file + ".new");
 
-	*p1 << cmd1;
-	*p2 << cmd2;
+	p1 << cmd1;
+	p2 << cmd2;
 
-	p1->setOutputChannelMode( KProcess::MergedChannels );
-	p1->setStandardOutputProcess( p2 );
+	p1.setOutputChannelMode( KProcess::MergedChannels );
+	p1.setStandardOutputProcess( &p2 );
 
-	QApplication::connect( p1, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process1Error()) );
-	QApplication::connect( p2, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process2Error()) );
-	QApplication::connect( p1, SIGNAL(finished(int,QProcess::ExitStatus)), this,
+	QApplication::connect( &p1, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process1Error()) );
+	QApplication::connect( &p2, SIGNAL(error(QProcess::ProcessError)), this, SLOT(process2Error()) );
+	QApplication::connect( &p1, SIGNAL(finished(int,QProcess::ExitStatus)), this,
 		SLOT(process1Finished(int,QProcess::ExitStatus)) );
-	QApplication::connect( p2, SIGNAL(finished(int,QProcess::ExitStatus)), this,
+	QApplication::connect( &p2, SIGNAL(finished(int,QProcess::ExitStatus)), this,
 		SLOT(process2Finished(int,QProcess::ExitStatus)) );
 
 	bool retry;
@@ -75,8 +75,8 @@ void ConvertSQLite3::convert()
 		m_process1Error = m_process2Error = false;
 		m_process1Finished = m_process2Finished = false;
 
-		p2->start();
-		p1->start();
+		p2.start();
+		p1.start();
 		m_localEventLoop->exec();
 
 		if ( m_process1Error && !m_process1Finished ) {
@@ -109,14 +109,14 @@ void ConvertSQLite3::convert()
 				return;
 			}
 			delete prefDialog;
-			p1->kill();
-			p2->kill();
+			p1.kill();
+			p2.kill();
 			cmd1[0] = config.readEntry("SQLiteOldVersionPath", "sqlite");
 			cmd2[0] = config.readEntry("SQLiteNewVersionPath", "sqlite3");
-			p1->clearProgram();
-			p2->clearProgram();
-			*p1 << cmd1;
-			*p2 << cmd2;
+			p1.clearProgram();
+			p2.clearProgram();
+			p1 << cmd1;
+			p2 << cmd2;
 		}
 	} while ( retry );
 
