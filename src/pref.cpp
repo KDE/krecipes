@@ -223,9 +223,9 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	portEdit->setValue( config.readEntry( "Port", 0 ) );
 	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
 	dumpPathRequester->setUrl( config.readEntry( "MySQLDumpPath", "mysqldump" ) );
-	dumpPathRequester->setFilter( "mysqldump" );
+	dumpPathRequester->setFilter( "mysqldump\n*|" + i18n( "All files" ) );
 	mysqlPathRequester->setUrl( config.readEntry( "MySQLPath", "mysql" ) );
-	mysqlPathRequester->setFilter( "mysql" );
+	mysqlPathRequester->setFilter( "mysql\n*|" + i18n( "All files" ) );
 }
 
 void MySQLServerPrefs::saveOptions( void )
@@ -338,9 +338,9 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	portEdit->setValue( config.readEntry( "Port", 0 ) );
 	dbNameEdit->setText( config.readEntry( "DBName", "Krecipes" ) );
 	dumpPathRequester->setUrl( config.readEntry( "PgDumpPath", "pg_dump" ) );
-	dumpPathRequester->setFilter( "pg_dump" );
+	dumpPathRequester->setFilter( "pg_dump\n*|" + i18n( "All files" ) );
 	psqlPathRequester->setUrl( config.readEntry( "PsqlPath", "psql" ) );
-	psqlPathRequester->setFilter( "psql" );
+	psqlPathRequester->setFilter( "psql\n*|" + i18n( "All files" ) );
 }
 
 void PostgreSQLServerPrefs::saveOptions( void )
@@ -423,9 +423,11 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	fileRequester->fileDialog()->setCaption( i18n( "Select SQLite database file" ) );
 	hbox->setStretchFactor( fileRequester, 2 );
 	dumpPathRequester->setUrl( config.readEntry( "SQLitePath", sqliteBinary ) );
-	dumpPathRequester->setFilter( sqliteBinary );
+	dumpPathRequester->setFilter( sqliteBinary + "\n*|" + i18n( "All files" ) );
 	oldPathRequester->setUrl( config.readEntry( "SQLiteOldVersionPath", "sqlite" ) );
+	oldPathRequester->setFilter( "sqlite\n*|" + i18n( "All files" ) );
 	newPathRequester->setUrl( config.readEntry( "SQLiteNewVersionPath", "sqlite3" ) );
+	newPathRequester->setFilter( "sqlite3\n*|" + i18n( "All files" ) );
 }
 
 void SQLiteServerPrefs::saveOptions( void )
