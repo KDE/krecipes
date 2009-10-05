@@ -51,9 +51,8 @@ public:
 	}
 };
 
-PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db, const QString &specialItem ) : 
-  KComboBox( b, parent ),
-  database( db ), m_specialItem(specialItem)
+PrepMethodComboBox::PrepMethodComboBox( bool b, QWidget *parent, RecipeDB *db, const QString &specialItem ):
+	KComboBox( b, parent ), database( db ), m_specialItem(specialItem)
 {
 	setAutoDeleteCompletionObject(true);
 	setCompletionObject(new PrepMethodCompletion());

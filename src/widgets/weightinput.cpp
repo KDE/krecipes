@@ -17,8 +17,8 @@
 #include "prepmethodcombobox.h"
 
 WeightInput::WeightInput( QWidget *parent, RecipeDB *database, Unit::Type type, MixedNumber::Format format ) : 
-  AmountUnitInput(parent,database,type,format),
-  m_database(database)
+	AmountUnitInput(parent,database,type,format),
+	m_database(database)
 {
 	prepMethodBox = new PrepMethodComboBox(false,this,database,i18n("-No Preparation-"));
 	prepMethodBox->reload();

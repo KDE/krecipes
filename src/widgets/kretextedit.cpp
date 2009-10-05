@@ -16,15 +16,15 @@
 #include <kaction.h>
 #include <kdebug.h>
 
-KreTextEdit::KreTextEdit( QWidget *parent )
-    : KTextEdit( parent )//, KCompletionBase()
+KreTextEdit::KreTextEdit( QWidget *parent ):
+	KTextEdit( parent )//, KCompletionBase()
 {
-    KCompletion * comp = completionObject(); //creates the completion object
-    comp->setIgnoreCase( true );
+	KCompletion * comp = completionObject(); //creates the completion object
+	comp->setIgnoreCase( true );
 
-    completing = false;
+	completing = false;
 
-    //connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
+	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
 }
 
 void KreTextEdit::haltCompletion()
@@ -58,7 +58,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 	//using just the standard Ctrl+E isn't user-friendly enough for Grandma...
 	if ( completing && ( cut.contains( e->key() ) || e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) ) {
 #if 0
-            int paraFrom, indexFrom, paraTo, indexTo;
+		int paraFrom, indexFrom, paraTo, indexTo;
 		getSelection ( &paraFrom, &indexFrom, &paraTo, &indexTo );
 
 		removeSelection();
@@ -156,8 +156,8 @@ void KreTextEdit::rotateText( KCompletionBase::KeyBindingType type )
 {
 	KCompletion * comp = compObj();
 	if ( comp && completing &&
-	        ( type == KCompletionBase::PrevCompletionMatch ||
-	          type == KCompletionBase::NextCompletionMatch ) ) {
+	( type == KCompletionBase::PrevCompletionMatch ||
+	type == KCompletionBase::NextCompletionMatch ) ) {
 #if 0
 		QString input = ( type == KCompletionBase::PrevCompletionMatch ) ? comp->previousMatch() : comp->nextMatch();
 

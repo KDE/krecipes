@@ -52,76 +52,76 @@
 #include "krecipesadaptor.h"
 
 KrecipesView::KrecipesView( QWidget *parent )
-    : QWidget( parent )
+	: QWidget( parent )
 {
-    new KrecipesAdaptor(this );
-    QDBusConnection::sessionBus().registerObject("/Krecipes", this);
+	new KrecipesAdaptor(this );
+	QDBusConnection::sessionBus().registerObject("/Krecipes", this);
 
 #ifndef NDEBUG
-    QTime dbg_total_timer; dbg_total_timer.start();
+	QTime dbg_total_timer; dbg_total_timer.start();
 #endif
-    // Init the setup wizard if necessary
-    kDebug() << "Beginning wizard" ;
-    wizard();
-    kDebug() << "Wizard finished correctly" ;
+	// Init the setup wizard if necessary
+	kDebug() << "Beginning wizard" ;
+	wizard();
+	kDebug() << "Wizard finished correctly" ;
 
-    // Show Splash Screen
+	// Show Splash Screen
 
-    KStartupLogo* start_logo = 0L;
-    start_logo = new KStartupLogo();
-    start_logo -> setHideEnabled( true );
-    start_logo->show();
-    start_logo->raise();
+	KStartupLogo* start_logo = 0L;
+	start_logo = new KStartupLogo();
+	start_logo -> setHideEnabled( true );
+	start_logo->show();
+	start_logo->raise();
 
-    // Initialize Database
+	// Initialize Database
 
-    // Check if the database type is among those supported
-    // and initialize the database in each case
-    START_TIMER("Initializing database")
+	// Check if the database type is among those supported
+	// and initialize the database in each case
+	START_TIMER("Initializing database")
 	initDatabase();
-    END_TIMER()
+	END_TIMER()
 
 	// Design the GUI
-        QHBoxLayout *layout = new QHBoxLayout;
-    setLayout( layout );
-    splitter = new KHBox( this );
-    layout->addWidget( splitter );
-    // Create Left and Right Panels (splitter)
+	QHBoxLayout *layout = new QHBoxLayout;
+	setLayout( layout );
+	splitter = new KHBox( this );
+	layout->addWidget( splitter );
+	// Create Left and Right Panels (splitter)
 
 	leftPanelFrame = new QFrame( splitter );
-    leftPanel = new KreMenu;
+	leftPanel = new KreMenu;
 	QHBoxLayout *leftPanelFrameLayout = new QHBoxLayout;
 	leftPanelFrame->setLayout( leftPanelFrameLayout );
 	leftPanelFrameLayout->addWidget( leftPanel );
 	leftPanelFrameLayout->setMargin( 0 );
 	leftPanelFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 	leftPanelFrame->setFrameRect( QRect( 0, 0, 0, 0 ) );
-    rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
+	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
 
-    // Design Left Panel
+	// Design Left Panel
 
-    START_TIMER("Setting up buttons")
+	START_TIMER("Setting up buttons")
 	// Buttons
 
-    button0 = new KreMenuButton( leftPanel, SelectP );
-    button0->setIconSet( KIcon( "system-search" ) );
-    buttonsList.append( button0 );
+	button0 = new KreMenuButton( leftPanel, SelectP );
+	button0->setIconSet( KIcon( "system-search" ) );
+	buttonsList.append( button0 );
 
-    button1 = new KreMenuButton( leftPanel, ShoppingP );
-    button1->setIconSet( KIcon( "view-pim-tasks" ) );
-    buttonsList.append( button1 );
+	button1 = new KreMenuButton( leftPanel, ShoppingP );
+	button1->setIconSet( KIcon( "view-pim-tasks" ) );
+	buttonsList.append( button1 );
 
-    button7 = new KreMenuButton( leftPanel, DietP );
-    button7->setIconSet( KIcon( "diet" ) );
-    buttonsList.append( button7 );
+	button7 = new KreMenuButton( leftPanel, DietP );
+	button7->setIconSet( KIcon( "diet" ) );
+	buttonsList.append( button7 );
 
-    button8 = new KreMenuButton( leftPanel, MatcherP );
-    button8->setIconSet( KIcon( "view-filter" ) );
-    buttonsList.append( button8 );
+	button8 = new KreMenuButton( leftPanel, MatcherP );
+	button8->setIconSet( KIcon( "view-filter" ) );
+	buttonsList.append( button8 );
 
 
-    // Submenus
-    dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "server-database" );
+	// Submenus
+	dataMenu = leftPanel->createSubMenu( i18n( "Data..." ), "server-database" );
 	
 	recipeButton = new KreMenuButton( leftPanel, RecipeEdit );
 	recipeButton->setIconSet( KIcon( "document-save" ) );
@@ -129,194 +129,194 @@ KrecipesView::KrecipesView( QWidget *parent )
 	recipeButton->setEnabled( false );
 	recipeButton->hide();
 
-    button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
-    button2->setIconSet( KIcon( "ingredients" ) );
-    buttonsList.append(button2);
+	button2 = new KreMenuButton( leftPanel, IngredientsP, dataMenu );
+	button2->setIconSet( KIcon( "ingredients" ) );
+	buttonsList.append(button2);
 
-    button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
-    button3->setIconSet( KIcon( "properties" ) );
-    buttonsList.append( button3 );
+	button3 = new KreMenuButton( leftPanel, PropertiesP, dataMenu );
+	button3->setIconSet( KIcon( "properties" ) );
+	buttonsList.append( button3 );
 
-    button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
-    button4->setIconSet( KIcon( "units" ) );
-    buttonsList.append( button4 );
+	button4 = new KreMenuButton( leftPanel, UnitsP, dataMenu );
+	button4->setIconSet( KIcon( "units" ) );
+	buttonsList.append( button4 );
 
-    button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
-    button9->setIconSet( KIcon( "methods" ) );
-    buttonsList.append( button9 );
+	button9 = new KreMenuButton( leftPanel, PrepMethodsP, dataMenu );
+	button9->setIconSet( KIcon( "methods" ) );
+	buttonsList.append( button9 );
 
-    button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
-    button5->setIconSet( KIcon( "folder-yellow" ) );
-    buttonsList.append( button5 );
+	button5 = new KreMenuButton( leftPanel, CategoriesP, dataMenu );
+	button5->setIconSet( KIcon( "folder-yellow" ) );
+	buttonsList.append( button5 );
 
-    button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
-    button6->setIconSet( KIcon( "authors" ) );
-    buttonsList.append( button6 );	
+	button6 = new KreMenuButton( leftPanel, AuthorsP, dataMenu );
+	button6->setIconSet( KIcon( "authors" ) );
+	buttonsList.append( button6 );	
 
-    contextButton = new QPushButton( leftPanel );
-    contextButton->setObjectName( "contextButton" );
-    contextButton->setIcon( KIcon( "system-help" ) );
-    contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
+	contextButton = new QPushButton( leftPanel );
+	contextButton->setObjectName( "contextButton" );
+	contextButton->setIcon( KIcon( "system-help" ) );
+	contextButton->setGeometry( leftPanel->width() - 42, leftPanel->height() - 42, 32, 32 );
 
-    QPalette p = palette();
-    p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) );
-    contextButton->setPalette(p);
-    contextButton->setFlat( true );
-    END_TIMER()
+	QPalette p = palette();
+	p.setColor(backgroundRole(), contextButton->palette().color(backgroundRole()).light( 140 ) );
+	contextButton->setPalette(p);
+	contextButton->setFlat( true );
+	END_TIMER()
 
-    KConfigGroup config(KGlobal::config(), "Performance" );
-    int limit = config.readEntry( "CategoryLimit", -1 );
-    database->updateCategoryCache(limit);
+	KConfigGroup config(KGlobal::config(), "Performance" );
+	int limit = config.readEntry( "CategoryLimit", -1 );
+	database->updateCategoryCache(limit);
 
-    // Right Panel Widgets
-    START_TIMER("Creating input dialog")
+	// Right Panel Widgets
+	START_TIMER("Creating input dialog")
 	inputPanel = new RecipeInputDialog( rightPanel, database );
-    rightPanel->addStackWidget( inputPanel );
-    END_TIMER()
+	rightPanel->addStackWidget( inputPanel );
+	END_TIMER()
 
 	START_TIMER("Creating recipe view")
 	viewPanel = new RecipeViewDialog( rightPanel, database );
-    rightPanel->addStackWidget( viewPanel );
-    END_TIMER()
+	rightPanel->addStackWidget( viewPanel );
+	END_TIMER()
 
 	START_TIMER("Creating recipe selection dialog")
 	selectPanel = new SelectRecipeDialog( rightPanel, database );
-    rightPanel->addStackWidget( selectPanel );
+	rightPanel->addStackWidget( selectPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating ingredients component")
 	ingredientsPanel = new IngredientsDialog( rightPanel, database );
-    rightPanel->addStackWidget( ingredientsPanel );
-    END_TIMER()
+	rightPanel->addStackWidget( ingredientsPanel );
+	END_TIMER()
 
 	START_TIMER("Creating properties component")
 	propertiesPanel = new PropertiesDialog( rightPanel, database );
-    rightPanel->addStackWidget( propertiesPanel );
+	rightPanel->addStackWidget( propertiesPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating units component")
 	unitsPanel = new UnitsDialog( rightPanel, database );
-    rightPanel->addStackWidget( unitsPanel );
+	rightPanel->addStackWidget( unitsPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating shopping list dialog")
 	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
-    rightPanel->addStackWidget( shoppingListPanel );
+	rightPanel->addStackWidget( shoppingListPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating diet wizard dialog")
 	dietPanel = new DietWizardDialog( rightPanel, database );
-    rightPanel->addStackWidget( dietPanel );
+	rightPanel->addStackWidget( dietPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating categories component")
 	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
-    rightPanel->addStackWidget( categoriesPanel );
+	rightPanel->addStackWidget( categoriesPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating authors component")
 	authorsPanel = new AuthorsDialog( rightPanel, database );
-    rightPanel->addStackWidget( authorsPanel );
+	rightPanel->addStackWidget( authorsPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating prep methods component")
 	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
-    rightPanel->addStackWidget( prepMethodsPanel );
+	rightPanel->addStackWidget( prepMethodsPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
-    rightPanel->addStackWidget( ingredientMatcherPanel );
+	rightPanel->addStackWidget( ingredientMatcherPanel );
 
-    END_TIMER()
+	END_TIMER()
 
 	database->clearCategoryCache();
 
-    // Use to keep track of the panels
-    panelMap.insert( inputPanel, RecipeEdit );
-    panelMap.insert( viewPanel, RecipeView );
-    panelMap.insert( selectPanel, SelectP );
-    panelMap.insert( ingredientsPanel, IngredientsP );
-    panelMap.insert( propertiesPanel, PropertiesP );
-    panelMap.insert( unitsPanel, UnitsP );
-    panelMap.insert( shoppingListPanel, ShoppingP );
-    panelMap.insert( dietPanel, DietP );
-    panelMap.insert( categoriesPanel, CategoriesP );
-    panelMap.insert( authorsPanel, AuthorsP );
-    panelMap.insert( prepMethodsPanel, PrepMethodsP );
-    panelMap.insert( ingredientMatcherPanel, MatcherP );
+	// Use to keep track of the panels
+	panelMap.insert( inputPanel, RecipeEdit );
+	panelMap.insert( viewPanel, RecipeView );
+	panelMap.insert( selectPanel, SelectP );
+	panelMap.insert( ingredientsPanel, IngredientsP );
+	panelMap.insert( propertiesPanel, PropertiesP );
+	panelMap.insert( unitsPanel, UnitsP );
+	panelMap.insert( shoppingListPanel, ShoppingP );
+	panelMap.insert( dietPanel, DietP );
+	panelMap.insert( categoriesPanel, CategoriesP );
+	panelMap.insert( authorsPanel, AuthorsP );
+	panelMap.insert( prepMethodsPanel, PrepMethodsP );
+	panelMap.insert( ingredientMatcherPanel, MatcherP );
 
 	m_activePanel = SelectP;
 	m_previousActivePanel = SelectP;
 	slotSetPanel( SelectP );
 
-    // i18n
-    translate();
+	// i18n
+	translate();
 
 
-    // Connect Signals from Left Panel to slotSetPanel()
-    connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
+	// Connect Signals from Left Panel to slotSetPanel()
+	connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
 
-    connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
+	connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
 
-    connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
+	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
 
 
-    // Retransmit signal to parent to Enable/Disable the Save Button
-    connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
+	// Retransmit signal to parent to Enable/Disable the Save Button
+	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
 
-    // Create a new button when a recipe is unsaved
-    connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
+	// Create a new button when a recipe is unsaved
+	connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
 
-    // Connect Signals from selectPanel (SelectRecipeDialog)
+	// Connect Signals from selectPanel (SelectRecipeDialog)
 
-    connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-    connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
+	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
+	connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
 
-    // Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
+	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
-    connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
+	connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
 
-    // Close a recipe when requested (just switch panels)
-    connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
+	// Close a recipe when requested (just switch panels)
+	connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
 
-    // Show a recipe when requested (just switch panels)
-    connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
+	// Show a recipe when requested (just switch panels)
+	connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
 
-    // Close the recipe view when requested (just switch panels)
-    connect( viewPanel, SIGNAL( closeRecipeView() ), this, SLOT( closeRecipe() ) );
+	// Close the recipe view when requested (just switch panels)
+	connect( viewPanel, SIGNAL( closeRecipeView() ), this, SLOT( closeRecipe() ) );
 
-    // Create a new shopping list when a new diet is generated and accepted
-    connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
+	// Create a new shopping list when a new diet is generated and accepted
+	connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
 
-    // Place the Tip Button in correct position when the left pane is resized
-    connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
+	// Place the Tip Button in correct position when the left pane is resized
+	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
 
-    connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
+	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
 
-    connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
-    
-    connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+	
+	connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
 
-    // Close Splash Screen
-    delete start_logo;
+	// Close Splash Screen
+	delete start_logo;
 
 #ifndef NDEBUG
-    kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
+	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
 #endif
 }
 
 KrecipesView::~KrecipesView()
 {
-    qDeleteAll(buttonsList);
+	qDeleteAll(buttonsList);
 	delete viewPanel; //manually delete viewPanel because we need to be sure it is deleted
 	//before the database is because its destructor uses 'database'
 	delete database;
@@ -523,7 +523,7 @@ bool KrecipesView::save( void )
 }
 
 /*!
-    \fn KrecipesView::exportRecipe()
+	\fn KrecipesView::exportRecipe()
  */
 void KrecipesView::exportRecipe()
 {
@@ -729,9 +729,9 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 			if ( !inputPanel->everythingSaved() )
 			{
 				switch ( KMessageBox::questionYesNoCancel( this,
-				         i18n( "A recipe contains unsaved changes.\n"
-				                        "Do you want to save changes made to this recipe before editing another recipe?" ),
-				         i18n( "Unsaved changes" ) ) ) {
+					i18n( "A recipe contains unsaved changes.\n"
+					"Do you want to save changes made to this recipe before editing another recipe?" ),
+					i18n( "Unsaved changes" ) ) ) {
 				case KMessageBox::Yes:
 					inputPanel->save();
 					break;
@@ -749,8 +749,8 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 	case 2:  //Remove
 		{
 			switch ( KMessageBox::questionYesNo( this,
-			                                     i18n( "Are you sure you want to permanently remove the recipe, %1?"  ,database->recipeTitle(recipeID)),
-			                                     i18n( "Confirm remove" ) ) )
+				i18n( "Are you sure you want to permanently remove the recipe, %1?"  ,database->recipeTitle(recipeID)),
+				i18n( "Confirm remove" ) ) )
 			{
 			case KMessageBox::Yes:
 				database->removeRecipe( recipeID );
@@ -781,9 +781,9 @@ void KrecipesView::createNewRecipe( void )
 {
 	if ( !inputPanel->everythingSaved() ) {
 		switch ( KMessageBox::questionYesNoCancel( this,
-		         i18n( "A recipe contains unsaved changes.\n"
-		                        "Do you want to save changes made to this recipe before creating a new recipe?" ),
-		         i18n( "Unsaved changes" ) ) ) {
+			i18n( "A recipe contains unsaved changes.\n"
+			"Do you want to save changes made to this recipe before creating a new recipe?" ),
+			i18n( "Unsaved changes" ) ) ) {
 		case KMessageBox::Yes:
 			inputPanel->save();
 			break;
@@ -816,13 +816,13 @@ void KrecipesView::wizard( bool force )
 		QPointer<SetupAssistant> setupAssistant = new SetupAssistant( this );
 		if ( setupAssistant->exec() == QDialog::Accepted )
 		{
-                    config.sync();
+			config.sync();
 			config = KGlobal::config()->group( "DBType" );
 			dbType = config.readEntry( "Type", "SQLite" );
 
 			kDebug() << "Setting up" ;
 			setupAssistant->getOptions( setupUser, initData, doUSDAImport );
-                        kDebug()<<" setupUser :"<<setupUser<<" initData :"<<initData<<" doUSDAImport :"<<doUSDAImport;
+			kDebug()<<" setupUser :"<<setupUser<<" initData :"<<initData<<" doUSDAImport :"<<doUSDAImport;
 			// Setup user if necessary
 			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
 			{
@@ -851,21 +851,21 @@ void KrecipesView::wizard( bool force )
 
 			// Initialize database with data if requested
 			if ( initData ) {
-                            kDebug();
+				kDebug();
 				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 				initializeData( host, dbName, user, pass, port ); // Populate data as normal user
 			}
 
 			if ( doUSDAImport ) {
-                            kDebug()<<" import USDA";
+				kDebug()<<" import USDA";
 				// Open the DB first
 				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port ); //only used if needed by backend
-                                kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
+				kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
 				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
-                                kDebug()<<" database created :"<<db;
+				kDebug()<<" database created :"<<db;
 				// Import the data
 				if ( db ) {
-                                    kDebug()<<" try to connect";
+					kDebug()<<" try to connect";
 					db->connect();
 
 					if ( db->ok() ) {
@@ -873,7 +873,7 @@ void KrecipesView::wizard( bool force )
 						pi.listenOn(db);
 						db->importUSDADatabase();
 					}
-                                        kDebug()<<" close";
+					kDebug()<<" close";
 					//close the database whether ok() or not
 					delete db;
 				}
@@ -881,19 +881,19 @@ void KrecipesView::wizard( bool force )
 
 			//we can do a faster usda import if this is done after it
 			if ( initData ) {
-                            kDebug()<<" initData :"<<initData;
+				kDebug()<<" initData :"<<initData;
 				RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 				if ( db ) {
-                                    kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
+					kDebug()<<" dbName :"<<dbName<<" user :"<<user<<" pass :"<<pass<<" port :"<<port;
 					db->connect();
 
 					if ( db->ok() ) {
-                                            kDebug()<<" import sample";
+						kDebug()<<" import sample";
 						db->importSamples();
 					}
 
 					//close the database whether ok() or not
-                                        kDebug()<<" close db";
+					kDebug()<<" close db";
 					delete db;
 				}
 			}
@@ -936,21 +936,21 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 
 void KrecipesView::initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port )
 {
-    kDebug();
+	kDebug();
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
 		kError() << i18n( "Code error. No DB support has been included. Exiting" ) ;
 		kapp->exit( 1 );
 	}
-        kDebug()<<" connect it";
+	kDebug()<<" connect it";
 	db->connect();
-        kDebug()<<" connected ok";
+	kDebug()<<" connected ok";
 	if ( db->ok() ) {
-            kDebug()<<" ok";
+		kDebug()<<" ok";
 		db->emptyData();
-                kDebug()<<" db empty data";
+		kDebug()<<" db empty data";
 		db->initializeData();
-                kDebug()<<" initializeData";
+		kDebug()<<" initializeData";
 	}
 
 	delete db;
@@ -1195,7 +1195,7 @@ void KrecipesView::reload()
 
 QString KrecipesView::currentDatabase() const
 {
-    return "";
+	return "";
 	// QDbus to be done
 	//return DCOPRef(database);
 }

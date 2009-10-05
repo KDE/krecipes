@@ -21,19 +21,19 @@
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName )
-    : QWidget( parent )
+PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ):
+	QWidget( parent )
 {
-    QVBoxLayout * lay = new QVBoxLayout;
+	QVBoxLayout * lay = new QVBoxLayout;
 
-    tDeco = new TopDeco( this, "TopDecoration", title, iconName );
-    lay->addWidget( tDeco );
+	tDeco = new TopDeco( this, "TopDecoration", title, iconName );
+	lay->addWidget( tDeco );
 
-    stack = new QStackedWidget;
-    lay->addWidget( stack );
+	stack = new QStackedWidget;
+	lay->addWidget( stack );
 
-    stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-    setLayout( lay );
+	stack->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	setLayout( lay );
 }
 
 
@@ -44,22 +44,22 @@ PanelDeco::~PanelDeco()
 
 void PanelDeco::addStackWidget( QWidget *w )
 {
-    stack->addWidget( w );
+	stack->addWidget( w );
 }
 
 int PanelDeco::id( QWidget* w )
 {
-    return ( stack->indexOf( w ) );
+	return ( stack->indexOf( w ) );
 }
 
 void PanelDeco::raise( QWidget *w )
 {
-    QWidget * old_w = visiblePanel();
+	QWidget * old_w = visiblePanel();
 
-    stack->setCurrentWidget( w );
+	stack->setCurrentWidget( w );
 
-    if ( old_w != w )
-        emit panelRaised( w, old_w );
+	if ( old_w != w )
+		emit panelRaised( w, old_w );
 }
 
 QWidget* PanelDeco::visiblePanel( void )
@@ -75,18 +75,18 @@ void PanelDeco::setHeader( const QString &title, const QString &icon )
 // Top part of the decoration
 
 TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ) :
-    QWidget( parent, Qt::WNoAutoErase )
+	QWidget( parent, Qt::WNoAutoErase )
 {
-    setObjectName( name );
-    setMinimumHeight( 30 );
-    panelTitle = QString::null;
-    if ( !iconName.isNull() ) {
-        icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
-    }
+	setObjectName( name );
+	setMinimumHeight( 30 );
+	panelTitle = QString::null;
+	if ( !iconName.isNull() ) {
+		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
+	}
 
-    if ( !title.isNull() ) {
-        panelTitle = title;
-    }
+	if ( !title.isNull() ) {
+		panelTitle = title;
+	}
 }
 
 TopDeco::~TopDeco()
@@ -105,14 +105,13 @@ void TopDeco::paintEvent( QPaintEvent * )
 	painter.setPen( QColorGroup( QPalette() ).color( QPalette::Button ).dark( 130 ) );
 	painter.drawLine( 0, 0, width(), 0 );
 
-        QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
-        linearGrad.setColorAt(0, c1);
-        linearGrad.setColorAt(1, c2);
-        QBrush brush( linearGrad );
-        painter.fillRect( QRect( 0, 0, width(), height() ),brush );
+	QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
+	linearGrad.setColorAt(0, c1);
+	linearGrad.setColorAt(1, c2);
+	QBrush brush( linearGrad );
+	painter.fillRect( QRect( 0, 0, width(), height() ),brush );
 
-
-        // Now Add the iconName
+	// Now Add the iconName
 	int xpos = 0, ypos = 0;
 	if ( !icon.isNull() ) {
 		xpos = 20;

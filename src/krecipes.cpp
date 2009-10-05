@@ -73,10 +73,9 @@
 #include <KShortcutsDialog>
 
 
-Krecipes::Krecipes()
-    : KXmlGuiWindow( 0 )
+Krecipes::Krecipes(): KXmlGuiWindow( 0 )
 {
-    m_view = new KrecipesView( this );
+	m_view = new KrecipesView( this );
 	setObjectName( "Krecipes" );
 	// accept dnd
 	setAcceptDrops( true );
@@ -98,9 +97,9 @@ Krecipes::Krecipes()
 
 	// allow the view to change the statusbar and caption
 	connect( m_view, SIGNAL( signalChangeStatusbar( const QString& ) ),
-	         this, SLOT( changeStatusbar( const QString& ) ) );
+		this, SLOT( changeStatusbar( const QString& ) ) );
 	connect( m_view, SIGNAL( signalChangeCaption( const QString& ) ),
-	         this, SLOT( changeCaption( const QString& ) ) );
+		this, SLOT( changeCaption( const QString& ) ) );
 
 	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
 
@@ -418,7 +417,7 @@ void Krecipes::saveProperties( KConfigGroup& group )
 	// later when this app is restored
 
 	//if (!m_view->currentUrl().isNull())
-    //group.writeEntry("lastURL", m_view->currentUrl());
+	//group.writeEntry("lastURL", m_view->currentUrl());
 }
 
 void Krecipes::readProperties( const KConfigGroup& group )
@@ -431,7 +430,7 @@ void Krecipes::readProperties( const KConfigGroup& group )
 	//QString url = group.readEntry("lastURL");
 
 	//if (!url.isNull())
-    //m_view->openURL(KUrl(url));
+	//m_view->openURL(KUrl(url));
 }
 
 void Krecipes::dragEnterEvent( QDragEnterEvent *event )
@@ -460,7 +459,7 @@ void Krecipes::fileOpen()
 	// standard filedialog
 	/*KUrl url = KFileDialog::getOpenUrl(QString::null, QString::null, this, i18n("Open Location"));
 	if (!url.isEmpty())
-	    m_view->openURL(url);*/
+		m_view->openURL(url);*/
 }
 
 void Krecipes::fileSave()
@@ -490,16 +489,16 @@ void Krecipes::filePrint()
 void Krecipes::import()
 {
 	QPointer<KFileDialog> file_dialog = new KFileDialog( KUrl(),
-	                         "*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
-	                         "*.mx2|MasterCook (*.mx2)\n"
-	                         "*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
-	                         "*.mmf *.txt|Meal-Master (*.mmf, *.txt)\n"
-	                         "*.txt|\"Now You're Cooking\" Generic Export (*.txt)\n"
-	                         "*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
-	                         "*.rk *.txt|Rezkonv (*.rk, *.txt)",
-	                         this,
-	                        0
-	                       );
+		"*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
+		"*.mx2|MasterCook (*.mx2)\n"
+		"*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
+		"*.mmf *.txt|Meal-Master (*.mmf, *.txt)\n"
+		"*.txt|\"Now You're Cooking\" Generic Export (*.txt)\n"
+		"*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
+		"*.rk *.txt|Rezkonv (*.rk, *.txt)",
+		this,
+		0
+	);
 	file_dialog->setObjectName( "file_dialog" );
 	file_dialog->setCaption( i18n( "Import from file" ) );
 	file_dialog->setMode( KFile::Files );
@@ -526,10 +525,10 @@ void Krecipes::import()
 			importer = new RezkonvImporter();
 		else {
 			KMessageBox::sorry( this,
-			                    i18n( "Filter \"%1\" not recognized.\n"
-			                                   "Please select one of the provided filters."  , selected_filter ),
-			                    i18n( "Unrecognized Filter" )
-			                  );
+				i18n( "Filter \"%1\" not recognized.\n"
+				"Please select one of the provided filters."  , selected_filter ),
+				i18n( "Unrecognized Filter" )
+			);
 			import(); //let's try again :)
 			return ;
 		}
@@ -803,7 +802,6 @@ void Krecipes::optionsShowStatusbar()
 void Krecipes::optionsConfigureKeys()
 {
 	KShortcutsDialog::configure( actionCollection(), KShortcutsEditor::LetterShortcutsAllowed , this, true );
-
 }
 
 void Krecipes::optionsConfigureToolbars()

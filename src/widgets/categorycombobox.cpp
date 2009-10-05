@@ -31,9 +31,9 @@ CategoryComboBox::CategoryComboBox( QWidget *parent, RecipeDB *db ) : KComboBox(
 	connect( database, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
 	connect( database, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
 
-    // Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
-    // the rest of the items are loaded when needed in order to significantly speed up startup
-    insertItem( count(), i18n( "All Categories" ) );
+	// Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
+	// the rest of the items are loaded when needed in order to significantly speed up startup
+	insertItem( count(), i18n( "All Categories" ) );
 }
 
 void CategoryComboBox::popup()

@@ -38,7 +38,7 @@ public:
 	~PanelDeco();
 	int id( QWidget* w ); // obtain the id of the given panel
 	QWidget* visiblePanel( void ); // obtain the current active panel no.
-    void addStackWidget( QWidget *w );
+	void addStackWidget( QWidget *w );
 
 signals:
 	void panelRaised( QWidget *w, QWidget *old_w );
@@ -60,7 +60,7 @@ public:
 	TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString::null, const QString &iconName = QString::null );
 	~TopDeco();
 
-    virtual QSize sizeHint( void ) const;
+	virtual QSize sizeHint( void ) const;
 public slots:
 	void setHeader( const QString &title = QString::null, const QString &iconName = QString::null );
 protected:

@@ -54,14 +54,14 @@ public:
 };
 
 DBListViewBase::DBListViewBase( QWidget *parent, RecipeDB *db, int t ) : K3ListView(parent),
-  database(db),
-  curr_limit(-1),
-  curr_offset(0),
-  total(t),
-  bulk_load(false),
-  delete_me_later(0),
-  m_progress(0),
-  m_totalSteps(0)
+	database(db),
+	curr_limit(-1),
+	curr_offset(0),
+	total(t),
+	bulk_load(false),
+	delete_me_later(0),
+	m_progress(0),
+	m_totalSteps(0)
 {
 	setSorting(-1);
 

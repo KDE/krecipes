@@ -148,10 +148,10 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 {
 	if ( col == 1 ) {
 		QPointer<KDialog> amountEditDialog = new KDialog(this);
-		         amountEditDialog->setCaption(i18n("Enter amount"));
-		         amountEditDialog->setButtons(KDialog::Cancel | KDialog::Ok);
-		         amountEditDialog->setDefaultButton(KDialog::Ok);
-		         amountEditDialog->setModal( false );	
+		amountEditDialog->setCaption(i18n("Enter amount"));
+		amountEditDialog->setButtons(KDialog::Cancel | KDialog::Ok);
+		amountEditDialog->setDefaultButton(KDialog::Ok);
+		amountEditDialog->setModal( false );	
 		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item

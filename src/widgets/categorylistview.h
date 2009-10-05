@@ -124,8 +124,8 @@ protected:
 	virtual void load( int limit, int offset );
 
 	/** so that it allows dropping into
-	         * subchildren that aren't expandable.  The code is taken from KDE's K3ListView with
-	         * one line commented out.
+	  * subchildren that aren't expandable.  The code is taken from KDE's K3ListView with
+	  * one line commented out.
 	  */
 	void findDrop( const QPoint &pos, Q3ListViewItem *&parent, Q3ListViewItem *&after )
 	{
@@ -161,7 +161,7 @@ protected:
 			{
 				// The mouse is sufficiently on the right ? - doesn't matter if 'above' has visible children
 				if ( p.x() >= depthToPixels( above->depth() + 1 ) ||
-				        ( above->isOpen() && above->childCount() > 0 ) )
+					( above->isOpen() && above->childCount() > 0 ) )
 				{
 					parent = above;
 					after = 0L;

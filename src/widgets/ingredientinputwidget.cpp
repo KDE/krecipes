@@ -199,7 +199,7 @@ void IngredientInput::typeButtonClicked( int button_id )
 	prepMethodBox->setEnabled( !bool( button_id ) );
 
 	if ( button_id == 1 ) { //Header
-            header_ing_stack->setCurrentWidget( headerBox );
+		header_ing_stack->setCurrentWidget( headerBox );
 	}
 	else {
 		header_ing_stack->setCurrentWidget( ingredientBox );
@@ -257,10 +257,10 @@ bool IngredientInput::checkBounds()
 	}
 
 	QStringList prepMethodList;
-   if (prepMethodBox->currentText().isEmpty())
-      prepMethodList = QStringList();
-   else
-      prepMethodList = prepMethodBox->currentText().split( ",", QString::SkipEmptyParts);
+	if (prepMethodBox->currentText().isEmpty())
+		prepMethodList = QStringList();
+	else
+		prepMethodList = prepMethodBox->currentText().split( ",", QString::SkipEmptyParts);
    
 	for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 		if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
@@ -281,7 +281,7 @@ bool IngredientInput::checkAmountEdit()
 		return true;
 	else {
 		KMessageBox::error( this, i18n( "Amount field contains invalid input." ),
-		                    i18n( "Invalid input" ) );
+			i18n( "Invalid input" ) );
 		amountEdit->setFocus();
 		amountEdit->selectAll();
 		return false;
@@ -315,7 +315,7 @@ void IngredientInput::loadUnitListCombo()
 				unitBox->completionObject() ->addItem( ( *unit_it ).name_abbrev );
 			}
 			if ( !(*unit_it ).plural_abbrev.isEmpty() &&
-			   ( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
+				( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
 				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural_abbrev );
 				unitBox->completionObject() ->addItem( ( *unit_it ).plural_abbrev );
 			}
@@ -382,11 +382,11 @@ void IngredientInputWidget::clear()
 
 void IngredientInputWidget::updateInputs(bool on, IngredientInput* input)
 {
-   QList<IngredientInput*>::iterator curr;
-   if (m_ingInputs.indexOf(input) == -1)
-      curr = m_ingInputs.end();
-   else
-      curr = m_ingInputs.begin()+m_ingInputs.indexOf(input);
+	QList<IngredientInput*>::iterator curr;
+	if (m_ingInputs.indexOf(input) == -1)
+		curr = m_ingInputs.end();
+	else
+		curr = m_ingInputs.begin()+m_ingInputs.indexOf(input);
 
 	IngredientInput *prev_input = *curr;
 	++curr;

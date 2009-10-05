@@ -150,18 +150,18 @@ QString RecipeListView::tooltip(Q3ListViewItem *item, int /*column*/) const
 		KLocale *locale = KGlobal::locale();
 
 		return QString("<center><b>%7</b></center><center>__________</center>%1 %2<br />%3 %4<br />%5 %6")
-		   .arg(i18n("Created:")).arg(locale->formatDateTime(r.ctime))
-		   .arg(i18n("Modified:")).arg(locale->formatDateTime(r.mtime))
-		   .arg(i18n("Last Accessed:")).arg(locale->formatDateTime(r.atime))
-		   .arg(recipe_it->title());
+		.arg(i18n("Created:")).arg(locale->formatDateTime(r.ctime))
+		.arg(i18n("Modified:")).arg(locale->formatDateTime(r.mtime))
+		.arg(i18n("Last Accessed:")).arg(locale->formatDateTime(r.atime))
+		.arg(recipe_it->title());
 	}/* Maybe this would be handy
 	else if ( item->rtti() == CATEGORYLISTITEM_RTTI ) {
 		CategoryListItem *cat_it = (CategoryListItem*)item;
 
 		return QString("<b>%1</b><hr />%2: %3")
-		   .arg(cat_it->categoryName())
-		   .arg(i18n("Recipes"))
-		   .arg(QString::number(WHATEVER THE CHILD COUNT IS));
+		.arg(cat_it->categoryName())
+		.arg(i18n("Recipes"))
+		.arg(QString::number(WHATEVER THE CHILD COUNT IS));
 	}*/
 
 	return QString::null;

@@ -24,34 +24,34 @@
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
 	 : KDialog( parent)
 {
-	 setCaption(i18n("New Category" ));
-	 setButtons(KDialog::Ok | KDialog::Cancel);
-	 setDefaultButton(KDialog::Ok);
-	 setModal( true );
+	setCaption(i18n("New Category" ));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setDefaultButton(KDialog::Ok);
+	setModal( true );
 
-	 KVBox *page = new KVBox( this );
-	 setMainWidget( page );
+	KVBox *page = new KVBox( this );
+	setMainWidget( page );
 
-	 box = new QGroupBox( page );
-	 QVBoxLayout *boxLayout = new QVBoxLayout;
-	 box->setLayout( boxLayout );
-	 boxLayout->setAlignment( Qt::AlignTop );
-	 box->setTitle( i18n( "New Category" ) );
+	box = new QGroupBox( page );
+	QVBoxLayout *boxLayout = new QVBoxLayout;
+	box->setLayout( boxLayout );
+	boxLayout->setAlignment( Qt::AlignTop );
+	box->setTitle( i18n( "New Category" ) );
 
-	 elementEdit = new KLineEdit( box );
-	 boxLayout->addWidget( elementEdit );
+	elementEdit = new KLineEdit( box );
+	boxLayout->addWidget( elementEdit );
 
-	 KHBox *subcatHBox = new KHBox( box );
-	 ( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
-	 categoryComboBox = new KComboBox( subcatHBox );
-	 boxLayout->addWidget( subcatHBox );
-	 loadCategories( categories );
+	KHBox *subcatHBox = new KHBox( box );
+	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
+	categoryComboBox = new KComboBox( subcatHBox );
+	boxLayout->addWidget( subcatHBox );
+	loadCategories( categories );
 
-	 adjustSize();
-	 resize( 400, size().height() );
-	 setFixedHeight( size().height() );
+	adjustSize();
+	resize( 400, size().height() );
+	setFixedHeight( size().height() );
 
-	 elementEdit->setFocus();
+	elementEdit->setFocus();
 }
 
 

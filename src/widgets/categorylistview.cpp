@@ -255,7 +255,7 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 		else {
 			QMap<int,Q3ListViewItem*>::iterator parent_item_it = items_map.find(parent_id);
 			if ( parent_item_it != items_map.end() &&
- 			  dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
+ 			dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
 				(*parent_item_it)->insertItem( item );
 				createElement(item);
 			}
@@ -361,8 +361,8 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 
 
 
-CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive, const ElementList &init_items_checked ) : CategoryListView( parent, db ),
-  exclusive(_exclusive)
+CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive, const ElementList &init_items_checked ) :
+CategoryListView( parent, db ), exclusive(_exclusive)
 {
 	addColumn( i18n( "Category" ) );
 

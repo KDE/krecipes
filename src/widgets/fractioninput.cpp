@@ -106,15 +106,15 @@ void FractionInput::slotStartValidateTimer()
 
 void FractionInput::validate()
 {
-QPalette p = palette();
+	QPalette p = palette();
 
-   if ( isInputValid() ) {
-      //KDE4 port setPaletteForegroundColor( KGlobalSettings::textColor() );
-      p.setColor( foregroundRole(), QPalette::Text );	
+	if ( isInputValid() ) {
+		//KDE4 port setPaletteForegroundColor( KGlobalSettings::textColor() );
+		p.setColor( foregroundRole(), QPalette::Text );	
 	}
 	else
-      p.setColor( foregroundRole(), Qt::red );	
-setPalette(p);
+		p.setColor( foregroundRole(), Qt::red );	
+	setPalette(p);
 }
 
 bool FractionInput::isEmpty() const

@@ -36,7 +36,7 @@ public slots:
 	void loadPrevGroup();
 
 protected:
-    virtual void popup();
+	virtual void popup();
 
 private slots:
 	void createCategory( const Element &element, int /*parent_id*/ );
