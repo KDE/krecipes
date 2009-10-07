@@ -34,10 +34,10 @@ class Q3ListViewItem;
 UnitActionsHandler::UnitActionsHandler( StdUnitListView *_parentListView, RecipeDB *db ):
 	ActionsHandlerBase( _parentListView, db )
 {
-        connect( parentListView,
-                SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ),
-                SLOT( saveUnit( Q3ListViewItem*, const QString &, int ) )
-        );
+	connect( parentListView,
+		SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ),
+		SLOT( saveUnit( Q3ListViewItem*, const QString &, int ) )
+	);
 }
 
 void UnitActionsHandler::createNew()

@@ -338,17 +338,19 @@ void RecipeActionsHandler::exportRecipe( int id, const QString & caption, const 
 void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString & caption, const QString &selection, RecipeDB *database )
 {
 	KFileDialog * fd = new KFileDialog( KUrl(),
-	                                    QString( "*.kre|%1 (*.kre)\n"
-	                                             "*.kreml|Krecipes (*.kreml)\n"
-	                                             "*.txt|%3 (*.txt)\n"
-	                                             //"*.cml|CookML (*.cml)\n"
-	                                             "*|Web Book\n"
-	                                             "*.html|%2 (*.html)\n"
-	                                             "*.mmf|Meal-Master (*.mmf)\n"
-	                                             "*.xml|RecipeML (*.xml)\n"
-	                                             "*.rk|Rezkonv (*.rk)"
-	                                              ).arg( i18n( "Compressed Krecipes format" ) ).arg( i18n( "Web page" ) ).arg( i18n("Plain Text") ),
-	                                    0 );
+		QString( "*.kre|%1 (*.kre)\n"
+		"*.kreml|Krecipes (*.kreml)\n"
+		"*.txt|%3 (*.txt)\n"
+		//"*.cml|CookML (*.cml)\n"
+		"*|Web Book\n"
+		"*.html|%2 (*.html)\n"
+		"*.mmf|Meal-Master (*.mmf)\n"
+		"*.xml|RecipeML (*.xml)\n"
+		"*.rk|Rezkonv (*.rk)"
+		).arg( i18n( "Compressed Krecipes format" ) )
+		.arg( i18n( "Web page" ) )
+		.arg( i18n("Plain Text") ),
+	0 );
 	fd->setObjectName( "export_dlg" );
 	fd->setModal( true );
 	fd->setCaption( caption );
