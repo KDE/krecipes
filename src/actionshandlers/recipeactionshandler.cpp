@@ -342,14 +342,15 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 		"*.kreml|Krecipes (*.kreml)\n"
 		"*.txt|%3 (*.txt)\n"
 		//"*.cml|CookML (*.cml)\n"
-		"*|Web Book\n"
+		"*|%4\n"
 		"*.html|%2 (*.html)\n"
 		"*.mmf|Meal-Master (*.mmf)\n"
 		"*.xml|RecipeML (*.xml)\n"
 		"*.rk|Rezkonv (*.rk)"
 		).arg( i18n( "Compressed Krecipes format" ) )
 		.arg( i18n( "Web page" ) )
-		.arg( i18n("Plain Text") ),
+		.arg( i18n("Plain Text") )
+		.arg( i18n("Web Book") ),
 	0 );
 	fd->setObjectName( "export_dlg" );
 	fd->setModal( true );

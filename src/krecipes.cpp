@@ -488,14 +488,16 @@ void Krecipes::filePrint()
 
 void Krecipes::import()
 {
-	QPointer<KFileDialog> file_dialog = new KFileDialog( KUrl(),
+	QPointer<KFileDialog> file_dialog = new KFileDialog( KUrl(), QString(
 		"*.kre *.kreml|Krecipes (*.kre, *.kreml)\n"
 		"*.mx2|MasterCook (*.mx2)\n"
-		"*.mxp *.txt|MasterCook Export (*.mxp, *.txt)\n"
+		"*.mxp *.txt|%1 (*.mxp, *.txt)\n"
 		"*.mmf *.txt|Meal-Master (*.mmf, *.txt)\n"
-		"*.txt|\"Now You're Cooking\" Generic Export (*.txt)\n"
+		"*.txt|%2 (*.txt)\n"
 		"*.xml *.recipeml|RecipeML (*.xml, *.recipeml)\n"
-		"*.rk *.txt|Rezkonv (*.rk, *.txt)",
+		"*.rk *.txt|Rezkonv (*.rk, *.txt)"
+		).arg( i18n("MasterCook Export format") )
+		.arg( i18n("\"Now You're Cooking\" Generic Export format") ),
 		this,
 		0
 	);
