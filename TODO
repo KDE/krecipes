@@ -5,7 +5,6 @@ Planned for the next release in 2.0 branch:
  [Mandatory]
  * Using a QSplitter on the ingredient matcher dialog.
  * Preferences dialog allow the removal of gradients in the left panel.
- * Restored options about formatting in preferences dialog.
  * Solve the issues reported by krazy.
  * Check files taken from other projects and explain in a comment where those
    files came from.

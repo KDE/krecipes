@@ -6,8 +6,6 @@
   click on the right arrow; some ingredients might be missing in the right
   list.
 
-* We have lost formatting options in the preferences dialog.
-
 * On my debian system, if I don't provide a password for PostgreSQL, krecipes
   silently fails.
 
