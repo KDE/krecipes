@@ -2,8 +2,8 @@
 krazy2 Analysis
 
 Checkers Run = 46
-Files Processed = 297
-Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
+Files Processed = 295
+Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 
 ==>For File Type c++<==
 1. Check for TRUE and FALSE macros [captruefalse]... Ok!
@@ -28,7 +28,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 
 4. Check for cpp macros and usage [cpp]... 32 issues found
 	./src/pref.cpp: Unknown HAVE_FOO macro line#373[HAVE_SQLITE3] (1)
-	./src/setupassistant.cpp: Unknown HAVE_FOO macro line#74[HAVE_MYSQL],77[HAVE_POSTGRESQL],865[HAVE_POSTGRESQL],871[HAVE_MYSQL] (4)
+	./src/setupassistant.cpp: Unknown HAVE_FOO macro line#74[HAVE_MYSQL],77[HAVE_POSTGRESQL],871[HAVE_POSTGRESQL],877[HAVE_MYSQL] (4)
 	./src/backends/recipedb.cpp: Unknown HAVE_FOO macro line#42[HAVE_POSTGRESQL],46[HAVE_MYSQL],50[HAVE_SQLITE3],134[HAVE_SQLITE3],140[HAVE_MYSQL],145[HAVE_POSTGRESQL] (6)
 	./src/backends/SQLite/literecipedb.cpp: Unknown HAVE_FOO macro line#27[HAVE_SQLITE3],69[HAVE_SQLITE3],85[HAVE_SQLITE3],1023[HAVE_SQLITE3],1029[HAVE_SQLITE3] (5)
 	./src/backends/SQLite/qsql_sqlite.cpp: Unknown HAVE_FOO macro line#31[HAVE_SQLITE3],451[HAVE_SQLITE3] (2)
@@ -46,8 +46,8 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	Looks for not using QPointers when showing modal dialogs via
 	exec(), as discussed in <http://www.kdedevelopers.org/node/3919>
 
-6. Check single-char QString operations for efficiency [doublequote_chars]... 193 issues found
-	./src/krecipesview.cpp: line#326 (1)
+6. Check single-char QString operations for efficiency [doublequote_chars]... 194 issues found
+	./src/krecipesview.cpp: line#329,351 (2)
 	./src/importers/mmfimporter.cpp: line#152,176 (2)
 	./src/importers/rezkonvimporter.cpp: line#148 (1)
 	./src/importers/rezkonvimporter.cpp: section issues line#250,253,256 (3)
@@ -64,25 +64,25 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/widgets/fractioninput.cpp: line#44 (1)
 	./src/widgets/conversiontable.cpp: line#43 (1)
 	./src/widgets/prepmethodcombobox.cpp: line#47 (1)
-	./src/widgets/krelistview.cpp: line#55 (1)
+	./src/widgets/krelistview.cpp: line#54 (1)
 	./src/widgets/thumbbar.cpp: line#552 (1)
 	./src/widgets/ingredientinputwidget.cpp: split issues line#263 (1)
-	./src/backends/qsqlrecipedb.cpp: line#194,784,798,1466,1470,1478,1505,1509,1798,2299 (10)
-	./src/backends/qsqlrecipedb.cpp: replace issues line#1839,1840 (2)
+	./src/backends/qsqlrecipedb.cpp: line#195,785,799,1473,1477,1485,1512,1516,1805,2306 (10)
+	./src/backends/qsqlrecipedb.cpp: replace issues line#1846,1847 (2)
 	./src/backends/recipedb.cpp: line#591,677,684,693,700,709,716,724,731,738,745,774,775,780,781,784,790,791,796,797,800,806,807,812,813,816,821,825 (28)
 	./src/backends/recipedb.cpp: starts/endsWith issues line#595 (1)
 	./src/backends/recipedb.cpp: split issues line#865 (1)
 	./src/backends/PostgreSQL/psqlrecipedb.cpp: line#487,496,505,506,518,562 (6)
 	./src/backends/SQLite/literecipedb.cpp: line#798,854,932,942,956,958 (6)
 	./src/dialogs/editpropertiesdialog.cpp: line#78,80 (2)
-	./src/dialogs/editpropertiesdialog.cpp: split issues line#513 (1)
-	./src/dialogs/dependanciesdialog.cpp: line#85 (1)
-	./src/dialogs/ingredientmatcherdialog.cpp: line#182 (1)
-	./src/dialogs/advancedsearchdialog.cpp: line#1043 (1)
-	./src/dialogs/advancedsearchdialog.cpp: replace issues line#1023,1024,1026,1027 (4)
+	./src/dialogs/editpropertiesdialog.cpp: split issues line#519 (1)
+	./src/dialogs/dependanciesdialog.cpp: line#86 (1)
+	./src/dialogs/ingredientmatcherdialog.cpp: line#185 (1)
+	./src/dialogs/advancedsearchdialog.cpp: line#1042 (1)
+	./src/dialogs/advancedsearchdialog.cpp: replace issues line#1022,1023,1025,1026 (4)
 	./src/dialogs/selectpropertydialog.cpp: line#144 (1)
-	./src/dialogs/recipeinputdialog.cpp: line#1197,1225,1677,1681,1685,1689 (6)
-	./src/dialogs/recipeinputdialog.cpp: split issues line#1047,1706 (2)
+	./src/dialogs/recipeinputdialog.cpp: line#1199,1227,1667,1671,1675,1679 (6)
+	./src/dialogs/recipeinputdialog.cpp: split issues line#1049,1696 (2)
 	./src/dialogs/ingredientparserdialog.cpp: split issues line#237 (1)
 	./src/dialogs/selectunitdialog.cpp: line#73 (1)
 	./src/dialogs/conversiondialog.cpp: line#135,139 (2)
@@ -150,31 +150,32 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 
 12. Check for foreach loop issues [foreach]... Ok!
 
-13. Check validity of i18n calls [i18ncheckarg]... 90 issues found
+13. Check validity of i18n calls [i18ncheckarg]... 97 issues found
 	./src/krepagelayout.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#120
 	./src/pref.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#151,175,266,290
-	./src/pref.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#522,635,645
-	./src/krecipes.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#563
-	./src/krecipes.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#189,342
-	./src/setupassistant.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#153,186,301,416,757,783
+	./src/pref.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#553,666,676
+	./src/krecipes.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#564
+	./src/krecipes.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#188,341
+	./src/setupassistant.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#153,186,301,416,763,789
 	./src/setupassistant.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#220,335,436,514
-	./src/krecipesview.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#332
+	./src/convert_sqlite3.cpp: wrong argument count, have 0 need 1 line#83,91,100,131,137,141
+	./src/krecipesview.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#345,360
 	./src/importers/baseimporter.cpp: malformed markup (unmatched tags, etc.) line#385
 	./src/widgets/recipelistview.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#153
 	./src/widgets/unitlistview.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#86
 	./src/widgets/unitlistview.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#68,84
-	./src/widgets/kremenu.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#131
+	./src/widgets/kremenu.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#130
 	./src/widgets/dblistviewbase.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#33,49
 	./src/widgets/unitlistview.h: reported ambiguous message by translators; use context call to explain what it refers to line#108
 	./src/widgets/unitlistview.h: single adjective as message, probably ambiguous; use context call to explain what it refers to line#106
-	./src/widgets/krelistview.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#55
+	./src/widgets/krelistview.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#54
 	./src/widgets/thumbbar.cpp: wrong argument count, have 0 need 2 line#649
 	./src/widgets/thumbbar.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#634
-	./src/backends/qsqlrecipedb.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#1991
+	./src/backends/qsqlrecipedb.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#1998
 	./src/backends/PostgreSQL/psqlrecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#390
 	./src/backends/MySQL/mysqlrecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#471
 	./src/backends/SQLite/literecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#750
-	./src/dialogs/dietviewdialog.cpp: use of QString::number() on an argument line#96
+	./src/dialogs/dietviewdialog.cpp: use of QString::number() on an argument line#98
 	./src/dialogs/editpropertiesdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#242
 	./src/dialogs/dietwizarddialog.cpp: use of QString::number() on an argument line#415
 	./src/dialogs/dietwizarddialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#110
@@ -186,20 +187,20 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/dialogs/createunitdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#70
 	./src/dialogs/createunitdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#42,54,68
 	./src/dialogs/shoppinglistdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#139
-	./src/dialogs/advancedsearchdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#580,657,686
-	./src/dialogs/advancedsearchdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#412,684
+	./src/dialogs/advancedsearchdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#579,656,685
+	./src/dialogs/advancedsearchdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#411,683
 	./src/dialogs/refineshoppinglistdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#45
-	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1546,1591,1600,1604
-	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 3 line#1606,1609
-	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 1 line#741
-	./src/dialogs/recipeinputdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#378
-	./src/dialogs/recipeinputdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#1625,1636
+	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1536,1581,1590,1594
+	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 3 line#1596,1599
+	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 1 line#743
+	./src/dialogs/recipeinputdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#379
+	./src/dialogs/recipeinputdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#1615,1626
 	./src/dialogs/similarcategoriesdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#184
 	./src/dialogs/similarcategoriesdialog.cpp: malformed markup (unmatched tags, etc.) line#186
 	./src/dialogs/borderdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#133,206
 	./src/dialogs/ingredientparserdialog.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#108
 	./src/dialogs/dbimportdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#185,189
-	./src/dialogs/createcategorydialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#62
+	./src/dialogs/createcategorydialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#63
 	./src/dialogs/conversiondialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#98
 	./src/dialogs/selectrecipedialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#74,75
 	./src/dialogs/selectrecipedialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#113,116
@@ -228,10 +229,10 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/krepagelayout.cpp: line#64,65,66,70,71,72,73 (7)
 	./src/propertycalculator.cpp: line#103 (1)
 	./src/krecipesview.h: line#154 (1)
-	./src/convert_sqlite3.h: line#22 (1)
-	./src/krecipes.cpp: line#642,661,703 (3)
-	./src/setupassistant.cpp: line#608 (1)
-	./src/krecipesview.cpp: line#811,883 (2)
+	./src/convert_sqlite3.h: line#26 (1)
+	./src/krecipes.cpp: line#643,662,704 (3)
+	./src/setupassistant.cpp: line#613 (1)
+	./src/krecipesview.cpp: line#840,912 (2)
 	./src/importers/mmfimporter.cpp: line#336,337,339 (3)
 	./src/importers/rezkonvimporter.cpp: line#134 (1)
 	./src/importers/recipemlimporter.h: line#38 (1)
@@ -240,7 +241,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/importers/baseimporter.cpp: line#99,122 (2)
 	./src/tests/mxptest.cpp: line#57 (1)
 	./src/tests/mx2test.cpp: line#57 (1)
-	./src/actionshandlers/recipeactionshandler.cpp: line#393,410,412,414,416,420,423 (7)
+	./src/actionshandlers/recipeactionshandler.cpp: line#396,413,415,417,419,423,426 (7)
 	./src/datablocks/recipe.h: line#25 (1)
 	./src/datablocks/recipe.cpp: line#28,30,31 (3)
 	./src/widgets/recipelistview.cpp: line#167,240 (2)
@@ -252,7 +253,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/widgets/paneldeco.cpp: line#82 (1)
 	./src/widgets/ingredientlistview.cpp: line#26,35,69 (3)
 	./src/widgets/paneldeco.h: line#37,52,60,65 (4)
-	./src/widgets/kremenu.cpp: line#304 (1)
+	./src/widgets/kremenu.cpp: line#296 (1)
 	./src/widgets/categorylistview.cpp: line#30,38,46 (3)
 	./src/widgets/dblistviewbase.cpp: line#36,52 (2)
 	./src/widgets/conversiontable.cpp: line#127,166,183 (3)
@@ -261,8 +262,8 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/widgets/prepmethodcombobox.h: line#26 (1)
 	./src/widgets/ingredientcombobox.h: line#28 (1)
 	./src/widgets/ingredientinputwidget.cpp: line#236 (1)
-	./src/backends/recipedb.h: line#103,195,267 (3)
-	./src/backends/qsqlrecipedb.cpp: line#537,588,1490,1878,1888,1898,1909,1993,2354,2476,2597,2618,2744,2752,2762 (15)
+	./src/backends/recipedb.h: line#105,197,269 (3)
+	./src/backends/qsqlrecipedb.cpp: line#538,589,1497,1885,1895,1905,1916,2000,2361,2483,2604,2625,2751,2759,2769 (15)
 	./src/backends/qsqlrecipedb.h: line#38,68,161 (3)
 	./src/backends/usda_ingredient_data.cpp: line#47 (1)
 	./src/backends/recipedb.cpp: line#99,317,489,590,593,597 (6)
@@ -277,9 +278,9 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/dialogs/selectauthorsdialog.cpp: line#81 (1)
 	./src/dialogs/editpropertiesdialog.cpp: line#82,84,129 (3)
 	./src/dialogs/recipeviewdialog.h: line#42,53 (2)
-	./src/dialogs/dependanciesdialog.cpp: line#95 (1)
+	./src/dialogs/dependanciesdialog.cpp: line#96 (1)
 	./src/dialogs/ingredientmatcherdialog.h: line#110 (1)
-	./src/dialogs/ingredientmatcherdialog.cpp: line#62,88,180 (3)
+	./src/dialogs/ingredientmatcherdialog.cpp: line#62,88,183 (3)
 	./src/dialogs/setupdisplay.cpp: line#141,310,518 (3)
 	./src/dialogs/setupdisplay.h: line#129 (1)
 	./src/dialogs/refineshoppinglistdialog.cpp: line#59,86 (2)
@@ -288,7 +289,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/dialogs/resizerecipedialog.cpp: line#131 (1)
 	./src/dialogs/createunitdialog.h: line#34 (1)
 	./src/dialogs/recipeviewdialog.cpp: line#112,119 (2)
-	./src/dialogs/editratingdialog.cpp: line#190 (1)
+	./src/dialogs/editratingdialog.cpp: line#192 (1)
 	./src/dialogs/createunitconversiondialog.cpp: line#77 (1)
 	./src/dialogs/pagesetupdialog.h: line#31 (1)
 	./src/dialogs/dbimportdialog.cpp: line#230 (1)
@@ -314,7 +315,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 21. Check for inappropriate pass-by-value function args [passbyvalue]... Ok!
 
 22. Check for postfix usage of ++ and -- [postfixop]... 5 issues found
-	./src/dialogs/dietviewdialog.cpp: line#92 (1)
+	./src/dialogs/dietviewdialog.cpp: line#94 (1)
 	./src/dialogs/similarcategoriesdialog.cpp: line#225,227,230,231 (4)
 	You should use ++ and -- as prefix whenever possible as these are
 	more efficient than postfix operators. Prefix increments first and
@@ -357,7 +358,7 @@ Total Issues = 557 ...as of September 19 2009 17:14:17 CEST
 	./src/importers/nycgenericimporter.cpp: QLatin1String issues line#38,89,90,95,98,105,108,111 (8)
 	./src/importers/mx2importer.cpp: QLatin1String issues line#45 (1)
 	./src/backends/recipedb.cpp: QLatin1String issues line#463,592,595 (3)
-	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1698,1704 (2)
+	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1688,1694 (2)
 	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#196 (1)
 	./src/exporters/xsltexporter.cpp: QLatin1String issues line#74 (1)
 	Some QString methods (like startsWith() and endsWith()) are more

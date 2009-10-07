@@ -1,4 +1,4 @@
-Changes from 2.0-alpha2 to svn:
+Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
     or failure of the operation.
   * If the program fails to fix the db structure with SQLite, you can execute
@@ -9,6 +9,8 @@ Changes from 2.0-alpha2 to svn:
   * Using KRatingWidget and KRatingPanter from nepomuk; as side effects we are
     avoiding some crashes when clicking on the old RatingWidget and we have
     refreshed artwork.
+  * Updated most screenshots in the user manual, note that the manual is not
+    finished yet.
   * Fixes for bugs:
     + The program can be built on Windows, thanks to Patrick Spendrin
       (SaroEngels).

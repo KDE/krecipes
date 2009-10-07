@@ -1,5 +1,5 @@
 Krecipes is a Recipe Book for KDE. It requires KDE 4.2 or greater (and Qt 4).
-Developed and tested on Debian GNU/Linux sid (KDE 4.3.1 and Qt 4.5.2).
+Developed and tested on Debian GNU/Linux sid (KDE 4.3.2 and Qt 4.5.2).
 
 
 First of all, make sure you have at least one of the three necessary databases
@@ -13,11 +13,11 @@ properly installed. The program won't work without database support.
  the following packages: 
  libqimageblitz-dev libsqlite0-dev libsqlite3-dev libmysqlclient-dev libpq-dev
  
-** Building The Latest (2.0-alpha2) Release
+** Building The Latest (2.0-alpha3) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0-alpha2.tar.gz
+ tar -zxf krecipes-2.0-alpha3.tar.gz
  
  And compile:
  
