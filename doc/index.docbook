@@ -1159,7 +1159,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para><guibutton>Help</guibutton> &ndash; clicking on this button will refer you to this section of the Handbook</para></listitem>
 <listitem><para><guibutton>Edit</guibutton> &ndash; is used to access the <interface>Print Setup</interface> interface so that you can make any desired changes to the way your recipe will print</para>
 <note><para>As previously stated, modifications to your print setup are done in exactly the manner as they are done in <link linkend="krecipes-page-setup">Page Setup</link>.</para></note></listitem>
-<listitem><para><guibutton>Print</guibutton> &ndash; will open the print dialog window for whatever print program you are using, for example, kprinter</para></listitem>
+<listitem><para><guibutton>Print</guibutton> &ndash; will open the print dialog window for whatever print program you are using, for example, &kprinter;</para></listitem>
 <listitem><para><guibutton>Cancel</guibutton> &ndash; will close the <interface>Print Preview</interface> window and return you to your open recipe</para></listitem>
 </itemizedlist>
 
@@ -1367,13 +1367,13 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <para><emphasis>&krecipes;</emphasis> can export your recipes to the following formats &mdash;</para>
 
 <itemizedlist>
-<listitem><para>Compressed Krecipes format &ndash; files of this format will have extensions of .kre</para>
-<para>This export format will result in a smaller filesize and as a result disk space is saved.  The smaller filesize also makes sending over the Internet easier.  This format also provides a mean of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your Krecipes Database</link> for further information.</para></listitem>
+<listitem><para>Compressed &krecipes; format &ndash; files of this format will have extensions of .kre</para>
+<para>This export format will result in a smaller filesize and as a result disk space is saved.  The smaller filesize also makes sending over the Internet easier.  This format also provides a mean of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your &krecipes; Database</link> for further information.</para></listitem>
 
-<listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
-<para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe XML.</para>
+<listitem><para>&krecipes; &ndash; files of this format will have extensions of .kreml</para>
+<para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe &XML;.</para>
 
-<note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>borders</quote> around certain elements, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
+<note><para>When exporting in either &krecipes; and &krecipes; Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>borders</quote> around certain elements, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
 
 <listitem><para>Plain Text &ndash; files of this format will have extensions of .txt</para>
 <para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as email.</para></listitem>
@@ -1407,7 +1407,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <listitem><para>RecipeML &ndash; files of this format will have extensions of .xml</para>
 
-<para>This is a standard recipe XML format, although not yet widely used by most recipe software.  However, you may wish to use this format to have recipes recognized by programs that use it.</para></listitem>
+<para>This is a standard recipe &XML; format, although not yet widely used by most recipe software.  However, you may wish to use this format to have recipes recognized by programs that use it.</para></listitem>
 
 <listitem><para>Rezkonv &ndash; files of this format will have extensions of .rk</para>
 
@@ -1497,7 +1497,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </sect1>
 
 <sect1 id="krecipes-components">
-<title>Other Krecipes Components</title>
+<title>Other &krecipes; Components</title>
 
 <sect2 id="shopping-list">
 <title>The Shopping List</title>
@@ -2378,7 +2378,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <sect1 id="configure-krecipes-choice">
 <title>Configuring <emphasis>&krecipes;</emphasis></title>
-<para>When you choose <guimenu>Settings</guimenu> and <guimenuitem>Configure Krecipes</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu, the <interface>Krecipes Preferences - Krecipes</interface> window appears.  From this window, you can choose one of three buttons to configure various aspects of <emphasis>&krecipes;</emphasis>.</para>
+<para>When you choose <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu, the <interface>&krecipes; Preferences - &krecipes;</interface> window appears.  From this window, you can choose one of three buttons to configure various aspects of <emphasis>&krecipes;</emphasis>.</para>
 
 <sect2 id="configure-server-settings">
 <title>Server Settings</title>
@@ -2411,8 +2411,8 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <para>Buttons that appear at the bottom of the <emphasis><guilabel>Server Settings</guilabel></emphasis> screen are common to each of the preference screens and function as follows &mdash;</para>
 
 <itemizedlist>
-<listitem><para><guibutton>OK</guibutton> &ndash; sets any changes made and closes the <interface>Krecipes Preferences - Krecipes</interface> window</para></listitem>
-<listitem><para><guibutton>Cancel</guibutton> &ndash; cancels changes, if any have been made, and closes the <interface>Krecipes Preferences - Krecipes</interface> window</para></listitem>
+<listitem><para><guibutton>OK</guibutton> &ndash; sets any changes made and closes the <interface>&krecipes; Preferences - &krecipes;</interface> window</para></listitem>
+<listitem><para><guibutton>Cancel</guibutton> &ndash; cancels changes, if any have been made, and closes the <interface>&krecipes; Preferences - &krecipes;</interface> window</para></listitem>
 <listitem><para><guibutton>Help</guibutton> opens the <emphasis>&krecipes;</emphasis> Handbook to the associated section</para></listitem>
 </itemizedlist>
 </sect2>
@@ -2420,7 +2420,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <sect2 id="custom-formatting">
 <title>Customizing Formatting</title>
 
-<para>Like accessing the <interface>Krecipes Preferences - Krecipes</interface> <emphasis><guilabel>Server Settings</guilabel></emphasis> preferences, you access the <emphasis><guilabel>Formatting</guilabel></emphasis> preferences, by first choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Formatting</guilabel></emphasis> option that appears on the left of the window.</para>
+<para>Like accessing the <interface>&krecipes; Preferences - &krecipes;</interface> <emphasis><guilabel>Server Settings</guilabel></emphasis> preferences, you access the <emphasis><guilabel>Formatting</guilabel></emphasis> preferences, by first choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Formatting</guilabel></emphasis> option that appears on the left of the window.</para>
 <para>
 <screenshot>
 <screeninfo>Here's a screenshot of the &krecipes; Formatting configuration window.</screeninfo>
@@ -2474,7 +2474,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>Accessing the <interface>Krecipes Preferences - Krecipes</interface> <emphasis><guilabel>Import/Export</guilabel></emphasis> preferences, is accomplished by first, choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Import/Export</guilabel></emphasis> option that appears on the left of the window.</para>
+<para>Accessing the <interface>&krecipes; Preferences - &krecipes;</interface> <emphasis><guilabel>Import/Export</guilabel></emphasis> preferences, is accomplished by first, choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Import/Export</guilabel></emphasis> option that appears on the left of the window.</para>
 
 <para>On this screen under the heading <emphasis><guilabel>Import</guilabel></emphasis>, two options exist &mdash;</para>
 
@@ -2497,7 +2497,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <itemizedlist>
 <listitem><para>Plain Text (*.txt) &ndash; If copied to the clipboard in this format, the result will be a plain text copy of the recipe.</para></listitem> 
-<listitem><para>Krecipes (*.kreml) &ndash; If copied to the clipboard in this format, the result will contain all the associated markup tags that allow formatting which is associated with <emphasis>&krecipes;</emphasis>.</para></listitem>
+<listitem><para>&krecipes; (*.kreml) &ndash; If copied to the clipboard in this format, the result will contain all the associated markup tags that allow formatting which is associated with <emphasis>&krecipes;</emphasis>.</para></listitem>
 <listitem><para>Meal-Master (*.mmf) &ndash; If copied to the clipboard in this format, the result will be a format that is recognized by the Meal-Master program.</para></listitem>
 <listitem><para>Rezkonv (*.rk) &ndash; If copied to the clipboard in this format, the result will be a format that is recognized by the Rezkonv program.</para></listitem>
 <listitem><para>RecipeML (*.xml) &ndash; If copied to the clipboard in this format, the result will contain all the associated markup tags that allow formatting associated with RecipeML.</para></listitem>
@@ -2530,7 +2530,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>Accessing the <interface>Krecipes Preferences - Krecipes</interface> <emphasis><guilabel>Performance</guilabel></emphasis> preferences, is accomplished by first, choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Performance</guilabel></emphasis> option that appears on the left of the window.</para>
+<para>Accessing the <interface>&krecipes; Preferences - &krecipes;</interface> <emphasis><guilabel>Performance</guilabel></emphasis> preferences, is accomplished by first, choosing <guimenu>Settings</guimenu> and <guimenuitem>Configure &krecipes;...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu and then, choosing the <emphasis><guilabel>Performance</guilabel></emphasis> option that appears on the left of the window.</para>
 
 <para>In this interface, you are customizing two settings. For a reason that you might want to do this, see the section <link linkend="config-performance-reason">Reasons for Configuring Performance Settings</link>.  These settings can be used individually or together or not at all.</para>
 
@@ -2640,7 +2640,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>From the screenshot, you will notice that there is an icon at the top of the page and beside this your username that you use to log onto your system.  This icon can be changed by clicking on it.</para>
 
-<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explanatory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An SMTP server is the server used for sending email.  This could be the one housed by your Internet service provider, or one that is on your local area network.</para>
+<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explanatory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An &SMTP; server is the server used for sending email.  This could be the one housed by your Internet service provider, or one that is on your local area network.</para>
 
 <para>The last item shown in the <emphasis><guilabel>User Information</guilabel></emphasis> section is for the <emphasis><guilabel>User ID</guilabel></emphasis>.  In the screenshot, nothing shows beside this label, but it would normally default to your numerical User ID as set up on the system.</para>
 
@@ -2903,7 +2903,7 @@ or menu bars. -->
 <title>The <guimenu>Help</guimenu> Menu</title>
 
 <!-- Assuming you have a standard help menu (help, what's this, about -->
-<!-- &krecipes;, about KDE) then the documentation is already written. -->
+<!-- &krecipes;, about &kde;) then the documentation is already written. -->
 <!-- The following entity is valid anywhere that a variablelist is -->
 <!-- valid.  -->
 
@@ -2934,17 +2934,17 @@ application work. -->
 
 <qandaentry>
 <question>
-<para>I've put a lot of recipes into Krecipes and now it runs and loads very slowly.  Is there anything I can do to speed it up?</para>
+<para>I've put a lot of recipes into &krecipes; and now it runs and loads very slowly.  Is there anything I can do to speed it up?</para>
 </question>
 <answer>
-<para>Krecipes can work fine with thousands of recipes, even on a modest machine, and it is currently being tested with 50,000+ recipes.</para>
+<para>&krecipes; can work fine with thousands of recipes, even on a modest machine, and it is currently being tested with 50,000+ recipes.</para>
 
 <para>Here's what you can do:</para>
 
 <itemizedlist>
 <listitem><para>Select the MySQL or PostgreSQL backends.  They provide better overall performance than SQLite, especially for a huge amount of recipes.</para></listitem>
-<listitem><para>In the Configure Krecipes dialog, tune the <link linkend="configure-performance">Performance options</link>.</para></listitem>
-<listitem><para>Categorize your recipes.  Krecipes will load much faster if all recipes are categorized.</para></listitem>
+<listitem><para>In the Configure &krecipes; dialog, tune the <link linkend="configure-performance">Performance options</link>.</para></listitem>
+<listitem><para>Categorize your recipes.  &krecipes; will load much faster if all recipes are categorized.</para></listitem>
 </itemizedlist>
 
 </answer>
@@ -2989,7 +2989,7 @@ application work. -->
 
 <!-- Include credits for the programmers, documentation writers, and
 contributors here. The license for your software should then be included below
-the credits with a reference to the appropriate license file included in the KDE
+the credits with a reference to the appropriate license file included in the &kde;
 distribution. -->
 
 <title>Credits and License</title>
@@ -3040,7 +3040,7 @@ Documentation copyright 2004-2006 Colleen Beamer <email>colleen.beamer&#064;gmai
 
 <para>The latest version of &krecipes; is available from its home page at <ulink url="http://krecipes.sourceforge.net">http://krecipes.sourceforge.net</ulink></para>
 
-<para>&krecipes; can also be found in KDE SVN in the extragear/utils module.  Instructions for downloading and installing through SVN are available at <ulink url="http://krecipes.sourceforge.net/downloading.html">http://krecipes.sourceforge.net/downloading.html</ulink></para>
+<para>&krecipes; can also be found in &kde; SVN in the extragear/utils module.  Instructions for downloading and installing through SVN are available at <ulink url="http://krecipes.sourceforge.net/downloading.html">http://krecipes.sourceforge.net/downloading.html</ulink></para>
 
 </sect1>
 
@@ -3097,7 +3097,7 @@ In order to successfully use &krecipes;, make sure you have at least one of the 
 &install.compile.documentation;
 
 <para>
-Krecipes can also be compiled without support for certain databases.  See <command>./configure --help</command>.
+&krecipes; can also be compiled without support for certain databases.  See <command>./configure --help</command>.
 </para>
 
 </sect1>
