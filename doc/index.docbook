@@ -157,7 +157,7 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <emphasis>Find/Edit 
  
 <itemizedlist><listitem><para>A title showing the name of the component selected</para></listitem>
 <listitem><para><emphasis><guilabel>Basic</guilabel></emphasis> (the default) and <emphasis><guilabel>Advanced</guilabel></emphasis> tabs</para></listitem>
-<listitem><para>A textbox to <userinput>enter search criteria</userinput></para>
+<listitem><para>A text box to <userinput>enter search criteria</userinput></para>
 <note><para>A cool feature here is that <emphasis>&krecipes;</emphasis> will search for recipes as you type a text string in the <guilabel>Search:</guilabel> box.  For example, if you wanted to find a recipe containing the word <quote>apple</quote>, the recipes that display in the recipe view would show only those recipes that contain the text string and would be filtered more finely as each subsequent letter is typed.</para></note></listitem>
 <listitem><para>A list of all recipe categories</para></listitem>
 <listitem><para>Buttons for <guibutton>Open</guibutton>, <guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing the corresponding action on a recipe</para></listitem>
@@ -252,7 +252,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <sect3 id="using-adv-ingredients">
 <title>The Ingredients Search</title>
 
-<para>In the <emphasis><guilabel>Ingredients</guilabel></emphasis> component of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab, single or multi-word ingredients can be searched for. Single word ingredients are entered in the textbox with a space between each ingredient.  Multi-word ingredients are enclosed in quotes, for example, "ice cream".</para>
+<para>In the <emphasis><guilabel>Ingredients</guilabel></emphasis> component of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab, single or multi-word ingredients can be searched for. Single word ingredients are entered in the text box with a space between each ingredient.  Multi-word ingredients are enclosed in quotes, for example, "ice cream".</para>
 
 <para>Searches may also be done using wild cards &ndash; <quote>*</quote> to replace any number of characters, or <quote>?</quote> to replace a single character.  For an explanation on the use of wildcards, see the section <link linkend="using-wildcards">Using Wildcards in Searches</link>.</para>
 
@@ -262,11 +262,11 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <itemizedlist>
 
-<listitem><para><emphasis><guilabel>Uses all:</guilabel></emphasis> &ndash; If the search terms are entered in this textbox, it is being stated that the recipe(s) <emphasis>MUST</emphasis> contain all ingredients listed and therefore, only those recipes that contain <emphasis>ALL</emphasis> ingredients will be returned as results of the search.</para></listitem>
+<listitem><para><emphasis><guilabel>Uses all:</guilabel></emphasis> &ndash; If the search terms are entered in this text box, it is being stated that the recipe(s) <emphasis>MUST</emphasis> contain all ingredients listed and therefore, only those recipes that contain <emphasis>ALL</emphasis> ingredients will be returned as results of the search.</para></listitem>
 
-<listitem><para><emphasis><guilabel>Uses any of:</guilabel></emphasis> &ndash; If the search terms are entered in this textbox, it is being stated that the recipe(s) <emphasis>MAY</emphasis> contain any of the ingredients specified.  The search results will return recipes that contain <emphasis>ANY OR ALL</emphasis> of the ingredients.</para></listitem>
+<listitem><para><emphasis><guilabel>Uses any of:</guilabel></emphasis> &ndash; If the search terms are entered in this text box, it is being stated that the recipe(s) <emphasis>MAY</emphasis> contain any of the ingredients specified.  The search results will return recipes that contain <emphasis>ANY OR ALL</emphasis> of the ingredients.</para></listitem>
 
-<listitem><para><emphasis><guilabel>Without:</guilabel></emphasis> &ndash; If the search terms are entered in this textbox, it is being specified that the recipes returned as results of the search <emphasis>MUST NOT</emphasis> contain <emphasis>ANY</emphasis> of the listed ingredients.</para></listitem>
+<listitem><para><emphasis><guilabel>Without:</guilabel></emphasis> &ndash; If the search terms are entered in this text box, it is being specified that the recipes returned as results of the search <emphasis>MUST NOT</emphasis> contain <emphasis>ANY</emphasis> of the listed ingredients.</para></listitem>
 
 </itemizedlist>
 
@@ -333,7 +333,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para>Searches can be performed in the following ways &mdash;</para>
 
 <itemizedlist>
-<listitem><para><emphasis><guilabel>By any of:</guilabel></emphasis> &ndash; This search would be used if the recipes desired are by <emphasis>ANY</emphasis> of the authors listed in the textbox.</para></listitem>
+<listitem><para><emphasis><guilabel>By any of:</guilabel></emphasis> &ndash; This search would be used if the recipes desired are by <emphasis>ANY</emphasis> of the authors listed in the text box.</para></listitem>
 <listitem><para><emphasis><guilabel>By all:</guilabel></emphasis> &ndash; This search would be used in situations where recipes have <quote>co-authors</quote>.  An example of this would be:  <emphasis><quote>Canadian Living Cooks</quote></emphasis>  <emphasis><quote>Elizabeth Baird</quote></emphasis>.  This would return only recipes where <emphasis>Canadian Living Cooks</emphasis> and <emphasis>Elizabeth Baird</emphasis> are both listed as the recipe source/author.</para></listitem>
 <listitem><para><emphasis><guilabel>Not by:</guilabel></emphasis> &ndash; This search would be used when you want to exclude certain authors from your search.</para></listitem>
 </itemizedlist>
@@ -380,7 +380,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Are you interested in finding a recipe that contains certain instructions or is prepared a certain way?  The <emphasis><guilabel>Instructions</guilabel></emphasis> component in the <emphasis><guilabel>Advanced</guilabel></emphasis> tab allows you to search the recipe instructions for specific terms that might include a preparation method, such as <quote><emphasis>Bake at 350</emphasis></quote>, or a suggested garnish.  However, these are just examples of how this component might be used.  Any term(s) that might appear in the <emphasis>Instructions</emphasis> of a recipe can be used.</para>
 
-<para>To utilize the <emphasis><guilabel>Instructions</guilabel></emphasis> search, simply type the keyword or keywords in the textbox beside the <emphasis><guilabel>Keywords:</guilabel></emphasis> label.  Enter keywords separated by spaces, or multi-word instructions enclosed in quotes.  Wild cards can also be used.  For instructions on the use of wildcards, see the section <link linkend="using-wildcards">Using Wildcards in Searches</link>.</para>
+<para>To utilize the <emphasis><guilabel>Instructions</guilabel></emphasis> search, simply type the keyword or keywords in the text box beside the <emphasis><guilabel>Keywords:</guilabel></emphasis> label.  Enter keywords separated by spaces, or multi-word instructions enclosed in quotes.  Wild cards can also be used.  For instructions on the use of wildcards, see the section <link linkend="using-wildcards">Using Wildcards in Searches</link>.</para>
 
 <para>Should you require that the search contain all the keywords listed, click the tick box beside the <emphasis><guilabel>Require All Words</guilabel></emphasis> label.</para>
 
@@ -397,31 +397,31 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <listitem><para><emphasis><guilabel>Last accessed:</guilabel></emphasis> &ndash; This is the date that the recipe was last opened or <quote>used</quote>.</para></listitem>
 </itemizedlist>
 
-<para>For each of the <emphasis>Meta Data</emphasis> descriptions, the date may be entered as an exact date if this is known or desired, or as a <quote>date range</quote>.  Dates are interpreted in the format that has been set within the &kde; environment.  For example, if the date format has been set to display as DD-MM-YYYY, you may enter the date directly into the textbox in the format of "DD-MM-YY".  When entering the date, the two initial digits of the year may be entered, but are not absolutely necessary.  However, it is imperative that you use the exact separator <abbrev>i.e.</abbrev> the dash (&ndash;), in the example, as set in the date format in &kde;.  You may also use the drop-down arrow beside the box in which you want to enter the date to reveal a calendar.</para>
+<para>For each of the <emphasis>Meta Data</emphasis> descriptions, the date may be entered as an exact date if this is known or desired, or as a <quote>date range</quote>.  Dates are interpreted in the format that has been set within the &kde; environment.  For example, if the date format has been set to display as DD-MM-YYYY, you may enter the date directly into the text box in the format of "DD-MM-YY".  When entering the date, the two initial digits of the year may be entered, but are not absolutely necessary.  However, it is imperative that you use the exact separator <abbrev>i.e.</abbrev> the dash (&ndash;), in the example, as set in the date format in &kde;.  You may also use the drop-down arrow beside the box in which you want to enter the date to reveal a calendar.</para>
 
-<caution><para>If you choose to enter the date directly into the textbox and are using a <emphasis>date range</emphasis> as opposed to an exact date, ensure that the dates for the start and end of the range are entered in the same format.  For example, if you enter the starting date for the range in the format of "DD-MM-YY" and the ending date for the range in the format of "DD/MM/YY", either no recipes will be found or the results returned will include only those recipes that fit the criteria for the starting date, if this date agrees with the format as set in &kde;.</para></caution>
+<caution><para>If you choose to enter the date directly into the text box and are using a <emphasis>date range</emphasis> as opposed to an exact date, ensure that the dates for the start and end of the range are entered in the same format.  For example, if you enter the starting date for the range in the format of "DD-MM-YY" and the ending date for the range in the format of "DD/MM/YY", either no recipes will be found or the results returned will include only those recipes that fit the criteria for the starting date, if this date agrees with the format as set in &kde;.</para></caution>
 
 <sect4 id="use-calendar">
 <title>Using the Calendar Interface</title>
 
 <para>The calendar allows you to easily navigate though months and years to select any date.</para>
 
-<para>When the calendar is revealed, the current month is shown and the current day is highlighted.  Below the calendar is a textbox, which shows the date and beside this a drop-down menu that displays the specific week of the year.</para>
+<para>When the calendar is revealed, the current month is shown and the current day is highlighted.  Below the calendar is a text box, which shows the date and beside this a drop-down menu that displays the specific week of the year.</para>
 
-<para>One way to select a date would be to use the drop-down menu to select a particular week in the year, for example <guimenuitem>Week 26</guimenuitem>.  Doing this will change the date in the textbox and will also position the highlighted date in the calendar to the beginning of Week 26. Note that <emphasis>Monday</emphasis> is used as the starting day for the week.  To use a date from this week either, click the highlighted date in the calendar, or select another date from the week and the date will be transferred to the <emphasis>Meta Data</emphasis> textbox where the calendar was utilized.</para>
+<para>One way to select a date would be to use the drop-down menu to select a particular week in the year, for example <guimenuitem>Week 26</guimenuitem>.  Doing this will change the date in the text box and will also position the highlighted date in the calendar to the beginning of Week 26. Note that <emphasis>Monday</emphasis> is used as the starting day for the week.  To use a date from this week either, click the highlighted date in the calendar, or select another date from the week and the date will be transferred to the <emphasis>Meta Data</emphasis> text box where the calendar was utilized.</para>
 
-<para>Below the textbox that is displaying the date at the beginning of the chosen week of the year (or the current week if no choice has been made), there is a list of additional choices for date selection.  Specifically, these are: &ndash; <emphasis>Today</emphasis>, <emphasis>Yesterday</emphasis>, <emphasis>Last Week</emphasis>, and <emphasis>Last Month</emphasis>.  Clicking on one of these selections, will result in this date being shown in the <emphasis>Meta Data</emphasis> textbox being used. It should be noted here that each of the choices is relevant to today's date.  For instance, if today's date is the 15th, clicking the <guibutton>Today</guibutton> would place today's date in the <emphasis>Meta Data</emphasis> textbox being used.  Clicking <guibutton>Yesterday</guibutton> would, of course, place yesterday's date in the box.  <guibutton>Last Week</guibutton> would place the date that is one week ago today in the box.  <guibutton>Last Month</guibutton> would place last month's date that corresponds to today's date in the box, in the example from above, the 15th of the previous month.</para>
+<para>Below the text box that is displaying the date at the beginning of the chosen week of the year (or the current week if no choice has been made), there is a list of additional choices for date selection.  Specifically, these are: &ndash; <emphasis>Today</emphasis>, <emphasis>Yesterday</emphasis>, <emphasis>Last Week</emphasis>, and <emphasis>Last Month</emphasis>.  Clicking on one of these selections, will result in this date being shown in the <emphasis>Meta Data</emphasis> text box being used. It should be noted here that each of the choices is relevant to today's date.  For instance, if today's date is the 15th, clicking the <guibutton>Today</guibutton> would place today's date in the <emphasis>Meta Data</emphasis> text box being used.  Clicking <guibutton>Yesterday</guibutton> would, of course, place yesterday's date in the box.  <guibutton>Last Week</guibutton> would place the date that is one week ago today in the box.  <guibutton>Last Month</guibutton> would place last month's date that corresponds to today's date in the box, in the example from above, the 15th of the previous month.</para>
 
-<para>Additionally, the calendar itself can be utilized to navigate to a specific date.  When the arrow beside the textbox in which you want to display the date is clicked, thus revealing the calendar, there are a number of ways to select a date &mdash;</para>
+<para>Additionally, the calendar itself can be utilized to navigate to a specific date.  When the arrow beside the text box in which you want to display the date is clicked, thus revealing the calendar, there are a number of ways to select a date &mdash;</para>
 
 <itemizedlist>
 <listitem><para>Click on the month displayed &ndash; This will reveal a list from which you can select a desired month.</para></listitem>
-<listitem><para>Click on the year displayed &ndash; This is reveal a textbox that displays the current year, but in which another year can be entered.</para></listitem>
+<listitem><para>Click on the year displayed &ndash; This is reveal a text box that displays the current year, but in which another year can be entered.</para></listitem>
 </itemizedlist>
 
 <para>To the left and right of the month and year heading on the calendar, there are arrows that can be used to navigate through various months and years.  Clicking on the <guiicon><inlinemediaobject><imageobject><imagedata  fileref="arrow-left.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will reveal the previous month's calendar.  Conversely, clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon will advance the calendar to the next month.</para>
 
-<para>Navigating between years is done in the same manner, but the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-left-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to previous years and the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-right-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to following years.  In each case, once a date is selected, it will be transferred to the textbox at the point where the calendar was selected.</para>
+<para>Navigating between years is done in the same manner, but the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-left-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to previous years and the <guiicon><inlinemediaobject><imageobject><imagedata fileref="arrow-right-double.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to navigate to following years.  In each case, once a date is selected, it will be transferred to the text box at the point where the calendar was selected.</para>
 
 </sect4>
 </sect3>
@@ -437,14 +437,14 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <sect4 id="avg-rating-srch">
 <title>Searching by Average Rating</title>
-<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By average:</guilabel></emphasis> label.  Then, enter a numerical value in the textbox that precedes the label <emphasis><guilabel>stars</guilabel></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.  Fractional amounts are also permitted, for example, 3.5.</para>
+<para>If you choose to search by average rating, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By average:</guilabel></emphasis> label.  Then, enter a numerical value in the text box that precedes the label <emphasis><guilabel>stars</guilabel></emphasis>.  This value is the average of the number of stars assigned to each parameter under which the recipe was rated and can be a fixed value or a range, for example <emphasis>3-4</emphasis> stars.  Fractional amounts are also permitted, for example, 3.5.</para>
 
 <para>Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
 </sect4>
 
 <sect4 id="rating-criteria-srch">
 <title>Searching by Rating Criteria</title>
-<para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By criteria:</guilabel></emphasis> label.  First, select the criteria that you want to use for your rating from the drop-down menu.  In the textbox next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Entry is permitted in the following formats &mdash;</para>
+<para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By criteria:</guilabel></emphasis> label.  First, select the criteria that you want to use for your rating from the drop-down menu.  In the text box next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Entry is permitted in the following formats &mdash;</para>
 
 <itemizedlist>
 <listitem><para>whole numbers, e.g. 3</para></listitem>
@@ -457,7 +457,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Additionally, if no range is specified, the search will find recipes that have an assigned star rating in a range of &#177;&#189; of the value entered, 3&#189; to 4&#189; stars in the example.</para>
 
-<para>Once you have chosen the parameters by which you want to search, click the <guibutton>+</guibutton> beside the textbox in which you entered the number of stars to have the criteria added to the list.  More than one criteria may be utilized in the search.    Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
+<para>Once you have chosen the parameters by which you want to search, click the <guibutton>+</guibutton> beside the text box in which you entered the number of stars to have the criteria added to the list.  More than one criteria may be utilized in the search.    Once you have entered your search parameters, click the <guibutton>Search</guibutton> button and the recipes that meet the search criteria will display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.  Should no recipes meet the criteria, <emphasis>--- No matching recipes found ---</emphasis> will display.</para>
 </sect4>
 
 </sect3>
@@ -533,7 +533,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <sect3 id="recipe-name">
 <title>Adding the Recipe Name</title>
-<para>The title of the recipe is entered in the textbox containing the prompt <quote>Write the recipe title here</quote>.</para>
+<para>The title of the recipe is entered in the text box containing the prompt <quote>Write the recipe title here</quote>.</para>
 </sect3>
 
 <sect3 id="recipe-author">
@@ -543,7 +543,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>A window will appear where the author or contributor of the recipe can be selected from the drop-down menu.  Once selected, transfer the name to the list box below by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears to the right of the drop-down menu.</para>
 
-<tip><itemizedlist><listitem><para>An author's name can be typed directly into the textbox and transferred to the list box as described above.  As you start entering characters, if there are authors that match the text string typed, the menu will display a list of existing choices from which you can choose to transfer the author's name to the list box, as described above.</para>
+<tip><itemizedlist><listitem><para>An author's name can be typed directly into the text box and transferred to the list box as described above.  As you start entering characters, if there are authors that match the text string typed, the menu will display a list of existing choices from which you can choose to transfer the author's name to the list box, as described above.</para>
 
 <para>However, in the situation where the author does not exist in your list, no choices will be listed as you type and when you click the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer the author to the listbox, the author will automatically be added to your list of authors as well.  Also see <link linkend="authors-component">The Authors Component.</link> for information on adding an author to the list.</para></listitem>
 
@@ -571,9 +571,9 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <sect3 id="set-yield">
 <title>Setting the Yield Amount and Type</title>
 
-<para>Setting the amount that the recipe will yield is performed by entering a value in the textbox beneath the <emphasis><guilabel>Amount</guilabel></emphasis> label.  It is possible to enter a numerical range for this number, for example, 3-4.  When entering a range, if an incorrect value or format is entered, the entry will turn red indicating that a correction is necessary.</para>
+<para>Setting the amount that the recipe will yield is performed by entering a value in the text box beneath the <emphasis><guilabel>Amount</guilabel></emphasis> label.  It is possible to enter a numerical range for this number, for example, 3-4.  When entering a range, if an incorrect value or format is entered, the entry will turn red indicating that a correction is necessary.</para>
 
-<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the textbox beneath the <emphasis><guilabel>Type</guilabel></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.  As you begin to type the yield type, &krecipes; will match it to any previously entered yield types and if any are found, they will appear in a list from which you can select the appropriate one.</para>
+<para>The second part of entering a yield is to enter the <emphasis>type</emphasis>.  This is done by entering text in the text box beneath the <emphasis><guilabel>Type</guilabel></emphasis> label.  The text entered can be anything you choose that is appropriate for the recipe yield type, for example, <emphasis>servings</emphasis>, <emphasis>dozen</emphasis>, or <emphasis>squares</emphasis>.  As you begin to type the yield type, &krecipes; will match it to any previously entered yield types and if any are found, they will appear in a list from which you can select the appropriate one.</para>
 
 </sect3>
 
@@ -627,16 +627,16 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To enter the recipe ingredients, click on the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  By default, the radio button beside the label <emphasis><guilabel>Ingredient:</guilabel></emphasis> is selected.  However, <emphasis>&krecipes;</emphasis> also allows the entry of a <emphasis><guilabel>Header:</guilabel></emphasis> by selecting the radio button beside this label.</para>
 
-<para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <emphasis><guilabel>Header:</guilabel></emphasis> radio button is selected. Enter the desired name for the header in the textbox then, press the &Enter; key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <emphasis><guilabel>Ingredient:</guilabel></emphasis> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
+<para>Ideally, the header should be created first, for example <quote>Cake</quote> or <quote>Frosting</quote>.  To do this, ensure that the <emphasis><guilabel>Header:</guilabel></emphasis> radio button is selected. Enter the desired name for the header in the text box then, press the &Enter; key, or click the <guibutton>Add ingredient</guibutton> button located at the top right-hand side of the ingredient list.  Once this is done, the radio button will automatically revert to the <emphasis><guilabel>Ingredient:</guilabel></emphasis> selection.  Then, ingredients can be entered.  You will note that as you enter each ingredient, it will appear below the header indented in a <quote>file tree</quote> type of format.</para>
 
 <note><para>Although it is ideal to enter the header first and then the ingredients associated with that header, you can also enter the header after entering the ingredients.  Enter the header as described above, then move the ingredient into the header by utilizing the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button to position the ingredient until it appears indented below the appropriate header.</para></note>
 
-<para> Ingredients are entered by filling in the appropriate textbox under the headings &mdash;</para>
+<para> Ingredients are entered by filling in the appropriate text box under the headings &mdash;</para>
 
 <itemizedlist>
 <listitem><para>Ingredient: &ndash; the ingredient is entered here, for example, Sugar</para>
 
-<tip><itemizedlist><listitem><para>Type in the first few letters of the ingredient.  If it exists in the ingredient list, it will appear in the textbox <quote>grayed-out</quote>.  To select the gray-out ingredient, tab to the next textbox.</para></listitem>
+<tip><itemizedlist><listitem><para>Type in the first few letters of the ingredient.  If it exists in the ingredient list, it will appear in the text box <quote>grayed-out</quote>.  To select the gray-out ingredient, tab to the next text box.</para></listitem>
 
 <listitem><para>The Ingredient can also be selected from the <quote>drop-down</quote> menu.</para></listitem></itemizedlist>
 
@@ -646,7 +646,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <listitem><para>Amount: &ndash; the amount of the ingredient required, for example, &#189; or 1-2 --> note that <emphasis>&krecipes;</emphasis> will allow the entry of ranges for ingredients</para></listitem>
 
 <listitem><para>Unit: &ndash; the unit of measurement, for example, <emphasis>teaspoon</emphasis></para>
-<para>When you enter a unit, if it does not exist in your <emphasis>Units list</emphasis>, it will automatically be added and a dialog box will appear prompting for the entry of a plural for the unit.  Enter the plural in the textbox beside the label <emphasis><guilabel>Plural:</guilabel></emphasis>.  Additionally, you can add an abbreviation for both the singular and plural forms of the unit as shown in the following diagram.</para>
+<para>When you enter a unit, if it does not exist in your <emphasis>Units list</emphasis>, it will automatically be added and a dialog box will appear prompting for the entry of a plural for the unit.  Enter the plural in the text box beside the label <emphasis><guilabel>Plural:</guilabel></emphasis>.  Additionally, you can add an abbreviation for both the singular and plural forms of the unit as shown in the following diagram.</para>
 
 <para><inlinemediaobject><imageobject><imagedata fileref="addunit.png" format="PNG"/></imageobject></inlinemediaobject></para>
 
@@ -667,7 +667,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 </itemizedlist>
 
-<para><emphasis>&krecipes;</emphasis> also permits the entry of alternate ingredients.  To enter an alternate ingredient, simply click on the tick box that appears between the <emphasis>Preparation Method:</emphasis> textbox and the <guilabel>OR</guilabel> label.  A row identical to the one that you have just finished will appear for completing the alternative choice.</para>
+<para><emphasis>&krecipes;</emphasis> also permits the entry of alternate ingredients.  To enter an alternate ingredient, simply click on the tick box that appears between the <emphasis>Preparation Method:</emphasis> text box and the <guilabel>OR</guilabel> label.  A row identical to the one that you have just finished will appear for completing the alternative choice.</para>
 
 <para>To add the ingredient(s) to the ingredient list, simply press the &Enter; key.</para>
 
@@ -858,10 +858,10 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <itemizedlist>
 <listitem><para>Rater: &ndash; this is the name of the person providing their opinion of the recipe</para>
-<para>To complete this element <userinput>enter the rater's name</userinput> in the textbox that appears beside the label <emphasis><guilabel>Rater:</guilabel></emphasis>.</para></listitem>
+<para>To complete this element <userinput>enter the rater's name</userinput> in the text box that appears beside the label <emphasis><guilabel>Rater:</guilabel></emphasis>.</para></listitem>
 
 <listitem><para>Criteria: &ndash; this is the criteria on which the recipe is rated</para>
-<para>Select the criteria against which you want to rate the recipe from the drop-down menu that appears beside the <emphasis><guilabel>Criteria:</guilabel></emphasis> label. Five default choices exist for rating criteria, as listed above, but if you have another against which you want to rate your recipe, it can be typed directly into the textbox and will automatically be added to your rating criteria list.</para></listitem>
+<para>Select the criteria against which you want to rate the recipe from the drop-down menu that appears beside the <emphasis><guilabel>Criteria:</guilabel></emphasis> label. Five default choices exist for rating criteria, as listed above, but if you have another against which you want to rate your recipe, it can be typed directly into the text box and will automatically be added to your rating criteria list.</para></listitem>
 
 <listitem><para>Stars: &ndash; this is the number of stars that you wish to assign to the particular criteria that you are rating on</para>
 
@@ -946,13 +946,13 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <listitem><para>Scale by yield &mdash;</para>
 
-<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield</guilabel></emphasis> label.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a textbox in which to <userinput>enter the new yield amount desired</userinput>.</para>
+<para>To scale by yield, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by yield</guilabel></emphasis> label.  Below this and beside the <emphasis><guilabel>Current yield:</guilabel></emphasis> label, the current yield of your recipe is shown.  Beside the <emphasis><guilabel>New yield:</guilabel></emphasis>, there is a text box in which to <userinput>enter the new yield amount desired</userinput>.</para>
 
 <note><para>If you have entered a range for your yield amount, <emphasis>Scale by yield</emphasis> will not be available because <emphasis>&krecipes;</emphasis> cannot determine which portion of the range it is scaling.</para></note></listitem>
 
 <listitem><para>Scale by factor &mdash;</para>
 
-<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the textbox beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
+<para>To scale by factor, click the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>Scale by factor</guilabel></emphasis> label.  Enter <userinput>the desired scaling factor</userinput> in the text box beside the <emphasis><guilabel>Factor (i.e. 1/2 to half; 3 to triple):</guilabel></emphasis> label.</para></listitem>
 </orderedlist>
 
 <para>In either of these scenarios, click the <guibutton>OK</guibutton> button to continue.  Your recipe will be reproportioned appropriately.  Alternatively, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para></tip></listitem>
@@ -1116,7 +1116,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <listitem><para>Specify the number of <guimenuitem>Columns...</guimenuitem> that will be used to display your list items, such as <emphasis>Ingredients</emphasis> and <emphasis>Properties</emphasis></para>
 
-<para>When the <guimenuitem>Columns...</guimenuitem> menu item is selected, a dialog box will appear where you can set the number of columns for display using a spinbox or typing the number directly into the textbox that appears beneath the label <guilabel>Select the number of columns to use:</guilabel>.</para></listitem>
+<para>When the <guimenuitem>Columns...</guimenuitem> menu item is selected, a dialog box will appear where you can set the number of columns for display using a spinbox or typing the number directly into the text box that appears beneath the label <guilabel>Select the number of columns to use:</guilabel>.</para></listitem>
 
 </itemizedlist>
 
@@ -1184,7 +1184,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <note><para>This tickbox is the important one!</para></note>
 </listitem>
 <listitem><para><emphasis><guilabel>Print images</guilabel></emphasis> &ndash; deselect this tickbox only if you do not want your recipe printed with the associated photo.</para></listitem>
-<listitem><para><emphasis><guilabel>Print header</guilabel></emphasis> &ndash; selecting this textbox will cause a header to be printed on your page showing the date, the file name and its path and the copy number.</para></listitem>
+<listitem><para><emphasis><guilabel>Print header</guilabel></emphasis> &ndash; selecting this text box will cause a header to be printed on your page showing the date, the file name and its path and the copy number.</para></listitem>
 </orderedlist>
 
 
@@ -1289,9 +1289,9 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </screenshot>
 </para>
 
-<para>If you choose SQLite, beneath the heading <emphasis><guilabel>Database file:</guilabel></emphasis>, there is a textbox and beside this, the <guiicon>Open File Dialog</guiicon> icon which, when clicked, will <action>open the file dialog window</action>.  This window is used to navigate to the location of the database that you want to import.  Once you have located the appropriate database file, select it from the file list.  The name will appear in the <emphasis><guilabel>Location:</guilabel></emphasis> box.  Click the <guibutton>OK</guibutton> button to proceed or the <guibutton>Cancel</guibutton> button to close the file dialog window and return to the previous screen.</para>
+<para>If you choose SQLite, beneath the heading <emphasis><guilabel>Database file:</guilabel></emphasis>, there is a text box and beside this, the <guiicon>Open File Dialog</guiicon> icon which, when clicked, will <action>open the file dialog window</action>.  This window is used to navigate to the location of the database that you want to import.  Once you have located the appropriate database file, select it from the file list.  The name will appear in the <emphasis><guilabel>Location:</guilabel></emphasis> box.  Click the <guibutton>OK</guibutton> button to proceed or the <guibutton>Cancel</guibutton> button to close the file dialog window and return to the previous screen.</para>
 
-<para>Once the <guibutton>OK</guibutton> button is pressed, the file dialog window will close.  You will be returned to the <interface> Database Import</interface> window and you should see the name of the database file with its <quote>path</quote> showing in the textbox.  Click the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> button to discontinue the import.</para>
+<para>Once the <guibutton>OK</guibutton> button is pressed, the file dialog window will close.  You will be returned to the <interface> Database Import</interface> window and you should see the name of the database file with its <quote>path</quote> showing in the text box.  Click the <guibutton>OK</guibutton> button to proceed with the import, or the <guibutton>Cancel</guibutton> button to discontinue the import.</para>
 
 <para>At this point, the import becomes <link linkend="common-import">common</link> for whatever database you are importing.</para>
 
@@ -1316,7 +1316,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </para>
 
 
-<para>If the MySQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label &mdash;</para>
+<para>If the MySQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the text box beside the appropriate label &mdash;</para>
 
 <itemizedlist><listitem><para><emphasis><guilabel>Server:</guilabel></emphasis></para></listitem>
 <listitem><para><emphasis><guilabel>Username:</guilabel></emphasis></para></listitem>
@@ -1333,7 +1333,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <sect3 id="import-postgresql">
 <title>Importing from PostgreSQL</title>
 
-<para>If the PostgreSQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the textbox beside the appropriate label &mdash;</para>
+<para>If the PostgreSQL radio button is selected in the <interface>Database Import</interface> window, you will be required to enter the following parameters in the text box beside the appropriate label &mdash;</para>
 
 <itemizedlist><listitem><para><emphasis><guilabel>Server:</guilabel></emphasis></para></listitem>
 <listitem><para><emphasis><guilabel>Username:</guilabel></emphasis></para></listitem>
@@ -1345,7 +1345,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once this information has been supplied, click the <guibutton>OK</guibutton> button to proceed with the import steps that are <link linkend="common-import">common</link> to all.  At this point, you may also click the <guibutton>Cancel</guibutton> button to cancel the import and return to the previous screen.</para>
 
-<note><para>For both MySQL and PostgreSQL, it will be fine to leave the <guilabel>Port:</guilabel> as <emphasis>Default</emphasis>, in most cases.  However, if you know that you connect to your database via a specific port number, especially in the situation where you might be connecting remotely, it can be set by either entering the port number in the textbox beside the <guilabel>Port:</guilabel> label, or using the spinbox beside the textbox to increment the port to the desired number. </para></note>
+<note><para>For both MySQL and PostgreSQL, it will be fine to leave the <guilabel>Port:</guilabel> as <emphasis>Default</emphasis>, in most cases.  However, if you know that you connect to your database via a specific port number, especially in the situation where you might be connecting remotely, it can be set by either entering the port number in the text box beside the <guilabel>Port:</guilabel> label, or using the spinbox beside the text box to increment the port to the desired number. </para></note>
 </sect3>
 
 <sect3 id="common-import">
@@ -1447,9 +1447,9 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <title>Backing Up Your <emphasis>&krecipes;</emphasis> Database</title>
 <para>To backup your <emphasis>&krecipes;</emphasis> database file, select <guimenu>File</guimenu> and <guimenuitem>Backup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.  However, you might want to consider creating a keyboard shortcut (see the section <link linkend="configure-shortcuts">Creating Shortcuts</link> for more information), or adding an icon to your toolbar (see the section <link linkend="configure-toolbars">Customizing the Toolbar</link> for instruction on how to do this), since this is an invaluable tool and you will find yourself utilizing it often.</para>
 
-<para>Once you have selected the menu item, shortcut or icon to backup your database, the <emphasis><interface>Save Backup As... -&krecipes;</interface></emphasis> window will appear where you can navigate to the location where you want to store your backup file and provide a name for it.  By default, this interface opens to your home directory.  You can navigate to another location and then, type the name that you wish to utilize for your backup in the textbox beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> textbox, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> textbox.</para>
+<para>Once you have selected the menu item, shortcut or icon to backup your database, the <emphasis><interface>Save Backup As... -&krecipes;</interface></emphasis> window will appear where you can navigate to the location where you want to store your backup file and provide a name for it.  By default, this interface opens to your home directory.  You can navigate to another location and then, type the name that you wish to utilize for your backup in the text box beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
 
-<para>The <emphasis><guilabel>Filter:</guilabel></emphasis> textbox shows the type of file that you are creating.  In the situation where you are backing up your <emphasis>&krecipes;</emphasis> database file, there is only one type of file available &ndash; a &krecipes; Backup File (*.krecbk), and that shows as the default selection.</para>
+<para>The <emphasis><guilabel>Filter:</guilabel></emphasis> text box shows the type of file that you are creating.  In the situation where you are backing up your <emphasis>&krecipes;</emphasis> database file, there is only one type of file available &ndash; a &krecipes; Backup File (*.krecbk), and that shows as the default selection.</para>
 
 <para>The final item in this window is a tick box beside the label <emphasis><guilabel>Automatically select filename extension (.krecbk)</guilabel></emphasis>.  With this option active, <abbrev>i.e.</abbrev> there is an x in the tick box, you can provide a filename, but do not have to supply an extension.  The extension .krecbk will be attached to your filename automatically.  However, you do not have to use the extension .krecdb.  Simply clear the tick box and then, when you supply the filename for your backup, include the extension that you choose.  For example, you might choose to name your database backup file <emphasis>myrecipes.krback</emphasis>.</para>
 
@@ -1461,11 +1461,11 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>To restore your <emphasis>&krecipes;</emphasis> database file, select <guimenu>File</guimenu> and <guimenuitem>Restore...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.  As previously mentioned, you might want to consider creating a keyboard shortcut (see the section <link linkend="configure-shortcuts">Creating Shortcuts</link> for more information), or adding an icon to your toolbar (see the section <link linkend="configure-toolbars">Customizing the Toolbar</link> for instruction on how to do this).</para>
 
-<para>Once you have selected the menu item, shortcut or icon to restore your database, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window will appear where you can navigate to the location where you saved your backup.  Once you have located the file and selected it, its name will appear in the textbox beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.</para>
+<para>Once you have selected the menu item, shortcut or icon to restore your database, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window will appear where you can navigate to the location where you saved your backup.  Once you have located the file and selected it, its name will appear in the text box beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.</para>
 
-<para>By default, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window opens to your home directory.  An alternative to navigating to the location of your backup file and selecting it would be to type its name, including the path, directly into the <emphasis><guilabel>Location:</guilabel></emphasis> textbox.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> textbox, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> textbox.</para>
+<para>By default, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window opens to your home directory.  An alternative to navigating to the location of your backup file and selecting it would be to type its name, including the path, directly into the <emphasis><guilabel>Location:</guilabel></emphasis> text box.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
 
-<para>As with the backup function, the textbox beside the <emphasis><guilabel>Filter:</guilabel></emphasis> label shows the type of file as <emphasis>&krecipes; Backup File (*.krecbk)</emphasis>.
+<para>As with the backup function, the text box beside the <emphasis><guilabel>Filter:</guilabel></emphasis> label shows the type of file as <emphasis>&krecipes; Backup File (*.krecbk)</emphasis>.
 </para>
 
 <para>Once you have selected your backup file, click the <guibutton>Open</guibutton> button to initiate the restore or the <guibutton>Cancel</guibutton> button to close the window and return to the main <emphasis>&krecipes;</emphasis> interface.</para>
@@ -1521,7 +1521,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>When selected, the component title appears at the top in the right pane of the window.</para>
   
-<para>Below this is a textbox to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <emphasis><guilabel>Shopping List</guilabel></emphasis> by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>  button between the two portions of the screen.</para>
+<para>Below this is a text box to <userinput>enter the specific name of a recipe</userinput> to search for.  Recipes can also be chosen by selecting them from the list.  Either way, the selected recipe must by transferred to the right-hand side of the screen under the heading <emphasis><guilabel>Shopping List</guilabel></emphasis> by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>  button between the two portions of the screen.</para>
 
 <para>Once the desired recipes have been transferred to the shopping list side of the screen, click the <guibutton>OK</guibutton> button.</para>
 
@@ -1532,7 +1532,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </itemizedlist>
 </tip>
 
-<para>When the <guibutton>OK</guibutton> button is clicked, a window will appear that lists all ingredients contained in the <emphasis>&krecipes;</emphasis> database on the left and the ingredients required for the selected recipe(s) on the right.  Above each of these is a <emphasis><guilabel>Search:</guilabel></emphasis> textbox to <userinput>enter the name of an ingredient</userinput> to search for within each of the lists.</para>
+<para>When the <guibutton>OK</guibutton> button is clicked, a window will appear that lists all ingredients contained in the <emphasis>&krecipes;</emphasis> database on the left and the ingredients required for the selected recipe(s) on the right.  Above each of these is a <emphasis><guilabel>Search:</guilabel></emphasis> text box to <userinput>enter the name of an ingredient</userinput> to search for within each of the lists.</para>
 
 <para>Ingredients can be transferred to and from either side by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears between the lists, as needed.</para>
 
@@ -1639,7 +1639,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>The purpose of the <emphasis>Ingredient Matcher</emphasis> component is to find recipes that you are able to make (or almost make) with ingredients that you have on hand.  To access the <emphasis>Ingredient Matcher</emphasis> component, click on the <guibutton>Ingredient Matcher</guibutton> button that is  visible in the left frame of the <emphasis>&krecipes;</emphasis> window.</para>
 
-<para>Once the component starts, typical of all <emphasis>&krecipes;</emphasis> components, the name will appear at the top of the window in the right frame.  Beneath this, beside the <emphasis><guilabel>Search:</guilabel></emphasis> label, there is a textbox to <userinput> enter the recipe ingredient</userinput> that you want to search for.</para>
+<para>Once the component starts, typical of all <emphasis>&krecipes;</emphasis> components, the name will appear at the top of the window in the right frame.  Beneath this, beside the <emphasis><guilabel>Search:</guilabel></emphasis> label, there is a text box to <userinput> enter the recipe ingredient</userinput> that you want to search for.</para>
 
 <para>
 <screenshot>
@@ -1664,11 +1664,11 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the checkbox beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
 
-<para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the textbox below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> textbox.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
+<para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the text box below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> text box.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
 
 <tip><para>If your right-hand ingredient list is fairly lengthy and you are looking for an ingredient for which you <emphasis>might</emphasis> want to enter an <guilabel>Amount Available</guilabel>, a <guilabel>Search:</guilabel> box appears above this list as well.  When you enter a search term in this box, it will search only the ingredients that are in the right-hand list box.</para></tip>
 
-<para>Before the recipes containing the selected ingredients will display, you must select the number of missing ingredients permitted in your recipes.  This is accomplished by using the spinbox beside the label <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis>.  There will always be certain ingredients that you have on hand, for example, <emphasis>salt</emphasis> or <emphasis>sugar</emphasis>.  One of the purposes of allowing missing ingredients is to compensate for those ingredients that are normally in your cupboard.  It is for this reason that you might want to set the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> to a reasonably high number.  Or, if the number of missing ingredients shows as <emphasis>0</emphasis>, you can click on the textbox beside the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> label to activate it and then, press the <keycap>&#8595;</keycap> directional arrow which will cause <emphasis>Any</emphasis> to appear in the textbox, indicating that any number of missing ingredients are permitted.</para>
+<para>Before the recipes containing the selected ingredients will display, you must select the number of missing ingredients permitted in your recipes.  This is accomplished by using the spinbox beside the label <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis>.  There will always be certain ingredients that you have on hand, for example, <emphasis>salt</emphasis> or <emphasis>sugar</emphasis>.  One of the purposes of allowing missing ingredients is to compensate for those ingredients that are normally in your cupboard.  It is for this reason that you might want to set the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> to a reasonably high number.  Or, if the number of missing ingredients shows as <emphasis>0</emphasis>, you can click on the text box beside the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> label to activate it and then, press the <keycap>&#8595;</keycap> directional arrow which will cause <emphasis>Any</emphasis> to appear in the text box, indicating that any number of missing ingredients are permitted.</para>
   
 <caution><para>Setting the missing ingredients too high will result in a longer list of recipes.  Setting the missing ingredients too low will result in either no recipes being found, or cause the search to exclude recipes that you might also be able to make had you allowed for slightly more missing ingredients.</para></caution>
   
@@ -1701,7 +1701,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <orderedlist>
 <listitem><para>Below the heading <emphasis><guilabel>Ingredient list</guilabel></emphasis>, the list of ingredients contained in the <emphasis>&krecipes;</emphasis> database is shown.  This list includes ingredients that have be provided as defaults in the program and also, ingredients that you have added.</para>
-<para>Beside the heading is a textbox to <userinput>enter an ingredient</userinput> to search for in the ingredient list.</para>
+<para>Beside the heading is a text box to <userinput>enter an ingredient</userinput> to search for in the ingredient list.</para>
 <para>To the right of this section is a <guibutton>+</guibutton> button, for adding ingredients to the list, and a <guibutton>-</guibutton> button, for removing ingredients.  See the section on <link linkend="working-ingredients">Working with Ingredients</link> for more details.</para>
 </listitem>
 
@@ -1747,9 +1747,9 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>When the <emphasis>Ingredients</emphasis> component is accessed, you will also notice a <guilabel>Headers</guilabel> tab.  If this tab is accessed, the headers that apply to your recipes may be added, removed or renamed.</para>
 
-<para>Similar to other <emphasis>&krecipes;</emphasis> components, there is a textbox beside a <guilabel>Search:</guilabel> label where you can enter the name of the header for which you want to search, should your list be long enough that this would be the best method to access a particular header.</para>
+<para>Similar to other <emphasis>&krecipes;</emphasis> components, there is a text box beside a <guilabel>Search:</guilabel> label where you can enter the name of the header for which you want to search, should your list be long enough that this would be the best method to access a particular header.</para>
 
-<para>On the right side of the <emphasis>Headers</emphasis> window, there is a <guibutton>+</guibutton> button, which when clicked, will bring up a dialog box which will permit the entry of a new header.  To add the header, simply type in the name that you desire in the textbox that appears beneath the <guilabel>Header</guilabel> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition or, the <guibutton>Cancel</guibutton> button to clear the dialog box and return to the main header interface.</para>
+<para>On the right side of the <emphasis>Headers</emphasis> window, there is a <guibutton>+</guibutton> button, which when clicked, will bring up a dialog box which will permit the entry of a new header.  To add the header, simply type in the name that you desire in the text box that appears beneath the <guilabel>Header</guilabel> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition or, the <guibutton>Cancel</guibutton> button to clear the dialog box and return to the main header interface.</para>
 
 <para>To remove a header, select it in the header list and click the <guibutton>-</guibutton> button.  If this header is utilized in any of your recipes, a dialog box will appear stating <quote>Warning:  The following will have to be removed also, since currently they use the element you have chosen to be removed.</quote>.  To remove the header, click the <guibutton>OK</guibutton> button.  The header will be removed from the list.  Note, however, that in your recipe(s) that contain the particular header that you have chosen to remove, only the header will be absent.  The ingredients that were part of the removed header will still be intact.  To cancel the removal of the header, click the <guibutton>Cancel</guibutton> button.  The dialog box will disappear and you will be returned to your header list.  Of course, if the header does not exist in any of your recipes, it will be removed with no prompt.</para>
 
@@ -1771,7 +1771,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <sect4 id="adding-ingredients">
 <title>Adding:</title>
-<para>To add an ingredient to the list, click on the <guibutton>+</guibutton> button that appears beside the ingredient list.  A window will be presented where <userinput>the name of the new ingredient</userinput> can be typed in the textbox beneath the heading <emphasis><guilabel>New Ingredient</guilabel></emphasis>.  Once the name has been added, click the <guibutton>OK</guibutton> button to complete the addition and close the window.  The ingredient will now appear in the ingredient list.  If you do not wish to add the ingredient to the list, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
+<para>To add an ingredient to the list, click on the <guibutton>+</guibutton> button that appears beside the ingredient list.  A window will be presented where <userinput>the name of the new ingredient</userinput> can be typed in the text box beneath the heading <emphasis><guilabel>New Ingredient</guilabel></emphasis>.  Once the name has been added, click the <guibutton>OK</guibutton> button to complete the addition and close the window.  The ingredient will now appear in the ingredient list.  If you do not wish to add the ingredient to the list, click the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
 </sect4>
 
 <sect4 id="remove-ingredients">
@@ -1853,11 +1853,11 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 <para>To add a weight for your ingredient, you must first select it.  Then, click the <guibutton>+</guibutton> button that appears beside the <guilabel>Ingredient Weight</guilabel> list.  A dialog box will appear in which you can enter the parameters for the <guilabel>New Ingredient Weight</guilabel>.</para>
 
-<para>First, in the textbox beside the label <guilabel>Weight:</guilabel>, you can enter the weight that you want for the ingredient.  Remember the table for apples in the <link linkend="property-status">Looking After Nutrients</link> section?  By utilizing this table, it was calculated that 1 medium apple weighed 151.3 grams.  Following through with this example, 151.3 is the value that would be entered in the <guilabel>Weight:</guilabel> textbox.</para>
+<para>First, in the text box beside the label <guilabel>Weight:</guilabel>, you can enter the weight that you want for the ingredient.  Remember the table for apples in the <link linkend="property-status">Looking After Nutrients</link> section?  By utilizing this table, it was calculated that 1 medium apple weighed 151.3 grams.  Following through with this example, 151.3 is the value that would be entered in the <guilabel>Weight:</guilabel> text box.</para>
 
 <para>Next, the weight measure must be selected from the drop-down menu.  So, using the apple example, we would select <emphasis>gram</emphasis> from this list.  Since properties, or nutrient values, are usually specified as a <quote>per gram</quote> value, it is a good idea to set your weight measure to grams.</para>
 
-<para>In the textbox beside the <guilabel>Per Amount:</guilabel> label, you would enter whatever amount the weight applies to.  In the apple example, we would enter 1.  Then, from the drop-down menu beside this textbox, the unit of measure would be selected, in this case <emphasis>medium</emphasis>.</para>
+<para>In the text box beside the <guilabel>Per Amount:</guilabel> label, you would enter whatever amount the weight applies to.  In the apple example, we would enter 1.  Then, from the drop-down menu beside this text box, the unit of measure would be selected, in this case <emphasis>medium</emphasis>.</para>
 
 <tip><para>To quickly find the unit of measure, or any value from a drop-down list, press the key on the keyboard that corresponds to the first letter of the item being selected.  For <emphasis>medium</emphasis>, press the <keycap>M</keycap> key as many times as required until <emphasis>medium</emphasis> is selected.  Repeated pressing of the <keycap>M</keycap> key will cycle through all choices that begin with the letter m.</para></tip>
 
@@ -1885,9 +1885,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <para>Any portion of the ingredient weight that is listed in the <guilabel>Ingredient Weights</guilabel> list can be edited by double-clicking the part that you want to edit as follows: &mdash;</para>
 
 <itemizedlist>
-<listitem><para>If you double-click the portion under the <guilabel>Weight</guilabel> heading, a dialog box will appear.  Under the heading <guilabel>Weight</guilabel>, the existing weight will show in the textbox, but you can delete this and enter a new value.  Beside the <guilabel>Weight</guilabel> textbox, the drop-down menu for the weight measure displays the current setting.  However, this can be changed by selecting another from the menu.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
+<listitem><para>If you double-click the portion under the <guilabel>Weight</guilabel> heading, a dialog box will appear.  Under the heading <guilabel>Weight</guilabel>, the existing weight will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Weight</guilabel> text box, the drop-down menu for the weight measure displays the current setting.  However, this can be changed by selecting another from the menu.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
 
-<listitem><para>If you double-click the portion under the <guilabel>Per Amount</guilabel> heading, again, a dialog box will appear.  Under the heading <guilabel>Amount</guilabel>, the existing amount will show in the textbox, but you can delete this and enter a new value.  Beside the <guilabel>Amount</guilabel> textbox, the drop-down menu for selecting the unit that the amount applies to displays the current setting.  However, this can be changed by selecting another from the menu.  Next to the drop-down menu for specifying the unit, another drop-down menu displays from which you can select a preparation method.  Again, this will display the current setting, if a preparation method has been used for the ingredient weight.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
+<listitem><para>If you double-click the portion under the <guilabel>Per Amount</guilabel> heading, again, a dialog box will appear.  Under the heading <guilabel>Amount</guilabel>, the existing amount will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Amount</guilabel> text box, the drop-down menu for selecting the unit that the amount applies to displays the current setting.  However, this can be changed by selecting another from the menu.  Next to the drop-down menu for specifying the unit, another drop-down menu displays from which you can select a preparation method.  Again, this will display the current setting, if a preparation method has been used for the ingredient weight.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
 
 </itemizedlist>
 
@@ -1925,7 +1925,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>A number of nutrients have been provided by default in the <emphasis>&krecipes;</emphasis> program.  By default, all available nutrients are selected to be displayed in your recipes, if you choose to do so.  However, you will notice in the screenshot that you can select exactly which nutrients that you want to display.  This is a great way to watch your diet for specific nutrient intake.</para>
 
-<para>Although the nutrient list provided by default is quite extensive, if there is a nutrient missing, it is possible to add it to the list.  To add a missing nutrient, click the <guibutton>Create...</guibutton> button that appears near the top in the right-hand side of the <emphasis>&krecipes;</emphasis> window.  The <interface>New Property</interface> window will appear.  In this window, the <userinput>name of the nutrient</userinput> can be entered in the textbox beside the <emphasis><guilabel>Property name:</guilabel></emphasis> label, and the associated <userinput>unit of measure</userinput> is entered in the textbox beside the <emphasis><guilabel>Units:</guilabel></emphasis> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
+<para>Although the nutrient list provided by default is quite extensive, if there is a nutrient missing, it is possible to add it to the list.  To add a missing nutrient, click the <guibutton>Create...</guibutton> button that appears near the top in the right-hand side of the <emphasis>&krecipes;</emphasis> window.  The <interface>New Property</interface> window will appear.  In this window, the <userinput>name of the nutrient</userinput> can be entered in the text box beside the <emphasis><guilabel>Property name:</guilabel></emphasis> label, and the associated <userinput>unit of measure</userinput> is entered in the text box beside the <emphasis><guilabel>Units:</guilabel></emphasis> label.  Click the <guibutton>OK</guibutton> button to proceed with the addition, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
 
 <warning><para>Adding a nutrient, or <emphasis>Property</emphasis>, is a two-step procedure.  First, the nutrient and associated unit is added in the <emphasis>Properties</emphasis> component as described above.  However,  the actual nutrient value &ndash; <abbrev>i.e.</abbrev> the number of mg of iron, for example, contained in a particular ingredient must be added within the <emphasis>Ingredients</emphasis> component.  This must be done for <emphasis>EACH</emphasis> ingredient.  Refer to the section <link linkend="ingredient-properties">Properties in Ingredients</link> for more information.</para></warning>
 
@@ -1982,7 +1982,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <sect3 id="add-units">
 <title>Adding Units of Measure</title>
-<para>To add a unit of measure, click the <guibutton>Create...</guibutton> button that appears to the right of the <emphasis>Unit</emphasis> list.  The <interface>New Unit</interface> dialog box will appear where the name of the new unit can be added.  Beneath the heading <emphasis><guilabel>New Unit</guilabel></emphasis>, there is a textbox to <userinput>enter the singular form of the unit</userinput> and one to <userinput>enter the plural form of the unit</userinput>.  To the right of each of these textboxes is another pair of textboxes in which to <userinput>enter the abbreviation</userinput> for both singular and plural forms respectively.  However, since both singular and plural abbreviations are most often identical, typing the abbreviation in the singular textbox, will result in the plural abbreviation being automatically completed.  On the rare occasion that the plural abbreviation is different, you can easily edit the entry.</para>
+<para>To add a unit of measure, click the <guibutton>Create...</guibutton> button that appears to the right of the <emphasis>Unit</emphasis> list.  The <interface>New Unit</interface> dialog box will appear where the name of the new unit can be added.  Beneath the heading <emphasis><guilabel>New Unit</guilabel></emphasis>, there is a text box to <userinput>enter the singular form of the unit</userinput> and one to <userinput>enter the plural form of the unit</userinput>.  To the right of each of these text boxes is another pair of text boxes in which to <userinput>enter the abbreviation</userinput> for both singular and plural forms respectively.  However, since both singular and plural abbreviations are most often identical, typing the abbreviation in the singular text box, will result in the plural abbreviation being automatically completed.  On the rare occasion that the plural abbreviation is different, you can easily edit the entry.</para>
 
 <para>Finally, the unit <emphasis>type</emphasis> is selected from the drop-down menu that appears beside the label <guilabel>Type:</guilabel>.  Choices for unit type are: &mdash;</para>
 
@@ -2069,7 +2069,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>As you will note from the screenshot, when the <interface>Measurement Converter</interface> starts, beside the label <guilabel>Convert</guilabel> there is a textbox in which the enter <userinput>the amount you want to convert</userinput>.  Beside this textbox, there is a drop-down menu from which to select the unit of measure that is associated with the amount that you are converting.</para>
+<para>As you will note from the screenshot, when the <interface>Measurement Converter</interface> starts, beside the label <guilabel>Convert</guilabel> there is a text box in which the enter <userinput>the amount you want to convert</userinput>.  Beside this text box, there is a drop-down menu from which to select the unit of measure that is associated with the amount that you are converting.</para>
 
 <para>Below the amount  and unit that you want to convert, there are two drop-down menus from which making a choice is optional.  The first menu is labeled <guilabel>--Ingredient (optional)--</guilabel> and is for choosing an ingredient.  The second is labeled <guilabel>-No Preparation-</guilabel> and is for selecting a preparation method, if desired.  However, it is these two menus that cause your <emphasis>Ingredient Weights</emphasis> to come into play.  For example, suppose one of your recipes calls for 8 cups of apples and you want to know how many pounds of apples you need to buy.  The <interface>Measurement Converter</interface> can help!</para>
 
@@ -2110,9 +2110,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <sect3 id="add-prep">
 <title>Adding a New Preparation Method</title>
 
-<para>To add a new preparation method, click the <guibutton>Create...</guibutton> button that is seen in the upper right-hand portion of the screen.  A dialog box will appear containing a textbox that allows entry of the new preparation method under the heading <quote>New Preparation Method</quote>.</para>
+<para>To add a new preparation method, click the <guibutton>Create...</guibutton> button that is seen in the upper right-hand portion of the screen.  A dialog box will appear containing a text box that allows entry of the new preparation method under the heading <quote>New Preparation Method</quote>.</para>
 
-<para><userinput>Enter the name of the new preparation method</userinput>, for example, <emphasis>Slightly beaten</emphasis> in the textbox provided.  Click the <guibutton>OK</guibutton> button to complete the addition, or the <guibutton>Cancel</guibutton> button to cancel the addition and return to the <quote>Preparation Method</quote> list.</para>
+<para><userinput>Enter the name of the new preparation method</userinput>, for example, <emphasis>Slightly beaten</emphasis> in the text box provided.  Click the <guibutton>OK</guibutton> button to complete the addition, or the <guibutton>Cancel</guibutton> button to cancel the addition and return to the <quote>Preparation Method</quote> list.</para>
 </sect3>
 
 <sect3 id="remove-prep">
@@ -2160,9 +2160,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>To add a new category, click on the <guibutton>Create...</guibutton> button.</para>
 
-<para>A window will pop up where the name of the new category can be entered in a textbox under the label <emphasis><guilabel>New Category</guilabel></emphasis>.  A subcategory can be selected using the <quote><guimenu>Subcategory of</guimenu></quote> drop-down menu, which lists existing categories.  The default for the subcategory is <emphasis>&#042;&#042;NONE&#042;&#042;</emphasis>.</para>
+<para>A window will pop up where the name of the new category can be entered in a text box under the label <emphasis><guilabel>New Category</guilabel></emphasis>.  A subcategory can be selected using the <quote><guimenu>Subcategory of</guimenu></quote> drop-down menu, which lists existing categories.  The default for the subcategory is <emphasis>&#042;&#042;NONE&#042;&#042;</emphasis>.</para>
 
-<para>Once the name of the new category has been entered in the textbox, click the <guibutton>OK</guibutton> button to create the category and return to the category list.  The list will now show the new category.</para>
+<para>Once the name of the new category has been entered in the text box, click the <guibutton>OK</guibutton> button to create the category and return to the category list.  The list will now show the new category.</para>
 
 <para>To cancel the addition of a new category and clear the window, click on the <guibutton>Cancel</guibutton> button.</para>
 
@@ -2192,7 +2192,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>To add an author/contributor, click on the <guibutton>Create...</guibutton> button on the right-hand side of the screen.</para>
 
-<para>A window will appear that allows entry of the author's name in the textbox labelled <emphasis><guilabel>New Author</guilabel></emphasis></para>
+<para>A window will appear that allows entry of the author's name in the text box labelled <emphasis><guilabel>New Author</guilabel></emphasis></para>
 
 <para>
 <screenshot>
@@ -2237,11 +2237,11 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>To access the Shortcut configuration interface, select <guimenu>Settings</guimenu> and <guimenuitem>Configure Shortcuts...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu.  The <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen will appear.</para>
 
-<para>In the <emphasis><guilabel>Search:</guilabel></emphasis> textbox, <action>type the name</action> of the <emphasis>Action</emphasis> for which you want to create the shortcut.  Under the heading <emphasis><guilabel>Action</guilabel></emphasis>, the cursor will position itself on an item in the list that matches the characters typed.  As more characters are typed, the cursor will reposition itself on another item in the list.  If an exact match is typed, the cursor will be positioned on this item.  However, if multiple matches exist for the characters typed, the cursor will be positioned on the first match.</para>
+<para>In the <emphasis><guilabel>Search:</guilabel></emphasis> text box, <action>type the name</action> of the <emphasis>Action</emphasis> for which you want to create the shortcut.  Under the heading <emphasis><guilabel>Action</guilabel></emphasis>, the cursor will position itself on an item in the list that matches the characters typed.  As more characters are typed, the cursor will reposition itself on another item in the list.  If an exact match is typed, the cursor will be positioned on this item.  However, if multiple matches exist for the characters typed, the cursor will be positioned on the first match.</para>
 
 <para>For example, in the screenshot below, two <emphasis>Actions</emphasis> exist for the expression <quote>Import</quote>  Therefore, if you type <quote>Import</quote>, the cursor will be positioned on <quote>Import from Database...</quote>, although it may not be this Action that you want to create the shortcut for.  However, if you type <quote>Import from File</quote>, the cursor will be positioned on the <quote>Import from File...</quote> Action.</para>
 
-<para>Clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon located beside the <emphasis><guilabel>Search:</guilabel></emphasis> textbox clears the contents of the textbox.</para>
+<para>Clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon located beside the <emphasis><guilabel>Search:</guilabel></emphasis> text box clears the contents of the text box.</para>
 
 <para>Alternatively, you can use the scroll bars to scroll through the <emphasis>Actions</emphasis> until the one for which you want to change the shortcut is found.</para>
 
@@ -2281,10 +2281,10 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>If a shortcut already exists, the textbox will contain an entry, as seen in the screenshot above.  To clear this entry in order to enter a new one, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon on the left of the textbox.
+<para>If a shortcut already exists, the text box will contain an entry, as seen in the screenshot above.  To clear this entry in order to enter a new one, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_right.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> icon on the left of the text box.
 </para>
 
-<para>If no shortcut exists, position the cursor in the textbox and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the &Ctrl; and simultaneously, press the <keycap>I</keycap> key.  Entering the key combination in the textbox will close the entry window and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <emphasis><guilabel>Custom</guilabel></emphasis> label.</para>
+<para>If no shortcut exists, position the cursor in the text box and enter your key combination.  For example, to enter the key combination <keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the &Ctrl; and simultaneously, press the <keycap>I</keycap> key.  Entering the key combination in the text box will close the entry window and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The shortcut will show on the <guibutton>Shortcut</guibutton> button that appears to the left of the <emphasis><guilabel>Custom</guilabel></emphasis> label.</para>
 
 <para>Clicking the <guibutton>OK</guibutton> button, will set a change made, for instance if you cleared a shortcut and didn't want to set another, and return you to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.  The <guibutton>Cancel</guibutton> button on the shortcut entry screen will cancel setting of the shortcut and return you to the main interface.</para>
 
@@ -2309,23 +2309,23 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>The <guibutton>OK</guibutton> and <guibutton>Cancel</guibutton> buttons also operate in the same manner as previously described.  The <guibutton>Advanced&lt;&lt;</guibutton> button collapses the window to the single shortcut entry interface.</para>
 
-<para>You will also notice beneath the <emphasis><guilabel>Alternate shortcut:</guilabel></emphasis> textbox, that there is a tickbox labeled <emphasis><guilabel>Multi-key mode</guilabel></emphasis>.  Selecting this provides very cool functionality!  Follow these steps to see how it works &mdash;</para>
+<para>You will also notice beneath the <emphasis><guilabel>Alternate shortcut:</guilabel></emphasis> text box, that there is a tickbox labeled <emphasis><guilabel>Multi-key mode</guilabel></emphasis>.  Selecting this provides very cool functionality!  Follow these steps to see how it works &mdash;</para>
 
 <orderedlist>
 <listitem><para>From the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen, choose an <emphasis>Action</emphasis> for which you would like to configure a shortcut.  As an example, let's choose <quote>About KDE</quote>.  </para></listitem>
 <listitem><para>Select the <emphasis><guilabel>Custom</guilabel></emphasis> radio button.</para></listitem>
 <listitem><para>In the shortcut input screen, click the <guibutton>Advanced&gt;&gt;</guibutton> button, if the window is not already expanded.</para></listitem>
 <listitem><para>Click the <emphasis><guilabel>Multi-key mode</guilabel></emphasis> tickbox to select.</para></listitem>
-<listitem><para>Type A,A by pressing the <keycap>A</keycap> key twice &ndash; this will cause <emphasis>A,A</emphasis> to appear in the shortcut entry textbox.</para></listitem>
+<listitem><para>Type A,A by pressing the <keycap>A</keycap> key twice &ndash; this will cause <emphasis>A,A</emphasis> to appear in the shortcut entry text box.</para></listitem>
 <listitem><para>Click the <guibutton>OK</guibutton> button.  You will be returned to the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.</para></listitem>
 <listitem><para>Select another <emphasis>Action</emphasis>, for example, <quote>About Krecipes</quote>.</para></listitem>
 <listitem><para>Again, make sure that you have selected the <emphasis><guilabel>Multi-key mode</guilabel></emphasis> tickbox.</para></listitem>
-<listitem><para>For your shortcut combination, type A,B by pressing the <keycap>A</keycap> key and then, the <keycap>B</keycap> key &ndash; <emphasis>A,B</emphasis> will show in the shortcut textbox.</para></listitem>
+<listitem><para>For your shortcut combination, type A,B by pressing the <keycap>A</keycap> key and then, the <keycap>B</keycap> key &ndash; <emphasis>A,B</emphasis> will show in the shortcut text box.</para></listitem>
 <listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
 <listitem><para>Back on the main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen, click the <guibutton>OK</guibutton> button to close the window.</para></listitem>
 </orderedlist>
 
-<para>Now the fun begins!  Anywhere in the program, as long as your cursor is not focused on text, for example, in a textbox or in a recipe edit input area, press the <keycap>A</keycap> key on your keyboard.  In the top, left-hand corner of your screen, using the example outlined, a small menu will appear, as follows &mdash;</para>
+<para>Now the fun begins!  Anywhere in the program, as long as your cursor is not focused on text, for example, in a text box or in a recipe edit input area, press the <keycap>A</keycap> key on your keyboard.  In the top, left-hand corner of your screen, using the example outlined, a small menu will appear, as follows &mdash;</para>
 
 <para><inlinemediaobject><imageobject><imagedata fileref="menu.png" format="PNG"/></imageobject></inlinemediaobject></para>
 <para>You can press the <keycap>A</keycap> or <keycap>B</keycap> key on the keyboard to select your choice, or you can use the directional arrows on the keyboard to highlight your selection and then, press the &Enter; key.</para>
@@ -2398,9 +2398,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 	</mediaobject>
 </screenshot>
 </para>
-<para>If you wanted to choose another database file, you would click on the <guiicon>File</guiicon> icon and in the window that appears, navigate to the location of the database file that you want to use.  This change would be reflected in the <emphasis><guilabel>Database file:</guilabel></emphasis> textbox.</para>
+<para>If you wanted to choose another database file, you would click on the <guiicon>File</guiicon> icon and in the window that appears, navigate to the location of the database file that you want to use.  This change would be reflected in the <emphasis><guilabel>Database file:</guilabel></emphasis> text box.</para>
 
-<para>The second preference available for configuration in the <emphasis><guilabel>Server Settings</guilabel></emphasis> screen is for the <emphasis>Backup</emphasis> operation.  It is required that the path to your database program be known for the <emphasis>Backup</emphasis> operation to work properly.  Therefore, beside the label that is shown in the screenshot as <emphasis><guilabel>Path to 'sqlite3':</guilabel></emphasis>, there is a textbox which shows the name of the database program.  The text in this box can be changed by directly editing it, or by clicking the File icon, which will activate the screen that allows you to navigate to the location of your database program executable file.</para>
+<para>The second preference available for configuration in the <emphasis><guilabel>Server Settings</guilabel></emphasis> screen is for the <emphasis>Backup</emphasis> operation.  It is required that the path to your database program be known for the <emphasis>Backup</emphasis> operation to work properly.  Therefore, beside the label that is shown in the screenshot as <emphasis><guilabel>Path to 'sqlite3':</guilabel></emphasis>, there is a text box which shows the name of the database program.  The text in this box can be changed by directly editing it, or by clicking the File icon, which will activate the screen that allows you to navigate to the location of your database program executable file.</para>
 
 <para>You might want to do this if you have chosen to install your database program to a location that is different from the default.  Also note that, in the screenshot, the database program shows as <quote>sqlite3</quote>.  However, if you use another database program, for instance MySQL or PostgreSQL, the appropriate database would be shown.</para>
 
@@ -2441,7 +2441,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <orderedlist><listitem><para><emphasis><guilabel>Number Format</guilabel></emphasis> &ndash; either <emphasis><guilabel>Fraction</guilabel></emphasis> or <emphasis><guilabel>Decimal</guilabel></emphasis> can be selected by clicking on the appropriate radio button and this choice controls how the units of measure will display in your recipes</para></listitem>
 
 <listitem><para><emphasis><guilabel>Ingredient</guilabel></emphasis> format &ndash; this controls how the ingredients are listed in your recipes</para>
-<para>You will notice from the screenshot that each portion of the ingredient has a variable associated with it, <emphasis>%n</emphasis> for <quote>Name</quote>, <emphasis>%p</emphasis> for <quote>Preparation method</quote>, <emphasis>%a</emphasis> for <quote>Amount</quote>, <emphasis>%u</emphasis> for <quote>Unit</quote>.  The chosen order for display of these items appears in the <emphasis><guilabel>Ingredient format:</guilabel></emphasis> textbox and can be changed at will.</para>
+<para>You will notice from the screenshot that each portion of the ingredient has a variable associated with it, <emphasis>%n</emphasis> for <quote>Name</quote>, <emphasis>%p</emphasis> for <quote>Preparation method</quote>, <emphasis>%a</emphasis> for <quote>Amount</quote>, <emphasis>%u</emphasis> for <quote>Unit</quote>.  The chosen order for display of these items appears in the <emphasis><guilabel>Ingredient format:</guilabel></emphasis> text box and can be changed at will.</para>
 </listitem>
 
 <listitem><para><emphasis><guilabel>Use abbreviations</guilabel></emphasis> &ndash; this feature is turned on by clicking on the tickbox beside the label</para>
@@ -2485,7 +2485,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <para>Chocolate Cheesecake</para>
 <para>Chocolate Cheesecake (2)</para> 
 
-<para>The second option is <emphasis><guilabel>Ask which recipes to import</guilabel></emphasis> and again, this feature can be turned on by selecting the textbox.  If this feature is not turned on, your recipes will be imported silently with no prompt.  See the section <link linkend="import-export-recipes">Importing and Exporting Recipes</link> for a screenshot that will show the result of this option being selected.</para>
+<para>The second option is <emphasis><guilabel>Ask which recipes to import</guilabel></emphasis> and again, this feature can be turned on by selecting the text box.  If this feature is not turned on, your recipes will be imported silently with no prompt.  See the section <link linkend="import-export-recipes">Importing and Exporting Recipes</link> for a screenshot that will show the result of this option being selected.</para>
 
 <sect3 id="copy-clipboard">
 <title>Copying to the Clipboard</title>
@@ -2613,7 +2613,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <listitem><para><emphasis><guilabel>Translation</guilabel></emphasis> &ndash; this selection would be use to request that the <emphasis>&krecipes;</emphasis> be translated into another language.</para></listitem>
 </itemizedlist>
 
-<para>In the textbox beside the label <emphasis><guilabel>Subject:</guilabel></emphasis> you would type a description of the report being submitted and finally, in the large text area, you would type a description of the problem or enhancement and provide any error messages that have been displayed.  Additionally, you should provide the maintainer with the database that you are using, <abbrev>i.e.</abbrev> SQLite, MySQL or PostreSQL and the version. </para>
+<para>In the text box beside the label <emphasis><guilabel>Subject:</guilabel></emphasis> you would type a description of the report being submitted and finally, in the large text area, you would type a description of the problem or enhancement and provide any error messages that have been displayed.  Additionally, you should provide the maintainer with the database that you are using, <abbrev>i.e.</abbrev> SQLite, MySQL or PostreSQL and the version. </para>
 
 <para>When you have completed the e-mail, click the <guibutton>Send</guibutton> button to submit your e-mail or the <guibutton>Cancel</guibutton> button to close the interface and return to the main <emphasis><guilabel>&krecipes;</guilabel></emphasis> window.</para>
 
