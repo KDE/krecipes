@@ -8,7 +8,7 @@
   
   
   <!-- Do not define any other entities; instead, use the entities
-       from kde-genent.entities and $LANG/user.entities. -->
+       from kde-geeg;nent.entities and $LANG/user.entities. -->
 ]>
 
 <!-- The language must NOT be changed here. -->
@@ -66,7 +66,7 @@ Do NOT change these in the translation. -->
 </para>
 </abstract>
 
-<!-- This is a set of Keywords for indexing by search engines.
+<!-- This is a set of Keywords for indexing by search engieg;nes.
 Please at least include KDE, the KDE package it is in, the name
  of your application, and a few relevant keywords. -->
 
@@ -83,7 +83,7 @@ Please at least include KDE, the KDE package it is in, the name
 <!-- The contents of the documentation begin here.  Label
 each chapter so with the id attribute. This is necessary for two reasons: it
 allows you to easily reference the chapter from other chapters of your
-document, and if there is no ID, the name of the generated HTML files will vary
+document, and if there is no ID, the name of the geeg;nerated HTML files will vary
 from time to time making it hard to manage for maintainers and for the CVS
 system. Any chapter labelled (OPTIONAL) may be left out at the author's
 discretion. Other chapters should not be left out in order to maintain a
@@ -326,7 +326,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <sect3 id="using-adv-authors">
 <title>The Authors Search</title>
 
-<para>Are you looking for a recipe given to you by a certain person or input into <emphasis>&krecipes;</emphasis> from a specific magazine?  The <emphasis><guilabel>Authors</guilabel></emphasis> component of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab allows you to find that recipe!</para>
+<para>Are you looking for a recipe gieg;ven to you by a certain person or input into <emphasis>&krecipes;</emphasis> from a specific magazine?  The <emphasis><guilabel>Authors</guilabel></emphasis> component of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab allows you to find that recipe!</para>
 
 <para>As with the searches previously described, you can search using wildcards.  For a description of using wildcards, see the section <link linkend="using-wildcards">Using Wildcards in Searches</link>.  Names are entered with a space between if, for instance, you are searching for a recipe by only a first name.  Whole names, or for situations where you have entered a magazine name as the recipe source (Author), the name is entered enclosed in quotes, for example, <quote><emphasis>Jason Kivlighn</emphasis></quote>, or <quote><emphasis>Vegetarian Times</emphasis></quote>.</para>
 
@@ -447,10 +447,10 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By criteria:</guilabel></emphasis> label.  First, select the criteria that you want to use for your rating from the drop-down menu.  In the text box next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Entry is permitted in the following formats &mdash;</para>
 
 <itemizedlist>
-<listitem><para>whole numbers, e.g. 3</para></listitem>
-<listitem><para>numbers that include fractional amounts, e.g. 3.5</para></listitem>
-<listitem><para>whole number ranges, e.g. 3-4</para></listitem>
-<listitem><para>ranges that include fractional amounts, e.g. 3.5-4</para></listitem>
+<listitem><para>whole numbers, e.g.eg; 3</para></listitem>
+<listitem><para>numbers that include fractional amounts, e.g.eg; 3.5</para></listitem>
+<listitem><para>whole number ranges, e.g.eg; 3-4</para></listitem>
+<listitem><para>ranges that include fractional amounts, e.g.eg; 3.5-4</para></listitem>
 </itemizedlist>
 
 <para>Note that, if you enter a fractional amount, for instance, 3.5, it will display in the format that you have chosen for your preferences when transferred to the listbox &ndash; <abbrev>i.e.</abbrev>3.5 will display as 3.5 if you have chosen numbers to display in decimal format, or 3&#189; if you have chosen numbers to display as fractions.  See the section <link linkend="custom-formatting">Customizing Formatting</link> for an explanation of setting formatting preferences.</para>
@@ -480,7 +480,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <row><entry>can*cherries</entry><entry><itemizedlist><listitem><para>canned cherries</para></listitem><listitem><para>candied red cherries</para></listitem><listitem><para>candied green cherries</para></listitem></itemizedlist></entry></row>
 
-<row><entry>egg?</entry><entry><itemizedlist><listitem><para>egg</para></listitem><listitem><para>eggs</para></listitem></itemizedlist></entry></row>
+<row><entry>egg?eg;</entry><entry><itemizedlist><listitem><para>egg<eg;/para></listitem><listitem><para>eggseg;</para></listitem></itemizedlist></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -597,7 +597,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>In the <emphasis><guilabel>Recipe</guilabel></emphasis> tab, the displayed photo can also be changed by clicking on the <guibutton>...</guibutton> button and selecting a photo for insertion.  Alternatively, a  photo may be inserted by dragging a graphic from any other application, for example a web page, and dropping it onto the photo in the Recipe tab while in edit mode.</para>
 
-<note><para>The change in the graphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
+<note><para>The change in the greg;aphic applies <emphasis>only to the current recipe</emphasis>.</para></note>
 
 <tip><itemizedlist><listitem><para>To revert to the original, <emphasis>&krecipes;</emphasis> graphic, click on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="edit-clear.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.  This can be done before the recipe is saved or after saving it.</para></listitem>
 <listitem><para>To display NO photo in the recipe, refer to the section <link linkend="displayed-items">Selecting Items to Display</link> for further instructions.</para></listitem>
@@ -636,7 +636,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <itemizedlist>
 <listitem><para>Ingredient: &ndash; the ingredient is entered here, for example, Sugar</para>
 
-<tip><itemizedlist><listitem><para>Type in the first few letters of the ingredient.  If it exists in the ingredient list, it will appear in the text box <quote>grayed-out</quote>.  To select the gray-out ingredient, tab to the next text box.</para></listitem>
+<tip><itemizedlist><listitem><para>Type in the first few letters of the ingredient.  If it exists in the ingredient list, it will appear in the text box <quote>greg;ayed-out</quote>.  To select the greg;ay-out ingredient, tab to the next text box.</para></listitem>
 
 <listitem><para>The Ingredient can also be selected from the <quote>drop-down</quote> menu.</para></listitem></itemizedlist>
 
@@ -653,12 +653,12 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para>A drop-down menu is also available for selecting a <guilabel>Type:</guilabel> for the new unit.  Choices for this are: &nbsp;</para>
 
 <itemizedlist>
-<listitem><para>Mass, for those units that are based on weight, for example, pound</para></listitem>
+<listitem><para>Mass, for those units that are based on weigheg;t, for example, pound</para></listitem>
 <listitem><para>Volume, for those units that are based on a volume measure, for example teaspoon, fluid  ounce, or cup</para></listitem>
-<listitem><para>Other, for those units that are neither a neither mass, nor volume or where a weight might be dependent on the size of the unit, for example <emphasis>bag</emphasis></para></listitem>
+<listitem><para>Other, for those units that are neither a neither mass, nor volume or where a weigheg;t might be dependent on the size of the unit, for example <emphasis>bag</emphasis></para></listitem>
 </itemizedlist>
 
-<para>Specifying the unit type is important for the purpose of your unit conversions which, in combination with nutrient weights, help determine the nutrient values in your recipes.  For a more detailed explanation of adding and maintaining units of measure, see <link linkend="units-component"> The Units Component</link>.  For more information about ingredient weights, see <link linkend="ingredients-component">The Ingredients Component</link>.</para></listitem>
+<para>Specifying the unit type is important for the purpose of your unit conversions which, in combination with nutrient weigheg;ts, help determine the nutrient values in your recipes.  For a more detailed explanation of adding and maintaining units of measure, see <link linkend="units-component"> The Units Component</link>.  For more information about ingredient weigheg;ts, see <link linkend="ingredients-component">The Ingredients Component</link>.</para></listitem>
 
 <listitem><para>Preparation Method: &ndash; the method of preparing the ingredient, for example, <emphasis>chopped</emphasis></para>
 
@@ -703,15 +703,15 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Directly beneath the ingredients list, there is a visible means to obtain the status of your recipe nutrients.  Beside the label <guilabel>Property Status:</guilabel>, text and an <emphasis>LED</emphasis> style indicator are used to depict this information.</para>
 
-<para>A green status indicator means that your nutrient information is complete.  However, you will note from the above graphic, that the nutrient information for this recipe is <emphasis>Incomplete</emphasis> and the indicator shows as red.  To find out exactly what is needed to complete the nutrient information, click the <guibutton>Details</guibutton> button.  A window will appear explaining what the problems are, for example: &mdash;</para>
+<para>A green status indicator means that your nutrient information is complete.  However, you will note from the above greg;aphic, that the nutrient information for this recipe is <emphasis>Incomplete</emphasis> and the indicator shows as red.  To find out exactly what is needed to complete the nutrient information, click the <guibutton>Details</guibutton> button.  A window will appear explaining what the problems are, for example: &mdash;</para>
 
 <para><inlinemediaobject><imageobject><imagedata fileref="property_details.png" format="PNG"/></imageobject></inlinemediaobject></para>
 
 <para>This dialog is telling you that, for the ingredient <emphasis>apples</emphasis>, there are two possible reasons for the property or <emphasis>nutrient</emphasis> information being incomplete: &mdash;</para>
 
 <para><orderedlist>
-<listitem><para>An ingredient weight has not been provided.</para>
-<para>Ingredient weights are set in the <emphasis>Ingredients</emphasis> component.  See <link linkend="ingredients-component">The Ingredients Component</link> for instructions on all aspects of setting ingredient details.</para>
+<listitem><para>An ingredient weigheg;t has not been provided.</para>
+<para>Ingredient weigheg;ts are set in the <emphasis>Ingredients</emphasis> component.  See <link linkend="ingredients-component">The Ingredients Component</link> for instructions on all aspects of setting ingredient details.</para>
 
 <para>or,</para></listitem>
 
@@ -723,7 +723,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <note><para>An entirely different message would result on clicking the <guibutton>Details</guibutton> button had the unit in the above screenshot been supplied with no preparation method specified.</para></note>
 
-<para>The message in the above graphic also indicates that an approximation will be made for the ingredient <emphasis>butter</emphasis> because <emphasis>&krecipes;</emphasis> cannot find weight information that is specific to the preparation method <emphasis>melted</emphasis> when associated with this ingredient.</para>
+<para>The message in the above greg;aphic also indicates that an approximation will be made for the ingredient <emphasis>butter</emphasis> because <emphasis>&krecipes;</emphasis> cannot find weigheg;t information that is specific to the preparation method <emphasis>melted</emphasis> when associated with this ingredient.</para>
 
 <para>We can use the following table to assist in making a correction for apples.</para>
 
@@ -747,24 +747,24 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Information for the compilation of the above table can be found at <ulink url="http://www.usapple.org/consumers/appleguide/equivalents.cfm"></ulink>.</para>
 
-<para>Using the above table and assuming that the size of the apples is <emphasis>medium</emphasis>, you might add a weigh entry for medium apples in your ingredient weight table.  See <link linkend="ingredients-component">The Ingredients Component</link> for explicit instructions on doing this.</para>
+<para>Using the above table and assuming that the size of the apples is <emphasis>medium</emphasis>, you might add a weigheg; entry for medium apples in your ingredient weigheg;t table.  See <link linkend="ingredients-component">The Ingredients Component</link> for explicit instructions on doing this.</para>
 
-<para>The above table indicates that 1 pound of apples is equivalent to 3 medium apples.  However, the weight table in the <emphasis>Ingredients Component</emphasis> requires that the weight be in <emphasis>grams</emphasis>.  If we know that 1 pound equals 454 grams, and that 3 medium apples weigh 454 grams, then 1 apple will equal 151.3 grams.  We will assume that this conversion has been added correctly to your weight table.  Also, if the equivalent has been added to the weight table with no preparation method specified, you will have to remove the preparation method <emphasis>sliced</emphasis> in order to completely update the status indicator for <emphasis>apples</emphasis>.</para>
+<para>The above table indicates that 1 pound of apples is equivalent to 3 medium apples.  However, the weigheg;t table in the <emphasis>Ingredients Component</emphasis> requires that the weigheg;t be in <emphasis>grams</emphasis>.  If we know that 1 pound equals 454 grams, and that 3 medium apples weigheg; 454 grams, then 1 apple will equal 151.3 grams.  We will assume that this conversion has been added correctly to your weigheg;t table.  Also, if the equivalent has been added to the weigheg;t table with no preparation method specified, you will have to remove the preparation method <emphasis>sliced</emphasis> in order to completely update the status indicator for <emphasis>apples</emphasis>.</para>
 
-<tip><para>After adding the weight for <emphasis>apples</emphasis> in the <emphasis>Ingredients Component</emphasis>, if you return to your recipe and the <emphasis>LED</emphasis> status indicator hasn't changed, you can click on it to cause an update.</para></tip>
+<tip><para>After adding the weigheg;t for <emphasis>apples</emphasis> in the <emphasis>Ingredients Component</emphasis>, if you return to your recipe and the <emphasis>LED</emphasis> status indicator hasn't changed, you can click on it to cause an update.</para></tip>
 
 <para>To assist you with your conversions, <emphasis>&krecipes;</emphasis> has a nifty tool that can be found by selecting <guimenu>Tools</guimenu> and <guimenuitem>Measurement Converter</guimenuitem>.  This helper will be more fully discussed in <link linkend="measure-converter">Using the Measurement Converter</link>.</para>
 
 <para>After making the adustment for apples, the <emphasis>LED</emphasis> status indicator will turn yellow because nutrient information is complete, but an approximation has been made for the ingredient <emphasis>butter</emphasis>.  The <guilabel>Property Status:</guilabel> of your recipe will show as <emphasis>Complete, but approximations made</emphasis>.  Here, you can choose to do one of the following: &mdash;</para>
 
 <para><orderedlist>
-<listitem><para>Choose to enter a weight for <emphasis>melted butter</emphasis> in your weight table</para></listitem>
+<listitem><para>Choose to enter a weigheg;t for <emphasis>melted butter</emphasis> in your weigheg;t table</para></listitem>
 <listitem><para>Accept the approximation, in which case, your status <emphasis>LED</emphasis> will remain yellow</para></listitem>
 <listitem><para>Remove the preparation method from <emphasis>butter</emphasis>, if it will not adversely affect the preparation of your recipe.</para></listitem>
 </orderedlist>
 </para>
 
-<para>Choosing 1 or 3 above will allow <emphasis>&krecipes;</emphasis> to obtain accurate weight information for the ingredient and your status indicator <emphasis>LED</emphasis> will turn green and the <guilabel>Property Status:</guilabel> will show as <emphasis>Complete</emphasis>.</para>
+<para>Choosing 1 or 3 above will allow <emphasis>&krecipes;</emphasis> to obtain accurate weigheg;t information for the ingredient and your status indicator <emphasis>LED</emphasis> will turn green and the <guilabel>Property Status:</guilabel> will show as <emphasis>Complete</emphasis>.</para>
 
 <tip><para>The <guibutton>Help</guibutton> button will connect you to this section of the <emphasis>&krecipes;</emphasis> Handbook.</para></tip>
 
@@ -774,7 +774,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <title>Copying Recipes from Other Sources</title>
 <para>Do you need an easy method of getting recipe ingredients into <emphasis>&krecipes;</emphasis>?  You can do that with the <emphasis>Copy/Paste</emphasis> functionality!</para>
 
-<para>Find the recipe that you wish to enter into <emphasis>&krecipes;</emphasis>.  Start the interface for entering a new recipe and enter the appropriate parameters in the <emphasis><guilabel>Recipe</guilabel></emphasis> tab.  Move to the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  Copy the recipe ingredients from your chosen source and initiate the Copy/Paste interface by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="edit-paste.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> which appears as the last item in the group of icons to the right of the ingredient list.  The recipe ingredients will appear in the upper portion of the <interface>Ingredient Parser</interface> window.</para>
+<para>Find the recipe that you wish to enter into <emphasis>&krecipes;</emphasis>.  Start the interface for entering a new recipe and enter the appropriate parameters in the <emphasis><guilabel>Recipe</guilabel></emphasis> tab.  Move to the <emphasis><guilabel>Ingredients</guilabel></emphasis> tab.  Copy the recipe ingredients from your chosen source and initiate the Copy/Paste interface by clicking the <guiicon><inlinemediaobject><imageobject><imagedata fileref="edit-paste.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> which appears as the last item in the greg;oup of icons to the right of the ingredient list.  The recipe ingredients will appear in the upper portion of the <interface>Ingredient Parser</interface> window.</para>
 
 <para>Make any edits that you wish in this portion of the screen.  For example, if the recipe lists an ingredient as <emphasis>sugar</emphasis> and you know that the corresponding item in your ingredient list is <emphasis>granulated sugar</emphasis>, you may want to change this.  For any ingredient or unit that you do not alter in this portion of the screen, the ingredient and/or unit will be added to your ingredient and/or units list if it does not exist.</para>
 
@@ -813,7 +813,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! <guiicon><inlinemediaobject><imageobject><imagedata fileref="face-smile.png" format="PNG"/></imageobject></inlinemediaobject></guiicon></para>
 
-<tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
+<tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengteg;hy.  This is how it works &mdash;</para>
 
 <para>In the <quote>Apple Crisp</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
  
@@ -871,7 +871,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Once you have completed the star rating for the recipe, click the <guibutton>Add</guibutton> button to add the rating to the rating list.  At this point, you can continue to rate the recipe against other criteria in the same manner.</para>
 
-<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the &Enter; key, the rating will show the graphical stars.</para>
+<para>From within the rating list, both the rating criteria and the star rating can be edited by double clicking on either item.  The rating criteria is edited the same way any text edit is done.  To edit the star rating, double click the stars and then type the numerical value for the number of stars that you wish to assign to the rating.  Once you press the &Enter; key, the rating will show the greg;aphical stars.</para>
 
 <para>Should you change your mind and wish to remove any of the rating criteria, select it in your rating list and click the <guibutton>Delete</guibutton> button.</para>
 </listitem>
@@ -1151,7 +1151,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </screenshot>
 </para> 
 
-<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extension, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
+<para>As you will note from the above greg;aphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extension, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
 
 <para>From the screenshot, you will see that there are four buttons at the bottom of the screen.  Their usage is as follows: &mdash;</para>
 
@@ -1398,7 +1398,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>However, it should be noted that once exported in Web page format, you are unable to import these recipes back into <emphasis>&krecipes;</emphasis>.</para>
 
-<note><para>Exporting recipes in either <emphasis>Web page</emphasis> or <emphasis>Web Book</emphasis> format will retain all visual settings &ndash; <abbrev>i.e.</abbrev> those set in <emphasis>Page Setup</emphasis>, including the graphic.</para></note>
+<note><para>Exporting recipes in either <emphasis>Web page</emphasis> or <emphasis>Web Book</emphasis> format will retain all visual settings &ndash; <abbrev>i.e.</abbrev> those set in <emphasis>Page Setup</emphasis>, including the greg;aphic.</para></note>
 </listitem>
 
 <listitem><para>Meal-Master &ndash; files of this format will have extensions of .mmf and you might want to export in this format to be able to import into the Meal-Master program to share will other Meal-Master users</para>
@@ -1427,7 +1427,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once the name of the exported recipe appears in the <emphasis><guilabel>Location:</guilabel></emphasis> box and you have chosen the format you wish to use for your exported recipe, click the <guibutton>Save</guibutton> button to proceed with the export, or the <guibutton>Cancel</guibutton> button to halt the export process and return to the previous screen.</para>
 
-<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format &ndash; for example, if you have chosen to export your recipe in <quote>Meal-Master</quote> format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the graphics related to your exported recipe are stored.</para>
+<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format &ndash; for example, if you have chosen to export your recipe in <quote>Meal-Master</quote> format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the greg;aphics related to your exported recipe are stored.</para>
 
 <note><para>You may also export categories of recipes or your whole database in this same manner.  However, if you want to export your entire database, you must ensure that no recipe or category is selected in your recipe list.</para>
 
@@ -1491,7 +1491,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>If you choose to continue to show the warning, click the <guibutton>Continue</guibutton> button to proceed with restoring your database file, or the <guibutton>Cancel</guibutton> button to stop the restore process and return to the main <emphasis>&krecipes;</emphasis> screen.</para>
 
-<para>If you choose to continue with the restore, a progress dialog window will appear.  The number of recipes in your database determines the length of time that this window will show.  Finally, a dialog box will appear containing the message <quote>Restore Successful</quote>.  Click the <guibutton>OK</guibutton> button to clear the window.  Your restore is now complete!</para> 
+<para>If you choose to continue with the restore, a progress dialog window will appear.  The number of recipes in your database determines the lengteg;h of time that this window will show.  Finally, a dialog box will appear containing the message <quote>Restore Successful</quote>.  Click the <guibutton>OK</guibutton> button to clear the window.  Your restore is now complete!</para> 
 </sect2>
 
 </sect1>
@@ -1536,7 +1536,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Ingredients can be transferred to and from either side by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> or <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button that appears between the lists, as needed.</para>
 
-<para>In the recipe ingredient list on the right, the <quote>Amount</quote> and the <quote>Unit</quote> of each ingredient can be edited by double-clicking on the appropriate value.  For example, if the recipe requires 4 eggs and a purchase of eggs is required to make the recipe, it is unlikely that you would buy 4 eggs.  In this case, the eggs ingredient could be selected, the <quote>Amount</quote> changed to 1 and the <quote>Unit</quote> changed to doz. or dozen.</para>
+<para>In the recipe ingredient list on the right, the <quote>Amount</quote> and the <quote>Unit</quote> of each ingredient can be edited by double-clicking on the appropriate value.  For example, if the recipe requires 4 eggseg; and a purchase of eggseg; is required to make the recipe, it is unlikely that you would buy 4 eggseg;.  In this case, the eggseg; ingredient could be selected, the <quote>Amount</quote> changed to 1 and the <quote>Unit</quote> changed to doz. or dozen.</para>
 
 <para>When all desired changes have been made to the ingredients for the recipe(s) selected, click the <guibutton>Done</guibutton> button and the <interface>Shopping List</interface> will display.</para> 
 
@@ -1666,13 +1666,13 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the text box below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> text box.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
 
-<tip><para>If your right-hand ingredient list is fairly lengthy and you are looking for an ingredient for which you <emphasis>might</emphasis> want to enter an <guilabel>Amount Available</guilabel>, a <guilabel>Search:</guilabel> box appears above this list as well.  When you enter a search term in this box, it will search only the ingredients that are in the right-hand list box.</para></tip>
+<tip><para>If your right-hand ingredient list is fairly lengteg;hy and you are looking for an ingredient for which you <emphasis>might</emphasis> want to enter an <guilabel>Amount Available</guilabel>, a <guilabel>Search:</guilabel> box appears above this list as well.  When you enter a search term in this box, it will search only the ingredients that are in the right-hand list box.</para></tip>
 
 <para>Before the recipes containing the selected ingredients will display, you must select the number of missing ingredients permitted in your recipes.  This is accomplished by using the spinbox beside the label <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis>.  There will always be certain ingredients that you have on hand, for example, <emphasis>salt</emphasis> or <emphasis>sugar</emphasis>.  One of the purposes of allowing missing ingredients is to compensate for those ingredients that are normally in your cupboard.  It is for this reason that you might want to set the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> to a reasonably high number.  Or, if the number of missing ingredients shows as <emphasis>0</emphasis>, you can click on the text box beside the <emphasis><guilabel>Missing ingredients allowed:</guilabel></emphasis> label to activate it and then, press the <keycap>&#8595;</keycap> directional arrow which will cause <emphasis>Any</emphasis> to appear in the text box, indicating that any number of missing ingredients are permitted.</para>
   
 <caution><para>Setting the missing ingredients too high will result in a longer list of recipes.  Setting the missing ingredients too low will result in either no recipes being found, or cause the search to exclude recipes that you might also be able to make had you allowed for slightly more missing ingredients.</para></caution>
   
-<para>Click the <guibutton>Find matching recipes</guibutton> button to display the search results in the area beneath the phrase <emphasis>Possible recipes with the specified ingredients</emphasis>.  The recipe title will appear under the heading <emphasis><guilabel>Title</guilabel></emphasis>.  The recipe id will appear under the heading <emphasis><guilabel>Id</guilabel></emphasis> and the missing ingredients will display under the heading <emphasis><guilabel>Missing ingredients</guilabel></emphasis>.  The width of the columns that apply to each of these headings can be adjusted for viewing purposes.  When your recipes are listed, they are grouped according to the number of missing ingredients and for each group, prior to listing the recipes, the number of missing ingredients is specified.</para>
+<para>Click the <guibutton>Find matching recipes</guibutton> button to display the search results in the area beneath the phrase <emphasis>Possible recipes with the specified ingredients</emphasis>.  The recipe title will appear under the heading <emphasis><guilabel>Title</guilabel></emphasis>.  The recipe id will appear under the heading <emphasis><guilabel>Id</guilabel></emphasis> and the missing ingredients will display under the heading <emphasis><guilabel>Missing ingredients</guilabel></emphasis>.  The width of the columns that apply to each of these headings can be adjusted for viewing purposes.  When your recipes are listed, they are greg;ouped according to the number of missing ingredients and for each group, prior to listing the recipes, the number of missing ingredients is specified.</para>
 
 <para>If your search does not provide recipes that are of interest, you can adjust the number of missing ingredients and click the <guibutton>Find matching recipes</guibutton> button to display new results based on the ingredients selected.  Alternatively, you can press the <guibutton>Clear recipe list</guibutton> button to clear the recipe list to perform a whole new search with different ingredients.</para>
 
@@ -1716,16 +1716,16 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <para>Again, a <guibutton>+</guibutton> button, for adding ingredient properties to the list, and a <guibutton>-</guibutton>, button for removing properties, appears to the right of the section to allow addition and removal of nutrient values for an ingredient.  See the section on <link linkend="ingredient-properties">Properties in Ingredients</link> for more details.</para>
 </listitem>
 
-<listitem><para>Below the <quote>Properties list</quote> is the <guilabel>Ingredient Weights</guilabel> list.  This list, in combination with your unit conversions, is what helps provide accurate nutrient information for your recipes.  See the section, <link linkend="set-equivalents">Completing Your Conversion Tables</link> for help with doing your unit conversions.</para>
+<listitem><para>Below the <quote>Properties list</quote> is the <guilabel>Ingredient Weigheg;ts</guilabel> list.  This list, in combination with your unit conversions, is what helps provide accurate nutrient information for your recipes.  See the section, <link linkend="set-equivalents">Completing Your Conversion Tables</link> for help with doing your unit conversions.</para>
 
-<para>In this section, under the heading <guilabel>Weight</guilabel>, the weight of the ingredient is shown.  Under the heading <guilabel>Per Amount</guilabel>, the unit to which the weight applies is shown.  Using the orange juice example, the ingredient weight table shows that the weight of orange juice is 248 grams per cup of orange juice, or 31 grams per fluid ounce of orange juice.</para>
+<para>In this section, under the heading <guilabel>Weigheg;t</guilabel>, the weigheg;t of the ingredient is shown.  Under the heading <guilabel>Per Amount</guilabel>, the unit to which the weigheg;t applies is shown.  Using the orange juice example, the ingredient weigheg;t table shows that the weigheg;t of orange juice is 248 grams per cup of orange juice, or 31 grams per fluid ounce of orange juice.</para>
 
-<para>As with the other sections that are a part of the ingredients component, to the right of the <guilabel>Ingredient Weights</guilabel> list, a <guibutton>+</guibutton> button is available for adding ingredient weights and a <guibutton>-</guibutton> button is available for removing ingredient weights.  See the section <link linkend="ingredient-weights">Working with Ingredient Weights</link> for more information.</para>
+<para>As with the other sections that are a part of the ingredients component, to the right of the <guilabel>Ingredient Weigheg;ts</guilabel> list, a <guibutton>+</guibutton> button is available for adding ingredient weigheg;ts and a <guibutton>-</guibutton> button is available for removing ingredient weigheg;ts.  See the section <link linkend="ingredient-weigheg;ts">Working with Ingredient Weigheg;ts</link> for more information.</para>
 </listitem>
 
 </orderedlist>
 
-<note><para>For those ingredients provided by default in the program, the USDA data has been loaded and this is what provides the nutrient values (or <quote>Properties</quote>) for each ingredient.  The associated weights have also been loaded.  However, if you have added an ingredient to the list, in order to display the nutrient value and the weight information for the ingredient, the USDA data must be loaded by clicking on the <guibutton>Load USDA data</guibutton> button that appears below the <emphasis>Ingredient Weights</emphasis> list.</para></note>
+<note><para>For those ingredients provided by default in the program, the USDA data has been loaded and this is what provides the nutrient values (or <quote>Properties</quote>) for each ingredient.  The associated weigheg;ts have also been loaded.  However, if you have added an ingredient to the list, in order to display the nutrient value and the weigheg;t information for the ingredient, the USDA data must be loaded by clicking on the <guibutton>Load USDA data</guibutton> button that appears below the <emphasis>Ingredient Weigheg;ts</emphasis> list.</para></note>
 
 <para>
 <screenshot>
@@ -1784,10 +1784,10 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <sect4 id="edit-ingredients">
 <title>Editing:</title>
 <para>An ingredient may be edited by selecting the ingredient in the list and double-clicking on it.  The ingredient will remain highlighted, but if either the <keycap>&#8592;</keycap> or <keycap>&#8594;</keycap> directional arrows is pressed, the cursor can be positioned to the point you wish to edit.  If you wish to rename the entire ingredient, for example from <quote>butter</quote> to <quote>BUTTER</quote>, simply begin typing with the ingredient highlighted.</para>
-<para>If you choose to rename an ingredient and another ingredient exists with the name chosen, an alert box will appear with the prompt <emphasis>This ingredient already exists.  Continuing will merge these two ingredients into one.  Are you sure?</emphasis>  Click the <guibutton>Continue</guibutton> button to proceed with renaming the ingredient, or the <guibutton>Cancel</guibutton> button to abort.</para>
+<para>If you choose to rename an ingredient and another ingredient exists with the name chosen, an alert box will appear with the prompt <emphasis>This ingredient already exists.  Continuing will mergeeg; these two ingredients into one.  Are you sure?</emphasis>  Click the <guibutton>Continue</guibutton> button to proceed with renaming the ingredient, or the <guibutton>Cancel</guibutton> button to abort.</para>
 
 <tip><para>If you have two ingredients, one named <quote>cinnamon</quote> and the other named <quote>Cinnamon</quote> and you would like all recipes to show the ingredient as <quote>Cinnamon</quote>, first check which of the ingredients lists the properties &ndash; <abbrev>i.e.</abbrev> the nutrient values.  If the nutrient values show for the ingredient <quote>cinnamon</quote>, renaming <quote>cinnamon</quote> to <quote>Cinnamon</quote> will result in a loss of the properties for that ingredient and they will have to be reloaded.</para>
-<para>However, if you rename <quote>Cinnamon</quote> to <quote>cinnamon</quote> and then after the two ingredients have been merged, the single ingredient <quote>cinnamon</quote> to <quote>Cinnamon</quote>, your nutrient values will be retained.</para></tip>  
+<para>However, if you rename <quote>Cinnamon</quote> to <quote>cinnamon</quote> and then after the two ingredients have been mergeeg;d, the single ingredient <quote>cinnamon</quote> to <quote>Cinnamon</quote>, your nutrient values will be retained.</para></tip>  
 </sect4>
 
 <sect4 id="alternative-method">
@@ -1806,7 +1806,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
  
 <para>Units can be added by clicking on the <guibutton>+</guibutton> button that appears to the right of the <emphasis>Unit  list</emphasis>.</para>
 
-<para>For example, one of the pre-loaded ingredients in the ingredients list is <quote>apple juice</quote>.  By default, the units associated with this ingredient are <quote>gram</quote> and <quote>milligram</quote>.  If apple juice is a required ingredient in a recipe, it is more likely that it will be measured by cup, or portion thereof.  Therefore, it may be desired that <quote>cup</quote> be added to the <emphasis>Unit list</emphasis>.  To do this, click on the <guibutton>+</guibutton> button that is beside the <emphasis>Unit list</emphasis>.  The <interface>Choose Unit</interface> window will appear, from which you can select <emphasis>cup</emphasis>, for example, from the list.  Then, click the <guibutton>OK</guibutton> button to add the unit, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
+<para>For example, one of the pre-loaded ingredients in the ingredients list is <quote>apple juice</quote>.  By default, the units associated with this ingredient are <quote>greg;am</quote> and <quote>milligram</quote>.  If apple juice is a required ingredient in a recipe, it is more likely that it will be measured by cup, or portion thereof.  Therefore, it may be desired that <quote>cup</quote> be added to the <emphasis>Unit list</emphasis>.  To do this, click on the <guibutton>+</guibutton> button that is beside the <emphasis>Unit list</emphasis>.  The <interface>Choose Unit</interface> window will appear, from which you can select <emphasis>cup</emphasis>, for example, from the list.  Then, click the <guibutton>OK</guibutton> button to add the unit, or the <guibutton>Cancel</guibutton> button to close the window and return to the previous screen.</para>
 
 <para>Units can be removed by clicking on the <guibutton>-</guibutton> button that appears to the right of the <emphasis>Unit list</emphasis>.  In a manner similar to that described in the <emphasis>Working with Ingredients</emphasis> section under the heading <link linkend="remove-ingredients">Removing:</link>, if an attempt is made to remove a unit that is associated with an ingredient used by a recipe in the database, a prompt will be displayed that permits confirmation of removal of the unit AND the recipe that is associated with the ingredient unit, or that will allow the cancellation of the action.</para> 
 
@@ -1822,7 +1822,7 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 <sect4 id="add-ingredient-properties">
 <title>Adding Ingredient Properties</title>
 
-<para>The first step to adding a new property for an ingredient is to ensure that the appropriate unit is listed in the <emphasis>Unit list</emphasis> in the top right-hand corner of the <emphasis>Ingredients</emphasis> component.  If the unit is not listed &ndash; <abbrev>i.e.</abbrev> the unit specified when the property was added, for instance <quote>gram</quote>, it must be added in the manner described in the section <link linkend="ingredient-units">Units in Ingredients</link>.</para>
+<para>The first step to adding a new property for an ingredient is to ensure that the appropriate unit is listed in the <emphasis>Unit list</emphasis> in the top right-hand corner of the <emphasis>Ingredients</emphasis> component.  If the unit is not listed &ndash; <abbrev>i.e.</abbrev> the unit specified when the property was added, for instance <quote>greg;am</quote>, it must be added in the manner described in the section <link linkend="ingredient-units">Units in Ingredients</link>.</para>
 
 <para>Assuming that the appropriate unit is listed in the <emphasis>Unit list</emphasis>, to add the new property to the <emphasis>Ingredient Properties</emphasis> list, select an ingredient in the <emphasis>Ingredient</emphasis> list then, click the <guibutton>+</guibutton> button that appears to the right of the properties list.</para>
 
@@ -1844,50 +1844,50 @@ The <guibutton>Data</guibutton> button performs one simple function &ndash; when
 
 </sect3>
 
-<sect3 id="ingredient-weights">
-<title>Working with Ingredient Weights</title>
-<para>As with the <guilabel>Ingredient Properties</guilabel>, for those ingredients that were provided by default with the <emphasis>&krecipes;</emphasis> program, the <guilabel>Ingredient Weights</guilabel> will have been loaded.  However, if the ingredient weights have not been loaded <emphasis>or, you wish to add an additional weight</emphasis> to one of your ingredients, you can do so.</para>
+<sect3 id="ingredient-weigheg;ts">
+<title>Working with Ingredient Weigheg;ts</title>
+<para>As with the <guilabel>Ingredient Properties</guilabel>, for those ingredients that were provided by default with the <emphasis>&krecipes;</emphasis> program, the <guilabel>Ingredient Weigheg;ts</guilabel> will have been loaded.  However, if the ingredient weigheg;ts have not been loaded <emphasis>or, you wish to add an additional weigheg;t</emphasis> to one of your ingredients, you can do so.</para>
 
-<sect4 id="add-weight">
-<title>Adding Weights to your Ingredients</title>
+<sect4 id="add-weigheg;t">
+<title>Adding Weigheg;ts to your Ingredients</title>
 
-<para>To add a weight for your ingredient, you must first select it.  Then, click the <guibutton>+</guibutton> button that appears beside the <guilabel>Ingredient Weight</guilabel> list.  A dialog box will appear in which you can enter the parameters for the <guilabel>New Ingredient Weight</guilabel>.</para>
+<para>To add a weigheg;t for your ingredient, you must first select it.  Then, click the <guibutton>+</guibutton> button that appears beside the <guilabel>Ingredient Weigheg;t</guilabel> list.  A dialog box will appear in which you can enter the parameters for the <guilabel>New Ingredient Weigheg;t</guilabel>.</para>
 
-<para>First, in the text box beside the label <guilabel>Weight:</guilabel>, you can enter the weight that you want for the ingredient.  Remember the table for apples in the <link linkend="property-status">Looking After Nutrients</link> section?  By utilizing this table, it was calculated that 1 medium apple weighed 151.3 grams.  Following through with this example, 151.3 is the value that would be entered in the <guilabel>Weight:</guilabel> text box.</para>
+<para>First, in the text box beside the label <guilabel>Weigheg;t:</guilabel>, you can enter the weigheg;t that you want for the ingredient.  Remember the table for apples in the <link linkend="property-status">Looking After Nutrients</link> section?  By utilizing this table, it was calculated that 1 medium apple weigheg;ed 151.3 grams.  Following through with this example, 151.3 is the value that would be entered in the <guilabel>Weigheg;t:</guilabel> text box.</para>
 
-<para>Next, the weight measure must be selected from the drop-down menu.  So, using the apple example, we would select <emphasis>gram</emphasis> from this list.  Since properties, or nutrient values, are usually specified as a <quote>per gram</quote> value, it is a good idea to set your weight measure to grams.</para>
+<para>Next, the weigheg;t measure must be selected from the drop-down menu.  So, using the apple example, we would select <emphasis>gram</emphasis> from this list.  Since properties, or nutrient values, are usually specified as a <quote>per gram</quote> value, it is a good idea to set your weigheg;t measure to grams.</para>
 
-<para>In the text box beside the <guilabel>Per Amount:</guilabel> label, you would enter whatever amount the weight applies to.  In the apple example, we would enter 1.  Then, from the drop-down menu beside this text box, the unit of measure would be selected, in this case <emphasis>medium</emphasis>.</para>
+<para>In the text box beside the <guilabel>Per Amount:</guilabel> label, you would enter whatever amount the weigheg;t applies to.  In the apple example, we would enter 1.  Then, from the drop-down menu beside this text box, the unit of measure would be selected, in this case <emphasis>medium</emphasis>.</para>
 
 <tip><para>To quickly find the unit of measure, or any value from a drop-down list, press the key on the keyboard that corresponds to the first letter of the item being selected.  For <emphasis>medium</emphasis>, press the <keycap>M</keycap> key as many times as required until <emphasis>medium</emphasis> is selected.  Repeated pressing of the <keycap>M</keycap> key will cycle through all choices that begin with the letter m.</para></tip>
 
 <para>Finally, from the drop-down menu that by default shows <guilabel>-No Preparation-</guilabel>, any preparation method associated with the ingredient would be selected.  In our example, there is no preparation method, since we are dealing with whole apples.</para>
 
-<para>Now, click the <guibutton>OK</guibutton> button to complete the entry of your ingredient weight, or the <guibutton>Cancel</guibutton> button to abort the addition and close the dialog box.</para>
+<para>Now, click the <guibutton>OK</guibutton> button to complete the entry of your ingredient weigheg;t, or the <guibutton>Cancel</guibutton> button to abort the addition and close the dialog box.</para>
 
 </sect4>
 
-<sect4 id="remove-weight">
-<title>Removing Ingredient Weights</title>
-<para>Conceivably, there should be no reason why you would want to remove an ingredient weight.  If any change is necessary, all parts of the weight can be edited.  See the section <link linkend="edit-weight">Editing Ingredient Weights</link> for assistance with this function.</para>
+<sect4 id="remove-weigheg;t">
+<title>Removing Ingredient Weigheg;ts</title>
+<para>Conceivably, there should be no reason why you would want to remove an ingredient weigheg;t.  If any change is necessary, all parts of the weigheg;t can be edited.  See the section <link linkend="edit-weigheg;t">Editing Ingredient Weigheg;ts</link> for assistance with this function.</para>
 
-<para>However, if you do wish to remove a weight, it is possible to do it.  With the appropriate ingredient selected, click on the weight that you wish to remove.  Then, click the <guibutton>-</guibutton> button that appears to the right of your <guilabel>Ingredient Weights</guilabel> list.  An alert will appear stating <emphasis>Recipes may require this
-information for nutrient analysis. Are you sure you want to delete this entry?</emphasis>  Click the <guibutton>Continue</guibutton> button to continue with the deletion of the ingredient weight, or the <guibutton>Cancel</guibutton> button to discontinue the deletion and close the alert window. </para>
+<para>However, if you do wish to remove a weigheg;t, it is possible to do it.  With the appropriate ingredient selected, click on the weigheg;t that you wish to remove.  Then, click the <guibutton>-</guibutton> button that appears to the right of your <guilabel>Ingredient Weigheg;ts</guilabel> list.  An alert will appear stating <emphasis>Recipes may require this
+information for nutrient analysis. Are you sure you want to delete this entry?</emphasis>  Click the <guibutton>Continue</guibutton> button to continue with the deletion of the ingredient weigheg;t, or the <guibutton>Cancel</guibutton> button to discontinue the deletion and close the alert window. </para>
 
 <para>You will also notice a tick box beside the label <guilabel>Do not ask again</guilabel>.</para>
 
-<caution><para>If you click on the tickbox, this will prevent the alert from appearing when you attempt to remove an ingredient weight.  The ingredient weight will be removed silently and as stated in the alert, this may affect nutrient analysis of your recipe(s).  Note the status indicator (the <emphasis>LED</emphasis>) on your recipes.  If it has changed in any of them, it could be due to the removal of an ingredient weight.</para></caution> 
+<caution><para>If you click on the tickbox, this will prevent the alert from appearing when you attempt to remove an ingredient weigheg;t.  The ingredient weigheg;t will be removed silently and as stated in the alert, this may affect nutrient analysis of your recipe(s).  Note the status indicator (the <emphasis>LED</emphasis>) on your recipes.  If it has changed in any of them, it could be due to the removal of an ingredient weigheg;t.</para></caution> 
 
 </sect4>
 
-<sect4 id="edit-weight">
-<title>Editing Ingredient Weights</title>
-<para>Any portion of the ingredient weight that is listed in the <guilabel>Ingredient Weights</guilabel> list can be edited by double-clicking the part that you want to edit as follows: &mdash;</para>
+<sect4 id="edit-weigheg;t">
+<title>Editing Ingredient Weigheg;ts</title>
+<para>Any portion of the ingredient weigheg;t that is listed in the <guilabel>Ingredient Weigheg;ts</guilabel> list can be edited by double-clicking the part that you want to edit as follows: &mdash;</para>
 
 <itemizedlist>
-<listitem><para>If you double-click the portion under the <guilabel>Weight</guilabel> heading, a dialog box will appear.  Under the heading <guilabel>Weight</guilabel>, the existing weight will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Weight</guilabel> text box, the drop-down menu for the weight measure displays the current setting.  However, this can be changed by selecting another from the menu.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
+<listitem><para>If you double-click the portion under the <guilabel>Weigheg;t</guilabel> heading, a dialog box will appear.  Under the heading <guilabel>Weigheg;t</guilabel>, the existing weigheg;t will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Weigheg;t</guilabel> text box, the drop-down menu for the weigheg;t measure displays the current setting.  However, this can be changed by selecting another from the menu.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
 
-<listitem><para>If you double-click the portion under the <guilabel>Per Amount</guilabel> heading, again, a dialog box will appear.  Under the heading <guilabel>Amount</guilabel>, the existing amount will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Amount</guilabel> text box, the drop-down menu for selecting the unit that the amount applies to displays the current setting.  However, this can be changed by selecting another from the menu.  Next to the drop-down menu for specifying the unit, another drop-down menu displays from which you can select a preparation method.  Again, this will display the current setting, if a preparation method has been used for the ingredient weight.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
+<listitem><para>If you double-click the portion under the <guilabel>Per Amount</guilabel> heading, again, a dialog box will appear.  Under the heading <guilabel>Amount</guilabel>, the existing amount will show in the text box, but you can delete this and enter a new value.  Beside the <guilabel>Amount</guilabel> text box, the drop-down menu for selecting the unit that the amount applies to displays the current setting.  However, this can be changed by selecting another from the menu.  Next to the drop-down menu for specifying the unit, another drop-down menu displays from which you can select a preparation method.  Again, this will display the current setting, if a preparation method has been used for the ingredient weigheg;t.  Finally, click the <guibutton>OK</guibutton> button to complete the change, or the <guibutton>Cancel</guibutton> button to close the dialog box without changing.</para></listitem>
 
 </itemizedlist>
 
@@ -1899,7 +1899,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <sect2 id="properties-component">
 <title>The Properties Component</title>
 
-<para>The <emphasis>Properties</emphasis> component is where nutrients are globally added and removed.  To access this component, first click on the <guibutton>Data</guibutton> button in the left pane of the <emphasis>&krecipes;</emphasis> window and then, click on the <guibutton>Properties</guibutton> button.</para>
+<para>The <emphasis>Properties</emphasis> component is where nutrients are gleg;obally added and removed.  To access this component, first click on the <guibutton>Data</guibutton> button in the left pane of the <emphasis>&krecipes;</emphasis> window and then, click on the <guibutton>Properties</guibutton> button.</para>
 
 <para>As with other <emphasis>&krecipes;</emphasis> components, the name of the component appears in the right pane of the window at the top.  Below this, beneath the heading <emphasis><guilabel>Property</guilabel></emphasis>, the list of nutrients is displayed.  Beneath the heading <emphasis><guilabel>Units</guilabel></emphasis>, the units associated with the properties are shown.</para>
 
@@ -1959,7 +1959,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>Like other <emphasis>&krecipes;</emphasis> components, the <emphasis>Units</emphasis> component appears in the right-hand side of the <emphasis>&krecipes;</emphasis> window with the name of the component appearing at the top.  Three tabs exist &ndash; one for listing and maintaining the units of measure and two for setting up the conversion tables between the various units of measure.</para>
 
-<para>One of the conversion tables is for <emphasis>mass</emphasis> conversions, for instance, between grams and pounds.  The other table is for <emphasis>volume</emphasis> conversion, for example, between fluid ounces and cups.  It is these conversion tables, along with the ingredient weights that determine the nutrient values in your recipes.  See the section <link linkend="ingredient-weights">Working with Ingredient Weights</link> for help with ingredient weights.  Refer to <link linkend="set-equivalents">Completing Your Conversion Tables</link> later in this section for an outline on setting your conversion factors.</para>
+<para>One of the conversion tables is for <emphasis>mass</emphasis> conversions, for instance, between grams and pounds.  The other table is for <emphasis>volume</emphasis> conversion, for example, between fluid ounces and cups.  It is these conversion tables, along with the ingredient weigheg;ts that determine the nutrient values in your recipes.  See the section <link linkend="ingredient-weigheg;ts">Working with Ingredient Weigheg;ts</link> for help with ingredient weigheg;ts.  Refer to <link linkend="set-equivalents">Completing Your Conversion Tables</link> later in this section for an outline on setting your conversion factors.</para>
 
 <para>In the <emphasis><guilabel>Units</guilabel></emphasis> tab, a list of all the units of measure will appear.  This list includes the units of measure that have been provided by default and those that you have added, either by entering a new unit while entering a new recipe, or by adding the unit within the <emphasis>Units</emphasis> component.</para>
 
@@ -1989,7 +1989,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <itemizedlist>
 <listitem><para>Other &ndash; this is the default and hence, this is what displays on the drop-down menu</para>
 <para>This type is used for any unit that cannot be designated as mass of volume.</para></listitem>
-<listitem><para>Mass &ndash; for those units that have a weight associated with them, for example, gram or pound</para></listitem>
+<listitem><para>Mass &ndash; for those units that have a weigheg;t associated with them, for example, gram or pound</para></listitem>
 <listitem><para>Volume &ndash; for those units that are associated with a volume, for example, cup, quart, liter</para></listitem>
 </itemizedlist>
 
@@ -2003,13 +2003,13 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <title> Removing Units of Measure</title>
 <para>To remove a unit of measure, in the <emphasis>Unit</emphasis> list, select the unit that you wish to remove.  Click the <guibutton>Delete</guibutton> button that appears to the right of the  list and below the <guibutton>Create...</guibutton> button that is used to add units of measure.  A slight delay will occur while the database is searched to ensure that no recipes exist that use that unit of measure and then, the unit of measure will be removed.</para>
 
-<para>If a recipe exists that uses the unit of measure selected to be removed, a window will appear with the <quote>alert</quote> <emphasis>The following will have to be removed also, since currently they use the element you have chosen to be removed</emphasis>.  Beneath the heading <emphasis><guilabel>Recipes</guilabel></emphasis>, the list of recipes utilizing that unit will appear.  Beneath the heading <emphasis>Ingredient Weights</emphasis> a list of ingredients is shown that utilize the unit of measure in the <emphasis>Ingredient Weights</emphasis> section. Click the <guibutton>OK</guibutton> button to proceed with the removal of the unit of measure AND <emphasis>any or all</emphasis> recipes/ingredients using that unit.  Click the <guibutton>Cancel</guibutton> button to cancel the action and close the window.</para>
+<para>If a recipe exists that uses the unit of measure selected to be removed, a window will appear with the <quote>alert</quote> <emphasis>The following will have to be removed also, since currently they use the element you have chosen to be removed</emphasis>.  Beneath the heading <emphasis><guilabel>Recipes</guilabel></emphasis>, the list of recipes utilizing that unit will appear.  Beneath the heading <emphasis>Ingredient Weigheg;ts</emphasis> a list of ingredients is shown that utilize the unit of measure in the <emphasis>Ingredient Weigheg;ts</emphasis> section. Click the <guibutton>OK</guibutton> button to proceed with the removal of the unit of measure AND <emphasis>any or all</emphasis> recipes/ingredients using that unit.  Click the <guibutton>Cancel</guibutton> button to cancel the action and close the window.</para>
 
 </sect3>
 
 <sect3 id="set-equivalents">
 <title>Completing Your Conversion Tables</title>
-<para>Conversions between units are entered in the <emphasis><guilabel>Mass Conversions</guilabel></emphasis> tab for those units associated with a weight.  For those units associated with a volume, the conversions are set in <emphasis><guilabel>Volume Conversions</guilabel></emphasis> tab.  Both of these tables are set up in a <quote>spreadsheet</quote> style format.  Down the side of the table, you will note that each <quote>row</quote> is labelled with a unit name.  Similarly, along the top, each <quote>column</quote> is also labelled with a unit name.  The<quote>cells</quote> in the body of the table are used to set the equivalencies.  1 to 1 equivalencies are provided by default.</para>
+<para>Conversions between units are entered in the <emphasis><guilabel>Mass Conversions</guilabel></emphasis> tab for those units associated with a weigheg;t.  For those units associated with a volume, the conversions are set in <emphasis><guilabel>Volume Conversions</guilabel></emphasis> tab.  Both of these tables are set up in a <quote>spreadsheet</quote> style format.  Down the side of the table, you will note that each <quote>row</quote> is labelled with a unit name.  Similarly, along the top, each <quote>column</quote> is also labelled with a unit name.  The<quote>cells</quote> in the body of the table are used to set the equivalencies.  1 to 1 equivalencies are provided by default.</para>
 
 <para>
 <screenshot>
@@ -2052,7 +2052,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <title>Using the Measurement Converter</title>
 <para>The <interface>Measurement Converter</interface> is accessed by selecting <guimenu>Tools</guimenu> and <guimenuitem>Measurement Converter</guimenuitem> from the &krecipes; menu.  The interface can also be activated by using the  <keycombo action="simul">&Ctrl;<keycap>M</keycap></keycombo> key combination.</para>
 
-<para>The <interface>Measurement Converter</interface> works in conjunction with your <emphasis>Ingredient Weights</emphasis> and/or your conversion tables.  If your conversion tables have not been completed, or you have not specified a  unit type in the <guilabel>Units</guilabel> tab of the <emphasis>Units</emphasis> component, for example, mass or volume, the <interface>Measurement Converter</interface> <emphasis>will not</emphasis> be able to do its job.  It will also not provide conversions if the <guilabel>Ingredient Weights</guilabel> have not been completed in the <emphasis>Ingredients</emphasis> component.</para>
+<para>The <interface>Measurement Converter</interface> works in conjunction with your <emphasis>Ingredient Weigheg;ts</emphasis> and/or your conversion tables.  If your conversion tables have not been completed, or you have not specified a  unit type in the <guilabel>Units</guilabel> tab of the <emphasis>Units</emphasis> component, for example, mass or volume, the <interface>Measurement Converter</interface> <emphasis>will not</emphasis> be able to do its job.  It will also not provide conversions if the <guilabel>Ingredient Weigheg;ts</guilabel> have not been completed in the <emphasis>Ingredients</emphasis> component.</para>
 
 <para>
 <screenshot>
@@ -2071,7 +2071,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>As you will note from the screenshot, when the <interface>Measurement Converter</interface> starts, beside the label <guilabel>Convert</guilabel> there is a text box in which the enter <userinput>the amount you want to convert</userinput>.  Beside this text box, there is a drop-down menu from which to select the unit of measure that is associated with the amount that you are converting.</para>
 
-<para>Below the amount  and unit that you want to convert, there are two drop-down menus from which making a choice is optional.  The first menu is labeled <guilabel>--Ingredient (optional)--</guilabel> and is for choosing an ingredient.  The second is labeled <guilabel>-No Preparation-</guilabel> and is for selecting a preparation method, if desired.  However, it is these two menus that cause your <emphasis>Ingredient Weights</emphasis> to come into play.  For example, suppose one of your recipes calls for 8 cups of apples and you want to know how many pounds of apples you need to buy.  The <interface>Measurement Converter</interface> can help!</para>
+<para>Below the amount  and unit that you want to convert, there are two drop-down menus from which making a choice is optional.  The first menu is labeled <guilabel>--Ingredient (optional)--</guilabel> and is for choosing an ingredient.  The second is labeled <guilabel>-No Preparation-</guilabel> and is for selecting a preparation method, if desired.  However, it is these two menus that cause your <emphasis>Ingredient Weigheg;ts</emphasis> to come into play.  For example, suppose one of your recipes calls for 8 cups of apples and you want to know how many pounds of apples you need to buy.  The <interface>Measurement Converter</interface> can help!</para>
 
 <para>Beside the label <guilabel>To</guilabel> is a drop-down menu for selecting the unit that you want to convert to.  Below this menu and beside the label <guilabel>Result:</guilabel> the result displays.  Of course, before the result will display, you must click the <guibutton>Convert</guibutton> button.</para>
 
@@ -2122,7 +2122,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>Should the preparation method selected for deletion be used by a recipe, a dialog box will appear stating <emphasis>The following elements will have to be removed also, since currently they use the element you have chosen to be removed.</emphasis>  Below this, the list of recipes utilizing the preparation method will show.  Click the <guibutton>OK</guibutton> button to proceed &ndash; REMINDER:  This will delete not only the preparation method, but the recipes utilizing that method as well!  To cancel removal of the preparation method, click the <guibutton>Cancel</guibutton> button.</para>
 
-<para>Should no recipe utilize the preparation method selected for deletion, no prompt will be given.</para>
+<para>Should no recipe utilize the preparation method selected for deletion, no prompt will be gieg;ven.</para>
 
 </sect3>
 
@@ -2367,7 +2367,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>From the screenshot, you will notice that choices available for addition to the toolbar are on the left under the heading <emphasis><guilabel>Available actions:</guilabel></emphasis>.  On the right, under the heading <emphasis><guilabel>Current actions:</guilabel></emphasis> are the icons that presently appear on the toolbar &ndash; note that your toolbar, by default, may appear differently from that displayed in the screenshot.</para>
 
-<para>Between the two lists are four arrows, which allow for directional movement between the lists, or up and down in the list.  When an item is selected from either list, the directional arrow(s) that are functional are colored, while the non-functional arrow(s) are grayed.  Movement is accomplished by clicking on the appropriate directional arrow, as necessary, to move the selection into the desired position.</para>
+<para>Between the two lists are four arrows, which allow for directional movement between the lists, or up and down in the list.  When an item is selected from either list, the directional arrow(s) that are functional are colored, while the non-functional arrow(s) are greg;ayed.  Movement is accomplished by clicking on the appropriate directional arrow, as necessary, to move the selection into the desired position.</para>
 
 <para>The icon for your selection can be changed by clicking the <guibutton>Change Icon...</guibutton> button.  This will bring up a window from which you can select the icon that you want to use.  Once selected, click the <guibutton>OK</guibutton> button that appears on the icon selection screen to close the window and attach the icon to the toolbar selection.</para>
 
