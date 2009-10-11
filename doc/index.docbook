@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY krecipes "<application>Krecipes</application>">
   <!ENTITY kappname "&krecipes;"><!-- replace kapp here, do *not* replace kappname-->
   <!ENTITY package "extragear/utils"><!-- kdebase, kdeadmin, etc -->
