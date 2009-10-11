@@ -181,7 +181,7 @@ By default, <emphasis>&krecipes;</emphasis> starts with the <emphasis>Find/Edit 
 <listitem><para>Remove From Category &ndash; Removes the recipe from its current category. If the recipe is not included in any other category, places it in the <emphasis>Uncategorized</emphasis> group.  From the <emphasis>Uncategorized</emphasis> group, the recipe can be selected for editing to re-categorize it.  See the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more information.</para></listitem>
 <listitem><para>Delete &ndash; Deletes the recipe from the database.</para></listitem>
 <listitem><para>Add to Shopping List &ndash; Adds the selected recipe to your shopping list.  See the section <link linkend="shopping-list">The Shopping List</link> for information regarding the use of the Shopping List.</para></listitem>
-<listitem><para>Copy to Clipboard &ndash; Makes a copy of the recipe and places in on the clipboard so that it can be pasted into another application for example, an e-mail.  The format of the copy is dependent on what is selected as a preference.  For a complete description of the <quote>Copy to Clipboard</quote> functionality, see the section <link linkend="copy-clipboard">Copying to the Clipboard</link>.</para></listitem>
+<listitem><para>Copy to Clipboard &ndash; Makes a copy of the recipe and places in on the clipboard so that it can be pasted into another application for example, an email.  The format of the copy is dependent on what is selected as a preference.  For a complete description of the <quote>Copy to Clipboard</quote> functionality, see the section <link linkend="copy-clipboard">Copying to the Clipboard</link>.</para></listitem>
 <listitem><para>Categorize &ndash; Allows you to select one or more recipes that appear in the <emphasis>Uncategorized</emphasis> group and place them in the appropriate category by selecting the it from a pop-up instead of having to edit the recipe(s).</para>
 <note><para>This option applies only when there are recipes listed as <emphasis>Uncategorized</emphasis>.  If multiple recipes are selected for categorizing, they must be of the same category.  To select non-adjacent recipes for categorizing, hold the &Ctrl; key and select the desired recipes by clicking on them.</para></note></listitem>
 </itemizedlist>
@@ -447,10 +447,10 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 <para>To search by rating criteria, select the <emphasis>Radio Button</emphasis> beside the <emphasis><guilabel>By criteria:</guilabel></emphasis> label.  First, select the criteria that you want to use for your rating from the drop-down menu.  In the text box next to this, enter the value of the number of stars for which you want recipes displayed, for example, 4.  Entry is permitted in the following formats &mdash;</para>
 
 <itemizedlist>
-<listitem><para>whole numbers, e.g. 3</para></listitem>
-<listitem><para>numbers that include fractional amounts, e.g. 3.5</para></listitem>
-<listitem><para>whole number ranges, e.g. 3-4</para></listitem>
-<listitem><para>ranges that include fractional amounts, e.g. 3.5-4</para></listitem>
+<listitem><para>whole numbers, &eg; 3</para></listitem>
+<listitem><para>numbers that include fractional amounts, &eg; 3.5</para></listitem>
+<listitem><para>whole number ranges, &eg; 3-4</para></listitem>
+<listitem><para>ranges that include fractional amounts, &eg; 3.5-4</para></listitem>
 </itemizedlist>
 
 <para>Note that, if you enter a fractional amount, for instance, 3.5, it will display in the format that you have chosen for your preferences when transferred to the listbox &ndash; <abbrev>i.e.</abbrev>3.5 will display as 3.5 if you have chosen numbers to display in decimal format, or 3&#189; if you have chosen numbers to display as fractions.  See the section <link linkend="custom-formatting">Customizing Formatting</link> for an explanation of setting formatting preferences.</para>
@@ -562,7 +562,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Next, the recipe category is selected by clicking on the <guibutton>+</guibutton> beside the category box.</para>
 
-<para>To select a category, click on the checkbox beside the category name and click the <guibutton>OK</guibutton> button to accept the selection or, the <guibutton>Cancel</guibutton> button to cancel the selection.  Either way, the window will close.</para>
+<para>To select a category, click on the check box beside the category name and click the <guibutton>OK</guibutton> button to accept the selection or, the <guibutton>Cancel</guibutton> button to cancel the selection.  Either way, the window will close.</para>
 
 <tip><para>It is also possible to add a category here.  Simply click on the <guibutton>New Category...</guibutton> button.  Add a new category in the same manner as described in the section entitled <link linkend="categories-component">The Categories Component</link>.</para></tip>
 
@@ -809,11 +809,11 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>To enter the recipe instructions, click on the <emphasis><guilabel>Instructions</guilabel></emphasis> tab.</para>
 
-<para>Entering the recipe instructions is easy &ndash; in the whitespace provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
+<para>Entering the recipe instructions is easy &ndash; in the white space provided,  simply type in the steps necessary to complete the preparation of the recipe.</para>
 
 <para>To make absolutely sure that typing is done in the correct area, the prompt <prompt>Write the recipe instructions here</prompt> is displayed! <guiicon><inlinemediaobject><imageobject><imagedata fileref="face-smile.png" format="PNG"/></imageobject></inlinemediaobject></guiicon></para>
 
-<tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
+<tip><para>A <emphasis>VERY COOL</emphasis> part of entering the recipe instructions is the <emphasis>Auto Completion</emphasis> feature!  This is a real-time and effort saver if your instructions refer to many of the ingredients in your ingredient list, and/or if your ingredient names are lengthy.  This is how it works &mdash;</para>
 
 <para>In the <quote>Apple Crisp</quote> recipe shown in the screenshot, we have the ingredient <quote>brown sugar</quote>.  As you begin typing <quote>brown sugar</quote> in your recipe instructions, <emphasis>&krecipes;</emphasis> will match typed characters with ingredients in your recipe ingredient list and automatically complete the remaining characters.</para>
  
@@ -1079,7 +1079,7 @@ The last icon on the toolbar allows access to a list of items that are available
 </itemizedlist>
 
 <para>
-By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the checkbox beside it.
+By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the check box beside it.
 </para>
 
 <note><para>All sections chosen to display in the recipe will also print.  It may be desirable to have a section display, but not print.  In this case, you can define a new print layout.  See the section <link linkend="print-setup">Print Setup</link> for instructions.</para>
@@ -1100,7 +1100,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para>Change the <guimenuitem>Background color...</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenuitem>Text color...</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenuitem>Font...</guimenuitem></para></listitem>
-<listitem><para>Choose whether or not to display the section by selecting or deselecting the checkbox beside <guimenuitem>Show</guimenuitem></para></listitem>
+<listitem><para>Choose whether or not to display the section by selecting or deselecting the check box beside <guimenuitem>Show</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenu>Alignment</guimenu> &ndash; This menu item has a sub-menu that allows you to select the alignment</para></listitem>
 <listitem><para>Define a <guimenuitem>Border...</guimenuitem> that will appear around the selected section </para>
 <para>When the <quote>Requested Border</quote> configuration window appears, there are sections that allow the definition of various elements under the appropriate headings.  For example &mdash;</para>
@@ -1151,7 +1151,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 </screenshot>
 </para> 
 
-<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you can't have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extension, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
+<para>As you will note from the above graphic, the page has been modified to depict a <quote>blueberry</quote> theme.  There is absolutely no reason why you cannot have multiple print layout files to use for different recipes.  <emphasis>&krecipes;</emphasis> names its layout files with a .klo extension, so you could have a blueberry.klo file for all your blueberry recipes, or a christmas.klo file for all those Christmas goodies.  You will also observe that <emphasis>Properties</emphasis> (your nutrients) have been deselected for printing purposes.</para>
 
 <para>From the screenshot, you will see that there are four buttons at the bottom of the screen.  Their usage is as follows: &mdash;</para>
 
@@ -1368,7 +1368,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <itemizedlist>
 <listitem><para>Compressed Krecipes format &ndash; files of this format will have extensions of .kre</para>
-<para>This export format will result in a smaller file size and as a result disk space is saved.  The smaller file size also makes sending over the Internet easier.  This format also provides a mean of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your Krecipes Database</link> for further information.</para></listitem>
+<para>This export format will result in a smaller filesize and as a result disk space is saved.  The smaller filesize also makes sending over the Internet easier.  This format also provides a mean of backup in addition to the backup functionality in <emphasis>&krecipes;</emphasis>.  See the section <link linkend="backup-db">Backing up Your Krecipes Database</link> for further information.</para></listitem>
 
 <listitem><para>Krecipes &ndash; files of this format will have extensions of .kreml</para>
 <para>Using this format exports your recipe in a readable format that makes it easier to edit the recipe XML.</para>
@@ -1376,7 +1376,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <note><para>When exporting in either Krecipes and Krecipes Compressed format, all information is guaranteed to be preserved.  Other formats may support only certain information.  If your recipes contain, for example, <quote>borders</quote> around certain elements, and this is not supported by the export format that you have specified, that information is lost without any warning.</para></note></listitem>
 
 <listitem><para>Plain Text &ndash; files of this format will have extensions of .txt</para>
-<para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as e-mail.</para></listitem>
+<para>Using this format exports your recipe information <emphasis>without the photo</emphasis> into plain text format.  The idea here is not to be able to import back into <emphasis>&krecipes;</emphasis>, nor import into any other recipe format.  The purpose is to be a handy tool for such tasks as email.</para></listitem>
 
 <listitem><para>Web Book &ndash; files of this format will have extensions of .html</para>
 
@@ -1392,7 +1392,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <listitem><para>Web page &ndash; files of this format will have extensions of .html</para>
  
-<para>You might choose to export in this format in order to create a web page that contains your recipes.  Similar to exporting as a <emphasis>Web Book</emphasis>, you can export recipes from a single category, entire categories or randomly selected recipes from any number of categories.  The difference is that all recipes exported in Web page format will appear on a single webpage with no navigational ability other than scrolling through the page using the scrollbar.</para>
+<para>You might choose to export in this format in order to create a web page that contains your recipes.  Similar to exporting as a <emphasis>Web Book</emphasis>, you can export recipes from a single category, entire categories or randomly selected recipes from any number of categories.  The difference is that all recipes exported in Web page format will appear on a single web page with no navigational ability other than scrolling through the page using the scrollbar.</para>
 
 <para>While exporting in Web page format has its purpose, you will obviously note the benefits of exporting as a Web Book if you are exporting many recipes.</para>
 
@@ -1417,7 +1417,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>To export a single recipe to one of the above formats, first select the recipe that you wish to export.  Then, select <guimenu>File</guimenu> from the <emphasis>&krecipes;</emphasis> menu bar.  From the available choices, select <guimenuitem>Export ...</guimenuitem></para>
 
-<para>A window will appear that allows you to navigate to location where you wish to save your exported recipe.  The location will default to your home directory, but another existing directory can be chosen, or you can create a new directory.  The name of the recipe will appear in the box labelled <emphasis><guilabel>Location:</guilabel></emphasis> and this will default to the name that was given to the recipe in the <emphasis>&krecipes;</emphasis> database.  However, this name can be changed to another at your discretion.</para>
+<para>A window will appear that allows you to navigate to location where you wish to save your exported recipe.  The location will default to your home folder, but another existing folder can be chosen, or you can create a new folder.  The name of the recipe will appear in the box labelled <emphasis><guilabel>Location:</guilabel></emphasis> and this will default to the name that was given to the recipe in the <emphasis>&krecipes;</emphasis> database.  However, this name can be changed to another at your discretion.</para>
 
 <para>The <emphasis><guilabel>Filter:</guilabel></emphasis> box is used to select the format that you wish to use for the exported recipe from the drop-down menu.</para>
 
@@ -1427,7 +1427,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once the name of the exported recipe appears in the <emphasis><guilabel>Location:</guilabel></emphasis> box and you have chosen the format you wish to use for your exported recipe, click the <guibutton>Save</guibutton> button to proceed with the export, or the <guibutton>Cancel</guibutton> button to halt the export process and return to the previous screen.</para>
 
-<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format &ndash; for example, if you have chosen to export your recipe in <quote>Meal-Master</quote> format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a directory in which the graphics related to your exported recipe are stored.</para>
+<para>When the <guibutton>Save</guibutton> button is clicked, the recipe will save in the chosen format and you will be able to open it with the program that accepts that file format &ndash; for example, if you have chosen to export your recipe in <quote>Meal-Master</quote> format, you will be able to open it in any program that accepts .mmf format files.  You will also notice that the export process has created a folder in which the graphics related to your exported recipe are stored.</para>
 
 <note><para>You may also export categories of recipes or your whole database in this same manner.  However, if you want to export your entire database, you must ensure that no recipe or category is selected in your recipe list.</para>
 
@@ -1447,7 +1447,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <title>Backing Up Your <emphasis>&krecipes;</emphasis> Database</title>
 <para>To backup your <emphasis>&krecipes;</emphasis> database file, select <guimenu>File</guimenu> and <guimenuitem>Backup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.  However, you might want to consider creating a keyboard shortcut (see the section <link linkend="configure-shortcuts">Creating Shortcuts</link> for more information), or adding an icon to your toolbar (see the section <link linkend="configure-toolbars">Customizing the Toolbar</link> for instruction on how to do this), since this is an invaluable tool and you will find yourself utilizing it often.</para>
 
-<para>Once you have selected the menu item, shortcut or icon to backup your database, the <emphasis><interface>Save Backup As... -&krecipes;</interface></emphasis> window will appear where you can navigate to the location where you want to store your backup file and provide a name for it.  By default, this interface opens to your home directory.  You can navigate to another location and then, type the name that you wish to utilize for your backup in the text box beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
+<para>Once you have selected the menu item, shortcut or icon to backup your database, the <emphasis><interface>Save Backup As... -&krecipes;</interface></emphasis> window will appear where you can navigate to the location where you want to store your backup file and provide a name for it.  By default, this interface opens to your home folder.  You can navigate to another location and then, type the name that you wish to utilize for your backup in the text box beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
 
 <para>The <emphasis><guilabel>Filter:</guilabel></emphasis> text box shows the type of file that you are creating.  In the situation where you are backing up your <emphasis>&krecipes;</emphasis> database file, there is only one type of file available &ndash; a &krecipes; Backup File (*.krecbk), and that shows as the default selection.</para>
 
@@ -1463,7 +1463,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>Once you have selected the menu item, shortcut or icon to restore your database, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window will appear where you can navigate to the location where you saved your backup.  Once you have located the file and selected it, its name will appear in the text box beside the label <emphasis><guilabel>Location:</guilabel></emphasis>.</para>
 
-<para>By default, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window opens to your home directory.  An alternative to navigating to the location of your backup file and selecting it would be to type its name, including the path, directly into the <emphasis><guilabel>Location:</guilabel></emphasis> text box.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
+<para>By default, the <emphasis><interface>Restore Backup &ndash; &krecipes;</interface></emphasis> window opens to your home folder.  An alternative to navigating to the location of your backup file and selecting it would be to type its name, including the path, directly into the <emphasis><guilabel>Location:</guilabel></emphasis> text box.  To position the cursor in the <emphasis><guilabel>Location:</guilabel></emphasis> text box, either click in the box or use the keyboard shortcut <keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>.  If you have previously backed up your database, you can also select it from the drop-down menu beside the <emphasis><guilabel>Location:</guilabel></emphasis> text box.</para>
 
 <para>As with the backup function, the text box beside the <emphasis><guilabel>Filter:</guilabel></emphasis> label shows the type of file as <emphasis>&krecipes; Backup File (*.krecbk)</emphasis>.
 </para>
@@ -1662,7 +1662,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>It is likely that the ingredients that you want to select will <emphasis>not</emphasis> be adjacent to each other, but this is not a problem.  Simply click on the first ingredient that you want to use and then, hold down the &Ctrl; key and click on the next ingredient.  This will work even if you are using the <guilabel>Search:</guilabel> box to look for ingredients.  Just remember that after finding and selecting the first ingredient and then, using the search box to locate the next (and any subsequent) ingredient,  you must hold down the &Ctrl; key before clicking on the ingredient name.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
 
-<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the checkbox beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
+<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the check box beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
 
 <para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the text box below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> text box.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
 
@@ -2491,7 +2491,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <title>Copying to the Clipboard</title>
 <para>Under the heading <emphasis><guilabel>Export</guilabel></emphasis>, a drop-down menu exists from which you can select the <quote>Copy to Clipboard</quote> format you wish to use.</para>
 
-<para>Essentially, copying to the clipboard is the same as exporting a recipe.  The difference lies in the end result of the export.  The traditional export function creates a <emphasis>file</emphasis> (see the section <link linkend="export-recipe">Exporting Recipes to Other Formats</link> for a complete description of this).  The <quote>Copy to Clipboard</quote> function creates a copy of the recipe in the specified format and places the copy on the clipboard.  This provides the ability to paste that copy into an e-mail, for example.  The usefulness of this might be in the situation where an attachment to an e-mail might be scrubbed.</para>
+<para>Essentially, copying to the clipboard is the same as exporting a recipe.  The difference lies in the end result of the export.  The traditional export function creates a <emphasis>file</emphasis> (see the section <link linkend="export-recipe">Exporting Recipes to Other Formats</link> for a complete description of this).  The <quote>Copy to Clipboard</quote> function creates a copy of the recipe in the specified format and places the copy on the clipboard.  This provides the ability to paste that copy into an email, for example.  The usefulness of this might be in the situation where an attachment to an email might be scrubbed.</para>
 
 <para>The available choices for <quote>Copy to Clipboard</quote> are &mdash;</para>
 
@@ -2503,9 +2503,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <listitem><para>RecipeML (*.xml) &ndash; If copied to the clipboard in this format, the result will contain all the associated markup tags that allow formatting associated with RecipeML.</para></listitem>
 </itemizedlist>
 
-<para>As previously stated, once the recipe is copied to the clipboard in the desired format, it can be pasted into an e-mail.  It can also be pasted into a text editor for the purpose of saving the document.  When a recipe is copied to the clipboard in a plain text format and then pasted into an e-mail or another document, it is not intended to be imported back into <emphasis>&krecipes;</emphasis> or any other recipe program.  However, suppose another format has been selected for <quote>Copy to Clipboard</quote>.  What do you do then and how do you get it back into a related recipe program?</para>
+<para>As previously stated, once the recipe is copied to the clipboard in the desired format, it can be pasted into an email.  It can also be pasted into a text editor for the purpose of saving the document.  When a recipe is copied to the clipboard in a plain text format and then pasted into an email or another document, it is not intended to be imported back into <emphasis>&krecipes;</emphasis> or any other recipe program.  However, suppose another format has been selected for <quote>Copy to Clipboard</quote>.  What do you do then and how do you get it back into a related recipe program?</para>
 
-<para>If the recipe has been copied into an e-mail and sent, the recipient could just copy the section associated with the recipe and then, paste it into a text editor and save it to a file with the extension associated with the format &ndash; <emphasis>.kreml</emphasis> for <emphasis>&krecipes;</emphasis> format, <emphasis>.mmf</emphasis> for Meal-Master format, <emphasis>.rk</emphasis> for Rezkonv format, or <emphasis>.xml</emphasis> for RecipeML format.  Once saved, this file could then be imported back into the associated recipe program.</para>
+<para>If the recipe has been copied into an email and sent, the recipient could just copy the section associated with the recipe and then, paste it into a text editor and save it to a file with the extension associated with the format &ndash; <emphasis>.kreml</emphasis> for <emphasis>&krecipes;</emphasis> format, <emphasis>.mmf</emphasis> for Meal-Master format, <emphasis>.rk</emphasis> for Rezkonv format, or <emphasis>.xml</emphasis> for RecipeML format.  Once saved, this file could then be imported back into the associated recipe program.</para>
 
 <para>If the contents of the clipboard have been pasted directly into a text editor, the file can then be saved with the appropriate extension as previously listed and imported back into the associated recipe program.</para> 
 
@@ -2577,12 +2577,12 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 </screenshot>
 </para>
 
-<para>This is the actual e-mail interface used to submit the bug report or feature enhancement.  In addition to the section for typing the e-mail, it provides a wealth of information, some of which provides information that will assist the maintainer in acting on your e-mail.  The information provided is as follows: &mdash;</para>
+<para>This is the actual email interface used to submit the bug report or feature enhancement.  In addition to the section for typing the email, it provides a wealth of information, some of which provides information that will assist the maintainer in acting on your email.  The information provided is as follows: &mdash;</para>
 
 <itemizedlist>
-<listitem><para><emphasis><guilabel>From:</guilabel></emphasis> &ndash; the e-mail address of the person sending the e-mail shows beside this label, <abbrev>i.e.</abbrev>your e-mail address</para></listitem>
+<listitem><para><emphasis><guilabel>From:</guilabel></emphasis> &ndash; the email address of the person sending the email shows beside this label, <abbrev>i.e.</abbrev>your email address</para></listitem>
 
-<listitem><para><emphasis><guilabel>To:</guilabel></emphasis> &ndash; the e-mail address of the person to whom the e-mail is being sent shows beside this label, <abbrev>i.e.</abbrev>the program maintainer</para></listitem>
+<listitem><para><emphasis><guilabel>To:</guilabel></emphasis> &ndash; the email address of the person to whom the email is being sent shows beside this label, <abbrev>i.e.</abbrev>the program maintainer</para></listitem>
 
 <listitem><para><emphasis><guilabel>Application:</guilabel></emphasis> &ndash; the application that the report pertains to shows beside this label</para>
 <note><para><emphasis>&krecipes;</emphasis> is shown by default because you are sending this from within <emphasis>&krecipes;</emphasis>.  However, <emphasis>&krecipes;</emphasis> is a &kde; application, so there is a drop-down menu from which you could select another application if you were sending a report from within another program.</para></note>
@@ -2602,7 +2602,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 <itemizedlist>
 <listitem><para><emphasis><guilabel>Critical</guilabel></emphasis> &ndash; this selection indicates that there is a serious malfunction in the <emphasis>&krecipes; program</emphasis>, for instance, one that causes data loss</para>
 
-<note><para>In the event of a crash, a <emphasis>Backtrace</emphasis> window might appear.  This information is useful to the maintainer, so it is wise to copy the text that appears in this window and paste it into the body of your e-mail.</para></note></listitem>
+<note><para>In the event of a crash, a <emphasis>Backtrace</emphasis> window might appear.  This information is useful to the maintainer, so it is wise to copy the text that appears in this window and paste it into the body of your email.</para></note></listitem>
 
 <listitem><para><emphasis><guilabel>Grave</guilabel></emphasis> &ndash; this selection might be indicated if <emphasis>&krecipes;</emphasis> has been rendered unusable</para></listitem>
 
@@ -2615,9 +2615,9 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>In the text box beside the label <emphasis><guilabel>Subject:</guilabel></emphasis> you would type a description of the report being submitted and finally, in the large text area, you would type a description of the problem or enhancement and provide any error messages that have been displayed.  Additionally, you should provide the maintainer with the database that you are using, <abbrev>i.e.</abbrev> SQLite, MySQL or PostreSQL and the version. </para>
 
-<para>When you have completed the e-mail, click the <guibutton>Send</guibutton> button to submit your e-mail or the <guibutton>Cancel</guibutton> button to close the interface and return to the main <emphasis><guilabel>&krecipes;</guilabel></emphasis> window.</para>
+<para>When you have completed the email, click the <guibutton>Send</guibutton> button to submit your email or the <guibutton>Cancel</guibutton> button to close the interface and return to the main <emphasis><guilabel>&krecipes;</guilabel></emphasis> window.</para>
 
-<para>When you click the <guibutton>Send</guibutton> button, you will be prompted for a password.  This is the password that goes along with your system username.  However, before you can actually send your e-mail, it must be configured for sending as described in the following section.  Click the <guibutton>Configure Email...</guibutton> button to start the e-mail configuration interface.</para>
+<para>When you click the <guibutton>Send</guibutton> button, you will be prompted for a password.  This is the password that goes along with your system username.  However, before you can actually send your email, it must be configured for sending as described in the following section.  Click the <guibutton>Configure Email...</guibutton> button to start the email configuration interface.</para>
 
 
 <sect2 id="config-email">
@@ -2625,7 +2625,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>
 <screenshot>
-<screeninfo>Here's a screenshot of the e-mail configuration screen that enables the ability to send bug reports from within &krecipes;.</screeninfo>
+<screeninfo>Here's a screenshot of the email configuration screen that enables the ability to send bug reports from within &krecipes;.</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="config-email.png" format="PNG"/>
@@ -2640,7 +2640,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>From the screenshot, you will notice that there is an icon at the top of the page and beside this your username that you use to log onto your system.  This icon can be changed by clicking on it.</para>
 
-<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explanatory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An SMTP server is the server used for sending e-mail.  This could be the one housed by your internet service provider, or one that is on your local area network.</para>
+<para>The next set of information that you need to provide appears below the label <emphasis><guilabel>User Information</guilabel></emphasis> and that is exactly what this section contains.  Looking at the screenshot, the information that needs to be provided is self-explanatory.  Of the first four pieces of information provided, the only ones that are absolutely essential are your <emphasis><guilabel>Email address:</guilabel></emphasis> and <emphasis><guilabel>SMTP server:</guilabel></emphasis>.  An SMTP server is the server used for sending email.  This could be the one housed by your Internet service provider, or one that is on your local area network.</para>
 
 <para>The last item shown in the <emphasis><guilabel>User Information</guilabel></emphasis> section is for the <emphasis><guilabel>User ID</guilabel></emphasis>.  In the screenshot, nothing shows beside this label, but it would normally default to your numerical User ID as set up on the system.</para>
 
@@ -2648,7 +2648,7 @@ information for nutrient analysis. Are you sure you want to delete this entry?</
 
 <para>It is not necessary to utilize the <guibutton>Change Password</guibutton> button.  You probably already have a password to log onto your system.  However, should you wish to change the password associated with your username, you may do so by clicking this button and following the prompts.</para>
 
-<para>Now you are ready to send your e-mail!</para>
+<para>Now you are ready to send your email!</para>
 
 </sect2>
 </sect1>
@@ -2807,7 +2807,7 @@ or menu bars. -->
 <guimenu>Edit</guimenu>
 <guimenuitem>Copy to Clipboard</guimenuitem>
 </menuchoice></term>
-<listitem><para>Will make a text copy of a selected recipe and place it on the <interface>Clipboard</interface> in order to paste into another application, for example an e-mail.</para></listitem>
+<listitem><para>Will make a text copy of a selected recipe and place it on the <interface>Clipboard</interface> in order to paste into another application, for example an email.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -2971,7 +2971,7 @@ application work. -->
 <answer>
 <para>While running the &krecipes; wizard will allow you to choose to install sample recipes, the prime function of the program is to allow you to store and manage your own recipe collection.</para> 
 
-<para>If you are looking to augment your personal recipe collection, there are internet sites that host thousands of recipes that are freely available.  Among these are: &mdash;</para>
+<para>If you are looking to augment your personal recipe collection, there are Internet sites that host thousands of recipes that are freely available.  Among these are: &mdash;</para>
 
 <para><ulink url="http://www.thehoseys.com/recipes.html"></ulink></para>
 <para><ulink url="http://www.garvick.com/recipes/meal-master.htm"></ulink></para>
