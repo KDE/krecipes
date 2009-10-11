@@ -562,7 +562,7 @@ The purpose of the <emphasis><guilabel>Advanced</guilabel></emphasis> tab is to 
 
 <para>Next, the recipe category is selected by clicking on the <guibutton>+</guibutton> beside the category box.</para>
 
-<para>To select a category, click on the checkbox beside the category name and click the <guibutton>OK</guibutton> button to accept the selection or, the <guibutton>Cancel</guibutton> button to cancel the selection.  Either way, the window will close.</para>
+<para>To select a category, click on the check box beside the category name and click the <guibutton>OK</guibutton> button to accept the selection or, the <guibutton>Cancel</guibutton> button to cancel the selection.  Either way, the window will close.</para>
 
 <tip><para>It is also possible to add a category here.  Simply click on the <guibutton>New Category...</guibutton> button.  Add a new category in the same manner as described in the section entitled <link linkend="categories-component">The Categories Component</link>.</para></tip>
 
@@ -1079,7 +1079,7 @@ The last icon on the toolbar allows access to a list of items that are available
 </itemizedlist>
 
 <para>
-By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the checkbox beside it.
+By default, all items are displayed.  To prevent display in the recipe, deselect the item by clicking on the check box beside it.
 </para>
 
 <note><para>All sections chosen to display in the recipe will also print.  It may be desirable to have a section display, but not print.  In this case, you can define a new print layout.  See the section <link linkend="print-setup">Print Setup</link> for instructions.</para>
@@ -1100,7 +1100,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 <listitem><para>Change the <guimenuitem>Background color...</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenuitem>Text color...</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenuitem>Font...</guimenuitem></para></listitem>
-<listitem><para>Choose whether or not to display the section by selecting or deselecting the checkbox beside <guimenuitem>Show</guimenuitem></para></listitem>
+<listitem><para>Choose whether or not to display the section by selecting or deselecting the check box beside <guimenuitem>Show</guimenuitem></para></listitem>
 <listitem><para>Change the <guimenu>Alignment</guimenu> &ndash; This menu item has a sub-menu that allows you to select the alignment</para></listitem>
 <listitem><para>Define a <guimenuitem>Border...</guimenuitem> that will appear around the selected section </para>
 <para>When the <quote>Requested Border</quote> configuration window appears, there are sections that allow the definition of various elements under the appropriate headings.  For example &mdash;</para>
@@ -1662,7 +1662,7 @@ Right-click on any section in the Page Setup window.  A menu will display with t
 
 <para>It is likely that the ingredients that you want to select will <emphasis>not</emphasis> be adjacent to each other, but this is not a problem.  Simply click on the first ingredient that you want to use and then, hold down the &Ctrl; key and click on the next ingredient.  This will work even if you are using the <guilabel>Search:</guilabel> box to look for ingredients.  Just remember that after finding and selecting the first ingredient and then, using the search box to locate the next (and any subsequent) ingredient,  you must hold down the &Ctrl; key before clicking on the ingredient name.  <emphasis>&krecipes;</emphasis> dictates that at least one of the selected ingredients be in each of the recipes listed in the search results.</para>
 
-<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the checkbox beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
+<para>The next step, is to transfer the selected ingredients to the list box that appears to the right of your ingredient list.  This is done by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-next.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears between the two lists.  Ingredients can be transferred one at a time, or in multiples as previously described.  Your ingredients will be listed under the heading <guilabel>Ingredient (required?)</guilabel>.  If you would like to search for recipes that contain a specific ingredient, you can select the check box beside the ingredient name to indicate that it is a required ingredient for any recipes returned in your search.  Conversely, ingredients can be transferred out of the right-hand list box by clicking on the <guiicon><inlinemediaobject><imageobject><imagedata fileref="go-previous.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> button.</para>
 
 <para>Once you have transferred the ingredients to the listbox on the right, you can enter an <guilabel>Amount Available</guilabel> in the column beneath this heading.  This is done by double-clicking on the space beside the ingredient for which you want to enter an available amount.  The <interface>Enter amount - &krecipes;</interface> dialog box will appear in which you can <userinput>enter an amount</userinput> in the text box below the <guilabel>Amount</guilabel> label.  Next, you can select the unit of measure for the ingredient from the drop-down menu that appears beside the <guilabel>Amount</guilabel> text box.  Click the <guibutton>OK</guibutton> button to accept the amount entered, or the <guibutton>Cancel</guibutton> button to close the dialog box.  Of course, you don't have to enter an amount if you know that you have enough of the ingredient for any recipe that might be returned in your search.</para>
 
