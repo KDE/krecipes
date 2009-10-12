@@ -2,10 +2,6 @@
   loading the examples from the setup assistant does not work for the same
   reason.
 
-* Click Ingredient Matcher on left panel, select several random ingredients and
-  click on the right arrow; some ingredients might be missing in the right
-  list.
-
 * On my debian system, if I don't provide a password for PostgreSQL, krecipes
   silently fails.
 

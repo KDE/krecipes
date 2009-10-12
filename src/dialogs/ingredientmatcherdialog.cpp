@@ -219,7 +219,6 @@ void IngredientMatcherDialog::addIngredient()
 
 				m_item_ing_map.insert( new_item, m_ingredientList.append( Ingredient( items[i]->text( 0 ), 0, Unit(), -1, items[i]->text( 1 ).toInt() ) ) );
 			}
-			++i;
 		}
 	}
 }
