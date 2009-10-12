@@ -158,6 +158,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	m_query = new QSqlQuery( QString(), *database );
 	m_query->setForwardOnly(true);
 	dbOK = true;
+	return NoError;
 }
 
 void QSqlRecipeDB::execSQL( const QString &command )
