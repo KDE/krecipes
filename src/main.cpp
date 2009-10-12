@@ -19,7 +19,7 @@
 
 #include "convert_sqlite3.h"
 
-static const char *version = "2.0-alpha3";
+static const char *version = "2.0-alpha3+svn";
 
 static KCmdLineOptions options;
 

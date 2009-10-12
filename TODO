@@ -9,10 +9,11 @@ Planned for the next release in 2.0 branch:
  * Use some i18nc for some strings, fixing krazy issues about this.
  * Using a QSplitter on the ingredient matcher dialog.
  * Fix bugs.
- * Update user manual and fix the issues reported by krazy about the manual.
+ * Update user manual.
 
  [Brainstorming]
  * Make configurable the length of VARCHAR(%n) fields, for instance, the
+   preparation method name.
 
 Planned for the 2.1 branch:
 
@@ -31,7 +32,6 @@ Planned for the 2.1 branch:
    configuration.
  * Seek and remove the anti-pattern "if ( myList.count() > 0 ) ...".
  * Fix the hidden features: merge similar (categories|ingredients).
-   preparation method name.
  * Update the USDA data.
  * Some set-up to make the sample recipes translatable by kde i18n teams,
    something like krecipesdata2pot and po2krecipesdata... (ask Pino or someone

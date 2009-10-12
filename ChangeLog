@@ -1,3 +1,6 @@
+Changes from 2.0-alpha3 to svn:
+  * Updated user manual. (work in progress)
+
 Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
     or failure of the operation.
