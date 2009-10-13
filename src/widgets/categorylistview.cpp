@@ -177,6 +177,18 @@ void CategoryListView::load( int limit, int offset )
 	}
 }
 
+void CategoryListView::movableDropEvent( Q3ListViewItem * parent, Q3ListViewItem * afterme )
+{
+	if ( parent )
+		if ( (parent->rtti() == PREVLISTITEM_RTTI) ||
+		(parent->rtti() == NEXTLISTITEM_RTTI) )
+			return;
+	if ( (selectedItem()->rtti() == PREVLISTITEM_RTTI) ||
+	(selectedItem()->rtti() == NEXTLISTITEM_RTTI) )
+		return;
+	K3ListView::movableDropEvent( parent, afterme );
+}
+
 void CategoryListView::populate( Q3ListViewItem *item )
 {
 	CategoryItemInfo *cat_item = dynamic_cast<CategoryItemInfo*>(item);

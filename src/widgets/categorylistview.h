@@ -193,6 +193,8 @@ protected:
 		parent = after ? after->parent() : 0L ;
 	}
 
+	virtual void movableDropEvent( Q3ListViewItem * parent, Q3ListViewItem * afterme );
+
 protected slots:
 	virtual void removeCategory( int id ) = 0;
 	virtual void createCategory( const Element &category, int parent_id ) = 0;
