@@ -4,6 +4,7 @@ Changes from 2.0-alpha3 to svn:
     + In the Ingredient Matcher from previous versions when selecting various
       ingredients and clicking on the right arrow some ingredients might be
       missing in the list of the right side of the window.
+    + No more crashes when dragging categories. Fixes sourceforge #2853112.
 
 Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
