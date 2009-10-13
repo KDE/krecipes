@@ -2133,12 +2133,13 @@ void QSqlRecipeDB::modCategory( int categoryID, const QString &newLabel )
 	emit categoryModified( Element( newLabel, categoryID ) );
 }
 
-void QSqlRecipeDB::modCategory( int categoryID, int new_parent_id )
+void QSqlRecipeDB::modCategory( int categoryID, int new_parent_id, bool emit_cat_modified )
 {
 	QString command = QString( "UPDATE categories SET parent_id=%1 WHERE id=%2;" ).arg( new_parent_id ).arg( categoryID );
 	QSqlQuery categoryToUpdate( command, *database);
 
-	emit categoryModified( categoryID, new_parent_id );
+	if ( emit_cat_modified )
+		emit categoryModified( categoryID, new_parent_id );
 }
 
 void QSqlRecipeDB::removeCategory( int categoryID )

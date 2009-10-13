@@ -150,7 +150,7 @@ public:
 	* set newLabel for categoryID
 	*/
 	void modCategory( int categoryID, const QString &newLabel );
-	void modCategory( int categoryID, int new_parent_id );
+	void modCategory( int categoryID, int new_parent_id, bool emit_cat_modifed = true );
 	/**
 	* set newLabel for authorID
 	*/

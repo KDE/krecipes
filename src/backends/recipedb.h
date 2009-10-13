@@ -258,7 +258,7 @@ public:
 	* set newLabel for categoryID
 	*/
 	virtual void modCategory( int categoryID, const QString &newLabel ) = 0;
-	virtual void modCategory( int categoryID, int new_parent_id ) = 0;
+	virtual void modCategory( int categoryID, int new_parent_id, bool emit_cat_modified = true ) = 0;
 	/**
 	* set newLabel for authorID
 	*/

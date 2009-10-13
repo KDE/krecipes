@@ -124,19 +124,14 @@ void CategoryActionsHandler::pasteAsSub()
 void CategoryActionsHandler::changeCategoryParent(Q3ListViewItem *item,
 	Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ )
 {
+	//FIXME: We need to make sure that item is not an "Next" or "Previous" thing.
 	int new_parent_id = -1;
 	if ( Q3ListViewItem * parent = item->parent() )
 		new_parent_id = parent->text( 1 ).toInt();
 
 	int cat_id = item->text( 1 ).toInt();
 
-	disconnect( parentListView,
-		SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ) );
-	database->modCategory( cat_id, new_parent_id );
-	connect( parentListView,
-		SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ),
-		SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) )
-	);
+	database->modCategory( cat_id, new_parent_id, false );
 }
 
 void CategoryActionsHandler::remove()
