@@ -30,7 +30,7 @@ void Recipe::empty( void )
 	title = QString::null;
 	instructions = QString::null;
 	photo = QPixmap();
-	ingList.empty();
+	ingList.clear();
 	categoryList.clear();
 	authorList.clear();
 	ratingList.clear();
