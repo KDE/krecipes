@@ -44,7 +44,8 @@ main(int argc, char *argv[])
 	recipe.categoryList.append( Element("Cookies & Squares",2) );
 	recipe.instructions = 
 		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
-	recipe.prepTime = QTime(0,30);
+	recipe.prepTime = QTime(0,0); //It's not QTime(0,30)
+	//because mmf format doesn't provide preparation time.
 
 	Ingredient ing9;
 	ing9.name = "a";
