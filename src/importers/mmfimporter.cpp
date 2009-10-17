@@ -274,12 +274,12 @@ bool MMFImporter::loadIngredientHeader( const QString &string )
 		for ( IngredientList::iterator ing_it = m_left_col_ing.begin(); ing_it != m_left_col_ing.end(); ++ing_it ) {
 			m_all_ing.append( *ing_it );
 		}
-		m_left_col_ing.empty();
+		m_left_col_ing.clear();
 
 		for ( IngredientList::iterator ing_it = m_right_col_ing.begin(); ing_it != m_right_col_ing.end(); ++ing_it ) {
 			m_all_ing.append( *ing_it );
 		}
-		m_right_col_ing.empty();
+		m_right_col_ing.clear();
 
 		current_header = header;
 		return true;
@@ -325,9 +325,9 @@ void MMFImporter::putDataInRecipe()
 
 void MMFImporter::resetVars()
 {
-	m_left_col_ing.empty();
-	m_right_col_ing.empty();
-	m_all_ing.empty();
+	m_left_col_ing.clear();
+	m_right_col_ing.clear();
+	m_all_ing.clear();
 	m_authors.clear();
 	m_categories.clear();
 

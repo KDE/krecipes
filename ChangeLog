@@ -7,6 +7,8 @@ Changes from 2.0-alpha3 to svn:
     + No more crashes when dragging categories. Fixes sourceforge #2853112.
     + Ingredient list is cleared properly when creating a new recipe. Fixes
       sourceforge #2878946.
+    + Various lists are cleared properly in the mmfimporter; now the mmftest
+      exits with success and the mmf importer appears to work.
 
 Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
