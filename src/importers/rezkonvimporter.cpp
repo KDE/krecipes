@@ -203,6 +203,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 	QString instr;
 	QRegExp rx_title( "^:{0,1}\\s*O-Titel\\s*:" );
 	QString line;
+	text_it++;
 	while ( text_it != m_end_it ) {
 		line = *text_it;
 
