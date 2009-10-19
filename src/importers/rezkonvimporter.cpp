@@ -173,7 +173,8 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 	new_ingredient.group = current_header;
 
 	bool last_is_sub = is_sub;
-	if ( new_ingredient.prepMethodList.last().name == "or" ) {
+	if ( !new_ingredient.prepMethodList.isEmpty() &&
+	new_ingredient.prepMethodList.last().name == "or" ) {
 		new_ingredient.prepMethodList.pop_back();
 		is_sub = true;
 	}
