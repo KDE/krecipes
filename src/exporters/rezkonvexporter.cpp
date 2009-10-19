@@ -209,8 +209,6 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		authorLines += "                   -- ";
 		authorLines += (*author_it).name + "\n";
 	}
-	if ( !authorLines.isEmpty() )
-		authorLines += "\n";
 	content += authorLines;
 }
 
